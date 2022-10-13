@@ -14,9 +14,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "husky": "^8.0.1",
+    "husky": "^8.0.0",
     "is-ci": "^3.0.1",
-    "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -31,15 +30,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "is-ci || husky install",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "prettier:fix": "prettier --write 'src/**/*.{js,ts,tsx,scss,md,json,yml,yaml}'"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "prettier:fix": "prettier --write 'src/**/*.{js,ts,tsx,scss,md,json,yml,yaml}'",
+    "prepare": "is-ci || husky install"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,scss}": [
