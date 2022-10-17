@@ -3,6 +3,9 @@
 # vscode
 /.vscode
 
+# idea
+/.idea
+
 # dependencies
 /node_modules
 /.pnp
