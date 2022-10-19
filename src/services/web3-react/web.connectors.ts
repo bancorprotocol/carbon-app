@@ -1,39 +1,24 @@
-import { Connector } from '@web3-react/types';
-import { initializeConnector, Web3ReactHooks } from '@web3-react/core';
+import { initializeConnector } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
 import { WalletConnect } from '@web3-react/walletconnect';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
+import { Connection } from 'services/web3-react/web3.types';
 import {
+  ConnectionType,
   RPC_PROVIDERS,
   RPC_URLS,
   SupportedChainId,
-} from 'services/web3-react/chains';
-
-export enum ConnectionType {
-  INJECTED,
-  COINBASE_WALLET,
-  WALLET_CONNECT,
-  NETWORK,
-  GNOSIS_SAFE,
-}
-
-export const AVAILABLE_CONNECTION_TYPES: ConnectionType[] = [
-  ConnectionType.INJECTED,
-  ConnectionType.COINBASE_WALLET,
-  ConnectionType.WALLET_CONNECT,
-];
-
-export interface Connection {
-  connector: Connector;
-  hooks: Web3ReactHooks;
-  type: ConnectionType;
-}
+} from 'services/web3-react/web3.constants';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
 };
+
+// ********************************** //
+// NETWORK CONNECTOR
+// ********************************** //
 
 const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
   (actions) =>
@@ -45,6 +30,10 @@ export const networkConnection: Connection = {
   type: ConnectionType.NETWORK,
 };
 
+// ********************************** //
+// INJECTED CONNECTOR
+// ********************************** //
+
 const [web3Injected, web3InjectedHooks] = initializeConnector<MetaMask>(
   (actions) => new MetaMask({ actions, onError })
 );
@@ -54,6 +43,10 @@ export const injectedConnection: Connection = {
   type: ConnectionType.INJECTED,
 };
 
+// ********************************** //
+// GNOSIS CONNECTOR
+// ********************************** //
+
 const [web3GnosisSafe, web3GnosisSafeHooks] = initializeConnector<GnosisSafe>(
   (actions) => new GnosisSafe({ actions })
 );
@@ -62,6 +55,10 @@ export const gnosisSafeConnection: Connection = {
   hooks: web3GnosisSafeHooks,
   type: ConnectionType.GNOSIS_SAFE,
 };
+
+// ********************************** //
+// WALLETCONNECT CONNECTOR
+// ********************************** //
 
 const [web3WalletConnect, web3WalletConnectHooks] =
   initializeConnector<WalletConnect>(
@@ -80,6 +77,10 @@ export const walletConnectConnection: Connection = {
   hooks: web3WalletConnectHooks,
   type: ConnectionType.WALLET_CONNECT,
 };
+
+// ********************************** //
+// COINBASE WALLET CONNECTOR
+// ********************************** //
 
 const [web3CoinbaseWallet, web3CoinbaseWalletHooks] =
   initializeConnector<CoinbaseWallet>(

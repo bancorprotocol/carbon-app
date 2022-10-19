@@ -1,22 +1,145 @@
-import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
-import { ReactNode } from 'react';
+import {
+  useWeb3React,
+  Web3ReactHooks,
+  Web3ReactProvider,
+} from '@web3-react/core';
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Connector } from '@web3-react/types';
-import { AVAILABLE_CONNECTION_TYPES } from 'services/web3-react/connectors';
-import { getConnection, getConnectionName } from 'services/web3-react/utils';
+import {
+  ConnectionType,
+  SELECTABLE_CONNECTION_TYPES,
+} from 'services/web3-react/web3.constants';
+import {
+  getConnection,
+  getConnectionName,
+} from 'services/web3-react/web3.utils';
+import { BancorWeb3ProviderContext } from 'services/web3-react/web3.types';
+import { JsonRpcSigner, StaticJsonRpcProvider } from '@ethersproject/providers';
 
-export const Web3Provider = ({ children }: { children: ReactNode }) => {
-  const connectors: [Connector, Web3ReactHooks][] =
-    AVAILABLE_CONNECTION_TYPES.map(getConnection).map(
-      ({ hooks, connector }) => [connector, hooks]
-    );
+// ********************************** //
+// WEB3 CONTEXT
+// ********************************** //
 
-  const key = AVAILABLE_CONNECTION_TYPES.map((type) =>
-    getConnectionName(type)
-  ).join('-');
+const defaultValue: BancorWeb3ProviderContext = {
+  user: undefined,
+  setImposterAccount: (account) => console.log(account),
+  isNetworkActive: false,
+  provider: undefined,
+  signer: undefined,
+  chainId: 1,
+};
+
+const BancorWeb3CTX = createContext(defaultValue);
+
+export const useWeb3 = () => useContext(BancorWeb3CTX);
+
+// ********************************** //
+// WEB3 PROVIDER
+// ********************************** //
+
+const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
+  const network = getConnection(ConnectionType.NETWORK);
+  const isNetworkActive = network.hooks.useIsActive();
+  const networkProvider = network.hooks.useProvider();
+
+  const {
+    account: walletAccount,
+    provider: walletProvider,
+    chainId,
+    connector,
+  } = useWeb3React();
+
+  const [imposterAccount, setImposterAccount] = useState<string>();
+  const [tenderlyUrl, setTenderlyUrl] = useState<string>();
+  const [tenderlyProvider, setTenderlyProvider] =
+    useState<StaticJsonRpcProvider>();
+  const [tenderlySigner, setTenderlySigner] = useState<JsonRpcSigner>();
+
+  const user = useMemo(
+    () => imposterAccount ?? walletAccount,
+    [imposterAccount, walletAccount]
+  );
+  const provider = useMemo(
+    () => tenderlyProvider ?? networkProvider,
+    [tenderlyProvider, networkProvider]
+  );
+  const signer = useMemo(
+    () => tenderlySigner ?? walletProvider?.getSigner(user),
+    [walletProvider, tenderlySigner, user]
+  );
+
+  const handleTenderlyRPC = useCallback(
+    (url?: string) => {
+      setTenderlyUrl(url);
+      if (url) {
+        setTenderlyProvider(
+          new StaticJsonRpcProvider({
+            url,
+            skipFetchSetup: true,
+          })
+        );
+        setTenderlySigner(
+          new StaticJsonRpcProvider({
+            url,
+            skipFetchSetup: true,
+          }).getUncheckedSigner(user)
+        );
+      } else {
+        setTenderlyProvider(undefined);
+        setTenderlySigner(undefined);
+      }
+    },
+    [user]
+  );
+
+  useEffect(() => {
+    void network.connector.activate();
+    void connector.connectEagerly?.();
+  }, [connector, network.connector]);
 
   return (
-    <Web3ReactProvider connectors={connectors} key={key}>
+    <BancorWeb3CTX.Provider
+      value={{
+        user,
+        setImposterAccount,
+        isNetworkActive,
+        provider,
+        signer,
+        chainId,
+      }}
+    >
       {children}
+    </BancorWeb3CTX.Provider>
+  );
+};
+
+// ********************************** //
+// WEB3 REACT LIBRARY WRAPPER
+// ********************************** //
+
+const connectors: [Connector, Web3ReactHooks][] =
+  SELECTABLE_CONNECTION_TYPES.map(getConnection).map(({ hooks, connector }) => [
+    connector,
+    hooks,
+  ]);
+
+const key = SELECTABLE_CONNECTION_TYPES.map((type) =>
+  getConnectionName(type)
+).join('-');
+
+export const Web3ReactWrapper: FC<{ children: ReactNode }> = ({ children }) => {
+  return (
+    <Web3ReactProvider connectors={connectors} key={key}>
+      <BancorWeb3Provider>{children}</BancorWeb3Provider>
     </Web3ReactProvider>
   );
 };
