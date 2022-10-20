@@ -3,17 +3,20 @@ import {
   getConnection,
   getConnectionName,
 } from 'services/web3-react/web3.utils';
-import { Token__factory } from 'abis/types/index';
 import {
   SELECTABLE_CONNECTION_TYPES,
   ConnectionType,
 } from 'services/web3-react/web3.constants';
 import { useWeb3 } from 'services/web3-react/Web3Provider';
+import { DebugImposter } from 'elements/debug/DebugImposter';
+import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
+import { useContract } from 'hooks/useContract';
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 
 export const App = () => {
-  const { isNetworkActive, provider, user } = useWeb3();
+  const { isNetworkActive, user } = useWeb3();
+  const { Token } = useContract();
 
   const connect = (type: ConnectionType) => {
     const connection = getConnection(type);
@@ -21,14 +24,9 @@ export const App = () => {
   };
 
   const readChain = async () => {
-    if (!provider) {
-      throw Error('not provider set.');
-    }
     try {
-      const read = Token__factory.connect(bntToken, provider);
-      const decimals = await read.decimals();
+      const decimals = await Token(bntToken).read.decimals();
       console.log('decimals', decimals);
-      // const res = selectedProvider.
     } catch (e) {
       console.error(e);
     }
@@ -56,6 +54,9 @@ export const App = () => {
           <div>{user ? user : 'not logged in'}</div>
         </div>
       </div>
+
+      <DebugTenderlyRPC />
+      <DebugImposter />
     </div>
   );
 };

@@ -24,6 +24,10 @@ import {
 } from 'services/web3-react/web3.utils';
 import { BancorWeb3ProviderContext } from 'services/web3-react/web3.types';
 import { JsonRpcSigner, StaticJsonRpcProvider } from '@ethersproject/providers';
+import {
+  LocaleStorageId,
+  setLocaleStorage,
+} from 'services/localeStorage/index';
 
 // ********************************** //
 // WEB3 CONTEXT
@@ -36,6 +40,7 @@ const defaultValue: BancorWeb3ProviderContext = {
   provider: undefined,
   signer: undefined,
   chainId: 1,
+  handleTenderlyRPC: () => {},
 };
 
 const BancorWeb3CTX = createContext(defaultValue);
@@ -59,40 +64,34 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
   } = useWeb3React();
 
   const [imposterAccount, setImposterAccount] = useState<string>();
-  const [tenderlyUrl, setTenderlyUrl] = useState<string>();
   const [tenderlyProvider, setTenderlyProvider] =
     useState<StaticJsonRpcProvider>();
   const [tenderlySigner, setTenderlySigner] = useState<JsonRpcSigner>();
 
   const user = useMemo(
-    () => imposterAccount ?? walletAccount,
+    () => imposterAccount || walletAccount,
     [imposterAccount, walletAccount]
   );
   const provider = useMemo(
-    () => tenderlyProvider ?? networkProvider,
+    () => tenderlyProvider || networkProvider,
     [tenderlyProvider, networkProvider]
   );
   const signer = useMemo(
-    () => tenderlySigner ?? walletProvider?.getSigner(user),
+    () => tenderlySigner || walletProvider?.getSigner(user),
     [walletProvider, tenderlySigner, user]
   );
 
   const handleTenderlyRPC = useCallback(
     (url?: string) => {
-      setTenderlyUrl(url);
+      setLocaleStorage(LocaleStorageId.TENDERLY_RPC, url);
+
       if (url) {
-        setTenderlyProvider(
-          new StaticJsonRpcProvider({
-            url,
-            skipFetchSetup: true,
-          })
-        );
-        setTenderlySigner(
-          new StaticJsonRpcProvider({
-            url,
-            skipFetchSetup: true,
-          }).getUncheckedSigner(user)
-        );
+        const prov = new StaticJsonRpcProvider({
+          url,
+          skipFetchSetup: true,
+        });
+        setTenderlyProvider(prov);
+        setTenderlySigner(prov.getUncheckedSigner(user));
       } else {
         setTenderlyProvider(undefined);
         setTenderlySigner(undefined);
@@ -115,6 +114,7 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
         provider,
         signer,
         chainId,
+        handleTenderlyRPC,
       }}
     >
       {children}

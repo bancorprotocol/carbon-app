@@ -28,4 +28,5 @@ export interface BancorWeb3ProviderContext {
   isNetworkActive: boolean;
   provider?: Web3Provider | StaticJsonRpcProvider;
   signer: JsonRpcSigner | undefined;
+  handleTenderlyRPC: (url?: string) => void;
 }
