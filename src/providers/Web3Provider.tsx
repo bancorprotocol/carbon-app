@@ -14,17 +14,15 @@ import {
   useState,
 } from 'react';
 import { Connector } from '@web3-react/types';
+import { JsonRpcSigner, StaticJsonRpcProvider } from '@ethersproject/providers';
+import { LocalStorageId, setLocalStorage } from 'services/localeStorage';
 import {
+  BancorWeb3ProviderContext,
   ConnectionType,
-  SELECTABLE_CONNECTION_TYPES,
-} from 'services/web3-react/web3.constants';
-import {
   getConnection,
   getConnectionName,
-} from 'services/web3-react/web3.utils';
-import { BancorWeb3ProviderContext } from 'services/web3-react/web3.types';
-import { JsonRpcSigner, StaticJsonRpcProvider } from '@ethersproject/providers';
-import { LocalStorageId, setLocalStorage } from 'services/localeStorage/index';
+  SELECTABLE_CONNECTION_TYPES,
+} from 'services/web3';
 
 // ********************************** //
 // WEB3 CONTEXT

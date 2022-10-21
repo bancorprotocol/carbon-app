@@ -1,16 +1,14 @@
 import React from 'react';
-import {
-  getConnection,
-  getConnectionName,
-} from 'services/web3-react/web3.utils';
-import {
-  SELECTABLE_CONNECTION_TYPES,
-  ConnectionType,
-} from 'services/web3-react/web3.constants';
-import { useWeb3 } from 'services/web3-react/Web3Provider';
+import { useWeb3 } from 'providers/Web3Provider';
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
 import { useContract } from 'hooks/useContract';
+import {
+  ConnectionType,
+  getConnection,
+  getConnectionName,
+  SELECTABLE_CONNECTION_TYPES,
+} from 'services/web3';
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 

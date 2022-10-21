@@ -1,4 +1,4 @@
-import { useWeb3 } from 'services/web3-react/Web3Provider';
+import { useWeb3 } from 'providers/Web3Provider';
 import { useState } from 'react';
 
 export const DebugImposter = () => {

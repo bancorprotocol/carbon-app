@@ -1,4 +1,4 @@
-import { useWeb3 } from 'services/web3-react/Web3Provider';
+import { useWeb3 } from 'providers/Web3Provider';
 import { Token__factory } from 'abis/types/index';
 import { useCallback } from 'react';
 

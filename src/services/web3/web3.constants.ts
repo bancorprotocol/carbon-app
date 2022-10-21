@@ -1,5 +1,5 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
-import { ChainIdMapTo } from 'services/web3-react/web3.types';
+import { ChainIdMapTo } from 'services/web3';
 
 const ALCHEMY_URL = 'https://eth-mainnet.alchemyapi.io/v2/';
 const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY;

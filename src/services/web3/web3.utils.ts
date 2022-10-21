@@ -4,8 +4,8 @@ import {
   injectedConnection,
   networkConnection,
   walletConnectConnection,
-} from 'services/web3-react/web.connectors';
-import { ConnectionType } from 'services/web3-react/web3.constants';
+  ConnectionType,
+} from 'services/web3';
 
 export const getConnection = (c: ConnectionType) => {
   switch (c) {

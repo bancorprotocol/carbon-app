@@ -1,6 +1,6 @@
-import { useWeb3 } from 'services/web3-react/Web3Provider';
+import { useWeb3 } from 'providers/Web3Provider';
 import { useState } from 'react';
-import { getLocalStorage, LocalStorageId } from 'services/localeStorage/index';
+import { getLocalStorage, LocalStorageId } from 'services/localeStorage';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC } = useWeb3();
