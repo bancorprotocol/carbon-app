@@ -1,23 +1,23 @@
-import { ExtractDataType, IdAndData } from 'types/extractDataById.types';
+import { ExtractDataType, IdAndDataType } from 'types/extractDataById.types';
 
-const appId = 'bancor-ui';
+const appId = 'myAppName';
 const appVersion = 'v0';
 
-// To add a new localeStorage follow next 3 steps
+// To add a new LocalStorage follow next 3 steps
 // STEP 1: add ID
-export enum LocaleStorageId {
+export enum LocalStorageId {
   TENDERLY_RPC = 'tenderlyRpc',
   IMPOSTER_ACCOUNT = 'imposterAccount',
 }
 
 // STEP 2: add type
-type LsTenderlyType = IdAndData<LocaleStorageId.TENDERLY_RPC, string>;
-type LsImposterType = IdAndData<LocaleStorageId.IMPOSTER_ACCOUNT, string>;
+type LsTenderlyType = IdAndDataType<LocalStorageId.TENDERLY_RPC, string>;
+type LsImposterType = IdAndDataType<LocalStorageId.IMPOSTER_ACCOUNT, string>;
 
 // STEP 3: add type created in step 2 to union
 type AllLsTypes = LsTenderlyType | LsImposterType;
 
-export const getLocaleStorage = <T extends LocaleStorageId>(
+export const getLocalStorage = <T extends LocalStorageId>(
   id: T
 ): ExtractDataType<AllLsTypes, T>['data'] | undefined => {
   const lsId = [appId, appVersion, id].join('-');
@@ -28,7 +28,7 @@ export const getLocaleStorage = <T extends LocaleStorageId>(
   return JSON.parse(value);
 };
 
-export const setLocaleStorage = <T extends LocaleStorageId>(
+export const setLocalStorage = <T extends LocalStorageId>(
   id: T,
   value?: ExtractDataType<AllLsTypes, T>['data']
 ) => {
