@@ -1,5 +1,5 @@
 import { IdAndDataType } from 'types/extractDataById.types';
-import { ManagedLocalStorage } from 'utils/localStorage';
+import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 
 const appId = 'bancor';
 const appVersion = 'v0';
