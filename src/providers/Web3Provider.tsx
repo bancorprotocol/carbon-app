@@ -15,7 +15,6 @@ import {
 } from 'react';
 import { Connector } from '@web3-react/types';
 import { JsonRpcSigner, StaticJsonRpcProvider } from '@ethersproject/providers';
-import { LocalStorageId, setLocalStorage } from 'services/localeStorage';
 import {
   BancorWeb3ProviderContext,
   ConnectionType,
@@ -23,6 +22,7 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
+import { LocalStorageId, lsService } from 'utils/localStorage';
 
 // ********************************** //
 // WEB3 CONTEXT
@@ -78,7 +78,7 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const handleTenderlyRPC = useCallback(
     (url?: string) => {
-      setLocalStorage(LocalStorageId.TENDERLY_RPC, url);
+      lsService.set(LocalStorageId.TENDERLY_RPC, url);
 
       if (url) {
         const prov = new StaticJsonRpcProvider({

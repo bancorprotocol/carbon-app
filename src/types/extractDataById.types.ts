@@ -1,11 +1,15 @@
 type ExcludeIdKey<K> = K extends 'id' ? never : K;
 
-type ExcludeIdField<A> = {
-  [K in ExcludeIdKey<keyof A>]: A[K];
+export type IdAndDataType<I, D> = { id: I; data: D };
+
+type ExcludeIdField<T> = {
+  [K in ExcludeIdKey<keyof T>]: T[K];
 };
 
-export type IdAndDataType<B, T> = { id: B; data: T };
-
-export type ExtractDataType<U, T> = U extends IdAndDataType<T, unknown>
+type ExtractDataType<U, E> = U extends IdAndDataType<E, unknown>
   ? ExcludeIdField<U>
+  : never;
+
+export type DataTypeById<U, E> = U extends IdAndDataType<E, unknown>
+  ? ExtractDataType<U, E>['data']
   : never;
