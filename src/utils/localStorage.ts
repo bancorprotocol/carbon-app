@@ -1,7 +1,7 @@
 import { IdAndDataType } from 'types/extractDataById.types';
 import { LocalStorageService } from 'services/localeStorage/index';
 
-const appId = 'myAppName';
+const appId = 'bancor';
 const appVersion = 'v0';
 
 // To add a new LocalStorage follow next 2 steps
