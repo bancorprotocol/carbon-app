@@ -9,7 +9,11 @@ export class LocalStorageService<E, U extends IdAndDataType<E, unknown>> {
     this.appVersion = appVersion;
   }
 
-  get = <I extends E>(id: I): DataTypeById<U, I> | undefined => {
+  get = <I extends E>(
+    id: I
+  ): DataTypeById<U, I> extends never
+    ? any
+    : DataTypeById<U, I> | undefined => {
     const lsId = [this.appId, this.appVersion, id].join('-');
     const value = localStorage.getItem(lsId);
     if (!value) {
@@ -18,7 +22,10 @@ export class LocalStorageService<E, U extends IdAndDataType<E, unknown>> {
     return JSON.parse(value);
   };
 
-  set = <I extends E>(id: I, value?: DataTypeById<U, I>) => {
+  set = <I extends E>(
+    id: I,
+    value?: DataTypeById<U, I> extends never ? any : DataTypeById<U, I>
+  ) => {
     const lsId = [this.appId, this.appVersion, id].join('-');
     if (!value) {
       return localStorage.removeItem(lsId);
