@@ -1,22 +1,39 @@
-import { IdAndDataType } from 'types/extractDataById.types';
-import { LocalStorageService } from 'services/localeStorage/index';
+import { DataTypeById, IdAndDataType } from 'types/extractDataById.types';
 
-const appId = 'bancor';
-const appVersion = 'v0';
+export class ManagedLocalStorage<
+  E extends string,
+  U extends IdAndDataType<E, unknown>
+> {
+  private readonly keyFormatter = (id: E) => id as string;
 
-// To add a new LocalStorage follow next 2 steps
-// STEP 1: add ID
-export enum LocalStorageId {
-  TENDERLY_RPC = 'tenderlyRpc',
-  IMPOSTER_ACCOUNT = 'imposterAccount',
+  constructor(keyFormatter?: (id: E) => string) {
+    if (keyFormatter) {
+      this.keyFormatter = keyFormatter;
+    }
+  }
+
+  get = <I extends E>(
+    id: I
+  ): DataTypeById<U, I> extends never
+    ? any
+    : DataTypeById<U, I> | undefined => {
+    const formattedId = this.keyFormatter(id);
+    const value = localStorage.getItem(formattedId);
+    if (!value) {
+      return;
+    }
+    return JSON.parse(value);
+  };
+
+  set = <I extends E>(
+    id: I,
+    value?: DataTypeById<U, I> extends never ? any : DataTypeById<U, I>
+  ) => {
+    const formattedId = this.keyFormatter(id);
+    if (!value) {
+      return localStorage.removeItem(formattedId);
+    }
+    const stringValue = JSON.stringify(value);
+    localStorage.setItem(formattedId, stringValue);
+  };
 }
-
-// STEP 2: add type to union
-type AllLsTypes =
-  | IdAndDataType<LocalStorageId.TENDERLY_RPC, string>
-  | IdAndDataType<LocalStorageId.IMPOSTER_ACCOUNT, string>;
-
-export const lsService = new LocalStorageService<LocalStorageId, AllLsTypes>(
-  appId,
-  appVersion
-);

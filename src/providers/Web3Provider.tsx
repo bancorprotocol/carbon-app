@@ -22,7 +22,7 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
-import { LocalStorageId, lsService } from 'utils/localStorage';
+import { LocalStorageId, lsService } from 'services/localeStorage';
 
 // ********************************** //
 // WEB3 CONTEXT
