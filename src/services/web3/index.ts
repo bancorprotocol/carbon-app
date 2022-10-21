@@ -6,13 +6,7 @@ import {
   SELECTABLE_CONNECTION_TYPES,
   SupportedChainId,
 } from 'services/web3/web3.constants';
-import {
-  networkConnection,
-  injectedConnection,
-  gnosisSafeConnection,
-  walletConnectConnection,
-  coinbaseWalletConnection,
-} from 'services/web3/web.connectors';
+
 import {
   BancorWeb3ProviderContext,
   Connection,
@@ -29,9 +23,4 @@ export {
   SELECTABLE_CONNECTION_TYPES,
   RPC_URLS,
   RPC_PROVIDERS,
-  networkConnection,
-  injectedConnection,
-  gnosisSafeConnection,
-  walletConnectConnection,
-  coinbaseWalletConnection,
 };

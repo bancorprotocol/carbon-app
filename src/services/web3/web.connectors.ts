@@ -5,12 +5,12 @@ import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import {
-  Connection,
   ConnectionType,
   RPC_PROVIDERS,
   RPC_URLS,
   SupportedChainId,
-} from 'services/web3';
+} from './web3.constants';
+import { Connection } from './web3.types';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);

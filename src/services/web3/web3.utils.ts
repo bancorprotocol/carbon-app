@@ -1,11 +1,11 @@
+import { ConnectionType } from 'services/web3/web3.constants';
 import {
   coinbaseWalletConnection,
   gnosisSafeConnection,
   injectedConnection,
   networkConnection,
   walletConnectConnection,
-  ConnectionType,
-} from 'services/web3';
+} from 'services/web3/web.connectors';
 
 export const getConnection = (c: ConnectionType) => {
   switch (c) {

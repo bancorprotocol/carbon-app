@@ -1,12 +1,12 @@
 import { Connector } from '@web3-react/types';
 import { Web3ReactHooks } from '@web3-react/core';
-import { ConnectionType, SupportedChainId } from 'services/web3';
 import {
   JsonRpcProvider,
   JsonRpcSigner,
   StaticJsonRpcProvider,
   Web3Provider,
 } from '@ethersproject/providers';
+import { ConnectionType, SupportedChainId } from './web3.constants';
 
 export interface Connection {
   connector: Connector;
