@@ -4,15 +4,18 @@ import 'index.css';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
 import { ModalProvider } from 'modals/ModalProvider';
+import { Web3ReactWrapper } from 'providers/Web3Provider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <ModalProvider>
-      <App />
-    </ModalProvider>
+    <Web3ReactWrapper>
+      <ModalProvider>
+        <App />
+      </ModalProvider>
+    </Web3ReactWrapper>
   </React.StrictMode>
 );
 
