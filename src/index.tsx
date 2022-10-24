@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'index.css';
+import { ModalProvider } from 'modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
-import { ModalProvider } from 'modals/ModalProvider';
 import { Web3ReactWrapper } from 'providers/Web3Provider';
 
 const root = ReactDOM.createRoot(

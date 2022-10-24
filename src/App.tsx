@@ -1,5 +1,5 @@
 import React from 'react';
-import { useModal } from 'modals/ModalProvider';
+import { useModal } from 'modals';
 import { useWeb3 } from 'providers/Web3Provider';
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';

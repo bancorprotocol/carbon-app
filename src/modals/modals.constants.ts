@@ -16,7 +16,8 @@ export type AllModalsUnion =
   | IdAndDataType<ModalType.WALLET, ModalWalletData>
   | IdAndDataType<ModalType.TOKEN_LIST, undefined>;
 
-// Step 4: add modal component to map
 export const ModalsMap = new Map<ModalType, FC<{ id: string }>>();
+
+// Step 4: add modal component to map
 ModalsMap.set(ModalType.WALLET, (props) => ModalWallet(props));
 ModalsMap.set(ModalType.TOKEN_LIST, (props) => ModalTokenList(props));
