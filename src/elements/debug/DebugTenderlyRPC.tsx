@@ -4,7 +4,7 @@ import { lsService } from 'services/localeStorage';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC } = useWeb3();
-  const [input, setInput] = useState(lsService.get('tenderlyRpc') || '');
+  const [input, setInput] = useState(lsService.getItem('tenderlyRpc') || '');
 
   const handleOnClick = () => {
     handleTenderlyRPC(input);

@@ -85,11 +85,11 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
         });
         setTenderlyProvider(prov);
         setTenderlySigner(prov.getUncheckedSigner(user));
-        lsService.set('tenderlyRpc', url);
+        lsService.setItem('tenderlyRpc', url);
       } else {
         setTenderlyProvider(undefined);
         setTenderlySigner(undefined);
-        lsService.remove('tenderlyRpc');
+        lsService.removeItem('tenderlyRpc');
       }
     },
     [user]

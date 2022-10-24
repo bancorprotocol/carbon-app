@@ -7,7 +7,7 @@ export class ManagedLocalStorage<T> {
     }
   }
 
-  get = <K extends keyof T>(key: K): T[K] | undefined => {
+  getItem = <K extends keyof T>(key: K): T[K] | undefined => {
     const formattedId = this.keyFormatter(key);
     const value = localStorage.getItem(formattedId);
     if (!value) {
@@ -16,13 +16,13 @@ export class ManagedLocalStorage<T> {
     return JSON.parse(value);
   };
 
-  set = <K extends keyof T>(key: K, value: T[K]) => {
+  setItem = <K extends keyof T>(key: K, value: T[K]) => {
     const formattedId = this.keyFormatter(key);
     const stringValue = JSON.stringify(value);
     localStorage.setItem(formattedId, stringValue);
   };
 
-  remove = <K extends keyof T>(key: K) => {
+  removeItem = <K extends keyof T>(key: K) => {
     const formattedId = this.keyFormatter(key);
     localStorage.removeItem(formattedId);
   };

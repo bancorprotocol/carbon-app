@@ -7,6 +7,9 @@ interface LocalStorageSchema {
   tenderlyRpc: string;
   imposterAccount: string;
   testNumber: number;
+  testObject: {
+    id: string;
+  };
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
