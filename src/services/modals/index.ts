@@ -10,13 +10,13 @@ export enum ModalType {
 
 // Step 3: Import Modal Component in providers/ModalProvider.ts
 
-// Step 3: create optional MODAL data
+// Step 4: create optional MODAL data
 type ModalWalletData = {
   foo: string;
   bar: string;
 };
 
-// Step 4: add modal to union type
+// Step 5: add modal to union type
 export type AllModalsUnion =
   | IdAndDataType<ModalType.WALLET, ModalWalletData>
   | IdAndDataType<ModalType.TOKEN_LIST, undefined>;
