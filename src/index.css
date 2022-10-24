@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html, body {
+        @apply text-body bg-body;
+    }
+}
+
+@layer utilities {
+    .text-body {
+        @apply text-black dark:text-white;
+    }
+
+    .bg-body {
+        @apply bg-white dark:bg-black;
+    }
+
+    .px-content {
+        @apply px-4;
+    }
+
+    .text-content {
+        @apply text-black dark:text-white;
+    }
+
+    .bg-content {
+        @apply text-white dark:bg-black;
+    }
+
+    .text-secondary {
+        @apply text-black dark:text-white;
+    }
+
+    .bg-secondary {
+        @apply text-white dark:bg-black;
+    }
+}
