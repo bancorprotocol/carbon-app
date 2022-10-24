@@ -1,12 +1,10 @@
 import { useWeb3 } from 'providers/Web3Provider';
 import { useState } from 'react';
-import { LocalStorageId, lsService } from 'services/localeStorage';
+import { lsService } from 'services/localeStorage';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC } = useWeb3();
-  const [input, setInput] = useState(
-    lsService.get(LocalStorageId.TENDERLY_RPC) || ''
-  );
+  const [input, setInput] = useState(lsService.get('tenderlyRpc') || '');
 
   const handleOnClick = () => {
     handleTenderlyRPC(input);
