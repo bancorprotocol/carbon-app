@@ -7,37 +7,32 @@ import {
   useState,
 } from 'react';
 import { uuid } from 'utils/helpers';
-import { AllModalsUnion, ModalsMap, ModalType } from './modals.constants';
-import { DataTypeById } from 'types/extractDataById.types';
+import { ModalSchema, ModalsMap } from './modals.constants';
+
+type ModalKey = keyof ModalSchema;
 
 interface ModalOpen {
   id: string;
-  type: ModalType;
-  data: AllModalsUnion['data'];
+  key: ModalKey;
+  data: ModalSchema[ModalKey];
 }
 
 interface ModalContext {
   modalsOpen: ModalOpen[];
-  openModal: <T extends ModalType>(
-    type: T,
-    data: DataTypeById<AllModalsUnion, T>
-  ) => void;
+  openModal: <T extends ModalKey>(key: T, data: ModalSchema[T]) => void;
   closeModal: (id: string) => void;
-  getModalData: <T extends ModalType>(
-    type: T,
-    id: string
-  ) => DataTypeById<AllModalsUnion, T>;
+  getModalData: <T extends ModalKey>(key: T, id: string) => ModalSchema[T];
   activeModalId: string | null;
 }
 
 const defaultValue: ModalContext = {
   modalsOpen: [],
-  openModal: (type, data) => console.log(type, data),
+  openModal: (key, data) => console.log(key, data),
   closeModal: (id) => console.log(id),
   activeModalId: null,
-  getModalData: <T extends ModalType>(type: T, id: string) => {
-    console.log(type, id);
-    return {} as DataTypeById<AllModalsUnion, T>;
+  getModalData: <T extends ModalKey>(key: T, id: string) => {
+    console.log(key, id);
+    return {} as ModalSchema[T];
   },
 };
 
@@ -46,11 +41,8 @@ const ModalCTX = createContext<ModalContext>(defaultValue);
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [modalsOpen, setModalsOpen] = useState<ModalOpen[]>([]);
 
-  const openModal = <T extends ModalType>(
-    type: T,
-    data: DataTypeById<AllModalsUnion, T>
-  ) => {
-    setModalsOpen((prevState) => [...prevState, { id: uuid(), type, data }]);
+  const openModal = <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
+    setModalsOpen((prevState) => [...prevState, { id: uuid(), key, data }]);
   };
 
   const activeModalId = useMemo(
@@ -67,13 +59,13 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const getModalData = <T extends ModalType>(type: T, id: string) => {
+  const getModalData = <T extends ModalKey>(key: T, id: string) => {
     const state = modalsOpen.find((modal) => modal.id === id);
     if (!state) {
-      throw Error(`Modal of type "${type}" with ID: "${id}" not found.`);
+      throw Error(`Modal of key "${key}" with ID: "${id}" not found.`);
     }
 
-    return state.data as DataTypeById<AllModalsUnion, T>;
+    return state.data as ModalSchema[T];
   };
 
   return (
@@ -89,8 +81,8 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
       <>
         {children}
 
-        {modalsOpen.map(({ id, type }) => {
-          const Modal = ModalsMap.get(type);
+        {modalsOpen.map(({ id, key }) => {
+          const Modal = ModalsMap.get(key);
           if (!Modal) {
             return null;
           }

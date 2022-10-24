@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
-import { ModalType } from 'modals/index';
 
 export type ModalWalletData = {
   foo: string;
@@ -11,7 +10,7 @@ export type ModalWalletData = {
 export const ModalWallet: FC<{ id: string }> = ({ id }) => {
   const { closeModal, getModalData } = useModal();
 
-  const data = getModalData(ModalType.WALLET, id);
+  const data = getModalData('wallet', id);
 
   return (
     <Modal id={id}>

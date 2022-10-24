@@ -10,7 +10,6 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
-import { ModalType } from 'modals/index';
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 
@@ -37,17 +36,13 @@ export const App = () => {
     <div>
       <h1 className={'text-red-600'}>Hello</h1>
       <div>
-        <button
-          onClick={() =>
-            openModal(ModalType.WALLET, { foo: 'asd', bar: 'asd' })
-          }
-        >
+        <button onClick={() => openModal('wallet', { foo: 'asd', bar: 'asd' })}>
           open wallet modal
         </button>
       </div>
 
       <div>
-        <button onClick={() => openModal(ModalType.TOKEN_LIST, undefined)}>
+        <button onClick={() => openModal('tokenLists', undefined)}>
           open token list modal
         </button>
       </div>

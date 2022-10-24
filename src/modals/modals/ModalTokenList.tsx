@@ -1,12 +1,11 @@
 import { FC } from 'react';
 import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
-import { ModalType } from 'modals/index';
 
 export const ModalTokenList: FC<{ id: string }> = ({ id }) => {
   const { closeModal, getModalData } = useModal();
 
-  const data = getModalData(ModalType.TOKEN_LIST, id);
+  const data = getModalData('tokenLists', id);
 
   return (
     <Modal id={id}>
