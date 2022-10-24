@@ -22,7 +22,7 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
-import { LocalStorageId, lsService } from 'services/localeStorage';
+import { lsService } from 'services/localeStorage';
 
 // ********************************** //
 // WEB3 CONTEXT
@@ -78,8 +78,6 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const handleTenderlyRPC = useCallback(
     (url?: string) => {
-      lsService.set(LocalStorageId.TENDERLY_RPC, url);
-
       if (url) {
         const prov = new StaticJsonRpcProvider({
           url,
@@ -87,9 +85,11 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
         });
         setTenderlyProvider(prov);
         setTenderlySigner(prov.getUncheckedSigner(user));
+        lsService.setItem('tenderlyRpc', url);
       } else {
         setTenderlyProvider(undefined);
         setTenderlySigner(undefined);
+        lsService.removeItem('tenderlyRpc');
       }
     },
     [user]

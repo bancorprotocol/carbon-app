@@ -1,21 +1,21 @@
-import { IdAndDataType } from 'types/extractDataById.types';
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 
-const appId = 'bancor';
-const appVersion = 'v0';
+const APP_ID = 'bancor';
+const APP_VERSION = 'v0';
 
-// To add a new LocalStorage follow next 2 steps
-// STEP 1: add ID
-export enum LocalStorageId {
-  TENDERLY_RPC = 'tenderlyRpc',
-  IMPOSTER_ACCOUNT = 'imposterAccount',
+// ************************** /
+// BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
+// ************************** /
+
+interface LocalStorageSchema {
+  tenderlyRpc: string;
+  imposterAccount: string;
+  testNumber: number;
+  testObject: {
+    id: string;
+  };
 }
 
-// STEP 2: add type to union
-type AllLsTypes =
-  | IdAndDataType<LocalStorageId.TENDERLY_RPC, string>
-  | IdAndDataType<LocalStorageId.IMPOSTER_ACCOUNT, string>;
-
-export const lsService = new ManagedLocalStorage<LocalStorageId, AllLsTypes>(
-  (key) => [appId, appVersion, key].join('-')
+export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
+  [APP_ID, APP_VERSION, key].join('-')
 );

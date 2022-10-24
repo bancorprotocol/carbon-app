@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  pull_request:
+    types:
+      [opened, closed, edited, ready_for_review, review_requested, reopened]
+  push:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: |
+            **/node_modules
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        env:
+          CI: false
+          ALCHEMY_MAINNET: ${{ secrets.ALCHEMY_MAINNET }}
+          ALCHEMY_ROPSTEN: ${{ secrets.ALCHEMY_ROPSTEN }}
+          PORTIS_DAPP_ID: ${{ secrets.PORTIS_DAPP_ID }}
+          FORTMATIC_API_KEY: ${{ secrets.FORTMATIC_API_KEY }}
+        run: yarn build
