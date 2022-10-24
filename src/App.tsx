@@ -1,4 +1,5 @@
 import React from 'react';
+import { useModal } from 'modals';
 import { useWeb3 } from 'providers/Web3Provider';
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
@@ -15,6 +16,7 @@ export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 export const App = () => {
   const { isNetworkActive, user } = useWeb3();
   const { Token } = useContract();
+  const { openModal } = useModal();
 
   const connect = (type: ConnectionType) => {
     const connection = getConnection(type);
@@ -33,6 +35,18 @@ export const App = () => {
   return (
     <div>
       <h1 className={'text-red-600'}>Hello</h1>
+      <div>
+        <button onClick={() => openModal('wallet', { foo: 'asd', bar: 'asd' })}>
+          open wallet modal
+        </button>
+      </div>
+
+      <div>
+        <button onClick={() => openModal('tokenLists', undefined)}>
+          open token list modal
+        </button>
+      </div>
+
       <div>
         <button onClick={() => readChain()}>read chain</button>
         {isNetworkActive ? 'true' : 'false'}

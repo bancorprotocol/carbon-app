@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'index.css';
+import { ModalProvider } from 'modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
 import { Web3ReactWrapper } from 'providers/Web3Provider';
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Web3ReactWrapper>
-      <App />
+      <ModalProvider>
+        <App />
+      </ModalProvider>
     </Web3ReactWrapper>
   </React.StrictMode>
 );
