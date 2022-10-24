@@ -1,4 +1,3 @@
-import React from 'react';
 import { useWeb3 } from 'providers/Web3Provider';
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
@@ -9,6 +8,9 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 
@@ -31,30 +33,32 @@ export const App = () => {
   };
 
   return (
-    <div>
-      <h1 className={'text-red-600'}>Hello</h1>
+    <QueryClientProvider client={queryClient}>
       <div>
-        <button onClick={() => readChain()}>read chain</button>
-        {isNetworkActive ? 'true' : 'false'}
-      </div>
-      <div>
-        <div className={'flex flex-col space-y-1'}>
-          {SELECTABLE_CONNECTION_TYPES.map((type) => (
-            <button
-              key={type}
-              className={'bg-sky-500 px-2 text-white'}
-              onClick={() => connect(type)}
-            >
-              {getConnectionName(type, true)} connect
-            </button>
-          ))}
-
-          <div>{user ? user : 'not logged in'}</div>
+        <h1 className={'text-red-600'}>Hello</h1>
+        <div>
+          <button onClick={() => readChain()}>read chain</button>
+          {isNetworkActive ? 'true' : 'false'}
         </div>
-      </div>
+        <div>
+          <div className={'flex flex-col space-y-1'}>
+            {SELECTABLE_CONNECTION_TYPES.map((type) => (
+              <button
+                key={type}
+                className={'bg-sky-500 px-2 text-white'}
+                onClick={() => connect(type)}
+              >
+                {getConnectionName(type, true)} connect
+              </button>
+            ))}
 
-      <DebugTenderlyRPC />
-      <DebugImposter />
-    </div>
+            <div>{user ? user : 'not logged in'}</div>
+          </div>
+        </div>
+
+        <DebugTenderlyRPC />
+        <DebugImposter />
+      </div>
+    </QueryClientProvider>
   );
 };
