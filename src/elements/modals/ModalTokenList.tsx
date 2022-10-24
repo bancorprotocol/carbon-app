@@ -1,11 +1,12 @@
 import { FC } from 'react';
-import { ModalType, useModal } from 'modals/ModalProvider';
-import { Modal } from 'modals/Modal';
+import { useModal } from 'providers/ModalProvider';
+import { Modal } from 'components/Modal';
+import { ModalType } from 'services/modals';
 
-export const ModalWallet: FC<{ id: string }> = ({ id }) => {
+export const ModalTokenList: FC<{ id: string }> = ({ id }) => {
   const { closeModal, getModalData } = useModal();
 
-  const data = getModalData(ModalType.WALLET, id);
+  const data = getModalData(ModalType.TOKEN_LIST, id);
 
   return (
     <Modal id={id}>
@@ -16,7 +17,7 @@ export const ModalWallet: FC<{ id: string }> = ({ id }) => {
         >
           close
         </button>
-        <div>MODAL WALLET</div>
+        <div>MODAL TOKEN LIST</div>
         <div>
           Data:
           <pre>{JSON.stringify(data, null, 2)}</pre>

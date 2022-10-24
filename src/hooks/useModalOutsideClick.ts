@@ -1,5 +1,5 @@
 import { RefObject, useEffect } from 'react';
-import { useModal } from 'modals/ModalProvider';
+import { useModal } from 'providers/ModalProvider';
 
 export const useModalOutsideClick = (
   id: string,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModalType, useModal } from 'modals/ModalProvider';
+import { useModal } from 'providers/ModalProvider';
 import { useWeb3 } from 'providers/Web3Provider';
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
@@ -10,6 +10,7 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
+import { ModalType } from 'services/modals';
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 
@@ -35,11 +36,22 @@ export const App = () => {
   return (
     <div>
       <h1 className={'text-red-600'}>Hello</h1>
-      <button
-        onClick={() => openModal(ModalType.WALLET, { foo: 'asd', bar: 'asd' })}
-      >
-        open wallet modal
-      </button>
+      <div>
+        <button
+          onClick={() =>
+            openModal(ModalType.WALLET, { foo: 'asd', bar: 'asd' })
+          }
+        >
+          open wallet modal
+        </button>
+      </div>
+
+      <div>
+        <button onClick={() => openModal(ModalType.TOKEN_LIST, undefined)}>
+          open token list modal
+        </button>
+      </div>
+
       <div>
         <button onClick={() => readChain()}>read chain</button>
         {isNetworkActive ? 'true' : 'false'}

@@ -7,62 +7,50 @@ import {
   useState,
 } from 'react';
 import { uuid } from 'utils/helpers';
-import { ExtractModalData, Modals } from 'modals/types.modal';
-import { ModalWallet } from 'modals/ModalWallet';
+import { ModalWallet } from 'elements/modals/ModalWallet';
+import { AllModalsUnion, ModalType } from 'services/modals/index';
+import { DataTypeById } from 'types/extractDataById.types';
+import { ModalTokenList } from 'elements/modals/ModalTokenList';
 
-export enum ModalType {
-  WALLET,
-}
-
-type ModalState = {
+interface ModalOpen {
   id: string;
   type: ModalType;
-  data: ExtractModalData<Modals, ModalType>['data'];
-}[];
-
-const tmpOpenFn = <T extends ModalType>(
-  type: T,
-  data: ExtractModalData<Modals, T>['data'] extends infer R
-    ? { [key in keyof R]: R[key] }
-    : never
-) => {
-  console.log(data);
-};
-
-const tmpDataFn = <T extends ModalType>(
-  type: T,
-  id: string
-): ExtractModalData<Modals, T>['data'] => {
-  return {} as ExtractModalData<Modals, T>['data'];
-};
+  data: AllModalsUnion['data'];
+}
 
 interface ModalContext {
-  modalsOpen: ModalState;
-  openModal: typeof tmpOpenFn;
+  modalsOpen: ModalOpen[];
+  openModal: <T extends ModalType>(
+    type: T,
+    data: DataTypeById<AllModalsUnion, T>
+  ) => void;
   closeModal: (id: string) => void;
-  isModalOpen: (id: string) => boolean;
-  getModalData: typeof tmpDataFn;
+  getModalData: <T extends ModalType>(
+    type: T,
+    id: string
+  ) => DataTypeById<AllModalsUnion, T>;
   activeModalId: string | null;
 }
 
 const defaultValue: ModalContext = {
   modalsOpen: [],
-  openModal: (type, data) => {},
-  closeModal: (id) => {},
-  isModalOpen: (id) => false,
+  openModal: (type, data) => console.log(type, data),
+  closeModal: (id) => console.log(id),
   activeModalId: null,
-  // @ts-ignore
-  getModalData: (type, id) => {},
+  getModalData: <T extends ModalType>(type: T, id: string) => {
+    console.log(type, id);
+    return {} as DataTypeById<AllModalsUnion, T>;
+  },
 };
 
 const ModalCTX = createContext<ModalContext>(defaultValue);
 
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [modalsOpen, setModalsOpen] = useState<ModalState>([]);
+  const [modalsOpen, setModalsOpen] = useState<ModalOpen[]>([]);
 
   const openModal = <T extends ModalType>(
     type: T,
-    data: ExtractModalData<Modals, T>['data']
+    data: DataTypeById<AllModalsUnion, T>
   ) => {
     setModalsOpen((prevState) => [...prevState, { id: uuid(), type, data }]);
   };
@@ -87,23 +75,17 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
       throw Error(`Modal of type "${type}" with ID: "${id}" not found.`);
     }
 
-    return state.data as ExtractModalData<Modals, T>['data'];
-  };
-
-  const isModalOpen = (id: string) => {
-    return !!modalsOpen.find((modal) => modal.id === id);
+    return state.data as DataTypeById<AllModalsUnion, T>;
   };
 
   return (
     <ModalCTX.Provider
       value={{
-        // @ts-ignore
         openModal,
         closeModal,
-        isModalOpen,
-        activeModalId,
         modalsOpen,
         getModalData,
+        activeModalId,
       }}
     >
       <>
@@ -113,6 +95,7 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
           return (
             <div key={id}>
               {type === ModalType.WALLET && <ModalWallet id={id} />}
+              {type === ModalType.TOKEN_LIST && <ModalTokenList id={id} />}
             </div>
           );
         })}
