@@ -9,7 +9,7 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
-import { MainMenu } from 'elements/mainMenu/MainMenu';
+import { MainMenu } from 'elements/menu';
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 

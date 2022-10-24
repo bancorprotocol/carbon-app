@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { menuItems } from 'services/menu/index';
+import { menuItems } from 'elements/menu';
 
 export const MainMenuLeft: FC = () => {
   return (

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { MainMenuLeft } from 'elements/mainMenu/MainMenuLeft';
-import { MainMenuRight } from 'elements/mainMenu/MainMenuRight';
+import { MainMenuLeft } from './MainMenuLeft';
+import { MainMenuRight } from './MainMenuRight';
 
 export const MainMenu: FC = () => {
   return (
