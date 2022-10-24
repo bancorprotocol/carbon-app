@@ -1,5 +1,5 @@
 import React from 'react';
-import { useModal } from 'providers/ModalProvider';
+import { useModal } from 'modals/ModalProvider';
 import { useWeb3 } from 'providers/Web3Provider';
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
@@ -10,7 +10,7 @@ import {
   getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
-import { ModalType } from 'services/modals';
+import { ModalType } from 'modals/index';
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 

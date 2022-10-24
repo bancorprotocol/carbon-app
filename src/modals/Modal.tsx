@@ -1,6 +1,6 @@
 import { FC, ReactNode, useRef } from 'react';
-import { useModal } from 'providers/ModalProvider';
-import { useModalOutsideClick } from 'hooks/useModalOutsideClick';
+import { useModal } from './ModalProvider';
+import { useModalOutsideClick } from './useModalOutsideClick';
 
 type Props = {
   children: ReactNode;

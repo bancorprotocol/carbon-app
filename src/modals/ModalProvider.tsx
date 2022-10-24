@@ -7,10 +7,8 @@ import {
   useState,
 } from 'react';
 import { uuid } from 'utils/helpers';
-import { ModalWallet } from 'elements/modals/ModalWallet';
-import { AllModalsUnion, ModalType } from 'services/modals/index';
+import { AllModalsUnion, ModalsMap, ModalType } from './modals.constants';
 import { DataTypeById } from 'types/extractDataById.types';
-import { ModalTokenList } from 'elements/modals/ModalTokenList';
 
 interface ModalOpen {
   id: string;
@@ -92,12 +90,11 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
         {children}
 
         {modalsOpen.map(({ id, type }) => {
-          return (
-            <div key={id}>
-              {type === ModalType.WALLET && <ModalWallet id={id} />}
-              {type === ModalType.TOKEN_LIST && <ModalTokenList id={id} />}
-            </div>
-          );
+          const Modal = ModalsMap.get(type);
+          if (!Modal) {
+            return null;
+          }
+          return <Modal key={id} id={id} />;
         })}
       </>
     </ModalCTX.Provider>
