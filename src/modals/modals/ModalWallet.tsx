@@ -1,4 +1,3 @@
-import React from 'react';
 import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
