@@ -26,6 +26,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "framer-motion": "^7.6.1",
     "husky": "^8.0.0",
     "is-ci": "^3.0.1",
     "postcss": "^8.4.18",

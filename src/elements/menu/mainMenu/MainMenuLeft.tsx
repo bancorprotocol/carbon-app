@@ -7,7 +7,7 @@ export const MainMenuLeft: FC = () => {
       <div className={'h-[39px] w-[39px] rounded-full bg-purple-400'}></div>
       <div className={'space-x-6'}>
         {menuItems.map(({ label, href }) => (
-          <a key={href} href={href} className={'px-2 py-2'}>
+          <a key={label} href={href} className={'px-2 py-2'}>
             {label}
           </a>
         ))}

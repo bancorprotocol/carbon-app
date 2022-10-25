@@ -3,7 +3,15 @@ import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
 
-export const ModalWallet: ModalFC<undefined> = ({ id }) => {
+export type ModalDataExampleData = {
+  foo: string;
+  bar: string;
+};
+
+export const ModalDataExample: ModalFC<ModalDataExampleData> = ({
+  id,
+  data,
+}) => {
   const { closeModal, openModal } = useModal();
 
   return (
@@ -21,6 +29,11 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
           <button onClick={() => openModal('tokenLists', undefined)}>
             open token list modal
           </button>
+        </div>
+
+        <div>
+          Data:
+          <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
 
         <p>

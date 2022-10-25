@@ -5,17 +5,20 @@ import { ModalProvider } from 'modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
 import { Web3ReactWrapper } from 'providers/Web3Provider';
+import { domAnimation, LazyMotion } from 'framer-motion';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Web3ReactWrapper>
-      <ModalProvider>
-        <App />
-      </ModalProvider>
-    </Web3ReactWrapper>
+    <LazyMotion features={domAnimation} strict>
+      <Web3ReactWrapper>
+        <ModalProvider>
+          <App />
+        </ModalProvider>
+      </Web3ReactWrapper>
+    </LazyMotion>
   </React.StrictMode>
 );
 

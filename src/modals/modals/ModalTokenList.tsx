@@ -1,11 +1,10 @@
-import { FC } from 'react';
+import React from 'react';
 import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
+import { ModalFC } from 'modals/modals.types';
 
-export const ModalTokenList: FC<{ id: string }> = ({ id }) => {
-  const { closeModal, getModalData } = useModal();
-
-  const data = getModalData('tokenLists', id);
+export const ModalTokenList: ModalFC<undefined> = ({ id }) => {
+  const { closeModal } = useModal();
 
   return (
     <Modal id={id}>
@@ -17,10 +16,6 @@ export const ModalTokenList: FC<{ id: string }> = ({ id }) => {
           close
         </button>
         <div>MODAL TOKEN LIST</div>
-        <div>
-          Data:
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
 
         <p>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
