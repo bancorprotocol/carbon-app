@@ -12,6 +12,8 @@ export interface Connection {
   connector: Connector;
   hooks: Web3ReactHooks;
   type: ConnectionType;
+  name: string;
+  logoUrl?: string;
 }
 
 export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
@@ -26,4 +28,5 @@ export interface BancorWeb3ProviderContext {
   provider?: Web3Provider | StaticJsonRpcProvider;
   signer: JsonRpcSigner | undefined;
   handleTenderlyRPC: (url?: string) => void;
+  disconnect: () => Promise<void>;
 }

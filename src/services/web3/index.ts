@@ -1,4 +1,4 @@
-import { getConnection, getConnectionName } from 'services/web3/web3.utils';
+import { getConnection } from 'services/web3/web3.utils';
 import {
   ConnectionType,
   RPC_PROVIDERS,
@@ -17,7 +17,6 @@ export type { BancorWeb3ProviderContext, Connection, ChainIdMapTo };
 
 export {
   getConnection,
-  getConnectionName,
   SupportedChainId,
   ConnectionType,
   SELECTABLE_CONNECTION_TYPES,

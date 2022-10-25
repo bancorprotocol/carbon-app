@@ -1,9 +1,20 @@
 import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
+import { ConnectionType, getConnection } from 'services/web3/index';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
-  const { closeModal, openModal } = useModal();
+  const { closeModal } = useModal();
+
+  const connect = async (type: ConnectionType) => {
+    const { connector, name } = getConnection(type);
+    try {
+      await connector.activate();
+      closeModal(id);
+    } catch (e) {
+      console.error(`failed to connect to ${name} with error: `, e);
+    }
+  };
 
   return (
     <Modal id={id}>
@@ -16,87 +27,9 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
         </button>
         <div>MODAL WALLET</div>
 
-        <div>
-          <button onClick={() => openModal('tokenLists', undefined)}>
-            open token list modal
-          </button>
-        </div>
-
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-          laudantium libero, nobis non nostrum odio quos sit. Amet earum et, id
-          inventore magni necessitatibus nihil odit quasi sunt unde velit.
-        </p>
+        <button onClick={() => connect(ConnectionType.INJECTED)}>
+          Connect to MetaMask
+        </button>
       </div>
     </Modal>
   );

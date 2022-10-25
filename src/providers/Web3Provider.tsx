@@ -19,7 +19,6 @@ import {
   BancorWeb3ProviderContext,
   ConnectionType,
   getConnection,
-  getConnectionName,
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
 import { lsService } from 'services/localeStorage';
@@ -36,6 +35,7 @@ const defaultValue: BancorWeb3ProviderContext = {
   signer: undefined,
   chainId: 1,
   handleTenderlyRPC: () => {},
+  disconnect: async () => {},
 };
 
 const BancorWeb3CTX = createContext(defaultValue);
@@ -58,7 +58,7 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
     connector,
   } = useWeb3React();
 
-  const [imposterAccount, setImposterAccount] = useState<string>();
+  const [imposterAccount, setImposterAccount] = useState<string>('');
   const [tenderlyProvider, setTenderlyProvider] =
     useState<StaticJsonRpcProvider>();
   const [tenderlySigner, setTenderlySigner] = useState<JsonRpcSigner>();
@@ -95,6 +95,15 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
     [user]
   );
 
+  const disconnect = useCallback(async () => {
+    if (connector.deactivate) {
+      await connector.deactivate();
+    } else {
+      await connector.resetState();
+    }
+    setImposterAccount('');
+  }, [connector]);
+
   useEffect(() => {
     void network.connector.activate();
     void connector.connectEagerly?.();
@@ -110,6 +119,7 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
         signer,
         chainId,
         handleTenderlyRPC,
+        disconnect,
       }}
     >
       {children}
@@ -127,9 +137,7 @@ const connectors: [Connector, Web3ReactHooks][] =
     hooks,
   ]);
 
-const key = SELECTABLE_CONNECTION_TYPES.map((type) =>
-  getConnectionName(type)
-).join('-');
+const key = 'Web3ReactProviderKey';
 
 export const Web3ReactWrapper: FC<{ children: ReactNode }> = ({ children }) => {
   return (

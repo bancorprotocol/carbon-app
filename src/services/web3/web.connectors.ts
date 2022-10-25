@@ -28,6 +28,7 @@ export const networkConnection: Connection = {
   connector: web3Network,
   hooks: web3NetworkHooks,
   type: ConnectionType.NETWORK,
+  name: 'Network',
 };
 
 // ********************************** //
@@ -41,6 +42,7 @@ export const injectedConnection: Connection = {
   connector: web3Injected,
   hooks: web3InjectedHooks,
   type: ConnectionType.INJECTED,
+  name: 'MetaMask',
 };
 
 // ********************************** //
@@ -54,6 +56,7 @@ export const gnosisSafeConnection: Connection = {
   connector: web3GnosisSafe,
   hooks: web3GnosisSafeHooks,
   type: ConnectionType.GNOSIS_SAFE,
+  name: 'Gnosis Safe',
 };
 
 // ********************************** //
@@ -76,6 +79,7 @@ export const walletConnectConnection: Connection = {
   connector: web3WalletConnect,
   hooks: web3WalletConnectHooks,
   type: ConnectionType.WALLET_CONNECT,
+  name: 'WalletConnect',
 };
 
 // ********************************** //
@@ -101,4 +105,5 @@ export const coinbaseWalletConnection: Connection = {
   connector: web3CoinbaseWallet,
   hooks: web3CoinbaseWalletHooks,
   type: ConnectionType.COINBASE_WALLET,
+  name: 'Coinbase Wallet',
 };
