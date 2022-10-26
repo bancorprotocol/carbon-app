@@ -5,3 +5,19 @@ export const uuid = () => {
     return v.toString(16);
   });
 };
+
+export const sanitizeNumberInput = (
+  input: string,
+  precision?: number
+): string => {
+  const sanitized = input
+    .replace(/,/, '.')
+    .replace(/[^\d.]/g, '')
+    .replace(/\./, 'x')
+    .replace(/\./g, '')
+    .replace(/x/, '.');
+  if (!precision) return sanitized;
+  const [integer, decimals] = sanitized.split('.');
+  if (decimals) return `${integer}.${decimals.substring(0, precision)}`;
+  else return sanitized;
+};

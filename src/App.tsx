@@ -1,4 +1,3 @@
-import React from 'react';
 import { useModal } from 'modals';
 import { useWeb3 } from 'providers/Web3Provider';
 import { DebugImposter } from 'elements/debug/DebugImposter';
@@ -39,7 +38,9 @@ export const App = () => {
       <main className={'px-content'}>
         <h1 className={'text-red-600'}>Hello</h1>
         <div>
-          <button onClick={() => openModal('wallet', { foo: 'asd', bar: 'asd' })}>
+          <button
+            onClick={() => openModal('wallet', { foo: 'asd', bar: 'asd' })}
+          >
             open wallet modal
           </button>
         </div>
