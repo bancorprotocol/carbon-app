@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-    html, body {
-        @apply text-body bg-body;
+    html, body, #root {
+        @apply text-body bg-body h-screen;
     }
 }
 

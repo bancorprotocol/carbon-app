@@ -6,6 +6,9 @@ import { useContract } from 'hooks/useContract';
 
 import { MainMenu } from 'elements/menu';
 import { useWeb3 } from 'providers/Web3Provider';
+import { DebugBalance } from 'elements/debug/DebugBalance';
+import { IS_TENDERLY_FORK } from 'services/web3/web3.constants';
+import { DebugWeb3 } from 'elements/debug/DebugWeb3';
 
 export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
 
@@ -35,6 +38,9 @@ export const App = () => {
   return (
     <>
       <MainMenu />
+      {IS_TENDERLY_FORK && (
+        <div className={'h-[50px] bg-amber-500 text-white'}>TENDERLY FORK</div>
+      )}
       <main className={'px-content'}>
         <h1 className={'text-red-600'}>Hello</h1>
         <div>
@@ -57,8 +63,10 @@ export const App = () => {
           <button onClick={() => writeChain()}>write chain</button>
         </div>
 
+        <DebugWeb3 />
         <DebugTenderlyRPC />
         <DebugImposter />
+        <DebugBalance />
       </main>
     </>
   );

@@ -6,6 +6,7 @@ import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
 import { Web3ReactWrapper } from 'providers/Web3Provider';
 import { domAnimation, LazyMotion } from 'framer-motion';
+import { NotificationProvider } from 'notifications/NotificationsProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,11 +14,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <LazyMotion features={domAnimation} strict>
-      <Web3ReactWrapper>
-        <ModalProvider>
-          <App />
-        </ModalProvider>
-      </Web3ReactWrapper>
+      <NotificationProvider>
+        <Web3ReactWrapper>
+          <ModalProvider>
+            <App />
+          </ModalProvider>
+        </Web3ReactWrapper>
+      </NotificationProvider>
     </LazyMotion>
   </React.StrictMode>
 );

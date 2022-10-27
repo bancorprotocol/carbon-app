@@ -14,7 +14,7 @@ import {
   useState,
 } from 'react';
 import { Connector } from '@web3-react/types';
-import { JsonRpcSigner, StaticJsonRpcProvider } from '@ethersproject/providers';
+import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import {
   BancorWeb3ProviderContext,
   ConnectionType,
@@ -22,6 +22,11 @@ import {
   SELECTABLE_CONNECTION_TYPES,
 } from 'services/web3';
 import { lsService } from 'services/localeStorage';
+import { IS_TENDERLY_FORK } from 'services/web3/web3.constants';
+import {
+  NotificationType,
+  useNotifications,
+} from 'notifications/NotificationsProvider';
 
 // ********************************** //
 // WEB3 CONTEXT
@@ -29,13 +34,16 @@ import { lsService } from 'services/localeStorage';
 
 const defaultValue: BancorWeb3ProviderContext = {
   user: undefined,
-  setImposterAccount: (account) => console.log(account),
+  handleImposterAccount: (account) => console.log(account),
   isNetworkActive: false,
+  isNetworkActivating: false,
   provider: undefined,
   signer: undefined,
   chainId: 1,
-  handleTenderlyRPC: () => {},
+  handleTenderlyRPC: (url) => console.log(url),
   disconnect: async () => {},
+  isImposter: false,
+  networkError: undefined,
 };
 
 const BancorWeb3CTX = createContext(defaultValue);
@@ -48,52 +56,58 @@ export const useWeb3 = () => useContext(BancorWeb3CTX);
 
 const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
   const network = getConnection(ConnectionType.NETWORK);
-  const isNetworkActive = network.hooks.useIsActive();
-  const networkProvider = network.hooks.useProvider();
+  const provider = network.hooks.useProvider();
+  const { dispatchNotification } = useNotifications();
 
   const {
     account: walletAccount,
     provider: walletProvider,
     chainId,
     connector,
+    isActive: isNetworkActive,
+    isActivating: isNetworkActivating,
   } = useWeb3React();
 
-  const [imposterAccount, setImposterAccount] = useState<string>('');
-  const [tenderlyProvider, setTenderlyProvider] =
-    useState<StaticJsonRpcProvider>();
-  const [tenderlySigner, setTenderlySigner] = useState<JsonRpcSigner>();
+  const [imposterAccount, setImposterAccount] = useState<string>(
+    lsService.getItem('imposterAccount') || ''
+  );
+  useState<StaticJsonRpcProvider>();
+
+  const [networkError, setNetworkError] = useState<string>();
+  useState<StaticJsonRpcProvider>();
 
   const user = useMemo(
     () => imposterAccount || walletAccount,
     [imposterAccount, walletAccount]
   );
-  const provider = useMemo(
-    () => tenderlyProvider || networkProvider,
-    [tenderlyProvider, networkProvider]
-  );
+
+  const isImposter = useMemo(() => !!imposterAccount, [imposterAccount]);
+
   const signer = useMemo(
-    () => tenderlySigner || walletProvider?.getSigner(user),
-    [walletProvider, tenderlySigner, user]
+    () =>
+      IS_TENDERLY_FORK
+        ? provider?.getUncheckedSigner(user)
+        : walletProvider?.getSigner(user),
+    [provider, user, walletProvider]
   );
 
-  const handleTenderlyRPC = useCallback(
-    (url?: string) => {
-      if (url) {
-        const prov = new StaticJsonRpcProvider({
-          url,
-          skipFetchSetup: true,
-        });
-        setTenderlyProvider(prov);
-        setTenderlySigner(prov.getUncheckedSigner(user));
-        lsService.setItem('tenderlyRpc', url);
-      } else {
-        setTenderlyProvider(undefined);
-        setTenderlySigner(undefined);
-        lsService.removeItem('tenderlyRpc');
-      }
-    },
-    [user]
-  );
+  const handleImposterAccount = (account = '') => {
+    setImposterAccount(account);
+    if (account) {
+      lsService.setItem('imposterAccount', account);
+    } else {
+      lsService.removeItem('imposterAccount');
+    }
+  };
+
+  const handleTenderlyRPC = (url?: string) => {
+    if (url) {
+      lsService.setItem('tenderlyRpc', url);
+    } else {
+      lsService.removeItem('tenderlyRpc');
+    }
+    window.location.reload();
+  };
 
   const disconnect = useCallback(async () => {
     if (connector.deactivate) {
@@ -104,22 +118,49 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
     setImposterAccount('');
   }, [connector]);
 
-  useEffect(() => {
-    void network.connector.activate();
-    void connector.connectEagerly?.();
-  }, [connector, network.connector]);
+  const activateNetwork = useCallback(async () => {
+    console.log('activateNetwork');
+    if (isNetworkActive || isNetworkActivating || networkError) {
+      return;
+    }
+    try {
+      await network.connector.activate();
+      await connector.connectEagerly?.();
+    } catch (e: any) {
+      const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
+      console.error('activateNetwork failed.', msg);
+      setNetworkError(msg);
+      dispatchNotification({
+        title: 'Network Error',
+        description: msg,
+        type: NotificationType.Failed,
+      });
+    }
+  }, [
+    connector,
+    dispatchNotification,
+    isNetworkActivating,
+    isNetworkActive,
+    network.connector,
+    networkError,
+  ]);
+
+  useEffect(() => void activateNetwork(), [activateNetwork]);
 
   return (
     <BancorWeb3CTX.Provider
       value={{
         user,
-        setImposterAccount,
         isNetworkActive,
+        isNetworkActivating,
         provider,
         signer,
         chainId,
         handleTenderlyRPC,
+        handleImposterAccount,
         disconnect,
+        isImposter,
+        networkError,
       }}
     >
       {children}

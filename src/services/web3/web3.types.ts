@@ -22,11 +22,14 @@ export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
 
 export interface BancorWeb3ProviderContext {
   user: string | undefined;
-  setImposterAccount: (account: string) => void;
   chainId: number | undefined;
   isNetworkActive: boolean;
+  isNetworkActivating: boolean;
+  networkError: string | undefined;
   provider?: Web3Provider | StaticJsonRpcProvider;
   signer: JsonRpcSigner | undefined;
   handleTenderlyRPC: (url?: string) => void;
+  handleImposterAccount: (account: string) => void;
   disconnect: () => Promise<void>;
+  isImposter: boolean;
 }

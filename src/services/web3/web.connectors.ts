@@ -4,12 +4,7 @@ import { WalletConnect } from '@web3-react/walletconnect';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import {
-  ConnectionType,
-  RPC_PROVIDERS,
-  RPC_URLS,
-  SupportedChainId,
-} from './web3.constants';
+import { ConnectionType, RPC_URLS, SupportedChainId } from './web3.constants';
 import { Connection } from './web3.types';
 
 const onError = (error: Error) => {
@@ -22,7 +17,11 @@ const onError = (error: Error) => {
 
 const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
   (actions) =>
-    new Network({ actions, urlMap: RPC_PROVIDERS, defaultChainId: 1 })
+    new Network({
+      actions,
+      urlMap: RPC_URLS,
+      defaultChainId: SupportedChainId.MAINNET,
+    })
 );
 export const networkConnection: Connection = {
   connector: web3Network,
@@ -92,7 +91,7 @@ const [web3CoinbaseWallet, web3CoinbaseWalletHooks] =
       new CoinbaseWallet({
         actions,
         options: {
-          url: RPC_URLS[SupportedChainId.MAINNET][0],
+          url: RPC_URLS[SupportedChainId.MAINNET],
           appName: 'Bancor',
           // TODO: add Bancor Logo
           appLogoUrl: '',
