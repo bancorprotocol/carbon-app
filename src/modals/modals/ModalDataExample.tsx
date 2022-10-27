@@ -2,8 +2,16 @@ import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
 
-export const ModalTokenList: ModalFC<undefined> = ({ id }) => {
-  const { closeModal } = useModal();
+export type ModalDataExampleData = {
+  foo: string;
+  bar: string;
+};
+
+export const ModalDataExample: ModalFC<ModalDataExampleData> = ({
+  id,
+  data,
+}) => {
+  const { closeModal, openModal } = useModal();
 
   return (
     <Modal id={id}>
@@ -14,7 +22,18 @@ export const ModalTokenList: ModalFC<undefined> = ({ id }) => {
         >
           close
         </button>
-        <div>MODAL TOKEN LIST</div>
+        <div>MODAL WALLET</div>
+
+        <div>
+          <button onClick={() => openModal('tokenLists', undefined)}>
+            open token list modal
+          </button>
+        </div>
+
+        <div>
+          Data:
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
 
         <p>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur

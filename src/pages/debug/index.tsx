@@ -35,8 +35,10 @@ export const DebugPage = () => {
     <main className={'px-content'}>
       <h1 className={'text-red-600'}>Hello</h1>
       <div>
-        <button onClick={() => openModal('wallet', { foo: 'asd', bar: 'asd' })}>
-          open wallet modal
+        <button
+          onClick={() => openModal('dataExample', { foo: 'asd', bar: 'asd' })}
+        >
+          open example modal with data
         </button>
       </div>
 
