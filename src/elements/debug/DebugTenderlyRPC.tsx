@@ -11,10 +11,10 @@ export const DebugTenderlyRPC = () => {
   };
 
   return (
-    <div>
+    <>
       <h2>Set Tenderly RPC</h2>
       <input value={input} onChange={(e) => setInput(e.target.value)} />
       <button onClick={handleOnClick}>save</button>
-    </div>
+    </>
   );
 };

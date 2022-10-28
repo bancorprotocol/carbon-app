@@ -6,6 +6,30 @@
     html, body, #root {
         @apply text-body bg-body h-screen;
     }
+
+    h1 {
+        @apply text-4xl font-semibold my-3;
+    }
+
+    h2 {
+        @apply text-3xl font-semibold my-2;
+    }
+
+    h3 {
+        @apply text-2xl font-semibold;
+    }
+
+    h4 {
+        @apply text-xl font-semibold;
+    }
+
+    h5 {
+        @apply text-lg font-semibold;
+    }
+
+    h6 {
+        @apply font-semibold;
+    }
 }
 
 @layer utilities {

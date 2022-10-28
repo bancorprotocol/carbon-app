@@ -1,5 +1,7 @@
+import { Page } from 'components/Page';
+
 export const StrategiesPage = () => (
-  <div>
+  <Page title={'Strategies'}>
     <span>Here be strategies!'</span>
-  </div>
+  </Page>
 );

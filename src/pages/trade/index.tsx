@@ -1,5 +1,7 @@
+import { Page } from 'components/Page';
+
 export const TradePage = () => (
-  <div>
+  <Page title={'Trade'}>
     <span>Here be trades!'</span>
-  </div>
+  </Page>
 );
