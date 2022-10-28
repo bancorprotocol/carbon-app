@@ -1,3 +1,5 @@
+import { PathNames } from 'routing';
+
 export interface MenuItem {
   label: string;
   href: string;
@@ -5,15 +7,11 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   {
+    label: 'Strategies',
+    href: PathNames.strategies,
+  },
+  {
     label: 'Trade',
-    href: '/#',
-  },
-  {
-    label: 'Portfolio',
-    href: '/#',
-  },
-  {
-    label: 'Vote',
-    href: '/#',
+    href: PathNames.trade,
   },
 ];
