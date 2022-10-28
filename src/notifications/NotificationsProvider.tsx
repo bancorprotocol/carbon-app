@@ -66,7 +66,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
 
         <div className={'fixed bottom-0 w-full p-6'}>
           <ul className={'space-y-4'}>
-            <AnimatePresence mode={'popLayout'}>
+            <AnimatePresence mode={'sync'}>
               {notifications.map((notification) => {
                 return (
                   <motion.li

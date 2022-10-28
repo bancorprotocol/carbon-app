@@ -36,7 +36,6 @@ const defaultValue: BancorWeb3ProviderContext = {
   user: undefined,
   handleImposterAccount: (account) => console.log(account),
   isNetworkActive: false,
-  isNetworkActivating: false,
   provider: undefined,
   signer: undefined,
   chainId: 1,
@@ -57,21 +56,19 @@ export const useWeb3 = () => useContext(BancorWeb3CTX);
 const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
   const network = getConnection(ConnectionType.NETWORK);
   const provider = network.hooks.useProvider();
-  const { dispatchNotification } = useNotifications();
+  const [isNetworkActive, setIsNetworkActive] = useState(false);
 
+  const { dispatchNotification } = useNotifications();
   const {
     account: walletAccount,
     provider: walletProvider,
     chainId,
     connector,
-    isActive: isNetworkActive,
-    isActivating: isNetworkActivating,
   } = useWeb3React();
 
   const [imposterAccount, setImposterAccount] = useState<string>(
     lsService.getItem('imposterAccount') || ''
   );
-  useState<StaticJsonRpcProvider>();
 
   const [networkError, setNetworkError] = useState<string>();
   useState<StaticJsonRpcProvider>();
@@ -118,13 +115,17 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
     setImposterAccount('');
   }, [connector]);
 
+  console.log('render');
+
   const activateNetwork = useCallback(async () => {
-    console.log('activateNetwork');
-    if (isNetworkActive || isNetworkActivating || networkError) {
+    if (networkError || isNetworkActive) {
       return;
     }
+    console.log('activateNetwork');
+
     try {
       await network.connector.activate();
+      setIsNetworkActive(true);
       await connector.connectEagerly?.();
     } catch (e: any) {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
@@ -139,20 +140,22 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [
     connector,
     dispatchNotification,
-    isNetworkActivating,
     isNetworkActive,
     network.connector,
     networkError,
   ]);
 
-  useEffect(() => void activateNetwork(), [activateNetwork]);
+  useEffect(() => {
+    console.log('effect');
+    void activateNetwork();
+    return () => console.log('unmounted');
+  }, [activateNetwork]);
 
   return (
     <BancorWeb3CTX.Provider
       value={{
         user,
         isNetworkActive,
-        isNetworkActivating,
         provider,
         signer,
         chainId,
@@ -181,6 +184,11 @@ const connectors: [Connector, Web3ReactHooks][] =
 const key = 'Web3ReactProviderKey';
 
 export const Web3ReactWrapper: FC<{ children: ReactNode }> = ({ children }) => {
+  useEffect(() => {
+    console.log('effect outer');
+    return () => console.log('unmounted outer');
+  }, []);
+
   return (
     <Web3ReactProvider connectors={connectors} key={key}>
       <BancorWeb3Provider>{children}</BancorWeb3Provider>

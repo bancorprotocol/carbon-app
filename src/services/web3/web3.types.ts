@@ -24,7 +24,6 @@ export interface BancorWeb3ProviderContext {
   user: string | undefined;
   chainId: number | undefined;
   isNetworkActive: boolean;
-  isNetworkActivating: boolean;
   networkError: string | undefined;
   provider?: Web3Provider | StaticJsonRpcProvider;
   signer: JsonRpcSigner | undefined;
