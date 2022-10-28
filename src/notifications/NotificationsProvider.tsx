@@ -1,6 +1,6 @@
 import { createContext, FC, ReactNode, useContext, useState } from 'react';
 import { uuid } from 'utils/helpers';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'motion';
 
 export enum NotificationType {
   Pending,
@@ -69,7 +69,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
             <AnimatePresence mode={'sync'}>
               {notifications.map((notification) => {
                 return (
-                  <motion.li
+                  <m.li
                     key={notification.id}
                     layout
                     initial={{ scale: 0.8, opacity: 0 }}
@@ -85,7 +85,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
                     <button onClick={() => removeNotification(notification.id)}>
                       close
                     </button>
-                  </motion.li>
+                  </m.li>
                 );
               })}
             </AnimatePresence>

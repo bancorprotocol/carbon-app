@@ -1,4 +1,4 @@
-import { motion, Variants } from 'framer-motion';
+import { m, Variants } from 'motion';
 import { Notification, useNotifications } from './NotificationsProvider';
 import { forwardRef } from 'react';
 
@@ -32,7 +32,7 @@ export const NotificationLine = forwardRef(
     const { removeNotification } = useNotifications();
 
     return (
-      <motion.li
+      <m.li
         layout
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -45,7 +45,7 @@ export const NotificationLine = forwardRef(
         <button onClick={() => removeNotification(notification.id)}>
           close
         </button>
-      </motion.li>
+      </m.li>
     );
   }
 );

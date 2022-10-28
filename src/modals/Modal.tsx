@@ -1,7 +1,7 @@
 import { FC, ReactNode, useRef } from 'react';
 import { useModal } from './ModalProvider';
 import { useModalOutsideClick } from './useModalOutsideClick';
-import { m, Variants } from 'framer-motion';
+import { m, Variants } from 'motion';
 
 type Props = {
   children: ReactNode;

@@ -5,16 +5,16 @@ import { ModalProvider } from 'modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
 import { Web3ReactWrapper } from 'web3';
-import { domAnimation, LazyMotion } from 'framer-motion';
 import { NotificationProvider } from 'notifications/NotificationsProvider';
 import { Router } from 'routing';
+import { LazyMotion } from 'motion';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <LazyMotion features={domAnimation} strict>
+    <LazyMotion>
       <NotificationProvider>
         <Web3ReactWrapper>
           <ModalProvider>
