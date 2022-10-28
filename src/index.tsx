@@ -7,6 +7,7 @@ import reportWebVitals from 'reportWebVitals';
 import { Web3ReactWrapper } from 'web3';
 import { domAnimation, LazyMotion } from 'framer-motion';
 import { NotificationProvider } from 'notifications/NotificationsProvider';
+import { Router } from 'routing';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,7 +18,9 @@ root.render(
       <NotificationProvider>
         <Web3ReactWrapper>
           <ModalProvider>
-            <App />
+            <Router>
+              <App />
+            </Router>
           </ModalProvider>
         </Web3ReactWrapper>
       </NotificationProvider>
