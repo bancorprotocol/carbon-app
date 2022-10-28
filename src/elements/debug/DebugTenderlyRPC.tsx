@@ -1,4 +1,4 @@
-import { useWeb3 } from 'providers/Web3Provider';
+import { useWeb3 } from 'web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 

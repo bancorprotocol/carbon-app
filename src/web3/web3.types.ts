@@ -6,7 +6,7 @@ import {
   StaticJsonRpcProvider,
   Web3Provider,
 } from '@ethersproject/providers';
-import { ConnectionType, SupportedChainId } from './web3.constants';
+import { ConnectionType, SupportedChainId } from 'web3/web3.constants';
 
 export interface Connection {
   connector: Connector;
@@ -30,5 +30,6 @@ export interface BancorWeb3ProviderContext {
   handleTenderlyRPC: (url?: string) => void;
   handleImposterAccount: (account: string) => void;
   disconnect: () => Promise<void>;
+  connect: (type: ConnectionType) => Promise<void>;
   isImposter: boolean;
 }

@@ -15,18 +15,18 @@ import {
 } from 'react';
 import { Connector } from '@web3-react/types';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
-import {
-  BancorWeb3ProviderContext,
-  ConnectionType,
-  getConnection,
-  SELECTABLE_CONNECTION_TYPES,
-} from 'services/web3';
 import { lsService } from 'services/localeStorage';
-import { IS_TENDERLY_FORK } from 'services/web3/web3.constants';
+import {
+  ConnectionType,
+  IS_TENDERLY_FORK,
+  SELECTABLE_CONNECTION_TYPES,
+} from 'web3/web3.constants';
 import {
   NotificationType,
   useNotifications,
 } from 'notifications/NotificationsProvider';
+import { getConnection } from 'web3/web3.utils';
+import { BancorWeb3ProviderContext } from 'web3/web3.types';
 
 // ********************************** //
 // WEB3 CONTEXT
@@ -41,6 +41,7 @@ const defaultValue: BancorWeb3ProviderContext = {
   chainId: 1,
   handleTenderlyRPC: (url) => console.log(url),
   disconnect: async () => {},
+  connect: async () => {},
   isImposter: false,
   networkError: undefined,
 };
@@ -106,6 +107,11 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
     window.location.reload();
   };
 
+  const connect = useCallback(async (type: ConnectionType) => {
+    const { connector } = getConnection(type);
+    await connector.activate();
+  }, []);
+
   const disconnect = useCallback(async () => {
     if (connector.deactivate) {
       await connector.deactivate();
@@ -113,6 +119,7 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
       await connector.resetState();
     }
     setImposterAccount('');
+    lsService.removeItem('imposterAccount');
   }, [connector]);
 
   console.log('render');
@@ -161,6 +168,7 @@ const BancorWeb3Provider: FC<{ children: ReactNode }> = ({ children }) => {
         chainId,
         handleTenderlyRPC,
         handleImposterAccount,
+        connect,
         disconnect,
         isImposter,
         networkError,

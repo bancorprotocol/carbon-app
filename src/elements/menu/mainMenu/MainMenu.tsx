@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
 import { MainMenuLeft } from './MainMenuLeft';
 import { MainMenuRight } from './MainMenuRight';
-import { IS_TENDERLY_FORK } from 'services/web3/web3.constants';
-import { useWeb3 } from 'providers/Web3Provider';
+import { IS_TENDERLY_FORK } from 'web3/web3.constants';
+import { useWeb3 } from 'web3';
 enum AlertType {
   ERROR,
   WARNING,

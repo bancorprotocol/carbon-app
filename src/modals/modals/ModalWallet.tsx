@@ -1,18 +1,18 @@
 import { useModal } from 'modals/ModalProvider';
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import { ConnectionType, getConnection } from 'services/web3/index';
+import { ConnectionType, useWeb3 } from 'web3';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
+  const { connect } = useWeb3();
 
-  const connect = async (type: ConnectionType) => {
-    const { connector, name } = getConnection(type);
+  const onClickConnect = async (type: ConnectionType) => {
     try {
-      await connector.activate();
+      await connect(type);
       closeModal(id);
     } catch (e) {
-      console.error(`failed to connect to ${name} with error: `, e);
+      console.error(`Modal Wallet onClickConnect error: `, e);
     }
   };
 
@@ -27,7 +27,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
         </button>
         <div>MODAL WALLET</div>
 
-        <button onClick={() => connect(ConnectionType.INJECTED)}>
+        <button onClick={() => onClickConnect(ConnectionType.INJECTED)}>
           Connect to MetaMask
         </button>
       </div>

@@ -4,7 +4,7 @@ import 'index.css';
 import { ModalProvider } from 'modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
-import { Web3ReactWrapper } from 'providers/Web3Provider';
+import { Web3ReactWrapper } from 'web3';
 import { domAnimation, LazyMotion } from 'framer-motion';
 import { NotificationProvider } from 'notifications/NotificationsProvider';
 
