@@ -9,8 +9,7 @@ import {
 } from 'services/web3';
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
-
-export const bntToken: string = '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C';
+import { bntToken } from 'services/web3/config';
 
 export const DebugPage = () => {
   const { isNetworkActive, user } = useWeb3();
