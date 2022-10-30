@@ -1,34 +1,33 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useCallback, useEffect } from 'react';
 import { useModal } from 'modals/ModalProvider';
 
 export const useModalOutsideClick = (
   id: string,
   ref: RefObject<HTMLDivElement>,
-  handler: Function
+  onClick: (id: string) => void
 ) => {
   const { activeModalId } = useModal();
-  useEffect(
-    () => {
-      const listener = (event: any) => {
-        // Do nothing if clicking ref's element or descendent elements
-        if (
-          !ref.current ||
-          ref.current.contains(event.target) ||
-          activeModalId !== id
-        ) {
-          return;
-        }
-        handler(event);
-      };
 
-      document.addEventListener('mousedown', listener);
-      document.addEventListener('touchstart', listener);
-      return () => {
-        document.removeEventListener('mousedown', listener);
-        document.removeEventListener('touchstart', listener);
-      };
-    },
-    // TODO: wrap handler in useCallback
-    [ref, handler, activeModalId, id]
-  );
+  const handler = useCallback(() => onClick(id), [id, onClick]);
+
+  useEffect(() => {
+    const listener = (event: any) => {
+      // Do nothing if clicking ref's element or descendent elements
+      if (
+        !ref.current ||
+        ref.current.contains(event.target) ||
+        activeModalId !== id
+      ) {
+        return;
+      }
+      handler();
+    };
+
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
+    return () => {
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
+    };
+  }, [ref, handler, activeModalId, id]);
 };

@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { menuItems } from 'elements/menu';
+import { Link } from 'routing';
 
 export const MainMenuLeft: FC = () => {
   return (
@@ -7,9 +8,9 @@ export const MainMenuLeft: FC = () => {
       <div className={'h-[39px] w-[39px] rounded-full bg-purple-400'}></div>
       <div className={'space-x-6'}>
         {menuItems.map(({ label, href }) => (
-          <a key={href} href={href} className={'px-2 py-2'}>
+          <Link key={label} to={href} className={'px-2 py-2'}>
             {label}
-          </a>
+          </Link>
         ))}
       </div>
     </div>
