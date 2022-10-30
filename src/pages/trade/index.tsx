@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+import { tokenList } from 'services/tokens';
 // import { useCallback, useEffect, useState } from 'react';
 // import { ethToken } from 'services/web3/config';
 
@@ -7,6 +9,7 @@
 // }
 
 export const TradePage = () => {
+  const query = useQuery(['tokens'], tokenList);
   // const tokens = []<Token>;
 
   // const ethOrFirst = useCallback(() => {
