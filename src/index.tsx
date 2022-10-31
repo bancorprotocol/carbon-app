@@ -17,11 +17,11 @@ root.render(
     <LazyMotion>
       <NotificationProvider>
         <Web3ReactWrapper>
-          <ModalProvider>
-            <Router>
+          <Router>
+            <ModalProvider>
               <App />
-            </Router>
-          </ModalProvider>
+            </ModalProvider>
+          </Router>
         </Web3ReactWrapper>
       </NotificationProvider>
     </LazyMotion>

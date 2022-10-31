@@ -5,7 +5,7 @@ import {
   injectedConnection,
   networkConnection,
   walletConnectConnection,
-} from 'web3/web.connectors';
+} from 'web3/web3.connectors';
 
 export const getConnection = (c: ConnectionType) => {
   switch (c) {

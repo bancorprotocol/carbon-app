@@ -1,5 +1,5 @@
 import { MainMenu } from 'elements/menu';
-import { Outlet } from '@tanstack/react-location';
+import { Outlet } from 'routing';
 
 export const App = () => {
   return (

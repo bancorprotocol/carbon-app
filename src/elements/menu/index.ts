@@ -1,5 +1,3 @@
-import { MainMenu } from './mainMenu/MainMenu';
-import { MenuItem, menuItems } from './menuItems';
-
-export type { MenuItem };
-export { menuItems, MainMenu };
+export { MainMenu } from './mainMenu/MainMenu';
+export { menuItems } from './menuItems';
+export type { MenuItem } from './menuItems';
