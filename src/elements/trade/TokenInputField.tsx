@@ -1,12 +1,12 @@
 import { ChangeEvent, memo, useCallback, useMemo, useState } from 'react';
-import { Imager } from 'elements/Image';
-import useDimensions from 'hooks/useDimantions';
 import { useResizeTokenInput } from './useResizeTokenInput';
-import { Token } from 'services/tokens';
 import { sanitizeNumberInput } from 'utils/helpers';
+import useDimensions from 'hooks/useDimantions';
+import { Imager } from 'elements/Image';
+import { Token } from 'services/tokens';
 
 export interface TokenInputProps {
-  token: Token;
+  token?: Token;
   input: string;
   setInput: (amount: string) => void;
   isError: boolean;
@@ -16,7 +16,6 @@ const TokenInputField = ({
   token,
   input,
   setInput,
-
   isError,
 }: TokenInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -44,14 +43,14 @@ const TokenInputField = ({
       onClick={() => {
         inputRef.current && inputRef.current.focus();
       }}
-      className={`rounded-20 dark:bg-charcoal relative flex items-center border-2 bg-white text-[36px] ${
+      className={`relative flex items-center rounded-[20px] border-2 bg-white text-[24px] dark:bg-charcoal ${
         isFocused ? 'border-primary' : 'border-fog dark:border-grey'
       } ${isError ? 'border-error text-error' : ''}`}
     >
       <Imager
-        src={token.logoURI}
+        src={token?.logoURI}
         alt={'Token Logo'}
-        className="absolute ml-20 h-[40px] w-[40px] !rounded-full"
+        className="absolute ml-[20px] h-[40px] w-[40px] !rounded-full"
       />
       <span
         ref={helperRef}
@@ -67,17 +66,14 @@ const TokenInputField = ({
         onChange={handleChange}
         className={`${
           input === '' ? 'min-w-[80px]' : 'min-w-[10px]'
-        } dark:bg-charcoal rounded-20 font-inherit ml-[80px] h-[75px] bg-white outline-none`}
+        } ml-[80px] h-[75px] rounded-[20px] bg-white outline-none dark:bg-charcoal`}
         style={{
           maxWidth: maxInputWidth,
         }}
       />
-      <span ref={symbolRef} className="text-16 ml-5">
-        {token.symbol}
+      <span ref={symbolRef} className="text-16 ml-[5px]">
+        {token?.symbol}
       </span>
-      {/* <span ref={oppositeRef} className="text-12 absolute right-[10px]">
-        {prettifyNumber(isFiat ? inputTkn : inputFiat, !isFiat)} {oppositeUnit}
-      </span> */}
     </div>
   );
 };
