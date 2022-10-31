@@ -1,7 +1,7 @@
 import { FC, ReactNode, useRef } from 'react';
 import { useModal } from './ModalProvider';
 import { useModalOutsideClick } from './useModalOutsideClick';
-import { m, Variants } from 'framer-motion';
+import { m, Variants } from 'motion';
 
 type Props = {
   children: ReactNode;
@@ -65,7 +65,7 @@ export const Modal: FC<Props> = ({ children, id }) => {
       className={`fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black/70 px-3 outline-none backdrop-blur focus:outline-none`}
     >
       <m.div
-        className="relative my-6 mx-auto w-auto max-w-3xl"
+        className="relative my-6 mx-auto w-full max-w-xl"
         variants={dropIn}
         initial="hidden"
         animate="visible"

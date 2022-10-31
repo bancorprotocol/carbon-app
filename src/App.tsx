@@ -1,10 +1,13 @@
 import { MainMenu } from 'elements/menu';
-import { Router } from 'routing/router';
+import { Outlet } from 'routing';
 
 export const App = () => {
   return (
-    <Router>
+    <>
       <MainMenu />
-    </Router>
+      <main className={'px-content'}>
+        <Outlet />
+      </main>
+    </>
   );
 };

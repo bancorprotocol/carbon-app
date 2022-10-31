@@ -1,5 +1,5 @@
-import { useWeb3 } from 'providers/Web3Provider';
-import { Token__factory } from 'abis/types/index';
+import { useWeb3 } from 'web3';
+import { Token__factory } from 'abis/types';
 import { useCallback } from 'react';
 
 export const useContract = () => {

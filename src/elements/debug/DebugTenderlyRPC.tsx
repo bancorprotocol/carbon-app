@@ -1,4 +1,4 @@
-import { useWeb3 } from 'providers/Web3Provider';
+import { useWeb3 } from 'web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 
@@ -11,10 +11,10 @@ export const DebugTenderlyRPC = () => {
   };
 
   return (
-    <div>
+    <>
       <h2>Set Tenderly RPC</h2>
       <input value={input} onChange={(e) => setInput(e.target.value)} />
       <button onClick={handleOnClick}>save</button>
-    </div>
+    </>
   );
 };

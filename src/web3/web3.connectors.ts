@@ -6,11 +6,10 @@ import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import {
   ConnectionType,
-  RPC_PROVIDERS,
   RPC_URLS,
   SupportedChainId,
-} from './web3.constants';
-import { Connection } from './web3.types';
+} from 'web3/web3.constants';
+import { Connection } from 'web3/web3.types';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
@@ -22,12 +21,17 @@ const onError = (error: Error) => {
 
 const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
   (actions) =>
-    new Network({ actions, urlMap: RPC_PROVIDERS, defaultChainId: 1 })
+    new Network({
+      actions,
+      urlMap: RPC_URLS,
+      defaultChainId: SupportedChainId.MAINNET,
+    })
 );
 export const networkConnection: Connection = {
   connector: web3Network,
   hooks: web3NetworkHooks,
   type: ConnectionType.NETWORK,
+  name: 'Network',
 };
 
 // ********************************** //
@@ -41,6 +45,7 @@ export const injectedConnection: Connection = {
   connector: web3Injected,
   hooks: web3InjectedHooks,
   type: ConnectionType.INJECTED,
+  name: 'MetaMask',
 };
 
 // ********************************** //
@@ -54,6 +59,7 @@ export const gnosisSafeConnection: Connection = {
   connector: web3GnosisSafe,
   hooks: web3GnosisSafeHooks,
   type: ConnectionType.GNOSIS_SAFE,
+  name: 'Gnosis Safe',
 };
 
 // ********************************** //
@@ -76,6 +82,7 @@ export const walletConnectConnection: Connection = {
   connector: web3WalletConnect,
   hooks: web3WalletConnectHooks,
   type: ConnectionType.WALLET_CONNECT,
+  name: 'WalletConnect',
 };
 
 // ********************************** //
@@ -88,7 +95,7 @@ const [web3CoinbaseWallet, web3CoinbaseWalletHooks] =
       new CoinbaseWallet({
         actions,
         options: {
-          url: RPC_URLS[SupportedChainId.MAINNET][0],
+          url: RPC_URLS[SupportedChainId.MAINNET],
           appName: 'Bancor',
           // TODO: add Bancor Logo
           appLogoUrl: '',
@@ -101,4 +108,5 @@ export const coinbaseWalletConnection: Connection = {
   connector: web3CoinbaseWallet,
   hooks: web3CoinbaseWalletHooks,
   type: ConnectionType.COINBASE_WALLET,
+  name: 'Coinbase Wallet',
 };
