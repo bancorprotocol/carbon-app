@@ -3,61 +3,44 @@
 @tailwind utilities;
 
 @layer base {
-    html, body, #root {
-        @apply text-body bg-body h-screen;
-    }
+  html,
+  body,
+  #root {
+    @apply text-body bg-body;
+  }
 
-    h1 {
-        @apply text-4xl font-semibold my-3;
-    }
+  h1 {
+    @apply my-3 text-36 font-weight-500;
+  }
 
-    h2 {
-        @apply text-3xl font-semibold my-2;
-    }
+  h2 {
+    @apply my-2 text-20 font-weight-500;
+  }
 
-    h3 {
-        @apply text-2xl font-semibold;
-    }
-
-    h4 {
-        @apply text-xl font-semibold;
-    }
-
-    h5 {
-        @apply text-lg font-semibold;
-    }
-
-    h6 {
-        @apply font-semibold;
-    }
+  h3 {
+    @apply text-18 font-weight-500;
+  }
 }
 
 @layer utilities {
-    .text-body {
-        @apply text-black dark:text-white;
-    }
+  .bg-body {
+    @apply bg-white dark:bg-black;
+  }
 
-    .bg-body {
-        @apply bg-white dark:bg-black;
-    }
+  .bg-content {
+    @apply border border-lightGrey bg-white;
+    @apply dark:border dark:border-charcoal dark:bg-charcoal;
+  }
 
-    .px-content {
-        @apply px-4;
-    }
+  .bg-secondary {
+    @apply bg-fog dark:bg-darkGrey;
+  }
 
-    .text-content {
-        @apply text-black dark:text-white;
-    }
+  .text-body {
+    @apply text-charcoal dark:text-white;
+  }
 
-    .bg-content {
-        @apply text-white dark:bg-black;
-    }
-
-    .text-secondary {
-        @apply text-black dark:text-white;
-    }
-
-    .bg-secondary {
-        @apply text-white dark:bg-black;
-    }
+  .text-secondary {
+    @apply text-14  text-charcoal/50 dark:text-white/50;
+  }
 }
