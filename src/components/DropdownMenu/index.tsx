@@ -1,14 +1,5 @@
-import { motion, Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
-
-const itemVariants: Variants = {
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring', stiffness: 300, damping: 24 },
-  },
-  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
-};
 
 export const DropdownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,14 +16,17 @@ export const DropdownMenu = () => {
       >
         Menu
       </motion.button>
-      <motion.ul
+      <motion.div
         className={
-          'absolute mt-10 -ml-20 min-w-[200px] space-y-10 bg-lightGrey px-20 py-10 dark:bg-darkGrey'
+          'absolute mt-10 -ml-20 min-w-[200px] space-y-10 rounded bg-primary-500/10 px-24 py-16 shadow-xl backdrop-blur-2xl dark:bg-darkGrey/30'
         }
         variants={{
           open: {
-            clipPath: 'inset(0% 0% 0% 0% round 10px)',
+            //clipPath: 'inset(0% 0% 0% 0% round 10px)',
             opacity: 1,
+            scale: 1,
+            y: '0px',
+            x: '0px',
             transition: {
               type: 'spring',
               bounce: 0,
@@ -42,8 +36,11 @@ export const DropdownMenu = () => {
             },
           },
           closed: {
-            clipPath: 'inset(10% 50% 90% 50% round 10px)',
+            //clipPath: 'inset(10% 50% 90% 50% round 10px)',
             opacity: 0,
+            scale: 0.8,
+            y: '-40px',
+            x: '-30px',
             transition: {
               type: 'spring',
               bounce: 0,
@@ -53,12 +50,15 @@ export const DropdownMenu = () => {
         }}
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
-        <motion.li variants={itemVariants}>Item 1 </motion.li>
-        <motion.li variants={itemVariants}>Item 2 </motion.li>
-        <motion.li variants={itemVariants}>Item 3 </motion.li>
-        <motion.li variants={itemVariants}>Item 4 </motion.li>
-        <motion.li variants={itemVariants}>Item 5 </motion.li>
-      </motion.ul>
+        <div>Item 1</div>
+        <div>Item 1</div>
+        <div>Item 1</div>
+        <div>Item 1</div>
+        <div>Item 1</div>
+        <div>Item 1</div>
+        <div>Item 1</div>
+        <div>Item 1</div>
+      </motion.div>
     </motion.div>
   );
 };

@@ -18,6 +18,18 @@ export const DebugPage = () => {
       <Button variant={'success'} size={'sm'}>
         Success Button SMALL
       </Button>
+      <Button>Primary Button</Button>
+      <Button variant={'success'} size={'sm'}>
+        Success Button SMALL
+      </Button>
+      <Button>Primary Button</Button>
+      <Button variant={'success'} size={'sm'}>
+        Success Button SMALL
+      </Button>
+      <Button>Primary Button</Button>
+      <Button variant={'success'} size={'sm'}>
+        Success Button SMALL
+      </Button>
 
       <DebugWeb3 />
       <DebugTenderlyRPC />
