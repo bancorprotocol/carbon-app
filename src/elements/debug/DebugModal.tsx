@@ -14,12 +14,6 @@ export const DebugModal: FC = () => {
           open example modal with data
         </button>
       </div>
-
-      <div>
-        <button onClick={() => openModal('tokenLists', undefined)}>
-          open token list modal
-        </button>
-      </div>
     </>
   );
 };

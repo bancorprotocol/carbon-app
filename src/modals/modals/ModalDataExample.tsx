@@ -25,12 +25,6 @@ export const ModalDataExample: ModalFC<ModalDataExampleData> = ({
         <div>MODAL WALLET</div>
 
         <div>
-          <button onClick={() => openModal('tokenLists', undefined)}>
-            open token list modal
-          </button>
-        </div>
-
-        <div>
           Data:
           <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>

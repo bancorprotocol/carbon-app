@@ -1,8 +1,10 @@
 import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Imager } from 'elements/Image';
-import { Token } from 'services/tokens';
+import { Token, tokenList } from 'services/tokens';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
+import { useModal } from 'modals';
+import { useQuery } from '@tanstack/react-query';
 
 export interface TokenInputProps {
   token?: Token;
@@ -17,6 +19,10 @@ const TokenInputField = ({
   setInput,
   isError,
 }: TokenInputProps) => {
+  const { openModal } = useModal();
+  const query = useQuery(['tokens'], tokenList);
+  const tokens = query.data;
+
   const [isFocused, setIsFocused] = useState(false);
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +38,17 @@ const TokenInputField = ({
         isFocused ? 'border-primary' : 'dark:border-grey border-fog'
       } ${isError ? 'border-error text-error' : ''}`}
     >
-      <button className="flex min-w-[175px] items-center gap-10">
+      <button
+        onClick={() =>
+          tokens &&
+          openModal('tokenLists', {
+            onClick: (token: Token) => {},
+            tokens,
+            limit: true,
+          })
+        }
+        className="flex min-w-[175px] items-center gap-10"
+      >
         {token ? (
           <>
             <Imager
