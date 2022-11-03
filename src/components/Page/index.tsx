@@ -5,9 +5,9 @@ export const Page: FC<{ children: ReactNode; title?: string }> = ({
   title,
 }) => {
   return (
-    <>
-      <h1>{title}</h1>
+    <div className={'px-10 md:px-20'}>
+      {title && <h1 className={'mb-30'}>{title}</h1>}
       {children}
-    </>
+    </div>
   );
 };

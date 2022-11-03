@@ -1,13 +1,18 @@
 import { Page } from 'components/Page';
+import { StrategyBlock } from 'components/StrategyBlock';
+import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 
 export const StrategiesPage = () => (
   <Page title={'Strategies'}>
-    <span>Here be strategies!'</span>
+    <div className={'grid grid-cols-4 gap-30'}>
+      <StrategyBlock />
+      <StrategyBlock />
+      <StrategyBlock />
+      <StrategyBlock />
+      <StrategyBlock />
+      <StrategyBlock />
 
-    <div className="bg-content max-w-md rounded-16">
-      <h2>Strategy</h2>
-      <div className="text-secondary">Secondary</div>
-      <div className="bg-secondary">hello</div>
+      <StrategyBlockCreate />
     </div>
   </Page>
 );
