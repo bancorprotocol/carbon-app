@@ -7,7 +7,9 @@ export const StrategyBlock = () => {
             key={i}
             className="bg-secondary flex w-full items-center space-x-10 rounded-12 p-10"
           >
-            <div className={'h-30 w-30 rounded-full bg-primary-500'} />
+            <div
+              className={'h-40 w-40 rounded-full bg-lightGrey dark:bg-darkGrey'}
+            />
             <div>
               <div>TKN</div>
               <div className="text-secondary">????????</div>
