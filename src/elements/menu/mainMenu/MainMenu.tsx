@@ -61,7 +61,7 @@ const NetworkErrorAlert = () => {
 
 export const MainMenu: FC = () => {
   return (
-    <div className={`sticky top-0`}>
+    <div className={`sticky top-0 z-40`}>
       <TenderlyForkAlert />
       <ImposterAccountAlert />
       <NetworkErrorAlert />
