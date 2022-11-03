@@ -11,7 +11,7 @@ export const StrategyBlock = () => {
               className={'h-40 w-40 rounded-full bg-lightGrey dark:bg-darkGrey'}
             />
             <div>
-              <div>TKN</div>
+              <div className={'text-20 font-weight-500'}>TKN</div>
               <div className="text-secondary">????????</div>
             </div>
           </div>
@@ -22,14 +22,14 @@ export const StrategyBlock = () => {
           <div className={'absolute right-20 top-0 flex h-full items-center'}>
             <div
               className={
-                'rounded-full bg-primary-500/20 px-16 py-3 text-primary-400'
+                'rounded-full bg-primary-500/20 px-16 py-3 text-14 text-primary-400'
               }
             >
               Simple
             </div>
           </div>
-          <div className="text-secondary">Sell 1 TKN for</div>
-          <div>100,000,000 TKN</div>
+          <div className="text-secondary text-12">Sell 1 TKN for</div>
+          <div className={'text-18 font-weight-500'}>100,000,000 TKN</div>
         </div>
       ))}
     </div>
