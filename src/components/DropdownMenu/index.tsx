@@ -17,7 +17,7 @@ export const DropdownMenu = () => {
     <motion.div
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
-      className={'relative w-full'}
+      className={'relative'}
     >
       <motion.button
         whileTap={{ scale: 0.97 }}
