@@ -9,7 +9,7 @@ export const StrategiesPage = () => (
         'grid grid-cols-1 gap-30 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
       }
     >
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
         <StrategyBlock key={i} />
       ))}
 
