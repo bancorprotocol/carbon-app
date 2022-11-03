@@ -142,11 +142,6 @@ module.exports = {
       DEFAULT: theme('colors.gray.200', 'currentColor'),
     }),
     borderOpacity: ({ theme }) => theme('opacity'),
-    borderRadius: {
-      ...createTwConfigValues(0, 50, 2),
-      DEFAULT: '16px',
-      full: '9999px',
-    },
     borderSpacing: ({ theme }) => ({
       ...theme('spacing'),
     }),

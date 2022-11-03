@@ -40,7 +40,7 @@ export const TradePage = ({ from, to }: TradePageProps) => {
 
   return (
     <Page title={'Trade'}>
-      <div className="mx-auto max-w-[485px] p-[10px]">
+      <div className="mx-auto max-w-[485px]">
         <TradeWidget from={fromToken} to={toToken} />
       </div>
     </Page>

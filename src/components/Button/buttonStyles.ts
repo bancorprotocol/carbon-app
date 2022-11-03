@@ -8,7 +8,7 @@ import { cva } from 'class-variance-authority';
 type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
 export const buttonStyles = cva<ButtonVariants>(
-  ['font-semibold', 'text-white', 'rounded-lg', 'rounded-br'],
+  ['font-semibold', 'text-white'],
   {
     variants: {
       variant: {

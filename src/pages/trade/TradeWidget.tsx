@@ -1,3 +1,4 @@
+import { Button } from 'components/Button';
 import TokenInputField from 'elements/trade/TokenInputField';
 import { useState } from 'react';
 import { Token } from 'services/tokens';
@@ -6,7 +7,7 @@ export const TradeWidget = ({ from, to }: { from?: Token; to?: Token }) => {
   const [fromInput, setFromInput] = useState('');
   const [toInput, setToInput] = useState('');
   return (
-    <div className="flex flex-col gap-[10px]">
+    <div className="flex flex-col gap-10 p-30">
       <TokenInputField
         input={fromInput}
         setInput={setFromInput}
@@ -19,6 +20,7 @@ export const TradeWidget = ({ from, to }: { from?: Token; to?: Token }) => {
         token={to}
         isError={false}
       />
+      <Button className="h-50 rounded-full">Trade</Button>
     </div>
   );
 };
