@@ -8,7 +8,7 @@ import { cva } from 'class-variance-authority';
 type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
 export const buttonStyles = cva<ButtonVariants>(
-  ['font-semibold', 'text-white', 'rounded-lg', 'rounded-br'],
+  ['font-weight-600', 'text-white', 'rounded-full px-30'],
   {
     variants: {
       variant: {
@@ -18,9 +18,9 @@ export const buttonStyles = cva<ButtonVariants>(
         error: ['bg-error-500', 'hover:bg-error-600'],
       },
       size: {
-        sm: ['text-sm', 'py-1', 'px-2'],
-        md: ['text-base', 'py-2', 'px-4'],
-        lg: ['text-lg', 'py-3', 'px-4'],
+        sm: ['text-14', 'h-30'],
+        md: ['text-16', 'h-40'],
+        lg: ['text-18', 'h-50'],
       },
       fullWidth: {
         true: 'w-full',
