@@ -3,6 +3,7 @@ import { Token, tokenList } from 'services/tokens';
 import { useCallback, useEffect, useState } from 'react';
 import { ethToken } from 'services/web3/config';
 import { TradeWidget } from './TradeWidget';
+import { Page } from 'components/Page';
 
 interface TradePageProps {
   from?: string;
@@ -38,8 +39,10 @@ export const TradePage = ({ from, to }: TradePageProps) => {
   }, [from, to, tokens, ethOrFirst]);
 
   return (
-    <div className="mx-auto max-w-[485px] p-[10px]">
-      <TradeWidget from={fromToken} to={toToken} />
-    </div>
+    <Page title={'Trade'}>
+      <div className="mx-auto max-w-[485px] p-[10px]">
+        <TradeWidget from={fromToken} to={toToken} />
+      </div>
+    </Page>
   );
 };

@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { uuid } from 'utils/helpers';
 import { MODAL_COMPONENTS, ModalSchema } from 'modals/modals/index';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion';
 import { ModalContext, ModalKey, ModalOpen } from './modals.types';
 
 // ********************************** //

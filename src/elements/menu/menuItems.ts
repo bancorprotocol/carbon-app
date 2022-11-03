@@ -14,4 +14,8 @@ export const menuItems: MenuItem[] = [
     label: 'Trade',
     href: PathNames.trade,
   },
+  {
+    label: 'Debug',
+    href: PathNames.debug,
+  },
 ];

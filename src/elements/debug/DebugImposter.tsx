@@ -1,12 +1,15 @@
-import { useWeb3 } from 'providers/Web3Provider';
+import { useWeb3 } from 'web3';
 import { useState } from 'react';
+import { lsService } from 'services/localeStorage';
 
 export const DebugImposter = () => {
-  const { setImposterAccount } = useWeb3();
-  const [input, setInput] = useState('');
+  const { handleImposterAccount } = useWeb3();
+  const [input, setInput] = useState(
+    lsService.getItem('imposterAccount') || ''
+  );
 
   const handleOnClick = () => {
-    setImposterAccount(input);
+    handleImposterAccount(input);
   };
 
   return (

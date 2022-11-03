@@ -6,12 +6,14 @@ import {
   StaticJsonRpcProvider,
   Web3Provider,
 } from '@ethersproject/providers';
-import { ConnectionType, SupportedChainId } from './web3.constants';
+import { ConnectionType, SupportedChainId } from 'web3/web3.constants';
 
 export interface Connection {
   connector: Connector;
   hooks: Web3ReactHooks;
   type: ConnectionType;
+  name: string;
+  logoUrl?: string;
 }
 
 export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
@@ -20,10 +22,14 @@ export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
 
 export interface BancorWeb3ProviderContext {
   user: string | undefined;
-  setImposterAccount: (account: string) => void;
   chainId: number | undefined;
   isNetworkActive: boolean;
+  networkError: string | undefined;
   provider?: Web3Provider | StaticJsonRpcProvider;
   signer: JsonRpcSigner | undefined;
   handleTenderlyRPC: (url?: string) => void;
+  handleImposterAccount: (account: string) => void;
+  disconnect: () => Promise<void>;
+  connect: (type: ConnectionType) => Promise<void>;
+  isImposter: boolean;
 }
