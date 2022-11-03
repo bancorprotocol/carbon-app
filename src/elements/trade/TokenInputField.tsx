@@ -1,7 +1,5 @@
-import { ChangeEvent, memo, useCallback, useMemo, useState } from 'react';
-import { useResizeTokenInput } from './useResizeTokenInput';
+import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
-import useDimensions from 'hooks/useDimantions';
 import { Imager } from 'elements/Image';
 import { Token } from 'services/tokens';
 
@@ -27,53 +25,28 @@ const TokenInputField = ({
     [setInput]
   );
 
-  const { observe: containerRef, width: containerWidth } = useDimensions();
-  const { width: oppositeWidth } = useDimensions();
-  const { observe: symbolRef, width: symbolWidth } = useDimensions();
-  const maxInputWidth = useMemo(
-    () => containerWidth - symbolWidth - oppositeWidth - 120,
-    [oppositeWidth, symbolWidth, containerWidth]
-  );
-  const { inputRef, helperRef } = useResizeTokenInput({
-    input,
-  });
   return (
     <div
-      ref={containerRef}
-      onClick={() => {
-        inputRef.current && inputRef.current.focus();
-      }}
-      className={`relative flex items-center rounded-[20px] border-2 bg-white text-[24px] dark:bg-charcoal ${
-        isFocused ? 'border-primary' : 'border-fog dark:border-grey'
+      className={`flex items-center gap-10 rounded-2xl border-2 bg-white p-20 text-24 dark:bg-charcoal ${
+        isFocused ? 'border-primary' : 'dark:border-grey border-fog'
       } ${isError ? 'border-error text-error' : ''}`}
     >
       <Imager
         src={token?.logoURI}
         alt={'Token Logo'}
-        className="absolute ml-[20px] h-[40px] w-[40px] !rounded-full"
+        className="h-[40px] w-[40px] rounded-full"
       />
-      <span
-        ref={helperRef}
-        className="absolute h-0 overflow-hidden whitespace-pre"
-      />
+      <span className="text-20">{token?.symbol}</span>
       <input
-        ref={inputRef}
         type="text"
+        dir="rtl"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         value={input}
         placeholder="0.00"
         onChange={handleChange}
-        className={`${
-          input === '' ? 'min-w-[80px]' : 'min-w-[10px]'
-        } ml-[80px] h-[75px] rounded-[20px] bg-white outline-none dark:bg-charcoal`}
-        style={{
-          maxWidth: maxInputWidth,
-        }}
+        className={`w-full rounded-2xl bg-white outline-none dark:bg-charcoal`}
       />
-      <span ref={symbolRef} className="text-16 ml-[5px]">
-        {token?.symbol}
-      </span>
     </div>
   );
 };
