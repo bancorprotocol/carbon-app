@@ -73,7 +73,7 @@ export const Modal: FC<Props> = ({ children, id }) => {
       >
         <div
           ref={ref}
-          className="relative flex max-h-[70vh] w-full flex-col overflow-y-auto rounded-2xl border-0 bg-gray-400 p-10 outline-none focus:outline-none"
+          className="rounded-2xl relative flex max-h-[70vh] w-full flex-col overflow-y-auto border-0 bg-gray-400 p-10 outline-none focus:outline-none"
         >
           {children}
         </div>
