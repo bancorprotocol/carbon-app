@@ -30,9 +30,9 @@ const Alert: FC<{ children: ReactNode; type: AlertType }> = ({
 }) => {
   return (
     <div
-      className={`flex h-[24px] items-center justify-center ${getAlertColorClass(
+      className={`flex h-24 items-center justify-center ${getAlertColorClass(
         type
-      )} text-sm font-bold text-white`}
+      )} text-14 font-weight-700 text-white`}
     >
       {children}
     </div>
@@ -61,15 +61,11 @@ const NetworkErrorAlert = () => {
 
 export const MainMenu: FC = () => {
   return (
-    <div className={`sticky top-0`}>
+    <div className={`sticky top-0 z-40 px-10 md:px-20`}>
       <TenderlyForkAlert />
       <ImposterAccountAlert />
       <NetworkErrorAlert />
-      <div
-        className={
-          'bg-body px-content flex h-[79px] w-full items-center justify-between'
-        }
-      >
+      <div className={'bg-body flex h-80 w-full items-center justify-between'}>
         <MainMenuLeft />
         <MainMenuRight />
       </div>

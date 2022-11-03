@@ -6,6 +6,7 @@ import { DebugModal } from 'elements/debug/DebugModal';
 import { Switch } from 'components/Switch';
 import { useState } from 'react';
 import { Button } from 'components/Button';
+import { DropdownMenu } from 'components/DropdownMenu';
 
 export const DebugPage = () => {
   const [isOn, setIsOn] = useState(false);
@@ -22,6 +23,9 @@ export const DebugPage = () => {
       <DebugTenderlyRPC />
       <DebugImposter />
       <DebugModal />
+      <div>
+        <DropdownMenu />
+      </div>
     </Page>
   );
 };
