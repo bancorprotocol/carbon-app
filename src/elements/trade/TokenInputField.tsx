@@ -2,6 +2,7 @@ import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Imager } from 'elements/Image';
 import { Token } from 'services/tokens';
+import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 
 export interface TokenInputProps {
   token?: Token;
@@ -31,12 +32,21 @@ const TokenInputField = ({
         isFocused ? 'border-primary' : 'dark:border-grey border-fog'
       } ${isError ? 'border-error text-error' : ''}`}
     >
-      <Imager
-        src={token?.logoURI}
-        alt={'Token Logo'}
-        className="h-[40px] w-[40px] rounded-full"
-      />
-      <span className="text-20">{token?.symbol}</span>
+      <button className="flex min-w-[175px] items-center gap-10">
+        {token ? (
+          <>
+            <Imager
+              src={token?.logoURI}
+              alt={'Token Logo'}
+              className="h-[40px] w-[40px] rounded-full"
+            />
+            <span className="text-20">{token.symbol}</span>
+          </>
+        ) : (
+          <span>Choose Token</span>
+        )}
+        <IconArrowDown className="w-14" />
+      </button>
       <input
         type="text"
         dir="rtl"
