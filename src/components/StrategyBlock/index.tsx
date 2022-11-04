@@ -1,36 +1,26 @@
-export const StrategyBlock = () => {
+import { Index } from 'components/TokenBlock';
+import { OrderBlock } from 'components/OrderBlock';
+import { FC } from 'react';
+
+export const StrategyBlock: FC = () => {
   return (
     <div className="bg-content space-y-20 rounded-10 p-20">
       <div className={'flex space-x-20'}>
         {[1, 2].map((i) => (
-          <div
+          <Index
             key={i}
-            className="bg-secondary flex w-full items-center space-x-10 rounded-12 p-10"
-          >
-            <div
-              className={'h-40 w-40 rounded-full bg-lightGrey dark:bg-darkGrey'}
-            />
-            <div>
-              <div className={'text-20 font-weight-500'}>TKN</div>
-              <div className="text-secondary">????????</div>
-            </div>
-          </div>
+            text={'TKN'}
+            textSecondary={'100.000.000'}
+            imgUrl={''}
+          />
         ))}
       </div>
       {[1, 2].map((i) => (
-        <div key={i} className="bg-secondary relative rounded-12 p-10">
-          <div className={'absolute right-20 top-0 flex h-full items-center'}>
-            <div
-              className={
-                'rounded-full bg-primary-500/20 px-16 py-3 text-14 text-primary-400'
-              }
-            >
-              Simple
-            </div>
-          </div>
-          <div className="text-secondary text-12">Sell 1 TKN for</div>
-          <div className={'text-18 font-weight-500'}>100,000,000 TKN</div>
-        </div>
+        <OrderBlock
+          key={i}
+          text={'100,000,000 TKN'}
+          textSecondary={'Sell 1 TKN for'}
+        />
       ))}
     </div>
   );
