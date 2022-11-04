@@ -35,9 +35,16 @@ export const DebugPage = () => {
       <DebugTenderlyRPC />
       <DebugImposter />
       <DebugModal />
-      <div>
-        <DropdownMenu />
-      </div>
+      <DropdownMenu button={'Menu'}>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+      </DropdownMenu>
     </Page>
   );
 };

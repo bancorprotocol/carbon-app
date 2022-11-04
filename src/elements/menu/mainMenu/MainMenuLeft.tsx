@@ -14,7 +14,16 @@ export const MainMenuLeft: FC = () => {
           </Link>
         ))}
       </div>
-      <DropdownMenu />
+      <DropdownMenu button={'Menu'}>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+      </DropdownMenu>
     </div>
   );
 };
