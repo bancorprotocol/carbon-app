@@ -14,8 +14,8 @@ export const StrategiesPage = () => (
       animate={'visible'}
     >
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-        <m.div variants={items}>
-          <StrategyBlock key={i} />
+        <m.div key={i} variants={items}>
+          <StrategyBlock />
         </m.div>
       ))}
 
