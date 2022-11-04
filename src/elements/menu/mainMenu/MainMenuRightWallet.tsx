@@ -12,14 +12,14 @@ export const MainMenuRightWallet: FC = () => {
 
   if (user) {
     return (
-      <Button variant={'primary'} onClick={disconnect}>
+      <Button variant={'secondary'} onClick={disconnect}>
         {shortenString(user)}
       </Button>
     );
   }
 
   return (
-    <Button variant={'primary'} onClick={onClickOpenModal}>
+    <Button variant={'secondary'} onClick={onClickOpenModal}>
       Connect
     </Button>
   );

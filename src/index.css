@@ -6,7 +6,7 @@
   html,
   body,
   #root {
-    @apply text-body bg-body;
+    @apply font-euclid text-body bg-body;
   }
 
   h1 {
