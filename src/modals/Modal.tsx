@@ -11,53 +11,6 @@ type Props = {
   showCloseButton?: boolean;
 };
 
-const dropIn: Variants = {
-  hidden: {
-    y: '100vh',
-    //opacity: 0,
-    scale: 0.7,
-  },
-  visible: {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delay: 0,
-      duration: 0.5,
-      type: 'spring',
-      damping: 20,
-      mass: 1,
-      stiffness: 200,
-    },
-  },
-  exit: {
-    y: '100vh',
-    opacity: 0,
-    scale: 0.7,
-    transition: {
-      duration: 0.5,
-    },
-  },
-};
-
-const fadeIn: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.7,
-    },
-  },
-};
-
 export const Modal: FC<Props> = ({
   children,
   id,
@@ -104,4 +57,51 @@ export const Modal: FC<Props> = ({
       </m.div>
     </m.div>
   );
+};
+
+const dropIn: Variants = {
+  hidden: {
+    y: '100vh',
+    //opacity: 0,
+    scale: 0.7,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: 0,
+      duration: 0.5,
+      type: 'spring',
+      damping: 20,
+      mass: 1,
+      stiffness: 200,
+    },
+  },
+  exit: {
+    y: '100vh',
+    opacity: 0,
+    scale: 0.7,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
+const fadeIn: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.7,
+    },
+  },
 };
