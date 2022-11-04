@@ -1,9 +1,15 @@
 import { Button } from 'components/Button';
+import { m, Variants } from 'motion';
 
 export const CreateStrategy = () => {
   return (
-    <div className={'max-w-[514px] space-y-30'}>
-      <div className={'bg-secondary rounded-18 p-20'}>
+    <m.div
+      className={'space-y-30'}
+      variants={list}
+      initial={'hidden'}
+      animate={'visible'}
+    >
+      <m.div variants={items} className={'bg-secondary rounded-18 p-20'}>
         <h2 className={'mb-20'}>Select Tokens</h2>
 
         <div className={'flex items-center justify-between'}>
@@ -31,9 +37,12 @@ export const CreateStrategy = () => {
             <div className={'text-20 font-weight-500'}>TKN</div>
           </div>
         </div>
-      </div>
+      </m.div>
 
-      <div className={'bg-secondary space-y-20 rounded-18 p-20'}>
+      <m.div
+        variants={items}
+        className={'bg-secondary space-y-20 rounded-18 p-20'}
+      >
         <h2>Buy</h2>
 
         <div
@@ -115,9 +124,12 @@ export const CreateStrategy = () => {
             </div>
           </div>
         </div>
-      </div>
+      </m.div>
 
-      <div className={'bg-secondary space-y-10 rounded-18 p-20'}>
+      <m.div
+        variants={items}
+        className={'bg-secondary space-y-10 rounded-18 p-20'}
+      >
         <h2 className={'mb-20'}>Budget</h2>
 
         <div className={'bg-body space-y-10 rounded-14 p-20'}>
@@ -130,7 +142,7 @@ export const CreateStrategy = () => {
               <div className={'bg-body h-30 w-30 rounded-full'} />
               <div>DAI</div>
             </div>
-            <div className={'text-22'}>100.000.000</div>
+            <div className={'text-[22px]'}>100.000.000</div>
           </div>
           <div className={'flex items-center justify-between'}>
             <div className={'text-secondary text-12'}>
@@ -149,7 +161,7 @@ export const CreateStrategy = () => {
               <div className={'bg-body h-30 w-30 rounded-full'} />
               <div>DAI</div>
             </div>
-            <div className={'text-22'}>100.000.000</div>
+            <div className={'text-[22px]'}>100.000.000</div>
           </div>
           <div className={'flex items-center justify-between'}>
             <div className={'text-secondary text-12'}>
@@ -158,11 +170,40 @@ export const CreateStrategy = () => {
             <div className={'text-secondary text-12'}>$100.000.000</div>
           </div>
         </div>
-      </div>
+      </m.div>
 
-      <Button variant={'secondary'} size={'lg'} fullWidth>
-        Confirm Strategy
-      </Button>
-    </div>
+      <m.div variants={items}>
+        <Button variant={'secondary'} size={'lg'} fullWidth>
+          Confirm Strategy
+        </Button>
+      </m.div>
+    </m.div>
   );
+};
+
+const list: Variants = {
+  visible: {
+    opacity: 1,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.1,
+    },
+  },
+  hidden: {
+    transition: {
+      when: 'afterChildren',
+    },
+    opacity: 0,
+  },
+};
+
+const items: Variants = {
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
+  },
 };

@@ -3,8 +3,10 @@ import { CreateStrategy } from 'elements/strategies/create';
 
 export const CreateStrategyPage = () => {
   return (
-    <Page title={'Create Strategy'}>
-      <CreateStrategy />
-    </Page>
+    <div className={'mx-auto max-w-[650px]'}>
+      <Page title={'Create Strategy'}>
+        <CreateStrategy />
+      </Page>
+    </div>
   );
 };
