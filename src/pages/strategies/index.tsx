@@ -1,13 +1,52 @@
 import { Page } from 'components/Page';
+import { StrategyBlock } from 'components/StrategyBlock';
+import { StrategyBlockCreate } from 'components/StrategyBlock/create';
+import { m, Variants } from 'motion';
 
 export const StrategiesPage = () => (
   <Page title={'Strategies'}>
-    <span>Here be strategies!'</span>
+    <m.div
+      className={
+        'grid grid-cols-1 gap-30 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
+      }
+      variants={list}
+      initial={'hidden'}
+      animate={'visible'}
+    >
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
+        <m.div variants={items}>
+          <StrategyBlock key={i} />
+        </m.div>
+      ))}
 
-    <div className="bg-content max-w-md rounded-16">
-      <h2>Strategy</h2>
-      <div className="text-secondary">Secondary</div>
-      <div className="bg-secondary">hello</div>
-    </div>
+      <StrategyBlockCreate />
+    </m.div>
   </Page>
 );
+
+const list: Variants = {
+  visible: {
+    opacity: 1,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.1,
+    },
+  },
+  hidden: {
+    transition: {
+      when: 'afterChildren',
+    },
+    opacity: 0,
+  },
+};
+
+const items: Variants = {
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
+  },
+};

@@ -65,7 +65,11 @@ export const MainMenu: FC = () => {
       <TenderlyForkAlert />
       <ImposterAccountAlert />
       <NetworkErrorAlert />
-      <div className={'bg-body flex h-80 w-full items-center justify-between'}>
+      <div
+        className={
+          'bg-body px-content flex h-80 w-full items-center justify-between'
+        }
+      >
         <MainMenuLeft />
         <MainMenuRight />
       </div>

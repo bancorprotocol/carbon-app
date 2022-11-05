@@ -21,7 +21,7 @@ module.exports = {
     },
     colors: ({ colors }) => ({
       ...colors,
-      primary: colors.purple,
+      primary: colors.blue,
       secondary: colors.gray,
       success: colors.green,
       error: colors.red,
@@ -299,6 +299,7 @@ module.exports = {
       DEFAULT: '1',
     },
     fontFamily: {
+      euclid: ['Euclid Circular A', 'sans-serif'],
       sans: [
         'ui-sans-serif',
         'system-ui',
