@@ -16,6 +16,7 @@ jobs:
         node-version: [14.x]
 
     steps:
+      - uses: actions/checkout@v2
       - name: Run Tests
         run: yarn test
       - name: Run Lint
