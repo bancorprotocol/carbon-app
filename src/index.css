@@ -6,7 +6,7 @@
   html,
   body,
   #root {
-    @apply text-body bg-body;
+    @apply font-euclid text-body bg-body;
   }
 
   h1 {
@@ -29,11 +29,11 @@
 
   .bg-content {
     @apply border border-lightGrey bg-white;
-    @apply dark:border dark:border-charcoal dark:bg-charcoal;
+    @apply dark:border dark:border-darkGrey dark:bg-black;
   }
 
   .bg-secondary {
-    @apply bg-fog dark:bg-darkGrey;
+    @apply bg-fog dark:bg-charcoal;
   }
 
   .text-body {

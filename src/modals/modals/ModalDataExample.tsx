@@ -11,7 +11,7 @@ export const ModalDataExample: ModalFC<ModalDataExampleData> = ({
   id,
   data,
 }) => {
-  const { closeModal, openModal } = useModal();
+  const { closeModal } = useModal();
 
   return (
     <Modal id={id}>
