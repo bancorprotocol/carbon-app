@@ -42,7 +42,7 @@ const TokenInputField = ({
         onClick={() =>
           tokens &&
           openModal('tokenLists', {
-            onClick: (token: Token) => {},
+            onClick: (_) => {},
             tokens,
             limit: true,
           })

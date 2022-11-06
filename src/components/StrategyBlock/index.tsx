@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 export const StrategyBlock: FC = () => {
   return (
-    <div className="bg-content rounded-10 space-y-20 p-20">
+    <div className="bg-content rounded-10 space-y-2 p-20">
       <div className={'flex space-x-20'}>
         {[1, 2].map((i) => (
           <Index
