@@ -27,7 +27,7 @@ export const Modal: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black/70 px-3 outline-none backdrop-blur focus:outline-none`}
+      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black/70 px-3 outline-none backdrop-blur focus:outline-none`}
     >
       <m.div
         className="relative my-6 mx-auto w-full max-w-[485px]"
@@ -38,7 +38,7 @@ export const Modal: FC<Props> = ({
       >
         <div
           ref={ref}
-          className="relative flex max-h-[70vh] w-full flex-col overflow-y-auto rounded-16 border-0 bg-white p-30 outline-none focus:outline-none dark:bg-black"
+          className="relative flex w-full flex-col rounded-16 border-0 bg-white p-30 outline-none focus:outline-none dark:bg-black"
         >
           <div className={'flex justify-between'}>
             <div>{typeof title === 'string' ? <h2>{title}</h2> : title}</div>
@@ -52,7 +52,7 @@ export const Modal: FC<Props> = ({
             </div>
           </div>
 
-          {children}
+          <div className="max-h-[70vh] overflow-y-auto">{children}</div>
         </div>
       </m.div>
     </m.div>

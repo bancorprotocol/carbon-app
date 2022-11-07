@@ -9,7 +9,7 @@ export const MainMenuRight: FC = () => {
     <div className={'flex items-center space-x-20'}>
       <IconBell className={'w-[18px]'} />
       <IconHamburger className={'w-[17px]'} />
-      <Button variant={'tertiary'}>
+      <Button className="hidden md:block" variant={'tertiary'}>
         1000 BNT<span className={'px-3'}>|</span>Level 1
       </Button>
       <MainMenuRightWallet />
