@@ -2,27 +2,33 @@ import { Page } from 'components/Page';
 import { StrategyBlock } from 'components/StrategyBlock';
 import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 import { m, Variants } from 'motion';
+import { useGetUserStrategies } from 'queries';
 
-export const StrategiesPage = () => (
-  <Page title={'Strategies'}>
-    <m.div
-      className={
-        'grid grid-cols-1 gap-30 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
-      }
-      variants={list}
-      initial={'hidden'}
-      animate={'visible'}
-    >
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-        <m.div variants={items}>
-          <StrategyBlock key={i} />
-        </m.div>
-      ))}
+export const StrategiesPage = () => {
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const { status, data, error, isFetching } = useGetUserStrategies();
+  console.log(data);
+  return (
+    <Page title={'Strategies'}>
+      <m.div
+        className={
+          'grid grid-cols-1 gap-30 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
+        }
+        variants={list}
+        initial={'hidden'}
+        animate={'visible'}
+      >
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
+          <m.div variants={items}>
+            <StrategyBlock key={i} />
+          </m.div>
+        ))}
 
-      <StrategyBlockCreate />
-    </m.div>
-  </Page>
-);
+        <StrategyBlockCreate />
+      </m.div>
+    </Page>
+  );
+};
 
 const list: Variants = {
   visible: {

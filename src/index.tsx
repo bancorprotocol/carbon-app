@@ -9,6 +9,7 @@ import { Web3ReactWrapper } from 'web3';
 import { NotificationProvider } from 'notifications/NotificationsProvider';
 import { Router } from 'routing';
 import { LazyMotion } from 'motion';
+import { QueryProvider } from 'queries';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,11 +19,13 @@ root.render(
     <LazyMotion>
       <NotificationProvider>
         <Web3ReactWrapper>
-          <Router>
-            <ModalProvider>
-              <App />
-            </ModalProvider>
-          </Router>
+          <QueryProvider>
+            <Router>
+              <ModalProvider>
+                <App />
+              </ModalProvider>
+            </Router>
+          </QueryProvider>
         </Web3ReactWrapper>
       </NotificationProvider>
     </LazyMotion>

@@ -1,0 +1,766 @@
+{
+  "address": "0x4556af507375912d77c151a75f47640b1de4b468",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract IBancorNetwork",
+          "name": "initNetwork",
+          "type": "address"
+        },
+        {
+          "internalType": "contract IMasterVault",
+          "name": "initMasterVault",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    { "inputs": [], "name": "AccessDenied", "type": "error" },
+    { "inputs": [], "name": "AlreadyInitialized", "type": "error" },
+    { "inputs": [], "name": "IdenticalAddresses", "type": "error" },
+    { "inputs": [], "name": "InvalidAddress", "type": "error" },
+    { "inputs": [], "name": "InvalidFee", "type": "error" },
+    { "inputs": [], "name": "NativeTokenAmountMismatch", "type": "error" },
+    { "inputs": [], "name": "Overflow", "type": "error" },
+    { "inputs": [], "name": "PoolAlreadyExists", "type": "error" },
+    { "inputs": [], "name": "PoolDoesNotExists", "type": "error" },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "prevFeePPM",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "newFeePPM",
+          "type": "uint32"
+        }
+      ],
+      "name": "NetworkFeePPMUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "poolId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "contract Token",
+          "name": "token0",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "contract Token",
+          "name": "token1",
+          "type": "address"
+        }
+      ],
+      "name": "PoolCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "previousAdminRole",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "newAdminRole",
+          "type": "bytes32"
+        }
+      ],
+      "name": "RoleAdminChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "RoleGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "RoleRevoked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "provider",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "contract Token",
+          "name": "sourceToken",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "contract Token",
+          "name": "targetToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "y0",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "z0",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "A0",
+          "type": "uint64"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "B0",
+          "type": "uint64"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "y1",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint128",
+          "name": "z1",
+          "type": "uint128"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "A1",
+          "type": "uint64"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "B1",
+          "type": "uint64"
+        }
+      ],
+      "name": "StrategyCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Unpaused",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "DEFAULT_ADMIN_ROLE",
+      "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract Token",
+          "name": "token0",
+          "type": "address"
+        },
+        {
+          "internalType": "contract Token",
+          "name": "token1",
+          "type": "address"
+        }
+      ],
+      "name": "createPool",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            {
+              "internalType": "contract Token",
+              "name": "token0",
+              "type": "address"
+            },
+            {
+              "internalType": "contract Token",
+              "name": "token1",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct Pool",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract Token",
+          "name": "sourceToken",
+          "type": "address"
+        },
+        {
+          "internalType": "contract Token",
+          "name": "targetToken",
+          "type": "address"
+        },
+        { "internalType": "uint128", "name": "y0", "type": "uint128" },
+        { "internalType": "uint128", "name": "z0", "type": "uint128" },
+        { "internalType": "uint64", "name": "A0", "type": "uint64" },
+        { "internalType": "uint64", "name": "B0", "type": "uint64" },
+        { "internalType": "uint128", "name": "y1", "type": "uint128" },
+        { "internalType": "uint128", "name": "z1", "type": "uint128" },
+        { "internalType": "uint64", "name": "A1", "type": "uint64" },
+        { "internalType": "uint64", "name": "B1", "type": "uint64" }
+      ],
+      "name": "createStrategy",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "role", "type": "bytes32" }
+      ],
+      "name": "getRoleAdmin",
+      "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+        { "internalType": "uint256", "name": "index", "type": "uint256" }
+      ],
+      "name": "getRoleMember",
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "role", "type": "bytes32" }
+      ],
+      "name": "getRoleMemberCount",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+        { "internalType": "address", "name": "account", "type": "address" }
+      ],
+      "name": "grantRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+        { "internalType": "address", "name": "account", "type": "address" }
+      ],
+      "name": "hasRole",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "networkFeePPM",
+      "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pairs",
+      "outputs": [
+        { "internalType": "address[2][]", "name": "", "type": "address[2][]" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "paused",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract Token",
+          "name": "token0",
+          "type": "address"
+        },
+        {
+          "internalType": "contract Token",
+          "name": "token1",
+          "type": "address"
+        }
+      ],
+      "name": "pool",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            {
+              "internalType": "contract Token",
+              "name": "token0",
+              "type": "address"
+            },
+            {
+              "internalType": "contract Token",
+              "name": "token1",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct Pool",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "poolType",
+      "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{ "internalType": "bytes", "name": "data", "type": "bytes" }],
+      "name": "postUpgrade",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+        { "internalType": "address", "name": "account", "type": "address" }
+      ],
+      "name": "renounceRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+        { "internalType": "address", "name": "account", "type": "address" }
+      ],
+      "name": "revokeRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "roleAdmin",
+      "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "newNetworkFeePPM",
+          "type": "uint32"
+        }
+      ],
+      "name": "setNetworkFeePPM",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" }
+      ],
+      "name": "strategiesByIds",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            {
+              "internalType": "address",
+              "name": "provider",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "contract Token",
+                  "name": "source",
+                  "type": "address"
+                },
+                {
+                  "internalType": "contract Token",
+                  "name": "target",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct SourceTargetTokens",
+              "name": "tokens",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                { "internalType": "uint128", "name": "y", "type": "uint128" },
+                { "internalType": "uint128", "name": "z", "type": "uint128" },
+                { "internalType": "uint64", "name": "A", "type": "uint64" },
+                { "internalType": "uint64", "name": "B", "type": "uint64" }
+              ],
+              "internalType": "struct Order[2]",
+              "name": "orders",
+              "type": "tuple[2]"
+            }
+          ],
+          "internalType": "struct Strategy[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract Token",
+          "name": "sourceToken",
+          "type": "address"
+        },
+        {
+          "internalType": "contract Token",
+          "name": "targetToken",
+          "type": "address"
+        }
+      ],
+      "name": "strategiesByPool",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            {
+              "internalType": "address",
+              "name": "provider",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "contract Token",
+                  "name": "source",
+                  "type": "address"
+                },
+                {
+                  "internalType": "contract Token",
+                  "name": "target",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct SourceTargetTokens",
+              "name": "tokens",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                { "internalType": "uint128", "name": "y", "type": "uint128" },
+                { "internalType": "uint128", "name": "z", "type": "uint128" },
+                { "internalType": "uint64", "name": "A", "type": "uint64" },
+                { "internalType": "uint64", "name": "B", "type": "uint64" }
+              ],
+              "internalType": "struct Order[2]",
+              "name": "orders",
+              "type": "tuple[2]"
+            }
+          ],
+          "internalType": "struct Strategy[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "provider", "type": "address" }
+      ],
+      "name": "strategiesByProvider",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            {
+              "internalType": "address",
+              "name": "provider",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "contract Token",
+                  "name": "source",
+                  "type": "address"
+                },
+                {
+                  "internalType": "contract Token",
+                  "name": "target",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct SourceTargetTokens",
+              "name": "tokens",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                { "internalType": "uint128", "name": "y", "type": "uint128" },
+                { "internalType": "uint128", "name": "z", "type": "uint128" },
+                { "internalType": "uint64", "name": "A", "type": "uint64" },
+                { "internalType": "uint64", "name": "B", "type": "uint64" }
+              ],
+              "internalType": "struct Order[2]",
+              "name": "orders",
+              "type": "tuple[2]"
+            }
+          ],
+          "internalType": "struct Strategy[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "uint256", "name": "id", "type": "uint256" }
+      ],
+      "name": "strategy",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            {
+              "internalType": "address",
+              "name": "provider",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "contract Token",
+                  "name": "source",
+                  "type": "address"
+                },
+                {
+                  "internalType": "contract Token",
+                  "name": "target",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct SourceTargetTokens",
+              "name": "tokens",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                { "internalType": "uint128", "name": "y", "type": "uint128" },
+                { "internalType": "uint128", "name": "z", "type": "uint128" },
+                { "internalType": "uint64", "name": "A", "type": "uint64" },
+                { "internalType": "uint64", "name": "B", "type": "uint64" }
+              ],
+              "internalType": "struct Order[2]",
+              "name": "orders",
+              "type": "tuple[2]"
+            }
+          ],
+          "internalType": "struct Strategy",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+      ],
+      "name": "supportsInterface",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "provider", "type": "address" },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "strategyId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint128",
+              "name": "tokenAmount",
+              "type": "uint128"
+            }
+          ],
+          "internalType": "struct Trade[]",
+          "name": "trades",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "tradeByTargetAmount",
+          "type": "bool"
+        }
+      ],
+      "name": "trade",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "version",
+      "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ]
+}
