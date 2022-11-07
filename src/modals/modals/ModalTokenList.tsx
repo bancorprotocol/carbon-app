@@ -7,7 +7,7 @@ import { useState, useMemo } from 'react';
 import { Token, TokenList } from 'services/tokens';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { useModal } from 'modals/ModalProvider';
-import { Imager } from 'elements/Image';
+import { Imager } from 'elements/Imager';
 import { SearchInput } from 'components/SearchInput';
 
 export type ModalTokenListData = {

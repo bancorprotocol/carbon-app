@@ -1,8 +1,8 @@
 import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useState, useEffect, useMemo } from 'react';
-import { genericToken } from 'services/web3/config';
+import genericToken from 'assets/icons/generic_token.svg';
 
-export const useImage = (
+export const useImager = (
   src: string = genericToken,
   fallbackSrc: string = genericToken
 ) => {
@@ -62,7 +62,7 @@ export const Imager = ({
   fallbackSrc,
   ...props
 }: ImageProps) => {
-  const { hasLoaded, source } = useImage(src, fallbackSrc);
+  const { hasLoaded, source } = useImager(src, fallbackSrc);
 
   return hasLoaded ? (
     <img {...props} src={source} alt={alt} loading={lazy ? 'lazy' : 'eager'} />
