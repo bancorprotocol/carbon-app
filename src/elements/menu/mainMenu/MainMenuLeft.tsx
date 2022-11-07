@@ -8,7 +8,7 @@ export const MainMenuLeft: FC = () => {
   return (
     <div className={'flex items-center space-x-24'}>
       <LogoCarbon className={'w-34'} />
-      <div className={'space-x-24'}>
+      <div className={'hidden space-x-24 md:block'}>
         {menuItems.map(({ label, href }) => (
           <Link key={label} to={href} className={'px-3 py-3'}>
             {label}
