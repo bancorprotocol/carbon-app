@@ -38,7 +38,7 @@ export const NotificationLine = forwardRef(
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
         transition={{ type: 'spring' }}
-        className={'w-full rounded-2xl bg-red-600 px-4 py-2 text-white'}
+        className={'w-full rounded bg-red-600 px-4 py-2 text-white'}
       >
         <h3>{notification.title}</h3>
         <p>{notification.description}</p>

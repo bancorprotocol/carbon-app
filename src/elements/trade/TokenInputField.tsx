@@ -34,7 +34,7 @@ const TokenInputField = ({
 
   return (
     <div
-      className={`flex items-center gap-10 rounded-2xl border-2 bg-white p-20 text-24 dark:bg-charcoal ${
+      className={`flex items-center gap-10 rounded border-2 bg-white p-20 text-24 dark:bg-charcoal ${
         isFocused ? 'border-primary' : 'dark:border-grey border-fog'
       } ${isError ? 'border-error text-error' : ''}`}
     >
@@ -47,7 +47,7 @@ const TokenInputField = ({
             limit: true,
           })
         }
-        className="flex min-w-[175px] items-center gap-10"
+        className="flex min-w-[185px] items-center gap-10"
       >
         {token ? (
           <>
@@ -71,7 +71,7 @@ const TokenInputField = ({
         value={input}
         placeholder="0.00"
         onChange={handleChange}
-        className={`w-full rounded-2xl bg-white outline-none dark:bg-charcoal`}
+        className={`w-full rounded bg-white outline-none dark:bg-charcoal`}
       />
     </div>
   );

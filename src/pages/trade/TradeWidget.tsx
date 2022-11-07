@@ -6,6 +6,7 @@ import { Token } from 'services/tokens';
 export const TradeWidget = ({ from, to }: { from?: Token; to?: Token }) => {
   const [fromInput, setFromInput] = useState('');
   const [toInput, setToInput] = useState('');
+
   return (
     <div className="flex flex-col gap-10 p-10 md:p-30">
       <TokenInputField

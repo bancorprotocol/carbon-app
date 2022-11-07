@@ -223,12 +223,12 @@ export const SuggestedTokens = ({
           <button
             key={token?.address}
             onClick={() => onClick(token!)}
-            className="dark:bg-grey dark:border-grey dark:hover:border-black-disabled rounded-10 hover:shadow-widget flex w-full flex-col items-center bg-fog pt-10 pb-5 transition-all duration-500 dark:border"
+            className="flex w-full flex-col items-center rounded-10 border-2 border-white py-8"
           >
             <Imager
               src={token!.logoURI}
               alt={`${token!.symbol} Token`}
-              className="mb-5 h-28 w-28 !rounded-full"
+              className="h-28 w-28 rounded-full"
             />
             <span className="text-12">{token!.symbol}</span>
           </button>
