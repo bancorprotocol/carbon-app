@@ -9,14 +9,15 @@ export const switchStyles = cva<SwitchVariants>(
     variants: {
       variant: {
         primary: ['bg-primary-500'],
-        secondary: ['bg-secondary-500'],
+        secondary: ['bg-black dark:bg-white'],
+        tertiary: ['bg-tertiary'],
         success: ['bg-success-500'],
         error: ['bg-error-500'],
       },
       size: {
-        sm: ['h-[50px] w-[160px] p-2'],
-        md: ['h-[80px] w-[240px] p-2'],
-        lg: ['h-[100px] w-[320px] p-3'],
+        sm: ['h-20 w-[50px] p-3'],
+        md: ['h-30 w-[60px] p-5'],
+        lg: ['h-40 w-[90px] p-6'],
       },
       isOn: {
         true: 'justify-end',

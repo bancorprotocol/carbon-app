@@ -1,41 +1,54 @@
 import { Button } from 'components/Button';
 import { Page } from 'components/Page';
 import { useContract } from 'hooks/useContract';
+import { StrategyBlock } from 'components/StrategyBlock';
+import { StrategyBlockCreate } from 'components/StrategyBlock/create';
+import { m, Variants } from 'motion';
 
-export const StrategiesPage = () => {
-  const { PoolCollection } = useContract();
+export const StrategiesPage = () => (
+  <Page title={'Strategies'}>
+    <m.div
+      className={
+        'grid grid-cols-1 gap-30 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
+      }
+      variants={list}
+      initial={'hidden'}
+      animate={'visible'}
+    >
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
+        <m.div variants={items}>
+          <StrategyBlock key={i} />
+        </m.div>
+      ))}
 
-  const getStrategies = async () => {
-    try {
-      const res = await PoolCollection.read.strategiesByIds([1]);
-      console.log(res);
+      <StrategyBlockCreate />
+    </m.div>
+  </Page>
+);
 
-      const obj = {
-        id: res[0].id.toString(),
-        provider: res[0].provider,
-        tokens: {
-          source: res[0].tokens.source,
-          target: res[0].tokens.target,
-        },
-        orders: [res[0].orders[0].toString(), res[0].orders[1].toString()],
-      };
-      console.log(obj);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+const list: Variants = {
+  visible: {
+    opacity: 1,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.1,
+    },
+  },
+  hidden: {
+    transition: {
+      when: 'afterChildren',
+    },
+    opacity: 0,
+  },
+};
 
-  return (
-    <Page title={'Strategies'}>
-      <span>Here be strategies!'</span>
-      
-      <div className="bg-content max-w-md rounded-16">
-        <h2>Strategy</h2>
-        <div className="text-secondary">Secondary</div>
-        <div className="bg-secondary">hello</div>
-      </div>
-
-      <Button onClick={getStrategies}>get strategy</Button>
-    </Page>
-  );
+const items: Variants = {
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
+  },
 };

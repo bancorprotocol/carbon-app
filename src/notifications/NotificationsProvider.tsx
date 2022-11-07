@@ -23,8 +23,8 @@ interface NotificationsContext {
 
 const defaultValue: NotificationsContext = {
   notifications: [],
-  dispatchNotification: (data) => {},
-  removeNotification: (id) => {},
+  dispatchNotification: () => {},
+  removeNotification: () => {},
 };
 
 const NotificationCTX = createContext<NotificationsContext>(defaultValue);
@@ -77,7 +77,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
                     exit={{ scale: 0.8, opacity: 0 }}
                     transition={{ type: 'spring' }}
                     className={
-                      'w-full rounded-2xl bg-red-600 px-4 py-2 text-white'
+                      'rounded-2xl w-full bg-red-600 px-4 py-2 text-white'
                     }
                   >
                     <h3>{notification.title}</h3>
