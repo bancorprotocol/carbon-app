@@ -1,5 +1,4 @@
-import { MainMenu } from 'elements/menu';
-import { MobileMenu } from 'elements/menu/mobileMenu/MobileMenu';
+import { MainMenu, MobileMenu } from 'elements/menu';
 import { Outlet } from 'routing';
 
 export const App = () => {
