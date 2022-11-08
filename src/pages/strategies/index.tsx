@@ -2,32 +2,11 @@ import { Page } from 'components/Page';
 import { StrategyBlock } from 'components/StrategyBlock';
 import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 import { m, Variants } from 'motion';
-import { useWeb3 } from 'web3';
-import { useContract } from 'hooks/useContract';
-import { useEffect } from 'react';
+import { useGetUserStrategies } from 'queries';
 
 export const StrategiesPage = () => {
-  const { user } = useWeb3();
-  const { PoolCollection } = useContract();
-
-  const getStrategies = async () => {
-    if (!user) {
-      return;
-    }
-    try {
-      const res = await PoolCollection.read.strategiesByPool(
-        '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-        '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C'
-      );
-      console.log(res);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  useEffect(() => {
-    void getStrategies();
-  }, [getStrategies]);
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const { status, data, error, isFetching } = useGetUserStrategies();
 
   return (
     <Page title={'Strategies'}>
