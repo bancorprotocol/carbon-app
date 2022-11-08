@@ -27,12 +27,21 @@ export const CreateStrategy = () => {
       >
         <h2>Buy</h2>
 
-        <div className={'bg-body rounded-14 px-20 py-14'}>
-          <AmountInputWithButtons
-            label={'TKN for TKN'}
-            amount={source.high}
-            setAmount={source.setHigh}
-          />
+        <div className={'flex space-x-4'}>
+          <div className={'bg-body rounded-l-14 px-20 py-14'}>
+            <AmountInputWithButtons
+              label={'TKN for TKN'}
+              amount={source.low}
+              setAmount={source.setLow}
+            />
+          </div>
+          <div className={'bg-body rounded-r-14 px-20 py-14'}>
+            <AmountInputWithButtons
+              label={'TKN for TKN'}
+              amount={source.high}
+              setAmount={source.setHigh}
+            />
+          </div>
         </div>
 
         <div className={'bg-body h-[200px] rounded-14 p-20'}></div>

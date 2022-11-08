@@ -1,6 +1,7 @@
 import { useWeb3 } from 'web3';
-import { Token__factory } from 'abis/types';
-import { useCallback } from 'react';
+import { PoolCollection__factory, Token__factory } from 'abis/types';
+import { useCallback, useMemo } from 'react';
+import poolCollectionProxyABI from 'abis/PoolCollection_Proxy.json';
 
 export const useContract = () => {
   const { provider, signer } = useWeb3();
@@ -13,5 +14,19 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  return { Token };
+  const PoolCollection = useMemo(
+    () => ({
+      read: PoolCollection__factory.connect(
+        poolCollectionProxyABI.address,
+        provider!
+      ),
+      write: PoolCollection__factory.connect(
+        poolCollectionProxyABI.address,
+        signer!
+      ),
+    }),
+    [provider, signer]
+  );
+
+  return { Token, PoolCollection };
 };
