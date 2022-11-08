@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContract } from 'hooks/useContract';
-
-// TODO: I should be able to get account using our own hooks
-import { useWeb3React } from '@web3-react/core';
+import { useWeb3 } from 'web3';
 
 enum ServerStateKeysEnum {
   Strategies = 'strategies',
@@ -10,14 +8,15 @@ enum ServerStateKeysEnum {
 
 export const useGetUserStrategies = () => {
   const { PoolCollection } = useContract();
-  const { account } = useWeb3React();
+  const { user } = useWeb3();
+
   return useQuery(
     [ServerStateKeysEnum.Strategies],
     async () => {
-      PoolCollection().read.strategiesByProvider(account!);
+      PoolCollection.read.strategiesByProvider(user!);
     },
     {
-      enabled: !!account,
+      enabled: !!user,
     }
   );
 };
@@ -35,7 +34,7 @@ export const useCreateStrategy = (strategy: any) => {
 
   return useMutation(
     async () => {
-      PoolCollection().write.createStrategy(...toStrategy(strategy));
+      PoolCollection.write.createStrategy(...toStrategy(strategy));
     },
     {
       onSuccess: () => {

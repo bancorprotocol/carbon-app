@@ -7,7 +7,7 @@ import { useGetUserStrategies } from 'queries';
 export const StrategiesPage = () => {
   // eslint-disable-next-line unused-imports/no-unused-vars
   const { status, data, error, isFetching } = useGetUserStrategies();
-  console.log(data);
+
   return (
     <Page title={'Strategies'}>
       <m.div

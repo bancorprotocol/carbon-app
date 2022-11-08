@@ -1,5 +1,5 @@
 {
-  "address": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+  "address": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
   "abi": [
     {
       "inputs": [],
@@ -123,37 +123,22 @@
     },
     {
       "inputs": [],
+      "name": "AlreadyExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "AlreadyInitialized",
       "type": "error"
     },
     {
       "inputs": [],
-      "name": "IdenticalAddresses",
+      "name": "DeadlineExpired",
       "type": "error"
     },
     {
       "inputs": [],
-      "name": "InvalidFee",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "NativeTokenAmountMismatch",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "Overflow",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "PoolAlreadyExists",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "PoolDoesNotExists",
+      "name": "DoesNotExist",
       "type": "error"
     },
     {
@@ -174,25 +159,6 @@
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint32",
-          "name": "prevFeePPM",
-          "type": "uint32"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint32",
-          "name": "newFeePPM",
-          "type": "uint32"
-        }
-      ],
-      "name": "NetworkFeePPMUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
           "internalType": "address",
           "name": "account",
           "type": "address"
@@ -206,24 +172,37 @@
       "inputs": [
         {
           "indexed": true,
-          "internalType": "uint256",
-          "name": "poolId",
-          "type": "uint256"
+          "internalType": "uint16",
+          "name": "poolType",
+          "type": "uint16"
         },
         {
           "indexed": true,
-          "internalType": "contract Token",
-          "name": "token0",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "contract Token",
-          "name": "token1",
+          "internalType": "contract IPoolCollection",
+          "name": "poolCollection",
           "type": "address"
         }
       ],
-      "name": "PoolCreated",
+      "name": "PoolCollectionAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint16",
+          "name": "poolType",
+          "type": "uint16"
+        },
+        {
+          "indexed": true,
+          "internalType": "contract IPoolCollection",
+          "name": "poolCollection",
+          "type": "address"
+        }
+      ],
+      "name": "PoolCollectionRemoved",
       "type": "event"
     },
     {
@@ -306,85 +285,6 @@
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "id",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "provider",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "contract Token",
-          "name": "sourceToken",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "contract Token",
-          "name": "targetToken",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint128",
-          "name": "y0",
-          "type": "uint128"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint128",
-          "name": "z0",
-          "type": "uint128"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint64",
-          "name": "A0",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint64",
-          "name": "B0",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint128",
-          "name": "y1",
-          "type": "uint128"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint128",
-          "name": "z1",
-          "type": "uint128"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint64",
-          "name": "A1",
-          "type": "uint64"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint64",
-          "name": "B1",
-          "type": "uint64"
-        }
-      ],
-      "name": "StrategyCreated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
           "internalType": "address",
           "name": "account",
           "type": "address"
@@ -442,70 +342,6 @@
           "internalType": "struct Pool",
           "name": "",
           "type": "tuple"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "contract Token",
-          "name": "sourceToken",
-          "type": "address"
-        },
-        {
-          "internalType": "contract Token",
-          "name": "targetToken",
-          "type": "address"
-        },
-        {
-          "internalType": "uint128",
-          "name": "y0",
-          "type": "uint128"
-        },
-        {
-          "internalType": "uint128",
-          "name": "z0",
-          "type": "uint128"
-        },
-        {
-          "internalType": "uint64",
-          "name": "A0",
-          "type": "uint64"
-        },
-        {
-          "internalType": "uint64",
-          "name": "B0",
-          "type": "uint64"
-        },
-        {
-          "internalType": "uint128",
-          "name": "y1",
-          "type": "uint128"
-        },
-        {
-          "internalType": "uint128",
-          "name": "z1",
-          "type": "uint128"
-        },
-        {
-          "internalType": "uint64",
-          "name": "A1",
-          "type": "uint64"
-        },
-        {
-          "internalType": "uint64",
-          "name": "B1",
-          "type": "uint64"
-        }
-      ],
-      "name": "createStrategy",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
         }
       ],
       "stateMutability": "nonpayable",
@@ -624,19 +460,6 @@
     },
     {
       "inputs": [],
-      "name": "networkFeePPM",
-      "outputs": [
-        {
-          "internalType": "uint32",
-          "name": "",
-          "type": "uint32"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
       "name": "pairs",
       "outputs": [
         {
@@ -646,6 +469,13 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -704,12 +534,12 @@
     },
     {
       "inputs": [],
-      "name": "poolType",
+      "name": "poolCollections",
       "outputs": [
         {
-          "internalType": "uint16",
+          "internalType": "contract IPoolCollection[]",
           "name": "",
-          "type": "uint16"
+          "type": "address[]"
         }
       ],
       "stateMutability": "view",
@@ -731,6 +561,19 @@
     {
       "inputs": [
         {
+          "internalType": "contract IPoolCollection",
+          "name": "newPoolCollection",
+          "type": "address"
+        }
+      ],
+      "name": "registerPoolCollection",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "bytes32",
           "name": "role",
           "type": "bytes32"
@@ -742,6 +585,13 @@
         }
       ],
       "name": "renounceRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "resume",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -778,321 +628,16 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint32",
-          "name": "newNetworkFeePPM",
-          "type": "uint32"
-        }
-      ],
-      "name": "setNetworkFeePPM",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256[]",
-          "name": "ids",
-          "type": "uint256[]"
-        }
-      ],
-      "name": "strategiesByIds",
+      "inputs": [],
+      "name": "roleEmergencyStopper",
       "outputs": [
         {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "id",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "provider",
-              "type": "address"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "contract Token",
-                  "name": "source",
-                  "type": "address"
-                },
-                {
-                  "internalType": "contract Token",
-                  "name": "target",
-                  "type": "address"
-                }
-              ],
-              "internalType": "struct SourceTargetTokens",
-              "name": "tokens",
-              "type": "tuple"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "uint128",
-                  "name": "y",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint128",
-                  "name": "z",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "A",
-                  "type": "uint64"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "B",
-                  "type": "uint64"
-                }
-              ],
-              "internalType": "struct Order[2]",
-              "name": "orders",
-              "type": "tuple[2]"
-            }
-          ],
-          "internalType": "struct Strategy[]",
+          "internalType": "bytes32",
           "name": "",
-          "type": "tuple[]"
+          "type": "bytes32"
         }
       ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "contract Token",
-          "name": "sourceToken",
-          "type": "address"
-        },
-        {
-          "internalType": "contract Token",
-          "name": "targetToken",
-          "type": "address"
-        }
-      ],
-      "name": "strategiesByPool",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "id",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "provider",
-              "type": "address"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "contract Token",
-                  "name": "source",
-                  "type": "address"
-                },
-                {
-                  "internalType": "contract Token",
-                  "name": "target",
-                  "type": "address"
-                }
-              ],
-              "internalType": "struct SourceTargetTokens",
-              "name": "tokens",
-              "type": "tuple"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "uint128",
-                  "name": "y",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint128",
-                  "name": "z",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "A",
-                  "type": "uint64"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "B",
-                  "type": "uint64"
-                }
-              ],
-              "internalType": "struct Order[2]",
-              "name": "orders",
-              "type": "tuple[2]"
-            }
-          ],
-          "internalType": "struct Strategy[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "provider",
-          "type": "address"
-        }
-      ],
-      "name": "strategiesByProvider",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "id",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "provider",
-              "type": "address"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "contract Token",
-                  "name": "source",
-                  "type": "address"
-                },
-                {
-                  "internalType": "contract Token",
-                  "name": "target",
-                  "type": "address"
-                }
-              ],
-              "internalType": "struct SourceTargetTokens",
-              "name": "tokens",
-              "type": "tuple"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "uint128",
-                  "name": "y",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint128",
-                  "name": "z",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "A",
-                  "type": "uint64"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "B",
-                  "type": "uint64"
-                }
-              ],
-              "internalType": "struct Order[2]",
-              "name": "orders",
-              "type": "tuple[2]"
-            }
-          ],
-          "internalType": "struct Strategy[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "id",
-          "type": "uint256"
-        }
-      ],
-      "name": "strategy",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "id",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "provider",
-              "type": "address"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "contract Token",
-                  "name": "source",
-                  "type": "address"
-                },
-                {
-                  "internalType": "contract Token",
-                  "name": "target",
-                  "type": "address"
-                }
-              ],
-              "internalType": "struct SourceTargetTokens",
-              "name": "tokens",
-              "type": "tuple"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "uint128",
-                  "name": "y",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint128",
-                  "name": "z",
-                  "type": "uint128"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "A",
-                  "type": "uint64"
-                },
-                {
-                  "internalType": "uint64",
-                  "name": "B",
-                  "type": "uint64"
-                }
-              ],
-              "internalType": "struct Order[2]",
-              "name": "orders",
-              "type": "tuple[2]"
-            }
-          ],
-          "internalType": "struct Strategy",
-          "name": "",
-          "type": "tuple"
-        }
-      ],
-      "stateMutability": "view",
+      "stateMutability": "pure",
       "type": "function"
     },
     {
@@ -1117,34 +662,12 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "provider",
-          "type": "address"
-        },
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "strategyId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint128",
-              "name": "tokenAmount",
-              "type": "uint128"
-            }
-          ],
-          "internalType": "struct Trade[]",
-          "name": "trades",
-          "type": "tuple[]"
-        },
-        {
-          "internalType": "bool",
-          "name": "tradeByTargetAmount",
-          "type": "bool"
+          "internalType": "uint16",
+          "name": "poolType",
+          "type": "uint16"
         }
       ],
-      "name": "trade",
+      "name": "unregisterPoolCollection",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1184,35 +707,35 @@
       "type": "constructor"
     }
   ],
-  "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
+  "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
   "receipt": {
     "to": null,
     "from": "0x5bEBA4D3533a963Dedb270a95ae5f7752fA0Fe22",
-    "contractAddress": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+    "contractAddress": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
     "transactionIndex": 0,
-    "gasUsed": "717507",
-    "logsBloom": "0x000000040000000008000000000000004800000000000008000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000200020020000000000000000000000080000000000000000000200004008000000000008000000008100000000000000000000000000000100000000000000000000000000000000000000a0000000000000800008000000000000000000000020000400000000000000000000001000000000000000000020000000000000000000040000000000000400000300000000000020000000000000000010000000020000000000000000000000000000000000020000",
-    "blockHash": "0xfec4781e9dcd8485598cff8eee305c41f35325a6388c2c70fc656928712b3cfc",
-    "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
+    "gasUsed": "718124",
+    "logsBloom": "0x000000040000000008000000000000004800000000000000000000000000000000000000040000000000000000000000000000000000000040000000000000000000000000000000000000200010020000000000000000000000080000000000000000000200004000800000000008000000008000000000000000000000000000000100000000000000040000000000000000000000a0000000000200800008000000000000000000000000000400000000000400000000001000000000000000000020000000000000000000040000000000000400000100000000000020000080000008000000000000020000000000000000000000000000000000000000",
+    "blockHash": "0xa29bf52c5c7660a2d44f5097f9d1606e28764e3f580e264257037fc8ad2b421e",
+    "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
     "logs": [
       {
         "transactionIndex": 0,
-        "blockNumber": 15881799,
-        "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
-        "address": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+        "blockNumber": 15881797,
+        "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
+        "address": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
         "topics": [
           "0xbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b",
-          "0x0000000000000000000000004556af507375912d77c151a75f47640b1de4b468"
+          "0x00000000000000000000000089924ebd1106be2689be2b294103643b0eb4cbc0"
         ],
         "data": "0x",
         "logIndex": 0,
-        "blockHash": "0xfec4781e9dcd8485598cff8eee305c41f35325a6388c2c70fc656928712b3cfc"
+        "blockHash": "0xa29bf52c5c7660a2d44f5097f9d1606e28764e3f580e264257037fc8ad2b421e"
       },
       {
         "transactionIndex": 0,
-        "blockNumber": 15881799,
-        "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
-        "address": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+        "blockNumber": 15881797,
+        "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
+        "address": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
         "topics": [
           "0xbd79b86ffe0ab8e8776151514217cd7cacd52c909f66475c3af44e129f0b00ff",
           "0x2172861495e7b85edac73e3cd5fbb42dd675baadf627720e687bcfdaca025096",
@@ -1221,13 +744,13 @@
         ],
         "data": "0x",
         "logIndex": 1,
-        "blockHash": "0xfec4781e9dcd8485598cff8eee305c41f35325a6388c2c70fc656928712b3cfc"
+        "blockHash": "0xa29bf52c5c7660a2d44f5097f9d1606e28764e3f580e264257037fc8ad2b421e"
       },
       {
         "transactionIndex": 0,
-        "blockNumber": 15881799,
-        "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
-        "address": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+        "blockNumber": 15881797,
+        "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
+        "address": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
         "topics": [
           "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d",
           "0x2172861495e7b85edac73e3cd5fbb42dd675baadf627720e687bcfdaca025096",
@@ -1236,52 +759,55 @@
         ],
         "data": "0x",
         "logIndex": 2,
-        "blockHash": "0xfec4781e9dcd8485598cff8eee305c41f35325a6388c2c70fc656928712b3cfc"
+        "blockHash": "0xa29bf52c5c7660a2d44f5097f9d1606e28764e3f580e264257037fc8ad2b421e"
       },
       {
         "transactionIndex": 0,
-        "blockNumber": 15881799,
-        "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
-        "address": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+        "blockNumber": 15881797,
+        "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
+        "address": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
         "topics": [
-          "0x1f1f36475e04b1709caf649fc7f00350aa38c7f7f110f653e81f79011db0867c"
+          "0xbd79b86ffe0ab8e8776151514217cd7cacd52c909f66475c3af44e129f0b00ff",
+          "0xf28f409b8cbe6b50c7ca45afe893f01f69626f8a4e33cb480bc1bc2d618c0845",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x2172861495e7b85edac73e3cd5fbb42dd675baadf627720e687bcfdaca025096"
         ],
-        "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030d40",
+        "data": "0x",
         "logIndex": 3,
-        "blockHash": "0xfec4781e9dcd8485598cff8eee305c41f35325a6388c2c70fc656928712b3cfc"
+        "blockHash": "0xa29bf52c5c7660a2d44f5097f9d1606e28764e3f580e264257037fc8ad2b421e"
       },
       {
         "transactionIndex": 0,
-        "blockNumber": 15881799,
-        "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
-        "address": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+        "blockNumber": 15881797,
+        "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
+        "address": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
         "topics": [
           "0x7f26b83ff96e1f2b6a682f133852f6798a09c465da95921460cefb3847402498"
         ],
         "data": "0x0000000000000000000000000000000000000000000000000000000000000001",
         "logIndex": 4,
-        "blockHash": "0xfec4781e9dcd8485598cff8eee305c41f35325a6388c2c70fc656928712b3cfc"
+        "blockHash": "0xa29bf52c5c7660a2d44f5097f9d1606e28764e3f580e264257037fc8ad2b421e"
       },
       {
         "transactionIndex": 0,
-        "blockNumber": 15881799,
-        "transactionHash": "0xcd329f4338bf1f5bce3c65112d204f17e1a02665e51e45d4872755ddfe53e53c",
-        "address": "0x038E1Cf98566fc0e75F7f4Ca55598c8F662B0Ebc",
+        "blockNumber": 15881797,
+        "transactionHash": "0x6d5ada96523b335e1c9eec8f4b6dc5d157867f5fa03c42e02ade35a9c9d1ebab",
+        "address": "0xD8A1C1CF34aD2a85a74E682a4501Bb0924176f28",
         "topics": [
           "0x7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f"
         ],
         "data": "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000093d44fc55c69393035aa485c299fd623e89350b",
         "logIndex": 5,
-        "blockHash": "0xfec4781e9dcd8485598cff8eee305c41f35325a6388c2c70fc656928712b3cfc"
+        "blockHash": "0xa29bf52c5c7660a2d44f5097f9d1606e28764e3f580e264257037fc8ad2b421e"
       }
     ],
-    "blockNumber": 15881799,
-    "cumulativeGasUsed": "717507",
+    "blockNumber": 15881797,
+    "cumulativeGasUsed": "718124",
     "status": 1,
     "byzantium": true
   },
   "args": [
-    "0x4556Af507375912d77c151a75f47640B1De4B468",
+    "0x89924ebD1106be2689BE2B294103643B0Eb4cbC0",
     "0x093D44fC55c69393035aa485c299Fd623E89350b",
     "0x8129fc1c"
   ],
@@ -1294,7 +820,7 @@
     "methodName": "initialize",
     "args": []
   },
-  "implementation": "0x4556Af507375912d77c151a75f47640B1De4B468",
+  "implementation": "0x89924ebD1106be2689BE2B294103643B0Eb4cbC0",
   "devdoc": {
     "details": "this contract is a slightly optimized version of the original TransparentUpgradeableProxy solely designed to work with the ProxyAdmin contract: - the address of the admin is stored as an immutable state variables and as the result: - the address of the admin can't be change, so the changeAdmin() function was subsequently removed note that we're using the Transparent Upgradeable Proxy pattern and *not* the Universal Upgradeable Proxy Standard (UUPS) pattern, therefore initializing the implementation contracts is not necessary or required",
     "kind": "dev",
