@@ -27,7 +27,7 @@ export const Modal: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-black/70 px-3 outline-none backdrop-blur focus:outline-none`}
+      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-primary-500/50 px-3 outline-none backdrop-blur focus:outline-none`}
     >
       <m.div
         className="relative my-6 mx-auto w-full max-w-[485px]"
