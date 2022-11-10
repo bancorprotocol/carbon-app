@@ -9,9 +9,11 @@ export const DebugModal: FC = () => {
       <h2>Modals</h2>
       <div>
         <button
-          onClick={() => openModal('dataExample', { foo: 'asd', bar: 'asd' })}
+          onClick={() =>
+            openModal('createStrategy', { foo: 'asd', bar: 'asd' })
+          }
         >
-          open example modal with data
+          open create strategy modal
         </button>
       </div>
 
