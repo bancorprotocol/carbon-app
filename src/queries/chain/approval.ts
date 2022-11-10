@@ -1,6 +1,7 @@
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 
 enum ServerStateKeysEnum {
   Approval = 'approval',
@@ -59,8 +60,29 @@ export const useSetUserApproval = () => {
         throw new Error('useGetUserApproval negative amount provided');
       }
 
-      // TODO fix GAS limit
+      const isNullApprovalContract =
+        NULL_APPROVAL_CONTRACTS.includes(tokenAddress);
+
+      if (isNullApprovalContract) {
+        const allowanceWei = await Token(tokenAddress).read.allowance(
+          user!,
+          spenderAddress
+        );
+        if (allowanceWei.gt(0)) {
+          const tx = await Token(tokenAddress).write.approve(
+            spenderAddress,
+            '0',
+            {
+              // TODO fix GAS limit
+              gasLimit: '99999999999999999',
+            }
+          );
+          await tx.wait();
+        }
+      }
+
       return Token(tokenAddress).write.approve(spenderAddress, amount, {
+        // TODO fix GAS limit
         gasLimit: '99999999999999999',
       });
     },
