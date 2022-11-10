@@ -1,24 +1,28 @@
 import { FC, useState } from 'react';
 import {
-  SetUserApprovalProps,
-  useGetUserApproval,
+  GetUserApprovalReturn,
   useSetUserApproval,
 } from 'queries/chain/approval';
 import { Button } from 'components/Button';
 import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
 
-export const ApproveToken: FC<SetUserApprovalProps> = (props) => {
-  const query = useGetUserApproval(props);
+type Props = {
+  data?: GetUserApprovalReturn;
+  isLoading: boolean;
+  error: unknown;
+};
+
+export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   const mutation = useSetUserApproval();
   const [isUnlimited, setIsUnlimited] = useState(true);
 
-  if (query.isLoading) {
-    return <div>is loading</div>;
-  }
-
-  if (query.isError) {
-    return <div>is error</div>;
+  // TODO handle error
+  if (!data) {
+    if (isLoading) {
+      return <div>is loading</div>;
+    }
+    return <div>error</div>;
   }
 
   return (
@@ -30,22 +34,20 @@ export const ApproveToken: FC<SetUserApprovalProps> = (props) => {
       <div className={'space-y-6'}>
         <div className={'flex items-center space-x-10'}>
           <div className={'bg-secondary h-30 w-30 rounded-full'} />
-          <div>{props.symbol}</div>
+          <div>{data.symbol}</div>
         </div>
-        {query.data.lt(props.amount) ? (
+        {!data.hasApproval ? (
           <>
-            <div className={'text-secondary'}>
-              Allowance: {query.data.toString()}
-            </div>
+            <div className={'text-secondary'}>Allowance: {data.allowance}</div>
 
             <div className={'text-secondary'}>
-              Spender: {shortenString(props.spenderAddress)}
+              Spender: {shortenString(data.spenderAddress)}
             </div>
           </>
         ) : null}
       </div>
 
-      {query.data.lt(props.amount) ? (
+      {!data.hasApproval ? (
         mutation.isLoading ? (
           <div>please wait</div>
         ) : (
@@ -59,7 +61,7 @@ export const ApproveToken: FC<SetUserApprovalProps> = (props) => {
                 size={'sm'}
               />
             </div>
-            <Button onClick={() => mutation.mutate(props)} size={'sm'}>
+            <Button onClick={() => mutation.mutate(data)} size={'sm'}>
               Confirm
             </Button>
           </div>
@@ -68,9 +70,7 @@ export const ApproveToken: FC<SetUserApprovalProps> = (props) => {
         <div className={'text-success-500'}>approved</div>
       )}
 
-      {mutation.error ? (
-        <pre>{JSON.stringify(mutation.error, null, 2)}</pre>
-      ) : null}
+      {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
     </div>
   );
 };

@@ -1,46 +1,57 @@
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 
-enum ServerStateKeysEnum {
+export enum ServerStateKeysEnum {
   Approval = 'approval',
 }
 
-type GetUserApprovalProps = {
+export type GetUserApprovalProps = {
   tokenAddress: string;
   spenderAddress: string;
+  symbol: string;
+  decimals: number;
+  amount: string;
 };
 
-export const useGetUserApproval = ({
-  tokenAddress,
-  spenderAddress,
-}: GetUserApprovalProps) => {
+export type GetUserApprovalReturn = GetUserApprovalProps & {
+  allowance: string;
+  hasApproval: boolean;
+};
+
+export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
   const { Token } = useContract();
   const { user } = useWeb3();
 
-  return useQuery(
-    [ServerStateKeysEnum.Approval, tokenAddress, spenderAddress, user],
-    async () => {
-      if (!tokenAddress) {
-        throw new Error('useGetUserApproval no tokenAddress provided');
-      }
-      if (!spenderAddress) {
-        throw new Error('useGetUserApproval no spenderAddress provided');
-      }
+  return useQueries({
+    queries: data.map((t) => ({
+      queryKey: [
+        ServerStateKeysEnum.Approval,
+        t.tokenAddress,
+        t.spenderAddress,
+        user,
+      ],
+      queryFn: async () => {
+        if (!t.tokenAddress) {
+          throw new Error('useGetUserApproval no tokenAddress provided');
+        }
+        if (!t.spenderAddress) {
+          throw new Error('useGetUserApproval no spenderAddress provided');
+        }
 
-      return Token(tokenAddress).read.allowance(user!, spenderAddress);
-    },
-    {
+        const allowance = await Token(t.tokenAddress).read.allowance(
+          user!,
+          t.spenderAddress
+        );
+
+        const hasApproval = allowance.gte(t.amount);
+
+        return { ...t, allowance: allowance.toString(), hasApproval };
+      },
       enabled: !!user,
-    }
-  );
-};
-
-export type SetUserApprovalProps = GetUserApprovalProps & {
-  amount: string;
-  decimals: number;
-  symbol: string;
+    })),
+  });
 };
 
 export const useSetUserApproval = () => {
@@ -49,7 +60,7 @@ export const useSetUserApproval = () => {
   const cache = useQueryClient();
 
   return useMutation(
-    async ({ tokenAddress, spenderAddress, amount }: SetUserApprovalProps) => {
+    async ({ tokenAddress, spenderAddress, amount }: GetUserApprovalProps) => {
       if (!tokenAddress) {
         throw new Error('useGetUserApproval no tokenAddress provided');
       }

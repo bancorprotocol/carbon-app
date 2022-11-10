@@ -17,7 +17,7 @@ export const Modal: FC<Props> = ({
   title,
   showCloseButton = true,
 }) => {
-  const { closeModal } = useModal();
+  const { closeModal, minimizeModal } = useModal();
   const ref = useRef<HTMLDivElement>(null);
   useModalOutsideClick(id, ref, closeModal);
 
@@ -42,6 +42,17 @@ export const Modal: FC<Props> = ({
         >
           <div className={'flex justify-between'}>
             <div>{typeof title === 'string' ? <h2>{title}</h2> : title}</div>
+
+            <div>
+              {showCloseButton ? (
+                <button
+                  className={'rotate-90 text-30'}
+                  onClick={() => minimizeModal(id)}
+                >
+                  {'>'}
+                </button>
+              ) : null}
+            </div>
 
             <div>
               {showCloseButton ? (

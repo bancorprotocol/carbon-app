@@ -1,21 +1,34 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import { SetUserApprovalProps } from 'queries/chain/approval';
+import {
+  GetUserApprovalProps,
+  useGetUserApproval,
+} from 'queries/chain/approval';
 import { ApproveToken } from 'components/approval';
 import { Button } from 'components/Button';
 import { useModal } from 'modals/ModalProvider';
 
-export type ModalTxConfirmData = SetUserApprovalProps[];
+export type ModalTxConfirmData = GetUserApprovalProps[];
 
 export const ModalTxConfirm: ModalFC<ModalTxConfirmData> = ({ id, data }) => {
   const { closeModal } = useModal();
+  const approvalQuery = useGetUserApproval(data);
+
+  const hasApproval = !approvalQuery
+    .map((q) => q.data && q.data.hasApproval)
+    .some((x) => !x);
 
   return (
     <Modal id={id} title={'Confirm Transaction'}>
       <h3 className={'mt-30 mb-20'}>1. Approval</h3>
       <div className={'space-y-20'}>
-        {data.map((props, i) => (
-          <ApproveToken key={i} {...props} />
+        {approvalQuery.map(({ data, isLoading, error }, i) => (
+          <ApproveToken
+            key={i}
+            data={data}
+            isLoading={isLoading}
+            error={error}
+          />
         ))}
       </div>
       <h3 className={'mt-30 mb-20'}>2. Create Strategy</h3>
@@ -45,6 +58,7 @@ export const ModalTxConfirm: ModalFC<ModalTxConfirmData> = ({ id, data }) => {
           <div>BNT 100,000</div>
         </div>
       </div>
+      <div>{hasApproval ? 'true' : 'false'}</div>
       <Button
         size={'lg'}
         fullWidth
