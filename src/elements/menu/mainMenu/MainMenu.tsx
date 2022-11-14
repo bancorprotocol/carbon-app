@@ -61,13 +61,13 @@ const NetworkErrorAlert = () => {
 
 export const MainMenu: FC = () => {
   return (
-    <div className={`sticky top-0 z-40 px-10 md:px-20`}>
+    <div className={`sticky top-0 z-40`}>
       <TenderlyForkAlert />
       <ImposterAccountAlert />
       <NetworkErrorAlert />
       <div
         className={
-          'bg-body px-content flex h-80 w-full items-center justify-between'
+          'bg-body px-content flex h-80 w-full items-center justify-between px-10 md:px-20'
         }
       >
         <MainMenuLeft />

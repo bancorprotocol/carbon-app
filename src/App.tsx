@@ -1,16 +1,17 @@
-import { MainMenu } from 'elements/menu';
+import { MainMenu, MobileMenu } from 'elements/menu';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Outlet } from 'routing';
 
-export const App = () => {
-  const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
+export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <MainMenu />
-      <main className={'px-content'}>
+      <main>
         <Outlet />
       </main>
+      <MobileMenu />
     </QueryClientProvider>
   );
 };

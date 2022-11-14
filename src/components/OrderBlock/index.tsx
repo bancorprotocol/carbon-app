@@ -7,7 +7,7 @@ type Props = {
 
 export const OrderBlock: FC<Props> = ({ text, textSecondary }) => {
   return (
-    <div className="bg-secondary rounded-12 relative p-10">
+    <div className="bg-secondary relative rounded-12 p-10">
       <div className={'absolute right-20 top-0 flex h-full items-center'}>
         <div
           className={

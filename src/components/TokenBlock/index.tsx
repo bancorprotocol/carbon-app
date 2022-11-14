@@ -8,7 +8,7 @@ type Props = {
 
 export const Index: FC<Props> = ({ text, textSecondary }) => {
   return (
-    <div className="bg-secondary rounded-12 flex w-full items-center space-x-10 p-10">
+    <div className="bg-secondary flex w-full items-center space-x-10 rounded-12 p-10">
       <div className={'h-40 w-40 rounded-full bg-lightGrey dark:bg-darkGrey'} />
       <div>
         <div className={'text-20 font-weight-500'}>{text}</div>

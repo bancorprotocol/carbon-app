@@ -9,7 +9,10 @@ export const PathNames = {
 };
 
 export const routes = [
-  { path: PathNames.strategies, element: <StrategiesPage /> },
+  {
+    path: PathNames.strategies,
+    element: <StrategiesPage />,
+  },
   {
     path: PathNames.trade,
     element: <TradePage />,
