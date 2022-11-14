@@ -1,6 +1,5 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import { wait } from '@testing-library/user-event/dist/utils';
 import { Switch } from 'components/Switch';
 import { orderBy } from 'lodash';
 import { useState, useMemo } from 'react';
@@ -9,7 +8,8 @@ import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { useModal } from 'modals/ModalProvider';
 import { Imager } from 'elements/Imager';
 import { SearchInput } from 'components/SearchInput';
-import { useTokenLists } from 'hooks/useTokens';
+import { useTokenLists } from 'queries';
+import { wait } from 'utils/helpers';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;

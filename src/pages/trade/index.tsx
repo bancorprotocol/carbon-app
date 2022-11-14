@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ethToken } from 'services/web3/config';
 import { TradeWidget } from './TradeWidget';
 import { Page } from 'components/Page';
-import { useTokens } from 'hooks/useTokens';
+import { useTokens } from 'queries';
 
 interface TradePageProps {
   from?: string;

@@ -35,3 +35,6 @@ export const shortenString = (
   const end = string.substring(string.length - startEndLength, string.length);
   return start + separator + end;
 };
+
+export const wait = async (ms: number = 0) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
