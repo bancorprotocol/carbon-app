@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { Token, tokenList } from 'services/tokens';
+import { Token } from 'services/tokens';
 import { useCallback, useEffect, useState } from 'react';
 import { ethToken } from 'services/web3/config';
 import { TradeWidget } from './TradeWidget';
 import { Page } from 'components/Page';
+import { useTokens } from 'hooks/useTokens';
 
 interface TradePageProps {
   from?: string;
@@ -11,8 +11,7 @@ interface TradePageProps {
 }
 
 export const TradePage = ({ from, to }: TradePageProps) => {
-  const query = useQuery(['tokens'], tokenList);
-  const tokens = query.data;
+  const { tokens } = useTokens();
 
   const ethOrFirst = useCallback(() => {
     const eth = tokens?.find((x) => x.address === ethToken);
