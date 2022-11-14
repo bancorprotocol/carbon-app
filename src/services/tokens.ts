@@ -59,23 +59,26 @@ const getLogoByURI = (uri: string | undefined) =>
 
 const buildIpfsUri = (ipfsHash: string) => `https://ipfs.io/ipfs/${ipfsHash}`;
 
+export const fetchTokenLists = async () => {
+  const res = await Promise.all(
+    listOfLists.map(async (list) => {
+      try {
+        const res = await axios.get<TokenList>(list.uri, { timeout: 10000 });
+        return {
+          ...res.data,
+          logoURI: getLogoByURI(res.data.logoURI),
+        };
+      } catch (error) {}
+
+      return undefined;
+    })
+  );
+
+  return res.filter((x) => !!x) as TokenList[];
+};
+
 export const tokenList = async () => {
-  const res = (
-    await Promise.all(
-      listOfLists.map(async (list) => {
-        try {
-          const res = await axios.get<TokenList>(list.uri, { timeout: 10000 });
-          return {
-            ...res.data,
-            logoURI: getLogoByURI(res.data.logoURI),
-          };
-        } catch (error) {}
-
-        return undefined;
-      })
-    )
-  ).filter((x) => !!x) as TokenList[];
-
+  const res = await fetchTokenLists();
   return buildTokenList(res);
 };
 

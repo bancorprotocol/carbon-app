@@ -4,11 +4,12 @@ import { wait } from '@testing-library/user-event/dist/utils';
 import { Switch } from 'components/Switch';
 import { orderBy } from 'lodash';
 import { useState, useMemo } from 'react';
-import { Token, TokenList } from 'services/tokens';
+import { fetchTokenLists, Token, TokenList } from 'services/tokens';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { useModal } from 'modals/ModalProvider';
 import { Imager } from 'elements/Imager';
 import { SearchInput } from 'components/SearchInput';
+import { useQuery } from '@tanstack/react-query';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -32,8 +33,8 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   const [search, setSearch] = useState('');
   const [manage, setManage] = useState(false);
   const [userPreferredListIds, setUserLists] = useState(['']);
-
-  const tokensLists: TokenList[] = [];
+  const query = useQuery(['token_lists'], fetchTokenLists);
+  const tokensLists: TokenList[] | undefined = query.data;
 
   const onClose = async () => {
     closeModal(id);
@@ -81,7 +82,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
       {manage ? (
         <div className="mb-20 h-full overflow-auto md:max-h-[calc(70vh-100px)]">
           <div className="space-y-15 px-20 pt-10">
-            {tokensLists.map((tokenList) => {
+            {tokensLists?.map((tokenList) => {
               const isSelected = userPreferredListIds.some(
                 (listId) => tokenList.name === listId
               );
