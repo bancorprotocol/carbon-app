@@ -11,7 +11,7 @@ export const ModalDataExample: ModalFC<ModalDataExampleData> = ({
   id,
   data,
 }) => {
-  const { closeModal, openModal } = useModal();
+  const { closeModal } = useModal();
 
   return (
     <Modal id={id}>
@@ -23,12 +23,6 @@ export const ModalDataExample: ModalFC<ModalDataExampleData> = ({
           close
         </button>
         <div>MODAL WALLET</div>
-
-        <div>
-          <button onClick={() => openModal('tokenLists', undefined)}>
-            open token list modal
-          </button>
-        </div>
 
         <div>
           Data:

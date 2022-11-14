@@ -6,6 +6,22 @@ export const uuid = () => {
   });
 };
 
+export const sanitizeNumberInput = (
+  input: string,
+  precision?: number
+): string => {
+  const sanitized = input
+    .replace(/,/, '.')
+    .replace(/[^\d.]/g, '')
+    .replace(/\./, 'x')
+    .replace(/\./g, '')
+    .replace(/x/, '.');
+  if (!precision) return sanitized;
+  const [integer, decimals] = sanitized.split('.');
+  if (decimals) return `${integer}.${decimals.substring(0, precision)}`;
+  else return sanitized;
+};
+
 export const shortenString = (
   string: string,
   separator = '...',
@@ -19,3 +35,6 @@ export const shortenString = (
   const end = string.substring(string.length - startEndLength, string.length);
   return start + separator + end;
 };
+
+export const wait = async (ms: number = 0) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
