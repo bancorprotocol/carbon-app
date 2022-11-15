@@ -1,12 +1,33 @@
 import { Button } from 'components/Button';
 import { m, Variants } from 'motion';
-import { useCreateStrategy } from './useCreateStrategy';
+import { useCreate } from './useCreateStrategy';
 import { AmountInputWithButtons } from 'components/AmountInputWithButtons';
 import { SelectTokens } from 'components/SelectTokens';
 import { BudgetBlock } from 'components/BudgetBlock';
+import { useEffect } from 'react';
+
+export interface Token {
+  address: string;
+  decimals: number;
+  symbol: string;
+}
 
 export const CreateStrategy = () => {
-  const { source, target, create } = useCreateStrategy();
+  const { source, target, create, txBusy } = useCreate();
+
+  useEffect(() => {
+    console.log('effect');
+    source.setToken({
+      address: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
+      decimals: 18,
+      symbol: 'BNT',
+    });
+    target.setToken({
+      address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      decimals: 6,
+      symbol: 'USDC',
+    });
+  }, [source, target]);
 
   return (
     <m.div
@@ -81,6 +102,8 @@ export const CreateStrategy = () => {
           setAmount={target.setLiquidity}
         />
       </m.div>
+
+      <div>{txBusy ? 'true' : 'false'}</div>
 
       <m.div variants={items}>
         <Button variant={'secondary'} size={'lg'} fullWidth onClick={create}>

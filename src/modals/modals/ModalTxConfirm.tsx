@@ -1,22 +1,44 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import {
-  GetUserApprovalProps,
-  useGetUserApproval,
-} from 'queries/chain/approval';
+import { useGetUserApproval } from 'queries/chain/approval';
 import { ApproveToken } from 'components/approval';
 import { Button } from 'components/Button';
 import { useModal } from 'modals/ModalProvider';
+import { useMemo } from 'react';
+import { ApprovalToken } from 'pages/debug';
 
-export type ModalTxConfirmData = GetUserApprovalProps[];
+export type ModalTxConfirmData = ApprovalToken[];
+
+export type ApprovalTokenResult = ApprovalToken & {
+  allowance: string;
+  approvalRequired: boolean;
+};
+
+const useApproval = (data: ModalTxConfirmData) => {
+  const approvalQuery = useGetUserApproval(data);
+
+  const result = useMemo(() => {
+    return approvalQuery.map((q, i) => {
+      const newData: ApprovalTokenResult | undefined = q.data && {
+        ...data[i],
+        allowance: q.data.toString(),
+        approvalRequired: q.data.lt(data[i].amount),
+      };
+      return {
+        ...q,
+        data: newData,
+      };
+    });
+  }, [approvalQuery, data]);
+
+  const approvalRequired = result.some((x) => x.data?.approvalRequired);
+
+  return { approvalQuery: result, approvalRequired };
+};
 
 export const ModalTxConfirm: ModalFC<ModalTxConfirmData> = ({ id, data }) => {
   const { closeModal } = useModal();
-  const approvalQuery = useGetUserApproval(data);
-
-  const hasApproval = !approvalQuery
-    .map((q) => q.data && q.data.hasApproval)
-    .some((x) => !x);
+  const { approvalQuery, approvalRequired } = useApproval(data);
 
   return (
     <Modal id={id} title={'Confirm Transaction'}>
@@ -58,7 +80,7 @@ export const ModalTxConfirm: ModalFC<ModalTxConfirmData> = ({ id, data }) => {
           <div>BNT 100,000</div>
         </div>
       </div>
-      <div>{hasApproval ? 'true' : 'false'}</div>
+      <div>{approvalRequired ? 'true' : 'false'}</div>
       <Button
         size={'lg'}
         fullWidth

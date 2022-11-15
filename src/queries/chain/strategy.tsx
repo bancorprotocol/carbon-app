@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
+import { toStrategy } from 'utils/sdk';
+import { Token } from 'elements/strategies/create';
 
 enum ServerStateKeysEnum {
   Strategies = 'strategies',
@@ -13,36 +15,49 @@ export const useGetUserStrategies = () => {
   return useQuery(
     [ServerStateKeysEnum.Strategies],
     async () => {
-      PoolCollection.read.strategiesByProvider(user!);
+      const result = await PoolCollection.read.strategiesByProvider(user!);
+
+      return result.map((s) => ({
+        id: s.id.toString(),
+        tokens: { source: s.tokens[0], target: s.tokens[1] },
+        orders: {
+          source: s.orders[0].toString(),
+          target: s.orders[1].toString(),
+        },
+        provider: s.provider,
+      }));
     },
-    {
-      enabled: !!user,
-    }
+    { enabled: !!user }
   );
 };
 
-// TODO: this should be utils from SDK + implement
-// eslint-disable-next-line unused-imports/no-unused-vars
-const toStrategy = (uiStrategy: any) => {
-  return ['bla', 'yada', 1, 1, 1, 1, 1, 1, 1, 1] as const;
-};
+interface CreateStrategyOrder {
+  token?: Token;
+  liquidity: string;
+  high: string;
+  low: string;
+  intercept?: string;
+}
 
-// TODO: strongly type UI Order and Strategy
-export const useCreateStrategy = (strategy: any) => {
+export interface CreateStrategyParams {
+  source: CreateStrategyOrder;
+  target: CreateStrategyOrder;
+}
+export const useCreateStrategy = () => {
   const { PoolCollection } = useContract();
   const cache = useQueryClient();
 
   return useMutation(
-    async () => {
-      PoolCollection.write.createStrategy(...toStrategy(strategy));
+    (strategy: CreateStrategyParams) => {
+      console.log(strategy);
+      return PoolCollection.write.createStrategy(...toStrategy(strategy), {
+        // TODO fix GAS limit
+        gasLimit: '99999999999999999',
+      });
     },
     {
       onSuccess: () => {
-        cache.invalidateQueries([ServerStateKeysEnum.Strategies]);
-      },
-      onError: () => {
-        // TODO: proper error handling
-        console.error('could not create strategy');
+        return cache.invalidateQueries([ServerStateKeysEnum.Strategies]);
       },
     }
   );

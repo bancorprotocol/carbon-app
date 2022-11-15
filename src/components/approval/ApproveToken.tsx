@@ -1,14 +1,12 @@
 import { FC, useState } from 'react';
-import {
-  GetUserApprovalReturn,
-  useSetUserApproval,
-} from 'queries/chain/approval';
+import { useSetUserApproval } from 'queries/chain/approval';
 import { Button } from 'components/Button';
 import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
+import { ApprovalTokenResult } from 'modals/modals/ModalTxConfirm';
 
 type Props = {
-  data?: GetUserApprovalReturn;
+  data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
 };
@@ -36,7 +34,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           <div className={'bg-secondary h-30 w-30 rounded-full'} />
           <div>{data.symbol}</div>
         </div>
-        {!data.hasApproval ? (
+        {data.approvalRequired ? (
           <>
             <div className={'text-secondary'}>Allowance: {data.allowance}</div>
 
@@ -47,7 +45,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         ) : null}
       </div>
 
-      {!data.hasApproval ? (
+      {data.approvalRequired ? (
         mutation.isLoading ? (
           <div>please wait</div>
         ) : (

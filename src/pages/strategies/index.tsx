@@ -10,6 +10,7 @@ export const StrategiesPage = () => {
 
   return (
     <Page title={'Strategies'}>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
       <m.div
         className={
           'grid grid-cols-1 gap-30 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'

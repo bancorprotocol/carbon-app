@@ -10,14 +10,7 @@ export enum ServerStateKeysEnum {
 export type GetUserApprovalProps = {
   tokenAddress: string;
   spenderAddress: string;
-  symbol: string;
   decimals: number;
-  amount: string;
-};
-
-export type GetUserApprovalReturn = GetUserApprovalProps & {
-  allowance: string;
-  hasApproval: boolean;
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
@@ -40,18 +33,15 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
-        const allowance = await Token(t.tokenAddress).read.allowance(
-          user!,
-          t.spenderAddress
-        );
-
-        const hasApproval = allowance.gte(t.amount);
-
-        return { ...t, allowance: allowance.toString(), hasApproval };
+        return Token(t.tokenAddress).read.allowance(user!, t.spenderAddress);
       },
       enabled: !!user,
     })),
   });
+};
+
+export type SetUserApprovalProps = GetUserApprovalProps & {
+  amount: string;
 };
 
 export const useSetUserApproval = () => {
@@ -60,7 +50,7 @@ export const useSetUserApproval = () => {
   const cache = useQueryClient();
 
   return useMutation(
-    async ({ tokenAddress, spenderAddress, amount }: GetUserApprovalProps) => {
+    async ({ tokenAddress, spenderAddress, amount }: SetUserApprovalProps) => {
       if (!tokenAddress) {
         throw new Error('useGetUserApproval no tokenAddress provided');
       }

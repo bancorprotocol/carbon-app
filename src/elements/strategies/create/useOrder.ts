@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Token } from 'elements/strategies/create/index';
 
 export const useOrder = () => {
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState<Token | undefined>();
   const [liquidity, setLiquidity] = useState('');
   const [intercept, setIntercept] = useState('');
   const [high, setHigh] = useState('');
