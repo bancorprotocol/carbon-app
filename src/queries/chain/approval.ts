@@ -2,6 +2,8 @@ import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
+import { expandToken, shrinkToken } from 'utils/sdk';
+import BigNumber from 'bignumber.js';
 
 export enum ServerStateKeysEnum {
   Approval = 'approval',
@@ -33,7 +35,12 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
-        return Token(t.tokenAddress).read.allowance(user!, t.spenderAddress);
+        const allowance = await Token(t.tokenAddress).read.allowance(
+          user!,
+          t.spenderAddress
+        );
+
+        return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
       },
       enabled: !!user,
     })),
@@ -50,7 +57,12 @@ export const useSetUserApproval = () => {
   const cache = useQueryClient();
 
   return useMutation(
-    async ({ tokenAddress, spenderAddress, amount }: SetUserApprovalProps) => {
+    async ({
+      tokenAddress,
+      spenderAddress,
+      amount,
+      decimals,
+    }: SetUserApprovalProps) => {
       if (!tokenAddress) {
         throw new Error('useGetUserApproval no tokenAddress provided');
       }
@@ -60,6 +72,8 @@ export const useSetUserApproval = () => {
       if (parseFloat(amount) < 0) {
         throw new Error('useGetUserApproval negative amount provided');
       }
+
+      const amountWei = expandToken(amount, decimals);
 
       const isNullApprovalContract =
         NULL_APPROVAL_CONTRACTS.includes(tokenAddress);
@@ -82,7 +96,7 @@ export const useSetUserApproval = () => {
         }
       }
 
-      return Token(tokenAddress).write.approve(spenderAddress, amount, {
+      return Token(tokenAddress).write.approve(spenderAddress, amountWei, {
         // TODO fix GAS limit
         gasLimit: '99999999999999999',
       });

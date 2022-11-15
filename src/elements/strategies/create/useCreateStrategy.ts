@@ -1,29 +1,85 @@
 import { useOrder } from './useOrder';
-import { useCreateStrategy } from 'queries';
-import { useState } from 'react';
+import { useCreateStrategy, useTokens } from 'queries';
+import { useMemo } from 'react';
+import { useModal } from 'modals';
+import { ModalTokenListData } from 'modals/modals/ModalTokenList';
+import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
+import { ApprovalToken } from 'pages/debug';
+
+const spenderAddress = poolCollectionProxyAbi.address;
 
 export const useCreate = () => {
+  const { openModal } = useModal();
+  const { tokens } = useTokens();
   const source = useOrder();
   const target = useOrder();
-  const [txBusy, setTxBusy] = useState(false);
   const mutation = useCreateStrategy();
 
+  const showStep2 = !!source.token && !!target.token;
+
+  const approvalTokens = useMemo(() => {
+    const array: ApprovalToken[] = [];
+    if (source.token) {
+      array.push({
+        tokenAddress: source.token?.address,
+        spenderAddress,
+        amount: source.liquidity,
+        decimals: source.token?.decimals,
+        symbol: source.token?.symbol,
+      });
+    }
+    if (target.token) {
+      array.push({
+        tokenAddress: target.token?.address,
+        spenderAddress,
+        amount: target.liquidity,
+        decimals: target.token?.decimals,
+        symbol: target.token?.symbol,
+      });
+    }
+
+    return array;
+  }, [source.liquidity, source.token, target.liquidity, target.token]);
+
   const create = async () => {
-    setTxBusy(true);
+    if (!(source && target)) {
+      throw new Error('source or target tokens not set');
+    }
     mutation.mutate(
+      // @ts-ignore
       { source, target },
       {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);
           await tx.wait();
-          setTxBusy(false);
+          console.log('tx confirmed');
         },
-        onError: () => {
-          setTxBusy(false);
+        onError: (e) => {
+          console.error('create mutation failed', e);
         },
       }
     );
   };
 
-  return { source, target, create, txBusy };
+  const onCTAClick = async () => {
+    openModal('txConfirm', { approvalTokens, onConfirm: create });
+  };
+
+  const openTokenListModal = (type?: 'source' | 'target') => {
+    const onClick =
+      type === 'source'
+        ? source.setToken
+        : type === 'target'
+        ? target.setToken
+        : () => {};
+
+    const data: ModalTokenListData = {
+      onClick,
+      tokens: tokens ?? [],
+      limit: true,
+    };
+    openModal('tokenLists', data);
+  };
+
+  return { source, target, onCTAClick, txBusy, openTokenListModal, showStep2 };
 };

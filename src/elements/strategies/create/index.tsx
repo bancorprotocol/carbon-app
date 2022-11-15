@@ -4,30 +4,10 @@ import { useCreate } from './useCreateStrategy';
 import { AmountInputWithButtons } from 'components/AmountInputWithButtons';
 import { SelectTokens } from 'components/SelectTokens';
 import { BudgetBlock } from 'components/BudgetBlock';
-import { useEffect } from 'react';
-
-export interface Token {
-  address: string;
-  decimals: number;
-  symbol: string;
-}
 
 export const CreateStrategy = () => {
-  const { source, target, create, txBusy } = useCreate();
-
-  useEffect(() => {
-    console.log('effect');
-    source.setToken({
-      address: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
-      decimals: 18,
-      symbol: 'BNT',
-    });
-    target.setToken({
-      address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-      decimals: 6,
-      symbol: 'USDC',
-    });
-  }, [source, target]);
+  const { source, target, onCTAClick, openTokenListModal, showStep2 } =
+    useCreate();
 
   return (
     <m.div
@@ -39,77 +19,93 @@ export const CreateStrategy = () => {
       <m.div variants={items} className={'bg-secondary rounded-18 p-20'}>
         <h2 className={'mb-20'}>Select Tokens</h2>
 
-        <SelectTokens />
-      </m.div>
-
-      <m.div
-        variants={items}
-        className={'bg-secondary space-y-20 rounded-18 p-20'}
-      >
-        <h2>Buy</h2>
-
-        <div className={'flex space-x-4'}>
-          <div className={'bg-body rounded-l-14 px-20 py-14'}>
-            <AmountInputWithButtons
-              label={'TKN for TKN'}
-              amount={source.low}
-              setAmount={source.setLow}
-            />
-          </div>
-          <div className={'bg-body rounded-r-14 px-20 py-14'}>
-            <AmountInputWithButtons
-              label={'TKN for TKN'}
-              amount={source.high}
-              setAmount={source.setHigh}
-            />
-          </div>
-        </div>
-
-        <div className={'bg-body h-[200px] rounded-14 p-20'}></div>
-
-        <h2>Sell</h2>
-
-        <div className={'flex space-x-4'}>
-          <div className={'bg-body rounded-l-14 px-20 py-14'}>
-            <AmountInputWithButtons
-              label={'TKN for TKN'}
-              amount={target.low}
-              setAmount={target.setLow}
-            />
-          </div>
-          <div className={'bg-body rounded-r-14 px-20 py-14'}>
-            <AmountInputWithButtons
-              label={'TKN for TKN'}
-              amount={target.high}
-              setAmount={target.setHigh}
-            />
-          </div>
-        </div>
-      </m.div>
-
-      <m.div
-        variants={items}
-        className={'bg-secondary space-y-10 rounded-18 p-20'}
-      >
-        <h2 className={'mb-20'}>Budget</h2>
-
-        <BudgetBlock
-          amount={source.liquidity}
-          setAmount={source.setLiquidity}
-        />
-        <BudgetBlock
-          amount={target.liquidity}
-          setAmount={target.setLiquidity}
+        <SelectTokens
+          symbol0={source.token?.symbol}
+          symbol1={target.token?.symbol}
+          imgUrl0={source.token?.logoURI}
+          imgUrl1={target.token?.logoURI}
+          onClick0={() => openTokenListModal('source')}
+          onClick1={() => openTokenListModal('target')}
         />
       </m.div>
 
-      <div>{txBusy ? 'true' : 'false'}</div>
+      {showStep2 && (
+        <>
+          <m.div
+            variants={items}
+            className={'bg-secondary space-y-20 rounded-18 p-20'}
+          >
+            <h2>Buy</h2>
 
-      <m.div variants={items}>
-        <Button variant={'secondary'} size={'lg'} fullWidth onClick={create}>
-          Confirm Strategy
-        </Button>
-      </m.div>
+            <div className={'flex space-x-4'}>
+              <div className={'bg-body rounded-l-14 px-20 py-14'}>
+                <AmountInputWithButtons
+                  label={`${source.token?.symbol} for ${target.token?.symbol}`}
+                  amount={source.low}
+                  setAmount={source.setLow}
+                />
+              </div>
+              <div className={'bg-body rounded-r-14 px-20 py-14'}>
+                <AmountInputWithButtons
+                  label={`${source.token?.symbol} for ${target.token?.symbol}`}
+                  amount={source.high}
+                  setAmount={source.setHigh}
+                />
+              </div>
+            </div>
+
+            <h2>Sell</h2>
+
+            <div className={'flex space-x-4'}>
+              <div className={'bg-body rounded-l-14 px-20 py-14'}>
+                <AmountInputWithButtons
+                  label={`${target.token?.symbol} for ${source.token?.symbol}`}
+                  amount={target.low}
+                  setAmount={target.setLow}
+                />
+              </div>
+              <div className={'bg-body rounded-r-14 px-20 py-14'}>
+                <AmountInputWithButtons
+                  label={`${target.token?.symbol} for ${source.token?.symbol}`}
+                  amount={target.high}
+                  setAmount={target.setHigh}
+                />
+              </div>
+            </div>
+          </m.div>
+
+          <m.div
+            variants={items}
+            className={'bg-secondary space-y-10 rounded-18 p-20'}
+          >
+            <h2 className={'mb-20'}>Budget</h2>
+
+            <BudgetBlock
+              symbol={source.token?.symbol}
+              logoURI={source.token?.logoURI}
+              amount={source.liquidity}
+              setAmount={source.setLiquidity}
+            />
+            <BudgetBlock
+              symbol={target.token?.symbol}
+              logoURI={target.token?.logoURI}
+              amount={target.liquidity}
+              setAmount={target.setLiquidity}
+            />
+          </m.div>
+
+          <m.div variants={items}>
+            <Button
+              variant={'secondary'}
+              size={'lg'}
+              fullWidth
+              onClick={onCTAClick}
+            >
+              Confirm Strategy
+            </Button>
+          </m.div>
+        </>
+      )}
     </m.div>
   );
 };

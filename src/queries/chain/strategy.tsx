@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
-import { Token } from 'elements/strategies/create';
+import { Token } from 'services/tokens';
 
 enum ServerStateKeysEnum {
   Strategies = 'strategies',
@@ -32,7 +32,7 @@ export const useGetUserStrategies = () => {
 };
 
 interface CreateStrategyOrder {
-  token?: Token;
+  token: Token;
   liquidity: string;
   high: string;
   low: string;

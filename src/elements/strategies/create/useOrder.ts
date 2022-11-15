@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Token } from 'elements/strategies/create/index';
+import { Token } from 'services/tokens';
 
 export const useOrder = () => {
   const [token, setToken] = useState<Token | undefined>();
