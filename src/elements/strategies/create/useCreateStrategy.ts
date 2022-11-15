@@ -81,5 +81,5 @@ export const useCreate = () => {
     openModal('tokenLists', data);
   };
 
-  return { source, target, onCTAClick, txBusy, openTokenListModal, showStep2 };
+  return { source, target, onCTAClick, openTokenListModal, showStep2 };
 };
