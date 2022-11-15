@@ -16,12 +16,6 @@ export const DebugModal: FC = () => {
           open create strategy modal
         </button>
       </div>
-
-      <div>
-        <button onClick={() => openModal('tokenLists', undefined)}>
-          open token list modal
-        </button>
-      </div>
     </>
   );
 };

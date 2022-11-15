@@ -1,5 +1,8 @@
 import { ModalWallet } from 'modals/modals/ModalWallet';
-import { ModalTokenList } from 'modals/modals/ModalTokenList';
+import {
+  ModalTokenList,
+  ModalTokenListData,
+} from 'modals/modals/ModalTokenList';
 import { TModals } from 'modals/modals.types';
 import {
   ModalTxConfirm,
@@ -13,7 +16,7 @@ import {
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
   wallet: undefined;
-  tokenLists: undefined;
+  tokenLists: ModalTokenListData;
   txConfirm: ModalTxConfirmData;
   createStrategy: ModalCreateStrategyData;
 }
