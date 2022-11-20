@@ -6,6 +6,7 @@ import {
   networkConnection,
   walletConnectConnection,
 } from 'web3/web3.connectors';
+import { Buffer } from 'buffer';
 
 export const getConnection = (c: ConnectionType) => {
   switch (c) {
@@ -21,3 +22,5 @@ export const getConnection = (c: ConnectionType) => {
       return gnosisSafeConnection;
   }
 };
+
+window.Buffer = window.Buffer || Buffer;

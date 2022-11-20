@@ -1,4 +1,5 @@
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
+import { ConnectionType } from 'web3';
 
 const APP_ID = 'bancor';
 const APP_VERSION = 'v0';
@@ -10,6 +11,7 @@ const APP_VERSION = 'v0';
 interface LocalStorageSchema {
   tenderlyRpc: string;
   imposterAccount: string;
+  connectionType: ConnectionType;
   testNumber: number;
   testObject: {
     id: string;
