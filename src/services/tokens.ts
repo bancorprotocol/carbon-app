@@ -33,10 +33,6 @@ export const listOfLists = [
     name: 'Zerion',
   },
   {
-    uri: 'https://zapper.fi/api/token-list',
-    name: 'Zapper Token List',
-  },
-  {
     uri: 'https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json',
     name: 'Compound',
   },
