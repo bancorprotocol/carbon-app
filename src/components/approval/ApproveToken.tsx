@@ -3,7 +3,7 @@ import { useSetUserApproval } from 'queries/chain/approval';
 import { Button } from 'components/Button';
 import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
-import { ApprovalTokenResult } from 'modals/modals/ModalTxConfirm';
+import { ApprovalTokenResult } from 'modals/modals/ModalCreateConfirm';
 
 type Props = {
   data?: ApprovalTokenResult;

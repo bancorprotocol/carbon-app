@@ -57,7 +57,11 @@ export const useCreateStrategy = () => {
     },
     {
       onSuccess: () => {
-        return cache.invalidateQueries([ServerStateKeysEnum.Strategies]);
+        cache.invalidateQueries([ServerStateKeysEnum.Strategies]);
+      },
+      onError: () => {
+        // TODO: proper error handling
+        console.error('could not create strategy');
       },
     }
   );

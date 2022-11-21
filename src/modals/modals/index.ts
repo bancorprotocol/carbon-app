@@ -5,20 +5,15 @@ import {
 } from 'modals/modals/ModalTokenList';
 import { TModals } from 'modals/modals.types';
 import {
-  ModalTxConfirm,
+  ModalCreateConfirm,
   ModalTxConfirmData,
-} from 'modals/modals/ModalTxConfirm';
-import {
-  ModalCreateStrategy,
-  ModalCreateStrategyData,
-} from 'modals/modals/ModalCreateStrategy';
+} from 'modals/modals/ModalCreateConfirm';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
   wallet: undefined;
   tokenLists: ModalTokenListData;
   txConfirm: ModalTxConfirmData;
-  createStrategy: ModalCreateStrategyData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -27,6 +22,5 @@ export interface ModalSchema {
 export const MODAL_COMPONENTS: TModals = {
   wallet: (props) => ModalWallet(props),
   tokenLists: (props) => ModalTokenList(props),
-  txConfirm: (props) => ModalTxConfirm(props),
-  createStrategy: (props) => ModalCreateStrategy(props),
+  txConfirm: (props) => ModalCreateConfirm(props),
 };

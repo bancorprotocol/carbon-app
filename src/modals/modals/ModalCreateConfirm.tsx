@@ -39,7 +39,7 @@ const useApproval = (data: ApprovalToken[]) => {
   return { approvalQuery: result, approvalRequired };
 };
 
-export const ModalTxConfirm: ModalFC<ModalTxConfirmData> = ({
+export const ModalCreateConfirm: ModalFC<ModalTxConfirmData> = ({
   id,
   data: { approvalTokens, onConfirm },
 }) => {
