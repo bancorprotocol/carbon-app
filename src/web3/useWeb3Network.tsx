@@ -33,9 +33,9 @@ export const useWeb3Network = () => {
       const connectionType = lsService.getItem('connectionType');
       if (connectionType !== undefined) {
         const c = getConnection(connectionType);
-        c.connector.connectEagerly?.();
+        await c.connector.connectEagerly?.();
       } else {
-        connector.connectEagerly?.();
+        await connector.connectEagerly?.();
       }
     } catch (e: any) {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
