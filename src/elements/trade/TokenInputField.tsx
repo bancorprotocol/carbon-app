@@ -10,7 +10,7 @@ export interface TokenInputProps {
   token?: Token;
   input: string;
   setInput: (amount: string) => void;
-  isError: boolean;
+  isError?: boolean;
 }
 
 const TokenInputField = ({
