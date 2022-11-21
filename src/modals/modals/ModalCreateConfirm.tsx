@@ -1,45 +1,16 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import { useGetUserApproval } from 'queries/chain/approval';
 import { ApproveToken } from 'components/approval';
 import { Button } from 'components/Button';
 import { useModal } from 'modals/ModalProvider';
-import { useMemo } from 'react';
-import { ApprovalToken } from 'pages/debug';
+import { ApprovalToken, useApproval } from 'hooks/useApproval';
 
-export type ModalTxConfirmData = {
+export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
 };
 
-export type ApprovalTokenResult = ApprovalToken & {
-  allowance: string;
-  approvalRequired: boolean;
-};
-
-const useApproval = (data: ApprovalToken[]) => {
-  const approvalQuery = useGetUserApproval(data);
-
-  const result = useMemo(() => {
-    return approvalQuery.map((q, i) => {
-      const newData: ApprovalTokenResult | undefined = q.data && {
-        ...data[i],
-        allowance: q.data.toString(),
-        approvalRequired: q.data.lt(data[i].amount),
-      };
-      return {
-        ...q,
-        data: newData,
-      };
-    });
-  }, [approvalQuery, data]);
-
-  const approvalRequired = result.some((x) => x.data?.approvalRequired);
-
-  return { approvalQuery: result, approvalRequired };
-};
-
-export const ModalCreateConfirm: ModalFC<ModalTxConfirmData> = ({
+export const ModalCreateConfirm: ModalFC<ModalCreateConfirmData> = ({
   id,
   data: { approvalTokens, onConfirm },
 }) => {

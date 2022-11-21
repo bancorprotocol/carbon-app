@@ -6,14 +6,14 @@ import {
 import { TModals } from 'modals/modals.types';
 import {
   ModalCreateConfirm,
-  ModalTxConfirmData,
+  ModalCreateConfirmData,
 } from 'modals/modals/ModalCreateConfirm';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
   wallet: undefined;
   tokenLists: ModalTokenListData;
-  txConfirm: ModalTxConfirmData;
+  txConfirm: ModalCreateConfirmData;
 }
 
 // Step 2: Create component in modals/modals folder

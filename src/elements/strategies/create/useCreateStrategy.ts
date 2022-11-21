@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
-import { ApprovalToken } from 'pages/debug';
+import { ApprovalToken } from 'hooks/useApproval';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 
