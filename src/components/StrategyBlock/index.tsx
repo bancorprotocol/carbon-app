@@ -1,13 +1,13 @@
-import { Index } from 'components/TokenBlock';
+import { TokenBlock } from 'components/TokenBlock';
 import { OrderBlock } from 'components/OrderBlock';
 import { FC } from 'react';
 
 export const StrategyBlock: FC = () => {
   return (
-    <div className="bg-content space-y-2 rounded-10 p-20">
-      <div className={'flex space-x-20'}>
+    <div className="bg-content space-y-10 rounded-10 p-20">
+      <div className={'flex space-x-10'}>
         {[1, 2].map((i) => (
-          <Index
+          <TokenBlock
             key={i}
             text={'TKN'}
             textSecondary={'100.000.000'}
