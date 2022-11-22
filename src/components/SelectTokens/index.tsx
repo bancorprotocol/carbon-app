@@ -14,10 +14,10 @@ interface Props {
 export const SelectTokens: FC<Props> = ({
   symbol0,
   symbol1,
-  imgUrl1,
   imgUrl0,
-  onClick1,
+  imgUrl1,
   onClick0,
+  onClick1,
   onMiddleClick,
 }) => {
   return (
