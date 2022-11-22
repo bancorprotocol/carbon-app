@@ -5,6 +5,7 @@
 
 # idea
 /.idea
+/.fleet
 
 # dependencies
 /node_modules
