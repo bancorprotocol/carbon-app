@@ -6,7 +6,7 @@ type Props = {
   imgUrl: string;
 };
 
-export const Index: FC<Props> = ({ text, textSecondary }) => {
+export const TokenBlock: FC<Props> = ({ text, textSecondary }) => {
   return (
     <div className="bg-secondary flex w-full items-center space-x-10 rounded-12 p-10">
       <div className={'h-40 w-40 rounded-full bg-lightGrey dark:bg-darkGrey'} />

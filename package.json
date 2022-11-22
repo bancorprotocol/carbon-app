@@ -31,6 +31,7 @@
     "bignumber.js": "^9.1.0",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.2.4",
+    "decimal.js": "^10.4.2",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",

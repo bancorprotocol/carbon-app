@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { uuid } from 'utils/helpers';
-import { MODAL_COMPONENTS, ModalSchema } from 'modals/modals/index';
+import { MODAL_COMPONENTS, ModalSchema } from 'modals/modals';
 import { AnimatePresence } from 'motion';
 import { ModalContext, ModalKey, ModalOpen } from './modals.types';
 
@@ -17,9 +17,12 @@ import { ModalContext, ModalKey, ModalOpen } from './modals.types';
 // ********************************** //
 
 const defaultValue: ModalContext = {
+  modals: { open: [], minimized: [] },
   openModal: (key, data) => console.log(key, data),
   closeModal: (id) => console.log(id),
   activeModalId: null,
+  minimizeModal: (id) => console.log(id),
+  maximizeModal: (id) => console.log(id),
 };
 
 const ModalCTX = createContext(defaultValue);
@@ -34,6 +37,15 @@ export const useModal = () => {
 
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [modalsOpen, setModalsOpen] = useState<ModalOpen[]>([]);
+  const [modalsMinimized, setModalsMinimized] = useState<ModalOpen[]>([]);
+
+  const modals = useMemo(
+    () => ({
+      open: modalsOpen,
+      minimized: modalsMinimized,
+    }),
+    [modalsMinimized, modalsOpen]
+  );
 
   const openModal = useCallback(
     <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
@@ -59,12 +71,35 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     [modalsOpen]
   );
 
+  const minimizeModal = (id: string) => {
+    const index = modalsOpen.findIndex((modal) => modal.id === id);
+    if (index > -1) {
+      const newModals = [...modalsOpen];
+      const modalFound = newModals.splice(index, 1);
+      setModalsOpen(newModals);
+      setModalsMinimized((prevState) => [...prevState, modalFound[0]!]);
+    }
+  };
+
+  const maximizeModal = (id: string) => {
+    const index = modalsMinimized.findIndex((modal) => modal.id === id);
+    if (index > -1) {
+      const newModals = [...modalsMinimized];
+      const modalFound = newModals.splice(index, 1);
+      setModalsMinimized(newModals);
+      setModalsOpen((prevState) => [...prevState, modalFound[0]!]);
+    }
+  };
+
   return (
     <ModalCTX.Provider
       value={{
+        modals,
         openModal,
         closeModal,
         activeModalId,
+        minimizeModal,
+        maximizeModal,
       }}
     >
       {children}
