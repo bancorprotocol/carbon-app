@@ -6,9 +6,11 @@ import { Page } from 'components/Page';
 export const DebugPage = () => {
   return (
     <Page title={'Debug'}>
-      <DebugWeb3 />
-      <DebugTenderlyRPC />
-      <DebugImposter />
+      <div className="flex flex-col gap-10">
+        <DebugWeb3 />
+        <DebugTenderlyRPC />
+        <DebugImposter />
+      </div>
     </Page>
   );
 };
