@@ -19,6 +19,7 @@ export interface BoundaryLine {
 interface Props {
   data: CandleStickData[];
   boundaryLines: BoundaryLine[];
+  setBoundaryLines: Function;
 }
 
 const yExtent = fc
@@ -69,7 +70,31 @@ export const CandleStickChart: FC<Props> = (props) => {
 
     selection
       .select('g.left-handle text')
-      .text((d: BoundaryLine) => d.name + ' - ' + d.value.toFixed(2));
+      .text((d: BoundaryLine) => d.name + ' - ' + d.value.toFixed(2))
+      .call(
+        d3.drag().on('drag', (e) => {
+          const sub = e.subject;
+          props.setBoundaryLines(() => {
+            const index = props.boundaryLines.findIndex(
+              (d) => d.value === sub.value
+            );
+            const boundaries = [...props.boundaryLines];
+            boundaries.splice(index, 1);
+            return boundaries;
+          });
+          const yValue = 412 - e.sourceEvent.offsetY;
+          const tmp = d3
+            .scaleLinear(yExtent(props.data), [0, 412])
+            .invert(yValue);
+          props.setBoundaryLines((prev: BoundaryLine[]) => [
+            ...prev,
+            {
+              name: sub.name,
+              value: tmp,
+            },
+          ]);
+        })
+      );
   });
 
   const render = useCallback(() => {
