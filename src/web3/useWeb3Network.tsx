@@ -6,7 +6,6 @@ import {
   useNotifications,
 } from 'notifications/NotificationsProvider';
 import { useWeb3React } from '@web3-react/core';
-import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { lsService } from 'services/localeStorage';
 
 export const useWeb3Network = () => {
@@ -20,7 +19,6 @@ export const useWeb3Network = () => {
   const [isNetworkActive, setIsNetworkActive] = useState(false);
 
   const [networkError, setNetworkError] = useState<string>();
-  useState<StaticJsonRpcProvider>();
 
   const activateNetwork = useCallback(async () => {
     if (networkError || isNetworkActive) {
