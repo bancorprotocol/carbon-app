@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import * as d3 from 'd3';
 import * as fc from 'd3fc';
 
@@ -16,10 +16,12 @@ export interface BoundaryLine {
   value: number;
 }
 
+type SetBoundaryLines = Dispatch<SetStateAction<BoundaryLine[]>>;
+
 interface Props {
   data: CandleStickData[];
   boundaryLines: BoundaryLine[];
-  setBoundaryLines: Function;
+  setBoundaryLines: SetBoundaryLines;
 }
 
 const yExtent = fc
@@ -30,37 +32,74 @@ const xExtent = fc.extentTime().accessors([(d: CandleStickData) => d.date]);
 
 const gridlines = fc.annotationSvgGridline();
 
-const boundaryLines = fc
+const boundaryLinesAnnotation = fc
   .annotationSvgLine()
   .value((d: BoundaryLine) => d.value);
 
-const candlestick = fc.seriesSvgCandlestick();
+const boundaryBandAnnotation = fc
+  .annotationSvgBand()
+  .fromValue((d: any) => d.low)
+  .toValue((d: any) => d.high);
+
+boundaryBandAnnotation.decorate((selection: any) => {
+  selection
+    .enter()
+    .select('g path.band')
+    .attr('class', 'opacity-20 fill-error-500');
+});
+
+const candlestickSeries = fc.seriesSvgCandlestick();
 
 const multi = fc
   .seriesSvgMulti()
-  .series([gridlines, candlestick, boundaryLines])
+  .series([
+    gridlines,
+    candlestickSeries,
+    boundaryLinesAnnotation,
+    boundaryBandAnnotation,
+  ])
   .mapping((props: Props, index: number, series: unknown[]) => {
     switch (series[index]) {
-      case candlestick:
+      case candlestickSeries:
         return props.data;
-      case boundaryLines:
+      case boundaryLinesAnnotation:
         return props.boundaryLines;
+      case boundaryBandAnnotation:
+        return [
+          {
+            low: props.boundaryLines[0].value,
+            high: props.boundaryLines[1].value,
+          },
+        ];
     }
   });
 
 const chart = fc
   .chartCartesian(d3.scaleTime(), d3.scaleLinear())
-  .chartLabel('Price History')
-  .yTicks(5)
-  .yLabel('Price (USD)')
   .yNice()
   .svgPlotArea(multi);
 
-export const CandleStickChart: FC<Props> = (props) => {
-  chart.xDomain(xExtent(props.data));
-  chart.yDomain(yExtent(props.data));
+const onDragBoundary = ({ data, boundaryLines, setBoundaryLines }: Props) =>
+  d3.drag().on('drag', ({ subject, sourceEvent }) => {
+    setBoundaryLines(() => {
+      const index = boundaryLines.findIndex((d) => d.value === subject.value);
+      const boundaries = [...boundaryLines];
+      boundaries.splice(index, 1);
+      return boundaries;
+    });
+    const yValue = 412 - sourceEvent.offsetY;
+    const value = d3.scaleLinear(yExtent(data), [0, 412]).invert(yValue);
+    setBoundaryLines((prev: BoundaryLine[]) => [
+      ...prev,
+      {
+        ...subject,
+        value,
+      },
+    ]);
+  });
 
-  boundaryLines.decorate((selection: any) => {
+const decorateBoundaryLines = (props: Props) => {
+  boundaryLinesAnnotation.decorate((selection: any) => {
     selection
       .enter()
       .select('g.left-handle')
@@ -71,39 +110,19 @@ export const CandleStickChart: FC<Props> = (props) => {
     selection
       .select('g.left-handle text')
       .text((d: BoundaryLine) => d.name + ' - ' + d.value.toFixed(2))
-      .call(
-        d3.drag().on('drag', (e) => {
-          const sub = e.subject;
-          props.setBoundaryLines(() => {
-            const index = props.boundaryLines.findIndex(
-              (d) => d.value === sub.value
-            );
-            const boundaries = [...props.boundaryLines];
-            boundaries.splice(index, 1);
-            return boundaries;
-          });
-          const yValue = 412 - e.sourceEvent.offsetY;
-          const tmp = d3
-            .scaleLinear(yExtent(props.data), [0, 412])
-            .invert(yValue);
-          props.setBoundaryLines((prev: BoundaryLine[]) => [
-            ...prev,
-            {
-              name: sub.name,
-              value: tmp,
-            },
-          ]);
-        })
-      );
+      .call(onDragBoundary(props));
   });
+};
 
-  const render = useCallback(() => {
-    d3.select('#chart').datum(props).call(chart);
-  }, [props]);
+export const CandleStickChart: FC<Props> = (props) => {
+  chart.xDomain(xExtent(props.data));
+  chart.yDomain(yExtent(props.data));
+
+  decorateBoundaryLines(props);
 
   useEffect(() => {
-    render();
-  }, [render]);
+    d3.select('#chart').datum(props).call(chart);
+  }, [props]);
 
   return <div id="chart" className={'h-[500px]'}></div>;
 };

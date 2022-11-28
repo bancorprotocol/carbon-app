@@ -14,14 +14,18 @@ export const CreateStrategyPage = () => {
     },
     {
       name: 'high',
-      value: 90,
+      value: 101,
     },
   ]);
 
   return (
     <Page title={'Create Strategy'}>
-      <CandleStickChart data={data} boundaryLines={boundaries} />
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <CandleStickChart
+        data={data}
+        boundaryLines={boundaries}
+        setBoundaryLines={setBoundaries}
+      />
+      <pre>{JSON.stringify(boundaries, null, 2)}</pre>
 
       <CreateStrategy />
     </Page>
