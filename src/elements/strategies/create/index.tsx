@@ -85,12 +85,16 @@ export const CreateStrategy = () => {
               logoURI={source.token?.logoURI}
               amount={source.liquidity}
               setAmount={source.setLiquidity}
+              balance={source.balanceQuery.data}
+              isBalanceLoading={source.balanceQuery.isLoading}
             />
             <BudgetBlock
               symbol={target.token?.symbol}
               logoURI={target.token?.logoURI}
               amount={target.liquidity}
               setAmount={target.setLiquidity}
+              balance={target.balanceQuery.data}
+              isBalanceLoading={target.balanceQuery.isLoading}
             />
           </m.div>
 
