@@ -8,18 +8,29 @@ enum ServerStateKeysEnum {
   Strategies = 'strategies',
 }
 
+export interface Strategy {
+  id: string;
+  tokens: SourceTarget;
+  orders: SourceTarget;
+  provider: string;
+}
+
+export interface SourceTarget {
+  source: string;
+  target: string;
+}
+
 export const useGetUserStrategies = () => {
   const { PoolCollection } = useContract();
   const { user } = useWeb3();
 
-  return useQuery(
+  return useQuery<Strategy[]>(
     [ServerStateKeysEnum.Strategies],
     async () => {
       const result = await PoolCollection.read.strategiesByProvider(user!);
-
       return result.map((s) => ({
         id: s.id.toString(),
-        tokens: { source: s.tokens[0], target: s.tokens[1] },
+        tokens: { source: s.pair[0], target: s.pair[1] },
         orders: {
           source: s.orders[0].toString(),
           target: s.orders[1].toString(),
