@@ -45,6 +45,20 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
             >
               MetaMask
             </button>
+
+            <button
+              onClick={() => onClickConnect(ConnectionType.WALLET_CONNECT)}
+              className={'w-full rounded bg-gray-100 p-16'}
+            >
+              Wallet Connect
+            </button>
+
+            <button
+              onClick={() => onClickConnect(ConnectionType.COINBASE_WALLET)}
+              className={'w-full rounded bg-gray-100 p-16'}
+            >
+              Coinbase Wallet
+            </button>
           </div>
         )}
       </div>

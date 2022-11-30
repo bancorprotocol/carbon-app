@@ -6,7 +6,7 @@ import {
   useNotifications,
 } from 'notifications/NotificationsProvider';
 import { useWeb3React } from '@web3-react/core';
-import { StaticJsonRpcProvider } from '@ethersproject/providers';
+import { lsService } from 'services/localeStorage';
 
 export const useWeb3Network = () => {
   const { dispatchNotification } = useNotifications();
@@ -19,7 +19,6 @@ export const useWeb3Network = () => {
   const [isNetworkActive, setIsNetworkActive] = useState(false);
 
   const [networkError, setNetworkError] = useState<string>();
-  useState<StaticJsonRpcProvider>();
 
   const activateNetwork = useCallback(async () => {
     if (networkError || isNetworkActive) {
@@ -29,7 +28,13 @@ export const useWeb3Network = () => {
     try {
       await network.connector.activate();
       setIsNetworkActive(true);
-      await connector.connectEagerly?.();
+      const connectionType = lsService.getItem('connectionType');
+      if (connectionType !== undefined) {
+        const c = getConnection(connectionType);
+        await c.connector.connectEagerly?.();
+      } else {
+        await connector.connectEagerly?.();
+      }
     } catch (e: any) {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
       console.error('activateNetwork failed.', msg);

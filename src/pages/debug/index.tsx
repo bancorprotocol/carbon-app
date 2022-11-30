@@ -5,26 +5,16 @@ import { Page } from 'components/Page';
 import { DebugModal } from 'elements/debug/DebugModal';
 import { DropdownMenu } from 'components/DropdownMenu';
 import { ChartComponent } from 'components/Chart';
+import { DebugTenderlyFaucet } from 'elements/debug/DebugTenderlyFaucet';
 
 export const DebugPage = () => {
   return (
     <Page title={'Debug'}>
       <ChartComponent />
-
       <DebugWeb3 />
       <DebugTenderlyRPC />
       <DebugImposter />
-      <DebugModal />
-      <DropdownMenu button={'Menu'}>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-      </DropdownMenu>
+      <DebugTenderlyFaucet />
     </Page>
   );
 };

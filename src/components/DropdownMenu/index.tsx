@@ -1,6 +1,5 @@
-import { m } from 'motion';
+import { m, Variants } from 'motion';
 import { FC, ReactNode, useRef, useState } from 'react';
-import { Variants } from 'framer-motion';
 import { useOutsideClick } from 'hooks/useOutsideClick';
 
 type Props = {

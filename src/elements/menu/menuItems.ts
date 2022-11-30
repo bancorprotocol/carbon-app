@@ -18,4 +18,8 @@ export const menuItems: MenuItem[] = [
     label: 'Debug',
     href: PathNames.debug,
   },
+  {
+    label: 'Create',
+    href: PathNames.createStrategy,
+  },
 ];
