@@ -5,6 +5,7 @@ import { Page } from 'components/Page';
 import * as d3 from 'd3';
 import * as fc from 'd3fc';
 import { useCallback, useEffect, useState } from 'react';
+import { DebugTenderlyFaucet } from 'elements/debug/DebugTenderlyFaucet';
 
 // a random number generator
 const generator = fc.randomGeometricBrownianMotion().steps(11);
@@ -156,6 +157,7 @@ export const DebugPage = () => {
       <DebugWeb3 />
       <DebugTenderlyRPC />
       <DebugImposter />
+      <DebugTenderlyFaucet />
     </Page>
   );
 };
