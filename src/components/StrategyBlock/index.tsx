@@ -1,10 +1,17 @@
 import { TokenBlock } from 'components/TokenBlock';
 import { OrderBlock } from 'components/OrderBlock';
 import { FC } from 'react';
+import { Strategy } from 'queries';
+import { m, mItemVariant } from 'motion';
 
-export const StrategyBlock: FC = () => {
+type Props = { strategy: Strategy };
+
+export const StrategyBlock: FC<Props> = ({ strategy }) => {
   return (
-    <div className="bg-content space-y-10 rounded-10 p-20">
+    <m.div
+      variants={mItemVariant}
+      className="bg-content space-y-10 rounded-10 p-20"
+    >
       <div className={'flex space-x-10'}>
         {[1, 2].map((i) => (
           <TokenBlock
@@ -22,6 +29,7 @@ export const StrategyBlock: FC = () => {
           textSecondary={'Sell 1 TKN for'}
         />
       ))}
-    </div>
+      <div>ID: {strategy.id}</div>
+    </m.div>
   );
 };

@@ -1,12 +1,23 @@
 import { FC } from 'react';
 import { Imager } from 'elements/Imager';
 
-export const BudgetBlock: FC<{
+type Props = {
   amount: string;
   setAmount: (value: string) => void;
   symbol?: string;
   logoURI?: string;
-}> = ({ amount, setAmount, symbol, logoURI }) => {
+  balance?: string;
+  isBalanceLoading: boolean;
+};
+
+export const BudgetBlock: FC<Props> = ({
+  amount,
+  setAmount,
+  symbol,
+  logoURI,
+  balance,
+  isBalanceLoading,
+}) => {
   return (
     <div className={'bg-body space-y-10 rounded-14 p-20'}>
       <div className={'flex items-center justify-between'}>
@@ -27,7 +38,7 @@ export const BudgetBlock: FC<{
       </div>
       <div className={'flex items-center justify-between'}>
         <div className={'text-secondary text-12'}>
-          Balance: 100.000.000 (MAX)
+          Balance: {isBalanceLoading ? 'loading' : balance} (MAX)
         </div>
         <div className={'text-secondary text-12'}>$100.000.000</div>
       </div>
