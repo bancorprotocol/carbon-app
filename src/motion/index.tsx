@@ -6,6 +6,7 @@ import {
   m,
   Variants,
 } from 'framer-motion';
+import { mItemVariant, mListVariant } from './motionVariants';
 
 export const LazyMotion: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -17,4 +18,4 @@ export const LazyMotion: FC<{ children: ReactNode }> = ({ children }) => {
 
 export type { Variants };
 
-export { m, AnimatePresence };
+export { m, AnimatePresence, mItemVariant, mListVariant };
