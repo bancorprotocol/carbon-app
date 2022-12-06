@@ -1,14 +1,17 @@
+import { Link, PathNames } from 'routing';
+
 export const StrategyBlockCreate = () => {
   return (
-    <div
-      className={
-        'bg-content flex items-center justify-center rounded-10 border-dashed'
-      }
+    <Link
+      to={PathNames.createStrategy}
+      className="bg-content flex h-[420px] w-[410px] items-center justify-center rounded-10 border-dashed"
     >
-      <div className={'flex flex-col items-center space-y-20'}>
-        <div className={'h-50 text-[50px]'}>+</div>
+      <div className="flex flex-col items-center space-y-20">
+        <div className="h-72 w-72 rounded-full bg-white text-center text-[50px] text-black">
+          +
+        </div>
         <h2>Create a Strategy</h2>
       </div>
-    </div>
+    </Link>
   );
 };
