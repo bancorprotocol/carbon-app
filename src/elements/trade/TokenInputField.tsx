@@ -4,7 +4,7 @@ import { Imager } from 'elements/Imager';
 import { Token } from 'services/tokens';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'modals';
-import { useTokens } from 'queries';
+import { useTokens } from 'tokens';
 
 export interface TokenInputProps {
   token?: Token;

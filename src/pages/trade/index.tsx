@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ethToken } from 'services/web3/config';
 import { TradeWidget } from './TradeWidget';
 import { Page } from 'components/Page';
-import { useTokens } from 'queries';
+import { useTokensQuery } from 'queries/offChain/tokens';
 
 interface TradePageProps {
   from?: string;
@@ -11,7 +11,7 @@ interface TradePageProps {
 }
 
 export const TradePage = ({ from, to }: TradePageProps) => {
-  const { tokens } = useTokens();
+  const { data: tokens } = useTokensQuery();
 
   const ethOrFirst = useCallback(() => {
     const eth = tokens?.find((x) => x.address === ethToken);

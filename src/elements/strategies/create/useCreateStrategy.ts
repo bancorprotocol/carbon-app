@@ -1,10 +1,11 @@
 import { useOrder } from './useOrder';
-import { useCreateStrategy, useTokens } from 'queries';
+import { useCreateStrategy } from 'queries';
 import { useMemo } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken } from 'hooks/useApproval';
+import { useTokens } from 'tokens';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 

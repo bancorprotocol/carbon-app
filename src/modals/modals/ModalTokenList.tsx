@@ -8,8 +8,8 @@ import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { useModal } from 'modals/ModalProvider';
 import { Imager } from 'elements/Imager';
 import { SearchInput } from 'components/SearchInput';
-import { useTokenLists } from 'queries';
 import { wait } from 'utils/helpers';
+import { useTokenLists } from 'queries/offChain/tokens';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -33,7 +33,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   const [search, setSearch] = useState('');
   const [manage, setManage] = useState(false);
   const [userPreferredListIds, setUserLists] = useState(['']);
-  const { tokenLists } = useTokenLists();
+  const { data: tokenLists } = useTokenLists();
 
   const onClose = async () => {
     closeModal(id);

@@ -77,12 +77,7 @@ export const fetchTokenLists = async () => {
   return res.filter((x) => !!x) as TokenList[];
 };
 
-export const tokenList = async () => {
-  const res = await fetchTokenLists();
-  return buildTokenList(res);
-};
-
-const buildTokenList = (tokenList: TokenList[]): Token[] => {
+export const buildTokenList = (tokenList: TokenList[]): Token[] => {
   const tokens: Token[] = [
     {
       symbol: 'ETH',
