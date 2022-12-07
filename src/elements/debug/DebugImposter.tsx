@@ -1,6 +1,7 @@
 import { useWeb3 } from 'web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
+import { InputUserAccount } from 'components/InputField';
 import { Button } from 'components/Button';
 
 export const DebugImposter = () => {
@@ -14,18 +15,19 @@ export const DebugImposter = () => {
   };
 
   return (
-    <div>
+    <div
+      className={
+        'bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20'
+      }
+    >
       <h2>Set Imposter Account</h2>
-      <div className="flex items-center gap-10">
-        <input
-          className="w-[600px] rounded bg-white outline-none dark:bg-charcoal"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <Button onClick={handleOnClick} className="rounded-full">
-          Save
-        </Button>
-      </div>
+      <InputUserAccount
+        label={'Imposter Account'}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+
+      <Button onClick={handleOnClick}>Save</Button>
     </div>
   );
 };
