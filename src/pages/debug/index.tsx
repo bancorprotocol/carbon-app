@@ -7,10 +7,12 @@ import { DebugTenderlyFaucet } from 'elements/debug/DebugTenderlyFaucet';
 export const DebugPage = () => {
   return (
     <Page title={'Debug'}>
-      <DebugWeb3 />
-      <DebugTenderlyRPC />
-      <DebugImposter />
-      <DebugTenderlyFaucet />
+      <div className="flex flex-col gap-10">
+        <DebugWeb3 />
+        <DebugTenderlyRPC />
+        <DebugImposter />
+        <DebugTenderlyFaucet />
+      </div>
     </Page>
   );
 };
