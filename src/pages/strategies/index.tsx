@@ -9,9 +9,8 @@ export const StrategiesPage = () => {
 
   return (
     <Page title={'Strategies'}>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
       <m.div
-        className={'grid grid-cols-1 gap-30 md:grid-cols-3'}
+        className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
         variants={mListVariant}
         initial={'hidden'}
         animate={'visible'}
