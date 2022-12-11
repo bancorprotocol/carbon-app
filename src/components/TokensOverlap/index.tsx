@@ -4,9 +4,11 @@ import { Imager } from 'elements/Imager';
 export const TokensOverlap = ({
   tokens,
   maxLogos = 4,
+  className,
 }: {
   tokens: Token[];
   maxLogos?: number;
+  className?: string;
 }) => {
   const tokenCount = tokens.length;
 
@@ -17,7 +19,7 @@ export const TokensOverlap = ({
           key={token.symbol + idx}
           src={token.logoURI}
           alt="Token Logo"
-          className={`h-30 w-30 !rounded-full border border-fog bg-fog dark:border-black dark:bg-black`}
+          className={`${className} h-30 w-30 !rounded-full border border-fog bg-fog dark:border-black dark:bg-black`}
           style={{
             marginLeft: tokens.length > 1 ? `${'-10'}px` : '0px',
           }}
