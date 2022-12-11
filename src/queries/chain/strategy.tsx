@@ -9,11 +9,12 @@ enum ServerStateKeysEnum {
   Strategies = 'strategies',
 }
 
-enum StrategyStatus {
+export enum StrategyStatus {
   Normal,
   ToBeFilled,
   Completed,
   NoAllocation,
+  OffCurve,
 }
 
 export interface Strategy {
@@ -55,7 +56,7 @@ export const useGetUserStrategies = () => {
             source: orderSource,
             target: orderTarget,
           },
-          status: StrategyStatus.Normal,
+          status: StrategyStatus.OffCurve,
           provider: s.provider,
         };
       });
