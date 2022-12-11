@@ -32,6 +32,16 @@ export const StrategyBlock: FC<Props> = ({ strategy }) => {
         </div>
       </div>
       <hr className="border-silver dark:border-emphasis" />
+      <OrderStatus strategy={strategy} />
+      <BuySell strategy={strategy} />
+      <Balances strategy={strategy} />
+    </m.div>
+  );
+};
+
+const OrderStatus: FC<Props> = ({ strategy }) => {
+  return (
+    <>
       {strategy.status !== StrategyStatus.Normal && (
         <>
           <Section
@@ -60,6 +70,13 @@ export const StrategyBlock: FC<Props> = ({ strategy }) => {
           <hr className="border-silver dark:border-emphasis" />
         </>
       )}
+    </>
+  );
+};
+
+const BuySell: FC<Props> = ({ strategy }) => {
+  return (
+    <>
       {strategy.status !== StrategyStatus.Completed &&
         strategy.status !== StrategyStatus.OffCurve && (
           <>
@@ -83,6 +100,13 @@ export const StrategyBlock: FC<Props> = ({ strategy }) => {
             )}
           </>
         )}
+    </>
+  );
+};
+
+const Balances: FC<Props> = ({ strategy }) => {
+  return (
+    <>
       {strategy.status !== StrategyStatus.NoAllocation && (
         <>
           <Section
@@ -114,7 +138,7 @@ export const StrategyBlock: FC<Props> = ({ strategy }) => {
           />
         </>
       )}
-    </m.div>
+    </>
   );
 };
 

@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-location';
 import { Button } from 'components/Button';
 import { Page } from 'components/Page';
 import { SearchInput } from 'components/SearchInput';
@@ -8,7 +7,7 @@ import { m, mListVariant } from 'motion';
 import { useGetUserStrategies } from 'queries';
 import { FC, useState } from 'react';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
-import { PathNames } from 'routing';
+import { Link, PathNames } from 'routing';
 
 export const StrategiesPage = () => {
   const { data } = useGetUserStrategies();
