@@ -7,9 +7,11 @@ import { m, mListVariant } from 'motion';
 import { useGetUserStrategies } from 'queries';
 import { FC, useMemo, useState } from 'react';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
+import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { Link, PathNames } from 'routing';
 import { useWeb3 } from 'web3';
 import { WalletConnect } from 'components/WalletConnect';
+import { DropdownMenu } from 'components/DropdownMenu';
 
 export const StrategiesPage = () => {
   const strategies = useGetUserStrategies().data;
@@ -68,9 +70,51 @@ const StrategyPageTitleWidget: FC<{
         setValue={setSearch}
         className="h-40 w-full"
       />
-      <Button variant="tertiary" className="flex items-center gap-10">
-        Filter & Sort <IconArrowDown className="w-14" />
-      </Button>
+      <DropdownMenu
+        button={
+          <Button variant="tertiary" className="flex items-center gap-10">
+            Filter & Sort <IconArrowDown className="w-14" />
+          </Button>
+        }
+      >
+        <div className="grid w-[300px] gap-20 p-10">
+          <div className="text-secondary text-20">Sort By</div>
+          <button className="flex items-center justify-between">
+            Recent Trade Activity
+            {false && <IconCheck />}
+          </button>
+          <button className="flex items-center justify-between">
+            Largest Balance (USD)
+            {false && <IconCheck />}
+          </button>
+          <button className="flex items-center justify-between">
+            Smallest Balance (USD)
+            {false && <IconCheck />}
+          </button>
+          <button className="flex items-center justify-between">
+            Recently Created
+            {false && <IconCheck />}
+          </button>
+          <button className="flex items-center justify-between">
+            Oldest Created
+            {false && <IconCheck />}
+          </button>
+          <hr className="border-2 border-silver dark:border-emphasis" />
+          <button className="text-secondary">View</button>
+          <button className="flex items-center justify-between">
+            All
+            {false && <IconCheck />}
+          </button>
+          <button className="flex items-center justify-between">
+            Active
+            {false && <IconCheck />}
+          </button>
+          <button className="flex items-center justify-between">
+            Off curve
+            {false && <IconCheck />}
+          </button>
+        </div>
+      </DropdownMenu>
       <Link to={PathNames.createStrategy}>
         <Button variant="secondary">Create Strategy</Button>
       </Link>
