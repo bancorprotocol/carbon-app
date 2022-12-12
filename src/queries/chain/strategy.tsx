@@ -3,40 +3,63 @@ import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
 import { Token } from 'services/tokens';
+import { useTokens } from 'queries/tokens';
 
 enum ServerStateKeysEnum {
   Strategies = 'strategies',
+}
+
+export enum StrategyStatus {
+  Normal,
+  ToBeFilled,
+  Completed,
+  NoAllocation,
+  OffCurve,
 }
 
 export interface Strategy {
   id: string;
   tokens: SourceTarget;
   orders: SourceTarget;
+  status: StrategyStatus;
   provider: string;
 }
 
 export interface SourceTarget {
-  source: string;
-  target: string;
+  source: Token;
+  target: Token;
 }
 
 export const useGetUserStrategies = () => {
   const { PoolCollection } = useContract();
   const { user } = useWeb3();
+  const tokens = useTokens().tokens;
 
   return useQuery<Strategy[]>(
     [ServerStateKeysEnum.Strategies],
     async () => {
+      if (!tokens) return [];
       const result = await PoolCollection.read.strategiesByProvider(user!);
-      return result.map((s) => ({
-        id: s.id.toString(),
-        tokens: { source: s.pair[0], target: s.pair[1] },
-        orders: {
-          source: s.orders[0].toString(),
-          target: s.orders[1].toString(),
-        },
-        provider: s.provider,
-      }));
+      return result.map((s) => {
+        const source = tokens.find((t) => t.address === s.pair[0])!;
+        const target = tokens.find((t) => t.address === s.pair[1])!;
+        const orderSource = tokens.find(
+          (t) => t.address === s.orders[0].toString()
+        )!;
+        const orderTarget = tokens.find(
+          (t) => t.address === s.orders[1].toString()
+        )!;
+        return {
+          id: s.id.toString(),
+          tokens: { source, target },
+          orders: {
+            source: orderSource,
+            target: orderTarget,
+          },
+          status: StrategyStatus.OffCurve,
+          provider: s.provider,
+        };
+      });
     },
     { enabled: !!user }
   );
