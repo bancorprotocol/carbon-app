@@ -12,28 +12,34 @@ import { useWeb3 } from 'web3';
 import { WalletConnect } from 'components/WalletConnect';
 
 export const StrategiesPage = () => {
-  const { data } = useGetUserStrategies();
+  const strategies = useGetUserStrategies().data;
   const [search, setSearch] = useState('');
   const { user } = useWeb3();
 
   return user ? (
-    <Page
-      title={'Strategies'}
-      widget={<StrategyPageTitleWidget search={search} setSearch={setSearch} />}
-    >
-      <m.div
-        className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
-        variants={mListVariant}
-        initial={'hidden'}
-        animate={'visible'}
+    strategies && strategies.length > 0 ? (
+      <Page
+        title={'Strategies'}
+        widget={
+          <StrategyPageTitleWidget search={search} setSearch={setSearch} />
+        }
       >
-        {data?.map((s) => (
-          <StrategyBlock key={s.id} strategy={s} />
-        ))}
+        <m.div
+          className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
+          variants={mListVariant}
+          initial={'hidden'}
+          animate={'visible'}
+        >
+          {strategies.map((s) => (
+            <StrategyBlock key={s.id} strategy={s} />
+          ))}
 
-        <StrategyBlockCreate />
-      </m.div>
-    </Page>
+          <StrategyBlockCreate />
+        </m.div>
+      </Page>
+    ) : (
+      <CreateFirstStrategy />
+    )
   ) : (
     <WalletConnect />
   );
@@ -56,6 +62,17 @@ const StrategyPageTitleWidget: FC<{
       <Link to={PathNames.createStrategy}>
         <Button variant="secondary">Create Strategy</Button>
       </Link>
+    </div>
+  );
+};
+
+const CreateFirstStrategy = () => {
+  return (
+    <div className="h-screen">
+      <StrategyBlockCreate
+        title="Create Your First Strategy"
+        className="w-[270px] gap-[32px] text-center text-36"
+      />
     </div>
   );
 };
