@@ -29,6 +29,8 @@ module.exports = {
       darkGrey: '#303034',
       lightGrey: '#E4E4E6',
       fog: '#F4F4F4',
+      emphasis: '#212123',
+      silver: '#161617',
     }),
     columns: {
       auto: 'auto',

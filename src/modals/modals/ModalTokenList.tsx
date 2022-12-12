@@ -87,7 +87,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
               );
               return (
                 <div
-                  className={`border-silver dark:border-grey flex items-center justify-between rounded border-2 px-15 py-6 ${
+                  className={`dark:border-grey flex items-center justify-between rounded border-2 border-silver px-15 py-6 ${
                     isSelected ? 'border-primary dark:border-primary-light' : ''
                   }`}
                   key={tokenList.name}
@@ -96,7 +96,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
                     <Imager
                       alt="TokenList"
                       src={tokenList.logoURI}
-                      className="bg-silver h-28 w-28 rounded-full"
+                      className="h-28 w-28 rounded-full bg-silver"
                     />
                     <div className={'ml-15'}>
                       <div className={'text-16'}>{tokenList.name}</div>
@@ -172,7 +172,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
               );
             })}
           </div>
-          <hr className="border-silver dark:border-black-low" />
+          <hr className="dark:border-black-low border-silver" />
           <div className="my-5 flex h-[59px] items-center justify-center">
             <button
               onClick={() => {
