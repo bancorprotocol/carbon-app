@@ -6,10 +6,10 @@ type NewVariant<T extends { [key in string]: ReadonlyArray<string> }> = {
   [key in keyof T]: ObjectFromList<T[key], string | string[]>;
 };
 
-const COLOR = {
+const Variant = {
   variant: ['primary', 'secondary', 'success', 'error', 'tertiary'],
 } as const;
-export type VariantColor = NewVariant<typeof COLOR>;
+export type VariantColor = NewVariant<typeof Variant>;
 
 const SIZE = {
   size: ['sm', 'md', 'lg'],
