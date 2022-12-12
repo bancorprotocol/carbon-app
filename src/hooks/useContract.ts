@@ -4,6 +4,7 @@ import {
   PoolCollection__factory,
   BancorNetwork__factory,
   Voucher__factory,
+  Multicall__factory,
 } from 'abis/types';
 import { useCallback, useMemo } from 'react';
 
@@ -58,5 +59,19 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  return { Token, PoolCollection, BancorNetwork, Voucher };
+  const Multicall = useMemo(
+    () => ({
+      read: Multicall__factory.connect(
+        '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
+        provider!
+      ),
+      write: Multicall__factory.connect(
+        '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
+        signer!
+      ),
+    }),
+    [provider, signer]
+  );
+
+  return { Token, PoolCollection, BancorNetwork, Voucher, Multicall };
 };

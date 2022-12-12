@@ -15,25 +15,25 @@ const calcA = (low: string, high: string) =>
 
 const calcB = (low: string) => calcScale(low).floor().toString();
 
-export const toStrategy = ({ source, target }: CreateStrategyParams) => {
-  const sourceLiquidity = expandToken(source.liquidity, source.token.decimals);
-  const targetLiquidity = expandToken(target.liquidity, target.token.decimals);
-  const sourceLow = expandToken(source.low, source.token.decimals);
-  const targetLow = expandToken(target.low, target.token.decimals);
-  const sourceHigh = expandToken(source.high, source.token.decimals);
-  const targetHigh = expandToken(target.high, target.token.decimals);
+export const toStrategy = ({ token0, token1 }: CreateStrategyParams) => {
+  const token0Balance = expandToken(token0.balance, token0.token.decimals);
+  const token1Balance = expandToken(token1.balance, token1.token.decimals);
+  const token0Low = expandToken(token0.low, token0.token.decimals);
+  const token1Low = expandToken(token1.low, token1.token.decimals);
+  const token0High = expandToken(token0.high, token0.token.decimals);
+  const token1High = expandToken(token1.high, token1.token.decimals);
 
   return [
-    source.token.address,
-    target.token.address,
-    sourceLiquidity,
-    sourceLiquidity,
-    calcA(sourceLow, sourceHigh),
-    calcB(sourceLow),
-    targetLiquidity,
-    targetLiquidity,
-    calcA(targetLow, targetHigh),
-    calcB(targetLow),
+    token0.token.address,
+    token1.token.address,
+    token0Balance,
+    token0Balance,
+    calcA(token0Low, token0High),
+    calcB(token0Low),
+    token1Balance,
+    token1Balance,
+    calcA(token1Low, token1High),
+    calcB(token1Low),
   ] as const;
 };
 
