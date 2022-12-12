@@ -2,6 +2,7 @@ import { useWeb3 } from 'web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/Button';
+import { Input, Label } from 'components/InputField';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC } = useWeb3();
@@ -12,18 +13,20 @@ export const DebugTenderlyRPC = () => {
   };
 
   return (
-    <div>
+    <div
+      className={
+        'bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20'
+      }
+    >
       <h2>Set Tenderly RPC</h2>
-      <div className="flex items-center gap-10">
-        <input
-          className="w-[600px] rounded bg-white outline-none dark:bg-charcoal"
+      <Label>
+        <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          fullWidth
         />
-        <Button onClick={handleOnClick} className="rounded-full">
-          Save
-        </Button>
-      </div>
+      </Label>
+      <Button onClick={handleOnClick}>Save</Button>
     </div>
   );
 };
