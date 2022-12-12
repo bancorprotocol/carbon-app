@@ -8,12 +8,15 @@ import { useGetUserStrategies } from 'queries';
 import { FC, useState } from 'react';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { Link, PathNames } from 'routing';
+import { useWeb3 } from 'web3';
+import { WalletConnect } from 'components/WalletConnect';
 
 export const StrategiesPage = () => {
   const { data } = useGetUserStrategies();
   const [search, setSearch] = useState('');
+  const { user } = useWeb3();
 
-  return (
+  return user ? (
     <Page
       title={'Strategies'}
       widget={<StrategyPageTitleWidget search={search} setSearch={setSearch} />}
@@ -31,6 +34,8 @@ export const StrategiesPage = () => {
         <StrategyBlockCreate />
       </m.div>
     </Page>
+  ) : (
+    <WalletConnect />
   );
 };
 
