@@ -3,11 +3,13 @@ import {
   Token__factory,
   PoolCollection__factory,
   BancorNetwork__factory,
+  Voucher__factory,
 } from 'abis/types';
 import { useCallback, useMemo } from 'react';
 
 import PoolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import BancorNetworkProxyAbi from 'abis/BancorNetwork_Proxy.json';
+import VoucherAbi from 'abis/Voucher.json';
 
 export const useContract = () => {
   const { provider, signer } = useWeb3();
@@ -48,5 +50,13 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  return { Token, PoolCollection, BancorNetwork };
+  const Voucher = useMemo(
+    () => ({
+      read: Voucher__factory.connect(VoucherAbi.address, provider!),
+      write: Voucher__factory.connect(VoucherAbi.address, signer!),
+    }),
+    [provider, signer]
+  );
+
+  return { Token, PoolCollection, BancorNetwork, Voucher };
 };

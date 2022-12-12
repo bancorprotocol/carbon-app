@@ -7,6 +7,7 @@ import { useWeb3 } from 'web3';
 import { useGetTokenBalances } from 'queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
 import { ethToken } from 'services/web3/config';
+import { Button } from 'components/Button';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -40,11 +41,20 @@ export const DebugTenderlyFaucet = () => {
   };
 
   return (
-    <div>
-      {queries.map((t, i) => (
-        <div key={i}>{t.data}</div>
-      ))}
-      <button onClick={() => handleOnClick()}>get money</button>
+    <div
+      className={
+        'bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20'
+      }
+    >
+      <h2>Tenderly Faucet</h2>
+
+      <div>
+        {queries.map((t, i) => (
+          <div key={i}>{t.data}</div>
+        ))}
+      </div>
+
+      <Button onClick={handleOnClick}>Get money</Button>
     </div>
   );
 };

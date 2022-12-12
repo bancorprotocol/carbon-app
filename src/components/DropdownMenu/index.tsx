@@ -19,9 +19,7 @@ export const DropdownMenu: FC<Props> = ({ children, button }) => {
       animate={isOpen ? 'open' : 'closed'}
       className={'relative'}
     >
-      <m.button whileTap={{ scale: 0.97 }} onClick={() => setIsOpen(!isOpen)}>
-        {button}
-      </m.button>
+      <m.button onClick={() => setIsOpen(!isOpen)}>{button}</m.button>
       <m.div
         className={
           'absolute mt-10 -ml-20 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30'
