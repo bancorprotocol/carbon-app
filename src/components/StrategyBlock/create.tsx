@@ -9,7 +9,7 @@ export const StrategyBlockCreate: FC<{
   return (
     <Link
       to={PathNames.createStrategy}
-      className="bg-content flex h-[420px] items-center justify-center rounded-10 border-dashed"
+      className="bg-content flex h-full items-center justify-center rounded-10 border-dashed"
     >
       <div className={`${className} flex flex-col items-center gap-24 text-20`}>
         <IconPlus />

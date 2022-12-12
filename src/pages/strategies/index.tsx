@@ -5,7 +5,7 @@ import { StrategyBlock } from 'components/StrategyBlock';
 import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 import { m, mListVariant } from 'motion';
 import { useGetUserStrategies } from 'queries';
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { Link, PathNames } from 'routing';
 import { useWeb3 } from 'web3';
@@ -16,8 +16,20 @@ export const StrategiesPage = () => {
   const [search, setSearch] = useState('');
   const { user } = useWeb3();
 
+  const filteredStrategies = useMemo(() => {
+    return strategies?.filter(
+      (strategy) =>
+        strategy.tokens.source.symbol
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        strategy.tokens.target.symbol
+          .toLowerCase()
+          .includes(search.toLowerCase())
+    );
+  }, [search, strategies]);
+
   return user ? (
-    strategies && strategies.length > 0 ? (
+    filteredStrategies && strategies && strategies.length > 0 ? (
       <Page
         title={'Strategies'}
         widget={
@@ -30,7 +42,7 @@ export const StrategiesPage = () => {
           initial={'hidden'}
           animate={'visible'}
         >
-          {strategies.map((s) => (
+          {filteredStrategies.map((s) => (
             <StrategyBlock key={s.id} strategy={s} />
           ))}
 
@@ -68,7 +80,7 @@ const StrategyPageTitleWidget: FC<{
 
 const CreateFirstStrategy = () => {
   return (
-    <div className="h-screen">
+    <div className="h-screen p-20">
       <StrategyBlockCreate
         title="Create Your First Strategy"
         className="w-[270px] gap-[32px] text-center text-36"
