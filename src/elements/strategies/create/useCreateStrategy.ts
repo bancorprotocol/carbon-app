@@ -1,10 +1,11 @@
 import { useOrder } from './useOrder';
-import { useCreateStrategy, useTokens } from 'queries';
+import { useCreateStrategy } from 'queries';
 import { useMemo } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken } from 'hooks/useApproval';
+import { useTokens } from 'tokens';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 
@@ -46,8 +47,20 @@ export const useCreate = () => {
       throw new Error('source or target tokens not set');
     }
     mutation.mutate(
-      // @ts-ignore
-      { source, target },
+      {
+        token0: {
+          balance: source.liquidity,
+          token: source.token!,
+          low: source.low,
+          high: source.high,
+        },
+        token1: {
+          balance: target.liquidity,
+          token: target.token!,
+          low: target.low,
+          high: target.high,
+        },
+      },
       {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);

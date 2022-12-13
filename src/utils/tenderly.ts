@@ -1,7 +1,7 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { Token__factory } from 'abis/types/factories/Token__factory';
 import { lsService } from 'services/localeStorage';
-import { expandToken } from 'utils/sdk';
+import { expandToken } from 'utils/tokens';
 
 export interface FaucetToken {
   decimals: number;

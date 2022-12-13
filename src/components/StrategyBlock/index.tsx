@@ -20,13 +20,13 @@ export const StrategyBlock: FC<Props> = ({ strategy }) => {
       <div className={'flex space-x-10'}>
         <TokensOverlap
           className="h-40 w-40"
-          tokens={[strategy.tokens.source, strategy.tokens.target]}
+          tokens={[strategy.order0.token, strategy.order1.token]}
         />
         <div>
           <div className="flex">
-            <span>{strategy.tokens.source.symbol}</span>
+            <span>{strategy.order0.token.symbol}</span>
             <div>·</div>
-            <span>{strategy.tokens.target.symbol}</span>
+            <span>{strategy.order1.token.symbol}</span>
           </div>
           <div className="text-secondary">????</div>
         </div>
@@ -82,7 +82,18 @@ const BuySell: FC<Props> = ({ strategy }) => {
           <>
             <Section
               title={<div className="text-14 text-success-500">Buy Price</div>}
-              description={<div>????????? {strategy.tokens.target.symbol}</div>}
+              description={
+                <div>
+                  <div>
+                    start rate: {strategy.order0.startRate}{' '}
+                    {strategy.order1.token.symbol}
+                  </div>
+                  <div>
+                    end rate: {strategy.order0.endRate}{' '}
+                    {strategy.order1.token.symbol}
+                  </div>
+                </div>
+              }
             />
             <hr className="border-silver dark:border-emphasis" />
             {strategy.status !== StrategyStatus.ToBeFilled && (
@@ -92,7 +103,16 @@ const BuySell: FC<Props> = ({ strategy }) => {
                     <div className="text-14 text-error-500">Sell Price</div>
                   }
                   description={
-                    <div>????????? {strategy.tokens.target.symbol}</div>
+                    <div>
+                      <div>
+                        start rate: {strategy.order1.startRate}{' '}
+                        {strategy.order1.token.symbol}
+                      </div>
+                      <div>
+                        end rate: {strategy.order1.endRate}{' '}
+                        {strategy.order1.token.symbol}
+                      </div>
+                    </div>
                   }
                 />
                 <hr className="border-silver dark:border-emphasis" />
@@ -114,13 +134,17 @@ const Balances: FC<Props> = ({ strategy }) => {
               <div className="text-secondary flex items-center gap-5 text-14">
                 <Imager
                   className="h-10 w-10"
-                  src={strategy.tokens.source.logoURI}
+                  src={strategy.order0.token.logoURI}
                   alt="token"
                 />
-                {strategy.tokens.source.symbol}
+                {strategy.order0.token.symbol}
               </div>
             }
-            description={<div>????????? {strategy.tokens.source.symbol}</div>}
+            description={
+              <div>
+                {strategy.order0.balance} {strategy.order0.token.symbol}
+              </div>
+            }
           />
           <hr className="border-silver dark:border-emphasis" />
           <Section
@@ -128,13 +152,17 @@ const Balances: FC<Props> = ({ strategy }) => {
               <div className="text-secondary flex items-center gap-5 text-14">
                 <Imager
                   className="h-10 w-10"
-                  src={strategy.tokens.target.logoURI}
+                  src={strategy.order1.token.logoURI}
                   alt="token"
                 />
-                {strategy.tokens.target.symbol}
+                {strategy.order1.token.symbol}
               </div>
             }
-            description={<div>????????? {strategy.tokens.target.symbol}</div>}
+            description={
+              <div>
+                {strategy.order1.balance} {strategy.order1.token.symbol}
+              </div>
+            }
           />
         </>
       )}

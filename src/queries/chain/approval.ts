@@ -2,7 +2,7 @@ import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
-import { expandToken, shrinkToken } from 'utils/sdk';
+import { expandToken, shrinkToken } from 'utils/tokens';
 import BigNumber from 'bignumber.js';
 
 export enum ServerStateKeysEnum {
