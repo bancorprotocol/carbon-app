@@ -78,8 +78,9 @@ export const useGetUserStrategies = () => {
               order0.currentRate.toString(),
               token0.decimals
             ),
-            startRate: order0.lowestRate.toFixed(10).toString(),
-            endRate: order0.highestRate.toFixed(10).toString(),
+            // remove
+            startRate: order0.lowestRate.toString(),
+            endRate: order0.highestRate.toString(),
           },
           order1: {
             token: token1,
@@ -88,8 +89,8 @@ export const useGetUserStrategies = () => {
               order1.currentRate.toString(),
               token1.decimals
             ),
-            startRate: order1.lowestRate.toFixed(10).toString(),
-            endRate: order1.highestRate.toFixed(10).toString(),
+            startRate: order1.lowestRate.toString(),
+            endRate: order1.highestRate.toString(),
           },
           status: StrategyStatus.Normal,
           provider: s.provider,
