@@ -78,7 +78,6 @@ export const useGetUserStrategies = () => {
               order0.currentRate.toString(),
               token0.decimals
             ),
-            // remove
             startRate: order0.lowestRate.toString(),
             endRate: order0.highestRate.toString(),
           },
