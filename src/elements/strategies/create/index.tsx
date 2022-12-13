@@ -4,10 +4,13 @@ import { useCreate } from './useCreateStrategy';
 import { AmountInputWithButtons } from 'components/AmountInputWithButtons';
 import { SelectTokens } from 'components/SelectTokens';
 import { BudgetBlock } from 'components/BudgetBlock';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { useLocation } from 'routing';
 
 export const CreateStrategy = () => {
   const { source, target, onCTAClick, openTokenListModal, showStep2 } =
     useCreate();
+  const location = useLocation();
 
   return (
     <m.div
@@ -16,8 +19,17 @@ export const CreateStrategy = () => {
       initial={'hidden'}
       animate={'visible'}
     >
+      <div className="flex items-center gap-16 text-24">
+        <button
+          onClick={() => location.history.back()}
+          className="h-40 w-40 rounded-full bg-emphasis"
+        >
+          <IconChevron className="mx-auto w-14 rotate-90" />
+        </button>
+        Create Strategy
+      </div>
       <m.div variants={items} className={'bg-secondary rounded-18 p-20'}>
-        <h2 className={'mb-20'}>Select Tokens</h2>
+        <h2 className={'mb-20'}>Token Pair</h2>
 
         <SelectTokens
           symbol0={source.token?.symbol}
@@ -28,7 +40,6 @@ export const CreateStrategy = () => {
           onClick1={() => openTokenListModal('target')}
         />
       </m.div>
-
       {showStep2 && (
         <>
           <m.div

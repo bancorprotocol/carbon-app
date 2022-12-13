@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { Imager } from 'elements/Imager';
+import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 
 interface Props {
   symbol0?: string;
@@ -25,11 +27,18 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onClick0()}
         className={
-          'bg-body -mr-13 flex flex-grow items-center space-x-10 rounded-l-14 px-20 py-10'
+          'bg-body -mr-13 flex flex-grow items-center rounded-12 py-10 px-18'
         }
       >
-        <Imager alt={''} src={imgUrl0} className={'h-30 w-30 rounded-full'} />
-        <div className={'text-20 font-weight-500'}>{symbol0 ?? 'select'}</div>
+        <Imager
+          alt={''}
+          src={imgUrl0}
+          className={'mr-8 h-30 w-30 rounded-full'}
+        />
+        <div className={'mr-auto text-16 font-weight-500'}>
+          {symbol0 ?? 'Select'}
+        </div>
+        <IconChevron className="w-14" />
       </button>
       <button
         onClick={() => onMiddleClick?.()}
@@ -37,16 +46,23 @@ export const SelectTokens: FC<Props> = ({
           'bg-secondary z-20 flex h-30 w-30 flex-grow-0 items-center justify-center rounded-full'
         }
       >
-        {'->'}
+        <IconArrow />
       </button>
       <button
         onClick={() => onClick1()}
         className={
-          'bg-body -ml-13 flex flex-grow items-center space-x-10 rounded-r-14 px-20 py-10'
+          'bg-body -ml-13 flex flex-grow items-center rounded-12 py-10 px-18'
         }
       >
-        <Imager alt={''} src={imgUrl1} className={'h-30 w-30 rounded-full'} />
-        <div className={'text-20 font-weight-500'}>{symbol1 ?? 'select'}</div>
+        <Imager
+          alt={''}
+          src={imgUrl1}
+          className={'mr-8 h-30 w-30 rounded-full'}
+        />
+        <div className={'mr-auto text-16 font-weight-500'}>
+          {symbol1 ?? 'Select'}
+        </div>
+        <IconChevron className="w-14" />
       </button>
     </div>
   );

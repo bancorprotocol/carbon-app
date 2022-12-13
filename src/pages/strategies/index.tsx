@@ -6,7 +6,7 @@ import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 import { m, mListVariant } from 'motion';
 import { useGetUserStrategies } from 'queries';
 import { FC, useState } from 'react';
-import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Link, PathNames } from 'routing';
 
 export const StrategiesPage = () => {
@@ -46,7 +46,7 @@ const StrategyPageTitleWidget: FC<{
         className="h-40 w-full"
       />
       <Button variant="tertiary" className="flex items-center gap-10">
-        Filter & Sort <IconArrowDown className="w-14" />
+        Filter & Sort <IconChevron className="w-14" />
       </Button>
       <Link to={PathNames.createStrategy}>
         <Button variant="secondary">Create Strategy</Button>

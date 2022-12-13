@@ -2,7 +2,7 @@ import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Imager } from 'elements/Imager';
 import { Token } from 'services/tokens';
-import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useModal } from 'modals';
 import { useTokens } from 'queries';
 
@@ -60,7 +60,7 @@ const TokenInputField = ({
         ) : (
           <span>Choose Token</span>
         )}
-        <IconArrowDown className="w-14" />
+        <IconChevron className="w-14" />
       </button>
       <input
         type="text"
