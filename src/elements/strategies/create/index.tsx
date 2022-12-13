@@ -120,7 +120,7 @@ export const CreateStrategy = () => {
               fullWidth
               onClick={onCTAClick}
             >
-              Confirm Strategy
+              Create Strategy
             </Button>
           </m.div>
         </>

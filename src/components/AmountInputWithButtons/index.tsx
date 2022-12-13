@@ -23,7 +23,7 @@ export const AmountInputWithButtons: FC<{
         <input
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          placeholder={'enter amount'}
+          placeholder={'Enter amount'}
           className={'w-full bg-transparent text-center font-weight-500'}
         />
       </div>

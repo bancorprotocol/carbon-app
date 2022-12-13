@@ -32,8 +32,8 @@ export const BudgetBlock: FC<Props> = ({
         <input
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          placeholder={'enter amount'}
-          className={'bg-transparent text-right text-[22px]'}
+          placeholder={'Enter amount'}
+          className={'bg-transparent text-right '}
         />
       </div>
       <div className={'flex items-center justify-between'}>
