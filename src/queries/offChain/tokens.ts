@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { buildTokenList, fetchTokenLists } from 'services/tokens';
+import { buildTokenList, fetchTokenLists } from 'tokens';
 
 export const useTokenLists = () =>
   useQuery(['token_lists'], fetchTokenLists, {

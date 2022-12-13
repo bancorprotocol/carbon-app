@@ -1,7 +1,7 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
-import { Token } from 'services/tokens';
+import { Token } from 'tokens';
 import { shrinkToken } from 'utils/sdk';
 import { ethToken } from 'services/web3/config';
 import {

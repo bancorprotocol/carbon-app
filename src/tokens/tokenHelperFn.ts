@@ -1,23 +1,8 @@
 import axios from 'axios';
-import { ethToken, wethToken } from './web3/config';
+import { ethToken, wethToken } from 'services/web3/config';
 import { uniqBy } from 'lodash';
 import { utils } from 'ethers';
-
-export interface Token {
-  address: string;
-  decimals: number;
-  logoURI?: string;
-  name?: string;
-  symbol: string;
-  balance?: string;
-}
-
-export interface TokenList {
-  id: string;
-  name: string;
-  logoURI?: string;
-  tokens: Token[];
-}
+import { Token, TokenList } from 'tokens/token.types';
 
 export const listOfLists = [
   {

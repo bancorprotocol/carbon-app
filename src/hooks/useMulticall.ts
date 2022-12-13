@@ -8,7 +8,6 @@ export interface MultiCall {
   methodParameters: any[];
 }
 
-// TODO move to hooks folder
 export const useMulticall = () => {
   const { Multicall } = useContract();
 
@@ -28,7 +27,7 @@ export const useMulticall = () => {
 
       return encodedRes.map((call, i) => {
         if (!call.success) {
-          console.log(calls[i]);
+          console.log('multicall failed', calls[i]);
           throw new Error('multicall failed');
         }
 

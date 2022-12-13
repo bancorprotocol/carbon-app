@@ -3,13 +3,13 @@ import { ModalFC } from 'modals/modals.types';
 import { Switch } from 'components/Switch';
 import { orderBy } from 'lodash';
 import { useState, useMemo } from 'react';
-import { Token } from 'services/tokens';
+import { Token } from 'tokens';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { useModal } from 'modals/ModalProvider';
 import { Imager } from 'elements/Imager';
 import { SearchInput } from 'components/SearchInput';
 import { wait } from 'utils/helpers';
-import { useTokenLists } from 'queries/offChain/tokens';
+import { useTokenLists } from 'queries';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
