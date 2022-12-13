@@ -6,6 +6,7 @@ import { SelectTokens } from 'components/SelectTokens';
 import { BudgetBlock } from 'components/BudgetBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useLocation } from 'routing';
+import { Tooltip } from 'components/Tooltip';
 
 export const CreateStrategy = () => {
   const { source, target, onCTAClick, openTokenListModal, showStep2 } =
@@ -29,7 +30,10 @@ export const CreateStrategy = () => {
         Create Strategy
       </div>
       <m.div variants={items} className={'bg-secondary rounded-18 p-20'}>
-        <h2 className={'mb-20'}>Token Pair</h2>
+        <div className="mb-20 flex items-center justify-between">
+          <h2>Token Pair</h2>
+          <Tooltip>??????????</Tooltip>
+        </div>
 
         <SelectTokens
           symbol0={source.token?.symbol}
