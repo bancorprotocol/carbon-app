@@ -2,9 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
-import { Token } from 'tokens';
+import { Token, useTokens } from 'tokens';
 import { MultiCall, useMulticall } from 'hooks/useMulticall';
-import { useTokens } from 'tokens';
 
 enum ServerStateKeysEnum {
   Strategies = 'strategies',

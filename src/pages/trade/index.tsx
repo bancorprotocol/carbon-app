@@ -1,9 +1,8 @@
-import { Token } from 'tokens';
+import { Token, useTokens } from 'tokens';
 import { useCallback, useEffect, useState } from 'react';
 import { ethToken } from 'services/web3/config';
 import { TradeWidget } from './TradeWidget';
 import { Page } from 'components/Page';
-import { useTokens } from 'tokens';
 
 interface TradePageProps {
   from?: string;
