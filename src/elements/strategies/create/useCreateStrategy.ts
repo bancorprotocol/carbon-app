@@ -47,8 +47,20 @@ export const useCreate = () => {
       throw new Error('source or target tokens not set');
     }
     mutation.mutate(
-      // @ts-ignore
-      { source, target },
+      {
+        token0: {
+          balance: source.liquidity,
+          token: source.token!,
+          low: source.low,
+          high: source.high,
+        },
+        token1: {
+          balance: target.liquidity,
+          token: target.token!,
+          low: target.low,
+          high: target.high,
+        },
+      },
       {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);

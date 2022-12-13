@@ -94,3 +94,9 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
 
   return uniqBy(tokens, (token: Token) => token.address);
 };
+
+export const getMockTokenById = (id: string): Token => ({
+  address: id,
+  symbol: 'N/A',
+  decimals: 18,
+});

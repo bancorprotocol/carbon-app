@@ -4,6 +4,9 @@ import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
 import { Token, useTokens } from 'tokens';
 import { MultiCall, useMulticall } from 'hooks/useMulticall';
+import { decodeOrder } from 'utils/sdk2';
+import { shrinkToken } from 'utils/tokens';
+import { getMockTokenById } from 'tokens/tokenHelperFn';
 
 enum ServerStateKeysEnum {
   Strategies = 'strategies',
@@ -59,27 +62,36 @@ export const useGetUserStrategies = () => {
       const strategies = await PoolCollection.read.strategiesByIds(ids);
 
       return strategies.map((s) => {
-        // TODO handle token not found exception
-        const token0 = getTokenById(s.pair[0]);
-        const token1 = getTokenById(s.pair[1]);
+        // TODO future improvement: fetch symbol and decimals instead of mock token
+        const token0 = getTokenById(s.pair[0]) || getMockTokenById(s.pair[0]);
+        const token1 = getTokenById(s.pair[1]) || getMockTokenById(s.pair[1]);
+
+        const order0 = decodeOrder({ ...s.orders[0] });
+        const order1 = decodeOrder({ ...s.orders[1] });
 
         return {
           id: s.id.toNumber(),
           order0: {
-            token: token0!,
-            balance: s.orders[0].y.toString(),
-            curveCapacity: s.orders[0].z.toString(),
-            startRate: s.orders[0].A.toString(),
-            endRate: s.orders[0].B.toString(),
+            token: token0,
+            balance: shrinkToken(order0.liquidity.toString(), token0.decimals),
+            curveCapacity: shrinkToken(
+              order0.currentRate.toString(),
+              token0.decimals
+            ),
+            startRate: order0.lowestRate.toFixed(10).toString(),
+            endRate: order0.highestRate.toFixed(10).toString(),
           },
           order1: {
-            token: token1!,
-            balance: s.orders[1].y.toString(),
-            curveCapacity: s.orders[1].z.toString(),
-            startRate: s.orders[1].A.toString(),
-            endRate: s.orders[1].B.toString(),
+            token: token1,
+            balance: shrinkToken(order1.liquidity.toString(), token1.decimals),
+            curveCapacity: shrinkToken(
+              order1.currentRate.toString(),
+              token1.decimals
+            ),
+            startRate: order1.lowestRate.toFixed(10).toString(),
+            endRate: order1.highestRate.toFixed(10).toString(),
           },
-          status: StrategyStatus.OffCurve,
+          status: StrategyStatus.Normal,
           provider: s.provider,
         };
       });

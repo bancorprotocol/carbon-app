@@ -82,7 +82,18 @@ const BuySell: FC<Props> = ({ strategy }) => {
           <>
             <Section
               title={<div className="text-14 text-success-500">Buy Price</div>}
-              description={<div>????????? {strategy.order1.token.symbol}</div>}
+              description={
+                <div>
+                  <div>
+                    start rate: {strategy.order0.startRate}{' '}
+                    {strategy.order1.token.symbol}
+                  </div>
+                  <div>
+                    end rate: {strategy.order0.endRate}{' '}
+                    {strategy.order1.token.symbol}
+                  </div>
+                </div>
+              }
             />
             <hr className="border-silver dark:border-emphasis" />
             {strategy.status !== StrategyStatus.ToBeFilled && (
@@ -92,7 +103,16 @@ const BuySell: FC<Props> = ({ strategy }) => {
                     <div className="text-14 text-error-500">Sell Price</div>
                   }
                   description={
-                    <div>????????? {strategy.order1.token.symbol}</div>
+                    <div>
+                      <div>
+                        start rate: {strategy.order1.startRate}{' '}
+                        {strategy.order1.token.symbol}
+                      </div>
+                      <div>
+                        end rate: {strategy.order1.endRate}{' '}
+                        {strategy.order1.token.symbol}
+                      </div>
+                    </div>
                   }
                 />
                 <hr className="border-silver dark:border-emphasis" />
@@ -120,7 +140,11 @@ const Balances: FC<Props> = ({ strategy }) => {
                 {strategy.order0.token.symbol}
               </div>
             }
-            description={<div>????????? {strategy.order0.token.symbol}</div>}
+            description={
+              <div>
+                {strategy.order0.balance} {strategy.order0.token.symbol}
+              </div>
+            }
           />
           <hr className="border-silver dark:border-emphasis" />
           <Section
@@ -134,7 +158,11 @@ const Balances: FC<Props> = ({ strategy }) => {
                 {strategy.order1.token.symbol}
               </div>
             }
-            description={<div>????????? {strategy.order1.token.symbol}</div>}
+            description={
+              <div>
+                {strategy.order1.balance} {strategy.order1.token.symbol}
+              </div>
+            }
           />
         </>
       )}
