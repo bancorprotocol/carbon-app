@@ -4,24 +4,24 @@ import { useGetTokenBalance } from 'queries/chain/balance';
 
 export const useOrder = () => {
   const [token, setToken] = useState<Token | undefined>();
-  const [liquidity, setLiquidity] = useState('');
-  const [intercept, setIntercept] = useState('');
-  const [high, setHigh] = useState('');
-  const [low, setLow] = useState('');
+  const [budget, setBudget] = useState('');
+  const [price, setPrice] = useState('');
+  const [max, setMax] = useState('');
+  const [min, setMin] = useState('');
 
   const balanceQuery = useGetTokenBalance(token);
 
   return {
     token,
     setToken,
-    liquidity,
-    setLiquidity,
-    intercept,
-    setIntercept,
-    high,
-    setHigh,
-    low,
-    setLow,
+    budget,
+    setBudget,
+    price,
+    setPrice,
+    max,
+    setMax,
+    min,
+    setMin,
     balanceQuery,
   };
 };

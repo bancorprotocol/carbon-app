@@ -23,7 +23,7 @@ export const useCreate = () => {
       array.push({
         tokenAddress: source.token?.address,
         spenderAddress,
-        amount: source.liquidity,
+        amount: source.budget,
         decimals: source.token?.decimals,
         symbol: source.token?.symbol,
       });
@@ -32,14 +32,14 @@ export const useCreate = () => {
       array.push({
         tokenAddress: target.token?.address,
         spenderAddress,
-        amount: target.liquidity,
+        amount: target.budget,
         decimals: target.token?.decimals,
         symbol: target.token?.symbol,
       });
     }
 
     return array;
-  }, [source.liquidity, source.token, target.liquidity, target.token]);
+  }, [source.budget, source.token, target.budget, target.token]);
 
   const create = async () => {
     if (!(source && target)) {

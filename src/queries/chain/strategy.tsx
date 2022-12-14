@@ -70,7 +70,7 @@ interface CreateStrategyOrder {
   liquidity: string;
   high: string;
   low: string;
-  intercept?: string;
+  price?: string;
 }
 
 export interface CreateStrategyParams {

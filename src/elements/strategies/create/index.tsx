@@ -1,9 +1,8 @@
 import { Button } from 'components/Button';
 import { m, Variants } from 'motion';
 import { useCreate } from './useCreateStrategy';
-import { AmountInputWithButtons } from 'components/AmountInputWithButtons';
 import { SelectTokens } from 'components/SelectTokens';
-import { BudgetBlock } from 'components/BudgetBlock';
+import { BuySellBlock } from 'components/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useLocation } from 'routing';
 import { Tooltip } from 'components/Tooltip';
@@ -44,72 +43,41 @@ export const CreateStrategy = () => {
           onClick1={() => openTokenListModal('target')}
         />
       </m.div>
-      {showStep2 && (
+      {showStep2 && source.token && target.token && (
         <>
-          <m.div
-            variants={items}
-            className={'bg-secondary space-y-20 rounded-18 p-20'}
-          >
-            <h2>Buy</h2>
-
-            <div className={'flex space-x-4'}>
-              <div className={'bg-body rounded-l-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${source.token?.symbol} for ${target.token?.symbol}`}
-                  amount={source.low}
-                  setAmount={source.setLow}
-                />
-              </div>
-              <div className={'bg-body rounded-r-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${source.token?.symbol} for ${target.token?.symbol}`}
-                  amount={source.high}
-                  setAmount={source.setHigh}
-                />
-              </div>
-            </div>
-
-            <h2>Sell</h2>
-
-            <div className={'flex space-x-4'}>
-              <div className={'bg-body rounded-l-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${target.token?.symbol} for ${source.token?.symbol}`}
-                  amount={target.low}
-                  setAmount={target.setLow}
-                />
-              </div>
-              <div className={'bg-body rounded-r-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${target.token?.symbol} for ${source.token?.symbol}`}
-                  amount={target.high}
-                  setAmount={target.setHigh}
-                />
-              </div>
-            </div>
-          </m.div>
-
-          <m.div
-            variants={items}
-            className={'bg-secondary space-y-10 rounded-18 p-20'}
-          >
-            <h2 className={'mb-20'}>Budget</h2>
-
-            <BudgetBlock
-              symbol={source.token?.symbol}
-              logoURI={source.token?.logoURI}
-              amount={source.liquidity}
-              setAmount={source.setLiquidity}
+          <m.div variants={items}>
+            <BuySellBlock
+              title="Buy"
+              buyToken={source.token}
+              sellToken={target.token}
               balance={source.balanceQuery.data}
               isBalanceLoading={source.balanceQuery.isLoading}
+              price={source.price}
+              setPrice={source.setPrice}
+              budget={source.budget}
+              setBudget={source.setBudget}
+              min={source.min}
+              setMin={source.setMin}
+              max={source.max}
+              setMax={source.setMax}
             />
-            <BudgetBlock
-              symbol={target.token?.symbol}
-              logoURI={target.token?.logoURI}
-              amount={target.liquidity}
-              setAmount={target.setLiquidity}
+          </m.div>
+
+          <m.div variants={items}>
+            <BuySellBlock
+              title="Sell"
+              buyToken={source.token}
+              sellToken={target.token}
               balance={target.balanceQuery.data}
               isBalanceLoading={target.balanceQuery.isLoading}
+              price={target.price}
+              setPrice={target.setPrice}
+              budget={target.budget}
+              setBudget={target.setBudget}
+              min={target.min}
+              setMin={target.setMin}
+              max={target.max}
+              setMax={target.setMax}
             />
           </m.div>
 
