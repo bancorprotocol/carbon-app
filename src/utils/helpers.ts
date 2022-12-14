@@ -1,3 +1,6 @@
+import { BigNumber } from 'bignumber.js';
+import numeral from 'numeral';
+
 export const uuid = () => {
   return 'xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0,
@@ -35,6 +38,42 @@ export const shortenString = (
   const end = string.substring(string.length - startEndLength, string.length);
   return start + separator + end;
 };
+
+export function prettifyNumber(num: number | string | BigNumber): string;
+
+export function prettifyNumber(
+  num: number | string | BigNumber,
+  usd: boolean
+): string;
+
+export function prettifyNumber(
+  num: number | string | BigNumber,
+  options?: { usd?: boolean; abbreviate?: boolean }
+): string;
+
+export function prettifyNumber(
+  num: number | string | BigNumber,
+  optionsOrUsd?: { usd?: boolean; abbreviate?: boolean } | boolean
+): string {
+  let usd;
+  if (optionsOrUsd === undefined) usd = false;
+  else if (typeof optionsOrUsd === 'boolean') usd = optionsOrUsd;
+  else usd = optionsOrUsd.usd;
+
+  const bigNum = new BigNumber(num);
+  if (usd) {
+    if (bigNum.lte(0)) return '$0.00';
+    if (bigNum.lt(0.01)) return '< $0.01';
+    if (bigNum.gt(100)) return numeral(bigNum).format('$0,0', Math.floor);
+    return numeral(bigNum).format('$0,0.00', Math.floor);
+  }
+
+  if (bigNum.lte(0)) return '0';
+  if (bigNum.gte(1000)) return numeral(bigNum).format('0,0', Math.floor);
+  if (bigNum.gte(2)) return numeral(bigNum).format('0,0.[00]', Math.floor);
+  if (bigNum.lt(0.000001)) return '< 0.000001';
+  return numeral(bigNum).format('0.[000000]', Math.floor);
+}
 
 export const wait = async (ms: number = 0) =>
   new Promise((resolve) => setTimeout(resolve, ms));
