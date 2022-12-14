@@ -1,4 +1,4 @@
-import { Token } from 'services/tokens';
+import { Token } from 'tokens';
 import { Imager } from 'elements/Imager';
 
 export const TokensOverlap = ({
