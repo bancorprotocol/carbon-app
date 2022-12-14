@@ -8,15 +8,15 @@ export const toStrategy = ({ token0, token1 }: CreateStrategyParams) => {
 
   const order0 = encodeOrder({
     currentRate: new Decimal(token0Balance),
-    highestRate: new Decimal(token0.high),
-    lowestRate: new Decimal(token0.low),
+    lowestRate: new Decimal(token0.min),
+    highestRate: new Decimal(token0.max),
     liquidity: BigNumber.from(token0Balance),
   });
 
   const order1 = encodeOrder({
     currentRate: new Decimal(token1Balance),
-    highestRate: new Decimal(token1.high),
-    lowestRate: new Decimal(token1.low),
+    lowestRate: new Decimal(token1.min),
+    highestRate: new Decimal(token1.max),
     liquidity: BigNumber.from(token1Balance),
   });
 

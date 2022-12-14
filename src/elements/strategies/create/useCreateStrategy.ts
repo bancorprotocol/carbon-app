@@ -52,14 +52,16 @@ export const useCreate = () => {
         token0: {
           balance: source.budget,
           token: source.token!,
-          low: source.min,
-          high: source.max,
+          min: source.min,
+          max: source.max,
+          price: source.price,
         },
         token1: {
           balance: target.budget,
           token: target.token!,
-          low: target.min,
-          high: target.max,
+          min: target.min,
+          max: target.max,
+          price: target.price,
         },
       },
       {
