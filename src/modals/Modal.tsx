@@ -16,7 +16,7 @@ export const Modal: FC<Props> = ({
   title,
   showCloseButton = true,
 }) => {
-  const { closeModal, minimizeModal } = useModal();
+  const { closeModal } = useModal();
 
   return (
     <m.div
@@ -38,18 +38,6 @@ export const Modal: FC<Props> = ({
         <div className="relative flex w-full flex-col rounded-16 border-0 bg-white p-30 outline-none focus:outline-none dark:bg-black">
           <div className={'flex justify-between'}>
             <div>{typeof title === 'string' ? <h2>{title}</h2> : title}</div>
-
-            <div>
-              {showCloseButton ? (
-                <button
-                  className={'rotate-90 text-30'}
-                  onClick={() => minimizeModal(id)}
-                >
-                  {'>'}
-                </button>
-              ) : null}
-            </div>
-
             <div>
               {showCloseButton ? (
                 <button className={''} onClick={() => closeModal(id)}>
