@@ -21,10 +21,10 @@ export const StrategiesPage = () => {
   const filteredStrategies = useMemo(() => {
     return strategies?.filter(
       (strategy) =>
-        strategy.tokens.source.symbol
+        strategy.order0.token.symbol
           .toLowerCase()
           .includes(search.toLowerCase()) ||
-        strategy.tokens.target.symbol
+        strategy.order1.token.symbol
           .toLowerCase()
           .includes(search.toLowerCase())
     );
