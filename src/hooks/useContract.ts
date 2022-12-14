@@ -4,12 +4,14 @@ import {
   PoolCollection__factory,
   BancorNetwork__factory,
   Voucher__factory,
+  Multicall__factory,
 } from 'abis/types';
 import { useCallback, useMemo } from 'react';
 
 import PoolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import BancorNetworkProxyAbi from 'abis/BancorNetwork_Proxy.json';
 import VoucherAbi from 'abis/Voucher.json';
+import { multicallAddress } from 'services/web3/config';
 
 export const useContract = () => {
   const { provider, signer } = useWeb3();
@@ -58,5 +60,13 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  return { Token, PoolCollection, BancorNetwork, Voucher };
+  const Multicall = useMemo(
+    () => ({
+      read: Multicall__factory.connect(multicallAddress, provider!),
+      write: Multicall__factory.connect(multicallAddress, signer!),
+    }),
+    [provider, signer]
+  );
+
+  return { Token, PoolCollection, BancorNetwork, Voucher, Multicall };
 };

@@ -1,10 +1,9 @@
 import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Imager } from 'elements/Imager';
-import { Token } from 'services/tokens';
+import { Token, useTokens } from 'tokens';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'modals';
-import { useTokens } from 'queries';
 
 export interface TokenInputProps {
   token?: Token;

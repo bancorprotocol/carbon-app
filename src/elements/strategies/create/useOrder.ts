@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Token } from 'services/tokens';
+import { Token } from 'tokens';
 import { useGetTokenBalance } from 'queries/chain/balance';
 
 export const useOrder = () => {

@@ -1,23 +1,8 @@
 import axios from 'axios';
-import { ethToken, wethToken } from './web3/config';
+import { ethToken, wethToken } from 'services/web3/config';
 import { uniqBy } from 'lodash';
 import { utils } from 'ethers';
-
-export interface Token {
-  address: string;
-  decimals: number;
-  logoURI?: string;
-  name?: string;
-  symbol: string;
-  balance?: string;
-}
-
-export interface TokenList {
-  id: string;
-  name: string;
-  logoURI?: string;
-  tokens: Token[];
-}
+import { Token, TokenList } from 'tokens/token.types';
 
 export const listOfLists = [
   {
@@ -77,12 +62,7 @@ export const fetchTokenLists = async () => {
   return res.filter((x) => !!x) as TokenList[];
 };
 
-export const tokenList = async () => {
-  const res = await fetchTokenLists();
-  return buildTokenList(res);
-};
-
-const buildTokenList = (tokenList: TokenList[]): Token[] => {
+export const buildTokenList = (tokenList: TokenList[]): Token[] => {
   const tokens: Token[] = [
     {
       symbol: 'ETH',
@@ -114,3 +94,9 @@ const buildTokenList = (tokenList: TokenList[]): Token[] => {
 
   return uniqBy(tokens, (token: Token) => token.address);
 };
+
+export const getMockTokenById = (id: string): Token => ({
+  address: id,
+  symbol: 'N/A',
+  decimals: 18,
+});

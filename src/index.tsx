@@ -11,6 +11,7 @@ import { NotificationProvider } from 'notifications/NotificationsProvider';
 import { Router } from 'routing';
 import { LazyMotion } from 'motion';
 import { QueryProvider } from 'queries';
+import { TokensProvider } from 'tokens';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,17 +19,19 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <LazyMotion>
-      <NotificationProvider>
-        <Web3ReactWrapper>
-          <QueryProvider>
-            <Router>
-              <ModalProvider>
-                <App />
-              </ModalProvider>
-            </Router>
-          </QueryProvider>
-        </Web3ReactWrapper>
-      </NotificationProvider>
+      <QueryProvider>
+        <TokensProvider>
+          <NotificationProvider>
+            <Web3ReactWrapper>
+              <Router>
+                <ModalProvider>
+                  <App />
+                </ModalProvider>
+              </Router>
+            </Web3ReactWrapper>
+          </NotificationProvider>
+        </TokensProvider>
+      </QueryProvider>
     </LazyMotion>
   </React.StrictMode>
 );

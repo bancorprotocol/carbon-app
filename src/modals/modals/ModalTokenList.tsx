@@ -3,12 +3,11 @@ import { ModalFC } from 'modals/modals.types';
 import { Switch } from 'components/Switch';
 import { orderBy } from 'lodash';
 import { useState, useMemo } from 'react';
-import { Token } from 'services/tokens';
+import { Token, useTokens } from 'tokens';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { useModal } from 'modals/ModalProvider';
 import { Imager } from 'elements/Imager';
 import { SearchInput } from 'components/SearchInput';
-import { useTokenLists } from 'queries';
 import { wait } from 'utils/helpers';
 
 export type ModalTokenListData = {
@@ -33,7 +32,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   const [search, setSearch] = useState('');
   const [manage, setManage] = useState(false);
   const [userPreferredListIds, setUserLists] = useState(['']);
-  const { tokenLists } = useTokenLists();
+  const { tokenLists } = useTokens();
 
   const onClose = async () => {
     closeModal(id);
