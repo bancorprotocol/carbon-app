@@ -68,6 +68,7 @@ export const CreateStrategy = () => {
               setMin={source.setMin}
               max={source.max}
               setMax={source.setMax}
+              buy
             />
           </m.div>
 

@@ -4,6 +4,7 @@ import { Button } from 'components/Button';
 import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
+import { Imager } from 'elements/Imager';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -13,7 +14,7 @@ type Props = {
 
 export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   const mutation = useSetUserApproval();
-  const [isUnlimited, setIsUnlimited] = useState(true);
+  const [isLimited, setIsLimited] = useState(false);
 
   // TODO handle error
   if (!data) {
@@ -31,8 +32,12 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     >
       <div className={'space-y-6'}>
         <div className={'flex items-center space-x-10'}>
-          <div className={'bg-secondary h-30 w-30 rounded-full'} />
-          <div>{data.symbol}</div>
+          <Imager
+            alt={'Token'}
+            src={data.token.logoURI}
+            className={'h-30 w-30 rounded-full'}
+          />
+          <div>{data.token.symbol}</div>
         </div>
         {data.approvalRequired ? (
           <>
@@ -47,25 +52,35 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
 
       {data.approvalRequired ? (
         mutation.isLoading ? (
-          <div>please wait</div>
+          <div>Approving...</div>
         ) : (
           <div className={'flex h-82 flex-col items-end justify-between'}>
             <div className={'flex items-center space-x-8'}>
-              <div className={'text-secondary'}>Unlimited</div>
+              <div
+                className={`!text-12 ${
+                  isLimited ? 'text-white' : 'text-secondary'
+                }`}
+              >
+                Limited
+              </div>
               <Switch
                 variant={'tertiary'}
-                isOn={isUnlimited}
-                setIsOn={setIsUnlimited}
+                isOn={isLimited}
+                setIsOn={setIsLimited}
                 size={'sm'}
               />
             </div>
-            <Button onClick={() => mutation.mutate(data)} size={'sm'}>
-              Confirm
+            <Button
+              variant={'secondary'}
+              onClick={() => mutation.mutate(data)}
+              size={'sm'}
+            >
+              Approve
             </Button>
           </div>
         )
       ) : (
-        <div className={'text-success-500'}>approved</div>
+        <div className={'text-success-500'}>Approved</div>
       )}
 
       {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}

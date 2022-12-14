@@ -18,6 +18,7 @@ type Props = {
   sellToken: Token;
   balance?: string;
   isBalanceLoading: boolean;
+  buy?: boolean;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -34,6 +35,7 @@ export const BuySellBlock: FC<Props> = ({
   sellToken,
   balance,
   isBalanceLoading,
+  buy,
 }) => {
   const [isRange, setIsRange] = useState(true);
 
@@ -44,7 +46,7 @@ export const BuySellBlock: FC<Props> = ({
           {title}{' '}
           <Imager
             alt={'Token'}
-            src={buyToken.logoURI}
+            src={buy ? buyToken.logoURI : sellToken.logoURI}
             className={'h-18 w-18 rounded-full'}
           />
         </div>
@@ -90,7 +92,7 @@ export const BuySellBlock: FC<Props> = ({
         title={title}
         budget={budget}
         setBudget={setBudget}
-        buyToken={buyToken}
+        buyToken={buy ? buyToken : sellToken}
         balance={balance}
         isBalanceLoading={isBalanceLoading}
       />
