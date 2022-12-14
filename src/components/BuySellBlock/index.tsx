@@ -49,8 +49,21 @@ export const BuySellBlock: FC<Props> = ({
           />
         </div>
 
-        <div className="flex items-center gap-10">
-          Limit, Range
+        <div className="flex items-center gap-10 text-14">
+          <div className="bg-body flex items-center rounded-[100px] p-2">
+            <button
+              onClick={() => setIsRange(!isRange)}
+              className={`rounded-40 ${!isRange ? 'bg-silver' : ''} px-10 py-4`}
+            >
+              Limit
+            </button>
+            <button
+              onClick={() => setIsRange(!isRange)}
+              className={`rounded-40 ${isRange ? 'bg-silver' : ''} px-10 py-4`}
+            >
+              Range
+            </button>
+          </div>
           <Tooltip>??????</Tooltip>
         </div>
       </div>
@@ -98,7 +111,6 @@ const InputLimit: FC<{
       </div>
       <input
         value={price}
-        size={1}
         onChange={(e) => setPrice(e.target.value)}
         placeholder={`Amount (${sellToken.symbol})`}
         className={'w-full shrink bg-transparent focus:outline-none'}
@@ -123,7 +135,6 @@ const InputRange: FC<{
         </div>
         <input
           value={min}
-          size={1}
           onChange={(e) => setMin(e.target.value)}
           placeholder="Price"
           className={'w-full bg-transparent focus:outline-none'}
@@ -136,7 +147,6 @@ const InputRange: FC<{
           </div>
           <input
             value={max}
-            size={1}
             onChange={(e) => setMax(e.target.value)}
             placeholder={`Price`}
             className={'w-full bg-transparent focus:outline-none'}
