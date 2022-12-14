@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { Imager } from 'elements/Imager';
 import { prettifyNumber } from 'utils/helpers';
-import { Token } from 'services/tokens';
 import { Tooltip } from 'components/Tooltip';
+import { Token } from 'tokens';
 
 type Props = {
   title: string;

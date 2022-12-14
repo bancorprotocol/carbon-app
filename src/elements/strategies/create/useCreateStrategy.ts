@@ -49,16 +49,16 @@ export const useCreate = () => {
     mutation.mutate(
       {
         token0: {
-          balance: source.liquidity,
+          balance: source.budget,
           token: source.token!,
-          low: source.low,
-          high: source.high,
+          low: source.min,
+          high: source.max,
         },
         token1: {
-          balance: target.liquidity,
+          balance: target.budget,
           token: target.token!,
-          low: target.low,
-          high: target.high,
+          low: target.min,
+          high: target.max,
         },
       },
       {
