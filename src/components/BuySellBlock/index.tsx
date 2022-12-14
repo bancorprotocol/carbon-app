@@ -85,7 +85,7 @@ export const BuySellBlock: FC<Props> = ({
   );
 };
 
-export const InputLimit: FC<{
+const InputLimit: FC<{
   buyToken: Token;
   sellToken: Token;
   price: string;
@@ -107,7 +107,7 @@ export const InputLimit: FC<{
   );
 };
 
-export const InputRange: FC<{
+const InputRange: FC<{
   buyToken: Token;
   sellToken: Token;
   min: string;

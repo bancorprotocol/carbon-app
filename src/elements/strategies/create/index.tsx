@@ -6,10 +6,18 @@ import { BuySellBlock } from 'components/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useLocation } from 'routing';
 import { Tooltip } from 'components/Tooltip';
+import { FC } from 'react';
 
 export const CreateStrategy = () => {
-  const { source, target, onCTAClick, openTokenListModal, showStep2 } =
-    useCreate();
+  const {
+    source,
+    target,
+    name,
+    setName,
+    onCTAClick,
+    openTokenListModal,
+    showStep2,
+  } = useCreate();
   const location = useLocation();
 
   return (
@@ -82,6 +90,10 @@ export const CreateStrategy = () => {
           </m.div>
 
           <m.div variants={items}>
+            <NameBlock name={name} setName={setName} />
+          </m.div>
+
+          <m.div variants={items}>
             <Button
               variant={'secondary'}
               size={'lg'}
@@ -122,4 +134,32 @@ const items: Variants = {
     opacity: 0,
     scale: 0.8,
   },
+};
+
+export const NameBlock: FC<{
+  name: string;
+  setName: (value: string) => void;
+}> = ({ name, setName }) => {
+  return (
+    <div className={'bg-secondary space-y-10 rounded-18 p-20'}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-8 text-18">
+          Strategy Name
+          <div className="text-secondary">Optional</div>
+        </div>
+
+        <Tooltip>??????</Tooltip>
+      </div>
+
+      <div className="bg-body rounded-14 p-16">
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Eg. Carbon Strategy"
+          className={'mb-8 w-full bg-transparent focus:outline-none'}
+        />
+        <div className="text-secondary !text-10">32 Characters Max</div>
+      </div>
+    </div>
+  );
 };

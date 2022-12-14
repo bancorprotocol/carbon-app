@@ -1,6 +1,6 @@
 import { useOrder } from './useOrder';
 import { useCreateStrategy } from 'queries';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
@@ -14,6 +14,7 @@ export const useCreate = () => {
   const { tokens } = useTokens();
   const source = useOrder();
   const target = useOrder();
+  const [name, setName] = useState('');
   const mutation = useCreateStrategy();
 
   const showStep2 = !!source.token && !!target.token;
@@ -97,6 +98,8 @@ export const useCreate = () => {
   return {
     source,
     target,
+    name,
+    setName,
     onCTAClick,
     openTokenListModal,
     showStep2,
