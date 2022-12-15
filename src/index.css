@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  html, body {
-    @apply min-h-screen;
-  }
-
   html,
   body,
   #root {
@@ -28,7 +24,7 @@
 
 @layer utilities {
   .bg-body {
-    @apply bg-white dark:bg-black;
+    @apply dark:bg-black;
   }
 
   .bg-content {
