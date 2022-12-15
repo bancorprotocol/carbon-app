@@ -7,11 +7,7 @@ import {
   Multicall__factory,
 } from 'abis/types';
 import { useCallback, useMemo } from 'react';
-
-import PoolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
-import BancorNetworkProxyAbi from 'abis/BancorNetwork_Proxy.json';
-import VoucherAbi from 'abis/Voucher.json';
-import { multicallAddress } from 'services/web3/config';
+import { ADDRESS_DICT } from 'services/web3/config';
 
 export const useContract = () => {
   const { provider, signer } = useWeb3();
@@ -27,11 +23,11 @@ export const useContract = () => {
   const PoolCollection = useMemo(
     () => ({
       read: PoolCollection__factory.connect(
-        PoolCollectionProxyAbi.address,
+        ADDRESS_DICT.carbon.poolCollection,
         provider!
       ),
       write: PoolCollection__factory.connect(
-        PoolCollectionProxyAbi.address,
+        ADDRESS_DICT.carbon.poolCollection,
         signer!
       ),
     }),
@@ -41,11 +37,11 @@ export const useContract = () => {
   const BancorNetwork = useMemo(
     () => ({
       read: BancorNetwork__factory.connect(
-        BancorNetworkProxyAbi.address,
+        ADDRESS_DICT.carbon.bancorNetwork,
         provider!
       ),
       write: BancorNetwork__factory.connect(
-        BancorNetworkProxyAbi.address,
+        ADDRESS_DICT.carbon.bancorNetwork,
         signer!
       ),
     }),
@@ -54,16 +50,16 @@ export const useContract = () => {
 
   const Voucher = useMemo(
     () => ({
-      read: Voucher__factory.connect(VoucherAbi.address, provider!),
-      write: Voucher__factory.connect(VoucherAbi.address, signer!),
+      read: Voucher__factory.connect(ADDRESS_DICT.carbon.voucher, provider!),
+      write: Voucher__factory.connect(ADDRESS_DICT.carbon.voucher, signer!),
     }),
     [provider, signer]
   );
 
   const Multicall = useMemo(
     () => ({
-      read: Multicall__factory.connect(multicallAddress, provider!),
-      write: Multicall__factory.connect(multicallAddress, signer!),
+      read: Multicall__factory.connect(ADDRESS_DICT.utils.multicall, provider!),
+      write: Multicall__factory.connect(ADDRESS_DICT.utils.multicall, signer!),
     }),
     [provider, signer]
   );
