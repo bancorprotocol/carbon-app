@@ -8,7 +8,7 @@ import {
   NotificationType,
   useNotifications,
 } from 'notifications/NotificationsProvider';
-import { QueryKey } from '../queryKey.service';
+import { QueryKey } from '../queryKey';
 
 export const useGetTokenBalance = (
   token?: Pick<Token, 'address' | 'decimals'>

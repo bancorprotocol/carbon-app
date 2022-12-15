@@ -7,7 +7,7 @@ import { MultiCall, useMulticall } from 'hooks/useMulticall';
 import { decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
 import { getMockTokenById } from 'tokens/tokenHelperFn';
-import { QueryKey } from '../queryKey.service';
+import { QueryKey } from '../queryKey';
 
 export enum StrategyStatus {
   Normal,
