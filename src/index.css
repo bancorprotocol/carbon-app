@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html, body {
+    @apply min-h-screen;
+  }
+
   html,
   body,
   #root {
