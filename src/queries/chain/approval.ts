@@ -4,10 +4,7 @@ import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
 import BigNumber from 'bignumber.js';
-
-export enum ServerStateKeysEnum {
-  Approval = 'approval',
-}
+import { QueryKey } from '../queryKey';
 
 export type GetUserApprovalProps = {
   tokenAddress: string;
@@ -21,13 +18,11 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
   return useQueries({
     queries: data.map((t) => ({
-      queryKey: [
-        ServerStateKeysEnum.Approval,
-        t.tokenAddress,
-        t.spenderAddress,
-        user,
-      ],
+      queryKey: QueryKey.approval(user!, t.tokenAddress, t.spenderAddress),
       queryFn: async () => {
+        if (!user) {
+          throw new Error('useGetUserApproval no user provided');
+        }
         if (!t.tokenAddress) {
           throw new Error('useGetUserApproval no tokenAddress provided');
         }
@@ -36,13 +31,12 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
         }
 
         const allowance = await Token(t.tokenAddress).read.allowance(
-          user!,
+          user,
           t.spenderAddress
         );
 
         return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
       },
-      enabled: !!user,
     })),
   });
 };
@@ -63,14 +57,17 @@ export const useSetUserApproval = () => {
       amount,
       decimals,
     }: SetUserApprovalProps) => {
+      if (!user) {
+        throw new Error('useSetUserApproval no user provided');
+      }
       if (!tokenAddress) {
-        throw new Error('useGetUserApproval no tokenAddress provided');
+        throw new Error('useSetUserApproval no tokenAddress provided');
       }
       if (!spenderAddress) {
-        throw new Error('useGetUserApproval no spenderAddress provided');
+        throw new Error('useSetUserApproval no spenderAddress provided');
       }
       if (parseFloat(amount) < 0) {
-        throw new Error('useGetUserApproval negative amount provided');
+        throw new Error('useSetUserApproval negative amount provided');
       }
 
       const amountWei = expandToken(amount, decimals);
@@ -80,7 +77,7 @@ export const useSetUserApproval = () => {
 
       if (isNullApprovalContract) {
         const allowanceWei = await Token(tokenAddress).read.allowance(
-          user!,
+          user,
           spenderAddress
         );
         if (allowanceWei.gt(0)) {
@@ -96,19 +93,27 @@ export const useSetUserApproval = () => {
         }
       }
 
-      return Token(tokenAddress).write.approve(spenderAddress, amountWei, {
-        // TODO fix GAS limit
-        gasLimit: '99999999999999999',
-      });
+      const tx = await Token(tokenAddress).write.approve(
+        spenderAddress,
+        amountWei,
+        {
+          // TODO fix GAS limit
+          gasLimit: '99999999999999999',
+        }
+      );
+
+      await tx.wait();
+      return tx;
     },
     {
       onSuccess: (data, variables) =>
-        cache.invalidateQueries([
-          ServerStateKeysEnum.Approval,
-          variables.tokenAddress,
-          variables.spenderAddress,
-          user,
-        ]),
+        cache.invalidateQueries({
+          queryKey: QueryKey.approval(
+            user!,
+            variables.tokenAddress,
+            variables.spenderAddress
+          ),
+        }),
       onError: () => {
         // TODO: proper error handling
         console.error('could not set approval');
