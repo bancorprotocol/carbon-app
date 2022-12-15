@@ -1,4 +1,5 @@
 import { PathNames } from 'routing';
+import { IS_TENDERLY_FORK } from 'web3/web3.constants';
 
 export interface MenuItem {
   label: string;
@@ -7,15 +8,19 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   {
-    label: 'Strategies',
-    href: PathNames.strategies,
-  },
-  {
     label: 'Trade',
     href: PathNames.trade,
   },
   {
-    label: 'Debug',
-    href: PathNames.debug,
+    label: 'Strategies',
+    href: PathNames.strategies,
   },
+  ...(IS_TENDERLY_FORK
+    ? [
+        {
+          label: 'Debug',
+          href: PathNames.debug,
+        },
+      ]
+    : []),
 ];

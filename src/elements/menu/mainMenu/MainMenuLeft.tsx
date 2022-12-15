@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { menuItems } from 'elements/menu';
 import { Link } from 'routing';
-import { DropdownMenu } from 'components/DropdownMenu';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 
 export const MainMenuLeft: FC = () => {
@@ -15,16 +14,6 @@ export const MainMenuLeft: FC = () => {
           </Link>
         ))}
       </div>
-      <DropdownMenu button={'Menu'}>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-      </DropdownMenu>
     </div>
   );
 };
