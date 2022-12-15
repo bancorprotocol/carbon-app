@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { buildTokenList, fetchTokenLists } from 'tokens';
 import { QueryKey } from '../queryKey';
+import { ONE_DAY_IN_MS } from 'utils/time';
 
 export const useTokenLists = () =>
   useQuery(QueryKey.tokenLists(), fetchTokenLists, {
-    staleTime: 24 * 60 * 60 * 1000,
+    staleTime: ONE_DAY_IN_MS,
   });
 
 export const useTokensQuery = () => {
@@ -13,7 +14,7 @@ export const useTokensQuery = () => {
     QueryKey.tokens(),
     () => buildTokenList(tokenListQuery.data!),
     {
-      staleTime: 24 * 60 * 60 * 1000,
+      staleTime: ONE_DAY_IN_MS,
       enabled: !!tokenListQuery.data?.length,
     }
   );
