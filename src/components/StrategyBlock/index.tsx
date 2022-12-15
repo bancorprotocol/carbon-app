@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Order, Strategy, StrategyStatus } from 'queries';
 import { m, mItemVariant } from 'motion';
 import { TokensOverlap } from 'components/TokensOverlap';
@@ -6,9 +6,13 @@ import { Imager } from 'elements/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRangeGraph } from 'assets/icons/rangeGraph.svg';
 import { ReactComponent as IconPriceGraph } from 'assets/icons/priceGraph.svg';
+import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
+import { Button } from 'components/Button';
+import { DropdownMenu } from 'components/DropdownMenu';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = String(strategy.id).padStart(9, '0');
+  const [manage, setManage] = useState(false);
   return (
     <m.div
       variants={mItemVariant}
@@ -53,6 +57,47 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <BuySell title="Buy" order={strategy.order0} />
       <BuySell title="Sell" order={strategy.order1} />
       <OrderStatus status={strategy.status} />
+      <DropdownMenu
+        isOpen={manage}
+        setIsOpen={setManage}
+        button={
+          <Button
+            className="flex items-center justify-center gap-8"
+            size={'md'}
+            fullWidth
+            variant={'secondary'}
+          >
+            Manage
+            <IconArrowDown className="w-12" />
+          </Button>
+        }
+        className="w-full !p-10"
+      >
+        <div
+          onClick={() => {
+            setManage(false);
+          }}
+          className="hover:bg-body cursor-pointer rounded-6 p-12"
+        >
+          Edit Strategy Name
+        </div>
+        <div
+          onClick={() => {
+            setManage(false);
+          }}
+          className="hover:bg-body cursor-pointer rounded-6 p-12"
+        >
+          Withdraw Funds
+        </div>
+        <div
+          onClick={() => {
+            setManage(false);
+          }}
+          className="hover:bg-body cursor-pointer rounded-6 p-12"
+        >
+          Delete Strategy
+        </div>
+      </DropdownMenu>
     </m.div>
   );
 };
