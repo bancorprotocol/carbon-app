@@ -2,6 +2,7 @@ import { DebugPage } from 'pages/debug';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
+import { isProduction } from 'utils/helpers';
 
 export const PathNames = {
   strategies: '/',
@@ -20,11 +21,15 @@ export const routes = [
     element: <TradePage />,
   },
   {
-    path: PathNames.debug,
-    element: <DebugPage />,
-  },
-  {
     path: PathNames.createStrategy,
     element: <CreateStrategyPage />,
   },
+  ...(isProduction
+    ? []
+    : [
+        {
+          path: PathNames.debug,
+          element: <DebugPage />,
+        },
+      ]),
 ];
