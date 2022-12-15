@@ -1,22 +1,20 @@
-export abstract class QueryKey {
-  private static _chain = ['chain'];
-  private static _extAPI = ['ext-api'];
+const _chain = ['chain'];
+const _extAPI = ['ext-api'];
 
-  static tokenLists = () => [...this._extAPI, 'token-lists'];
-  static tokens = () => [...this._extAPI, 'tokens'];
-
-  static strategies = (user?: string) => [...this._chain, 'strategies', user];
-
-  static approval = (user: string, token: string, spender: string) => [
-    ...this._chain,
+export namespace QueryKey {
+  export const tokenLists = () => [..._extAPI, 'token-lists'];
+  export const tokens = () => [..._extAPI, 'tokens'];
+  export const strategies = (user?: string) => [..._chain, 'strategies', user];
+  export const approval = (user: string, token: string, spender: string) => [
+    ..._chain,
     'approval',
     user,
     token,
     spender,
   ];
 
-  static balance = (user: string, token: string) => [
-    ...this._chain,
+  export const balance = (user: string, token: string) => [
+    ..._chain,
     'balance',
     user,
     token,
