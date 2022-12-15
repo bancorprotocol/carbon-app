@@ -1,4 +1,4 @@
-import { Interface } from '@ethersproject/abi';
+import { Interface, Result } from '@ethersproject/abi';
 import { useContract } from 'hooks/useContract';
 
 export interface MultiCall {
@@ -11,7 +11,10 @@ export interface MultiCall {
 export const useMulticall = () => {
   const { Multicall } = useContract();
 
-  const fetchMulticall = async (calls: MultiCall[], blockHeight?: number) => {
+  const fetchMulticall = async (
+    calls: MultiCall[],
+    blockHeight?: number
+  ): Promise<Result[]> => {
     try {
       const encoded = calls.map((call) => ({
         target: call.contractAddress,

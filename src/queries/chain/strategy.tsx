@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Result } from '@ethersproject/abi';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
@@ -13,11 +14,10 @@ enum ServerStateKeysEnum {
 }
 
 export enum StrategyStatus {
-  Normal,
-  ToBeFilled,
-  Completed,
-  NoAllocation,
+  Active,
+  NoBudget,
   OffCurve,
+  Inactive,
 }
 
 interface Order {
@@ -34,6 +34,7 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   provider: string;
+  name?: string;
 }
 
 export const useGetUserStrategies = () => {
@@ -57,7 +58,7 @@ export const useGetUserStrategies = () => {
         })
       );
       const mcResult = await fetchMulticall(calls);
-      const ids = mcResult.map((id) => id[0]);
+      const ids = mcResult.map((id: Result) => id[0]);
 
       const strategies = await PoolCollection.read.strategiesByIds(ids);
 
@@ -91,7 +92,7 @@ export const useGetUserStrategies = () => {
             startRate: order1.lowestRate.toString(),
             endRate: order1.highestRate.toString(),
           },
-          status: StrategyStatus.Normal,
+          status: StrategyStatus.Active,
           provider: s.provider,
         };
       });
