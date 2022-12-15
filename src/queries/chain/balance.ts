@@ -8,10 +8,7 @@ import {
   NotificationType,
   useNotifications,
 } from 'notifications/NotificationsProvider';
-
-enum ServerStateKeysEnum {
-  Balance = 'balance',
-}
+import { QueryKey } from '../queryKey.service';
 
 export const useGetTokenBalance = (
   token?: Pick<Token, 'address' | 'decimals'>
@@ -23,18 +20,31 @@ export const useGetTokenBalance = (
   const { user, provider } = useWeb3();
 
   return useQuery(
-    [ServerStateKeysEnum.Balance, user, address],
+    QueryKey.balance(user!, address!),
     async () => {
+      if (!user) {
+        throw new Error('useGetTokenBalance no user provided');
+      }
+      if (!provider) {
+        throw new Error('useGetTokenBalance no provider provided');
+      }
+      if (!address) {
+        throw new Error('useGetTokenBalance no token address provided');
+      }
+      if (!decimals) {
+        throw new Error('useGetTokenBalance no token decimals provided');
+      }
+
       if (address === ethToken) {
-        const res = await provider!.getBalance(user!);
+        const res = await provider.getBalance(user!);
         return shrinkToken(res.toString(), 18);
       } else {
-        const res = await Token(address!).read.balanceOf(user!);
-        return shrinkToken(res.toString(), decimals!);
+        const res = await Token(address).read.balanceOf(user);
+        return shrinkToken(res.toString(), decimals);
       }
     },
     {
-      enabled: !!user && !!provider && !!token,
+      enabled: !!user && !!address && !!decimals && !!provider,
       onError: (e: any) => {
         console.error('useGetTokenBalance failed with error:', e);
         dispatchNotification({
@@ -52,20 +62,36 @@ export const useGetTokenBalances = (
 ) => {
   const { Token } = useContract();
   const { user, provider } = useWeb3();
+  const { dispatchNotification } = useNotifications();
 
   return useQueries({
     queries: tokens.map(({ address, decimals }) => ({
-      queryKey: [ServerStateKeysEnum.Balance, user, address],
+      queryKey: QueryKey.balance(user!, address),
       queryFn: async () => {
+        if (!user) {
+          throw new Error('useGetTokenBalances no user provided');
+        }
+        if (!provider) {
+          throw new Error('useGetTokenBalances no provider provided');
+        }
+
         if (address === ethToken) {
-          const res = await provider!.getBalance(user!);
+          const res = await provider.getBalance(user);
           return shrinkToken(res.toString(), 18);
         } else {
-          const res = await Token(address).read.balanceOf(user!);
+          const res = await Token(address).read.balanceOf(user);
           return shrinkToken(res.toString(), decimals);
         }
       },
-      enabled: !!user && !!provider && !!address && !!decimals,
+      enabled: !!user && !!provider,
+      onError: (e: any) => {
+        console.error('useGetTokenBalances failed with error:', e);
+        dispatchNotification({
+          type: NotificationType.Failed,
+          title: 'useGetTokenBalances Failed',
+          description: e.message || 'Unknown error, please check console logs.',
+        });
+      },
     })),
   });
 };
