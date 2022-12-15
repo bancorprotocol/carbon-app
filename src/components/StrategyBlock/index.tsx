@@ -1,11 +1,13 @@
 import { FC } from 'react';
-import { Strategy, StrategyStatus } from 'queries';
+import { Order, Strategy, StrategyStatus } from 'queries';
 import { m, mItemVariant } from 'motion';
 import { TokensOverlap } from 'components/TokensOverlap';
+import { Imager } from 'elements/Imager';
+import { prettifyNumber } from 'utils/helpers';
+import { ReactComponent as IconRangeGraph } from 'assets/icons/rangeGraph.svg';
+import { ReactComponent as IconPriceGraph } from 'assets/icons/priceGraph.svg';
 
-type Props = { strategy: Strategy };
-
-export const StrategyBlock: FC<Props> = ({ strategy }) => {
+export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = String(strategy.id).padStart(9, '0');
   return (
     <m.div
@@ -48,29 +50,84 @@ export const StrategyBlock: FC<Props> = ({ strategy }) => {
         </div>
       </div>
       <hr className="border-silver dark:border-emphasis" />
-      <OrderStatus strategy={strategy} />
+      <BuySell title="Buy" order={strategy.order0} />
+      <BuySell title="Sell" order={strategy.order1} />
+      <OrderStatus status={strategy.status} />
     </m.div>
   );
 };
 
-const OrderStatus: FC<Props> = ({ strategy }) => {
+const OrderStatus: FC<{ status: StrategyStatus }> = ({ status }) => {
   return (
     <div className="rounded-8 border border-emphasis p-15">
       <div className="text-secondary text-14">Order Status</div>
       <div
         className={`${
-          strategy.status === StrategyStatus.Active
+          status === StrategyStatus.Active
             ? 'text-success-500'
             : 'text-error-500'
         } `}
       >
-        {strategy.status === StrategyStatus.Active
+        {status === StrategyStatus.Active
           ? 'Active'
-          : strategy.status === StrategyStatus.NoBudget
+          : status === StrategyStatus.NoBudget
           ? 'No Budget · Inactive'
-          : strategy.status === StrategyStatus.OffCurve
+          : status === StrategyStatus.OffCurve
           ? 'Off Curve · Inactive'
           : 'Inactive'}
+      </div>
+    </div>
+  );
+};
+
+const BuySell: FC<{ order: Order; title: string }> = ({ order, title }) => {
+  const limit = order.startRate === order.endRate;
+  return (
+    <div className="rounded-8 border border-emphasis p-15">
+      <div className="flex items-center gap-6">
+        {title}
+        <Imager className="h-16 w-16" src={order.token.logoURI} alt="token" />
+      </div>
+      <hr className="my-12 border-silver dark:border-emphasis" />
+      <div>
+        <div className="mb-5 flex items-center justify-between">
+          <div className={`${limit ? 'text-success-500' : 'text-error-500'}`}>
+            {limit ? 'Limit Price' : 'Price Range'}
+          </div>
+          <div className="flex items-center gap-7">
+            {prettifyNumber(order.startRate, {
+              abbreviate: order.startRate.length > 10,
+            })}
+
+            {!limit &&
+              ` - ${prettifyNumber(order.endRate, {
+                abbreviate: order.endRate.length > 10,
+              })}`}
+            <Imager
+              className="h-16 w-16"
+              src={order.token.logoURI}
+              alt="token"
+            />
+          </div>
+        </div>
+        <div className="mb-10 flex items-center justify-between">
+          <div className="text-secondary !text-16">Budget</div>
+          <div className="flex items-center gap-7">
+            {prettifyNumber(order.balance, {
+              abbreviate: order.balance.length > 10,
+            })}
+            <Imager
+              className="h-16 w-16"
+              src={order.token.logoURI}
+              alt="token"
+            />
+          </div>
+        </div>
+        {limit ? (
+          <IconPriceGraph className="text-success-500" />
+        ) : (
+          <IconRangeGraph className="text-error-500" />
+        )}
       </div>
     </div>
   );

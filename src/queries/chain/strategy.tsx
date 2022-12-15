@@ -20,7 +20,7 @@ export enum StrategyStatus {
   Inactive,
 }
 
-interface Order {
+export interface Order {
   token: Token;
   balance: string;
   curveCapacity: string;
