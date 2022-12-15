@@ -2,6 +2,8 @@ import BigNumber from 'bignumber.js';
 import numeral from 'numeral';
 import numbro from 'numbro';
 
+export const isProduction = window.location.host.includes('bancor.network');
+
 export const uuid = () => {
   return 'xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0,
