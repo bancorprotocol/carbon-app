@@ -10,7 +10,7 @@ function createTwConfigValues(start, end, step) {
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
-  darkMode: 'media',
+  darkMode: 'class',
   theme: {
     screens: {
       sm: '640px',
