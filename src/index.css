@@ -6,7 +6,7 @@
   html,
   body,
   #root {
-    @apply font-euclid text-body bg-body;
+    @apply text-body bg-body font-euclid;
   }
 
   h1 {
@@ -24,7 +24,7 @@
 
 @layer utilities {
   .bg-body {
-    @apply bg-white dark:bg-black;
+    @apply dark:bg-black;
   }
 
   .bg-content {
