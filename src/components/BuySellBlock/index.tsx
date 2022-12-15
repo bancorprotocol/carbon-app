@@ -37,7 +37,7 @@ export const BuySellBlock: FC<Props> = ({
   isBalanceLoading,
   buy,
 }) => {
-  const [isRange, setIsRange] = useState(true);
+  const [isRange, setIsRange] = useState(false);
 
   return (
     <div className={'bg-secondary space-y-10 rounded-18 p-20'}>
@@ -195,12 +195,15 @@ const BudgetInput: FC<{
       <div
         className={'text-secondary flex items-center justify-between !text-12'}
       >
-        <div className={'flex items-center gap-5 '}>
+        <button
+          onClick={() => balance && setBudget(balance)}
+          className={'flex items-center gap-5'}
+        >
           Wallet:{' '}
           {isBalanceLoading || !balance ? 'loading' : prettifyNumber(balance)}{' '}
           <div className="text-success-500">MAX</div>
-        </div>
-        <div>$100.000.000</div>
+        </button>
+        <div>$???.???.???</div>
       </div>
     </div>
   );
