@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { buildTokenList, fetchTokenLists } from 'tokens';
-import { QueryKey } from '../queryKey.service';
+import { QueryKey } from '../queryKey';
 
 export const useTokenLists = () =>
   useQuery(QueryKey.tokenLists(), fetchTokenLists, {

@@ -4,7 +4,7 @@ import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
 import BigNumber from 'bignumber.js';
-import { QueryKey } from '../queryKey.service';
+import { QueryKey } from '../queryKey';
 
 export type GetUserApprovalProps = {
   tokenAddress: string;
