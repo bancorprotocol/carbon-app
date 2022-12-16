@@ -4,6 +4,10 @@ import { Button } from 'components/Button';
 import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
+import { QueryKey } from 'queries';
+import { useQueryClient } from '@tanstack/react-query';
+import { useWeb3 } from 'web3';
+import { ethToken } from 'services/web3/config';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -12,8 +16,45 @@ type Props = {
 };
 
 export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
+  const { user } = useWeb3();
   const mutation = useSetUserApproval();
   const [isUnlimited, setIsUnlimited] = useState(true);
+  const cache = useQueryClient();
+  const [txBusy, setTxBusy] = useState(false);
+  const [txSuccess, setTxSuccess] = useState(false);
+
+  const onApprove = async () => {
+    if (!data) {
+      return console.error('No data loaded');
+    }
+    setTxBusy(true);
+    await mutation.mutate(
+      { ...data, isUnlimited },
+      {
+        onSuccess: async (tx, variables) => {
+          await tx.wait();
+          void cache.invalidateQueries({
+            queryKey: QueryKey.approval(
+              user!,
+              variables.tokenAddress,
+              variables.spenderAddress
+            ),
+          });
+          setTxBusy(false);
+          setTxSuccess(true);
+        },
+        onError: () => {
+          // TODO: proper error handling
+          console.error('could not set approval');
+          setTxBusy(false);
+        },
+      }
+    );
+  };
+
+  if (data?.tokenAddress === ethToken) {
+    return null;
+  }
 
   // TODO handle error
   if (!data) {
@@ -34,7 +75,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           <div className={'bg-secondary h-30 w-30 rounded-full'} />
           <div>{data.symbol}</div>
         </div>
-        {data.approvalRequired ? (
+        {data.approvalRequired && !txSuccess ? (
           <>
             <div className={'text-secondary'}>Allowance: {data.allowance}</div>
 
@@ -45,8 +86,8 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         ) : null}
       </div>
 
-      {data.approvalRequired ? (
-        mutation.isLoading ? (
+      {data.approvalRequired && !txSuccess ? (
+        txBusy ? (
           <div>please wait</div>
         ) : (
           <div className={'flex h-82 flex-col items-end justify-between'}>
@@ -59,7 +100,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
                 size={'sm'}
               />
             </div>
-            <Button onClick={() => mutation.mutate(data)} size={'sm'}>
+            <Button onClick={onApprove} size={'sm'}>
               Confirm
             </Button>
           </div>

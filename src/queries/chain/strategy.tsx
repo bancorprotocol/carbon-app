@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
@@ -114,26 +114,12 @@ export interface CreateStrategyParams {
   token1: CreateStrategyOrder;
 }
 export const useCreateStrategy = () => {
-  const { user } = useWeb3();
   const { PoolCollection } = useContract();
-  const cache = useQueryClient();
 
-  return useMutation(
-    (strategy: CreateStrategyParams) => {
-      console.log(strategy);
-      return PoolCollection.write.createStrategy(...toStrategy(strategy), {
-        // TODO fix GAS limit
-        gasLimit: '99999999999999999',
-      });
-    },
-    {
-      onSuccess: () => {
-        void cache.invalidateQueries({ queryKey: QueryKey.strategies(user) });
-      },
-      onError: () => {
-        // TODO: proper error handling
-        console.error('could not create strategy');
-      },
-    }
+  return useMutation(async (strategy: CreateStrategyParams) =>
+    PoolCollection.write.createStrategy(...toStrategy(strategy), {
+      // TODO fix GAS limit
+      gasLimit: '99999999999999999',
+    })
   );
 };

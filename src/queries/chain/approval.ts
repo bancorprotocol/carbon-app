@@ -1,10 +1,11 @@
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
-import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
-import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
+import { useMutation, useQueries } from '@tanstack/react-query';
+import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
 import BigNumber from 'bignumber.js';
 import { QueryKey } from '../queryKey';
+import { ethToken } from 'services/web3/config';
 
 export type GetUserApprovalProps = {
   tokenAddress: string;
@@ -30,6 +31,11 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
+        const isETH = t.tokenAddress === ethToken;
+        if (isETH) {
+          return new BigNumber(shrinkToken(UNLIMITED_WEI, t.decimals));
+        }
+
         const allowance = await Token(t.tokenAddress).read.allowance(
           user,
           t.spenderAddress
@@ -43,12 +49,12 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
 export type SetUserApprovalProps = GetUserApprovalProps & {
   amount: string;
+  isUnlimited: boolean;
 };
 
 export const useSetUserApproval = () => {
   const { Token } = useContract();
   const { user } = useWeb3();
-  const cache = useQueryClient();
 
   return useMutation(
     async ({
@@ -56,7 +62,12 @@ export const useSetUserApproval = () => {
       spenderAddress,
       amount,
       decimals,
+      isUnlimited,
     }: SetUserApprovalProps) => {
+      const isETH = tokenAddress === ethToken;
+      if (isETH) {
+        throw new Error('useSetUserApproval cannot approve ETH');
+      }
       if (!user) {
         throw new Error('useSetUserApproval no user provided');
       }
@@ -70,7 +81,9 @@ export const useSetUserApproval = () => {
         throw new Error('useSetUserApproval negative amount provided');
       }
 
-      const amountWei = expandToken(amount, decimals);
+      const amountWei = isUnlimited
+        ? UNLIMITED_WEI
+        : expandToken(amount, decimals);
 
       const isNullApprovalContract =
         NULL_APPROVAL_CONTRACTS.includes(tokenAddress);
@@ -92,32 +105,10 @@ export const useSetUserApproval = () => {
           await tx.wait();
         }
       }
-
-      const tx = await Token(tokenAddress).write.approve(
-        spenderAddress,
-        amountWei,
-        {
-          // TODO fix GAS limit
-          gasLimit: '99999999999999999',
-        }
-      );
-
-      await tx.wait();
-      return tx;
-    },
-    {
-      onSuccess: (data, variables) =>
-        cache.invalidateQueries({
-          queryKey: QueryKey.approval(
-            user!,
-            variables.tokenAddress,
-            variables.spenderAddress
-          ),
-        }),
-      onError: () => {
-        // TODO: proper error handling
-        console.error('could not set approval');
-      },
+      return Token(tokenAddress).write.approve(spenderAddress, amountWei, {
+        // TODO fix GAS limit
+        gasLimit: '99999999999999999',
+      });
     }
   );
 };

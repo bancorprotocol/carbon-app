@@ -6,10 +6,14 @@ import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken } from 'hooks/useApproval';
 import { useTokens } from 'tokens';
+import { useNavigate } from '@tanstack/react-location';
+import { PathNames } from 'routing';
+import { txWait } from 'utils/tenderly';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 
 export const useCreate = () => {
+  const navigate = useNavigate();
   const { openModal } = useModal();
   const { tokens } = useTokens();
   const source = useOrder();
@@ -64,7 +68,8 @@ export const useCreate = () => {
       {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);
-          await tx.wait();
+          await txWait(tx);
+          navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
         onError: (e) => {
