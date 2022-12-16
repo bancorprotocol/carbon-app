@@ -37,7 +37,7 @@ export const useGetUserStrategies = () => {
   const { PoolCollection, Voucher, Token } = useContract();
   const { fetchMulticall } = useMulticall();
   const { user } = useWeb3();
-  const { tokens, getTokenById } = useTokens();
+  const { tokens, getTokenById, importToken } = useTokens();
 
   return useQuery<Strategy[]>(
     QueryKey.strategies(user),
@@ -62,12 +62,17 @@ export const useGetUserStrategies = () => {
 
       const strategiesByIds = await PoolCollection.read.strategiesByIds(ids);
 
+      const _getTknData = async (address: string) => {
+        const data = await fetchTokenData(Token, address);
+        importToken(data);
+        return data;
+      };
+
       const promises = strategiesByIds.map(async (s) => {
         const token0 =
-          getTokenById(s.pair[0]) || (await fetchTokenData(Token, s.pair[0]));
-
+          getTokenById(s.pair[0]) || (await _getTknData(s.pair[0]));
         const token1 =
-          getTokenById(s.pair[1]) || (await fetchTokenData(Token, s.pair[1]));
+          getTokenById(s.pair[1]) || (await _getTknData(s.pair[1]));
 
         const order0 = decodeOrder({ ...s.orders[0] });
         const order1 = decodeOrder({ ...s.orders[1] });

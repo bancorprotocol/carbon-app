@@ -128,7 +128,12 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
                         className="h-32 w-32 !rounded-full"
                       />
                       <div className="ml-15 grid justify-items-start">
-                        <div className="text-16">{token.symbol}</div>
+                        <div className="text-16">
+                          {token.symbol}{' '}
+                          <span className={'text-warning-500'}>
+                            {token.isSuspicious && 'suspicious'}
+                          </span>
+                        </div>
                         <div className="text-secondary text-12">
                           {tokenName(token.name ?? token.symbol)}
                         </div>
@@ -157,7 +162,7 @@ const ImportTokenMessage: FC<{ address: string }> = ({ address }) => {
       <div className={'mt-40 mb-20 flex w-full justify-center'}>
         <div className={'max-w-[276px] space-y-12 text-center'}>
           <h2>Token not found</h2>
-          <p>
+          <p className={'text-14'}>
             Unfortunately we couldn't find a token for the address you entered,
             try
             <span className={'font-weight-600'}> to import a new token.</span>

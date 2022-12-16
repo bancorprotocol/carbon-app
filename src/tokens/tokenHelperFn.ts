@@ -103,6 +103,7 @@ export const getMockTokenById = (id: string): Token => ({
   address: id,
   symbol: 'N/A',
   decimals: 18,
+  isSuspicious: true,
 });
 
 export const fetchTokenData = async (
@@ -119,5 +120,6 @@ export const fetchTokenData = async (
     symbol,
     decimals,
     name,
+    isSuspicious: true,
   };
 };

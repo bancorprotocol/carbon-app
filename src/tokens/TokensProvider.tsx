@@ -65,9 +65,16 @@ export const TokensProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const importToken = useCallback(
     (token: Token) => {
       const exists =
-        _tokensMap.has(token.address) || importedTokens.includes(token);
+        _tokensMap.has(token.address) ||
+        !!importedTokens.find((tkn) => tkn.address === token.address);
       if (exists) return;
+
       const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
+      const existsInLs = !!lsImportedTokens.find(
+        (tkn) => tkn.address === token.address
+      );
+      if (existsInLs) return;
+
       const newTokens = [...lsImportedTokens, token];
       setImportedTokens(newTokens);
       lsService.setItem('importedTokens', newTokens);

@@ -29,7 +29,7 @@ export const Modal: FC<Props> = ({
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className="relative my-6 mx-auto w-full max-w-[485px]"
+        className="relative my-15 mx-auto w-full max-w-[485px]"
         variants={dropIn}
         initial="hidden"
         animate="visible"
