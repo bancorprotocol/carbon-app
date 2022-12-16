@@ -5,7 +5,7 @@ import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
 import BigNumber from 'bignumber.js';
 import { QueryKey } from '../queryKey';
-import { ethToken } from 'services/web3/config';
+import { config } from 'services/web3/config';
 
 export type GetUserApprovalProps = {
   tokenAddress: string;
@@ -31,7 +31,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
-        const isETH = t.tokenAddress === ethToken;
+        const isETH = t.tokenAddress === config.tokens.ETH;
         if (isETH) {
           return new BigNumber(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
@@ -64,7 +64,7 @@ export const useSetUserApproval = () => {
       decimals,
       isUnlimited,
     }: SetUserApprovalProps) => {
-      const isETH = tokenAddress === ethToken;
+      const isETH = tokenAddress === config.tokens.ETH;
       if (isETH) {
         throw new Error('useSetUserApproval cannot approve ETH');
       }

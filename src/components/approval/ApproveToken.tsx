@@ -7,7 +7,7 @@ import { ApprovalTokenResult } from 'hooks/useApproval';
 import { QueryKey } from 'queries';
 import { useQueryClient } from '@tanstack/react-query';
 import { useWeb3 } from 'web3';
-import { ethToken } from 'services/web3/config';
+import { config } from 'services/web3/config';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -52,7 +52,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     );
   };
 
-  if (data?.tokenAddress === ethToken) {
+  if (data?.tokenAddress === config.tokens.ETH) {
     return null;
   }
 
