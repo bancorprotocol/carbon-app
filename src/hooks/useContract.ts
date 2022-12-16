@@ -7,7 +7,7 @@ import {
   Multicall__factory,
 } from 'abis/types';
 import { useCallback, useMemo } from 'react';
-import { ADDRESS_DICT } from 'services/web3/config';
+import { config } from 'services/web3/config';
 
 export const useContract = () => {
   const { provider, signer } = useWeb3();
@@ -23,11 +23,11 @@ export const useContract = () => {
   const PoolCollection = useMemo(
     () => ({
       read: PoolCollection__factory.connect(
-        ADDRESS_DICT.carbon.poolCollection,
+        config.carbon.poolCollection,
         provider!
       ),
       write: PoolCollection__factory.connect(
-        ADDRESS_DICT.carbon.poolCollection,
+        config.carbon.poolCollection,
         signer!
       ),
     }),
@@ -37,11 +37,11 @@ export const useContract = () => {
   const BancorNetwork = useMemo(
     () => ({
       read: BancorNetwork__factory.connect(
-        ADDRESS_DICT.carbon.bancorNetwork,
+        config.carbon.bancorNetwork,
         provider!
       ),
       write: BancorNetwork__factory.connect(
-        ADDRESS_DICT.carbon.bancorNetwork,
+        config.carbon.bancorNetwork,
         signer!
       ),
     }),
@@ -50,16 +50,16 @@ export const useContract = () => {
 
   const Voucher = useMemo(
     () => ({
-      read: Voucher__factory.connect(ADDRESS_DICT.carbon.voucher, provider!),
-      write: Voucher__factory.connect(ADDRESS_DICT.carbon.voucher, signer!),
+      read: Voucher__factory.connect(config.carbon.voucher, provider!),
+      write: Voucher__factory.connect(config.carbon.voucher, signer!),
     }),
     [provider, signer]
   );
 
   const Multicall = useMemo(
     () => ({
-      read: Multicall__factory.connect(ADDRESS_DICT.utils.multicall, provider!),
-      write: Multicall__factory.connect(ADDRESS_DICT.utils.multicall, signer!),
+      read: Multicall__factory.connect(config.utils.multicall, provider!),
+      write: Multicall__factory.connect(config.utils.multicall, signer!),
     }),
     [provider, signer]
   );
