@@ -3,7 +3,7 @@ import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { Token } from 'tokens';
 import { shrinkToken } from 'utils/tokens';
-import { ethToken } from 'services/web3/config';
+import { config } from 'services/web3/config';
 import {
   NotificationType,
   useNotifications,
@@ -35,7 +35,7 @@ export const useGetTokenBalance = (
         throw new Error('useGetTokenBalance no token decimals provided');
       }
 
-      if (address === ethToken) {
+      if (address === config.tokens.ETH) {
         const res = await provider.getBalance(user!);
         return shrinkToken(res.toString(), 18);
       } else {
@@ -75,7 +75,7 @@ export const useGetTokenBalances = (
           throw new Error('useGetTokenBalances no provider provided');
         }
 
-        if (address === ethToken) {
+        if (address === config.tokens.ETH) {
           const res = await provider.getBalance(user);
           return shrinkToken(res.toString(), 18);
         } else {
