@@ -19,4 +19,6 @@ export namespace QueryKey {
     user,
     token,
   ];
+
+  export const token = (token: string) => [..._chain, 'token', token];
 }

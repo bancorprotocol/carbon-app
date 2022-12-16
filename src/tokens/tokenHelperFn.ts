@@ -3,6 +3,8 @@ import { config } from 'services/web3/config';
 import { uniqBy } from 'lodash';
 import { utils } from 'ethers';
 import { Token, TokenList } from 'tokens/token.types';
+import { Token as TokenContract } from 'abis/types';
+import { lsService } from '../services/localeStorage';
 
 export const listOfLists = [
   {
@@ -81,6 +83,8 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
       name: 'Wrapped Ethereum',
     },
   ];
+  const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
+  tokens.push(...lsImportedTokens);
 
   const merged = tokenList
     .flatMap((list) => list.tokens)
@@ -100,3 +104,20 @@ export const getMockTokenById = (id: string): Token => ({
   symbol: 'N/A',
   decimals: 18,
 });
+
+export const fetchTokenData = async (
+  Token: (address: string) => { read: TokenContract },
+  address: string
+): Promise<Token> => {
+  const [symbol, decimals, name] = await Promise.all([
+    Token(address).read.symbol(),
+    Token(address).read.decimals(),
+    Token(address).read.name(),
+  ]);
+  return {
+    address,
+    symbol,
+    decimals,
+    name,
+  };
+};

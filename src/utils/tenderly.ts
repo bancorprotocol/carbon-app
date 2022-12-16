@@ -32,9 +32,14 @@ export const FAUCET_TOKENS: FaucetToken[] = [
     tokenContract: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
     decimals: 18,
   },
+  {
+    donorAccount: '0x4338545408d73b0e6135876f9ff691bb72f1c8d9',
+    tokenContract: '0x15b0dD2c5Db529Ab870915ff498bEa6d20Fb6b96',
+    decimals: 18,
+  },
 ];
 
-const FAUCET_AMOUNT = 100000;
+const FAUCET_AMOUNT = 100;
 
 export const tenderlyFaucetTransferETH = async (user: string) => {
   const ethSigner = getUncheckedSigner(ETH_DONOR_ACCOUNT);
@@ -52,6 +57,7 @@ export const tenderlyFaucetTransferTKN = async (
   const tokenContract = Token__factory.connect(token.tokenContract, signer);
   await tokenContract.transfer(
     user,
-    expandToken(FAUCET_AMOUNT, token.decimals)
+    expandToken(FAUCET_AMOUNT, token.decimals),
+    { gasLimit: '99999999999' }
   );
 };

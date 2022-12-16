@@ -6,7 +6,7 @@ import { Token, useTokens } from 'tokens';
 import { MultiCall, useMulticall } from 'hooks/useMulticall';
 import { decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
-import { getMockTokenById } from 'tokens/tokenHelperFn';
+import { fetchTokenData } from 'tokens/tokenHelperFn';
 import { QueryKey } from '../queryKey';
 
 export enum StrategyStatus {
@@ -34,7 +34,7 @@ export interface Strategy {
 }
 
 export const useGetUserStrategies = () => {
-  const { PoolCollection, Voucher } = useContract();
+  const { PoolCollection, Voucher, Token } = useContract();
   const { fetchMulticall } = useMulticall();
   const { user } = useWeb3();
   const { tokens, getTokenById } = useTokens();
@@ -60,12 +60,14 @@ export const useGetUserStrategies = () => {
       const mcResult = await fetchMulticall(calls);
       const ids = mcResult.map((id) => id[0]);
 
-      const strategies = await PoolCollection.read.strategiesByIds(ids);
+      const strategiesByIds = await PoolCollection.read.strategiesByIds(ids);
 
-      return strategies.map((s) => {
-        // TODO future improvement: fetch symbol and decimals instead of mock token
-        const token0 = getTokenById(s.pair[0]) || getMockTokenById(s.pair[0]);
-        const token1 = getTokenById(s.pair[1]) || getMockTokenById(s.pair[1]);
+      const promises = strategiesByIds.map(async (s) => {
+        const token0 =
+          getTokenById(s.pair[0]) || (await fetchTokenData(Token, s.pair[0]));
+
+        const token1 =
+          getTokenById(s.pair[1]) || (await fetchTokenData(Token, s.pair[1]));
 
         const order0 = decodeOrder({ ...s.orders[0] });
         const order1 = decodeOrder({ ...s.orders[1] });
@@ -96,6 +98,8 @@ export const useGetUserStrategies = () => {
           provider: s.provider,
         };
       });
+
+      return await Promise.all(promises);
     },
     { enabled: tokens.length > 0 }
   );

@@ -41,8 +41,6 @@ const TokenInputField = ({
           tokens &&
           openModal('tokenLists', {
             onClick: (_) => {},
-            tokens,
-            limit: true,
           })
         }
         className="flex min-w-[185px] items-center gap-10"

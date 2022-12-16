@@ -5,13 +5,11 @@ import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken } from 'hooks/useApproval';
-import { useTokens } from 'tokens';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 
 export const useCreate = () => {
   const { openModal } = useModal();
-  const { tokens } = useTokens();
   const source = useOrder();
   const target = useOrder();
   const mutation = useCreateStrategy();
@@ -86,11 +84,7 @@ export const useCreate = () => {
         ? target.setToken
         : () => {};
 
-    const data: ModalTokenListData = {
-      onClick,
-      tokens: tokens ?? [],
-      limit: true,
-    };
+    const data: ModalTokenListData = { onClick };
     openModal('tokenLists', data);
   };
 

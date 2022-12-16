@@ -1,57 +1,33 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import { Switch } from 'components/Switch';
 import { orderBy } from 'lodash';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, FC } from 'react';
 import { Token, useTokens } from 'tokens';
-import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { useModal } from 'modals/ModalProvider';
 import { Imager } from 'elements/Imager';
 import { SearchInput } from 'components/SearchInput';
 import { wait } from 'utils/helpers';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { utils } from 'ethers';
+import { Button } from '../../components/Button';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
   excludedTokens?: string[];
   includedTokens?: string[];
-  tokens: Token[];
-  limit?: boolean;
 };
 
-const suggestedTokens = ['BNT', 'ETH', 'WBTC', 'USDC', 'USDT'];
-
 export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
-  const {
-    onClick,
-    excludedTokens = [],
-    includedTokens = [],
-    tokens,
-    limit,
-  } = data;
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const { tokens } = useTokens();
+  const { onClick, excludedTokens = [], includedTokens = [] } = data;
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
-  const [manage, setManage] = useState(false);
-  const [userPreferredListIds, setUserLists] = useState(['']);
-  const { tokenLists } = useTokens();
-
   const onClose = async () => {
     closeModal(id);
     await wait(500);
-    setManage(false);
     setSearch('');
-  };
-
-  const handleTokenlistClick = (listId: string) => {
-    const alreadyPreferred = userPreferredListIds.includes(listId);
-
-    const newUserPreferredListIds = alreadyPreferred
-      ? userPreferredListIds.filter((list) => list !== listId)
-      : [...userPreferredListIds, listId];
-
-    if (newUserPreferredListIds.length === 0) return;
-
-    //setTokenListLS(newUserPreferredListIds);
-    setUserLists(newUserPreferredListIds);
   };
 
   const tokenName = (name: string) => {
@@ -62,177 +38,135 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   const sortedTokens = useMemo(() => {
     const filtered = tokens.filter(
       (token) =>
-        (includedTokens.length === 0 ||
+        ((includedTokens.length === 0 ||
           includedTokens.includes(token.address)) &&
-        !excludedTokens.includes(token.address) &&
-        (token.symbol.toLowerCase().includes(search.toLowerCase()) ||
-          (token.name &&
-            token.name.toLowerCase().includes(search.toLowerCase())))
+          !excludedTokens.includes(token.address) &&
+          (token.symbol.toLowerCase().includes(search.toLowerCase()) ||
+            (token.name &&
+              token.name.toLowerCase().includes(search.toLowerCase())))) ||
+        token.address.toLowerCase().includes(search.toLowerCase())
     );
-    return orderBy(filtered, ({ balance }) => balance ?? 0, 'desc').slice(
-      0,
-      limit ? 300 : filtered.length
+    return orderBy(filtered, ({ symbol }) => symbol, 'asc');
+  }, [tokens, search, excludedTokens, includedTokens]);
+
+  const rowVirtualizer = useVirtualizer({
+    count: sortedTokens.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 65,
+    overscan: 10,
+  });
+
+  const showImportToken = useMemo(() => {
+    const isValidAddress = utils.isAddress(search);
+    return (
+      isValidAddress &&
+      !sortedTokens.find(
+        (token) => token.address.toLowerCase() === search.toLowerCase()
+      )
     );
-  }, [excludedTokens, includedTokens, limit, search, tokens]);
+  }, [search, sortedTokens]);
+
+  const showNoResults = useMemo(
+    () => !showImportToken && sortedTokens.length === 0,
+    [showImportToken, sortedTokens]
+  );
 
   return (
-    <Modal id={id}>
-      {manage ? (
-        <div className="mb-20 h-full overflow-auto md:max-h-[calc(70vh-100px)]">
-          <div className="space-y-15 px-20 pt-10">
-            {tokenLists?.map((tokenList) => {
-              const isSelected = userPreferredListIds.some(
-                (listId) => tokenList.name === listId
-              );
-              return (
-                <div
-                  className={`dark:border-grey flex items-center justify-between rounded border-2 border-silver px-15 py-6 ${
-                    isSelected ? 'border-primary dark:border-primary-light' : ''
-                  }`}
-                  key={tokenList.name}
-                >
-                  <div className="flex items-center">
-                    <Imager
-                      alt="TokenList"
-                      src={tokenList.logoURI}
-                      className="h-28 w-28 rounded-full bg-silver"
-                    />
-                    <div className={'ml-15'}>
-                      <div className={'text-16'}>{tokenList.name}</div>
-                      <div className={'text-graphite text-12'}>
-                        {tokenList.tokens.length} Tokens
+    <Modal id={id} title={'Select Token'}>
+      <SearchInput
+        value={search}
+        setValue={setSearch}
+        className="mt-20 w-full rounded-8 py-10"
+      />
+      {showImportToken ? (
+        <ImportTokenMessage address={search} />
+      ) : showNoResults ? (
+        <div>no results</div>
+      ) : (
+        <div>
+          <div className="my-20">
+            <div className="text-secondary">{sortedTokens.length} Tokens</div>
+          </div>
+          <div
+            ref={parentRef}
+            style={{
+              height: `390px`,
+              overflow: 'auto',
+            }}
+          >
+            <div
+              style={{
+                height: `${rowVirtualizer.getTotalSize()}px`,
+                width: '100%',
+                position: 'relative',
+              }}
+            >
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const token = sortedTokens[virtualRow.index];
+                return (
+                  <div
+                    key={virtualRow.key}
+                    data-index={virtualRow.index}
+                    className={'w-full'}
+                    style={{
+                      position: 'absolute',
+                      height: `${virtualRow.size}px`,
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                  >
+                    <button
+                      onClick={() => {
+                        onClick(token);
+                        onClose();
+                      }}
+                      className="flex w-full items-center"
+                      style={{ height: `${virtualRow.size}px` }}
+                    >
+                      <Imager
+                        src={token.logoURI}
+                        alt={`${token.symbol} Token`}
+                        className="h-32 w-32 !rounded-full"
+                      />
+                      <div className="ml-15 grid justify-items-start">
+                        <div className="text-16">{token.symbol}</div>
+                        <div className="text-secondary text-12">
+                          {tokenName(token.name ?? token.symbol)}
+                        </div>
                       </div>
-                    </div>
+                    </button>
                   </div>
-                  <div>
-                    <Switch
-                      isOn={isSelected}
-                      setIsOn={() => handleTokenlistClick(tokenList.name)}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
-      ) : (
-        <>
-          <div className="relative mb-10 px-20">
-            <SearchInput
-              value={search}
-              setValue={setSearch}
-              className="w-full rounded-full py-10"
-            />
-          </div>
-          <div className="h-[calc(70vh-50px)] overflow-auto px-10 pb-10 md:h-[calc(70vh-206px)]">
-            <div className="pb-12">
-              <SuggestedTokens
-                allTokens={tokens}
-                suggestedTokens={suggestedTokens}
-                onClick={(token) => {
-                  onClick(token);
-                  onClose();
-                }}
-              />
-            </div>
-            <div className="mt-20 flex justify-between px-10">
-              <div className="text-secondary pb-6">Token</div>
-              <div className="text-secondary pb-6">Balance</div>
-            </div>
-            {sortedTokens.map((token) => {
-              return (
-                <button
-                  key={token.address}
-                  onClick={() => {
-                    onClick(token);
-                    onClose();
-                  }}
-                  className="focus:ring-primary my-5 flex w-full items-center justify-between rounded py-5 px-14 focus:ring-2"
-                >
-                  <div className="flex items-center">
-                    <Imager
-                      src={token.logoURI}
-                      alt={`${token.symbol} Token`}
-                      className="h-32 w-32 !rounded-full"
-                    />
-                    <div className="ml-15 grid justify-items-start">
-                      <div className="text-16">{token.symbol}</div>
-                      <div className="text-secondary text-12">
-                        {tokenName(token.name ?? token.symbol)}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-16">
-                      {token.balance && token.balance}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          <hr className="dark:border-black-low border-silver" />
-          <div className="my-5 flex h-[59px] items-center justify-center">
-            <button
-              onClick={() => {
-                //setUserLists(getTokenListLS());
-                setManage(true);
-              }}
-              className="font-semibold text-primary"
-            >
-              <span className="items center flex justify-center">
-                <IconEdit className="mr-4 h-[18px] w-[18px]" />
-                Manage Token Lists
-              </span>
-              <span className="font-medium text-graphite text-12">
-                Only supported tokens will be displayed
-              </span>
-            </button>
-          </div>
-        </>
       )}
     </Modal>
   );
 };
 
-interface SuggestedTokensProps {
-  allTokens: Token[];
-  suggestedTokens: string[];
-  onClick: (token: Token) => void;
-}
+const ImportTokenMessage: FC<{ address: string }> = ({ address }) => {
+  const { openModal } = useModal();
 
-export const SuggestedTokens = ({
-  allTokens,
-  suggestedTokens,
-  onClick,
-}: SuggestedTokensProps) => {
-  const suggestedTokenList = useMemo(
-    () =>
-      suggestedTokens
-        .map((token) => allTokens.find((t) => t.symbol === token))
-        .filter((token) => !!token),
-    [allTokens, suggestedTokens]
-  );
+  const onClick = () => {
+    openModal('importToken', { address });
+  };
 
   return (
-    <div className="px-10">
-      <div className="text-secondary mt-10 pb-14">Popular Tokens</div>
-      <div className="flex w-full space-x-8">
-        {suggestedTokenList.map((token) => (
-          <button
-            key={token?.address}
-            onClick={() => onClick(token!)}
-            className="flex w-full flex-col items-center rounded-10 border-2 border-white py-8"
-          >
-            <Imager
-              src={token!.logoURI}
-              alt={`${token!.symbol} Token`}
-              className="h-28 w-28 rounded-full"
-            />
-            <span className="text-12">{token!.symbol}</span>
-          </button>
-        ))}
+    <>
+      <div className={'mt-40 mb-20 flex w-full justify-center'}>
+        <div className={'max-w-[276px] space-y-12 text-center'}>
+          <h2>Token not found</h2>
+          <p>
+            Unfortunately we couldn't find a token for the address you entered,
+            try
+            <span className={'font-weight-600'}> to import a new token.</span>
+          </p>
+        </div>
       </div>
-    </div>
+      <Button fullWidth onClick={onClick}>
+        Import Token
+      </Button>
+    </>
   );
 };
