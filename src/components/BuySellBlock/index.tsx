@@ -192,19 +192,15 @@ const BudgetInput: FC<{
           }
         />
       </div>
-      <div
-        className={'text-secondary flex items-center justify-between !text-12'}
+
+      <button
+        onClick={() => balance && setBudget(balance)}
+        className={'text-secondary flex items-center gap-5 !text-12'}
       >
-        <button
-          onClick={() => balance && setBudget(balance)}
-          className={'flex items-center gap-5'}
-        >
-          Wallet:{' '}
-          {isBalanceLoading || !balance ? 'loading' : prettifyNumber(balance)}{' '}
-          <div className="text-success-500">MAX</div>
-        </button>
-        <div>$???.???.???</div>
-      </div>
+        Wallet:{' '}
+        {isBalanceLoading || !balance ? 'loading' : prettifyNumber(balance)}{' '}
+        <div className="text-success-500">MAX</div>
+      </button>
     </div>
   );
 };

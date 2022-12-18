@@ -102,9 +102,9 @@ export const useGetUserStrategies = () => {
 
 interface CreateStrategyOrder {
   token: Token;
-  balance: string;
-  min: string;
-  max: string;
+  balance?: string;
+  min?: string;
+  max?: string;
   price?: string;
 }
 
