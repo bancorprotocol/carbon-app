@@ -61,40 +61,11 @@ export const CreateStrategy = () => {
       {showStep2 && source.token && target.token && (
         <>
           <m.div variants={items}>
-            <BuySellBlock
-              title="Buy"
-              buyToken={source.token}
-              sellToken={target.token}
-              balance={source.balanceQuery.data}
-              isBalanceLoading={source.balanceQuery.isLoading}
-              price={source.price}
-              setPrice={source.setPrice}
-              budget={source.budget}
-              setBudget={source.setBudget}
-              min={source.min}
-              setMin={source.setMin}
-              max={source.max}
-              setMax={source.setMax}
-              buy
-            />
+            <BuySellBlock source={source} target={target} buy />
           </m.div>
 
           <m.div variants={items}>
-            <BuySellBlock
-              title="Sell"
-              buyToken={source.token}
-              sellToken={target.token}
-              balance={target.balanceQuery.data}
-              isBalanceLoading={target.balanceQuery.isLoading}
-              price={target.price}
-              setPrice={target.setPrice}
-              budget={target.budget}
-              setBudget={target.setBudget}
-              min={target.min}
-              setMin={target.setMin}
-              max={target.max}
-              setMax={target.setMax}
-            />
+            <BuySellBlock source={source} target={target} />
           </m.div>
 
           <m.div variants={items}>

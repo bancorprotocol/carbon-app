@@ -3,41 +3,28 @@ import { Imager } from 'elements/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { Tooltip } from 'components/Tooltip';
 import { Token } from 'tokens';
+import { Order } from 'elements/strategies/create/useOrder';
 
 type Props = {
-  title: string;
-  price: string;
-  setPrice: (value: string) => void;
-  budget: string;
-  setBudget: (value: string) => void;
-  min: string;
-  setMin: (value: string) => void;
-  max: string;
-  setMax: (value: string) => void;
-  buyToken: Token;
-  sellToken: Token;
-  balance?: string;
-  isBalanceLoading: boolean;
+  source: Order;
+  target: Order;
   buy?: boolean;
 };
 
-export const BuySellBlock: FC<Props> = ({
-  title,
-  price,
-  setPrice,
-  budget,
-  setBudget,
-  min,
-  setMin,
-  max,
-  setMax,
-  buyToken,
-  sellToken,
-  balance,
-  isBalanceLoading,
-  buy,
-}) => {
+export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
   const [isRange, setIsRange] = useState(false);
+  const order = buy ? source : target;
+  const title = buy ? 'Buy' : 'Sell';
+
+  const handleRangeChange = () => {
+    setIsRange(!isRange);
+    source.setMax('');
+    source.setMin('');
+    source.setPrice('');
+  };
+
+  //Impossible but TS doesnt recognize it
+  if (!source.token || !target.token) return null;
 
   return (
     <div className={'bg-secondary space-y-10 rounded-10 p-20'}>
@@ -46,7 +33,7 @@ export const BuySellBlock: FC<Props> = ({
           {title}{' '}
           <Imager
             alt={'Token'}
-            src={buy ? buyToken.logoURI : sellToken.logoURI}
+            src={buy ? source.token.logoURI : target.token.logoURI}
             className={'h-18 w-18 rounded-full'}
           />
         </div>
@@ -54,13 +41,13 @@ export const BuySellBlock: FC<Props> = ({
         <div className="flex items-center gap-10 text-14">
           <div className="bg-body flex items-center rounded-[100px] p-2">
             <button
-              onClick={() => setIsRange(!isRange)}
+              onClick={() => handleRangeChange()}
               className={`rounded-40 ${!isRange ? 'bg-silver' : ''} px-10 py-4`}
             >
               Limit
             </button>
             <button
-              onClick={() => setIsRange(!isRange)}
+              onClick={() => handleRangeChange()}
               className={`rounded-40 ${isRange ? 'bg-silver' : ''} px-10 py-4`}
             >
               Range
@@ -72,29 +59,29 @@ export const BuySellBlock: FC<Props> = ({
 
       {isRange ? (
         <InputRange
-          buyToken={buyToken}
-          sellToken={sellToken}
-          min={min}
-          setMin={setMin}
-          max={max}
-          setMax={setMax}
+          buyToken={source.token}
+          sellToken={target.token}
+          min={order.min}
+          setMin={order.setMin}
+          max={order.max}
+          setMax={order.setMax}
         />
       ) : (
         <InputLimit
-          buyToken={buyToken}
-          sellToken={sellToken}
-          price={price}
-          setPrice={setPrice}
+          buyToken={source.token}
+          sellToken={target.token}
+          price={order.price}
+          setPrice={order.setPrice}
         />
       )}
 
       <BudgetInput
         title={title}
-        budget={budget}
-        setBudget={setBudget}
-        buyToken={buy ? buyToken : sellToken}
-        balance={balance}
-        isBalanceLoading={isBalanceLoading}
+        budget={order.budget}
+        setBudget={order.setBudget}
+        buyToken={buy ? source.token : target.token}
+        balance={order.balanceQuery.data}
+        isBalanceLoading={order.balanceQuery.isLoading}
       />
     </div>
   );

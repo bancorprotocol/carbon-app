@@ -1,4 +1,4 @@
-import { useOrder } from './useOrder';
+import { Order, useOrder } from './useOrder';
 import { useCreateStrategy } from 'queries';
 import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
@@ -77,8 +77,27 @@ export const useCreate = () => {
     );
   };
 
+  const checkAndSetErrors = (order: Order) => {
+    const minMaxCorrect =
+      Number(order.min) > 0 && Number(order.max) > Number(order.min);
+    const priceCorrect = Number(order.price) > 0;
+
+    if (!minMaxCorrect)
+      order.setPriceError(
+        'Max Price must be higher than min price and not zero'
+      );
+
+    if (!priceCorrect) order.setPriceError('Price Must be greater than 0');
+
+    return priceCorrect || minMaxCorrect;
+  };
+
   const onCTAClick = async () => {
-    openModal('txConfirm', { approvalTokens, onConfirm: create });
+    const sourceCorrect = checkAndSetErrors(source);
+    const targetCorrect = checkAndSetErrors(target);
+
+    if (sourceCorrect && targetCorrect)
+      openModal('txConfirm', { approvalTokens, onConfirm: create });
   };
 
   const openTokenListModal = (type?: 'source' | 'target') => {
