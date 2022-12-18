@@ -81,6 +81,8 @@ export const useCreate = () => {
     const minMaxCorrect =
       Number(order.min) > 0 && Number(order.max) > Number(order.min);
     const priceCorrect = Number(order.price) > 0;
+    const budgetCorrect =
+      Number(order.budget) <= Number(order.balanceQuery.data);
 
     if (!minMaxCorrect)
       order.setRangeError(
@@ -89,10 +91,21 @@ export const useCreate = () => {
 
     if (!priceCorrect) order.setPriceError('Price Must be greater than 0');
 
-    return priceCorrect || minMaxCorrect;
+    if (!budgetCorrect) order.setBudgetError('Insufficient Balance');
+
+    return (priceCorrect || minMaxCorrect) && budgetCorrect;
+  };
+
+  const resetErrors = (order: Order) => {
+    order.setRangeError('');
+    order.setPriceError('');
+    order.setBudgetError('');
   };
 
   const onCTAClick = async () => {
+    resetErrors(source);
+    resetErrors(target);
+
     const sourceCorrect = checkAndSetErrors(source);
     const targetCorrect = checkAndSetErrors(target);
 

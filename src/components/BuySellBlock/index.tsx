@@ -84,6 +84,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
         buyToken={buy ? source.token : target.token}
         balance={order.balanceQuery.data}
         isBalanceLoading={order.balanceQuery.isLoading}
+        error={order.budgetError}
       />
     </div>
   );
@@ -98,7 +99,11 @@ const InputLimit: FC<{
 }> = ({ buyToken, sellToken, price, setPrice, error }) => {
   return (
     <div>
-      <div className={'bg-body rounded-16 p-16'}>
+      <div
+        className={`${
+          error && 'border border-error-500 text-error-500'
+        } bg-body rounded-16 p-16`}
+      >
         <div className="mb-8 text-12 text-error-500">
           {sellToken.symbol} per {buyToken.symbol}
         </div>
@@ -128,7 +133,11 @@ const InputRange: FC<{
   return (
     <div>
       <div className="flex gap-6">
-        <div className={'bg-body w-full rounded-14 rounded-r-0 p-16'}>
+        <div
+          className={`${
+            error && 'border border-error-500 text-error-500'
+          } bg-body w-full rounded-14 rounded-r-0 p-16`}
+        >
           <div className="mb-8 text-[11px] text-success-500">
             Min {sellToken.symbol} per {buyToken.symbol}
           </div>
@@ -139,7 +148,11 @@ const InputRange: FC<{
             className={'w-full bg-transparent focus:outline-none'}
           />
         </div>
-        <div className={'bg-body w-full rounded-14 rounded-l-0 p-16'}>
+        <div
+          className={`${
+            error && 'border border-error-500 text-error-500'
+          } bg-body w-full rounded-14 rounded-l-0 p-16`}
+        >
           <div>
             <div className="mb-8 text-[11px] text-success-500">
               Max {sellToken.symbol} per {buyToken.symbol}
@@ -167,13 +180,26 @@ const BudgetInput: FC<{
   buyToken: Token;
   balance?: string;
   isBalanceLoading: boolean;
-}> = ({ title, budget, setBudget, buyToken, balance, isBalanceLoading }) => {
+  error?: string;
+}> = ({
+  title,
+  budget,
+  setBudget,
+  buyToken,
+  balance,
+  isBalanceLoading,
+  error,
+}) => {
   return (
-    <div className={'bg-body rounded-16 p-16'}>
+    <div
+      className={`${
+        error && 'border border-error-500 text-error-500'
+      } bg-body rounded-16 p-16`}
+    >
       <div className={'mb-8 flex items-center gap-10'}>
         <div
           className={
-            'bg-secondary flex flex-none items-center gap-6 rounded-full p-6 pr-10'
+            'bg-secondary flex flex-none items-center gap-6 rounded-full p-6 pr-10 text-white'
           }
         >
           <Imager
@@ -194,14 +220,19 @@ const BudgetInput: FC<{
         />
       </div>
 
-      <button
-        onClick={() => balance && setBudget(balance)}
-        className={'text-secondary flex items-center gap-5 !text-12'}
-      >
-        Wallet:{' '}
-        {isBalanceLoading || !balance ? 'loading' : prettifyNumber(balance)}{' '}
-        <div className="text-success-500">MAX</div>
-      </button>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => balance && setBudget(balance)}
+          className={'text-secondary flex items-center gap-5 !text-12'}
+        >
+          Wallet:{' '}
+          {isBalanceLoading || !balance ? 'loading' : prettifyNumber(balance)}{' '}
+          <div className="text-success-500">MAX</div>
+        </button>
+        {error && (
+          <div className="text-center text-12 text-error-500">{error}</div>
+        )}
+      </div>
     </div>
   );
 };

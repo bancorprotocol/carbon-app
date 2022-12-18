@@ -16,6 +16,8 @@ export interface Order {
   setRangeError: (value: string) => void;
   priceError: string;
   setPriceError: (value: string) => void;
+  budgetError: string;
+  setBudgetError: (value: string) => void;
   balanceQuery: any;
 }
 
@@ -27,6 +29,7 @@ export const useOrder = () => {
   const [min, setMin] = useState('');
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
+  const [budgetError, setBudgetError] = useState('');
 
   useEffect(() => {
     setMin('');
@@ -53,5 +56,7 @@ export const useOrder = () => {
     setRangeError,
     priceError,
     setPriceError,
+    budgetError,
+    setBudgetError,
   };
 };
