@@ -1,3 +1,4 @@
 export * from './QueryProvider';
 export * from './chain/strategy';
-export * from './offChain/tokens';
+export * from './extApi/tokens';
+export * from './queryKey';

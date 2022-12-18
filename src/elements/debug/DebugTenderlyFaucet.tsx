@@ -6,7 +6,7 @@ import {
 import { useWeb3 } from 'web3';
 import { useGetTokenBalances } from 'queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
-import { ethToken } from 'services/web3/config';
+import { config } from 'services/web3/config';
 import { Button } from 'components/Button';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
@@ -14,7 +14,7 @@ const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   decimals: tkn.decimals,
 }));
 
-TOKENS.push({ address: ethToken, decimals: 18 });
+TOKENS.push({ address: config.tokens.ETH, decimals: 18 });
 
 export const DebugTenderlyFaucet = () => {
   const { user } = useWeb3();
