@@ -40,7 +40,7 @@ export const BuySellBlock: FC<Props> = ({
   const [isRange, setIsRange] = useState(false);
 
   return (
-    <div className={'bg-secondary space-y-10 rounded-18 p-20'}>
+    <div className={'bg-secondary space-y-10 rounded-10 p-20'}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">
           {title}{' '}
@@ -107,7 +107,7 @@ const InputLimit: FC<{
   setPrice: (value: string) => void;
 }> = ({ buyToken, sellToken, price, setPrice }) => {
   return (
-    <div className={'bg-body rounded-14 p-16'}>
+    <div className={'bg-body rounded-16 p-16'}>
       <div className="mb-8 text-12 text-error-500">
         {sellToken.symbol} per {buyToken.symbol}
       </div>
@@ -168,7 +168,7 @@ const BudgetInput: FC<{
   isBalanceLoading: boolean;
 }> = ({ title, budget, setBudget, buyToken, balance, isBalanceLoading }) => {
   return (
-    <div className={'bg-body rounded-14 p-16'}>
+    <div className={'bg-body rounded-16 p-16'}>
       <div className={'mb-8 flex items-center gap-10'}>
         <div
           className={

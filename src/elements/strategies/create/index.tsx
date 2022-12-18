@@ -22,7 +22,7 @@ export const CreateStrategy = () => {
 
   return (
     <m.div
-      className={'space-y-30'}
+      className={'space-y-20'}
       variants={list}
       initial={'hidden'}
       animate={'visible'}
@@ -37,7 +37,7 @@ export const CreateStrategy = () => {
         Create Strategy
       </div>
       <m.div variants={items} className={'bg-secondary rounded-18 p-20'}>
-        <div className="mb-20 flex items-center justify-between">
+        <div className="mb-14 flex items-center justify-between">
           <h2>Token Pair</h2>
           <Tooltip>??????????</Tooltip>
         </div>
@@ -49,6 +49,13 @@ export const CreateStrategy = () => {
           imgUrl1={target.token?.logoURI}
           onClick0={() => openTokenListModal('source')}
           onClick1={() => openTokenListModal('target')}
+          onMiddleClick={() => {
+            if (source.token || target.token) {
+              source.setToken(target.token);
+              target.setToken(source.token);
+            }
+          }}
+          middleDisabled={!(source.token || target.token)}
         />
       </m.div>
       {showStep2 && source.token && target.token && (
@@ -143,7 +150,7 @@ export const NameBlock: FC<{
   setName: (value: string) => void;
 }> = ({ name, setName }) => {
   return (
-    <div className={'bg-secondary space-y-10 rounded-18 p-20'}>
+    <div className={'bg-secondary space-y-10 rounded-10 p-20'}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-8 text-18">
           Strategy Name
@@ -153,7 +160,7 @@ export const NameBlock: FC<{
         <Tooltip>??????</Tooltip>
       </div>
 
-      <div className="bg-body rounded-14 p-16">
+      <div className="bg-body rounded-16 p-16">
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}

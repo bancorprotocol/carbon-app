@@ -11,6 +11,7 @@ interface Props {
   onClick0: Function;
   onClick1: Function;
   onMiddleClick?: Function;
+  middleDisabled?: boolean;
 }
 
 export const SelectTokens: FC<Props> = ({
@@ -21,6 +22,7 @@ export const SelectTokens: FC<Props> = ({
   onClick0,
   onClick1,
   onMiddleClick,
+  middleDisabled,
 }) => {
   return (
     <div className={'flex items-center justify-between'}>
@@ -42,11 +44,12 @@ export const SelectTokens: FC<Props> = ({
       </button>
       <button
         onClick={() => onMiddleClick?.()}
+        disabled={middleDisabled}
         className={
-          'bg-secondary z-20 flex h-30 w-30 flex-grow-0 items-center justify-center rounded-full'
+          'bg-secondary z-20 flex h-30 w-30 flex-grow-0 items-center justify-center rounded-full disabled:cursor-not-allowed'
         }
       >
-        <IconArrow />
+        <IconArrow className={`${middleDisabled && 'opacity-25'}`} />
       </button>
       <button
         onClick={() => onClick1()}
