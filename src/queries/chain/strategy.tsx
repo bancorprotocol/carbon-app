@@ -8,10 +8,7 @@ import { MultiCall, useMulticall } from 'hooks/useMulticall';
 import { decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
 import { getMockTokenById } from 'tokens/tokenHelperFn';
-
-enum ServerStateKeysEnum {
-  Strategies = 'strategies',
-}
+import { QueryKey } from '../queryKey';
 
 export enum StrategyStatus {
   Active,
@@ -44,9 +41,13 @@ export const useGetUserStrategies = () => {
   const { tokens, getTokenById } = useTokens();
 
   return useQuery<Strategy[]>(
-    [ServerStateKeysEnum.Strategies],
+    QueryKey.strategies(user),
     async () => {
-      const balance = await Voucher.read.balanceOf(user!);
+      if (!user) {
+        return [];
+      }
+
+      const balance = await Voucher.read.balanceOf(user);
 
       const calls: MultiCall[] = Array.from(
         Array(balance.toNumber()),
@@ -54,7 +55,7 @@ export const useGetUserStrategies = () => {
           contractAddress: Voucher.read.address,
           interface: Voucher.read.interface,
           methodName: 'tokenOfOwnerByIndex',
-          methodParameters: [user!, i],
+          methodParameters: [user, i],
         })
       );
       const mcResult = await fetchMulticall(calls);
@@ -97,7 +98,7 @@ export const useGetUserStrategies = () => {
         };
       });
     },
-    { enabled: !!user && tokens.length > 0 }
+    { enabled: tokens.length > 0 }
   );
 };
 
@@ -114,6 +115,7 @@ export interface CreateStrategyParams {
   token1: CreateStrategyOrder;
 }
 export const useCreateStrategy = () => {
+  const { user } = useWeb3();
   const { PoolCollection } = useContract();
   const cache = useQueryClient();
 
@@ -127,7 +129,7 @@ export const useCreateStrategy = () => {
     },
     {
       onSuccess: () => {
-        cache.invalidateQueries([ServerStateKeysEnum.Strategies]);
+        void cache.invalidateQueries({ queryKey: QueryKey.strategies(user) });
       },
       onError: () => {
         // TODO: proper error handling
