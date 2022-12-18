@@ -65,6 +65,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           setMin={order.setMin}
           max={order.max}
           setMax={order.setMax}
+          error={order.rangeError}
         />
       ) : (
         <InputLimit
@@ -72,6 +73,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           sellToken={target.token}
           price={order.price}
           setPrice={order.setPrice}
+          error={order.priceError}
         />
       )}
 
@@ -92,18 +94,24 @@ const InputLimit: FC<{
   sellToken: Token;
   price: string;
   setPrice: (value: string) => void;
-}> = ({ buyToken, sellToken, price, setPrice }) => {
+  error?: string;
+}> = ({ buyToken, sellToken, price, setPrice, error }) => {
   return (
-    <div className={'bg-body rounded-16 p-16'}>
-      <div className="mb-8 text-12 text-error-500">
-        {sellToken.symbol} per {buyToken.symbol}
+    <div>
+      <div className={'bg-body rounded-16 p-16'}>
+        <div className="mb-8 text-12 text-error-500">
+          {sellToken.symbol} per {buyToken.symbol}
+        </div>
+        <input
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          placeholder={`Amount (${sellToken.symbol})`}
+          className={'w-full shrink bg-transparent focus:outline-none'}
+        />
       </div>
-      <input
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-        placeholder={`Amount (${sellToken.symbol})`}
-        className={'w-full shrink bg-transparent focus:outline-none'}
-      />
+      {error && (
+        <div className="text-center text-12 text-error-500">{error}</div>
+      )}
     </div>
   );
 };
@@ -115,33 +123,39 @@ const InputRange: FC<{
   setMin: (value: string) => void;
   max: string;
   setMax: (value: string) => void;
-}> = ({ buyToken, sellToken, min, setMin, max, setMax }) => {
+  error?: string;
+}> = ({ buyToken, sellToken, min, setMin, max, setMax, error }) => {
   return (
-    <div className="flex gap-6">
-      <div className={'bg-body w-full rounded-14 rounded-r-0 p-16'}>
-        <div className="mb-8 text-[11px] text-success-500">
-          Min {sellToken.symbol} per {buyToken.symbol}
-        </div>
-        <input
-          value={min}
-          onChange={(e) => setMin(e.target.value)}
-          placeholder="Price"
-          className={'w-full bg-transparent focus:outline-none'}
-        />
-      </div>
-      <div className={'bg-body w-full rounded-14 rounded-l-0 p-16'}>
-        <div>
+    <div>
+      <div className="flex gap-6">
+        <div className={'bg-body w-full rounded-14 rounded-r-0 p-16'}>
           <div className="mb-8 text-[11px] text-success-500">
-            Max {sellToken.symbol} per {buyToken.symbol}
+            Min {sellToken.symbol} per {buyToken.symbol}
           </div>
           <input
-            value={max}
-            onChange={(e) => setMax(e.target.value)}
-            placeholder={`Price`}
+            value={min}
+            onChange={(e) => setMin(e.target.value)}
+            placeholder="Price"
             className={'w-full bg-transparent focus:outline-none'}
           />
         </div>
+        <div className={'bg-body w-full rounded-14 rounded-l-0 p-16'}>
+          <div>
+            <div className="mb-8 text-[11px] text-success-500">
+              Max {sellToken.symbol} per {buyToken.symbol}
+            </div>
+            <input
+              value={max}
+              onChange={(e) => setMax(e.target.value)}
+              placeholder={`Price`}
+              className={'w-full bg-transparent focus:outline-none'}
+            />
+          </div>
+        </div>
       </div>
+      {error && (
+        <div className="text-center text-12 text-error-500">{error}</div>
+      )}
     </div>
   );
 };

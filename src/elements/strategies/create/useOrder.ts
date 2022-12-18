@@ -12,6 +12,8 @@ export interface Order {
   setMin: (value: string) => void;
   max: string;
   setMax: (value: string) => void;
+  rangeError: string;
+  setRangeError: (value: string) => void;
   priceError: string;
   setPriceError: (value: string) => void;
   balanceQuery: any;
@@ -23,6 +25,7 @@ export const useOrder = () => {
   const [price, setPrice] = useState('');
   const [max, setMax] = useState('');
   const [min, setMin] = useState('');
+  const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
 
   useEffect(() => {
@@ -46,6 +49,8 @@ export const useOrder = () => {
     min,
     setMin,
     balanceQuery,
+    rangeError,
+    setRangeError,
     priceError,
     setPriceError,
   };

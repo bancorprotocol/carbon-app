@@ -83,7 +83,7 @@ export const useCreate = () => {
     const priceCorrect = Number(order.price) > 0;
 
     if (!minMaxCorrect)
-      order.setPriceError(
+      order.setRangeError(
         'Max Price must be higher than min price and not zero'
       );
 
