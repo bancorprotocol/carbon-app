@@ -4,7 +4,8 @@ import { uniqBy } from 'lodash';
 import { utils } from 'ethers';
 import { Token, TokenList } from 'tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
-import { lsService } from '../services/localeStorage';
+import { lsService } from 'services/localeStorage';
+import { wait } from 'utils/helpers';
 
 export const listOfLists = [
   {
@@ -15,30 +16,6 @@ export const listOfLists = [
     uri: 'https://tokens.coingecko.com/ethereum/all.json',
     name: 'CoinGecko',
   },
-  {
-    uri: 'https://tokenlist.zerion.eth.link',
-    name: 'Zerion',
-  },
-  {
-    uri: 'https://zapper.fi/api/token-list',
-    name: 'Zapper Token List',
-  },
-  {
-    uri: 'https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json',
-    name: 'Compound',
-  },
-  {
-    uri: 'https://uniswap.mycryptoapi.com',
-    name: 'MyCrypto Token List',
-  },
-  {
-    uri: 'https://tokenlist.aave.eth.link',
-    name: 'Aave Token List',
-  },
-  {
-    uri: 'https://defiprime.com/defiprime.tokenlist.json',
-    name: 'Defiprime',
-  },
 ];
 
 const getLogoByURI = (uri: string | undefined) =>
@@ -47,17 +24,14 @@ const getLogoByURI = (uri: string | undefined) =>
 const buildIpfsUri = (ipfsHash: string) => `https://ipfs.io/ipfs/${ipfsHash}`;
 
 export const fetchTokenLists = async () => {
+  await wait(5000);
   const res = await Promise.all(
     listOfLists.map(async (list) => {
-      try {
-        const res = await axios.get<TokenList>(list.uri, { timeout: 10000 });
-        return {
-          ...res.data,
-          logoURI: getLogoByURI(res.data.logoURI),
-        };
-      } catch (error) {}
-
-      return undefined;
+      const res = await axios.get<TokenList>(list.uri, { timeout: 10000 });
+      return {
+        ...res.data,
+        logoURI: getLogoByURI(res.data.logoURI),
+      };
     })
   );
 
