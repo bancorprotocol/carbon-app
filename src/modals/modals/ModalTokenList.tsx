@@ -1,6 +1,5 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import { orderBy } from 'lodash';
 import { useState, useMemo, useRef, FC } from 'react';
 import { Token, useTokens } from 'tokens';
 import { useModal } from 'modals/ModalProvider';
@@ -9,7 +8,8 @@ import { SearchInput } from 'components/SearchInput';
 import { wait } from 'utils/helpers';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { utils } from 'ethers';
-import { Button } from '../../components/Button';
+import { Button } from 'components/Button';
+import Fuse from 'fuse.js';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -35,19 +35,54 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     return name + '...';
   };
 
+  const sanitizedTokens = useMemo(
+    () =>
+      tokens.filter(
+        (token) =>
+          (includedTokens.length === 0 ||
+            includedTokens.includes(token.address)) &&
+          !excludedTokens.includes(token.address)
+      ),
+    [tokens, excludedTokens, includedTokens]
+  );
+
+  const myIndex = useMemo(
+    () => Fuse.createIndex(['symbol', 'name', 'address'], sanitizedTokens),
+    [sanitizedTokens]
+  );
+
+  const fuse = useMemo(
+    () =>
+      new Fuse(
+        sanitizedTokens,
+        {
+          keys: ['address', 'symbol', 'name'],
+          threshold: 0.3,
+        },
+        myIndex
+      ),
+    [sanitizedTokens, myIndex]
+  );
+
   const sortedTokens = useMemo(() => {
-    const filtered = tokens.filter(
-      (token) =>
-        ((includedTokens.length === 0 ||
-          includedTokens.includes(token.address)) &&
-          !excludedTokens.includes(token.address) &&
-          (token.symbol.toLowerCase().includes(search.toLowerCase()) ||
-            (token.name &&
-              token.name.toLowerCase().includes(search.toLowerCase())))) ||
-        token.address.toLowerCase().includes(search.toLowerCase())
-    );
-    return orderBy(filtered, ({ symbol }) => symbol, 'asc');
-  }, [tokens, search, excludedTokens, includedTokens]);
+    if (search.length === 0) {
+      return sanitizedTokens;
+    }
+
+    const exactMatch = utils.isAddress(search);
+    if (exactMatch) {
+      const found = sanitizedTokens.find(
+        (token) => token.address.toLowerCase() === search.toLowerCase()
+      );
+      if (found) {
+        return [found];
+      }
+      return [];
+    }
+
+    const result = fuse.search(search);
+    return result.map((result) => result.item);
+  }, [search, sanitizedTokens, fuse]);
 
   const rowVirtualizer = useVirtualizer({
     count: sortedTokens.length,
