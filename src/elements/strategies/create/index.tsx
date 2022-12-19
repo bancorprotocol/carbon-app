@@ -9,6 +9,8 @@ import { Tooltip } from 'components/Tooltip';
 import { FC } from 'react';
 
 export const CreateStrategy = () => {
+  const location = useLocation();
+
   const {
     source,
     target,
@@ -17,8 +19,8 @@ export const CreateStrategy = () => {
     onCTAClick,
     openTokenListModal,
     showStep2,
+    isCTAdisabled,
   } = useCreate();
-  const location = useLocation();
 
   return (
     <m.div
@@ -79,6 +81,7 @@ export const CreateStrategy = () => {
               size={'lg'}
               fullWidth
               onClick={onCTAClick}
+              disabled={isCTAdisabled}
             >
               Create Strategy
             </Button>

@@ -5,6 +5,9 @@ import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { Imager } from 'elements/Imager';
+import { QueryKey, useQueryClient } from 'queries';
+import { useWeb3 } from 'web3';
+import { config } from 'services/web3/config';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -13,8 +16,45 @@ type Props = {
 };
 
 export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
+  const { user } = useWeb3();
   const mutation = useSetUserApproval();
   const [isLimited, setIsLimited] = useState(false);
+  const cache = useQueryClient();
+  const [txBusy, setTxBusy] = useState(false);
+  const [txSuccess, setTxSuccess] = useState(false);
+
+  const onApprove = async () => {
+    if (!data) {
+      return console.error('No data loaded');
+    }
+    setTxBusy(true);
+    await mutation.mutate(
+      { ...data, isLimited },
+      {
+        onSuccess: async (tx, variables) => {
+          await tx.wait();
+          void cache.invalidateQueries({
+            queryKey: QueryKey.approval(
+              user!,
+              variables.tokenAddress,
+              variables.spenderAddress
+            ),
+          });
+          setTxBusy(false);
+          setTxSuccess(true);
+        },
+        onError: () => {
+          // TODO: proper error handling
+          console.error('could not set approval');
+          setTxBusy(false);
+        },
+      }
+    );
+  };
+
+  if (data?.tokenAddress === config.tokens.ETH) {
+    return null;
+  }
 
   // TODO handle error
   if (!data) {
@@ -39,7 +79,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           />
           <div>{data.token.symbol}</div>
         </div>
-        {data.approvalRequired ? (
+        {data.approvalRequired && !txSuccess ? (
           <>
             <div className={'text-secondary'}>Allowance: {data.allowance}</div>
 
@@ -50,9 +90,9 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         ) : null}
       </div>
 
-      {data.approvalRequired ? (
-        mutation.isLoading ? (
-          <div>Approving...</div>
+      {data.approvalRequired && !txSuccess ? (
+        txBusy ? (
+          <div>please wait</div>
         ) : (
           <div className={'flex h-82 flex-col items-end justify-between'}>
             <div className={'flex items-center space-x-8'}>
@@ -70,12 +110,8 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
                 size={'sm'}
               />
             </div>
-            <Button
-              variant={'secondary'}
-              onClick={() => mutation.mutate(data)}
-              size={'sm'}
-            >
-              Approve
+            <Button variant={'secondary'} onClick={onApprove} size={'sm'}>
+              Confirm
             </Button>
           </div>
         )
