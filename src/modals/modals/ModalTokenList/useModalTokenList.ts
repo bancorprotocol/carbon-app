@@ -9,15 +9,11 @@ import { orderBy } from 'lodash';
 const SEARCH_KEYS = [
   {
     name: 'symbol',
-    weight: 0.5,
+    weight: 0.6,
   },
   {
     name: 'name',
-    weight: 0.3,
-  },
-  {
-    name: 'address',
-    weight: 0.2,
+    weight: 0.4,
   },
 ];
 
