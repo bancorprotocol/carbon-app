@@ -6,8 +6,14 @@ import { SelectTokens } from 'components/SelectTokens';
 import { BudgetBlock } from 'components/BudgetBlock';
 
 export const CreateStrategy = () => {
-  const { source, target, onCTAClick, openTokenListModal, showStep2 } =
-    useCreate();
+  const {
+    source,
+    target,
+    onCTAClick,
+    openTokenListModal,
+    showStep2,
+    isCTAdisabled,
+  } = useCreate();
 
   return (
     <m.div
@@ -104,6 +110,7 @@ export const CreateStrategy = () => {
               size={'lg'}
               fullWidth
               onClick={onCTAClick}
+              disabled={isCTAdisabled}
             >
               Confirm Strategy
             </Button>
