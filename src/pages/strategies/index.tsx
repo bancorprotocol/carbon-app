@@ -40,7 +40,13 @@ const StrategyContent = () => {
   ) : filteredStrategies && strategies.data && strategies.data.length > 0 ? (
     <Page
       title={'Strategies'}
-      widget={<StrategyPageTitleWidget search={search} setSearch={setSearch} />}
+      widget={
+        <StrategyPageTitleWidget
+          search={search}
+          setSearch={setSearch}
+          showFilter={strategies.data.length > 2}
+        />
+      }
     >
       <m.div
         className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
@@ -80,15 +86,20 @@ const StrategyLoadingPage = () => {
 const StrategyPageTitleWidget: FC<{
   search: string;
   setSearch: (value: string) => void;
-}> = ({ search, setSearch }) => {
+  showFilter: boolean;
+}> = ({ search, setSearch, showFilter }) => {
   return (
     <div className="flex items-center gap-20">
-      <SearchInput
-        value={search}
-        setValue={setSearch}
-        className="h-40 w-full"
-      />
-      <FilterSort />
+      {showFilter && (
+        <>
+          <SearchInput
+            value={search}
+            setValue={setSearch}
+            className="h-40 w-full"
+          />
+          <FilterSort />
+        </>
+      )}
       <Link to={PathNames.createStrategy}>
         <Button variant="secondary">Create Strategy</Button>
       </Link>
@@ -118,18 +129,6 @@ const FilterSort = () => {
     >
       <div className="grid w-[300px] gap-20 p-10">
         <div className="text-secondary text-20">Sort By</div>
-        <button className="flex items-center justify-between">
-          Recent Trade Activity
-          {false && <IconCheck />}
-        </button>
-        <button className="flex items-center justify-between">
-          Largest Balance (USD)
-          {false && <IconCheck />}
-        </button>
-        <button className="flex items-center justify-between">
-          Smallest Balance (USD)
-          {false && <IconCheck />}
-        </button>
         <button className="flex items-center justify-between">
           Recently Created
           {false && <IconCheck />}

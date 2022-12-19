@@ -54,8 +54,8 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
         </div>
       </div>
       <hr className="border-silver dark:border-emphasis" />
-      <BuySell title="Buy" order={strategy.order0} />
-      <BuySell title="Sell" order={strategy.order1} />
+      <BuySell buy order={strategy.order0} otherOrder={strategy.order1} />
+      <BuySell order={strategy.order1} otherOrder={strategy.order0} />
       <OrderStatus status={strategy.status} />
       <DropdownMenu
         isOpen={manage}
@@ -125,18 +125,22 @@ const OrderStatus: FC<{ status: StrategyStatus }> = ({ status }) => {
   );
 };
 
-const BuySell: FC<{ order: Order; title: string }> = ({ order, title }) => {
+const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
+  order,
+  otherOrder,
+  buy,
+}) => {
   const limit = order.startRate === order.endRate;
   return (
     <div className="rounded-8 border border-emphasis p-15">
       <div className="flex items-center gap-6">
-        {title}
+        {buy ? 'Buy' : 'Sell'}
         <Imager className="h-16 w-16" src={order.token.logoURI} alt="token" />
       </div>
       <hr className="my-12 border-silver dark:border-emphasis" />
       <div>
         <div className="mb-5 flex items-center justify-between">
-          <div className={`${limit ? 'text-success-500' : 'text-error-500'}`}>
+          <div className={`${buy ? 'text-success-500' : 'text-error-500'}`}>
             {limit ? 'Limit Price' : 'Price Range'}
           </div>
           <div className="flex items-center gap-7">
@@ -158,20 +162,26 @@ const BuySell: FC<{ order: Order; title: string }> = ({ order, title }) => {
         <div className="mb-10 flex items-center justify-between">
           <div className="text-secondary !text-16">Budget</div>
           <div className="flex items-center gap-7">
-            {prettifyNumber(order.balance, {
-              abbreviate: order.balance.length > 10,
+            {prettifyNumber(otherOrder.balance, {
+              abbreviate: otherOrder.balance.length > 10,
             })}
             <Imager
               className="h-16 w-16"
-              src={order.token.logoURI}
+              src={otherOrder.token.logoURI}
               alt="token"
             />
           </div>
         </div>
         {limit ? (
-          <IconPriceGraph className="text-success-500" />
+          <IconPriceGraph
+            className={`${
+              buy ? 'text-white text-success-500' : 'text-error-500'
+            }`}
+          />
         ) : (
-          <IconRangeGraph className="text-error-500" />
+          <IconRangeGraph
+            className={`${buy ? 'text-success-500' : 'text-error-500'}`}
+          />
         )}
       </div>
     </div>
