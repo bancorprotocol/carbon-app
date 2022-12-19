@@ -2,6 +2,7 @@ import { Imager } from 'elements/Imager';
 import { FC, useRef } from 'react';
 import { Token } from 'tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 type Props = {
   tokens: Token[];
@@ -60,11 +61,13 @@ export const ModalTokenListContent: FC<Props> = ({ tokens, onSelect }) => {
                     className="h-32 w-32 !rounded-full"
                   />
                   <div className="ml-15 grid justify-items-start">
-                    <div className="text-16">
-                      {token.symbol}{' '}
-                      <span className={'text-warning-500'}>
-                        {token.isSuspicious && 'suspicious'}
-                      </span>
+                    <div className="flex text-16">
+                      {token.symbol}
+                      {token.isSuspicious && (
+                        <IconWarning
+                          className={'ml-10 w-14 text-warning-500'}
+                        />
+                      )}
                     </div>
                     <div className="text-secondary text-12">
                       {

@@ -5,7 +5,6 @@ import { utils } from 'ethers';
 import { Token, TokenList } from 'tokens/token.types';
 import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
-import { wait } from 'utils/helpers';
 
 export const listOfLists = [
   {
@@ -24,7 +23,6 @@ const getLogoByURI = (uri: string | undefined) =>
 const buildIpfsUri = (ipfsHash: string) => `https://ipfs.io/ipfs/${ipfsHash}`;
 
 export const fetchTokenLists = async () => {
-  await wait(5000);
   const res = await Promise.all(
     listOfLists.map(async (list) => {
       const res = await axios.get<TokenList>(list.uri, { timeout: 10000 });

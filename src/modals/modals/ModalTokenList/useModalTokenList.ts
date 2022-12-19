@@ -4,6 +4,7 @@ import { useModal } from '../../ModalProvider';
 import Fuse from 'fuse.js';
 import { utils } from 'ethers';
 import { ModalTokenListData } from './ModalTokenList';
+import { orderBy } from 'lodash';
 
 const SEARCH_KEYS = [
   {
@@ -71,7 +72,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
   const filteredTokens = useMemo(() => {
     if (search.length === 0) {
-      return sanitizedTokens;
+      return orderBy(sanitizedTokens, 'symbol', 'asc');
     }
 
     const isAddress = utils.isAddress(search);

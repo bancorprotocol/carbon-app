@@ -6,6 +6,8 @@ import { useModalTokenList } from './useModalTokenList';
 import { ModalTokenListImport } from './ModalTokenListImport';
 import { ModalTokenListNotFound } from './ModalTokenListNotFound';
 import { ModalTokenListContent } from './ModalTokenListContent';
+import { ModalTokenListLoading } from './ModalTokenListLoading';
+import { ModalTokenListError } from './ModalTokenListError';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -33,9 +35,9 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         className="mt-20 w-full rounded-8 py-10"
       />
       {isError ? (
-        <div>error</div>
+        <ModalTokenListError />
       ) : isLoading ? (
-        <div>loading</div>
+        <ModalTokenListLoading />
       ) : showImportToken ? (
         <ModalTokenListImport address={search} />
       ) : showNoResults ? (

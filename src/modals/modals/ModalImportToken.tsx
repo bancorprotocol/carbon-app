@@ -7,7 +7,8 @@ import { useModal } from 'modals';
 import { shortenString } from 'utils/helpers';
 import { IconTitleText } from 'components/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { getExplorerLink } from '../../utils/blockExplorer';
+import { ReactComponent as IconLink } from 'assets/icons/link.svg';
+import { getExplorerLink } from 'utils/blockExplorer';
 
 export type ModalImportTokenData = {
   address: string;
@@ -29,6 +30,8 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
     closeModal(id);
   };
 
+  const blockClasses = 'my-20 h-80 rounded-8';
+
   return (
     <Modal id={id} title={'Import Token'}>
       <div className={'mt-40'}>
@@ -42,24 +45,37 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         />
       </div>
 
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>Error</div>}
+      {isLoading && (
+        <div className={`${blockClasses} animate-pulse dark:bg-silver`}></div>
+      )}
+      {isError && (
+        <div
+          className={`${blockClasses} flex items-center justify-center dark:bg-error-500/30`}
+        >
+          Error
+        </div>
+      )}
       {data && (
-        <div className={'my-20 rounded-8 bg-silver p-16'}>
-          <div className={'flex items-end justify-between'}>
-            <div>{data.symbol}</div>
+        <div className={`${blockClasses} bg-silver p-16`}>
+          <div className={'flex items-center justify-between'}>
+            <div className={'font-weight-500'}>{data.symbol}</div>
             <a
               href={getExplorerLink('token', data.address)}
               target={'_blank'}
-              className={'font-weight-500 text-warning-500'}
+              className={
+                'flex items-center text-14 font-weight-500 text-warning-500'
+              }
               rel="noreferrer"
             >
-              View on Explorer
+              <span className={'whitespace-nowrap'}>View on Explorer</span>
+              <IconLink className={'ml-4 inline-flex h-14'} />
             </a>
           </div>
           <div className={'flex items-center justify-between'}>
-            <div className={'text-secondary'}>{data.name}</div>
-            <div>{shortenString(data.address)}</div>
+            <div className={'text-secondary text-14'}>{data.name}</div>
+            <div className={'font-mono text-14'}>
+              {shortenString(data.address)}
+            </div>
           </div>
         </div>
       )}
