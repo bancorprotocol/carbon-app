@@ -43,4 +43,8 @@
   .text-secondary {
     @apply text-14  text-charcoal/50 dark:text-white/50;
   }
+
+  .loading-skeleton {
+    @apply animate-pulse rounded-10 bg-silver bg-opacity-30;
+  }
 }
