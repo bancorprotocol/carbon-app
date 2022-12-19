@@ -1,6 +1,8 @@
 import { FC } from 'react';
-import { useModal } from '../../ModalProvider';
-import { Button } from '../../../components/Button';
+import { useModal } from 'modals';
+import { Button } from 'components/Button';
+import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
+import { IconTitleText } from 'components/IconTitleText';
 
 export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
   const { openModal } = useModal();
@@ -9,21 +11,30 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
     openModal('importToken', { address });
   };
 
+  const Text = () => (
+    <>
+      <span>
+        Unfortunately we couldn't find a token for the address you entered, try
+      </span>
+      <span className={'font-weight-500 dark:text-white'}>
+        {' '}
+        to import a new token.
+      </span>
+    </>
+  );
+
   return (
     <>
-      <div className={'mt-40 mb-20 flex w-full justify-center'}>
-        <div className={'max-w-[276px] space-y-12 text-center'}>
-          <h2>Token not found</h2>
-          <p className={'text-14'}>
-            Unfortunately we couldn't find a token for the address you entered,
-            try
-            <span className={'font-weight-600'}> to import a new token.</span>
-          </p>
-        </div>
+      <div className={'mt-40 flex w-full flex-col items-center'}>
+        <IconTitleText
+          icon={<IconSearch />}
+          title={'Token not found'}
+          text={<Text />}
+        />
+        <Button variant={'secondary'} onClick={onClick} className={'my-30'}>
+          Import Token
+        </Button>
       </div>
-      <Button fullWidth onClick={onClick}>
-        Import Token
-      </Button>
     </>
   );
 };
