@@ -1,29 +1,44 @@
 import { useState } from 'react';
 import { Button } from 'components/Button';
-import { Input, Label } from 'components/InputField';
+import { Input, InputUserAccount, Label } from 'components/InputField';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
+import { QueryKey, useQueryClient } from 'queries';
 
 export const DebugTransferNFT = () => {
   const { user } = useWeb3();
   const { Voucher } = useContract();
   const [inputId, setInputId] = useState('');
   const [inputRecipient, setInputRecipient] = useState('');
+  const cache = useQueryClient();
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOnClick = async () => {
+    setIsSuccess(false);
+    setIsError(false);
     if (!user) {
       console.error('No user logged in');
       return;
     }
+    setIsLoading(true);
 
     try {
       const tx = await Voucher.write.transferFrom(
         user,
         inputRecipient,
-        inputId
+        inputId,
+        { gasLimit: '99999999999999' }
       );
+      await tx.wait();
+      await cache.invalidateQueries({ queryKey: QueryKey.strategies(user) });
+      setIsSuccess(true);
     } catch (e) {
       console.error('failed to transfer NFT', e);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,14 +57,17 @@ export const DebugTransferNFT = () => {
           fullWidth
         />
       </Label>
-      <Label label={'Recipient'}>
-        <Input
-          value={inputRecipient}
-          onChange={(e) => setInputRecipient(e.target.value)}
-          fullWidth
-        />
-      </Label>
-      <Button onClick={handleOnClick}>Confirm</Button>
+      <InputUserAccount
+        label={'Recipient'}
+        value={inputRecipient}
+        onChange={(e) => setInputRecipient(e.target.value)}
+      />
+
+      {isSuccess && <p className={'text-success-500'}>Success!</p>}
+      {isError && <p className={'text-error-500'}>Error!</p>}
+      <Button onClick={handleOnClick} disabled={isLoading}>
+        {isLoading ? 'loading' : 'Confirm'}
+      </Button>
     </div>
   );
 };
