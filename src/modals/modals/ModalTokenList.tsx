@@ -129,6 +129,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
               <SuggestedTokens
                 allTokens={tokens}
                 suggestedTokens={suggestedTokens}
+                excludedTokens={excludedTokens}
                 onClick={(token) => {
                   onClick(token);
                   onClose();
@@ -198,20 +199,22 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
 interface SuggestedTokensProps {
   allTokens: Token[];
   suggestedTokens: string[];
+  excludedTokens: string[];
   onClick: (token: Token) => void;
 }
 
 export const SuggestedTokens = ({
   allTokens,
   suggestedTokens,
+  excludedTokens,
   onClick,
 }: SuggestedTokensProps) => {
   const suggestedTokenList = useMemo(
     () =>
       suggestedTokens
         .map((token) => allTokens.find((t) => t.symbol === token))
-        .filter((token) => !!token),
-    [allTokens, suggestedTokens]
+        .filter((token) => !!token && !excludedTokens.includes(token.address)),
+    [allTokens, suggestedTokens, excludedTokens]
   );
 
   return (

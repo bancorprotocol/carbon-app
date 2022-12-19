@@ -5,7 +5,7 @@ import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { useTokens } from 'tokens';
+import { Token, useTokens } from 'tokens';
 import { PathNames, useNavigate } from 'routing';
 
 const spenderAddress = poolCollectionProxyAbi.address;
@@ -46,6 +46,17 @@ export const useCreate = () => {
   }, [source.budget, source.token, target.budget, target.token]);
 
   const approval = useApproval(approvalTokens);
+
+  const resetFields = () => {
+    source.setMin('');
+    source.setMax('');
+    source.setPrice('');
+    source.setBudget('');
+    target.setMin('');
+    target.setMax('');
+    target.setPrice('');
+    target.setBudget('');
+  };
 
   const create = async () => {
     if (!(source && target)) {
@@ -121,17 +132,18 @@ export const useCreate = () => {
     }
   };
 
-  const openTokenListModal = (type?: 'source' | 'target') => {
-    const onClick =
-      type === 'source'
-        ? source.setToken
-        : type === 'target'
-        ? target.setToken
-        : () => {};
+  const openTokenListModal = (isSource?: boolean) => {
+    const onClick = (token: Token) => {
+      isSource ? source.setToken(token) : target.setToken(token);
+      resetFields();
+    };
 
     const data: ModalTokenListData = {
       onClick,
       tokens: tokens ?? [],
+      excludedTokens: [
+        isSource ? target.token?.address ?? '' : source.token?.address ?? '',
+      ],
       limit: true,
     };
     openModal('tokenLists', data);

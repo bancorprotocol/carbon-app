@@ -4,6 +4,7 @@ import { prettifyNumber } from 'utils/helpers';
 import { Tooltip } from 'components/Tooltip';
 import { Token } from 'tokens';
 import { Order } from 'elements/strategies/create/useOrder';
+import { useSanitizeInput } from 'hooks/useSanitizeInput';
 
 type Props = {
   source: Order;
@@ -18,9 +19,15 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
 
   const handleRangeChange = () => {
     setIsRange(!isRange);
-    source.setMax('');
-    source.setMin('');
-    source.setPrice('');
+    if (buy) {
+      source.setMax('');
+      source.setMin('');
+      source.setPrice('');
+    } else {
+      target.setMax('');
+      target.setMin('');
+      target.setPrice('');
+    }
   };
 
   //Impossible but TS doesnt recognize it
@@ -66,6 +73,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           max={order.max}
           setMax={order.setMax}
           error={order.rangeError}
+          buy={buy}
         />
       ) : (
         <InputLimit
@@ -74,6 +82,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           price={order.price}
           setPrice={order.setPrice}
           error={order.priceError}
+          buy={buy}
         />
       )}
 
@@ -81,10 +90,11 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
         title={title}
         budget={order.budget}
         setBudget={order.setBudget}
-        buyToken={buy ? source.token : target.token}
+        buyToken={buy ? target.token : source.token}
         balance={order.balanceQuery.data}
         isBalanceLoading={order.balanceQuery.isLoading}
         error={order.budgetError}
+        setBudgetError={order.setBudgetError}
       />
     </div>
   );
@@ -96,7 +106,9 @@ const InputLimit: FC<{
   price: string;
   setPrice: (value: string) => void;
   error?: string;
-}> = ({ buyToken, sellToken, price, setPrice, error }) => {
+  buy?: boolean;
+}> = ({ buyToken, sellToken, price, setPrice, error, buy }) => {
+  const handleChange = useSanitizeInput(setPrice);
   return (
     <div>
       <div
@@ -104,13 +116,17 @@ const InputLimit: FC<{
           error && 'border border-error-500 text-error-500'
         } bg-body rounded-16 p-16`}
       >
-        <div className="mb-8 text-12 text-error-500">
+        <div
+          className={`mb-8 text-12 ${
+            buy ? 'text-success-500' : 'text-error-500'
+          }`}
+        >
           {sellToken.symbol} per {buyToken.symbol}
         </div>
         <input
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder={`Amount (${sellToken.symbol})`}
+          onChange={handleChange}
+          placeholder="Price"
           className={'w-full shrink bg-transparent focus:outline-none'}
         />
       </div>
@@ -129,7 +145,10 @@ const InputRange: FC<{
   max: string;
   setMax: (value: string) => void;
   error?: string;
-}> = ({ buyToken, sellToken, min, setMin, max, setMax, error }) => {
+  buy?: boolean;
+}> = ({ buyToken, sellToken, min, setMin, max, setMax, error, buy }) => {
+  const handleChangeMin = useSanitizeInput(setMin);
+  const handleChangeMax = useSanitizeInput(setMax);
   return (
     <div>
       <div className="flex gap-6">
@@ -138,12 +157,16 @@ const InputRange: FC<{
             error && 'border border-error-500 text-error-500'
           } bg-body w-full rounded-14 rounded-r-0 p-16`}
         >
-          <div className="mb-8 text-[11px] text-success-500">
+          <div
+            className={`mb-8 text-[11px] ${
+              buy ? 'text-success-500' : 'text-error-500'
+            }`}
+          >
             Min {sellToken.symbol} per {buyToken.symbol}
           </div>
           <input
             value={min}
-            onChange={(e) => setMin(e.target.value)}
+            onChange={handleChangeMin}
             placeholder="Price"
             className={'w-full bg-transparent focus:outline-none'}
           />
@@ -154,12 +177,16 @@ const InputRange: FC<{
           } bg-body w-full rounded-14 rounded-l-0 p-16`}
         >
           <div>
-            <div className="mb-8 text-[11px] text-success-500">
+            <div
+              className={`mb-8 text-[11px] ${
+                buy ? 'text-success-500' : 'text-error-500'
+              }`}
+            >
               Max {sellToken.symbol} per {buyToken.symbol}
             </div>
             <input
               value={max}
-              onChange={(e) => setMax(e.target.value)}
+              onChange={handleChangeMax}
               placeholder={`Price`}
               className={'w-full bg-transparent focus:outline-none'}
             />
@@ -180,6 +207,7 @@ const BudgetInput: FC<{
   buyToken: Token;
   balance?: string;
   isBalanceLoading: boolean;
+  setBudgetError: (error: string) => void;
   error?: string;
 }> = ({
   title,
@@ -188,8 +216,11 @@ const BudgetInput: FC<{
   buyToken,
   balance,
   isBalanceLoading,
+  setBudgetError,
   error,
 }) => {
+  const handleChange = useSanitizeInput(setBudget);
+
   return (
     <div
       className={`${
@@ -212,7 +243,12 @@ const BudgetInput: FC<{
         <input
           value={budget}
           size={1}
-          onChange={(e) => setBudget(e.target.value)}
+          onChange={handleChange}
+          onBlur={() =>
+            setBudgetError(
+              Number(budget) > Number(balance) ? 'Insufficient Balance' : ''
+            )
+          }
           placeholder={`${title} Amount`}
           className={
             'w-full shrink bg-transparent text-right focus:outline-none'

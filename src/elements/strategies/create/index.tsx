@@ -49,8 +49,8 @@ export const CreateStrategy = () => {
           symbol1={target.token?.symbol}
           imgUrl0={source.token?.logoURI}
           imgUrl1={target.token?.logoURI}
-          onClick0={() => openTokenListModal('source')}
-          onClick1={() => openTokenListModal('target')}
+          onClick0={() => openTokenListModal(true)}
+          onClick1={() => openTokenListModal()}
           onMiddleClick={() => {
             if (source.token || target.token) {
               source.setToken(target.token);
@@ -139,6 +139,7 @@ export const NameBlock: FC<{
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Eg. Carbon Strategy"
+          maxLength={32}
           className={'mb-8 w-full bg-transparent focus:outline-none'}
         />
         <div className="text-secondary !text-10">32 Characters Max</div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Token } from 'tokens';
 import { useGetTokenBalance } from 'queries/chain/balance';
 
@@ -30,13 +30,6 @@ export const useOrder = () => {
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [budgetError, setBudgetError] = useState('');
-
-  useEffect(() => {
-    setMin('');
-    setMax('');
-    setPrice('');
-    setBudget('');
-  }, [token?.address]);
 
   const balanceQuery = useGetTokenBalance(token);
 
