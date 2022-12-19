@@ -105,7 +105,7 @@ export const useCreate = () => {
 
   const isCTAdisabled = useMemo(() => {
     return approval.isLoading || approval.isError || mutation.isLoading;
-  }, []);
+  }, [approval.isError, approval.isLoading, mutation.isLoading]);
 
   return {
     source,
