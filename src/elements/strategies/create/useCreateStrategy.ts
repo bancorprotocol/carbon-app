@@ -4,11 +4,9 @@ import { useMemo } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
-import { ApprovalToken } from 'hooks/useApproval';
+import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { useTokens } from 'tokens';
-import { useNavigate } from '@tanstack/react-location';
-import { PathNames } from 'routing';
-import { txWait } from 'utils/tenderly';
+import { PathNames, useNavigate } from 'routing';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 
@@ -46,6 +44,8 @@ export const useCreate = () => {
     return array;
   }, [source.liquidity, source.token, target.liquidity, target.token]);
 
+  const approval = useApproval(approvalTokens);
+
   const create = async () => {
     if (!(source && target)) {
       throw new Error('source or target tokens not set');
@@ -68,7 +68,7 @@ export const useCreate = () => {
       {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);
-          await txWait(tx);
+          await tx.wait();
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
@@ -80,7 +80,11 @@ export const useCreate = () => {
   };
 
   const onCTAClick = async () => {
-    openModal('txConfirm', { approvalTokens, onConfirm: create });
+    if (approval.approvalRequired) {
+      openModal('txConfirm', { approvalTokens, onConfirm: create });
+    } else {
+      create();
+    }
   };
 
   const openTokenListModal = (type?: 'source' | 'target') => {
@@ -99,11 +103,16 @@ export const useCreate = () => {
     openModal('tokenLists', data);
   };
 
+  const isCTAdisabled = useMemo(() => {
+    return approval.isLoading || approval.isError || mutation.isLoading;
+  }, []);
+
   return {
     source,
     target,
     onCTAClick,
     openTokenListModal,
     showStep2,
+    isCTAdisabled,
   };
 };

@@ -4,8 +4,7 @@ import { Button } from 'components/Button';
 import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
-import { QueryKey } from 'queries';
-import { useQueryClient } from '@tanstack/react-query';
+import { QueryKey, useQueryClient } from 'queries';
 import { useWeb3 } from 'web3';
 import { config } from 'services/web3/config';
 

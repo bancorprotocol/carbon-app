@@ -1,3 +1,3 @@
 export { Router } from './router';
-export { Link, Outlet } from '@tanstack/react-location';
+export { Link, Outlet, useNavigate } from '@tanstack/react-location';
 export { PathNames } from './routes';

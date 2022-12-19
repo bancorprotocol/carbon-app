@@ -2,9 +2,6 @@ import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { Token__factory } from 'abis/types/factories/Token__factory';
 import { lsService } from 'services/localeStorage';
 import { expandToken } from 'utils/tokens';
-import { ContractTransaction } from 'ethers';
-import { IS_TENDERLY_FORK } from 'web3';
-import { wait } from './helpers';
 
 export interface FaucetToken {
   decimals: number;
@@ -57,15 +54,4 @@ export const tenderlyFaucetTransferTKN = async (
     user,
     expandToken(FAUCET_AMOUNT, token.decimals)
   );
-};
-
-export const txWait = async (tx: ContractTransaction) => {
-  if (IS_TENDERLY_FORK) {
-    console.log('txWait start', tx.hash);
-    await tx.wait();
-    await wait(5000);
-    console.log('txWait done', tx.hash);
-  } else {
-    await tx.wait();
-  }
 };
