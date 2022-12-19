@@ -31,7 +31,14 @@ export const useApproval = (data: ApprovalToken[]) => {
     });
   }, [approvalQuery, data]);
 
-  const approvalRequired = result.some((x) => x.data?.approvalRequired);
+  const approvalRequired = useMemo(
+    () => result.some((x) => x.data?.approvalRequired),
+    [result]
+  );
 
-  return { approvalQuery: result, approvalRequired };
+  const isLoading = useMemo(() => result.some((x) => x.isLoading), [result]);
+  const isError = useMemo(() => result.some((x) => x.isError), [result]);
+  const error = useMemo(() => result.find((x) => x.isError)?.error, [result]);
+
+  return { approvalQuery: result, approvalRequired, isLoading, isError, error };
 };
