@@ -3,8 +3,7 @@ import { Button } from 'components/Button';
 import { Input, InputUserAccount, Label } from 'components/InputField';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
-import { useQueryClient } from '@tanstack/react-query';
-import { QueryKey } from 'queries';
+import { QueryKey, useQueryClient } from 'queries';
 
 export const DebugTransferNFT = () => {
   const { user } = useWeb3();
