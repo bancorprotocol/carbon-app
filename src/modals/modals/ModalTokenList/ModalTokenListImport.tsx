@@ -15,10 +15,11 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
     <>
       <span>
         Unfortunately we couldn't find a token for the address you entered, try
+        to
       </span>
       <span className={'font-weight-500 dark:text-white'}>
         {' '}
-        to import a new token.
+        import a new token.
       </span>
     </>
   );
