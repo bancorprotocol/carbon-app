@@ -2,16 +2,16 @@ import { useOrder } from './useOrder';
 import { useCreateStrategy } from 'queries';
 import { useMemo } from 'react';
 import { useModal } from 'modals';
-import { ModalTokenListData } from 'modals/modals/ModalTokenList';
+import { ModalTokenListData } from 'modals/modals/ModalTokenList/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
-import { ApprovalToken } from 'hooks/useApproval';
-import { useTokens } from 'tokens';
+import { ApprovalToken, useApproval } from 'hooks/useApproval';
+import { PathNames, useNavigate } from 'routing';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 
 export const useCreate = () => {
+  const navigate = useNavigate();
   const { openModal } = useModal();
-  const { tokens } = useTokens();
   const source = useOrder();
   const target = useOrder();
   const mutation = useCreateStrategy();
@@ -42,6 +42,8 @@ export const useCreate = () => {
     return array;
   }, [source.liquidity, source.token, target.liquidity, target.token]);
 
+  const approval = useApproval(approvalTokens);
+
   const create = async () => {
     if (!(source && target)) {
       throw new Error('source or target tokens not set');
@@ -65,6 +67,7 @@ export const useCreate = () => {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);
           await tx.wait();
+          navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
         onError: (e) => {
@@ -75,7 +78,11 @@ export const useCreate = () => {
   };
 
   const onCTAClick = async () => {
-    openModal('txConfirm', { approvalTokens, onConfirm: create });
+    if (approval.approvalRequired) {
+      openModal('txConfirm', { approvalTokens, onConfirm: create });
+    } else {
+      create();
+    }
   };
 
   const openTokenListModal = (type?: 'source' | 'target') => {
@@ -86,13 +93,13 @@ export const useCreate = () => {
         ? target.setToken
         : () => {};
 
-    const data: ModalTokenListData = {
-      onClick,
-      tokens: tokens ?? [],
-      limit: true,
-    };
+    const data: ModalTokenListData = { onClick };
     openModal('tokenLists', data);
   };
+
+  const isCTAdisabled = useMemo(() => {
+    return approval.isLoading || approval.isError || mutation.isLoading;
+  }, [approval.isError, approval.isLoading, mutation.isLoading]);
 
   return {
     source,
@@ -100,5 +107,6 @@ export const useCreate = () => {
     onCTAClick,
     openTokenListModal,
     showStep2,
+    isCTAdisabled,
   };
 };

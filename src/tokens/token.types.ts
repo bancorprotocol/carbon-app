@@ -5,6 +5,7 @@ export interface Token {
   name?: string;
   symbol: string;
   balance?: string;
+  isSuspicious?: boolean;
 }
 
 export interface TokenList {
