@@ -28,8 +28,8 @@ export const Button: FC<ButtonProps> = ({
     <m.button
       className={buttonStyles({ variant, size, fullWidth, class: className })}
       {...props}
-      whileTap={{ scale: 0.98 }}
-      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.9 }}
+      whileHover={{ scale: 0.98 }}
     />
   );
 };

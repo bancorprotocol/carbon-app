@@ -2,10 +2,9 @@ import { useOrder } from './useOrder';
 import { useCreateStrategy } from 'queries';
 import { useMemo } from 'react';
 import { useModal } from 'modals';
-import { ModalTokenListData } from 'modals/modals/ModalTokenList';
+import { ModalTokenListData } from 'modals/modals/ModalTokenList/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { useTokens } from 'tokens';
 import { PathNames, useNavigate } from 'routing';
 
 const spenderAddress = poolCollectionProxyAbi.address;
@@ -13,7 +12,6 @@ const spenderAddress = poolCollectionProxyAbi.address;
 export const useCreate = () => {
   const navigate = useNavigate();
   const { openModal } = useModal();
-  const { tokens } = useTokens();
   const source = useOrder();
   const target = useOrder();
   const mutation = useCreateStrategy();
@@ -95,11 +93,7 @@ export const useCreate = () => {
         ? target.setToken
         : () => {};
 
-    const data: ModalTokenListData = {
-      onClick,
-      tokens: tokens ?? [],
-      limit: true,
-    };
+    const data: ModalTokenListData = { onClick };
     openModal('tokenLists', data);
   };
 
