@@ -1,0 +1,40 @@
+import { useSanitizeInput } from 'hooks/useSanitizeInput';
+import { FC } from 'react';
+import { Token } from 'tokens';
+
+export const InputLimit: FC<{
+  buyToken: Token;
+  sellToken: Token;
+  price: string;
+  setPrice: (value: string) => void;
+  error?: string;
+  buy?: boolean;
+}> = ({ buyToken, sellToken, price, setPrice, error, buy }) => {
+  const handleChange = useSanitizeInput(setPrice);
+  return (
+    <div>
+      <div
+        className={`${
+          error && 'border border-error-500 text-error-500'
+        } bg-body rounded-16 p-16`}
+      >
+        <div
+          className={`mb-8 text-12 ${
+            buy ? 'text-success-500' : 'text-error-500'
+          }`}
+        >
+          {sellToken.symbol} per {buyToken.symbol}
+        </div>
+        <input
+          value={price}
+          onChange={handleChange}
+          placeholder="Price"
+          className={'w-full shrink bg-transparent focus:outline-none'}
+        />
+      </div>
+      {error && (
+        <div className="text-center text-12 text-error-500">{error}</div>
+      )}
+    </div>
+  );
+};
