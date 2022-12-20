@@ -28,7 +28,8 @@ export const useCreate = () => {
         spenderAddress,
         amount: source.budget,
         decimals: source.token?.decimals,
-        token: source.token,
+        logoURI: source.token.logoURI,
+        symbol: source.token.symbol,
       });
     }
     if (target.token) {
@@ -37,7 +38,7 @@ export const useCreate = () => {
         spenderAddress,
         amount: target.budget,
         decimals: target.token?.decimals,
-        token: target.token,
+        symbol: target.token.symbol,
       });
     }
 

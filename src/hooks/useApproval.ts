@@ -3,11 +3,9 @@ import {
   useGetUserApproval,
 } from 'queries/chain/approval';
 import { useMemo } from 'react';
-import { Token } from 'tokens';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;
-  token: Token;
 };
 
 export type ApprovalTokenResult = ApprovalToken & {

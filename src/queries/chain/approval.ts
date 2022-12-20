@@ -11,6 +11,8 @@ export type GetUserApprovalProps = {
   tokenAddress: string;
   spenderAddress: string;
   decimals: number;
+  symbol: string;
+  logoURI?: string;
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {

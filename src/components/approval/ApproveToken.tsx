@@ -74,10 +74,10 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         <div className={'flex items-center space-x-10'}>
           <Imager
             alt={'Token'}
-            src={data.token.logoURI}
+            src={data.logoURI}
             className={'h-30 w-30 rounded-full'}
           />
-          <div>{data.token.symbol}</div>
+          <div>{data.symbol}</div>
         </div>
         {data.approvalRequired && !txSuccess ? (
           <>

@@ -15,6 +15,7 @@ type Props = {
 export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
   const [isRange, setIsRange] = useState(false);
   const order = buy ? source : target;
+  const otherOrder = buy ? target : source;
   const title = buy ? 'Buy' : 'Sell';
 
   const handleRangeChange = () => {
@@ -91,8 +92,8 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
         budget={order.budget}
         setBudget={order.setBudget}
         buyToken={buy ? target.token : source.token}
-        balance={order.balanceQuery.data}
-        isBalanceLoading={order.balanceQuery.isLoading}
+        balance={otherOrder.balanceQuery.data}
+        isBalanceLoading={otherOrder.balanceQuery.isLoading}
         error={order.budgetError}
         setBudgetError={order.setBudgetError}
       />
