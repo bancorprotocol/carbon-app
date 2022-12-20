@@ -1,5 +1,5 @@
 import { Button } from 'components/Button';
-import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { DropdownMenu } from 'components/DropdownMenu';
 
@@ -8,7 +8,7 @@ export const FilterSort = () => {
     <DropdownMenu
       button={
         <Button variant="tertiary" className="flex items-center gap-10">
-          Filter & Sort <IconArrow className="w-14" />
+          Filter & Sort <IconChevron className="w-14" />
         </Button>
       }
     >

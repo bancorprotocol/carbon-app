@@ -6,7 +6,7 @@ import { Imager } from 'elements/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRangeGraph } from 'assets/icons/rangeGraph.svg';
 import { ReactComponent as IconPriceGraph } from 'assets/icons/priceGraph.svg';
-import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Button } from 'components/Button';
 import { DropdownMenu } from 'components/DropdownMenu';
 
@@ -166,7 +166,7 @@ const Manage: FC<{ manage: boolean; setManage: (flag: boolean) => void }> = ({
           variant={'secondary'}
         >
           Manage
-          <IconArrow className="w-12" />
+          <IconChevron className="w-12" />
         </Button>
       }
       className="w-full !p-10"

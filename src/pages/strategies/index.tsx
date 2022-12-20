@@ -10,7 +10,6 @@ import { Link, PathNames } from 'routing';
 import { useWeb3 } from 'web3';
 import { WalletConnect } from 'components/WalletConnect';
 import { FilterSort } from './FilterSort';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 
 export const StrategiesPage = () => {
   const { user } = useWeb3();
@@ -81,14 +80,6 @@ const StrategyPageTitleWidget: FC<{
 }> = ({ search, setSearch, showFilter }) => {
   return (
     <div className="flex items-center gap-20">
-      <SearchInput
-        value={search}
-        setValue={setSearch}
-        className="h-40 w-full"
-      />
-      <Button variant="tertiary" className="flex items-center gap-10">
-        Filter & Sort <IconChevron className="w-14" />
-      </Button>
       {showFilter && (
         <>
           <SearchInput
