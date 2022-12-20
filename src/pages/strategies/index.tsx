@@ -6,12 +6,10 @@ import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 import { m, mListVariant } from 'motion';
 import { useGetUserStrategies } from 'queries';
 import { FC, useMemo, useState } from 'react';
-import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
-import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { Link, PathNames } from 'routing';
 import { useWeb3 } from 'web3';
 import { WalletConnect } from 'components/WalletConnect';
-import { DropdownMenu } from 'components/DropdownMenu';
+import { FilterSort } from './FilterSort';
 
 export const StrategiesPage = () => {
   const { user } = useWeb3();
@@ -35,16 +33,17 @@ const StrategyContent = () => {
     );
   }, [search, strategies.data]);
 
-  return strategies.isLoading ? (
-    <StrategyLoadingPage />
-  ) : filteredStrategies && strategies.data && strategies.data.length > 0 ? (
+  if (strategies && strategies.data && strategies.data.length === 0)
+    return <CreateFirstStrategy />;
+
+  return (
     <Page
       title={'Strategies'}
       widget={
         <StrategyPageTitleWidget
           search={search}
           setSearch={setSearch}
-          showFilter={strategies.data.length > 2}
+          showFilter={!!(strategies.data && strategies.data.length > 2)}
         />
       }
     >
@@ -54,30 +53,21 @@ const StrategyContent = () => {
         initial={'hidden'}
         animate={'visible'}
       >
-        {filteredStrategies.map((s) => (
-          <StrategyBlock key={s.id} strategy={s} />
-        ))}
+        {strategies.isLoading ? (
+          <>
+            {[...Array(3)].map(() => (
+              <div className="loading-skeleton h-[665px] w-full" />
+            ))}
+          </>
+        ) : (
+          <>
+            {filteredStrategies?.map((s) => (
+              <StrategyBlock key={s.id} strategy={s} />
+            ))}
 
-        <StrategyBlockCreate />
-      </m.div>
-    </Page>
-  ) : (
-    <CreateFirstStrategy />
-  );
-};
-
-const StrategyLoadingPage = () => {
-  return (
-    <Page title={'Strategies'}>
-      <m.div
-        className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
-        variants={mListVariant}
-        initial={'hidden'}
-        animate={'visible'}
-      >
-        {[...Array(3)].map(() => (
-          <div className="loading-skeleton h-[665px] w-full" />
-        ))}
+            <StrategyBlockCreate />
+          </>
+        )}
       </m.div>
     </Page>
   );
@@ -115,43 +105,5 @@ const CreateFirstStrategy = () => {
         className="w-[270px] gap-[32px] text-center text-36"
       />
     </div>
-  );
-};
-
-const FilterSort = () => {
-  return (
-    <DropdownMenu
-      button={
-        <Button variant="tertiary" className="flex items-center gap-10">
-          Filter & Sort <IconArrowDown className="w-14" />
-        </Button>
-      }
-    >
-      <div className="grid w-[300px] gap-20 p-10">
-        <div className="text-secondary text-20">Sort By</div>
-        <button className="flex items-center justify-between">
-          Recently Created
-          {false && <IconCheck />}
-        </button>
-        <button className="flex items-center justify-between">
-          Oldest Created
-          {false && <IconCheck />}
-        </button>
-        <hr className="border-2 border-silver dark:border-emphasis" />
-        <button className="text-secondary">View</button>
-        <button className="flex items-center justify-between">
-          All
-          {false && <IconCheck />}
-        </button>
-        <button className="flex items-center justify-between">
-          Active
-          {false && <IconCheck />}
-        </button>
-        <button className="flex items-center justify-between">
-          Off curve
-          {false && <IconCheck />}
-        </button>
-      </div>
-    </DropdownMenu>
   );
 };
