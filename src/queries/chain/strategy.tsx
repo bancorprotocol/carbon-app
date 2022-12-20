@@ -1,6 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Result } from '@ethersproject/abi';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Result } from '@ethersproject/abi';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
