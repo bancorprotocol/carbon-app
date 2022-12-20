@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Result } from '@ethersproject/abi';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
@@ -6,18 +7,17 @@ import { Token, useTokens } from 'tokens';
 import { MultiCall, useMulticall } from 'hooks/useMulticall';
 import { decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
-import { getMockTokenById } from 'tokens/tokenHelperFn';
+import { fetchTokenData } from 'tokens/tokenHelperFn';
 import { QueryKey } from '../queryKey';
 
 export enum StrategyStatus {
-  Normal,
-  ToBeFilled,
-  Completed,
-  NoAllocation,
+  Active,
+  NoBudget,
   OffCurve,
+  Inactive,
 }
 
-interface Order {
+export interface Order {
   token: Token;
   balance: string;
   curveCapacity: string;
@@ -31,13 +31,14 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   provider: string;
+  name?: string;
 }
 
 export const useGetUserStrategies = () => {
-  const { PoolCollection, Voucher } = useContract();
+  const { PoolCollection, Voucher, Token } = useContract();
   const { fetchMulticall } = useMulticall();
   const { user } = useWeb3();
-  const { tokens, getTokenById } = useTokens();
+  const { tokens, getTokenById, importToken } = useTokens();
 
   return useQuery<Strategy[]>(
     QueryKey.strategies(user),
@@ -58,14 +59,21 @@ export const useGetUserStrategies = () => {
         })
       );
       const mcResult = await fetchMulticall(calls);
-      const ids = mcResult.map((id) => id[0]);
+      const ids = mcResult.map((id: Result) => id[0]);
 
-      const strategies = await PoolCollection.read.strategiesByIds(ids);
+      const strategiesByIds = await PoolCollection.read.strategiesByIds(ids);
 
-      return strategies.map((s) => {
-        // TODO future improvement: fetch symbol and decimals instead of mock token
-        const token0 = getTokenById(s.pair[0]) || getMockTokenById(s.pair[0]);
-        const token1 = getTokenById(s.pair[1]) || getMockTokenById(s.pair[1]);
+      const _getTknData = async (address: string) => {
+        const data = await fetchTokenData(Token, address);
+        importToken(data);
+        return data;
+      };
+
+      const promises = strategiesByIds.map(async (s) => {
+        const token0 =
+          getTokenById(s.pair[0]) || (await _getTknData(s.pair[0]));
+        const token1 =
+          getTokenById(s.pair[1]) || (await _getTknData(s.pair[1]));
 
         const order0 = decodeOrder({ ...s.orders[0] });
         const order1 = decodeOrder({ ...s.orders[1] });
@@ -92,10 +100,12 @@ export const useGetUserStrategies = () => {
             startRate: order1.lowestRate.toString(),
             endRate: order1.highestRate.toString(),
           },
-          status: StrategyStatus.Normal,
+          status: StrategyStatus.Active,
           provider: s.provider,
         };
       });
+
+      return await Promise.all(promises);
     },
     { enabled: tokens.length > 0 }
   );

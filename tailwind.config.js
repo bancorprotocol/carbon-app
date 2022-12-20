@@ -25,6 +25,7 @@ module.exports = {
       secondary: colors.gray,
       success: colors.green,
       error: colors.red,
+      warning: colors.orange,
       charcoal: '#18181A',
       darkGrey: '#303034',
       lightGrey: '#E4E4E6',

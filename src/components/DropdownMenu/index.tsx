@@ -5,27 +5,43 @@ import { useOutsideClick } from 'hooks/useOutsideClick';
 type Props = {
   button: string | ReactNode;
   children: ReactNode;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+  className?: string;
 };
 
-export const DropdownMenu: FC<Props> = ({ children, button }) => {
+export const DropdownMenu: FC<Props> = ({
+  children,
+  button,
+  className,
+  isOpen,
+  setIsOpen,
+}) => {
+  const outsideState = setIsOpen !== undefined && isOpen !== undefined;
   const ref = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  useOutsideClick(ref, () => setIsOpen(false));
+  const [open, setOpen] = useState(false);
+  useOutsideClick(ref, () =>
+    outsideState ? setIsOpen(false) : setOpen(false)
+  );
+  const menuOpen = (outsideState && isOpen) || (!outsideState && open);
 
   return (
     <m.div
       ref={ref}
       initial={false}
-      animate={isOpen ? 'open' : 'closed'}
+      animate={menuOpen ? 'open' : 'closed'}
       className={'relative'}
     >
-      <m.button onClick={() => setIsOpen(!isOpen)}>{button}</m.button>
+      <m.button
+        className="w-full"
+        onClick={() => (outsideState ? setIsOpen(!isOpen) : setOpen(!open))}
+      >
+        {button}
+      </m.button>
       <m.div
-        className={
-          'absolute mt-10 -ml-20 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30'
-        }
+        className={`${className} absolute mt-10 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
         variants={menuVariants}
-        style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+        style={{ pointerEvents: menuOpen ? 'auto' : 'none' }}
       >
         {children}
       </m.div>
