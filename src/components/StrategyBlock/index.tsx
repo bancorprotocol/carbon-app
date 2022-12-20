@@ -57,47 +57,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <BuySell buy order={strategy.order0} otherOrder={strategy.order1} />
       <BuySell order={strategy.order1} otherOrder={strategy.order0} />
       <OrderStatus status={strategy.status} />
-      <DropdownMenu
-        isOpen={manage}
-        setIsOpen={setManage}
-        button={
-          <Button
-            className="flex items-center justify-center gap-8"
-            size={'md'}
-            fullWidth
-            variant={'secondary'}
-          >
-            Manage
-            <IconArrowDown className="w-12" />
-          </Button>
-        }
-        className="w-full !p-10"
-      >
-        <div
-          onClick={() => {
-            setManage(false);
-          }}
-          className="hover:bg-body cursor-pointer rounded-6 p-12"
-        >
-          Edit Strategy Name
-        </div>
-        <div
-          onClick={() => {
-            setManage(false);
-          }}
-          className="hover:bg-body cursor-pointer rounded-6 p-12"
-        >
-          Withdraw Funds
-        </div>
-        <div
-          onClick={() => {
-            setManage(false);
-          }}
-          className="hover:bg-body cursor-pointer rounded-6 p-12"
-        >
-          Delete Strategy
-        </div>
-      </DropdownMenu>
+      <Manage manage={manage} setManage={setManage} />
     </m.div>
   );
 };
@@ -184,6 +144,52 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
           />
         )}
       </div>
+    </div>
+  );
+};
+
+const Manage: FC<{ manage: boolean; setManage: (flag: boolean) => void }> = ({
+  manage,
+  setManage,
+}) => {
+  const items = ['Edit Strategy Name', 'Withdraw Funds', 'Delete Strategy'];
+
+  return (
+    <DropdownMenu
+      isOpen={manage}
+      setIsOpen={setManage}
+      button={
+        <Button
+          className="flex items-center justify-center gap-8"
+          size={'md'}
+          fullWidth
+          variant={'secondary'}
+        >
+          Manage
+          <IconArrowDown className="w-12" />
+        </Button>
+      }
+      className="w-full !p-10"
+    >
+      {items.map((item) => (
+        <ManageItem title={item} setManage={setManage} />
+      ))}
+    </DropdownMenu>
+  );
+};
+
+const ManageItem: FC<{ title: string; setManage: (flag: boolean) => void }> = ({
+  title,
+  setManage,
+}) => {
+  return (
+    <div
+      onClick={() => {
+        setManage(false);
+      }}
+      className="hover:bg-body cursor-pointer rounded-6 p-12"
+    >
+      {title}
     </div>
   );
 };

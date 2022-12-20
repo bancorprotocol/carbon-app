@@ -2,10 +2,14 @@ import { FC } from 'react';
 import { Link, PathNames } from 'routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 
-export const StrategyBlockCreate: FC<{
+type Props = {
   title?: string;
   className?: string;
-}> = ({ title = 'Create a Strategy', className }) => {
+};
+export const StrategyBlockCreate: FC<Props> = ({
+  title = 'Create a Strategy',
+  className,
+}) => {
   return (
     <Link
       to={PathNames.createStrategy}
