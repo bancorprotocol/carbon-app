@@ -9,7 +9,7 @@ import { FC, useMemo, useState } from 'react';
 import { Link, PathNames } from 'routing';
 import { useWeb3 } from 'web3';
 import { WalletConnect } from 'components/WalletConnect';
-import { FilterSort } from './FilterSort';
+import { FilterSort, StrategyFilter, StrategySort } from './FilterSort';
 
 export const StrategiesPage = () => {
   const { user } = useWeb3();
@@ -20,6 +20,8 @@ export const StrategiesPage = () => {
 const StrategyContent = () => {
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
+  const [sort, setSort] = useState(StrategySort.Recent);
+  const [filter, setFilter] = useState(StrategyFilter.All);
 
   const filteredStrategies = useMemo(() => {
     return strategies.data?.filter(
@@ -41,6 +43,10 @@ const StrategyContent = () => {
       title={'Strategies'}
       widget={
         <StrategyPageTitleWidget
+          sort={sort}
+          filter={filter}
+          setSort={setSort}
+          setFilter={setFilter}
           search={search}
           setSearch={setSearch}
           showFilter={!!(strategies.data && strategies.data.length > 2)}
@@ -77,7 +83,11 @@ const StrategyPageTitleWidget: FC<{
   search: string;
   setSearch: (value: string) => void;
   showFilter: boolean;
-}> = ({ search, setSearch, showFilter }) => {
+  sort: StrategySort;
+  filter: StrategyFilter;
+  setSort: (sort: StrategySort) => void;
+  setFilter: (sort: StrategyFilter) => void;
+}> = ({ search, setSearch, showFilter, sort, filter, setSort, setFilter }) => {
   return (
     <div className="flex items-center gap-20">
       {showFilter && (
@@ -87,7 +97,12 @@ const StrategyPageTitleWidget: FC<{
             setValue={setSearch}
             className="h-40 w-full"
           />
-          <FilterSort />
+          <FilterSort
+            sort={sort}
+            filter={filter}
+            setSort={setSort}
+            setFilter={setFilter}
+          />
         </>
       )}
       <Link to={PathNames.createStrategy}>
