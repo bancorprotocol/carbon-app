@@ -172,7 +172,7 @@ const Manage: FC<{ manage: boolean; setManage: (flag: boolean) => void }> = ({
       className="w-full !p-10"
     >
       {items.map((item) => (
-        <ManageItem title={item} setManage={setManage} />
+        <ManageItem key={item} title={item} setManage={setManage} />
       ))}
     </DropdownMenu>
   );

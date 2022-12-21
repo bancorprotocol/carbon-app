@@ -61,8 +61,8 @@ const StrategyContent = () => {
       >
         {strategies.isLoading ? (
           <>
-            {[...Array(3)].map(() => (
-              <div className="loading-skeleton h-[665px] w-full" />
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="loading-skeleton h-[665px] w-full" />
             ))}
           </>
         ) : (
