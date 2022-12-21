@@ -24,10 +24,16 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
       source.setMax('');
       source.setMin('');
       source.setPrice('');
+      source.setBudgetError('');
+      source.setPriceError('');
+      source.setRangeError('');
     } else {
       target.setMax('');
       target.setMin('');
       target.setPrice('');
+      target.setBudgetError('');
+      target.setPriceError('');
+      target.setRangeError('');
     }
   };
 

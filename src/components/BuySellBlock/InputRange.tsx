@@ -26,8 +26,8 @@ export const InputRange: FC<{
   const handleChangeMin = useSanitizeInput(setMin);
   const handleChangeMax = useSanitizeInput(setMax);
 
-  const handleBlur = () => {
-    Number(min) > 0 && Number(max) > Number(min)
+  const handleBlur = (min?: boolean) => {
+    Number(min) > 0 && (min || Number(max) > Number(min))
       ? setRangeError('')
       : setRangeError('Max Price must be higher than min price and not zero');
   };
@@ -50,7 +50,7 @@ export const InputRange: FC<{
             value={min}
             onChange={handleChangeMin}
             placeholder="Price"
-            onBlur={handleBlur}
+            onBlur={() => handleBlur(true)}
             className={'w-full bg-transparent focus:outline-none'}
           />
         </div>
@@ -71,7 +71,7 @@ export const InputRange: FC<{
               value={max}
               onChange={handleChangeMax}
               placeholder={`Price`}
-              onBlur={handleBlur}
+              onBlur={() => handleBlur()}
               className={'w-full bg-transparent focus:outline-none'}
             />
           </div>
