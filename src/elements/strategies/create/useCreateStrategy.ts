@@ -97,28 +97,20 @@ export const useCreate = () => {
     );
   };
 
-  const checkAndSetErrors = (order: Order) => {
+  const checkErrors = (order: Order, otherOrder: Order) => {
     const minMaxCorrect =
       Number(order.min) > 0 && Number(order.max) > Number(order.min);
     const priceCorrect = Number(order.price) > 0;
     const budgetCorrect =
-      Number(order.budget) <= Number(order.balanceQuery.data);
+      !order.budget ||
+      Number(order.budget) <= Number(otherOrder.balanceQuery.data);
 
-    return (priceCorrect || minMaxCorrect) && budgetCorrect;
-  };
-
-  const resetErrors = (order: Order) => {
-    order.setRangeError('');
-    order.setPriceError('');
-    order.setBudgetError('');
+    return (minMaxCorrect || priceCorrect) && budgetCorrect;
   };
 
   const onCTAClick = async () => {
-    resetErrors(source);
-    resetErrors(target);
-
-    const sourceCorrect = checkAndSetErrors(source);
-    const targetCorrect = checkAndSetErrors(target);
+    const sourceCorrect = checkErrors(source, target);
+    const targetCorrect = checkErrors(target, source);
 
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired)
