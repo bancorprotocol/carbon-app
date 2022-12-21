@@ -50,13 +50,17 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           <div className="bg-body flex items-center rounded-[100px] p-2">
             <button
               onClick={() => handleRangeChange()}
-              className={`rounded-40 ${!isRange ? 'bg-silver' : ''} px-10 py-4`}
+              className={`rounded-40 ${
+                !isRange ? 'bg-silver' : 'text-secondary'
+              } px-10 py-4`}
             >
               Limit
             </button>
             <button
               onClick={() => handleRangeChange()}
-              className={`rounded-40 ${isRange ? 'bg-silver' : ''} px-10 py-4`}
+              className={`rounded-40 ${
+                isRange ? 'bg-silver' : 'text-secondary'
+              } px-10 py-4`}
             >
               Range
             </button>
@@ -75,6 +79,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           setMax={order.setMax}
           error={order.rangeError}
           buy={buy}
+          setRangeError={order.setRangeError}
         />
       ) : (
         <InputLimit
@@ -84,6 +89,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           setPrice={order.setPrice}
           error={order.priceError}
           buy={buy}
+          setPriceError={order.setPriceError}
         />
       )}
 

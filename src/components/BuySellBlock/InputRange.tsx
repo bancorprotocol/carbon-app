@@ -11,9 +11,26 @@ export const InputRange: FC<{
   setMax: (value: string) => void;
   error?: string;
   buy?: boolean;
-}> = ({ buyToken, sellToken, min, setMin, max, setMax, error, buy }) => {
+  setRangeError: (error: string) => void;
+}> = ({
+  buyToken,
+  sellToken,
+  min,
+  setMin,
+  max,
+  setMax,
+  error,
+  buy,
+  setRangeError,
+}) => {
   const handleChangeMin = useSanitizeInput(setMin);
   const handleChangeMax = useSanitizeInput(setMax);
+
+  const handleBlur = () => {
+    Number(min) > 0 && Number(max) > Number(min)
+      ? setRangeError('')
+      : setRangeError('Max Price must be higher than min price and not zero');
+  };
   return (
     <div>
       <div className="flex gap-6">
@@ -33,6 +50,7 @@ export const InputRange: FC<{
             value={min}
             onChange={handleChangeMin}
             placeholder="Price"
+            onBlur={handleBlur}
             className={'w-full bg-transparent focus:outline-none'}
           />
         </div>
@@ -53,6 +71,7 @@ export const InputRange: FC<{
               value={max}
               onChange={handleChangeMax}
               placeholder={`Price`}
+              onBlur={handleBlur}
               className={'w-full bg-transparent focus:outline-none'}
             />
           </div>

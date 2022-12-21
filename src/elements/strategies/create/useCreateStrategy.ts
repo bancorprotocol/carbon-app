@@ -83,6 +83,10 @@ export const useCreate = () => {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);
           await tx.wait();
+          if (source.budget && Number(source.budget) !== 0)
+            source.balanceQuery.refetch();
+          if (target.budget && Number(target.budget) !== 0)
+            target.balanceQuery.refetch();
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
@@ -99,15 +103,6 @@ export const useCreate = () => {
     const priceCorrect = Number(order.price) > 0;
     const budgetCorrect =
       Number(order.budget) <= Number(order.balanceQuery.data);
-
-    if (!minMaxCorrect)
-      order.setRangeError(
-        'Max Price must be higher than min price and not zero'
-      );
-
-    if (!priceCorrect) order.setPriceError('Price Must be greater than 0');
-
-    if (!budgetCorrect) order.setBudgetError('Insufficient Balance');
 
     return (priceCorrect || minMaxCorrect) && budgetCorrect;
   };

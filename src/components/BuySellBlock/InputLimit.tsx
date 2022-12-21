@@ -9,7 +9,8 @@ export const InputLimit: FC<{
   setPrice: (value: string) => void;
   error?: string;
   buy?: boolean;
-}> = ({ buyToken, sellToken, price, setPrice, error, buy }) => {
+  setPriceError: (error: string) => void;
+}> = ({ buyToken, sellToken, price, setPrice, error, buy, setPriceError }) => {
   const handleChange = useSanitizeInput(setPrice);
   return (
     <div>
@@ -28,6 +29,11 @@ export const InputLimit: FC<{
         <input
           value={price}
           onChange={handleChange}
+          onBlur={() =>
+            Number(price) > 0
+              ? setPriceError('')
+              : setPriceError('Price Must be greater than 0')
+          }
           placeholder="Price"
           className={'w-full shrink bg-transparent focus:outline-none'}
         />
