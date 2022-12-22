@@ -1,11 +1,12 @@
-import { useOrder } from './useOrder';
+import { Order, useOrder } from './useOrder';
 import { useCreateStrategy } from 'queries';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList/ModalTokenList';
 import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { PathNames, useNavigate } from 'routing';
+import { Token } from 'tokens';
 
 const spenderAddress = poolCollectionProxyAbi.address;
 
@@ -14,6 +15,7 @@ export const useCreate = () => {
   const { openModal } = useModal();
   const source = useOrder();
   const target = useOrder();
+  const [name, setName] = useState('');
   const mutation = useCreateStrategy();
 
   const showStep2 = !!source.token && !!target.token;
@@ -24,23 +26,24 @@ export const useCreate = () => {
       array.push({
         tokenAddress: source.token?.address,
         spenderAddress,
-        amount: source.liquidity,
+        amount: source.budget,
         decimals: source.token?.decimals,
-        symbol: source.token?.symbol,
+        logoURI: source.token.logoURI,
+        symbol: source.token.symbol,
       });
     }
     if (target.token) {
       array.push({
         tokenAddress: target.token?.address,
         spenderAddress,
-        amount: target.liquidity,
+        amount: target.budget,
         decimals: target.token?.decimals,
-        symbol: target.token?.symbol,
+        symbol: target.token.symbol,
       });
     }
 
     return array;
-  }, [source.liquidity, source.token, target.liquidity, target.token]);
+  }, [source.budget, source.token, target.budget, target.token]);
 
   const approval = useApproval(approvalTokens);
 
@@ -51,22 +54,28 @@ export const useCreate = () => {
     mutation.mutate(
       {
         token0: {
-          balance: source.liquidity,
+          balance: source.budget,
           token: source.token!,
-          low: source.low,
-          high: source.high,
+          min: source.min,
+          max: source.max,
+          price: source.price,
         },
         token1: {
-          balance: target.liquidity,
+          balance: target.budget,
           token: target.token!,
-          low: target.low,
-          high: target.high,
+          min: target.min,
+          max: target.max,
+          price: target.price,
         },
       },
       {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);
           await tx.wait();
+          if (source.budget && Number(source.budget) !== 0)
+            source.balanceQuery.refetch();
+          if (target.budget && Number(target.budget) !== 0)
+            target.balanceQuery.refetch();
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
@@ -77,23 +86,41 @@ export const useCreate = () => {
     );
   };
 
-  const onCTAClick = async () => {
-    if (approval.approvalRequired) {
-      openModal('txConfirm', { approvalTokens, onConfirm: create });
-    } else {
-      create();
+  const checkErrors = (order: Order, otherOrder: Order) => {
+    const minMaxCorrect =
+      Number(order.min) > 0 && Number(order.max) > Number(order.min);
+    const priceCorrect = Number(order.price) > 0;
+    const budgetCorrect =
+      !order.budget ||
+      Number(order.budget) <= Number(otherOrder.balanceQuery.data);
+
+    return (minMaxCorrect || priceCorrect) && budgetCorrect;
+  };
+
+  const createStrategy = async () => {
+    const sourceCorrect = checkErrors(source, target);
+    const targetCorrect = checkErrors(target, source);
+
+    if (sourceCorrect && targetCorrect) {
+      if (approval.approvalRequired)
+        openModal('txConfirm', { approvalTokens, onConfirm: create });
+      else create();
     }
   };
 
-  const openTokenListModal = (type?: 'source' | 'target') => {
-    const onClick =
-      type === 'source'
-        ? source.setToken
-        : type === 'target'
-        ? target.setToken
-        : () => {};
+  const openTokenListModal = (isSource?: boolean) => {
+    const onClick = (token: Token) => {
+      isSource ? source.setToken(token) : target.setToken(token);
+      source.resetFields();
+      target.resetFields();
+    };
 
-    const data: ModalTokenListData = { onClick };
+    const data: ModalTokenListData = {
+      onClick,
+      excludedTokens: [
+        isSource ? target.token?.address ?? '' : source.token?.address ?? '',
+      ],
+    };
     openModal('tokenLists', data);
   };
 
@@ -104,7 +131,9 @@ export const useCreate = () => {
   return {
     source,
     target,
-    onCTAClick,
+    name,
+    setName,
+    createStrategy,
     openTokenListModal,
     showStep2,
     isCTAdisabled,
