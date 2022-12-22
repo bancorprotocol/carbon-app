@@ -1,45 +1,45 @@
 @font-face {
-    font-family: 'Euclid Circular A';
+    font-family: 'GT America';
     font-weight: normal;
-    src: url('assets/font/euclid/EuclidCircularA-Regular.ttf')
-    format('truetype');
+    src: url('assets/font/gt-america/GT-America-Standard-Regular-Trial.woff2')
+    format('woff');
 }
 
 @font-face {
-    font-family: 'Euclid Circular A';
+    font-family: 'GT America';
     font-weight: bold;
-    src: url('assets/font/euclid/EuclidCircularA-Bold.ttf') format('truetype');
+    src: url('assets/font/gt-america/GT-America-Standard-Black-Trial.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'Euclid Circular A';
+    font-family: 'GT America';
     font-weight: 700;
-    src: url('assets/font/euclid/EuclidCircularA-Bold.ttf') format('truetype');
+    src: url('assets/font/gt-america/GT-America-Standard-Black-Trial.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'Euclid Circular A';
+    font-family: 'GT America';
     font-weight: 600;
-    src: url('assets/font/euclid/EuclidCircularA-Semibold.ttf')
-    format('truetype');
+    src: url('assets/font/gt-america/GT-America-Standard-Bold-Trial.woff2')
+    format('woff');
 }
 
 @font-face {
-    font-family: 'Euclid Circular A';
+    font-family: 'GT America';
     font-weight: 500;
-    src: url('assets/font/euclid/EuclidCircularA-Medium.ttf')
-    format('truetype');
+    src: url('assets/font/gt-america/GT-America-Standard-Medium-Trial.woff2')
+    format('woff');
 }
 
 @font-face {
-    font-family: 'Euclid Circular A';
+    font-family: 'GT America';
     font-weight: 400;
-    src: url('assets/font/euclid/EuclidCircularA-Regular.ttf')
-    format('truetype');
+    src: url('assets/font/gt-america/GT-America-Standard-Light-Trial.woff2')
+    format('woff');
 }
 
 @font-face {
-    font-family: 'Euclid Circular A';
+    font-family: 'GT America';
     font-weight: 300;
-    src: url('assets/font/euclid/EuclidCircularA-Light.ttf') format('truetype');
+    src: url('assets/font/gt-america/GT-America-Standard-Thin-Trial.woff2') format('woff');
 }
