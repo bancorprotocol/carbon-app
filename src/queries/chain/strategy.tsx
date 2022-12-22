@@ -5,7 +5,7 @@ import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
 import { Token, useTokens } from 'tokens';
 import { MultiCall, useMulticall } from 'hooks/useMulticall';
-import { decodeOrder } from 'utils/sdk2';
+import { Decimal, decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
 import { fetchTokenData } from 'tokens/tokenHelperFn';
 import { QueryKey } from '../queryKey';
@@ -78,6 +78,25 @@ export const useGetUserStrategies = () => {
         const order0 = decodeOrder({ ...s.orders[0] });
         const order1 = decodeOrder({ ...s.orders[1] });
 
+        const zero = new Decimal(0);
+
+        const offCurve =
+          order0.lowestRate === zero &&
+          order0.highestRate === zero &&
+          order1.lowestRate === zero &&
+          order1.highestRate === zero;
+
+        const noBudget = order0.liquidity.isZero() && order1.liquidity.isZero();
+
+        const status =
+          noBudget && offCurve
+            ? StrategyStatus.Inactive
+            : offCurve
+            ? StrategyStatus.OffCurve
+            : noBudget
+            ? StrategyStatus.NoBudget
+            : StrategyStatus.Active;
+
         return {
           id: s.id.toNumber(),
           order0: {
@@ -100,7 +119,7 @@ export const useGetUserStrategies = () => {
             startRate: order1.lowestRate.toString(),
             endRate: order1.highestRate.toString(),
           },
-          status: StrategyStatus.Active,
+          status,
           provider: s.provider,
         };
       });
