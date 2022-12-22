@@ -47,17 +47,6 @@ export const useCreate = () => {
 
   const approval = useApproval(approvalTokens);
 
-  const resetFields = () => {
-    source.setMin('');
-    source.setMax('');
-    source.setPrice('');
-    source.setBudget('');
-    target.setMin('');
-    target.setMax('');
-    target.setPrice('');
-    target.setBudget('');
-  };
-
   const create = async () => {
     if (!(source && target)) {
       throw new Error('source or target tokens not set');
@@ -108,7 +97,7 @@ export const useCreate = () => {
     return (minMaxCorrect || priceCorrect) && budgetCorrect;
   };
 
-  const onCTAClick = async () => {
+  const createStrategy = async () => {
     const sourceCorrect = checkErrors(source, target);
     const targetCorrect = checkErrors(target, source);
 
@@ -122,7 +111,8 @@ export const useCreate = () => {
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
       isSource ? source.setToken(token) : target.setToken(token);
-      resetFields();
+      source.resetFields();
+      target.resetFields();
     };
 
     const data: ModalTokenListData = {
@@ -143,7 +133,7 @@ export const useCreate = () => {
     target,
     name,
     setName,
-    onCTAClick,
+    createStrategy,
     openTokenListModal,
     showStep2,
     isCTAdisabled,

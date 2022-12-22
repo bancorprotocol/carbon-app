@@ -19,6 +19,7 @@ export interface Order {
   budgetError: string;
   setBudgetError: (value: string) => void;
   balanceQuery: any;
+  resetFields: (skipBudget?: boolean, skipPrice?: boolean) => void;
 }
 
 export const useOrder = () => {
@@ -32,6 +33,21 @@ export const useOrder = () => {
   const [budgetError, setBudgetError] = useState('');
 
   const balanceQuery = useGetTokenBalance(token);
+
+  const resetFields = (skipBudget?: boolean, skipPrice?: boolean) => {
+    if (!skipPrice) {
+      setMin('');
+      setMax('');
+      setPrice('');
+      setPriceError('');
+      setRangeError('');
+    }
+
+    if (!skipBudget) {
+      setBudget('');
+      setBudgetError('');
+    }
+  };
 
   return {
     token,
@@ -51,5 +67,6 @@ export const useOrder = () => {
     setPriceError,
     budgetError,
     setBudgetError,
+    resetFields,
   };
 };

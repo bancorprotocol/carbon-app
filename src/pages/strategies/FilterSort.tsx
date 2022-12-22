@@ -15,6 +15,32 @@ export enum StrategySort {
   Old,
 }
 
+const sortItems = [
+  {
+    title: 'Recently Created',
+    item: StrategySort.Recent,
+  },
+  {
+    title: 'Oldest Created',
+    item: StrategySort.Old,
+  },
+];
+
+const filterItems = [
+  {
+    title: 'All',
+    item: StrategyFilter.All,
+  },
+  {
+    title: 'Active',
+    item: StrategyFilter.Active,
+  },
+  {
+    title: 'Off Curve',
+    item: StrategyFilter.OffCurve,
+  },
+];
+
 export const FilterSort: FC<{
   filter: StrategyFilter;
   sort: StrategySort;
@@ -31,44 +57,51 @@ export const FilterSort: FC<{
     >
       <div className="grid w-[300px] gap-20 p-10">
         <div className="text-secondary text-20">Sort By</div>
-        <button
-          onClick={() => setSort(StrategySort.Recent)}
-          className="flex items-center justify-between"
-        >
-          Recently Created
-          {sort === StrategySort.Recent && <IconCheck />}
-        </button>
-        <button
-          onClick={() => setSort(StrategySort.Old)}
-          className="flex items-center justify-between"
-        >
-          Oldest Created
-          {sort === StrategySort.Old && <IconCheck />}
-        </button>
+
+        <>
+          {sortItems.map((sortItem) => (
+            <FilterSortItem
+              key={sortItem.title}
+              item={sortItem.item}
+              selectedItem={sort}
+              setItem={setSort}
+              title={sortItem.title}
+            />
+          ))}
+        </>
+
         <hr className="border-2 border-silver dark:border-emphasis" />
         <div className="text-secondary">View</div>
-        <button
-          onClick={() => setFilter(StrategyFilter.All)}
-          className="flex items-center justify-between"
-        >
-          All
-          {filter === StrategyFilter.All && <IconCheck />}
-        </button>
-        <button
-          onClick={() => setFilter(StrategyFilter.Active)}
-          className="flex items-center justify-between"
-        >
-          Active
-          {filter === StrategyFilter.Active && <IconCheck />}
-        </button>
-        <button
-          onClick={() => setFilter(StrategyFilter.OffCurve)}
-          className="flex items-center justify-between"
-        >
-          Off curve
-          {filter === StrategyFilter.OffCurve && <IconCheck />}
-        </button>
+
+        <>
+          {filterItems.map((filterItem) => (
+            <FilterSortItem
+              key={filterItem.title}
+              item={filterItem.item}
+              selectedItem={filter}
+              setItem={setFilter}
+              title={filterItem.title}
+            />
+          ))}
+        </>
       </div>
     </DropdownMenu>
+  );
+};
+
+const FilterSortItem: FC<{
+  title: string;
+  item: StrategyFilter | StrategySort;
+  selectedItem: StrategyFilter | StrategySort;
+  setItem: (filter: any) => void;
+}> = ({ title, item, selectedItem, setItem }) => {
+  return (
+    <button
+      onClick={() => setItem(item)}
+      className="flex items-center justify-between"
+    >
+      {title}
+      {selectedItem === item && <IconCheck />}
+    </button>
   );
 };

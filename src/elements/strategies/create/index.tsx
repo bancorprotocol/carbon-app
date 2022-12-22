@@ -16,7 +16,7 @@ export const CreateStrategy = () => {
     target,
     name,
     setName,
-    onCTAClick,
+    createStrategy,
     openTokenListModal,
     showStep2,
     isCTAdisabled,
@@ -80,7 +80,7 @@ export const CreateStrategy = () => {
               variant={'secondary'}
               size={'lg'}
               fullWidth
-              onClick={onCTAClick}
+              onClick={createStrategy}
               disabled={isCTAdisabled}
             >
               Create Strategy
