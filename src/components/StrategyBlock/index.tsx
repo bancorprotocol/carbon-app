@@ -114,7 +114,7 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
               })}`}
             <Imager
               className="h-16 w-16"
-              src={order.token.logoURI}
+              src={otherOrder.token.logoURI}
               alt="token"
             />
           </div>
@@ -122,12 +122,12 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
         <div className="mb-10 flex items-center justify-between">
           <div className="text-secondary !text-16">Budget</div>
           <div className="flex items-center gap-7">
-            {prettifyNumber(otherOrder.balance, {
-              abbreviate: otherOrder.balance.length > 10,
+            {prettifyNumber(order.balance, {
+              abbreviate: order.balance.length > 10,
             })}
             <Imager
               className="h-16 w-16"
-              src={otherOrder.token.logoURI}
+              src={order.token.logoURI}
               alt="token"
             />
           </div>
