@@ -2,11 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --main-menu-height: 80px;
+  --mobile-menu-height: 80px;
+}
+
 @layer base {
   html,
   body,
   #root {
     @apply text-body bg-body font-gt-america;
+  }
+
+  html {
+    @apply h-full;
+  }
+
+  body,
+  #root {
+    @apply h-screen;
+  }
+
+  main {
+    @apply h-full overflow-y-scroll;
+    height: calc(100% - var(--main-menu-height));
+  }
+
+  @media screen and (max-width: theme("screens.md")) {
+    main {
+      height: calc(100% - var(--mobile-menu-height) - var(--main-menu-height));
+    }
   }
 
   h1 {
@@ -19,6 +44,18 @@
 
   h3 {
     @apply text-18 font-weight-500;
+  }
+}
+
+@layer components {
+  .main-menu {
+    height: var(--main-menu-height);
+    @apply bg-body flex w-full items-center justify-between px-10 md:px-20;
+  }
+
+  .mobile-menu {
+    height: var(--mobile-menu-height);
+    @apply bg-body fixed bottom-0 z-40 flex w-full items-center justify-between border-t border-lightGrey px-10 dark:border-darkGrey md:hidden;
   }
 }
 
