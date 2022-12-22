@@ -99,7 +99,7 @@ const StrategyPageTitleWidget: FC<{
 
 const CreateFirstStrategy = () => {
   return (
-    <div className="h-[calc(100vh-128px)] p-20">
+    <div className="h-[calc(100vh-188px)] p-20 md:h-[calc(100vh-128px)]">
       <StrategyBlockCreate
         title="Create Your First Strategy"
         className="w-[270px] gap-[32px] text-center text-36"
