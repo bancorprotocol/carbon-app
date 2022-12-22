@@ -4,6 +4,7 @@ import { Button } from 'components/Button';
 import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
+import { Imager } from 'elements/Imager';
 import { QueryKey, useQueryClient } from 'queries';
 import { useWeb3 } from 'web3';
 import { config } from 'services/web3/config';
@@ -17,7 +18,7 @@ type Props = {
 export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   const { user } = useWeb3();
   const mutation = useSetUserApproval();
-  const [isUnlimited, setIsUnlimited] = useState(true);
+  const [isLimited, setIsLimited] = useState(false);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
@@ -28,7 +29,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     }
     setTxBusy(true);
     await mutation.mutate(
-      { ...data, isUnlimited },
+      { ...data, isLimited },
       {
         onSuccess: async (tx, variables) => {
           await tx.wait();
@@ -71,7 +72,11 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     >
       <div className={'space-y-6'}>
         <div className={'flex items-center space-x-10'}>
-          <div className={'bg-secondary h-30 w-30 rounded-full'} />
+          <Imager
+            alt={'Token'}
+            src={data.logoURI}
+            className={'h-30 w-30 rounded-full'}
+          />
           <div>{data.symbol}</div>
         </div>
         {data.approvalRequired && !txSuccess ? (
@@ -91,21 +96,27 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         ) : (
           <div className={'flex h-82 flex-col items-end justify-between'}>
             <div className={'flex items-center space-x-8'}>
-              <div className={'text-secondary'}>Unlimited</div>
+              <div
+                className={`!text-12 ${
+                  isLimited ? 'text-white' : 'text-secondary'
+                }`}
+              >
+                Limited
+              </div>
               <Switch
                 variant={'tertiary'}
-                isOn={isUnlimited}
-                setIsOn={setIsUnlimited}
+                isOn={isLimited}
+                setIsOn={setIsLimited}
                 size={'sm'}
               />
             </div>
-            <Button onClick={onApprove} size={'sm'}>
+            <Button variant={'secondary'} onClick={onApprove} size={'sm'}>
               Confirm
             </Button>
           </div>
         )
       ) : (
-        <div className={'text-success-500'}>approved</div>
+        <div className={'text-success-500'}>Approved</div>
       )}
 
       {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}

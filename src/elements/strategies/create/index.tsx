@@ -1,15 +1,22 @@
 import { Button } from 'components/Button';
 import { m, Variants } from 'motion';
 import { useCreate } from './useCreateStrategy';
-import { AmountInputWithButtons } from 'components/AmountInputWithButtons';
 import { SelectTokens } from 'components/SelectTokens';
-import { BudgetBlock } from 'components/BudgetBlock';
+import { BuySellBlock } from 'components/BuySellBlock';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { useLocation } from 'routing';
+import { Tooltip } from 'components/Tooltip';
+import { NameBlock } from './NameBlock';
 
 export const CreateStrategy = () => {
+  const location = useLocation();
+
   const {
     source,
     target,
-    onCTAClick,
+    name,
+    setName,
+    createStrategy,
     openTokenListModal,
     showStep2,
     isCTAdisabled,
@@ -17,102 +24,66 @@ export const CreateStrategy = () => {
 
   return (
     <m.div
-      className={'space-y-30'}
+      className={'space-y-20'}
       variants={list}
       initial={'hidden'}
       animate={'visible'}
     >
+      <div className="flex items-center gap-16 text-24">
+        <button
+          onClick={() => location.history.back()}
+          className="h-40 w-40 rounded-full bg-emphasis"
+        >
+          <IconChevron className="mx-auto w-14 rotate-90" />
+        </button>
+        Create Strategy
+      </div>
       <m.div variants={items} className={'bg-secondary rounded-18 p-20'}>
-        <h2 className={'mb-20'}>Select Tokens</h2>
+        <div className="mb-14 flex items-center justify-between">
+          <h2>Token Pair</h2>
+          <Tooltip>??????????</Tooltip>
+        </div>
 
         <SelectTokens
           symbol0={source.token?.symbol}
           symbol1={target.token?.symbol}
           imgUrl0={source.token?.logoURI}
           imgUrl1={target.token?.logoURI}
-          onClick0={() => openTokenListModal('source')}
-          onClick1={() => openTokenListModal('target')}
+          onClick0={() => openTokenListModal(true)}
+          onClick1={() => openTokenListModal()}
+          onMiddleClick={() => {
+            if (source.token || target.token) {
+              source.setToken(target.token);
+              target.setToken(source.token);
+            }
+          }}
+          middleDisabled={!(source.token || target.token)}
         />
       </m.div>
-
       {showStep2 && (
         <>
-          <m.div
-            variants={items}
-            className={'bg-secondary space-y-20 rounded-18 p-20'}
-          >
-            <h2>Buy</h2>
-
-            <div className={'flex space-x-4'}>
-              <div className={'bg-body rounded-l-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${source.token?.symbol} for ${target.token?.symbol}`}
-                  amount={source.low}
-                  setAmount={source.setLow}
-                />
-              </div>
-              <div className={'bg-body rounded-r-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${source.token?.symbol} for ${target.token?.symbol}`}
-                  amount={source.high}
-                  setAmount={source.setHigh}
-                />
-              </div>
-            </div>
-
-            <h2>Sell</h2>
-
-            <div className={'flex space-x-4'}>
-              <div className={'bg-body rounded-l-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${target.token?.symbol} for ${source.token?.symbol}`}
-                  amount={target.low}
-                  setAmount={target.setLow}
-                />
-              </div>
-              <div className={'bg-body rounded-r-14 px-20 py-14'}>
-                <AmountInputWithButtons
-                  label={`${target.token?.symbol} for ${source.token?.symbol}`}
-                  amount={target.high}
-                  setAmount={target.setHigh}
-                />
-              </div>
-            </div>
+          <m.div variants={items}>
+            <BuySellBlock source={source} target={target} buy />
           </m.div>
 
-          <m.div
-            variants={items}
-            className={'bg-secondary space-y-10 rounded-18 p-20'}
-          >
-            <h2 className={'mb-20'}>Budget</h2>
+          <m.div variants={items}>
+            <BuySellBlock source={source} target={target} />
+          </m.div>
 
-            <BudgetBlock
-              symbol={source.token?.symbol}
-              logoURI={source.token?.logoURI}
-              amount={source.liquidity}
-              setAmount={source.setLiquidity}
-              balance={source.balanceQuery.data}
-              isBalanceLoading={source.balanceQuery.isLoading}
-            />
-            <BudgetBlock
-              symbol={target.token?.symbol}
-              logoURI={target.token?.logoURI}
-              amount={target.liquidity}
-              setAmount={target.setLiquidity}
-              balance={target.balanceQuery.data}
-              isBalanceLoading={target.balanceQuery.isLoading}
-            />
+          <m.div variants={items}>
+            <NameBlock name={name} setName={setName} />
           </m.div>
 
           <m.div variants={items}>
             <Button
+              className="mb-80"
               variant={'secondary'}
               size={'lg'}
               fullWidth
-              onClick={onCTAClick}
+              onClick={createStrategy}
               disabled={isCTAdisabled}
             >
-              Confirm Strategy
+              Create Strategy
             </Button>
           </m.div>
         </>

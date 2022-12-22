@@ -1,12 +1,15 @@
-import { Page } from 'components/Page';
+import { WalletConnect } from 'components/WalletConnect';
 import { CreateStrategy } from 'elements/strategies/create';
+import { useWeb3 } from 'web3';
 
 export const CreateStrategyPage = () => {
-  return (
-    <div className={'mx-auto max-w-[650px]'}>
-      <Page title={'Create Strategy'}>
-        <CreateStrategy />
-      </Page>
+  const { user } = useWeb3();
+
+  return user ? (
+    <div className={'mx-auto max-w-[350px]'}>
+      <CreateStrategy />
     </div>
+  ) : (
+    <WalletConnect />
   );
 };

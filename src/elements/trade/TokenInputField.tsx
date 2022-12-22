@@ -1,8 +1,8 @@
 import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Imager } from 'elements/Imager';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Token, useTokens } from 'tokens';
-import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { useModal } from 'modals';
 
 export interface TokenInputProps {
@@ -57,7 +57,7 @@ const TokenInputField = ({
         ) : (
           <span>Choose Token</span>
         )}
-        <IconArrowDown className="w-14" />
+        <IconChevron className="w-14" />
       </button>
       <input
         type="text"
