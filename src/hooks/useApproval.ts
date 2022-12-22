@@ -6,7 +6,6 @@ import { useMemo } from 'react';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;
-  symbol: string;
 };
 
 export type ApprovalTokenResult = ApprovalToken & {

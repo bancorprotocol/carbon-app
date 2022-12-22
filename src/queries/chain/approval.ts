@@ -11,6 +11,8 @@ export type GetUserApprovalProps = {
   tokenAddress: string;
   spenderAddress: string;
   decimals: number;
+  symbol: string;
+  logoURI?: string;
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
@@ -49,7 +51,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
 export type SetUserApprovalProps = GetUserApprovalProps & {
   amount: string;
-  isUnlimited: boolean;
+  isLimited: boolean;
 };
 
 export const useSetUserApproval = () => {
@@ -62,7 +64,7 @@ export const useSetUserApproval = () => {
       spenderAddress,
       amount,
       decimals,
-      isUnlimited,
+      isLimited,
     }: SetUserApprovalProps) => {
       const isETH = tokenAddress === config.tokens.ETH;
       if (isETH) {
@@ -81,9 +83,9 @@ export const useSetUserApproval = () => {
         throw new Error('useSetUserApproval negative amount provided');
       }
 
-      const amountWei = isUnlimited
-        ? UNLIMITED_WEI
-        : expandToken(amount, decimals);
+      const amountWei = isLimited
+        ? expandToken(amount, decimals)
+        : UNLIMITED_WEI;
 
       const isNullApprovalContract =
         NULL_APPROVAL_CONTRACTS.includes(tokenAddress);

@@ -6,7 +6,7 @@ import { Imager } from 'elements/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRangeGraph } from 'assets/icons/rangeGraph.svg';
 import { ReactComponent as IconPriceGraph } from 'assets/icons/priceGraph.svg';
-import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Button } from 'components/Button';
 import { DropdownMenu } from 'components/DropdownMenu';
 
@@ -166,13 +166,13 @@ const Manage: FC<{ manage: boolean; setManage: (flag: boolean) => void }> = ({
           variant={'secondary'}
         >
           Manage
-          <IconArrowDown className="w-12" />
+          <IconChevron className="w-12" />
         </Button>
       }
       className="w-full !p-10"
     >
       {items.map((item) => (
-        <ManageItem title={item} setManage={setManage} />
+        <ManageItem key={item} title={item} setManage={setManage} />
       ))}
     </DropdownMenu>
   );
