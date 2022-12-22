@@ -303,6 +303,7 @@ module.exports = {
     },
     fontFamily: {
       euclid: ['Euclid Circular A', 'sans-serif'],
+      'gt-america': ['GT America', 'sans-serif'],
       sans: [
         'ui-sans-serif',
         'system-ui',

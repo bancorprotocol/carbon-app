@@ -2,7 +2,7 @@ import { ModalWallet } from 'modals/modals/ModalWallet';
 import {
   ModalTokenList,
   ModalTokenListData,
-} from 'modals/modals/ModalTokenList/ModalTokenList';
+} from 'modals/modals/ModalTokenList';
 import { TModals } from 'modals/modals.types';
 import {
   ModalCreateConfirm,

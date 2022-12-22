@@ -52,7 +52,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         <div
           className={`${blockClasses} flex items-center justify-center dark:bg-error-500/30`}
         >
-          Error
+          Error: No token found for this address
         </div>
       )}
       {data && (
