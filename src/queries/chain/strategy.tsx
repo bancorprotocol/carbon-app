@@ -133,11 +133,11 @@ export const useGetUserStrategies = () => {
           ),
           startRate: new BigNumber(1)
             .div(decodedOrder0.highestRate.toString())
-            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
+            .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
           endRate: new BigNumber(1)
             .div(decodedOrder0.lowestRate.toString())
-            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
+            .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
         };
 
