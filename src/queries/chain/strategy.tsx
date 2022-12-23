@@ -9,6 +9,7 @@ import { Decimal, decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
 import { fetchTokenData } from 'tokens/tokenHelperFn';
 import { QueryKey } from '../queryKey';
+import BigNumber from 'bignumber.js';
 
 export enum StrategyStatus {
   Active,
@@ -31,7 +32,6 @@ export interface Strategy {
   order0: Order;
   order1: Order;
   status: StrategyStatus;
-  provider: string;
   name?: string;
 }
 
@@ -76,18 +76,19 @@ export const useGetUserStrategies = () => {
         const token1 =
           getTokenById(s.pair[1]) || (await _getTknData(s.pair[1]));
 
-        const order0 = decodeOrder({ ...s.orders[0] });
-        const order1 = decodeOrder({ ...s.orders[1] });
+        const decodedOrder0 = decodeOrder({ ...s.orders[0] });
+        const decodedOrder1 = decodeOrder({ ...s.orders[1] });
 
         const zero = new Decimal(0);
 
         const offCurve =
-          order0.lowestRate === zero &&
-          order0.highestRate === zero &&
-          order1.lowestRate === zero &&
-          order1.highestRate === zero;
+          decodedOrder0.lowestRate === zero &&
+          decodedOrder0.highestRate === zero &&
+          decodedOrder1.lowestRate === zero &&
+          decodedOrder1.highestRate === zero;
 
-        const noBudget = order0.liquidity.isZero() && order1.liquidity.isZero();
+        const noBudget =
+          decodedOrder0.liquidity === zero && decodedOrder1.liquidity === zero;
 
         const status =
           noBudget && offCurve
@@ -98,30 +99,55 @@ export const useGetUserStrategies = () => {
             ? StrategyStatus.NoBudget
             : StrategyStatus.Active;
 
+        // ATTENTION *****************************
+        // This is the buy order | UI order 0 and CONTRACT order 1
+        // ATTENTION *****************************
+        const order0: Order = {
+          balance: shrinkToken(
+            decodedOrder1.liquidity.toString(),
+            token1.decimals
+          ),
+          curveCapacity: shrinkToken(
+            decodedOrder1.marginalRate.toString(),
+            token1.decimals
+          ),
+          startRate: new BigNumber(decodedOrder1.lowestRate.toString())
+            .div(new BigNumber(10).pow(token1.decimals - token0.decimals))
+            .toString(),
+          endRate: new BigNumber(decodedOrder1.highestRate.toString())
+            .div(new BigNumber(10).pow(token1.decimals - token0.decimals))
+            .toString(),
+        };
+
+        // ATTENTION *****************************
+        // This is the sell order | UI order 1 and CONTRACT order 0
+        // ATTENTION *****************************
+        const order1: Order = {
+          balance: shrinkToken(
+            decodedOrder0.liquidity.toString(),
+            token0.decimals
+          ),
+          curveCapacity: shrinkToken(
+            decodedOrder0.marginalRate.toString(),
+            token0.decimals
+          ),
+          startRate: new BigNumber(1)
+            .div(decodedOrder0.highestRate.toString())
+            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
+            .toString(),
+          endRate: new BigNumber(1)
+            .div(decodedOrder0.lowestRate.toString())
+            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
+            .toString(),
+        };
+
         const strategy: Strategy = {
           id: s.id.toNumber(),
           token0,
           token1,
-          order0: {
-            balance: shrinkToken(order0.liquidity.toString(), token0.decimals),
-            curveCapacity: shrinkToken(
-              order0.currentRate.toString(),
-              token0.decimals
-            ),
-            startRate: order0.lowestRate.toString(),
-            endRate: order0.highestRate.toString(),
-          },
-          order1: {
-            balance: shrinkToken(order1.liquidity.toString(), token1.decimals),
-            curveCapacity: shrinkToken(
-              order1.currentRate.toString(),
-              token1.decimals
-            ),
-            startRate: order1.lowestRate.toString(),
-            endRate: order1.highestRate.toString(),
-          },
+          order0,
+          order1,
           status,
-          provider: s.provider,
         };
 
         return strategy;
@@ -134,7 +160,7 @@ export const useGetUserStrategies = () => {
 };
 
 interface CreateStrategyOrder {
-  balance?: string;
+  budget?: string;
   min?: string;
   max?: string;
   price?: string;

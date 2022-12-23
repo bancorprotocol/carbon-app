@@ -67,13 +67,13 @@ export const useCreate = () => {
         token0: token0,
         token1: token1,
         order0: {
-          balance: order0.budget,
+          budget: order0.budget,
           min: order0.min,
           max: order0.max,
           price: order0.price,
         },
         order1: {
-          balance: order1.budget,
+          budget: order1.budget,
           min: order1.min,
           max: order1.max,
           price: order1.price,

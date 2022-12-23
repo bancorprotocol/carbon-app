@@ -5,78 +5,52 @@ Decimal.set({ precision: 50, rounding: Decimal.ROUND_HALF_DOWN });
 
 export { Decimal, BigNumber };
 
-export const ONE = 2 ** 32;
+const ONE = 2 ** 32;
+
+const sqrtScaled = (x: string | Decimal.Value) => {
+  return BigNumber.from(new Decimal(x).sqrt().mul(ONE).toFixed(0));
+};
 
 export interface EncodedOrder {
-  y: BigNumber;
-  z: BigNumber;
-  A: BigNumber;
-  B: BigNumber;
-}
-
-export class EncodedOrder implements EncodedOrder {
-  y: BigNumber;
-  z: BigNumber;
-  A: BigNumber;
-  B: BigNumber;
-  constructor(y: BigNumber, z: BigNumber, A: BigNumber, B: BigNumber) {
-    this.y = BigNumber.from(y);
-    this.z = BigNumber.from(z);
-    this.A = BigNumber.from(A);
-    this.B = BigNumber.from(B);
-  }
+  y: BigNumber | string;
+  z: BigNumber | string;
+  A: BigNumber | string;
+  B: BigNumber | string;
 }
 
 export interface DecodedOrder {
-  liquidity: BigNumber;
-  currentRate: Decimal;
-  highestRate: Decimal;
-  lowestRate: Decimal;
+  liquidity: Decimal.Value;
+  lowestRate: Decimal.Value;
+  highestRate: Decimal.Value;
+  marginalRate: Decimal.Value;
 }
 
-export class DecodedOrder implements DecodedOrder {
-  liquidity: BigNumber;
-  currentRate: Decimal;
-  highestRate: Decimal;
-  lowestRate: Decimal;
-  constructor(
-    liquidity: BigNumber,
-    currentRate: Decimal,
-    highestRate: Decimal,
-    lowestRate: Decimal
-  ) {
-    this.liquidity = BigNumber.from(liquidity);
-    this.currentRate = new Decimal(currentRate);
-    this.highestRate = new Decimal(highestRate);
-    this.lowestRate = new Decimal(lowestRate);
-  }
-}
-
-export const sqrtScaled = (x: Decimal) =>
-  BigNumber.from(x.sqrt().mul(ONE).floor().toFixed());
-
-export const encodeOrder = (order: DecodedOrder) => {
-  const currentRate = sqrtScaled(order.currentRate);
-  const highestRate = sqrtScaled(order.highestRate);
+export const encodeOrder = (order: DecodedOrder): EncodedOrder => {
+  const liquidity = BigNumber.from(order.liquidity);
   const lowestRate = sqrtScaled(order.lowestRate);
-  const liquidity = order.liquidity;
-  return new EncodedOrder(
-    liquidity,
-    liquidity.mul(highestRate.sub(lowestRate)).div(currentRate.sub(lowestRate)),
-    highestRate.sub(lowestRate),
-    lowestRate
-  );
+  const highestRate = sqrtScaled(order.highestRate);
+  const marginalRate = sqrtScaled(order.marginalRate);
+
+  return {
+    y: liquidity,
+    z: liquidity
+      .mul(highestRate.sub(lowestRate))
+      .div(marginalRate.sub(lowestRate)),
+    A: highestRate.sub(lowestRate),
+    B: lowestRate,
+  };
 };
 
-export const decodeOrder = (order: EncodedOrder) => {
+export const decodeOrder = (order: EncodedOrder): DecodedOrder => {
   const y = new Decimal(order.y.toString());
   const z = new Decimal(order.z.toString());
   const A = new Decimal(order.A.toString());
   const B = new Decimal(order.B.toString());
-  return new DecodedOrder(
-    BigNumber.from(y.toFixed()),
-    y.mul(A).add(z.mul(B)).div(z.mul(ONE)).pow(2),
-    A.add(B).div(ONE).pow(2),
-    B.div(ONE).pow(2)
-  );
+
+  return {
+    liquidity: y,
+    lowestRate: B.div(ONE).pow(2),
+    highestRate: y.mul(A).add(z.mul(B)).div(z.mul(ONE)).pow(2),
+    marginalRate: A.add(B).div(ONE).pow(2),
+  };
 };
