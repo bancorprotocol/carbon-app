@@ -112,10 +112,10 @@ export const useGetUserStrategies = () => {
             token1.decimals
           ),
           startRate: new BigNumber(decodedOrder1.lowestRate.toString())
-            .div(new BigNumber(10).pow(token1.decimals - token0.decimals))
+            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
           endRate: new BigNumber(decodedOrder1.highestRate.toString())
-            .div(new BigNumber(10).pow(token1.decimals - token0.decimals))
+            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
         };
 
@@ -133,11 +133,11 @@ export const useGetUserStrategies = () => {
           ),
           startRate: new BigNumber(1)
             .div(decodedOrder0.highestRate.toString())
-            .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
+            .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
             .toString(),
           endRate: new BigNumber(1)
             .div(decodedOrder0.lowestRate.toString())
-            .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
+            .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
             .toString(),
         };
 

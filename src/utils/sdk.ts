@@ -29,11 +29,11 @@ export const toStrategy = ({
     liquidity: order1Budget,
     lowestRate: new BigNumber(1)
       .div(order1Max)
-      .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
+      .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
       .toString(),
     highestRate: new BigNumber(1)
       .div(order1Low)
-      .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
+      .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
       .toString(),
     marginalRate: order1Budget,
   });
@@ -44,10 +44,10 @@ export const toStrategy = ({
   const encodedOrder1 = encodeOrder({
     liquidity: order0Budget,
     lowestRate: new BigNumber(order0Low)
-      .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
+      .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
       .toString(),
     highestRate: new BigNumber(order0Max)
-      .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
+      .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
       .toString(),
     marginalRate: order0Budget,
   });
