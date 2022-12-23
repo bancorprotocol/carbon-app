@@ -3,12 +3,12 @@ import { useCreateStrategy } from 'queries';
 import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList/ModalTokenList';
-import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { PathNames, useNavigate } from 'routing';
 import { Token } from 'tokens';
+import { config } from 'services/web3/config';
 
-const spenderAddress = poolCollectionProxyAbi.address;
+const spenderAddress = config.carbon.poolCollection;
 
 export const useCreate = () => {
   const navigate = useNavigate();

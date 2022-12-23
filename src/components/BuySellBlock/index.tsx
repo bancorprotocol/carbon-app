@@ -33,7 +33,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           {title}{' '}
           <Imager
             alt={'Token'}
-            src={buy ? source.token.logoURI : target.token.logoURI}
+            src={source.token.logoURI}
             className={'h-18 w-18 rounded-full'}
           />
         </div>
@@ -86,7 +86,6 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
       )}
 
       <BudgetInput
-        title={title}
         budget={order.budget}
         setBudget={order.setBudget}
         buyToken={buy ? target.token : source.token}

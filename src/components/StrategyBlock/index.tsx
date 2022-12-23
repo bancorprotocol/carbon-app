@@ -95,7 +95,11 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
     <div className="rounded-8 border border-emphasis p-15">
       <div className="flex items-center gap-6">
         {buy ? 'Buy' : 'Sell'}
-        <Imager className="h-16 w-16" src={order.token.logoURI} alt="token" />
+        <Imager
+          className="h-16 w-16"
+          src={buy ? order.token.logoURI : otherOrder.token.logoURI}
+          alt="token"
+        />
       </div>
       <hr className="my-12 border-silver dark:border-emphasis" />
       <div>
@@ -114,7 +118,7 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
               })}`}
             <Imager
               className="h-16 w-16"
-              src={order.token.logoURI}
+              src={buy ? otherOrder.token.logoURI : order.token.logoURI}
               alt="token"
             />
           </div>
@@ -122,8 +126,8 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
         <div className="mb-10 flex items-center justify-between">
           <div className="text-secondary !text-16">Budget</div>
           <div className="flex items-center gap-7">
-            {prettifyNumber(otherOrder.balance, {
-              abbreviate: otherOrder.balance.length > 10,
+            {prettifyNumber(order.balance, {
+              abbreviate: order.balance.length > 10,
             })}
             <Imager
               className="h-16 w-16"

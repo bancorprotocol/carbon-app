@@ -16,10 +16,11 @@ export const toStrategy = ({ token0, token1 }: CreateStrategyParams) => {
   const token1Low = token1.price ? token1.price : token1.min ? token1.min : 0;
   const token1Max = token1.price ? token1.price : token1.max ? token1.max : 0;
 
+  // TODO make sure it is the sell order - switch it
   const order0 = encodeOrder({
     currentRate: new Decimal(token0Balance),
-    lowestRate: new Decimal(token0Low),
-    highestRate: new Decimal(token0Max),
+    lowestRate: new Decimal(token0Low), // TODO 1/TKN max amount
+    highestRate: new Decimal(token0Max), // TODO 1/TKN min amount
     liquidity: BigNumber.from(token0Balance),
   });
 

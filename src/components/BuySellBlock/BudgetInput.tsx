@@ -5,7 +5,6 @@ import { Token } from 'tokens';
 import { prettifyNumber } from 'utils/helpers';
 
 export const BudgetInput: FC<{
-  title: string;
   budget: string;
   setBudget: (value: string) => void;
   buyToken: Token;
@@ -14,7 +13,6 @@ export const BudgetInput: FC<{
   setBudgetError: (error: string) => void;
   error?: string;
 }> = ({
-  title,
   budget,
   setBudget,
   buyToken,
@@ -53,7 +51,7 @@ export const BudgetInput: FC<{
               Number(budget) > Number(balance) ? 'Insufficient Balance' : ''
             )
           }
-          placeholder={`${title} Amount`}
+          placeholder={`Budget`}
           className={
             'w-full shrink bg-transparent text-right focus:outline-none'
           }
