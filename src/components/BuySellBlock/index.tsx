@@ -1,18 +1,18 @@
 import { FC, useState } from 'react';
 import { Imager } from 'elements/Imager';
 import { Tooltip } from 'components/Tooltip';
-import { Order } from 'elements/strategies/create/useOrder';
+import { OrderCreate } from 'elements/strategies/create/useOrder';
 import { BudgetInput } from './BudgetInput';
 import { InputLimit } from './InputLimit';
 import { InputRange } from './InputRange';
-import { Token } from '../../tokens';
-import { UseQueryResult } from '@tanstack/react-query';
+import { Token } from 'tokens';
+import { UseQueryResult } from 'queries';
 
 type Props = {
   token0: Token;
   token1: Token;
   tokenBalanceQuery: UseQueryResult<string>;
-  order: Order;
+  order: OrderCreate;
   buy?: boolean;
 };
 

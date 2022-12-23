@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export interface Order {
+export interface OrderCreate {
   price: string;
   setPrice: (value: string) => void;
   budget: string;

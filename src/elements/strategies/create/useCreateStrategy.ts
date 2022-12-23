@@ -2,14 +2,13 @@ import { useOrder } from './useOrder';
 import { QueryKey, useCreateStrategy } from 'queries';
 import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
-import { ModalTokenListData } from 'modals/modals/ModalTokenList/ModalTokenList';
+import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { PathNames, useNavigate } from 'routing';
 import { Token } from 'tokens';
 import { config } from 'services/web3/config';
-import { useGetTokenBalance } from '../../../queries/chain/balance';
-import { useQueryClient } from '@tanstack/react-query';
-import { useWeb3 } from '../../../web3';
+import { useGetTokenBalance, useQueryClient } from 'queries';
+import { useWeb3 } from 'web3';
 
 const spenderAddress = config.carbon.poolCollection;
 
