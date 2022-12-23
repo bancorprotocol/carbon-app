@@ -7,7 +7,7 @@ import { prettifyNumber } from 'utils/helpers';
 export const BudgetInput: FC<{
   budget: string;
   setBudget: (value: string) => void;
-  buyToken: Token;
+  token: Token;
   balance?: string;
   isBalanceLoading: boolean;
   setBudgetError: (error: string) => void;
@@ -15,7 +15,7 @@ export const BudgetInput: FC<{
 }> = ({
   budget,
   setBudget,
-  buyToken,
+  token,
   balance,
   isBalanceLoading,
   setBudgetError,
@@ -37,10 +37,10 @@ export const BudgetInput: FC<{
         >
           <Imager
             alt={'Token'}
-            src={buyToken.logoURI}
+            src={token.logoURI}
             className={'h-30 w-30 rounded-full'}
           />
-          {buyToken.symbol}
+          {token.symbol}
         </div>
         <input
           value={budget}

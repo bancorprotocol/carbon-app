@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Order, Strategy, StrategyStatus } from 'queries';
+import { Strategy, StrategyStatus } from 'queries';
 import { m, mItemVariant } from 'motion';
 import { TokensOverlap } from 'components/TokensOverlap';
 import { Imager } from 'elements/Imager';
@@ -23,16 +23,16 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <div className={'flex space-x-10'}>
         <TokensOverlap
           className="h-40 w-40"
-          tokens={[strategy.order0.token, strategy.order1.token]}
+          tokens={[strategy.token0, strategy.token1]}
         />
         <div>
           {strategy.name ? (
             <>{strategy.name}</>
           ) : (
             <div className="flex gap-6">
-              <span>{strategy.order0.token.symbol}</span>
+              <span>{strategy.token0.symbol}</span>
               <div className="text-secondary">/</div>
-              <span>{strategy.order1.token.symbol}</span>
+              <span>{strategy.token1.symbol}</span>
             </div>
           )}
 
@@ -44,9 +44,9 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
               <>
                 <div>·</div>
                 <div className="flex gap-4">
-                  <span>{strategy.order0.token.symbol}</span>
+                  <span>{strategy.token0.symbol}</span>
                   <div>/</div>
-                  <span>{strategy.order1.token.symbol}</span>
+                  <span>{strategy.token1.symbol}</span>
                 </div>
               </>
             )}
@@ -54,8 +54,8 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
         </div>
       </div>
       <hr className="border-silver dark:border-emphasis" />
-      <BuySell buy order={strategy.order0} otherOrder={strategy.order1} />
-      <BuySell order={strategy.order1} otherOrder={strategy.order0} />
+      <BuySell buy strategy={strategy} />
+      <BuySell strategy={strategy} />
       <OrderStatus status={strategy.status} />
       <Manage manage={manage} setManage={setManage} />
     </m.div>
@@ -85,19 +85,22 @@ const OrderStatus: FC<{ status: StrategyStatus }> = ({ status }) => {
   );
 };
 
-const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
-  order,
-  otherOrder,
+const BuySell: FC<{ strategy: Strategy; buy?: boolean }> = ({
+  strategy,
   buy,
 }) => {
+  const token = buy ? strategy.token0 : strategy.token1;
+  const otherToken = buy ? strategy.token1 : strategy.token0;
+  const order = buy ? strategy.order0 : strategy.order1;
   const limit = order.startRate === order.endRate;
+
   return (
     <div className="rounded-8 border border-emphasis p-15">
       <div className="flex items-center gap-6">
         {buy ? 'Buy' : 'Sell'}
         <Imager
           className="h-16 w-16"
-          src={buy ? order.token.logoURI : otherOrder.token.logoURI}
+          src={buy ? token.logoURI : otherToken.logoURI}
           alt="token"
         />
       </div>
@@ -118,7 +121,7 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
               })}`}
             <Imager
               className="h-16 w-16"
-              src={buy ? otherOrder.token.logoURI : order.token.logoURI}
+              src={buy ? otherToken.logoURI : token.logoURI}
               alt="token"
             />
           </div>
@@ -131,7 +134,7 @@ const BuySell: FC<{ order: Order; otherOrder: Order; buy?: boolean }> = ({
             })}
             <Imager
               className="h-16 w-16"
-              src={otherOrder.token.logoURI}
+              src={otherToken.logoURI}
               alt="token"
             />
           </div>

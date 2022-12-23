@@ -5,26 +5,32 @@ import { Order } from 'elements/strategies/create/useOrder';
 import { BudgetInput } from './BudgetInput';
 import { InputLimit } from './InputLimit';
 import { InputRange } from './InputRange';
+import { Token } from '../../tokens';
+import { UseQueryResult } from '@tanstack/react-query';
 
 type Props = {
-  source: Order;
-  target: Order;
+  token0: Token;
+  token1: Token;
+  tokenBalanceQuery: UseQueryResult<string>;
+  order: Order;
   buy?: boolean;
 };
 
-export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
+export const BuySellBlock: FC<Props> = ({
+  token0,
+  token1,
+  tokenBalanceQuery,
+  order,
+  buy,
+}) => {
+  const budgetToken = buy ? token1 : token0;
   const [isRange, setIsRange] = useState(false);
-  const order = buy ? source : target;
-  const otherOrder = buy ? target : source;
   const title = buy ? 'Buy' : 'Sell';
 
   const handleRangeChange = () => {
     setIsRange(!isRange);
-    buy ? source.resetFields(true) : target.resetFields(true);
+    order.resetFields(true);
   };
-
-  //Impossible but TS doesnt recognize it
-  if (!source.token || !target.token) return null;
 
   return (
     <div className={'bg-secondary space-y-10 rounded-10 p-20'}>
@@ -33,7 +39,7 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
           {title}{' '}
           <Imager
             alt={'Token'}
-            src={source.token.logoURI}
+            src={token0.logoURI}
             className={'h-18 w-18 rounded-full'}
           />
         </div>
@@ -63,8 +69,8 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
 
       {isRange ? (
         <InputRange
-          buyToken={source.token}
-          sellToken={target.token}
+          buyToken={token0}
+          sellToken={token1}
           min={order.min}
           setMin={order.setMin}
           max={order.max}
@@ -75,8 +81,8 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
         />
       ) : (
         <InputLimit
-          buyToken={source.token}
-          sellToken={target.token}
+          buyToken={token0}
+          sellToken={token1}
           price={order.price}
           setPrice={order.setPrice}
           error={order.priceError}
@@ -88,9 +94,9 @@ export const BuySellBlock: FC<Props> = ({ source, target, buy }) => {
       <BudgetInput
         budget={order.budget}
         setBudget={order.setBudget}
-        buyToken={buy ? target.token : source.token}
-        balance={otherOrder.balanceQuery.data}
-        isBalanceLoading={otherOrder.balanceQuery.isLoading}
+        token={budgetToken}
+        balance={tokenBalanceQuery.data}
+        isBalanceLoading={tokenBalanceQuery.isLoading}
         error={order.budgetError}
         setBudgetError={order.setBudgetError}
       />

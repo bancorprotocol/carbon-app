@@ -18,7 +18,6 @@ export enum StrategyStatus {
 }
 
 export interface Order {
-  token: Token;
   balance: string;
   curveCapacity: string;
   startRate: string;
@@ -27,6 +26,8 @@ export interface Order {
 
 export interface Strategy {
   id: number;
+  token0: Token;
+  token1: Token;
   order0: Order;
   order1: Order;
   status: StrategyStatus;
@@ -97,10 +98,11 @@ export const useGetUserStrategies = () => {
             ? StrategyStatus.NoBudget
             : StrategyStatus.Active;
 
-        return {
+        const strategy: Strategy = {
           id: s.id.toNumber(),
+          token0,
+          token1,
           order0: {
-            token: token0,
             balance: shrinkToken(order0.liquidity.toString(), token0.decimals),
             curveCapacity: shrinkToken(
               order0.currentRate.toString(),
@@ -110,7 +112,6 @@ export const useGetUserStrategies = () => {
             endRate: order0.highestRate.toString(),
           },
           order1: {
-            token: token1,
             balance: shrinkToken(order1.liquidity.toString(), token1.decimals),
             curveCapacity: shrinkToken(
               order1.currentRate.toString(),
@@ -122,6 +123,8 @@ export const useGetUserStrategies = () => {
           status,
           provider: s.provider,
         };
+
+        return strategy;
       });
 
       return await Promise.all(promises);
@@ -131,16 +134,19 @@ export const useGetUserStrategies = () => {
 };
 
 interface CreateStrategyOrder {
-  token: Token;
   balance?: string;
   min?: string;
   max?: string;
   price?: string;
 }
 
+type TokenAddressDecimals = Pick<Token, 'address' | 'decimals'>;
+
 export interface CreateStrategyParams {
-  token0: CreateStrategyOrder;
-  token1: CreateStrategyOrder;
+  token0: TokenAddressDecimals;
+  token1: TokenAddressDecimals;
+  order0: CreateStrategyOrder;
+  order1: CreateStrategyOrder;
 }
 export const useCreateStrategy = () => {
   const { PoolCollection } = useContract();
