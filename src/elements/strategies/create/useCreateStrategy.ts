@@ -36,7 +36,7 @@ export const useCreate = () => {
       array.push({
         tokenAddress: token0.address,
         spenderAddress,
-        amount: order0.budget,
+        amount: order1.budget || '0',
         decimals: token0.decimals,
         logoURI: token0.logoURI,
         symbol: token0.symbol,
@@ -46,7 +46,7 @@ export const useCreate = () => {
       array.push({
         tokenAddress: token1.address,
         spenderAddress,
-        amount: order1.budget,
+        amount: order0.budget || '0',
         decimals: token1.decimals,
         logoURI: token1.logoURI,
         symbol: token1.symbol,
