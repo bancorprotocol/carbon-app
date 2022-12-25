@@ -48,6 +48,7 @@ export const useCreate = () => {
         spenderAddress,
         amount: order1.budget,
         decimals: token1.decimals,
+        logoURI: token1.logoURI,
         symbol: token1.symbol,
       });
     }

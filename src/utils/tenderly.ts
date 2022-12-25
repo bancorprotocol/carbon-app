@@ -42,6 +42,12 @@ export const FAUCET_TOKENS: FaucetToken[] = [
     decimals: 18,
     symbol: 'PARQ',
   },
+  {
+    donorAccount: '0x218b95be3ed99141b0144dba6ce88807c4ad7c09',
+    tokenContract: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+    decimals: 8,
+    symbol: 'WBTC',
+  },
 ];
 
 const FAUCET_AMOUNT = 100;

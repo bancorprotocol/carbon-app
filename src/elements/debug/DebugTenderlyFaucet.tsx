@@ -30,6 +30,9 @@ export const DebugTenderlyFaucet = () => {
     }
 
     await tenderlyFaucetTransferETH(user);
+    await queryClient.invalidateQueries({
+      queryKey: QueryKey.balance(user, config.tokens.ETH),
+    });
 
     for await (const tkn of FAUCET_TOKENS) {
       try {
