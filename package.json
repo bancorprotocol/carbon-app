@@ -33,6 +33,7 @@
     "bignumber.js": "^9.1.0",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.2.4",
+    "dayjs": "^1.11.7",
     "decimal.js": "^10.4.2",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",

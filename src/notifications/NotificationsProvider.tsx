@@ -1,6 +1,6 @@
+import dayjs from 'dayjs';
 import { createContext, FC, ReactNode, useContext, useState } from 'react';
 import { uuid } from 'utils/helpers';
-import { AnimatePresence, m } from 'motion';
 
 export enum NotificationStatus {
   Pending,
@@ -13,11 +13,15 @@ export interface Notification {
   status: NotificationStatus;
   title: string;
   description: string;
+  timestamp: number;
+  txHash?: string;
 }
 
 interface NotificationsContext {
   notifications: Notification[];
-  dispatchNotification: (notification: Omit<Notification, 'id'>) => void;
+  dispatchNotification: (
+    notification: Omit<Notification, 'id' | 'timestamp'>
+  ) => void;
   removeNotification: (id: string) => void;
   rejectNotification: () => void;
 }
@@ -46,6 +50,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
         status: notification.status,
         title: notification.title,
         description: notification.description,
+        timestamp: dayjs().unix(),
       },
     ]);
   };
@@ -73,35 +78,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
         rejectNotification,
       }}
     >
-      <>
-        {children}
-
-        <div className={'fixed bottom-0 w-full p-6'}>
-          <ul className={'space-y-4'}>
-            <AnimatePresence mode={'sync'}>
-              {notifications.map((notification) => {
-                return (
-                  <m.li
-                    key={notification.id}
-                    layout
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.8, opacity: 0 }}
-                    transition={{ type: 'spring' }}
-                    className={'w-full rounded bg-red-600 px-4 py-2 text-white'}
-                  >
-                    <h3>{notification.title}</h3>
-                    <p>{notification.description}</p>
-                    <button onClick={() => removeNotification(notification.id)}>
-                      Close
-                    </button>
-                  </m.li>
-                );
-              })}
-            </AnimatePresence>
-          </ul>
-        </div>
-      </>
+      <>{children}</>
     </NotificationCTX.Provider>
   );
 };
