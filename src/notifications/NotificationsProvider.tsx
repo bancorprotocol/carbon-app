@@ -2,7 +2,7 @@ import { createContext, FC, ReactNode, useContext, useState } from 'react';
 import { uuid } from 'utils/helpers';
 import { AnimatePresence, m } from 'motion';
 
-export enum NotificationType {
+export enum NotificationStatus {
   Pending,
   Failed,
   Success,
@@ -10,7 +10,7 @@ export enum NotificationType {
 
 export interface Notification {
   id: string;
-  type: NotificationType;
+  status: NotificationStatus;
   title: string;
   description: string;
 }
@@ -19,12 +19,14 @@ interface NotificationsContext {
   notifications: Notification[];
   dispatchNotification: (notification: Omit<Notification, 'id'>) => void;
   removeNotification: (id: string) => void;
+  rejectNotification: () => void;
 }
 
 const defaultValue: NotificationsContext = {
   notifications: [],
   dispatchNotification: () => {},
   removeNotification: () => {},
+  rejectNotification: () => {},
 };
 
 const NotificationCTX = createContext<NotificationsContext>(defaultValue);
@@ -41,11 +43,20 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
       ...prevState,
       {
         id: uuid(),
-        type: notification.type,
+        status: notification.status,
         title: notification.title,
         description: notification.description,
       },
     ]);
+  };
+
+  const rejectNotification = () => {
+    dispatchNotification({
+      status: NotificationStatus.Failed,
+      title: 'Transaction Rejected',
+      description:
+        'You rejected the trade. If this was by mistake, please try again.',
+    });
   };
 
   const removeNotification = (id: string) => {
@@ -59,6 +70,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
         notifications,
         dispatchNotification,
         removeNotification,
+        rejectNotification,
       }}
     >
       <>
@@ -81,7 +93,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
                     <h3>{notification.title}</h3>
                     <p>{notification.description}</p>
                     <button onClick={() => removeNotification(notification.id)}>
-                      close
+                      Close
                     </button>
                   </m.li>
                 );
