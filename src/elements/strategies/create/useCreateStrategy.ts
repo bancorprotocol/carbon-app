@@ -1,4 +1,4 @@
-import { useOrder } from './useOrder';
+import { OrderCreate, useOrder } from './useOrder';
 import { QueryKey, useCreateStrategy } from 'queries';
 import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
@@ -99,26 +99,29 @@ export const useCreate = () => {
     );
   };
 
-  // const checkErrors = (order: Order, otherOrder: Order) => {
-  //   const minMaxCorrect =
-  //     Number(order.min) > 0 && Number(order.max) > Number(order.min);
-  //   const priceCorrect = Number(order.price) > 0;
-  //   const budgetCorrect =
-  //     !order.budget ||
-  //     Number(order.budget) <= Number(otherOrder.balanceQuery.data);
-  //
-  //   return (minMaxCorrect || priceCorrect) && budgetCorrect;
-  // };
+  const checkErrors = (
+    order: OrderCreate,
+    otherOrder: OrderCreate,
+    balance?: string
+  ) => {
+    const minMaxCorrect =
+      Number(order.min) > 0 && Number(order.max) > Number(order.min);
+    const priceCorrect = Number(order.price) > 0;
+    const budgetCorrect =
+      !order.budget || Number(order.budget) <= Number(balance);
+
+    return (minMaxCorrect || priceCorrect) && budgetCorrect;
+  };
 
   const createStrategy = async () => {
-    // const sourceCorrect = checkErrors(order0, order1);
-    // const targetCorrect = checkErrors(order1, order0);
+    const sourceCorrect = checkErrors(order0, order1, token1BalanceQuery.data);
+    const targetCorrect = checkErrors(order1, order0, token0BalanceQuery.data);
 
-    // if (sourceCorrect && targetCorrect) {
-    if (approval.approvalRequired)
-      openModal('txConfirm', { approvalTokens, onConfirm: create });
-    else create();
-    // }
+    if (sourceCorrect && targetCorrect) {
+      if (approval.approvalRequired)
+        openModal('txConfirm', { approvalTokens, onConfirm: create });
+      else create();
+    }
   };
 
   const openTokenListModal = (isSource?: boolean) => {
