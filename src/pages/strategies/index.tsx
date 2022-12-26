@@ -4,7 +4,7 @@ import { SearchInput } from 'components/SearchInput';
 import { StrategyBlock } from 'components/StrategyBlock';
 import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 import { m, mListVariant } from 'motion';
-import { useGetUserStrategies } from 'queries';
+import { StrategyStatus, useGetUserStrategies } from 'queries';
 import { FC, useMemo, useState } from 'react';
 import { Link, PathNames } from 'routing';
 import { useWeb3 } from 'web3';
@@ -24,14 +24,22 @@ const StrategyContent = () => {
   const [filter, setFilter] = useState(StrategyFilter.All);
 
   const filteredStrategies = useMemo(() => {
-    return strategies.data?.filter(
+    const filtered = strategies.data?.filter(
       (strategy) =>
         strategy.order0.token.symbol
           .toLowerCase()
           .includes(search.toLowerCase()) ||
         strategy.order1.token.symbol
           .toLowerCase()
-          .includes(search.toLowerCase())
+          .includes(search.toLowerCase()) ||
+        (filter === StrategyFilter.Active &&
+          strategy.status === StrategyStatus.Active) ||
+        (filter === StrategyFilter.OffCurve &&
+          strategy.status === StrategyStatus.OffCurve)
+    );
+
+    return filtered?.sort(
+      (a, b) => (sort === StrategySort.Recent ? 1 : -1) * (a.id - b.id)
     );
   }, [search, strategies.data]);
 
