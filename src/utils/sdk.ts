@@ -1,7 +1,6 @@
 import { CreateStrategyParams } from 'queries';
-import { encodeOrder } from 'utils/sdk2';
+import { Decimal, encodeOrder } from 'utils/sdk2';
 import { expandToken } from 'utils/tokens';
-import BigNumber from 'bignumber.js';
 
 export const toStrategy = ({
   token0,
@@ -9,12 +8,13 @@ export const toStrategy = ({
   order0,
   order1,
 }: CreateStrategyParams) => {
+  const zero = new Decimal(0);
   const order0Budget = order0.budget
-    ? expandToken(order0.budget, token1.decimals)
-    : '0';
+    ? new Decimal(expandToken(order0.budget, token1.decimals))
+    : zero;
   const order1Budget = order1.budget
-    ? expandToken(order1.budget, token0.decimals)
-    : '0';
+    ? new Decimal(expandToken(order1.budget, token0.decimals))
+    : zero;
 
   const order0Low = order0.price ? order0.price : order0.min ? order0.min : '0';
   const order0Max = order0.price ? order0.price : order0.max ? order0.max : '0';
@@ -27,14 +27,12 @@ export const toStrategy = ({
   // ATTENTION *****************************
   const encodedOrder0 = encodeOrder({
     liquidity: order1Budget,
-    lowestRate: new BigNumber(1)
+    lowestRate: new Decimal(1)
       .div(order1Max)
-      .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
-      .toString(),
-    highestRate: new BigNumber(1)
+      .times(new Decimal(10).pow(token1.decimals - token0.decimals)),
+    highestRate: new Decimal(1)
       .div(order1Low)
-      .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
-      .toString(),
+      .times(new Decimal(10).pow(token1.decimals - token0.decimals)),
     marginalRate: order1Budget,
   });
 
@@ -43,12 +41,12 @@ export const toStrategy = ({
   // ATTENTION *****************************
   const encodedOrder1 = encodeOrder({
     liquidity: order0Budget,
-    lowestRate: new BigNumber(order0Low)
-      .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
-      .toString(),
-    highestRate: new BigNumber(order0Max)
-      .times(new BigNumber(10).pow(token0.decimals - token1.decimals))
-      .toString(),
+    lowestRate: new Decimal(order0Low).times(
+      new Decimal(10).pow(token0.decimals - token1.decimals)
+    ),
+    highestRate: new Decimal(order0Max).times(
+      new Decimal(10).pow(token0.decimals - token1.decimals)
+    ),
     marginalRate: order0Budget,
   });
 
