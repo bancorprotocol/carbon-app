@@ -26,12 +26,8 @@ const StrategyContent = () => {
   const filteredStrategies = useMemo(() => {
     const filtered = strategies.data?.filter(
       (strategy) =>
-        strategy.order0.token.symbol
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        strategy.order1.token.symbol
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
+        strategy.token0.symbol.toLowerCase().includes(search.toLowerCase()) ||
+        strategy.token1.symbol.toLowerCase().includes(search.toLowerCase()) ||
         (filter === StrategyFilter.Active &&
           strategy.status === StrategyStatus.Active) ||
         (filter === StrategyFilter.OffCurve &&
@@ -41,7 +37,7 @@ const StrategyContent = () => {
     return filtered?.sort(
       (a, b) => (sort === StrategySort.Recent ? 1 : -1) * (a.id - b.id)
     );
-  }, [search, strategies.data]);
+  }, [search, strategies.data, filter, sort]);
 
   if (strategies && strategies.data && strategies.data.length === 0)
     return <CreateFirstStrategy />;
