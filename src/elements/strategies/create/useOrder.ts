@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { Token } from 'tokens';
-import { useGetTokenBalance } from 'queries/chain/balance';
 
-export interface Order {
-  token?: Token;
+export interface OrderCreate {
   price: string;
   setPrice: (value: string) => void;
   budget: string;
@@ -18,12 +15,10 @@ export interface Order {
   setPriceError: (value: string) => void;
   budgetError: string;
   setBudgetError: (value: string) => void;
-  balanceQuery: any;
   resetFields: (skipBudget?: boolean, skipPrice?: boolean) => void;
 }
 
 export const useOrder = () => {
-  const [token, setToken] = useState<Token | undefined>();
   const [budget, setBudget] = useState('');
   const [price, setPrice] = useState('');
   const [max, setMax] = useState('');
@@ -31,8 +26,6 @@ export const useOrder = () => {
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [budgetError, setBudgetError] = useState('');
-
-  const balanceQuery = useGetTokenBalance(token);
 
   const resetFields = (skipBudget?: boolean, skipPrice?: boolean) => {
     if (!skipPrice) {
@@ -50,8 +43,6 @@ export const useOrder = () => {
   };
 
   return {
-    token,
-    setToken,
     budget,
     setBudget,
     price,
@@ -60,7 +51,6 @@ export const useOrder = () => {
     setMax,
     min,
     setMin,
-    balanceQuery,
     rangeError,
     setRangeError,
     priceError,

@@ -13,9 +13,10 @@ import { QueryKey } from '../../queries';
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
   decimals: tkn.decimals,
+  symbol: tkn.symbol,
 }));
 
-TOKENS.push({ address: config.tokens.ETH, decimals: 18 });
+TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
 
 export const DebugTenderlyFaucet = () => {
   const { user } = useWeb3();
@@ -29,6 +30,9 @@ export const DebugTenderlyFaucet = () => {
     }
 
     await tenderlyFaucetTransferETH(user);
+    await queryClient.invalidateQueries({
+      queryKey: QueryKey.balance(user, config.tokens.ETH),
+    });
 
     for await (const tkn of FAUCET_TOKENS) {
       try {
@@ -52,7 +56,9 @@ export const DebugTenderlyFaucet = () => {
 
       <div>
         {queries.map((t, i) => (
-          <div key={i}>{t.data}</div>
+          <div key={i}>
+            {t.data} {TOKENS[i].symbol}
+          </div>
         ))}
       </div>
 
