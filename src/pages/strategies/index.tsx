@@ -26,12 +26,8 @@ const StrategyContent = () => {
   const filteredStrategies = useMemo(() => {
     return strategies.data?.filter(
       (strategy) =>
-        strategy.order0.token.symbol
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        strategy.order1.token.symbol
-          .toLowerCase()
-          .includes(search.toLowerCase())
+        strategy.token0.symbol.toLowerCase().includes(search.toLowerCase()) ||
+        strategy.token1.symbol.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, strategies.data]);
 
