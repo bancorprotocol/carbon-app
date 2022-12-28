@@ -18,11 +18,11 @@ import { ModalContext, ModalKey, ModalOpen } from './modals.types';
 
 const defaultValue: ModalContext = {
   modals: { open: [], minimized: [] },
-  openModal: (key, data) => console.log(key, data),
-  closeModal: (id) => console.log(id),
+  openModal: () => {},
+  closeModal: () => {},
   activeModalId: null,
-  minimizeModal: (id) => console.log(id),
-  maximizeModal: (id) => console.log(id),
+  minimizeModal: () => {},
+  maximizeModal: () => {},
 };
 
 const ModalCTX = createContext(defaultValue);

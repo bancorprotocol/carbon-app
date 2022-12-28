@@ -110,7 +110,13 @@ const BuySell: FC<{ strategy: Strategy; buy?: boolean }> = ({
           <div className={`${buy ? 'text-success-500' : 'text-error-500'}`}>
             {limit ? 'Limit Price' : 'Price Range'}
           </div>
-          <div className="flex items-center gap-7">
+          <div
+            onMouseEnter={() => {
+              console.log(limit ? 'Price' : 'order.startRate', order.startRate);
+              if (!limit) console.log('order.endRate', order.endRate);
+            }}
+            className="flex items-center gap-7"
+          >
             {prettifyNumber(order.startRate, {
               abbreviate: order.startRate.length > 10,
             })}
