@@ -25,14 +25,16 @@ const StrategyContent = () => {
 
   const filteredStrategies = useMemo(() => {
     const searchLC = search.toLowerCase();
+
     const filtered = strategies.data?.filter(
       (strategy) =>
-        strategy.token0.symbol.toLowerCase().includes(searchLC) ||
-        strategy.token1.symbol.toLowerCase().includes(searchLC) ||
-        (filter === StrategyFilter.Active &&
-          strategy.status === StrategyStatus.Active) ||
-        (filter === StrategyFilter.OffCurve &&
-          strategy.status === StrategyStatus.OffCurve)
+        (strategy.token0.symbol.toLowerCase().includes(searchLC) ||
+          strategy.token1.symbol.toLowerCase().includes(searchLC)) &&
+        (filter === StrategyFilter.All ||
+          (filter === StrategyFilter.Active &&
+            strategy.status === StrategyStatus.Active) ||
+          (filter === StrategyFilter.OffCurve &&
+            strategy.status === StrategyStatus.OffCurve))
     );
 
     const sorterNum = sort === StrategySort.Recent ? -1 : 1;

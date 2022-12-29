@@ -5,7 +5,7 @@ import { useWeb3 } from 'web3';
 import { toStrategy } from 'utils/sdk';
 import { Token, useTokens } from 'tokens';
 import { MultiCall, useMulticall } from 'hooks/useMulticall';
-import { Decimal, decodeOrder } from 'utils/sdk2';
+import { decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
 import { fetchTokenData } from 'tokens/tokenHelperFn';
 import { QueryKey } from '../queryKey';
@@ -79,16 +79,14 @@ export const useGetUserStrategies = () => {
         const decodedOrder0 = decodeOrder({ ...s.orders[0] });
         const decodedOrder1 = decodeOrder({ ...s.orders[1] });
 
-        const zero = new Decimal(0);
-
         const offCurve =
-          decodedOrder0.lowestRate === zero &&
-          decodedOrder0.highestRate === zero &&
-          decodedOrder1.lowestRate === zero &&
-          decodedOrder1.highestRate === zero;
+          decodedOrder0.lowestRate.isZero() &&
+          decodedOrder0.highestRate.isZero() &&
+          decodedOrder1.lowestRate.isZero() &&
+          decodedOrder1.highestRate.isZero();
 
         const noBudget =
-          decodedOrder0.liquidity === zero && decodedOrder1.liquidity === zero;
+          decodedOrder0.liquidity.isZero() && decodedOrder1.liquidity.isZero();
 
         const status =
           noBudget && offCurve
