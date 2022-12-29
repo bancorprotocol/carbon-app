@@ -24,19 +24,19 @@ const StrategyContent = () => {
   const [filter, setFilter] = useState(StrategyFilter.All);
 
   const filteredStrategies = useMemo(() => {
+    const searchLC = search.toLowerCase();
     const filtered = strategies.data?.filter(
       (strategy) =>
-        strategy.token0.symbol.toLowerCase().includes(search.toLowerCase()) ||
-        strategy.token1.symbol.toLowerCase().includes(search.toLowerCase()) ||
+        strategy.token0.symbol.toLowerCase().includes(searchLC) ||
+        strategy.token1.symbol.toLowerCase().includes(searchLC) ||
         (filter === StrategyFilter.Active &&
           strategy.status === StrategyStatus.Active) ||
         (filter === StrategyFilter.OffCurve &&
           strategy.status === StrategyStatus.OffCurve)
     );
 
-    return filtered?.sort(
-      (a, b) => (sort === StrategySort.Recent ? 1 : -1) * (a.id - b.id)
-    );
+    const sorterNum = sort === StrategySort.Recent ? -1 : 1;
+    return filtered?.sort((a, b) => sorterNum * (a.id - b.id));
   }, [search, strategies.data, filter, sort]);
 
   if (strategies && strategies.data && strategies.data.length === 0)
