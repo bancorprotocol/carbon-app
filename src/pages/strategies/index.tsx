@@ -10,6 +10,7 @@ import { Link, PathNames } from 'routing';
 import { useWeb3 } from 'web3';
 import { WalletConnect } from 'components/WalletConnect';
 import { FilterSort, StrategyFilter, StrategySort } from './FilterSort';
+import { ReactComponent as IconEllipse } from 'assets/icons/ellipse.svg';
 
 export const StrategiesPage = () => {
   const { user } = useWeb3();
@@ -49,28 +50,35 @@ const StrategyContent = () => {
         />
       }
     >
-      <m.div
-        className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
-        variants={mListVariant}
-        initial={'hidden'}
-        animate={'visible'}
-      >
-        {strategies.isLoading ? (
-          <>
-            {[...Array(3)].map((_, index) => (
-              <div key={index} className="loading-skeleton h-[665px] w-full" />
-            ))}
-          </>
-        ) : (
-          <>
-            {filteredStrategies?.map((s) => (
-              <StrategyBlock key={s.id} strategy={s} />
-            ))}
+      {!filteredStrategies || filteredStrategies.length === 0 ? (
+        <StrategyNotFound />
+      ) : (
+        <m.div
+          className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
+          variants={mListVariant}
+          initial={'hidden'}
+          animate={'visible'}
+        >
+          {strategies.isLoading ? (
+            <>
+              {[...Array(3)].map((_, index) => (
+                <div
+                  key={index}
+                  className="loading-skeleton h-[665px] w-full"
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {filteredStrategies.map((s) => (
+                <StrategyBlock key={s.id} strategy={s} />
+              ))}
 
-            <StrategyBlockCreate />
-          </>
-        )}
-      </m.div>
+              <StrategyBlockCreate />
+            </>
+          )}
+        </m.div>
+      )}
     </Page>
   );
 };
@@ -115,6 +123,19 @@ const CreateFirstStrategy = () => {
         title="Create Your First Strategy"
         className="w-[270px] gap-[32px] text-center text-36"
       />
+    </div>
+  );
+};
+
+const StrategyNotFound = () => {
+  return (
+    <div className="flex h-screen items-center justify-center p-20">
+      <div className=" w-[209px] text-center font-weight-500">
+        <div className="mx-auto mb-32 w-80 rounded-full bg-silver p-16">
+          <IconEllipse />
+        </div>
+        <div className="text-36">Strategy Not Found</div>
+      </div>
     </div>
   );
 };
