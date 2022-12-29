@@ -49,11 +49,15 @@ export const FilterSort: FC<{
 }> = ({ sort, filter, setSort, setFilter }) => {
   return (
     <DropdownMenu
-      button={
-        <Button variant="tertiary" className="flex items-center gap-10">
+      button={(onClick) => (
+        <Button
+          onClick={onClick}
+          variant="tertiary"
+          className="flex items-center gap-10"
+        >
           Filter & Sort <IconChevron className="w-14" />
         </Button>
-      }
+      )}
     >
       <div className="grid w-[300px] gap-20 p-10">
         <div className="text-secondary text-20">Sort By</div>
