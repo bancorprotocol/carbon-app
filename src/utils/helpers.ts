@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import numeral from 'numeral';
 import numbro from 'numbro';
+import { config } from 'services/web3/config';
 
 export const isProduction = window.location.host.includes('bancor.network');
 
@@ -40,6 +41,13 @@ export const shortenString = (
   const start = string.substring(0, startEndLength);
   const end = string.substring(string.length - startEndLength, string.length);
   return start + separator + end;
+};
+
+export const reduceETH = (value: string, address: string) => {
+  if (address === config.tokens.ETH)
+    return new BigNumber(value).minus(0.01).toString();
+
+  return value;
 };
 
 const prettifyNumberAbbreviateFormat: numbro.Format = {
