@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Imager } from 'elements/Imager';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { shortenString } from 'utils/helpers';
 
 interface Props {
   symbol0?: string;
@@ -29,7 +30,7 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onClick0()}
         className={
-          'bg-body -mr-13 flex flex-grow items-center rounded-12 py-10 px-18'
+          'bg-body -mr-13 flex w-[140px] flex-grow items-center rounded-12 py-10 px-18'
         }
       >
         <Imager
@@ -38,7 +39,7 @@ export const SelectTokens: FC<Props> = ({
           className={'mr-8 h-30 w-30 rounded-full'}
         />
         <div className={'mr-auto text-16 font-weight-500'}>
-          {symbol0 ?? 'Select'}
+          {symbol0 ? shortenString(symbol0, '...', 5) : 'Select'}
         </div>
         <IconChevron className="w-14" />
       </button>
@@ -54,7 +55,7 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onClick1()}
         className={
-          'bg-body -ml-13 flex flex-grow items-center rounded-12 py-10 px-18'
+          'bg-body -ml-13 flex w-[140px] flex-grow items-center rounded-12 py-10 px-18'
         }
       >
         <Imager
@@ -63,7 +64,7 @@ export const SelectTokens: FC<Props> = ({
           className={'mr-8 h-30 w-30 rounded-full'}
         />
         <div className={'mr-auto text-16 font-weight-500'}>
-          {symbol1 ?? 'Select'}
+          {symbol1 ? shortenString(symbol1, '...', 5) : 'Select'}
         </div>
         <IconChevron className="w-14" />
       </button>
