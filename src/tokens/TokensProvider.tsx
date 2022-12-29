@@ -24,13 +24,8 @@ interface TokensContext {
 const defaultValue: TokensContext = {
   tokenLists: [],
   tokens: [],
-  getTokenById: (id) => {
-    console.log(id);
-    return undefined;
-  },
-  importToken: (token) => {
-    console.log(token);
-  },
+  getTokenById: () => undefined,
+  importToken: () => () => {},
   isLoading: false,
   isError: false,
   error: undefined,

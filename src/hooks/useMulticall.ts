@@ -30,8 +30,7 @@ export const useMulticall = () => {
 
       return encodedRes.map((call, i) => {
         if (!call.success) {
-          console.log('multicall failed', calls[i]);
-          throw new Error('multicall failed');
+          console.error('multicall failed', calls[i]);
         }
 
         return calls[i].interface.decodeFunctionResult(
@@ -39,9 +38,9 @@ export const useMulticall = () => {
           call.returnData
         );
       });
-    } catch (error) {
-      throw error;
-    }
+    } catch (error) {}
+
+    return [];
   };
 
   return { fetchMulticall };
