@@ -1,8 +1,7 @@
 import { Imager } from 'elements/Imager';
-import { useSanitizeInput } from 'hooks/useSanitizeInput';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { Token } from 'tokens';
-import { prettifyNumber } from 'utils/helpers';
+import { prettifyNumber, reduceETH, sanitizeNumberInput } from 'utils/helpers';
 
 export const BudgetInput: FC<{
   budget: string;
@@ -21,7 +20,10 @@ export const BudgetInput: FC<{
   setBudgetError,
   error,
 }) => {
-  const handleChange = useSanitizeInput(setBudget);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNumberInput(e.target.value, token.decimals);
+    setBudget(reduceETH(sanitized, token.address));
+  };
 
   return (
     <div

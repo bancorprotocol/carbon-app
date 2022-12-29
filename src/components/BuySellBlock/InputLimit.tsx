@@ -1,6 +1,6 @@
-import { useSanitizeInput } from 'hooks/useSanitizeInput';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { Token } from 'tokens';
+import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputLimit: FC<{
   buyToken: Token;
@@ -11,7 +11,9 @@ export const InputLimit: FC<{
   buy?: boolean;
   setPriceError: (error: string) => void;
 }> = ({ buyToken, sellToken, price, setPrice, error, buy, setPriceError }) => {
-  const handleChange = useSanitizeInput(setPrice);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+    setPrice(sanitizeNumberInput(e.target.value));
+
   return (
     <div>
       <div
