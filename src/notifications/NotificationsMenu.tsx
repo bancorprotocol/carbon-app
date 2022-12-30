@@ -7,7 +7,7 @@ export const NotificationsMenu = () => {
   const { notifications, dispatchNotification } = useNotifications();
 
   return (
-    <DropdownMenu button={'Notifications'}>
+    <DropdownMenu button={() => 'Notifications'}>
       {notifications.map((notification) => (
         <NotificationLine key={notification.id} notification={notification} />
       ))}
