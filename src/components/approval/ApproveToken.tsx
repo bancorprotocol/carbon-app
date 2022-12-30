@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import { useSetUserApproval } from 'queries/chain/approval';
 import { Button } from 'components/Button';
-import { shortenString } from 'utils/helpers';
 import { Switch } from 'components/Switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { Imager } from 'elements/Imager';
@@ -79,22 +78,13 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           />
           <div>{data.symbol}</div>
         </div>
-        {data.approvalRequired && !txSuccess ? (
-          <>
-            <div className={'text-secondary'}>Allowance: {data.allowance}</div>
-
-            <div className={'text-secondary'}>
-              Spender: {shortenString(data.spenderAddress)}
-            </div>
-          </>
-        ) : null}
       </div>
 
       {data.approvalRequired && !txSuccess ? (
         txBusy ? (
           <div>please wait</div>
         ) : (
-          <div className={'flex h-82 flex-col items-end justify-between'}>
+          <div className={'flex h-82 flex-col items-end justify-center gap-10'}>
             <div className={'flex items-center space-x-8'}>
               <div
                 className={`!text-12 ${
@@ -116,7 +106,9 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           </div>
         )
       ) : (
-        <div className={'text-success-500'}>Approved</div>
+        <div className={'text-success-500'}>
+          {txSuccess ? 'Approved' : 'Pre-Apprpved'}
+        </div>
       )}
 
       {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
