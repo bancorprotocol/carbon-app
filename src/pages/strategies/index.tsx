@@ -2,7 +2,7 @@ import { Page } from 'components/Page';
 import { StrategyBlock } from 'components/StrategyBlock';
 import { StrategyBlockCreate } from 'components/StrategyBlock/create';
 import { m, mListVariant } from 'motion';
-import { useGetUserStrategies } from 'queries';
+import { StrategyStatus, useGetUserStrategies } from 'queries';
 import { useMemo, useState } from 'react';
 import { useWeb3 } from 'web3';
 import { WalletConnect } from 'components/WalletConnect';
@@ -24,12 +24,22 @@ const StrategyContent = () => {
   const [filter, setFilter] = useState(StrategyFilter.All);
 
   const filteredStrategies = useMemo(() => {
-    return strategies.data?.filter(
+    const searchLC = search.toLowerCase();
+
+    const filtered = strategies.data?.filter(
       (strategy) =>
-        strategy.token0.symbol.toLowerCase().includes(search.toLowerCase()) ||
-        strategy.token1.symbol.toLowerCase().includes(search.toLowerCase())
+        (strategy.token0.symbol.toLowerCase().includes(searchLC) ||
+          strategy.token1.symbol.toLowerCase().includes(searchLC)) &&
+        (filter === StrategyFilter.All ||
+          (filter === StrategyFilter.Active &&
+            strategy.status === StrategyStatus.Active) ||
+          (filter === StrategyFilter.Inactive &&
+            strategy.status !== StrategyStatus.Active))
     );
-  }, [search, strategies.data]);
+
+    const sorterNum = sort === StrategySort.Recent ? -1 : 1;
+    return filtered?.sort((a, b) => sorterNum * (a.id - b.id));
+  }, [search, strategies.data, filter, sort]);
 
   if (strategies && strategies.data && strategies.data.length === 0)
     return <CreateFirstStrategy />;

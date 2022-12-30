@@ -7,7 +7,7 @@ import { FC } from 'react';
 export enum StrategyFilter {
   All,
   Active,
-  OffCurve,
+  Inactive,
 }
 
 export enum StrategySort {
@@ -36,8 +36,8 @@ const filterItems = [
     item: StrategyFilter.Active,
   },
   {
-    title: 'Off Curve',
-    item: StrategyFilter.OffCurve,
+    title: 'Inactive',
+    item: StrategyFilter.Inactive,
   },
 ];
 
