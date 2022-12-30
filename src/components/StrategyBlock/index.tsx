@@ -165,17 +165,18 @@ const Manage: FC<{ manage: boolean; setManage: (flag: boolean) => void }> = ({
     <DropdownMenu
       isOpen={manage}
       setIsOpen={setManage}
-      button={
+      button={(onClick) => (
         <Button
           className="flex items-center justify-center gap-8"
           size={'md'}
           fullWidth
           variant={'secondary'}
+          onClick={onClick}
         >
           Manage
           <IconChevron className="w-12" />
         </Button>
-      }
+      )}
       className="w-full !p-10"
     >
       {items.map((item) => (

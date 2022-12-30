@@ -12,12 +12,12 @@ import { useWeb3User } from 'web3/useWeb3User';
 
 const defaultValue: BancorWeb3ProviderContext = {
   user: undefined,
-  handleImposterAccount: (account) => console.log(account),
+  handleImposterAccount: () => {},
   isNetworkActive: false,
   provider: undefined,
   signer: undefined,
   chainId: 1,
-  handleTenderlyRPC: (url) => console.log(url),
+  handleTenderlyRPC: () => {},
   disconnect: async () => {},
   connect: async () => {},
   isImposter: false,
