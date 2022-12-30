@@ -1,29 +1,29 @@
 import { Imager } from 'elements/Imager';
-import { useSanitizeInput } from 'hooks/useSanitizeInput';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { Token } from 'tokens';
-import { prettifyNumber } from 'utils/helpers';
+import { prettifyNumber, reduceETH, sanitizeNumberInput } from 'utils/helpers';
 
 export const BudgetInput: FC<{
-  title: string;
   budget: string;
   setBudget: (value: string) => void;
-  buyToken: Token;
+  token: Token;
   balance?: string;
   isBalanceLoading: boolean;
   setBudgetError: (error: string) => void;
   error?: string;
 }> = ({
-  title,
   budget,
   setBudget,
-  buyToken,
+  token,
   balance,
   isBalanceLoading,
   setBudgetError,
   error,
 }) => {
-  const handleChange = useSanitizeInput(setBudget);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNumberInput(e.target.value, token.decimals);
+    setBudget(reduceETH(sanitized, token.address));
+  };
 
   return (
     <div
@@ -39,10 +39,10 @@ export const BudgetInput: FC<{
         >
           <Imager
             alt={'Token'}
-            src={buyToken.logoURI}
+            src={token.logoURI}
             className={'h-30 w-30 rounded-full'}
           />
-          {buyToken.symbol}
+          {token.symbol}
         </div>
         <input
           value={budget}
@@ -53,7 +53,7 @@ export const BudgetInput: FC<{
               Number(budget) > Number(balance) ? 'Insufficient Balance' : ''
             )
           }
-          placeholder={`${title} Amount`}
+          placeholder={`Budget`}
           className={
             'w-full shrink bg-transparent text-right focus:outline-none'
           }

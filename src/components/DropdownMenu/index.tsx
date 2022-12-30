@@ -3,7 +3,7 @@ import { FC, ReactNode, useRef, useState } from 'react';
 import { useOutsideClick } from 'hooks/useOutsideClick';
 
 type Props = {
-  button: string | ReactNode;
+  button: (onClick: () => void) => ReactNode;
   children: ReactNode;
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
@@ -32,12 +32,10 @@ export const DropdownMenu: FC<Props> = ({
       animate={menuOpen ? 'open' : 'closed'}
       className={'relative'}
     >
-      <m.button
-        className="w-full"
-        onClick={() => (outsideState ? setIsOpen(!isOpen) : setOpen(!open))}
-      >
-        {button}
-      </m.button>
+      {button(() => {
+        if (outsideState) setIsOpen(!isOpen);
+        else setOpen(!open);
+      })}
       <m.div
         className={`${className} absolute mt-10 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
         variants={menuVariants}

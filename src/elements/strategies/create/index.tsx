@@ -12,14 +12,20 @@ export const CreateStrategy = () => {
   const location = useLocation();
 
   const {
-    source,
-    target,
+    token0,
+    setToken0,
+    token1,
+    setToken1,
+    order0,
+    order1,
     name,
     setName,
     createStrategy,
     openTokenListModal,
     showStep2,
     isCTAdisabled,
+    token0BalanceQuery,
+    token1BalanceQuery,
   } = useCreate();
 
   return (
@@ -45,29 +51,40 @@ export const CreateStrategy = () => {
         </div>
 
         <SelectTokens
-          symbol0={source.token?.symbol}
-          symbol1={target.token?.symbol}
-          imgUrl0={source.token?.logoURI}
-          imgUrl1={target.token?.logoURI}
+          symbol0={token0?.symbol}
+          symbol1={token1?.symbol}
+          imgUrl0={token0?.logoURI}
+          imgUrl1={token1?.logoURI}
           onClick0={() => openTokenListModal(true)}
           onClick1={() => openTokenListModal()}
           onMiddleClick={() => {
-            if (source.token || target.token) {
-              source.setToken(target.token);
-              target.setToken(source.token);
+            if (token0 || token1) {
+              setToken0(token1);
+              setToken1(token0);
             }
           }}
-          middleDisabled={!(source.token || target.token)}
+          middleDisabled={!(token0 || token1)}
         />
       </m.div>
       {showStep2 && (
         <>
           <m.div variants={items}>
-            <BuySellBlock source={source} target={target} buy />
+            <BuySellBlock
+              token0={token0!}
+              token1={token1!}
+              order={order0}
+              buy
+              tokenBalanceQuery={token1BalanceQuery}
+            />
           </m.div>
 
           <m.div variants={items}>
-            <BuySellBlock source={source} target={target} />
+            <BuySellBlock
+              token0={token0!}
+              token1={token1!}
+              order={order1}
+              tokenBalanceQuery={token0BalanceQuery}
+            />
           </m.div>
 
           <m.div variants={items}>

@@ -1,6 +1,6 @@
-import { useSanitizeInput } from 'hooks/useSanitizeInput';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { Token } from 'tokens';
+import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputRange: FC<{
   buyToken: Token;
@@ -23,11 +23,14 @@ export const InputRange: FC<{
   buy,
   setRangeError,
 }) => {
-  const handleChangeMin = useSanitizeInput(setMin);
-  const handleChangeMax = useSanitizeInput(setMax);
+  const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) =>
+    setMin(sanitizeNumberInput(e.target.value));
 
-  const handleBlur = (min?: boolean) => {
-    Number(min) > 0 && (min || Number(max) > Number(min))
+  const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) =>
+    setMax(sanitizeNumberInput(e.target.value));
+
+  const handleBlur = (isMin?: boolean) => {
+    Number(min) > 0 && (isMin || Number(max) > Number(min))
       ? setRangeError('')
       : setRangeError('Max Price must be higher than min price and not zero');
   };

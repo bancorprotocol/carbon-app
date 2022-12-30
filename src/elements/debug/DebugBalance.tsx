@@ -6,14 +6,7 @@ export const DebugBalance = () => {
   const [balance, setBalance] = useState('');
 
   const fetchETH = useCallback(async () => {
-    if (!provider) {
-      return console.log('Not provider set.');
-    }
-    if (!user) {
-      return console.log('Not logged in.');
-    }
-
-    console.log('going for it');
+    if (!provider || !user) return;
 
     try {
       const res = await provider.getBalance(user);

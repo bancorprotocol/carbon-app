@@ -1,81 +1,95 @@
-import { Order, useOrder } from './useOrder';
-import { useCreateStrategy } from 'queries';
+import { OrderCreate, useOrder } from './useOrder';
+import { QueryKey, useCreateStrategy } from 'queries';
 import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
-import { ModalTokenListData } from 'modals/modals/ModalTokenList/ModalTokenList';
-import poolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
+import { ModalTokenListData } from 'modals/modals/ModalTokenList';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { PathNames, useNavigate } from 'routing';
 import { Token } from 'tokens';
+import { config } from 'services/web3/config';
+import { useGetTokenBalance, useQueryClient } from 'queries';
+import { useWeb3 } from 'web3';
 
-const spenderAddress = poolCollectionProxyAbi.address;
+const spenderAddress = config.carbon.poolCollection;
 
 export const useCreate = () => {
+  const cache = useQueryClient();
   const navigate = useNavigate();
+  const { user } = useWeb3();
   const { openModal } = useModal();
-  const source = useOrder();
-  const target = useOrder();
+  const [token0, setToken0] = useState<Token | undefined>();
+  const [token1, setToken1] = useState<Token | undefined>();
+
+  const token0BalanceQuery = useGetTokenBalance(token0);
+  const token1BalanceQuery = useGetTokenBalance(token1);
+
+  const order0 = useOrder();
+  const order1 = useOrder();
   const [name, setName] = useState('');
   const mutation = useCreateStrategy();
 
-  const showStep2 = !!source.token && !!target.token;
+  const showStep2 = !!token0 && !!token1;
 
   const approvalTokens = useMemo(() => {
     const array: ApprovalToken[] = [];
-    if (source.token) {
+    if (token0) {
       array.push({
-        tokenAddress: source.token?.address,
+        tokenAddress: token0.address,
         spenderAddress,
-        amount: source.budget,
-        decimals: source.token?.decimals,
-        logoURI: source.token.logoURI,
-        symbol: source.token.symbol,
+        amount: order1.budget || '0',
+        decimals: token0.decimals,
+        logoURI: token0.logoURI,
+        symbol: token0.symbol,
       });
     }
-    if (target.token) {
+    if (token1) {
       array.push({
-        tokenAddress: target.token?.address,
+        tokenAddress: token1.address,
         spenderAddress,
-        amount: target.budget,
-        decimals: target.token?.decimals,
-        symbol: target.token.symbol,
+        amount: order0.budget || '0',
+        decimals: token1.decimals,
+        logoURI: token1.logoURI,
+        symbol: token1.symbol,
       });
     }
 
     return array;
-  }, [source.budget, source.token, target.budget, target.token]);
+  }, [order0.budget, token0, order1.budget, token1]);
 
   const approval = useApproval(approvalTokens);
 
   const create = async () => {
-    if (!(source && target)) {
-      throw new Error('source or target tokens not set');
+    if (!token0 || !token1 || !user) {
+      throw new Error('error in create strategy: missing data ');
     }
+
     mutation.mutate(
       {
-        token0: {
-          balance: source.budget,
-          token: source.token!,
-          min: source.min,
-          max: source.max,
-          price: source.price,
+        token0: token0,
+        token1: token1,
+        order0: {
+          budget: order0.budget,
+          min: order0.min,
+          max: order0.max,
+          price: order0.price,
         },
-        token1: {
-          balance: target.budget,
-          token: target.token!,
-          min: target.min,
-          max: target.max,
-          price: target.price,
+        order1: {
+          budget: order1.budget,
+          min: order1.min,
+          max: order1.max,
+          price: order1.price,
         },
       },
       {
         onSuccess: async (tx) => {
           console.log('tx hash', tx.hash);
           await tx.wait();
-          if (source.budget && Number(source.budget) !== 0)
-            source.balanceQuery.refetch();
-          if (target.budget && Number(target.budget) !== 0)
-            target.balanceQuery.refetch();
+          void cache.invalidateQueries({
+            queryKey: QueryKey.balance(user, token0.address),
+          });
+          void cache.invalidateQueries({
+            queryKey: QueryKey.balance(user, token1.address),
+          });
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
@@ -86,20 +100,23 @@ export const useCreate = () => {
     );
   };
 
-  const checkErrors = (order: Order, otherOrder: Order) => {
+  const checkErrors = (
+    order: OrderCreate,
+    otherOrder: OrderCreate,
+    balance?: string
+  ) => {
     const minMaxCorrect =
       Number(order.min) > 0 && Number(order.max) > Number(order.min);
     const priceCorrect = Number(order.price) > 0;
     const budgetCorrect =
-      !order.budget ||
-      Number(order.budget) <= Number(otherOrder.balanceQuery.data);
+      !order.budget || Number(order.budget) <= Number(balance);
 
     return (minMaxCorrect || priceCorrect) && budgetCorrect;
   };
 
   const createStrategy = async () => {
-    const sourceCorrect = checkErrors(source, target);
-    const targetCorrect = checkErrors(target, source);
+    const sourceCorrect = checkErrors(order0, order1, token1BalanceQuery.data);
+    const targetCorrect = checkErrors(order1, order0, token0BalanceQuery.data);
 
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired)
@@ -110,15 +127,15 @@ export const useCreate = () => {
 
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
-      isSource ? source.setToken(token) : target.setToken(token);
-      source.resetFields();
-      target.resetFields();
+      isSource ? setToken0(token) : setToken1(token);
+      order0.resetFields();
+      order1.resetFields();
     };
 
     const data: ModalTokenListData = {
       onClick,
       excludedTokens: [
-        isSource ? target.token?.address ?? '' : source.token?.address ?? '',
+        isSource ? token1?.address ?? '' : token0?.address ?? '',
       ],
     };
     openModal('tokenLists', data);
@@ -129,13 +146,19 @@ export const useCreate = () => {
   }, [approval.isError, approval.isLoading, mutation.isLoading]);
 
   return {
-    source,
-    target,
+    token0,
+    setToken0,
+    token1,
+    setToken1,
+    order0,
+    order1,
     name,
     setName,
     createStrategy,
     openTokenListModal,
     showStep2,
     isCTAdisabled,
+    token0BalanceQuery,
+    token1BalanceQuery,
   };
 };
