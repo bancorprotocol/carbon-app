@@ -59,7 +59,8 @@ const StrategyContent = () => {
         />
       }
     >
-      {!filteredStrategies || filteredStrategies.length === 0 ? (
+      {(!filteredStrategies || filteredStrategies.length === 0) &&
+      !strategies.isLoading ? (
         <StrategyNotFound />
       ) : (
         <m.div
@@ -79,7 +80,7 @@ const StrategyContent = () => {
             </>
           ) : (
             <>
-              {filteredStrategies.map((s) => (
+              {filteredStrategies?.map((s) => (
                 <StrategyBlock key={s.id} strategy={s} />
               ))}
 

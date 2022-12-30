@@ -95,7 +95,7 @@ const BuySell: FC<{ strategy: Strategy; buy?: boolean }> = ({
   const limit = order.startRate === order.endRate;
 
   return (
-    <div className="rounded-8 border border-emphasis p-15">
+    <div className="rounded-8 border border-emphasis p-12">
       <div className="flex items-center gap-6">
         {buy ? 'Buy' : 'Sell'}
         <Imager
