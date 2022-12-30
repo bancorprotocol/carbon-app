@@ -33,8 +33,8 @@ const StrategyContent = () => {
         (filter === StrategyFilter.All ||
           (filter === StrategyFilter.Active &&
             strategy.status === StrategyStatus.Active) ||
-          (filter === StrategyFilter.OffCurve &&
-            strategy.status === StrategyStatus.OffCurve))
+          (filter === StrategyFilter.Inactive &&
+            strategy.status !== StrategyStatus.Active))
     );
 
     const sorterNum = sort === StrategySort.Recent ? -1 : 1;
