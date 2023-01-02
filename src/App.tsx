@@ -1,5 +1,5 @@
-import { MainMenu, MobileMenu } from 'elements/menu';
-import { Outlet } from 'routing';
+import { MainMenu, MobileMenu } from 'components/menu';
+import { Outlet } from 'libs/routing';
 
 export const App = () => {
   return (

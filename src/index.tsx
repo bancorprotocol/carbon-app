@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom/client';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
-import { ModalProvider } from 'modals';
+import { ModalProvider } from 'libs/modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
-import { Web3ReactWrapper } from 'web3';
-import { NotificationProvider } from 'notifications/NotificationsProvider';
-import { Router } from 'routing';
-import { LazyMotion } from 'motion';
-import { QueryProvider } from 'queries';
-import { TokensProvider } from 'tokens';
+import { Web3ReactWrapper } from 'libs/web3';
+import { NotificationProvider } from 'libs/notifications/NotificationsProvider';
+import { Router } from 'libs/routing';
+import { LazyMotion } from 'libs/motion';
+import { QueryProvider } from 'libs/queries';
+import { TokensProvider } from 'libs/tokens';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
