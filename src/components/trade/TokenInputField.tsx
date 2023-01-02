@@ -2,8 +2,8 @@ import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Imager } from 'components/common/imager/Imager';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { Token, useTokens } from 'tokens';
-import { useModal } from 'modals';
+import { Token, useTokens } from 'libs/tokens';
+import { useModal } from 'libs/modals';
 
 export interface TokenInputProps {
   token?: Token;

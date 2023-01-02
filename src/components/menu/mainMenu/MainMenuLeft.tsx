@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { menuItems } from 'components/menu';
-import { Link } from 'routing';
+import { Link } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 
 export const MainMenuLeft: FC = () => {

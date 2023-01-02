@@ -1,10 +1,10 @@
 import { Button } from 'components/common/button';
-import { m, Variants } from 'motion';
+import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
 import { SelectTokens } from 'components/common/selectTokens';
 import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { useLocation } from 'routing';
+import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
 

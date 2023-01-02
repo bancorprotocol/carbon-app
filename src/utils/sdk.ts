@@ -1,4 +1,4 @@
-import { CreateStrategyParams } from 'queries';
+import { CreateStrategyParams } from 'libs/queries';
 import { Decimal, encodeOrder } from 'utils/sdk2';
 import { expandToken } from 'utils/tokens';
 

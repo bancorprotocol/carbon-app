@@ -1,6 +1,6 @@
 import { Imager } from 'components/common/imager/Imager';
 import { ChangeEvent, FC } from 'react';
-import { Token } from 'tokens';
+import { Token } from 'libs/tokens';
 import { prettifyNumber, reduceETH, sanitizeNumberInput } from 'utils/helpers';
 
 export const BudgetInput: FC<{

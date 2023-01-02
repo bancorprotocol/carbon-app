@@ -1,7 +1,7 @@
 import { Button } from 'components/common/button';
 import TokenInputField from 'components/trade/TokenInputField';
 import { useState } from 'react';
-import { Token } from 'tokens';
+import { Token } from 'libs/tokens';
 
 export const TradeWidget = ({ from, to }: { from?: Token; to?: Token }) => {
   const [fromInput, setFromInput] = useState('');

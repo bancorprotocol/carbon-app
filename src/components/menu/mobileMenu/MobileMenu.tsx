@@ -1,4 +1,4 @@
-import { Link } from 'routing';
+import { Link } from 'libs/routing';
 import { menuItems } from '../menuItems';
 
 export const MobileMenu = () => {

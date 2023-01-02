@@ -1,14 +1,14 @@
 import { OrderCreate, useOrder } from './useOrder';
-import { QueryKey, useCreateStrategy } from 'queries';
+import { QueryKey, useCreateStrategy } from 'libs/queries';
 import { useMemo, useState } from 'react';
-import { useModal } from 'modals';
-import { ModalTokenListData } from 'modals/modals/ModalTokenList';
+import { useModal } from 'libs/modals';
+import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
-import { PathNames, useNavigate } from 'routing';
-import { Token } from 'tokens';
+import { PathNames, useNavigate } from 'libs/routing';
+import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
-import { useGetTokenBalance, useQueryClient } from 'queries';
-import { useWeb3 } from 'web3';
+import { useGetTokenBalance, useQueryClient } from 'libs/queries';
+import { useWeb3 } from 'libs/web3';
 import { BigNumber } from 'bignumber.js';
 
 const spenderAddress = config.carbon.poolCollection;

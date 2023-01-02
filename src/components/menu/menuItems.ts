@@ -1,4 +1,4 @@
-import { PathNames } from 'routing';
+import { PathNames } from 'libs/routing';
 import { isProduction } from 'utils/helpers';
 
 export interface MenuItem {

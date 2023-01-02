@@ -1,4 +1,4 @@
-import { StrategyStatus } from 'queries';
+import { StrategyStatus } from 'libs/queries';
 import { FC } from 'react';
 
 export const StrategyBlockOrderStatus: FC<{ status: StrategyStatus }> = ({

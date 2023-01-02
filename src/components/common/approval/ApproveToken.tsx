@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
-import { useSetUserApproval } from 'queries/chain/approval';
+import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { Imager } from 'components/common/imager/Imager';
-import { QueryKey, useQueryClient } from 'queries';
-import { useWeb3 } from 'web3';
+import { QueryKey, useQueryClient } from 'libs/queries';
+import { useWeb3 } from 'libs/web3';
 import { config } from 'services/web3/config';
 
 type Props = {

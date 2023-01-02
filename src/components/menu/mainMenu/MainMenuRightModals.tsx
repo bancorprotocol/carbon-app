@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useModal } from 'modals';
+import { useModal } from 'libs/modals';
 import { Button } from 'components/common/button';
 
 export const MainMenuRightModals: FC = () => {

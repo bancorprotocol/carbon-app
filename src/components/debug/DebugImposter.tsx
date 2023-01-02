@@ -1,4 +1,4 @@
-import { useWeb3 } from 'web3';
+import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { InputUserAccount } from 'components/common/inputField';

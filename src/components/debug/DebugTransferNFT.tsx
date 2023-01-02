@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Button } from 'components/common/button';
 import { Input, InputUserAccount, Label } from 'components/common/inputField';
 import { useContract } from 'hooks/useContract';
-import { useWeb3 } from 'web3';
-import { QueryKey, useQueryClient } from 'queries';
+import { useWeb3 } from 'libs/web3';
+import { QueryKey, useQueryClient } from 'libs/queries';
 
 export const DebugTransferNFT = () => {
   const { user } = useWeb3();

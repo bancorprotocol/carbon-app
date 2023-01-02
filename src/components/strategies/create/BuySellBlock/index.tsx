@@ -5,8 +5,8 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { BudgetInput } from 'components/strategies/create/BuySellBlock/BudgetInput';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { Token } from 'tokens';
-import { UseQueryResult } from 'queries';
+import { Token } from 'libs/tokens';
+import { UseQueryResult } from 'libs/queries';
 
 type Props = {
   token0: Token;

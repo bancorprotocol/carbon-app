@@ -1,4 +1,4 @@
-import { Token, useTokens } from 'tokens';
+import { Token, useTokens } from 'libs/tokens';
 import { useCallback, useEffect, useState } from 'react';
 import { config } from 'services/web3/config';
 import { TradeWidget } from 'components/trade/TradeWidget';

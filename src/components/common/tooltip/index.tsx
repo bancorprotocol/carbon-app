@@ -1,4 +1,4 @@
-import { m, Variants } from 'motion';
+import { m, Variants } from 'libs/motion';
 import { FC, ReactNode, useRef, useState } from 'react';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 

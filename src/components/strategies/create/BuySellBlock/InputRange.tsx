@@ -1,5 +1,5 @@
 import { ChangeEvent, FC } from 'react';
-import { Token } from 'tokens';
+import { Token } from 'libs/tokens';
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputRange: FC<{

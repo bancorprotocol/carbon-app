@@ -1,4 +1,4 @@
-import { useWeb3 } from 'web3';
+import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';

@@ -1,7 +1,7 @@
 import { Button } from 'components/common/button';
 import { SearchInput } from 'components/common/searchInput';
 import { FC } from 'react';
-import { Link, PathNames } from 'routing';
+import { Link, PathNames } from 'libs/routing';
 import {
   StrategySort,
   StrategyFilter,

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { useModal } from 'modals';
-import { useWeb3 } from 'web3';
+import { useModal } from 'libs/modals';
+import { useWeb3 } from 'libs/web3';
 import { shortenString } from 'utils/helpers';
 import { Button } from 'components/common/button';
 

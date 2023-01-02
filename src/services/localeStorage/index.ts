@@ -1,6 +1,6 @@
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
-import { ConnectionType } from 'web3';
-import { Token } from 'tokens';
+import { ConnectionType } from 'libs/web3';
+import { Token } from 'libs/tokens';
 
 const APP_ID = 'bancor';
 const APP_VERSION = 'v0';

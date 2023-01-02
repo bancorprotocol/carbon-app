@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
-import { Strategy, StrategyStatus } from 'queries';
-import { m, mItemVariant } from 'motion';
+import { Strategy, StrategyStatus } from 'libs/queries';
+import { m, mItemVariant } from 'libs/motion';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockOrderStatus } from 'components/strategies/overview/strategyBlock/StrategyBlockOrderStatus';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';

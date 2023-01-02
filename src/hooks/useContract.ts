@@ -1,4 +1,4 @@
-import { useWeb3 } from 'web3';
+import { useWeb3 } from 'libs/web3';
 import {
   Token__factory,
   PoolCollection__factory,

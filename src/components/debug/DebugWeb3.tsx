@@ -1,6 +1,6 @@
-import { useWeb3 } from 'web3';
+import { useWeb3 } from 'libs/web3';
 import { shortenString } from 'utils/helpers';
-import { IS_TENDERLY_FORK } from 'web3/web3.constants';
+import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 
 export const DebugWeb3 = () => {
   const { chainId, user, isImposter, isNetworkActive, networkError } =

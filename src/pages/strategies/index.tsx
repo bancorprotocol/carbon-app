@@ -1,4 +1,4 @@
-import { useWeb3 } from 'web3';
+import { useWeb3 } from 'libs/web3';
 import { WalletConnect } from 'components/common/walletConnect';
 import { StrategyContent } from 'components/strategies/overview';
 

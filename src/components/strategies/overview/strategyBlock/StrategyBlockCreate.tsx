@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Link, PathNames } from 'routing';
+import { Link, PathNames } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 
 type Props = {

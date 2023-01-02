@@ -1,4 +1,4 @@
-import { StrategyStatus, useGetUserStrategies } from 'queries';
+import { StrategyStatus, useGetUserStrategies } from 'libs/queries';
 import { useMemo, useState } from 'react';
 import {
   StrategyFilter,
@@ -8,7 +8,7 @@ import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCrea
 import { Page } from 'components/common/page';
 import { StrategyPageTitleWidget } from './StrategyPageTitleWidget';
 import { StrategyNotFound } from './StrategyNotFound';
-import { m, mListVariant } from 'motion';
+import { m, mListVariant } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 

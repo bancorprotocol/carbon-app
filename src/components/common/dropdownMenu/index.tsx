@@ -1,4 +1,4 @@
-import { m, Variants } from 'motion';
+import { m, Variants } from 'libs/motion';
 import { FC, ReactNode, useRef, useState } from 'react';
 import { useOutsideClick } from 'hooks/useOutsideClick';
 

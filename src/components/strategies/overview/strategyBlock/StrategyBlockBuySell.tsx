@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Strategy, StrategyStatus } from 'queries';
+import { Strategy, StrategyStatus } from 'libs/queries';
 import { Imager } from 'components/common/imager/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
