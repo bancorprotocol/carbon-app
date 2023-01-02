@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Strategy } from 'queries';
+import { Strategy, StrategyStatus } from 'queries';
 import { Imager } from 'components/imager/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
@@ -12,9 +12,14 @@ export const StrategyBlockBuySell: FC<{
   const otherToken = buy ? strategy.token1 : strategy.token0;
   const order = buy ? strategy.order0 : strategy.order1;
   const limit = order.startRate === order.endRate;
+  const active = strategy.status === StrategyStatus.Active;
 
   return (
-    <div className="rounded-8 border border-emphasis p-15">
+    <div
+      className={`rounded-8 border border-emphasis p-12 ${
+        active ? '' : 'opacity-35'
+      }`}
+    >
       <div className="flex items-center gap-6">
         {buy ? 'Buy' : 'Sell'}
         <Imager

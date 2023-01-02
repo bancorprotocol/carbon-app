@@ -9,6 +9,7 @@ import { StrategyBlockManage } from 'elements/strategies/overview/strategyBlock/
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = String(strategy.id).padStart(9, '0');
   const [manage, setManage] = useState(false);
+
   return (
     <m.div
       variants={mItemVariant}

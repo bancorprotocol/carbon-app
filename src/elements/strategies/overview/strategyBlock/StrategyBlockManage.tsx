@@ -18,7 +18,7 @@ export const StrategyBlockManage: FC<{
           className="flex items-center justify-center gap-8"
           size={'md'}
           fullWidth
-          variant={'secondary'}
+          variant={'tertiary'}
           onClick={onClick}
         >
           Manage
