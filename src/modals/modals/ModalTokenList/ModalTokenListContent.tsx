@@ -1,5 +1,5 @@
 import { Imager } from 'elements/Imager';
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Token } from 'tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -7,9 +7,14 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 type Props = {
   tokens: Token[];
   onSelect: (token: Token) => void;
+  search: string;
 };
 
-export const ModalTokenListContent: FC<Props> = ({ tokens, onSelect }) => {
+export const ModalTokenListContent: FC<Props> = ({
+  tokens,
+  onSelect,
+  search,
+}) => {
   const parentRef = useRef<HTMLDivElement>(null);
 
   const rowVirtualizer = useVirtualizer({
@@ -18,6 +23,10 @@ export const ModalTokenListContent: FC<Props> = ({ tokens, onSelect }) => {
     estimateSize: () => 65,
     overscan: 10,
   });
+
+  useEffect(() => {
+    if (parentRef.current) parentRef.current.scrollTop = 0;
+  }, [search]);
 
   return (
     <div>

@@ -20,7 +20,7 @@ export const StrategiesPage = () => {
 const StrategyContent = () => {
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState(StrategySort.Recent);
+  const [sort, setSort] = useState(StrategySort.Old);
   const [filter, setFilter] = useState(StrategyFilter.All);
 
   const filteredStrategies = useMemo(() => {
@@ -59,11 +59,14 @@ const StrategyContent = () => {
         />
       }
     >
-      {!filteredStrategies || filteredStrategies.length === 0 ? (
+      {(!filteredStrategies || filteredStrategies.length === 0) &&
+      !strategies.isLoading ? (
         <StrategyNotFound />
       ) : (
         <m.div
-          className={'grid grid-cols-1 gap-25 md:grid-cols-3'}
+          className={
+            'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
+          }
           variants={mListVariant}
           initial={'hidden'}
           animate={'visible'}
@@ -79,7 +82,7 @@ const StrategyContent = () => {
             </>
           ) : (
             <>
-              {filteredStrategies.map((s) => (
+              {filteredStrategies?.map((s) => (
                 <StrategyBlock key={s.id} strategy={s} />
               ))}
 
