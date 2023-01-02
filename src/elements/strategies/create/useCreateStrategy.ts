@@ -3,12 +3,13 @@ import { QueryKey, useCreateStrategy } from 'queries';
 import { useMemo, useState } from 'react';
 import { useModal } from 'modals';
 import { ModalTokenListData } from 'modals/modals/ModalTokenList';
-import { ApprovalToken, useApproval } from 'hooks/useApproval';
+import { useApproval } from 'hooks/useApproval';
 import { PathNames, useNavigate } from 'routing';
 import { Token } from 'tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'queries';
 import { useWeb3 } from 'web3';
+import { BigNumber } from 'bignumber.js';
 
 const spenderAddress = config.carbon.poolCollection;
 
@@ -31,29 +32,36 @@ export const useCreate = () => {
   const showStep2 = !!token0 && !!token1;
 
   const approvalTokens = useMemo(() => {
-    const array: ApprovalToken[] = [];
-    if (token0) {
-      array.push({
-        tokenAddress: token0.address,
-        spenderAddress,
-        amount: order1.budget || '0',
-        decimals: token0.decimals,
-        logoURI: token0.logoURI,
-        symbol: token0.symbol,
-      });
-    }
-    if (token1) {
-      array.push({
-        tokenAddress: token1.address,
-        spenderAddress,
-        amount: order0.budget || '0',
-        decimals: token1.decimals,
-        logoURI: token1.logoURI,
-        symbol: token1.symbol,
-      });
-    }
-
-    return array;
+    const token0Approve =
+      !!token0 && order1.budget && !new BigNumber(order1.budget).isZero();
+    const token1Approve =
+      !!token1 && order0.budget && !new BigNumber(order0.budget).isZero();
+    return [
+      ...(token0Approve
+        ? [
+            {
+              tokenAddress: token0.address,
+              spenderAddress,
+              amount: order1.budget || '0',
+              decimals: token0.decimals,
+              logoURI: token0.logoURI,
+              symbol: token0.symbol,
+            },
+          ]
+        : []),
+      ...(token1Approve
+        ? [
+            {
+              tokenAddress: token1.address,
+              spenderAddress,
+              amount: order0.budget || '0',
+              decimals: token1.decimals,
+              logoURI: token1.logoURI,
+              symbol: token1.symbol,
+            },
+          ]
+        : []),
+    ];
   }, [order0.budget, token0, order1.budget, token1]);
 
   const approval = useApproval(approvalTokens);
