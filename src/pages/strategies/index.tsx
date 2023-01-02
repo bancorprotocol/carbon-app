@@ -20,7 +20,7 @@ export const StrategiesPage = () => {
 const StrategyContent = () => {
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState(StrategySort.Recent);
+  const [sort, setSort] = useState(StrategySort.Old);
   const [filter, setFilter] = useState(StrategyFilter.All);
 
   const filteredStrategies = useMemo(() => {

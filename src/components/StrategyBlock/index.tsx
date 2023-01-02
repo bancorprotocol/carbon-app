@@ -93,9 +93,14 @@ const BuySell: FC<{ strategy: Strategy; buy?: boolean }> = ({
   const otherToken = buy ? strategy.token1 : strategy.token0;
   const order = buy ? strategy.order0 : strategy.order1;
   const limit = order.startRate === order.endRate;
+  const active = strategy.status === StrategyStatus.Active;
 
   return (
-    <div className="rounded-8 border border-emphasis p-12">
+    <div
+      className={`rounded-8 border border-emphasis p-12 ${
+        active ? '' : 'opacity-35'
+      }`}
+    >
       <div className="flex items-center gap-6">
         {buy ? 'Buy' : 'Sell'}
         <Imager
@@ -170,7 +175,7 @@ const Manage: FC<{ manage: boolean; setManage: (flag: boolean) => void }> = ({
           className="flex items-center justify-center gap-8"
           size={'md'}
           fullWidth
-          variant={'secondary'}
+          variant={'tertiary'}
           onClick={onClick}
         >
           Manage
