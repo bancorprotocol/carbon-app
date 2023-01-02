@@ -1,4 +1,4 @@
-import { Tooltip } from 'components/Tooltip';
+import { Tooltip } from 'components/tooltip';
 import { FC } from 'react';
 
 export const NameBlock: FC<{

@@ -1,4 +1,4 @@
-import { Button } from 'components/Button';
+import { Button } from 'components/button';
 import TokenInputField from 'elements/trade/TokenInputField';
 import { useState } from 'react';
 import { Token } from 'tokens';

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useModal } from 'modals';
-import { Button } from 'components/Button';
+import { Button } from 'components/button';
 
 export const MainMenuRightModals: FC = () => {
   const { modals, maximizeModal } = useModal();

@@ -1,4 +1,4 @@
-import { WalletConnect } from 'components/WalletConnect';
+import { WalletConnect } from 'components/walletConnect';
 import { CreateStrategy } from 'elements/strategies/create';
 import { useWeb3 } from 'web3';
 

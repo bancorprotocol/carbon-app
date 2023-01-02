@@ -1,8 +1,8 @@
 import { useWeb3 } from 'web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import { InputUserAccount } from 'components/InputField';
-import { Button } from 'components/Button';
+import { InputUserAccount } from 'components/inputField';
+import { Button } from 'components/button';
 
 export const DebugImposter = () => {
   const { handleImposterAccount } = useWeb3();

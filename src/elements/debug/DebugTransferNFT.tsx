@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button } from 'components/Button';
-import { Input, InputUserAccount, Label } from 'components/InputField';
+import { Button } from 'components/button';
+import { Input, InputUserAccount, Label } from 'components/inputField';
 import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'web3';
 import { QueryKey, useQueryClient } from 'queries';

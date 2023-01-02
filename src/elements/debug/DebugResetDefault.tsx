@@ -1,5 +1,5 @@
 import { useWeb3 } from 'web3';
-import { Button } from 'components/Button';
+import { Button } from 'components/button';
 
 export const DebugResetDefault = () => {
   const { handleTenderlyRPC, handleImposterAccount } = useWeb3();

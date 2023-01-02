@@ -1,7 +1,7 @@
-import { Button } from 'components/Button';
+import { Button } from 'components/button';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
-import { DropdownMenu } from 'components/DropdownMenu';
+import { DropdownMenu } from 'components/dropdownMenu';
 import { FC } from 'react';
 
 export enum StrategyFilter {
@@ -41,7 +41,7 @@ const filterItems = [
   },
 ];
 
-export const FilterSort: FC<{
+export const StrategyFilterSort: FC<{
   filter: StrategyFilter;
   sort: StrategySort;
   setSort: (sort: StrategySort) => void;

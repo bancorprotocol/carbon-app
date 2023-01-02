@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useSetUserApproval } from 'queries/chain/approval';
-import { Button } from 'components/Button';
-import { Switch } from 'components/Switch';
+import { Button } from 'components/button';
+import { Switch } from 'components/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
 import { Imager } from 'components/imager/Imager';
 import { QueryKey, useQueryClient } from 'queries';

@@ -1,5 +1,5 @@
 import { useModal } from 'modals';
-import { Button } from 'components/Button';
+import { Button } from 'components/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 
 export const WalletConnect = () => {

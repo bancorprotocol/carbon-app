@@ -1,5 +1,5 @@
-import { Label, LabelProps } from 'components/InputField/Label';
-import { Input, InputProps } from 'components/InputField/Input';
+import { Label, LabelProps } from 'components/inputField/Label';
+import { Input, InputProps } from 'components/inputField/Input';
 import { useMemo } from 'react';
 import { utils } from 'ethers';
 

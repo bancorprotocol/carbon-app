@@ -7,8 +7,8 @@ import { useWeb3 } from 'web3';
 import { useGetTokenBalances } from 'queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
 import { config } from 'services/web3/config';
-import { Button } from 'components/Button';
-import { QueryKey } from '../../queries';
+import { Button } from 'components/button';
+import { QueryKey } from 'queries';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,

@@ -5,7 +5,7 @@ import {
   FC,
 } from 'react';
 import { VariantProps } from 'class-variance-authority';
-import { buttonStyles } from 'components/Button/buttonStyles';
+import { buttonStyles } from 'components/button/buttonStyles';
 import { m } from 'motion';
 
 type ButtonHTMLProps = DetailedHTMLProps<

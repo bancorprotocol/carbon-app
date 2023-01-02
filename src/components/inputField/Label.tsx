@@ -1,5 +1,5 @@
 import { DetailedHTMLProps, FC, LabelHTMLAttributes } from 'react';
-import { labelStyles } from 'components/InputField/labelStyles';
+import { labelStyles } from 'components/inputField/labelStyles';
 import { VariantProps } from 'class-variance-authority';
 
 type LabelHTMLProps = DetailedHTMLProps<

@@ -1,11 +1,11 @@
-import { Button } from 'components/Button';
+import { Button } from 'components/button';
 import { m, Variants } from 'motion';
 import { useCreate } from './useCreateStrategy';
-import { SelectTokens } from 'components/SelectTokens';
-import { BuySellBlock } from 'components/BuySellBlock';
+import { SelectTokens } from 'components/selectTokens';
+import { BuySellBlock } from 'elements/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useLocation } from 'routing';
-import { Tooltip } from 'components/Tooltip';
+import { Tooltip } from 'components/tooltip';
 import { NameBlock } from './NameBlock';
 
 export const CreateStrategy = () => {

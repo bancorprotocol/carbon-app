@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useModal } from 'modals';
 import { useWeb3 } from 'web3';
 import { shortenString } from 'utils/helpers';
-import { Button } from 'components/Button';
+import { Button } from 'components/button';
 
 export const MainMenuRightWallet: FC = () => {
   const { user, disconnect } = useWeb3();

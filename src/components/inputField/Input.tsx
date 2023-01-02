@@ -1,6 +1,6 @@
 import { DetailedHTMLProps, FC, InputHTMLAttributes } from 'react';
 import { VariantProps } from 'class-variance-authority';
-import { inputStyles } from 'components/InputField/inputStyles';
+import { inputStyles } from 'components/inputField/inputStyles';
 
 type InputHTMLProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,

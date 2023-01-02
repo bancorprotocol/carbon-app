@@ -1,8 +1,8 @@
 import { useWeb3 } from 'web3';
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
-import { Button } from 'components/Button';
-import { Input, Label } from 'components/InputField';
+import { Button } from 'components/button';
+import { Input, Label } from 'components/inputField';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC } = useWeb3();

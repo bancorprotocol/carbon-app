@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { BaseHTMLAttributes, DetailedHTMLProps, FC } from 'react';
 import { VariantProps } from 'class-variance-authority';
-import { switchStyles } from 'components/Switch/switchStyles';
+import { switchStyles } from 'components/switch/switchStyles';
 
 type SwitchHTMLProps = DetailedHTMLProps<
   BaseHTMLAttributes<HTMLDivElement>,

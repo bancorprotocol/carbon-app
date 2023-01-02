@@ -1,7 +1,7 @@
 import { DebugImposter } from 'elements/debug/DebugImposter';
 import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
 import { DebugWeb3 } from 'elements/debug/DebugWeb3';
-import { Page } from 'components/Page';
+import { Page } from 'components/page';
 import { DebugTenderlyFaucet } from 'elements/debug/DebugTenderlyFaucet';
 import { DebugTransferNFT } from 'elements/debug/DebugTransferNFT';
 import { DebugResetDefault } from 'elements/debug/DebugResetDefault';

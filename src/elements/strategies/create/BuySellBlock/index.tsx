@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import { Imager } from 'components/imager/Imager';
-import { Tooltip } from 'components/Tooltip';
+import { Tooltip } from 'components/tooltip';
 import { OrderCreate } from 'elements/strategies/create/useOrder';
-import { BudgetInput } from './BudgetInput';
-import { InputLimit } from './InputLimit';
-import { InputRange } from './InputRange';
+import { BudgetInput } from 'elements/strategies/create/BuySellBlock/BudgetInput';
+import { InputLimit } from 'elements/strategies/create/BuySellBlock/InputLimit';
+import { InputRange } from 'elements/strategies/create/BuySellBlock/InputRange';
 import { Token } from 'tokens';
 import { UseQueryResult } from 'queries';
 

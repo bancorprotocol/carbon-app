@@ -1,8 +1,12 @@
-import { Button } from 'components/Button';
-import { SearchInput } from 'components/SearchInput';
+import { Button } from 'components/button';
+import { SearchInput } from 'components/searchInput';
 import { FC } from 'react';
 import { Link, PathNames } from 'routing';
-import { StrategySort, StrategyFilter, FilterSort } from './FilterSort';
+import {
+  StrategySort,
+  StrategyFilter,
+  StrategyFilterSort,
+} from 'elements/strategies/overview/StrategyFilterSort';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;
@@ -22,7 +26,7 @@ export const StrategyPageTitleWidget: FC<{
             setValue={setSearch}
             className="h-40 w-full"
           />
-          <FilterSort
+          <StrategyFilterSort
             sort={sort}
             filter={filter}
             setSort={setSort}

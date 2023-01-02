@@ -1,6 +1,6 @@
-import { StrategyBlockCreate } from 'components/StrategyBlock/create';
+import { StrategyBlockCreate } from 'elements/strategies/overview/strategyBlock/StrategyBlockCreate';
 
-export const CreateFirstStrategy = () => {
+export const StrategyCreateFirst = () => {
   return (
     <div className="h-full p-20">
       <StrategyBlockCreate
