@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { Strategy, StrategyStatus } from 'queries';
 import { m, mItemVariant } from 'motion';
 import { TokensOverlap } from 'components/TokensOverlap';
-import { Imager } from 'elements/Imager';
+import { Imager } from 'components/imager/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Button } from 'components/Button';

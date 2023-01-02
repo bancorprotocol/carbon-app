@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Imager } from 'elements/Imager';
+import { Imager } from 'components/imager/Imager';
 import { Tooltip } from 'components/Tooltip';
 import { OrderCreate } from 'elements/strategies/create/useOrder';
 import { BudgetInput } from './BudgetInput';

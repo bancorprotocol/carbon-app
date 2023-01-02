@@ -3,7 +3,7 @@ import { useSetUserApproval } from 'queries/chain/approval';
 import { Button } from 'components/Button';
 import { Switch } from 'components/Switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
-import { Imager } from 'elements/Imager';
+import { Imager } from 'components/imager/Imager';
 import { QueryKey, useQueryClient } from 'queries';
 import { useWeb3 } from 'web3';
 import { config } from 'services/web3/config';

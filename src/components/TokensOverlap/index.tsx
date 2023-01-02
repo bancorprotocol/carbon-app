@@ -1,5 +1,5 @@
 import { Token } from 'tokens';
-import { Imager } from 'elements/Imager';
+import { Imager } from 'components/imager/Imager';
 
 export const TokensOverlap = ({
   tokens,

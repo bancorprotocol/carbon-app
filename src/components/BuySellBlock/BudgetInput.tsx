@@ -1,4 +1,4 @@
-import { Imager } from 'elements/Imager';
+import { Imager } from 'components/imager/Imager';
 import { ChangeEvent, FC } from 'react';
 import { Token } from 'tokens';
 import { prettifyNumber, reduceETH, sanitizeNumberInput } from 'utils/helpers';

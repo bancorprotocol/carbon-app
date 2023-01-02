@@ -1,6 +1,6 @@
 import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
-import { Imager } from 'elements/Imager';
+import { Imager } from 'components/imager/Imager';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Token, useTokens } from 'tokens';
 import { useModal } from 'modals';
