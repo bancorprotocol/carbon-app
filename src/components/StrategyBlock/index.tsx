@@ -4,11 +4,10 @@ import { m, mItemVariant } from 'motion';
 import { TokensOverlap } from 'components/TokensOverlap';
 import { Imager } from 'elements/Imager';
 import { prettifyNumber } from 'utils/helpers';
-import { ReactComponent as IconRangeGraph } from 'assets/icons/rangeGraph.svg';
-import { ReactComponent as IconPriceGraph } from 'assets/icons/priceGraph.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Button } from 'components/Button';
 import { DropdownMenu } from 'components/DropdownMenu';
+import { BuySellPriceRangeIndicator } from '../BuySellPriceRangeIndicator';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = String(strategy.id).padStart(9, '0');
@@ -139,17 +138,7 @@ const BuySell: FC<{ strategy: Strategy; buy?: boolean }> = ({
             />
           </div>
         </div>
-        {limit ? (
-          <IconPriceGraph
-            className={`${
-              buy ? 'text-white text-success-500' : 'text-error-500'
-            }`}
-          />
-        ) : (
-          <IconRangeGraph
-            className={`${buy ? 'text-success-500' : 'text-error-500'}`}
-          />
-        )}
+        <BuySellPriceRangeIndicator buy={buy} limit={limit} />
       </div>
     </div>
   );
