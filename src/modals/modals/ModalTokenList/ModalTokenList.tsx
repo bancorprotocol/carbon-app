@@ -43,7 +43,11 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
       ) : showNoResults ? (
         <ModalTokenListNotFound />
       ) : (
-        <ModalTokenListContent tokens={filteredTokens} onSelect={onSelect} />
+        <ModalTokenListContent
+          tokens={filteredTokens}
+          onSelect={onSelect}
+          search={search}
+        />
       )}
     </Modal>
   );
