@@ -4,5 +4,6 @@ export {
   Outlet,
   useLocation,
   useNavigate,
+  useRouter,
 } from '@tanstack/react-location';
 export { PathNames } from 'libs/routing/routes';

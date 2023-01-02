@@ -6,9 +6,9 @@ import { isProduction } from 'utils/helpers';
 
 export const PathNames = {
   strategies: '/',
-  trade: 'trade',
-  debug: 'debug',
-  createStrategy: 'strategies/create',
+  trade: '/trade',
+  debug: '/debug',
+  createStrategy: '/strategies/create',
 };
 
 export const routes = [
