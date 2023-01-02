@@ -1,10 +1,10 @@
-import { DebugImposter } from 'elements/debug/DebugImposter';
-import { DebugTenderlyRPC } from 'elements/debug/DebugTenderlyRPC';
-import { DebugWeb3 } from 'elements/debug/DebugWeb3';
-import { Page } from 'components/page';
-import { DebugTenderlyFaucet } from 'elements/debug/DebugTenderlyFaucet';
-import { DebugTransferNFT } from 'elements/debug/DebugTransferNFT';
-import { DebugResetDefault } from 'elements/debug/DebugResetDefault';
+import { DebugImposter } from 'components/debug/DebugImposter';
+import { DebugTenderlyRPC } from 'components/debug/DebugTenderlyRPC';
+import { DebugWeb3 } from 'components/debug/DebugWeb3';
+import { Page } from 'components/common/page';
+import { DebugTenderlyFaucet } from 'components/debug/DebugTenderlyFaucet';
+import { DebugTransferNFT } from 'components/debug/DebugTransferNFT';
+import { DebugResetDefault } from 'components/debug/DebugResetDefault';
 
 export const DebugPage = () => {
   return (

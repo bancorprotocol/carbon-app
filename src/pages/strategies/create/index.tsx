@@ -1,5 +1,5 @@
-import { WalletConnect } from 'components/walletConnect';
-import { CreateStrategy } from 'elements/strategies/create';
+import { WalletConnect } from 'components/common/walletConnect';
+import { CreateStrategy } from 'components/strategies/create';
 import { useWeb3 } from 'web3';
 
 export const CreateStrategyPage = () => {

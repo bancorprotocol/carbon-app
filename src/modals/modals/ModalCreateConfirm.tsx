@@ -1,7 +1,7 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
-import { ApproveToken } from 'components/approval';
-import { Button } from 'components/button';
+import { ApproveToken } from 'components/common/approval';
+import { Button } from 'components/common/button';
 import { useModal } from 'modals/ModalProvider';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 

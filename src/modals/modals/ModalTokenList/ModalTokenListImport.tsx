@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { useModal } from 'modals';
-import { Button } from 'components/button';
+import { Button } from 'components/common/button';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { IconTitleText } from 'components/iconTitleText/IconTitleText';
+import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 
 export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
   const { openModal } = useModal();

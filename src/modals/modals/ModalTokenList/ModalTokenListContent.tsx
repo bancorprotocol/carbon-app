@@ -1,4 +1,4 @@
-import { Imager } from 'components/imager/Imager';
+import { Imager } from 'components/common/imager/Imager';
 import { FC, useEffect, useRef } from 'react';
 import { Token } from 'tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';

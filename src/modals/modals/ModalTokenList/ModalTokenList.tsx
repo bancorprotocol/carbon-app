@@ -1,7 +1,7 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
 import { Token } from 'tokens';
-import { SearchInput } from 'components/searchInput';
+import { SearchInput } from 'components/common/searchInput';
 import { useModalTokenList } from './useModalTokenList';
 import { ModalTokenListImport } from './ModalTokenListImport';
 import { ModalTokenListNotFound } from './ModalTokenListNotFound';

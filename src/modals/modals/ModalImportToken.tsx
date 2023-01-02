@@ -1,11 +1,11 @@
 import { Modal } from 'modals/Modal';
 import { ModalFC } from 'modals/modals.types';
 import { useGetTokenData } from 'queries/chain/token';
-import { Button } from 'components/button';
+import { Button } from 'components/common/button';
 import { useTokens } from 'tokens';
 import { useModal } from 'modals';
 import { shortenString } from 'utils/helpers';
-import { IconTitleText } from 'components/iconTitleText/IconTitleText';
+import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
