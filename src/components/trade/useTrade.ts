@@ -32,6 +32,9 @@ export const useTrade = () => {
   const baseToken = getTokenById(search.base!);
   const quoteToken = getTokenById(search.quote!);
 
+  const isTokenError =
+    (search.base && !baseToken) || (search.base && !quoteToken);
+
   const onTradePairSelect = (tradePair: TradePair) => {
     navigate({
       to: PathNames.trade,
@@ -57,5 +60,7 @@ export const useTrade = () => {
     quoteToken,
     tradePairs,
     openTradePairList,
+    isTokenError,
+    isLoading: pairsQuery.isLoading,
   };
 };
