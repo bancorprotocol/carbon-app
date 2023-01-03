@@ -4,13 +4,20 @@ import { Button } from 'components/common/button';
 import { useGetTokenBalance } from 'libs/queries';
 
 export const TradeWidget = () => {
-  const { baseToken, quoteToken, openTradePairList, isTokenError, isLoading } =
-    useTrade();
+  const {
+    baseToken,
+    quoteToken,
+    openTradePairList,
+    isLoading,
+    isTradePairError,
+  } = useTrade();
 
   const baseBalanceQuery = useGetTokenBalance(baseToken);
   const quoteBalanceQuery = useGetTokenBalance(quoteToken);
 
   const isValidPair = !(!baseToken || !quoteToken);
+
+  const noTokens = !baseToken && !quoteToken;
 
   return (
     <div className={'rounded-12 bg-silver p-10'}>
@@ -19,7 +26,14 @@ export const TradeWidget = () => {
         <div>settings</div>
       </div>
 
-      {isValidPair ? (
+      {isLoading ? (
+        <div>is loading</div>
+      ) : isTradePairError || !isValidPair ? (
+        <div>
+          {!noTokens && <div>Not found</div>}
+          <Button onClick={openTradePairList}>select pair</Button>
+        </div>
+      ) : (
         <div className={'grid grid-cols-2 gap-20'}>
           <TradeWidgetBuySell
             buy
@@ -34,13 +48,6 @@ export const TradeWidget = () => {
             baseBalanceQuery={quoteBalanceQuery}
             quoteBalanceQuery={baseBalanceQuery}
           />
-        </div>
-      ) : isLoading ? (
-        <div>loading</div>
-      ) : (
-        <div>
-          {isTokenError && <div>Not found</div>}
-          <Button onClick={openTradePairList}>select pair</Button>
         </div>
       )}
     </div>

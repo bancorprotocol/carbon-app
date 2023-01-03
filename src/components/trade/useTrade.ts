@@ -50,6 +50,12 @@ export const useTrade = () => {
     return pairsQuery.data;
   }, [pairsQuery.data]);
 
+  const isTradePairError = !tradePairs.some(
+    (item) =>
+      item.baseToken.address.toLowerCase() === search.base?.toLowerCase() &&
+      item.quoteToken.address.toLowerCase() === search.quote?.toLowerCase()
+  );
+
   const openTradePairList = () => {
     openModal('tradeTokenList', { onClick: onTradePairSelect, tradePairs });
   };
@@ -62,5 +68,6 @@ export const useTrade = () => {
     openTradePairList,
     isTokenError,
     isLoading: pairsQuery.isLoading,
+    isTradePairError,
   };
 };
