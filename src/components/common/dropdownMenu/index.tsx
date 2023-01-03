@@ -8,6 +8,7 @@ type Props = {
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
   className?: string;
+  right?: boolean;
 };
 
 export const DropdownMenu: FC<Props> = ({
@@ -16,6 +17,7 @@ export const DropdownMenu: FC<Props> = ({
   className,
   isOpen,
   setIsOpen,
+  right,
 }) => {
   const outsideState = setIsOpen !== undefined && isOpen !== undefined;
   const ref = useRef<HTMLDivElement>(null);
@@ -37,7 +39,9 @@ export const DropdownMenu: FC<Props> = ({
         else setOpen(!open);
       })}
       <m.div
-        className={`${className} absolute mt-10 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
+        className={`${className} ${
+          right ? 'right-0' : 'left-0'
+        } absolute mt-10 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
         variants={menuVariants}
         style={{ pointerEvents: menuOpen ? 'auto' : 'none' }}
       >

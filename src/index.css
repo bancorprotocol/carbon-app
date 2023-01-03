@@ -50,12 +50,12 @@
 @layer components {
   .main-menu {
     height: var(--main-menu-height);
-    @apply bg-body flex w-full items-center justify-between px-10 md:px-20;
+    @apply bg-body flex w-full items-center justify-between px-10 md:px-20 font-weight-500 text-white/50;
   }
 
   .mobile-menu {
     height: var(--mobile-menu-height);
-    @apply bg-body fixed bottom-0 z-40 flex w-full items-center justify-between border-t border-lightGrey px-10 dark:border-darkGrey md:hidden;
+    @apply bg-body fixed bottom-0 z-40 flex w-full items-center justify-around border-t border-lightGrey px-10 dark:border-darkGrey md:hidden font-weight-500 text-white/50;
   }
 }
 
