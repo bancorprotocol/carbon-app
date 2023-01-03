@@ -3,6 +3,8 @@ import { MainMenuLeft } from './MainMenuLeft';
 import { MainMenuRight } from './MainMenuRight';
 import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 import { useWeb3 } from 'libs/web3';
+import { MainMenuTokens } from 'components/menu/mainMenu/MainMenuTokens';
+
 enum AlertType {
   ERROR,
   WARNING,
@@ -67,6 +69,7 @@ export const MainMenu: FC = () => {
       <NetworkErrorAlert />
       <div className={'main-menu'}>
         <MainMenuLeft />
+        <MainMenuTokens />
         <MainMenuRight />
       </div>
     </div>

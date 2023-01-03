@@ -1,27 +1,48 @@
+import { TradeWidgetBuySell } from 'components/trade/widget/TradeWidgetBuySell';
+import { useTrade } from 'components/trade/useTrade';
 import { Button } from 'components/common/button';
-import TokenInputField from 'components/trade/TokenInputField';
-import { useState } from 'react';
-import { Token } from 'libs/tokens';
+import { useTokens } from 'libs/tokens';
+import { useGetTokenBalance } from 'libs/queries';
 
-export const TradeWidget = ({ from, to }: { from?: Token; to?: Token }) => {
-  const [fromInput, setFromInput] = useState('');
-  const [toInput, setToInput] = useState('');
+export const TradeWidget = () => {
+  const { isLoading } = useTokens();
+  const { baseToken, quoteToken, openTradePairList } = useTrade();
+
+  const baseBalanceQuery = useGetTokenBalance(baseToken);
+  const quoteBalanceQuery = useGetTokenBalance(quoteToken);
+
+  const isValidPair = !(!baseToken || !quoteToken);
 
   return (
-    <div className="flex flex-col gap-10 p-10 md:p-30">
-      <TokenInputField
-        input={fromInput}
-        setInput={setFromInput}
-        token={from}
-        isError={false}
-      />
-      <TokenInputField
-        input={toInput}
-        setInput={setToInput}
-        token={to}
-        isError={false}
-      />
-      <Button className="h-50 rounded-full">Trade</Button>
+    <div className={'rounded-12 bg-silver p-10'}>
+      <div className={'flex justify-between'}>
+        <h2>Trade</h2>
+        <div>settings</div>
+      </div>
+
+      {isValidPair ? (
+        <div className={'grid grid-cols-2 gap-20'}>
+          <TradeWidgetBuySell
+            buy
+            baseToken={baseToken}
+            quoteToken={quoteToken}
+            baseBalanceQuery={baseBalanceQuery}
+            quoteBalanceQuery={quoteBalanceQuery}
+          />
+          <TradeWidgetBuySell
+            baseToken={quoteToken}
+            quoteToken={baseToken}
+            baseBalanceQuery={quoteBalanceQuery}
+            quoteBalanceQuery={baseBalanceQuery}
+          />
+        </div>
+      ) : isLoading ? (
+        <div>loading</div>
+      ) : (
+        <div>
+          <Button onClick={openTradePairList}>select pair</Button>
+        </div>
+      )}
     </div>
   );
 };
