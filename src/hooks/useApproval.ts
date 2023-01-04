@@ -1,7 +1,7 @@
 import {
   GetUserApprovalProps,
   useGetUserApproval,
-} from 'queries/chain/approval';
+} from 'libs/queries/chain/approval';
 import { useMemo } from 'react';
 
 export type ApprovalToken = GetUserApprovalProps & {
