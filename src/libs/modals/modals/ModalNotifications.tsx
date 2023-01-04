@@ -1,16 +1,30 @@
+import { Button } from 'components/common/button';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
+import { NotificationLine } from 'libs/notifications/NotificationLine';
+import { useNotifications } from 'libs/notifications/NotificationsProvider';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
+  const { notifications, createStrategyNtfc, clearNotification } =
+    useNotifications();
   return (
-    <ModalSlideOver id={id} title={'Notifications'} size={'md'}>
-      <div className={'mt-30'}>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium,
-          aliquam animi asperiores beatae commodi doloremque earum
-          exercitationem fuga in iste laboriosam officia, placeat praesentium
-          temporibus voluptate! Amet dolorum molestiae vero?
-        </p>
+    <ModalSlideOver
+      id={id}
+      title={
+        <div className="flex w-full items-center justify-between">
+          Notifications
+          <button onClick={() => clearNotification()} className="mr-20">
+            Clear All
+          </button>
+        </div>
+      }
+      size={'md'}
+    >
+      <div className={'mt-25 flex flex-col gap-25'}>
+        {notifications.map((notification) => (
+          <NotificationLine key={notification.id} notification={notification} />
+        ))}
+        <Button onClick={() => createStrategyNtfc('')}>New</Button>
       </div>
     </ModalSlideOver>
   );

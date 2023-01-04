@@ -68,7 +68,6 @@ export const NotificationLine: FC<{ notification: Notification }> = ({
       <div className="text-secondary text-center">
         {unix(notification.timestamp).fromNow(true)}
       </div>
-      <hr className="my-12 border-silver dark:border-emphasis" />
     </div>
   );
 };

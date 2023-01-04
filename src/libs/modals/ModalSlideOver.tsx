@@ -40,7 +40,7 @@ export const ModalSlideOver: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-50 flex justify-end overflow-hidden bg-primary-500/50 outline-none backdrop-blur focus:outline-none`}
+      className={`bg-primary-500/5ya0 fixed inset-0 z-50 flex justify-end overflow-hidden outline-none backdrop-blur focus:outline-none`}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
@@ -50,15 +50,15 @@ export const ModalSlideOver: FC<Props> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex h-screen w-full flex-col border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis">
+        <div className="relative flex h-screen w-full flex-col border-0 bg-silver p-25 outline-none focus:outline-none">
           <div className={'flex justify-between'}>
-            <div>
+            <>
               {typeof title === 'string' ? (
                 <h2 className={'m-0'}>{title}</h2>
               ) : (
                 title
               )}
-            </div>
+            </>
             <div>
               {showCloseButton ? (
                 <button className={'p-4'} onClick={() => closeModal(id)}>

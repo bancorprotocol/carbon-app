@@ -26,6 +26,7 @@ export interface Notification {
 interface NotificationsContext {
   notifications: Notification[];
   removeNotification: (id: string) => void;
+  clearNotification: () => void;
   rejectNotification: () => void;
   createStrategyNtfc: (txHash: string) => void;
   editStrategyNameNtfc: (txHash: string) => void;
@@ -37,6 +38,7 @@ interface NotificationsContext {
 const defaultValue: NotificationsContext = {
   notifications: [],
   removeNotification: () => {},
+  clearNotification: () => {},
   rejectNotification: () => {},
   createStrategyNtfc: () => {},
   editStrategyNameNtfc: () => {},
@@ -89,6 +91,10 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
   const removeNotification = (id: string) => {
     const newNot = notifications.filter((no) => no.id !== id);
     setNotifications(newNot);
+  };
+
+  const clearNotification = () => {
+    setNotifications([]);
   };
 
   const checkStatus = async (notification: Notification) => {
@@ -203,6 +209,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
       value={{
         notifications,
         removeNotification,
+        clearNotification,
         rejectNotification,
         createStrategyNtfc,
         editStrategyNameNtfc,
