@@ -4,16 +4,11 @@ import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { shrinkToken } from 'utils/tokens';
 import { config } from 'services/web3/config';
-import {
-  NotificationType,
-  useNotifications,
-} from 'libs/notifications/NotificationsProvider';
 import { QueryKey } from 'libs/queries/queryKey';
 
 export const useGetTokenBalance = (
   token?: Pick<Token, 'address' | 'decimals'>
 ) => {
-  const { dispatchNotification } = useNotifications();
   const address = token?.address;
   const decimals = token?.decimals;
   const { Token } = useContract();
@@ -45,14 +40,8 @@ export const useGetTokenBalance = (
     },
     {
       enabled: !!user && !!address && !!decimals && !!provider,
-      onError: (e: any) => {
-        console.error('useGetTokenBalance failed with error:', e);
-        dispatchNotification({
-          type: NotificationType.Failed,
-          title: 'useGetTokenBalance Failed',
-          description: e.message || 'Unknown error, please check console logs.',
-        });
-      },
+      onError: (e: any) =>
+        console.error('useGetTokenBalance failed with error:', e),
     }
   );
 };
@@ -62,7 +51,6 @@ export const useGetTokenBalances = (
 ) => {
   const { Token } = useContract();
   const { user, provider } = useWeb3();
-  const { dispatchNotification } = useNotifications();
 
   return useQueries({
     queries: tokens.map(({ address, decimals }) => ({
@@ -84,14 +72,8 @@ export const useGetTokenBalances = (
         }
       },
       enabled: !!user && !!provider,
-      onError: (e: any) => {
-        console.error('useGetTokenBalances failed with error:', e);
-        dispatchNotification({
-          type: NotificationType.Failed,
-          title: 'useGetTokenBalances Failed',
-          description: e.message || 'Unknown error, please check console logs.',
-        });
-      },
+      onError: (e: any) =>
+        console.error('useGetTokenBalances failed with error:', e),
     })),
   });
 };

@@ -3,7 +3,7 @@ import { Input, InputProps } from 'components/common/inputField/Input';
 import { useMemo } from 'react';
 import { utils } from 'ethers';
 
-type Props = InputProps & Pick<LabelProps, 'label' | 'msg' | 'msgType'>;
+type Props = InputProps & Pick<LabelProps, 'label' | 'msg'>;
 
 export const InputUserAccount = ({ label, msg, ...props }: Props) => {
   const isValid = useMemo(
@@ -21,7 +21,7 @@ export const InputUserAccount = ({ label, msg, ...props }: Props) => {
     return 'Invalid';
   }, [isValid, msg, props.value]);
 
-  const labelMsgType = useMemo(() => {
+  const variant = useMemo(() => {
     if (!props.value) {
       return;
     }
@@ -32,8 +32,8 @@ export const InputUserAccount = ({ label, msg, ...props }: Props) => {
   }, [isValid, props.value]);
 
   return (
-    <Label label={label} msg={labelMsg} msgType={labelMsgType}>
-      <Input fullWidth {...props} variant={labelMsgType} />
+    <Label label={label} msg={labelMsg} variant={variant}>
+      <Input fullWidth {...props} variant={variant} />
     </Label>
   );
 };
