@@ -87,10 +87,10 @@ const dropIn: Variants = {
     transition: {
       delay: 0,
       duration: 0.5,
-      type: 'spring',
-      damping: 20,
-      mass: 1,
-      stiffness: 200,
+      // type: 'spring',
+      // damping: 20,
+      // mass: 1,
+      // stiffness: 200,
     },
   },
   exit: {
