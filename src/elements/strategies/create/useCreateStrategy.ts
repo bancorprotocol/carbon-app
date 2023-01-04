@@ -10,6 +10,7 @@ import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'queries';
 import { useWeb3 } from 'web3';
 import { BigNumber } from 'bignumber.js';
+import { useNotifications } from 'notifications/NotificationsProvider';
 
 const spenderAddress = config.carbon.poolCollection;
 
@@ -20,6 +21,7 @@ export const useCreate = () => {
   const { openModal } = useModal();
   const [token0, setToken0] = useState<Token | undefined>();
   const [token1, setToken1] = useState<Token | undefined>();
+  const { createStrategyNtfc } = useNotifications();
 
   const token0BalanceQuery = useGetTokenBalance(token0);
   const token1BalanceQuery = useGetTokenBalance(token1);
@@ -90,6 +92,7 @@ export const useCreate = () => {
       },
       {
         onSuccess: async (tx) => {
+          createStrategyNtfc(tx.hash);
           console.log('tx hash', tx.hash);
           await tx.wait();
           void cache.invalidateQueries({
