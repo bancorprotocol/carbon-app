@@ -3,7 +3,7 @@ import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
   return (
-    <ModalSlideOver id={id} title={'Notifications'}>
+    <ModalSlideOver id={id} title={'Notifications'} size={'md'}>
       <div className={'mt-30'}>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium,
