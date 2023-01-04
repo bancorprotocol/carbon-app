@@ -63,14 +63,14 @@ export const NotificationLine: FC<{ notification: Notification }> = ({
           </div>
         </div>
         {isHovering ? (
-          <button
+          <div
             className="text-12"
             onClick={() => removeNotification(notification.id)}
           >
             Clear
-          </button>
+          </div>
         ) : (
-          <div className="text-secondary w-full max-w-fit text-center !text-12">
+          <div className="text-secondary w-full max-w-fit !text-12">
             {unix(notification.timestamp).fromNow(true)}
           </div>
         )}

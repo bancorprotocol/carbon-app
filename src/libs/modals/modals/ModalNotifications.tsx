@@ -1,12 +1,10 @@
-import { Button } from 'components/common/button';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'libs/notifications/NotificationsProvider';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
-  const { notifications, createStrategyNtfc, clearNotification } =
-    useNotifications();
+  const { notifications, clearNotification } = useNotifications();
   return (
     <ModalSlideOver
       id={id}
@@ -24,7 +22,6 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
         {notifications.map((notification) => (
           <NotificationLine key={notification.id} notification={notification} />
         ))}
-        <Button onClick={() => createStrategyNtfc('')}>New</Button>
       </div>
     </ModalSlideOver>
   );
