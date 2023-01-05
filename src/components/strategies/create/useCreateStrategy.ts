@@ -90,6 +90,7 @@ export const useCreate = () => {
       },
       {
         onSuccess: async (tx) => {
+          if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
           void cache.invalidateQueries({

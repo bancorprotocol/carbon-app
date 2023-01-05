@@ -1,8 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Result } from '@ethersproject/abi';
 import { useContract } from 'hooks/useContract';
-import { useWeb3 } from 'libs/web3';
-import { toStrategy } from 'utils/sdk';
+import { useWeb3, RPC_URLS } from 'libs/web3';
 import { Token, useTokens } from 'libs/tokens';
 import { MultiCall, useMulticall } from 'hooks/useMulticall';
 import { decodeOrder } from 'utils/sdk2';
@@ -10,6 +9,9 @@ import { shrinkToken } from 'utils/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
+import Sdk from '@bancor/carbon-sdk';
+
+const sdk = new Sdk(RPC_URLS[1]);
 
 export enum StrategyStatus {
   Active,
@@ -173,12 +175,50 @@ export interface CreateStrategyParams {
   order1: CreateStrategyOrder;
 }
 export const useCreateStrategy = () => {
-  const { PoolCollection } = useContract();
+  const { provider, signer } = useWeb3();
 
-  return useMutation(async (strategy: CreateStrategyParams) =>
-    PoolCollection.write.createStrategy(...toStrategy(strategy), {
-      // TODO fix GAS limit
-      gasLimit: '99999999999999999',
-    })
-  );
+  return useMutation(async (strategy: CreateStrategyParams) => {
+    const { token0, token1, order0, order1 } = strategy;
+
+    const order0Low = order0.price
+      ? order0.price
+      : order0.min
+      ? order0.min
+      : '0';
+    const order0Max = order0.price
+      ? order0.price
+      : order0.max
+      ? order0.max
+      : '0';
+
+    const order1Low = order1.price
+      ? order1.price
+      : order1.min
+      ? order1.min
+      : '0';
+    const order1Max = order1.price
+      ? order1.price
+      : order1.max
+      ? order1.max
+      : '0';
+
+    const unsignedTx = await sdk.createBuySellStrategy(
+      token0,
+      token1,
+      order0Low,
+      order0Max,
+      order0.budget ?? '0',
+      order1Low,
+      order1Max,
+      order1.budget ?? '0'
+    );
+
+    const signedTx = await signer?.signTransaction(unsignedTx);
+    const tx = await provider?.sendTransaction(signedTx!);
+    return tx;
+    // PoolCollection.write.createStrategy(...toStrategy(strategy), {
+    //   // TODO fix GAS limit
+    //   gasLimit: '99999999999999999',
+    // });
+  });
 };
