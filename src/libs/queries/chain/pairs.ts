@@ -23,7 +23,15 @@ export const useGetTradePairsData = () => {
         baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),
         quoteToken: getTokenById(pair[1]) ?? (await _getTknData(pair[1])),
       }));
-      return await Promise.all(promises);
+      const result = await Promise.all(promises);
+
+      return [
+        ...result,
+        ...result.map((p) => ({
+          baseToken: p.quoteToken,
+          quoteToken: p.baseToken,
+        })),
+      ];
     },
     enabled: !!tokens.length,
     retry: 1,

@@ -37,16 +37,16 @@ export const TradeWidget = () => {
         <div className={'grid grid-cols-2 gap-20'}>
           <TradeWidgetBuySell
             buy
-            baseToken={baseToken}
-            quoteToken={quoteToken}
-            baseBalanceQuery={baseBalanceQuery}
-            quoteBalanceQuery={quoteBalanceQuery}
-          />
-          <TradeWidgetBuySell
             baseToken={quoteToken}
             quoteToken={baseToken}
             baseBalanceQuery={quoteBalanceQuery}
             quoteBalanceQuery={baseBalanceQuery}
+          />
+          <TradeWidgetBuySell
+            baseToken={baseToken}
+            quoteToken={quoteToken}
+            baseBalanceQuery={baseBalanceQuery}
+            quoteBalanceQuery={quoteBalanceQuery}
           />
         </div>
       )}

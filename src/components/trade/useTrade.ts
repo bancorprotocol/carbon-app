@@ -57,7 +57,7 @@ export const useTrade = () => {
   );
 
   const openTradePairList = () => {
-    openModal('tradeTokenList', { onClick: onTradePairSelect, tradePairs });
+    openModal('tradeTokenList', { onClick: onTradePairSelect });
   };
 
   return {
@@ -68,6 +68,7 @@ export const useTrade = () => {
     openTradePairList,
     isTokenError,
     isLoading: pairsQuery.isLoading,
+    isError: pairsQuery.isError,
     isTradePairError,
   };
 };

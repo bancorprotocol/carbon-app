@@ -2,7 +2,10 @@ import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Token } from 'libs/tokens';
 import { SearchInput } from 'components/common/searchInput';
-import { useModal } from 'libs/modals/ModalProvider';
+import { useModalTradeTokenList } from 'libs/modals/modals/ModalTradeTokenList/useModalTradeTokenList';
+import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
+import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
+import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 
 export type TradePair = {
   baseToken: Token;
@@ -11,18 +14,15 @@ export type TradePair = {
 
 export type ModalTradeTokenListData = {
   onClick: (tradePair: TradePair) => void;
-  tradePairs?: TradePair[];
 };
 
 export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   id,
   data,
 }) => {
-  const { closeModal } = useModal();
-  const handleSelect = (tradePair: TradePair) => {
-    data.onClick(tradePair);
-    closeModal(id);
-  };
+  const { tradePairs, isLoading, isError, handleSelect } =
+    useModalTradeTokenList({ id, data });
+
   return (
     <Modal id={id} title={'Select Token'}>
       <SearchInput
@@ -31,15 +31,16 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         className="mt-20 w-full rounded-8 py-10"
       />
 
-      <div>
-        {data.tradePairs?.map((tradePair, i) => (
-          <div key={i}>
-            <button onClick={() => handleSelect(tradePair)}>
-              {tradePair.baseToken.symbol}/{tradePair.quoteToken.symbol}
-            </button>
-          </div>
-        ))}
-      </div>
+      {isError ? (
+        <ModalTokenListError />
+      ) : isLoading ? (
+        <ModalTokenListLoading />
+      ) : (
+        <ModalTradeTokenListContent
+          tradePairs={tradePairs}
+          handleSelect={handleSelect}
+        />
+      )}
     </Modal>
   );
 };
