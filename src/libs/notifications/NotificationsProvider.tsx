@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { dayjs } from 'libs/dayjs';
 import { useInterval } from 'hooks/useInterval';
 import { useWeb3 } from 'libs/web3/Web3Provider';
 import { createContext, FC, ReactNode, useContext, useState } from 'react';

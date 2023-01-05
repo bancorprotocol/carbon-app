@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs, { unix } from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 
@@ -23,4 +23,4 @@ dayjs.updateLocale('en', {
   },
 });
 
-export { unix } from 'dayjs';
+export { dayjs, unix };
