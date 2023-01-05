@@ -8,7 +8,7 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTimes } from 'assets/icons/times.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
-import { unix } from 'nightjs';
+import { unix } from 'libs/dayjs';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
