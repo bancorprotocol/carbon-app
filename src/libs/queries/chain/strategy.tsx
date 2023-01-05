@@ -213,8 +213,8 @@ export const useCreateStrategy = () => {
       order1.budget ?? '0'
     );
 
-    const signedTx = await signer?.signTransaction(unsignedTx);
-    const tx = await provider?.sendTransaction(signedTx!);
+    const tx = await signer?.sendTransaction(unsignedTx);
+
     return tx;
     // PoolCollection.write.createStrategy(...toStrategy(strategy), {
     //   // TODO fix GAS limit
