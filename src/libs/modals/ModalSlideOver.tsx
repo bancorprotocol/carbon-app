@@ -11,6 +11,17 @@ type Props = {
   size?: 'sm' | 'md' | 'lg';
 };
 
+const getSize = (size: 'sm' | 'md' | 'lg') => {
+  switch (size) {
+    case 'lg':
+      return 'max-w-[580px]';
+    case 'md':
+      return 'max-w-[480px]';
+    default:
+      return 'max-w-[380px]';
+  }
+};
+
 export const ModalSlideOver: FC<Props> = ({
   children,
   id,
@@ -20,18 +31,7 @@ export const ModalSlideOver: FC<Props> = ({
 }) => {
   const { closeModal } = useModal();
 
-  const getSize = () => {
-    switch (size) {
-      case 'lg':
-        return 'max-w-[580px]';
-      case 'md':
-        return 'max-w-[480px]';
-      default:
-        return 'max-w-[380px]';
-    }
-  };
-
-  const sizeClass = getSize();
+  const sizeClass = getSize(size);
 
   return (
     <m.div
