@@ -1,15 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Result } from '@ethersproject/abi';
-import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'libs/web3';
 import { Token, useTokens } from 'libs/tokens';
-import { MultiCall, useMulticall } from 'hooks/useMulticall';
-import { decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
 import { sdk } from 'libs/sdk/carbonSdk';
+import { useContract } from 'hooks/useContract';
 
 export enum StrategyStatus {
   Active,
@@ -36,33 +33,16 @@ export interface Strategy {
 }
 
 export const useGetUserStrategies = () => {
-  const { PoolCollection, Voucher, Token } = useContract();
-  const { fetchMulticall } = useMulticall();
   const { user } = useWeb3();
   const { tokens, getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
 
   return useQuery<Strategy[]>(
     QueryKey.strategies(user),
     async () => {
-      if (!user) {
-        return [];
-      }
+      if (!user) return [];
 
-      const balance = await Voucher.read.balanceOf(user);
-
-      const calls: MultiCall[] = Array.from(
-        Array(balance.toNumber()),
-        (_, i) => ({
-          contractAddress: Voucher.read.address,
-          interface: Voucher.read.interface,
-          methodName: 'tokenOfOwnerByIndex',
-          methodParameters: [user, i],
-        })
-      );
-      const mcResult = await fetchMulticall(calls);
-      const ids = mcResult.map((id: Result) => id[0]);
-
-      const strategiesByIds = await PoolCollection.read.strategiesByIds(ids);
+      const strategies: any[] = []; //FETCH
 
       const _getTknData = async (address: string) => {
         const data = await fetchTokenData(Token, address);
@@ -70,14 +50,14 @@ export const useGetUserStrategies = () => {
         return data;
       };
 
-      const promises = strategiesByIds.map(async (s) => {
+      const promises = strategies.map(async (s) => {
         const token0 =
           getTokenById(s.pair[0]) || (await _getTknData(s.pair[0]));
         const token1 =
           getTokenById(s.pair[1]) || (await _getTknData(s.pair[1]));
 
-        const decodedOrder0 = decodeOrder({ ...s.orders[0] });
-        const decodedOrder1 = decodeOrder({ ...s.orders[1] });
+        const decodedOrder0 = s.orders[0];
+        const decodedOrder1 = s.orders[1];
 
         const offCurve =
           decodedOrder0.lowestRate.isZero() &&

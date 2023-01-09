@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { Button } from 'components/common/button';
 import { Input, InputUserAccount, Label } from 'components/common/inputField';
-import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'libs/web3';
 import { QueryKey, useQueryClient } from 'libs/queries';
 
 export const DebugTransferNFT = () => {
   const { user } = useWeb3();
-  const { Voucher } = useContract();
   const [inputId, setInputId] = useState('');
   const [inputRecipient, setInputRecipient] = useState('');
   const cache = useQueryClient();
@@ -25,13 +23,13 @@ export const DebugTransferNFT = () => {
     setIsLoading(true);
 
     try {
-      const tx = await Voucher.write.transferFrom(
-        user,
-        inputRecipient,
-        inputId,
-        { gasLimit: '99999999999999' }
-      );
-      await tx.wait();
+      // const tx = await Voucher.write.transferFrom(
+      //   user,
+      //   inputRecipient,
+      //   inputId,
+      //   { gasLimit: '99999999999999' }
+      // );
+      // await tx.wait();
       await cache.invalidateQueries({ queryKey: QueryKey.strategies(user) });
       setIsSuccess(true);
     } catch (e) {

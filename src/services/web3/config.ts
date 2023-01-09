@@ -1,6 +1,3 @@
-import PoolCollectionProxyAbi from 'abis/PoolCollection_Proxy.json';
-import BancorNetworkProxyAbi from 'abis/BancorNetwork_Proxy.json';
-import VoucherAbi from 'abis/Voucher.json';
 import conf from './config.json';
 
 export interface Config {
@@ -12,8 +9,6 @@ export interface Config {
   };
   carbon: {
     poolCollection: string;
-    bancorNetwork: string;
-    voucher: string;
   };
   utils: {
     multicall: string;
@@ -22,9 +17,4 @@ export interface Config {
 
 export const config: Config = {
   ...conf,
-  carbon: {
-    poolCollection: PoolCollectionProxyAbi.address,
-    bancorNetwork: BancorNetworkProxyAbi.address,
-    voucher: VoucherAbi.address,
-  },
 };
