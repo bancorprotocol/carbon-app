@@ -12,6 +12,8 @@ type Props = {
   setError?: (error: string) => void;
   error?: string | false;
   className?: string;
+  onKeystroke?: () => void;
+  isLoading?: boolean;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -22,12 +24,29 @@ export const TokenInputField: FC<Props> = ({
   isBalanceLoading,
   error,
   className,
+  onKeystroke,
+  isLoading,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleOnFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleOnBlur = () => {
+    setIsFocused(false);
+  };
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onKeystroke && onKeystroke();
     const sanitized = sanitizeNumberInput(e.target.value, token.decimals);
     setValue(sanitized);
+  };
+
+  const handleBalanceClick = () => {
+    onKeystroke && onKeystroke();
+    balance && setValue(balance);
   };
 
   return (
@@ -43,6 +62,7 @@ export const TokenInputField: FC<Props> = ({
           error ? 'ring-2 ring-error-500/50' : ''
         } ${className}`}
         onClick={() => {
+          setIsFocused(true);
           inputRef.current?.focus();
         }}
       >
@@ -55,22 +75,26 @@ export const TokenInputField: FC<Props> = ({
             />
             <span className={'font-weight-500'}>{token.symbol}</span>
           </div>
-          <input
-            ref={inputRef}
-            value={!isFocused ? (!value ? '' : prettifyNumber(value)) : value}
-            size={1}
-            onChange={handleChange}
-            placeholder={`enter amount`}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            className={`w-full shrink bg-transparent text-right font-mono text-20 font-weight-500 focus:outline-none ${
-              error ? 'text-error-500' : 'text-white'
-            }`}
-          />
+          {isLoading ? (
+            <div>loading</div>
+          ) : (
+            <input
+              ref={inputRef}
+              value={!isFocused ? (!value ? '' : prettifyNumber(value)) : value}
+              size={1}
+              onChange={handleChange}
+              placeholder={`enter amount`}
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
+              className={`w-full shrink bg-transparent text-right font-mono text-20 font-weight-500 focus:outline-none ${
+                error ? 'text-error-500' : 'text-white'
+              }`}
+            />
+          )}
         </div>
 
         <button
-          onClick={() => balance && setValue(balance)}
+          onClick={handleBalanceClick}
           className={
             'text-secondary group mt-10 flex items-center p-5 font-mono !text-12 font-weight-600'
           }

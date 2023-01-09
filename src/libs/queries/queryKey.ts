@@ -22,4 +22,10 @@ export namespace QueryKey {
 
   export const token = (token: string) => [..._chain, 'token', token];
   export const pairs = () => [..._chain, 'pairs'];
+
+  export const tradeData = (
+    sourceToken: string,
+    targetToken: string,
+    amount: string
+  ) => [..._chain, 'trade-data', sourceToken, targetToken, amount];
 }
