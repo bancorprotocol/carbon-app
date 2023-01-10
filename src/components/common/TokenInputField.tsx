@@ -42,14 +42,14 @@ export const TokenInputField: FC<Props> = ({
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onKeystroke && onKeystroke();
     const sanitized = sanitizeNumberInput(e.target.value, token.decimals);
     setValue(sanitized);
+    onKeystroke && onKeystroke();
   };
 
   const handleBalanceClick = () => {
-    onKeystroke && onKeystroke();
     balance && setValue(balance);
+    onKeystroke && onKeystroke();
   };
 
   return (

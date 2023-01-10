@@ -5,9 +5,9 @@ import {
 } from 'libs/modals/modals/ModalTokenList';
 import { TModals } from 'libs/modals/modals.types';
 import {
-  ModalCreateConfirm,
+  ModalConfirm,
   ModalCreateConfirmData,
-} from 'libs/modals/modals/ModalCreateConfirm';
+} from 'libs/modals/modals/ModalConfirm';
 import {
   ModalImportToken,
   ModalImportTokenData,
@@ -33,7 +33,7 @@ export interface ModalSchema {
 export const MODAL_COMPONENTS: TModals = {
   wallet: (props) => ModalWallet(props),
   tokenLists: (props) => ModalTokenList(props),
-  txConfirm: (props) => ModalCreateConfirm(props),
+  txConfirm: (props) => ModalConfirm(props),
   importToken: (props) => ModalImportToken(props),
   tradeTokenList: (props) => ModalTradeTokenList(props),
 };

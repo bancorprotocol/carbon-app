@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { wait } from 'utils/helpers';
 import { QueryKey } from 'libs/queries';
-import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'libs/sdk';
 
 type Props = {
@@ -9,6 +8,7 @@ type Props = {
   targetToken: string;
   input: string;
   isTradeBySource: boolean;
+  enabled?: boolean;
 };
 
 export const useGetTradeData = ({
@@ -16,14 +16,15 @@ export const useGetTradeData = ({
   input,
   sourceToken,
   targetToken,
+  enabled,
 }: Props) => {
   const { isInitialized } = useCarbonSDK();
 
   return useQuery(
-    QueryKey.tradeData(sourceToken, targetToken, input),
+    QueryKey.tradeData(sourceToken, targetToken, isTradeBySource, input),
     async () => {
       if (input === '' || input === '0') {
-        return '';
+        return { input: '', output: '' };
       }
       await wait(1000);
       if (isTradeBySource) {
@@ -34,10 +35,17 @@ export const useGetTradeData = ({
         //   !isTradeBySource,
         //   () => false
         // );
-        return (Number(input) * 2).toString();
+        return {
+          input: (Number(input) * 0.99).toString(),
+          output: (Number(input) * 2).toString(),
+        };
       } else {
-        return new BigNumber(input).div(2.1).toString();
+        return {
+          input: (Number(input) / 0.99).toString(),
+          output: (Number(input) / 2).toString(),
+        };
       }
-    }
+    },
+    { enabled, cacheTime: 0, retry: 1, staleTime: 0 }
   );
 };

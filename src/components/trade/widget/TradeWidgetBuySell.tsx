@@ -28,17 +28,28 @@ export const TradeWidgetBuySell = ({
   const { openModal } = useModal();
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
+  const [sourceSDKInput, setSourceSDKInput] = useState('');
+  const [targetSDKInput, setTargetSDKInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const approvalTokens = [
     { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
   ];
   const approval = useApproval(approvalTokens);
 
-  const dataQuery = useGetTradeData({
+  const bySourceQuery = useGetTradeData({
     sourceToken: source.address,
     targetToken: target.address,
-    isTradeBySource,
-    input: isTradeBySource ? sourceInput : targetInput,
+    isTradeBySource: true,
+    input: sourceInput,
+    enabled: isTradeBySource,
+  });
+
+  const byTargetQuery = useGetTradeData({
+    sourceToken: source.address,
+    targetToken: target.address,
+    isTradeBySource: false,
+    input: targetInput,
+    enabled: !isTradeBySource,
   });
 
   const tradeAction = async () => {
@@ -49,10 +60,21 @@ export const TradeWidgetBuySell = ({
     if (!user) {
       openModal('wallet', undefined);
     } else if (approval.approvalRequired) {
-      openModal('txConfirm', { approvalTokens, onConfirm: tradeAction });
+      openModal('txConfirm', {
+        approvalTokens,
+        onConfirm: tradeAction,
+        buttonLabel: 'Confirm Trade',
+      });
     } else {
       tradeAction();
     }
+  };
+
+  const onInputChange = (bySource: boolean) => {
+    setSourceSDKInput('');
+    setTargetSDKInput('');
+    setIsTradeBySource(bySource);
+    console.log('onInputChange', sourceInput);
   };
 
   const rate = useMemo(
@@ -61,15 +83,22 @@ export const TradeWidgetBuySell = ({
   );
 
   useEffect(() => {
-    const output = dataQuery.data;
-    if (typeof output === 'string') {
-      if (isTradeBySource) {
-        setTargetInput(output);
-      } else {
-        setSourceInput(output);
-      }
+    if (bySourceQuery.data) {
+      const { input, output } = bySourceQuery.data;
+
+      setSourceSDKInput(input);
+      setTargetInput(output);
     }
-  }, [dataQuery.data, isTradeBySource]);
+  }, [bySourceQuery.data]);
+
+  useEffect(() => {
+    if (byTargetQuery.data) {
+      const { input, output } = byTargetQuery.data;
+
+      setSourceInput(output);
+      setTargetSDKInput(input);
+    }
+  }, [byTargetQuery.data]);
 
   useEffect(() => {
     setSourceInput('');
@@ -89,30 +118,30 @@ export const TradeWidgetBuySell = ({
         className={'mt-5 mb-20 rounded-12 bg-black p-16'}
         token={source}
         isBalanceLoading={false}
-        value={sourceInput}
+        value={sourceSDKInput ? sourceSDKInput : sourceInput}
         setValue={setSourceInput}
         balance={sourceBalanceQuery.data}
         error={errorBaseBalanceSufficient}
-        onKeystroke={() => setIsTradeBySource(true)}
-        isLoading={isTradeBySource ? false : dataQuery.isFetching}
+        onKeystroke={() => onInputChange(true)}
+        isLoading={byTargetQuery.isFetching}
       />
 
       <TokenInputField
         className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
         token={target}
         isBalanceLoading={false}
-        value={targetInput}
+        value={targetSDKInput ? targetSDKInput : targetInput}
         setValue={setTargetInput}
         balance={targetBalanceQuery.data}
-        onKeystroke={() => setIsTradeBySource(false)}
-        isLoading={isTradeBySource ? dataQuery.isFetching : false}
+        onKeystroke={() => onInputChange(false)}
+        isLoading={bySourceQuery.isFetching}
       />
       <div
         className={
           'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
         }
       >
-        {dataQuery.isFetching ? (
+        {bySourceQuery.isFetching || byTargetQuery.isFetching ? (
           'Loading...'
         ) : (
           <>
@@ -126,7 +155,8 @@ export const TradeWidgetBuySell = ({
           !!errorBaseBalanceSufficient ||
           !sourceInput ||
           !targetInput ||
-          dataQuery.isFetching ||
+          bySourceQuery.isFetching ||
+          byTargetQuery.isFetching ||
           approval.isLoading
         }
         variant={buy ? 'success' : 'error'}

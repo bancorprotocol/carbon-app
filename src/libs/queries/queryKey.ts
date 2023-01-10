@@ -27,6 +27,14 @@ export namespace QueryKey {
   export const tradeData = (
     sourceToken: string,
     targetToken: string,
+    isTradeBySource: boolean,
     amount: string
-  ) => [..._sdk, 'trade-data', sourceToken, targetToken, amount];
+  ) => [
+    ..._sdk,
+    'trade-data',
+    sourceToken,
+    targetToken,
+    isTradeBySource,
+    amount,
+  ];
 }
