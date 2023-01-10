@@ -32,7 +32,9 @@ export const CarbonSDKProvider: FC<{ children: ReactNode }> = ({
   const init = async () => {
     try {
       setIsLoading(true);
+      console.log('Initializing CarbonSDK...');
       await sdk.startDataSync();
+      console.log('CarbonSDK initialized');
       setIsInitialized(true);
     } catch (e) {
       setIsError(true);

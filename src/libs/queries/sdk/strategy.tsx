@@ -43,8 +43,9 @@ export const useGetUserStrategies = () => {
     async () => {
       if (!user) return [];
 
+      console.log('Fetching strategies...');
       const strategies = await sdk.getUserStrategies(user);
-
+      console.log('Fetched strategies', strategies);
       const _getTknData = async (address: string) => {
         const data = await fetchTokenData(Token, address);
         importToken(data);

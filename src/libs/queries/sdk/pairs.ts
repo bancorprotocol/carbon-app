@@ -20,7 +20,9 @@ export const useGetTradePairsData = () => {
   return useQuery({
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
+      console.log('useGetTradePairsData');
       const pairs = sdk.pairs;
+      console.log('pairs', pairs);
       const promises = pairs.map(async (pair) => ({
         baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),
         quoteToken: getTokenById(pair[1]) ?? (await _getTknData(pair[1])),
