@@ -30,13 +30,19 @@ export const useGetTradeData = ({
         return { totalInput: '', totalOutput: '', tradeActions: [] };
       }
       const srcTKN = getTokenById(sourceToken);
-      return await sdk.trade(
+      const data = await sdk.trade(
         sourceToken,
         targetToken,
         // TODO who handles the decimal places?
         BigNumber.from(expandToken(input, srcTKN?.decimals || 18)),
         !isTradeBySource
       );
+
+      return {
+        ...data,
+        totalInput: parseFloat(data.totalInput).toString(),
+        totalOutput: parseFloat(data.totalOutput).toString(),
+      };
     },
     {
       enabled: !!enabled && !!tokens.length && isInitialized,

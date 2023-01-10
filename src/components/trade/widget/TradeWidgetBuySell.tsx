@@ -59,14 +59,16 @@ export const TradeWidgetBuySell = ({
     if (!user || !signer) {
       throw new Error('No user or signer');
     }
+    console.log(1);
     const unsignedTx = await sdk.composeTradeTransaction(
       source.address,
       target.address,
       !isTradeBySource,
       tradeActions
     );
-
+    console.log(2);
     const tx = await signer.sendTransaction(unsignedTx);
+    console.log(3);
     console.log('tradeAction tx', tx);
   };
 
