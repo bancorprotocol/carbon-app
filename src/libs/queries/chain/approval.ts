@@ -1,4 +1,3 @@
-import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'libs/web3';
 import { useMutation, useQueries } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
@@ -6,6 +5,7 @@ import { expandToken, shrinkToken } from 'utils/tokens';
 import BigNumber from 'bignumber.js';
 import { QueryKey } from 'libs/queries/queryKey';
 import { config } from 'services/web3/config';
+import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 
 export type GetUserApprovalProps = Pick<Token, 'address' | 'decimals'> & {
@@ -13,8 +13,8 @@ export type GetUserApprovalProps = Pick<Token, 'address' | 'decimals'> & {
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
-  const { Token } = useContract();
   const { user } = useWeb3();
+  const { Token } = useContract();
 
   return useQueries({
     queries: data.map((t) => ({
@@ -52,8 +52,8 @@ export type SetUserApprovalProps = GetUserApprovalProps & {
 };
 
 export const useSetUserApproval = () => {
-  const { Token } = useContract();
   const { user } = useWeb3();
+  const { Token } = useContract();
 
   return useMutation(
     async ({

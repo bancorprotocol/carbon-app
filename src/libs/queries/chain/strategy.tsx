@@ -1,15 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Result } from '@ethersproject/abi';
-import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'libs/web3';
 import { Token, useTokens } from 'libs/tokens';
-import { MultiCall, useMulticall } from 'hooks/useMulticall';
-import { decodeOrder } from 'utils/sdk2';
 import { shrinkToken } from 'utils/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
 import { sdk } from 'libs/sdk/carbonSdk';
+import { useContract } from 'hooks/useContract';
 
 export enum StrategyStatus {
   Active,
@@ -20,13 +17,12 @@ export enum StrategyStatus {
 
 export interface Order {
   balance: string;
-  curveCapacity: string;
   startRate: string;
   endRate: string;
 }
 
 export interface Strategy {
-  id: number;
+  id: string;
   token0: Token;
   token1: Token;
   order0: Order;
@@ -36,33 +32,16 @@ export interface Strategy {
 }
 
 export const useGetUserStrategies = () => {
-  const { PoolCollection, Voucher, Token } = useContract();
-  const { fetchMulticall } = useMulticall();
   const { user } = useWeb3();
   const { tokens, getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
 
   return useQuery<Strategy[]>(
     QueryKey.strategies(user),
     async () => {
-      if (!user) {
-        return [];
-      }
+      if (!user) return [];
 
-      const balance = await Voucher.read.balanceOf(user);
-
-      const calls: MultiCall[] = Array.from(
-        Array(balance.toNumber()),
-        (_, i) => ({
-          contractAddress: Voucher.read.address,
-          interface: Voucher.read.interface,
-          methodName: 'tokenOfOwnerByIndex',
-          methodParameters: [user, i],
-        })
-      );
-      const mcResult = await fetchMulticall(calls);
-      const ids = mcResult.map((id: Result) => id[0]);
-
-      const strategiesByIds = await PoolCollection.read.strategiesByIds(ids);
+      const strategies = await sdk.getUserStrategies(user);
 
       const _getTknData = async (address: string) => {
         const data = await fetchTokenData(Token, address);
@@ -70,23 +49,27 @@ export const useGetUserStrategies = () => {
         return data;
       };
 
-      const promises = strategiesByIds.map(async (s) => {
+      const promises = strategies.map(async (s) => {
         const token0 =
-          getTokenById(s.pair[0]) || (await _getTknData(s.pair[0]));
+          getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
         const token1 =
-          getTokenById(s.pair[1]) || (await _getTknData(s.pair[1]));
+          getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
 
-        const decodedOrder0 = decodeOrder({ ...s.orders[0] });
-        const decodedOrder1 = decodeOrder({ ...s.orders[1] });
+        const sellLow = new BigNumber(s.sellPriceLow);
+        const sellHigh = new BigNumber(s.sellPriceHigh);
+        const sellBudget = new BigNumber(s.sellBudget);
+
+        const buyLow = new BigNumber(s.buyPriceLow);
+        const buyHight = new BigNumber(s.buyPriceHigh);
+        const buyBudget = new BigNumber(s.buyBudget);
 
         const offCurve =
-          decodedOrder0.lowestRate.isZero() &&
-          decodedOrder0.highestRate.isZero() &&
-          decodedOrder1.lowestRate.isZero() &&
-          decodedOrder1.highestRate.isZero();
+          sellLow.isZero() &&
+          sellHigh.isZero() &&
+          buyLow.isZero() &&
+          buyHight.isZero();
 
-        const noBudget =
-          decodedOrder0.liquidity.isZero() && decodedOrder1.liquidity.isZero();
+        const noBudget = sellBudget.isZero() && buyBudget.isZero();
 
         const status =
           noBudget && offCurve
@@ -101,18 +84,11 @@ export const useGetUserStrategies = () => {
         // This is the buy order | UI order 0 and CONTRACT order 1
         // ATTENTION *****************************
         const order0: Order = {
-          balance: shrinkToken(
-            decodedOrder1.liquidity.toString(),
-            token1.decimals
-          ),
-          curveCapacity: shrinkToken(
-            decodedOrder1.marginalRate.toString(),
-            token1.decimals
-          ),
-          startRate: new BigNumber(decodedOrder1.lowestRate.toString())
+          balance: shrinkToken(s.buyBudget, token1.decimals),
+          startRate: new BigNumber(s.buyPriceLow)
             .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
-          endRate: new BigNumber(decodedOrder1.highestRate.toString())
+          endRate: new BigNumber(s.buyPriceHigh)
             .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
         };
@@ -121,26 +97,19 @@ export const useGetUserStrategies = () => {
         // This is the sell order | UI order 1 and CONTRACT order 0
         // ATTENTION *****************************
         const order1: Order = {
-          balance: shrinkToken(
-            decodedOrder0.liquidity.toString(),
-            token0.decimals
-          ),
-          curveCapacity: shrinkToken(
-            decodedOrder0.marginalRate.toString(),
-            token0.decimals
-          ),
+          balance: shrinkToken(s.sellBudget, token0.decimals),
           startRate: new BigNumber(1)
-            .div(decodedOrder0.highestRate.toString())
+            .div(s.sellPriceHigh)
             .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
             .toString(),
           endRate: new BigNumber(1)
-            .div(decodedOrder0.lowestRate.toString())
+            .div(s.sellPriceLow)
             .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
             .toString(),
         };
 
         const strategy: Strategy = {
-          id: s.id.toNumber(),
+          id: s.id.toString(),
           token0,
           token1,
           order0,
