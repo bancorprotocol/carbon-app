@@ -30,16 +30,18 @@ export const CarbonSDKProvider: FC<{ children: ReactNode }> = ({
   const [isError, setIsError] = useState(false);
 
   const init = async () => {
-    try {
-      setIsLoading(true);
-      console.log('Initializing CarbonSDK...');
-      await sdk.startDataSync();
-      console.log('CarbonSDK initialized');
-      setIsInitialized(true);
-    } catch (e) {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
+    if (!sdk.isInitialized) {
+      try {
+        setIsLoading(true);
+        console.log('Initializing CarbonSDK...');
+        await sdk.startDataSync();
+        console.log('CarbonSDK initialized');
+        setIsInitialized(true);
+      } catch (e) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
   useEffect(() => {

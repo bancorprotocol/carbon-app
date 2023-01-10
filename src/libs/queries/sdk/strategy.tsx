@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useWeb3 } from 'libs/web3';
 import { Token, useTokens } from 'libs/tokens';
-import { shrinkToken } from 'utils/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
@@ -87,28 +86,18 @@ export const useGetUserStrategies = () => {
         // This is the buy order | UI order 0 and CONTRACT order 1
         // ATTENTION *****************************
         const order0: Order = {
-          balance: shrinkToken(s.buyBudget, token1.decimals),
-          startRate: new BigNumber(s.buyPriceLow)
-            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
-            .toString(),
-          endRate: new BigNumber(s.buyPriceHigh)
-            .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
-            .toString(),
+          balance: s.buyBudget,
+          startRate: s.buyPriceLow,
+          endRate: s.buyPriceHigh,
         };
 
         // ATTENTION *****************************
         // This is the sell order | UI order 1 and CONTRACT order 0
         // ATTENTION *****************************
         const order1: Order = {
-          balance: shrinkToken(s.sellBudget, token0.decimals),
-          startRate: new BigNumber(1)
-            .div(s.sellPriceHigh)
-            .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
-            .toString(),
-          endRate: new BigNumber(1)
-            .div(s.sellPriceLow)
-            .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
-            .toString(),
+          balance: s.sellBudget,
+          startRate: s.sellPriceLow,
+          endRate: s.sellPriceHigh,
         };
 
         const strategy: Strategy = {
