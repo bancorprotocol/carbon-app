@@ -4,6 +4,7 @@ import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 
 type Props = {
+  title?: string;
   value: string;
   setValue: (value: string) => void;
   token: Token;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export const TokenInputField: FC<Props> = ({
+  title = 'Amount',
   value,
   setValue,
   token,
@@ -28,6 +30,7 @@ export const TokenInputField: FC<Props> = ({
   isLoading,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleOnFocus = () => {
@@ -52,15 +55,17 @@ export const TokenInputField: FC<Props> = ({
   return (
     <>
       <div className={'flex justify-between text-14'}>
-        <div className={'text-white/50'}>Amount</div>
+        <div className={'text-white/50'}>{title}</div>
         <div className={'font-weight-500 text-error-500'}>{error}</div>
       </div>
       <div
         className={`cursor-text ${
-          isFocused ? 'ring-2 ring-white/50' : ''
+          isFocused || isActive ? 'ring-2 ring-white/50' : ''
         } transition-all duration-200 ${
           error ? 'ring-2 ring-error-500/50' : ''
         } ${className}`}
+        onMouseDown={() => setIsActive(true)}
+        onMouseUp={() => setIsActive(false)}
         onClick={() => {
           setIsFocused(true);
           inputRef.current?.focus();
@@ -80,7 +85,15 @@ export const TokenInputField: FC<Props> = ({
           ) : (
             <input
               ref={inputRef}
-              value={!isFocused ? (!value ? '' : prettifyNumber(value)) : value}
+              value={
+                !isFocused
+                  ? !value
+                    ? ''
+                    : !isActive
+                    ? prettifyNumber(value)
+                    : value
+                  : value
+              }
               size={1}
               onChange={handleChange}
               placeholder={`enter amount`}
@@ -100,8 +113,16 @@ export const TokenInputField: FC<Props> = ({
           }
         >
           Wallet:{' '}
-          {isBalanceLoading || !balance ? 'loading' : prettifyNumber(balance)}{' '}
-          <div className="ml-10 group-hover:text-white">MAX</div>
+          {isBalanceLoading ? (
+            'loading'
+          ) : balance ? (
+            <>
+              {prettifyNumber(balance)}{' '}
+              <div className="ml-10 group-hover:text-white">MAX</div>
+            </>
+          ) : (
+            'not logged in'
+          )}
         </button>
       </div>
     </>

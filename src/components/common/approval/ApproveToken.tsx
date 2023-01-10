@@ -7,6 +7,7 @@ import { Imager } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { config } from 'services/web3/config';
+import { useTokens } from 'libs/tokens';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -16,6 +17,8 @@ type Props = {
 
 export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   const { user } = useWeb3();
+  const { getTokenById } = useTokens();
+  const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
   const [isLimited, setIsLimited] = useState(false);
   const cache = useQueryClient();
@@ -35,8 +38,8 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           void cache.invalidateQueries({
             queryKey: QueryKey.approval(
               user!,
-              variables.tokenAddress,
-              variables.spenderAddress
+              variables.address,
+              variables.spender
             ),
           });
           setTxBusy(false);
@@ -51,12 +54,12 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     );
   };
 
-  if (data?.tokenAddress === config.tokens.ETH) {
+  if (data?.address === config.tokens.ETH) {
     return null;
   }
 
   // TODO handle error
-  if (!data) {
+  if (!data || !token) {
     if (isLoading) {
       return <div>is loading</div>;
     }
@@ -73,10 +76,10 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         <div className={'flex items-center space-x-10'}>
           <Imager
             alt={'Token'}
-            src={data.logoURI}
+            src={token.logoURI}
             className={'h-30 w-30 rounded-full'}
           />
-          <div>{data.symbol}</div>
+          <div>{token.symbol}</div>
         </div>
       </div>
 

@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { wait } from 'utils/helpers';
 import { QueryKey } from 'libs/queries';
-import { sdk } from 'libs/sdk/carbonSdk';
-import { BigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 
 type Props = {
   sourceToken: string;
@@ -25,16 +24,16 @@ export const useGetTradeData = ({
       }
       await wait(1000);
       if (isTradeBySource) {
-        const data = sdk.trade(
-          sourceToken,
-          targetToken,
-          BigNumber.from(input),
-          !isTradeBySource,
-          () => false
-        );
+        // const data = sdk.trade(
+        //   sourceToken,
+        //   targetToken,
+        //   BigNumber.from(input),
+        //   !isTradeBySource,
+        //   () => false
+        // );
         return (Number(input) * 2).toString();
       } else {
-        return (Number(input) / 2.1).toString();
+        return new BigNumber(input).div(2.1).toString();
       }
     }
   );

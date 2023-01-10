@@ -40,24 +40,18 @@ export const useCreate = () => {
       ...(token0Approve
         ? [
             {
-              tokenAddress: token0.address,
-              spenderAddress,
+              ...token0,
+              spender: spenderAddress,
               amount: order1.budget || '0',
-              decimals: token0.decimals,
-              logoURI: token0.logoURI,
-              symbol: token0.symbol,
             },
           ]
         : []),
       ...(token1Approve
         ? [
             {
-              tokenAddress: token1.address,
-              spenderAddress,
+              ...token1,
+              spender: spenderAddress,
               amount: order0.budget || '0',
-              decimals: token1.decimals,
-              logoURI: token1.logoURI,
-              symbol: token1.symbol,
             },
           ]
         : []),
