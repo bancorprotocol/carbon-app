@@ -4,9 +4,10 @@ import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'libs/tokens';
-import { sdk } from 'libs/sdk';
+import { sdk, useCarbonSDK } from 'libs/sdk';
 
 export const useGetTradePairsData = () => {
+  const { isInitialized } = useCarbonSDK();
   const { Token } = useContract();
   const { tokens, getTokenById, importToken } = useTokens();
 
@@ -34,7 +35,7 @@ export const useGetTradePairsData = () => {
         })),
       ];
     },
-    enabled: !!tokens.length,
+    enabled: !!tokens.length && isInitialized,
     retry: 1,
     staleTime: ONE_DAY_IN_MS,
   });

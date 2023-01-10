@@ -8,7 +8,7 @@ import {
 import { useTokens } from 'libs/tokens';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'libs/modals';
-import { useGetTradePairsData } from 'libs/queries/chain/pairs';
+import { useGetTradePairsData } from 'libs/queries/sdk/pairs';
 import { useMemo } from 'react';
 
 type MyLocationGenerics = MakeGenerics<{

@@ -7,6 +7,7 @@ import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
 import { sdk } from 'libs/sdk/carbonSdk';
 import { useContract } from 'hooks/useContract';
+import { useCarbonSDK } from 'libs/sdk';
 
 export enum StrategyStatus {
   Active,
@@ -32,6 +33,7 @@ export interface Strategy {
 }
 
 export const useGetUserStrategies = () => {
+  const { isInitialized } = useCarbonSDK();
   const { user } = useWeb3();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
@@ -122,7 +124,7 @@ export const useGetUserStrategies = () => {
 
       return await Promise.all(promises);
     },
-    { enabled: tokens.length > 0 }
+    { enabled: tokens.length > 0 && isInitialized }
   );
 };
 
