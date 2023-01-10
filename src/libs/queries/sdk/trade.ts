@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { wait } from 'utils/helpers';
 import { QueryKey } from 'libs/queries';
 import BigNumber from 'bignumber.js';
+import { useCarbonSDK } from 'libs/sdk';
 
 type Props = {
   sourceToken: string;
@@ -16,6 +17,8 @@ export const useGetTradeData = ({
   sourceToken,
   targetToken,
 }: Props) => {
+  const { isInitialized } = useCarbonSDK();
+
   return useQuery(
     QueryKey.tradeData(sourceToken, targetToken, input),
     async () => {
