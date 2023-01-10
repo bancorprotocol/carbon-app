@@ -22,7 +22,7 @@ export interface Order {
 }
 
 export interface Strategy {
-  id: number;
+  id: string;
   token0: Token;
   token1: Token;
   order0: Order;
@@ -109,7 +109,7 @@ export const useGetUserStrategies = () => {
         };
 
         const strategy: Strategy = {
-          id: -1, //s.id,
+          id: s.id.toString(),
           token0,
           token1,
           order0,
