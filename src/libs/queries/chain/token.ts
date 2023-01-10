@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
+import { useContract } from 'hooks/useContract';
 import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
-import { useContract } from 'hooks/useContract';
 import { ONE_DAY_IN_MS } from 'utils/time';
 
 export const useGetTokenData = (address: string) => {

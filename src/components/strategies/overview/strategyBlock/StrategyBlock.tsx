@@ -7,7 +7,7 @@ import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlo
 import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
-  const paddedID = String(strategy.id).padStart(9, '0');
+  const paddedID = strategy.id.padStart(9, '0');
   const [manage, setManage] = useState(false);
 
   return (
