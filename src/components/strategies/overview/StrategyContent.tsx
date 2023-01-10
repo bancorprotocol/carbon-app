@@ -33,7 +33,7 @@ export const StrategyContent = () => {
     );
 
     const sorterNum = sort === StrategySort.Recent ? -1 : 1;
-    return filtered?.sort((a, b) => sorterNum * (a.id - b.id));
+    return filtered?.sort((a, b) => sorterNum * (Number(a.id) - Number(b.id)));
   }, [search, strategies.data, filter, sort]);
 
   if (strategies && strategies.data && strategies.data.length === 0)
