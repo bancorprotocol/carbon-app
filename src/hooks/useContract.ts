@@ -1,6 +1,7 @@
 import { useWeb3 } from 'libs/web3';
-import { Token__factory } from 'abis/types';
-import { useCallback } from 'react';
+import { Token__factory, Voucher__factory } from 'abis/types';
+import { useCallback, useMemo } from 'react';
+import { config } from 'services/web3/config';
 
 export const useContract = () => {
   const { provider, signer } = useWeb3();
@@ -13,5 +14,13 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  return { Token };
+  const Voucher = useMemo(
+    () => ({
+      read: Voucher__factory.connect(config.carbon.voucher, provider!),
+      write: Voucher__factory.connect(config.carbon.voucher, signer!),
+    }),
+    [provider, signer]
+  );
+
+  return { Token, Voucher };
 };

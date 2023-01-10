@@ -17,7 +17,6 @@ export enum StrategyStatus {
 
 export interface Order {
   balance: string;
-  curveCapacity: string;
   startRate: string;
   endRate: string;
 }
@@ -42,7 +41,7 @@ export const useGetUserStrategies = () => {
     async () => {
       if (!user) return [];
 
-      const strategies: any[] = []; //FETCH
+      const strategies = await sdk.getUserStrategies(user);
 
       const _getTknData = async (address: string) => {
         const data = await fetchTokenData(Token, address);
@@ -52,21 +51,25 @@ export const useGetUserStrategies = () => {
 
       const promises = strategies.map(async (s) => {
         const token0 =
-          getTokenById(s.pair[0]) || (await _getTknData(s.pair[0]));
+          getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
         const token1 =
-          getTokenById(s.pair[1]) || (await _getTknData(s.pair[1]));
+          getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
 
-        const decodedOrder0 = s.orders[0];
-        const decodedOrder1 = s.orders[1];
+        const sellLow = new BigNumber(s.sellPriceLow);
+        const sellHigh = new BigNumber(s.sellPriceHigh);
+        const sellBudget = new BigNumber(s.sellBudget);
+
+        const buyLow = new BigNumber(s.buyPriceLow);
+        const buyHight = new BigNumber(s.buyPriceHigh);
+        const buyBudget = new BigNumber(s.buyBudget);
 
         const offCurve =
-          decodedOrder0.lowestRate.isZero() &&
-          decodedOrder0.highestRate.isZero() &&
-          decodedOrder1.lowestRate.isZero() &&
-          decodedOrder1.highestRate.isZero();
+          sellLow.isZero() &&
+          sellHigh.isZero() &&
+          buyLow.isZero() &&
+          buyHight.isZero();
 
-        const noBudget =
-          decodedOrder0.liquidity.isZero() && decodedOrder1.liquidity.isZero();
+        const noBudget = sellBudget.isZero() && buyBudget.isZero();
 
         const status =
           noBudget && offCurve
@@ -81,18 +84,11 @@ export const useGetUserStrategies = () => {
         // This is the buy order | UI order 0 and CONTRACT order 1
         // ATTENTION *****************************
         const order0: Order = {
-          balance: shrinkToken(
-            decodedOrder1.liquidity.toString(),
-            token1.decimals
-          ),
-          curveCapacity: shrinkToken(
-            decodedOrder1.marginalRate.toString(),
-            token1.decimals
-          ),
-          startRate: new BigNumber(decodedOrder1.lowestRate.toString())
+          balance: shrinkToken(s.buyBudget, token1.decimals),
+          startRate: new BigNumber(s.buyPriceLow)
             .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
-          endRate: new BigNumber(decodedOrder1.highestRate.toString())
+          endRate: new BigNumber(s.buyPriceHigh)
             .div(new BigNumber(10).pow(token0.decimals - token1.decimals))
             .toString(),
         };
@@ -101,26 +97,19 @@ export const useGetUserStrategies = () => {
         // This is the sell order | UI order 1 and CONTRACT order 0
         // ATTENTION *****************************
         const order1: Order = {
-          balance: shrinkToken(
-            decodedOrder0.liquidity.toString(),
-            token0.decimals
-          ),
-          curveCapacity: shrinkToken(
-            decodedOrder0.marginalRate.toString(),
-            token0.decimals
-          ),
+          balance: shrinkToken(s.sellBudget, token0.decimals),
           startRate: new BigNumber(1)
-            .div(decodedOrder0.highestRate.toString())
+            .div(s.sellPriceHigh)
             .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
             .toString(),
           endRate: new BigNumber(1)
-            .div(decodedOrder0.lowestRate.toString())
+            .div(s.sellPriceLow)
             .times(new BigNumber(10).pow(token1.decimals - token0.decimals))
             .toString(),
         };
 
         const strategy: Strategy = {
-          id: s.id.toNumber(),
+          id: -1, //s.id,
           token0,
           token1,
           order0,

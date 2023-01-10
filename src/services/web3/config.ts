@@ -9,6 +9,7 @@ export interface Config {
   };
   carbon: {
     poolCollection: string;
+    voucher: string;
   };
   utils: {
     multicall: string;
