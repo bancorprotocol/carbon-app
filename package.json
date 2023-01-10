@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bancor/carbon-sdk": "git+ssh://git@github.com:bancorprotocol/carbon-sdk.git",
+    "@bancor/carbon-sdk": "0.0.11-DEV",
     "@coinbase/wallet-sdk": "^3.5.3",
     "@ethersproject/providers": "^5.7.1",
     "@tanstack/react-location": "^3.7.4",
@@ -61,7 +61,7 @@
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir 'src/abis/types' 'src/abis/**/*.json'",
     "carbon-sdk": "cd node_modules/@bancor/carbon-sdk && yarn && yarn build",
-    "postinstall": "yarn compile-abis && yarn carbon-sdk",
+    "postinstall": "yarn compile-abis",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",

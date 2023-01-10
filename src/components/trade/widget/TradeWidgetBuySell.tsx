@@ -9,6 +9,8 @@ import { useWeb3 } from 'libs/web3';
 import { useModal } from 'libs/modals';
 import { useApproval } from 'hooks/useApproval';
 import { config } from 'services/web3/config';
+import { TradeActionStruct } from 'abis/types/PoolCollection';
+import { sdk } from 'libs/sdk';
 
 type Props = {
   source: Token;
@@ -24,13 +26,14 @@ export const TradeWidgetBuySell = ({
   sourceBalanceQuery,
   targetBalanceQuery,
 }: Props) => {
-  const { user } = useWeb3();
+  const { user, signer } = useWeb3();
   const { openModal } = useModal();
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
   const [sourceSDKInput, setSourceSDKInput] = useState('');
   const [targetSDKInput, setTargetSDKInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
+  const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
   const approvalTokens = [
     { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
   ];
@@ -53,7 +56,18 @@ export const TradeWidgetBuySell = ({
   });
 
   const tradeAction = async () => {
-    console.log('tradeAction');
+    if (!user || !signer) {
+      throw new Error('No user or signer');
+    }
+    const unsignedTx = await sdk.composeTradeTransaction(
+      source.address,
+      target.address,
+      !isTradeBySource,
+      tradeActions
+    );
+
+    const tx = await signer.sendTransaction(unsignedTx);
+    console.log('tradeAction tx', tx);
   };
 
   const handleCTAClick = () => {
@@ -84,19 +98,21 @@ export const TradeWidgetBuySell = ({
 
   useEffect(() => {
     if (bySourceQuery.data) {
-      const { input, output } = bySourceQuery.data;
+      const { totalOutput, totalInput, tradeActions } = bySourceQuery.data;
 
-      setSourceSDKInput(input);
-      setTargetInput(output);
+      setSourceSDKInput(totalInput);
+      setTargetInput(totalOutput);
+      setTradeActions(tradeActions);
     }
   }, [bySourceQuery.data]);
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      const { input, output } = byTargetQuery.data;
+      const { totalOutput, totalInput, tradeActions } = byTargetQuery.data;
 
-      setSourceInput(output);
-      setTargetSDKInput(input);
+      setSourceInput(totalOutput);
+      setTargetSDKInput(totalInput);
+      setTradeActions(tradeActions);
     }
   }, [byTargetQuery.data]);
 

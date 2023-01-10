@@ -1070,9 +1070,10 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@bancor/carbon-sdk@git+ssh://git@github.com:bancorprotocol/carbon-sdk.git":
-  version "0.0.10-DEV"
-  resolved "git+ssh://git@github.com:bancorprotocol/carbon-sdk.git#0f50cbd89acada6f11e6472b041da46a5ddf29d1"
+"@bancor/carbon-sdk@0.0.11-DEV":
+  version "0.0.11-DEV"
+  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.11-DEV.tgz#808143633716ccbd6787def335027320a4bd7528"
+  integrity sha512-Owvam2Rbtjk/8ujIu8kyEVXGwpcFeMrujrzvgRC/ZzcUizUyAZ/KTTlFZDyKrM+ksyv5SlQVOufogyjhpeuatA==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
