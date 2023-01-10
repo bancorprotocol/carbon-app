@@ -60,8 +60,8 @@
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir 'src/abis/types' 'src/abis/**/*.json'",
-    "carbon-sdk": "cd node_modules/@bancor/carbon-sdk & yarn build",
-    "postinstall": "yarn compile-abis & yarn carbon-sdk",
+    "carbon-sdk": "cd node_modules/@bancor/carbon-sdk && yarn && yarn build",
+    "postinstall": "yarn compile-abis && yarn carbon-sdk",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
