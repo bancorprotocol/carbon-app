@@ -6,13 +6,10 @@ import BigNumber from 'bignumber.js';
 import { QueryKey } from 'libs/queries/queryKey';
 import { config } from 'services/web3/config';
 import { useContract } from 'hooks/useContract';
+import { Token } from 'libs/tokens';
 
-export type GetUserApprovalProps = {
-  tokenAddress: string;
-  spenderAddress: string;
-  decimals: number;
-  symbol: string;
-  logoURI?: string;
+export type GetUserApprovalProps = Pick<Token, 'address' | 'decimals'> & {
+  spender: string;
 };
 
 export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
@@ -21,26 +18,26 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
   return useQueries({
     queries: data.map((t) => ({
-      queryKey: QueryKey.approval(user!, t.tokenAddress, t.spenderAddress),
+      queryKey: QueryKey.approval(user!, t.address, t.spender),
       queryFn: async () => {
         if (!user) {
           throw new Error('useGetUserApproval no user provided');
         }
-        if (!t.tokenAddress) {
+        if (!t.address) {
           throw new Error('useGetUserApproval no tokenAddress provided');
         }
-        if (!t.spenderAddress) {
+        if (!t.spender) {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
-        const isETH = t.tokenAddress === config.tokens.ETH;
+        const isETH = t.address === config.tokens.ETH;
         if (isETH) {
           return new BigNumber(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
 
-        const allowance = await Token(t.tokenAddress).read.allowance(
+        const allowance = await Token(t.address).read.allowance(
           user,
-          t.spenderAddress
+          t.spender
         );
 
         return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
@@ -60,23 +57,23 @@ export const useSetUserApproval = () => {
 
   return useMutation(
     async ({
-      tokenAddress,
-      spenderAddress,
+      address,
+      spender,
       amount,
       decimals,
       isLimited,
     }: SetUserApprovalProps) => {
-      const isETH = tokenAddress === config.tokens.ETH;
+      const isETH = address === config.tokens.ETH;
       if (isETH) {
         throw new Error('useSetUserApproval cannot approve ETH');
       }
       if (!user) {
         throw new Error('useSetUserApproval no user provided');
       }
-      if (!tokenAddress) {
+      if (!address) {
         throw new Error('useSetUserApproval no tokenAddress provided');
       }
-      if (!spenderAddress) {
+      if (!spender) {
         throw new Error('useSetUserApproval no spenderAddress provided');
       }
       if (parseFloat(amount) < 0) {
@@ -87,27 +84,19 @@ export const useSetUserApproval = () => {
         ? expandToken(amount, decimals)
         : UNLIMITED_WEI;
 
-      const isNullApprovalContract =
-        NULL_APPROVAL_CONTRACTS.includes(tokenAddress);
+      const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(address);
 
       if (isNullApprovalContract) {
-        const allowanceWei = await Token(tokenAddress).read.allowance(
-          user,
-          spenderAddress
-        );
+        const allowanceWei = await Token(address).read.allowance(user, spender);
         if (allowanceWei.gt(0)) {
-          const tx = await Token(tokenAddress).write.approve(
-            spenderAddress,
-            '0',
-            {
-              // TODO fix GAS limit
-              gasLimit: '99999999999999999',
-            }
-          );
+          const tx = await Token(address).write.approve(spender, '0', {
+            // TODO fix GAS limit
+            gasLimit: '99999999999999999',
+          });
           await tx.wait();
         }
       }
-      return Token(tokenAddress).write.approve(spenderAddress, amountWei, {
+      return Token(address).write.approve(spender, amountWei, {
         // TODO fix GAS limit
         gasLimit: '99999999999999999',
       });

@@ -12,11 +12,17 @@ import {
   ModalImportToken,
   ModalImportTokenData,
 } from 'libs/modals/modals/ModalImportToken';
+import {
+  ModalTradeTokenList,
+  ModalTradeTokenListData,
+} from 'libs/modals/modals/ModalTradeTokenList';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
   wallet: undefined;
   tokenLists: ModalTokenListData;
+  tradeTokenList: ModalTradeTokenListData;
+
   txConfirm: ModalCreateConfirmData;
   importToken: ModalImportTokenData;
 }
@@ -29,4 +35,5 @@ export const MODAL_COMPONENTS: TModals = {
   tokenLists: (props) => ModalTokenList(props),
   txConfirm: (props) => ModalCreateConfirm(props),
   importToken: (props) => ModalImportToken(props),
+  tradeTokenList: (props) => ModalTradeTokenList(props),
 };

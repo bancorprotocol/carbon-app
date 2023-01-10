@@ -176,7 +176,8 @@ export const useCreateStrategy = () => {
         order0.budget ?? '0',
         order1Low,
         order1Max,
-        order1.budget ?? '0'
+        order1.budget ?? '0',
+        { gasLimit: 9999999 }
       );
 
       return signer!.sendTransaction(unsignedTx);

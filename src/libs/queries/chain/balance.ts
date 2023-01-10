@@ -37,10 +37,10 @@ export const useGetTokenBalance = (
 
       if (address === config.tokens.ETH) {
         const res = await provider.getBalance(user!);
-        return shrinkToken(res.toString(), 18);
+        return shrinkToken(res.toString(), 18, true);
       } else {
         const res = await Token(address).read.balanceOf(user);
-        return shrinkToken(res.toString(), decimals);
+        return shrinkToken(res.toString(), decimals, true);
       }
     },
     {
