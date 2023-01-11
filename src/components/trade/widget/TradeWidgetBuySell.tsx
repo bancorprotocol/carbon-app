@@ -30,8 +30,6 @@ export const TradeWidgetBuySell = ({
   const { openModal } = useModal();
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
-  const [sourceSDKInput, setSourceSDKInput] = useState('');
-  const [targetSDKInput, setTargetSDKInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
   const approvalTokens = [
@@ -64,7 +62,8 @@ export const TradeWidgetBuySell = ({
       source.address,
       target.address,
       !isTradeBySource,
-      tradeActions
+      tradeActions,
+      { gasLimit: 999999999 }
     );
     console.log(2);
     const tx = await signer.sendTransaction(unsignedTx);
@@ -90,8 +89,6 @@ export const TradeWidgetBuySell = ({
   };
 
   const onInputChange = (bySource: boolean) => {
-    setSourceSDKInput('');
-    setTargetSDKInput('');
     setIsTradeBySource(bySource);
     console.log('onInputChange', sourceInput);
   };
@@ -103,9 +100,8 @@ export const TradeWidgetBuySell = ({
 
   useEffect(() => {
     if (bySourceQuery.data) {
-      const { totalOutput, totalInput, tradeActions } = bySourceQuery.data;
+      const { totalOutput, tradeActions } = bySourceQuery.data;
 
-      setSourceSDKInput(totalInput);
       setTargetInput(totalOutput);
       setTradeActions(tradeActions);
     }
@@ -113,10 +109,9 @@ export const TradeWidgetBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      const { totalOutput, totalInput, tradeActions } = byTargetQuery.data;
+      const { totalOutput, tradeActions } = byTargetQuery.data;
 
       setSourceInput(totalOutput);
-      setTargetSDKInput(totalInput);
       setTradeActions(tradeActions);
     }
   }, [byTargetQuery.data]);
@@ -139,7 +134,7 @@ export const TradeWidgetBuySell = ({
         className={'mt-5 mb-20 rounded-12 bg-black p-16'}
         token={source}
         isBalanceLoading={false}
-        value={sourceSDKInput ? sourceSDKInput : sourceInput}
+        value={sourceInput}
         setValue={setSourceInput}
         balance={sourceBalanceQuery.data}
         error={errorBaseBalanceSufficient}
@@ -151,7 +146,7 @@ export const TradeWidgetBuySell = ({
         className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
         token={target}
         isBalanceLoading={false}
-        value={targetSDKInput ? targetSDKInput : targetInput}
+        value={targetInput}
         setValue={setTargetInput}
         balance={targetBalanceQuery.data}
         onKeystroke={() => onInputChange(false)}
