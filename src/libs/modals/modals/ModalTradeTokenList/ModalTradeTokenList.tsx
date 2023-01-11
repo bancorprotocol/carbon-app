@@ -4,8 +4,8 @@ import { Token } from 'libs/tokens';
 import { SearchInput } from 'components/common/searchInput';
 import { useModalTradeTokenList } from 'libs/modals/modals/ModalTradeTokenList/useModalTradeTokenList';
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
-import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
 import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
+import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
 
 export type TradePair = {
   baseToken: Token;
