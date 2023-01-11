@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { sdk } from 'libs/sdk/carbonSdk';
+import { sdk } from './carbonSdk';
 
 interface CarbonSDKContext {
   isInitialized: boolean;

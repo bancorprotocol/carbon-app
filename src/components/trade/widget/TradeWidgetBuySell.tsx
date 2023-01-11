@@ -68,6 +68,9 @@ export const TradeWidgetBuySell = ({
     );
     console.log(2);
     const tx = await signer.sendTransaction(unsignedTx);
+    await tx.wait();
+    void sourceBalanceQuery.refetch();
+    void targetBalanceQuery.refetch();
     console.log(3);
     console.log('tradeAction tx', tx);
   };
