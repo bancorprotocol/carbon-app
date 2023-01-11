@@ -9,7 +9,6 @@ import { useWeb3 } from 'libs/web3';
 import { useModal } from 'libs/modals';
 import { useApproval } from 'hooks/useApproval';
 import { config } from 'services/web3/config';
-import { TradeActionStruct } from 'abis/types/PoolCollection';
 import { sdk } from 'libs/sdk';
 import { PopulatedTransaction } from 'ethers';
 
@@ -32,7 +31,7 @@ export const TradeWidgetBuySell = ({
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
-  const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
+  const [tradeActions, setTradeActions] = useState<any[]>([]);
   const approvalTokens = [
     { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
   ];
