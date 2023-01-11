@@ -39,6 +39,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           user,
           t.spender
         );
+        console.log('allowance', allowance.toString());
 
         return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
       },

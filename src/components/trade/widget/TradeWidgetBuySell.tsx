@@ -11,6 +11,7 @@ import { useApproval } from 'hooks/useApproval';
 import { config } from 'services/web3/config';
 import { TradeActionStruct } from 'abis/types/PoolCollection';
 import { sdk } from 'libs/sdk';
+import { PopulatedTransaction } from 'ethers';
 
 type Props = {
   source: Token;
@@ -58,13 +59,27 @@ export const TradeWidgetBuySell = ({
       throw new Error('No user or signer');
     }
     console.log(1);
-    const unsignedTx = await sdk.composeTradeTransaction(
-      source.address,
-      target.address,
-      !isTradeBySource,
-      tradeActions,
-      { gasLimit: 999999999 }
-    );
+    let unsignedTx: PopulatedTransaction;
+    if (isTradeBySource) {
+      unsignedTx = await sdk.composeTradeBySourceTransaction(
+        source.address,
+        target.address,
+        tradeActions,
+        0,
+        0,
+        { gasLimit: 999999999 }
+      );
+    } else {
+      unsignedTx = await sdk.composeTradeByTargetTransaction(
+        source.address,
+        target.address,
+        tradeActions,
+        0,
+        0,
+        { gasLimit: 999999999 }
+      );
+    }
+
     console.log(2);
     const tx = await signer.sendTransaction(unsignedTx);
     await tx.wait();

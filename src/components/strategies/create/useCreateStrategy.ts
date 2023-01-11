@@ -4,12 +4,11 @@ import { useMemo, useState } from 'react';
 import { useModal } from 'libs/modals';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
-import { BigNumber } from 'bignumber.js';
 
 const spenderAddress = config.carbon.poolCollection;
 
@@ -32,12 +31,8 @@ export const useCreate = () => {
   const showStep2 = !!token0 && !!token1;
 
   const approvalTokens = useMemo(() => {
-    const token0Approve =
-      !!token0 && order1.budget && !new BigNumber(order1.budget).isZero();
-    const token1Approve =
-      !!token1 && order0.budget && !new BigNumber(order0.budget).isZero();
     return [
-      ...(token0Approve
+      ...(!!token0
         ? [
             {
               ...token0,
@@ -46,7 +41,7 @@ export const useCreate = () => {
             },
           ]
         : []),
-      ...(token1Approve
+      ...(!!token1
         ? [
             {
               ...token1,
@@ -93,7 +88,7 @@ export const useCreate = () => {
           void cache.invalidateQueries({
             queryKey: QueryKey.balance(user, token1.address),
           });
-          navigate({ to: PathNames.strategies });
+          // navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
         onError: (e) => {

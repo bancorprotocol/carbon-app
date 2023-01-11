@@ -26,7 +26,7 @@ export const useGetTradeData = ({
         return { totalInput: '', totalOutput: '', tradeActions: [] };
       }
 
-      const data = await sdk.trade(
+      const data = await sdk.getTradeData(
         sourceToken,
         targetToken,
         input,

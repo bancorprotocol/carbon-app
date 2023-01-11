@@ -172,6 +172,9 @@ export const useCreateStrategy = () => {
         { gasLimit: 9999999 }
       );
 
+      console.log('order0.budget', order0.budget ?? '0');
+      console.log('order1.budget', order1.budget ?? '0');
+
       return signer!.sendTransaction(unsignedTx);
     }
   );
