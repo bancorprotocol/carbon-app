@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { orderBy } from 'lodash';
 
 type Props = {
   tradePairs: TradePair[];
@@ -13,7 +14,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
 }) => {
   return (
     <div className={'mt-20 space-y-10'}>
-      {tradePairs?.map((tradePair, i) => (
+      {orderBy(tradePairs, 'baseToken.symbol', 'asc')?.map((tradePair, i) => (
         <div key={i}>
           <button
             onClick={() => handleSelect(tradePair)}
