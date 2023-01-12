@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { sdk, useCarbonSDK } from 'libs/sdk';
+import BigNumber from 'bignumber.js';
 
 type Props = {
   sourceToken: string;
@@ -22,7 +23,10 @@ export const useGetTradeData = ({
   return useQuery(
     QueryKey.tradeData(sourceToken, targetToken, isTradeBySource, input),
     async () => {
-      if (input === '' || input === '0') {
+      const hasInvalidInput =
+        input === '' || isNaN(Number(input)) || new BigNumber(input).isZero();
+
+      if (hasInvalidInput) {
         return { totalInput: '', totalOutput: '', tradeActions: [] };
       }
 
