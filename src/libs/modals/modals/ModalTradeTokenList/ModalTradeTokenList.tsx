@@ -24,7 +24,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
     useModalTradeTokenList({ id, data });
 
   return (
-    <Modal id={id} title={'Select Token'}>
+    <Modal id={id} title={'Select Token Pair'}>
       <SearchInput
         value={''}
         setValue={() => {}}
