@@ -46,13 +46,14 @@ export const useBuySell = ({
     if (!user || !signer) {
       throw new Error('No user or signer');
     }
-    console.log(1);
+
     let unsignedTx: PopulatedTransaction;
     if (isTradeBySource) {
       unsignedTx = await sdk.composeTradeBySourceTransaction(
         source.address,
         target.address,
         tradeActions,
+        // TODO handle this
         0,
         0,
         { gasLimit: 999999999 }
@@ -62,19 +63,18 @@ export const useBuySell = ({
         source.address,
         target.address,
         tradeActions,
+        // TODO handle this
         0,
         0,
         { gasLimit: 999999999 }
       );
     }
 
-    console.log(2);
     const tx = await signer.sendTransaction(unsignedTx);
     await tx.wait();
     void sourceBalanceQuery.refetch();
     void targetBalanceQuery.refetch();
-    console.log(3);
-    console.log('tradeAction tx', tx);
+    console.log('tradeAction successful', tx);
   };
 
   const handleCTAClick = () => {
@@ -93,7 +93,6 @@ export const useBuySell = ({
 
   const onInputChange = (bySource: boolean) => {
     setIsTradeBySource(bySource);
-    console.log('onInputChange', sourceInput);
   };
 
   const rate = useMemo(
