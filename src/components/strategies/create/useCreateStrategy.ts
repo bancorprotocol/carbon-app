@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useModal } from 'libs/modals';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
-import { useNavigate } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
@@ -88,7 +88,7 @@ export const useCreate = () => {
           void cache.invalidateQueries({
             queryKey: QueryKey.balance(user, token1.address),
           });
-          // navigate({ to: PathNames.strategies });
+          navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
         },
         onError: (e) => {
