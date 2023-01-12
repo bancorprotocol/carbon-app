@@ -1,11 +1,5 @@
 import { useWeb3 } from 'libs/web3';
-import {
-  Token__factory,
-  PoolCollection__factory,
-  BancorNetwork__factory,
-  Voucher__factory,
-  Multicall__factory,
-} from 'abis/types';
+import { Token__factory, Voucher__factory } from 'abis/types';
 import { useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
 
@@ -20,34 +14,6 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  const PoolCollection = useMemo(
-    () => ({
-      read: PoolCollection__factory.connect(
-        config.carbon.poolCollection,
-        provider!
-      ),
-      write: PoolCollection__factory.connect(
-        config.carbon.poolCollection,
-        signer!
-      ),
-    }),
-    [provider, signer]
-  );
-
-  const BancorNetwork = useMemo(
-    () => ({
-      read: BancorNetwork__factory.connect(
-        config.carbon.bancorNetwork,
-        provider!
-      ),
-      write: BancorNetwork__factory.connect(
-        config.carbon.bancorNetwork,
-        signer!
-      ),
-    }),
-    [provider, signer]
-  );
-
   const Voucher = useMemo(
     () => ({
       read: Voucher__factory.connect(config.carbon.voucher, provider!),
@@ -56,13 +22,5 @@ export const useContract = () => {
     [provider, signer]
   );
 
-  const Multicall = useMemo(
-    () => ({
-      read: Multicall__factory.connect(config.utils.multicall, provider!),
-      write: Multicall__factory.connect(config.utils.multicall, signer!),
-    }),
-    [provider, signer]
-  );
-
-  return { Token, PoolCollection, BancorNetwork, Voucher, Multicall };
+  return { Token, Voucher };
 };

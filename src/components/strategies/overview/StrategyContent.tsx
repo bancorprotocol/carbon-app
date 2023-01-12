@@ -11,6 +11,7 @@ import { StrategyNotFound } from './StrategyNotFound';
 import { m, mListVariant } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
+import BigNumber from 'bignumber.js';
 
 export const StrategyContent = () => {
   const strategies = useGetUserStrategies();
@@ -33,7 +34,9 @@ export const StrategyContent = () => {
     );
 
     const sorterNum = sort === StrategySort.Recent ? -1 : 1;
-    return filtered?.sort((a, b) => sorterNum * (a.id - b.id));
+    return filtered?.sort((a, b) =>
+      new BigNumber(a.id).minus(b.id).times(sorterNum).toNumber()
+    );
   }, [search, strategies.data, filter, sort]);
 
   if (strategies && strategies.data && strategies.data.length === 0)

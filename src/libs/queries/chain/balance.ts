@@ -1,5 +1,4 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { useContract } from 'hooks/useContract';
 import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { shrinkToken } from 'utils/tokens';
@@ -9,6 +8,7 @@ import {
   useNotifications,
 } from 'libs/notifications/NotificationsProvider';
 import { QueryKey } from 'libs/queries/queryKey';
+import { useContract } from 'hooks/useContract';
 
 export const useGetTokenBalance = (
   token?: Pick<Token, 'address' | 'decimals'>
@@ -37,10 +37,10 @@ export const useGetTokenBalance = (
 
       if (address === config.tokens.ETH) {
         const res = await provider.getBalance(user!);
-        return shrinkToken(res.toString(), 18);
+        return shrinkToken(res.toString(), decimals, true);
       } else {
         const res = await Token(address).read.balanceOf(user);
-        return shrinkToken(res.toString(), decimals);
+        return shrinkToken(res.toString(), decimals, true);
       }
     },
     {
@@ -60,8 +60,8 @@ export const useGetTokenBalance = (
 export const useGetTokenBalances = (
   tokens: Pick<Token, 'address' | 'decimals'>[]
 ) => {
-  const { Token } = useContract();
   const { user, provider } = useWeb3();
+  const { Token } = useContract();
   const { dispatchNotification } = useNotifications();
 
   return useQueries({
