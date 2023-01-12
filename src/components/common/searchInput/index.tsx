@@ -5,12 +5,18 @@ interface Props {
   value: string;
   setValue: (value: string) => void;
   className?: string;
+  autoFocus?: boolean;
 }
 
 const defaultClassName =
   'block pl-[38px] pr-[38px] dark:placeholder-white-disabled dark:bg-charcoal rounded-full focus:outline-none';
 
-export const SearchInput = ({ value, setValue, className }: Props) => {
+export const SearchInput = ({
+  value,
+  setValue,
+  className,
+  autoFocus,
+}: Props) => {
   return (
     <div className="relative">
       <IconSearch className="text-graphite dark:text-white-disabled absolute ml-14 w-16" />
@@ -24,6 +30,7 @@ export const SearchInput = ({ value, setValue, className }: Props) => {
       )}
 
       <input
+        autoFocus={autoFocus}
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}

@@ -39,7 +39,6 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           user,
           t.spender
         );
-        console.log('allowance', allowance.toString());
 
         return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
       },
@@ -77,6 +76,7 @@ export const useSetUserApproval = () => {
       if (!spender) {
         throw new Error('useSetUserApproval no spenderAddress provided');
       }
+
       if (parseFloat(amount) < 0) {
         throw new Error('useSetUserApproval negative amount provided');
       }
