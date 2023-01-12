@@ -30,6 +30,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   return (
     <Modal id={id} title={'Select Token'}>
       <SearchInput
+        autoFocus
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
