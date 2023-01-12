@@ -119,10 +119,10 @@ export const useGetUserStrategies = () => {
 };
 
 interface CreateStrategyOrder {
-  budget?: string;
-  min?: string;
-  max?: string;
-  price?: string;
+  budget: string;
+  min: string;
+  max: string;
+  price: string;
 }
 
 type TokenAddressDecimals = Pick<Token, 'address' | 'decimals'>;
@@ -138,42 +138,29 @@ export const useCreateStrategy = () => {
 
   return useMutation(
     async ({ token0, token1, order0, order1 }: CreateStrategyParams) => {
-      const order0Low = order0.price
-        ? order0.price
-        : order0.min
-        ? order0.min
-        : '0';
-      const order0Max = order0.price
-        ? order0.price
-        : order0.max
-        ? order0.max
-        : '0';
+      const noPrice0 = Number(order0.price) === 0;
+      const noPrice1 = Number(order1.price) === 0;
 
-      const order1Low = order1.price
-        ? order1.price
-        : order1.min
-        ? order1.min
-        : '0';
-      const order1Max = order1.price
-        ? order1.price
-        : order1.max
-        ? order1.max
-        : '0';
+      const order0Low = noPrice0 ? order0.min : order0.price;
+      const order0Max = noPrice0 ? order0.max : order0.price;
+
+      const order1Low = noPrice1 ? order1.min : order1.price;
+      const order1Max = noPrice1 ? order1.max : order1.price;
+
+      const order0Budget = Number(order0.budget) === 0 ? '0' : order0.budget;
+      const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
 
       const unsignedTx = await sdk.createBuySellStrategy(
         token0,
         token1,
         order0Low,
         order0Max,
-        order0.budget ?? '0',
+        order0Budget,
         order1Low,
         order1Max,
-        order1.budget ?? '0',
+        order1Budget,
         { gasLimit: 9999999 }
       );
-
-      console.log('order0.budget', order0.budget ?? '0');
-      console.log('order1.budget', order1.budget ?? '0');
 
       return signer!.sendTransaction(unsignedTx);
     }

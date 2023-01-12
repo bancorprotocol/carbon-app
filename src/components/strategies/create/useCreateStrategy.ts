@@ -37,7 +37,7 @@ export const useCreate = () => {
             {
               ...token0,
               spender: spenderAddress,
-              amount: order1.budget || '0',
+              amount: order1.budget,
             },
           ]
         : []),
@@ -46,7 +46,7 @@ export const useCreate = () => {
             {
               ...token1,
               spender: spenderAddress,
-              amount: order0.budget || '0',
+              amount: order0.budget,
             },
           ]
         : []),
