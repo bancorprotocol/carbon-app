@@ -22,7 +22,7 @@ export const BudgetInput: FC<{
 }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const sanitized = sanitizeNumberInput(e.target.value, token.decimals);
-    setBudget(reduceETH(sanitized, token.address));
+    setBudget(sanitized);
   };
 
   return (
@@ -62,7 +62,9 @@ export const BudgetInput: FC<{
 
       <div className="flex items-center justify-between">
         <button
-          onClick={() => balance && setBudget(balance)}
+          onClick={() =>
+            balance && setBudget(reduceETH(balance, token.address))
+          }
           className={'text-secondary flex items-center gap-5 !text-12'}
         >
           Wallet:{' '}
