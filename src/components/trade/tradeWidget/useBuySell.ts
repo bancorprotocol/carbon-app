@@ -1,31 +1,20 @@
-import { Button } from 'components/common/button';
-import { TokenInputField } from 'components/common/TokenInputField';
-import { Token } from 'libs/tokens';
-import { useEffect, useMemo, useState } from 'react';
-import { UseQueryResult } from '@tanstack/react-query';
-import BigNumber from 'bignumber.js';
-import { useGetTradeData } from 'libs/queries/sdk/trade';
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'libs/modals';
-import { useApproval } from 'hooks/useApproval';
+import { useEffect, useMemo, useState } from 'react';
 import { config } from 'services/web3/config';
-import { sdk } from 'libs/sdk';
+import { useApproval } from 'hooks/useApproval';
+import { useGetTradeData } from 'libs/queries/sdk/trade';
 import { PopulatedTransaction } from 'ethers';
+import { sdk } from 'libs/sdk';
+import BigNumber from 'bignumber.js';
+import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 
-type Props = {
-  source: Token;
-  target: Token;
-  buy?: boolean;
-  sourceBalanceQuery: UseQueryResult<string>;
-  targetBalanceQuery: UseQueryResult<string>;
-};
-export const TradeWidgetBuySell = ({
-  buy,
+export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
   targetBalanceQuery,
-}: Props) => {
+}: TradeWidgetBuySellProps) => {
   const { user, signer } = useWeb3();
   const { openModal } = useModal();
   const [sourceInput, setSourceInput] = useState('');
@@ -140,61 +129,17 @@ export const TradeWidgetBuySell = ({
     new BigNumber(sourceBalanceQuery.data || 0).lt(sourceInput) &&
     'Insufficient balance';
 
-  if (!source || !target) return null;
-
-  return (
-    <div className={'pt-20'}>
-      <TokenInputField
-        className={'mt-5 mb-20 rounded-12 bg-black p-16'}
-        token={source}
-        isBalanceLoading={false}
-        value={sourceInput}
-        setValue={setSourceInput}
-        balance={sourceBalanceQuery.data}
-        error={errorBaseBalanceSufficient}
-        onKeystroke={() => onInputChange(true)}
-        isLoading={byTargetQuery.isFetching}
-      />
-
-      <TokenInputField
-        className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
-        token={target}
-        isBalanceLoading={false}
-        value={targetInput}
-        setValue={setTargetInput}
-        balance={targetBalanceQuery.data}
-        onKeystroke={() => onInputChange(false)}
-        isLoading={bySourceQuery.isFetching}
-      />
-      <div
-        className={
-          'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
-        }
-      >
-        {bySourceQuery.isFetching || byTargetQuery.isFetching ? (
-          'Loading...'
-        ) : (
-          <>
-            1 {source.symbol} = {rate} {target.symbol}
-          </>
-        )}
-      </div>
-      <Button
-        onClick={handleCTAClick}
-        disabled={
-          !!errorBaseBalanceSufficient ||
-          !sourceInput ||
-          !targetInput ||
-          bySourceQuery.isFetching ||
-          byTargetQuery.isFetching ||
-          approval.isLoading
-        }
-        variant={buy ? 'success' : 'error'}
-        fullWidth
-        className={'mt-20'}
-      >
-        {buy ? 'Buy' : 'Sell'}
-      </Button>
-    </div>
-  );
+  return {
+    sourceInput,
+    setSourceInput,
+    targetInput,
+    setTargetInput,
+    rate,
+    onInputChange,
+    handleCTAClick,
+    errorBaseBalanceSufficient,
+    bySourceQuery,
+    byTargetQuery,
+    approval,
+  };
 };

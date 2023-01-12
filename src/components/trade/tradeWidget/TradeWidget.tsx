@@ -1,4 +1,4 @@
-import { TradeWidgetBuySell } from 'components/trade/widget/TradeWidgetBuySell';
+import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useTrade } from 'components/trade/useTrade';
 import { Button } from 'components/common/button';
 import { useGetTokenBalance } from 'libs/queries';
