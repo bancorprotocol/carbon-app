@@ -45,8 +45,8 @@ export const useGetTradeData = ({
 
       return {
         ...data,
-        totalInput: parseFloat(data.totalInput).toString(),
-        totalOutput: parseFloat(data.totalOutput).toString(),
+        totalInput: data.totalInput,
+        totalOutput: data.totalOutput,
       };
     },
     {

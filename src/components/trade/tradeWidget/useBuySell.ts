@@ -23,6 +23,7 @@ export const useBuySell = ({
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const [tradeActions, setTradeActions] = useState<any[]>([]);
   const [rate, setRate] = useState('');
+  const [isLiquidityError, setIsLiquidityError] = useState('');
 
   const approvalTokens = [
     { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
@@ -46,6 +47,22 @@ export const useBuySell = ({
   });
 
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
+
+  const checkLiquidity = (value: string) => {
+    const check = (v: string) => new BigNumber(v).times(0.9999).gt(value);
+    const set = () => setIsLiquidityError('Insufficient liquidity');
+    setIsLiquidityError('');
+
+    if (isTradeBySource) {
+      if (check(sourceInput)) {
+        return set();
+      }
+    } else {
+      if (check(targetInput)) {
+        return set();
+      }
+    }
+  };
 
   const tradeAction = async () => {
     if (!user || !signer) {
@@ -102,21 +119,25 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (bySourceQuery.data) {
-      const { totalOutput, tradeActions, effectiveRate } = bySourceQuery.data;
+      const { totalInput, totalOutput, tradeActions, effectiveRate } =
+        bySourceQuery.data;
 
       setTargetInput(totalOutput);
       setTradeActions(tradeActions);
       setRate(effectiveRate);
+      checkLiquidity(totalInput);
     }
   }, [bySourceQuery.data]);
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      const { totalOutput, tradeActions, effectiveRate } = byTargetQuery.data;
+      const { totalInput, totalOutput, tradeActions, effectiveRate } =
+        byTargetQuery.data;
 
-      setSourceInput(totalOutput);
+      setSourceInput(totalInput);
       setTradeActions(tradeActions);
       setRate(effectiveRate);
+      checkLiquidity(totalOutput);
     }
   }, [byTargetQuery.data]);
 
@@ -143,5 +164,6 @@ export const useBuySell = ({
     byTargetQuery,
     approval,
     liquidityQuery,
+    isLiquidityError,
   };
 };
