@@ -41,7 +41,7 @@ export const DropdownMenu: FC<Props> = ({
       <m.div
         className={`${className} ${
           right ? 'right-0' : 'left-0'
-        } absolute mt-10 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
+        } absolute z-50 mt-10 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
         variants={menuVariants}
         style={{ pointerEvents: menuOpen ? 'auto' : 'none' }}
       >

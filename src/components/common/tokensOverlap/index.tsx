@@ -11,7 +11,6 @@ export const TokensOverlap = ({
   className?: string;
 }) => {
   const tokenCount = tokens.length;
-
   return (
     <div className="flex">
       {tokens.slice(0, maxLogos).map((token, idx) => (
@@ -20,7 +19,7 @@ export const TokensOverlap = ({
           src={token.logoURI}
           alt="Token Logo"
           className={`${className} z-${
-            (maxLogos - idx) * 10
+            (tokenCount - idx) * 10
           } h-30 w-30 !rounded-full border border-fog bg-fog dark:border-black dark:bg-black`}
           style={{
             marginLeft: tokens.length > 1 ? `${'-10'}px` : '0px',
