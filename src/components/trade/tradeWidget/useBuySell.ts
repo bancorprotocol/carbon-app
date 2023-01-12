@@ -9,13 +9,14 @@ import { sdk } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTradeLiquidity } from 'libs/queries/sdk/tradeLiquidity';
+import { QueryKey, useQueryClient } from 'libs/queries';
 
 export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
-  targetBalanceQuery,
 }: TradeWidgetBuySellProps) => {
+  const cache = useQueryClient();
   const { user, signer } = useWeb3();
   const { openModal } = useModal();
   const [sourceInput, setSourceInput] = useState('');
@@ -76,8 +77,8 @@ export const useBuySell = ({
         target.address,
         tradeActions,
         // TODO handle this
-        0,
-        0,
+        Date.now() + 1000 * 60 * 60 * 24 * 7,
+        1,
         { gasLimit: 999999999 }
       );
     } else {
@@ -86,17 +87,18 @@ export const useBuySell = ({
         target.address,
         tradeActions,
         // TODO handle this
-        0,
-        0,
+        Date.now() + 1000 * 60 * 60 * 24 * 7,
+        9999999999999999999999999999999999999,
         { gasLimit: 999999999 }
       );
     }
 
     const tx = await signer.sendTransaction(unsignedTx);
+    setSourceInput('');
+    setTargetInput('');
     await tx.wait();
-    void sourceBalanceQuery.refetch();
-    void targetBalanceQuery.refetch();
-    console.log('tradeAction successful', tx);
+    void cache.invalidateQueries(QueryKey.balance(user, source.address));
+    void cache.invalidateQueries(QueryKey.balance(user, target.address));
   };
 
   const handleCTAClick = () => {
