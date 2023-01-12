@@ -3,6 +3,7 @@ import { TokenInputField } from 'components/common/TokenInputField';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
+import { prettifyNumber } from 'utils/helpers';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -55,19 +56,22 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         onKeystroke={() => onInputChange(false)}
         isLoading={bySourceQuery.isFetching}
       />
-      <div
-        className={
-          'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
-        }
-      >
-        {bySourceQuery.isFetching || byTargetQuery.isFetching ? (
-          'Loading...'
-        ) : (
-          <>
-            1 {source.symbol} = {rate} {target.symbol}
-          </>
-        )}
-      </div>
+      {rate && (
+        <div
+          className={
+            'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
+          }
+        >
+          {bySourceQuery.isFetching || byTargetQuery.isFetching ? (
+            'Loading...'
+          ) : (
+            <>
+              1 {target.symbol} = {prettifyNumber(rate)} {source.symbol}
+            </>
+          )}
+        </div>
+      )}
+
       <Button
         onClick={handleCTAClick}
         disabled={

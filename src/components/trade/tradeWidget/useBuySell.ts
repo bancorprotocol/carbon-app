@@ -1,6 +1,6 @@
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'libs/modals';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { config } from 'services/web3/config';
 import { useApproval } from 'hooks/useApproval';
 import { useGetTradeData } from 'libs/queries/sdk/trade';
@@ -21,6 +21,8 @@ export const useBuySell = ({
   const [targetInput, setTargetInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const [tradeActions, setTradeActions] = useState<any[]>([]);
+  const [rate, setRate] = useState('');
+
   const approvalTokens = [
     { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
   ];
@@ -95,26 +97,23 @@ export const useBuySell = ({
     setIsTradeBySource(bySource);
   };
 
-  const rate = useMemo(
-    () => new BigNumber(targetInput).div(sourceInput).toString(),
-    [sourceInput, targetInput]
-  );
-
   useEffect(() => {
     if (bySourceQuery.data) {
-      const { totalOutput, tradeActions } = bySourceQuery.data;
+      const { totalOutput, tradeActions, effectiveRate } = bySourceQuery.data;
 
       setTargetInput(totalOutput);
       setTradeActions(tradeActions);
+      setRate(effectiveRate);
     }
   }, [bySourceQuery.data]);
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      const { totalOutput, tradeActions } = byTargetQuery.data;
+      const { totalOutput, tradeActions, effectiveRate } = byTargetQuery.data;
 
       setSourceInput(totalOutput);
       setTradeActions(tradeActions);
+      setRate(effectiveRate);
     }
   }, [byTargetQuery.data]);
 

@@ -27,7 +27,12 @@ export const useGetTradeData = ({
         input === '' || isNaN(Number(input)) || new BigNumber(input).isZero();
 
       if (hasInvalidInput) {
-        return { totalInput: '', totalOutput: '', tradeActions: [] };
+        return {
+          totalInput: '',
+          totalOutput: '',
+          tradeActions: [],
+          effectiveRate: '',
+        };
       }
 
       const data = await sdk.getTradeData(
@@ -36,6 +41,7 @@ export const useGetTradeData = ({
         input,
         !isTradeBySource
       );
+      console.log('get trade data result: ', data);
 
       return {
         ...data,
