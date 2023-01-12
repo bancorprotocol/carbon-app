@@ -26,6 +26,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     bySourceQuery,
     byTargetQuery,
     approval,
+    liquidityQuery,
   } = useBuySell(props);
 
   const { buy, source, target, sourceBalanceQuery, targetBalanceQuery } = props;
@@ -69,6 +70,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               1 {target.symbol} = {prettifyNumber(rate)} {source.symbol}
             </>
           )}
+        </div>
+      )}
+
+      {liquidityQuery.data && (
+        <div>
+          Liquidity: {prettifyNumber(liquidityQuery.data)} {target.symbol}
         </div>
       )}
 

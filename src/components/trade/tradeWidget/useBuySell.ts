@@ -8,6 +8,7 @@ import { PopulatedTransaction } from 'ethers';
 import { sdk } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
+import { useGetTradeLiquidity } from 'libs/queries/sdk/tradeLiquidity';
 
 export const useBuySell = ({
   source,
@@ -43,6 +44,8 @@ export const useBuySell = ({
     input: targetInput,
     enabled: !isTradeBySource,
   });
+
+  const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
   const tradeAction = async () => {
     if (!user || !signer) {
@@ -139,5 +142,6 @@ export const useBuySell = ({
     bySourceQuery,
     byTargetQuery,
     approval,
+    liquidityQuery,
   };
 };
