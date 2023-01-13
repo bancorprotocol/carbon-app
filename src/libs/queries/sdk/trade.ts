@@ -50,7 +50,7 @@ export const useGetTradeData = ({
       };
     },
     {
-      enabled: !!enabled && isInitialized,
+      enabled: !!enabled && isInitialized && input !== '...',
       cacheTime: 0,
       retry: 1,
       staleTime: 0,

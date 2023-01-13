@@ -39,6 +39,7 @@ export const parseSearchWith = (parser: (str: string) => any) => {
     // Try to parse any query params that might be json
     for (let key in query) {
       if (key === 'quote' || key === 'base') {
+        // eslint-disable-next-line
         query[key] = query[key];
       } else {
         const value = query[key];

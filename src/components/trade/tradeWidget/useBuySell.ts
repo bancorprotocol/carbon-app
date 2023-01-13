@@ -1,6 +1,6 @@
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'libs/modals';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { config } from 'services/web3/config';
 import { useApproval } from 'hooks/useApproval';
 import { useGetTradeData } from 'libs/queries/sdk/trade';
@@ -10,6 +10,7 @@ import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTradeLiquidity } from 'libs/queries/sdk/tradeLiquidity';
 import { QueryKey, useQueryClient } from 'libs/queries';
+import { prettifyNumber } from 'utils/helpers';
 
 export const useBuySell = ({
   source,
@@ -49,25 +50,28 @@ export const useBuySell = ({
 
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
-  const checkLiquidity = useCallback(
-    (value: string) => {
-      const check = (v: string) => new BigNumber(v).times(0.9999).gt(value);
-      const set = () => setIsLiquidityError('Insufficient liquidity');
-      setIsLiquidityError('');
+  const checkLiquidity = (value: string) => {
+    const check = (v: string) => new BigNumber(v).times(0.9999).gt(value);
+    const set = () =>
+      setIsLiquidityError(
+        `Available liquidity: ${prettifyNumber(liquidityQuery.data || '0')} ${
+          target.symbol
+        }`
+      );
+    setIsLiquidityError('');
 
-      if (isTradeBySource) {
-        if (check(sourceInput)) {
-          return set();
-        }
-      } else {
-        if (check(targetInput)) {
-          return set();
-        }
+    if (isTradeBySource) {
+      if (check(sourceInput)) {
+        setTargetInput('...');
+        return set();
       }
-    },
-    [isTradeBySource, sourceInput, targetInput]
-  );
-
+    } else {
+      if (check(targetInput)) {
+        setSourceInput('...');
+        return set();
+      }
+    }
+  };
   const tradeAction = async () => {
     if (!user || !signer) {
       throw new Error('No user or signer');
@@ -132,7 +136,9 @@ export const useBuySell = ({
       setRate(effectiveRate);
       checkLiquidity(totalInput);
     }
-  }, [bySourceQuery.data, checkLiquidity]);
+    // TODO depency array issues
+    // eslint-disable-next-line
+  }, [bySourceQuery.data]);
 
   useEffect(() => {
     if (byTargetQuery.data) {
@@ -144,7 +150,9 @@ export const useBuySell = ({
       setRate(effectiveRate);
       checkLiquidity(totalOutput);
     }
-  }, [byTargetQuery.data, checkLiquidity]);
+    // TODO depency array issues
+    // eslint-disable-next-line
+  }, [byTargetQuery.data]);
 
   useEffect(() => {
     setSourceInput('');
