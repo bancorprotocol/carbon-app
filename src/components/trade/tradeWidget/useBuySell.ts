@@ -1,6 +1,6 @@
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'libs/modals';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { config } from 'services/web3/config';
 import { useApproval } from 'hooks/useApproval';
 import { useGetTradeData } from 'libs/queries/sdk/trade';
@@ -9,13 +9,14 @@ import { sdk } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTradeLiquidity } from 'libs/queries/sdk/tradeLiquidity';
+import { QueryKey, useQueryClient } from 'libs/queries';
 
 export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
-  targetBalanceQuery,
 }: TradeWidgetBuySellProps) => {
+  const cache = useQueryClient();
   const { user, signer } = useWeb3();
   const { openModal } = useModal();
   const [sourceInput, setSourceInput] = useState('');
@@ -23,6 +24,7 @@ export const useBuySell = ({
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const [tradeActions, setTradeActions] = useState<any[]>([]);
   const [rate, setRate] = useState('');
+  const [isLiquidityError, setIsLiquidityError] = useState('');
 
   const approvalTokens = [
     { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
@@ -47,6 +49,25 @@ export const useBuySell = ({
 
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
+  const checkLiquidity = useCallback(
+    (value: string) => {
+      const check = (v: string) => new BigNumber(v).times(0.9999).gt(value);
+      const set = () => setIsLiquidityError('Insufficient liquidity');
+      setIsLiquidityError('');
+
+      if (isTradeBySource) {
+        if (check(sourceInput)) {
+          return set();
+        }
+      } else {
+        if (check(targetInput)) {
+          return set();
+        }
+      }
+    },
+    [isTradeBySource, sourceInput, targetInput]
+  );
+
   const tradeAction = async () => {
     if (!user || !signer) {
       throw new Error('No user or signer');
@@ -59,8 +80,8 @@ export const useBuySell = ({
         target.address,
         tradeActions,
         // TODO handle this
-        0,
-        0,
+        Date.now() + 1000 * 60 * 60 * 24 * 7,
+        1,
         { gasLimit: 999999999 }
       );
     } else {
@@ -69,17 +90,18 @@ export const useBuySell = ({
         target.address,
         tradeActions,
         // TODO handle this
-        0,
-        0,
+        Date.now() + 1000 * 60 * 60 * 24 * 7,
+        9999999999999999999999999999999999999,
         { gasLimit: 999999999 }
       );
     }
 
     const tx = await signer.sendTransaction(unsignedTx);
+    setSourceInput('');
+    setTargetInput('');
     await tx.wait();
-    void sourceBalanceQuery.refetch();
-    void targetBalanceQuery.refetch();
-    console.log('tradeAction successful', tx);
+    void cache.invalidateQueries(QueryKey.balance(user, source.address));
+    void cache.invalidateQueries(QueryKey.balance(user, target.address));
   };
 
   const handleCTAClick = () => {
@@ -102,23 +124,27 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (bySourceQuery.data) {
-      const { totalOutput, tradeActions, effectiveRate } = bySourceQuery.data;
+      const { totalInput, totalOutput, tradeActions, effectiveRate } =
+        bySourceQuery.data;
 
       setTargetInput(totalOutput);
       setTradeActions(tradeActions);
       setRate(effectiveRate);
+      checkLiquidity(totalInput);
     }
-  }, [bySourceQuery.data]);
+  }, [bySourceQuery.data, checkLiquidity]);
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      const { totalOutput, tradeActions, effectiveRate } = byTargetQuery.data;
+      const { totalInput, totalOutput, tradeActions, effectiveRate } =
+        byTargetQuery.data;
 
-      setSourceInput(totalOutput);
+      setSourceInput(totalInput);
       setTradeActions(tradeActions);
       setRate(effectiveRate);
+      checkLiquidity(totalOutput);
     }
-  }, [byTargetQuery.data]);
+  }, [byTargetQuery.data, checkLiquidity]);
 
   useEffect(() => {
     setSourceInput('');
@@ -143,5 +169,6 @@ export const useBuySell = ({
     byTargetQuery,
     approval,
     liquidityQuery,
+    isLiquidityError,
   };
 };

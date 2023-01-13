@@ -27,7 +27,6 @@ export const TokenInputField: FC<Props> = ({
   error,
   className,
   onKeystroke,
-  isLoading,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -80,9 +79,7 @@ export const TokenInputField: FC<Props> = ({
             />
             <span className={'font-weight-500'}>{token.symbol}</span>
           </div>
-          {isLoading ? (
-            <div>loading</div>
-          ) : (
+          {
             <input
               ref={inputRef}
               value={
@@ -103,7 +100,7 @@ export const TokenInputField: FC<Props> = ({
                 error ? 'text-error-500' : 'text-white'
               }`}
             />
-          )}
+          }
         </div>
 
         <button
