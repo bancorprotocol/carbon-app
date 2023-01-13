@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bancor/carbon-sdk": "^0.0.19-DEV",
+    "@bancor/carbon-sdk": "^0.0.20-DEV",
     "@coinbase/wallet-sdk": "^3.5.3",
     "@ethersproject/providers": "^5.7.1",
     "@tanstack/react-location": "^3.7.4",
