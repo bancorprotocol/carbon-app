@@ -60,8 +60,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         isLoading={bySourceQuery.isFetching}
         error={isLiquidityError}
         onErrorClick={() => {
-          onInputChange(false);
           setTargetInput(liquidityQuery.data || '0');
+          onInputChange(false);
         }}
       />
       <div
