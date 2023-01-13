@@ -5,6 +5,7 @@ import {
   TradePair,
 } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { useMemo, useState } from 'react';
+import { orderBy } from 'lodash';
 
 type Props = {
   id: string;
@@ -35,11 +36,15 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
     );
 
     if (value1) {
-      return baseTokens.filter((pair) =>
-        pair.quoteToken.symbol.toLowerCase().includes(value1)
+      return orderBy(
+        baseTokens.filter((pair) =>
+          pair.quoteToken.symbol.toLowerCase().includes(value1)
+        ),
+        'baseToken.symbol',
+        'asc'
       );
     }
-    return baseTokens;
+    return orderBy(baseTokens, 'baseToken.symbol', 'asc');
   }, [tradePairs, search]);
 
   const handleSelect = (tradePair: TradePair) => {

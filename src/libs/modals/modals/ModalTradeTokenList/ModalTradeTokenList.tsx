@@ -37,6 +37,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         <ModalTokenListLoading />
       ) : (
         <ModalTradeTokenListContent
+          search={search}
           tradePairs={tradePairs}
           handleSelect={handleSelect}
         />

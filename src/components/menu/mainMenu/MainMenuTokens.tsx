@@ -10,10 +10,14 @@ export const MainMenuTokens = () => {
   return (
     <button
       onClick={openTradePairList}
-      className={'flex items-center space-x-10 rounded-full bg-silver p-10'}
+      className={
+        'flex items-center space-x-10 rounded-full bg-silver py-5 pl-15 pr-15'
+      }
     >
       <TokensOverlap tokens={[baseToken, quoteToken]} />
-      <span>{`${baseToken.symbol}/${quoteToken.symbol}`}</span>
+      <span
+        className={'text-14 font-weight-500'}
+      >{`${baseToken.symbol} - ${quoteToken.symbol}`}</span>
       <IconChevron className="w-14" />
     </button>
   );
