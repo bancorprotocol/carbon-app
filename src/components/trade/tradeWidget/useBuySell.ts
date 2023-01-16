@@ -128,13 +128,17 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (bySourceQuery.data) {
-      const { totalInput, totalOutput, tradeActions, effectiveRate } =
-        bySourceQuery.data;
+      const {
+        totalSourceAmount,
+        totalTargetAmount,
+        tradeActions,
+        effectiveRate,
+      } = bySourceQuery.data;
 
-      setTargetInput(totalOutput);
+      setTargetInput(totalTargetAmount);
       setTradeActions(tradeActions);
       setRate(effectiveRate);
-      checkLiquidity(totalInput);
+      checkLiquidity(totalSourceAmount);
     }
     // TODO depency array issues
     // eslint-disable-next-line
@@ -142,13 +146,17 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      const { totalInput, totalOutput, tradeActions, effectiveRate } =
-        byTargetQuery.data;
+      const {
+        totalSourceAmount,
+        totalTargetAmount,
+        tradeActions,
+        effectiveRate,
+      } = byTargetQuery.data;
 
-      setSourceInput(totalInput);
+      setSourceInput(totalSourceAmount);
       setTradeActions(tradeActions);
       setRate(effectiveRate);
-      checkLiquidity(totalOutput);
+      checkLiquidity(totalTargetAmount);
     }
     // TODO depency array issues
     // eslint-disable-next-line
