@@ -16,8 +16,6 @@ export const Label: FC<LabelProps & VariantProps<typeof labelStyles>> = ({
   children,
   label,
   msg,
-  // eslint-disable-next-line
-  msgType,
   ...props
 }) => {
   return (

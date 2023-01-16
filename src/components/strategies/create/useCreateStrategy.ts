@@ -9,7 +9,6 @@ import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
-import { BigNumber } from 'bignumber.js';
 import { useNotifications } from 'libs/notifications/NotificationsProvider';
 
 const spenderAddress = config.carbon.poolCollection;
