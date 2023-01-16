@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { sdk, useCarbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
+import { TWO_SECONDS_IN_MS } from 'utils/time';
 
 type Props = {
   sourceToken: string;
@@ -28,8 +29,8 @@ export const useGetTradeData = ({
 
       if (hasInvalidInput) {
         return {
-          totalInput: '',
-          totalOutput: '',
+          totalSourceAmount: '',
+          totalTargetAmount: '',
           tradeActions: [],
           effectiveRate: '',
         };
@@ -43,17 +44,13 @@ export const useGetTradeData = ({
       );
       console.log('get trade data result: ', data);
 
-      return {
-        ...data,
-        totalInput: data.totalInput,
-        totalOutput: data.totalOutput,
-      };
+      return data;
     },
     {
-      enabled: !!enabled && isInitialized,
+      enabled: !!enabled && isInitialized && input !== '...',
       cacheTime: 0,
       retry: 1,
-      staleTime: 0,
+      refetchInterval: TWO_SECONDS_IN_MS,
     }
   );
 };

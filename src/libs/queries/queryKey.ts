@@ -37,4 +37,11 @@ export namespace QueryKey {
     isTradeBySource,
     amount,
   ];
+
+  export const tradeLiquidity = (token0: string, token1: string) => [
+    ..._sdk,
+    'liquidity',
+    token0,
+    token1,
+  ];
 }

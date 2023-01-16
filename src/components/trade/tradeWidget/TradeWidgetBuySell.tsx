@@ -59,6 +59,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         onKeystroke={() => onInputChange(false)}
         isLoading={bySourceQuery.isFetching}
         error={isLiquidityError}
+        onErrorClick={() => {
+          setTargetInput(liquidityQuery.data || '0');
+          onInputChange(false);
+        }}
       />
       <div
         className={

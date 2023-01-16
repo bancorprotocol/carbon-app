@@ -10,8 +10,8 @@ type Props = {
   token: Token;
   balance?: string;
   isBalanceLoading: boolean;
-  setError?: (error: string) => void;
   error?: string | false;
+  onErrorClick?: () => void;
   className?: string;
   onKeystroke?: () => void;
   isLoading?: boolean;
@@ -25,6 +25,7 @@ export const TokenInputField: FC<Props> = ({
   balance,
   isBalanceLoading,
   error,
+  onErrorClick,
   className,
   onKeystroke,
 }) => {
@@ -55,7 +56,14 @@ export const TokenInputField: FC<Props> = ({
     <>
       <div className={'flex justify-between text-14'}>
         <div className={'text-white/50'}>{title}</div>
-        <div className={'font-weight-500 text-error-500'}>{error}</div>
+        <div
+          className={`font-weight-500 text-error-500 ${
+            onErrorClick ? 'cursor-pointer' : ''
+          }`}
+          onClick={onErrorClick}
+        >
+          {error}
+        </div>
       </div>
       <div
         className={`cursor-text ${
@@ -83,7 +91,9 @@ export const TokenInputField: FC<Props> = ({
             <input
               ref={inputRef}
               value={
-                !isFocused
+                value === '...'
+                  ? value
+                  : !isFocused
                   ? !value
                     ? ''
                     : !isActive

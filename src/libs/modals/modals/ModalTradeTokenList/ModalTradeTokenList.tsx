@@ -20,14 +20,14 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   id,
   data,
 }) => {
-  const { tradePairs, isLoading, isError, handleSelect } =
+  const { tradePairs, isLoading, isError, handleSelect, search, setSearch } =
     useModalTradeTokenList({ id, data });
 
   return (
     <Modal id={id} title={'Select Token Pair'}>
       <SearchInput
-        value={''}
-        setValue={() => {}}
+        value={search}
+        setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
       />
 
@@ -37,6 +37,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         <ModalTokenListLoading />
       ) : (
         <ModalTradeTokenListContent
+          search={search}
           tradePairs={tradePairs}
           handleSelect={handleSelect}
         />

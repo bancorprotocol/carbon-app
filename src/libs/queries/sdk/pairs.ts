@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
-import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'libs/tokens';
 import { sdk, useCarbonSDK } from 'libs/sdk';
+import { TWO_SECONDS_IN_MS } from 'utils/time';
 
 export const useGetTradePairsData = () => {
   const { isInitialized } = useCarbonSDK();
@@ -39,6 +39,6 @@ export const useGetTradePairsData = () => {
     },
     enabled: !!tokens.length && isInitialized,
     retry: 1,
-    staleTime: ONE_DAY_IN_MS,
+    refetchInterval: TWO_SECONDS_IN_MS,
   });
 };
