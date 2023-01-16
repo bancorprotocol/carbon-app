@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js';
 import { sdk } from 'libs/sdk/carbonSdk';
 import { useContract } from 'hooks/useContract';
 import { useCarbonSDK } from 'libs/sdk';
+import { TWO_SECONDS_IN_MS } from 'utils/time';
 
 export enum StrategyStatus {
   Active,
@@ -114,7 +115,10 @@ export const useGetUserStrategies = () => {
 
       return await Promise.all(promises);
     },
-    { enabled: tokens.length > 0 && isInitialized }
+    {
+      enabled: tokens.length > 0 && isInitialized,
+      refetchInterval: TWO_SECONDS_IN_MS,
+    }
   );
 };
 
