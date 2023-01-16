@@ -3,13 +3,16 @@ import { useModal } from 'libs/modals';
 import { useEffect, useState } from 'react';
 import { config } from 'services/web3/config';
 import { useApproval } from 'hooks/useApproval';
-import { useGetTradeData } from 'libs/queries/sdk/trade';
 import { PopulatedTransaction } from 'ethers';
 import { sdk } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import { useGetTradeLiquidity } from 'libs/queries/sdk/tradeLiquidity';
-import { QueryKey, useQueryClient } from 'libs/queries';
+import {
+  QueryKey,
+  useQueryClient,
+  useGetTradeLiquidity,
+  useGetTradeData,
+} from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 
 export const useBuySell = ({
