@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bancor/carbon-sdk": "^0.0.21-DEV",
     "@coinbase/wallet-sdk": "^3.5.3",
     "@ethersproject/providers": "^5.7.1",
     "@tanstack/react-location": "^3.7.4",
@@ -39,7 +40,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "framer-motion": "^7.6.1",
+    "framer-motion": "7.6.7",
     "fuse.js": "^6.6.2",
     "husky": "^8.0.0",
     "is-ci": "^3.0.1",

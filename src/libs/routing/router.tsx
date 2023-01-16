@@ -5,8 +5,11 @@ import {
 } from '@tanstack/react-location';
 import { routes } from 'libs/routing/routes';
 import { ReactLocationDevtools } from '@tanstack/react-location-devtools';
+import { parseSearchWith } from 'libs/routing/utils';
 
-const location = new ReactLocation();
+const location = new ReactLocation({
+  parseSearch: parseSearchWith((search) => JSON.parse(search)),
+});
 
 export const Router: FC<{ children: ReactNode }> = ({ children }) => {
   return (

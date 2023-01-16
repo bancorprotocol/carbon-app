@@ -8,11 +8,12 @@ import { ApprovalToken, useApproval } from 'hooks/useApproval';
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
+  buttonLabel?: string;
 };
 
-export const ModalCreateConfirm: ModalFC<ModalCreateConfirmData> = ({
+export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   id,
-  data: { approvalTokens, onConfirm },
+  data: { approvalTokens, onConfirm, buttonLabel = 'Confirm' },
 }) => {
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
@@ -41,7 +42,7 @@ export const ModalCreateConfirm: ModalFC<ModalCreateConfirmData> = ({
           closeModal(id);
         }}
       >
-        Create Strategy
+        {buttonLabel}
       </Button>
     </Modal>
   );

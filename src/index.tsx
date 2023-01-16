@@ -12,6 +12,7 @@ import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { TokensProvider } from 'libs/tokens';
+import { CarbonSDKProvider } from 'libs/sdk';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,19 +20,21 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <LazyMotion>
-      <QueryProvider>
-        <TokensProvider>
-          <NotificationProvider>
-            <Web3ReactWrapper>
-              <Router>
-                <ModalProvider>
-                  <App />
-                </ModalProvider>
-              </Router>
-            </Web3ReactWrapper>
-          </NotificationProvider>
-        </TokensProvider>
-      </QueryProvider>
+      <CarbonSDKProvider>
+        <QueryProvider>
+          <TokensProvider>
+            <NotificationProvider>
+              <Web3ReactWrapper>
+                <Router>
+                  <ModalProvider>
+                    <App />
+                  </ModalProvider>
+                </Router>
+              </Web3ReactWrapper>
+            </NotificationProvider>
+          </TokensProvider>
+        </QueryProvider>
+      </CarbonSDKProvider>
     </LazyMotion>
   </React.StrictMode>
 );

@@ -34,32 +34,22 @@ export const useCreate = () => {
   const showStep2 = !!token0 && !!token1;
 
   const approvalTokens = useMemo(() => {
-    const token0Approve =
-      !!token0 && order1.budget && !new BigNumber(order1.budget).isZero();
-    const token1Approve =
-      !!token1 && order0.budget && !new BigNumber(order0.budget).isZero();
     return [
-      ...(token0Approve
+      ...(!!token0
         ? [
             {
-              tokenAddress: token0.address,
-              spenderAddress,
-              amount: order1.budget || '0',
-              decimals: token0.decimals,
-              logoURI: token0.logoURI,
-              symbol: token0.symbol,
+              ...token0,
+              spender: spenderAddress,
+              amount: order1.budget,
             },
           ]
         : []),
-      ...(token1Approve
+      ...(!!token1
         ? [
             {
-              tokenAddress: token1.address,
-              spenderAddress,
-              amount: order0.budget || '0',
-              decimals: token1.decimals,
-              logoURI: token1.logoURI,
-              symbol: token1.symbol,
+              ...token1,
+              spender: spenderAddress,
+              amount: order0.budget,
             },
           ]
         : []),
@@ -93,6 +83,7 @@ export const useCreate = () => {
       {
         onSuccess: async (tx) => {
           createStrategyNtfc(tx.hash);
+          if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
           void cache.invalidateQueries({

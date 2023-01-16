@@ -1,46 +1,17 @@
-import { Token, useTokens } from 'libs/tokens';
-import { useCallback, useEffect, useState } from 'react';
-import { config } from 'services/web3/config';
-import { TradeWidget } from 'components/trade/TradeWidget';
-import { Page } from 'components/common/page';
+import { TradeWidget } from 'components/trade/tradeWidget/TradeWidget';
+import { OrderBookWidget } from 'components/trade/orderWidget/OrderBookWidget';
+import { DepthChartWidget } from 'components/trade/depthChartWidget/DepthChartWidget';
 
-interface TradePageProps {
-  from?: string;
-  to?: string;
-}
-
-export const TradePage = ({ from, to }: TradePageProps) => {
-  const { tokens } = useTokens();
-
-  const ethOrFirst = useCallback(() => {
-    const eth = tokens?.find((x) => x.address === config.tokens.ETH);
-    return eth ? eth : tokens ? tokens[0] : undefined;
-  }, [tokens]);
-
-  const [fromToken, setFromToken] = useState(ethOrFirst());
-  const [toToken, setToToken] = useState<Token | undefined>();
-
-  useEffect(() => {
-    if (tokens) {
-      if (from) {
-        const fromToken = tokens.find((x) => x.address === from);
-        if (fromToken) setFromToken(fromToken);
-        else setFromToken(ethOrFirst());
-      } else setFromToken(ethOrFirst());
-
-      if (to) {
-        const toToken = tokens.find((x) => x.address === to);
-        if (toToken) setToToken(toToken);
-        else setToToken(undefined);
-      } else setToToken(undefined);
-    }
-  }, [from, to, tokens, ethOrFirst]);
-
+export const TradePage = () => {
   return (
-    <Page title={'Trade'}>
-      <div className="mx-auto max-w-[485px]">
-        <TradeWidget from={fromToken} to={toToken} />
+    <div className="mx-auto mt-50 grid max-w-[1280px] grid-cols-12 gap-20 px-10 pb-30 md:px-20 xl:px-50">
+      <div className={'col-span-4'}>
+        <OrderBookWidget />
       </div>
-    </Page>
+      <div className={'col-span-8 space-y-20'}>
+        <TradeWidget />
+        <DepthChartWidget />
+      </div>
+    </div>
   );
 };

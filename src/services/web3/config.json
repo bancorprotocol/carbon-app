@@ -6,9 +6,8 @@
     "ZERO": "0x0000000000000000000000000000000000000000"
   },
   "carbon": {
-    "poolCollection": "",
-    "bancorNetwork": "",
-    "voucher": ""
+    "poolCollection": "0x1f9344e9e593f9fBFc4a87d1914f5E3973fE54DA",
+    "voucher": "0xD88c3AA46a100694926c6a8c969835ee6F773128"
   },
   "utils": {
     "multicall": "0x5ba1e12693dc8f9c48aad8770482f4739beed696"
