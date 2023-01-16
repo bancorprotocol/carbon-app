@@ -28,8 +28,8 @@ export const useGetTradeData = ({
 
       if (hasInvalidInput) {
         return {
-          totalInput: '',
-          totalOutput: '',
+          totalSourceAmount: '',
+          totalTargetAmount: '',
           tradeActions: [],
           effectiveRate: '',
         };
@@ -43,11 +43,7 @@ export const useGetTradeData = ({
       );
       console.log('get trade data result: ', data);
 
-      return {
-        ...data,
-        totalInput: data.totalInput,
-        totalOutput: data.totalOutput,
-      };
+      return data;
     },
     {
       enabled: !!enabled && isInitialized && input !== '...',
