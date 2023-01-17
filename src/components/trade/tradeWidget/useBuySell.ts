@@ -1,6 +1,6 @@
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'libs/modals';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { config } from 'services/web3/config';
 import { useApproval } from 'hooks/useApproval';
 import { PopulatedTransaction } from 'ethers';
@@ -14,12 +14,14 @@ import {
   useGetTradeData,
 } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
+import { useNotifications } from 'libs/notifications';
 
 export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
 }: TradeWidgetBuySellProps) => {
+  const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
   const { user, signer } = useWeb3();
   const { openModal } = useModal();
@@ -30,9 +32,13 @@ export const useBuySell = ({
   const [rate, setRate] = useState('');
   const [isLiquidityError, setIsLiquidityError] = useState('');
 
-  const approvalTokens = [
-    { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
-  ];
+  const approvalTokens = useMemo(
+    () => [
+      { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
+    ],
+    [source, sourceInput]
+  );
+
   const approval = useApproval(approvalTokens);
 
   const bySourceQuery = useGetTradeData({
@@ -75,7 +81,7 @@ export const useBuySell = ({
       }
     }
   };
-  const tradeAction = async () => {
+  const tradeAction = useCallback(async () => {
     if (!user || !signer) {
       throw new Error('No user or signer');
     }
@@ -104,14 +110,35 @@ export const useBuySell = ({
     }
 
     const tx = await signer.sendTransaction(unsignedTx);
+    dispatchNotification('trade', {
+      txHash: tx.hash,
+      amount: sourceInput,
+      from: source.symbol,
+      to: target.symbol,
+    });
     setSourceInput('');
     setTargetInput('');
+
+    void cache.invalidateQueries(
+      QueryKey.approval(user, source.address, config.carbon.poolCollection)
+    );
+
     await tx.wait();
     void cache.invalidateQueries(QueryKey.balance(user, source.address));
     void cache.invalidateQueries(QueryKey.balance(user, target.address));
-  };
+  }, [
+    tradeActions,
+    isTradeBySource,
+    source,
+    target,
+    user,
+    signer,
+    cache,
+    dispatchNotification,
+    sourceInput,
+  ]);
 
-  const handleCTAClick = () => {
+  const handleCTAClick = useCallback(() => {
     if (!user) {
       openModal('wallet', undefined);
     } else if (approval.approvalRequired) {
@@ -123,7 +150,7 @@ export const useBuySell = ({
     } else {
       tradeAction();
     }
-  };
+  }, [approval, tradeAction, user, openModal, approvalTokens]);
 
   const onInputChange = (bySource: boolean) => {
     setIsTradeBySource(bySource);

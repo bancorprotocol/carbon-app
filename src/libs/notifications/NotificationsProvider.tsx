@@ -1,50 +1,52 @@
 import { dayjs } from 'libs/dayjs';
-import { useInterval } from 'hooks/useInterval';
-import { useWeb3 } from 'libs/web3/Web3Provider';
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { useWeb3 } from 'libs/web3';
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import { uuid } from 'utils/helpers';
+import { NOTIFICATIONS_MAP } from 'libs/notifications/notifications';
+import {
+  DispatchNotification,
+  NotificationsContext,
+  Notification,
+  NotificationStatus,
+} from 'libs/notifications/types';
+import { useInterval } from 'hooks/useInterval';
+import { lsService } from 'services/localeStorage';
+import { NotificationLine } from 'libs/notifications/NotificationLine';
+import { AnimatePresence, motion } from 'framer-motion';
 
-export enum NotificationStatus {
-  Pending,
-  Failed,
-  Success,
-}
-
-export interface Notification {
-  id: string;
-  status: NotificationStatus;
-  title: string;
-  description: string;
-  timestamp: number;
-  txHash?: string;
-  successTitle?: string;
-  successDesc?: string;
-  failedTitle?: string;
-  failedDesc?: string;
-}
-
-interface NotificationsContext {
-  notifications: Notification[];
-  removeNotification: (id: string) => void;
-  clearNotification: () => void;
-  rejectNotification: () => void;
-  createStrategyNtfc: (txHash: string) => void;
-  editStrategyNameNtfc: (txHash: string) => void;
-  withdrawStrategyNtfc: (txHash: string) => void;
-  deleteStrategyNtfc: (txHash: string) => void;
-  tradeNtfc: (txHash: string, amount: string, from: string, to: string) => void;
-}
+const notificationVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0.2,
+    transition: { type: 'spring' },
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.2,
+    transition: { type: 'spring' },
+  },
+  hover: { scale: 1.05, transition: { type: 'spring' } },
+};
 
 const defaultValue: NotificationsContext = {
   notifications: [],
+  alerts: [],
+  dispatchNotification: () => {},
   removeNotification: () => {},
-  clearNotification: () => {},
-  rejectNotification: () => {},
-  createStrategyNtfc: () => {},
-  editStrategyNameNtfc: () => {},
-  withdrawStrategyNtfc: () => {},
-  deleteStrategyNtfc: () => {},
-  tradeNtfc: () => {},
+  clearNotifications: () => {},
+  dismissAlert: () => {},
 };
 
 const NotificationCTX = createContext<NotificationsContext>(defaultValue);
@@ -52,173 +54,116 @@ const NotificationCTX = createContext<NotificationsContext>(defaultValue);
 export const NotificationProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>(
+    lsService.getItem('notifications') || []
+  );
   const { provider } = useWeb3();
 
-  const dispatchNotification = (
-    notification: Omit<Notification, 'id' | 'timestamp'>
-  ) => {
-    setNotifications((prevState) => [
-      ...prevState,
-      {
-        id: uuid(),
-        status: notification.status,
-        title: notification.title,
-        description: notification.description,
-        timestamp: dayjs().unix(),
-        txHash: notification.txHash,
-      },
-    ]);
-  };
+  const alerts = useMemo(
+    () => notifications.filter((n) => !!n.showAlert),
+    [notifications]
+  );
 
-  const setNotification = (notification: Notification) => {
-    setNotifications(
-      notifications.map((n) =>
-        n.id === notification.id
-          ? {
-              id: notification.id,
-              status: notification.status,
-              title: notification.title,
-              description: notification.description,
-              timestamp: notification.timestamp,
-              txHash: notification.txHash,
-            }
-          : n
-      )
+  const _applyChanges = useCallback((newNotifications: Notification[]) => {
+    if (newNotifications.length > 100) {
+      newNotifications.splice(0, 1);
+    }
+    setNotifications(newNotifications);
+    const persisted = newNotifications.filter((n) => !n.nonPersistent);
+    lsService.setItem('notifications', persisted);
+  }, []);
+
+  const _updateNotificationStatus = (
+    id: string,
+    status: NotificationStatus
+  ) => {
+    _applyChanges(
+      notifications.map((n) => (n.id === id ? { ...n, status } : n))
     );
   };
 
-  const removeNotification = (id: string) => {
-    const newNot = notifications.filter((no) => no.id !== id);
-    setNotifications(newNot);
-  };
-
-  const clearNotification = () => {
-    setNotifications([]);
-  };
-
-  const checkStatus = async (notification: Notification) => {
-    if (!notification.txHash) return;
+  const _checkStatus = async (n: Notification) => {
+    if (!n.txHash) return;
     try {
-      const tx = await provider?.getTransactionReceipt(notification.txHash);
-      if (tx)
-        setNotification({
-          id: notification.id,
-          status: tx.status
-            ? NotificationStatus.Success
-            : NotificationStatus.Failed,
-          title: tx.status
-            ? notification.successTitle ?? ''
-            : notification.failedTitle ?? '',
-          description: tx.status
-            ? notification?.successDesc ?? ''
-            : notification?.failedDesc ?? '',
-          timestamp: notification.timestamp,
-        });
-    } catch (e: any) {}
+      if (!provider) {
+        throw new Error('No provider');
+      }
+      const tx = await provider.getTransactionReceipt(n.txHash);
+      if (tx && tx.status !== null) {
+        const status: NotificationStatus = tx.status ? 'success' : 'failed';
+        _updateNotificationStatus(n.id, status);
+      }
+    } catch (e: any) {
+      console.log('Error checking tx status', e.message);
+    }
   };
 
   useInterval(async () => {
     notifications
-      .filter((n) => n.status === NotificationStatus.Pending)
-      .forEach((n) => checkStatus(n));
+      .filter((n) => n.status === 'pending')
+      .forEach((n) => _checkStatus(n));
   }, 2000);
 
-  const rejectNotification = () => {
-    dispatchNotification({
-      status: NotificationStatus.Failed,
-      title: 'Transaction Rejected',
-      description:
-        'You rejected the trade. If this was by mistake, please try again.',
-    });
+  const dispatchNotification: DispatchNotification = useCallback(
+    (key, data) => {
+      const notificationNew = NOTIFICATIONS_MAP[key](data);
+      _applyChanges([
+        ...notifications,
+        { ...notificationNew, id: uuid(), timestamp: dayjs().unix() },
+      ]);
+    },
+    [notifications, _applyChanges]
+  );
+
+  const removeNotification = (id: string) => {
+    const newNot = notifications.filter((no) => no.id !== id);
+    _applyChanges(newNot);
   };
 
-  const createStrategyNtfc = (txHash: string) => {
-    dispatchNotification({
-      status: NotificationStatus.Pending,
-      title: 'Pending Confirmation',
-      description: 'New strategy is being created',
-      successTitle: 'Success',
-      successDesc: 'New strategy was successfully created',
-      failedTitle: 'Transaction Failed',
-      failedDesc: 'New strategy creation have failed',
-      txHash,
-    });
+  const dismissAlert = (id: string) => {
+    _applyChanges(
+      notifications.map((n) => (n.id === id ? { ...n, showAlert: false } : n))
+    );
   };
 
-  const editStrategyNameNtfc = (txHash: string) => {
-    dispatchNotification({
-      status: NotificationStatus.Pending,
-      title: 'Pending Confirmation',
-      description: 'Strategy name is being updated',
-      successTitle: 'Success',
-      successDesc: 'Strategy name was updated successfully',
-      failedTitle: 'Transaction Failed',
-      failedDesc: 'Strategy name update have failed',
-      txHash,
-    });
-  };
-
-  const withdrawStrategyNtfc = (txHash: string) => {
-    dispatchNotification({
-      status: NotificationStatus.Pending,
-      title: 'Pending Confirmation',
-      description: 'Strategy budget is being withdrawn',
-      successTitle: 'Success',
-      successDesc: 'Strategy budget was successfully withdrawn',
-      failedTitle: 'Transaction Failed',
-      failedDesc: 'Strategy budget withdrawal have failed',
-      txHash,
-    });
-  };
-
-  const deleteStrategyNtfc = (txHash: string) => {
-    dispatchNotification({
-      status: NotificationStatus.Pending,
-      title: 'Pending Confirmation',
-      description: 'Strategy deletion is being processed',
-      successTitle: 'Success',
-      successDesc:
-        'Strategy was successfully deleted and all associated funds have been withdrawn to your wallet',
-      failedTitle: 'Transaction Failed',
-      failedDesc: 'Strategy deletion have failed',
-      txHash,
-    });
-  };
-
-  const tradeNtfc = (
-    txHash: string,
-    amount: string,
-    from: string,
-    to: string
-  ) => {
-    dispatchNotification({
-      status: NotificationStatus.Pending,
-      title: 'Pending Confirmation',
-      description: `Trading ${amount} ${from} for ${to} is being processed`,
-      successTitle: 'Success',
-      successDesc: `Trading ${amount} ${from} for ${to} was successfully completed`,
-      failedTitle: 'Transaction Failed',
-      failedDesc: `Trading ${amount} ${from} for ${to} have failed`,
-      txHash,
-    });
+  const clearNotifications = () => {
+    _applyChanges([]);
   };
 
   return (
     <NotificationCTX.Provider
       value={{
         notifications,
+        alerts,
+        dispatchNotification,
         removeNotification,
-        clearNotification,
-        rejectNotification,
-        createStrategyNtfc,
-        editStrategyNameNtfc,
-        withdrawStrategyNtfc,
-        deleteStrategyNtfc,
-        tradeNtfc,
+        clearNotifications,
+        dismissAlert,
       }}
     >
       <>{children}</>
+      <div className={'fixed absolute top-10 right-10'}>
+        <div className={'sticky z-40'}>
+          <AnimatePresence mode={'popLayout'}>
+            {alerts.map((n) => (
+              <motion.div
+                key={n.id}
+                layout
+                variants={notificationVariants} // Defined animation states
+                whileHover="hover" // Animation on hover gesture
+                initial="initial" // Starting animation
+                animate="animate" // Values to animate to
+                exit="exit" // Target to animate to w
+                className={
+                  'mb-20 block w-[350px] rounded-10 bg-silver px-20 py-10'
+                }
+              >
+                <NotificationLine isAlert notification={n} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
     </NotificationCTX.Provider>
   );
 };

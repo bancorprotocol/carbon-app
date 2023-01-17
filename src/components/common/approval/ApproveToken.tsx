@@ -8,6 +8,7 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { config } from 'services/web3/config';
 import { useTokens } from 'libs/tokens';
+import { useNotifications } from 'libs/notifications';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
+  const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
@@ -34,6 +36,11 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
       { ...data, isLimited },
       {
         onSuccess: async (tx, variables) => {
+          dispatchNotification('approve', {
+            symbol: token?.symbol || 'N/A',
+            txHash: tx.hash,
+            limited: isLimited,
+          });
           await tx.wait();
           void cache.invalidateQueries({
             queryKey: QueryKey.approval(

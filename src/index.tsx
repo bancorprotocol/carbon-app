@@ -7,12 +7,12 @@ import { ModalProvider } from 'libs/modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
 import { Web3ReactWrapper } from 'libs/web3';
-import { NotificationProvider } from 'libs/notifications/NotificationsProvider';
 import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { TokensProvider } from 'libs/tokens';
 import { CarbonSDKProvider } from 'libs/sdk';
+import { NotificationProvider } from 'libs/notifications';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -23,15 +23,15 @@ root.render(
       <CarbonSDKProvider>
         <QueryProvider>
           <TokensProvider>
-            <NotificationProvider>
-              <Web3ReactWrapper>
+            <Web3ReactWrapper>
+              <NotificationProvider>
                 <Router>
                   <ModalProvider>
                     <App />
                   </ModalProvider>
                 </Router>
-              </Web3ReactWrapper>
-            </NotificationProvider>
+              </NotificationProvider>
+            </Web3ReactWrapper>
           </TokensProvider>
         </QueryProvider>
       </CarbonSDKProvider>

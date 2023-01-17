@@ -68,7 +68,7 @@ export const ModalSlideOver: FC<Props> = ({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-auto">{children}</div>
+          <div className="overflow-y-auto">{children}</div>
         </div>
       </m.div>
     </m.div>
