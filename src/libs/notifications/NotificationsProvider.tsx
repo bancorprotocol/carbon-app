@@ -22,24 +22,6 @@ import { lsService } from 'services/localeStorage';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const notificationVariants = {
-  initial: {
-    opacity: 0,
-    scale: 0.2,
-    transition: { type: 'spring' },
-  },
-  animate: {
-    opacity: 1,
-    scale: 1,
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.2,
-    transition: { type: 'spring' },
-  },
-  hover: { scale: 1.05, transition: { type: 'spring' } },
-};
-
 const defaultValue: NotificationsContext = {
   notifications: [],
   alerts: [],
@@ -167,11 +149,11 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
               <motion.div
                 key={n.id}
                 layout
-                variants={notificationVariants} // Defined animation states
-                whileHover="hover" // Animation on hover gesture
-                initial="initial" // Starting animation
-                animate="animate" // Values to animate to
-                exit="exit" // Target to animate to w
+                variants={notificationVariants}
+                whileHover="hover"
+                initial="initial"
+                animate="animate"
+                exit="exit"
                 className={
                   'mb-20 block w-[350px] rounded-10 bg-silver px-20 py-10'
                 }
@@ -188,4 +170,22 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
 
 export const useNotifications = () => {
   return useContext(NotificationCTX);
+};
+
+const notificationVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0.2,
+    transition: { type: 'spring' },
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.2,
+    transition: { type: 'spring' },
+  },
+  hover: { scale: 1.05, transition: { type: 'spring' } },
 };

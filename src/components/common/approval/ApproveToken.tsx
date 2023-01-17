@@ -28,7 +28,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   const [txSuccess, setTxSuccess] = useState(false);
 
   const onApprove = async () => {
-    if (!data) {
+    if (!data || !token) {
       return console.error('No data loaded');
     }
     setTxBusy(true);
@@ -37,7 +37,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
       {
         onSuccess: async (tx, variables) => {
           dispatchNotification('approve', {
-            symbol: token?.symbol || 'N/A',
+            symbol: token.symbol,
             txHash: tx.hash,
             limited: isLimited,
           });
