@@ -81,6 +81,7 @@ export const useBuySell = ({
       }
     }
   };
+
   const tradeAction = useCallback(async () => {
     if (!user || !signer) {
       throw new Error('No user or signer');

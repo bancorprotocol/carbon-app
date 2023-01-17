@@ -30,6 +30,7 @@ export interface NotificationsContext {
   removeNotification: (id: string) => void;
   clearNotifications: () => void;
   dismissAlert: (id: string) => void;
+  hasPendingTx: boolean;
 }
 
 export type NotificationNew = Omit<Notification, 'id' | 'timestamp'>;

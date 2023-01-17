@@ -43,6 +43,7 @@ const notificationVariants = {
 const defaultValue: NotificationsContext = {
   notifications: [],
   alerts: [],
+  hasPendingTx: false,
   dispatchNotification: () => {},
   removeNotification: () => {},
   clearNotifications: () => {},
@@ -59,35 +60,32 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
   );
   const { provider } = useWeb3();
 
+  const hasPendingTx = useMemo(
+    () => notifications.some((n) => n.status === 'pending'),
+    [notifications]
+  );
+
   const alerts = useMemo(
     () => notifications.filter((n) => !!n.showAlert),
     [notifications]
   );
 
-  const _applyChanges = useCallback((newNotifications: Notification[]) => {
-    if (newNotifications.length > 100) {
-      newNotifications.splice(0, 1);
-    }
-    setNotifications(newNotifications);
-    const persisted = newNotifications.filter((n) => !n.nonPersistent);
-    lsService.setItem('notifications', persisted);
-  }, []);
-
   const _updateNotificationStatus = (
     id: string,
     status: NotificationStatus
   ) => {
-    _applyChanges(
-      notifications.map((n) => (n.id === id ? { ...n, status } : n))
-    );
+    setNotifications((prev) => {
+      const newNotifications = prev.map((n) =>
+        n.id === id ? { ...n, status } : n
+      );
+      lsService.setItem('notifications', newNotifications);
+      return newNotifications;
+    });
   };
 
   const _checkStatus = async (n: Notification) => {
-    if (!n.txHash) return;
+    if (!n.txHash || !provider) return;
     try {
-      if (!provider) {
-        throw new Error('No provider');
-      }
       const tx = await provider.getTransactionReceipt(n.txHash);
       if (tx && tx.status !== null) {
         const status: NotificationStatus = tx.status ? 'success' : 'failed';
@@ -106,28 +104,47 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
 
   const dispatchNotification: DispatchNotification = useCallback(
     (key, data) => {
-      const notificationNew = NOTIFICATIONS_MAP[key](data);
-      _applyChanges([
-        ...notifications,
-        { ...notificationNew, id: uuid(), timestamp: dayjs().unix() },
-      ]);
+      setNotifications((prev) => {
+        const newNotifications = [
+          ...prev,
+          {
+            ...NOTIFICATIONS_MAP[key](data),
+            id: uuid(),
+            timestamp: dayjs().unix(),
+          },
+        ];
+        if (newNotifications.length > 100) {
+          newNotifications.splice(0, 1);
+        }
+        const persisted = newNotifications.filter((n) => !n.nonPersistent);
+        lsService.setItem('notifications', persisted);
+        return newNotifications;
+      });
     },
-    [notifications, _applyChanges]
+    [setNotifications]
   );
 
   const removeNotification = (id: string) => {
-    const newNot = notifications.filter((no) => no.id !== id);
-    _applyChanges(newNot);
+    setNotifications((prev) => {
+      const newNotifications = prev.filter((n) => n.id !== id);
+      lsService.setItem('notifications', newNotifications);
+      return newNotifications;
+    });
   };
 
   const dismissAlert = (id: string) => {
-    _applyChanges(
-      notifications.map((n) => (n.id === id ? { ...n, showAlert: false } : n))
-    );
+    setNotifications((prev) => {
+      const newNotifications = prev.map((n) =>
+        n.id === id ? { ...n, showAlert: false } : n
+      );
+      lsService.setItem('notifications', newNotifications);
+      return newNotifications;
+    });
   };
 
   const clearNotifications = () => {
-    _applyChanges([]);
+    setNotifications([]);
+    lsService.removeItem('notifications');
   };
 
   return (
@@ -135,6 +152,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
       value={{
         notifications,
         alerts,
+        hasPendingTx,
         dispatchNotification,
         removeNotification,
         clearNotifications,

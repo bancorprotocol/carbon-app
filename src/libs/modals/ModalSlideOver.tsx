@@ -40,7 +40,7 @@ export const ModalSlideOver: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`bg-primary-500/5ya0 fixed inset-0 z-50 flex justify-end overflow-hidden outline-none backdrop-blur focus:outline-none`}
+      className={`fixed inset-0 z-50 flex justify-end overflow-hidden bg-primary-500/20 outline-none backdrop-blur focus:outline-none`}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}

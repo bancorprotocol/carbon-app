@@ -40,7 +40,7 @@ export const Modal: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-primary-500/50 px-10 outline-none backdrop-blur focus:outline-none md:px-20`}
+      className={`fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 px-10 outline-none backdrop-blur focus:outline-none md:px-20`}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
