@@ -9,6 +9,7 @@ import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
+import { useNotifications } from 'libs/notifications';
 
 const spenderAddress = config.carbon.poolCollection;
 
@@ -19,6 +20,7 @@ export const useCreate = () => {
   const { openModal } = useModal();
   const [token0, setToken0] = useState<Token | undefined>();
   const [token1, setToken1] = useState<Token | undefined>();
+  const { dispatchNotification } = useNotifications();
 
   const token0BalanceQuery = useGetTokenBalance(token0);
   const token1BalanceQuery = useGetTokenBalance(token1);
@@ -79,6 +81,7 @@ export const useCreate = () => {
       },
       {
         onSuccess: async (tx) => {
+          dispatchNotification('createStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();

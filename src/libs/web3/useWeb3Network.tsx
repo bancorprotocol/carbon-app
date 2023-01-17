@@ -1,16 +1,10 @@
 import { getConnection } from 'libs/web3/web3.utils';
 import { ConnectionType } from 'libs/web3/web3.constants';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  NotificationType,
-  useNotifications,
-} from 'libs/notifications/NotificationsProvider';
 import { useWeb3React } from '@web3-react/core';
 import { lsService } from 'services/localeStorage';
 
 export const useWeb3Network = () => {
-  const { dispatchNotification } = useNotifications();
-
   const { connector } = useWeb3React();
 
   const network = getConnection(ConnectionType.NETWORK);
@@ -39,19 +33,8 @@ export const useWeb3Network = () => {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
       console.error('activateNetwork failed.', msg);
       setNetworkError(msg);
-      dispatchNotification({
-        title: 'Network Error',
-        description: msg,
-        type: NotificationType.Failed,
-      });
     }
-  }, [
-    connector,
-    dispatchNotification,
-    isNetworkActive,
-    network.connector,
-    networkError,
-  ]);
+  }, [connector, isNetworkActive, network.connector, networkError]);
 
   useEffect(() => {
     void activateNetwork();

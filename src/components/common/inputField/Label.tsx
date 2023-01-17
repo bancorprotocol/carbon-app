@@ -10,15 +10,12 @@ type LabelHTMLProps = DetailedHTMLProps<
 export interface LabelProps extends LabelHTMLProps {
   label?: string;
   msg?: string;
-  msgType?: 'success' | 'error';
 }
 
 export const Label: FC<LabelProps & VariantProps<typeof labelStyles>> = ({
   children,
   label,
   msg,
-  // eslint-disable-next-line
-  msgType,
   ...props
 }) => {
   return (

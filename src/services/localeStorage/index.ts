@@ -1,6 +1,7 @@
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 import { ConnectionType } from 'libs/web3';
 import { Token } from 'libs/tokens';
+import { Notification } from 'libs/notifications';
 
 const APP_ID = 'bancor';
 const APP_VERSION = 'v0';
@@ -14,9 +15,7 @@ interface LocalStorageSchema {
   imposterAccount: string;
   connectionType: ConnectionType;
   importedTokens: Token[];
-  testObject: {
-    id: string;
-  };
+  notifications: Notification[];
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>

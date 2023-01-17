@@ -12,6 +12,7 @@ import {
   ModalImportToken,
   ModalImportTokenData,
 } from 'libs/modals/modals/ModalImportToken';
+import { ModalNotifications } from 'libs/modals/modals/ModalNotifications';
 import {
   ModalTradeTokenList,
   ModalTradeTokenListData,
@@ -25,6 +26,7 @@ export interface ModalSchema {
 
   txConfirm: ModalCreateConfirmData;
   importToken: ModalImportTokenData;
+  notifications: undefined;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -35,5 +37,6 @@ export const MODAL_COMPONENTS: TModals = {
   tokenLists: (props) => ModalTokenList(props),
   txConfirm: (props) => ModalConfirm(props),
   importToken: (props) => ModalImportToken(props),
+  notifications: (props) => ModalNotifications(props),
   tradeTokenList: (props) => ModalTradeTokenList(props),
 };

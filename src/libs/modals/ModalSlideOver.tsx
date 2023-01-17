@@ -22,7 +22,7 @@ const getSize = (size: 'sm' | 'md' | 'lg') => {
   }
 };
 
-export const Modal: FC<Props> = ({
+export const ModalSlideOver: FC<Props> = ({
   children,
   id,
   title,
@@ -40,25 +40,25 @@ export const Modal: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 px-10 outline-none backdrop-blur focus:outline-none md:px-20`}
+      className={`fixed inset-0 z-50 flex justify-end overflow-hidden bg-primary-500/20 outline-none backdrop-blur focus:outline-none`}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto w-full ${sizeClass}`}
+        className={`relative w-full ${sizeClass}`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis">
+        <div className="relative flex h-screen w-full flex-col border-0 bg-silver p-25 outline-none focus:outline-none">
           <div className={'flex justify-between'}>
-            <div>
+            <>
               {typeof title === 'string' ? (
                 <h2 className={'m-0'}>{title}</h2>
               ) : (
                 title
               )}
-            </div>
+            </>
             <div>
               {showCloseButton ? (
                 <button className={'p-4'} onClick={() => closeModal(id)}>
@@ -68,7 +68,7 @@ export const Modal: FC<Props> = ({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-auto">{children}</div>
+          <div className="overflow-y-auto">{children}</div>
         </div>
       </m.div>
     </m.div>
@@ -77,27 +77,25 @@ export const Modal: FC<Props> = ({
 
 const dropIn: Variants = {
   hidden: {
-    y: '100vh',
+    x: '100vh',
     //opacity: 0,
-    scale: 0.7,
   },
   visible: {
-    y: 0,
+    x: 0,
     opacity: 1,
     scale: 1,
     transition: {
       delay: 0,
       duration: 0.5,
-      type: 'spring',
-      damping: 20,
-      mass: 1,
-      stiffness: 200,
+      // type: 'spring',
+      // damping: 20,
+      // mass: 1,
+      // stiffness: 200,
     },
   },
   exit: {
-    y: '100vh',
+    x: '100vh',
     opacity: 0,
-    scale: 0.7,
     transition: {
       duration: 0.5,
     },
