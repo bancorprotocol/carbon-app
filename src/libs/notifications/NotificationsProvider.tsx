@@ -115,31 +115,37 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
         return newNotifications;
       });
     },
-    [setNotifications]
+    [setNotifications, user]
   );
 
-  const removeNotification = (id: string) => {
-    setNotifications((prev) => {
-      const newNotifications = prev.filter((n) => n.id !== id);
-      setLSUserNotifications(user, newNotifications);
-      return newNotifications;
-    });
-  };
+  const removeNotification = useCallback(
+    (id: string) => {
+      setNotifications((prev) => {
+        const newNotifications = prev.filter((n) => n.id !== id);
+        setLSUserNotifications(user, newNotifications);
+        return newNotifications;
+      });
+    },
+    [setNotifications, user]
+  );
 
-  const dismissAlert = (id: string) => {
-    setNotifications((prev) => {
-      const newNotifications = prev.map((n) =>
-        n.id === id ? { ...n, showAlert: false } : n
-      );
-      setLSUserNotifications(user, newNotifications);
-      return newNotifications;
-    });
-  };
+  const dismissAlert = useCallback(
+    (id: string) => {
+      setNotifications((prev) => {
+        const newNotifications = prev.map((n) =>
+          n.id === id ? { ...n, showAlert: false } : n
+        );
+        setLSUserNotifications(user, newNotifications);
+        return newNotifications;
+      });
+    },
+    [setNotifications, user]
+  );
 
-  const clearNotifications = () => {
+  const clearNotifications = useCallback(() => {
     setNotifications([]);
     setLSUserNotifications(user, []);
-  };
+  }, [setNotifications, user]);
 
   return (
     <NotificationCTX.Provider
