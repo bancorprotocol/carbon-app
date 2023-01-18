@@ -6,7 +6,6 @@ import { ApprovalTokenResult } from 'hooks/useApproval';
 import { Imager } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
-import { config } from 'services/web3/config';
 import { useTokens } from 'libs/tokens';
 import { useNotifications } from 'libs/notifications';
 
@@ -61,10 +60,6 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     );
   };
 
-  if (data?.address === config.tokens.ETH) {
-    return null;
-  }
-
   // TODO handle error
   if (!data || !token) {
     if (isLoading) {
@@ -117,7 +112,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         )
       ) : (
         <div className={'text-success-500'}>
-          {txSuccess ? 'Approved' : 'Pre-Apprpved'}
+          {txSuccess ? 'Approved' : 'Pre-Approved'}
         </div>
       )}
 
