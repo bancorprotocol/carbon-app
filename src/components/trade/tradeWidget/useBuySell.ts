@@ -144,6 +144,7 @@ export const useBuySell = ({
     cache,
     dispatchNotification,
     sourceInput,
+    targetInput,
   ]);
 
   const handleCTAClick = useCallback(() => {
