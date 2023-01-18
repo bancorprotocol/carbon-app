@@ -1,9 +1,9 @@
 import { Notification } from 'libs/notifications/types';
+import { lsService } from 'services/localeStorage';
 
 export const getLSUserNotifications = (user?: string): Notification[] => {
   if (!user) return [];
-  const value = localStorage.getItem(`notifications-${user}`);
-  return value ? JSON.parse(value) : [];
+  return lsService.getItem(`notifications-${user}`) || [];
 };
 
 export const setLSUserNotifications = (
@@ -12,5 +12,5 @@ export const setLSUserNotifications = (
 ) => {
   if (!user) return;
   const persisted = data.filter((n) => !n.nonPersistent);
-  localStorage.setItem(`notifications-${user}`, JSON.stringify(persisted));
+  lsService.setItem(`notifications-${user}`, persisted);
 };
