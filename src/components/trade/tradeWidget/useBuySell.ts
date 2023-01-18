@@ -15,6 +15,15 @@ import {
 } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { useNotifications } from 'libs/notifications';
+import { ONE_YEAR_FROM_NOW } from 'utils/time';
+
+const calcMinReturn = (amount: string, slippagePercent = 0.5) => {
+  return new BigNumber(amount).times(1 - slippagePercent / 100).toString();
+};
+
+const calcMaxInput = (amount: string, slippagePercent = 0.5) => {
+  return new BigNumber(amount).times(1 + slippagePercent / 100).toString();
+};
 
 export const useBuySell = ({
   source,
@@ -93,9 +102,8 @@ export const useBuySell = ({
         source.address,
         target.address,
         tradeActions,
-        // TODO handle this
-        Date.now() + 1000 * 60 * 60 * 24 * 7,
-        1,
+        ONE_YEAR_FROM_NOW,
+        calcMinReturn(targetInput),
         { gasLimit: 999999999 }
       );
     } else {
@@ -103,9 +111,8 @@ export const useBuySell = ({
         source.address,
         target.address,
         tradeActions,
-        // TODO handle this
-        Date.now() + 1000 * 60 * 60 * 24 * 7,
-        9999999999999999999999999999999999999,
+        ONE_YEAR_FROM_NOW,
+        calcMaxInput(sourceInput),
         { gasLimit: 999999999 }
       );
     }
