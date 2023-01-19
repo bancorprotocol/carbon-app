@@ -36,7 +36,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (!source || !target) return null;
 
   return (
-    <div className={'pt-20'}>
+    <div className={'rounded-12 bg-silver p-20'}>
+      <h2 className={'mb-20'}>{buy ? 'Buy' : 'Sell'}</h2>
       <TokenInputField
         className={'mt-5 mb-20 rounded-12 bg-black p-16'}
         token={source}
@@ -52,9 +53,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       <TokenInputField
         className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
         token={target}
+        title={'Total'}
         isBalanceLoading={false}
         value={targetInput}
         setValue={setTargetInput}
+        placeholder={'Total Amount'}
         balance={targetBalanceQuery.data}
         onKeystroke={() => onInputChange(false)}
         isLoading={bySourceQuery.isFetching}
@@ -69,8 +72,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
         }
       >
-        {bySourceQuery.isFetching || byTargetQuery.isFetching ? (
-          'Loading...'
+        {!rate ? (
+          '...'
         ) : buy ? (
           <>
             1 {target.symbol} = {rate ? prettifyNumber(rate) : '--'}{' '}

@@ -4,7 +4,7 @@ import { DepthChartWidget } from 'components/trade/depthChartWidget/DepthChartWi
 
 export const TradePage = () => {
   return (
-    <div className="mx-auto mt-50 grid max-w-[1280px] grid-cols-12 gap-20 px-10 pb-30 md:px-20 xl:px-50">
+    <div className="mx-auto mt-50 grid grid-cols-12 gap-20 px-10 pb-30 md:px-20 xl:px-50">
       <div className={'col-span-4'}>
         <OrderBookWidget />
       </div>
