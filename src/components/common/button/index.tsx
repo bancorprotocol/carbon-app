@@ -8,7 +8,7 @@ import { VariantProps } from 'class-variance-authority';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { m } from 'libs/motion';
 
-type ButtonHTMLProps = DetailedHTMLProps<
+export type ButtonHTMLProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > &

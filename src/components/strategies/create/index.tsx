@@ -1,21 +1,19 @@
 import { Button } from 'components/common/button';
 import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
-import { SelectTokens } from 'components/common/selectTokens';
 import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
+import { SelectTokenButton } from 'components/common/selectToken';
 
 export const CreateStrategy = () => {
   const location = useLocation();
 
   const {
     token0,
-    setToken0,
     token1,
-    setToken1,
     order0,
     order1,
     name,
@@ -44,27 +42,28 @@ export const CreateStrategy = () => {
         </button>
         Create Strategy
       </div>
-      <m.div variants={items} className={'bg-secondary rounded-18 p-20'}>
+      <m.div variants={items} className={'bg-secondary rounded-10 p-20'}>
         <div className="mb-14 flex items-center justify-between">
           <h2>Token Pair</h2>
           <Tooltip>??????????</Tooltip>
         </div>
 
-        <SelectTokens
-          symbol0={token0?.symbol}
-          symbol1={token1?.symbol}
-          imgUrl0={token0?.logoURI}
-          imgUrl1={token1?.logoURI}
-          onClick0={() => openTokenListModal(true)}
-          onClick1={() => openTokenListModal()}
-          onMiddleClick={() => {
-            if (token0 || token1) {
-              setToken0(token1);
-              setToken1(token0);
-            }
-          }}
-          middleDisabled={!(token0 || token1)}
+        <div className={'text-secondary mb-10'}>Base Token</div>
+        <SelectTokenButton
+          symbol={token0?.symbol}
+          imgUrl={token0?.logoURI}
+          onClick={() => openTokenListModal(true)}
         />
+        {!!token0 && (
+          <>
+            <div className={'text-secondary my-10'}>Quote Token</div>
+            <SelectTokenButton
+              symbol={token1?.symbol}
+              imgUrl={token1?.logoURI}
+              onClick={() => openTokenListModal()}
+            />
+          </>
+        )}
       </m.div>
       {showStep2 && (
         <>

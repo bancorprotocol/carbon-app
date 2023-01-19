@@ -21,13 +21,6 @@ export const InputLimit: FC<{
           error && 'border border-error-500 text-error-500'
         } bg-body rounded-16 p-16`}
       >
-        <div
-          className={`mb-8 text-12 ${
-            buy ? 'text-success-500' : 'text-error-500'
-          }`}
-        >
-          {sellToken.symbol} per {buyToken.symbol}
-        </div>
         <input
           value={price}
           onChange={handleChange}
@@ -39,6 +32,13 @@ export const InputLimit: FC<{
           placeholder="Price"
           className={'w-full shrink bg-transparent focus:outline-none'}
         />
+        <div
+          className={`mt-8 text-12 ${
+            buy ? 'text-success-500' : 'text-error-500'
+          }`}
+        >
+          {sellToken.symbol} per {buyToken.symbol}
+        </div>
       </div>
       {error && (
         <div className="text-center text-12 text-error-500">{error}</div>

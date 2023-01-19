@@ -1,6 +1,8 @@
 import { Tooltip } from 'components/common/tooltip';
 import { FC } from 'react';
 
+const maxLength = 35;
+
 export const NameBlock: FC<{
   name: string;
   setName: (value: string) => void;
@@ -21,10 +23,12 @@ export const NameBlock: FC<{
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Eg. Carbon Strategy"
-          maxLength={32}
+          maxLength={maxLength}
           className={'mb-8 w-full bg-transparent focus:outline-none'}
         />
-        <div className="text-secondary !text-10">32 Characters Max</div>
+        <div className="text-secondary !text-10">
+          {name.length}/{maxLength} Characters Max
+        </div>
       </div>
     </div>
   );
