@@ -1,4 +1,4 @@
-import { NotificationSchema } from 'libs/notifications/notifications';
+import { NotificationSchema } from 'libs/notifications/data';
 
 export type NotificationStatus = 'pending' | 'failed' | 'success';
 
