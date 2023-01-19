@@ -146,48 +146,6 @@ export const useBuySell = ({
     targetInput,
   ]);
 
-  const handleCTAClick = useCallback(() => {
-    if (
-      bySourceQuery.isFetching ||
-      byTargetQuery.isFetching ||
-      approval.isLoading ||
-      isLiquidityError ||
-      errorBaseBalanceSufficient
-    ) {
-      return;
-    }
-
-    if (!sourceInput) {
-      return setIsSourceEmptyError(true);
-    }
-
-    if (!targetInput) {
-      return setIsTargetEmptyError(true);
-    }
-
-    if (!user) {
-      openModal('wallet', undefined);
-    } else if (approval.approvalRequired) {
-      openModal('txConfirm', {
-        approvalTokens,
-        onConfirm: tradeAction,
-        buttonLabel: 'Confirm Trade',
-      });
-    } else {
-      tradeAction();
-    }
-  }, [
-    approval,
-    tradeAction,
-    user,
-    openModal,
-    approvalTokens,
-    bySourceQuery,
-    byTargetQuery,
-    sourceInput,
-    targetInput,
-  ]);
-
   const onInputChange = (bySource: boolean) => {
     setIsTradeBySource(bySource);
     resetError();
@@ -237,6 +195,50 @@ export const useBuySell = ({
 
   const errorBaseBalanceSufficient =
     !!user && new BigNumber(sourceBalanceQuery.data || 0).lt(sourceInput);
+
+  const handleCTAClick = useCallback(() => {
+    if (
+      bySourceQuery.isFetching ||
+      byTargetQuery.isFetching ||
+      approval.isLoading ||
+      isLiquidityError ||
+      errorBaseBalanceSufficient
+    ) {
+      return;
+    }
+
+    if (!sourceInput) {
+      return setIsSourceEmptyError(true);
+    }
+
+    if (!targetInput) {
+      return setIsTargetEmptyError(true);
+    }
+
+    if (!user) {
+      openModal('wallet', undefined);
+    } else if (approval.approvalRequired) {
+      openModal('txConfirm', {
+        approvalTokens,
+        onConfirm: tradeAction,
+        buttonLabel: 'Confirm Trade',
+      });
+    } else {
+      tradeAction();
+    }
+  }, [
+    approval,
+    tradeAction,
+    user,
+    openModal,
+    approvalTokens,
+    bySourceQuery,
+    byTargetQuery,
+    sourceInput,
+    targetInput,
+    errorBaseBalanceSufficient,
+    isLiquidityError,
+  ]);
 
   const resetError = () => {
     setIsSourceEmptyError(false);
