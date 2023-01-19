@@ -18,19 +18,13 @@ import { useNotifications } from 'libs/notifications';
 import { ONE_YEAR_FROM_NOW } from 'utils/time';
 
 const calcMinReturn = (amount: string, slippagePercent = 0.5) => {
-  return new BigNumber(1)
-    .minus(slippagePercent)
-    .div(100)
-    .times(amount)
-    .toString();
+  const slippage = new BigNumber(slippagePercent).div(100);
+  return new BigNumber(1).minus(slippage).times(amount).toString();
 };
 
 const calcMaxInput = (amount: string, slippagePercent = 0.5) => {
-  return new BigNumber(1)
-    .plus(slippagePercent)
-    .div(100)
-    .times(amount)
-    .toString();
+  const slippage = new BigNumber(slippagePercent).div(100);
+  return new BigNumber(1).plus(slippage).times(amount).toString();
 };
 
 export const useBuySell = ({
