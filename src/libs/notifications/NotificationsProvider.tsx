@@ -6,11 +6,12 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
 import { uuid } from 'utils/helpers';
-import { NOTIFICATIONS_MAP } from 'libs/notifications/notifications';
+import { NOTIFICATIONS_MAP } from 'libs/notifications/data';
 import {
   DispatchNotification,
   NotificationsContext,
@@ -18,9 +19,12 @@ import {
   NotificationStatus,
 } from 'libs/notifications/types';
 import { useInterval } from 'hooks/useInterval';
-import { lsService } from 'services/localeStorage';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { AnimatePresence, motion } from 'framer-motion';
+import {
+  getLSUserNotifications,
+  setLSUserNotifications,
+} from 'libs/notifications/utils';
 
 const defaultValue: NotificationsContext = {
   notifications: [],
@@ -37,9 +41,18 @@ const NotificationCTX = createContext<NotificationsContext>(defaultValue);
 export const NotificationProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [notifications, setNotifications] = useState<Notification[]>(
-    lsService.getItem('notifications') || []
-  );
+  const { user } = useWeb3();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      const lsNotifications = getLSUserNotifications(user);
+      if (lsNotifications) {
+        setNotifications(lsNotifications);
+      }
+    }
+  }, [user]);
+
   const { provider } = useWeb3();
 
   const hasPendingTx = useMemo(
@@ -60,7 +73,7 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
       const newNotifications = prev.map((n) =>
         n.id === id ? { ...n, status } : n
       );
-      lsService.setItem('notifications', newNotifications);
+      setLSUserNotifications(user, newNotifications);
       return newNotifications;
     });
   };
@@ -98,36 +111,41 @@ export const NotificationProvider: FC<{ children: ReactNode }> = ({
         if (newNotifications.length > 100) {
           newNotifications.splice(0, 1);
         }
-        const persisted = newNotifications.filter((n) => !n.nonPersistent);
-        lsService.setItem('notifications', persisted);
+        setLSUserNotifications(user, newNotifications);
         return newNotifications;
       });
     },
-    [setNotifications]
+    [setNotifications, user]
   );
 
-  const removeNotification = (id: string) => {
-    setNotifications((prev) => {
-      const newNotifications = prev.filter((n) => n.id !== id);
-      lsService.setItem('notifications', newNotifications);
-      return newNotifications;
-    });
-  };
+  const removeNotification = useCallback(
+    (id: string) => {
+      setNotifications((prev) => {
+        const newNotifications = prev.filter((n) => n.id !== id);
+        setLSUserNotifications(user, newNotifications);
+        return newNotifications;
+      });
+    },
+    [setNotifications, user]
+  );
 
-  const dismissAlert = (id: string) => {
-    setNotifications((prev) => {
-      const newNotifications = prev.map((n) =>
-        n.id === id ? { ...n, showAlert: false } : n
-      );
-      lsService.setItem('notifications', newNotifications);
-      return newNotifications;
-    });
-  };
+  const dismissAlert = useCallback(
+    (id: string) => {
+      setNotifications((prev) => {
+        const newNotifications = prev.map((n) =>
+          n.id === id ? { ...n, showAlert: false } : n
+        );
+        setLSUserNotifications(user, newNotifications);
+        return newNotifications;
+      });
+    },
+    [setNotifications, user]
+  );
 
-  const clearNotifications = () => {
+  const clearNotifications = useCallback(() => {
     setNotifications([]);
-    lsService.removeItem('notifications');
-  };
+    setLSUserNotifications(user, []);
+  }, [setNotifications, user]);
 
   return (
     <NotificationCTX.Provider

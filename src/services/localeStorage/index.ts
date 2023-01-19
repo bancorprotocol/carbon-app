@@ -15,7 +15,8 @@ interface LocalStorageSchema {
   imposterAccount: string;
   connectionType: ConnectionType;
   importedTokens: Token[];
-  notifications: Notification[];
+  // TODO check for autocomplete possibility
+  [k: `notifications-${string}`]: Notification[];
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
