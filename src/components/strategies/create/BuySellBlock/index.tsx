@@ -36,12 +36,13 @@ export const BuySellBlock: FC<Props> = ({
     <div className={'bg-secondary space-y-10 rounded-10 p-20'}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">
-          {title}{' '}
+          <span>{title}</span>
           <Imager
             alt={'Token'}
             src={token0.logoURI}
-            className={'h-18 w-18 rounded-full'}
+            className={'mx-6 h-18 w-18 rounded-full'}
           />
+          <span>{token0.symbol}</span>
         </div>
 
         <div className="flex items-center gap-10 text-14">

@@ -34,21 +34,15 @@ export const InputRange: FC<{
       ? setRangeError('')
       : setRangeError('Max Price must be higher than min price and not zero');
   };
+
   return (
     <div>
-      <div className="flex gap-6">
+      <div className="flex space-x-6">
         <div
           className={`${
-            error && 'border border-error-500 text-error-500'
-          } bg-body w-full rounded-14 rounded-r-0 p-16`}
+            error ? 'border border-error-500 text-error-500' : ''
+          } bg-body w-full rounded-l-16 p-16`}
         >
-          <div
-            className={`mb-8 text-[11px] ${
-              buy ? 'text-success-500' : 'text-error-500'
-            }`}
-          >
-            Min {sellToken.symbol} per {buyToken.symbol}
-          </div>
           <input
             value={min}
             onChange={handleChangeMin}
@@ -56,20 +50,20 @@ export const InputRange: FC<{
             onBlur={() => handleBlur(true)}
             className={'w-full bg-transparent focus:outline-none'}
           />
+          <div
+            className={`mt-8 text-[12px] ${
+              buy ? 'text-success-500' : 'text-error-500'
+            }`}
+          >
+            Min {sellToken.symbol} per {buyToken.symbol}
+          </div>
         </div>
         <div
           className={`${
-            error && 'border border-error-500 text-error-500'
-          } bg-body w-full rounded-14 rounded-l-0 p-16`}
+            error ? 'border border-error-500 text-error-500' : ''
+          } bg-body w-full rounded-r-16 p-16`}
         >
           <div>
-            <div
-              className={`mb-8 text-[11px] ${
-                buy ? 'text-success-500' : 'text-error-500'
-              }`}
-            >
-              Max {sellToken.symbol} per {buyToken.symbol}
-            </div>
             <input
               value={max}
               onChange={handleChangeMax}
@@ -77,11 +71,18 @@ export const InputRange: FC<{
               onBlur={() => handleBlur()}
               className={'w-full bg-transparent focus:outline-none'}
             />
+            <div
+              className={`mt-8 text-[12px] ${
+                buy ? 'text-success-500' : 'text-error-500'
+              }`}
+            >
+              Max {sellToken.symbol} per {buyToken.symbol}
+            </div>
           </div>
         </div>
       </div>
       {error && (
-        <div className="text-center text-12 text-error-500">{error}</div>
+        <div className="mt-5 text-center text-12 text-error-500">{error}</div>
       )}
     </div>
   );
