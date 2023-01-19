@@ -41,7 +41,9 @@ export const useBuySell = ({
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const [tradeActions, setTradeActions] = useState<any[]>([]);
   const [rate, setRate] = useState('');
-  const [isLiquidityError, setIsLiquidityError] = useState('');
+  const [isLiquidityError, setIsLiquidityError] = useState(false);
+  const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
+  const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
 
   const approvalTokens = useMemo(
     () => [
@@ -72,13 +74,8 @@ export const useBuySell = ({
 
   const checkLiquidity = (value: string) => {
     const check = (v: string) => new BigNumber(v).times(0.9999).gt(value);
-    const set = () =>
-      setIsLiquidityError(
-        `Available liquidity: ${prettifyNumber(liquidityQuery.data || '0')} ${
-          target.symbol
-        }`
-      );
-    setIsLiquidityError('');
+    const set = () => setIsLiquidityError(true);
+    setIsLiquidityError(false);
 
     if (isTradeBySource) {
       if (check(sourceInput)) {
@@ -150,6 +147,24 @@ export const useBuySell = ({
   ]);
 
   const handleCTAClick = useCallback(() => {
+    if (
+      bySourceQuery.isFetching ||
+      byTargetQuery.isFetching ||
+      approval.isLoading ||
+      isLiquidityError ||
+      errorBaseBalanceSufficient
+    ) {
+      return;
+    }
+
+    if (!sourceInput) {
+      return setIsSourceEmptyError(true);
+    }
+
+    if (!targetInput) {
+      return setIsTargetEmptyError(true);
+    }
+
     if (!user) {
       openModal('wallet', undefined);
     } else if (approval.approvalRequired) {
@@ -161,10 +176,21 @@ export const useBuySell = ({
     } else {
       tradeAction();
     }
-  }, [approval, tradeAction, user, openModal, approvalTokens]);
+  }, [
+    approval,
+    tradeAction,
+    user,
+    openModal,
+    approvalTokens,
+    bySourceQuery,
+    byTargetQuery,
+    sourceInput,
+    targetInput,
+  ]);
 
   const onInputChange = (bySource: boolean) => {
     setIsTradeBySource(bySource);
+    resetError();
   };
 
   useEffect(() => {
@@ -206,12 +232,43 @@ export const useBuySell = ({
   useEffect(() => {
     setSourceInput('');
     setTargetInput('');
+    resetError();
   }, [source.address, target.address]);
 
   const errorBaseBalanceSufficient =
-    !!user &&
-    new BigNumber(sourceBalanceQuery.data || 0).lt(sourceInput) &&
-    'Insufficient balance';
+    !!user && new BigNumber(sourceBalanceQuery.data || 0).lt(sourceInput);
+
+  const resetError = () => {
+    setIsSourceEmptyError(false);
+    setIsTargetEmptyError(false);
+    setIsLiquidityError(false);
+  };
+
+  const errorMsgSource = useMemo(() => {
+    if (isSourceEmptyError) {
+      return 'Please enter an amount';
+    }
+
+    if (errorBaseBalanceSufficient) {
+      return 'Insufficient balance';
+    }
+  }, [errorBaseBalanceSufficient, isSourceEmptyError]);
+
+  const errorMsgTarget = useMemo(() => {
+    if (isTargetEmptyError) {
+      return 'Please enter an amount';
+    }
+    if (isLiquidityError) {
+      return `Available liquidity: ${prettifyNumber(
+        liquidityQuery.data || '0'
+      )} ${target.symbol}`;
+    }
+  }, [
+    liquidityQuery.data,
+    isLiquidityError,
+    isTargetEmptyError,
+    target.symbol,
+  ]);
 
   return {
     sourceInput,
@@ -227,5 +284,7 @@ export const useBuySell = ({
     approval,
     liquidityQuery,
     isLiquidityError,
+    errorMsgSource,
+    errorMsgTarget,
   };
 };

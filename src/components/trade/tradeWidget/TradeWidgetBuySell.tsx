@@ -23,12 +23,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     rate,
     onInputChange,
     handleCTAClick,
-    errorBaseBalanceSufficient,
     bySourceQuery,
     byTargetQuery,
-    approval,
     liquidityQuery,
-    isLiquidityError,
+    errorMsgSource,
+    errorMsgTarget,
   } = useBuySell(props);
 
   const { buy, source, target, sourceBalanceQuery, targetBalanceQuery } = props;
@@ -45,7 +44,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         value={sourceInput}
         setValue={setSourceInput}
         balance={sourceBalanceQuery.data}
-        error={errorBaseBalanceSufficient}
+        error={errorMsgSource}
         onKeystroke={() => onInputChange(true)}
         isLoading={byTargetQuery.isFetching}
       />
@@ -61,7 +60,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         balance={targetBalanceQuery.data}
         onKeystroke={() => onInputChange(false)}
         isLoading={bySourceQuery.isFetching}
-        error={isLiquidityError}
+        error={errorMsgTarget}
         onErrorClick={() => {
           setTargetInput(liquidityQuery.data || '0');
           onInputChange(false);
@@ -96,14 +95,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
       <Button
         onClick={handleCTAClick}
-        disabled={
-          !!errorBaseBalanceSufficient ||
-          !sourceInput ||
-          !targetInput ||
-          bySourceQuery.isFetching ||
-          byTargetQuery.isFetching ||
-          approval.isLoading
-        }
         variant={buy ? 'success' : 'error'}
         fullWidth
         className={'mt-20'}
