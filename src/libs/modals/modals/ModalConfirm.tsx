@@ -34,7 +34,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
 
       <Button
         size={'lg'}
-        variant={'secondary'}
+        variant={'white'}
         fullWidth
         disabled={approvalRequired}
         onClick={async () => {

@@ -7,38 +7,30 @@ export const BuySellPriceRangeIndicator = ({ buy, limit }: Props) => {
   return (
     <div
       className={`flex w-full justify-center rounded-b-6 bg-gradient-to-t ${
-        buy ? 'from-success-500/10' : 'from-error-500/10'
+        buy ? 'from-green/10' : 'from-red/10'
       }`}
     >
       <div className={'flex items-end'}>
         <div className={'flex flex-col items-center'}>
           <div
-            className={`h-4 w-4 rounded-full ${
-              buy ? 'bg-success-500' : 'bg-error-500'
-            }`}
+            className={`h-4 w-4 rounded-full ${buy ? 'bg-green' : 'bg-red'}`}
           />
-          <div
-            className={`h-16 w-2 ${buy ? 'bg-success-500' : 'bg-error-500'}`}
-          />
+          <div className={`h-16 w-2 ${buy ? 'bg-green' : 'bg-red'}`} />
         </div>
         {!limit && (
           <>
             <div
               className={`-mx-2 h-14 w-100 ${
-                buy ? 'bg-success-500/20' : 'bg-error-500/20'
+                buy ? 'bg-green/20' : 'bg-red/20'
               }`}
             />
             <div className={'flex flex-col items-center'}>
               <div
                 className={`h-4 w-4 rounded-full ${
-                  buy ? 'bg-success-500' : 'bg-error-500'
+                  buy ? 'bg-green' : 'bg-red'
                 }`}
               />
-              <div
-                className={`h-16 w-2 ${
-                  buy ? 'bg-success-500' : 'bg-error-500'
-                }`}
-              />
+              <div className={`h-16 w-2 ${buy ? 'bg-green' : 'bg-red'}`} />
             </div>
           </>
         )}

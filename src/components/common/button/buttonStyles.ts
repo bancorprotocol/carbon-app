@@ -9,22 +9,36 @@ type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
 export const buttonStyles = cva<ButtonVariants>(
   [
+    'text-black',
     'font-weight-500',
-    'text-white',
     'rounded-full px-30',
+    'transition duration-300 ease-in-out',
     'disabled:cursor-not-allowed',
-    'disabled:opacity-20',
+    'disabled:opacity-25',
   ],
   {
     variants: {
       variant: {
-        primary: ['bg-primary-500', 'hover:bg-primary-600'],
-        secondary: ['bg-black', 'dark:bg-white dark:text-charcoal'],
-        tertiary: [
-          'bg-lightGrey text-charcoal dark:bg-darkGrey dark:text-white',
+        black: [
+          'bg-black border-2 border-black !text-white',
+          'hover:border-grey3 hover:disabled:black',
         ],
-        success: ['bg-success-500', 'hover:bg-success-600'],
-        error: ['bg-error-500', 'hover:bg-error-600'],
+        white: [
+          'bg-white border-2 border-white',
+          'hover:border-grey4 hover:disabled:border-white',
+        ],
+        secondary: [
+          'bg-silver border-2 border-silver !text-white',
+          'hover:border-grey3 hover:disabled:border-silver',
+        ],
+        success: [
+          'bg-green border-2 border-green',
+          'hover:border-greenLight hover:disabled:border-green',
+        ],
+        error: [
+          'bg-red border-2 border-red',
+          'hover:border-redLight hover:disabled:border-red',
+        ],
       },
       size: {
         sm: ['text-12', 'h-30'],
@@ -37,7 +51,7 @@ export const buttonStyles = cva<ButtonVariants>(
       },
     },
     defaultVariants: {
-      variant: 'primary',
+      variant: 'white',
       size: 'md',
     },
   }

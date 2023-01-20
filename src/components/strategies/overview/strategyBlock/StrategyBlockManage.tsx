@@ -16,9 +16,8 @@ export const StrategyBlockManage: FC<{
       button={(onClick) => (
         <Button
           className="flex items-center justify-center gap-8"
-          size={'md'}
           fullWidth
-          variant={'tertiary'}
+          variant={'black'}
           onClick={onClick}
         >
           Manage

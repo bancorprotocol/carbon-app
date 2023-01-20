@@ -18,7 +18,7 @@ export const InputLimit: FC<{
     <div>
       <div
         className={`${
-          error && 'border border-error-500 text-error-500'
+          error && 'border border-red text-red'
         } bg-body rounded-16 p-16`}
       >
         <input
@@ -32,17 +32,11 @@ export const InputLimit: FC<{
           placeholder="Price"
           className={'w-full shrink bg-transparent focus:outline-none'}
         />
-        <div
-          className={`mt-8 text-12 ${
-            buy ? 'text-success-500' : 'text-error-500'
-          }`}
-        >
+        <div className={`mt-8 text-12 ${buy ? 'text-green' : 'text-red'}`}>
           {sellToken.symbol} per {buyToken.symbol}
         </div>
       </div>
-      {error && (
-        <div className="text-center text-12 text-error-500">{error}</div>
-      )}
+      {error && <div className="text-center text-12 text-red">{error}</div>}
     </div>
   );
 };

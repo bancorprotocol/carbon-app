@@ -7,7 +7,7 @@ type NewVariant<T extends { [key in string]: ReadonlyArray<string> }> = {
 };
 
 const Variant = {
-  variant: ['primary', 'secondary', 'success', 'error', 'tertiary'],
+  variant: ['black', 'white', 'success', 'error', 'secondary'],
 } as const;
 export type VariantColor = NewVariant<typeof Variant>;
 
