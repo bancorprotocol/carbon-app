@@ -16,7 +16,7 @@ export const SelectTokenButton: FC<Props> = ({
 }) => {
   return (
     <Button
-      variant={symbol ? 'tertiary' : 'success'}
+      variant={symbol ? 'black' : 'success'}
       className={`flex h-52 items-center justify-between rounded-12 px-14 ${className}`}
       fullWidth
       {...props}

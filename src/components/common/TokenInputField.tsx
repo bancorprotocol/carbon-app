@@ -59,7 +59,7 @@ export const TokenInputField: FC<Props> = ({
       <div className={'flex justify-between text-14'}>
         <div className={'text-white/50'}>{title}</div>
         <div
-          className={`font-weight-500 text-error-500 ${
+          className={`font-weight-500 text-red ${
             onErrorClick ? 'cursor-pointer' : ''
           }`}
           onClick={onErrorClick}
@@ -71,7 +71,7 @@ export const TokenInputField: FC<Props> = ({
         className={`cursor-text ${
           isFocused || isActive ? 'ring-2 ring-white/50' : ''
         } transition-all duration-200 ${
-          error ? 'ring-2 ring-error-500/50' : ''
+          error ? 'ring-2 ring-red/50' : ''
         } ${className}`}
         onMouseDown={() => setIsActive(true)}
         onMouseUp={() => setIsActive(false)}
@@ -109,7 +109,7 @@ export const TokenInputField: FC<Props> = ({
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
               className={`w-full shrink bg-transparent text-right font-mono text-20 font-weight-500 focus:outline-none ${
-                error ? 'text-error-500' : 'text-white'
+                error ? 'text-red' : 'text-white'
               }`}
             />
           }

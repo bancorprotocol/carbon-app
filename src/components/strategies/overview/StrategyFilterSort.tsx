@@ -52,7 +52,7 @@ export const StrategyFilterSort: FC<{
       button={(onClick) => (
         <Button
           onClick={onClick}
-          variant="tertiary"
+          variant="secondary"
           className="flex items-center gap-10"
         >
           Filter & Sort <IconChevron className="w-14" />

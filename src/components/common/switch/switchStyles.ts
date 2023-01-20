@@ -12,11 +12,11 @@ export const switchStyles = cva<SwitchVariants>(
   {
     variants: {
       variant: {
-        primary: ['bg-primary-500'],
-        secondary: ['bg-black dark:bg-white'],
-        tertiary: ['bg-lightGrey dark:bg-darkGrey'],
-        success: ['bg-success-500'],
-        error: ['bg-error-500'],
+        black: ['bg-black'],
+        secondary: ['bg-silver'],
+        white: ['bg-white'],
+        success: ['bg-green'],
+        error: ['bg-red'],
       },
       size: {
         sm: ['h-20 w-[50px] p-3'],
@@ -29,7 +29,7 @@ export const switchStyles = cva<SwitchVariants>(
       },
     },
     defaultVariants: {
-      variant: 'primary',
+      variant: 'black',
       size: 'md',
       isOn: false,
     },

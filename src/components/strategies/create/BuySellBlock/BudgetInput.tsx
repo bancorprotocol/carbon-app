@@ -28,7 +28,7 @@ export const BudgetInput: FC<{
   return (
     <div
       className={`${
-        error && 'border border-error-500 text-error-500'
+        error && 'border border-red text-red'
       } bg-body rounded-16 p-16`}
     >
       <div className={'mb-8 flex items-center gap-10'}>
@@ -69,11 +69,9 @@ export const BudgetInput: FC<{
         >
           Wallet:{' '}
           {isBalanceLoading || !balance ? 'loading' : prettifyNumber(balance)}{' '}
-          <div className="text-success-500">MAX</div>
+          <div className="text-green">MAX</div>
         </button>
-        {error && (
-          <div className="text-center text-12 text-error-500">{error}</div>
-        )}
+        {error && <div className="text-center text-12 text-red">{error}</div>}
       </div>
     </div>
   );

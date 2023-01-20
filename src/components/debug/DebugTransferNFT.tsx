@@ -63,8 +63,8 @@ export const DebugTransferNFT = () => {
         onChange={(e) => setInputRecipient(e.target.value)}
       />
 
-      {isSuccess && <p className={'text-success-500'}>Success!</p>}
-      {isError && <p className={'text-error-500'}>Error!</p>}
+      {isSuccess && <p className={'text-green'}>Success!</p>}
+      {isError && <p className={'text-red'}>Error!</p>}
       <Button onClick={handleOnClick} disabled={isLoading}>
         {isLoading ? 'loading' : 'Confirm'}
       </Button>

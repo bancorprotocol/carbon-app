@@ -22,24 +22,22 @@ export const inputStyles = cva<InputVariants>(
   {
     variants: {
       variant: {
-        primary: ['bg-primary-500', 'hover:bg-primary-600'],
+        black: ['bg-primary-500', 'hover:bg-primary-600'],
         secondary: ['bg-black', 'dark:bg-white dark:text-charcoal'],
-        tertiary: [
-          'bg-lightGrey text-charcoal dark:bg-darkGrey dark:text-white',
-        ],
+        white: ['bg-lightGrey text-charcoal dark:bg-darkGrey dark:text-white'],
         success: [
           'outline',
           'outline-offset-2',
           'outline-2',
-          'outline-success-500',
-          'focus:!outline-success-500',
+          'outline-green',
+          'focus:!outline-green',
         ],
         error: [
           'outline',
           'outline-offset-2',
           'outline-2',
-          'outline-error-500',
-          'focus:outline-error-500',
+          'outline-red',
+          'focus:outline-red',
         ],
       },
       size: {

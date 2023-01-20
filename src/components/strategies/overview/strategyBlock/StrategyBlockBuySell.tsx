@@ -31,7 +31,7 @@ export const StrategyBlockBuySell: FC<{
       <hr className="my-12 border-silver dark:border-emphasis" />
       <div>
         <div className="mb-5 flex items-center justify-between">
-          <div className={`${buy ? 'text-success-500' : 'text-error-500'}`}>
+          <div className={`${buy ? 'text-green' : 'text-red'}`}>
             {limit ? 'Limit Price' : 'Price Range'}
           </div>
           <div className="flex items-center gap-7">

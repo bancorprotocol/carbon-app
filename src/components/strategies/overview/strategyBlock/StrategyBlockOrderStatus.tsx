@@ -9,9 +9,7 @@ export const StrategyBlockOrderStatus: FC<{ status: StrategyStatus }> = ({
       <div className="text-secondary text-14">Order Status</div>
       <div
         className={`${
-          status === StrategyStatus.Active
-            ? 'text-success-500'
-            : 'text-error-500'
+          status === StrategyStatus.Active ? 'text-green' : 'text-red'
         } `}
       >
         {status === StrategyStatus.Active

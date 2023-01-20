@@ -99,19 +99,19 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
                 Limited
               </div>
               <Switch
-                variant={'tertiary'}
+                variant={'secondary'}
                 isOn={isLimited}
                 setIsOn={setIsLimited}
                 size={'sm'}
               />
             </div>
-            <Button variant={'secondary'} onClick={onApprove} size={'sm'}>
+            <Button variant={'white'} onClick={onApprove} size={'sm'}>
               Confirm
             </Button>
           </div>
         )
       ) : (
-        <div className={'text-success-500'}>
+        <div className={'text-green'}>
           {txSuccess ? 'Approved' : 'Pre-Approved'}
         </div>
       )}

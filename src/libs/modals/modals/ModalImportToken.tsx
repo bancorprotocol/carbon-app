@@ -50,7 +50,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       )}
       {isError && (
         <div
-          className={`${blockClasses} flex items-center justify-center dark:bg-error-500/30`}
+          className={`${blockClasses} flex items-center justify-center dark:bg-red/30`}
         >
           Error: No token found for this address
         </div>
@@ -80,7 +80,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         </div>
       )}
       <Button
-        variant={'secondary'}
+        variant={'white'}
         fullWidth
         onClick={onClick}
         disabled={isLoading || isError}
@@ -88,7 +88,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         Import Token
       </Button>
       <Button
-        variant={'tertiary'}
+        variant={'secondary'}
         fullWidth
         onClick={() => closeModal(id)}
         className={'mt-16'}

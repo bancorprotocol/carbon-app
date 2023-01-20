@@ -40,7 +40,7 @@ export const InputRange: FC<{
       <div className="flex space-x-6">
         <div
           className={`${
-            error ? 'border border-error-500 text-error-500' : ''
+            error ? 'border border-red text-red' : ''
           } bg-body w-full rounded-l-16 p-16`}
         >
           <input
@@ -51,16 +51,14 @@ export const InputRange: FC<{
             className={'w-full bg-transparent focus:outline-none'}
           />
           <div
-            className={`mt-8 text-[12px] ${
-              buy ? 'text-success-500' : 'text-error-500'
-            }`}
+            className={`mt-8 text-[12px] ${buy ? 'text-green' : 'text-red'}`}
           >
             Min {sellToken.symbol} per {buyToken.symbol}
           </div>
         </div>
         <div
           className={`${
-            error ? 'border border-error-500 text-error-500' : ''
+            error ? 'border border-red text-red' : ''
           } bg-body w-full rounded-r-16 p-16`}
         >
           <div>
@@ -72,9 +70,7 @@ export const InputRange: FC<{
               className={'w-full bg-transparent focus:outline-none'}
             />
             <div
-              className={`mt-8 text-[12px] ${
-                buy ? 'text-success-500' : 'text-error-500'
-              }`}
+              className={`mt-8 text-[12px] ${buy ? 'text-green' : 'text-red'}`}
             >
               Max {sellToken.symbol} per {buyToken.symbol}
             </div>
@@ -82,7 +78,7 @@ export const InputRange: FC<{
         </div>
       </div>
       {error && (
-        <div className="mt-5 text-center text-12 text-error-500">{error}</div>
+        <div className="mt-5 text-center text-12 text-red">{error}</div>
       )}
     </div>
   );
