@@ -23,12 +23,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     rate,
     onInputChange,
     handleCTAClick,
-    errorBaseBalanceSufficient,
     bySourceQuery,
     byTargetQuery,
-    approval,
     liquidityQuery,
-    isLiquidityError,
+    errorMsgSource,
+    errorMsgTarget,
   } = useBuySell(props);
 
   const { buy, source, target, sourceBalanceQuery, targetBalanceQuery } = props;
@@ -36,7 +35,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (!source || !target) return null;
 
   return (
-    <div className={'pt-20'}>
+    <div className={'rounded-12 bg-silver p-20'}>
+      <h2 className={'mb-20'}>{buy ? 'Buy' : 'Sell'}</h2>
       <TokenInputField
         className={'mt-5 mb-20 rounded-12 bg-black p-16'}
         token={source}
@@ -44,7 +44,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         value={sourceInput}
         setValue={setSourceInput}
         balance={sourceBalanceQuery.data}
-        error={errorBaseBalanceSufficient}
+        error={errorMsgSource}
         onKeystroke={() => onInputChange(true)}
         isLoading={byTargetQuery.isFetching}
       />
@@ -52,13 +52,15 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       <TokenInputField
         className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
         token={target}
+        title={'Total'}
         isBalanceLoading={false}
         value={targetInput}
         setValue={setTargetInput}
+        placeholder={'Total Amount'}
         balance={targetBalanceQuery.data}
         onKeystroke={() => onInputChange(false)}
         isLoading={bySourceQuery.isFetching}
-        error={isLiquidityError}
+        error={errorMsgTarget}
         onErrorClick={() => {
           setTargetInput(liquidityQuery.data || '0');
           onInputChange(false);
@@ -69,8 +71,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
         }
       >
-        {bySourceQuery.isFetching || byTargetQuery.isFetching ? (
-          'Loading...'
+        {!rate ? (
+          '...'
         ) : buy ? (
           <>
             1 {target.symbol} = {rate ? prettifyNumber(rate) : '--'}{' '}
@@ -93,14 +95,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
       <Button
         onClick={handleCTAClick}
-        disabled={
-          !!errorBaseBalanceSufficient ||
-          !sourceInput ||
-          !targetInput ||
-          bySourceQuery.isFetching ||
-          byTargetQuery.isFetching ||
-          approval.isLoading
-        }
         variant={buy ? 'success' : 'error'}
         fullWidth
         className={'mt-20'}

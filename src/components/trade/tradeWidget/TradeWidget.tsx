@@ -20,12 +20,7 @@ export const TradeWidget = () => {
   const noTokens = !baseToken && !quoteToken;
 
   return (
-    <div className={'rounded-12 bg-silver p-10'}>
-      <div className={'flex justify-between'}>
-        <h2>Trade</h2>
-        <div>settings</div>
-      </div>
-
+    <>
       {isLoading ? (
         <div>is loading</div>
       ) : isTradePairError || !isValidPair ? (
@@ -50,6 +45,6 @@ export const TradeWidget = () => {
           />
         </div>
       )}
-    </div>
+    </>
   );
 };

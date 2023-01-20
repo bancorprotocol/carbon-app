@@ -8,6 +8,7 @@ type Props = {
   value: string;
   setValue: (value: string) => void;
   token: Token;
+  placeholder?: string;
   balance?: string;
   isBalanceLoading: boolean;
   error?: string | false;
@@ -28,6 +29,7 @@ export const TokenInputField: FC<Props> = ({
   onErrorClick,
   className,
   onKeystroke,
+  placeholder = 'Enter Amount',
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -79,7 +81,7 @@ export const TokenInputField: FC<Props> = ({
         }}
       >
         <div className={`flex items-center justify-between`}>
-          <div className={'flex items-center'}>
+          <div className={'mr-10 flex flex-none items-center'}>
             <Imager
               alt={'Token'}
               src={token.logoURI}
@@ -97,13 +99,13 @@ export const TokenInputField: FC<Props> = ({
                   ? !value
                     ? ''
                     : !isActive
-                    ? prettifyNumber(value)
+                    ? value
                     : value
                   : value
               }
               size={1}
               onChange={handleChange}
-              placeholder={`enter amount`}
+              placeholder={placeholder}
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
               className={`w-full shrink bg-transparent text-right font-mono text-20 font-weight-500 focus:outline-none ${
