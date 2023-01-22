@@ -31,7 +31,7 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
       ref={ref}
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
-      className={'relative'}
+      className={`relative ${isOpen ? 'z-10' : 'z-0'}`}
     >
       <m.div
         onMouseEnter={() => handleOnMouseEnter()}
