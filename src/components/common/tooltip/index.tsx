@@ -17,7 +17,17 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
   const itemRef = useRef<HTMLDivElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { styles } = usePopper(itemRef.current, tooltipRef.current);
+  const { styles } = usePopper(itemRef.current, tooltipRef.current, {
+    placement: 'top',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 8],
+        },
+      },
+    ],
+  });
 
   const handleOnMouseEnter = () => {
     prevPopFunc();
@@ -34,7 +44,7 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
     <m.div
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
-      className={`relative ${isOpen ? 'z-10' : 'z-0'}`}
+      className={`relative ${isOpen ? 'z-10' : ''}`}
     >
       <m.div
         ref={itemRef}
@@ -47,7 +57,7 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
       <m.div
         ref={tooltipRef}
         className={
-          'absolute -ml-[125px] mt-10 min-w-[275px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30'
+          'min-w-[275px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30'
         }
         onMouseEnter={() => handleOnMouseEnter()}
         onMouseLeave={() => handleOnMouseLeave()}
@@ -66,26 +76,8 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
 const menuVariants: Variants = {
   open: {
     opacity: 1,
-    scale: 1,
-    y: '0px',
-    x: '0px',
-    transition: {
-      type: 'spring',
-      bounce: 0,
-      duration: 0.2,
-      delayChildren: 0,
-      staggerChildren: 0,
-    },
   },
   closed: {
     opacity: 0,
-    scale: 0.8,
-    y: '-40px',
-    x: '-30px',
-    transition: {
-      type: 'spring',
-      bounce: 0,
-      duration: 0.2,
-    },
   },
 };
