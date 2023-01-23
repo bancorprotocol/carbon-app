@@ -1,5 +1,6 @@
-import { m, Variants } from 'libs/motion';
 import { FC, ReactNode, useRef, useState } from 'react';
+import { usePopper } from 'react-popper';
+import { m, Variants } from 'libs/motion';
 import { useOutsideClick } from 'hooks/useOutsideClick';
 
 type Props = {
@@ -21,6 +22,9 @@ export const DropdownMenu: FC<Props> = ({
 }) => {
   const outsideState = setIsOpen !== undefined && isOpen !== undefined;
   const ref = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const { styles } = usePopper(ref.current, tooltipRef.current);
+
   const [open, setOpen] = useState(false);
   useOutsideClick(ref, () =>
     outsideState ? setIsOpen(false) : setOpen(false)
@@ -39,11 +43,12 @@ export const DropdownMenu: FC<Props> = ({
         else setOpen(!open);
       })}
       <m.div
+        ref={tooltipRef}
         className={`${className} ${
           right ? 'right-0' : 'left-0'
         } absolute z-50 mt-10 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
         variants={menuVariants}
-        style={{ pointerEvents: menuOpen ? 'auto' : 'none' }}
+        style={{ ...styles.popper, pointerEvents: menuOpen ? 'auto' : 'none' }}
       >
         {children}
       </m.div>
@@ -53,7 +58,6 @@ export const DropdownMenu: FC<Props> = ({
 
 const menuVariants: Variants = {
   open: {
-    //clipPath: 'inset(0% 0% 0% 0% round 10px)',
     opacity: 1,
     scale: 1,
     y: '0px',
