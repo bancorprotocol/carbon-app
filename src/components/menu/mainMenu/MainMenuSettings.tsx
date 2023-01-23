@@ -10,7 +10,7 @@ export const MainMenuSettings: FC = () => {
     <Button
       variant={'secondary'}
       className={'flex w-40 items-center justify-center !p-0'}
-      onClick={() => openModal('notifications', undefined)}
+      onClick={() => openModal('tradeSettings', undefined)}
     >
       <IconCog className={'h-20 w-20'} />
     </Button>

@@ -47,7 +47,11 @@ export const useBuySell = ({
 
   const approvalTokens = useMemo(
     () => [
-      { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
+      {
+        ...source,
+        spender: config.carbon.poolCollection,
+        amount: calcMaxInput(sourceInput),
+      },
     ],
     [source, sourceInput]
   );
