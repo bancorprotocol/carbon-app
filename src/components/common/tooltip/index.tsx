@@ -18,7 +18,6 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const { styles } = usePopper(itemRef.current, tooltipRef.current, {
-    placement: 'top',
     modifiers: [
       {
         name: 'offset',
