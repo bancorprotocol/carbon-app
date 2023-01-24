@@ -56,10 +56,12 @@ export const useBuySell = ({
       {
         ...source,
         spender: config.carbon.poolCollection,
-        amount: calcMaxInput(sourceInput, slippage),
+        amount: isTradeBySource
+          ? sourceInput
+          : calcMaxInput(sourceInput, slippage),
       },
     ],
-    [source, sourceInput, slippage]
+    [source, sourceInput, slippage, isTradeBySource]
   );
 
   const approval = useApproval(approvalTokens);
