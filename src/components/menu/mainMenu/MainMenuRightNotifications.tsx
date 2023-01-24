@@ -18,11 +18,11 @@ export const MainMenuRightNotifications: FC = () => {
       className={'relative !p-0'}
       onClick={() => openModal('notifications', undefined)}
     >
-      <span className="flex h-40 w-40 items-center justify-center">
+      <span className="flex h-36 w-36 items-center justify-center">
         {hasPendingTx && (
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red/30 opacity-75"></span>
         )}
-        <span className="relative flex inline-flex h-40 w-40 items-center justify-center rounded-full bg-emphasis">
+        <span className="relative flex inline-flex h-36 w-36 items-center justify-center rounded-full">
           <IconBell />
         </span>
       </span>
