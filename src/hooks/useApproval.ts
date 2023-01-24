@@ -13,6 +13,7 @@ export type ApprovalTokenResult = ApprovalToken & {
   approvalRequired: boolean;
 };
 
+
 export const useApproval = (data: ApprovalToken[]) => {
   const approvalQuery = useGetUserApproval(data);
 
