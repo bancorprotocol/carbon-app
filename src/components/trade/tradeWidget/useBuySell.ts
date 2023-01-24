@@ -15,16 +15,21 @@ import {
 } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { useNotifications } from 'libs/notifications';
-import { ONE_YEAR_FROM_NOW } from 'utils/time';
+import { useStore } from 'store';
 
-const calcMinReturn = (amount: string, slippagePercent = 0.5) => {
+const calcMinReturn = (amount: string, slippagePercent: string | number) => {
   const slippage = new BigNumber(slippagePercent).div(100);
   return new BigNumber(1).minus(slippage).times(amount).toString();
 };
 
-const calcMaxInput = (amount: string, slippagePercent = 0.5) => {
+const calcMaxInput = (amount: string, slippagePercent: string | number) => {
   const slippage = new BigNumber(slippagePercent).div(100);
   return new BigNumber(1).plus(slippage).times(amount).toString();
+};
+
+const calcDeadline = (value: string) => {
+  const deadlineInMs = new BigNumber(value).times(60).times(1000);
+  return deadlineInMs.plus(Date.now()).toString();
 };
 
 export const useBuySell = ({
@@ -32,6 +37,11 @@ export const useBuySell = ({
   target,
   sourceBalanceQuery,
 }: TradeWidgetBuySellProps) => {
+  const {
+    trade: {
+      settings: { slippage, deadline },
+    },
+  } = useStore();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
   const { user, signer } = useWeb3();
@@ -47,9 +57,15 @@ export const useBuySell = ({
 
   const approvalTokens = useMemo(
     () => [
-      { ...source, spender: config.carbon.poolCollection, amount: sourceInput },
+      {
+        ...source,
+        spender: config.carbon.poolCollection,
+        amount: isTradeBySource
+          ? sourceInput
+          : calcMaxInput(sourceInput, slippage),
+      },
     ],
-    [source, sourceInput]
+    [source, sourceInput, slippage, isTradeBySource]
   );
 
   const approval = useApproval(approvalTokens);
@@ -101,8 +117,8 @@ export const useBuySell = ({
         source.address,
         target.address,
         tradeActions,
-        ONE_YEAR_FROM_NOW,
-        calcMinReturn(targetInput),
+        calcDeadline(deadline),
+        calcMinReturn(targetInput, slippage),
         { gasLimit: 999999999 }
       );
     } else {
@@ -110,8 +126,8 @@ export const useBuySell = ({
         source.address,
         target.address,
         tradeActions,
-        ONE_YEAR_FROM_NOW,
-        calcMaxInput(sourceInput),
+        calcDeadline(deadline),
+        calcMaxInput(sourceInput, slippage),
         { gasLimit: 999999999 }
       );
     }
@@ -144,6 +160,8 @@ export const useBuySell = ({
     dispatchNotification,
     sourceInput,
     targetInput,
+    deadline,
+    slippage,
   ]);
 
   const onInputChange = (bySource: boolean) => {

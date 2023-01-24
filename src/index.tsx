@@ -13,29 +13,32 @@ import { QueryProvider } from 'libs/queries';
 import { TokensProvider } from 'libs/tokens';
 import { CarbonSDKProvider } from 'libs/sdk';
 import { NotificationProvider } from 'libs/notifications';
+import { StoreProvider } from 'store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <LazyMotion>
-      <CarbonSDKProvider>
-        <QueryProvider>
-          <TokensProvider>
-            <Web3ReactWrapper>
-              <NotificationProvider>
-                <Router>
-                  <ModalProvider>
-                    <App />
-                  </ModalProvider>
-                </Router>
-              </NotificationProvider>
-            </Web3ReactWrapper>
-          </TokensProvider>
-        </QueryProvider>
-      </CarbonSDKProvider>
-    </LazyMotion>
+    <StoreProvider>
+      <LazyMotion>
+        <CarbonSDKProvider>
+          <QueryProvider>
+            <TokensProvider>
+              <Web3ReactWrapper>
+                <NotificationProvider>
+                  <Router>
+                    <ModalProvider>
+                      <App />
+                    </ModalProvider>
+                  </Router>
+                </NotificationProvider>
+              </Web3ReactWrapper>
+            </TokensProvider>
+          </QueryProvider>
+        </CarbonSDKProvider>
+      </LazyMotion>
+    </StoreProvider>
   </React.StrictMode>
 );
 
