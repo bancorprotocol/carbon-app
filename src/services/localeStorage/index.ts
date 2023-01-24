@@ -17,6 +17,9 @@ interface LocalStorageSchema {
   importedTokens: Token[];
   // TODO check for autocomplete possibility
   [k: `notifications-${string}`]: Notification[];
+  tradeSlippage: string;
+  tradeDeadline: string;
+  tradeMaxOrders: string;
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>

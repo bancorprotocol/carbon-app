@@ -1,10 +1,6 @@
 import { Button } from 'components/common/button';
-import { useState } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
-
-const slippageValues = [0.01, 0.05, 0.1];
-const expireTimeValues = [5, 10, 30];
-const maxOrdersValues = [5, 10, 20];
+import { useTradeSettings } from 'hooks/useTradeSettings';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -13,57 +9,40 @@ const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
 export const TradeSettings = () => {
-  const [slippage, setSlippage] = useState(0.01);
-  const [customSlippage, setCustomSlippage] = useState('');
-
-  const handleSlippageChange = (value: number) => {
-    setSlippage(value);
-    setCustomSlippage('');
-  };
-
-  const [expireTime, setExpireTime] = useState(5);
-  const [customExpireTime, setCustomExpireTime] = useState('');
-
-  const handleExpireTimeChange = (value: number) => {
-    setExpireTime(value);
-    setCustomExpireTime('');
-  };
-
-  const [maxOrders, setMaxOrders] = useState(5);
-  const [customMaxOrders, setCustomMaxOrders] = useState('');
-
-  const handleMaxOrdersChange = (value: number) => {
-    setMaxOrders(value);
-    setCustomMaxOrders('');
-  };
+  const {
+    slippage,
+    setSlippage,
+    deadline,
+    setDeadline,
+    maxOrders,
+    setMaxOrders,
+    presets,
+  } = useTradeSettings();
 
   const data = [
     {
       title: 'Slippage Tolerance',
       value: slippage,
+      prepend: '+',
+      append: '%',
       setValue: setSlippage,
-      customValue: customSlippage,
-      setCustomValue: setCustomSlippage,
-      values: slippageValues,
-      handleValueChange: handleSlippageChange,
+      values: presets.slippage,
     },
     {
       title: 'Transaction Expiration Time',
-      value: expireTime,
-      setValue: setExpireTime,
-      customValue: customExpireTime,
-      setCustomValue: setCustomExpireTime,
-      values: expireTimeValues,
-      handleValueChange: handleExpireTimeChange,
+      value: deadline,
+      prepend: '',
+      append: ' Min',
+      setValue: setDeadline,
+      values: presets.deadline,
     },
     {
       title: 'Maximum Orders',
       value: maxOrders,
+      prepend: '',
+      append: '',
       setValue: setMaxOrders,
-      customValue: customMaxOrders,
-      setCustomValue: setCustomMaxOrders,
-      values: maxOrdersValues,
-      handleValueChange: handleMaxOrdersChange,
+      values: presets.maxOrders,
     },
   ];
 
@@ -77,24 +56,30 @@ export const TradeSettings = () => {
               <Button
                 key={value}
                 variant={'black'}
-                onClick={() => item.handleValueChange(value)}
+                onClick={() => item.setValue(value)}
                 className={`${buttonClasses} ${
-                  item.value === value && !item.customValue
-                    ? buttonActiveClasses
-                    : ''
+                  item.value === value ? buttonActiveClasses : ''
                 }`}
               >
-                +{value}%
+                {item.prepend}
+                {value}
+                {item.append}
               </Button>
             ))}
             <input
               placeholder={'custom'}
-              value={item.customValue}
+              value={
+                !item.values.some((value) => value === item.value)
+                  ? item.value
+                  : ''
+              }
               onChange={(e) =>
-                item.setCustomValue(sanitizeNumberInput(e.target.value))
+                item.setValue(sanitizeNumberInput(e.target.value))
               }
               className={`${buttonClasses} ${inputClasses} ${
-                item.customValue ? buttonActiveClasses : ''
+                !item.values.some((value) => value === item.value)
+                  ? buttonActiveClasses
+                  : ''
               }`}
             />
           </div>
