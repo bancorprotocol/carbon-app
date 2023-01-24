@@ -1,5 +1,6 @@
 import { createContext, FC, ReactNode, useContext } from 'react';
 import {
+  defaultTradeSettingsStore,
   TradeSettingsStore,
   useTradeSettingsStore,
 } from 'store/useTradeSettingsStore';
@@ -16,14 +17,7 @@ interface StoreContext {
 
 const defaultValue: StoreContext = {
   trade: {
-    settings: {
-      slippage: '',
-      setSlippage: () => {},
-      deadline: '',
-      setDeadline: () => {},
-      maxOrders: '',
-      setMaxOrders: () => {},
-    },
+    settings: defaultTradeSettingsStore,
   },
 };
 

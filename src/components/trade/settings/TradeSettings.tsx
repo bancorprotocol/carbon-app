@@ -1,6 +1,6 @@
 import { Button } from 'components/common/button';
 import { sanitizeNumberInput } from 'utils/helpers';
-import { useTradeSettings } from 'hooks/useTradeSettings';
+import { useStore } from 'store';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -10,14 +10,18 @@ const inputClasses =
 
 export const TradeSettings = () => {
   const {
-    slippage,
-    setSlippage,
-    deadline,
-    setDeadline,
-    maxOrders,
-    setMaxOrders,
-    presets,
-  } = useTradeSettings();
+    trade: {
+      settings: {
+        slippage,
+        setSlippage,
+        deadline,
+        setDeadline,
+        maxOrders,
+        setMaxOrders,
+        presets,
+      },
+    },
+  } = useStore();
 
   const data = [
     {

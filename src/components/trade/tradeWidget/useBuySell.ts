@@ -15,7 +15,7 @@ import {
 } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { useNotifications } from 'libs/notifications';
-import { useTradeSettings } from 'hooks/useTradeSettings';
+import { useStore } from 'store';
 
 const calcMinReturn = (amount: string, slippagePercent: string | number) => {
   const slippage = new BigNumber(slippagePercent).div(100);
@@ -37,7 +37,11 @@ export const useBuySell = ({
   target,
   sourceBalanceQuery,
 }: TradeWidgetBuySellProps) => {
-  const { slippage, deadline } = useTradeSettings();
+  const {
+    trade: {
+      settings: { slippage, deadline },
+    },
+  } = useStore();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
   const { user, signer } = useWeb3();
