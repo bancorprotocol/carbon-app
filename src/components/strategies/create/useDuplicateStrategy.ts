@@ -1,6 +1,12 @@
 import { Token } from 'libs/tokens';
 import { OrderCreate } from './useOrder';
-import { MakeGenerics, PathNames, useNavigate, useSearch } from 'libs/routing';
+import {
+  MakeGenerics,
+  PathNames,
+  useLocation,
+  useNavigate,
+  useSearch,
+} from 'libs/routing';
 import { Order, Strategy } from 'libs/queries';
 
 type Props = {
@@ -19,6 +25,7 @@ type MyLocationGenerics = MakeGenerics<{
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate<MyLocationGenerics>();
   const { strategy: strategyDuplicate } = useSearch<MyLocationGenerics>();
+  const location = useLocation();
 
   const _updateOrder = (order: OrderCreate, baseOrder: Order) => {
     order.setBudget(baseOrder.balance);
@@ -47,6 +54,7 @@ export const useDuplicateStrategy = () => {
       _updateOrder(order0, parsedStrategy.order0);
       _updateOrder(order1, parsedStrategy.order1);
     }
+    location.history.replace(PathNames.createStrategy);
   };
 
   const duplicate = (strategy: Strategy) => {
