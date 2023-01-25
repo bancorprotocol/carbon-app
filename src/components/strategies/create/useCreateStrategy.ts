@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { OrderCreate, useOrder } from './useOrder';
 import { QueryKey, useCreateStrategy } from 'libs/queries';
 import { useModal } from 'libs/modals';
@@ -10,6 +10,7 @@ import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'libs/notifications';
+import { useDuplicateStrategy } from './useDuplicateStrategy';
 
 const spenderAddress = config.carbon.poolCollection;
 
@@ -27,39 +28,12 @@ export const useCreate = () => {
 
   const order1 = useOrder();
   const order0 = useOrder();
+  useDuplicateStrategy({ setToken0, setToken1, order0, order1 });
 
   const [name, setName] = useState('');
   const mutation = useCreateStrategy();
 
   const showStep2 = !!token0 && !!token1;
-
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const strategy = JSON.parse(urlParams?.get('strategy') || '');
-    if (strategy) {
-      setToken0(strategy.token0);
-      setToken1(strategy.token1);
-      order0.setBudget(strategy.order0.balance);
-      order1.setBudget(strategy.order1.balance);
-      const limit0 = strategy.order0.startRate === strategy.order0.endRate;
-      const limit1 = strategy.order1.startRate === strategy.order1.endRate;
-      if (limit0) {
-        order0.setPrice(strategy.order0.startRate);
-      } else {
-        order0.setIsRange(true);
-        order0.setMin(strategy.order0.startRate);
-        order0.setMax(strategy.order0.endRate);
-      }
-      if (limit1) {
-        order1.setPrice(strategy.order1.startRate);
-      } else {
-        order1.setIsRange(true);
-        order1.setMin(strategy.order1.startRate);
-        order1.setMax(strategy.order1.endRate);
-      }
-    }
-  }, []);
 
   const approvalTokens = useMemo(() => {
     return [

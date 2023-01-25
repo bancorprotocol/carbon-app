@@ -21,7 +21,9 @@ export const StrategyBlockManage: FC<{
     {
       name: 'Duplicate Strategy',
       action: () => {
-        const parsedData = JSON.stringify(strategy);
+        const parsedData = Buffer.from(JSON.stringify(strategy)).toString(
+          'base64'
+        );
         navigate({
           to: `${PathNames.createStrategy}/?strategy=${parsedData}`,
         });
