@@ -45,7 +45,12 @@ export const CreateStrategy = () => {
       <m.div variants={items} className={'bg-secondary rounded-10 p-20'}>
         <div className="mb-14 flex items-center justify-between">
           <h2>Token Pair</h2>
-          <Tooltip>??????????</Tooltip>
+          <Tooltip>
+            Selecting the tokens you would like to create a strategy for. The
+            Base token represents how much of the Quoted token is needed for you
+            to get one unit of the Base token (i.e. 1 Base token = xxx Quote
+            token).
+          </Tooltip>
         </div>
 
         <div className={'text-secondary mb-10'}>Base Token</div>

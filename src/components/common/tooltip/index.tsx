@@ -1,5 +1,6 @@
+import { FC, ReactNode, useState } from 'react';
 import { m, Variants } from 'libs/motion';
-import { FC, ReactNode, useRef, useState } from 'react';
+import { useTooltip } from 'libs/tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 
 type Props = {
@@ -12,8 +13,17 @@ let timeout: NodeJS.Timeout;
 let prevPopFunc: Function = () => {};
 
 export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
-  const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const { itemRef, tooltipRef, styles } = useTooltip({
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 8],
+        },
+      },
+    ],
+  });
 
   const handleOnMouseEnter = () => {
     prevPopFunc();
@@ -28,12 +38,12 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
 
   return (
     <m.div
-      ref={ref}
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
-      className={'relative'}
+      className={`relative ${isOpen ? 'z-10' : ''}`}
     >
       <m.div
+        ref={itemRef}
         onMouseEnter={() => handleOnMouseEnter()}
         onMouseLeave={() => handleOnMouseLeave()}
         onClick={() => setIsOpen(!isOpen)}
@@ -41,13 +51,17 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
         {element ? element : <IconTooltip />}
       </m.div>
       <m.div
+        ref={tooltipRef}
         className={
-          'absolute mt-10 -ml-80 min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30'
+          'min-w-[275px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30'
         }
         onMouseEnter={() => handleOnMouseEnter()}
         onMouseLeave={() => handleOnMouseLeave()}
         variants={menuVariants}
-        style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+        style={{
+          ...styles.popper,
+          pointerEvents: isOpen ? 'auto' : 'none',
+        }}
       >
         {children}
       </m.div>
@@ -58,26 +72,8 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
 const menuVariants: Variants = {
   open: {
     opacity: 1,
-    scale: 1,
-    y: '0px',
-    x: '0px',
-    transition: {
-      type: 'spring',
-      bounce: 0,
-      duration: 0.2,
-      delayChildren: 0,
-      staggerChildren: 0,
-    },
   },
   closed: {
     opacity: 0,
-    scale: 0.8,
-    y: '-40px',
-    x: '-30px',
-    transition: {
-      type: 'spring',
-      bounce: 0,
-      duration: 0.2,
-    },
   },
 };

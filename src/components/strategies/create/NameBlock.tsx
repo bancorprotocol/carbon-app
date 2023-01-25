@@ -15,7 +15,7 @@ export const NameBlock: FC<{
           <div className="text-secondary">Optional</div>
         </div>
 
-        <Tooltip>??????</Tooltip>
+        <Tooltip>A publicly descriptive name for your strategy</Tooltip>
       </div>
 
       <div className="bg-body rounded-16 p-16">
