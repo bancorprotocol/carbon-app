@@ -27,6 +27,7 @@ export const MainMenuRightWallet: FC = () => {
   if (user) {
     return (
       <DropdownMenu
+        placement="bottom-end"
         button={(onClick) => (
           <Button
             variant={'secondary'}
