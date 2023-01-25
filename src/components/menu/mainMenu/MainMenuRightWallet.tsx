@@ -27,7 +27,6 @@ export const MainMenuRightWallet: FC = () => {
   if (user) {
     return (
       <DropdownMenu
-        right
         button={(onClick) => (
           <Button
             variant={'secondary'}
