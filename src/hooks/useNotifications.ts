@@ -6,7 +6,6 @@ import {
   NotificationStatus,
 } from 'libs/notifications/types';
 import { setLSUserNotifications } from 'libs/notifications/utils';
-import { useInterval } from 'hooks/useInterval';
 import { useCallback } from 'react';
 import { NOTIFICATIONS_MAP } from 'libs/notifications/data';
 import { uuid } from 'utils/helpers';
@@ -31,7 +30,7 @@ export const useNotifications = () => {
     });
   };
 
-  const _checkStatus = async (n: Notification) => {
+  const checkStatus = async (n: Notification) => {
     if (!n.txHash || !provider) return;
     try {
       const tx = await provider.getTransactionReceipt(n.txHash);
@@ -43,12 +42,6 @@ export const useNotifications = () => {
       console.log('Error checking tx status', e.message);
     }
   };
-
-  useInterval(async () => {
-    notifications
-      .filter((n) => n.status === 'pending')
-      .forEach((n) => _checkStatus(n));
-  }, 2000);
 
   const dispatchNotification: DispatchNotification = useCallback(
     (key, data) => {
@@ -109,5 +102,6 @@ export const useNotifications = () => {
     dismissAlert,
     hasPendingTx,
     alerts,
+    checkStatus,
   };
 };

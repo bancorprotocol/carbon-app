@@ -4,10 +4,18 @@ import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getLSUserNotifications } from 'libs/notifications/utils';
 import { useNotifications } from 'hooks/useNotifications';
+import { useInterval } from 'hooks/useInterval';
 
 export const NotificationAlerts: FC = () => {
   const { user } = useWeb3();
-  const { alerts, setNotifications } = useNotifications();
+  const { alerts, notifications, checkStatus, setNotifications } =
+    useNotifications();
+
+  useInterval(async () => {
+    notifications
+      .filter((n) => n.status === 'pending')
+      .forEach((n) => checkStatus(n));
+  }, 2000);
 
   useEffect(() => {
     if (user) {
