@@ -4,11 +4,11 @@ import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
-import { sdk } from 'libs/sdk/carbonSdk';
+import { carbonSDK } from 'libs/sdk/carbonSdk';
 import { useContract } from 'hooks/useContract';
-import { useCarbonSDK } from 'libs/sdk';
 import { TWO_SECONDS_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
+import { useCarbonSDK } from 'hooks/useCarbonSDK';
 
 export enum StrategyStatus {
   Active,
@@ -45,7 +45,7 @@ export const useGetUserStrategies = () => {
       if (!user) return [];
 
       console.log('Fetching strategies...');
-      const strategies = await sdk.getUserStrategies(user);
+      const strategies = await carbonSDK.getUserStrategies(user);
       console.log('Fetched strategies', strategies);
       const _getTknData = async (address: string) => {
         const data = await fetchTokenData(Token, address);
@@ -155,7 +155,7 @@ export const useCreateStrategy = () => {
       const order0Budget = Number(order0.budget) === 0 ? '0' : order0.budget;
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
 
-      const unsignedTx = await sdk.createBuySellStrategy(
+      const unsignedTx = await carbonSDK.createBuySellStrategy(
         token0,
         token1,
         order0Low,

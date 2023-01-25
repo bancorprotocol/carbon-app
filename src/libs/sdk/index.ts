@@ -1,2 +1,1 @@
-export { sdk } from './carbonSdk';
-export { CarbonSDKProvider, useCarbonSDK } from './CarbonSDKProvider';
+export { carbonSDK } from './carbonSdk';

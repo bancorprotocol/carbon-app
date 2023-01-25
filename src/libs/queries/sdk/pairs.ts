@@ -3,8 +3,9 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
-import { sdk, useCarbonSDK } from 'libs/sdk';
+import { carbonSDK } from 'libs/sdk';
 import { TWO_SECONDS_IN_MS } from 'utils/time';
+import { useCarbonSDK } from 'hooks/useCarbonSDK';
 
 export const useGetTradePairsData = () => {
   const { isInitialized } = useCarbonSDK();
@@ -21,7 +22,7 @@ export const useGetTradePairsData = () => {
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
       console.log('useGetTradePairsData');
-      const pairs = sdk.pairs;
+      const pairs = carbonSDK.pairs;
       console.log('pairs', pairs);
       const promises = pairs.map(async (pair) => ({
         baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),

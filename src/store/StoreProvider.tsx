@@ -19,12 +19,14 @@ import {
   TokensStore,
   useTokensStore,
 } from 'store/useTokensStore';
+import { defaultSDKStore, SDKStore, useSDKStore } from 'store/useSDKStore';
 
 // ********************************** //
 // STORE CONTEXT
 // ********************************** //
 
 interface StoreContext {
+  sdk: SDKStore;
   tokens: TokensStore;
   notifications: NotificationsStore;
   modals: ModalStore;
@@ -34,6 +36,7 @@ interface StoreContext {
 }
 
 const defaultValue: StoreContext = {
+  sdk: defaultSDKStore,
   tokens: defaultTokensStore,
   notifications: defaultNotificationsStore,
   modals: defaultModalStore,
@@ -53,12 +56,14 @@ export const useStore = () => {
 // ********************************** //
 
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const notifications = useNotificationsStore();
   const modals = useModalStore();
   const tokens = useTokensStore();
 
   const value: StoreContext = {
+    sdk,
     tokens,
     notifications,
     modals,

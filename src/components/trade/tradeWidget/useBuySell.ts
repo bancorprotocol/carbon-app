@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { config } from 'services/web3/config';
 import { useApproval } from 'hooks/useApproval';
 import { PopulatedTransaction } from 'ethers';
-import { sdk } from 'libs/sdk';
+import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import {
@@ -113,7 +113,7 @@ export const useBuySell = ({
 
     let unsignedTx: PopulatedTransaction;
     if (isTradeBySource) {
-      unsignedTx = await sdk.composeTradeBySourceTransaction(
+      unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
         source.address,
         target.address,
         tradeActions,
@@ -122,7 +122,7 @@ export const useBuySell = ({
         { gasLimit: 999999999 }
       );
     } else {
-      unsignedTx = await sdk.composeTradeByTargetTransaction(
+      unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
         source.address,
         target.address,
         tradeActions,

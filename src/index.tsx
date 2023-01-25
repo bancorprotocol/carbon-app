@@ -9,7 +9,6 @@ import { Web3ReactWrapper } from 'libs/web3';
 import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
-import { CarbonSDKProvider } from 'libs/sdk';
 import { StoreProvider } from 'store';
 
 const root = ReactDOM.createRoot(
@@ -19,15 +18,13 @@ root.render(
   <React.StrictMode>
     <QueryProvider>
       <StoreProvider>
-        <LazyMotion>
-          <CarbonSDKProvider>
-            <Web3ReactWrapper>
-              <Router>
-                <App />
-              </Router>
-            </Web3ReactWrapper>
-          </CarbonSDKProvider>
-        </LazyMotion>
+        <Web3ReactWrapper>
+          <LazyMotion>
+            <Router>
+              <App />
+            </Router>
+          </LazyMotion>
+        </Web3ReactWrapper>
       </StoreProvider>
     </QueryProvider>
   </React.StrictMode>
