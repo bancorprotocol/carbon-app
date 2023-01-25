@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 import { usePopper, Modifier } from 'react-popper';
-import * as PopperJS from '@popperjs/core';
+import { Options, createPopper } from '@popperjs/core';
 
 export const useTooltip = <Modifiers>(
-  options?: Omit<Partial<PopperJS.Options>, 'modifiers'> & {
-    createPopper?: typeof PopperJS.createPopper;
+  options?: Omit<Partial<Options>, 'modifiers'> & {
+    createPopper?: typeof createPopper;
     modifiers?: ReadonlyArray<Modifier<Modifiers>>;
   }
 ) => {

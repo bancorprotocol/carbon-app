@@ -1,4 +1,5 @@
 import { FC, ReactNode, useState } from 'react';
+import { Placement } from '@popperjs/core';
 import { useTooltip } from 'libs/tooltip';
 import { m, Variants } from 'libs/motion';
 import { useOutsideClick } from 'hooks/useOutsideClick';
@@ -9,6 +10,7 @@ type Props = {
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
   className?: string;
+  placement?: Placement;
 };
 
 export const DropdownMenu: FC<Props> = ({
@@ -17,10 +19,12 @@ export const DropdownMenu: FC<Props> = ({
   className,
   isOpen,
   setIsOpen,
+  placement,
 }) => {
   const outsideState = setIsOpen !== undefined && isOpen !== undefined;
 
   const { itemRef, tooltipRef, styles } = useTooltip({
+    placement,
     modifiers: [
       {
         name: 'offset',
