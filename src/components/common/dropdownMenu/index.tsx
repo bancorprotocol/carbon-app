@@ -1,5 +1,5 @@
 import { FC, ReactNode, useRef, useState } from 'react';
-import { usePopper } from 'react-popper';
+import { useTooltip } from 'libs/tooltip';
 import { m, Variants } from 'libs/motion';
 import { useOutsideClick } from 'hooks/useOutsideClick';
 
@@ -21,12 +21,12 @@ export const DropdownMenu: FC<Props> = ({
   const outsideState = setIsOpen !== undefined && isOpen !== undefined;
   const ref = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { styles } = usePopper(ref.current, tooltipRef.current, {
+  const { styles } = useTooltip(ref.current, tooltipRef.current, {
     modifiers: [
       {
         name: 'offset',
         options: {
-          offset: [0, 10],
+          offset: [0, 8],
         },
       },
     ],

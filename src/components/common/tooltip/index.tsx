@@ -1,7 +1,7 @@
-import { m, Variants } from 'libs/motion';
 import { FC, ReactNode, useRef, useState } from 'react';
+import { m, Variants } from 'libs/motion';
+import { useTooltip } from 'libs/tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { usePopper } from 'react-popper';
 
 type Props = {
   children: ReactNode;
@@ -17,7 +17,7 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
   const itemRef = useRef<HTMLDivElement>(null);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { styles } = usePopper(itemRef.current, tooltipRef.current, {
+  const { styles } = useTooltip(itemRef.current, tooltipRef.current, {
     modifiers: [
       {
         name: 'offset',
