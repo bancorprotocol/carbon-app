@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from './useOrder';
+import { PathNames, useNavigate } from 'libs/routing';
+import { Strategy } from 'libs/queries';
 
 type Props = {
+  strategy: string;
   setToken0: (token: Token | undefined) => void;
   setToken1: (token: Token | undefined) => void;
   order0: OrderCreate;
@@ -16,12 +18,9 @@ type Order = {
   price: number;
 };
 
-export const useDuplicateStrategy = ({
-  setToken0,
-  setToken1,
-  order0,
-  order1,
-}: Props) => {
+export const useDuplicateStrategy = () => {
+  const navigate = useNavigate();
+
   const updateOrder = (order: OrderCreate, baseOrder: Order) => {
     order.setBudget(baseOrder.balance);
     const limit = baseOrder.startRate === baseOrder.endRate;
@@ -34,19 +33,35 @@ export const useDuplicateStrategy = ({
     }
   };
 
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const rawStrategy = urlParams?.get('strategy') || '';
-    const strategy = JSON.parse(
-      Buffer.from(rawStrategy, 'base64').toString('utf8')
+  const populateStrategy = ({
+    strategy,
+    setToken0,
+    setToken1,
+    order0,
+    order1,
+  }: Props) => {
+    const newStrategy = JSON.parse(
+      Buffer.from(strategy, 'base64').toString('utf8')
     );
 
     if (strategy) {
-      setToken0(strategy.token0);
-      setToken1(strategy.token1);
-      updateOrder(order0, strategy.order0);
-      updateOrder(order1, strategy.order1);
+      setToken0(newStrategy.token0);
+      setToken1(newStrategy.token1);
+      updateOrder(order0, newStrategy.order0);
+      updateOrder(order1, newStrategy.order1);
     }
-  }, []);
+  };
+
+  const duplicate = (strategy: Strategy) => {
+    const parsedData = Buffer.from(JSON.stringify(strategy)).toString('base64');
+    navigate({
+      to: `${PathNames.createStrategy}/?strategy=${parsedData}`,
+    });
+  };
+
+  return {
+    duplicate,
+    populateStrategy,
+    updateOrder,
+  };
 };

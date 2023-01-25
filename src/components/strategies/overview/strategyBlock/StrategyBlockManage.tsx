@@ -2,15 +2,14 @@ import { FC } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 
 export const StrategyBlockManage: FC<{
   strategy: any;
   manage: boolean;
   setManage: (flag: boolean) => void;
 }> = ({ strategy, manage, setManage }) => {
-  const navigate = useNavigate();
-
+  const { duplicate } = useDuplicateStrategy();
   const items = [
     {
       name: 'Edit Strategy Name',
@@ -20,14 +19,7 @@ export const StrategyBlockManage: FC<{
     },
     {
       name: 'Duplicate Strategy',
-      action: () => {
-        const parsedData = Buffer.from(JSON.stringify(strategy)).toString(
-          'base64'
-        );
-        navigate({
-          to: `${PathNames.createStrategy}/?strategy=${parsedData}`,
-        });
-      },
+      action: () => duplicate(strategy),
     },
     {
       name: 'Delete Strategy',

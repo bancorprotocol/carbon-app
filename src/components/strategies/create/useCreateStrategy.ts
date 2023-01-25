@@ -10,7 +10,6 @@ import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'libs/notifications';
-import { useDuplicateStrategy } from './useDuplicateStrategy';
 
 const spenderAddress = config.carbon.poolCollection;
 
@@ -25,10 +24,8 @@ export const useCreate = () => {
 
   const token0BalanceQuery = useGetTokenBalance(token0);
   const token1BalanceQuery = useGetTokenBalance(token1);
-
   const order1 = useOrder();
   const order0 = useOrder();
-  useDuplicateStrategy({ setToken0, setToken1, order0, order1 });
 
   const [name, setName] = useState('');
   const mutation = useCreateStrategy();
