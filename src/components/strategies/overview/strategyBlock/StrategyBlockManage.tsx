@@ -3,9 +3,10 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { Strategy } from 'libs/queries';
 
 export const StrategyBlockManage: FC<{
-  strategy: any;
+  strategy: Strategy;
   manage: boolean;
   setManage: (flag: boolean) => void;
 }> = ({ strategy, manage, setManage }) => {

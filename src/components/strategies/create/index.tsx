@@ -3,23 +3,15 @@ import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
 import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { MakeGenerics, useLocation, useSearch } from 'libs/routing';
+import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { useEffect } from 'react';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
 
-type MyLocationGenerics = MakeGenerics<{
-  Search: {
-    strategy: string;
-  };
-}>;
-
 export const CreateStrategy = () => {
   const location = useLocation();
-  const { strategy } = useSearch<MyLocationGenerics>();
-  const { populateStrategy } = useDuplicateStrategy();
 
   const {
     token0,
@@ -38,17 +30,25 @@ export const CreateStrategy = () => {
     token1BalanceQuery,
   } = useCreate();
 
+  const { populateStrategy, strategyDuplicate } = useDuplicateStrategy();
+
   useEffect(() => {
-    if (strategy) {
-      populateStrategy({
-        strategy,
-        setToken0,
+    if (strategyDuplicate) {
+      populateStrategy(strategyDuplicate, {
         setToken1,
         order0,
         order1,
+        setToken0,
       });
     }
-  }, []);
+  }, [
+    strategyDuplicate,
+    populateStrategy,
+    setToken1,
+    order0,
+    order1,
+    setToken0,
+  ]);
 
   return (
     <m.div
