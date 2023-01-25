@@ -3,16 +3,13 @@ import ReactDOM from 'react-dom/client';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
-import { ModalProvider } from 'libs/modals';
 import { App } from 'App';
 import reportWebVitals from 'reportWebVitals';
 import { Web3ReactWrapper } from 'libs/web3';
 import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
-import { TokensProvider } from 'libs/tokens';
 import { CarbonSDKProvider } from 'libs/sdk';
-import { NotificationProvider } from 'libs/notifications';
 import { StoreProvider } from 'store';
 
 const root = ReactDOM.createRoot(
@@ -20,25 +17,19 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <StoreProvider>
-      <LazyMotion>
-        <CarbonSDKProvider>
-          <QueryProvider>
-            <TokensProvider>
-              <Web3ReactWrapper>
-                <NotificationProvider>
-                  <Router>
-                    <ModalProvider>
-                      <App />
-                    </ModalProvider>
-                  </Router>
-                </NotificationProvider>
-              </Web3ReactWrapper>
-            </TokensProvider>
-          </QueryProvider>
-        </CarbonSDKProvider>
-      </LazyMotion>
-    </StoreProvider>
+    <QueryProvider>
+      <StoreProvider>
+        <LazyMotion>
+          <CarbonSDKProvider>
+            <Web3ReactWrapper>
+              <Router>
+                <App />
+              </Router>
+            </Web3ReactWrapper>
+          </CarbonSDKProvider>
+        </LazyMotion>
+      </StoreProvider>
+    </QueryProvider>
   </React.StrictMode>
 );
 

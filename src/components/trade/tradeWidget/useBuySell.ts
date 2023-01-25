@@ -1,5 +1,5 @@
 import { useWeb3 } from 'libs/web3';
-import { useModal } from 'libs/modals';
+import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { config } from 'services/web3/config';
 import { useApproval } from 'hooks/useApproval';
@@ -14,7 +14,7 @@ import {
   useGetTradeData,
 } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
-import { useNotifications } from 'libs/notifications';
+import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 
 const calcMinReturn = (amount: string, slippagePercent: string | number) => {

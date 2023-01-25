@@ -1,5 +1,5 @@
 import { useTrade } from 'components/trade/useTrade';
-import { useModal } from 'libs/modals/ModalProvider';
+import { useModal } from 'hooks/useModal';
 import {
   ModalTradeTokenListData,
   TradePair,

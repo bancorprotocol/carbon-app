@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useWeb3 } from 'libs/web3';
-import { Token, useTokens } from 'libs/tokens';
+import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
@@ -8,6 +8,7 @@ import { sdk } from 'libs/sdk/carbonSdk';
 import { useContract } from 'hooks/useContract';
 import { useCarbonSDK } from 'libs/sdk';
 import { TWO_SECONDS_IN_MS } from 'utils/time';
+import { useTokens } from 'hooks/useTokens';
 
 export enum StrategyStatus {
   Active,

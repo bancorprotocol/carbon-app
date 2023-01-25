@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
-import { useTokens } from 'libs/tokens';
+import { useTokens } from 'hooks/useTokens';
 import { sdk, useCarbonSDK } from 'libs/sdk';
 import { TWO_SECONDS_IN_MS } from 'utils/time';
 
