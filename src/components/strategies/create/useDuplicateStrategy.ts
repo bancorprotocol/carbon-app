@@ -12,7 +12,7 @@ type Props = {
 
 type MyLocationGenerics = MakeGenerics<{
   Search: {
-    strategy: Strategy;
+    strategy: string;
   };
 }>;
 
@@ -32,22 +32,28 @@ export const useDuplicateStrategy = () => {
     }
   };
 
-  const populateStrategy = (
-    newStrategy: Strategy,
-    { setToken0, setToken1, order0, order1 }: Props
-  ) => {
-    if (strategyDuplicate) {
-      setToken0(newStrategy.token0);
-      setToken1(newStrategy.token1);
-      _updateOrder(order0, newStrategy.order0);
-      _updateOrder(order1, newStrategy.order1);
+  const populateStrategy = ({
+    setToken0,
+    setToken1,
+    order0,
+    order1,
+  }: Props) => {
+    const parsedStrategy = JSON.parse(
+      Buffer.from(strategyDuplicate || '', 'base64').toString('utf8')
+    );
+    if (parsedStrategy) {
+      setToken0(parsedStrategy.token0);
+      setToken1(parsedStrategy.token1);
+      _updateOrder(order0, parsedStrategy.order0);
+      _updateOrder(order1, parsedStrategy.order1);
     }
   };
 
   const duplicate = (strategy: Strategy) => {
+    const parsedData = Buffer.from(JSON.stringify(strategy)).toString('base64');
+
     navigate({
-      to: PathNames.createStrategy,
-      search: { strategy },
+      to: `${PathNames.createStrategy}/?strategy=${parsedData}`,
     });
   };
 

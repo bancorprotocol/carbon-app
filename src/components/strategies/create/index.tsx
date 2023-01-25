@@ -34,21 +34,14 @@ export const CreateStrategy = () => {
 
   useEffect(() => {
     if (strategyDuplicate) {
-      populateStrategy(strategyDuplicate, {
+      populateStrategy({
         setToken1,
         order0,
         order1,
         setToken0,
       });
     }
-  }, [
-    strategyDuplicate,
-    populateStrategy,
-    setToken1,
-    order0,
-    order1,
-    setToken0,
-  ]);
+  }, []);
 
   return (
     <m.div
