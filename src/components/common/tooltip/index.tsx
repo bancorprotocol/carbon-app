@@ -1,4 +1,4 @@
-import { FC, ReactNode, useRef, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { m, Variants } from 'libs/motion';
 import { useTooltip } from 'libs/tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
@@ -13,11 +13,8 @@ let timeout: NodeJS.Timeout;
 let prevPopFunc: Function = () => {};
 
 export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const itemRef = useRef<HTMLDivElement>(null);
-
   const [isOpen, setIsOpen] = useState(false);
-  const { styles } = useTooltip(itemRef.current, tooltipRef.current, {
+  const { itemRef, tooltipRef, styles } = useTooltip({
     modifiers: [
       {
         name: 'offset',

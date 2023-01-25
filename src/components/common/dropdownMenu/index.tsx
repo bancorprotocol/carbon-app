@@ -1,4 +1,4 @@
-import { FC, ReactNode, useRef, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { useTooltip } from 'libs/tooltip';
 import { m, Variants } from 'libs/motion';
 import { useOutsideClick } from 'hooks/useOutsideClick';
@@ -19,9 +19,8 @@ export const DropdownMenu: FC<Props> = ({
   setIsOpen,
 }) => {
   const outsideState = setIsOpen !== undefined && isOpen !== undefined;
-  const ref = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const { styles } = useTooltip(ref.current, tooltipRef.current, {
+
+  const { itemRef, tooltipRef, styles } = useTooltip({
     modifiers: [
       {
         name: 'offset',
@@ -33,14 +32,14 @@ export const DropdownMenu: FC<Props> = ({
   });
 
   const [open, setOpen] = useState(false);
-  useOutsideClick(ref, () =>
+  useOutsideClick(itemRef, () =>
     outsideState ? setIsOpen(false) : setOpen(false)
   );
   const menuOpen = (outsideState && isOpen) || (!outsideState && open);
 
   return (
     <m.div
-      ref={ref}
+      ref={itemRef}
       initial={false}
       animate={menuOpen ? 'open' : 'closed'}
       className={'relative'}
