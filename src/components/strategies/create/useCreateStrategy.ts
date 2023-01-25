@@ -1,6 +1,6 @@
+import { useMemo, useState, useEffect } from 'react';
 import { OrderCreate, useOrder } from './useOrder';
 import { QueryKey, useCreateStrategy } from 'libs/queries';
-import { useMemo, useState } from 'react';
 import { useModal } from 'libs/modals';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
@@ -18,19 +18,48 @@ export const useCreate = () => {
   const navigate = useNavigate();
   const { user } = useWeb3();
   const { openModal } = useModal();
-  const [token0, setToken0] = useState<Token | undefined>();
-  const [token1, setToken1] = useState<Token | undefined>();
+  const [token0, setToken0] = useState<Token | undefined>(undefined);
+  const [token1, setToken1] = useState<Token | undefined>(undefined);
   const { dispatchNotification } = useNotifications();
 
   const token0BalanceQuery = useGetTokenBalance(token0);
   const token1BalanceQuery = useGetTokenBalance(token1);
 
-  const order0 = useOrder();
   const order1 = useOrder();
+  const order0 = useOrder();
+
   const [name, setName] = useState('');
   const mutation = useCreateStrategy();
 
   const showStep2 = !!token0 && !!token1;
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const strategy = JSON.parse(urlParams?.get('strategy') || '');
+    if (strategy) {
+      setToken0(strategy.token0);
+      setToken1(strategy.token1);
+      order0.setBudget(strategy.order0.balance);
+      order1.setBudget(strategy.order1.balance);
+      const limit0 = strategy.order0.startRate === strategy.order0.endRate;
+      const limit1 = strategy.order1.startRate === strategy.order1.endRate;
+      if (limit0) {
+        order0.setPrice(strategy.order0.startRate);
+      } else {
+        order0.setIsRange(true);
+        order0.setMin(strategy.order0.startRate);
+        order0.setMax(strategy.order0.endRate);
+      }
+      if (limit1) {
+        order1.setPrice(strategy.order1.startRate);
+      } else {
+        order1.setIsRange(true);
+        order1.setMin(strategy.order1.startRate);
+        order1.setMax(strategy.order1.endRate);
+      }
+    }
+  }, []);
 
   const approvalTokens = useMemo(() => {
     return [

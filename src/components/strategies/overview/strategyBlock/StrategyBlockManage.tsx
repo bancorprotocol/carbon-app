@@ -2,12 +2,35 @@ import { FC } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { PathNames, useNavigate } from 'libs/routing';
 
 export const StrategyBlockManage: FC<{
+  strategy: any;
   manage: boolean;
   setManage: (flag: boolean) => void;
-}> = ({ manage, setManage }) => {
-  const items = ['Edit Strategy Name', 'Withdraw Funds', 'Delete Strategy'];
+}> = ({ strategy, manage, setManage }) => {
+  const navigate = useNavigate();
+
+  const items = [
+    {
+      name: 'Edit Strategy Name',
+    },
+    {
+      name: 'Withdraw Funds',
+    },
+    {
+      name: 'Duplicate Strategy',
+      action: () => {
+        const parsedData = JSON.stringify(strategy);
+        navigate({
+          to: `${PathNames.createStrategy}/?strategy=${parsedData}`,
+        });
+      },
+    },
+    {
+      name: 'Delete Strategy',
+    },
+  ];
 
   return (
     <DropdownMenu
@@ -26,20 +49,27 @@ export const StrategyBlockManage: FC<{
       )}
       className="w-full !p-10"
     >
-      {items.map((item) => (
-        <ManageItem key={item} title={item} setManage={setManage} />
+      {items.map(({ name, action }) => (
+        <ManageItem
+          key={name}
+          title={name}
+          setManage={setManage}
+          action={action}
+        />
       ))}
     </DropdownMenu>
   );
 };
 
-const ManageItem: FC<{ title: string; setManage: (flag: boolean) => void }> = ({
-  title,
-  setManage,
-}) => {
+const ManageItem: FC<{
+  title: string;
+  setManage: (flag: boolean) => void;
+  action?: () => void;
+}> = ({ title, setManage, action }) => {
   return (
     <div
       onClick={() => {
+        action && action();
         setManage(false);
       }}
       className="hover:bg-body cursor-pointer rounded-6 p-12"

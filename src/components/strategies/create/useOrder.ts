@@ -12,6 +12,8 @@ export interface OrderCreate {
   rangeError: string;
   setRangeError: (value: string) => void;
   priceError: string;
+  setIsRange: (value: boolean) => void;
+  isRange: boolean;
   setPriceError: (value: string) => void;
   budgetError: string;
   setBudgetError: (value: string) => void;
@@ -26,6 +28,7 @@ export const useOrder = () => {
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [budgetError, setBudgetError] = useState('');
+  const [isRange, setIsRange] = useState(false);
 
   const resetFields = (skipBudget?: boolean, skipPrice?: boolean) => {
     if (!skipPrice) {
@@ -52,6 +55,8 @@ export const useOrder = () => {
     min,
     setMin,
     rangeError,
+    isRange,
+    setIsRange,
     setRangeError,
     priceError,
     setPriceError,
