@@ -40,6 +40,7 @@ export const CreateStrategy = () => {
       populateStrategy(templateStrategy);
       navigate({
         search: undefined,
+        replace: true,
       });
     }
   }, []);
