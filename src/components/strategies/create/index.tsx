@@ -3,15 +3,18 @@ import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
 import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { useLocation } from 'libs/routing';
+import { useLocation, useNavigate } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { useEffect } from 'react';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
+import { OrderCreate } from './useOrder';
+import { Order, Strategy } from 'libs/queries';
 
 export const CreateStrategy = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const {
     token0,
@@ -30,18 +33,35 @@ export const CreateStrategy = () => {
     token1BalanceQuery,
   } = useCreate();
 
-  const { populateStrategy, templateStrategy } = useDuplicateStrategy();
+  const { templateStrategy } = useDuplicateStrategy();
 
   useEffect(() => {
     if (templateStrategy) {
-      populateStrategy({
-        setToken0,
-        setToken1,
-        order0,
-        order1,
+      populateStrategy(templateStrategy);
+      navigate({
+        search: undefined,
       });
     }
   }, []);
+
+  const updateOrder = (order: OrderCreate, baseOrder: Order) => {
+    order.setBudget(baseOrder.balance);
+    const limit = baseOrder.startRate === baseOrder.endRate;
+    if (limit) {
+      order.setPrice(baseOrder.startRate);
+    } else {
+      order.setIsRange(true);
+      order.setMin(baseOrder.startRate);
+      order.setMax(baseOrder.endRate);
+    }
+  };
+
+  const populateStrategy = (templateStrategy: Strategy) => {
+    setToken0(templateStrategy.token0);
+    setToken1(templateStrategy.token1);
+    updateOrder(order0, templateStrategy.order0);
+    updateOrder(order1, templateStrategy.order1);
+  };
 
   return (
     <m.div
