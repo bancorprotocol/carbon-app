@@ -39,35 +39,49 @@ export const useDuplicateStrategy = () => {
     }
   };
 
+  const _isValid = (strategy: Strategy) => {
+    return (
+      strategy.hasOwnProperty('token0') &&
+      strategy.hasOwnProperty('token1') &&
+      strategy.hasOwnProperty('order0') &&
+      strategy.hasOwnProperty('order1')
+    );
+  };
+
   const populateStrategy = ({
     setToken0,
     setToken1,
     order0,
     order1,
   }: Props) => {
-    const parsedStrategy = JSON.parse(
+    const decodedStrategy = JSON.parse(
       Buffer.from(strategyDuplicate || '', 'base64').toString('utf8')
     );
-    if (parsedStrategy) {
-      setToken0(parsedStrategy.token0);
-      setToken1(parsedStrategy.token1);
-      _updateOrder(order0, parsedStrategy.order0);
-      _updateOrder(order1, parsedStrategy.order1);
+
+    const isValid = _isValid(decodedStrategy);
+
+    if (decodedStrategy && isValid) {
+      setToken0(decodedStrategy.token0);
+      setToken1(decodedStrategy.token1);
+      _updateOrder(order0, decodedStrategy.order0);
+      _updateOrder(order1, decodedStrategy.order1);
     }
     location.history.replace(PathNames.createStrategy);
   };
 
   const duplicate = (strategy: Strategy) => {
-    const parsedData = Buffer.from(JSON.stringify(strategy)).toString('base64');
+    const encodedStrategy = Buffer.from(JSON.stringify(strategy)).toString(
+      'base64'
+    );
 
     navigate({
-      to: `${PathNames.createStrategy}/?strategy=${parsedData}`,
+      to: `${PathNames.createStrategy}/?strategy=${encodedStrategy}`,
     });
   };
 
   return {
     duplicate,
     populateStrategy,
-    strategyDuplicate,
+    isDuplicate: !!strategyDuplicate,
   };
 };
