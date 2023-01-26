@@ -90,10 +90,14 @@ export const useSetUserApproval = () => {
         ? expandToken(amount, decimals)
         : UNLIMITED_WEI;
 
-      const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(address);
+      const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
+        address.toLowerCase()
+      );
 
       if (isNullApprovalContract) {
+        console.log('muh isNullApprovalContract', address);
         const allowanceWei = await Token(address).read.allowance(user, spender);
+        console.log('muh allowanceWei', allowanceWei.toString());
         if (allowanceWei.gt(0)) {
           const tx = await Token(address).write.approve(spender, '0', {
             // TODO fix GAS limit

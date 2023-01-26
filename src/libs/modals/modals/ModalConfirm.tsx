@@ -38,8 +38,8 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
         fullWidth
         disabled={approvalRequired}
         onClick={async () => {
-          await onConfirm();
           closeModal(id);
+          await onConfirm();
         }}
       >
         {buttonLabel}

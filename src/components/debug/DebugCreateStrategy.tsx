@@ -14,6 +14,7 @@ import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
+import { Input, Label } from 'components/common/inputField';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -25,7 +26,7 @@ TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
 
 const spender = config.carbon.poolCollection;
 
-const rounds = 40;
+const perRound = TOKENS.length * TOKENS.length - TOKENS.length;
 
 export const DebugCreateStrategy = () => {
   const { user } = useWeb3();
@@ -33,7 +34,10 @@ export const DebugCreateStrategy = () => {
   const queryClient = useQueryClient();
   const balanceQueries = useGetTokenBalances(TOKENS);
   const createMutation = useCreateStrategy();
+  const [rounds, setRounds] = useState(1);
   const [index, setIndex] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [interval, setInterval] = useState(1);
 
   const balancesMap = useMemo(() => {
     return new Map(balanceQueries.map((t, i) => [TOKENS[i].address, t.data]));
@@ -46,6 +50,8 @@ export const DebugCreateStrategy = () => {
       return { ...tkn, spender, amount };
     });
   }, [balancesMap]);
+
+  const total = useMemo(() => rounds * perRound, [rounds]);
 
   const approval = useApproval(approvalTokens);
 
@@ -62,15 +68,16 @@ export const DebugCreateStrategy = () => {
       console.error('user is undefined');
       return;
     }
+    setIsRunning(true);
 
-    while (index < rounds) {
+    for await (const _ of Array.from({ length: rounds })) {
       for await (const tkn0 of TOKENS) {
-        if (index >= rounds) {
+        if (index >= total) {
           break;
         }
 
         for await (const tkn1 of TOKENS) {
-          if (index >= rounds) {
+          if (index >= total) {
             break;
           }
           if (tkn0.address === tkn1.address) {
@@ -86,13 +93,13 @@ export const DebugCreateStrategy = () => {
             order0: {
               max: randomIntFromInterval(8, 10).toString(),
               min: randomIntFromInterval(4, 7).toString(),
-              budget: new BigNumber(balance0).div(rounds + 1).toFixed(2),
+              budget: new BigNumber(balance0).div(total).toFixed(2),
               price: '',
             },
             order1: {
               max: randomIntFromInterval(66, 100).toString(),
               min: randomIntFromInterval(40, 50).toString(),
-              budget: new BigNumber(balance1).div(rounds + 1).toFixed(2),
+              budget: new BigNumber(balance1).div(total).toFixed(2),
               price: '',
             },
           };
@@ -100,7 +107,7 @@ export const DebugCreateStrategy = () => {
             await createMutation.mutate(strategy, {
               onError: (e) => console.error(e),
             });
-            await wait(500);
+            await wait(interval * 1000);
             await queryClient.invalidateQueries({
               queryKey: QueryKey.balance(user, tkn0.address),
             });
@@ -127,6 +134,7 @@ export const DebugCreateStrategy = () => {
         }
       }
     }
+    setIsRunning(false);
   };
 
   return (
@@ -136,8 +144,31 @@ export const DebugCreateStrategy = () => {
       }
     >
       <h2>Create Strategy</h2>
-      {index} / {rounds}
-      <Button onClick={handleClick}>RESET</Button>
+      <Label label={'Rounds'}>
+        <Input
+          type={'number'}
+          value={rounds}
+          fullWidth
+          onChange={(e) => setRounds(Number(e.target.value))}
+        />
+      </Label>
+      <Label label={'Pause in seconds'}>
+        <Input
+          type={'number'}
+          value={interval}
+          fullWidth
+          onChange={(e) => setInterval(Number(e.target.value))}
+        />
+      </Label>
+      <div>Strategies per round: {perRound}</div>
+      <div>Strategies total: {total}</div>
+      {isRunning ? (
+        <div>
+          Strategies created: {index} / {total}
+        </div>
+      ) : (
+        <Button onClick={handleClick}>RESET</Button>
+      )}
     </div>
   );
 };
