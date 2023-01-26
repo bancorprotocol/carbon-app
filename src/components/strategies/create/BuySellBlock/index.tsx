@@ -63,7 +63,14 @@ export const BuySellBlock: FC<Props> = ({
               Range
             </button>
           </div>
-          <Tooltip>??????</Tooltip>
+          <Tooltip>
+            {buy
+              ? `Indicate the part of your strategy where you are willing to purchase back the asset. Typically, this can be below market rate. Limit allows you to set a specific rate while Range allows you to set your own range of rates for the strategy to be available in.`
+              : `Indicate the part of your strategy where you are willing to sell the
+            asset to the market. Typically, this can be above market rate. Limit
+            allows you to set a specific rate while Range allows you to set your
+            own range of rates for the strategy to be available in.`}
+          </Tooltip>
         </div>
       </div>
 
