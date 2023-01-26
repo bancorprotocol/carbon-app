@@ -5,9 +5,9 @@ import {
   useNavigate,
   useLocation,
 } from 'libs/routing';
-import { useTokens } from 'libs/tokens';
+import { useTokens } from 'hooks/useTokens';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { useModal } from 'libs/modals';
+import { useModal } from 'hooks/useModal';
 import { useGetTradePairsData } from 'libs/queries/sdk/pairs';
 import { useMemo } from 'react';
 

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { OrderCreate, useOrder } from './useOrder';
 import { QueryKey, useCreateStrategy } from 'libs/queries';
-import { useModal } from 'libs/modals';
+import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
 import { PathNames, useNavigate } from 'libs/routing';
@@ -9,7 +9,7 @@ import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
-import { useNotifications } from 'libs/notifications';
+import { useNotifications } from 'hooks/useNotifications';
 
 const spenderAddress = config.carbon.poolCollection;
 

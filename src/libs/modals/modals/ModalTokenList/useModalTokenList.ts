@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Token, useTokens } from 'libs/tokens';
-import { useModal } from 'libs/modals/ModalProvider';
+import { Token } from 'libs/tokens';
+import { useTokens } from 'hooks/useTokens';
+import { useModal } from 'hooks/useModal';
 import Fuse from 'fuse.js';
 import { utils } from 'ethers';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';

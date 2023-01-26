@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useModal } from 'libs/modals';
+import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { Button } from 'components/common/button';
 

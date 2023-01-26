@@ -1,4 +1,4 @@
-import { useModal } from 'libs/modals';
+import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 

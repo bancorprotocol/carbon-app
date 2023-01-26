@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
-import { sdk, useCarbonSDK } from 'libs/sdk';
+import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { TWO_SECONDS_IN_MS } from 'utils/time';
+import { useCarbonSDK } from 'hooks/useCarbonSDK';
 
 type Props = {
   sourceToken: string;
@@ -36,7 +37,7 @@ export const useGetTradeData = ({
         };
       }
 
-      const data = await sdk.getTradeData(
+      const data = await carbonSDK.getTradeData(
         sourceToken,
         targetToken,
         input,
