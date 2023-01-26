@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
 import { SelectTokenButton } from 'components/common/selectToken';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
 import { OrderCreate } from './useOrder';
 import { Order, Strategy } from 'libs/queries';
@@ -35,15 +35,25 @@ export const CreateStrategy = () => {
 
   const { templateStrategy } = useDuplicateStrategy();
 
-  useEffect(() => {
-    if (templateStrategy) {
-      populateStrategy(templateStrategy);
+  const populateStrategy = useCallback(
+    (templateStrategy: Strategy) => {
+      setToken0(templateStrategy.token0);
+      setToken1(templateStrategy.token1);
+      updateOrder(order0, templateStrategy.order0);
+      updateOrder(order1, templateStrategy.order1);
       navigate({
         search: undefined,
         replace: true,
       });
+    },
+    [navigate, order0, order1, setToken0, setToken1]
+  );
+
+  useEffect(() => {
+    if (templateStrategy) {
+      populateStrategy(templateStrategy);
     }
-  }, []);
+  }, [populateStrategy, templateStrategy]);
 
   const updateOrder = (order: OrderCreate, baseOrder: Order) => {
     order.setBudget(baseOrder.balance);
@@ -55,13 +65,6 @@ export const CreateStrategy = () => {
       order.setMin(baseOrder.startRate);
       order.setMax(baseOrder.endRate);
     }
-  };
-
-  const populateStrategy = (templateStrategy: Strategy) => {
-    setToken0(templateStrategy.token0);
-    setToken1(templateStrategy.token1);
-    updateOrder(order0, templateStrategy.order0);
-    updateOrder(order1, templateStrategy.order1);
   };
 
   return (

@@ -1,5 +1,6 @@
 import { MakeGenerics, PathNames, useNavigate, useSearch } from 'libs/routing';
 import { Strategy } from 'libs/queries';
+import { useCallback, useMemo } from 'react';
 
 type MyLocationGenerics = MakeGenerics<{
   Search: {
@@ -20,7 +21,7 @@ export const useDuplicateStrategy = () => {
     );
   };
 
-  const decodedStrategyAndValidate = () => {
+  const decodedStrategyAndValidate = useCallback(() => {
     try {
       const decodedStrategy = JSON.parse(
         Buffer.from(templateStrategy || '', 'base64').toString('utf8')
@@ -32,7 +33,7 @@ export const useDuplicateStrategy = () => {
       }
       return undefined;
     } catch (error) {}
-  };
+  }, [templateStrategy]);
 
   const duplicate = (strategy: Strategy) => {
     const encodedStrategy = Buffer.from(JSON.stringify(strategy)).toString(
@@ -44,8 +45,12 @@ export const useDuplicateStrategy = () => {
     });
   };
 
+  const decodedStrategy = useMemo(() => {
+    return decodedStrategyAndValidate();
+  }, [decodedStrategyAndValidate]);
+
   return {
     duplicate,
-    templateStrategy: decodedStrategyAndValidate(),
+    templateStrategy: decodedStrategy,
   };
 };
