@@ -9,7 +9,7 @@ export const useTokens = () => {
   } = useStore();
 
   const getTokenById = useCallback(
-    (id: string) => tokensMap.get(id),
+    (id: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
     [tokensMap]
   );
 
