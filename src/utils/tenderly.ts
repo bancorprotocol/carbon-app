@@ -48,6 +48,30 @@ export const FAUCET_TOKENS: FaucetToken[] = [
     decimals: 8,
     symbol: 'WBTC',
   },
+  {
+    donorAccount: '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8',
+    tokenContract: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
+    decimals: 18,
+    symbol: 'BNB',
+  },
+  {
+    donorAccount: '0x5e3ef299fddf15eaa0432e6e66473ace8c13d908',
+    tokenContract: '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
+    decimals: 18,
+    symbol: 'MATIC',
+  },
+  {
+    donorAccount: '0x5a52e96bacdabb82fd05763e25335261b270efcb',
+    tokenContract: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+    decimals: 18,
+    symbol: 'SHIB',
+  },
+  {
+    donorAccount: '0x4b4e140d1f131fdad6fb59c13af796fd194e4135',
+    tokenContract: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+    decimals: 18,
+    symbol: 'UNI',
+  },
 ];
 
 const FAUCET_AMOUNT = 100;

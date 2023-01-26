@@ -22,7 +22,7 @@ export const useTokensStore = (): TokensStore => {
   );
 
   const tokensMap = useMemo(
-    () => new Map(tokens.map((token) => [token.address, token])),
+    () => new Map(tokens.map((token) => [token.address.toLowerCase(), token])),
     [tokens]
   );
 

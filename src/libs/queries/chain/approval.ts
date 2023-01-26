@@ -42,6 +42,10 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
         return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
       },
+      enabled: !!user,
+      onError: (error: any) => {
+        console.error('useGetUserApproval error', error);
+      },
     })),
   });
 };
@@ -85,7 +89,9 @@ export const useSetUserApproval = () => {
         ? expandToken(amount, decimals)
         : UNLIMITED_WEI;
 
-      const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(address);
+      const isNullApprovalContract = NULL_APPROVAL_CONTRACTS.includes(
+        address.toLowerCase()
+      );
 
       if (isNullApprovalContract) {
         const allowanceWei = await Token(address).read.allowance(user, spender);

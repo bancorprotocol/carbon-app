@@ -6,6 +6,7 @@ import { DebugTenderlyFaucet } from 'components/debug/DebugTenderlyFaucet';
 import { DebugTransferNFT } from 'components/debug/DebugTransferNFT';
 import { DebugResetDefault } from 'components/debug/DebugResetDefault';
 import { DebugNotifications } from 'components/debug/DebugNotifications';
+import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
 
 export const DebugPage = () => {
   return (
@@ -18,6 +19,7 @@ export const DebugPage = () => {
         <DebugTenderlyFaucet />
         <DebugTransferNFT />
         <DebugNotifications />
+        <DebugCreateStrategy />
       </div>
     </Page>
   );

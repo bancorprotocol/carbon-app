@@ -65,7 +65,14 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     if (isLoading) {
       return <div>is loading</div>;
     }
-    return <div>error</div>;
+    if (error) {
+      return (
+        <div>
+          <>error: {error}</>
+        </div>
+      );
+    }
+    return <div>Unkown Error</div>;
   }
 
   return (
