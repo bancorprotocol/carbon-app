@@ -5,7 +5,7 @@ import { ReactComponent as IconTimes } from 'assets/icons/times.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { unix } from 'libs/dayjs';
-import { useNotifications } from 'libs/notifications';
+import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
 
 const StatusIcon = (status: NotificationStatus) => {

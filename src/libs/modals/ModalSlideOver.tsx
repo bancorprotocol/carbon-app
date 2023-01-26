@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { useModal } from 'libs/modals/ModalProvider';
+import { useModal } from 'hooks/useModal';
 import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 

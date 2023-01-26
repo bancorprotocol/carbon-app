@@ -1,5 +1,5 @@
 import { Button } from 'components/common/button';
-import { useNotifications } from 'libs/notifications';
+import { useNotifications } from 'hooks/useNotifications';
 
 export const DebugNotifications = () => {
   const { dispatchNotification } = useNotifications();

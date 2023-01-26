@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { useModal } from 'libs/modals';
+import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
-import { useNotifications } from 'libs/notifications';
+import { useNotifications } from 'hooks/useNotifications';
 import { useWeb3 } from 'libs/web3';
 import { Button } from 'components/common/button';
 

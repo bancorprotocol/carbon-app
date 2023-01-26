@@ -2,7 +2,7 @@ import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
 import { Button } from 'components/common/button';
-import { useModal } from 'libs/modals/ModalProvider';
+import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 
 export type ModalCreateConfirmData = {

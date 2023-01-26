@@ -1,1 +1,1 @@
-export { useModal, ModalProvider } from 'libs/modals/ModalProvider';
+export { ModalProvider } from 'libs/modals/ModalProvider';

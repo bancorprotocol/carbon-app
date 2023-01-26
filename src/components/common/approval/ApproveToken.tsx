@@ -6,8 +6,8 @@ import { ApprovalTokenResult } from 'hooks/useApproval';
 import { Imager } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
-import { useTokens } from 'libs/tokens';
-import { useNotifications } from 'libs/notifications';
+import { useNotifications } from 'hooks/useNotifications';
+import { useTokens } from 'hooks/useTokens';
 
 type Props = {
   data?: ApprovalTokenResult;

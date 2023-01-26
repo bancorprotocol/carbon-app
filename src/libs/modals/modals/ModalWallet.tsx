@@ -1,4 +1,4 @@
-import { useModal } from 'libs/modals/ModalProvider';
+import { useModal } from 'hooks/useModal';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ConnectionType, useWeb3 } from 'libs/web3';
