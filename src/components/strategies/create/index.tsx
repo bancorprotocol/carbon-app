@@ -30,15 +30,15 @@ export const CreateStrategy = () => {
     token1BalanceQuery,
   } = useCreate();
 
-  const { populateStrategy, isDuplicate } = useDuplicateStrategy();
+  const { populateStrategy, templateStrategy } = useDuplicateStrategy();
 
   useEffect(() => {
-    if (isDuplicate) {
+    if (templateStrategy) {
       populateStrategy({
+        setToken0,
         setToken1,
         order0,
         order1,
-        setToken0,
       });
     }
   }, []);

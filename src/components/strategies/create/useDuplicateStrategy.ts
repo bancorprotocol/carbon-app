@@ -24,7 +24,7 @@ type MyLocationGenerics = MakeGenerics<{
 
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate<MyLocationGenerics>();
-  const { strategy: strategyDuplicate } = useSearch<MyLocationGenerics>();
+  const { strategy: templateStrategy } = useSearch<MyLocationGenerics>();
   const location = useLocation();
 
   const _updateOrder = (order: OrderCreate, baseOrder: Order) => {
@@ -54,19 +54,21 @@ export const useDuplicateStrategy = () => {
     order0,
     order1,
   }: Props) => {
-    const decodedStrategy = JSON.parse(
-      Buffer.from(strategyDuplicate || '', 'base64').toString('utf8')
-    );
+    try {
+      const decodedStrategy = JSON.parse(
+        Buffer.from(templateStrategy || '', 'base64').toString('utf8')
+      );
 
-    const isValid = _isValid(decodedStrategy);
+      const isValid = _isValid(decodedStrategy);
 
-    if (decodedStrategy && isValid) {
-      setToken0(decodedStrategy.token0);
-      setToken1(decodedStrategy.token1);
-      _updateOrder(order0, decodedStrategy.order0);
-      _updateOrder(order1, decodedStrategy.order1);
-    }
-    location.history.replace(PathNames.createStrategy);
+      if (decodedStrategy && isValid) {
+        setToken0(decodedStrategy.token0);
+        setToken1(decodedStrategy.token1);
+        _updateOrder(order0, decodedStrategy.order0);
+        _updateOrder(order1, decodedStrategy.order1);
+      }
+      location.history.replace(PathNames.createStrategy);
+    } catch (error) {}
   };
 
   const duplicate = (strategy: Strategy) => {
@@ -82,6 +84,6 @@ export const useDuplicateStrategy = () => {
   return {
     duplicate,
     populateStrategy,
-    isDuplicate: !!strategyDuplicate,
+    templateStrategy,
   };
 };
