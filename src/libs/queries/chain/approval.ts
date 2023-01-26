@@ -39,7 +39,6 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           user,
           t.spender
         );
-        console.log('muh', allowance.toString(), t.address);
 
         return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
       },
@@ -95,9 +94,7 @@ export const useSetUserApproval = () => {
       );
 
       if (isNullApprovalContract) {
-        console.log('muh isNullApprovalContract', address);
         const allowanceWei = await Token(address).read.allowance(user, spender);
-        console.log('muh allowanceWei', allowanceWei.toString());
         if (allowanceWei.gt(0)) {
           const tx = await Token(address).write.approve(spender, '0', {
             // TODO fix GAS limit
