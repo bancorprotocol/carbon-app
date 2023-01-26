@@ -1,6 +1,5 @@
 import { MakeGenerics, PathNames, useNavigate, useSearch } from 'libs/routing';
 import { Strategy } from 'libs/queries';
-import { useCallback, useMemo } from 'react';
 
 type MyLocationGenerics = MakeGenerics<{
   Search: {
@@ -8,33 +7,36 @@ type MyLocationGenerics = MakeGenerics<{
   };
 }>;
 
+const isValid = (strategy: Strategy) => {
+  return (
+    strategy.hasOwnProperty('token0') &&
+    strategy.hasOwnProperty('token1') &&
+    strategy.hasOwnProperty('order0') &&
+    strategy.hasOwnProperty('order1')
+  );
+};
+
+const decodeStrategyAndValidate = (
+  urlStrategy?: string
+): Strategy | undefined => {
+  if (!urlStrategy) return;
+
+  try {
+    const decodedStrategy = JSON.parse(
+      Buffer.from(urlStrategy, 'base64').toString('utf8')
+    );
+
+    if (isValid(decodedStrategy)) {
+      return decodedStrategy;
+    }
+    return undefined;
+  } catch (error) {
+    console.log('Invalid value for search param `strategy`', error);
+  }
+};
+
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate<MyLocationGenerics>();
-  const { strategy: templateStrategy } = useSearch<MyLocationGenerics>();
-
-  const isValid = (strategy: Strategy) => {
-    return (
-      strategy.hasOwnProperty('token0') &&
-      strategy.hasOwnProperty('token1') &&
-      strategy.hasOwnProperty('order0') &&
-      strategy.hasOwnProperty('order1')
-    );
-  };
-
-  const decodedStrategyAndValidate = useCallback(() => {
-    try {
-      const decodedStrategy = JSON.parse(
-        Buffer.from(templateStrategy || '', 'base64').toString('utf8')
-      );
-
-      const isStrategyValid = isValid(decodedStrategy);
-      if (isStrategyValid) {
-        return decodedStrategy;
-      }
-      return undefined;
-    } catch (error) {}
-  }, [templateStrategy]);
-
   const duplicate = (strategy: Strategy) => {
     const encodedStrategy = Buffer.from(JSON.stringify(strategy)).toString(
       'base64'
@@ -45,12 +47,10 @@ export const useDuplicateStrategy = () => {
     });
   };
 
-  const decodedStrategy = useMemo(() => {
-    return decodedStrategyAndValidate();
-  }, [decodedStrategyAndValidate]);
+  const { strategy: urlStrategy } = useSearch<MyLocationGenerics>();
 
   return {
     duplicate,
-    templateStrategy: decodedStrategy,
+    templateStrategy: decodeStrategyAndValidate(urlStrategy),
   };
 };

@@ -3,24 +3,17 @@ import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
 import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { useLocation, useNavigate } from 'libs/routing';
+import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
 import { SelectTokenButton } from 'components/common/selectToken';
-import { useCallback, useEffect } from 'react';
-import { useDuplicateStrategy } from './useDuplicateStrategy';
-import { OrderCreate } from './useOrder';
-import { Order, Strategy } from 'libs/queries';
 
 export const CreateStrategy = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const {
     token0,
-    setToken0,
     token1,
-    setToken1,
     order0,
     order1,
     name,
@@ -32,40 +25,6 @@ export const CreateStrategy = () => {
     token0BalanceQuery,
     token1BalanceQuery,
   } = useCreate();
-
-  const { templateStrategy } = useDuplicateStrategy();
-
-  const populateStrategy = useCallback(
-    (templateStrategy: Strategy) => {
-      setToken0(templateStrategy.token0);
-      setToken1(templateStrategy.token1);
-      updateOrder(order0, templateStrategy.order0);
-      updateOrder(order1, templateStrategy.order1);
-      navigate({
-        search: undefined,
-        replace: true,
-      });
-    },
-    [navigate, order0, order1, setToken0, setToken1]
-  );
-
-  useEffect(() => {
-    if (templateStrategy) {
-      populateStrategy(templateStrategy);
-    }
-  }, [populateStrategy, templateStrategy]);
-
-  const updateOrder = (order: OrderCreate, baseOrder: Order) => {
-    order.setBudget(baseOrder.balance);
-    const limit = baseOrder.startRate === baseOrder.endRate;
-    if (limit) {
-      order.setPrice(baseOrder.startRate);
-    } else {
-      order.setIsRange(true);
-      order.setMin(baseOrder.startRate);
-      order.setMax(baseOrder.endRate);
-    }
-  };
 
   return (
     <m.div
