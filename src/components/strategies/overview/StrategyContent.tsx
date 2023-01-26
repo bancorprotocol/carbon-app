@@ -1,5 +1,6 @@
-import { StrategyStatus, useGetUserStrategies } from 'libs/queries';
 import { useMemo, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { StrategyStatus, useGetUserStrategies } from 'libs/queries';
 import {
   StrategyFilter,
   StrategySort,
@@ -11,7 +12,6 @@ import { StrategyNotFound } from './StrategyNotFound';
 import { m, mListVariant } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
-import BigNumber from 'bignumber.js';
 
 export const StrategyContent = () => {
   const strategies = useGetUserStrategies();
@@ -83,7 +83,6 @@ export const StrategyContent = () => {
               {filteredStrategies?.map((s) => (
                 <StrategyBlock key={s.id} strategy={s} />
               ))}
-
               <StrategyBlockCreate />
             </>
           )}

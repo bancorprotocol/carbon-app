@@ -1,3 +1,4 @@
+import { Order } from 'libs/queries';
 import { useState } from 'react';
 
 export interface OrderCreate {
@@ -12,20 +13,29 @@ export interface OrderCreate {
   rangeError: string;
   setRangeError: (value: string) => void;
   priceError: string;
+  setIsRange: (value: boolean) => void;
+  isRange: boolean;
   setPriceError: (value: string) => void;
   budgetError: string;
   setBudgetError: (value: string) => void;
   resetFields: (skipBudget?: boolean, skipPrice?: boolean) => void;
 }
 
-export const useOrder = () => {
-  const [budget, setBudget] = useState('');
-  const [price, setPrice] = useState('');
-  const [max, setMax] = useState('');
-  const [min, setMin] = useState('');
+export const useOrder = (order?: Order) => {
+  const [budget, setBudget] = useState(order?.balance ?? '');
+  const [price, setPrice] = useState(
+    order?.startRate !== order?.endRate ? '' : order?.startRate ?? ''
+  );
+  const [max, setMax] = useState(
+    order?.startRate !== order?.endRate ? order?.endRate ?? '' : ''
+  );
+  const [min, setMin] = useState(
+    order?.startRate !== order?.endRate ? order?.startRate ?? '' : ''
+  );
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [budgetError, setBudgetError] = useState('');
+  const [isRange, setIsRange] = useState(order?.startRate !== order?.endRate);
 
   const resetFields = (skipBudget?: boolean, skipPrice?: boolean) => {
     if (!skipPrice) {
@@ -52,6 +62,8 @@ export const useOrder = () => {
     min,
     setMin,
     rangeError,
+    isRange,
+    setIsRange,
     setRangeError,
     priceError,
     setPriceError,

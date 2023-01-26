@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Imager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -24,12 +24,11 @@ export const BuySellBlock: FC<Props> = ({
   buy,
 }) => {
   const budgetToken = buy ? token1 : token0;
-  const [isRange, setIsRange] = useState(false);
   const title = buy ? 'Buy' : 'Sell';
-
+  const { isRange, setIsRange, resetFields } = order;
   const handleRangeChange = () => {
     setIsRange(!isRange);
-    order.resetFields(true);
+    resetFields(true);
   };
 
   return (

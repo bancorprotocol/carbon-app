@@ -1,6 +1,6 @@
+import { useMemo, useState } from 'react';
 import { OrderCreate, useOrder } from './useOrder';
 import { QueryKey, useCreateStrategy } from 'libs/queries';
-import { useMemo, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
@@ -10,23 +10,29 @@ import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
+import { useDuplicateStrategy } from './useDuplicateStrategy';
 
 const spenderAddress = config.carbon.poolCollection;
 
 export const useCreate = () => {
+  const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate();
   const { user } = useWeb3();
   const { openModal } = useModal();
-  const [token0, setToken0] = useState<Token | undefined>();
-  const [token1, setToken1] = useState<Token | undefined>();
+  const [token0, setToken0] = useState<Token | undefined>(
+    templateStrategy?.token0
+  );
+  const [token1, setToken1] = useState<Token | undefined>(
+    templateStrategy?.token1
+  );
   const { dispatchNotification } = useNotifications();
 
   const token0BalanceQuery = useGetTokenBalance(token0);
   const token1BalanceQuery = useGetTokenBalance(token1);
+  const order1 = useOrder(templateStrategy?.order1);
+  const order0 = useOrder(templateStrategy?.order0);
 
-  const order0 = useOrder();
-  const order1 = useOrder();
   const [name, setName] = useState('');
   const mutation = useCreateStrategy();
 
