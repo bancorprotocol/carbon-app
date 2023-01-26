@@ -13,7 +13,7 @@ import BigNumber from 'bignumber.js';
 import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
 import { useApproval } from 'hooks/useApproval';
-import { useModal } from 'libs/modals';
+import { useModal } from 'hooks/useModal';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
