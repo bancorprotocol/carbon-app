@@ -24,10 +24,14 @@ export interface OrderCreate {
 export const useOrder = (order?: Order) => {
   const [budget, setBudget] = useState(order?.balance ?? '');
   const [price, setPrice] = useState(
+    order?.startRate !== order?.endRate ? '' : order?.startRate ?? ''
+  );
+  const [max, setMax] = useState(
+    order?.startRate !== order?.endRate ? order?.endRate ?? '' : ''
+  );
+  const [min, setMin] = useState(
     order?.startRate !== order?.endRate ? order?.startRate ?? '' : ''
   );
-  const [max, setMax] = useState(order?.endRate ?? '');
-  const [min, setMin] = useState(order?.startRate ?? '');
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [budgetError, setBudgetError] = useState('');
