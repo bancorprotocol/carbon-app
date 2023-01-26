@@ -39,8 +39,13 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           user,
           t.spender
         );
+        console.log('muh', allowance.toString(), t.address);
 
         return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
+      },
+      enabled: !!user,
+      onError: (error: any) => {
+        console.error('useGetUserApproval error', error);
       },
     })),
   });
