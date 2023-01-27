@@ -1,7 +1,9 @@
 import { Imager } from 'components/common/imager/Imager';
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
+import BigNumber from 'bignumber.js';
 
 type Props = {
   value: string;
@@ -30,6 +32,16 @@ export const TokenInputField: FC<Props> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const tokenPriceQuery = useGetTokenPrice(token.address);
+
+  const usdValue = useMemo(
+    () =>
+      new BigNumber(value || 0)
+        .times(tokenPriceQuery.data?.usd || 0)
+        .toString(),
+    [tokenPriceQuery.data?.usd, value]
+  );
 
   const handleOnFocus = () => {
     setIsFocused(true);
@@ -117,6 +129,8 @@ export const TokenInputField: FC<Props> = ({
           'not logged in'
         )}
       </button>
+
+      <div>{prettifyNumber(usdValue, true)} USD</div>
     </div>
   );
 };
