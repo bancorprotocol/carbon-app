@@ -29,7 +29,7 @@ export const InputLimit: FC<{
               ? setPriceError('')
               : setPriceError('Price Must be greater than 0')
           }
-          placeholder="Price"
+          placeholder="Enter Price"
           className={'w-full shrink bg-transparent focus:outline-none'}
         />
         <div className={`mt-8 text-12 ${buy ? 'text-green' : 'text-red'}`}>

@@ -24,7 +24,7 @@ export const BuySellBlock: FC<Props> = ({
   buy,
 }) => {
   const budgetToken = buy ? token1 : token0;
-  const title = buy ? 'Buy' : 'Sell';
+  const title = buy ? 'Buy Low' : 'Sell High';
   const { isRange, setIsRange, resetFields } = order;
   const handleRangeChange = () => {
     setIsRange(!isRange);
@@ -32,7 +32,11 @@ export const BuySellBlock: FC<Props> = ({
   };
 
   return (
-    <div className={'bg-secondary space-y-10 rounded-10 p-20'}>
+    <div
+      className={`bg-secondary space-y-10 rounded-10 border-l-2 p-20 ${
+        buy ? 'border-green' : 'border-red'
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">
           <span>{title}</span>

@@ -46,7 +46,7 @@ export const InputRange: FC<{
           <input
             value={min}
             onChange={handleChangeMin}
-            placeholder="Price"
+            placeholder="Enter Price"
             onBlur={() => handleBlur(true)}
             className={'w-full bg-transparent focus:outline-none'}
           />
@@ -65,7 +65,7 @@ export const InputRange: FC<{
             <input
               value={max}
               onChange={handleChangeMax}
-              placeholder={`Price`}
+              placeholder={`Enter Price`}
               onBlur={() => handleBlur()}
               className={'w-full bg-transparent focus:outline-none'}
             />
