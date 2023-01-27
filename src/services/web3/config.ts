@@ -8,7 +8,7 @@ export interface Config {
     ZERO: string;
   };
   carbon: {
-    poolCollection: string;
+    carbonController: string;
     voucher: string;
   };
   utils: {

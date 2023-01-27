@@ -12,7 +12,7 @@ import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
 
-const spenderAddress = config.carbon.poolCollection;
+const spenderAddress = config.carbon.carbonController;
 
 export const useCreate = () => {
   const { templateStrategy } = useDuplicateStrategy();
