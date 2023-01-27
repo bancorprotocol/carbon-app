@@ -1,28 +1,14 @@
 import { ChangeEvent, FC } from 'react';
-import { Token } from 'libs/tokens';
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputRange: FC<{
-  buyToken: Token;
-  sellToken: Token;
   min: string;
   setMin: (value: string) => void;
   max: string;
   setMax: (value: string) => void;
   error?: string;
-  buy?: boolean;
   setRangeError: (error: string) => void;
-}> = ({
-  buyToken,
-  sellToken,
-  min,
-  setMin,
-  max,
-  setMax,
-  error,
-  buy,
-  setRangeError,
-}) => {
+}> = ({ min, setMin, max, setMax, error, setRangeError }) => {
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) =>
     setMin(sanitizeNumberInput(e.target.value));
 
@@ -40,41 +26,35 @@ export const InputRange: FC<{
       <div className="flex space-x-6">
         <div
           className={`${
-            error ? 'border border-red text-red' : ''
-          } bg-body w-full rounded-l-16 p-16`}
+            error ? 'border-2 border-red text-red' : ''
+          } bg-body w-full rounded-r-4 rounded-l-16 p-16`}
         >
+          <div className={'mb-5 text-12 text-white/60'}>Min</div>
           <input
             value={min}
             onChange={handleChangeMin}
             placeholder="Enter Price"
             onBlur={() => handleBlur(true)}
-            className={'w-full bg-transparent focus:outline-none'}
+            className={
+              'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
+            }
           />
-          <div
-            className={`mt-8 text-[12px] ${buy ? 'text-green' : 'text-red'}`}
-          >
-            Min {sellToken.symbol} per {buyToken.symbol}
-          </div>
         </div>
         <div
           className={`${
-            error ? 'border border-red text-red' : ''
-          } bg-body w-full rounded-r-16 p-16`}
+            error ? 'border-2 border-red text-red' : ''
+          } bg-body w-full rounded-r-16 rounded-l-4 p-16`}
         >
-          <div>
-            <input
-              value={max}
-              onChange={handleChangeMax}
-              placeholder={`Enter Price`}
-              onBlur={() => handleBlur()}
-              className={'w-full bg-transparent focus:outline-none'}
-            />
-            <div
-              className={`mt-8 text-[12px] ${buy ? 'text-green' : 'text-red'}`}
-            >
-              Max {sellToken.symbol} per {buyToken.symbol}
-            </div>
-          </div>
+          <div className={'mb-5 text-12 text-white/60'}>Max</div>
+          <input
+            value={max}
+            onChange={handleChangeMax}
+            placeholder={`Enter Price`}
+            onBlur={() => handleBlur()}
+            className={
+              'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
+            }
+          />
         </div>
       </div>
       {error && (

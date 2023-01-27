@@ -108,7 +108,7 @@ export const CreateStrategy = () => {
           <m.div variants={items}>
             <Button
               className="mb-80"
-              variant={'white'}
+              variant={'success'}
               size={'lg'}
               fullWidth
               onClick={createStrategy}

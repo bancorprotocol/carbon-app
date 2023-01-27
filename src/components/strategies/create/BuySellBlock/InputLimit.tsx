@@ -1,16 +1,12 @@
 import { ChangeEvent, FC } from 'react';
-import { Token } from 'libs/tokens';
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputLimit: FC<{
-  buyToken: Token;
-  sellToken: Token;
   price: string;
   setPrice: (value: string) => void;
   error?: string;
-  buy?: boolean;
   setPriceError: (error: string) => void;
-}> = ({ buyToken, sellToken, price, setPrice, error, buy, setPriceError }) => {
+}> = ({ price, setPrice, error, setPriceError }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPrice(sanitizeNumberInput(e.target.value));
 
@@ -18,7 +14,7 @@ export const InputLimit: FC<{
     <div>
       <div
         className={`${
-          error && 'border border-red text-red'
+          error && 'border-2 border-red text-red'
         } bg-body rounded-16 p-16`}
       >
         <input
@@ -30,13 +26,14 @@ export const InputLimit: FC<{
               : setPriceError('Price Must be greater than 0')
           }
           placeholder="Enter Price"
-          className={'w-full shrink bg-transparent focus:outline-none'}
+          className={
+            'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
+          }
         />
-        <div className={`mt-8 text-12 ${buy ? 'text-green' : 'text-red'}`}>
-          {sellToken.symbol} per {buyToken.symbol}
-        </div>
       </div>
-      {error && <div className="text-center text-12 text-red">{error}</div>}
+      {error && (
+        <div className="mt-5 text-center text-12 text-red">{error}</div>
+      )}
     </div>
   );
 };
