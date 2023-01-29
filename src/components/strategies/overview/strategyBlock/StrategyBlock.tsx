@@ -54,7 +54,11 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <StrategyBlockBuySell buy strategy={strategy} />
       <StrategyBlockBuySell strategy={strategy} />
       <StrategyBlockOrderStatus status={strategy.status} />
-      <StrategyBlockManage manage={manage} setManage={setManage} />
+      <StrategyBlockManage
+        manage={manage}
+        setManage={setManage}
+        strategy={strategy}
+      />
     </m.div>
   );
 };
