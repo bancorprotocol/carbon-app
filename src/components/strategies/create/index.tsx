@@ -3,6 +3,7 @@ import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
 import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
@@ -53,22 +54,31 @@ export const CreateStrategy = () => {
           </Tooltip>
         </div>
 
-        <div className={'text-secondary mb-10'}>Base Token</div>
-        <SelectTokenButton
-          symbol={token0?.symbol}
-          imgUrl={token0?.logoURI}
-          onClick={() => openTokenListModal(true)}
-        />
-        {!!token0 && (
-          <>
-            <div className={'text-secondary my-10'}>Quote Token</div>
-            <SelectTokenButton
-              symbol={token1?.symbol}
-              imgUrl={token1?.logoURI}
-              onClick={() => openTokenListModal()}
-            />
-          </>
-        )}
+        <div className={'-space-y-15'}>
+          <SelectTokenButton
+            symbol={token0?.symbol}
+            imgUrl={token0?.logoURI}
+            description={'Buy or Sell'}
+            onClick={() => openTokenListModal(true)}
+          />
+          {!!token0 && (
+            <>
+              <div
+                className={
+                  'relative z-10 mx-auto flex h-40 w-40 items-center justify-center rounded-full border-[5px] border border-silver bg-black'
+                }
+              >
+                <IconArrow className={'w-12'} />
+              </div>
+              <SelectTokenButton
+                symbol={token1?.symbol}
+                imgUrl={token1?.logoURI}
+                description={'With'}
+                onClick={() => openTokenListModal()}
+              />
+            </>
+          )}
+        </div>
       </m.div>
       {showStep2 && (
         <>
@@ -98,7 +108,7 @@ export const CreateStrategy = () => {
           <m.div variants={items}>
             <Button
               className="mb-80"
-              variant={'white'}
+              variant={'success'}
               size={'lg'}
               fullWidth
               onClick={createStrategy}

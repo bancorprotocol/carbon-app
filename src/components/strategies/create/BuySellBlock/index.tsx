@@ -2,11 +2,12 @@ import { FC } from 'react';
 import { Imager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { BudgetInput } from 'components/strategies/create/BuySellBlock/BudgetInput';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
+import { TokenInputField } from 'components/common/TokenInputField';
+import BigNumber from 'bignumber.js';
 
 type Props = {
   token0: Token;
@@ -24,15 +25,23 @@ export const BuySellBlock: FC<Props> = ({
   buy,
 }) => {
   const budgetToken = buy ? token1 : token0;
-  const title = buy ? 'Buy' : 'Sell';
+  const title = buy ? 'Buy Low' : 'Sell High';
   const { isRange, setIsRange, resetFields } = order;
   const handleRangeChange = () => {
     setIsRange(!isRange);
     resetFields(true);
   };
 
+  const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
+    order.budget
+  );
+
   return (
-    <div className={'bg-secondary space-y-10 rounded-10 p-20'}>
+    <div
+      className={`bg-secondary space-y-12 rounded-10 border-l-2 p-20 ${
+        buy ? 'border-green' : 'border-red'
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">
           <span>{title}</span>
@@ -74,39 +83,74 @@ export const BuySellBlock: FC<Props> = ({
         </div>
       </div>
 
+      <div className={'flex items-center pt-10'}>
+        <div
+          className={
+            'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+          }
+        >
+          1
+        </div>
+        <div className={'text-14 font-weight-500 text-white/60'}>
+          Set {buy ? 'Buy' : 'Sell'} Price{' '}
+          <span className={'ml-8 text-white/80'}>
+            ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
+            {token0.symbol})
+          </span>
+        </div>
+      </div>
+
       {isRange ? (
         <InputRange
-          buyToken={token0}
-          sellToken={token1}
           min={order.min}
           setMin={order.setMin}
           max={order.max}
           setMax={order.setMax}
           error={order.rangeError}
-          buy={buy}
           setRangeError={order.setRangeError}
         />
       ) : (
         <InputLimit
-          buyToken={token0}
-          sellToken={token1}
           price={order.price}
           setPrice={order.setPrice}
           error={order.priceError}
-          buy={buy}
           setPriceError={order.setPriceError}
         />
       )}
 
-      <BudgetInput
-        budget={order.budget}
-        setBudget={order.setBudget}
-        token={budgetToken}
-        balance={tokenBalanceQuery.data}
-        isBalanceLoading={tokenBalanceQuery.isLoading}
-        error={order.budgetError}
-        setBudgetError={order.setBudgetError}
-      />
+      <div className={'flex items-center pt-10'}>
+        <div
+          className={
+            'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+          }
+        >
+          2
+        </div>
+        <div className={'text-14 font-weight-500 text-white/60'}>
+          Set {buy ? 'Buy' : 'Sell'} Budget{' '}
+          <span className={'ml-8 text-white/80'}>
+            ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
+            {token0.symbol})
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <TokenInputField
+          className={'rounded-16 bg-black p-16'}
+          value={order.budget}
+          setValue={order.setBudget}
+          token={budgetToken}
+          isBalanceLoading={tokenBalanceQuery.isLoading}
+          balance={tokenBalanceQuery.data}
+          isError={insufficientBalance}
+        />
+        {insufficientBalance && (
+          <div className="mt-6 text-center text-12 text-red">
+            Insufficient balance
+          </div>
+        )}
+      </div>
     </div>
   );
 };

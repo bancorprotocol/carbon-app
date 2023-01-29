@@ -59,7 +59,7 @@ export const useBuySell = ({
     () => [
       {
         ...source,
-        spender: config.carbon.poolCollection,
+        spender: config.carbon.carbonController,
         amount: isTradeBySource
           ? sourceInput
           : calcMaxInput(sourceInput, slippage),
@@ -143,7 +143,7 @@ export const useBuySell = ({
     setTargetInput('');
 
     void cache.invalidateQueries(
-      QueryKey.approval(user, source.address, config.carbon.poolCollection)
+      QueryKey.approval(user, source.address, config.carbon.carbonController)
     );
 
     await tx.wait();

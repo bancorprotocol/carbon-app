@@ -40,7 +40,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const renderNotEnoughLiquidity = () => {
     return (
       <>
-        <div className="text-14 text-white/50">Amount</div>
         <div className="t-grey mt-5 min-h-[228px] flex-1">
           <div
             className={`flex h-full flex-col items-center
@@ -69,6 +68,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
       <h2 className={'mb-20'}>{buy ? 'Buy' : 'Sell'}</h2>
+      <div className={'flex justify-between text-14'}>
+        <div className={'text-white/50'}>Amount</div>
+        {errorMsgSource && (
+          <div className={`font-weight-500 text-red`}>{errorMsgSource}</div>
+        )}
+      </div>
       {hasEnoughLiquidity ? (
         <>
           <TokenInputField
@@ -78,15 +83,27 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             value={sourceInput}
             setValue={setSourceInput}
             balance={sourceBalanceQuery.data}
-            error={errorMsgSource}
             onKeystroke={() => onInputChange(true)}
             isLoading={byTargetQuery.isFetching}
+            isError={!!errorMsgSource}
           />
-
+          <div className={'flex justify-between text-14'}>
+            <div className={'text-white/50'}>Amount</div>
+            {errorMsgTarget && (
+              <div
+                className={`cursor-pointer font-weight-500 text-red`}
+                onClick={() => {
+                  setTargetInput(liquidityQuery.data || '0');
+                  onInputChange(false);
+                }}
+              >
+                {errorMsgTarget}
+              </div>
+            )}
+          </div>
           <TokenInputField
             className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
             token={target}
-            title={'Total'}
             isBalanceLoading={false}
             value={targetInput}
             setValue={setTargetInput}
@@ -94,11 +111,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             balance={targetBalanceQuery.data}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
-            error={errorMsgTarget}
-            onErrorClick={() => {
-              setTargetInput(liquidityQuery.data || '0');
-              onInputChange(false);
-            }}
+            isError={!!errorMsgTarget}
           />
           <div
             className={
