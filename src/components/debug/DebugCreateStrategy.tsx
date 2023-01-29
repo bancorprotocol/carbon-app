@@ -24,7 +24,7 @@ const TOKENS = FAUCET_TOKENS.map((tkn) => ({
 
 TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
 
-const spender = config.carbon.poolCollection;
+const spender = config.carbon.carbonController;
 
 const perRound = TOKENS.length * TOKENS.length - TOKENS.length;
 
