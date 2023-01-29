@@ -3,10 +3,10 @@ import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { Token } from 'libs/tokens';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { Link, PathNames } from 'libs/routing';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -32,7 +32,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgSource,
     errorMsgTarget,
   } = useBuySell(props);
-
+  const { duplicate } = useDuplicateStrategy();
   const { buy, source, target, sourceBalanceQuery, targetBalanceQuery } = props;
 
   if (!source || !target) return null;
@@ -43,23 +43,22 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         <div className="text-14 text-white/50">Amount</div>
         <div className="t-grey mt-5 min-h-[228px] flex-1">
           <div
-            className={`${!hasEnoughLiquidity ? 'border border-red/100' : ''}
-          flex h-full flex-col items-center justify-center rounded-12 px-[4rem] text-center`}
+            className={`flex h-full flex-col items-center
+          justify-center rounded-12 border border-red/100 px-[4rem] text-center text-14 font-weight-400`}
           >
             <div className="mb-16 flex flex h-38 w-38 items-center justify-center rounded-full bg-red/10">
               <IconWarning className="h-16 w-16 fill-red/100" />
             </div>
-            <div className="trade-widget-buy-sell-not-enough-liquidity-title mb-8 text-14 font-weight-500">
-              No Liquidity Available
-            </div>
-            <div className="trade-widget-buy-sell-not-enough-liquidity-title text-14 font-weight-400">
-              No available orders at this moment.
-            </div>
-            <div className="trade-widget-buy-sell-not-enough-liquidity-title text-14 font-weight-400">
+            <div className="mb-8 font-weight-500">No Liquidity Available</div>
+            <div>No available orders at this moment.</div>
+            <div>
               {`You can `}
-              <Link to={PathNames.createStrategy}>
-                <span className="font-weight-500">Create a Strategy.</span>
-              </Link>
+              <span
+                onClick={() => duplicate({ token0: source, token1: target })}
+                className="cursor-pointer font-weight-500"
+              >
+                Create a Strategy.
+              </span>
             </div>
           </div>
         </div>
