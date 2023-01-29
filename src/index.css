@@ -70,7 +70,7 @@
   }
 
   .bg-secondary {
-    @apply bg-fog dark:bg-charcoal;
+    @apply bg-silver;
   }
 
   .text-body {
