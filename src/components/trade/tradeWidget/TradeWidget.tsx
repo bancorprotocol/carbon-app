@@ -26,7 +26,7 @@ export const TradeWidget = () => {
       ) : isTradePairError || !isValidPair ? (
         <div>
           {!noTokens && <div>Not found</div>}
-          <Button onClick={openTradePairList}>select pair</Button>
+          <Button onClick={openTradePairList}>Select Pair</Button>
         </div>
       ) : (
         <div className={'grid grid-cols-2 gap-20'}>

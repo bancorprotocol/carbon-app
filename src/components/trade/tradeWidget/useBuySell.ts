@@ -12,6 +12,7 @@ import {
   useQueryClient,
   useGetTradeLiquidity,
   useGetTradeData,
+  useHasLiquidityByPair,
 } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { useNotifications } from 'hooks/useNotifications';
@@ -87,6 +88,10 @@ export const useBuySell = ({
   });
 
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
+  const hasLiquidityQuery = useHasLiquidityByPair(
+    source.address,
+    target.address
+  );
 
   const checkLiquidity = (value: string) => {
     const check = (v: string) => new BigNumber(v).times(0.9999).gt(value);
@@ -303,6 +308,7 @@ export const useBuySell = ({
     byTargetQuery,
     approval,
     liquidityQuery,
+    hasEnoughLiquidity: hasLiquidityQuery.data,
     isLiquidityError,
     errorMsgSource,
     errorMsgTarget,
