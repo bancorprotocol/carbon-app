@@ -44,11 +44,4 @@ export namespace QueryKey {
     token0,
     token1,
   ];
-
-  export const tradeHasLiquidity = (token0: string, token1: string) => [
-    ..._sdk,
-    'hasLiquidity',
-    token0,
-    token1,
-  ];
 }

@@ -28,12 +28,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     bySourceQuery,
     byTargetQuery,
     liquidityQuery,
-    hasEnoughLiquidity,
     errorMsgSource,
     errorMsgTarget,
   } = useBuySell(props);
   const { duplicate } = useDuplicateStrategy();
   const { buy, source, target, sourceBalanceQuery, targetBalanceQuery } = props;
+  const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   if (!source || !target) return null;
 
