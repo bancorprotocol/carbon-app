@@ -35,7 +35,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const { buy, source, target, sourceBalanceQuery, targetBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
-  if (!source || !target) return null;
+  if (!source || !target || !liquidityQuery?.data) return null;
 
   const renderNotEnoughLiquidity = () => {
     return (
