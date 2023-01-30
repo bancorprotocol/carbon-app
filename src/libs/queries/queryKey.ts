@@ -5,6 +5,11 @@ const _extAPI = ['ext-api'];
 export namespace QueryKey {
   export const tokenLists = () => [..._extAPI, 'token-lists'];
   export const tokens = () => [..._extAPI, 'tokens'];
+  export const tokenPrice = (address: string) => [
+    ..._extAPI,
+    'token-price',
+    address,
+  ];
   export const strategies = (user?: string) => [..._sdk, 'strategies', user];
   export const approval = (user: string, token: string, spender: string) => [
     ..._chain,

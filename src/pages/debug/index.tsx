@@ -7,6 +7,7 @@ import { DebugTransferNFT } from 'components/debug/DebugTransferNFT';
 import { DebugResetDefault } from 'components/debug/DebugResetDefault';
 import { DebugNotifications } from 'components/debug/DebugNotifications';
 import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
+import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 
 export const DebugPage = () => {
   return (
@@ -20,6 +21,7 @@ export const DebugPage = () => {
         <DebugTransferNFT />
         <DebugNotifications />
         <DebugCreateStrategy />
+        <DebugFiatCurrency />
       </div>
     </Page>
   );

@@ -20,6 +20,11 @@ import {
   useTokensStore,
 } from 'store/useTokensStore';
 import { defaultSDKStore, SDKStore, useSDKStore } from 'store/useSDKStore';
+import {
+  defaultFiatCurrencyStore,
+  FiatCurrencyStore,
+  useFiatCurrencyStore,
+} from 'store/useFiatCurrencyStore';
 
 // ********************************** //
 // STORE CONTEXT
@@ -33,6 +38,7 @@ interface StoreContext {
   trade: {
     settings: TradeSettingsStore;
   };
+  fiatCurrency: FiatCurrencyStore;
 }
 
 const defaultValue: StoreContext = {
@@ -43,6 +49,7 @@ const defaultValue: StoreContext = {
   trade: {
     settings: defaultTradeSettingsStore,
   },
+  fiatCurrency: defaultFiatCurrencyStore,
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -61,6 +68,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const notifications = useNotificationsStore();
   const modals = useModalStore();
   const tokens = useTokensStore();
+  const fiatCurrency = useFiatCurrencyStore();
 
   const value: StoreContext = {
     sdk,
@@ -70,6 +78,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     trade: {
       settings: tradeSettings,
     },
+    fiatCurrency,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;
