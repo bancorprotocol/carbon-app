@@ -1,38 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
-import axios from 'axios';
-import { config } from 'services/web3/config';
+import { THIRTY_SEC_IN_MS } from 'utils/time';
+import { FiatPriceDict } from 'store/useFiatCurrencyStore';
+import { useStore } from 'store';
+import { cryptoCompareAxios } from 'utils/cryptoCompare';
 
-export type TokenPrice = {
-  usd: string;
-};
+export const useGetTokenPrice = (symbol?: string) => {
+  const {
+    fiatCurrency: { availableCurrencies },
+  } = useStore();
 
-type ReturnType = {
-  [p: string]: TokenPrice;
-};
-
-export const useGetTokenPrice = (address?: string) => {
   return useQuery(
-    QueryKey.tokenPrice(address!),
+    QueryKey.tokenPrice(symbol!),
     async () => {
-      if (address?.toLowerCase() === config.tokens.ETH.toLowerCase()) {
-        const result = await axios.get<[{ current_price: number }]>(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum`
-        );
-        if (result.data.length !== 1) {
-          throw new Error('No ETH price found on coingecko');
-        }
-        return { usd: result.data[0].current_price };
-      }
+      const result = await cryptoCompareAxios.get<FiatPriceDict>('data/price', {
+        params: { fsym: symbol, tsyms: availableCurrencies.join(',') },
+      });
 
-      const result = await axios.get<ReturnType>(
-        `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${address}&vs_currencies=usd`
-      );
-      return result.data[address!.toLowerCase()];
+      return result.data;
     },
     {
-      enabled: !!address,
-      refetchInterval: 10 * 1000,
+      enabled: !!symbol && availableCurrencies.length > 0,
+      refetchInterval: THIRTY_SEC_IN_MS,
     }
   );
 };

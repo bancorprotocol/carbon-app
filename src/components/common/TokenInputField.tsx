@@ -2,8 +2,8 @@ import { Imager } from 'components/common/imager/Imager';
 import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import BigNumber from 'bignumber.js';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 type Props = {
   value: string;
@@ -33,14 +33,16 @@ export const TokenInputField: FC<Props> = ({
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const tokenPriceQuery = useGetTokenPrice(token.address);
+  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
 
-  const usdValue = useMemo(
+  const tokenPriceQuery = useGetTokenPrice(token.symbol);
+
+  const fiatValue = useMemo(
     () =>
-      new BigNumber(value || 0)
-        .times(tokenPriceQuery.data?.usd || 0)
-        .toString(),
-    [tokenPriceQuery.data?.usd, value]
+      new BigNumber(value || 0).times(
+        tokenPriceQuery.data?.[selectedFiatCurrency] || 0
+      ),
+    [selectedFiatCurrency, tokenPriceQuery.data, value]
   );
 
   const handleOnFocus = () => {
@@ -111,26 +113,32 @@ export const TokenInputField: FC<Props> = ({
         }
       </div>
 
-      <button
-        onClick={handleBalanceClick}
-        className={
-          'text-secondary group mt-10 flex items-center p-5 font-mono !text-12 font-weight-600'
-        }
-      >
-        Wallet:{' '}
-        {isBalanceLoading ? (
-          'loading'
-        ) : balance ? (
-          <>
-            {prettifyNumber(balance)}{' '}
-            <div className="ml-10 group-hover:text-white">MAX</div>
-          </>
-        ) : (
-          'not logged in'
-        )}
-      </button>
+      <div className={'mt-10 flex items-center justify-between font-mono'}>
+        <button
+          onClick={handleBalanceClick}
+          className={
+            'text-secondary group flex items-center !text-12 font-weight-500'
+          }
+        >
+          Wallet:{' '}
+          {isBalanceLoading ? (
+            'loading'
+          ) : balance ? (
+            <>
+              {prettifyNumber(balance)}{' '}
+              <div className="ml-10 group-hover:text-white">MAX</div>
+            </>
+          ) : (
+            'not logged in'
+          )}
+        </button>
 
-      <div>{prettifyNumber(usdValue, true)} USD</div>
+        {fiatValue.gt(0) && (
+          <div className={'text-12'}>
+            {prettifyNumber(fiatValue, true)} {selectedFiatCurrency}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
