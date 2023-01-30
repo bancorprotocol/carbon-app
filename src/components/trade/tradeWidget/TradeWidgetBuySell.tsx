@@ -1,11 +1,11 @@
 import { UseQueryResult } from '@tanstack/react-query';
+import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { Token } from 'libs/tokens';
 import { prettifyNumber } from 'utils/helpers';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
-import { Rate } from './Rate';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -36,6 +36,25 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   if (liquidityQuery?.isLoading) return <div>Loading</div>;
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target || !liquidityQuery?.data) return null;
+
+  const getRate = () => {
+    if (!rate) return '...';
+
+    if (buy) {
+      return (
+        <>
+          1 {target.symbol} = {rate ? prettifyNumber(rate) : '--'}{' '}
+          {source.symbol}
+        </>
+      );
+    } else {
+      <>
+        1 {source.symbol} ={' '}
+        {rate ? prettifyNumber(new BigNumber(1).div(rate)) : '--'}{' '}
+        {target.symbol}
+      </>;
+    }
+  };
 
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
@@ -90,7 +109,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
             }
           >
-            <Rate source={source} target={target} rate={rate} buy={buy} />
+            {getRate()}
           </div>
           {liquidityQuery.data && (
             <div className={'text-secondary mt-5 text-right'}>
