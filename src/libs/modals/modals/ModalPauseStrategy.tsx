@@ -1,9 +1,12 @@
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
+import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconWarning } from 'assets/icons/pause.svg';
 
 export const ModalPauseStrategy: ModalFC<undefined> = ({ id }) => {
+  const { closeModal } = useModal();
+
   return (
     <Modal id={id} title="Pause Strategy">
       <div className="mt-24 flex flex-col items-center text-center font-weight-500">
@@ -25,7 +28,13 @@ export const ModalPauseStrategy: ModalFC<undefined> = ({ id }) => {
         >
           Pause Strategy
         </Button>
-        <Button className="mt-16" variant="black" size="lg" fullWidth>
+        <Button
+          onClick={() => closeModal(id)}
+          className="mt-16"
+          variant="black"
+          size="lg"
+          fullWidth
+        >
           Cancel
         </Button>
       </div>
