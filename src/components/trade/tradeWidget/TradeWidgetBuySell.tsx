@@ -93,13 +93,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           '...'
         ) : buy ? (
           <>
-            1 {target.symbol} = {rate ? prettifyNumber(rate) : '--'}{' '}
+            1 {target.symbol} ={' '}
+            {rate ? prettifyNumber(new BigNumber(1).div(rate)) : '--'}{' '}
             {source.symbol}
           </>
         ) : (
           <>
-            1 {source.symbol} ={' '}
-            {rate ? prettifyNumber(new BigNumber(1).div(rate)) : '--'}{' '}
+            1 {source.symbol} = {rate ? prettifyNumber(rate) : '--'}{' '}
             {target.symbol}
           </>
         )}
