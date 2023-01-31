@@ -16,7 +16,7 @@ const buildOrderBook = (
 ) => {
   const orders: OrderRow[] = [];
 
-  for (let i = new BigNumber(0); i.lt(buckets); i = i.plus(1)) {
+  for (let i = new BigNumber(0); i.lte(buckets); i = i.plus(1)) {
     const rate = i.times(step).plus(min).toString();
     const amount = carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
