@@ -23,7 +23,7 @@ const buildOrderBook = (
       quoteToken,
       rate
     );
-    const total = new BigNumber(amount).multipliedBy(rate).toString();
+    const total = new BigNumber(amount).times(rate).toString();
     orders.push({ rate, total, amount });
   }
 
@@ -32,11 +32,12 @@ const buildOrderBook = (
   return orders;
 };
 
-const getOrderBook = (base: string, quote: string) => {
+const getOrderBook = (base: string, quote: string, normalize?: boolean) => {
   const minBuy = new BigNumber(carbonSDK.getMinRateByPair(quote, base));
   const maxBuy = new BigNumber(carbonSDK.getMaxRateByPair(quote, base));
   const minSell = new BigNumber(1).div(carbonSDK.getMaxRateByPair(base, quote));
   const maxSell = new BigNumber(1).div(carbonSDK.getMinRateByPair(base, quote));
+
   console.log('order jan minBuy', minBuy.toString());
   console.log('order jan maxBuy', maxBuy.toString());
   console.log('order jan minSell', minSell.toString());
@@ -45,17 +46,24 @@ const getOrderBook = (base: string, quote: string) => {
   const deltaBuy = maxBuy.minus(minBuy);
   const deltaSell = maxSell.minus(minSell);
 
-  const step = deltaBuy.lt(deltaSell)
-    ? deltaBuy.isZero()
-      ? maxSell.minus(minSell).div(buckets)
-      : maxBuy.minus(minBuy).div(buckets)
-    : deltaSell.isZero()
-    ? maxBuy.minus(minBuy).div(buckets)
-    : maxSell.minus(minSell).div(buckets);
+  const stepBuy = deltaBuy.div(buckets);
+  const stepSell = deltaSell.div(buckets);
+
+  const stepNormalized = stepBuy.lte(stepSell) ? stepBuy : stepSell;
 
   return {
-    buyOrders: buildOrderBook(base, quote, minBuy, step),
-    sellOrders: buildOrderBook(quote, base, minSell, step),
+    buyOrders: buildOrderBook(
+      base,
+      quote,
+      minBuy,
+      normalize ? stepNormalized : stepBuy
+    ),
+    sellOrders: buildOrderBook(
+      quote,
+      base,
+      minSell,
+      normalize ? stepNormalized : stepSell
+    ),
   };
 };
 
