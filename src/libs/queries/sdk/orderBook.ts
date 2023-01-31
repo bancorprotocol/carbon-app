@@ -53,14 +53,14 @@ const getOrderBook = (base: string, quote: string, normalize?: boolean) => {
 
   return {
     buyOrders: buildOrderBook(
-      base,
       quote,
+      base,
       minBuy,
       normalize ? stepNormalized : stepBuy
     ),
     sellOrders: buildOrderBook(
-      quote,
       base,
+      quote,
       minSell,
       normalize ? stepNormalized : stepSell
     ),
