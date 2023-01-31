@@ -1,11 +1,11 @@
-import { UseQueryResult } from '@tanstack/react-query';
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
-import { Token } from 'libs/tokens';
-import { prettifyNumber } from 'utils/helpers';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
+import { Token } from 'libs/tokens';
+import { UseQueryResult } from 'libs/queries';
+import { prettifyNumber } from 'utils/helpers';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
