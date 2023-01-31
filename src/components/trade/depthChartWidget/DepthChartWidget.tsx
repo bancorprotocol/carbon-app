@@ -1,3 +1,4 @@
+import { NoData } from 'components/common/noData';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
@@ -140,10 +141,18 @@ export const DepthChartWidget = () => {
     ],
   };
 
+  const isError = !bidsData || !asksData;
+
   return (
-    <div className=" rounded-10 bg-silver p-20">
+    <div className="rounded-10 bg-silver p-20">
       <div className="mb-20 font-weight-500">Depth</div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      {isError ? (
+        <div className="flex h-[300px] items-center justify-center rounded-10 bg-black">
+          <NoData />
+        </div>
+      ) : (
+        <HighchartsReact highcharts={Highcharts} options={options} />
+      )}
     </div>
   );
 };
