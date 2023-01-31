@@ -6446,6 +6446,16 @@ hey-listen@^1.0.8:
   resolved "https://registry.yarnpkg.com/hey-listen/-/hey-listen-1.0.8.tgz#8e59561ff724908de1aa924ed6ecc84a56a9aa68"
   integrity sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==
 
+highcharts-react-official@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/highcharts-react-official/-/highcharts-react-official-3.1.0.tgz#921e5614f9e8580bc99a1e3b531d51a70f396500"
+  integrity sha512-CkWJHrVMOc6CT8KFu1dR+a0w5OxCVKKgZUNWtEi5TmR0xqBDIDe+RyM652MAN/jBYppxMo6TCUVlRObCyWAn0Q==
+
+highcharts@^10.3.3:
+  version "10.3.3"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-10.3.3.tgz#b8acca24f2d4b1f2f726540734166e59e07b35c4"
+  integrity sha512-r7wgUPQI9tr3jFDn3XT36qsNwEIZYcfgz4mkKEA6E4nn5p86y+u1EZjazIG4TRkl5/gmGRtkBUiZW81g029RIw==
+
 history@^5.2.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/history/-/history-5.3.0.tgz#1548abaa245ba47992f063a0783db91ef201c73b"
