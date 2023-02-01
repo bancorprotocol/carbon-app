@@ -9,10 +9,8 @@ type MyLocationGenerics = MakeGenerics<{
 
 const isValid = (strategy: Strategy) => {
   return (
-    strategy.hasOwnProperty('token0') &&
-    strategy.hasOwnProperty('token1') &&
-    strategy.hasOwnProperty('order0') &&
-    strategy.hasOwnProperty('order1')
+    (strategy.hasOwnProperty('token0') && strategy.hasOwnProperty('token1')) ||
+    (strategy.hasOwnProperty('order0') && strategy.hasOwnProperty('order1'))
   );
 };
 
@@ -37,17 +35,22 @@ const decodeStrategyAndValidate = (
 
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate<MyLocationGenerics>();
-  const duplicate = (strategy: Strategy) => {
+  const search = useSearch<MyLocationGenerics>();
+  const { strategy: urlStrategy } = search;
+
+  const duplicate = (strategy: Partial<Strategy>) => {
     const encodedStrategy = Buffer.from(JSON.stringify(strategy)).toString(
       'base64'
     );
 
     navigate({
-      to: `${PathNames.createStrategy}/?strategy=${encodedStrategy}`,
+      to: `${PathNames.createStrategy}`,
+      search: {
+        ...search,
+        strategy: encodedStrategy,
+      },
     });
   };
-
-  const { strategy: urlStrategy } = useSearch<MyLocationGenerics>();
 
   return {
     duplicate,
