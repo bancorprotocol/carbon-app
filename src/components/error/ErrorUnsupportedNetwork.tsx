@@ -15,7 +15,7 @@ export const ErrorUnsupportedNetwork = () => {
         icon={<IconWarning />}
         title={'Wrong Network'}
         text={
-          'Please connect to a supported network in the dropdown menu or in your wallet'
+          'Please connect to Ethereum Mainnet using your wallet or the button below'
         }
         variant={'error'}
       />

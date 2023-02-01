@@ -17,7 +17,11 @@ export const MainMenuRightWallet: FC = () => {
 
   if (!isSupportedNetwork) {
     return (
-      <Button variant="error" className={'flex items-center space-x-10'}>
+      <Button
+        variant="error"
+        className={'flex items-center space-x-10'}
+        disabled
+      >
         <IconWarning className={'w-16'} />
         <span>Wrong Network</span>
       </Button>
