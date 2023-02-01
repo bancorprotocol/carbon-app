@@ -17,7 +17,7 @@ export const OrderBookWidgetHeader: FC<Props> = ({
     >
       <div>Price ({quoteSymbol})</div>
       <div>Amount ({baseSymbol})</div>
-      <div>Total</div>
+      <div className={'text-right'}>Total</div>
     </div>
   );
 };
