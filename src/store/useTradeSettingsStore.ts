@@ -15,32 +15,38 @@ export interface TradeSettingsStore {
   };
 }
 
+const presets: TradeSettingsStore['presets'] = {
+  slippage: ['0.5', '1', '5'],
+  deadline: ['10', '30', '60'],
+  maxOrders: ['10', '20', '30'],
+};
+
 export const useTradeSettingsStore = (): TradeSettingsStore => {
   const [slippage, _setSlippage] = useState(
-    lsService.getItem('tradeSlippage') || '0.05'
+    lsService.getItem('tradeSlippage') || presets.slippage[1]
   );
   const [deadline, _setDeadline] = useState(
-    lsService.getItem('tradeDeadline') || '30'
+    lsService.getItem('tradeDeadline') || presets.deadline[1]
   );
 
   const [maxOrders, _setMaxOrders] = useState(
-    lsService.getItem('tradeMaxOrders') || '20'
+    lsService.getItem('tradeMaxOrders') || presets.maxOrders[1]
   );
 
   const setSlippage = (value: string) => {
-    const slippage = value || '0.05';
+    const slippage = value || presets.slippage[1];
     _setSlippage(slippage);
     lsService.setItem('tradeSlippage', slippage);
   };
 
   const setDeadline = (value: string) => {
-    const deadline = value || '30';
+    const deadline = value || presets.deadline[1];
     _setDeadline(deadline);
     lsService.setItem('tradeDeadline', deadline);
   };
 
   const setMaxOrders = (value: string) => {
-    const maxOrders = value || '20';
+    const maxOrders = value || presets.maxOrders[1];
     _setMaxOrders(maxOrders);
     lsService.setItem('tradeMaxOrders', maxOrders);
   };
@@ -52,11 +58,7 @@ export const useTradeSettingsStore = (): TradeSettingsStore => {
     setDeadline,
     maxOrders,
     setMaxOrders,
-    presets: {
-      slippage: ['0.01', '0.05', '0.1'],
-      deadline: ['10', '30', '60'],
-      maxOrders: ['10', '20', '30'],
-    },
+    presets,
   };
 };
 
@@ -67,9 +69,5 @@ export const defaultTradeSettingsStore: TradeSettingsStore = {
   setDeadline: () => {},
   maxOrders: '',
   setMaxOrders: () => {},
-  presets: {
-    slippage: [],
-    deadline: [],
-    maxOrders: [],
-  },
+  presets,
 };
