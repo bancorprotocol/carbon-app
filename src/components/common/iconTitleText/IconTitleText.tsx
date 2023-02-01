@@ -4,7 +4,7 @@ type Props = {
   icon: ReactNode;
   title: string;
   text?: string | ReactNode;
-  variant?: 'warning';
+  variant?: 'warning' | 'error';
 };
 
 export const IconTitleText: FC<Props> = ({ icon, title, text, variant }) => {
@@ -12,6 +12,8 @@ export const IconTitleText: FC<Props> = ({ icon, title, text, variant }) => {
     switch (variant) {
       case 'warning':
         return 'text-warning-500 bg-warning-500/25';
+      case 'error':
+        return 'text-red bg-red/25';
       default:
         return 'bg-black/25';
     }

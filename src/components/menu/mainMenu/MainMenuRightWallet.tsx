@@ -10,12 +10,12 @@ import { ReactComponent as IconETHLogo } from 'assets/logos/ethlogo.svg';
 import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
 
 export const MainMenuRightWallet: FC = () => {
-  const { user, disconnect, chainId } = useWeb3();
+  const { user, disconnect, isSupportedNetwork } = useWeb3();
   const { openModal } = useModal();
 
   const onClickOpenModal = () => openModal('wallet', undefined);
 
-  if ((chainId ?? 1) !== 1) {
+  if (!isSupportedNetwork) {
     return (
       <Button variant="error" className={'flex items-center space-x-10'}>
         <IconWarning className={'w-16'} />
