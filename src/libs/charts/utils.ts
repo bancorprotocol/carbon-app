@@ -32,6 +32,11 @@ export const getOptions = (bidsData: number[][], asksData: number[][]) => {
           color: 'rgba(255, 255, 255, 0.6)',
         },
       },
+      crosshair: {
+        color: 'rgba(255, 255, 255, 0.25)',
+        width: 1,
+        dashStyle: 'dash',
+      },
     },
     yAxis: [
       {
@@ -44,6 +49,11 @@ export const getOptions = (bidsData: number[][], asksData: number[][]) => {
         labels: {
           x: 50,
           enabled: false,
+        },
+        crosshair: {
+          color: 'rgba(255, 255, 255, 0.25)',
+          width: 1,
+          dashStyle: 'dash',
         },
       },
       {
@@ -73,9 +83,14 @@ export const getOptions = (bidsData: number[][], asksData: number[][]) => {
       },
     },
     tooltip: {
-      headerFormat:
-        '<span style="font-size=10px;">Price: {point.key}</span><br/>',
+      pointFormat: '{series.name} <b>{point.y}</b><br/>',
       valueDecimals: 2,
+      borderRadius: 12,
+      backgroundColor: '#212123',
+      borderWidth: 0,
+      style: {
+        color: 'white',
+      },
     },
     series: [
       {
