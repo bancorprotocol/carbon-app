@@ -1,11 +1,11 @@
 import { OrderBookWidgetHeader } from 'components/trade/orderWidget/OrderBookWidgetHeader';
 import { OrderBookWidgetRate } from 'components/trade/orderWidget/OrderBookWidgetRate';
 import { OrderBookWidgetRow } from 'components/trade/orderWidget/OrderBookWidgetRow';
-import { useTrade } from 'components/trade/useTrade';
 import { useOrderBookWidget } from 'components/trade/orderWidget/useOrderBookWidget';
+import { useTradeTokens } from 'components/trade/useTradeTokens';
 
 export const OrderBookWidget = () => {
-  const { baseToken, quoteToken } = useTrade();
+  const { baseToken, quoteToken } = useTradeTokens();
   const { data } = useOrderBookWidget(baseToken?.address, quoteToken?.address);
 
   if (!baseToken || !quoteToken) {

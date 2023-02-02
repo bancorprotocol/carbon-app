@@ -1,4 +1,4 @@
-import { useTrade } from 'components/trade/useTrade';
+import { useTradePairs } from 'components/trade/useTradePairs';
 import { useModal } from 'hooks/useModal';
 import {
   ModalTradeTokenListData,
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const useModalTradeTokenList = ({ id, data }: Props) => {
-  const { tradePairs, isLoading, isError } = useTrade();
+  const { tradePairs, isLoading, isError } = useTradePairs();
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
 

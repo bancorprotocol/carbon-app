@@ -5,7 +5,7 @@ import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 import { useWeb3 } from 'libs/web3';
 import { MainMenuTokens } from 'components/menu/mainMenu/MainMenuTokens';
 import { MainMenuSettings } from 'components/menu/mainMenu/MainMenuSettings';
-import { useTrade } from 'components/trade/useTrade';
+import { useTradeTokens } from 'components/trade/useTradeTokens';
 
 enum AlertType {
   ERROR,
@@ -64,7 +64,7 @@ const NetworkErrorAlert = () => {
 };
 
 export const MainMenu: FC = () => {
-  const { baseToken, quoteToken, isTradePage } = useTrade();
+  const { baseToken, quoteToken, isTradePage } = useTradeTokens();
 
   return (
     <div className={`sticky top-0 z-40`}>
