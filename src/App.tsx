@@ -22,18 +22,27 @@ export const App = () => {
     void init();
   }, [init]);
 
+  const MainContent = () => {
+    if (isDebugPage) {
+      return <Outlet />;
+    }
+
+    if (!isSupportedNetwork) {
+      return <ErrorUnsupportedNetwork />;
+    }
+
+    if (networkError) {
+      return <ErrorNetworkConnection />;
+    }
+
+    return <Outlet />;
+  };
+
   return (
     <>
       <MainMenu />
       <main>
-        {(isSupportedNetwork && !networkError) || isDebugPage ? (
-          <Outlet />
-        ) : (
-          <>
-            {!isSupportedNetwork && <ErrorUnsupportedNetwork />}
-            {networkError && <ErrorNetworkConnection />}
-          </>
-        )}
+        <MainContent />
       </main>
       <MobileMenu />
       <NotificationAlerts />
