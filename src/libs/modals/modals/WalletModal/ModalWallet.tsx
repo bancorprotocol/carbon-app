@@ -1,15 +1,11 @@
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { useWeb3, Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
+import { useWeb3, Connection } from 'libs/web3';
 import { useState } from 'react';
-import { getConnection } from 'libs/web3/web3.utils';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletLoading } from 'libs/modals/modals/WalletModal/ModalWalletLoading';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
-
-export const SELECTABLE_CONNECTIONS: Connection[] =
-  SELECTABLE_CONNECTION_TYPES.map(getConnection);
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
