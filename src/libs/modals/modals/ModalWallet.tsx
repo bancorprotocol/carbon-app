@@ -1,20 +1,27 @@
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { ConnectionType, useWeb3 } from 'libs/web3';
+import { useWeb3, Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
 import { useState } from 'react';
+import { Imager } from 'components/common/imager/Imager';
+import iconLedger from 'assets/logos/ledger.svg';
+import iconTrezor from 'assets/logos/trezor.svg';
+import { getConnection } from 'libs/web3/web3.utils';
+
+export const SELECTABLE_CONNECTIONS: Connection[] =
+  SELECTABLE_CONNECTION_TYPES.map(getConnection);
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
   const { connect } = useWeb3();
   const [selectedConnection, setSelectedConnection] =
-    useState<ConnectionType | null>(null);
+    useState<Connection | null>(null);
   const [connectionError, setConnectionError] = useState('');
 
-  const onClickConnect = async (type: ConnectionType) => {
-    setSelectedConnection(type);
+  const onClickConnect = async (c: Connection) => {
+    setSelectedConnection(c);
     try {
-      await connect(type);
+      await connect(c.type);
       closeModal(id);
     } catch (e: any) {
       console.error(`Modal Wallet onClickConnect error: `, e);
@@ -27,38 +34,79 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       <div className={'mt-30'}>
         {selectedConnection !== null ? (
           connectionError ? (
-            <div>
-              <h3>Error</h3>
-              <div>{connectionError}</div>
+            <div className={'flex flex-col items-center space-y-20'}>
+              <Imager
+                alt={'Wallet Logo'}
+                src={selectedConnection.logoUrl}
+                className={'w-60'}
+              />
+              <span>{selectedConnection.name} Error:</span>
+              <span
+                className={
+                  'rounded-10 bg-red/20 px-20 py-10 font-weight-500 text-red'
+                }
+              >
+                {connectionError}
+              </span>
             </div>
           ) : (
-            <div>
-              <h3>Loading</h3>
-              <div>connecting to {selectedConnection}</div>
+            <div className={'flex flex-col items-center space-y-20'}>
+              <Imager
+                alt={'Wallet Logo'}
+                src={selectedConnection.logoUrl}
+                className={'w-60 animate-pulse'}
+              />
+              <span>connecting to {selectedConnection.name} ...</span>
             </div>
           )
         ) : (
-          <div className={'space-y-20'}>
-            <button
-              onClick={() => onClickConnect(ConnectionType.INJECTED)}
-              className={'w-full rounded bg-gray-100 p-16 dark:bg-darkGrey'}
-            >
-              MetaMask
-            </button>
+          <div className={'space-y-10'}>
+            {SELECTABLE_CONNECTIONS.map((c) => (
+              <button
+                key={c.type}
+                onClick={() => onClickConnect(c)}
+                className={
+                  'flex h-44 w-full items-center space-x-16 rounded-8 px-10 hover:bg-black'
+                }
+              >
+                <Imager
+                  alt={'Wallet Logo'}
+                  src={c.logoUrl}
+                  className={'w-24'}
+                />
+                <span className={'text-16 font-weight-500'}>{c.name}</span>
+              </button>
+            ))}
 
-            <button
-              onClick={() => onClickConnect(ConnectionType.WALLET_CONNECT)}
-              className={'w-full rounded bg-gray-100 p-16 dark:bg-darkGrey'}
+            <a
+              href={
+                'https://www.ledger.com/academy/security/the-safest-way-to-use-metamask'
+              }
+              target={'_blank'}
+              rel="noreferrer"
+              className={
+                'flex h-44 w-full items-center space-x-16 rounded-8 px-10 hover:bg-black'
+              }
             >
-              Wallet Connect
-            </button>
+              <Imager alt={'Wallet Logo'} src={iconLedger} className={'w-24'} />
+              <span className={'text-16 font-weight-500'}>Ledger</span>
+            </a>
 
-            <button
-              onClick={() => onClickConnect(ConnectionType.COINBASE_WALLET)}
-              className={'w-full rounded bg-gray-100 p-16 dark:bg-darkGrey'}
+            <a
+              href={'https://trezor.io/learn/a/metamask-and-trezor'}
+              target={'_blank'}
+              rel="noreferrer"
+              className={
+                'flex h-44 w-full items-center space-x-16 rounded-8 px-10 hover:bg-black'
+              }
             >
-              Coinbase Wallet
-            </button>
+              <Imager
+                alt={'Wallet Logo'}
+                src={iconTrezor}
+                className={'mx-3 w-18'}
+              />
+              <span className={'text-16 font-weight-500'}>Trezor</span>
+            </a>
           </div>
         )}
       </div>

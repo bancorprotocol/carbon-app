@@ -10,6 +10,10 @@ import {
   SupportedChainId,
 } from 'libs/web3/web3.constants';
 import { Connection } from 'libs/web3/web3.types';
+import iconMetaMask from 'assets/logos/metamask.svg';
+import iconWalletConnect from 'assets/logos/walletConnect.svg';
+import iconCoinbase from 'assets/logos/coinbase.svg';
+import iconGnosis from 'assets/logos/gnosis.svg';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
@@ -46,6 +50,7 @@ export const injectedConnection: Connection = {
   hooks: web3InjectedHooks,
   type: ConnectionType.INJECTED,
   name: 'MetaMask',
+  logoUrl: iconMetaMask,
 };
 
 // ********************************** //
@@ -60,6 +65,7 @@ export const gnosisSafeConnection: Connection = {
   hooks: web3GnosisSafeHooks,
   type: ConnectionType.GNOSIS_SAFE,
   name: 'Gnosis Safe',
+  logoUrl: iconGnosis,
 };
 
 // ********************************** //
@@ -83,6 +89,7 @@ export const walletConnectConnection: Connection = {
   hooks: web3WalletConnectHooks,
   type: ConnectionType.WALLET_CONNECT,
   name: 'WalletConnect',
+  logoUrl: iconWalletConnect,
 };
 
 // ********************************** //
@@ -109,4 +116,5 @@ export const coinbaseWalletConnection: Connection = {
   hooks: web3CoinbaseWalletHooks,
   type: ConnectionType.COINBASE_WALLET,
   name: 'Coinbase Wallet',
+  logoUrl: iconCoinbase,
 };
