@@ -6,12 +6,11 @@ import { QueryKey } from 'libs/queries/queryKey';
 
 export type OrderRow = { rate: string; total: string; amount: string };
 
-const buckets = 10;
-
 const buildOrderBook = async (
   baseToken: string,
   quoteToken: string,
   min: BigNumber | string,
+  buckets: number,
   step: BigNumber | string
 ) => {
   const orders: OrderRow[] = [];
@@ -35,15 +34,16 @@ const buildOrderBook = async (
 const getOrderBook = async (
   base: string,
   quote: string,
+  buckets = 10,
   normalize?: boolean
 ) => {
-  const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
-  const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
+  const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(base, quote));
+  const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(base, quote));
   const minSell = new BigNumber(1).div(
-    await carbonSDK.getMaxRateByPair(base, quote)
+    await carbonSDK.getMaxRateByPair(quote, base)
   );
   const maxSell = new BigNumber(1).div(
-    await carbonSDK.getMinRateByPair(base, quote)
+    await carbonSDK.getMinRateByPair(quote, base)
   );
 
   console.log('order jan minBuy', minBuy.toString());
@@ -64,23 +64,30 @@ const getOrderBook = async (
       quote,
       base,
       minBuy,
+      buckets,
       normalize ? stepNormalized : stepBuy
     ),
     sellOrders: await buildOrderBook(
       base,
       quote,
       minSell,
+      buckets,
       normalize ? stepNormalized : stepSell
     ),
   };
 };
 
-export const useGetOrderBook = (base?: string, quote?: string) => {
+export const useGetOrderBook = (
+  base?: string,
+  quote?: string,
+  buckets = 14,
+  normalize = false
+) => {
   const { isInitialized } = useCarbonSDK();
 
   return useQuery({
-    queryKey: QueryKey.tradeOrderBook(base!, quote!),
-    queryFn: () => getOrderBook(base!, quote!),
+    queryKey: QueryKey.tradeOrderBook(base!, quote!, buckets!, normalize!),
+    queryFn: () => getOrderBook(base!, quote!, buckets!, normalize!),
     enabled: isInitialized && !!base && !!quote,
     retry: 1,
   });
