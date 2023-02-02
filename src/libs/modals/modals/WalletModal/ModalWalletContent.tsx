@@ -48,7 +48,9 @@ export const ModalWalletContent: FC<Props> = ({ onClick }) => {
           rel="noreferrer"
           className={buttonClasses}
         >
-          <Imager alt={'Wallet Logo'} src={logoUrl} className={'w-24'} />
+          <div className={'flex w-24 justify-center'}>
+            <Imager alt={'Wallet Logo'} src={logoUrl} className={'h-24'} />
+          </div>
           <span className={textClasses}>{name}</span>
         </a>
       ))}
