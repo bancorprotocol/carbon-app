@@ -4,6 +4,7 @@ import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useWeb3 } from 'libs/web3';
 
 type Props = {
   value: string;
@@ -29,6 +30,7 @@ export const TokenInputField: FC<Props> = ({
   onKeystroke,
   placeholder = 'Enter Amount',
 }) => {
+  const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -113,28 +115,32 @@ export const TokenInputField: FC<Props> = ({
         }
       </div>
 
-      <div className={'mt-10 flex items-center justify-between font-mono'}>
-        <button
-          onClick={handleBalanceClick}
-          className={
-            'text-secondary group flex items-center !text-12 font-weight-500'
-          }
-        >
-          Wallet:{' '}
-          {isBalanceLoading ? (
-            'loading'
-          ) : balance ? (
-            <>
-              {prettifyNumber(balance)}{' '}
-              <div className="ml-10 group-hover:text-white">MAX</div>
-            </>
-          ) : (
-            'not logged in'
-          )}
-        </button>
+      <div
+        className={
+          'text-secondary mt-10 flex items-center justify-between font-mono !text-12 font-weight-500'
+        }
+      >
+        {user ? (
+          <button
+            onClick={handleBalanceClick}
+            className={'group flex items-center'}
+          >
+            Wallet:{' '}
+            {isBalanceLoading ? (
+              'loading'
+            ) : (
+              <>
+                {prettifyNumber(balance || 0)}{' '}
+                <div className="ml-10 group-hover:text-white">MAX</div>
+              </>
+            )}
+          </button>
+        ) : (
+          <div className={'h-16'}></div>
+        )}
 
         {fiatValue.gt(0) && (
-          <div className={'text-12'}>
+          <div className={''}>
             {prettifyNumber(
               fiatValue,
               ['USD', 'CAD', 'AUD'].includes(selectedFiatCurrency)
