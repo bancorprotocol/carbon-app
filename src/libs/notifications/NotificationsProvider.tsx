@@ -28,7 +28,7 @@ export const NotificationAlerts: FC = () => {
 
   return (
     <div className={'fixed absolute top-10 right-10'}>
-      <div className={'sticky z-40'}>
+      <div className={'sticky z-50'}>
         <AnimatePresence mode={'popLayout'}>
           {alerts.map((n) => (
             <motion.div
