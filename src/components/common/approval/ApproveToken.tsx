@@ -100,13 +100,13 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
             <div className={'flex items-center space-x-8'}>
               <div
                 className={`!text-12 ${
-                  isLimited ? 'text-white' : 'text-secondary'
+                  isLimited ? 'text-white/85 font-weight-500' : 'text-white/60'
                 }`}
               >
                 Limited
               </div>
               <Switch
-                variant={'secondary'}
+                className={`${isLimited ? 'bg-white/80' : 'bg-emphasis'}`}
                 isOn={isLimited}
                 setIsOn={setIsLimited}
                 size={'sm'}
