@@ -106,7 +106,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
                 Limited
               </div>
               <Switch
-                className={`${isLimited ? 'bg-white/80' : 'bg-emphasis'}`}
+                variant={isLimited ? 'white' : 'secondary'}
                 isOn={isLimited}
                 setIsOn={setIsLimited}
                 size={'sm'}
