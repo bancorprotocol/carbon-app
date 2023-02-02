@@ -42,6 +42,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick }) => {
 
       {EXT_LINKS.map(({ url, name, logoUrl }) => (
         <a
+          key={url}
           href={url}
           target={'_blank'}
           rel="noreferrer"
