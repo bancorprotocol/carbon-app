@@ -24,7 +24,7 @@ export const IconTitleText: FC<Props> = ({ icon, title, text, variant }) => {
   return (
     <div className={'flex flex-col items-center'}>
       <div
-        className={`flex h-60 w-60 items-center justify-center rounded-full p-20 ${variantClass}`}
+        className={`flex h-60 w-60 items-center justify-center rounded-full p-18 ${variantClass}`}
       >
         {icon}
       </div>

@@ -17,7 +17,7 @@ enum AlertType {
 const getAlertColorClass = (type: AlertType) => {
   switch (type) {
     case AlertType.ERROR:
-      return 'bg-red-500';
+      return 'bg-red';
     case AlertType.WARNING:
       return 'bg-amber-500';
     case AlertType.INFO:
@@ -25,7 +25,7 @@ const getAlertColorClass = (type: AlertType) => {
     case AlertType.PINK:
       return 'bg-pink-500';
     default:
-      return 'bg-green-500';
+      return 'bg-green';
   }
 };
 const Alert: FC<{ children: ReactNode; type: AlertType }> = ({
@@ -56,13 +56,6 @@ const ImposterAccountAlert = () => {
   ) : null;
 };
 
-const NetworkErrorAlert = () => {
-  const { networkError } = useWeb3();
-  return networkError ? (
-    <Alert type={AlertType.ERROR}>Network Error: {networkError}</Alert>
-  ) : null;
-};
-
 export const MainMenu: FC = () => {
   const { baseToken, quoteToken, isTradePage } = useTrade();
 
@@ -70,7 +63,6 @@ export const MainMenu: FC = () => {
     <div className={`sticky top-0 z-40`}>
       <TenderlyForkAlert />
       <ImposterAccountAlert />
-      <NetworkErrorAlert />
       <div className={'main-menu'}>
         <MainMenuLeft />
         {!(!isTradePage || !baseToken || !quoteToken) && (
