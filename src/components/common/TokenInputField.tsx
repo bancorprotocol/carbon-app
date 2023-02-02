@@ -140,7 +140,7 @@ export const TokenInputField: FC<Props> = ({
         )}
 
         {fiatValue.gt(0) && (
-          <div className={''}>
+          <div>
             {prettifyNumber(
               fiatValue,
               ['USD', 'CAD', 'AUD'].includes(selectedFiatCurrency)
