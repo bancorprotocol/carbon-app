@@ -1,8 +1,8 @@
+import { useMemo, useState } from 'react';
 import {
   GetUserApprovalProps,
   useGetUserApproval,
 } from 'libs/queries/chain/approval';
-import { useMemo } from 'react';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;
@@ -14,8 +14,8 @@ export type ApprovalTokenResult = ApprovalToken & {
 };
 
 export const useApproval = (data: ApprovalToken[]) => {
+  const [txSuccess, setTxSuccess] = useState(false);
   const approvalQuery = useGetUserApproval(data);
-
   const result = useMemo(() => {
     return approvalQuery.map((q, i) => {
       const newData: ApprovalTokenResult | undefined = q.data && {
@@ -39,5 +39,13 @@ export const useApproval = (data: ApprovalToken[]) => {
   const isError = useMemo(() => result.some((x) => x.isError), [result]);
   const error = useMemo(() => result.find((x) => x.isError)?.error, [result]);
 
-  return { approvalQuery: result, approvalRequired, isLoading, isError, error };
+  return {
+    approvalQuery: result,
+    approvalRequired,
+    txSuccess,
+    setTxSuccess,
+    isLoading,
+    isError,
+    error,
+  };
 };

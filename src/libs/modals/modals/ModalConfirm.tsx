@@ -16,7 +16,8 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   data: { approvalTokens, onConfirm, buttonLabel = 'Confirm' },
 }) => {
   const { closeModal } = useModal();
-  const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
+  const { approvalQuery, txSuccess, setTxSuccess } =
+    useApproval(approvalTokens);
 
   return (
     <Modal id={id} title={'Confirm Transaction'}>
@@ -28,6 +29,8 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
             data={data}
             isLoading={isLoading}
             error={error}
+            txSuccess={txSuccess}
+            setTxSuccess={setTxSuccess}
           />
         ))}
       </div>
@@ -36,7 +39,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
         size={'lg'}
         variant={'white'}
         fullWidth
-        disabled={approvalRequired}
+        disabled={!txSuccess}
         onClick={async () => {
           closeModal(id);
           await onConfirm();

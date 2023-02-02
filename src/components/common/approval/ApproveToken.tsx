@@ -13,9 +13,17 @@ type Props = {
   data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
+  txSuccess: boolean;
+  setTxSuccess: (value: boolean) => void;
 };
 
-export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
+export const ApproveToken: FC<Props> = ({
+  data,
+  isLoading,
+  error,
+  txSuccess,
+  setTxSuccess,
+}) => {
   const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
   const { getTokenById } = useTokens();
@@ -24,7 +32,6 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   const [isLimited, setIsLimited] = useState(false);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
-  const [txSuccess, setTxSuccess] = useState(false);
 
   const onApprove = async () => {
     if (!data || !token) {
