@@ -8,7 +8,7 @@ export type OrderRow = { rate: string; total: string; amount: string };
 
 const buckets = 10;
 
-const buildOrderBook = (
+const buildOrderBook = async (
   baseToken: string,
   quoteToken: string,
   min: BigNumber | string,
@@ -18,7 +18,7 @@ const buildOrderBook = (
 
   for (let i = new BigNumber(0); i.lte(buckets); i = i.plus(1)) {
     const rate = i.times(step).plus(min).toString();
-    const amount = carbonSDK.getRateLiquidityDepthByPair(
+    const amount = await carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
       quoteToken,
       rate
@@ -32,11 +32,19 @@ const buildOrderBook = (
   return orders;
 };
 
-const getOrderBook = (base: string, quote: string, normalize?: boolean) => {
-  const minBuy = new BigNumber(carbonSDK.getMinRateByPair(quote, base));
-  const maxBuy = new BigNumber(carbonSDK.getMaxRateByPair(quote, base));
-  const minSell = new BigNumber(1).div(carbonSDK.getMaxRateByPair(base, quote));
-  const maxSell = new BigNumber(1).div(carbonSDK.getMinRateByPair(base, quote));
+const getOrderBook = async (
+  base: string,
+  quote: string,
+  normalize?: boolean
+) => {
+  const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
+  const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
+  const minSell = new BigNumber(1).div(
+    await carbonSDK.getMaxRateByPair(base, quote)
+  );
+  const maxSell = new BigNumber(1).div(
+    await carbonSDK.getMinRateByPair(base, quote)
+  );
 
   console.log('order jan minBuy', minBuy.toString());
   console.log('order jan maxBuy', maxBuy.toString());
@@ -52,13 +60,13 @@ const getOrderBook = (base: string, quote: string, normalize?: boolean) => {
   const stepNormalized = stepBuy.lte(stepSell) ? stepBuy : stepSell;
 
   return {
-    buyOrders: buildOrderBook(
+    buyOrders: await buildOrderBook(
       quote,
       base,
       minBuy,
       normalize ? stepNormalized : stepBuy
     ),
-    sellOrders: buildOrderBook(
+    sellOrders: await buildOrderBook(
       base,
       quote,
       minSell,
