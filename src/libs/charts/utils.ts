@@ -1,4 +1,13 @@
-export const getOptions = (bidsData: number[][], asksData: number[][]) => {
+export const getOptions = (bidsData?: number[][], asksData?: number[][]) => {
+  // TODO: Clean
+  const minBid = bidsData?.[0][0];
+  const minAsk = asksData?.[0][0];
+
+  const maxBid = bidsData?.[bidsData.length - 1][0];
+  const maxAsk = asksData?.[asksData.length - 1][0];
+  const min = Math.min(minBid || 0, minAsk || 0);
+  const max = Math.max(maxBid || 0, maxAsk || 0);
+  const xMiddle = (min + max) / 2;
   return {
     chart: {
       type: 'area',
@@ -16,7 +25,7 @@ export const getOptions = (bidsData: number[][], asksData: number[][]) => {
         {
           color: 'rgba(255, 255, 255, 0.25)',
           opacity: 0.75,
-          value: 0.1523,
+          value: xMiddle,
           width: 1.5,
           label: {
             text: ' ',
