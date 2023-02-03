@@ -13,9 +13,6 @@ export const StrategyBlockManage: FC<{
   const { duplicate } = useDuplicateStrategy();
   const items = [
     {
-      name: 'Edit Strategy Name',
-    },
-    {
       name: 'Withdraw Funds',
     },
     {
