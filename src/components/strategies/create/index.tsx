@@ -6,7 +6,6 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
-import { NameBlock } from './NameBlock';
 import { SelectTokenButton } from 'components/common/selectToken';
 
 export const CreateStrategy = () => {
@@ -17,8 +16,6 @@ export const CreateStrategy = () => {
     token1,
     order0,
     order1,
-    name,
-    setName,
     createStrategy,
     openTokenListModal,
     showStep2,
@@ -99,10 +96,6 @@ export const CreateStrategy = () => {
               order={order1}
               tokenBalanceQuery={token0BalanceQuery}
             />
-          </m.div>
-
-          <m.div variants={items}>
-            <NameBlock name={name} setName={setName} />
           </m.div>
 
           <m.div variants={items}>
