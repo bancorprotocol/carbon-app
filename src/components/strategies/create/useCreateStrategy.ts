@@ -33,7 +33,6 @@ export const useCreate = () => {
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
 
-  const [name, setName] = useState('');
   const mutation = useCreateStrategy();
 
   const showStep2 = !!token0 && !!token1;
@@ -159,8 +158,6 @@ export const useCreate = () => {
     setToken1,
     order0,
     order1,
-    name,
-    setName,
     createStrategy,
     openTokenListModal,
     showStep2,
