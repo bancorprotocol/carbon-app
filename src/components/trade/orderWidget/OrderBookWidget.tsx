@@ -3,6 +3,7 @@ import { OrderBookWidgetRate } from 'components/trade/orderWidget/OrderBookWidge
 import { OrderBookWidgetRow } from 'components/trade/orderWidget/OrderBookWidgetRow';
 import { useOrderBookWidget } from 'components/trade/orderWidget/useOrderBookWidget';
 import { useTradeTokens } from 'components/trade/useTradeTokens';
+import { orderBy } from 'lodash';
 
 export const OrderBookWidget = () => {
   const { baseToken, quoteToken } = useTradeTokens();
@@ -33,9 +34,11 @@ export const OrderBookWidget = () => {
           </div>
           <OrderBookWidgetRate buy rate={'??????????'} />
           <div className={'grid grid-cols-3'}>
-            {data?.buyOrders.map(({ amount, rate }, i) => (
-              <OrderBookWidgetRow key={i} buy price={rate} amount={amount} />
-            ))}
+            {orderBy(data?.buyOrders, 'price', 'desc').map(
+              ({ amount, rate }, i) => (
+                <OrderBookWidgetRow key={i} buy price={rate} amount={amount} />
+              )
+            )}
           </div>
         </div>
       </div>

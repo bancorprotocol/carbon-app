@@ -39,12 +39,8 @@ const getOrderBook = async (
 ) => {
   const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(base, quote));
   const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(base, quote));
-  const minSell = new BigNumber(1).div(
-    await carbonSDK.getMaxRateByPair(quote, base)
-  );
-  const maxSell = new BigNumber(1).div(
-    await carbonSDK.getMinRateByPair(quote, base)
-  );
+  const minSell = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
+  const maxSell = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
 
   console.log('order jan minBuy', minBuy.toString());
   console.log('order jan maxBuy', maxBuy.toString());
@@ -61,15 +57,15 @@ const getOrderBook = async (
 
   return {
     buyOrders: await buildOrderBook(
-      quote,
       base,
+      quote,
       minBuy,
       buckets,
       normalize ? stepNormalized : stepBuy
     ),
     sellOrders: await buildOrderBook(
-      base,
       quote,
+      base,
       minSell,
       buckets,
       normalize ? stepNormalized : stepSell
