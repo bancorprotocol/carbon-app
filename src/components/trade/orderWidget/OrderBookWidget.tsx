@@ -28,13 +28,13 @@ export const OrderBookWidget = () => {
           }
         >
           <div className={'grid grid-cols-3'}>
-            {data?.sell.map((props, i) => (
+            {orderBy(data.sell, 'rate', 'desc').map((props, i) => (
               <OrderBookWidgetRow key={i} {...props} />
             ))}
           </div>
           <OrderBookWidgetRate buy rate={'??????????'} />
           <div className={'grid grid-cols-3'}>
-            {orderBy(data?.buy, 'rate', 'desc').map((props, i) => (
+            {orderBy(data.buy, 'rate', 'desc').map((props, i) => (
               <OrderBookWidgetRow key={i} buy {...props} />
             ))}
           </div>
