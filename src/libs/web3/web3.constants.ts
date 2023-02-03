@@ -26,8 +26,8 @@ export enum ConnectionType {
 
 export const SELECTABLE_CONNECTION_TYPES: ConnectionType[] = [
   ConnectionType.INJECTED,
-  ConnectionType.COINBASE_WALLET,
   ConnectionType.WALLET_CONNECT,
+  ConnectionType.COINBASE_WALLET,
 ];
 
 export const RPC_URLS: ChainIdMapTo<string> = {
