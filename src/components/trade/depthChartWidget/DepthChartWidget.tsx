@@ -96,9 +96,13 @@ export const DepthChartWidget = () => {
   );
   const options = getOptions(buyOrders, sellOrders);
 
-  const isError = !baseToken || !quoteToken;
+  const isError = !baseToken || !quoteToken || !buyOrders || !sellOrders;
   console.log('BUY', buyOrders);
   console.log('SELL', sellOrders);
+
+  if (isError || !options) {
+    return null;
+  }
 
   return (
     <div className="rounded-10 bg-silver p-20">

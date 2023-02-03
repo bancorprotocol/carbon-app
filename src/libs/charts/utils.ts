@@ -1,63 +1,46 @@
 export const getOptions = (bidsData?: number[][], asksData?: number[][]) => {
-  // TODO: Clean
-  const minBid = bidsData?.[0][0];
-  const minAsk = asksData?.[0][0];
+  try {
+    // TODO: Clean
+    const minBid = bidsData?.[0][0];
+    const minAsk = asksData?.[0][0];
 
-  const maxBid = bidsData?.[bidsData.length - 1][0];
-  const maxAsk = asksData?.[asksData.length - 1][0];
-  const min = Math.min(minBid || 0, minAsk || 0);
-  const max = Math.max(maxBid || 0, maxAsk || 0);
-  const xMiddle = (min + max) / 2;
-  return {
-    chart: {
-      type: 'area',
-      zoomType: 'xy',
-      backgroundColor: '#000000',
-      borderColor: '#000000',
-    },
-    title: {
-      text: ' ',
-    },
-    xAxis: {
-      minPadding: 0,
-      maxPadding: 0,
-      plotLines: [
-        {
-          color: 'rgba(255, 255, 255, 0.25)',
-          opacity: 0.75,
-          value: xMiddle,
-          width: 1.5,
-          label: {
-            text: ' ',
-            rotation: 90,
+    const maxBid = bidsData?.[bidsData.length - 1][0];
+    const maxAsk = asksData?.[asksData.length - 1][0];
+    const min = Math.min(minBid || 0, minAsk || 0);
+    const max = Math.max(maxBid || 0, maxAsk || 0);
+    const xMiddle = (min + max) / 2;
+    return {
+      chart: {
+        type: 'area',
+        zoomType: 'xy',
+        backgroundColor: '#000000',
+        borderColor: '#000000',
+      },
+      title: {
+        text: ' ',
+      },
+      xAxis: {
+        minPadding: 0,
+        maxPadding: 0,
+        plotLines: [
+          {
+            color: 'rgba(255, 255, 255, 0.25)',
+            opacity: 0.75,
+            value: xMiddle,
+            width: 1.5,
+            label: {
+              text: ' ',
+              rotation: 90,
+            },
           },
-        },
-      ],
-      title: {},
-      tickWidth: 0,
-      lineWidth: 0,
-      labels: {
-        style: {
-          color: 'rgba(255, 255, 255, 0.6)',
-        },
-      },
-      crosshair: {
-        color: 'rgba(255, 255, 255, 0.25)',
-        width: 1,
-        dashStyle: 'dash',
-      },
-    },
-    yAxis: [
-      {
-        lineWidth: 0,
-        gridLineWidth: 0,
-        title: null,
+        ],
+        title: {},
         tickWidth: 0,
-        tickLength: 5,
-        tickPosition: 'inside',
+        lineWidth: 0,
         labels: {
-          x: 50,
-          enabled: false,
+          style: {
+            color: 'rgba(255, 255, 255, 0.6)',
+          },
         },
         crosshair: {
           color: 'rgba(255, 255, 255, 0.25)',
@@ -65,53 +48,72 @@ export const getOptions = (bidsData?: number[][], asksData?: number[][]) => {
           dashStyle: 'dash',
         },
       },
-      {
-        opposite: true,
-        linkedTo: 0,
-        lineWidth: 0,
-        gridLineWidth: 0,
-        title: null,
-        tickWidth: 0,
-        tickLength: 5,
-        tickPosition: 'inside',
-        labels: {
-          style: {
-            color: 'rgba(255, 255, 255, 0.6)',
+      yAxis: [
+        {
+          lineWidth: 0,
+          gridLineWidth: 0,
+          title: null,
+          tickWidth: 0,
+          tickLength: 5,
+          tickPosition: 'inside',
+          labels: {
+            x: 50,
+            enabled: false,
+          },
+          crosshair: {
+            color: 'rgba(255, 255, 255, 0.25)',
+            width: 1,
+            dashStyle: 'dash',
           },
         },
+        {
+          opposite: true,
+          linkedTo: 0,
+          lineWidth: 0,
+          gridLineWidth: 0,
+          title: null,
+          tickWidth: 0,
+          tickLength: 5,
+          tickPosition: 'inside',
+          labels: {
+            style: {
+              color: 'rgba(255, 255, 255, 0.6)',
+            },
+          },
+        },
+      ],
+      legend: {
+        enabled: false,
       },
-    ],
-    legend: {
-      enabled: false,
-    },
-    plotOptions: {
-      area: {
-        fillOpacity: 0.2,
-        lineWidth: 1,
-        step: 'center',
+      plotOptions: {
+        area: {
+          fillOpacity: 0.2,
+          lineWidth: 1,
+          step: 'center',
+        },
       },
-    },
-    tooltip: {
-      pointFormat: '{series.name} <b>{point.y}</b><br/>',
-      valueDecimals: 2,
-      borderRadius: 12,
-      backgroundColor: '#212123',
-      borderWidth: 0,
-      style: {
-        color: 'white',
+      tooltip: {
+        pointFormat: '{series.name} <b>{point.y}</b><br/>',
+        valueDecimals: 2,
+        borderRadius: 12,
+        backgroundColor: '#212123',
+        borderWidth: 0,
+        style: {
+          color: 'white',
+        },
       },
-    },
-    series: [
-      {
-        name: 'Asks',
-        data: asksData,
-        color: 'rgba(216, 99, 113, 0.8)',
-      },
-      {
-        name: 'Bids',
-        data: bidsData,
-        color: 'rgba(0, 181, 120, 0.8);',
-      },
-    ],
-  };
+      series: [
+        {
+          name: 'Asks',
+          data: asksData,
+          color: 'rgba(216, 99, 113, 0.8)',
+        },
+        {
+          name: 'Bids',
+          data: bidsData,
+          color: 'rgba(0, 181, 120, 0.8);',
+        },
+      ],
+    };
+  } catch (e) {}
 };

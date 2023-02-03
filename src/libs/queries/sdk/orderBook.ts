@@ -28,6 +28,9 @@ const buildOrderBook = async (
       quoteToken,
       rate
     );
+    if (amount === '0') {
+      continue;
+    }
     if (!buy) {
       rate = new BigNumber(1).div(rate).toString();
     }
@@ -67,7 +70,7 @@ const getOrderBook = async (
       base,
       quote,
       minBuy,
-      buckets,
+      minBuy.eq(maxBuy) ? 0 : buckets,
       normalize ? stepNormalized : stepBuy
     ),
     sell: await buildOrderBook(
@@ -75,7 +78,7 @@ const getOrderBook = async (
       quote,
       base,
       minSell,
-      buckets,
+      minSell.eq(maxSell) ? 0 : buckets,
       normalize ? stepNormalized : stepSell
     ),
   };
@@ -84,7 +87,7 @@ const getOrderBook = async (
 export const useGetOrderBook = (
   base?: string,
   quote?: string,
-  buckets = 14,
+  buckets = 10,
   normalize = false
 ) => {
   const { isInitialized } = useCarbonSDK();
