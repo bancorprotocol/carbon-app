@@ -1,7 +1,7 @@
 import { OrderRow, useGetOrderBook } from 'libs/queries/sdk/orderBook';
 
 export const useDepthChartWidget = (base?: string, quote?: string) => {
-  const { data } = useGetOrderBook(base, quote);
+  const { data } = useGetOrderBook(base, quote, 10, true);
 
   const getOrders = (orders?: OrderRow[]) => {
     return orders?.map(({ rate, total }) => {
@@ -9,7 +9,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
     });
   };
   return {
-    buyOrders: getOrders(data?.buyOrders),
-    sellOrders: getOrders(data?.sellOrders),
+    buyOrders: getOrders(data?.buy),
+    sellOrders: getOrders(data?.sell),
   };
 };

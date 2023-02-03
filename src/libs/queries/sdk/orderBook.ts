@@ -6,7 +6,13 @@ import { QueryKey } from 'libs/queries/queryKey';
 
 export type OrderRow = { rate: string; total: string; amount: string };
 
+export type OrderBook = {
+  buy: OrderRow[];
+  sell: OrderRow[];
+};
+
 const buildOrderBook = async (
+  buy: boolean,
   baseToken: string,
   quoteToken: string,
   min: BigNumber | string,
@@ -16,13 +22,18 @@ const buildOrderBook = async (
   const orders: OrderRow[] = [];
 
   for (let i = new BigNumber(0); i.lte(buckets); i = i.plus(1)) {
-    const rate = i.times(step).plus(min).toString();
-    const amount = await carbonSDK.getRateLiquidityDepthByPair(
+    let rate = i.times(step).plus(min).toString();
+    let amount = await carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
       quoteToken,
       rate
     );
+    if (!buy) {
+      rate = new BigNumber(1).div(rate).toString();
+      amount = new BigNumber(amount).div(rate).toString();
+    }
     const total = new BigNumber(amount).times(rate).toString();
+
     orders.push({ rate, total, amount });
   }
 
@@ -36,16 +47,11 @@ const getOrderBook = async (
   quote: string,
   buckets = 10,
   normalize?: boolean
-) => {
+): Promise<OrderBook> => {
   const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(base, quote));
   const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(base, quote));
   const minSell = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
   const maxSell = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
-
-  console.log('order jan minBuy', minBuy.toString());
-  console.log('order jan maxBuy', maxBuy.toString());
-  console.log('order jan minSell', minSell.toString());
-  console.log('order jan maxSell', maxSell.toString());
 
   const deltaBuy = maxBuy.minus(minBuy);
   const deltaSell = maxSell.minus(minSell);
@@ -56,14 +62,16 @@ const getOrderBook = async (
   const stepNormalized = stepBuy.lte(stepSell) ? stepBuy : stepSell;
 
   return {
-    buyOrders: await buildOrderBook(
+    buy: await buildOrderBook(
+      true,
       base,
       quote,
       minBuy,
       buckets,
       normalize ? stepNormalized : stepBuy
     ),
-    sellOrders: await buildOrderBook(
+    sell: await buildOrderBook(
+      false,
       quote,
       base,
       minSell,
