@@ -99,14 +99,14 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           <div className={'flex h-82 flex-col items-end justify-center gap-10'}>
             <div className={'flex items-center space-x-8'}>
               <div
-                className={`!text-12 ${
-                  isLimited ? 'text-white' : 'text-secondary'
+                className={`!text-12 font-weight-500 ${
+                  isLimited ? 'text-white/85' : 'text-white/60'
                 }`}
               >
                 Limited
               </div>
               <Switch
-                variant={'secondary'}
+                variant={isLimited ? 'white' : 'secondary'}
                 isOn={isLimited}
                 setIsOn={setIsLimited}
                 size={'sm'}
