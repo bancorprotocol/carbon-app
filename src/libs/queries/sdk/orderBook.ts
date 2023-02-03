@@ -33,8 +33,9 @@ const buildOrderBook = async (
     }
     if (!buy) {
       rate = new BigNumber(1).div(rate).toString();
+    } else {
+      amount = new BigNumber(amount).div(rate).toString();
     }
-    amount = new BigNumber(amount).div(rate).toString();
     const total = new BigNumber(amount).times(rate).toString();
 
     orders.push({ rate, total, amount });
