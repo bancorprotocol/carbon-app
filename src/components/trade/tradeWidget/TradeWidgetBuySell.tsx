@@ -65,7 +65,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           <TokenInputField
             className={'mt-5 mb-20 rounded-12 bg-black p-16'}
             token={source}
-            isBalanceLoading={false}
+            isBalanceLoading={sourceBalanceQuery.isLoading}
             value={sourceInput}
             setValue={setSourceInput}
             balance={sourceBalanceQuery.data}
@@ -90,7 +90,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           <TokenInputField
             className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
             token={target}
-            isBalanceLoading={false}
+            isBalanceLoading={targetBalanceQuery.isLoading}
             value={targetInput}
             setValue={setTargetInput}
             placeholder={'Total Amount'}
