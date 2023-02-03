@@ -1,4 +1,4 @@
-import { Highcharts, HighchartsReact } from 'libs/charts/index';
+import { Highcharts, HighchartsReact } from 'libs/charts';
 import { NoData } from 'components/common/noData';
 import { getOptions } from 'libs/charts/utils';
 import { useDepthChartWidget } from './useDepthChartWidget';
