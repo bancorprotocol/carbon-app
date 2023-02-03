@@ -215,6 +215,10 @@ export const useBuySell = ({
     !!user && new BigNumber(sourceBalanceQuery.data || 0).lt(sourceInput);
 
   const handleCTAClick = useCallback(() => {
+    if (!user) {
+      return openModal('wallet', undefined);
+    }
+
     if (
       bySourceQuery.isFetching ||
       byTargetQuery.isFetching ||
@@ -233,9 +237,7 @@ export const useBuySell = ({
       return setIsTargetEmptyError(true);
     }
 
-    if (!user) {
-      openModal('wallet', undefined);
-    } else if (approval.approvalRequired) {
+    if (approval.approvalRequired) {
       openModal('txConfirm', {
         approvalTokens,
         onConfirm: tradeAction,
