@@ -8,6 +8,10 @@ import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { NameBlock } from './NameBlock';
 import { SelectTokenButton } from 'components/common/selectToken';
+import Chart from 'components/chart';
+import { memo } from 'react';
+
+const MemoChart = memo(Chart);
 
 export const CreateStrategy = () => {
   const location = useLocation();
@@ -34,91 +38,98 @@ export const CreateStrategy = () => {
       initial={'hidden'}
       animate={'visible'}
     >
-      <div className="flex items-center gap-16 text-24">
-        <button
-          onClick={() => location.history.back()}
-          className="h-40 w-40 rounded-full bg-emphasis"
-        >
-          <IconChevron className="mx-auto w-14 rotate-90" />
-        </button>
-        Create Strategy
-      </div>
-      <m.div variants={items} className={'bg-secondary rounded-10 p-20'}>
-        <div className="mb-14 flex items-center justify-between">
-          <h2>Token Pair</h2>
-          <Tooltip>
-            Selecting the tokens you would like to create a strategy for. The
-            Base token represents how much of the Quoted token is needed for you
-            to get one unit of the Base token (i.e. 1 Base token = xxx Quote
-            token).
-          </Tooltip>
-        </div>
+      <div className="flex justify-between p-20">
+        <div className="min-w-[400px] space-y-20">
+          <div className="flex items-center gap-16 text-24">
+            <button
+              onClick={() => location.history.back()}
+              className="h-40 w-40 rounded-full bg-emphasis"
+            >
+              <IconChevron className="mx-auto w-14 rotate-90" />
+            </button>
+            Create Strategy
+          </div>
+          <m.div variants={items} className="bg-secondary rounded-10 p-20">
+            <div className="mb-14 flex items-center justify-between">
+              <h2>Token Pair</h2>
+              <Tooltip>
+                Selecting the tokens you would like to create a strategy for.
+                The Base token represents how much of the Quoted token is needed
+                for you to get one unit of the Base token (i.e. 1 Base token =
+                xxx Quote token).
+              </Tooltip>
+            </div>
 
-        <div className={'-space-y-15'}>
-          <SelectTokenButton
-            symbol={token0?.symbol}
-            imgUrl={token0?.logoURI}
-            description={'Buy or Sell'}
-            onClick={() => openTokenListModal(true)}
-          />
-          {!!token0 && (
-            <>
-              <div
-                className={
-                  'relative z-10 mx-auto flex h-40 w-40 items-center justify-center rounded-full border-[5px] border border-silver bg-black'
-                }
-              >
-                <IconArrow className={'w-12'} />
-              </div>
+            <div className={'-space-y-15'}>
               <SelectTokenButton
-                symbol={token1?.symbol}
-                imgUrl={token1?.logoURI}
-                description={'With'}
-                onClick={() => openTokenListModal()}
+                symbol={token0?.symbol}
+                imgUrl={token0?.logoURI}
+                description={'Buy or Sell'}
+                onClick={() => openTokenListModal(true)}
               />
+              {!!token0 && (
+                <>
+                  <div
+                    className={
+                      'relative z-10 mx-auto flex h-40 w-40 items-center justify-center rounded-full border-[5px] border border-silver bg-black'
+                    }
+                  >
+                    <IconArrow className={'w-12'} />
+                  </div>
+                  <SelectTokenButton
+                    symbol={token1?.symbol}
+                    imgUrl={token1?.logoURI}
+                    description={'With'}
+                    onClick={() => openTokenListModal()}
+                  />
+                </>
+              )}
+            </div>
+          </m.div>
+          {showStep2 && (
+            <>
+              <m.div variants={items}>
+                <BuySellBlock
+                  token0={token0!}
+                  token1={token1!}
+                  order={order0}
+                  buy
+                  tokenBalanceQuery={token1BalanceQuery}
+                />
+              </m.div>
+
+              <m.div variants={items}>
+                <BuySellBlock
+                  token0={token0!}
+                  token1={token1!}
+                  order={order1}
+                  tokenBalanceQuery={token0BalanceQuery}
+                />
+              </m.div>
+
+              <m.div variants={items}>
+                <NameBlock name={name} setName={setName} />
+              </m.div>
+
+              <m.div variants={items}>
+                <Button
+                  className="mb-80"
+                  variant={'success'}
+                  size={'lg'}
+                  fullWidth
+                  onClick={createStrategy}
+                  disabled={isCTAdisabled}
+                >
+                  Create Strategy
+                </Button>
+              </m.div>
             </>
           )}
         </div>
-      </m.div>
-      {showStep2 && (
-        <>
-          <m.div variants={items}>
-            <BuySellBlock
-              token0={token0!}
-              token1={token1!}
-              order={order0}
-              buy
-              tokenBalanceQuery={token1BalanceQuery}
-            />
-          </m.div>
-
-          <m.div variants={items}>
-            <BuySellBlock
-              token0={token0!}
-              token1={token1!}
-              order={order1}
-              tokenBalanceQuery={token0BalanceQuery}
-            />
-          </m.div>
-
-          <m.div variants={items}>
-            <NameBlock name={name} setName={setName} />
-          </m.div>
-
-          <m.div variants={items}>
-            <Button
-              className="mb-80"
-              variant={'success'}
-              size={'lg'}
-              fullWidth
-              onClick={createStrategy}
-              disabled={isCTAdisabled}
-            >
-              Create Strategy
-            </Button>
-          </m.div>
-        </>
-      )}
+        <div className="mt-60 w-full px-20">
+          <MemoChart symbol="BTC" allow_symbol_change />
+        </div>
+      </div>
     </m.div>
   );
 };

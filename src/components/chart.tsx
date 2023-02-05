@@ -1,9 +1,12 @@
-import { AdvancedChart } from 'react-tradingview-embed';
+import {
+  AdvancedChart,
+  AdvancedChartWidgetProps,
+} from 'react-tradingview-embed';
 
-const Chart = ({ symbol }: { symbol: string }) => {
+const Chart = (props: AdvancedChartWidgetProps) => {
   return (
     <div>
-      <AdvancedChart widgetProps={{ theme: 'dark', symbol }} />
+      <AdvancedChart widgetProps={{ theme: 'dark', ...props }} />
     </div>
   );
 };
