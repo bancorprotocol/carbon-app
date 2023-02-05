@@ -32,4 +32,6 @@ export interface BancorWeb3ProviderContext {
   disconnect: () => Promise<void>;
   connect: (type: ConnectionType) => Promise<void>;
   isImposter: boolean;
+  isSupportedNetwork: boolean;
+  switchNetwork: () => void;
 }

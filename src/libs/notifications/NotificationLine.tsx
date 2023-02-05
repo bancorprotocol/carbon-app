@@ -74,37 +74,32 @@ export const NotificationLine: FC<{
   );
 
   return (
-    <div>
-      <div className="flex gap-16">
-        <div className="self-center">{StatusIcon(notification.status)}</div>
-        <div className="w-full">
-          {getTitleByStatus(notification)}
-          <div className="text-14 text-charcoal/80 dark:text-white/80">
-            <div>{getDescriptionByStatus(notification)}</div>
-            {notification.txHash && (
-              <a
-                href={getExplorerLink('tx', notification.txHash)}
-                target="_blank"
-                rel="noreferrer"
-                className={'mt-10 flex items-center font-weight-500'}
-              >
-                View on Etherscan <IconLink className="ml-6 w-14" />
-              </a>
-            )}
-          </div>
+    <div className="flex gap-16">
+      <div className="self-center">{StatusIcon(notification.status)}</div>
+      <div className="w-full">
+        {getTitleByStatus(notification)}
+        <div className="text-14 text-charcoal/80 dark:text-white/80">
+          <div>{getDescriptionByStatus(notification)}</div>
+          {notification.txHash && (
+            <a
+              href={getExplorerLink('tx', notification.txHash)}
+              target="_blank"
+              rel="noreferrer"
+              className={'mt-10 flex items-center font-weight-500'}
+            >
+              View on Etherscan <IconLink className="ml-6 w-14" />
+            </a>
+          )}
         </div>
+      </div>
 
-        <div className={'flex flex-col items-end justify-between'}>
-          <div className="text-secondary whitespace-nowrap text-12 font-weight-500">
-            {unix(notification.timestamp).fromNow(true)}
-          </div>
-          <button
-            className="text-12 font-weight-500"
-            onClick={handleCloseClick}
-          >
-            Clear
-          </button>
+      <div className={'flex flex-col items-end justify-between'}>
+        <div className="text-secondary whitespace-nowrap text-12 font-weight-500">
+          {unix(notification.timestamp).fromNow(true)}
         </div>
+        <button className="text-12 font-weight-500" onClick={handleCloseClick}>
+          Clear
+        </button>
       </div>
     </div>
   );

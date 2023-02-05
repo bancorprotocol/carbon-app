@@ -14,6 +14,10 @@ export const useWeb3Network = () => {
 
   const [networkError, setNetworkError] = useState<string>();
 
+  const switchNetwork = useCallback(async () => {
+    await connector.activate(1);
+  }, [connector]);
+
   const activateNetwork = useCallback(async () => {
     if (networkError || isNetworkActive) {
       return;
@@ -40,5 +44,5 @@ export const useWeb3Network = () => {
     void activateNetwork();
   }, [activateNetwork]);
 
-  return { provider, isNetworkActive, networkError };
+  return { provider, isNetworkActive, networkError, switchNetwork };
 };

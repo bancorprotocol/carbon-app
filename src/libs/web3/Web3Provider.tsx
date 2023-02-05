@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { createContext, FC, ReactNode, useContext } from 'react';
+import { createContext, FC, ReactNode, useContext, useMemo } from 'react';
 import { BancorWeb3ProviderContext } from 'libs/web3/web3.types';
 import { useWeb3Network } from 'libs/web3/useWeb3Network';
 import { useWeb3Imposter } from 'libs/web3/useWeb3Imposter';
@@ -22,6 +22,8 @@ const defaultValue: BancorWeb3ProviderContext = {
   connect: async () => {},
   isImposter: false,
   networkError: undefined,
+  isSupportedNetwork: true,
+  switchNetwork: () => {},
 };
 
 const BancorWeb3CTX = createContext(defaultValue);
@@ -42,7 +44,8 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
     connector,
   } = useWeb3React();
 
-  const { provider, isNetworkActive, networkError } = useWeb3Network();
+  const { provider, isNetworkActive, networkError, switchNetwork } =
+    useWeb3Network();
 
   const { imposterAccount, handleImposterAccount, isImposter } =
     useWeb3Imposter();
@@ -58,6 +61,11 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
     connector,
   });
 
+  const isSupportedNetwork = useMemo(
+    () => !(!!user && (chainId || 1) !== 1),
+    [chainId, user]
+  );
+
   return (
     <BancorWeb3CTX.Provider
       value={{
@@ -72,6 +80,8 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
         disconnect,
         isImposter,
         networkError,
+        isSupportedNetwork,
+        switchNetwork,
       }}
     >
       {children}

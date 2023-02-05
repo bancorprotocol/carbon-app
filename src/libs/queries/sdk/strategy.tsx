@@ -30,7 +30,6 @@ export interface Strategy {
   order0: Order;
   order1: Order;
   status: StrategyStatus;
-  name?: string;
 }
 
 export const useGetUserStrategies = () => {
