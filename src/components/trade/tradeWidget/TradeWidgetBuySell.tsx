@@ -30,7 +30,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgSource,
     errorMsgTarget,
   } = useBuySell(props);
-  const { buy, source, target, sourceBalanceQuery, targetBalanceQuery } = props;
+  const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   if (liquidityQuery?.isLoading) return <div>Loading</div>;
@@ -96,11 +96,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           <TokenInputField
             className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
             token={target}
-            isBalanceLoading={targetBalanceQuery.isLoading}
             value={targetInput}
             setValue={setTargetInput}
             placeholder={'Total Amount'}
-            balance={targetBalanceQuery.data}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}
