@@ -78,7 +78,7 @@
   }
 
   .text-secondary {
-    @apply text-14  text-charcoal/50 dark:text-white/50;
+    @apply text-14 text-white/60;
   }
 
   .loading-skeleton {

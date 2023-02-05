@@ -1,4 +1,4 @@
-import { ModalWallet } from 'libs/modals/modals/ModalWallet';
+import { ModalWallet } from 'libs/modals/modals/WalletModal/ModalWallet';
 import {
   ModalTokenList,
   ModalTokenListData,

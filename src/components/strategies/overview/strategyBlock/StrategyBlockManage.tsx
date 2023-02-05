@@ -15,9 +15,6 @@ export const StrategyBlockManage: FC<{
   const { openModal } = useModal();
   const items = [
     {
-      name: 'Edit Strategy Name',
-    },
-    {
       name: 'Withdraw Funds',
     },
     {
