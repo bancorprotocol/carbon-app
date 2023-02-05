@@ -53,9 +53,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
-      <h2 className={'mb-20'}>{buy ? 'Buy' : 'Sell'}</h2>
+      <h2 className={'mb-20'}>
+        {buy
+          ? `Buy ${source.symbol} with ${target.symbol}`
+          : `Sell ${source.symbol} for ${target.symbol}`}
+      </h2>
       <div className={'flex justify-between text-14'}>
-        <div className={'text-white/50'}>Amount</div>
+        <div className={'text-white/50'}>{buy ? 'You receive' : 'You pay'}</div>
         {errorMsgSource && (
           <div className={`font-weight-500 text-red`}>{errorMsgSource}</div>
         )}
@@ -74,7 +78,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             isError={!!errorMsgSource}
           />
           <div className={'flex justify-between text-14'}>
-            <div className={'text-white/50'}>Amount</div>
+            <div className={'text-white/50'}>
+              {buy ? 'You pay' : 'You receive'}
+            </div>
             {errorMsgTarget && (
               <div
                 className={`cursor-pointer font-weight-500 text-red`}
@@ -122,7 +128,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         fullWidth
         className={'mt-20'}
       >
-        {buy ? 'Buy' : 'Sell'}
+        {buy ? `Buy ${source.symbol}` : `Sell ${source.symbol}`}
       </Button>
     </div>
   );
