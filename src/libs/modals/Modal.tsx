@@ -40,18 +40,18 @@ export const Modal: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 px-10 outline-none backdrop-blur focus:outline-none md:px-20`}
+      className="fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 px-10 outline-none backdrop-blur focus:outline-none sm:px-0 md:px-20"
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto w-full ${sizeClass}`}
+        className={`relative mx-auto w-full sm:h-full sm:max-w-none ${sizeClass}`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis">
-          <div className={'flex justify-between'}>
+        <div className="relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis sm:h-full sm:rounded-0">
+          <div className="flex justify-between">
             <div>
               {typeof title === 'string' ? (
                 <h2 className={'m-0'}>{title}</h2>
