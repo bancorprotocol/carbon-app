@@ -4,25 +4,34 @@ import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 
+const ONE = new BigNumber(1);
+
 export type OrderRow = { rate: string; total: string; amount: string };
 
 export type OrderBook = {
   buy: OrderRow[];
   sell: OrderRow[];
+  middleRate: string;
 };
+
+export const orderBookBuckets = 100;
 
 const buildOrderBook = async (
   buy: boolean,
   baseToken: string,
   quoteToken: string,
-  min: BigNumber | string,
-  buckets: number,
-  step: BigNumber | string
+  startRate: BigNumber,
+  step: BigNumber
 ) => {
   const orders: OrderRow[] = [];
+  let i = 0;
 
-  for (let i = new BigNumber(0); i.lte(buckets); i = i.plus(1)) {
-    let rate = i.times(step).plus(min).toString();
+  while (orders.length < orderBookBuckets) {
+    let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
+    i++;
+
+    rate = buy ? rate : ONE.div(rate).toString();
+
     let amount = await carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
       quoteToken,
@@ -31,71 +40,51 @@ const buildOrderBook = async (
     if (amount === '0') {
       continue;
     }
-    if (!buy) {
-      rate = new BigNumber(1).div(rate).toString();
-    } else {
+    if (buy) {
       amount = new BigNumber(amount).div(rate).toString();
+    } else {
+      rate = ONE.div(rate).toString();
     }
+
     const total = new BigNumber(amount).times(rate).toString();
 
     orders.push({ rate, total, amount });
   }
-
-  console.log('order jan', orders);
 
   return orders;
 };
 
 const getOrderBook = async (
   base: string,
-  quote: string,
-  buckets = 10,
-  normalize?: boolean
+  quote: string
 ): Promise<OrderBook> => {
   const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(base, quote));
   const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(base, quote));
   const minSell = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
   const maxSell = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
 
-  const deltaBuy = maxBuy.minus(minBuy);
-  const deltaSell = maxSell.minus(minSell);
+  const stepBuy = maxBuy.minus(minBuy).div(orderBookBuckets);
+  const stepSell = ONE.div(minSell)
+    .minus(ONE.div(maxSell))
+    .div(orderBookBuckets);
 
-  const stepBuy = deltaBuy.div(buckets);
-  const stepSell = deltaSell.div(buckets);
+  const step = stepBuy.lte(stepSell) ? stepBuy : stepSell;
 
-  const stepNormalized = stepBuy.lte(stepSell) ? stepBuy : stepSell;
+  const middleRate = maxBuy.plus(ONE.div(maxSell)).div(2);
 
   return {
-    buy: await buildOrderBook(
-      true,
-      base,
-      quote,
-      minBuy,
-      minBuy.eq(maxBuy) ? 0 : buckets,
-      normalize ? stepNormalized : stepBuy
-    ),
-    sell: await buildOrderBook(
-      false,
-      quote,
-      base,
-      minSell,
-      minSell.eq(maxSell) ? 0 : buckets,
-      normalize ? stepNormalized : stepSell
-    ),
+    buy: await buildOrderBook(true, base, quote, middleRate, step),
+    sell: await buildOrderBook(false, quote, base, middleRate, step),
+    middleRate: middleRate.toString(),
   };
 };
 
-export const useGetOrderBook = (
-  base?: string,
-  quote?: string,
-  buckets = 10,
-  normalize = false
-) => {
+export const useGetOrderBook = (base?: string, quote?: string) => {
   const { isInitialized } = useCarbonSDK();
 
   return useQuery({
-    queryKey: QueryKey.tradeOrderBook(base!, quote!, buckets!, normalize!),
-    queryFn: () => getOrderBook(base!, quote!, buckets!, normalize!),
+    queryKey: QueryKey.tradeOrderBook(base!, quote!),
+    queryFn: () => getOrderBook(base!, quote!),
     enabled: isInitialized && !!base && !!quote,
     retry: 1,
   });

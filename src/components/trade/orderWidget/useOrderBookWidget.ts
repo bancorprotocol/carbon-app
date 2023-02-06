@@ -7,9 +7,12 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
   const orderBookQuery = useGetOrderBook(base, quote);
 
   const orders = useMemo<OrderBook>(() => {
+    const buy = [...(orderBookQuery.data?.buy || [])].splice(0, 14);
+    const sell = [...(orderBookQuery.data?.sell || [])].splice(0, 14);
+
     const data = {
-      buy: orderBy(orderBookQuery.data?.buy || [], 'rate', 'desc'),
-      sell: orderBy(orderBookQuery.data?.sell || [], 'rate', 'asc'),
+      buy: orderBy(buy, 'rate', 'desc'),
+      sell: orderBy(sell, 'rate', 'asc'),
     };
 
     const _subtractPrevAmount = (
@@ -36,6 +39,7 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
       sell: data.sell.map(({ amount, rate }, i) =>
         _subtractPrevAmount(false, amount, rate, i)
       ),
+      middleRate: orderBookQuery.data?.middleRate || '0',
     };
   }, [orderBookQuery.data]);
 
