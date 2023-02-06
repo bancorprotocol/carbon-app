@@ -1,9 +1,9 @@
 import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
 import { FC, ReactNode } from 'react';
 import { Connector } from '@web3-react/types';
+import { BancorWeb3Provider } from 'libs/web3/Web3Provider';
 import { SELECTABLE_CONNECTION_TYPES } from 'libs/web3/web3.constants';
 import { getConnection } from 'libs/web3/web3.utils';
-import { BancorWeb3Provider } from 'libs/web3/Web3Provider';
 
 // ********************************** //
 // WEB3 REACT LIBRARY WRAPPER

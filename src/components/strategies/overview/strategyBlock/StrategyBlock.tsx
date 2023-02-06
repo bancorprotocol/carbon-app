@@ -23,30 +23,18 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
           tokens={[strategy.token0, strategy.token1]}
         />
         <div>
-          {strategy.name ? (
-            <>{strategy.name}</>
-          ) : (
+          {
             <div className="flex gap-6">
               <span>{strategy.token0.symbol}</span>
-              <div className="text-secondary">/</div>
+              <div className="text-secondary !text-16">/</div>
               <span>{strategy.token1.symbol}</span>
             </div>
-          )}
+          }
 
           <div className="text-secondary flex gap-8">
             <span>{paddedID.slice(0, 3)}</span>
             <span>{paddedID.slice(3, 6)}</span>
             <span>{paddedID.slice(6, 9)}</span>
-            {strategy.name && (
-              <>
-                <div>·</div>
-                <div className="flex gap-4">
-                  <span>{strategy.token0.symbol}</span>
-                  <div>/</div>
-                  <span>{strategy.token1.symbol}</span>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </div>
