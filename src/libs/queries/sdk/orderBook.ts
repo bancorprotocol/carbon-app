@@ -33,7 +33,7 @@ const buildOrderBook = async (
     minEqMax = min.eq(max);
     let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
     rate = buy ? rate : ONE.div(rate).toString();
-    rate = minEqMax ? (!buy ? max.toString() : ONE.div(max).toString()) : rate;
+    rate = minEqMax ? max.toString() : rate;
     i++;
 
     console.log('jan rate', minEqMax, rate);
@@ -45,6 +45,9 @@ const buildOrderBook = async (
     );
     console.log('jan amount', amount);
     if (amount === '0') {
+      if (minEqMax) {
+        // minEqMax = false;
+      }
       continue;
     }
     if (buy) {
@@ -84,8 +87,9 @@ const getOrderBook = async (
   console.log('jan stepSell', stepSell.toString());
 
   const getStep = () => {
-    if (stepBuy.isFinite()) {
-      if (stepSell.isFinite()) {
+    if (stepBuy.isFinite() && stepBuy.gt(0)) {
+      if (stepSell.isFinite() && stepSell.gt(0)) {
+        console.log('jan muh');
         return stepBuy.lte(stepSell) ? stepBuy : stepSell;
       } else {
         return stepBuy;
@@ -93,7 +97,6 @@ const getOrderBook = async (
     } else if (stepSell.isFinite()) {
       return stepSell;
     } else {
-      console.log('jan muh');
       return new BigNumber(0);
     }
   };
@@ -102,7 +105,22 @@ const getOrderBook = async (
 
   console.log('jan step', step.toString());
 
-  const middleRate = maxBuy.plus(ONE.div(maxSell)).div(2);
+  const getMiddleRate = () => {
+    if (maxBuy.isFinite() && maxSell.isFinite()) {
+      return maxBuy.plus(ONE.div(maxSell)).div(2);
+    }
+
+    if (maxBuy.isFinite()) {
+      return maxBuy;
+    }
+
+    if (maxSell.isFinite()) {
+      return ONE.div(maxSell);
+    }
+    return new BigNumber(0);
+  };
+
+  const middleRate = getMiddleRate();
   console.log('jan middleRate', middleRate.toString());
 
   return {

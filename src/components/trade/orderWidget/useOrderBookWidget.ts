@@ -7,8 +7,8 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
   const orderBookQuery = useGetOrderBook(base, quote);
 
   const orders = useMemo<OrderBook>(() => {
-    const buy = [...(orderBookQuery.data?.buy || [])].splice(0, 14);
-    const sell = [...(orderBookQuery.data?.sell || [])].splice(0, 14);
+    const buy = [...(orderBookQuery.data?.buy || [])];
+    const sell = [...(orderBookQuery.data?.sell || [])];
 
     const data = {
       buy: orderBy(buy, 'rate', 'desc'),
@@ -33,12 +33,18 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
     };
 
     return {
-      buy: data.buy.map(({ amount, rate }, i) =>
-        _subtractPrevAmount(true, amount, rate, i)
-      ),
-      sell: data.sell.map(({ amount, rate }, i) =>
-        _subtractPrevAmount(false, amount, rate, i)
-      ),
+      buy: data.buy
+        .map(({ amount, rate }, i) =>
+          _subtractPrevAmount(true, amount, rate, i)
+        )
+        .filter(({ amount }) => amount !== '0')
+        .splice(0, 14),
+      sell: data.sell
+        .map(({ amount, rate }, i) =>
+          _subtractPrevAmount(false, amount, rate, i)
+        )
+        .filter(({ amount }) => amount !== '0')
+        .splice(0, 14),
       middleRate: orderBookQuery.data?.middleRate || '0',
     };
   }, [orderBookQuery.data]);
