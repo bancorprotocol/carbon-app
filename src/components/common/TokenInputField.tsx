@@ -12,7 +12,7 @@ type Props = {
   token: Token;
   placeholder?: string;
   balance?: string;
-  isBalanceLoading: boolean;
+  isBalanceLoading?: boolean;
   isError?: boolean;
   className?: string;
   onKeystroke?: () => void;
@@ -114,13 +114,12 @@ export const TokenInputField: FC<Props> = ({
           />
         }
       </div>
-
       <div
         className={
           'text-secondary mt-10 flex items-center justify-between font-mono !text-12 font-weight-500'
         }
       >
-        {user ? (
+        {user && balance ? (
           <button
             onClick={handleBalanceClick}
             className={'group flex items-center'}
@@ -136,9 +135,8 @@ export const TokenInputField: FC<Props> = ({
             )}
           </button>
         ) : (
-          <div className={'h-16'}></div>
+          <div className={'h-16'} />
         )}
-
         {fiatValue.gt(0) && (
           <div>
             {prettifyNumber(
