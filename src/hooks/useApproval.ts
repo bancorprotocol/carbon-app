@@ -3,6 +3,7 @@ import {
   useGetUserApproval,
 } from 'libs/queries/chain/approval';
 import { useMemo } from 'react';
+import { sanitizeNumberInput } from 'utils/helpers';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;
@@ -21,7 +22,9 @@ export const useApproval = (data: ApprovalToken[]) => {
       const newData: ApprovalTokenResult | undefined = q.data && {
         ...data[i],
         allowance: q.data.toString(),
-        approvalRequired: q.data.lt(data[i].amount),
+        approvalRequired: q.data.lt(
+          sanitizeNumberInput(data[i].amount, data[i].decimals)
+        ),
       };
       return {
         ...q,
