@@ -35,7 +35,7 @@ export const CreateStrategy = () => {
       initial={'hidden'}
       animate={'visible'}
     >
-      <div className="flex justify-between p-20">
+      <div className="flex justify-between gap-20 p-20">
         <div className="min-w-[400px] space-y-20">
           <div className="flex items-center gap-16 text-24">
             <button
@@ -56,7 +56,6 @@ export const CreateStrategy = () => {
                 xxx Quote token).
               </Tooltip>
             </div>
-
             <div className={'-space-y-15'}>
               <SelectTokenButton
                 symbol={token0?.symbol}
@@ -118,7 +117,8 @@ export const CreateStrategy = () => {
             </>
           )}
         </div>
-        <div className="mt-60 w-full px-20">
+        <div className="mt-60 h-full w-full rounded-10 bg-silver p-20">
+          <h2 className="mb-20 font-weight-500">Price</h2>
           <MemoChart symbol="BTC" allow_symbol_change />
         </div>
       </div>
