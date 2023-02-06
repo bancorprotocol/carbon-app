@@ -1,20 +1,17 @@
 export const getOptions = (bidsData?: number[][], asksData?: number[][]) => {
   try {
-    // TODO: Clean
-    const minBid = bidsData?.[0][0];
-    const minAsk = asksData?.[0][0];
+    const left = bidsData?.[bidsData.length - 1]?.[0] || 0;
+    const right = asksData?.[asksData.length - 1]?.[0] || 0;
+    const xMiddle = (right + left) / 2;
 
-    const maxBid = bidsData?.[bidsData.length - 1][0];
-    const maxAsk = asksData?.[asksData.length - 1][0];
-    const min = Math.min(minBid || 0, minAsk || 0);
-    const max = Math.max(maxBid || 0, maxAsk || 0);
-    const xMiddle = (min + max) / 2;
     return {
       chart: {
         type: 'area',
-        zoomType: 'xy',
         backgroundColor: '#000000',
         borderColor: '#000000',
+      },
+      credits: {
+        enabled: false,
       },
       title: {
         text: ' ',
