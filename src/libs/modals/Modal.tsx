@@ -14,11 +14,11 @@ type Props = {
 const getSize = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
     case 'lg':
-      return 'max-w-[580px]';
+      return 'sm:max-w-[580px]';
     case 'md':
-      return 'max-w-[480px]';
+      return 'sm:max-w-[480px]';
     default:
-      return 'max-w-[380px]';
+      return 'sm:max-w-[380px]';
   }
 };
 
@@ -40,17 +40,17 @@ export const Modal: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 px-10 outline-none backdrop-blur focus:outline-none md:px-20`}
+      className={`fixed inset-0 z-40 flex items-end justify-center overflow-hidden bg-primary-500/20 outline-none backdrop-blur focus:outline-none sm:items-center sm:px-10 md:px-20`}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto w-full ${sizeClass}`}
+        className={`relative w-full ${sizeClass}`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis">
+        <div className="relative flex w-full flex-col rounded-t-30 border-0 bg-emphasis p-20 outline-none focus:outline-none sm:rounded-10">
           <div className={'flex justify-between'}>
             <div>
               {typeof title === 'string' ? (
