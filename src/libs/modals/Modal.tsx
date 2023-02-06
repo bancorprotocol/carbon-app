@@ -14,11 +14,11 @@ type Props = {
 const getSize = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
     case 'lg':
-      return 'max-w-[580px]';
+      return 'md:max-w-[580px]';
     case 'md':
-      return 'max-w-[480px]';
+      return 'md:max-w-[480px]';
     default:
-      return 'max-w-[380px]';
+      return 'md:max-w-[380px]';
   }
 };
 
@@ -40,17 +40,17 @@ export const Modal: FC<Props> = ({
       initial="hidden"
       animate="visible"
       exit="exit"
-      className="fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 px-10 outline-none backdrop-blur focus:outline-none sm:px-0 md:px-20"
+      className="fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 px-10 px-0 outline-none backdrop-blur focus:outline-none md:px-20"
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto w-full sm:h-full sm:max-w-none ${sizeClass}`}
+        className={`relative mx-auto h-full w-full md:h-auto ${sizeClass}`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis sm:h-full sm:rounded-0">
+        <div className="relative flex h-full w-full flex-col rounded-10 rounded-0 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis md:h-auto md:rounded-10">
           <div className="flex justify-between">
             <div>
               {typeof title === 'string' ? (
