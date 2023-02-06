@@ -3,11 +3,31 @@ import { Outlet, PathNames } from 'libs/routing';
 import { NotificationAlerts } from 'libs/notifications';
 import { ModalProvider } from 'libs/modals';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useWeb3 } from 'libs/web3';
 import { ErrorUnsupportedNetwork } from 'components/error/ErrorUnsupportedNetwork';
 import { ErrorNetworkConnection } from 'components/error/ErrorNetworkConnection';
 import { useLocation } from '@tanstack/react-location';
+
+const MainContent: FC<{
+  isDebugPage: boolean;
+  isSupportedNetwork: boolean;
+  networkError: boolean;
+}> = ({ isSupportedNetwork, networkError, isDebugPage }) => {
+  if (isDebugPage) {
+    return <Outlet />;
+  }
+
+  if (!isSupportedNetwork) {
+    return <ErrorUnsupportedNetwork />;
+  }
+
+  if (networkError) {
+    return <ErrorNetworkConnection />;
+  }
+
+  return <Outlet />;
+};
 
 export const App = () => {
   const { init } = useCarbonSDK();
@@ -22,27 +42,15 @@ export const App = () => {
     void init();
   }, [init]);
 
-  const MainContent = () => {
-    if (isDebugPage) {
-      return <Outlet />;
-    }
-
-    if (!isSupportedNetwork) {
-      return <ErrorUnsupportedNetwork />;
-    }
-
-    if (networkError) {
-      return <ErrorNetworkConnection />;
-    }
-
-    return <Outlet />;
-  };
-
   return (
     <>
       <MainMenu />
       <main>
-        <MainContent />
+        <MainContent
+          isSupportedNetwork={isSupportedNetwork}
+          isDebugPage={isDebugPage}
+          networkError={!!networkError}
+        />
       </main>
       <MobileMenu />
       <NotificationAlerts />
