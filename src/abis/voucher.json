@@ -1,17 +1,12 @@
 {
-  "address": "0x2aaD5E2868771112c1897Cb12cDaDE53b616daf4",
+  "address": "0x2fB666c75ec98462852c66D4981e1B3a0E668593",
   "abi": [
     {
       "inputs": [
         {
           "internalType": "bool",
-          "name": "newUseGlobalJson",
+          "name": "newUseGlobalURI",
           "type": "bool"
-        },
-        {
-          "internalType": "string",
-          "name": "newGlobalURI",
-          "type": "string"
         },
         {
           "internalType": "string",
@@ -403,19 +398,6 @@
         }
       ],
       "name": "setCarbonController",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "newGlobalURI",
-          "type": "string"
-        }
-      ],
-      "name": "setGlobalURI",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
