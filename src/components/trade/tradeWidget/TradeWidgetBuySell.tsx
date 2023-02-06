@@ -82,8 +82,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               <div
                 className={`cursor-pointer font-weight-500 text-red`}
                 onClick={() => {
-                  setTargetInput(liquidityQuery.data || '0');
                   onInputChange(false);
+                  setTargetInput(liquidityQuery.data || '0');
                 }}
               >
                 {errorMsgTarget}
