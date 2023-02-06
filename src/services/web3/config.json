@@ -6,8 +6,8 @@
     "ZERO": "0x0000000000000000000000000000000000000000"
   },
   "carbon": {
-    "carbonController": "0x4aa24bE5828C24e90e16de4203373a55170f009b",
-    "voucher": "0x2aaD5E2868771112c1897Cb12cDaDE53b616daf4"
+    "carbonController": "0x483309B60A7f5A097aE09Cf5811773431a9E8d1B",
+    "voucher": "0x2fB666c75ec98462852c66D4981e1B3a0E668593"
   },
   "utils": {
     "multicall": "0x5ba1e12693dc8f9c48aad8770482f4739beed696"
