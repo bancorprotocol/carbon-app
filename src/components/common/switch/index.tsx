@@ -29,7 +29,7 @@ export const Switch: FC<SwitchProps> = ({
       {...props}
     >
       <motion.div
-        className={`aspect-square rounded-full ${
+        className={`aspect-square h-10 rounded-full ${
           isOn ? 'bg-white dark:bg-black' : 'bg-white/60'
         }`}
         layout
