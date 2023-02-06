@@ -9533,10 +9533,10 @@ react-scripts@5.0.1:
   optionalDependencies:
     fsevents "^2.3.2"
 
-react-tradingview-embed@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/react-tradingview-embed/-/react-tradingview-embed-3.0.6.tgz#880c0a9de55b3f3a8ba9738dee96c4cfc89eef3d"
-  integrity sha512-1qClGqBHOi7mvRFvhBxXSoyoPrNR8aPi/yfF/mYt8EWStA8LoWBl9ufemCyG+mc61iPmNGjJla0XB00FPENaPg==
+react-ts-tradingview-widgets@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/react-ts-tradingview-widgets/-/react-ts-tradingview-widgets-1.0.14.tgz#bb82be565e721e0f535821f1095dfdaa72a0d3d8"
+  integrity sha512-gnpW/p2pi428nm5JshCjT69pJETT0eNJC7pI1juRwwNGNT67x8ZETTszK6vHgMnye3LUGiMJNXQSllzSbxTx/Q==
 
 react@^18.2.0:
   version "18.2.0"

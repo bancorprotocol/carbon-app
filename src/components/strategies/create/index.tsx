@@ -1,3 +1,4 @@
+import { memo, useEffect, useState } from 'react';
 import { Button } from 'components/common/button';
 import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
@@ -8,11 +9,12 @@ import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import Chart from 'components/chart';
-import { memo } from 'react';
+import { ReactComponent as IconX } from 'assets/icons/X.svg';
 
 const MemoChart = memo(Chart);
 
 export const CreateStrategy = () => {
+  const [showGraph, setShowGraph] = useState(false);
   const location = useLocation();
 
   const {
@@ -28,6 +30,12 @@ export const CreateStrategy = () => {
     token1BalanceQuery,
   } = useCreate();
 
+  useEffect(() => {
+    if (showStep2) {
+      setShowGraph(true);
+    }
+  }, [showStep2]);
+
   return (
     <m.div
       className={'space-y-20'}
@@ -35,7 +43,11 @@ export const CreateStrategy = () => {
       initial={'hidden'}
       animate={'visible'}
     >
-      <div className="flex justify-between gap-20 p-20">
+      <div
+        className={`flex ${
+          showGraph ? 'justify-between' : 'justify-center'
+        } gap-20 p-20`}
+      >
         <div className="min-w-[400px] space-y-20">
           <div className="flex items-center gap-16 text-24">
             <button
@@ -117,9 +129,36 @@ export const CreateStrategy = () => {
             </>
           )}
         </div>
-        <div className="mt-60 h-full w-full rounded-10 bg-silver p-20">
-          <h2 className="mb-20 font-weight-500">Price</h2>
-          <MemoChart symbol="BTC" allow_symbol_change />
+        <div
+          className={`flex flex-col ${
+            showGraph ? 'flex-1' : 'absolute right-20'
+          }`}
+        >
+          {showStep2 && (
+            <Button
+              className="mb-20 self-end"
+              variant="secondary"
+              size={'md'}
+              onClick={() => setShowGraph((prev) => !prev)}
+            >
+              <div className="flex items-center justify-center ">
+                {showGraph && <IconX className={'mr-12 w-10'} />}
+                {showGraph ? 'Close Graph' : 'Open Graph'}
+              </div>
+            </Button>
+          )}
+          {showGraph && (
+            <m.div
+              variants={list}
+              className="flex h-[550px] flex-col rounded-10 bg-silver p-20 pb-40"
+            >
+              <h2 className="mb-20 font-weight-500">Price</h2>
+              <MemoChart
+                symbol={`BINANCE:${token0?.symbol}${token1?.symbol}`}
+                allow_symbol_change
+              />
+            </m.div>
+          )}
         </div>
       </div>
     </m.div>

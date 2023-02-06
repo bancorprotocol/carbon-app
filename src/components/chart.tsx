@@ -1,13 +1,16 @@
-import {
-  AdvancedChart,
-  AdvancedChartWidgetProps,
-} from 'react-tradingview-embed';
+import { AdvancedRealTimeChart } from 'react-ts-tradingview-widgets';
 
-const Chart = (props: AdvancedChartWidgetProps) => {
+const Chart = (props: any) => {
   return (
-    <div>
-      <AdvancedChart widgetProps={{ theme: 'dark', ...props }} />
-    </div>
+    <AdvancedRealTimeChart
+      {...{
+        autosize: true,
+        style: '1',
+        theme: 'dark',
+        interval: 'D',
+        ...props,
+      }}
+    />
   );
 };
 
