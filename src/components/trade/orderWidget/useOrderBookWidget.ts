@@ -11,8 +11,8 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
     const sell = [...(orderBookQuery.data?.sell || [])];
 
     const data = {
-      buy: orderBy(buy, 'rate', 'desc'),
-      sell: orderBy(sell, 'rate', 'asc'),
+      buy: orderBy(buy, ({ rate }) => Number(rate), 'desc'),
+      sell: orderBy(sell, ({ rate }) => Number(rate), 'asc'),
     };
 
     const _subtractPrevAmount = (
