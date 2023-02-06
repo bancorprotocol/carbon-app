@@ -1,7 +1,7 @@
-import { Imager } from 'components/common/imager/Imager';
 import { FC, useEffect, useRef } from 'react';
-import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { Imager } from 'components/common/imager/Imager';
+import { Token } from 'libs/tokens';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 type Props = {
@@ -31,11 +31,10 @@ export const ModalTokenListContent: FC<Props> = ({
   return (
     <div>
       <div className="text-secondary mt-20">{tokens.length} Tokens</div>
-
       <div
         ref={parentRef}
         style={{
-          height: `390px`,
+          height: '1000px',
           overflow: 'auto',
         }}
       >
