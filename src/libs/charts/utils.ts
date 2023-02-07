@@ -104,11 +104,17 @@ export const getOptions = (bidsData?: number[][], asksData?: number[][]) => {
           name: 'Asks',
           data: asksData,
           color: 'rgba(216, 99, 113, 0.8)',
+          marker: {
+            enabled: false,
+          },
         },
         {
           name: 'Bids',
           data: bidsData,
-          color: 'rgba(0, 181, 120, 0.8);',
+          color: 'rgba(0, 181, 120, 0.8)',
+          marker: {
+            enabled: false,
+          },
         },
       ],
     };
