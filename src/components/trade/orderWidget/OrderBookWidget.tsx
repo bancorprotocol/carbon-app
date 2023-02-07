@@ -29,16 +29,23 @@ export const OrderBookWidget = () => {
         >
           <div className={'grid grid-cols-3'}>
             {orderBy(data.sell, ({ rate }) => Number(rate), 'desc').map(
-              (props, i) => (
-                <OrderBookWidgetRow key={i} {...props} />
+              (props) => (
+                <OrderBookWidgetRow
+                  key={`orderbooksell-${props.rate}`}
+                  {...props}
+                />
               )
             )}
           </div>
           <OrderBookWidgetRate buy rate={data.middleRate} />
           <div className={'grid grid-cols-3'}>
             {orderBy(data.buy, ({ rate }) => Number(rate), 'desc').map(
-              (props, i) => (
-                <OrderBookWidgetRow key={i} buy {...props} />
+              (props) => (
+                <OrderBookWidgetRow
+                  key={`orderbookbuy-${props.rate}`}
+                  buy
+                  {...props}
+                />
               )
             )}
           </div>
