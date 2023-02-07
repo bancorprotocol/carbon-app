@@ -35,19 +35,12 @@ const buildOrderBook = async (
     rate = buy ? rate : ONE.div(rate).toString();
     rate = minEqMax ? max.toString() : rate;
     i++;
-
-    console.log('jan rate', minEqMax, rate);
-
     let amount = await carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
       quoteToken,
       rate
     );
-    console.log('jan amount', amount);
     if (amount === '0') {
-      if (minEqMax) {
-        // minEqMax = false;
-      }
       continue;
     }
     if (buy) {
@@ -55,14 +48,9 @@ const buildOrderBook = async (
     } else {
       rate = ONE.div(rate).toString();
     }
-
     const total = new BigNumber(amount).times(rate).toString();
-
     orders.push({ rate, total, amount });
   }
-
-  console.log('jan orders', orders);
-
   return orders;
 };
 
@@ -74,22 +62,15 @@ const getOrderBook = async (
   const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(base, quote));
   const minSell = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
   const maxSell = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
-  console.log('jan minBuy', minBuy.toString());
-  console.log('jan maxBuy', maxBuy.toString());
-  console.log('jan minSell', minSell.toString());
-  console.log('jan maxSell', maxSell.toString());
 
   const stepBuy = maxBuy.minus(minBuy).div(orderBookBuckets);
   const stepSell = ONE.div(minSell)
     .minus(ONE.div(maxSell))
     .div(orderBookBuckets);
-  console.log('jan stepBuy', stepBuy.toString());
-  console.log('jan stepSell', stepSell.toString());
 
   const getStep = () => {
     if (stepBuy.isFinite() && stepBuy.gt(0)) {
       if (stepSell.isFinite() && stepSell.gt(0)) {
-        console.log('jan muh');
         return stepBuy.lte(stepSell) ? stepBuy : stepSell;
       } else {
         return stepBuy;
@@ -100,28 +81,21 @@ const getOrderBook = async (
       return new BigNumber(0);
     }
   };
-
   const step = getStep();
-
-  console.log('jan step', step.toString());
 
   const getMiddleRate = () => {
     if (maxBuy.isFinite() && maxSell.isFinite()) {
       return maxBuy.plus(ONE.div(maxSell)).div(2);
     }
-
     if (maxBuy.isFinite()) {
       return maxBuy;
     }
-
     if (maxSell.isFinite()) {
       return ONE.div(maxSell);
     }
     return new BigNumber(0);
   };
-
   const middleRate = getMiddleRate();
-  console.log('jan middleRate', middleRate.toString());
 
   return {
     buy: carbonSDK.hasLiquidityByPair(base, quote)
