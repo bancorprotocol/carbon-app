@@ -62,7 +62,9 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
         {
           lineWidth: 0,
           gridLineWidth: 0,
-          title: {},
+          title: {
+            text: ' ',
+          },
           tickWidth: 0,
           tickLength: 5,
           tickPosition: 'inside',
@@ -81,7 +83,9 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
           linkedTo: 0,
           lineWidth: 0,
           gridLineWidth: 0,
-          title: {},
+          title: {
+            text: ' ',
+          },
           tickWidth: 0,
           tickLength: 5,
           tickPosition: 'inside',
@@ -100,6 +104,13 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
           fillOpacity: 0.2,
           lineWidth: 1,
           step: 'center',
+        },
+        series: {
+          states: {
+            inactive: {
+              opacity: 0.7,
+            },
+          },
         },
       },
       tooltip: {
