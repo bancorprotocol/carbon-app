@@ -1,6 +1,9 @@
-import { AdvancedRealTimeChart } from 'react-ts-tradingview-widgets';
+import {
+  AdvancedRealTimeChart,
+  AdvancedRealTimeChartProps,
+} from 'react-ts-tradingview-widgets';
 
-const Chart = (props: any) => {
+const Chart = (props: AdvancedRealTimeChartProps) => {
   return (
     <AdvancedRealTimeChart
       {...{
