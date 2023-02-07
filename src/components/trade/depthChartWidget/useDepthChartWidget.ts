@@ -1,4 +1,5 @@
 import { OrderRow, useGetOrderBook } from 'libs/queries';
+import { Options } from 'libs/charts';
 
 export const useDepthChartWidget = (base?: string, quote?: string) => {
   const { data } = useGetOrderBook(base, quote);
@@ -12,7 +13,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
   const getOptions = (
     bidsData?: number[][],
     asksData?: number[][]
-  ): Highcharts.Options => {
+  ): Options => {
     const left = bidsData?.[bidsData.length - 1]?.[0] || 0;
     const right = asksData?.[asksData.length - 1]?.[0] || 0;
     const xMiddle = (right + left) / 2;
