@@ -1,13 +1,18 @@
 import { FC, ReactNode } from 'react';
 
-type Props = {
+export type IconTitleTextProps = {
   icon: ReactNode;
   title: string;
   text?: string | ReactNode;
   variant?: 'warning' | 'error';
 };
 
-export const IconTitleText: FC<Props> = ({ icon, title, text, variant }) => {
+export const IconTitleText: FC<IconTitleTextProps> = ({
+  icon,
+  title,
+  text,
+  variant,
+}) => {
   const getVariantClass = () => {
     switch (variant) {
       case 'warning':

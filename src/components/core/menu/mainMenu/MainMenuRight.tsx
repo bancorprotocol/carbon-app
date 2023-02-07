@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { MainMenuRightWallet } from 'components/menu/mainMenu/MainMenuRightWallet';
-import { MainMenuRightNotifications } from 'components/menu/mainMenu/MainMenuRightNotifications';
+import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRightWallet';
+import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';
 
 export const MainMenuRight: FC = () => {
   return (

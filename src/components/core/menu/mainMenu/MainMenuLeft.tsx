@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { menuItems } from 'components/menu';
+import { menuItems } from 'components/core/menu/index';
 import { Link, PathNames, useLocation } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 

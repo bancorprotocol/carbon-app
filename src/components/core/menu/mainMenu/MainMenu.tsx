@@ -1,10 +1,10 @@
 import { FC, ReactNode } from 'react';
-import { MainMenuLeft } from './MainMenuLeft';
-import { MainMenuRight } from './MainMenuRight';
+import { MainMenuLeft } from 'components/core/menu/mainMenu/MainMenuLeft';
+import { MainMenuRight } from 'components/core/menu/mainMenu/MainMenuRight';
 import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 import { useWeb3 } from 'libs/web3';
-import { MainMenuTokens } from 'components/menu/mainMenu/MainMenuTokens';
-import { MainMenuSettings } from 'components/menu/mainMenu/MainMenuSettings';
+import { MainMenuTokens } from 'components/core/menu/mainMenu/MainMenuTokens';
+import { MainMenuSettings } from 'components/core/menu/mainMenu/MainMenuSettings';
 import { useTrade } from 'components/trade/useTrade';
 
 enum AlertType {
