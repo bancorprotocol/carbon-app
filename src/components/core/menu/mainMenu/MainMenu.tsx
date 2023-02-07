@@ -8,11 +8,13 @@ import { useTrade } from 'components/trade/useTrade';
 export const MainMenu: FC = () => {
   const { baseToken, quoteToken, isTradePage } = useTrade();
 
+  const showTradeMenu = !(!isTradePage || !baseToken || !quoteToken);
+
   return (
     <div className={`sticky top-0 z-40`}>
       <div className={'main-menu'}>
         <MainMenuLeft />
-        {!(!isTradePage || !baseToken || !quoteToken) && (
+        {showTradeMenu && (
           <div className={'flex space-x-5'}>
             <MainMenuTokens />
             <MainMenuSettings />
