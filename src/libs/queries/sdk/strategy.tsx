@@ -9,6 +9,7 @@ import { useContract } from 'hooks/useContract';
 import { TWO_SECONDS_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { EncodedStrategy } from '@bancor/carbon-sdk/dist/types';
 
 export enum StrategyStatus {
   Active,
@@ -30,6 +31,7 @@ export interface Strategy {
   order0: Order;
   order1: Order;
   status: StrategyStatus;
+  encoded: EncodedStrategy;
 }
 
 export const useGetUserStrategies = () => {
@@ -108,6 +110,7 @@ export const useGetUserStrategies = () => {
           order0,
           order1,
           status,
+          encoded: s.encoded,
         };
 
         return strategy;
@@ -136,7 +139,17 @@ export interface CreateStrategyParams {
   token1: TokenAddressDecimals;
   order0: CreateStrategyOrder;
   order1: CreateStrategyOrder;
+  encoded?: EncodedStrategy;
 }
+
+export interface UpdateStrategyParams {
+  token0: TokenAddressDecimals;
+  token1: TokenAddressDecimals;
+  order0: CreateStrategyOrder;
+  order1: CreateStrategyOrder;
+  encoded: EncodedStrategy;
+}
+
 export const useCreateStrategy = () => {
   const { signer } = useWeb3();
 
@@ -157,6 +170,52 @@ export const useCreateStrategy = () => {
       const unsignedTx = await carbonSDK.createBuySellStrategy(
         token0,
         token1,
+        order0Low,
+        order0Max,
+        order0Budget,
+        order1Low,
+        order1Max,
+        order1Budget,
+        { gasLimit: 9999999 }
+      );
+
+      return signer!.sendTransaction(unsignedTx);
+    }
+  );
+};
+
+export const useUpdateStrategy = () => {
+  const { signer } = useWeb3();
+
+  return useMutation(
+    async ({
+      token0,
+      token1,
+      order0,
+      order1,
+      encoded,
+    }: UpdateStrategyParams) => {
+      const noPrice0 = Number(order0.price) === 0;
+      const noPrice1 = Number(order1.price) === 0;
+
+      const order0Low = noPrice0 ? order0.min : order0.price;
+      const order0Max = noPrice0 ? order0.max : order0.price;
+
+      const order1Low = noPrice1 ? order1.min : order1.price;
+      const order1Max = noPrice1 ? order1.max : order1.price;
+
+      const order0Budget = Number(order0.budget) === 0 ? '0' : order0.budget;
+      const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
+
+      const strategyId = encoded.id;
+      const baseToken = token0;
+      const quoteToken = token1;
+
+      const unsignedTx = await carbonSDK.updateStrategy(
+        strategyId,
+        encoded,
+        baseToken,
+        quoteToken,
         order0Low,
         order0Max,
         order0Budget,

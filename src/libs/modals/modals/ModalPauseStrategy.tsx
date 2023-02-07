@@ -3,9 +3,24 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconWarning } from 'assets/icons/pause.svg';
+import { useCreate } from 'components/strategies/create/useCreateStrategy';
+import { Strategy } from 'libs/queries';
 
-export const ModalPauseStrategy: ModalFC<undefined> = ({ id }) => {
+export type ModalPauseStrategyData = {
+  strategy: Strategy;
+};
+
+export const ModalPauseStrategy: ModalFC<ModalPauseStrategyData> = ({
+  id,
+  data: { strategy },
+}) => {
   const { closeModal } = useModal();
+  const { updateStrategy } = useCreate();
+
+  const handleOnPauseStrategyClick = () => {
+    updateStrategy(strategy);
+    closeModal(id);
+  };
 
   return (
     <Modal id={id} title="Pause Strategy">
@@ -21,6 +36,7 @@ export const ModalPauseStrategy: ModalFC<undefined> = ({ id }) => {
           associated funds
         </div>
         <Button
+          onClick={handleOnPauseStrategyClick}
           className="mt-32 dark:text-charcoal"
           variant="white"
           size="lg"
