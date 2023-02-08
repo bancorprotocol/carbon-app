@@ -1,11 +1,6 @@
 import { useMemo, useState } from 'react';
 import { OrderCreate, useOrder } from './useOrder';
-import {
-  QueryKey,
-  Strategy,
-  useCreateStrategy,
-  useUpdateStrategy,
-} from 'libs/queries';
+import { QueryKey, useCreateStrategy } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
@@ -39,7 +34,6 @@ export const useCreate = () => {
   const order0 = useOrder(templateStrategy?.order0);
 
   const mutation = useCreateStrategy();
-  const updateMutation = useUpdateStrategy();
 
   const showStep2 = !!token0 && !!token1;
 
@@ -112,50 +106,6 @@ export const useCreate = () => {
     );
   };
 
-  const updateStrategy = async (strategy: Strategy) => {
-    const { token0, token1, order0, order1, encoded } = strategy;
-
-    if (!token0 || !token1 || !user) {
-      throw new Error('error in update strategy: missing data ');
-    }
-
-    updateMutation.mutate(
-      {
-        token0,
-        token1,
-        order0: {
-          budget: order0.balance,
-          min: '0',
-          max: '0',
-          price: '',
-        },
-        order1: {
-          budget: order1.balance,
-          min: '0',
-          max: '0',
-          price: '',
-        },
-        encoded,
-      },
-      {
-        onSuccess: async (tx) => {
-          dispatchNotification('updateStrategy', { txHash: tx.hash });
-          if (!tx) return;
-          console.log('tx hash', tx.hash);
-          await tx.wait();
-
-          void cache.invalidateQueries({
-            queryKey: QueryKey.strategies(user),
-          });
-          console.log('tx confirmed');
-        },
-        onError: (e) => {
-          console.error('update mutation failed', e);
-        },
-      }
-    );
-  };
-
   const checkErrors = (
     order: OrderCreate,
     otherOrder: OrderCreate,
@@ -209,7 +159,6 @@ export const useCreate = () => {
     order0,
     order1,
     createStrategy,
-    updateStrategy,
     openTokenListModal,
     showStep2,
     isCTAdisabled,

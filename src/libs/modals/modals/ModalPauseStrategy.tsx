@@ -3,8 +3,8 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconWarning } from 'assets/icons/pause.svg';
-import { useCreate } from 'components/strategies/create/useCreateStrategy';
 import { Strategy } from 'libs/queries';
+import { useUpdate } from 'components/strategies/update/useUpdateStrategy';
 
 export type ModalPauseStrategyData = {
   strategy: Strategy;
@@ -15,10 +15,10 @@ export const ModalPauseStrategy: ModalFC<ModalPauseStrategyData> = ({
   data: { strategy },
 }) => {
   const { closeModal } = useModal();
-  const { updateStrategy } = useCreate();
+  const { pauseStrategy } = useUpdate();
 
   const handleOnPauseStrategyClick = () => {
-    updateStrategy(strategy);
+    pauseStrategy(strategy);
     closeModal(id);
   };
 

@@ -6,7 +6,7 @@ export interface NotificationSchema {
   approve: { symbol: string; limited: boolean; txHash: string };
   trade: { txHash: string; amount: string; from: string; to: string };
   createStrategy: { txHash: string };
-  updateStrategy: { txHash: string };
+  pauseStrategy: { txHash: string };
   editStrategyName: { txHash: string };
   withdrawStrategy: { txHash: string };
   deleteStrategy: { txHash: string };
@@ -48,14 +48,14 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     txHash: data.txHash,
     showAlert: true,
   }),
-  updateStrategy: (data) => ({
+  pauseStrategy: (data) => ({
     status: 'pending',
     title: 'Pending Confirmation',
-    description: 'Strategy is being updated',
+    description: 'Taking the strategy off curve is being processed',
     successTitle: 'Success',
-    successDesc: 'Strategy was successfully updated',
+    successDesc: 'The strategy was successfully taken off curve',
     failedTitle: 'Transaction Failed',
-    failedDesc: 'Strategy update has failed',
+    failedDesc: 'Taking the strategy off curve have failed',
     txHash: data.txHash,
     showAlert: true,
   }),
