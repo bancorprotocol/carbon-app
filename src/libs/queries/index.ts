@@ -8,3 +8,5 @@ export * from 'libs/queries/sdk/trade';
 export * from 'libs/queries/sdk/tradeLiquidity';
 export { useQueryClient } from '@tanstack/react-query';
 export type { UseQueryResult } from '@tanstack/react-query';
+export { useGetOrderBook } from 'libs/queries/sdk/orderBook';
+export type { OrderRow } from 'libs/queries/sdk/orderBook';
