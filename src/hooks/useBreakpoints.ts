@@ -21,8 +21,7 @@ export const useBreakpoints = () => {
 
   const currentBreakpoint = useMemo(() => {
     return Object.keys(screens).reduce(
-      // @ts-ignore
-      (acc, key) => (width >= screens[key] ? key : acc),
+      (acc, key) => (width >= screens[key as Breakpoint] ? key : acc),
       'sm'
     ) as Breakpoint;
   }, [width]);
