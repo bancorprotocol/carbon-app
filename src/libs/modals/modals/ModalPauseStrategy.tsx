@@ -37,7 +37,7 @@ export const ModalPauseStrategy: ModalFC<ModalPauseStrategyData> = ({
         </div>
         <Button
           onClick={handleOnPauseStrategyClick}
-          className="mt-32 dark:text-charcoal"
+          className="mt-32"
           variant="white"
           size="lg"
           fullWidth
