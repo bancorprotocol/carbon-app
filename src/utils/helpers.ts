@@ -110,7 +110,10 @@ export function prettifyNumber(
     if (bigNum.gte(2)) return numeral(bigNum).format('0,0.[00]', Math.floor);
   }
   if (bigNum.lt(0.000001)) return '< 0.000001';
-  return numeral(bigNum).format('0.[000000]', Math.floor);
+  return numeral(bigNum).format(
+    highPrecision ? '0,0.000000' : '0,0.[000000]',
+    Math.floor
+  );
 }
 
 export const wait = async (ms: number = 0) =>
