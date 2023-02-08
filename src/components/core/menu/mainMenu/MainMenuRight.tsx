@@ -6,8 +6,8 @@ import { Button } from 'components/common/button';
 
 const TenderlyForkAlert = () => {
   return IS_TENDERLY_FORK ? (
-    <Button variant={'error'} size={'sm'}>
-      Tenderly Fork
+    <Button variant={'error'} size={'sm'} className={'px-8'}>
+      Fork
     </Button>
   ) : null;
 };

@@ -12,7 +12,7 @@ import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 export const DebugPage = () => {
   return (
     <Page title={'Debug'}>
-      <div className="grid grid-cols-2 gap-20">
+      <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
         <DebugResetDefault />
         <DebugWeb3 />
         <DebugImposter />

@@ -18,14 +18,16 @@ export const StrategyPageTitleWidget: FC<{
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ search, setSearch, showFilter, sort, filter, setSort, setFilter }) => {
   return (
-    <div className="flex items-center gap-20">
+    <div className="grid grid-cols-2 gap-10 md:flex md:items-center md:gap-20">
       {showFilter && (
         <>
-          <SearchInput
-            value={search}
-            setValue={setSearch}
-            className="h-40 w-full"
-          />
+          <div className={'order-last col-span-2 md:order-first'}>
+            <SearchInput
+              value={search}
+              setValue={setSearch}
+              className="h-40 w-full"
+            />
+          </div>
           <StrategyFilterSort
             sort={sort}
             filter={filter}
