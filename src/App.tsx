@@ -1,15 +1,12 @@
-import { MainMenu, MobileMenu } from 'components/menu';
-import { Outlet } from 'libs/routing';
+import { MainMenu, MobileMenu } from 'components/core/menu';
 import { NotificationAlerts } from 'libs/notifications';
 import { ModalProvider } from 'libs/modals';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useEffect } from 'react';
-import { useWeb3 } from 'libs/web3';
-import { ErrorUnsupportedNetwork } from 'components/error/ErrorUnsupportedNetwork';
+import { MainContent } from 'components/core/MainContent';
 
 export const App = () => {
   const { init } = useCarbonSDK();
-  const { isSupportedNetwork } = useWeb3();
 
   useEffect(() => {
     void init();
@@ -19,7 +16,7 @@ export const App = () => {
     <>
       <MainMenu />
       <main>
-        {isSupportedNetwork ? <Outlet /> : <ErrorUnsupportedNetwork />}
+        <MainContent />
       </main>
       <MobileMenu />
       <NotificationAlerts />
