@@ -2,16 +2,11 @@ import { OrderBookWidgetHeader } from 'components/trade/orderWidget/OrderBookWid
 import { OrderBookWidgetRate } from 'components/trade/orderWidget/OrderBookWidgetRate';
 import { OrderBookWidgetRow } from 'components/trade/orderWidget/OrderBookWidgetRow';
 import { useOrderBookWidget } from 'components/trade/orderWidget/useOrderBookWidget';
-import { useTradeTokens } from 'components/trade/useTradeTokens';
 import { orderBy } from 'lodash';
+import { TradePageProps } from 'pages/trade';
 
-export const OrderBookWidget = () => {
-  const { baseToken, quoteToken } = useTradeTokens();
-  const { data } = useOrderBookWidget(baseToken?.address, quoteToken?.address);
-
-  if (!baseToken || !quoteToken) {
-    return null;
-  }
+export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
+  const { data } = useOrderBookWidget(base.address, quote.address);
 
   return (
     <div className={'h-full rounded-10 bg-silver p-20'}>
@@ -19,8 +14,8 @@ export const OrderBookWidget = () => {
 
       <div className={'mt-20 font-mono'}>
         <OrderBookWidgetHeader
-          baseSymbol={baseToken.symbol}
-          quoteSymbol={quoteToken.symbol}
+          baseSymbol={base.symbol}
+          quoteSymbol={base.symbol}
         />
         <div
           className={
