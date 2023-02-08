@@ -8,7 +8,7 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
-import Chart from 'components/chart';
+import { Chart } from 'components/chart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 
 const MemoChart = memo(Chart);
@@ -153,10 +153,7 @@ export const CreateStrategy = () => {
               className="flex h-[550px] flex-col rounded-10 bg-silver p-20 pb-40"
             >
               <h2 className="mb-20 font-weight-500">Price</h2>
-              <MemoChart
-                symbol={`BINANCE:${token0?.symbol}${token1?.symbol}`}
-                allow_symbol_change
-              />
+              <MemoChart token0={token0} token1={token1} />
             </m.div>
           )}
         </div>

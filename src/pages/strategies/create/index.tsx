@@ -5,11 +5,5 @@ import { useWeb3 } from 'libs/web3';
 export const CreateStrategyPage = () => {
   const { user } = useWeb3();
 
-  return user ? (
-    <div>
-      <CreateStrategy />
-    </div>
-  ) : (
-    <WalletConnect />
-  );
+  return user ? <CreateStrategy /> : <WalletConnect />;
 };

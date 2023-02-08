@@ -55,7 +55,6 @@
     "react-dom": "^18.2.0",
     "react-popper": "^2.3.0",
     "react-scripts": "5.0.1",
-    "react-ts-tradingview-widgets": "^1.0.14",
     "source-map-explorer": "^2.5.3",
     "tailwindcss": "^3.1.8",
     "typechain": "^8.1.0",

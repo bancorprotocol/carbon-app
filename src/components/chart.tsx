@@ -1,20 +1,19 @@
-import {
-  AdvancedRealTimeChart,
-  AdvancedRealTimeChartProps,
-} from 'react-ts-tradingview-widgets';
+import { Token } from 'libs/tokens';
+import Copyright from './copyrights';
+import Widget from './widget';
 
-const Chart = (props: AdvancedRealTimeChartProps) => {
-  return (
-    <AdvancedRealTimeChart
-      {...{
-        autosize: true,
-        style: '1',
-        theme: 'dark',
-        interval: 'D',
-        ...props,
-      }}
-    />
-  );
+export type ChartProps = {
+  token0: Token | undefined;
+  token1: Token | undefined;
 };
 
-export default Chart;
+export const Chart: React.FC<ChartProps> = ({ token0, token1 }) => {
+  const symbol = `BINANCE:${token0?.symbol}${token1?.symbol}`;
+
+  return (
+    <div>
+      <Widget symbol={symbol} />
+      <Copyright symbol={symbol} />
+    </div>
+  );
+};
