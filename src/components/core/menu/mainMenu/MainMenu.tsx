@@ -2,25 +2,16 @@ import { FC } from 'react';
 import { MainMenuLeft } from 'components/core/menu/mainMenu/MainMenuLeft';
 import { MainMenuRight } from 'components/core/menu/mainMenu/MainMenuRight';
 import { MainMenuTokens } from 'components/core/menu/mainMenu/MainMenuTokens';
-import { MainMenuSettings } from 'components/core/menu/mainMenu/MainMenuSettings';
-import { useTrade } from 'components/trade/useTrade';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export const MainMenu: FC = () => {
-  const { baseToken, quoteToken, isTradePage } = useTrade();
-
-  const showTradeMenu = !(!isTradePage || !baseToken || !quoteToken);
+  const { aboveBreakpoint } = useBreakpoints();
 
   return (
     <div className={`sticky top-0 z-40`}>
       <div className={'main-menu'}>
         <MainMenuLeft />
-        {showTradeMenu && (
-          <div className={'flex space-x-5'}>
-            <MainMenuTokens />
-            <MainMenuSettings />
-          </div>
-        )}
-
+        {aboveBreakpoint('md') && <MainMenuTokens />}
         <MainMenuRight />
       </div>
     </div>

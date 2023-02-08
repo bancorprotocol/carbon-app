@@ -48,4 +48,11 @@ export namespace QueryKey {
     token0,
     token1,
   ];
+
+  export const tradeOrderBook = (base: string, quote: string) => [
+    ..._sdk,
+    'trade-order-book',
+    base,
+    quote,
+  ];
 }
