@@ -1,13 +1,18 @@
 import { FC, ReactNode } from 'react';
 
-type Props = {
+export type IconTitleTextProps = {
   icon: ReactNode;
   title: string;
   text?: string | ReactNode;
   variant?: 'warning' | 'error';
 };
 
-export const IconTitleText: FC<Props> = ({ icon, title, text, variant }) => {
+export const IconTitleText: FC<IconTitleTextProps> = ({
+  icon,
+  title,
+  text,
+  variant,
+}) => {
   const getVariantClass = () => {
     switch (variant) {
       case 'warning':
@@ -24,7 +29,7 @@ export const IconTitleText: FC<Props> = ({ icon, title, text, variant }) => {
   return (
     <div className={'flex flex-col items-center'}>
       <div
-        className={`flex h-60 w-60 items-center justify-center rounded-full p-20 ${variantClass}`}
+        className={`flex h-60 w-60 items-center justify-center rounded-full p-18 ${variantClass}`}
       >
         {icon}
       </div>
