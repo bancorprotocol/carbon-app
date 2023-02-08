@@ -8,9 +8,10 @@ import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconETHLogo } from 'assets/logos/ethlogo.svg';
 import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
+import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
 
 export const MainMenuRightWallet: FC = () => {
-  const { user, disconnect, isSupportedNetwork } = useWeb3();
+  const { user, disconnect, isSupportedNetwork, isImposter } = useWeb3();
   const { openModal } = useModal();
 
   const onClickOpenModal = () => openModal('wallet', undefined);
@@ -36,9 +37,13 @@ export const MainMenuRightWallet: FC = () => {
           <Button
             variant={'secondary'}
             onClick={onClick}
-            className={'flex items-center space-x-10'}
+            className={'flex items-center space-x-10 pl-20'}
           >
-            <IconMetaMaskLogo className={'w-20'} />
+            {isImposter ? (
+              <IconImposterLogo className={'w-20'} />
+            ) : (
+              <IconMetaMaskLogo className={'w-20'} />
+            )}
             <span>{shortenString(user)}</span>
           </Button>
         )}

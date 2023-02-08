@@ -3,7 +3,6 @@ const _chain = ['chain'];
 const _extAPI = ['ext-api'];
 
 export namespace QueryKey {
-  export const tokenLists = () => [..._extAPI, 'token-lists'];
   export const tokens = () => [..._extAPI, 'tokens'];
   export const tokenPrice = (address: string) => [
     ..._extAPI,
