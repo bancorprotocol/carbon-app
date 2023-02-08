@@ -1,11 +1,13 @@
-import { useTrade } from 'components/trade/useTrade';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { Button } from 'components/common/button';
 import { MainMenuSettings } from 'components/core/menu/mainMenu/MainMenuSettings';
+import { useTradeTokens } from 'components/trade/useTradeTokens';
+import { useTradePairs } from 'components/trade/useTradePairs';
 
 export const MainMenuTokens = () => {
-  const { baseToken, quoteToken, isTradePage, openTradePairList } = useTrade();
+  const { baseToken, quoteToken, isTradePage } = useTradeTokens();
+  const { openTradePairList } = useTradePairs();
 
   if (!isTradePage || !baseToken || !quoteToken) return null;
 

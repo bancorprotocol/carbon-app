@@ -5,6 +5,7 @@ import { shrinkToken } from 'utils/tokens';
 import { config } from 'services/web3/config';
 import { QueryKey } from 'libs/queries/queryKey';
 import { useContract } from 'hooks/useContract';
+import { TEN_SEC_IN_MS } from 'utils/time';
 
 export const useGetTokenBalance = (
   token?: Pick<Token, 'address' | 'decimals'>
@@ -40,6 +41,7 @@ export const useGetTokenBalance = (
     },
     {
       enabled: !!user && !!address && !!decimals && !!provider,
+      refetchInterval: TEN_SEC_IN_MS,
       onError: (e: any) =>
         console.error('useGetTokenBalance failed with error:', e),
     }

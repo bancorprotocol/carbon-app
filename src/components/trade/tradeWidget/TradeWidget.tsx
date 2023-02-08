@@ -1,16 +1,12 @@
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import { useTrade } from 'components/trade/useTrade';
+import { useTradePairs } from 'components/trade/useTradePairs';
 import { Button } from 'components/common/button';
 import { useGetTokenBalance } from 'libs/queries';
+import { useTradeTokens } from 'components/trade/useTradeTokens';
 
 export const TradeWidget = () => {
-  const {
-    baseToken,
-    quoteToken,
-    openTradePairList,
-    isLoading,
-    isTradePairError,
-  } = useTrade();
+  const { baseToken, quoteToken } = useTradeTokens();
+  const { openTradePairList, isLoading, isTradePairError } = useTradePairs();
 
   const baseBalanceQuery = useGetTokenBalance(baseToken);
   const quoteBalanceQuery = useGetTokenBalance(quoteToken);
