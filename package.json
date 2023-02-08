@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bancor/carbon-sdk": "0.0.34-DEV",
+    "@bancor/carbon-sdk": "0.0.36-DEV",
     "@coinbase/wallet-sdk": "^3.5.3",
     "@ethersproject/providers": "^5.7.1",
     "@popperjs/core": "^2.11.6",
