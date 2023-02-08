@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'libs/routing';
-import { menuItems } from '../menuItems';
+import { menuItems } from 'components/core/menu/menuItems';
 
 export const MobileMenu = () => {
   const location = useLocation();
