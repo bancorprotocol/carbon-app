@@ -9,6 +9,7 @@ import { Tooltip } from 'components/common/tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { Chart } from 'components/chart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
+import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { StepTwo } from './stepTwo';
 
 const MemoChart = memo(Chart);
@@ -36,6 +37,10 @@ export const CreateStrategy = () => {
     }
   }, [showStep2]);
 
+  const showGraphToggle = () => {
+    setShowGraph((prev) => !prev);
+  };
+
   return (
     <m.div
       className={'space-y-20'}
@@ -49,14 +54,24 @@ export const CreateStrategy = () => {
         } gap-20 p-20`}
       >
         <div className="min-w-[400px] space-y-20">
-          <div className="flex items-center gap-16 text-24">
-            <button
-              onClick={() => location.history.back()}
-              className="h-40 w-40 rounded-full bg-emphasis"
-            >
-              <IconChevron className="mx-auto w-14 rotate-90" />
-            </button>
-            Create Strategy
+          <div className="flex flex-row justify-between">
+            <div className="flex items-center gap-16 text-24">
+              <button
+                onClick={() => location.history.back()}
+                className="h-40 w-40 rounded-full bg-emphasis"
+              >
+                <IconChevron className="mx-auto w-14 rotate-90" />
+              </button>
+              Create Strategy
+            </div>
+            {!showGraph && showStep2 && (
+              <button
+                onClick={showGraphToggle}
+                className="h-40 w-40 self-end rounded-full bg-emphasis"
+              >
+                <IconCandles className="mx-auto w-14 " />
+              </button>
+            )}
           </div>
           <m.div variants={items} className="bg-secondary rounded-10 p-20">
             <div className="mb-14 flex items-center justify-between">
@@ -114,16 +129,16 @@ export const CreateStrategy = () => {
             showGraph ? 'flex-1' : 'absolute right-20'
           }`}
         >
-          {showStep2 && (
+          {showStep2 && showGraph && (
             <Button
-              className="mb-20 self-end"
+              className={`mb-20 self-end`}
               variant="secondary"
               size={'md'}
-              onClick={() => setShowGraph((prev) => !prev)}
+              onClick={showGraphToggle}
             >
               <div className="flex items-center justify-center ">
-                {showGraph && <IconX className={'mr-12 w-10'} />}
-                {showGraph ? 'Close Graph' : 'Open Graph'}
+                <IconX className={'mr-12 w-10'} />
+                Close Graph
               </div>
             </Button>
           )}
