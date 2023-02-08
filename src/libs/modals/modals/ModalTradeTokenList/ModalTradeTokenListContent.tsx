@@ -2,6 +2,7 @@ import { FC, useEffect, useRef } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 type Props = {
   tradePairs: TradePair[];
@@ -14,6 +15,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   handleSelect,
   search,
 }) => {
+  const { aboveBreakpoint } = useBreakpoints();
   const parentRef = useRef<HTMLDivElement>(null);
 
   const rowVirtualizer = useVirtualizer({
@@ -34,7 +36,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
       <div
         ref={parentRef}
         style={{
-          height: `390px`,
+          height: aboveBreakpoint('md') ? `390px` : 'calc(70vh)',
           overflow: 'auto',
         }}
       >
