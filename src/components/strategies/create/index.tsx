@@ -2,7 +2,6 @@ import { memo, useEffect, useState } from 'react';
 import { Button } from 'components/common/button';
 import { m, Variants } from 'libs/motion';
 import { useCreate } from './useCreateStrategy';
-import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useLocation } from 'libs/routing';
@@ -10,6 +9,7 @@ import { Tooltip } from 'components/common/tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { Chart } from 'components/chart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
+import { StepTwo } from './stepTwo';
 
 const MemoChart = memo(Chart);
 
@@ -20,11 +20,11 @@ export const CreateStrategy = () => {
   const {
     token0,
     token1,
+    openTokenListModal,
+    showStep2,
     order0,
     order1,
     createStrategy,
-    openTokenListModal,
-    showStep2,
     isCTAdisabled,
     token0BalanceQuery,
     token1BalanceQuery,
@@ -95,38 +95,18 @@ export const CreateStrategy = () => {
             </div>
           </m.div>
           {showStep2 && (
-            <>
-              <m.div variants={items}>
-                <BuySellBlock
-                  token0={token0!}
-                  token1={token1!}
-                  order={order0}
-                  buy
-                  tokenBalanceQuery={token1BalanceQuery}
-                />
-              </m.div>
-
-              <m.div variants={items}>
-                <BuySellBlock
-                  token0={token0!}
-                  token1={token1!}
-                  order={order1}
-                  tokenBalanceQuery={token0BalanceQuery}
-                />
-              </m.div>
-              <m.div variants={items}>
-                <Button
-                  className="mb-80"
-                  variant={'success'}
-                  size={'lg'}
-                  fullWidth
-                  onClick={createStrategy}
-                  disabled={isCTAdisabled}
-                >
-                  Create Strategy
-                </Button>
-              </m.div>
-            </>
+            <StepTwo
+              {...{
+                token0,
+                token1,
+                order0,
+                order1,
+                createStrategy,
+                isCTAdisabled,
+                token0BalanceQuery,
+                token1BalanceQuery,
+              }}
+            />
           )}
         </div>
         <div
@@ -178,7 +158,7 @@ const list: Variants = {
   },
 };
 
-const items: Variants = {
+export const items: Variants = {
   visible: {
     opacity: 1,
     scale: 1,
