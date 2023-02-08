@@ -50,7 +50,7 @@
 @layer components {
   .main-menu {
     height: var(--main-menu-height);
-    @apply bg-body flex w-full items-center justify-between px-10 font-weight-500 text-white/50 md:px-20;
+    @apply bg-body flex w-full items-center justify-between px-content font-weight-500 text-white/50;
   }
 
   .mobile-menu {
@@ -71,6 +71,10 @@
 
   .bg-secondary {
     @apply bg-silver;
+  }
+
+  .px-content {
+    @apply px-10 md:px-20;
   }
 
   .text-body {

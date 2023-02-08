@@ -21,7 +21,7 @@ export const StrategyPageTitleWidget: FC<{
     <div className="grid grid-cols-2 gap-10 md:flex md:items-center md:gap-20">
       {showFilter && (
         <>
-          <div className={'col-span-2'}>
+          <div className={'order-last col-span-2 md:order-first'}>
             <SearchInput
               value={search}
               setValue={setSearch}

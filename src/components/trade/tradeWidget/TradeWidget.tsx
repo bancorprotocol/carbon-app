@@ -25,7 +25,7 @@ export const TradeWidget = () => {
           <Button onClick={openTradePairList}>Select Pair</Button>
         </div>
       ) : (
-        <div className={'grid grid-cols-2 gap-20'}>
+        <div className={'grid grid-cols-1 gap-20 md:grid-cols-2'}>
           <TradeWidgetBuySell
             buy
             source={quoteToken}
