@@ -33,9 +33,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
-  if (liquidityQuery?.isLoading) return <div>Loading</div>;
   if (liquidityQuery?.isError) return <div>Error</div>;
-  if (!source || !target || !liquidityQuery?.data) return null;
+  if (!source || !target) return null;
 
   const getRate = () => {
     if (!rate) return '...';
@@ -63,7 +62,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           <div className={`font-weight-500 text-red`}>{errorMsgSource}</div>
         )}
       </div>
-      {hasEnoughLiquidity ? (
+      {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
           <TokenInputField
             className={'mt-5 mb-20 rounded-12 bg-black p-16'}
@@ -107,11 +106,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           >
             {getRate()}
           </div>
-          {liquidityQuery.data && (
-            <div className={'text-secondary mt-5 text-right'}>
-              Liquidity: {prettifyNumber(liquidityQuery.data)} {target.symbol}
-            </div>
-          )}
+
+          <div className={'text-secondary mt-5 text-right'}>
+            Liquidity:{' '}
+            {liquidityQuery.isLoading
+              ? 'loading'
+              : prettifyNumber(liquidityQuery.data)}{' '}
+            {target.symbol}
+          </div>
         </>
       ) : (
         <NotEnoughLiquidity source={source} target={target} />
