@@ -55,7 +55,7 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
     return orderBy(baseTokens, 'baseToken.symbol', 'asc');
   }, [tradePairs, search]);
 
-  const handleSelect = (tradePair: TradePair) => {
+  const handleSelect = async (tradePair: TradePair) => {
     data.onClick(tradePair);
     closeModal(id);
   };

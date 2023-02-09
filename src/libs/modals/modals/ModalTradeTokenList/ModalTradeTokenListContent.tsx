@@ -61,23 +61,24 @@ export const ModalTradeTokenListContent: FC<Props> = ({
 
   return (
     <div>
-      <div className={'my-20 flex justify-between'}>
-        <div className={'space-x-20'}>
-          {categories.map((category) => (
-            <button
-              key={category}
-              className={`capitalize ${
-                category === selectedList ? 'font-weight-500' : 'text-secondary'
-              }`}
-              onClick={() => setSelectedList(category)}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
+      <div className={'my-20 grid w-full grid-cols-4'}>
+        {categories.map((category, i) => (
+          <button
+            key={category}
+            className={`flex items-end justify-start capitalize ${
+              category === selectedList ? 'font-weight-500' : 'text-secondary'
+            } ${i > 0 ? 'justify-center' : ''}`}
+            onClick={() => setSelectedList(category)}
+          >
+            {category}
+          </button>
+        ))}
 
-        <div className="text-secondary">{tradePairs2.length} Pairs</div>
+        <div className="text-secondary flex items-end justify-end">
+          {tradePairs2.length} Pairs
+        </div>
       </div>
+
       <div
         ref={parentRef}
         style={{
