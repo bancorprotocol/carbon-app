@@ -6,6 +6,10 @@ export interface Config {
     WETH: string;
     BNT: string;
     ZERO: string;
+    USDT: string;
+    USDC: string;
+    DAI: string;
+    WBTC: string;
   };
   carbon: {
     carbonController: string;
