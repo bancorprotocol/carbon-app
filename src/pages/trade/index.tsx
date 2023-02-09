@@ -64,7 +64,7 @@ export const TradePage = () => {
     if (!!tradePairs.length && !baseToken && !quoteToken) {
       const foundDefault = checkDefaultPairs(tradePairs);
       if (foundDefault) {
-        goToPair(foundDefault[0], foundDefault[1]);
+        goToPair(foundDefault[0], foundDefault[1], true);
       }
       setHasMounted(true);
     }

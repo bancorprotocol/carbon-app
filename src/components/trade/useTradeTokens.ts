@@ -24,8 +24,8 @@ export const useTradeTokens = () => {
   const baseToken = getTokenById(search.base!);
   const quoteToken = getTokenById(search.quote!);
 
-  const goToPair = (base: string, quote: string) =>
-    navigate({ to: PathNames.trade, search: { base, quote }, replace: true });
+  const goToPair = (base: string, quote: string, replace?: boolean) =>
+    navigate({ to: PathNames.trade, search: { base, quote }, replace });
 
   const isTokenError =
     (search.base && !baseToken) || (search.base && !quoteToken);
