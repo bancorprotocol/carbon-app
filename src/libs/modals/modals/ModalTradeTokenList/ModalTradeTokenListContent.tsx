@@ -4,12 +4,13 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
+import { lsService } from 'services/localeStorage';
 
 const categories = ['popular', 'favorites', 'all'] as const;
-type Category = (typeof categories)[number];
+export type TradePairCategory = (typeof categories)[number];
 
 type Props = {
-  tradePairs: { [k in Category]: TradePair[] };
+  tradePairs: { [k in TradePairCategory]: TradePair[] };
   handleSelect: (tradePair: TradePair) => void;
   onAddFavorite: (tradePair: TradePair) => void;
   onRemoveFavorite: (tradePair: TradePair) => void;
@@ -25,7 +26,14 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   onAddFavorite,
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
-  const [selectedList, setSelectedList] = useState<Category>('popular');
+  const [selectedList, _setSelectedList] = useState<TradePairCategory>(
+    lsService.getItem('tradePairsCategory') || 'popular'
+  );
+
+  const setSelectedList = (category: TradePairCategory) => {
+    _setSelectedList(category);
+    lsService.setItem('tradePairsCategory', category);
+  };
 
   const tradePairs2 = !!search ? tradePairs.all : tradePairs[selectedList];
 
