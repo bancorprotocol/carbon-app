@@ -2,19 +2,29 @@ import { FC, ReactNode, useState } from 'react';
 import { m, Variants } from 'libs/motion';
 import { useTooltip } from 'libs/tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import { Placement } from '@popperjs/core';
 
 type Props = {
   children: ReactNode;
   element?: string | ReactNode;
   delay?: number;
+  className?: string;
+  placement?: Placement;
 };
 
 let timeout: NodeJS.Timeout;
 let prevPopFunc: Function = () => {};
 
-export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
+export const Tooltip: FC<Props> = ({
+  children,
+  element,
+  delay = 300,
+  className = 'min-w-[275px]',
+  placement,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const { itemRef, tooltipRef, styles } = useTooltip({
+    placement,
     modifiers: [
       {
         name: 'offset',
@@ -52,9 +62,7 @@ export const Tooltip: FC<Props> = ({ children, element, delay = 300 }) => {
       </m.div>
       <m.div
         ref={tooltipRef}
-        className={
-          'min-w-[275px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30'
-        }
+        className={`rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30 ${className}`}
         onMouseEnter={() => handleOnMouseEnter()}
         onMouseLeave={() => handleOnMouseLeave()}
         variants={menuVariants}

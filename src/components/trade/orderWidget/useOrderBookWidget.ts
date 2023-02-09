@@ -2,9 +2,12 @@ import { OrderBook, useGetOrderBook } from 'libs/queries/sdk/orderBook';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { orderBy } from 'lodash';
+import { useTokens } from 'hooks/useTokens';
+import { sanitizeNumberInput } from 'utils/helpers';
 
 export const useOrderBookWidget = (base?: string, quote?: string) => {
   const orderBookQuery = useGetOrderBook(base, quote);
+  const { getTokenById } = useTokens();
 
   const orders = useMemo<OrderBook>(() => {
     const buy = [...(orderBookQuery.data?.buy || [])];
@@ -26,9 +29,15 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
       const totalAmount = newAmount.times(rate);
 
       return {
-        rate,
-        amount: newAmount.toString(),
-        total: totalAmount.toString(),
+        rate: sanitizeNumberInput(rate, getTokenById(quote!)?.decimals),
+        amount: sanitizeNumberInput(
+          newAmount.toString(),
+          getTokenById(base!)?.decimals
+        ),
+        total: sanitizeNumberInput(
+          totalAmount.toString(),
+          getTokenById(quote!)?.decimals
+        ),
       };
     };
 
@@ -47,7 +56,7 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
         .splice(0, 14),
       middleRate: orderBookQuery.data?.middleRate || '0',
     };
-  }, [orderBookQuery.data]);
+  }, [orderBookQuery.data, base, quote, getTokenById]);
 
   return { ...orderBookQuery, data: orders };
 };
