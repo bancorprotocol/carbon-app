@@ -117,7 +117,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                     tokens={[tradePair.baseToken, tradePair.quoteToken]}
                   />
                   <span className={'font-weight-500'}>
-                    {tradePair.baseToken.symbol} - {tradePair.quoteToken.symbol}
+                    {tradePair.baseToken.symbol} / {tradePair.quoteToken.symbol}
                   </span>
                 </button>
                 <button
