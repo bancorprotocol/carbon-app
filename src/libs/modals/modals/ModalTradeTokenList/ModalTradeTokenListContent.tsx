@@ -1,11 +1,19 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { ReactComponent as IconStar } from 'assets/icons/star.svg';
+import { buildPairKey } from 'utils/helpers';
+
+const categories = ['popular', 'favorites', 'all'] as const;
+type Category = (typeof categories)[number];
 
 type Props = {
-  tradePairs: TradePair[];
+  tradePairs: { [k in Category]: TradePair[] };
   handleSelect: (tradePair: TradePair) => void;
+  onAddFavorite: (tradePair: TradePair) => void;
+  onRemoveFavorite: (tradePair: TradePair) => void;
+
   search: string;
 };
 
@@ -13,11 +21,16 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   tradePairs,
   handleSelect,
   search,
+  onRemoveFavorite,
+  onAddFavorite,
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
+  const [selectedList, setSelectedList] = useState<Category>('popular');
+
+  const tradePairs2 = !!search ? tradePairs.all : tradePairs[selectedList];
 
   const rowVirtualizer = useVirtualizer({
-    count: tradePairs.length,
+    count: tradePairs2.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 50,
     overscan: 10,
@@ -25,12 +38,38 @@ export const ModalTradeTokenListContent: FC<Props> = ({
 
   useEffect(() => {
     if (parentRef.current) parentRef.current.scrollTop = 0;
+    if (!!search) setSelectedList('all');
   }, [search]);
+
+  const favoritesMap = useMemo(
+    () => new Set(tradePairs.favorites.map((pair) => buildPairKey(pair))),
+    [tradePairs.favorites]
+  );
+
+  const isFavorite = useCallback(
+    (tradePair: TradePair) => favoritesMap.has(buildPairKey(tradePair)),
+    [favoritesMap]
+  );
 
   return (
     <div>
-      <div className="text-secondary mt-20">{tradePairs.length} Pairs</div>
+      <div className={'my-20 flex justify-between'}>
+        <div className={'space-x-20'}>
+          {categories.map((category) => (
+            <button
+              key={category}
+              className={`capitalize ${
+                category === selectedList ? 'font-weight-500' : 'text-secondary'
+              }`}
+              onClick={() => setSelectedList(category)}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
 
+        <div className="text-secondary">{tradePairs2.length} Pairs</div>
+      </div>
       <div
         ref={parentRef}
         style={{
@@ -46,12 +85,15 @@ export const ModalTradeTokenListContent: FC<Props> = ({
           }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            const tradePair = tradePairs[virtualRow.index];
+            const tradePair = tradePairs2[virtualRow.index];
+            console.log(
+              `jan asd ${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`
+            );
             return (
               <div
-                key={virtualRow.key}
+                key={`${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}
                 data-index={virtualRow.index}
-                className={'flex w-full items-center'}
+                className={'flex w-full items-center justify-between'}
                 style={{
                   position: 'absolute',
                   height: `${virtualRow.size}px`,
@@ -68,6 +110,21 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   <span className={'font-weight-500'}>
                     {tradePair.baseToken.symbol} - {tradePair.quoteToken.symbol}
                   </span>
+                </button>
+                <button
+                  onClick={() =>
+                    isFavorite(tradePair)
+                      ? onRemoveFavorite(tradePair)
+                      : onAddFavorite(tradePair)
+                  }
+                >
+                  <IconStar
+                    className={`${
+                      isFavorite(tradePair)
+                        ? 'text-yellow-500/60'
+                        : 'text-white/20'
+                    } w-30 transition hover:text-yellow-500`}
+                  />
                 </button>
               </div>
             );

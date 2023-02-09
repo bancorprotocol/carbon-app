@@ -20,8 +20,18 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   id,
   data,
 }) => {
-  const { tradePairs, isLoading, isError, handleSelect, search, setSearch } =
-    useModalTradeTokenList({ id, data });
+  const {
+    tradePairs,
+    isLoading,
+    isError,
+    handleSelect,
+    search,
+    setSearch,
+    tradePairsPopular,
+    favoritePairs,
+    addFavoritePair,
+    removeFavoritePair,
+  } = useModalTradeTokenList({ id, data });
 
   return (
     <Modal id={id} title={'Select Token Pair'}>
@@ -38,8 +48,14 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
       ) : (
         <ModalTradeTokenListContent
           search={search}
-          tradePairs={tradePairs}
+          tradePairs={{
+            all: tradePairs,
+            favorites: favoritePairs,
+            popular: tradePairsPopular,
+          }}
           handleSelect={handleSelect}
+          onAddFavorite={addFavoritePair}
+          onRemoveFavorite={removeFavoritePair}
         />
       )}
     </Modal>
