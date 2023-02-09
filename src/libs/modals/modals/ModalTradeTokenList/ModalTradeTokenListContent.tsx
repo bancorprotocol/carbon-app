@@ -65,7 +65,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
         {categories.map((category, i) => (
           <button
             key={category}
-            className={`flex items-end justify-start capitalize ${
+            className={`flex items-end justify-start capitalize transition hover:text-white ${
               category === selectedList ? 'font-weight-500' : 'text-secondary'
             } ${i > 0 ? 'justify-center' : ''}`}
             onClick={() => setSelectedList(category)}
