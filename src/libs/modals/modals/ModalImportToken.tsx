@@ -9,6 +9,7 @@ import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
+import { Link } from 'libs/routing';
 
 export type ModalImportTokenData = {
   address: string;
@@ -59,17 +60,15 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         <div className={`${blockClasses} bg-silver p-16`}>
           <div className={'flex items-center justify-between'}>
             <div className={'font-weight-500'}>{data.symbol}</div>
-            <a
-              href={getExplorerLink('token', data.address)}
-              target={'_blank'}
+            <Link
+              to={getExplorerLink('token', data.address)}
               className={
                 'flex items-center text-14 font-weight-500 text-warning-500'
               }
-              rel="noreferrer"
             >
               <span className={'whitespace-nowrap'}>View on Explorer</span>
               <IconLink className={'ml-4 inline-flex h-14'} />
-            </a>
+            </Link>
           </div>
           <div className={'flex items-center justify-between'}>
             <div className={'text-secondary text-14'}>{data.name}</div>
