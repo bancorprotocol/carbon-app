@@ -17,5 +17,9 @@ export const Link: FC<LinkPropsType> = ({ to, children, ...props }) => {
     );
   }
 
-  return <TanstackLink {...props}>{children}</TanstackLink>;
+  return (
+    <TanstackLink to={to} {...props}>
+      {children}
+    </TanstackLink>
+  );
 };
