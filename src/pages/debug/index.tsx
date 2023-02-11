@@ -8,6 +8,7 @@ import { DebugResetDefault } from 'components/debug/DebugResetDefault';
 import { DebugNotifications } from 'components/debug/DebugNotifications';
 import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
 import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
+import { DebugWebWorker } from 'components/debug/DebugWebWorker';
 
 export const DebugPage = () => {
   return (
@@ -22,6 +23,7 @@ export const DebugPage = () => {
         <DebugNotifications />
         <DebugCreateStrategy />
         <DebugFiatCurrency />
+        <DebugWebWorker />
       </div>
     </Page>
   );
