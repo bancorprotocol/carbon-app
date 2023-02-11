@@ -50,7 +50,7 @@ export const Tooltip: FC<Props> = ({
     <m.div
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
-      className={`relative ${isOpen ? 'z-10' : ''}`}
+      className={`relative ${isOpen ? 'z-10' : ''} flex`}
     >
       <m.div
         ref={itemRef}

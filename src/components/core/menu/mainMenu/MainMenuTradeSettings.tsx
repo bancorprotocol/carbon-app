@@ -3,7 +3,7 @@ import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { Button } from 'components/common/button';
 
-export const MainMenuSettings: FC = () => {
+export const MainMenuTradeSettings: FC = () => {
   const { openModal } = useModal();
 
   return (

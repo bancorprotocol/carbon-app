@@ -4,6 +4,7 @@ import iconLedger from 'assets/logos/ledger.svg';
 import iconTrezor from 'assets/logos/trezor.svg';
 import { Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
+import { Link } from 'libs/routing';
 
 type Props = {
   onClick: (c: Connection) => Promise<void>;
@@ -41,18 +42,12 @@ export const ModalWalletContent: FC<Props> = ({ onClick }) => {
       ))}
 
       {EXT_LINKS.map(({ url, name, logoUrl }) => (
-        <a
-          key={url}
-          href={url}
-          target={'_blank'}
-          rel="noreferrer"
-          className={buttonClasses}
-        >
+        <Link key={url} to={url} className={buttonClasses}>
           <div className={'flex w-24 justify-center'}>
             <Imager alt={'Wallet Logo'} src={logoUrl} className={'h-24'} />
           </div>
           <span className={textClasses}>{name}</span>
-        </a>
+        </Link>
       ))}
     </div>
   );
