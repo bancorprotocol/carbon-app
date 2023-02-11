@@ -2,13 +2,13 @@ import { TradeWidget } from 'components/trade/tradeWidget/TradeWidget';
 import { OrderBookWidget } from 'components/trade/orderWidget/OrderBookWidget';
 import { DepthChartWidget } from 'components/trade/depthChartWidget/DepthChartWidget';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { MainMenuTokens } from 'components/core/menu/mainMenu/MainMenuTokens';
 import { config } from 'services/web3/config';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { useTradeTokens } from 'components/trade/useTradeTokens';
 import { useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTradePairs } from 'components/trade/useTradePairs';
+import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 
 export type TradePageProps = { base: Token; quote: Token };
 
@@ -83,7 +83,7 @@ export const TradePage = () => {
 
   return (
     <>
-      {belowBreakpoint('md') && <MainMenuTokens />}
+      {belowBreakpoint('md') && <MainMenuTrade />}
 
       {isLoading ? (
         <div>is loading</div>
