@@ -2,6 +2,7 @@ import { FC, ReactNode } from 'react';
 import { useModal } from 'hooks/useModal';
 import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
+import { Overlay } from 'libs/modals/Overlay';
 
 type Props = {
   children: ReactNode;
@@ -34,13 +35,9 @@ export const Modal: FC<Props> = ({
   const sizeClass = getSize(size);
 
   return (
-    <m.div
+    <Overlay
       onClick={() => closeModal(id)}
-      variants={fadeIn}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      className={`px-content fixed inset-0 z-40 flex items-center justify-center overflow-hidden bg-primary-500/20 outline-none backdrop-blur focus:outline-none`}
+      className={'px-content items-center justify-center'}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
@@ -71,14 +68,13 @@ export const Modal: FC<Props> = ({
           <div className="max-h-[70vh] overflow-y-auto">{children}</div>
         </div>
       </m.div>
-    </m.div>
+    </Overlay>
   );
 };
 
 const dropIn: Variants = {
   hidden: {
     y: '100vh',
-    //opacity: 0,
     scale: 0.7,
   },
   visible: {
@@ -100,24 +96,6 @@ const dropIn: Variants = {
     scale: 0.7,
     transition: {
       duration: 0.5,
-    },
-  },
-};
-
-const fadeIn: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.7,
     },
   },
 };

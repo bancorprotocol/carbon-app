@@ -2,6 +2,7 @@ import { FC, ReactNode } from 'react';
 import { useModal } from 'hooks/useModal';
 import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
+import { Overlay } from 'libs/modals/Overlay';
 
 type Props = {
   children: ReactNode;
@@ -34,14 +35,7 @@ export const ModalSlideOver: FC<Props> = ({
   const sizeClass = getSize(size);
 
   return (
-    <m.div
-      onClick={() => closeModal(id)}
-      variants={fadeIn}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      className={`fixed inset-0 z-50 flex justify-end overflow-hidden bg-primary-500/20 outline-none backdrop-blur focus:outline-none`}
-    >
+    <Overlay onClick={() => closeModal(id)} className={`justify-end`}>
       <m.div
         onClick={(e) => e.stopPropagation()}
         className={`relative w-full ${sizeClass}`}
@@ -71,14 +65,13 @@ export const ModalSlideOver: FC<Props> = ({
           <div className="overflow-y-auto">{children}</div>
         </div>
       </m.div>
-    </m.div>
+    </Overlay>
   );
 };
 
 const dropIn: Variants = {
   hidden: {
     x: '100vh',
-    //opacity: 0,
   },
   visible: {
     x: 0,
@@ -87,10 +80,6 @@ const dropIn: Variants = {
     transition: {
       delay: 0,
       duration: 0.5,
-      // type: 'spring',
-      // damping: 20,
-      // mass: 1,
-      // stiffness: 200,
     },
   },
   exit: {
@@ -98,24 +87,6 @@ const dropIn: Variants = {
     opacity: 0,
     transition: {
       duration: 0.5,
-    },
-  },
-};
-
-const fadeIn: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.7,
     },
   },
 };
