@@ -126,7 +126,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         fullWidth
         className={'mt-20'}
       >
-        {buy ? `Buy ${source.symbol}` : `Sell ${source.symbol}`}
+        {buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`}
       </Button>
     </div>
   );
