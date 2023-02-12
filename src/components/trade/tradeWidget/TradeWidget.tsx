@@ -1,46 +1,28 @@
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import { useTradePairs } from 'components/trade/useTradePairs';
-import { Button } from 'components/common/button';
 import { useGetTokenBalance } from 'libs/queries';
-import { useTradeTokens } from 'components/trade/useTradeTokens';
+import { TradePageProps } from 'pages/trade';
 
-export const TradeWidget = () => {
-  const { baseToken, quoteToken } = useTradeTokens();
-  const { openTradePairList, isLoading, isTradePairError } = useTradePairs();
-
-  const baseBalanceQuery = useGetTokenBalance(baseToken);
-  const quoteBalanceQuery = useGetTokenBalance(quoteToken);
-
-  const isValidPair = !(!baseToken || !quoteToken);
-
-  const noTokens = !baseToken && !quoteToken;
+export const TradeWidget = ({ base, quote }: TradePageProps) => {
+  const baseBalanceQuery = useGetTokenBalance(base);
+  const quoteBalanceQuery = useGetTokenBalance(quote);
 
   return (
     <>
-      {isLoading ? (
-        <div>is loading</div>
-      ) : isTradePairError || !isValidPair ? (
-        <div>
-          {!noTokens && <div>Not found</div>}
-          <Button onClick={openTradePairList}>Select Pair</Button>
-        </div>
-      ) : (
-        <div className={'grid grid-cols-2 gap-20'}>
-          <TradeWidgetBuySell
-            buy
-            source={quoteToken}
-            target={baseToken}
-            sourceBalanceQuery={quoteBalanceQuery}
-            targetBalanceQuery={baseBalanceQuery}
-          />
-          <TradeWidgetBuySell
-            source={baseToken}
-            target={quoteToken}
-            sourceBalanceQuery={baseBalanceQuery}
-            targetBalanceQuery={quoteBalanceQuery}
-          />
-        </div>
-      )}
+      <div className={'grid grid-cols-1 gap-20 md:grid-cols-2'}>
+        <TradeWidgetBuySell
+          buy
+          source={quote}
+          target={base}
+          sourceBalanceQuery={quoteBalanceQuery}
+          targetBalanceQuery={baseBalanceQuery}
+        />
+        <TradeWidgetBuySell
+          source={base}
+          target={quote}
+          sourceBalanceQuery={baseBalanceQuery}
+          targetBalanceQuery={quoteBalanceQuery}
+        />
+      </div>
     </>
   );
 };

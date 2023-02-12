@@ -1,15 +1,9 @@
-import { MakeGenerics, PathNames, useSearch, useNavigate } from 'libs/routing';
+import { PathNames, useSearch, useNavigate } from 'libs/routing';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'hooks/useModal';
 import { useGetTradePairsData } from 'libs/queries/sdk/pairs';
 import { useMemo } from 'react';
-
-type MyLocationGenerics = MakeGenerics<{
-  Search: {
-    base: string;
-    quote: string;
-  };
-}>;
+import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 
 export const useTradePairs = () => {
   const { openModal } = useModal();

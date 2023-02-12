@@ -2,6 +2,7 @@ import { FC, useEffect, useRef } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
 
 type Props = {
   tradePairs: TradePair[];
@@ -65,8 +66,16 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   <TokensOverlap
                     tokens={[tradePair.baseToken, tradePair.quoteToken]}
                   />
-                  <span className={'font-weight-500'}>
-                    {tradePair.baseToken.symbol} - {tradePair.quoteToken.symbol}
+                  <span className={'flex font-weight-500'}>
+                    {tradePair.baseToken.symbol}
+                    {tradePair.baseToken.isSuspicious && (
+                      <SuspiciousTokenWarning />
+                    )}
+                    <span className={'px-5 text-white/60'}>/</span>
+                    {tradePair.quoteToken.symbol}
+                    {tradePair.quoteToken.isSuspicious && (
+                      <SuspiciousTokenWarning />
+                    )}
                   </span>
                 </button>
               </div>

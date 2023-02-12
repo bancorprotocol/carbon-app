@@ -1070,10 +1070,10 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@bancor/carbon-sdk@0.0.34-DEV":
-  version "0.0.34-DEV"
-  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.34-DEV.tgz#74e9f41f24114019a743edf31778a517fb225970"
-  integrity sha512-o88o+5MJkeBXGsRBntp4rsdGBQD84ZloqgG9X5mIqICitxszWjQxwnp6NbemwN5eg+l1f+Qtm2b6AYCZ+DG9Wg==
+"@bancor/carbon-sdk@0.0.39-DEV":
+  version "0.0.39-DEV"
+  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.39-DEV.tgz#2e08e2a0c71c80aff2ee8ee4368d5c2ebcc46882"
+  integrity sha512-WZdkA5f/t7yRFo6GuoCUSkI/uQ8CGcMBv4iLKeyqpyxTA+WHSx6yuMPmvpls+RUdC8Dr5nabljD6EQilddMIaA==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
