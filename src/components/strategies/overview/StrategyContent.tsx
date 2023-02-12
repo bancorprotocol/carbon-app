@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { StrategyStatus, useGetUserStrategies } from 'libs/queries';
+import { Strategy, StrategyStatus, useGetUserStrategies } from 'libs/queries';
 import {
   StrategyFilter,
   StrategySort,
@@ -16,8 +16,35 @@ import { StrategyBlockCreate } from 'components/strategies/overview/strategyBloc
 export const StrategyContent = () => {
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState(StrategySort.Old);
+  const [sort, setSort] = useState(StrategySort.PairAscending);
   const [filter, setFilter] = useState(StrategyFilter.All);
+
+  const compareBySortType = useCallback(
+    (a: Strategy, b: Strategy) => {
+      let firstPairComparison;
+      switch (sort) {
+        case StrategySort.Recent:
+          return new BigNumber(a.id).minus(b.id).times(-1).toNumber();
+        case StrategySort.Old:
+          return new BigNumber(a.id).minus(b.id).toNumber();
+        case StrategySort.PairAscending:
+          firstPairComparison = a.token0.symbol.localeCompare(b.token0.symbol);
+          if (firstPairComparison !== 0) {
+            return firstPairComparison;
+          }
+          return a.token1.symbol.localeCompare(b.token1.symbol);
+        case StrategySort.PairDescending:
+          firstPairComparison = b.token0.symbol.localeCompare(a.token0.symbol);
+          if (firstPairComparison !== 0) {
+            return firstPairComparison;
+          }
+          return b.token1.symbol.localeCompare(a.token1.symbol);
+        default:
+          return new BigNumber(a.id).minus(b.id).times(-1).toNumber();
+      }
+    },
+    [sort]
+  );
 
   const filteredStrategies = useMemo(() => {
     const searchLC = search.toLowerCase();
@@ -33,11 +60,10 @@ export const StrategyContent = () => {
             strategy.status !== StrategyStatus.Active))
     );
 
-    const sorterNum = sort === StrategySort.Recent ? -1 : 1;
-    return filtered?.sort((a, b) =>
-      new BigNumber(a.id).minus(b.id).times(sorterNum).toNumber()
-    );
-  }, [search, strategies.data, filter, sort]);
+    return filtered?.sort((a, b) => {
+      return compareBySortType(a, b);
+    });
+  }, [search, strategies.data, filter, compareBySortType]);
 
   if (strategies && strategies.data && strategies.data.length === 0)
     return <StrategyCreateFirst />;
