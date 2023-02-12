@@ -27,7 +27,7 @@ export const InputLimit: FC<{
           }
           placeholder="Enter Price"
           className={
-            'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
+            'w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
           }
         />
       </div>
