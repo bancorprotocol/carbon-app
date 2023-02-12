@@ -53,7 +53,7 @@ export const CreateStrategy = () => {
           showGraph ? 'justify-between' : 'justify-center'
         } gap-20 p-20`}
       >
-        <div className="min-w-[400px] space-y-20">
+        <div className="w-[400px] space-y-20">
           <div className="flex flex-row justify-between">
             <div className="flex items-center gap-16 text-24">
               <button
