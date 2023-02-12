@@ -1,19 +1,17 @@
 import { Highcharts, HighchartsReact } from 'libs/charts';
 import { NoData } from 'components/common/noData';
 import { useDepthChartWidget } from './useDepthChartWidget';
-import { useTradeTokens } from '../useTradeTokens';
+import { TradePageProps } from 'pages/trade';
 
-export const DepthChartWidget = () => {
-  const { baseToken, quoteToken } = useTradeTokens();
+export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
   const { buyOrders, sellOrders, getOptions } = useDepthChartWidget(
-    baseToken?.address,
-    quoteToken?.address
+    base.address,
+    quote.address
   );
 
   const options = getOptions(buyOrders, sellOrders);
 
-  const isError =
-    !baseToken || !quoteToken || !buyOrders || !sellOrders || !options;
+  const isError = !base || !quote || !buyOrders || !sellOrders || !options;
 
   return (
     <div className="rounded-10 bg-silver p-20">

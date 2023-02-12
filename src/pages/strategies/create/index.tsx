@@ -6,7 +6,7 @@ export const CreateStrategyPage = () => {
   const { user } = useWeb3();
 
   return user ? (
-    <div className={'mx-auto max-w-[400px]'}>
+    <div className={'px-content mx-auto mt-50 max-w-[400px]'}>
       <CreateStrategy />
     </div>
   ) : (

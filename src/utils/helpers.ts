@@ -68,14 +68,16 @@ export function prettifyNumber(
 
 export function prettifyNumber(
   num: number | string | BigNumber,
-  options?: { usd?: boolean; abbreviate?: boolean }
+  options?: { usd?: boolean; abbreviate?: boolean; highPrecision?: boolean }
 ): string;
 
 export function prettifyNumber(
   num: number | string | BigNumber,
-  optionsOrUsd?: { usd?: boolean; abbreviate?: boolean } | boolean
+  optionsOrUsd?:
+    | { usd?: boolean; abbreviate?: boolean; highPrecision?: boolean }
+    | boolean
 ): string {
-  let usd, abbreviate;
+  let usd, abbreviate, highPrecision;
   if (optionsOrUsd === undefined) {
     usd = false;
     abbreviate = false;
@@ -85,13 +87,16 @@ export function prettifyNumber(
   } else {
     usd = optionsOrUsd.usd;
     abbreviate = optionsOrUsd.abbreviate;
+    highPrecision = optionsOrUsd.highPrecision;
   }
 
   const bigNum = new BigNumber(num);
   if (usd) {
     if (bigNum.lte(0)) return '$0.00';
     if (bigNum.lt(0.01)) return '< $0.01';
-    if (bigNum.gt(100)) return numeral(bigNum).format('$0,0', Math.floor);
+    if (!highPrecision) {
+      if (bigNum.gt(100)) return numeral(bigNum).format('$0,0', Math.floor);
+    }
     if (abbreviate && bigNum.gt(999999))
       return `$${numbro(bigNum).format(prettifyNumberAbbreviateFormat)}`;
     return numeral(bigNum).format('$0,0.00', Math.floor);
@@ -100,10 +105,12 @@ export function prettifyNumber(
   if (bigNum.lte(0)) return '0';
   if (abbreviate && bigNum.gt(999999))
     return numbro(bigNum).format(prettifyNumberAbbreviateFormat);
-  if (bigNum.gte(1000)) return numeral(bigNum).format('0,0', Math.floor);
-  if (bigNum.gte(2)) return numeral(bigNum).format('0,0.[00]', Math.floor);
+  if (!highPrecision) {
+    if (bigNum.gte(1000)) return numeral(bigNum).format('0,0', Math.floor);
+    if (bigNum.gte(2)) return numeral(bigNum).format('0,0.[00]', Math.floor);
+  }
   if (bigNum.lt(0.000001)) return '< 0.000001';
-  return numeral(bigNum).format('0.[000000]', Math.floor);
+  return numeral(bigNum).format('0,0.[000000]', Math.floor);
 }
 
 export const wait = async (ms: number = 0) =>

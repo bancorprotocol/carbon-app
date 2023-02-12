@@ -35,21 +35,22 @@ const buildOrderBook = async (
     rate = buy ? rate : ONE.div(rate).toString();
     rate = minEqMax ? max.toString() : rate;
     i++;
-    let amount = await carbonSDK.getRateLiquidityDepthByPair(
+    const amount = await carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
       quoteToken,
       rate
     );
-    if (amount === '0') {
+    let amountBn = new BigNumber(amount);
+    if (amountBn.eq(0)) {
       continue;
     }
     if (buy) {
-      amount = new BigNumber(amount).div(rate).toString();
+      amountBn = amountBn.div(rate);
     } else {
       rate = ONE.div(rate).toString();
     }
-    const total = new BigNumber(amount).times(rate).toString();
-    orders.push({ rate, total, amount });
+    const total = amountBn.times(rate).toString();
+    orders.push({ rate, total, amount: amountBn.toString() });
   }
   return orders;
 };
