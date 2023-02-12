@@ -1,5 +1,5 @@
 import { Highcharts, HighchartsReact } from 'libs/charts';
-import { NoOrders } from 'components/common/noOrders';
+import { NoOrders } from 'components/common/noOrder';
 import { useDepthChartWidget } from './useDepthChartWidget';
 import { TradePageProps } from 'pages/trade';
 
