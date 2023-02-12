@@ -2,9 +2,9 @@ import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { UseQueryResult } from 'libs/queries';
 import { Token } from 'libs/tokens';
-import { items } from './index';
 import { BuySellBlock } from './BuySellBlock';
 import { OrderCreate } from './useOrder';
+import { items } from './variants';
 
 type StepTwoProps = {
   token0: Token | undefined;
