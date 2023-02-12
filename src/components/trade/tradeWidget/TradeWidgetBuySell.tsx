@@ -114,7 +114,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           )}
         </>
       ) : (
-        <NotEnoughLiquidity source={source} target={target} />
+        <NotEnoughLiquidity
+          source={buy ? target : source}
+          target={buy ? source : target}
+        />
       )}
       <Button
         disabled={!hasEnoughLiquidity}
