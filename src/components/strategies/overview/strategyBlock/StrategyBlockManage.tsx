@@ -3,7 +3,8 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
-import { Strategy } from 'libs/queries';
+import { Strategy, StrategyStatus } from 'libs/queries';
+import { useModal } from 'hooks/useModal';
 
 export const StrategyBlockManage: FC<{
   strategy: Strategy;
@@ -11,6 +12,7 @@ export const StrategyBlockManage: FC<{
   setManage: (flag: boolean) => void;
 }> = ({ strategy, manage, setManage }) => {
   const { duplicate } = useDuplicateStrategy();
+  const { openModal } = useModal();
   const items = [
     {
       name: 'Withdraw Funds',
@@ -23,6 +25,13 @@ export const StrategyBlockManage: FC<{
       name: 'Delete Strategy',
     },
   ];
+
+  if (strategy.status === StrategyStatus.Active) {
+    items.push({
+      name: 'Take Off Curve',
+      action: () => openModal('pauseStrategy', { strategy }),
+    });
+  }
 
   return (
     <DropdownMenu
