@@ -35,7 +35,7 @@ type ScriptHTML = {
   container_id: string;
 };
 
-const Widget: React.FC<WidgetProps> = ({ symbol }) => {
+export const Widget: React.FC<WidgetProps> = ({ symbol }) => {
   const containerId = 'tradingview_container';
   const ref: { current: HTMLDivElement | null } = createRef();
 
@@ -81,5 +81,3 @@ const Widget: React.FC<WidgetProps> = ({ symbol }) => {
 
   return <div ref={ref} id={containerId} />;
 };
-
-export default Widget;

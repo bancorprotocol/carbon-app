@@ -7,12 +7,12 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useLocation } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
-import { Chart } from 'components/chart';
+import { TradingviewChart } from 'components/tradingviewChart/index';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { StepTwo } from './stepTwo';
 
-const MemoChart = memo(Chart);
+const MemoChart = memo(TradingviewChart);
 
 export const CreateStrategy = () => {
   const [showGraph, setShowGraph] = useState(false);
