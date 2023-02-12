@@ -13,7 +13,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
 
   const wrappedNoOrders = () => {
     return (
-      <div className="flex h-[300px] items-center justify-center rounded-10 bg-black text-center">
+      <div className="flex h-[396px] items-center justify-center rounded-10 bg-black text-center">
         <NoOrders />
       </div>
     );
