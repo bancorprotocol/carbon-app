@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import BigNumber from 'bignumber.js';
 import { StrategyStatus, useGetUserStrategies } from 'libs/queries';
 import {
   StrategyFilter,
@@ -12,12 +11,14 @@ import { StrategyNotFound } from './StrategyNotFound';
 import { m, mListVariant } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
+import { getCompareFunctionBySortType } from './utils';
 
 export const StrategyContent = () => {
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState(StrategySort.Old);
   const [filter, setFilter] = useState(StrategyFilter.All);
+  const compareFunction = getCompareFunctionBySortType(sort);
 
   const filteredStrategies = useMemo(() => {
     const searchLC = search.toLowerCase();
@@ -33,11 +34,10 @@ export const StrategyContent = () => {
             strategy.status !== StrategyStatus.Active))
     );
 
-    const sorterNum = sort === StrategySort.Recent ? -1 : 1;
-    return filtered?.sort((a, b) =>
-      new BigNumber(a.id).minus(b.id).times(sorterNum).toNumber()
-    );
-  }, [search, strategies.data, filter, sort]);
+    return filtered?.sort((a, b) => {
+      return compareFunction(a, b);
+    });
+  }, [search, strategies.data, filter, compareFunction]);
 
   if (strategies && strategies.data && strategies.data.length === 0)
     return <StrategyCreateFirst />;
