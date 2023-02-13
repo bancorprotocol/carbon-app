@@ -8,12 +8,12 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   {
-    label: 'Trade',
-    href: PathNames.trade,
-  },
-  {
     label: 'Strategies',
     href: PathNames.strategies,
+  },
+  {
+    label: 'Trade',
+    href: PathNames.trade,
   },
   ...(isProduction
     ? []
