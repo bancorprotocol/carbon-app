@@ -1088,7 +1088,7 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@coinbase/wallet-sdk@^3.5.3":
+"@coinbase/wallet-sdk@^3.6.3":
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-3.6.3.tgz#fd96f6f19d5a0090520c1b014ad4737bbc8e1267"
   integrity sha512-XUR4poOJE+dKzwBTdlM693CdLFitr046oZOVY3iDnbFcRrrQswhbDji7q4CmUcD4HxbfViX7PFoIwl79YQcukg==
@@ -3101,10 +3101,10 @@
   dependencies:
     "@walletconnect/window-getters" "^1.0.0"
 
-"@web3-react/coinbase-wallet@8.0.34-beta.0":
-  version "8.0.34-beta.0"
-  resolved "https://registry.yarnpkg.com/@web3-react/coinbase-wallet/-/coinbase-wallet-8.0.34-beta.0.tgz#43d51bb440fb4b98cc2c33782714da30ab8e1fb6"
-  integrity sha512-eGgtGtAqcRL64U1lcWeICB9CmpUycVl/mWD/b2Nd7yE0hXFUbPGLZHNvBTpnOpkANkjHI5ufFoyDGzzoxdw12A==
+"@web3-react/coinbase-wallet@8.0.35-beta.0":
+  version "8.0.35-beta.0"
+  resolved "https://registry.yarnpkg.com/@web3-react/coinbase-wallet/-/coinbase-wallet-8.0.35-beta.0.tgz#903df113a0987f0b28c07941a82c05f227cbccf8"
+  integrity sha512-wSITb75xIfERw1rZA8t35mJ3Lq459Emt2ybraWvT0TAIVTzHGCKvEm3WglEVWj5CMy1X1lrJvWJ0ZfWUj1/0Lg==
   dependencies:
     "@web3-react/types" "^8.0.20-beta.0"
 

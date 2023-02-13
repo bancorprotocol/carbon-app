@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@bancor/carbon-sdk": "0.0.39-DEV",
-    "@coinbase/wallet-sdk": "^3.5.3",
+    "@coinbase/wallet-sdk": "^3.6.3",
     "@ethersproject/providers": "^5.7.1",
     "@popperjs/core": "^2.11.6",
     "@tanstack/react-location": "^3.7.4",
@@ -23,7 +23,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@walletconnect/ethereum-provider": "^1.8.0",
-    "@web3-react/coinbase-wallet": "8.0.34-beta.0",
+    "@web3-react/coinbase-wallet": "8.0.35-beta.0",
     "@web3-react/core": "8.0.35-beta.0",
     "@web3-react/gnosis-safe": "8.0.7-beta.0",
     "@web3-react/metamask": "8.0.28-beta.0",
