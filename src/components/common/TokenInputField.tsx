@@ -119,7 +119,7 @@ export const TokenInputField: FC<Props> = ({
           'text-secondary mt-10 flex items-center justify-between font-mono !text-12 font-weight-500'
         }
       >
-        {user && typeof isBalanceLoading === 'boolean' ? (
+        {user && isBalanceLoading !== undefined ? (
           <button
             onClick={handleBalanceClick}
             className={'group flex items-center'}
