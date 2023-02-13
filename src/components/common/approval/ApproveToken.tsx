@@ -113,7 +113,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
               />
             </div>
             <Button variant={'white'} onClick={onApprove} size={'sm'}>
-              Confirm
+              Approve
             </Button>
           </div>
         )
