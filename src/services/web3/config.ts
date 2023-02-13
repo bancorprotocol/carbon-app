@@ -10,6 +10,7 @@ export interface Config {
     USDC: string;
     DAI: string;
     WBTC: string;
+    SHIB: string;
   };
   carbon: {
     carbonController: string;

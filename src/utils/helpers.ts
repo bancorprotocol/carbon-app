@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import numeral from 'numeral';
 import numbro from 'numbro';
 import { config } from 'services/web3/config';
+import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 
 export const isProduction = window.location.host.includes('bancor.network');
 
@@ -120,3 +121,9 @@ export const randomIntFromInterval = (min: number, max: number) => {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
+
+export const buildPairKey = (pair: TradePair) =>
+  [
+    pair.baseToken.address.toLowerCase(),
+    pair.quoteToken.address.toLowerCase(),
+  ].join('-');

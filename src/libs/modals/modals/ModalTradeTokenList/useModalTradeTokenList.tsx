@@ -13,7 +13,15 @@ type Props = {
 };
 
 export const useModalTradeTokenList = ({ id, data }: Props) => {
-  const { tradePairs, isLoading, isError } = useTradePairs();
+  const {
+    tradePairs,
+    isLoading,
+    isError,
+    tradePairsPopular,
+    favoritePairs,
+    addFavoritePair,
+    removeFavoritePair,
+  } = useTradePairs();
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
 
@@ -47,17 +55,21 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
     return orderBy(baseTokens, 'baseToken.symbol', 'asc');
   }, [tradePairs, search]);
 
-  const handleSelect = (tradePair: TradePair) => {
+  const handleSelect = async (tradePair: TradePair) => {
     data.onClick(tradePair);
     closeModal(id);
   };
 
   return {
     tradePairs: filteredPairs,
+    tradePairsPopular,
     isLoading,
     isError,
     handleSelect,
     search,
     setSearch,
+    favoritePairs,
+    addFavoritePair,
+    removeFavoritePair,
   };
 };
