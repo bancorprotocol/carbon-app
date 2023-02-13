@@ -7,7 +7,6 @@ import {
 import { ConnectionType } from 'libs/web3/web3.constants';
 import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { lsService } from 'services/localeStorage';
 
 export const useWeb3Network = () => {
   const { connector } = useWeb3React();
@@ -31,21 +30,17 @@ export const useWeb3Network = () => {
     try {
       await network.connector.activate();
       setIsNetworkActive(true);
-      const connectionType = lsService.getItem('connectionType');
-      if (connectionType !== undefined) {
-        const c = getConnection(connectionType);
-        await c.connector.connectEagerly?.();
-      } else {
-        if (IS_IN_IFRAME) {
-          const c = getConnection(ConnectionType.GNOSIS_SAFE);
-          await c.connector.connectEagerly?.();
-        } else if (IS_METAMASK_WALLET) {
-          const c = getConnection(ConnectionType.INJECTED);
-          await c.connector.connectEagerly?.();
-        } else if (IS_COINBASE_WALLET) {
-          const c = getConnection(ConnectionType.COINBASE_WALLET);
-          await c.connector.connectEagerly?.();
-        }
+      if (IS_IN_IFRAME) {
+        const c = getConnection(ConnectionType.GNOSIS_SAFE);
+        return await c.connector.connectEagerly?.();
+      }
+      if (IS_METAMASK_WALLET) {
+        const c = getConnection(ConnectionType.INJECTED);
+        return await c.connector.connectEagerly?.();
+      }
+      if (IS_COINBASE_WALLET) {
+        const c = getConnection(ConnectionType.COINBASE_WALLET);
+        return await c.connector.connectEagerly?.();
       }
     } catch (e: any) {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
