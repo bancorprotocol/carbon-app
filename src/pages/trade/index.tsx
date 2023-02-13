@@ -66,8 +66,8 @@ export const TradePage = () => {
       if (foundDefault) {
         goToPair(foundDefault[0], foundDefault[1], true);
       }
-      setHasMounted(true);
     }
+    setHasMounted(true);
   }, [
     baseToken,
     goToPair,
