@@ -53,12 +53,12 @@ const checkDefaultPairs = (
 
 export const TradePage = () => {
   const { belowBreakpoint } = useBreakpoints();
-  const { baseToken, quoteToken, goToPair } = useTradeTokens();
+  const { baseToken, quoteToken, goToPair, isTradePage } = useTradeTokens();
   const { isLoading, isTradePairError, tradePairs } = useTradePairs();
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    if (hasMounted) {
+    if (hasMounted && !isTradePage) {
       return;
     }
     if (!!tradePairs.length && !baseToken && !quoteToken) {
@@ -72,6 +72,7 @@ export const TradePage = () => {
     baseToken,
     goToPair,
     hasMounted,
+    isTradePage,
     quoteToken,
     tradePairs,
     tradePairs.length,
