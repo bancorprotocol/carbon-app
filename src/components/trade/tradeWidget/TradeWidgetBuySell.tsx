@@ -49,6 +49,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ${target.symbol}`;
   };
 
+  const getLiquidty = () => {
+    const value = liquidityQuery.isLoading
+      ? 'loading'
+      : prettifyNumber(liquidityQuery.data);
+    return `Liquidity: ${value} ${target.symbol}`;
+  };
+
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
       <h2 className={'mb-20'}>
@@ -108,11 +115,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           </div>
 
           <div className={'text-secondary mt-5 text-right'}>
-            Liquidity:{' '}
-            {liquidityQuery.isLoading
-              ? 'loading'
-              : prettifyNumber(liquidityQuery.data)}{' '}
-            {target.symbol}
+            {getLiquidty()}
           </div>
         </>
       ) : (
