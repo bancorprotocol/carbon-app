@@ -13,7 +13,6 @@ interface LocalStorageSchema {
   tenderlyRpc: string;
   imposterAccount: string;
   importedTokens: Token[];
-  // TODO check for autocomplete possibility
   [k: `notifications-${string}`]: Notification[];
   tradeSlippage: string;
   tradeDeadline: string;
