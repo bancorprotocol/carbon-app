@@ -1,4 +1,9 @@
-import { getConnection } from 'libs/web3/web3.utils';
+import {
+  getConnection,
+  IS_COINBASE_WALLET,
+  IS_IN_IFRAME,
+  IS_METAMASK_WALLET,
+} from 'libs/web3/web3.utils';
 import { ConnectionType } from 'libs/web3/web3.constants';
 import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
@@ -31,9 +36,16 @@ export const useWeb3Network = () => {
         const c = getConnection(connectionType);
         await c.connector.connectEagerly?.();
       } else {
-        const gnosis = getConnection(ConnectionType.GNOSIS_SAFE);
-        await gnosis.connector.connectEagerly?.();
-        // await connector.connectEagerly?.();
+        if (IS_IN_IFRAME) {
+          const c = getConnection(ConnectionType.GNOSIS_SAFE);
+          await c.connector.connectEagerly?.();
+        } else if (IS_METAMASK_WALLET) {
+          const c = getConnection(ConnectionType.INJECTED);
+          await c.connector.connectEagerly?.();
+        } else if (IS_COINBASE_WALLET) {
+          const c = getConnection(ConnectionType.COINBASE_WALLET);
+          await c.connector.connectEagerly?.();
+        }
       }
     } catch (e: any) {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
