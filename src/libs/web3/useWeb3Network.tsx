@@ -31,14 +31,16 @@ export const useWeb3Network = () => {
         const c = getConnection(connectionType);
         await c.connector.connectEagerly?.();
       } else {
-        await connector.connectEagerly?.();
+        const gnosis = getConnection(ConnectionType.GNOSIS_SAFE);
+        await gnosis.connector.connectEagerly?.();
+        // await connector.connectEagerly?.();
       }
     } catch (e: any) {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
       console.error('activateNetwork failed.', msg);
       setNetworkError(msg);
     }
-  }, [connector, isNetworkActive, network.connector, networkError]);
+  }, [isNetworkActive, network.connector, networkError]);
 
   useEffect(() => {
     void activateNetwork();
