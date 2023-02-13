@@ -4,6 +4,7 @@ import {
 } from 'components/common/iconTitleText/IconTitleText';
 import { FC, ReactNode } from 'react';
 import { Button } from 'components/common/button';
+import { Link } from 'libs/routing';
 
 type Props = IconTitleTextProps & {
   children?: ReactNode;
@@ -20,10 +21,11 @@ export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
       {children ? (
         children
       ) : (
-        // TODO: Add support link
-        <Button variant={'error'} fullWidth>
-          Contact Support
-        </Button>
+        <Link to={'https://faq.carbondefi.xyz/'}>
+          <Button variant={'error'} fullWidth>
+            Contact Support
+          </Button>
+        </Link>
       )}
     </div>
   );

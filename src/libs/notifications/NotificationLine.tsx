@@ -7,6 +7,7 @@ import { getExplorerLink } from 'utils/blockExplorer';
 import { unix } from 'libs/dayjs';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
+import { Link } from 'libs/routing';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
@@ -81,14 +82,12 @@ export const NotificationLine: FC<{
         <div className="text-14 text-charcoal/80 dark:text-white/80">
           <div>{getDescriptionByStatus(notification)}</div>
           {notification.txHash && (
-            <a
-              href={getExplorerLink('tx', notification.txHash)}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to={getExplorerLink('tx', notification.txHash)}
               className={'mt-10 flex items-center font-weight-500'}
             >
               View on Etherscan <IconLink className="ml-6 w-14" />
-            </a>
+            </Link>
           )}
         </div>
       </div>

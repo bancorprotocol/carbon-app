@@ -5,6 +5,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
+import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -116,8 +117,16 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   <TokensOverlap
                     tokens={[tradePair.baseToken, tradePair.quoteToken]}
                   />
-                  <span className={'font-weight-500'}>
-                    {tradePair.baseToken.symbol} / {tradePair.quoteToken.symbol}
+                  <span className={'flex font-weight-500'}>
+                    {tradePair.baseToken.symbol}
+                    {tradePair.baseToken.isSuspicious && (
+                      <SuspiciousTokenWarning />
+                    )}
+                    <span className={'px-5 text-white/60'}>/</span>
+                    {tradePair.quoteToken.symbol}
+                    {tradePair.quoteToken.isSuspicious && (
+                      <SuspiciousTokenWarning />
+                    )}
                   </span>
                 </button>
                 <button
