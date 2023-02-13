@@ -21,5 +21,11 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "providedBy": {
+    "name": "Carbon",
+    "url": "https://carbondefi.xyz"
+  },
+  "description": "Carbon is a decentralized finance protocol developed by Bancor.",
+  "iconPath": "logo512.png"
 }

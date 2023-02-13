@@ -21,3 +21,10 @@ export const getConnection = (c: ConnectionType) => {
       return gnosisSafeConnection;
   }
 };
+
+export const IS_IN_IFRAME = window.self !== window.top;
+
+export const IS_METAMASK_WALLET = window.ethereum && window.ethereum.isMetaMask;
+export const IS_COINBASE_WALLET =
+  // @ts-ignore
+  window.ethereum && window.ethereum.isCoinbaseWallet;

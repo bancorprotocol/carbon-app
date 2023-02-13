@@ -28,6 +28,7 @@ export const SELECTABLE_CONNECTION_TYPES: ConnectionType[] = [
   ConnectionType.INJECTED,
   ConnectionType.WALLET_CONNECT,
   ConnectionType.COINBASE_WALLET,
+  ConnectionType.GNOSIS_SAFE,
 ];
 
 export const RPC_URLS: ChainIdMapTo<string> = {
