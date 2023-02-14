@@ -3,7 +3,7 @@ import { Strategy, StrategyStatus } from 'libs/queries';
 import { Imager } from 'components/common/imager/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
-import { Tooltip } from 'components/common/tooltip';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -31,31 +31,33 @@ export const StrategyBlockBuySell: FC<{
         active ? '' : 'opacity-35'
       }`}
     >
-      <Tooltip
-        element={
+      <div className="flex items-center gap-6">
+        <Tooltip
+          element={
+            buy
+              ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
+              : `This section indicates the details to which you are willing to sell ${token.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`
+          }
+        >
           <div className="flex items-center gap-6">
             {buy ? 'Buy' : 'Sell'}
             <Imager className="h-16 w-16" src={token.logoURI} alt="token" />
           </div>
-        }
-      >
-        {buy
-          ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
-          : `This section indicates the details to which you are willing to sell ${token.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`}
-      </Tooltip>
+        </Tooltip>
+      </div>
       <hr className="my-12 border-silver dark:border-emphasis" />
       <div>
         <div className="mb-5 flex items-center justify-between">
           <Tooltip
             element={
-              <div className={`${buy ? 'text-green' : 'text-red'}`}>
-                {limit ? 'Limit Price' : 'Price Range'}
-              </div>
+              buy
+                ? `This is the rate in which you are willing to buy ${token.symbol}.`
+                : `This is the rate in which you are willing to sell ${token.symbol}.`
             }
           >
-            {buy
-              ? `This is the rate in which you are willing to buy ${token.symbol}.`
-              : `This is the rate in which you are willing to sell ${token.symbol}.`}
+            <div className={`${buy ? 'text-green' : 'text-red'}`}>
+              {limit ? 'Limit Price' : 'Price Range'}
+            </div>
           </Tooltip>
           <div className="flex items-center gap-7">
             {prices}
@@ -68,11 +70,13 @@ export const StrategyBlockBuySell: FC<{
         </div>
         <div className="mb-10 flex items-center justify-between">
           <Tooltip
-            element={<div className="text-secondary !text-16">Budget</div>}
+            element={
+              buy
+                ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
+                : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`
+            }
           >
-            {buy
-              ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
-              : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`}
+            <div className="text-secondary !text-16">Budget</div>
           </Tooltip>
           <div className="flex items-center gap-7">
             {prettifyNumber(order.balance, {
