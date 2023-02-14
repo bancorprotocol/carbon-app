@@ -85,6 +85,10 @@
     @apply text-14 text-white/60;
   }
 
+  .text-tooltip {
+    @apply text-14 text-white;
+  }
+
   .loading-skeleton {
     @apply animate-pulse rounded-10 bg-silver;
   }
