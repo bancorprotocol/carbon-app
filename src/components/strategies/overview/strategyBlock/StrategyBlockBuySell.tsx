@@ -14,6 +14,16 @@ export const StrategyBlockBuySell: FC<{
   const limit = order.startRate === order.endRate;
   const active = strategy.status === StrategyStatus.Active;
 
+  const prices = `${prettifyNumber(order.startRate, {
+    abbreviate: order.startRate.length > 10,
+  })} ${
+    !limit
+      ? ` - ${prettifyNumber(order.endRate, {
+          abbreviate: order.endRate.length > 10,
+        })}`
+      : ''
+  }`;
+
   return (
     <div
       className={`rounded-8 border border-emphasis p-12 ${
@@ -35,14 +45,7 @@ export const StrategyBlockBuySell: FC<{
             {limit ? 'Limit Price' : 'Price Range'}
           </div>
           <div className="flex items-center gap-7">
-            {prettifyNumber(order.startRate, {
-              abbreviate: order.startRate.length > 10,
-            })}
-
-            {!limit &&
-              ` - ${prettifyNumber(order.endRate, {
-                abbreviate: order.endRate.length > 10,
-              })}`}
+            {prices}
             <Imager
               className="h-16 w-16"
               src={buy ? otherToken.logoURI : token.logoURI}
