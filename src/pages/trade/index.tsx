@@ -5,7 +5,7 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { config } from 'services/web3/config';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { useTradeTokens } from 'components/trade/useTradeTokens';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Token } from 'libs/tokens';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
@@ -52,13 +52,13 @@ const checkDefaultPairs = (
 };
 
 export const TradePage = () => {
+  const hasMounted = useRef(false);
   const { belowBreakpoint } = useBreakpoints();
-  const { baseToken, quoteToken, goToPair } = useTradeTokens();
+  const { baseToken, quoteToken, goToPair, isTradePage } = useTradeTokens();
   const { isLoading, isTradePairError, tradePairs } = useTradePairs();
-  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    if (hasMounted) {
+    if (hasMounted.current && !isTradePage) {
       return;
     }
     if (!!tradePairs.length && !baseToken && !quoteToken) {
@@ -66,12 +66,13 @@ export const TradePage = () => {
       if (foundDefault) {
         goToPair(foundDefault[0], foundDefault[1], true);
       }
-      setHasMounted(true);
     }
+    hasMounted.current = true;
   }, [
     baseToken,
     goToPair,
     hasMounted,
+    isTradePage,
     quoteToken,
     tradePairs,
     tradePairs.length,

@@ -5,9 +5,9 @@ import { useCreate } from './useCreateStrategy';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useLocation } from 'libs/routing';
-import { Tooltip } from 'components/common/tooltip';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
-import { TradingviewChart } from 'components/tradingviewChart/index';
+import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { StepTwo } from './stepTwo';
@@ -75,12 +75,12 @@ export const CreateStrategy = () => {
           <m.div variants={items} className="bg-secondary rounded-10 p-20">
             <div className="mb-14 flex items-center justify-between">
               <h2>Token Pair</h2>
-              <Tooltip>
-                Selecting the tokens you would like to create a strategy for.
+              <Tooltip
+                element="Selecting the tokens you would like to create a strategy for.
                 The Base token represents how much of the Quoted token is needed
                 for you to get one unit of the Base token (i.e. 1 Base token =
-                xxx Quote token).
-              </Tooltip>
+                xxx Quote token)."
+              />
             </div>
             <div className={'-space-y-15'}>
               <SelectTokenButton
