@@ -35,24 +35,28 @@ export const StrategyBlockBuySell: FC<{
         element={
           <div className="flex items-center gap-6">
             {buy ? 'Buy' : 'Sell'}
-            <Imager
-              className="h-16 w-16"
-              src={buy ? token.logoURI : otherToken.logoURI}
-              alt="token"
-            />
+            <Imager className="h-16 w-16" src={token.logoURI} alt="token" />
           </div>
         }
       >
         {buy
           ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
-          : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`}
+          : `This section indicates the details to which you are willing to sell ${token.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`}
       </Tooltip>
       <hr className="my-12 border-silver dark:border-emphasis" />
       <div>
         <div className="mb-5 flex items-center justify-between">
-          <div className={`${buy ? 'text-green' : 'text-red'}`}>
-            {limit ? 'Limit Price' : 'Price Range'}
-          </div>
+          <Tooltip
+            element={
+              <div className={`${buy ? 'text-green' : 'text-red'}`}>
+                {limit ? 'Limit Price' : 'Price Range'}
+              </div>
+            }
+          >
+            {buy
+              ? `This is the rate in which you are willing to buy ${token.symbol}.`
+              : `This is the rate in which you are willing to sell ${token.symbol}.`}
+          </Tooltip>
           <div className="flex items-center gap-7">
             {prices}
             <Imager
