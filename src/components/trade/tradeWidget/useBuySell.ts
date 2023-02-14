@@ -189,7 +189,7 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      if (new BigNumber(sourceInput).gt(liquidityQuery.data || 0)) {
+      if (new BigNumber(targetInput).gt(liquidityQuery.data || 0)) {
         setIsLiquidityError(true);
         setSourceInput('...');
         return;
