@@ -103,13 +103,21 @@ export const BuySellBlock: FC<Props> = ({
         >
           1
         </div>
-        <div className={'text-14 font-weight-500 text-white/60'}>
-          Set {buy ? 'Buy' : 'Sell'} Price{' '}
-          <span className={'ml-8 text-white/80'}>
-            ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
-            {token0.symbol})
-          </span>
-        </div>
+        <Tooltip
+          element={`Define the rate you are willing to ${
+            buy ? 'buy' : 'sell'
+          } ${token0.symbol} at. Make sure the price is in ${
+            token1.symbol
+          } tokens.`}
+        >
+          <div className={'text-14 font-weight-500 text-white/60'}>
+            <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
+            <span className={'ml-8 text-white/80'}>
+              ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
+              {token0.symbol})
+            </span>
+          </div>
+        </Tooltip>
       </div>
 
       {isRange ? (
@@ -120,6 +128,8 @@ export const BuySellBlock: FC<Props> = ({
           setMax={order.setMax}
           error={order.rangeError}
           setRangeError={order.setRangeError}
+          token={token0}
+          buy={buy}
         />
       ) : (
         <InputLimit
