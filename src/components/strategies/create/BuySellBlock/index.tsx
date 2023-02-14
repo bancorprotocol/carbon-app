@@ -26,6 +26,10 @@ export const BuySellBlock: FC<Props> = ({
 }) => {
   const budgetToken = buy ? token1 : token0;
   const title = buy ? 'Buy Low' : 'Sell High';
+  const tooltipText = `This section will define the order details in which you are willing to ${
+    buy ? 'buy' : 'sell'
+  } ${token0.symbol} at.`;
+
   const { isRange, setIsRange, resetFields } = order;
   const handleRangeChange = () => {
     setIsRange(!isRange);
@@ -44,7 +48,9 @@ export const BuySellBlock: FC<Props> = ({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">
-          <span>{title}</span>
+          <Tooltip element={tooltipText}>
+            <span>{title}</span>
+          </Tooltip>
           <Imager
             alt={'Token'}
             src={token0.logoURI}
@@ -74,12 +80,16 @@ export const BuySellBlock: FC<Props> = ({
           </div>
           <Tooltip
             element={
-              buy
-                ? `Indicate the part of your strategy where you are willing to purchase back the asset. Typically, this can be below market rate. Limit allows you to set a specific rate while Range allows you to set your own range of rates for the strategy to be available in.`
-                : `Indicate the part of your strategy where you are willing to sell the
-            asset to the market. Typically, this can be above market rate. Limit
-            allows you to set a specific rate while Range allows you to set your
-            own range of rates for the strategy to be available in.`
+              <>
+                This section will define the order details in which you are
+                willing to {buy ? 'buy' : 'sell'} {token0.symbol} at.
+                <br />
+                <b>Limit</b> will allow you to define a specific price point to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+                <br />
+                <b>Range</b> will allow you to define a range of prices to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+              </>
             }
           />
         </div>
