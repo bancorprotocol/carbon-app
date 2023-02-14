@@ -94,8 +94,10 @@ export const CreateStrategy = () => {
               <SelectTokenButton
                 symbol={token0?.symbol}
                 imgUrl={token0?.logoURI}
+                address={token0?.address}
                 description={'Buy or Sell'}
                 onClick={() => openTokenListModal(true)}
+                isBaseToken
               />
               {!!token0 && (
                 <>
@@ -109,6 +111,7 @@ export const CreateStrategy = () => {
                   <SelectTokenButton
                     symbol={token1?.symbol}
                     imgUrl={token1?.logoURI}
+                    address={token1?.address}
                     description={'With'}
                     onClick={() => openTokenListModal()}
                   />
