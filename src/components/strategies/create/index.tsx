@@ -76,10 +76,18 @@ export const CreateStrategy = () => {
             <div className="mb-14 flex items-center justify-between">
               <h2>Token Pair</h2>
               <Tooltip
-                element="Selecting the tokens you would like to create a strategy for.
-                The Base token represents how much of the Quoted token is needed
-                for you to get one unit of the Base token (i.e. 1 Base token =
-                xxx Quote token)."
+                element={
+                  <div>
+                    Selecting the tokens you would like to create a strategy
+                    for.
+                    <br />
+                    <b>Buy or Sell token</b> (also called Base token) is the
+                    token you would like to buy or sell in the strategy.
+                    <br />
+                    <b>With token</b> (also called Quote token) is the token you
+                    would denominate the rates in.
+                  </div>
+                }
               />
             </div>
             <div className={'-space-y-15'}>
