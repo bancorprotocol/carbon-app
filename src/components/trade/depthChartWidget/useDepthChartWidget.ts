@@ -12,7 +12,8 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
 
   const getOptions = (
     bidsData?: number[][],
-    asksData?: number[][]
+    asksData?: number[][],
+    baseTokenSymbol?: string
   ): Options => {
     const left = bidsData?.[bidsData.length - 1]?.[0] || 0;
     const right = asksData?.[asksData.length - 1]?.[0] || 0;
@@ -114,7 +115,10 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
         },
       },
       tooltip: {
-        pointFormat: '{series.name} <b>{point.y}</b><br/>',
+        headerFormat: ' ',
+        pointFormat: `${
+          baseTokenSymbol ? baseTokenSymbol : ''
+        } Amount: <b>{point.y}</b><br/>Price: <b>{point.x}</b>`,
         valueDecimals: 2,
         borderRadius: 12,
         backgroundColor: '#212123',
