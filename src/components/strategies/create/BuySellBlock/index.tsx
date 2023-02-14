@@ -148,9 +148,17 @@ export const BuySellBlock: FC<Props> = ({
         >
           2
         </div>
-        <div className={'text-14 font-weight-500 text-white/60'}>
-          Set {buy ? 'Buy' : 'Sell'} Budget{' '}
-        </div>
+        <Tooltip
+          element={
+            buy
+              ? `The amount of ${token1.symbol} tokens you would like to use in order to buy ${token0.symbol}. Note: this amount will re-fill once the "Sell" order is used by traders.`
+              : `The amount of ${token0.symbol} tokens you would like to sell. Note: this amount will re-fill once the "Buy" order is used by traders.`
+          }
+        >
+          <div className={'text-14 font-weight-500 text-white/60'}>
+            Set {buy ? 'Buy' : 'Sell'} Budget{' '}
+          </div>
+        </Tooltip>
       </div>
 
       <div>
