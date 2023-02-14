@@ -4,6 +4,9 @@ import { Imager } from 'components/common/imager/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { TokenPrice } from './TokenPrice';
+import BigNumber from 'bignumber.js';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -14,16 +17,36 @@ export const StrategyBlockBuySell: FC<{
   const order = buy ? strategy.order0 : strategy.order1;
   const limit = order.startRate === order.endRate;
   const active = strategy.status === StrategyStatus.Active;
+  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
+  const tokenPriceQuery = useGetTokenPrice(token.symbol);
 
-  const prices = `${prettifyNumber(order.startRate, {
-    abbreviate: order.startRate.length > 10,
-  })} ${
-    !limit
-      ? ` - ${prettifyNumber(order.endRate, {
-          abbreviate: order.endRate.length > 10,
-        })}`
-      : ''
-  }`;
+  const getPrice = (usd = false) => {
+    return `${prettifyNumber(order.startRate, {
+      abbreviate: order.startRate.length > 10,
+      usd,
+    })} ${
+      !limit
+        ? ` - ${prettifyNumber(order.endRate, {
+            abbreviate: order.endRate.length > 10,
+            usd,
+          })}`
+        : ''
+    }`;
+  };
+
+  const getFiatValue = (value: string) => {
+    return prettifyNumber(
+      new BigNumber(value || 0).times(
+        tokenPriceQuery.data?.[selectedFiatCurrency] || 0
+      ),
+      { abbreviate: order.startRate.length > 10, usd: true }
+    );
+  };
+  const prices = getPrice();
+  const fiatValue = getFiatValue(order.startRate);
+  const fiatSecondValue = getFiatValue(order.endRate);
+
+  const fiatPrices = `${fiatValue} ${!limit ? ` - ${fiatSecondValue}` : ''}`;
 
   return (
     <div
@@ -59,14 +82,24 @@ export const StrategyBlockBuySell: FC<{
               {limit ? 'Limit Price' : 'Price Range'}
             </div>
           </Tooltip>
-          <div className="flex items-center gap-7">
-            {prices}
-            <Imager
-              className="h-16 w-16"
-              src={buy ? otherToken.logoURI : token.logoURI}
-              alt="token"
-            />
-          </div>
+          <Tooltip
+            element={
+              <>
+                <TokenPrice
+                  price={prices}
+                  iconSrc={buy ? otherToken.logoURI : token.logoURI}
+                />
+                <TokenPrice className="text-white/60" price={fiatPrices} />
+              </>
+            }
+          >
+            <div>
+              <TokenPrice
+                price={prices}
+                iconSrc={buy ? otherToken.logoURI : token.logoURI}
+              />
+            </div>
+          </Tooltip>
         </div>
         <div className="mb-10 flex items-center justify-between">
           <Tooltip
