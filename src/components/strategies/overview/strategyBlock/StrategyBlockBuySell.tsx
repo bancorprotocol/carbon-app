@@ -3,6 +3,7 @@ import { Strategy, StrategyStatus } from 'libs/queries';
 import { Imager } from 'components/common/imager/Imager';
 import { prettifyNumber } from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
+import { Tooltip } from 'components/common/tooltip';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -30,14 +31,22 @@ export const StrategyBlockBuySell: FC<{
         active ? '' : 'opacity-35'
       }`}
     >
-      <div className="flex items-center gap-6">
-        {buy ? 'Buy' : 'Sell'}
-        <Imager
-          className="h-16 w-16"
-          src={buy ? token.logoURI : otherToken.logoURI}
-          alt="token"
-        />
-      </div>
+      <Tooltip
+        element={
+          <div className="flex items-center gap-6">
+            {buy ? 'Buy' : 'Sell'}
+            <Imager
+              className="h-16 w-16"
+              src={buy ? token.logoURI : otherToken.logoURI}
+              alt="token"
+            />
+          </div>
+        }
+      >
+        {buy
+          ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
+          : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`}
+      </Tooltip>
       <hr className="my-12 border-silver dark:border-emphasis" />
       <div>
         <div className="mb-5 flex items-center justify-between">
