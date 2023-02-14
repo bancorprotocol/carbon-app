@@ -45,6 +45,15 @@ export const StrategyBlockBuySell: FC<{
   const prices = getPrice();
   const fiatValue = getFiatValue(order.startRate);
   const fiatSecondValue = getFiatValue(order.endRate);
+  const budgetFiat = prettifyNumber(
+    new BigNumber(order.balance || 0).times(
+      tokenPriceQuery.data?.[selectedFiatCurrency] || 0
+    ),
+    {
+      abbreviate: order.balance.length > 10,
+      usd: true,
+    }
+  );
 
   const fiatPrices = `${fiatValue} ${!limit ? ` - ${fiatSecondValue}` : ''}`;
 
@@ -111,16 +120,30 @@ export const StrategyBlockBuySell: FC<{
           >
             <div className="text-secondary !text-16">Budget</div>
           </Tooltip>
-          <div className="flex items-center gap-7">
-            {prettifyNumber(order.balance, {
-              abbreviate: order.balance.length > 10,
-            })}
-            <Imager
-              className="h-16 w-16"
-              src={otherToken.logoURI}
-              alt="token"
-            />
-          </div>
+          <Tooltip
+            element={
+              <div>
+                <TokenPrice
+                  price={prettifyNumber(order.balance, {
+                    abbreviate: order.balance.length > 10,
+                  })}
+                  iconSrc={otherToken.logoURI}
+                />
+                <TokenPrice className="text-white/60" price={budgetFiat} />
+              </div>
+            }
+          >
+            <div className="flex items-center gap-7">
+              {prettifyNumber(order.balance, {
+                abbreviate: order.balance.length > 10,
+              })}
+              <Imager
+                className="h-16 w-16"
+                src={otherToken.logoURI}
+                alt="token"
+              />
+            </div>
+          </Tooltip>
         </div>
         <BuySellPriceRangeIndicator buy={buy} limit={limit} />
       </div>
