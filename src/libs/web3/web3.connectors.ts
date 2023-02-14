@@ -14,6 +14,7 @@ import iconMetaMask from 'assets/logos/metamask.svg';
 import iconWalletConnect from 'assets/logos/walletConnect.svg';
 import iconCoinbase from 'assets/logos/coinbase.svg';
 import iconGnosis from 'assets/logos/gnosis.svg';
+import carbonLogo from 'assets/logos/carbon.svg';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
@@ -103,9 +104,8 @@ const [web3CoinbaseWallet, web3CoinbaseWalletHooks] =
         actions,
         options: {
           url: RPC_URLS[SupportedChainId.MAINNET],
-          appName: 'Bancor',
-          // TODO: add Bancor Logo
-          appLogoUrl: '',
+          appName: 'Carbon',
+          appLogoUrl: carbonLogo,
           reloadOnDisconnect: false,
         },
         onError,

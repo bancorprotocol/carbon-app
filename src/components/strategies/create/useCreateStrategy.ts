@@ -126,7 +126,11 @@ export const useCreate = () => {
 
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired)
-        openModal('txConfirm', { approvalTokens, onConfirm: create });
+        openModal('txConfirm', {
+          approvalTokens,
+          onConfirm: create,
+          buttonLabel: 'Create Strategy',
+        });
       else create();
     }
   };
