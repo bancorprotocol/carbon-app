@@ -67,7 +67,13 @@ export const StrategyBlockBuySell: FC<{
           </div>
         </div>
         <div className="mb-10 flex items-center justify-between">
-          <div className="text-secondary !text-16">Budget</div>
+          <Tooltip
+            element={<div className="text-secondary !text-16">Budget</div>}
+          >
+            {buy
+              ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
+              : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`}
+          </Tooltip>
           <div className="flex items-center gap-7">
             {prettifyNumber(order.balance, {
               abbreviate: order.balance.length > 10,
