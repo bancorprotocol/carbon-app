@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
-import { TWO_SECONDS_IN_MS } from 'utils/time';
+import { ONE_DAY_IN_MS } from 'utils/time';
 
 const ONE = new BigNumber(1);
 
@@ -134,6 +134,6 @@ export const useGetOrderBook = (base?: string, quote?: string) => {
     queryFn: () => getOrderBook(base!, quote!),
     enabled: isInitialized && !!base && !!quote,
     retry: 1,
-    refetchInterval: TWO_SECONDS_IN_MS,
+    staleTime: ONE_DAY_IN_MS,
   });
 };
