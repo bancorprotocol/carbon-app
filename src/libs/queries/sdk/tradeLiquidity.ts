@@ -11,7 +11,6 @@ export const useGetTradeLiquidity = (token0?: string, token1?: string) => {
     queryKey: QueryKey.tradeLiquidity(token0!, token1!),
     queryFn: async () => carbonSDK.getLiquidityByPair(token0!, token1!),
     enabled: !!token0 && !!token1 && isInitialized,
-    cacheTime: 0,
     staleTime: ONE_DAY_IN_MS,
   });
 };
