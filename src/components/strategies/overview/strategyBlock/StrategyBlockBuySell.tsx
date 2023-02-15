@@ -18,17 +18,17 @@ export const StrategyBlockBuySell: FC<{
   const limit = order.startRate === order.endRate;
   const active = strategy.status === StrategyStatus.Active;
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const tokenPriceQuery = useGetTokenPrice(token.symbol);
+  const tokenPriceQuery = useGetTokenPrice(otherToken.symbol);
 
-  const getPrice = (usd = false) => {
+  const getPrice = () => {
+    const limit = order.startRate === order.endRate;
+
     return `${prettifyNumber(order.startRate, {
       abbreviate: order.startRate.length > 10,
-      usd,
     })} ${
       !limit
         ? ` - ${prettifyNumber(order.endRate, {
             abbreviate: order.endRate.length > 10,
-            usd,
           })}`
         : ''
     }`;
@@ -42,9 +42,11 @@ export const StrategyBlockBuySell: FC<{
       { abbreviate: order.startRate.length > 10, usd: true }
     );
   };
-  const prices = getPrice();
+
+  const price = getPrice();
   const fiatValue = getFiatValue(order.startRate);
   const fiatSecondValue = getFiatValue(order.endRate);
+
   const budgetFiat = prettifyNumber(
     new BigNumber(order.balance || 0).times(
       tokenPriceQuery.data?.[selectedFiatCurrency] || 0
@@ -99,17 +101,19 @@ export const StrategyBlockBuySell: FC<{
             element={
               <>
                 <TokenPrice
-                  price={prices}
+                  price={price}
                   iconSrc={buy ? otherToken.logoURI : token.logoURI}
                 />
                 <TokenPrice className="text-white/60" price={fiatPrices} />
               </>
             }
           >
-            <TokenPrice
-              price={prices}
-              iconSrc={buy ? otherToken.logoURI : token.logoURI}
-            />
+            <div>
+              <TokenPrice
+                price={price}
+                iconSrc={buy ? otherToken.logoURI : token.logoURI}
+              />
+            </div>
           </Tooltip>
         </div>
         <div className="mb-10 flex items-center justify-between">
