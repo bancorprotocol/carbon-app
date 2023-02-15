@@ -38,8 +38,16 @@ export const StrategyBlockBuySell: FC<{
           : ''
       }`;
     }
-    return `${sanitizeNumberInput(order.startRate, 15)} ${
-      !limit ? ` - ${sanitizeNumberInput(order.endRate, 15)}` : ''
+    return `${sanitizeNumberInput(
+      order.startRate,
+      buy ? otherToken.decimals : token.decimals
+    )} ${
+      !limit
+        ? ` - ${sanitizeNumberInput(
+            order.endRate,
+            buy ? otherToken.decimals : token.decimals
+          )}`
+        : ''
     }`;
   };
 
