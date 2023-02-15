@@ -19,12 +19,12 @@ export const StrategyBlockBuySell: FC<{
   const token = buy ? strategy.token0 : strategy.token1;
   const otherToken = buy ? strategy.token1 : strategy.token0;
   const order = buy ? strategy.order0 : strategy.order1;
+  const otherOrder = buy ? strategy.order1 : strategy.order1;
   const limit = order.startRate === order.endRate;
   const active = strategy.status === StrategyStatus.Active;
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const tokenPriceQuery = useGetTokenPrice(
-    buy ? otherToken.symbol : token.symbol
-  );
+  const tokenPriceQuery = useGetTokenPrice(token.symbol);
+  const otherTokenPriceQuery = useGetTokenPrice(otherToken.symbol);
 
   const getPrice = (prettified?: boolean) => {
     if (prettified) {
@@ -51,25 +51,36 @@ export const StrategyBlockBuySell: FC<{
     }`;
   };
 
-  const getFiatBudget = (value: string) => {
+  const getTokenFiat = (value: string) => {
+    return new BigNumber(value || 0).times(
+      otherTokenPriceQuery.data?.[selectedFiatCurrency] || 0
+    );
+  };
+
+  const getOtherTokenFiat = (value: string) => {
     return new BigNumber(value || 0).times(
       tokenPriceQuery.data?.[selectedFiatCurrency] || 0
     );
   };
 
-  const prettifiedPrice = getPrice(true);
-  const price = getPrice();
-  const fiatValue = getFiatBudget(order.startRate);
-  const fiatSecondValue = getFiatBudget(order.endRate);
+  const fiatValue = buy
+    ? getTokenFiat(order.startRate)
+    : getOtherTokenFiat(otherOrder.startRate);
 
-  const budgetFiat = getFiatValue(
-    getFiatBudget(order.balance),
-    selectedFiatCurrency
-  );
+  const fiatSecondValue = buy
+    ? getTokenFiat(order.endRate)
+    : getOtherTokenFiat(otherOrder.endRate);
 
   const fiatPrices = `${getFiatValue(fiatValue, selectedFiatCurrency)} ${
     !limit ? ` - ${getFiatValue(fiatSecondValue, selectedFiatCurrency)}` : ''
   }`;
+  const prettifiedPrice = getPrice(true);
+  const price = getPrice();
+
+  const budgetFiat = getFiatValue(
+    getTokenFiat(buy ? otherOrder.balance : order.balance),
+    selectedFiatCurrency
+  );
 
   return (
     <div
@@ -82,7 +93,7 @@ export const StrategyBlockBuySell: FC<{
           element={
             buy
               ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
-              : `This section indicates the details to which you are willing to sell ${token.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`
+              : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`
           }
         >
           <div className="flex items-center gap-6">
@@ -102,7 +113,7 @@ export const StrategyBlockBuySell: FC<{
             element={
               buy
                 ? `This is the rate in which you are willing to buy ${token.symbol}.`
-                : `This is the rate in which you are willing to sell ${token.symbol}.`
+                : `This is the rate in which you are willing to sell ${otherToken.symbol}.`
             }
           >
             <div className={`${buy ? 'text-green' : 'text-red'}`}>
@@ -143,9 +154,7 @@ export const StrategyBlockBuySell: FC<{
             element={
               <>
                 <TokenPrice
-                  price={prettifyNumber(order.balance, {
-                    abbreviate: order.balance.length > 10,
-                  })}
+                  price={sanitizeNumberInput(order.balance, token.decimals)}
                   iconSrc={otherToken.logoURI}
                 />
                 <TokenPrice className="text-white/60" price={budgetFiat} />
