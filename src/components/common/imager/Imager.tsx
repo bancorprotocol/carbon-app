@@ -62,11 +62,9 @@ export const Imager = ({
   fallbackSrc,
   ...props
 }: ImageProps) => {
-  const { hasLoaded, source } = useImager(src, fallbackSrc);
+  const { source } = useImager(src, fallbackSrc);
 
-  return hasLoaded ? (
+  return (
     <img {...props} src={source} alt={alt} loading={lazy ? 'lazy' : 'eager'} />
-  ) : (
-    <div className={`loading-skeleton ${props.className}`} />
   );
 };

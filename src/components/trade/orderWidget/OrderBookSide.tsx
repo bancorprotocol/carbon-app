@@ -13,7 +13,7 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({ orders, buy }) => {
   return (
     <div>
       {orders?.length > 0 ? (
-        <div className={'grid grid-cols-3'}>
+        <div className={'grid grid-cols-3 gap-x-10'}>
           {orderBy(orders, ({ rate }) => Number(rate), 'desc').map((props) => (
             <OrderBookWidgetRow
               key={`orderbook${buy ? 'buy' : 'sell'}-${props.rate}`}
