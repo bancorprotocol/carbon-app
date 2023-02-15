@@ -37,9 +37,10 @@ export const Tooltip: FC<
 
   return (
     <Tippy
+      delay={500}
       render={(attrs) => (
         <m.div
-          className={`text-tooltip rounded border border-darkGrey bg-darkGrey/30 px-24 py-16 shadow-lg backdrop-blur-2xl ${className}`}
+          className={`rounded border border-darkGrey bg-darkGrey/30 px-24 py-16 text-14 text-white shadow-lg backdrop-blur-2xl ${className}`}
           style={{ scale, opacity, maxWidth }}
           {...attrs}
         >

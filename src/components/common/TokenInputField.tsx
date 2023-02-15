@@ -1,7 +1,11 @@
 import { Imager } from 'components/common/imager/Imager';
 import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import {
+  getFiatValue,
+  prettifyNumber,
+  sanitizeNumberInput,
+} from 'utils/helpers';
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
@@ -138,13 +142,7 @@ export const TokenInputField: FC<Props> = ({
           <div className={'h-16'} />
         )}
         {fiatValue.gt(0) && (
-          <div>
-            {prettifyNumber(
-              fiatValue,
-              ['USD', 'CAD', 'AUD'].includes(selectedFiatCurrency)
-            )}{' '}
-            {selectedFiatCurrency}
-          </div>
+          <div>{getFiatValue(fiatValue, selectedFiatCurrency)}</div>
         )}
       </div>
     </div>

@@ -1,7 +1,11 @@
 import { FC } from 'react';
 import { Strategy, StrategyStatus } from 'libs/queries';
 import { Imager } from 'components/common/imager/Imager';
-import { prettifyNumber } from 'utils/helpers';
+import {
+  getFiatValue,
+  prettifyNumber,
+  sanitizeNumberInput,
+} from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from './TokenPrice';
@@ -18,46 +22,46 @@ export const StrategyBlockBuySell: FC<{
   const limit = order.startRate === order.endRate;
   const active = strategy.status === StrategyStatus.Active;
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const tokenPriceQuery = useGetTokenPrice(otherToken.symbol);
+  const tokenPriceQuery = useGetTokenPrice(
+    buy ? otherToken.symbol : token.symbol
+  );
 
-  const getPrice = () => {
-    const limit = order.startRate === order.endRate;
-
-    return `${prettifyNumber(order.startRate, {
-      abbreviate: order.startRate.length > 10,
-    })} ${
-      !limit
-        ? ` - ${prettifyNumber(order.endRate, {
-            abbreviate: order.endRate.length > 10,
-          })}`
-        : ''
+  const getPrice = (prettified?: boolean) => {
+    if (prettified) {
+      return `${prettifyNumber(order.startRate, {
+        abbreviate: order.startRate.length > 10,
+      })} ${
+        !limit
+          ? ` - ${prettifyNumber(order.endRate, {
+              abbreviate: order.endRate.length > 10,
+            })}`
+          : ''
+      }`;
+    }
+    return `${sanitizeNumberInput(order.startRate, 15)} ${
+      !limit ? ` - ${sanitizeNumberInput(order.endRate, 15)}` : ''
     }`;
   };
 
-  const getFiatValue = (value: string) => {
-    return prettifyNumber(
-      new BigNumber(value || 0).times(
-        tokenPriceQuery.data?.[selectedFiatCurrency] || 0
-      ),
-      { abbreviate: order.startRate.length > 10, usd: true }
+  const getFiatBudget = (value: string) => {
+    return new BigNumber(value || 0).times(
+      tokenPriceQuery.data?.[selectedFiatCurrency] || 0
     );
   };
 
+  const prettifiedPrice = getPrice(true);
   const price = getPrice();
-  const fiatValue = getFiatValue(order.startRate);
-  const fiatSecondValue = getFiatValue(order.endRate);
+  const fiatValue = getFiatBudget(order.startRate);
+  const fiatSecondValue = getFiatBudget(order.endRate);
 
-  const budgetFiat = prettifyNumber(
-    new BigNumber(order.balance || 0).times(
-      tokenPriceQuery.data?.[selectedFiatCurrency] || 0
-    ),
-    {
-      abbreviate: order.balance.length > 10,
-      usd: true,
-    }
+  const budgetFiat = getFiatValue(
+    getFiatBudget(order.balance),
+    selectedFiatCurrency
   );
 
-  const fiatPrices = `${fiatValue} ${!limit ? ` - ${fiatSecondValue}` : ''}`;
+  const fiatPrices = `${getFiatValue(fiatValue, selectedFiatCurrency)} ${
+    !limit ? ` - ${getFiatValue(fiatSecondValue, selectedFiatCurrency)}` : ''
+  }`;
 
   return (
     <div
@@ -98,6 +102,7 @@ export const StrategyBlockBuySell: FC<{
             </div>
           </Tooltip>
           <Tooltip
+            maxWidth={430}
             element={
               <>
                 <TokenPrice
@@ -110,7 +115,7 @@ export const StrategyBlockBuySell: FC<{
           >
             <div>
               <TokenPrice
-                price={price}
+                price={prettifiedPrice}
                 iconSrc={buy ? otherToken.logoURI : token.logoURI}
               />
             </div>
