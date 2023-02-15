@@ -7,4 +7,4 @@ export const decimalFetcherSDKMap: { map: Map<string, number> } = {
 const decimalFetcher = (a: string) =>
   decimalFetcherSDKMap.map.get(a.toLowerCase());
 
-export const carbonSDK = new CarbonSDK(RPC_URLS[1]);
+export const carbonSDK = new CarbonSDK(RPC_URLS[1], decimalFetcher);
