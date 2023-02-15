@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
+import { decimalFetcherSDKMap } from 'libs/sdk/carbonSdk';
 
 export interface TokensStore {
   tokens: Token[];
@@ -29,6 +30,14 @@ export const useTokensStore = (): TokensStore => {
   const isLoading = tokensQuery.isLoading;
   const isError = tokensQuery.isError;
   const error = tokensQuery.error;
+
+  useEffect(() => {
+    if (tokens.length) {
+      decimalFetcherSDKMap.map = new Map(
+        tokens.map((t) => [t.address.toLowerCase(), t.decimals])
+      );
+    }
+  }, [tokens]);
 
   return {
     tokens,

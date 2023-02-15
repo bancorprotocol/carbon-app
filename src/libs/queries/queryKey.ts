@@ -1,17 +1,17 @@
-const _sdk = ['sdk'];
-const _chain = ['chain'];
-const _extAPI = ['ext-api'];
-
 export namespace QueryKey {
-  export const tokens = () => [..._extAPI, 'tokens'];
+  export const sdk = ['sdk'];
+  export const chain = ['chain'];
+  export const extAPI = ['ext-api'];
+
+  export const tokens = () => [...extAPI, 'tokens'];
   export const tokenPrice = (address: string) => [
-    ..._extAPI,
+    ...extAPI,
     'token-price',
     address,
   ];
-  export const strategies = (user?: string) => [..._sdk, 'strategies', user];
+  export const strategies = (user?: string) => [...sdk, 'strategies', user];
   export const approval = (user: string, token: string, spender: string) => [
-    ..._chain,
+    ...chain,
     'approval',
     user,
     token,
@@ -19,14 +19,14 @@ export namespace QueryKey {
   ];
 
   export const balance = (user: string, token: string) => [
-    ..._chain,
+    ...chain,
     'balance',
     user,
     token,
   ];
 
-  export const token = (token: string) => [..._chain, 'token', token];
-  export const pairs = () => [..._sdk, 'pairs'];
+  export const token = (token: string) => [...chain, 'token', token];
+  export const pairs = () => [...sdk, 'pairs'];
 
   export const tradeData = (
     sourceToken: string,
@@ -34,7 +34,7 @@ export namespace QueryKey {
     isTradeBySource: boolean,
     amount: string
   ) => [
-    ..._sdk,
+    ...sdk,
     'trade-data',
     sourceToken,
     targetToken,
@@ -43,14 +43,14 @@ export namespace QueryKey {
   ];
 
   export const tradeLiquidity = (token0: string, token1: string) => [
-    ..._sdk,
+    ...sdk,
     'liquidity',
     token0,
     token1,
   ];
 
   export const tradeOrderBook = (base: string, quote: string) => [
-    ..._sdk,
+    ...sdk,
     'trade-order-book',
     base,
     quote,

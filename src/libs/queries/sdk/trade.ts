@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
-import { TWO_SECONDS_IN_MS } from 'utils/time';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 
 type Props = {
@@ -51,7 +50,6 @@ export const useGetTradeData = ({
       enabled: !!enabled && isInitialized && input !== '...',
       cacheTime: 0,
       retry: 1,
-      refetchInterval: TWO_SECONDS_IN_MS,
     }
   );
 };
