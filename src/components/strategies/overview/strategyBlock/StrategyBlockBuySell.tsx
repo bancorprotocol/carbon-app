@@ -73,7 +73,11 @@ export const StrategyBlockBuySell: FC<{
         >
           <div className="flex items-center gap-6">
             {buy ? 'Buy' : 'Sell'}
-            <Imager className="h-16 w-16" src={token.logoURI} alt="token" />
+            <Imager
+              className="h-16 w-16"
+              src={buy ? token.logoURI : otherToken.logoURI}
+              alt="token"
+            />
           </div>
         </Tooltip>
       </div>
@@ -102,12 +106,10 @@ export const StrategyBlockBuySell: FC<{
               </>
             }
           >
-            <div>
-              <TokenPrice
-                price={prices}
-                iconSrc={buy ? otherToken.logoURI : token.logoURI}
-              />
-            </div>
+            <TokenPrice
+              price={prices}
+              iconSrc={buy ? otherToken.logoURI : token.logoURI}
+            />
           </Tooltip>
         </div>
         <div className="mb-10 flex items-center justify-between">
@@ -122,7 +124,7 @@ export const StrategyBlockBuySell: FC<{
           </Tooltip>
           <Tooltip
             element={
-              <div>
+              <>
                 <TokenPrice
                   price={prettifyNumber(order.balance, {
                     abbreviate: order.balance.length > 10,
@@ -130,7 +132,7 @@ export const StrategyBlockBuySell: FC<{
                   iconSrc={otherToken.logoURI}
                 />
                 <TokenPrice className="text-white/60" price={budgetFiat} />
-              </div>
+              </>
             }
           >
             <div className="flex items-center gap-7">
