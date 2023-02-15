@@ -6,7 +6,7 @@ import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
 import { carbonSDK } from 'libs/sdk/carbonSdk';
 import { useContract } from 'hooks/useContract';
-import { TWO_SECONDS_IN_MS } from 'utils/time';
+import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { EncodedStrategy } from '@bancor/carbon-sdk/dist/types';
@@ -120,7 +120,7 @@ export const useGetUserStrategies = () => {
     },
     {
       enabled: tokens.length > 0 && isInitialized,
-      refetchInterval: TWO_SECONDS_IN_MS,
+      staleTime: ONE_DAY_IN_MS,
     }
   );
 };

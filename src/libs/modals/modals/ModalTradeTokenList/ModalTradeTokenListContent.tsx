@@ -96,9 +96,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
             const tradePair = tradePairs2[virtualRow.index];
-            console.log(
-              `jan asd ${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`
-            );
+
             return (
               <div
                 key={`${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}

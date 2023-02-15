@@ -189,6 +189,12 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
+      if (new BigNumber(targetInput).gt(liquidityQuery.data || 0)) {
+        setIsLiquidityError(true);
+        setSourceInput('...');
+        return;
+      }
+
       const {
         totalSourceAmount,
         totalTargetAmount,
