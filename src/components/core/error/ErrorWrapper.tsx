@@ -10,6 +10,16 @@ type Props = IconTitleTextProps & {
   children?: ReactNode;
 };
 
+const DefaultChildren = () => (
+  <div>
+    <Link to={'https://faq.carbondefi.xyz/'}>
+      <Button variant={'error'} fullWidth>
+        Contact Support
+      </Button>
+    </Link>
+  </div>
+);
+
 export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
   return (
     <div
@@ -18,15 +28,7 @@ export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
       }
     >
       <IconTitleText {...props} />
-      {children ? (
-        children
-      ) : (
-        <Link to={'https://faq.carbondefi.xyz/'}>
-          <Button variant={'error'} fullWidth>
-            Contact Support
-          </Button>
-        </Link>
-      )}
+      {children ? children : <DefaultChildren />}
     </div>
   );
 };

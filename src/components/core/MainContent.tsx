@@ -6,6 +6,8 @@ import { ErrorUnsupportedNetwork } from 'components/core/error/ErrorUnsupportedN
 import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnection';
 import { useTokens } from 'hooks/useTokens';
 import { ErrorTokenList } from 'components/core/error/ErrorTokenList';
+import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
 
 export const MainContent: FC = () => {
   const web3 = useWeb3();
@@ -13,6 +15,7 @@ export const MainContent: FC = () => {
     current: { pathname },
   } = useLocation();
   const tokens = useTokens();
+  const sdk = useCarbonSDK();
 
   if (pathname === PathNames.debug) {
     return <Outlet />;
@@ -24,6 +27,10 @@ export const MainContent: FC = () => {
 
   if (web3.networkError) {
     return <ErrorNetworkConnection />;
+  }
+
+  if (sdk.isError) {
+    return <ErrorSDKStartSync />;
   }
 
   if (tokens.isError) {
