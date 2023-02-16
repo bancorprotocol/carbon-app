@@ -1,3 +1,5 @@
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { Token } from 'libs/tokens';
 import { ChangeEvent, FC } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 
@@ -6,9 +8,11 @@ export const InputRange: FC<{
   setMin: (value: string) => void;
   max: string;
   setMax: (value: string) => void;
+  token: Token;
+  buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
-}> = ({ min, setMin, max, setMax, error, setRangeError }) => {
+}> = ({ min, setMin, max, setMax, token, buy, error, setRangeError }) => {
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) =>
     setMin(sanitizeNumberInput(e.target.value));
 
@@ -29,7 +33,13 @@ export const InputRange: FC<{
             error ? 'border-2 border-red text-red' : ''
           } bg-body w-full rounded-r-4 rounded-l-16 p-16`}
         >
-          <div className={'mb-5 text-12 text-white/60'}>Min</div>
+          <Tooltip
+            element={`The lowest rate to ${buy ? 'buy' : 'sell'} ${
+              token.symbol
+            } at.`}
+          >
+            <div className={'mb-5 text-12 text-white/60'}>Min</div>
+          </Tooltip>
           <input
             value={min}
             onChange={handleChangeMin}
@@ -45,7 +55,13 @@ export const InputRange: FC<{
             error ? 'border-2 border-red text-red' : ''
           } bg-body w-full rounded-r-16 rounded-l-4 p-16`}
         >
-          <div className={'mb-5 text-12 text-white/60'}>Max</div>
+          <Tooltip
+            element={`The highest rate to ${buy ? 'buy' : 'sell'} ${
+              token.symbol
+            } at.`}
+          >
+            <div className={'mb-5 text-12 text-white/60'}>Max</div>
+          </Tooltip>
           <input
             value={max}
             onChange={handleChangeMax}

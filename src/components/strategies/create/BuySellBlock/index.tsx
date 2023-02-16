@@ -26,6 +26,10 @@ export const BuySellBlock: FC<Props> = ({
 }) => {
   const budgetToken = buy ? token1 : token0;
   const title = buy ? 'Buy Low' : 'Sell High';
+  const tooltipText = `This section will define the order details in which you are willing to ${
+    buy ? 'buy' : 'sell'
+  } ${token0.symbol} at.`;
+
   const { isRange, setIsRange, resetFields } = order;
   const handleRangeChange = () => {
     setIsRange(!isRange);
@@ -44,7 +48,9 @@ export const BuySellBlock: FC<Props> = ({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">
-          <span>{title}</span>
+          <Tooltip element={tooltipText}>
+            <span>{title}</span>
+          </Tooltip>
           <Imager
             alt={'Token'}
             src={token0.logoURI}
@@ -74,12 +80,16 @@ export const BuySellBlock: FC<Props> = ({
           </div>
           <Tooltip
             element={
-              buy
-                ? `Indicate the part of your strategy where you are willing to purchase back the asset. Typically, this can be below market rate. Limit allows you to set a specific rate while Range allows you to set your own range of rates for the strategy to be available in.`
-                : `Indicate the part of your strategy where you are willing to sell the
-            asset to the market. Typically, this can be above market rate. Limit
-            allows you to set a specific rate while Range allows you to set your
-            own range of rates for the strategy to be available in.`
+              <>
+                This section will define the order details in which you are
+                willing to {buy ? 'buy' : 'sell'} {token0.symbol} at.
+                <br />
+                <b>Limit</b> will allow you to define a specific price point to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+                <br />
+                <b>Range</b> will allow you to define a range of prices to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+              </>
             }
           />
         </div>
@@ -93,13 +103,21 @@ export const BuySellBlock: FC<Props> = ({
         >
           1
         </div>
-        <div className={'text-14 font-weight-500 text-white/60'}>
-          Set {buy ? 'Buy' : 'Sell'} Price{' '}
-          <span className={'ml-8 text-white/80'}>
-            ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
-            {token0.symbol})
-          </span>
-        </div>
+        <Tooltip
+          element={`Define the rate you are willing to ${
+            buy ? 'buy' : 'sell'
+          } ${token0.symbol} at. Make sure the price is in ${
+            token1.symbol
+          } tokens.`}
+        >
+          <div className={'text-14 font-weight-500 text-white/60'}>
+            <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
+            <span className={'ml-8 text-white/80'}>
+              ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
+              {token0.symbol})
+            </span>
+          </div>
+        </Tooltip>
       </div>
 
       {isRange ? (
@@ -110,6 +128,8 @@ export const BuySellBlock: FC<Props> = ({
           setMax={order.setMax}
           error={order.rangeError}
           setRangeError={order.setRangeError}
+          token={token0}
+          buy={buy}
         />
       ) : (
         <InputLimit
@@ -128,9 +148,17 @@ export const BuySellBlock: FC<Props> = ({
         >
           2
         </div>
-        <div className={'text-14 font-weight-500 text-white/60'}>
-          Set {buy ? 'Buy' : 'Sell'} Budget{' '}
-        </div>
+        <Tooltip
+          element={
+            buy
+              ? `The amount of ${token1.symbol} tokens you would like to use in order to buy ${token0.symbol}. Note: this amount will re-fill once the "Sell" order is used by traders.`
+              : `The amount of ${token0.symbol} tokens you would like to sell. Note: this amount will re-fill once the "Buy" order is used by traders.`
+          }
+        >
+          <div className={'text-14 font-weight-500 text-white/60'}>
+            Set {buy ? 'Buy' : 'Sell'} Budget{' '}
+          </div>
+        </Tooltip>
       </div>
 
       <div>

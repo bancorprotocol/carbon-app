@@ -4,10 +4,13 @@ import { useSpring, m } from 'framer-motion';
 import { Instance } from 'tippy.js';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 
-export const Tooltip: FC<TippyProps & { element: ReactNode }> = ({
+export const Tooltip: FC<
+  TippyProps & { element: ReactNode; className?: string }
+> = ({
   element,
   children = <IconTooltip className={'h-18 w-18'} />,
   maxWidth = 350,
+  className = '',
   ...props
 }) => {
   const springConfig = { damping: 15, stiffness: 300 };
@@ -34,9 +37,10 @@ export const Tooltip: FC<TippyProps & { element: ReactNode }> = ({
 
   return (
     <Tippy
+      delay={500}
       render={(attrs) => (
         <m.div
-          className={`rounded border border-darkGrey bg-darkGrey/30 px-24 py-16 shadow-lg backdrop-blur-2xl`}
+          className={`rounded border border-darkGrey bg-darkGrey/30 px-24 py-16 text-14 text-white shadow-lg backdrop-blur-2xl ${className}`}
           style={{ scale, opacity, maxWidth }}
           {...attrs}
         >

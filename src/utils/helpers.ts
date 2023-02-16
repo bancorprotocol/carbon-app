@@ -3,6 +3,7 @@ import numeral from 'numeral';
 import numbro from 'numbro';
 import { config } from 'services/web3/config';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { FiatSymbol } from 'store/useFiatCurrencyStore';
 
 export const isProduction = window.location.host.includes('bancor.network');
 
@@ -58,6 +59,16 @@ const prettifyNumberAbbreviateFormat: numbro.Format = {
   lowPrecision: false,
   spaceSeparated: true,
   roundingFunction: (num) => Math.floor(num),
+};
+
+export const getFiatValue = (
+  fiatValue: BigNumber,
+  currentCurrency: FiatSymbol
+) => {
+  return `${prettifyNumber(
+    fiatValue,
+    ['USD', 'CAD', 'AUD'].includes(currentCurrency)
+  )} ${currentCurrency}`;
 };
 
 export function prettifyNumber(num: number | string | BigNumber): string;

@@ -3,20 +3,37 @@ import { Imager } from 'components/common/imager/Imager';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { Button, ButtonHTMLProps } from 'components/common/button';
+import { Tooltip } from '../tooltip/Tooltip';
 
 type Props = ButtonHTMLProps & {
   symbol?: string;
+  address?: string;
   imgUrl?: string;
   description?: string;
+  isBaseToken?: boolean;
 };
 
 export const SelectTokenButton: FC<Props> = ({
   symbol,
+  address,
   imgUrl,
   className,
   description,
+  isBaseToken,
   ...props
 }) => {
+  const getTooltipText = () => {
+    if (isBaseToken) {
+      return symbol
+        ? `${symbol}: ${address}`
+        : 'Select the Base token for the pair';
+    }
+
+    return symbol
+      ? `${symbol}: ${address}`
+      : 'Select the Quote token for the pair (i.e. when selecting USDC, all rates would be denominated in USDC)';
+  };
+
   return (
     <Button
       variant={symbol ? 'black' : 'success'}
@@ -42,13 +59,19 @@ export const SelectTokenButton: FC<Props> = ({
         )}
         <div className={'flex flex-col items-start'}>
           {description && (
-            <div
-              className={`text-12 ${
-                symbol ? 'text-white/60' : 'text-black/60'
-              }`}
+            <Tooltip
+              maxWidth={430}
+              interactive={false}
+              element={getTooltipText()}
             >
-              {description}
-            </div>
+              <div
+                className={`text-12 ${
+                  symbol ? 'text-white/60' : 'text-black/60'
+                }`}
+              >
+                {description}
+              </div>
+            </Tooltip>
           )}
           <div>{symbol ? symbol : 'Select Token'}</div>
         </div>
