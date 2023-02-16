@@ -13,10 +13,10 @@ export const StrategyBlockCreate: FC<Props> = ({
   return (
     <Link
       to={PathNames.createStrategy}
-      className="bg-content flex h-full items-center justify-center rounded-10 border-dashed"
+      className="bg-content flex h-full items-center justify-center rounded-10 border-dashed py-50"
     >
       <div
-        className={`${className}  flex flex-col items-center gap-24  text-20`}
+        className={`${className} flex flex-col items-center gap-24  text-20`}
       >
         <div className="h-40 w-40 rounded-full bg-white">
           <IconPlus className="text-black" />
