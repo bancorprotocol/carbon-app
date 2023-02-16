@@ -78,7 +78,7 @@ export const StrategyBlockBuySell: FC<{
   const price = getPrice();
 
   const budgetFiat = getFiatValue(
-    getTokenFiat(buy ? otherOrder.balance : order.balance),
+    getTokenFiat(buy ? order.balance : otherOrder.balance),
     selectedFiatCurrency
   );
 
@@ -154,7 +154,10 @@ export const StrategyBlockBuySell: FC<{
             element={
               <>
                 <TokenPrice
-                  price={sanitizeNumberInput(order.balance, token.decimals)}
+                  price={sanitizeNumberInput(
+                    buy ? order.balance : otherOrder.balance,
+                    buy ? token.decimals : otherToken.decimals
+                  )}
                   iconSrc={otherToken.logoURI}
                 />
                 <TokenPrice className="text-white/60" price={budgetFiat} />
