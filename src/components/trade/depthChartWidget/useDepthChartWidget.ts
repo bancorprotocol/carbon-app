@@ -118,7 +118,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
         headerFormat: ' ',
         pointFormat: `${
           baseTokenSymbol ? baseTokenSymbol : ''
-        } Amount: <b>{point.y}</b><br/>Price: <b>{point.x}</b>`,
+        } amount: {point.y}<br/>Price: {point.x}`,
         valueDecimals: 2,
         borderRadius: 12,
         backgroundColor: '#212123',
