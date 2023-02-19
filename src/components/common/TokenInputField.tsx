@@ -1,5 +1,12 @@
 import { Imager } from 'components/common/imager/Imager';
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react';
 import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -16,6 +23,8 @@ type Props = {
   className?: string;
   onKeystroke?: () => void;
   isLoading?: boolean;
+  focus?: boolean;
+  setFocus?: Dispatch<SetStateAction<boolean>>;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -28,6 +37,8 @@ export const TokenInputField: FC<Props> = ({
   className,
   onKeystroke,
   placeholder = 'Enter Amount',
+  focus,
+  setFocus,
 }) => {
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
@@ -38,10 +49,12 @@ export const TokenInputField: FC<Props> = ({
 
   const handleOnFocus = () => {
     setIsFocused(true);
+    !focus && setFocus && setFocus(true);
   };
 
   const handleOnBlur = () => {
     setIsFocused(false);
+    focus && setFocus && setFocus(false);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +78,7 @@ export const TokenInputField: FC<Props> = ({
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
       onClick={() => {
+        !focus && setFocus && setFocus(true);
         setIsFocused(true);
         inputRef.current?.focus();
       }}

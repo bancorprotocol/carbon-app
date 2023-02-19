@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
@@ -13,7 +13,20 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
-}> = ({ min, setMin, max, setMax, token, buy, error, setRangeError }) => {
+  focus?: boolean;
+  setFocus?: Dispatch<SetStateAction<boolean>>;
+}> = ({
+  min,
+  setMin,
+  max,
+  setMax,
+  token,
+  buy,
+  error,
+  setRangeError,
+  focus,
+  setFocus,
+}) => {
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) =>
     setMin(sanitizeNumberInput(e.target.value));
 
@@ -24,7 +37,9 @@ export const InputRange: FC<{
     Number(min) > 0 && (isMin || Number(max) > Number(min))
       ? setRangeError('')
       : setRangeError('Max Price must be higher than min price and not zero');
+    focus && setFocus && setFocus(false);
   };
+
   const { fiatAsString: fiatAsStringMin } = useFiatCurrency(token, min);
   const { fiatAsString: fiatAsStringMax } = useFiatCurrency(token, max);
 
@@ -48,6 +63,7 @@ export const InputRange: FC<{
             onChange={handleChangeMin}
             placeholder="Enter Price"
             onBlur={() => handleBlur(true)}
+            onFocus={() => !focus && setFocus && setFocus(true)}
             className={
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
@@ -73,6 +89,7 @@ export const InputRange: FC<{
             onChange={handleChangeMax}
             placeholder={`Enter Price`}
             onBlur={() => handleBlur()}
+            onFocus={() => !focus && setFocus && setFocus(true)}
             className={
               'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
