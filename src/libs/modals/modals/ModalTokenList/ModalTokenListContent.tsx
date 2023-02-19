@@ -1,8 +1,12 @@
 import { Imager } from 'components/common/imager/Imager';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
+import { lsService } from 'services/localeStorage';
+
+const categories = ['popular', 'favorites', 'all'] as const;
+export type ChooseTokenCategory = (typeof categories)[number];
 
 type Props = {
   tokens: Token[];
@@ -16,6 +20,14 @@ export const ModalTokenListContent: FC<Props> = ({
   search,
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
+  const [selectedList, _setSelectedList] = useState<ChooseTokenCategory>(
+    lsService.getItem('chooseTokenCategory') || 'popular'
+  );
+
+  const setSelectedList = (category: ChooseTokenCategory) => {
+    _setSelectedList(category);
+    lsService.setItem('chooseTokenCategory', category);
+  };
 
   const rowVirtualizer = useVirtualizer({
     count: tokens.length,
@@ -31,7 +43,22 @@ export const ModalTokenListContent: FC<Props> = ({
   return (
     <div>
       <div className="text-secondary mt-20">{tokens.length} Tokens</div>
-
+      <div className={'my-20 grid w-full grid-cols-4'}>
+        {categories.map((category, i) => (
+          <button
+            key={category}
+            className={`flex items-end justify-start capitalize transition hover:text-white ${
+              category === selectedList ? 'font-weight-500' : 'text-secondary'
+            } ${i > 0 ? 'justify-center' : ''}`}
+            onClick={() => setSelectedList(category)}
+          >
+            {category}
+          </button>
+        ))}
+        <div className="text-secondary flex items-end justify-end">
+          {60} Pairs
+        </div>
+      </div>
       <div
         ref={parentRef}
         style={{
