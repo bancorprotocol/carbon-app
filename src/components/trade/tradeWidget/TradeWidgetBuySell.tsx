@@ -29,12 +29,15 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     liquidityQuery,
     errorMsgSource,
     errorMsgTarget,
+    calcSlippage,
   } = useBuySell(props);
   const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
+
+  const slippage = calcSlippage();
 
   const getRate = () => {
     if (!rate) return '...';
@@ -105,6 +108,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}
+            slippage={slippage}
           />
           <div
             className={

@@ -21,6 +21,7 @@ type Props = {
   className?: string;
   onKeystroke?: () => void;
   isLoading?: boolean;
+  slippage?: BigNumber;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -33,6 +34,7 @@ export const TokenInputField: FC<Props> = ({
   className,
   onKeystroke,
   placeholder = 'Enter Amount',
+  slippage,
 }) => {
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
@@ -141,9 +143,23 @@ export const TokenInputField: FC<Props> = ({
         ) : (
           <div className={'h-16'} />
         )}
-        {fiatValue.gt(0) && (
-          <div>{getFiatValue(fiatValue, selectedFiatCurrency)}</div>
-        )}
+        <div className="flex">
+          {fiatValue.gt(0) && (
+            <div>{getFiatValue(fiatValue, selectedFiatCurrency)}</div>
+          )}
+          {slippage && !slippage.isNaN() && (
+            <div
+              className={`ml-4 ${
+                slippage.isGreaterThan(0) ? 'text-green' : 'text-red'
+              }`}
+            >
+              {`(${slippage.isGreaterThan(0) ? '+' : '-'}${sanitizeNumberInput(
+                slippage?.toString(),
+                2
+              )}%)`}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
