@@ -11,11 +11,11 @@ export const InputLimit: FC<{
     setPrice(sanitizeNumberInput(e.target.value));
 
   return (
-    <div>
+    <div className="">
       <div
         className={`${
-          error && 'border-2 border-red text-red'
-        } bg-body rounded-16 p-16`}
+          error && 'border-red/50 text-red'
+        } bg-body rounded-16 border-2 border-black p-16`}
       >
         <input
           value={price}
@@ -31,9 +31,13 @@ export const InputLimit: FC<{
           }
         />
       </div>
-      {error && (
-        <div className="mt-5 text-center text-12 text-red">{error}</div>
-      )}
+      <div
+        className={`mt-10 h-16 text-center text-12 text-red ${
+          !error ? 'invisible' : ''
+        }`}
+      >
+        {error ? error : ''}
+      </div>
     </div>
   );
 };

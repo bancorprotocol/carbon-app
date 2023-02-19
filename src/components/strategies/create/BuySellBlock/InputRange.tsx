@@ -30,8 +30,8 @@ export const InputRange: FC<{
       <div className="flex space-x-6">
         <div
           className={`${
-            error ? 'border-2 border-red text-red' : ''
-          } bg-body w-full rounded-r-4 rounded-l-16 p-16`}
+            error ? 'border-red/50 text-red' : ''
+          } bg-body w-full rounded-r-4 rounded-l-16 border-2 border-black p-16`}
         >
           <Tooltip
             element={`The lowest rate to ${buy ? 'buy' : 'sell'} ${
@@ -52,8 +52,8 @@ export const InputRange: FC<{
         </div>
         <div
           className={`${
-            error ? 'border-2 border-red text-red' : ''
-          } bg-body w-full rounded-r-16 rounded-l-4 p-16`}
+            error ? 'border-red/50 text-red' : ''
+          } bg-body w-full rounded-r-16 rounded-l-4 border-2 border-black p-16`}
         >
           <Tooltip
             element={`The highest rate to ${buy ? 'buy' : 'sell'} ${
@@ -73,9 +73,13 @@ export const InputRange: FC<{
           />
         </div>
       </div>
-      {error && (
-        <div className="mt-5 text-center text-12 text-red">{error}</div>
-      )}
+      <div
+        className={`mt-10 h-16 text-center text-12 text-red ${
+          !error ? 'invisible' : ''
+        }`}
+      >
+        {error ? error : ''}
+      </div>
     </div>
   );
 };

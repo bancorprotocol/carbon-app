@@ -171,11 +171,13 @@ export const BuySellBlock: FC<Props> = ({
           balance={tokenBalanceQuery.data}
           isError={insufficientBalance}
         />
-        {insufficientBalance && (
-          <div className="mt-6 text-center text-12 text-red">
-            Insufficient balance
-          </div>
-        )}
+        <div
+          className={`mt-10 text-center text-12 text-red ${
+            !insufficientBalance ? 'invisible' : ''
+          }`}
+        >
+          Insufficient balance
+        </div>
       </div>
     </div>
   );
