@@ -42,8 +42,8 @@ export const BuySellBlock: FC<Props> = ({
 
   return (
     <div
-      className={`bg-secondary space-y-12 rounded-10 border-l-2 p-20 ${
-        buy ? 'border-green' : 'border-red'
+      className={`bg-secondary space-y-12 rounded-10 border-l-2 p-20 pb-10 ${
+        buy ? 'border-green/50' : 'border-red/50'
       }`}
     >
       <div className="flex items-center justify-between">
@@ -58,7 +58,6 @@ export const BuySellBlock: FC<Props> = ({
           />
           <span>{token0.symbol}</span>
         </div>
-
         <div className="flex items-center gap-10 text-14">
           <div className="bg-body flex items-center rounded-[100px] p-2">
             <button
@@ -161,7 +160,6 @@ export const BuySellBlock: FC<Props> = ({
           </div>
         </Tooltip>
       </div>
-
       <div>
         <TokenInputField
           className={'rounded-16 bg-black p-16'}
