@@ -113,7 +113,7 @@ export const BuySellBlock: FC<Props> = ({
           <div className={'text-14 font-weight-500 text-white/60'}>
             <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
             <span className={'ml-8 text-white/80'}>
-              ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
+              ({token1.symbol} <span className={'text-white/60'}>per 1 </span>
               {token0.symbol})
             </span>
           </div>
