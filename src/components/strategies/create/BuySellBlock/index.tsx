@@ -137,7 +137,7 @@ export const BuySellBlock: FC<Props> = ({
         />
       ) : (
         <InputLimit
-          token={token0}
+          token={token1}
           price={order.price}
           setPrice={order.setPrice}
           error={order.priceError}
