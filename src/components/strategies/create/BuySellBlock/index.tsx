@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import BigNumber from 'bignumber.js';
 import { Imager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -7,7 +8,6 @@ import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
-import BigNumber from 'bignumber.js';
 
 type Props = {
   token0: Token;
@@ -24,7 +24,6 @@ export const BuySellBlock: FC<Props> = ({
   order,
   buy,
 }) => {
-  const [focus, setFocus] = useState(false);
   const { isRange, setIsRange, resetFields } = order;
   const budgetToken = buy ? token1 : token0;
   const title = buy ? 'Buy Low' : 'Sell High';
@@ -45,8 +44,8 @@ export const BuySellBlock: FC<Props> = ({
     <div
       className={`bg-secondary space-y-12 rounded-10 border-l-2 p-20 pb-10 ${
         buy
-          ? `${focus ? 'border-green' : 'border-green/50'}`
-          : `${focus ? 'border-red' : 'border-red/50'}`
+          ? 'border-green/50 focus-within:border-green'
+          : 'border-red/50 focus-within:border-red'
       }`}
     >
       <div className="flex items-center justify-between">
@@ -132,8 +131,6 @@ export const BuySellBlock: FC<Props> = ({
           setRangeError={order.setRangeError}
           token={token0}
           buy={buy}
-          focus={focus}
-          setFocus={setFocus}
         />
       ) : (
         <InputLimit
@@ -142,8 +139,6 @@ export const BuySellBlock: FC<Props> = ({
           setPrice={order.setPrice}
           error={order.priceError}
           setPriceError={order.setPriceError}
-          focus={focus}
-          setFocus={setFocus}
         />
       )}
 
@@ -176,8 +171,6 @@ export const BuySellBlock: FC<Props> = ({
           isBalanceLoading={tokenBalanceQuery.isLoading}
           balance={tokenBalanceQuery.data}
           isError={insufficientBalance}
-          focus={focus}
-          setFocus={setFocus}
         />
         <div
           className={`mt-10 text-center text-12 text-red ${

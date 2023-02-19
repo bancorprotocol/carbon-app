@@ -1,6 +1,6 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputLimit: FC<{
@@ -9,9 +9,7 @@ export const InputLimit: FC<{
   token: Token;
   error?: string;
   setPriceError: (error: string) => void;
-  focus?: boolean;
-  setFocus?: Dispatch<SetStateAction<boolean>>;
-}> = ({ price, setPrice, token, error, setPriceError, setFocus, focus }) => {
+}> = ({ price, setPrice, token, error, setPriceError }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPrice(sanitizeNumberInput(e.target.value));
 
@@ -31,9 +29,7 @@ export const InputLimit: FC<{
             Number(price) > 0
               ? setPriceError('')
               : setPriceError('Price Must be greater than 0');
-            focus && setFocus && setFocus(false);
           }}
-          onFocus={() => !focus && setFocus && setFocus(true)}
           placeholder="Enter Price"
           className={
             'mb-5 w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
