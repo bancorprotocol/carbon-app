@@ -1,12 +1,7 @@
 import { Imager } from 'components/common/imager/Imager';
-import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, FC, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
-import {
-  getFiatValue,
-  prettifyNumber,
-  sanitizeNumberInput,
-} from 'utils/helpers';
-import BigNumber from 'bignumber.js';
+import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 
@@ -39,17 +34,7 @@ export const TokenInputField: FC<Props> = ({
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-
-  const tokenPriceQuery = useGetTokenPrice(token.symbol);
-
-  const fiatValue = useMemo(
-    () =>
-      new BigNumber(value || 0).times(
-        tokenPriceQuery.data?.[selectedFiatCurrency] || 0
-      ),
-    [selectedFiatCurrency, tokenPriceQuery.data, value]
-  );
+  const { fiatValue, fiatAsString } = useFiatCurrency(token, value);
 
   const handleOnFocus = () => {
     setIsFocused(true);
@@ -141,9 +126,7 @@ export const TokenInputField: FC<Props> = ({
         ) : (
           <div className={'h-16'} />
         )}
-        {fiatValue.gt(0) && (
-          <div>{getFiatValue(fiatValue, selectedFiatCurrency)}</div>
-        )}
+        {fiatValue.gt(0) && <div>{fiatAsString}</div>}
       </div>
     </div>
   );
