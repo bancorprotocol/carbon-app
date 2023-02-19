@@ -315,6 +315,9 @@ export const useBuySell = ({
   const calcSlippage = useCallback(() => {
     const sourceFiat = getTokenFiat(sourceInput, sourceTokenPriceQuery);
     const targetFiat = getTokenFiat(targetInput, targetTokenPriceQuery);
+    if (targetFiat.isEqualTo(0)) {
+      return undefined;
+    }
     const diff = sourceFiat.div(targetFiat);
     return new BigNumber(1).minus(diff).times(100);
   }, [

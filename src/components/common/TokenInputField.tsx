@@ -1,12 +1,12 @@
-import { Imager } from 'components/common/imager/Imager';
 import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
 import {
   getFiatValue,
   prettifyNumber,
   sanitizeNumberInput,
 } from 'utils/helpers';
-import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 
@@ -40,10 +40,9 @@ export const TokenInputField: FC<Props> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-
   const tokenPriceQuery = useGetTokenPrice(token.symbol);
+  const isSlippagePositive = slippage?.isGreaterThan(0);
 
   const fiatValue = useMemo(
     () =>
@@ -147,14 +146,14 @@ export const TokenInputField: FC<Props> = ({
           {fiatValue.gt(0) && (
             <div>{getFiatValue(fiatValue, selectedFiatCurrency)}</div>
           )}
-          {slippage && !slippage.isNaN() && (
+          {slippage && (
             <div
               className={`ml-4 ${
-                slippage.isGreaterThan(0) ? 'text-green' : 'text-red'
+                isSlippagePositive ? 'text-green' : 'text-red'
               }`}
             >
-              {`(${slippage.isGreaterThan(0) ? '+' : '-'}${sanitizeNumberInput(
-                slippage?.toString(),
+              {`(${isSlippagePositive ? '+' : '-'}${sanitizeNumberInput(
+                slippage.toString(),
                 2
               )}%)`}
             </div>
