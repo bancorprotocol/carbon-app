@@ -146,7 +146,7 @@ export const TokenInputField: FC<Props> = ({
           {fiatValue.gt(0) && (
             <div>{getFiatValue(fiatValue, selectedFiatCurrency)}</div>
           )}
-          {slippage && (
+          {slippage && !slippage.isNaN() && (
             <div
               className={`ml-4 ${
                 isSlippagePositive ? 'text-green' : 'text-red'
