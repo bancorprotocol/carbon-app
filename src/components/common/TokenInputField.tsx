@@ -21,7 +21,7 @@ type Props = {
   className?: string;
   onKeystroke?: () => void;
   isLoading?: boolean;
-  slippage?: BigNumber;
+  slippage?: BigNumber | null;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -44,7 +44,7 @@ export const TokenInputField: FC<Props> = ({
   const tokenPriceQuery = useGetTokenPrice(token.symbol);
   const isSlippagePositive = slippage?.isGreaterThan(0);
 
-  const fiatValue = useMemo(
+  const fiatNumber = useMemo(
     () =>
       new BigNumber(value || 0).times(
         tokenPriceQuery.data?.[selectedFiatCurrency] || 0
@@ -143,10 +143,10 @@ export const TokenInputField: FC<Props> = ({
           <div className={'h-16'} />
         )}
         <div className="flex">
-          {fiatValue.gt(0) && (
-            <div>{getFiatValue(fiatValue, selectedFiatCurrency)}</div>
+          {fiatNumber.gt(0) && (
+            <div>{getFiatValue(fiatNumber, selectedFiatCurrency)}</div>
           )}
-          {slippage && !slippage.isNaN() && (
+          {slippage && !slippage.isEqualTo(0) && (
             <div
               className={`ml-4 ${
                 isSlippagePositive ? 'text-green' : 'text-red'

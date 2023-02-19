@@ -312,11 +312,18 @@ export const useBuySell = ({
     [selectedFiatCurrency]
   );
 
-  const calcSlippage = useCallback((): BigNumber => {
+  const calcSlippage = useCallback((): BigNumber | null => {
     const sourceFiat = getTokenFiat(sourceInput, sourceTokenPriceQuery);
     const targetFiat = getTokenFiat(targetInput, targetTokenPriceQuery);
+    if (targetFiat.isEqualTo(0)) {
+      return null;
+    }
     const diff = sourceFiat.div(targetFiat);
-    return new BigNumber(1).minus(diff).times(100);
+    const slippage = new BigNumber(1).minus(diff).times(100);
+    if (slippage.isFinite()) {
+      return slippage;
+    }
+    return null;
   }, [
     getTokenFiat,
     sourceInput,
