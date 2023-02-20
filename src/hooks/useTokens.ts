@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
@@ -38,12 +38,6 @@ export const useTokens = () => {
   const [favoriteTokens, _setFavoriteTokens] = useState<Token[]>(
     lsService.getItem(`favoriteTokens-${user}`) || []
   );
-
-  useEffect(() => {
-    if (user) {
-      _setFavoriteTokens(lsService.getItem(`favoriteTokens-${user}`) || []);
-    }
-  }, [user]);
 
   const addFavoriteToken = useCallback(
     (token: Token) => {
