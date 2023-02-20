@@ -28,6 +28,7 @@ export const ModalTokenListContent: FC<Props> = ({
   const [selectedList, _setSelectedList] = useState<ChooseTokenCategory>(
     lsService.getItem('chooseTokenCategory') || 'popular'
   );
+  const _tokens = !!search ? tokens.all : tokens[selectedList];
 
   const setSelectedList = (category: ChooseTokenCategory) => {
     _setSelectedList(category);
@@ -35,12 +36,11 @@ export const ModalTokenListContent: FC<Props> = ({
   };
 
   const rowVirtualizer = useVirtualizer({
-    count: tokens[selectedList].length,
+    count: _tokens.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 65,
     overscan: 10,
   });
-  const _tokens = !!search ? tokens.all : tokens[selectedList];
 
   useEffect(() => {
     if (parentRef.current) parentRef.current.scrollTop = 0;
