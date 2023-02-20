@@ -150,7 +150,7 @@ export const TokenInputField: FC<Props> = ({
             <div
               className={`ml-4 ${
                 slippage.isEqualTo(0)
-                  ? 'text-white/60'
+                  ? 'text-white/80'
                   : isSlippagePositive
                   ? 'text-green'
                   : 'text-red'

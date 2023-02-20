@@ -316,11 +316,12 @@ export const useBuySell = ({
     const sourceFiat = getTokenFiat(sourceInput, sourceTokenPriceQuery);
     const targetFiat = getTokenFiat(targetInput, targetTokenPriceQuery);
 
-    if (sourceFiat.isEqualTo(0)) {
+    if (sourceFiat.isEqualTo(0) || targetFiat.isEqualTo(0)) {
       return new BigNumber(0);
     }
     const diff = sourceFiat.div(targetFiat);
     const slippage = new BigNumber(1).minus(diff).times(100);
+
     if (slippage.isFinite()) {
       return slippage;
     }
