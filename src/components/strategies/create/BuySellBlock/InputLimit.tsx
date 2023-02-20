@@ -16,7 +16,7 @@ export const InputLimit: FC<{
   const { fiatAsString } = useFiatCurrency(token, price);
 
   return (
-    <div className="">
+    <div>
       <div
         className={`${
           error && 'border-red/50 text-red'
