@@ -66,6 +66,14 @@ export const useModalTokenList = ({ id, data }: Props) => {
     [tokens, excludedTokens, includedTokens]
   );
 
+  const _favoriteTokens = useMemo(
+    () =>
+      favoriteTokens.filter(
+        (token) => !excludedTokens.includes(token?.address || '')
+      ),
+    [excludedTokens, favoriteTokens]
+  );
+
   const fuseIndex = useMemo(
     () => Fuse.createIndex(SEARCH_KEYS, sanitizedTokens),
     [sanitizedTokens]
@@ -122,10 +130,12 @@ export const useModalTokenList = ({ id, data }: Props) => {
 
   const popularTokens = useMemo(
     () =>
-      defaultPopularTokens.map((tokenAddress) =>
-        tokensMap.get(tokenAddress.toLowerCase())
-      ) as Token[],
-    [defaultPopularTokens, tokensMap]
+      defaultPopularTokens
+        .map((tokenAddress) => tokensMap.get(tokenAddress.toLowerCase()))
+        .filter(
+          (token) => !excludedTokens.includes(token?.address || '')
+        ) as Token[],
+    [defaultPopularTokens, excludedTokens, tokensMap]
   );
 
   return {
@@ -140,7 +150,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
     error,
     addFavoriteToken,
     removeFavoriteToken,
-    favoriteTokens,
+    favoriteTokens: _favoriteTokens,
     popularTokens,
   };
 };
