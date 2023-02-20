@@ -6,6 +6,7 @@ import Fuse from 'fuse.js';
 import { utils } from 'ethers';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
 import { orderBy } from 'lodash';
+import { config } from 'services/web3/config';
 
 const SEARCH_KEYS = [
   {
@@ -32,10 +33,19 @@ export const useModalTokenList = ({ id, data }: Props) => {
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
+    tokensMap,
   } = useTokens();
-  const { onClick, excludedTokens = [], includedTokens = [] } = data;
+  const {
+    onClick,
+    excludedTokens = [],
+    includedTokens = [],
+    isBaseToken = false,
+  } = data;
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
+  const defaultPopularTokens = isBaseToken
+    ? basePopularTokens
+    : quotePopularTokens;
 
   const onSelect = useCallback(
     (token: Token) => {
@@ -110,6 +120,14 @@ export const useModalTokenList = ({ id, data }: Props) => {
     [showImportToken, filteredTokens]
   );
 
+  const popularTokens = useMemo(
+    () =>
+      defaultPopularTokens.map((tokenAddress) =>
+        tokensMap.get(tokenAddress.toLowerCase())
+      ) as Token[],
+    [defaultPopularTokens, tokensMap]
+  );
+
   return {
     search,
     setSearch,
@@ -123,5 +141,41 @@ export const useModalTokenList = ({ id, data }: Props) => {
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
+    popularTokens,
   };
 };
+
+const {
+  ENJ,
+  UNI,
+  LINK,
+  LDO,
+  APE,
+  GRT,
+  AAVE,
+  CRV,
+  ETH,
+  WBTC,
+  BNT,
+  SHIB,
+  DAI,
+  USDC,
+  USDT,
+} = config.tokens;
+
+const basePopularTokens: string[] = [
+  ETH,
+  WBTC,
+  BNT,
+  SHIB,
+  ENJ,
+  UNI,
+  LINK,
+  LDO,
+  APE,
+  GRT,
+  AAVE,
+  CRV,
+];
+
+const quotePopularTokens: string[] = [DAI, USDC, USDT, ETH, WBTC];

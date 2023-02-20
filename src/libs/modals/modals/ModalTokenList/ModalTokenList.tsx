@@ -13,6 +13,7 @@ export type ModalTokenListData = {
   onClick: (token: Token) => void;
   excludedTokens?: string[];
   includedTokens?: string[];
+  isBaseToken?: boolean;
 };
 
 export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
@@ -28,6 +29,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
+    popularTokens,
   } = useModalTokenList({ id, data });
 
   return (
@@ -51,7 +53,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
           tokens={{
             all: filteredTokens,
             favorites: favoriteTokens,
-            popular: filteredTokens,
+            popular: popularTokens,
           }}
           onSelect={onSelect}
           search={search}

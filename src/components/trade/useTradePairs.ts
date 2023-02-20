@@ -32,12 +32,10 @@ export const useTradePairs = () => {
     if (!pairsQuery.data) return [];
     return pairsQuery.data;
   }, [pairsQuery.data]);
-
   const tradePairsMap = useMemo(
     () => new Map(tradePairs.map((p) => [buildPairKey(p), p])),
     [tradePairs]
   );
-
   const getTradePair = useCallback(
     (base: string, quote: string): TradePair | undefined => {
       return tradePairsMap.get(
@@ -54,7 +52,6 @@ export const useTradePairs = () => {
         .filter((p) => !!p) as TradePair[],
     [getTradePair]
   );
-
   const [favoritePairs, _setFavoritePairs] = useState<TradePair[]>(
     lsService.getItem(`favoriteTradePairs-${user}`) || []
   );

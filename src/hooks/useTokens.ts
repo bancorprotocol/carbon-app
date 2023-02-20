@@ -76,5 +76,6 @@ export const useTokens = () => {
     addFavoriteToken,
     removeFavoriteToken,
     favoriteTokens,
+    tokensMap,
   };
 };

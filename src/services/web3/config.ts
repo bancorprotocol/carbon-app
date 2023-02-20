@@ -11,6 +11,14 @@ export interface Config {
     DAI: string;
     WBTC: string;
     SHIB: string;
+    ENJ: string;
+    UNI: string;
+    LINK: string;
+    LDO: string;
+    APE: string;
+    GRT: string;
+    AAVE: string;
+    CRV: string;
   };
   carbon: {
     carbonController: string;

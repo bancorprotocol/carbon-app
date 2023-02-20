@@ -59,7 +59,6 @@ export const ModalTokenListContent: FC<Props> = ({
 
   return (
     <div>
-      <div className="text-secondary mt-20">{_tokens.length} Tokens</div>
       <div className={'my-20 grid w-full grid-cols-4'}>
         {categories.map((category, i) => (
           <button
@@ -73,7 +72,7 @@ export const ModalTokenListContent: FC<Props> = ({
           </button>
         ))}
         <div className="text-secondary flex items-end justify-end">
-          {_tokens.length} Pairs
+          {_tokens.length} Tokens
         </div>
       </div>
       <div
