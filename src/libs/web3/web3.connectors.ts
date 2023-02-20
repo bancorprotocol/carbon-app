@@ -15,6 +15,7 @@ import iconWalletConnect from 'assets/logos/walletConnect.svg';
 import iconCoinbase from 'assets/logos/coinbase.svg';
 import iconGnosis from 'assets/logos/gnosis.svg';
 import carbonLogo from 'assets/logos/carbon.svg';
+import { StaticJsonRpcProvider } from '@ethersproject/providers';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
@@ -28,7 +29,13 @@ const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
   (actions) =>
     new Network({
       actions,
-      urlMap: RPC_URLS,
+      urlMap: {
+        ...RPC_URLS,
+        [SupportedChainId.MAINNET]: new StaticJsonRpcProvider({
+          url: RPC_URLS[SupportedChainId.MAINNET],
+          skipFetchSetup: true,
+        }),
+      },
       defaultChainId: SupportedChainId.MAINNET,
     })
 );
