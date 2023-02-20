@@ -146,16 +146,19 @@ export const TokenInputField: FC<Props> = ({
           {fiatNumber.gt(0) && (
             <div>{getFiatValue(fiatNumber, selectedFiatCurrency)}</div>
           )}
-          {slippage && !slippage.isEqualTo(0) && (
+          {slippage && (
             <div
               className={`ml-4 ${
-                isSlippagePositive ? 'text-green' : 'text-red'
+                slippage.isEqualTo(0)
+                  ? 'text-white/60'
+                  : isSlippagePositive
+                  ? 'text-green'
+                  : 'text-red'
               }`}
             >
-              {`(${isSlippagePositive ? '+' : '-'}${sanitizeNumberInput(
-                slippage.toString(),
-                2
-              )}%)`}
+              {`(${
+                slippage.isEqualTo(0) ? '' : isSlippagePositive ? '+' : '-'
+              }${sanitizeNumberInput(slippage.toString(), 2)}%)`}
             </div>
           )}
         </div>
