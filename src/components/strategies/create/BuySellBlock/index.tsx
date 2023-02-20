@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import BigNumber from 'bignumber.js';
 import { Imager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -7,7 +8,6 @@ import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
-import BigNumber from 'bignumber.js';
 
 type Props = {
   token0: Token;
@@ -24,13 +24,13 @@ export const BuySellBlock: FC<Props> = ({
   order,
   buy,
 }) => {
+  const { isRange, setIsRange, resetFields } = order;
   const budgetToken = buy ? token1 : token0;
   const title = buy ? 'Buy Low' : 'Sell High';
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
   } ${token0.symbol} at.`;
 
-  const { isRange, setIsRange, resetFields } = order;
   const handleRangeChange = () => {
     setIsRange(!isRange);
     resetFields(true);
@@ -42,8 +42,10 @@ export const BuySellBlock: FC<Props> = ({
 
   return (
     <div
-      className={`bg-secondary space-y-12 rounded-10 border-l-2 p-20 ${
-        buy ? 'border-green' : 'border-red'
+      className={`bg-secondary space-y-12 rounded-10 border-l-2 p-20 pb-10 ${
+        buy
+          ? 'border-green/50 focus-within:border-green'
+          : 'border-red/50 focus-within:border-red'
       }`}
     >
       <div className="flex items-center justify-between">
@@ -58,7 +60,6 @@ export const BuySellBlock: FC<Props> = ({
           />
           <span>{token0.symbol}</span>
         </div>
-
         <div className="flex items-center gap-10 text-14">
           <div className="bg-body flex items-center rounded-[100px] p-2">
             <button
@@ -113,7 +114,7 @@ export const BuySellBlock: FC<Props> = ({
           <div className={'text-14 font-weight-500 text-white/60'}>
             <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
             <span className={'ml-8 text-white/80'}>
-              ({token1.symbol} <span className={'text-white/60'}>per</span> 1{' '}
+              ({token1.symbol} <span className={'text-white/60'}>per 1 </span>
               {token0.symbol})
             </span>
           </div>
@@ -133,6 +134,7 @@ export const BuySellBlock: FC<Props> = ({
         />
       ) : (
         <InputLimit
+          token={token1}
           price={order.price}
           setPrice={order.setPrice}
           error={order.priceError}
@@ -160,7 +162,6 @@ export const BuySellBlock: FC<Props> = ({
           </div>
         </Tooltip>
       </div>
-
       <div>
         <TokenInputField
           className={'rounded-16 bg-black p-16'}
@@ -171,11 +172,13 @@ export const BuySellBlock: FC<Props> = ({
           balance={tokenBalanceQuery.data}
           isError={insufficientBalance}
         />
-        {insufficientBalance && (
-          <div className="mt-6 text-center text-12 text-red">
-            Insufficient balance
-          </div>
-        )}
+        <div
+          className={`mt-10 text-center text-12 text-red ${
+            !insufficientBalance ? 'invisible' : ''
+          }`}
+        >
+          Insufficient balance
+        </div>
       </div>
     </div>
   );

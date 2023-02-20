@@ -20,6 +20,8 @@ export const CreateStrategy = () => {
   const {
     token0,
     token1,
+    setToken0,
+    setToken1,
     openTokenListModal,
     showStep2,
     order0,
@@ -106,7 +108,18 @@ export const CreateStrategy = () => {
                       'relative z-10 mx-auto flex h-40 w-40 items-center justify-center rounded-full border-[5px] border border-silver bg-black'
                     }
                   >
-                    <IconArrow className={'w-12'} />
+                    <IconArrow
+                      onClick={() => {
+                        if (token0 && token1) {
+                          const temp = token0;
+                          setToken0(token1);
+                          setToken1(temp);
+                        }
+                      }}
+                      className={`w-12 ${
+                        token0 && token1 ? 'cursor-pointer' : ''
+                      }`}
+                    />
                   </div>
                   <SelectTokenButton
                     symbol={token1?.symbol}
