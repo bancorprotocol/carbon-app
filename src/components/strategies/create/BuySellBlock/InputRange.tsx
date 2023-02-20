@@ -1,7 +1,8 @@
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { Token } from 'libs/tokens';
 import { ChangeEvent, FC } from 'react';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
+import { Token } from 'libs/tokens';
 
 export const InputRange: FC<{
   min: string;
@@ -25,13 +26,16 @@ export const InputRange: FC<{
       : setRangeError('Max Price must be higher than min price and not zero');
   };
 
+  const { fiatAsString: fiatAsStringMin } = useFiatCurrency(token, min);
+  const { fiatAsString: fiatAsStringMax } = useFiatCurrency(token, max);
+
   return (
     <div>
       <div className="flex space-x-6">
         <div
           className={`${
-            error ? 'border-2 border-red text-red' : ''
-          } bg-body w-full rounded-r-4 rounded-l-16 p-16`}
+            error ? 'border-red/50 text-red' : ''
+          } bg-body w-full rounded-r-4 rounded-l-16 border-2 border-black p-16`}
         >
           <Tooltip
             element={`The lowest rate to ${buy ? 'buy' : 'sell'} ${
@@ -46,14 +50,17 @@ export const InputRange: FC<{
             placeholder="Enter Price"
             onBlur={() => handleBlur(true)}
             className={
-              'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
+              'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
+          <div className="font-mono text-12 text-white/60">
+            {fiatAsStringMin}
+          </div>
         </div>
         <div
           className={`${
-            error ? 'border-2 border-red text-red' : ''
-          } bg-body w-full rounded-r-16 rounded-l-4 p-16`}
+            error ? 'border-red/50 text-red' : ''
+          } bg-body w-full rounded-r-16 rounded-l-4 border-2 border-black p-16`}
         >
           <Tooltip
             element={`The highest rate to ${buy ? 'buy' : 'sell'} ${
@@ -71,11 +78,18 @@ export const InputRange: FC<{
               'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
+          <div className="mt-6 font-mono text-12 text-white/60">
+            {fiatAsStringMax}
+          </div>
         </div>
       </div>
-      {error && (
-        <div className="mt-5 text-center text-12 text-red">{error}</div>
-      )}
+      <div
+        className={`mt-10 h-16 text-center text-12 text-red ${
+          !error ? 'invisible' : ''
+        }`}
+      >
+        {error ? error : ''}
+      </div>
     </div>
   );
 };
