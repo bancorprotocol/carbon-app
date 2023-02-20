@@ -16,6 +16,7 @@ import {
 import { prettifyNumber } from 'utils/helpers';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
+import { FriendlyAction, TradeActionStruct } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 
@@ -54,7 +55,9 @@ export const useBuySell = ({
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
-  const [tradeActions, setTradeActions] = useState<any[]>([]);
+  const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
+  const [tradeActionsRes, setTradeActionsRes] = useState<FriendlyAction[]>([]);
+
   const [rate, setRate] = useState('');
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
@@ -180,11 +183,13 @@ export const useBuySell = ({
         totalSourceAmount,
         totalTargetAmount,
         tradeActions,
+        actionsTokenRes,
         effectiveRate,
       } = bySourceQuery.data;
 
       setTargetInput(totalTargetAmount);
       setTradeActions(tradeActions);
+      setTradeActionsRes(actionsTokenRes);
       setRate(effectiveRate);
       checkLiquidity(totalSourceAmount);
     }
@@ -204,11 +209,13 @@ export const useBuySell = ({
         totalSourceAmount,
         totalTargetAmount,
         tradeActions,
+        actionsTokenRes,
         effectiveRate,
       } = byTargetQuery.data;
 
       setSourceInput(totalSourceAmount);
       setTradeActions(tradeActions);
+      setTradeActionsRes(actionsTokenRes);
       setRate(effectiveRate);
       checkLiquidity(totalTargetAmount);
     }
@@ -303,6 +310,14 @@ export const useBuySell = ({
     target.symbol,
   ]);
 
+  const openTradeRouteModal = useCallback(() => {
+    openModal('tradeRouting', {
+      tradeActions: tradeActionsRes,
+      source,
+      target,
+    });
+  }, [openModal, source, target, tradeActionsRes]);
+
   const getTokenFiat = useCallback(
     (value: string, query: any) => {
       return new BigNumber(value || 0).times(
@@ -350,6 +365,7 @@ export const useBuySell = ({
     isLiquidityError,
     errorMsgSource,
     errorMsgTarget,
+    openTradeRouteModal,
     calcSlippage,
   };
 };

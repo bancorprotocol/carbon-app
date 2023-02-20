@@ -29,6 +29,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     liquidityQuery,
     errorMsgSource,
     errorMsgTarget,
+    openTradeRouteModal,
     calcSlippage,
   } = useBuySell(props);
   const { buy, source, target, sourceBalanceQuery } = props;
@@ -112,10 +113,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           />
           <div
             className={
-              'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
+              'mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
             }
           >
-            {getRate()}
+            <span>{getRate()}</span>
+
+            <span>
+              <button onClick={openTradeRouteModal}>routing</button>
+            </span>
           </div>
 
           <div className={'text-secondary mt-5 text-right'}>
