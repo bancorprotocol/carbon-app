@@ -24,7 +24,15 @@ type Props = {
 };
 
 export const useModalTokenList = ({ id, data }: Props) => {
-  const { tokens, isLoading, isError, error } = useTokens();
+  const {
+    tokens,
+    isLoading,
+    isError,
+    error,
+    addFavoriteToken,
+    removeFavoriteToken,
+    favoriteTokens,
+  } = useTokens();
   const { onClick, excludedTokens = [], includedTokens = [] } = data;
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
@@ -112,5 +120,8 @@ export const useModalTokenList = ({ id, data }: Props) => {
     isLoading,
     isError,
     error,
+    addFavoriteToken,
+    removeFavoriteToken,
+    favoriteTokens,
   };
 };

@@ -18,6 +18,7 @@ interface LocalStorageSchema {
   importedTokens: Token[];
   [k: `notifications-${string}`]: Notification[];
   [k: `favoriteTradePairs-${string}`]: TradePair[];
+  [k: `favoriteTokens-${string}`]: Token[];
   tradePairsCategory: TradePairCategory;
   tradeSlippage: string;
   tradeDeadline: string;

@@ -1,23 +1,28 @@
 import { Imager } from 'components/common/imager/Imager';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
 import { lsService } from 'services/localeStorage';
+import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
 
 type Props = {
-  tokens: Token[];
+  tokens: { [k in ChooseTokenCategory]: Token[] };
   onSelect: (token: Token) => void;
   search: string;
+  onAddFavorite: (token: Token) => void;
+  onRemoveFavorite: (token: Token) => void;
 };
 
 export const ModalTokenListContent: FC<Props> = ({
   tokens,
   onSelect,
   search,
+  onAddFavorite,
+  onRemoveFavorite,
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [selectedList, _setSelectedList] = useState<ChooseTokenCategory>(
@@ -30,19 +35,31 @@ export const ModalTokenListContent: FC<Props> = ({
   };
 
   const rowVirtualizer = useVirtualizer({
-    count: tokens.length,
+    count: tokens[selectedList].length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 65,
     overscan: 10,
   });
+  const _tokens = !!search ? tokens.all : tokens[selectedList];
 
   useEffect(() => {
     if (parentRef.current) parentRef.current.scrollTop = 0;
+    if (!!search) setSelectedList('all');
   }, [search]);
+
+  const favoritesMap = useMemo(
+    () => new Set(tokens.favorites.map((token) => token.address)),
+    [tokens.favorites]
+  );
+
+  const isFavorite = useCallback(
+    (token: Token) => favoritesMap.has(token.address),
+    [favoritesMap]
+  );
 
   return (
     <div>
-      <div className="text-secondary mt-20">{tokens.length} Tokens</div>
+      <div className="text-secondary mt-20">{_tokens.length} Tokens</div>
       <div className={'my-20 grid w-full grid-cols-4'}>
         {categories.map((category, i) => (
           <button
@@ -56,7 +73,7 @@ export const ModalTokenListContent: FC<Props> = ({
           </button>
         ))}
         <div className="text-secondary flex items-end justify-end">
-          {60} Pairs
+          {_tokens.length} Pairs
         </div>
       </div>
       <div
@@ -74,7 +91,7 @@ export const ModalTokenListContent: FC<Props> = ({
           }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            const token = tokens[virtualRow.index];
+            const token = _tokens[virtualRow.index];
             return (
               <div
                 key={virtualRow.key}
@@ -86,29 +103,46 @@ export const ModalTokenListContent: FC<Props> = ({
                   transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
-                <button
-                  onClick={() => onSelect(token)}
-                  className="flex w-full items-center"
-                  style={{ height: `${virtualRow.size}px` }}
-                >
-                  <Imager
-                    src={token.logoURI}
-                    alt={`${token.symbol} Token`}
-                    className="h-32 w-32 !rounded-full"
-                  />
-                  <div className="ml-15 grid justify-items-start">
-                    <div className="flex">
-                      {token.symbol}
-                      {token.isSuspicious && <SuspiciousTokenWarning />}
+                <div className="flex">
+                  <button
+                    onClick={() => onSelect(token)}
+                    className="flex w-full items-center"
+                    style={{ height: `${virtualRow.size}px` }}
+                  >
+                    <Imager
+                      src={token.logoURI}
+                      alt={`${token.symbol} Token`}
+                      className="h-32 w-32 !rounded-full"
+                    />
+                    <div className="ml-15 grid justify-items-start">
+                      <div className="flex">
+                        {token.symbol}
+                        {token.isSuspicious && <SuspiciousTokenWarning />}
+                      </div>
+                      <div className="text-secondary text-12">
+                        {
+                          // TODO: add tailwind line camp
+                          token.name ?? token.symbol
+                        }
+                      </div>
                     </div>
-                    <div className="text-secondary text-12">
-                      {
-                        // TODO: add tailwind line camp
-                        token.name ?? token.symbol
-                      }
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                  <button
+                    onClick={() =>
+                      isFavorite(token)
+                        ? onRemoveFavorite(token)
+                        : onAddFavorite(token)
+                    }
+                  >
+                    <IconStar
+                      className={`${
+                        isFavorite(token)
+                          ? 'text-yellow-500/60'
+                          : 'text-white/20'
+                      } w-30 transition hover:text-yellow-500`}
+                    />
+                  </button>
+                </div>
               </div>
             );
           })}
