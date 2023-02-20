@@ -1,5 +1,6 @@
-import { Imager } from 'components/common/imager/Imager';
 import { ChangeEvent, FC, useRef, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -16,6 +17,7 @@ type Props = {
   className?: string;
   onKeystroke?: () => void;
   isLoading?: boolean;
+  slippage?: BigNumber | null;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -28,11 +30,13 @@ export const TokenInputField: FC<Props> = ({
   className,
   onKeystroke,
   placeholder = 'Enter Amount',
+  slippage,
 }) => {
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isSlippagePositive = slippage?.isGreaterThan(0);
 
   const { fiatValue, fiatAsString } = useFiatCurrency(token, value);
 
@@ -126,7 +130,24 @@ export const TokenInputField: FC<Props> = ({
         ) : (
           <div className={'h-16'} />
         )}
-        {fiatValue.gt(0) && <div>{fiatAsString}</div>}
+        <div className="flex">
+          {fiatValue.gt(0) && <div>{fiatAsString}</div>}
+          {slippage && (
+            <div
+              className={`ml-4 ${
+                slippage.isEqualTo(0)
+                  ? 'text-white/80'
+                  : isSlippagePositive
+                  ? 'text-green'
+                  : 'text-red'
+              }`}
+            >
+              {`(${
+                slippage.isEqualTo(0) ? '' : isSlippagePositive ? '+' : '-'
+              }${sanitizeNumberInput(slippage.toString(), 2)}%)`}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

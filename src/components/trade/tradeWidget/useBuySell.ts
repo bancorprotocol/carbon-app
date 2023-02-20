@@ -16,6 +16,8 @@ import {
 import { prettifyNumber } from 'utils/helpers';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 
 const calcMinReturn = (amount: string, slippagePercent: string | number) => {
   const slippage = new BigNumber(slippagePercent).div(100);
@@ -46,6 +48,9 @@ export const useBuySell = ({
   const cache = useQueryClient();
   const { user, signer } = useWeb3();
   const { openModal } = useModal();
+  const { selectedFiatCurrency } = useFiatCurrency();
+  const sourceTokenPriceQuery = useGetTokenPrice(source.symbol);
+  const targetTokenPriceQuery = useGetTokenPrice(target.symbol);
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
@@ -298,6 +303,37 @@ export const useBuySell = ({
     target.symbol,
   ]);
 
+  const getTokenFiat = useCallback(
+    (value: string, query: any) => {
+      return new BigNumber(value || 0).times(
+        query.data?.[selectedFiatCurrency] || 0
+      );
+    },
+    [selectedFiatCurrency]
+  );
+
+  const calcSlippage = useCallback((): BigNumber | null => {
+    const sourceFiat = getTokenFiat(sourceInput, sourceTokenPriceQuery);
+    const targetFiat = getTokenFiat(targetInput, targetTokenPriceQuery);
+
+    if (sourceFiat.isEqualTo(0) || targetFiat.isEqualTo(0)) {
+      return new BigNumber(0);
+    }
+    const diff = sourceFiat.div(targetFiat);
+    const slippage = new BigNumber(1).minus(diff).times(100);
+
+    if (slippage.isFinite()) {
+      return slippage;
+    }
+    return null;
+  }, [
+    getTokenFiat,
+    sourceInput,
+    sourceTokenPriceQuery,
+    targetInput,
+    targetTokenPriceQuery,
+  ]);
+
   return {
     sourceInput,
     setSourceInput,
@@ -314,5 +350,6 @@ export const useBuySell = ({
     isLiquidityError,
     errorMsgSource,
     errorMsgTarget,
+    calcSlippage,
   };
 };
