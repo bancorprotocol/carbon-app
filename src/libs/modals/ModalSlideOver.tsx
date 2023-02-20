@@ -54,6 +54,12 @@ export const ModalSlideOver: FC<Props> = ({
               )}
             </>
             <div>
+              <button
+                className="font-mono text-16 font-weight-500 text-white"
+                onClick={() => {}}
+              >
+                Reset All
+              </button>
               {showCloseButton ? (
                 <button className={'p-4'} onClick={() => closeModal(id)}>
                   <IconX className={'w-12'} />
