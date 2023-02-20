@@ -46,11 +46,11 @@ export const useTokens = () => {
   }, [user]);
 
   const addFavoriteToken = useCallback(
-    (pair: Token) => {
+    (token: Token) => {
       _setFavoriteTokens((prev) => {
-        const newValue = [...prev, pair];
-        lsService.setItem(`favoriteTokens-${user}`, newValue);
-        return newValue;
+        const updatedFavoriteTokens = [...prev, token];
+        lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
+        return updatedFavoriteTokens;
       });
     },
     [user]
@@ -59,11 +59,11 @@ export const useTokens = () => {
   const removeFavoriteToken = useCallback(
     (token: Token) => {
       _setFavoriteTokens((prev) => {
-        const newValue = prev.filter(
+        const updatedFavoriteTokens = prev.filter(
           (p) => p.address.toLowerCase() !== token.address.toLowerCase()
         );
-        lsService.setItem(`favoriteTokens-${user}`, newValue);
-        return newValue;
+        lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
+        return updatedFavoriteTokens;
       });
     },
     [user]
