@@ -45,7 +45,7 @@ export const ModalSlideOver: FC<Props> = ({
         exit="exit"
       >
         <div className="relative flex h-screen w-full flex-col border-0 bg-silver p-25 outline-none focus:outline-none">
-          <div className={'flex justify-between'}>
+          <div className={'flex items-center justify-between'}>
             <>
               {typeof title === 'string' ? (
                 <h2 className={'m-0'}>{title}</h2>
@@ -54,14 +54,8 @@ export const ModalSlideOver: FC<Props> = ({
               )}
             </>
             <div>
-              <button
-                className="font-mono text-16 font-weight-500 text-white"
-                onClick={() => {}}
-              >
-                Reset All
-              </button>
               {showCloseButton ? (
-                <button className={'p-4'} onClick={() => closeModal(id)}>
+                <button className={'ml-20 p-4'} onClick={() => closeModal(id)}>
                   <IconX className={'w-12'} />
                 </button>
               ) : null}
