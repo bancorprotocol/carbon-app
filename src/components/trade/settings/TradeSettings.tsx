@@ -2,6 +2,7 @@ import { Button } from 'components/common/button';
 import { useStore } from 'store';
 import { sanitizeIntegerInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { DataType, getWarningMessageIfNeeded } from './utils';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -24,7 +25,7 @@ export const TradeSettings = () => {
     },
   } = useStore();
 
-  const data = [
+  const data: DataType[] = [
     {
       id: 'slippageTolerance',
       title: 'Slippage Tolerance',
@@ -53,35 +54,6 @@ export const TradeSettings = () => {
       values: presets.maxOrders,
     },
   ];
-
-  const getWarningMessageIfNeeded = (id: string, value: string): string => {
-    const numberedValue = +value;
-    switch (id) {
-      case 'slippageTolerance':
-        if (numberedValue > 5) {
-          return 'Please select a value that is smaller than 5%';
-        }
-        if (numberedValue < 0.01) {
-          return 'Low tolerance might result in failed trades';
-        }
-        return '';
-      case 'transactionExpiration':
-        if (numberedValue < 5) {
-          return 'Short expiration might result in failed trades';
-        }
-        return '';
-      case 'maxOrders':
-        if (numberedValue > 30) {
-          return 'High number of orders might increase the gas costs';
-        }
-        if (numberedValue < 10) {
-          return 'You trades might not find good rates as a result of this setting';
-        }
-        return '';
-      default:
-        return '';
-    }
-  };
 
   return (
     <div className={'mt-30'}>
@@ -113,10 +85,7 @@ export const TradeSettings = () => {
                     ? item.value
                     : ''
                 }
-                onChange={(e) => {
-                  const {
-                    target: { value },
-                  } = e;
+                onChange={({ target: { value } }) => {
                   const res = sanitizeIntegerInput(value);
                   item.setValue(res);
                 }}
