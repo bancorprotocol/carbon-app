@@ -18,9 +18,7 @@ export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
           {!isAllSettingsDefault && (
             <button
               className="mr-20 font-mono text-16 font-weight-500 text-white"
-              onClick={() => {
-                resetAll();
-              }}
+              onClick={() => resetAll()}
             >
               Reset All
             </button>
