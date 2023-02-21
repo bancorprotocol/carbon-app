@@ -6,6 +6,7 @@ import Fuse from 'fuse.js';
 import { utils } from 'ethers';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
 import { orderBy } from 'lodash';
+import { config } from 'services/web3/config';
 
 const SEARCH_KEYS = [
   {
@@ -24,10 +25,27 @@ type Props = {
 };
 
 export const useModalTokenList = ({ id, data }: Props) => {
-  const { tokens, isLoading, isError, error } = useTokens();
-  const { onClick, excludedTokens = [], includedTokens = [] } = data;
+  const {
+    tokens,
+    isLoading,
+    isError,
+    error,
+    addFavoriteToken,
+    removeFavoriteToken,
+    favoriteTokens,
+    tokensMap,
+  } = useTokens();
+  const {
+    onClick,
+    excludedTokens = [],
+    includedTokens = [],
+    isBaseToken = false,
+  } = data;
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
+  const defaultPopularTokens = isBaseToken
+    ? basePopularTokens
+    : quotePopularTokens;
 
   const onSelect = useCallback(
     (token: Token) => {
@@ -46,6 +64,14 @@ export const useModalTokenList = ({ id, data }: Props) => {
           !excludedTokens.includes(token.address)
       ),
     [tokens, excludedTokens, includedTokens]
+  );
+
+  const _favoriteTokens = useMemo(
+    () =>
+      favoriteTokens.filter(
+        (token) => !excludedTokens.includes(token?.address || '')
+      ),
+    [excludedTokens, favoriteTokens]
   );
 
   const fuseIndex = useMemo(
@@ -102,6 +128,16 @@ export const useModalTokenList = ({ id, data }: Props) => {
     [showImportToken, filteredTokens]
   );
 
+  const popularTokens = useMemo(
+    () =>
+      defaultPopularTokens
+        .map((tokenAddress) => tokensMap.get(tokenAddress.toLowerCase()))
+        .filter(
+          (token) => !excludedTokens.includes(token?.address || '')
+        ) as Token[],
+    [defaultPopularTokens, excludedTokens, tokensMap]
+  );
+
   return {
     search,
     setSearch,
@@ -112,5 +148,44 @@ export const useModalTokenList = ({ id, data }: Props) => {
     isLoading,
     isError,
     error,
+    addFavoriteToken,
+    removeFavoriteToken,
+    favoriteTokens: _favoriteTokens,
+    popularTokens,
   };
 };
+
+const {
+  ENJ,
+  UNI,
+  LINK,
+  LDO,
+  APE,
+  GRT,
+  AAVE,
+  CRV,
+  ETH,
+  WBTC,
+  BNT,
+  SHIB,
+  DAI,
+  USDC,
+  USDT,
+} = config.tokens;
+
+const basePopularTokens: string[] = [
+  ETH,
+  WBTC,
+  BNT,
+  SHIB,
+  ENJ,
+  UNI,
+  LINK,
+  LDO,
+  APE,
+  GRT,
+  AAVE,
+  CRV,
+];
+
+const quotePopularTokens: string[] = [DAI, USDC, USDT, ETH, WBTC];
