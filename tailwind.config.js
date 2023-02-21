@@ -29,7 +29,6 @@ module.exports = {
       green: '#00B578',
       greenLight: '#85E1C2',
       red: '#D86371',
-      orange: '#FF8A00',
       redLight: '#EFC1C6',
       error: colors.red,
       warning: colors.orange,

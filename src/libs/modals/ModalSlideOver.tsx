@@ -55,7 +55,7 @@ export const ModalSlideOver: FC<Props> = ({
             </>
             <div>
               {showCloseButton ? (
-                <button className={'ml-20 p-4'} onClick={() => closeModal(id)}>
+                <button className={'p-4'} onClick={() => closeModal(id)}>
                   <IconX className={'w-12'} />
                 </button>
               ) : null}
