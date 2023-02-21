@@ -147,6 +147,7 @@ export const useCreate = () => {
       excludedTokens: [
         isSource ? token1?.address ?? '' : token0?.address ?? '',
       ],
+      isBaseToken: isSource,
     };
     openModal('tokenLists', data);
   };
