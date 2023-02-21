@@ -6,18 +6,19 @@ import { ReactComponent as IconWarning } from 'assets/icons/pause.svg';
 import { Strategy } from 'libs/queries';
 import { useUpdate } from 'components/strategies/update/useUpdateStrategy';
 
-export type ModalPauseStrategyData = {
+export type ModalMutateStrategyData = {
   strategy: Strategy;
+  type: 'delete' | 'pause';
 };
 
-export const ModalPauseStrategy: ModalFC<ModalPauseStrategyData> = ({
+export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
   id,
   data: { strategy },
 }) => {
   const { closeModal } = useModal();
   const { pauseStrategy } = useUpdate();
 
-  const handleOnPauseStrategyClick = () => {
+  const handleOnActionClick = () => {
     pauseStrategy(strategy);
     closeModal(id);
   };
@@ -36,7 +37,7 @@ export const ModalPauseStrategy: ModalFC<ModalPauseStrategyData> = ({
           associated funds
         </div>
         <Button
-          onClick={handleOnPauseStrategyClick}
+          onClick={handleOnActionClick}
           className="mt-32"
           variant="white"
           size="lg"
