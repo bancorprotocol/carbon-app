@@ -2,9 +2,10 @@ import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
-import { ReactComponent as IconWarning } from 'assets/icons/pause.svg';
 import { Strategy } from 'libs/queries';
 import { useUpdate } from 'components/strategies/update/useUpdateStrategy';
+import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
+import { getData } from './utils';
 
 export type ModalMutateStrategyData = {
   strategy: Strategy;
@@ -13,29 +14,33 @@ export type ModalMutateStrategyData = {
 
 export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
   id,
-  data: { strategy },
+  data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
   const { pauseStrategy } = useUpdate();
+  const data = getData(type);
 
   const handleOnActionClick = () => {
-    pauseStrategy(strategy);
+    switch (type) {
+      case 'pause':
+        pauseStrategy(strategy);
+        break;
+      case 'delete':
+        break;
+    }
+
     closeModal(id);
   };
 
   return (
-    <Modal id={id} title="Pause Strategy">
+    <Modal id={id} title={data?.modalTitle}>
       <div className="mt-24 flex flex-col items-center text-center font-weight-500">
-        <div className="mb-16 flex flex h-48 w-48 items-center justify-center rounded-full bg-white/25">
-          <IconWarning className="h-16 w-16" />
-        </div>
-        <div className="text-18">
-          Are you sure you would like to pause your strategy?
-        </div>
-        <div className="text-14 font-weight-400 text-white/80">
-          This will pause the strategy but you will maintain access to any
-          associated funds
-        </div>
+        <IconTitleText
+          variant={data?.variant}
+          icon={data?.icon}
+          title={data?.title || ''}
+          text={data?.content}
+        />
         <Button
           onClick={handleOnActionClick}
           className="mt-32"
@@ -43,7 +48,7 @@ export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
           size="lg"
           fullWidth
         >
-          Pause Strategy
+          {data?.actionButton}
         </Button>
         <Button
           onClick={() => closeModal(id)}
