@@ -17,7 +17,7 @@ export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { pauseStrategy } = useUpdate();
+  const { pauseStrategy, deleteStrategy } = useUpdate();
   const data = getData(type);
 
   const handleOnActionClick = () => {
@@ -26,6 +26,7 @@ export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
         pauseStrategy(strategy);
         break;
       case 'delete':
+        deleteStrategy(strategy);
         break;
     }
 

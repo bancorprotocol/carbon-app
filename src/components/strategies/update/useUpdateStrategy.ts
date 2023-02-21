@@ -2,6 +2,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import {
   QueryKey,
   Strategy,
+  useDeleteStrategy,
   useQueryClient,
   useUpdateStrategy,
 } from 'libs/queries';
@@ -11,6 +12,7 @@ export const useUpdate = () => {
   const { user } = useWeb3();
   const { dispatchNotification } = useNotifications();
   const updateMutation = useUpdateStrategy();
+  const deleteMutation = useDeleteStrategy();
   const cache = useQueryClient();
 
   const pauseStrategy = async (strategy: Strategy) => {
@@ -57,7 +59,39 @@ export const useUpdate = () => {
     );
   };
 
+  const deleteStrategy = async (strategy: Strategy) => {
+    const { token0, token1, encoded } = strategy;
+
+    if (!token0 || !token1 || !user) {
+      throw new Error('error in delete strategy: missing data ');
+    }
+
+    deleteMutation.mutate(
+      {
+        encoded,
+      },
+      {
+        onSuccess: async (tx) => {
+          console.log(tx, '-=-=-=-=-=- tx -=-=-=-=-=-');
+          dispatchNotification('deleteStrategy', { txHash: tx.hash });
+          if (!tx) return;
+          console.log('tx hash', tx.hash);
+          await tx.wait();
+
+          void cache.invalidateQueries({
+            queryKey: QueryKey.strategies(user),
+          });
+          console.log('tx confirmed');
+        },
+        onError: (e) => {
+          console.error('delete mutation failed', e);
+        },
+      }
+    );
+  };
+
   return {
     pauseStrategy,
+    deleteStrategy,
   };
 };
