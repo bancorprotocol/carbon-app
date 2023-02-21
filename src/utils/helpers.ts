@@ -31,6 +31,10 @@ export const sanitizeNumberInput = (
   else return sanitized;
 };
 
+export const sanitizeIntegerInput = (input: string): string => {
+  return input.replace(/\D/g, '');
+};
+
 export const shortenString = (
   string: string,
   separator = '...',

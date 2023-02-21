@@ -1,6 +1,6 @@
 import { Button } from 'components/common/button';
-import { sanitizeNumberInput } from 'utils/helpers';
 import { useStore } from 'store';
+import { sanitizeIntegerInput } from 'utils/helpers';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -77,9 +77,9 @@ export const TradeSettings = () => {
                   ? item.value
                   : ''
               }
-              onChange={(e) =>
-                item.setValue(sanitizeNumberInput(e.target.value))
-              }
+              onChange={({ target: { value } }) => {
+                item.setValue(sanitizeIntegerInput(value));
+              }}
               className={`${buttonClasses} ${inputClasses} ${
                 !item.values.some((value) => value === item.value)
                   ? buttonActiveClasses
