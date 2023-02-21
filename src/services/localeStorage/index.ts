@@ -3,6 +3,7 @@ import { Token } from 'libs/tokens';
 import { Notification } from 'libs/notifications';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
+import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 
 const APP_ID = 'bancor';
 const APP_VERSION = 'v0';
@@ -17,10 +18,12 @@ interface LocalStorageSchema {
   importedTokens: Token[];
   [k: `notifications-${string}`]: Notification[];
   [k: `favoriteTradePairs-${string}`]: TradePair[];
+  [k: `favoriteTokens-${string}`]: Token[];
   tradePairsCategory: TradePairCategory;
   tradeSlippage: string;
   tradeDeadline: string;
   tradeMaxOrders: string;
+  chooseTokenCategory: ChooseTokenCategory;
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
