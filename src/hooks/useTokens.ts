@@ -1,9 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
+import { useWeb3 } from 'libs/web3';
 
 export const useTokens = () => {
+  const { user } = useWeb3();
   const {
     tokens: { tokensMap, importedTokens, setImportedTokens, ...props },
   } = useStore();
@@ -33,9 +35,41 @@ export const useTokens = () => {
     [tokensMap, importedTokens, setImportedTokens]
   );
 
+  const [favoriteTokens, _setFavoriteTokens] = useState<Token[]>(
+    lsService.getItem(`favoriteTokens-${user}`) || []
+  );
+
+  const addFavoriteToken = useCallback(
+    (token: Token) => {
+      _setFavoriteTokens((prev) => {
+        const updatedFavoriteTokens = [...prev, token];
+        lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
+        return updatedFavoriteTokens;
+      });
+    },
+    [user]
+  );
+
+  const removeFavoriteToken = useCallback(
+    (token: Token) => {
+      _setFavoriteTokens((prev) => {
+        const updatedFavoriteTokens = prev.filter(
+          (p) => p.address.toLowerCase() !== token.address.toLowerCase()
+        );
+        lsService.setItem(`favoriteTokens-${user}`, updatedFavoriteTokens);
+        return updatedFavoriteTokens;
+      });
+    },
+    [user]
+  );
+
   return {
     ...props,
     getTokenById,
     importToken,
+    addFavoriteToken,
+    removeFavoriteToken,
+    favoriteTokens,
+    tokensMap,
   };
 };
