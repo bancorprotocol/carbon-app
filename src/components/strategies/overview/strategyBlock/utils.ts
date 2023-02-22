@@ -7,7 +7,7 @@ export const getStatusText = (status: StrategyStatus) => {
     : status === StrategyStatus.NoBudget
     ? 'No Budget · Inactive'
     : status === StrategyStatus.OffCurve
-    ? 'Off Curve · Inactive'
+    ? 'Paused - Inactive'
     : 'Inactive';
 };
 
