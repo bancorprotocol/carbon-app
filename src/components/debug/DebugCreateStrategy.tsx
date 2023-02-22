@@ -2,7 +2,7 @@ import { Button } from 'components/common/button';
 import {
   CreateStrategyParams,
   QueryKey,
-  useCreateStrategy,
+  useCreateStrategyQuery,
   useGetTokenBalances,
 } from 'libs/queries';
 import { FAUCET_TOKENS } from 'utils/tenderly';
@@ -33,7 +33,7 @@ export const DebugCreateStrategy = () => {
   const { openModal } = useModal();
   const queryClient = useQueryClient();
   const balanceQueries = useGetTokenBalances(TOKENS);
-  const createMutation = useCreateStrategy();
+  const createMutation = useCreateStrategyQuery();
   const [rounds, setRounds] = useState(1);
   const [index, setIndex] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
