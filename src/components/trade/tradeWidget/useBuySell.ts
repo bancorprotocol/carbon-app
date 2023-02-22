@@ -334,8 +334,8 @@ export const useBuySell = ({
     if (sourceFiat.isEqualTo(0) || targetFiat.isEqualTo(0)) {
       return new BigNumber(0);
     }
-    const diff = sourceFiat.div(targetFiat);
-    const slippage = new BigNumber(1).minus(diff).times(100);
+    const diff = targetFiat.div(sourceFiat);
+    const slippage = diff.minus(new BigNumber(1)).times(100);
 
     if (slippage.isFinite()) {
       return slippage;

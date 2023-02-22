@@ -19,8 +19,8 @@
     "CRV":"0xD533a949740bb3306d119CC777fa900bA034cd52"
   },
   "carbon": {
-    "carbonController": "0x483309B60A7f5A097aE09Cf5811773431a9E8d1B",
-    "voucher": "0x2fB666c75ec98462852c66D4981e1B3a0E668593"
+    "carbonController": "0x8b604f9d7f96fa5b9f635f27bfabdcb152015742",
+    "voucher": "0x78d59e4e207572b506788e57bd0823be21a3a373"
   },
   "utils": {
     "multicall": "0x5ba1e12693dc8f9c48aad8770482f4739beed696"
