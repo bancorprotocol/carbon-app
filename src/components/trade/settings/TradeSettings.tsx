@@ -1,6 +1,6 @@
 import { useStore } from 'store';
-import { SettingsRow } from './SettingsRow';
-import { DataType } from './utils';
+import { TradeSettingsRow } from './TradeSettingsRow';
+import { SettingsData } from './utils';
 
 export const TradeSettings = () => {
   const {
@@ -17,7 +17,7 @@ export const TradeSettings = () => {
     },
   } = useStore();
 
-  const data: DataType[] = [
+  const settingsData: SettingsData[] = [
     {
       id: 'slippageTolerance',
       title: 'Slippage Tolerance',
@@ -25,7 +25,7 @@ export const TradeSettings = () => {
       prepend: '+',
       append: '%',
       setValue: setSlippage,
-      values: presets.slippage,
+      presets: presets.slippage,
     },
     {
       id: 'transactionExpiration',
@@ -34,7 +34,7 @@ export const TradeSettings = () => {
       prepend: '',
       append: ' Min',
       setValue: setDeadline,
-      values: presets.deadline,
+      presets: presets.deadline,
     },
     {
       id: 'maxOrders',
@@ -43,14 +43,17 @@ export const TradeSettings = () => {
       prepend: '',
       append: '',
       setValue: setMaxOrders,
-      values: presets.maxOrders,
+      presets: presets.maxOrders,
     },
   ];
 
   return (
     <div className={'mt-30'}>
-      {data.map((item, i) => (
-        <SettingsRow key={item.id} item={item} i={i} numOfItems={data.length} />
+      {settingsData.map((item) => (
+        <>
+          <TradeSettingsRow key={item.id} item={item} />
+          <hr className={'my-20 border-b-2 border-grey5 last:hidden'} />
+        </>
       ))}
     </div>
   );

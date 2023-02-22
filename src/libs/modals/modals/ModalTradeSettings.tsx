@@ -9,6 +9,7 @@ export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
       settings: { resetAll, isAllSettingsDefault },
     },
   } = useStore();
+
   return (
     <ModalSlideOver
       id={id}

@@ -1,13 +1,13 @@
 type Id = 'slippageTolerance' | 'transactionExpiration' | 'maxOrders';
 
-export type DataType = {
+export type SettingsData = {
   id: Id;
   title: string;
   value: string;
   prepend: string;
   append: string;
   setValue: (value: string) => void;
-  values: string[];
+  presets: string[];
 };
 
 export const getWarningMessageIfNeeded = (id: Id, value: string): string => {

@@ -1,8 +1,8 @@
 import { Button } from 'components/common/button';
 import { sanitizeIntegerInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { DataType, getWarningMessageIfNeeded } from './utils';
-import { FC, useEffect, useState } from 'react';
+import { SettingsData, getWarningMessageIfNeeded } from './utils';
+import { ChangeEvent, FC, useState } from 'react';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -10,26 +10,27 @@ const buttonActiveClasses = 'border-green !text-green';
 const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
-export const SettingsRow: FC<{
-  item: DataType;
-  i: number;
-  numOfItems: number;
-}> = ({ item, i, numOfItems }) => {
-  const isExist = item.values.some((value) => value === item.value);
-  const [internalValue, setInternalValue] = useState(isExist ? '' : item.value);
+export const TradeSettingsRow: FC<{
+  item: SettingsData;
+}> = ({ item }) => {
+  const [internalValue, setInternalValue] = useState(
+    item.presets.includes(item.value) ? '' : item.value
+  );
 
-  useEffect(() => {
-    if (isExist) {
-      setInternalValue('');
-    }
-  }, [internalValue, isExist, item, item.values]);
+  const handleOnInputChange = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => {
+    const res = sanitizeIntegerInput(value);
+    item.setValue(res);
+    setInternalValue(res);
+  };
 
   const warningMessage = getWarningMessageIfNeeded(item.id, item.value);
   return (
     <div key={item.title}>
       <div className={'text-white/60'}>{item.title}</div>
       <div className={'mt-10 grid grid-cols-4 gap-10'}>
-        {item.values.map((value) => (
+        {item.presets.map((value) => (
           <Button
             key={value}
             variant={'black'}
@@ -46,15 +47,9 @@ export const SettingsRow: FC<{
         <input
           placeholder={'custom'}
           value={internalValue}
-          onChange={({ target: { value } }) => {
-            const res = sanitizeIntegerInput(value);
-            item.setValue(res);
-            setInternalValue(res);
-          }}
+          onChange={handleOnInputChange}
           className={`${buttonClasses} ${inputClasses} ${
-            !item.values.some((value) => value === item.value)
-              ? buttonActiveClasses
-              : ''
+            !item.presets.includes(item.value) ? buttonActiveClasses : ''
           }`}
         />
       </div>
@@ -64,7 +59,6 @@ export const SettingsRow: FC<{
           <span className="ml-5">{warningMessage}</span>
         </div>
       )}
-      {numOfItems - 1 > i && <hr className={'my-20 border-b-2 border-grey5'} />}
     </div>
   );
 };
