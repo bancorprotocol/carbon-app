@@ -78,7 +78,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   return (
     <div
       className={
-        'bg-content flex items-center justify-between rounded px-20 py-12'
+        'bg-content flex h-84 items-center justify-between rounded px-20'
       }
     >
       <div className={'space-y-6'}>
@@ -99,20 +99,25 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           <div className={'flex h-82 flex-col items-end justify-center gap-10'}>
             <div className={'flex items-center space-x-8'}>
               <div
-                className={`!text-12 font-weight-500 ${
-                  isLimited ? 'text-white/85' : 'text-white/60'
+                className={`font-mono text-12 font-weight-500 transition-all ${
+                  isLimited ? 'text-white/60' : 'text-white/85'
                 }`}
               >
-                Limited
+                Unlimited
               </div>
               <Switch
-                variant={isLimited ? 'white' : 'secondary'}
-                isOn={isLimited}
-                setIsOn={setIsLimited}
+                variant={isLimited ? 'secondary' : 'white'}
+                isOn={!isLimited}
+                setIsOn={(x) => setIsLimited(!x)}
                 size={'sm'}
               />
             </div>
-            <Button variant={'white'} onClick={onApprove} size={'sm'}>
+            <Button
+              variant={'white'}
+              onClick={onApprove}
+              size={'sm'}
+              className={'text-14'}
+            >
               Approve
             </Button>
           </div>
