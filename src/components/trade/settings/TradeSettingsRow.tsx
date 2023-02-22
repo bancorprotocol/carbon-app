@@ -1,7 +1,7 @@
 import { Button } from 'components/common/button';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { SettingsData, getWarningMessageIfNeeded } from './utils';
+import { TradeSettingsData, warningMessageIfOutOfRange } from './utils';
 import { ChangeEvent, FC, useState } from 'react';
 
 const buttonClasses =
@@ -11,7 +11,7 @@ const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
 export const TradeSettingsRow: FC<{
-  item: SettingsData;
+  item: TradeSettingsData;
 }> = ({ item }) => {
   const [internalValue, setInternalValue] = useState(
     item.presets.includes(item.value) ? '' : item.value
@@ -32,9 +32,9 @@ export const TradeSettingsRow: FC<{
     }
   };
 
-  const warningMessage = getWarningMessageIfNeeded(item.id, item.value);
+  const warningMessage = warningMessageIfOutOfRange(item.id, item.value);
   return (
-    <div key={item.title}>
+    <div>
       <div className={'text-white/60'}>{item.title}</div>
       <div className={'mt-10 grid grid-cols-4 gap-10'}>
         {item.presets.map((value) => (

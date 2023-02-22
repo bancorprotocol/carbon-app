@@ -1,7 +1,10 @@
-type Id = 'slippageTolerance' | 'transactionExpiration' | 'maxOrders';
+type TradeSettingsDataId =
+  | 'slippageTolerance'
+  | 'transactionExpiration'
+  | 'maxOrders';
 
-export type SettingsData = {
-  id: Id;
+export type TradeSettingsData = {
+  id: TradeSettingsDataId;
   title: string;
   value: string;
   prepend: string;
@@ -10,7 +13,10 @@ export type SettingsData = {
   presets: string[];
 };
 
-export const getWarningMessageIfNeeded = (id: Id, value: string): string => {
+export const warningMessageIfOutOfRange = (
+  id: TradeSettingsDataId,
+  value: string
+): string => {
   const numberedValue = +value;
   switch (id) {
     case 'slippageTolerance':

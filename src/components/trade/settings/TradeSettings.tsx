@@ -1,6 +1,7 @@
+import { Fragment } from 'react';
 import { useStore } from 'store';
 import { TradeSettingsRow } from './TradeSettingsRow';
-import { SettingsData } from './utils';
+import { TradeSettingsData } from './utils';
 
 export const TradeSettings = () => {
   const {
@@ -17,7 +18,7 @@ export const TradeSettings = () => {
     },
   } = useStore();
 
-  const settingsData: SettingsData[] = [
+  const settingsData: TradeSettingsData[] = [
     {
       id: 'slippageTolerance',
       title: 'Slippage Tolerance',
@@ -50,10 +51,10 @@ export const TradeSettings = () => {
   return (
     <div className={'mt-30'}>
       {settingsData.map((item) => (
-        <>
-          <TradeSettingsRow key={item.id} item={item} />
+        <Fragment key={item.id}>
+          <TradeSettingsRow item={item} />
           <hr className={'my-20 border-b-2 border-grey5 last:hidden'} />
-        </>
+        </Fragment>
       ))}
     </div>
   );
