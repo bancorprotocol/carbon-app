@@ -72,7 +72,6 @@ export const useUpdate = () => {
       },
       {
         onSuccess: async (tx) => {
-          console.log(tx, '-=-=-=-=-=- tx -=-=-=-=-=-');
           dispatchNotification('deleteStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);

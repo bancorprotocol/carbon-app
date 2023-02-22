@@ -3,7 +3,8 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
-import { useUpdate } from 'components/strategies/update/useUpdateStrategy';
+import { useUpdate } from 'components/strategies/useUpdate';
+import { useDelete } from 'components/strategies/useDelete';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getData } from './utils';
 
@@ -17,7 +18,8 @@ export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { pauseStrategy, deleteStrategy } = useUpdate();
+  const { pauseStrategy } = useUpdate();
+  const { deleteStrategy } = useDelete();
   const data = getData(type);
 
   const handleOnActionClick = () => {
@@ -42,6 +44,7 @@ export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
           title={data?.title || ''}
           text={data?.content}
         />
+        {data?.additionalContent}
         <Button
           onClick={handleOnActionClick}
           className="mt-32"
