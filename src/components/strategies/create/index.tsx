@@ -161,7 +161,7 @@ export const CreateStrategy = () => {
             >
               <div className="flex items-center justify-center ">
                 <IconX className={'mr-12 w-10'} />
-                Close Graph
+                Close Chart
               </div>
             </Button>
           )}
