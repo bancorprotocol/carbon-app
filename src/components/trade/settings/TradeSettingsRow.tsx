@@ -1,5 +1,5 @@
 import { Button } from 'components/common/button';
-import { sanitizeIntegerInput } from 'utils/helpers';
+import { sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { SettingsData, getWarningMessageIfNeeded } from './utils';
 import { ChangeEvent, FC, useState } from 'react';
@@ -17,12 +17,19 @@ export const TradeSettingsRow: FC<{
     item.presets.includes(item.value) ? '' : item.value
   );
 
+  const updateItemAndInternalState = (value: string) => {
+    item.setValue(value);
+    setInternalValue(value);
+  };
+
   const handleOnInputChange = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    const res = sanitizeIntegerInput(value);
-    item.setValue(res);
-    setInternalValue(res);
+    if (item.id === 'slippageTolerance') {
+      updateItemAndInternalState(sanitizeNumberInput(value));
+    } else {
+      updateItemAndInternalState(value.replace(/\D/g, ''));
+    }
   };
 
   const warningMessage = getWarningMessageIfNeeded(item.id, item.value);
