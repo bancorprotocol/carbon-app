@@ -3,11 +3,11 @@ import { QueryKey } from 'libs/queries';
 import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { FriendlyAction, TradeActionStruct } from 'libs/sdk';
+import { Action, TradeActionStruct } from 'libs/sdk';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionStruct[];
-  actionsTokenRes: FriendlyAction[];
+  actionsTokenRes: Action[];
   totalSourceAmount: string;
   totalTargetAmount: string;
   effectiveRate: string;

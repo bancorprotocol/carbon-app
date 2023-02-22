@@ -16,7 +16,7 @@ import {
 import { prettifyNumber } from 'utils/helpers';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
-import { FriendlyAction, TradeActionStruct } from 'libs/sdk';
+import { Action, TradeActionStruct } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 
@@ -56,7 +56,7 @@ export const useBuySell = ({
   const [targetInput, setTargetInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
-  const [tradeActionsRes, setTradeActionsRes] = useState<FriendlyAction[]>([]);
+  const [tradeActionsRes, setTradeActionsRes] = useState<Action[]>([]);
 
   const [rate, setRate] = useState('');
   const [isLiquidityError, setIsLiquidityError] = useState(false);

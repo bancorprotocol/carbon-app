@@ -1,2 +1,2 @@
 export { carbonSDK } from './carbonSdk';
-export type { FriendlyAction, TradeActionStruct } from '@bancor/carbon-sdk';
+export type { Action, TradeActionStruct } from '@bancor/carbon-sdk';

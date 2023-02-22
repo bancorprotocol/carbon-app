@@ -1,6 +1,6 @@
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { FriendlyAction } from 'libs/sdk';
+import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { getFiatValue, prettifyNumber } from 'utils/helpers';
@@ -14,7 +14,7 @@ import { TokenInputField } from 'components/common/TokenInputField';
 export type ModalTradeRoutingData = {
   source: Token;
   target: Token;
-  tradeActions: FriendlyAction[];
+  tradeActions: Action[];
 };
 
 const Muh2: FC<{
@@ -39,7 +39,7 @@ const Muh2: FC<{
 };
 
 type MuhProps = {
-  action: FriendlyAction;
+  action: Action;
   source: Token;
   target: Token;
   sourceFiatPrice?: FiatPriceDict;
