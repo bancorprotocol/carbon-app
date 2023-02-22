@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { useCreateStrategy } from './useCreateStrategy';
@@ -31,12 +31,6 @@ export const CreateStrategy = () => {
     token0BalanceQuery,
     token1BalanceQuery,
   } = useCreateStrategy();
-
-  useEffect(() => {
-    if (showStep2) {
-      setShowGraph(true);
-    }
-  }, [showStep2]);
 
   const showGraphToggle = () => {
     setShowGraph((prev) => !prev);
