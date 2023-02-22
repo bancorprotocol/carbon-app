@@ -6,7 +6,7 @@ import { Strategy } from 'libs/queries';
 import { useUpdate } from 'components/strategies/useUpdate';
 import { useDelete } from 'components/strategies/useDelete';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { getData } from './utils';
+import { getModalDataByType } from './utils';
 
 export type ModalMutateStrategyData = {
   strategy: Strategy;
@@ -20,7 +20,7 @@ export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
   const { closeModal } = useModal();
   const { pauseStrategy } = useUpdate();
   const { deleteStrategy } = useDelete();
-  const data = getData(type);
+  const data = getModalDataByType(type);
 
   const handleOnActionClick = () => {
     switch (type) {

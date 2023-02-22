@@ -13,7 +13,7 @@ export type DataType = {
   variant?: 'error';
 };
 
-export const getData = (type: 'pause' | 'delete'): DataType | undefined => {
+export const getModalDataByType = (type: 'pause' | 'delete'): DataType => {
   switch (type) {
     case 'pause':
       return {
@@ -34,7 +34,7 @@ export const getData = (type: 'pause' | 'delete'): DataType | undefined => {
         additionalContent: (
           <div className="mt-20 flex items-center">
             <IconWallet className="mr-10 h-12 w-12" />
-            <div className="white/80 flex-1 text-14 font-weight-500">
+            <div className="flex-1 text-14 font-weight-500 text-white/80">
               All funds will be withdrawn to your wallet
             </div>
           </div>
