@@ -3,7 +3,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 
-export type DataType = {
+export type MutateModalContentData = {
   modalTitle: string;
   icon: ReactNode;
   title: string;
@@ -13,7 +13,9 @@ export type DataType = {
   variant?: 'error';
 };
 
-export const getModalDataByType = (type: 'pause' | 'delete'): DataType => {
+export const getModalDataByType = (
+  type: 'pause' | 'delete'
+): MutateModalContentData => {
   switch (type) {
     case 'pause':
       return {
@@ -41,14 +43,6 @@ export const getModalDataByType = (type: 'pause' | 'delete'): DataType => {
         ),
         actionButton: 'Delete Strategy',
         variant: 'error',
-      };
-    default:
-      return {
-        icon: null,
-        modalTitle: '',
-        title: '',
-        content: '',
-        actionButton: '',
       };
   }
 };

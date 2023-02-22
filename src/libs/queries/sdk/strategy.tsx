@@ -154,7 +154,7 @@ export interface DeleteStrategyParams {
   encoded: EncodedStrategy;
 }
 
-export const useCreateStrategy = () => {
+export const useCreateStrategyQuery = () => {
   const { signer } = useWeb3();
 
   return useMutation(
@@ -188,7 +188,7 @@ export const useCreateStrategy = () => {
   );
 };
 
-export const useUpdateStrategy = () => {
+export const useUpdateStrategyQuery = () => {
   const { signer } = useWeb3();
 
   return useMutation(
@@ -234,7 +234,7 @@ export const useUpdateStrategy = () => {
   );
 };
 
-export const useDeleteStrategy = () => {
+export const useDeleteStrategyQuery = () => {
   const { signer } = useWeb3();
 
   return useMutation(async ({ encoded }: DeleteStrategyParams) => {

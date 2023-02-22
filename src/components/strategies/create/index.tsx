@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
-import { useCreate } from './useCreateStrategy';
+import { useCreateStrategy } from './useCreateStrategy';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useLocation } from 'libs/routing';
@@ -30,7 +30,7 @@ export const CreateStrategy = () => {
     isCTAdisabled,
     token0BalanceQuery,
     token1BalanceQuery,
-  } = useCreate();
+  } = useCreateStrategy();
 
   useEffect(() => {
     if (showStep2) {

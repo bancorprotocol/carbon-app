@@ -2,15 +2,15 @@ import { useNotifications } from 'hooks/useNotifications';
 import {
   QueryKey,
   Strategy,
-  useDeleteStrategy,
+  useDeleteStrategyQuery,
   useQueryClient,
 } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 
-export const useDelete = () => {
+export const useDeleteStrategy = () => {
   const { user } = useWeb3();
   const { dispatchNotification } = useNotifications();
-  const deleteMutation = useDeleteStrategy();
+  const deleteMutation = useDeleteStrategyQuery();
   const cache = useQueryClient();
 
   const deleteStrategy = async (strategy: Strategy) => {

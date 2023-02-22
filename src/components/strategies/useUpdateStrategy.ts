@@ -3,14 +3,14 @@ import {
   QueryKey,
   Strategy,
   useQueryClient,
-  useUpdateStrategy,
+  useUpdateStrategyQuery,
 } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 
-export const useUpdate = () => {
+export const useUpdateStrategy = () => {
   const { user } = useWeb3();
   const { dispatchNotification } = useNotifications();
-  const updateMutation = useUpdateStrategy();
+  const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
 
   const pauseStrategy = async (strategy: Strategy) => {
