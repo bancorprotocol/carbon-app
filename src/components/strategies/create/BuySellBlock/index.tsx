@@ -15,6 +15,7 @@ type Props = {
   tokenBalanceQuery: UseQueryResult<string>;
   order: OrderCreate;
   buy?: boolean;
+  isBudgetOptional?: boolean;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -23,6 +24,7 @@ export const BuySellBlock: FC<Props> = ({
   tokenBalanceQuery,
   order,
   buy,
+  isBudgetOptional,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
   const budgetToken = buy ? token1 : token0;
@@ -142,7 +144,7 @@ export const BuySellBlock: FC<Props> = ({
         />
       )}
 
-      <div className={'flex items-center pt-10'}>
+      <div className={'flex items-center pt-10 text-14'}>
         <div
           className={
             'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
@@ -157,10 +159,13 @@ export const BuySellBlock: FC<Props> = ({
               : `The amount of ${token0.symbol} tokens you would like to sell. Note: this amount will re-fill once the "Buy" order is used by traders.`
           }
         >
-          <div className={'text-14 font-weight-500 text-white/60'}>
+          <div className={'font-weight-500 text-white/60'}>
             Set {buy ? 'Buy' : 'Sell'} Budget{' '}
           </div>
         </Tooltip>
+        {isBudgetOptional && (
+          <div className="ml-8 font-weight-500 text-white/40">Optional</div>
+        )}
       </div>
       <div>
         <TokenInputField

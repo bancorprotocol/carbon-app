@@ -150,7 +150,11 @@ export interface UpdateStrategyParams {
   encoded: EncodedStrategy;
 }
 
-export const useCreateStrategy = () => {
+export interface DeleteStrategyParams {
+  encoded: EncodedStrategy;
+}
+
+export const useCreateStrategyQuery = () => {
   const { signer } = useWeb3();
 
   return useMutation(
@@ -184,7 +188,7 @@ export const useCreateStrategy = () => {
   );
 };
 
-export const useUpdateStrategy = () => {
+export const useUpdateStrategyQuery = () => {
   const { signer } = useWeb3();
 
   return useMutation(
@@ -228,4 +232,16 @@ export const useUpdateStrategy = () => {
       return signer!.sendTransaction(unsignedTx);
     }
   );
+};
+
+export const useDeleteStrategyQuery = () => {
+  const { signer } = useWeb3();
+
+  return useMutation(async ({ encoded }: DeleteStrategyParams) => {
+    const strategyId = encoded.id;
+
+    const unsignedTx = await carbonSDK.deleteStrategy(strategyId);
+
+    return signer!.sendTransaction(unsignedTx);
+  });
 };
