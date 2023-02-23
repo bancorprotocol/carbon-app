@@ -19,15 +19,13 @@ import {
 } from 'libs/modals/modals/ModalTradeTokenList';
 import { ModalTradeSettings } from 'libs/modals/modals/ModalTradeSettings';
 import {
-import {
   ModalTradeRouting,
   ModalTradeRoutingData,
 } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
-
+import {
   ModalMutateStrategy,
   ModalMutateStrategyData,
 } from './ModalMutateStrategy/ModalMutateStrategy';
-
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
