@@ -6,6 +6,7 @@ import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
+import { IS_TENDERLY_FORK } from 'libs/web3';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -117,10 +118,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           >
             {getRate()}
           </div>
-
-          <div className={'text-secondary mt-5 text-right'}>
-            {getLiquidty()}
-          </div>
+          {IS_TENDERLY_FORK && (
+            <div className={'text-secondary mt-5 text-right'}>
+              {getLiquidty()}
+            </div>
+          )}
         </>
       ) : (
         <NotEnoughLiquidity
