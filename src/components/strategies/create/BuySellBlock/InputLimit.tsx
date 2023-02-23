@@ -26,7 +26,7 @@ export const InputLimit: FC<{
           value={price}
           onChange={handleChange}
           onBlur={() => {
-            Number(price) > 0
+            +price > 0
               ? setPriceError('')
               : setPriceError('Price Must be greater than 0');
           }}
