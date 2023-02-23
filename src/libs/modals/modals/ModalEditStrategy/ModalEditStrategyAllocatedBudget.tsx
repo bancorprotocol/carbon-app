@@ -24,8 +24,19 @@ export const ModalEditStrategyAllocatedBudget: FC<{
         />
       </div>
       <div className="flex">
-        {balance && <span>{sanitizeNumberInput(balance, base?.decimals)}</span>}
-        <Imager className="ml-8 h-16 w-16" src={base?.logoURI} alt="token" />
+        {balance && (
+          <span>
+            {sanitizeNumberInput(
+              balance,
+              buy ? base?.decimals : quote?.decimals
+            )}
+          </span>
+        )}
+        <Imager
+          className="ml-8 h-16 w-16"
+          src={buy ? base?.logoURI : quote?.logoURI}
+          alt="token"
+        />
       </div>
     </div>
   );
