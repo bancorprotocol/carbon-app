@@ -49,7 +49,7 @@ export const StrategyBlockManage: FC<{
   if (strategy.status === StrategyStatus.Active) {
     items.push({
       id: ItemId.takeOffCurve,
-      name: 'Take Off Curve',
+      name: 'Pause Strategy',
       action: () => openModal('mutateStrategy', { strategy, type: 'pause' }),
     });
   }
