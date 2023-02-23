@@ -36,6 +36,7 @@ export const StepTwo = ({
           order={order0}
           buy
           tokenBalanceQuery={token1BalanceQuery}
+          isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
         />
       </m.div>
 
@@ -45,6 +46,7 @@ export const StepTwo = ({
           token1={token1!}
           order={order1}
           tokenBalanceQuery={token0BalanceQuery}
+          isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
         />
       </m.div>
       <m.div variants={items}>

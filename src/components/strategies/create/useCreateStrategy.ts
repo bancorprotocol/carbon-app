@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { OrderCreate, useOrder } from './useOrder';
-import { QueryKey, useCreateStrategy } from 'libs/queries';
+import { QueryKey, useCreateStrategyQuery } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
@@ -14,7 +14,7 @@ import { useDuplicateStrategy } from './useDuplicateStrategy';
 
 const spenderAddress = config.carbon.carbonController;
 
-export const useCreate = () => {
+export const useCreateStrategy = () => {
   const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export const useCreate = () => {
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
 
-  const mutation = useCreateStrategy();
+  const mutation = useCreateStrategyQuery();
 
   const showStep2 = !!token0 && !!token1;
 

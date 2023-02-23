@@ -42,14 +42,15 @@ export const StrategyBlockManage: FC<{
     {
       id: ItemId.DeleteStrategy,
       name: 'Delete Strategy',
+      action: () => openModal('mutateStrategy', { strategy, type: 'delete' }),
     },
   ];
 
   if (strategy.status === StrategyStatus.Active) {
     items.push({
       id: ItemId.takeOffCurve,
-      name: 'Take Off Curve',
-      action: () => openModal('pauseStrategy', { strategy }),
+      name: 'Pause Strategy',
+      action: () => openModal('mutateStrategy', { strategy, type: 'pause' }),
     });
   }
 
