@@ -6,7 +6,7 @@ export const getStatusText = (status: StrategyStatus) => {
     ? 'Active'
     : status === StrategyStatus.NoBudget
     ? 'No Budget · Inactive'
-    : status === StrategyStatus.OffCurve
+    : status === StrategyStatus.Paused
     ? 'Paused - Inactive'
     : 'Inactive';
 };
@@ -16,7 +16,7 @@ export const getTooltipTextByStatus = (status: StrategyStatus) => {
     ? 'Your strategy is active and ready'
     : status === StrategyStatus.NoBudget
     ? 'Your strategy has no associated funds. Consider depositing funds to activate it.'
-    : status === StrategyStatus.OffCurve
+    : status === StrategyStatus.Paused
     ? 'Your strategy is currently paused. Update the rates to activate it.'
     : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
 };

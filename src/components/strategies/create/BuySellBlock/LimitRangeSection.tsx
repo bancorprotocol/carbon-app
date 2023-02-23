@@ -9,18 +9,18 @@ type Props = {
   token0: Token;
   token1: Token;
   order: OrderCreate;
-  buy?: boolean;
   title: ReactNode | string;
   inputTitle: ReactNode | string;
+  buy?: boolean;
 };
 
 export const LimitRangeSection: FC<Props> = ({
   token0,
   token1,
   order,
-  buy,
   title,
   inputTitle,
+  buy,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
 
@@ -79,7 +79,7 @@ export const LimitRangeSection: FC<Props> = ({
           setMax={order.setMax}
           error={order.rangeError}
           setRangeError={order.setRangeError}
-          token={token0}
+          token={token1}
           buy={buy}
         />
       ) : (

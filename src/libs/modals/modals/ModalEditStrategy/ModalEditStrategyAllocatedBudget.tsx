@@ -28,13 +28,13 @@ export const ModalEditStrategyAllocatedBudget: FC<{
           <span>
             {sanitizeNumberInput(
               balance,
-              buy ? base?.decimals : quote?.decimals
+              buy ? quote?.decimals : base?.decimals
             )}
           </span>
         )}
         <Imager
           className="ml-8 h-16 w-16"
-          src={buy ? base?.logoURI : quote?.logoURI}
+          src={buy ? quote?.logoURI : base?.logoURI}
           alt="token"
         />
       </div>

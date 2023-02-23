@@ -31,8 +31,8 @@ export const ModalEditStrategyBuySellBlock: FC<{
             <div className="text-white/60">
               Enter Price{' '}
               <span className={'text-white/80'}>
-                ({base.symbol} <span className="text-white/60">per 1 </span>
-                {quote.symbol})
+                ({quote.symbol} <span className="text-white/60">per 1 </span>
+                {base.symbol})
               </span>
             </div>
           ),

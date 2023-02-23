@@ -55,7 +55,7 @@ export const StrategyBlockManage: FC<{
     });
   }
   if (
-    strategy.status === StrategyStatus.OffCurve ||
+    strategy.status === StrategyStatus.Paused ||
     strategy.status === StrategyStatus.Inactive
   ) {
     items.push({
