@@ -3,7 +3,8 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
-import { ModalEditStrategyAllocatedBudget } from './ModalEditStrategyAllocatedBudget';
+import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
+import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 
 export type ModalEditStrategyData = {
   strategy: Strategy;
@@ -18,15 +19,23 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   const handleOnActionClick = () => {
     closeModal(id);
   };
+  const { order0, order1 } = useCreateStrategy();
 
   return (
     <Modal className="dark:bg-emphasis/60" id={id} title={'Unpause Strategy'}>
-      <div className="mt-24 flex flex-col items-center text-center font-weight-500">
-        <ModalEditStrategyAllocatedBudget
+      <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
+        <ModalEditStrategyBuySellBlock
           buy
-          base={strategy.token0}
-          quote={strategy.token1}
+          base={strategy?.token0}
+          quote={strategy?.token1}
+          order={order0}
           balance={strategy.order0.balance}
+        />
+        <ModalEditStrategyBuySellBlock
+          base={strategy?.token1}
+          quote={strategy?.token0}
+          order={order1}
+          balance={strategy.order1.balance}
         />
         <Button
           onClick={handleOnActionClick}

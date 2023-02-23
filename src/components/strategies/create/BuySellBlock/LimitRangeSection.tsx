@@ -12,7 +12,6 @@ type Props = {
   buy?: boolean;
   title: ReactNode | string;
   inputTitle: ReactNode | string;
-  sectionTooltip: ReactNode | string;
 };
 
 export const LimitRangeSection: FC<Props> = ({
@@ -22,7 +21,6 @@ export const LimitRangeSection: FC<Props> = ({
   buy,
   title,
   inputTitle,
-  sectionTooltip,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
 
@@ -32,7 +30,7 @@ export const LimitRangeSection: FC<Props> = ({
   };
 
   return (
-    <div className={`space-y-12`}>
+    <div className={`space-y-12 text-left`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">{title}</div>
         <div className="flex items-center gap-10 text-14">
@@ -54,7 +52,20 @@ export const LimitRangeSection: FC<Props> = ({
               Range
             </button>
           </div>
-          <Tooltip element={sectionTooltip} />
+          <Tooltip
+            element={
+              <>
+                This section will define the order details in which you are
+                willing to {buy ? 'buy' : 'sell'} {token0.symbol} at.
+                <br />
+                <b>Limit</b> will allow you to define a specific price point to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+                <br />
+                <b>Range</b> will allow you to define a range of prices to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+              </>
+            }
+          />
         </div>
       </div>
 

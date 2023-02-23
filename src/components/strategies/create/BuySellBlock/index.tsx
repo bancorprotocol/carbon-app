@@ -74,19 +74,6 @@ export const BuySellBlock: FC<Props> = ({
     </>
   );
 
-  const sectionTooltip = (
-    <>
-      This section will define the order details in which you are willing to{' '}
-      {buy ? 'buy' : 'sell'} {token0.symbol} at.
-      <br />
-      <b>Limit</b> will allow you to define a specific price point to{' '}
-      {buy ? 'buy' : 'sell'} the token at.
-      <br />
-      <b>Range</b> will allow you to define a range of prices to{' '}
-      {buy ? 'buy' : 'sell'} the token at.
-    </>
-  );
-
   return (
     <div
       className={`bg-secondary space-y-12 rounded-10 border-l-2 p-20 pb-10 ${
@@ -96,7 +83,7 @@ export const BuySellBlock: FC<Props> = ({
       }`}
     >
       <LimitRangeSection
-        {...{ token0, token1, order, buy, title, inputTitle, sectionTooltip }}
+        {...{ token0, token1, order, buy, title, inputTitle }}
       />
       <div className={'flex items-center pt-10 text-14'}>
         <div
