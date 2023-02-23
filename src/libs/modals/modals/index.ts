@@ -22,6 +22,7 @@ import {
   ModalMutateStrategy,
   ModalMutateStrategyData,
 } from './ModalMutateStrategy/ModalMutateStrategy';
+import { ModalEditStrategy, ModalEditStrategyData } from './ModalEditStrategy';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -34,6 +35,7 @@ export interface ModalSchema {
   notifications: undefined;
   tradeSettings: undefined;
   mutateStrategy: ModalMutateStrategyData;
+  editStrategy: ModalEditStrategyData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -48,4 +50,5 @@ export const MODAL_COMPONENTS: TModals = {
   tradeTokenList: (props) => ModalTradeTokenList(props),
   tradeSettings: (props) => ModalTradeSettings(props),
   mutateStrategy: (props) => ModalMutateStrategy(props),
+  editStrategy: (props) => ModalEditStrategy(props),
 };

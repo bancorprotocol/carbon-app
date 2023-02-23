@@ -10,6 +10,7 @@ type Props = {
   title?: string | ReactNode;
   showCloseButton?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  className?: string;
 };
 
 const getSize = (size: 'sm' | 'md' | 'lg') => {
@@ -29,6 +30,7 @@ export const Modal: FC<Props> = ({
   title,
   size = 'sm',
   showCloseButton = true,
+  className = '',
 }) => {
   const { closeModal } = useModal();
 
@@ -47,7 +49,11 @@ export const Modal: FC<Props> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis">
+        <div
+          className={`relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis  ${
+            className ? className : ''
+          }`}
+        >
           <div className={'flex justify-between'}>
             <div>
               {typeof title === 'string' ? (

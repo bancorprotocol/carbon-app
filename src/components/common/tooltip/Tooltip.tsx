@@ -5,12 +5,21 @@ import { Instance } from 'tippy.js';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 
 export const Tooltip: FC<
-  TippyProps & { element: ReactNode; className?: string }
+  TippyProps & {
+    element: ReactNode;
+    className?: string;
+    iconClassName?: string;
+  }
 > = ({
   element,
-  children = <IconTooltip className={'h-18 w-18'} />,
-  maxWidth = 350,
   className = '',
+  iconClassName = '',
+  maxWidth = 350,
+  children = (
+    <IconTooltip
+      className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
+    />
+  ),
   ...props
 }) => {
   const springConfig = { damping: 15, stiffness: 300 };

@@ -13,6 +13,7 @@ export enum ItemId {
   DuplicateStrategy,
   DeleteStrategy,
   takeOffCurve,
+  UnpauseStrategy,
 }
 
 type itemsType = {
@@ -51,6 +52,13 @@ export const StrategyBlockManage: FC<{
       id: ItemId.takeOffCurve,
       name: 'Take Off Curve',
       action: () => openModal('mutateStrategy', { strategy, type: 'pause' }),
+    });
+  }
+  if (strategy.status === StrategyStatus.OffCurve) {
+    items.push({
+      id: ItemId.UnpauseStrategy,
+      name: 'Unpause Strategy',
+      action: () => openModal('editStrategy', { strategy }),
     });
   }
 
