@@ -12,7 +12,7 @@ export enum ItemId {
   WithdrawFunds,
   DuplicateStrategy,
   DeleteStrategy,
-  takeOffCurve,
+  pauseStrategy,
   UnpauseStrategy,
 }
 
@@ -49,12 +49,15 @@ export const StrategyBlockManage: FC<{
 
   if (strategy.status === StrategyStatus.Active) {
     items.push({
-      id: ItemId.takeOffCurve,
+      id: ItemId.pauseStrategy,
       name: 'Pause Strategy',
       action: () => openModal('mutateStrategy', { strategy, type: 'pause' }),
     });
   }
-  if (strategy.status === StrategyStatus.OffCurve) {
+  if (
+    strategy.status === StrategyStatus.OffCurve ||
+    strategy.status === StrategyStatus.Inactive
+  ) {
     items.push({
       id: ItemId.UnpauseStrategy,
       name: 'Unpause Strategy',

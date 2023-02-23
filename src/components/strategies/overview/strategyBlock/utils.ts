@@ -28,7 +28,7 @@ export const getTooltipTextByItemId = (id: ItemId) => {
     ? 'Create a new strategy with the same details'
     : id === ItemId.DeleteStrategy
     ? 'Delete the strategy and withdraw all associated funds to your wallet'
-    : id === ItemId.takeOffCurve
+    : id === ItemId.pauseStrategy
     ? ''
     : '';
 };

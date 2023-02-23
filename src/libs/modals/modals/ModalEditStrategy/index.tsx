@@ -37,7 +37,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   };
 
   return (
-    <Modal className="dark:bg-emphasis/60" id={id} title={'Unpause Strategy'}>
+    <Modal className="dark:bg-silver/80" id={id} title={'Unpause Strategy'}>
       <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
         <ModalEditStrategyBuySellBlock
           buy
