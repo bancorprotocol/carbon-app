@@ -1,13 +1,12 @@
 import { FC } from 'react';
 import BigNumber from 'bignumber.js';
-import { Imager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
-import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
+import { LimitRangeSection } from './LimitRangeSection';
+import { Imager } from 'components/common/imager/Imager';
 
 type Props = {
   token0: Token;
@@ -26,20 +25,66 @@ export const BuySellBlock: FC<Props> = ({
   buy,
   isBudgetOptional,
 }) => {
-  const { isRange, setIsRange, resetFields } = order;
   const budgetToken = buy ? token1 : token0;
-  const title = buy ? 'Buy Low' : 'Sell High';
+
+  const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
+    order.budget
+  );
+  const titleText = buy ? 'Buy Low' : 'Sell High';
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
   } ${token0.symbol} at.`;
 
-  const handleRangeChange = () => {
-    setIsRange(!isRange);
-    resetFields(true);
-  };
+  const title = (
+    <>
+      <Tooltip element={tooltipText}>
+        <span>{titleText}</span>
+      </Tooltip>
+      <Imager
+        alt={'Token'}
+        src={token0.logoURI}
+        className={'mx-6 h-18 w-18 rounded-full'}
+      />
+      <span>{token0.symbol}</span>
+    </>
+  );
 
-  const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
-    order.budget
+  const inputTitle = (
+    <>
+      <div
+        className={
+          'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+        }
+      >
+        1
+      </div>
+      <Tooltip
+        element={`Define the rate you are willing to ${buy ? 'buy' : 'sell'} ${
+          token0.symbol
+        } at. Make sure the price is in ${token1.symbol} tokens.`}
+      >
+        <div className={'text-14 font-weight-500 text-white/60'}>
+          <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
+          <span className={'ml-8 text-white/80'}>
+            ({token1.symbol} <span className={'text-white/60'}>per 1 </span>
+            {token0.symbol})
+          </span>
+        </div>
+      </Tooltip>
+    </>
+  );
+
+  const sectionTooltip = (
+    <>
+      This section will define the order details in which you are willing to{' '}
+      {buy ? 'buy' : 'sell'} {token0.symbol} at.
+      <br />
+      <b>Limit</b> will allow you to define a specific price point to{' '}
+      {buy ? 'buy' : 'sell'} the token at.
+      <br />
+      <b>Range</b> will allow you to define a range of prices to{' '}
+      {buy ? 'buy' : 'sell'} the token at.
+    </>
   );
 
   return (
@@ -50,100 +95,9 @@ export const BuySellBlock: FC<Props> = ({
           : 'border-red/50 focus-within:border-red'
       }`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-6 text-18">
-          <Tooltip element={tooltipText}>
-            <span>{title}</span>
-          </Tooltip>
-          <Imager
-            alt={'Token'}
-            src={token0.logoURI}
-            className={'mx-6 h-18 w-18 rounded-full'}
-          />
-          <span>{token0.symbol}</span>
-        </div>
-        <div className="flex items-center gap-10 text-14">
-          <div className="bg-body flex items-center rounded-[100px] p-2">
-            <button
-              onClick={() => handleRangeChange()}
-              className={`rounded-40 ${
-                !isRange ? 'bg-silver' : 'text-secondary'
-              } px-10 py-4`}
-            >
-              Limit
-            </button>
-            <button
-              onClick={() => handleRangeChange()}
-              className={`rounded-40 ${
-                isRange ? 'bg-silver' : 'text-secondary'
-              } px-10 py-4`}
-            >
-              Range
-            </button>
-          </div>
-          <Tooltip
-            element={
-              <>
-                This section will define the order details in which you are
-                willing to {buy ? 'buy' : 'sell'} {token0.symbol} at.
-                <br />
-                <b>Limit</b> will allow you to define a specific price point to{' '}
-                {buy ? 'buy' : 'sell'} the token at.
-                <br />
-                <b>Range</b> will allow you to define a range of prices to{' '}
-                {buy ? 'buy' : 'sell'} the token at.
-              </>
-            }
-          />
-        </div>
-      </div>
-
-      <div className={'flex items-center pt-10'}>
-        <div
-          className={
-            'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
-          }
-        >
-          1
-        </div>
-        <Tooltip
-          element={`Define the rate you are willing to ${
-            buy ? 'buy' : 'sell'
-          } ${token0.symbol} at. Make sure the price is in ${
-            token1.symbol
-          } tokens.`}
-        >
-          <div className={'text-14 font-weight-500 text-white/60'}>
-            <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
-            <span className={'ml-8 text-white/80'}>
-              ({token1.symbol} <span className={'text-white/60'}>per 1 </span>
-              {token0.symbol})
-            </span>
-          </div>
-        </Tooltip>
-      </div>
-
-      {isRange ? (
-        <InputRange
-          min={order.min}
-          setMin={order.setMin}
-          max={order.max}
-          setMax={order.setMax}
-          error={order.rangeError}
-          setRangeError={order.setRangeError}
-          token={token0}
-          buy={buy}
-        />
-      ) : (
-        <InputLimit
-          token={token1}
-          price={order.price}
-          setPrice={order.setPrice}
-          error={order.priceError}
-          setPriceError={order.setPriceError}
-        />
-      )}
-
+      <LimitRangeSection
+        {...{ token0, token1, order, buy, title, inputTitle, sectionTooltip }}
+      />
       <div className={'flex items-center pt-10 text-14'}>
         <div
           className={
