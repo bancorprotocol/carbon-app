@@ -1,4 +1,8 @@
-import { OrderBook, useGetOrderBook } from 'libs/queries/sdk/orderBook';
+import {
+  OrderBook,
+  orderBookConfig,
+  useGetOrderBook,
+} from 'libs/queries/sdk/orderBook';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { orderBy } from 'lodash';
@@ -47,16 +51,23 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
           _subtractPrevAmount(true, amount, rate, i)
         )
         .filter(({ amount }) => amount !== '0')
-        .splice(0, 14),
+        .splice(0, orderBookConfig.buckets.orderBook),
       sell: data.sell
         .map(({ amount, rate }, i) =>
           _subtractPrevAmount(false, amount, rate, i)
         )
         .filter(({ amount }) => amount !== '0')
-        .splice(0, 14),
+        .splice(0, orderBookConfig.buckets.orderBook),
       middleRate: orderBookQuery.data?.middleRate || '0',
     };
-  }, [orderBookQuery.data, base, quote, getTokenById]);
+  }, [
+    base,
+    getTokenById,
+    orderBookQuery.data?.buy,
+    orderBookQuery.data?.middleRate,
+    orderBookQuery.data?.sell,
+    quote,
+  ]);
 
   return { ...orderBookQuery, data: orders };
 };
