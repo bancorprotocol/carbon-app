@@ -60,7 +60,7 @@ const buildOrderBook = async (
     const total = amountBn.times(rate).toString();
     orders.push({ rate, total, amount: amountBn.toString() });
     if (minEqMax) {
-      Array.from({ length: buckets }).map((_, i) =>
+      Array.from({ length: buckets - 1 }).map((_, i) =>
         orders.push({
           rate: new BigNumber(rate)
             [buy ? 'minus' : 'plus'](step.times(i))
