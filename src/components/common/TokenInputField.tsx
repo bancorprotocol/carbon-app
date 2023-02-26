@@ -18,6 +18,7 @@ type Props = {
   onKeystroke?: () => void;
   isLoading?: boolean;
   slippage?: BigNumber | null;
+  withoutWallet?: boolean;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -31,6 +32,7 @@ export const TokenInputField: FC<Props> = ({
   onKeystroke,
   placeholder = 'Enter Amount',
   slippage,
+  withoutWallet,
 }) => {
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
@@ -112,7 +114,7 @@ export const TokenInputField: FC<Props> = ({
           'text-secondary mt-10 flex items-center justify-between font-mono !text-12 font-weight-500'
         }
       >
-        {user && isBalanceLoading !== undefined ? (
+        {user && isBalanceLoading !== undefined && !withoutWallet ? (
           <button
             onClick={handleBalanceClick}
             className={'group flex items-center'}

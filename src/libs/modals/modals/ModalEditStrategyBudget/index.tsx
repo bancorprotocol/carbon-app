@@ -5,6 +5,7 @@ import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useOrder } from 'components/strategies/create/useOrder';
+import { ModalEditStrategyBudgetBuySellBlock } from './ModalEditStrategyBudgetBuySellBlock';
 
 export type ModalEditStrategyBudgetData = {
   strategy: Strategy;
@@ -56,7 +57,26 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
             </div>
           </div>
         </div>
+        <ModalEditStrategyBudgetBuySellBlock
+          buy
+          base={strategy?.token0}
+          quote={strategy?.token1}
+          order={order0}
+          balance={strategy.order0.balance}
+        />
+        <ModalEditStrategyBudgetBuySellBlock
+          base={strategy?.token0}
+          quote={strategy?.token1}
+          order={order1}
+          balance={strategy.order1.balance}
+        />
         <Button
+          disabled={
+            +order0.budget === 0 ||
+            !!!order0.budget ||
+            +order1.budget === 0 ||
+            !!!order1.budget
+          }
           onClick={handleOnActionClick}
           className="mt-32"
           variant="white"
