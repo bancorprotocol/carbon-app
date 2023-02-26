@@ -7,34 +7,32 @@ import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type ModalEditStrategyData = {
   strategy: Strategy;
+  type: 'unpause' | 'changeRates';
 };
 
 export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   id,
-  data: { strategy },
+  data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
   const { unPauseStrategy } = useUpdateStrategy();
   const { order0, order1 } = useCreateStrategy();
   const paddedID = strategy.id.padStart(9, '0');
 
-  const populateOrder = useCallback(
-    (order: OrderCreate, strategyOrder: Order) => {
-      if (strategyOrder.startRate === strategyOrder.endRate) {
-        order.setPrice(strategyOrder.startRate);
-      } else {
-        order.setMin(strategyOrder.startRate);
-        order.setMax(strategyOrder.endRate);
-        order.setIsRange(true);
-      }
-    },
-    []
-  );
+  const populateOrder = (order: OrderCreate, strategyOrder: Order) => {
+    if (strategyOrder.startRate === strategyOrder.endRate) {
+      order.setPrice(strategyOrder.startRate);
+    } else {
+      order.setMin(strategyOrder.startRate);
+      order.setMax(strategyOrder.endRate);
+      order.setIsRange(true);
+    }
+  };
 
   useEffect(() => {
     populateOrder(order0, strategy.order0);
@@ -59,7 +57,11 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   };
 
   return (
-    <Modal className="dark:bg-silver" id={id} title={'Unpause Strategy'}>
+    <Modal
+      className="dark:bg-silver"
+      id={id}
+      title={type === 'unpause' ? 'Unpause Strategy' : 'Edit Price'}
+    >
       <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
         <div
           className={

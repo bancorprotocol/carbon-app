@@ -49,7 +49,8 @@ export const StrategyBlockManage: FC<{
     {
       id: ItemId.ChangeRates,
       name: 'Change Rates',
-      action: () => openModal('editStrategy', { strategy }),
+      action: () =>
+        openModal('editStrategy', { strategy, type: 'changeRates' }),
     },
   ];
 
@@ -67,7 +68,7 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: ItemId.UnpauseStrategy,
       name: 'Unpause Strategy',
-      action: () => openModal('editStrategy', { strategy }),
+      action: () => openModal('editStrategy', { strategy, type: 'unpause' }),
     });
   }
 
