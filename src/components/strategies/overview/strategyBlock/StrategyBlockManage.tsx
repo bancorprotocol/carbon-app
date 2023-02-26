@@ -14,6 +14,7 @@ export enum ItemId {
   DeleteStrategy,
   PauseStrategy,
   UnpauseStrategy,
+  ChangeRates,
 }
 
 type itemsType = {
@@ -44,6 +45,11 @@ export const StrategyBlockManage: FC<{
       id: ItemId.DeleteStrategy,
       name: 'Delete Strategy',
       action: () => openModal('mutateStrategy', { strategy, type: 'delete' }),
+    },
+    {
+      id: ItemId.ChangeRates,
+      name: 'Change Rates',
+      action: () => openModal('editStrategy', { strategy }),
     },
   ];
 

@@ -2,11 +2,13 @@ import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
-import { Strategy } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { useCallback, useEffect } from 'react';
+import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type ModalEditStrategyData = {
   strategy: Strategy;
@@ -20,6 +22,24 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   const { unPauseStrategy } = useUpdateStrategy();
   const { order0, order1 } = useCreateStrategy();
   const paddedID = strategy.id.padStart(9, '0');
+
+  const populateOrder = useCallback(
+    (order: OrderCreate, strategyOrder: Order) => {
+      if (strategyOrder.startRate === strategyOrder.endRate) {
+        order.setPrice(strategyOrder.startRate);
+      } else {
+        order.setMin(strategyOrder.startRate);
+        order.setMax(strategyOrder.endRate);
+        order.setIsRange(true);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    populateOrder(order0, strategy.order0);
+    populateOrder(order1, strategy.order1);
+  }, []);
 
   const handleOnActionClick = () => {
     unPauseStrategy({
