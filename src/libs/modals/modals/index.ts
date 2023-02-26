@@ -23,6 +23,10 @@ import {
   ModalMutateStrategyData,
 } from './ModalMutateStrategy/ModalMutateStrategy';
 import { ModalEditStrategy, ModalEditStrategyData } from './ModalEditStrategy';
+import {
+  ModalEditStrategyBudget,
+  ModalEditStrategyBudgetData,
+} from './ModalEditStrategyBudget';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -35,6 +39,7 @@ export interface ModalSchema {
   tradeSettings: undefined;
   mutateStrategy: ModalMutateStrategyData;
   editStrategy: ModalEditStrategyData;
+  editStrategyBudget: ModalEditStrategyBudgetData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -50,4 +55,5 @@ export const MODAL_COMPONENTS: TModals = {
   tradeSettings: (props) => ModalTradeSettings(props),
   mutateStrategy: (props) => ModalMutateStrategy(props),
   editStrategy: (props) => ModalEditStrategy(props),
+  editStrategyBudget: (props) => ModalEditStrategyBudget(props),
 };

@@ -35,6 +35,8 @@ export const StrategyBlockManage: FC<{
     {
       id: ItemId.WithdrawFunds,
       name: 'Withdraw Funds',
+      action: () =>
+        openModal('editStrategyBudget', { strategy, type: 'remove' }),
     },
     {
       id: ItemId.DuplicateStrategy,
