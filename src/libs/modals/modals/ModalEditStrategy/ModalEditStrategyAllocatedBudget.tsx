@@ -15,19 +15,19 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   balance?: string;
   buy?: boolean;
 }> = ({ base, quote, balance, buy, order }) => {
-  const numOfRenders = useRef(0);
+  const firstTime = useRef(true);
   const [isDistribute, setIsDistribute] = useState(true);
   const [showDistribute, setShowDistribute] = useState(false);
 
   useEffect(() => {
-    numOfRenders.current++;
-    if (numOfRenders.current > 3 && order.isRange) {
+    if (!firstTime.current && order.isRange) {
       setShowDistribute(true);
     }
     if (!order.isRange) {
       setShowDistribute(false);
     }
-  }, [order.isRange, order.min, order.max]);
+    firstTime.current = false;
+  }, [order.max, order.min, order.isRange]);
 
   return (
     <div className="flex w-full flex-col rounded-8 border border-emphasis p-15 text-left font-mono text-12 font-weight-500">
