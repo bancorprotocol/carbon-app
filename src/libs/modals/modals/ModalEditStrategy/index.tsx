@@ -103,9 +103,17 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
         <Button
           disabled={
             (order0.isRange
-              ? !!!order0.min || !!!order0.max
-              : !!!order0.price) ||
-            (order1.isRange ? !!!order1.min || !!!order1.max : !!!order1.price)
+              ? !!!order0.min ||
+                +order0.min === 0 ||
+                !!!order0.max ||
+                +order0.max === 0
+              : !!!order0.price || +order0.price === 0) ||
+            (order1.isRange
+              ? !!!order1.min ||
+                +order1.min === 0 ||
+                !!!order1.max ||
+                +order1.max === 0
+              : !!!order1.price || +order1.price === 0)
           }
           onClick={handleOnActionClick}
           className="mt-32"
