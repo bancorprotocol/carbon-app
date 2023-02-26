@@ -18,26 +18,35 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { renewStrategy } = useUpdateStrategy();
+  const { renewStrategy, changeRateStrategy } = useUpdateStrategy();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
 
   const paddedID = strategy.id.padStart(9, '0');
 
   const handleOnActionClick = () => {
-    renewStrategy({
-      ...strategy,
-      order0: {
-        balance: strategy.order0.balance,
-        startRate: order0.price || order0.min,
-        endRate: order0.max,
-      },
-      order1: {
-        balance: strategy.order1.balance,
-        startRate: order1.price || order1.min,
-        endRate: order1.max,
-      },
-    });
+    const newOrder0 = {
+      balance: strategy.order0.balance,
+      startRate: order0.price || order0.min,
+      endRate: order0.max,
+    };
+    const newOrder1 = {
+      balance: strategy.order1.balance,
+      startRate: order1.price || order1.min,
+      endRate: order1.max,
+    };
+
+    type === 'renew'
+      ? renewStrategy({
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        })
+      : changeRateStrategy({
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        });
     closeModal(id);
   };
 
