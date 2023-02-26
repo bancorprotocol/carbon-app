@@ -50,9 +50,7 @@ export const Modal: FC<Props> = ({
         exit="exit"
       >
         <div
-          className={`relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis  ${
-            className ? className : ''
-          }`}
+          className={`relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis ${className}`}
         >
           <div className={'flex justify-between'}>
             <div>

@@ -13,7 +13,7 @@ export enum ItemId {
   DuplicateStrategy,
   DeleteStrategy,
   PauseStrategy,
-  UnpauseStrategy,
+  RenewStrategy,
   ChangeRates,
 }
 
@@ -66,9 +66,9 @@ export const StrategyBlockManage: FC<{
     strategy.status === StrategyStatus.Inactive
   ) {
     items.push({
-      id: ItemId.UnpauseStrategy,
-      name: 'Unpause Strategy',
-      action: () => openModal('editStrategy', { strategy, type: 'unpause' }),
+      id: ItemId.RenewStrategy,
+      name: 'Renew Strategy',
+      action: () => openModal('editStrategy', { strategy, type: 'renew' }),
     });
   }
 

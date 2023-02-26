@@ -7,7 +7,7 @@ export interface NotificationSchema {
   trade: { txHash: string; amount: string; from: string; to: string };
   createStrategy: { txHash: string };
   pauseStrategy: { txHash: string };
-  unPauseStrategy: { txHash: string };
+  renewStrategy: { txHash: string };
   editStrategyName: { txHash: string };
   withdrawStrategy: { txHash: string };
   deleteStrategy: { txHash: string };
@@ -60,15 +60,15 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     txHash: data.txHash,
     showAlert: true,
   }),
-  unPauseStrategy: (data) => ({
+  renewStrategy: (data) => ({
     status: 'pending',
     title: 'Pending Confirmation',
-    description: 'Your request to unpause the strategy is being processed',
+    description: 'Your request to renew the strategy is being processed',
     successTitle: 'Success',
     successDesc:
-      'Your request to unpause the strategy was successfully completed',
+      'Your request to renew the strategy was successfully completed',
     failedTitle: 'Transaction Failed',
-    failedDesc: 'Your request to unpause the strategy have failed',
+    failedDesc: 'Your request to renew the strategy has failed',
     txHash: data.txHash,
     showAlert: true,
   }),

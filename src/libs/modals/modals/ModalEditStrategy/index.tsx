@@ -10,7 +10,7 @@ import { useOrder } from 'components/strategies/create/useOrder';
 
 export type ModalEditStrategyData = {
   strategy: Strategy;
-  type: 'unpause' | 'changeRates';
+  type: 'renew' | 'changeRates';
 };
 
 export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
@@ -18,13 +18,14 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { unPauseStrategy } = useUpdateStrategy();
+  const { renewStrategy } = useUpdateStrategy();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
+
   const paddedID = strategy.id.padStart(9, '0');
 
   const handleOnActionClick = () => {
-    unPauseStrategy({
+    renewStrategy({
       ...strategy,
       order0: {
         balance: strategy.order0.balance,
@@ -44,7 +45,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
     <Modal
       className="dark:bg-silver"
       id={id}
-      title={type === 'unpause' ? 'Unpause Strategy' : 'Edit Price'}
+      title={type === 'renew' ? 'Renew Strategy' : 'Edit Price'}
     >
       <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
         <div
@@ -105,7 +106,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
           size="lg"
           fullWidth
         >
-          {type === 'unpause' ? 'Renew Strategy' : 'Confirm Changes'}
+          {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
         </Button>
         <Button
           onClick={() => closeModal(id)}
