@@ -113,7 +113,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
           size="lg"
           fullWidth
         >
-          Renew Strategy
+          {type === 'unpause' ? 'Renew Strategy' : 'Confirm Changes'}
         </Button>
         <Button
           onClick={() => closeModal(id)}
