@@ -5,6 +5,8 @@ import { Token } from 'libs/tokens';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
+import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
+import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
 
 export const ModalEditStrategyAllocatedBudget: FC<{
   order: OrderCreate;
@@ -64,9 +66,36 @@ export const ModalEditStrategyAllocatedBudget: FC<{
             <Tooltip
               iconClassName="h-13 text-white/60"
               element={
-                buy
-                  ? `This is the available amount of ${quote?.symbol} tokens that you are willing to use in order to buy ${base?.symbol}.`
-                  : `This is the available amount of ${base?.symbol} tokens that you are willing to sell.`
+                <div className="flex flex-col gap-10">
+                  <div className="flex gap-8">
+                    <div>
+                      <IconDistributedEntireRange />
+                    </div>
+                    <div>
+                      <div className="text-12 font-weight-500 text-white">
+                        Distribute Across Entire Range
+                      </div>
+                      <div className="text-10 text-white/60">
+                        The budget is allocated to the entire newly set range
+                        and the asking price is updated.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-8">
+                    <div>
+                      <IconDistributedUnusedRange />
+                    </div>
+                    <div>
+                      <div className="text-12 font-weight-500 text-white">
+                        Distribute To Unused Range
+                      </div>
+                      <div className="text-10 text-white/60">
+                        Price remains the same as it was. The budget is not
+                        allocated to the new range.
+                      </div>
+                    </div>
+                  </div>
+                </div>
               }
             />
           </div>
