@@ -31,8 +31,8 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
       }`}
     >
       <div className="mb-10 flex justify-between">
-        <div className={'font-weight-500 text-white/60'}>
-          {buy ? 'Buy' : 'Sell'} Budget
+        <div className={'font-weight-500'}>
+          Withdraw {buy ? 'Buy' : 'Sell'} Budget
         </div>
         <Tooltip element={<>???</>} />
       </div>
@@ -54,6 +54,7 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
       </div>
       <div className="pt-10">
         <ModalEditStrategyAllocatedBudget
+          showMaxCb={() => order.setBudget(balance || '')}
           {...{ order, base, quote, balance, buy }}
         />
       </div>

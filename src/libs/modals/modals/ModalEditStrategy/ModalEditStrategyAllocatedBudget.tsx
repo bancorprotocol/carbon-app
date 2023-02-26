@@ -14,7 +14,8 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   quote: Token;
   balance?: string;
   buy?: boolean;
-}> = ({ base, quote, balance, buy, order }) => {
+  showMaxCb?: () => void;
+}> = ({ base, quote, balance, buy, order, showMaxCb }) => {
   const firstTime = useRef(true);
   const [isDistribute, setIsDistribute] = useState(true);
   const [showDistribute, setShowDistribute] = useState(false);
@@ -57,6 +58,14 @@ export const ModalEditStrategyAllocatedBudget: FC<{
             src={buy ? quote?.logoURI : base?.logoURI}
             alt="token"
           />
+          {showMaxCb && (
+            <div
+              onClick={() => showMaxCb()}
+              className="ml-8 cursor-pointer font-weight-500 text-green"
+            >
+              MAX
+            </div>
+          )}
         </div>
       </div>
       {showDistribute && (
