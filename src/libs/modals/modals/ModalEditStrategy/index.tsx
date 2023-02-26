@@ -17,12 +17,12 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   data: { strategy },
 }) => {
   const { closeModal } = useModal();
-  const { unPauseStrategy } = useUpdateStrategy();
+  const { renewStrategy } = useUpdateStrategy();
   const { order0, order1 } = useCreateStrategy();
   const paddedID = strategy.id.padStart(9, '0');
 
   const handleOnActionClick = () => {
-    unPauseStrategy({
+    renewStrategy({
       ...strategy,
       order0: {
         balance: strategy.order0.balance,
@@ -39,7 +39,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   };
 
   return (
-    <Modal className="dark:bg-silver" id={id} title={'Unpause Strategy'}>
+    <Modal className="dark:bg-silver" id={id} title={'Renew Strategy'}>
       <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
         <div
           className={

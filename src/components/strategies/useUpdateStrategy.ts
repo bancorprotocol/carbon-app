@@ -57,11 +57,11 @@ export const useUpdateStrategy = () => {
     );
   };
 
-  const unPauseStrategy = async (strategy: Strategy) => {
+  const renewStrategy = async (strategy: Strategy) => {
     const { token0, token1, order0, order1, encoded } = strategy;
 
     if (!token0 || !token1 || !user) {
-      throw new Error('error in unPause strategy: missing data ');
+      throw new Error('error in renew strategy: missing data ');
     }
     const isOrder0Limit = !!!order0.endRate;
     const isOrder1Limit = !!!order1.endRate;
@@ -86,7 +86,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          dispatchNotification('unPauseStrategy', { txHash: tx.hash });
+          dispatchNotification('renewStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
@@ -104,6 +104,6 @@ export const useUpdateStrategy = () => {
   };
   return {
     pauseStrategy,
-    unPauseStrategy,
+    renewStrategy,
   };
 };
