@@ -5,7 +5,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
   const { data } = useGetOrderBook(base, quote);
 
   const getOrders = (orders?: OrderRow[]) => {
-    return [...(orders || [])].splice(0, 50).map(({ rate, total }) => {
+    return [...(orders || [])].map(({ rate, total }) => {
       return [+rate, +total];
     });
   };
