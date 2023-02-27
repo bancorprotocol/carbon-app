@@ -13,7 +13,8 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
   order: OrderCreate;
   balance?: string;
   buy?: boolean;
-}> = ({ base, quote, balance, buy, order }) => {
+  isBudgetOptional?: boolean;
+}> = ({ base, quote, balance, buy, order, isBudgetOptional }) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
   const tokenBalanceQuery = buy
@@ -30,11 +31,18 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
           : 'border-red/50 focus-within:border-red'
       }`}
     >
-      <div className="mb-10 flex justify-between">
-        <div className={'font-weight-500'}>
-          Withdraw {buy ? 'Buy' : 'Sell'} Budget
+      <div className="mb-10 flex items-center justify-between">
+        <div className="flex items-center">
+          <div>Withdraw {buy ? 'Buy' : 'Sell'} Budget</div>
+          {isBudgetOptional && (
+            <div className="ml-8 text-14 font-weight-500 text-white/40">
+              Optional
+            </div>
+          )}
         </div>
-        <Tooltip element={<>???</>} />
+        <Tooltip
+          element={`Indicate the amount you wish to withdraw from the available "allocated budget"`}
+        />
       </div>
       <TokenInputField
         className={'mr-4 rounded-16 bg-black p-16'}

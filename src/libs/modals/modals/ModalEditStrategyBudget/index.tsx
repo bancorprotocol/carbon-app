@@ -6,10 +6,12 @@ import { Strategy } from 'libs/queries';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { ModalEditStrategyBudgetBuySellBlock } from './ModalEditStrategyBudgetBuySellBlock';
+import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
+import BigNumber from 'bignumber.js';
 
 export type ModalEditStrategyBudgetData = {
   strategy: Strategy;
-  type: 'add' | 'remove';
+  type: 'deposit' | 'withdraw';
 };
 
 export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
@@ -17,12 +19,29 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const order0 = useOrder(strategy.order0);
-  const order1 = useOrder(strategy.order1);
-
+  const { withdrawBudget } = useUpdateStrategy();
+  const order0 = useOrder({ ...strategy.order0, balance: '0' });
+  const order1 = useOrder({ ...strategy.order1, balance: '0' });
   const paddedID = strategy.id.padStart(9, '0');
 
   const handleOnActionClick = () => {
+    withdrawBudget({
+      ...strategy,
+      order0: {
+        balance: new BigNumber(strategy.order0.balance)
+          .minus(new BigNumber(order0.budget))
+          .toString(),
+        startRate: order0.price || order0.min,
+        endRate: order0.max,
+      },
+      order1: {
+        balance: new BigNumber(strategy.order1.balance)
+          .minus(new BigNumber(order1.budget))
+          .toString(),
+        startRate: order1.price || order1.min,
+        endRate: order1.max,
+      },
+    });
     closeModal(id);
   };
 
@@ -30,7 +49,7 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
     <Modal
       className="dark:bg-silver"
       id={id}
-      title={type === 'add' ? 'Add Budget' : 'Remove Budget'}
+      title={type === 'deposit' ? 'Deposit Budget' : 'Withdraw Budget'}
     >
       <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
         <div
@@ -63,19 +82,19 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           quote={strategy?.token1}
           order={order0}
           balance={strategy.order0.balance}
+          isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
         />
         <ModalEditStrategyBudgetBuySellBlock
           base={strategy?.token0}
           quote={strategy?.token1}
           order={order1}
           balance={strategy.order1.balance}
+          isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
         />
         <Button
           disabled={
-            +order0.budget === 0 ||
-            !!!order0.budget ||
-            +order1.budget === 0 ||
-            !!!order1.budget
+            (+order0.budget === 0 || !!!order0.budget) &&
+            (+order1.budget === 0 || !!!order1.budget)
           }
           onClick={handleOnActionClick}
           className="mt-32"
@@ -83,7 +102,7 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           size="lg"
           fullWidth
         >
-          {type === 'add' ? 'Confirm Deposit' : 'Confirm Withdraw'}
+          {type === 'deposit' ? 'Confirm Deposit' : 'Confirm Withdraw'}
         </Button>
         <Button
           onClick={() => closeModal(id)}

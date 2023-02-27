@@ -33,12 +33,6 @@ export const StrategyBlockManage: FC<{
 
   const items: itemsType[] = [
     {
-      id: ItemId.WithdrawFunds,
-      name: 'Withdraw Funds',
-      action: () =>
-        openModal('editStrategyBudget', { strategy, type: 'remove' }),
-    },
-    {
       id: ItemId.DuplicateStrategy,
       name: 'Duplicate Strategy',
       action: () => duplicate(strategy),
@@ -55,7 +49,14 @@ export const StrategyBlockManage: FC<{
         openModal('editStrategy', { strategy, type: 'changeRates' }),
     },
   ];
-
+  if (strategy.status !== StrategyStatus.NoBudget) {
+    items.push({
+      id: ItemId.WithdrawFunds,
+      name: 'Withdraw Funds',
+      action: () =>
+        openModal('editStrategyBudget', { strategy, type: 'withdraw' }),
+    });
+  }
   if (strategy.status === StrategyStatus.Active) {
     items.push({
       id: ItemId.PauseStrategy,
