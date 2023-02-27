@@ -44,7 +44,7 @@ export const StrategyBlockManage: FC<{
     {
       id: ItemId.DeleteStrategy,
       name: 'Delete Strategy',
-      action: () => openModal('mutateStrategy', { strategy, type: 'delete' }),
+      action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
       id: ItemId.ChangeRates,
@@ -58,7 +58,7 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: ItemId.PauseStrategy,
       name: 'Pause Strategy',
-      action: () => openModal('mutateStrategy', { strategy, type: 'pause' }),
+      action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
     });
   }
   if (
