@@ -11,7 +11,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   buy?: boolean;
 }> = ({ base, quote, balance, buy }) => {
   return (
-    <div className="flex w-full justify-between rounded-8 border border-emphasis p-15 font-mono text-12 font-weight-500">
+    <div className="flex w-full justify-between rounded-8 border-2 border-emphasis p-15 font-mono text-12 font-weight-500">
       <div className="flex items-center">
         <div className="mr-5">Allocated Budget</div>
         <Tooltip
