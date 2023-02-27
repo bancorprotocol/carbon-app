@@ -4,7 +4,7 @@ import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { useOrder } from 'components/strategies/create/useOrder';
+import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { ModalEditStrategyBudgetBuySellBlock } from './ModalEditStrategyBudgetBuySellBlock';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import BigNumber from 'bignumber.js';
@@ -20,29 +20,40 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
 }) => {
   const { closeModal } = useModal();
   const { withdrawBudget } = useUpdateStrategy();
-  const order0 = useOrder({ ...strategy.order0, balance: '0' });
-  const order1 = useOrder({ ...strategy.order1, balance: '0' });
+  const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '0' });
+  const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '0' });
   const paddedID = strategy.id.padStart(9, '0');
+
+  const calculatedOrder0Budget = new BigNumber(strategy.order0.balance).minus(
+    new BigNumber(order0.budget)
+  );
+  const calculatedOrder1Budget = new BigNumber(strategy.order1.balance).minus(
+    new BigNumber(order1.budget)
+  );
 
   const handleOnActionClick = () => {
     withdrawBudget({
       ...strategy,
       order0: {
-        balance: new BigNumber(strategy.order0.balance)
-          .minus(new BigNumber(order0.budget))
-          .toString(),
+        balance: calculatedOrder0Budget.toString(),
         startRate: order0.price || order0.min,
         endRate: order0.max,
       },
       order1: {
-        balance: new BigNumber(strategy.order1.balance)
-          .minus(new BigNumber(order1.budget))
-          .toString(),
+        balance: calculatedOrder1Budget.toString(),
         startRate: order1.price || order1.min,
         endRate: order1.max,
       },
     });
     closeModal(id);
+  };
+
+  const isOrdersBudgetValid = () => {
+    return (
+      calculatedOrder0Budget.gte(0) &&
+      calculatedOrder1Budget.gte(0) &&
+      (+order0.budget > 0 || +order1.budget > 0)
+    );
   };
 
   return (
@@ -91,10 +102,7 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
         />
         <Button
-          disabled={
-            (+order0.budget === 0 || !!!order0.budget) &&
-            (+order1.budget === 0 || !!!order1.budget)
-          }
+          disabled={!isOrdersBudgetValid()}
           onClick={handleOnActionClick}
           className="mt-32"
           variant="white"
