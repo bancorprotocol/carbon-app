@@ -10,6 +10,7 @@ import { getTooltipTextByItemId } from './utils';
 
 export enum ItemId {
   WithdrawFunds,
+  DepositFunds,
   DuplicateStrategy,
   DeleteStrategy,
   PauseStrategy,
@@ -43,10 +44,10 @@ export const StrategyBlockManage: FC<{
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
-      id: ItemId.ChangeRates,
-      name: 'Change Rates',
+      id: ItemId.DepositFunds,
+      name: 'Deposit Funds',
       action: () =>
-        openModal('editStrategy', { strategy, type: 'changeRates' }),
+        openModal('editStrategyBudget', { strategy, type: 'deposit' }),
     },
   ];
   if (strategy.status !== StrategyStatus.NoBudget) {

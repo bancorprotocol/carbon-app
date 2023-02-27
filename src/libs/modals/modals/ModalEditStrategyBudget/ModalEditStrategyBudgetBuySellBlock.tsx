@@ -14,14 +14,23 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
   balance?: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
-}> = ({ base, quote, balance, buy, order, isBudgetOptional }) => {
+  type?: 'deposit' | 'withdraw';
+}> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
   const tokenBalanceQuery = buy
-    ? tokenBaseBalanceQuery
-    : tokenQuoteBalanceQuery;
+    ? tokenQuoteBalanceQuery
+    : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
-  const insufficientBalance = new BigNumber(balance || 0).lt(order.budget);
+
+  const calculatedWalletBalance = new BigNumber(
+    tokenBalanceQuery.data || 0
+  ).minus(new BigNumber(order.budget || 0));
+
+  const insufficientBalance =
+    type === 'withdraw'
+      ? new BigNumber(balance || 0).lt(order.budget)
+      : calculatedWalletBalance.lt(0);
 
   return (
     <div
@@ -33,7 +42,10 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
     >
       <div className="mb-10 flex items-center justify-between">
         <div className="flex items-center">
-          <div>Withdraw {buy ? 'Buy' : 'Sell'} Budget</div>
+          <div>
+            {`${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
+            {buy ? 'Buy' : 'Sell'} Budget
+          </div>
           {isBudgetOptional && (
             <div className="ml-8 text-14 font-weight-500 text-white/40">
               Optional
@@ -41,7 +53,9 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
           )}
         </div>
         <Tooltip
-          element={`Indicate the amount you wish to withdraw from the available "allocated budget"`}
+          element={`Indicate the amount you wish to ${
+            type === 'withdraw' ? 'withdraw' : 'deposit'
+          } from the available "allocated budget"`}
         />
       </div>
       <TokenInputField
@@ -51,7 +65,8 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
         token={budgetToken}
         isBalanceLoading={tokenBalanceQuery.isLoading}
         isError={insufficientBalance}
-        withoutWallet
+        balance={tokenBalanceQuery.data}
+        withoutWallet={type === 'withdraw'}
       />
       <div
         className={`mt-10 text-center text-12 text-red ${
@@ -62,8 +77,10 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
       </div>
       <div className="pt-10">
         <ModalEditStrategyAllocatedBudget
-          showMaxCb={() => order.setBudget(balance || '')}
           {...{ order, base, quote, balance, buy }}
+          {...(type === 'withdraw' && {
+            showMaxCb: () => order.setBudget(balance || ''),
+          })}
         />
       </div>
     </div>

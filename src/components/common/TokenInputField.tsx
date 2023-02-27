@@ -119,13 +119,17 @@ export const TokenInputField: FC<Props> = ({
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >
-            Wallet:{' '}
+            Wallet:
             {isBalanceLoading ? (
               'loading'
             ) : (
               <>
-                {prettifyNumber(balance || 0)}{' '}
-                <div className="ml-10 group-hover:text-white">MAX</div>
+                <span className="ml-5 text-white">
+                  {prettifyNumber(balance || 0)}
+                </span>
+                <div className="ml-10 text-green group-hover:text-white">
+                  MAX
+                </div>
               </>
             )}
           </button>
