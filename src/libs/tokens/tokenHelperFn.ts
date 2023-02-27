@@ -60,7 +60,7 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
 
   const merged = tokenList
     .flatMap((list) => list.tokens)
-    .filter((token) => !!token.address)
+    .filter((token) => !!token.address && !!token.symbol)
     .map((token) => ({
       ...token,
       address: utils.getAddress(token.address),
