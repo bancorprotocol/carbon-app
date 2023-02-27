@@ -20,7 +20,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
       case 'error':
         return 'text-red bg-red/25';
       default:
-        return 'bg-black/25';
+        return 'bg-black/50';
     }
   };
 

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ReactComponent as IconWarning } from 'assets/icons/pause.svg';
+import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 
@@ -20,7 +20,7 @@ export const getModalDataByType = (
     case 'pause':
       return {
         modalTitle: 'Pause Strategy',
-        icon: <IconWarning className="h-16 w-16" />,
+        icon: <IconPause className="h-16 w-16" />,
         title: 'Are you sure you would like to pause your strategy?',
         content:
           'This will pause the strategy but you will maintain access to any associated funds',
