@@ -49,10 +49,9 @@ export namespace QueryKey {
     token1,
   ];
 
-  export const tradeOrderBook = (base: string, quote: string) => [
-    ...sdk,
-    'trade-order-book',
-    base,
-    quote,
-  ];
+  export const tradeOrderBook = (
+    base: string,
+    quote: string,
+    buckets: number
+  ) => [...sdk, 'trade-order-book', base, quote, buckets];
 }
