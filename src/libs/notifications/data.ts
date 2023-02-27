@@ -115,7 +115,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     successTitle: 'Success',
     successDesc: 'Your strategy was successfully updated',
     failedTitle: 'Transaction Failed',
-    failedDesc: 'Your edit request have failed',
+    failedDesc: 'Your edit request has failed',
     txHash: data.txHash,
     showAlert: true,
   }),
