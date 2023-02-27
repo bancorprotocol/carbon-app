@@ -47,7 +47,6 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
 
   return (
     <Modal
-      className="dark:bg-silver"
       id={id}
       title={type === 'deposit' ? 'Deposit Budget' : 'Withdraw Budget'}
     >
