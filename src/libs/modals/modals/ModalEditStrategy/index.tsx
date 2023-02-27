@@ -7,6 +7,7 @@ import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
 import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type ModalEditStrategyData = {
   strategy: Strategy;
@@ -36,6 +37,10 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
       },
     });
     closeModal(id);
+  };
+
+  const isOrderValid = (order: OrderCreate) => {
+    return order.isRange ? +order.min > 0 && +order.max > 0 : +order.price > 0;
   };
 
   return (
@@ -79,12 +84,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
           balance={strategy.order1.balance}
         />
         <Button
-          disabled={
-            (order0.isRange
-              ? !!!order0.min || !!!order0.max
-              : !!!order0.price) ||
-            (order1.isRange ? !!!order1.min || !!!order1.max : !!!order1.price)
-          }
+          disabled={!isOrderValid(order0) || !isOrderValid(order1)}
           onClick={handleOnActionClick}
           className="mt-32"
           variant="white"
