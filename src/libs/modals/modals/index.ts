@@ -23,7 +23,7 @@ import { ModalEditStrategy, ModalEditStrategyData } from './ModalEditStrategy';
 import {
   ModalConfirmStrategy,
   ModalConfirmStrategyData,
-} from './ModalConfirmStrategyChanges/ModalConfirmStrategyChanges';
+} from './ModalConfirmStrategy/ModalConfirmStrategy';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
