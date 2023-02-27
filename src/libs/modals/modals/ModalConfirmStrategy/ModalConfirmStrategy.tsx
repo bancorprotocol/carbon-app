@@ -8,12 +8,12 @@ import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getModalDataByType } from './utils';
 
-export type ModalMutateStrategyData = {
+export type ModalConfirmStrategyData = {
   strategy: Strategy;
   type: 'delete' | 'pause';
 };
 
-export const ModalMutateStrategy: ModalFC<ModalMutateStrategyData> = ({
+export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   id,
   data: { strategy, type },
 }) => {

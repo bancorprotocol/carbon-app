@@ -57,7 +57,7 @@ export const TokenInputField: FC<Props> = ({
   };
 
   const handleBalanceClick = () => {
-    balance && setValue(balance);
+    balance && setValue(new BigNumber(balance).toFixed(token.decimals));
     onKeystroke && onKeystroke();
   };
 

@@ -18,15 +18,16 @@ import {
   ModalTradeTokenListData,
 } from 'libs/modals/modals/ModalTradeTokenList';
 import { ModalTradeSettings } from 'libs/modals/modals/ModalTradeSettings';
-import {
-  ModalMutateStrategy,
-  ModalMutateStrategyData,
-} from './ModalMutateStrategy/ModalMutateStrategy';
+
 import { ModalEditStrategy, ModalEditStrategyData } from './ModalEditStrategy';
 import {
   ModalEditStrategyBudget,
   ModalEditStrategyBudgetData,
 } from './ModalEditStrategyBudget';
+import {
+  ModalConfirmStrategy,
+  ModalConfirmStrategyData,
+} from './ModalConfirmStrategy/ModalConfirmStrategy';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -37,7 +38,7 @@ export interface ModalSchema {
   importToken: ModalImportTokenData;
   notifications: undefined;
   tradeSettings: undefined;
-  mutateStrategy: ModalMutateStrategyData;
+  confirmStrategy: ModalConfirmStrategyData;
   editStrategy: ModalEditStrategyData;
   editStrategyBudget: ModalEditStrategyBudgetData;
 }
@@ -53,7 +54,7 @@ export const MODAL_COMPONENTS: TModals = {
   notifications: (props) => ModalNotifications(props),
   tradeTokenList: (props) => ModalTradeTokenList(props),
   tradeSettings: (props) => ModalTradeSettings(props),
-  mutateStrategy: (props) => ModalMutateStrategy(props),
+  confirmStrategy: (props) => ModalConfirmStrategy(props),
   editStrategy: (props) => ModalEditStrategy(props),
   editStrategyBudget: (props) => ModalEditStrategyBudget(props),
 };

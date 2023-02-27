@@ -7,6 +7,7 @@ import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useOrder } from 'components/strategies/create/useOrder';
+import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type ModalEditStrategyData = {
   strategy: Strategy;
@@ -50,12 +51,12 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
     closeModal(id);
   };
 
+  const isOrderValid = (order: OrderCreate) => {
+    return order.isRange ? +order.min > 0 && +order.max > 0 : +order.price > 0;
+  };
+
   return (
-    <Modal
-      className="dark:bg-silver"
-      id={id}
-      title={type === 'renew' ? 'Renew Strategy' : 'Edit Price'}
-    >
+    <Modal id={id} title={type === 'renew' ? 'Renew Strategy' : 'Edit Price'}>
       <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
         <div
           className={
@@ -95,20 +96,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
           balance={strategy.order1.balance}
         />
         <Button
-          disabled={
-            (order0.isRange
-              ? !!!order0.min ||
-                +order0.min === 0 ||
-                !!!order0.max ||
-                +order0.max === 0
-              : !!!order0.price || +order0.price === 0) ||
-            (order1.isRange
-              ? !!!order1.min ||
-                +order1.min === 0 ||
-                !!!order1.max ||
-                +order1.max === 0
-              : !!!order1.price || +order1.price === 0)
-          }
+          disabled={!isOrderValid(order0) || !isOrderValid(order1)}
           onClick={handleOnActionClick}
           className="mt-32"
           variant="white"
