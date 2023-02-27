@@ -49,11 +49,10 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
       },
     };
 
-    if (type === 'withdraw') {
-      withdrawBudget(updatedStrategy);
-    } else {
-      depositBudget(updatedStrategy);
-    }
+    type === 'withdraw'
+      ? withdrawBudget(updatedStrategy)
+      : depositBudget(updatedStrategy);
+
     closeModal(id);
   };
 
@@ -127,7 +126,7 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           size="lg"
           fullWidth
         >
-          {type === 'deposit' ? 'Confirm Deposit' : 'Confirm Withdraw'}
+          {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
         </Button>
         <Button
           onClick={() => closeModal(id)}
