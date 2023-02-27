@@ -44,6 +44,12 @@ export const StrategyBlockManage: FC<{
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
+      id: ItemId.ChangeRates,
+      name: 'Change Rates',
+      action: () =>
+        openModal('editStrategy', { strategy, type: 'changeRates' }),
+    },
+    {
       id: ItemId.DepositFunds,
       name: 'Deposit Funds',
       action: () =>
