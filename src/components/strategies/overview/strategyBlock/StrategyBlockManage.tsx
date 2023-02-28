@@ -14,6 +14,7 @@ export enum ItemId {
   DeleteStrategy,
   PauseStrategy,
   RenewStrategy,
+  ChangeRates,
 }
 
 type itemsType = {
@@ -45,6 +46,12 @@ export const StrategyBlockManage: FC<{
       name: 'Delete Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
+    {
+      id: ItemId.ChangeRates,
+      name: 'Change Rates',
+      action: () =>
+        openModal('editStrategy', { strategy, type: 'changeRates' }),
+    },
   ];
 
   if (strategy.status === StrategyStatus.Active) {
@@ -61,7 +68,7 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: ItemId.RenewStrategy,
       name: 'Renew Strategy',
-      action: () => openModal('editStrategy', { strategy }),
+      action: () => openModal('editStrategy', { strategy, type: 'renew' }),
     });
   }
 

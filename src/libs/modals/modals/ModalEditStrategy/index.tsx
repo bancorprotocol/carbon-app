@@ -4,38 +4,50 @@ import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
-import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { useOrder } from 'components/strategies/create/useOrder';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type ModalEditStrategyData = {
   strategy: Strategy;
+  type: 'renew' | 'changeRates';
 };
 
 export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   id,
-  data: { strategy },
+  data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { renewStrategy } = useUpdateStrategy();
-  const { order0, order1 } = useCreateStrategy();
+  const { renewStrategy, changeRateStrategy } = useUpdateStrategy();
+  const order0 = useOrder(strategy.order0);
+  const order1 = useOrder(strategy.order1);
+
   const paddedID = strategy.id.padStart(9, '0');
 
   const handleOnActionClick = () => {
-    renewStrategy({
-      ...strategy,
-      order0: {
-        balance: strategy.order0.balance,
-        startRate: order0.price || order0.min,
-        endRate: order0.max,
-      },
-      order1: {
-        balance: strategy.order1.balance,
-        startRate: order1.price || order1.min,
-        endRate: order1.max,
-      },
-    });
+    const newOrder0 = {
+      balance: strategy.order0.balance,
+      startRate: order0.price || order0.min,
+      endRate: order0.max,
+    };
+    const newOrder1 = {
+      balance: strategy.order1.balance,
+      startRate: order1.price || order1.min,
+      endRate: order1.max,
+    };
+
+    type === 'renew'
+      ? renewStrategy({
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        })
+      : changeRateStrategy({
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        });
     closeModal(id);
   };
 
@@ -44,7 +56,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   };
 
   return (
-    <Modal id={id} title={'Renew Strategy'}>
+    <Modal id={id} title={type === 'renew' ? 'Renew Strategy' : 'Edit Price'}>
       <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
         <div
           className={
@@ -91,7 +103,7 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
           size="lg"
           fullWidth
         >
-          Renew Strategy
+          {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
         </Button>
         <Button
           onClick={() => closeModal(id)}

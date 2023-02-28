@@ -30,7 +30,6 @@ export interface ModalSchema {
   wallet: undefined;
   tokenLists: ModalTokenListData;
   tradeTokenList: ModalTradeTokenListData;
-
   txConfirm: ModalCreateConfirmData;
   importToken: ModalImportTokenData;
   notifications: undefined;

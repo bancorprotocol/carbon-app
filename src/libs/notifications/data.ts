@@ -11,6 +11,7 @@ export interface NotificationSchema {
   editStrategyName: { txHash: string };
   withdrawStrategy: { txHash: string };
   deleteStrategy: { txHash: string };
+  changeRatesStrategy: { txHash: string };
 }
 
 export const NOTIFICATIONS_MAP: NotificationsMap = {
@@ -104,6 +105,17 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
       'Strategy was successfully deleted and all associated funds have been withdrawn to your wallet',
     failedTitle: 'Transaction Failed',
     failedDesc: 'Strategy deletion have failed',
+    txHash: data.txHash,
+    showAlert: true,
+  }),
+  changeRatesStrategy: (data) => ({
+    status: 'pending',
+    title: 'Pending Confirmation',
+    description: 'Your edit request is being processed',
+    successTitle: 'Success',
+    successDesc: 'Your strategy was successfully updated',
+    failedTitle: 'Transaction Failed',
+    failedDesc: 'Your edit request has failed',
     txHash: data.txHash,
     showAlert: true,
   }),

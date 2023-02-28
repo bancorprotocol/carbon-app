@@ -39,7 +39,9 @@ export const ModalEditStrategyBuySellBlock: FC<{
         }}
       />
       <div className="pt-10">
-        <ModalEditStrategyAllocatedBudget {...{ base, quote, balance, buy }} />
+        <ModalEditStrategyAllocatedBudget
+          {...{ order, base, quote, balance, buy }}
+        />
       </div>
     </div>
   );
