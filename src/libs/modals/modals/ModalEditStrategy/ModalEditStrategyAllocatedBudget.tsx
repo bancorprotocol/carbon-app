@@ -2,11 +2,14 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { getFiatValue, sanitizeNumberInput } from 'utils/helpers';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
+import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPrice';
+import BigNumber from 'bignumber.js';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 export const ModalEditStrategyAllocatedBudget: FC<{
   order: OrderCreate;
@@ -14,20 +17,39 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   quote: Token;
   balance?: string;
   buy?: boolean;
-}> = ({ base, quote, balance, buy, order }) => {
+  showMaxCb?: () => void;
+}> = ({ base, quote, balance, buy, order, showMaxCb }) => {
   const firstTime = useRef(true);
   const [isDistribute, setIsDistribute] = useState(true);
   const [showDistribute, setShowDistribute] = useState(false);
+  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
+  const baseTokenPriceQuery = useGetTokenPrice(base.symbol);
+  const quoteTokenPriceQuery = useGetTokenPrice(quote.symbol);
 
   useEffect(() => {
-    if (!firstTime.current && order.isRange) {
+    if (!firstTime.current && order.isRange && +order.budget > 0) {
       setShowDistribute(true);
     }
-    if (!order.isRange) {
+    if (!order.isRange || +order.budget === 0) {
       setShowDistribute(false);
     }
     firstTime.current = false;
-  }, [order.max, order.min, order.isRange]);
+  }, [order.max, order.min, order.budget, order.isRange]);
+
+  const getTokenFiat = (value: string) => {
+    return buy
+      ? new BigNumber(value || 0).times(
+          quoteTokenPriceQuery.data?.[selectedFiatCurrency] || 0
+        )
+      : new BigNumber(value || 0).times(
+          baseTokenPriceQuery.data?.[selectedFiatCurrency] || 0
+        );
+  };
+
+  const budgetFiat = getFiatValue(
+    getTokenFiat(balance || ''),
+    selectedFiatCurrency
+  );
 
   return (
     <div className="flex w-full flex-col rounded-8 border-2 border-emphasis p-15 text-left font-mono text-12 font-weight-500">
@@ -38,25 +60,50 @@ export const ModalEditStrategyAllocatedBudget: FC<{
             iconClassName="h-13 text-white/60"
             element={
               buy
-                ? `This is the available amount of ${quote?.symbol} tokens that you are willing to use in order to buy ${base?.symbol}.`
-                : `This is the available amount of ${base?.symbol} tokens that you are willing to sell.`
+                ? `This is the current available ${quote?.symbol} budget you can withdraw`
+                : `This is the current available ${base?.symbol} budget you can withdraw`
             }
           />
         </div>
         <div className="flex">
-          {balance && (
-            <span>
-              {sanitizeNumberInput(
-                balance,
-                buy ? quote?.decimals : base?.decimals
+          <Tooltip
+            element={
+              <>
+                <TokenPrice
+                  price={sanitizeNumberInput(
+                    balance || '',
+                    buy ? quote.decimals : base.decimals
+                  )}
+                  iconSrc={buy ? quote?.logoURI : base?.logoURI}
+                />
+                <TokenPrice className="text-white/60" price={budgetFiat} />
+              </>
+            }
+          >
+            <div className="flex">
+              {balance && (
+                <span>
+                  {sanitizeNumberInput(
+                    balance,
+                    buy ? quote?.decimals : base?.decimals
+                  )}
+                </span>
               )}
-            </span>
+              <Imager
+                className="ml-8 h-16 w-16"
+                src={buy ? quote?.logoURI : base?.logoURI}
+                alt="token"
+              />
+            </div>
+          </Tooltip>
+          {showMaxCb && (
+            <div
+              onClick={() => showMaxCb()}
+              className="ml-8 cursor-pointer font-weight-500 text-green"
+            >
+              MAX
+            </div>
           )}
-          <Imager
-            className="ml-8 h-16 w-16"
-            src={buy ? quote?.logoURI : base?.logoURI}
-            alt="token"
-          />
         </div>
       </div>
       {showDistribute && (
