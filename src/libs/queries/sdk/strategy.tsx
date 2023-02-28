@@ -172,8 +172,8 @@ export const useCreateStrategyQuery = () => {
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
 
       const unsignedTx = await carbonSDK.createBuySellStrategy(
-        token0,
-        token1,
+        token0.address,
+        token1.address,
         order0Low,
         order0Max,
         order0Budget,
@@ -212,14 +212,12 @@ export const useUpdateStrategyQuery = () => {
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
 
       const strategyId = encoded.id;
-      const baseToken = token0;
-      const quoteToken = token1;
 
       const unsignedTx = await carbonSDK.updateStrategy(
         strategyId,
         encoded,
-        baseToken,
-        quoteToken,
+        token0.address,
+        token1.address,
         order0Low,
         order0Max,
         order0Budget,

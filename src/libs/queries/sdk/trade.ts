@@ -4,6 +4,7 @@ import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { Action, TradeActionStruct } from 'libs/sdk';
+import { MatchAction } from '@bancor/carbon-sdk/src/types';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionStruct[];
@@ -11,6 +12,7 @@ type GetTradeDataResult = {
   totalSourceAmount: string;
   totalTargetAmount: string;
   effectiveRate: string;
+  actionsWei: MatchAction[];
 };
 
 type Props = {
@@ -43,6 +45,7 @@ export const useGetTradeData = ({
           tradeActions: [],
           actionsTokenRes: [],
           effectiveRate: '',
+          actionsWei: [],
         };
       }
 
