@@ -39,7 +39,6 @@ export const TokenInputField: FC<Props> = ({
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const isSlippagePositive = slippage?.isGreaterThan(0);
-
   const { fiatValue, fiatAsString } = useFiatCurrency(token, value);
 
   const handleOnFocus = () => {
@@ -138,7 +137,7 @@ export const TokenInputField: FC<Props> = ({
         )}
         <div className="flex">
           {fiatValue.gt(0) && <div>{fiatAsString}</div>}
-          {slippage && (
+          {slippage && value && (
             <div
               className={`ml-4 ${
                 slippage.isEqualTo(0)
