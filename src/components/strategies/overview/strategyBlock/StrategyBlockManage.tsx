@@ -12,7 +12,8 @@ export enum ItemId {
   WithdrawFunds,
   DuplicateStrategy,
   DeleteStrategy,
-  takeOffCurve,
+  PauseStrategy,
+  RenewStrategy,
 }
 
 type itemsType = {
@@ -42,15 +43,25 @@ export const StrategyBlockManage: FC<{
     {
       id: ItemId.DeleteStrategy,
       name: 'Delete Strategy',
-      action: () => openModal('mutateStrategy', { strategy, type: 'delete' }),
+      action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
   ];
 
   if (strategy.status === StrategyStatus.Active) {
     items.push({
-      id: ItemId.takeOffCurve,
+      id: ItemId.PauseStrategy,
       name: 'Pause Strategy',
-      action: () => openModal('mutateStrategy', { strategy, type: 'pause' }),
+      action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
+    });
+  }
+  if (
+    strategy.status === StrategyStatus.Paused ||
+    strategy.status === StrategyStatus.Inactive
+  ) {
+    items.push({
+      id: ItemId.RenewStrategy,
+      name: 'Renew Strategy',
+      action: () => openModal('editStrategy', { strategy }),
     });
   }
 

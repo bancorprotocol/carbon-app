@@ -14,7 +14,7 @@ import { EncodedStrategy } from '@bancor/carbon-sdk/dist/types';
 export enum StrategyStatus {
   Active,
   NoBudget,
-  OffCurve,
+  Paused,
   Inactive,
 }
 
@@ -80,7 +80,7 @@ export const useGetUserStrategies = () => {
           noBudget && offCurve
             ? StrategyStatus.Inactive
             : offCurve
-            ? StrategyStatus.OffCurve
+            ? StrategyStatus.Paused
             : noBudget
             ? StrategyStatus.NoBudget
             : StrategyStatus.Active;
