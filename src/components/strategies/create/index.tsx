@@ -45,10 +45,12 @@ export const CreateStrategy = () => {
     >
       <div
         className={`flex ${
-          showGraph ? 'justify-between' : 'justify-center'
+          showGraph
+            ? 'flex-col-reverse justify-between md:flex-row'
+            : 'justify-center'
         } gap-20 p-20`}
       >
-        <div className="w-[400px] space-y-20">
+        <div className="space-y-20 md:w-[400px]">
           <div className="flex flex-row justify-between">
             <div className="flex items-center gap-16 text-24">
               <button
@@ -146,25 +148,27 @@ export const CreateStrategy = () => {
             showGraph ? 'flex-1' : 'absolute right-20'
           }`}
         >
-          {showStep2 && showGraph && (
-            <Button
-              className={`mb-20 self-end`}
-              variant="secondary"
-              size={'md'}
-              onClick={showGraphToggle}
-            >
-              <div className="flex items-center justify-center ">
-                <IconX className={'mr-12 w-10'} />
-                Close Chart
-              </div>
-            </Button>
-          )}
           {showGraph && (
             <m.div
               variants={list}
-              className="flex h-[550px] flex-col rounded-10 bg-silver p-20 pb-40"
+              className="flex h-[550px] flex-col rounded-10 bg-silver p-20 pb-40 md:mt-60"
             >
-              <h2 className="mb-20 font-weight-500">Price</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="mb-20 font-weight-500">Price Chart</h2>
+                {showStep2 && showGraph && (
+                  <Button
+                    className={`mb-20 self-end bg-emphasis`}
+                    variant="secondary"
+                    size={'md'}
+                    onClick={showGraphToggle}
+                  >
+                    <div className="flex items-center justify-center">
+                      <IconX className={'w-10 md:mr-12'} />
+                      <span className="hidden md:block">Close Chart</span>
+                    </div>
+                  </Button>
+                )}
+              </div>
               <TradingviewChart token0={token0} token1={token1} />
             </m.div>
           )}
