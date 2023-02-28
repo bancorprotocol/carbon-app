@@ -92,7 +92,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     successTitle: 'Success',
     successDesc: 'Your withdraw request was successfully completed',
     failedTitle: 'Transaction Failed',
-    failedDesc: 'Your withdraw request have failed',
+    failedDesc: 'Your withdraw request has failed',
     txHash: data.txHash,
     showAlert: true,
   }),
