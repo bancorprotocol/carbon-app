@@ -10,6 +10,7 @@ export interface NotificationSchema {
   renewStrategy: { txHash: string };
   editStrategyName: { txHash: string };
   withdrawStrategy: { txHash: string };
+  depositStrategy: { txHash: string };
   deleteStrategy: { txHash: string };
   changeRatesStrategy: { txHash: string };
 }
@@ -93,6 +94,17 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     successDesc: 'Your withdraw request was successfully completed',
     failedTitle: 'Transaction Failed',
     failedDesc: 'Your withdraw request has failed',
+    txHash: data.txHash,
+    showAlert: true,
+  }),
+  depositStrategy: (data) => ({
+    status: 'pending',
+    title: 'Pending Confirmation',
+    description: 'Your deposit request is being processed',
+    successTitle: 'Success',
+    successDesc: 'Your deposit request was successfully completed',
+    failedTitle: 'Transaction Failed',
+    failedDesc: 'Your deposit request have failed',
     txHash: data.txHash,
     showAlert: true,
   }),
