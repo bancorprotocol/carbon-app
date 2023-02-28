@@ -7,6 +7,7 @@ import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3';
+import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -118,10 +119,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             }
           >
             <span>{getRate()}</span>
-
-            <span>
-              <button onClick={openTradeRouteModal}>routing</button>
-            </span>
+            {rate && rate !== '0' && !errorMsgTarget && !errorMsgSource && (
+              <button
+                onClick={openTradeRouteModal}
+                className={'flex space-x-10 hover:text-white'}
+              >
+                <IconRouting className={'w-20'} /> <span>Routing</span>
+              </button>
+            )}
           </div>
           {IS_TENDERLY_FORK && (
             <div className={'text-secondary mt-5 text-right'}>
