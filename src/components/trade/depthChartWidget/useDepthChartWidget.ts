@@ -1,6 +1,6 @@
-import { OrderRow, useGetOrderBook } from 'libs/queries';
-import { Options } from 'libs/charts';
 import BigNumber from 'bignumber.js';
+import { Options } from 'libs/charts';
+import { OrderRow, useGetOrderBook } from 'libs/queries';
 import { orderBookConfig } from 'libs/queries/sdk/orderBook';
 
 export const useDepthChartWidget = (base?: string, quote?: string) => {
