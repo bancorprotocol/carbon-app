@@ -39,6 +39,7 @@ export const TokenInputField: FC<Props> = ({
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const isSlippagePositive = slippage?.isGreaterThan(0);
+
   const { fiatValue, fiatAsString } = useFiatCurrency(token, value);
 
   const handleOnFocus = () => {
