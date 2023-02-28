@@ -51,7 +51,6 @@ export const StepTwo = ({
       </m.div>
       <m.div variants={items}>
         <Button
-          className="mb-80"
           variant={'success'}
           size={'lg'}
           fullWidth
