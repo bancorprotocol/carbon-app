@@ -19,6 +19,7 @@ type Props = {
   isLoading?: boolean;
   disabled?: boolean;
   slippage?: BigNumber | null;
+  withoutWallet?: boolean;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -33,6 +34,7 @@ export const TokenInputField: FC<Props> = ({
   placeholder = 'Enter Amount',
   disabled,
   slippage,
+  withoutWallet,
 }) => {
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
@@ -116,18 +118,22 @@ export const TokenInputField: FC<Props> = ({
           'text-secondary mt-10 flex items-center justify-between font-mono !text-12 font-weight-500'
         }
       >
-        {user && isBalanceLoading !== undefined ? (
+        {user && isBalanceLoading !== undefined && !withoutWallet ? (
           <button
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >
-            Wallet:{' '}
+            Wallet:
             {isBalanceLoading ? (
               'loading'
             ) : (
               <>
-                {prettifyNumber(balance || 0)}{' '}
-                <div className="ml-10 group-hover:text-white">MAX</div>
+                <span className="ml-5 text-white">
+                  {prettifyNumber(balance || 0)}
+                </span>
+                <div className="ml-10 text-green group-hover:text-white">
+                  MAX
+                </div>
               </>
             )}
           </button>

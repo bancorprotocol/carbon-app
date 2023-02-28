@@ -10,9 +10,12 @@ import { getTooltipTextByItemId } from './utils';
 
 export enum ItemId {
   WithdrawFunds,
+  DepositFunds,
   DuplicateStrategy,
   DeleteStrategy,
-  takeOffCurve,
+  PauseStrategy,
+  RenewStrategy,
+  ChangeRates,
 }
 
 type itemsType = {
@@ -31,10 +34,6 @@ export const StrategyBlockManage: FC<{
 
   const items: itemsType[] = [
     {
-      id: ItemId.WithdrawFunds,
-      name: 'Withdraw Funds',
-    },
-    {
       id: ItemId.DuplicateStrategy,
       name: 'Duplicate Strategy',
       action: () => duplicate(strategy),
@@ -42,15 +41,44 @@ export const StrategyBlockManage: FC<{
     {
       id: ItemId.DeleteStrategy,
       name: 'Delete Strategy',
-      action: () => openModal('mutateStrategy', { strategy, type: 'delete' }),
+      action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
+    },
+    {
+      id: ItemId.ChangeRates,
+      name: 'Change Rates',
+      action: () =>
+        openModal('editStrategy', { strategy, type: 'changeRates' }),
+    },
+    {
+      id: ItemId.DepositFunds,
+      name: 'Deposit Funds',
+      action: () =>
+        openModal('editStrategyBudget', { strategy, type: 'deposit' }),
     },
   ];
-
+  if (strategy.status !== StrategyStatus.NoBudget) {
+    items.push({
+      id: ItemId.WithdrawFunds,
+      name: 'Withdraw Funds',
+      action: () =>
+        openModal('editStrategyBudget', { strategy, type: 'withdraw' }),
+    });
+  }
   if (strategy.status === StrategyStatus.Active) {
     items.push({
-      id: ItemId.takeOffCurve,
+      id: ItemId.PauseStrategy,
       name: 'Pause Strategy',
-      action: () => openModal('mutateStrategy', { strategy, type: 'pause' }),
+      action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
+    });
+  }
+  if (
+    strategy.status === StrategyStatus.Paused ||
+    strategy.status === StrategyStatus.Inactive
+  ) {
+    items.push({
+      id: ItemId.RenewStrategy,
+      name: 'Renew Strategy',
+      action: () => openModal('editStrategy', { strategy, type: 'renew' }),
     });
   }
 

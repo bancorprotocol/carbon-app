@@ -47,7 +47,9 @@ export const Modal: FC<Props> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis">
+        <div
+          className={`relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-silver`}
+        >
           <div className={'flex justify-between'}>
             <div>
               {typeof title === 'string' ? (
