@@ -24,6 +24,8 @@ interface LocalStorageSchema {
   tradeDeadline: string;
   tradeMaxOrders: string;
   chooseTokenCategory: ChooseTokenCategory;
+  carbonControllerAddress: string;
+  voucherContractAddress: string;
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
