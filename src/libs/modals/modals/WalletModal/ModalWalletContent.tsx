@@ -4,7 +4,7 @@ import iconLedger from 'assets/logos/ledger.svg';
 import iconTrezor from 'assets/logos/trezor.svg';
 import { Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
-import { Link } from 'libs/routing';
+import { Link, PathNames } from 'libs/routing';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 
 type Props = {
@@ -38,8 +38,15 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
     <div className={'space-y-10'}>
       <div className={'mb-20 space-y-10 text-14 text-white/80'}>
         <p>
-          By connecting my wallet, I agree to the terms and conditions of this
-          site.
+          By connecting my wallet, I agree to the{' '}
+          <Link
+            to={PathNames.terms}
+            target={'_blank'}
+            className={'font-weight-500 text-white'}
+          >
+            terms and conditions
+          </Link>{' '}
+          of this site.
         </p>
         <div className={'flex items-center space-x-10'}>
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
