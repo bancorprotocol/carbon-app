@@ -56,10 +56,9 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     title: 'Pending Confirmation',
     description: 'Your request to pause the strategy is being processed',
     successTitle: 'Success',
-    successDesc:
-      'Your request to pause the strategy was successfully completed',
+    successDesc: 'Your strategy was successfully paused',
     failedTitle: 'Transaction Failed',
-    failedDesc: 'Your request to pause the strategy has failed',
+    failedDesc: 'Your request to pause your strategy has failed',
     txHash: data.txHash,
     showAlert: true,
   }),
