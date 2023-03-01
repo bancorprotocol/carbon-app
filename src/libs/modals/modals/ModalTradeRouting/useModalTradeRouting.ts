@@ -121,6 +121,11 @@ export const useModalTradeRouting = ({
     closeModal(id);
   }, [closeModal, id]);
 
+  const disabledCTA = useMemo(
+    () => !selectedIDs.length || isLoading || isError,
+    [isError, isLoading, selectedIDs.length]
+  );
+
   return {
     selected,
     onSelect,
@@ -130,5 +135,6 @@ export const useModalTradeRouting = ({
     onCancel,
     totalSourceAmount: data?.totalSourceAmount || '0',
     totalTargetAmount: data?.totalTargetAmount || '0',
+    disabledCTA,
   };
 };

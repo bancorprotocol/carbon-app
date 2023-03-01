@@ -32,6 +32,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     onCancel,
     totalSourceAmount,
     totalTargetAmount,
+    disabledCTA,
   } = useModalTradeRouting({ id, data });
 
   return (
@@ -86,7 +87,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         <Button variant={'secondary'} fullWidth onClick={onCancel}>
           Cancel
         </Button>
-        <Button fullWidth onClick={handleCTAClick}>
+        <Button fullWidth onClick={handleCTAClick} disabled={disabledCTA}>
           Confirm
         </Button>
       </div>
