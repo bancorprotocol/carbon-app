@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { useCreateStrategy } from './useCreateStrategy';
@@ -12,6 +12,7 @@ import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { StepTwo } from './stepTwo';
 import { items, list } from './variants';
+import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 
 export const CreateStrategy = () => {
   const [showGraph, setShowGraph] = useState(false);
@@ -35,6 +36,12 @@ export const CreateStrategy = () => {
   const showGraphToggle = () => {
     setShowGraph((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (pairsToExchangeMapping[`${token0?.symbol}${token1?.symbol}`]) {
+      setShowGraph(true);
+    }
+  }, [token0, token1]);
 
   return (
     <m.div
