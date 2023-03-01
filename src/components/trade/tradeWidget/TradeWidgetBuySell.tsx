@@ -62,6 +62,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return `Liquidity: ${value} ${target.symbol}`;
   };
 
+  const showRouting =
+    rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
+
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
       <h2 className={'mb-20'}>
@@ -119,10 +122,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             }
           >
             <span>{getRate()}</span>
-            {rate && rate !== '0' && !errorMsgTarget && !errorMsgSource && (
+            {showRouting && (
               <button
                 onClick={openTradeRouteModal}
-                className={'flex space-x-10 hover:text-white'}
+                className={'flex hidden space-x-10 hover:text-white md:flex'}
               >
                 <IconRouting className={'w-20'} /> <span>Routing</span>
               </button>
