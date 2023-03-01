@@ -8,7 +8,7 @@ import { useWeb3 } from 'libs/web3';
 
 type Props = {
   value: string;
-  setValue: (value: string) => void;
+  setValue?: (value: string) => void;
   token: Token;
   placeholder?: string;
   balance?: string;
@@ -17,13 +17,14 @@ type Props = {
   className?: string;
   onKeystroke?: () => void;
   isLoading?: boolean;
+  disabled?: boolean;
   slippage?: BigNumber | null;
   withoutWallet?: boolean;
 };
 
 export const TokenInputField: FC<Props> = ({
   value,
-  setValue,
+  setValue = () => {},
   token,
   balance,
   isBalanceLoading,
@@ -31,6 +32,7 @@ export const TokenInputField: FC<Props> = ({
   className,
   onKeystroke,
   placeholder = 'Enter Amount',
+  disabled,
   slippage,
   withoutWallet,
 }) => {
@@ -43,7 +45,7 @@ export const TokenInputField: FC<Props> = ({
   const { fiatValue, fiatAsString } = useFiatCurrency(token, value);
 
   const handleOnFocus = () => {
-    setIsFocused(true);
+    !disabled && setIsFocused(true);
   };
 
   const handleOnBlur = () => {
@@ -68,9 +70,10 @@ export const TokenInputField: FC<Props> = ({
       } transition-all duration-200 ${
         isError ? 'ring-2 ring-red/50' : ''
       } ${className}`}
-      onMouseDown={() => setIsActive(true)}
-      onMouseUp={() => setIsActive(false)}
+      onMouseDown={() => !disabled && setIsActive(true)}
+      onMouseUp={() => !disabled && setIsActive(false)}
       onClick={() => {
+        if (disabled) return;
         setIsFocused(true);
         inputRef.current?.focus();
       }}
@@ -106,6 +109,7 @@ export const TokenInputField: FC<Props> = ({
             className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none ${
               isError ? 'text-red' : 'text-white'
             }`}
+            disabled={disabled}
           />
         }
       </div>

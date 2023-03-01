@@ -1,52 +1,22 @@
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { config } from 'services/web3/config';
-import { useApproval } from 'hooks/useApproval';
-import { PopulatedTransaction } from 'ethers';
-import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import {
-  QueryKey,
-  useQueryClient,
-  useGetTradeLiquidity,
-  useGetTradeData,
-} from 'libs/queries';
+import { useGetTradeLiquidity, useGetTradeData } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
-import { useNotifications } from 'hooks/useNotifications';
-import { useStore } from 'store';
+import { Action, TradeActionStruct } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
-
-const calcMinReturn = (amount: string, slippagePercent: string | number) => {
-  const slippage = new BigNumber(slippagePercent).div(100);
-  return new BigNumber(1).minus(slippage).times(amount).toString();
-};
-
-const calcMaxInput = (amount: string, slippagePercent: string | number) => {
-  const slippage = new BigNumber(slippagePercent).div(100);
-  return new BigNumber(1).plus(slippage).times(amount).toString();
-};
-
-const calcDeadline = (value: string) => {
-  const deadlineInMs = new BigNumber(value).times(60).times(1000);
-  return deadlineInMs.plus(Date.now()).toString();
-};
+import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
+import { MatchAction } from '@bancor/carbon-sdk/src/types';
 
 export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
 }: TradeWidgetBuySellProps) => {
-  const {
-    trade: {
-      settings: { slippage, deadline },
-    },
-  } = useStore();
-  const { dispatchNotification } = useNotifications();
-  const cache = useQueryClient();
-  const { user, signer } = useWeb3();
+  const { user } = useWeb3();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.symbol);
@@ -54,26 +24,25 @@ export const useBuySell = ({
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
-  const [tradeActions, setTradeActions] = useState<any[]>([]);
+  const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
+  const [tradeActionsRes, setTradeActionsRes] = useState<Action[]>([]);
+  const [tradeActionsWei, setTradeActionsWei] = useState<MatchAction[]>([]);
   const [rate, setRate] = useState('');
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
 
-  const approvalTokens = useMemo(
-    () => [
-      {
-        ...source,
-        spender: config.carbon.carbonController,
-        amount: isTradeBySource
-          ? sourceInput
-          : calcMaxInput(sourceInput, slippage),
-      },
-    ],
-    [source, sourceInput, slippage, isTradeBySource]
-  );
+  const clearInputs = useCallback(() => {
+    setSourceInput('');
+    setTargetInput('');
+  }, []);
 
-  const approval = useApproval(approvalTokens);
+  const { trade, approval } = useTradeAction({
+    source,
+    sourceInput,
+    isTradeBySource,
+    onSuccess: clearInputs,
+  });
 
   const bySourceQuery = useGetTradeData({
     sourceToken: source.address,
@@ -111,64 +80,6 @@ export const useBuySell = ({
     }
   };
 
-  const tradeAction = useCallback(async () => {
-    if (!user || !signer) {
-      throw new Error('No user or signer');
-    }
-
-    let unsignedTx: PopulatedTransaction;
-    if (isTradeBySource) {
-      unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
-        source.address,
-        target.address,
-        tradeActions,
-        calcDeadline(deadline),
-        calcMinReturn(targetInput, slippage),
-        { gasLimit: 999999999 }
-      );
-    } else {
-      unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
-        source.address,
-        target.address,
-        tradeActions,
-        calcDeadline(deadline),
-        calcMaxInput(sourceInput, slippage),
-        { gasLimit: 999999999 }
-      );
-    }
-
-    const tx = await signer.sendTransaction(unsignedTx);
-    dispatchNotification('trade', {
-      txHash: tx.hash,
-      amount: sourceInput,
-      from: source.symbol,
-      to: target.symbol,
-    });
-    setSourceInput('');
-    setTargetInput('');
-
-    void cache.invalidateQueries(
-      QueryKey.approval(user, source.address, config.carbon.carbonController)
-    );
-
-    await tx.wait();
-    void cache.invalidateQueries(QueryKey.balance(user, source.address));
-    void cache.invalidateQueries(QueryKey.balance(user, target.address));
-  }, [
-    tradeActions,
-    isTradeBySource,
-    source,
-    target,
-    user,
-    signer,
-    cache,
-    dispatchNotification,
-    sourceInput,
-    targetInput,
-    deadline,
-    slippage,
-  ]);
-
   const onInputChange = (bySource: boolean) => {
     setIsTradeBySource(bySource);
     resetError();
@@ -180,13 +91,19 @@ export const useBuySell = ({
         totalSourceAmount,
         totalTargetAmount,
         tradeActions,
+        actionsTokenRes,
         effectiveRate,
+        actionsWei,
       } = bySourceQuery.data;
 
       setTargetInput(totalTargetAmount);
       setTradeActions(tradeActions);
+      setTradeActionsRes(actionsTokenRes);
+      setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      checkLiquidity(totalSourceAmount);
+      if (effectiveRate !== '0') {
+        checkLiquidity(totalSourceAmount);
+      }
     }
     // TODO depency array issues
     // eslint-disable-next-line
@@ -204,13 +121,19 @@ export const useBuySell = ({
         totalSourceAmount,
         totalTargetAmount,
         tradeActions,
+        actionsTokenRes,
         effectiveRate,
+        actionsWei,
       } = byTargetQuery.data;
 
       setSourceInput(totalSourceAmount);
       setTradeActions(tradeActions);
+      setTradeActionsRes(actionsTokenRes);
+      setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
-      checkLiquidity(totalTargetAmount);
+      if (effectiveRate !== '0') {
+        checkLiquidity(totalTargetAmount);
+      }
     }
     // TODO depency array issues
     // eslint-disable-next-line
@@ -248,27 +171,42 @@ export const useBuySell = ({
       return setIsTargetEmptyError(true);
     }
 
+    const tradeFn = async () =>
+      await trade({
+        source,
+        target,
+        tradeActions,
+        isTradeBySource,
+        sourceInput: sourceInput,
+        targetInput: targetInput,
+      });
+
     if (approval.approvalRequired) {
       openModal('txConfirm', {
-        approvalTokens,
-        onConfirm: tradeAction,
+        approvalTokens: approval.tokens,
+        onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
       });
     } else {
-      tradeAction();
+      void tradeFn();
     }
   }, [
-    approval,
-    tradeAction,
-    user,
-    openModal,
-    approvalTokens,
-    bySourceQuery,
-    byTargetQuery,
-    sourceInput,
-    targetInput,
+    approval.approvalRequired,
+    approval.isLoading,
+    approval.tokens,
+    bySourceQuery.isFetching,
+    byTargetQuery.isFetching,
     errorBaseBalanceSufficient,
     isLiquidityError,
+    isTradeBySource,
+    openModal,
+    source,
+    sourceInput,
+    target,
+    targetInput,
+    trade,
+    tradeActions,
+    user,
   ]);
 
   const resetError = () => {
@@ -301,6 +239,25 @@ export const useBuySell = ({
     isLiquidityError,
     isTargetEmptyError,
     target.symbol,
+  ]);
+
+  const openTradeRouteModal = useCallback(() => {
+    openModal('tradeRouting', {
+      tradeActionsWei,
+      tradeActionsRes,
+      source,
+      target,
+      isTradeBySource,
+      onSuccess: clearInputs,
+    });
+  }, [
+    clearInputs,
+    isTradeBySource,
+    openModal,
+    source,
+    target,
+    tradeActionsRes,
+    tradeActionsWei,
   ]);
 
   const getTokenFiat = useCallback(
@@ -350,6 +307,7 @@ export const useBuySell = ({
     isLiquidityError,
     errorMsgSource,
     errorMsgTarget,
+    openTradeRouteModal,
     calcSlippage,
   };
 };

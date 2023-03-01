@@ -1,3 +1,5 @@
+import { MatchAction } from '@bancor/carbon-sdk/src/types';
+
 export namespace QueryKey {
   export const sdk = ['sdk'];
   export const chain = ['chain'];
@@ -40,6 +42,20 @@ export namespace QueryKey {
     targetToken,
     isTradeBySource,
     amount,
+  ];
+
+  export const tradeActions = (
+    sourceToken: string,
+    targetToken: string,
+    isTradeBySource: boolean,
+    actions: MatchAction[]
+  ) => [
+    ...sdk,
+    'trade-actions',
+    sourceToken,
+    targetToken,
+    isTradeBySource,
+    actions.map((a) => a.id.toString()).join('-'),
   ];
 
   export const tradeLiquidity = (token0: string, token1: string) => [

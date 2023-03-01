@@ -3,6 +3,17 @@ import { QueryKey } from 'libs/queries';
 import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { Action, TradeActionStruct } from 'libs/sdk';
+import { MatchAction } from '@bancor/carbon-sdk/src/types';
+
+type GetTradeDataResult = {
+  tradeActions: TradeActionStruct[];
+  actionsTokenRes: Action[];
+  totalSourceAmount: string;
+  totalTargetAmount: string;
+  effectiveRate: string;
+  actionsWei: MatchAction[];
+};
 
 type Props = {
   sourceToken: string;
@@ -21,7 +32,7 @@ export const useGetTradeData = ({
 }: Props) => {
   const { isInitialized } = useCarbonSDK();
 
-  return useQuery(
+  return useQuery<GetTradeDataResult>(
     QueryKey.tradeData(sourceToken, targetToken, isTradeBySource, input),
     async () => {
       const hasInvalidInput =
@@ -32,19 +43,18 @@ export const useGetTradeData = ({
           totalSourceAmount: '',
           totalTargetAmount: '',
           tradeActions: [],
+          actionsTokenRes: [],
           effectiveRate: '',
+          actionsWei: [],
         };
       }
 
-      const data = await carbonSDK.getTradeData(
+      return await carbonSDK.getTradeData(
         sourceToken,
         targetToken,
         input,
         !isTradeBySource
       );
-      console.log('get trade data result: ', data);
-
-      return data;
     },
     {
       enabled: !!enabled && isInitialized && input !== '...',

@@ -25,6 +25,10 @@ import {
   ModalEditStrategyBudgetData,
 } from './ModalEditStrategyBudget';
 import {
+  ModalTradeRouting,
+  ModalTradeRoutingData,
+} from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
+import {
   ModalConfirmStrategy,
   ModalConfirmStrategyData,
 } from './ModalConfirmStrategy/ModalConfirmStrategy';
@@ -38,6 +42,7 @@ export interface ModalSchema {
   importToken: ModalImportTokenData;
   notifications: undefined;
   tradeSettings: undefined;
+  tradeRouting: ModalTradeRoutingData;
   confirmStrategy: ModalConfirmStrategyData;
   editStrategy: ModalEditStrategyData;
   editStrategyBudget: ModalEditStrategyBudgetData;
@@ -54,6 +59,7 @@ export const MODAL_COMPONENTS: TModals = {
   notifications: (props) => ModalNotifications(props),
   tradeTokenList: (props) => ModalTradeTokenList(props),
   tradeSettings: (props) => ModalTradeSettings(props),
+  tradeRouting: (props) => ModalTradeRouting(props),
   confirmStrategy: (props) => ModalConfirmStrategy(props),
   editStrategy: (props) => ModalEditStrategy(props),
   editStrategyBudget: (props) => ModalEditStrategyBudget(props),

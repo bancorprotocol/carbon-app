@@ -7,6 +7,7 @@ import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3';
+import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -30,6 +31,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     liquidityQuery,
     errorMsgSource,
     errorMsgTarget,
+    openTradeRouteModal,
     calcSlippage,
   } = useBuySell(props);
   const { buy, source, target, sourceBalanceQuery } = props;
@@ -59,6 +61,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       : prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
   };
+
+  const showRouting =
+    rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
 
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
@@ -113,10 +118,18 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           />
           <div
             className={
-              'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
+              'mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
             }
           >
-            {getRate()}
+            <span>{getRate()}</span>
+            {showRouting && (
+              <button
+                onClick={openTradeRouteModal}
+                className={'flex hidden space-x-10 hover:text-white md:flex'}
+              >
+                <IconRouting className={'w-12'} /> <span>Routing</span>
+              </button>
+            )}
           </div>
           {IS_TENDERLY_FORK && (
             <div className={'text-secondary mt-5 text-right'}>
