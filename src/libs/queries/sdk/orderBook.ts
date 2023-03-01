@@ -97,10 +97,10 @@ const getOrderBook = async (
       } else {
         return stepBuy;
       }
-    } else if (stepSell.isFinite()) {
+    } else if (stepSell.isFinite() && stepSell.gt(0)) {
       return stepSell;
     } else {
-      return new BigNumber(0);
+      return ONE.div(minSell).minus(minBuy).div(orderBookConfig.steps);
     }
   };
   const step = getStep();
