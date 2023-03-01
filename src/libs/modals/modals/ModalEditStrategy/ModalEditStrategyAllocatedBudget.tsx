@@ -52,7 +52,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   );
 
   return (
-    <div className="flex w-full flex-col rounded-8 border-2 border-emphasis p-15 text-left font-mono text-12 font-weight-500">
+    <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
       <div className="flex justify-between">
         <div className="flex items-center">
           <div className="mr-5">Allocated Budget</div>
