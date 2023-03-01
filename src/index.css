@@ -5,6 +5,9 @@
 :root {
   --main-menu-height: 80px;
   --mobile-menu-height: 80px;
+  --blue: rgba(0, 181, 120, 0.25);;
+  --cyan: rgba(0, 181, 120, 0.25);;
+  --green: #00B578;
 }
 
 @layer base {
@@ -50,7 +53,7 @@
 @layer components {
   .main-menu {
     height: var(--main-menu-height);
-    @apply bg-body flex w-full items-center justify-between px-content font-weight-500 text-white/50;
+    @apply bg-body px-content flex w-full items-center justify-between font-weight-500 text-white/50;
   }
 
   .mobile-menu {
@@ -87,5 +90,43 @@
 
   .loading-skeleton {
     @apply animate-pulse rounded-10 bg-silver;
+  }
+}
+
+.statusBar {
+  overflow: hidden;
+}
+.statusBar:before {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: -100%;
+  will-change: transform;
+  background: linear-gradient(
+    90deg,
+    var(--blue) 0%,
+    var(--blue) 25%,
+    var(--cyan) 25%,
+    var(--cyan) 37.5%,
+    var(--green) 37.5%,
+    var(--green) 50%,
+    var(--blue) 50%,
+    var(--blue) 75%,
+    var(--cyan) 75%,
+    var(--cyan) 87.5%,
+    var(--green) 87.5%,
+    var(--green) 100%
+  );
+  animation: 1.3s progress ease infinite;
+}
+
+@keyframes progress {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(50%);
   }
 }
