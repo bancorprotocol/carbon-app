@@ -27,7 +27,11 @@ export interface BancorWeb3ProviderContext {
   networkError: string | undefined;
   provider?: Web3Provider | StaticJsonRpcProvider;
   signer: JsonRpcSigner | undefined;
-  handleTenderlyRPC: (url?: string) => void;
+  handleTenderlyRPC: (
+    url?: string,
+    carbonController?: string,
+    voucherAddress?: string
+  ) => void;
   handleImposterAccount: (account: string) => void;
   disconnect: () => Promise<void>;
   connect: (type: ConnectionType) => Promise<void>;
