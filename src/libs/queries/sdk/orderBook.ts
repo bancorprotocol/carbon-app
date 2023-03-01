@@ -13,6 +13,7 @@ export type OrderBook = {
   buy: OrderRow[];
   sell: OrderRow[];
   middleRate: string;
+  step?: BigNumber;
 };
 
 export const orderBookConfig = {
@@ -144,6 +145,7 @@ const getOrderBook = async (
         )
       : [],
     middleRate: middleRate.toString(),
+    step,
   };
 };
 
