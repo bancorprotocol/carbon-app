@@ -1,4 +1,4 @@
-import CarbonSDK, { Config } from '@bancor/carbon-sdk';
+import { Sdk, Config } from '@bancor/carbon-sdk';
 import { RPC_URLS } from 'libs/web3';
 import { config } from 'services/web3/config';
 
@@ -16,4 +16,4 @@ const sdkConfig: Config = {
   },
 };
 
-export const carbonSDK = new CarbonSDK(sdkConfig, decimalFetcher);
+export const carbonSDK = new Sdk(sdkConfig, decimalFetcher);

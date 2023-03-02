@@ -218,13 +218,14 @@ export const useUpdateStrategyQuery = () => {
         encoded,
         token0.address,
         token1.address,
-        order0Low,
-        order0Max,
-        order0Budget,
-        order1Low,
-        order1Max,
-        order1Budget,
-        { gasLimit: 9999999 }
+        {
+          buyPriceLow: order0Low,
+          buyPriceHigh: order0Max,
+          buyBudget: order0Budget,
+          sellPriceLow: order1Low,
+          sellPriceHigh: order1Max,
+          sellBudget: order1Budget,
+        }
       );
 
       return signer!.sendTransaction(unsignedTx);
