@@ -1,1 +1,1 @@
-export { CreateStrategyMain } from './GCreateStrategyMain';
+export { CreateStrategyMain } from './CreateStrategyMain';
