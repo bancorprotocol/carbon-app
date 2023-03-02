@@ -27,7 +27,7 @@ export const CreateStrategyGraph = ({
           className={`mb-20 self-end bg-emphasis`}
           variant="secondary"
           size={'md'}
-          onClick={(prev) => setShowGraph(!prev)}
+          onClick={() => setShowGraph(false)}
         >
           <div className="flex items-center justify-center">
             <IconX className={'w-10 md:mr-12'} />
