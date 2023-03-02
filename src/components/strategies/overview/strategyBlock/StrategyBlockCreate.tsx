@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { Link, PathNames } from 'libs/routing';
+import { Link, PathNames, useSearch } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 
 type Props = {
   title?: string;
@@ -10,9 +11,12 @@ export const StrategyBlockCreate: FC<Props> = ({
   title = 'Create a Strategy',
   className,
 }) => {
+  const search = useSearch<MyLocationGenerics>();
+
   return (
     <Link
       to={PathNames.createStrategy}
+      search={search}
       className="bg-content flex h-full items-center justify-center rounded-10 border-dashed py-50"
     >
       <div

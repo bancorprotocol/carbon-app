@@ -1,12 +1,13 @@
 import { Button } from 'components/common/button';
 import { SearchInput } from 'components/common/searchInput';
 import { FC } from 'react';
-import { Link, PathNames } from 'libs/routing';
+import { Link, PathNames, useSearch } from 'libs/routing';
 import {
   StrategySort,
   StrategyFilter,
   StrategyFilterSort,
 } from 'components/strategies/overview/StrategyFilterSort';
+import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;
@@ -17,6 +18,8 @@ export const StrategyPageTitleWidget: FC<{
   setSort: (sort: StrategySort) => void;
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ search, setSearch, showFilter, sort, filter, setSort, setFilter }) => {
+  const searchParams = useSearch<MyLocationGenerics>();
+
   return (
     <div className="grid grid-cols-2 gap-10 md:flex md:items-center md:gap-20">
       {showFilter && (
@@ -36,7 +39,7 @@ export const StrategyPageTitleWidget: FC<{
           />
         </>
       )}
-      <Link to={PathNames.createStrategy}>
+      <Link to={PathNames.createStrategy} search={searchParams}>
         <Button variant="white">Create Strategy</Button>
       </Link>
     </div>
