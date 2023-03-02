@@ -1,13 +1,13 @@
+import { useEffect } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-location';
+import { UseQueryResult } from '@tanstack/react-query';
+import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { CreateStrategyOrders } from './CreateStrategyOrders';
 import { CreateStrategyGraph } from './CreateStrategyGraph';
 import { CreateStrategyTokenSelection } from './CreateStrategyTokenSelection';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useTokens } from 'hooks/useTokens';
-import { useEffect } from 'react';
-import { Token } from 'libs/tokens';
 import { OrderCreate } from './useOrder';
-import { UseQueryResult } from '@tanstack/react-query';
+import { Token } from 'libs/tokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 
 type CreateStrategyContentProps = {
