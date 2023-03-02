@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-location';
-import { CreateStrategyOrders } from './createStrategyOrders';
-import { CreateStrategyGraph } from './createStrategyGraph';
-import { CreateStrategyTokenSelection } from './createStrategyTokenSelection';
+import { CreateStrategyOrders } from './CreateStrategyOrders';
+import { CreateStrategyGraph } from './CreateStrategyGraph';
+import { CreateStrategyTokenSelection } from './CreateStrategyTokenSelection';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useTokens } from 'hooks/useTokens';
 import { useEffect } from 'react';

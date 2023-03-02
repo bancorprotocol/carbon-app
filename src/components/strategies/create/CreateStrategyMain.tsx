@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { m } from 'libs/motion';
 import { useCreateStrategy } from './useCreateStrategy';
 import { list } from './variants';
-import { CreateStrategyHeader } from './createStrategyHeader';
+import { CreateStrategyHeader } from './CreateStrategyHeader';
 import { CreateStrategyContent } from './CreateStrategyContent';
 
-export const CreateStrategy = () => {
+export const CreateStrategyMain = () => {
   const [showGraph, setShowGraph] = useState(false);
 
   const {
