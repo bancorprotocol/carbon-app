@@ -5,13 +5,13 @@ import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 type CreateStrategyHeaderProps = {
   showGraph: boolean;
   showOrders: boolean;
-  showGraphToggle: () => void;
+  setShowGraph: (value: boolean) => void;
 };
 
 export const CreateStrategyHeader = ({
   showGraph,
   showOrders,
-  showGraphToggle,
+  setShowGraph,
 }: CreateStrategyHeaderProps) => {
   const {
     history: { back },
@@ -25,7 +25,10 @@ export const CreateStrategyHeader = ({
     >
       <div className="flex items-center gap-16 text-24">
         <button
-          onClick={() => back()}
+          onClick={() => {
+            showGraph && setShowGraph(false);
+            back();
+          }}
           className="h-40 w-40 rounded-full bg-emphasis"
         >
           <IconChevron className="mx-auto w-14 rotate-90" />
@@ -34,7 +37,7 @@ export const CreateStrategyHeader = ({
       </div>
       {!showGraph && showOrders && (
         <button
-          onClick={showGraphToggle}
+          onClick={() => setShowGraph(true)}
           className="h-40 w-40 self-end rounded-full bg-emphasis"
         >
           <IconCandles className="mx-auto w-14" />

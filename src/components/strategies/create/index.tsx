@@ -23,10 +23,6 @@ export const CreateStrategy = () => {
     token1BalanceQuery,
   } = useCreateStrategy();
 
-  const showGraphToggle = () => {
-    setShowGraph((prev) => !prev);
-  };
-
   return (
     <m.div
       className={`flex flex-col items-center space-y-20 p-20 ${
@@ -36,7 +32,7 @@ export const CreateStrategy = () => {
       initial={'hidden'}
       animate={'visible'}
     >
-      <CreateStrategyHeader {...{ showGraph, showOrders, showGraphToggle }} />
+      <CreateStrategyHeader {...{ showGraph, showOrders, setShowGraph }} />
       <CreateStrategyContent
         {...{
           token0,
@@ -46,7 +42,7 @@ export const CreateStrategy = () => {
           order0,
           order1,
           showOrders,
-          showGraphToggle,
+          setShowGraph,
           showGraph,
           isCTAdisabled,
           createStrategy,

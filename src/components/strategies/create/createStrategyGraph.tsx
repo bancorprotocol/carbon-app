@@ -8,13 +8,13 @@ import { Token } from 'libs/tokens';
 type CreateStrategyGraphProps = {
   token0: Token | undefined;
   token1: Token | undefined;
-  showGraphToggle: () => void;
+  setShowGraph: (value: boolean) => void;
 };
 
 export const CreateStrategyGraph = ({
   token0,
   token1,
-  showGraphToggle,
+  setShowGraph,
 }: CreateStrategyGraphProps) => {
   return (
     <m.div
@@ -27,7 +27,7 @@ export const CreateStrategyGraph = ({
           className={`mb-20 self-end bg-emphasis`}
           variant="secondary"
           size={'md'}
-          onClick={showGraphToggle}
+          onClick={(prev) => setShowGraph(!prev)}
         >
           <div className="flex items-center justify-center">
             <IconX className={'w-10 md:mr-12'} />

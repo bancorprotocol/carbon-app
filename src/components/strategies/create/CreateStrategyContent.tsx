@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from './useOrder';
 import { UseQueryResult } from '@tanstack/react-query';
+import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 
 type CreateStrategyContentProps = {
   token0: Token | undefined;
@@ -21,7 +22,7 @@ type CreateStrategyContentProps = {
   showGraph: boolean;
   setToken0: any;
   setToken1: any;
-  showGraphToggle: () => void;
+  setShowGraph: (value: boolean) => void;
   createStrategy: () => void;
   openTokenListModal: () => void;
 };
@@ -34,7 +35,7 @@ export const CreateStrategyContent = ({
   order0,
   order1,
   showOrders,
-  showGraphToggle,
+  setShowGraph,
   showGraph,
   isCTAdisabled,
   createStrategy,
@@ -61,6 +62,9 @@ export const CreateStrategyContent = ({
         },
       },
     });
+    if (pairsToExchangeMapping[`${token0?.symbol}${token1?.symbol}`]) {
+      setShowGraph(true);
+    }
   }, [token0, token1]);
 
   useEffect(() => {
@@ -75,8 +79,8 @@ export const CreateStrategyContent = ({
           showGraph ? 'flex-1' : 'absolute right-20'
         }`}
       >
-        {showGraph && (
-          <CreateStrategyGraph {...{ token0, token1, showGraphToggle }} />
+        {showGraph && showOrders && (
+          <CreateStrategyGraph {...{ token0, token1, setShowGraph }} />
         )}
       </div>
       <div className="w-full space-y-20 md:w-[400px]">
