@@ -14,7 +14,6 @@ type CreateStrategyOrdersProps = {
   token0BalanceQuery: UseQueryResult<string>;
   token1BalanceQuery: UseQueryResult<string>;
   isCTAdisabled: boolean;
-  showOrders: boolean;
   createStrategy: () => void;
 };
 
@@ -23,15 +22,11 @@ export const CreateStrategyOrders = ({
   token1,
   order0,
   order1,
-  showOrders,
   createStrategy,
   isCTAdisabled,
   token0BalanceQuery,
   token1BalanceQuery,
 }: CreateStrategyOrdersProps) => {
-  if (!showOrders) {
-    return null;
-  }
   return (
     <>
       <m.div variants={items}>

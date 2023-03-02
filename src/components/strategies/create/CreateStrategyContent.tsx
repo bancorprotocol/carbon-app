@@ -75,27 +75,28 @@ export const CreateStrategyContent = ({
           showGraph ? 'flex-1' : 'absolute right-20'
         }`}
       >
-        <CreateStrategyGraph
-          {...{ token0, token1, showGraph, showGraphToggle }}
-        />
+        {showGraph && (
+          <CreateStrategyGraph {...{ token0, token1, showGraphToggle }} />
+        )}
       </div>
       <div className="w-full space-y-20 md:w-[400px]">
         <CreateStrategyTokenSelection
           {...{ token0, token1, setToken0, setToken1, openTokenListModal }}
         />
-        <CreateStrategyOrders
-          {...{
-            token0,
-            token1,
-            order0,
-            order1,
-            showOrders,
-            createStrategy,
-            isCTAdisabled,
-            token0BalanceQuery,
-            token1BalanceQuery,
-          }}
-        />
+        {showOrders && (
+          <CreateStrategyOrders
+            {...{
+              token0,
+              token1,
+              order0,
+              order1,
+              createStrategy,
+              isCTAdisabled,
+              token0BalanceQuery,
+              token1BalanceQuery,
+            }}
+          />
+        )}
       </div>
     </div>
   );
