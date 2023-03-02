@@ -65,7 +65,8 @@ export const CreateStrategyContent = ({
     if (pairsToExchangeMapping[`${token0?.symbol}${token1?.symbol}`]) {
       setShowGraph(true);
     }
-  }, [token0, token1]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token0, token1, setShowGraph, navigate]);
 
   useEffect(() => {
     setToken0(getTokenById(base || ''));
