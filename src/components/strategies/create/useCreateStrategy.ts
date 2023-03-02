@@ -35,7 +35,7 @@ export const useCreateStrategy = () => {
 
   const mutation = useCreateStrategyQuery();
 
-  const showStep2 = !!token0 && !!token1;
+  const showOrders = !!token0 && !!token1;
 
   const approvalTokens = useMemo(() => {
     return [
@@ -165,7 +165,7 @@ export const useCreateStrategy = () => {
     order1,
     createStrategy,
     openTokenListModal,
-    showStep2,
+    showOrders,
     isCTAdisabled,
     token0BalanceQuery,
     token1BalanceQuery,

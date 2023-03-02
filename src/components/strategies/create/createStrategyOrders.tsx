@@ -6,7 +6,7 @@ import { BuySellBlock } from './BuySellBlock';
 import { OrderCreate } from './useOrder';
 import { items } from './variants';
 
-type StepTwoProps = {
+type CreateStrategyOrdersProps = {
   token0: Token | undefined;
   token1: Token | undefined;
   order0: OrderCreate;
@@ -14,19 +14,24 @@ type StepTwoProps = {
   token0BalanceQuery: UseQueryResult<string>;
   token1BalanceQuery: UseQueryResult<string>;
   isCTAdisabled: boolean;
+  showOrders: boolean;
   createStrategy: () => void;
 };
 
-export const StepTwo = ({
+export const CreateStrategyOrders = ({
   token0,
   token1,
   order0,
   order1,
+  showOrders,
   createStrategy,
   isCTAdisabled,
   token0BalanceQuery,
   token1BalanceQuery,
-}: StepTwoProps) => {
+}: CreateStrategyOrdersProps) => {
+  if (!showOrders) {
+    return null;
+  }
   return (
     <>
       <m.div variants={items}>
@@ -39,7 +44,6 @@ export const StepTwo = ({
           isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
         />
       </m.div>
-
       <m.div variants={items}>
         <BuySellBlock
           token0={token0!}
