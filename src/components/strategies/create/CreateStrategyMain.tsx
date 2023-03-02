@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { m } from 'libs/motion';
-import { useCreateStrategy } from './useCreateStrategy';
 import { list } from './variants';
+import { useCreateStrategy } from './useCreateStrategy';
 import { CreateStrategyHeader } from './CreateStrategyHeader';
 import { CreateStrategyContent } from './CreateStrategyContent';
 
