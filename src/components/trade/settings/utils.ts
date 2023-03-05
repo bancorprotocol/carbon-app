@@ -37,7 +37,7 @@ export const warningMessageIfOutOfRange = (
         return 'High number of orders might increase the gas costs';
       }
       if (numberedValue < 10) {
-        return 'You trades might not find good rates as a result of this setting';
+        return 'Your trades might not find good rates as a result of this setting';
       }
       return '';
     default:
