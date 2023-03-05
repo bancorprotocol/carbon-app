@@ -19,16 +19,8 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   balance?: string;
   buy?: boolean;
   showMaxCb?: () => void;
-  distributeAcrossEntireRange?: boolean;
-}> = ({
-  base,
-  quote,
-  balance,
-  buy,
-  order,
-  showMaxCb,
-  distributeAcrossEntireRange,
-}) => {
+  type?: 'renew' | 'changeRates' | 'deposit' | 'withdraw';
+}> = ({ base, quote, balance, buy, order, showMaxCb, type }) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
@@ -38,14 +30,19 @@ export const ModalEditStrategyAllocatedBudget: FC<{
     order.marginalPriceOption === MarginalPriceOptions.reset;
 
   useEffect(() => {
-    if (!firstTime.current && order.isRange && +order.budget > 0) {
+    if (
+      !firstTime.current &&
+      order.isRange &&
+      +order.budget > 0 &&
+      type !== 'renew'
+    ) {
       setShowDistribute(true);
     }
     if (!order.isRange || +order.budget === 0) {
       setShowDistribute(false);
     }
     firstTime.current = false;
-  }, [order.max, order.min, order.budget, order.isRange]);
+  }, [order.max, order.min, order.budget, order.isRange, type]);
 
   const getTokenFiat = (value: string) => {
     return buy
@@ -118,7 +115,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
             )}
           </div>
         </div>
-        {showDistribute && !distributeAcrossEntireRange && (
+        {showDistribute && (type === 'withdraw' || type === 'deposit') && (
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
               <span className="mr-5">Distribute Across Entire Range</span>
@@ -173,7 +170,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
           </div>
         )}
       </div>
-      {distributeAcrossEntireRange && showDistribute && (
+      {type === 'changeRates' && showDistribute && (
         <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left  text-12 text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"

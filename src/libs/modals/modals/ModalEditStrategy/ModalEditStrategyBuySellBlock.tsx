@@ -10,15 +10,8 @@ export const ModalEditStrategyBuySellBlock: FC<{
   order: OrderCreate;
   balance?: string;
   buy?: boolean;
-  distributeAcrossEntireRange?: boolean;
-}> = ({
-  base,
-  quote,
-  balance,
-  buy,
-  order,
-  distributeAcrossEntireRange = false,
-}) => {
+  type?: 'renew' | 'changeRates';
+}> = ({ base, quote, balance, buy, order, type }) => {
   return (
     <div
       className={`w-full border-l-2 pl-10 text-12 ${
@@ -48,7 +41,14 @@ export const ModalEditStrategyBuySellBlock: FC<{
       />
       <div className="pt-10">
         <ModalEditStrategyAllocatedBudget
-          {...{ order, base, quote, balance, buy, distributeAcrossEntireRange }}
+          {...{
+            order,
+            base,
+            quote,
+            balance,
+            buy,
+            type,
+          }}
         />
       </div>
     </div>

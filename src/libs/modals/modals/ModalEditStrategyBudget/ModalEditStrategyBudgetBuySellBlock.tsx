@@ -77,7 +77,7 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
       </div>
       <div className="pt-10">
         <ModalEditStrategyAllocatedBudget
-          {...{ order, base, quote, balance, buy }}
+          {...{ order, base, quote, balance, buy, type }}
           {...(type === 'withdraw' && {
             showMaxCb: () => order.setBudget(balance || ''),
           })}
