@@ -10,6 +10,7 @@ import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributed
 import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPrice';
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 
 export const ModalEditStrategyAllocatedBudget: FC<{
   order: OrderCreate;
@@ -20,11 +21,12 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   showMaxCb?: () => void;
 }> = ({ base, quote, balance, buy, order, showMaxCb }) => {
   const firstTime = useRef(true);
-  const [isDistribute, setIsDistribute] = useState(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
   const baseTokenPriceQuery = useGetTokenPrice(base.symbol);
   const quoteTokenPriceQuery = useGetTokenPrice(quote.symbol);
+  const isDistributeToggleOn =
+    order.marginalPriceOption === MarginalPriceOptions.reset;
 
   useEffect(() => {
     if (!firstTime.current && order.isRange && +order.budget > 0) {
@@ -147,9 +149,15 @@ export const ModalEditStrategyAllocatedBudget: FC<{
             />
           </div>
           <Switch
-            variant={isDistribute ? 'white' : 'black'}
-            isOn={isDistribute}
-            setIsOn={(isOn) => setIsDistribute(isOn)}
+            variant={isDistributeToggleOn ? 'white' : 'black'}
+            isOn={isDistributeToggleOn}
+            setIsOn={(isOn) =>
+              order.setMarginalPriceOption(
+                isOn
+                  ? MarginalPriceOptions.reset
+                  : MarginalPriceOptions.maintain
+              )
+            }
             size={'sm'}
           />
         </div>

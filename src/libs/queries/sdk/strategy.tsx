@@ -148,6 +148,8 @@ export interface UpdateStrategyParams {
   token1: TokenAddressDecimals;
   encoded: EncodedStrategy;
   fieldsToUpdate: StrategyUpdate;
+  buyMarginalPrice?: MarginalPriceOptions;
+  sellMarginalPrice?: MarginalPriceOptions;
 }
 
 export interface DeleteStrategyParams {
@@ -197,6 +199,8 @@ export const useUpdateStrategyQuery = () => {
       token1,
       encoded,
       fieldsToUpdate,
+      buyMarginalPrice,
+      sellMarginalPrice,
     }: UpdateStrategyParams) => {
       const strategyId = encoded.id;
 
@@ -208,8 +212,8 @@ export const useUpdateStrategyQuery = () => {
         {
           ...fieldsToUpdate,
         },
-        MarginalPriceOptions.reset,
-        MarginalPriceOptions.reset,
+        buyMarginalPrice ? buyMarginalPrice : MarginalPriceOptions.reset,
+        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset,
         { gasLimit: 9999999 }
       );
 

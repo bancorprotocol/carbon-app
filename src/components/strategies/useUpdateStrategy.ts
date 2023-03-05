@@ -1,3 +1,4 @@
+import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 import { useNotifications } from 'hooks/useNotifications';
 import {
   QueryKey,
@@ -127,7 +128,11 @@ export const useUpdateStrategy = () => {
     );
   };
 
-  const withdrawBudget = async (strategy: Strategy) => {
+  const withdrawBudget = async (
+    strategy: Strategy,
+    buyMarginalPrice?: MarginalPriceOptions,
+    sellMarginalPrice?: MarginalPriceOptions
+  ) => {
     const { token0, token1, order0, order1, encoded } = strategy;
 
     if (!token0 || !token1 || !user) {
@@ -143,6 +148,8 @@ export const useUpdateStrategy = () => {
           buyBudget: order0.balance,
           sellBudget: order1.balance,
         },
+        buyMarginalPrice,
+        sellMarginalPrice,
       },
       {
         onSuccess: async (tx) => {
@@ -163,7 +170,11 @@ export const useUpdateStrategy = () => {
     );
   };
 
-  const depositBudget = async (strategy: Strategy) => {
+  const depositBudget = async (
+    strategy: Strategy,
+    buyMarginalPrice?: MarginalPriceOptions,
+    sellMarginalPrice?: MarginalPriceOptions
+  ) => {
     const { token0, token1, order0, order1, encoded } = strategy;
 
     if (!token0 || !token1 || !user) {
@@ -179,6 +190,8 @@ export const useUpdateStrategy = () => {
           buyBudget: order0.balance,
           sellBudget: order1.balance,
         },
+        buyMarginalPrice,
+        sellMarginalPrice,
       },
       {
         onSuccess: async (tx) => {
