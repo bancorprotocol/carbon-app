@@ -20,8 +20,8 @@ type CreateStrategyContentProps = {
   isCTAdisabled: boolean;
   showOrders: boolean;
   showGraph: boolean;
-  setToken0: any;
-  setToken1: any;
+  setToken0: (token: Token | undefined) => void;
+  setToken1: (token: Token | undefined) => void;
   setShowGraph: (value: boolean) => void;
   createStrategy: () => void;
   openTokenListModal: () => void;
