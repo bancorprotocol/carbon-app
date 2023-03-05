@@ -50,8 +50,16 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
     };
 
     type === 'withdraw'
-      ? withdrawBudget(updatedStrategy)
-      : depositBudget(updatedStrategy);
+      ? withdrawBudget(
+          updatedStrategy,
+          order0.marginalPriceOption,
+          order1.marginalPriceOption
+        )
+      : depositBudget(
+          updatedStrategy,
+          order0.marginalPriceOption,
+          order1.marginalPriceOption
+        );
 
     closeModal(id);
   };

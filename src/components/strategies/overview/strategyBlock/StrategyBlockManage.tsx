@@ -70,11 +70,7 @@ export const StrategyBlockManage: FC<{
       name: 'Pause Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
     });
-  }
-  if (
-    strategy.status === StrategyStatus.Paused ||
-    strategy.status === StrategyStatus.Inactive
-  ) {
+  } else {
     items.push({
       id: ItemId.RenewStrategy,
       name: 'Renew Strategy',

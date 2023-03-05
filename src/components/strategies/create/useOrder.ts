@@ -1,3 +1,4 @@
+import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 import { Order } from 'libs/queries';
 import { useState } from 'react';
 
@@ -18,6 +19,8 @@ export interface OrderCreate {
   setPriceError: (value: string) => void;
   budgetError: string;
   setBudgetError: (value: string) => void;
+  marginalPriceOption: MarginalPriceOptions;
+  setMarginalPriceOption: (value: MarginalPriceOptions) => void;
   resetFields: (skipBudget?: boolean, skipPrice?: boolean) => void;
 }
 
@@ -36,6 +39,9 @@ export const useOrder = (order?: Order) => {
   const [priceError, setPriceError] = useState('');
   const [budgetError, setBudgetError] = useState('');
   const [isRange, setIsRange] = useState(order?.startRate !== order?.endRate);
+  const [marginalPriceOption, setMarginalPriceOption] = useState(
+    MarginalPriceOptions.reset
+  );
 
   const resetFields = (skipBudget?: boolean, skipPrice?: boolean) => {
     if (!skipPrice) {
@@ -69,6 +75,8 @@ export const useOrder = (order?: Order) => {
     setPriceError,
     budgetError,
     setBudgetError,
+    marginalPriceOption,
+    setMarginalPriceOption,
     resetFields,
   };
 };
