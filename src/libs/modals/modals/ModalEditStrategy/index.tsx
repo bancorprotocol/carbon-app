@@ -88,12 +88,14 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
           quote={strategy?.token1}
           order={order0}
           balance={strategy.order0.balance}
+          distributeAcrossEntireRange={type === 'changeRates'}
         />
         <ModalEditStrategyBuySellBlock
           base={strategy?.token0}
           quote={strategy?.token1}
           order={order1}
           balance={strategy.order1.balance}
+          distributeAcrossEntireRange={type === 'changeRates'}
         />
         <Button
           disabled={!isOrderValid(order0) || !isOrderValid(order1)}

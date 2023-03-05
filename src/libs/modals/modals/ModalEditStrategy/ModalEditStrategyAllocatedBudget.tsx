@@ -19,7 +19,16 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   balance?: string;
   buy?: boolean;
   showMaxCb?: () => void;
-}> = ({ base, quote, balance, buy, order, showMaxCb }) => {
+  distributeAcrossEntireRange?: boolean;
+}> = ({
+  base,
+  quote,
+  balance,
+  buy,
+  order,
+  showMaxCb,
+  distributeAcrossEntireRange,
+}) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
@@ -54,114 +63,127 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   );
 
   return (
-    <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
-      <div className="flex justify-between">
-        <div className="flex items-center">
-          <div className="mr-5">Allocated Budget</div>
-          <Tooltip
-            iconClassName="h-13 text-white/60"
-            element={
-              buy
-                ? `This is the current available ${quote?.symbol} budget you can withdraw`
-                : `This is the current available ${base?.symbol} budget you can withdraw`
-            }
-          />
-        </div>
-        <div className="flex">
-          <Tooltip
-            element={
-              <>
-                <TokenPrice
-                  price={sanitizeNumberInput(
-                    balance || '',
-                    buy ? quote.decimals : base.decimals
-                  )}
-                  iconSrc={buy ? quote?.logoURI : base?.logoURI}
-                />
-                <TokenPrice className="text-white/60" price={budgetFiat} />
-              </>
-            }
-          >
-            <div className="flex">
-              {balance && (
-                <span>
-                  {sanitizeNumberInput(
-                    balance,
-                    buy ? quote?.decimals : base?.decimals
-                  )}
-                </span>
-              )}
-              <Imager
-                className="ml-8 h-16 w-16"
-                src={buy ? quote?.logoURI : base?.logoURI}
-                alt="token"
-              />
-            </div>
-          </Tooltip>
-          {showMaxCb && (
-            <div
-              onClick={() => showMaxCb()}
-              className="ml-8 cursor-pointer font-weight-500 text-green"
-            >
-              MAX
-            </div>
-          )}
-        </div>
-      </div>
-      {showDistribute && (
-        <div className="mt-10 flex justify-between">
+    <>
+      <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
+        <div className="flex justify-between">
           <div className="flex items-center">
-            <span className="mr-5">Distribute Across Entire Range</span>
+            <div className="mr-5">Allocated Budget</div>
             <Tooltip
               iconClassName="h-13 text-white/60"
               element={
-                <div className="flex flex-col gap-10">
-                  <div className="flex gap-8">
-                    <div>
-                      <IconDistributedEntireRange />
-                    </div>
-                    <div>
-                      <div className="text-12 font-weight-500 text-white">
-                        Distribute Across Entire Range
-                      </div>
-                      <div className="text-10 text-white/60">
-                        The budget is allocated to the entire newly set range
-                        and the asking price is updated.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-8">
-                    <div>
-                      <IconDistributedUnusedRange />
-                    </div>
-                    <div>
-                      <div className="text-12 font-weight-500 text-white">
-                        Distribute To Unused Range
-                      </div>
-                      <div className="text-10 text-white/60">
-                        Price remains the same as it was. The budget is not
-                        allocated to the new range.
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                buy
+                  ? `This is the current available ${quote?.symbol} budget you can withdraw`
+                  : `This is the current available ${base?.symbol} budget you can withdraw`
               }
             />
           </div>
-          <Switch
-            variant={isDistributeToggleOn ? 'white' : 'black'}
-            isOn={isDistributeToggleOn}
-            setIsOn={(isOn) =>
-              order.setMarginalPriceOption(
-                isOn
-                  ? MarginalPriceOptions.reset
-                  : MarginalPriceOptions.maintain
-              )
+          <div className="flex">
+            <Tooltip
+              element={
+                <>
+                  <TokenPrice
+                    price={sanitizeNumberInput(
+                      balance || '',
+                      buy ? quote.decimals : base.decimals
+                    )}
+                    iconSrc={buy ? quote?.logoURI : base?.logoURI}
+                  />
+                  <TokenPrice className="text-white/60" price={budgetFiat} />
+                </>
+              }
+            >
+              <div className="flex">
+                {balance && (
+                  <span>
+                    {sanitizeNumberInput(
+                      balance,
+                      buy ? quote?.decimals : base?.decimals
+                    )}
+                  </span>
+                )}
+                <Imager
+                  className="ml-8 h-16 w-16"
+                  src={buy ? quote?.logoURI : base?.logoURI}
+                  alt="token"
+                />
+              </div>
+            </Tooltip>
+            {showMaxCb && (
+              <div
+                onClick={() => showMaxCb()}
+                className="ml-8 cursor-pointer font-weight-500 text-green"
+              >
+                MAX
+              </div>
+            )}
+          </div>
+        </div>
+        {showDistribute && !distributeAcrossEntireRange && (
+          <div className="mt-10 flex justify-between">
+            <div className="flex items-center">
+              <span className="mr-5">Distribute Across Entire Range</span>
+              <Tooltip
+                iconClassName="h-13 text-white/60"
+                element={
+                  <div className="flex flex-col gap-10">
+                    <div className="flex gap-8">
+                      <div>
+                        <IconDistributedEntireRange />
+                      </div>
+                      <div>
+                        <div className="text-12 font-weight-500 text-white">
+                          Distribute Across Entire Range
+                        </div>
+                        <div className="text-10 text-white/60">
+                          The budget is allocated to the entire newly set range
+                          and the asking price is updated.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex gap-8">
+                      <div>
+                        <IconDistributedUnusedRange />
+                      </div>
+                      <div>
+                        <div className="text-12 font-weight-500 text-white">
+                          Distribute To Unused Range
+                        </div>
+                        <div className="text-10 text-white/60">
+                          Price remains the same as it was. The budget is not
+                          allocated to the new range.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              />
+            </div>
+            <Switch
+              variant={isDistributeToggleOn ? 'white' : 'black'}
+              isOn={isDistributeToggleOn}
+              setIsOn={(isOn) =>
+                order.setMarginalPriceOption(
+                  isOn
+                    ? MarginalPriceOptions.reset
+                    : MarginalPriceOptions.maintain
+                )
+              }
+              size={'sm'}
+            />
+          </div>
+        )}
+      </div>
+      {distributeAcrossEntireRange && showDistribute && (
+        <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left  text-12 text-white/60">
+          <Tooltip
+            iconClassName="h-13 text-white/60"
+            element={
+              'When updating the rates, the allocated budget will be distributed equally across the entire range'
             }
-            size={'sm'}
           />
+          Strategy budget will be distribute across entire range
         </div>
       )}
-    </div>
+    </>
   );
 };
