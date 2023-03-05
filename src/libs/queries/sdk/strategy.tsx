@@ -9,7 +9,8 @@ import { useContract } from 'hooks/useContract';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { EncodedStrategy } from '@bancor/carbon-sdk/dist/types';
+import { EncodedStrategy, StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 
 export enum StrategyStatus {
   Active,
@@ -145,9 +146,8 @@ export interface CreateStrategyParams {
 export interface UpdateStrategyParams {
   token0: TokenAddressDecimals;
   token1: TokenAddressDecimals;
-  order0: CreateStrategyOrder;
-  order1: CreateStrategyOrder;
   encoded: EncodedStrategy;
+  fieldsToUpdate: StrategyUpdate;
 }
 
 export interface DeleteStrategyParams {
@@ -195,22 +195,9 @@ export const useUpdateStrategyQuery = () => {
     async ({
       token0,
       token1,
-      order0,
-      order1,
       encoded,
+      fieldsToUpdate,
     }: UpdateStrategyParams) => {
-      const noPrice0 = Number(order0.price) === 0;
-      const noPrice1 = Number(order1.price) === 0;
-
-      const order0Low = noPrice0 ? order0.min : order0.price;
-      const order0Max = noPrice0 ? order0.max : order0.price;
-
-      const order1Low = noPrice1 ? order1.min : order1.price;
-      const order1Max = noPrice1 ? order1.max : order1.price;
-
-      const order0Budget = Number(order0.budget) === 0 ? '0' : order0.budget;
-      const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
-
       const strategyId = encoded.id;
 
       const unsignedTx = await carbonSDK.updateStrategy(
@@ -219,13 +206,11 @@ export const useUpdateStrategyQuery = () => {
         token0.address,
         token1.address,
         {
-          buyPriceLow: order0Low,
-          buyPriceHigh: order0Max,
-          buyBudget: order0Budget,
-          sellPriceLow: order1Low,
-          sellPriceHigh: order1Max,
-          sellBudget: order1Budget,
-        }
+          ...fieldsToUpdate,
+        },
+        MarginalPriceOptions.reset,
+        MarginalPriceOptions.reset,
+        { gasLimit: 9999999 }
       );
 
       return signer!.sendTransaction(unsignedTx);

@@ -28,13 +28,13 @@ export const ModalEditStrategy: ModalFC<ModalEditStrategyData> = ({
   const handleOnActionClick = () => {
     const newOrder0 = {
       balance: strategy.order0.balance,
-      startRate: order0.price || order0.min,
-      endRate: order0.max,
+      startRate: order0.isRange ? order0.min : order0.price,
+      endRate: order0.isRange ? order0.max : order0.price,
     };
     const newOrder1 = {
       balance: strategy.order1.balance,
-      startRate: order1.price || order1.min,
-      endRate: order1.max,
+      startRate: order1.isRange ? order1.min : order1.price,
+      endRate: order1.isRange ? order1.max : order1.price,
     };
 
     type === 'renew'

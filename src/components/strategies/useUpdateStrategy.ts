@@ -14,7 +14,7 @@ export const useUpdateStrategy = () => {
   const cache = useQueryClient();
 
   const pauseStrategy = async (strategy: Strategy) => {
-    const { token0, token1, order0, order1, encoded } = strategy;
+    const { token0, token1, encoded } = strategy;
 
     if (!token0 || !token1 || !user) {
       throw new Error('error in update strategy: missing data ');
@@ -24,19 +24,13 @@ export const useUpdateStrategy = () => {
       {
         token0,
         token1,
-        order0: {
-          budget: order0.balance,
-          min: '0',
-          max: '0',
-          price: '',
-        },
-        order1: {
-          budget: order1.balance,
-          min: '0',
-          max: '0',
-          price: '',
-        },
         encoded,
+        fieldsToUpdate: {
+          buyPriceLow: '0',
+          buyPriceHigh: '0',
+          sellPriceLow: '0',
+          sellPriceHigh: '0',
+        },
       },
       {
         onSuccess: async (tx) => {
@@ -63,26 +57,18 @@ export const useUpdateStrategy = () => {
     if (!token0 || !token1 || !user) {
       throw new Error('error in renew strategy: missing data ');
     }
-    const isOrder0Limit = !!!order0.endRate;
-    const isOrder1Limit = !!!order1.endRate;
 
     updateMutation.mutate(
       {
         token0,
         token1,
-        order0: {
-          budget: order0.balance,
-          min: isOrder0Limit ? '' : order0.startRate,
-          max: isOrder0Limit ? '' : order0.endRate,
-          price: isOrder0Limit ? order0.startRate : '',
-        },
-        order1: {
-          budget: order1.balance,
-          min: isOrder1Limit ? '' : order1.startRate,
-          max: isOrder1Limit ? '' : order1.endRate,
-          price: isOrder1Limit ? order1.startRate : '',
-        },
         encoded,
+        fieldsToUpdate: {
+          buyPriceLow: order0.startRate,
+          buyPriceHigh: order0.endRate,
+          sellPriceLow: order1.startRate,
+          sellPriceHigh: order1.endRate,
+        },
       },
       {
         onSuccess: async (tx) => {
@@ -109,26 +95,18 @@ export const useUpdateStrategy = () => {
     if (!token0 || !token1 || !user) {
       throw new Error('error in change rates strategy: missing data ');
     }
-    const isOrder0Limit = !!!order0.endRate;
-    const isOrder1Limit = !!!order1.endRate;
 
     updateMutation.mutate(
       {
         token0,
         token1,
-        order0: {
-          budget: order0.balance,
-          min: isOrder0Limit ? '' : order0.startRate,
-          max: isOrder0Limit ? '' : order0.endRate,
-          price: isOrder0Limit ? order0.startRate : '',
-        },
-        order1: {
-          budget: order1.balance,
-          min: isOrder1Limit ? '' : order1.startRate,
-          max: isOrder1Limit ? '' : order1.endRate,
-          price: isOrder1Limit ? order1.startRate : '',
-        },
         encoded,
+        fieldsToUpdate: {
+          buyPriceLow: order0.startRate,
+          buyPriceHigh: order0.endRate,
+          sellPriceLow: order1.startRate,
+          sellPriceHigh: order1.endRate,
+        },
       },
       {
         onSuccess: async (tx) => {
@@ -155,26 +133,16 @@ export const useUpdateStrategy = () => {
     if (!token0 || !token1 || !user) {
       throw new Error('error in withdraw strategy budget: missing data ');
     }
-    const isOrder0Limit = !!!order0.endRate;
-    const isOrder1Limit = !!!order1.endRate;
 
     updateMutation.mutate(
       {
         token0,
         token1,
-        order0: {
-          budget: order0.balance,
-          min: isOrder0Limit ? '' : order0.startRate,
-          max: isOrder0Limit ? '' : order0.endRate,
-          price: isOrder0Limit ? order0.startRate : '',
-        },
-        order1: {
-          budget: order1.balance,
-          min: isOrder1Limit ? '' : order1.startRate,
-          max: isOrder1Limit ? '' : order1.endRate,
-          price: isOrder1Limit ? order1.startRate : '',
-        },
         encoded,
+        fieldsToUpdate: {
+          buyBudget: order0.balance,
+          sellBudget: order1.balance,
+        },
       },
       {
         onSuccess: async (tx) => {
@@ -201,26 +169,16 @@ export const useUpdateStrategy = () => {
     if (!token0 || !token1 || !user) {
       throw new Error('error in deposit strategy budget: missing data ');
     }
-    const isOrder0Limit = !!!order0.endRate;
-    const isOrder1Limit = !!!order1.endRate;
 
     updateMutation.mutate(
       {
         token0,
         token1,
-        order0: {
-          budget: order0.balance,
-          min: isOrder0Limit ? '' : order0.startRate,
-          max: isOrder0Limit ? '' : order0.endRate,
-          price: isOrder0Limit ? order0.startRate : '',
-        },
-        order1: {
-          budget: order1.balance,
-          min: isOrder1Limit ? '' : order1.startRate,
-          max: isOrder1Limit ? '' : order1.endRate,
-          price: isOrder1Limit ? order1.startRate : '',
-        },
         encoded,
+        fieldsToUpdate: {
+          buyBudget: order0.balance,
+          sellBudget: order1.balance,
+        },
       },
       {
         onSuccess: async (tx) => {
