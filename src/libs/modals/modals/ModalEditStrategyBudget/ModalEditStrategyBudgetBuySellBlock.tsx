@@ -14,7 +14,7 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
   balance?: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
-  type?: 'deposit' | 'withdraw';
+  type: 'deposit' | 'withdraw';
 }> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);

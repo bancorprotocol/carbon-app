@@ -12,6 +12,15 @@ import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 
+const shouldDisplayDistributeByType: {
+  [key in 'renew' | 'changeRates' | 'deposit' | 'withdraw']: boolean;
+} = {
+  renew: false,
+  changeRates: true,
+  deposit: true,
+  withdraw: true,
+};
+
 export const ModalEditStrategyAllocatedBudget: FC<{
   order: OrderCreate;
   base: Token;
@@ -19,7 +28,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   balance?: string;
   buy?: boolean;
   showMaxCb?: () => void;
-  type?: 'renew' | 'changeRates' | 'deposit' | 'withdraw';
+  type: 'renew' | 'changeRates' | 'deposit' | 'withdraw';
 }> = ({ base, quote, balance, buy, order, showMaxCb, type }) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
@@ -34,7 +43,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
       !firstTime.current &&
       order.isRange &&
       +order.budget > 0 &&
-      type !== 'renew'
+      shouldDisplayDistributeByType[type]
     ) {
       setShowDistribute(true);
     }
@@ -115,7 +124,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
             )}
           </div>
         </div>
-        {showDistribute && (type === 'withdraw' || type === 'deposit') && (
+        {showDistribute && type !== 'changeRates' && (
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
               <span className="mr-5">Distribute Across Entire Range</span>

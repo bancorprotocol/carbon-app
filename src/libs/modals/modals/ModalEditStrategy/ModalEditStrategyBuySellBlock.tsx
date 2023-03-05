@@ -10,7 +10,7 @@ export const ModalEditStrategyBuySellBlock: FC<{
   order: OrderCreate;
   balance?: string;
   buy?: boolean;
-  type?: 'renew' | 'changeRates';
+  type: 'renew' | 'changeRates';
 }> = ({ base, quote, balance, buy, order, type }) => {
   return (
     <div
