@@ -63,7 +63,14 @@ export const useBuySell = ({
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
   const checkLiquidity = (value: string) => {
-    const check = (v: string) => !new BigNumber(v).eq(value);
+    const check = (v: string) => {
+      if (v === '' || v === '...') {
+        return false;
+      }
+
+      return !new BigNumber(v).eq(value);
+    };
+
     const set = () => setIsLiquidityError(true);
     setIsLiquidityError(false);
 
