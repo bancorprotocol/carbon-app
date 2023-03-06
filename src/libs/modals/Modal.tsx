@@ -10,6 +10,7 @@ type Props = {
   title?: string | ReactNode;
   showCloseButton?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  isLoading?: boolean;
 };
 
 const getSize = (size: 'sm' | 'md' | 'lg') => {
@@ -29,6 +30,7 @@ export const Modal: FC<Props> = ({
   title,
   size = 'sm',
   showCloseButton = true,
+  isLoading = false,
 }) => {
   const { closeModal } = useModal();
 
@@ -48,8 +50,15 @@ export const Modal: FC<Props> = ({
         exit="exit"
       >
         <div
-          className={`relative flex w-full flex-col rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
+          className={`relative flex w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
         >
+          {isLoading && (
+            <div
+              className={
+                'statusBar absolute -mt-20 -ml-20 h-6 w-full bg-green/25'
+              }
+            />
+          )}
           <div className={'flex justify-between'}>
             <div>
               {typeof title === 'string' ? (
