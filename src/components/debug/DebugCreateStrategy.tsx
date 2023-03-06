@@ -7,7 +7,7 @@ import {
 } from 'libs/queries';
 import { FAUCET_TOKENS } from 'utils/tenderly';
 import { config } from 'services/web3/config';
-import { randomIntFromInterval, wait } from 'utils/helpers';
+import { wait } from 'utils/helpers';
 import { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useWeb3 } from 'libs/web3';
@@ -15,6 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
+import { Checkbox } from 'components/common/Checkbox/Checkbox';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -26,32 +27,59 @@ TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
 
 const spender = config.carbon.carbonController;
 
-const perRound = TOKENS.length * TOKENS.length - TOKENS.length;
-
 export const DebugCreateStrategy = () => {
   const { user } = useWeb3();
   const { openModal } = useModal();
   const queryClient = useQueryClient();
-  const balanceQueries = useGetTokenBalances(TOKENS);
   const createMutation = useCreateStrategyQuery();
-  const [rounds, setRounds] = useState(1);
+  const [rounds, setRounds] = useState(10);
   const [index, setIndex] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [interval, setInterval] = useState(1);
+  const [interval, setInterval] = useState(0);
+  const [allTokens, setAllTokens] = useState(
+    TOKENS.map((t) => ({ ...t, selected: false }))
+  );
+  const [buyMin, setBuyMin] = useState('0');
+  const [buyMax, setBuyMax] = useState('0');
+  const [sellMin, setSellMin] = useState('0');
+  const [sellMax, setSellMax] = useState('0');
+
+  const selectedTokens = useMemo(() => {
+    return allTokens.filter((t) => t.selected);
+  }, [allTokens]);
+
+  const balanceQueries = useGetTokenBalances(selectedTokens);
+
+  const perRound = 1;
+
+  const selectToken = (token: string) => {
+    setAllTokens((prev) => {
+      const res = prev.map((t) =>
+        t.address === token ? { ...t, selected: !t.selected } : t
+      );
+      const numberSelected = res.filter((t) => t.selected).length;
+      if (numberSelected > 2) {
+        return prev;
+      }
+      return res;
+    });
+  };
 
   const balancesMap = useMemo(() => {
-    return new Map(balanceQueries.map((t, i) => [TOKENS[i].address, t.data]));
-  }, [balanceQueries]);
+    return new Map(
+      balanceQueries.map((t, i) => [selectedTokens[i].address, t.data])
+    );
+  }, [balanceQueries, selectedTokens]);
 
   const approvalTokens = useMemo(() => {
-    return TOKENS.map((tkn) => {
+    return selectedTokens.map((tkn) => {
       const amount = balancesMap.get(tkn.address) || '0';
 
       return { ...tkn, spender, amount };
     });
-  }, [balancesMap]);
+  }, [balancesMap, selectedTokens]);
 
-  const total = useMemo(() => rounds * perRound, [rounds]);
+  const total = useMemo(() => rounds * perRound, [perRound, rounds]);
 
   const approval = useApproval(approvalTokens);
 
@@ -71,67 +99,55 @@ export const DebugCreateStrategy = () => {
     setIsRunning(true);
 
     for await (const _ of Array.from({ length: rounds })) {
-      for await (const tkn0 of TOKENS) {
-        if (index >= total) {
-          break;
-        }
+      const tkn0 = selectedTokens[0];
+      const tkn1 = selectedTokens[1];
 
-        for await (const tkn1 of TOKENS) {
-          if (index >= total) {
-            break;
-          }
-          if (tkn0.address === tkn1.address) {
-            continue;
-          }
+      const balance0 = balancesMap.get(tkn0.address) || '0';
+      const balance1 = balancesMap.get(tkn1.address) || '0';
 
-          const balance0 = balancesMap.get(tkn0.address) || '0';
-          const balance1 = balancesMap.get(tkn1.address) || '0';
-
-          let strategy: CreateStrategyParams = {
-            token0: tkn0,
-            token1: tkn1,
-            order0: {
-              max: randomIntFromInterval(8, 10).toString(),
-              min: randomIntFromInterval(4, 7).toString(),
-              budget: new BigNumber(balance0).div(total).toFixed(2),
-              price: '',
-            },
-            order1: {
-              max: randomIntFromInterval(66, 100).toString(),
-              min: randomIntFromInterval(40, 50).toString(),
-              budget: new BigNumber(balance1).div(total).toFixed(2),
-              price: '',
-            },
-          };
-          try {
-            await createMutation.mutate(strategy, {
-              onError: (e) => console.error(e),
-            });
-            await wait(interval * 1000);
-            await queryClient.invalidateQueries({
-              queryKey: QueryKey.balance(user, tkn0.address),
-            });
-            await queryClient.invalidateQueries({
-              queryKey: QueryKey.balance(user, tkn1.address),
-            });
-            console.log(
-              'created strategy',
-              strategy.token0.address,
-              strategy.token1.address
-            );
-          } catch (e) {
-            console.error(
-              'create strategy failed for ',
-              'token0',
-              tkn0.address,
-              'token1',
-              tkn1.address,
-              e
-            );
-          } finally {
-            setIndex((i) => i + 1);
-          }
-        }
+      let strategy: CreateStrategyParams = {
+        token0: tkn0,
+        token1: tkn1,
+        order0: {
+          max: buyMax,
+          min: buyMin,
+          budget: new BigNumber(balance1).div(total + 1).toFixed(2),
+          price: buyMax === buyMin ? buyMax : '0',
+        },
+        order1: {
+          max: sellMax,
+          min: sellMin,
+          budget: new BigNumber(balance0).div(total + 1).toFixed(2),
+          price: sellMax === sellMin ? sellMax : '0',
+        },
+      };
+      try {
+        await createMutation.mutate(strategy, {
+          onError: (e) => console.error(e),
+        });
+        await wait(interval * 1000);
+        await queryClient.invalidateQueries({
+          queryKey: QueryKey.balance(user, tkn0.address),
+        });
+        await queryClient.invalidateQueries({
+          queryKey: QueryKey.balance(user, tkn1.address),
+        });
+        console.log(
+          'created strategy',
+          strategy.token0.address,
+          strategy.token1.address
+        );
+      } catch (e) {
+        console.error(
+          'create strategy failed for ',
+          'token0',
+          tkn0.address,
+          'token1',
+          tkn1.address,
+          e
+        );
+      } finally {
+        setIndex((i) => i + 1);
       }
     }
     setIsRunning(false);
@@ -144,7 +160,51 @@ export const DebugCreateStrategy = () => {
       }
     >
       <h2>Create Strategy</h2>
-      <Label label={'Rounds'}>
+      <div className={'space-y-10'}>
+        Tokens:
+        {allTokens.map((t) => (
+          <div key={t.address} className={'flex items-center space-x-10'}>
+            <Checkbox
+              isChecked={t.selected}
+              setIsChecked={() => selectToken(t.address)}
+            />
+            <div>{t.symbol}</div>
+          </div>
+        ))}
+      </div>
+      <Label label={'Buy Min'}>
+        <Input
+          type={'text'}
+          value={buyMin}
+          fullWidth
+          onChange={(e) => setBuyMin(e.target.value)}
+        />
+      </Label>
+      <Label label={'Buy Max'}>
+        <Input
+          type={'text'}
+          value={buyMax}
+          fullWidth
+          onChange={(e) => setBuyMax(e.target.value)}
+        />
+      </Label>
+      <Label label={'Sell Min'}>
+        <Input
+          type={'text'}
+          value={sellMin}
+          fullWidth
+          onChange={(e) => setSellMin(e.target.value)}
+        />
+      </Label>
+      <Label label={'Sell Max'}>
+        <Input
+          type={'text'}
+          value={sellMax}
+          fullWidth
+          onChange={(e) => setSellMax(e.target.value)}
+        />
+      </Label>
+      <Label label={'How many strategies?'}>
         <Input
           type={'number'}
           value={rounds}
@@ -152,7 +212,7 @@ export const DebugCreateStrategy = () => {
           onChange={(e) => setRounds(Number(e.target.value))}
         />
       </Label>
-      <Label label={'Pause in seconds'}>
+      <Label label={'Pause in seconds between creation'}>
         <Input
           type={'number'}
           value={interval}
@@ -160,14 +220,13 @@ export const DebugCreateStrategy = () => {
           onChange={(e) => setInterval(Number(e.target.value))}
         />
       </Label>
-      <div>Strategies per round: {perRound}</div>
       <div>Strategies total: {total}</div>
       {isRunning ? (
         <div>
           Strategies created: {index} / {total}
         </div>
       ) : (
-        <Button onClick={handleClick}>RESET</Button>
+        <Button onClick={handleClick}>START</Button>
       )}
     </div>
   );
