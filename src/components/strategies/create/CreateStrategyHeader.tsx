@@ -25,10 +25,7 @@ export const CreateStrategyHeader = ({
     >
       <div className="flex items-center gap-16 text-24">
         <button
-          onClick={() => {
-            showGraph && setShowGraph(false);
-            back();
-          }}
+          onClick={() => back()}
           className="h-40 w-40 rounded-full bg-emphasis"
         >
           <IconChevron className="mx-auto w-14 rotate-90" />
