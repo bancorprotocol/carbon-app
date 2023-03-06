@@ -14,7 +14,7 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
   balance?: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
-  type?: 'deposit' | 'withdraw';
+  type: 'deposit' | 'withdraw';
 }> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
@@ -77,7 +77,7 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
       </div>
       <div className="pt-10">
         <ModalEditStrategyAllocatedBudget
-          {...{ order, base, quote, balance, buy }}
+          {...{ order, base, quote, balance, buy, type }}
           {...(type === 'withdraw' && {
             showMaxCb: () => order.setBudget(balance || ''),
           })}
