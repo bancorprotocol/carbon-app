@@ -2,7 +2,7 @@ import { Button } from 'components/common/button';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { TradeSettingsData, warningMessageIfOutOfRange } from './utils';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useMemo, useState } from 'react';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -16,6 +16,10 @@ export const TradeSettingsRow: FC<{
   const [internalValue, setInternalValue] = useState(
     item.presets.includes(item.value) ? '' : item.value
   );
+
+  const displayValue = useMemo(() => {
+    return item.value === item.presets[1] ? '' : internalValue;
+  }, [internalValue, item.presets, item.value]);
 
   const updateItemAndInternalState = (value: string) => {
     item.setValue(value);
@@ -53,7 +57,7 @@ export const TradeSettingsRow: FC<{
         ))}
         <input
           placeholder={'custom'}
-          value={internalValue}
+          value={displayValue}
           onChange={handleOnInputChange}
           className={`${buttonClasses} ${inputClasses} ${
             !item.presets.includes(item.value) ? buttonActiveClasses : ''
