@@ -124,7 +124,7 @@ export const StrategyBlockBuySell: FC<{
             maxWidth={430}
             element={
               <>
-                <div className={`flex items-center gap-7`}>{`${price} ${
+                <div>{`${price} ${
                   buy ? otherToken.symbol : token.symbol
                 }`}</div>
                 <TokenPrice className="text-white/60" price={fiatPrices} />
@@ -152,9 +152,7 @@ export const StrategyBlockBuySell: FC<{
           <Tooltip
             element={
               <>
-                <div
-                  className={`flex items-center gap-7`}
-                >{`${sanitizeNumberInput(
+                <div>{`${sanitizeNumberInput(
                   buy ? order.balance : otherOrder.balance,
                   buy ? token.decimals : otherToken.decimals
                 )} ${otherToken.symbol}`}</div>
