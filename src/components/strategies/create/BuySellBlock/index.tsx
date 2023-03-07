@@ -59,7 +59,7 @@ export const BuySellBlock: FC<Props> = ({
         1
       </div>
       <Tooltip
-        element={`Define the rate you are willing to ${buy ? 'buy' : 'sell'} ${
+        element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
           token0.symbol
         } at. Make sure the price is in ${token1.symbol} tokens.`}
       >

@@ -38,7 +38,7 @@ export const InputRange: FC<{
           } bg-body w-full rounded-r-4 rounded-l-16 border-2 border-black p-16`}
         >
           <Tooltip
-            element={`The lowest rate to ${buy ? 'buy' : 'sell'} ${
+            element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
               token.symbol
             } at.`}
           >
@@ -63,7 +63,7 @@ export const InputRange: FC<{
           } bg-body w-full rounded-r-16 rounded-l-4 border-2 border-black p-16`}
         >
           <Tooltip
-            element={`The highest rate to ${buy ? 'buy' : 'sell'} ${
+            element={`The highest price to ${buy ? 'buy' : 'sell'} ${
               token.symbol
             } at.`}
           >
