@@ -112,8 +112,8 @@ export const StrategyBlockBuySell: FC<{
           <Tooltip
             element={
               buy
-                ? `This is the rate in which you are willing to buy ${token.symbol}.`
-                : `This is the rate in which you are willing to sell ${otherToken.symbol}.`
+                ? `This is the price in which you are willing to buy ${token.symbol}.`
+                : `This is the price in which you are willing to sell ${otherToken.symbol}.`
             }
           >
             <div className={`${buy ? 'text-green' : 'text-red'}`}>
@@ -124,10 +124,9 @@ export const StrategyBlockBuySell: FC<{
             maxWidth={430}
             element={
               <>
-                <TokenPrice
-                  price={price}
-                  iconSrc={buy ? otherToken.logoURI : token.logoURI}
-                />
+                <div>{`${price} ${
+                  buy ? otherToken.symbol : token.symbol
+                }`}</div>
                 <TokenPrice className="text-white/60" price={fiatPrices} />
               </>
             }
@@ -153,13 +152,10 @@ export const StrategyBlockBuySell: FC<{
           <Tooltip
             element={
               <>
-                <TokenPrice
-                  price={sanitizeNumberInput(
-                    buy ? order.balance : otherOrder.balance,
-                    buy ? token.decimals : otherToken.decimals
-                  )}
-                  iconSrc={otherToken.logoURI}
-                />
+                <div>{`${sanitizeNumberInput(
+                  buy ? order.balance : otherOrder.balance,
+                  buy ? token.decimals : otherToken.decimals
+                )} ${otherToken.symbol}`}</div>
                 <TokenPrice className="text-white/60" price={budgetFiat} />
               </>
             }

@@ -1,14 +1,15 @@
 import BigNumber from 'bignumber.js';
 import { Options } from 'libs/charts';
-import { OrderRow, useGetOrderBook } from 'libs/queries';
+import { OrderRow } from 'libs/queries';
 import { orderBookConfig } from 'libs/queries/sdk/orderBook';
+import { useOrderBookWidget } from '../orderWidget/useOrderBookWidget';
 
 export const useDepthChartWidget = (base?: string, quote?: string) => {
-  const { data } = useGetOrderBook(base, quote);
+  const { data } = useOrderBookWidget(base, quote);
 
   const getOrders = (orders?: OrderRow[], buy?: boolean) => {
-    const res = [...(orders || [])].map(({ rate, total }) => {
-      return [+rate, +total];
+    const res = [...(orders || [])].map(({ rate, amount }) => {
+      return [+rate, +amount];
     });
 
     if (res.length > 0) {
