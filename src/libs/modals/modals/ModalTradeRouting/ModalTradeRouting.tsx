@@ -4,6 +4,7 @@ import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MatchAction } from '@bancor/carbon-sdk/dist/types';
 import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useModalTradeRouting';
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
@@ -37,7 +38,13 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 
   return (
     <Modal id={id} title="Trade Routing" size={'md'}>
-      <div className={'text-secondary mt-20 mb-5'}>Routing Table</div>
+      <Tooltip
+        element={
+          'This is the list of orders your trade will use when executed.'
+        }
+      >
+        <div className={'text-secondary mt-20 mb-5'}>Routing Table</div>
+      </Tooltip>
       <ModalTradeRoutingHeader
         baseSymbol={data.source.symbol}
         quoteSymbol={data.target.symbol}
@@ -57,8 +64,9 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           />
         ))}
       </div>
-
-      <div className={'text-secondary mt-20 mb-5'}>Confirm Trade</div>
+      <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
+        <div className={'text-secondary mt-20 mb-5'}>Confirm Trade</div>
+      </Tooltip>
       <div className={'-space-y-10'}>
         <div className={'rounded-12 bg-black p-16'}>
           <TokenInputField

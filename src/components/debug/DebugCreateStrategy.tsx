@@ -8,7 +8,7 @@ import {
 import { FAUCET_TOKENS } from 'utils/tenderly';
 import { config } from 'services/web3/config';
 import { wait } from 'utils/helpers';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
@@ -28,6 +28,7 @@ TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
 const spender = config.carbon.carbonController;
 
 export const DebugCreateStrategy = () => {
+  const count = useRef(0);
   const { user } = useWeb3();
   const { openModal } = useModal();
   const queryClient = useQueryClient();
@@ -37,15 +38,16 @@ export const DebugCreateStrategy = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [interval, setInterval] = useState(0);
   const [allTokens, setAllTokens] = useState(
-    TOKENS.map((t) => ({ ...t, selected: false }))
+    TOKENS.map((t) => ({ ...t, selected: false, count: -1 }))
   );
   const [buyMin, setBuyMin] = useState('0');
   const [buyMax, setBuyMax] = useState('0');
   const [sellMin, setSellMin] = useState('0');
   const [sellMax, setSellMax] = useState('0');
-
   const selectedTokens = useMemo(() => {
-    return allTokens.filter((t) => t.selected);
+    return allTokens
+      .filter((t) => t.selected && t.count > 0)
+      .sort((t1, t2) => t1.count - t2.count);
   }, [allTokens]);
 
   const balanceQueries = useGetTokenBalances(selectedTokens);
@@ -54,9 +56,13 @@ export const DebugCreateStrategy = () => {
 
   const selectToken = (token: string) => {
     setAllTokens((prev) => {
-      const res = prev.map((t) =>
-        t.address === token ? { ...t, selected: !t.selected } : t
-      );
+      const res = prev.map((t) => {
+        if (t.address === token) {
+          count.current++;
+          return { ...t, selected: !t.selected, count: count.current };
+        }
+        return t;
+      });
       const numberSelected = res.filter((t) => t.selected).length;
       if (numberSelected > 2) {
         return prev;
