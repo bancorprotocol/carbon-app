@@ -11,7 +11,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
 
   const getOrders = (orders?: OrderRow[], buy?: boolean) => {
     const res = [...(orders || [])].map(({ rate, amount }) => {
-      return [+rate < 0 ? 0 : +rate, +amount];
+      return [+rate, +amount];
     });
 
     if (res.length > 0) {
@@ -19,7 +19,15 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
     }
 
     let rate;
-    return new Array(orderBookConfig.buckets.depthChart).fill(0).map((_, i) => {
+    const length = buy
+      ? data.sell.length === 1
+        ? orderBookConfig.buckets.depthChart
+        : data.sell.length
+      : data.buy.length === 1
+      ? orderBookConfig.buckets.depthChart
+      : data.buy.length;
+
+    return new Array(length).fill(0).map((_, i) => {
       rate = new BigNumber(+data?.middleRate)?.[buy ? 'minus' : 'plus'](
         step?.times(i) || 0
       );

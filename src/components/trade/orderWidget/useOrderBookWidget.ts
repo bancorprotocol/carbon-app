@@ -33,7 +33,7 @@ const buildOrders = (
 ): OrderRow[] => {
   return data
     .map(({ amount, rate }, i) => _subtractPrevAmount(data, amount, rate, i))
-    .filter(({ amount }) => amount !== '0')
+    .filter(({ amount, rate }) => amount !== '0' && +rate > 0)
     .splice(0, orderBookConfig.buckets.orderBook)
     .map(({ amount, rate, total }) => ({
       rate: new BigNumber(rate).toFixed(quoteDecimals, 1),
