@@ -178,6 +178,18 @@ export const DebugCreateStrategy = () => {
           </div>
         ))}
       </div>
+      <div className="flex w-full justify-between">
+        <div>{`Base: ${
+          selectedTokens?.[0]?.symbol
+            ? selectedTokens?.[0]?.symbol
+            : 'not selected'
+        }`}</div>
+        <div>{`Quote: ${
+          selectedTokens?.[1]?.symbol
+            ? selectedTokens?.[1]?.symbol
+            : 'not selected'
+        }`}</div>
+      </div>
       <Label label={'Buy Min'}>
         <Input
           type={'text'}
