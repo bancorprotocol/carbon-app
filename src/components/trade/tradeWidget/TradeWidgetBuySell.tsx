@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { Token } from 'libs/tokens';
@@ -125,9 +126,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {showRouting && (
               <button
                 onClick={openTradeRouteModal}
-                className={'flex hidden space-x-10 hover:text-white md:flex'}
+                className={
+                  'flex hidden space-x-10 text-left hover:text-white md:flex'
+                }
               >
-                <IconRouting className={'w-12'} /> <span>Routing</span>
+                <IconRouting className={'w-12'} />
+                <Tooltip element="You can view and manage the orders that are included in the trade.">
+                  <span>Routing</span>
+                </Tooltip>
               </button>
             )}
           </div>
