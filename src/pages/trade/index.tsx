@@ -9,8 +9,6 @@ import { useEffect, useRef } from 'react';
 import { Token } from 'libs/tokens';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
-import { useWeb3 } from 'libs/web3';
-import { WalletConnect } from 'components/common/walletConnect';
 
 export type TradePageProps = { base: Token; quote: Token };
 
@@ -54,7 +52,6 @@ const checkDefaultPairs = (
 };
 
 export const TradePage = () => {
-  const { user } = useWeb3();
   const hasMounted = useRef(false);
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken, goToPair, isTradePage } = useTradeTokens();
@@ -84,8 +81,6 @@ export const TradePage = () => {
   const isValidPair = !(!baseToken || !quoteToken);
 
   const noTokens = !baseToken && !quoteToken;
-
-  if (!user) return <WalletConnect />;
 
   return (
     <>
