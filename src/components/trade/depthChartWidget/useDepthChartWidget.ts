@@ -31,10 +31,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
     asksData?: number[][],
     baseTokenSymbol?: string
   ): Options => {
-    const left = bidsData?.[bidsData.length - 1]?.[0] || 0;
-    const right = asksData?.[asksData.length - 1]?.[0] || 0;
-    const middle = data?.middleRate ? +data?.middleRate : 0;
-    const xMiddle = left > 0 && right > 0 ? (right + left) / 2 : middle;
+    const xMiddle = data?.middleRate ? +data?.middleRate : 0;
 
     return {
       chart: {
