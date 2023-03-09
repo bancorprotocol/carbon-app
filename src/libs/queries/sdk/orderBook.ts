@@ -116,13 +116,18 @@ const getOrderBook = async (
   const step = getStep();
 
   const getMiddleRate = () => {
-    if (maxBuy.isFinite() && maxSell.isFinite()) {
+    if (
+      maxBuy.isFinite() &&
+      maxBuy.gt(0) &&
+      maxSell.isFinite() &&
+      maxSell.gt(0)
+    ) {
       return maxBuy.plus(ONE.div(maxSell)).div(2);
     }
-    if (maxBuy.isFinite()) {
+    if (maxBuy.isFinite() && maxBuy.gt(0)) {
       return maxBuy;
     }
-    if (maxSell.isFinite()) {
+    if (maxSell.isFinite() && maxSell.gt(0)) {
       return ONE.div(maxSell);
     }
     return new BigNumber(0);
