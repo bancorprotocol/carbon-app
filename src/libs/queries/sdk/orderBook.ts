@@ -80,10 +80,20 @@ const getOrderBook = async (
   quote: string,
   buckets: number
 ): Promise<OrderBook> => {
-  const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(base, quote));
-  const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(base, quote));
-  const minSell = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
-  const maxSell = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
+  const buyHasLiq = carbonSDK.hasLiquidityByPair(base, quote);
+  const sellHasLiq = carbonSDK.hasLiquidityByPair(quote, base);
+  const minBuy = new BigNumber(
+    buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0
+  );
+  const maxBuy = new BigNumber(
+    buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0
+  );
+  const minSell = new BigNumber(
+    sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0
+  );
+  const maxSell = new BigNumber(
+    sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
+  );
 
   const stepBuy = maxBuy.minus(minBuy).div(orderBookConfig.steps);
   const stepSell = ONE.div(minSell)
@@ -120,7 +130,7 @@ const getOrderBook = async (
   const middleRate = getMiddleRate();
 
   return {
-    buy: carbonSDK.hasLiquidityByPair(base, quote)
+    buy: buyHasLiq
       ? await buildOrderBook(
           true,
           base,
@@ -132,7 +142,7 @@ const getOrderBook = async (
           buckets
         )
       : [],
-    sell: carbonSDK.hasLiquidityByPair(quote, base)
+    sell: sellHasLiq
       ? await buildOrderBook(
           false,
           quote,
