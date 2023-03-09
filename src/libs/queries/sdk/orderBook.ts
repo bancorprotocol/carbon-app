@@ -94,17 +94,11 @@ const getOrderBook = async (
   const maxSell = new BigNumber(
     sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
   );
-  console.log('jan minBuy', minBuy.toString());
-  console.log('jan maxBuy', maxBuy.toString());
-  console.log('jan minSell', minSell.toString());
-  console.log('jan maxSell', maxSell.toString());
 
   const stepBuy = maxBuy.minus(minBuy).div(orderBookConfig.steps);
   const stepSell = ONE.div(minSell)
     .minus(ONE.div(maxSell))
     .div(orderBookConfig.steps);
-  console.log('jan stepBuy', stepBuy.toString());
-  console.log('jan stepSell', stepSell.toString());
 
   const getStep = () => {
     if (stepBuy.isFinite() && stepBuy.gt(0)) {
@@ -120,7 +114,6 @@ const getOrderBook = async (
     }
   };
   const step = getStep();
-  console.log('jan step', step.toString());
 
   const getMiddleRate = () => {
     if (maxBuy.isFinite() && maxSell.isFinite()) {
@@ -135,7 +128,6 @@ const getOrderBook = async (
     return new BigNumber(0);
   };
   const middleRate = getMiddleRate();
-  console.log('jan middleRate', middleRate.toString());
 
   return {
     buy: buyHasLiq
