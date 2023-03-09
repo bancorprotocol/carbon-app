@@ -1,11 +1,10 @@
 import BigNumber from 'bignumber.js';
 import { Options } from 'libs/charts';
-import { OrderRow } from 'libs/queries';
+import { OrderRow, useGetOrderBook } from 'libs/queries';
 import { orderBookConfig } from 'libs/queries/sdk/orderBook';
-import { useOrderBookWidget } from '../orderWidget/useOrderBookWidget';
 
 export const useDepthChartWidget = (base?: string, quote?: string) => {
-  const { data } = useOrderBookWidget(base, quote);
+  const { data } = useGetOrderBook(base, quote);
 
   const getOrders = (orders?: OrderRow[], buy?: boolean) => {
     const res = [...(orders || [])].map(({ rate, amount }) => {
@@ -17,6 +16,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
     }
 
     let rate;
+
     return new Array(orderBookConfig.buckets.depthChart).fill(0).map((_, i) => {
       rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
         data?.step?.times(i) || 0
@@ -31,9 +31,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
     asksData?: number[][],
     baseTokenSymbol?: string
   ): Options => {
-    const left = bidsData?.[bidsData.length - 1]?.[0] || 0;
-    const right = asksData?.[asksData.length - 1]?.[0] || 0;
-    const xMiddle = (right + left) / 2;
+    const xMiddle = data?.middleRate ? +data?.middleRate : 0;
 
     return {
       chart: {

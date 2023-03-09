@@ -11,7 +11,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
 
   const options = getOptions(buyOrders, sellOrders, base.symbol);
 
-  const isError = !base || !quote || !buyOrders || !sellOrders || !options;
+  const isError = (!buyOrders && !sellOrders) || !base || !quote || !options;
 
   return (
     <div className="rounded-10 bg-silver p-20">
