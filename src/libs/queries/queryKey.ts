@@ -55,7 +55,7 @@ export namespace QueryKey {
     sourceToken,
     targetToken,
     isTradeBySource,
-    actions.map((a) => a.id.toString()).join('-'),
+    actions,
   ];
 
   export const tradeLiquidity = (token0: string, token1: string) => [
