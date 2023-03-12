@@ -121,7 +121,7 @@ export const TokenInputField: FC<Props> = ({
       </div>
       <div
         className={
-          'text-secondary mt-10 flex items-center justify-between font-mono !text-12 font-weight-500'
+          'text-secondary mt-10 flex items-center justify-between gap-10 font-mono !text-12 font-weight-500'
         }
       >
         {user && isBalanceLoading !== undefined && !withoutWallet ? (
@@ -146,7 +146,7 @@ export const TokenInputField: FC<Props> = ({
         ) : (
           <div className={'h-16'} />
         )}
-        <div className="flex">
+        <div className="flex truncate">
           {fiatValue.gt(0) && <div>{fiatAsString}</div>}
           {slippage && value && (
             <div
