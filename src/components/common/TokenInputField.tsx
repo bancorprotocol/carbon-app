@@ -52,9 +52,15 @@ export const TokenInputField: FC<Props> = ({
     setIsFocused(false);
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNumberInput(e.target.value, token.decimals);
-    setValue(sanitized);
+  const handleChange = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => {
+    if (value.includes('...')) {
+      setValue(value.replaceAll('.', ''));
+    } else {
+      const sanitized = sanitizeNumberInput(value, token.decimals);
+      setValue(sanitized);
+    }
     onKeystroke && onKeystroke();
   };
 

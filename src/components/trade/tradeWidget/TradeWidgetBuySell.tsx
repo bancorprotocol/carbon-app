@@ -56,7 +56,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ${target.symbol}`;
   };
 
-  const getLiquidty = () => {
+  const getLiquidity = () => {
     const value = liquidityQuery.isLoading
       ? 'loading'
       : prettifyNumber(liquidityQuery.data);
@@ -139,7 +139,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           </div>
           {IS_TENDERLY_FORK && (
             <div className={'text-secondary mt-5 text-right'}>
-              {getLiquidty()}
+              {getLiquidity()}
             </div>
           )}
         </>
