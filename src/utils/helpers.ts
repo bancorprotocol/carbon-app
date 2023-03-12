@@ -51,6 +51,15 @@ export const reduceETH = (value: string, address: string) => {
   return value;
 };
 
+export const getFiatValue = (
+  fiatValue: BigNumber | string | number,
+  currentCurrency: FiatSymbol
+) => {
+  return `${prettifyNumber(fiatValue, {
+    usd: ['USD', 'CAD', 'AUD'].includes(currentCurrency),
+  })} ${currentCurrency}`;
+};
+
 const prettifyNumberAbbreviateFormat: numbro.Format = {
   average: true,
   mantissa: 1,
@@ -60,13 +69,11 @@ const prettifyNumberAbbreviateFormat: numbro.Format = {
   roundingFunction: (num) => Math.floor(num),
 };
 
-export const getFiatValue = (
-  fiatValue: BigNumber | string | number,
-  currentCurrency: FiatSymbol
-) => {
-  return `${prettifyNumber(fiatValue, {
-    usd: ['USD', 'CAD', 'AUD'].includes(currentCurrency),
-  })} ${currentCurrency}`;
+const defaultNumbroOptions: numbro.Format = {
+  roundingFunction: (num) => Math.floor(num),
+  mantissa: 0,
+  optionalMantissa: true,
+  thousandSeparated: true,
 };
 
 export function prettifyNumber(num: number | string | BigNumber): string;
@@ -105,19 +112,18 @@ export function prettifyNumber(
   if (abbreviate && bigNum.gt(999999))
     return numbro(bigNum).format(prettifyNumberAbbreviateFormat);
   if (!highPrecision) {
-    if (bigNum.gte(1000))
-      return numbroFormat(bigNum, '0,0', {
-        roundingFunction: (num) => Math.floor(num),
-      });
+    if (bigNum.gte(1000)) return numbro(bigNum).format(defaultNumbroOptions);
 
     if (bigNum.gte(2))
-      return numbroFormat(bigNum, '0,0.[00]', {
-        roundingFunction: (num) => Math.floor(num),
-      });
+      return `${numbro(bigNum).format({
+        ...defaultNumbroOptions,
+        mantissa: 2,
+      })}`;
   }
-  return numbroFormat(bigNum, '0,0.[000000]', {
-    roundingFunction: (num) => Math.floor(num),
-  });
+  return `${numbro(bigNum).format({
+    ...defaultNumbroOptions,
+    mantissa: 6,
+  })}`;
 }
 
 const handlePrettifyNumberUsd = (
@@ -135,26 +141,12 @@ const handlePrettifyNumberUsd = (
   if (abbreviate && num.gt(999999))
     return `$${numbro(num).format(prettifyNumberAbbreviateFormat)}`;
   if (!highPrecision) {
-    if (num.gt(100))
-      return numbroFormat(num, '$0,0', {
-        roundingFunction: (num) => Math.floor(num),
-      });
+    if (num.gt(100)) return `$${numbro(num).format(defaultNumbroOptions)}`;
   }
-  return numbroFormat(num, '$0,0.00', {
-    roundingFunction: (num) => Math.floor(num),
-  });
-};
-
-const numbroFormat = (
-  num: number | BigNumber,
-  format: string,
-  options?: numbro.Format
-) => {
-  return numbro(
-    +numbro(num).format({
-      ...options,
-    })
-  ).format(format);
+  return `$${numbro(num).format({
+    ...defaultNumbroOptions,
+    mantissa: 2,
+  })}`;
 };
 
 export const wait = async (ms: number = 0) =>

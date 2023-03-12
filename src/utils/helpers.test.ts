@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { prettifyNumber } from './helpers';
 
 describe('prettifyNumber', () => {
@@ -18,19 +17,19 @@ describe('prettifyNumber', () => {
     expect(prettifyNumber(0, { usd: true })).toEqual('$0.00');
   });
 
-  it('should return "0" for input 0 and optionsOrUsd false', () => {
+  it('should return "0" for input 0 and usd false', () => {
     expect(prettifyNumber(0, { usd: false })).toEqual('0');
   });
 
-  it('should return "100" for input 1000 and optionsOrUsd false', () => {
+  it('should return "100" for input 1000 and usd false', () => {
     expect(prettifyNumber(1000, { usd: false })).toEqual('1,000');
   });
 
-  it('should return "$1.23" for input 1.2345 and optionsOrUsd true', () => {
+  it('should return "$1.23" for input 1.2345 and usd true', () => {
     expect(prettifyNumber(1.2345, { usd: true })).toEqual('$1.23');
   });
 
-  it('should return "< $0.01" for input 0.001 and optionsOrUsd true', () => {
+  it('should return "< $0.01" for input 0.001 and usd true', () => {
     expect(prettifyNumber(0.001, { usd: true })).toEqual('< $0.01');
   });
 
@@ -38,9 +37,9 @@ describe('prettifyNumber', () => {
     expect(prettifyNumber(1234567, { abbreviate: true })).toEqual('1.2 m');
   });
 
-  it('should return "1.234567" for input 1.23456789 and optionsOrUsd false', () => {
+  it('should return "1.234567" for input 1.23456789 and usd false', () => {
     expect(prettifyNumber(1.23456789, { highPrecision: true })).toEqual(
-      '1.234568'
+      '1.234567'
     );
   });
 
@@ -48,9 +47,11 @@ describe('prettifyNumber', () => {
     expect(prettifyNumber(0.0000001)).toEqual('< 0.000001');
   });
 
-  test('should return "1.000000" for 1e-6 and supportExponential option', () => {
-    expect(prettifyNumber(new BigNumber(1321965484984894959595))).toEqual(
-      '1.321965484984895e+21'
-    );
+  test('should return "1,321,965,595" for large number', () => {
+    expect(prettifyNumber(1321965595)).toEqual('1,321,965,595');
+  });
+
+  test('should return "1,321,965,595" for large number and usd  true', () => {
+    expect(prettifyNumber(1321965595, { usd: true })).toEqual('$1,321,965,595');
   });
 });
