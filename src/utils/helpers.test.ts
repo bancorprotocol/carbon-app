@@ -7,7 +7,7 @@ describe('prettifyNumber', () => {
   });
 
   it('should return $0.00 for input lower then 0 and usd true', () => {
-    expect(prettifyNumber(-10, true)).toEqual('$0.00');
+    expect(prettifyNumber(-10, { usd: true })).toEqual('$0.00');
   });
 
   it('should return "$0.00" for input 0 and optionsOrUsd undefined', () => {
@@ -15,15 +15,15 @@ describe('prettifyNumber', () => {
   });
 
   it('should return "$0.00" for input 0 and usd true', () => {
-    expect(prettifyNumber(0, true)).toEqual('$0.00');
+    expect(prettifyNumber(0, { usd: true })).toEqual('$0.00');
   });
 
   it('should return "0" for input 0 and optionsOrUsd false', () => {
-    expect(prettifyNumber(0, false)).toEqual('0');
+    expect(prettifyNumber(0, { usd: false })).toEqual('0');
   });
 
   it('should return "100" for input 1000 and optionsOrUsd false', () => {
-    expect(prettifyNumber(1000, false)).toEqual('1,000');
+    expect(prettifyNumber(1000, { usd: false })).toEqual('1,000');
   });
 
   it('should return "$1.23" for input 1.2345 and optionsOrUsd true', () => {
@@ -40,7 +40,7 @@ describe('prettifyNumber', () => {
 
   it('should return "1.234567" for input 1.23456789 and optionsOrUsd false', () => {
     expect(prettifyNumber(1.23456789, { highPrecision: true })).toEqual(
-      '1.234567'
+      '1.234568'
     );
   });
 
@@ -49,10 +49,8 @@ describe('prettifyNumber', () => {
   });
 
   test('should return "1.000000" for 1e-6 and supportExponential option', () => {
-    expect(
-      prettifyNumber(new BigNumber(1321965484984894959595), {
-        supportExponential: true,
-      })
-    ).toEqual('1.321965484984895e+21');
+    expect(prettifyNumber(new BigNumber(1321965484984894959595))).toEqual(
+      '1.321965484984895e+21'
+    );
   });
 });

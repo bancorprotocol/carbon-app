@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import numeral from 'numeral';
 import numbro from 'numbro';
 import { config } from 'services/web3/config';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
@@ -63,21 +62,14 @@ const prettifyNumberAbbreviateFormat: numbro.Format = {
 
 export const getFiatValue = (
   fiatValue: BigNumber | string | number,
-  currentCurrency: FiatSymbol,
-  supportExponential = false
+  currentCurrency: FiatSymbol
 ) => {
   return `${prettifyNumber(fiatValue, {
     usd: ['USD', 'CAD', 'AUD'].includes(currentCurrency),
-    supportExponential,
   })} ${currentCurrency}`;
 };
 
 export function prettifyNumber(num: number | string | BigNumber): string;
-
-export function prettifyNumber(
-  num: number | string | BigNumber,
-  usd: boolean
-): string;
 
 export function prettifyNumber(
   num: number | string | BigNumber,
@@ -91,53 +83,79 @@ export function prettifyNumber(
 
 export function prettifyNumber(
   num: number | string | BigNumber,
-  optionsOrUsd?:
-    | {
-        usd?: boolean;
-        abbreviate?: boolean;
-        highPrecision?: boolean;
-        supportExponential?: boolean;
-      }
-    | boolean
-): string {
-  let usd, abbreviate, highPrecision, supportExponential;
-  if (optionsOrUsd === undefined) {
-    usd = false;
-    abbreviate = false;
-  } else if (typeof optionsOrUsd === 'boolean') {
-    usd = optionsOrUsd;
-    abbreviate = false;
-  } else {
-    usd = optionsOrUsd.usd;
-    abbreviate = optionsOrUsd.abbreviate;
-    highPrecision = optionsOrUsd.highPrecision;
-    supportExponential = optionsOrUsd.supportExponential;
+  options?: {
+    usd?: boolean;
+    abbreviate?: boolean;
+    highPrecision?: boolean;
   }
+): string {
+  const {
+    usd = false,
+    abbreviate = false,
+    highPrecision = false,
+  } = options || {};
 
   const bigNum = new BigNumber(num);
   if (usd) {
-    if (bigNum.lte(0)) return '$0.00';
-    if (bigNum.lt(0.01)) return '< $0.01';
-    if (supportExponential) return numbro(bigNum).format('$0,0');
-    if (!highPrecision) {
-      if (bigNum.gt(100)) return numeral(bigNum).format('$0,0', Math.floor);
-    }
-    if (abbreviate && bigNum.gt(999999))
-      return `$${numbro(bigNum).format(prettifyNumberAbbreviateFormat)}`;
-    return numeral(bigNum).format('$0,0.00', Math.floor);
+    return handlePrettifyNumberUsd(bigNum, options);
   }
 
   if (bigNum.lte(0)) return '0';
+  if (bigNum.lt(0.000001)) return '< 0.000001';
   if (abbreviate && bigNum.gt(999999))
     return numbro(bigNum).format(prettifyNumberAbbreviateFormat);
-  if (supportExponential) return numbro(bigNum).format('0,0');
   if (!highPrecision) {
-    if (bigNum.gte(1000)) return numeral(bigNum).format('0,0', Math.floor);
-    if (bigNum.gte(2)) return numeral(bigNum).format('0,0.[00]', Math.floor);
+    if (bigNum.gte(1000))
+      return numbroFormat(bigNum, '0,0', {
+        roundingFunction: (num) => Math.floor(num),
+      });
+
+    if (bigNum.gte(2))
+      return numbroFormat(bigNum, '0,0.[00]', {
+        roundingFunction: (num) => Math.floor(num),
+      });
   }
-  if (bigNum.lt(0.000001)) return '< 0.000001';
-  return numeral(bigNum).format('0,0.[000000]', Math.floor);
+  return numbroFormat(bigNum, '0,0.[000000]', {
+    roundingFunction: (num) => Math.floor(num),
+  });
 }
+
+const handlePrettifyNumberUsd = (
+  num: BigNumber,
+  options?: {
+    usd?: boolean;
+    abbreviate?: boolean;
+    highPrecision?: boolean;
+  }
+) => {
+  const { abbreviate = false, highPrecision = false } = options || {};
+
+  if (num.lte(0)) return '$0.00';
+  if (num.lt(0.01)) return '< $0.01';
+  if (abbreviate && num.gt(999999))
+    return `$${numbro(num).format(prettifyNumberAbbreviateFormat)}`;
+  if (!highPrecision) {
+    if (num.gt(100))
+      return numbroFormat(num, '$0,0', {
+        roundingFunction: (num) => Math.floor(num),
+      });
+  }
+  return numbroFormat(num, '$0,0.00', {
+    roundingFunction: (num) => Math.floor(num),
+  });
+};
+
+const numbroFormat = (
+  num: number | BigNumber,
+  format: string,
+  options?: numbro.Format
+) => {
+  return numbro(
+    +numbro(num).format({
+      ...options,
+    })
+  ).format(format);
+};
 
 export const wait = async (ms: number = 0) =>
   new Promise((resolve) => setTimeout(resolve, ms));

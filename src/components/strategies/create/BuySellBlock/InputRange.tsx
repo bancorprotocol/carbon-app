@@ -26,8 +26,8 @@ export const InputRange: FC<{
       : setRangeError('Max Price must be higher than min price and not zero');
   };
 
-  const { getFiatAsString: getFiatAsStringMin } = useFiatCurrency(token, min);
-  const { getFiatAsString: getFiatAsStringMax } = useFiatCurrency(token, max);
+  const { fiatAsString: fiatAsStringMin } = useFiatCurrency(token, min);
+  const { fiatAsString: fiatAsStringMax } = useFiatCurrency(token, max);
 
   return (
     <div>
@@ -54,7 +54,7 @@ export const InputRange: FC<{
             }
           />
           <div className="font-mono text-12 text-white/60">
-            {getFiatAsStringMin()}
+            {fiatAsStringMin}
           </div>
         </div>
         <div
@@ -79,7 +79,7 @@ export const InputRange: FC<{
             }
           />
           <div className="mt-6 font-mono text-12 text-white/60">
-            {getFiatAsStringMax()}
+            {fiatAsStringMax}
           </div>
         </div>
       </div>
