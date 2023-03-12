@@ -48,7 +48,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
     if (buy) {
       return `1 ${target.symbol} = ${
-        rate ? prettifyNumber(new BigNumber(1).div(rate)) : '--'
+        rate && rate !== '0' ? prettifyNumber(new BigNumber(1).div(rate)) : '--'
       } ${source.symbol}`;
     }
     return `1 ${source.symbol} =
