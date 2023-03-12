@@ -77,4 +77,10 @@ describe('prettifyNumber', () => {
       prettifyNumber(19999.999999999986138278, { round: true, usd: true })
     ).toEqual('$20,000');
   });
+
+  test('Remove redundant zero', () => {
+    expect(prettifyNumber('18.00000')).toEqual('18');
+    expect(prettifyNumber('18.120000')).toEqual('18.12');
+    expect(prettifyNumber('18.12345678910000')).toEqual('18.12');
+  });
 });

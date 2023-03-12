@@ -74,6 +74,7 @@ const defaultNumbroOptions: numbro.Format = {
   mantissa: 0,
   optionalMantissa: true,
   thousandSeparated: true,
+  trimMantissa: true,
 };
 
 const getDefaultNumberoOptions = (round = false) => {
