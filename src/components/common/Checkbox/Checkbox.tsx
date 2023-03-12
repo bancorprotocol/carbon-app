@@ -9,7 +9,7 @@ type Props = {
 export const Checkbox: FC<Props> = ({ isChecked, setIsChecked }) => {
   const classNames =
     'h-18 w-18 rounded-4 border-2 flex items-center justify-center cursor-pointer';
-  const borderColor = isChecked ? 'border-green bg-green' : 'border-black';
+  const borderColor = isChecked ? 'border-green bg-green' : 'border-silver';
 
   return (
     <div
