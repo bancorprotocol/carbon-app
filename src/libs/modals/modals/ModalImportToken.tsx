@@ -4,7 +4,7 @@ import { useGetTokenData } from 'libs/queries/chain/token';
 import { Button } from 'components/common/button';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
-import { shortenString } from 'utils/helpers';
+import { shortenString } from 'utils/helpers/helpers';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';

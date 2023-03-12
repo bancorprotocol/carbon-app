@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { ModalKey } from 'libs/modals/modals.types';
-import { uuid } from 'utils/helpers';
+import { uuid } from 'utils/helpers/helpers';
 import { useStore } from 'store';
 import { ModalSchema } from 'libs/modals/modals';
 

@@ -5,7 +5,7 @@ import {
   getFiatValue,
   prettifyNumber,
   sanitizeNumberInput,
-} from 'utils/helpers';
+} from 'utils/helpers/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from './TokenPrice';
@@ -30,10 +30,12 @@ export const StrategyBlockBuySell: FC<{
     if (prettified) {
       return `${prettifyNumber(order.startRate, {
         abbreviate: order.startRate.length > 10,
+        round: true,
       })} ${
         !limit
           ? ` - ${prettifyNumber(order.endRate, {
               abbreviate: order.endRate.length > 10,
+              round: true,
             })}`
           : ''
       }`;

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
-import { shortenString } from 'utils/helpers';
+import { shortenString } from 'utils/helpers/helpers';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';

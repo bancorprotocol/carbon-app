@@ -6,7 +6,7 @@ import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
-import { prettifyNumber } from 'utils/helpers';
+import { prettifyNumber } from 'utils/helpers/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 

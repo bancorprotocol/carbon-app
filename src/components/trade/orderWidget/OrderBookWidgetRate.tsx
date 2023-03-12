@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { prettifyNumber } from 'utils/helpers';
+import { prettifyNumber } from 'utils/helpers/helpers';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 

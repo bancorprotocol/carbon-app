@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { getFiatValue, sanitizeNumberInput } from 'utils/helpers';
+import { getFiatValue, sanitizeNumberInput } from 'utils/helpers/helpers';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';

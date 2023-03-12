@@ -1,7 +1,7 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { ChangeEvent, FC } from 'react';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeNumberInput } from 'utils/helpers/helpers';
 
 export const InputLimit: FC<{
   price: string;

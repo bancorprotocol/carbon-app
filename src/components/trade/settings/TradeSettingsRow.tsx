@@ -1,5 +1,5 @@
 import { Button } from 'components/common/button';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeNumberInput } from 'utils/helpers/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { TradeSettingsData, warningMessageIfOutOfRange } from './utils';
 import { ChangeEvent, FC, useMemo, useState } from 'react';

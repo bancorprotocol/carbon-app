@@ -3,7 +3,7 @@ import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import { useStore } from 'store';
-import { getFiatValue } from 'utils/helpers';
+import { getFiatValue } from 'utils/helpers/helpers';
 
 export const useFiatCurrency = (token?: Token, value?: string) => {
   const { fiatCurrency } = useStore();

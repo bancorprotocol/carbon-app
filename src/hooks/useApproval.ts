@@ -3,7 +3,7 @@ import {
   useGetUserApproval,
 } from 'libs/queries/chain/approval';
 import { useMemo } from 'react';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeNumberInput } from 'utils/helpers/helpers';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;

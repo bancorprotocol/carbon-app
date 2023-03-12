@@ -7,7 +7,7 @@ import {
 } from 'libs/queries';
 import { FAUCET_TOKENS } from 'utils/tenderly';
 import { config } from 'services/web3/config';
-import { wait } from 'utils/helpers';
+import { wait } from 'utils/helpers/helpers';
 import { useMemo, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useWeb3 } from 'libs/web3';

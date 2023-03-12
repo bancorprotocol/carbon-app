@@ -1,7 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeNumberInput } from 'utils/helpers/helpers';
 import { Token } from 'libs/tokens';
 
 export const InputRange: FC<{

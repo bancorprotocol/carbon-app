@@ -1,5 +1,5 @@
 import { PathNames } from 'libs/routing';
-import { isProduction } from 'utils/helpers';
+import { isProduction } from 'utils/helpers/helpers';
 
 export interface MenuItem {
   label: string;

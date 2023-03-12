@@ -8,7 +8,7 @@ import {
 import { setLSUserNotifications } from 'libs/notifications/utils';
 import { useCallback } from 'react';
 import { NOTIFICATIONS_MAP } from 'libs/notifications/data';
-import { uuid } from 'utils/helpers';
+import { uuid } from 'utils/helpers/helpers';
 import { dayjs } from 'libs/dayjs';
 
 export const useNotifications = () => {

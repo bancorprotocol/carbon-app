@@ -2,7 +2,7 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 import { FiatSymbol } from 'store/useFiatCurrencyStore';
 import { Imager } from 'components/common/imager/Imager';
-import { getFiatValue, prettifyNumber } from 'utils/helpers';
+import { getFiatValue, prettifyNumber } from 'utils/helpers/helpers';
 
 export const ModalTradeRoutingRowCell: FC<{
   logoURI?: string;
