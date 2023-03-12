@@ -23,6 +23,7 @@ export const useFiatCurrency = (token?: Token, value?: string) => {
     ...fiatCurrency,
     useGetTokenPrice,
     fiatValue,
-    fiatAsString: getFiatValue(fiatValue, selectedFiatCurrency),
+    getFiatAsString: (supportExponential?: boolean) =>
+      getFiatValue(fiatValue, selectedFiatCurrency, supportExponential),
   };
 };

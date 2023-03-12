@@ -63,12 +63,13 @@ const prettifyNumberAbbreviateFormat: numbro.Format = {
 
 export const getFiatValue = (
   fiatValue: BigNumber | string | number,
-  currentCurrency: FiatSymbol
+  currentCurrency: FiatSymbol,
+  supportExponential = false
 ) => {
-  return `${prettifyNumber(
-    fiatValue,
-    ['USD', 'CAD', 'AUD'].includes(currentCurrency)
-  )} ${currentCurrency}`;
+  return `${prettifyNumber(fiatValue, {
+    usd: ['USD', 'CAD', 'AUD'].includes(currentCurrency),
+    supportExponential,
+  })} ${currentCurrency}`;
 };
 
 export function prettifyNumber(num: number | string | BigNumber): string;
@@ -80,16 +81,26 @@ export function prettifyNumber(
 
 export function prettifyNumber(
   num: number | string | BigNumber,
-  options?: { usd?: boolean; abbreviate?: boolean; highPrecision?: boolean }
+  options?: {
+    usd?: boolean;
+    abbreviate?: boolean;
+    highPrecision?: boolean;
+    supportExponential?: boolean;
+  }
 ): string;
 
 export function prettifyNumber(
   num: number | string | BigNumber,
   optionsOrUsd?:
-    | { usd?: boolean; abbreviate?: boolean; highPrecision?: boolean }
+    | {
+        usd?: boolean;
+        abbreviate?: boolean;
+        highPrecision?: boolean;
+        supportExponential?: boolean;
+      }
     | boolean
 ): string {
-  let usd, abbreviate, highPrecision;
+  let usd, abbreviate, highPrecision, supportExponential;
   if (optionsOrUsd === undefined) {
     usd = false;
     abbreviate = false;
@@ -100,12 +111,14 @@ export function prettifyNumber(
     usd = optionsOrUsd.usd;
     abbreviate = optionsOrUsd.abbreviate;
     highPrecision = optionsOrUsd.highPrecision;
+    supportExponential = optionsOrUsd.supportExponential;
   }
 
   const bigNum = new BigNumber(num);
   if (usd) {
     if (bigNum.lte(0)) return '$0.00';
     if (bigNum.lt(0.01)) return '< $0.01';
+    if (supportExponential) return numbro(bigNum).format('$0,0');
     if (!highPrecision) {
       if (bigNum.gt(100)) return numeral(bigNum).format('$0,0', Math.floor);
     }
@@ -117,6 +130,7 @@ export function prettifyNumber(
   if (bigNum.lte(0)) return '0';
   if (abbreviate && bigNum.gt(999999))
     return numbro(bigNum).format(prettifyNumberAbbreviateFormat);
+  if (supportExponential) return numbro(bigNum).format('0,0');
   if (!highPrecision) {
     if (bigNum.gte(1000)) return numeral(bigNum).format('0,0', Math.floor);
     if (bigNum.gte(2)) return numeral(bigNum).format('0,0.[00]', Math.floor);

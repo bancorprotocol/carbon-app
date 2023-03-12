@@ -13,7 +13,7 @@ export const InputLimit: FC<{
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPrice(sanitizeNumberInput(e.target.value));
 
-  const { fiatAsString } = useFiatCurrency(token, price);
+  const { getFiatAsString } = useFiatCurrency(token, price);
 
   return (
     <div>
@@ -35,7 +35,9 @@ export const InputLimit: FC<{
             'mb-5 w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
           }
         />
-        <div className="font-mono text-12 text-white/60">{fiatAsString}</div>
+        <div className="font-mono text-12 text-white/60">
+          {getFiatAsString()}
+        </div>
       </div>
       <div
         className={`mt-10 h-16 text-center text-12 text-red ${
