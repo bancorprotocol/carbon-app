@@ -46,14 +46,19 @@ export const TokenInputField: FC<Props> = ({
 
   const handleOnFocus = () => {
     !disabled && setIsFocused(true);
+    if (value === '...') {
+      setValue('');
+    }
   };
 
   const handleOnBlur = () => {
     setIsFocused(false);
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNumberInput(e.target.value, token.decimals);
+  const handleChange = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNumberInput(value, token.decimals);
     setValue(sanitized);
     onKeystroke && onKeystroke();
   };
@@ -72,6 +77,7 @@ export const TokenInputField: FC<Props> = ({
       } ${className}`}
       onMouseDown={() => !disabled && setIsActive(true)}
       onMouseUp={() => !disabled && setIsActive(false)}
+      onFocus={handleOnFocus}
       onClick={() => {
         if (disabled) return;
         setIsFocused(true);
