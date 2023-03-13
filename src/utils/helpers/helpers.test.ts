@@ -1,4 +1,4 @@
-import { prettifyNumber } from './helpers';
+import { prettifyNumber } from '.';
 
 describe('prettifyNumber', () => {
   it('should return 0 for input lower then 0', () => {
@@ -53,5 +53,34 @@ describe('prettifyNumber', () => {
 
   test('should return "1,321,965,595" for large number and usd  true', () => {
     expect(prettifyNumber(1321965595, { usd: true })).toEqual('$1,321,965,595');
+  });
+
+  test('Check rounding is correct - default = math.floor', () => {
+    expect(prettifyNumber(18999.999999999851769955)).toEqual('18,999');
+    expect(prettifyNumber(19999.999999999986138278)).toEqual('19,999');
+  });
+
+  test('Check rounding is correct - math.round', () => {
+    expect(prettifyNumber(18999.999999999851769955, { round: true })).toEqual(
+      '19,000'
+    );
+    expect(prettifyNumber(19999.999999999986138278, { round: true })).toEqual(
+      '20,000'
+    );
+  });
+
+  test('Check rounding is correct - usd = true', () => {
+    expect(prettifyNumber(18999.999999999851769955, { usd: true })).toEqual(
+      '$18,999'
+    );
+    expect(
+      prettifyNumber(19999.999999999986138278, { round: true, usd: true })
+    ).toEqual('$20,000');
+  });
+
+  test('Remove redundant zero', () => {
+    expect(prettifyNumber('18.00000')).toEqual('18');
+    expect(prettifyNumber('18.120000')).toEqual('18.12');
+    expect(prettifyNumber('18.12345678910000')).toEqual('18.12');
   });
 });
