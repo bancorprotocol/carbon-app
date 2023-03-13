@@ -59,6 +59,9 @@ export const TradePage = () => {
   const { isLoading, isTradePairError, tradePairs } = useTradePairs();
 
   useEffect(() => {
+    if (baseToken && quoteToken) {
+      lsService.setItem('tradePair', [baseToken.address, quoteToken.address]);
+    }
     if (hasMounted.current && !isTradePage) {
       return;
     }
@@ -79,12 +82,6 @@ export const TradePage = () => {
     tradePairs,
     tradePairs.length,
   ]);
-
-  useEffect(() => {
-    baseToken &&
-      quoteToken &&
-      lsService.setItem('tradePair', [baseToken.address, quoteToken.address]);
-  }, [baseToken, quoteToken]);
 
   const isValidPair = !(!baseToken || !quoteToken);
 
