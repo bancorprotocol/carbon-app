@@ -9,6 +9,7 @@ import { useEffect, useRef } from 'react';
 import { Token } from 'libs/tokens';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
+import { lsService } from 'services/localeStorage';
 
 export type TradePageProps = { base: Token; quote: Token };
 
@@ -62,7 +63,8 @@ export const TradePage = () => {
       return;
     }
     if (!!tradePairs.length && !baseToken && !quoteToken) {
-      const foundDefault = checkDefaultPairs(tradePairs);
+      const foundDefault =
+        lsService.getItem('tradePair') || checkDefaultPairs(tradePairs);
       if (foundDefault) {
         goToPair(foundDefault[0], foundDefault[1], true);
       }
@@ -70,13 +72,19 @@ export const TradePage = () => {
     hasMounted.current = true;
   }, [
     baseToken,
+    quoteToken,
     goToPair,
     hasMounted,
     isTradePage,
-    quoteToken,
     tradePairs,
     tradePairs.length,
   ]);
+
+  useEffect(() => {
+    baseToken &&
+      quoteToken &&
+      lsService.setItem('tradePair', [baseToken.address, quoteToken.address]);
+  }, [baseToken, quoteToken]);
 
   const isValidPair = !(!baseToken || !quoteToken);
 
