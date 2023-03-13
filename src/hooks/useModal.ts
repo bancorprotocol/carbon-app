@@ -34,7 +34,8 @@ export const useModal = () => {
 
   useEffect(() => {
     keyPressed === 'Escape' && closeModal(activeModalId);
-  }, [activeModalId, closeModal, keyPressed]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyPressed]);
 
   const minimizeModal = (id: string) => {
     const index = modalsOpen.findIndex((modal) => modal.id === id);
