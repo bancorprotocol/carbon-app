@@ -1,8 +1,9 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { useModal } from 'hooks/useModal';
 import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
+import { useKeyPress } from 'hooks/useKeyPress';
 
 type Props = {
   children: ReactNode;
@@ -35,6 +36,11 @@ export const Modal: FC<Props> = ({
   const { closeModal } = useModal();
 
   const sizeClass = getSize(size);
+  const { keyPressed } = useKeyPress();
+
+  useEffect(() => {
+    keyPressed === 'Escape' && closeModal(id);
+  }, [closeModal, id, keyPressed]);
 
   return (
     <Overlay
