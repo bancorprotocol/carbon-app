@@ -6,14 +6,16 @@ import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
 import { carbonSDK } from 'libs/sdk/carbonSdk';
 import { useContract } from 'hooks/useContract';
-import { TWO_SECONDS_IN_MS } from 'utils/time';
+import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { EncodedStrategy, StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 
 export enum StrategyStatus {
   Active,
   NoBudget,
-  OffCurve,
+  Paused,
   Inactive,
 }
 
@@ -30,6 +32,7 @@ export interface Strategy {
   order0: Order;
   order1: Order;
   status: StrategyStatus;
+  encoded: EncodedStrategy;
 }
 
 export const useGetUserStrategies = () => {
@@ -78,7 +81,7 @@ export const useGetUserStrategies = () => {
           noBudget && offCurve
             ? StrategyStatus.Inactive
             : offCurve
-            ? StrategyStatus.OffCurve
+            ? StrategyStatus.Paused
             : noBudget
             ? StrategyStatus.NoBudget
             : StrategyStatus.Active;
@@ -108,6 +111,7 @@ export const useGetUserStrategies = () => {
           order0,
           order1,
           status,
+          encoded: s.encoded,
         };
 
         return strategy;
@@ -117,7 +121,7 @@ export const useGetUserStrategies = () => {
     },
     {
       enabled: tokens.length > 0 && isInitialized,
-      refetchInterval: TWO_SECONDS_IN_MS,
+      staleTime: ONE_DAY_IN_MS,
     }
   );
 };
@@ -136,8 +140,23 @@ export interface CreateStrategyParams {
   token1: TokenAddressDecimals;
   order0: CreateStrategyOrder;
   order1: CreateStrategyOrder;
+  encoded?: EncodedStrategy;
 }
-export const useCreateStrategy = () => {
+
+export interface UpdateStrategyParams {
+  token0: TokenAddressDecimals;
+  token1: TokenAddressDecimals;
+  encoded: EncodedStrategy;
+  fieldsToUpdate: StrategyUpdate;
+  buyMarginalPrice?: MarginalPriceOptions;
+  sellMarginalPrice?: MarginalPriceOptions;
+}
+
+export interface DeleteStrategyParams {
+  encoded: EncodedStrategy;
+}
+
+export const useCreateStrategyQuery = () => {
   const { signer } = useWeb3();
 
   return useMutation(
@@ -155,8 +174,8 @@ export const useCreateStrategy = () => {
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
 
       const unsignedTx = await carbonSDK.createBuySellStrategy(
-        token0,
-        token1,
+        token0.address,
+        token1.address,
         order0Low,
         order0Max,
         order0Budget,
@@ -169,4 +188,48 @@ export const useCreateStrategy = () => {
       return signer!.sendTransaction(unsignedTx);
     }
   );
+};
+
+export const useUpdateStrategyQuery = () => {
+  const { signer } = useWeb3();
+
+  return useMutation(
+    async ({
+      token0,
+      token1,
+      encoded,
+      fieldsToUpdate,
+      buyMarginalPrice,
+      sellMarginalPrice,
+    }: UpdateStrategyParams) => {
+      const strategyId = encoded.id;
+
+      const unsignedTx = await carbonSDK.updateStrategy(
+        strategyId,
+        encoded,
+        token0.address,
+        token1.address,
+        {
+          ...fieldsToUpdate,
+        },
+        buyMarginalPrice ? buyMarginalPrice : MarginalPriceOptions.reset,
+        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset,
+        { gasLimit: 9999999 }
+      );
+
+      return signer!.sendTransaction(unsignedTx);
+    }
+  );
+};
+
+export const useDeleteStrategyQuery = () => {
+  const { signer } = useWeb3();
+
+  return useMutation(async ({ encoded }: DeleteStrategyParams) => {
+    const strategyId = encoded.id;
+
+    const unsignedTx = await carbonSDK.deleteStrategy(strategyId);
+
+    return signer!.sendTransaction(unsignedTx);
+  });
 };

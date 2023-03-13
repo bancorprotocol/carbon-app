@@ -19,16 +19,33 @@ import {
 } from 'libs/modals/modals/ModalTradeTokenList';
 import { ModalTradeSettings } from 'libs/modals/modals/ModalTradeSettings';
 
+import { ModalEditStrategy, ModalEditStrategyData } from './ModalEditStrategy';
+import {
+  ModalEditStrategyBudget,
+  ModalEditStrategyBudgetData,
+} from './ModalEditStrategyBudget';
+import {
+  ModalTradeRouting,
+  ModalTradeRoutingData,
+} from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
+import {
+  ModalConfirmStrategy,
+  ModalConfirmStrategyData,
+} from './ModalConfirmStrategy/ModalConfirmStrategy';
+
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
   wallet: undefined;
   tokenLists: ModalTokenListData;
   tradeTokenList: ModalTradeTokenListData;
-
   txConfirm: ModalCreateConfirmData;
   importToken: ModalImportTokenData;
   notifications: undefined;
   tradeSettings: undefined;
+  tradeRouting: ModalTradeRoutingData;
+  confirmStrategy: ModalConfirmStrategyData;
+  editStrategy: ModalEditStrategyData;
+  editStrategyBudget: ModalEditStrategyBudgetData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -42,4 +59,8 @@ export const MODAL_COMPONENTS: TModals = {
   notifications: (props) => ModalNotifications(props),
   tradeTokenList: (props) => ModalTradeTokenList(props),
   tradeSettings: (props) => ModalTradeSettings(props),
+  tradeRouting: (props) => ModalTradeRouting(props),
+  confirmStrategy: (props) => ModalConfirmStrategy(props),
+  editStrategy: (props) => ModalEditStrategy(props),
+  editStrategyBudget: (props) => ModalEditStrategyBudget(props),
 };

@@ -1,5 +1,5 @@
 {
-  "address": "0x2fB666c75ec98462852c66D4981e1B3a0E668593",
+  "address": "0x31051bCd26B8EaEFE4EfA54E0668B133ee7C44c0",
   "abi": [
     {
       "inputs": [
@@ -91,6 +91,45 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "internalType": "string",
+          "name": "newBaseExtension",
+          "type": "string"
+        }
+      ],
+      "name": "BaseExtensionUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "newBaseURI",
+          "type": "string"
+        }
+      ],
+      "name": "BaseURIUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "contract CarbonController",
+          "name": "carbonController",
+          "type": "address"
+        }
+      ],
+      "name": "CarbonControllerUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "address",
           "name": "previousOwner",
@@ -129,6 +168,19 @@
         }
       ],
       "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "newUseGlobalURI",
+          "type": "bool"
+        }
+      ],
+      "name": "UseGlobalURIUpdated",
       "type": "event"
     },
     {

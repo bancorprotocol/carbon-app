@@ -13,6 +13,8 @@ export enum StrategyFilter {
 export enum StrategySort {
   Recent,
   Old,
+  PairAscending,
+  PairDescending,
 }
 
 const sortItems = [
@@ -23,6 +25,14 @@ const sortItems = [
   {
     title: 'Oldest Created',
     item: StrategySort.Old,
+  },
+  {
+    title: 'Pair (A->Z)',
+    item: StrategySort.PairAscending,
+  },
+  {
+    title: 'Pair (Z->A)',
+    item: StrategySort.PairDescending,
   },
 ];
 
@@ -61,7 +71,6 @@ export const StrategyFilterSort: FC<{
     >
       <div className="grid w-[300px] gap-20 p-10">
         <div className="text-secondary text-20">Sort By</div>
-
         <>
           {sortItems.map((sortItem) => (
             <FilterSortItem

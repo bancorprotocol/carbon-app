@@ -1,22 +1,37 @@
-import { OrderRow, useGetOrderBook } from 'libs/queries';
+import BigNumber from 'bignumber.js';
 import { Options } from 'libs/charts';
+import { OrderRow, useGetOrderBook } from 'libs/queries';
+import { orderBookConfig } from 'libs/queries/sdk/orderBook';
 
 export const useDepthChartWidget = (base?: string, quote?: string) => {
   const { data } = useGetOrderBook(base, quote);
 
-  const getOrders = (orders?: OrderRow[]) => {
-    return [...(orders || [])].splice(0, 50).map(({ rate, total }) => {
-      return [+rate, +total];
+  const getOrders = (orders?: OrderRow[], buy?: boolean) => {
+    const res = [...(orders || [])].map(({ rate, amount }) => {
+      return [+rate, +amount];
+    });
+
+    if (res.length > 0) {
+      return res;
+    }
+
+    let rate;
+
+    return new Array(orderBookConfig.buckets.depthChart).fill(0).map((_, i) => {
+      rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
+        data?.step?.times(i) || 0
+      );
+
+      return [+rate, 0];
     });
   };
 
   const getOptions = (
     bidsData?: number[][],
-    asksData?: number[][]
+    asksData?: number[][],
+    baseTokenSymbol?: string
   ): Options => {
-    const left = bidsData?.[bidsData.length - 1]?.[0] || 0;
-    const right = asksData?.[asksData.length - 1]?.[0] || 0;
-    const xMiddle = (right + left) / 2;
+    const xMiddle = data?.middleRate ? +data?.middleRate : 0;
 
     return {
       chart: {
@@ -114,7 +129,10 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
         },
       },
       tooltip: {
-        pointFormat: '{series.name} <b>{point.y}</b><br/>',
+        headerFormat: ' ',
+        pointFormat: `${
+          baseTokenSymbol ? baseTokenSymbol : ''
+        } amount: {point.y}<br/>Price: {point.x}`,
         valueDecimals: 2,
         borderRadius: 12,
         backgroundColor: '#212123',
@@ -147,7 +165,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
   };
 
   return {
-    buyOrders: getOrders(data?.buy),
+    buyOrders: getOrders(data?.buy, true),
     sellOrders: getOrders(data?.sell),
     getOptions,
   };

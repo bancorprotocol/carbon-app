@@ -1,4 +1,5 @@
 import conf from './config.json';
+import { lsService } from 'services/localeStorage';
 
 export interface Config {
   tokens: {
@@ -10,6 +11,15 @@ export interface Config {
     USDC: string;
     DAI: string;
     WBTC: string;
+    SHIB: string;
+    ENJ: string;
+    UNI: string;
+    LINK: string;
+    LDO: string;
+    APE: string;
+    GRT: string;
+    AAVE: string;
+    CRV: string;
   };
   carbon: {
     carbonController: string;
@@ -22,4 +32,11 @@ export interface Config {
 
 export const config: Config = {
   ...conf,
+  carbon: {
+    ...conf.carbon,
+    carbonController:
+      lsService.getItem('carbonControllerAddress') ||
+      conf.carbon.carbonController,
+    voucher: lsService.getItem('voucherContractAddress') || conf.carbon.voucher,
+  },
 };

@@ -3,13 +3,23 @@ import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
+import { config } from 'services/web3/config';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC } = useWeb3();
-  const [input, setInput] = useState(lsService.getItem('tenderlyRpc') || '');
+  const [urlInput, setUrlInput] = useState(
+    lsService.getItem('tenderlyRpc') || ''
+  );
+  const [carbonControllerInput, setCarbonControllerInput] = useState(
+    config.carbon.carbonController
+  );
+
+  const [voucherAddressInput, setVoucherAddressInput] = useState(
+    config.carbon.voucher
+  );
 
   const handleOnClick = () => {
-    handleTenderlyRPC(input);
+    handleTenderlyRPC(urlInput, carbonControllerInput, voucherAddressInput);
   };
 
   return (
@@ -19,13 +29,34 @@ export const DebugTenderlyRPC = () => {
       }
     >
       <h2>Set Tenderly RPC</h2>
-      <Label>
+      <Label label={'RPC URL'}>
         <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          value={urlInput}
+          onChange={(e) => setUrlInput(e.target.value)}
           fullWidth
         />
       </Label>
+
+      {urlInput && (
+        <>
+          <Label label={'Carbon Controller Contract'}>
+            <Input
+              value={carbonControllerInput}
+              onChange={(e) => setCarbonControllerInput(e.target.value)}
+              fullWidth
+            />
+          </Label>
+
+          <Label label={'Carbon Voucher Contract'}>
+            <Input
+              value={voucherAddressInput}
+              onChange={(e) => setVoucherAddressInput(e.target.value)}
+              fullWidth
+            />
+          </Label>
+        </>
+      )}
+
       <Button onClick={handleOnClick}>Save</Button>
     </div>
   );

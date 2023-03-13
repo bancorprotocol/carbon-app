@@ -6,9 +6,13 @@ export interface NotificationSchema {
   approve: { symbol: string; limited: boolean; txHash: string };
   trade: { txHash: string; amount: string; from: string; to: string };
   createStrategy: { txHash: string };
+  pauseStrategy: { txHash: string };
+  renewStrategy: { txHash: string };
   editStrategyName: { txHash: string };
   withdrawStrategy: { txHash: string };
+  depositStrategy: { txHash: string };
   deleteStrategy: { txHash: string };
+  changeRatesStrategy: { txHash: string };
 }
 
 export const NOTIFICATIONS_MAP: NotificationsMap = {
@@ -47,6 +51,29 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     txHash: data.txHash,
     showAlert: true,
   }),
+  pauseStrategy: (data) => ({
+    status: 'pending',
+    title: 'Pending Confirmation',
+    description: 'Your request to pause the strategy is being processed',
+    successTitle: 'Success',
+    successDesc: 'Your strategy was successfully paused',
+    failedTitle: 'Transaction Failed',
+    failedDesc: 'Your request to pause your strategy has failed',
+    txHash: data.txHash,
+    showAlert: true,
+  }),
+  renewStrategy: (data) => ({
+    status: 'pending',
+    title: 'Pending Confirmation',
+    description: 'Your request to renew the strategy is being processed',
+    successTitle: 'Success',
+    successDesc:
+      'Your request to renew the strategy was successfully completed',
+    failedTitle: 'Transaction Failed',
+    failedDesc: 'Your request to renew the strategy has failed',
+    txHash: data.txHash,
+    showAlert: true,
+  }),
   editStrategyName: (data) => ({
     status: 'pending',
     title: 'Pending Confirmation',
@@ -61,11 +88,22 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
   withdrawStrategy: (data) => ({
     status: 'pending',
     title: 'Pending Confirmation',
-    description: 'Strategy budget is being withdrawn',
+    description: 'Your withdraw request is being processed',
     successTitle: 'Success',
-    successDesc: 'Strategy budget was successfully withdrawn',
+    successDesc: 'Your withdraw request was successfully completed',
     failedTitle: 'Transaction Failed',
-    failedDesc: 'Strategy budget withdrawal have failed',
+    failedDesc: 'Your withdraw request has failed',
+    txHash: data.txHash,
+    showAlert: true,
+  }),
+  depositStrategy: (data) => ({
+    status: 'pending',
+    title: 'Pending Confirmation',
+    description: 'Your deposit request is being processed',
+    successTitle: 'Success',
+    successDesc: 'Your deposit request was successfully completed',
+    failedTitle: 'Transaction Failed',
+    failedDesc: 'Your deposit request have failed',
     txHash: data.txHash,
     showAlert: true,
   }),
@@ -78,6 +116,17 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
       'Strategy was successfully deleted and all associated funds have been withdrawn to your wallet',
     failedTitle: 'Transaction Failed',
     failedDesc: 'Strategy deletion have failed',
+    txHash: data.txHash,
+    showAlert: true,
+  }),
+  changeRatesStrategy: (data) => ({
+    status: 'pending',
+    title: 'Pending Confirmation',
+    description: 'Your edit request is being processed',
+    successTitle: 'Success',
+    successDesc: 'Your strategy was successfully updated',
+    failedTitle: 'Transaction Failed',
+    failedDesc: 'Your edit request has failed',
     txHash: data.txHash,
     showAlert: true,
   }),

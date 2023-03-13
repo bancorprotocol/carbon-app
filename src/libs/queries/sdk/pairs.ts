@@ -4,7 +4,7 @@ import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
 import { carbonSDK } from 'libs/sdk';
-import { TWO_SECONDS_IN_MS } from 'utils/time';
+import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 
 export const useGetTradePairsData = () => {
@@ -45,6 +45,6 @@ export const useGetTradePairsData = () => {
     },
     enabled: !!tokens.length && isInitialized,
     retry: 1,
-    refetchInterval: TWO_SECONDS_IN_MS,
+    staleTime: ONE_DAY_IN_MS,
   });
 };

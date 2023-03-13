@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
+import { ONE_DAY_IN_MS } from 'utils/time';
 
 const ONE = new BigNumber(1);
 
@@ -12,9 +13,16 @@ export type OrderBook = {
   buy: OrderRow[];
   sell: OrderRow[];
   middleRate: string;
+  step?: BigNumber;
 };
 
-export const orderBookBuckets = 100;
+export const orderBookConfig = {
+  steps: 100,
+  buckets: {
+    orderBook: 14,
+    depthChart: 50,
+  },
+};
 
 const buildOrderBook = async (
   buy: boolean,
@@ -23,13 +31,14 @@ const buildOrderBook = async (
   startRate: BigNumber,
   step: BigNumber,
   min: BigNumber,
-  max: BigNumber
+  max: BigNumber,
+  buckets: number
 ) => {
   const orders: OrderRow[] = [];
   let i = 0;
   let minEqMax = false;
 
-  while (orders.length < orderBookBuckets && !minEqMax) {
+  while (orders.length < buckets && !minEqMax) {
     minEqMax = min.eq(max);
     let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
     rate = buy ? rate : ONE.div(rate).toString();
@@ -51,23 +60,45 @@ const buildOrderBook = async (
     }
     const total = amountBn.times(rate).toString();
     orders.push({ rate, total, amount: amountBn.toString() });
+    if (minEqMax) {
+      Array.from({ length: buckets - 1 }).map((_, i) =>
+        orders.push({
+          rate: new BigNumber(rate)
+            [buy ? 'minus' : 'plus'](step.times(i))
+            .toString(),
+          total,
+          amount: amountBn.toString(),
+        })
+      );
+    }
   }
   return orders;
 };
 
 const getOrderBook = async (
   base: string,
-  quote: string
+  quote: string,
+  buckets: number
 ): Promise<OrderBook> => {
-  const minBuy = new BigNumber(await carbonSDK.getMinRateByPair(base, quote));
-  const maxBuy = new BigNumber(await carbonSDK.getMaxRateByPair(base, quote));
-  const minSell = new BigNumber(await carbonSDK.getMinRateByPair(quote, base));
-  const maxSell = new BigNumber(await carbonSDK.getMaxRateByPair(quote, base));
+  const buyHasLiq = carbonSDK.hasLiquidityByPair(base, quote);
+  const sellHasLiq = carbonSDK.hasLiquidityByPair(quote, base);
+  const minBuy = new BigNumber(
+    buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0
+  );
+  const maxBuy = new BigNumber(
+    buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0
+  );
+  const minSell = new BigNumber(
+    sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0
+  );
+  const maxSell = new BigNumber(
+    sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
+  );
 
-  const stepBuy = maxBuy.minus(minBuy).div(orderBookBuckets);
+  const stepBuy = maxBuy.minus(minBuy).div(orderBookConfig.steps);
   const stepSell = ONE.div(minSell)
     .minus(ONE.div(maxSell))
-    .div(orderBookBuckets);
+    .div(orderBookConfig.steps);
 
   const getStep = () => {
     if (stepBuy.isFinite() && stepBuy.gt(0)) {
@@ -76,22 +107,27 @@ const getOrderBook = async (
       } else {
         return stepBuy;
       }
-    } else if (stepSell.isFinite()) {
+    } else if (stepSell.isFinite() && stepSell.gt(0)) {
       return stepSell;
     } else {
-      return new BigNumber(0);
+      return ONE.div(minSell).minus(minBuy).div(orderBookConfig.steps);
     }
   };
   const step = getStep();
 
   const getMiddleRate = () => {
-    if (maxBuy.isFinite() && maxSell.isFinite()) {
+    if (
+      maxBuy.isFinite() &&
+      maxBuy.gt(0) &&
+      maxSell.isFinite() &&
+      maxSell.gt(0)
+    ) {
       return maxBuy.plus(ONE.div(maxSell)).div(2);
     }
-    if (maxBuy.isFinite()) {
+    if (maxBuy.isFinite() && maxBuy.gt(0)) {
       return maxBuy;
     }
-    if (maxSell.isFinite()) {
+    if (maxSell.isFinite() && maxSell.gt(0)) {
       return ONE.div(maxSell);
     }
     return new BigNumber(0);
@@ -99,7 +135,7 @@ const getOrderBook = async (
   const middleRate = getMiddleRate();
 
   return {
-    buy: carbonSDK.hasLiquidityByPair(base, quote)
+    buy: buyHasLiq
       ? await buildOrderBook(
           true,
           base,
@@ -107,10 +143,11 @@ const getOrderBook = async (
           middleRate,
           step,
           minBuy,
-          maxBuy
+          maxBuy,
+          buckets
         )
       : [],
-    sell: carbonSDK.hasLiquidityByPair(quote, base)
+    sell: sellHasLiq
       ? await buildOrderBook(
           false,
           quote,
@@ -118,20 +155,27 @@ const getOrderBook = async (
           middleRate,
           step,
           minSell,
-          maxSell
+          maxSell,
+          buckets
         )
       : [],
     middleRate: middleRate.toString(),
+    step,
   };
 };
 
-export const useGetOrderBook = (base?: string, quote?: string) => {
+export const useGetOrderBook = (
+  base?: string,
+  quote?: string,
+  buckets = orderBookConfig.buckets.depthChart
+) => {
   const { isInitialized } = useCarbonSDK();
 
   return useQuery({
-    queryKey: QueryKey.tradeOrderBook(base!, quote!),
-    queryFn: () => getOrderBook(base!, quote!),
+    queryKey: QueryKey.tradeOrderBook(base!, quote!, buckets),
+    queryFn: () => getOrderBook(base!, quote!, buckets),
     enabled: isInitialized && !!base && !!quote,
     retry: 1,
+    staleTime: ONE_DAY_IN_MS,
   });
 };

@@ -1,11 +1,14 @@
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
+import { IS_TENDERLY_FORK } from 'libs/web3';
+import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -29,26 +32,39 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     liquidityQuery,
     errorMsgSource,
     errorMsgTarget,
+    openTradeRouteModal,
+    calcSlippage,
   } = useBuySell(props);
   const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
-  if (liquidityQuery?.isLoading) return <div>Loading</div>;
   if (liquidityQuery?.isError) return <div>Error</div>;
-  if (!source || !target || !liquidityQuery?.data) return null;
+  if (!source || !target) return null;
+
+  const slippage = calcSlippage();
 
   const getRate = () => {
     if (!rate) return '...';
 
     if (buy) {
       return `1 ${target.symbol} = ${
-        rate ? prettifyNumber(new BigNumber(1).div(rate)) : '--'
+        rate && rate !== '0' ? prettifyNumber(new BigNumber(1).div(rate)) : '--'
       } ${source.symbol}`;
     }
     return `1 ${source.symbol} =
         ${rate ? prettifyNumber(rate) : '--'}
         ${target.symbol}`;
   };
+
+  const getLiquidity = () => {
+    const value = liquidityQuery.isLoading
+      ? 'loading'
+      : prettifyNumber(liquidityQuery.data);
+    return `Liquidity: ${value} ${target.symbol}`;
+  };
+
+  const showRouting =
+    rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
 
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
@@ -63,7 +79,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           <div className={`font-weight-500 text-red`}>{errorMsgSource}</div>
         )}
       </div>
-      {hasEnoughLiquidity ? (
+      {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
           <TokenInputField
             className={'mt-5 mb-20 rounded-12 bg-black p-16'}
@@ -99,22 +115,39 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}
+            slippage={slippage}
           />
           <div
             className={
-              'mt-5 rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
+              'mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
             }
           >
-            {getRate()}
+            <span>{getRate()}</span>
+            {showRouting && (
+              <button
+                onClick={openTradeRouteModal}
+                className={
+                  'flex hidden space-x-10 text-left hover:text-white md:flex'
+                }
+              >
+                <IconRouting className={'w-12'} />
+                <Tooltip element="You can view and manage the orders that are included in the trade.">
+                  <span>Routing</span>
+                </Tooltip>
+              </button>
+            )}
           </div>
-          {liquidityQuery.data && (
+          {IS_TENDERLY_FORK && (
             <div className={'text-secondary mt-5 text-right'}>
-              Liquidity: {prettifyNumber(liquidityQuery.data)} {target.symbol}
+              {getLiquidity()}
             </div>
           )}
         </>
       ) : (
-        <NotEnoughLiquidity source={source} target={target} />
+        <NotEnoughLiquidity
+          source={buy ? target : source}
+          target={buy ? source : target}
+        />
       )}
       <Button
         disabled={!hasEnoughLiquidity}
@@ -123,7 +156,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         fullWidth
         className={'mt-20'}
       >
-        {buy ? `Buy ${source.symbol}` : `Sell ${source.symbol}`}
+        {buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`}
       </Button>
     </div>
   );
