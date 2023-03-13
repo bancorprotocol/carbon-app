@@ -1,5 +1,6 @@
 import { NoOrders } from 'components/common/noOrder';
 import { OrderRow } from 'libs/queries';
+import { Token } from 'libs/tokens';
 import { orderBy } from 'lodash';
 import { FC } from 'react';
 import { OrderBookWidgetRow } from './OrderBookWidgetRow';
@@ -7,9 +8,16 @@ import { OrderBookWidgetRow } from './OrderBookWidgetRow';
 type OrderBookSideProps = {
   orders: OrderRow[];
   buy?: boolean;
+  base: Token;
+  quote: Token;
 };
 
-export const OrderBookSide: FC<OrderBookSideProps> = ({ orders, buy }) => {
+export const OrderBookSide: FC<OrderBookSideProps> = ({
+  orders,
+  buy,
+  base,
+  quote,
+}) => {
   return (
     <div>
       {orders?.length > 0 ? (
@@ -18,6 +26,8 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({ orders, buy }) => {
             <OrderBookWidgetRow
               key={`orderbook${buy ? 'buy' : 'sell'}-${props.rate}`}
               buy={buy}
+              base={base}
+              quote={quote}
               {...props}
             />
           ))}
