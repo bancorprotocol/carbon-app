@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { Action, TradeActionStruct } from 'libs/sdk';
 import { MatchAction } from '@bancor/carbon-sdk/src/types';
-import { obj } from 'index';
+import { carbonSDK } from 'index';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionStruct[];
@@ -49,7 +49,7 @@ export const useGetTradeData = ({
         };
       }
 
-      return await obj.getTradeData(
+      return await carbonSDK.getTradeData(
         sourceToken,
         targetToken,
         input,

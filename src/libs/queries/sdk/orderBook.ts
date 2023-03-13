@@ -3,7 +3,7 @@ import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { obj } from 'index';
+import { carbonSDK } from 'index';
 
 const ONE = new BigNumber(1);
 
@@ -44,7 +44,7 @@ const buildOrderBook = async (
     rate = buy ? rate : ONE.div(rate).toString();
     rate = minEqMax ? max.toString() : rate;
     i++;
-    const amount = await obj.getRateLiquidityDepthByPair(
+    const amount = await carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
       quoteToken,
       rate
@@ -80,19 +80,19 @@ const getOrderBook = async (
   quote: string,
   buckets: number
 ): Promise<OrderBook> => {
-  const buyHasLiq = await obj.hasLiquidityByPair(base, quote);
-  const sellHasLiq = await obj.hasLiquidityByPair(quote, base);
+  const buyHasLiq = await carbonSDK.hasLiquidityByPair(base, quote);
+  const sellHasLiq = await carbonSDK.hasLiquidityByPair(quote, base);
   const minBuy = new BigNumber(
-    buyHasLiq ? await obj.getMinRateByPair(base, quote) : 0
+    buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0
   );
   const maxBuy = new BigNumber(
-    buyHasLiq ? await obj.getMaxRateByPair(base, quote) : 0
+    buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0
   );
   const minSell = new BigNumber(
-    sellHasLiq ? await obj.getMinRateByPair(quote, base) : 0
+    sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0
   );
   const maxSell = new BigNumber(
-    sellHasLiq ? await obj.getMaxRateByPair(quote, base) : 0
+    sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
   );
 
   const stepBuy = maxBuy.minus(minBuy).div(orderBookConfig.steps);

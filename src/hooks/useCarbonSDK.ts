@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { config } from 'services/web3/config';
-import { obj } from 'index';
+import { carbonSDK } from 'index';
 import { wait } from 'utils/helpers';
 
 export const useCarbonSDK = () => {
@@ -31,14 +31,14 @@ export const useCarbonSDK = () => {
       try {
         setIsLoading(true);
         console.log('Initializing CarbonSDK...');
-        await obj.init({
+        await carbonSDK.init({
           rpcUrl: RPC_URLS[1],
           contractAddresses: {
             carbonControllerAddress: config.carbon.carbonController,
             voucherAddress: config.carbon.voucher,
           },
         });
-        await obj.startDataSync();
+        await carbonSDK.startDataSync();
         console.log('Web worker: SDK initialized');
         // TODO: make onChange callback work
         // await obj.onChange(onChangeCallback);

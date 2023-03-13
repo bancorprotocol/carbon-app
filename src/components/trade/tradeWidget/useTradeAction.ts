@@ -9,7 +9,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
-import { obj } from 'index';
+import { carbonSDK } from 'index';
 
 type TradeProps = {
   source: Token;
@@ -75,7 +75,7 @@ export const useTradeAction = ({
 
       let unsignedTx: PopulatedTransaction;
       if (isTradeBySource) {
-        unsignedTx = await obj.composeTradeBySourceTransaction(
+        unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
           source.address,
           target.address,
           tradeActions,
@@ -84,7 +84,7 @@ export const useTradeAction = ({
           { gasLimit: 999999999 }
         );
       } else {
-        unsignedTx = await obj.composeTradeByTargetTransaction(
+        unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
           source.address,
           target.address,
           tradeActions,
