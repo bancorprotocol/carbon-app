@@ -2,7 +2,7 @@ import { DebugPage } from 'pages/debug';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
-import { isProduction } from 'utils/helpers/helpers';
+import { isProduction } from 'utils/helpers';
 import { TermsPage } from 'pages/terms';
 
 export const PathNames = {

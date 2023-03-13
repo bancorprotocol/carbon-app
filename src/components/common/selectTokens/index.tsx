@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Imager } from 'components/common/imager/Imager';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { shortenString } from 'utils/helpers/helpers';
+import { shortenString } from 'utils/helpers';
 
 interface Props {
   symbol0?: string;

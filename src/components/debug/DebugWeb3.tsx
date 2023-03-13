@@ -1,5 +1,5 @@
 import { useWeb3 } from 'libs/web3';
-import { shortenString } from 'utils/helpers/helpers';
+import { shortenString } from 'utils/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 
 export const DebugWeb3 = () => {

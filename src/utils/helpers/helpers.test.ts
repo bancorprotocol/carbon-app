@@ -1,4 +1,4 @@
-import { prettifyNumber } from '../helpers/helpers';
+import { prettifyNumber } from '.';
 
 describe('prettifyNumber', () => {
   it('should return 0 for input lower then 0', () => {

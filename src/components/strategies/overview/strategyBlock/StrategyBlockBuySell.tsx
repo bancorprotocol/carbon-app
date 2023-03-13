@@ -5,7 +5,7 @@ import {
   getFiatValue,
   prettifyNumber,
   sanitizeNumberInput,
-} from 'utils/helpers/helpers';
+} from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from './TokenPrice';

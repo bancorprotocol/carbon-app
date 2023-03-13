@@ -7,7 +7,7 @@ import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { config } from 'services/web3/config';
 import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';
-import { buildPairKey } from 'utils/helpers/helpers';
+import { buildPairKey } from 'utils/helpers';
 
 export const useTradePairs = () => {
   const { user } = useWeb3();

@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers/helpers';
+import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 

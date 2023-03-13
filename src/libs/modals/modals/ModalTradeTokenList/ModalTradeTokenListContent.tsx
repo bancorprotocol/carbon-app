@@ -3,7 +3,7 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeToke
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
-import { buildPairKey } from 'utils/helpers/helpers';
+import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
 

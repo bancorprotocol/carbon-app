@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { OrderRow } from 'libs/queries/sdk/orderBook';
-import { prettifyNumber } from 'utils/helpers/helpers';
+import { prettifyNumber } from 'utils/helpers';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 type Props = OrderRow & {

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useGetTradeLiquidity, useGetTradeData } from 'libs/queries';
-import { prettifyNumber } from 'utils/helpers/helpers';
+import { prettifyNumber } from 'utils/helpers';
 import { Action, TradeActionStruct } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
