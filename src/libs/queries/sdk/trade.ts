@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
-import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { Action, TradeActionStruct } from 'libs/sdk';
 import { MatchAction } from '@bancor/carbon-sdk/src/types';
+import { obj } from 'index';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionStruct[];
@@ -49,7 +49,7 @@ export const useGetTradeData = ({
         };
       }
 
-      return await carbonSDK.getTradeData(
+      return await obj.getTradeData(
         sourceToken,
         targetToken,
         input,

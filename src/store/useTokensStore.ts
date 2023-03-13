@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
-import { decimalFetcherSDKMap } from 'libs/sdk/carbonSdk';
 
 export interface TokensStore {
   tokens: Token[];
@@ -33,9 +32,10 @@ export const useTokensStore = (): TokensStore => {
 
   useEffect(() => {
     if (tokens.length) {
-      decimalFetcherSDKMap.map = new Map(
-        tokens.map((t) => [t.address.toLowerCase(), t.decimals])
-      );
+      // TODO fix decimal fetcher for web worker
+      // decimalFetcherSDKMap.map = new Map(
+      //   tokens.map((t) => [t.address.toLowerCase(), t.decimals])
+      // );
     }
   }, [tokens]);
 

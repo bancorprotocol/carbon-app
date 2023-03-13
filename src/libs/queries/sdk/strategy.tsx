@@ -4,13 +4,13 @@ import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
-import { carbonSDK } from 'libs/sdk/carbonSdk';
 import { useContract } from 'hooks/useContract';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { EncodedStrategy, StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { obj } from 'index';
 
 export enum StrategyStatus {
   Active,
@@ -47,7 +47,7 @@ export const useGetUserStrategies = () => {
       if (!user) return [];
 
       console.log('Fetching strategies...');
-      const strategies = await carbonSDK.getUserStrategies(user);
+      const strategies = await obj.getUserStrategies(user);
       console.log('Fetched strategies', strategies);
       const _getTknData = async (address: string) => {
         const data = await fetchTokenData(Token, address);
@@ -173,7 +173,7 @@ export const useCreateStrategyQuery = () => {
       const order0Budget = Number(order0.budget) === 0 ? '0' : order0.budget;
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
 
-      const unsignedTx = await carbonSDK.createBuySellStrategy(
+      const unsignedTx = await obj.createBuySellStrategy(
         token0.address,
         token1.address,
         order0Low,
@@ -204,7 +204,7 @@ export const useUpdateStrategyQuery = () => {
     }: UpdateStrategyParams) => {
       const strategyId = encoded.id;
 
-      const unsignedTx = await carbonSDK.updateStrategy(
+      const unsignedTx = await obj.updateStrategy(
         strategyId,
         encoded,
         token0.address,
@@ -228,7 +228,7 @@ export const useDeleteStrategyQuery = () => {
   return useMutation(async ({ encoded }: DeleteStrategyParams) => {
     const strategyId = encoded.id;
 
-    const unsignedTx = await carbonSDK.deleteStrategy(strategyId);
+    const unsignedTx = await obj.deleteStrategy(strategyId);
 
     return signer!.sendTransaction(unsignedTx);
   });

@@ -10,6 +10,11 @@ import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { StoreProvider } from 'store';
+import * as Comlink from 'comlink';
+import { CarbonSDKWebWorker } from 'workers/sdk';
+
+const worker = new Worker(new URL('./workers/sdk.ts', import.meta.url));
+export const obj = Comlink.wrap<CarbonSDKWebWorker>(worker);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

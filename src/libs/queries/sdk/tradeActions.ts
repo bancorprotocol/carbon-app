@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
-import { carbonSDK } from 'libs/sdk';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { MatchAction } from '@bancor/carbon-sdk/src/types';
 import { ONE_DAY_IN_MS } from 'utils/time';
+import { obj } from 'index';
 
 type Props = {
   sourceToken: string;
@@ -28,7 +28,7 @@ export const useGetTradeActionsQuery = ({
       actionsWei
     ),
     async () => {
-      return await carbonSDK.getTradeDataFromActions(
+      return await obj.getTradeDataFromActions(
         sourceToken,
         targetToken,
         !isTradeBySource,

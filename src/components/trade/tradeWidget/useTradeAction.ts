@@ -2,13 +2,14 @@ import { useWeb3 } from 'libs/web3';
 import { useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
 import { PopulatedTransaction } from 'ethers';
-import { carbonSDK, TradeActionStruct } from 'libs/sdk';
+import { TradeActionStruct } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
+import { obj } from 'index';
 
 type TradeProps = {
   source: Token;
@@ -74,7 +75,7 @@ export const useTradeAction = ({
 
       let unsignedTx: PopulatedTransaction;
       if (isTradeBySource) {
-        unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
+        unsignedTx = await obj.composeTradeBySourceTransaction(
           source.address,
           target.address,
           tradeActions,
@@ -83,7 +84,7 @@ export const useTradeAction = ({
           { gasLimit: 999999999 }
         );
       } else {
-        unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
+        unsignedTx = await obj.composeTradeByTargetTransaction(
           source.address,
           target.address,
           tradeActions,

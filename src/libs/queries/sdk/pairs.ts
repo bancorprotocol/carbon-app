@@ -3,9 +3,9 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
-import { carbonSDK } from 'libs/sdk';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { obj } from 'index';
 
 export const useGetTradePairsData = () => {
   const { isInitialized } = useCarbonSDK();
@@ -22,11 +22,11 @@ export const useGetTradePairsData = () => {
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
       console.log('useGetTradePairsData');
-      const pairs = carbonSDK.pairs;
-      console.log('pairs', pairs);
+      const pairs = await obj.getPairs();
+      console.log('pairs jan jan', pairs);
       const pairsWithLiquidity = pairs.filter((pair) => {
-        const buy = carbonSDK.hasLiquidityByPair(pair[0], pair[1]);
-        const sell = carbonSDK.hasLiquidityByPair(pair[1], pair[0]);
+        const buy = obj.hasLiquidityByPair(pair[0], pair[1]);
+        const sell = obj.hasLiquidityByPair(pair[1], pair[0]);
         return buy || sell;
       });
       const promises = pairsWithLiquidity.map(async (pair) => ({
