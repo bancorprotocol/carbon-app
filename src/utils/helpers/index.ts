@@ -74,6 +74,16 @@ const defaultNumbroOptions: numbro.Format = {
   mantissa: 0,
   optionalMantissa: true,
   thousandSeparated: true,
+  trimMantissa: true,
+};
+
+const getDefaultNumberoOptions = (round = false) => {
+  return {
+    ...defaultNumbroOptions,
+    ...(round && {
+      roundingFunction: (num: number) => Math.round(num),
+    }),
+  };
 };
 
 export function prettifyNumber(num: number | string | BigNumber): string;
@@ -84,7 +94,7 @@ export function prettifyNumber(
     usd?: boolean;
     abbreviate?: boolean;
     highPrecision?: boolean;
-    supportExponential?: boolean;
+    round?: boolean;
   }
 ): string;
 
@@ -94,12 +104,14 @@ export function prettifyNumber(
     usd?: boolean;
     abbreviate?: boolean;
     highPrecision?: boolean;
+    round?: boolean;
   }
 ): string {
   const {
     usd = false,
     abbreviate = false,
     highPrecision = false,
+    round = false,
   } = options || {};
 
   const bigNum = new BigNumber(num);
@@ -110,18 +122,23 @@ export function prettifyNumber(
   if (bigNum.lte(0)) return '0';
   if (bigNum.lt(0.000001)) return '< 0.000001';
   if (abbreviate && bigNum.gt(999999))
-    return numbro(bigNum).format(prettifyNumberAbbreviateFormat);
+    return numbro(bigNum).format({
+      ...prettifyNumberAbbreviateFormat,
+      ...(round && {
+        roundingFunction: (num) => Math.round(num),
+      }),
+    });
   if (!highPrecision) {
-    if (bigNum.gte(1000)) return numbro(bigNum).format(defaultNumbroOptions);
-
+    if (bigNum.gte(1000))
+      return numbro(bigNum).format(getDefaultNumberoOptions(round));
     if (bigNum.gte(2))
       return `${numbro(bigNum).format({
-        ...defaultNumbroOptions,
+        ...getDefaultNumberoOptions(round),
         mantissa: 2,
       })}`;
   }
   return `${numbro(bigNum).format({
-    ...defaultNumbroOptions,
+    ...getDefaultNumberoOptions(round),
     mantissa: 6,
   })}`;
 }
@@ -132,19 +149,30 @@ const handlePrettifyNumberUsd = (
     usd?: boolean;
     abbreviate?: boolean;
     highPrecision?: boolean;
+    round?: boolean;
   }
 ) => {
-  const { abbreviate = false, highPrecision = false } = options || {};
+  const {
+    abbreviate = false,
+    highPrecision = false,
+    round = false,
+  } = options || {};
 
   if (num.lte(0)) return '$0.00';
   if (num.lt(0.01)) return '< $0.01';
   if (abbreviate && num.gt(999999))
-    return `$${numbro(num).format(prettifyNumberAbbreviateFormat)}`;
+    return `$${numbro(num).format({
+      ...prettifyNumberAbbreviateFormat,
+      ...(round && {
+        roundingFunction: (num) => Math.round(num),
+      }),
+    })}`;
   if (!highPrecision) {
-    if (num.gt(100)) return `$${numbro(num).format(defaultNumbroOptions)}`;
+    if (num.gt(100))
+      return `$${numbro(num).format(getDefaultNumberoOptions(round))}`;
   }
   return `$${numbro(num).format({
-    ...defaultNumbroOptions,
+    ...getDefaultNumberoOptions(round),
     mantissa: 2,
   })}`;
 };
