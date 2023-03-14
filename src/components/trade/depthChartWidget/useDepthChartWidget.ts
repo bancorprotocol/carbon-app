@@ -29,7 +29,8 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
   const getOptions = (
     bidsData?: number[][],
     asksData?: number[][],
-    baseTokenSymbol?: string
+    baseTokenSymbol?: string,
+    quoteTokenSymbol?: string
   ): Options => {
     const xMiddle = data?.middleRate ? +data?.middleRate : 0;
 
@@ -132,7 +133,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
         headerFormat: ' ',
         pointFormat: `${
           baseTokenSymbol ? baseTokenSymbol : ''
-        } amount: {point.y}<br/>Price: {point.x}`,
+        } amount: {point.y}<br/>Price: {point.x} ${quoteTokenSymbol}`,
         valueDecimals: 2,
         borderRadius: 12,
         backgroundColor: '#212123',
