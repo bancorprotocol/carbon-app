@@ -37,12 +37,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
   );
 
   const getOptions = useCallback(
-    (
-      bidsData?: number[][],
-      asksData?: number[][],
-      baseTokenSymbol?: string,
-      quoteTokenSymbol?: string
-    ): Options => {
+    (bidsData?: number[][], asksData?: number[][]): Options => {
       const xMiddle = data?.middleRate ? +data?.middleRate : 0;
 
       return {
@@ -142,7 +137,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
         },
         tooltip: {
           headerFormat: ' ',
-          pointFormat: `Amount: {point.y} ${baseTokenSymbol}<br/>Price: {point.x} ${quoteTokenSymbol}`,
+          pointFormat: `Amount: {point.y} ${base?.symbol}<br/>Price: {point.x} ${quote?.symbol}`,
           valueDecimals: undefined,
           borderRadius: 12,
           backgroundColor: '#212123',
@@ -173,7 +168,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
         ],
       };
     },
-    [data?.middleRate]
+    [base?.symbol, data?.middleRate, quote?.symbol]
   );
 
   return {
