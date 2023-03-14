@@ -7,6 +7,9 @@ import { Strategy, StrategyStatus } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { getTooltipTextByItemId } from './utils';
+import { useNavigate } from '@tanstack/react-location';
+import { PathNames } from 'libs/routing';
+import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 
 export enum ItemId {
   WithdrawFunds,
@@ -31,6 +34,7 @@ export const StrategyBlockManage: FC<{
 }> = ({ strategy, manage, setManage }) => {
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
+  const navigate = useNavigate<EditStrategyLocationGenerics>();
 
   const items: itemsType[] = [
     {
@@ -47,13 +51,19 @@ export const StrategyBlockManage: FC<{
       id: ItemId.ChangeRates,
       name: 'Change Rates',
       action: () =>
-        openModal('editStrategy', { strategy, type: 'changeRates' }),
+        navigate({
+          to: PathNames.editStrategy,
+          search: { strategy, type: 'changeRates' },
+        }),
     },
     {
       id: ItemId.DepositFunds,
       name: 'Deposit Funds',
       action: () =>
-        openModal('editStrategyBudget', { strategy, type: 'deposit' }),
+        navigate({
+          to: PathNames.editStrategy,
+          search: { strategy, type: 'deposit' },
+        }),
     },
   ];
   if (strategy.status !== StrategyStatus.NoBudget) {
@@ -61,7 +71,10 @@ export const StrategyBlockManage: FC<{
       id: ItemId.WithdrawFunds,
       name: 'Withdraw Funds',
       action: () =>
-        openModal('editStrategyBudget', { strategy, type: 'withdraw' }),
+        navigate({
+          to: PathNames.editStrategy,
+          search: { strategy, type: 'withdraw' },
+        }),
     });
   }
   if (strategy.status === StrategyStatus.Active) {
@@ -74,7 +87,11 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: ItemId.RenewStrategy,
       name: 'Renew Strategy',
-      action: () => openModal('editStrategy', { strategy, type: 'renew' }),
+      action: () =>
+        navigate({
+          to: PathNames.editStrategy,
+          search: { strategy, type: 'renew' },
+        }),
     });
   }
 
