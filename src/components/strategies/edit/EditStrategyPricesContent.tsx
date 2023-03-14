@@ -4,7 +4,7 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { EditTypes } from './EditStrategyMain';
-import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
+import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 
 type EditStrategyPricesContentProps = {
   type: EditTypes;
@@ -79,7 +79,7 @@ export const EditStrategyPricesContent = ({
           </div>
         </div>
       </div>
-      <ModalEditStrategyBuySellBlock
+      <EditStrategyPricesBuySellBlock
         buy
         base={strategy?.token0}
         quote={strategy?.token1}
@@ -87,7 +87,7 @@ export const EditStrategyPricesContent = ({
         balance={strategy.order0.balance}
         type={type}
       />
-      <ModalEditStrategyBuySellBlock
+      <EditStrategyPricesBuySellBlock
         base={strategy?.token0}
         quote={strategy?.token1}
         order={order1}

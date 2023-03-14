@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
-import { ModalEditStrategyAllocatedBudget } from '../../../libs/modals/modals/ModalEditStrategy/ModalEditStrategyAllocatedBudget';
 import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from './EditStrategyMain';
+import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 
-export const ModalEditStrategyBuySellBlock: FC<{
+export const EditStrategyPricesBuySellBlock: FC<{
   base: Token;
   quote: Token;
   order: OrderCreate;
@@ -41,7 +41,7 @@ export const ModalEditStrategyBuySellBlock: FC<{
         }}
       />
       <div className="pt-10">
-        <ModalEditStrategyAllocatedBudget
+        <EditStrategyAllocatedBudget
           {...{
             order,
             base,

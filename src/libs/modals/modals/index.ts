@@ -19,7 +19,6 @@ import {
 } from 'libs/modals/modals/ModalTradeTokenList';
 import { ModalTradeSettings } from 'libs/modals/modals/ModalTradeSettings';
 
-import { ModalEditStrategy, ModalEditStrategyData } from './ModalEditStrategy';
 import {
   ModalTradeRouting,
   ModalTradeRoutingData,
@@ -40,7 +39,6 @@ export interface ModalSchema {
   tradeSettings: undefined;
   tradeRouting: ModalTradeRoutingData;
   confirmStrategy: ModalConfirmStrategyData;
-  editStrategy: ModalEditStrategyData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -56,5 +54,4 @@ export const MODAL_COMPONENTS: TModals = {
   tradeSettings: (props) => ModalTradeSettings(props),
   tradeRouting: (props) => ModalTradeRouting(props),
   confirmStrategy: (props) => ModalConfirmStrategy(props),
-  editStrategy: (props) => ModalEditStrategy(props),
 };
