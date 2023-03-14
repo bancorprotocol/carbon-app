@@ -38,4 +38,5 @@ export interface BancorWeb3ProviderContext {
   isImposter: boolean;
   isSupportedNetwork: boolean;
   switchNetwork: () => void;
+  isUserBlocked: boolean;
 }
