@@ -1,30 +1,31 @@
 import BigNumber from 'bignumber.js';
-import { Modal } from 'libs/modals/Modal';
-import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
-import { useModal } from 'hooks/useModal';
-import { Strategy, useGetTokenBalance } from 'libs/queries';
+import { useGetTokenBalance } from 'libs/queries';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
-import { ModalEditStrategyBudgetBuySellBlock } from './ModalEditStrategyBudgetBuySellBlock';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
+import { EditTypes } from './EditStrategyMain';
+import { useLocation } from '@tanstack/react-location';
+import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock';
 
-export type ModalEditStrategyBudgetData = {
-  strategy: Strategy;
-  type: 'deposit' | 'withdraw';
+type EditStrategyBudgetContentProps = {
+  type: EditTypes;
+  strategy: any;
 };
 
-export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
-  id,
-  data: { strategy, type },
-}) => {
-  const { closeModal } = useModal();
+export const EditStrategyBudgetContent = ({
+  strategy,
+  type,
+}: EditStrategyBudgetContentProps) => {
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '0' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '0' });
   const paddedID = strategy.id.padStart(9, '0');
   const token0Amount = useGetTokenBalance(strategy.token1).data;
   const token1Amount = useGetTokenBalance(strategy.token0).data;
+  const {
+    history: { back },
+  } = useLocation();
 
   const calculatedOrder0Budget = new BigNumber(strategy.order0.balance)?.[
     `${type === 'withdraw' ? 'minus' : 'plus'}`
@@ -60,8 +61,6 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           order0.marginalPriceOption,
           order1.marginalPriceOption
         );
-
-    closeModal(id);
   };
 
   const isOrdersBudgetValid = () => {
@@ -80,14 +79,11 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
   };
 
   return (
-    <Modal
-      id={id}
-      title={type === 'deposit' ? 'Deposit Budget' : 'Withdraw Budget'}
-    >
-      <div className="mt-24 flex flex-col items-center space-y-20 text-center font-weight-500">
+    <div className="w-full space-y-20 md:w-[400px]">
+      <div className="flex flex-col items-center space-y-20 text-center font-weight-500">
         <div
           className={
-            'flex w-full items-center space-x-10 rounded-10 bg-black p-15 font-mono'
+            'bg-secondary flex w-full items-center space-x-10 rounded-10 p-15 pl-30 font-mono'
           }
         >
           <TokensOverlap
@@ -109,7 +105,7 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
             </div>
           </div>
         </div>
-        <ModalEditStrategyBudgetBuySellBlock
+        <EditStrategyBudgetBuySellBlock
           buy
           base={strategy?.token0}
           quote={strategy?.token1}
@@ -118,7 +114,7 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
           type={type}
         />
-        <ModalEditStrategyBudgetBuySellBlock
+        <EditStrategyBudgetBuySellBlock
           base={strategy?.token0}
           quote={strategy?.token1}
           order={order1}
@@ -137,7 +133,7 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
         </Button>
         <Button
-          onClick={() => closeModal(id)}
+          onClick={() => back()}
           className="mt-16"
           variant="black"
           size="lg"
@@ -146,6 +142,6 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
           Cancel
         </Button>
       </div>
-    </Modal>
+    </div>
   );
 };

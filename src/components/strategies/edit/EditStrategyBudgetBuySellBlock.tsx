@@ -1,20 +1,21 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { ModalEditStrategyAllocatedBudget } from '../ModalEditStrategy/ModalEditStrategyAllocatedBudget';
 import { TokenInputField } from 'components/common/TokenInputField';
 import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useGetTokenBalance } from 'libs/queries';
+import { EditTypes } from './EditStrategyMain';
+import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 
-export const ModalEditStrategyBudgetBuySellBlock: FC<{
+export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
   quote: Token;
   order: OrderCreate;
   balance?: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
-  type: 'deposit' | 'withdraw';
+  type: EditTypes;
 }> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
@@ -34,7 +35,7 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
 
   return (
     <div
-      className={`w-full border-l-2 pl-10 text-left ${
+      className={`bg-secondary w-full rounded-l-6 border-l-2 p-20 text-left ${
         buy
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
@@ -76,7 +77,7 @@ export const ModalEditStrategyBudgetBuySellBlock: FC<{
         Insufficient balance
       </div>
       <div className="pt-10">
-        <ModalEditStrategyAllocatedBudget
+        <EditStrategyAllocatedBudget
           {...{ order, base, quote, balance, buy, type }}
           {...(type === 'withdraw' && {
             showMaxCb: () => order.setBudget(balance || ''),

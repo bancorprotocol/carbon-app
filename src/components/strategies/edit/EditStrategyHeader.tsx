@@ -1,17 +1,25 @@
 import { useLocation } from 'libs/routing';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
+import { EditTypes } from './EditStrategyMain';
+
+export const titleByType: { [key: string]: string } = {
+  renew: 'Renew Strategy',
+  changeRates: 'Edit Price',
+  deposit: 'Add Budget',
+  withdraw: 'Remove Budget',
+};
 
 type EditStrategyHeaderProps = {
   showGraph: boolean;
-  showOrders: boolean;
   setShowGraph: (value: boolean) => void;
+  type: EditTypes | undefined;
 };
 
 export const EditStrategyHeader = ({
   showGraph,
-  showOrders,
   setShowGraph,
+  type,
 }: EditStrategyHeaderProps) => {
   const {
     history: { back },
@@ -30,9 +38,9 @@ export const EditStrategyHeader = ({
         >
           <IconChevron className="mx-auto w-14 rotate-90" />
         </button>
-        Create Strategy
+        {(type && titleByType[type]) || ''}
       </div>
-      {!showGraph && showOrders && (
+      {!showGraph && (
         <button
           onClick={() => setShowGraph(true)}
           className="h-40 w-40 self-end rounded-full bg-emphasis"
