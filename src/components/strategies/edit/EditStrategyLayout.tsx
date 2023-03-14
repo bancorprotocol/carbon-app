@@ -1,6 +1,7 @@
 import { EditTypes } from './EditStrategyMain';
 import { CreateStrategyGraph } from '../create/CreateStrategyGraph';
 import { EditStrategyBudgetContent } from './EditStrategyBudgetContent';
+import { EditStrategyPricesContent } from './EditStrategyPricesContent';
 
 type EditStrategyLayoutProps = {
   type: EditTypes;
@@ -28,7 +29,11 @@ export const EditStrategyLayout = ({
           <CreateStrategyGraph {...{ token0, token1, setShowGraph }} />
         )}
       </div>
-      <EditStrategyBudgetContent {...{ strategy, type }} />
+      {type === 'deposit' || type === 'withdraw' ? (
+        <EditStrategyBudgetContent {...{ strategy, type }} />
+      ) : (
+        <EditStrategyPricesContent {...{ strategy, type }} />
+      )}
     </div>
   );
 };

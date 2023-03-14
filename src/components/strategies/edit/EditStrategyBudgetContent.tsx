@@ -79,69 +79,67 @@ export const EditStrategyBudgetContent = ({
   };
 
   return (
-    <div className="w-full space-y-20 md:w-[400px]">
-      <div className="flex flex-col items-center space-y-20 text-center font-weight-500">
-        <div
-          className={
-            'bg-secondary flex w-full items-center space-x-10 rounded-10 p-15 pl-30 font-mono'
-          }
-        >
-          <TokensOverlap
-            className="h-32 w-32"
-            tokens={[strategy.token0, strategy.token1]}
-          />
-          <div>
-            {
-              <div className="flex gap-6">
-                <span>{strategy.token0.symbol}</span>
-                <div className="text-secondary !text-16">/</div>
-                <span>{strategy.token1.symbol}</span>
-              </div>
-            }
-            <div className="text-secondary flex gap-8">
-              <span>{paddedID.slice(0, 3)}</span>
-              <span>{paddedID.slice(3, 6)}</span>
-              <span>{paddedID.slice(6, 9)}</span>
+    <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
+      <div
+        className={
+          'bg-secondary flex w-full items-center space-x-10 rounded-10 p-15 pl-30 font-mono'
+        }
+      >
+        <TokensOverlap
+          className="h-32 w-32"
+          tokens={[strategy.token0, strategy.token1]}
+        />
+        <div>
+          {
+            <div className="flex gap-6">
+              <span>{strategy.token0.symbol}</span>
+              <div className="text-secondary !text-16">/</div>
+              <span>{strategy.token1.symbol}</span>
             </div>
+          }
+          <div className="text-secondary flex gap-8">
+            <span>{paddedID.slice(0, 3)}</span>
+            <span>{paddedID.slice(3, 6)}</span>
+            <span>{paddedID.slice(6, 9)}</span>
           </div>
         </div>
-        <EditStrategyBudgetBuySellBlock
-          buy
-          base={strategy?.token0}
-          quote={strategy?.token1}
-          order={order0}
-          balance={strategy.order0.balance}
-          isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-          type={type}
-        />
-        <EditStrategyBudgetBuySellBlock
-          base={strategy?.token0}
-          quote={strategy?.token1}
-          order={order1}
-          balance={strategy.order1.balance}
-          isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-          type={type}
-        />
-        <Button
-          disabled={!isOrdersBudgetValid()}
-          onClick={handleOnActionClick}
-          className="mt-32"
-          variant="white"
-          size="lg"
-          fullWidth
-        >
-          {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
-        </Button>
-        <Button
-          onClick={() => back()}
-          className="mt-16"
-          variant="black"
-          size="lg"
-          fullWidth
-        >
-          Cancel
-        </Button>
       </div>
+      <EditStrategyBudgetBuySellBlock
+        buy
+        base={strategy?.token0}
+        quote={strategy?.token1}
+        order={order0}
+        balance={strategy.order0.balance}
+        isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+        type={type}
+      />
+      <EditStrategyBudgetBuySellBlock
+        base={strategy?.token0}
+        quote={strategy?.token1}
+        order={order1}
+        balance={strategy.order1.balance}
+        isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+        type={type}
+      />
+      <Button
+        disabled={!isOrdersBudgetValid()}
+        onClick={handleOnActionClick}
+        className="mt-32"
+        variant="white"
+        size="lg"
+        fullWidth
+      >
+        {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
+      </Button>
+      <Button
+        onClick={() => back()}
+        className="mt-16"
+        variant="secondary"
+        size="lg"
+        fullWidth
+      >
+        Cancel
+      </Button>
     </div>
   );
 };

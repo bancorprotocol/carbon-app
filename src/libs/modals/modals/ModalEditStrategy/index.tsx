@@ -3,7 +3,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
-import { ModalEditStrategyBuySellBlock } from './ModalEditStrategyBuySellBlock';
+import { ModalEditStrategyBuySellBlock } from '../../../../components/strategies/edit/ModalEditStrategyBuySellBlock';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useOrder } from 'components/strategies/create/useOrder';
