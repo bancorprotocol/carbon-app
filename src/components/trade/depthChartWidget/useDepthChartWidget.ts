@@ -131,9 +131,7 @@ export const useDepthChartWidget = (base?: string, quote?: string) => {
       },
       tooltip: {
         headerFormat: ' ',
-        pointFormat: `${
-          baseTokenSymbol ? baseTokenSymbol : ''
-        } amount: {point.y}<br/>Price: {point.x} ${quoteTokenSymbol}`,
+        pointFormat: `Amount: {point.y} ${baseTokenSymbol}<br/>Price: {point.x} ${quoteTokenSymbol}`,
         valueDecimals: 2,
         borderRadius: 12,
         backgroundColor: '#212123',
