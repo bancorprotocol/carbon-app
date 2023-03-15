@@ -110,7 +110,13 @@ const getOrderBook = async (
     } else if (stepSell.isFinite() && stepSell.gt(0)) {
       return stepSell;
     } else {
-      return ONE.div(minSell).minus(minBuy).div(orderBookConfig.steps);
+      if (minBuy.gt(0) && minBuy.eq(maxBuy)) {
+        return minBuy.div(orderBookConfig.steps);
+      }
+      if (minSell.gt(0) && minSell.eq(maxSell)) {
+        return minSell.div(orderBookConfig.steps);
+      }
+      return ONE.div(10000);
     }
   };
   const step = getStep();
@@ -134,32 +140,52 @@ const getOrderBook = async (
   };
   const middleRate = getMiddleRate();
 
+  const buy = buyHasLiq
+    ? await buildOrderBook(
+        true,
+        base,
+        quote,
+        middleRate,
+        step,
+        minBuy,
+        maxBuy,
+        buckets
+      )
+    : [];
+
+  const sell = sellHasLiq
+    ? await buildOrderBook(
+        false,
+        quote,
+        base,
+        middleRate,
+        step,
+        minSell,
+        maxSell,
+        buckets
+      )
+    : [];
+
+  const largestBuy = Math.max(
+    ...buy.map((o) => new BigNumber(o.rate).toNumber())
+  );
+
+  const smallestSell = Math.min(
+    ...sell.map((o) => new BigNumber(o.rate).toNumber())
+  );
+
+  const newMiddleRate =
+    largestBuy > 0 &&
+    smallestSell > 0 &&
+    isFinite(largestBuy) &&
+    isFinite(smallestSell)
+      ? new BigNumber(largestBuy).plus(smallestSell).div(2).toString()
+      : middleRate.toString();
+
   return {
-    buy: buyHasLiq
-      ? await buildOrderBook(
-          true,
-          base,
-          quote,
-          middleRate,
-          step,
-          minBuy,
-          maxBuy,
-          buckets
-        )
-      : [],
-    sell: sellHasLiq
-      ? await buildOrderBook(
-          false,
-          quote,
-          base,
-          middleRate,
-          step,
-          minSell,
-          maxSell,
-          buckets
-        )
-      : [],
-    middleRate: middleRate.toString(),
+    buy,
+    sell,
+    middleRate: newMiddleRate,
     step,
   };
 };
