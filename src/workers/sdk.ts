@@ -11,25 +11,207 @@ import {
   StrategyUpdate,
 } from '@bancor/carbon-sdk/dist/types';
 import { BigNumberish } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { OrderRow } from 'libs/queries';
+import { OrderBook } from 'libs/queries/sdk/orderBook';
 
-const decimalFetcherSDKMap: { map: Map<string, number> } = {
-  map: new Map(),
+const ONE = new BigNumber(1);
+
+export const orderBookConfig = {
+  steps: 100,
+  buckets: {
+    orderBook: 14,
+    depthChart: 50,
+  },
 };
-const decimalFetcher = (a: string) =>
-  decimalFetcherSDKMap.map.get(a.toLowerCase());
 
 let carbonSDK: Sdk;
+let isInitialized = false;
+let isInitializing = false;
 
-const init = (config: Config) => {
-  carbonSDK = new Sdk(config, decimalFetcher);
+const init = async (config: Config) => {
+  if (isInitialized || isInitializing) return;
+  isInitializing = true;
+  carbonSDK = new Sdk(config);
+  await carbonSDK.startDataSync();
+  isInitialized = true;
+  isInitializing = false;
+};
+
+const buildOrderBook = async (
+  buy: boolean,
+  baseToken: string,
+  quoteToken: string,
+  startRate: BigNumber,
+  step: BigNumber,
+  min: BigNumber,
+  max: BigNumber,
+  buckets: number
+) => {
+  const orders: OrderRow[] = [];
+  let i = 0;
+  let minEqMax = false;
+
+  while (orders.length < buckets && !minEqMax) {
+    minEqMax = min.eq(max);
+    let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
+    rate = buy ? rate : ONE.div(rate).toString();
+    rate = minEqMax ? max.toString() : rate;
+    i++;
+    const amount = await carbonSDK.getRateLiquidityDepthByPair(
+      baseToken,
+      quoteToken,
+      rate
+    );
+    let amountBn = new BigNumber(amount);
+    if (amountBn.eq(0)) {
+      continue;
+    }
+    if (buy) {
+      amountBn = amountBn.div(rate);
+    } else {
+      rate = ONE.div(rate).toString();
+    }
+    const total = amountBn.times(rate).toString();
+    orders.push({ rate, total, amount: amountBn.toString() });
+    if (minEqMax) {
+      Array.from({ length: buckets - 1 }).map((_, i) =>
+        orders.push({
+          rate: new BigNumber(rate)
+            [buy ? 'minus' : 'plus'](step.times(i))
+            .toString(),
+          total,
+          amount: amountBn.toString(),
+        })
+      );
+    }
+  }
+  return orders;
+};
+
+const getOrderBook = async (
+  base: string,
+  quote: string,
+  buckets: number
+): Promise<OrderBook> => {
+  const buyHasLiq = await carbonSDK.hasLiquidityByPair(base, quote);
+  const sellHasLiq = await carbonSDK.hasLiquidityByPair(quote, base);
+  const minBuy = new BigNumber(
+    buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0
+  );
+  const maxBuy = new BigNumber(
+    buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0
+  );
+  const minSell = new BigNumber(
+    sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0
+  );
+  const maxSell = new BigNumber(
+    sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
+  );
+
+  const stepBuy = maxBuy.minus(minBuy).div(orderBookConfig.steps);
+  const stepSell = ONE.div(minSell)
+    .minus(ONE.div(maxSell))
+    .div(orderBookConfig.steps);
+
+  const getStep = () => {
+    if (stepBuy.isFinite() && stepBuy.gt(0)) {
+      if (stepSell.isFinite() && stepSell.gt(0)) {
+        return stepBuy.lte(stepSell) ? stepBuy : stepSell;
+      } else {
+        return stepBuy;
+      }
+    } else if (stepSell.isFinite() && stepSell.gt(0)) {
+      return stepSell;
+    } else {
+      if (minBuy.gt(0) && minBuy.eq(maxBuy)) {
+        return minBuy.div(orderBookConfig.steps);
+      }
+      if (minSell.gt(0) && minSell.eq(maxSell)) {
+        return minSell.div(orderBookConfig.steps);
+      }
+      return ONE.div(10000);
+    }
+  };
+  const step = getStep();
+
+  const getMiddleRate = () => {
+    if (
+      maxBuy.isFinite() &&
+      maxBuy.gt(0) &&
+      maxSell.isFinite() &&
+      maxSell.gt(0)
+    ) {
+      return maxBuy.plus(ONE.div(maxSell)).div(2);
+    }
+    if (maxBuy.isFinite() && maxBuy.gt(0)) {
+      return maxBuy;
+    }
+    if (maxSell.isFinite() && maxSell.gt(0)) {
+      return ONE.div(maxSell);
+    }
+    return new BigNumber(0);
+  };
+  const middleRate = getMiddleRate();
+
+  const buy = buyHasLiq
+    ? await buildOrderBook(
+        true,
+        base,
+        quote,
+        middleRate,
+        step,
+        minBuy,
+        maxBuy,
+        buckets
+      )
+    : [];
+
+  const sell = sellHasLiq
+    ? await buildOrderBook(
+        false,
+        quote,
+        base,
+        middleRate,
+        step,
+        minSell,
+        maxSell,
+        buckets
+      )
+    : [];
+
+  const largestBuy = Math.max(
+    ...buy.map((o) => new BigNumber(o.rate).toNumber())
+  );
+
+  const smallestSell = Math.min(
+    ...sell.map((o) => new BigNumber(o.rate).toNumber())
+  );
+
+  const newMiddleRate =
+    largestBuy > 0 &&
+    smallestSell > 0 &&
+    isFinite(largestBuy) &&
+    isFinite(smallestSell)
+      ? new BigNumber(largestBuy).plus(smallestSell).div(2).toString()
+      : middleRate.toString();
+
+  return {
+    buy,
+    sell,
+    middleRate: newMiddleRate,
+    step: step.toString(),
+  };
 };
 
 const obj = {
   init,
-  startDataSync: () => carbonSDK.startDataSync(),
-  //isInitialized: () => carbonSDK.isInitialized,
-  getPairs: () => carbonSDK.pairs,
-  onChange: (cb: () => void) => carbonSDK.onChange(cb),
+  isInitialized: () => isInitialized,
+  getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
+  onChange: (cb: () => void) => {
+    carbonSDK.onChange(() => cb());
+    return;
+  },
   getRateLiquidityDepthByPair: (
     baseToken: string,
     quoteToken: string,
@@ -139,6 +321,7 @@ const obj = {
       maxInput,
       overrides
     ),
+  getOrderBook,
 };
 
 export type CarbonSDKWebWorker = typeof obj;

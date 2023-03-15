@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import { useStore } from 'store';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { config } from 'services/web3/config';
 import { carbonSDK } from 'index';
-import { wait } from 'utils/helpers';
+import * as Comlink from 'comlink';
+import { QueryKey } from 'libs/queries';
 
 export const useCarbonSDK = () => {
   const cache = useQueryClient();
@@ -26,8 +26,8 @@ export const useCarbonSDK = () => {
 
   const init = useCallback(async () => {
     // TODO: if isInitialized is true, don't init again
-    // const isInitialized = await obj.isInitialized();
-    if (true) {
+    const isInitialized = await carbonSDK.isInitialized();
+    if (!isInitialized) {
       try {
         setIsLoading(true);
         console.log('Initializing CarbonSDK...');
@@ -38,11 +38,8 @@ export const useCarbonSDK = () => {
             voucherAddress: config.carbon.voucher,
           },
         });
-        await carbonSDK.startDataSync();
         console.log('Web worker: SDK initialized');
-        // TODO: make onChange callback work
-        // await obj.onChange(onChangeCallback);
-        await wait(5000);
+        await carbonSDK.onChange(Comlink.proxy(onChangeCallback));
         setIsInitialized(true);
         console.log('CarbonSDK initialized jan jan');
       } catch (e) {

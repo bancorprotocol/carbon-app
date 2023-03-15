@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { Options } from 'libs/charts';
 import { OrderRow, useGetOrderBook } from 'libs/queries';
-import { orderBookConfig } from 'libs/queries/sdk/orderBook';
 import { Token } from 'libs/tokens';
 import { useCallback } from 'react';
+import { orderBookConfig } from 'workers/sdk';
 
 export const useDepthChartWidget = (base?: Token, quote?: Token) => {
   const { data } = useGetOrderBook(base?.address, quote?.address);
@@ -27,7 +27,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
         .fill(0)
         .map((_, i) => {
           rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
-            data?.step?.times(i) || 0
+            new BigNumber(data?.step || 0).times(i)
           );
 
           return [+(+rate).toFixed(quote?.decimals), 0];

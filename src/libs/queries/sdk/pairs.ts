@@ -21,15 +21,8 @@ export const useGetTradePairsData = () => {
   return useQuery({
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
-      console.log('useGetTradePairsData');
-      const pairs = await carbonSDK.getPairs();
-      console.log('pairs jan jan', pairs);
-      const pairsWithLiquidity = pairs.filter((pair) => {
-        const buy = carbonSDK.hasLiquidityByPair(pair[0], pair[1]);
-        const sell = carbonSDK.hasLiquidityByPair(pair[1], pair[0]);
-        return buy || sell;
-      });
-      const promises = pairsWithLiquidity.map(async (pair) => ({
+      const pairs = await carbonSDK.getAllTokenPairs();
+      const promises = pairs.map(async (pair) => ({
         baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),
         quoteToken: getTokenById(pair[1]) ?? (await _getTknData(pair[1])),
       }));

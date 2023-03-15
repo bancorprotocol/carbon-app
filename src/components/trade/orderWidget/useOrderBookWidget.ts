@@ -1,6 +1,5 @@
 import {
   OrderBook,
-  orderBookConfig,
   OrderRow,
   useGetOrderBook,
 } from 'libs/queries/sdk/orderBook';
@@ -8,6 +7,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { orderBy } from 'lodash';
 import { useTokens } from 'hooks/useTokens';
+import { orderBookConfig } from 'workers/sdk';
 
 const _subtractPrevAmount = (
   data: OrderRow[],
