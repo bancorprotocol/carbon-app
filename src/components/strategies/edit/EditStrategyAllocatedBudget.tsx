@@ -71,7 +71,7 @@ export const EditStrategyAllocatedBudget: FC<{
   return (
     <>
       <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="mr-5">Allocated Budget</div>
             <Tooltip
@@ -83,7 +83,7 @@ export const EditStrategyAllocatedBudget: FC<{
               }
             />
           </div>
-          <div className="flex">
+          <div className="flex justify-end">
             <Tooltip
               element={
                 <>
@@ -98,7 +98,7 @@ export const EditStrategyAllocatedBudget: FC<{
                 </>
               }
             >
-              <div className="flex">
+              <div className="mr-5 flex">
                 {balance && (
                   <span>
                     {sanitizeNumberInput(
@@ -117,7 +117,7 @@ export const EditStrategyAllocatedBudget: FC<{
             {showMaxCb && (
               <div
                 onClick={() => showMaxCb()}
-                className="ml-8 cursor-pointer font-weight-500 text-green"
+                className="cursor-pointer font-weight-500 text-green"
               >
                 MAX
               </div>
