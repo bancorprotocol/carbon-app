@@ -20,6 +20,7 @@ interface LocalStorageSchema {
   [k: `favoriteTradePairs-${string}`]: TradePair[];
   [k: `favoriteTokens-${string}`]: Token[];
   tradePairsCategory: TradePairCategory;
+  tradePair: [string, string];
   tradeSlippage: string;
   tradeDeadline: string;
   tradeMaxOrders: string;

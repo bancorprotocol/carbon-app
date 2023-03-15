@@ -5,11 +5,11 @@ import { TradePageProps } from 'pages/trade';
 
 export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
   const { buyOrders, sellOrders, getOptions } = useDepthChartWidget(
-    base.address,
-    quote.address
+    base,
+    quote
   );
 
-  const options = getOptions(buyOrders, sellOrders, base.symbol);
+  const options = getOptions(buyOrders, sellOrders);
 
   const isError = (!buyOrders && !sellOrders) || !base || !quote || !options;
 

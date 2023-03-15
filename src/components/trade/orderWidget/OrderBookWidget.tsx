@@ -22,9 +22,9 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
             'mt-2 rounded-t-4 rounded-b-10 bg-black px-20 py-8 text-14'
           }
         >
-          <OrderBookSide orders={sell} />
+          <OrderBookSide orders={sell} base={base} quote={quote} />
           <OrderBookWidgetRate buy rate={middleRate} />
-          <OrderBookSide orders={buy} buy />
+          <OrderBookSide orders={buy} base={base} quote={quote} buy />
         </div>
       </div>
     </div>
