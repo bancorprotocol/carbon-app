@@ -22,7 +22,7 @@ export const useGetOrderBook = (
   const { isInitialized } = useCarbonSDK();
 
   return useQuery({
-    queryKey: QueryKey.tradeOrderBook(base!, quote!, buckets),
+    queryKey: QueryKey.tradeOrderBook([base!, quote!], buckets),
     queryFn: () => carbonSDK.getOrderBook(base!, quote!, buckets),
     enabled: isInitialized && !!base && !!quote,
     retry: 1,

@@ -3,6 +3,7 @@ import numbro from 'numbro';
 import { config } from 'services/web3/config';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { FiatSymbol } from 'store/useFiatCurrencyStore';
+import { TokenPair } from '@bancor/carbon-sdk';
 
 export const isProduction = window.location.host.includes('bancor.network');
 
@@ -190,3 +191,6 @@ export const buildPairKey = (pair: TradePair) =>
     pair.baseToken.address.toLowerCase(),
     pair.quoteToken.address.toLowerCase(),
   ].join('-');
+
+export const buildTokenPairKey = (pair: TokenPair) =>
+  pair.join('-').toLowerCase();

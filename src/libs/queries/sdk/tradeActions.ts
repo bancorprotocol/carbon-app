@@ -22,8 +22,7 @@ export const useGetTradeActionsQuery = ({
 
   return useQuery(
     QueryKey.tradeActions(
-      sourceToken,
-      targetToken,
+      [sourceToken, targetToken],
       isTradeBySource,
       actionsWei
     ),

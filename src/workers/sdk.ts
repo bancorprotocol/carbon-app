@@ -4,6 +4,7 @@ import {
   Config,
   PayableOverrides,
   TradeActionStruct,
+  TokenPair,
 } from '@bancor/carbon-sdk';
 import {
   EncodedStrategy,
@@ -208,8 +209,8 @@ const obj = {
   init,
   isInitialized: () => isInitialized,
   getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
-  onChange: (cb: () => void) => {
-    carbonSDK.onChange(() => cb());
+  onChange: (cb: (affectedPairs: TokenPair[]) => void) => {
+    carbonSDK.onChange((_, affectedPairs) => cb(affectedPairs));
     return;
   },
   getRateLiquidityDepthByPair: (

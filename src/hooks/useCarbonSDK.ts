@@ -5,7 +5,8 @@ import { RPC_URLS } from 'libs/web3';
 import { config } from 'services/web3/config';
 import { carbonSDK } from 'index';
 import * as Comlink from 'comlink';
-import { QueryKey } from 'libs/queries';
+import { TokenPair } from '@bancor/carbon-sdk';
+import { buildTokenPairKey } from 'utils/helpers';
 
 export const useCarbonSDK = () => {
   const cache = useQueryClient();
@@ -20,12 +21,20 @@ export const useCarbonSDK = () => {
     },
   } = useStore();
 
-  const onChangeCallback = useCallback(() => {
-    void cache.invalidateQueries({ queryKey: QueryKey.sdk });
-  }, [cache]);
+  const onChangeCallback = useCallback(
+    (pairs: TokenPair[]) => {
+      pairs.forEach((pair) => {
+        void cache.invalidateQueries({
+          predicate: (query) =>
+            query.queryKey[1] === buildTokenPairKey(pair) ||
+            query.queryKey[1] === buildTokenPairKey([pair[1], pair[0]]),
+        });
+      });
+    },
+    [cache]
+  );
 
   const init = useCallback(async () => {
-    // TODO: if isInitialized is true, don't init again
     const isInitialized = await carbonSDK.isInitialized();
     if (!isInitialized) {
       try {

@@ -8,7 +8,7 @@ export const useGetTradeLiquidity = (token0?: string, token1?: string) => {
   const { isInitialized } = useCarbonSDK();
 
   return useQuery({
-    queryKey: QueryKey.tradeLiquidity(token0!, token1!),
+    queryKey: QueryKey.tradeLiquidity([token0!, token1!]),
     queryFn: async () => carbonSDK.getLiquidityByPair(token0!, token1!),
     enabled: !!token0 && !!token1 && isInitialized,
     staleTime: ONE_DAY_IN_MS,

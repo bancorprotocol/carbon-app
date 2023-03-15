@@ -33,7 +33,7 @@ export const useGetTradeData = ({
   const { isInitialized } = useCarbonSDK();
 
   return useQuery<GetTradeDataResult>(
-    QueryKey.tradeData(sourceToken, targetToken, isTradeBySource, input),
+    QueryKey.tradeData([sourceToken, targetToken], isTradeBySource, input),
     async () => {
       const hasInvalidInput =
         input === '' || isNaN(Number(input)) || new BigNumber(input).isZero();
