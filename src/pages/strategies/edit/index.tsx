@@ -6,7 +6,7 @@ import { StrategiesPage } from '..';
 export const EditStrategyPage = () => {
   const { user } = useWeb3();
   const {
-    tokens: { strategy: strategyToEdit },
+    strategies: { strategyToEdit },
   } = useStore();
 
   return user && strategyToEdit ? (

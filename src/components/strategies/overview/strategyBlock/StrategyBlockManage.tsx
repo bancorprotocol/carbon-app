@@ -37,7 +37,7 @@ export const StrategyBlockManage: FC<{
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
   const {
-    tokens: { setStrategy },
+    strategies: { setStrategyToEdit },
   } = useStore();
 
   const items: itemsType[] = [
@@ -55,7 +55,7 @@ export const StrategyBlockManage: FC<{
       id: ItemId.ChangeRates,
       name: 'Change Rates',
       action: () => {
-        setStrategy(strategy);
+        setStrategyToEdit(strategy);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'changeRates' },
@@ -66,7 +66,7 @@ export const StrategyBlockManage: FC<{
       id: ItemId.DepositFunds,
       name: 'Deposit Funds',
       action: () => {
-        setStrategy(strategy);
+        setStrategyToEdit(strategy);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'deposit' },
@@ -79,7 +79,7 @@ export const StrategyBlockManage: FC<{
       id: ItemId.WithdrawFunds,
       name: 'Withdraw Funds',
       action: () => {
-        setStrategy(strategy);
+        setStrategyToEdit(strategy);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'withdraw' },
@@ -98,7 +98,7 @@ export const StrategyBlockManage: FC<{
       id: ItemId.RenewStrategy,
       name: 'Renew Strategy',
       action: () => {
-        setStrategy(strategy);
+        setStrategyToEdit(strategy);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'renew' },
