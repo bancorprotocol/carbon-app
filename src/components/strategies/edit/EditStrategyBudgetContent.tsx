@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
-import { TokensOverlap } from 'components/common/tokensOverlap';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { EditTypes } from './EditStrategyMain';
 import { useLocation } from '@tanstack/react-location';
 import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock';
+import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 
 type EditStrategyBudgetContentProps = {
   type: EditTypes;
@@ -20,7 +20,6 @@ export const EditStrategyBudgetContent = ({
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '0' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '0' });
-  const paddedID = strategy.id.padStart(9, '0');
   const token0Amount = useGetTokenBalance(strategy.token1).data;
   const token1Amount = useGetTokenBalance(strategy.token0).data;
   const {
@@ -80,30 +79,7 @@ export const EditStrategyBudgetContent = ({
 
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
-      <div
-        className={
-          'bg-secondary flex w-full items-center space-x-10 rounded-10 p-15 pl-30 font-mono'
-        }
-      >
-        <TokensOverlap
-          className="h-32 w-32"
-          tokens={[strategy.token0, strategy.token1]}
-        />
-        <div>
-          {
-            <div className="flex gap-6">
-              <span>{strategy.token0.symbol}</span>
-              <div className="text-secondary !text-16">/</div>
-              <span>{strategy.token1.symbol}</span>
-            </div>
-          }
-          <div className="text-secondary flex gap-8">
-            <span>{paddedID.slice(0, 3)}</span>
-            <span>{paddedID.slice(3, 6)}</span>
-            <span>{paddedID.slice(6, 9)}</span>
-          </div>
-        </div>
-      </div>
+      <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyBudgetBuySellBlock
         buy
         base={strategy?.token0}

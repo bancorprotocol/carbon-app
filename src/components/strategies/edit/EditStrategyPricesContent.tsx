@@ -1,10 +1,10 @@
 import { useLocation } from '@tanstack/react-location';
 import { Button } from 'components/common/button';
-import { TokensOverlap } from 'components/common/tokensOverlap';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
 import { EditTypes } from './EditStrategyMain';
+import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 
 type EditStrategyPricesContentProps = {
@@ -19,8 +19,6 @@ export const EditStrategyPricesContent = ({
   const { renewStrategy, changeRateStrategy } = useUpdateStrategy();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-
-  const paddedID = strategy.id.padStart(9, '0');
   const {
     history: { back },
   } = useLocation();
@@ -56,30 +54,7 @@ export const EditStrategyPricesContent = ({
 
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
-      <div
-        className={
-          'bg-secondary flex w-full items-center space-x-10 rounded-10 p-15 pl-30 font-mono'
-        }
-      >
-        <TokensOverlap
-          className="h-32 w-32"
-          tokens={[strategy.token0, strategy.token1]}
-        />
-        <div>
-          {
-            <div className="flex gap-6">
-              <span>{strategy.token0.symbol}</span>
-              <div className="text-secondary !text-16">/</div>
-              <span>{strategy.token1.symbol}</span>
-            </div>
-          }
-          <div className="text-secondary flex gap-8">
-            <span>{paddedID.slice(0, 3)}</span>
-            <span>{paddedID.slice(3, 6)}</span>
-            <span>{paddedID.slice(6, 9)}</span>
-          </div>
-        </div>
-      </div>
+      <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyPricesBuySellBlock
         buy
         base={strategy?.token0}
