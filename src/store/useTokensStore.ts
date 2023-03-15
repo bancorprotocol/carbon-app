@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
-import { useTokensQuery } from 'libs/queries';
+import { Strategy, useTokensQuery } from 'libs/queries';
 import { decimalFetcherSDKMap } from 'libs/sdk/carbonSdk';
 
 export interface TokensStore {
@@ -11,11 +11,14 @@ export interface TokensStore {
   isLoading: boolean;
   isError: boolean;
   error: unknown;
+  strategy: Strategy | undefined;
+  setStrategy: Dispatch<SetStateAction<Strategy | undefined>>;
 }
 
 export const useTokensStore = (): TokensStore => {
   const tokensQuery = useTokensQuery();
   const [importedTokens, setImportedTokens] = useState<Token[]>([]);
+  const [strategy, setStrategy] = useState<Strategy | undefined>(undefined);
 
   const tokens = useMemo(
     () => (tokensQuery.data ? [...tokensQuery.data, ...importedTokens] : []),
@@ -47,6 +50,8 @@ export const useTokensStore = (): TokensStore => {
     isError,
     error,
     setImportedTokens,
+    strategy,
+    setStrategy,
   };
 };
 
@@ -58,4 +63,6 @@ export const defaultTokensStore: TokensStore = {
   isLoading: false,
   isError: false,
   error: undefined,
+  strategy: undefined,
+  setStrategy: () => {},
 };

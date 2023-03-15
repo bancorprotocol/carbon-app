@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
-import { useGetTokenBalance } from 'libs/queries';
+import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
@@ -10,7 +10,7 @@ import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock
 
 type EditStrategyBudgetContentProps = {
   type: EditTypes;
-  strategy: any;
+  strategy: Strategy;
 };
 
 export const EditStrategyBudgetContent = ({

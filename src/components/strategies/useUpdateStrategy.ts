@@ -1,4 +1,6 @@
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { useNavigate } from '@tanstack/react-location';
+import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useNotifications } from 'hooks/useNotifications';
 import {
   QueryKey,
@@ -6,6 +8,7 @@ import {
   useQueryClient,
   useUpdateStrategyQuery,
 } from 'libs/queries';
+import { PathNames } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 
 export const useUpdateStrategy = () => {
@@ -13,6 +16,7 @@ export const useUpdateStrategy = () => {
   const { dispatchNotification } = useNotifications();
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
+  const navigate = useNavigate<MyLocationGenerics>();
 
   const pauseStrategy = async (strategy: Strategy) => {
     const { token0, token1, encoded } = strategy;
@@ -77,6 +81,7 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -115,6 +120,7 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -157,6 +163,7 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -199,6 +206,7 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),

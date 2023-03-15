@@ -4,6 +4,7 @@ import { EditStrategyHeader } from './EditStrategyHeader';
 import { EditStrategyLayout } from './EditStrategyLayout';
 import { list } from '../create/variants';
 import { MakeGenerics, useSearch } from '@tanstack/react-location';
+import { Strategy } from 'libs/queries';
 
 export type EditTypes = 'renew' | 'changeRates' | 'deposit' | 'withdraw';
 export type EditStrategyLocationGenerics = MakeGenerics<{
@@ -13,10 +14,14 @@ export type EditStrategyLocationGenerics = MakeGenerics<{
   };
 }>;
 
-export const EditStrategyMain = () => {
+export const EditStrategyMain = ({
+  strategy,
+}: {
+  strategy: Strategy | undefined;
+}) => {
   const [showGraph, setShowGraph] = useState(true);
   const search = useSearch<EditStrategyLocationGenerics>();
-  const { strategy, type } = search;
+  const { type } = search;
 
   return (
     <m.div
@@ -28,7 +33,7 @@ export const EditStrategyMain = () => {
       animate={'visible'}
     >
       <EditStrategyHeader {...{ showGraph, setShowGraph, type }} />
-      {type && (
+      {type && strategy && (
         <EditStrategyLayout
           {...{
             strategy,

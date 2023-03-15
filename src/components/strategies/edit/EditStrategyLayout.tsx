@@ -2,10 +2,11 @@ import { EditTypes } from './EditStrategyMain';
 import { CreateStrategyGraph } from '../create/CreateStrategyGraph';
 import { EditStrategyBudgetContent } from './EditStrategyBudgetContent';
 import { EditStrategyPricesContent } from './EditStrategyPricesContent';
+import { Strategy } from 'libs/queries';
 
 type EditStrategyLayoutProps = {
   type: EditTypes;
-  strategy: any;
+  strategy: Strategy;
   showGraph: boolean;
   setShowGraph: (value: boolean) => void;
 };
