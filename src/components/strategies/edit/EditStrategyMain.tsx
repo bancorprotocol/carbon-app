@@ -7,6 +7,7 @@ import { MakeGenerics, useSearch } from '@tanstack/react-location';
 import { Strategy } from 'libs/queries';
 
 export type EditTypes = 'renew' | 'changeRates' | 'deposit' | 'withdraw';
+
 export type EditStrategyLocationGenerics = MakeGenerics<{
   Search: {
     type: EditTypes;
