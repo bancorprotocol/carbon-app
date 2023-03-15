@@ -3,12 +3,13 @@ import { Button } from 'components/common/button';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
+import { Strategy } from 'libs/queries';
 import { EditTypes } from './EditStrategyMain';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 
 type EditStrategyPricesContentProps = {
   type: EditTypes;
-  strategy: any;
+  strategy: Strategy;
 };
 
 export const EditStrategyPricesContent = ({
