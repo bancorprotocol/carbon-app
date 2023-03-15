@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
+import { lsService } from 'services/localeStorage';
 
 export interface TokensStore {
   tokens: Token[];
@@ -16,10 +17,18 @@ export const useTokensStore = (): TokensStore => {
   const tokensQuery = useTokensQuery();
   const [importedTokens, setImportedTokens] = useState<Token[]>([]);
 
-  const tokens = useMemo(
-    () => (tokensQuery.data ? [...tokensQuery.data, ...importedTokens] : []),
-    [tokensQuery.data, importedTokens]
-  );
+  const tokens = useMemo(() => {
+    if (tokensQuery.data && tokensQuery.data.length) {
+      // TODO check for duplicates
+      return [...tokensQuery.data, ...importedTokens];
+    }
+    const cachedTokens = lsService.getItem('tokenListCache')?.tokens;
+    if (cachedTokens) {
+      // TODO check for duplicates
+      return [...cachedTokens, ...importedTokens];
+    }
+    return [];
+  }, [tokensQuery.data, importedTokens]);
 
   const tokensMap = useMemo(
     () => new Map(tokens.map((token) => [token.address.toLowerCase(), token])),

@@ -27,6 +27,7 @@ interface LocalStorageSchema {
   chooseTokenCategory: ChooseTokenCategory;
   carbonControllerAddress: string;
   voucherContractAddress: string;
+  tokenListCache: { tokens: Token[]; timestamp: number };
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>

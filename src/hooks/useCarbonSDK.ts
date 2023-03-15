@@ -7,6 +7,21 @@ import { carbonSDK } from 'index';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { buildTokenPairKey } from 'utils/helpers';
+import { lsService } from 'services/localeStorage';
+
+const sdkConfig = {
+  rpcUrl: RPC_URLS[1],
+  contractAddresses: {
+    carbonControllerAddress: config.carbon.carbonController,
+    voucherAddress: config.carbon.voucher,
+  },
+};
+
+const getTokenDecimalMap = () => {
+  const tokens = lsService.getItem('tokenListCache')?.tokens || [];
+  if (!tokens.length) return;
+  return new Map(tokens.map((token) => [token.address, token.decimals]));
+};
 
 export const useCarbonSDK = () => {
   const cache = useQueryClient();
@@ -40,13 +55,7 @@ export const useCarbonSDK = () => {
       try {
         setIsLoading(true);
         console.log('Initializing CarbonSDK...');
-        await carbonSDK.init({
-          rpcUrl: RPC_URLS[1],
-          contractAddresses: {
-            carbonControllerAddress: config.carbon.carbonController,
-            voucherAddress: config.carbon.voucher,
-          },
-        });
+        await carbonSDK.init(sdkConfig, getTokenDecimalMap());
         console.log('Web worker: SDK initialized');
         await carbonSDK.onChange(Comlink.proxy(onChangeCallback));
         setIsInitialized(true);

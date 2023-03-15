@@ -30,10 +30,13 @@ let carbonSDK: Sdk;
 let isInitialized = false;
 let isInitializing = false;
 
-const init = async (config: Config) => {
+const init = async (config: Config, decimalsMap?: Map<string, number>) => {
   if (isInitialized || isInitializing) return;
   isInitializing = true;
-  carbonSDK = new Sdk(config);
+  carbonSDK = new Sdk(
+    config,
+    decimalsMap ? (address) => decimalsMap.get(address) : undefined
+  );
   await carbonSDK.startDataSync();
   isInitialized = true;
   isInitializing = false;
