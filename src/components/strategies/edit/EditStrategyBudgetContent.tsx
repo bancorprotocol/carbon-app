@@ -7,6 +7,8 @@ import { EditTypes } from './EditStrategyMain';
 import { useLocation } from '@tanstack/react-location';
 import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
+import { useModal } from 'hooks/useModal';
+import { useEditStrategy } from '../create/useEditStrategy';
 
 type EditStrategyBudgetContentProps = {
   type: EditTypes;
@@ -22,6 +24,9 @@ export const EditStrategyBudgetContent = ({
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '0' });
   const token0Amount = useGetTokenBalance(strategy.token1).data;
   const token1Amount = useGetTokenBalance(strategy.token0).data;
+  const { approval } = useEditStrategy(strategy, order0, order1);
+  const { openModal } = useModal();
+
   const {
     history: { back },
   } = useLocation();
@@ -35,6 +40,18 @@ export const EditStrategyBudgetContent = ({
   ](new BigNumber(order1.budget));
 
   const handleOnActionClick = () => {
+    if (approval.approvalRequired) {
+      openModal('txConfirm', {
+        approvalTokens: approval.tokens,
+        onConfirm: depositOrWithdrawFunds,
+        buttonLabel: 'Confirm Trade',
+      });
+    } else {
+      depositOrWithdrawFunds();
+    }
+  };
+
+  const depositOrWithdrawFunds = () => {
     const updatedStrategy = {
       ...strategy,
       order0: {
