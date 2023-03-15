@@ -14,19 +14,19 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
         new BigNumber(a.id).minus(b.id).toNumber();
     case StrategySort.PairAscending:
       return (a: Strategy, b: Strategy) => {
-        firstPairComparison = a.token0.symbol.localeCompare(b.token0.symbol);
+        firstPairComparison = a.base.symbol.localeCompare(b.base.symbol);
         if (firstPairComparison !== 0) {
           return firstPairComparison;
         }
-        return a.token1.symbol.localeCompare(b.token1.symbol);
+        return a.quote.symbol.localeCompare(b.quote.symbol);
       };
     case StrategySort.PairDescending:
       return (a: Strategy, b: Strategy) => {
-        firstPairComparison = b.token0.symbol.localeCompare(a.token0.symbol);
+        firstPairComparison = b.base.symbol.localeCompare(a.base.symbol);
         if (firstPairComparison !== 0) {
           return firstPairComparison;
         }
-        return b.token1.symbol.localeCompare(a.token1.symbol);
+        return b.quote.symbol.localeCompare(a.quote.symbol);
       };
     default:
       return (a: Strategy, b: Strategy) =>

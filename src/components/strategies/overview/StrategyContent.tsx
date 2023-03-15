@@ -25,8 +25,8 @@ export const StrategyContent = () => {
 
     const filtered = strategies.data?.filter(
       (strategy) =>
-        (strategy.token0.symbol.toLowerCase().includes(searchLC) ||
-          strategy.token1.symbol.toLowerCase().includes(searchLC)) &&
+        (strategy.base.symbol.toLowerCase().includes(searchLC) ||
+          strategy.quote.symbol.toLowerCase().includes(searchLC)) &&
         (filter === StrategyFilter.All ||
           (filter === StrategyFilter.Active &&
             strategy.status === StrategyStatus.Active) ||

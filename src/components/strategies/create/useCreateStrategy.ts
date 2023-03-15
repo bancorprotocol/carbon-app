@@ -20,57 +20,55 @@ export const useCreateStrategy = () => {
   const navigate = useNavigate();
   const { user } = useWeb3();
   const { openModal } = useModal();
-  const [token0, setToken0] = useState<Token | undefined>(
-    templateStrategy?.token0
-  );
-  const [token1, setToken1] = useState<Token | undefined>(
-    templateStrategy?.token1
+  const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
+  const [quote, setQuote] = useState<Token | undefined>(
+    templateStrategy?.quote
   );
   const { dispatchNotification } = useNotifications();
 
-  const token0BalanceQuery = useGetTokenBalance(token0);
-  const token1BalanceQuery = useGetTokenBalance(token1);
+  const token0BalanceQuery = useGetTokenBalance(base);
+  const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
 
   const mutation = useCreateStrategyQuery();
 
-  const showOrders = !!token0 && !!token1;
+  const showOrders = !!base && !!quote;
 
   const approvalTokens = useMemo(() => {
     return [
-      ...(!!token0
+      ...(!!base
         ? [
             {
-              ...token0,
+              ...base,
               spender: spenderAddress,
               amount: order1.budget,
             },
           ]
         : []),
-      ...(!!token1
+      ...(!!quote
         ? [
             {
-              ...token1,
+              ...quote,
               spender: spenderAddress,
               amount: order0.budget,
             },
           ]
         : []),
     ];
-  }, [order0.budget, token0, order1.budget, token1]);
+  }, [base, quote, order0.budget, order1.budget]);
 
   const approval = useApproval(approvalTokens);
 
   const create = async () => {
-    if (!token0 || !token1 || !user) {
+    if (!base || !quote || !user) {
       throw new Error('error in create strategy: missing data ');
     }
 
     mutation.mutate(
       {
-        token0: token0,
-        token1: token1,
+        base: base,
+        quote: quote,
         order0: {
           budget: order0.budget,
           min: order0.min,
@@ -91,10 +89,10 @@ export const useCreateStrategy = () => {
           console.log('tx hash', tx.hash);
           await tx.wait();
           void cache.invalidateQueries({
-            queryKey: QueryKey.balance(user, token0.address),
+            queryKey: QueryKey.balance(user, base.address),
           });
           void cache.invalidateQueries({
-            queryKey: QueryKey.balance(user, token1.address),
+            queryKey: QueryKey.balance(user, quote.address),
           });
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
@@ -137,16 +135,14 @@ export const useCreateStrategy = () => {
 
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
-      isSource ? setToken0(token) : setToken1(token);
+      isSource ? setBase(token) : setQuote(token);
       order0.resetFields();
       order1.resetFields();
     };
 
     const data: ModalTokenListData = {
       onClick,
-      excludedTokens: [
-        isSource ? token1?.address ?? '' : token0?.address ?? '',
-      ],
+      excludedTokens: [isSource ? quote?.address ?? '' : base?.address ?? ''],
       isBaseToken: isSource,
     };
     openModal('tokenLists', data);
@@ -157,10 +153,10 @@ export const useCreateStrategy = () => {
   }, [approval.isError, approval.isLoading, mutation.isLoading]);
 
   return {
-    token0,
-    setToken0,
-    token1,
-    setToken1,
+    base,
+    setBase,
+    quote,
+    setQuote,
     order0,
     order1,
     createStrategy,

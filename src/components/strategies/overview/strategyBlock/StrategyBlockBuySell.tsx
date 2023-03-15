@@ -16,8 +16,8 @@ export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
   buy?: boolean;
 }> = ({ strategy, buy }) => {
-  const token = buy ? strategy.token0 : strategy.token1;
-  const otherToken = buy ? strategy.token1 : strategy.token0;
+  const token = buy ? strategy.base : strategy.quote;
+  const otherToken = buy ? strategy.quote : strategy.base;
   const order = buy ? strategy.order0 : strategy.order1;
   const otherOrder = buy ? strategy.order1 : strategy.order1;
   const limit = order.startRate === order.endRate;
