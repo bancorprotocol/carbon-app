@@ -18,14 +18,14 @@ export const EditStrategyOverlapTokens = ({
     >
       <TokensOverlap
         className="h-32 w-32"
-        tokens={[strategy.token0, strategy.token1]}
+        tokens={[strategy.base, strategy.quote]}
       />
       <div>
         {
           <div className="flex gap-6">
-            <span>{strategy.token0.symbol}</span>
+            <span>{strategy.base.symbol}</span>
             <div className="text-secondary !text-16">/</div>
-            <span>{strategy.token1.symbol}</span>
+            <span>{strategy.quote.symbol}</span>
           </div>
         }
         <div className="text-secondary flex gap-8">

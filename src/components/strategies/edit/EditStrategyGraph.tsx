@@ -6,14 +6,14 @@ import { Token } from 'libs/tokens';
 import { list } from '../create/variants';
 
 type EditStrategyGraphProps = {
-  token0: Token | undefined;
-  token1: Token | undefined;
+  base: Token | undefined;
+  quote: Token | undefined;
   setShowGraph: (value: boolean) => void;
 };
 
 export const EditStrategyGraph = ({
-  token0,
-  token1,
+  base,
+  quote,
   setShowGraph,
 }: EditStrategyGraphProps) => {
   return (
@@ -35,7 +35,7 @@ export const EditStrategyGraph = ({
           </div>
         </Button>
       </div>
-      <TradingviewChart token0={token0} token1={token1} />
+      <TradingviewChart base={base} quote={quote} />
     </m.div>
   );
 };

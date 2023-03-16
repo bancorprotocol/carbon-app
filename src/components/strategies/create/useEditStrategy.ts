@@ -11,30 +11,30 @@ export const useEditStrategy = (
   order0: OrderCreate,
   order1: OrderCreate
 ) => {
-  const { token0, token1 } = strategy;
+  const { base, quote } = strategy;
 
   const approvalTokens = useMemo(() => {
     return [
-      ...(!!token0
+      ...(!!base
         ? [
             {
-              ...token0,
+              ...base,
               spender: spenderAddress,
               amount: order1.budget,
             },
           ]
         : []),
-      ...(!!token1
+      ...(!!quote
         ? [
             {
-              ...token1,
+              ...quote,
               spender: spenderAddress,
               amount: order0.budget,
             },
           ]
         : []),
     ];
-  }, [order0.budget, order1.budget, token0, token1]);
+  }, [order0.budget, order1.budget, base, quote]);
 
   const approval = useApproval(approvalTokens);
 

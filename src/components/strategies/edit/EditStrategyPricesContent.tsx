@@ -64,15 +64,15 @@ export const EditStrategyPricesContent = ({
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyPricesBuySellBlock
         buy
-        base={strategy?.token0}
-        quote={strategy?.token1}
+        base={strategy?.base}
+        quote={strategy?.quote}
         order={order0}
         balance={strategy.order0.balance}
         type={type}
       />
       <EditStrategyPricesBuySellBlock
-        base={strategy?.token0}
-        quote={strategy?.token1}
+        base={strategy?.base}
+        quote={strategy?.quote}
         order={order1}
         balance={strategy.order1.balance}
         type={type}

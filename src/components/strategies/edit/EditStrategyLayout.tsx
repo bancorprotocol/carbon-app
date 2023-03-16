@@ -17,7 +17,7 @@ export const EditStrategyLayout = ({
   showGraph,
   setShowGraph,
 }: EditStrategyLayoutProps) => {
-  const { token0, token1 } = strategy;
+  const { base, quote } = strategy;
 
   return (
     <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
@@ -27,7 +27,7 @@ export const EditStrategyLayout = ({
         }`}
       >
         {showGraph && (
-          <CreateStrategyGraph {...{ token0, token1, setShowGraph }} />
+          <CreateStrategyGraph {...{ base, quote, setShowGraph }} />
         )}
       </div>
       {type === 'deposit' || type === 'withdraw' ? (
