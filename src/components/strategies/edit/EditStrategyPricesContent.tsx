@@ -56,7 +56,9 @@ export const EditStrategyPricesContent = ({
   };
 
   const isOrderValid = (order: OrderCreate) => {
-    return order.isRange ? +order.min > 0 && +order.max > 0 : +order.price > 0;
+    return order.isRange
+      ? +order.min > 0 && +order.max > 0 && +order.max > +order.min
+      : +order.price > 0;
   };
 
   return (
