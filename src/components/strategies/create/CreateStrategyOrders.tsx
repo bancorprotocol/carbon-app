@@ -7,8 +7,8 @@ import { OrderCreate } from './useOrder';
 import { items } from './variants';
 
 type CreateStrategyOrdersProps = {
-  token0: Token | undefined;
-  token1: Token | undefined;
+  base: Token | undefined;
+  quote: Token | undefined;
   order0: OrderCreate;
   order1: OrderCreate;
   token0BalanceQuery: UseQueryResult<string>;
@@ -18,8 +18,8 @@ type CreateStrategyOrdersProps = {
 };
 
 export const CreateStrategyOrders = ({
-  token0,
-  token1,
+  base,
+  quote,
   order0,
   order1,
   createStrategy,
@@ -31,8 +31,8 @@ export const CreateStrategyOrders = ({
     <>
       <m.div variants={items}>
         <BuySellBlock
-          token0={token0!}
-          token1={token1!}
+          base={base!}
+          quote={quote!}
           order={order0}
           buy
           tokenBalanceQuery={token1BalanceQuery}
@@ -41,8 +41,8 @@ export const CreateStrategyOrders = ({
       </m.div>
       <m.div variants={items}>
         <BuySellBlock
-          token0={token0!}
-          token1={token1!}
+          base={base!}
+          quote={quote!}
           order={order1}
           tokenBalanceQuery={token0BalanceQuery}
           isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}

@@ -6,14 +6,14 @@ import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Token } from 'libs/tokens';
 
 type CreateStrategyGraphProps = {
-  token0: Token | undefined;
-  token1: Token | undefined;
+  base: Token | undefined;
+  quote: Token | undefined;
   setShowGraph: (value: boolean) => void;
 };
 
 export const CreateStrategyGraph = ({
-  token0,
-  token1,
+  base,
+  quote,
   setShowGraph,
 }: CreateStrategyGraphProps) => {
   return (
@@ -35,7 +35,7 @@ export const CreateStrategyGraph = ({
           </div>
         </Button>
       </div>
-      <TradingviewChart token0={token0} token1={token1} />
+      <TradingviewChart base={base} quote={quote} />
     </m.div>
   );
 };

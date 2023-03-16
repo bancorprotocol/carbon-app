@@ -27,7 +27,7 @@ export const NotEnoughLiquidity = ({
         <div>
           {`You can `}
           <span
-            onClick={() => duplicate({ token0: source, token1: target })}
+            onClick={() => duplicate({ base: source, quote: target })}
             className="cursor-pointer font-weight-500"
           >
             Create a Strategy.

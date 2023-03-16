@@ -23,7 +23,7 @@ export const getModalDataByType = (
         icon: <IconPause className="h-16 w-16" />,
         title: 'Are you sure you would like to pause your strategy?',
         content:
-          'This will pause the strategy but you will maintain access to any associated funds',
+          'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
         actionButton: 'Pause Strategy',
       };
     case 'delete':
