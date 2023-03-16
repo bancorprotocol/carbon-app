@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
+import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
-import { Strategy, useGetTokenBalance } from 'libs/queries';
+import { Strategy } from 'libs/queries';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
-import { useLocation } from '@tanstack/react-location';
 import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { useModal } from 'hooks/useModal';
@@ -21,8 +21,6 @@ export const EditStrategyBudgetContent = ({
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
-  const token0Amount = useGetTokenBalance(strategy.token1).data;
-  const token1Amount = useGetTokenBalance(strategy.token0).data;
   const { approval } = useEditStrategy(strategy, order0, order1);
   const { openModal } = useModal();
 
@@ -30,13 +28,17 @@ export const EditStrategyBudgetContent = ({
     history: { back },
   } = useLocation();
 
-  const calculatedOrder0Budget = new BigNumber(strategy.order0.balance)?.[
-    `${type === 'withdraw' ? 'minus' : 'plus'}`
-  ](new BigNumber(order0.budget));
+  const calculatedOrder0Budget = !!order0.budget
+    ? new BigNumber(strategy.order0.balance)?.[
+        `${type === 'withdraw' ? 'minus' : 'plus'}`
+      ](new BigNumber(order0.budget))
+    : new BigNumber(strategy.order0.balance);
 
-  const calculatedOrder1Budget = new BigNumber(strategy.order1.balance)?.[
-    `${type === 'withdraw' ? 'minus' : 'plus'}`
-  ](new BigNumber(order1.budget));
+  const calculatedOrder1Budget = !!order1.budget
+    ? new BigNumber(strategy.order1.balance)?.[
+        `${type === 'withdraw' ? 'minus' : 'plus'}`
+      ](new BigNumber(order1.budget))
+    : new BigNumber(strategy.order1.balance);
 
   const handleOnActionClick = () => {
     if (approval.approvalRequired) {
@@ -79,18 +81,7 @@ export const EditStrategyBudgetContent = ({
   };
 
   const isOrdersBudgetValid = () => {
-    if (type === 'withdraw') {
-      return (
-        calculatedOrder0Budget.gte(0) &&
-        calculatedOrder1Budget.gte(0) &&
-        (+order0.budget > 0 || +order1.budget > 0)
-      );
-    }
-    return (
-      new BigNumber(token0Amount || 0).gte(order0.budget) &&
-      new BigNumber(token1Amount || 0).gte(order1.budget) &&
-      (+order0.budget > 0 || +order1.budget > 0)
-    );
+    return +order0.budget > 0 || +order1.budget > 0;
   };
 
   return (

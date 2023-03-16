@@ -1,4 +1,4 @@
-import { useLocation } from '@tanstack/react-location';
+import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
