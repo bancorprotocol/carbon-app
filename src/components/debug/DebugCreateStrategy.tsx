@@ -112,8 +112,8 @@ export const DebugCreateStrategy = () => {
       const balance1 = balancesMap.get(tkn1.address) || '0';
 
       let strategy: CreateStrategyParams = {
-        token0: tkn0,
-        token1: tkn1,
+        base: tkn0,
+        quote: tkn1,
         order0: {
           max: buyMax,
           min: buyMin,
@@ -140,15 +140,15 @@ export const DebugCreateStrategy = () => {
         });
         console.log(
           'created strategy',
-          strategy.token0.address,
-          strategy.token1.address
+          strategy.base.address,
+          strategy.quote.address
         );
       } catch (e) {
         console.error(
           'create strategy failed for ',
-          'token0',
+          'base',
           tkn0.address,
-          'token1',
+          'quote',
           tkn1.address,
           e
         );

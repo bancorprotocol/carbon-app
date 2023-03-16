@@ -15,16 +15,16 @@ export const useUpdateStrategy = () => {
   const cache = useQueryClient();
 
   const pauseStrategy = async (strategy: Strategy) => {
-    const { token0, token1, encoded } = strategy;
+    const { base, quote, encoded } = strategy;
 
-    if (!token0 || !token1 || !user) {
+    if (!base || !quote || !user) {
       throw new Error('error in update strategy: missing data ');
     }
 
     updateMutation.mutate(
       {
-        token0,
-        token1,
+        base,
+        quote,
         encoded,
         fieldsToUpdate: {
           buyPriceLow: '0',
@@ -53,16 +53,16 @@ export const useUpdateStrategy = () => {
   };
 
   const renewStrategy = async (strategy: Strategy) => {
-    const { token0, token1, order0, order1, encoded } = strategy;
+    const { base, quote, order0, order1, encoded } = strategy;
 
-    if (!token0 || !token1 || !user) {
+    if (!base || !quote || !user) {
       throw new Error('error in renew strategy: missing data ');
     }
 
     updateMutation.mutate(
       {
-        token0,
-        token1,
+        base,
+        quote,
         encoded,
         fieldsToUpdate: {
           buyPriceLow: order0.startRate,
@@ -91,16 +91,16 @@ export const useUpdateStrategy = () => {
   };
 
   const changeRateStrategy = async (strategy: Strategy) => {
-    const { token0, token1, order0, order1, encoded } = strategy;
+    const { base, quote, order0, order1, encoded } = strategy;
 
-    if (!token0 || !token1 || !user) {
+    if (!base || !quote || !user) {
       throw new Error('error in change rates strategy: missing data ');
     }
 
     updateMutation.mutate(
       {
-        token0,
-        token1,
+        base,
+        quote,
         encoded,
         fieldsToUpdate: {
           buyPriceLow: order0.startRate,
@@ -133,16 +133,16 @@ export const useUpdateStrategy = () => {
     buyMarginalPrice?: MarginalPriceOptions,
     sellMarginalPrice?: MarginalPriceOptions
   ) => {
-    const { token0, token1, order0, order1, encoded } = strategy;
+    const { base, quote, order0, order1, encoded } = strategy;
 
-    if (!token0 || !token1 || !user) {
+    if (!base || !quote || !user) {
       throw new Error('error in withdraw strategy budget: missing data ');
     }
 
     updateMutation.mutate(
       {
-        token0,
-        token1,
+        base,
+        quote,
         encoded,
         fieldsToUpdate: {
           buyBudget: order0.balance,
@@ -175,16 +175,16 @@ export const useUpdateStrategy = () => {
     buyMarginalPrice?: MarginalPriceOptions,
     sellMarginalPrice?: MarginalPriceOptions
   ) => {
-    const { token0, token1, order0, order1, encoded } = strategy;
+    const { base, quote, order0, order1, encoded } = strategy;
 
-    if (!token0 || !token1 || !user) {
+    if (!base || !quote || !user) {
       throw new Error('error in deposit strategy budget: missing data ');
     }
 
     updateMutation.mutate(
       {
-        token0,
-        token1,
+        base,
+        quote,
         encoded,
         fieldsToUpdate: {
           buyBudget: order0.balance,

@@ -22,8 +22,8 @@ export const ModalEditStrategyBuySellBlock: FC<{
     >
       <LimitRangeSection
         {...{
-          token0: base,
-          token1: quote,
+          base,
+          quote,
           balance,
           buy,
           order,

@@ -5,15 +5,15 @@ import { Token } from 'libs/tokens';
 import { pairsToExchangeMapping } from './utils';
 
 export type TradingviewChartProps = {
-  token0: Token | undefined;
-  token1: Token | undefined;
+  base: Token | undefined;
+  quote: Token | undefined;
 };
 
 export const TradingviewChart: FC<TradingviewChartProps> = memo(
-  ({ token0, token1 }) => {
+  ({ base, quote }) => {
     const symbol =
-      pairsToExchangeMapping[`${token0?.symbol}${token1?.symbol}`] ||
-      `BINANCE:${token0?.symbol}${token1?.symbol}`;
+      pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`] ||
+      `BINANCE:${base?.symbol}${quote?.symbol}`;
 
     return (
       <div>

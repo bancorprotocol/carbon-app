@@ -27,8 +27,8 @@ export interface Order {
 
 export interface Strategy {
   id: string;
-  token0: Token;
-  token1: Token;
+  base: Token;
+  quote: Token;
   order0: Order;
   order1: Order;
   status: StrategyStatus;
@@ -56,9 +56,9 @@ export const useGetUserStrategies = () => {
       };
 
       const promises = strategies.map(async (s) => {
-        const token0 =
+        const base =
           getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
-        const token1 =
+        const quote =
           getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
 
         const sellLow = new BigNumber(s.sellPriceLow);
@@ -106,8 +106,8 @@ export const useGetUserStrategies = () => {
 
         const strategy: Strategy = {
           id: s.id.toString(),
-          token0,
-          token1,
+          base,
+          quote,
           order0,
           order1,
           status,
@@ -136,16 +136,16 @@ interface CreateStrategyOrder {
 type TokenAddressDecimals = Pick<Token, 'address' | 'decimals'>;
 
 export interface CreateStrategyParams {
-  token0: TokenAddressDecimals;
-  token1: TokenAddressDecimals;
+  base: TokenAddressDecimals;
+  quote: TokenAddressDecimals;
   order0: CreateStrategyOrder;
   order1: CreateStrategyOrder;
   encoded?: EncodedStrategy;
 }
 
 export interface UpdateStrategyParams {
-  token0: TokenAddressDecimals;
-  token1: TokenAddressDecimals;
+  base: TokenAddressDecimals;
+  quote: TokenAddressDecimals;
   encoded: EncodedStrategy;
   fieldsToUpdate: StrategyUpdate;
   buyMarginalPrice?: MarginalPriceOptions;
@@ -160,7 +160,7 @@ export const useCreateStrategyQuery = () => {
   const { signer } = useWeb3();
 
   return useMutation(
-    async ({ token0, token1, order0, order1 }: CreateStrategyParams) => {
+    async ({ base, quote, order0, order1 }: CreateStrategyParams) => {
       const noPrice0 = Number(order0.price) === 0;
       const noPrice1 = Number(order1.price) === 0;
 
@@ -174,8 +174,8 @@ export const useCreateStrategyQuery = () => {
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
 
       const unsignedTx = await carbonSDK.createBuySellStrategy(
-        token0.address,
-        token1.address,
+        base.address,
+        quote.address,
         order0Low,
         order0Max,
         order0Budget,
@@ -195,8 +195,8 @@ export const useUpdateStrategyQuery = () => {
 
   return useMutation(
     async ({
-      token0,
-      token1,
+      base,
+      quote,
       encoded,
       fieldsToUpdate,
       buyMarginalPrice,
@@ -207,8 +207,8 @@ export const useUpdateStrategyQuery = () => {
       const unsignedTx = await carbonSDK.updateStrategy(
         strategyId,
         encoded,
-        token0.address,
-        token1.address,
+        base.address,
+        quote.address,
         {
           ...fieldsToUpdate,
         },
