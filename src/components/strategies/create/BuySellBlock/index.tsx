@@ -7,6 +7,7 @@ import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
+import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 
 type Props = {
   token0: Token;
@@ -117,6 +118,13 @@ export const BuySellBlock: FC<Props> = ({
           isBalanceLoading={tokenBalanceQuery.isLoading}
           balance={tokenBalanceQuery.data}
           isError={insufficientBalance}
+          warning={
+            <WarningWithTooltip
+              tooltipContent={
+                'Low balance might be skipped due to gas concerns'
+              }
+            />
+          }
         />
         <div
           className={`mt-10 text-center text-12 text-red ${

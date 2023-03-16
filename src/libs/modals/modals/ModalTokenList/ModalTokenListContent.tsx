@@ -2,9 +2,9 @@ import { Imager } from 'components/common/imager/Imager';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
+import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -116,7 +116,7 @@ export const ModalTokenListContent: FC<Props> = ({
                     <div className="ml-15 grid justify-items-start">
                       <div className="flex">
                         {token.symbol}
-                        {token.isSuspicious && <SuspiciousTokenWarning />}
+                        {token.isSuspicious && <WarningWithTooltip />}
                       </div>
                       <div className="text-secondary text-12">
                         {
