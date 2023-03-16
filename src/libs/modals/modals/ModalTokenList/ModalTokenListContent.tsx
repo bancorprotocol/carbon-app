@@ -56,6 +56,8 @@ export const ModalTokenListContent: FC<Props> = ({
     (token: Token) => favoritesMap.has(token.address),
     [favoritesMap]
   );
+  const suspiciousTokenTooltipMsg =
+    'This token is not part of any known token list. Always conduct your own research before trading.';
 
   return (
     <div>
@@ -116,7 +118,11 @@ export const ModalTokenListContent: FC<Props> = ({
                     <div className="ml-15 grid justify-items-start">
                       <div className="flex">
                         {token.symbol}
-                        {token.isSuspicious && <WarningWithTooltip />}
+                        {token.isSuspicious && (
+                          <WarningWithTooltip
+                            tooltipContent={suspiciousTokenTooltipMsg}
+                          />
+                        )}
                       </div>
                       <div className="text-secondary text-12">
                         {

@@ -1,9 +1,13 @@
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
+type WarningWithTooltipProps = {
+  tooltipContent: string;
+};
+
 export const WarningWithTooltip = ({
-  tooltipContent = 'This token is not part of any known token list. Always conduct your own research before trading.',
-}) => {
+  tooltipContent,
+}: WarningWithTooltipProps) => {
   return (
     <span className={'ml-5 flex'}>
       <Tooltip interactive={false} element={tooltipContent}>

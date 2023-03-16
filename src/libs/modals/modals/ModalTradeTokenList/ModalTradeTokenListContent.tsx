@@ -60,6 +60,9 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     [favoritesMap]
   );
 
+  const suspiciousTokenTooltipMsg =
+    'This token is not part of any known token list. Always conduct your own research before trading.';
+
   return (
     <div>
       <div className={'my-20 grid w-full grid-cols-4'}>
@@ -117,11 +120,17 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   />
                   <span className={'flex font-weight-500'}>
                     {tradePair.baseToken.symbol}
-                    {tradePair.baseToken.isSuspicious && <WarningWithTooltip />}
+                    {tradePair.baseToken.isSuspicious && (
+                      <WarningWithTooltip
+                        tooltipContent={suspiciousTokenTooltipMsg}
+                      />
+                    )}
                     <span className={'px-5 text-white/60'}>/</span>
                     {tradePair.quoteToken.symbol}
                     {tradePair.quoteToken.isSuspicious && (
-                      <WarningWithTooltip />
+                      <WarningWithTooltip
+                        tooltipContent={suspiciousTokenTooltipMsg}
+                      />
                     )}
                   </span>
                 </button>
