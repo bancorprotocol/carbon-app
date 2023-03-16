@@ -12,6 +12,7 @@ import { TokenPrice } from './TokenPrice';
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
+import { AVAILABLE_CURRENCIES } from 'store/useFiatCurrencyStore';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -59,6 +60,11 @@ export const StrategyBlockBuySell: FC<{
       otherTokenPriceQuery.data?.[selectedFiatCurrency] || 0
     );
   };
+  const getTokenFiatUsd = (value: string) => {
+    return new BigNumber(value || 0).times(
+      otherTokenPriceQuery.data?.[AVAILABLE_CURRENCIES[0]] || 0
+    );
+  };
 
   const getOtherTokenFiat = (value: string) => {
     return new BigNumber(value || 0).times(
@@ -81,8 +87,12 @@ export const StrategyBlockBuySell: FC<{
   const price = getPrice();
 
   const budgetPrice = getTokenFiat(buy ? order.balance : otherOrder.balance);
+  const budgetPriceUsd = getTokenFiatUsd(
+    buy ? order.balance : otherOrder.balance
+  );
   const budgetFiat = getFiatValue(budgetPrice, selectedFiatCurrency);
-  const budgetWarning = new BigNumber(budgetPrice).lte(20);
+
+  const budgetWarning = budgetPriceUsd.lte(new BigNumber(20));
 
   return (
     <div
