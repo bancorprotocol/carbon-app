@@ -5,10 +5,10 @@ import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
 
 export const CreateStrategyTokenSelection = ({
-  token0,
-  token1,
-  setToken0,
-  setToken1,
+  base,
+  quote,
+  setBase,
+  setQuote,
   openTokenListModal,
 }: any) => {
   return (
@@ -31,14 +31,14 @@ export const CreateStrategyTokenSelection = ({
       </div>
       <div className={'-space-y-15'}>
         <SelectTokenButton
-          symbol={token0?.symbol}
-          imgUrl={token0?.logoURI}
-          address={token0?.address}
+          symbol={base?.symbol}
+          imgUrl={base?.logoURI}
+          address={base?.address}
           description={'Buy or Sell'}
           onClick={() => openTokenListModal(true)}
           isBaseToken
         />
-        {!!token0 && (
+        {!!base && (
           <>
             <div
               className={
@@ -47,19 +47,19 @@ export const CreateStrategyTokenSelection = ({
             >
               <IconArrow
                 onClick={() => {
-                  if (token0 && token1) {
-                    const temp = token0;
-                    setToken0(token1);
-                    setToken1(temp);
+                  if (base && quote) {
+                    const temp = base;
+                    setBase(quote);
+                    setQuote(temp);
                   }
                 }}
-                className={`w-12 ${token0 && token1 ? 'cursor-pointer' : ''}`}
+                className={`w-12 ${base && quote ? 'cursor-pointer' : ''}`}
               />
             </div>
             <SelectTokenButton
-              symbol={token1?.symbol}
-              imgUrl={token1?.logoURI}
-              address={token1?.address}
+              symbol={quote?.symbol}
+              imgUrl={quote?.logoURI}
+              address={quote?.address}
               description={'With'}
               onClick={() => openTokenListModal()}
             />

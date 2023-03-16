@@ -9,8 +9,8 @@ import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
 
 type Props = {
-  token0: Token;
-  token1: Token;
+  base: Token;
+  quote: Token;
   tokenBalanceQuery: UseQueryResult<string>;
   order: OrderCreate;
   buy?: boolean;
@@ -18,14 +18,14 @@ type Props = {
 };
 
 export const BuySellBlock: FC<Props> = ({
-  token0,
-  token1,
+  base,
+  quote,
   tokenBalanceQuery,
   order,
   buy,
   isBudgetOptional,
 }) => {
-  const budgetToken = buy ? token1 : token0;
+  const budgetToken = buy ? quote : base;
 
   const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
     order.budget
@@ -33,7 +33,7 @@ export const BuySellBlock: FC<Props> = ({
   const titleText = buy ? 'Buy Low' : 'Sell High';
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
-  } ${token0.symbol} at.`;
+  } ${base.symbol} at.`;
 
   const title = (
     <>
@@ -42,10 +42,10 @@ export const BuySellBlock: FC<Props> = ({
       </Tooltip>
       <Imager
         alt={'Token'}
-        src={token0.logoURI}
+        src={base.logoURI}
         className={'mx-6 h-18 w-18 rounded-full'}
       />
-      <span>{token0.symbol}</span>
+      <span>{base.symbol}</span>
     </>
   );
 
@@ -60,14 +60,14 @@ export const BuySellBlock: FC<Props> = ({
       </div>
       <Tooltip
         element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
-          token0.symbol
-        } at. Make sure the price is in ${token1.symbol} tokens.`}
+          base.symbol
+        } at. Make sure the price is in ${quote.symbol} tokens.`}
       >
         <div className={'text-14 font-weight-500 text-white/60'}>
           <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
           <span className={'ml-8 text-white/80'}>
-            ({token1.symbol} <span className={'text-white/60'}>per 1 </span>
-            {token0.symbol})
+            ({quote.symbol} <span className={'text-white/60'}>per 1 </span>
+            {base.symbol})
           </span>
         </div>
       </Tooltip>
@@ -82,9 +82,7 @@ export const BuySellBlock: FC<Props> = ({
           : 'border-red/50 focus-within:border-red'
       }`}
     >
-      <LimitRangeSection
-        {...{ token0, token1, order, buy, title, inputTitle }}
-      />
+      <LimitRangeSection {...{ base, quote, order, buy, title, inputTitle }} />
       <div className={'flex items-center pt-10 text-14'}>
         <div
           className={
@@ -96,8 +94,8 @@ export const BuySellBlock: FC<Props> = ({
         <Tooltip
           element={
             buy
-              ? `The amount of ${token1.symbol} tokens you would like to use in order to buy ${token0.symbol}. Note: this amount will re-fill once the "Sell" order is used by traders.`
-              : `The amount of ${token0.symbol} tokens you would like to sell. Note: this amount will re-fill once the "Buy" order is used by traders.`
+              ? `The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}. Note: this amount will re-fill once the "Sell" order is used by traders.`
+              : `The amount of ${base.symbol} tokens you would like to sell. Note: this amount will re-fill once the "Buy" order is used by traders.`
           }
         >
           <div className={'font-weight-500 text-white/60'}>

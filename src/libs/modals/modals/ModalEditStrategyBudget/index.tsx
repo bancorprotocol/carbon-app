@@ -23,8 +23,8 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '0' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '0' });
   const paddedID = strategy.id.padStart(9, '0');
-  const token0Amount = useGetTokenBalance(strategy.token1).data;
-  const token1Amount = useGetTokenBalance(strategy.token0).data;
+  const token0Amount = useGetTokenBalance(strategy.quote).data;
+  const token1Amount = useGetTokenBalance(strategy.base).data;
 
   const calculatedOrder0Budget = new BigNumber(strategy.order0.balance)?.[
     `${type === 'withdraw' ? 'minus' : 'plus'}`
@@ -92,14 +92,14 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
         >
           <TokensOverlap
             className="h-32 w-32"
-            tokens={[strategy.token0, strategy.token1]}
+            tokens={[strategy.base, strategy.quote]}
           />
           <div>
             {
               <div className="flex gap-6">
-                <span>{strategy.token0.symbol}</span>
+                <span>{strategy.base.symbol}</span>
                 <div className="text-secondary !text-16">/</div>
-                <span>{strategy.token1.symbol}</span>
+                <span>{strategy.quote.symbol}</span>
               </div>
             }
             <div className="text-secondary flex gap-8">
@@ -111,16 +111,16 @@ export const ModalEditStrategyBudget: ModalFC<ModalEditStrategyBudgetData> = ({
         </div>
         <ModalEditStrategyBudgetBuySellBlock
           buy
-          base={strategy?.token0}
-          quote={strategy?.token1}
+          base={strategy?.base}
+          quote={strategy?.quote}
           order={order0}
           balance={strategy.order0.balance}
           isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
           type={type}
         />
         <ModalEditStrategyBudgetBuySellBlock
-          base={strategy?.token0}
-          quote={strategy?.token1}
+          base={strategy?.base}
+          quote={strategy?.quote}
           order={order1}
           balance={strategy.order1.balance}
           isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}

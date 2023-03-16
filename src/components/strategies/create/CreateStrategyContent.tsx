@@ -11,8 +11,10 @@ import { Token } from 'libs/tokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 
 type CreateStrategyContentProps = {
-  token0: Token | undefined;
-  token1: Token | undefined;
+  base: Token | undefined;
+  quote: Token | undefined;
+  setBase: (token: Token | undefined) => void;
+  setQuote: (token: Token | undefined) => void;
   order0: OrderCreate;
   order1: OrderCreate;
   token0BalanceQuery: UseQueryResult<string>;
@@ -20,18 +22,16 @@ type CreateStrategyContentProps = {
   isCTAdisabled: boolean;
   showOrders: boolean;
   showGraph: boolean;
-  setToken0: (token: Token | undefined) => void;
-  setToken1: (token: Token | undefined) => void;
   setShowGraph: (value: boolean) => void;
   createStrategy: () => void;
   openTokenListModal: () => void;
 };
 
 export const CreateStrategyContent = ({
-  token0,
-  token1,
-  setToken0,
-  setToken1,
+  base,
+  quote,
+  setBase,
+  setQuote,
   order0,
   order1,
   showOrders,
@@ -45,7 +45,7 @@ export const CreateStrategyContent = ({
 }: CreateStrategyContentProps) => {
   const navigate = useNavigate<MyLocationGenerics>();
   const search = useSearch<MyLocationGenerics>();
-  const { base, quote } = search;
+  const { base: baseAddress, quote: quoteAddress } = search;
   const { getTokenById } = useTokens();
 
   useEffect(() => {
@@ -53,28 +53,28 @@ export const CreateStrategyContent = ({
       search: {
         ...search,
         ...{
-          ...(token0 && {
-            base: token0.address,
+          ...(base && {
+            base: base.address,
           }),
-          ...(token1 && {
-            quote: token1.address,
+          ...(quote && {
+            quote: quote.address,
           }),
         },
       },
     });
-    if (pairsToExchangeMapping[`${token0?.symbol}${token1?.symbol}`]) {
+    if (pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`]) {
       setShowGraph(true);
     }
-    if (!token0 || !token1) {
+    if (!base || !quote) {
       setShowGraph(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token0, token1, setShowGraph, navigate]);
+  }, [base, quote, setShowGraph, navigate]);
 
   useEffect(() => {
-    setToken0(getTokenById(base || ''));
-    setToken1(getTokenById(quote || ''));
-  }, [base, quote, setToken0, setToken1, getTokenById]);
+    setBase(getTokenById(baseAddress || ''));
+    setQuote(getTokenById(quoteAddress || ''));
+  }, [base, quote, setBase, setQuote, getTokenById, baseAddress, quoteAddress]);
 
   return (
     <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
@@ -84,18 +84,18 @@ export const CreateStrategyContent = ({
         }`}
       >
         {showGraph && showOrders && (
-          <CreateStrategyGraph {...{ token0, token1, setShowGraph }} />
+          <CreateStrategyGraph {...{ base, quote, setShowGraph }} />
         )}
       </div>
       <div className="w-full space-y-20 md:w-[400px]">
         <CreateStrategyTokenSelection
-          {...{ token0, token1, setToken0, setToken1, openTokenListModal }}
+          {...{ base, quote, setBase, setQuote, openTokenListModal }}
         />
         {showOrders && (
           <CreateStrategyOrders
             {...{
-              token0,
-              token1,
+              base,
+              quote,
               order0,
               order1,
               createStrategy,

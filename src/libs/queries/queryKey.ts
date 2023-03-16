@@ -58,11 +58,11 @@ export namespace QueryKey {
     actions,
   ];
 
-  export const tradeLiquidity = (token0: string, token1: string) => [
+  export const tradeLiquidity = (base: string, quote: string) => [
     ...sdk,
     'liquidity',
-    token0,
-    token1,
+    base,
+    quote,
   ];
 
   export const tradeOrderBook = (

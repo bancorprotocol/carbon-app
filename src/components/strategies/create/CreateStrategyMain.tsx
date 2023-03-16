@@ -9,10 +9,10 @@ export const CreateStrategyMain = () => {
   const [showGraph, setShowGraph] = useState(false);
 
   const {
-    token0,
-    token1,
-    setToken0,
-    setToken1,
+    base,
+    quote,
+    setBase,
+    setQuote,
     openTokenListModal,
     showOrders,
     order0,
@@ -35,10 +35,10 @@ export const CreateStrategyMain = () => {
       <CreateStrategyHeader {...{ showGraph, showOrders, setShowGraph }} />
       <CreateStrategyContent
         {...{
-          token0,
-          token1,
-          setToken0,
-          setToken1,
+          base,
+          quote,
+          setBase,
+          setQuote,
           order0,
           order1,
           showOrders,
