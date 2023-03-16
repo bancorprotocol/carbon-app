@@ -11,6 +11,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from './TokenPrice';
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -79,10 +80,9 @@ export const StrategyBlockBuySell: FC<{
   const prettifiedPrice = getPrice(true);
   const price = getPrice();
 
-  const budgetFiat = getFiatValue(
-    getTokenFiat(buy ? order.balance : otherOrder.balance),
-    selectedFiatCurrency
-  );
+  const budgetPrice = getTokenFiat(buy ? order.balance : otherOrder.balance);
+  const budgetFiat = getFiatValue(budgetPrice, selectedFiatCurrency);
+  const budgetWarning = new BigNumber(budgetPrice).lte(20);
 
   return (
     <div
@@ -151,28 +151,37 @@ export const StrategyBlockBuySell: FC<{
           >
             <div className="text-secondary !text-16">Budget</div>
           </Tooltip>
-          <Tooltip
-            element={
-              <>
-                <div>{`${sanitizeNumberInput(
-                  buy ? order.balance : otherOrder.balance,
-                  buy ? token.decimals : otherToken.decimals
-                )} ${otherToken.symbol}`}</div>
-                <TokenPrice className="text-white/60" price={budgetFiat} />
-              </>
-            }
-          >
-            <div className="flex items-center gap-7">
-              {prettifyNumber(order.balance, {
-                abbreviate: order.balance.length > 10,
-              })}
-              <Imager
-                className="h-16 w-16"
-                src={otherToken.logoURI}
-                alt="token"
+          <div className="flex gap-7">
+            {budgetWarning && (
+              <WarningWithTooltip
+                tooltipContent={
+                  'Low balance might be skipped due to gas concerns'
+                }
               />
-            </div>
-          </Tooltip>
+            )}
+            <Tooltip
+              element={
+                <>
+                  <div>{`${sanitizeNumberInput(
+                    buy ? order.balance : otherOrder.balance,
+                    buy ? token.decimals : otherToken.decimals
+                  )} ${otherToken.symbol}`}</div>
+                  <TokenPrice className="text-white/60" price={budgetFiat} />
+                </>
+              }
+            >
+              <div className="flex items-center gap-7">
+                {prettifyNumber(order.balance, {
+                  abbreviate: order.balance.length > 10,
+                })}
+                <Imager
+                  className="h-16 w-16"
+                  src={otherToken.logoURI}
+                  alt="token"
+                />
+              </div>
+            </Tooltip>
+          </div>
         </div>
         <BuySellPriceRangeIndicator buy={buy} limit={limit} />
       </div>
