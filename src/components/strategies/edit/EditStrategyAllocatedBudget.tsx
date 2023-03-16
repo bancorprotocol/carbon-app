@@ -13,10 +13,10 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 
 const shouldDisplayDistributeByType: {
-  [key in 'renew' | 'changeRates' | 'deposit' | 'withdraw']: boolean;
+  [key in 'renew' | 'editPrices' | 'deposit' | 'withdraw']: boolean;
 } = {
   renew: false,
-  changeRates: true,
+  editPrices: true,
   deposit: true,
   withdraw: true,
 };
@@ -28,7 +28,7 @@ export const EditStrategyAllocatedBudget: FC<{
   balance?: string;
   buy?: boolean;
   showMaxCb?: () => void;
-  type: 'renew' | 'changeRates' | 'deposit' | 'withdraw';
+  type: 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 }> = ({ base, quote, balance, buy, order, showMaxCb, type }) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
@@ -124,7 +124,7 @@ export const EditStrategyAllocatedBudget: FC<{
             )}
           </div>
         </div>
-        {showDistribute && type !== 'changeRates' && (
+        {showDistribute && type !== 'editPrices' && (
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
               <span className="mr-5">Distribute Across Entire Range</span>
@@ -179,7 +179,7 @@ export const EditStrategyAllocatedBudget: FC<{
           </div>
         )}
       </div>
-      {type === 'changeRates' && showDistribute && (
+      {type === 'editPrices' && showDistribute && (
         <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left  text-12 text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"

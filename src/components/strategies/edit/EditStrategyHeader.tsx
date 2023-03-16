@@ -5,9 +5,9 @@ import { EditTypes } from './EditStrategyMain';
 
 export const titleByType: { [key: string]: string } = {
   renew: 'Renew Strategy',
-  changeRates: 'Edit Price',
-  deposit: 'Add Budget',
-  withdraw: 'Remove Budget',
+  editPrices: 'Edit Prices',
+  deposit: 'Deposit Budget',
+  withdraw: 'Withdraw Budget',
 };
 
 type EditStrategyHeaderProps = {

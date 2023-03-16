@@ -3,12 +3,11 @@ import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
-import { EditTypes } from './EditStrategyMain';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 
 type EditStrategyPricesContentProps = {
-  type: EditTypes;
+  type: 'editPrices' | 'renew';
   strategy: Strategy;
 };
 

@@ -19,7 +19,7 @@ export enum ItemId {
   DeleteStrategy,
   PauseStrategy,
   RenewStrategy,
-  ChangeRates,
+  EditPrices,
 }
 
 type itemsType = {
@@ -52,13 +52,13 @@ export const StrategyBlockManage: FC<{
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
-      id: ItemId.ChangeRates,
-      name: 'Change Rates',
+      id: ItemId.EditPrices,
+      name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
         navigate({
           to: PathNames.editStrategy,
-          search: { type: 'changeRates' },
+          search: { type: 'editPrices' },
         });
       },
     },

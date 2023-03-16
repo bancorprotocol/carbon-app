@@ -15,7 +15,7 @@ export const EditStrategyPricesBuySellBlock: FC<{
 }> = ({ base, quote, balance, buy, order, type }) => {
   return (
     <div
-      className={`bg-secondary w-full rounded-l-6 border-l-2 p-20 text-12 ${
+      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-12 ${
         buy
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'

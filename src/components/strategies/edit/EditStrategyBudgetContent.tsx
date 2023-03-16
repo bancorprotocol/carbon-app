@@ -3,7 +3,6 @@ import { Button } from 'components/common/button';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
-import { EditTypes } from './EditStrategyMain';
 import { useLocation } from '@tanstack/react-location';
 import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
@@ -11,7 +10,7 @@ import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
 
 type EditStrategyBudgetContentProps = {
-  type: EditTypes;
+  type: 'withdraw' | 'deposit';
   strategy: Strategy;
 };
 
@@ -44,7 +43,7 @@ export const EditStrategyBudgetContent = ({
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
         onConfirm: depositOrWithdrawFunds,
-        buttonLabel: 'Confirm Trade',
+        buttonLabel: `Confirm ${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`,
       });
     } else {
       depositOrWithdrawFunds();
