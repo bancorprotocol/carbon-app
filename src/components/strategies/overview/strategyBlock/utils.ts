@@ -17,7 +17,7 @@ export const getTooltipTextByStatus = (status: StrategyStatus) => {
     : status === StrategyStatus.NoBudget
     ? 'Your strategy has no associated funds. Consider depositing funds to activate it.'
     : status === StrategyStatus.Paused
-    ? 'Your strategy is currently paused. Update the rates to activate it.'
+    ? 'Your strategy is currently paused. Edit the prices to activate it.'
     : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
 };
 
