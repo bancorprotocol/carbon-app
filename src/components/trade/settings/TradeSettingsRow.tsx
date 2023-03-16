@@ -6,7 +6,7 @@ import { ChangeEvent, FC, useMemo, useState } from 'react';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
-const buttonActiveClasses = 'border-green !text-green';
+const buttonActiveClasses = '!border-green !text-green';
 const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
