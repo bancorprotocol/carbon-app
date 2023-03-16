@@ -11,9 +11,10 @@ import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPr
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { EditTypes } from './EditStrategyMain';
 
 const shouldDisplayDistributeByType: {
-  [key in 'renew' | 'editPrices' | 'deposit' | 'withdraw']: boolean;
+  [key in EditTypes]: boolean;
 } = {
   renew: false,
   editPrices: true,
@@ -28,7 +29,7 @@ export const EditStrategyAllocatedBudget: FC<{
   balance?: string;
   buy?: boolean;
   showMaxCb?: () => void;
-  type: 'renew' | 'editPrices' | 'deposit' | 'withdraw';
+  type: EditTypes;
 }> = ({ base, quote, balance, buy, order, showMaxCb, type }) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);

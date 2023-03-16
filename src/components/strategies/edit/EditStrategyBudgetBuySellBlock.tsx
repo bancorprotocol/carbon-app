@@ -5,7 +5,6 @@ import { TokenInputField } from 'components/common/TokenInputField';
 import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useGetTokenBalance } from 'libs/queries';
-import { EditTypes } from './EditStrategyMain';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
@@ -15,7 +14,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
   balance?: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
-  type: EditTypes;
+  type: 'deposit' | 'withdraw';
 }> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
