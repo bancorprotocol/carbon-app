@@ -20,14 +20,14 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <div className={'flex space-x-10'}>
         <TokensOverlap
           className="h-40 w-40"
-          tokens={[strategy.token0, strategy.token1]}
+          tokens={[strategy.base, strategy.quote]}
         />
         <div>
           {
             <div className="flex gap-6">
-              <span>{strategy.token0.symbol}</span>
+              <span>{strategy.base.symbol}</span>
               <div className="text-secondary !text-16">/</div>
-              <span>{strategy.token1.symbol}</span>
+              <span>{strategy.quote.symbol}</span>
             </div>
           }
 

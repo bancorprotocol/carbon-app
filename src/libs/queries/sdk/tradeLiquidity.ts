@@ -4,13 +4,13 @@ import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { carbonSDK } from 'index';
 
-export const useGetTradeLiquidity = (token0?: string, token1?: string) => {
+export const useGetTradeLiquidity = (base?: string, quote?: string) => {
   const { isInitialized } = useCarbonSDK();
 
   return useQuery({
-    queryKey: QueryKey.tradeLiquidity([token0!, token1!]),
-    queryFn: async () => carbonSDK.getLiquidityByPair(token0!, token1!),
-    enabled: !!token0 && !!token1 && isInitialized,
+    queryKey: QueryKey.tradeLiquidity(base!, quote!),
+    queryFn: async () => carbonSDK.getLiquidityByPair(base!, quote!),
+    enabled: !!base && !!quote && isInitialized,
     staleTime: ONE_DAY_IN_MS,
   });
 };

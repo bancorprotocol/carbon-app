@@ -9,7 +9,7 @@ type MyLocationGenerics = MakeGenerics<{
 
 const isValid = (strategy: Strategy) => {
   return (
-    (strategy.hasOwnProperty('token0') && strategy.hasOwnProperty('token1')) ||
+    (strategy.hasOwnProperty('base') && strategy.hasOwnProperty('quote')) ||
     (strategy.hasOwnProperty('order0') && strategy.hasOwnProperty('order1'))
   );
 };
