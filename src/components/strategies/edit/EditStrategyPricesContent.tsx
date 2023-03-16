@@ -16,8 +16,16 @@ export const EditStrategyPricesContent = ({
   type,
 }: EditStrategyPricesContentProps) => {
   const { renewStrategy, changeRateStrategy } = useUpdateStrategy();
-  const order0 = useOrder(strategy.order0);
-  const order1 = useOrder(strategy.order1);
+  const order0 = useOrder(
+    type === 'renew'
+      ? { ...strategy.order0, startRate: '', endRate: '' }
+      : strategy.order0
+  );
+  const order1 = useOrder(
+    type === 'renew'
+      ? { ...strategy.order1, startRate: '', endRate: '' }
+      : strategy.order1
+  );
   const {
     history: { back },
   } = useLocation();

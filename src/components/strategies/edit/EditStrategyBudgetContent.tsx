@@ -19,8 +19,8 @@ export const EditStrategyBudgetContent = ({
   type,
 }: EditStrategyBudgetContentProps) => {
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
-  const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '0' });
-  const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '0' });
+  const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
+  const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
   const token0Amount = useGetTokenBalance(strategy.token1).data;
   const token1Amount = useGetTokenBalance(strategy.token0).data;
   const { approval } = useEditStrategy(strategy, order0, order1);
