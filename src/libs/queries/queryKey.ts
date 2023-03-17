@@ -1,5 +1,4 @@
-import { TokenPair } from '@bancor/carbon-sdk';
-import { MatchAction } from '@bancor/carbon-sdk/src/types';
+import { SerializableMatchAction, TokenPair } from '@bancor/carbon-sdk';
 import { buildTokenPairKey } from 'utils/helpers';
 
 export namespace QueryKey {
@@ -41,7 +40,7 @@ export namespace QueryKey {
   export const tradeActions = (
     pair: TokenPair,
     isTradeBySource: boolean,
-    actions: MatchAction[]
+    actions: SerializableMatchAction[]
   ) => [
     ...sdk,
     buildTokenPairKey(pair),

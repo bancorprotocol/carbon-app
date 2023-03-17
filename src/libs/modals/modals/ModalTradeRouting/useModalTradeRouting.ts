@@ -34,14 +34,12 @@ export const useModalTradeRouting = ({
 
   const selectedIDs = useMemo(
     () =>
-      selected
-        .filter((action) => action.isSelected)
-        .map((action) => action.id.toNumber()),
+      selected.filter((action) => action.isSelected).map((action) => action.id),
     [selected]
   );
 
   const selectedActionsWei = useMemo(
-    () => tradeActionsWei.filter((x) => selectedIDs.includes(x.id.toNumber())),
+    () => tradeActionsWei.filter((x) => selectedIDs.includes(x.id)),
     [selectedIDs, tradeActionsWei]
   );
 
@@ -107,10 +105,10 @@ export const useModalTradeRouting = ({
     isTradeBySource,
   ]);
 
-  const onSelect = (id: number) => {
+  const onSelect = (id: string) => {
     setSelected((prev) =>
       prev.map((action) =>
-        action.id.eq(id)
+        action.id === id
           ? { ...action, isSelected: !action.isSelected }
           : action
       )

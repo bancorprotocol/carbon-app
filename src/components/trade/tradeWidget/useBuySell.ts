@@ -9,7 +9,7 @@ import { Action, TradeActionStruct } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import { MatchAction } from '@bancor/carbon-sdk/src/types';
+import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
 
 export const useBuySell = ({
   source,
@@ -26,7 +26,9 @@ export const useBuySell = ({
   const [isTradeBySource, setIsTradeBySource] = useState(true);
   const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
   const [tradeActionsRes, setTradeActionsRes] = useState<Action[]>([]);
-  const [tradeActionsWei, setTradeActionsWei] = useState<MatchAction[]>([]);
+  const [tradeActionsWei, setTradeActionsWei] = useState<
+    SerializableMatchAction[]
+  >([]);
   const [rate, setRate] = useState('');
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);

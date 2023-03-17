@@ -15,7 +15,7 @@ type ModalTradeRoutingRowProps = {
   sourceFiatPrice?: FiatPriceDict;
   targetFiatPrice?: FiatPriceDict;
   isSelected: boolean;
-  handleClick: (id: number) => void;
+  handleClick: (id: string) => void;
 };
 
 export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
@@ -40,7 +40,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   );
 
   const onCheckboxClick = () => {
-    handleClick(id.toNumber());
+    handleClick(id);
   };
 
   return (

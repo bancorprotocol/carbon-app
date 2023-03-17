@@ -32,7 +32,7 @@ export interface Strategy {
   order0: Order;
   order1: Order;
   status: StrategyStatus;
-  encoded: EncodedStrategy;
+  encoded: string;
 }
 
 export const useGetUserStrategies = () => {
@@ -145,16 +145,17 @@ export interface CreateStrategyParams {
 }
 
 export interface UpdateStrategyParams {
+  id: string;
   base: TokenAddressDecimals;
   quote: TokenAddressDecimals;
-  encoded: EncodedStrategy;
+  encoded: string;
   fieldsToUpdate: StrategyUpdate;
   buyMarginalPrice?: MarginalPriceOptions;
   sellMarginalPrice?: MarginalPriceOptions;
 }
 
 export interface DeleteStrategyParams {
-  encoded: EncodedStrategy;
+  id: string;
 }
 
 export const useCreateStrategyQuery = () => {
@@ -196,6 +197,7 @@ export const useUpdateStrategyQuery = () => {
 
   return useMutation(
     async ({
+      id,
       base,
       quote,
       encoded,
@@ -203,10 +205,8 @@ export const useUpdateStrategyQuery = () => {
       buyMarginalPrice,
       sellMarginalPrice,
     }: UpdateStrategyParams) => {
-      const strategyId = encoded.id;
-
       const unsignedTx = await carbonSDK.updateStrategy(
-        strategyId,
+        id,
         encoded,
         base.address,
         quote.address,
@@ -226,10 +226,8 @@ export const useUpdateStrategyQuery = () => {
 export const useDeleteStrategyQuery = () => {
   const { signer } = useWeb3();
 
-  return useMutation(async ({ encoded }: DeleteStrategyParams) => {
-    const strategyId = encoded.id;
-
-    const unsignedTx = await carbonSDK.deleteStrategy(strategyId);
+  return useMutation(async ({ id }: DeleteStrategyParams) => {
+    const unsignedTx = await carbonSDK.deleteStrategy(id);
 
     return signer!.sendTransaction(unsignedTx);
   });

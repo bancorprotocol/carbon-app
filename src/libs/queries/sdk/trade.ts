@@ -3,7 +3,7 @@ import { QueryKey } from 'libs/queries';
 import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { Action, TradeActionStruct } from 'libs/sdk';
-import { MatchAction } from '@bancor/carbon-sdk/src/types';
+import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
 import { carbonSDK } from 'index';
 
 type GetTradeDataResult = {
@@ -12,7 +12,7 @@ type GetTradeDataResult = {
   totalSourceAmount: string;
   totalTargetAmount: string;
   effectiveRate: string;
-  actionsWei: MatchAction[];
+  actionsWei: SerializableMatchAction[];
 };
 
 type Props = {

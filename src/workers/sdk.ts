@@ -5,12 +5,9 @@ import {
   PayableOverrides,
   TradeActionStruct,
   TokenPair,
+  SerializableMatchAction,
 } from '@bancor/carbon-sdk';
-import {
-  EncodedStrategy,
-  MatchAction,
-  StrategyUpdate,
-} from '@bancor/carbon-sdk/dist/types';
+import { StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
 import { BigNumberish } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { OrderRow } from 'libs/queries';
@@ -274,7 +271,7 @@ const obj = {
     ),
   updateStrategy: (
     strategyId: BigNumberish,
-    encoded: EncodedStrategy,
+    encoded: string,
     baseToken: string,
     quoteToken: string,
     data: StrategyUpdate,
@@ -305,7 +302,7 @@ const obj = {
     sourceToken: string,
     targetToken: string,
     isTradeBySource: boolean,
-    actionsWei: MatchAction[]
+    actionsWei: SerializableMatchAction[]
   ) =>
     carbonSDK.getTradeDataFromActions(
       sourceToken,
