@@ -30,14 +30,20 @@ let carbonSDK: Sdk;
 let isInitialized = false;
 let isInitializing = false;
 
-const init = async (config: Config, decimalsMap?: Map<string, number>) => {
+const init = async (
+  config: Config,
+  decimalsMap?: Map<string, number>,
+  cachedData?: string
+) => {
   if (isInitialized || isInitializing) return;
   isInitializing = true;
   carbonSDK = new Sdk(
     config,
-    decimalsMap ? (address) => decimalsMap.get(address) : undefined
+    decimalsMap
+      ? (address) => decimalsMap.get(address.toLowerCase())
+      : undefined
   );
-  await carbonSDK.startDataSync();
+  await carbonSDK.startDataSync(cachedData);
   isInitialized = true;
   isInitializing = false;
 };
@@ -212,8 +218,24 @@ const obj = {
   init,
   isInitialized: () => isInitialized,
   getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
-  onChange: (cb: (affectedPairs: TokenPair[]) => void) => {
-    carbonSDK.onChange((_, affectedPairs) => cb(affectedPairs));
+  onPairDataChanged: (cb: (affectedPairs: TokenPair[]) => void) => {
+    carbonSDK.on('onPairDataChanged', (affectedPairs) => cb(affectedPairs));
+    return;
+  },
+  onPairAddedToCache: (cb: (affectedPairs: TokenPair) => void) => {
+    carbonSDK.on('onPairAddedToCache', (affectedPairs) => cb(affectedPairs));
+    return;
+  },
+  setOnChangeHandlers: (
+    onPairDataChanged: (affectedPairs: TokenPair[]) => void,
+    onPairAddedToCache: (affectedPairs: TokenPair) => void
+  ) => {
+    carbonSDK.on('onPairDataChanged', (affectedPairs) =>
+      onPairDataChanged(affectedPairs)
+    );
+    carbonSDK.on('onPairAddedToCache', (affectedPairs) =>
+      onPairAddedToCache(affectedPairs)
+    );
     return;
   },
   getRateLiquidityDepthByPair: (
@@ -326,6 +348,7 @@ const obj = {
       overrides
     ),
   getOrderBook,
+  getCacheDump: () => carbonSDK.getCacheDump(),
 };
 
 export type CarbonSDKWebWorker = typeof obj;

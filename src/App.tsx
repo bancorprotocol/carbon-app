@@ -5,11 +5,17 @@ import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useEffect } from 'react';
 import { MainContent } from 'components/core/MainContent';
 
+let didInit = false;
+
 export const App = () => {
   const { init } = useCarbonSDK();
 
   useEffect(() => {
-    void init();
+    if (!didInit) {
+      didInit = true;
+      console.log('init jan');
+      void init();
+    }
   }, [init]);
 
   return (

@@ -4,6 +4,19 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { lsService } from 'services/localeStorage';
 
+const getCachedData = () => {
+  const cachedTokens = lsService.getItem('tokenListCache');
+  const importedTokens = lsService.getItem('importedTokens') || [];
+  if (
+    cachedTokens &&
+    cachedTokens.timestamp > Date.now() - 1000 * 60 * 60 * 24 * 7
+  ) {
+    // TODO check for duplicates
+    return [...cachedTokens.tokens, ...importedTokens];
+  }
+  return undefined;
+};
+
 export const useTokensQuery = () => {
   return useQuery(
     QueryKey.tokens(),
@@ -13,6 +26,7 @@ export const useTokensQuery = () => {
       return tokens;
     },
     {
+      placeholderData: getCachedData(),
       staleTime: ONE_DAY_IN_MS,
     }
   );

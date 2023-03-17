@@ -6,6 +6,8 @@ import { useTradeTokens } from 'components/trade/useTradeTokens';
 import { Token } from 'libs/tokens';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
+import { useEffect } from 'react';
+import { lsService } from 'services/localeStorage';
 
 export type TradePageProps = { base: Token; quote: Token };
 
@@ -17,6 +19,12 @@ export const TradePage = () => {
   const isValidPair = !(!baseToken || !quoteToken);
 
   const noTokens = !baseToken && !quoteToken;
+
+  useEffect(() => {
+    if (baseToken && quoteToken) {
+      lsService.setItem('tradePair', [baseToken.address, quoteToken.address]);
+    }
+  }, [baseToken, quoteToken]);
 
   return (
     <>

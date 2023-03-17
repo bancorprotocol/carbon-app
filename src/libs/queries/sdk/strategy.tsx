@@ -122,6 +122,7 @@ export const useGetUserStrategies = () => {
     {
       enabled: tokens.length > 0 && isInitialized,
       staleTime: ONE_DAY_IN_MS,
+      retry: false,
     }
   );
 };

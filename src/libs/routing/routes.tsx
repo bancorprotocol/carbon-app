@@ -4,14 +4,8 @@ import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
 import { isProduction } from 'utils/helpers';
 import { TermsPage } from 'pages/terms';
-import { Navigate, Route } from '@tanstack/react-location';
-import { config } from 'services/web3/config';
-import { lsService } from 'services/localeStorage';
-
-const [base, quote] = lsService.getItem('tradePair') || [
-  config.tokens.ETH,
-  config.tokens.USDC,
-];
+import { Route } from '@tanstack/react-location';
+import { getLastVisitedPair } from 'libs/routing/utils';
 
 export const PathNames = {
   strategies: '/',
@@ -30,19 +24,14 @@ export const routes: Route[] = [
     id: 'trade',
     path: PathNames.trade,
     element: <TradePage />,
-    search: (search) => {
-      return search.base && search.quote;
-    },
-  },
-  {
-    id: 'trade-redirect',
-    path: PathNames.trade,
-    element: (
-      <Navigate replace={true} to={PathNames.trade} search={{ base, quote }} />
-    ),
-    search: (search) => {
-      return !search.base || !search.quote;
-    },
+    searchFilters: [
+      (search) => {
+        if (search.base && search.quote) {
+          return search;
+        }
+        return { ...search, ...getLastVisitedPair() };
+      },
+    ],
   },
   {
     path: PathNames.createStrategy,

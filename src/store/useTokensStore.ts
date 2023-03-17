@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
-import { lsService } from 'services/localeStorage';
 
 export interface TokensStore {
   tokens: Token[];
@@ -21,11 +20,6 @@ export const useTokensStore = (): TokensStore => {
     if (tokensQuery.data && tokensQuery.data.length) {
       // TODO check for duplicates
       return [...tokensQuery.data, ...importedTokens];
-    }
-    const cachedTokens = lsService.getItem('tokenListCache')?.tokens;
-    if (cachedTokens) {
-      // TODO check for duplicates
-      return [...cachedTokens, ...importedTokens];
     }
     return [];
   }, [tokensQuery.data, importedTokens]);

@@ -8,6 +8,7 @@ import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { buildTokenPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
+import { QueryKey } from 'libs/queries';
 
 const sdkConfig = {
   rpcUrl: RPC_URLS[1],
@@ -19,8 +20,14 @@ const sdkConfig = {
 
 const getTokenDecimalMap = () => {
   const tokens = lsService.getItem('tokenListCache')?.tokens || [];
-  if (!tokens.length) return;
-  return new Map(tokens.map((token) => [token.address, token.decimals]));
+  const importedTokens = lsService.getItem('importedTokens') || [];
+  return new Map(
+    // TODO filter out duplicates
+    [...tokens, ...importedTokens].map((token) => [
+      token.address.toLowerCase(),
+      token.decimals,
+    ])
+  );
 };
 
 export const useCarbonSDK = () => {
@@ -36,38 +43,67 @@ export const useCarbonSDK = () => {
     },
   } = useStore();
 
-  const onChangeCallback = useCallback(
-    (pairs: TokenPair[]) => {
-      pairs.forEach((pair) => {
-        void cache.invalidateQueries({
-          predicate: (query) =>
-            query.queryKey[1] === buildTokenPairKey(pair) ||
-            query.queryKey[1] === buildTokenPairKey([pair[1], pair[0]]),
-        });
+  const invalidateQueriesByPair = useCallback(
+    (pair: TokenPair) => {
+      void cache.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey[1] === buildTokenPairKey(pair) ||
+          query.queryKey[1] === buildTokenPairKey([pair[1], pair[0]]) ||
+          query.queryKey[1] === 'strategies',
       });
     },
     [cache]
   );
 
+  const onPairDataChangedCallback = useCallback(
+    async (pairs: TokenPair[]) => {
+      console.log('Web worker: onPairDataChangedCallback', pairs);
+      if (pairs.length === 0) return;
+      pairs.forEach((pair) => invalidateQueriesByPair(pair));
+      const cachedDump = await carbonSDK.getCacheDump();
+      lsService.setItem('sdkCacheData', cachedDump);
+    },
+    [invalidateQueriesByPair]
+  );
+
+  const onPairAddedToCacheCallback = useCallback(
+    async (pair: TokenPair) => {
+      console.log('Web worker: onPairAddedToCacheCallback', pair);
+      if (pair.length !== 2) return;
+      void invalidateQueriesByPair(pair);
+      void cache.invalidateQueries({ queryKey: QueryKey.pairs() });
+      const cachedDump = await carbonSDK.getCacheDump();
+      lsService.setItem('sdkCacheData', cachedDump);
+    },
+    [cache, invalidateQueriesByPair]
+  );
+
   const init = useCallback(async () => {
-    const isInitialized = await carbonSDK.isInitialized();
-    if (!isInitialized) {
-      try {
-        setIsLoading(true);
-        console.log('Initializing CarbonSDK...');
-        await carbonSDK.init(sdkConfig, getTokenDecimalMap());
-        console.log('Web worker: SDK initialized');
-        await carbonSDK.onChange(Comlink.proxy(onChangeCallback));
-        setIsInitialized(true);
-        console.log('CarbonSDK initialized jan jan');
-      } catch (e) {
-        console.error('Error initializing CarbonSDK', e);
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      setIsLoading(true);
+      console.log('Initializing CarbonSDK...');
+      const cacheData = lsService.getItem('sdkCacheData');
+      await carbonSDK.init(sdkConfig, getTokenDecimalMap(), cacheData);
+      console.log('Web worker: SDK initialized');
+      await carbonSDK.setOnChangeHandlers(
+        Comlink.proxy(onPairDataChangedCallback),
+        Comlink.proxy(onPairAddedToCacheCallback)
+      );
+      setIsInitialized(true);
+      console.log('CarbonSDK initialized jan jan');
+    } catch (e) {
+      console.error('Error initializing CarbonSDK', e);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
-  }, [setIsLoading, onChangeCallback, setIsInitialized, setIsError]);
+  }, [
+    setIsLoading,
+    onPairDataChangedCallback,
+    onPairAddedToCacheCallback,
+    setIsInitialized,
+    setIsError,
+  ]);
 
   return { isInitialized, isLoading, isError, init };
 };

@@ -6,6 +6,15 @@ import { useTokens } from 'hooks/useTokens';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { carbonSDK } from 'index';
+import { lsService } from 'services/localeStorage';
+
+const getCachedData = () => {
+  const cachedPairs = lsService.getItem('tokenPairs');
+  if (cachedPairs && cachedPairs.timestamp > Date.now() - 1000 * 60 * 60) {
+    return cachedPairs.pairs;
+  }
+  return undefined;
+};
 
 export const useGetTradePairsData = () => {
   const { isInitialized } = useCarbonSDK();
@@ -28,14 +37,22 @@ export const useGetTradePairsData = () => {
       }));
       const result = await Promise.all(promises);
 
-      return [
+      const pairsWithInverse = [
         ...result,
         ...result.map((p) => ({
           baseToken: p.quoteToken,
           quoteToken: p.baseToken,
         })),
       ];
+
+      lsService.setItem('tokenPairs', {
+        pairs: pairsWithInverse,
+        timestamp: Date.now(),
+      });
+
+      return pairsWithInverse;
     },
+    placeholderData: getCachedData(),
     enabled: !!tokens.length && isInitialized,
     retry: 1,
     staleTime: ONE_DAY_IN_MS,
