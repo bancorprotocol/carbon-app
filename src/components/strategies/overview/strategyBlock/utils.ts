@@ -21,14 +21,14 @@ export const getTooltipTextByStatus = (status: StrategyStatus) => {
     : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
 };
 
-export const getTooltipTextByItemId = (id: ItemId) => {
-  return id === ItemId.WithdrawFunds
-    ? 'Withdraw funds from an existing strategy'
-    : id === ItemId.DuplicateStrategy
-    ? 'Create a new strategy with the same details'
-    : id === ItemId.DeleteStrategy
-    ? 'Delete the strategy and withdraw all associated funds to your wallet'
-    : id === ItemId.PauseStrategy
-    ? ''
-    : '';
+export const tooltipTextByItemId: { [key in ItemId]: string } = {
+  [ItemId.DuplicateStrategy]: 'Create a new strategy with the same details',
+  [ItemId.DeleteStrategy]:
+    'Delete the strategy and withdraw all associated funds to your wallet',
+  [ItemId.PauseStrategy]: 'Deactivate the strategy by nulling the prices',
+  [ItemId.WithdrawFunds]: 'Withdraw funds from an existing strategy',
+  [ItemId.DepositFunds]: 'Deposit additional funds into an existing strategy',
+  [ItemId.ChangeRates]:
+    'Edit the prices of your buy/sell orders within an existing strategy',
+  [ItemId.RenewStrategy]: 'Renew an inactive strategy',
 };

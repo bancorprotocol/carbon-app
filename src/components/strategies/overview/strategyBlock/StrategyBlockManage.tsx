@@ -6,7 +6,7 @@ import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateS
 import { Strategy, StrategyStatus } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { getTooltipTextByItemId } from './utils';
+import { tooltipTextByItemId } from './utils';
 
 export enum ItemId {
   WithdrawFunds,
@@ -114,7 +114,7 @@ const ManageItem: FC<{
   setManage: (flag: boolean) => void;
   action?: () => void;
 }> = ({ title, id, setManage, action }) => {
-  const tooltipText = getTooltipTextByItemId(id);
+  const tooltipText = tooltipTextByItemId?.[id];
 
   if (tooltipText) {
     return (
