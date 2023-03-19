@@ -72,11 +72,11 @@ export const EditStrategyAllocatedBudget: FC<{
   return (
     <>
       <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="mr-5">Allocated Budget</div>
+        <div className="flex items-center justify-between gap-16">
+          <div className="flex w-auto items-center gap-6">
+            <div>Allocated Budget</div>
             <Tooltip
-              iconClassName="h-13 text-white/60"
+              iconClassName="h-13 mr-6 text-white/60"
               element={
                 buy
                   ? `This is the current available ${quote?.symbol} budget you can withdraw`
@@ -84,7 +84,7 @@ export const EditStrategyAllocatedBudget: FC<{
               }
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex flex-1 justify-end gap-8">
             <Tooltip
               element={
                 <>
@@ -99,7 +99,7 @@ export const EditStrategyAllocatedBudget: FC<{
                 </>
               }
             >
-              <div className="mr-5 flex">
+              <>
                 {balance && (
                   <span>
                     {sanitizeNumberInput(
@@ -109,11 +109,11 @@ export const EditStrategyAllocatedBudget: FC<{
                   </span>
                 )}
                 <Imager
-                  className="ml-8 h-16 w-16"
+                  className="h-16 w-16"
                   src={buy ? quote?.logoURI : base?.logoURI}
                   alt="token"
                 />
-              </div>
+              </>
             </Tooltip>
             {showMaxCb && (
               <div
