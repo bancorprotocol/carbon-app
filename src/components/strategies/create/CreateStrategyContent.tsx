@@ -74,7 +74,7 @@ export const CreateStrategyContent = ({
   useEffect(() => {
     setBase(getTokenById(baseAddress || ''));
     setQuote(getTokenById(quoteAddress || ''));
-  }, [base, quote, setBase, setQuote, getTokenById, baseAddress, quoteAddress]);
+  }, [setBase, setQuote, getTokenById, baseAddress, quoteAddress]);
 
   return (
     <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
