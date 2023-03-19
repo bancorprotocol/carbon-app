@@ -5,14 +5,18 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from './EditStrategyMain';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 
-export const EditStrategyPricesBuySellBlock: FC<{
+type EditStrategyPricesBuySellBlockProps = {
   base: Token;
   quote: Token;
   order: OrderCreate;
   balance?: string;
   buy?: boolean;
   type: EditTypes;
-}> = ({ base, quote, balance, buy, order, type }) => {
+};
+
+export const EditStrategyPricesBuySellBlock: FC<
+  EditStrategyPricesBuySellBlockProps
+> = ({ base, quote, balance, buy, order, type }) => {
   return (
     <div
       className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-12 ${

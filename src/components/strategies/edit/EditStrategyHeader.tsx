@@ -3,7 +3,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { EditTypes } from './EditStrategyMain';
 
-export const titleByType: { [key: string]: string } = {
+export const titleByType: { [key in EditTypes]: string } = {
   renew: 'Renew Strategy',
   editPrices: 'Edit Prices',
   deposit: 'Deposit Budget',

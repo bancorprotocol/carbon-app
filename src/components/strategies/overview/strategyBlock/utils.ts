@@ -1,5 +1,5 @@
 import { StrategyStatus } from 'libs/queries';
-import { ItemId } from './StrategyBlockManage';
+import { StrategyEditOptionsId } from './StrategyBlockManage';
 
 export const getStatusText = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
@@ -21,14 +21,14 @@ export const getTooltipTextByStatus = (status: StrategyStatus) => {
     : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
 };
 
-export const getTooltipTextByItemId = (id: ItemId) => {
-  return id === ItemId.WithdrawFunds
+export const getTooltipTextByItemId = (id: StrategyEditOptionsId) => {
+  return id === StrategyEditOptionsId.WithdrawFunds
     ? 'Withdraw funds from an existing strategy'
-    : id === ItemId.DuplicateStrategy
+    : id === StrategyEditOptionsId.DuplicateStrategy
     ? 'Create a new strategy with the same details'
-    : id === ItemId.DeleteStrategy
+    : id === StrategyEditOptionsId.DeleteStrategy
     ? 'Delete the strategy and withdraw all associated funds to your wallet'
-    : id === ItemId.PauseStrategy
+    : id === StrategyEditOptionsId.PauseStrategy
     ? ''
     : '';
 };

@@ -1,5 +1,4 @@
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
-import { useNavigate } from '@tanstack/react-location';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useNotifications } from 'hooks/useNotifications';
 import {
@@ -8,7 +7,7 @@ import {
   useQueryClient,
   useUpdateStrategyQuery,
 } from 'libs/queries';
-import { PathNames } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 
 export const useUpdateStrategy = () => {

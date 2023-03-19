@@ -1,18 +1,17 @@
 import { FC } from 'react';
+import { useStore } from 'store';
+import { useModal } from 'hooks/useModal';
+import { Strategy, StrategyStatus } from 'libs/queries';
+import { PathNames, useNavigate } from 'libs/routing';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Button } from 'components/common/button';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
-import { Strategy, StrategyStatus } from 'libs/queries';
-import { useModal } from 'hooks/useModal';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { getTooltipTextByItemId } from './utils';
-import { useNavigate } from '@tanstack/react-location';
-import { PathNames } from 'libs/routing';
-import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
-import { useStore } from 'store';
 
-export enum ItemId {
+export enum StrategyEditOptionsId {
   WithdrawFunds,
   DepositFunds,
   DuplicateStrategy,
@@ -23,7 +22,7 @@ export enum ItemId {
 }
 
 type itemsType = {
-  id: ItemId;
+  id: StrategyEditOptionsId;
   name: string;
   action?: () => void;
 };
@@ -42,17 +41,17 @@ export const StrategyBlockManage: FC<{
 
   const items: itemsType[] = [
     {
-      id: ItemId.DuplicateStrategy,
+      id: StrategyEditOptionsId.DuplicateStrategy,
       name: 'Duplicate Strategy',
       action: () => duplicate(strategy),
     },
     {
-      id: ItemId.DeleteStrategy,
+      id: StrategyEditOptionsId.DeleteStrategy,
       name: 'Delete Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
-      id: ItemId.EditPrices,
+      id: StrategyEditOptionsId.EditPrices,
       name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
@@ -63,7 +62,7 @@ export const StrategyBlockManage: FC<{
       },
     },
     {
-      id: ItemId.DepositFunds,
+      id: StrategyEditOptionsId.DepositFunds,
       name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
@@ -76,7 +75,7 @@ export const StrategyBlockManage: FC<{
   ];
   if (strategy.status !== StrategyStatus.NoBudget) {
     items.push({
-      id: ItemId.WithdrawFunds,
+      id: StrategyEditOptionsId.WithdrawFunds,
       name: 'Withdraw Funds',
       action: () => {
         setStrategyToEdit(strategy);
@@ -89,13 +88,13 @@ export const StrategyBlockManage: FC<{
   }
   if (strategy.status === StrategyStatus.Active) {
     items.push({
-      id: ItemId.PauseStrategy,
+      id: StrategyEditOptionsId.PauseStrategy,
       name: 'Pause Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
     });
   } else {
     items.push({
-      id: ItemId.RenewStrategy,
+      id: StrategyEditOptionsId.RenewStrategy,
       name: 'Renew Strategy',
       action: () => {
         setStrategyToEdit(strategy);
@@ -139,7 +138,7 @@ export const StrategyBlockManage: FC<{
 
 const ManageItem: FC<{
   title: string;
-  id: ItemId;
+  id: StrategyEditOptionsId;
   setManage: (flag: boolean) => void;
   action?: () => void;
 }> = ({ title, id, setManage, action }) => {

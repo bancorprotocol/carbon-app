@@ -30,13 +30,13 @@ export const EditStrategyBudgetContent = ({
 
   const calculatedOrder0Budget = !!order0.budget
     ? new BigNumber(strategy.order0.balance)?.[
-        `${type === 'withdraw' ? 'minus' : 'plus'}`
+        type === 'withdraw' ? 'minus' : 'plus'
       ](new BigNumber(order0.budget))
     : new BigNumber(strategy.order0.balance);
 
   const calculatedOrder1Budget = !!order1.budget
     ? new BigNumber(strategy.order1.balance)?.[
-        `${type === 'withdraw' ? 'minus' : 'plus'}`
+        type === 'withdraw' ? 'minus' : 'plus'
       ](new BigNumber(order1.budget))
     : new BigNumber(strategy.order1.balance);
 
