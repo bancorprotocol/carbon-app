@@ -5,6 +5,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { Strategy, StrategyStatus } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { tooltipTextByItemId } from './utils';
 
@@ -31,13 +32,9 @@ export const StrategyBlockManage: FC<{
 }> = ({ strategy, manage, setManage }) => {
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
+  const { belowBreakpoint } = useBreakpoints();
 
   const items: itemsType[] = [
-    {
-      id: ItemId.DuplicateStrategy,
-      name: 'Duplicate Strategy',
-      action: () => duplicate(strategy),
-    },
     {
       id: ItemId.DeleteStrategy,
       name: 'Delete Strategy',
@@ -56,6 +53,13 @@ export const StrategyBlockManage: FC<{
         openModal('editStrategyBudget', { strategy, type: 'deposit' }),
     },
   ];
+  if (belowBreakpoint('md')) {
+    items.push({
+      id: ItemId.DuplicateStrategy,
+      name: 'Duplicate Strategy',
+      action: () => duplicate(strategy),
+    });
+  }
   if (strategy.status !== StrategyStatus.NoBudget) {
     items.push({
       id: ItemId.WithdrawFunds,
