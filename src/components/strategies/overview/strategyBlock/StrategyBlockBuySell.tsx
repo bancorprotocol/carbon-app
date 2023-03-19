@@ -12,7 +12,6 @@ import { TokenPrice } from './TokenPrice';
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { AVAILABLE_CURRENCIES } from 'store/useFiatCurrencyStore';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -24,7 +23,9 @@ export const StrategyBlockBuySell: FC<{
   const otherOrder = buy ? strategy.order1 : strategy.order1;
   const limit = order.startRate === order.endRate;
   const active = strategy.status === StrategyStatus.Active;
-  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
+  const { selectedFiatCurrency, useGetTokenPrice, availableCurrencies } =
+    useFiatCurrency();
+
   const tokenPriceQuery = useGetTokenPrice(token.symbol);
   const otherTokenPriceQuery = useGetTokenPrice(otherToken.symbol);
 
@@ -62,7 +63,7 @@ export const StrategyBlockBuySell: FC<{
   };
   const getTokenFiatUsd = (value: string) => {
     return new BigNumber(value || 0).times(
-      otherTokenPriceQuery.data?.[AVAILABLE_CURRENCIES[0]] || 0
+      otherTokenPriceQuery.data?.[availableCurrencies[0]] || 0
     );
   };
 

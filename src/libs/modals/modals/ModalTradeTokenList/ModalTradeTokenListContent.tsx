@@ -122,6 +122,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                     {tradePair.baseToken.symbol}
                     {tradePair.baseToken.isSuspicious && (
                       <WarningWithTooltip
+                        className="ml-5"
                         tooltipContent={suspiciousTokenTooltipMsg}
                       />
                     )}
@@ -129,6 +130,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                     {tradePair.quoteToken.symbol}
                     {tradePair.quoteToken.isSuspicious && (
                       <WarningWithTooltip
+                        className="ml-5"
                         tooltipContent={suspiciousTokenTooltipMsg}
                       />
                     )}

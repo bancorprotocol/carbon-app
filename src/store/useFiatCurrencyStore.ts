@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
-export const AVAILABLE_CURRENCIES = [
+const AVAILABLE_CURRENCIES = [
   'USD',
   'EUR',
   'JPY',

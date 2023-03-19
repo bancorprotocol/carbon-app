@@ -120,6 +120,7 @@ export const ModalTokenListContent: FC<Props> = ({
                         {token.symbol}
                         {token.isSuspicious && (
                           <WarningWithTooltip
+                            className="ml-5"
                             tooltipContent={suspiciousTokenTooltipMsg}
                           />
                         )}

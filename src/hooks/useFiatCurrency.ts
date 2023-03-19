@@ -3,12 +3,12 @@ import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import { useStore } from 'store';
-import { AVAILABLE_CURRENCIES } from 'store/useFiatCurrencyStore';
 import { getFiatValue } from 'utils/helpers';
 
 export const useFiatCurrency = (token?: Token, value?: string) => {
   const { fiatCurrency } = useStore();
-  const { selectedFiatCurrency } = fiatCurrency;
+
+  const { selectedFiatCurrency, availableCurrencies } = fiatCurrency;
 
   const tokenPriceQuery = useGetTokenPrice(token?.symbol);
 
@@ -23,9 +23,9 @@ export const useFiatCurrency = (token?: Token, value?: string) => {
   const fiatValueUsd = useMemo(
     () =>
       new BigNumber(value || 0).times(
-        tokenPriceQuery.data?.[AVAILABLE_CURRENCIES[0]] || 0
+        tokenPriceQuery.data?.[availableCurrencies[0]] || 0
       ),
-    [tokenPriceQuery.data, value]
+    [availableCurrencies, tokenPriceQuery.data, value]
   );
 
   return {
