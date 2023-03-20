@@ -7,20 +7,13 @@ import { Strategy, StrategyStatus } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { tooltipTextByItemId } from './utils';
-
-export enum ItemId {
-  WithdrawFunds,
-  DepositFunds,
-  DuplicateStrategy,
-  DeleteStrategy,
-  PauseStrategy,
-  RenewStrategy,
-  ChangeRates,
-}
+import {
+  StrategyEditOptionId,
+  tooltipTextByStrategyEditOptionsId,
+} from './utils';
 
 type itemsType = {
-  id: ItemId;
+  id: StrategyEditOptionId;
   name: string;
   action?: () => void;
 };
@@ -36,18 +29,18 @@ export const StrategyBlockManage: FC<{
 
   const items: itemsType[] = [
     {
-      id: ItemId.DeleteStrategy,
+      id: 'deleteStrategy',
       name: 'Delete Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
-      id: ItemId.ChangeRates,
+      id: 'changeRates',
       name: 'Change Rates',
       action: () =>
         openModal('editStrategy', { strategy, type: 'changeRates' }),
     },
     {
-      id: ItemId.DepositFunds,
+      id: 'depositFunds',
       name: 'Deposit Funds',
       action: () =>
         openModal('editStrategyBudget', { strategy, type: 'deposit' }),
@@ -55,14 +48,14 @@ export const StrategyBlockManage: FC<{
   ];
   if (belowBreakpoint('md')) {
     items.push({
-      id: ItemId.DuplicateStrategy,
+      id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => duplicate(strategy),
     });
   }
   if (strategy.status !== StrategyStatus.NoBudget) {
     items.push({
-      id: ItemId.WithdrawFunds,
+      id: 'withdrawFunds',
       name: 'Withdraw Funds',
       action: () =>
         openModal('editStrategyBudget', { strategy, type: 'withdraw' }),
@@ -70,7 +63,7 @@ export const StrategyBlockManage: FC<{
   }
   if (strategy.status === StrategyStatus.Active) {
     items.push({
-      id: ItemId.PauseStrategy,
+      id: 'pauseStrategy',
       name: 'Pause Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
     });
@@ -78,7 +71,7 @@ export const StrategyBlockManage: FC<{
 
   if (strategy.status === StrategyStatus.Paused) {
     items.push({
-      id: ItemId.RenewStrategy,
+      id: 'renewStrategy',
       name: 'Renew Strategy',
       action: () => openModal('editStrategy', { strategy, type: 'renew' }),
     });
@@ -116,11 +109,11 @@ export const StrategyBlockManage: FC<{
 
 const ManageItem: FC<{
   title: string;
-  id: ItemId;
+  id: StrategyEditOptionId;
   setManage: (flag: boolean) => void;
   action?: () => void;
 }> = ({ title, id, setManage, action }) => {
-  const tooltipText = tooltipTextByItemId?.[id];
+  const tooltipText = tooltipTextByStrategyEditOptionsId?.[id];
 
   if (tooltipText) {
     return (
