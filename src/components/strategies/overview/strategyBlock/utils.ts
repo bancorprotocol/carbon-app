@@ -28,7 +28,7 @@ export const tooltipTextByStrategyEditOptionsId = {
   pauseStrategy: 'Deactivate the strategy by nulling the prices',
   withdrawFunds: 'Withdraw funds from an existing strategy',
   depositFunds: 'Deposit additional funds into an existing strategy',
-  changeRates:
+  editPrices:
     'Edit the prices of your buy/sell orders within an existing strategy',
   renewStrategy: 'Renew an inactive strategy',
 };

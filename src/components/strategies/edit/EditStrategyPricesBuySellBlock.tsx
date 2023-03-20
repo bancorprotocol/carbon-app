@@ -1,20 +1,25 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
-import { ModalEditStrategyAllocatedBudget } from './ModalEditStrategyAllocatedBudget';
 import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
 import { OrderCreate } from 'components/strategies/create/useOrder';
+import { EditTypes } from './EditStrategyMain';
+import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 
-export const ModalEditStrategyBuySellBlock: FC<{
+type EditStrategyPricesBuySellBlockProps = {
   base: Token;
   quote: Token;
   order: OrderCreate;
   balance?: string;
   buy?: boolean;
-  type: 'renew' | 'changeRates';
-}> = ({ base, quote, balance, buy, order, type }) => {
+  type: EditTypes;
+};
+
+export const EditStrategyPricesBuySellBlock: FC<
+  EditStrategyPricesBuySellBlockProps
+> = ({ base, quote, balance, buy, order, type }) => {
   return (
     <div
-      className={`w-full border-l-2 pl-10 text-12 ${
+      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-12 ${
         buy
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
@@ -40,7 +45,7 @@ export const ModalEditStrategyBuySellBlock: FC<{
         }}
       />
       <div className="pt-10">
-        <ModalEditStrategyAllocatedBudget
+        <EditStrategyAllocatedBudget
           {...{
             order,
             base,
