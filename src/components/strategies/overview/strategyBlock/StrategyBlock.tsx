@@ -6,13 +6,11 @@ import { StrategyBlockOrderStatus } from 'components/strategies/overview/strateg
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
-import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = strategy.id.padStart(9, '0');
   const [manage, setManage] = useState(false);
-  const { aboveBreakpoint } = useBreakpoints();
   const { duplicate } = useDuplicateStrategy();
 
   return (
@@ -44,14 +42,12 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
             </div>
           </div>
         </div>
-        {aboveBreakpoint('md') && (
-          <span
-            onClick={() => duplicate(strategy)}
-            className={`invisible flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3 group-hover:visible`}
-          >
-            <IconDuplicate className="h-18 w-18" />
-          </span>
-        )}
+        <span
+          onClick={() => duplicate(strategy)}
+          className={`invisible flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3 md:group-hover:visible`}
+        >
+          <IconDuplicate className="h-18 w-18" />
+        </span>
       </div>
       <hr className="border-silver dark:border-emphasis" />
       <StrategyBlockBuySell buy strategy={strategy} />
