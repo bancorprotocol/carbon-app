@@ -1,6 +1,5 @@
 import { Order, StrategyStatus } from 'libs/queries';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { ItemId } from './StrategyBlockManage';
 
 export const getStatusText = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
@@ -22,17 +21,20 @@ export const getTooltipTextByStatus = (status: StrategyStatus) => {
     : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
 };
 
-export const getTooltipTextByItemId = (id: ItemId) => {
-  return id === ItemId.WithdrawFunds
-    ? 'Withdraw funds from an existing strategy'
-    : id === ItemId.DuplicateStrategy
-    ? 'Create a new strategy with the same details'
-    : id === ItemId.DeleteStrategy
-    ? 'Delete the strategy and withdraw all associated funds to your wallet'
-    : id === ItemId.PauseStrategy
-    ? ''
-    : '';
+export const tooltipTextByStrategyEditOptionsId = {
+  duplicateStrategy: 'Create a new strategy with the same details',
+  deleteStrategy:
+    'Delete the strategy and withdraw all associated funds to your wallet',
+  pauseStrategy: 'Deactivate the strategy by nulling the prices',
+  withdrawFunds: 'Withdraw funds from an existing strategy',
+  depositFunds: 'Deposit additional funds into an existing strategy',
+  changeRates:
+    'Edit the prices of your buy/sell orders within an existing strategy',
+  renewStrategy: 'Renew an inactive strategy',
 };
+
+type StrategyEditOption = typeof tooltipTextByStrategyEditOptionsId;
+export type StrategyEditOptionId = keyof StrategyEditOption;
 
 type getPriceParams = {
   prettified?: boolean;
