@@ -42,7 +42,8 @@ export const StrategyBlockOrderStatus: FC<{
                 variant={'success'}
                 onClick={() =>
                   window.open(
-                    `app.hal.xyz/recipes/carbon-strategy?strategyID=${strategyId}`
+                    `https://app.hal.xyz/recipes/carbon-strategy?strategyID=${strategyId}`,
+                    '_blank'
                   )
                 }
               >
