@@ -52,7 +52,10 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <hr className="border-silver dark:border-emphasis" />
       <StrategyBlockBuySell buy strategy={strategy} />
       <StrategyBlockBuySell strategy={strategy} />
-      <StrategyBlockOrderStatus status={strategy.status} />
+      <StrategyBlockOrderStatus
+        status={strategy.status}
+        strategyId={strategy.id}
+      />
       <StrategyBlockManage
         manage={manage}
         setManage={setManage}
