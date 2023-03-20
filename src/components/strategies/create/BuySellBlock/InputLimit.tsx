@@ -13,7 +13,8 @@ export const InputLimit: FC<{
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPrice(sanitizeNumberInput(e.target.value));
 
-  const { fiatAsString } = useFiatCurrency(token, price);
+  const { getFiatAsString } = useFiatCurrency(token);
+  const fiatAsString = getFiatAsString(price);
 
   return (
     <div>

@@ -2,9 +2,9 @@ import { Imager } from 'components/common/imager/Imager';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
+import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -56,6 +56,8 @@ export const ModalTokenListContent: FC<Props> = ({
     (token: Token) => favoritesMap.has(token.address),
     [favoritesMap]
   );
+  const suspiciousTokenTooltipMsg =
+    'This token is not part of any known token list. Always conduct your own research before trading.';
 
   return (
     <div>
@@ -116,7 +118,12 @@ export const ModalTokenListContent: FC<Props> = ({
                     <div className="ml-15 grid justify-items-start">
                       <div className="flex">
                         {token.symbol}
-                        {token.isSuspicious && <SuspiciousTokenWarning />}
+                        {token.isSuspicious && (
+                          <WarningWithTooltip
+                            className="ml-5"
+                            tooltipContent={suspiciousTokenTooltipMsg}
+                          />
+                        )}
                       </div>
                       <div className="text-secondary text-12">
                         {
