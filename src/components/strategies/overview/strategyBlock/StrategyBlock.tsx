@@ -12,18 +12,15 @@ import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateS
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = strategy.id.padStart(9, '0');
   const [manage, setManage] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
   const { aboveBreakpoint } = useBreakpoints();
   const { duplicate } = useDuplicateStrategy();
 
   return (
     <m.div
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
       variants={mItemVariant}
       className={`${
         strategy.status === StrategyStatus.Active ? 'bg-silver' : 'bg-content'
-      } space-y-20 rounded-10 p-20`}
+      } group space-y-20 rounded-10 p-20`}
     >
       <div className="flex justify-between">
         <div className={'flex space-x-10'}>
@@ -50,9 +47,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
         {aboveBreakpoint('md') && (
           <span
             onClick={() => duplicate(strategy)}
-            className={`${
-              isHovering ? 'visible' : 'invisible'
-            } flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3`}
+            className={`invisible flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3 group-hover:visible`}
           >
             <IconDuplicate className="h-18 w-18" />
           </span>
