@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
@@ -20,6 +20,7 @@ type Props = {
   disabled?: boolean;
   slippage?: BigNumber | null;
   withoutWallet?: boolean;
+  warning?: ReactNode;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -35,6 +36,7 @@ export const TokenInputField: FC<Props> = ({
   disabled,
   slippage,
   withoutWallet,
+  warning,
 }) => {
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
@@ -42,7 +44,8 @@ export const TokenInputField: FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const isSlippagePositive = slippage?.isGreaterThan(0);
 
-  const { fiatValue, fiatAsString } = useFiatCurrency(token, value);
+  const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
+  const fiatValueUsd = getFiatValue(value, true);
 
   const handleOnFocus = () => {
     !disabled && setIsFocused(true);
@@ -67,6 +70,8 @@ export const TokenInputField: FC<Props> = ({
     balance && setValue(new BigNumber(balance).toFixed(token.decimals));
     onKeystroke && onKeystroke();
   };
+
+  const showFiatValue = fiatValueUsd.gt(0);
 
   return (
     <div
@@ -147,7 +152,10 @@ export const TokenInputField: FC<Props> = ({
           <div className={'h-16'} />
         )}
         <div className="flex truncate">
-          {fiatValue.gt(0) && <div>{fiatAsString}</div>}
+          {showFiatValue && fiatValueUsd.lte(20) && (
+            <div className="mr-10">{warning}</div>
+          )}
+          {showFiatValue && <div>{getFiatAsString(value)}</div>}
           {slippage && value && (
             <div
               className={`ml-4 ${

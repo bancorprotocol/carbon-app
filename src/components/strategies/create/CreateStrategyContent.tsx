@@ -38,6 +38,7 @@ export const CreateStrategyContent = ({
   token0BalanceQuery,
   token1BalanceQuery,
 }: CreateStrategyContentProps) => {
+
   return (
     <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
       <div

@@ -1,16 +1,18 @@
 import { FC } from 'react';
+import BigNumber from 'bignumber.js';
 import { Strategy, StrategyStatus } from 'libs/queries';
 import { Imager } from 'components/common/imager/Imager';
 import {
-  getFiatValue,
+  getFiatDisplayValue,
   prettifyNumber,
   sanitizeNumberInput,
 } from 'utils/helpers';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from './TokenPrice';
-import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
+import { getPrice } from './utils';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -22,67 +24,53 @@ export const StrategyBlockBuySell: FC<{
   const otherOrder = buy ? strategy.order1 : strategy.order1;
   const limit = order.startRate === order.endRate;
   const active = strategy.status === StrategyStatus.Active;
-  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const tokenPriceQuery = useGetTokenPrice(token.symbol);
-  const otherTokenPriceQuery = useGetTokenPrice(otherToken.symbol);
+  const { selectedFiatCurrency, getFiatValue: getFiatValueBase } =
+    useFiatCurrency(token);
+  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(otherToken);
 
-  const getPrice = (prettified?: boolean) => {
-    if (prettified) {
-      return `${prettifyNumber(order.startRate, {
-        abbreviate: order.startRate.length > 10,
-        round: true,
-      })} ${
-        !limit
-          ? ` - ${prettifyNumber(order.endRate, {
-              abbreviate: order.endRate.length > 10,
-              round: true,
-            })}`
-          : ''
-      }`;
-    }
-    return `${sanitizeNumberInput(
-      order.startRate,
-      buy ? otherToken.decimals : token.decimals
-    )} ${
-      !limit
-        ? ` - ${sanitizeNumberInput(
-            order.endRate,
-            buy ? otherToken.decimals : token.decimals
-          )}`
-        : ''
-    }`;
-  };
+  const prettifiedPrice = getPrice({
+    order,
+    limit,
+    prettified: true,
+    decimals: buy ? otherToken.decimals : token.decimals,
+  });
 
-  const getTokenFiat = (value: string) => {
-    return new BigNumber(value || 0).times(
-      otherTokenPriceQuery.data?.[selectedFiatCurrency] || 0
-    );
-  };
+  const fullPrice = getPrice({
+    order,
+    limit,
+    decimals: buy ? otherToken.decimals : token.decimals,
+  });
 
-  const getOtherTokenFiat = (value: string) => {
-    return new BigNumber(value || 0).times(
-      tokenPriceQuery.data?.[selectedFiatCurrency] || 0
-    );
-  };
+  const fiatStartRate = buy
+    ? getFiatValueQuote(order.startRate)
+    : getFiatValueBase(otherOrder.startRate);
 
-  const fiatValue = buy
-    ? getTokenFiat(order.startRate)
-    : getOtherTokenFiat(otherOrder.startRate);
+  const fiatEndRate = buy
+    ? getFiatValueQuote(order.endRate)
+    : getFiatValueBase(otherOrder.endRate);
 
-  const fiatSecondValue = buy
-    ? getTokenFiat(order.endRate)
-    : getOtherTokenFiat(otherOrder.endRate);
-
-  const fiatPrices = `${getFiatValue(fiatValue, selectedFiatCurrency)} ${
-    !limit ? ` - ${getFiatValue(fiatSecondValue, selectedFiatCurrency)}` : ''
-  }`;
-  const prettifiedPrice = getPrice(true);
-  const price = getPrice();
-
-  const budgetFiat = getFiatValue(
-    getTokenFiat(buy ? order.balance : otherOrder.balance),
+  const fullFiatPrices = `${getFiatDisplayValue(
+    fiatStartRate,
     selectedFiatCurrency
+  )} ${
+    !limit ? ` - ${getFiatDisplayValue(fiatEndRate, selectedFiatCurrency)}` : ''
+  }`;
+
+  const fullBudget = sanitizeNumberInput(
+    buy ? order.balance : otherOrder.balance,
+    buy ? token.decimals : otherToken.decimals
   );
+  const prettifiedBudget = prettifyNumber(order.balance, {
+    abbreviate: order.balance.length > 10,
+  });
+  const budget = getFiatValueQuote(buy ? order.balance : otherOrder.balance);
+  const fullFiatBudget = getFiatDisplayValue(budget, selectedFiatCurrency);
+
+  const budgetInUsd = buy
+    ? getFiatValueBase(order.balance, true)
+    : getFiatValueQuote(otherOrder.balance, true);
+
+  const budgetWarning = budgetInUsd.lte(new BigNumber(20));
 
   return (
     <div
@@ -126,10 +114,10 @@ export const StrategyBlockBuySell: FC<{
             maxWidth={430}
             element={
               <>
-                <div>{`${price} ${
-                  buy ? otherToken.symbol : token.symbol
-                }`}</div>
-                <TokenPrice className="text-white/60" price={fiatPrices} />
+                <div>
+                  {`${fullPrice} ${buy ? otherToken.symbol : token.symbol}`}
+                </div>
+                <TokenPrice className="text-white/60" price={fullFiatPrices} />
               </>
             }
           >
@@ -151,28 +139,35 @@ export const StrategyBlockBuySell: FC<{
           >
             <div className="text-secondary !text-16">Budget</div>
           </Tooltip>
-          <Tooltip
-            element={
-              <>
-                <div>{`${sanitizeNumberInput(
-                  buy ? order.balance : otherOrder.balance,
-                  buy ? token.decimals : otherToken.decimals
-                )} ${otherToken.symbol}`}</div>
-                <TokenPrice className="text-white/60" price={budgetFiat} />
-              </>
-            }
-          >
-            <div className="flex items-center gap-7">
-              {prettifyNumber(order.balance, {
-                abbreviate: order.balance.length > 10,
-              })}
-              <Imager
-                className="h-16 w-16"
-                src={otherToken.logoURI}
-                alt="token"
+          <div className="flex gap-7">
+            {budgetWarning && (
+              <WarningWithTooltip
+                tooltipContent={
+                  'Low balance might be skipped due to gas concerns'
+                }
               />
-            </div>
-          </Tooltip>
+            )}
+            <Tooltip
+              element={
+                <>
+                  <div>{`${fullBudget} ${otherToken.symbol}`}</div>
+                  <TokenPrice
+                    className="text-white/60"
+                    price={fullFiatBudget}
+                  />
+                </>
+              }
+            >
+              <div className="flex items-center gap-7">
+                {prettifiedBudget}
+                <Imager
+                  className="h-16 w-16"
+                  src={otherToken.logoURI}
+                  alt="token"
+                />
+              </div>
+            </Tooltip>
+          </div>
         </div>
         <BuySellPriceRangeIndicator buy={buy} limit={limit} />
       </div>
