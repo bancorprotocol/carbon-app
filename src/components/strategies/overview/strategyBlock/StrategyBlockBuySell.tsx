@@ -67,7 +67,7 @@ export const StrategyBlockBuySell: FC<{
   const fullFiatBudget = getFiatDisplayValue(budget, selectedFiatCurrency);
 
   const budgetInUsd = buy
-    ? getFiatValueBase(order.balance, true)
+    ? getFiatValueQuote(order.balance, true)
     : getFiatValueQuote(otherOrder.balance, true);
 
   const budgetWarning = budgetInUsd.lte(new BigNumber(20));
