@@ -62,7 +62,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
 
   return (
     <div>
-      <div className={'my-20 grid w-full grid-cols-4'}>
+      <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
           <button
             key={category}
@@ -71,13 +71,9 @@ export const ModalTradeTokenListContent: FC<Props> = ({
             } ${i > 0 ? 'justify-center' : ''}`}
             onClick={() => setSelectedList(category)}
           >
-            {category}
+            {`${category} (${tradePairs[category].length})`}
           </button>
         ))}
-
-        <div className="text-secondary flex items-end justify-end">
-          {tradePairs2.length} Pairs
-        </div>
       </div>
 
       <div
