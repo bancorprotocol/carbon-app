@@ -9,20 +9,14 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Button } from 'components/common/button';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { getTooltipTextByItemId } from './utils';
-
-export enum StrategyEditOptionsId {
-  WithdrawFunds,
-  DepositFunds,
-  DuplicateStrategy,
-  DeleteStrategy,
-  PauseStrategy,
-  RenewStrategy,
-  EditPrices,
-}
+import {
+  StrategyEditOptionId,
+  tooltipTextByStrategyEditOptionsId,
+} from './utils';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 type itemsType = {
-  id: StrategyEditOptionsId;
+  id: StrategyEditOptionId;
   name: string;
   action?: () => void;
 };
@@ -35,23 +29,20 @@ export const StrategyBlockManage: FC<{
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
+  const { belowBreakpoint } = useBreakpoints();
+
   const {
     strategies: { setStrategyToEdit },
   } = useStore();
 
   const items: itemsType[] = [
     {
-      id: StrategyEditOptionsId.DuplicateStrategy,
-      name: 'Duplicate Strategy',
-      action: () => duplicate(strategy),
-    },
-    {
-      id: StrategyEditOptionsId.DeleteStrategy,
+      id: 'deleteStrategy',
       name: 'Delete Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
-      id: StrategyEditOptionsId.EditPrices,
+      id: 'editPrices',
       name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
@@ -62,7 +53,7 @@ export const StrategyBlockManage: FC<{
       },
     },
     {
-      id: StrategyEditOptionsId.DepositFunds,
+      id: 'depositFunds',
       name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
@@ -75,7 +66,7 @@ export const StrategyBlockManage: FC<{
   ];
   if (strategy.status !== StrategyStatus.NoBudget) {
     items.push({
-      id: StrategyEditOptionsId.WithdrawFunds,
+      id: 'withdrawFunds',
       name: 'Withdraw Funds',
       action: () => {
         setStrategyToEdit(strategy);
@@ -86,15 +77,24 @@ export const StrategyBlockManage: FC<{
       },
     });
   }
+  if (belowBreakpoint('md')) {
+    items.push({
+      id: 'duplicateStrategy',
+      name: 'Duplicate Strategy',
+      action: () => duplicate(strategy),
+    });
+  }
   if (strategy.status === StrategyStatus.Active) {
     items.push({
-      id: StrategyEditOptionsId.PauseStrategy,
+      id: 'pauseStrategy',
       name: 'Pause Strategy',
       action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
     });
-  } else {
+  }
+
+  if (strategy.status === StrategyStatus.Paused) {
     items.push({
-      id: StrategyEditOptionsId.RenewStrategy,
+      id: 'renewStrategy',
       name: 'Renew Strategy',
       action: () => {
         setStrategyToEdit(strategy);
@@ -138,11 +138,11 @@ export const StrategyBlockManage: FC<{
 
 const ManageItem: FC<{
   title: string;
-  id: StrategyEditOptionsId;
+  id: StrategyEditOptionId;
   setManage: (flag: boolean) => void;
   action?: () => void;
 }> = ({ title, id, setManage, action }) => {
-  const tooltipText = getTooltipTextByItemId(id);
+  const tooltipText = tooltipTextByStrategyEditOptionsId?.[id];
 
   if (tooltipText) {
     return (

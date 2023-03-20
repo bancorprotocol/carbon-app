@@ -51,7 +51,7 @@ export const reduceETH = (value: string, address: string) => {
   return value;
 };
 
-export const getFiatValue = (
+export const getFiatDisplayValue = (
   fiatValue: BigNumber | string | number,
   currentCurrency: FiatSymbol
 ) => {
