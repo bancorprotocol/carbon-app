@@ -5,7 +5,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
-import { SuspiciousTokenWarning } from 'components/common/SuspiciousTokenWarning/SuspiciousTokenWarning';
+import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -59,6 +59,9 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     (tradePair: TradePair) => favoritesMap.has(buildPairKey(tradePair)),
     [favoritesMap]
   );
+
+  const suspiciousTokenTooltipMsg =
+    'This token is not part of any known token list. Always conduct your own research before trading.';
 
   return (
     <div>
@@ -114,12 +117,18 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   <span className={'flex font-weight-500'}>
                     {tradePair.baseToken.symbol}
                     {tradePair.baseToken.isSuspicious && (
-                      <SuspiciousTokenWarning />
+                      <WarningWithTooltip
+                        className="ml-5"
+                        tooltipContent={suspiciousTokenTooltipMsg}
+                      />
                     )}
                     <span className={'px-5 text-white/60'}>/</span>
                     {tradePair.quoteToken.symbol}
                     {tradePair.quoteToken.isSuspicious && (
-                      <SuspiciousTokenWarning />
+                      <WarningWithTooltip
+                        className="ml-5"
+                        tooltipContent={suspiciousTokenTooltipMsg}
+                      />
                     )}
                   </span>
                 </button>

@@ -1,4 +1,5 @@
-import { StrategyStatus } from 'libs/queries';
+import { Order, StrategyStatus } from 'libs/queries';
+import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 
 export const getStatusText = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
@@ -34,3 +35,34 @@ export const tooltipTextByStrategyEditOptionsId = {
 
 type StrategyEditOption = typeof tooltipTextByStrategyEditOptionsId;
 export type StrategyEditOptionId = keyof StrategyEditOption;
+
+type getPriceParams = {
+  prettified?: boolean;
+  limit?: boolean;
+  order: Order;
+  decimals: number;
+};
+
+export const getPrice = ({
+  prettified = false,
+  limit = false,
+  order,
+  decimals,
+}: getPriceParams) => {
+  if (prettified) {
+    return `${prettifyNumber(order.startRate, {
+      abbreviate: order.startRate.length > 10,
+      round: true,
+    })} ${
+      !limit
+        ? ` - ${prettifyNumber(order.endRate, {
+            abbreviate: order.endRate.length > 10,
+            round: true,
+          })}`
+        : ''
+    }`;
+  }
+  return `${sanitizeNumberInput(order.startRate, decimals)} ${
+    !limit ? ` - ${sanitizeNumberInput(order.endRate, decimals)}` : ''
+  }`;
+};
