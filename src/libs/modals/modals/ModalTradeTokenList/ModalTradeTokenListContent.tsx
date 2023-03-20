@@ -74,7 +74,6 @@ export const ModalTradeTokenListContent: FC<Props> = ({
             {`${category} (${tradePairs[category].length})`}
           </button>
         ))}
-        <div className="text-secondary flex items-end justify-end"></div>
       </div>
 
       <div
