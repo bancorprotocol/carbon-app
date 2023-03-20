@@ -56,7 +56,7 @@ export const StrategyBlockManage: FC<{
       action: () => {
         setStrategyToEdit(strategy);
         navigate({
-          to: PathNames.editStrategy,
+          to: PathNames.editStrategyNew(strategy.id),
           search: { type: 'editPrices' },
         });
       },
@@ -67,7 +67,7 @@ export const StrategyBlockManage: FC<{
       action: () => {
         setStrategyToEdit(strategy);
         navigate({
-          to: PathNames.editStrategy,
+          to: PathNames.editStrategyNew(strategy.id),
           search: { type: 'deposit' },
         });
       },
@@ -80,7 +80,7 @@ export const StrategyBlockManage: FC<{
       action: () => {
         setStrategyToEdit(strategy);
         navigate({
-          to: PathNames.editStrategy,
+          to: PathNames.editStrategyNew(strategy.id),
           search: { type: 'withdraw' },
         });
       },
@@ -99,7 +99,7 @@ export const StrategyBlockManage: FC<{
       action: () => {
         setStrategyToEdit(strategy);
         navigate({
-          to: PathNames.editStrategy,
+          to: PathNames.editStrategyNew(strategy.id),
           search: { type: 'renew' },
         });
       },
