@@ -50,7 +50,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         quoteSymbol={data.target.symbol}
       />
 
-      <div className="mt-2 grid max-h-[210px] grid-cols-3 grid-cols-3 gap-10 gap-10 overflow-y-auto rounded-t-4 rounded-b-10 bg-black p-10 pl-20">
+      <div className="mt-2 grid max-h-[210px] grid-cols-3 gap-10 overflow-y-auto rounded-t-4 rounded-b-10 bg-black p-10 pl-20">
         {selected.map((action, index) => (
           <ModalTradeRoutingRow
             key={index}
