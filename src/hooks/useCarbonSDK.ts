@@ -6,7 +6,7 @@ import { config } from 'services/web3/config';
 import { carbonSDK } from 'index';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
-import { buildTokenPairKey } from 'utils/helpers';
+import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
 
@@ -18,12 +18,11 @@ const sdkConfig = {
   },
 };
 
-const setSdkCacheDumpInterval = () =>
-  setInterval(async () => {
-    console.log('SDK Cache dumped into local storage');
-    const cachedDump = await carbonSDK.getCacheDump();
-    lsService.setItem('sdkCacheData', cachedDump);
-  }, 1000 * 60);
+const persistSdkCacheDump = async () => {
+  console.log('SDK Cache dumped into local storage');
+  const cachedDump = await carbonSDK.getCacheDump();
+  lsService.setItem('sdkCacheData', cachedDump);
+};
 
 const getTokenDecimalMap = () => {
   const tokens = lsService.getItem('tokenListCache')?.tokens || [];
@@ -89,7 +88,7 @@ export const useCarbonSDK = () => {
         Comlink.proxy(onPairAddedToCacheCallback)
       );
       setIsInitialized(true);
-      setSdkCacheDumpInterval();
+      setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {
       console.error('Error initializing CarbonSDK', e);
       setIsError(true);

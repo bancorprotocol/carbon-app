@@ -194,3 +194,18 @@ export const buildPairKey = (pair: TradePair) =>
 
 export const buildTokenPairKey = (pair: TokenPair) =>
   pair.join('-').toLowerCase();
+
+export const setIntervalUsingTimeout = (
+  callback: Function,
+  interval: number
+): NodeJS.Timeout => {
+  let intervalId: NodeJS.Timeout;
+
+  const timeoutCallback = () => {
+    callback();
+    intervalId = setTimeout(timeoutCallback, interval);
+  };
+
+  intervalId = setTimeout(timeoutCallback, interval);
+  return intervalId;
+};
