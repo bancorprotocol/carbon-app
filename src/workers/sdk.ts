@@ -60,27 +60,35 @@ const buildOrderBook = async (
   let minEqMax = false;
 
   while (orders.length < buckets && !minEqMax) {
+    const length = orders.length;
     minEqMax = min.eq(max);
     let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
     rate = buy ? rate : ONE.div(rate).toString();
     rate = minEqMax ? max.toString() : rate;
     i++;
-    const amount = await carbonSDK.getRateLiquidityDepthByPair(
+    const liquidity = await carbonSDK.getRateLiquidityDepthByPair(
       baseToken,
       quoteToken,
       rate
     );
-    let amountBn = new BigNumber(amount);
-    if (amountBn.eq(0)) {
+    let liquidityBn = new BigNumber(liquidity);
+    if (liquidityBn.eq(0)) {
       continue;
     }
     if (buy) {
-      amountBn = amountBn.div(rate);
+      if (length === 0) {
+        liquidityBn = liquidityBn.div(rate);
+      } else {
+        const firstRate = new BigNumber(orders[0].rate);
+        const firstTotal = new BigNumber(orders[0].total);
+        const delta = liquidityBn.minus(firstTotal);
+        liquidityBn = firstTotal.div(firstRate).plus(delta.div(rate));
+      }
     } else {
       rate = ONE.div(rate).toString();
     }
-    const total = amountBn.times(rate).toString();
-    orders.push({ rate, total, amount: amountBn.toString() });
+    const total = liquidityBn.times(rate).toString();
+    orders.push({ rate, total, amount: liquidityBn.toString() });
     if (minEqMax) {
       Array.from({ length: buckets - 1 }).map((_, i) =>
         orders.push({
@@ -88,7 +96,7 @@ const buildOrderBook = async (
             [buy ? 'minus' : 'plus'](step.times(i))
             .toString(),
           total,
-          amount: amountBn.toString(),
+          amount: liquidityBn.toString(),
         })
       );
     }
