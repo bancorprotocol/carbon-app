@@ -10,12 +10,14 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
 
   const getOrders = useCallback(
     (orders?: OrderRow[], buy?: boolean) => {
-      const res = [...(orders || [])].map(({ rate, amount }) => {
-        return [
-          +(+rate).toFixed(quote?.decimals),
-          +(+amount).toFixed(base?.decimals),
-        ];
-      });
+      const res = [...(orders || [])]
+        .splice(0, orderBookConfig.buckets.depthChart)
+        .map(({ rate, amount }) => {
+          return [
+            +(+rate).toFixed(quote?.decimals),
+            +(+amount).toFixed(base?.decimals),
+          ];
+        });
 
       if (res.length > 0) {
         return res;

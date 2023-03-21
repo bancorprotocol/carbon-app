@@ -17,7 +17,7 @@ export type OrderBook = {
 export const useGetOrderBook = (
   base?: string,
   quote?: string,
-  buckets = orderBookConfig.buckets.depthChart
+  buckets = orderBookConfig.steps + 1
 ) => {
   const { isInitialized } = useCarbonSDK();
 
