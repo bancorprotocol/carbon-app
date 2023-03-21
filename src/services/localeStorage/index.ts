@@ -29,7 +29,7 @@ interface LocalStorageSchema {
   voucherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCacheData: string;
-  tokenPairs: { pairs: TradePair[]; timestamp: number };
+  tokenPairsCache: { pairs: TradePair[]; timestamp: number };
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>

@@ -18,6 +18,13 @@ const sdkConfig = {
   },
 };
 
+const setSdkCacheDumpInterval = () =>
+  setInterval(async () => {
+    console.log('SDK Cache dumped into local storage');
+    const cachedDump = await carbonSDK.getCacheDump();
+    lsService.setItem('sdkCacheData', cachedDump);
+  }, 1000 * 60);
+
 const getTokenDecimalMap = () => {
   const tokens = lsService.getItem('tokenListCache')?.tokens || [];
   const importedTokens = lsService.getItem('importedTokens') || [];
@@ -57,23 +64,17 @@ export const useCarbonSDK = () => {
 
   const onPairDataChangedCallback = useCallback(
     async (pairs: TokenPair[]) => {
-      console.log('Web worker: onPairDataChangedCallback', pairs);
       if (pairs.length === 0) return;
       pairs.forEach((pair) => invalidateQueriesByPair(pair));
-      const cachedDump = await carbonSDK.getCacheDump();
-      lsService.setItem('sdkCacheData', cachedDump);
     },
     [invalidateQueriesByPair]
   );
 
   const onPairAddedToCacheCallback = useCallback(
     async (pair: TokenPair) => {
-      console.log('Web worker: onPairAddedToCacheCallback', pair);
       if (pair.length !== 2) return;
       void invalidateQueriesByPair(pair);
       void cache.invalidateQueries({ queryKey: QueryKey.pairs() });
-      const cachedDump = await carbonSDK.getCacheDump();
-      lsService.setItem('sdkCacheData', cachedDump);
     },
     [cache, invalidateQueriesByPair]
   );
@@ -81,16 +82,14 @@ export const useCarbonSDK = () => {
   const init = useCallback(async () => {
     try {
       setIsLoading(true);
-      console.log('Initializing CarbonSDK...');
       const cacheData = lsService.getItem('sdkCacheData');
       await carbonSDK.init(sdkConfig, getTokenDecimalMap(), cacheData);
-      console.log('Web worker: SDK initialized');
       await carbonSDK.setOnChangeHandlers(
         Comlink.proxy(onPairDataChangedCallback),
         Comlink.proxy(onPairAddedToCacheCallback)
       );
       setIsInitialized(true);
-      console.log('CarbonSDK initialized jan jan');
+      setSdkCacheDumpInterval();
     } catch (e) {
       console.error('Error initializing CarbonSDK', e);
       setIsError(true);

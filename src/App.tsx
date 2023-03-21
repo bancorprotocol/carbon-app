@@ -13,7 +13,6 @@ export const App = () => {
   useEffect(() => {
     if (!didInit) {
       didInit = true;
-      console.log('init jan');
       void init();
     }
   }, [init]);

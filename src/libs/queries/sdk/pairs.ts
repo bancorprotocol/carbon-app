@@ -9,7 +9,7 @@ import { carbonSDK } from 'index';
 import { lsService } from 'services/localeStorage';
 
 const getCachedData = () => {
-  const cachedPairs = lsService.getItem('tokenPairs');
+  const cachedPairs = lsService.getItem('tokenPairsCache');
   if (cachedPairs && cachedPairs.timestamp > Date.now() - 1000 * 60 * 60) {
     return cachedPairs.pairs;
   }
@@ -45,7 +45,7 @@ export const useGetTradePairsData = () => {
         })),
       ];
 
-      lsService.setItem('tokenPairs', {
+      lsService.setItem('tokenPairsCache', {
         pairs: pairsWithInverse,
         timestamp: Date.now(),
       });
