@@ -6,8 +6,8 @@ import {
   TradeActionStruct,
   TokenPair,
   SerializableMatchAction,
+  StrategyUpdate,
 } from '@bancor/carbon-sdk';
-import { StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
 import { BigNumberish } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { OrderRow } from 'libs/queries';
