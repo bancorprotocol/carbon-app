@@ -6,12 +6,14 @@ import { isProduction } from 'utils/helpers';
 import { TermsPage } from 'pages/terms';
 import { Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
+import { EditStrategyPage } from 'pages/strategies/edit';
 
 export const PathNames = {
   strategies: '/',
   trade: '/trade',
   debug: '/debug',
   createStrategy: '/strategies/create',
+  editStrategy: '/strategies/edit',
   terms: '/terms',
 };
 
@@ -36,6 +38,10 @@ export const routes: Route[] = [
   {
     path: PathNames.createStrategy,
     element: <CreateStrategyPage />,
+  },
+  {
+    path: PathNames.editStrategy,
+    element: <EditStrategyPage />,
   },
   {
     path: PathNames.terms,

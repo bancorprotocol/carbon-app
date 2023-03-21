@@ -1,16 +1,19 @@
 import { FC } from 'react';
+import { useStore } from 'store';
+import { useModal } from 'hooks/useModal';
+import { Strategy, StrategyStatus } from 'libs/queries';
+import { PathNames, useNavigate } from 'libs/routing';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Button } from 'components/common/button';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
-import { Strategy, StrategyStatus } from 'libs/queries';
-import { useModal } from 'hooks/useModal';
-import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import {
   StrategyEditOptionId,
   tooltipTextByStrategyEditOptionsId,
 } from './utils';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -25,7 +28,12 @@ export const StrategyBlockManage: FC<{
 }> = ({ strategy, manage, setManage }) => {
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
+  const navigate = useNavigate<EditStrategyLocationGenerics>();
   const { belowBreakpoint } = useBreakpoints();
+
+  const {
+    strategies: { setStrategyToEdit },
+  } = useStore();
 
   const items: itemsType[] = [
     {
@@ -34,31 +42,46 @@ export const StrategyBlockManage: FC<{
       action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
     },
     {
-      id: 'changeRates',
-      name: 'Change Rates',
-      action: () =>
-        openModal('editStrategy', { strategy, type: 'changeRates' }),
+      id: 'editPrices',
+      name: 'Edit Prices',
+      action: () => {
+        setStrategyToEdit(strategy);
+        navigate({
+          to: PathNames.editStrategy,
+          search: { type: 'editPrices' },
+        });
+      },
     },
     {
       id: 'depositFunds',
       name: 'Deposit Funds',
-      action: () =>
-        openModal('editStrategyBudget', { strategy, type: 'deposit' }),
+      action: () => {
+        setStrategyToEdit(strategy);
+        navigate({
+          to: PathNames.editStrategy,
+          search: { type: 'deposit' },
+        });
+      },
     },
   ];
+  if (strategy.status !== StrategyStatus.NoBudget) {
+    items.push({
+      id: 'withdrawFunds',
+      name: 'Withdraw Funds',
+      action: () => {
+        setStrategyToEdit(strategy);
+        navigate({
+          to: PathNames.editStrategy,
+          search: { type: 'withdraw' },
+        });
+      },
+    });
+  }
   if (belowBreakpoint('md')) {
     items.push({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => duplicate(strategy),
-    });
-  }
-  if (strategy.status !== StrategyStatus.NoBudget) {
-    items.push({
-      id: 'withdrawFunds',
-      name: 'Withdraw Funds',
-      action: () =>
-        openModal('editStrategyBudget', { strategy, type: 'withdraw' }),
     });
   }
   if (strategy.status === StrategyStatus.Active) {
@@ -73,7 +96,13 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: 'renewStrategy',
       name: 'Renew Strategy',
-      action: () => openModal('editStrategy', { strategy, type: 'renew' }),
+      action: () => {
+        setStrategyToEdit(strategy);
+        navigate({
+          to: PathNames.editStrategy,
+          search: { type: 'renew' },
+        });
+      },
     });
   }
 
