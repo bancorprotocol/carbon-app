@@ -44,15 +44,17 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {orderBy(orders, ({ rate }) => Number(rate), 'desc').map((props) => (
-            <OrderBookWidgetRow
-              key={`orderbook${buy ? 'buy' : 'sell'}-${props.rate}`}
-              buy={buy}
-              base={base}
-              quote={quote}
-              {...props}
-            />
-          ))}
+          {orderBy(orders, ({ rate }) => Number(rate), 'desc').map(
+            (props, i) => (
+              <OrderBookWidgetRow
+                key={`orderbook${buy ? 'buy' : 'sell'}-${props.rate}-${i}`}
+                buy={buy}
+                base={base}
+                quote={quote}
+                {...props}
+              />
+            )
+          )}
         </m.div>
       ) : (
         <m.div
