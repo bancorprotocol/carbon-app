@@ -56,6 +56,9 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
           type: 'area',
           backgroundColor: '#000000',
           borderColor: '#000000',
+          height: 420,
+          borderRadius: 10,
+          marginTop: 20,
         },
         credits: {
           enabled: false,

@@ -17,7 +17,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
     <div className="rounded-10 bg-silver p-20">
       <div className="mb-20 font-weight-500">Depth</div>
       {isError ? (
-        <div className="flex h-[300px] items-center justify-center rounded-10 bg-black">
+        <div className="flex items-center justify-center rounded-10 bg-black">
           <NoOrders />
         </div>
       ) : (

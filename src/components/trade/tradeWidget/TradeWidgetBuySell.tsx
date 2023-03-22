@@ -67,7 +67,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
 
   return (
-    <div className={`flex flex-col rounded-12 bg-silver p-20`}>
+    <div className={`rounded-12 bg-silver p-20`}>
       <h2 className={'mb-20'}>
         {buy
           ? `Buy ${target.symbol} with ${source.symbol}`

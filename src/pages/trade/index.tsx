@@ -40,16 +40,14 @@ export const TradePage = () => {
       ) : isTradePairError || !isValidPair ? (
         <div>{!noTokens && <div>Not found</div>}</div>
       ) : (
-        <div className="px-content mx-auto mt-50 grid grid-cols-1 gap-20 pb-30 md:grid-cols-12 xl:px-50">
-          <div
-            className={'order-last md:order-first md:col-span-4 md:row-span-2'}
-          >
+        <div className="px-content mt-50 grid grid-cols-1 gap-20 pb-30 md:grid-cols-12 xl:px-50">
+          <div className={'md:col-span-4 md:row-span-2'}>
             <OrderBookWidget base={baseToken} quote={quoteToken} />
           </div>
           <div className={'md:col-span-8'}>
             <TradeWidget base={baseToken} quote={quoteToken} />
           </div>
-          <div className={'order-first md:order-last md:col-span-8'}>
+          <div className={'md:col-span-8'}>
             <DepthChartWidget base={baseToken} quote={quoteToken} />
           </div>
         </div>
