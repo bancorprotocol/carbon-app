@@ -159,12 +159,20 @@ const getOrderBook = async (
   };
   const middleRate = getMiddleRate();
 
+  const buyStartRate = middleRate.minus(
+    step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
+  );
+
+  const sellStartRate = middleRate.plus(
+    step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
+  );
+
   const buy = buyHasLiq
     ? await buildOrderBook(
         true,
         base,
         quote,
-        middleRate,
+        buyStartRate,
         step,
         minBuy,
         maxBuy,
@@ -177,7 +185,7 @@ const getOrderBook = async (
         false,
         quote,
         base,
-        middleRate,
+        sellStartRate,
         step,
         minSell,
         maxSell,
