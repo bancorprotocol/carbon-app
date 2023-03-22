@@ -4,6 +4,7 @@ import { Token } from 'libs/tokens';
 import { orderBy } from 'lodash';
 import { FC } from 'react';
 import { OrderBookWidgetRow } from './OrderBookWidgetRow';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 type OrderBookSideProps = {
   orders: OrderRow[];
@@ -23,7 +24,11 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
   return (
     <div>
       {isLoading ? (
-        <div>loading</div>
+        <div className={'flex h-[392px] w-full items-center justify-center'}>
+          <div className={'h-[80px]'}>
+            <CarbonLogoLoading />
+          </div>
+        </div>
       ) : orders?.length > 0 ? (
         <div className={'grid grid-cols-3 gap-x-10'}>
           {orderBy(orders, ({ rate }) => Number(rate), 'desc').map((props) => (

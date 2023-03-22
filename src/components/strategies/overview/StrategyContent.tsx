@@ -12,6 +12,7 @@ import { m, mListVariant } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 import { getCompareFunctionBySortType } from './utils';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 export const StrategyContent = () => {
   const strategies = useGetUserStrategies();
@@ -57,9 +58,20 @@ export const StrategyContent = () => {
         />
       }
     >
-      {(!filteredStrategies || filteredStrategies.length === 0) &&
-      !strategies.isLoading ? (
-        <StrategyNotFound />
+      {!filteredStrategies ||
+      filteredStrategies.length === 0 ||
+      strategies.isLoading ? (
+        <>
+          {strategies.isLoading ? (
+            <div className={'flex h-full items-center justify-center'}>
+              <div className={'h-80'}>
+                <CarbonLogoLoading />
+              </div>
+            </div>
+          ) : (
+            <StrategyNotFound />
+          )}
+        </>
       ) : (
         <m.div
           className={
@@ -69,23 +81,10 @@ export const StrategyContent = () => {
           initial={'hidden'}
           animate={'visible'}
         >
-          {strategies.isLoading ? (
-            <>
-              {[...Array(3)].map((_, index) => (
-                <div
-                  key={index}
-                  className="loading-skeleton h-[665px] w-full"
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {filteredStrategies?.map((s) => (
-                <StrategyBlock key={s.id} strategy={s} />
-              ))}
-              <StrategyBlockCreate />
-            </>
-          )}
+          {filteredStrategies?.map((s) => (
+            <StrategyBlock key={s.id} strategy={s} />
+          ))}
+          <StrategyBlockCreate />
         </m.div>
       )}
     </Page>

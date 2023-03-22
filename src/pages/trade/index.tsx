@@ -8,6 +8,7 @@ import { useTradePairs } from 'components/trade/useTradePairs';
 import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 export type TradePageProps = { base: Token; quote: Token };
 
@@ -31,7 +32,11 @@ export const TradePage = () => {
       {belowBreakpoint('md') && <MainMenuTrade />}
 
       {isLoading ? (
-        <div>is loading</div>
+        <div className={'flex h-full items-center justify-center'}>
+          <div className={'h-80'}>
+            <CarbonLogoLoading />
+          </div>
+        </div>
       ) : isTradePairError || !isValidPair ? (
         <div>{!noTokens && <div>Not found</div>}</div>
       ) : (
