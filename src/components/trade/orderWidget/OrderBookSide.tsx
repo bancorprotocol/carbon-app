@@ -47,7 +47,9 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
           {orderBy(orders, ({ rate }) => Number(rate), 'desc').map(
             (props, i) => (
               <OrderBookWidgetRow
-                key={`orderbook${buy ? 'buy' : 'sell'}-${props.rate}-${i}`}
+                key={`orderbook-${buy ? 'buy' : 'sell'}-${props.rate}-${i}-${
+                  base.address
+                }-${quote.address}`}
                 buy={buy}
                 base={base}
                 quote={quote}
