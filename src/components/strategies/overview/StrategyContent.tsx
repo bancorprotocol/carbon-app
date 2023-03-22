@@ -63,7 +63,7 @@ export const StrategyContent = () => {
       strategies.isLoading ? (
         <>
           {strategies.isLoading ? (
-            <div className={'flex h-full items-center justify-center'}>
+            <div className={'flex h-[80%] items-center justify-center'}>
               <div className={'h-80'}>
                 <CarbonLogoLoading />
               </div>
