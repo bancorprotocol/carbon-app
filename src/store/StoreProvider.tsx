@@ -30,6 +30,11 @@ import {
   StrategiesStore,
   useStrategiesStore,
 } from './useStrategiesStore';
+import {
+  defaultOrderBookSettingsStore,
+  OrderBookSettingsStore,
+  useOrderBookSettingsStore,
+} from 'store/useOrderBookSettingsStore';
 
 // ********************************** //
 // STORE CONTEXT
@@ -44,6 +49,9 @@ interface StoreContext {
   trade: {
     settings: TradeSettingsStore;
   };
+  orderBook: {
+    settings: OrderBookSettingsStore;
+  };
   fiatCurrency: FiatCurrencyStore;
 }
 
@@ -55,6 +63,9 @@ const defaultValue: StoreContext = {
   modals: defaultModalStore,
   trade: {
     settings: defaultTradeSettingsStore,
+  },
+  orderBook: {
+    settings: defaultOrderBookSettingsStore,
   },
   fiatCurrency: defaultFiatCurrencyStore,
 };
@@ -72,6 +83,7 @@ export const useStore = () => {
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
+  const orderBookSettings = useOrderBookSettingsStore();
   const notifications = useNotificationsStore();
   const modals = useModalStore();
   const tokens = useTokensStore();
@@ -86,6 +98,9 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     modals,
     trade: {
       settings: tradeSettings,
+    },
+    orderBook: {
+      settings: orderBookSettings,
     },
     fiatCurrency,
   };

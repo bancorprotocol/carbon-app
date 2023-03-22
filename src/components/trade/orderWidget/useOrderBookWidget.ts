@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { orderBy } from 'lodash';
 import { useTokens } from 'hooks/useTokens';
-import { orderBookConfig } from 'workers/sdk';
+import { useStore } from 'store';
 
 const _subtractPrevAmount = (
   data: OrderRow[],
@@ -29,12 +29,13 @@ const _subtractPrevAmount = (
 const buildOrders = (
   data: OrderRow[],
   baseDecimals: number,
-  quoteDecimals: number
+  quoteDecimals: number,
+  buckets: number
 ): OrderRow[] => {
   return data
     .map(({ amount, rate }, i) => _subtractPrevAmount(data, amount, rate, i))
     .filter(({ amount }) => amount !== '0')
-    .splice(0, orderBookConfig.buckets.orderBook)
+    .splice(0, buckets)
     .map(({ amount, rate, total }) => ({
       rate: new BigNumber(rate).toFixed(quoteDecimals, 1),
       amount: new BigNumber(amount).toFixed(baseDecimals, 1),
@@ -43,7 +44,12 @@ const buildOrders = (
 };
 
 export const useOrderBookWidget = (base?: string, quote?: string) => {
-  const orderBookQuery = useGetOrderBook(base, quote);
+  const {
+    orderBook: {
+      settings: { steps, orderBookBuckets },
+    },
+  } = useStore();
+  const orderBookQuery = useGetOrderBook(steps, base, quote);
   const { getTokenById } = useTokens();
   const { data } = orderBookQuery;
 
@@ -55,11 +61,18 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
     const sell = orderBy(data?.sell || [], ({ rate }) => +rate, 'asc');
 
     return {
-      buy: buildOrders(buy, baseDecimals, quoteDecimals),
-      sell: buildOrders(sell, baseDecimals, quoteDecimals),
+      buy: buildOrders(buy, baseDecimals, quoteDecimals, orderBookBuckets),
+      sell: buildOrders(sell, baseDecimals, quoteDecimals, orderBookBuckets),
       middleRate: data?.middleRate || '0',
     };
-  }, [baseDecimals, data?.buy, data?.middleRate, data?.sell, quoteDecimals]);
+  }, [
+    baseDecimals,
+    data?.buy,
+    data?.middleRate,
+    data?.sell,
+    orderBookBuckets,
+    quoteDecimals,
+  ]);
 
   return { ...orderBookQuery, data: orders };
 };

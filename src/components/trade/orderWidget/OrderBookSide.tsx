@@ -4,7 +4,6 @@ import { Token } from 'libs/tokens';
 import { orderBy } from 'lodash';
 import { FC } from 'react';
 import { OrderBookWidgetRow } from './OrderBookWidgetRow';
-import { orderBookConfig } from 'workers/sdk';
 
 type OrderBookSideProps = {
   orders: OrderRow[];
@@ -24,16 +23,7 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
   return (
     <div>
       {isLoading ? (
-        <div className={'mt-8 space-y-8'}>
-          {Array.from({ length: orderBookConfig.buckets.orderBook }).map(
-            (_, i) => (
-              <div
-                key={i}
-                className={'loading-skeleton h-20 w-full rounded-4'}
-              ></div>
-            )
-          )}
-        </div>
+        <div>loading</div>
       ) : orders?.length > 0 ? (
         <div className={'grid grid-cols-3 gap-x-10'}>
           {orderBy(orders, ({ rate }) => Number(rate), 'desc').map((props) => (

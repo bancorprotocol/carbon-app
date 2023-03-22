@@ -3,15 +3,20 @@ import { Options } from 'libs/charts';
 import { OrderRow, useGetOrderBook } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useCallback } from 'react';
-import { orderBookConfig } from 'workers/sdk';
+import { useStore } from 'store';
 
 export const useDepthChartWidget = (base?: Token, quote?: Token) => {
-  const { data } = useGetOrderBook(base?.address, quote?.address);
+  const {
+    orderBook: {
+      settings: { steps, depthChartBuckets },
+    },
+  } = useStore();
+  const { data } = useGetOrderBook(steps, base?.address, quote?.address);
 
   const getOrders = useCallback(
     (orders?: OrderRow[], buy?: boolean) => {
       const res = [...(orders || [])]
-        .splice(0, orderBookConfig.buckets.depthChart)
+        .splice(0, depthChartBuckets)
         .map(({ rate, amount }) => {
           return [
             +(+rate).toFixed(quote?.decimals),
@@ -25,17 +30,21 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
 
       let rate;
 
-      return new Array(orderBookConfig.buckets.depthChart)
-        .fill(0)
-        .map((_, i) => {
-          rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
-            new BigNumber(data?.step || 0).times(i)
-          );
+      return new Array(depthChartBuckets).fill(0).map((_, i) => {
+        rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
+          new BigNumber(data?.step || 0).times(i)
+        );
 
-          return [+(+rate).toFixed(quote?.decimals), 0];
-        });
+        return [+(+rate).toFixed(quote?.decimals), 0];
+      });
     },
-    [base?.decimals, data?.middleRate, data?.step, quote?.decimals]
+    [
+      base?.decimals,
+      data?.middleRate,
+      data?.step,
+      depthChartBuckets,
+      quote?.decimals,
+    ]
   );
 
   const getOptions = useCallback(

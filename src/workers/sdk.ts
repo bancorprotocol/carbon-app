@@ -15,14 +15,6 @@ import { OrderBook } from 'libs/queries/sdk/orderBook';
 
 const ONE = new BigNumber(1);
 
-export const orderBookConfig = {
-  steps: 100,
-  buckets: {
-    orderBook: 14,
-    depthChart: 50,
-  },
-};
-
 let carbonSDK: Sdk;
 let isInitialized = false;
 let isInitializing = false;
@@ -53,13 +45,13 @@ const buildOrderBook = async (
   step: BigNumber,
   min: BigNumber,
   max: BigNumber,
-  buckets: number
+  steps: number
 ) => {
   const orders: OrderRow[] = [];
   let i = 0;
   let minEqMax = false;
 
-  while (orders.length < buckets && !minEqMax) {
+  while (orders.length < steps && !minEqMax) {
     const length = orders.length;
     minEqMax = min.eq(max);
     let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
@@ -90,10 +82,10 @@ const buildOrderBook = async (
     const total = liquidityBn.times(rate).toString();
     orders.push({ rate, total, amount: liquidityBn.toString() });
     if (minEqMax) {
-      Array.from({ length: buckets - 1 }).map((_, i) =>
+      Array.from({ length: steps - 1 }).map((_, i) =>
         orders.push({
           rate: new BigNumber(rate)
-            [buy ? 'minus' : 'plus'](step.times(i))
+            [buy ? 'minus' : 'plus'](step.times(i + 1))
             .toString(),
           total,
           amount: liquidityBn.toString(),
@@ -107,7 +99,7 @@ const buildOrderBook = async (
 const getOrderBook = async (
   base: string,
   quote: string,
-  buckets: number
+  steps: number
 ): Promise<OrderBook> => {
   const buyHasLiq = await carbonSDK.hasLiquidityByPair(base, quote);
   const sellHasLiq = await carbonSDK.hasLiquidityByPair(quote, base);
@@ -124,10 +116,8 @@ const getOrderBook = async (
     sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
   );
 
-  const stepBuy = maxBuy.minus(minBuy).div(orderBookConfig.steps);
-  const stepSell = ONE.div(minSell)
-    .minus(ONE.div(maxSell))
-    .div(orderBookConfig.steps);
+  const stepBuy = maxBuy.minus(minBuy).div(steps);
+  const stepSell = ONE.div(minSell).minus(ONE.div(maxSell)).div(steps);
 
   const getStep = () => {
     if (stepBuy.isFinite() && stepBuy.gt(0)) {
@@ -140,10 +130,10 @@ const getOrderBook = async (
       return stepSell;
     } else {
       if (minBuy.gt(0) && minBuy.eq(maxBuy)) {
-        return minBuy.div(orderBookConfig.steps);
+        return minBuy.div(steps);
       }
       if (minSell.gt(0) && minSell.eq(maxSell)) {
-        return minSell.div(orderBookConfig.steps);
+        return minSell.div(steps);
       }
       return ONE.div(10000);
     }
@@ -178,7 +168,7 @@ const getOrderBook = async (
         step,
         minBuy,
         maxBuy,
-        buckets
+        steps
       )
     : [];
 
@@ -191,7 +181,7 @@ const getOrderBook = async (
         step,
         minSell,
         maxSell,
-        buckets
+        steps
       )
     : [];
 

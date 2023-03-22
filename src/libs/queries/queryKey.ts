@@ -55,10 +55,10 @@ export namespace QueryKey {
     'liquidity',
   ];
 
-  export const tradeOrderBook = (pair: TokenPair, buckets: number) => [
+  export const tradeOrderBook = (pair: TokenPair, steps: number) => [
     ...sdk,
     buildTokenPairKey(pair),
     'trade-order-book',
-    buckets,
+    steps,
   ];
 }

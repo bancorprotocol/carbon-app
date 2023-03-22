@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { carbonSDK } from 'index';
-import { orderBookConfig } from 'workers/sdk';
 
 export type OrderRow = { rate: string; total: string; amount: string };
 
@@ -15,15 +14,15 @@ export type OrderBook = {
 };
 
 export const useGetOrderBook = (
+  steps: number,
   base?: string,
-  quote?: string,
-  buckets = orderBookConfig.steps + 1
+  quote?: string
 ) => {
   const { isInitialized } = useCarbonSDK();
 
   return useQuery({
-    queryKey: QueryKey.tradeOrderBook([base!, quote!], buckets),
-    queryFn: () => carbonSDK.getOrderBook(base!, quote!, buckets),
+    queryKey: QueryKey.tradeOrderBook([base!, quote!], steps),
+    queryFn: () => carbonSDK.getOrderBook(base!, quote!, steps),
     enabled: isInitialized && !!base && !!quote,
     retry: 1,
     staleTime: ONE_DAY_IN_MS,
