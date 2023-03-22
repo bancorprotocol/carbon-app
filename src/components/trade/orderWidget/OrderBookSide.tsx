@@ -23,7 +23,7 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
   isLoading,
 }) => {
   return (
-    <AnimatePresence exitBeforeEnter={true} presenceAffectsLayout={true}>
+    <AnimatePresence exitBeforeEnter={true}>
       {isLoading ? (
         <m.div
           key={'loading'}
@@ -55,9 +55,14 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
           ))}
         </m.div>
       ) : (
-        <div className="flex h-[392px] items-center justify-center rounded-10 bg-black text-center">
+        <m.div
+          className="flex h-[392px] items-center justify-center rounded-10 bg-black text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
           <NoOrders />
-        </div>
+        </m.div>
       )}
     </AnimatePresence>
   );
