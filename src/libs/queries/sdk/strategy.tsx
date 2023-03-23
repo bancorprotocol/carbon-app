@@ -146,8 +146,6 @@ export interface CreateStrategyParams {
 
 export interface UpdateStrategyParams {
   id: string;
-  base: TokenAddressDecimals;
-  quote: TokenAddressDecimals;
   encoded: string;
   fieldsToUpdate: StrategyUpdate;
   buyMarginalPrice?: MarginalPriceOptions;
@@ -198,8 +196,6 @@ export const useUpdateStrategyQuery = () => {
   return useMutation(
     async ({
       id,
-      base,
-      quote,
       encoded,
       fieldsToUpdate,
       buyMarginalPrice,
@@ -208,8 +204,6 @@ export const useUpdateStrategyQuery = () => {
       const unsignedTx = await carbonSDK.updateStrategy(
         id,
         encoded,
-        base.address,
-        quote.address,
         {
           ...fieldsToUpdate,
         },

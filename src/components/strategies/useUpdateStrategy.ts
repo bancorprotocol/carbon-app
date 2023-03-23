@@ -27,8 +27,6 @@ export const useUpdateStrategy = () => {
     updateMutation.mutate(
       {
         id,
-        base,
-        quote,
         encoded,
         fieldsToUpdate: {
           buyPriceLow: '0',
@@ -66,8 +64,6 @@ export const useUpdateStrategy = () => {
     updateMutation.mutate(
       {
         id,
-        base,
-        quote,
         encoded,
         fieldsToUpdate: {
           buyPriceLow: order0.startRate,
@@ -106,8 +102,6 @@ export const useUpdateStrategy = () => {
     updateMutation.mutate(
       {
         id,
-        base,
-        quote,
         encoded,
         fieldsToUpdate: {
           buyPriceLow: order0.startRate,
@@ -150,8 +144,6 @@ export const useUpdateStrategy = () => {
     updateMutation.mutate(
       {
         id,
-        base,
-        quote,
         encoded,
         fieldsToUpdate: {
           buyBudget: order0.balance,
@@ -194,8 +186,6 @@ export const useUpdateStrategy = () => {
     updateMutation.mutate(
       {
         id,
-        base,
-        quote,
         encoded,
         fieldsToUpdate: {
           buyBudget: order0.balance,

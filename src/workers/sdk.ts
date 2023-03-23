@@ -46,26 +46,51 @@ const buildOrderBook = async (
   min: BigNumber,
   max: BigNumber,
   steps: number
-) => {
+): Promise<OrderRow[]> => {
   const orders: OrderRow[] = [];
   let i = 0;
   let minEqMax = false;
+  const rates: string[] = [];
 
-  while (orders.length < steps && !minEqMax) {
-    const length = orders.length;
+  console.log('jan buildOrderBook reached');
+
+  while (rates.length < steps && !minEqMax) {
     minEqMax = min.eq(max);
     let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
     rate = buy ? rate : ONE.div(rate).toString();
     rate = minEqMax ? max.toString() : rate;
     i++;
-    const liquidity = await carbonSDK.getRateLiquidityDepthByPair(
-      baseToken,
-      quoteToken,
-      rate
-    );
+    rates.push(rate);
+
+    if (minEqMax) {
+      Array.from({ length: steps - 1 }).map((_, i) =>
+        rates.push(
+          new BigNumber(rate)
+            [buy ? 'minus' : 'plus'](step.times(i + 1))
+            .toString()
+        )
+      );
+    }
+  }
+
+  console.log('jan rates', rates);
+
+  const results = await carbonSDK.getRateLiquidityDepthsByPair(
+    baseToken,
+    quoteToken,
+    rates
+  );
+
+  console.log('jan results', results);
+
+  results.forEach((liquidity, i) => {
+    const length = orders.length;
+    let rate = rates[i];
     let liquidityBn = new BigNumber(liquidity);
+
     if (liquidityBn.eq(0)) {
-      continue;
+      console.log('liquidity is 0');
+      return;
     }
     if (buy) {
       if (length === 0) {
@@ -81,18 +106,10 @@ const buildOrderBook = async (
     }
     const total = liquidityBn.times(rate).toString();
     orders.push({ rate, total, amount: liquidityBn.toString() });
-    if (minEqMax) {
-      Array.from({ length: steps - 1 }).map((_, i) =>
-        orders.push({
-          rate: new BigNumber(rate)
-            [buy ? 'minus' : 'plus'](step.times(i + 1))
-            .toString(),
-          total,
-          amount: liquidityBn.toString(),
-        })
-      );
-    }
-  }
+  });
+
+  console.log('jan orders', orders);
+
   return orders;
 };
 
@@ -115,9 +132,15 @@ const getOrderBook = async (
   const maxSell = new BigNumber(
     sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
   );
+  console.log('jan minBuy', minBuy.toString());
+  console.log('jan maxBuy', maxBuy.toString());
+  console.log('jan minSell', minSell.toString());
+  console.log('jan maxSell', maxSell.toString());
 
   const stepBuy = maxBuy.minus(minBuy).div(steps);
   const stepSell = ONE.div(minSell).minus(ONE.div(maxSell)).div(steps);
+  console.log('jan stepBuy', stepBuy.toString());
+  console.log('jan stepSell', stepSell.toString());
 
   const getStep = () => {
     if (stepBuy.isFinite() && stepBuy.gt(0)) {
@@ -139,6 +162,7 @@ const getOrderBook = async (
     }
   };
   const step = getStep();
+  console.log('jan step', step.toString());
 
   const getMiddleRate = () => {
     if (
@@ -158,14 +182,19 @@ const getOrderBook = async (
     return new BigNumber(0);
   };
   const middleRate = getMiddleRate();
+  console.log('jan middleRate', middleRate.toString());
 
   const buyStartRate = middleRate.minus(
-    step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
+    step.times(middleRate.minus(maxBuy).div(step).toFixed(0)).plus(step)
   );
+  console.log('jan buyStartRate', buyStartRate.toString());
 
   const sellStartRate = middleRate.plus(
-    step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
+    step
+      .times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
+      .plus(step)
   );
+  console.log('jan sellStartRate', sellStartRate.toString());
 
   const buy = buyHasLiq
     ? await buildOrderBook(
@@ -180,6 +209,8 @@ const getOrderBook = async (
       )
     : [];
 
+  console.log('jan buy', buy);
+
   const sell = sellHasLiq
     ? await buildOrderBook(
         false,
@@ -192,6 +223,8 @@ const getOrderBook = async (
         steps
       )
     : [];
+
+  console.log('jan sell', sell);
 
   const largestBuy = Math.max(
     ...buy.map((o) => new BigNumber(o.rate).toNumber())
@@ -221,14 +254,6 @@ const obj = {
   init,
   isInitialized: () => isInitialized,
   getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
-  onPairDataChanged: (cb: (affectedPairs: TokenPair[]) => void) => {
-    carbonSDK.on('onPairDataChanged', (affectedPairs) => cb(affectedPairs));
-    return;
-  },
-  onPairAddedToCache: (cb: (affectedPairs: TokenPair) => void) => {
-    carbonSDK.on('onPairAddedToCache', (affectedPairs) => cb(affectedPairs));
-    return;
-  },
   setOnChangeHandlers: (
     onPairDataChanged: (affectedPairs: TokenPair[]) => void,
     onPairAddedToCache: (affectedPairs: TokenPair) => void
@@ -241,17 +266,8 @@ const obj = {
     );
     return;
   },
-  getRateLiquidityDepthByPair: (
-    baseToken: string,
-    quoteToken: string,
-    rate: string
-  ) => carbonSDK.getRateLiquidityDepthByPair(baseToken, quoteToken, rate),
   hasLiquidityByPair: (baseToken: string, quoteToken: string) =>
     carbonSDK.hasLiquidityByPair(baseToken, quoteToken),
-  getMinRateByPair: (baseToken: string, quoteToken: string) =>
-    carbonSDK.getMinRateByPair(baseToken, quoteToken),
-  getMaxRateByPair: (baseToken: string, quoteToken: string) =>
-    carbonSDK.getMaxRateByPair(baseToken, quoteToken),
   getUserStrategies: (address: string) => carbonSDK.getUserStrategies(address),
   createBuySellStrategy: (
     baseToken: string,
@@ -278,8 +294,6 @@ const obj = {
   updateStrategy: (
     strategyId: BigNumberish,
     encoded: string,
-    baseToken: string,
-    quoteToken: string,
     data: StrategyUpdate,
     buyMarginalPrice?: string | undefined,
     sellMarginalPrice?: string | undefined,
@@ -288,8 +302,6 @@ const obj = {
     carbonSDK.updateStrategy(
       strategyId,
       encoded,
-      baseToken,
-      quoteToken,
       data,
       buyMarginalPrice,
       sellMarginalPrice,
