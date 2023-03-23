@@ -13,16 +13,18 @@ const _subtractPrevAmount = (
   data: OrderRow[],
   amount: string,
   rate: string,
+  total: string,
   i: number
 ) => {
   const prevAmount = data[i - 1]?.amount || '0';
+  const prevTotal = data[i - 1]?.total || '0';
   const newAmount = new BigNumber(amount).minus(prevAmount);
-  const totalAmount = newAmount.times(rate);
+  const newTotal = new BigNumber(total).minus(prevTotal);
 
   return {
     rate,
     amount: newAmount.toString(),
-    total: totalAmount.toString(),
+    total: newTotal.toString(),
   };
 };
 
@@ -33,7 +35,9 @@ const buildOrders = (
   buckets: number
 ): OrderRow[] => {
   return data
-    .map(({ amount, rate }, i) => _subtractPrevAmount(data, amount, rate, i))
+    .map(({ amount, rate, total }, i) =>
+      _subtractPrevAmount(data, amount, rate, total, i)
+    )
     .filter(({ amount }) => amount !== '0')
     .splice(0, buckets)
     .map(({ amount, rate, total }) => ({

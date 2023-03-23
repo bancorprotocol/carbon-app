@@ -92,20 +92,37 @@ const buildOrderBook = async (
       console.log('liquidity is 0');
       return;
     }
+    console.log('jan ------------------');
+    console.log('jan liquidityBn unchanged', liquidityBn.toString());
+    console.log('jan rate unchanged', rate);
     if (buy) {
       if (length === 0) {
         liquidityBn = liquidityBn.div(rate);
+        console.log('jan first liquidityBn', liquidityBn.toString());
       } else {
-        const prevRate = new BigNumber(orders[i - 1].rate);
-        const prevTotal = new BigNumber(orders[i - 1].total);
-        const delta = liquidityBn.minus(prevTotal);
-        liquidityBn = prevTotal.div(prevRate).plus(delta.div(rate));
+        if (liquidityBn.eq(orders[length - 1].total)) {
+          console.log('jan done NOTHING');
+          liquidityBn = new BigNumber(orders[length - 1].amount);
+          console.log('jan liquidityBn', liquidityBn.toString());
+        } else {
+          const firstRate = new BigNumber(orders[0].rate);
+          console.log('jan firstRate', firstRate.toString());
+          const firstTotal = new BigNumber(orders[0].total);
+          console.log('jan firstTotal', firstTotal.toString());
+          const delta = liquidityBn.minus(firstTotal);
+          console.log('jan delta', delta.toString());
+          liquidityBn = firstTotal.div(firstRate).plus(delta.div(rate));
+          console.log('jan liquidityBn', liquidityBn.toString());
+        }
       }
     } else {
       rate = ONE.div(rate).toString();
     }
-    const total = liquidityBn.times(rate).toString();
-    orders.push({ rate, total, amount: liquidityBn.toString() });
+    orders.push({
+      rate,
+      total: liquidity,
+      amount: liquidityBn.toString(),
+    });
   });
 
   console.log('jan orders', orders);
