@@ -20,7 +20,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
   const getOrders = useCallback(
     (orders?: OrderRow[], buy?: boolean) => {
       const res = [...(orders || [])]
-        .splice(0, depthChartBuckets)
+        .splice(0, depthChartBuckets + 1)
         .map(({ rate, amount }) => {
           return [
             +(+rate).toFixed(quote?.decimals),

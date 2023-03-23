@@ -53,7 +53,7 @@ const buildOrderBook = async (
 
   console.log('jan buildOrderBook reached');
 
-  while (rates.length < steps) {
+  while (rates.length <= steps + 1) {
     const incrementBy = step.times(i);
     let rate = startRate[buy ? 'minus' : 'plus'](incrementBy).toString();
     rate = buy ? rate : ONE.div(rate).toString();
