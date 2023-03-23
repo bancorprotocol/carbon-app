@@ -49,39 +49,33 @@ const buildOrderBook = async (
 ): Promise<OrderRow[]> => {
   const orders: OrderRow[] = [];
   let i = 0;
-  let minEqMax = false;
   const rates: string[] = [];
 
   console.log('jan buildOrderBook reached');
 
-  while (rates.length < steps && !minEqMax) {
-    minEqMax = min.eq(max);
+  while (rates.length < steps) {
     let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
     rate = buy ? rate : ONE.div(rate).toString();
-    rate = minEqMax ? max.toString() : rate;
     i++;
     rates.push(rate);
-
-    if (minEqMax) {
-      Array.from({ length: steps - 1 }).map((_, i) =>
-        rates.push(
-          new BigNumber(rate)
-            [buy ? 'minus' : 'plus'](step.times(i + 1))
-            .toString()
-        )
-      );
-    }
   }
 
   console.log('jan rates', rates);
 
-  const results = await carbonSDK.getRateLiquidityDepthsByPair(
+  let results = await carbonSDK.getRateLiquidityDepthsByPair(
     baseToken,
     quoteToken,
     rates
   );
 
   console.log('jan results', results);
+
+  if (!buy && results[0]) {
+    results = results.map((liquidity) => {
+      const isZero = new BigNumber(liquidity).eq(0);
+      return isZero ? results[0] : liquidity;
+    });
+  }
 
   results.forEach((liquidity, i) => {
     const length = orders.length;
@@ -202,14 +196,12 @@ const getOrderBook = async (
   console.log('jan middleRate', middleRate.toString());
 
   const buyStartRate = middleRate.minus(
-    step.times(middleRate.minus(maxBuy).div(step).toFixed(0)).plus(step)
+    step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
   );
   console.log('jan buyStartRate', buyStartRate.toString());
 
   const sellStartRate = middleRate.plus(
-    step
-      .times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
-      .plus(step)
+    step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
   );
   console.log('jan sellStartRate', sellStartRate.toString());
 
