@@ -96,10 +96,10 @@ const buildOrderBook = async (
       if (length === 0) {
         liquidityBn = liquidityBn.div(rate);
       } else {
-        const firstRate = new BigNumber(orders[i - 1].rate);
-        const firstTotal = new BigNumber(orders[i - 1].total);
-        const delta = liquidityBn.minus(firstTotal);
-        liquidityBn = firstTotal.div(firstRate).plus(delta.div(rate));
+        const prevRate = new BigNumber(orders[i - 1].rate);
+        const prevTotal = new BigNumber(orders[i - 1].total);
+        const delta = liquidityBn.minus(prevTotal);
+        liquidityBn = prevTotal.div(prevRate).plus(delta.div(rate));
       }
     } else {
       rate = ONE.div(rate).toString();
