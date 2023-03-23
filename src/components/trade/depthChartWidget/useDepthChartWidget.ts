@@ -20,7 +20,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
   const getOrders = useCallback(
     (orders?: OrderRow[], buy?: boolean) => {
       const res = [...(orders || [])]
-        .splice(0, depthChartBuckets + 1)
+        .splice(0, depthChartBuckets + 2)
         .map(({ rate, amount }) => {
           return [
             +(+rate).toFixed(quote?.decimals),
@@ -34,7 +34,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
 
       let rate;
 
-      return new Array(depthChartBuckets).fill(0).map((_, i) => {
+      return new Array(depthChartBuckets + 2).fill(0).map((_, i) => {
         rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
           new BigNumber(data?.step || 0).times(i)
         );

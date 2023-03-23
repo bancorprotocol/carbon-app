@@ -55,10 +55,10 @@ const buildOrderBook = async (
 
   while (rates.length <= steps + 1) {
     const incrementBy = step.times(i);
-    let rate = startRate[buy ? 'minus' : 'plus'](incrementBy).toString();
-    rate = buy ? rate : ONE.div(rate).toString();
+    let rate = startRate[buy ? 'minus' : 'plus'](incrementBy);
+    rate = buy ? rate : ONE.div(rate);
     i++;
-    rates.push(rate);
+    rates.push(rate.toString());
   }
 
   console.log('jan rates', rates);
@@ -69,14 +69,14 @@ const buildOrderBook = async (
     rates
   );
 
-  console.log('jan results', results);
-
   if (!buy && results[0]) {
     results = results.map((liquidity) => {
       const isZero = new BigNumber(liquidity).eq(0);
       return isZero ? results[0] : liquidity;
     });
   }
+
+  console.log('jan results', results);
 
   results.forEach((liquidity, i) => {
     const length = orders.length;
@@ -165,10 +165,10 @@ const getOrderBook = async (
       return stepSell;
     } else {
       if (minBuy.gt(0) && minBuy.eq(maxBuy)) {
-        return minBuy.div(steps);
+        return minBuy.div(steps + 2);
       }
       if (minSell.gt(0) && minSell.eq(maxSell)) {
-        return minSell.div(steps);
+        return minSell.div(steps + 2);
       }
       return ONE.div(10000);
     }
@@ -197,14 +197,12 @@ const getOrderBook = async (
   console.log('jan middleRate', middleRate.toString());
 
   const buyStartRate = middleRate.minus(
-    step.times(middleRate.minus(maxBuy).div(step).toFixed(0)).minus(step)
+    step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
   );
   console.log('jan buyStartRate', buyStartRate.toString());
 
   const sellStartRate = middleRate.plus(
-    step
-      .times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
-      .plus(step)
+    step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
   );
   console.log('jan sellStartRate', sellStartRate.toString());
 
