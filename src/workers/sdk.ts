@@ -54,7 +54,8 @@ const buildOrderBook = async (
   console.log('jan buildOrderBook reached');
 
   while (rates.length < steps) {
-    let rate = startRate[buy ? 'minus' : 'plus'](step.times(i)).toString();
+    const incrementBy = step.times(i);
+    let rate = startRate[buy ? 'minus' : 'plus'](incrementBy).toString();
     rate = buy ? rate : ONE.div(rate).toString();
     i++;
     rates.push(rate);
@@ -196,12 +197,14 @@ const getOrderBook = async (
   console.log('jan middleRate', middleRate.toString());
 
   const buyStartRate = middleRate.minus(
-    step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
+    step.times(middleRate.minus(maxBuy).div(step).toFixed(0)).minus(step)
   );
   console.log('jan buyStartRate', buyStartRate.toString());
 
   const sellStartRate = middleRate.plus(
-    step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
+    step
+      .times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
+      .plus(step)
   );
   console.log('jan sellStartRate', sellStartRate.toString());
 
