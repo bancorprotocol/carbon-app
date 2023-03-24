@@ -122,6 +122,22 @@ const buildOrderBook = async (
 
   console.log('jan orders', orders);
 
+  const allZeros = orders.every((order) => new BigNumber(order.total).eq(0));
+
+  if (allZeros) {
+    const newStartRate = startRate[buy ? 'minus' : 'plus'](step.times(steps));
+    return buildOrderBook(
+      buy,
+      baseToken,
+      quoteToken,
+      newStartRate,
+      step,
+      min,
+      max,
+      steps
+    );
+  }
+
   return orders;
 };
 
