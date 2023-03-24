@@ -196,22 +196,22 @@ const getOrderBook = async (
   const middleRate = getMiddleRate();
   console.log('jan middleRate', middleRate.toString());
 
-  const buyStartRate = middleRate.minus(
-    step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
-  );
-  console.log('jan buyStartRate', buyStartRate.toString());
-
-  const sellStartRate = middleRate.plus(
-    step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
-  );
-  console.log('jan sellStartRate', sellStartRate.toString());
+  // const buyStartRate = middleRate.minus(
+  //   step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
+  // );
+  // console.log('jan buyStartRate', buyStartRate.toString());
+  //
+  // const sellStartRate = middleRate.plus(
+  //   step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
+  // );
+  // console.log('jan sellStartRate', sellStartRate.toString());
 
   const buy = buyHasLiq
     ? await buildOrderBook(
         true,
         base,
         quote,
-        buyStartRate,
+        middleRate,
         step,
         minBuy,
         maxBuy,
@@ -226,7 +226,7 @@ const getOrderBook = async (
         false,
         quote,
         base,
-        sellStartRate,
+        middleRate,
         step,
         minSell,
         maxSell,
@@ -235,27 +235,27 @@ const getOrderBook = async (
     : [];
 
   console.log('jan sell', sell);
-
-  const largestBuy = Math.max(
-    ...buy.map((o) => new BigNumber(o.rate).toNumber())
-  );
-
-  const smallestSell = Math.min(
-    ...sell.map((o) => new BigNumber(o.rate).toNumber())
-  );
-
-  const newMiddleRate =
-    largestBuy > 0 &&
-    smallestSell > 0 &&
-    isFinite(largestBuy) &&
-    isFinite(smallestSell)
-      ? new BigNumber(largestBuy).plus(smallestSell).div(2).toString()
-      : middleRate.toString();
+  //
+  // const largestBuy = Math.max(
+  //   ...buy.map((o) => new BigNumber(o.rate).toNumber())
+  // );
+  //
+  // const smallestSell = Math.min(
+  //   ...sell.map((o) => new BigNumber(o.rate).toNumber())
+  // );
+  //
+  // const newMiddleRate =
+  //   largestBuy > 0 &&
+  //   smallestSell > 0 &&
+  //   isFinite(largestBuy) &&
+  //   isFinite(smallestSell)
+  //     ? new BigNumber(largestBuy).plus(smallestSell).div(2).toString()
+  //     : middleRate.toString();
 
   return {
     buy,
     sell,
-    middleRate: newMiddleRate,
+    middleRate: middleRate.toString(),
     step: step.toString(),
   };
 };

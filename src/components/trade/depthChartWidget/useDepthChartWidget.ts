@@ -20,6 +20,12 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
   const getOrders = useCallback(
     (orders?: OrderRow[], buy?: boolean) => {
       const res = [...(orders || [])]
+        .filter(({ rate }) => {
+          if (buy) {
+            return +rate <= (data?.middleRate || 0);
+          }
+          return +rate >= (data?.middleRate || 0);
+        })
         .splice(0, depthChartBuckets + 2)
         .map(({ rate, amount }) => {
           return [

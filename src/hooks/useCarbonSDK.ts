@@ -63,6 +63,7 @@ export const useCarbonSDK = () => {
 
   const onPairDataChangedCallback = useCallback(
     async (pairs: TokenPair[]) => {
+      console.log('onPairDataChangedCallback', pairs);
       if (pairs.length === 0) return;
       pairs.forEach((pair) => invalidateQueriesByPair(pair));
     },
@@ -71,6 +72,7 @@ export const useCarbonSDK = () => {
 
   const onPairAddedToCacheCallback = useCallback(
     async (pair: TokenPair) => {
+      console.log('onPairAddedToCacheCallback', pair);
       if (pair.length !== 2) return;
       void invalidateQueriesByPair(pair);
       void cache.invalidateQueries({ queryKey: QueryKey.pairs() });
