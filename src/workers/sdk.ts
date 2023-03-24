@@ -45,19 +45,21 @@ const buildOrderBook = async (
   step: BigNumber,
   min: BigNumber,
   max: BigNumber,
-  steps: number
+  steps: number,
+  count = 0
 ): Promise<OrderRow[]> => {
+  if (count > 20) {
+    return [];
+  }
   const orders: OrderRow[] = [];
-  let i = 0;
   const rates: string[] = [];
 
   console.log('jan buildOrderBook reached');
 
-  while (rates.length <= steps + 1) {
+  for (let i = 0; rates.length <= steps + 1; i++) {
     const incrementBy = step.times(i);
     let rate = startRate[buy ? 'minus' : 'plus'](incrementBy);
     rate = buy ? rate : ONE.div(rate);
-    i++;
     rates.push(rate.toString());
   }
 
@@ -134,7 +136,8 @@ const buildOrderBook = async (
       step,
       min,
       max,
-      steps
+      steps,
+      count++
     );
   }
 
