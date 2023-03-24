@@ -69,12 +69,12 @@ const buildOrderBook = async (
     rates
   );
 
-  if (!buy && results[0]) {
-    results = results.map((liquidity) => {
-      const isZero = new BigNumber(liquidity).eq(0);
-      return isZero ? results[0] : liquidity;
-    });
-  }
+  // if (!buy && results[0]) {
+  //   results = results.map((liquidity) => {
+  //     const isZero = new BigNumber(liquidity).eq(0);
+  //     return isZero ? results[0] : liquidity;
+  //   });
+  // }
 
   console.log('jan results', results);
 
