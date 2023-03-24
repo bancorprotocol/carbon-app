@@ -51,12 +51,13 @@ const buildOrderBook = async (
   if (count > 20) {
     return [];
   }
+
   const orders: OrderRow[] = [];
   const rates: string[] = [];
 
   console.log('jan buildOrderBook reached');
 
-  for (let i = 0; rates.length <= steps + 1; i++) {
+  for (let i = 0; i <= steps + 1; i++) {
     const incrementBy = step.times(i);
     let rate = startRate[buy ? 'minus' : 'plus'](incrementBy);
     rate = buy ? rate : ONE.div(rate);
@@ -124,9 +125,11 @@ const buildOrderBook = async (
 
   console.log('jan orders', orders);
 
-  const allZeros = orders.every((order) => new BigNumber(order.total).eq(0));
+  const currentBucketCount = orders.filter((order) =>
+    new BigNumber(order.total).gt(0)
+  ).length;
 
-  if (allZeros) {
+  if (currentBucketCount < steps) {
     const newStartRate = startRate[buy ? 'minus' : 'plus'](step.times(steps));
     return buildOrderBook(
       buy,
@@ -136,7 +139,7 @@ const buildOrderBook = async (
       step,
       min,
       max,
-      steps,
+      steps - currentBucketCount,
       count++
     );
   }
