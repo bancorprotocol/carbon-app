@@ -48,6 +48,7 @@ export const TokenInputField: FC<Props> = ({
   const fiatValueUsd = getFiatValue(value, true);
 
   const handleOnFocus = () => {
+    inputRef.current?.select();
     !disabled && setIsFocused(true);
     if (value === '...') {
       setValue('');
