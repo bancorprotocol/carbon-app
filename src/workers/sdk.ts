@@ -45,17 +45,10 @@ const buildOrderBook = async (
   step: BigNumber,
   min: BigNumber,
   max: BigNumber,
-  steps: number,
-  count = 0
+  steps: number
 ): Promise<OrderRow[]> => {
-  if (count > 20) {
-    return [];
-  }
-
   const orders: OrderRow[] = [];
   const rates: string[] = [];
-
-  console.log('jan buildOrderBook reached');
 
   for (let i = 0; i <= steps + 1; i++) {
     const incrementBy = step.times(i);
@@ -64,22 +57,11 @@ const buildOrderBook = async (
     rates.push(rate.toString());
   }
 
-  console.log('jan rates', rates);
-
   let results = await carbonSDK.getRateLiquidityDepthsByPair(
     baseToken,
     quoteToken,
     rates
   );
-
-  // if (!buy && results[0]) {
-  //   results = results.map((liquidity) => {
-  //     const isZero = new BigNumber(liquidity).eq(0);
-  //     return isZero ? results[0] : liquidity;
-  //   });
-  // }
-
-  console.log('jan results', results);
 
   results.forEach((liquidity, i) => {
     const length = orders.length;
@@ -88,30 +70,20 @@ const buildOrderBook = async (
     let totalBn = liquidityBn;
 
     if (liquidityBn.eq(0)) {
-      console.log('liquidity is 0');
+      console.warn('order book getRateLiquidityDepthsByPair returns 0');
       return;
     }
-    console.log('jan ------------------');
-    console.log('jan liquidityBn unchanged', liquidityBn.toString());
-    console.log('jan rate unchanged', rate);
     if (buy) {
       if (length === 0) {
         liquidityBn = liquidityBn.div(rate);
-        console.log('jan first liquidityBn', liquidityBn.toString());
       } else {
         if (liquidityBn.eq(orders[length - 1].originalTotal || '0')) {
-          console.log('jan done NOTHING');
           liquidityBn = new BigNumber(orders[length - 1].amount);
-          console.log('jan liquidityBn', liquidityBn.toString());
         } else {
           const firstRate = new BigNumber(orders[0].rate);
-          console.log('jan firstRate', firstRate.toString());
           const firstTotal = new BigNumber(orders[0].originalTotal || '0');
-          console.log('jan firstTotal', firstTotal.toString());
           const delta = liquidityBn.minus(firstTotal);
-          console.log('jan delta', delta.toString());
           liquidityBn = firstTotal.div(firstRate).plus(delta.div(rate));
-          console.log('jan liquidityBn', liquidityBn.toString());
         }
       }
     } else {
@@ -125,27 +97,6 @@ const buildOrderBook = async (
       originalTotal: liquidity,
     });
   });
-
-  console.log('jan orders', orders);
-
-  const currentBucketCount = orders.filter((order) =>
-    new BigNumber(order.total).gt(0)
-  ).length;
-
-  if (currentBucketCount < steps) {
-    const newStartRate = startRate[buy ? 'minus' : 'plus'](step.times(steps));
-    return buildOrderBook(
-      buy,
-      baseToken,
-      quoteToken,
-      newStartRate,
-      step,
-      min,
-      max,
-      steps - currentBucketCount,
-      count++
-    );
-  }
 
   return orders;
 };
@@ -215,10 +166,7 @@ const getOrderBook = async (
   const maxSell = new BigNumber(
     sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
   );
-  console.log('jan minBuy', minBuy.toString());
-  console.log('jan maxBuy', maxBuy.toString());
-  console.log('jan minSell', minSell.toString());
-  console.log('jan maxSell', maxSell.toString());
+
   const minSellNormalized = ONE.div(maxSell);
   const maxSellNormalized = ONE.div(minSell);
 
@@ -227,8 +175,6 @@ const getOrderBook = async (
 
   const stepBuy = deltaBuy.div(steps);
   const stepSell = deltaSell.div(steps);
-  console.log('jan stepBuy', stepBuy.toString());
-  console.log('jan stepSell', stepSell.toString());
 
   const step = getStep(
     stepBuy,
@@ -239,20 +185,9 @@ const getOrderBook = async (
     minSell,
     maxSell
   );
-  console.log('jan step', step.toString());
 
   const middleRate = getMiddleRate(maxBuy, maxSell);
-  console.log('jan middleRate', middleRate.toString());
 
-  // const buyStartRate = middleRate.minus(
-  //   step.times(middleRate.minus(maxBuy).div(step).toFixed(0))
-  // );
-  // console.log('jan buyStartRate', buyStartRate.toString());
-  //
-  // const sellStartRate = middleRate.plus(
-  //   step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
-  // );
-  // console.log('jan sellStartRate', sellStartRate.toString());
   const hasOverlappingRates = maxBuy.gt(minSellNormalized);
   const buyStartRate = hasOverlappingRates ? middleRate : maxBuy;
   const sellStartRate = hasOverlappingRates ? middleRate : minSellNormalized;
@@ -270,8 +205,6 @@ const getOrderBook = async (
       )
     : [];
 
-  console.log('jan buy', buy);
-
   const sell = sellHasLiq
     ? await buildOrderBook(
         false,
@@ -285,24 +218,6 @@ const getOrderBook = async (
       )
     : [];
 
-  console.log('jan sell', sell);
-  //
-  // const largestBuy = Math.max(
-  //   ...buy.map((o) => new BigNumber(o.rate).toNumber())
-  // );
-  //
-  // const smallestSell = Math.min(
-  //   ...sell.map((o) => new BigNumber(o.rate).toNumber())
-  // );
-  //
-  // const newMiddleRate =
-  //   largestBuy > 0 &&
-  //   smallestSell > 0 &&
-  //   isFinite(largestBuy) &&
-  //   isFinite(smallestSell)
-  //     ? new BigNumber(largestBuy).plus(smallestSell).div(2).toString()
-  //     : middleRate.toString();
-
   return {
     buy,
     sell,
@@ -311,7 +226,7 @@ const getOrderBook = async (
   };
 };
 
-const obj = {
+const sdkExposed = {
   init,
   isInitialized: () => isInitialized,
   getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
@@ -427,8 +342,8 @@ const obj = {
   getCacheDump: () => carbonSDK.getCacheDump(),
 };
 
-export type CarbonSDKWebWorker = typeof obj;
+export type CarbonSDKWebWorker = typeof sdkExposed;
 
-Comlink.expose(obj);
+Comlink.expose(sdkExposed);
 
 export {};
