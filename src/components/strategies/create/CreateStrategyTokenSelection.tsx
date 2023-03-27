@@ -3,7 +3,10 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
+import { useEffect } from 'react';
+import { sendEvent } from 'services/googleTagManager';
 
+// TODO: Remove any
 export const CreateStrategyTokenSelection = ({
   base,
   quote,
@@ -11,6 +14,22 @@ export const CreateStrategyTokenSelection = ({
   setQuote,
   openTokenListModal,
 }: any) => {
+  useEffect(() => {
+    base &&
+      sendEvent({
+        event: 'new_strategy_base_token_select',
+        event_properties: { token: base.symbol },
+      });
+  }, [base]);
+
+  useEffect(() => {
+    quote &&
+      sendEvent({
+        event: 'new_strategy_quote_token_select',
+        event_properties: { token: quote.symbol },
+      });
+  }, [quote]);
+
   return (
     <m.div variants={items} className="bg-secondary rounded-10 p-20">
       <div className="mb-14 flex items-center justify-between">

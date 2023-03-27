@@ -1,6 +1,7 @@
 import { useLocation } from 'libs/routing';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
+import { sendEvent } from 'services/googleTagManager';
 
 type CreateStrategyHeaderProps = {
   showGraph: boolean;
@@ -34,7 +35,12 @@ export const CreateStrategyHeader = ({
       </div>
       {!showGraph && showOrders && (
         <button
-          onClick={() => setShowGraph(true)}
+          onClick={() => {
+            sendEvent({
+              event: 'strategy_chart_open',
+            });
+            setShowGraph(true);
+          }}
           className="h-40 w-40 self-end rounded-full bg-emphasis"
         >
           <IconCandles className="mx-auto w-14" />

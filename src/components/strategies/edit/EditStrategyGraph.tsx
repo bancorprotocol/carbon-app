@@ -4,6 +4,7 @@ import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Token } from 'libs/tokens';
 import { list } from '../create/variants';
+import { sendEvent } from 'services/googleTagManager';
 
 type EditStrategyGraphProps = {
   base: Token | undefined;
@@ -27,7 +28,12 @@ export const EditStrategyGraph = ({
           className={`mb-20 self-end bg-emphasis`}
           variant="secondary"
           size={'md'}
-          onClick={() => setShowGraph(false)}
+          onClick={() => {
+            sendEvent({
+              event: 'strategy_chart_close',
+            });
+            setShowGraph(false);
+          }}
         >
           <div className="flex items-center justify-center">
             <IconX className={'w-10 md:mr-12'} />

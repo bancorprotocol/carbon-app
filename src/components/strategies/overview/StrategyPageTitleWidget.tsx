@@ -7,6 +7,7 @@ import {
   StrategyFilter,
   StrategyFilterSort,
 } from 'components/strategies/overview/StrategyFilterSort';
+import { Events, sendEvent } from 'services/googleTagManager';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;
@@ -37,7 +38,14 @@ export const StrategyPageTitleWidget: FC<{
         </>
       )}
       <Link to={PathNames.createStrategy}>
-        <Button variant="white">Create Strategy</Button>
+        <Button
+          variant="white"
+          onClick={() =>
+            sendEvent({ event: Events.Strategy.new_strategy_create_click })
+          }
+        >
+          Create Strategy
+        </Button>
       </Link>
     </div>
   );
