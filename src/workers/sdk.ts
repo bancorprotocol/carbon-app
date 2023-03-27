@@ -85,6 +85,7 @@ const buildOrderBook = async (
     const length = orders.length;
     let rate = rates[i];
     let liquidityBn = new BigNumber(liquidity);
+    let totalBn = liquidityBn;
 
     if (liquidityBn.eq(0)) {
       console.log('liquidity is 0');
@@ -98,14 +99,14 @@ const buildOrderBook = async (
         liquidityBn = liquidityBn.div(rate);
         console.log('jan first liquidityBn', liquidityBn.toString());
       } else {
-        if (liquidityBn.eq(orders[length - 1].total)) {
+        if (liquidityBn.eq(orders[length - 1].originalTotal || '0')) {
           console.log('jan done NOTHING');
           liquidityBn = new BigNumber(orders[length - 1].amount);
           console.log('jan liquidityBn', liquidityBn.toString());
         } else {
           const firstRate = new BigNumber(orders[0].rate);
           console.log('jan firstRate', firstRate.toString());
-          const firstTotal = new BigNumber(orders[0].total);
+          const firstTotal = new BigNumber(orders[0].originalTotal || '0');
           console.log('jan firstTotal', firstTotal.toString());
           const delta = liquidityBn.minus(firstTotal);
           console.log('jan delta', delta.toString());
@@ -115,11 +116,13 @@ const buildOrderBook = async (
       }
     } else {
       rate = ONE.div(rate).toString();
+      totalBn = totalBn.times(rate);
     }
     orders.push({
       rate,
-      total: liquidity,
+      total: totalBn.toString(),
       amount: liquidityBn.toString(),
+      originalTotal: liquidity,
     });
   });
 
@@ -147,6 +150,52 @@ const buildOrderBook = async (
   return orders;
 };
 
+const getStep = (
+  stepBuy: BigNumber,
+  stepSell: BigNumber,
+  minBuy: BigNumber,
+  maxBuy: BigNumber,
+  steps: number,
+  minSell: BigNumber,
+  maxSell: BigNumber
+): BigNumber => {
+  if (stepBuy.isFinite() && stepBuy.gt(0)) {
+    if (stepSell.isFinite() && stepSell.gt(0)) {
+      return stepBuy.lte(stepSell) ? stepBuy : stepSell;
+    } else {
+      return stepBuy;
+    }
+  } else if (stepSell.isFinite() && stepSell.gt(0)) {
+    return stepSell;
+  } else {
+    if (minBuy.gt(0) && minBuy.eq(maxBuy)) {
+      return minBuy.div(steps + 2);
+    }
+    if (minSell.gt(0) && minSell.eq(maxSell)) {
+      return minSell.div(steps + 2);
+    }
+    return ONE.div(10000);
+  }
+};
+
+const getMiddleRate = (maxBuy: BigNumber, maxSell: BigNumber): BigNumber => {
+  if (
+    maxBuy.isFinite() &&
+    maxBuy.gt(0) &&
+    maxSell.isFinite() &&
+    maxSell.gt(0)
+  ) {
+    return maxBuy.plus(ONE.div(maxSell)).div(2);
+  }
+  if (maxBuy.isFinite() && maxBuy.gt(0)) {
+    return maxBuy;
+  }
+  if (maxSell.isFinite() && maxSell.gt(0)) {
+    return ONE.div(maxSell);
+  }
+  return new BigNumber(0);
+};
+
 const getOrderBook = async (
   base: string,
   quote: string,
@@ -170,52 +219,29 @@ const getOrderBook = async (
   console.log('jan maxBuy', maxBuy.toString());
   console.log('jan minSell', minSell.toString());
   console.log('jan maxSell', maxSell.toString());
+  const minSellNormalized = ONE.div(maxSell);
+  const maxSellNormalized = ONE.div(minSell);
 
-  const stepBuy = maxBuy.minus(minBuy).div(steps);
-  const stepSell = ONE.div(minSell).minus(ONE.div(maxSell)).div(steps);
+  const deltaBuy = maxBuy.minus(minBuy);
+  const deltaSell = maxSellNormalized.minus(minSellNormalized);
+
+  const stepBuy = deltaBuy.div(steps);
+  const stepSell = deltaSell.div(steps);
   console.log('jan stepBuy', stepBuy.toString());
   console.log('jan stepSell', stepSell.toString());
 
-  const getStep = () => {
-    if (stepBuy.isFinite() && stepBuy.gt(0)) {
-      if (stepSell.isFinite() && stepSell.gt(0)) {
-        return stepBuy.lte(stepSell) ? stepBuy : stepSell;
-      } else {
-        return stepBuy;
-      }
-    } else if (stepSell.isFinite() && stepSell.gt(0)) {
-      return stepSell;
-    } else {
-      if (minBuy.gt(0) && minBuy.eq(maxBuy)) {
-        return minBuy.div(steps + 2);
-      }
-      if (minSell.gt(0) && minSell.eq(maxSell)) {
-        return minSell.div(steps + 2);
-      }
-      return ONE.div(10000);
-    }
-  };
-  const step = getStep();
+  const step = getStep(
+    stepBuy,
+    stepSell,
+    minBuy,
+    maxBuy,
+    steps,
+    minSell,
+    maxSell
+  );
   console.log('jan step', step.toString());
 
-  const getMiddleRate = () => {
-    if (
-      maxBuy.isFinite() &&
-      maxBuy.gt(0) &&
-      maxSell.isFinite() &&
-      maxSell.gt(0)
-    ) {
-      return maxBuy.plus(ONE.div(maxSell)).div(2);
-    }
-    if (maxBuy.isFinite() && maxBuy.gt(0)) {
-      return maxBuy;
-    }
-    if (maxSell.isFinite() && maxSell.gt(0)) {
-      return ONE.div(maxSell);
-    }
-    return new BigNumber(0);
-  };
-  const middleRate = getMiddleRate();
+  const middleRate = getMiddleRate(maxBuy, maxSell);
   console.log('jan middleRate', middleRate.toString());
 
   // const buyStartRate = middleRate.minus(
@@ -227,13 +253,16 @@ const getOrderBook = async (
   //   step.times(ONE.div(maxSell).minus(middleRate).div(step).toFixed(0))
   // );
   // console.log('jan sellStartRate', sellStartRate.toString());
+  const hasOverlappingRates = maxBuy.gt(minSellNormalized);
+  const buyStartRate = hasOverlappingRates ? middleRate : maxBuy;
+  const sellStartRate = hasOverlappingRates ? middleRate : minSellNormalized;
 
   const buy = buyHasLiq
     ? await buildOrderBook(
         true,
         base,
         quote,
-        middleRate,
+        buyStartRate,
         step,
         minBuy,
         maxBuy,
@@ -248,7 +277,7 @@ const getOrderBook = async (
         false,
         quote,
         base,
-        middleRate,
+        sellStartRate,
         step,
         minSell,
         maxSell,

@@ -4,7 +4,12 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { carbonSDK } from 'index';
 
-export type OrderRow = { rate: string; total: string; amount: string };
+export type OrderRow = {
+  rate: string;
+  total: string;
+  amount: string;
+  originalTotal?: string;
+};
 
 export type OrderBook = {
   buy: OrderRow[];

@@ -11,7 +11,7 @@ export interface OrderBookSettingsStore {
 
 export const useOrderBookSettingsStore = (): OrderBookSettingsStore => {
   const [steps, setSteps] = useState(100);
-  const [depthChartBuckets, setDepthChartBuckets] = useState(50);
+  const [depthChartBuckets, setDepthChartBuckets] = useState(100);
   const [orderBookBuckets, setOrderBookBuckets] = useState(14);
 
   return {
@@ -25,9 +25,9 @@ export const useOrderBookSettingsStore = (): OrderBookSettingsStore => {
 };
 
 export const defaultOrderBookSettingsStore: OrderBookSettingsStore = {
-  steps: 98,
+  steps: 100,
   setSteps: () => {},
-  depthChartBuckets: 98,
+  depthChartBuckets: 100,
   setDepthChartBuckets: () => {},
   orderBookBuckets: 14,
   setOrderBookBuckets: () => {},
