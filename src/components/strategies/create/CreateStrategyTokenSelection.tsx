@@ -41,7 +41,7 @@ export const CreateStrategyTokenSelection = ({
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
           address={base?.address}
-          description={'Buy or Sell'}
+          description="Buy or Sell"
           onClick={() => openTokenListModal(true)}
           isBaseToken
         />
