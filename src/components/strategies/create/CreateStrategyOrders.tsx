@@ -5,6 +5,8 @@ import { Token } from 'libs/tokens';
 import { BuySellBlock } from './BuySellBlock';
 import { OrderCreate } from './useOrder';
 import { items } from './variants';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useBudgetWarning } from '../useBudgetWarning';
 
 type CreateStrategyOrdersProps = {
   base: Token | undefined;
@@ -27,6 +29,13 @@ export const CreateStrategyOrders = ({
   token0BalanceQuery,
   token1BalanceQuery,
 }: CreateStrategyOrdersProps) => {
+  const showBudgetWarning = useBudgetWarning(
+    base,
+    quote,
+    order0.budget,
+    order1.budget
+  );
+
   return (
     <>
       <m.div variants={items}>
@@ -48,6 +57,16 @@ export const CreateStrategyOrders = ({
           isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
         />
       </m.div>
+      {showBudgetWarning && (
+        <div
+          className={
+            'flex items-center gap-6 px-25 font-mono text-12 text-warning-500'
+          }
+        >
+          <IconWarning className={'w-14'} />
+          <span>Low balance might be skipped due to gas considerations</span>
+        </div>
+      )}
       <m.div variants={items}>
         <Button
           variant={'success'}
