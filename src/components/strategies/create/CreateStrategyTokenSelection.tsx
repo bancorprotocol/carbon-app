@@ -12,11 +12,11 @@ export const CreateStrategyTokenSelection = ({
   setQuote,
   openTokenListModal,
 }: {
-  base: Token;
-  quote: Token;
+  base: Token | undefined;
+  quote: Token | undefined;
   setBase: (token: Token | undefined) => void;
   setQuote: (token: Token | undefined) => void;
-  openTokenListModal: () => void;
+  openTokenListModal: (isSource?: boolean) => void;
 }) => {
   return (
     <m.div variants={items} className="bg-secondary rounded-10 p-20">
