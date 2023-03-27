@@ -25,6 +25,7 @@ export const StrategyBlockOrderStatus: FC<{
       </div>
       {status === StrategyStatus.Active && (
         <Tooltip
+          trigger="click"
           element={
             <div className="flex flex-col gap-10">
               <div className="text-14">Strategy Notification</div>
@@ -53,7 +54,7 @@ export const StrategyBlockOrderStatus: FC<{
           }
         >
           <span
-            className={`flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3 md:invisible md:group-hover:visible`}
+            className={`flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3 md:opacity-0 md:group-hover:opacity-100 `}
           >
             <IconActiveBell className="h-15 w-15" />
           </span>

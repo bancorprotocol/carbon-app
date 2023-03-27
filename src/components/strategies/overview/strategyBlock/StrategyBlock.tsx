@@ -44,7 +44,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
         </div>
         <span
           onClick={() => duplicate(strategy)}
-          className={`invisible flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3 md:group-hover:visible`}
+          className={`pointer-events-none flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis opacity-0 transition duration-300 ease-in-out hover:border-grey3 md:pointer-events-auto md:group-hover:opacity-100`}
         >
           <IconDuplicate className="h-18 w-18" />
         </span>
