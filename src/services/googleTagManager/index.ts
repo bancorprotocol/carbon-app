@@ -51,7 +51,7 @@ type SendEventFn = (
   eventProperties?: EventStrategySchema[keyof EventStrategySchema]
 ) => void;
 
-export const sendEvent: SendEventFn = (event, event_properties) => {
+export const sendEvent = (event: any, event_properties?: any) => {
   sendGTM({
     event,
     event_properties: event_properties ? event_properties : {},
@@ -59,5 +59,3 @@ export const sendEvent: SendEventFn = (event, event_properties) => {
     wallet: {},
   });
 };
-
-sendEvent('strategy.new_strategy_create_click', 123);
