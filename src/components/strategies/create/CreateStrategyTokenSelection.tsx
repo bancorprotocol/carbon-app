@@ -3,6 +3,7 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
+import { Token } from 'libs/tokens';
 
 export const CreateStrategyTokenSelection = ({
   base,
@@ -10,7 +11,13 @@ export const CreateStrategyTokenSelection = ({
   setBase,
   setQuote,
   openTokenListModal,
-}: any) => {
+}: {
+  base: Token | undefined;
+  quote: Token | undefined;
+  setBase: (token: Token | undefined) => void;
+  setQuote: (token: Token | undefined) => void;
+  openTokenListModal: (isSource?: boolean) => void;
+}) => {
   return (
     <m.div variants={items} className="bg-secondary rounded-10 p-20">
       <div className="mb-14 flex items-center justify-between">
@@ -34,7 +41,7 @@ export const CreateStrategyTokenSelection = ({
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
           address={base?.address}
-          description={'Buy or Sell'}
+          description="Buy or Sell"
           onClick={() => openTokenListModal(true)}
           isBaseToken
         />
