@@ -37,15 +37,21 @@ export const sendGTMPath = (to: string) => {
   });
 };
 
-export const sendEvent = ({
-  event,
-  event_properties,
-}: {
-  event: string;
-  event_properties?: {
-    token?: string;
-  };
-}) => {
+type EventStrategySchema = {
+  new_strategy_create_click: undefined;
+  new_strategy_base_token_select: { token: string };
+};
+
+type EventSchema = {
+  strategy: EventStrategySchema;
+};
+
+type SendEventFn = (
+  eventKey: `${keyof EventSchema}.${keyof EventSchema[keyof EventSchema]}`,
+  eventProperties?: EventStrategySchema[keyof EventStrategySchema]
+) => void;
+
+export const sendEvent: SendEventFn = (event, event_properties) => {
   sendGTM({
     event,
     event_properties: event_properties ? event_properties : {},
@@ -53,3 +59,5 @@ export const sendEvent = ({
     wallet: {},
   });
 };
+
+sendEvent('strategy.new_strategy_create_click', 123);
