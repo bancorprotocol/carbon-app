@@ -5,15 +5,21 @@ import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
 import { useEffect } from 'react';
 import { sendEvent } from 'services/googleTagManager';
+import { Token } from 'libs/tokens';
 
-// TODO: Remove any
 export const CreateStrategyTokenSelection = ({
   base,
   quote,
   setBase,
   setQuote,
   openTokenListModal,
-}: any) => {
+}: {
+  base: Token | undefined;
+  quote: Token | undefined;
+  setBase: (token: Token | undefined) => void;
+  setQuote: (token: Token | undefined) => void;
+  openTokenListModal: (isSource?: boolean) => void;
+}) => {
   useEffect(() => {
     base &&
       sendEvent({
@@ -53,7 +59,7 @@ export const CreateStrategyTokenSelection = ({
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
           address={base?.address}
-          description={'Buy or Sell'}
+          description="Buy or Sell"
           onClick={() => openTokenListModal(true)}
           isBaseToken
         />

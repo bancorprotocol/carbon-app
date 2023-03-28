@@ -24,7 +24,7 @@ type CreateStrategyContentProps = {
   showGraph: boolean;
   setShowGraph: (value: boolean) => void;
   createStrategy: () => void;
-  openTokenListModal: () => void;
+  openTokenListModal: (isSource?: boolean) => void;
 };
 
 export const CreateStrategyContent = ({
