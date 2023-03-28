@@ -13,7 +13,7 @@ export const StrategyBlockOrderStatus: FC<{
       <div className="flex gap-6">
         <div className="text-secondary text-14">Order Status</div>
         {showBudgetWarning && (
-          <WarningWithTooltip tooltipContent="Low balance might be skipped due to gas considerations" />
+          <WarningWithTooltip tooltipContent="Strategies with low budget might be ignored during trading due to gas considerations" />
         )}
       </div>
       <div>
