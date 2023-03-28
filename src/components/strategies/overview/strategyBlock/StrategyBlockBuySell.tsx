@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
 import { Strategy, StrategyStatus } from 'libs/queries';
 import { Imager } from 'components/common/imager/Imager';
 import {
@@ -11,7 +10,6 @@ import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeI
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from './TokenPrice';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { getPrice } from './utils';
 
 export const StrategyBlockBuySell: FC<{
@@ -65,12 +63,6 @@ export const StrategyBlockBuySell: FC<{
   });
   const budget = getFiatValueQuote(buy ? order.balance : otherOrder.balance);
   const fullFiatBudget = getFiatDisplayValue(budget, selectedFiatCurrency);
-
-  const budgetInUsd = buy
-    ? getFiatValueQuote(order.balance, true)
-    : getFiatValueQuote(otherOrder.balance, true);
-
-  const budgetWarning = budgetInUsd.lte(new BigNumber(20));
 
   return (
     <div
@@ -140,13 +132,6 @@ export const StrategyBlockBuySell: FC<{
             <div className="text-secondary !text-16">Budget</div>
           </Tooltip>
           <div className="flex gap-7">
-            {budgetWarning && (
-              <WarningWithTooltip
-                tooltipContent={
-                  'Low balance might be skipped due to gas concerns'
-                }
-              />
-            )}
             <Tooltip
               element={
                 <>

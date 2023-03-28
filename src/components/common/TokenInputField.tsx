@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
+import { ChangeEvent, FC, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
@@ -20,7 +20,6 @@ type Props = {
   disabled?: boolean;
   slippage?: BigNumber | null;
   withoutWallet?: boolean;
-  warning?: ReactNode;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -36,7 +35,6 @@ export const TokenInputField: FC<Props> = ({
   disabled,
   slippage,
   withoutWallet,
-  warning,
 }) => {
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
@@ -152,9 +150,6 @@ export const TokenInputField: FC<Props> = ({
           <div className={'h-16'} />
         )}
         <div className="flex truncate">
-          {showFiatValue && fiatValueUsd.lte(20) && (
-            <div className="mr-10">{warning}</div>
-          )}
           {showFiatValue && <div>{getFiatAsString(value)}</div>}
           {slippage && value && (
             <div
