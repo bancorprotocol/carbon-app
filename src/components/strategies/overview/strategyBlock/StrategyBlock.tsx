@@ -7,11 +7,18 @@ import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlo
 import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = strategy.id.padStart(9, '0');
   const [manage, setManage] = useState(false);
   const { duplicate } = useDuplicateStrategy();
+  const showBudgetWarning = useBudgetWarning(
+    strategy.base,
+    strategy.quote,
+    strategy.order0.balance,
+    strategy.order1.balance
+  );
 
   return (
     <m.div
@@ -55,6 +62,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <StrategyBlockOrderStatus
         status={strategy.status}
         strategyId={strategy.id}
+        showBudgetWarning={showBudgetWarning}
       />
       <StrategyBlockManage
         manage={manage}
