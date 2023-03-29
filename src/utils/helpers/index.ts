@@ -221,13 +221,12 @@ export const mergeArraysRemovingDuplicates = <
   const mergedArray: A[number][] = [...array1, ...array2];
   const uniqueArray: A[number][] = [];
 
-  const ids = new Set<number>();
+  const keys = new Set<A[number][K]>();
 
   for (const item of mergedArray) {
-    // @ts-ignore
-    if (!ids.has(item[key])) {
-      // @ts-ignore
-      ids.add(item[key]);
+    const k = item[key];
+    if (!keys.has(k)) {
+      keys.add(k);
       uniqueArray.push(item);
     }
   }

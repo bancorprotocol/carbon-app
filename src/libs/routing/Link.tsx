@@ -1,4 +1,4 @@
-import { Link as TanstackLink, LinkPropsType } from '@tanstack/react-location';
+import { Link as TanstackLink, LinkPropsType } from 'libs/routing';
 import { FC } from 'react';
 
 export const Link: FC<LinkPropsType> = ({ to, children, ...props }) => {

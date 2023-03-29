@@ -5,10 +5,9 @@ import {
 } from 'utils/tenderly';
 import { useWeb3 } from 'libs/web3';
 import { useGetTokenBalances } from 'libs/queries/chain/balance';
-import { useQueryClient } from '@tanstack/react-query';
 import { config } from 'services/web3/config';
 import { Button } from 'components/common/button';
-import { QueryKey } from 'libs/queries';
+import { QueryKey, useQueryClient } from 'libs/queries';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,

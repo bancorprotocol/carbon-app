@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-location';
+import { useNavigate } from 'libs/routing';
 import { EditStrategyMain } from 'components/strategies/edit';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { PathNames } from 'libs/routing';
