@@ -13,20 +13,9 @@ const sendGTM = (data: GTMData) => {
   console.log(window.dataLayer, '-=-=-=-=-=- window.dataLayer -=-=-=-=-=-');
 };
 
-export const sendGTMPath = (to: string, from: string) => {
-  sendGTM({
-    event: `PV ${to}`,
-    event_properties: {
-      page_spa_referral: from,
-    },
-    wallet: {},
-  });
-};
-
 type EventGeneralSchema = {
   change_page: {
-    from: string;
-    to: string;
+    page_spa_referral: string | null;
   };
 };
 
@@ -47,10 +36,17 @@ type EventNavigationSchema = {
   nav_wallet_click: undefined;
 };
 
+type EventWalletSchema = {
+  wallet_connect_popup_view?: undefined;
+  wallet_connect: { wallet_name: string; tos_approve: boolean };
+  wallet_disconnect: { wallet_name: string };
+};
+
 type EventSchema = {
   general: EventGeneralSchema;
   strategy: EventStrategySchema;
   navigation: EventNavigationSchema;
+  wallet: EventWalletSchema;
 };
 
 type SendEventFn = <
@@ -59,17 +55,16 @@ type SendEventFn = <
 >(
   type: T,
   event: D,
-  data: EventSchema[T][D] | any
+  data: EventSchema[T][D]
 ) => void;
-// TODO: Fix any
+
 export const sendEvent: SendEventFn = (type, event, data) => {
   switch (type) {
     case 'general': {
       return sendGTM({
-        event: `PV ${data.to}`,
-        event_properties: {
-          page_spa_referral: data.from,
-        },
+        event: `PV`,
+        event_properties: {},
+        page: data ? data : {},
         wallet: {},
       });
     }
@@ -78,6 +73,13 @@ export const sendEvent: SendEventFn = (type, event, data) => {
         event: `CE ${event}`,
         event_properties: data ? data : {},
         wallet: {},
+      });
+    }
+    case 'wallet': {
+      return sendGTM({
+        event: `CE ${event}`,
+        event_properties: {},
+        wallet: data ? data : {},
       });
     }
     default:

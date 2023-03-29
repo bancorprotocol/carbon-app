@@ -19,8 +19,9 @@ export const MainContent: FC = () => {
   useEffect(() => {
     if (prevPathnameRef.current !== location.current.pathname) {
       sendEvent('general', 'change_page', {
-        from: prevPathnameRef.current ? prevPathnameRef.current : null,
-        to: location.current.pathname,
+        page_spa_referral: prevPathnameRef.current
+          ? prevPathnameRef.current
+          : null,
       });
       prevPathnameRef.current = location.current.pathname;
     }

@@ -37,13 +37,30 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   return <IconWallet {...props} />;
 };
 
+// TODO: Fix that function
+const getWalletName = () => {
+  if (IS_METAMASK_WALLET) {
+    return 'MetaMask';
+  }
+  if (IS_COINBASE_WALLET) {
+    return 'Coinbase Wallet';
+  }
+  return '';
+};
+
 export const MainMenuRightWallet: FC = () => {
   const { user, disconnect, isSupportedNetwork, isImposter } = useWeb3();
   const { openModal } = useModal();
 
   const onClickOpenModal = () => {
     sendEvent('navigation', 'nav_wallet_connect_click', undefined);
+    sendEvent('wallet', 'wallet_connect_popup_view', undefined);
     openModal('wallet', undefined);
+  };
+
+  const onDisconnect = async () => {
+    disconnect();
+    sendEvent('wallet', 'wallet_disconnect', { wallet_name: getWalletName() });
   };
 
   if (!isSupportedNetwork) {
@@ -83,7 +100,7 @@ export const MainMenuRightWallet: FC = () => {
             <span>Ethereum Network</span>
           </div>
           <hr className={'my-10 border-t-2 border-silver'} />
-          <button onClick={disconnect} className={'hover:text-white'}>
+          <button onClick={onDisconnect} className={'hover:text-white'}>
             Disconnect
           </button>
         </div>

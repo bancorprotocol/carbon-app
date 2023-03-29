@@ -5,6 +5,7 @@ import { useWeb3, Connection } from 'libs/web3';
 import { useState } from 'react';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
+import { sendEvent } from 'services/googleTagManager';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
@@ -21,6 +22,11 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     try {
       await connect(c.type);
       closeModal(id);
+      sendEvent('wallet', 'wallet_connect', {
+        wallet_name: c.name,
+        tos_approve: true,
+      });
+      // TODO: verify tos_approve
     } catch (e: any) {
       console.error(`Modal Wallet onClickConnect error: `, e);
       setConnectionError(e.message || 'Unknown connection error.');
