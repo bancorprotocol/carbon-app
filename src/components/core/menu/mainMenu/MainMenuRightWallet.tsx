@@ -16,6 +16,7 @@ import {
   IS_IN_IFRAME,
   IS_METAMASK_WALLET,
 } from 'libs/web3/web3.utils';
+import { sendEvent } from 'services/googleTagManager';
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   const props = { className: 'w-20' };
@@ -40,7 +41,10 @@ export const MainMenuRightWallet: FC = () => {
   const { user, disconnect, isSupportedNetwork, isImposter } = useWeb3();
   const { openModal } = useModal();
 
-  const onClickOpenModal = () => openModal('wallet', undefined);
+  const onClickOpenModal = () => {
+    sendEvent('navigation', 'nav_wallet_connect_click', undefined);
+    openModal('wallet', undefined);
+  };
 
   if (!isSupportedNetwork) {
     return (
@@ -62,7 +66,10 @@ export const MainMenuRightWallet: FC = () => {
         button={(onClick) => (
           <Button
             variant={'secondary'}
-            onClick={onClick}
+            onClick={() => {
+              sendEvent('navigation', 'nav_wallet_click', undefined);
+              onClick();
+            }}
             className={'flex items-center space-x-10 pl-20'}
           >
             <WalletIcon isImposter={isImposter} />

@@ -22,17 +22,15 @@ export const CreateStrategyTokenSelection = ({
 }) => {
   useEffect(() => {
     base &&
-      sendEvent({
-        event: 'new_strategy_base_token_select',
-        event_properties: { token: base.symbol },
+      sendEvent('strategy', 'new_strategy_base_token_select', {
+        token: base.symbol,
       });
   }, [base]);
 
   useEffect(() => {
     quote &&
-      sendEvent({
-        event: 'new_strategy_quote_token_select',
-        event_properties: { token: quote.symbol },
+      sendEvent('strategy', 'new_strategy_quote_token_select', {
+        token: quote.symbol,
       });
   }, [quote]);
 

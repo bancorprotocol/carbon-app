@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Link, PathNames } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
-import { Events, sendEvent } from 'services/googleTagManager';
+import { sendEvent } from 'services/googleTagManager';
 
 type Props = {
   title?: string;
@@ -14,7 +14,7 @@ export const StrategyBlockCreate: FC<Props> = ({
   return (
     <Link
       onClick={() =>
-        sendEvent({ event: Events.Strategy.new_strategy_create_click })
+        sendEvent('strategy', 'new_strategy_create_click', undefined)
       }
       to={PathNames.createStrategy}
       className="bg-content flex h-full items-center justify-center rounded-10 border-dashed py-50"

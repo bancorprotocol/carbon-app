@@ -44,9 +44,7 @@ export const EditStrategyHeader = ({
       {!showGraph && (
         <button
           onClick={() => {
-            sendEvent({
-              event: 'strategy_chart_open',
-            });
+            sendEvent('strategy', 'strategy_chart_open', undefined);
             setShowGraph(true);
           }}
           className="h-40 w-40 self-end rounded-full bg-emphasis"

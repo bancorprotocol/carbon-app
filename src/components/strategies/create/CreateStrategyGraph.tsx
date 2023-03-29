@@ -29,9 +29,7 @@ export const CreateStrategyGraph = ({
           variant="secondary"
           size={'md'}
           onClick={() => {
-            sendEvent({
-              event: 'strategy_chart_close',
-            });
+            sendEvent('strategy', 'strategy_chart_close', undefined);
             setShowGraph(false);
           }}
         >
