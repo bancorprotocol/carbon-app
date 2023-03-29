@@ -4,14 +4,12 @@ import { list } from './variants';
 import { useCreateStrategy } from './useCreateStrategy';
 import { CreateStrategyHeader } from './CreateStrategyHeader';
 import { CreateStrategyContent } from './CreateStrategyContent';
-import { useSearch } from '@tanstack/react-location';
+import { useSearch } from 'libs/routing';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 
 export const CreateStrategyMain = () => {
-  const [showGraph, setShowGraph] = useState(false);
-
   const {
     base,
     quote,
@@ -27,18 +25,12 @@ export const CreateStrategyMain = () => {
     token1BalanceQuery,
   } = useCreateStrategy();
 
+  const [showGraph, setShowGraph] = useState(
+    !!pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`]
+  );
   const search = useSearch<MyLocationGenerics>();
   const { base: baseAddress, quote: quoteAddress } = search;
   const { getTokenById } = useTokens();
-
-  useEffect(() => {
-    if (pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`]) {
-      setShowGraph(true);
-    }
-    if (!base || !quote) {
-      setShowGraph(false);
-    }
-  }, [base, quote, setShowGraph]);
 
   useEffect(() => {
     if (!baseAddress && !quoteAddress) {
