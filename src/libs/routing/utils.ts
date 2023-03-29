@@ -1,3 +1,6 @@
+import { lsService } from 'services/localeStorage';
+import { config } from 'services/web3/config';
+
 function toValue(mix: string | undefined) {
   if (!mix) return '';
   var str = decodeURIComponent(mix);
@@ -55,4 +58,13 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 
     return query;
   };
+};
+
+export const getLastVisitedPair = () => {
+  const [base, quote] = lsService.getItem('tradePair') || [
+    config.tokens.ETH,
+    config.tokens.USDC,
+  ];
+
+  return { base, quote };
 };

@@ -1,4 +1,5 @@
-import { MatchAction } from '@bancor/carbon-sdk/src/types';
+import { SerializableMatchAction, TokenPair } from '@bancor/carbon-sdk';
+import { buildTokenPairKey } from 'utils/helpers';
 
 export namespace QueryKey {
   export const sdk = ['sdk'];
@@ -31,43 +32,33 @@ export namespace QueryKey {
   export const pairs = () => [...sdk, 'pairs'];
 
   export const tradeData = (
-    sourceToken: string,
-    targetToken: string,
+    pair: TokenPair,
     isTradeBySource: boolean,
     amount: string
-  ) => [
-    ...sdk,
-    'trade-data',
-    sourceToken,
-    targetToken,
-    isTradeBySource,
-    amount,
-  ];
+  ) => [...sdk, buildTokenPairKey(pair), 'trade-data', isTradeBySource, amount];
 
   export const tradeActions = (
-    sourceToken: string,
-    targetToken: string,
+    pair: TokenPair,
     isTradeBySource: boolean,
-    actions: MatchAction[]
+    actions: SerializableMatchAction[]
   ) => [
     ...sdk,
+    buildTokenPairKey(pair),
     'trade-actions',
-    sourceToken,
-    targetToken,
     isTradeBySource,
     actions,
   ];
 
-  export const tradeLiquidity = (base: string, quote: string) => [
+  export const tradeLiquidity = (pair: TokenPair) => [
     ...sdk,
+    buildTokenPairKey(pair),
     'liquidity',
-    base,
-    quote,
   ];
 
-  export const tradeOrderBook = (
-    base: string,
-    quote: string,
-    buckets: number
-  ) => [...sdk, 'trade-order-book', base, quote, buckets];
+  export const tradeOrderBook = (pair: TokenPair, steps: number) => [
+    ...sdk,
+    buildTokenPairKey(pair),
+    'trade-order-book',
+    steps,
+  ];
 }

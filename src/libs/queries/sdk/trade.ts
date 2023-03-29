@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
-import { carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { Action, TradeActionStruct } from 'libs/sdk';
-import { MatchAction } from '@bancor/carbon-sdk/src/types';
+import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
+import { carbonSDK } from 'libs/sdk';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionStruct[];
@@ -12,7 +12,7 @@ type GetTradeDataResult = {
   totalSourceAmount: string;
   totalTargetAmount: string;
   effectiveRate: string;
-  actionsWei: MatchAction[];
+  actionsWei: SerializableMatchAction[];
 };
 
 type Props = {
@@ -33,7 +33,7 @@ export const useGetTradeData = ({
   const { isInitialized } = useCarbonSDK();
 
   return useQuery<GetTradeDataResult>(
-    QueryKey.tradeData(sourceToken, targetToken, isTradeBySource, input),
+    QueryKey.tradeData([sourceToken, targetToken], isTradeBySource, input),
     async () => {
       const hasInvalidInput =
         input === '' || isNaN(Number(input)) || new BigNumber(input).isZero();
