@@ -340,6 +340,8 @@ const sdkExposed = {
     ),
   getOrderBook,
   getCacheDump: () => carbonSDK.getCacheDump(),
+  getLastTradeByPair: (source: string, target: string) =>
+    carbonSDK.getLastTradeByPair(source, target),
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

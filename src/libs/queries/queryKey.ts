@@ -61,4 +61,10 @@ export namespace QueryKey {
     'trade-order-book',
     steps,
   ];
+
+  export const tradeOrderBookLastTradeBuy = (pair: TokenPair) => [
+    ...sdk,
+    buildTokenPairKey(pair),
+    'trade-order-book-last-trade-buy',
+  ];
 }
