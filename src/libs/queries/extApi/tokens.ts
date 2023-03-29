@@ -3,6 +3,7 @@ import { buildTokenList, fetchTokenLists } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { lsService } from 'services/localeStorage';
+import { mergeArraysRemovingDuplicates } from 'utils/helpers';
 
 const getCachedData = () => {
   const cachedTokens = lsService.getItem('tokenListCache');
@@ -11,8 +12,11 @@ const getCachedData = () => {
     cachedTokens &&
     cachedTokens.timestamp > Date.now() - 1000 * 60 * 60 * 24 * 7
   ) {
-    // TODO check for duplicates
-    return [...cachedTokens.tokens, ...importedTokens];
+    return mergeArraysRemovingDuplicates(
+      cachedTokens.tokens,
+      importedTokens,
+      'address'
+    );
   }
   return undefined;
 };

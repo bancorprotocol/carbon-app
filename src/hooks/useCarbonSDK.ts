@@ -6,7 +6,11 @@ import { config } from 'services/web3/config';
 import { carbonSDK } from 'index';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
-import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
+import {
+  buildTokenPairKey,
+  mergeArraysRemovingDuplicates,
+  setIntervalUsingTimeout,
+} from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
 
@@ -28,11 +32,9 @@ const getTokenDecimalMap = () => {
   const tokens = lsService.getItem('tokenListCache')?.tokens || [];
   const importedTokens = lsService.getItem('importedTokens') || [];
   return new Map(
-    // TODO filter out duplicates
-    [...tokens, ...importedTokens].map((token) => [
-      token.address.toLowerCase(),
-      token.decimals,
-    ])
+    mergeArraysRemovingDuplicates(tokens, importedTokens, 'address').map(
+      (token) => [token.address.toLowerCase(), token.decimals]
+    )
   );
 };
 

@@ -114,7 +114,6 @@ export const useBuySell = ({
         checkLiquidity(totalSourceAmount);
       }
     }
-    // TODO depency array issues
     // eslint-disable-next-line
   }, [bySourceQuery.data]);
 
@@ -144,7 +143,6 @@ export const useBuySell = ({
         checkLiquidity(totalTargetAmount);
       }
     }
-    // TODO depency array issues
     // eslint-disable-next-line
   }, [byTargetQuery.data]);
 

@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
+import { mergeArraysRemovingDuplicates } from 'utils/helpers';
 
 export interface TokensStore {
   tokens: Token[];
@@ -18,8 +19,11 @@ export const useTokensStore = (): TokensStore => {
 
   const tokens = useMemo(() => {
     if (tokensQuery.data && tokensQuery.data.length) {
-      // TODO check for duplicates
-      return [...tokensQuery.data, ...importedTokens];
+      return mergeArraysRemovingDuplicates(
+        tokensQuery.data,
+        importedTokens,
+        'address'
+      );
     }
     return [];
   }, [tokensQuery.data, importedTokens]);
@@ -32,15 +36,6 @@ export const useTokensStore = (): TokensStore => {
   const isLoading = tokensQuery.isLoading;
   const isError = tokensQuery.isError;
   const error = tokensQuery.error;
-
-  useEffect(() => {
-    if (tokens.length) {
-      // TODO fix decimal fetcher for web worker
-      // decimalFetcherSDKMap.map = new Map(
-      //   tokens.map((t) => [t.address.toLowerCase(), t.decimals])
-      // );
-    }
-  }, [tokens]);
 
   return {
     tokens,

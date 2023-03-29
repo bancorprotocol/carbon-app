@@ -209,3 +209,28 @@ export const setIntervalUsingTimeout = (
   intervalId = setTimeout(timeoutCallback, interval);
   return intervalId;
 };
+
+export const mergeArraysRemovingDuplicates = <
+  A extends Array<object>,
+  K extends Extract<keyof A[number], string>
+>(
+  array1: A,
+  array2: A,
+  key: K
+): A[number][] => {
+  const mergedArray: A[number][] = [...array1, ...array2];
+  const uniqueArray: A[number][] = [];
+
+  const ids = new Set<number>();
+
+  for (const item of mergedArray) {
+    // @ts-ignore
+    if (!ids.has(item[key])) {
+      // @ts-ignore
+      ids.add(item[key]);
+      uniqueArray.push(item);
+    }
+  }
+
+  return uniqueArray;
+};
