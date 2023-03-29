@@ -3,7 +3,6 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
-import { useEffect } from 'react';
 import { sendEvent } from 'services/googleTagManager';
 import { Token } from 'libs/tokens';
 
@@ -20,20 +19,6 @@ export const CreateStrategyTokenSelection = ({
   setQuote: (token: Token | undefined) => void;
   openTokenListModal: (isSource?: boolean) => void;
 }) => {
-  useEffect(() => {
-    base &&
-      sendEvent('strategy', 'new_strategy_base_token_select', {
-        token: base.symbol,
-      });
-  }, [base]);
-
-  useEffect(() => {
-    quote &&
-      sendEvent('strategy', 'new_strategy_quote_token_select', {
-        token: quote.symbol,
-      });
-  }, [quote]);
-
   return (
     <m.div variants={items} className="bg-secondary rounded-10 p-20">
       <div className="mb-14 flex items-center justify-between">
@@ -71,6 +56,10 @@ export const CreateStrategyTokenSelection = ({
               <IconArrow
                 onClick={() => {
                   if (base && quote) {
+                    sendEvent('strategy', 'strategy_token_swap', {
+                      tokenPairFrom: `${base.symbol}/${quote.symbol}`,
+                      tokenPair: `${quote.symbol}/${base.symbol}`,
+                    });
                     const temp = base;
                     setBase(quote);
                     setQuote(temp);

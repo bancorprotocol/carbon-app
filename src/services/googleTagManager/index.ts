@@ -23,6 +23,9 @@ type EventStrategySchema = {
   new_strategy_create_click: undefined;
   new_strategy_base_token_select: { token: string };
   new_strategy_quote_token_select: { token: string };
+  strategy_base_token_change: { token: string };
+  strategy_quote_token_change: { token: string };
+  strategy_token_swap: { tokenPair: string; tokenPairFrom: string };
   strategy_chart_open: undefined;
   strategy_chart_close: undefined;
 };

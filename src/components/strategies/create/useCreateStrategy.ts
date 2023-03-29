@@ -11,6 +11,7 @@ import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
+import { sendEvent } from 'services/googleTagManager';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -133,9 +134,32 @@ export const useCreateStrategy = () => {
     }
   };
 
+  const handleChangeTokensEvents = (isSource = false, token: Token) => {
+    isSource
+      ? sendEvent(
+          'strategy',
+          !base
+            ? 'new_strategy_base_token_select'
+            : 'strategy_base_token_change',
+          {
+            token: token?.symbol,
+          }
+        )
+      : sendEvent(
+          'strategy',
+          !quote
+            ? 'new_strategy_quote_token_select'
+            : 'strategy_quote_token_change',
+          {
+            token: token.symbol,
+          }
+        );
+  };
+
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
       isSource ? setBase(token) : setQuote(token);
+      handleChangeTokensEvents(isSource, token);
       order0.resetFields();
       order1.resetFields();
     };

@@ -89,7 +89,13 @@ export const CreateStrategyContent = ({
       </div>
       <div className="w-full space-y-20 md:w-[400px]">
         <CreateStrategyTokenSelection
-          {...{ base, quote, setBase, setQuote, openTokenListModal }}
+          {...{
+            base,
+            quote,
+            setBase,
+            setQuote,
+            openTokenListModal,
+          }}
         />
         {showOrders && (
           <CreateStrategyOrders
