@@ -10,7 +10,7 @@ import { useTokens } from 'hooks/useTokens';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { EncodedStrategy, StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
-import { carbonSDK } from 'index';
+import { carbonSDK } from 'libs/sdk';
 
 export enum StrategyStatus {
   Active,

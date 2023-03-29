@@ -3,7 +3,7 @@ import { useStore } from 'store';
 import { useQueryClient } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { config } from 'services/web3/config';
-import { carbonSDK } from 'index';
+import { carbonSDK } from 'libs/sdk';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
 import {

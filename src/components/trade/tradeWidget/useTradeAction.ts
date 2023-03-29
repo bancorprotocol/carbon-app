@@ -9,7 +9,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
-import { carbonSDK } from 'index';
+import { carbonSDK } from 'libs/sdk';
 
 type TradeProps = {
   source: Token;

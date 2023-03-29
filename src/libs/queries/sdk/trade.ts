@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { Action, TradeActionStruct } from 'libs/sdk';
 import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
-import { carbonSDK } from 'index';
+import { carbonSDK } from 'libs/sdk';
 
 type GetTradeDataResult = {
   tradeActions: TradeActionStruct[];

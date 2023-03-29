@@ -5,7 +5,7 @@ import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { carbonSDK } from 'index';
+import { carbonSDK } from 'libs/sdk';
 import { lsService } from 'services/localeStorage';
 
 const getCachedData = () => {

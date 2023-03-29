@@ -2,7 +2,7 @@ import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { carbonSDK } from 'index';
+import { carbonSDK } from 'libs/sdk';
 
 export type OrderRow = {
   rate: string;

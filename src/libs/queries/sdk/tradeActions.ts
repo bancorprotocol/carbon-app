@@ -3,7 +3,7 @@ import { QueryKey } from 'libs/queries';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { carbonSDK } from 'index';
+import { carbonSDK } from 'libs/sdk';
 
 type Props = {
   sourceToken: string;
