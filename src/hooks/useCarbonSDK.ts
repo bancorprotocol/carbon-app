@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useStore } from 'store';
-import { useQueryClient } from 'libs/queries';
+import { useQueryClient } from '@tanstack/react-query';
 import { RPC_URLS } from 'libs/web3';
 import { config } from 'services/web3/config';
 import { carbonSDK } from 'libs/sdk';

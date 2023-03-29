@@ -3,7 +3,7 @@ import { m } from 'libs/motion';
 import { EditStrategyHeader } from './EditStrategyHeader';
 import { EditStrategyLayout } from './EditStrategyLayout';
 import { list } from '../create/variants';
-import { MakeGenerics, useSearch } from 'libs/routing';
+import { MakeGenerics, useSearch } from '@tanstack/react-location';
 import { Strategy } from 'libs/queries';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';

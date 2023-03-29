@@ -1,4 +1,4 @@
-import { UseQueryResult } from 'libs/queries';
+import { UseQueryResult } from '@tanstack/react-query';
 import { CreateStrategyOrders } from './CreateStrategyOrders';
 import { CreateStrategyGraph } from './CreateStrategyGraph';
 import { CreateStrategyTokenSelection } from './CreateStrategyTokenSelection';

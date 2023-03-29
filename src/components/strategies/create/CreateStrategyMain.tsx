@@ -4,7 +4,7 @@ import { list } from './variants';
 import { useCreateStrategy } from './useCreateStrategy';
 import { CreateStrategyHeader } from './CreateStrategyHeader';
 import { CreateStrategyContent } from './CreateStrategyContent';
-import { useSearch } from 'libs/routing';
+import { useSearch } from '@tanstack/react-location';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
