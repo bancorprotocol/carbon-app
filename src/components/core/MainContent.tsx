@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { useWeb3 } from 'libs/web3';
-import { useLocation } from '@tanstack/react-location';
-import { Outlet, PathNames } from 'libs/routing';
+import { Outlet, PathNames, useLocation } from 'libs/routing';
 import { ErrorUnsupportedNetwork } from 'components/core/error/ErrorUnsupportedNetwork';
 import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnection';
 import { useTokens } from 'hooks/useTokens';

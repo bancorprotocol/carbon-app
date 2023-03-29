@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { getFiatValue, sanitizeNumberInput } from 'utils/helpers';
+import { getFiatDisplayValue, sanitizeNumberInput } from 'utils/helpers';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
@@ -11,24 +11,25 @@ import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPr
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { EditTypes } from './EditStrategyMain';
 
 const shouldDisplayDistributeByType: {
-  [key in 'renew' | 'changeRates' | 'deposit' | 'withdraw']: boolean;
+  [key in EditTypes]: boolean;
 } = {
   renew: false,
-  changeRates: true,
+  editPrices: true,
   deposit: true,
   withdraw: true,
 };
 
-export const ModalEditStrategyAllocatedBudget: FC<{
+export const EditStrategyAllocatedBudget: FC<{
   order: OrderCreate;
   base: Token;
   quote: Token;
   balance?: string;
   buy?: boolean;
   showMaxCb?: () => void;
-  type: 'renew' | 'changeRates' | 'deposit' | 'withdraw';
+  type: EditTypes;
 }> = ({ base, quote, balance, buy, order, showMaxCb, type }) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
@@ -63,7 +64,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
         );
   };
 
-  const budgetFiat = getFiatValue(
+  const budgetFiat = getFiatDisplayValue(
     getTokenFiat(balance || ''),
     selectedFiatCurrency
   );
@@ -71,11 +72,11 @@ export const ModalEditStrategyAllocatedBudget: FC<{
   return (
     <>
       <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
-        <div className="flex justify-between">
-          <div className="flex items-center">
-            <div className="mr-5">Allocated Budget</div>
+        <div className="flex items-center justify-between gap-16">
+          <div className="flex w-auto items-center gap-6">
+            <div>Allocated Budget</div>
             <Tooltip
-              iconClassName="h-13 text-white/60"
+              iconClassName="h-13 mr-6 text-white/60"
               element={
                 buy
                   ? `This is the current available ${quote?.symbol} budget you can withdraw`
@@ -83,7 +84,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
               }
             />
           </div>
-          <div className="flex">
+          <div className="flex flex-1 justify-end gap-8">
             <Tooltip
               element={
                 <>
@@ -98,7 +99,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
                 </>
               }
             >
-              <div className="flex">
+              <>
                 {balance && (
                   <span>
                     {sanitizeNumberInput(
@@ -108,23 +109,23 @@ export const ModalEditStrategyAllocatedBudget: FC<{
                   </span>
                 )}
                 <Imager
-                  className="ml-8 h-16 w-16"
+                  className="h-16 w-16"
                   src={buy ? quote?.logoURI : base?.logoURI}
                   alt="token"
                 />
-              </div>
+              </>
             </Tooltip>
             {showMaxCb && (
               <div
                 onClick={() => showMaxCb()}
-                className="ml-8 cursor-pointer font-weight-500 text-green"
+                className="cursor-pointer font-weight-500 text-green"
               >
                 MAX
               </div>
             )}
           </div>
         </div>
-        {showDistribute && type !== 'changeRates' && (
+        {showDistribute && type !== 'editPrices' && (
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
               <span className="mr-5">Distribute Across Entire Range</span>
@@ -179,7 +180,7 @@ export const ModalEditStrategyAllocatedBudget: FC<{
           </div>
         )}
       </div>
-      {type === 'changeRates' && showDistribute && (
+      {type === 'editPrices' && showDistribute && (
         <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left  text-12 text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"

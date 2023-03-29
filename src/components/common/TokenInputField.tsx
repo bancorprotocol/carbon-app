@@ -42,9 +42,11 @@ export const TokenInputField: FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const isSlippagePositive = slippage?.isGreaterThan(0);
 
-  const { fiatValue, fiatAsString } = useFiatCurrency(token, value);
+  const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
+  const fiatValueUsd = getFiatValue(value, true);
 
   const handleOnFocus = () => {
+    inputRef.current?.select();
     !disabled && setIsFocused(true);
     if (value === '...') {
       setValue('');
@@ -67,6 +69,8 @@ export const TokenInputField: FC<Props> = ({
     balance && setValue(new BigNumber(balance).toFixed(token.decimals));
     onKeystroke && onKeystroke();
   };
+
+  const showFiatValue = fiatValueUsd.gt(0);
 
   return (
     <div
@@ -147,7 +151,7 @@ export const TokenInputField: FC<Props> = ({
           <div className={'h-16'} />
         )}
         <div className="flex truncate">
-          {fiatValue.gt(0) && <div>{fiatAsString}</div>}
+          {showFiatValue && <div>{getFiatAsString(value)}</div>}
           {slippage && value && (
             <div
               className={`ml-4 ${

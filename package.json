@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bancor/carbon-sdk": "^0.0.54-DEV",
+    "@bancor/carbon-sdk": "^0.0.62-DEV",
     "@coinbase/wallet-sdk": "^3.6.3",
     "@ethersproject/providers": "^5.7.1",
     "@popperjs/core": "^2.11.6",
@@ -36,6 +36,7 @@
     "bignumber.js": "^9.1.0",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.2.4",
+    "comlink": "^4.4.1",
     "dayjs": "^1.11.7",
     "decimal.js": "^10.4.2",
     "eslint-config-prettier": "^8.5.0",

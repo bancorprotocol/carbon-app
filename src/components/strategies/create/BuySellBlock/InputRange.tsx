@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, FocusEvent } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
@@ -14,20 +14,25 @@ export const InputRange: FC<{
   error?: string;
   setRangeError: (error: string) => void;
 }> = ({ min, setMin, max, setMax, token, buy, error, setRangeError }) => {
-  const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
-
-  const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) =>
-    setMax(sanitizeNumberInput(e.target.value));
-
-  const handleBlur = (isMin?: boolean) => {
-    Number(min) > 0 && (isMin || Number(max) > Number(min))
+    !max || (+e.target.value > 0 && +max > +e.target.value)
       ? setRangeError('')
       : setRangeError('Max Price must be higher than min price and not zero');
   };
 
-  const { fiatAsString: fiatAsStringMin } = useFiatCurrency(token, min);
-  const { fiatAsString: fiatAsStringMax } = useFiatCurrency(token, max);
+  const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
+    setMax(sanitizeNumberInput(e.target.value));
+    !min || (+e.target.value > 0 && +e.target.value > +min)
+      ? setRangeError('')
+      : setRangeError('Max Price must be higher than min price and not zero');
+  };
+
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
+    e.target.select();
+  };
+
+  const { getFiatAsString } = useFiatCurrency(token);
 
   return (
     <div>
@@ -48,13 +53,13 @@ export const InputRange: FC<{
             value={min}
             onChange={handleChangeMin}
             placeholder="Enter Price"
-            onBlur={() => handleBlur(true)}
+            onFocus={handleFocus}
             className={
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
           <div className="font-mono text-12 text-white/60">
-            {fiatAsStringMin}
+            {getFiatAsString(min)}
           </div>
         </div>
         <div
@@ -73,13 +78,13 @@ export const InputRange: FC<{
             value={max}
             onChange={handleChangeMax}
             placeholder={`Enter Price`}
-            onBlur={() => handleBlur()}
+            onFocus={handleFocus}
             className={
               'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
           <div className="mt-6 font-mono text-12 text-white/60">
-            {fiatAsStringMax}
+            {getFiatAsString(max)}
           </div>
         </div>
       </div>

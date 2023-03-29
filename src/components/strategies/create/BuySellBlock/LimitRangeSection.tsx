@@ -6,8 +6,8 @@ import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange
 import { Token } from 'libs/tokens';
 
 type Props = {
-  token0: Token;
-  token1: Token;
+  base: Token;
+  quote: Token;
   order: OrderCreate;
   title: ReactNode | string;
   inputTitle: ReactNode | string;
@@ -15,8 +15,8 @@ type Props = {
 };
 
 export const LimitRangeSection: FC<Props> = ({
-  token0,
-  token1,
+  base,
+  quote,
   order,
   title,
   inputTitle,
@@ -56,7 +56,7 @@ export const LimitRangeSection: FC<Props> = ({
             element={
               <>
                 This section will define the order details in which you are
-                willing to {buy ? 'buy' : 'sell'} {token0.symbol} at.
+                willing to {buy ? 'buy' : 'sell'} {base.symbol} at.
                 <br />
                 <b>Limit</b> will allow you to define a specific price point to{' '}
                 {buy ? 'buy' : 'sell'} the token at.
@@ -79,12 +79,12 @@ export const LimitRangeSection: FC<Props> = ({
           setMax={order.setMax}
           error={order.rangeError}
           setRangeError={order.setRangeError}
-          token={token1}
+          token={quote}
           buy={buy}
         />
       ) : (
         <InputLimit
-          token={token1}
+          token={quote}
           price={order.price}
           setPrice={order.setPrice}
           error={order.priceError}

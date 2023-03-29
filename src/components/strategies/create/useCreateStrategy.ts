@@ -20,57 +20,53 @@ export const useCreateStrategy = () => {
   const navigate = useNavigate();
   const { user } = useWeb3();
   const { openModal } = useModal();
-  const [token0, setToken0] = useState<Token | undefined>(
-    templateStrategy?.token0
-  );
-  const [token1, setToken1] = useState<Token | undefined>(
-    templateStrategy?.token1
+  const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
+  const [quote, setQuote] = useState<Token | undefined>(
+    templateStrategy?.quote
   );
   const { dispatchNotification } = useNotifications();
 
-  const token0BalanceQuery = useGetTokenBalance(token0);
-  const token1BalanceQuery = useGetTokenBalance(token1);
+  const token0BalanceQuery = useGetTokenBalance(base);
+  const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
 
   const mutation = useCreateStrategyQuery();
 
-  const showOrders = !!token0 && !!token1;
+  const showOrders = !!base && !!quote;
 
   const approvalTokens = useMemo(() => {
-    return [
-      ...(!!token0
-        ? [
-            {
-              ...token0,
-              spender: spenderAddress,
-              amount: order1.budget,
-            },
-          ]
-        : []),
-      ...(!!token1
-        ? [
-            {
-              ...token1,
-              spender: spenderAddress,
-              amount: order0.budget,
-            },
-          ]
-        : []),
-    ];
-  }, [order0.budget, token0, order1.budget, token1]);
+    const arr = [];
+
+    if (base) {
+      arr.push({
+        ...base,
+        spender: spenderAddress,
+        amount: order1.budget,
+      });
+    }
+    if (quote) {
+      arr.push({
+        ...quote,
+        spender: spenderAddress,
+        amount: order0.budget,
+      });
+    }
+
+    return arr;
+  }, [base, quote, order0.budget, order1.budget]);
 
   const approval = useApproval(approvalTokens);
 
   const create = async () => {
-    if (!token0 || !token1 || !user) {
+    if (!base || !quote || !user) {
       throw new Error('error in create strategy: missing data ');
     }
 
     mutation.mutate(
       {
-        token0: token0,
-        token1: token1,
+        base: base,
+        quote: quote,
         order0: {
           budget: order0.budget,
           min: order0.min,
@@ -91,10 +87,10 @@ export const useCreateStrategy = () => {
           console.log('tx hash', tx.hash);
           await tx.wait();
           void cache.invalidateQueries({
-            queryKey: QueryKey.balance(user, token0.address),
+            queryKey: QueryKey.balance(user, base.address),
           });
           void cache.invalidateQueries({
-            queryKey: QueryKey.balance(user, token1.address),
+            queryKey: QueryKey.balance(user, quote.address),
           });
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
@@ -137,30 +133,62 @@ export const useCreateStrategy = () => {
 
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
-      isSource ? setToken0(token) : setToken1(token);
+      if (isSource) {
+        const b = token.address;
+        const q = quote?.address;
+        navigate({
+          to: PathNames.createStrategy,
+          search: { base: b, quote: q },
+        });
+      } else {
+        const b = base?.address;
+        const q = token.address;
+        navigate({
+          to: PathNames.createStrategy,
+          search: { base: b, quote: q },
+        });
+      }
       order0.resetFields();
       order1.resetFields();
     };
 
     const data: ModalTokenListData = {
       onClick,
-      excludedTokens: [
-        isSource ? token1?.address ?? '' : token0?.address ?? '',
-      ],
+      excludedTokens: [isSource ? quote?.address ?? '' : base?.address ?? ''],
       isBaseToken: isSource,
     };
     openModal('tokenLists', data);
   };
 
   const isCTAdisabled = useMemo(() => {
-    return approval.isLoading || approval.isError || mutation.isLoading;
-  }, [approval.isError, approval.isLoading, mutation.isLoading]);
+    const isOrder0Valid = order0.isRange
+      ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
+      : +order0.price > 0;
+
+    const isOrder1Valid = order1.isRange
+      ? +order1.min > 0 && +order1.max > 0 && +order1.min < +order1.max
+      : +order1.price > 0;
+
+    return (
+      approval.isLoading ||
+      approval.isError ||
+      mutation.isLoading ||
+      !isOrder0Valid ||
+      !isOrder1Valid
+    );
+  }, [
+    approval.isError,
+    approval.isLoading,
+    mutation.isLoading,
+    order0,
+    order1,
+  ]);
 
   return {
-    token0,
-    setToken0,
-    token1,
-    setToken1,
+    base,
+    setBase,
+    quote,
+    setQuote,
     order0,
     order1,
     createStrategy,

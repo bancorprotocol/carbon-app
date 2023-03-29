@@ -29,7 +29,9 @@ export const useTradePairs = () => {
   };
 
   const tradePairs = useMemo<TradePair[]>(() => {
-    if (!pairsQuery.data) return [];
+    if (!pairsQuery.data) {
+      return [];
+    }
     return pairsQuery.data;
   }, [pairsQuery.data]);
 

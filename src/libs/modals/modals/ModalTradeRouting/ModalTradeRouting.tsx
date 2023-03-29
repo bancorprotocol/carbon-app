@@ -5,7 +5,7 @@ import { Token } from 'libs/tokens';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { MatchAction } from '@bancor/carbon-sdk/dist/types';
+import { SerializableMatchAction } from '@bancor/carbon-sdk/dist/types';
 import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useModalTradeRouting';
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
@@ -15,7 +15,7 @@ export type ModalTradeRoutingData = {
   source: Token;
   target: Token;
   tradeActionsRes: Action[];
-  tradeActionsWei: MatchAction[];
+  tradeActionsWei: SerializableMatchAction[];
   isTradeBySource: boolean;
   onSuccess: Function;
 };
@@ -50,7 +50,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         quoteSymbol={data.target.symbol}
       />
 
-      <div className="mt-2 grid grid-cols-3 gap-10 rounded-t-4 rounded-b-10 bg-black p-10 pl-20">
+      <div className="mt-2 grid max-h-[210px] grid-cols-3 gap-10 overflow-y-auto rounded-t-4 rounded-b-10 bg-black p-10 pl-20">
         {selected.map((action, index) => (
           <ModalTradeRoutingRow
             key={index}

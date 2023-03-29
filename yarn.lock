@@ -1070,10 +1070,10 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@bancor/carbon-sdk@^0.0.54-DEV":
-  version "0.0.54-DEV"
-  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.54-DEV.tgz#37dfd73f680609dd3611ba4a974b1727442ea348"
-  integrity sha512-hOCgFdp7RTlqgwKIwC1bsdM1s7dt6NtbjRpL8SgoiybJpPKj56gdTPDCWxN+dhIZBDP0SHKXOvjjEciS/7TgZg==
+"@bancor/carbon-sdk@^0.0.62-DEV":
+  version "0.0.62-DEV"
+  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.62-DEV.tgz#537046cc0e61b984525ac167a7d624515b98b636"
+  integrity sha512-U+6VzBTlajZ8/mici8q632nyqixge4Eu+d3CkKMZT2LRh7bVIrAPv+3TsnnGMuN/TSIyjta5Qlkf5f5zP7qhgw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
@@ -1082,6 +1082,7 @@
     "@ethersproject/units" "^5.7.0"
     decimal.js "^10.4.3"
     ethers "^5.7.2"
+    events "^3.3.0"
 
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
@@ -4348,6 +4349,11 @@ combined-stream@^1.0.8:
   integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
   dependencies:
     delayed-stream "~1.0.0"
+
+comlink@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/comlink/-/comlink-4.4.1.tgz#e568b8e86410b809e8600eb2cf40c189371ef981"
+  integrity sha512-+1dlx0aY5Jo1vHy/tSsIGpSkN4tS9rZSW8FIhG0JH/crs9wwweswIo/POr451r7bZww3hFbPAKnTpimzL/mm4Q==
 
 command-line-args@^5.1.1:
   version "5.2.1"
