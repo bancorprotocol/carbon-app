@@ -167,11 +167,11 @@ export const useCreateStrategy = () => {
   const isCTAdisabled = useMemo(() => {
     const isOrder0Valid = order0.isRange
       ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
-      : +order0.price >= 0;
+      : +order0.price >= 0 && order0.price !== '';
 
     const isOrder1Valid = order1.isRange
       ? +order1.min > 0 && +order1.max > 0 && +order1.min < +order1.max
-      : +order1.price >= 0;
+      : +order1.price >= 0 && order1.price !== '';
 
     return (
       approval.isLoading ||
