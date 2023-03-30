@@ -14,7 +14,7 @@ export type ButtonHTMLProps = DetailedHTMLProps<
 > &
   AriaAttributes;
 
-type ButtonProps = ButtonHTMLProps & VariantProps<typeof buttonStyles>;
+export type ButtonProps = ButtonHTMLProps & VariantProps<typeof buttonStyles>;
 
 export const Button: FC<ButtonProps> = ({
   variant,

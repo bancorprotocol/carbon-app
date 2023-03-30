@@ -3,7 +3,7 @@ import { m } from 'libs/motion';
 import { list } from './variants';
 import { useCreateStrategy } from './useCreateStrategy';
 import { CreateStrategyHeader } from './CreateStrategyHeader';
-import { CreateStrategyContent } from './CreateStrategyContent';
+import { CreateStrategyContent } from 'components/strategies/create/createStrategyContent/CreateStrategyContent';
 import { MakeGenerics, useSearch } from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
@@ -12,13 +12,13 @@ export type StrategyType = 'reoccurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
 export type StrategySettings = 'limit' | 'range' | 'custom';
 
-type StrategyCreateLocationGenerics = MakeGenerics<{
+export type StrategyCreateLocationGenerics = MakeGenerics<{
   Search: {
-    base: string;
-    quote: string;
-    strategyType: StrategyType;
-    strategyDirection: StrategyDirection;
-    strategySettings: StrategySettings;
+    base?: string;
+    quote?: string;
+    strategyType?: StrategyType;
+    strategyDirection?: StrategyDirection;
+    strategySettings?: StrategySettings;
   };
 }>;
 
@@ -46,22 +46,26 @@ const handleStrategySettings = (
   }
 };
 
+type OrderWithSetters = {
+  setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  setPrice: (value: ((prevState: string) => string) | string) => void;
+  setBudget: (value: ((prevState: string) => string) | string) => void;
+};
+
 function handleStrategyDirection(
   strategyDirection: 'buy' | 'sell' | undefined,
   strategySettings: 'limit' | 'range' | 'custom' | undefined,
-  order1: {
-    setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
-  },
-  order0: {
-    setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
-  }
+  order1: OrderWithSetters,
+  order0: OrderWithSetters
 ) {
   switch (strategyDirection) {
     case 'buy':
       handleStrategySettings(strategySettings, [order1.setIsRange]);
+      order0.setPrice('0');
       break;
     case 'sell': {
       handleStrategySettings(strategySettings, [order0.setIsRange]);
+      order1.setPrice('0');
       break;
     }
   }
@@ -114,37 +118,35 @@ export const CreateStrategyMain = () => {
 
     switch (strategyType) {
       case 'disposable': {
+        order0.resetFields();
+        order1.resetFields();
         handleStrategyDirection(
           strategyDirection,
           strategySettings,
           order0,
           order1
         );
-        order0.resetFields();
-        order1.resetFields();
         break;
       }
       case 'reoccurring': {
+        order0.resetFields();
+        order1.resetFields();
         handleStrategySettings(strategySettings, [
           order0.setIsRange,
           order1.setIsRange,
         ]);
-        order0.resetFields();
-        order1.resetFields();
         break;
       }
     }
   }, [
-    getTokenById,
     baseAddress,
+    getTokenById,
     quoteAddress,
     setBase,
     setQuote,
-    strategyType,
     strategyDirection,
     strategySettings,
-    order1,
-    order0,
+    strategyType,
   ]);
 
   return (
