@@ -28,6 +28,36 @@ type EventStrategySchema = {
   strategy_token_swap: { tokenPair: string; tokenPairFrom: string };
   strategy_chart_open: undefined;
   strategy_chart_close: undefined;
+  strategy_buy_low_order_type_change: StrategyType;
+  strategy_buy_low_price_set: StrategyType;
+  strategy_buy_low_budget_set: StrategyType;
+  strategy_sell_high_order_type_change: StrategyType;
+  strategy_sell_high_price_set: StrategyType;
+  strategy_sell_high_budget_set: StrategyType;
+  strategy_create_click: StrategyType;
+  strategy_create: StrategyType;
+};
+
+export type StrategyType = {
+  strategy_base_token?: string;
+  strategy_quote_token?: string;
+
+  strategy_buy_low_token?: string;
+  strategy_buy_low_token_price?: string;
+  strategy_buy_low_token_min_price?: string;
+  strategy_buy_low_token_max_price?: string;
+  strategy_buy_low_pay_token?: string;
+  strategy_buy_low_order_type?: 'limit' | 'range';
+  strategy_buy_low_budget?: string;
+  strategy_buy_low_budget_usd?: string;
+  strategy_sell_high_token?: string;
+  strategy_sell_high_token_price?: string;
+  strategy_sell_high_token_min_price?: string;
+  strategy_sell_high_token_max_price?: string;
+  strategy_sell_high_receive_token?: string;
+  strategy_sell_high_order_type?: 'limit' | 'range';
+  strategy_sell_high_budget?: string;
+  strategy_sell_high_budget_usd?: string;
 };
 
 type EventNavigationSchema = {

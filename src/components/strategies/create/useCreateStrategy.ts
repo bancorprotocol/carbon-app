@@ -12,6 +12,7 @@ import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
 import { sendEvent } from 'services/googleTagManager';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -60,6 +61,29 @@ export const useCreateStrategy = () => {
   }, [base, quote, order0.budget, order1.budget]);
 
   const approval = useApproval(approvalTokens);
+  const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
+  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
+  const fiatValueBaseUsd = getFiatValueBase(order0.budget, true).toString();
+  const fiatValueQuoteUsd = getFiatValueQuote(order1.budget, true).toString();
+
+  const handleCreateStrategyEvent = () => {
+    sendEvent('strategy', 'strategy_create', {
+      strategy_buy_low_order_type: order0.isRange ? 'range' : 'limit',
+      strategy_base_token: base?.symbol,
+      strategy_quote_token: quote?.symbol,
+      strategy_buy_low_budget: order0.budget,
+      strategy_buy_low_budget_usd: fiatValueBaseUsd,
+      strategy_buy_low_token_price: order0.price,
+      strategy_buy_low_token_min_price: order0.min,
+      strategy_buy_low_token_max_price: order0.max,
+      strategy_sell_high_order_type: order1.isRange ? 'range' : 'limit',
+      strategy_sell_high_budget: order1.budget,
+      strategy_sell_high_budget_usd: fiatValueQuoteUsd,
+      strategy_sell_high_token_price: order1.price,
+      strategy_sell_high_token_min_price: order1.min,
+      strategy_sell_high_token_max_price: order1.max,
+    });
+  };
 
   const create = async () => {
     if (!base || !quote || !user) {
@@ -97,6 +121,7 @@ export const useCreateStrategy = () => {
           });
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
+          handleCreateStrategyEvent();
         },
         onError: (e) => {
           console.error('create mutation failed', e);

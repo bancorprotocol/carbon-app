@@ -7,6 +7,7 @@ import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
+import { useStrategyEvents } from './useStrategyEvents';
 
 type Props = {
   base: Token;
@@ -26,7 +27,7 @@ export const BuySellBlock: FC<Props> = ({
   isBudgetOptional,
 }) => {
   const budgetToken = buy ? quote : base;
-
+  useStrategyEvents({ base, quote, order, buy });
   const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
     order.budget
   );
