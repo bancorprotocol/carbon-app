@@ -7,6 +7,7 @@ import { OrderCreate } from './useOrder';
 import { items } from './variants';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useBudgetWarning } from '../useBudgetWarning';
+import { StrategyDirection } from 'components/strategies/create/CreateStrategyMain';
 
 type CreateStrategyOrdersProps = {
   base: Token | undefined;
@@ -17,6 +18,7 @@ type CreateStrategyOrdersProps = {
   token1BalanceQuery: UseQueryResult<string>;
   isCTAdisabled: boolean;
   createStrategy: () => void;
+  strategyDirection?: StrategyDirection;
 };
 
 export const CreateStrategyOrders = ({
@@ -28,6 +30,7 @@ export const CreateStrategyOrders = ({
   isCTAdisabled,
   token0BalanceQuery,
   token1BalanceQuery,
+  strategyDirection,
 }: CreateStrategyOrdersProps) => {
   const showBudgetWarning = useBudgetWarning(
     base,
@@ -38,25 +41,29 @@ export const CreateStrategyOrders = ({
 
   return (
     <>
-      <m.div variants={items}>
-        <BuySellBlock
-          base={base!}
-          quote={quote!}
-          order={order0}
-          buy
-          tokenBalanceQuery={token1BalanceQuery}
-          isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-        />
-      </m.div>
-      <m.div variants={items}>
-        <BuySellBlock
-          base={base!}
-          quote={quote!}
-          order={order1}
-          tokenBalanceQuery={token0BalanceQuery}
-          isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-        />
-      </m.div>
+      {(strategyDirection === 'buy' || !strategyDirection) && (
+        <m.div variants={items}>
+          <BuySellBlock
+            base={base!}
+            quote={quote!}
+            order={order0}
+            buy
+            tokenBalanceQuery={token1BalanceQuery}
+            isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+          />
+        </m.div>
+      )}
+      {(strategyDirection === 'sell' || !strategyDirection) && (
+        <m.div variants={items}>
+          <BuySellBlock
+            base={base!}
+            quote={quote!}
+            order={order1}
+            tokenBalanceQuery={token0BalanceQuery}
+            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+          />
+        </m.div>
+      )}
       {showBudgetWarning && (
         <div
           className={'font-auto flex items-center gap-6 px-25 text-warning-500'}

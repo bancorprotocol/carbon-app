@@ -4,10 +4,68 @@ import { list } from './variants';
 import { useCreateStrategy } from './useCreateStrategy';
 import { CreateStrategyHeader } from './CreateStrategyHeader';
 import { CreateStrategyContent } from './CreateStrategyContent';
-import { useSearch } from 'libs/routing';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
+import { MakeGenerics, useSearch } from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
+
+export type StrategyType = 'reoccurring' | 'disposable';
+export type StrategyDirection = 'buy' | 'sell';
+export type StrategySettings = 'limit' | 'range' | 'custom';
+
+type StrategyCreateLocationGenerics = MakeGenerics<{
+  Search: {
+    base: string;
+    quote: string;
+    strategyType: StrategyType;
+    strategyDirection: StrategyDirection;
+    strategySettings: StrategySettings;
+  };
+}>;
+
+const handleStrategySettings = (
+  strategySettings?: StrategySettings,
+  functions?: ((value: boolean) => void)[]
+) => {
+  if (!functions || !strategySettings) {
+    return;
+  }
+
+  switch (strategySettings) {
+    case 'limit': {
+      functions.forEach((fn) => fn(false));
+      break;
+    }
+    case 'range': {
+      functions.forEach((fn) => fn(true));
+      break;
+    }
+    case 'custom': {
+      functions.forEach((fn, i) => fn(i % 2 === 0));
+      break;
+    }
+  }
+};
+
+function handleStrategyDirection(
+  strategyDirection: 'buy' | 'sell' | undefined,
+  strategySettings: 'limit' | 'range' | 'custom' | undefined,
+  order1: {
+    setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  },
+  order0: {
+    setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  }
+) {
+  switch (strategyDirection) {
+    case 'buy':
+      handleStrategySettings(strategySettings, [order1.setIsRange]);
+      break;
+    case 'sell': {
+      handleStrategySettings(strategySettings, [order0.setIsRange]);
+      break;
+    }
+  }
+}
 
 export const CreateStrategyMain = () => {
   const [showGraph, setShowGraph] = useState(false);
@@ -25,10 +83,17 @@ export const CreateStrategyMain = () => {
     isCTAdisabled,
     token0BalanceQuery,
     token1BalanceQuery,
+    isDuplicate,
   } = useCreateStrategy();
 
-  const search = useSearch<MyLocationGenerics>();
-  const { base: baseAddress, quote: quoteAddress } = search;
+  const search = useSearch<StrategyCreateLocationGenerics>();
+  const {
+    base: baseAddress,
+    quote: quoteAddress,
+    strategySettings,
+    strategyDirection,
+    strategyType,
+  } = search;
   const { getTokenById } = useTokens();
 
   useEffect(() => {
@@ -46,7 +111,41 @@ export const CreateStrategyMain = () => {
     }
     setBase(getTokenById(baseAddress || ''));
     setQuote(getTokenById(quoteAddress || ''));
-  }, [getTokenById, baseAddress, quoteAddress, setBase, setQuote]);
+
+    switch (strategyType) {
+      case 'disposable': {
+        handleStrategyDirection(
+          strategyDirection,
+          strategySettings,
+          order0,
+          order1
+        );
+        order0.resetFields();
+        order1.resetFields();
+        break;
+      }
+      case 'reoccurring': {
+        handleStrategySettings(strategySettings, [
+          order0.setIsRange,
+          order1.setIsRange,
+        ]);
+        order0.resetFields();
+        order1.resetFields();
+        break;
+      }
+    }
+  }, [
+    getTokenById,
+    baseAddress,
+    quoteAddress,
+    setBase,
+    setQuote,
+    strategyType,
+    strategyDirection,
+    strategySettings,
+    order1,
+    order0,
+  ]);
 
   return (
     <m.div
@@ -58,6 +157,7 @@ export const CreateStrategyMain = () => {
       animate={'visible'}
     >
       <CreateStrategyHeader {...{ showGraph, showOrders, setShowGraph }} />
+
       <CreateStrategyContent
         {...{
           base,
@@ -74,6 +174,10 @@ export const CreateStrategyMain = () => {
           openTokenListModal,
           token0BalanceQuery,
           token1BalanceQuery,
+          strategyDirection,
+          strategySettings,
+          strategyType,
+          isDuplicate,
         }}
       />
     </m.div>

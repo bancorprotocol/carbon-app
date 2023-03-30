@@ -4,6 +4,13 @@ import { CreateStrategyGraph } from './CreateStrategyGraph';
 import { CreateStrategyTokenSelection } from './CreateStrategyTokenSelection';
 import { OrderCreate } from './useOrder';
 import { Token } from 'libs/tokens';
+import {
+  StrategyDirection,
+  StrategySettings,
+  StrategyType,
+} from 'components/strategies/create/CreateStrategyMain';
+import { Button } from 'components/common/button';
+import { Link, PathNames } from 'libs/routing';
 
 type CreateStrategyContentProps = {
   base: Token | undefined;
@@ -20,6 +27,10 @@ type CreateStrategyContentProps = {
   setShowGraph: (value: boolean) => void;
   createStrategy: () => void;
   openTokenListModal: (isSource?: boolean) => void;
+  strategyType?: StrategyType;
+  strategyDirection?: StrategyDirection;
+  strategySettings?: StrategySettings;
+  isDuplicate?: boolean;
 };
 
 export const CreateStrategyContent = ({
@@ -37,7 +48,13 @@ export const CreateStrategyContent = ({
   openTokenListModal,
   token0BalanceQuery,
   token1BalanceQuery,
+  strategySettings,
+  strategyDirection,
+  strategyType,
+  isDuplicate,
 }: CreateStrategyContentProps) => {
+  const showTokenSelection = !strategyType || !strategySettings;
+
   return (
     <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
       <div
@@ -50,10 +67,133 @@ export const CreateStrategyContent = ({
         )}
       </div>
       <div className="w-full space-y-20 md:w-[400px]">
-        <CreateStrategyTokenSelection
-          {...{ base, quote, setBase, setQuote, openTokenListModal }}
-        />
-        {showOrders && (
+        {showTokenSelection && (
+          <>
+            <CreateStrategyTokenSelection
+              {...{ base, quote, setBase, setQuote, openTokenListModal }}
+            />
+            {showOrders && (
+              <>
+                <div>
+                  <Link
+                    to={PathNames.createStrategy}
+                    search={{
+                      base: base?.address,
+                      quote: quote?.address,
+                      strategyType: 'reoccurring',
+                    }}
+                  >
+                    <Button>Reoccurring</Button>
+                  </Link>
+                  <Link
+                    to={PathNames.createStrategy}
+                    search={{
+                      base: base?.address,
+                      quote: quote?.address,
+                      strategyType: 'disposable',
+                    }}
+                  >
+                    <Button>Disposable</Button>
+                  </Link>
+                </div>
+                <div>
+                  {strategyType === 'reoccurring' && (
+                    <div>
+                      reoccuring
+                      <Link
+                        to={PathNames.createStrategy}
+                        search={{
+                          base: base?.address,
+                          quote: quote?.address,
+                          strategyType: 'reoccurring',
+                          strategySettings: 'limit',
+                        }}
+                      >
+                        limit
+                      </Link>
+                      <Link
+                        to={PathNames.createStrategy}
+                        search={{
+                          base: base?.address,
+                          quote: quote?.address,
+                          strategyType: 'reoccurring',
+                          strategySettings: 'range',
+                        }}
+                      >
+                        range
+                      </Link>
+                      <Link
+                        to={PathNames.createStrategy}
+                        search={{
+                          base: base?.address,
+                          quote: quote?.address,
+                          strategyType: 'reoccurring',
+                          strategySettings: 'custom',
+                        }}
+                      >
+                        custom
+                      </Link>
+                    </div>
+                  )}
+                  {strategyType === 'disposable' && (
+                    <div>
+                      disposable
+                      <Link
+                        to={PathNames.createStrategy}
+                        search={{
+                          base: base?.address,
+                          quote: quote?.address,
+                          strategyType: 'disposable',
+                          strategySettings: 'limit',
+                          strategyDirection: 'buy',
+                        }}
+                      >
+                        buy limit
+                      </Link>
+                      <Link
+                        to={PathNames.createStrategy}
+                        search={{
+                          base: base?.address,
+                          quote: quote?.address,
+                          strategyType: 'disposable',
+                          strategySettings: 'range',
+                          strategyDirection: 'buy',
+                        }}
+                      >
+                        buy range
+                      </Link>
+                      <Link
+                        to={PathNames.createStrategy}
+                        search={{
+                          base: base?.address,
+                          quote: quote?.address,
+                          strategyType: 'disposable',
+                          strategySettings: 'limit',
+                          strategyDirection: 'sell',
+                        }}
+                      >
+                        sell limit
+                      </Link>
+                      <Link
+                        to={PathNames.createStrategy}
+                        search={{
+                          base: base?.address,
+                          quote: quote?.address,
+                          strategyType: 'disposable',
+                          strategySettings: 'range',
+                          strategyDirection: 'sell',
+                        }}
+                      >
+                        sell range
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </>
+        )}
+        {((strategySettings && base && quote) || isDuplicate) && (
           <CreateStrategyOrders
             {...{
               base,
@@ -64,6 +204,7 @@ export const CreateStrategyContent = ({
               isCTAdisabled,
               token0BalanceQuery,
               token1BalanceQuery,
+              strategyDirection,
             }}
           />
         )}

@@ -197,5 +197,6 @@ export const useCreateStrategy = () => {
     isCTAdisabled,
     token0BalanceQuery,
     token1BalanceQuery,
+    isDuplicate: !!templateStrategy,
   };
 };
