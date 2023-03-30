@@ -2,6 +2,7 @@ import {
   OrderBook,
   OrderRow,
   useGetOrderBook,
+  useGetOrderBookLastTradeBuy,
 } from 'libs/queries/sdk/orderBook';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
@@ -54,6 +55,7 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
     },
   } = useStore();
   const orderBookQuery = useGetOrderBook(steps, base, quote);
+  const lastTradeBuyQuery = useGetOrderBookLastTradeBuy(quote, base);
   const { getTokenById } = useTokens();
   const { data } = orderBookQuery;
 
@@ -78,5 +80,10 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
     quoteDecimals,
   ]);
 
-  return { ...orderBookQuery, data: orders };
+  return {
+    ...orderBookQuery,
+    data: orders,
+    isLastTradeBuy: lastTradeBuyQuery.data,
+    isLastTradeLoading: lastTradeBuyQuery.isLoading,
+  };
 };

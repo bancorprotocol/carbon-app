@@ -8,6 +8,8 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
   const {
     data: { buy, sell, middleRate },
     isLoading,
+    isLastTradeLoading,
+    isLastTradeBuy,
   } = useOrderBookWidget(base.address, quote.address);
 
   return (
@@ -29,7 +31,11 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
             base={base}
             quote={quote}
           />
-          <OrderBookWidgetRate buy rate={middleRate} />
+          <OrderBookWidgetRate
+            buy={isLastTradeBuy}
+            rate={middleRate}
+            isLoading={isLastTradeLoading}
+          />
           <OrderBookSide
             isLoading={isLoading}
             orders={buy}
