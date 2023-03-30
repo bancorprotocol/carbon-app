@@ -33,3 +33,21 @@ export const useGetOrderBook = (
     staleTime: ONE_DAY_IN_MS,
   });
 };
+
+export const useGetOrderBookLastTradeBuy = (base?: string, quote?: string) => {
+  const { isInitialized } = useCarbonSDK();
+
+  return useQuery({
+    queryKey: QueryKey.tradeOrderBookLastTradeBuy([base!, quote!]),
+    queryFn: async () => {
+      const res = await carbonSDK.getLastTradeByPair(base!, quote!);
+      const source = res?.sourceToken;
+      const target = res?.targetToken;
+
+      return source === base && target === quote;
+    },
+    enabled: isInitialized && !!base && !!quote,
+    retry: 1,
+    staleTime: ONE_DAY_IN_MS,
+  });
+};
