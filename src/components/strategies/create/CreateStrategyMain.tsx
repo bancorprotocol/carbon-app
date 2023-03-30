@@ -40,7 +40,7 @@ const handleStrategySettings = (
       break;
     }
     case 'custom': {
-      functions.forEach((fn, i) => fn(i % 2 === 0));
+      functions.forEach((fn, i) => fn(i % 2 !== 0));
       break;
     }
   }

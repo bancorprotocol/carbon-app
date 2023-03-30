@@ -69,7 +69,7 @@ function useCreateStrategyTypeMenu(
         base,
         quote,
         strategyType: 'reoccurring',
-        strategySettings: 'range',
+        strategySettings: 'limit',
       },
     },
     {
@@ -80,7 +80,7 @@ function useCreateStrategyTypeMenu(
         base,
         quote,
         strategyType: 'reoccurring',
-        strategySettings: 'limit',
+        strategySettings: 'range',
       },
     },
     {
