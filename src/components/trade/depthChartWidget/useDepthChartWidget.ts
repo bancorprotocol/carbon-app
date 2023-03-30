@@ -1,21 +1,32 @@
 import BigNumber from 'bignumber.js';
 import { Options } from 'libs/charts';
 import { OrderRow, useGetOrderBook } from 'libs/queries';
-import { orderBookConfig } from 'libs/queries/sdk/orderBook';
 import { Token } from 'libs/tokens';
 import { useCallback } from 'react';
+import { useStore } from 'store';
 
 export const useDepthChartWidget = (base?: Token, quote?: Token) => {
-  const { data } = useGetOrderBook(base?.address, quote?.address);
+  const {
+    orderBook: {
+      settings: { steps, depthChartBuckets },
+    },
+  } = useStore();
+  const { data, isLoading } = useGetOrderBook(
+    steps,
+    base?.address,
+    quote?.address
+  );
 
   const getOrders = useCallback(
     (orders?: OrderRow[], buy?: boolean) => {
-      const res = [...(orders || [])].map(({ rate, amount }) => {
-        return [
-          +(+rate).toFixed(quote?.decimals),
-          +(+amount).toFixed(base?.decimals),
-        ];
-      });
+      const res = [...(orders || [])]
+        .splice(0, depthChartBuckets + 2)
+        .map(({ rate, amount }) => {
+          return [
+            +(+rate).toFixed(quote?.decimals),
+            +(+amount).toFixed(base?.decimals),
+          ];
+        });
 
       if (res.length > 0) {
         return res;
@@ -23,17 +34,21 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
 
       let rate;
 
-      return new Array(orderBookConfig.buckets.depthChart)
-        .fill(0)
-        .map((_, i) => {
-          rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
-            data?.step?.times(i) || 0
-          );
+      return new Array(depthChartBuckets + 2).fill(0).map((_, i) => {
+        rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
+          new BigNumber(data?.step || 0).times(i)
+        );
 
-          return [+(+rate).toFixed(quote?.decimals), 0];
-        });
+        return [+(+rate).toFixed(quote?.decimals), 0];
+      });
     },
-    [base?.decimals, data?.middleRate, data?.step, quote?.decimals]
+    [
+      base?.decimals,
+      data?.middleRate,
+      data?.step,
+      depthChartBuckets,
+      quote?.decimals,
+    ]
   );
 
   const getOptions = useCallback(
@@ -45,6 +60,9 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
           type: 'area',
           backgroundColor: '#000000',
           borderColor: '#000000',
+          height: 420,
+          borderRadius: 10,
+          marginTop: 20,
         },
         credits: {
           enabled: false,
@@ -175,5 +193,6 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
     buyOrders: getOrders(data?.buy, true),
     sellOrders: getOrders(data?.sell),
     getOptions,
+    isLoading,
   };
 };

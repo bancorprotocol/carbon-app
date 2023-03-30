@@ -36,26 +36,24 @@ export const useCreateStrategy = () => {
   const showOrders = !!base && !!quote;
 
   const approvalTokens = useMemo(() => {
-    return [
-      ...(!!base
-        ? [
-            {
-              ...base,
-              spender: spenderAddress,
-              amount: order1.budget,
-            },
-          ]
-        : []),
-      ...(!!quote
-        ? [
-            {
-              ...quote,
-              spender: spenderAddress,
-              amount: order0.budget,
-            },
-          ]
-        : []),
-    ];
+    const arr = [];
+
+    if (base) {
+      arr.push({
+        ...base,
+        spender: spenderAddress,
+        amount: order1.budget,
+      });
+    }
+    if (quote) {
+      arr.push({
+        ...quote,
+        spender: spenderAddress,
+        amount: order0.budget,
+      });
+    }
+
+    return arr;
   }, [base, quote, order0.budget, order1.budget]);
 
   const approval = useApproval(approvalTokens);
@@ -135,7 +133,21 @@ export const useCreateStrategy = () => {
 
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
-      isSource ? setBase(token) : setQuote(token);
+      if (isSource) {
+        const b = token.address;
+        const q = quote?.address;
+        navigate({
+          to: PathNames.createStrategy,
+          search: { base: b, quote: q },
+        });
+      } else {
+        const b = base?.address;
+        const q = token.address;
+        navigate({
+          to: PathNames.createStrategy,
+          search: { base: b, quote: q },
+        });
+      }
       order0.resetFields();
       order1.resetFields();
     };
@@ -149,8 +161,28 @@ export const useCreateStrategy = () => {
   };
 
   const isCTAdisabled = useMemo(() => {
-    return approval.isLoading || approval.isError || mutation.isLoading;
-  }, [approval.isError, approval.isLoading, mutation.isLoading]);
+    const isOrder0Valid = order0.isRange
+      ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
+      : +order0.price > 0;
+
+    const isOrder1Valid = order1.isRange
+      ? +order1.min > 0 && +order1.max > 0 && +order1.min < +order1.max
+      : +order1.price > 0;
+
+    return (
+      approval.isLoading ||
+      approval.isError ||
+      mutation.isLoading ||
+      !isOrder0Valid ||
+      !isOrder1Valid
+    );
+  }, [
+    approval.isError,
+    approval.isLoading,
+    mutation.isLoading,
+    order0,
+    order1,
+  ]);
 
   return {
     base,

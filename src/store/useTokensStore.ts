@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
-import { decimalFetcherSDKMap } from 'libs/sdk/carbonSdk';
+import { mergeArraysRemovingDuplicates } from 'utils/helpers';
 
 export interface TokensStore {
   tokens: Token[];
@@ -17,10 +17,16 @@ export const useTokensStore = (): TokensStore => {
   const tokensQuery = useTokensQuery();
   const [importedTokens, setImportedTokens] = useState<Token[]>([]);
 
-  const tokens = useMemo(
-    () => (tokensQuery.data ? [...tokensQuery.data, ...importedTokens] : []),
-    [tokensQuery.data, importedTokens]
-  );
+  const tokens = useMemo(() => {
+    if (tokensQuery.data && tokensQuery.data.length) {
+      return mergeArraysRemovingDuplicates(
+        tokensQuery.data,
+        importedTokens,
+        'address'
+      );
+    }
+    return [];
+  }, [tokensQuery.data, importedTokens]);
 
   const tokensMap = useMemo(
     () => new Map(tokens.map((token) => [token.address.toLowerCase(), token])),
@@ -30,14 +36,6 @@ export const useTokensStore = (): TokensStore => {
   const isLoading = tokensQuery.isLoading;
   const isError = tokensQuery.isError;
   const error = tokensQuery.error;
-
-  useEffect(() => {
-    if (tokens.length) {
-      decimalFetcherSDKMap.map = new Map(
-        tokens.map((t) => [t.address.toLowerCase(), t.decimals])
-      );
-    }
-  }, [tokens]);
 
   return {
     tokens,

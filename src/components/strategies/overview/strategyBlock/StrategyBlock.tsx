@@ -7,11 +7,18 @@ import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlo
 import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const paddedID = strategy.id.padStart(9, '0');
   const [manage, setManage] = useState(false);
   const { duplicate } = useDuplicateStrategy();
+  const showBudgetWarning = useBudgetWarning(
+    strategy.base,
+    strategy.quote,
+    strategy.order0.balance,
+    strategy.order1.balance
+  );
 
   return (
     <m.div
@@ -44,7 +51,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
         </div>
         <span
           onClick={() => duplicate(strategy)}
-          className={`invisible flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis transition duration-300 ease-in-out hover:border-grey3 md:group-hover:visible`}
+          className={`pointer-events-none flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis opacity-0 transition duration-300 ease-in-out hover:border-grey3 md:pointer-events-auto md:group-hover:opacity-100`}
         >
           <IconDuplicate className="h-18 w-18" />
         </span>
@@ -52,7 +59,11 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <hr className="border-silver dark:border-emphasis" />
       <StrategyBlockBuySell buy strategy={strategy} />
       <StrategyBlockBuySell strategy={strategy} />
-      <StrategyBlockOrderStatus status={strategy.status} />
+      <StrategyBlockOrderStatus
+        status={strategy.status}
+        strategyId={strategy.id}
+        showBudgetWarning={showBudgetWarning}
+      />
       <StrategyBlockManage
         manage={manage}
         setManage={setManage}

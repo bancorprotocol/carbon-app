@@ -8,10 +8,12 @@ import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCrea
 import { Page } from 'components/common/page';
 import { StrategyPageTitleWidget } from './StrategyPageTitleWidget';
 import { StrategyNotFound } from './StrategyNotFound';
-import { m, mListVariant } from 'libs/motion';
+import { m, mItemVariant, mListVariant } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 import { getCompareFunctionBySortType } from './utils';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { AnimatePresence } from 'framer-motion';
 
 export const StrategyContent = () => {
   const strategies = useGetUserStrategies();
@@ -57,37 +59,46 @@ export const StrategyContent = () => {
         />
       }
     >
-      {(!filteredStrategies || filteredStrategies.length === 0) &&
-      !strategies.isLoading ? (
-        <StrategyNotFound />
-      ) : (
-        <m.div
-          className={
-            'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
-          }
-          variants={mListVariant}
-          initial={'hidden'}
-          animate={'visible'}
-        >
-          {strategies.isLoading ? (
-            <>
-              {[...Array(3)].map((_, index) => (
-                <div
-                  key={index}
-                  className="loading-skeleton h-[665px] w-full"
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {filteredStrategies?.map((s) => (
-                <StrategyBlock key={s.id} strategy={s} />
-              ))}
+      <AnimatePresence exitBeforeEnter={true}>
+        {!filteredStrategies ||
+        filteredStrategies.length === 0 ||
+        strategies.isLoading ? (
+          <>
+            {strategies.isLoading ? (
+              <m.div
+                key={'loading'}
+                className={'flex h-[80%] items-center justify-center'}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className={'h-80'}>
+                  <CarbonLogoLoading />
+                </div>
+              </m.div>
+            ) : (
+              <StrategyNotFound />
+            )}
+          </>
+        ) : (
+          <m.div
+            key={'strategies'}
+            className={
+              'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
+            }
+            variants={mListVariant}
+            initial={'hidden'}
+            animate={'visible'}
+          >
+            {filteredStrategies?.map((s) => (
+              <StrategyBlock key={s.id} strategy={s} />
+            ))}
+            <m.div variants={mItemVariant}>
               <StrategyBlockCreate />
-            </>
-          )}
-        </m.div>
-      )}
+            </m.div>
+          </m.div>
+        )}
+      </AnimatePresence>
     </Page>
   );
 };
