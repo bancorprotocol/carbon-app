@@ -66,7 +66,7 @@ export const CreateStrategyContent = ({
         )}
       </div>
       <div className="w-full space-y-20 md:w-[400px]">
-        {showTokenSelection && (
+        {showTokenSelection && !isDuplicate && (
           <>
             <CreateStrategyTokenSelection
               {...{ base, quote, setBase, setQuote, openTokenListModal }}

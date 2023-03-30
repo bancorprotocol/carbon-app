@@ -133,21 +133,25 @@ export const useCreateStrategy = () => {
 
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
-      if (isSource) {
-        const b = token.address;
-        const q = quote?.address;
-        navigate({
-          to: PathNames.createStrategy,
-          search: { base: b, quote: q },
-        });
-      } else {
-        const b = base?.address;
-        const q = token.address;
-        navigate({
-          to: PathNames.createStrategy,
-          search: { base: b, quote: q },
-        });
+      let b: string | undefined;
+      let q: string | undefined;
+
+      switch (isSource) {
+        case true: {
+          b = token.address;
+          q = quote?.address;
+          break;
+        }
+        default: {
+          b = base?.address;
+          q = token.address;
+        }
       }
+
+      navigate({
+        to: PathNames.createStrategy,
+        search: (search) => ({ ...search, base: b, quote: q }),
+      });
       order0.resetFields();
       order1.resetFields();
     };
