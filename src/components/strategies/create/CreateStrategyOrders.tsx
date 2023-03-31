@@ -4,7 +4,7 @@ import { BuySellBlock } from './BuySellBlock';
 import { items } from './variants';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useBudgetWarning } from '../useBudgetWarning';
-import { UseStrategyCreateReturn } from 'components/strategies/create/useCreateStrategy';
+import { UseStrategyCreateReturn } from 'components/strategies/create';
 
 export const CreateStrategyOrders = ({
   base,
@@ -27,7 +27,7 @@ export const CreateStrategyOrders = ({
   return (
     <>
       {(strategyDirection === 'buy' || !strategyDirection) && (
-        <m.div variants={items}>
+        <m.div variants={items} key={'createStrategyBuyOrder'}>
           <BuySellBlock
             base={base!}
             quote={quote!}
@@ -39,7 +39,7 @@ export const CreateStrategyOrders = ({
         </m.div>
       )}
       {(strategyDirection === 'sell' || !strategyDirection) && (
-        <m.div variants={items}>
+        <m.div variants={items} key={'createStrategySellOrder'}>
           <BuySellBlock
             base={base!}
             quote={quote!}
@@ -62,7 +62,7 @@ export const CreateStrategyOrders = ({
           </span>
         </div>
       )}
-      <m.div variants={items}>
+      <m.div variants={items} key={'createStrategyCTA'}>
         <Button
           variant={'success'}
           size={'lg'}
