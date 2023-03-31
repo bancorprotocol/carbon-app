@@ -114,6 +114,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
       <Button
         variant={'success'}
         fullWidth
+        size={'lg'}
         disabled={!selectedStrategySettings}
         onClick={() =>
           handleClick(
