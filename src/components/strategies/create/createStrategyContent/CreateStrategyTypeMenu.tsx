@@ -3,24 +3,18 @@ import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { PathNames } from 'libs/routing';
 import { FC, ReactNode, useMemo } from 'react';
 import { useNavigate } from '@tanstack/react-location';
-import {
-  StrategyCreateLocationGenerics,
-  StrategyType,
-} from 'components/strategies/create/CreateStrategyMain';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconSellRange } from 'assets/icons/sell-range.svg';
 import { ReactComponent as IconSellLimit } from 'assets/icons/sell-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
-import { ReactComponent as IconTwoLimits } from 'assets/icons/two-limits.svg';
+import { ReactComponent as IconTwoLimits } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strategy.svg';
 import { Button } from 'components/common/button';
-
-type Props = {
-  base: string;
-  quote: string;
-  strategyType?: StrategyType;
-};
+import {
+  StrategyCreateLocationGenerics,
+  UseStrategyCreateReturn,
+} from 'components/strategies/create/useCreateStrategy';
 
 type StrategyTypeItem = {
   label: string;
@@ -32,11 +26,11 @@ type StrategyTypeItemSvg = StrategyTypeItem & {
   svg: ReactNode;
 };
 
-function useCreateStrategyTypeMenu(
+const useCreateStrategyTypeMenu = (
   base: string,
   quote: string,
   strategyType: 'reoccurring' | 'disposable' | undefined
-) {
+) => {
   const navigate = useNavigate();
 
   const items: StrategyTypeItem[] = [
@@ -162,16 +156,16 @@ function useCreateStrategyTypeMenu(
     }
   }, [items2, items3, strategyType]);
   return { items, handleClick, selectedTabItems };
-}
+};
 
-export const CreateStrategyTypeMenu: FC<Props> = ({
+export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
   quote,
   strategyType,
 }) => {
   const { items, handleClick, selectedTabItems } = useCreateStrategyTypeMenu(
-    base,
-    quote,
+    base?.address!,
+    quote?.address!,
     strategyType
   );
 

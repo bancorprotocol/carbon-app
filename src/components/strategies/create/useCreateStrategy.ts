@@ -1,18 +1,85 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { OrderCreate, useOrder } from './useOrder';
 import { QueryKey, useCreateStrategyQuery } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
-import { PathNames, useNavigate } from 'libs/routing';
+import { MakeGenerics, PathNames, useNavigate, useSearch } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
+import { useTokens } from 'hooks/useTokens';
+import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 
 const spenderAddress = config.carbon.carbonController;
+
+export type StrategyType = 'reoccurring' | 'disposable';
+export type StrategyDirection = 'buy' | 'sell';
+export type StrategySettings = 'limit' | 'range' | 'custom';
+
+export type StrategyCreateLocationGenerics = MakeGenerics<{
+  Search: {
+    base?: string;
+    quote?: string;
+    strategyType?: StrategyType;
+    strategyDirection?: StrategyDirection;
+    strategySettings?: StrategySettings;
+  };
+}>;
+
+const handleStrategySettings = (
+  strategySettings?: StrategySettings,
+  functions?: ((value: boolean) => void)[]
+) => {
+  if (!functions || !strategySettings) {
+    return;
+  }
+
+  switch (strategySettings) {
+    case 'limit': {
+      functions.forEach((fn) => fn(false));
+      break;
+    }
+    case 'range': {
+      functions.forEach((fn) => fn(true));
+      break;
+    }
+    case 'custom': {
+      functions.forEach((fn, i) => fn(i % 2 !== 0));
+      break;
+    }
+  }
+};
+
+type OrderWithSetters = {
+  setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  setPrice: (value: ((prevState: string) => string) | string) => void;
+  setBudget: (value: ((prevState: string) => string) | string) => void;
+};
+
+function handleStrategyDirection(
+  strategyDirection: 'buy' | 'sell' | undefined,
+  strategySettings: 'limit' | 'range' | 'custom' | undefined,
+  order1: OrderWithSetters,
+  order0: OrderWithSetters
+) {
+  switch (strategyDirection) {
+    case 'buy':
+      handleStrategySettings(strategySettings, [order1.setIsRange]);
+      order0.setPrice('0');
+      break;
+    case 'sell': {
+      handleStrategySettings(strategySettings, [order0.setIsRange]);
+      order1.setPrice('0');
+      break;
+    }
+  }
+}
+
+export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
 export const useCreateStrategy = () => {
   const { templateStrategy } = useDuplicateStrategy();
@@ -24,6 +91,7 @@ export const useCreateStrategy = () => {
   const [quote, setQuote] = useState<Token | undefined>(
     templateStrategy?.quote
   );
+  const [showGraph, setShowGraph] = useState(false);
   const { dispatchNotification } = useNotifications();
 
   const token0BalanceQuery = useGetTokenBalance(base);
@@ -188,6 +256,66 @@ export const useCreateStrategy = () => {
     order1,
   ]);
 
+  const search = useSearch<StrategyCreateLocationGenerics>();
+  const {
+    base: baseAddress,
+    quote: quoteAddress,
+    strategySettings,
+    strategyDirection,
+    strategyType,
+  } = search;
+  const { getTokenById } = useTokens();
+
+  useEffect(() => {
+    if (pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`]) {
+      setShowGraph(true);
+    }
+    if (!base || !quote) {
+      setShowGraph(false);
+    }
+  }, [base, quote, setShowGraph]);
+
+  useEffect(() => {
+    if (!baseAddress && !quoteAddress) {
+      return;
+    }
+    setBase(getTokenById(baseAddress || ''));
+    setQuote(getTokenById(quoteAddress || ''));
+
+    switch (strategyType) {
+      case 'disposable': {
+        order0.resetFields();
+        order1.resetFields();
+        handleStrategyDirection(
+          strategyDirection,
+          strategySettings,
+          order0,
+          order1
+        );
+        break;
+      }
+      case 'reoccurring': {
+        order0.resetFields();
+        order1.resetFields();
+        handleStrategySettings(strategySettings, [
+          order0.setIsRange,
+          order1.setIsRange,
+        ]);
+        break;
+      }
+    }
+  }, [
+    baseAddress,
+    getTokenById,
+    quoteAddress,
+    setBase,
+    setQuote,
+    strategyDirection,
+    strategySettings,
+    strategyType,
+  ]);
+  const showTokenSelection = !strategyType || !strategySettings;
+
   return {
     base,
     setBase,
@@ -202,5 +330,10 @@ export const useCreateStrategy = () => {
     token0BalanceQuery,
     token1BalanceQuery,
     isDuplicate: !!templateStrategy,
+    showGraph,
+    setShowGraph,
+    showTokenSelection,
+    strategyType,
+    strategyDirection,
   };
 };

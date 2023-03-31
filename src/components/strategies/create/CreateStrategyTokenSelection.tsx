@@ -3,20 +3,15 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
-import { Token } from 'libs/tokens';
+import { FC } from 'react';
+import { UseStrategyCreateReturn } from 'components/strategies/create/useCreateStrategy';
 
-export const CreateStrategyTokenSelection = ({
+export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
   base,
   quote,
   setBase,
   setQuote,
   openTokenListModal,
-}: {
-  base: Token | undefined;
-  quote: Token | undefined;
-  setBase: (token: Token | undefined) => void;
-  setQuote: (token: Token | undefined) => void;
-  openTokenListModal: (isSource?: boolean) => void;
 }) => {
   return (
     <m.div variants={items} className="bg-secondary rounded-10 p-20">

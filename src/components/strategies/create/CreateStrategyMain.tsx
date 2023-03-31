@@ -1,153 +1,21 @@
-import { useEffect, useState } from 'react';
 import { m } from 'libs/motion';
 import { list } from './variants';
 import { useCreateStrategy } from './useCreateStrategy';
 import { CreateStrategyHeader } from './CreateStrategyHeader';
-import { CreateStrategyContent } from 'components/strategies/create/createStrategyContent/CreateStrategyContent';
-import { MakeGenerics, useSearch } from 'libs/routing';
-import { useTokens } from 'hooks/useTokens';
-import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
-
-export type StrategyType = 'reoccurring' | 'disposable';
-export type StrategyDirection = 'buy' | 'sell';
-export type StrategySettings = 'limit' | 'range' | 'custom';
-
-export type StrategyCreateLocationGenerics = MakeGenerics<{
-  Search: {
-    base?: string;
-    quote?: string;
-    strategyType?: StrategyType;
-    strategyDirection?: StrategyDirection;
-    strategySettings?: StrategySettings;
-  };
-}>;
-
-const handleStrategySettings = (
-  strategySettings?: StrategySettings,
-  functions?: ((value: boolean) => void)[]
-) => {
-  if (!functions || !strategySettings) {
-    return;
-  }
-
-  switch (strategySettings) {
-    case 'limit': {
-      functions.forEach((fn) => fn(false));
-      break;
-    }
-    case 'range': {
-      functions.forEach((fn) => fn(true));
-      break;
-    }
-    case 'custom': {
-      functions.forEach((fn, i) => fn(i % 2 !== 0));
-      break;
-    }
-  }
-};
-
-type OrderWithSetters = {
-  setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
-  setPrice: (value: ((prevState: string) => string) | string) => void;
-  setBudget: (value: ((prevState: string) => string) | string) => void;
-};
-
-function handleStrategyDirection(
-  strategyDirection: 'buy' | 'sell' | undefined,
-  strategySettings: 'limit' | 'range' | 'custom' | undefined,
-  order1: OrderWithSetters,
-  order0: OrderWithSetters
-) {
-  switch (strategyDirection) {
-    case 'buy':
-      handleStrategySettings(strategySettings, [order1.setIsRange]);
-      order0.setPrice('0');
-      break;
-    case 'sell': {
-      handleStrategySettings(strategySettings, [order0.setIsRange]);
-      order1.setPrice('0');
-      break;
-    }
-  }
-}
+import { CreateStrategyGraph } from 'components/strategies/create/CreateStrategyGraph';
+import { CreateStrategyTokenSelection } from 'components/strategies/create/CreateStrategyTokenSelection';
+import { CreateStrategyTypeMenu } from 'components/strategies/create/createStrategyContent/CreateStrategyTypeMenu';
+import { CreateStrategyOrders } from 'components/strategies/create/CreateStrategyOrders';
 
 export const CreateStrategyMain = () => {
-  const [showGraph, setShowGraph] = useState(false);
-
+  const createStrategy = useCreateStrategy();
   const {
-    base,
-    quote,
-    setBase,
-    setQuote,
-    openTokenListModal,
+    showGraph,
+    showTokenSelection,
     showOrders,
-    order0,
-    order1,
-    createStrategy,
-    isCTAdisabled,
-    token0BalanceQuery,
-    token1BalanceQuery,
+    setShowGraph,
     isDuplicate,
-  } = useCreateStrategy();
-
-  const search = useSearch<StrategyCreateLocationGenerics>();
-  const {
-    base: baseAddress,
-    quote: quoteAddress,
-    strategySettings,
-    strategyDirection,
-    strategyType,
-  } = search;
-  const { getTokenById } = useTokens();
-
-  useEffect(() => {
-    if (pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`]) {
-      setShowGraph(true);
-    }
-    if (!base || !quote) {
-      setShowGraph(false);
-    }
-  }, [base, quote, setShowGraph]);
-
-  useEffect(() => {
-    if (!baseAddress && !quoteAddress) {
-      return;
-    }
-    setBase(getTokenById(baseAddress || ''));
-    setQuote(getTokenById(quoteAddress || ''));
-
-    switch (strategyType) {
-      case 'disposable': {
-        order0.resetFields();
-        order1.resetFields();
-        handleStrategyDirection(
-          strategyDirection,
-          strategySettings,
-          order0,
-          order1
-        );
-        break;
-      }
-      case 'reoccurring': {
-        order0.resetFields();
-        order1.resetFields();
-        handleStrategySettings(strategySettings, [
-          order0.setIsRange,
-          order1.setIsRange,
-        ]);
-        break;
-      }
-    }
-  }, [
-    baseAddress,
-    getTokenById,
-    quoteAddress,
-    setBase,
-    setQuote,
-    strategyDirection,
-    strategySettings,
-    strategyType,
-  ]);
+  } = createStrategy;
 
   return (
     <m.div
@@ -158,30 +26,17 @@ export const CreateStrategyMain = () => {
       initial={'hidden'}
       animate={'visible'}
     >
-      <CreateStrategyHeader {...{ showGraph, showOrders, setShowGraph }} />
+      <CreateStrategyHeader {...createStrategy} />
 
-      <CreateStrategyContent
-        {...{
-          base,
-          quote,
-          setBase,
-          setQuote,
-          order0,
-          order1,
-          showOrders,
-          setShowGraph,
-          showGraph,
-          isCTAdisabled,
-          createStrategy,
-          openTokenListModal,
-          token0BalanceQuery,
-          token1BalanceQuery,
-          strategyDirection,
-          strategySettings,
-          strategyType,
-          isDuplicate,
-        }}
-      />
+      <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
+        <CreateStrategyGraph {...createStrategy} />
+
+        <div className="w-full space-y-20 md:w-[440px]">
+          <CreateStrategyTokenSelection {...createStrategy} />
+          <CreateStrategyTypeMenu {...createStrategy} />
+          <CreateStrategyOrders {...createStrategy} />
+        </div>
+      </div>
     </m.div>
   );
 };

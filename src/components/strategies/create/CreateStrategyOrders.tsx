@@ -1,25 +1,10 @@
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
-import { UseQueryResult } from 'libs/queries';
-import { Token } from 'libs/tokens';
 import { BuySellBlock } from './BuySellBlock';
-import { OrderCreate } from './useOrder';
 import { items } from './variants';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useBudgetWarning } from '../useBudgetWarning';
-import { StrategyDirection } from 'components/strategies/create/CreateStrategyMain';
-
-type CreateStrategyOrdersProps = {
-  base: Token | undefined;
-  quote: Token | undefined;
-  order0: OrderCreate;
-  order1: OrderCreate;
-  token0BalanceQuery: UseQueryResult<string>;
-  token1BalanceQuery: UseQueryResult<string>;
-  isCTAdisabled: boolean;
-  createStrategy: () => void;
-  strategyDirection?: StrategyDirection;
-};
+import { UseStrategyCreateReturn } from 'components/strategies/create/useCreateStrategy';
 
 export const CreateStrategyOrders = ({
   base,
@@ -31,7 +16,7 @@ export const CreateStrategyOrders = ({
   token0BalanceQuery,
   token1BalanceQuery,
   strategyDirection,
-}: CreateStrategyOrdersProps) => {
+}: UseStrategyCreateReturn) => {
   const showBudgetWarning = useBudgetWarning(
     base,
     quote,
