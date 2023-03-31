@@ -1,7 +1,10 @@
 import { useNavigate } from '@tanstack/react-location';
 import { PathNames } from 'libs/routing';
 import { ReactNode, useMemo } from 'react';
-import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
+import {
+  StrategyCreateLocationGenerics,
+  StrategyType,
+} from 'components/strategies/create/types';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconSellRange } from 'assets/icons/sell-range.svg';
@@ -23,7 +26,7 @@ type StrategyTypeItemSvg = StrategyTypeItem & {
 export const useCreateStrategyTypeMenu = (
   base: string,
   quote: string,
-  strategyType: 'reoccurring' | 'disposable' | undefined
+  strategyType?: StrategyType
 ) => {
   const navigate = useNavigate();
 
@@ -149,5 +152,6 @@ export const useCreateStrategyTypeMenu = (
         return [];
     }
   }, [items2, items3, strategyType]);
+
   return { items, handleClick, selectedTabItems };
 };

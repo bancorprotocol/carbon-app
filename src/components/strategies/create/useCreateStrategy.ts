@@ -69,9 +69,11 @@ export const useCreateStrategy = () => {
   const approval = useApproval(approvalTokens);
 
   const createStrategy = async () => {
+    console.log('createStrategy');
     const sourceCorrect = checkErrors(order0, order1, token1BalanceQuery.data);
     const targetCorrect = checkErrors(order1, order0, token0BalanceQuery.data);
-
+    console.log('sourceCorrect', sourceCorrect);
+    console.log('targetCorrect', targetCorrect);
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired) {
         openModal('txConfirm', {

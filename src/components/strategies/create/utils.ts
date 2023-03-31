@@ -64,6 +64,7 @@ export const createStrategyAction = async ({
   if (!base || !quote || !user) {
     throw new Error('error in create strategy: missing data ');
   }
+  console.log('create strategy 123');
 
   mutation.mutate(
     {
@@ -111,7 +112,7 @@ export const checkErrors = (
 ) => {
   const minMaxCorrect =
     Number(order.min) > 0 && Number(order.max) > Number(order.min);
-  const priceCorrect = Number(order.price) > 0;
+  const priceCorrect = Number(order.price) >= 0;
   const budgetCorrect =
     !order.budget || Number(order.budget) <= Number(balance);
 
