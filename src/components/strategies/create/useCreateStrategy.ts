@@ -174,6 +174,13 @@ export const useCreateStrategy = () => {
     strategyType,
   } = search;
   const { getTokenById } = useTokens();
+  const [selectedStrategySettings, setSelectedStrategySettings] = useState<
+    | {
+        to: string;
+        search: StrategyCreateLocationGenerics['Search'];
+      }
+    | undefined
+  >();
 
   useEffect(() => {
     if (!baseAddress && !quoteAddress) {
@@ -254,5 +261,7 @@ export const useCreateStrategy = () => {
     strategyType,
     strategyDirection,
     showTypeMenu,
+    selectedStrategySettings,
+    setSelectedStrategySettings,
   };
 };

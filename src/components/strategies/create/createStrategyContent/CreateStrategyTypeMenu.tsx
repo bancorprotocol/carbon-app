@@ -39,6 +39,8 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
   quote,
   strategyType,
+  selectedStrategySettings,
+  setSelectedStrategySettings,
 }) => {
   const {
     items: tabs,
@@ -47,58 +49,81 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   } = useCreateStrategyTypeMenu(base?.address!, quote?.address!, strategyType);
 
   return (
-    <m.div
-      variants={items}
-      className={'space-y-20 rounded-10 bg-silver p-20'}
-      key={'createStrategyTypeMenu'}
-    >
-      <h2>Strategy Type</h2>
-      <TabsMenu>
-        {tabs.map(({ label, to, search }) => (
-          <TabsMenuButton
-            key={label}
-            onClick={() => handleClick(to, search)}
-            isActive={search.strategyType === strategyType}
-          >
-            {label}
-          </TabsMenuButton>
-        ))}
-      </TabsMenu>
+    <>
+      <m.div
+        variants={items}
+        className={'space-y-20 rounded-10 bg-silver p-20'}
+        key={'createStrategyTypeMenu'}
+      >
+        <h2>Strategy Type</h2>
+        <TabsMenu>
+          {tabs.map(({ label, to, search }) => (
+            <TabsMenuButton
+              key={label}
+              onClick={() => {
+                setSelectedStrategySettings(undefined);
+                handleClick(to, search);
+              }}
+              isActive={search.strategyType === strategyType}
+            >
+              {label}
+            </TabsMenuButton>
+          ))}
+        </TabsMenu>
 
-      <div>
-        {strategyType === 'reoccurring' &&
-          BlockIconTextDesc({
-            icon: <IconArrows className={'h-18 w-18'} />,
-            title: 'Automated Linked Orders',
-            description:
-              'Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.',
-          })}
-        {strategyType === 'disposable' &&
-          BlockIconTextDesc({
-            icon: <IconArrowsTransparent className={'h-18 w-18'} />,
-            title: 'Single Use Order',
-            description:
-              'An irreversible buy or sell order at a predefined price or range.',
-          })}
-      </div>
+        <div>
+          {strategyType === 'reoccurring' &&
+            BlockIconTextDesc({
+              icon: <IconArrows className={'h-18 w-18'} />,
+              title: 'Automated Linked Orders',
+              description:
+                'Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.',
+            })}
+          {strategyType === 'disposable' &&
+            BlockIconTextDesc({
+              icon: <IconArrowsTransparent className={'h-18 w-18'} />,
+              title: 'Single Use Order',
+              description:
+                'An irreversible buy or sell order at a predefined price or range.',
+            })}
+        </div>
 
-      <div className={'flex space-x-14'}>
-        {selectedTabItems.map(({ label, svg, to, search }, i) => (
-          <Button
-            key={i}
-            variant={'black'}
-            onClick={() => handleClick(to, search)}
-            fullWidth
-            className={
-              'flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10'
-            }
-          >
-            {svg}
+        <div className={'flex space-x-14'}>
+          {selectedTabItems.map(({ label, svg, to, search }, i) => (
+            <Button
+              key={i}
+              variant={'black'}
+              onClick={() => setSelectedStrategySettings({ to, search })}
+              fullWidth
+              className={`flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10 ${
+                selectedStrategySettings?.search.strategyDirection ===
+                  search.strategyDirection &&
+                selectedStrategySettings?.search.strategySettings ===
+                  search.strategySettings
+                  ? '!border-grey3'
+                  : ''
+              }`}
+            >
+              {svg}
 
-            <span className={'mt-10 text-14'}>{label}</span>
-          </Button>
-        ))}
-      </div>
-    </m.div>
+              <span className={'mt-10 text-14'}>{label}</span>
+            </Button>
+          ))}
+        </div>
+      </m.div>
+      <Button
+        variant={'success'}
+        fullWidth
+        disabled={!selectedStrategySettings}
+        onClick={() =>
+          handleClick(
+            selectedStrategySettings?.to!,
+            selectedStrategySettings?.search!
+          )
+        }
+      >
+        Next Step
+      </Button>
+    </>
   );
 };
