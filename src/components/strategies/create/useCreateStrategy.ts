@@ -222,10 +222,13 @@ export const useCreateStrategy = () => {
     strategyType,
   ]);
 
-  const showTokenSelection = !strategyType || !strategySettings;
+  const showTokenSelection =
+    (!strategyType || !strategySettings) && !templateStrategy;
   const showTypeMenu =
-    !(!base || !quote) && (!strategyType || !strategySettings);
-  const showOrders = !!base && !!quote && !showTypeMenu;
+    !(!base || !quote) &&
+    (!strategyType || !strategySettings) &&
+    !templateStrategy;
+  const showOrders = (!!base && !!quote && !showTypeMenu) || !!templateStrategy;
 
   useEffect(() => {
     if (!showOrders) {
