@@ -36,6 +36,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
             data={data}
             isLoading={isLoading}
             error={error}
+            eventData={eventData}
           />
         ))}
       </div>

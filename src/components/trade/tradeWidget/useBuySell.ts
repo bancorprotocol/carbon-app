@@ -238,7 +238,7 @@ export const useBuySell = ({
     isLiquidityError,
     isTradeBySource,
     openModal,
-    provider?.network.name,
+    provider?.network?.name,
     source,
     sourceInput,
     target,
@@ -291,6 +291,7 @@ export const useBuySell = ({
       buy,
     });
   }, [
+    buy,
     clearInputs,
     isTradeBySource,
     openModal,
@@ -298,7 +299,6 @@ export const useBuySell = ({
     target,
     tradeActionsRes,
     tradeActionsWei,
-    buy,
   ]);
 
   const getTokenFiat = useCallback(

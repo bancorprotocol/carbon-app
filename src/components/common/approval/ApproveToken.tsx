@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
@@ -8,14 +8,21 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
+import { sendEvent, StrategyType, TradeType } from 'services/googleTagManager';
 
 type Props = {
   data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
+  eventData?: TradeType | StrategyType;
 };
 
-export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
+export const ApproveToken: FC<Props> = ({
+  data,
+  isLoading,
+  error,
+  eventData,
+}) => {
   const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
   const { getTokenById } = useTokens();
@@ -25,6 +32,14 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
+
+  useEffect(() => {
+    eventData &&
+      sendEvent('confirmation', 'token_confirmation_unlimited_switch_change', {
+        ...eventData,
+        switch: !isLimited,
+      });
+  }, [eventData, isLimited]);
 
   const onApprove = async () => {
     if (!data || !token) {
@@ -50,6 +65,14 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           });
           setTxBusy(false);
           setTxSuccess(true);
+          isLimited
+            ? eventData && sendEvent('confirmation', 'token_confirm', eventData)
+            : eventData &&
+              sendEvent(
+                'confirmation',
+                'token_confirmation_unlimited_approve',
+                eventData
+              );
         },
         onError: () => {
           // TODO: proper error handling

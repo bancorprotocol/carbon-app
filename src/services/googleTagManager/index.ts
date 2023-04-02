@@ -82,6 +82,7 @@ export type TradeType = {
   blockchain_network?: string;
   transaction_hash?: string;
   message?: string;
+  switch?: boolean;
 };
 
 export type StrategyType = {
