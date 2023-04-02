@@ -38,6 +38,22 @@ type EventStrategySchema = {
   strategy_create: StrategyType;
 };
 
+type EventTradeSchema = {
+  trade_pair_swap: TradeType;
+  trade_pair_change_click: TradeType;
+  trade_pair_change: TradeType;
+  trade_pair_settings_click: TradeType;
+  trade_pair_settings_set: TradeType;
+};
+
+type TradeType = {
+  trade_direction?: 'buy' | 'sell';
+  token_pair: string;
+  buy_token: string;
+  sell_token: string;
+  value_usd?: string;
+};
+
 export type StrategyType = {
   strategy_base_token?: string;
   strategy_quote_token?: string;
@@ -93,6 +109,7 @@ type EventSchema = {
   strategyEdit: EventStrategyEdit;
   navigation: EventNavigationSchema;
   wallet: EventWalletSchema;
+  trade: EventTradeSchema;
 };
 
 type SendEventFn = <

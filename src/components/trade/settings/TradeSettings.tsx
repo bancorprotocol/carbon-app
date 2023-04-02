@@ -1,9 +1,14 @@
-import { Fragment } from 'react';
+import { Token } from 'libs/tokens';
+import { Fragment, FC } from 'react';
+import { sendEvent } from 'services/googleTagManager';
 import { useStore } from 'store';
 import { TradeSettingsRow } from './TradeSettingsRow';
 import { TradeSettingsData } from './utils';
 
-export const TradeSettings = () => {
+export const TradeSettings: FC<{ base: Token; quote: Token }> = ({
+  base,
+  quote,
+}) => {
   const {
     trade: {
       settings: {
@@ -18,6 +23,14 @@ export const TradeSettings = () => {
     },
   } = useStore();
 
+  const handleEvent = () => {
+    sendEvent('trade', 'trade_pair_settings_set', {
+      token_pair: `${base.symbol}/${quote.symbol}`,
+      buy_token: base.symbol,
+      sell_token: quote.symbol,
+    });
+  };
+
   const settingsData: TradeSettingsData[] = [
     {
       id: 'slippageTolerance',
@@ -25,7 +38,10 @@ export const TradeSettings = () => {
       value: slippage,
       prepend: '+',
       append: '%',
-      setValue: setSlippage,
+      setValue: (value) => {
+        setSlippage(value);
+        handleEvent();
+      },
       presets: presets.slippage,
     },
     {
@@ -34,7 +50,10 @@ export const TradeSettings = () => {
       value: deadline,
       prepend: '',
       append: ' Min',
-      setValue: setDeadline,
+      setValue: (value) => {
+        setDeadline(value);
+        handleEvent();
+      },
       presets: presets.deadline,
     },
     {
@@ -43,7 +62,10 @@ export const TradeSettings = () => {
       value: maxOrders,
       prepend: '',
       append: '',
-      setValue: setMaxOrders,
+      setValue: (value) => {
+        setMaxOrders(value);
+        handleEvent();
+      },
       presets: presets.maxOrders,
     },
   ];

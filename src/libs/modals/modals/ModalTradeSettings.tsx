@@ -2,8 +2,17 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { TradeSettings } from 'components/trade/settings/TradeSettings';
 import { useStore } from 'store';
+import { Token } from 'libs/tokens';
 
-export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
+export type ModalTradeSettingsData = {
+  base: Token;
+  quote: Token;
+};
+
+export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
+  id,
+  data,
+}) => {
   const {
     trade: {
       settings: { resetAll, isAllSettingsDefault },
@@ -28,7 +37,7 @@ export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
       }
       size={'md'}
     >
-      <TradeSettings />
+      <TradeSettings base={data.base} quote={data.quote} />
     </ModalSlideOver>
   );
 };

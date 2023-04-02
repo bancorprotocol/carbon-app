@@ -4,6 +4,7 @@ import { Button } from 'components/common/button';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
+import { sendEvent } from 'services/googleTagManager';
 
 type Props = {
   baseToken: Token;
@@ -16,7 +17,14 @@ export const MainMenuTradePairs: FC<Props> = ({ baseToken, quoteToken }) => {
   return (
     <Button
       variant={'secondary'}
-      onClick={openTradePairList}
+      onClick={() => {
+        openTradePairList();
+        sendEvent('trade', 'trade_pair_change_click', {
+          token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
+          buy_token: baseToken.symbol,
+          sell_token: quoteToken.symbol,
+        });
+      }}
       className={
         'flex items-center space-x-10 rounded-full bg-silver py-5 pl-15 pr-15'
       }
