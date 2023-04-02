@@ -44,6 +44,16 @@ type EventTradeSchema = {
   trade_pair_change: TradeType;
   trade_pair_settings_click: TradeType;
   trade_pair_settings_set: TradeType;
+  trade_slippage_tolerance_change: {
+    trade_slippage_tolerance: string;
+  };
+  trade_transaction_expiration_time_change: {
+    trade_transaction_expiration_time: string;
+  };
+  trade_maximum_orders_change: {
+    trade_maximum_orders: string;
+  };
+  trade_reset_all: undefined;
 };
 
 type TradeType = {

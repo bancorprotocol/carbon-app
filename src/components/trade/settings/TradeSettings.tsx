@@ -41,6 +41,9 @@ export const TradeSettings: FC<{ base: Token; quote: Token }> = ({
       setValue: (value) => {
         setSlippage(value);
         handleEvent();
+        sendEvent('trade', 'trade_slippage_tolerance_change', {
+          trade_slippage_tolerance: value,
+        });
       },
       presets: presets.slippage,
     },
@@ -53,6 +56,9 @@ export const TradeSettings: FC<{ base: Token; quote: Token }> = ({
       setValue: (value) => {
         setDeadline(value);
         handleEvent();
+        sendEvent('trade', 'trade_transaction_expiration_time_change', {
+          trade_transaction_expiration_time: value,
+        });
       },
       presets: presets.deadline,
     },
@@ -65,6 +71,9 @@ export const TradeSettings: FC<{ base: Token; quote: Token }> = ({
       setValue: (value) => {
         setMaxOrders(value);
         handleEvent();
+        sendEvent('trade', 'trade_maximum_orders_change', {
+          trade_maximum_orders: value,
+        });
       },
       presets: presets.maxOrders,
     },
