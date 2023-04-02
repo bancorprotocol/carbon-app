@@ -211,6 +211,16 @@ export const useBuySell = ({
         approvalTokens: approval.tokens,
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
+        eventData: {
+          trade_direction: buy ? 'buy' : 'sell',
+          buy_token: target.symbol,
+          sell_token: source.symbol,
+          token_pair: `${target.symbol}/${source.symbol}`,
+          blockchain_network: provider?.network.name,
+          value_usd: isTradeBySource
+            ? getFiatValueSource(sourceInput, true).toString()
+            : getFiatValueTarget(targetInput, true).toString(),
+        },
       });
     } else {
       void tradeFn();
@@ -219,12 +229,16 @@ export const useBuySell = ({
     approval.approvalRequired,
     approval.isLoading,
     approval.tokens,
+    buy,
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,
     errorBaseBalanceSufficient,
+    getFiatValueSource,
+    getFiatValueTarget,
     isLiquidityError,
     isTradeBySource,
     openModal,
+    provider?.network.name,
     source,
     sourceInput,
     target,
@@ -274,6 +288,7 @@ export const useBuySell = ({
       target,
       isTradeBySource,
       onSuccess: clearInputs,
+      buy,
     });
   }, [
     clearInputs,
@@ -283,6 +298,7 @@ export const useBuySell = ({
     target,
     tradeActionsRes,
     tradeActionsWei,
+    buy,
   ]);
 
   const getTokenFiat = useCallback(

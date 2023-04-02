@@ -4,19 +4,27 @@ import { ApproveToken } from 'components/common/approval';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
+import { sendEvent, StrategyType, TradeType } from 'services/googleTagManager';
+import { useEffect } from 'react';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
   buttonLabel?: string;
+  eventData?: TradeType | StrategyType;
 };
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   id,
-  data: { approvalTokens, onConfirm, buttonLabel = 'Confirm' },
+  data: { approvalTokens, onConfirm, buttonLabel = 'Confirm', eventData },
 }) => {
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
+
+  useEffect(() => {
+    eventData &&
+      sendEvent('confirmation', 'token_confirmation_view', eventData);
+  }, [eventData]);
 
   return (
     <Modal id={id} title="Confirm Transaction">

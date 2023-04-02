@@ -61,6 +61,7 @@ export const EditStrategyBudgetContent = ({
         approvalTokens: approval.tokens,
         onConfirm: depositOrWithdrawFunds,
         buttonLabel: `Confirm ${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`,
+        eventData: strategyEventData,
       });
     } else {
       depositOrWithdrawFunds();

@@ -21,6 +21,7 @@ export const useModalTradeRouting = ({
     tradeActionsWei,
     tradeActionsRes,
     onSuccess,
+    buy,
   },
 }: Props) => {
   const { user } = useWeb3();
@@ -28,6 +29,8 @@ export const useModalTradeRouting = ({
   const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.symbol);
   const targetFiatPrice = useGetTokenPrice(target.symbol);
+  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
+  const { getFiatValue: getFiatValueTarget } = useFiatCurrency(target);
   const [selected, setSelected] = useState<
     (Action & { isSelected: boolean })[]
   >(tradeActionsRes.map((data) => ({ ...data, isSelected: true })));
@@ -84,6 +87,15 @@ export const useModalTradeRouting = ({
         approvalTokens: approval.tokens,
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
+        eventData: {
+          trade_direction: buy ? 'buy' : 'sell',
+          buy_token: target.symbol,
+          sell_token: source.symbol,
+          token_pair: `${target.symbol}/${source.symbol}`,
+          value_usd: isTradeBySource
+            ? getFiatValueSource(data?.totalSourceAmount, true).toString()
+            : getFiatValueTarget(data?.totalTargetAmount, true).toString(),
+        },
       });
     } else {
       void tradeFn();
@@ -103,6 +115,9 @@ export const useModalTradeRouting = ({
     data?.totalSourceAmount,
     data?.totalTargetAmount,
     isTradeBySource,
+    buy,
+    getFiatValueSource,
+    getFiatValueTarget,
   ]);
 
   const onSelect = (id: string) => {

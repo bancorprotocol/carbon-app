@@ -19,6 +19,13 @@ type EventGeneralSchema = {
   };
 };
 
+type EventTokenConfirmationSchema = {
+  token_confirmation_view: StrategyType | TradeType;
+  token_confirmation_unlimited_switch_change: StrategyType | TradeType;
+  token_confirmation_unlimited_approve: StrategyType | TradeType;
+  token_confirm: StrategyType | TradeType;
+};
+
 type EventStrategySchema = {
   new_strategy_create_click: undefined;
   new_strategy_base_token_select: { token: string };
@@ -66,7 +73,7 @@ type EventTradeSchema = {
   trade_sell: TradeType;
 };
 
-type TradeType = {
+export type TradeType = {
   trade_direction?: 'buy' | 'sell';
   token_pair?: string;
   buy_token?: string;
@@ -133,6 +140,7 @@ type EventSchema = {
   navigation: EventNavigationSchema;
   wallet: EventWalletSchema;
   trade: EventTradeSchema;
+  confirmation: EventTokenConfirmationSchema;
 };
 
 type SendEventFn = <
