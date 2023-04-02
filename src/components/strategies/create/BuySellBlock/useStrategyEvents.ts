@@ -9,11 +9,13 @@ export const useStrategyEvents = ({
   quote,
   order,
   buy,
+  insufficientBalance,
 }: {
   base: Token;
   quote: Token;
   order: OrderCreate;
   buy?: boolean;
+  insufficientBalance?: boolean;
 }) => {
   const firstTimeRender = useRef({ price: true, budget: true, type: true });
   const budgetToken = buy ? quote : base;
@@ -44,6 +46,13 @@ export const useStrategyEvents = ({
       strategy_sell_high_token_max_price: order.max,
     };
   };
+
+  useEffect(() => {
+    sendEvent('strategy', 'strategy_error_show', {
+      section: buy ? 'Buy Low' : 'Sell High',
+      message: 'Insufficient balance',
+    });
+  }, [buy, insufficientBalance]);
 
   useEffect(() => {
     if (!firstTimeRender.current.type) {
