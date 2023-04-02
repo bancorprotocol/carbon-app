@@ -49,7 +49,7 @@ export const EditStrategyBudgetContent = ({
       ](new BigNumber(order1.budget))
     : new BigNumber(strategy.order1.balance);
 
-  const handleActions = () => {
+  const handleEvents = () => {
     type === 'withdraw'
       ? sendEvent('strategyEdit', 'strategy_withdraw', strategyEventData)
       : sendEvent('strategyEdit', 'strategy_deposit', strategyEventData);
@@ -88,13 +88,13 @@ export const EditStrategyBudgetContent = ({
           updatedStrategy,
           order0.marginalPriceOption,
           order1.marginalPriceOption,
-          handleActions
+          handleEvents
         )
       : depositBudget(
           updatedStrategy,
           order0.marginalPriceOption,
           order1.marginalPriceOption,
-          handleActions
+          handleEvents
         );
   };
 
