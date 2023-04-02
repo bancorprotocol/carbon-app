@@ -46,8 +46,20 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
         fullWidth
         disabled={approvalRequired}
         onClick={async () => {
+          eventData &&
+            sendEvent(
+              'transactionConfirmation',
+              'transaction_confirmation_request',
+              eventData
+            );
           closeModal(id);
           await onConfirm();
+          eventData &&
+            sendEvent(
+              'transactionConfirmation',
+              'transaction_confirm',
+              eventData
+            );
         }}
       >
         {buttonLabel}

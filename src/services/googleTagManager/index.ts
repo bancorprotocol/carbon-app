@@ -28,6 +28,22 @@ type EventTokenConfirmationSchema = {
   token_confirm: (StrategyType | TradeType) & ConfirmationType;
 };
 
+export type TransactionType = {
+  trade_direction?: 'buy' | 'sell';
+  trade_type?: 'strategy' | 'trade';
+  token_pair?: string;
+  buy_token?: string;
+  sell_token?: string;
+  value_usd?: string;
+  blockchain_network?: string;
+  transaction_hash?: string;
+};
+
+type EventTransactionConfirmationSchema = {
+  transaction_confirmation_request: TradeType | StrategyType;
+  transaction_confirm: TradeType | StrategyType;
+};
+
 type EventStrategySchema = {
   new_strategy_create_click: undefined;
   new_strategy_base_token_select: { token: string };
@@ -149,6 +165,7 @@ type EventSchema = {
   wallet: EventWalletSchema;
   trade: EventTradeSchema;
   confirmation: EventTokenConfirmationSchema;
+  transactionConfirmation: EventTransactionConfirmationSchema;
 };
 
 type SendEventFn = <
