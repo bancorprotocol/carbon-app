@@ -5,6 +5,8 @@ import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
+import { sendEvent } from 'services/googleTagManager';
+import { useStrategyEvent } from '../create/useStrategyEvent';
 
 type EditStrategyPricesContentProps = {
   type: 'editPrices' | 'renew';
@@ -29,7 +31,12 @@ export const EditStrategyPricesContent = ({
   const {
     history: { back },
   } = useLocation();
-
+  const strategyEventData = useStrategyEvent({
+    base: strategy.base,
+    quote: strategy.quote,
+    order0,
+    order1,
+  });
   const handleOnActionClick = () => {
     const newOrder0 = {
       balance: strategy.order0.balance,
@@ -48,11 +55,19 @@ export const EditStrategyPricesContent = ({
           order0: newOrder0,
           order1: newOrder1,
         })
-      : changeRateStrategy({
-          ...strategy,
-          order0: newOrder0,
-          order1: newOrder1,
-        });
+      : changeRateStrategy(
+          {
+            ...strategy,
+            order0: newOrder0,
+            order1: newOrder1,
+          },
+          () =>
+            sendEvent(
+              'strategyEdit',
+              'strategy_change_rates',
+              strategyEventData
+            )
+        );
   };
 
   const isOrderValid = (order: OrderCreate) => {

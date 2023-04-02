@@ -35,7 +35,7 @@ export const StrategyBlockOrderStatus: FC<{
       <div>
         {status === StrategyStatus.Active && (
           <Tooltip
-            trigger="click"
+            delay={0}
             element={
               <div className="flex flex-col gap-10">
                 <div className="text-14">Strategy Notification</div>

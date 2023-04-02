@@ -14,6 +14,9 @@ import {
   tooltipTextByStrategyEditOptionsId,
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { useOrder } from 'components/strategies/create/useOrder';
+import { useStrategyEvent } from 'components/strategies/create/useStrategyEvent';
+import { sendEvent } from 'services/googleTagManager';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -30,6 +33,15 @@ export const StrategyBlockManage: FC<{
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
   const { belowBreakpoint } = useBreakpoints();
+  const order0 = useOrder(strategy.order0);
+  const order1 = useOrder(strategy.order1);
+
+  const strategyEventData = useStrategyEvent({
+    base: strategy.base,
+    quote: strategy.quote,
+    order0,
+    order1,
+  });
 
   const {
     strategies: { setStrategyToEdit },
@@ -46,6 +58,11 @@ export const StrategyBlockManage: FC<{
       name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
+        sendEvent(
+          'strategyEdit',
+          'strategy_change_rates_click',
+          strategyEventData
+        );
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'editPrices' },
@@ -57,6 +74,7 @@ export const StrategyBlockManage: FC<{
       name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
+        sendEvent('strategyEdit', 'strategy_deposit_click', strategyEventData);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'deposit' },
@@ -70,6 +88,7 @@ export const StrategyBlockManage: FC<{
       name: 'Withdraw Funds',
       action: () => {
         setStrategyToEdit(strategy);
+        sendEvent('strategyEdit', 'strategy_withdraw_click', strategyEventData);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'withdraw' },
@@ -81,7 +100,14 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
-      action: () => duplicate(strategy),
+      action: () => {
+        sendEvent(
+          'strategyEdit',
+          'strategy_duplicate_click',
+          strategyEventData
+        );
+        duplicate(strategy);
+      },
     });
   }
   if (strategy.status === StrategyStatus.Active) {

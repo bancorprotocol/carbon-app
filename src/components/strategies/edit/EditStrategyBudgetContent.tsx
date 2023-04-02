@@ -8,6 +8,8 @@ import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
+import { useStrategyEvent } from '../create/useStrategyEvent';
+import { sendEvent } from 'services/googleTagManager';
 
 type EditStrategyBudgetContentProps = {
   type: 'withdraw' | 'deposit';
@@ -21,6 +23,13 @@ export const EditStrategyBudgetContent = ({
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
+  const strategyEventData = useStrategyEvent({
+    base: strategy.base,
+    quote: strategy.quote,
+    order0,
+    order1,
+  });
+
   const { approval } = useEditStrategy(strategy, order0, order1);
   const { openModal } = useModal();
 
@@ -39,6 +48,12 @@ export const EditStrategyBudgetContent = ({
         type === 'withdraw' ? 'minus' : 'plus'
       ](new BigNumber(order1.budget))
     : new BigNumber(strategy.order1.balance);
+
+  const handleActions = () => {
+    type === 'withdraw'
+      ? sendEvent('strategyEdit', 'strategy_withdraw', strategyEventData)
+      : sendEvent('strategyEdit', 'strategy_deposit', strategyEventData);
+  };
 
   const handleOnActionClick = () => {
     if (approval.approvalRequired) {
@@ -71,12 +86,14 @@ export const EditStrategyBudgetContent = ({
       ? withdrawBudget(
           updatedStrategy,
           order0.marginalPriceOption,
-          order1.marginalPriceOption
+          order1.marginalPriceOption,
+          handleActions
         )
       : depositBudget(
           updatedStrategy,
           order0.marginalPriceOption,
-          order1.marginalPriceOption
+          order1.marginalPriceOption,
+          handleActions
         );
   };
 

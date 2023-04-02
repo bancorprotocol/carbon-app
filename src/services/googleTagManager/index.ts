@@ -47,7 +47,7 @@ export type StrategyType = {
   strategy_buy_low_token_min_price?: string;
   strategy_buy_low_token_max_price?: string;
   strategy_buy_low_pay_token?: string;
-  strategy_buy_low_order_type?: 'limit' | 'range';
+  strategy_buy_low_order_type?: string;
   strategy_buy_low_budget?: string;
   strategy_buy_low_budget_usd?: string;
   strategy_sell_high_token?: string;
@@ -55,9 +55,21 @@ export type StrategyType = {
   strategy_sell_high_token_min_price?: string;
   strategy_sell_high_token_max_price?: string;
   strategy_sell_high_receive_token?: string;
-  strategy_sell_high_order_type?: 'limit' | 'range';
+  strategy_sell_high_order_type?: string;
   strategy_sell_high_budget?: string;
   strategy_sell_high_budget_usd?: string;
+};
+
+type EventStrategyEdit = {
+  strategy_change_rates_click: StrategyType;
+  strategy_change_rates: StrategyType;
+  strategy_deposit_click: StrategyType;
+  strategy_deposit: StrategyType;
+  strategy_withdraw_click: StrategyType;
+  strategy_withdraw: StrategyType;
+  strategy_delete: StrategyType;
+  strategy_duplicate_click: StrategyType;
+  strategy_pause: StrategyType;
 };
 
 type EventNavigationSchema = {
@@ -78,6 +90,7 @@ type EventWalletSchema = {
 type EventSchema = {
   general: EventGeneralSchema;
   strategy: EventStrategySchema;
+  strategyEdit: EventStrategyEdit;
   navigation: EventNavigationSchema;
   wallet: EventWalletSchema;
 };

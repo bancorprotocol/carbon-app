@@ -13,7 +13,10 @@ export const useDeleteStrategy = () => {
   const deleteMutation = useDeleteStrategyQuery();
   const cache = useQueryClient();
 
-  const deleteStrategy = async (strategy: Strategy) => {
+  const deleteStrategy = async (
+    strategy: Strategy,
+    successEventsCb?: () => void
+  ) => {
     const { base, quote, encoded } = strategy;
 
     if (!base || !quote || !user) {
@@ -35,6 +38,7 @@ export const useDeleteStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           console.error('delete mutation failed', e);
