@@ -66,12 +66,16 @@ export const ApproveToken: FC<Props> = ({
           setTxBusy(false);
           setTxSuccess(true);
           isLimited
-            ? eventData && sendEvent('confirmation', 'token_confirm', eventData)
+            ? eventData &&
+              sendEvent('confirmation', 'token_confirm', {
+                ...eventData,
+                token: token.symbol,
+              })
             : eventData &&
               sendEvent(
                 'confirmation',
                 'token_confirmation_unlimited_approve',
-                eventData
+                { ...eventData, token: token.symbol }
               );
         },
         onError: () => {

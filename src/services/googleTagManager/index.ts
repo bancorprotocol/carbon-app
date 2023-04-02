@@ -20,10 +20,12 @@ type EventGeneralSchema = {
 };
 
 type EventTokenConfirmationSchema = {
-  token_confirmation_view: StrategyType | TradeType;
-  token_confirmation_unlimited_switch_change: StrategyType | TradeType;
-  token_confirmation_unlimited_approve: StrategyType | TradeType;
-  token_confirm: StrategyType | TradeType;
+  token_confirmation_view: (StrategyType | TradeType) & ConfirmationType;
+  token_confirmation_unlimited_switch_change: (StrategyType | TradeType) &
+    ConfirmationType;
+  token_confirmation_unlimited_approve: (StrategyType | TradeType) &
+    ConfirmationType;
+  token_confirm: (StrategyType | TradeType) & ConfirmationType;
 };
 
 type EventStrategySchema = {
@@ -83,6 +85,11 @@ export type TradeType = {
   transaction_hash?: string;
   message?: string;
   switch?: boolean;
+};
+
+export type ConfirmationType = {
+  switch?: boolean;
+  token?: string;
 };
 
 export type StrategyType = {
