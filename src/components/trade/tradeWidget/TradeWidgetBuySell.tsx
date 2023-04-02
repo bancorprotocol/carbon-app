@@ -9,6 +9,8 @@ import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
+import { sendEvent } from 'services/googleTagManager';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -38,11 +40,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
+  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
+  const { getFiatValue: getFiatValueTarget } = useFiatCurrency(target);
+
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
 
   const slippage = calcSlippage();
-
   const getRate = () => {
     if (!rate) return '...';
 
@@ -61,6 +65,28 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       ? 'loading'
       : prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
+  };
+
+  const handleEvents = (value: string, isSource = false) => {
+    isSource
+      ? sendEvent('trade', buy ? 'trade_buy_pay_set' : 'trade_sell_pay_set', {
+          trade_direction: buy ? 'buy' : 'sell',
+          buy_token: target.symbol,
+          sell_token: source.symbol,
+          token_pair: `${target.symbol}/${source.symbol}`,
+          value_usd: getFiatValueSource(value, true).toString(),
+        })
+      : sendEvent(
+          'trade',
+          buy ? 'trade_buy_receive_set' : 'trade_sell_receive_set',
+          {
+            trade_direction: buy ? 'buy' : 'sell',
+            buy_token: target.symbol,
+            sell_token: source.symbol,
+            token_pair: `${target.symbol}/${source.symbol}`,
+            value_usd: getFiatValueTarget(value, true).toString(),
+          }
+        );
   };
 
   const showRouting =
@@ -86,7 +112,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             token={source}
             isBalanceLoading={sourceBalanceQuery.isLoading}
             value={sourceInput}
-            setValue={setSourceInput}
+            setValue={(value) => {
+              setSourceInput(value);
+              handleEvents(value, true);
+            }}
             balance={sourceBalanceQuery.data}
             onKeystroke={() => onInputChange(true)}
             isLoading={byTargetQuery.isFetching}
@@ -111,7 +140,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
             token={target}
             value={targetInput}
-            setValue={setTargetInput}
+            setValue={(value) => {
+              setTargetInput(value);
+              handleEvents(value);
+            }}
             placeholder={'Total Amount'}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
@@ -153,7 +185,15 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
       <Button
         disabled={!hasEnoughLiquidity}
-        onClick={handleCTAClick}
+        onClick={() => {
+          handleCTAClick();
+          sendEvent('trade', buy ? 'trade_buy_click' : 'trade_sell_click', {
+            trade_direction: buy ? 'buy' : 'sell',
+            buy_token: target.symbol,
+            sell_token: source.symbol,
+            token_pair: `${target.symbol}/${source.symbol}`,
+          });
+        }}
         variant={buy ? 'success' : 'error'}
         fullWidth
         className={'mt-20'}

@@ -54,6 +54,12 @@ type EventTradeSchema = {
     trade_maximum_orders: string;
   };
   trade_reset_all: undefined;
+  trade_buy_pay_set: TradeType;
+  trade_buy_receive_set: TradeType;
+  trade_buy_click: TradeType;
+  trade_sell_pay_set: TradeType;
+  trade_sell_receive_set: TradeType;
+  trade_sell_click: TradeType;
 };
 
 type TradeType = {
