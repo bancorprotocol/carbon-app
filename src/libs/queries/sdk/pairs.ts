@@ -3,9 +3,18 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
-import { carbonSDK } from 'libs/sdk';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { carbonSDK } from 'libs/sdk';
+import { lsService } from 'services/localeStorage';
+
+const getCachedData = () => {
+  const cachedPairs = lsService.getItem('tokenPairsCache');
+  if (cachedPairs && cachedPairs.timestamp > Date.now() - 1000 * 60 * 60) {
+    return cachedPairs.pairs;
+  }
+  return undefined;
+};
 
 export const useGetTradePairsData = () => {
   const { isInitialized } = useCarbonSDK();
@@ -21,28 +30,29 @@ export const useGetTradePairsData = () => {
   return useQuery({
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
-      console.log('useGetTradePairsData');
-      const pairs = carbonSDK.pairs;
-      console.log('pairs', pairs);
-      const pairsWithLiquidity = pairs.filter((pair) => {
-        const buy = carbonSDK.hasLiquidityByPair(pair[0], pair[1]);
-        const sell = carbonSDK.hasLiquidityByPair(pair[1], pair[0]);
-        return buy || sell;
-      });
-      const promises = pairsWithLiquidity.map(async (pair) => ({
+      const pairs = await carbonSDK.getAllTokenPairs();
+      const promises = pairs.map(async (pair) => ({
         baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),
         quoteToken: getTokenById(pair[1]) ?? (await _getTknData(pair[1])),
       }));
       const result = await Promise.all(promises);
 
-      return [
+      const pairsWithInverse = [
         ...result,
         ...result.map((p) => ({
           baseToken: p.quoteToken,
           quoteToken: p.baseToken,
         })),
       ];
+
+      lsService.setItem('tokenPairsCache', {
+        pairs: pairsWithInverse,
+        timestamp: Date.now(),
+      });
+
+      return pairsWithInverse;
     },
+    placeholderData: getCachedData(),
     enabled: !!tokens.length && isInitialized,
     retry: 1,
     staleTime: ONE_DAY_IN_MS,

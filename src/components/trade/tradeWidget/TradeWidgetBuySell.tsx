@@ -91,6 +91,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             onKeystroke={() => onInputChange(true)}
             isLoading={byTargetQuery.isFetching}
             isError={!!errorMsgSource}
+            disabled={!hasEnoughLiquidity}
           />
           <div className={'flex justify-between text-14'}>
             <div className={'text-white/50'}>You receive</div>
@@ -116,6 +117,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}
             slippage={slippage}
+            disabled={!hasEnoughLiquidity}
           />
           <div
             className={

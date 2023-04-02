@@ -1,40 +1,46 @@
 import {
   OrderBook,
-  orderBookConfig,
   OrderRow,
   useGetOrderBook,
+  useGetOrderBookLastTradeBuy,
 } from 'libs/queries/sdk/orderBook';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { orderBy } from 'lodash';
 import { useTokens } from 'hooks/useTokens';
+import { useStore } from 'store';
 
 const _subtractPrevAmount = (
   data: OrderRow[],
   amount: string,
   rate: string,
+  total: string,
   i: number
 ) => {
   const prevAmount = data[i - 1]?.amount || '0';
+  const prevTotal = data[i - 1]?.total || '0';
   const newAmount = new BigNumber(amount).minus(prevAmount);
-  const totalAmount = newAmount.times(rate);
+  const newTotal = new BigNumber(total).minus(prevTotal);
 
   return {
     rate,
     amount: newAmount.toString(),
-    total: totalAmount.toString(),
+    total: newTotal.toString(),
   };
 };
 
 const buildOrders = (
   data: OrderRow[],
   baseDecimals: number,
-  quoteDecimals: number
+  quoteDecimals: number,
+  buckets: number
 ): OrderRow[] => {
   return data
-    .map(({ amount, rate }, i) => _subtractPrevAmount(data, amount, rate, i))
+    .map(({ amount, rate, total }, i) =>
+      _subtractPrevAmount(data, amount, rate, total, i)
+    )
     .filter(({ amount }) => amount !== '0')
-    .splice(0, orderBookConfig.buckets.orderBook)
+    .splice(0, buckets)
     .map(({ amount, rate, total }) => ({
       rate: new BigNumber(rate).toFixed(quoteDecimals, 1),
       amount: new BigNumber(amount).toFixed(baseDecimals, 1),
@@ -43,7 +49,13 @@ const buildOrders = (
 };
 
 export const useOrderBookWidget = (base?: string, quote?: string) => {
-  const orderBookQuery = useGetOrderBook(base, quote);
+  const {
+    orderBook: {
+      settings: { steps, orderBookBuckets },
+    },
+  } = useStore();
+  const orderBookQuery = useGetOrderBook(steps, base, quote);
+  const lastTradeBuyQuery = useGetOrderBookLastTradeBuy(quote, base);
   const { getTokenById } = useTokens();
   const { data } = orderBookQuery;
 
@@ -55,11 +67,23 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
     const sell = orderBy(data?.sell || [], ({ rate }) => +rate, 'asc');
 
     return {
-      buy: buildOrders(buy, baseDecimals, quoteDecimals),
-      sell: buildOrders(sell, baseDecimals, quoteDecimals),
+      buy: buildOrders(buy, baseDecimals, quoteDecimals, orderBookBuckets),
+      sell: buildOrders(sell, baseDecimals, quoteDecimals, orderBookBuckets),
       middleRate: data?.middleRate || '0',
     };
-  }, [baseDecimals, data?.buy, data?.middleRate, data?.sell, quoteDecimals]);
+  }, [
+    baseDecimals,
+    data?.buy,
+    data?.middleRate,
+    data?.sell,
+    orderBookBuckets,
+    quoteDecimals,
+  ]);
 
-  return { ...orderBookQuery, data: orders };
+  return {
+    ...orderBookQuery,
+    data: orders,
+    isLastTradeBuy: lastTradeBuyQuery.data,
+    isLastTradeLoading: lastTradeBuyQuery.isLoading,
+  };
 };

@@ -1,14 +1,9 @@
-import { useEffect } from 'react';
-import { useNavigate, useSearch } from '@tanstack/react-location';
 import { UseQueryResult } from '@tanstack/react-query';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { CreateStrategyOrders } from './CreateStrategyOrders';
 import { CreateStrategyGraph } from './CreateStrategyGraph';
 import { CreateStrategyTokenSelection } from './CreateStrategyTokenSelection';
-import { useTokens } from 'hooks/useTokens';
 import { OrderCreate } from './useOrder';
 import { Token } from 'libs/tokens';
-import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 
 type CreateStrategyContentProps = {
   base: Token | undefined;
@@ -43,39 +38,6 @@ export const CreateStrategyContent = ({
   token0BalanceQuery,
   token1BalanceQuery,
 }: CreateStrategyContentProps) => {
-  const navigate = useNavigate<MyLocationGenerics>();
-  const search = useSearch<MyLocationGenerics>();
-  const { base: baseAddress, quote: quoteAddress } = search;
-  const { getTokenById } = useTokens();
-
-  useEffect(() => {
-    navigate({
-      search: {
-        ...search,
-        ...{
-          ...(base && {
-            base: base.address,
-          }),
-          ...(quote && {
-            quote: quote.address,
-          }),
-        },
-      },
-    });
-    if (pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`]) {
-      setShowGraph(true);
-    }
-    if (!base || !quote) {
-      setShowGraph(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [base, quote, setShowGraph, navigate]);
-
-  useEffect(() => {
-    setBase(getTokenById(baseAddress || ''));
-    setQuote(getTokenById(quoteAddress || ''));
-  }, [setBase, setQuote, getTokenById, baseAddress, quoteAddress]);
-
   return (
     <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
       <div
