@@ -11,6 +11,7 @@ import { IS_TENDERLY_FORK } from 'libs/web3';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { sendEvent } from 'services/googleTagManager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useEffect } from 'react';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -42,6 +43,29 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
   const { getFiatValue: getFiatValueTarget } = useFiatCurrency(target);
+
+  useEffect(() => {
+    errorMsgSource &&
+      sendEvent('trade', 'trade_error_show', {
+        trade_direction: buy ? 'buy' : 'sell',
+        buy_token: target.symbol,
+        sell_token: source.symbol,
+        token_pair: `${target.symbol}/${source.symbol}`,
+        value_usd: getFiatValueSource(sourceInput, true).toString(),
+        message: errorMsgSource,
+      });
+
+    errorMsgTarget &&
+      sendEvent('trade', 'trade_error_show', {
+        trade_direction: buy ? 'buy' : 'sell',
+        buy_token: target.symbol,
+        sell_token: source.symbol,
+        token_pair: `${target.symbol}/${source.symbol}`,
+        value_usd: getFiatValueTarget(targetInput, true).toString(),
+        message: errorMsgTarget,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMsgSource, errorMsgTarget]);
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;

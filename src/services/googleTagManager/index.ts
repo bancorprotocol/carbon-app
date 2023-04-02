@@ -39,6 +39,8 @@ type EventStrategySchema = {
 };
 
 type EventTradeSchema = {
+  trade_warning_show: TradeType;
+  trade_error_show: TradeType;
   trade_pair_swap: TradeType;
   trade_pair_change_click: TradeType;
   trade_pair_change: TradeType;
@@ -66,12 +68,13 @@ type EventTradeSchema = {
 
 type TradeType = {
   trade_direction?: 'buy' | 'sell';
-  token_pair: string;
-  buy_token: string;
-  sell_token: string;
+  token_pair?: string;
+  buy_token?: string;
+  sell_token?: string;
   value_usd?: string;
   blockchain_network?: string;
   transaction_hash?: string;
+  message?: string;
 };
 
 export type StrategyType = {
