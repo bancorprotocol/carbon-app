@@ -10,13 +10,15 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
+import { sendEvent } from 'services/googleTagManager';
 
 export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
+  buy,
 }: TradeWidgetBuySellProps) => {
-  const { user } = useWeb3();
+  const { user, provider } = useWeb3();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.symbol);
@@ -34,6 +36,9 @@ export const useBuySell = ({
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
 
+  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
+  const { getFiatValue: getFiatValueTarget } = useFiatCurrency(target);
+
   const clearInputs = useCallback(() => {
     setSourceInput('');
     setTargetInput('');
@@ -43,7 +48,20 @@ export const useBuySell = ({
     source,
     sourceInput,
     isTradeBySource,
-    onSuccess: clearInputs,
+    onSuccess: (txHash: string) => {
+      clearInputs();
+      sendEvent('trade', buy ? 'trade_buy' : 'trade_sell', {
+        trade_direction: buy ? 'buy' : 'sell',
+        buy_token: target.symbol,
+        sell_token: source.symbol,
+        token_pair: `${target.symbol}/${source.symbol}`,
+        blockchain_network: provider?.network.name,
+        transaction_hash: txHash,
+        value_usd: isTradeBySource
+          ? getFiatValueSource(sourceInput, true).toString()
+          : getFiatValueTarget(targetInput, true).toString(),
+      });
+    },
   });
 
   const bySourceQuery = useGetTradeData({

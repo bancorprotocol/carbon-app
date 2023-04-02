@@ -60,6 +60,8 @@ type EventTradeSchema = {
   trade_sell_pay_set: TradeType;
   trade_sell_receive_set: TradeType;
   trade_sell_click: TradeType;
+  trade_buy: TradeType;
+  trade_sell: TradeType;
 };
 
 type TradeType = {
@@ -68,6 +70,8 @@ type TradeType = {
   buy_token: string;
   sell_token: string;
   value_usd?: string;
+  blockchain_network?: string;
+  transaction_hash?: string;
 };
 
 export type StrategyType = {

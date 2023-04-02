@@ -100,7 +100,7 @@ export const useTradeAction = ({
         from: source.symbol,
         to: target.symbol,
       });
-      onSuccess?.();
+      onSuccess?.(tx.hash);
 
       void cache.invalidateQueries(
         QueryKey.approval(user, source.address, config.carbon.carbonController)
