@@ -19,7 +19,7 @@ export const InputLimit: FC<{
       setPriceError('');
     } else {
       sendEvent('strategy', 'strategy_error_show', {
-        section: buy ? 'Buy Low' : 'Buy High',
+        section: buy ? 'Buy Low' : 'Sell High',
         message: errorMessage,
       });
       setPriceError(errorMessage);
