@@ -5,9 +5,9 @@
 :root {
   --main-menu-height: 80px;
   --mobile-menu-height: 80px;
-  --blue: rgba(0, 181, 120, 0.25);;
-  --cyan: rgba(0, 181, 120, 0.25);;
-  --green: #00B578;
+  --blue: rgba(0, 181, 120, 0.25);
+  --cyan: rgba(0, 181, 120, 0.25);
+  --green: #00b578;
 }
 
 @layer base {
@@ -128,5 +128,14 @@
   }
   100% {
     transform: translate(50%);
+  }
+}
+
+@keyframes carbonLoading {
+  from {
+    stroke-dashoffset: 5000;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }

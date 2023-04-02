@@ -14,7 +14,7 @@ export const useDeleteStrategy = () => {
   const cache = useQueryClient();
 
   const deleteStrategy = async (strategy: Strategy) => {
-    const { base, quote, encoded } = strategy;
+    const { base, quote, id } = strategy;
 
     if (!base || !quote || !user) {
       throw new Error('error in delete strategy: missing data ');
@@ -22,7 +22,7 @@ export const useDeleteStrategy = () => {
 
     deleteMutation.mutate(
       {
-        encoded,
+        id,
       },
       {
         onSuccess: async (tx) => {

@@ -7,6 +7,9 @@ import { OrderBookSide } from './OrderBookSide';
 export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
   const {
     data: { buy, sell, middleRate },
+    isLoading,
+    isLastTradeLoading,
+    isLastTradeBuy,
   } = useOrderBookWidget(base.address, quote.address);
 
   return (
@@ -22,9 +25,24 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
             'mt-2 rounded-t-4 rounded-b-10 bg-black px-20 py-8 text-14'
           }
         >
-          <OrderBookSide orders={sell} base={base} quote={quote} />
-          <OrderBookWidgetRate buy rate={middleRate} />
-          <OrderBookSide orders={buy} base={base} quote={quote} buy />
+          <OrderBookSide
+            isLoading={isLoading}
+            orders={sell}
+            base={base}
+            quote={quote}
+          />
+          <OrderBookWidgetRate
+            buy={isLastTradeBuy}
+            rate={middleRate}
+            isLoading={isLastTradeLoading}
+          />
+          <OrderBookSide
+            isLoading={isLoading}
+            orders={buy}
+            base={base}
+            quote={quote}
+            buy
+          />
         </div>
       </div>
     </div>

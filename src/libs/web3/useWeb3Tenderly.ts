@@ -18,6 +18,9 @@ export const useWeb3Tenderly = () => {
       ? lsService.setItem('voucherContractAddress', voucherAddress)
       : lsService.removeItem('voucherContractAddress');
 
+    lsService.removeItem('sdkCacheData');
+    lsService.removeItem('tokenPairsCache');
+
     window.location.reload();
   };
 

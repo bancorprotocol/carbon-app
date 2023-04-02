@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
-import { carbonSDK } from 'libs/sdk';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { MatchAction } from '@bancor/carbon-sdk/src/types';
+import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
 import { ONE_DAY_IN_MS } from 'utils/time';
+import { carbonSDK } from 'libs/sdk';
 
 type Props = {
   sourceToken: string;
   targetToken: string;
-  actionsWei: MatchAction[];
+  actionsWei: SerializableMatchAction[];
   isTradeBySource: boolean;
 };
 
@@ -22,8 +22,7 @@ export const useGetTradeActionsQuery = ({
 
   return useQuery(
     QueryKey.tradeActions(
-      sourceToken,
-      targetToken,
+      [sourceToken, targetToken],
       isTradeBySource,
       actionsWei
     ),
