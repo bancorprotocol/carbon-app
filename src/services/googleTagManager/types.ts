@@ -4,7 +4,7 @@ export type GTMData = {
   wallet?: { wallet_id: string; wallet_name: string } | {};
   page?:
     | {
-        page_spa_referral: string;
+        page_referrer_spa: string;
         page_group: Page;
       }
     | {};

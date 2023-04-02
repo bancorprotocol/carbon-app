@@ -15,7 +15,7 @@ const sendGTM = (data: GTMData) => {
 
 type EventGeneralSchema = {
   change_page: {
-    page_spa_referral: string | null;
+    page_referrer_spa: string | null;
   };
 };
 
