@@ -38,7 +38,10 @@ export const BuySellBlock: FC<Props> = ({
 
   const title = (
     <>
-      <Tooltip element={tooltipText}>
+      <Tooltip
+        sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
+        element={tooltipText}
+      >
         <span>{titleText}</span>
       </Tooltip>
       <Imager
@@ -60,6 +63,7 @@ export const BuySellBlock: FC<Props> = ({
         1
       </div>
       <Tooltip
+        sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
         element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
           base.symbol
         } at. Make sure the price is in ${quote.symbol} tokens.`}
@@ -93,6 +97,7 @@ export const BuySellBlock: FC<Props> = ({
           2
         </div>
         <Tooltip
+          sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
           element={
             buy
               ? `The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}. Note: this amount will re-fill once the "Sell" order is used by traders.`

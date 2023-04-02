@@ -53,6 +53,7 @@ export const LimitRangeSection: FC<Props> = ({
             </button>
           </div>
           <Tooltip
+            sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
             element={
               <>
                 This section will define the order details in which you are

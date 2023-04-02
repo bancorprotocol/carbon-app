@@ -61,6 +61,18 @@ type EventStrategySchema = {
   strategy_sell_high_budget_set: StrategyType;
   strategy_create_click: StrategyType;
   strategy_create: StrategyType;
+  strategy_warning_show: {
+    section: string;
+    message: string;
+  };
+  strategy_error_show: {
+    section: string;
+    message: string;
+  };
+  strategy_tooltip_show: {
+    section: string;
+    message: string;
+  };
 };
 
 type EventTradeSchema = {

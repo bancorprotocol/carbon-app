@@ -3,18 +3,23 @@ import { FC, ReactNode } from 'react';
 import { useSpring, m } from 'framer-motion';
 import { Instance } from 'tippy.js';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import { sendEvent } from 'services/googleTagManager';
 
 export const Tooltip: FC<
   TippyProps & {
     element: ReactNode;
     className?: string;
     iconClassName?: string;
+    sendEventOnMount?: {
+      section: 'Token Pair' | 'Buy Low' | 'Sell High';
+    };
   }
 > = ({
   element,
   className = '',
   iconClassName = '',
   maxWidth = 350,
+  sendEventOnMount,
   children = (
     <IconTooltip
       className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
@@ -30,6 +35,11 @@ export const Tooltip: FC<
   const onMount = () => {
     scale.set(1);
     opacity.set(1);
+    sendEventOnMount &&
+      sendEvent('strategy', 'strategy_tooltip_show', {
+        section: sendEventOnMount?.section,
+        message: element?.toLocaleString() || '',
+      });
   };
 
   const onHide = ({ unmount }: Instance) => {

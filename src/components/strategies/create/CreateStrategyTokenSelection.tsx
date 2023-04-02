@@ -24,6 +24,7 @@ export const CreateStrategyTokenSelection = ({
       <div className="mb-14 flex items-center justify-between">
         <h2>Token Pair</h2>
         <Tooltip
+          sendEventOnMount={{ section: 'Token Pair' }}
           element={
             <div>
               Selecting the tokens you would like to create a strategy for.

@@ -72,6 +72,7 @@ export const StrategyBlockBuySell: FC<{
     >
       <div className="flex items-center gap-6">
         <Tooltip
+          sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
           element={
             buy
               ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
@@ -92,6 +93,7 @@ export const StrategyBlockBuySell: FC<{
       <div>
         <div className="mb-5 flex items-center justify-between">
           <Tooltip
+            sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
             element={
               buy
                 ? `This is the price in which you are willing to buy ${token.symbol}.`
@@ -103,6 +105,7 @@ export const StrategyBlockBuySell: FC<{
             </div>
           </Tooltip>
           <Tooltip
+            sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
             maxWidth={430}
             element={
               <>
@@ -123,6 +126,7 @@ export const StrategyBlockBuySell: FC<{
         </div>
         <div className="mb-10 flex items-center justify-between">
           <Tooltip
+            sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
             element={
               buy
                 ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
@@ -133,6 +137,7 @@ export const StrategyBlockBuySell: FC<{
           </Tooltip>
           <div className="flex gap-7">
             <Tooltip
+              sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
               element={
                 <>
                   <div>{`${fullBudget} ${otherToken.symbol}`}</div>
