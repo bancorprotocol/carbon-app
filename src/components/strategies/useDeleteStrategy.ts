@@ -30,15 +30,16 @@ export const useDeleteStrategy = () => {
       {
         onSuccess: async (tx) => {
           dispatchNotification('deleteStrategy', { txHash: tx.hash });
+
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          successEventsCb?.();
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
-          successEventsCb?.();
         },
         onError: (e) => {
           console.error('delete mutation failed', e);

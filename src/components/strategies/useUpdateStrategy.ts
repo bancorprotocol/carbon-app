@@ -45,6 +45,7 @@ export const useUpdateStrategy = () => {
           console.log('tx hash', tx.hash);
           await tx.wait();
 
+          successEventsCb?.();
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
           });
@@ -52,9 +53,6 @@ export const useUpdateStrategy = () => {
         },
         onError: (e) => {
           console.error('update mutation failed', e);
-        },
-        onSettled: () => {
-          successEventsCb?.();
         },
       }
     );
