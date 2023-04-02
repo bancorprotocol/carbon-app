@@ -9,6 +9,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useBudgetWarning } from '../useBudgetWarning';
 import { sendEvent } from 'services/googleTagManager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useEffect } from 'react';
 
 type CreateStrategyOrdersProps = {
   base: Token | undefined;
@@ -41,6 +42,14 @@ export const CreateStrategyOrders = ({
     order0.budget,
     order1.budget
   );
+  const budgetWarningMessage =
+    'Strategies with low budget might be ignored during trading due to gas considerations';
+
+  useEffect(() => {
+    sendEvent('strategy', 'strategy_warning_show', {
+      message: budgetWarningMessage,
+    });
+  }, [showBudgetWarning]);
 
   const onCreateStrategy = () => {
     sendEvent('strategy', 'strategy_create_click', {
@@ -89,10 +98,7 @@ export const CreateStrategyOrders = ({
           <div>
             <IconWarning className={'h-14 w-14'} />
           </div>
-          <span className="font-mono text-12">
-            Strategies with low budget might be ignored during trading due to
-            gas considerations
-          </span>
+          <span className="font-mono text-12">{budgetWarningMessage}</span>
         </div>
       )}
       <m.div variants={items}>

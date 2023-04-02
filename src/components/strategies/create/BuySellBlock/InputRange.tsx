@@ -3,6 +3,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Token } from 'libs/tokens';
+import { sendEvent } from 'services/googleTagManager';
 
 export const InputRange: FC<{
   min: string;
@@ -14,18 +15,32 @@ export const InputRange: FC<{
   error?: string;
   setRangeError: (error: string) => void;
 }> = ({ min, setMin, max, setMax, token, buy, error, setRangeError }) => {
+  const errorMessage = 'Max Price must be higher than min price and not zero';
+
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
-    !max || (+e.target.value > 0 && +max > +e.target.value)
-      ? setRangeError('')
-      : setRangeError('Max Price must be higher than min price and not zero');
+    if (!max || (+e.target.value > 0 && +max > +e.target.value)) {
+      setRangeError('');
+    } else {
+      sendEvent('strategy', 'strategy_error_show', {
+        section: buy ? 'Buy Low' : 'Sell High',
+        message: errorMessage,
+      });
+      setRangeError(errorMessage);
+    }
   };
 
   const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
     setMax(sanitizeNumberInput(e.target.value));
-    !min || (+e.target.value > 0 && +e.target.value > +min)
-      ? setRangeError('')
-      : setRangeError('Max Price must be higher than min price and not zero');
+    if (!min || (+e.target.value > 0 && +e.target.value > +min)) {
+      setRangeError('');
+    } else {
+      sendEvent('strategy', 'strategy_error_show', {
+        section: buy ? 'Buy Low' : 'Sell High',
+        message: errorMessage,
+      });
+      setRangeError(errorMessage);
+    }
   };
 
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {

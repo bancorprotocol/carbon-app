@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -8,6 +8,7 @@ import { TokenInputField } from 'components/common/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
 import { useStrategyEvents } from './useStrategyEvents';
+import { sendEvent } from 'services/googleTagManager';
 
 type Props = {
   base: Token;
@@ -35,6 +36,13 @@ export const BuySellBlock: FC<Props> = ({
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
   } ${base.symbol} at.`;
+
+  useEffect(() => {
+    sendEvent('strategy', 'strategy_error_show', {
+      section: buy ? 'Buy Low' : 'Sell High',
+      message: 'Insufficient balance',
+    });
+  }, [buy, insufficientBalance]);
 
   const title = (
     <>

@@ -1,6 +1,7 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { ChangeEvent, FC, FocusEvent } from 'react';
+import { sendEvent } from 'services/googleTagManager';
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputLimit: FC<{
@@ -9,11 +10,20 @@ export const InputLimit: FC<{
   token: Token;
   error?: string;
   setPriceError: (error: string) => void;
-}> = ({ price, setPrice, token, error, setPriceError }) => {
+  buy?: boolean;
+}> = ({ price, setPrice, token, error, setPriceError, buy }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    +e.target.value > 0
-      ? setPriceError('')
-      : setPriceError('Price Must be greater than 0');
+    const errorMessage = 'Price Must be greater than 0';
+
+    if (+e.target.value > 0) {
+      setPriceError('');
+    } else {
+      sendEvent('strategy', 'strategy_error_show', {
+        section: buy ? 'Buy Low' : 'Buy High',
+        message: errorMessage,
+      });
+      setPriceError(errorMessage);
+    }
     setPrice(sanitizeNumberInput(e.target.value));
   };
 

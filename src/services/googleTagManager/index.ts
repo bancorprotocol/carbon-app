@@ -62,7 +62,7 @@ type EventStrategySchema = {
   strategy_create_click: StrategyType;
   strategy_create: StrategyType;
   strategy_warning_show: {
-    section: string;
+    section?: string;
     message: string;
   };
   strategy_error_show: {

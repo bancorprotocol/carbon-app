@@ -90,6 +90,7 @@ export const LimitRangeSection: FC<Props> = ({
           setPrice={order.setPrice}
           error={order.priceError}
           setPriceError={order.setPriceError}
+          buy={buy}
         />
       )}
     </div>
