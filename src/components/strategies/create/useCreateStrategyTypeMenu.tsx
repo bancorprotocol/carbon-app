@@ -30,7 +30,7 @@ export const useCreateStrategyTypeMenu = (
 ) => {
   const navigate = useNavigate();
 
-  const items: StrategyTypeItem[] = [
+  const types: StrategyTypeItem[] = [
     {
       label: 'Reoccurring',
       to: PathNames.createStrategy,
@@ -51,7 +51,7 @@ export const useCreateStrategyTypeMenu = (
     },
   ];
 
-  const items2: StrategyTypeItemSvg[] = [
+  const typeReoccurring: StrategyTypeItemSvg[] = [
     {
       label: '2 Limits',
       svg: <IconTwoRanges className={'w-60'} />,
@@ -87,7 +87,7 @@ export const useCreateStrategyTypeMenu = (
     },
   ];
 
-  const items3: StrategyTypeItemSvg[] = [
+  const typeDisposable: StrategyTypeItemSvg[] = [
     {
       label: 'Buy Limit',
       svg: <IconBuyLimit className={'w-60 text-green'} />,
@@ -145,13 +145,13 @@ export const useCreateStrategyTypeMenu = (
   const selectedTabItems = useMemo(() => {
     switch (strategyType) {
       case 'reoccurring':
-        return items2;
+        return typeReoccurring;
       case 'disposable':
-        return items3;
+        return typeDisposable;
       default:
         return [];
     }
-  }, [items2, items3, strategyType]);
+  }, [typeReoccurring, typeDisposable, strategyType]);
 
-  return { items, handleClick, selectedTabItems };
+  return { items: types, handleClick, selectedTabItems };
 };
