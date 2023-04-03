@@ -48,14 +48,14 @@ export const useCreateStrategy = () => {
   const approvalTokens = useMemo(() => {
     const arr = [];
 
-    if (base) {
+    if (base && +order1.budget > 0) {
       arr.push({
         ...base,
         spender: spenderAddress,
         amount: order1.budget,
       });
     }
-    if (quote) {
+    if (quote && +order0.budget > 0) {
       arr.push({
         ...quote,
         spender: spenderAddress,
