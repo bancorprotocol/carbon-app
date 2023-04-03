@@ -4,8 +4,9 @@ import { ApproveToken } from 'components/common/approval';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { sendEvent, StrategyType, TradeType } from 'services/googleTagManager';
+import { sendEvent } from 'services/googleTagManager';
 import { useEffect } from 'react';
+import { StrategyType, TradeType } from 'services/googleTagManager/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];

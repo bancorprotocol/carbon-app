@@ -15,7 +15,7 @@ import {
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
-import { useStrategyEvent } from 'components/strategies/create/useStrategyEvent';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { sendEvent } from 'services/googleTagManager';
 
 type itemsType = {
@@ -36,7 +36,7 @@ export const StrategyBlockManage: FC<{
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
 
-  const strategyEventData = useStrategyEvent({
+  const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
     order0,

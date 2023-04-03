@@ -9,7 +9,7 @@ import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
 import { sendEvent } from 'services/googleTagManager';
-import { useStrategyEvent } from 'components/strategies/create/useStrategyEvent';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { useOrder } from 'components/strategies/create/useOrder';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
@@ -25,7 +25,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
 
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-  const strategyEventData = useStrategyEvent({
+  const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
     order0,

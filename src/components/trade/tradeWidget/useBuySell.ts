@@ -44,6 +44,29 @@ export const useBuySell = ({
     setTargetInput('');
   }, []);
 
+  const eventData = useMemo(() => {
+    return {
+      trade_direction: buy ? 'buy' : 'sell',
+      buy_token: target.symbol,
+      sell_token: source.symbol,
+      token_pair: `${target.symbol}/${source.symbol}`,
+      blockchain_network: provider?.network.name,
+      value_usd: isTradeBySource
+        ? getFiatValueSource(sourceInput, true).toString()
+        : getFiatValueTarget(targetInput, true).toString(),
+    };
+  }, [
+    buy,
+    getFiatValueSource,
+    getFiatValueTarget,
+    isTradeBySource,
+    provider?.network.name,
+    source.symbol,
+    sourceInput,
+    target.symbol,
+    targetInput,
+  ]);
+
   const { trade, approval } = useTradeAction({
     source,
     sourceInput,
@@ -51,15 +74,8 @@ export const useBuySell = ({
     onSuccess: (txHash: string) => {
       clearInputs();
       sendEvent('trade', buy ? 'trade_buy' : 'trade_sell', {
-        trade_direction: buy ? 'buy' : 'sell',
-        buy_token: target.symbol,
-        sell_token: source.symbol,
-        token_pair: `${target.symbol}/${source.symbol}`,
-        blockchain_network: provider?.network.name,
+        ...eventData,
         transaction_hash: txHash,
-        value_usd: isTradeBySource
-          ? getFiatValueSource(sourceInput, true).toString()
-          : getFiatValueTarget(targetInput, true).toString(),
       });
     },
   });
@@ -211,16 +227,7 @@ export const useBuySell = ({
         approvalTokens: approval.tokens,
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
-        eventData: {
-          trade_direction: buy ? 'buy' : 'sell',
-          buy_token: target.symbol,
-          sell_token: source.symbol,
-          token_pair: `${target.symbol}/${source.symbol}`,
-          blockchain_network: provider?.network.name,
-          value_usd: isTradeBySource
-            ? getFiatValueSource(sourceInput, true).toString()
-            : getFiatValueTarget(targetInput, true).toString(),
-        },
+        eventData,
       });
     } else {
       void tradeFn();
@@ -229,16 +236,13 @@ export const useBuySell = ({
     approval.approvalRequired,
     approval.isLoading,
     approval.tokens,
-    buy,
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,
     errorBaseBalanceSufficient,
-    getFiatValueSource,
-    getFiatValueTarget,
+    eventData,
     isLiquidityError,
     isTradeBySource,
     openModal,
-    provider?.network?.name,
     source,
     sourceInput,
     target,

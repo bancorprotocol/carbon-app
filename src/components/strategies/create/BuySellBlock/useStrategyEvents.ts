@@ -1,7 +1,8 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { useEffect, useRef } from 'react';
-import { sendEvent, StrategyType } from 'services/googleTagManager';
+import { sendEvent } from 'services/googleTagManager';
+import { StrategyType } from 'services/googleTagManager/types';
 import { OrderCreate } from '../useOrder';
 
 export const useStrategyEvents = ({

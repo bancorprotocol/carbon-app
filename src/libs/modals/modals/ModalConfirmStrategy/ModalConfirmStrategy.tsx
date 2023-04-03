@@ -7,7 +7,7 @@ import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getModalDataByType } from './utils';
-import { useStrategyEvent } from 'components/strategies/create/useStrategyEvent';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { sendEvent } from 'services/googleTagManager';
 
@@ -27,7 +27,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
 
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-  const strategyEventData = useStrategyEvent({
+  const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
     order0,

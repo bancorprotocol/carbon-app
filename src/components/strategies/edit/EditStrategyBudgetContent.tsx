@@ -8,7 +8,7 @@ import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
-import { useStrategyEvent } from '../create/useStrategyEvent';
+import { useStrategyEventData } from '../create/useStrategyEventData';
 import { sendEvent } from 'services/googleTagManager';
 
 type EditStrategyBudgetContentProps = {
@@ -23,7 +23,7 @@ export const EditStrategyBudgetContent = ({
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
-  const strategyEventData = useStrategyEvent({
+  const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
     order0,

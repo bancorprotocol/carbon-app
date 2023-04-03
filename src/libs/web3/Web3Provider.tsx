@@ -24,6 +24,7 @@ const defaultValue: BancorWeb3ProviderContext = {
   networkError: undefined,
   isSupportedNetwork: true,
   switchNetwork: () => {},
+  connector: undefined,
 };
 
 const BancorWeb3CTX = createContext(defaultValue);
@@ -82,6 +83,7 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
         networkError,
         isSupportedNetwork,
         switchNetwork,
+        connector,
       }}
     >
       {children}

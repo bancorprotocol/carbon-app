@@ -8,7 +8,8 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
-import { sendEvent, StrategyType, TradeType } from 'services/googleTagManager';
+import { sendEvent } from 'services/googleTagManager';
+import { StrategyType, TradeType } from 'services/googleTagManager/types';
 
 type Props = {
   data?: ApprovalTokenResult;

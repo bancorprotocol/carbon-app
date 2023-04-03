@@ -37,19 +37,9 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   return <IconWallet {...props} />;
 };
 
-// TODO: Fix that function
-const getWalletName = () => {
-  if (IS_METAMASK_WALLET) {
-    return 'MetaMask';
-  }
-  if (IS_COINBASE_WALLET) {
-    return 'Coinbase Wallet';
-  }
-  return '';
-};
-
 export const MainMenuRightWallet: FC = () => {
-  const { user, disconnect, isSupportedNetwork, isImposter } = useWeb3();
+  const { user, disconnect, isSupportedNetwork, isImposter, connector } =
+    useWeb3();
   const { openModal } = useModal();
 
   const onClickOpenModal = () => {
@@ -60,7 +50,9 @@ export const MainMenuRightWallet: FC = () => {
 
   const onDisconnect = async () => {
     disconnect();
-    sendEvent('wallet', 'wallet_disconnect', { wallet_name: getWalletName() });
+    sendEvent('wallet', 'wallet_disconnect', {
+      wallet_name: connector?.constructor?.name || '',
+    });
   };
 
   if (!isSupportedNetwork) {

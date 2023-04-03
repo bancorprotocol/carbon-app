@@ -2,7 +2,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from './useOrder';
 
-export const useStrategyEvent = ({
+export const useStrategyEventData = ({
   base,
   quote,
   order0,

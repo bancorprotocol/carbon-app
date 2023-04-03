@@ -6,7 +6,7 @@ import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 import { sendEvent } from 'services/googleTagManager';
-import { useStrategyEvent } from '../create/useStrategyEvent';
+import { useStrategyEventData } from '../create/useStrategyEventData';
 
 type EditStrategyPricesContentProps = {
   type: 'editPrices' | 'renew';
@@ -31,7 +31,7 @@ export const EditStrategyPricesContent = ({
   const {
     history: { back },
   } = useLocation();
-  const strategyEventData = useStrategyEvent({
+  const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
     order0,
