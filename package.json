@@ -1,9 +1,9 @@
 {
   "name": "carbon-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
-    "@bancor/carbon-sdk": "^0.0.64-DEV",
+    "@bancor/carbon-sdk": "^0.0.65-DEV",
     "@coinbase/wallet-sdk": "^3.6.3",
     "@ethersproject/providers": "^5.7.1",
     "@popperjs/core": "^2.11.6",
@@ -23,6 +23,7 @@
     "@types/numeral": "^2.0.2",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^3.1.0",
     "@walletconnect/ethereum-provider": "^1.8.0",
     "@web3-react/coinbase-wallet": "8.0.35-beta.0",
     "@web3-react/core": "8.0.35-beta.0",
@@ -47,8 +48,6 @@
     "fuse.js": "^6.6.2",
     "highcharts": "^10.3.3",
     "highcharts-react-official": "^3.1.0",
-    "husky": "^8.0.0",
-    "is-ci": "^3.0.1",
     "lodash": "^4.17.21",
     "numbro": "^2.3.6",
     "numeral": "^2.0.6",
@@ -58,31 +57,22 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-popper": "^2.3.0",
-    "react-scripts": "5.0.1",
     "source-map-explorer": "^2.5.3",
-    "tailwindcss": "^3.1.8",
+    "tailwindcss": "^3.3.1",
     "typechain": "^8.1.0",
     "typescript": "^4.4.2",
+    "vite": "^4.2.1",
+    "vite-plugin-svgr": "^2.4.0",
+    "vite-tsconfig-paths": "^4.0.7",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir 'src/abis/types' 'src/abis/**/*.json'",
     "postinstall": "yarn compile-abis",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "prettier:fix": "prettier --write 'src/**/*.{js,ts,tsx,scss,md,json,yml,yaml}'",
-    "prepare": "is-ci || husky install"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,scss}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
   },
   "eslintConfig": {
     "extends": [
@@ -106,7 +96,7 @@
           "argsIgnorePattern": "^_"
         }
       ],
-      "prettier/prettier": "error"
+      "prettier/prettier": "warn"
     },
     "overrides": [
       {

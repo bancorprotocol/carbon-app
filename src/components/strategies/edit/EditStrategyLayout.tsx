@@ -3,13 +3,12 @@ import { CreateStrategyGraph } from '../create/CreateStrategyGraph';
 import { EditStrategyBudgetContent } from './EditStrategyBudgetContent';
 import { EditStrategyPricesContent } from './EditStrategyPricesContent';
 import { Strategy } from 'libs/queries';
+import { UseStrategyCreateReturn } from '../create';
 
 type EditStrategyLayoutProps = {
   type: EditTypes;
   strategy: Strategy;
-  showGraph: boolean;
-  setShowGraph: (value: boolean) => void;
-};
+} & Pick<UseStrategyCreateReturn, 'showGraph' | 'setShowGraph'>;
 
 export const EditStrategyLayout = ({
   strategy,
@@ -27,7 +26,7 @@ export const EditStrategyLayout = ({
         }`}
       >
         {showGraph && (
-          <CreateStrategyGraph {...{ base, quote, setShowGraph }} />
+          <CreateStrategyGraph {...{ base, quote, showGraph, setShowGraph }} />
         )}
       </div>
       {type === 'deposit' || type === 'withdraw' ? (

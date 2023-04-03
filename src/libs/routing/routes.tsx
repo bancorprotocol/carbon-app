@@ -40,6 +40,18 @@ export const routes: Route[] = [
   {
     path: PathNames.createStrategy,
     element: <CreateStrategyPage />,
+    searchFilters: [
+      (search) => {
+        if (
+          search.strategyType === 'reoccurring' ||
+          search.strategyType === 'disposable' ||
+          search.encodedStrategy
+        ) {
+          return search;
+        }
+        return { ...search, strategyType: 'reoccurring' };
+      },
+    ],
   },
   {
     path: PathNames.editStrategyNew(':id'),
