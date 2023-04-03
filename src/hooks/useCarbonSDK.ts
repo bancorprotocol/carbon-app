@@ -13,6 +13,7 @@ import {
 } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
+import LZString from 'lz-string';
 
 const sdkConfig = {
   rpcUrl: RPC_URLS[1],
@@ -25,7 +26,8 @@ const sdkConfig = {
 const persistSdkCacheDump = async () => {
   console.log('SDK Cache dumped into local storage');
   const cachedDump = await carbonSDK.getCacheDump();
-  lsService.setItem('sdkCacheData', cachedDump);
+  const compressed = LZString.compress(cachedDump);
+  lsService.setItem('sdkCacheData', compressed);
 };
 
 const getTokenDecimalMap = () => {
@@ -85,7 +87,9 @@ export const useCarbonSDK = () => {
   const init = useCallback(async () => {
     try {
       setIsLoading(true);
-      const cacheData = lsService.getItem('sdkCacheData');
+      const compressedCacheData = lsService.getItem('sdkCacheData');
+      const cacheData =
+        compressedCacheData && LZString.decompress(compressedCacheData);
       await carbonSDK.init(sdkConfig, getTokenDecimalMap(), cacheData);
       await carbonSDK.setOnChangeHandlers(
         Comlink.proxy(onPairDataChangedCallback),
