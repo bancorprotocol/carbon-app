@@ -64,7 +64,6 @@ export const createStrategyAction = async ({
   if (!base || !quote || !user) {
     throw new Error('error in create strategy: missing data ');
   }
-  console.log('create strategy 123');
 
   mutation.mutate(
     {
