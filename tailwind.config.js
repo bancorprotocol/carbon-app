@@ -20,7 +20,9 @@ module.exports = {
       '2xl': '1536px',
     },
     colors: ({ colors }) => ({
-      ...colors,
+      white: colors.white,
+      transparent: colors.transparent,
+      black: colors.black,
       primary: colors.blue,
       secondary: colors.gray,
       success: colors.green,
