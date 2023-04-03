@@ -56,6 +56,7 @@ export const CreateStrategyOrders = ({
             buy
             tokenBalanceQuery={token1BalanceQuery}
             isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+            strategyType={strategyType}
           />
         </m.div>
       )}
@@ -67,6 +68,7 @@ export const CreateStrategyOrders = ({
             order={order1}
             tokenBalanceQuery={token0BalanceQuery}
             isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+            strategyType={strategyType}
           />
         </m.div>
       )}

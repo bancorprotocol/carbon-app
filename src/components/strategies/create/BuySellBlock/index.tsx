@@ -7,6 +7,7 @@ import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
+import { StrategyType } from 'components/strategies/create/types';
 
 type Props = {
   base: Token;
@@ -15,6 +16,7 @@ type Props = {
   order: OrderCreate;
   buy?: boolean;
   isBudgetOptional?: boolean;
+  strategyType?: StrategyType;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -24,6 +26,7 @@ export const BuySellBlock: FC<Props> = ({
   order,
   buy,
   isBudgetOptional,
+  strategyType,
 }) => {
   const budgetToken = buy ? quote : base;
 
@@ -94,8 +97,20 @@ export const BuySellBlock: FC<Props> = ({
         <Tooltip
           element={
             buy
-              ? `The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}. Note: this amount will re-fill once the "Sell" order is used by traders.`
-              : `The amount of ${base.symbol} tokens you would like to sell. Note: this amount will re-fill once the "Buy" order is used by traders.`
+              ? `The amount of ${
+                  quote.symbol
+                } tokens you would like to use in order to buy ${
+                  base.symbol
+                }. ${
+                  strategyType === 'reoccurring'
+                    ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
+                    : ''
+                }`
+              : `The amount of ${base.symbol} tokens you would like to sell. ${
+                  strategyType === 'reoccurring'
+                    ? 'Note: this amount will re-fill once the "Buy" order is used by traders.'
+                    : ''
+                }`
           }
         >
           <div className={'font-weight-500 text-white/60'}>
