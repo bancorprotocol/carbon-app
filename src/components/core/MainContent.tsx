@@ -7,6 +7,7 @@ import { useTokens } from 'hooks/useTokens';
 import { ErrorTokenList } from 'components/core/error/ErrorTokenList';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
+import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';
 
 export const MainContent: FC = () => {
   const web3 = useWeb3();
@@ -34,6 +35,10 @@ export const MainContent: FC = () => {
 
   if (tokens.isError) {
     return <ErrorTokenList />;
+  }
+
+  if (web3.isUserBlocked) {
+    return <ErrorUserBlocked />;
   }
 
   return <Outlet />;
