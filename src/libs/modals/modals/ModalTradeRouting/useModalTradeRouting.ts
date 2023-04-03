@@ -118,7 +118,6 @@ export const useModalTradeRouting = ({
     isTradeBySource,
     buy,
     getFiatValueSource,
-    getFiatValueTarget,
   ]);
 
   const onSelect = (id: string) => {
