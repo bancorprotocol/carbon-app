@@ -92,9 +92,10 @@ export const useModalTradeRouting = ({
           buy_token: target.symbol,
           sell_token: source.symbol,
           token_pair: `${target.symbol}/${source.symbol}`,
-          value_usd: isTradeBySource
-            ? getFiatValueSource(data?.totalSourceAmount, true).toString()
-            : getFiatValueTarget(data?.totalTargetAmount, true).toString(),
+          value_usd: getFiatValueSource(
+            data?.totalSourceAmount,
+            true
+          ).toString(),
         },
       });
     } else {

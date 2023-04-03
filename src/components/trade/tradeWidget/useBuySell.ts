@@ -51,20 +51,15 @@ export const useBuySell = ({
       sell_token: source.symbol,
       token_pair: `${target.symbol}/${source.symbol}`,
       blockchain_network: provider?.network.name,
-      value_usd: isTradeBySource
-        ? getFiatValueSource(sourceInput, true).toString()
-        : getFiatValueTarget(targetInput, true).toString(),
+      value_usd: getFiatValueSource(sourceInput, true).toString(),
     };
   }, [
     buy,
     getFiatValueSource,
-    getFiatValueTarget,
-    isTradeBySource,
     provider?.network.name,
     source.symbol,
     sourceInput,
     target.symbol,
-    targetInput,
   ]);
 
   const { trade, approval } = useTradeAction({

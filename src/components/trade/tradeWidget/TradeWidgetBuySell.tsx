@@ -42,7 +42,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
-  const { getFiatValue: getFiatValueTarget } = useFiatCurrency(target);
 
   useEffect(() => {
     errorMsgSource &&
@@ -61,7 +60,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         buy_token: target.symbol,
         sell_token: source.symbol,
         token_pair: `${target.symbol}/${source.symbol}`,
-        value_usd: getFiatValueTarget(targetInput, true).toString(),
+        value_usd: getFiatValueSource(sourceInput, true).toString(),
         message: errorMsgTarget,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,7 +107,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             buy_token: target.symbol,
             sell_token: source.symbol,
             token_pair: `${target.symbol}/${source.symbol}`,
-            value_usd: getFiatValueTarget(value, true).toString(),
+            value_usd: getFiatValueSource(value, true).toString(),
           }
         );
   };
