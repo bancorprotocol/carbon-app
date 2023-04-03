@@ -5,7 +5,7 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { FiatSymbol } from 'store/useFiatCurrencyStore';
 import { TokenPair } from '@bancor/carbon-sdk';
 
-export const isProduction = window.location.host.includes('bancor.network');
+export const isProduction = window?.location.host.includes('bancor.network');
 
 export const uuid = () => {
   return 'xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
