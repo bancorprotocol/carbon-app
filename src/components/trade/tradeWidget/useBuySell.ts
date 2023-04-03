@@ -33,6 +33,11 @@ export const useBuySell = ({
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
+  const { calcMaxInput } = useTradeAction({
+    source,
+    isTradeBySource,
+    sourceInput,
+  });
 
   const clearInputs = useCallback(() => {
     setSourceInput('');
@@ -153,7 +158,10 @@ export const useBuySell = ({
   }, [source.address, target.address]);
 
   const errorBaseBalanceSufficient =
-    !!user && new BigNumber(sourceBalanceQuery.data || 0).lt(sourceInput);
+    !!user &&
+    new BigNumber(sourceBalanceQuery.data || 0).lt(
+      isTradeBySource ? sourceInput : calcMaxInput(sourceInput)
+    );
 
   const handleCTAClick = useCallback(() => {
     if (!user) {
