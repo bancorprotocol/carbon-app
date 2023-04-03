@@ -36,18 +36,18 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   const handleOnActionClick = () => {
     switch (type) {
       case 'pause':
-        pauseStrategy(strategy, () =>
-          sendEvent('strategyEdit', 'strategy_pause', strategyEventData)
-        );
+        pauseStrategy(strategy, () => {
+          sendEvent('strategyEdit', 'strategy_pause', strategyEventData);
+          closeModal(id);
+        });
         break;
       case 'delete':
-        deleteStrategy(strategy, () =>
-          sendEvent('strategyEdit', 'strategy_delete', strategyEventData)
-        );
+        deleteStrategy(strategy, () => {
+          sendEvent('strategyEdit', 'strategy_delete', strategyEventData);
+          closeModal(id);
+        });
         break;
     }
-
-    closeModal(id);
   };
 
   return (
