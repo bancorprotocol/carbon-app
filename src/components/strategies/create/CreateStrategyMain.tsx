@@ -1,81 +1,42 @@
-import { useEffect, useState } from 'react';
 import { m } from 'libs/motion';
 import { list } from './variants';
-import { useCreateStrategy } from './useCreateStrategy';
+import { useCreateStrategy } from 'components/strategies/create/useCreateStrategy';
 import { CreateStrategyHeader } from './CreateStrategyHeader';
-import { CreateStrategyContent } from './CreateStrategyContent';
-import { useSearch } from 'libs/routing';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
-import { useTokens } from 'hooks/useTokens';
-import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
+import { CreateStrategyGraph } from 'components/strategies/create/CreateStrategyGraph';
+import { CreateStrategyTokenSelection } from 'components/strategies/create/CreateStrategyTokenSelection';
+import { CreateStrategyTypeMenu } from 'components/strategies/create/CreateStrategyTypeMenu';
+import { CreateStrategyOrders } from 'components/strategies/create/CreateStrategyOrders';
+import { AnimatePresence } from 'framer-motion';
 
 export const CreateStrategyMain = () => {
-  const [showGraph, setShowGraph] = useState(false);
-
-  const {
-    base,
-    quote,
-    setBase,
-    setQuote,
-    openTokenListModal,
-    showOrders,
-    order0,
-    order1,
-    createStrategy,
-    isCTAdisabled,
-    token0BalanceQuery,
-    token1BalanceQuery,
-  } = useCreateStrategy();
-
-  const search = useSearch<MyLocationGenerics>();
-  const { base: baseAddress, quote: quoteAddress } = search;
-  const { getTokenById } = useTokens();
-
-  useEffect(() => {
-    if (pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`]) {
-      setShowGraph(true);
-    }
-    if (!base || !quote) {
-      setShowGraph(false);
-    }
-  }, [base, quote, setShowGraph]);
-
-  useEffect(() => {
-    if (!baseAddress && !quoteAddress) {
-      return;
-    }
-    setBase(getTokenById(baseAddress || ''));
-    setQuote(getTokenById(quoteAddress || ''));
-  }, [getTokenById, baseAddress, quoteAddress, setBase, setQuote]);
+  const createStrategy = useCreateStrategy();
+  const { showGraph, showTokenSelection, showTypeMenu, showOrders } =
+    createStrategy;
 
   return (
-    <m.div
-      className={`flex flex-col items-center space-y-20 p-20 ${
-        showGraph ? 'justify-between' : 'justify-center'
-      }`}
-      variants={list}
-      initial={'hidden'}
-      animate={'visible'}
-    >
-      <CreateStrategyHeader {...{ showGraph, showOrders, setShowGraph }} />
-      <CreateStrategyContent
-        {...{
-          base,
-          quote,
-          setBase,
-          setQuote,
-          order0,
-          order1,
-          showOrders,
-          setShowGraph,
-          showGraph,
-          isCTAdisabled,
-          createStrategy,
-          openTokenListModal,
-          token0BalanceQuery,
-          token1BalanceQuery,
-        }}
-      />
-    </m.div>
+    <AnimatePresence mode={'sync'}>
+      <m.div
+        className={`flex flex-col items-center space-y-20 p-20 ${
+          showGraph ? 'justify-between' : 'justify-center'
+        }`}
+        variants={list}
+        initial={'hidden'}
+        animate={'visible'}
+      >
+        <CreateStrategyHeader {...createStrategy} />
+
+        <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
+          {showGraph && <CreateStrategyGraph {...createStrategy} />}
+
+          <div className="w-full space-y-20 md:w-[440px]">
+            {showTokenSelection && (
+              <CreateStrategyTokenSelection {...createStrategy} />
+            )}
+            {showTypeMenu && <CreateStrategyTypeMenu {...createStrategy} />}
+            {showOrders && <CreateStrategyOrders {...createStrategy} />}
+          </div>
+        </div>
+      </m.div>
+    </AnimatePresence>
   );
 };

@@ -3,23 +3,23 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
-import { Token } from 'libs/tokens';
+import { FC } from 'react';
+import { PathNames, useNavigate } from 'libs/routing';
+import { UseStrategyCreateReturn } from 'components/strategies/create';
 
-export const CreateStrategyTokenSelection = ({
+export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
   base,
   quote,
-  setBase,
-  setQuote,
   openTokenListModal,
-}: {
-  base: Token | undefined;
-  quote: Token | undefined;
-  setBase: (token: Token | undefined) => void;
-  setQuote: (token: Token | undefined) => void;
-  openTokenListModal: (isSource?: boolean) => void;
 }) => {
+  const navigate = useNavigate();
+
   return (
-    <m.div variants={items} className="bg-secondary rounded-10 p-20">
+    <m.div
+      variants={items}
+      className="bg-secondary rounded-10 p-20"
+      key={'strategyCreateTokenSelection'}
+    >
       <div className="mb-14 flex items-center justify-between">
         <h2>Token Pair</h2>
         <Tooltip
@@ -55,9 +55,14 @@ export const CreateStrategyTokenSelection = ({
               <IconArrow
                 onClick={() => {
                   if (base && quote) {
-                    const temp = base;
-                    setBase(quote);
-                    setQuote(temp);
+                    navigate({
+                      to: PathNames.createStrategy,
+                      search: (search) => ({
+                        ...search,
+                        base: quote.address,
+                        quote: base.address,
+                      }),
+                    });
                   }
                 }}
                 className={`w-12 ${base && quote ? 'cursor-pointer' : ''}`}
