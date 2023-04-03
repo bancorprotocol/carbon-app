@@ -7,7 +7,13 @@ import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
-import { StrategyType } from 'components/strategies/create/types';
+import {
+  StrategyCreateLocationGenerics,
+  StrategyType,
+} from 'components/strategies/create/types';
+import { TabsMenu } from 'components/common/tabs/TabsMenu';
+import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
+import { useNavigate } from 'libs/routing';
 
 type Props = {
   base: Token;
@@ -28,6 +34,7 @@ export const BuySellBlock: FC<Props> = ({
   isBudgetOptional,
   strategyType,
 }) => {
+  const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
 
   const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
@@ -85,6 +92,41 @@ export const BuySellBlock: FC<Props> = ({
           : 'border-red/50 focus-within:border-red'
       }`}
     >
+      {strategyType === 'disposable' && (
+        <div className={'mb-30'}>
+          <TabsMenu>
+            <TabsMenuButton
+              onClick={() => {
+                navigate({
+                  search: (search) => ({
+                    ...search,
+                    strategyDirection: 'buy',
+                  }),
+                  replace: true,
+                });
+              }}
+              isActive={buy}
+            >
+              Buy
+            </TabsMenuButton>
+            <TabsMenuButton
+              onClick={() => {
+                navigate({
+                  search: (search) => ({
+                    ...search,
+                    strategyDirection: 'sell',
+                  }),
+                  replace: true,
+                });
+              }}
+              isActive={!buy}
+            >
+              Sell
+            </TabsMenuButton>
+          </TabsMenu>
+        </div>
+      )}
+
       <LimitRangeSection {...{ base, quote, order, buy, title, inputTitle }} />
       <div className={'flex items-center pt-10 text-14'}>
         <div
