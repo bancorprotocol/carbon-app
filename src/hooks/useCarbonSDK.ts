@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import LZString from 'lz-string';
 import { useStore } from 'store';
 import { useQueryClient } from '@tanstack/react-query';
 import { RPC_URLS } from 'libs/web3';
@@ -13,7 +14,6 @@ import {
 } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
-import LZString from 'lz-string';
 
 const sdkConfig = {
   rpcUrl: RPC_URLS[1],
