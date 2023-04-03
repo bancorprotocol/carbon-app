@@ -4,7 +4,7 @@ import { useCreateStrategy } from 'components/strategies/create/useCreateStrateg
 import { CreateStrategyHeader } from './CreateStrategyHeader';
 import { CreateStrategyGraph } from 'components/strategies/create/CreateStrategyGraph';
 import { CreateStrategyTokenSelection } from 'components/strategies/create/CreateStrategyTokenSelection';
-import { CreateStrategyTypeMenu } from 'components/strategies/create/createStrategyContent/CreateStrategyTypeMenu';
+import { CreateStrategyTypeMenu } from 'components/strategies/create/CreateStrategyTypeMenu';
 import { CreateStrategyOrders } from 'components/strategies/create/CreateStrategyOrders';
 import { AnimatePresence } from 'framer-motion';
 

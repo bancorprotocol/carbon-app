@@ -2,9 +2,9 @@ import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { FC, ReactNode } from 'react';
 import { Button } from 'components/common/button';
-import { items } from './../variants';
+import { items } from 'components/strategies/create/variants';
 import { m } from 'libs/motion';
-import { UseStrategyCreateReturn } from 'components/strategies/create';
+import { UseStrategyCreateReturn } from 'components/strategies/create/index';
 import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
 import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
@@ -29,7 +29,7 @@ const BlockIconTextDesc = ({
       </div>
       <div className={'flex-shrink space-y-6'}>
         <div className={'text-14 font-weight-500'}>{title}</div>
-        <div className={'text-12 text-white/60'}>{description}</div>
+        <div className={'h-32 text-12 text-white/60'}>{description}</div>
       </div>
     </div>
   );
