@@ -25,5 +25,8 @@ export default defineConfig({
       util: 'util',
     },
   },
+  server: {
+    port: 3000,
+  },
   plugins: [react(), viteTsconfigPaths(), svgrPlugin()],
 });
