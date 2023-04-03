@@ -104,10 +104,6 @@ export const MainMenuRightWallet: FC = () => {
           <button onClick={disconnect} className={'hover:text-white'}>
             Disconnect
           </button>
-          <hr className={'my-10 border-t-2 border-silver'} />
-          <div>
-            Currency: <span className={'font-weight-500'}>USD</span>
-          </div>
         </div>
       </DropdownMenu>
     );
