@@ -42,22 +42,32 @@ export const sendEvent: SendEventFn = (type, event, data) => {
   }
 };
 
-export const carbonEvents: CarbonEvents = {
-  general: {
-    changePage: ({ referrer, test }) => {
-      console.log('event', 'changePage', test, referrer);
+const eventsGeneralChangePage: CarbonEvents['general']['changePage'] = ({
+  referrer,
+  test,
+}) => {
+  console.log('event', 'changePage', test, referrer);
 
-      sendEvent('general', 'changePage', {
-        page_referrer_spa: referrer ? referrer : null,
-      });
-    },
+  sendEvent('general', 'changePage', {
+    page_referrer_spa: referrer ? referrer : null,
+  });
+};
+
+const eventsGeneral: CarbonEvents['general'] = {
+  changePage: eventsGeneralChangePage,
+};
+
+const eventsWallet: CarbonEvents['wallet'] = {
+  walletConnect: ({ name, tos }) => {
+    sendEvent('wallet', 'walletConnect', {
+      wallet_name: name,
+      tos_approve: tos,
+    });
   },
-  wallet: {
-    walletConnect: ({ name, tos }) => {
-      sendEvent('wallet', 'walletConnect', {
-        wallet_name: name,
-        tos_approve: tos,
-      });
-    },
-  },
+  walletConnectPopupView: () => {},
+};
+
+export const carbonEvents: CarbonEvents = {
+  general: eventsGeneral,
+  wallet: eventsWallet,
 };

@@ -160,16 +160,22 @@ type EventSchema = {
   transactionConfirmation: EventTransactionConfirmationSchema;
 };
 
-type EventGeneralSchemaNew = {
+type EventCategory = { [key: string]: { input: any; gtmData: any } };
+
+interface EventGeneralSchemaNew extends EventCategory {
   changePage: {
     input: { referrer: string | null; test: number; sentryData: string };
-    output: {
+    gtmData: {
       page_referrer_spa: string | null;
     };
   };
+}
+
+type CarbonEventsBase = {
+  [key: string]: EventCategory;
 };
 
-type EventWalletSchemaNew = {
+interface EventWalletSchemaNew extends EventCategory {
   walletConnectPopupView: {
     input: undefined;
     gtmData: undefined;
@@ -178,12 +184,12 @@ type EventWalletSchemaNew = {
     input: { name: string; tos: boolean };
     gtmData: { wallet_name: string; tos_approve: boolean };
   };
-};
+}
 
-type CarbonEventSchema = {
+interface CarbonEventSchema extends CarbonEventsBase {
   general: EventGeneralSchemaNew;
   wallet: EventWalletSchemaNew;
-};
+}
 
 export type SendEventFn = <
   T extends Extract<keyof CarbonEventSchema, string>,
@@ -191,14 +197,12 @@ export type SendEventFn = <
 >(
   type: T,
   event: D,
-  // @ts-ignore
   data: CarbonEventSchema[T][D]['gtmData']
 ) => void;
 
 export type CarbonEvents = {
   [key in keyof CarbonEventSchema]: {
     [key2 in keyof CarbonEventSchema[key]]: (
-      // @ts-ignore
       input: CarbonEventSchema[key][key2]['input']
     ) => void;
   };
