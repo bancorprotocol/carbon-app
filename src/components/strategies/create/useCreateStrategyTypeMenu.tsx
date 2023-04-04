@@ -54,7 +54,7 @@ export const useCreateStrategyTypeMenu = (
   const typeReoccurring: StrategyTypeItemSvg[] = [
     {
       label: '2 Limits',
-      svg: <IconTwoRanges className={'w-60'} />,
+      svg: <IconTwoLimits className={'w-60'} />,
       to: PathNames.createStrategy,
       search: {
         base,
@@ -65,7 +65,7 @@ export const useCreateStrategyTypeMenu = (
     },
     {
       label: '2 Ranges',
-      svg: <IconTwoLimits className={'w-60'} />,
+      svg: <IconTwoRanges className={'w-60'} />,
       to: PathNames.createStrategy,
       search: {
         base,
