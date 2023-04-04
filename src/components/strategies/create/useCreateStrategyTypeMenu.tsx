@@ -10,7 +10,7 @@ import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconSellRange } from 'assets/icons/sell-range.svg';
 import { ReactComponent as IconSellLimit } from 'assets/icons/sell-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
-import { ReactComponent as IconTwoLimits } from 'assets/icons/two-ranges.svg';
+import { ReactComponent as IconTwoLimits } from 'assets/icons/two-limits.svg';
 import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strategy.svg';
 
 type StrategyTypeItem = {
