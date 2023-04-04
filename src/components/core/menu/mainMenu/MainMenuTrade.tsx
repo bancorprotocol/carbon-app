@@ -2,19 +2,9 @@ import { MainMenuTradeSettings } from 'components/core/menu/mainMenu/MainMenuTra
 import { useTradeTokens } from 'components/trade/useTradeTokens';
 import { MainMenuTradePairs } from 'components/core/menu/mainMenu/MainMenuTradePairs';
 import { MainMenuTradeSwitch } from 'components/core/menu/mainMenu/MainMenuTradeSwitch';
-import { useEffect } from 'react';
-import { sendEvent } from 'services/googleTagManager';
 
 export const MainMenuTrade = () => {
   const { baseToken, quoteToken, isTradePage } = useTradeTokens();
-
-  useEffect(() => {
-    sendEvent('trade', 'trade_pair_change', {
-      token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
-      buy_token: baseToken?.symbol || '',
-      sell_token: quoteToken?.symbol || '',
-    });
-  }, [baseToken, quoteToken]);
 
   if (!isTradePage || !baseToken || !quoteToken) return null;
 

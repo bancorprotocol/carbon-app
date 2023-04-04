@@ -2,6 +2,7 @@ import { CarbonEvents, GTMData, SendEventFn } from './types';
 import { convertCase } from 'utils/helpers';
 import { generalEvents } from './generalEvents';
 import { walletEvents } from './walletEvents';
+import { navigationEvents } from './navigationEvents';
 
 declare global {
   interface Window {
@@ -48,4 +49,5 @@ export const sendEvent: SendEventFn = (type, event, data) => {
 export const carbonEvents: CarbonEvents = {
   general: generalEvents,
   wallet: walletEvents,
+  navigation: navigationEvents,
 };

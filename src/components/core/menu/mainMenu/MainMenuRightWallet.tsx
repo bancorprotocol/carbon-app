@@ -43,7 +43,7 @@ export const MainMenuRightWallet: FC = () => {
   const { openModal } = useModal();
 
   const onClickOpenModal = () => {
-    // sendEvent('navigation', 'nav_wallet_connect_click', undefined);
+    carbonEvents.navigation.navWalletConnectClick(undefined);
     carbonEvents.wallet.walletConnectPopupView(undefined);
     openModal('wallet', undefined);
   };
@@ -76,7 +76,7 @@ export const MainMenuRightWallet: FC = () => {
           <Button
             variant={'secondary'}
             onClick={() => {
-              // sendEvent('navigation', 'nav_wallet_click', undefined);
+              carbonEvents.navigation.navWalletClick(undefined);
               onClick();
             }}
             className={'flex items-center space-x-10 pl-20'}

@@ -55,7 +55,7 @@ export const useBuySell = ({
   }, [
     buy,
     getFiatValueSource,
-    provider?.network.name,
+    provider?.network?.name,
     source.symbol,
     sourceInput,
     target.symbol,
