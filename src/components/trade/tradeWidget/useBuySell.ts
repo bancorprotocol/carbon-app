@@ -37,7 +37,6 @@ export const useBuySell = ({
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
-  const { getFiatValue: getFiatValueTarget } = useFiatCurrency(target);
 
   const clearInputs = useCallback(() => {
     setSourceInput('');

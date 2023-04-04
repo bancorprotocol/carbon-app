@@ -30,7 +30,7 @@ export const useModalTradeRouting = ({
   const sourceFiatPrice = useGetTokenPrice(source.symbol);
   const targetFiatPrice = useGetTokenPrice(target.symbol);
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
-  const { getFiatValue: getFiatValueTarget } = useFiatCurrency(target);
+
   const [selected, setSelected] = useState<
     (Action & { isSelected: boolean })[]
   >(tradeActionsRes.map((data) => ({ ...data, isSelected: true })));

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
@@ -34,14 +34,6 @@ export const ApproveToken: FC<Props> = ({
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
 
-  useEffect(() => {
-    eventData &&
-      sendEvent('confirmation', 'token_confirmation_unlimited_switch_change', {
-        ...eventData,
-        switch: !isLimited,
-      });
-  }, [eventData, isLimited]);
-
   const onApprove = async () => {
     if (!data || !token) {
       return console.error('No data loaded');
@@ -66,18 +58,18 @@ export const ApproveToken: FC<Props> = ({
           });
           setTxBusy(false);
           setTxSuccess(true);
-          isLimited
-            ? eventData &&
-              sendEvent('confirmation', 'token_confirm', {
+
+          eventData &&
+            sendEvent(
+              'confirmation',
+              isLimited
+                ? 'token_confirm'
+                : 'token_confirmation_unlimited_approve',
+              {
                 ...eventData,
                 token: token.symbol,
-              })
-            : eventData &&
-              sendEvent(
-                'confirmation',
-                'token_confirmation_unlimited_approve',
-                { ...eventData, token: token.symbol }
-              );
+              }
+            );
         },
         onError: () => {
           // TODO: proper error handling
@@ -136,7 +128,18 @@ export const ApproveToken: FC<Props> = ({
               <Switch
                 variant={isLimited ? 'secondary' : 'white'}
                 isOn={!isLimited}
-                setIsOn={(x) => setIsLimited(!x)}
+                setIsOn={(x) => {
+                  setIsLimited(!x);
+                  eventData &&
+                    sendEvent(
+                      'confirmation',
+                      'token_confirmation_unlimited_switch_change',
+                      {
+                        ...eventData,
+                        switch: x,
+                      }
+                    );
+                }}
                 size={'sm'}
               />
             </div>
