@@ -1,4 +1,4 @@
-name: Build
+name: Test
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Tests
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,11 +32,5 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
-      - name: Build
-        env:
-          CI: false
-          ALCHEMY_MAINNET: ${{ secrets.ALCHEMY_MAINNET }}
-          ALCHEMY_ROPSTEN: ${{ secrets.ALCHEMY_ROPSTEN }}
-          PORTIS_DAPP_ID: ${{ secrets.PORTIS_DAPP_ID }}
-          FORTMATIC_API_KEY: ${{ secrets.FORTMATIC_API_KEY }}
-        run: yarn build
+      - name: Test with Vitest
+        run: yarn test
