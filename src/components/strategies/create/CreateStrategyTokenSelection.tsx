@@ -62,6 +62,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
                         base: quote.address,
                         quote: base.address,
                       }),
+                      replace: true,
                     });
                   }
                 }}
