@@ -15,15 +15,6 @@ type EventGeneralSchema = {
   };
 };
 
-type EventGeneralSchemaNew = {
-  changePage: {
-    input: string | null;
-    output: {
-      page_referrer_spa: string | null;
-    };
-  };
-};
-
 type EventTokenConfirmationSchema = {
   token_confirmation_view: (StrategyType | TradeType) & ConfirmationType;
   token_confirmation_unlimited_switch_change: (StrategyType | TradeType) &
@@ -169,8 +160,29 @@ type EventSchema = {
   transactionConfirmation: EventTransactionConfirmationSchema;
 };
 
+type EventGeneralSchemaNew = {
+  changePage: {
+    input: { referrer: string | null; test: number; sentryData: string };
+    output: {
+      page_referrer_spa: string | null;
+    };
+  };
+};
+
+type EventWalletSchemaNew = {
+  walletConnectPopupView: {
+    input: undefined;
+    gtmData: undefined;
+  };
+  walletConnect: {
+    input: { name: string; tos: boolean };
+    gtmData: { wallet_name: string; tos_approve: boolean };
+  };
+};
+
 type CarbonEventSchema = {
   general: EventGeneralSchemaNew;
+  wallet: EventWalletSchemaNew;
 };
 
 export type SendEventFn = <
@@ -180,7 +192,7 @@ export type SendEventFn = <
   type: T,
   event: D,
   // @ts-ignore
-  data: EventSchema[T][D]['output']
+  data: CarbonEventSchema[T][D]['gtmData']
 ) => void;
 
 export type CarbonEvents = {

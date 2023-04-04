@@ -44,9 +44,19 @@ export const sendEvent: SendEventFn = (type, event, data) => {
 
 export const carbonEvents: CarbonEvents = {
   general: {
-    changePage: (input) => {
+    changePage: ({ referrer, test }) => {
+      console.log('event', 'changePage', test, referrer);
+
       sendEvent('general', 'changePage', {
-        page_referrer_spa: input ? input : null,
+        page_referrer_spa: referrer ? referrer : null,
+      });
+    },
+  },
+  wallet: {
+    walletConnect: ({ name, tos }) => {
+      sendEvent('wallet', 'walletConnect', {
+        wallet_name: name,
+        tos_approve: tos,
       });
     },
   },
