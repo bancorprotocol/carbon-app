@@ -4,6 +4,7 @@ import { generalEvents } from './generalEvents';
 import { walletEvents } from './walletEvents';
 import { navigationEvents } from './navigationEvents';
 import { strategyEvents } from './strategyEvents';
+import { strategyEditEvents } from './strategyEditEvents';
 
 declare global {
   interface Window {
@@ -52,4 +53,5 @@ export const carbonEvents: CarbonEvents = {
   wallet: walletEvents,
   navigation: navigationEvents,
   strategy: strategyEvents,
+  strategyEdit: strategyEditEvents,
 };

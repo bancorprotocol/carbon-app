@@ -7,7 +7,7 @@ import { OrderCreate } from './useOrder';
 import { items } from './variants';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useBudgetWarning } from '../useBudgetWarning';
-import { carbonEvents, sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { useEffect } from 'react';
 import { useStrategyEventData } from './useStrategyEventData';
 
@@ -54,9 +54,10 @@ export const CreateStrategyOrders = ({
   }, [showBudgetWarning]);
 
   const onCreateStrategy = () => {
-    sendEvent('strategy', 'strategy_create_click', strategyEventData);
+    carbonEvents.strategy.strategyCreateClick(strategyEventData);
     createStrategy();
   };
+
   return (
     <>
       <m.div variants={items}>

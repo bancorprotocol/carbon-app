@@ -9,7 +9,7 @@ import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useStrategyEventData } from '../create/useStrategyEventData';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 type EditStrategyBudgetContentProps = {
   type: 'withdraw' | 'deposit';
@@ -23,6 +23,7 @@ export const EditStrategyBudgetContent = ({
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
+
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
@@ -51,8 +52,8 @@ export const EditStrategyBudgetContent = ({
 
   const handleEvents = () => {
     type === 'withdraw'
-      ? sendEvent('strategyEdit', 'strategy_withdraw', strategyEventData)
-      : sendEvent('strategyEdit', 'strategy_deposit', strategyEventData);
+      ? carbonEvents.strategyEdit.strategyWithdraw(strategyEventData)
+      : carbonEvents.strategyEdit.strategyDeposit(strategyEventData);
   };
 
   const handleOnActionClick = () => {

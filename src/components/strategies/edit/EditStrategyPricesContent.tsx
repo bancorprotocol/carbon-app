@@ -5,7 +5,7 @@ import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 
 type EditStrategyPricesContentProps = {
@@ -61,12 +61,7 @@ export const EditStrategyPricesContent = ({
             order0: newOrder0,
             order1: newOrder1,
           },
-          () =>
-            sendEvent(
-              'strategyEdit',
-              'strategy_change_rates',
-              strategyEventData
-            )
+          () => carbonEvents.strategyEdit.strategyChangeRates(strategyEventData)
         );
   };
 

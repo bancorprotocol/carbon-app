@@ -11,7 +11,7 @@ import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
-import { carbonEvents, sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { useStrategyEventData } from './useStrategyEventData';
 
 const spenderAddress = config.carbon.carbonController;
@@ -66,10 +66,6 @@ export const useCreateStrategy = () => {
     order1,
   });
 
-  const handleCreateStrategyEvent = () => {
-    sendEvent('strategy', 'strategy_create', strategyEventData);
-  };
-
   const create = async () => {
     if (!base || !quote || !user) {
       throw new Error('error in create strategy: missing data ');
@@ -106,7 +102,7 @@ export const useCreateStrategy = () => {
           });
           navigate({ to: PathNames.strategies });
           console.log('tx confirmed');
-          handleCreateStrategyEvent();
+          carbonEvents.strategy.strategyCreate(strategyEventData);
         },
         onError: (e) => {
           console.error('create mutation failed', e);

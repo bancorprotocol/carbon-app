@@ -9,7 +9,7 @@ import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getModalDataByType } from './utils';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { useOrder } from 'components/strategies/create/useOrder';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 export type ModalConfirmStrategyData = {
   strategy: Strategy;
@@ -37,13 +37,13 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
     switch (type) {
       case 'pause':
         pauseStrategy(strategy, () => {
-          sendEvent('strategyEdit', 'strategy_pause', strategyEventData);
+          carbonEvents.strategyEdit.strategyPause(strategyEventData);
           closeModal(id);
         });
         break;
       case 'delete':
         deleteStrategy(strategy, () => {
-          sendEvent('strategyEdit', 'strategy_delete', strategyEventData);
+          carbonEvents.strategyEdit.strategyDelete(strategyEventData);
           closeModal(id);
         });
         break;

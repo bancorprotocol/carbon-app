@@ -1,5 +1,5 @@
 import { sendEvent } from '.';
-import { CarbonEvents, EventCategory, Message } from './types';
+import { CarbonEvents, EventCategory, Message, StrategyType } from './types';
 
 export interface EventStrategySchemaNew extends EventCategory {
   strategyWarningShow: {
@@ -68,6 +68,38 @@ export interface EventStrategySchemaNew extends EventCategory {
       token_pair_from: string;
     };
   };
+  strategyBuyLowOrderTypeChange: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
+  strategySellHighOrderTypeChange: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
+  strategyBuyLowPriceSet: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
+  strategySellHighPriceSet: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
+  strategyBuyLowBudgetSet: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
+  strategySellHighBudgetSet: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
+  strategyCreateClick: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
+  strategyCreate: {
+    input: StrategyType;
+    gtmData: StrategyType;
+  };
 }
 
 export const strategyEvents: CarbonEvents['strategy'] = {
@@ -115,5 +147,29 @@ export const strategyEvents: CarbonEvents['strategy'] = {
       token_pair_from: `${updatedQuote}/${updatedBase}`,
       token_pair: `${updatedBase}/${updatedQuote}`,
     });
+  },
+  strategyBuyLowOrderTypeChange: (strategy) => {
+    sendEvent('strategy', 'strategyBuyLowOrderTypeChange', strategy);
+  },
+  strategySellHighOrderTypeChange: (strategy) => {
+    sendEvent('strategy', 'strategySellHighOrderTypeChange', strategy);
+  },
+  strategyBuyLowPriceSet: (strategy) => {
+    sendEvent('strategy', 'strategyBuyLowPriceSet', strategy);
+  },
+  strategySellHighPriceSet: (strategy) => {
+    sendEvent('strategy', 'strategySellHighPriceSet', strategy);
+  },
+  strategyBuyLowBudgetSet: (strategy) => {
+    sendEvent('strategy', 'strategyBuyLowBudgetSet', strategy);
+  },
+  strategySellHighBudgetSet: (strategy) => {
+    sendEvent('strategy', 'strategySellHighBudgetSet', strategy);
+  },
+  strategyCreateClick: (strategy) => {
+    sendEvent('strategy', 'strategyCreateClick', strategy);
+  },
+  strategyCreate: (strategy) => {
+    sendEvent('strategy', 'strategyCreate', strategy);
   },
 };

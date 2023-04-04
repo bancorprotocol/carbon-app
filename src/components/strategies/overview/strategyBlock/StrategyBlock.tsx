@@ -8,7 +8,7 @@ import { StrategyBlockManage } from 'components/strategies/overview/strategyBloc
 import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { useOrder } from 'components/strategies/create/useOrder';
 
@@ -63,11 +63,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
         </div>
         <span
           onClick={() => {
-            sendEvent(
-              'strategyEdit',
-              'strategy_duplicate_click',
-              strategyEventData
-            );
+            carbonEvents.strategyEdit.strategyDuplicateClick(strategyEventData);
             duplicate(strategy);
           }}
           className={`pointer-events-none flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis opacity-0 transition duration-300 ease-in-out hover:border-grey3 md:pointer-events-auto md:group-hover:opacity-100`}

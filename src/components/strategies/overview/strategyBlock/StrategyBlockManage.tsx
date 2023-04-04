@@ -16,7 +16,7 @@ import {
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -58,11 +58,7 @@ export const StrategyBlockManage: FC<{
       name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
-        sendEvent(
-          'strategyEdit',
-          'strategy_change_rates_click',
-          strategyEventData
-        );
+        carbonEvents.strategyEdit.strategyChangeRatesClick(strategyEventData);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'editPrices' },
@@ -74,7 +70,7 @@ export const StrategyBlockManage: FC<{
       name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
-        sendEvent('strategyEdit', 'strategy_deposit_click', strategyEventData);
+        carbonEvents.strategyEdit.strategyDepositClick(strategyEventData);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'deposit' },
@@ -88,7 +84,7 @@ export const StrategyBlockManage: FC<{
       name: 'Withdraw Funds',
       action: () => {
         setStrategyToEdit(strategy);
-        sendEvent('strategyEdit', 'strategy_withdraw_click', strategyEventData);
+        carbonEvents.strategyEdit.strategyWithdrawClick(strategyEventData);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'withdraw' },
@@ -101,11 +97,7 @@ export const StrategyBlockManage: FC<{
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
-        sendEvent(
-          'strategyEdit',
-          'strategy_duplicate_click',
-          strategyEventData
-        );
+        carbonEvents.strategyEdit.strategyDuplicateClick(strategyEventData);
         duplicate(strategy);
       },
     });

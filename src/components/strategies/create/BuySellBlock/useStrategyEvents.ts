@@ -1,7 +1,7 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { useEffect, useRef } from 'react';
-import { carbonEvents, sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { StrategyType } from 'services/googleTagManager/types';
 import { OrderCreate } from '../useOrder';
 
@@ -67,12 +67,8 @@ export const useStrategyEvents = ({
     if (!firstTimeRender.current.type) {
       const strategy = getStrategyEventData();
       buy
-        ? sendEvent('strategy', 'strategy_buy_low_order_type_change', strategy)
-        : sendEvent(
-            'strategy',
-            'strategy_sell_high_order_type_change',
-            strategy
-          );
+        ? carbonEvents.strategy.strategyBuyLowOrderTypeChange(strategy)
+        : carbonEvents.strategy.strategySellHighOrderTypeChange(strategy);
     }
     firstTimeRender.current.type = false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,8 +78,8 @@ export const useStrategyEvents = ({
     if (!firstTimeRender.current.price) {
       const strategy = getStrategyEventData();
       buy
-        ? sendEvent('strategy', 'strategy_buy_low_price_set', strategy)
-        : sendEvent('strategy', 'strategy_sell_high_price_set', strategy);
+        ? carbonEvents.strategy.strategyBuyLowPriceSet(strategy)
+        : carbonEvents.strategy.strategySellHighPriceSet(strategy);
     }
     firstTimeRender.current.price = false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,9 +88,10 @@ export const useStrategyEvents = ({
   useEffect(() => {
     if (!firstTimeRender.current.budget) {
       const strategy = getStrategyEventData();
+
       buy
-        ? sendEvent('strategy', 'strategy_buy_low_budget_set', strategy)
-        : sendEvent('strategy', 'strategy_sell_high_budget_set', strategy);
+        ? carbonEvents.strategy.strategyBuyLowBudgetSet(strategy)
+        : carbonEvents.strategy.strategySellHighBudgetSet(strategy);
     }
     firstTimeRender.current.budget = false;
     // eslint-disable-next-line react-hooks/exhaustive-deps

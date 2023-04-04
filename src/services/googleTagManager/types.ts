@@ -1,5 +1,6 @@
 import { EventGeneralSchemaNew } from './generalEvents';
 import { EventNavigationSchemaNew } from './navigationEvents';
+import { EventStrategyEditSchemaNew } from './strategyEditEvents';
 import { EventStrategySchemaNew } from './strategyEvents';
 import { EventWalletSchemaNew } from './walletEvents';
 
@@ -69,6 +70,7 @@ interface CarbonEventSchema extends CarbonEventsBase {
   wallet: EventWalletSchemaNew;
   navigation: EventNavigationSchemaNew;
   strategy: EventStrategySchemaNew;
+  strategyEdit: EventStrategyEditSchemaNew;
 }
 
 export type SendEventFn = <
