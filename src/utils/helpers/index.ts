@@ -1,11 +1,12 @@
 import BigNumber from 'bignumber.js';
 import numbro from 'numbro';
-import { config } from 'services/web3/config';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { FiatSymbol } from 'store/useFiatCurrencyStore';
 import { TokenPair } from '@bancor/carbon-sdk';
 
-export const isProduction = window?.location.host.includes('bancor.network');
+export const isProduction = window
+  ? window.location.host.includes('carbondefi.xyz')
+  : true;
 
 export const uuid = () => {
   return 'xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -43,13 +44,6 @@ export const shortenString = (
   const start = string.substring(0, startEndLength);
   const end = string.substring(string.length - startEndLength, string.length);
   return start + separator + end;
-};
-
-export const reduceETH = (value: string, address: string) => {
-  if (address === config.tokens.ETH)
-    return new BigNumber(value).minus(0.01).toString();
-
-  return value;
 };
 
 export const getFiatDisplayValue = (

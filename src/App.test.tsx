@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { test, expect } from 'vitest';
 
-test('renders learn react link', () => {
-  render(<div>Hello</div>);
-  const linkElement = screen.getByText(/Hello/i);
-  expect(linkElement).toBeInTheDocument();
+test('test App.tsx', () => {
+  const tmp = 1;
+  expect(tmp).equal(1);
 });
