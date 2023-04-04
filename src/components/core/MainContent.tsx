@@ -7,7 +7,7 @@ import { useTokens } from 'hooks/useTokens';
 import { ErrorTokenList } from 'components/core/error/ErrorTokenList';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 export const MainContent: FC = () => {
   const web3 = useWeb3();
@@ -18,11 +18,8 @@ export const MainContent: FC = () => {
 
   useEffect(() => {
     if (prevPathnameRef.current !== location.current.pathname) {
-      sendEvent('general', 'change_page', {
-        page_referrer_spa: prevPathnameRef.current
-          ? prevPathnameRef.current
-          : null,
-      });
+      carbonEvents.general.changePage({ referrer: prevPathnameRef.current });
+
       prevPathnameRef.current = location.current.pathname;
     }
   }, [location, location.current.pathname]);

@@ -16,7 +16,7 @@ import {
   IS_IN_IFRAME,
   IS_METAMASK_WALLET,
 } from 'libs/web3/web3.utils';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   const props = { className: 'w-20' };
@@ -43,15 +43,15 @@ export const MainMenuRightWallet: FC = () => {
   const { openModal } = useModal();
 
   const onClickOpenModal = () => {
-    sendEvent('navigation', 'nav_wallet_connect_click', undefined);
-    sendEvent('wallet', 'wallet_connect_popup_view', undefined);
+    // sendEvent('navigation', 'nav_wallet_connect_click', undefined);
+    carbonEvents.wallet.walletConnectPopupView(undefined);
     openModal('wallet', undefined);
   };
 
   const onDisconnect = async () => {
     disconnect();
-    sendEvent('wallet', 'wallet_disconnect', {
-      wallet_name: connector?.constructor?.name || '',
+    carbonEvents.wallet.walletDisconnect({
+      name: connector?.constructor?.name || '',
     });
   };
 
@@ -76,7 +76,7 @@ export const MainMenuRightWallet: FC = () => {
           <Button
             variant={'secondary'}
             onClick={() => {
-              sendEvent('navigation', 'nav_wallet_click', undefined);
+              // sendEvent('navigation', 'nav_wallet_click', undefined);
               onClick();
             }}
             className={'flex items-center space-x-10 pl-20'}

@@ -160,11 +160,54 @@ type EventSchema = {
   transactionConfirmation: EventTransactionConfirmationSchema;
 };
 
+type EventCategory = { [key: string]: { input: any; gtmData: any } };
+
+interface EventGeneralSchemaNew extends EventCategory {
+  changePage: {
+    input: { referrer: string | null };
+    gtmData: {
+      page_referrer_spa: string | null;
+    };
+  };
+}
+
+type CarbonEventsBase = {
+  [key: string]: EventCategory;
+};
+
+interface EventWalletSchemaNew extends EventCategory {
+  walletConnectPopupView: {
+    input: undefined;
+    gtmData: undefined;
+  };
+  walletConnect: {
+    input: { name: string; tos: boolean };
+    gtmData: { wallet_name: string; tos_approve: boolean };
+  };
+  walletDisconnect: {
+    input: { name: string };
+    gtmData: { wallet_name: string };
+  };
+}
+
+interface CarbonEventSchema extends CarbonEventsBase {
+  general: EventGeneralSchemaNew;
+  wallet: EventWalletSchemaNew;
+}
+
 export type SendEventFn = <
-  T extends Extract<keyof EventSchema, string>,
-  D extends Extract<keyof EventSchema[T], string>
+  T extends Extract<keyof CarbonEventSchema, string>,
+  D extends Extract<keyof CarbonEventSchema[T], string>
 >(
   type: T,
   event: D,
-  data: EventSchema[T][D]
+  data: CarbonEventSchema[T][D]['gtmData']
 ) => void;
+
+export type CarbonEvents = {
+  [key in keyof CarbonEventSchema]: {
+    [key2 in keyof CarbonEventSchema[key]]: (
+      input: CarbonEventSchema[key][key2]['input']
+    ) => void;
+  };
+};
