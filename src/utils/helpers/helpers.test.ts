@@ -1,6 +1,7 @@
 import { prettifyNumber } from '.';
+import { test, it, expect } from 'vitest';
 
-describe('prettifyNumber', () => {
+test('prettifyNumber', () => {
   it('should return 0 for input lower then 0', () => {
     expect(prettifyNumber(-5000)).toEqual('0');
   });

@@ -54,7 +54,7 @@ export const DropdownMenu: FC<Props> = ({
       })}
       <m.div
         ref={tooltipRef}
-        className={`${className} min-w-[200px] rounded border border-b-lightGrey bg-primary-500/10 px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
+        className={`${className} min-w-[200px] rounded border border-b-lightGrey px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-darkGrey/30`}
         variants={menuVariants}
         style={{ ...styles.popper, pointerEvents: menuOpen ? 'auto' : 'none' }}
       >
