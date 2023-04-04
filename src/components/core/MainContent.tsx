@@ -18,7 +18,7 @@ export const MainContent: FC = () => {
 
   useEffect(() => {
     if (prevPathnameRef.current !== location.current.pathname) {
-      carbonEvents.general.changePage(prevPathnameRef.current);
+      carbonEvents.general.changePage({ referrer: prevPathnameRef.current });
 
       prevPathnameRef.current = location.current.pathname;
     }

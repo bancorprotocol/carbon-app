@@ -4,7 +4,6 @@ import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
 import { useNotifications } from 'hooks/useNotifications';
 import { useWeb3 } from 'libs/web3';
 import { Button } from 'components/common/button';
-import { sendEvent } from 'services/googleTagManager';
 
 export const MainMenuRightNotifications: FC = () => {
   const { user } = useWeb3();
@@ -18,7 +17,7 @@ export const MainMenuRightNotifications: FC = () => {
       variant={'secondary'}
       className={'relative !p-0'}
       onClick={() => {
-        sendEvent('navigation', 'nav_notification_click', undefined);
+        // sendEvent('navigation', 'nav_notification_click', undefined);
         openModal('notifications', undefined);
       }}
     >

@@ -1,5 +1,7 @@
 import { CarbonEvents, GTMData, SendEventFn } from './types';
 import { convertCase } from 'utils/helpers';
+import { generalEvents } from './generalEvents';
+import { walletEvents } from './walletEvents';
 
 declare global {
   interface Window {
@@ -11,6 +13,7 @@ const sendGTM = (data: GTMData) => {
   if (window.dataLayer) {
     window.dataLayer.push(data);
   }
+  console.log(window.dataLayer, '-=-=-=-=-=- window.dataLayer -=-=-=-=-=-');
 };
 
 export const sendEvent: SendEventFn = (type, event, data) => {
@@ -42,32 +45,7 @@ export const sendEvent: SendEventFn = (type, event, data) => {
   }
 };
 
-const eventsGeneralChangePage: CarbonEvents['general']['changePage'] = ({
-  referrer,
-  test,
-}) => {
-  console.log('event', 'changePage', test, referrer);
-
-  sendEvent('general', 'changePage', {
-    page_referrer_spa: referrer ? referrer : null,
-  });
-};
-
-const eventsGeneral: CarbonEvents['general'] = {
-  changePage: eventsGeneralChangePage,
-};
-
-const eventsWallet: CarbonEvents['wallet'] = {
-  walletConnect: ({ name, tos }) => {
-    sendEvent('wallet', 'walletConnect', {
-      wallet_name: name,
-      tos_approve: tos,
-    });
-  },
-  walletConnectPopupView: () => {},
-};
-
 export const carbonEvents: CarbonEvents = {
-  general: eventsGeneral,
-  wallet: eventsWallet,
+  general: generalEvents,
+  wallet: walletEvents,
 };

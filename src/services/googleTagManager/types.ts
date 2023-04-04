@@ -164,7 +164,7 @@ type EventCategory = { [key: string]: { input: any; gtmData: any } };
 
 interface EventGeneralSchemaNew extends EventCategory {
   changePage: {
-    input: { referrer: string | null; test: number; sentryData: string };
+    input: { referrer: string | null };
     gtmData: {
       page_referrer_spa: string | null;
     };
@@ -183,6 +183,10 @@ interface EventWalletSchemaNew extends EventCategory {
   walletConnect: {
     input: { name: string; tos: boolean };
     gtmData: { wallet_name: string; tos_approve: boolean };
+  };
+  walletDisconnect: {
+    input: { name: string };
+    gtmData: { wallet_name: string };
   };
 }
 

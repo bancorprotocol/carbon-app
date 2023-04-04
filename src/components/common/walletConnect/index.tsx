@@ -1,6 +1,7 @@
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
+import { carbonEvents } from 'services/googleTagManager';
 
 export const WalletConnect = () => {
   const { openModal } = useModal();
@@ -12,7 +13,10 @@ export const WalletConnect = () => {
       <Button
         className="w-[200px]"
         variant={'secondary'}
-        onClick={() => openModal('wallet', undefined)}
+        onClick={() => {
+          openModal('wallet', undefined);
+          carbonEvents.wallet.walletConnectPopupView(undefined);
+        }}
       >
         Connect
       </Button>
