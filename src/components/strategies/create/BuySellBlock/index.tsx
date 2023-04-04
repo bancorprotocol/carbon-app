@@ -144,12 +144,12 @@ export const BuySellBlock: FC<Props> = ({
                 } tokens you would like to use in order to buy ${
                   base.symbol
                 }. ${
-                  strategyType === 'reoccurring'
+                  strategyType === 'recurring'
                     ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
                     : ''
                 }`
               : `The amount of ${base.symbol} tokens you would like to sell. ${
-                  strategyType === 'reoccurring'
+                  strategyType === 'recurring'
                     ? 'Note: this amount will re-fill once the "Buy" order is used by traders.'
                     : ''
                 }`
