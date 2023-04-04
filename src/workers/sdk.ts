@@ -229,7 +229,7 @@ const getOrderBook = async (
 const sdkExposed = {
   init,
   isInitialized: () => isInitialized,
-  getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
+  getAllPairs: () => carbonSDK.getAllPairs(),
   setOnChangeHandlers: (
     onPairDataChanged: (affectedPairs: TokenPair[]) => void,
     onPairAddedToCache: (affectedPairs: TokenPair) => void
