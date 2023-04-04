@@ -3,7 +3,7 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { Token } from 'libs/tokens';
 
 export const CreateStrategyTokenSelection = ({
@@ -57,9 +57,9 @@ export const CreateStrategyTokenSelection = ({
               <IconArrow
                 onClick={() => {
                   if (base && quote) {
-                    sendEvent('strategy', 'strategy_token_swap', {
-                      tokenPairFrom: `${base.symbol}/${quote.symbol}`,
-                      tokenPair: `${quote.symbol}/${base.symbol}`,
+                    carbonEvents.strategy.strategyTokenSwap({
+                      updatedBase: quote.symbol,
+                      updatedQuote: base.symbol,
                     });
                     const temp = base;
                     setBase(quote);

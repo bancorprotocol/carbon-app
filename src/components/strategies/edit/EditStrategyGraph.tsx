@@ -4,7 +4,7 @@ import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Token } from 'libs/tokens';
 import { list } from '../create/variants';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 type EditStrategyGraphProps = {
   base: Token | undefined;
@@ -29,7 +29,7 @@ export const EditStrategyGraph = ({
           variant="secondary"
           size={'md'}
           onClick={() => {
-            sendEvent('strategy', 'strategy_chart_close', undefined);
+            carbonEvents.strategy.strategyChartClose(undefined);
             setShowGraph(false);
           }}
         >

@@ -11,7 +11,7 @@ import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents, sendEvent } from 'services/googleTagManager';
 import { useStrategyEventData } from './useStrategyEventData';
 
 const spenderAddress = config.carbon.carbonController;
@@ -146,25 +146,23 @@ export const useCreateStrategy = () => {
   };
 
   const handleChangeTokensEvents = (isSource = false, token: Token) => {
-    isSource
-      ? sendEvent(
-          'strategy',
-          !base
-            ? 'new_strategy_base_token_select'
-            : 'strategy_base_token_change',
-          {
+    if (isSource) {
+      !base
+        ? carbonEvents.strategy.newStrategyBaseTokenSelect({
             token: token?.symbol,
-          }
-        )
-      : sendEvent(
-          'strategy',
-          !quote
-            ? 'new_strategy_quote_token_select'
-            : 'strategy_quote_token_change',
-          {
-            token: token.symbol,
-          }
-        );
+          })
+        : carbonEvents.strategy.strategyBaseTokenChange({
+            token: token?.symbol,
+          });
+    } else {
+      !quote
+        ? carbonEvents.strategy.newStrategyQuoteTokenSelect({
+            token: token?.symbol,
+          })
+        : carbonEvents.strategy.strategyQuoteTokenChange({
+            token: token?.symbol,
+          });
+    }
   };
 
   const openTokenListModal = (isSource?: boolean) => {

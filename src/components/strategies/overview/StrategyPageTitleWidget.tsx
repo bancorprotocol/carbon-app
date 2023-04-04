@@ -7,7 +7,7 @@ import {
   StrategyFilter,
   StrategyFilterSort,
 } from 'components/strategies/overview/StrategyFilterSort';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;
@@ -41,7 +41,7 @@ export const StrategyPageTitleWidget: FC<{
         <Button
           variant="white"
           onClick={() =>
-            sendEvent('strategy', 'new_strategy_create_click', undefined)
+            carbonEvents.strategy.newStrategyCreateClick(undefined)
           }
         >
           Create Strategy
