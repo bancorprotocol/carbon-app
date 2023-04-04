@@ -1,7 +1,7 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { ChangeEvent, FC, FocusEvent } from 'react';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputLimit: FC<{
@@ -18,7 +18,7 @@ export const InputLimit: FC<{
     if (+e.target.value > 0) {
       setPriceError('');
     } else {
-      sendEvent('strategy', 'strategy_error_show', {
+      carbonEvents.strategy.strategyErrorShow({
         section: buy ? 'Buy Low' : 'Sell High',
         message: errorMessage,
       });

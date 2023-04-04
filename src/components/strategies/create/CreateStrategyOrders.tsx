@@ -7,7 +7,7 @@ import { OrderCreate } from './useOrder';
 import { items } from './variants';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useBudgetWarning } from '../useBudgetWarning';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents, sendEvent } from 'services/googleTagManager';
 import { useEffect } from 'react';
 import { useStrategyEventData } from './useStrategyEventData';
 
@@ -48,7 +48,7 @@ export const CreateStrategyOrders = ({
     'Strategies with low budget might be ignored during trading due to gas considerations';
 
   useEffect(() => {
-    sendEvent('strategy', 'strategy_warning_show', {
+    carbonEvents.strategy.strategyWarningShow({
       message: budgetWarningMessage,
     });
   }, [showBudgetWarning]);

@@ -1,9 +1,10 @@
 import Tippy, { TippyProps } from '@tippyjs/react/headless';
-import { FC, ReactNode } from 'react';
+import { FC, isValidElement, ReactNode } from 'react';
 import { useSpring, m } from 'framer-motion';
 import { Instance } from 'tippy.js';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
+import ReactDOMServer from 'react-dom/server';
 
 export const Tooltip: FC<
   TippyProps & {
@@ -36,9 +37,13 @@ export const Tooltip: FC<
     scale.set(1);
     opacity.set(1);
     sendEventOnMount &&
-      sendEvent('strategy', 'strategy_tooltip_show', {
+      carbonEvents.strategy.strategyTooltipShow({
         section: sendEventOnMount?.section,
-        message: element?.toLocaleString() || '',
+        message: isValidElement(element)
+          ? ReactDOMServer.renderToString(element)
+          : element
+          ? element.toString()
+          : '',
       });
   };
 

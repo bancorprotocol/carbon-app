@@ -1,5 +1,6 @@
 import { EventGeneralSchemaNew } from './generalEvents';
 import { EventNavigationSchemaNew } from './navigationEvents';
+import { EventStrategySchemaNew } from './strategyEvents';
 import { EventWalletSchemaNew } from './walletEvents';
 
 export type GTMData = {
@@ -11,6 +12,11 @@ export type GTMData = {
         page_referrer_spa: string;
       }
     | {};
+};
+
+export type Message = {
+  section?: string;
+  message: string;
 };
 
 export type TradeType = {
@@ -61,6 +67,7 @@ interface CarbonEventSchema extends CarbonEventsBase {
   general: EventGeneralSchemaNew;
   wallet: EventWalletSchemaNew;
   navigation: EventNavigationSchemaNew;
+  strategy: EventStrategySchemaNew;
 }
 
 export type SendEventFn = <

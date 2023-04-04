@@ -1,7 +1,7 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { useEffect, useRef } from 'react';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents, sendEvent } from 'services/googleTagManager';
 import { StrategyType } from 'services/googleTagManager/types';
 import { OrderCreate } from '../useOrder';
 
@@ -18,7 +18,12 @@ export const useStrategyEvents = ({
   buy?: boolean;
   insufficientBalance?: boolean;
 }) => {
-  const firstTimeRender = useRef({ price: true, budget: true, type: true });
+  const firstTimeRender = useRef({
+    price: true,
+    budget: true,
+    type: true,
+    errorMsg: true,
+  });
   const budgetToken = buy ? quote : base;
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
@@ -49,10 +54,13 @@ export const useStrategyEvents = ({
   };
 
   useEffect(() => {
-    sendEvent('strategy', 'strategy_error_show', {
-      section: buy ? 'Buy Low' : 'Sell High',
-      message: 'Insufficient balance',
-    });
+    if (!firstTimeRender.current.errorMsg) {
+      carbonEvents.strategy.strategyErrorShow({
+        section: buy ? 'Buy Low' : 'Sell High',
+        message: 'Insufficient balance',
+      });
+    }
+    firstTimeRender.current.errorMsg = false;
   }, [buy, insufficientBalance]);
 
   useEffect(() => {

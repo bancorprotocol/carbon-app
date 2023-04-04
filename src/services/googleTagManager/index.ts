@@ -3,6 +3,7 @@ import { convertCase } from 'utils/helpers';
 import { generalEvents } from './generalEvents';
 import { walletEvents } from './walletEvents';
 import { navigationEvents } from './navigationEvents';
+import { strategyEvents } from './strategyEvents';
 
 declare global {
   interface Window {
@@ -50,4 +51,5 @@ export const carbonEvents: CarbonEvents = {
   general: generalEvents,
   wallet: walletEvents,
   navigation: navigationEvents,
+  strategy: strategyEvents,
 };

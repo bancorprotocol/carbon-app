@@ -3,7 +3,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Token } from 'libs/tokens';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 export const InputRange: FC<{
   min: string;
@@ -22,7 +22,7 @@ export const InputRange: FC<{
     if (!max || (+e.target.value > 0 && +max > +e.target.value)) {
       setRangeError('');
     } else {
-      sendEvent('strategy', 'strategy_error_show', {
+      carbonEvents.strategy.strategyErrorShow({
         section: buy ? 'Buy Low' : 'Sell High',
         message: errorMessage,
       });
@@ -35,7 +35,7 @@ export const InputRange: FC<{
     if (!min || (+e.target.value > 0 && +e.target.value > +min)) {
       setRangeError('');
     } else {
-      sendEvent('strategy', 'strategy_error_show', {
+      carbonEvents.strategy.strategyErrorShow({
         section: buy ? 'Buy Low' : 'Sell High',
         message: errorMessage,
       });
