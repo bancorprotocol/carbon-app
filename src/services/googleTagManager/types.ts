@@ -15,6 +15,15 @@ type EventGeneralSchema = {
   };
 };
 
+type EventGeneralSchemaNew = {
+  changePage: {
+    input: string | null;
+    output: {
+      page_referrer_spa: string | null;
+    };
+  };
+};
+
 type EventTokenConfirmationSchema = {
   token_confirmation_view: (StrategyType | TradeType) & ConfirmationType;
   token_confirmation_unlimited_switch_change: (StrategyType | TradeType) &
@@ -160,11 +169,25 @@ type EventSchema = {
   transactionConfirmation: EventTransactionConfirmationSchema;
 };
 
+type CarbonEventSchema = {
+  general: EventGeneralSchemaNew;
+};
+
 export type SendEventFn = <
-  T extends Extract<keyof EventSchema, string>,
-  D extends Extract<keyof EventSchema[T], string>
+  T extends Extract<keyof CarbonEventSchema, string>,
+  D extends Extract<keyof CarbonEventSchema[T], string>
 >(
   type: T,
   event: D,
-  data: EventSchema[T][D]
+  // @ts-ignore
+  data: EventSchema[T][D]['output']
 ) => void;
+
+export type CarbonEvents = {
+  [key in keyof CarbonEventSchema]: {
+    [key2 in keyof CarbonEventSchema[key]]: (
+      // @ts-ignore
+      input: CarbonEventSchema[key][key2]['input']
+    ) => void;
+  };
+};
