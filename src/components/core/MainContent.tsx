@@ -18,11 +18,7 @@ export const MainContent: FC = () => {
 
   useEffect(() => {
     if (prevPathnameRef.current !== location.current.pathname) {
-      const eventInput = prevPathnameRef.current
-        ? prevPathnameRef.current
-        : null;
-
-      carbonEvents.general.changePage(eventInput);
+      carbonEvents.general.changePage(prevPathnameRef.current);
 
       prevPathnameRef.current = location.current.pathname;
     }

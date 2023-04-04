@@ -45,7 +45,9 @@ export const sendEvent: SendEventFn = (type, event, data) => {
 export const carbonEvents: CarbonEvents = {
   general: {
     changePage: (input) => {
-      sendEvent('general', 'changePage', { page_referrer_spa: input });
+      sendEvent('general', 'changePage', {
+        page_referrer_spa: input ? input : null,
+      });
     },
   },
 };
