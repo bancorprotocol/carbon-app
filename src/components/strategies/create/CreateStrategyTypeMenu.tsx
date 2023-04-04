@@ -62,7 +62,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
               key={label}
               onClick={() => {
                 setSelectedStrategySettings(undefined);
-                handleClick(to, search);
+                handleClick(to, search, true);
               }}
               isActive={search.strategyType === strategyType}
             >

@@ -126,6 +126,7 @@ export const useCreateStrategy = () => {
       navigate({
         to: PathNames.createStrategy,
         search: (search) => ({ ...search, base: b, quote: q }),
+        replace: true,
       });
       order0.resetFields();
       order1.resetFields();

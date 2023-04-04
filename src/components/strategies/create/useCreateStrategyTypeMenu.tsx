@@ -138,8 +138,12 @@ export const useCreateStrategyTypeMenu = (
     },
   ];
 
-  const handleClick = (to: string, search: any) => {
-    navigate({ to, search });
+  const handleClick = (
+    to: string,
+    search: StrategyCreateLocationGenerics['Search'],
+    replace?: boolean
+  ) => {
+    navigate({ to, search, replace });
   };
 
   const selectedTabItems = useMemo(() => {
