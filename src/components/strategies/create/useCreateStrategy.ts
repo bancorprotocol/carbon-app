@@ -200,7 +200,7 @@ export const useCreateStrategy = () => {
         );
         break;
       }
-      case 'reoccurring': {
+      case 'recurring': {
         order0.resetFields();
         order1.resetFields();
         handleStrategySettings(strategySettings, [
