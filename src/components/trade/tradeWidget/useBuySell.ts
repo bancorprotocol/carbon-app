@@ -3,14 +3,16 @@ import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import { useGetTradeLiquidity, useGetTradeData } from 'libs/queries';
+import {
+  useGetTradeLiquidity,
+  useGetTradeData,
+  useGetMaxSourceAmountByPair,
+  useGetTokenPrice,
+} from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
-import { Action, TradeActionStruct } from 'libs/sdk';
+import { Action, TradeActionStruct, SerializableMatchAction } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
-import { useGetMaxSourceAmountByPair } from 'libs/queries/sdk/maxSourceAmount';
 
 export const useBuySell = ({
   source,
