@@ -186,7 +186,8 @@ export const useBuySell = ({
       byTargetQuery.isFetching ||
       approval.isLoading ||
       isLiquidityError ||
-      errorBaseBalanceSufficient
+      errorBaseBalanceSufficient ||
+      maxSourceAmountQuery.isFetching
     ) {
       return;
     }
@@ -337,5 +338,6 @@ export const useBuySell = ({
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
+    maxSourceAmountQuery,
   };
 };
