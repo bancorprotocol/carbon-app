@@ -49,7 +49,7 @@ export const useGetTradeData = ({
         };
       }
 
-      return await carbonSDK.getTradeData(
+      return carbonSDK.getTradeData(
         sourceToken,
         targetToken,
         input,
