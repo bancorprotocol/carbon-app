@@ -228,3 +228,16 @@ export const mergeArraysRemovingDuplicates = <
 
   return uniqueArray;
 };
+
+export const getLowestBits = (decimal: string, bits: number = 128): string => {
+  const bigInt = BigInt(decimal);
+  const binary = bigInt.toString(2);
+
+  // Pad the binary string with zeroes to ensure it's 256 bits long
+  const paddedBinary = binary.padStart(256, '0');
+  const lowerBits = paddedBinary.substr(bits);
+
+  const bigIntFromLowerBits = BigInt('0b' + lowerBits);
+
+  return bigIntFromLowerBits.toString();
+};
