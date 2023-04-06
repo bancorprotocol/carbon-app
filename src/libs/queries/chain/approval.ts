@@ -96,17 +96,11 @@ export const useSetUserApproval = () => {
       if (isNullApprovalContract) {
         const allowanceWei = await Token(address).read.allowance(user, spender);
         if (allowanceWei.gt(0)) {
-          const tx = await Token(address).write.approve(spender, '0', {
-            // TODO fix GAS limit
-            gasLimit: '99999999999999999',
-          });
+          const tx = await Token(address).write.approve(spender, '0');
           await tx.wait();
         }
       }
-      return Token(address).write.approve(spender, amountWei, {
-        // TODO fix GAS limit
-        gasLimit: '99999999999999999',
-      });
+      return Token(address).write.approve(spender, amountWei);
     }
   );
 };
