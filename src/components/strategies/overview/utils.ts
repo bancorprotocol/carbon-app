@@ -8,10 +8,10 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
   switch (sortType) {
     case StrategySort.Recent:
       return (a: Strategy, b: Strategy) =>
-        new BigNumber(a.id).minus(b.id).times(-1).toNumber();
+        new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
     case StrategySort.Old:
       return (a: Strategy, b: Strategy) =>
-        new BigNumber(a.id).minus(b.id).toNumber();
+        new BigNumber(a.idDisplay).minus(b.idDisplay).toNumber();
     case StrategySort.PairAscending:
       return (a: Strategy, b: Strategy) => {
         firstPairComparison = a.base.symbol.localeCompare(b.base.symbol);
@@ -30,6 +30,6 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
       };
     default:
       return (a: Strategy, b: Strategy) =>
-        new BigNumber(a.id).minus(b.id).times(-1).toNumber();
+        new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
   }
 };

@@ -3,13 +3,16 @@ import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import { useGetTradeLiquidity, useGetTradeData } from 'libs/queries';
+import {
+  useGetTradeLiquidity,
+  useGetTradeData,
+  useGetMaxSourceAmountByPair,
+  useGetTokenPrice,
+} from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
-import { Action, TradeActionStruct } from 'libs/sdk';
+import { Action, TradeActionStruct, SerializableMatchAction } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
 
 export const useBuySell = ({
   source,
@@ -38,6 +41,10 @@ export const useBuySell = ({
     isTradeBySource,
     sourceInput,
   });
+  const maxSourceAmountQuery = useGetMaxSourceAmountByPair(
+    source.address,
+    target.address
+  );
 
   const clearInputs = useCallback(() => {
     setSourceInput('');
@@ -69,25 +76,33 @@ export const useBuySell = ({
 
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
-  const checkLiquidity = (value: string) => {
-    const check = (v: string) => {
-      if (v === '' || v === '...') {
+  const checkLiquidity = () => {
+    const checkSource = () => {
+      if (sourceInput === '' || sourceInput === '...') {
         return false;
       }
 
-      return !new BigNumber(v).eq(value);
+      return new BigNumber(sourceInput).gt(maxSourceAmountQuery.data || 0);
+    };
+
+    const checkTarget = () => {
+      if (targetInput === '' || targetInput === '...') {
+        return false;
+      }
+
+      return new BigNumber(targetInput).gt(liquidityQuery.data || 0);
     };
 
     const set = () => setIsLiquidityError(true);
     setIsLiquidityError(false);
 
     if (isTradeBySource) {
-      if (check(sourceInput)) {
+      if (checkSource()) {
         setTargetInput('...');
         return set();
       }
     } else {
-      if (check(targetInput)) {
+      if (checkTarget()) {
         setSourceInput('...');
         return set();
       }
@@ -102,7 +117,6 @@ export const useBuySell = ({
   useEffect(() => {
     if (bySourceQuery.data) {
       const {
-        totalSourceAmount,
         totalTargetAmount,
         tradeActions,
         actionsTokenRes,
@@ -116,7 +130,7 @@ export const useBuySell = ({
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
       if (effectiveRate !== '0') {
-        checkLiquidity(totalSourceAmount);
+        checkLiquidity();
       }
     }
     // eslint-disable-next-line
@@ -132,7 +146,6 @@ export const useBuySell = ({
 
       const {
         totalSourceAmount,
-        totalTargetAmount,
         tradeActions,
         actionsTokenRes,
         effectiveRate,
@@ -145,7 +158,7 @@ export const useBuySell = ({
       setTradeActionsWei(actionsWei);
       setRate(effectiveRate);
       if (effectiveRate !== '0') {
-        checkLiquidity(totalTargetAmount);
+        checkLiquidity();
       }
     }
     // eslint-disable-next-line
@@ -173,7 +186,8 @@ export const useBuySell = ({
       byTargetQuery.isFetching ||
       approval.isLoading ||
       isLiquidityError ||
-      errorBaseBalanceSufficient
+      errorBaseBalanceSufficient ||
+      maxSourceAmountQuery.isFetching
     ) {
       return;
     }
@@ -324,5 +338,6 @@ export const useBuySell = ({
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
+    maxSourceAmountQuery,
   };
 };

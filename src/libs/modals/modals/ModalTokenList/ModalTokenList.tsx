@@ -39,6 +39,11 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            onSelect(filteredTokens[0]);
+          }
+        }}
       />
       {isError ? (
         <ModalTokenListError />

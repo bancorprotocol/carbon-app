@@ -14,7 +14,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
 
   return (
     <div className={'h-full rounded-10 bg-silver p-20'}>
-      <h2>Order Book</h2>
+      <h2>Orders</h2>
       <div className={'mt-20 font-mono'}>
         <OrderBookWidgetHeader
           baseSymbol={base.symbol}
