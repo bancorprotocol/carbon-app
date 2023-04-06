@@ -72,7 +72,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         </TabsMenu>
 
         <div>
-          {strategyType === 'reoccurring' &&
+          {strategyType === 'recurring' &&
             BlockIconTextDesc({
               icon: <IconArrows className={'h-18 w-18'} />,
               title: 'Automated Linked Orders',

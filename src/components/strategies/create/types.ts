@@ -6,7 +6,7 @@ import { CreateStrategyParams } from 'libs/queries';
 import { DispatchNotification } from 'libs/notifications/types';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 
-export type StrategyType = 'reoccurring' | 'disposable';
+export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
 export type StrategySettings = 'limit' | 'range' | 'custom';
 
