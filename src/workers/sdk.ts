@@ -229,7 +229,7 @@ const getOrderBook = async (
 const sdkExposed = {
   init,
   isInitialized: () => isInitialized,
-  getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
+  getAllPairs: () => carbonSDK.getAllPairs(),
   setOnChangeHandlers: (
     onPairDataChanged: (affectedPairs: TokenPair[]) => void,
     onPairAddedToCache: (affectedPairs: TokenPair) => void
@@ -342,6 +342,8 @@ const sdkExposed = {
   getCacheDump: () => carbonSDK.getCacheDump(),
   getLastTradeByPair: (source: string, target: string) =>
     carbonSDK.getLastTradeByPair(source, target),
+  getMaxSourceAmountByPair: (source: string, target: string) =>
+    carbonSDK.getMaxSourceAmountByPair(source, target),
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

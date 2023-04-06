@@ -30,7 +30,7 @@ export const useGetTradePairsData = () => {
   return useQuery({
     queryKey: QueryKey.pairs(),
     queryFn: async () => {
-      const pairs = await carbonSDK.getAllTokenPairs();
+      const pairs = await carbonSDK.getAllPairs();
       const promises = pairs.map(async (pair) => ({
         baseToken: getTokenById(pair[0]) ?? (await _getTknData(pair[0])),
         quoteToken: getTokenById(pair[1]) ?? (await _getTknData(pair[1])),

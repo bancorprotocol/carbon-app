@@ -43,13 +43,13 @@ export const routes: Route[] = [
     searchFilters: [
       (search) => {
         if (
-          search.strategyType === 'reoccurring' ||
+          search.strategyType === 'recurring' ||
           search.strategyType === 'disposable' ||
           search.encodedStrategy
         ) {
           return search;
         }
-        return { ...search, strategyType: 'reoccurring' };
+        return { ...search, strategyType: 'recurring' };
       },
     ],
   },

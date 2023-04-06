@@ -32,12 +32,12 @@ export const useCreateStrategyTypeMenu = (
 
   const types: StrategyTypeItem[] = [
     {
-      label: 'Reoccurring',
+      label: 'Recurring',
       to: PathNames.createStrategy,
       search: {
         base,
         quote,
-        strategyType: 'reoccurring',
+        strategyType: 'recurring',
       },
     },
     {
@@ -51,26 +51,26 @@ export const useCreateStrategyTypeMenu = (
     },
   ];
 
-  const typeReoccurring: StrategyTypeItemSvg[] = [
+  const typeRecurring: StrategyTypeItemSvg[] = [
     {
       label: '2 Limits',
-      svg: <IconTwoRanges className={'w-60'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'reoccurring',
-        strategySettings: 'limit',
-      },
-    },
-    {
-      label: '2 Ranges',
       svg: <IconTwoLimits className={'w-60'} />,
       to: PathNames.createStrategy,
       search: {
         base,
         quote,
-        strategyType: 'reoccurring',
+        strategyType: 'recurring',
+        strategySettings: 'limit',
+      },
+    },
+    {
+      label: '2 Ranges',
+      svg: <IconTwoRanges className={'w-60'} />,
+      to: PathNames.createStrategy,
+      search: {
+        base,
+        quote,
+        strategyType: 'recurring',
         strategySettings: 'range',
       },
     },
@@ -81,7 +81,7 @@ export const useCreateStrategyTypeMenu = (
       search: {
         base,
         quote,
-        strategyType: 'reoccurring',
+        strategyType: 'recurring',
         strategySettings: 'custom',
       },
     },
@@ -148,14 +148,14 @@ export const useCreateStrategyTypeMenu = (
 
   const selectedTabItems = useMemo(() => {
     switch (strategyType) {
-      case 'reoccurring':
-        return typeReoccurring;
+      case 'recurring':
+        return typeRecurring;
       case 'disposable':
         return typeDisposable;
       default:
         return [];
     }
-  }, [typeReoccurring, typeDisposable, strategyType]);
+  }, [typeRecurring, typeDisposable, strategyType]);
 
   return { items: types, handleClick, selectedTabItems };
 };

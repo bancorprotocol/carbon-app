@@ -40,6 +40,11 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSelect(tradePairs[0]);
+          }
+        }}
       />
 
       {isError ? (

@@ -34,6 +34,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
+    maxSourceAmountQuery,
   } = useBuySell(props);
   const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
@@ -152,7 +153,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         />
       )}
       <Button
-        disabled={!hasEnoughLiquidity}
+        disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
         onClick={handleCTAClick}
         variant={buy ? 'success' : 'error'}
         fullWidth
