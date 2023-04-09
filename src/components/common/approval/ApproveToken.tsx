@@ -8,7 +8,7 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { StrategyType, TradeType } from 'services/googleTagManager/types';
 
 type Props = {
@@ -59,17 +59,19 @@ export const ApproveToken: FC<Props> = ({
           setTxBusy(false);
           setTxSuccess(true);
 
-          eventData &&
-            sendEvent(
-              'confirmation',
-              isLimited
-                ? 'token_confirm'
-                : 'token_confirmation_unlimited_approve',
-              {
-                ...eventData,
-                token: token.symbol,
-              }
-            );
+          if (eventData) {
+            isLimited
+              ? carbonEvents.tokenConfirmation.tokenConfirm({
+                  ...eventData,
+                  token: token.symbol,
+                })
+              : carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedApprove(
+                  {
+                    ...eventData,
+                    token: token.symbol,
+                  }
+                );
+          }
         },
         onError: () => {
           // TODO: proper error handling
@@ -131,9 +133,7 @@ export const ApproveToken: FC<Props> = ({
                 setIsOn={(x) => {
                   setIsLimited(!x);
                   eventData &&
-                    sendEvent(
-                      'confirmation',
-                      'token_confirmation_unlimited_switch_change',
+                    carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedSwitchChange(
                       {
                         ...eventData,
                         switch: x,

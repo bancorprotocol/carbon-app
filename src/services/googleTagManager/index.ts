@@ -6,6 +6,8 @@ import { navigationEvents } from './navigationEvents';
 import { strategyEvents } from './strategyEvents';
 import { strategyEditEvents } from './strategyEditEvents';
 import { tradeEvents } from './tradeEvents';
+import { transactionConfirmationEvents } from './transactionConfirmationEvents';
+import { tokenConfirmationEvents } from './tokenConfirmationEvents';
 
 declare global {
   interface Window {
@@ -27,7 +29,7 @@ export const sendEvent: SendEventFn = (type, event, data) => {
   switch (type) {
     case 'general': {
       return sendGTM({
-        event: `PV`,
+        event: 'PV',
         event_properties: {},
         page: dataObj,
         wallet: {},
@@ -56,4 +58,6 @@ export const carbonEvents: CarbonEvents = {
   strategy: strategyEvents,
   strategyEdit: strategyEditEvents,
   trade: tradeEvents,
+  transactionConfirmation: transactionConfirmationEvents,
+  tokenConfirmation: tokenConfirmationEvents,
 };

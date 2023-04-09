@@ -4,7 +4,7 @@ import { ApproveToken } from 'components/common/approval';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { useEffect } from 'react';
 import { StrategyType, TradeType } from 'services/googleTagManager/types';
 
@@ -24,7 +24,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
 
   useEffect(() => {
     eventData &&
-      sendEvent('confirmation', 'token_confirmation_view', eventData);
+      carbonEvents.tokenConfirmation.tokenConfirmationView(eventData);
   }, [eventData]);
 
   return (
@@ -48,19 +48,13 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
         disabled={approvalRequired}
         onClick={async () => {
           eventData &&
-            sendEvent(
-              'transactionConfirmation',
-              'transaction_confirmation_request',
+            carbonEvents.transactionConfirmation.transactionConfirmationRequest(
               eventData
             );
           closeModal(id);
           await onConfirm();
           eventData &&
-            sendEvent(
-              'transactionConfirmation',
-              'transaction_confirm',
-              eventData
-            );
+            carbonEvents.transactionConfirmation.transactionConfirm(eventData);
         }}
       >
         {buttonLabel}

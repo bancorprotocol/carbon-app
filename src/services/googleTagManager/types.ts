@@ -2,7 +2,9 @@ import { EventGeneralSchemaNew } from './generalEvents';
 import { EventNavigationSchemaNew } from './navigationEvents';
 import { EventStrategyEditSchemaNew } from './strategyEditEvents';
 import { EventStrategySchemaNew } from './strategyEvents';
+import { EventTokenConfirmationSchemaNew } from './tokenConfirmationEvents';
 import { EventTradeSchemaNew } from './tradeEvents';
+import { EventTransactionConfirmationSchemaNew } from './transactionConfirmationEvents';
 import { EventWalletSchemaNew } from './walletEvents';
 
 export type GTMData = {
@@ -23,9 +25,9 @@ export type Message = {
 
 export type TradeType = {
   trade_direction?: string;
-  token_pair: string;
-  buy_token: string;
-  sell_token: string;
+  token_pair?: string;
+  buy_token?: string;
+  sell_token?: string;
   value_usd?: string;
   blockchain_network?: string;
   transaction_hash?: string;
@@ -73,6 +75,8 @@ interface CarbonEventSchema extends CarbonEventsBase {
   strategy: EventStrategySchemaNew;
   strategyEdit: EventStrategyEditSchemaNew;
   trade: EventTradeSchemaNew;
+  transactionConfirmation: EventTransactionConfirmationSchemaNew;
+  tokenConfirmation: EventTokenConfirmationSchemaNew;
 }
 
 export type SendEventFn = <
