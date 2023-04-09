@@ -48,9 +48,10 @@ export const CreateStrategyOrders = ({
     'Strategies with low budget might be ignored during trading due to gas considerations';
 
   useEffect(() => {
-    carbonEvents.strategy.strategyWarningShow({
-      message: budgetWarningMessage,
-    });
+    showBudgetWarning &&
+      carbonEvents.strategy.strategyWarningShow({
+        message: budgetWarningMessage,
+      });
   }, [showBudgetWarning]);
 
   const onCreateStrategy = () => {
