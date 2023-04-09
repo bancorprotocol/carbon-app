@@ -60,7 +60,6 @@ export const useStrategyEvents = ({
     buy
       ? carbonEvents.strategy.strategyBuyLowOrderTypeChange(strategy)
       : carbonEvents.strategy.strategySellHighOrderTypeChange(strategy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buy, order.isRange]);
 
   useInitEffect(() => {
@@ -68,7 +67,6 @@ export const useStrategyEvents = ({
     buy
       ? carbonEvents.strategy.strategyBuyLowPriceSet(strategy)
       : carbonEvents.strategy.strategySellHighPriceSet(strategy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buy, order.min, order.max, order.price]);
 
   useInitEffect(() => {
@@ -77,6 +75,5 @@ export const useStrategyEvents = ({
     buy
       ? carbonEvents.strategy.strategyBuyLowBudgetSet(strategy)
       : carbonEvents.strategy.strategySellHighBudgetSet(strategy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buy, order.budget]);
 };

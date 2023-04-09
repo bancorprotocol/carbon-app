@@ -76,6 +76,7 @@ export const EditStrategyAllocatedBudget: FC<{
           <div className="flex w-auto items-center gap-6">
             <div>Allocated Budget</div>
             <Tooltip
+              sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
               iconClassName="h-13 mr-6 text-white/60"
               element={
                 buy

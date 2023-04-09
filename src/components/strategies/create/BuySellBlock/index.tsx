@@ -27,9 +27,10 @@ export const BuySellBlock: FC<Props> = ({
   isBudgetOptional,
 }) => {
   const budgetToken = buy ? quote : base;
-  const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
-    order.budget
-  );
+  const insufficientBalance =
+    !tokenBalanceQuery.isLoading &&
+    new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
+
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
   const titleText = buy ? 'Buy Low' : 'Sell High';
