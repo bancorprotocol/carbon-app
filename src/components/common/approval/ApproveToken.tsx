@@ -60,17 +60,11 @@ export const ApproveToken: FC<Props> = ({
           setTxSuccess(true);
 
           if (eventData) {
-            isLimited
-              ? carbonEvents.tokenConfirmation.tokenConfirm({
-                  ...eventData,
-                  token: token.symbol,
-                })
-              : carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedApprove(
-                  {
-                    ...eventData,
-                    token: token.symbol,
-                  }
-                );
+            carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedApprove({
+              ...eventData,
+              token: token.symbol,
+              switch: !isLimited ? 'true' : 'false',
+            });
           }
         },
         onError: () => {
@@ -87,7 +81,7 @@ export const ApproveToken: FC<Props> = ({
     eventData &&
       carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedSwitchChange({
         ...eventData,
-        switch: value,
+        switch: value ? 'true' : 'false',
       });
   };
 

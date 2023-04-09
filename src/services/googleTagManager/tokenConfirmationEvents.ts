@@ -11,12 +11,14 @@ export interface EventTokenConfirmationSchemaNew extends EventCategory {
     gtmData: TradeType | StrategyType;
   };
   tokenConfirmationUnlimitedApprove: {
-    input: TradeType | StrategyType | { token: string };
-    gtmData: TradeType | StrategyType | { token: string };
-  };
-  tokenConfirm: {
-    input: TradeType | StrategyType | { token: string };
-    gtmData: TradeType | StrategyType | { token: string };
+    input:
+      | TradeType
+      | StrategyType
+      | { token: string; switch: 'true' | 'false' };
+    gtmData:
+      | TradeType
+      | StrategyType
+      | { token: string; switch: 'true' | 'false' };
   };
 }
 
@@ -33,8 +35,5 @@ export const tokenConfirmationEvents: CarbonEvents['tokenConfirmation'] = {
   },
   tokenConfirmationUnlimitedApprove: (data) => {
     sendEvent('tokenConfirmation', 'tokenConfirmationUnlimitedApprove', data);
-  },
-  tokenConfirm: (data) => {
-    sendEvent('tokenConfirmation', 'tokenConfirm', data);
   },
 };

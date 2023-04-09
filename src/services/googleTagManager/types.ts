@@ -32,11 +32,11 @@ export type TradeType = {
   blockchain_network?: string;
   transaction_hash?: string;
   message?: string;
-  switch?: boolean;
+  switch?: 'true' | 'false';
 };
 
 export type ConfirmationType = {
-  switch?: boolean;
+  switch?: 'true' | 'false';
   token?: string;
 };
 
