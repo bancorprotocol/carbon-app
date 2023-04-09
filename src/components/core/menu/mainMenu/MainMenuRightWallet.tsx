@@ -44,7 +44,6 @@ export const MainMenuRightWallet: FC = () => {
 
   const onClickOpenModal = () => {
     carbonEvents.navigation.navWalletConnectClick(undefined);
-    carbonEvents.wallet.walletConnectPopupView(undefined);
     openModal('wallet', undefined);
   };
 

@@ -2,7 +2,7 @@ import { useModal } from 'hooks/useModal';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useWeb3, Connection } from 'libs/web3';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { carbonEvents } from 'services/googleTagManager';
@@ -28,6 +28,10 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       setConnectionError(e.message || 'Unknown connection error.');
     }
   };
+
+  useEffect(() => {
+    carbonEvents.wallet.walletConnectPopupView(undefined);
+  }, []);
 
   return (
     <Modal id={id} title={'Connect Wallet'} isLoading={isLoading}>
