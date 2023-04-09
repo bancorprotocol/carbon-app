@@ -27,7 +27,7 @@ export const useGetTradeActionsQuery = ({
       actionsWei
     ),
     async () => {
-      return await carbonSDK.getTradeDataFromActions(
+      return carbonSDK.getTradeDataFromActions(
         sourceToken,
         targetToken,
         !isTradeBySource,

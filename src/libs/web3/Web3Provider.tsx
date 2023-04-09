@@ -24,6 +24,7 @@ const defaultValue: BancorWeb3ProviderContext = {
   networkError: undefined,
   isSupportedNetwork: true,
   switchNetwork: () => {},
+  isUserBlocked: false,
 };
 
 const BancorWeb3CTX = createContext(defaultValue);
@@ -52,7 +53,7 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
 
   const { handleTenderlyRPC } = useWeb3Tenderly();
 
-  const { user, signer, connect, disconnect } = useWeb3User({
+  const { user, signer, connect, disconnect, isUserBlocked } = useWeb3User({
     walletAccount,
     walletProvider,
     provider,
@@ -82,6 +83,7 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
         networkError,
         isSupportedNetwork,
         switchNetwork,
+        isUserBlocked,
       }}
     >
       {children}

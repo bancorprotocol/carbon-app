@@ -21,7 +21,7 @@ export const useWeb3Tenderly = () => {
     lsService.removeItem('sdkCompressedCacheData');
     lsService.removeItem('tokenPairsCache');
 
-    window.location.reload();
+    window?.location.reload();
   };
 
   return { handleTenderlyRPC };

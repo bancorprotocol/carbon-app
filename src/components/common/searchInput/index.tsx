@@ -1,11 +1,13 @@
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
+import { KeyboardEventHandler } from 'react';
 
 interface Props {
   value: string;
   setValue: (value: string) => void;
   className?: string;
   autoFocus?: boolean;
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
 }
 
 const defaultClassName =
@@ -16,6 +18,7 @@ export const SearchInput = ({
   setValue,
   className,
   autoFocus,
+  onKeyDown,
 }: Props) => {
   return (
     <div className="relative">
@@ -35,6 +38,7 @@ export const SearchInput = ({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Search"
+        onKeyDown={onKeyDown}
         className={`${defaultClassName} ${className}`}
       />
     </div>

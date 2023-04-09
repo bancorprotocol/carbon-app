@@ -6,8 +6,8 @@ const cryptoCompareAxios = axios.create({
   baseURL: CRYPTO_COMPARE_URL,
 });
 
-cryptoCompareAxios.defaults.headers.common[
-  'authorization'
-] = `Apikey ${process.env.REACT_APP_CRYPTO_COMPARE}`;
+cryptoCompareAxios.defaults.headers.common['authorization'] = `Apikey ${
+  import.meta.env.VITE_CRYPTO_COMPARE
+}`;
 
 export { cryptoCompareAxios };

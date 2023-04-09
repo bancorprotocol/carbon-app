@@ -3,6 +3,7 @@ import { ConnectionType, IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 import { getConnection } from 'libs/web3/web3.utils';
 import { Web3Provider } from '@ethersproject/providers';
 import { Connector } from '@web3-react/types';
+import { isAccountBlocked } from 'utils/restrictedAccounts';
 
 type Props = {
   imposterAccount: string;
@@ -26,6 +27,8 @@ export const useWeb3User = ({
     [imposterAccount, walletAccount]
   );
 
+  const isUserBlocked = useMemo(() => isAccountBlocked(user), [user]);
+
   const signer = useMemo(
     () =>
       IS_TENDERLY_FORK
@@ -48,5 +51,5 @@ export const useWeb3User = ({
     handleImposterAccount();
   }, [connector, handleImposterAccount]);
 
-  return { user, signer, connect, disconnect };
+  return { user, signer, connect, disconnect, isUserBlocked };
 };

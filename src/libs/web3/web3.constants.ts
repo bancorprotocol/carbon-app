@@ -2,11 +2,9 @@ import { ChainIdMapTo } from 'libs/web3/web3.types';
 import { lsService } from 'services/localeStorage';
 
 const ALCHEMY_URL = 'https://eth-mainnet.alchemyapi.io/v2/';
-const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY;
+const ALCHEMY_KEY = import.meta.env.VITE_ALCHEMY_KEY;
 if (typeof ALCHEMY_KEY === 'undefined') {
-  throw new Error(
-    `REACT_APP_ALCHEMY_KEY must be a defined environment variable`
-  );
+  throw new Error(`VITE_ALCHEMY_KEY must be a defined environment variable`);
 }
 
 const TENDERLY_RPC = lsService.getItem('tenderlyRpc');

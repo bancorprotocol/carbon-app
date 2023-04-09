@@ -55,6 +55,12 @@ export namespace QueryKey {
     'liquidity',
   ];
 
+  export const tradeMaxSourceAmount = (pair: TokenPair) => [
+    ...sdk,
+    buildTokenPairKey(pair),
+    'trade-max-source-amount',
+  ];
+
   export const tradeOrderBook = (pair: TokenPair, steps: number) => [
     ...sdk,
     buildTokenPairKey(pair),
