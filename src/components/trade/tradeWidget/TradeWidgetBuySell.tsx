@@ -9,7 +9,7 @@ import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useEffect } from 'react';
 
@@ -37,6 +37,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
+    isTradeBySource,
   } = useBuySell(props);
   const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
@@ -45,26 +46,83 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   useEffect(() => {
     errorMsgSource &&
-      sendEvent('trade', 'trade_error_show', {
+      carbonEvents.trade.tradeErrorShow({
         trade_direction: buy ? 'buy' : 'sell',
         buy_token: target.symbol,
         sell_token: source.symbol,
         token_pair: `${target.symbol}/${source.symbol}`,
         value_usd: getFiatValueSource(sourceInput, true).toString(),
-        message: errorMsgSource,
+        message: errorMsgSource || '',
       });
 
     errorMsgTarget &&
-      sendEvent('trade', 'trade_error_show', {
+      carbonEvents.trade.tradeErrorShow({
         trade_direction: buy ? 'buy' : 'sell',
         buy_token: target.symbol,
         sell_token: source.symbol,
         token_pair: `${target.symbol}/${source.symbol}`,
         value_usd: getFiatValueSource(sourceInput, true).toString(),
-        message: errorMsgTarget,
+        message: errorMsgTarget || '',
       });
+
+    !hasEnoughLiquidity &&
+      !liquidityQuery.isLoading &&
+      carbonEvents.trade.tradeErrorShow({
+        trade_direction: buy ? 'buy' : 'sell',
+        buy_token: target.symbol,
+        sell_token: source.symbol,
+        token_pair: `${target.symbol}/${source.symbol}`,
+        message: 'No Liquidity Available',
+      });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorMsgSource, errorMsgTarget]);
+  }, [errorMsgSource, errorMsgTarget, hasEnoughLiquidity]);
+
+  useEffect(() => {
+    const tradeData = {
+      trade_direction: buy ? 'buy' : 'sell',
+      buy_token: target.symbol,
+      sell_token: source.symbol,
+      token_pair: `${target.symbol}/${source.symbol}`,
+      value_usd: getFiatValueSource(sourceInput, true).toString(),
+    };
+    if (isTradeBySource) {
+      buy
+        ? carbonEvents.trade.tradeBuyPaySet(tradeData)
+        : carbonEvents.trade.tradeSellPaySet(tradeData);
+    }
+  }, [
+    buy,
+    getFiatValueSource,
+    isTradeBySource,
+    source.symbol,
+    sourceInput,
+    target.symbol,
+  ]);
+
+  useEffect(() => {
+    const tradeData = {
+      trade_direction: buy ? 'buy' : 'sell',
+      buy_token: target.symbol,
+      sell_token: source.symbol,
+      token_pair: `${target.symbol}/${source.symbol}`,
+      value_usd: getFiatValueSource(sourceInput, true).toString(),
+    };
+
+    if (!isTradeBySource && sourceInput) {
+      buy
+        ? carbonEvents.trade.tradeBuyReceiveSet(tradeData)
+        : carbonEvents.trade.tradeSellReceiveSet(tradeData);
+    }
+  }, [
+    isTradeBySource,
+    targetInput,
+    sourceInput,
+    buy,
+    target.symbol,
+    source.symbol,
+    getFiatValueSource,
+  ]);
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
@@ -88,28 +146,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       ? 'loading'
       : prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
-  };
-
-  const handleEvents = (value: string, isSource = false) => {
-    isSource
-      ? sendEvent('trade', buy ? 'trade_buy_pay_set' : 'trade_sell_pay_set', {
-          trade_direction: buy ? 'buy' : 'sell',
-          buy_token: target.symbol,
-          sell_token: source.symbol,
-          token_pair: `${target.symbol}/${source.symbol}`,
-          value_usd: getFiatValueSource(value, true).toString(),
-        })
-      : sendEvent(
-          'trade',
-          buy ? 'trade_buy_receive_set' : 'trade_sell_receive_set',
-          {
-            trade_direction: buy ? 'buy' : 'sell',
-            buy_token: target.symbol,
-            sell_token: source.symbol,
-            token_pair: `${target.symbol}/${source.symbol}`,
-            value_usd: getFiatValueSource(value, true).toString(),
-          }
-        );
   };
 
   const showRouting =
@@ -137,7 +173,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             value={sourceInput}
             setValue={(value) => {
               setSourceInput(value);
-              handleEvents(value, true);
             }}
             balance={sourceBalanceQuery.data}
             onKeystroke={() => onInputChange(true)}
@@ -165,7 +200,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             value={targetInput}
             setValue={(value) => {
               setTargetInput(value);
-              handleEvents(value);
             }}
             placeholder={'Total Amount'}
             onKeystroke={() => onInputChange(false)}
@@ -210,12 +244,21 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         disabled={!hasEnoughLiquidity}
         onClick={() => {
           handleCTAClick();
-          sendEvent('trade', buy ? 'trade_buy_click' : 'trade_sell_click', {
-            trade_direction: buy ? 'buy' : 'sell',
-            buy_token: target.symbol,
-            sell_token: source.symbol,
-            token_pair: `${target.symbol}/${source.symbol}`,
-          });
+          buy
+            ? carbonEvents.trade.tradeBuyClick({
+                trade_direction: buy ? 'buy' : 'sell',
+                buy_token: target.symbol,
+                sell_token: source.symbol,
+                token_pair: `${target.symbol}/${source.symbol}`,
+                value_usd: getFiatValueSource(sourceInput, true).toString(),
+              })
+            : carbonEvents.trade.tradeSellClick({
+                trade_direction: buy ? 'buy' : 'sell',
+                buy_token: target.symbol,
+                sell_token: source.symbol,
+                token_pair: `${target.symbol}/${source.symbol}`,
+                value_usd: getFiatValueSource(sourceInput, true).toString(),
+              });
         }}
         variant={buy ? 'success' : 'error'}
         fullWidth

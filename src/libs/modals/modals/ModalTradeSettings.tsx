@@ -3,7 +3,7 @@ import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { TradeSettings } from 'components/trade/settings/TradeSettings';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 export type ModalTradeSettingsData = {
   base: Token;
@@ -31,7 +31,11 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
               className="mr-20 font-mono text-16 font-weight-500 text-white"
               onClick={() => {
                 resetAll();
-                sendEvent('trade', 'trade_reset_all', undefined);
+                carbonEvents.trade.tradeSettingsResetAllClick({
+                  token_pair: `${data.base?.symbol}/${data.quote?.symbol}`,
+                  buy_token: data.base?.symbol || '',
+                  sell_token: data.quote?.symbol || '',
+                });
               }}
             >
               Reset All

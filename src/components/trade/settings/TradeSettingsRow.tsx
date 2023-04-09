@@ -3,7 +3,7 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { TradeSettingsData, warningMessageIfOutOfRange } from './utils';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -44,9 +44,7 @@ export const TradeSettingsRow: FC<{
 
   useEffect(() => {
     warningMessage &&
-      sendEvent('trade', 'trade_warning_show', {
-        message: warningMessage,
-      });
+      carbonEvents.trade.tradeWarningShow({ message: warningMessage });
   }, [warningMessage]);
 
   return (

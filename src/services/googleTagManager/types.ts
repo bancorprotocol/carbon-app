@@ -2,6 +2,7 @@ import { EventGeneralSchemaNew } from './generalEvents';
 import { EventNavigationSchemaNew } from './navigationEvents';
 import { EventStrategyEditSchemaNew } from './strategyEditEvents';
 import { EventStrategySchemaNew } from './strategyEvents';
+import { EventTradeSchemaNew } from './tradeEvents';
 import { EventWalletSchemaNew } from './walletEvents';
 
 export type GTMData = {
@@ -71,6 +72,7 @@ interface CarbonEventSchema extends CarbonEventsBase {
   navigation: EventNavigationSchemaNew;
   strategy: EventStrategySchemaNew;
   strategyEdit: EventStrategyEditSchemaNew;
+  trade: EventTradeSchemaNew;
 }
 
 export type SendEventFn = <

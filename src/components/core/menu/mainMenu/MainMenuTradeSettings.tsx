@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { Button } from 'components/common/button';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 import { Token } from 'libs/tokens';
 
 type Props = {
@@ -19,7 +19,7 @@ export const MainMenuTradeSettings: FC<Props> = ({ baseToken, quoteToken }) => {
       className={'flex w-40 items-center justify-center !p-0'}
       onClick={() => {
         openModal('tradeSettings', { base: baseToken, quote: quoteToken });
-        sendEvent('trade', 'trade_pair_settings_click', {
+        carbonEvents.trade.tradeSettingsClick({
           token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
           buy_token: baseToken.symbol,
           sell_token: quoteToken.symbol,

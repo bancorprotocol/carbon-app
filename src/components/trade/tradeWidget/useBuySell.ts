@@ -10,7 +10,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 export const useBuySell = ({
   source,
@@ -49,7 +49,7 @@ export const useBuySell = ({
       buy_token: target.symbol,
       sell_token: source.symbol,
       token_pair: `${target.symbol}/${source.symbol}`,
-      blockchain_network: provider?.network.name,
+      blockchain_network: provider?.network?.name,
       value_usd: getFiatValueSource(sourceInput, true).toString(),
     };
   }, [
@@ -67,10 +67,15 @@ export const useBuySell = ({
     isTradeBySource,
     onSuccess: (txHash: string) => {
       clearInputs();
-      sendEvent('trade', buy ? 'trade_buy' : 'trade_sell', {
-        ...eventData,
-        transaction_hash: txHash,
-      });
+      buy
+        ? carbonEvents.trade.tradeBuy({
+            ...eventData,
+            transaction_hash: txHash,
+          })
+        : carbonEvents.trade.tradeSell({
+            ...eventData,
+            transaction_hash: txHash,
+          });
     },
   });
 
@@ -348,5 +353,6 @@ export const useBuySell = ({
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
+    isTradeBySource,
   };
 };

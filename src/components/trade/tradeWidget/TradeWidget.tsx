@@ -2,14 +2,14 @@ import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuyS
 import { useGetTokenBalance } from 'libs/queries';
 import { TradePageProps } from 'pages/trade';
 import { useEffect } from 'react';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 export const TradeWidget = ({ base, quote }: TradePageProps) => {
   const baseBalanceQuery = useGetTokenBalance(base);
   const quoteBalanceQuery = useGetTokenBalance(quote);
 
   useEffect(() => {
-    sendEvent('trade', 'trade_pair_change', {
+    carbonEvents.trade.tradePairChange({
       token_pair: `${base?.symbol}/${quote?.symbol}`,
       buy_token: base?.symbol || '',
       sell_token: quote?.symbol || '',

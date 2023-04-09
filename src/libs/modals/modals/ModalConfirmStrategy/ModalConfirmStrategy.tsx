@@ -7,9 +7,9 @@ import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getModalDataByType } from './utils';
-import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/googleTagManager';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 
 export type ModalConfirmStrategyData = {
   strategy: Strategy;

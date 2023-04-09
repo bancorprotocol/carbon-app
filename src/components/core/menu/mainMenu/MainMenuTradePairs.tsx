@@ -4,7 +4,7 @@ import { Button } from 'components/common/button';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
-import { sendEvent } from 'services/googleTagManager';
+import { carbonEvents } from 'services/googleTagManager';
 
 type Props = {
   baseToken: Token;
@@ -19,7 +19,7 @@ export const MainMenuTradePairs: FC<Props> = ({ baseToken, quoteToken }) => {
       variant={'secondary'}
       onClick={() => {
         openTradePairList();
-        sendEvent('trade', 'trade_pair_change_click', {
+        carbonEvents.trade.tradePairChangeClick({
           token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
           buy_token: baseToken.symbol,
           sell_token: quoteToken.symbol,
