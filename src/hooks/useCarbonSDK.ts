@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import LZString from 'lz-string';
 import { useStore } from 'store';
 import { useQueryClient } from '@tanstack/react-query';
 import { RPC_URLS } from 'libs/web3';
@@ -26,8 +25,7 @@ const sdkConfig = {
 const persistSdkCacheDump = async () => {
   console.log('SDK Cache dumped into local storage');
   const cachedDump = await carbonSDK.getCacheDump();
-  const compressedCachedDump = LZString.compress(cachedDump);
-  lsService.setItem('sdkCompressedCacheData', compressedCachedDump);
+  lsService.setItem('sdkCompressedCacheData', cachedDump, true);
 };
 
 const getTokenDecimalMap = () => {
@@ -87,9 +85,8 @@ export const useCarbonSDK = () => {
   const init = useCallback(async () => {
     try {
       setIsLoading(true);
-      const compressedCacheData = lsService.getItem('sdkCompressedCacheData');
-      const cacheData =
-        compressedCacheData && LZString.decompress(compressedCacheData);
+      const cacheData = lsService.getItem('sdkCompressedCacheData', true);
+      console.log(cacheData,'-=-=-=-=-=- cacheData -=-=-=-=-=-');
       await carbonSDK.init(sdkConfig, getTokenDecimalMap(), cacheData);
       await carbonSDK.setOnChangeHandlers(
         Comlink.proxy(onPairDataChangedCallback),
