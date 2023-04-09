@@ -9,10 +9,21 @@ import { carbonEvents } from 'services/googleTagManager';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
-  const { connect } = useWeb3();
+  const { connect, user } = useWeb3();
   const [selectedConnection, setSelectedConnection] =
     useState<Connection | null>(null);
   const [connectionError, setConnectionError] = useState('');
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    if (isConnected) {
+      carbonEvents.wallet.walletConnect({
+        address: user,
+        name: selectedConnection?.name || '',
+        tos: true,
+      });
+    }
+  }, [isConnected, selectedConnection?.name, user]);
 
   const isLoading = selectedConnection !== null && !connectionError;
   const isError = selectedConnection !== null && connectionError;
@@ -22,7 +33,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     try {
       await connect(c.type);
       closeModal(id);
-      carbonEvents.wallet.walletConnect({ name: c.name, tos: true });
+      setIsConnected(true);
     } catch (e: any) {
       console.error(`Modal Wallet onClickConnect error: `, e);
       setConnectionError(e.message || 'Unknown connection error.');

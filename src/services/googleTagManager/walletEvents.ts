@@ -7,26 +7,34 @@ export interface EventWalletSchemaNew extends EventCategory {
     gtmData: undefined;
   };
   walletConnect: {
-    input: { name: string; tos: boolean };
-    gtmData: { wallet_name: string; tos_approve: boolean };
+    input: { address: string | undefined; name: string; tos: boolean };
+    gtmData: {
+      wallet_id: string | undefined;
+      wallet_name: string;
+      tos_approve: boolean;
+    };
   };
   walletDisconnect: {
-    input: { name: string };
-    gtmData: { wallet_name: string };
+    input: { address: string | undefined; name: string };
+    gtmData: { wallet_name: string; wallet_id: string | undefined };
   };
 }
 
 export const walletEvents: CarbonEvents['wallet'] = {
-  walletConnect: ({ name, tos }) => {
+  walletConnect: ({ name, tos, address }) => {
     sendEvent('wallet', 'walletConnect', {
       wallet_name: name,
+      wallet_id: address,
       tos_approve: tos,
     });
   },
   walletConnectPopupView: () => {
     sendEvent('wallet', 'walletConnectPopupView', undefined);
   },
-  walletDisconnect: ({ name }) => {
-    sendEvent('wallet', 'walletDisconnect', { wallet_name: name });
+  walletDisconnect: ({ name, address }) => {
+    sendEvent('wallet', 'walletDisconnect', {
+      wallet_id: address,
+      wallet_name: name,
+    });
   },
 };

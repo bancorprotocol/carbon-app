@@ -12,6 +12,7 @@ import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { carbonEvents } from 'services/googleTagManager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useEffect } from 'react';
+import useInitEffect from 'hooks/useInitEffect';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -78,7 +79,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMsgSource, errorMsgTarget, hasEnoughLiquidity]);
 
-  useEffect(() => {
+  useInitEffect(() => {
     const tradeData = {
       trade_direction: buy ? 'buy' : 'sell',
       buy_token: target.symbol,
@@ -100,7 +101,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     target.symbol,
   ]);
 
-  useEffect(() => {
+  useInitEffect(() => {
     const tradeData = {
       trade_direction: buy ? 'buy' : 'sell',
       buy_token: target.symbol,

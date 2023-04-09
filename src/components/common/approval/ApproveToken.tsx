@@ -82,6 +82,15 @@ export const ApproveToken: FC<Props> = ({
     );
   };
 
+  const handleLimitChange = (value: boolean) => {
+    setIsLimited(!value);
+    eventData &&
+      carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedSwitchChange({
+        ...eventData,
+        switch: value,
+      });
+  };
+
   // TODO handle error
   if (!data || !token) {
     if (isLoading) {
@@ -130,16 +139,7 @@ export const ApproveToken: FC<Props> = ({
               <Switch
                 variant={isLimited ? 'secondary' : 'white'}
                 isOn={!isLimited}
-                setIsOn={(x) => {
-                  setIsLimited(!x);
-                  eventData &&
-                    carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedSwitchChange(
-                      {
-                        ...eventData,
-                        switch: x,
-                      }
-                    );
-                }}
+                setIsOn={handleLimitChange}
                 size={'sm'}
               />
             </div>

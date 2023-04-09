@@ -1,6 +1,6 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import useInitEffect from 'hooks/useInitEffect';
 import { Token } from 'libs/tokens';
-import { useEffect, useRef } from 'react';
 import { carbonEvents } from 'services/googleTagManager';
 import { StrategyType } from 'services/googleTagManager/types';
 import { OrderCreate } from '../useOrder';
@@ -18,12 +18,6 @@ export const useStrategyEvents = ({
   buy?: boolean;
   insufficientBalance?: boolean;
 }) => {
-  const firstTimeRender = useRef({
-    price: true,
-    budget: true,
-    type: true,
-    errorMsg: true,
-  });
   const budgetToken = buy ? quote : base;
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
@@ -53,47 +47,35 @@ export const useStrategyEvents = ({
     };
   };
 
-  useEffect(() => {
-    if (!firstTimeRender.current.errorMsg) {
-      carbonEvents.strategy.strategyErrorShow({
-        section: buy ? 'Buy Low' : 'Sell High',
-        message: 'Insufficient balance',
-      });
-    }
-    firstTimeRender.current.errorMsg = false;
+  useInitEffect(() => {
+    carbonEvents.strategy.strategyErrorShow({
+      section: buy ? 'Buy Low' : 'Sell High',
+      message: 'Insufficient balance',
+    });
   }, [buy, insufficientBalance]);
 
-  useEffect(() => {
-    if (!firstTimeRender.current.type) {
-      const strategy = getStrategyEventData();
-      buy
-        ? carbonEvents.strategy.strategyBuyLowOrderTypeChange(strategy)
-        : carbonEvents.strategy.strategySellHighOrderTypeChange(strategy);
-    }
-    firstTimeRender.current.type = false;
+  useInitEffect(() => {
+    const strategy = getStrategyEventData();
+    buy
+      ? carbonEvents.strategy.strategyBuyLowOrderTypeChange(strategy)
+      : carbonEvents.strategy.strategySellHighOrderTypeChange(strategy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buy, order.isRange]);
 
-  useEffect(() => {
-    if (!firstTimeRender.current.price) {
-      const strategy = getStrategyEventData();
-      buy
-        ? carbonEvents.strategy.strategyBuyLowPriceSet(strategy)
-        : carbonEvents.strategy.strategySellHighPriceSet(strategy);
-    }
-    firstTimeRender.current.price = false;
+  useInitEffect(() => {
+    const strategy = getStrategyEventData();
+    buy
+      ? carbonEvents.strategy.strategyBuyLowPriceSet(strategy)
+      : carbonEvents.strategy.strategySellHighPriceSet(strategy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buy, order.min, order.max, order.price]);
 
-  useEffect(() => {
-    if (!firstTimeRender.current.budget) {
-      const strategy = getStrategyEventData();
+  useInitEffect(() => {
+    const strategy = getStrategyEventData();
 
-      buy
-        ? carbonEvents.strategy.strategyBuyLowBudgetSet(strategy)
-        : carbonEvents.strategy.strategySellHighBudgetSet(strategy);
-    }
-    firstTimeRender.current.budget = false;
+    buy
+      ? carbonEvents.strategy.strategyBuyLowBudgetSet(strategy)
+      : carbonEvents.strategy.strategySellHighBudgetSet(strategy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buy, order.budget]);
 };

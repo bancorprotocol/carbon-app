@@ -50,6 +50,7 @@ export const MainMenuRightWallet: FC = () => {
   const onDisconnect = async () => {
     disconnect();
     carbonEvents.wallet.walletDisconnect({
+      address: user,
       name: connector?.constructor?.name || '',
     });
   };
