@@ -25,6 +25,7 @@ export const EditStrategyBudgetContent = ({
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
 
   const strategyEventData = useStrategyEventData({
+    id: strategy.id,
     base: strategy.base,
     quote: strategy.quote,
     order0,

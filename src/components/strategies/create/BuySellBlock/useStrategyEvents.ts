@@ -3,6 +3,7 @@ import useInitEffect from 'hooks/useInitEffect';
 import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/googleTagManager';
 import { StrategyType } from 'services/googleTagManager/types';
+import { sanitizeNumberInput } from 'utils/helpers';
 import { OrderCreate } from '../useOrder';
 
 export const useStrategyEvents = ({
@@ -30,9 +31,9 @@ export const useStrategyEvents = ({
         strategy_buy_low_order_type: order.isRange ? 'range' : 'limit',
         strategy_buy_low_budget: order.budget,
         strategy_buy_low_budget_usd: fiatValueUsd,
-        strategy_buy_low_token_price: order.price,
-        strategy_buy_low_token_min_price: order.min,
-        strategy_buy_low_token_max_price: order.max,
+        strategy_buy_low_token_price: sanitizeNumberInput(order.price, 18),
+        strategy_buy_low_token_min_price: sanitizeNumberInput(order.min, 18),
+        strategy_buy_low_token_max_price: sanitizeNumberInput(order.max, 18),
       };
     }
     return {
@@ -41,9 +42,9 @@ export const useStrategyEvents = ({
       strategy_sell_high_order_type: order.isRange ? 'range' : 'limit',
       strategy_sell_high_budget: order.budget,
       strategy_sell_high_budget_usd: fiatValueUsd,
-      strategy_sell_high_token_price: order.price,
-      strategy_sell_high_token_min_price: order.min,
-      strategy_sell_high_token_max_price: order.max,
+      strategy_sell_high_token_price: sanitizeNumberInput(order.price, 18),
+      strategy_sell_high_token_min_price: sanitizeNumberInput(order.min, 18),
+      strategy_sell_high_token_max_price: sanitizeNumberInput(order.max, 18),
     };
   };
 

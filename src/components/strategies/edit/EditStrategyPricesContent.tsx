@@ -32,6 +32,7 @@ export const EditStrategyPricesContent = ({
     history: { back },
   } = useLocation();
   const strategyEventData = useStrategyEventData({
+    id: strategy.id,
     base: strategy.base,
     quote: strategy.quote,
     order0,

@@ -15,8 +15,8 @@ export interface EventWalletSchemaNew extends EventCategory {
     };
   };
   walletDisconnect: {
-    input: { address: string | undefined; name: string };
-    gtmData: { wallet_name: string; wallet_id: string | undefined };
+    input: { address: string | undefined };
+    gtmData: { wallet_id: string | undefined };
   };
 }
 
@@ -31,10 +31,9 @@ export const walletEvents: CarbonEvents['wallet'] = {
   walletConnectPopupView: () => {
     sendEvent('wallet', 'walletConnectPopupView', undefined);
   },
-  walletDisconnect: ({ name, address }) => {
+  walletDisconnect: ({ address }) => {
     sendEvent('wallet', 'walletDisconnect', {
       wallet_id: address,
-      wallet_name: name,
     });
   },
 };

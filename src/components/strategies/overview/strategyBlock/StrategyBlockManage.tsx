@@ -37,6 +37,7 @@ export const StrategyBlockManage: FC<{
   const order1 = useOrder(strategy.order1);
 
   const strategyEventData = useStrategyEventData({
+    id: strategy.id,
     base: strategy.base,
     quote: strategy.quote,
     order0,
