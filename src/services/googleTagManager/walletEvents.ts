@@ -7,11 +7,11 @@ export interface EventWalletSchemaNew extends EventCategory {
     gtmData: undefined;
   };
   walletConnect: {
-    input: { address: string | undefined; name: string; tos: boolean };
+    input: { address: string | undefined; name: string; tos: 'true' | 'false' };
     gtmData: {
       wallet_id: string | undefined;
       wallet_name: string;
-      tos_approve: boolean;
+      tos_approve: 'true' | 'false';
     };
   };
   walletDisconnect: {

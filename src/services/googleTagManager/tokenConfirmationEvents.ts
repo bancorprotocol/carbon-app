@@ -9,8 +9,8 @@ import {
 
 export interface EventTokenConfirmationSchemaNew extends EventCategory {
   tokenConfirmationView: {
-    input: TradeType | StrategyType;
-    gtmData: TradeType | StrategyType;
+    input: (TradeType | StrategyType) & { token: string[] };
+    gtmData: (TradeType | StrategyType) & { token: string[] };
   };
   tokenConfirmationUnlimitedSwitchChange: {
     input: TradeType | StrategyType | ConfirmationType;

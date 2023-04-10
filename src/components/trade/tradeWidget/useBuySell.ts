@@ -226,7 +226,10 @@ export const useBuySell = ({
         approvalTokens: approval.tokens,
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
-        eventData,
+        eventData: {
+          ...eventData,
+          token: approval.tokens.map(({ symbol }) => symbol),
+        },
       });
     } else {
       void tradeFn();

@@ -12,7 +12,7 @@ export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
   buttonLabel?: string;
-  eventData?: TradeType | StrategyType;
+  eventData?: (TradeType | StrategyType) & { token: string[] };
 };
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({

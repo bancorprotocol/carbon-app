@@ -96,6 +96,7 @@ export const useModalTradeRouting = ({
             data?.totalSourceAmount,
             true
           ).toString(),
+          token: approval.tokens.map(({ symbol }) => symbol),
         },
       });
     } else {

@@ -135,7 +135,10 @@ export const useCreateStrategy = () => {
           approvalTokens,
           onConfirm: create,
           buttonLabel: 'Create Strategy',
-          eventData: strategyEventData,
+          eventData: {
+            ...strategyEventData,
+            token: approval.tokens.map(({ symbol }) => symbol),
+          },
         });
       else create();
     }

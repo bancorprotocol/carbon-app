@@ -17,11 +17,13 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
 
   useEffect(() => {
     if (isConnected) {
-      carbonEvents.wallet.walletConnect({
-        address: user,
-        name: selectedConnection?.name || '',
-        tos: true,
-      });
+      setTimeout(() => {
+        carbonEvents.wallet.walletConnect({
+          address: user,
+          name: selectedConnection?.name || '',
+          tos: 'true',
+        });
+      }, 500);
     }
   }, [isConnected, selectedConnection?.name, user]);
 
