@@ -27,16 +27,16 @@ export interface EventTradeSchemaNew extends EventCategory {
     gtmData: TradeType;
   };
   tradeSettingsSlippageToleranceChange: {
-    input: { tolerance: string };
-    gtmData: { trade_settings_slippage_tolerance: string };
+    input: { tolerance: string; base: string; quote: string };
+    gtmData: { trade_settings_slippage_tolerance: string } & TradeType;
   };
   tradeSettingsTransactionExpirationTimeChange: {
-    input: { expirationTime: string };
-    gtmData: { trade_settings_transaction_expiration_time: string };
+    input: { expirationTime: string; base: string; quote: string };
+    gtmData: { trade_settings_transaction_expiration_time: string } & TradeType;
   };
   tradeSettingsMaximumOrdersChange: {
-    input: { maxOrders: string };
-    gtmData: { trade_settings_maximum_orders: string };
+    input: { maxOrders: string; base: string; quote: string };
+    gtmData: { trade_settings_maximum_orders: string } & TradeType;
   };
   tradeSettingsResetAllClick: {
     input: TradeType;
@@ -95,19 +95,32 @@ export const tradeEvents: CarbonEvents['trade'] = {
   tradeSettingsClick: (data) => {
     sendEvent('trade', 'tradeSettingsClick', data);
   },
-  tradeSettingsSlippageToleranceChange: ({ tolerance }) => {
+  tradeSettingsSlippageToleranceChange: ({ tolerance, base, quote }) => {
     sendEvent('trade', 'tradeSettingsSlippageToleranceChange', {
       trade_settings_slippage_tolerance: tolerance,
+      token_pair: `${base}/${quote}`,
+      buy_token: base,
+      sell_token: quote,
     });
   },
-  tradeSettingsTransactionExpirationTimeChange: ({ expirationTime }) => {
+  tradeSettingsTransactionExpirationTimeChange: ({
+    expirationTime,
+    base,
+    quote,
+  }) => {
     sendEvent('trade', 'tradeSettingsTransactionExpirationTimeChange', {
       trade_settings_transaction_expiration_time: expirationTime,
+      token_pair: `${base}/${quote}`,
+      buy_token: base,
+      sell_token: quote,
     });
   },
-  tradeSettingsMaximumOrdersChange: ({ maxOrders }) => {
+  tradeSettingsMaximumOrdersChange: ({ maxOrders, base, quote }) => {
     sendEvent('trade', 'tradeSettingsMaximumOrdersChange', {
       trade_settings_maximum_orders: maxOrders,
+      token_pair: `${base}/${quote}`,
+      buy_token: base,
+      sell_token: quote,
     });
   },
   tradeSettingsResetAllClick: (data) => {
