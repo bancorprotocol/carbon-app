@@ -20,7 +20,7 @@ export const TradeSettingsRow: FC<{
   useEffect(() => {
     // clean up input in case of reset
     if(item.presets.includes(item.value)){
-      setInternalValue('')
+      internalValue && setInternalValue('')
     }
   }, [item.value])
 
@@ -39,13 +39,13 @@ export const TradeSettingsRow: FC<{
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
     if(!isValidValue(item.id,value)){
-      setIsError(false)
-      setInternalValue('')
+      isError && setIsError(false)
+      internalValue && setInternalValue('')
       item.setValue(item.presets[1])
     }
     
     if(item.presets.includes(item.value)){
-      setInternalValue('')
+      internalValue && setInternalValue('')
     }
   };
   
