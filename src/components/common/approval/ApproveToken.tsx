@@ -82,6 +82,7 @@ export const ApproveToken: FC<Props> = ({
       carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedSwitchChange({
         ...eventData,
         switch: value ? 'true' : 'false',
+        token: token?.symbol,
       });
   };
 

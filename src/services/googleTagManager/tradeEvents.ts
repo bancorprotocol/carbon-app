@@ -26,17 +26,17 @@ export interface EventTradeSchemaNew extends EventCategory {
     input: TradeType;
     gtmData: TradeType;
   };
-  tradeSettingsSet: {
-    input: {
-      trade_settings_slippage_tolerance?: string;
-      trade_settings_transaction_expiration_time?: string;
-      trade_settings_maximum_orders?: string;
-    };
-    gtmData: {
-      trade_settings_slippage_tolerance?: string;
-      trade_settings_transaction_expiration_time?: string;
-      trade_settings_maximum_orders?: string;
-    };
+  tradeSettingsSlippageToleranceChange: {
+    input: { tolerance: string };
+    gtmData: { trade_settings_slippage_tolerance: string };
+  };
+  tradeSettingsTransactionExpirationTimeChange: {
+    input: { expirationTime: string };
+    gtmData: { trade_settings_transaction_expiration_time: string };
+  };
+  tradeSettingsMaximumOrdersChange: {
+    input: { maxOrders: string };
+    gtmData: { trade_settings_maximum_orders: string };
   };
   tradeSettingsResetAllClick: {
     input: TradeType;
@@ -95,8 +95,20 @@ export const tradeEvents: CarbonEvents['trade'] = {
   tradeSettingsClick: (data) => {
     sendEvent('trade', 'tradeSettingsClick', data);
   },
-  tradeSettingsSet: (data) => {
-    sendEvent('trade', 'tradeSettingsSet', data);
+  tradeSettingsSlippageToleranceChange: ({ tolerance }) => {
+    sendEvent('trade', 'tradeSettingsSlippageToleranceChange', {
+      trade_settings_slippage_tolerance: tolerance,
+    });
+  },
+  tradeSettingsTransactionExpirationTimeChange: ({ expirationTime }) => {
+    sendEvent('trade', 'tradeSettingsTransactionExpirationTimeChange', {
+      trade_settings_transaction_expiration_time: expirationTime,
+    });
+  },
+  tradeSettingsMaximumOrdersChange: ({ maxOrders }) => {
+    sendEvent('trade', 'tradeSettingsMaximumOrdersChange', {
+      trade_settings_maximum_orders: maxOrders,
+    });
   },
   tradeSettingsResetAllClick: (data) => {
     sendEvent('trade', 'tradeSettingsResetAllClick', data);

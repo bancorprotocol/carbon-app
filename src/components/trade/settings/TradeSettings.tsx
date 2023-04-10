@@ -32,8 +32,8 @@ export const TradeSettings: FC<{ base: Token; quote: Token }> = ({
       append: '%',
       setValue: (value) => {
         setSlippage(value);
-        carbonEvents.trade.tradeSettingsSet({
-          trade_settings_slippage_tolerance: value,
+        carbonEvents.trade.tradeSettingsSlippageToleranceChange({
+          tolerance: value,
         });
       },
       presets: presets.slippage,
@@ -46,8 +46,8 @@ export const TradeSettings: FC<{ base: Token; quote: Token }> = ({
       append: ' Min',
       setValue: (value) => {
         setDeadline(value);
-        carbonEvents.trade.tradeSettingsSet({
-          trade_settings_transaction_expiration_time: value,
+        carbonEvents.trade.tradeSettingsTransactionExpirationTimeChange({
+          expirationTime: value,
         });
       },
       presets: presets.deadline,
@@ -60,8 +60,8 @@ export const TradeSettings: FC<{ base: Token; quote: Token }> = ({
       append: '',
       setValue: (value) => {
         setMaxOrders(value);
-        carbonEvents.trade.tradeSettingsSet({
-          trade_settings_maximum_orders: value,
+        carbonEvents.trade.tradeSettingsMaximumOrdersChange({
+          maxOrders: value,
         });
       },
       presets: presets.maxOrders,

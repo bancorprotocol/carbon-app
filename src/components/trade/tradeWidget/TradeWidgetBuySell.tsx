@@ -92,14 +92,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ? carbonEvents.trade.tradeBuyPaySet(tradeData)
         : carbonEvents.trade.tradeSellPaySet(tradeData);
     }
-  }, [
-    buy,
-    getFiatValueSource,
-    isTradeBySource,
-    source.symbol,
-    sourceInput,
-    target.symbol,
-  ]);
+  }, [buy, sourceInput]);
 
   useInitEffect(() => {
     const tradeData = {
@@ -115,15 +108,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ? carbonEvents.trade.tradeBuyReceiveSet(tradeData)
         : carbonEvents.trade.tradeSellReceiveSet(tradeData);
     }
-  }, [
-    isTradeBySource,
-    targetInput,
-    sourceInput,
-    buy,
-    target.symbol,
-    source.symbol,
-    getFiatValueSource,
-  ]);
+  }, [buy, targetInput, sourceInput]);
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;

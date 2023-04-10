@@ -1,5 +1,11 @@
 import { sendEvent } from '.';
-import { CarbonEvents, EventCategory, StrategyType, TradeType } from './types';
+import {
+  CarbonEvents,
+  ConfirmationType,
+  EventCategory,
+  StrategyType,
+  TradeType,
+} from './types';
 
 export interface EventTokenConfirmationSchemaNew extends EventCategory {
   tokenConfirmationView: {
@@ -7,18 +13,12 @@ export interface EventTokenConfirmationSchemaNew extends EventCategory {
     gtmData: TradeType | StrategyType;
   };
   tokenConfirmationUnlimitedSwitchChange: {
-    input: TradeType | StrategyType;
-    gtmData: TradeType | StrategyType;
+    input: TradeType | StrategyType | ConfirmationType;
+    gtmData: TradeType | StrategyType | ConfirmationType;
   };
   tokenConfirmationUnlimitedApprove: {
-    input:
-      | TradeType
-      | StrategyType
-      | { token: string; switch: 'true' | 'false' };
-    gtmData:
-      | TradeType
-      | StrategyType
-      | { token: string; switch: 'true' | 'false' };
+    input: TradeType | StrategyType | ConfirmationType;
+    gtmData: TradeType | StrategyType | ConfirmationType;
   };
 }
 
