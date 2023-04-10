@@ -24,7 +24,7 @@ export class ManagedLocalStorage<T> {
       return compressed
         ? JSON.parse(LZString.decompress(value))
         : JSON.parse(value);
-    } catch (error) {
+    } catch {
       return undefined
     }
   };
