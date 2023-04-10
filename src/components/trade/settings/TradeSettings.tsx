@@ -11,8 +11,6 @@ export const TradeSettings = () => {
         setSlippage,
         deadline,
         setDeadline,
-        maxOrders,
-        setMaxOrders,
         presets,
       },
     },
@@ -36,15 +34,6 @@ export const TradeSettings = () => {
       append: ' Min',
       setValue: setDeadline,
       presets: presets.deadline,
-    },
-    {
-      id: 'maxOrders',
-      title: 'Maximum Orders',
-      value: maxOrders,
-      prepend: '',
-      append: '',
-      setValue: setMaxOrders,
-      presets: presets.maxOrders,
     },
   ];
 
