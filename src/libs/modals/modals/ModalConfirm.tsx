@@ -52,7 +52,8 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
               eventData
             );
           closeModal(id);
-          await onConfirm();
+          const oz = await onConfirm();
+          console.log(oz, '-=-=-=-=-=- oz -=-=-=-=-=-');
           eventData &&
             carbonEvents.transactionConfirmation.transactionConfirm(eventData);
         }}

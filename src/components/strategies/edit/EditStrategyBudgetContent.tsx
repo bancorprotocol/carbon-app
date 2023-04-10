@@ -10,6 +10,7 @@ import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/googleTagManager';
+import { useWeb3 } from 'libs/web3';
 
 type EditStrategyBudgetContentProps = {
   type: 'withdraw' | 'deposit';
@@ -23,6 +24,7 @@ export const EditStrategyBudgetContent = ({
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
+  const { provider } = useWeb3();
 
   const strategyEventData = useStrategyEventData({
     id: strategy.id,
@@ -66,6 +68,10 @@ export const EditStrategyBudgetContent = ({
         eventData: {
           ...strategyEventData,
           token: approval.tokens.map(({ symbol }) => symbol),
+          buy_token: strategy.base?.symbol,
+          sell_token: strategy.quote?.symbol,
+          token_pair: `${strategy.base?.symbol}/${strategy.quote?.symbol}`,
+          blockchain_network: provider?.network?.name,
         },
       });
     } else {

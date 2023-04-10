@@ -20,7 +20,7 @@ export const useCreateStrategy = () => {
   const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate();
-  const { user } = useWeb3();
+  const { user, provider } = useWeb3();
   const { openModal } = useModal();
   const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
   const [quote, setQuote] = useState<Token | undefined>(
@@ -138,6 +138,10 @@ export const useCreateStrategy = () => {
           eventData: {
             ...strategyEventData,
             token: approval.tokens.map(({ symbol }) => symbol),
+            buy_token: base?.symbol,
+            sell_token: quote?.symbol,
+            token_pair: `${base?.symbol}/${quote?.symbol}`,
+            blockchain_network: provider?.network?.name,
           },
         });
       else create();

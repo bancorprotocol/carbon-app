@@ -75,9 +75,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         token_pair: `${target.symbol}/${source.symbol}`,
         message: 'No Liquidity Available',
       });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorMsgSource, errorMsgTarget, hasEnoughLiquidity]);
+  }, [
+    buy,
+    errorMsgSource,
+    errorMsgTarget,
+    getFiatValueSource,
+    liquidityQuery.isLoading,
+  ]);
 
   useInitEffect(() => {
     const tradeData = {

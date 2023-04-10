@@ -24,7 +24,7 @@ export const useModalTradeRouting = ({
     buy,
   },
 }: Props) => {
-  const { user } = useWeb3();
+  const { user, provider } = useWeb3();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.symbol);
@@ -97,6 +97,7 @@ export const useModalTradeRouting = ({
             true
           ).toString(),
           token: approval.tokens.map(({ symbol }) => symbol),
+          blockchain_network: provider?.network?.name,
         },
       });
     } else {
@@ -119,6 +120,7 @@ export const useModalTradeRouting = ({
     isTradeBySource,
     buy,
     getFiatValueSource,
+    provider?.network?.name,
   ]);
 
   const onSelect = (id: string) => {
