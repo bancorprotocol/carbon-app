@@ -21,7 +21,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
         carbonEvents.wallet.walletConnect({
           address: user,
           name: selectedConnection?.name || '',
-          tos: 'true',
         });
       }, 500);
     }
