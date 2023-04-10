@@ -15,8 +15,8 @@ export class ManagedLocalStorage<T> {
     if (!value) {
       return;
     }
-    const parsedValue = JSON.parse(value);
-    return compressed ? LZString.decompress(parsedValue): parsedValue;
+    
+    return compressed ? JSON.parse(LZString.decompress(value)): JSON.parse(value);
   };
 
   setItem = <K extends keyof T>(key: K, value: T[K],compress=false) => {
