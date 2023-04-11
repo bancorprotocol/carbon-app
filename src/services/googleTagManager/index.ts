@@ -12,6 +12,7 @@ import { tokenConfirmationEvents } from './tokenConfirmationEvents';
 declare global {
   interface Window {
     dataLayer: GTMData[];
+    OneTrust: any;
   }
 }
 
@@ -30,6 +31,7 @@ export const sendEvent: SendEventFn = (type, event, data) => {
     case 'general': {
       return sendGTM({
         event: 'PV',
+        user_properties: {},
         event_properties: {},
         page: dataObj,
         wallet: {},
@@ -38,6 +40,7 @@ export const sendEvent: SendEventFn = (type, event, data) => {
     case 'wallet': {
       return sendGTM({
         event: `CE ${snakeCaseEvent}`,
+        user_properties: dataObj,
         event_properties: {},
         wallet: dataObj,
       });
@@ -46,6 +49,7 @@ export const sendEvent: SendEventFn = (type, event, data) => {
       return sendGTM({
         event: `CE ${snakeCaseEvent}`,
         event_properties: dataObj,
+        user_properties: {},
         wallet: {},
       });
   }

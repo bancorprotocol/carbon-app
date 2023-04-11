@@ -17,12 +17,17 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
 
   useEffect(() => {
     if (isConnected) {
-      setTimeout(() => {
-        carbonEvents.wallet.walletConnect({
-          address: user,
-          name: selectedConnection?.name || '',
-        });
-      }, 500);
+      try {
+        window?.OneTrust.AllowAll();
+        window?.OneTrust.Close();
+      } catch (e) {
+        console.log(e, 'one trust failed ');
+      }
+
+      carbonEvents.wallet.walletConnect({
+        address: user,
+        name: selectedConnection?.name || '',
+      });
     }
   }, [isConnected, selectedConnection?.name, user]);
 

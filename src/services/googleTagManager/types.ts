@@ -10,6 +10,7 @@ import { EventWalletSchemaNew } from './walletEvents';
 export type GTMData = {
   event?: string;
   event_properties?: any;
+  user_properties?: { wallet_id: string; wallet_name: string } | {};
   wallet?: { wallet_id: string; wallet_name: string } | {};
   page?:
     | {
