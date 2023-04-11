@@ -9,10 +9,7 @@ export class ManagedLocalStorage<T> {
     }
   }
 
-  getItem = <K extends keyof T>(
-    key: K,
-    compressed = false
-  ): T[K] | undefined => {
+  getItem = <K extends keyof T>(key: K): T[K] | undefined => {
     const formattedId = this.keyFormatter(key);
     const value = localStorage.getItem(formattedId);
 
@@ -20,24 +17,32 @@ export class ManagedLocalStorage<T> {
       return;
     }
 
-    try {
-      return compressed
-        ? JSON.parse(LZString.decompress(value))
-        : JSON.parse(value);
-    } catch (error) {
-      console.error('Decompress has failed', error);
-      return undefined;
+    const parsedValue = JSON.parse(value);
+
+    if (parsedValue.isCompressed) {
+      try {
+        return JSON.parse(LZString.decompress(parsedValue.value));
+      } catch (error) {
+        console.error('Decompress has failed', error);
+        return undefined;
+      }
     }
+
+    return parsedValue;
   };
 
   setItem = <K extends keyof T>(key: K, value: T[K], compress = false) => {
     const formattedId = this.keyFormatter(key);
-    const stringValue = JSON.stringify(value);
+    let stringValue = JSON.stringify(value);
 
-    localStorage.setItem(
-      formattedId,
-      compress ? LZString.compress(stringValue) : stringValue
-    );
+    if (compress) {
+      stringValue = JSON.stringify({
+        isCompressed: true,
+        value: LZString.compress(stringValue),
+      });
+    }
+
+    localStorage.setItem(formattedId, stringValue);
   };
 
   removeItem = <K extends keyof T>(key: K) => {
