@@ -28,8 +28,7 @@ export const DebugTransferNFT = () => {
       const tx = await Voucher.write.transferFrom(
         user,
         inputRecipient,
-        inputId,
-        { gasLimit: '99999999999999' }
+        inputId
       );
       await tx.wait();
       await cache.invalidateQueries({ queryKey: QueryKey.strategies(user) });

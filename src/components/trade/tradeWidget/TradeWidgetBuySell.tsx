@@ -7,7 +7,6 @@ import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
-import { IS_TENDERLY_FORK } from 'libs/web3';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 
 export type TradeWidgetBuySellProps = {
@@ -55,13 +54,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     return `1 ${source.symbol} =
         ${rate ? prettifyNumber(rate) : '--'}
         ${target.symbol}`;
-  };
-
-  const getLiquidity = () => {
-    const value = liquidityQuery.isLoading
-      ? 'loading'
-      : prettifyNumber(liquidityQuery.data);
-    return `Liquidity: ${value} ${target.symbol}`;
   };
 
   const showRouting =
@@ -140,11 +132,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               </button>
             )}
           </div>
-          {IS_TENDERLY_FORK && (
-            <div className={'text-secondary mt-5 text-right'}>
-              {getLiquidity()}
-            </div>
-          )}
         </>
       ) : (
         <NotEnoughLiquidity

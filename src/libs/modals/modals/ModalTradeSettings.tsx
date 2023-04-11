@@ -28,7 +28,7 @@ export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
       }
       size={'md'}
     >
-      <TradeSettings />
+      <TradeSettings isAllSettingsDefault={isAllSettingsDefault} />
     </ModalSlideOver>
   );
 };

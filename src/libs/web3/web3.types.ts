@@ -20,7 +20,7 @@ export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
   [key in SupportedChainId]: T;
 };
 
-export interface BancorWeb3ProviderContext {
+export interface CarbonWeb3ProviderContext {
   user: string | undefined;
   chainId: number | undefined;
   isNetworkActive: boolean;
@@ -39,4 +39,6 @@ export interface BancorWeb3ProviderContext {
   isSupportedNetwork: boolean;
   switchNetwork: () => void;
   isUserBlocked: boolean;
+  isUncheckedSigner: boolean;
+  setIsUncheckedSigner: (value: boolean) => void;
 }

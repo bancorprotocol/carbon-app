@@ -79,8 +79,7 @@ export const useTradeAction = ({
           target.address,
           tradeActions,
           calcDeadline(deadline),
-          calcMinReturn(targetInput),
-          { gasLimit: 999999999 }
+          calcMinReturn(targetInput)
         );
       } else {
         unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
@@ -88,8 +87,7 @@ export const useTradeAction = ({
           target.address,
           tradeActions,
           calcDeadline(deadline),
-          calcMaxInput(sourceInput),
-          { gasLimit: 999999999 }
+          calcMaxInput(sourceInput)
         );
       }
 
