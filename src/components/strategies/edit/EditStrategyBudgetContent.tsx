@@ -67,6 +67,7 @@ export const EditStrategyBudgetContent = ({
         buttonLabel: `Confirm ${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`,
         eventData: {
           ...strategyEventData,
+          product_type: 'strategy',
           token: approval.tokens.map(({ symbol }) => symbol),
           buy_token: strategy.base?.symbol,
           sell_token: strategy.quote?.symbol,

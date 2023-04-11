@@ -6,13 +6,17 @@ import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { carbonEvents } from 'services/googleTagManager';
 import { useEffect } from 'react';
-import { StrategyType, TradeType } from 'services/googleTagManager/types';
+import {
+  ConfirmationType,
+  StrategyType,
+  TradeType,
+} from 'services/googleTagManager/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
   buttonLabel?: string;
-  eventData?: (TradeType | StrategyType) & { token: string[] };
+  eventData?: (TradeType | StrategyType) & ConfirmationType;
 };
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
@@ -52,8 +56,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
               eventData
             );
           closeModal(id);
-          const oz = await onConfirm();
-          console.log(oz, '-=-=-=-=-=- oz -=-=-=-=-=-');
+          await onConfirm();
           eventData &&
             carbonEvents.transactionConfirmation.transactionConfirm(eventData);
         }}

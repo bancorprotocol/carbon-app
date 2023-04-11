@@ -88,6 +88,7 @@ export const useModalTradeRouting = ({
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
         eventData: {
+          product_type: 'trade',
           trade_direction: buy ? 'buy' : 'sell',
           buy_token: target.symbol,
           sell_token: source.symbol,

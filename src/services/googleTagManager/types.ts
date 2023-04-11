@@ -38,7 +38,8 @@ export type TradeType = {
 
 export type ConfirmationType = {
   switch?: 'true' | 'false';
-  token?: string;
+  token?: string | string[];
+  product_type?: string;
 };
 
 export type StrategyType = {

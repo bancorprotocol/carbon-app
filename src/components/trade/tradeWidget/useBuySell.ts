@@ -228,6 +228,7 @@ export const useBuySell = ({
         buttonLabel: 'Confirm Trade',
         eventData: {
           ...eventData,
+          product_type: 'trade',
           token: approval.tokens.map(({ symbol }) => symbol),
         },
       });

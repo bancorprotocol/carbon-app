@@ -137,6 +137,7 @@ export const useCreateStrategy = () => {
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
+            product_type: 'strategy',
             token: approval.tokens.map(({ symbol }) => symbol),
             buy_token: base?.symbol,
             sell_token: quote?.symbol,

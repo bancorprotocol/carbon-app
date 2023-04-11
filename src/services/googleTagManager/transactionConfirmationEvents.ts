@@ -1,14 +1,20 @@
 import { sendEvent } from '.';
-import { CarbonEvents, EventCategory, StrategyType, TradeType } from './types';
+import {
+  CarbonEvents,
+  ConfirmationType,
+  EventCategory,
+  StrategyType,
+  TradeType,
+} from './types';
 
 export interface EventTransactionConfirmationSchemaNew extends EventCategory {
   transactionConfirmationRequest: {
-    input: TradeType | StrategyType;
-    gtmData: TradeType | StrategyType;
+    input: (TradeType | StrategyType) & ConfirmationType;
+    gtmData: (TradeType | StrategyType) & ConfirmationType;
   };
   transactionConfirm: {
-    input: TradeType | StrategyType;
-    gtmData: TradeType | StrategyType;
+    input: (TradeType | StrategyType) & ConfirmationType;
+    gtmData: (TradeType | StrategyType) & ConfirmationType;
   };
 }
 
