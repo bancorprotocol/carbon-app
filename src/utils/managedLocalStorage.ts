@@ -17,14 +17,15 @@ export class ManagedLocalStorage<T> {
     const value = localStorage.getItem(formattedId);
 
     if (!value) {
-      return;
+      return; 
     }
-  
+
     try {
       return compressed
         ? JSON.parse(LZString.decompress(value))
         : JSON.parse(value);
-    } catch {
+    } catch (error) {
+      console.error('Decompress has failed', error);
       return undefined
     }
   };
