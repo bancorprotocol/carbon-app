@@ -5,7 +5,7 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 
-const APP_ID = 'bancor';
+const APP_ID = 'carbon';
 const APP_VERSION = 'v1';
 
 // ************************** /

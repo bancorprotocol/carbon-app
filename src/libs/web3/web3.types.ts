@@ -20,7 +20,7 @@ export type ChainIdMapTo<T extends string | JsonRpcProvider> = {
   [key in SupportedChainId]: T;
 };
 
-export interface BancorWeb3ProviderContext {
+export interface CarbonWeb3ProviderContext {
   user: string | undefined;
   chainId: number | undefined;
   isNetworkActive: boolean;
