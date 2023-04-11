@@ -39,4 +39,6 @@ export interface CarbonWeb3ProviderContext {
   isSupportedNetwork: boolean;
   switchNetwork: () => void;
   isUserBlocked: boolean;
+  isUncheckedSigner: boolean;
+  setIsUncheckedSigner: (value: boolean) => void;
 }

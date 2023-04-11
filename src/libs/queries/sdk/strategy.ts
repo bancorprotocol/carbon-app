@@ -184,8 +184,7 @@ export const useCreateStrategyQuery = () => {
         order0Budget,
         order1Low,
         order1Max,
-        order1Budget,
-        { gasLimit: 9999999 }
+        order1Budget
       );
 
       return signer!.sendTransaction(unsignedTx);
@@ -211,8 +210,7 @@ export const useUpdateStrategyQuery = () => {
           ...fieldsToUpdate,
         },
         buyMarginalPrice ? buyMarginalPrice : MarginalPriceOptions.reset,
-        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset,
-        { gasLimit: 9999999 }
+        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset
       );
 
       return signer!.sendTransaction(unsignedTx);
