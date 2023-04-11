@@ -5,8 +5,8 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 
-const APP_ID = 'bancor';
-const APP_VERSION = 'v0';
+const APP_ID = 'carbon';
+const APP_VERSION = 'v1';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!
