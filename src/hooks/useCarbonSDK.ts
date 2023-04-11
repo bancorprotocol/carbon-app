@@ -85,7 +85,7 @@ export const useCarbonSDK = () => {
   const init = useCallback(async () => {
     try {
       setIsLoading(true);
-      const cacheData = lsService.getItem('sdkCompressedCacheData');
+      const cacheData = lsService.getItem('sdkCompressedCacheData', true);
 
       await carbonSDK.init(sdkConfig, getTokenDecimalMap(), cacheData);
       await carbonSDK.setOnChangeHandlers(
