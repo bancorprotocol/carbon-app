@@ -4,9 +4,11 @@ import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
 import { config } from 'services/web3/config';
+import { Checkbox } from 'components/common/Checkbox/Checkbox';
 
 export const DebugTenderlyRPC = () => {
-  const { handleTenderlyRPC } = useWeb3();
+  const { handleTenderlyRPC, isUncheckedSigner, setIsUncheckedSigner } =
+    useWeb3();
   const [urlInput, setUrlInput] = useState(
     lsService.getItem('tenderlyRpc') || ''
   );
@@ -56,6 +58,18 @@ export const DebugTenderlyRPC = () => {
           </Label>
         </>
       )}
+
+      <div
+        className={
+          'flex w-full items-center space-x-20 rounded-full bg-black px-20 py-10'
+        }
+      >
+        <Checkbox
+          isChecked={isUncheckedSigner}
+          setIsChecked={setIsUncheckedSigner}
+        />
+        <span>Unchecked Signer</span>
+      </div>
 
       <Button onClick={handleOnClick}>Save</Button>
     </div>
