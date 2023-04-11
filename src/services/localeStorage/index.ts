@@ -28,7 +28,7 @@ interface LocalStorageSchema {
   carbonControllerAddress: string;
   voucherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
-  sdkCacheData: string;
+  sdkCompressedCacheData: string;
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };
   isUncheckedSigner: boolean;
 }
