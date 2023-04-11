@@ -25,7 +25,7 @@ const sdkConfig = {
 const persistSdkCacheDump = async () => {
   console.log('SDK Cache dumped into local storage');
   const cachedDump = await carbonSDK.getCacheDump();
-  lsService.setItem('sdkCacheData', cachedDump);
+  lsService.setItem('sdkCompressedCacheData', cachedDump, true);
 };
 
 const getTokenDecimalMap = () => {
@@ -85,7 +85,8 @@ export const useCarbonSDK = () => {
   const init = useCallback(async () => {
     try {
       setIsLoading(true);
-      const cacheData = lsService.getItem('sdkCacheData');
+      const cacheData = lsService.getItem('sdkCompressedCacheData');
+
       await carbonSDK.init(sdkConfig, getTokenDecimalMap(), cacheData);
       await carbonSDK.setOnChangeHandlers(
         Comlink.proxy(onPairDataChangedCallback),
