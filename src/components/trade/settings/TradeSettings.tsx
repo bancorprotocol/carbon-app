@@ -3,16 +3,14 @@ import { useStore } from 'store';
 import { TradeSettingsRow } from './TradeSettingsRow';
 import { TradeSettingsData } from './utils';
 
-export const TradeSettings = () => {
+export const TradeSettings = ({
+  isAllSettingsDefault,
+}: {
+  isAllSettingsDefault: boolean;
+}) => {
   const {
     trade: {
-      settings: {
-        slippage,
-        setSlippage,
-        deadline,
-        setDeadline,
-        presets,
-      },
+      settings: { slippage, setSlippage, deadline, setDeadline, presets },
     },
   } = useStore();
 
@@ -41,7 +39,10 @@ export const TradeSettings = () => {
     <div className={'mt-30'}>
       {settingsData.map((item) => (
         <Fragment key={item.id}>
-          <TradeSettingsRow item={item} />
+          <TradeSettingsRow
+            isAllSettingsDefault={isAllSettingsDefault}
+            item={item}
+          />
           <hr className={'my-20 border-b-2 border-grey5 last:hidden'} />
         </Fragment>
       ))}

@@ -1,8 +1,12 @@
 import { Button } from 'components/common/button';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { isValidValue, TradeSettingsData, warningMessageIfOutOfRange } from './utils';
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import {
+  isValidValue,
+  TradeSettingsData,
+  warningMessageIfOutOfRange,
+} from './utils';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -13,42 +17,44 @@ const inputClasses =
 
 export const TradeSettingsRow: FC<{
   item: TradeSettingsData;
-}> = ({ item }) => {
-  const [internalValue, setInternalValue] = useState(item.presets.includes(item.value) ? '' : item.value);
-  const [isError,setIsError] = useState(!isValidValue(item.id, item.value));
+  isAllSettingsDefault: boolean;
+}> = ({ item, isAllSettingsDefault }) => {
+  const [internalValue, setInternalValue] = useState(
+    item.presets.includes(item.value) ? '' : item.value
+  );
+  const [isError, setIsError] = useState(!isValidValue(item.id, item.value));
 
   useEffect(() => {
     // clean up input in case of reset
-    if(item.presets.includes(item.value)){
-      internalValue && setInternalValue('')
+    if (item.presets.includes(item.value) && isAllSettingsDefault) {
+      internalValue && setInternalValue('');
     }
-  }, [item.value])
-
+  }, [item.value]);
 
   const updateItemAndInternalState = (value: string) => {
     setInternalValue(value);
-    if(isValidValue(item.id, value)){
+    if (isValidValue(item.id, value)) {
       item.setValue(value);
-      isError && setIsError(false)
+      isError && setIsError(false);
     } else {
-        setIsError(true);
+      setIsError(true);
     }
   };
 
   const handleOnBlur = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    if(!isValidValue(item.id,value)){
-      isError && setIsError(false)
-      internalValue && setInternalValue('')
-      item.setValue(item.presets[1])
+    if (!isValidValue(item.id, value)) {
+      isError && setIsError(false);
+      internalValue && setInternalValue('');
+      item.setValue(item.presets[1]);
     }
-    
-    if(item.presets.includes(item.value)){
-      internalValue && setInternalValue('')
+
+    if (item.presets.includes(item.value)) {
+      internalValue && setInternalValue('');
     }
   };
-  
+
   const handleOnInputChange = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
@@ -58,9 +64,11 @@ export const TradeSettingsRow: FC<{
       updateItemAndInternalState(value.replace(/\D/g, ''));
     }
   };
-  
 
-  const warningMessage = warningMessageIfOutOfRange(item.id, internalValue || item.value);
+  const warningMessage = warningMessageIfOutOfRange(
+    item.id,
+    internalValue || item.value
+  );
   return (
     <div>
       <div className={'text-white/60'}>{item.title}</div>
@@ -70,8 +78,8 @@ export const TradeSettingsRow: FC<{
             key={value}
             variant={'black'}
             onClick={() => {
-              setInternalValue('')
-              item.setValue(value)
+              setInternalValue('');
+              item.setValue(value);
             }}
             className={`${buttonClasses} ${
               item.value === value ? buttonActiveClasses : ''
@@ -87,15 +95,19 @@ export const TradeSettingsRow: FC<{
           value={internalValue}
           onBlur={handleOnBlur}
           onChange={handleOnInputChange}
-          className={`${buttonClasses} ${inputClasses} ${isError? buttonErrorClasses :''}${
-            !item.presets.includes(item.value) ? buttonActiveClasses : ''
-          }`}
+          className={`${buttonClasses} ${inputClasses} ${
+            isError ? buttonErrorClasses : ''
+          }${!item.presets.includes(item.value) ? buttonActiveClasses : ''}`}
         />
       </div>
       {warningMessage && (
-        <div className={`mt-15 flex font-mono text-12 font-weight-500 text-warning-400`}>
+        <div
+          className={`mt-15 flex font-mono text-12 font-weight-500 text-warning-400`}
+        >
           <IconWarning className={`w-14 ${isError ? 'text-red' : ''}`} />
-          <span className={`ml-5 ${isError ? 'text-red' : ''}`}>{warningMessage}</span>
+          <span className={`ml-5 ${isError ? 'text-red' : ''}`}>
+            {warningMessage}
+          </span>
         </div>
       )}
     </div>
