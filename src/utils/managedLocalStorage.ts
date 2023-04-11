@@ -19,7 +19,7 @@ export class ManagedLocalStorage<T> {
 
     const parsedValue = JSON.parse(value);
 
-    if (parsedValue.isCompressed) {
+    if (parsedValue.__IS_COMPRESSED__) {
       try {
         return JSON.parse(LZString.decompress(parsedValue.value));
       } catch (error) {
@@ -37,7 +37,7 @@ export class ManagedLocalStorage<T> {
 
     if (compress) {
       stringValue = JSON.stringify({
-        isCompressed: true,
+        __IS_COMPRESSED__: true,
         value: LZString.compress(stringValue),
       });
     }
