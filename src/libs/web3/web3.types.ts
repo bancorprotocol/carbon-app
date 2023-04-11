@@ -39,4 +39,6 @@ export interface BancorWeb3ProviderContext {
   isSupportedNetwork: boolean;
   switchNetwork: () => void;
   isUserBlocked: boolean;
+  isUncheckedSigner: boolean;
+  setIsUncheckedSigner: (value: boolean) => void;
 }

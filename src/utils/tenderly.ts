@@ -92,7 +92,6 @@ export const tenderlyFaucetTransferTKN = async (
   const tokenContract = Token__factory.connect(token.tokenContract, signer);
   await tokenContract.transfer(
     user,
-    expandToken(FAUCET_AMOUNT, token.decimals),
-    { gasLimit: '99999999999' }
+    expandToken(FAUCET_AMOUNT, token.decimals)
   );
 };

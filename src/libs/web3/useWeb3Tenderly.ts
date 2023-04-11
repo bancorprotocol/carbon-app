@@ -20,6 +20,7 @@ export const useWeb3Tenderly = () => {
 
     lsService.removeItem('sdkCacheData');
     lsService.removeItem('tokenPairsCache');
+    !url && lsService.removeItem('isUncheckedSigner');
 
     window?.location.reload();
   };
