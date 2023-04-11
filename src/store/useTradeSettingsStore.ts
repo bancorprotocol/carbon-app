@@ -18,7 +18,7 @@ export interface TradeSettingsStore {
 }
 
 const presets: TradeSettingsStore['presets'] = {
-  slippage: ['0.5', '1', '5'],
+  slippage: ['0.1', '0.5', '1'],
   deadline: ['10', '30', '60'],
   maxOrders: ['10', '20', '30'],
 };
@@ -27,6 +27,7 @@ export const useTradeSettingsStore = (): TradeSettingsStore => {
   const [slippage, _setSlippage] = useState(
     lsService.getItem('tradeSlippage') || presets.slippage[1]
   );
+
   const [deadline, _setDeadline] = useState(
     lsService.getItem('tradeDeadline') || presets.deadline[1]
   );
