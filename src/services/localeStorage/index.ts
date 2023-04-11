@@ -30,6 +30,7 @@ interface LocalStorageSchema {
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };
+  isUncheckedSigner: boolean;
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>
