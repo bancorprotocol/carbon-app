@@ -32,6 +32,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
     addFavoritePair,
     removeFavoritePair,
   } = useModalTradeTokenList({ id, data });
+  // @ts-ignore
 
   return (
     <Modal id={id} title="Select Token Pair">
@@ -42,7 +43,8 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         className="mt-20 w-full rounded-8 py-10"
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            handleSelect(tradePairs[0]);
+            // TODO: Fix Error
+            // handleSelect(tradePairs[0]);
           }
         }}
       />
@@ -55,7 +57,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         <ModalTradeTokenListContent
           search={search}
           tradePairs={{
-            all: tradePairs,
+            all: tradePairsPopular,
             favorites: favoritePairs,
             popular: tradePairsPopular,
           }}
