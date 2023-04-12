@@ -51,7 +51,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
           <>
             <div
               className={
-                'relative z-10 mx-auto flex h-40 w-40 items-center justify-center rounded-full border-[5px] border border-silver bg-black'
+                'relative z-10 mx-auto flex h-40 w-40 items-center justify-center rounded-full border-[5px] border-silver bg-black'
               }
             >
               <IconArrow
