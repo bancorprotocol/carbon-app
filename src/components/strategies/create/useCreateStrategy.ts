@@ -182,6 +182,10 @@ export const useCreateStrategy = () => {
   >();
 
   useEffect(() => {
+    setSelectedStrategySettings(undefined);
+  }, [baseAddress, quoteAddress]);
+
+  useEffect(() => {
     if (!baseAddress && !quoteAddress) {
       return;
     }
