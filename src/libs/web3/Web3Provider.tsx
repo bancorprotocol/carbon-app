@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { createContext, FC, ReactNode, useContext, useMemo } from 'react';
-import { BancorWeb3ProviderContext } from 'libs/web3/web3.types';
+import { CarbonWeb3ProviderContext } from 'libs/web3/web3.types';
 import { useWeb3Network } from 'libs/web3/useWeb3Network';
 import { useWeb3Imposter } from 'libs/web3/useWeb3Imposter';
 import { useWeb3Tenderly } from 'libs/web3/useWeb3Tenderly';
@@ -10,7 +10,7 @@ import { useWeb3User } from 'libs/web3/useWeb3User';
 // WEB3 CONTEXT
 // ********************************** //
 
-const defaultValue: BancorWeb3ProviderContext = {
+const defaultValue: CarbonWeb3ProviderContext = {
   user: undefined,
   handleImposterAccount: () => {},
   isNetworkActive: false,
@@ -24,17 +24,20 @@ const defaultValue: BancorWeb3ProviderContext = {
   networkError: undefined,
   isSupportedNetwork: true,
   switchNetwork: () => {},
+  isUserBlocked: false,
+  isUncheckedSigner: false,
+  setIsUncheckedSigner: () => {},
 };
 
-const BancorWeb3CTX = createContext(defaultValue);
+const CarbonWeb3CTX = createContext(defaultValue);
 
-export const useWeb3 = () => useContext(BancorWeb3CTX);
+export const useWeb3 = () => useContext(CarbonWeb3CTX);
 
 // ********************************** //
 // WEB3 PROVIDER
 // ********************************** //
 
-export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
+export const CarbonWeb3Provider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const {
@@ -52,7 +55,15 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
 
   const { handleTenderlyRPC } = useWeb3Tenderly();
 
-  const { user, signer, connect, disconnect } = useWeb3User({
+  const {
+    user,
+    signer,
+    connect,
+    disconnect,
+    isUserBlocked,
+    isUncheckedSigner,
+    setIsUncheckedSigner,
+  } = useWeb3User({
     walletAccount,
     walletProvider,
     provider,
@@ -67,7 +78,7 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
   );
 
   return (
-    <BancorWeb3CTX.Provider
+    <CarbonWeb3CTX.Provider
       value={{
         user,
         isNetworkActive,
@@ -82,9 +93,12 @@ export const BancorWeb3Provider: FC<{ children: ReactNode }> = ({
         networkError,
         isSupportedNetwork,
         switchNetwork,
+        isUserBlocked,
+        isUncheckedSigner,
+        setIsUncheckedSigner,
       }}
     >
       {children}
-    </BancorWeb3CTX.Provider>
+    </CarbonWeb3CTX.Provider>
   );
 };

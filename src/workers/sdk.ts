@@ -9,11 +9,18 @@ import {
   StrategyUpdate,
 } from '@bancor/carbon-sdk';
 import { BigNumberish } from 'ethers';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { OrderRow } from 'libs/queries';
 import { OrderBook } from 'libs/queries/sdk/orderBook';
 
-const ONE = new BigNumber(1);
+Decimal.set({
+  precision: 100,
+  rounding: Decimal.ROUND_HALF_DOWN,
+  toExpNeg: -30,
+  toExpPos: 30,
+});
+
+const ONE = new Decimal(1);
 
 let carbonSDK: Sdk;
 let isInitialized = false;
@@ -41,10 +48,10 @@ const buildOrderBook = async (
   buy: boolean,
   baseToken: string,
   quoteToken: string,
-  startRate: BigNumber,
-  step: BigNumber,
-  min: BigNumber,
-  max: BigNumber,
+  startRate: Decimal,
+  step: Decimal,
+  min: Decimal,
+  max: Decimal,
   steps: number
 ): Promise<OrderRow[]> => {
   const orders: OrderRow[] = [];
@@ -66,7 +73,7 @@ const buildOrderBook = async (
   results.forEach((liquidity, i) => {
     const length = orders.length;
     let rate = rates[i];
-    let liquidityBn = new BigNumber(liquidity);
+    let liquidityBn = new Decimal(liquidity);
     let totalBn = liquidityBn;
 
     if (liquidityBn.eq(0)) {
@@ -78,10 +85,10 @@ const buildOrderBook = async (
         liquidityBn = liquidityBn.div(rate);
       } else {
         if (liquidityBn.eq(orders[length - 1].originalTotal || '0')) {
-          liquidityBn = new BigNumber(orders[length - 1].amount);
+          liquidityBn = new Decimal(orders[length - 1].amount);
         } else {
-          const firstRate = new BigNumber(orders[0].rate);
-          const firstTotal = new BigNumber(orders[0].originalTotal || '0');
+          const firstRate = new Decimal(orders[0].rate);
+          const firstTotal = new Decimal(orders[0].originalTotal || '0');
           const delta = liquidityBn.minus(firstTotal);
           liquidityBn = firstTotal.div(firstRate).plus(delta.div(rate));
         }
@@ -102,14 +109,14 @@ const buildOrderBook = async (
 };
 
 const getStep = (
-  stepBuy: BigNumber,
-  stepSell: BigNumber,
-  minBuy: BigNumber,
-  maxBuy: BigNumber,
+  stepBuy: Decimal,
+  stepSell: Decimal,
+  minBuy: Decimal,
+  maxBuy: Decimal,
   steps: number,
-  minSell: BigNumber,
-  maxSell: BigNumber
-): BigNumber => {
+  minSell: Decimal,
+  maxSell: Decimal
+): Decimal => {
   if (stepBuy.isFinite() && stepBuy.gt(0)) {
     if (stepSell.isFinite() && stepSell.gt(0)) {
       return stepBuy.lte(stepSell) ? stepBuy : stepSell;
@@ -129,7 +136,7 @@ const getStep = (
   }
 };
 
-const getMiddleRate = (maxBuy: BigNumber, maxSell: BigNumber): BigNumber => {
+const getMiddleRate = (maxBuy: Decimal, maxSell: Decimal): Decimal => {
   if (
     maxBuy.isFinite() &&
     maxBuy.gt(0) &&
@@ -144,7 +151,7 @@ const getMiddleRate = (maxBuy: BigNumber, maxSell: BigNumber): BigNumber => {
   if (maxSell.isFinite() && maxSell.gt(0)) {
     return ONE.div(maxSell);
   }
-  return new BigNumber(0);
+  return new Decimal(0);
 };
 
 const getOrderBook = async (
@@ -154,16 +161,17 @@ const getOrderBook = async (
 ): Promise<OrderBook> => {
   const buyHasLiq = await carbonSDK.hasLiquidityByPair(base, quote);
   const sellHasLiq = await carbonSDK.hasLiquidityByPair(quote, base);
-  const minBuy = new BigNumber(
+
+  const minBuy = new Decimal(
     buyHasLiq ? await carbonSDK.getMinRateByPair(base, quote) : 0
   );
-  const maxBuy = new BigNumber(
+  const maxBuy = new Decimal(
     buyHasLiq ? await carbonSDK.getMaxRateByPair(base, quote) : 0
   );
-  const minSell = new BigNumber(
+  const minSell = new Decimal(
     sellHasLiq ? await carbonSDK.getMinRateByPair(quote, base) : 0
   );
-  const maxSell = new BigNumber(
+  const maxSell = new Decimal(
     sellHasLiq ? await carbonSDK.getMaxRateByPair(quote, base) : 0
   );
 
@@ -229,7 +237,7 @@ const getOrderBook = async (
 const sdkExposed = {
   init,
   isInitialized: () => isInitialized,
-  getAllTokenPairs: () => carbonSDK.getAllTokenPairs(),
+  getAllPairs: () => carbonSDK.getAllPairs(),
   setOnChangeHandlers: (
     onPairDataChanged: (affectedPairs: TokenPair[]) => void,
     onPairAddedToCache: (affectedPairs: TokenPair) => void
@@ -342,6 +350,8 @@ const sdkExposed = {
   getCacheDump: () => carbonSDK.getCacheDump(),
   getLastTradeByPair: (source: string, target: string) =>
     carbonSDK.getLastTradeByPair(source, target),
+  getMaxSourceAmountByPair: (source: string, target: string) =>
+    carbonSDK.getMaxSourceAmountByPair(source, target),
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;

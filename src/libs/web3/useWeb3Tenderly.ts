@@ -18,10 +18,11 @@ export const useWeb3Tenderly = () => {
       ? lsService.setItem('voucherContractAddress', voucherAddress)
       : lsService.removeItem('voucherContractAddress');
 
-    lsService.removeItem('sdkCacheData');
+    lsService.removeItem('sdkCompressedCacheData');
     lsService.removeItem('tokenPairsCache');
+    !url && lsService.removeItem('isUncheckedSigner');
 
-    window.location.reload();
+    window?.location.reload();
   };
 
   return { handleTenderlyRPC };

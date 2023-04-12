@@ -13,7 +13,7 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { useOrder } from 'components/strategies/create/useOrder';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
-  const paddedID = strategy.id.padStart(9, '0');
+  const paddedID = strategy.idDisplay.padStart(9, '0');
   const [manage, setManage] = useState(false);
   const { duplicate } = useDuplicateStrategy();
   const showBudgetWarning = useBudgetWarning(

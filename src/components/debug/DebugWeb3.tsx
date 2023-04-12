@@ -3,8 +3,14 @@ import { shortenString } from 'utils/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 
 export const DebugWeb3 = () => {
-  const { chainId, user, isImposter, isNetworkActive, networkError } =
-    useWeb3();
+  const {
+    chainId,
+    user,
+    isImposter,
+    isNetworkActive,
+    networkError,
+    isUserBlocked,
+  } = useWeb3();
 
   return (
     <div
@@ -39,6 +45,10 @@ export const DebugWeb3 = () => {
         <div className={'flex justify-between'}>
           <div>Imposter:</div>
           <div>{isImposter ? 'true' : 'false'}</div>
+        </div>
+        <div className={'flex justify-between'}>
+          <div>Blocked:</div>
+          <div>{isUserBlocked ? 'true' : 'false'}</div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
 import { shortenString } from 'utils/helpers';
@@ -38,7 +38,14 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
 };
 
 export const MainMenuRightWallet: FC = () => {
-  const { user, disconnect, isSupportedNetwork, isImposter } = useWeb3();
+  const {
+    user,
+    disconnect,
+    isSupportedNetwork,
+    isImposter,
+    isUserBlocked,
+    switchNetwork,
+  } = useWeb3();
   const { openModal } = useModal();
 
   const onClickOpenModal = () => {
@@ -53,18 +60,27 @@ export const MainMenuRightWallet: FC = () => {
     });
   };
 
-  if (!isSupportedNetwork) {
-    return (
-      <Button
-        variant="error"
-        className={'flex items-center space-x-10'}
-        disabled
-      >
-        <IconWarning className={'w-16'} />
-        <span>Wrong Network</span>
-      </Button>
-    );
-  }
+  const buttonVariant = useMemo(() => {
+    if (isUserBlocked) return 'error';
+    if (!isSupportedNetwork) return 'error';
+    return 'secondary';
+  }, [isSupportedNetwork, isUserBlocked]);
+
+  const buttonText = useMemo(() => {
+    if (isUserBlocked) return 'Wallet Blocked';
+    if (!isSupportedNetwork) return 'Wrong Network';
+    if (!user) return 'Connect Wallet';
+    return shortenString(user);
+  }, [isSupportedNetwork, isUserBlocked, user]);
+
+  const buttonIcon = useMemo(() => {
+    const props = { className: 'w-20' };
+
+    if (isUserBlocked) return <IconWarning {...props} />;
+    if (!isSupportedNetwork) return <IconWarning {...props} />;
+    if (!user) return <IconWallet {...props} />;
+    return <WalletIcon {...props} isImposter={isImposter} />;
+  }, [isSupportedNetwork, isUserBlocked, user, isImposter]);
 
   if (user) {
     return (
@@ -72,25 +88,34 @@ export const MainMenuRightWallet: FC = () => {
         placement="bottom-end"
         button={(onClick) => (
           <Button
-            variant={'secondary'}
+            variant={buttonVariant}
             onClick={() => {
               carbonEvents.navigation.navWalletClick(undefined);
               onClick();
             }}
             className={'flex items-center space-x-10 pl-20'}
           >
-            <WalletIcon isImposter={isImposter} />
-            <span>{shortenString(user)}</span>
+            {buttonIcon}
+            <span>{buttonText}</span>
           </Button>
         )}
       >
-        <div className={'w-[180px] font-weight-400'}>
-          <div className={'flex items-center space-x-10'}>
-            <IconETHLogo className={'w-16'} />
-            <span>Ethereum Network</span>
-          </div>
-          <hr className={'my-10 border-t-2 border-silver'} />
-          <button onClick={onDisconnect} className={'hover:text-white'}>
+        <div className={'w-[180px] space-y-20 font-weight-400'}>
+          {isSupportedNetwork ? (
+            <div className={'flex items-center space-x-10'}>
+              <IconETHLogo className={'w-16'} />
+              <span>Ethereum Network</span>
+            </div>
+          ) : (
+            <button
+              onClick={switchNetwork}
+              className={'text-red/80 hover:text-red'}
+            >
+              Switch Network
+            </button>
+          )}
+
+          <button onClick={disconnect} className={'hover:text-white'}>
             Disconnect
           </button>
         </div>
@@ -100,12 +125,12 @@ export const MainMenuRightWallet: FC = () => {
 
   return (
     <Button
-      variant={'secondary'}
+      variant={buttonVariant}
       onClick={onClickOpenModal}
       className={'flex items-center space-x-10'}
     >
-      <IconWallet className={'w-16'} />
-      <span>Connect Wallet</span>
+      {buttonIcon}
+      <span>{buttonText}</span>
     </Button>
   );
 };

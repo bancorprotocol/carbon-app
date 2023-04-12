@@ -1,15 +1,13 @@
 import { ChainIdMapTo } from 'libs/web3/web3.types';
 import { lsService } from 'services/localeStorage';
 
-const ALCHEMY_URL = 'https://eth-mainnet.alchemyapi.io/v2/';
-const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY;
-if (typeof ALCHEMY_KEY === 'undefined') {
-  throw new Error(
-    `REACT_APP_ALCHEMY_KEY must be a defined environment variable`
-  );
+const TENDERLY_RPC = lsService.getItem('tenderlyRpc');
+const CHAIN_RPC_URL = TENDERLY_RPC || import.meta.env.VITE_CHAIN_RPC_URL;
+
+if (typeof CHAIN_RPC_URL === 'undefined') {
+  throw new Error(`VITE_CHAIN_RPC_URL must be a defined environment variable`);
 }
 
-const TENDERLY_RPC = lsService.getItem('tenderlyRpc');
 export const IS_TENDERLY_FORK = !!TENDERLY_RPC;
 
 export enum SupportedChainId {
@@ -32,7 +30,5 @@ export const SELECTABLE_CONNECTION_TYPES: ConnectionType[] = [
 ];
 
 export const RPC_URLS: ChainIdMapTo<string> = {
-  [SupportedChainId.MAINNET]: TENDERLY_RPC
-    ? TENDERLY_RPC
-    : `${ALCHEMY_URL}${ALCHEMY_KEY}`,
+  [SupportedChainId.MAINNET]: CHAIN_RPC_URL,
 };

@@ -1,30 +1,59 @@
 import { Button } from 'components/common/button';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { TradeSettingsData, warningMessageIfOutOfRange } from './utils';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { carbonEvents } from 'services/googleTagManager';
+import {
+  isValidValue,
+  TradeSettingsData,
+  warningMessageIfOutOfRange,
+} from './utils';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
 const buttonActiveClasses = '!border-green !text-green';
+const buttonErrorClasses = '!border-red !text-red focus:text-red';
 const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
 export const TradeSettingsRow: FC<{
   item: TradeSettingsData;
-}> = ({ item }) => {
+  isAllSettingsDefault: boolean;
+}> = ({ item, isAllSettingsDefault }) => {
   const [internalValue, setInternalValue] = useState(
     item.presets.includes(item.value) ? '' : item.value
   );
+  const [isError, setIsError] = useState(!isValidValue(item.id, item.value));
 
-  const displayValue = useMemo(() => {
-    return item.value === item.presets[1] ? '' : internalValue;
-  }, [internalValue, item.presets, item.value]);
+  useEffect(() => {
+    // clean up input in case of reset
+    if (item.presets.includes(item.value) && isAllSettingsDefault) {
+      internalValue && setInternalValue('');
+    }
+  }, [item.value]);
 
   const updateItemAndInternalState = (value: string) => {
-    item.setValue(value);
     setInternalValue(value);
+    if (isValidValue(item.id, value)) {
+      item.setValue(value);
+      isError && setIsError(false);
+    } else {
+      setIsError(true);
+    }
+  };
+
+  const handleOnBlur = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => {
+    if (!isValidValue(item.id, value)) {
+      isError && setIsError(false);
+      internalValue && setInternalValue('');
+      item.setValue(item.presets[1]);
+    }
+
+    if (item.presets.includes(item.value)) {
+      internalValue && setInternalValue('');
+    }
   };
 
   const handleOnInputChange = ({
@@ -55,7 +84,10 @@ export const TradeSettingsRow: FC<{
           <Button
             key={value}
             variant={'black'}
-            onClick={() => item.setValue(value)}
+            onClick={() => {
+              setInternalValue('');
+              item.setValue(value);
+            }}
             className={`${buttonClasses} ${
               item.value === value ? buttonActiveClasses : ''
             }`}
@@ -67,17 +99,22 @@ export const TradeSettingsRow: FC<{
         ))}
         <input
           placeholder={'custom'}
-          value={displayValue}
+          value={internalValue}
+          onBlur={handleOnBlur}
           onChange={handleOnInputChange}
           className={`${buttonClasses} ${inputClasses} ${
-            !item.presets.includes(item.value) ? buttonActiveClasses : ''
-          }`}
+            isError ? buttonErrorClasses : ''
+          }${!item.presets.includes(item.value) ? buttonActiveClasses : ''}`}
         />
       </div>
       {warningMessage && (
-        <div className="mt-15 flex font-mono text-12 font-weight-500 text-warning-400">
-          <IconWarning className={`w-14 text-warning-400`} />
-          <span className="ml-5">{warningMessage}</span>
+        <div
+          className={`mt-15 flex font-mono text-12 font-weight-500 text-warning-400`}
+        >
+          <IconWarning className={`w-14 ${isError ? 'text-red' : ''}`} />
+          <span className={`ml-5 ${isError ? 'text-red' : ''}`}>
+            {warningMessage}
+          </span>
         </div>
       )}
     </div>

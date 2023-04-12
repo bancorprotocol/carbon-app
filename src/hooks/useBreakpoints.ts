@@ -44,11 +44,11 @@ export const useBreakpoints = () => {
     const track = (innerWidth?: number) => {
       setWidth(innerWidth || defaultWidth);
     };
-    window.addEventListener('resize', (e) =>
+    window?.addEventListener('resize', (e) =>
       // @ts-ignore
       track(e.currentTarget?.innerWidth)
     );
-    return () => window.removeEventListener('resize', () => track());
+    return () => window?.removeEventListener('resize', () => track());
   }, []);
 
   return { width, currentBreakpoint, aboveBreakpoint, belowBreakpoint };

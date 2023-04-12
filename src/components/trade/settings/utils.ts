@@ -44,3 +44,16 @@ export const warningMessageIfOutOfRange = (
       return '';
   }
 };
+
+export const isValidValue = (
+  id: TradeSettingsDataId,
+  value: string
+): boolean => {
+  const numberedValue = +value;
+  switch (id) {
+    case 'slippageTolerance':
+      return numberedValue >= 0 && numberedValue <=5;        
+    default:
+      return true;
+  }
+};

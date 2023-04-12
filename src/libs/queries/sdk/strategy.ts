@@ -11,6 +11,7 @@ import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { EncodedStrategy, StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
+import { getLowestBits } from 'utils/helpers';
 
 export enum StrategyStatus {
   Active,
@@ -27,6 +28,7 @@ export interface Order {
 
 export interface Strategy {
   id: string;
+  idDisplay: string;
   base: Token;
   quote: Token;
   order0: Order;
@@ -106,6 +108,7 @@ export const useGetUserStrategies = () => {
 
         const strategy: Strategy = {
           id: s.id.toString(),
+          idDisplay: getLowestBits(s.id.toString()),
           base,
           quote,
           order0,
@@ -161,8 +164,8 @@ export const useCreateStrategyQuery = () => {
 
   return useMutation(
     async ({ base, quote, order0, order1 }: CreateStrategyParams) => {
-      const noPrice0 = Number(order0.price) === 0;
-      const noPrice1 = Number(order1.price) === 0;
+      const noPrice0 = order0.price === '';
+      const noPrice1 = order1.price === '';
 
       const order0Low = noPrice0 ? order0.min : order0.price;
       const order0Max = noPrice0 ? order0.max : order0.price;
@@ -181,8 +184,7 @@ export const useCreateStrategyQuery = () => {
         order0Budget,
         order1Low,
         order1Max,
-        order1Budget,
-        { gasLimit: 9999999 }
+        order1Budget
       );
 
       return signer!.sendTransaction(unsignedTx);
@@ -208,8 +210,7 @@ export const useUpdateStrategyQuery = () => {
           ...fieldsToUpdate,
         },
         buyMarginalPrice ? buyMarginalPrice : MarginalPriceOptions.reset,
-        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset,
-        { gasLimit: 9999999 }
+        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset
       );
 
       return signer!.sendTransaction(unsignedTx);

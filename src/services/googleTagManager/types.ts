@@ -44,6 +44,7 @@ export type ConfirmationType = {
 
 export type StrategyType = {
   strategy_id?: string;
+  token_pair?: string;
   strategy_base_token?: string;
   strategy_quote_token?: string;
   strategy_buy_low_token?: string;

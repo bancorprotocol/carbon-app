@@ -149,27 +149,51 @@ export const strategyEvents: CarbonEvents['strategy'] = {
     });
   },
   strategyBuyLowOrderTypeChange: (strategy) => {
-    sendEvent('strategy', 'strategyBuyLowOrderTypeChange', strategy);
+    sendEvent('strategy', 'strategyBuyLowOrderTypeChange', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
   strategySellHighOrderTypeChange: (strategy) => {
-    sendEvent('strategy', 'strategySellHighOrderTypeChange', strategy);
+    sendEvent('strategy', 'strategySellHighOrderTypeChange', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
   strategyBuyLowPriceSet: (strategy) => {
-    sendEvent('strategy', 'strategyBuyLowPriceSet', strategy);
+    sendEvent('strategy', 'strategyBuyLowPriceSet', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
   strategySellHighPriceSet: (strategy) => {
-    sendEvent('strategy', 'strategySellHighPriceSet', strategy);
+    sendEvent('strategy', 'strategySellHighPriceSet', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
   strategyBuyLowBudgetSet: (strategy) => {
-    sendEvent('strategy', 'strategyBuyLowBudgetSet', strategy);
+    sendEvent('strategy', 'strategyBuyLowBudgetSet', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
   strategySellHighBudgetSet: (strategy) => {
-    sendEvent('strategy', 'strategySellHighBudgetSet', strategy);
+    sendEvent('strategy', 'strategySellHighBudgetSet', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
   strategyCreateClick: (strategy) => {
-    sendEvent('strategy', 'strategyCreateClick', strategy);
+    sendEvent('strategy', 'strategyCreateClick', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
   strategyCreate: (strategy) => {
-    sendEvent('strategy', 'strategyCreate', strategy);
+    sendEvent('strategy', 'strategyCreate', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
   },
 };

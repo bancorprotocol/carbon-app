@@ -45,7 +45,11 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
       }
       size={'md'}
     >
-      <TradeSettings base={data.base} quote={data.quote} />
+      <TradeSettings
+        isAllSettingsDefault={isAllSettingsDefault}
+        base={data.base}
+        quote={data.quote}
+      />
     </ModalSlideOver>
   );
 };

@@ -7,7 +7,6 @@ import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
-import { IS_TENDERLY_FORK } from 'libs/web3';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { carbonEvents } from 'services/googleTagManager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -39,6 +38,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     openTradeRouteModal,
     calcSlippage,
     isTradeBySource,
+    maxSourceAmountQuery,
   } = useBuySell(props);
   const { buy, source, target, sourceBalanceQuery } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
@@ -132,13 +132,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ${target.symbol}`;
   };
 
-  const getLiquidity = () => {
-    const value = liquidityQuery.isLoading
-      ? 'loading'
-      : prettifyNumber(liquidityQuery.data);
-    return `Liquidity: ${value} ${target.symbol}`;
-  };
-
   const showRouting =
     rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
 
@@ -219,11 +212,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               </button>
             )}
           </div>
-          {IS_TENDERLY_FORK && (
-            <div className={'text-secondary mt-5 text-right'}>
-              {getLiquidity()}
-            </div>
-          )}
         </>
       ) : (
         <NotEnoughLiquidity
@@ -232,7 +220,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         />
       )}
       <Button
-        disabled={!hasEnoughLiquidity}
+        disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
         onClick={() => {
           handleCTAClick();
           buy

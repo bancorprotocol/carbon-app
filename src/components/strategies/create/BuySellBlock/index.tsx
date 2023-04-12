@@ -8,6 +8,13 @@ import { TokenInputField } from 'components/common/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
 import { useStrategyEvents } from './useStrategyEvents';
+import {
+  StrategyCreateLocationGenerics,
+  StrategyType,
+} from 'components/strategies/create/types';
+import { TabsMenu } from 'components/common/tabs/TabsMenu';
+import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
+import { useNavigate } from 'libs/routing';
 
 type Props = {
   base: Token;
@@ -16,6 +23,7 @@ type Props = {
   order: OrderCreate;
   buy?: boolean;
   isBudgetOptional?: boolean;
+  strategyType?: StrategyType;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -25,7 +33,9 @@ export const BuySellBlock: FC<Props> = ({
   order,
   buy,
   isBudgetOptional,
+  strategyType,
 }) => {
+  const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
@@ -89,6 +99,41 @@ export const BuySellBlock: FC<Props> = ({
           : 'border-red/50 focus-within:border-red'
       }`}
     >
+      {strategyType === 'disposable' && (
+        <div className={'mb-30'}>
+          <TabsMenu>
+            <TabsMenuButton
+              onClick={() => {
+                navigate({
+                  search: (search) => ({
+                    ...search,
+                    strategyDirection: 'buy',
+                  }),
+                  replace: true,
+                });
+              }}
+              isActive={buy}
+            >
+              Buy
+            </TabsMenuButton>
+            <TabsMenuButton
+              onClick={() => {
+                navigate({
+                  search: (search) => ({
+                    ...search,
+                    strategyDirection: 'sell',
+                  }),
+                  replace: true,
+                });
+              }}
+              isActive={!buy}
+            >
+              Sell
+            </TabsMenuButton>
+          </TabsMenu>
+        </div>
+      )}
+
       <LimitRangeSection {...{ base, quote, order, buy, title, inputTitle }} />
       <div className={'flex items-center pt-10 text-14'}>
         <div
@@ -102,8 +147,20 @@ export const BuySellBlock: FC<Props> = ({
           sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
           element={
             buy
-              ? `The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}. Note: this amount will re-fill once the "Sell" order is used by traders.`
-              : `The amount of ${base.symbol} tokens you would like to sell. Note: this amount will re-fill once the "Buy" order is used by traders.`
+              ? `The amount of ${
+                  quote.symbol
+                } tokens you would like to use in order to buy ${
+                  base.symbol
+                }. ${
+                  strategyType === 'recurring'
+                    ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
+                    : ''
+                }`
+              : `The amount of ${base.symbol} tokens you would like to sell. ${
+                  strategyType === 'recurring'
+                    ? 'Note: this amount will re-fill once the "Buy" order is used by traders.'
+                    : ''
+                }`
           }
         >
           <div className={'font-weight-500 text-white/60'}>
