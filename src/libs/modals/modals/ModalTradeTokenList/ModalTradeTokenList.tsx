@@ -32,7 +32,6 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
     addFavoritePair,
     removeFavoritePair,
   } = useModalTradeTokenList({ id, data });
-  // @ts-ignore
 
   return (
     <Modal id={id} title="Select Token Pair">
