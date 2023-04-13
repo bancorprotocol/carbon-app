@@ -49,31 +49,28 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   useEffect(() => {
     errorMsgSource &&
       carbonEvents.trade.tradeErrorShow({
-        trade_direction: buy ? 'buy' : 'sell',
-        buy_token: target.symbol,
-        sell_token: source.symbol,
-        token_pair: `${target.symbol}/${source.symbol}`,
-        value_usd: getFiatValueSource(sourceInput, true).toString(),
+        tradeDirection: buy ? 'buy' : 'sell',
+        buyToken: target.symbol,
+        sellToken: source.symbol,
+        valueUsd: getFiatValueSource(sourceInput, true).toString(),
         message: errorMsgSource || '',
       });
 
     errorMsgTarget &&
       carbonEvents.trade.tradeErrorShow({
-        trade_direction: buy ? 'buy' : 'sell',
-        buy_token: target.symbol,
-        sell_token: source.symbol,
-        token_pair: `${target.symbol}/${source.symbol}`,
-        value_usd: getFiatValueSource(sourceInput, true).toString(),
+        tradeDirection: buy ? 'buy' : 'sell',
+        buyToken: target.symbol,
+        sellToken: source.symbol,
+        valueUsd: getFiatValueSource(sourceInput, true).toString(),
         message: errorMsgTarget || '',
       });
 
     !hasEnoughLiquidity &&
       !liquidityQuery.isLoading &&
       carbonEvents.trade.tradeErrorShow({
-        trade_direction: buy ? 'buy' : 'sell',
-        buy_token: target.symbol,
-        sell_token: source.symbol,
-        token_pair: `${target.symbol}/${source.symbol}`,
+        tradeDirection: buy ? 'buy' : 'sell',
+        buyToken: target.symbol,
+        sellToken: source.symbol,
         message: 'No Liquidity Available',
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,11 +84,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   useInitEffect(() => {
     const tradeData = {
-      trade_direction: buy ? 'buy' : 'sell',
-      buy_token: target.symbol,
-      sell_token: source.symbol,
-      token_pair: `${target.symbol}/${source.symbol}`,
-      value_usd: getFiatValueSource(sourceInput, true).toString(),
+      tradeDirection: buy ? 'buy' : 'sell',
+      buyToken: target.symbol,
+      sellToken: source.symbol,
+      valueUsd: getFiatValueSource(sourceInput, true).toString(),
     };
     if (isTradeBySource) {
       buy
@@ -102,11 +98,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   useInitEffect(() => {
     const tradeData = {
-      trade_direction: buy ? 'buy' : 'sell',
-      buy_token: target.symbol,
-      sell_token: source.symbol,
-      token_pair: `${target.symbol}/${source.symbol}`,
-      value_usd: getFiatValueSource(sourceInput, true).toString(),
+      tradeDirection: buy ? 'buy' : 'sell',
+      buyToken: target.symbol,
+      sellToken: source.symbol,
+      valueUsd: getFiatValueSource(sourceInput, true).toString(),
     };
 
     if (!isTradeBySource && sourceInput) {
@@ -226,18 +221,16 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           handleCTAClick();
           buy
             ? carbonEvents.trade.tradeBuyClick({
-                trade_direction: buy ? 'buy' : 'sell',
-                buy_token: target.symbol,
-                sell_token: source.symbol,
-                token_pair: `${target.symbol}/${source.symbol}`,
-                value_usd: getFiatValueSource(sourceInput, true).toString(),
+                tradeDirection: buy ? 'buy' : 'sell',
+                buyToken: target.symbol,
+                sellToken: source.symbol,
+                valueUsd: getFiatValueSource(sourceInput, true).toString(),
               })
             : carbonEvents.trade.tradeSellClick({
-                trade_direction: buy ? 'buy' : 'sell',
-                buy_token: target.symbol,
-                sell_token: source.symbol,
-                token_pair: `${target.symbol}/${source.symbol}`,
-                value_usd: getFiatValueSource(sourceInput, true).toString(),
+                tradeDirection: buy ? 'buy' : 'sell',
+                buyToken: target.symbol,
+                sellToken: source.symbol,
+                valueUsd: getFiatValueSource(sourceInput, true).toString(),
               });
         }}
         variant={buy ? 'success' : 'error'}

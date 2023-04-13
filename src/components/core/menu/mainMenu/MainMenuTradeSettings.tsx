@@ -21,9 +21,8 @@ export const MainMenuTradeSettings: FC<Props> = ({ baseToken, quoteToken }) => {
       onClick={() => {
         openModal('tradeSettings', { base: baseToken, quote: quoteToken });
         carbonEvents.trade.tradeSettingsClick({
-          token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
-          buy_token: baseToken.symbol,
-          sell_token: quoteToken.symbol,
+          buyToken: baseToken.symbol,
+          sellToken: quoteToken.symbol,
         });
       }}
     >

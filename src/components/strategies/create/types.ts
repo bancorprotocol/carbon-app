@@ -5,7 +5,7 @@ import { TransactionResponse } from '@ethersproject/providers';
 import { CreateStrategyParams } from 'libs/queries';
 import { DispatchNotification } from 'libs/notifications/types';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
-import { StrategyGTMEventType } from 'services/events/googleTagManager/types';
+import { StrategyEventType } from 'services/events/types';
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
@@ -43,5 +43,5 @@ export type CreateStrategyActionProps = Pick<
   >;
   dispatchNotification: DispatchNotification;
   navigate: ReturnType<typeof useNavigate<StrategyCreateLocationGenerics>>;
-  strategyEventData: StrategyGTMEventType;
+  strategyEventData: StrategyEventType;
 };

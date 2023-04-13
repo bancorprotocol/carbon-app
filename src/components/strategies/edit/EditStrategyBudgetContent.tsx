@@ -68,12 +68,11 @@ export const EditStrategyBudgetContent = ({
         buttonLabel: `Confirm ${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`,
         eventData: {
           ...strategyEventData,
-          product_type: 'strategy',
+          productType: 'strategy',
           token: approval.tokens.map(({ symbol }) => symbol),
-          buy_token: strategy.base?.symbol,
-          sell_token: strategy.quote?.symbol,
-          token_pair: `${strategy.base?.symbol}/${strategy.quote?.symbol}`,
-          blockchain_network: provider?.network?.name,
+          buyToken: strategy.base?.symbol,
+          sellToken: strategy.quote?.symbol,
+          blockchainNetwork: provider?.network?.name,
         },
       });
     } else {

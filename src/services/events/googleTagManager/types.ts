@@ -33,11 +33,10 @@ export type TradeGTMEventType = {
   blockchain_network?: string;
   transaction_hash?: string;
   message?: string;
-  switch?: 'true' | 'false';
 };
 
 export type ConfirmationGTMEventType = {
-  switch?: 'true' | 'false';
+  switch?: string;
   token?: string | string[];
   product_type?: string;
 };

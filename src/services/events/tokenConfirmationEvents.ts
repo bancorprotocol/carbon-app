@@ -6,23 +6,22 @@ import {
   StrategyGTMEventType,
   TradeGTMEventType,
 } from './googleTagManager/types';
+import { prepareConfirmationData } from './transactionConfirmationEvents';
+import { ConfirmationEventType, StrategyEventOrTradeEvent } from './types';
 
 export interface EventTokenConfirmationSchema extends EventCategory {
   tokenConfirmationView: {
-    input: (TradeGTMEventType | StrategyGTMEventType) &
-      ConfirmationGTMEventType;
+    input: StrategyEventOrTradeEvent & ConfirmationEventType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
   tokenConfirmationUnlimitedSwitchChange: {
-    input: (TradeGTMEventType | StrategyGTMEventType) &
-      ConfirmationGTMEventType;
+    input: StrategyEventOrTradeEvent & ConfirmationEventType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
   tokenConfirmationUnlimitedApprove: {
-    input: (TradeGTMEventType | StrategyGTMEventType) &
-      ConfirmationGTMEventType;
+    input: StrategyEventOrTradeEvent & ConfirmationEventType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
@@ -30,20 +29,27 @@ export interface EventTokenConfirmationSchema extends EventCategory {
 
 export const tokenConfirmationEvents: CarbonEvents['tokenConfirmation'] = {
   tokenConfirmationView: (data) => {
-    sendGTMEvent('tokenConfirmation', 'tokenConfirmationView', data);
+    const tokenConfirmationData = prepareConfirmationData(data);
+    sendGTMEvent(
+      'tokenConfirmation',
+      'tokenConfirmationView',
+      tokenConfirmationData
+    );
   },
   tokenConfirmationUnlimitedSwitchChange: (data) => {
+    const tokenConfirmationData = prepareConfirmationData(data);
     sendGTMEvent(
       'tokenConfirmation',
       'tokenConfirmationUnlimitedSwitchChange',
-      data
+      tokenConfirmationData
     );
   },
   tokenConfirmationUnlimitedApprove: (data) => {
+    const tokenConfirmationData = prepareConfirmationData(data);
     sendGTMEvent(
       'tokenConfirmation',
       'tokenConfirmationUnlimitedApprove',
-      data
+      tokenConfirmationData
     );
   },
 };

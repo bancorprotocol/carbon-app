@@ -57,12 +57,11 @@ export const useBuySell = ({
 
   const eventData = useMemo(() => {
     return {
-      trade_direction: buy ? 'buy' : 'sell',
-      buy_token: target.symbol,
-      sell_token: source.symbol,
-      token_pair: `${target.symbol}/${source.symbol}`,
-      blockchain_network: provider?.network?.name,
-      value_usd: getFiatValueSource(sourceInput, true).toString(),
+      tradeDirection: buy ? 'buy' : 'sell',
+      buyToken: target.symbol,
+      sellToken: source.symbol,
+      blockchainNetwork: provider?.network?.name,
+      valueUsd: getFiatValueSource(sourceInput, true).toString(),
     };
   }, [
     buy,
@@ -82,11 +81,11 @@ export const useBuySell = ({
       buy
         ? carbonEvents.trade.tradeBuy({
             ...eventData,
-            transaction_hash: txHash,
+            transactionHash: txHash,
           })
         : carbonEvents.trade.tradeSell({
             ...eventData,
-            transaction_hash: txHash,
+            transactionHash: txHash,
           });
     },
   });
@@ -250,8 +249,9 @@ export const useBuySell = ({
         buttonLabel: 'Confirm Trade',
         eventData: {
           ...eventData,
-          product_type: 'trade',
+          productType: 'trade',
           token: approval.tokens.map(({ symbol }) => symbol),
+          blockchainNetwork: provider?.network?.name,
         },
       });
     } else {
@@ -267,6 +267,7 @@ export const useBuySell = ({
     eventData,
     isLiquidityError,
     isTradeBySource,
+    provider?.network?.name,
     maxSourceAmountQuery.isFetching,
     openModal,
     source,

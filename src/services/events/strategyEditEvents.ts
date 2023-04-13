@@ -4,72 +4,109 @@ import {
   EventCategory,
   StrategyGTMEventType,
 } from './googleTagManager/types';
-
+import { prepareGtmStrategyData } from './strategyEvents';
+import { StrategyEventType } from './types';
 export interface EventStrategyEditSchema extends EventCategory {
   strategyDuplicateClick: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyDelete: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyChangeRatesClick: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyChangeRates: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyDepositClick: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyDeposit: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyWithdraw: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyWithdrawClick: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyPause: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
 }
 
 export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
   strategyDuplicateClick: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyDuplicateClick', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyDuplicateClick', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyDelete: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyDelete', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyDelete', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyChangeRatesClick: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyChangeRatesClick', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyChangeRatesClick', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyChangeRates: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyChangeRates', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyChangeRates', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyDepositClick: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyDepositClick', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyDepositClick', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyDeposit: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyDeposit', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyDeposit', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyWithdraw: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyWithdraw', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyWithdraw', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyWithdrawClick: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyWithdrawClick', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyWithdrawClick', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
   strategyPause: (strategy) => {
-    sendGTMEvent('strategyEdit', 'strategyPause', strategy);
+    const gtmData = prepareGtmStrategyData(strategy);
+    sendGTMEvent('strategyEdit', 'strategyPause', {
+      ...gtmData,
+      strategy_id: strategy.strategyId,
+    });
   },
 };

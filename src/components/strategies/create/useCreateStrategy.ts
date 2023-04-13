@@ -114,12 +114,11 @@ export const useCreateStrategy = () => {
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
-            product_type: 'strategy',
+            productType: 'strategy',
             token: approval.tokens.map(({ symbol }) => symbol),
-            buy_token: base?.symbol,
-            sell_token: quote?.symbol,
-            token_pair: `${base?.symbol}/${quote?.symbol}`,
-            blockchain_network: provider?.network?.name,
+            buyToken: base?.symbol,
+            sellToken: quote?.symbol,
+            blockchainNetwork: provider?.network?.name,
           },
         });
       } else {

@@ -20,9 +20,8 @@ export const MainMenuTradePairs: FC<Props> = ({ baseToken, quoteToken }) => {
       onClick={() => {
         openTradePairList();
         carbonEvents.trade.tradePairChangeClick({
-          token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
-          buy_token: baseToken.symbol,
-          sell_token: quoteToken.symbol,
+          buyToken: baseToken.symbol,
+          sellToken: quoteToken.symbol,
         });
       }}
       className={

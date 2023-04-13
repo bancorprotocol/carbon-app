@@ -3,7 +3,7 @@ import useInitEffect from 'hooks/useInitEffect';
 import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
 
-import { StrategyGTMEventType } from 'services/events/googleTagManager/types';
+import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { OrderCreate } from '../useOrder';
 
@@ -24,28 +24,28 @@ export const useStrategyEvents = ({
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
 
-  const getStrategyEventData = (): StrategyGTMEventType => {
+  const getStrategyEventData = (): StrategyEventType => {
     if (buy) {
       return {
-        strategy_base_token: base.symbol,
-        strategy_quote_token: quote.symbol,
-        strategy_buy_low_order_type: order.isRange ? 'range' : 'limit',
-        strategy_buy_low_budget: order.budget,
-        strategy_buy_low_budget_usd: fiatValueUsd,
-        strategy_buy_low_token_price: sanitizeNumberInput(order.price, 18),
-        strategy_buy_low_token_min_price: sanitizeNumberInput(order.min, 18),
-        strategy_buy_low_token_max_price: sanitizeNumberInput(order.max, 18),
+        baseToken: base.symbol,
+        quoteToken: quote.symbol,
+        buyOrderType: order.isRange ? 'range' : 'limit',
+        buyBudget: order.budget,
+        buyBudgetUsd: fiatValueUsd,
+        buyTokenPrice: sanitizeNumberInput(order.price, 18),
+        buyTokenPriceMin: sanitizeNumberInput(order.min, 18),
+        buyTokenPriceMax: sanitizeNumberInput(order.max, 18),
       };
     }
     return {
-      strategy_base_token: base.symbol,
-      strategy_quote_token: quote.symbol,
-      strategy_sell_high_order_type: order.isRange ? 'range' : 'limit',
-      strategy_sell_high_budget: order.budget,
-      strategy_sell_high_budget_usd: fiatValueUsd,
-      strategy_sell_high_token_price: sanitizeNumberInput(order.price, 18),
-      strategy_sell_high_token_min_price: sanitizeNumberInput(order.min, 18),
-      strategy_sell_high_token_max_price: sanitizeNumberInput(order.max, 18),
+      baseToken: base.symbol,
+      quoteToken: quote.symbol,
+      sellOrderType: order.isRange ? 'range' : 'limit',
+      sellBudget: order.budget,
+      sellBudgetUsd: fiatValueUsd,
+      sellTokenPrice: sanitizeNumberInput(order.price, 18),
+      sellTokenPriceMin: sanitizeNumberInput(order.min, 18),
+      sellTokenPriceMax: sanitizeNumberInput(order.max, 18),
     };
   };
 

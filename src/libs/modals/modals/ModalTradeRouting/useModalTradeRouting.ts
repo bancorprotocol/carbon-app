@@ -88,17 +88,16 @@ export const useModalTradeRouting = ({
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
         eventData: {
-          product_type: 'trade',
-          trade_direction: buy ? 'buy' : 'sell',
-          buy_token: target.symbol,
-          sell_token: source.symbol,
-          token_pair: `${target.symbol}/${source.symbol}`,
-          value_usd: getFiatValueSource(
+          productType: 'trade',
+          tradeDirection: buy ? 'buy' : 'sell',
+          buyToken: target.symbol,
+          sellToken: source.symbol,
+          valueUsd: getFiatValueSource(
             data?.totalSourceAmount,
             true
           ).toString(),
           token: approval.tokens.map(({ symbol }) => symbol),
-          blockchain_network: provider?.network?.name,
+          blockchainNetwork: provider?.network?.name,
         },
       });
     } else {

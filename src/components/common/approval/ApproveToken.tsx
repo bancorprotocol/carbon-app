@@ -8,17 +8,17 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
-import {
-  StrategyGTMEventType,
-  TradeGTMEventType,
-} from 'services/events/googleTagManager/types';
 import { carbonEvents } from 'services/events';
+import {
+  ConfirmationEventType,
+  StrategyEventOrTradeEvent,
+} from 'services/events/types';
 
 type Props = {
   data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
-  eventData?: TradeGTMEventType | StrategyGTMEventType;
+  eventData?: StrategyEventOrTradeEvent & ConfirmationEventType;
 };
 
 export const ApproveToken: FC<Props> = ({
@@ -66,7 +66,7 @@ export const ApproveToken: FC<Props> = ({
             carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedApprove({
               ...eventData,
               token: token.symbol,
-              switch: !isLimited ? 'true' : 'false',
+              isLimited,
             });
           }
         },
@@ -84,8 +84,7 @@ export const ApproveToken: FC<Props> = ({
     eventData &&
       carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedSwitchChange({
         ...eventData,
-        switch: value ? 'true' : 'false',
-        token: token?.symbol,
+        isLimited: !value,
       });
   };
 
