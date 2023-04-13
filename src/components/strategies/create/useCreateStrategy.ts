@@ -23,6 +23,7 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
+import useInitEffect from 'hooks/useInitEffect';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -47,6 +48,15 @@ export const useCreateStrategy = () => {
   const order0 = useOrder(templateStrategy?.order0);
 
   const mutation = useCreateStrategyQuery();
+
+  const search = useSearch<StrategyCreateLocationGenerics>();
+  const [selectedStrategySettings, setSelectedStrategySettings] = useState<
+    | {
+        to: string;
+        search: StrategyCreateLocationGenerics['Search'];
+      }
+    | undefined
+  >();
 
   const approvalTokens = useMemo(() => {
     const arr = [];
@@ -75,6 +85,9 @@ export const useCreateStrategy = () => {
     quote,
     order0,
     order1,
+    strategyType: selectedStrategySettings?.search?.strategyType,
+    strategyDirection: selectedStrategySettings?.search?.strategyDirection,
+    strategySettings: selectedStrategySettings?.search?.strategySettings,
   });
 
   const createStrategy = async () => {
@@ -205,7 +218,6 @@ export const useCreateStrategy = () => {
     order1,
   ]);
 
-  const search = useSearch<StrategyCreateLocationGenerics>();
   const {
     base: baseAddress,
     quote: quoteAddress,
@@ -214,13 +226,17 @@ export const useCreateStrategy = () => {
     strategyType,
   } = search;
   const { getTokenById } = useTokens();
-  const [selectedStrategySettings, setSelectedStrategySettings] = useState<
-    | {
-        to: string;
-        search: StrategyCreateLocationGenerics['Search'];
-      }
-    | undefined
-  >();
+
+  useInitEffect(() => {
+    selectedStrategySettings?.search.strategyType === 'disposable' &&
+      carbonEvents.strategy.strategyDirectionChange({
+        strategy_base_token: base?.symbol,
+        strategy_quote_token: quote?.symbol,
+        strategy_settings: selectedStrategySettings?.search.strategySettings,
+        strategy_direction: selectedStrategySettings?.search.strategyDirection,
+        strategy_type: strategyType,
+      });
+  }, [selectedStrategySettings?.search.strategyDirection]);
 
   useEffect(() => {
     setSelectedStrategySettings(undefined);

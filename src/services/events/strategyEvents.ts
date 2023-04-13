@@ -105,6 +105,14 @@ export interface EventStrategySchema extends EventCategory {
     input: StrategyGTMEventType;
     gtmData: StrategyGTMEventType;
   };
+  newStrategyNextStepClick: {
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
+  };
+  strategyDirectionChange: {
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
+  };
 }
 
 export const strategyEvents: CarbonEvents['strategy'] = {
@@ -197,6 +205,18 @@ export const strategyEvents: CarbonEvents['strategy'] = {
   },
   strategyCreate: (strategy) => {
     sendGTMEvent('strategy', 'strategyCreate', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
+  },
+  newStrategyNextStepClick: (strategy) => {
+    sendGTMEvent('strategy', 'newStrategyNextStepClick', {
+      ...strategy,
+      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+    });
+  },
+  strategyDirectionChange: (strategy) => {
+    sendGTMEvent('strategy', 'strategyDirectionChange', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });

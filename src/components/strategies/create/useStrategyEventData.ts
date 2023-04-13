@@ -1,6 +1,7 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { sanitizeNumberInput } from 'utils/helpers';
+import { StrategyDirection, StrategySettings, StrategyType } from './types';
 import { OrderCreate } from './useOrder';
 
 export const useStrategyEventData = ({
@@ -9,12 +10,18 @@ export const useStrategyEventData = ({
   quote,
   order0,
   order1,
+  strategyType,
+  strategyDirection,
+  strategySettings,
 }: {
   id?: string;
   base: Token | undefined;
   quote: Token | undefined;
   order0: OrderCreate;
   order1: OrderCreate;
+  strategyType?: StrategyType;
+  strategyDirection?: StrategyDirection;
+  strategySettings?: StrategySettings;
 }) => {
   const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
@@ -37,5 +44,8 @@ export const useStrategyEventData = ({
     strategy_sell_high_token_price: sanitizeNumberInput(order1.price, 18),
     strategy_sell_high_token_min_price: sanitizeNumberInput(order1.min, 18),
     strategy_sell_high_token_max_price: sanitizeNumberInput(order1.max, 18),
+    strategy_type: strategyType,
+    strategy_direction: strategyDirection,
+    strategy_settings: strategySettings,
   };
 };

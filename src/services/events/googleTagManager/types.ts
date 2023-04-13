@@ -63,6 +63,9 @@ export type StrategyGTMEventType = {
   strategy_sell_high_order_type?: string;
   strategy_sell_high_budget?: string;
   strategy_sell_high_budget_usd?: string;
+  strategy_type?: 'recurring' | 'disposable';
+  strategy_direction?: 'buy' | 'sell';
+  strategy_settings?: 'limit' | 'range' | 'custom' | undefined;
 };
 
 export type EventCategory = { [key: string]: { input: any; gtmData: any } };

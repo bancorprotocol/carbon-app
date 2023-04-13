@@ -8,6 +8,7 @@ import { UseStrategyCreateReturn } from 'components/strategies/create/index';
 import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
 import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
+import { carbonEvents } from 'services/events';
 
 const BlockIconTextDesc = ({
   icon,
@@ -116,12 +117,21 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         fullWidth
         size={'lg'}
         disabled={!selectedStrategySettings}
-        onClick={() =>
+        onClick={() => {
           handleClick(
             selectedStrategySettings?.to!,
             selectedStrategySettings?.search!
-          )
-        }
+          );
+          carbonEvents.strategy.newStrategyNextStepClick({
+            strategy_base_token: base?.symbol,
+            strategy_quote_token: quote?.symbol,
+            strategy_settings:
+              selectedStrategySettings?.search.strategySettings,
+            strategy_direction:
+              selectedStrategySettings?.search.strategyDirection,
+            strategy_type: strategyType,
+          });
+        }}
       >
         Next Step
       </Button>
