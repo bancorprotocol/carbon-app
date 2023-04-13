@@ -1,17 +1,22 @@
 import * as Comlink from 'comlink';
 import {
-  Sdk,
-  Config,
   PayableOverrides,
-  TradeActionStruct,
+  TradeActionBNStr,
   TokenPair,
-  SerializableMatchAction,
+  MatchActionBNStr,
   StrategyUpdate,
+  EncodedStrategyBNStr,
 } from '@bancor/carbon-sdk';
-import { BigNumberish } from 'ethers';
+import { Toolkit } from '@bancor/carbon-sdk/strategy-management';
+import { ChainCache, initSyncedCache } from '@bancor/carbon-sdk/chain-cache';
+import {
+  ContractsApi,
+  ContractsConfig,
+} from '@bancor/carbon-sdk/contracts-api';
 import Decimal from 'decimal.js';
 import { OrderRow } from 'libs/queries';
 import { OrderBook } from 'libs/queries/sdk/orderBook';
+import { StaticJsonRpcProvider } from '@ethersproject/providers';
 
 Decimal.set({
   precision: 100,
@@ -22,24 +27,35 @@ Decimal.set({
 
 const ONE = new Decimal(1);
 
-let carbonSDK: Sdk;
+let api: ContractsApi;
+let sdkCache: ChainCache;
+let carbonSDK: Toolkit;
 let isInitialized = false;
 let isInitializing = false;
 
 const init = async (
-  config: Config,
+  rpcUrl: string,
+  config: ContractsConfig,
   decimalsMap?: Map<string, number>,
   cachedData?: string
 ) => {
   if (isInitialized || isInitializing) return;
   isInitializing = true;
-  carbonSDK = new Sdk(
-    config,
+  const provider = new StaticJsonRpcProvider(
+    { url: rpcUrl, skipFetchSetup: true },
+    1
+  );
+  api = new ContractsApi(provider, config);
+  const { cache, startDataSync } = initSyncedCache(api.reader, cachedData);
+  sdkCache = cache;
+  carbonSDK = new Toolkit(
+    api,
+    sdkCache,
     decimalsMap
       ? (address) => decimalsMap.get(address.toLowerCase())
       : undefined
   );
-  await carbonSDK.startDataSync(cachedData);
+  await startDataSync();
   isInitialized = true;
   isInitializing = false;
 };
@@ -237,15 +253,15 @@ const getOrderBook = async (
 const sdkExposed = {
   init,
   isInitialized: () => isInitialized,
-  getAllPairs: () => carbonSDK.getAllPairs(),
+  getAllPairs: () => api.reader.pairs(),
   setOnChangeHandlers: (
     onPairDataChanged: (affectedPairs: TokenPair[]) => void,
     onPairAddedToCache: (affectedPairs: TokenPair) => void
   ) => {
-    carbonSDK.on('onPairDataChanged', (affectedPairs) =>
+    sdkCache.on('onPairDataChanged', (affectedPairs) =>
       onPairDataChanged(affectedPairs)
     );
-    carbonSDK.on('onPairAddedToCache', (affectedPairs) =>
+    sdkCache.on('onPairAddedToCache', (affectedPairs) =>
       onPairAddedToCache(affectedPairs)
     );
     return;
@@ -276,8 +292,8 @@ const sdkExposed = {
       overrides
     ),
   updateStrategy: (
-    strategyId: BigNumberish,
-    encoded: string,
+    strategyId: string,
+    encoded: EncodedStrategyBNStr,
     data: StrategyUpdate,
     buyMarginalPrice?: string | undefined,
     sellMarginalPrice?: string | undefined,
@@ -291,8 +307,7 @@ const sdkExposed = {
       sellMarginalPrice,
       overrides
     ),
-  deleteStrategy: (strategyId: BigNumberish) =>
-    carbonSDK.deleteStrategy(strategyId),
+  deleteStrategy: (strategyId: string) => carbonSDK.deleteStrategy(strategyId),
   getTradeData: (
     sourceToken: string,
     targetToken: string,
@@ -304,7 +319,7 @@ const sdkExposed = {
     sourceToken: string,
     targetToken: string,
     isTradeBySource: boolean,
-    actionsWei: SerializableMatchAction[]
+    actionsWei: MatchActionBNStr[]
   ) =>
     carbonSDK.getTradeDataFromActions(
       sourceToken,
@@ -317,7 +332,7 @@ const sdkExposed = {
   composeTradeBySourceTransaction: (
     sourceToken: string,
     targetToken: string,
-    actions: TradeActionStruct[],
+    actions: TradeActionBNStr[],
     deadline: string,
     minReturn: string,
     overrides?: PayableOverrides | undefined
@@ -333,7 +348,7 @@ const sdkExposed = {
   composeTradeByTargetTransaction: (
     sourceToken: string,
     targetToken: string,
-    actions: TradeActionStruct[],
+    actions: TradeActionBNStr[],
     deadline: string,
     maxInput: string,
     overrides?: PayableOverrides | undefined
@@ -347,9 +362,9 @@ const sdkExposed = {
       overrides
     ),
   getOrderBook,
-  getCacheDump: () => carbonSDK.getCacheDump(),
+  getCacheDump: () => sdkCache.serialize(),
   getLastTradeByPair: (source: string, target: string) =>
-    carbonSDK.getLastTradeByPair(source, target),
+    sdkCache.getLatestTradeByPair(source, target),
   getMaxSourceAmountByPair: (source: string, target: string) =>
     carbonSDK.getMaxSourceAmountByPair(source, target),
 };
