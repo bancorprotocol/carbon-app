@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
+import { MatchActionBNStr } from '@bancor/carbon-sdk';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { carbonSDK } from 'libs/sdk';
 
 type Props = {
   sourceToken: string;
   targetToken: string;
-  actionsWei: SerializableMatchAction[];
+  actionsWei: MatchActionBNStr[];
   isTradeBySource: boolean;
 };
 

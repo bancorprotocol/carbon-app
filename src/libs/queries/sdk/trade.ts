@@ -2,17 +2,17 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import BigNumber from 'bignumber.js';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { Action, TradeActionStruct } from 'libs/sdk';
-import { SerializableMatchAction } from '@bancor/carbon-sdk/src/types';
+import { Action, TradeActionBNStr } from 'libs/sdk';
+import { MatchActionBNStr } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
 
 type GetTradeDataResult = {
-  tradeActions: TradeActionStruct[];
+  tradeActions: TradeActionBNStr[];
   actionsTokenRes: Action[];
   totalSourceAmount: string;
   totalTargetAmount: string;
   effectiveRate: string;
-  actionsWei: SerializableMatchAction[];
+  actionsWei: MatchActionBNStr[];
 };
 
 type Props = {

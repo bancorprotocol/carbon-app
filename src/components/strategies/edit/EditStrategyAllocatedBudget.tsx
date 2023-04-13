@@ -10,7 +10,7 @@ import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributed
 import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPrice';
 import BigNumber from 'bignumber.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { EditTypes } from './EditStrategyMain';
 
 const shouldDisplayDistributeByType: {
