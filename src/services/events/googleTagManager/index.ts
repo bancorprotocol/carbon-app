@@ -12,7 +12,6 @@ const sendGTM = (data: GTMData) => {
   if (window.dataLayer) {
     window.dataLayer.push(data);
   }
-  console.log(window.dataLayer, '-=-=-=-=-=- window.dataLayer -=-=-=-=-=-');
 };
 
 export const sendGTMEvent: SendEventFn = (type, event, data) => {
