@@ -1,4 +1,4 @@
-import { sendEvent } from '.';
+import { sendGTMEvent } from '.';
 import { CarbonEvents, EventCategory } from './types';
 
 export interface EventGeneralSchemaNew extends EventCategory {
@@ -12,7 +12,7 @@ export interface EventGeneralSchemaNew extends EventCategory {
 
 export const generalEvents: CarbonEvents['general'] = {
   changePage: ({ referrer }) => {
-    sendEvent('general', 'changePage', {
+    sendGTMEvent('general', 'changePage', {
       page_referrer_spa: referrer ? referrer : null,
     });
   },

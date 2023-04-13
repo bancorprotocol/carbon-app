@@ -1,5 +1,5 @@
-import { sendEvent } from '.';
-import { CarbonEvents, EventCategory, TradeType } from './types';
+import { sendGTMEvent } from '.';
+import { CarbonEvents, EventCategory, TradeGTMEventType } from './types';
 
 export interface EventTradeSchemaNew extends EventCategory {
   tradeWarningShow: {
@@ -7,96 +7,98 @@ export interface EventTradeSchemaNew extends EventCategory {
     gtmData: { message: string };
   };
   tradeErrorShow: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradePairSwap: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradePairChangeClick: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradePairChange: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeSettingsClick: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeSettingsSlippageToleranceChange: {
     input: { tolerance: string; base: string; quote: string };
-    gtmData: { trade_settings_slippage_tolerance: string } & TradeType;
+    gtmData: { trade_settings_slippage_tolerance: string } & TradeGTMEventType;
   };
   tradeSettingsTransactionExpirationTimeChange: {
     input: { expirationTime: string; base: string; quote: string };
-    gtmData: { trade_settings_transaction_expiration_time: string } & TradeType;
+    gtmData: {
+      trade_settings_transaction_expiration_time: string;
+    } & TradeGTMEventType;
   };
   tradeSettingsMaximumOrdersChange: {
     input: { maxOrders: string; base: string; quote: string };
-    gtmData: { trade_settings_maximum_orders: string } & TradeType;
+    gtmData: { trade_settings_maximum_orders: string } & TradeGTMEventType;
   };
   tradeSettingsResetAllClick: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeBuyPaySet: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeSellPaySet: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeBuyReceiveSet: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeSellReceiveSet: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeBuyClick: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeSellClick: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeBuy: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
   tradeSell: {
-    input: TradeType;
-    gtmData: TradeType;
+    input: TradeGTMEventType;
+    gtmData: TradeGTMEventType;
   };
 }
 
 export const tradeEvents: CarbonEvents['trade'] = {
   tradeWarningShow: (data) => {
-    sendEvent('trade', 'tradeWarningShow', data);
+    sendGTMEvent('trade', 'tradeWarningShow', data);
   },
   tradeErrorShow: (data) => {
-    sendEvent('trade', 'tradeErrorShow', data);
+    sendGTMEvent('trade', 'tradeErrorShow', data);
   },
   tradePairSwap: (data) => {
-    sendEvent('trade', 'tradePairSwap', data);
+    sendGTMEvent('trade', 'tradePairSwap', data);
   },
   tradePairChangeClick: (data) => {
-    sendEvent('trade', 'tradePairChangeClick', data);
+    sendGTMEvent('trade', 'tradePairChangeClick', data);
   },
   tradePairChange: (data) => {
-    sendEvent('trade', 'tradePairChange', data);
+    sendGTMEvent('trade', 'tradePairChange', data);
   },
   tradeSettingsClick: (data) => {
-    sendEvent('trade', 'tradeSettingsClick', data);
+    sendGTMEvent('trade', 'tradeSettingsClick', data);
   },
   tradeSettingsSlippageToleranceChange: ({ tolerance, base, quote }) => {
-    sendEvent('trade', 'tradeSettingsSlippageToleranceChange', {
+    sendGTMEvent('trade', 'tradeSettingsSlippageToleranceChange', {
       trade_settings_slippage_tolerance: tolerance,
       token_pair: `${base}/${quote}`,
       buy_token: base,
@@ -108,7 +110,7 @@ export const tradeEvents: CarbonEvents['trade'] = {
     base,
     quote,
   }) => {
-    sendEvent('trade', 'tradeSettingsTransactionExpirationTimeChange', {
+    sendGTMEvent('trade', 'tradeSettingsTransactionExpirationTimeChange', {
       trade_settings_transaction_expiration_time: expirationTime,
       token_pair: `${base}/${quote}`,
       buy_token: base,
@@ -116,7 +118,7 @@ export const tradeEvents: CarbonEvents['trade'] = {
     });
   },
   tradeSettingsMaximumOrdersChange: ({ maxOrders, base, quote }) => {
-    sendEvent('trade', 'tradeSettingsMaximumOrdersChange', {
+    sendGTMEvent('trade', 'tradeSettingsMaximumOrdersChange', {
       trade_settings_maximum_orders: maxOrders,
       token_pair: `${base}/${quote}`,
       buy_token: base,
@@ -124,30 +126,30 @@ export const tradeEvents: CarbonEvents['trade'] = {
     });
   },
   tradeSettingsResetAllClick: (data) => {
-    sendEvent('trade', 'tradeSettingsResetAllClick', data);
+    sendGTMEvent('trade', 'tradeSettingsResetAllClick', data);
   },
   tradeBuyPaySet: (data) => {
-    sendEvent('trade', 'tradeBuyPaySet', data);
+    sendGTMEvent('trade', 'tradeBuyPaySet', data);
   },
   tradeSellPaySet: (data) => {
-    sendEvent('trade', 'tradeSellPaySet', data);
+    sendGTMEvent('trade', 'tradeSellPaySet', data);
   },
   tradeBuyReceiveSet: (data) => {
-    sendEvent('trade', 'tradeBuyReceiveSet', data);
+    sendGTMEvent('trade', 'tradeBuyReceiveSet', data);
   },
   tradeSellReceiveSet: (data) => {
-    sendEvent('trade', 'tradeSellReceiveSet', data);
+    sendGTMEvent('trade', 'tradeSellReceiveSet', data);
   },
   tradeBuyClick: (data) => {
-    sendEvent('trade', 'tradeBuyClick', data);
+    sendGTMEvent('trade', 'tradeBuyClick', data);
   },
   tradeSellClick: (data) => {
-    sendEvent('trade', 'tradeSellClick', data);
+    sendGTMEvent('trade', 'tradeSellClick', data);
   },
   tradeBuy: (data) => {
-    sendEvent('trade', 'tradeBuy', data);
+    sendGTMEvent('trade', 'tradeBuy', data);
   },
   tradeSell: (data) => {
-    sendEvent('trade', 'tradeSell', data);
+    sendGTMEvent('trade', 'tradeSell', data);
   },
 };

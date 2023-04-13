@@ -1,5 +1,10 @@
-import { sendEvent } from '.';
-import { CarbonEvents, EventCategory, Message, StrategyType } from './types';
+import { sendGTMEvent } from '.';
+import {
+  CarbonEvents,
+  EventCategory,
+  Message,
+  StrategyGTMEventType,
+} from './types';
 
 export interface EventStrategySchemaNew extends EventCategory {
   strategyWarningShow: {
@@ -69,129 +74,129 @@ export interface EventStrategySchemaNew extends EventCategory {
     };
   };
   strategyBuyLowOrderTypeChange: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategySellHighOrderTypeChange: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyBuyLowPriceSet: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategySellHighPriceSet: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyBuyLowBudgetSet: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategySellHighBudgetSet: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyCreateClick: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyCreate: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
 }
 
 export const strategyEvents: CarbonEvents['strategy'] = {
   strategyWarningShow: ({ section, message }) => {
-    sendEvent('strategy', 'strategyWarningShow', {
+    sendGTMEvent('strategy', 'strategyWarningShow', {
       section,
       message,
     });
   },
   strategyErrorShow: ({ section, message }) => {
-    sendEvent('strategy', 'strategyErrorShow', {
+    sendGTMEvent('strategy', 'strategyErrorShow', {
       section,
       message,
     });
   },
   strategyTooltipShow: ({ section, message }) => {
-    sendEvent('strategy', 'strategyTooltipShow', {
+    sendGTMEvent('strategy', 'strategyTooltipShow', {
       section,
       message,
     });
   },
   strategyChartClose: () => {
-    sendEvent('strategy', 'strategyChartClose', undefined);
+    sendGTMEvent('strategy', 'strategyChartClose', undefined);
   },
   strategyChartOpen: () => {
-    sendEvent('strategy', 'strategyChartOpen', undefined);
+    sendGTMEvent('strategy', 'strategyChartOpen', undefined);
   },
   newStrategyCreateClick: () => {
-    sendEvent('strategy', 'newStrategyCreateClick', undefined);
+    sendGTMEvent('strategy', 'newStrategyCreateClick', undefined);
   },
   strategyBaseTokenChange: ({ token }) => {
-    sendEvent('strategy', 'strategyBaseTokenChange', { token });
+    sendGTMEvent('strategy', 'strategyBaseTokenChange', { token });
   },
   newStrategyBaseTokenSelect: ({ token }) => {
-    sendEvent('strategy', 'newStrategyBaseTokenSelect', { token });
+    sendGTMEvent('strategy', 'newStrategyBaseTokenSelect', { token });
   },
   newStrategyQuoteTokenSelect: ({ token }) => {
-    sendEvent('strategy', 'newStrategyQuoteTokenSelect', { token });
+    sendGTMEvent('strategy', 'newStrategyQuoteTokenSelect', { token });
   },
   strategyQuoteTokenChange: ({ token }) => {
-    sendEvent('strategy', 'strategyQuoteTokenChange', { token });
+    sendGTMEvent('strategy', 'strategyQuoteTokenChange', { token });
   },
   strategyTokenSwap: ({ updatedBase, updatedQuote }) => {
-    sendEvent('strategy', 'strategyTokenSwap', {
+    sendGTMEvent('strategy', 'strategyTokenSwap', {
       token_pair_from: `${updatedQuote}/${updatedBase}`,
       token_pair: `${updatedBase}/${updatedQuote}`,
     });
   },
   strategyBuyLowOrderTypeChange: (strategy) => {
-    sendEvent('strategy', 'strategyBuyLowOrderTypeChange', {
+    sendGTMEvent('strategy', 'strategyBuyLowOrderTypeChange', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });
   },
   strategySellHighOrderTypeChange: (strategy) => {
-    sendEvent('strategy', 'strategySellHighOrderTypeChange', {
+    sendGTMEvent('strategy', 'strategySellHighOrderTypeChange', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });
   },
   strategyBuyLowPriceSet: (strategy) => {
-    sendEvent('strategy', 'strategyBuyLowPriceSet', {
+    sendGTMEvent('strategy', 'strategyBuyLowPriceSet', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });
   },
   strategySellHighPriceSet: (strategy) => {
-    sendEvent('strategy', 'strategySellHighPriceSet', {
+    sendGTMEvent('strategy', 'strategySellHighPriceSet', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });
   },
   strategyBuyLowBudgetSet: (strategy) => {
-    sendEvent('strategy', 'strategyBuyLowBudgetSet', {
+    sendGTMEvent('strategy', 'strategyBuyLowBudgetSet', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });
   },
   strategySellHighBudgetSet: (strategy) => {
-    sendEvent('strategy', 'strategySellHighBudgetSet', {
+    sendGTMEvent('strategy', 'strategySellHighBudgetSet', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });
   },
   strategyCreateClick: (strategy) => {
-    sendEvent('strategy', 'strategyCreateClick', {
+    sendGTMEvent('strategy', 'strategyCreateClick', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });
   },
   strategyCreate: (strategy) => {
-    sendEvent('strategy', 'strategyCreate', {
+    sendGTMEvent('strategy', 'strategyCreate', {
       ...strategy,
       token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
     });

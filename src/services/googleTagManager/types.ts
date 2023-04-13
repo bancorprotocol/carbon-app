@@ -24,7 +24,7 @@ export type Message = {
   message: string;
 };
 
-export type TradeType = {
+export type TradeGTMEventType = {
   trade_direction?: string;
   token_pair?: string;
   buy_token?: string;
@@ -36,13 +36,13 @@ export type TradeType = {
   switch?: 'true' | 'false';
 };
 
-export type ConfirmationType = {
+export type ConfirmationGTMEventType = {
   switch?: 'true' | 'false';
   token?: string | string[];
   product_type?: string;
 };
 
-export type StrategyType = {
+export type StrategyGTMEventType = {
   strategy_id?: string;
   token_pair?: string;
   strategy_base_token?: string;

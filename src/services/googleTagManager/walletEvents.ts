@@ -1,4 +1,4 @@
-import { sendEvent } from '.';
+import { sendGTMEvent } from '.';
 import { CarbonEvents, EventCategory } from './types';
 
 export interface EventWalletSchemaNew extends EventCategory {
@@ -21,16 +21,16 @@ export interface EventWalletSchemaNew extends EventCategory {
 
 export const walletEvents: CarbonEvents['wallet'] = {
   walletConnect: ({ name, address }) => {
-    sendEvent('wallet', 'walletConnect', {
+    sendGTMEvent('wallet', 'walletConnect', {
       wallet_name: name,
       wallet_id: address,
     });
   },
   walletConnectPopupView: () => {
-    sendEvent('wallet', 'walletConnectPopupView', undefined);
+    sendGTMEvent('wallet', 'walletConnectPopupView', undefined);
   },
   walletDisconnect: ({ address }) => {
-    sendEvent('wallet', 'walletDisconnect', {
+    sendGTMEvent('wallet', 'walletDisconnect', {
       wallet_id: address,
     });
   },

@@ -23,7 +23,7 @@ const sendGTM = (data: GTMData) => {
   console.log(window.dataLayer, '-=-=-=-=-=- window.dataLayer -=-=-=-=-=-');
 };
 
-export const sendEvent: SendEventFn = (type, event, data) => {
+export const sendGTMEvent: SendEventFn = (type, event, data) => {
   const snakeCaseEvent = convertCase(event, true);
   const dataObj = data ? data : {};
 

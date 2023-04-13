@@ -1,71 +1,71 @@
-import { sendEvent } from '.';
-import { CarbonEvents, EventCategory, StrategyType } from './types';
+import { sendGTMEvent } from '.';
+import { CarbonEvents, EventCategory, StrategyGTMEventType } from './types';
 
 export interface EventStrategyEditSchemaNew extends EventCategory {
   strategyDuplicateClick: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyDelete: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyChangeRatesClick: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyChangeRates: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyDepositClick: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyDeposit: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyWithdraw: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyWithdrawClick: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
   strategyPause: {
-    input: StrategyType;
-    gtmData: StrategyType;
+    input: StrategyGTMEventType;
+    gtmData: StrategyGTMEventType;
   };
 }
 
 export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
   strategyDuplicateClick: (strategy) => {
-    sendEvent('strategyEdit', 'strategyDuplicateClick', strategy);
+    sendGTMEvent('strategyEdit', 'strategyDuplicateClick', strategy);
   },
   strategyDelete: (strategy) => {
-    sendEvent('strategyEdit', 'strategyDelete', strategy);
+    sendGTMEvent('strategyEdit', 'strategyDelete', strategy);
   },
   strategyChangeRatesClick: (strategy) => {
-    sendEvent('strategyEdit', 'strategyChangeRatesClick', strategy);
+    sendGTMEvent('strategyEdit', 'strategyChangeRatesClick', strategy);
   },
   strategyChangeRates: (strategy) => {
-    sendEvent('strategyEdit', 'strategyChangeRates', strategy);
+    sendGTMEvent('strategyEdit', 'strategyChangeRates', strategy);
   },
   strategyDepositClick: (strategy) => {
-    sendEvent('strategyEdit', 'strategyDepositClick', strategy);
+    sendGTMEvent('strategyEdit', 'strategyDepositClick', strategy);
   },
   strategyDeposit: (strategy) => {
-    sendEvent('strategyEdit', 'strategyDeposit', strategy);
+    sendGTMEvent('strategyEdit', 'strategyDeposit', strategy);
   },
   strategyWithdraw: (strategy) => {
-    sendEvent('strategyEdit', 'strategyWithdraw', strategy);
+    sendGTMEvent('strategyEdit', 'strategyWithdraw', strategy);
   },
   strategyWithdrawClick: (strategy) => {
-    sendEvent('strategyEdit', 'strategyWithdrawClick', strategy);
+    sendGTMEvent('strategyEdit', 'strategyWithdrawClick', strategy);
   },
   strategyPause: (strategy) => {
-    sendEvent('strategyEdit', 'strategyPause', strategy);
+    sendGTMEvent('strategyEdit', 'strategyPause', strategy);
   },
 };

@@ -2,7 +2,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import useInitEffect from 'hooks/useInitEffect';
 import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/googleTagManager';
-import { StrategyType } from 'services/googleTagManager/types';
+import { StrategyGTMEventType } from 'services/googleTagManager/types';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { OrderCreate } from '../useOrder';
 
@@ -23,7 +23,7 @@ export const useStrategyEvents = ({
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
 
-  const getStrategyEventData = (): StrategyType => {
+  const getStrategyEventData = (): StrategyGTMEventType => {
     if (buy) {
       return {
         strategy_base_token: base.symbol,

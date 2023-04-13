@@ -1,4 +1,4 @@
-import { sendEvent } from '.';
+import { sendGTMEvent } from '.';
 import { CarbonEvents, EventCategory } from './types';
 
 export interface EventNavigationSchemaNew extends EventCategory {
@@ -30,21 +30,21 @@ export interface EventNavigationSchemaNew extends EventCategory {
 
 export const navigationEvents: CarbonEvents['navigation'] = {
   navHomeClick: () => {
-    sendEvent('navigation', 'navHomeClick', undefined);
+    sendGTMEvent('navigation', 'navHomeClick', undefined);
   },
   navStrategyClick: () => {
-    sendEvent('navigation', 'navStrategyClick', undefined);
+    sendGTMEvent('navigation', 'navStrategyClick', undefined);
   },
   navTradeClick: () => {
-    sendEvent('navigation', 'navTradeClick', undefined);
+    sendGTMEvent('navigation', 'navTradeClick', undefined);
   },
   navNotificationClick: () => {
-    sendEvent('navigation', 'navNotificationClick', undefined);
+    sendGTMEvent('navigation', 'navNotificationClick', undefined);
   },
   navWalletConnectClick: () => {
-    sendEvent('navigation', 'navWalletConnectClick', undefined);
+    sendGTMEvent('navigation', 'navWalletConnectClick', undefined);
   },
   navWalletClick: () => {
-    sendEvent('navigation', 'navWalletClick', undefined);
+    sendGTMEvent('navigation', 'navWalletClick', undefined);
   },
 };

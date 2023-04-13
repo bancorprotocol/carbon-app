@@ -1,39 +1,49 @@
-import { sendEvent } from '.';
+import { sendGTMEvent } from '.';
 import {
   CarbonEvents,
-  ConfirmationType,
+  ConfirmationGTMEventType,
   EventCategory,
-  StrategyType,
-  TradeType,
+  StrategyGTMEventType,
+  TradeGTMEventType,
 } from './types';
 
 export interface EventTokenConfirmationSchemaNew extends EventCategory {
   tokenConfirmationView: {
-    input: (TradeType | StrategyType) & ConfirmationType;
-    gtmData: (TradeType | StrategyType) & ConfirmationType;
+    input: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
+    gtmData: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
   };
   tokenConfirmationUnlimitedSwitchChange: {
-    input: (TradeType | StrategyType) & ConfirmationType;
-    gtmData: (TradeType | StrategyType) & ConfirmationType;
+    input: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
+    gtmData: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
   };
   tokenConfirmationUnlimitedApprove: {
-    input: (TradeType | StrategyType) & ConfirmationType;
-    gtmData: (TradeType | StrategyType) & ConfirmationType;
+    input: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
+    gtmData: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
   };
 }
 
 export const tokenConfirmationEvents: CarbonEvents['tokenConfirmation'] = {
   tokenConfirmationView: (data) => {
-    sendEvent('tokenConfirmation', 'tokenConfirmationView', data);
+    sendGTMEvent('tokenConfirmation', 'tokenConfirmationView', data);
   },
   tokenConfirmationUnlimitedSwitchChange: (data) => {
-    sendEvent(
+    sendGTMEvent(
       'tokenConfirmation',
       'tokenConfirmationUnlimitedSwitchChange',
       data
     );
   },
   tokenConfirmationUnlimitedApprove: (data) => {
-    sendEvent('tokenConfirmation', 'tokenConfirmationUnlimitedApprove', data);
+    sendGTMEvent(
+      'tokenConfirmation',
+      'tokenConfirmationUnlimitedApprove',
+      data
+    );
   },
 };

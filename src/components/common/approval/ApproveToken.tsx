@@ -9,13 +9,16 @@ import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
 import { carbonEvents } from 'services/googleTagManager';
-import { StrategyType, TradeType } from 'services/googleTagManager/types';
+import {
+  StrategyGTMEventType,
+  TradeGTMEventType,
+} from 'services/googleTagManager/types';
 
 type Props = {
   data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
-  eventData?: TradeType | StrategyType;
+  eventData?: TradeGTMEventType | StrategyGTMEventType;
 };
 
 export const ApproveToken: FC<Props> = ({

@@ -7,16 +7,17 @@ import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { carbonEvents } from 'services/googleTagManager';
 import { useEffect } from 'react';
 import {
-  ConfirmationType,
-  StrategyType,
-  TradeType,
+  ConfirmationGTMEventType,
+  StrategyGTMEventType,
+  TradeGTMEventType,
 } from 'services/googleTagManager/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
   buttonLabel?: string;
-  eventData?: (TradeType | StrategyType) & ConfirmationType;
+  eventData?: (TradeGTMEventType | StrategyGTMEventType) &
+    ConfirmationGTMEventType;
 };
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({

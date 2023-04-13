@@ -1,33 +1,37 @@
-import { sendEvent } from '.';
+import { sendGTMEvent } from '.';
 import {
   CarbonEvents,
-  ConfirmationType,
+  ConfirmationGTMEventType,
   EventCategory,
-  StrategyType,
-  TradeType,
+  StrategyGTMEventType,
+  TradeGTMEventType,
 } from './types';
 
 export interface EventTransactionConfirmationSchemaNew extends EventCategory {
   transactionConfirmationRequest: {
-    input: (TradeType | StrategyType) & ConfirmationType;
-    gtmData: (TradeType | StrategyType) & ConfirmationType;
+    input: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
+    gtmData: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
   };
   transactionConfirm: {
-    input: (TradeType | StrategyType) & ConfirmationType;
-    gtmData: (TradeType | StrategyType) & ConfirmationType;
+    input: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
+    gtmData: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
   };
 }
 
 export const transactionConfirmationEvents: CarbonEvents['transactionConfirmation'] =
   {
     transactionConfirmationRequest: (data) => {
-      sendEvent(
+      sendGTMEvent(
         'transactionConfirmation',
         'transactionConfirmationRequest',
         data
       );
     },
     transactionConfirm: (data) => {
-      sendEvent('transactionConfirmation', 'transactionConfirm', data);
+      sendGTMEvent('transactionConfirmation', 'transactionConfirm', data);
     },
   };
