@@ -6,8 +6,7 @@ import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useBudgetWarning } from '../useBudgetWarning';
 import { useStrategyEventData } from './useStrategyEventData';
-import { useEffect } from 'react';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const CreateStrategyOrders = ({
   base,

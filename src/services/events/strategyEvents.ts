@@ -1,12 +1,12 @@
-import { sendGTMEvent } from '.';
+import { sendGTMEvent } from './googleTagManager';
 import {
   CarbonEvents,
   EventCategory,
   Message,
   StrategyGTMEventType,
-} from './types';
+} from './googleTagManager/types';
 
-export interface EventStrategySchemaNew extends EventCategory {
+export interface EventStrategySchema extends EventCategory {
   strategyWarningShow: {
     input: Message;
     gtmData: Message;

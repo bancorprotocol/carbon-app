@@ -3,7 +3,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Token } from 'libs/tokens';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const InputRange: FC<{
   min: string;

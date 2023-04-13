@@ -8,7 +8,8 @@ import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useEffect } from 'react';
 import useInitEffect from 'hooks/useInitEffect';

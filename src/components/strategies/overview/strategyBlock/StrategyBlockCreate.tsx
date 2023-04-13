@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Link, PathNames } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   title?: string;

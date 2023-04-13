@@ -1,7 +1,7 @@
-import { sendGTMEvent } from '.';
-import { CarbonEvents, EventCategory } from './types';
+import { sendGTMEvent } from './googleTagManager';
+import { CarbonEvents, EventCategory } from './googleTagManager/types';
 
-export interface EventNavigationSchemaNew extends EventCategory {
+export interface EventNavigationSchema extends EventCategory {
   navHomeClick: {
     input: undefined;
     gtmData: undefined;

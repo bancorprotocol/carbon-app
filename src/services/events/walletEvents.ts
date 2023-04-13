@@ -1,7 +1,7 @@
-import { sendGTMEvent } from '.';
-import { CarbonEvents, EventCategory } from './types';
+import { sendGTMEvent } from './googleTagManager';
+import { CarbonEvents, EventCategory } from './googleTagManager/types';
 
-export interface EventWalletSchemaNew extends EventCategory {
+export interface EventWalletSchema extends EventCategory {
   walletConnectPopupView: {
     input: undefined;
     gtmData: undefined;

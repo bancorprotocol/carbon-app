@@ -5,7 +5,7 @@ import { Token } from 'libs/tokens';
 import { useNavigate } from 'libs/routing';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { PathNames } from 'libs/routing';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   baseToken: Token;

@@ -5,7 +5,8 @@ import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { useStrategyEventData } from '../create/useStrategyEventData';
 
 type EditStrategyPricesContentProps = {

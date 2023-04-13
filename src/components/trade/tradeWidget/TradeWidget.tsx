@@ -2,7 +2,7 @@ import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuyS
 import useInitEffect from 'hooks/useInitEffect';
 import { useGetTokenBalance } from 'libs/queries';
 import { TradePageProps } from 'pages/trade';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const TradeWidget = ({ base, quote }: TradePageProps) => {
   const baseBalanceQuery = useGetTokenBalance(base);

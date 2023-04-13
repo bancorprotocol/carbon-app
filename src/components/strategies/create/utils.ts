@@ -6,7 +6,7 @@ import {
 import { QueryKey } from 'libs/queries';
 import { PathNames } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const handleStrategySettings = (
   strategySettings?: StrategySettings,

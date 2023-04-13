@@ -2,7 +2,8 @@ import { Button } from 'components/common/button';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import {
   isValidValue,
   TradeSettingsData,

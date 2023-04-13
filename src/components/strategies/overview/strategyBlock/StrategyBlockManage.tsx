@@ -16,7 +16,7 @@ import {
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -140,7 +140,7 @@ export const StrategyBlockManage: FC<{
           <IconChevron className="w-12" />
         </Button>
       )}
-      className="w-full !p-10 z-10"
+      className="z-10 w-full !p-10"
     >
       {items.map(({ name, action, id }) => (
         <ManageItem

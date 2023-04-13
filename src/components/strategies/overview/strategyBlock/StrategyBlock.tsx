@@ -8,7 +8,8 @@ import { StrategyBlockManage } from 'components/strategies/overview/strategyBloc
 import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { useOrder } from 'components/strategies/create/useOrder';
 

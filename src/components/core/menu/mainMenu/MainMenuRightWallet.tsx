@@ -16,7 +16,7 @@ import {
   IS_IN_IFRAME,
   IS_METAMASK_WALLET,
 } from 'libs/web3/web3.utils';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   const props = { className: 'w-20' };

@@ -7,7 +7,7 @@ import {
   StrategyFilter,
   StrategyFilterSort,
 } from 'components/strategies/overview/StrategyFilterSort';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;

@@ -5,7 +5,7 @@ import { useWeb3, Connection } from 'libs/web3';
 import { useEffect, useState } from 'react';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();

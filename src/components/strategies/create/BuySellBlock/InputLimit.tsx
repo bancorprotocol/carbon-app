@@ -1,7 +1,8 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { ChangeEvent, FC, FocusEvent } from 'react';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputLimit: FC<{

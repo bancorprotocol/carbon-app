@@ -2,7 +2,8 @@ import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { ReactComponent as IconCog } from 'assets/icons/cog.svg';
 import { Button } from 'components/common/button';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { Token } from 'libs/tokens';
 
 type Props = {

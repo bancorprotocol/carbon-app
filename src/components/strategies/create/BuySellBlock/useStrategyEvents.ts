@@ -1,8 +1,9 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import useInitEffect from 'hooks/useInitEffect';
 import { Token } from 'libs/tokens';
-import { carbonEvents } from 'services/googleTagManager';
-import { StrategyGTMEventType } from 'services/googleTagManager/types';
+import { carbonEvents } from 'services/events';
+
+import { StrategyGTMEventType } from 'services/events/googleTagManager/types';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { OrderCreate } from '../useOrder';
 

@@ -4,7 +4,7 @@ import { Button } from 'components/common/button';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   baseToken: Token;

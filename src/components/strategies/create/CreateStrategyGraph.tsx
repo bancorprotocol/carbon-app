@@ -3,7 +3,8 @@ import { items } from './variants';
 import { Button } from 'components/common/button';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { FC } from 'react';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 

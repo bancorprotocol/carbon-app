@@ -4,13 +4,14 @@ import { ApproveToken } from 'components/common/approval';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { useEffect } from 'react';
 import {
   ConfirmationGTMEventType,
   StrategyGTMEventType,
   TradeGTMEventType,
-} from 'services/googleTagManager/types';
+} from 'services/events/googleTagManager/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];

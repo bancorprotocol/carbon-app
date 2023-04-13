@@ -1,13 +1,13 @@
-import { sendGTMEvent } from '.';
+import { sendGTMEvent } from './googleTagManager';
 import {
   CarbonEvents,
   ConfirmationGTMEventType,
   EventCategory,
   StrategyGTMEventType,
   TradeGTMEventType,
-} from './types';
+} from './googleTagManager/types';
 
-export interface EventTransactionConfirmationSchemaNew extends EventCategory {
+export interface EventTransactionConfirmationSchema extends EventCategory {
   transactionConfirmationRequest: {
     input: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;

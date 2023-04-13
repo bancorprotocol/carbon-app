@@ -7,7 +7,7 @@ import { useTokens } from 'hooks/useTokens';
 import { ErrorTokenList } from 'components/core/error/ErrorTokenList';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';
 
 export const MainContent: FC = () => {

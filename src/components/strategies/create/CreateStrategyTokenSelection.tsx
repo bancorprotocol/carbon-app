@@ -3,7 +3,8 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { FC } from 'react';
 import { PathNames, useNavigate } from 'libs/routing';
 import { UseStrategyCreateReturn } from 'components/strategies/create';

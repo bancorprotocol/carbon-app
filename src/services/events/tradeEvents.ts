@@ -1,7 +1,11 @@
-import { sendGTMEvent } from '.';
-import { CarbonEvents, EventCategory, TradeGTMEventType } from './types';
+import { sendGTMEvent } from './googleTagManager';
+import {
+  CarbonEvents,
+  EventCategory,
+  TradeGTMEventType,
+} from './googleTagManager/types';
 
-export interface EventTradeSchemaNew extends EventCategory {
+export interface EventTradeSchema extends EventCategory {
   tradeWarningShow: {
     input: { message: string };
     gtmData: { message: string };

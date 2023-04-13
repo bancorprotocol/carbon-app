@@ -11,7 +11,8 @@ import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';

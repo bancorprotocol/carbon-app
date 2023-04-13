@@ -1,7 +1,7 @@
-import { sendGTMEvent } from '.';
-import { CarbonEvents, EventCategory } from './types';
+import { sendGTMEvent } from './googleTagManager';
+import { CarbonEvents, EventCategory } from './googleTagManager/types';
 
-export interface EventGeneralSchemaNew extends EventCategory {
+export interface EventGeneralSchema extends EventCategory {
   changePage: {
     input: { referrer: string | null };
     gtmData: {

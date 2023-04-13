@@ -13,7 +13,7 @@ import { prettifyNumber } from 'utils/helpers';
 import { Action, TradeActionStruct, SerializableMatchAction } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const useBuySell = ({
   source,

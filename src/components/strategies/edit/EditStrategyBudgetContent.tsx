@@ -9,7 +9,8 @@ import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useStrategyEventData } from '../create/useStrategyEventData';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
+
 import { useWeb3 } from 'libs/web3';
 
 type EditStrategyBudgetContentProps = {

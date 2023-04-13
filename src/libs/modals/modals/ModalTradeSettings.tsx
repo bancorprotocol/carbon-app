@@ -3,7 +3,7 @@ import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { TradeSettings } from 'components/trade/settings/TradeSettings';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export type ModalTradeSettingsData = {
   base: Token;

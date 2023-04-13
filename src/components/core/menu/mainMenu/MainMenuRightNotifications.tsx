@@ -4,7 +4,7 @@ import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
 import { useNotifications } from 'hooks/useNotifications';
 import { useWeb3 } from 'libs/web3';
 import { Button } from 'components/common/button';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const MainMenuRightNotifications: FC = () => {
   const { user } = useWeb3();

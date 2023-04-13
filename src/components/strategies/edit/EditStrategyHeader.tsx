@@ -2,7 +2,7 @@ import { useLocation } from 'libs/routing';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { EditTypes } from './EditStrategyMain';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const titleByType: { [key in EditTypes]: string } = {
   renew: 'Renew Strategy',

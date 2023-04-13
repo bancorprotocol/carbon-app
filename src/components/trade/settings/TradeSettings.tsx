@@ -1,6 +1,7 @@
 import { Token } from 'libs/tokens';
-import { Fragment, FC } from 'react';
-import { carbonEvents } from 'services/googleTagManager';
+import { Fragment } from 'react';
+import { carbonEvents } from 'services/events';
+
 import { useStore } from 'store';
 import { TradeSettingsRow } from './TradeSettingsRow';
 import { TradeSettingsData } from './utils';

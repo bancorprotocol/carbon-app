@@ -1,11 +1,11 @@
-import { EventGeneralSchemaNew } from './generalEvents';
-import { EventNavigationSchemaNew } from './navigationEvents';
-import { EventStrategyEditSchemaNew } from './strategyEditEvents';
-import { EventStrategySchemaNew } from './strategyEvents';
-import { EventTokenConfirmationSchemaNew } from './tokenConfirmationEvents';
-import { EventTradeSchemaNew } from './tradeEvents';
-import { EventTransactionConfirmationSchemaNew } from './transactionConfirmationEvents';
-import { EventWalletSchemaNew } from './walletEvents';
+import { EventGeneralSchema } from '../generalEvents';
+import { EventNavigationSchema } from '../navigationEvents';
+import { EventStrategyEditSchema } from '../strategyEditEvents';
+import { EventStrategySchema } from '../strategyEvents';
+import { EventTokenConfirmationSchema } from '../tokenConfirmationEvents';
+import { EventTradeSchema } from '../tradeEvents';
+import { EventTransactionConfirmationSchema } from '../transactionConfirmationEvents';
+import { EventWalletSchema } from '../walletEvents';
 
 export type GTMData = {
   event?: string;
@@ -72,14 +72,14 @@ export type CarbonEventsBase = {
 };
 
 interface CarbonEventSchema extends CarbonEventsBase {
-  general: EventGeneralSchemaNew;
-  wallet: EventWalletSchemaNew;
-  navigation: EventNavigationSchemaNew;
-  strategy: EventStrategySchemaNew;
-  strategyEdit: EventStrategyEditSchemaNew;
-  trade: EventTradeSchemaNew;
-  transactionConfirmation: EventTransactionConfirmationSchemaNew;
-  tokenConfirmation: EventTokenConfirmationSchemaNew;
+  general: EventGeneralSchema;
+  wallet: EventWalletSchema;
+  navigation: EventNavigationSchema;
+  strategy: EventStrategySchema;
+  strategyEdit: EventStrategyEditSchema;
+  trade: EventTradeSchema;
+  transactionConfirmation: EventTransactionConfirmationSchema;
+  tokenConfirmation: EventTokenConfirmationSchema;
 }
 
 export type SendEventFn = <

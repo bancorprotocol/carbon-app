@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { items } from 'components/strategies/create/variants';
 import { m } from 'libs/motion';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
-import { carbonEvents } from 'services/googleTagManager';
+import { carbonEvents } from 'services/events';
 
 export const CreateStrategyHeader = ({
   showGraph,

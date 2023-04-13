@@ -3,8 +3,8 @@ import { FC, isValidElement, ReactNode } from 'react';
 import { useSpring, m } from 'framer-motion';
 import { Instance } from 'tippy.js';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { carbonEvents } from 'services/googleTagManager';
 import ReactDOMServer from 'react-dom/server';
+import { carbonEvents } from 'services/events';
 
 export const Tooltip: FC<
   TippyProps & {

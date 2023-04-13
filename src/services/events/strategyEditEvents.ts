@@ -1,7 +1,11 @@
-import { sendGTMEvent } from '.';
-import { CarbonEvents, EventCategory, StrategyGTMEventType } from './types';
+import { sendGTMEvent } from './googleTagManager';
+import {
+  CarbonEvents,
+  EventCategory,
+  StrategyGTMEventType,
+} from './googleTagManager/types';
 
-export interface EventStrategyEditSchemaNew extends EventCategory {
+export interface EventStrategyEditSchema extends EventCategory {
   strategyDuplicateClick: {
     input: StrategyGTMEventType;
     gtmData: StrategyGTMEventType;
