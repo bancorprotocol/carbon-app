@@ -2,8 +2,8 @@ import * as Comlink from 'comlink';
 import { CarbonSDKWebWorker } from 'workers/sdk';
 export type {
   Action,
-  TradeActionStruct,
-  SerializableMatchAction,
+  TradeActionBNStr,
+  MatchActionBNStr,
 } from '@bancor/carbon-sdk';
 
 const worker = new Worker(new URL('./../../workers/sdk.ts', import.meta.url), {

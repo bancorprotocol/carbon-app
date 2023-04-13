@@ -2,7 +2,7 @@ import { useWeb3 } from 'libs/web3';
 import { useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
 import { PopulatedTransaction } from 'ethers';
-import { TradeActionStruct, carbonSDK } from 'libs/sdk';
+import { TradeActionBNStr, carbonSDK } from 'libs/sdk';
 import BigNumber from 'bignumber.js';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
@@ -13,7 +13,7 @@ import { useApproval } from 'hooks/useApproval';
 type TradeProps = {
   source: Token;
   target: Token;
-  tradeActions: TradeActionStruct[];
+  tradeActions: TradeActionBNStr[];
   isTradeBySource: boolean;
   sourceInput: string;
   targetInput: string;

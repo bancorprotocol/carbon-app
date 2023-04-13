@@ -14,7 +14,6 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { useOrder } from 'components/strategies/create/useOrder';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
-  const paddedID = strategy.idDisplay.padStart(9, '0');
   const [manage, setManage] = useState(false);
   const { duplicate } = useDuplicateStrategy();
   const showBudgetWarning = useBudgetWarning(
@@ -57,9 +56,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
             }
 
             <div className="text-secondary flex gap-8">
-              <span>{paddedID.slice(0, 3)}</span>
-              <span>{paddedID.slice(3, 6)}</span>
-              <span>{paddedID.slice(6, 9)}</span>
+              ID: {strategy.idDisplay}
             </div>
           </div>
         </div>

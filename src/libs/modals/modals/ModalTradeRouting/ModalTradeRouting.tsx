@@ -5,7 +5,7 @@ import { Token } from 'libs/tokens';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { SerializableMatchAction } from '@bancor/carbon-sdk/dist/types';
+import { MatchActionBNStr } from '@bancor/carbon-sdk/';
 import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useModalTradeRouting';
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
@@ -15,7 +15,7 @@ export type ModalTradeRoutingData = {
   source: Token;
   target: Token;
   tradeActionsRes: Action[];
-  tradeActionsWei: SerializableMatchAction[];
+  tradeActionsWei: MatchActionBNStr[];
   isTradeBySource: boolean;
   onSuccess: Function;
   buy?: boolean;

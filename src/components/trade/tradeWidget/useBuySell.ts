@@ -10,7 +10,7 @@ import {
   useGetTokenPrice,
 } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
-import { Action, TradeActionStruct, SerializableMatchAction } from 'libs/sdk';
+import { Action, TradeActionBNStr, MatchActionBNStr } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { carbonEvents } from 'services/events';
@@ -29,11 +29,11 @@ export const useBuySell = ({
   const [sourceInput, setSourceInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
   const [isTradeBySource, setIsTradeBySource] = useState(true);
-  const [tradeActions, setTradeActions] = useState<TradeActionStruct[]>([]);
+  const [tradeActions, setTradeActions] = useState<TradeActionBNStr[]>([]);
   const [tradeActionsRes, setTradeActionsRes] = useState<Action[]>([]);
-  const [tradeActionsWei, setTradeActionsWei] = useState<
-    SerializableMatchAction[]
-  >([]);
+  const [tradeActionsWei, setTradeActionsWei] = useState<MatchActionBNStr[]>(
+    []
+  );
   const [rate, setRate] = useState('');
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
@@ -267,6 +267,7 @@ export const useBuySell = ({
     eventData,
     isLiquidityError,
     isTradeBySource,
+    maxSourceAmountQuery.isFetching,
     openModal,
     source,
     sourceInput,
