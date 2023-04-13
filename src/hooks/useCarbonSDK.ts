@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import { useStore } from 'store';
 import { useQueryClient } from '@tanstack/react-query';
-import { RPC_URLS } from 'libs/web3';
 import { config } from 'services/web3/config';
 import { carbonSDK } from 'libs/sdk';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
+import { ContractsConfig } from '@bancor/carbon-sdk/contracts-api';
 import {
   buildTokenPairKey,
   mergeArraysRemovingDuplicates,
@@ -13,13 +13,12 @@ import {
 } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
+import { RPC_URLS } from 'libs/web3';
+import { SupportedChainId } from 'libs/web3/web3.constants';
 
-const sdkConfig = {
-  rpcUrl: RPC_URLS[1],
-  contractAddresses: {
-    carbonControllerAddress: config.carbon.carbonController,
-    voucherAddress: config.carbon.voucher,
-  },
+const contractsConfig: ContractsConfig = {
+  carbonControllerAddress: config.carbon.carbonController,
+  voucherAddress: config.carbon.voucher,
 };
 
 const persistSdkCacheDump = async () => {
@@ -87,7 +86,12 @@ export const useCarbonSDK = () => {
       setIsLoading(true);
       const cacheData = lsService.getItem('sdkCompressedCacheData');
 
-      await carbonSDK.init(sdkConfig, getTokenDecimalMap(), cacheData);
+      await carbonSDK.init(
+        RPC_URLS[SupportedChainId.MAINNET],
+        contractsConfig,
+        getTokenDecimalMap(),
+        cacheData
+      );
       await carbonSDK.setOnChangeHandlers(
         Comlink.proxy(onPairDataChangedCallback),
         Comlink.proxy(onPairAddedToCacheCallback)

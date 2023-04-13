@@ -1,4 +1,4 @@
-import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Order } from 'libs/queries';
 import { useState } from 'react';
 
