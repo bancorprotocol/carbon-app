@@ -8,8 +8,8 @@ import { useContract } from 'hooks/useContract';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { EncodedStrategy, StrategyUpdate } from '@bancor/carbon-sdk/dist/types';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { EncodedStrategyBNStr, StrategyUpdate } from '@bancor/carbon-sdk';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 
@@ -34,7 +34,7 @@ export interface Strategy {
   order0: Order;
   order1: Order;
   status: StrategyStatus;
-  encoded: string;
+  encoded: EncodedStrategyBNStr;
 }
 
 export const useGetUserStrategies = () => {
@@ -107,8 +107,8 @@ export const useGetUserStrategies = () => {
         };
 
         const strategy: Strategy = {
-          id: s.id.toString(),
-          idDisplay: getLowestBits(s.id.toString()),
+          id: s.id,
+          idDisplay: getLowestBits(s.id),
           base,
           quote,
           order0,
@@ -144,12 +144,12 @@ export interface CreateStrategyParams {
   quote: TokenAddressDecimals;
   order0: CreateStrategyOrder;
   order1: CreateStrategyOrder;
-  encoded?: EncodedStrategy;
+  encoded?: EncodedStrategyBNStr;
 }
 
 export interface UpdateStrategyParams {
   id: string;
-  encoded: string;
+  encoded: EncodedStrategyBNStr;
   fieldsToUpdate: StrategyUpdate;
   buyMarginalPrice?: MarginalPriceOptions;
   sellMarginalPrice?: MarginalPriceOptions;

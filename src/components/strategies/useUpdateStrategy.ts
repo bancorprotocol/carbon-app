@@ -1,4 +1,4 @@
-import { MarginalPriceOptions } from '@bancor/carbon-sdk';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useNotifications } from 'hooks/useNotifications';
 import {
