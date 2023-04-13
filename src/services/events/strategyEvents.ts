@@ -107,11 +107,11 @@ export interface EventStrategySchema extends EventCategory {
     gtmData: StrategyGTMEventType;
   };
   newStrategyNextStepClick: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyDirectionChange: {
-    input: StrategyGTMEventType;
+    input: StrategyEventType;
     gtmData: StrategyGTMEventType;
   };
 }
@@ -198,16 +198,36 @@ export const strategyEvents: CarbonEvents['strategy'] = {
     const gtmStrategyData = prepareGtmStrategyData(strategy);
     sendGTMEvent('strategy', 'strategyCreate', gtmStrategyData);
   },
-  newStrategyNextStepClick: (strategy) => {
+  newStrategyNextStepClick: ({
+    baseToken,
+    quoteToken,
+    strategySettings,
+    strategyDirection,
+    strategyType,
+  }) => {
     sendGTMEvent('strategy', 'newStrategyNextStepClick', {
-      ...strategy,
-      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+      strategy_base_token: baseToken,
+      strategy_quote_token: quoteToken,
+      strategy_settings: strategySettings,
+      strategy_direction: strategyDirection,
+      strategy_type: strategyType,
+      token_pair: `${baseToken}/${quoteToken}`,
     });
   },
-  strategyDirectionChange: (strategy) => {
+  strategyDirectionChange: ({
+    baseToken,
+    quoteToken,
+    strategySettings,
+    strategyDirection,
+    strategyType,
+  }) => {
     sendGTMEvent('strategy', 'strategyDirectionChange', {
-      ...strategy,
-      token_pair: `${strategy.strategy_base_token}/${strategy.strategy_quote_token}`,
+      strategy_base_token: baseToken,
+      strategy_quote_token: quoteToken,
+      strategy_settings: strategySettings,
+      strategy_direction: strategyDirection,
+      strategy_type: strategyType,
+      token_pair: `${baseToken}/${quoteToken}`,
     });
   },
 };

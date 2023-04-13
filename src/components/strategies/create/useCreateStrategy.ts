@@ -229,13 +229,13 @@ export const useCreateStrategy = () => {
   useInitEffect(() => {
     selectedStrategySettings?.search.strategyType === 'disposable' &&
       carbonEvents.strategy.strategyDirectionChange({
-        strategy_base_token: base?.symbol,
-        strategy_quote_token: quote?.symbol,
-        strategy_settings: selectedStrategySettings?.search.strategySettings,
-        strategy_direction: selectedStrategySettings?.search.strategyDirection,
-        strategy_type: strategyType,
+        baseToken: base?.symbol || '',
+        quoteToken: quote?.symbol || '',
+        strategySettings: selectedStrategySettings?.search.strategySettings,
+        strategyDirection: selectedStrategySettings?.search.strategyDirection,
+        strategyType: strategyType,
       });
-  }, [selectedStrategySettings?.search.strategyDirection]);
+  }, [selectedStrategySettings?.search?.strategyDirection]);
 
   useEffect(() => {
     setSelectedStrategySettings(undefined);

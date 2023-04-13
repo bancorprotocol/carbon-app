@@ -123,13 +123,12 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             selectedStrategySettings?.search!
           );
           carbonEvents.strategy.newStrategyNextStepClick({
-            strategy_base_token: base?.symbol,
-            strategy_quote_token: quote?.symbol,
-            strategy_settings:
-              selectedStrategySettings?.search.strategySettings,
-            strategy_direction:
+            baseToken: base?.symbol || '',
+            quoteToken: quote?.symbol || '',
+            strategySettings: selectedStrategySettings?.search.strategySettings,
+            strategyDirection:
               selectedStrategySettings?.search.strategyDirection,
-            strategy_type: strategyType,
+            strategyType: strategyType,
           });
         }}
       >
