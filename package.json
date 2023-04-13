@@ -20,7 +20,7 @@
     "@testing-library/user-event": "^13.2.1",
     "@tippyjs/react": "^4.2.6",
     "@typechain/ethers-v5": "^10.1.0",
-    "@types/lodash": "^4.14.186",
+    "@types/lodash": "4.14.191",
     "@types/node": "^16.7.13",
     "@types/numeral": "^2.0.2",
     "@types/react": "^18.0.0",

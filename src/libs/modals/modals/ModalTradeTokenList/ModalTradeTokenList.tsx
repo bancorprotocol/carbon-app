@@ -43,8 +43,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         className="mt-20 w-full rounded-8 py-10"
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            // TODO: Fix Error
-            // handleSelect(tradePairs[0]);
+            handleSelect(tradePairs[0]);
           }
         }}
       />
@@ -57,7 +56,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         <ModalTradeTokenListContent
           search={search}
           tradePairs={{
-            all: tradePairsPopular,
+            all: tradePairs,
             favorites: favoritePairs,
             popular: tradePairsPopular,
           }}
