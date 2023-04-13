@@ -63,7 +63,7 @@ export const Tooltip: FC<
       onHide={onHide}
       {...props}
     >
-      {children}
+      <div>{children}</div>
     </Tippy>
   );
 };
