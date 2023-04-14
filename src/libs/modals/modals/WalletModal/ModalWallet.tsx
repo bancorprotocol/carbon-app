@@ -31,6 +31,10 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     }
   }, [isConnected, selectedConnection?.name, user]);
 
+  useEffect(() => {
+    carbonEvents.wallet.walletConnectPopupView(undefined);
+  }, []);
+
   const isLoading = selectedConnection !== null && !connectionError;
   const isError = selectedConnection !== null && connectionError;
 
@@ -45,10 +49,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       setConnectionError(e.message || 'Unknown connection error.');
     }
   };
-
-  useEffect(() => {
-    carbonEvents.wallet.walletConnectPopupView(undefined);
-  }, []);
 
   return (
     <Modal id={id} title={'Connect Wallet'} isLoading={isLoading}>
