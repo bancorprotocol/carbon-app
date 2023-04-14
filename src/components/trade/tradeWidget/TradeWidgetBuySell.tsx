@@ -83,7 +83,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
           <TokenInputField
-            className={'mt-5 mb-20 rounded-12 bg-black p-16'}
+            className={'mb-20 mt-5 rounded-12 bg-black p-16'}
             token={source}
             isBalanceLoading={sourceBalanceQuery.isLoading}
             value={sourceInput}
@@ -109,7 +109,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             )}
           </div>
           <TokenInputField
-            className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
+            className={'mt-5 rounded-b-4 rounded-t-12 bg-black p-16'}
             token={target}
             value={targetInput}
             setValue={setTargetInput}
@@ -134,7 +134,10 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 }
               >
                 <IconRouting className={'w-12'} />
-                <Tooltip element="You can view and manage the orders that are included in the trade.">
+                <Tooltip
+                  placement={'left'}
+                  element="You can view and manage the orders that are included in the trade."
+                >
                   <span>Routing</span>
                 </Tooltip>
               </button>
