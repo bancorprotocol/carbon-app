@@ -4,7 +4,6 @@ import { BuySellBlock } from './BuySellBlock';
 import { items } from './variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { useBudgetWarning } from '../useBudgetWarning';
 import { useStrategyEventData } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
 
@@ -20,12 +19,6 @@ export const CreateStrategyOrders = ({
   strategyDirection,
   strategyType,
 }: UseStrategyCreateReturn) => {
-  const showBudgetWarning = useBudgetWarning(
-    base,
-    quote,
-    order0.budget,
-    order1.budget
-  );
   const strategyEventData = useStrategyEventData({
     base,
     quote,
