@@ -8,15 +8,18 @@ import { carbonEvents } from 'services/events';
 
 import { useEffect } from 'react';
 import {
-  ConfirmationEventType,
+  TokenConfirmationType,
   StrategyEventOrTradeEvent,
+  TransactionConfirmationType,
 } from 'services/events/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
   buttonLabel?: string;
-  eventData?: StrategyEventOrTradeEvent & ConfirmationEventType;
+  eventData?: StrategyEventOrTradeEvent &
+    TokenConfirmationType &
+    TransactionConfirmationType;
 };
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({

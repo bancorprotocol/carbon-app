@@ -30,7 +30,7 @@ export const EditStrategyAllocatedBudget: FC<{
   buy?: boolean;
   showMaxCb?: () => void;
   type: EditTypes;
-}> = ({ base, quote, balance, buy, order, showMaxCb, type }) => {
+}> = ({ base, quote, balance, order, showMaxCb, type, buy = false }) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
@@ -76,7 +76,7 @@ export const EditStrategyAllocatedBudget: FC<{
           <div className="flex w-auto items-center gap-6">
             <div>Allocated Budget</div>
             <Tooltip
-              sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
+              sendEventOnMount={{ buy }}
               iconClassName="h-13 mr-6 text-white/60"
               element={
                 buy

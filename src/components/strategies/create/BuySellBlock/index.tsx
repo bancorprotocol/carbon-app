@@ -31,9 +31,9 @@ export const BuySellBlock: FC<Props> = ({
   quote,
   tokenBalanceQuery,
   order,
-  buy,
   isBudgetOptional,
   strategyType,
+  buy = false,
 }) => {
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
@@ -50,10 +50,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const title = (
     <>
-      <Tooltip
-        sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
-        element={tooltipText}
-      >
+      <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
         <span>{titleText}</span>
       </Tooltip>
       <Imager
@@ -75,7 +72,7 @@ export const BuySellBlock: FC<Props> = ({
         1
       </div>
       <Tooltip
-        sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
+        sendEventOnMount={{ buy }}
         element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
           base.symbol
         } at. Make sure the price is in ${quote.symbol} tokens.`}
@@ -144,7 +141,7 @@ export const BuySellBlock: FC<Props> = ({
           2
         </div>
         <Tooltip
-          sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
+          sendEventOnMount={{ buy }}
           element={
             buy
               ? `The amount of ${

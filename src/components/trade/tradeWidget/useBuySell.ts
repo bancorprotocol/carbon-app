@@ -19,7 +19,7 @@ export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
-  buy,
+  buy = false,
 }: TradeWidgetBuySellProps) => {
   const { user, provider } = useWeb3();
   const { openModal } = useModal();
@@ -57,19 +57,19 @@ export const useBuySell = ({
 
   const eventData = useMemo(() => {
     return {
-      tradeDirection: buy ? 'buy' : 'sell',
-      buyToken: target.symbol,
-      sellToken: source.symbol,
-      blockchainNetwork: provider?.network?.name,
+      buy,
+      buyToken: target,
+      sellToken: source,
+      blockchainNetwork: provider?.network?.name || '',
       valueUsd: getFiatValueSource(sourceInput, true).toString(),
     };
   }, [
     buy,
     getFiatValueSource,
     provider?.network?.name,
-    source.symbol,
+    source,
     sourceInput,
-    target.symbol,
+    target,
   ]);
 
   const { trade, approval } = useTradeAction({
@@ -250,8 +250,8 @@ export const useBuySell = ({
         eventData: {
           ...eventData,
           productType: 'trade',
-          token: approval.tokens.map(({ symbol }) => symbol),
-          blockchainNetwork: provider?.network?.name,
+          approvalTokens: approval.tokens,
+          blockchainNetwork: provider?.network?.name || '',
         },
       });
     } else {

@@ -7,19 +7,24 @@ import {
   TradeGTMEventType,
 } from './googleTagManager/types';
 import {
-  ConfirmationEventType,
+  TokenConfirmationType,
   StrategyEventOrTradeEvent,
   StrategyEventType,
   TradeEventType,
+  TransactionConfirmationType,
 } from './types';
 
 export interface EventTransactionConfirmationSchema extends EventCategory {
   transactionConfirmationRequest: {
-    input: StrategyEventOrTradeEvent & ConfirmationEventType;
+    input: StrategyEventOrTradeEvent &
+      TokenConfirmationType &
+      TransactionConfirmationType;
     gtmData: ConfirmationGTMEventType;
   };
   transactionConfirm: {
-    input: StrategyEventOrTradeEvent & ConfirmationEventType;
+    input: StrategyEventOrTradeEvent &
+      TokenConfirmationType &
+      TransactionConfirmationType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
@@ -28,7 +33,7 @@ export interface EventTransactionConfirmationSchema extends EventCategory {
 export const transactionConfirmationEvents: CarbonEvents['transactionConfirmation'] =
   {
     transactionConfirmationRequest: (data) => {
-      const transactionConfirmData = prepareConfirmationData(data);
+      const transactionConfirmData = prepareTransactionConfirmationData(data);
       sendGTMEvent(
         'transactionConfirmation',
         'transactionConfirmationRequest',
@@ -36,7 +41,7 @@ export const transactionConfirmationEvents: CarbonEvents['transactionConfirmatio
       );
     },
     transactionConfirm: (data) => {
-      const transactionConfirmData = prepareConfirmationData(data);
+      const transactionConfirmData = prepareTransactionConfirmationData(data);
       sendGTMEvent(
         'transactionConfirmation',
         'transactionConfirm',
@@ -45,13 +50,16 @@ export const transactionConfirmationEvents: CarbonEvents['transactionConfirmatio
     },
   };
 
-export const prepareConfirmationData = (
-  data: StrategyEventOrTradeEvent & ConfirmationEventType
+export const prepareTransactionConfirmationData = (
+  data: StrategyEventOrTradeEvent &
+    TokenConfirmationType &
+    TransactionConfirmationType
 ) => {
   const gtmConfirmationData = {
     product_type: data?.productType,
     switch: data?.isLimited ? 'false' : 'true',
-    token: data?.token,
+    token: data?.approvalTokens.map(({ symbol }) => symbol),
+    blockchain_network: data?.blockchainNetwork,
   };
   let gtmData = {};
   if (data.productType === 'strategy') {
@@ -70,9 +78,6 @@ export const prepareConfirmationData = (
       sellOrderType,
       sellBudget,
       sellBudgetUsd,
-      strategyType,
-      strategyDirection,
-      strategySettings,
     } = data as StrategyEventType;
 
     gtmData = {
@@ -91,20 +96,15 @@ export const prepareConfirmationData = (
       strategy_sell_high_order_type: sellOrderType,
       strategy_sell_high_budget: sellBudget,
       strategy_sell_high_budget_usd: sellBudgetUsd,
-      strategy_type: strategyType,
-      strategy_direction: strategyDirection,
-      strategy_settings: strategySettings,
     };
   } else {
-    const { tradeDirection, buyToken, sellToken, valueUsd, blockchainNetwork } =
-      data as TradeEventType;
+    const { buy, buyToken, sellToken, valueUsd } = data as TradeEventType;
     gtmData = {
-      trade_direction: tradeDirection,
+      trade_direction: buy ? 'buy' : 'sell',
       token_pair: `${buyToken}/${sellToken}`,
       buy_token: buyToken,
       sell_token: sellToken,
       value_usd: valueUsd,
-      blockchain_network: blockchainNetwork,
     };
   }
 

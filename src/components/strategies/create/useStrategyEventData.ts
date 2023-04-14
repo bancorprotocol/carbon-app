@@ -32,8 +32,8 @@ export const useStrategyEventData = ({
   return {
     strategyId: id,
     buyOrderType: order0?.isRange ? 'range' : 'limit',
-    baseToken: base?.symbol ? base?.symbol : '',
-    quoteToken: quote?.symbol ? quote?.symbol : '',
+    baseToken: base,
+    quoteToken: quote,
     buyBudget: order0.budget,
     buyBudgetUsd: lowBudgetUsd,
     buyTokenPrice: sanitizeNumberInput(order0.price, 18),

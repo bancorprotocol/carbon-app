@@ -10,7 +10,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
 import { carbonEvents } from 'services/events';
 import {
-  ConfirmationEventType,
+  TokenConfirmationType,
   StrategyEventOrTradeEvent,
 } from 'services/events/types';
 
@@ -18,7 +18,7 @@ type Props = {
   data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
-  eventData?: StrategyEventOrTradeEvent & ConfirmationEventType;
+  eventData?: StrategyEventOrTradeEvent & TokenConfirmationType;
 };
 
 export const ApproveToken: FC<Props> = ({
@@ -65,7 +65,7 @@ export const ApproveToken: FC<Props> = ({
           if (eventData) {
             carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedApprove({
               ...eventData,
-              token: token.symbol,
+              approvalTokens: [token],
               isLimited,
             });
           }

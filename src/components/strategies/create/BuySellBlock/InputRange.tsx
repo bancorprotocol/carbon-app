@@ -14,7 +14,16 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
-}> = ({ min, setMin, max, setMax, token, buy, error, setRangeError }) => {
+}> = ({
+  min,
+  setMin,
+  max,
+  setMax,
+  token,
+  error,
+  setRangeError,
+  buy = false,
+}) => {
   const errorMessage = 'Max Price must be higher than min price and not zero';
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +32,7 @@ export const InputRange: FC<{
       setRangeError('');
     } else {
       carbonEvents.strategy.strategyErrorShow({
-        section: buy ? 'Buy Low' : 'Sell High',
+        buy,
         message: errorMessage,
       });
       setRangeError(errorMessage);
@@ -36,7 +45,7 @@ export const InputRange: FC<{
       setRangeError('');
     } else {
       carbonEvents.strategy.strategyErrorShow({
-        section: buy ? 'Buy Low' : 'Sell High',
+        buy,
         message: errorMessage,
       });
       setRangeError(errorMessage);
@@ -58,7 +67,7 @@ export const InputRange: FC<{
           } bg-body w-full rounded-r-4 rounded-l-16 border-2 border-black p-16`}
         >
           <Tooltip
-            sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
+            sendEventOnMount={{ buy }}
             element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
               token.symbol
             } at.`}
@@ -84,7 +93,7 @@ export const InputRange: FC<{
           } bg-body w-full rounded-r-16 rounded-l-4 border-2 border-black p-16`}
         >
           <Tooltip
-            sendEventOnMount={{ section: buy ? 'Buy Low' : 'Sell High' }}
+            sendEventOnMount={{ buy }}
             element={`The highest price to ${buy ? 'buy' : 'sell'} ${
               token.symbol
             } at.`}

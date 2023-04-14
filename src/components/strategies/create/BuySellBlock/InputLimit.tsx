@@ -12,7 +12,7 @@ export const InputLimit: FC<{
   error?: string;
   setPriceError: (error: string) => void;
   buy?: boolean;
-}> = ({ price, setPrice, token, error, setPriceError, buy }) => {
+}> = ({ price, setPrice, token, error, setPriceError, buy = false }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const errorMessage = 'Price Must be greater than 0';
 
@@ -20,7 +20,7 @@ export const InputLimit: FC<{
       setPriceError('');
     } else {
       carbonEvents.strategy.strategyErrorShow({
-        section: buy ? 'Buy Low' : 'Sell High',
+        buy,
         message: errorMessage,
       });
       setPriceError(errorMessage);

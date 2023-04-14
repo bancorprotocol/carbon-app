@@ -69,10 +69,10 @@ export const EditStrategyBudgetContent = ({
         eventData: {
           ...strategyEventData,
           productType: 'strategy',
-          token: approval.tokens.map(({ symbol }) => symbol),
-          buyToken: strategy.base?.symbol,
-          sellToken: strategy.quote?.symbol,
-          blockchainNetwork: provider?.network?.name,
+          approvalTokens: approval.tokens,
+          buyToken: strategy.base,
+          sellToken: strategy.quote,
+          blockchainNetwork: provider?.network?.name || '',
         },
       });
     } else {

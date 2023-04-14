@@ -21,7 +21,7 @@ export const useModalTradeRouting = ({
     tradeActionsWei,
     tradeActionsRes,
     onSuccess,
-    buy,
+    buy = false,
   },
 }: Props) => {
   const { user, provider } = useWeb3();
@@ -89,15 +89,15 @@ export const useModalTradeRouting = ({
         buttonLabel: 'Confirm Trade',
         eventData: {
           productType: 'trade',
-          tradeDirection: buy ? 'buy' : 'sell',
-          buyToken: target.symbol,
-          sellToken: source.symbol,
+          buy,
+          buyToken: target,
+          sellToken: source,
           valueUsd: getFiatValueSource(
             data?.totalSourceAmount,
             true
           ).toString(),
-          token: approval.tokens.map(({ symbol }) => symbol),
-          blockchainNetwork: provider?.network?.name,
+          approvalTokens: approval.tokens,
+          blockchainNetwork: provider?.network?.name || '',
         },
       });
     } else {

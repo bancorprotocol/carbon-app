@@ -10,8 +10,8 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
 
   useInitEffect(() => {
     carbonEvents.trade.tradePairChange({
-      buyToken: base?.symbol || '',
-      sellToken: quote?.symbol || '',
+      buyToken: base,
+      sellToken: quote,
     });
   }, [base, quote]);
 

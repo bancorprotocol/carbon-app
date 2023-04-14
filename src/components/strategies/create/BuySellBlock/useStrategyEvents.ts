@@ -11,8 +11,8 @@ export const useStrategyEvents = ({
   base,
   quote,
   order,
-  buy,
   insufficientBalance,
+  buy = false,
 }: {
   base: Token;
   quote: Token;
@@ -27,8 +27,8 @@ export const useStrategyEvents = ({
   const getStrategyEventData = (): StrategyEventType => {
     if (buy) {
       return {
-        baseToken: base.symbol,
-        quoteToken: quote.symbol,
+        baseToken: base,
+        quoteToken: quote,
         buyOrderType: order.isRange ? 'range' : 'limit',
         buyBudget: order.budget,
         buyBudgetUsd: fiatValueUsd,
@@ -38,8 +38,8 @@ export const useStrategyEvents = ({
       };
     }
     return {
-      baseToken: base.symbol,
-      quoteToken: quote.symbol,
+      baseToken: base,
+      quoteToken: quote,
       sellOrderType: order.isRange ? 'range' : 'limit',
       sellBudget: order.budget,
       sellBudgetUsd: fiatValueUsd,
@@ -51,7 +51,7 @@ export const useStrategyEvents = ({
 
   useInitEffect(() => {
     carbonEvents.strategy.strategyErrorShow({
-      section: buy ? 'Buy Low' : 'Sell High',
+      buy,
       message: 'Insufficient balance',
     });
   }, [buy, insufficientBalance]);

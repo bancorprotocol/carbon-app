@@ -3,27 +3,34 @@ import {
   StrategySettings,
   StrategyType,
 } from 'components/strategies/create/types';
+import { ApprovalToken } from 'hooks/useApproval';
+import { Token } from 'libs/tokens';
 
-export interface TradeEventType {
-  tradeDirection?: string;
-  buyToken?: string;
-  sellToken?: string;
-  valueUsd?: string;
-  blockchainNetwork?: string;
-  transactionHash?: string;
-  message?: string;
+export interface TradeEventBase {
+  buyToken: Token;
+  sellToken: Token;
 }
 
-export type ConfirmationEventType = {
+export interface TradeEventType extends TradeEventBase {
+  buy?: boolean;
+  valueUsd?: string;
+}
+
+export interface TransactionConfirmationType {
+  blockchainNetwork: string;
+  transactionHash?: string;
+}
+
+export type TokenConfirmationType = {
   isLimited?: boolean;
-  token: string | string[];
+  approvalTokens: ApprovalToken[] | [Token];
   productType: 'trade' | 'strategy';
 };
 
 export interface StrategyEventType {
   strategyId?: string;
-  baseToken: string;
-  quoteToken: string;
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
   buyTokenPrice?: string;
   buyTokenPriceMin?: string;
   buyTokenPriceMax?: string;

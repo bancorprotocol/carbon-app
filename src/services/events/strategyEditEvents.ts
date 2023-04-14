@@ -6,6 +6,7 @@ import {
 } from './googleTagManager/types';
 import { prepareGtmStrategyData } from './strategyEvents';
 import { StrategyEventType } from './types';
+
 export interface EventStrategyEditSchema extends EventCategory {
   strategyDuplicateClick: {
     input: StrategyEventType;

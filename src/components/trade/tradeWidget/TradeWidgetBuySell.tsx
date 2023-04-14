@@ -41,7 +41,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     isTradeBySource,
     maxSourceAmountQuery,
   } = useBuySell(props);
-  const { buy, source, target, sourceBalanceQuery } = props;
+  const { source, target, sourceBalanceQuery, buy = false } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
@@ -49,18 +49,18 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   useEffect(() => {
     errorMsgSource &&
       carbonEvents.trade.tradeErrorShow({
-        tradeDirection: buy ? 'buy' : 'sell',
-        buyToken: target.symbol,
-        sellToken: source.symbol,
+        buy,
+        buyToken: target,
+        sellToken: source,
         valueUsd: getFiatValueSource(sourceInput, true).toString(),
         message: errorMsgSource || '',
       });
 
     errorMsgTarget &&
       carbonEvents.trade.tradeErrorShow({
-        tradeDirection: buy ? 'buy' : 'sell',
-        buyToken: target.symbol,
-        sellToken: source.symbol,
+        buy,
+        buyToken: target,
+        sellToken: source,
         valueUsd: getFiatValueSource(sourceInput, true).toString(),
         message: errorMsgTarget || '',
       });
@@ -68,9 +68,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     !hasEnoughLiquidity &&
       !liquidityQuery.isLoading &&
       carbonEvents.trade.tradeErrorShow({
-        tradeDirection: buy ? 'buy' : 'sell',
-        buyToken: target.symbol,
-        sellToken: source.symbol,
+        buy,
+        buyToken: target,
+        sellToken: source,
         message: 'No Liquidity Available',
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,9 +84,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   useInitEffect(() => {
     const tradeData = {
-      tradeDirection: buy ? 'buy' : 'sell',
-      buyToken: target.symbol,
-      sellToken: source.symbol,
+      buy,
+      buyToken: target,
+      sellToken: source,
       valueUsd: getFiatValueSource(sourceInput, true).toString(),
     };
     if (isTradeBySource) {
@@ -98,9 +98,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   useInitEffect(() => {
     const tradeData = {
-      tradeDirection: buy ? 'buy' : 'sell',
-      buyToken: target.symbol,
-      sellToken: source.symbol,
+      buy,
+      buyToken: target,
+      sellToken: source,
       valueUsd: getFiatValueSource(sourceInput, true).toString(),
     };
 
@@ -110,6 +110,23 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         : carbonEvents.trade.tradeSellReceiveSet(tradeData);
     }
   }, [buy, targetInput, sourceInput]);
+
+  const handleTradeClick = () => {
+    handleCTAClick();
+    buy
+      ? carbonEvents.trade.tradeBuyClick({
+          buy,
+          buyToken: target,
+          sellToken: source,
+          valueUsd: getFiatValueSource(sourceInput, true).toString(),
+        })
+      : carbonEvents.trade.tradeSellClick({
+          buy,
+          buyToken: target,
+          sellToken: source,
+          valueUsd: getFiatValueSource(sourceInput, true).toString(),
+        });
+  };
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
@@ -217,22 +234,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
       <Button
         disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
-        onClick={() => {
-          handleCTAClick();
-          buy
-            ? carbonEvents.trade.tradeBuyClick({
-                tradeDirection: buy ? 'buy' : 'sell',
-                buyToken: target.symbol,
-                sellToken: source.symbol,
-                valueUsd: getFiatValueSource(sourceInput, true).toString(),
-              })
-            : carbonEvents.trade.tradeSellClick({
-                tradeDirection: buy ? 'buy' : 'sell',
-                buyToken: target.symbol,
-                sellToken: source.symbol,
-                valueUsd: getFiatValueSource(sourceInput, true).toString(),
-              });
-        }}
+        onClick={handleTradeClick}
         variant={buy ? 'success' : 'error'}
         fullWidth
         className={'mt-20'}

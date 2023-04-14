@@ -25,7 +25,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
       <div className="mb-14 flex items-center justify-between">
         <h2>Token Pair</h2>
         <Tooltip
-          sendEventOnMount={{ section: 'Token Pair' }}
+          sendEventOnMount={{ buy: undefined }}
           element={
             <div>
               Selecting the tokens you would like to create a strategy for.

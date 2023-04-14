@@ -12,7 +12,7 @@ export const Tooltip: FC<
     className?: string;
     iconClassName?: string;
     sendEventOnMount?: {
-      section: 'Token Pair' | 'Buy Low' | 'Sell High';
+      buy?: boolean | undefined;
     };
   }
 > = ({
@@ -38,7 +38,7 @@ export const Tooltip: FC<
     opacity.set(1);
     sendEventOnMount &&
       carbonEvents.strategy.strategyTooltipShow({
-        section: sendEventOnMount?.section,
+        buy: sendEventOnMount?.buy,
         message: isValidElement(element)
           ? ReactDOMServer.renderToString(element)
           : element

@@ -115,10 +115,10 @@ export const useCreateStrategy = () => {
           eventData: {
             ...strategyEventData,
             productType: 'strategy',
-            token: approval.tokens.map(({ symbol }) => symbol),
-            buyToken: base?.symbol,
-            sellToken: quote?.symbol,
-            blockchainNetwork: provider?.network?.name,
+            approvalTokens: approval.tokens,
+            buyToken: base,
+            sellToken: quote,
+            blockchainNetwork: provider?.network?.name || '',
           },
         });
       } else {
@@ -142,18 +142,18 @@ export const useCreateStrategy = () => {
     if (isSource) {
       !base
         ? carbonEvents.strategy.newStrategyBaseTokenSelect({
-            token: token?.symbol,
+            token,
           })
         : carbonEvents.strategy.strategyBaseTokenChange({
-            token: token?.symbol,
+            token,
           });
     } else {
       !quote
         ? carbonEvents.strategy.newStrategyQuoteTokenSelect({
-            token: token?.symbol,
+            token,
           })
         : carbonEvents.strategy.strategyQuoteTokenChange({
-            token: token?.symbol,
+            token,
           });
     }
   };
@@ -229,8 +229,8 @@ export const useCreateStrategy = () => {
   useInitEffect(() => {
     selectedStrategySettings?.search.strategyType === 'disposable' &&
       carbonEvents.strategy.strategyDirectionChange({
-        baseToken: base?.symbol || '',
-        quoteToken: quote?.symbol || '',
+        baseToken: base,
+        quoteToken: quote,
         strategySettings: selectedStrategySettings?.search.strategySettings,
         strategyDirection: selectedStrategySettings?.search.strategyDirection,
         strategyType: strategyType,

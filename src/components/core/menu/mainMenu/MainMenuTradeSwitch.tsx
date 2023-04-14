@@ -21,8 +21,8 @@ export const MainMenuTradeSwitch: FC<Props> = ({ baseToken, quoteToken }) => {
       search: { base: quoteToken.address, quote: baseToken.address },
     });
     carbonEvents.trade.tradePairSwap({
-      buyToken: quoteToken.symbol,
-      sellToken: baseToken.symbol,
+      buyToken: quoteToken,
+      sellToken: baseToken,
     });
   };
 
