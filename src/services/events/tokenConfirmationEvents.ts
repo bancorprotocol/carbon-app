@@ -66,7 +66,7 @@ export const prepareTokenConfirmationData = (
     switch: data?.isLimited ? 'false' : 'true',
     token: data?.approvalTokens?.map(({ symbol }) => symbol),
   };
-  let gtmData = {};
+
   if (data.productType === 'strategy') {
     const {
       baseToken,
@@ -85,7 +85,7 @@ export const prepareTokenConfirmationData = (
       sellBudgetUsd,
     } = data as StrategyEventType;
 
-    gtmData = {
+    const gtmStrategyData = {
       token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
       strategy_base_token: baseToken?.symbol,
       strategy_quote_token: quoteToken?.symbol,
@@ -101,20 +101,23 @@ export const prepareTokenConfirmationData = (
       strategy_sell_high_order_type: sellOrderType,
       strategy_sell_high_budget: sellBudget,
       strategy_sell_high_budget_usd: sellBudgetUsd,
+    } as StrategyGTMEventType;
+    return {
+      ...gtmStrategyData,
+      ...gtmConfirmationData,
     };
   } else {
     const { buy, buyToken, sellToken, valueUsd } = data as TradeEventType;
-    gtmData = {
+    const gtmTradeData = {
       trade_direction: buy ? 'buy' : 'sell',
       token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
       value_usd: valueUsd,
     };
+    return {
+      ...gtmTradeData,
+      ...gtmConfirmationData,
+    };
   }
-
-  return {
-    ...gtmData,
-    ...gtmConfirmationData,
-  };
 };

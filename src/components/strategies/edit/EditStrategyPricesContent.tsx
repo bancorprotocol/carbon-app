@@ -33,7 +33,6 @@ export const EditStrategyPricesContent = ({
     history: { back },
   } = useLocation();
   const strategyEventData = useStrategyEventData({
-    id: strategy.id,
     base: strategy.base,
     quote: strategy.quote,
     order0,
@@ -63,7 +62,11 @@ export const EditStrategyPricesContent = ({
             order0: newOrder0,
             order1: newOrder1,
           },
-          () => carbonEvents.strategyEdit.strategyChangeRates(strategyEventData)
+          () =>
+            carbonEvents.strategyEdit.strategyChangeRates({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            })
         );
   };
 

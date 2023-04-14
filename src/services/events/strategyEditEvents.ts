@@ -2,7 +2,7 @@ import { sendGTMEvent } from './googleTagManager';
 import {
   CarbonEvents,
   EventCategory,
-  StrategyGTMEventType,
+  StrategyEditGTMEventType,
 } from './googleTagManager/types';
 import { prepareGtmStrategyData } from './strategyEvents';
 import { StrategyEditEventType } from './types';
@@ -10,39 +10,39 @@ import { StrategyEditEventType } from './types';
 export interface EventStrategyEditSchema extends EventCategory {
   strategyDuplicateClick: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyDelete: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyChangeRatesClick: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyChangeRates: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyDepositClick: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyDeposit: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyWithdraw: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyWithdrawClick: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
   strategyPause: {
     input: StrategyEditEventType;
-    gtmData: StrategyGTMEventType;
+    gtmData: StrategyEditGTMEventType;
   };
 }
 

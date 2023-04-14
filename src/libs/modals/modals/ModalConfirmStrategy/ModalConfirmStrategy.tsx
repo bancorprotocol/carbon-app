@@ -25,27 +25,32 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   const { pauseStrategy } = useUpdateStrategy();
   const { deleteStrategy } = useDeleteStrategy();
   const data = getModalDataByType(type);
-
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
   const strategyEventData = useStrategyEventData({
-    id: strategy.id,
     base: strategy.base,
     quote: strategy.quote,
     order0,
     order1,
   });
+
   const handleOnActionClick = () => {
     switch (type) {
       case 'pause':
         pauseStrategy(strategy, () => {
-          carbonEvents.strategyEdit.strategyPause(strategyEventData);
+          carbonEvents.strategyEdit.strategyPause({
+            ...strategyEventData,
+            strategyId: strategy.id,
+          });
           closeModal(id);
         });
         break;
       case 'delete':
         deleteStrategy(strategy, () => {
-          carbonEvents.strategyEdit.strategyDelete(strategyEventData);
+          carbonEvents.strategyEdit.strategyDelete({
+            ...strategyEventData,
+            strategyId: strategy.id,
+          });
           closeModal(id);
         });
         break;

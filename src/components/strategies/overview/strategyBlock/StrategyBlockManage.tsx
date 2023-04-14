@@ -37,7 +37,6 @@ export const StrategyBlockManage: FC<{
   const order1 = useOrder(strategy.order1);
 
   const strategyEventData = useStrategyEventData({
-    id: strategy.id,
     base: strategy.base,
     quote: strategy.quote,
     order0,
@@ -59,7 +58,10 @@ export const StrategyBlockManage: FC<{
       name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyChangeRatesClick(strategyEventData);
+        carbonEvents.strategyEdit.strategyChangeRatesClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'editPrices' },
@@ -71,7 +73,10 @@ export const StrategyBlockManage: FC<{
       name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyDepositClick(strategyEventData);
+        carbonEvents.strategyEdit.strategyDepositClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'deposit' },
@@ -85,7 +90,10 @@ export const StrategyBlockManage: FC<{
       name: 'Withdraw Funds',
       action: () => {
         setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyWithdrawClick(strategyEventData);
+        carbonEvents.strategyEdit.strategyWithdrawClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'withdraw' },
@@ -98,7 +106,10 @@ export const StrategyBlockManage: FC<{
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
-        carbonEvents.strategyEdit.strategyDuplicateClick(strategyEventData);
+        carbonEvents.strategyEdit.strategyDuplicateClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         duplicate(strategy);
       },
     });

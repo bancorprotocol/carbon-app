@@ -19,7 +19,8 @@ export interface EventTransactionConfirmationSchema extends EventCategory {
     input: StrategyEventOrTradeEvent &
       TokenConfirmationType &
       TransactionConfirmationType;
-    gtmData: ConfirmationGTMEventType;
+    gtmData: (TradeGTMEventType | StrategyGTMEventType) &
+      ConfirmationGTMEventType;
   };
   transactionConfirm: {
     input: StrategyEventOrTradeEvent &
@@ -54,14 +55,13 @@ export const prepareTransactionConfirmationData = (
   data: StrategyEventOrTradeEvent &
     TokenConfirmationType &
     TransactionConfirmationType
-) => {
+): (TradeGTMEventType | StrategyGTMEventType) & ConfirmationGTMEventType => {
   const gtmConfirmationData = {
     product_type: data?.productType,
     switch: data?.isLimited ? 'false' : 'true',
     token: data?.approvalTokens.map(({ symbol }) => symbol),
     blockchain_network: data?.blockchainNetwork,
   };
-  let gtmData = {};
   if (data.productType === 'strategy') {
     const {
       baseToken,
@@ -80,7 +80,7 @@ export const prepareTransactionConfirmationData = (
       sellBudgetUsd,
     } = data as StrategyEventType;
 
-    gtmData = {
+    const gtmStrategyData = {
       token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
       strategy_base_token: baseToken?.symbol,
       strategy_quote_token: quoteToken?.symbol,
@@ -96,20 +96,25 @@ export const prepareTransactionConfirmationData = (
       strategy_sell_high_order_type: sellOrderType,
       strategy_sell_high_budget: sellBudget,
       strategy_sell_high_budget_usd: sellBudgetUsd,
+    } as StrategyGTMEventType;
+
+    return {
+      ...gtmConfirmationData,
+      ...gtmStrategyData,
     };
   } else {
     const { buy, buyToken, sellToken, valueUsd } = data as TradeEventType;
-    gtmData = {
+    const gtmTradeData = {
       trade_direction: buy ? 'buy' : 'sell',
       token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
       value_usd: valueUsd,
+    } as TradeGTMEventType;
+
+    return {
+      ...gtmConfirmationData,
+      ...gtmTradeData,
     };
   }
-
-  return {
-    ...gtmData,
-    ...gtmConfirmationData,
-  };
 };

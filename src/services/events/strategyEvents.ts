@@ -263,7 +263,7 @@ export const prepareGtmStrategyData = ({
   strategySettings,
   strategyDirection,
   strategyType,
-}: StrategyEventType): any => {
+}: StrategyEventType): StrategyGTMEventType => {
   return {
     token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
     strategy_base_token: baseToken?.symbol || '',

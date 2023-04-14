@@ -28,7 +28,6 @@ export const EditStrategyBudgetContent = ({
   const { provider } = useWeb3();
 
   const strategyEventData = useStrategyEventData({
-    id: strategy.id,
     base: strategy.base,
     quote: strategy.quote,
     order0,
@@ -56,8 +55,14 @@ export const EditStrategyBudgetContent = ({
 
   const handleEvents = () => {
     type === 'withdraw'
-      ? carbonEvents.strategyEdit.strategyWithdraw(strategyEventData)
-      : carbonEvents.strategyEdit.strategyDeposit(strategyEventData);
+      ? carbonEvents.strategyEdit.strategyWithdraw({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        })
+      : carbonEvents.strategyEdit.strategyDeposit({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
   };
 
   const handleOnActionClick = () => {
