@@ -37,7 +37,7 @@ export const StrategyPageTitleWidget: FC<{
         </>
       )}
       <Link to={PathNames.createStrategy}>
-        <Button variant="white">Create Strategy</Button>
+        <Button variant="success">Create Strategy</Button>
       </Link>
     </div>
   );
