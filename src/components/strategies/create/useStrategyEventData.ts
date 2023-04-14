@@ -1,36 +1,29 @@
+import { useSearch } from '@tanstack/react-location';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumberInput } from 'utils/helpers';
-import { StrategyDirection, StrategySettings, StrategyType } from './types';
+import { StrategyCreateLocationGenerics } from './types';
 import { OrderCreate } from './useOrder';
 
 export const useStrategyEventData = ({
-  id,
   base,
   quote,
   order0,
   order1,
-  strategyType,
-  strategyDirection,
-  strategySettings,
 }: {
-  id?: string;
   base: Token | undefined;
   quote: Token | undefined;
   order0: OrderCreate;
   order1: OrderCreate;
-  strategyType?: StrategyType;
-  strategyDirection?: StrategyDirection;
-  strategySettings?: StrategySettings;
 }): StrategyEventType => {
   const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
   const lowBudgetUsd = getFiatValueQuote(order0?.budget, true).toString();
   const highBudgetUsd = getFiatValueBase(order1?.budget, true).toString();
+  const search = useSearch<StrategyCreateLocationGenerics>();
 
   return {
-    strategyId: id,
     buyOrderType: order0?.isRange ? 'range' : 'limit',
     baseToken: base,
     quoteToken: quote,
@@ -45,8 +38,8 @@ export const useStrategyEventData = ({
     sellTokenPrice: sanitizeNumberInput(order1.price, 18),
     sellTokenPriceMin: sanitizeNumberInput(order1.min, 18),
     sellTokenPriceMax: sanitizeNumberInput(order1.max, 18),
-    strategyType: strategyType,
-    strategyDirection: strategyDirection,
-    strategySettings: strategySettings,
+    strategyDirection: search?.strategyDirection,
+    strategySettings: search?.strategySettings,
+    strategyType: search?.strategyType,
   };
 };

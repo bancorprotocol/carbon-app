@@ -27,25 +27,42 @@ export type TokenConfirmationType = {
   productType: 'trade' | 'strategy';
 };
 
-export interface StrategyEventType {
-  strategyId?: string;
+export interface StrategyEventTypeBase {
   baseToken: Token | undefined;
   quoteToken: Token | undefined;
-  buyTokenPrice?: string;
-  buyTokenPriceMin?: string;
-  buyTokenPriceMax?: string;
-  buyOrderType?: string;
-  buyBudget?: string;
-  buyBudgetUsd?: string;
-  sellTokenPrice?: string;
-  sellTokenPriceMin?: string;
-  sellTokenPriceMax?: string;
-  sellOrderType?: string;
-  sellBudget?: string;
-  sellBudgetUsd?: string;
-  strategyType?: StrategyType;
-  strategyDirection?: StrategyDirection;
-  strategySettings?: StrategySettings;
+  strategyType: StrategyType | undefined;
+  strategyDirection: StrategyDirection | undefined;
+  strategySettings: StrategySettings | undefined;
+}
+
+export interface StrategyBuyEventType {
+  buyTokenPrice: string;
+  buyTokenPriceMin: string;
+  buyTokenPriceMax: string;
+  buyOrderType: string;
+  buyBudget: string;
+  buyBudgetUsd: string;
+}
+
+export interface StrategySellEventType {
+  sellTokenPrice: string;
+  sellTokenPriceMin: string;
+  sellTokenPriceMax: string;
+  sellOrderType: string;
+  sellBudget: string;
+  sellBudgetUsd: string;
+}
+
+export interface StrategyEventType
+  extends StrategyEventTypeBase,
+    StrategyBuyEventType,
+    StrategySellEventType {}
+
+export interface StrategyEditEventType
+  extends StrategyEventTypeBase,
+    StrategyBuyEventType,
+    StrategySellEventType {
+  strategyId: string;
 }
 
 export type StrategyEventOrTradeEvent = TradeEventType | StrategyEventType;

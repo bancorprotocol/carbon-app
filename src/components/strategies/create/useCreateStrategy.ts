@@ -85,9 +85,6 @@ export const useCreateStrategy = () => {
     quote,
     order0,
     order1,
-    strategyType: selectedStrategySettings?.search?.strategyType,
-    strategyDirection: selectedStrategySettings?.search?.strategyDirection,
-    strategySettings: selectedStrategySettings?.search?.strategySettings,
   });
 
   const createStrategy = async () => {
@@ -231,9 +228,9 @@ export const useCreateStrategy = () => {
       carbonEvents.strategy.strategyDirectionChange({
         baseToken: base,
         quoteToken: quote,
-        strategySettings: selectedStrategySettings?.search.strategySettings,
-        strategyDirection: selectedStrategySettings?.search.strategyDirection,
-        strategyType: strategyType,
+        strategySettings: selectedStrategySettings.search.strategySettings,
+        strategyDirection: selectedStrategySettings.search.strategyDirection,
+        strategyType: selectedStrategySettings.search.strategyType,
       });
   }, [selectedStrategySettings?.search?.strategyDirection]);
 

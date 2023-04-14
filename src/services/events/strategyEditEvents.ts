@@ -5,43 +5,43 @@ import {
   StrategyGTMEventType,
 } from './googleTagManager/types';
 import { prepareGtmStrategyData } from './strategyEvents';
-import { StrategyEventType } from './types';
+import { StrategyEditEventType } from './types';
 
 export interface EventStrategyEditSchema extends EventCategory {
   strategyDuplicateClick: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyDelete: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyChangeRatesClick: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyChangeRates: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyDepositClick: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyDeposit: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyWithdraw: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyWithdrawClick: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
   strategyPause: {
-    input: StrategyEventType;
+    input: StrategyEditEventType;
     gtmData: StrategyGTMEventType;
   };
 }

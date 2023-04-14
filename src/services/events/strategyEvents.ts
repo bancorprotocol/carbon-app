@@ -4,9 +4,17 @@ import {
   CarbonEvents,
   EventCategory,
   Message,
+  StrategyBuyGTMEventType,
   StrategyGTMEventType,
+  StrategyGTMEventTypeBase,
+  StrategySellGTMEventType,
 } from './googleTagManager/types';
-import { StrategyEventType } from './types';
+import {
+  StrategyBuyEventType,
+  StrategyEventType,
+  StrategyEventTypeBase,
+  StrategySellEventType,
+} from './types';
 
 export interface EventStrategySchema extends EventCategory {
   strategyErrorShow: {
@@ -78,28 +86,28 @@ export interface EventStrategySchema extends EventCategory {
     };
   };
   strategyBuyLowOrderTypeChange: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
-  };
-  strategySellHighOrderTypeChange: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
+    input: StrategyBuyEventType & StrategyEventTypeBase;
+    gtmData: StrategyBuyGTMEventType & StrategyGTMEventTypeBase;
   };
   strategyBuyLowPriceSet: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
-  };
-  strategySellHighPriceSet: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
+    input: StrategyBuyEventType & StrategyEventTypeBase;
+    gtmData: StrategyBuyGTMEventType & StrategyGTMEventTypeBase;
   };
   strategyBuyLowBudgetSet: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
+    input: StrategyBuyEventType & StrategyEventTypeBase;
+    gtmData: StrategyBuyGTMEventType & StrategyGTMEventTypeBase;
+  };
+  strategySellHighOrderTypeChange: {
+    input: StrategySellEventType & StrategyEventTypeBase;
+    gtmData: StrategySellGTMEventType & StrategyGTMEventTypeBase;
+  };
+  strategySellHighPriceSet: {
+    input: StrategySellEventType & StrategyEventTypeBase;
+    gtmData: StrategySellGTMEventType & StrategyGTMEventTypeBase;
   };
   strategySellHighBudgetSet: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
+    input: StrategySellEventType & StrategyEventTypeBase;
+    gtmData: StrategySellGTMEventType & StrategyGTMEventTypeBase;
   };
   strategyCreateClick: {
     input: StrategyEventType;
@@ -110,12 +118,12 @@ export interface EventStrategySchema extends EventCategory {
     gtmData: StrategyGTMEventType;
   };
   newStrategyNextStepClick: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
+    input: StrategyEventTypeBase;
+    gtmData: StrategyGTMEventTypeBase;
   };
   strategyDirectionChange: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
+    input: StrategyEventTypeBase;
+    gtmData: StrategyGTMEventTypeBase;
   };
 }
 
@@ -167,22 +175,6 @@ export const strategyEvents: CarbonEvents['strategy'] = {
       token_pair: `${updatedBase}/${updatedQuote}`,
     });
   },
-  strategySellHighOrderTypeChange: (strategy) => {
-    const gtmStrategyData = prepareGtmSellStrategyData(strategy);
-    sendGTMEvent(
-      'strategy',
-      'strategySellHighOrderTypeChange',
-      gtmStrategyData
-    );
-  },
-  strategySellHighBudgetSet: (strategy) => {
-    const gtmStrategyData = prepareGtmSellStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategySellHighBudgetSet', gtmStrategyData);
-  },
-  strategySellHighPriceSet: (strategy) => {
-    const gtmStrategyData = prepareGtmBuyStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategySellHighPriceSet', gtmStrategyData);
-  },
   strategyBuyLowOrderTypeChange: (strategy) => {
     const gtmStrategyData = prepareGtmBuyStrategyData(strategy);
     sendGTMEvent('strategy', 'strategyBuyLowOrderTypeChange', gtmStrategyData);
@@ -194,6 +186,22 @@ export const strategyEvents: CarbonEvents['strategy'] = {
   strategyBuyLowBudgetSet: (strategy) => {
     const gtmStrategyData = prepareGtmBuyStrategyData(strategy);
     sendGTMEvent('strategy', 'strategyBuyLowBudgetSet', gtmStrategyData);
+  },
+  strategySellHighBudgetSet: (strategy) => {
+    const gtmStrategyData = prepareGtmSellStrategyData(strategy);
+    sendGTMEvent('strategy', 'strategySellHighBudgetSet', gtmStrategyData);
+  },
+  strategySellHighPriceSet: (strategy) => {
+    const gtmStrategyData = prepareGtmSellStrategyData(strategy);
+    sendGTMEvent('strategy', 'strategySellHighPriceSet', gtmStrategyData);
+  },
+  strategySellHighOrderTypeChange: (strategy) => {
+    const gtmStrategyData = prepareGtmSellStrategyData(strategy);
+    sendGTMEvent(
+      'strategy',
+      'strategySellHighOrderTypeChange',
+      gtmStrategyData
+    );
   },
   strategyCreateClick: (strategy) => {
     const gtmStrategyData = prepareGtmStrategyData(strategy);
@@ -211,12 +219,12 @@ export const strategyEvents: CarbonEvents['strategy'] = {
     strategyType,
   }) => {
     sendGTMEvent('strategy', 'newStrategyNextStepClick', {
-      strategy_base_token: baseToken?.symbol,
-      strategy_quote_token: quoteToken?.symbol,
+      strategy_base_token: baseToken?.symbol || '',
+      strategy_quote_token: quoteToken?.symbol || '',
       strategy_settings: strategySettings,
       strategy_direction: strategyDirection,
       strategy_type: strategyType,
-      token_pair: `${baseToken}/${quoteToken}`,
+      token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
     });
   },
   strategyDirectionChange: ({
@@ -227,12 +235,12 @@ export const strategyEvents: CarbonEvents['strategy'] = {
     strategyType,
   }) => {
     sendGTMEvent('strategy', 'strategyDirectionChange', {
-      strategy_base_token: baseToken?.symbol,
-      strategy_quote_token: quoteToken?.symbol,
+      strategy_base_token: baseToken?.symbol || '',
+      strategy_quote_token: quoteToken?.symbol || '',
       strategy_settings: strategySettings,
       strategy_direction: strategyDirection,
       strategy_type: strategyType,
-      token_pair: `${baseToken}/${quoteToken}`,
+      token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
     });
   },
 };
@@ -252,11 +260,14 @@ export const prepareGtmStrategyData = ({
   sellOrderType,
   sellBudget,
   sellBudgetUsd,
-}: StrategyEventType): StrategyGTMEventType => {
+  strategySettings,
+  strategyDirection,
+  strategyType,
+}: StrategyEventType): any => {
   return {
-    token_pair: `${baseToken}/${quoteToken}`,
-    strategy_base_token: baseToken?.symbol,
-    strategy_quote_token: quoteToken?.symbol,
+    token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
+    strategy_base_token: baseToken?.symbol || '',
+    strategy_quote_token: quoteToken?.symbol || '',
     strategy_buy_low_token_price: buyTokenPrice,
     strategy_buy_low_token_min_price: buyTokenPriceMin,
     strategy_buy_low_token_max_price: buyTokenPriceMax,
@@ -269,6 +280,9 @@ export const prepareGtmStrategyData = ({
     strategy_sell_high_order_type: sellOrderType,
     strategy_sell_high_budget: sellBudget,
     strategy_sell_high_budget_usd: sellBudgetUsd,
+    strategy_direction: strategyDirection,
+    strategy_settings: strategySettings,
+    strategy_type: strategyType,
   };
 };
 
@@ -281,17 +295,24 @@ export const prepareGtmSellStrategyData = ({
   sellOrderType,
   sellBudget,
   sellBudgetUsd,
-}: StrategyEventType): StrategyGTMEventType => {
+  strategySettings,
+  strategyDirection,
+  strategyType,
+}: StrategySellEventType & StrategyEventTypeBase): StrategySellGTMEventType &
+  StrategyGTMEventTypeBase => {
   return {
-    token_pair: `${baseToken}/${quoteToken}`,
-    strategy_base_token: baseToken?.symbol,
-    strategy_quote_token: quoteToken?.symbol,
+    token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
+    strategy_base_token: baseToken?.symbol || '',
+    strategy_quote_token: quoteToken?.symbol || '',
     strategy_sell_high_token_price: sellTokenPrice,
     strategy_sell_high_token_min_price: sellTokenPriceMin,
     strategy_sell_high_token_max_price: sellTokenPriceMax,
     strategy_sell_high_order_type: sellOrderType,
     strategy_sell_high_budget: sellBudget,
     strategy_sell_high_budget_usd: sellBudgetUsd,
+    strategy_direction: strategyDirection,
+    strategy_settings: strategySettings,
+    strategy_type: strategyType,
   };
 };
 
@@ -304,16 +325,23 @@ export const prepareGtmBuyStrategyData = ({
   buyOrderType,
   buyBudget,
   buyBudgetUsd,
-}: StrategyEventType): StrategyGTMEventType => {
+  strategySettings,
+  strategyDirection,
+  strategyType,
+}: StrategyBuyEventType & StrategyEventTypeBase): StrategyBuyGTMEventType &
+  StrategyGTMEventTypeBase => {
   return {
-    token_pair: `${baseToken}/${quoteToken}`,
-    strategy_base_token: baseToken?.symbol,
-    strategy_quote_token: quoteToken?.symbol,
+    token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
+    strategy_base_token: baseToken?.symbol || '',
+    strategy_quote_token: quoteToken?.symbol || '',
     strategy_buy_low_token_price: buyTokenPrice,
     strategy_buy_low_token_min_price: buyTokenPriceMin,
     strategy_buy_low_token_max_price: buyTokenPriceMax,
     strategy_buy_low_order_type: buyOrderType,
     strategy_buy_low_budget: buyBudget,
     strategy_buy_low_budget_usd: buyBudgetUsd,
+    strategy_direction: strategyDirection,
+    strategy_settings: strategySettings,
+    strategy_type: strategyType,
   };
 };

@@ -1,10 +1,16 @@
+import { useSearch } from '@tanstack/react-location';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import useInitEffect from 'hooks/useInitEffect';
 import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
 
-import { StrategyEventType } from 'services/events/types';
+import {
+  StrategyBuyEventType,
+  StrategyEventTypeBase,
+  StrategySellEventType,
+} from 'services/events/types';
 import { sanitizeNumberInput } from 'utils/helpers';
+import { StrategyCreateLocationGenerics } from '../types';
 import { OrderCreate } from '../useOrder';
 
 export const useStrategyEvents = ({
@@ -23,8 +29,13 @@ export const useStrategyEvents = ({
   const budgetToken = buy ? quote : base;
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
+  const search = useSearch<StrategyCreateLocationGenerics>();
 
-  const getStrategyEventData = (): StrategyEventType => {
+  const getStrategyEventData = (): (
+    | StrategySellEventType
+    | StrategyBuyEventType
+  ) &
+    StrategyEventTypeBase => {
     if (buy) {
       return {
         baseToken: base,
@@ -35,6 +46,9 @@ export const useStrategyEvents = ({
         buyTokenPrice: sanitizeNumberInput(order.price, 18),
         buyTokenPriceMin: sanitizeNumberInput(order.min, 18),
         buyTokenPriceMax: sanitizeNumberInput(order.max, 18),
+        strategyDirection: search?.strategyDirection,
+        strategySettings: search?.strategySettings,
+        strategyType: search?.strategyType,
       };
     }
     return {
@@ -46,6 +60,9 @@ export const useStrategyEvents = ({
       sellTokenPrice: sanitizeNumberInput(order.price, 18),
       sellTokenPriceMin: sanitizeNumberInput(order.min, 18),
       sellTokenPriceMax: sanitizeNumberInput(order.max, 18),
+      strategyDirection: search?.strategyDirection,
+      strategySettings: search?.strategySettings,
+      strategyType: search?.strategyType,
     };
   };
 
@@ -59,22 +76,34 @@ export const useStrategyEvents = ({
   useInitEffect(() => {
     const strategy = getStrategyEventData();
     buy
-      ? carbonEvents.strategy.strategyBuyLowOrderTypeChange(strategy)
-      : carbonEvents.strategy.strategySellHighOrderTypeChange(strategy);
+      ? carbonEvents.strategy.strategyBuyLowOrderTypeChange(
+          strategy as StrategyBuyEventType & StrategyEventTypeBase
+        )
+      : carbonEvents.strategy.strategySellHighOrderTypeChange(
+          strategy as StrategySellEventType & StrategyEventTypeBase
+        );
   }, [buy, order.isRange]);
 
   useInitEffect(() => {
     const strategy = getStrategyEventData();
     buy
-      ? carbonEvents.strategy.strategyBuyLowPriceSet(strategy)
-      : carbonEvents.strategy.strategySellHighPriceSet(strategy);
+      ? carbonEvents.strategy.strategyBuyLowPriceSet(
+          strategy as StrategyBuyEventType & StrategyEventTypeBase
+        )
+      : carbonEvents.strategy.strategySellHighPriceSet(
+          strategy as StrategySellEventType & StrategyEventTypeBase
+        );
   }, [buy, order.min, order.max, order.price]);
 
   useInitEffect(() => {
     const strategy = getStrategyEventData();
 
     buy
-      ? carbonEvents.strategy.strategyBuyLowBudgetSet(strategy)
-      : carbonEvents.strategy.strategySellHighBudgetSet(strategy);
+      ? carbonEvents.strategy.strategyBuyLowBudgetSet(
+          strategy as StrategyBuyEventType & StrategyEventTypeBase
+        )
+      : carbonEvents.strategy.strategySellHighBudgetSet(
+          strategy as StrategySellEventType & StrategyEventTypeBase
+        );
   }, [buy, order.budget]);
 };

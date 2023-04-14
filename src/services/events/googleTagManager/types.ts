@@ -47,31 +47,44 @@ export type ConfirmationGTMEventType = {
   product_type?: string;
 };
 
-export type StrategyGTMEventType = {
-  strategy_id?: string;
-  token_pair?: string;
-  strategy_base_token?: string;
-  strategy_quote_token?: string;
-  strategy_buy_low_token?: string;
-  strategy_buy_low_token_price?: string;
-  strategy_buy_low_token_min_price?: string;
-  strategy_buy_low_token_max_price?: string;
-  strategy_buy_low_pay_token?: string;
-  strategy_buy_low_order_type?: string;
-  strategy_buy_low_budget?: string;
-  strategy_buy_low_budget_usd?: string;
-  strategy_sell_high_token?: string;
-  strategy_sell_high_token_price?: string;
-  strategy_sell_high_token_min_price?: string;
-  strategy_sell_high_token_max_price?: string;
-  strategy_sell_high_receive_token?: string;
-  strategy_sell_high_order_type?: string;
-  strategy_sell_high_budget?: string;
-  strategy_sell_high_budget_usd?: string;
-  strategy_type?: 'recurring' | 'disposable';
-  strategy_direction?: 'buy' | 'sell';
-  strategy_settings?: 'limit' | 'range' | 'custom' | undefined;
-};
+export interface StrategyGTMEventTypeBase {
+  token_pair: string;
+  strategy_base_token: string;
+  strategy_quote_token: string;
+  strategy_type: 'recurring' | 'disposable' | undefined;
+  strategy_direction: 'buy' | 'sell' | undefined;
+  strategy_settings: 'limit' | 'range' | 'custom' | undefined;
+}
+
+export interface StrategyBuyGTMEventType {
+  strategy_buy_low_token_price: string;
+  strategy_buy_low_token_min_price: string;
+  strategy_buy_low_token_max_price: string;
+  strategy_buy_low_order_type: string;
+  strategy_buy_low_budget: string;
+  strategy_buy_low_budget_usd: string;
+}
+
+export interface StrategySellGTMEventType {
+  strategy_sell_high_token_price: string;
+  strategy_sell_high_token_min_price: string;
+  strategy_sell_high_token_max_price: string;
+  strategy_sell_high_order_type: string;
+  strategy_sell_high_budget: string;
+  strategy_sell_high_budget_usd: string;
+}
+
+export interface StrategyGTMEventType
+  extends StrategyGTMEventTypeBase,
+    StrategyBuyGTMEventType,
+    StrategySellGTMEventType {}
+
+export interface StrategyEditGTMEventType
+  extends StrategyGTMEventTypeBase,
+    StrategyBuyGTMEventType,
+    StrategySellGTMEventType {
+  strategy_id: string;
+}
 
 export type EventCategory = { [key: string]: { input: any; gtmData: any } };
 
