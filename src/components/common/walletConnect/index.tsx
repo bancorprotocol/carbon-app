@@ -1,23 +1,88 @@
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
+import { ReactComponent as IconWallet1 } from 'assets/icons/wallet-1.svg';
+import { ReactComponent as IconWallet2 } from 'assets/icons/wallet-2.svg';
+import { ReactComponent as IconWallet3 } from 'assets/icons/wallet-3.svg';
+import { ReactComponent as IconWallet4 } from 'assets/icons/wallet-4.svg';
+import { ReactComponent as IconWallet5 } from 'assets/icons/wallet-5.svg';
+import { ReactComponent as IconWallet6 } from 'assets/icons/wallet-6.svg';
+
+const items = [
+  {
+    icon: <IconWallet1 className="h-20 w-20 text-green" />,
+    title: 'On-chain Limit & Range Orders',
+  },
+  {
+    icon: <IconWallet2 className="h-20 w-20 text-green" />,
+    title: 'Automated and Recurring strategies',
+  },
+  {
+    icon: <IconWallet3 className="h-20 w-20 text-green" />,
+    title: 'Easily Adjustable',
+  },
+  {
+    icon: <IconWallet4 className="h-20 w-20 text-green" />,
+    title: 'Rotating Liquidity',
+  },
+  {
+    icon: <IconWallet5 className="h-20 w-20 text-green" />,
+    title: 'All standard ERC-20 tokens',
+  },
+  {
+    icon: <IconWallet6 className="h-20 w-20 text-green" />,
+    title: 'MEV Resistant',
+  },
+];
 
 export const WalletConnect = () => {
   const { openModal } = useModal();
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-32 text-36">
-      <IconWallet className="h-80 w-80" />
-      Connect Wallet
-      <Button
-        className="w-[200px]"
-        variant={'secondary'}
-        onClick={() => {
-          openModal('wallet', undefined);
-        }}
+    <div className="md:h-[calc(100%-100px)]">
+      <div
+        className={
+          'h-full justify-center rounded-10 border border-emphasis p-20 md:flex'
+        }
       >
-        Connect
-      </Button>
+        <div
+          className={
+            'f-full flex flex-col justify-center space-y-30 md:w-[360px]'
+          }
+        >
+          <h1>Automate your Trading Strategies</h1>
+          <p className={'text-white/60'}>
+            A fully decentralized protocol for automating on-chain trading
+            strategies.
+          </p>
+
+          <Button
+            className="flex items-center justify-center space-x-16"
+            variant={'success'}
+            onClick={() => openModal('wallet', undefined)}
+            fullWidth
+            size={'lg'}
+          >
+            <IconWallet className="h-20 w-20" />
+            <span>Connect</span>
+          </Button>
+        </div>
+        <div
+          className={
+            'my-50 flex items-center md:mx-50 md:my-0 md:h-full md:w-1'
+          }
+        >
+          <div className={'h-1 w-[300px] bg-silver md:h-[300px] md:w-1'}></div>
+        </div>
+        <div className={'flex h-full flex-col justify-center space-y-33'}>
+          {items.map((item, index) => (
+            <div className={'flex items-center space-x-20'} key={index}>
+              {item.icon}
+              <span className={'text-white/80'}>{item.title}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

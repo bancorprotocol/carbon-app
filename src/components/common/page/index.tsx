@@ -4,17 +4,21 @@ export const Page: FC<{
   children: ReactNode;
   title?: string;
   widget?: JSX.Element;
-}> = ({ children, title, widget }) => {
+  hideTitle?: boolean;
+}> = ({ children, title, widget, hideTitle }) => {
   return (
     <div
       className={
         'px-content mx-auto h-full max-w-[1280px] pb-30 pt-50 xl:px-50'
       }
     >
-      <div className="mb-30 flex flex-col justify-between space-y-10 md:flex-row md:items-center md:space-y-0">
-        {title && <h1>{title}</h1>}
-        {widget && widget}
-      </div>
+      {!hideTitle && (
+        <div className="mb-30 flex flex-col justify-between space-y-10 md:flex-row md:items-center md:space-y-0">
+          {title && <h1>{title}</h1>}
+          {widget && widget}
+        </div>
+      )}
+
       {children}
       <div className={'h-50'}></div>
     </div>

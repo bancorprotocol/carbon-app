@@ -71,7 +71,7 @@ export const ApproveToken: FC<Props> = ({
           }
         },
         onError: () => {
-          // TODO: proper error handling
+          dispatchNotification('approveError', { symbol: token.symbol });
           console.error('could not set approval');
           setTxBusy(false);
         },
@@ -93,14 +93,7 @@ export const ApproveToken: FC<Props> = ({
     if (isLoading) {
       return <div>is loading</div>;
     }
-    if (error) {
-      return (
-        <div>
-          <>error: {error}</>
-        </div>
-      );
-    }
-    return <div>Unkown Error</div>;
+    return <div>Unknown Error</div>;
   }
 
   return (

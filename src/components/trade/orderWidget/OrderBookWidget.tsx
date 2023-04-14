@@ -13,7 +13,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
   } = useOrderBookWidget(base.address, quote.address);
 
   return (
-    <div className={'h-full rounded-10 bg-silver p-20'}>
+    <div className={'rounded-10 bg-silver p-20'}>
       <h2>Orders</h2>
       <div className={'mt-20 font-mono'}>
         <OrderBookWidgetHeader
@@ -22,7 +22,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
         />
         <div
           className={
-            'mt-2 rounded-t-4 rounded-b-10 bg-black px-20 py-8 text-14'
+            'mt-2 rounded-b-10 rounded-t-4 bg-black px-20 py-8 text-14'
           }
         >
           <OrderBookSide

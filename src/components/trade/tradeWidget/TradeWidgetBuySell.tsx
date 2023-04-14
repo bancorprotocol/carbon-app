@@ -9,10 +9,10 @@ import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { carbonEvents } from 'services/events';
-
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useEffect } from 'react';
 import useInitEffect from 'hooks/useInitEffect';
+import { IS_TENDERLY_FORK } from 'libs/web3';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -148,6 +148,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const showRouting =
     rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
 
+  const getLiquidity = () => {
+    const value = liquidityQuery.isLoading
+      ? 'loading'
+      : prettifyNumber(liquidityQuery.data);
+    return `Liquidity: ${value} ${target.symbol}`;
+  };
+
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
       <h2 className={'mb-20'}>
@@ -164,7 +171,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
           <TokenInputField
-            className={'mt-5 mb-20 rounded-12 bg-black p-16'}
+            className={'mb-20 mt-5 rounded-12 bg-black p-16'}
             token={source}
             isBalanceLoading={sourceBalanceQuery.isLoading}
             value={sourceInput}
@@ -192,7 +199,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             )}
           </div>
           <TokenInputField
-            className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
+            className={'mt-5 rounded-b-4 rounded-t-12 bg-black p-16'}
             token={target}
             value={targetInput}
             setValue={(value) => {
@@ -219,12 +226,20 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 }
               >
                 <IconRouting className={'w-12'} />
-                <Tooltip element="You can view and manage the orders that are included in the trade.">
+                <Tooltip
+                  placement={'left'}
+                  element="You can view and manage the orders that are included in the trade."
+                >
                   <span>Routing</span>
                 </Tooltip>
               </button>
             )}
           </div>
+          {IS_TENDERLY_FORK && (
+            <div className={'text-secondary mt-5 text-right'}>
+              DEBUG: {getLiquidity()}
+            </div>
+          )}
         </>
       ) : (
         <NotEnoughLiquidity

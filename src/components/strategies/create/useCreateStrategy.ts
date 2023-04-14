@@ -91,6 +91,10 @@ export const useCreateStrategy = () => {
     const sourceCorrect = checkErrors(order0, order1, token1BalanceQuery.data);
     const targetCorrect = checkErrors(order1, order0, token0BalanceQuery.data);
 
+    if (!user) {
+      return openModal('wallet', undefined);
+    }
+
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired) {
         openModal('txConfirm', {

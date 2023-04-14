@@ -4,6 +4,7 @@ export interface NotificationSchema {
   generic: NotificationNew;
   reject: undefined;
   approve: { symbol: string; limited: boolean; txHash: string };
+  approveError: { symbol: string };
   trade: { txHash: string; amount: string; from: string; to: string };
   createStrategy: { txHash: string };
   pauseStrategy: { txHash: string };
@@ -38,6 +39,12 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: `Failed ${symbol} approval for ${
       limited ? 'limited' : 'unlimited'
     } spending on the protocol.`,
+    showAlert: true,
+  }),
+  approveError: ({ symbol }) => ({
+    status: 'failed',
+    title: 'Approve Token failed',
+    description: `Approval for ${symbol} has failed. Please try again or contact support.`,
     showAlert: true,
   }),
   createStrategy: (data) => ({

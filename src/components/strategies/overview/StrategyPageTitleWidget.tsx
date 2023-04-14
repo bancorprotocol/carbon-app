@@ -39,7 +39,7 @@ export const StrategyPageTitleWidget: FC<{
       )}
       <Link to={PathNames.createStrategy}>
         <Button
-          variant="white"
+          variant="success"
           onClick={() =>
             carbonEvents.strategy.newStrategyCreateClick(undefined)
           }
