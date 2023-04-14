@@ -9,9 +9,11 @@ import {
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export const StrategiesPage = () => {
   const { user } = useWeb3();
+  const { currentBreakpoint } = useBreakpoints();
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState(StrategySort.Old);
@@ -31,6 +33,7 @@ export const StrategiesPage = () => {
           showFilter={!!(strategies.data && strategies.data.length > 2)}
         />
       }
+      hideTitle={currentBreakpoint === 'sm' && !user}
     >
       {user ? (
         <StrategyContent
