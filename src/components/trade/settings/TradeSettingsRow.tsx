@@ -9,6 +9,7 @@ import {
   TradeSettingsData,
   warningMessageIfOutOfRange,
 } from './utils';
+import { Token } from 'libs/tokens';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -18,9 +19,11 @@ const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
 export const TradeSettingsRow: FC<{
+  base: Token;
+  quote: Token;
   item: TradeSettingsData;
   isAllSettingsDefault: boolean;
-}> = ({ item, isAllSettingsDefault }) => {
+}> = ({ base, quote, item, isAllSettingsDefault }) => {
   const [internalValue, setInternalValue] = useState(
     item.presets.includes(item.value) ? '' : item.value
   );
@@ -50,6 +53,11 @@ export const TradeSettingsRow: FC<{
       isError && setIsError(false);
       internalValue && setInternalValue('');
       item.setValue(item.presets[1]);
+      carbonEvents.trade.tradeErrorShow({
+        message: warningMessageIfOutOfRange(item.id, value),
+        buyToken: base,
+        sellToken: quote,
+      });
     }
 
     if (item.presets.includes(item.value)) {
@@ -68,8 +76,8 @@ export const TradeSettingsRow: FC<{
   };
 
   const warningMessage = useMemo(
-    () => warningMessageIfOutOfRange(item.id, item.value),
-    [item.id, item.value]
+    () => warningMessageIfOutOfRange(item.id, internalValue || item.value),
+    [internalValue, item.id, item.value]
   );
 
   useEffect(() => {

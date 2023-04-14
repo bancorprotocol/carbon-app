@@ -20,6 +20,14 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
     },
   } = useStore();
 
+  const handleReset = () => {
+    resetAll();
+    carbonEvents.trade.tradeSettingsResetAllClick({
+      buyToken: data.base,
+      sellToken: data.quote,
+    });
+  };
+
   return (
     <ModalSlideOver
       id={id}
@@ -29,13 +37,7 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
           {!isAllSettingsDefault && (
             <button
               className="mr-20 font-mono text-16 font-weight-500 text-white"
-              onClick={() => {
-                resetAll();
-                carbonEvents.trade.tradeSettingsResetAllClick({
-                  buyToken: data.base,
-                  sellToken: data.quote,
-                });
-              }}
+              onClick={handleReset}
             >
               Reset All
             </button>

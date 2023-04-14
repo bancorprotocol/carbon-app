@@ -63,6 +63,8 @@ export const TradeSettings = ({
           <TradeSettingsRow
             isAllSettingsDefault={isAllSettingsDefault}
             item={item}
+            base={base}
+            quote={quote}
           />
           <hr className={'my-20 border-b-2 border-grey5 last:hidden'} />
         </Fragment>

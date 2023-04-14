@@ -86,9 +86,9 @@ export const prepareTokenConfirmationData = (
     } = data as StrategyEventType;
 
     gtmData = {
-      token_pair: `${baseToken}/${quoteToken}`,
-      strategy_base_token: baseToken,
-      strategy_quote_token: quoteToken,
+      token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
+      strategy_base_token: baseToken?.symbol,
+      strategy_quote_token: quoteToken?.symbol,
       strategy_buy_low_token_price: buyTokenPrice,
       strategy_buy_low_token_min_price: buyTokenPriceMin,
       strategy_buy_low_token_max_price: buyTokenPriceMax,
@@ -106,9 +106,9 @@ export const prepareTokenConfirmationData = (
     const { buy, buyToken, sellToken, valueUsd } = data as TradeEventType;
     gtmData = {
       trade_direction: buy ? 'buy' : 'sell',
-      token_pair: `${buyToken}/${sellToken}`,
-      buy_token: buyToken,
-      sell_token: sellToken,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
+      buy_token: buyToken.symbol,
+      sell_token: sellToken.symbol,
       value_usd: valueUsd,
     };
   }

@@ -3,6 +3,8 @@ import {
   CarbonEvents,
   EventCategory,
   TradeGTMEventType,
+  TradeGTMEventTypeBase,
+  TransactionConfirmationGTMType,
 } from './googleTagManager/types';
 import {
   TradeEventBase,
@@ -21,33 +23,35 @@ export interface EventTradeSchema extends EventCategory {
   };
   tradePairSwap: {
     input: TradeEventBase;
-    gtmData: TradeGTMEventType;
+    gtmData: TradeGTMEventTypeBase;
   };
   tradePairChangeClick: {
     input: TradeEventBase;
-    gtmData: TradeGTMEventType;
+    gtmData: TradeGTMEventTypeBase;
   };
   tradePairChange: {
     input: TradeEventBase;
-    gtmData: TradeGTMEventType;
+    gtmData: TradeGTMEventTypeBase;
   };
   tradeSettingsClick: {
     input: TradeEventBase;
-    gtmData: TradeGTMEventType;
+    gtmData: TradeGTMEventTypeBase;
   };
   tradeSettingsSlippageToleranceChange: {
     input: TradeEventBase & { tolerance: string };
-    gtmData: TradeGTMEventType & { trade_settings_slippage_tolerance: string };
+    gtmData: TradeGTMEventTypeBase & {
+      trade_settings_slippage_tolerance: string;
+    };
   };
   tradeSettingsTransactionExpirationTimeChange: {
     input: TradeEventBase & { expirationTime: string };
-    gtmData: TradeGTMEventType & {
+    gtmData: TradeGTMEventTypeBase & {
       trade_settings_transaction_expiration_time: string;
     };
   };
   tradeSettingsResetAllClick: {
     input: TradeEventBase;
-    gtmData: TradeGTMEventType;
+    gtmData: TradeGTMEventTypeBase;
   };
   tradeBuyPaySet: {
     input: TradeEventType;
@@ -75,11 +79,11 @@ export interface EventTradeSchema extends EventCategory {
   };
   tradeBuy: {
     input: TradeEventType & TransactionConfirmationType;
-    gtmData: TradeGTMEventType;
+    gtmData: TradeGTMEventType & TransactionConfirmationGTMType;
   };
   tradeSell: {
     input: TradeEventType & TransactionConfirmationType;
-    gtmData: TradeGTMEventType;
+    gtmData: TradeGTMEventType & TransactionConfirmationGTMType;
   };
 }
 
@@ -96,28 +100,28 @@ export const tradeEvents: CarbonEvents['trade'] = {
   },
   tradePairSwap: ({ buyToken, sellToken }) => {
     sendGTMEvent('trade', 'tradePairSwap', {
-      token_pair: `${buyToken}/${sellToken}`,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
     });
   },
   tradePairChangeClick: ({ buyToken, sellToken }) => {
     sendGTMEvent('trade', 'tradePairChangeClick', {
-      token_pair: `${buyToken}/${sellToken}`,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
     });
   },
   tradePairChange: ({ buyToken, sellToken }) => {
     sendGTMEvent('trade', 'tradePairChange', {
-      token_pair: `${buyToken}/${sellToken}`,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
     });
   },
   tradeSettingsClick: ({ buyToken, sellToken }) => {
     sendGTMEvent('trade', 'tradeSettingsClick', {
-      token_pair: `${buyToken}/${sellToken}`,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
     });
@@ -129,7 +133,7 @@ export const tradeEvents: CarbonEvents['trade'] = {
   }) => {
     sendGTMEvent('trade', 'tradeSettingsSlippageToleranceChange', {
       trade_settings_slippage_tolerance: tolerance,
-      token_pair: `${buyToken}/${sellToken}`,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
     });
@@ -141,14 +145,14 @@ export const tradeEvents: CarbonEvents['trade'] = {
   }) => {
     sendGTMEvent('trade', 'tradeSettingsTransactionExpirationTimeChange', {
       trade_settings_transaction_expiration_time: expirationTime,
-      token_pair: `${buyToken}/${sellToken}`,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
     });
   },
   tradeSettingsResetAllClick: ({ buyToken, sellToken }) => {
     sendGTMEvent('trade', 'tradeSettingsResetAllClick', {
-      token_pair: `${buyToken}/${sellToken}`,
+      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
       buy_token: buyToken.symbol,
       sell_token: sellToken.symbol,
     });
@@ -199,7 +203,7 @@ const prepareTradeEventData = (data: TradeEventType): TradeGTMEventType => {
   const { buy, buyToken, sellToken, valueUsd } = data;
   return {
     trade_direction: buy ? 'buy' : 'sell',
-    token_pair: `${buyToken}/${sellToken}`,
+    token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
     buy_token: buyToken.symbol,
     sell_token: sellToken.symbol,
     value_usd: valueUsd,

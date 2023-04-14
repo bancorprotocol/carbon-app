@@ -24,15 +24,21 @@ export type Message = {
   message: string;
 };
 
-export type TradeGTMEventType = {
+export type TradeGTMEventTypeBase = {
+  token_pair: string;
+  buy_token: string;
+  sell_token: string;
+};
+
+export interface TradeGTMEventType extends TradeGTMEventTypeBase {
   trade_direction?: string;
-  token_pair?: string;
-  buy_token?: string;
-  sell_token?: string;
   value_usd?: string;
-  blockchain_network?: string;
-  transaction_hash?: string;
   message?: string;
+}
+
+export type TransactionConfirmationGTMType = {
+  blockchain_network: string;
+  transaction_hash?: string;
 };
 
 export type ConfirmationGTMEventType = {
