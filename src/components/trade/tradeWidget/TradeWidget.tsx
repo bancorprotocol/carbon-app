@@ -33,7 +33,7 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
           </TabsMenu>
         )}
 
-        {currentBreakpoint === 'sm' && mobileShowBuy && (
+        {(currentBreakpoint !== 'sm' || mobileShowBuy) && (
           <TradeWidgetBuySell
             buy
             source={quote}
@@ -43,7 +43,7 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
           />
         )}
 
-        {currentBreakpoint === 'sm' && !mobileShowBuy && (
+        {(currentBreakpoint !== 'sm' || !mobileShowBuy) && (
           <TradeWidgetBuySell
             source={base}
             target={quote}
