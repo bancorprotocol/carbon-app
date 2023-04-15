@@ -31,9 +31,9 @@ export const TradeSettings = ({
       setValue: (value) => {
         setSlippage(value);
         carbonEvents.trade.tradeSettingsSlippageToleranceChange({
-          tolerance: value,
-          buyToken: base,
-          sellToken: quote,
+          value,
+          base,
+          quote,
         });
       },
       presets: presets.slippage,
@@ -47,9 +47,9 @@ export const TradeSettings = ({
       setValue: (value) => {
         setDeadline(value);
         carbonEvents.trade.tradeSettingsTransactionExpirationTimeChange({
-          expirationTime: value,
-          buyToken: base,
-          sellToken: quote,
+          value,
+          base,
+          quote,
         });
       },
       presets: presets.deadline,

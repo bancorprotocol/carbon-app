@@ -2,7 +2,7 @@ import { EventGeneralSchema } from '../generalEvents';
 import { EventNavigationSchema } from '../navigationEvents';
 import { EventStrategyEditSchema } from '../strategyEditEvents';
 import { EventStrategySchema } from '../strategyEvents';
-import { EventTokenConfirmationSchema } from '../tokenConfirmationEvents';
+import { EventTokenApprovalSchema } from '../tokenApprovalEvents';
 import { EventTradeSchema } from '../tradeEvents';
 import { EventTransactionConfirmationSchema } from '../transactionConfirmationEvents';
 import { EventWalletSchema } from '../walletEvents';
@@ -51,9 +51,9 @@ export interface StrategyGTMEventTypeBase {
   token_pair: string;
   strategy_base_token: string;
   strategy_quote_token: string;
-  strategy_type: 'recurring' | 'disposable' | undefined;
+  strategy_type: 'recurring' | 'disposable';
   strategy_direction: 'buy' | 'sell' | undefined;
-  strategy_settings: 'limit' | 'range' | 'custom' | undefined;
+  strategy_settings: 'limit' | 'range' | 'custom';
 }
 
 export interface StrategyBuyGTMEventType {
@@ -100,7 +100,7 @@ interface CarbonEventSchema extends CarbonEventsBase {
   strategyEdit: EventStrategyEditSchema;
   trade: EventTradeSchema;
   transactionConfirmation: EventTransactionConfirmationSchema;
-  tokenConfirmation: EventTokenConfirmationSchema;
+  tokenApproval: EventTokenApprovalSchema;
 }
 
 export type SendEventFn = <

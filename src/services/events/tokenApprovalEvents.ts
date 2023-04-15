@@ -7,59 +7,55 @@ import {
   TradeGTMEventType,
 } from './googleTagManager/types';
 import {
-  TokenConfirmationType,
+  TokenApprovalType,
   StrategyEventOrTradeEvent,
   StrategyEventType,
   TradeEventType,
 } from './types';
 
-export interface EventTokenConfirmationSchema extends EventCategory {
+export interface EventTokenApprovalSchema extends EventCategory {
   tokenConfirmationView: {
-    input: StrategyEventOrTradeEvent & TokenConfirmationType;
+    input: StrategyEventOrTradeEvent & TokenApprovalType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
   tokenConfirmationUnlimitedSwitchChange: {
-    input: StrategyEventOrTradeEvent & TokenConfirmationType;
+    input: StrategyEventOrTradeEvent & TokenApprovalType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
   tokenConfirmationUnlimitedApprove: {
-    input: StrategyEventOrTradeEvent & TokenConfirmationType;
+    input: StrategyEventOrTradeEvent & TokenApprovalType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
 }
 
-export const tokenConfirmationEvents: CarbonEvents['tokenConfirmation'] = {
+export const tokenApprovalEvents: CarbonEvents['tokenApproval'] = {
   tokenConfirmationView: (data) => {
-    const tokenConfirmationData = prepareTokenConfirmationData(data);
-    sendGTMEvent(
-      'tokenConfirmation',
-      'tokenConfirmationView',
-      tokenConfirmationData
-    );
+    const tokenApprovalData = prepareTokenApprovalData(data);
+    sendGTMEvent('tokenApproval', 'tokenConfirmationView', tokenApprovalData);
   },
   tokenConfirmationUnlimitedSwitchChange: (data) => {
-    const tokenConfirmationData = prepareTokenConfirmationData(data);
+    const tokenApprovalData = prepareTokenApprovalData(data);
     sendGTMEvent(
-      'tokenConfirmation',
+      'tokenApproval',
       'tokenConfirmationUnlimitedSwitchChange',
-      tokenConfirmationData
+      tokenApprovalData
     );
   },
   tokenConfirmationUnlimitedApprove: (data) => {
-    const tokenConfirmationData = prepareTokenConfirmationData(data);
+    const tokenApprovalData = prepareTokenApprovalData(data);
     sendGTMEvent(
-      'tokenConfirmation',
+      'tokenApproval',
       'tokenConfirmationUnlimitedApprove',
-      tokenConfirmationData
+      tokenApprovalData
     );
   },
 };
 
-export const prepareTokenConfirmationData = (
-  data: StrategyEventOrTradeEvent & TokenConfirmationType
+export const prepareTokenApprovalData = (
+  data: StrategyEventOrTradeEvent & TokenApprovalType
 ) => {
   const gtmConfirmationData = {
     product_type: data?.productType,

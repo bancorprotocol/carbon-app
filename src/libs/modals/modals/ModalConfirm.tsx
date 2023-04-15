@@ -8,17 +8,18 @@ import { carbonEvents } from 'services/events';
 
 import { useEffect } from 'react';
 import {
-  TokenConfirmationType,
-  StrategyEventOrTradeEvent,
+  TokenApprovalType,
   TransactionConfirmationType,
+  StrategyEventType,
+  TradeEventType,
 } from 'services/events/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
   buttonLabel?: string;
-  eventData?: StrategyEventOrTradeEvent &
-    TokenConfirmationType &
+  eventData?: (StrategyEventType | TradeEventType) &
+    TokenApprovalType &
     TransactionConfirmationType;
 };
 
@@ -30,8 +31,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
 
   useEffect(() => {
-    eventData &&
-      carbonEvents.tokenConfirmation.tokenConfirmationView(eventData);
+    eventData && carbonEvents.tokenApproval.tokenConfirmationView(eventData);
   }, [eventData]);
 
   return (

@@ -1,3 +1,4 @@
+import { Token } from 'libs/tokens';
 import { sendGTMEvent } from './googleTagManager';
 import {
   CarbonEvents,
@@ -38,19 +39,19 @@ export interface EventTradeSchema extends EventCategory {
     gtmData: TradeGTMEventTypeBase;
   };
   tradeSettingsSlippageToleranceChange: {
-    input: TradeEventBase & { tolerance: string };
+    input: { value: string; base: Token; quote: Token };
     gtmData: TradeGTMEventTypeBase & {
       trade_settings_slippage_tolerance: string;
     };
   };
   tradeSettingsTransactionExpirationTimeChange: {
-    input: TradeEventBase & { expirationTime: string };
+    input: { value: string; base: Token; quote: Token };
     gtmData: TradeGTMEventTypeBase & {
       trade_settings_transaction_expiration_time: string;
     };
   };
   tradeSettingsResetAllClick: {
-    input: TradeEventBase;
+    input: { base: Token; quote: Token };
     gtmData: TradeGTMEventTypeBase;
   };
   tradeBuyPaySet: {
@@ -126,35 +127,27 @@ export const tradeEvents: CarbonEvents['trade'] = {
       sell_token: sellToken.symbol,
     });
   },
-  tradeSettingsSlippageToleranceChange: ({
-    tolerance,
-    buyToken,
-    sellToken,
-  }) => {
+  tradeSettingsSlippageToleranceChange: ({ value, base, quote }) => {
     sendGTMEvent('trade', 'tradeSettingsSlippageToleranceChange', {
-      trade_settings_slippage_tolerance: tolerance,
-      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
-      buy_token: buyToken.symbol,
-      sell_token: sellToken.symbol,
+      trade_settings_slippage_tolerance: value,
+      token_pair: `${base.symbol}/${quote.symbol}`,
+      buy_token: base.symbol,
+      sell_token: quote.symbol,
     });
   },
-  tradeSettingsTransactionExpirationTimeChange: ({
-    expirationTime,
-    buyToken,
-    sellToken,
-  }) => {
+  tradeSettingsTransactionExpirationTimeChange: ({ value, base, quote }) => {
     sendGTMEvent('trade', 'tradeSettingsTransactionExpirationTimeChange', {
-      trade_settings_transaction_expiration_time: expirationTime,
-      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
-      buy_token: buyToken.symbol,
-      sell_token: sellToken.symbol,
+      trade_settings_transaction_expiration_time: value,
+      token_pair: `${base.symbol}/${quote.symbol}`,
+      buy_token: base.symbol,
+      sell_token: quote.symbol,
     });
   },
-  tradeSettingsResetAllClick: ({ buyToken, sellToken }) => {
+  tradeSettingsResetAllClick: ({ base, quote }) => {
     sendGTMEvent('trade', 'tradeSettingsResetAllClick', {
-      token_pair: `${buyToken.symbol}/${sellToken.symbol}`,
-      buy_token: buyToken.symbol,
-      sell_token: sellToken.symbol,
+      token_pair: `${base.symbol}/${quote.symbol}`,
+      buy_token: base.symbol,
+      sell_token: quote.symbol,
     });
   },
   tradeBuyPaySet: (data) => {

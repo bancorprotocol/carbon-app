@@ -23,8 +23,7 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
   const handleReset = () => {
     resetAll();
     carbonEvents.trade.tradeSettingsResetAllClick({
-      buyToken: data.base,
-      sellToken: data.quote,
+      ...data,
     });
   };
 

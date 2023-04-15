@@ -21,7 +21,7 @@ export interface TransactionConfirmationType {
   transactionHash?: string;
 }
 
-export type TokenConfirmationType = {
+export type TokenApprovalType = {
   isLimited?: boolean;
   approvalTokens: ApprovalToken[] | [Token];
   productType: 'trade' | 'strategy';

@@ -10,7 +10,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
 import { carbonEvents } from 'services/events';
 import {
-  TokenConfirmationType,
+  TokenApprovalType,
   StrategyEventOrTradeEvent,
 } from 'services/events/types';
 
@@ -18,7 +18,7 @@ type Props = {
   data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
-  eventData?: StrategyEventOrTradeEvent & TokenConfirmationType;
+  eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
 };
 
 export const ApproveToken: FC<Props> = ({
@@ -63,7 +63,7 @@ export const ApproveToken: FC<Props> = ({
           setTxSuccess(true);
 
           if (eventData) {
-            carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedApprove({
+            carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove({
               ...eventData,
               approvalTokens: [token],
               isLimited,
@@ -82,7 +82,7 @@ export const ApproveToken: FC<Props> = ({
   const handleLimitChange = (value: boolean) => {
     setIsLimited(!value);
     eventData &&
-      carbonEvents.tokenConfirmation.tokenConfirmationUnlimitedSwitchChange({
+      carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange({
         ...eventData,
         isLimited: !value,
       });

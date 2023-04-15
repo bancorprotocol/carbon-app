@@ -7,7 +7,7 @@ import {
   TradeGTMEventType,
 } from './googleTagManager/types';
 import {
-  TokenConfirmationType,
+  TokenApprovalType,
   StrategyEventOrTradeEvent,
   StrategyEventType,
   TradeEventType,
@@ -17,14 +17,14 @@ import {
 export interface EventTransactionConfirmationSchema extends EventCategory {
   transactionConfirmationRequest: {
     input: StrategyEventOrTradeEvent &
-      TokenConfirmationType &
+      TokenApprovalType &
       TransactionConfirmationType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
   };
   transactionConfirm: {
     input: StrategyEventOrTradeEvent &
-      TokenConfirmationType &
+      TokenApprovalType &
       TransactionConfirmationType;
     gtmData: (TradeGTMEventType | StrategyGTMEventType) &
       ConfirmationGTMEventType;
@@ -53,7 +53,7 @@ export const transactionConfirmationEvents: CarbonEvents['transactionConfirmatio
 
 export const prepareTransactionConfirmationData = (
   data: StrategyEventOrTradeEvent &
-    TokenConfirmationType &
+    TokenApprovalType &
     TransactionConfirmationType
 ): (TradeGTMEventType | StrategyGTMEventType) & ConfirmationGTMEventType => {
   const gtmConfirmationData = {

@@ -177,39 +177,51 @@ export const strategyEvents: CarbonEvents['strategy'] = {
   },
   strategyBuyLowOrderTypeChange: (strategy) => {
     const gtmStrategyData = prepareGtmBuyStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategyBuyLowOrderTypeChange', gtmStrategyData);
+    gtmStrategyData &&
+      sendGTMEvent(
+        'strategy',
+        'strategyBuyLowOrderTypeChange',
+        gtmStrategyData
+      );
   },
   strategyBuyLowPriceSet: (strategy) => {
     const gtmStrategyData = prepareGtmBuyStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategyBuyLowPriceSet', gtmStrategyData);
+    gtmStrategyData &&
+      sendGTMEvent('strategy', 'strategyBuyLowPriceSet', gtmStrategyData);
   },
   strategyBuyLowBudgetSet: (strategy) => {
     const gtmStrategyData = prepareGtmBuyStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategyBuyLowBudgetSet', gtmStrategyData);
+    gtmStrategyData &&
+      sendGTMEvent('strategy', 'strategyBuyLowBudgetSet', gtmStrategyData);
   },
   strategySellHighBudgetSet: (strategy) => {
     const gtmStrategyData = prepareGtmSellStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategySellHighBudgetSet', gtmStrategyData);
+    gtmStrategyData &&
+      sendGTMEvent('strategy', 'strategySellHighBudgetSet', gtmStrategyData);
   },
   strategySellHighPriceSet: (strategy) => {
     const gtmStrategyData = prepareGtmSellStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategySellHighPriceSet', gtmStrategyData);
+    gtmStrategyData &&
+      sendGTMEvent('strategy', 'strategySellHighPriceSet', gtmStrategyData);
   },
   strategySellHighOrderTypeChange: (strategy) => {
     const gtmStrategyData = prepareGtmSellStrategyData(strategy);
-    sendGTMEvent(
-      'strategy',
-      'strategySellHighOrderTypeChange',
-      gtmStrategyData
-    );
+    gtmStrategyData &&
+      sendGTMEvent(
+        'strategy',
+        'strategySellHighOrderTypeChange',
+        gtmStrategyData
+      );
   },
   strategyCreateClick: (strategy) => {
     const gtmStrategyData = prepareGtmStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategyCreateClick', gtmStrategyData);
+    gtmStrategyData &&
+      sendGTMEvent('strategy', 'strategyCreateClick', gtmStrategyData);
   },
   strategyCreate: (strategy) => {
     const gtmStrategyData = prepareGtmStrategyData(strategy);
-    sendGTMEvent('strategy', 'strategyCreate', gtmStrategyData);
+    gtmStrategyData &&
+      sendGTMEvent('strategy', 'strategyCreate', gtmStrategyData);
   },
   newStrategyNextStepClick: ({
     baseToken,
@@ -218,14 +230,18 @@ export const strategyEvents: CarbonEvents['strategy'] = {
     strategyDirection,
     strategyType,
   }) => {
-    sendGTMEvent('strategy', 'newStrategyNextStepClick', {
-      strategy_base_token: baseToken?.symbol || '',
-      strategy_quote_token: quoteToken?.symbol || '',
-      strategy_settings: strategySettings,
-      strategy_direction: strategyDirection,
-      strategy_type: strategyType,
-      token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
-    });
+    baseToken &&
+      quoteToken &&
+      strategySettings &&
+      strategyType &&
+      sendGTMEvent('strategy', 'newStrategyNextStepClick', {
+        strategy_base_token: baseToken.symbol || '',
+        strategy_quote_token: quoteToken.symbol || '',
+        strategy_settings: strategySettings,
+        strategy_direction: strategyDirection,
+        strategy_type: strategyType,
+        token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
+      });
   },
   strategyDirectionChange: ({
     baseToken,
@@ -234,14 +250,18 @@ export const strategyEvents: CarbonEvents['strategy'] = {
     strategyDirection,
     strategyType,
   }) => {
-    sendGTMEvent('strategy', 'strategyDirectionChange', {
-      strategy_base_token: baseToken?.symbol || '',
-      strategy_quote_token: quoteToken?.symbol || '',
-      strategy_settings: strategySettings,
-      strategy_direction: strategyDirection,
-      strategy_type: strategyType,
-      token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
-    });
+    baseToken &&
+      quoteToken &&
+      strategySettings &&
+      strategyType &&
+      sendGTMEvent('strategy', 'strategyDirectionChange', {
+        strategy_base_token: baseToken.symbol || '',
+        strategy_quote_token: quoteToken.symbol || '',
+        strategy_settings: strategySettings,
+        strategy_direction: strategyDirection,
+        strategy_type: strategyType,
+        token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
+      });
   },
 };
 
@@ -263,11 +283,15 @@ export const prepareGtmStrategyData = ({
   strategySettings,
   strategyDirection,
   strategyType,
-}: StrategyEventType): StrategyGTMEventType => {
+}: StrategyEventType): StrategyGTMEventType | undefined => {
+  if (!baseToken || !quoteToken || !strategySettings || !strategyType) {
+    return undefined;
+  }
+
   return {
-    token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
-    strategy_base_token: baseToken?.symbol || '',
-    strategy_quote_token: quoteToken?.symbol || '',
+    token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
+    strategy_base_token: baseToken.symbol,
+    strategy_quote_token: quoteToken.symbol,
     strategy_buy_low_token_price: buyTokenPrice,
     strategy_buy_low_token_min_price: buyTokenPriceMin,
     strategy_buy_low_token_max_price: buyTokenPriceMax,
@@ -298,12 +322,16 @@ export const prepareGtmSellStrategyData = ({
   strategySettings,
   strategyDirection,
   strategyType,
-}: StrategySellEventType & StrategyEventTypeBase): StrategySellGTMEventType &
-  StrategyGTMEventTypeBase => {
+}: StrategySellEventType & StrategyEventTypeBase):
+  | (StrategySellGTMEventType & StrategyGTMEventTypeBase)
+  | undefined => {
+  if (!baseToken || !quoteToken || !strategySettings || !strategyType) {
+    return undefined;
+  }
   return {
     token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
-    strategy_base_token: baseToken?.symbol || '',
-    strategy_quote_token: quoteToken?.symbol || '',
+    strategy_base_token: baseToken?.symbol,
+    strategy_quote_token: quoteToken?.symbol,
     strategy_sell_high_token_price: sellTokenPrice,
     strategy_sell_high_token_min_price: sellTokenPriceMin,
     strategy_sell_high_token_max_price: sellTokenPriceMax,
@@ -328,12 +356,17 @@ export const prepareGtmBuyStrategyData = ({
   strategySettings,
   strategyDirection,
   strategyType,
-}: StrategyBuyEventType & StrategyEventTypeBase): StrategyBuyGTMEventType &
-  StrategyGTMEventTypeBase => {
+}: StrategyBuyEventType & StrategyEventTypeBase):
+  | (StrategyBuyGTMEventType & StrategyGTMEventTypeBase)
+  | undefined => {
+  if (!baseToken || !quoteToken || !strategySettings || !strategyType) {
+    return undefined;
+  }
+
   return {
-    token_pair: `${baseToken?.symbol}/${quoteToken?.symbol}`,
-    strategy_base_token: baseToken?.symbol || '',
-    strategy_quote_token: quoteToken?.symbol || '',
+    token_pair: `${baseToken.symbol}/${quoteToken.symbol}`,
+    strategy_base_token: baseToken?.symbol,
+    strategy_quote_token: quoteToken?.symbol,
     strategy_buy_low_token_price: buyTokenPrice,
     strategy_buy_low_token_min_price: buyTokenPriceMin,
     strategy_buy_low_token_max_price: buyTokenPriceMax,
