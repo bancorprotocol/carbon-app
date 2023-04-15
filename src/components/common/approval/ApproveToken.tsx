@@ -12,6 +12,8 @@ import { carbonEvents } from 'services/events';
 import {
   TokenApprovalType,
   StrategyEventOrTradeEvent,
+  StrategyEventType,
+  TradeEventType,
 } from 'services/events/types';
 
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
   isLoading: boolean;
   error: unknown;
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
+  context?: 'editStrategy' | 'createStrategy' | 'trade';
 };
 
 export const ApproveToken: FC<Props> = ({
@@ -26,6 +29,7 @@ export const ApproveToken: FC<Props> = ({
   isLoading,
   error,
   eventData,
+  context,
 }) => {
   const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
@@ -61,14 +65,7 @@ export const ApproveToken: FC<Props> = ({
           });
           setTxBusy(false);
           setTxSuccess(true);
-
-          if (eventData) {
-            carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove({
-              ...eventData,
-              approvalTokens: [token],
-              isLimited,
-            });
-          }
+          handleTokenConfirmationApproveEvent();
         },
         onError: () => {
           dispatchNotification('approveError', { symbol: token.symbol });
@@ -81,11 +78,77 @@ export const ApproveToken: FC<Props> = ({
 
   const handleLimitChange = (value: boolean) => {
     setIsLimited(!value);
-    eventData &&
-      carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange({
-        ...eventData,
-        isLimited: !value,
-      });
+    handleTokenConfirmationEvent(value);
+  };
+
+  const handleTokenConfirmationApproveEvent = () => {
+    if (eventData && token) {
+      switch (context) {
+        case 'createStrategy':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveStrategyCreate(
+            {
+              ...eventData,
+              approvalTokens: [token],
+              isLimited,
+            } as StrategyEventType & TokenApprovalType
+          );
+          break;
+        case 'editStrategy':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveStrategyEdit(
+            {
+              ...eventData,
+              approvalTokens: [token],
+              isLimited,
+            } as StrategyEventType & TokenApprovalType
+          );
+          break;
+        case 'trade':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveTrade({
+            ...eventData,
+            approvalTokens: [token],
+            isLimited,
+          } as TradeEventType & TokenApprovalType);
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const handleTokenConfirmationEvent = (value: boolean) => {
+    if (eventData) {
+      switch (context) {
+        case 'createStrategy':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeStrategyCreate(
+            {
+              ...eventData,
+              isLimited: !value,
+            } as StrategyEventType & TokenApprovalType
+          );
+
+          break;
+        case 'editStrategy':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeStrategyEdit(
+            {
+              ...eventData,
+              isLimited: !value,
+            } as StrategyEventType & TokenApprovalType
+          );
+
+          break;
+        case 'trade':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeTrade(
+            {
+              ...eventData,
+              isLimited: !value,
+            } as TradeEventType & TokenApprovalType
+          );
+
+          break;
+        default:
+          break;
+      }
+    }
   };
 
   // TODO handle error

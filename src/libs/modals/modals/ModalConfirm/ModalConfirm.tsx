@@ -1,19 +1,21 @@
+import { useEffect } from 'react';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { carbonEvents } from 'services/events';
-
-import { useEffect } from 'react';
 import {
   TokenApprovalType,
   TransactionConfirmationType,
   StrategyEventType,
   TradeEventType,
 } from 'services/events/types';
-import { handleAfterConfirmationEvent, handleOnRequestEvent } from './utils';
+import {
+  handleConfirmationPopupViewEvent,
+  handleAfterConfirmationEvent,
+  handleOnRequestEvent,
+} from './utils';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -39,8 +41,8 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
 
   useEffect(() => {
-    eventData && carbonEvents.tokenApproval.tokenConfirmationView(eventData);
-  }, [eventData]);
+    handleConfirmationPopupViewEvent(eventData, context);
+  }, [context, eventData]);
 
   return (
     <Modal id={id} title="Confirm Transaction">
@@ -53,6 +55,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
             isLoading={isLoading}
             error={error}
             eventData={eventData}
+            context={context}
           />
         ))}
       </div>

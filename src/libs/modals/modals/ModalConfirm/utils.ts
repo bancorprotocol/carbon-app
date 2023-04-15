@@ -75,3 +75,41 @@ export const handleAfterConfirmationEvent = (
     }
   }
 };
+
+export const handleConfirmationPopupViewEvent = (
+  eventData?: (StrategyEventType | TradeEventType) &
+    TokenApprovalType &
+    TransactionConfirmationType,
+  context?: 'editStrategy' | 'createStrategy' | 'trade'
+) => {
+  if (eventData) {
+    switch (context) {
+      case 'createStrategy':
+        carbonEvents.tokenApproval.tokenConfirmationViewStrategyCreate(
+          eventData as StrategyEventType &
+            TokenApprovalType &
+            TransactionConfirmationType
+        );
+
+        break;
+      case 'editStrategy':
+        carbonEvents.tokenApproval.tokenConfirmationViewStrategyEdit(
+          eventData as StrategyEventType &
+            TokenApprovalType &
+            TransactionConfirmationType
+        );
+
+        break;
+      case 'trade':
+        carbonEvents.tokenApproval.tokenConfirmationViewTrade(
+          eventData as TradeEventType &
+            TokenApprovalType &
+            TransactionConfirmationType
+        );
+
+        break;
+      default:
+        break;
+    }
+  }
+};
