@@ -13,10 +13,12 @@ import {
   StrategyEventType,
   TradeEventType,
 } from 'services/events/types';
+import { handleAfterConfirmationEvent, handleOnRequestEvent } from './utils';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
+  context?: 'editStrategy' | 'createStrategy' | 'trade';
   buttonLabel?: string;
   eventData?: (StrategyEventType | TradeEventType) &
     TokenApprovalType &
@@ -25,7 +27,13 @@ export type ModalCreateConfirmData = {
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   id,
-  data: { approvalTokens, onConfirm, buttonLabel = 'Confirm', eventData },
+  data: {
+    approvalTokens,
+    onConfirm,
+    buttonLabel = 'Confirm',
+    eventData,
+    context,
+  },
 }) => {
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
@@ -54,14 +62,10 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
         fullWidth
         disabled={approvalRequired}
         onClick={async () => {
-          eventData &&
-            carbonEvents.transactionConfirmation.transactionConfirmationRequest(
-              eventData
-            );
+          handleOnRequestEvent(eventData, context);
           closeModal(id);
           await onConfirm();
-          eventData &&
-            carbonEvents.transactionConfirmation.transactionConfirm(eventData);
+          handleAfterConfirmationEvent(eventData, context);
         }}
       >
         {buttonLabel}

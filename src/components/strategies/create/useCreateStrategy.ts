@@ -121,6 +121,7 @@ export const useCreateStrategy = () => {
             sellToken: quote,
             blockchainNetwork: provider?.network?.name || '',
           },
+          context: 'createStrategy',
         });
       } else {
         createStrategyAction({

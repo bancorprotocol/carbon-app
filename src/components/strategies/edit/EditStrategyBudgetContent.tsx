@@ -79,6 +79,7 @@ export const EditStrategyBudgetContent = ({
           sellToken: strategy.quote,
           blockchainNetwork: provider?.network?.name || '',
         },
+        context: 'editStrategy',
       });
     } else {
       depositOrWithdrawFunds();

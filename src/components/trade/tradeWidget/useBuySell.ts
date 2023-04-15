@@ -253,6 +253,7 @@ export const useBuySell = ({
           approvalTokens: approval.tokens,
           blockchainNetwork: provider?.network?.name || '',
         },
+        context: 'trade',
       });
     } else {
       void tradeFn();

@@ -7,7 +7,7 @@ import { TModals } from 'libs/modals/modals.types';
 import {
   ModalConfirm,
   ModalCreateConfirmData,
-} from 'libs/modals/modals/ModalConfirm';
+} from 'libs/modals/modals/ModalConfirm/ModalConfirm';
 import {
   ModalImportToken,
   ModalImportTokenData,
