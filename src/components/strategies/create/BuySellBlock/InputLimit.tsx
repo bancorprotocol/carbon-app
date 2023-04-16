@@ -13,7 +13,7 @@ export const InputLimit: FC<{
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     +e.target.value > 0
       ? setPriceError('')
-      : setPriceError('Price Must be greater than 0');
+      : setPriceError('Price must be greater than 0');
     setPrice(sanitizeNumberInput(e.target.value));
   };
 

@@ -35,35 +35,31 @@ export const SelectTokenButton: FC<Props> = ({
   };
 
   return (
-    <Button
-      variant={symbol ? 'black' : 'success'}
-      className={`flex h-52 items-center justify-between rounded-12 px-14 ${className}`}
-      fullWidth
-      {...props}
-    >
-      <span className={'flex items-center text-16 font-weight-500'}>
-        {symbol ? (
-          <Imager
-            alt={'Token Logo'}
-            src={imgUrl}
-            className={'mr-14 h-24 w-24 rounded-full'}
-          />
-        ) : (
-          <div
-            className={
-              'mr-14 flex h-24 w-24 items-center justify-center rounded-full bg-black'
-            }
-          >
-            <IconPlus className={'h-16 w-16 text-green'} />
-          </div>
-        )}
-        <div className={'flex flex-col items-start'}>
-          {description && (
-            <Tooltip
-              maxWidth={430}
-              interactive={false}
-              element={getTooltipText()}
+    <Tooltip maxWidth={430} element={getTooltipText()}>
+      <Button
+        variant={symbol ? 'black' : 'success'}
+        className={`flex h-52 items-center justify-between rounded-12 px-14 ${className}`}
+        fullWidth
+        {...props}
+      >
+        <span className={'flex items-center text-16 font-weight-500'}>
+          {symbol ? (
+            <Imager
+              alt={'Token Logo'}
+              src={imgUrl}
+              className={'mr-14 h-24 w-24 rounded-full'}
+            />
+          ) : (
+            <div
+              className={
+                'mr-14 flex h-24 w-24 items-center justify-center rounded-full bg-black'
+              }
             >
+              <IconPlus className={'h-16 w-16 text-green'} />
+            </div>
+          )}
+          <div className={'flex flex-col items-start'}>
+            {description && (
               <div
                 className={`text-12 ${
                   symbol ? 'text-white/60' : 'text-black/60'
@@ -71,12 +67,12 @@ export const SelectTokenButton: FC<Props> = ({
               >
                 {description}
               </div>
-            </Tooltip>
-          )}
-          <div>{symbol ? symbol : 'Select Token'}</div>
-        </div>
-      </span>
-      <IconChevron className="w-14" />
-    </Button>
+            )}
+            <div>{symbol ? symbol : 'Select Token'}</div>
+          </div>
+        </span>
+        <IconChevron className="w-14" />
+      </Button>
+    </Tooltip>
   );
 };
