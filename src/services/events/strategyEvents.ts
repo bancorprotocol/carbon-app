@@ -284,7 +284,7 @@ export const prepareGtmStrategyData = ({
   strategyDirection,
   strategyType,
 }: StrategyEventType): StrategyGTMEventType | undefined => {
-  if (!baseToken || !quoteToken || !strategySettings || !strategyType) {
+  if (!baseToken || !quoteToken) {
     return undefined;
   }
 

@@ -23,7 +23,6 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
-import useInitEffect from 'hooks/useInitEffect';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -227,17 +226,6 @@ export const useCreateStrategy = () => {
     strategyType,
   } = search;
   const { getTokenById } = useTokens();
-
-  useInitEffect(() => {
-    selectedStrategySettings?.search.strategyType === 'disposable' &&
-      carbonEvents.strategy.strategyDirectionChange({
-        baseToken: base,
-        quoteToken: quote,
-        strategySettings: selectedStrategySettings.search.strategySettings,
-        strategyDirection: selectedStrategySettings.search.strategyDirection,
-        strategyType: selectedStrategySettings.search.strategyType,
-      });
-  }, [selectedStrategySettings?.search?.strategyDirection]);
 
   useEffect(() => {
     setSelectedStrategySettings(undefined);
