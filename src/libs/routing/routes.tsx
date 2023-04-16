@@ -7,6 +7,7 @@ import { TermsPage } from 'pages/terms';
 import { Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
+import { PrivacyPage } from 'pages/privacy';
 
 export const PathNames = {
   strategies: '/',
@@ -15,6 +16,7 @@ export const PathNames = {
   createStrategy: '/strategies/create',
   editStrategy: '/strategies/edit',
   terms: '/terms',
+  privacy: '/privacy',
 };
 
 export const routes: Route[] = [
@@ -58,6 +60,10 @@ export const routes: Route[] = [
   {
     path: PathNames.terms,
     element: <TermsPage />,
+  },
+  {
+    path: PathNames.privacy,
+    element: <PrivacyPage />,
   },
   ...(isProduction
     ? []
