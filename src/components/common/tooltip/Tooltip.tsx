@@ -46,6 +46,7 @@ export const Tooltip: FC<
 
   return (
     <Tippy
+      appendTo={() => document.body}
       delay={500}
       render={(attrs) => (
         <m.div
