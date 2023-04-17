@@ -114,14 +114,14 @@ export const StrategyBlockManage: FC<{
         <Button
           className="flex items-center justify-center gap-8"
           fullWidth
-          variant={'black'}
+          variant={'success-light'}
           onClick={onClick}
         >
           Manage
           <IconChevron className="w-12" />
         </Button>
       )}
-      className="w-full !p-10 z-10"
+      className="z-10 w-full !p-10"
     >
       {items.map(({ name, action, id }) => (
         <ManageItem
