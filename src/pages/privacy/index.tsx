@@ -136,7 +136,7 @@ const content = [
   {
     subtitle:
       'Your Right to Opt Out of the Sale or Sharing of Your Information',
-    html: `<p>We currently disclose information collected through our Site to third parties, which under the CCPA may be considered a “sale.” [In addition, we may share information with third parties for the purpose of targeted advertising.] You have the right to opt out of the sale or sharing of your information by clicking the “Do Not Sell or Share My Personal Information” link on our Site or by clicking this TODO, or by emailing us at privacy@bancor.network.</p>`,
+    html: `<p>We currently disclose information collected through our Site to third parties, which under the CCPA may be considered a “sale.” [In addition, we may share information with third parties for the purpose of targeted advertising.] You have the right to opt out of the sale or sharing of your information by clicking the “Do Not Sell or Share My Personal Information” link on our Site or by clicking this <button id="ot-sdk-btn" class="ot-sdk-show-settings"><u>CookieSettings</u></button>, or by emailing us at privacy@bancor.network.</p>`,
   },
   {
     subtitle: 'Your Right to Non-Discrimination',
@@ -157,7 +157,7 @@ export const PrivacyPage = () => {
   return (
     <Page title={'Privacy Policy'}>
       <>
-        <span>Last updated: [TODO], 2023</span>
+        <span>Last updated: 17 April, 2023</span>
         <p>
           if you have not reviewed THIS PRIVACY POLICY since the “last updated”
           date above, It is your responsibility to re-review IT.
