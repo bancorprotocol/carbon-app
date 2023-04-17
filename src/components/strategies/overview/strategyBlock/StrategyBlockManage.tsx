@@ -145,7 +145,13 @@ export const StrategyBlockManage: FC<{
           className="flex items-center justify-center gap-8"
           fullWidth
           variant={'black'}
-          onClick={onClick}
+          onClick={() => {
+            onClick();
+            carbonEvents.strategyEdit.strategyManageClick({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            });
+          }}
         >
           Manage
           <IconChevron className="w-12" />

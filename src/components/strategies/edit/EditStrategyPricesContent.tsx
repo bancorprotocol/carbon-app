@@ -51,11 +51,18 @@ export const EditStrategyPricesContent = ({
     };
 
     type === 'renew'
-      ? renewStrategy({
-          ...strategy,
-          order0: newOrder0,
-          order1: newOrder1,
-        })
+      ? renewStrategy(
+          {
+            ...strategy,
+            order0: newOrder0,
+            order1: newOrder1,
+          },
+          () =>
+            carbonEvents.strategyEdit.strategyRenew({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            })
+        )
       : changeRateStrategy(
           {
             ...strategy,

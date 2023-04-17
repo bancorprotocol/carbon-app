@@ -44,6 +44,14 @@ export interface EventStrategyEditSchema extends EventCategory {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
+  strategyRenew: {
+    input: StrategyEditEventType;
+    gtmData: StrategyEditGTMEventType;
+  };
+  strategyManageClick: {
+    input: StrategyEditEventType;
+    gtmData: StrategyEditGTMEventType;
+  };
 }
 
 export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
@@ -115,6 +123,22 @@ export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
     const gtmData = prepareGtmStrategyData(strategy);
     gtmData &&
       sendGTMEvent('strategyEdit', 'strategyPause', {
+        ...gtmData,
+        strategy_id: strategy.strategyId,
+      });
+  },
+  strategyRenew: (strategy) => {
+    const gtmData = prepareGtmStrategyData(strategy);
+    gtmData &&
+      sendGTMEvent('strategyEdit', 'strategyRenew', {
+        ...gtmData,
+        strategy_id: strategy.strategyId,
+      });
+  },
+  strategyManageClick: (strategy) => {
+    const gtmData = prepareGtmStrategyData(strategy);
+    gtmData &&
+      sendGTMEvent('strategyEdit', 'strategyManageClick', {
         ...gtmData,
         strategy_id: strategy.strategyId,
       });

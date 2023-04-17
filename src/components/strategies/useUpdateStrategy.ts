@@ -58,7 +58,10 @@ export const useUpdateStrategy = () => {
     );
   };
 
-  const renewStrategy = async (strategy: Strategy) => {
+  const renewStrategy = async (
+    strategy: Strategy,
+    successEventsCb?: () => void
+  ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
 
     if (!base || !quote || !user) {
@@ -88,6 +91,7 @@ export const useUpdateStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           console.error('update mutation failed', e);
