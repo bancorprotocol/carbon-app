@@ -15,21 +15,21 @@ export const handleOnRequestEvent = (
   if (eventData) {
     switch (context) {
       case 'createStrategy':
-        carbonEvents.transactionConfirmation.txStrategyCreateConfirmationRequest(
+        carbonEvents.transactionConfirmation.txConfirmationRequestStrategyCreate(
           eventData as StrategyEventType &
             TokenApprovalType &
             TransactionConfirmationType
         );
         break;
       case 'depositStrategyFunds':
-        carbonEvents.transactionConfirmation.txStrategyEditConfirmationRequest(
+        carbonEvents.transactionConfirmation.txConfirmationRequestDepositStrategyFunds(
           eventData as StrategyEventType &
             TokenApprovalType &
             TransactionConfirmationType
         );
         break;
       case 'trade':
-        carbonEvents.transactionConfirmation.txTradeConfirmationRequest(
+        carbonEvents.transactionConfirmation.txConfirmationRequestTrade(
           eventData as TradeEventType &
             TokenApprovalType &
             TransactionConfirmationType
@@ -50,21 +50,21 @@ export const handleAfterConfirmationEvent = (
   if (eventData) {
     switch (context) {
       case 'createStrategy':
-        carbonEvents.transactionConfirmation.txStrategyCreateConfirm(
+        carbonEvents.transactionConfirmation.txConfirmationStrategyCreate(
           eventData as StrategyEventType &
             TokenApprovalType &
             TransactionConfirmationType
         );
         break;
       case 'depositStrategyFunds':
-        carbonEvents.transactionConfirmation.txStrategyEditConfirm(
+        carbonEvents.transactionConfirmation.txConfirmationDepositStrategyFunds(
           eventData as StrategyEventType &
             TokenApprovalType &
             TransactionConfirmationType
         );
         break;
       case 'trade':
-        carbonEvents.transactionConfirmation.txTradeConfirm(
+        carbonEvents.transactionConfirmation.txConfirmationTrade(
           eventData as TradeEventType &
             TokenApprovalType &
             TransactionConfirmationType
@@ -85,7 +85,7 @@ export const handleConfirmationPopupViewEvent = (
   if (eventData) {
     switch (context) {
       case 'createStrategy':
-        carbonEvents.tokenApproval.tokenConfirmationView_StrategyCreate(
+        carbonEvents.tokenApproval.tokenConfirmationViewStrategyCreate(
           eventData as StrategyEventType &
             TokenApprovalType &
             TransactionConfirmationType
@@ -93,7 +93,7 @@ export const handleConfirmationPopupViewEvent = (
 
         break;
       case 'depositStrategyFunds':
-        carbonEvents.tokenApproval.tokenConfirmationView_DepositStrategyFunds(
+        carbonEvents.tokenApproval.tokenConfirmationViewDepositStrategyFunds(
           eventData as StrategyEventType &
             TokenApprovalType &
             TransactionConfirmationType
@@ -101,7 +101,7 @@ export const handleConfirmationPopupViewEvent = (
 
         break;
       case 'trade':
-        carbonEvents.tokenApproval.tokenConfirmationView_Trade(
+        carbonEvents.tokenApproval.tokenConfirmationViewTrade(
           eventData as TradeEventType &
             TokenApprovalType &
             TransactionConfirmationType

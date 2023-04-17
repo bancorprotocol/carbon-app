@@ -14,27 +14,27 @@ import {
 } from './types';
 
 export interface EventTransactionConfirmationSchema extends EventCategory {
-  txStrategyCreateConfirmationRequest: {
+  txConfirmationRequestStrategyCreate: {
     input: StrategyEventType & TokenApprovalType & TransactionConfirmationType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  txStrategyEditConfirmationRequest: {
+  txConfirmationRequestDepositStrategyFunds: {
     input: StrategyEventType & TokenApprovalType & TransactionConfirmationType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  txTradeConfirmationRequest: {
+  txConfirmationRequestTrade: {
     input: TradeEventType & TokenApprovalType & TransactionConfirmationType;
     gtmData: TradeGTMEventType & ConfirmationGTMEventType;
   };
-  txStrategyCreateConfirm: {
+  txConfirmationStrategyCreate: {
     input: StrategyEventType & TokenApprovalType & TransactionConfirmationType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  txStrategyEditConfirm: {
+  txConfirmationDepositStrategyFunds: {
     input: StrategyEventType & TokenApprovalType & TransactionConfirmationType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  txTradeConfirm: {
+  txConfirmationTrade: {
     input: TradeEventType & TokenApprovalType & TransactionConfirmationType;
     gtmData: TradeGTMEventType & ConfirmationGTMEventType;
   };
@@ -42,64 +42,84 @@ export interface EventTransactionConfirmationSchema extends EventCategory {
 
 export const transactionConfirmationEvents: CarbonEvents['transactionConfirmation'] =
   {
-    txStrategyCreateConfirmationRequest: (data) => {
-      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(data);
+    txConfirmationRequestStrategyCreate: (data) => {
+      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(
+        data,
+        'strategy_create'
+      );
       sendGTMEvent(
         'transactionConfirmation',
-        'transactionConfirmationRequest',
+        'transactionConfirmationRequest' as 'txConfirmationRequestStrategyCreate',
         transactionConfirmData
       );
     },
-    txStrategyEditConfirmationRequest: (data) => {
-      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(data);
+    txConfirmationRequestDepositStrategyFunds: (data) => {
+      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(
+        data,
+        'strategy_deposit'
+      );
       sendGTMEvent(
         'transactionConfirmation',
-        'transactionConfirmationRequest',
+        'transactionConfirmationRequest' as 'txConfirmationRequestStrategyCreate',
         transactionConfirmData
       );
     },
-    txTradeConfirmationRequest: (data) => {
-      const transactionConfirmData = prepareTxConfirmationTradeGTMData(data);
+    txConfirmationRequestTrade: (data) => {
+      const transactionConfirmData = prepareTxConfirmationTradeGTMData(
+        data,
+        'trade'
+      );
       sendGTMEvent(
         'transactionConfirmation',
-        'transactionConfirmationRequest',
+        'transactionConfirmationRequest' as 'txConfirmationRequestTrade',
         transactionConfirmData
       );
     },
-    txStrategyCreateConfirm: (data) => {
-      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(data);
+    txConfirmationStrategyCreate: (data) => {
+      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(
+        data,
+        'strategy_create'
+      );
       sendGTMEvent(
         'transactionConfirmation',
-        'transactionConfirm',
+        'transactionConfirmation' as 'txConfirmationStrategyCreate',
         transactionConfirmData
       );
     },
-    txStrategyEditConfirm: (data) => {
-      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(data);
+    txConfirmationDepositStrategyFunds: (data) => {
+      const transactionConfirmData = prepareTxConfirmationStrategyGTMData(
+        data,
+        'strategy_deposit'
+      );
       sendGTMEvent(
         'transactionConfirmation',
-        'transactionConfirm',
+        'transactionConfirmation' as 'txConfirmationDepositStrategyFunds',
         transactionConfirmData
       );
     },
-    txTradeConfirm: (data) => {
-      const transactionConfirmData = prepareTxConfirmationTradeGTMData(data);
+    txConfirmationTrade: (data) => {
+      const transactionConfirmData = prepareTxConfirmationTradeGTMData(
+        data,
+        'trade'
+      );
       sendGTMEvent(
         'transactionConfirmation',
-        'transactionConfirm',
+        'transactionConfirmation' as 'txConfirmationTrade',
         transactionConfirmData
       );
     },
   };
 
 export const prepareTxConfirmationStrategyGTMData = (
-  data: StrategyEventType & TokenApprovalType & TransactionConfirmationType
+  data: StrategyEventType & TokenApprovalType & TransactionConfirmationType,
+  context: 'strategy_create' | 'strategy_deposit' | 'trade'
 ): StrategyGTMEventType & ConfirmationGTMEventType => {
   const gtmConfirmationData = {
     product_type: data?.productType,
     switch: data?.isLimited ? 'false' : 'true',
     token: data?.approvalTokens.map(({ symbol }) => symbol),
     blockchain_network: data?.blockchainNetwork,
+    context,
   };
   const {
     baseToken,
@@ -143,13 +163,15 @@ export const prepareTxConfirmationStrategyGTMData = (
 };
 
 export const prepareTxConfirmationTradeGTMData = (
-  data: TradeEventType & TokenApprovalType & TransactionConfirmationType
+  data: TradeEventType & TokenApprovalType & TransactionConfirmationType,
+  context: 'strategy_create' | 'strategy_deposit' | 'trade'
 ): TradeGTMEventType & ConfirmationGTMEventType => {
   const gtmConfirmationData = {
     product_type: data?.productType,
     switch: data?.isLimited ? 'false' : 'true',
     token: data?.approvalTokens.map(({ symbol }) => symbol),
     blockchain_network: data?.blockchainNetwork,
+    context,
   };
 
   const { buy, buyToken, sellToken, valueUsd } = data as TradeEventType;

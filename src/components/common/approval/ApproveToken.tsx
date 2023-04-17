@@ -85,7 +85,7 @@ export const ApproveToken: FC<Props> = ({
     if (eventData && token) {
       switch (context) {
         case 'createStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove_StrategyCreate(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveStrategyCreate(
             {
               ...eventData,
               approvalTokens: [token],
@@ -94,7 +94,7 @@ export const ApproveToken: FC<Props> = ({
           );
           break;
         case 'depositStrategyFunds':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove_DepositStrategyFunds(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveDepositStrategyFunds(
             {
               ...eventData,
               approvalTokens: [token],
@@ -103,7 +103,7 @@ export const ApproveToken: FC<Props> = ({
           );
           break;
         case 'trade':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove_Trade({
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveTrade({
             ...eventData,
             approvalTokens: [token],
             isLimited,
@@ -119,7 +119,7 @@ export const ApproveToken: FC<Props> = ({
     if (eventData) {
       switch (context) {
         case 'createStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange_StrategyCreate(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeStrategyCreate(
             {
               ...eventData,
               isLimited: !value,
@@ -127,7 +127,7 @@ export const ApproveToken: FC<Props> = ({
           );
           break;
         case 'depositStrategyFunds':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange_DepositStrategyFunds(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeDepositStrategyFunds(
             {
               ...eventData,
               isLimited: !value,
@@ -136,7 +136,7 @@ export const ApproveToken: FC<Props> = ({
 
           break;
         case 'trade':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange_Trade(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeTrade(
             {
               ...eventData,
               isLimited: !value,
