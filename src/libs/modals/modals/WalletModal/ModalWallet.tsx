@@ -18,8 +18,8 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   useEffect(() => {
     if (isConnected) {
       if (window?.OneTrust) {
-        window?.OneTrust.AllowAll();
-        window?.OneTrust.Close();
+        window?.OneTrust?.AllowAll();
+        window?.OneTrust?.Close();
       }
       carbonEvents.wallet.walletConnect({
         address: user,
