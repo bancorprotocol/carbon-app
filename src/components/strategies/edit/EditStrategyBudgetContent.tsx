@@ -66,23 +66,27 @@ export const EditStrategyBudgetContent = ({
   };
 
   const handleOnActionClick = () => {
-    if (approval.approvalRequired) {
-      openModal('txConfirm', {
-        approvalTokens: approval.tokens,
-        onConfirm: depositOrWithdrawFunds,
-        buttonLabel: `Confirm ${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`,
-        eventData: {
-          ...strategyEventData,
-          productType: 'strategy',
-          approvalTokens: approval.tokens,
-          buyToken: strategy.base,
-          sellToken: strategy.quote,
-          blockchainNetwork: provider?.network?.name || '',
-        },
-        context: 'editStrategy',
-      });
-    } else {
+    if (type === 'withdraw') {
       depositOrWithdrawFunds();
+    } else {
+      if (approval.approvalRequired) {
+        openModal('txConfirm', {
+          approvalTokens: approval.tokens,
+          onConfirm: depositOrWithdrawFunds,
+          buttonLabel: `Confirm Deposit`,
+          eventData: {
+            ...strategyEventData,
+            productType: 'strategy',
+            approvalTokens: approval.tokens,
+            buyToken: strategy.base,
+            sellToken: strategy.quote,
+            blockchainNetwork: provider?.network?.name || '',
+          },
+          context: 'depositStrategyFunds',
+        });
+      } else {
+        depositOrWithdrawFunds();
+      }
     }
   };
 

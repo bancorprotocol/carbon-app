@@ -21,7 +21,7 @@ type Props = {
   isLoading: boolean;
   error: unknown;
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
-  context?: 'editStrategy' | 'createStrategy' | 'trade';
+  context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
 };
 
 export const ApproveToken: FC<Props> = ({
@@ -85,7 +85,7 @@ export const ApproveToken: FC<Props> = ({
     if (eventData && token) {
       switch (context) {
         case 'createStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveStrategyCreate(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove_StrategyCreate(
             {
               ...eventData,
               approvalTokens: [token],
@@ -93,8 +93,8 @@ export const ApproveToken: FC<Props> = ({
             } as StrategyEventType & TokenApprovalType
           );
           break;
-        case 'editStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveStrategyEdit(
+        case 'depositStrategyFunds':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove_DepositStrategyFunds(
             {
               ...eventData,
               approvalTokens: [token],
@@ -103,7 +103,7 @@ export const ApproveToken: FC<Props> = ({
           );
           break;
         case 'trade':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveTrade({
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApprove_Trade({
             ...eventData,
             approvalTokens: [token],
             isLimited,
@@ -119,16 +119,15 @@ export const ApproveToken: FC<Props> = ({
     if (eventData) {
       switch (context) {
         case 'createStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeStrategyCreate(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange_StrategyCreate(
             {
               ...eventData,
               isLimited: !value,
             } as StrategyEventType & TokenApprovalType
           );
-
           break;
-        case 'editStrategy':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeStrategyEdit(
+        case 'depositStrategyFunds':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange_DepositStrategyFunds(
             {
               ...eventData,
               isLimited: !value,
@@ -137,7 +136,7 @@ export const ApproveToken: FC<Props> = ({
 
           break;
         case 'trade':
-          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeTrade(
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChange_Trade(
             {
               ...eventData,
               isLimited: !value,

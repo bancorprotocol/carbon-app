@@ -9,114 +9,146 @@ import {
 import { TokenApprovalType, StrategyEventType, TradeEventType } from './types';
 
 export interface EventTokenApprovalSchema extends EventCategory {
-  tokenConfirmationViewStrategyCreate: {
+  tokenConfirmationView_StrategyCreate: {
     input: StrategyEventType & TokenApprovalType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationViewStrategyEdit: {
+  tokenConfirmationView_DepositStrategyFunds: {
     input: StrategyEventType & TokenApprovalType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationViewTrade: {
+  tokenConfirmationView_Trade: {
     input: TradeEventType & TokenApprovalType;
     gtmData: TradeGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationUnlimitedSwitchChangeStrategyCreate: {
+  tokenConfirmationUnlimitedSwitchChange_StrategyCreate: {
     input: StrategyEventType & TokenApprovalType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationUnlimitedSwitchChangeStrategyEdit: {
+  tokenConfirmationUnlimitedSwitchChange_DepositStrategyFunds: {
     input: StrategyEventType & TokenApprovalType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationUnlimitedSwitchChangeTrade: {
+  tokenConfirmationUnlimitedSwitchChange_Trade: {
     input: TradeEventType & TokenApprovalType;
     gtmData: TradeGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationUnlimitedApproveStrategyCreate: {
+  tokenConfirmationUnlimitedApprove_StrategyCreate: {
     input: StrategyEventType & TokenApprovalType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationUnlimitedApproveStrategyEdit: {
+  tokenConfirmationUnlimitedApprove_DepositStrategyFunds: {
     input: StrategyEventType & TokenApprovalType;
     gtmData: StrategyGTMEventType & ConfirmationGTMEventType;
   };
-  tokenConfirmationUnlimitedApproveTrade: {
+  tokenConfirmationUnlimitedApprove_Trade: {
     input: TradeEventType & TokenApprovalType;
     gtmData: TradeGTMEventType & ConfirmationGTMEventType;
   };
 }
 
 export const tokenApprovalEvents: CarbonEvents['tokenApproval'] = {
-  tokenConfirmationViewStrategyCreate: (data) => {
-    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(data);
-    sendGTMEvent('tokenApproval', 'tokenConfirmationView', tokenApprovalData);
-  },
-  tokenConfirmationViewStrategyEdit: (data) => {
-    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(data);
-    sendGTMEvent('tokenApproval', 'tokenConfirmationView', tokenApprovalData);
-  },
-  tokenConfirmationViewTrade: (data) => {
-    const tokenApprovalData = prepareTokenApprovalTradeGTMData(data);
-    sendGTMEvent('tokenApproval', 'tokenConfirmationView', tokenApprovalData);
-  },
-  tokenConfirmationUnlimitedSwitchChangeStrategyCreate: (data) => {
-    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(data);
+  tokenConfirmationView_StrategyCreate: (data) => {
+    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(
+      data,
+      'strategy_create'
+    );
     sendGTMEvent(
       'tokenApproval',
-      'tokenConfirmationUnlimitedSwitchChange',
+      'tokenConfirmationView_StrategyCreate',
       tokenApprovalData
     );
   },
-  tokenConfirmationUnlimitedSwitchChangeStrategyEdit: (data) => {
-    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(data);
+  tokenConfirmationView_DepositStrategyFunds: (data) => {
+    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(
+      data,
+      'strategy_deposit'
+    );
     sendGTMEvent(
       'tokenApproval',
-      'tokenConfirmationUnlimitedSwitchChange',
+      'tokenConfirmationView_DepositStrategyFunds',
       tokenApprovalData
     );
   },
-  tokenConfirmationUnlimitedSwitchChangeTrade: (data) => {
-    const tokenApprovalData = prepareTokenApprovalTradeGTMData(data);
+  tokenConfirmationView_Trade: (data) => {
+    const tokenApprovalData = prepareTokenApprovalTradeGTMData(data, 'trade');
     sendGTMEvent(
       'tokenApproval',
-      'tokenConfirmationUnlimitedSwitchChange',
+      'tokenConfirmationView_Trade',
       tokenApprovalData
     );
   },
-  tokenConfirmationUnlimitedApproveStrategyCreate: (data) => {
-    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(data);
+  tokenConfirmationUnlimitedSwitchChange_StrategyCreate: (data) => {
+    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(
+      data,
+      'strategy_create'
+    );
     sendGTMEvent(
       'tokenApproval',
-      'tokenConfirmationUnlimitedApprove',
+      'tokenConfirmationUnlimitedSwitchChange_StrategyCreate',
       tokenApprovalData
     );
   },
-  tokenConfirmationUnlimitedApproveStrategyEdit: (data) => {
-    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(data);
+  tokenConfirmationUnlimitedSwitchChange_DepositStrategyFunds: (data) => {
+    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(
+      data,
+      'strategy_deposit'
+    );
     sendGTMEvent(
       'tokenApproval',
-      'tokenConfirmationUnlimitedApprove',
+      'tokenConfirmationUnlimitedSwitchChange_DepositStrategyFunds',
       tokenApprovalData
     );
   },
-  tokenConfirmationUnlimitedApproveTrade: (data) => {
-    const tokenApprovalData = prepareTokenApprovalTradeGTMData(data);
+  tokenConfirmationUnlimitedSwitchChange_Trade: (data) => {
+    const tokenApprovalData = prepareTokenApprovalTradeGTMData(data, 'trade');
     sendGTMEvent(
       'tokenApproval',
-      'tokenConfirmationUnlimitedApprove',
+      'tokenConfirmationUnlimitedSwitchChange_Trade',
+      tokenApprovalData
+    );
+  },
+  tokenConfirmationUnlimitedApprove_StrategyCreate: (data) => {
+    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(
+      data,
+      'strategy_create'
+    );
+    sendGTMEvent(
+      'tokenApproval',
+      'tokenConfirmationUnlimitedApprove_StrategyCreate',
+      tokenApprovalData
+    );
+  },
+  tokenConfirmationUnlimitedApprove_DepositStrategyFunds: (data) => {
+    const tokenApprovalData = prepareTokenApprovalStrategyGTMData(
+      data,
+      'strategy_deposit'
+    );
+    sendGTMEvent(
+      'tokenApproval',
+      'tokenConfirmationUnlimitedApprove_DepositStrategyFunds',
+      tokenApprovalData
+    );
+  },
+  tokenConfirmationUnlimitedApprove_Trade: (data) => {
+    const tokenApprovalData = prepareTokenApprovalTradeGTMData(data, 'trade');
+    sendGTMEvent(
+      'tokenApproval',
+      'tokenConfirmationUnlimitedApprove_Trade',
       tokenApprovalData
     );
   },
 };
 
 export const prepareTokenApprovalStrategyGTMData = (
-  data: StrategyEventType & TokenApprovalType
-) => {
+  data: StrategyEventType & TokenApprovalType,
+  context: 'strategy_create' | 'strategy_deposit' | 'trade'
+): StrategyGTMEventType & ConfirmationGTMEventType => {
   const gtmConfirmationData = {
     product_type: data?.productType,
     switch: data?.isLimited ? 'false' : 'true',
     token: data?.approvalTokens?.map(({ symbol }) => symbol),
+    context,
   };
 
   const {
@@ -160,12 +192,14 @@ export const prepareTokenApprovalStrategyGTMData = (
 };
 
 export const prepareTokenApprovalTradeGTMData = (
-  data: TradeEventType & TokenApprovalType
-) => {
+  data: TradeEventType & TokenApprovalType,
+  context: 'strategy_create' | 'strategy_deposit' | 'trade'
+): TradeGTMEventType & ConfirmationGTMEventType => {
   const gtmConfirmationData = {
     product_type: data?.productType,
     switch: data?.isLimited ? 'false' : 'true',
     token: data?.approvalTokens?.map(({ symbol }) => symbol),
+    context,
   };
 
   const { buy, buyToken, sellToken, valueUsd } = data as TradeEventType;

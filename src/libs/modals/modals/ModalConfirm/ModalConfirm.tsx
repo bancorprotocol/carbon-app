@@ -20,7 +20,7 @@ import {
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
   onConfirm: Function;
-  context?: 'editStrategy' | 'createStrategy' | 'trade';
+  context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
   buttonLabel?: string;
   eventData?: (StrategyEventType | TradeEventType) &
     TokenApprovalType &

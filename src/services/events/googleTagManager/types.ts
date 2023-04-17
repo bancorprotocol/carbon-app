@@ -45,6 +45,7 @@ export type ConfirmationGTMEventType = {
   switch?: string;
   token?: string | string[];
   product_type?: string;
+  context: 'strategy_create' | 'strategy_deposit' | 'trade';
 };
 
 export interface StrategyGTMEventTypeBase {

@@ -15,7 +15,7 @@ const sendGTM = (data: GTMData) => {
 };
 
 export const sendGTMEvent: SendEventFn = (type, event, data) => {
-  const snakeCaseEvent = convertCase(event, true);
+  const snakeCaseEvent = convertCase(event.split('_')[0], true);
   const dataObj = data ? data : {};
 
   switch (type) {
