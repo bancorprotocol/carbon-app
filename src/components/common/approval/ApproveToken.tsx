@@ -10,6 +10,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { prettifyNumber } from 'utils/helpers';
+import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -70,7 +71,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     <>
       <div
         className={
-          'bg-content flex h-100 items-center justify-between rounded px-20'
+          'bg-content flex h-[120px] items-center justify-between rounded px-20'
         }
       >
         <div className={'space-y-6'}>
@@ -86,10 +87,23 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
               {data.nullApprovalRequired && <div>1. Tx: 0</div>}
 
               <Tooltip element={data.amount}>
-                <div>
+                <button
+                  className={'flex items-center'}
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(data?.amount);
+                    dispatchNotification('generic', {
+                      title: 'Success',
+                      description: 'Successfully copied to clipboard',
+                      status: 'success',
+                      nonPersistent: true,
+                      showAlert: true,
+                    });
+                  }}
+                >
                   {data.nullApprovalRequired && '2. Tx: '}{' '}
-                  {prettifyNumber(data.amount)}
-                </div>
+                  {prettifyNumber(data.amount)}{' '}
+                  <IconDuplicate className={'ml-10 w-16'} />
+                </button>
               </Tooltip>
             </div>
           </div>
