@@ -29,12 +29,32 @@ export interface EventStrategyEditSchema extends EventCategory {
     gtmData: StrategyEditGTMEventType;
   };
   strategyDeposit: {
-    input: StrategyEditEventType;
-    gtmData: StrategyEditGTMEventType;
+    input: StrategyEditEventType & {
+      buyLowDepositBudget: string;
+      buyLowDepositBudgetUsd: string;
+      sellHighDepositBudget: string;
+      sellHighDepositBudgetUsd: string;
+    };
+    gtmData: StrategyEditGTMEventType & {
+      strategy_buy_low_deposit_budget: string;
+      strategy_buy_low_deposit_budget_usd: string;
+      strategy_sell_high_deposit_budget: string;
+      strategy_sell_high_deposit_budget_usd: string;
+    };
   };
   strategyWithdraw: {
-    input: StrategyEditEventType;
-    gtmData: StrategyEditGTMEventType;
+    input: StrategyEditEventType & {
+      buyLowWithdrawalBudget: string;
+      buyLowWithdrawalBudgetUsd: string;
+      sellHighWithdrawalBudget: string;
+      sellHighWithdrawalBudgetUsd: string;
+    };
+    gtmData: StrategyEditGTMEventType & {
+      strategy_buy_low_withdrawal_budget: string;
+      strategy_buy_low_withdrawal_budget_usd: string;
+      strategy_sell_high_withdrawal_budget: string;
+      strategy_sell_high_withdrawal_budget_usd: string;
+    };
   };
   strategyWithdrawClick: {
     input: StrategyEditEventType;
@@ -101,6 +121,11 @@ export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
       sendGTMEvent('strategyEdit', 'strategyDeposit', {
         ...gtmData,
         strategy_id: strategy.strategyId,
+        strategy_buy_low_deposit_budget: strategy.buyLowDepositBudget,
+        strategy_buy_low_deposit_budget_usd: strategy.buyLowDepositBudgetUsd,
+        strategy_sell_high_deposit_budget: strategy.sellHighDepositBudget,
+        strategy_sell_high_deposit_budget_usd:
+          strategy.sellHighDepositBudgetUsd,
       });
   },
   strategyWithdraw: (strategy) => {
@@ -109,6 +134,12 @@ export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
       sendGTMEvent('strategyEdit', 'strategyWithdraw', {
         ...gtmData,
         strategy_id: strategy.strategyId,
+        strategy_buy_low_withdrawal_budget: strategy.buyLowWithdrawalBudget,
+        strategy_buy_low_withdrawal_budget_usd:
+          strategy.buyLowWithdrawalBudgetUsd,
+        strategy_sell_high_withdrawal_budget: strategy.sellHighWithdrawalBudget,
+        strategy_sell_high_withdrawal_budget_usd:
+          strategy.sellHighWithdrawalBudgetUsd,
       });
   },
   strategyWithdrawClick: (strategy) => {

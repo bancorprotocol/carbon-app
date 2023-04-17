@@ -10,8 +10,8 @@ import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
-
 import { useWeb3 } from 'libs/web3';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 type EditStrategyBudgetContentProps = {
   type: 'withdraw' | 'deposit';
@@ -26,6 +26,16 @@ export const EditStrategyBudgetContent = ({
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
   const { provider } = useWeb3();
+  const { getFiatValue: getFiatValueBase } = useFiatCurrency(strategy.base);
+  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(strategy.quote);
+  const buyBudgetUsd = getFiatValueQuote(
+    strategy.order0.balance,
+    true
+  ).toString();
+  const sellBudgetUsd = getFiatValueBase(
+    strategy.order1.balance,
+    true
+  ).toString();
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -58,10 +68,26 @@ export const EditStrategyBudgetContent = ({
       ? carbonEvents.strategyEdit.strategyWithdraw({
           ...strategyEventData,
           strategyId: strategy.id,
+          buyBudget: strategy.order0.balance,
+          buyBudgetUsd,
+          sellBudget: strategy.order1.balance,
+          sellBudgetUsd,
+          buyLowWithdrawalBudget: strategyEventData.buyBudget,
+          buyLowWithdrawalBudgetUsd: strategyEventData.buyBudgetUsd,
+          sellHighWithdrawalBudget: strategyEventData.sellBudget,
+          sellHighWithdrawalBudgetUsd: strategyEventData.sellBudgetUsd,
         })
       : carbonEvents.strategyEdit.strategyDeposit({
           ...strategyEventData,
           strategyId: strategy.id,
+          buyBudget: strategy.order0.balance,
+          buyBudgetUsd,
+          sellBudget: strategy.order1.balance,
+          sellBudgetUsd,
+          buyLowDepositBudget: strategyEventData.buyBudget,
+          buyLowDepositBudgetUsd: strategyEventData.buyBudgetUsd,
+          sellHighDepositBudget: strategyEventData.sellBudget,
+          sellHighDepositBudgetUsd: strategyEventData.sellBudgetUsd,
         });
   };
 
