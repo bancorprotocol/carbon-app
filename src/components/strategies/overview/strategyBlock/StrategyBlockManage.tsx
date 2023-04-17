@@ -51,7 +51,13 @@ export const StrategyBlockManage: FC<{
     {
       id: 'deleteStrategy',
       name: 'Delete Strategy',
-      action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
+      action: () => {
+        carbonEvents.strategyEdit.strategyDeleteClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
+        openModal('confirmStrategy', { strategy, type: 'delete' });
+      },
     },
     {
       id: 'editPrices',
@@ -118,7 +124,13 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: 'pauseStrategy',
       name: 'Pause Strategy',
-      action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
+      action: () => {
+        carbonEvents.strategyEdit.strategyPauseClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
+        openModal('confirmStrategy', { strategy, type: 'pause' });
+      },
     });
   }
 
@@ -127,6 +139,10 @@ export const StrategyBlockManage: FC<{
       id: 'renewStrategy',
       name: 'Renew Strategy',
       action: () => {
+        carbonEvents.strategyEdit.strategyRenewClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         setStrategyToEdit(strategy);
         navigate({
           to: PathNames.editStrategy,

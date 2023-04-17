@@ -12,6 +12,10 @@ export interface EventStrategyEditSchema extends EventCategory {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
+  strategyDeleteClick: {
+    input: StrategyEditEventType;
+    gtmData: StrategyEditGTMEventType;
+  };
   strategyDelete: {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
@@ -60,7 +64,15 @@ export interface EventStrategyEditSchema extends EventCategory {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
+  strategyPauseClick: {
+    input: StrategyEditEventType;
+    gtmData: StrategyEditGTMEventType;
+  };
   strategyPause: {
+    input: StrategyEditEventType;
+    gtmData: StrategyEditGTMEventType;
+  };
+  strategyRenewClick: {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
@@ -79,6 +91,14 @@ export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
     const gtmData = prepareGtmStrategyData(strategy);
     gtmData &&
       sendGTMEvent('strategyEdit', 'strategyDuplicateClick', {
+        ...gtmData,
+        strategy_id: strategy.strategyId,
+      });
+  },
+  strategyDeleteClick: (strategy) => {
+    const gtmData = prepareGtmStrategyData(strategy);
+    gtmData &&
+      sendGTMEvent('strategyEdit', 'strategyDeleteClick', {
         ...gtmData,
         strategy_id: strategy.strategyId,
       });
@@ -150,10 +170,26 @@ export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
         strategy_id: strategy.strategyId,
       });
   },
+  strategyPauseClick: (strategy) => {
+    const gtmData = prepareGtmStrategyData(strategy);
+    gtmData &&
+      sendGTMEvent('strategyEdit', 'strategyPauseClick', {
+        ...gtmData,
+        strategy_id: strategy.strategyId,
+      });
+  },
   strategyPause: (strategy) => {
     const gtmData = prepareGtmStrategyData(strategy);
     gtmData &&
       sendGTMEvent('strategyEdit', 'strategyPause', {
+        ...gtmData,
+        strategy_id: strategy.strategyId,
+      });
+  },
+  strategyRenewClick: (strategy) => {
+    const gtmData = prepareGtmStrategyData(strategy);
+    gtmData &&
+      sendGTMEvent('strategyEdit', 'strategyRenewClick', {
         ...gtmData,
         strategy_id: strategy.strategyId,
       });
