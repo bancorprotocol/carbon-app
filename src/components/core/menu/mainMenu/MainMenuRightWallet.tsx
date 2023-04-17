@@ -115,7 +115,7 @@ export const MainMenuRightWallet: FC = () => {
             </button>
           )}
 
-          <button onClick={disconnect} className={'hover:text-white'}>
+          <button onClick={onDisconnect} className={'hover:text-white'}>
             Disconnect
           </button>
         </div>
