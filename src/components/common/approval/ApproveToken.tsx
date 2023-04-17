@@ -92,7 +92,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
                   onClick={async () => {
                     await navigator.clipboard.writeText(data?.amount);
                     dispatchNotification('generic', {
-                      title: 'Success',
+                      title: 'Clipboard',
                       description: 'Successfully copied to clipboard',
                       status: 'success',
                       nonPersistent: true,
