@@ -111,15 +111,17 @@ export const StrategyBlockManage: FC<{
       isOpen={manage}
       setIsOpen={setManage}
       button={(onClick) => (
-        <Button
-          className="flex items-center justify-center gap-8"
-          fullWidth
-          variant={'success-light'}
-          onClick={onClick}
-        >
-          Manage
-          <IconChevron className="w-12" />
-        </Button>
+        <div className="rounded-20 bg-black">
+          <Button
+            className="flex items-center justify-center gap-8"
+            fullWidth
+            variant={'success-light'}
+            onClick={onClick}
+          >
+            Manage
+            <IconChevron className="w-12" />
+          </Button>
+        </div>
       )}
       className="z-10 w-full !p-10"
     >
