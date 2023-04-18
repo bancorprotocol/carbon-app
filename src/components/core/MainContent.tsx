@@ -25,7 +25,11 @@ export const MainContent: FC = () => {
     }
   }, [location, location.current.pathname]);
 
-  if (location.current.pathname === PathNames.debug) {
+  if (
+    location.current.pathname === PathNames.debug ||
+    location.current.pathname === PathNames.terms ||
+    location.current.pathname === PathNames.privacy
+  ) {
     return <Outlet />;
   }
 
