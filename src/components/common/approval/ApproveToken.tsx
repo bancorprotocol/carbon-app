@@ -8,9 +8,7 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { prettifyNumber } from 'utils/helpers';
-import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -71,7 +69,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
     <>
       <div
         className={
-          'bg-content flex h-[120px] items-center justify-between rounded px-20'
+          'bg-content flex h-85 items-center justify-between rounded px-20'
         }
       >
         <div className={'space-y-6'}>
@@ -81,31 +79,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
               src={token.logoURI}
               className={'h-30 w-30 rounded-full'}
             />
-            <div>
-              <div className={'font-weight-500'}>{token.symbol}</div>
-              <div className={'text-14 text-white/60'}>Required Cap:</div>
-              {data.nullApprovalRequired && <div>1. Tx: 0</div>}
-
-              <Tooltip element={data.amount}>
-                <button
-                  className={'flex items-center'}
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(data?.amount);
-                    dispatchNotification('generic', {
-                      title: 'Clipboard',
-                      description: 'Successfully copied to clipboard',
-                      status: 'success',
-                      nonPersistent: true,
-                      showAlert: true,
-                    });
-                  }}
-                >
-                  {data.nullApprovalRequired && '2. Tx: '}{' '}
-                  {prettifyNumber(data.amount)}{' '}
-                  <IconDuplicate className={'ml-10 w-16'} />
-                </button>
-              </Tooltip>
-            </div>
+            <div className={'font-weight-500'}>{token.symbol}</div>
           </div>
         </div>
 
@@ -117,35 +91,21 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
               className={'flex h-82 flex-col items-end justify-center gap-10'}
             >
               <div className={'flex items-center space-x-8'}>
-                {data.nullApprovalRequired ? (
-                  <Tooltip
-                    element={`Before you can update your ${token.symbol} allowance, the token contract requires you to revoke it first, meaning setting the allowance to 0, and then update your allowance to ${data.amount}.`}
+                <div className={'flex items-center space-x-10'}>
+                  <div
+                    className={`font-mono text-12 font-weight-500 transition-all ${
+                      isLimited ? 'text-white/60' : 'text-white/85'
+                    }`}
                   >
-                    <div
-                      className={
-                        'font-mono text-12 font-weight-500 text-warning-500'
-                      }
-                    >
-                      Why Revoke?
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <div className={'hidden'}>
-                    <div
-                      className={`font-mono text-12 font-weight-500 transition-all ${
-                        isLimited ? 'text-white/60' : 'text-white/85'
-                      }`}
-                    >
-                      Unlimited
-                    </div>
-                    <Switch
-                      variant={isLimited ? 'secondary' : 'white'}
-                      isOn={!isLimited}
-                      setIsOn={(x) => setIsLimited(!x)}
-                      size={'sm'}
-                    />
+                    Unlimited
                   </div>
-                )}
+                  <Switch
+                    variant={isLimited ? 'secondary' : 'white'}
+                    isOn={!isLimited}
+                    setIsOn={(x) => setIsLimited(!x)}
+                    size={'sm'}
+                  />
+                </div>
               </div>
 
               <Button
@@ -166,6 +126,18 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
 
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
       </div>
+      {data.nullApprovalRequired && (
+        <div className={'flex space-x-20 font-mono text-14 text-warning-500'}>
+          <div>
+            <IconWarning className={'w-16'} />
+          </div>
+          <span>
+            Before you can update your {token.symbol} allowance, the token
+            contract requires you to revoke it first, meaning setting the
+            allowance to 0, and then update your allowance to {data.amount}.
+          </span>
+        </div>
+      )}
     </>
   );
 };
