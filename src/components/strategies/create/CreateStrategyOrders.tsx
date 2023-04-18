@@ -4,6 +4,9 @@ import { BuySellBlock } from './BuySellBlock';
 import { items } from './variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import { useStrategyEventData } from './useStrategyEventData';
+import { carbonEvents } from 'services/events';
+import useInitEffect from 'hooks/useInitEffect';
 
 export const CreateStrategyOrders = ({
   base,
@@ -16,7 +19,30 @@ export const CreateStrategyOrders = ({
   token1BalanceQuery,
   strategyDirection,
   strategyType,
+  selectedStrategySettings,
 }: UseStrategyCreateReturn) => {
+  const strategyEventData = useStrategyEventData({
+    base,
+    quote,
+    order0,
+    order1,
+  });
+
+  useInitEffect(() => {
+    selectedStrategySettings?.search.strategyType === 'disposable' &&
+      carbonEvents.strategy.strategyDirectionChange({
+        baseToken: base,
+        quoteToken: quote,
+        strategySettings: selectedStrategySettings.search.strategySettings,
+        strategyDirection: strategyDirection,
+        strategyType: selectedStrategySettings.search.strategyType,
+      });
+  }, [strategyDirection]);
+
+  const onCreateStrategy = () => {
+    carbonEvents.strategy.strategyCreateClick(strategyEventData);
+    createStrategy();
+  };
 
   return (
     <>
@@ -69,7 +95,7 @@ export const CreateStrategyOrders = ({
           variant={'success'}
           size={'lg'}
           fullWidth
-          onClick={createStrategy}
+          onClick={onCreateStrategy}
           disabled={isCTAdisabled}
         >
           Create Strategy

@@ -17,6 +17,7 @@ import {
   IS_IN_IFRAME,
   IS_METAMASK_WALLET,
 } from 'libs/web3/web3.utils';
+import { carbonEvents } from 'services/events';
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   const props = { className: 'w-20' };
@@ -48,7 +49,17 @@ export const MainMenuRightWallet: FC = () => {
   } = useWeb3();
   const { openModal } = useModal();
 
-  const onClickOpenModal = () => openModal('wallet', undefined);
+  const onClickOpenModal = () => {
+    carbonEvents.navigation.navWalletConnectClick(undefined);
+    openModal('wallet', undefined);
+  };
+
+  const onDisconnect = async () => {
+    disconnect();
+    carbonEvents.wallet.walletDisconnect({
+      address: user,
+    });
+  };
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
@@ -76,11 +87,14 @@ export const MainMenuRightWallet: FC = () => {
     return (
       <DropdownMenu
         placement="bottom-end"
-        className="rounded-[10px] py-8 px-10"
+        className="rounded-[10px] py-8 px-8"
         button={(onClick) => (
           <Button
             variant={buttonVariant}
-            onClick={onClick}
+            onClick={() => {
+              carbonEvents.navigation.navWalletClick(undefined);
+              onClick();
+            }}
             className={'flex items-center space-x-10 pl-20'}
           >
             {buttonIcon}
@@ -90,7 +104,11 @@ export const MainMenuRightWallet: FC = () => {
       >
         <div className={'w-[180px] space-y-10 font-weight-400 text-white'}>
           {isSupportedNetwork ? (
-            <div className={'flex items-center space-x-10 p-8 font-weight-400'}>
+            <div
+              className={
+                'flex w-full items-center space-x-10 p-8 font-weight-400'
+              }
+            >
               <IconETHLogo className={'w-16'} />
               <span>Ethereum Network</span>
             </div>
@@ -105,7 +123,7 @@ export const MainMenuRightWallet: FC = () => {
             </button>
           )}
           <button
-            onClick={disconnect}
+            onClick={onDisconnect}
             className={
               'hover:bg-body flex w-full items-center space-x-10 rounded-6 p-8'
             }
