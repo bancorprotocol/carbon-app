@@ -8,7 +8,10 @@ import { config } from 'services/web3/config';
 import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 
-export type GetUserApprovalProps = Pick<Token, 'address' | 'decimals'> & {
+export type GetUserApprovalProps = Pick<
+  Token,
+  'address' | 'decimals' | 'symbol'
+> & {
   spender: string;
 };
 

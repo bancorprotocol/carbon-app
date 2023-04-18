@@ -7,7 +7,7 @@ import { TModals } from 'libs/modals/modals.types';
 import {
   ModalConfirm,
   ModalCreateConfirmData,
-} from 'libs/modals/modals/ModalConfirm';
+} from 'libs/modals/modals/ModalConfirm/ModalConfirm';
 import {
   ModalImportToken,
   ModalImportTokenData,
@@ -17,7 +17,10 @@ import {
   ModalTradeTokenList,
   ModalTradeTokenListData,
 } from 'libs/modals/modals/ModalTradeTokenList';
-import { ModalTradeSettings } from 'libs/modals/modals/ModalTradeSettings';
+import {
+  ModalTradeSettings,
+  ModalTradeSettingsData,
+} from 'libs/modals/modals/ModalTradeSettings';
 
 import {
   ModalTradeRouting,
@@ -36,7 +39,7 @@ export interface ModalSchema {
   txConfirm: ModalCreateConfirmData;
   importToken: ModalImportTokenData;
   notifications: undefined;
-  tradeSettings: undefined;
+  tradeSettings: ModalTradeSettingsData;
   tradeRouting: ModalTradeRoutingData;
   confirmStrategy: ModalConfirmStrategyData;
 }

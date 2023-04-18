@@ -35,7 +35,11 @@ export const SelectTokenButton: FC<Props> = ({
   };
 
   return (
-    <Tooltip maxWidth={430} element={getTooltipText()}>
+    <Tooltip
+      maxWidth={430}
+      element={getTooltipText()}
+      sendEventOnMount={{ buy: undefined }}
+    >
       <Button
         variant={symbol ? 'black' : 'success'}
         className={`flex h-52 items-center justify-between rounded-12 px-14 ${className}`}
@@ -59,16 +63,18 @@ export const SelectTokenButton: FC<Props> = ({
             </div>
           )}
           <div className={'flex flex-col items-start'}>
-            {description && (
-              <div
-                className={`text-12 ${
-                  symbol ? 'text-white/60' : 'text-black/60'
-                }`}
-              >
-                {description}
-              </div>
-            )}
-            <div>{symbol ? symbol : 'Select Token'}</div>
+            <div className={'flex flex-col items-start'}>
+              {description && (
+                <div
+                  className={`text-12 ${
+                    symbol ? 'text-white/60' : 'text-black/60'
+                  }`}
+                >
+                  {description}
+                </div>
+              )}
+              <div>{symbol ? symbol : 'Select Token'}</div>
+            </div>
           </div>
         </span>
         <IconChevron className="w-14" />

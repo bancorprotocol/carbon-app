@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'libs/routing';
 import { menuItems } from 'components/core/menu/menuItems';
+import { handleOnItemClick } from '../utils';
 
 export const MobileMenu = () => {
   const location = useLocation();
@@ -9,6 +10,7 @@ export const MobileMenu = () => {
       {menuItems.map(({ label, href }) => (
         <Link
           key={label}
+          onClick={() => handleOnItemClick(href)}
           to={href}
           className={`px-3 py-3 ${
             href === location.current.pathname

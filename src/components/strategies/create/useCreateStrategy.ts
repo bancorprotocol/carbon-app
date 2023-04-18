@@ -11,6 +11,9 @@ import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
+import { carbonEvents } from 'services/events';
+
+import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
@@ -29,7 +32,7 @@ export const useCreateStrategy = () => {
   const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
-  const { user } = useWeb3();
+  const { user, provider } = useWeb3();
   const { openModal } = useModal();
   const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
   const [quote, setQuote] = useState<Token | undefined>(
@@ -44,6 +47,15 @@ export const useCreateStrategy = () => {
   const order0 = useOrder(templateStrategy?.order0);
 
   const mutation = useCreateStrategyQuery();
+
+  const search = useSearch<StrategyCreateLocationGenerics>();
+  const [selectedStrategySettings, setSelectedStrategySettings] = useState<
+    | {
+        to: string;
+        search: StrategyCreateLocationGenerics['Search'];
+      }
+    | undefined
+  >();
 
   const approvalTokens = useMemo(() => {
     const arr = [];
@@ -67,6 +79,12 @@ export const useCreateStrategy = () => {
   }, [base, quote, order0.budget, order1.budget]);
 
   const approval = useApproval(approvalTokens);
+  const strategyEventData = useStrategyEventData({
+    base,
+    quote,
+    order0,
+    order1,
+  });
 
   const createStrategy = async () => {
     const sourceCorrect = checkErrors(order0, order1, token1BalanceQuery.data);
@@ -91,8 +109,18 @@ export const useCreateStrategy = () => {
               dispatchNotification,
               cache,
               navigate,
+              strategyEventData,
             }),
           buttonLabel: 'Create Strategy',
+          eventData: {
+            ...strategyEventData,
+            productType: 'strategy',
+            approvalTokens: approval.tokens,
+            buyToken: base,
+            sellToken: quote,
+            blockchainNetwork: provider?.network?.name || '',
+          },
+          context: 'createStrategy',
         });
       } else {
         createStrategyAction({
@@ -105,8 +133,29 @@ export const useCreateStrategy = () => {
           dispatchNotification,
           cache,
           navigate,
+          strategyEventData,
         });
       }
+    }
+  };
+
+  const handleChangeTokensEvents = (isSource = false, token: Token) => {
+    if (isSource) {
+      !base
+        ? carbonEvents.strategy.newStrategyBaseTokenSelect({
+            token,
+          })
+        : carbonEvents.strategy.strategyBaseTokenChange({
+            token,
+          });
+    } else {
+      !quote
+        ? carbonEvents.strategy.newStrategyQuoteTokenSelect({
+            token,
+          })
+        : carbonEvents.strategy.strategyQuoteTokenChange({
+            token,
+          });
     }
   };
 
@@ -114,6 +163,7 @@ export const useCreateStrategy = () => {
     const onClick = (token: Token) => {
       let b: string | undefined;
       let q: string | undefined;
+      handleChangeTokensEvents(isSource, token);
 
       switch (isSource) {
         case true: {
@@ -168,7 +218,6 @@ export const useCreateStrategy = () => {
     order1,
   ]);
 
-  const search = useSearch<StrategyCreateLocationGenerics>();
   const {
     base: baseAddress,
     quote: quoteAddress,
@@ -177,13 +226,6 @@ export const useCreateStrategy = () => {
     strategyType,
   } = search;
   const { getTokenById } = useTokens();
-  const [selectedStrategySettings, setSelectedStrategySettings] = useState<
-    | {
-        to: string;
-        search: StrategyCreateLocationGenerics['Search'];
-      }
-    | undefined
-  >();
 
   useEffect(() => {
     setSelectedStrategySettings(undefined);

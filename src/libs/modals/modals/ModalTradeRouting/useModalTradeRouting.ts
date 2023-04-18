@@ -21,13 +21,16 @@ export const useModalTradeRouting = ({
     tradeActionsWei,
     tradeActionsRes,
     onSuccess,
+    buy = false,
   },
 }: Props) => {
-  const { user } = useWeb3();
+  const { user, provider } = useWeb3();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.symbol);
   const targetFiatPrice = useGetTokenPrice(target.symbol);
+  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
+
   const [selected, setSelected] = useState<
     (Action & { isSelected: boolean })[]
   >(tradeActionsRes.map((data) => ({ ...data, isSelected: true })));
@@ -84,6 +87,18 @@ export const useModalTradeRouting = ({
         approvalTokens: approval.tokens,
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
+        eventData: {
+          productType: 'trade',
+          buy,
+          buyToken: target,
+          sellToken: source,
+          valueUsd: getFiatValueSource(
+            data?.totalSourceAmount,
+            true
+          ).toString(),
+          approvalTokens: approval.tokens,
+          blockchainNetwork: provider?.network?.name || '',
+        },
       });
     } else {
       void tradeFn();
@@ -103,6 +118,9 @@ export const useModalTradeRouting = ({
     data?.totalSourceAmount,
     data?.totalTargetAmount,
     isTradeBySource,
+    buy,
+    getFiatValueSource,
+    provider?.network?.name,
   ]);
 
   const onSelect = (id: string) => {

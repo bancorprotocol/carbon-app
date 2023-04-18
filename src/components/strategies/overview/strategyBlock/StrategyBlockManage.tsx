@@ -14,6 +14,9 @@ import {
   tooltipTextByStrategyEditOptionsId,
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { useOrder } from 'components/strategies/create/useOrder';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import { carbonEvents } from 'services/events';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -30,6 +33,15 @@ export const StrategyBlockManage: FC<{
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
   const { belowBreakpoint } = useBreakpoints();
+  const order0 = useOrder(strategy.order0);
+  const order1 = useOrder(strategy.order1);
+
+  const strategyEventData = useStrategyEventData({
+    base: strategy.base,
+    quote: strategy.quote,
+    order0,
+    order1,
+  });
 
   const {
     strategies: { setStrategyToEdit },
@@ -39,13 +51,23 @@ export const StrategyBlockManage: FC<{
     {
       id: 'deleteStrategy',
       name: 'Delete Strategy',
-      action: () => openModal('confirmStrategy', { strategy, type: 'delete' }),
+      action: () => {
+        carbonEvents.strategyEdit.strategyDeleteClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
+        openModal('confirmStrategy', { strategy, type: 'delete' });
+      },
     },
     {
       id: 'editPrices',
       name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
+        carbonEvents.strategyEdit.strategyChangeRatesClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'editPrices' },
@@ -57,6 +79,10 @@ export const StrategyBlockManage: FC<{
       name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
+        carbonEvents.strategyEdit.strategyDepositClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'deposit' },
@@ -70,6 +96,10 @@ export const StrategyBlockManage: FC<{
       name: 'Withdraw Funds',
       action: () => {
         setStrategyToEdit(strategy);
+        carbonEvents.strategyEdit.strategyWithdrawClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'withdraw' },
@@ -81,14 +111,26 @@ export const StrategyBlockManage: FC<{
     items.push({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
-      action: () => duplicate(strategy),
+      action: () => {
+        carbonEvents.strategyEdit.strategyDuplicateClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
+        duplicate(strategy);
+      },
     });
   }
   if (strategy.status === StrategyStatus.Active) {
     items.push({
       id: 'pauseStrategy',
       name: 'Pause Strategy',
-      action: () => openModal('confirmStrategy', { strategy, type: 'pause' }),
+      action: () => {
+        carbonEvents.strategyEdit.strategyPauseClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
+        openModal('confirmStrategy', { strategy, type: 'pause' });
+      },
     });
   }
 
@@ -97,6 +139,10 @@ export const StrategyBlockManage: FC<{
       id: 'renewStrategy',
       name: 'Renew Strategy',
       action: () => {
+        carbonEvents.strategyEdit.strategyRenewClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
         setStrategyToEdit(strategy);
         navigate({
           to: PathNames.editStrategy,
@@ -115,13 +161,13 @@ export const StrategyBlockManage: FC<{
           className="flex items-center justify-center gap-8"
           fullWidth
           variant={'black'}
-          onClick={onClick}
+          onClick={() => onClick()}
         >
           Manage
           <IconChevron className="w-12" />
         </Button>
       )}
-      className="w-full !p-10 z-10"
+      className="z-10 w-full !p-10"
     >
       {items.map(({ name, action, id }) => (
         <ManageItem
