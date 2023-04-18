@@ -18,6 +18,7 @@ export type ModalTradeRoutingData = {
   tradeActionsWei: MatchActionBNStr[];
   isTradeBySource: boolean;
   onSuccess: Function;
+  buy?: boolean;
 };
 
 export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({

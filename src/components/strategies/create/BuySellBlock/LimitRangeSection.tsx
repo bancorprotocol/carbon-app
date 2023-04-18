@@ -20,7 +20,7 @@ export const LimitRangeSection: FC<Props> = ({
   order,
   title,
   inputTitle,
-  buy,
+  buy = false,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
 
@@ -53,6 +53,7 @@ export const LimitRangeSection: FC<Props> = ({
             </button>
           </div>
           <Tooltip
+            sendEventOnMount={{ buy }}
             element={
               <>
                 This section will define the order details in which you are
@@ -89,6 +90,7 @@ export const LimitRangeSection: FC<Props> = ({
           setPrice={order.setPrice}
           error={order.priceError}
           setPriceError={order.setPriceError}
+          buy={buy}
         />
       )}
     </div>

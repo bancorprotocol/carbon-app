@@ -4,6 +4,7 @@ import {
 } from 'libs/queries/chain/approval';
 import { useMemo } from 'react';
 import { sanitizeNumberInput } from 'utils/helpers';
+import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 
 export type ApprovalToken = GetUserApprovalProps & {
   amount: string;
@@ -12,6 +13,8 @@ export type ApprovalToken = GetUserApprovalProps & {
 export type ApprovalTokenResult = ApprovalToken & {
   allowance: string;
   approvalRequired: boolean;
+  nullApprovalRequired: boolean;
+  isNullApprovalToken: boolean;
 };
 
 export const useApproval = (data: ApprovalToken[]) => {
@@ -19,12 +22,17 @@ export const useApproval = (data: ApprovalToken[]) => {
 
   const result = useMemo(() => {
     return approvalQuery.map((q, i) => {
+      const amount = sanitizeNumberInput(data[i].amount, data[i].decimals);
+      const isNullApprovalToken = NULL_APPROVAL_CONTRACTS.includes(
+        data[i].address.toLowerCase()
+      );
       const newData: ApprovalTokenResult | undefined = q.data && {
         ...data[i],
         allowance: q.data.toString(),
-        approvalRequired: q.data.lt(
-          sanitizeNumberInput(data[i].amount, data[i].decimals)
-        ),
+        approvalRequired: q.data.lt(amount),
+        isNullApprovalToken,
+        nullApprovalRequired:
+          isNullApprovalToken && q.data.gt(0) && q.data.lt(amount),
       };
       return {
         ...q,

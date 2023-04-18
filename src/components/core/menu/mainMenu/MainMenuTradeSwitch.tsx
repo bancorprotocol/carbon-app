@@ -5,6 +5,7 @@ import { Token } from 'libs/tokens';
 import { useNavigate } from 'libs/routing';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { PathNames } from 'libs/routing';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   baseToken: Token;
@@ -13,10 +14,15 @@ type Props = {
 
 export const MainMenuTradeSwitch: FC<Props> = ({ baseToken, quoteToken }) => {
   const navigate = useNavigate<MyLocationGenerics>();
+
   const onClick = () => {
     navigate({
       to: PathNames.trade,
       search: { base: quoteToken.address, quote: baseToken.address },
+    });
+    carbonEvents.trade.tradePairSwap({
+      buyToken: quoteToken,
+      sellToken: baseToken,
     });
   };
 

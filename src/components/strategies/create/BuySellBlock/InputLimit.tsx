@@ -1,6 +1,8 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { ChangeEvent, FC, FocusEvent } from 'react';
+import { carbonEvents } from 'services/events';
+
 import { sanitizeNumberInput } from 'utils/helpers';
 
 export const InputLimit: FC<{
@@ -9,11 +11,21 @@ export const InputLimit: FC<{
   token: Token;
   error?: string;
   setPriceError: (error: string) => void;
-}> = ({ price, setPrice, token, error, setPriceError }) => {
+  buy?: boolean;
+}> = ({ price, setPrice, token, error, setPriceError, buy = false }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    +e.target.value > 0
-      ? setPriceError('')
-      : setPriceError('Price Must be greater than 0');
+    const errorMessage = 'Price must be greater than 0';
+    +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
+
+    if (+e.target.value > 0) {
+      setPriceError('');
+    } else {
+      carbonEvents.strategy.strategyErrorShow({
+        buy,
+        message: errorMessage,
+      });
+      setPriceError(errorMessage);
+    }
     setPrice(sanitizeNumberInput(e.target.value));
   };
 
