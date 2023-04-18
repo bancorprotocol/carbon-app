@@ -3,6 +3,8 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { items } from './variants';
+import { carbonEvents } from 'services/events';
+
 import { FC } from 'react';
 import { PathNames, useNavigate } from 'libs/routing';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
@@ -23,6 +25,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
       <div className="mb-14 flex items-center justify-between">
         <h2>Token Pair</h2>
         <Tooltip
+          sendEventOnMount={{ buy: undefined }}
           element={
             <div>
               Selecting the tokens you would like to create a strategy for.
@@ -55,6 +58,10 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
               <IconArrow
                 onClick={() => {
                   if (base && quote) {
+                    carbonEvents.strategy.strategyTokenSwap({
+                      updatedBase: quote.symbol,
+                      updatedQuote: base.symbol,
+                    });
                     navigate({
                       to: PathNames.createStrategy,
                       search: (search) => ({

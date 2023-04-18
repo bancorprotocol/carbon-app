@@ -8,6 +8,10 @@ import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
+import { useStrategyEventData } from '../create/useStrategyEventData';
+import { carbonEvents } from 'services/events';
+import { useWeb3 } from 'libs/web3';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 type EditStrategyBudgetContentProps = {
   type: 'withdraw' | 'deposit';
@@ -21,6 +25,25 @@ export const EditStrategyBudgetContent = ({
   const { withdrawBudget, depositBudget } = useUpdateStrategy();
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
+  const { provider } = useWeb3();
+  const { getFiatValue: getFiatValueBase } = useFiatCurrency(strategy.base);
+  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(strategy.quote);
+  const buyBudgetUsd = getFiatValueQuote(
+    strategy.order0.balance,
+    true
+  ).toString();
+  const sellBudgetUsd = getFiatValueBase(
+    strategy.order1.balance,
+    true
+  ).toString();
+
+  const strategyEventData = useStrategyEventData({
+    base: strategy.base,
+    quote: strategy.quote,
+    order0,
+    order1,
+  });
+
   const { approval } = useEditStrategy(strategy, order0, order1);
   const { openModal } = useModal();
 
@@ -40,15 +63,56 @@ export const EditStrategyBudgetContent = ({
       ](new BigNumber(order1.budget))
     : new BigNumber(strategy.order1.balance);
 
+  const handleEvents = () => {
+    type === 'withdraw'
+      ? carbonEvents.strategyEdit.strategyWithdraw({
+          ...strategyEventData,
+          strategyId: strategy.id,
+          buyBudget: strategy.order0.balance,
+          buyBudgetUsd,
+          sellBudget: strategy.order1.balance,
+          sellBudgetUsd,
+          buyLowWithdrawalBudget: strategyEventData.buyBudget,
+          buyLowWithdrawalBudgetUsd: strategyEventData.buyBudgetUsd,
+          sellHighWithdrawalBudget: strategyEventData.sellBudget,
+          sellHighWithdrawalBudgetUsd: strategyEventData.sellBudgetUsd,
+        })
+      : carbonEvents.strategyEdit.strategyDeposit({
+          ...strategyEventData,
+          strategyId: strategy.id,
+          buyBudget: strategy.order0.balance,
+          buyBudgetUsd,
+          sellBudget: strategy.order1.balance,
+          sellBudgetUsd,
+          buyLowDepositBudget: strategyEventData.buyBudget,
+          buyLowDepositBudgetUsd: strategyEventData.buyBudgetUsd,
+          sellHighDepositBudget: strategyEventData.sellBudget,
+          sellHighDepositBudgetUsd: strategyEventData.sellBudgetUsd,
+        });
+  };
+
   const handleOnActionClick = () => {
-    if (approval.approvalRequired) {
-      openModal('txConfirm', {
-        approvalTokens: approval.tokens,
-        onConfirm: depositOrWithdrawFunds,
-        buttonLabel: `Confirm ${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`,
-      });
-    } else {
+    if (type === 'withdraw') {
       depositOrWithdrawFunds();
+    } else {
+      if (approval.approvalRequired) {
+        openModal('txConfirm', {
+          approvalTokens: approval.tokens,
+          onConfirm: depositOrWithdrawFunds,
+          buttonLabel: `Confirm Deposit`,
+          eventData: {
+            ...strategyEventData,
+            productType: 'strategy',
+            approvalTokens: approval.tokens,
+            buyToken: strategy.base,
+            sellToken: strategy.quote,
+            blockchainNetwork: provider?.network?.name || '',
+          },
+          context: 'depositStrategyFunds',
+        });
+      } else {
+        depositOrWithdrawFunds();
+      }
     }
   };
 
@@ -71,12 +135,14 @@ export const EditStrategyBudgetContent = ({
       ? withdrawBudget(
           updatedStrategy,
           order0.marginalPriceOption,
-          order1.marginalPriceOption
+          order1.marginalPriceOption,
+          handleEvents
         )
       : depositBudget(
           updatedStrategy,
           order0.marginalPriceOption,
-          order1.marginalPriceOption
+          order1.marginalPriceOption,
+          handleEvents
         );
   };
 

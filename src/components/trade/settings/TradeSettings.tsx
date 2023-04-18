@@ -1,11 +1,18 @@
+import { Token } from 'libs/tokens';
 import { Fragment } from 'react';
+import { carbonEvents } from 'services/events';
+
 import { useStore } from 'store';
 import { TradeSettingsRow } from './TradeSettingsRow';
 import { TradeSettingsData } from './utils';
 
 export const TradeSettings = ({
+  base,
+  quote,
   isAllSettingsDefault,
 }: {
+  base: Token;
+  quote: Token;
   isAllSettingsDefault: boolean;
 }) => {
   const {
@@ -21,7 +28,14 @@ export const TradeSettings = ({
       value: slippage,
       prepend: '+',
       append: '%',
-      setValue: setSlippage,
+      setValue: (value) => {
+        setSlippage(value);
+        carbonEvents.trade.tradeSettingsSlippageToleranceChange({
+          value,
+          base,
+          quote,
+        });
+      },
       presets: presets.slippage,
     },
     {
@@ -30,7 +44,14 @@ export const TradeSettings = ({
       value: deadline,
       prepend: '',
       append: ' Min',
-      setValue: setDeadline,
+      setValue: (value) => {
+        setDeadline(value);
+        carbonEvents.trade.tradeSettingsTransactionExpirationTimeChange({
+          value,
+          base,
+          quote,
+        });
+      },
       presets: presets.deadline,
     },
   ];
@@ -42,6 +63,8 @@ export const TradeSettings = ({
           <TradeSettingsRow
             isAllSettingsDefault={isAllSettingsDefault}
             item={item}
+            base={base}
+            quote={quote}
           />
           <hr className={'my-20 border-b-2 border-grey5 last:hidden'} />
         </Fragment>

@@ -4,6 +4,7 @@ import { Button } from 'components/common/button';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   baseToken: Token;
@@ -16,7 +17,13 @@ export const MainMenuTradePairs: FC<Props> = ({ baseToken, quoteToken }) => {
   return (
     <Button
       variant={'secondary'}
-      onClick={openTradePairList}
+      onClick={() => {
+        openTradePairList();
+        carbonEvents.trade.tradePairChangeClick({
+          buyToken: baseToken,
+          sellToken: quoteToken,
+        });
+      }}
       className={
         'flex items-center space-x-10 rounded-full bg-silver py-5 pl-15 pr-15'
       }

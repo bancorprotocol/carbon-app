@@ -229,6 +229,16 @@ export const mergeArraysRemovingDuplicates = <
   return uniqueArray;
 };
 
+export const convertCase = (input: string, toSnakeCase: boolean): string => {
+  if (toSnakeCase) {
+    return input.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
+  } else {
+    return input.replace(/(_[a-z])/g, (match) =>
+      match.toUpperCase().replace('_', '')
+    );
+  }
+};
+
 export const getLowestBits = (decimal: string, bits: number = 128): string => {
   const bigInt = BigInt(decimal);
   const binary = bigInt.toString(2);

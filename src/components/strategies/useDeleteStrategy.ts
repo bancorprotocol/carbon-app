@@ -13,7 +13,10 @@ export const useDeleteStrategy = () => {
   const deleteMutation = useDeleteStrategyQuery();
   const cache = useQueryClient();
 
-  const deleteStrategy = async (strategy: Strategy) => {
+  const deleteStrategy = async (
+    strategy: Strategy,
+    successEventsCb?: () => void
+  ) => {
     const { base, quote, id } = strategy;
 
     if (!base || !quote || !user) {
@@ -27,9 +30,11 @@ export const useDeleteStrategy = () => {
       {
         onSuccess: async (tx) => {
           dispatchNotification('deleteStrategy', { txHash: tx.hash });
+
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          successEventsCb?.();
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
