@@ -45,7 +45,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   }, [context, eventData]);
 
   return (
-    <Modal id={id} title="Confirm Transaction">
+    <Modal id={id} title="Confirm Transaction" size={'md'}>
       <h3 className="text-secondary my-10">Approve Tokens</h3>
       <div className="mb-20 space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (

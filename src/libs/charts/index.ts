@@ -1,5 +1,6 @@
 import Highcharts from 'highcharts';
-export { HighchartsReact } from 'highcharts-react-official';
+import HighchartsReact from 'highcharts-react-official';
 
-export { Highcharts };
+//@ts-ignore
+export { Highcharts, HighchartsReact };
 export type { Options } from 'highcharts/highcharts';
