@@ -121,7 +121,7 @@ export const StrategyBlockManage: FC<{
           <IconChevron className="w-12" />
         </Button>
       )}
-      className="w-full !p-10 z-10"
+      className="z-10 w-full !p-10"
     >
       {items.map(({ name, action, id }) => (
         <ManageItem
