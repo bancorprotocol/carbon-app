@@ -132,9 +132,9 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
             <IconWarning className={'w-16'} />
           </div>
           <span>
-            Before you can update your {token.symbol} allowance, the token
-            contract requires you to revoke it first, meaning setting the
-            allowance to 0, and then update your allowance to {data.amount}.
+            Before you can update your {token.symbol} allowance to {data.amount}
+            , the token contract requires you to revoke it first by setting the
+            allowance to 0.
           </span>
         </div>
       )}
