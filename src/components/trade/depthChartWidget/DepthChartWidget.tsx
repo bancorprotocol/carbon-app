@@ -19,23 +19,27 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
 
   return (
     <div className="rounded-10 bg-silver p-20">
-      <div className="mb-20 font-weight-500">
+      <div className="bg-body mb-20 flex w-[244px] items-center rounded-[100px] p-2">
         <button
-          onClick={() => setShowTVChart(true)}
-          className={`${showTVChart ? '' : 'text-white/60'}`}
+          onClick={() => setShowTVChart(false)}
+          className={`rounded-40 ${
+            !showTVChart ? 'bg-silver' : 'text-secondary'
+          } w-[120px] px-10 py-4`}
         >
           Depth
         </button>
-        <span className={'text-secondary px-10'}> | </span>
         <button
-          onClick={() => setShowTVChart(false)}
-          className={`${showTVChart ? 'text-white/60' : ''}`}
+          onClick={() => setShowTVChart(true)}
+          className={`rounded-40 ${
+            showTVChart ? 'bg-silver' : 'text-secondary'
+          } w-[120px] px-10 py-4`}
         >
           Price
         </button>
       </div>
+
       {isLoading ? (
-        <div className="flex h-[420px] items-center justify-center rounded-10 bg-black">
+        <div className="flex h-[450px] items-center justify-center rounded-10 bg-black">
           <div className={'h-80'}>
             <CarbonLogoLoading />
           </div>
@@ -44,10 +48,10 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
         <div className="flex items-center justify-center rounded-10 bg-black">
           <NoOrders />
         </div>
-      ) : showTVChart ? (
+      ) : !showTVChart ? (
         <HighchartsReact highcharts={Highcharts} options={options} />
       ) : (
-        <div className={'h-[420px] pb-20'}>
+        <div className={'h-[450px] pb-20'}>
           <TradingviewChart base={base} quote={quote} />
         </div>
       )}
