@@ -16,6 +16,7 @@ export const switchStyles = cva<SwitchVariants>(
         secondary: ['bg-silver'],
         white: ['bg-white/90'],
         success: ['bg-green'],
+        'success-light': ['bg-green/20'],
         error: ['bg-red'],
       },
       size: {
