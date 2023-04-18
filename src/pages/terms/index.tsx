@@ -18,11 +18,11 @@ const content = [
     <p>ii. View information from supported electronic wallets used to manage blockchain addresses (each, an “Electronic Wallet” or “Wallet”);</p>
     <p>iii. Format messages and data (with the assistance of the Site’s interfaces), which you may then use to interact, or to instruct third-party software to interact, with certain blockchain networks in order to execute transactions through your Wallet;</p>
     <p>iv. Interact with an instance of an open-source Software Development Kit (the “Carbon SDK”) that facilitates interaction with Carbon, as defined below.</p>
-    <p>v. Access the Bancor Network site (<a href="https://bancor.network" target="_blank">https://bancor.network/</a>), which has its own terms of use available at <a href="https://app.bancor.network/terms-of-use" target="_blank">https://app.bancor.network/terms-of-use</a> and privacy policy available at <a href="https://app.bancor.network/privacy-policy" target="_blank">https://app.bancor.network/privacy-policy</a>;</p>
-    <p>vi. Access the Bancor Governance Forum (<a href="https://gov.bancor.network" target="_blank">https://gov.bancor.network/</a>), which has its own terms of use available at <a href="https://gov.bancor.network/tos" target="_blank">https://gov.bancor.network/tos</a>;</p>
+    <p>v. Access the Bancor Network site (<a style="color: #00B578; text-decoration: underline;" href="https://bancor.network" target="_blank">https://bancor.network/</a>), which has its own terms of use available at <a style="color: #00B578; text-decoration: underline;" href="https://app.bancor.network/terms-of-use" target="_blank">https://app.bancor.network/terms-of-use</a> and privacy policy available at <a href="https://app.bancor.network/privacy-policy" target="_blank">https://app.bancor.network/privacy-policy</a>;</p>
+    <p>vi. Access the Bancor Governance Forum (<a style="color: #00B578; text-decoration: underline;" href="https://gov.bancor.network" target="_blank">https://gov.bancor.network/</a>), which has its own terms of use available at <a style="color: #00B578; text-decoration: underline;" href="https://gov.bancor.network/tos" target="_blank">https://gov.bancor.network/tos</a>;</p>
     <p>vii. Find information concerning, and navigate to the websites of, certain third party service providers such as Fiat Gateway Providers.</p>
     <br>
-    <p>Detailed descriptions of the Content and functionality available through the Site is available at the Frequently Asked Questions page of the Site (available at <a href="https://faq.carbondefi.xyz" target="_blank">https://faq.carbondefi.xyz</a> (the “FAQ”)).</p>
+    <p>Detailed descriptions of the Content and functionality available through the Site is available at the Frequently Asked Questions page of the Site (available at <a style="color: #00B578; text-decoration: underline;" href="https://faq.carbondefi.xyz" target="_blank">https://faq.carbondefi.xyz</a> (the “FAQ”)).</p>
     <br>
     <p>USERS SHOULD REVIEW THE FAQ PERIODICALLY FOR UPDATES, AND FOR INFORMATION ON ANY CONTENT OR SERVICE WITH WHICH THEY ARE UNFAMILIAR.</p>
     `,
@@ -30,9 +30,9 @@ const content = [
   {
     id: 3,
     subtitle: 'Carbon',
-    html: `<p>Carbon is made up of smart contracts designed to facilitate peer-to-peer trades (“Carbon”). Users create permissionless strategies with one or more orders, and are issued a transferable NFT token. The NFT serves as the credentials for interacting with the underlying position. For more information on Carbon, please visit <a href="https://docs.carbondefi.xyz" target="_blank">https://docs.carbondefi.xyz</a></p>
+    html: `<p>Carbon is made up of smart contracts designed to facilitate peer-to-peer trades (“Carbon”). Users create permissionless strategies with one or more orders, and are issued a transferable NFT token. The NFT serves as the credentials for interacting with the underlying position. For more information on Carbon, please visit <a style="color: #00B578; text-decoration: underline;" href="https://docs.carbondefi.xyz" target="_blank">https://docs.carbondefi.xyz</a></p>
     <br>
-    <p>Carbon is deployed on public blockchains to provide a variety of functions as described more fully in the FAQ, and governed through a decentralized autonomous organization referred to as “BancorDAO”. For more information on BancorDAO, please visit <a href="https://support.bancor.network/hc/en-us/sections/4415839473682-Bancor-DAO" target="_blank">https://support.bancor.network/hc/en-us/sections/4415839473682-Bancor-DAO</a>.</p>
+    <p>Carbon is deployed on public blockchains to provide a variety of functions as described more fully in the FAQ, and governed through a decentralized autonomous organization referred to as “BancorDAO”. For more information on BancorDAO, please visit <a style="color: #00B578; text-decoration: underline;" href="https://support.bancor.network/hc/en-us/sections/4415839473682-Bancor-DAO" target="_blank">https://support.bancor.network/hc/en-us/sections/4415839473682-Bancor-DAO</a>.</p>
     <br>
     <p>BancorDAO may determine to update or deploy additional smart contracts in order to, among other things, add new features or functionalities, or respond to events such as chain migrations, security incidents, vulnerabilities, “forks” or other changes to the underlying blockchain.</p>
     <br>
@@ -42,7 +42,7 @@ const content = [
   {
     id: 4,
     subtitle: 'Fees and Payments',
-    html: `<p>Fees for use of Carbon, including potential maker and taker fees, are subject to determination by BancorDAO. For more information on the current fee structure, please visit <a href="https://docs.carbondefi.xyz/carbon/introducing-carbon/fees-and-payments" target="_blank">https://docs.carbondefi.xyz/carbon/introducing-carbon/fees-and-payments</a>.</p>
+    html: `<p>Fees for use of Carbon, including potential maker and taker fees, are subject to determination by BancorDAO. For more information on the current fee structure, please visit <a style="color: #00B578; text-decoration: underline;" href="https://docs.carbondefi.xyz/carbon/introducing-carbon/fees-and-payments" target="_blank">https://docs.carbondefi.xyz/carbon/introducing-carbon/fees-and-payments</a>.</p>
     <br>
     <p>Use of the Site and Content is not subject to or conditioned upon any payment or fee to the Foundation. By using this Site, you confirm that you are aware that transactions on public blockchains such as the Ethereum blockchain are often subject to a fee (referred to as “Gas” on Ethereum), which is typically paid in the native cryptocurrency of the blockchain and transferred internally into the system. To facilitate transactions on the blockchain you must have a sufficient amount of the crypto asset required for any applicable blockchain fees.</p>
     <br>
@@ -232,6 +232,7 @@ export const TermsPage = () => {
             href="https://app.bancor.network/privacy"
             target="_blank"
             rel="noreferrer"
+            className="text-green underline"
           >
             HTTPS://APP.CARBONDEFI.XYZ/PRIVACY{' '}
           </a>
@@ -244,6 +245,7 @@ export const TermsPage = () => {
               href="https://www.carbondefi.xyz"
               target="_blank"
               rel="noreferrer"
+              className="text-green underline"
             >
               {' '}
               https://www.carbondefi.xyz
@@ -268,6 +270,7 @@ export const TermsPage = () => {
             href="https://app.carbondefi.xyz/privacy"
             target="_blank"
             rel="noreferrer"
+            className="text-green underline"
           >
             CARBON PRIVACY POLICY
           </a>

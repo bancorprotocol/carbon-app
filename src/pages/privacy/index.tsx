@@ -126,7 +126,7 @@ const content = [
   {
     subtitle:
       'Your Right to Opt Out of the Sale or Sharing of Your Information',
-    html: `<p>We currently disclose information collected through our Site to third parties, which under the CCPA may be considered a “sale.” In addition, we may share information with third parties for the purpose of targeted advertising. You have the right to opt out of the sale or sharing of your information by clicking the “Do Not Sell or Share My Personal Information” link on our Site or by clicking this <button id="ot-sdk-btn" class="ot-sdk-show-settings"><u>CookieSettings</u></button>, or by emailing us at privacy@bancor.network.</p>`,
+    html: `<p>We currently disclose information collected through our Site to third parties, which under the CCPA may be considered a “sale.” In addition, we may share information with third parties for the purpose of targeted advertising. You have the right to opt out of the sale or sharing of your information by clicking the “Do Not Sell or Share My Personal Information” link on our Site or by clicking this <button onclick="window?.OneTrust?.ToggleInfoDisplay()" id="ot-sdk-btn" class="ot-sdk-show-settings"><u>CookieSettings</u></button>, or by emailing us at privacy@bancor.network.</p>`,
   },
   {
     subtitle: 'Your Right to Non-Discrimination',
@@ -158,6 +158,7 @@ export const PrivacyPage = () => {
             href="https://app.carbondefi.xyz/terms"
             target={'_blank'}
             rel="noreferrer"
+            className="text-green underline"
           >
             HTTPS://APP.CARBONDEFI.XYZ/TERMS
           </a>{' '}
@@ -175,6 +176,7 @@ export const PrivacyPage = () => {
             href="https://www.carbondefi.xyz"
             target={'_blank'}
             rel="noreferrer"
+            className="text-green underline"
           >
             https://www.carbondefi.xyz
           </a>
