@@ -9,13 +9,11 @@ const content = [
   {
     id: 2,
     subtitle: 'Site Content',
-    html: `<p>The Site offers a user interface that may display information related to certain blockchain networks, and that may assist with formatting or generating standardized transaction messages that a user may elect to use in connection with third-party software in order to interact with smart contracts deployed on those blockchain networks (such information, messages, and any other functionalities as may be provided on or through the Site from time to time, the “Content”). 
-    </p>
+    html: `<p>The Site offers a user interface that may display information related to certain blockchain networks, and that may assist with formatting or generating standardized transaction messages that a user may elect to use in connection with third-party software in order to interact with smart contracts deployed on those blockchain networks (such information, messages, and any other functionalities as may be provided on or through the Site from time to time, the <b>“Content”</b>).</p>
     <br>
-    <p>
-    THE SITE DOES NOT EXECUTE TRANSACTIONS ON BEHALF OF USERS, NOR CONTROL THE EXECUTION OF TRANSACTIONS; THE FOUNDATION AND ITS AFFILIATES HAVE NO RESPONSIBILITY FOR ANY THIRD-PARTY SOFTWARE USED BY A USER TO EFFECTUATE TRANSACTIONS.</p>
-    <br>Through the Site, you can:
-
+    <p>THE SITE DOES NOT EXECUTE TRANSACTIONS ON BEHALF OF USERS, NOR CONTROL THE EXECUTION OF TRANSACTIONS; THE FOUNDATION AND ITS AFFILIATES HAVE NO RESPONSIBILITY FOR ANY THIRD-PARTY SOFTWARE USED BY A USER TO EFFECTUATE TRANSACTIONS.</p>
+    <br>
+    Through the Site, you can:
     <p> i. View information relating to different cryptographic assets commonly referred to as tokens, such as tokens created using the ERC20 standard on the Ethereum blockchain network (“Tokens”);</p>
     <p>ii. View information from supported electronic wallets used to manage blockchain addresses (each, an “Electronic Wallet” or “Wallet”);</p>
     <p>iii. Format messages and data (with the assistance of the Site’s interfaces), which you may then use to interact, or to instruct third-party software to interact, with certain blockchain networks in order to execute transactions through your Wallet;</p>
@@ -53,18 +51,18 @@ const content = [
   {
     id: 5,
     subtitle: 'Rules of Use',
-    html: `<p>You represent and warrant that you have full right and authority to use the Content and to be bound by these Terms. You agree that you will comply fully with these Terms and all applicable domestic and international laws, regulations, statutes, ordinances that govern your use of the Content. Without limiting the foregoing and in recognition of the global nature of the Internet, you agree to comply with all local and international rules regarding online conduct. You also agree to comply with all applicable laws affecting the transmission of content or the privacy of persons.</p>
+    html: `<p>You represent and warrant that you have full right and authority to use the Site, the Content and to be bound by these Terms. You agree that you will comply fully with these Terms and all applicable domestic and international laws, regulations, statutes and ordinances that govern your use of the Site and/or the Content. Without limiting the foregoing and in recognition of the global nature of the Internet, you agree to comply with all local and international rules regarding online conduct. You also agree to comply with all applicable laws, rules and regulations affecting the transmission of content or the privacy of persons.</p>
       <br>
-      <p>When using the Site or Content, you may not, nor may you assist other parties to pursuit or engage in unlawful or abusive uses, or any types of activities which contradict the purpose of the Site or Content, hinder the Site’s operation or Content to other users, or which may be deemed to do so (“Restricted Uses”). For Clarity and reference, Restricted Uses include, but are not limited to, these types of activities as detailed herein, as we may amend from time to time in our sole discretion (thus, not to be regarded as an exhaustive list):</p>
+      <p>When using the Site or Content, you may not, nor may you assist other parties to pursue or engage in unlawful or abusive uses, or any types of activities which contradict the purpose of the Site or Content, which hinder the Site’s operation or the Content to other Users, or which may be deemed to do so (“Restricted Uses”). For clarity and reference, Restricted Uses include, but are not limited to, these types of activities as detailed herein, as we may amend from time to time in our sole discretion (thus, not to be regarded as an exhaustive list):</p>
       <br>
-      <li> Unlawful Activities, such as activities which: <p></p> 
+      <li> Unlawful Activities, such as activities which:
         <p>i. violate any applicable law, rule or regulation; or</p>
-        <p> ii. publish, distribute or disseminate any unlawful material or information; </p>
+        <p> ii. publish, distribute or disseminate any unlawful material or information;</p>
       </li>
-      <li> Undermining or Abusive Activities, such as activities which: <p></p> 
+      <li> Undermining or Abusive Activities, such as activities which:<p></p> 
         <p> i. take any action that imposes an unreasonable or disproportionately large load on our infrastructure, or detrimentally interfere with, intercept, or expropriate any system, data, or information;</p>
         <p> ii. institute, assist or become involved in any type of attack (deliberate or other) upon the Site or Content that prevents or disrupts the access to or the use of the Carbon.</p>
-        <p> iii. enter or make an attempt to enter the Site and Content (including by accessing linked platforms, networks or systems) without authorization, including by password mining, through a virtual private network (VPN) from a Prohibited Jurisdiction and/or by using other Users’ information; </p> 
+        <p> iii. enter or make an attempt to enter the Site and Content (including by accessing linked platforms, networks or systems) without authorization, including by password mining, through a virtual private network (VPN) from a Prohibited Jurisdiction and/or by using other Users’ information;</p> 
         <p> iv. design or assist in designing cheats, exploits, automation software, bots, hacks, modes or any other unauthorized third-party software to modify or interfere with the Site or the Content;</p> 
         <p> v. attempt to disable or circumvent any security or access control mechanism of the Site or the Content;</p>
         <p> vi. use any unauthorized third-party software that accesses, intercepts, 'mines', or otherwise collects information from or through the Content or the Site, or that is in transit from or to the Site;</p>
@@ -80,14 +78,14 @@ const content = [
         <p> v. violate the legal rights of others, including defaming, abusing, stalking or threatening Users; or</p>
         <p> vi. defraud any other Users or any other person or entity, including the Foundation’s directors, officers, employees, representatives and service providers, including by providing false, inaccurate, misleading, or partial information;</p>
       </li> 
-      <li> Activities Infringing Intellectual Property, such as activities which:<p></p>
+      <li> Activities Infringing Intellectual Property, such as activities which:
         <p> i. reverse engineer, decompile, disassemble, decipher or otherwise attempt to derive the source code for any underlying software or other intellectual property used to provide the Content, or to obtain any information from the Content using any method unless you have received the Foundation’s prior written approval;</p> 
-        <p> ii. infringe the intellectual property rights, privacy rights, or moral rights of the Foundation or any Foundation Party; or<p></p>
+        <p> ii. infringe the intellectual property rights, privacy rights, or moral rights of the Foundation or any Foundation Party; or</p>
         <p> iii. imply an untrue endorsement by or affiliation with the Foundation or any Foundation Party;</p>
       </li>
-      <li> Unfair or Abusive Transacting, such as activities which:<p></p>
+      <li> Unfair or Abusive Transacting, such as activities which:
         <p> i. create or enter a fictitious transaction or a transaction with fictitious elements of any kind;</p> 
-        <p> ii. exploit, disrupt or manipulate, or attempt to exploit, disrupt or manipulate the Site or the use of the Content, in a manner designed to create transaction conditions which are not available to other Users; or<p></p>
+        <p> ii. exploit, disrupt or manipulate, or attempt to exploit, disrupt or manipulate the Site or the use of the Content, in a manner designed to create transaction conditions which are not available to other Users; or</p>
         <p> iii. utilizes or applies technological abilities or foreknowledge not exploited or available to other Users, to perform (including off the Site) transactions using unequal terms among Users regarding the use of the Content on the Site, influence the terms of transactions on the blockchain (including activities commonly referred to as Front-Running) and/or create an unfair or abusive advantage over other Users;</p>
       </li>
       <br>
@@ -97,7 +95,7 @@ const content = [
   {
     id: 6,
     subtitle:
-      'Limitation or Termination of Access and Services; Limited License',
+      ' Limitation or Termination of Access and Services; Limited License',
     html: `<p>Subject to your agreement and compliance with these Terms, you are hereby granted with a personal, revocable, non-transferable and non-exclusive right to use the Content. Use of the Content shall be solely for your own, private purposes and for no other purpose whatsoever. You hereby acknowledge that your right to use the Content is limited by these Terms, and, if you violate or if, at any point, you do not agree to any of these Terms, your right to use the Content shall immediately terminate, and you shall immediately refrain from using the Content. Without derogating from the generality of the foregoing, any use of the Content that violates these Terms is strictly prohibited and can, at the Foundation’s sole discretion, result in the immediate revocation of your limited rights granted by these Terms.</p>
     <br>
     <p>Without limiting any other remedy, the Foundation may limit, suspend, revoke, terminate, modify, or delete your use of the Site or access to the Content at its sole discretion without prior notice or liability, if you are, or if the Foundation suspects (in its sole discretion) that you are failing to comply with these Terms or for any actual or suspected Restricted Use of the Site and Content. Any of such actions, including the termination of your rights to use the Site and Content, may be applied by the Foundation permanently or temporarily. In such an event, the Foundation may terminate your use of and access to the Site and Content (however without affecting your Wallet, which remains exclusively yours, subject to any applicable third party terms of use or laws, rules or regulations). You hereby acknowledge and agree that the Foundation is under no obligation to compensate you for any losses of any kind whatsoever resulting from the termination of your access as set forth hereinabove, whether such termination was voluntary or involuntary, and you hereby irrevocably waive any demand or claim regarding the above.</p>
@@ -115,7 +113,7 @@ const content = [
   {
     id: 8,
     subtitle: 'Third Party Content',
-    html: '<p>To the extent that the Site or the Content contain links or any other information to third party websites, Tokens or services, the Foundation does not control the availability and content of those websites, Tokens and services. Any concerns regarding any such third party websites, Tokens and/or service, or any link thereto, should be directed to such particular website and/or services provider. The Foundation makes no representation or warranty regarding any content, goods, Tokens and/or services provided by any third party, even if linked to through the Site or including in any Third Party Integrated Application. The linked sites and Tokens are not under the control of the Foundation and may collect data or solicit personal information from you. The Foundation is not responsible for their content, business practices or privacy policies, or for the collection, use or disclosure of any information those sites may collect. You agree that the Site and the Content may feature advertisements from third parties. The Foundation is not responsible for the actions of third parties who advertise on the Site. Your interactions with advertisers or entities that issued the Tokens are agreements between you and them, with the Foundation having no responsibility in connection with losses or claims arising therefrom.   ',
+    html: '<p>To the extent that the Site or the Content contain links or any other information to third party websites, Tokens or services, the Foundation does not control the availability and content of those websites, Tokens and services. Any concerns regarding any such third party websites, Tokens and/or service, or any link thereto, should be directed to such particular website and/or services provider. The Foundation makes no representation or warranty regarding any content, goods, Tokens and/or services provided by any third party, even if linked to through the Site or including in any Third Party Integrated Application. The linked sites and Tokens are not under the control of the Foundation and may collect data or solicit personal information from you. The Foundation is not responsible for their content, business practices or privacy policies, or for the collection, use or disclosure of any information those sites may collect. You agree that the Site and the Content may feature advertisements from third parties. The Foundation is not responsible for the actions of third parties who advertise on the Site. Your interactions with advertisers or entities that issued the Tokens are agreements between you and them, with the Foundation having no responsibility in connection with losses or claims arising therefrom.',
   },
   {
     id: 9,
@@ -212,54 +210,66 @@ export const TermsPage = () => {
   return (
     <Page title={'Terms of Use'}>
       <>
-        <span>Last updated: 17 April, 2023</span>
+        <span>Last updated: 18 April, 2023</span>
         <p>
           PLEASE READ THESE TERMS OF USE CAREFULLY. YOUR ACCEPTANCE MAY LIMIT OR
           WAIVE CERTAIN OF YOUR RIGHTS. IF YOU HAVE NOT REVIEWED THE TERMS OF
           USE SINCE THE “LAST UPDATED” DATE ABOVE, IT IS YOUR RESPONSIBILITY TO
-          RE-REVIEW THEM. THESE TERMS OF USE PROVIDE FOR MANDATORY INDIVIDUAL
-          ARBITRATION IN SWITZERLAND. BY ACCEPTING THESE TERMS, YOU HEREBY
-          IRREVOCABLY WAIVE ALL RIGHTS TO TRIAL BY JURY OR TO PROCEED IN A
-          COLLECTIVE ACTION IN RELATION TO YOUR USE OF THE WWW.CARBONDEFI.XYZ
-          SITE OR THE CONTENT MADE AVAILABLE THROUGH THE SITE. YOU HEREBY AGREE
-          NOT TO USE THE SITE OR THE CONTENT FOR RESTRICTED USES OR FROM
-          PROHIBITED JURISDICTIONS. IF YOU DO NOT AGREE TO ANY OF THESE TERMS OF
-          USE OR THE PRIVACY POLICY AVAILABLE AT{' '}
+          RE-REVIEW THEM.
+        </p>
+        <p className="mt-30">
+          THESE TERMS OF USE PROVIDE FOR MANDATORY INDIVIDUAL ARBITRATION IN
+          SWITZERLAND. BY ACCEPTING THESE TERMS, YOU HEREBY IRREVOCABLY WAIVE
+          ALL RIGHTS TO TRIAL BY JURY OR TO PROCEED IN A COLLECTIVE ACTION IN
+          RELATION TO YOUR USE OF THE WWW.CARBONDEFI.XYZ SITE OR THE CONTENT
+          MADE AVAILABLE THROUGH THE SITE.
+        </p>
+        <p className="mt-30">
+          YOU HEREBY AGREE NOT TO USE THE SITE OR THE CONTENT FOR RESTRICTED
+          USES OR FROM PROHIBITED JURISDICTIONS. IF YOU DO NOT AGREE TO ANY OF
+          THESE TERMS OF USE OR THE PRIVACY POLICY AVAILABLE AT{' '}
           <a
             href="https://app.bancor.network/privacy"
             target="_blank"
             rel="noreferrer"
           >
-            https://app.bancor.network/privacy
+            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY{' '}
           </a>
           , PLEASE IMMEDIATELY CEASE ALL USE OF THE SITE AND THE CONTENT.
         </p>
         <p className="mt-40">
-          By accessing or using{' '}
-          <a href="https://www.carbondefi.xyz" target="_blank" rel="noreferrer">
-            https://www.carbondefi.xyz
-          </a>
-          , and any linked or directed subdomain therein (collectively, the
-          “Site”) and any content made available on or through the Site, you
-          (the “User” and collectively with others using the Site, the “Users”)
-          agree to be bound by these Terms of Use (these “Terms”). The rights in
-          the Site are held by Bprotocol Foundation, a Swiss foundation, with
-          legal seat in Zug, Switzerland, registered in the Swiss commercial
-          register under UID CHE-181.679.849 (the “Foundation”), and the terms
-          “we,” “us,” and “our” refer to the Foundation. Please read these Terms
-          carefully. These Terms govern your access to and use of the Site and
-          Content (as defined herein).
+          <p>
+            By accessing or using{' '}
+            <a
+              href="https://www.carbondefi.xyz"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {' '}
+              https://www.carbondefi.xyz
+            </a>
+            , and any linked or directed subdomain therein (collectively, the
+            "Site") and any content made available on or through the Site, you
+            (the "User" and collectively with others using the Site, the
+            "Users") agree to be bound by these Terms of Use (these "Terms").
+            The rights in the Site are held by Bprotocol Foundation, a Swiss
+            foundation, with legal seat in Zug, Switzerland, registered in the
+            Swiss commercial register under UID CHE-181.679.849 (the
+            "Foundation"), and the terms "we," "us," and "our" refer to the
+            Foundation. Please read these Terms carefully. These Terms govern
+            your access to and use of the Site and Content (as defined herein).
+          </p>
         </p>
         <p className="mt-40">
           By using the Content or visiting the Site, you signify your consent to
           both these Terms and our privacy policy (the “Privacy Policy”), a
           current version of which is available at{' '}
           <a
-            href="https://app.bancor.network/privacy"
+            href="https://app.carbondefi.xyz/privacy"
             target="_blank"
             rel="noreferrer"
           >
-            https://app.bancor.network/privacy
+            CARBON PRIVACY POLICY
           </a>
           , which is incorporated herein by reference and which may be modified
           from time to time. In the event of any change, amendment or update to

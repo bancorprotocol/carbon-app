@@ -31,7 +31,7 @@ export const MainMenuRightBurger: FC = () => {
     <DropdownMenu
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      className="opacity-1 rounded-[10px] bg-emphasis py-8 px-10 text-16 font-weight-400 text-white"
+      className="opacity-1 rounded-[10px] bg-emphasis py-8 px-8 text-16 font-weight-400 text-white"
       button={(onClick) => (
         <Button
           variant={'secondary'}
