@@ -229,12 +229,12 @@ export const TermsPage = () => {
           USES OR FROM PROHIBITED JURISDICTIONS. IF YOU DO NOT AGREE TO ANY OF
           THESE TERMS OF USE OR THE PRIVACY POLICY AVAILABLE AT{' '}
           <a
-            href="https://app.bancor.network/privacy"
+            href="https://app.bancor.network/privacy-policy"
             target="_blank"
             rel="noreferrer"
             className="text-green underline"
           >
-            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY{' '}
+            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY-POLICY{' '}
           </a>
           , PLEASE IMMEDIATELY CEASE ALL USE OF THE SITE AND THE CONTENT.
         </p>
