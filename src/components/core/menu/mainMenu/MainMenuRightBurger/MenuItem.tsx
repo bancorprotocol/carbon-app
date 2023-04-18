@@ -9,7 +9,9 @@ export const MenuItem: FC<MenuItemProps> = ({ onClick, content }) => {
   return (
     <div
       onClick={onClick}
-      className={'hover:bg-body block rounded-6 p-10 hover:text-white'}
+      className={
+        'hover:bg-body block cursor-pointer rounded-6 p-10 hover:text-white'
+      }
     >
       {content}
     </div>
