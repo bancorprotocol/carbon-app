@@ -2,6 +2,7 @@ import { useLocation } from 'libs/routing';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { EditTypes } from './EditStrategyMain';
+import { carbonEvents } from 'services/events';
 
 export const titleByType: { [key in EditTypes]: string } = {
   renew: 'Renew Strategy',
@@ -42,7 +43,10 @@ export const EditStrategyHeader = ({
       </div>
       {!showGraph && (
         <button
-          onClick={() => setShowGraph(true)}
+          onClick={() => {
+            carbonEvents.strategy.strategyChartOpen(undefined);
+            setShowGraph(true);
+          }}
           className="h-40 w-40 self-end rounded-full bg-emphasis"
         >
           <IconCandles className="mx-auto w-14" />

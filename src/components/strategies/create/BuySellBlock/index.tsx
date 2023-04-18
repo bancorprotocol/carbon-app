@@ -7,6 +7,7 @@ import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
+import { useStrategyEvents } from './useStrategyEvents';
 import {
   StrategyCreateLocationGenerics,
   StrategyType,
@@ -30,16 +31,18 @@ export const BuySellBlock: FC<Props> = ({
   quote,
   tokenBalanceQuery,
   order,
-  buy,
   isBudgetOptional,
   strategyType,
+  buy = false,
 }) => {
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
+  const insufficientBalance =
+    !tokenBalanceQuery.isLoading &&
+    new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
 
-  const insufficientBalance = new BigNumber(tokenBalanceQuery.data || 0).lt(
-    order.budget
-  );
+  useStrategyEvents({ base, quote, order, buy, insufficientBalance });
+
   const titleText = buy ? 'Buy Low' : 'Sell High';
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
@@ -47,7 +50,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const title = (
     <>
-      <Tooltip element={tooltipText}>
+      <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
         <span>{titleText}</span>
       </Tooltip>
       <Imager
@@ -69,6 +72,7 @@ export const BuySellBlock: FC<Props> = ({
         1
       </div>
       <Tooltip
+        sendEventOnMount={{ buy }}
         element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
           base.symbol
         } at. Make sure the price is in ${quote.symbol} tokens.`}
@@ -137,6 +141,7 @@ export const BuySellBlock: FC<Props> = ({
           2
         </div>
         <Tooltip
+          sendEventOnMount={{ buy }}
           element={
             buy
               ? `The amount of ${

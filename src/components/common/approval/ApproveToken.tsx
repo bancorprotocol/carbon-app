@@ -8,15 +8,30 @@ import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useTokens } from 'hooks/useTokens';
+import { carbonEvents } from 'services/events';
+import {
+  TokenApprovalType,
+  StrategyEventOrTradeEvent,
+  StrategyEventType,
+  TradeEventType,
+} from 'services/events/types';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 type Props = {
   data?: ApprovalTokenResult;
   isLoading: boolean;
   error: unknown;
+  eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
+  context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
 };
 
-export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
+export const ApproveToken: FC<Props> = ({
+  data,
+  isLoading,
+  error,
+  eventData,
+  context,
+}) => {
   const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
   const { getTokenById } = useTokens();
@@ -43,6 +58,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
           });
           await tx.wait();
           setTxSuccess(true);
+          handleTokenConfirmationApproveEvent();
         },
         onError: () => {
           dispatchNotification('approveError', { symbol: token.symbol });
@@ -56,6 +72,80 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
         },
       }
     );
+  };
+
+  const handleLimitChange = (value: boolean) => {
+    setIsLimited(!value);
+    handleTokenConfirmationEvent(value);
+  };
+
+  const handleTokenConfirmationApproveEvent = () => {
+    if (eventData && token) {
+      switch (context) {
+        case 'createStrategy':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveStrategyCreate(
+            {
+              ...eventData,
+              approvalTokens: [token],
+              isLimited,
+            } as StrategyEventType & TokenApprovalType
+          );
+          break;
+        case 'depositStrategyFunds':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveDepositStrategyFunds(
+            {
+              ...eventData,
+              approvalTokens: [token],
+              isLimited,
+            } as StrategyEventType & TokenApprovalType
+          );
+          break;
+        case 'trade':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedApproveTrade({
+            ...eventData,
+            approvalTokens: [token],
+            isLimited,
+          } as TradeEventType & TokenApprovalType);
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const handleTokenConfirmationEvent = (value: boolean) => {
+    if (eventData) {
+      switch (context) {
+        case 'createStrategy':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeStrategyCreate(
+            {
+              ...eventData,
+              isLimited: !value,
+            } as StrategyEventType & TokenApprovalType
+          );
+          break;
+        case 'depositStrategyFunds':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeDepositStrategyFunds(
+            {
+              ...eventData,
+              isLimited: !value,
+            } as StrategyEventType & TokenApprovalType
+          );
+
+          break;
+        case 'trade':
+          carbonEvents.tokenApproval.tokenConfirmationUnlimitedSwitchChangeTrade(
+            {
+              ...eventData,
+              isLimited: !value,
+            } as TradeEventType & TokenApprovalType
+          );
+
+          break;
+        default:
+          break;
+      }
+    }
   };
 
   if (!data || !token) {
@@ -102,7 +192,7 @@ export const ApproveToken: FC<Props> = ({ data, isLoading, error }) => {
                   <Switch
                     variant={isLimited ? 'secondary' : 'white'}
                     isOn={!isLimited}
-                    setIsOn={(x) => setIsLimited(!x)}
+                    setIsOn={handleLimitChange}
                     size={'sm'}
                   />
                 </div>

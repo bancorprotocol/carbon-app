@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Link, PathNames } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   title?: string;
@@ -12,6 +13,7 @@ export const StrategyBlockCreate: FC<Props> = ({
 }) => {
   return (
     <Link
+      onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       to={PathNames.createStrategy}
       className="bg-content flex h-full items-center justify-center rounded-10 border-dashed py-50"
     >

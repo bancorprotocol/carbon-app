@@ -60,6 +60,7 @@ export const SelectTokenButton: FC<Props> = ({
         <div className={'flex flex-col items-start'}>
           {description && (
             <Tooltip
+              sendEventOnMount={{ buy: undefined }}
               maxWidth={430}
               interactive={false}
               element={getTooltipText()}

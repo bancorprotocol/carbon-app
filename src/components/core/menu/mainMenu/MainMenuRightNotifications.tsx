@@ -4,6 +4,7 @@ import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
 import { useNotifications } from 'hooks/useNotifications';
 import { useWeb3 } from 'libs/web3';
 import { Button } from 'components/common/button';
+import { carbonEvents } from 'services/events';
 
 export const MainMenuRightNotifications: FC = () => {
   const { user } = useWeb3();
@@ -16,7 +17,10 @@ export const MainMenuRightNotifications: FC = () => {
     <Button
       variant={'secondary'}
       className={'relative !p-0'}
-      onClick={() => openModal('notifications', undefined)}
+      onClick={() => {
+        carbonEvents.navigation.navNotificationClick(undefined);
+        openModal('notifications', undefined);
+      }}
     >
       <span className="flex h-36 w-36 items-center justify-center">
         {hasPendingTx && (
