@@ -22,17 +22,17 @@ export const useApproval = (data: ApprovalToken[]) => {
 
   const result = useMemo(() => {
     return approvalQuery.map((q, i) => {
+      const amount = sanitizeNumberInput(data[i].amount, data[i].decimals);
       const isNullApprovalToken = NULL_APPROVAL_CONTRACTS.includes(
         data[i].address.toLowerCase()
       );
       const newData: ApprovalTokenResult | undefined = q.data && {
         ...data[i],
         allowance: q.data.toString(),
-        approvalRequired: q.data.lt(
-          sanitizeNumberInput(data[i].amount, data[i].decimals)
-        ),
+        approvalRequired: q.data.lt(amount),
         isNullApprovalToken,
-        nullApprovalRequired: isNullApprovalToken && q.data.gt(0),
+        nullApprovalRequired:
+          isNullApprovalToken && q.data.gt(0) && q.data.lt(amount),
       };
       return {
         ...q,
