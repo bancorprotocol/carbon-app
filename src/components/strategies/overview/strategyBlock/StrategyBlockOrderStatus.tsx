@@ -5,12 +5,15 @@ import { getStatusText, getTooltipTextByStatus } from './utils';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconActiveBell } from 'assets/icons/activeBell.svg';
+import { StrategyEditEventType } from 'services/events/types';
+import { carbonEvents } from 'services/events';
 
 export const StrategyBlockOrderStatus: FC<{
   status: StrategyStatus;
   strategyId: string;
   showBudgetWarning?: boolean;
-}> = ({ status, strategyId, showBudgetWarning = false }) => {
+  strategyEventData: StrategyEditEventType;
+}> = ({ status, strategyId, strategyEventData, showBudgetWarning = false }) => {
   return (
     <div className="flex justify-between rounded-8 border border-emphasis p-15">
       <div>
@@ -51,12 +54,15 @@ export const StrategyBlockOrderStatus: FC<{
                   className="mt-5 flex items-center justify-center"
                   fullWidth
                   variant={'success'}
-                  onClick={() =>
+                  onClick={() => {
+                    carbonEvents.strategyEdit.strategyManageNotificationClick(
+                      strategyEventData
+                    );
                     window?.open(
                       `https://app.hal.xyz/recipes/carbon-strategy?strategyID=${strategyId}`,
                       '_blank'
-                    )
-                  }
+                    );
+                  }}
                 >
                   Manage Notification
                 </Button>

@@ -80,7 +80,7 @@ export interface EventStrategyEditSchema extends EventCategory {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
-  strategyManageClick: {
+  strategyManageNotificationClick: {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
@@ -202,10 +202,10 @@ export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
         strategy_id: strategy.strategyId,
       });
   },
-  strategyManageClick: (strategy) => {
+  strategyManageNotificationClick: (strategy) => {
     const gtmData = prepareGtmStrategyData(strategy);
     gtmData &&
-      sendGTMEvent('strategyEdit', 'strategyManageClick', {
+      sendGTMEvent('strategyEdit', 'strategyManageNotificationClick', {
         ...gtmData,
         strategy_id: strategy.strategyId,
       });
