@@ -59,7 +59,7 @@ export const SelectTokenButton: FC<Props> = ({
                 'mr-14 flex h-24 w-24 items-center justify-center rounded-full bg-black'
               }
             >
-              <IconPlus className={'h-16 w-16 text-green'} />
+              <IconPlus className={'h-16 w-16 p-2 text-green'} />
             </div>
           )}
           <div className={'flex flex-col items-start'}>
