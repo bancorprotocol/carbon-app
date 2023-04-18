@@ -16,6 +16,7 @@ import {
   IS_IN_IFRAME,
   IS_METAMASK_WALLET,
 } from 'libs/web3/web3.utils';
+import { carbonEvents } from 'services/events';
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   const props = { className: 'w-20' };
@@ -47,7 +48,17 @@ export const MainMenuRightWallet: FC = () => {
   } = useWeb3();
   const { openModal } = useModal();
 
-  const onClickOpenModal = () => openModal('wallet', undefined);
+  const onClickOpenModal = () => {
+    carbonEvents.navigation.navWalletConnectClick(undefined);
+    openModal('wallet', undefined);
+  };
+
+  const onDisconnect = async () => {
+    disconnect();
+    carbonEvents.wallet.walletDisconnect({
+      address: user,
+    });
+  };
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
@@ -78,7 +89,10 @@ export const MainMenuRightWallet: FC = () => {
         button={(onClick) => (
           <Button
             variant={buttonVariant}
-            onClick={onClick}
+            onClick={() => {
+              carbonEvents.navigation.navWalletClick(undefined);
+              onClick();
+            }}
             className={'flex items-center space-x-10 pl-20'}
           >
             {buttonIcon}
@@ -101,7 +115,7 @@ export const MainMenuRightWallet: FC = () => {
             </button>
           )}
 
-          <button onClick={disconnect} className={'hover:text-white'}>
+          <button onClick={onDisconnect} className={'hover:text-white'}>
             Disconnect
           </button>
         </div>

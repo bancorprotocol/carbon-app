@@ -1,6 +1,8 @@
 import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
+import useInitEffect from 'hooks/useInitEffect';
 import { useGetTokenBalance } from 'libs/queries';
 import { TradePageProps } from 'pages/trade';
+import { carbonEvents } from 'services/events';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
@@ -10,8 +12,14 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
   const { currentBreakpoint } = useBreakpoints();
   const baseBalanceQuery = useGetTokenBalance(base);
   const quoteBalanceQuery = useGetTokenBalance(quote);
-
   const [mobileShowBuy, setMobileShowBuy] = useState(true);
+
+  useInitEffect(() => {
+    carbonEvents.trade.tradePairChange({
+      buyToken: base,
+      sellToken: quote,
+    });
+  }, [base, quote]);
 
   return (
     <>

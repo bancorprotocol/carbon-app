@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { items } from 'components/strategies/create/variants';
 import { m } from 'libs/motion';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
+import { carbonEvents } from 'services/events';
 
 export const CreateStrategyHeader = ({
   showGraph,
@@ -47,7 +48,10 @@ export const CreateStrategyHeader = ({
       </div>
       {!showGraph && showOrders && (
         <button
-          onClick={() => setShowGraph(true)}
+          onClick={() => {
+            carbonEvents.strategy.strategyChartOpen(undefined);
+            setShowGraph(true);
+          }}
           className="h-40 w-40 self-end rounded-full bg-emphasis"
         >
           <IconCandles className="mx-auto w-14" />

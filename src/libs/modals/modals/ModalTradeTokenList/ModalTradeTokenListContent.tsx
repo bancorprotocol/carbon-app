@@ -15,7 +15,6 @@ type Props = {
   handleSelect: (tradePair: TradePair) => void;
   onAddFavorite: (tradePair: TradePair) => void;
   onRemoveFavorite: (tradePair: TradePair) => void;
-
   search: string;
 };
 
@@ -144,7 +143,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                       isFavorite(tradePair)
                         ? 'text-yellow-500/60'
                         : 'text-white/20'
-                    } w-30 transition hover:text-yellow-500`}
+                    } hover:text-yellow-500 w-30 transition`}
                   />
                 </button>
               </div>

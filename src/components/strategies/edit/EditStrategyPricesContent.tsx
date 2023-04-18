@@ -5,6 +5,9 @@ import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
+import { carbonEvents } from 'services/events';
+
+import { useStrategyEventData } from '../create/useStrategyEventData';
 
 type EditStrategyPricesContentProps = {
   type: 'editPrices' | 'renew';
@@ -29,7 +32,12 @@ export const EditStrategyPricesContent = ({
   const {
     history: { back },
   } = useLocation();
-
+  const strategyEventData = useStrategyEventData({
+    base: strategy.base,
+    quote: strategy.quote,
+    order0,
+    order1,
+  });
   const handleOnActionClick = () => {
     const newOrder0 = {
       balance: strategy.order0.balance,
@@ -43,16 +51,30 @@ export const EditStrategyPricesContent = ({
     };
 
     type === 'renew'
-      ? renewStrategy({
-          ...strategy,
-          order0: newOrder0,
-          order1: newOrder1,
-        })
-      : changeRateStrategy({
-          ...strategy,
-          order0: newOrder0,
-          order1: newOrder1,
-        });
+      ? renewStrategy(
+          {
+            ...strategy,
+            order0: newOrder0,
+            order1: newOrder1,
+          },
+          () =>
+            carbonEvents.strategyEdit.strategyRenew({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            })
+        )
+      : changeRateStrategy(
+          {
+            ...strategy,
+            order0: newOrder0,
+            order1: newOrder1,
+          },
+          () =>
+            carbonEvents.strategyEdit.strategyChangeRates({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            })
+        );
   };
 
   const isOrderValid = (order: OrderCreate) => {

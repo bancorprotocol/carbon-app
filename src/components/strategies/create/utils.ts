@@ -6,6 +6,7 @@ import {
 import { QueryKey } from 'libs/queries';
 import { PathNames } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
+import { carbonEvents } from 'services/events';
 
 export const handleStrategySettings = (
   strategySettings?: StrategySettings,
@@ -60,6 +61,7 @@ export const createStrategyAction = async ({
   mutation,
   dispatchNotification,
   navigate,
+  strategyEventData,
 }: CreateStrategyActionProps) => {
   if (!base || !quote || !user) {
     throw new Error('error in create strategy: missing data ');
@@ -96,6 +98,7 @@ export const createStrategyAction = async ({
         });
         navigate({ to: PathNames.strategies });
         console.log('tx confirmed');
+        carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e) => {
         console.error('create mutation failed', e);

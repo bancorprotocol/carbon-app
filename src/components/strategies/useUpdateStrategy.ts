@@ -17,7 +17,10 @@ export const useUpdateStrategy = () => {
   const cache = useQueryClient();
   const navigate = useNavigate<MyLocationGenerics>();
 
-  const pauseStrategy = async (strategy: Strategy) => {
+  const pauseStrategy = async (
+    strategy: Strategy,
+    successEventsCb?: () => void
+  ) => {
     const { base, quote, encoded, id } = strategy;
 
     if (!base || !quote || !user) {
@@ -42,6 +45,7 @@ export const useUpdateStrategy = () => {
           console.log('tx hash', tx.hash);
           await tx.wait();
 
+          successEventsCb?.();
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
           });
@@ -54,7 +58,10 @@ export const useUpdateStrategy = () => {
     );
   };
 
-  const renewStrategy = async (strategy: Strategy) => {
+  const renewStrategy = async (
+    strategy: Strategy,
+    successEventsCb?: () => void
+  ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
 
     if (!base || !quote || !user) {
@@ -84,6 +91,7 @@ export const useUpdateStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           console.error('update mutation failed', e);
@@ -92,7 +100,10 @@ export const useUpdateStrategy = () => {
     );
   };
 
-  const changeRateStrategy = async (strategy: Strategy) => {
+  const changeRateStrategy = async (
+    strategy: Strategy,
+    successEventsCb?: () => void
+  ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
 
     if (!base || !quote || !user) {
@@ -122,6 +133,7 @@ export const useUpdateStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           console.error('update mutation failed', e);
@@ -133,7 +145,8 @@ export const useUpdateStrategy = () => {
   const withdrawBudget = async (
     strategy: Strategy,
     buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions
+    sellMarginalPrice?: MarginalPriceOptions,
+    successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
 
@@ -164,6 +177,7 @@ export const useUpdateStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           console.error('update mutation failed', e);
@@ -175,12 +189,13 @@ export const useUpdateStrategy = () => {
   const depositBudget = async (
     strategy: Strategy,
     buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions
+    sellMarginalPrice?: MarginalPriceOptions,
+    successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
 
     if (!base || !quote || !user) {
-      throw new Error('error in deposit strategy budget: missing data ');
+      throw new Error('error in deposit strategy budget: missing data');
     }
 
     updateMutation.mutate(
@@ -206,6 +221,7 @@ export const useUpdateStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           console.error('update mutation failed', e);
