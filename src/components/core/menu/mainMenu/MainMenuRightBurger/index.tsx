@@ -49,8 +49,8 @@ export const MainMenuRightBurger: FC = () => {
         </Button>
       )}
     >
-      {items.map((item) => (
-        <MenuItem {...item} />
+      {items.map((item, index) => (
+        <MenuItem key={`${index}_${item.content}`} {...item} />
       ))}
     </DropdownMenu>
   );

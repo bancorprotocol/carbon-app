@@ -59,7 +59,7 @@ const content = [
         <p>i. violate any applicable law, rule or regulation; or</p>
         <p> ii. publish, distribute or disseminate any unlawful material or information;</p>
       </li>
-      <li> Undermining or Abusive Activities, such as activities which:<p></p> 
+      <li> Undermining or Abusive Activities, such as activities which:
         <p> i. take any action that imposes an unreasonable or disproportionately large load on our infrastructure, or detrimentally interfere with, intercept, or expropriate any system, data, or information;</p>
         <p> ii. institute, assist or become involved in any type of attack (deliberate or other) upon the Site or Content that prevents or disrupts the access to or the use of the Carbon.</p>
         <p> iii. enter or make an attempt to enter the Site and Content (including by accessing linked platforms, networks or systems) without authorization, including by password mining, through a virtual private network (VPN) from a Prohibited Jurisdiction and/or by using other Users’ information;</p> 
@@ -239,28 +239,26 @@ export const TermsPage = () => {
           , PLEASE IMMEDIATELY CEASE ALL USE OF THE SITE AND THE CONTENT.
         </p>
         <p className="mt-40">
-          <p>
-            By accessing or using{' '}
-            <a
-              href="https://www.carbondefi.xyz"
-              target="_blank"
-              rel="noreferrer"
-              className="text-green underline"
-            >
-              {' '}
-              https://www.carbondefi.xyz
-            </a>
-            , and any linked or directed subdomain therein (collectively, the
-            "Site") and any content made available on or through the Site, you
-            (the "User" and collectively with others using the Site, the
-            "Users") agree to be bound by these Terms of Use (these "Terms").
-            The rights in the Site are held by Bprotocol Foundation, a Swiss
-            foundation, with legal seat in Zug, Switzerland, registered in the
-            Swiss commercial register under UID CHE-181.679.849 (the
-            "Foundation"), and the terms "we," "us," and "our" refer to the
-            Foundation. Please read these Terms carefully. These Terms govern
-            your access to and use of the Site and Content (as defined herein).
-          </p>
+          By accessing or using{' '}
+          <a
+            href="https://www.carbondefi.xyz"
+            target="_blank"
+            rel="noreferrer"
+            className="text-green underline"
+          >
+            {' '}
+            https://www.carbondefi.xyz
+          </a>
+          , and any linked or directed subdomain therein (collectively, the
+          "Site") and any content made available on or through the Site, you
+          (the "User" and collectively with others using the Site, the "Users")
+          agree to be bound by these Terms of Use (these "Terms"). The rights in
+          the Site are held by Bprotocol Foundation, a Swiss foundation, with
+          legal seat in Zug, Switzerland, registered in the Swiss commercial
+          register under UID CHE-181.679.849 (the "Foundation"), and the terms
+          "we," "us," and "our" refer to the Foundation. Please read these Terms
+          carefully. These Terms govern your access to and use of the Site and
+          Content (as defined herein).
         </p>
         <p className="mt-40">
           By using the Content or visiting the Site, you signify your consent to
