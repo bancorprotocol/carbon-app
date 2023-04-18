@@ -14,7 +14,8 @@ export const InputLimit: FC<{
   buy?: boolean;
 }> = ({ price, setPrice, token, error, setPriceError, buy = false }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const errorMessage = 'Price Must be greater than 0';
+    const errorMessage = 'Price must be greater than 0';
+    +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
 
     if (+e.target.value > 0) {
       setPriceError('');
