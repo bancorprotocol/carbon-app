@@ -195,6 +195,10 @@ export const useCreateStrategy = () => {
   };
 
   const isCTAdisabled = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+
     const isOrder0Valid = order0.isRange
       ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
       : +order0.price >= 0 && order0.price !== '';
@@ -214,8 +218,15 @@ export const useCreateStrategy = () => {
     approval.isError,
     approval.isLoading,
     mutation.isLoading,
-    order0,
-    order1,
+    order0.isRange,
+    order0.max,
+    order0.min,
+    order0.price,
+    order1.isRange,
+    order1.max,
+    order1.min,
+    order1.price,
+    user,
   ]);
 
   const {
