@@ -37,7 +37,7 @@ const content = [
     id: 2,
     subtitle: 'Site Content',
     html: (
-      <>
+      <div>
         <p>
           The Site offers a user interface that may display information related
           to certain blockchain networks, and that may assist with formatting or
@@ -45,7 +45,7 @@ const content = [
           use in connection with third-party software in order to interact with
           smart contracts deployed on those blockchain networks (such
           information, messages, and any other functionalities as may be
-          provided on or through the Site from time to time, the
+          provided on or through the Site from time to time, the{' '}
           <b>“Content”</b>).
         </p>
         <br />
@@ -58,6 +58,7 @@ const content = [
         <br />
         Through the Site, you can:
         <p>
+          {' '}
           i. View information relating to different cryptographic assets
           commonly referred to as tokens, such as tokens created using the ERC20
           standard on the Ethereum blockchain network (“Tokens”);
@@ -87,7 +88,7 @@ const content = [
           >
             https://bancor.network/
           </a>
-          ), which has its own terms of use available at
+          ), which has its own terms of use available at{' '}
           <a
             className="text-green underline"
             href="https://app.bancor.network/terms-of-use"
@@ -95,8 +96,8 @@ const content = [
             rel="noreferrer"
           >
             https://app.bancor.network/terms-of-use
-          </a>
-          and privacy policy available at
+          </a>{' '}
+          and privacy policy available at{' '}
           <a
             href="https://app.bancor.network/privacy-policy"
             target="_blank"
@@ -116,7 +117,7 @@ const content = [
           >
             https://gov.bancor.network/
           </a>
-          ), which has its own terms of use available at
+          ), which has its own terms of use available at{' '}
           <a
             className="text-green underline"
             href="https://gov.bancor.network/tos"
@@ -135,7 +136,7 @@ const content = [
         <p>
           Detailed descriptions of the Content and functionality available
           through the Site is available at the Frequently Asked Questions page
-          of the Site (available at
+          of the Site (available at{' '}
           <a
             className="text-green underline"
             href="https://faq.carbondefi.xyz"
@@ -143,7 +144,7 @@ const content = [
             rel="noreferrer"
           >
             https://faq.carbondefi.xyz
-          </a>
+          </a>{' '}
           (the “FAQ”)).
         </p>
         <br />
@@ -151,7 +152,7 @@ const content = [
           USERS SHOULD REVIEW THE FAQ PERIODICALLY FOR UPDATES, AND FOR
           INFORMATION ON ANY CONTENT OR SERVICE WITH WHICH THEY ARE UNFAMILIAR.
         </p>
-      </>
+      </div>
     ),
   },
   {
@@ -164,7 +165,7 @@ const content = [
           peer-to-peer trades (“Carbon”). Users create permissionless strategies
           with one or more orders, and are issued a transferable NFT token. The
           NFT serves as the credentials for interacting with the underlying
-          position. For more information on Carbon, please visit
+          position. For more information on Carbon, please visit{' '}
           <a
             className="text-green underline"
             href="https://docs.carbondefi.xyz"
@@ -179,7 +180,7 @@ const content = [
           Carbon is deployed on public blockchains to provide a variety of
           functions as described more fully in the FAQ, and governed through a
           decentralized autonomous organization referred to as “BancorDAO”. For
-          more information on BancorDAO, please visit
+          more information on BancorDAO, please visit{' '}
           <a
             className="text-green underline"
             href="https://support.bancor.network/hc/en-us/sections/4415839473682-Bancor-DAO"
@@ -219,7 +220,7 @@ const content = [
         <p>
           Fees for use of Carbon, including potential maker and taker fees, are
           subject to determination by BancorDAO. For more information on the
-          current fee structure, please visit
+          current fee structure, please visit{' '}
           <a
             className="text-green underline"
             href="https://docs.carbondefi.xyz/carbon/introducing-carbon/fees-and-payments"
@@ -300,9 +301,11 @@ const content = [
         </p>
         <br />
         <li>
+          {' '}
           Unlawful Activities, such as activities which:
           <p>i. violate any applicable law, rule or regulation; or</p>
           <p>
+            {' '}
             ii. publish, distribute or disseminate any unlawful material or
             information;
           </p>
@@ -360,7 +363,7 @@ const content = [
         </li>
         <li>
           Activities Abusive to Other Users or Their Rights, such as activities
-          which:
+          which: <p></p>
           <p>
             i. interfere with other Users’ ability to access the Site or any of
             the Content;
@@ -689,25 +692,30 @@ const content = [
         In addition to the foregoing, you hereby represent and warrant as
         follows:
         <p>
+          {' '}
           i. you acknowledge and agree that Tokens you are seeking to engage in
           staking in connection with the Site, if any, are not to be construed,
           interpreted, classified or treated as any kind of currency,
           debentures, stocks, shares or other form of securities;
         </p>
         <p>
+          {' '}
           ii. you acknowledge that no regulatory authority has examined or
           approved of these Terms, and the provision of these Terms to you does
           not imply that applicable laws, rule or regulations have been complied
           with;
         </p>
         <p>
+          {' '}
           iii. you have read and understood all of these Terms and the Privacy
           Policy;
         </p>
         <p>
+          {' '}
           iv. any Wallet provided by you is fully operational, secure and valid;
         </p>
         <p>
+          {' '}
           v. you are not, and you are not acting on behalf of, (a) any person or
           entity seeking to access the Site or use the Content from within the
           Prohibited Jurisdictions or for any Restricted Use, or (b) any person
@@ -716,6 +724,7 @@ const content = [
           of the Site or use of the Content;
         </p>
         <p>
+          {' '}
           vi. these Terms constitute legal, valid and binding obligations on
           you, which are enforceable in accordance with these Terms, and neither
           your use of any of the Site or the Content, nor purchase, receipt or
@@ -723,12 +732,14 @@ const content = [
           laws, rules or regulations applicable to you;
         </p>
         <p>
+          {' '}
           vii. you will not, and will not attempt to, authorize anyone other
           than you to access any strategies, orders, or tokens available through
           the Site or the Content using a Wallet owned by you or Address for
           which you control; and
         </p>
         <p>
+          {' '}
           viii. all of the above representations and warranties set forth in
           this Section 9 are true, complete, accurate and non-misleading from
           the time of your acceptance of these Terms, and shall be deemed
@@ -749,6 +760,7 @@ const content = [
           Party shall be liable to you or any person or entity in relation to:
         </p>
         <p>
+          {' '}
           i. failure, malfunction or breakdown of, or disruption to, the
           operation of the Foundation, the Site, the Content, Carbon, Tokens, or
           any technology on which any of the foregoing rely or relies, including
@@ -757,25 +769,30 @@ const content = [
           of when such failure, malfunction, breakdown, or disruption occurs;
         </p>
         <p>
+          {' '}
           ii. any virus, error, bug, flaw or similar defect adversely affecting
           the operation, functionality, usage, storage, transmission mechanisms,
           transferability, tradeability and other material characteristics of
           the Site, the Content, any Tokens or Carbon;
         </p>
         <p>
+          {' '}
           iii. decreases or volatility in trading prices or trading volume of
           Tokens;
         </p>
         <p>
+          {' '}
           iv. any prohibition, restriction or regulation by any Governmental
           Authority in any jurisdiction of the operation, functionality, usage,
           transmission mechanisms of the Content, the Site or Carbon;
         </p>
         <p>
+          {' '}
           v. any risks (whether direct, indirect or ancillary) associated with
           the Site, the Content, the Foundation or Carbon; and
         </p>
         <p>
+          {' '}
           vi. any transaction fees which you may have to pay in connection with
           your use of the Site or the Content.
         </p>
@@ -1053,25 +1070,26 @@ export const TermsPage = () => {
         <p className="mt-30">
           YOU HEREBY AGREE NOT TO USE THE SITE OR THE CONTENT FOR RESTRICTED
           USES OR FROM PROHIBITED JURISDICTIONS. IF YOU DO NOT AGREE TO ANY OF
-          THESE TERMS OF USE OR THE PRIVACY POLICY AVAILABLE AT
+          THESE TERMS OF USE OR THE PRIVACY POLICY AVAILABLE AT{' '}
           <a
             href="https://app.bancor.network/privacy-policy"
             target="_blank"
             rel="noreferrer"
             className="text-green underline"
           >
-            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY-POLICY
+            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY-POLICY{' '}
           </a>
           , PLEASE IMMEDIATELY CEASE ALL USE OF THE SITE AND THE CONTENT.
         </p>
         <p className="mt-40">
-          By accessing or using
+          By accessing or using{' '}
           <a
             href="https://www.carbondefi.xyz"
             target="_blank"
             rel="noreferrer"
             className="text-green underline"
           >
+            {' '}
             https://www.carbondefi.xyz
           </a>
           , and any linked or directed subdomain therein (collectively, the
@@ -1088,7 +1106,7 @@ export const TermsPage = () => {
         <p className="mt-40">
           By using the Content or visiting the Site, you signify your consent to
           both these Terms and our privacy policy (the “Privacy Policy”), a
-          current version of which is available at
+          current version of which is available at{' '}
           <a
             href="https://app.carbondefi.xyz/privacy"
             target="_blank"

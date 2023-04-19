@@ -581,7 +581,7 @@ export const PrivacyPage = () => {
         </p>
         <p>
           THIS PRIVACY POLICY IS SUBJECT IN ALL RESPECTS TO THE TERMS OF USE
-          AVAILABLE AT
+          AVAILABLE AT{' '}
           <a
             href="https://app.carbondefi.xyz/terms"
             target={'_blank'}
@@ -589,7 +589,7 @@ export const PrivacyPage = () => {
             className="text-green underline"
           >
             HTTPS://APP.CARBONDEFI.XYZ/TERMS
-          </a>
+          </a>{' '}
           (THE “TERMS OF USE”), AND BY ACCEPTING SUCH TERMS OF USE PURSUANT TO
           THE TERMS THEREIN OR BY USING THE SITE, YOU ALSO HEREBY AGREE TO
           ACCEPT THE TERMS OF THIS PRIVACY POLICY IN ALL RESPECTS.
@@ -599,7 +599,7 @@ export const PrivacyPage = () => {
           NOT ACCESS OR USE THE SITES.
         </p>
         <p className="mt-40">
-          By accessing or using
+          By accessing or using{' '}
           <a
             href="https://www.carbondefi.xyz"
             target={'_blank'}
@@ -607,7 +607,7 @@ export const PrivacyPage = () => {
             className="text-green underline"
           >
             https://www.carbondefi.xyz
-          </a>
+          </a>{' '}
           , and any linked or directed subdomain therein (collectively, the
           “Site”) and any content made available on or through the Site, you
           (the “User” and collectively with others using the Site, the “Users”,
