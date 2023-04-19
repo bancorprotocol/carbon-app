@@ -76,6 +76,7 @@ export const InputRange: FC<{
           </Tooltip>
           <input
             type={'number'}
+            inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
             placeholder="Enter Price"
@@ -102,6 +103,8 @@ export const InputRange: FC<{
             <div className={'mb-5 text-12 text-white/60'}>Max</div>
           </Tooltip>
           <input
+            type={'number'}
+            inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
             placeholder={`Enter Price`}

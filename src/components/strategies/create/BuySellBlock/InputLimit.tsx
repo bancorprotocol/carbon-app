@@ -45,6 +45,7 @@ export const InputLimit: FC<{
       >
         <input
           type={'number'}
+          inputMode="decimal"
           value={price}
           onChange={handleChange}
           onFocus={handleFocus}
