@@ -191,10 +191,15 @@ const ManageItem: FC<{
   action?: () => void;
 }> = ({ title, id, setManage, action }) => {
   const tooltipText = tooltipTextByStrategyEditOptionsId?.[id];
+  const { belowBreakpoint } = useBreakpoints();
 
   if (tooltipText) {
     return (
-      <Tooltip element={tooltipText} interactive={false}>
+      <Tooltip
+        disabled={belowBreakpoint('md')}
+        element={tooltipText}
+        interactive={false}
+      >
         <div
           onClick={() => {
             action && action();

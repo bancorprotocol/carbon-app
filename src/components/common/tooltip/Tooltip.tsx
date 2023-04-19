@@ -14,6 +14,7 @@ export const Tooltip: FC<
     sendEventOnMount?: {
       buy?: boolean | undefined;
     };
+    disabled?: boolean;
   }
 > = ({
   element,
@@ -21,6 +22,7 @@ export const Tooltip: FC<
   iconClassName = '',
   maxWidth = 350,
   sendEventOnMount,
+  disabled = false,
   children = (
     <IconTooltip
       className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
@@ -58,6 +60,10 @@ export const Tooltip: FC<
     scale.set(initialScale);
     opacity.set(0);
   };
+
+  if (disabled) {
+    return children;
+  }
 
   return (
     <Tippy

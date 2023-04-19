@@ -4,6 +4,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { Button, ButtonHTMLProps } from 'components/common/button';
 import { Tooltip } from '../tooltip/Tooltip';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 type Props = ButtonHTMLProps & {
   symbol?: string;
@@ -22,6 +23,8 @@ export const SelectTokenButton: FC<Props> = ({
   isBaseToken,
   ...props
 }) => {
+  const { belowBreakpoint } = useBreakpoints();
+
   const getTooltipText = () => {
     if (isBaseToken) {
       return symbol
@@ -36,6 +39,7 @@ export const SelectTokenButton: FC<Props> = ({
 
   return (
     <Tooltip
+      disabled={belowBreakpoint('md')}
       maxWidth={430}
       element={getTooltipText()}
       sendEventOnMount={{ buy: undefined }}
