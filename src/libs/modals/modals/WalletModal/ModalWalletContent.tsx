@@ -44,9 +44,17 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
             target={'_blank'}
             className={'font-weight-500 text-white'}
           >
-            terms and conditions, privacy policy
+            terms & conditions
           </Link>{' '}
-          of this site and accept all cookies.
+          and{' '}
+          <Link
+            target={'_blank'}
+            to={PathNames.privacy}
+            className={'font-weight-500 text-white'}
+          >
+            cookie & privacy policy
+          </Link>{' '}
+          of this site.{' '}
         </p>
         <div className={'flex items-center space-x-10'}>
           <Checkbox isChecked={checked} setIsChecked={setChecked} />

@@ -4,6 +4,7 @@ import { useWeb3 } from 'libs/web3';
 import { shortenString } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
+import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconETHLogo } from 'assets/logos/ethlogo.svg';
@@ -86,6 +87,7 @@ export const MainMenuRightWallet: FC = () => {
     return (
       <DropdownMenu
         placement="bottom-end"
+        className="rounded-[10px] py-8 px-8"
         button={(onClick) => (
           <Button
             variant={buttonVariant}
@@ -100,23 +102,34 @@ export const MainMenuRightWallet: FC = () => {
           </Button>
         )}
       >
-        <div className={'w-[180px] space-y-20 font-weight-400'}>
+        <div className={'w-[180px] space-y-10 font-weight-400 text-white'}>
           {isSupportedNetwork ? (
-            <div className={'flex items-center space-x-10'}>
+            <div
+              className={
+                'flex w-full items-center space-x-10 p-8 font-weight-400'
+              }
+            >
               <IconETHLogo className={'w-16'} />
               <span>Ethereum Network</span>
             </div>
           ) : (
             <button
               onClick={switchNetwork}
-              className={'text-red/80 hover:text-red'}
+              className={
+                'hover:bg-body flex w-full rounded-6 p-8 text-red/80  hover:text-red'
+              }
             >
               Switch Network
             </button>
           )}
-
-          <button onClick={onDisconnect} className={'hover:text-white'}>
-            Disconnect
+          <button
+            onClick={onDisconnect}
+            className={
+              'hover:bg-body flex w-full items-center space-x-10 rounded-6 p-8'
+            }
+          >
+            <IconDisconnect className={'w-16'} />
+            <span>Disconnect</span>
           </button>
         </div>
       </DropdownMenu>
