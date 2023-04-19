@@ -5,10 +5,17 @@ import {
   useGetOrderBookLastTradeBuy,
 } from 'libs/queries/sdk/orderBook';
 import { useMemo } from 'react';
-import BigNumber from 'bignumber.js';
 import { orderBy } from 'lodash';
 import { useTokens } from 'hooks/useTokens';
 import { useStore } from 'store';
+import Decimal from 'decimal.js';
+
+Decimal.set({
+  precision: 100,
+  rounding: Decimal.ROUND_HALF_DOWN,
+  toExpNeg: -30,
+  toExpPos: 30,
+});
 
 const _subtractPrevAmount = (
   data: OrderRow[],
@@ -18,9 +25,8 @@ const _subtractPrevAmount = (
   i: number
 ) => {
   const prevAmount = data[i - 1]?.amount || '0';
-  const prevTotal = data[i - 1]?.total || '0';
-  const newAmount = new BigNumber(amount).minus(prevAmount);
-  const newTotal = new BigNumber(total).minus(prevTotal);
+  const newAmount = new Decimal(amount).minus(prevAmount);
+  const newTotal = new Decimal(rate).times(newAmount);
 
   return {
     rate,
@@ -42,9 +48,9 @@ const buildOrders = (
     .filter(({ amount }) => amount !== '0')
     .splice(0, buckets)
     .map(({ amount, rate, total }) => ({
-      rate: new BigNumber(rate).toFixed(quoteDecimals, 1),
-      amount: new BigNumber(amount).toFixed(baseDecimals, 1),
-      total: new BigNumber(total).toFixed(quoteDecimals, 1),
+      rate: new Decimal(rate).toFixed(quoteDecimals, 1),
+      amount: new Decimal(amount).toFixed(baseDecimals, 1),
+      total: new Decimal(total).toFixed(quoteDecimals, 1),
     }));
 };
 
