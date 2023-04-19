@@ -519,11 +519,11 @@ const content = [
         we may share information with third parties for the purpose of targeted
         advertising. You have the right to opt out of the sale or sharing of
         your information by clicking the “Do Not Sell or Share My Personal
-        Information” link on our Site or by clicking this
+        Information” link on our Site or by clicking this{' '}
         <button
           onClick={() => window?.OneTrust?.ToggleInfoDisplay()}
           id="ot-sdk-btn"
-          className="ot-sdk-show-settings"
+          className="text-green"
         >
           <u>Cookie Settings</u>
         </button>
