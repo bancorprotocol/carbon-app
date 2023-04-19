@@ -37,7 +37,7 @@ const content = [
     id: 2,
     subtitle: 'Site Content',
     html: (
-      <div>
+      <>
         <p>
           The Site offers a user interface that may display information related
           to certain blockchain networks, and that may assist with formatting or
@@ -151,7 +151,7 @@ const content = [
           USERS SHOULD REVIEW THE FAQ PERIODICALLY FOR UPDATES, AND FOR
           INFORMATION ON ANY CONTENT OR SERVICE WITH WHICH THEY ARE UNFAMILIAR.
         </p>
-      </div>
+      </>
     ),
   },
   {
@@ -360,7 +360,7 @@ const content = [
         </li>
         <li>
           Activities Abusive to Other Users or Their Rights, such as activities
-          which: <p></p>
+          which:
           <p>
             i. interfere with other Users’ ability to access the Site or any of
             the Content;
@@ -1116,7 +1116,7 @@ export const TermsPage = () => {
             <h2 className="font-semibold mb-10 text-[20px]">
               {item.id}. {item.subtitle}
             </h2>
-            <p className="mb-20 text-[16px]">{item.html}</p>
+            <div className="mb-20 text-[16px]">{item.html}</div>
           </div>
         ))}
       </>
