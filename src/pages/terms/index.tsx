@@ -1072,13 +1072,13 @@ export const TermsPage = () => {
           USES OR FROM PROHIBITED JURISDICTIONS. IF YOU DO NOT AGREE TO ANY OF
           THESE TERMS OF USE OR THE PRIVACY POLICY AVAILABLE AT{' '}
           <a
-            href="https://app.bancor.network/privacy-policy"
+            href="https://app.carbondefi.xyz/privacy"
             target="_blank"
             rel="noreferrer"
             className="text-green underline"
           >
-            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY-POLICY{' '}
-          </a>
+            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY
+          </a>{' '}
           , PLEASE IMMEDIATELY CEASE ALL USE OF THE SITE AND THE CONTENT.
         </p>
         <p className="mt-40">
