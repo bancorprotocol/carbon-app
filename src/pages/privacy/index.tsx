@@ -523,7 +523,7 @@ const content = [
         <button
           onClick={() => window?.OneTrust?.ToggleInfoDisplay()}
           id="ot-sdk-btn"
-          className="ot-sdk-show-settings text-green"
+          className="text-green"
         >
           <u>Cookie Settings</u>
         </button>
