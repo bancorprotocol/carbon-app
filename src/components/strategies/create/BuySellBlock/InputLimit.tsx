@@ -44,6 +44,7 @@ export const InputLimit: FC<{
         } bg-body flex flex-col items-end rounded-16 border-2 border-black p-16`}
       >
         <input
+          type={'number'}
           value={price}
           onChange={handleChange}
           onFocus={handleFocus}

@@ -75,6 +75,7 @@ export const InputRange: FC<{
             <div className={'mb-5 text-12 text-white/60'}>Min</div>
           </Tooltip>
           <input
+            type={'number'}
             value={min}
             onChange={handleChangeMin}
             placeholder="Enter Price"

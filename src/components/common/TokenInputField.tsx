@@ -103,6 +103,7 @@ export const TokenInputField: FC<Props> = ({
         </div>
         {
           <input
+            type={'number'}
             ref={inputRef}
             value={
               value === '...'
