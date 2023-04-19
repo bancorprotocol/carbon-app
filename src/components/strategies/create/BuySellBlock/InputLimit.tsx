@@ -44,7 +44,8 @@ export const InputLimit: FC<{
         } bg-body flex flex-col items-end rounded-16 border-2 border-black p-16`}
       >
         <input
-          type={'number'}
+          type={'text'}
+          pattern="[0-9]*"
           inputMode="decimal"
           value={price}
           onChange={handleChange}

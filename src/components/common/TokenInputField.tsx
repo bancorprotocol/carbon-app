@@ -103,7 +103,8 @@ export const TokenInputField: FC<Props> = ({
         </div>
         {
           <input
-            type={'number'}
+            type={'text'}
+            pattern="[0-9]*"
             inputMode="decimal"
             ref={inputRef}
             value={

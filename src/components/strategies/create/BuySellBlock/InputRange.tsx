@@ -75,7 +75,8 @@ export const InputRange: FC<{
             <div className={'mb-5 text-12 text-white/60'}>Min</div>
           </Tooltip>
           <input
-            type={'number'}
+            type={'text'}
+            pattern="[0-9]*"
             inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
@@ -103,7 +104,8 @@ export const InputRange: FC<{
             <div className={'mb-5 text-12 text-white/60'}>Max</div>
           </Tooltip>
           <input
-            type={'number'}
+            type={'text'}
+            pattern="[0-9]*"
             inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
