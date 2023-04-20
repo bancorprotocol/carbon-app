@@ -59,7 +59,7 @@ export const StrategyBlockOrderStatus: FC<{
                       strategyEventData
                     );
                     window?.open(
-                      `https://app.hal.xyz/recipes/carbon-strategy?strategyID=${strategyId}`,
+                      `https://app.hal.xyz/recipes/carbon-track-strategy-updated?strategyID=${strategyId}`,
                       '_blank'
                     );
                   }}
