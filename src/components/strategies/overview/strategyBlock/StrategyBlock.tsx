@@ -54,9 +54,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
               </div>
             }
 
-            <div className="text-secondary flex gap-8">
-              ID: {strategy.idDisplay}
-            </div>
+            <div className="text-secondary flex">ID: {strategy.idDisplay}</div>
           </div>
         </div>
         <span
@@ -77,9 +75,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <StrategyBlockBuySell strategy={strategy} />
       <StrategyBlockOrderStatus
         status={strategy.status}
-        strategyId={strategy.id}
         showBudgetWarning={showBudgetWarning}
-        strategyEventData={{ ...strategyEventData, strategyId: strategy.id }}
       />
       <StrategyBlockManage
         manage={manage}
