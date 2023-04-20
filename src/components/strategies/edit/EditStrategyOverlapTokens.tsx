@@ -8,8 +8,6 @@ type EditStrategyOverlapTokensProps = {
 export const EditStrategyOverlapTokens = ({
   strategy,
 }: EditStrategyOverlapTokensProps) => {
-  const paddedID = strategy.id.padStart(9, '0');
-
   return (
     <div
       className={
@@ -28,11 +26,7 @@ export const EditStrategyOverlapTokens = ({
             <span>{strategy.quote.symbol}</span>
           </div>
         }
-        <div className="text-secondary flex gap-8">
-          <span>{paddedID.slice(0, 3)}</span>
-          <span>{paddedID.slice(3, 6)}</span>
-          <span>{paddedID.slice(6, 9)}</span>
-        </div>
+        <div className="text-secondary">ID: {strategy.idDisplay}</div>
       </div>
     </div>
   );
