@@ -54,9 +54,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
               </div>
             }
 
-            <div className="text-secondary flex gap-8">
-              ID: {strategy.idDisplay}
-            </div>
+            <div className="text-secondary flex">ID: {strategy.idDisplay}</div>
           </div>
         </div>
         <span
