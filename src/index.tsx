@@ -1,4 +1,5 @@
 import 'global-shim';
+import 'init-sentry';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'utils/buffer';
