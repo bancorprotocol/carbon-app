@@ -57,14 +57,16 @@ export const ApproveToken: FC<Props> = ({
             limited: isLimited,
           });
           await tx.wait();
+          await cache.refetchQueries({
+            queryKey: QueryKey.approval(user!, data.address, data.spender),
+          });
+          setTxBusy(false);
           setTxSuccess(true);
           handleTokenConfirmationApproveEvent();
         },
-        onError: () => {
+        onError: async () => {
           dispatchNotification('approveError', { symbol: token.symbol });
           console.error('could not set approval');
-        },
-        onSettled: async () => {
           await cache.refetchQueries({
             queryKey: QueryKey.approval(user!, data.address, data.spender),
           });
