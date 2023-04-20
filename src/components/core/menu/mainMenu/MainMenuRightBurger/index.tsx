@@ -2,15 +2,34 @@ import { FC, useState } from 'react';
 import { ReactComponent as IconBurger } from 'assets/icons/burger.svg';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { PathNames, useNavigate } from 'libs/routing';
+import { Link, PathNames, useNavigate } from 'libs/routing';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { MenuItem } from './MenuItem';
+import { externalLinks } from 'libs/routing/routes';
+import { ReactComponent as IconTwitter } from 'assets/logos/twitter.svg';
+import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
+import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
+import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 
 export const MainMenuRightBurger: FC = () => {
   const navigate = useNavigate<MyLocationGenerics>();
   const [isOpen, setIsOpen] = useState(false);
 
   const items = [
+    {
+      content: 'Analytics',
+      onClick: () => {
+        navigate({ to: externalLinks.analytics });
+        setIsOpen(false);
+      },
+    },
+    {
+      content: 'Blog',
+      onClick: () => {
+        navigate({ to: externalLinks.blog });
+        setIsOpen(false);
+      },
+    },
     {
       content: 'Terms of Use',
       onClick: () => {
@@ -24,6 +43,25 @@ export const MainMenuRightBurger: FC = () => {
         navigate({ to: PathNames.privacy });
         setIsOpen(false);
       },
+    },
+    {
+      content: (
+        <div className="flex w-full justify-between">
+          <Link to={externalLinks.twitter}>
+            <IconTwitter />
+          </Link>
+          <Link to={externalLinks.youtube}>
+            <IconYoutube />
+          </Link>
+          <Link to={externalLinks.discord}>
+            <IconDiscord />
+          </Link>
+          <Link to={externalLinks.telegram}>
+            <IconTelegram />
+          </Link>
+        </div>
+      ),
+      onClick: () => setIsOpen(false),
     },
   ];
 
