@@ -40,7 +40,11 @@ export default defineConfig(({ mode }) => {
   return {
     build: {
       outDir: 'build',
-      sourcemap: true,
+      sourcemap: !!(
+        env.SENTRY_ORG &&
+        env.SENTRY_PROJECT &&
+        env.SENTRY_AUTH_TOKEN
+      ),
     },
     resolve: {
       alias: {
