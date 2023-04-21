@@ -75,7 +75,9 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <StrategyBlockBuySell strategy={strategy} />
       <StrategyBlockOrderStatus
         status={strategy.status}
+        strategyId={strategy.id}
         showBudgetWarning={showBudgetWarning}
+        strategyEventData={{ ...strategyEventData, strategyId: strategy.id }}
       />
       <StrategyBlockManage
         manage={manage}
