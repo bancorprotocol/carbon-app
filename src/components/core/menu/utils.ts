@@ -6,3 +6,7 @@ export const handleOnItemClick = (href: string) => {
     carbonEvents.navigation.navStrategyClick(undefined);
   href === PathNames.trade && carbonEvents.navigation.navTradeClick(undefined);
 };
+
+export const openUrlInNewTab = (url: string) => {
+  window?.open(url, '_blank');
+};

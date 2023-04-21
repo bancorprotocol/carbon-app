@@ -10,8 +10,8 @@ import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
 
 export const externalLinks = {
-  blog: 'blog.carbondefi.xyz',
-  analytics: 'analytics.carbondefi.xyz',
+  blog: 'http://blog.carbondefi.xyz',
+  analytics: 'http://analytics.carbondefi.xyz',
   twitter: 'https://twitter.com/carbondefixyz',
   youtube: 'https://www.youtube.com/c/BancorProtocol',
   discord: 'https://discord.gg/bancor',

@@ -10,6 +10,7 @@ import { ReactComponent as IconTwitter } from 'assets/logos/twitter.svg';
 import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
+import { openUrlInNewTab } from '../../utils';
 
 export const MainMenuRightBurger: FC = () => {
   const navigate = useNavigate<MyLocationGenerics>();
@@ -19,14 +20,14 @@ export const MainMenuRightBurger: FC = () => {
     {
       content: 'Analytics',
       onClick: () => {
-        navigate({ to: externalLinks.analytics });
+        openUrlInNewTab(externalLinks.analytics);
         setIsOpen(false);
       },
     },
     {
       content: 'Blog',
       onClick: () => {
-        navigate({ to: externalLinks.blog });
+        openUrlInNewTab(externalLinks.blog);
         setIsOpen(false);
       },
     },
