@@ -72,6 +72,7 @@ export const MainMenuRightBurger: FC = () => {
                 ),
                 onClick: () => {
                   setCurrentItems(items);
+                  setMenuType('main');
                 },
               },
               ...this?.children,
@@ -131,6 +132,7 @@ export const MainMenuRightBurger: FC = () => {
                 ),
                 onClick: () => {
                   setCurrentItems(items);
+                  setMenuType('main');
                 },
               },
               ...this?.children,
