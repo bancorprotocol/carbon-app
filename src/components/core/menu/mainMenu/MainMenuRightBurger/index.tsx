@@ -25,8 +25,10 @@ export const MainMenuRightBurger: FC = () => {
   const navigate = useNavigate<MyLocationGenerics>();
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
-
   const [isOpen, setIsOpen] = useState(false);
+  const [menuType, setMenuType] = useState<'main' | 'resource' | 'currency'>(
+    'main'
+  );
 
   let items: Item[] = useMemo(() => {
     return [
@@ -74,6 +76,7 @@ export const MainMenuRightBurger: FC = () => {
               },
               ...this?.children,
             ]);
+            setMenuType('currency');
           }
         },
       },
@@ -133,6 +136,7 @@ export const MainMenuRightBurger: FC = () => {
               ...this?.children,
             ]);
           }
+          setMenuType('resource');
         },
       },
       {
@@ -195,6 +199,7 @@ export const MainMenuRightBurger: FC = () => {
   useEffect(() => {
     if (isOpen) {
       setCurrentItems(items);
+      setMenuType('main');
     }
   }, [isOpen, items]);
 
@@ -221,7 +226,13 @@ export const MainMenuRightBurger: FC = () => {
       )}
     >
       {currentItems?.map((item, index) => (
-        <MenuItem key={`${index}_${item.content}`} item={item} />
+        <div
+          className={`border-grey5 ${
+            menuType === 'main' ? 'first:border-b-2 last:border-t-2' : ''
+          }`}
+        >
+          <MenuItem key={`${index}_${item.content}`} item={item} />
+        </div>
       ))}
     </DropdownMenu>
   );
