@@ -4,6 +4,7 @@ import { Notification } from 'libs/notifications';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
+import { FiatSymbol } from 'store/useFiatCurrencyStore';
 
 const APP_ID = 'carbon';
 const APP_VERSION = 'v1';
@@ -21,6 +22,7 @@ interface LocalStorageSchema {
   [k: `favoriteTokens-${string}`]: Token[];
   tradePairsCategory: TradePairCategory;
   tradePair: [string, string];
+  currentCurrency: FiatSymbol;
   tradeSlippage: string;
   tradeDeadline: string;
   tradeMaxOrders: string;

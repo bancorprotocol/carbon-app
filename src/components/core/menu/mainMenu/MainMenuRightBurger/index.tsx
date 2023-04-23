@@ -11,7 +11,9 @@ import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
+import { ReactComponent as IconV } from 'assets/icons/v.svg';
 import { openUrlInNewTab } from '../../utils';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 export type Item = {
   content: string | ReactElement;
@@ -21,10 +23,60 @@ export type Item = {
 
 export const MainMenuRightBurger: FC = () => {
   const navigate = useNavigate<MyLocationGenerics>();
+  const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
+    useFiatCurrency();
+
   const [isOpen, setIsOpen] = useState(false);
 
-  const items: Item[] = useMemo(() => {
+  let items: Item[] = useMemo(() => {
     return [
+      {
+        content: (
+          <div className="flex w-full items-center justify-between">
+            <span>Currency</span>
+            <span className="mr-10 font-weight-500">
+              {selectedFiatCurrency}
+            </span>
+          </div>
+        ),
+        children: availableCurrencies.map((currency) => {
+          const isCurrencySelected = currency === selectedFiatCurrency;
+
+          return {
+            content: (
+              <div className={`flex gap-20 ${isCurrencySelected ? '' : ''}`}>
+                <span>{currency}</span>
+                <span className="flex items-center">
+                  {isCurrencySelected && <IconV className="h-12 w-12" />}
+                </span>
+              </div>
+            ),
+            onClick: () => {
+              setSelectedFiatCurrency(currency);
+              setCurrentItems(items);
+              setIsOpen(false);
+            },
+          };
+        }),
+        onClick: function () {
+          if (this?.children) {
+            setCurrentItems([
+              {
+                content: (
+                  <div className="flex items-center gap-10">
+                    <IconArrow className="h-12 w-7 rotate-180" />
+                    <span className="font-weight-500">Currency</span>
+                  </div>
+                ),
+                onClick: () => {
+                  setCurrentItems(items);
+                },
+              },
+              ...this?.children,
+            ]);
+          }
+        },
+      },
       {
         content: 'Resources',
         children: [
@@ -64,8 +116,8 @@ export const MainMenuRightBurger: FC = () => {
             },
           },
         ],
-        onClick: () => {
-          if (currentItems?.[0]?.children) {
+        onClick: function () {
+          if (this?.children) {
             setCurrentItems([
               {
                 content: (
@@ -78,7 +130,7 @@ export const MainMenuRightBurger: FC = () => {
                   setCurrentItems(items);
                 },
               },
-              ...currentItems?.[0]?.children,
+              ...this?.children,
             ]);
           }
         },
@@ -131,7 +183,12 @@ export const MainMenuRightBurger: FC = () => {
         onClick: () => setIsOpen(false),
       },
     ];
-  }, [navigate]);
+  }, [
+    availableCurrencies,
+    navigate,
+    selectedFiatCurrency,
+    setSelectedFiatCurrency,
+  ]);
 
   const [currentItems, setCurrentItems] = useState(items);
 
@@ -164,7 +221,7 @@ export const MainMenuRightBurger: FC = () => {
       )}
     >
       {currentItems?.map((item, index) => (
-        <MenuItem key={`${index}_${item.content}`} {...item} />
+        <MenuItem key={`${index}_${item.content}`} item={item} />
       ))}
     </DropdownMenu>
   );

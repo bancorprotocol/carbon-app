@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
+import { lsService } from 'services/localeStorage';
 
 const AVAILABLE_CURRENCIES = [
   'USD',
@@ -20,12 +21,18 @@ export type FiatPriceDict = {
 export interface FiatCurrencyStore {
   availableCurrencies: readonly FiatSymbol[];
   selectedFiatCurrency: FiatSymbol;
-  setSelectedFiatCurrency: Dispatch<SetStateAction<FiatSymbol>>;
+  setSelectedFiatCurrency: (currency: FiatSymbol) => void;
 }
 
 export const useFiatCurrencyStore = (): FiatCurrencyStore => {
-  const [selectedFiatCurrency, setSelectedFiatCurrency] =
-    useState<FiatSymbol>('USD');
+  const [selectedFiatCurrency, _setSelectedFiatCurrency] = useState<FiatSymbol>(
+    lsService.getItem('currentCurrency') || 'USD'
+  );
+
+  const setSelectedFiatCurrency = (currency: FiatSymbol) => {
+    _setSelectedFiatCurrency(currency);
+    lsService.setItem('currentCurrency', currency);
+  };
 
   return {
     selectedFiatCurrency,
