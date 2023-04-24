@@ -10,6 +10,7 @@ import {
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { lsService } from 'services/localeStorage';
 
 export const StrategiesPage = () => {
   const { user } = useWeb3();
@@ -17,7 +18,14 @@ export const StrategiesPage = () => {
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState(StrategySort.Old);
-  const [filter, setFilter] = useState(StrategyFilter.All);
+  const [filter, _setFilter] = useState(
+    lsService.getItem('strategyOverviewFilter') || StrategyFilter.All
+  );
+
+  const setFilter = (filter: StrategyFilter) => {
+    _setFilter(filter);
+    lsService.setItem('strategyOverviewFilter', filter);
+  };
 
   return (
     <Page
@@ -48,4 +56,3 @@ export const StrategiesPage = () => {
     </Page>
   );
 };
-// ? <StrategyContent /> : <WalletConnect />
