@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useMemo, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, PathNames, useNavigate } from 'libs/routing';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { externalLinks } from 'libs/routing/routes';
@@ -12,26 +12,62 @@ import { openUrlInNewTab } from '../../utils';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 export type Item = {
-  id: string;
+  subMenu?: MenuType;
   content: string | ReactElement;
   onClick: () => void;
 };
 
-type MenuType = 'main' | 'resources' | 'currency';
+export type MenuType = 'main' | 'resources' | 'currency';
 
 export const useMenuContext = () => {
   const navigate = useNavigate<MyLocationGenerics>();
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
   const [isOpen, setIsOpen] = useState(false);
-  const [menuType, setMenuType] = useState<{ type: MenuType; title?: string }>({
-    type: 'main',
-  });
 
-  const items: Item[] = useMemo(() => {
-    return [
+  const menuMap = useMemo(
+    () => new Map<MenuType, { title?: string; items: Item[] }>(),
+    []
+  );
+
+  const getTopSubMenuItem = useCallback((title?: string) => {
+    return {
+      content: (
+        <div className="flex items-center gap-10">
+          <IconArrow className="h-12 w-7 rotate-180" />
+          <span className="font-weight-500">{title}</span>
+        </div>
+      ),
+      onClick: () => {
+        back();
+      },
+    };
+  }, []);
+
+  const setContextByItem = useCallback(
+    (item: Item) => {
+      setMenuContext((prev) => {
+        if (item?.subMenu) {
+          const data = menuMap.get(item?.subMenu);
+          if (data?.items) {
+            const topSubMenuItem = getTopSubMenuItem(data?.title);
+            const newContext = {
+              title: data.title,
+              items: [topSubMenuItem, ...data?.items],
+            };
+            setMenuContext([...prev, newContext]);
+          }
+        }
+        return prev;
+      });
+    },
+    [getTopSubMenuItem, menuMap]
+  );
+
+  const mainItems = useMemo(
+    (): Item[] => [
       {
-        id: 'currency',
+        subMenu: 'currency',
         content: (
           <div className="flex w-full items-center justify-between">
             <span>Currency</span>
@@ -40,19 +76,18 @@ export const useMenuContext = () => {
             </span>
           </div>
         ),
-        onClick: () => {
-          setMenuType({ type: 'currency', title: 'Currency' });
+        onClick: function () {
+          setContextByItem(this);
         },
       },
       {
-        id: 'resources',
+        subMenu: 'resources',
         content: 'Resources',
-        onClick: () => {
-          setMenuType({ type: 'resources', title: 'Resources' });
+        onClick: function () {
+          setContextByItem(this);
         },
       },
       {
-        id: 'analytics',
         content: 'Analytics',
         onClick: () => {
           openUrlInNewTab(externalLinks.analytics);
@@ -60,7 +95,6 @@ export const useMenuContext = () => {
         },
       },
       {
-        id: 'blog',
         content: 'Blog',
         onClick: () => {
           openUrlInNewTab(externalLinks.blog);
@@ -68,7 +102,6 @@ export const useMenuContext = () => {
         },
       },
       {
-        id: 'termOfUse',
         content: 'Terms of Use',
         onClick: () => {
           navigate({ to: PathNames.terms });
@@ -76,7 +109,6 @@ export const useMenuContext = () => {
         },
       },
       {
-        id: 'privacyPolicy',
         content: 'Privacy Policy',
         onClick: () => {
           navigate({ to: PathNames.privacy });
@@ -84,7 +116,6 @@ export const useMenuContext = () => {
         },
       },
       {
-        id: 'social',
         content: (
           <div className="flex w-full items-center justify-between">
             <Link
@@ -115,75 +146,94 @@ export const useMenuContext = () => {
         ),
         onClick: () => setIsOpen(false),
       },
-    ];
-  }, [navigate, selectedFiatCurrency]);
+    ],
+    [navigate, selectedFiatCurrency, setContextByItem]
+  );
 
-  const [menuContext, setMenuContext] = useState([items]);
+  const currencyItems = useMemo(
+    (): Item[] => [
+      ...availableCurrencies.map((currency) => {
+        const isCurrencySelected = currency === selectedFiatCurrency;
 
-  const menuMap = useMemo(() => new Map(), []);
+        return {
+          content: (
+            <div className={`flex gap-20 ${isCurrencySelected ? '' : ''}`}>
+              <span>{currency}</span>
+              <span className="flex items-center">
+                <IconV
+                  className={`invisible h-12 w-12 ${
+                    isCurrencySelected ? '!visible' : ''
+                  }`}
+                />
+              </span>
+            </div>
+          ),
+          onClick: () => {
+            setSelectedFiatCurrency(currency);
+            closeMenu();
+          },
+        };
+      }),
+    ],
+    [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency]
+  );
 
-  menuMap.set('currency', [
-    ...availableCurrencies.map((currency) => {
-      const isCurrencySelected = currency === selectedFiatCurrency;
-
-      return {
-        content: (
-          <div className={`flex gap-20 ${isCurrencySelected ? '' : ''}`}>
-            <span>{currency}</span>
-            <span className="flex items-center">
-              <IconV
-                className={`invisible h-12 w-12 ${
-                  isCurrencySelected ? '!visible' : ''
-                }`}
-              />
-            </span>
-          </div>
-        ),
+  const resourcesItems = useMemo(
+    (): Item[] => [
+      {
+        content: 'Tech Docs',
         onClick: () => {
-          setSelectedFiatCurrency(currency);
+          openUrlInNewTab(externalLinks.techDocs);
           closeMenu();
         },
-      };
-    }),
-  ]);
+      },
+      {
+        content: 'Litepaper',
+        onClick: () => {
+          openUrlInNewTab(externalLinks.litePaper);
+          closeMenu();
+        },
+      },
+      {
+        content: 'Whitepaper',
+        onClick: () => {
+          openUrlInNewTab(externalLinks.whitepaper);
+          closeMenu();
+        },
+      },
+      {
+        content: 'Simulator Repo',
+        onClick: () => {
+          openUrlInNewTab(externalLinks.simulatorRepo);
+          closeMenu();
+        },
+      },
+      {
+        content: 'Interactive Simulator',
+        onClick: () => {
+          openUrlInNewTab(externalLinks.interactiveSim);
+          closeMenu();
+        },
+      },
+    ],
+    []
+  );
 
-  menuMap.set('resources', [
-    {
-      content: 'Tech Docs',
-      onClick: () => {
-        openUrlInNewTab(externalLinks.techDocs);
-        closeMenu();
-      },
-    },
-    {
-      content: 'Litepaper',
-      onClick: () => {
-        openUrlInNewTab(externalLinks.litePaper);
-        closeMenu();
-      },
-    },
-    {
-      content: 'Whitepaper',
-      onClick: () => {
-        openUrlInNewTab(externalLinks.whitepaper);
-        closeMenu();
-      },
-    },
-    {
-      content: 'Simulator Repo',
-      onClick: () => {
-        openUrlInNewTab(externalLinks.simulatorRepo);
-        closeMenu();
-      },
-    },
-    {
-      content: 'Interactive Simulator',
-      onClick: () => {
-        openUrlInNewTab(externalLinks.interactiveSim);
-        closeMenu();
-      },
-    },
-  ]);
+  menuMap.set('main', { items: mainItems });
+
+  menuMap.set('currency', { items: currencyItems, title: 'Currency' });
+
+  menuMap.set('resources', { items: resourcesItems, title: 'Resources' });
+
+  const [menuContext, setMenuContext] = useState([menuMap.get('main')]);
+
+  const back = () => {
+    setMenuContext((prev) => {
+      const updatedContext = [...prev];
+      updatedContext.pop();
+      return updatedContext;
+    });
+  };
 
   const closeMenu = () => {
     setIsOpen(false);
@@ -191,45 +241,15 @@ export const useMenuContext = () => {
 
   useEffect(() => {
     if (!isOpen) {
-      setMenuType({ type: 'main' });
+      // Clean up the menu when closing
+      setMenuContext([menuMap.get('main')]);
     }
-  }, [isOpen, items]);
-
-  useEffect(() => {
-    if (menuType.type !== 'main') {
-      const subMenu = menuMap.get(menuType.type);
-      const titleItem = {
-        content: (
-          <div className="flex items-center gap-10">
-            <IconArrow className="h-12 w-7 rotate-180" />
-            <span className="font-weight-500">{menuType.title}</span>
-          </div>
-        ),
-        onClick: () => {
-          setMenuType({ type: 'main' });
-        },
-      };
-      const newContext = [...menuContext, [titleItem, ...subMenu]];
-      setMenuContext(newContext);
-    } else {
-      setMenuContext((prev) => {
-        if (prev.length > 1) {
-          prev.pop();
-          const newContext = [...prev];
-          return newContext.length === 1 ? [items] : newContext;
-        }
-        return prev;
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuMap, menuType, setMenuContext, items]);
+  }, [isOpen, menuMap]);
 
   return {
     isOpen,
     setIsOpen,
     closeMenu,
-    menuType,
-    menuMap,
-    currentMenuItems: menuContext[menuContext.length - 1],
+    menuContext,
   };
 };

@@ -1,19 +1,13 @@
-import { FC, ReactElement } from 'react';
+import { FC } from 'react';
 import { ReactComponent as IconBurger } from 'assets/icons/burger.svg';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { MenuItem } from './MenuItem';
 import { useMenuContext } from './useMenuContext';
 
-export type Item = {
-  id: string;
-  content: string | ReactElement;
-  onClick: () => void;
-};
-
 export const MainMenuRightBurger: FC = () => {
-  const { isOpen, setIsOpen, currentMenuItems, menuType, menuMap } =
-    useMenuContext();
+  const { isOpen, setIsOpen, menuContext } = useMenuContext();
+  const currentMenuItems = menuContext[menuContext.length - 1]?.items;
 
   return (
     <DropdownMenu
@@ -42,15 +36,15 @@ export const MainMenuRightBurger: FC = () => {
           <div
             key={`${index}_${item.content}`}
             className={`border-grey5 ${
-              menuType.type === 'main' ? 'first:border-b-2 last:border-t-2' : ''
+              menuContext.length === 1 ? 'first:border-b-2 last:border-t-2' : ''
             }`}
           >
             <MenuItem
               item={{
                 ...item,
-                hasSubMenu: menuMap.get(item.id),
+                hasSubMenu: !!item?.subMenu,
                 disableHoverEffect:
-                  menuType.type === 'main' &&
+                  menuContext.length === 1 &&
                   index === currentMenuItems.length - 1,
               }}
             />
