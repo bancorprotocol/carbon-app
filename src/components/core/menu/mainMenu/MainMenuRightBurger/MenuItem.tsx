@@ -6,17 +6,24 @@ type MenuItemProps = {
     onClick: () => void;
     content: string | ReactElement;
     hasSubMenu?: boolean;
+    disableHoverEffect?: boolean;
+    className?: string;
   };
 };
 
 export const MenuItem: FC<MenuItemProps> = ({ item }) => {
-  const { hasSubMenu, content } = item;
+  const {
+    content,
+    hasSubMenu,
+    disableHoverEffect = false,
+    className = '',
+  } = item;
   return (
     <div
       onClick={() => item.onClick()}
-      className={
-        'hover:bg-body block cursor-pointer rounded-6 p-10 hover:text-white'
-      }
+      className={`${
+        disableHoverEffect ? 'p-4' : 'hover:bg-body p-10'
+      } block cursor-pointer rounded-6 hover:text-white ${className}`}
     >
       <div
         className={`${hasSubMenu ? 'flex items-center justify-between' : ''}`}

@@ -45,7 +45,15 @@ export const MainMenuRightBurger: FC = () => {
               menuType.type === 'main' ? 'first:border-b-2 last:border-t-2' : ''
             }`}
           >
-            <MenuItem item={{ ...item, hasSubMenu: menuMap.get(item.id) }} />
+            <MenuItem
+              item={{
+                ...item,
+                hasSubMenu: menuMap.get(item.id),
+                disableHoverEffect:
+                  menuType.type === 'main' &&
+                  index === currentMenuItems.length - 1,
+              }}
+            />
           </div>
         );
       })}

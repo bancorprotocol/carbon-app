@@ -86,17 +86,29 @@ export const useMenuContext = () => {
       {
         id: 'social',
         content: (
-          <div className="flex w-full justify-between">
-            <Link to={externalLinks.twitter}>
+          <div className="flex w-full items-center justify-between">
+            <Link
+              to={externalLinks.twitter}
+              className="rounded-6 p-6 hover:bg-black"
+            >
               <IconTwitter />
             </Link>
-            <Link to={externalLinks.youtube}>
+            <Link
+              to={externalLinks.youtube}
+              className="rounded-6 p-6 hover:bg-black"
+            >
               <IconYoutube />
             </Link>
-            <Link to={externalLinks.discord}>
+            <Link
+              to={externalLinks.discord}
+              className="rounded-6 p-6 hover:bg-black"
+            >
               <IconDiscord />
             </Link>
-            <Link to={externalLinks.telegram}>
+            <Link
+              to={externalLinks.telegram}
+              className="rounded-6 p-6 hover:bg-black"
+            >
               <IconTelegram />
             </Link>
           </div>
