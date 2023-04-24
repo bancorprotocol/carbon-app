@@ -87,7 +87,7 @@ export const MainMenuRightWallet: FC = () => {
     return (
       <DropdownMenu
         placement="bottom-end"
-        className="rounded-[10px] py-8 px-8"
+        className="rounded-[10px] py-8 px-8 dark:bg-emphasis/100"
         button={(onClick) => (
           <Button
             variant={buttonVariant}
