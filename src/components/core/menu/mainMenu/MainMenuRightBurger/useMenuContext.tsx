@@ -43,7 +43,7 @@ export const useMenuContext = () => {
     };
   }, []);
 
-  const setContextByItem = useCallback(
+  const forward = useCallback(
     (item: Item) => {
       setMenuContext((prev) => {
         if (item?.subMenu) {
@@ -63,6 +63,18 @@ export const useMenuContext = () => {
     [getTopSubMenuItem, menuMap]
   );
 
+  const back = () => {
+    setMenuContext((prev) => {
+      const updatedContext = [...prev];
+      updatedContext.pop();
+      return updatedContext;
+    });
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   const mainItems = useMemo(
     (): Item[] => [
       {
@@ -76,14 +88,14 @@ export const useMenuContext = () => {
           </div>
         ),
         onClick: function () {
-          setContextByItem(this);
+          forward(this);
         },
       },
       {
         subMenu: 'resources',
         content: 'Resources',
         onClick: function () {
-          setContextByItem(this);
+          forward(this);
         },
       },
       {
@@ -152,7 +164,7 @@ export const useMenuContext = () => {
         onClick: () => setIsOpen(false),
       },
     ],
-    [navigate, selectedFiatCurrency, setContextByItem]
+    [navigate, selectedFiatCurrency, forward]
   );
 
   const currencyItems = useMemo(
@@ -244,18 +256,6 @@ export const useMenuContext = () => {
   menuMap.set('resources', { items: resourcesItems, title: 'Resources' });
 
   const [menuContext, setMenuContext] = useState([menuMap.get('main')]);
-
-  const back = () => {
-    setMenuContext((prev) => {
-      const updatedContext = [...prev];
-      updatedContext.pop();
-      return updatedContext;
-    });
-  };
-
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
 
   useEffect(() => {
     if (!isOpen) {
