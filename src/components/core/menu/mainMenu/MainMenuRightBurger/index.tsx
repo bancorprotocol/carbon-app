@@ -38,27 +38,6 @@ export const MainMenuRightBurger: FC = () => {
       )}
     >
       {currentMenuItems?.map((item, index) => {
-        if (menuType.type === 'currency') {
-          const nextItem = currentMenuItems?.[index + 1];
-          if (index === 0) {
-            return <MenuItem key={`${index}_${item.content}`} item={item} />;
-          }
-          if (index % 2 !== 0) {
-            return null;
-          }
-          if (nextItem && index % 2 === 0) {
-            return (
-              <div className="flex justify-between">
-                <MenuItem key={`${index}_${item.content}`} item={item} />
-                <MenuItem
-                  key={`${index + 1}_${nextItem.content}`}
-                  item={nextItem}
-                />
-              </div>
-            );
-          }
-        }
-
         return (
           <div
             key={`${index}_${item.content}`}
