@@ -28,7 +28,7 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
       <div
         className={`${hasSubMenu ? 'flex items-center justify-between' : ''}`}
       >
-        <span className="w-full">{content}</span>
+        {content}
         {hasSubMenu && <IconArrow className="h-12 w-7" />}
       </div>
     </div>

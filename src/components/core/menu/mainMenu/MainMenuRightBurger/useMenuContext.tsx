@@ -8,7 +8,6 @@ import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
-import { openUrlInNewTab } from '../../utils';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 export type Item = {
@@ -88,16 +87,22 @@ export const useMenuContext = () => {
         },
       },
       {
-        content: 'Analytics',
+        content: (
+          <Link className="flex" to={externalLinks.analytics}>
+            Analytics
+          </Link>
+        ),
         onClick: () => {
-          openUrlInNewTab(externalLinks.analytics);
           closeMenu();
         },
       },
       {
-        content: 'Blog',
+        content: (
+          <Link className="flex" to={externalLinks.blog}>
+            Blog
+          </Link>
+        ),
         onClick: () => {
-          openUrlInNewTab(externalLinks.blog);
           closeMenu();
         },
       },
@@ -181,37 +186,50 @@ export const useMenuContext = () => {
   const resourcesItems = useMemo(
     (): Item[] => [
       {
-        content: 'Tech Docs',
+        content: (
+          <Link className="flex" to={externalLinks.techDocs}>
+            Tech Docs
+          </Link>
+        ),
         onClick: () => {
-          openUrlInNewTab(externalLinks.techDocs);
           closeMenu();
         },
       },
       {
-        content: 'Litepaper',
+        content: (
+          <Link className="flex" to={externalLinks.litePaper}>
+            Litepaper
+          </Link>
+        ),
         onClick: () => {
-          openUrlInNewTab(externalLinks.litePaper);
           closeMenu();
         },
       },
       {
-        content: 'Whitepaper',
+        content: (
+          <Link className="flex" to={externalLinks.whitepaper}>
+            Whitepaper
+          </Link>
+        ),
         onClick: () => {
-          openUrlInNewTab(externalLinks.whitepaper);
           closeMenu();
         },
       },
       {
-        content: 'Simulator Repo',
+        content: (
+          <Link className="flex" to={externalLinks.simulatorRepo}>
+            Simulator Repo
+          </Link>
+        ),
         onClick: () => {
-          openUrlInNewTab(externalLinks.simulatorRepo);
           closeMenu();
         },
       },
       {
-        content: 'Interactive Simulator',
+        content: (
+          <Link to={externalLinks.interactiveSim}>Interactive Simulator</Link>
+        ),
         onClick: () => {
-          openUrlInNewTab(externalLinks.interactiveSim);
           closeMenu();
         },
       },
