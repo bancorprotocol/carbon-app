@@ -17,10 +17,17 @@ export const StrategiesPage = () => {
   const { currentBreakpoint } = useBreakpoints();
   const strategies = useGetUserStrategies();
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState(StrategySort.Old);
-  const [filter, _setFilter] = useState(
+  const [sort, _setSort] = useState<StrategySort>(
+    lsService.getItem('strategyOverviewSort') || StrategySort.Old
+  );
+  const [filter, _setFilter] = useState<StrategyFilter>(
     lsService.getItem('strategyOverviewFilter') || StrategyFilter.All
   );
+
+  const setSort = (sort: StrategySort) => {
+    _setSort(sort);
+    lsService.setItem('strategyOverviewSort', sort);
+  };
 
   const setFilter = (filter: StrategyFilter) => {
     _setFilter(filter);
