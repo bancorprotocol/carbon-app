@@ -119,7 +119,11 @@ export const useMenuContext = () => {
           <div className={`flex gap-20 ${isCurrencySelected ? '' : ''}`}>
             <span>{currency}</span>
             <span className="flex items-center">
-              {isCurrencySelected && <IconV className="h-12 w-12" />}
+              <IconV
+                className={`invisible h-12 w-12 ${
+                  isCurrencySelected ? '!visible' : ''
+                }`}
+              />
             </span>
           </div>
         ),

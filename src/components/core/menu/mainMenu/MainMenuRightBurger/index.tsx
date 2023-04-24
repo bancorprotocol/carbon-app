@@ -37,16 +37,39 @@ export const MainMenuRightBurger: FC = () => {
         </Button>
       )}
     >
-      {currentMenuItems?.map((item, index) => (
-        <div
-          key={`${index}_${item.content}`}
-          className={`border-grey5 ${
-            menuType.type === 'main' ? 'first:border-b-2 last:border-t-2' : ''
-          }`}
-        >
-          <MenuItem item={{ ...item, hasSubMenu: menuMap.get(item.id) }} />
-        </div>
-      ))}
+      {currentMenuItems?.map((item, index) => {
+        if (menuType.type === 'currency') {
+          const nextItem = currentMenuItems?.[index + 1];
+          if (index === 0) {
+            return <MenuItem key={`${index}_${item.content}`} item={item} />;
+          }
+          if (index % 2 !== 0) {
+            return null;
+          }
+          if (nextItem && index % 2 === 0) {
+            return (
+              <div className="flex justify-between">
+                <MenuItem key={`${index}_${item.content}`} item={item} />
+                <MenuItem
+                  key={`${index + 1}_${nextItem.content}`}
+                  item={nextItem}
+                />
+              </div>
+            );
+          }
+        }
+
+        return (
+          <div
+            key={`${index}_${item.content}`}
+            className={`border-grey5 ${
+              menuType.type === 'main' ? 'first:border-b-2 last:border-t-2' : ''
+            }`}
+          >
+            <MenuItem item={{ ...item, hasSubMenu: menuMap.get(item.id) }} />
+          </div>
+        );
+      })}
     </DropdownMenu>
   );
 };
