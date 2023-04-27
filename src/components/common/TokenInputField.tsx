@@ -123,7 +123,7 @@ export const TokenInputField: FC<Props> = ({
             placeholder={placeholder}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
-            className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none ${
+            className={`pointer-events-none w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none	 ${
               isError ? 'text-red' : 'text-white'
             }`}
             disabled={disabled}
