@@ -22,8 +22,8 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
     <div
       onClick={() => item.onClick()}
       className={`${
-        disableHoverEffect ? 'p-4' : 'hover:bg-body p-10'
-      } block cursor-pointer rounded-6 hover:text-white ${className}`}
+        disableHoverEffect ? 'p-4' : 'md:hover:bg-body p-10'
+      } block cursor-pointer rounded-6 md:hover:text-white ${className}`}
     >
       <div
         className={`${hasSubMenu ? 'flex items-center justify-between' : ''}`}

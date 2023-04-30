@@ -1,6 +1,5 @@
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, PathNames, useNavigate } from 'libs/routing';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
+import { Link, PathNames } from 'libs/routing';
 import { externalLinks } from 'libs/routing/routes';
 import { ReactComponent as IconTwitter } from 'assets/logos/twitter.svg';
 import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
@@ -11,7 +10,7 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { ImmutableStack } from 'utils/stack';
 
-export type Item = {
+export type MenuItem = {
   subMenu?: MenuType;
   content: string | ReactElement;
   onClick: () => void;
@@ -20,13 +19,12 @@ export type Item = {
 export type MenuType = 'main' | 'resources' | 'currency';
 
 export const useMenuContext = () => {
-  const navigate = useNavigate<MyLocationGenerics>();
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
   const [isOpen, setIsOpen] = useState(false);
 
   const menuMap = useMemo(
-    () => new Map<MenuType, { title?: string; items: Item[] }>(),
+    () => new Map<MenuType, { title?: string; items: MenuItem[] }>(),
     []
   );
 
@@ -45,7 +43,7 @@ export const useMenuContext = () => {
   }, []);
 
   const forward = useCallback(
-    (item: Item) => {
+    (item: MenuItem) => {
       setMenuContext((prev) => {
         if (item?.subMenu) {
           const data = menuMap.get(item?.subMenu);
@@ -74,17 +72,10 @@ export const useMenuContext = () => {
   };
 
   const mainItems = useMemo(
-    (): Item[] => [
+    (): MenuItem[] => [
       {
         subMenu: 'currency',
-        content: (
-          <div className="flex w-full items-center justify-between">
-            <span>Currency</span>
-            <span className="mr-10 font-weight-500">
-              {selectedFiatCurrency}
-            </span>
-          </div>
-        ),
+        content: <CurrencyMenuItemContent />,
         onClick: function () {
           forward(this);
         },
@@ -117,16 +108,22 @@ export const useMenuContext = () => {
         },
       },
       {
-        content: 'Terms of Use',
+        content: (
+          <Link className="flex" to={PathNames.terms}>
+            Terms of Use
+          </Link>
+        ),
         onClick: () => {
-          navigate({ to: PathNames.terms });
           closeMenu();
         },
       },
       {
-        content: 'Privacy Policy',
+        content: (
+          <Link className="flex" to={PathNames.privacy}>
+            Privacy Policy
+          </Link>
+        ),
         onClick: () => {
-          navigate({ to: PathNames.privacy });
           closeMenu();
         },
       },
@@ -135,25 +132,25 @@ export const useMenuContext = () => {
           <div className="flex w-full items-center justify-between">
             <Link
               to={externalLinks.twitter}
-              className="rounded-6 p-6 hover:bg-black"
+              className="rounded-6 p-6 md:hover:bg-black"
             >
               <IconTwitter />
             </Link>
             <Link
               to={externalLinks.youtube}
-              className="rounded-6 p-6 hover:bg-black"
+              className="rounded-6 p-6 md:hover:bg-black"
             >
               <IconYoutube />
             </Link>
             <Link
               to={externalLinks.discord}
-              className="rounded-6 p-6 hover:bg-black"
+              className="rounded-6 p-6 md:hover:bg-black"
             >
               <IconDiscord />
             </Link>
             <Link
               to={externalLinks.telegram}
-              className="rounded-6 p-6 hover:bg-black"
+              className="rounded-6 p-6 md:hover:bg-black"
             >
               <IconTelegram />
             </Link>
@@ -162,11 +159,11 @@ export const useMenuContext = () => {
         onClick: () => setIsOpen(false),
       },
     ],
-    [navigate, selectedFiatCurrency, forward]
+    [forward]
   );
 
   const currencyItems = useMemo(
-    (): Item[] => [
+    (): MenuItem[] => [
       ...availableCurrencies.map((currency) => {
         const isCurrencySelected = currency === selectedFiatCurrency;
 
@@ -185,7 +182,7 @@ export const useMenuContext = () => {
           ),
           onClick: () => {
             setSelectedFiatCurrency(currency);
-            closeMenu();
+            setMenuContext((prev) => prev.pop());
           },
         };
       }),
@@ -194,7 +191,7 @@ export const useMenuContext = () => {
   );
 
   const resourcesItems = useMemo(
-    (): Item[] => [
+    (): MenuItem[] => [
       {
         content: (
           <Link className="flex" to={externalLinks.techDocs}>
@@ -254,7 +251,7 @@ export const useMenuContext = () => {
   menuMap.set('resources', { items: resourcesItems, title: 'Resources' });
 
   const stack = ImmutableStack.create<
-    { items: Item[]; title?: string } | undefined
+    { items: MenuItem[]; title?: string } | undefined
   >();
 
   const [menuContext, setMenuContext] = useState(
@@ -279,4 +276,14 @@ export const useMenuContext = () => {
     closeMenu,
     menuContext,
   };
+};
+
+const CurrencyMenuItemContent = () => {
+  const { selectedFiatCurrency } = useFiatCurrency();
+  return (
+    <div className="flex w-full items-center justify-between">
+      <span>Currency</span>
+      <span className="mr-10 font-weight-500">{selectedFiatCurrency}</span>
+    </div>
+  );
 };
