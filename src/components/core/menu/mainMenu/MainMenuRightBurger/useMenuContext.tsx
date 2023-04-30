@@ -9,6 +9,7 @@ import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { ImmutableStack } from 'utils/stack';
 
 export type Item = {
   subMenu?: MenuType;
@@ -50,11 +51,12 @@ export const useMenuContext = () => {
           const data = menuMap.get(item?.subMenu);
           if (data?.items) {
             const topSubMenuItem = getTopSubMenuItem(data?.title);
-            const newContext = {
+            const newStackItem = {
               title: data.title,
               items: [topSubMenuItem, ...data?.items],
             };
-            setMenuContext([...prev, newContext]);
+            const updatedStack = prev.push(newStackItem);
+            setMenuContext(updatedStack);
           }
         }
         return prev;
@@ -64,11 +66,7 @@ export const useMenuContext = () => {
   );
 
   const back = () => {
-    setMenuContext((prev) => {
-      const updatedContext = [...prev];
-      updatedContext.pop();
-      return updatedContext;
-    });
+    setMenuContext((prev) => prev.pop());
   };
 
   const closeMenu = () => {
@@ -255,12 +253,23 @@ export const useMenuContext = () => {
 
   menuMap.set('resources', { items: resourcesItems, title: 'Resources' });
 
-  const [menuContext, setMenuContext] = useState([menuMap.get('main')]);
+  const stack = ImmutableStack.create<
+    { items: Item[]; title?: string } | undefined
+  >();
+
+  const [menuContext, setMenuContext] = useState(
+    stack.push(menuMap.get('main'))
+  );
 
   useEffect(() => {
     if (!isOpen) {
       // Clean up the menu when closing
-      setMenuContext([menuMap.get('main')]);
+      setMenuContext((prev) => {
+        if (prev.clear()) {
+          return prev.push(menuMap.get('main'));
+        }
+        return prev;
+      });
     }
   }, [isOpen, menuMap]);
 

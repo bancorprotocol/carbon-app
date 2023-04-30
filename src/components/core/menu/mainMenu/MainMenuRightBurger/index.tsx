@@ -7,7 +7,7 @@ import { useMenuContext } from './useMenuContext';
 
 export const MainMenuRightBurger: FC = () => {
   const { isOpen, setIsOpen, menuContext } = useMenuContext();
-  const currentMenuItems = menuContext[menuContext.length - 1]?.items;
+  const currentMenuItems = menuContext.top()?.items;
 
   return (
     <DropdownMenu
@@ -36,7 +36,7 @@ export const MainMenuRightBurger: FC = () => {
           <div
             key={`${index}_${item.content}`}
             className={`border-grey5 ${
-              menuContext.length === 1 ? 'first:border-b-2 last:border-t-2' : ''
+              menuContext.size() === 1 ? 'first:border-b-2 last:border-t-2' : ''
             }`}
           >
             <MenuItem
@@ -44,7 +44,7 @@ export const MainMenuRightBurger: FC = () => {
                 ...item,
                 hasSubMenu: !!item?.subMenu,
                 disableHoverEffect:
-                  menuContext.length === 1 &&
+                  menuContext.size() === 1 &&
                   index === currentMenuItems.length - 1,
               }}
             />
