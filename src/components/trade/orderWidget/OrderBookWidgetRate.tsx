@@ -5,7 +5,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 type Props = {
   rate: string;
-  fiatRate: string;
+  fiatRate?: string;
   buy?: boolean;
   isLoading?: boolean;
 };
@@ -34,7 +34,7 @@ export const OrderBookWidgetRate: FC<Props> = ({
               />
             </div>
           )}
-          <span className="ml-8 text-white/60">{fiatRate}</span>
+          {fiatRate && <span className="ml-8 text-white/60">{fiatRate}</span>}
         </span>
       </Tooltip>
     </div>
