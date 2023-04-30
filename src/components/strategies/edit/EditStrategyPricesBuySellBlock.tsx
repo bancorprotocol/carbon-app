@@ -32,7 +32,9 @@ export const EditStrategyPricesBuySellBlock: FC<
           balance,
           buy,
           order,
-          title: `${buy ? 'Buy' : 'Sell'} ${base.symbol} with ${quote.symbol}`,
+          title: `${buy ? 'Buy' : 'Sell'} ${buy ? 'Low' : 'High'} ${
+            base.symbol
+          }`,
           inputTitle: (
             <div className="text-white/60">
               {`Set ${buy ? 'Buy' : 'Sell'} Price `}
