@@ -12,7 +12,7 @@ import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useEffect } from 'react';
 import useInitEffect from 'hooks/useInitEffect';
-import { IS_TENDERLY_FORK } from 'libs/web3';
+import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -23,6 +23,7 @@ export type TradeWidgetBuySellProps = {
 };
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
+  const { user } = useWeb3();
   const {
     sourceInput,
     setSourceInput,
@@ -254,7 +255,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         fullWidth
         className={'mt-20'}
       >
-        {buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`}
+        {user
+          ? buy
+            ? `Buy ${target.symbol}`
+            : `Sell ${source.symbol}`
+          : 'Connect Wallet'}
       </Button>
     </div>
   );
