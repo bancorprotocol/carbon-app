@@ -15,7 +15,7 @@ export type OrderBook = {
   buy: OrderRow[];
   sell: OrderRow[];
   middleRate: string;
-  middleRateFiat: string;
+  middleRateFiat?: string;
   step?: string;
 };
 
