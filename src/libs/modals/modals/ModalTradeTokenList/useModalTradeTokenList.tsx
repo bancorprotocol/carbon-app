@@ -26,19 +26,22 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
   const [search, setSearch] = useState('');
 
   const filteredPairs = useMemo(() => {
-    const splitDash = search.split('-');
-    const splitSpace = search.split(' ');
+    const searchLowerCase = search.toLowerCase();
+    const splitDash = searchLowerCase.split('-');
+    const splitSpace = searchLowerCase.split(' ');
 
-    let value0 = search;
+    let value0 = searchLowerCase;
     let value1 = '';
+
     if (splitDash.length === 2) {
-      value0 = splitDash[0].toLowerCase();
-      value1 = splitDash[1].toLowerCase();
+      value0 = splitDash[0];
+      value1 = splitDash[1];
     }
     if (splitSpace.length === 2) {
-      value0 = splitSpace[0].toLowerCase();
-      value1 = splitSpace[1].toLowerCase();
+      value0 = splitSpace[0];
+      value1 = splitSpace[1];
     }
+
     const baseTokens = tradePairs.filter((pair) =>
       pair.baseToken.symbol.toLowerCase().includes(value0)
     );
