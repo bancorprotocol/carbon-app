@@ -72,7 +72,7 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
   const quoteDecimals = quoteToken?.decimals || 0;
   const { getFiatAsString } = useFiatCurrency(quoteToken);
 
-  const orders = useMemo<OrderBook>(() => {
+  const orders = useMemo<OrderBook & { middleRateFiat: string }>(() => {
     const buy = orderBy(data?.buy || [], ({ rate }) => +rate, 'desc');
     const sell = orderBy(data?.sell || [], ({ rate }) => +rate, 'asc');
 
