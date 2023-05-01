@@ -27,15 +27,8 @@ export class ImmutableStack<T> {
     return this.items[this.items.length - 1];
   }
 
-  clear(): boolean {
-    try {
-      while (this.items.length > 0) {
-        this.items.pop();
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
+  clear(): ImmutableStack<T> {
+    return new ImmutableStack<T>([]);
   }
 
   size(): number {

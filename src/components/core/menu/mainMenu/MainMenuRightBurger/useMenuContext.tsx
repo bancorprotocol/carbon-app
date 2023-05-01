@@ -262,10 +262,8 @@ export const useMenuContext = () => {
     if (!isOpen) {
       // Clean up the menu when closing
       setMenuContext((prev) => {
-        if (prev.clear()) {
-          return prev.push(menuMap.get('main'));
-        }
-        return prev;
+        const updatedStack = prev.clear();
+        return updatedStack.push(menuMap.get('main'));
       });
     }
   }, [isOpen, menuMap]);
