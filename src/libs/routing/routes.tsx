@@ -2,7 +2,6 @@ import { DebugPage } from 'pages/debug';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
-import { isProduction } from 'utils/helpers';
 import { TermsPage } from 'pages/terms';
 import { Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
@@ -65,12 +64,8 @@ export const routes: Route[] = [
     path: PathNames.privacy,
     element: <PrivacyPage />,
   },
-  ...(isProduction
-    ? []
-    : [
-        {
-          path: PathNames.debug,
-          element: <DebugPage />,
-        },
-      ]),
+  {
+    path: PathNames.debug,
+    element: <DebugPage />,
+  },
 ];
