@@ -3,6 +3,7 @@ import { Button, ButtonProps } from 'components/common/button';
 
 type Props = ButtonProps & {
   isActive?: boolean;
+  className?: string;
 };
 
 export const TabsMenuButton: FC<Props> = ({ children, isActive, ...props }) => {
@@ -11,7 +12,9 @@ export const TabsMenuButton: FC<Props> = ({ children, isActive, ...props }) => {
   return (
     <Button
       variant={variant}
-      className={'rounded-8'}
+      className={`h-[30px] rounded-8 ${
+        isActive ? 'cursor-default border-emphasis bg-emphasis' : ''
+      }`}
       fullWidth
       {...{ ...props }}
     >
