@@ -1,7 +1,7 @@
 import { Button } from 'components/common/button';
 import { SearchInput } from 'components/common/searchInput';
 import { FC } from 'react';
-import { Link, PathNames } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 import {
   StrategySort,
   StrategyFilter,
@@ -18,6 +18,8 @@ export const StrategyPageTitleWidget: FC<{
   setSort: (sort: StrategySort) => void;
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ search, setSearch, showFilter, sort, filter, setSort, setFilter }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="grid grid-cols-2 gap-10 md:flex md:items-center md:gap-20">
       {showFilter && (
@@ -37,16 +39,15 @@ export const StrategyPageTitleWidget: FC<{
           />
         </>
       )}
-      <Link to={PathNames.createStrategy}>
-        <Button
-          variant="success"
-          onClick={() =>
-            carbonEvents.strategy.newStrategyCreateClick(undefined)
-          }
-        >
-          Create Strategy
-        </Button>
-      </Link>
+      <Button
+        variant="success"
+        onClick={() => {
+          carbonEvents.strategy.newStrategyCreateClick(undefined);
+          navigate({ to: PathNames.createStrategy });
+        }}
+      >
+        Create Strategy
+      </Button>
     </div>
   );
 };
