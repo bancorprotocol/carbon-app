@@ -14,5 +14,5 @@ export const useBudgetWarning = (
     getFiatValueBase(order1Budget, true)
   );
 
-  return budgetInUsd.lte(20) || false;
+  return budgetInUsd.lte(0) || false;
 };
