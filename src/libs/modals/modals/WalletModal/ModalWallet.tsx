@@ -1,11 +1,11 @@
 import { useModal } from 'hooks/useModal';
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useWeb3, Connection } from 'libs/web3';
 import { useEffect, useState } from 'react';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { carbonEvents } from 'services/events';
+import { ModalFitContentOrFullScreen } from '../ModalFitContentOrFullScreen';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
@@ -48,7 +48,11 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <Modal id={id} title={'Connect Wallet'} isLoading={isLoading}>
+    <ModalFitContentOrFullScreen
+      id={id}
+      title={'Connect Wallet'}
+      isLoading={isLoading}
+    >
       <div className={'mt-20 h-full'}>
         {isError ? (
           <div className={'flex flex-col items-center space-y-20'}>
@@ -62,6 +66,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
           <ModalWalletContent onClick={onClickConnect} isLoading={isLoading} />
         )}
       </div>
-    </Modal>
+    </ModalFitContentOrFullScreen>
   );
 };

@@ -1,4 +1,3 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Token } from 'libs/tokens';
 import { SearchInput } from 'components/common/searchInput';
@@ -6,6 +5,7 @@ import { useModalTradeTokenList } from 'libs/modals/modals/ModalTradeTokenList/u
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
+import { ModalFitContentOrFullScreen } from '../ModalFitContentOrFullScreen';
 
 export type TradePair = {
   baseToken: Token;
@@ -34,7 +34,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   } = useModalTradeTokenList({ id, data });
 
   return (
-    <Modal id={id} title="Select Token Pair">
+    <ModalFitContentOrFullScreen id={id} title="Select Token Pair">
       <SearchInput
         autoFocus
         value={search}
@@ -64,6 +64,6 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
           onRemoveFavorite={removeFavoritePair}
         />
       )}
-    </Modal>
+    </ModalFitContentOrFullScreen>
   );
 };

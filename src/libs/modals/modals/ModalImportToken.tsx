@@ -1,4 +1,3 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useGetTokenData } from 'libs/queries/chain/token';
 import { Button } from 'components/common/button';
@@ -10,6 +9,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { Link } from 'libs/routing';
+import { ModalFitContentOrFullScreen } from './ModalFitContentOrFullScreen';
 
 export type ModalImportTokenData = {
   address: string;
@@ -34,7 +34,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   const blockClasses = 'my-20 h-80 rounded-8';
 
   return (
-    <Modal id={id} title={'Import Token'}>
+    <ModalFitContentOrFullScreen id={id} title={'Import Token'}>
       <div className={'mt-40'}>
         <IconTitleText
           variant={'warning'}
@@ -94,6 +94,6 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       >
         Cancel
       </Button>
-    </Modal>
+    </ModalFitContentOrFullScreen>
   );
 };

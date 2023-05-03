@@ -1,4 +1,3 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
@@ -11,6 +10,7 @@ import { useOrder } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
 
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import { ModalFitContentOrFullScreen } from '../ModalFitContentOrFullScreen';
 
 export type ModalConfirmStrategyData = {
   strategy: Strategy;
@@ -58,7 +58,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   };
 
   return (
-    <Modal id={id} title={data?.modalTitle}>
+    <ModalFitContentOrFullScreen id={id} title={data?.modalTitle}>
       <div className="mt-24 flex flex-col items-center text-center font-weight-500">
         <IconTitleText
           variant={data?.variant}
@@ -86,6 +86,6 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
           Cancel
         </Button>
       </div>
-    </Modal>
+    </ModalFitContentOrFullScreen>
   );
 };

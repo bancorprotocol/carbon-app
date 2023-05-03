@@ -4,53 +4,38 @@ import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
 
-export type ModalProps = {
+type ModalFullScreenProps = {
   children: ReactNode;
   id: string;
   title?: string | ReactNode;
   showCloseButton?: boolean;
-  size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
 };
 
-const getSize = (size: 'sm' | 'md' | 'lg') => {
-  switch (size) {
-    case 'lg':
-      return 'max-w-[580px]';
-    case 'md':
-      return 'max-w-[480px]';
-    default:
-      return 'max-w-[380px]';
-  }
-};
-
-export const Modal: FC<ModalProps> = ({
+export const ModalFullScreen: FC<ModalFullScreenProps> = ({
   children,
   id,
   title,
-  size = 'sm',
   showCloseButton = true,
   isLoading = false,
 }) => {
   const { closeModal } = useModal();
 
-  const sizeClass = getSize(size);
-
   return (
     <Overlay
       onClick={() => closeModal(id)}
-      className={'px-content items-center justify-center'}
+      className={'items-center justify-center'}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto w-full ${sizeClass}`}
+        className={`relative mx-auto h-full w-full`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
         <div
-          className={`relative flex h-full w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
+          className={`relative flex h-full w-full flex-col overflow-hidden border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
         >
           {isLoading && (
             <div
@@ -76,7 +61,7 @@ export const Modal: FC<ModalProps> = ({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-hidden">{children}</div>
+          <div className="h-full overflow-y-hidden">{children}</div>
         </div>
       </m.div>
     </Overlay>
