@@ -32,7 +32,7 @@ export const getModalDataByType = (
         icon: <IconTrash className="h-24 w-24" />,
         title: 'Are you sure you would like to delete your strategy?',
         content:
-          'All data on the strategy will be deleted.It will be impossible to restore them.',
+          'All data on the strategy will be deleted. It will be impossible to restore them.',
         additionalContent: (
           <div className="mt-20 flex items-center">
             <IconWallet className="mr-10 h-12 w-12" />

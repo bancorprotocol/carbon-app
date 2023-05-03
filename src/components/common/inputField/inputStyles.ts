@@ -32,6 +32,13 @@ export const inputStyles = cva<InputVariants>(
           'outline-green',
           'focus:!outline-green',
         ],
+        'success-light': [
+          'outline',
+          'outline-offset-2',
+          'outline-2',
+          'outline-green',
+          'focus:!outline-green',
+        ],
         error: [
           'outline',
           'outline-offset-2',

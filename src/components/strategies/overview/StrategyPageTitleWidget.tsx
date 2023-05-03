@@ -7,6 +7,7 @@ import {
   StrategyFilter,
   StrategyFilterSort,
 } from 'components/strategies/overview/StrategyFilterSort';
+import { carbonEvents } from 'services/events';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;
@@ -37,7 +38,14 @@ export const StrategyPageTitleWidget: FC<{
         </>
       )}
       <Link to={PathNames.createStrategy}>
-        <Button variant="white">Create Strategy</Button>
+        <Button
+          variant="success"
+          onClick={() =>
+            carbonEvents.strategy.newStrategyCreateClick(undefined)
+          }
+        >
+          Create Strategy
+        </Button>
       </Link>
     </div>
   );

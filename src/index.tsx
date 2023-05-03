@@ -1,3 +1,5 @@
+import 'global-shim';
+import 'init-sentry';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'utils/buffer';
@@ -14,6 +16,7 @@ import { StoreProvider } from 'store';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <QueryProvider>

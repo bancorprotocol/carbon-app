@@ -12,6 +12,7 @@ export const useWeb3Network = () => {
   const { connector } = useWeb3React();
 
   const network = getConnection(ConnectionType.NETWORK);
+
   const provider = network.hooks.useProvider();
 
   const [isNetworkActive, setIsNetworkActive] = useState(false);

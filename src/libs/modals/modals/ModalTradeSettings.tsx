@@ -2,13 +2,30 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { TradeSettings } from 'components/trade/settings/TradeSettings';
 import { useStore } from 'store';
+import { Token } from 'libs/tokens';
+import { carbonEvents } from 'services/events';
 
-export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
+export type ModalTradeSettingsData = {
+  base: Token;
+  quote: Token;
+};
+
+export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
+  id,
+  data,
+}) => {
   const {
     trade: {
       settings: { resetAll, isAllSettingsDefault },
     },
   } = useStore();
+
+  const handleReset = () => {
+    resetAll();
+    carbonEvents.trade.tradeSettingsResetAllClick({
+      ...data,
+    });
+  };
 
   return (
     <ModalSlideOver
@@ -19,7 +36,7 @@ export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
           {!isAllSettingsDefault && (
             <button
               className="mr-20 font-mono text-16 font-weight-500 text-white"
-              onClick={() => resetAll()}
+              onClick={handleReset}
             >
               Reset All
             </button>
@@ -28,7 +45,11 @@ export const ModalTradeSettings: ModalFC<undefined> = ({ id }) => {
       }
       size={'md'}
     >
-      <TradeSettings isAllSettingsDefault={isAllSettingsDefault} />
+      <TradeSettings
+        isAllSettingsDefault={isAllSettingsDefault}
+        base={data.base}
+        quote={data.quote}
+      />
     </ModalSlideOver>
   );
 };

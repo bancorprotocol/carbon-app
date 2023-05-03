@@ -8,6 +8,11 @@ import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
+import { carbonEvents } from 'services/events';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useEffect } from 'react';
+import useInitEffect from 'hooks/useInitEffect';
+import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -18,6 +23,7 @@ export type TradeWidgetBuySellProps = {
 };
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
+  const { user } = useWeb3();
   const {
     sourceInput,
     setSourceInput,
@@ -33,16 +39,100 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
+    isTradeBySource,
     maxSourceAmountQuery,
   } = useBuySell(props);
-  const { buy, source, target, sourceBalanceQuery } = props;
+  const { source, target, sourceBalanceQuery, buy = false } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
+
+  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
+
+  useEffect(() => {
+    errorMsgSource &&
+      carbonEvents.trade.tradeErrorShow({
+        buy,
+        buyToken: target,
+        sellToken: source,
+        valueUsd: getFiatValueSource(sourceInput, true).toString(),
+        message: errorMsgSource || '',
+      });
+
+    errorMsgTarget &&
+      carbonEvents.trade.tradeErrorShow({
+        buy,
+        buyToken: target,
+        sellToken: source,
+        valueUsd: getFiatValueSource(sourceInput, true).toString(),
+        message: errorMsgTarget || '',
+      });
+
+    !hasEnoughLiquidity &&
+      !liquidityQuery.isLoading &&
+      carbonEvents.trade.tradeErrorShow({
+        buy,
+        buyToken: target,
+        sellToken: source,
+        message: 'No Liquidity Available',
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    buy,
+    errorMsgSource,
+    errorMsgTarget,
+    getFiatValueSource,
+    liquidityQuery.isLoading,
+  ]);
+
+  useInitEffect(() => {
+    const tradeData = {
+      buy,
+      buyToken: target,
+      sellToken: source,
+      valueUsd: getFiatValueSource(sourceInput, true).toString(),
+    };
+    if (isTradeBySource) {
+      buy
+        ? carbonEvents.trade.tradeBuyPaySet(tradeData)
+        : carbonEvents.trade.tradeSellPaySet(tradeData);
+    }
+  }, [buy, sourceInput]);
+
+  useInitEffect(() => {
+    const tradeData = {
+      buy,
+      buyToken: target,
+      sellToken: source,
+      valueUsd: getFiatValueSource(sourceInput, true).toString(),
+    };
+
+    if (!isTradeBySource && sourceInput) {
+      buy
+        ? carbonEvents.trade.tradeBuyReceiveSet(tradeData)
+        : carbonEvents.trade.tradeSellReceiveSet(tradeData);
+    }
+  }, [buy, targetInput, sourceInput]);
+
+  const handleTradeClick = () => {
+    handleCTAClick();
+    buy
+      ? carbonEvents.trade.tradeBuyClick({
+          buy,
+          buyToken: target,
+          sellToken: source,
+          valueUsd: getFiatValueSource(sourceInput, true).toString(),
+        })
+      : carbonEvents.trade.tradeSellClick({
+          buy,
+          buyToken: target,
+          sellToken: source,
+          valueUsd: getFiatValueSource(sourceInput, true).toString(),
+        });
+  };
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
 
   const slippage = calcSlippage();
-
   const getRate = () => {
     if (!rate) return '...';
 
@@ -58,6 +148,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   const showRouting =
     rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
+
+  const getLiquidity = () => {
+    const value = liquidityQuery.isLoading
+      ? 'loading'
+      : prettifyNumber(liquidityQuery.data);
+    return `Liquidity: ${value} ${target.symbol}`;
+  };
 
   return (
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
@@ -75,11 +172,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
           <TokenInputField
-            className={'mt-5 mb-20 rounded-12 bg-black p-16'}
+            className={'mb-20 mt-5 rounded-12 bg-black p-16'}
             token={source}
             isBalanceLoading={sourceBalanceQuery.isLoading}
             value={sourceInput}
-            setValue={setSourceInput}
+            setValue={(value) => {
+              setSourceInput(value);
+            }}
             balance={sourceBalanceQuery.data}
             onKeystroke={() => onInputChange(true)}
             isLoading={byTargetQuery.isFetching}
@@ -101,10 +200,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             )}
           </div>
           <TokenInputField
-            className={'mt-5 rounded-t-12 rounded-b-4 bg-black p-16'}
+            className={'mt-5 rounded-b-4 rounded-t-12 bg-black p-16'}
             token={target}
             value={targetInput}
-            setValue={setTargetInput}
+            setValue={(value) => {
+              setTargetInput(value);
+            }}
             placeholder={'Total Amount'}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
@@ -126,12 +227,20 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 }
               >
                 <IconRouting className={'w-12'} />
-                <Tooltip element="You can view and manage the orders that are included in the trade.">
+                <Tooltip
+                  placement={'left'}
+                  element="You can view and manage the orders that are included in the trade."
+                >
                   <span>Routing</span>
                 </Tooltip>
               </button>
             )}
           </div>
+          {IS_TENDERLY_FORK && (
+            <div className={'text-secondary mt-5 text-right'}>
+              DEBUG: {getLiquidity()}
+            </div>
+          )}
         </>
       ) : (
         <NotEnoughLiquidity
@@ -141,12 +250,16 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
       <Button
         disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
-        onClick={handleCTAClick}
+        onClick={handleTradeClick}
         variant={buy ? 'success' : 'error'}
         fullWidth
         className={'mt-20'}
       >
-        {buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`}
+        {user
+          ? buy
+            ? `Buy ${target.symbol}`
+            : `Sell ${source.symbol}`
+          : 'Connect Wallet'}
       </Button>
     </div>
   );

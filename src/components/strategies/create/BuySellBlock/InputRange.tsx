@@ -3,6 +3,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Token } from 'libs/tokens';
+import { carbonEvents } from 'services/events';
 
 export const InputRange: FC<{
   min: string;
@@ -13,19 +14,42 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
-}> = ({ min, setMin, max, setMax, token, buy, error, setRangeError }) => {
+}> = ({
+  min,
+  setMin,
+  max,
+  setMax,
+  token,
+  error,
+  setRangeError,
+  buy = false,
+}) => {
+  const errorMessage = 'Max Price must be higher than min price and not zero';
+
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
-    !max || (+e.target.value > 0 && +max > +e.target.value)
-      ? setRangeError('')
-      : setRangeError('Max Price must be higher than min price and not zero');
+    if (!max || (+e.target.value > 0 && +max > +e.target.value)) {
+      setRangeError('');
+    } else {
+      carbonEvents.strategy.strategyErrorShow({
+        buy,
+        message: errorMessage,
+      });
+      setRangeError(errorMessage);
+    }
   };
 
   const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
     setMax(sanitizeNumberInput(e.target.value));
-    !min || (+e.target.value > 0 && +e.target.value > +min)
-      ? setRangeError('')
-      : setRangeError('Max Price must be higher than min price and not zero');
+    if (!min || (+e.target.value > 0 && +e.target.value > +min)) {
+      setRangeError('');
+    } else {
+      carbonEvents.strategy.strategyErrorShow({
+        buy,
+        message: errorMessage,
+      });
+      setRangeError(errorMessage);
+    }
   };
 
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
@@ -43,6 +67,7 @@ export const InputRange: FC<{
           } bg-body w-full rounded-r-4 rounded-l-16 border-2 border-black p-16`}
         >
           <Tooltip
+            sendEventOnMount={{ buy }}
             element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
               token.symbol
             } at.`}
@@ -50,6 +75,9 @@ export const InputRange: FC<{
             <div className={'mb-5 text-12 text-white/60'}>Min</div>
           </Tooltip>
           <input
+            type={'text'}
+            pattern="[0-9]*"
+            inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
             placeholder="Enter Price"
@@ -68,6 +96,7 @@ export const InputRange: FC<{
           } bg-body w-full rounded-r-16 rounded-l-4 border-2 border-black p-16`}
         >
           <Tooltip
+            sendEventOnMount={{ buy }}
             element={`The highest price to ${buy ? 'buy' : 'sell'} ${
               token.symbol
             } at.`}
@@ -75,6 +104,9 @@ export const InputRange: FC<{
             <div className={'mb-5 text-12 text-white/60'}>Max</div>
           </Tooltip>
           <input
+            type={'text'}
+            pattern="[0-9]*"
+            inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
             placeholder={`Enter Price`}

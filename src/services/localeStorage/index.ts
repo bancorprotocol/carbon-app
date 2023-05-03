@@ -4,6 +4,10 @@ import { Notification } from 'libs/notifications';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
+import {
+  StrategyFilter,
+  StrategySort,
+} from 'components/strategies/overview/StrategyFilterSort';
 
 const APP_ID = 'carbon';
 const APP_VERSION = 'v1';
@@ -26,6 +30,8 @@ interface LocalStorageSchema {
   tradeMaxOrders: string;
   chooseTokenCategory: ChooseTokenCategory;
   carbonControllerAddress: string;
+  strategyOverviewFilter: StrategyFilter;
+  strategyOverviewSort: StrategySort;
   voucherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;

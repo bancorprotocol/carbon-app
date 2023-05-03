@@ -1,20 +1,28 @@
 import Tippy, { TippyProps } from '@tippyjs/react/headless';
-import { FC, ReactNode } from 'react';
+import { FC, isValidElement, ReactNode } from 'react';
 import { useSpring, m } from 'framer-motion';
 import { Instance } from 'tippy.js';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import ReactDOMServer from 'react-dom/server';
+import { carbonEvents } from 'services/events';
 
 export const Tooltip: FC<
   TippyProps & {
     element: ReactNode;
     className?: string;
     iconClassName?: string;
+    sendEventOnMount?: {
+      buy?: boolean | undefined;
+    };
+    disabled?: boolean;
   }
 > = ({
   element,
   className = '',
   iconClassName = '',
   maxWidth = 350,
+  sendEventOnMount,
+  disabled = false,
   children = (
     <IconTooltip
       className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
@@ -30,6 +38,15 @@ export const Tooltip: FC<
   const onMount = () => {
     scale.set(1);
     opacity.set(1);
+    sendEventOnMount &&
+      carbonEvents.strategy.strategyTooltipShow({
+        buy: sendEventOnMount?.buy,
+        message: isValidElement(element)
+          ? ReactDOMServer.renderToString(element)
+          : element
+          ? element.toString()
+          : '',
+      });
   };
 
   const onHide = ({ unmount }: Instance) => {
@@ -44,8 +61,14 @@ export const Tooltip: FC<
     opacity.set(0);
   };
 
+  if (disabled) {
+    return children;
+  }
+
   return (
     <Tippy
+      appendTo={() => document.body}
+      hideOnClick={false}
       delay={500}
       render={(attrs) => (
         <m.div

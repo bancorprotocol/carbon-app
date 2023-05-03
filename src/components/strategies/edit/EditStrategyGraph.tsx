@@ -4,6 +4,7 @@ import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Token } from 'libs/tokens';
 import { list } from '../create/variants';
+import { carbonEvents } from 'services/events';
 
 type EditStrategyGraphProps = {
   base: Token | undefined;
@@ -27,7 +28,10 @@ export const EditStrategyGraph = ({
           className={`mb-20 self-end bg-emphasis`}
           variant="secondary"
           size={'md'}
-          onClick={() => setShowGraph(false)}
+          onClick={() => {
+            carbonEvents.strategy.strategyChartClose(undefined);
+            setShowGraph(false);
+          }}
         >
           <div className="flex items-center justify-center">
             <IconX className={'w-10 md:mr-12'} />

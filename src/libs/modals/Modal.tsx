@@ -76,7 +76,7 @@ export const Modal: FC<Props> = ({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-auto">{children}</div>
+          <div className="max-h-[70vh] overflow-y-hidden">{children}</div>
         </div>
       </m.div>
     </Overlay>

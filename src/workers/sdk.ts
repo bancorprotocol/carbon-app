@@ -1,3 +1,4 @@
+import './verbosity-setter';
 import * as Comlink from 'comlink';
 import {
   PayableOverrides,
@@ -77,7 +78,9 @@ const buildOrderBook = async (
     const incrementBy = step.times(i);
     let rate = startRate[buy ? 'minus' : 'plus'](incrementBy);
     rate = buy ? rate : ONE.div(rate);
-    rates.push(rate.toString());
+    if (rate.gt(0)) {
+      rates.push(rate.toString());
+    }
   }
 
   let results = await carbonSDK.getRateLiquidityDepthsByPair(

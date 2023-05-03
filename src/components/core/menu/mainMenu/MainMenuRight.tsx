@@ -3,6 +3,7 @@ import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRight
 import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';
 import { IS_TENDERLY_FORK } from 'libs/web3';
 import { Button } from 'components/common/button';
+import { MainMenuRightBurger } from './MainMenuRightBurger';
 
 const TenderlyForkAlert = () => {
   return IS_TENDERLY_FORK ? (
@@ -17,6 +18,7 @@ export const MainMenuRight: FC = () => {
     <div className={'flex items-center space-x-20'}>
       <TenderlyForkAlert />
       <MainMenuRightNotifications />
+      <MainMenuRightBurger />
       <MainMenuRightWallet />
     </div>
   );

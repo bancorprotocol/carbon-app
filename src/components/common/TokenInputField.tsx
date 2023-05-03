@@ -103,6 +103,9 @@ export const TokenInputField: FC<Props> = ({
         </div>
         {
           <input
+            type={'text'}
+            pattern="[0-9]*"
+            inputMode="decimal"
             ref={inputRef}
             value={
               value === '...'
@@ -134,6 +137,7 @@ export const TokenInputField: FC<Props> = ({
       >
         {user && isBalanceLoading !== undefined && !withoutWallet ? (
           <button
+            tabIndex={-1}
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >

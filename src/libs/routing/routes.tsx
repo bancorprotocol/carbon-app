@@ -2,12 +2,12 @@ import { DebugPage } from 'pages/debug';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
-import { isProduction } from 'utils/helpers';
 import { TermsPage } from 'pages/terms';
 import { Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { EditNewStrategyPage } from 'pages/strategies/id/edit';
+import { PrivacyPage } from 'pages/privacy';
 
 export const PathNames = {
   strategies: '/',
@@ -17,6 +17,7 @@ export const PathNames = {
   editStrategy: '/strategies/edit',
   editStrategyNew: (id: string) => `/strategies/${id}/edit`,
   terms: '/terms',
+  privacy: '/privacy',
 };
 
 export const routes: Route[] = [
@@ -65,12 +66,12 @@ export const routes: Route[] = [
     path: PathNames.terms,
     element: <TermsPage />,
   },
-  ...(isProduction
-    ? []
-    : [
-        {
-          path: PathNames.debug,
-          element: <DebugPage />,
-        },
-      ]),
+  {
+    path: PathNames.privacy,
+    element: <PrivacyPage />,
+  },
+  {
+    path: PathNames.debug,
+    element: <DebugPage />,
+  },
 ];

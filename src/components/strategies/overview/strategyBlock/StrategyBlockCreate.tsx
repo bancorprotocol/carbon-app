@@ -1,27 +1,31 @@
 import { FC } from 'react';
 import { Link, PathNames } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import { carbonEvents } from 'services/events';
 
 type Props = {
   title?: string;
   className?: string;
 };
 export const StrategyBlockCreate: FC<Props> = ({
-  title = 'Create a Strategy',
-  className,
+  title = 'Create Strategy',
+  className = '',
 }) => {
   return (
     <Link
+      onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       to={PathNames.createStrategy}
-      className="bg-content flex h-full items-center justify-center rounded-10 border-dashed py-50"
+      className="bg-content flex h-full items-center justify-center rounded-10 py-50"
     >
       <div
-        className={`${className} flex flex-col items-center gap-24  text-20`}
+        className={`${className} flex flex-col items-center gap-24 text-24 font-weight-500 md:text-[32px]`}
       >
-        <div className="h-40 w-40 rounded-full bg-white">
-          <IconPlus className="text-black" />
+        <div className="h-72 w-72 rounded-full bg-green/20 md:h-80 md:w-80">
+          <IconPlus className="p-24 text-green md:p-26" />
         </div>
-        {title}
+        <span className="w-[185px] text-center leading-9 md:w-[210px]">
+          {title}
+        </span>
       </div>
     </Link>
   );

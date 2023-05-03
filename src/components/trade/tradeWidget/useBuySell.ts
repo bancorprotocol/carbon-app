@@ -13,13 +13,15 @@ import { prettifyNumber } from 'utils/helpers';
 import { Action, TradeActionBNStr, MatchActionBNStr } from 'libs/sdk';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
+import { carbonEvents } from 'services/events';
 
 export const useBuySell = ({
   source,
   target,
   sourceBalanceQuery,
+  buy = false,
 }: TradeWidgetBuySellProps) => {
-  const { user } = useWeb3();
+  const { user, provider } = useWeb3();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.symbol);
@@ -46,16 +48,46 @@ export const useBuySell = ({
     target.address
   );
 
+  const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
+
   const clearInputs = useCallback(() => {
     setSourceInput('');
     setTargetInput('');
   }, []);
 
+  const eventData = useMemo(() => {
+    return {
+      buy,
+      buyToken: target,
+      sellToken: source,
+      blockchainNetwork: provider?.network?.name || '',
+      valueUsd: getFiatValueSource(sourceInput, true).toString(),
+    };
+  }, [
+    buy,
+    getFiatValueSource,
+    provider?.network?.name,
+    source,
+    sourceInput,
+    target,
+  ]);
+
   const { trade, approval } = useTradeAction({
     source,
     sourceInput,
     isTradeBySource,
-    onSuccess: clearInputs,
+    onSuccess: (txHash: string) => {
+      clearInputs();
+      buy
+        ? carbonEvents.trade.tradeBuy({
+            ...eventData,
+            transactionHash: txHash,
+          })
+        : carbonEvents.trade.tradeSell({
+            ...eventData,
+            transactionHash: txHash,
+          });
+    },
   });
 
   const bySourceQuery = useGetTradeData({
@@ -215,6 +247,13 @@ export const useBuySell = ({
         approvalTokens: approval.tokens,
         onConfirm: tradeFn,
         buttonLabel: 'Confirm Trade',
+        eventData: {
+          ...eventData,
+          productType: 'trade',
+          approvalTokens: approval.tokens,
+          blockchainNetwork: provider?.network?.name || '',
+        },
+        context: 'trade',
       });
     } else {
       void tradeFn();
@@ -226,8 +265,10 @@ export const useBuySell = ({
     bySourceQuery.isFetching,
     byTargetQuery.isFetching,
     errorBaseBalanceSufficient,
+    eventData,
     isLiquidityError,
     isTradeBySource,
+    provider?.network?.name,
     maxSourceAmountQuery.isFetching,
     openModal,
     source,
@@ -279,8 +320,10 @@ export const useBuySell = ({
       target,
       isTradeBySource,
       onSuccess: clearInputs,
+      buy,
     });
   }, [
+    buy,
     clearInputs,
     isTradeBySource,
     openModal,
@@ -339,6 +382,7 @@ export const useBuySell = ({
     errorMsgTarget,
     openTradeRouteModal,
     calcSlippage,
+    isTradeBySource,
     maxSourceAmountQuery,
   };
 };

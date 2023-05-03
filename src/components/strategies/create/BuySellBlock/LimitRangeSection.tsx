@@ -20,7 +20,7 @@ export const LimitRangeSection: FC<Props> = ({
   order,
   title,
   inputTitle,
-  buy,
+  buy = false,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
 
@@ -36,6 +36,7 @@ export const LimitRangeSection: FC<Props> = ({
         <div className="flex items-center gap-10 text-14">
           <div className="bg-body flex items-center rounded-[100px] p-2">
             <button
+              tabIndex={-1}
               onClick={() => handleRangeChange()}
               className={`rounded-40 ${
                 !isRange ? 'bg-silver' : 'text-secondary'
@@ -44,6 +45,7 @@ export const LimitRangeSection: FC<Props> = ({
               Limit
             </button>
             <button
+              tabIndex={-1}
               onClick={() => handleRangeChange()}
               className={`rounded-40 ${
                 isRange ? 'bg-silver' : 'text-secondary'
@@ -53,6 +55,7 @@ export const LimitRangeSection: FC<Props> = ({
             </button>
           </div>
           <Tooltip
+            sendEventOnMount={{ buy }}
             element={
               <>
                 This section will define the order details in which you are
@@ -89,6 +92,7 @@ export const LimitRangeSection: FC<Props> = ({
           setPrice={order.setPrice}
           error={order.priceError}
           setPriceError={order.setPriceError}
+          buy={buy}
         />
       )}
     </div>
