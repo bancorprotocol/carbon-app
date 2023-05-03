@@ -1,7 +1,7 @@
 import { Button } from 'components/common/button';
 import { SearchInput } from 'components/common/searchInput';
 import { FC } from 'react';
-import { PathNames, useNavigate } from 'libs/routing';
+import { Link, PathNames, useNavigate } from 'libs/routing';
 import {
   StrategySort,
   StrategyFilter,
@@ -39,15 +39,16 @@ export const StrategyPageTitleWidget: FC<{
           />
         </>
       )}
-      <Button
-        variant="success"
-        onClick={() => {
-          carbonEvents.strategy.newStrategyCreateClick(undefined);
-          navigate({ to: PathNames.createStrategy });
-        }}
-      >
-        Create Strategy
-      </Button>
+      <Link to={PathNames.createStrategy}>
+        <Button
+          variant="success"
+          onClick={() =>
+            carbonEvents.strategy.newStrategyCreateClick(undefined)
+          }
+        >
+          Create Strategy
+        </Button>
+      </Link>
     </div>
   );
 };
