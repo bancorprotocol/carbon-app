@@ -5,17 +5,23 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 type Props = {
   rate: string;
+  fiatRate?: string;
   buy?: boolean;
   isLoading?: boolean;
 };
 
-export const OrderBookWidgetRate: FC<Props> = ({ rate, buy, isLoading }) => {
+export const OrderBookWidgetRate: FC<Props> = ({
+  rate,
+  buy,
+  fiatRate,
+  isLoading,
+}) => {
   return (
     <div
       className={`-mx-10 my-10 flex items-center rounded-8 bg-silver px-10 py-10 text-16`}
     >
       <Tooltip element="The mid-market price based on the last trade">
-        <span className="flex">
+        <span className="flex items-center ">
           {prettifyNumber(rate)}
           {!isLoading && (
             <div
@@ -28,6 +34,7 @@ export const OrderBookWidgetRate: FC<Props> = ({ rate, buy, isLoading }) => {
               />
             </div>
           )}
+          {fiatRate && <span className="ml-8 text-white/60">{fiatRate}</span>}
         </span>
       </Tooltip>
     </div>
