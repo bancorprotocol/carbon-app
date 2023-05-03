@@ -5,6 +5,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -25,6 +26,7 @@ export const ModalTokenListContent: FC<Props> = ({
   onRemoveFavorite,
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
+  const { aboveBreakpoint } = useBreakpoints();
   const [selectedList, _setSelectedList] = useState<ChooseTokenCategory>(
     lsService.getItem('chooseTokenCategory') || 'popular'
   );
@@ -77,7 +79,7 @@ export const ModalTokenListContent: FC<Props> = ({
       <div
         ref={parentRef}
         style={{
-          height: `390px`,
+          height: `${aboveBreakpoint('md') ? '390px' : '100vh'}`,
           overflow: 'auto',
         }}
       >

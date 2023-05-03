@@ -16,11 +16,11 @@ type Props = {
 const getSize = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
     case 'lg':
-      return 'max-w-[580px]';
+      return 'md:max-w-[580px]';
     case 'md':
-      return 'max-w-[480px]';
+      return 'md:max-w-[480px]';
     default:
-      return 'max-w-[380px]';
+      return 'md:max-w-[380px]';
   }
 };
 
@@ -39,18 +39,18 @@ export const Modal: FC<Props> = ({
   return (
     <Overlay
       onClick={() => closeModal(id)}
-      className={'px-content items-center justify-center'}
+      className={'md:px-content items-center justify-center'}
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto w-full ${sizeClass}`}
+        className={`relative mx-auto h-full w-full md:h-auto ${sizeClass}`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
         <div
-          className={`relative flex w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
+          className={`relative flex h-full w-full flex-col overflow-hidden border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis md:rounded-10`}
         >
           {isLoading && (
             <div
@@ -76,7 +76,7 @@ export const Modal: FC<Props> = ({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-hidden">{children}</div>
+          <div className="overflow-y-hidden md:max-h-[70vh]">{children}</div>
         </div>
       </m.div>
     </Overlay>

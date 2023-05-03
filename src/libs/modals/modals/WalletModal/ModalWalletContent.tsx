@@ -63,36 +63,37 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
           </button>
         </div>
       </div>
+      <div className="h-screen space-y-10 overflow-y-auto md:h-auto">
+        {SELECTABLE_CONNECTION_TYPES.map(getConnection).map((c) => (
+          <button
+            key={c.type}
+            onClick={() => onClick(c)}
+            className={buttonClasses}
+            disabled={isDisabled}
+          >
+            <Imager alt={'Wallet Logo'} src={c.logoUrl} className={'w-24'} />
+            <span className={textClasses}>{c.name}</span>
+          </button>
+        ))}
 
-      {SELECTABLE_CONNECTION_TYPES.map(getConnection).map((c) => (
-        <button
-          key={c.type}
-          onClick={() => onClick(c)}
-          className={buttonClasses}
-          disabled={isDisabled}
-        >
-          <Imager alt={'Wallet Logo'} src={c.logoUrl} className={'w-24'} />
-          <span className={textClasses}>{c.name}</span>
-        </button>
-      ))}
-
-      {EXT_LINKS.map(({ url, name, logoUrl }) => (
-        <Link
-          key={url}
-          to={url}
-          className={`${buttonClasses} ${
-            isDisabled
-              ? 'pointer-events-none cursor-not-allowed opacity-50 hover:bg-transparent'
-              : ''
-          }`}
-          disabled={isDisabled}
-        >
-          <div className={'flex w-24 justify-center'}>
-            <Imager alt={'Wallet Logo'} src={logoUrl} className={'h-24'} />
-          </div>
-          <span className={textClasses}>{name}</span>
-        </Link>
-      ))}
+        {EXT_LINKS.map(({ url, name, logoUrl }) => (
+          <Link
+            key={url}
+            to={url}
+            className={`${buttonClasses} ${
+              isDisabled
+                ? 'pointer-events-none cursor-not-allowed opacity-50 hover:bg-transparent'
+                : ''
+            }`}
+            disabled={isDisabled}
+          >
+            <div className={'flex w-24 justify-center'}>
+              <Imager alt={'Wallet Logo'} src={logoUrl} className={'h-24'} />
+            </div>
+            <span className={textClasses}>{name}</span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

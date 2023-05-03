@@ -6,6 +6,7 @@ import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -26,6 +27,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   onAddFavorite,
 }) => {
   const parentRef = useRef<HTMLDivElement>(null);
+  const { aboveBreakpoint } = useBreakpoints();
   const [selectedList, _setSelectedList] = useState<TradePairCategory>(
     lsService.getItem('tradePairsCategory') || 'popular'
   );
@@ -81,7 +83,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
       <div
         ref={parentRef}
         style={{
-          height: `390px`,
+          height: `${aboveBreakpoint('md') ? '390px' : '100vh'}`,
           overflow: 'auto',
         }}
       >
