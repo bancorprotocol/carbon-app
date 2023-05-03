@@ -36,6 +36,7 @@ export const LimitRangeSection: FC<Props> = ({
         <div className="flex items-center gap-10 text-14">
           <div className="bg-body flex items-center rounded-[100px] p-2">
             <button
+              tabIndex={-1}
               onClick={() => handleRangeChange()}
               className={`rounded-40 ${
                 !isRange ? 'bg-silver' : 'text-secondary'
@@ -44,6 +45,7 @@ export const LimitRangeSection: FC<Props> = ({
               Limit
             </button>
             <button
+              tabIndex={-1}
               onClick={() => handleRangeChange()}
               className={`rounded-40 ${
                 isRange ? 'bg-silver' : 'text-secondary'
