@@ -5,6 +5,7 @@ import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
   value: string;
@@ -104,7 +105,7 @@ export const TokenInputField: FC<Props> = ({
         {
           <input
             type={'text'}
-            pattern="[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$"
+            pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             ref={inputRef}
             value={
@@ -123,7 +124,7 @@ export const TokenInputField: FC<Props> = ({
             placeholder={placeholder}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
-            className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none	 ${
+            className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none ${
               isError ? 'text-red' : 'text-white'
             }`}
             disabled={disabled}

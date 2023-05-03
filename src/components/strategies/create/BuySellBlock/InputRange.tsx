@@ -4,6 +4,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 export const InputRange: FC<{
   min: string;
@@ -76,7 +77,7 @@ export const InputRange: FC<{
           </Tooltip>
           <input
             type={'text'}
-            pattern="[0-9]*"
+            pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
@@ -105,7 +106,7 @@ export const InputRange: FC<{
           </Tooltip>
           <input
             type={'text'}
-            pattern="[0-9]*"
+            pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
