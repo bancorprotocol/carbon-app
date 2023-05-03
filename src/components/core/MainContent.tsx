@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from 'react';
 import { useWeb3 } from 'libs/web3';
-import { Outlet, PathNames, useLocation } from 'libs/routing';
+import { PathNames, useLocation } from 'libs/routing';
 import { ErrorUnsupportedNetwork } from 'components/core/error/ErrorUnsupportedNetwork';
 import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnection';
 import { useTokens } from 'hooks/useTokens';
@@ -9,6 +9,7 @@ import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
 import { carbonEvents } from 'services/events';
 import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';
+import { AutoTopScrollOutlet } from 'libs/routing/AutoTopScrollOutlet';
 
 export const MainContent: FC = () => {
   const web3 = useWeb3();
@@ -30,7 +31,7 @@ export const MainContent: FC = () => {
     location.current.pathname === PathNames.terms ||
     location.current.pathname === PathNames.privacy
   ) {
-    return <Outlet />;
+    return <AutoTopScrollOutlet />;
   }
 
   if (!web3.isSupportedNetwork) {
@@ -53,5 +54,5 @@ export const MainContent: FC = () => {
     return <ErrorUserBlocked />;
   }
 
-  return <Outlet />;
+  return <AutoTopScrollOutlet />;
 };

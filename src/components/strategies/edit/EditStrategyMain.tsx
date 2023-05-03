@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { m } from 'libs/motion';
 import { EditStrategyHeader } from './EditStrategyHeader';
 import { EditStrategyLayout } from './EditStrategyLayout';
@@ -21,18 +21,10 @@ export const EditStrategyMain = ({
 }) => {
   const [showGraph, setShowGraph] = useState(true);
   const search = useSearch<EditStrategyLocationGenerics>();
-  const parentRef = useRef<HTMLDivElement>(null);
   const { type } = search;
-
-  useEffect(() => {
-    if (parentRef.current) {
-      parentRef.current.scrollIntoView();
-    }
-  }, []);
 
   return (
     <m.div
-      ref={parentRef}
       className={`flex flex-col items-center space-y-20 p-20 ${
         showGraph ? 'justify-between' : 'justify-center'
       }`}
