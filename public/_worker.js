@@ -15,18 +15,31 @@ const isIpBlocked = (request, env) => {
   }
 };
 
+async function gatherResponse(response) {
+  const { headers } = response;
+  const contentType = headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    return JSON.stringify(await response.json());
+  }
+  return response.text();
+}
+
 const getPriceByAddress = async (env, address) => {
+  const init = {
+    headers: {
+      'content-type': 'application/json;charset=UTF-8',
+      'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
+    },
+  };
   let response;
   try {
     response = await fetch(
       'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
-      {
-        headers: {
-          'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
-        },
-      }
+      init
     );
-    return new Response(response, { status: 200 });
+    const results = await gatherResponse(response);
+
+    return new Response(results, init);
   } catch (ex) {
     return new Response(ex.message, { status: 500 });
   }
