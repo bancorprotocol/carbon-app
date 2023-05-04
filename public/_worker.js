@@ -61,9 +61,15 @@ const getPriceByAddress = async (env, request) => {
     const id = await fetchCMCIdByAddress(env, address);
 
     const convertString = searchParams.get('convert') || 'USD';
+    const convert = convertString.split(',');
     const results = await fetchCMCPriceById(env, id, convertString);
 
-    return new Response(JSON.stringify(results), {
+    const prices = {};
+    convert.forEach((c) => {
+      prices[c] = results[c].price;
+    });
+
+    return new Response(JSON.stringify(prices), {
       headers: {
         'content-type': 'application/json;charset=UTF-8',
       },
