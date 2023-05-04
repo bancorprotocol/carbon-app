@@ -22,8 +22,12 @@ const fetchCMCIdByAddress = async (env, address) => {
       'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
     },
   };
-  const response = await fetch(`${cmcBaseUrl}info?address=${address}`, init);
-  return Object.keys((await response.json()).data)[0];
+  const res = await fetch(`${cmcBaseUrl}info?address=${address}`, init);
+  const json = await res.json();
+  if (json.status.error_code !== 0) {
+    throw new Error(json.status.error_message);
+  }
+  return Object.keys(json.data)[0];
 };
 
 const fetchCMCPriceById = async (env, id) => {
@@ -33,11 +37,15 @@ const fetchCMCPriceById = async (env, id) => {
       'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
     },
   };
-  const response2 = await fetch(
+  const res = await fetch(
     `${cmcBaseUrl}quotes/latest?id=${id}&convert=USD,EUR,CAD`,
     init
   );
-  return (await response2.json()).data[id].quote;
+  const json = await res.json();
+  if (json.status.error_code !== 0) {
+    throw new Error(json.status.error_message);
+  }
+  return json.data[id].quote;
 };
 
 const getPriceByAddress = async (env, request) => {
@@ -66,17 +74,12 @@ export default {
 
     const { pathname } = new URL(request.url);
 
-    if (pathname.startsWith('/api/price/0x')) {
-      return getPriceByAddress(env, request);
-    }
-
     if (pathname.startsWith('/api/')) {
-      switch (pathname) {
-        case pathname.startsWith('/api/price/0x'):
-          return getPriceByAddress(env, request);
-        default:
-          return new Response('api endpoint not found', { status: 404 });
+      if (pathname.startsWith('/api/price/0x')) {
+        return getPriceByAddress(env, request);
       }
+
+      return new Response('api endpoint not found', { status: 404 });
     }
 
     return env.ASSETS.fetch(request);
