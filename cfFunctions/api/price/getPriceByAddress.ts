@@ -1,11 +1,11 @@
 import type { CFWorkerEnv } from './../../types';
 import { getCMCPriceByAddress } from './getCMCPriceByAddress';
 
-export const getPriceByAddress = async (request: Request, env: CFWorkerEnv) => {
-  const { pathname, searchParams } = new URL(request.url);
-  const address = pathname.split('/')[3];
-  const convertString = searchParams.get('convert') || 'USD';
-
+export const getPriceByAddress = async (
+  env: CFWorkerEnv,
+  address: string,
+  convertString: string
+) => {
   try {
     const res = await getCMCPriceByAddress(env, address, convertString);
 
