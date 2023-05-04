@@ -15,6 +15,11 @@ export default {
       }
     }
 
+    if (url.pathname.startsWith('/api/')) {
+      // TODO: Add your custom /api/* logic here.
+      return new Response('Ok');
+    }
+
     return env.ASSETS.fetch(request);
   },
 };
