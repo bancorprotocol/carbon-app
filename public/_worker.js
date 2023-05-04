@@ -34,7 +34,7 @@ const getPriceByAddress = async (env, address) => {
   let response;
   try {
     response = await fetch(
-      'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
+      'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=5000&convert=USD',
       init
     );
     const results = await gatherResponse(response);
