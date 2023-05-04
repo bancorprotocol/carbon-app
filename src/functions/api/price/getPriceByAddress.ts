@@ -13,7 +13,7 @@ export const getPriceByAddress = async (
     return new Response(JSON.stringify(res), {
       headers: {
         'content-type': 'application/json',
-        'Cache-Control': 'max-age:360',
+        'Cache-Control': 'max-age:3600',
       },
     });
   } catch (ex: any) {
