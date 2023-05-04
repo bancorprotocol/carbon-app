@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-import axios from 'axios';
 
 const isIpBlocked = (request, env) => {
   const RESTRICTED_DOMAIN = '.pages.dev';
@@ -19,7 +18,7 @@ const isIpBlocked = (request, env) => {
 const getPriceByAddress = async (env, address) => {
   let response;
   try {
-    response = await axios.get(
+    response = await fetch(
       'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
       {
         headers: {
