@@ -83,7 +83,7 @@
     "postinstall": "yarn compile-abis",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "vite",
-    "build": "tsc && vite build && yarn compile-cf-worker",
+    "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest run"
   },
