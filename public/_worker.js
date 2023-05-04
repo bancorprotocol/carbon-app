@@ -14,26 +14,37 @@ const isIpBlocked = (request, env) => {
     }
   }
 };
-
-const getPriceByAddress = async (env, request) => {
-  const cmcBaseUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/';
+const cmcBaseUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/';
+const fetchCMCIdByAddress = async (env, address) => {
   const init = {
     headers: {
       'content-type': 'application/json;charset=UTF-8',
       'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
     },
   };
+  const response = await fetch(`${cmcBaseUrl}info?address=${address}`, init);
+  return Object.keys((await response.json()).data)[0];
+};
+
+const fetchCMCPriceById = async (env, id) => {
+  const init = {
+    headers: {
+      'content-type': 'application/json;charset=UTF-8',
+      'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
+    },
+  };
+  const response2 = await fetch(`${cmcBaseUrl}quotes/latest?id=${id}`, init);
+  return (await response2.json()).data[id].quote;
+};
+
+const getPriceByAddress = async (env, request) => {
   const { pathname } = new URL(request.url);
   const address = pathname.split('/')[2];
   try {
-    const response = await fetch(`${cmcBaseUrl}info?address=${address}`, init);
+    const id = await fetchCMCIdByAddress(env, address);
+    const results = await fetchCMCPriceById(env, id);
 
-    const id = Object.keys((await response.json()).data)[0];
-
-    const response2 = await fetch(`${cmcBaseUrl}quotes/latest?id=${id}`, init);
-    const results = await response2.json();
-
-    return new Response(results.data[id].quote, {
+    return new Response(results, {
       headers: {
         'content-type': 'application/json;charset=UTF-8',
       },
