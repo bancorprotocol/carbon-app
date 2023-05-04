@@ -35,7 +35,7 @@ export default {
         return getPriceByAddress(request, env);
       }
 
-      return new Response('api endpoint not found', { status: 404 });
+      return new Response('not found', { status: 404 });
     }
 
     return env.ASSETS.fetch(request);
