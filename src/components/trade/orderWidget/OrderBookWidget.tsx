@@ -6,7 +6,7 @@ import { OrderBookSide } from './OrderBookSide';
 
 export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
   const {
-    data: { buy, sell, middleRate },
+    data: { buy, sell, middleRate, middleRateFiat },
     isLoading,
     isLastTradeLoading,
     isLastTradeBuy,
@@ -34,6 +34,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
           <OrderBookWidgetRate
             buy={isLastTradeBuy}
             rate={middleRate}
+            fiatRate={middleRateFiat}
             isLoading={isLastTradeLoading}
           />
           <OrderBookSide

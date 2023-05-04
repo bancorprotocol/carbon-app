@@ -28,8 +28,8 @@ export const buttonStyles = cva<ButtonVariants>(
           'hover:border-grey4 hover:disabled:border-white',
         ],
         secondary: [
-          'bg-silver border-2 border-silver !text-white',
-          'hover:border-grey3 hover:disabled:border-silver',
+          'bg-emphasis border-2 border-emphasis !text-white',
+          'hover:border-grey3 hover:disabled:border-emphasis',
         ],
         success: [
           'bg-green border-2 border-green',
