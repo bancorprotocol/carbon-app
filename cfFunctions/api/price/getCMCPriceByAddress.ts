@@ -1,4 +1,4 @@
-import { CFWorkerEnv } from './../../types';
+import type { CFWorkerEnv } from './../../types';
 
 const cmcBaseUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/';
 

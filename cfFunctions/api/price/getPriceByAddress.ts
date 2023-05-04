@@ -1,4 +1,4 @@
-import { CFWorkerEnv } from './../../types';
+import type { CFWorkerEnv } from './../../types';
 import { getCMCPriceByAddress } from './getCMCPriceByAddress';
 
 export const getPriceByAddress = async (request: Request, env: CFWorkerEnv) => {

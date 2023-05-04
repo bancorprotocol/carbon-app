@@ -1,4 +1,4 @@
-import { CFWorkerEnv } from './types';
+import type { CFWorkerEnv } from './types';
 import { isIpBlocked } from './ipBlock';
 import { getPriceByAddress } from './api/price';
 
