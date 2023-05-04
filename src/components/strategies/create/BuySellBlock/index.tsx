@@ -4,7 +4,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
-import { TokenInputField } from 'components/common/TokenInputField';
+import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
 import { Imager } from 'components/common/imager/Imager';
 import { useStrategyEvents } from './useStrategyEvents';
