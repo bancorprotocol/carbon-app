@@ -8,7 +8,14 @@ export const getPriceByAddress = async (
 ) => {
   try {
     const convert = new URL(url).searchParams.get('convert') || 'USD';
-    const res = await getCMCPriceByAddress(env, address, convert);
+    const promises = [getCMCPriceByAddress(env, address, convert)];
+
+    let res;
+    promises.some(async (promise) => {
+      res = await promise;
+      return true;
+    });
+    // const res = await getCMCPriceByAddress(env, address, convert);
 
     return new Response(JSON.stringify(res), {
       headers: {

@@ -34,7 +34,14 @@ const fetchCMCPriceById = async (
     getCMCHeaders(env)
   );
 
-  const json = await res.json<{ data: any; status: any }>();
+  const json = await res.json<{
+    data: {
+      [k in string]: {
+        quote: { [k in string]: { price: number; last_updated: string } };
+      };
+    };
+    status: any;
+  }>();
   if (json.status.error_code !== 0) {
     throw new Error(json.status.error_message + ' | fetchCMCPriceById: ' + id);
   }
@@ -50,9 +57,10 @@ export const getCMCPriceByAddress = async (
   const id = await fetchCMCIdByAddress(env, address);
   const res = await fetchCMCPriceById(env, id, convert);
 
-  const prices: { [k in string]: number } = {};
+  const prices: { [k in string]: { price: number; timestamp: number } } = {};
   Object.keys(res).forEach((c) => {
-    prices[c] = res[c].price;
+    prices[c].price = res[c].price;
+    prices[c].timestamp = new Date(res[c].last_updated).getTime();
   });
 
   return prices;
