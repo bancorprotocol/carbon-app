@@ -15,37 +15,25 @@ const isIpBlocked = (request, env) => {
   }
 };
 
-async function gatherResponse(response) {
-  const { headers } = response;
-  const contentType = headers.get('content-type') || '';
-  if (contentType.includes('application/json')) {
-    return JSON.stringify(await response.json());
-  }
-  return response.text();
-}
-
-const getPriceByAddress = async (env) => {
+const getPriceByAddress = async (env, request) => {
+  const cmcBaseUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/';
   const init = {
     headers: {
       'content-type': 'application/json;charset=UTF-8',
       'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
     },
   };
+  const { pathname } = new URL(request.url);
+  const address = pathname.split('/')[2];
   try {
-    const response = await fetch(
-      'https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?address=0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
-      init
-    );
+    const response = await fetch(`${cmcBaseUrl}info?address=${address}`, init);
 
     const id = Object.keys((await response.json()).data)[0];
 
-    const response2 = await fetch(
-      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${id}`,
-      init
-    );
-    const results = await gatherResponse(response2);
+    const response2 = await fetch(`${cmcBaseUrl}quotes/latest?id=${id}`, init);
+    const results = await response2.json();
 
-    return new Response(results, {
+    return new Response(results.data[id].quote, {
       headers: {
         'content-type': 'application/json;charset=UTF-8',
       },
@@ -67,7 +55,7 @@ export default {
     if (pathname.startsWith('/api/')) {
       switch (pathname) {
         case '/api/price':
-          return getPriceByAddress(env);
+          return getPriceByAddress(env, request);
         default:
           return new Response('api endpoint not found', { status: 404 });
       }
