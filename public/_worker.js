@@ -14,37 +14,41 @@ const isIpBlocked = (request, env) => {
     }
   }
 };
+
 const cmcBaseUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/';
+
+const getCMCHeaders = (env) => ({
+  headers: {
+    'content-type': 'application/json;charset=UTF-8',
+    'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
+  },
+});
+
 const fetchCMCIdByAddress = async (env, address) => {
-  const init = {
-    headers: {
-      'content-type': 'application/json;charset=UTF-8',
-      'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
-    },
-  };
-  const res = await fetch(`${cmcBaseUrl}info?address=${address}`, init);
+  const res = await fetch(
+    `${cmcBaseUrl}info?address=${address}`,
+    getCMCHeaders(env)
+  );
+
   const json = await res.json();
   if (json.status.error_code !== 0) {
     throw new Error(json.status.error_message);
   }
+
   return Object.keys(json.data)[0];
 };
 
 const fetchCMCPriceById = async (env, id) => {
-  const init = {
-    headers: {
-      'content-type': 'application/json;charset=UTF-8',
-      'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
-    },
-  };
   const res = await fetch(
     `${cmcBaseUrl}quotes/latest?id=${id}&convert=USD,EUR,CAD`,
-    init
+    getCMCHeaders(env)
   );
+
   const json = await res.json();
   if (json.status.error_code !== 0) {
     throw new Error(json.status.error_message);
   }
+
   return json.data[id].quote;
 };
 
@@ -73,7 +77,6 @@ export default {
     }
 
     const { pathname } = new URL(request.url);
-
     if (pathname.startsWith('/api/')) {
       if (pathname.startsWith('/api/price/0x')) {
         return getPriceByAddress(env, request);
