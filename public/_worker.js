@@ -40,7 +40,7 @@ const getPriceByAddress = async (env) => {
     const id = Object.keys((await response.json()).data)[0];
 
     const response2 = await fetch(
-      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=${id}`,
+      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${id}`,
       init
     );
     const results = await gatherResponse(response2);
