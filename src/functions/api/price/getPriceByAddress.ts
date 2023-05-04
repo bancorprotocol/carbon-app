@@ -11,10 +11,10 @@ export const getPriceByAddress = async (
     const promises = [getCMCPriceByAddress(env, address, convert)];
 
     let res;
-    promises.some(async (promise) => {
+    for (const promise of promises) {
       res = await promise;
-      return true;
-    });
+      if (res) break;
+    }
     // const res = await getCMCPriceByAddress(env, address, convert);
 
     return new Response(JSON.stringify(res), {
