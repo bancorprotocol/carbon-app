@@ -27,7 +27,7 @@ async function gatherResponse(response) {
 const getPriceByAddress = async (env) => {
   try {
     const response = await fetch(
-      'https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?slug=ethereum&address=0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
+      'https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?address=0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
       {
         headers: {
           'content-type': 'application/json;charset=UTF-8',
