@@ -65,7 +65,7 @@ export default {
 
     if (pathname.startsWith('/api/')) {
       switch (pathname) {
-        case '/api/price':
+        case pathname.startsWith('/api/price/0x'):
           return getPriceByAddress(env, request);
         default:
           return new Response('api endpoint not found', { status: 404 });
