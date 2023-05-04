@@ -40,9 +40,9 @@ const fetchCMCIdByAddress = async (env, address) => {
   return Object.keys(json.data)[0];
 };
 
-const fetchCMCPriceById = async (env, id) => {
+const fetchCMCPriceById = async (env, id, convert = 'USD') => {
   const res = await fetch(
-    `${cmcBaseUrl}quotes/latest?id=${id}&convert=USD,EUR,CAD`,
+    `${cmcBaseUrl}quotes/latest?id=${id}&convert=${convert}`,
     getCMCHeaders(env)
   );
 
@@ -56,11 +56,12 @@ const fetchCMCPriceById = async (env, id) => {
 
 const getPriceByAddress = async (env, request) => {
   const { pathname, searchParams } = new URL(request.url);
-  // const convertString = searchParams.get('convert');
-  const address = pathname.split('/')[3];
   try {
+    const address = pathname.split('/')[3];
     const id = await fetchCMCIdByAddress(env, address);
-    const results = await fetchCMCPriceById(env, id);
+
+    const convertString = searchParams.get('convert');
+    const results = await fetchCMCPriceById(env, id, convertString);
 
     return new Response(JSON.stringify(results), {
       headers: {
