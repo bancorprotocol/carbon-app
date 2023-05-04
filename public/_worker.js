@@ -63,7 +63,7 @@ const getPriceByAddress = async (env, request) => {
     const convertString = searchParams.get('convert');
     const results = await fetchCMCPriceById(env, id, convertString);
 
-    return new Response(JSON.stringify(results), {
+    return new Response(results, {
       headers: {
         'content-type': 'application/json;charset=UTF-8',
       },
