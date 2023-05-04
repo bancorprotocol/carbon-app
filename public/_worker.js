@@ -57,7 +57,7 @@ const fetchCMCPriceById = async (env, id) => {
 const getPriceByAddress = async (env, request) => {
   const { pathname, searchParams } = new URL(request.url);
   // const convertString = searchParams.get('convert');
-  const address = pathname.split('/')[2];
+  const address = pathname.split('/')[3];
   try {
     const id = await fetchCMCIdByAddress(env, address);
     const results = await fetchCMCPriceById(env, id);
