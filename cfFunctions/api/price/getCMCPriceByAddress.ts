@@ -17,7 +17,7 @@ const fetchCMCIdByAddress = async (env: CFWorkerEnv, address: string) => {
   const json = await res.json<{ data: any; status: any }>();
   if (json.status.error_code !== 0) {
     throw new Error(
-      json.status.error_message + ' fetchCMCIdByAddress ' + address
+      json.status.error_message + ' | fetchCMCIdByAddress: ' + address
     );
   }
 
@@ -36,7 +36,7 @@ const fetchCMCPriceById = async (
 
   const json = await res.json<{ data: any; status: any }>();
   if (json.status.error_code !== 0) {
-    throw new Error(json.status.error_message + ' fetchCMCPriceById ' + id);
+    throw new Error(json.status.error_message + ' | fetchCMCPriceById: ' + id);
   }
 
   return json.data[id].quote;
@@ -47,18 +47,13 @@ export const getCMCPriceByAddress = async (
   address: string,
   convert: string
 ) => {
-  try {
-    const id = await fetchCMCIdByAddress(env, address);
+  const id = await fetchCMCIdByAddress(env, address);
+  const res = await fetchCMCPriceById(env, id, convert);
 
-    const res = await fetchCMCPriceById(env, id, convert);
+  const prices: { [k in string]: number } = {};
+  Object.keys(res).forEach((c) => {
+    prices[c] = res[c].price;
+  });
 
-    const prices: { [k in string]: number } = {};
-    Object.keys(res).forEach((c) => {
-      prices[c] = res[c].price;
-    });
-
-    return prices;
-  } catch (ex: any) {
-    throw new Error(`fetchCMCPriceByAddress error: ${ex.message}`);
-  }
+  return prices;
 };
