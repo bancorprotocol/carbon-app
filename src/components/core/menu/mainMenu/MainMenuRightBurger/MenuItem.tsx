@@ -3,7 +3,7 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
 
 type MenuItemProps = {
   item: {
-    onClick: () => void;
+    onClick?: Function;
     content: string | ReactElement;
     hasSubMenu?: boolean;
     disableHoverEffect?: boolean;
@@ -20,7 +20,7 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
   } = item;
   return (
     <div
-      onClick={() => item.onClick()}
+      onClick={() => item.onClick && item.onClick()}
       className={`${
         disableHoverEffect ? 'p-4' : 'md:hover:bg-body p-10'
       } block cursor-pointer rounded-6 md:hover:text-white ${className}`}

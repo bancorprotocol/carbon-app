@@ -2,11 +2,18 @@ import { FC } from 'react';
 import { ReactComponent as IconBurger } from 'assets/icons/burger.svg';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { MenuItem } from './MenuItem';
 import { useMenuContext } from './useMenuContext';
+import { MenuItemType, MenuType } from './useBurgerMenuItems';
+import { MenuItem } from './MenuItem';
 
-export const MainMenuRightBurger: FC = () => {
-  const { isOpen, setIsOpen, menuContext } = useMenuContext();
+export const MainMenuRightBurger: FC<{
+  menuMapping: Map<MenuType, { title?: string; items: MenuItemType[] }>;
+}> = ({ menuMapping }) => {
+  const { isOpen, setIsOpen, menuContext } = useMenuContext<MenuType>({
+    mainMenu: 'main',
+    menuMapping,
+  });
+
   const currentMenuItems = menuContext.top()?.items;
 
   return (
