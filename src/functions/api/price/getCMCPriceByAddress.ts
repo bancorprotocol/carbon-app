@@ -59,8 +59,10 @@ export const getCMCPriceByAddress = async (
 
   const prices: { [k in string]: { price: number; timestamp: number } } = {};
   Object.keys(res).forEach((c) => {
-    prices[c].price = res[c].price;
-    prices[c].timestamp = new Date(res[c].last_updated).getTime();
+    prices[c] = {
+      price: res[c].price,
+      timestamp: new Date(res[c].last_updated).getTime(),
+    };
   });
 
   return prices;
