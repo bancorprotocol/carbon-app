@@ -79,7 +79,6 @@
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir 'src/abis/types' 'src/abis/**/*.json'",
-    "compile-cf-worker": "esbuild cfFunctions/index.ts --bundle --outfile=./build/_worker.js",
     "postinstall": "yarn compile-abis",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "vite",

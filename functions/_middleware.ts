@@ -1,5 +1,4 @@
-import { isIpBlocked } from '../cfFunctions/ipBlock';
-import { CFWorkerEnv } from '../cfFunctions/types';
+import { isIpBlocked, CFWorkerEnv } from './../src/functions';
 
 export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   request,

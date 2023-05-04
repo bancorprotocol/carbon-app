@@ -1,4 +1,4 @@
-import type { CFWorkerEnv } from './types';
+import type { CFWorkerEnv } from 'functions/types';
 
 export const isIpBlocked = (request: Request, env: CFWorkerEnv) => {
   const RESTRICTED_DOMAIN = '.pages.dev';

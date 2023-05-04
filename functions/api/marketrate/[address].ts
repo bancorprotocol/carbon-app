@@ -1,5 +1,4 @@
-import { CFWorkerEnv } from '../../../cfFunctions/types';
-import { getPriceByAddress } from '../../../cfFunctions/api/price';
+import { CFWorkerEnv, getPriceByAddress } from './../../../src/functions';
 
 export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   request: { url },
