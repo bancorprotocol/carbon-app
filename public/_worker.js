@@ -66,6 +66,10 @@ export default {
 
     const { pathname } = new URL(request.url);
 
+    if (pathname.startsWith('/api/price/0x')) {
+      return getPriceByAddress(env, request);
+    }
+
     if (pathname.startsWith('/api/')) {
       switch (pathname) {
         case pathname.startsWith('/api/price/0x'):
