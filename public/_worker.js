@@ -33,7 +33,10 @@ const fetchCMCPriceById = async (env, id) => {
       'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
     },
   };
-  const response2 = await fetch(`${cmcBaseUrl}quotes/latest?id=${id}`, init);
+  const response2 = await fetch(
+    `${cmcBaseUrl}quotes/latest?id=${id}&convert=USD,EUR,CAD`,
+    init
+  );
   return (await response2.json()).data[id].quote;
 };
 
