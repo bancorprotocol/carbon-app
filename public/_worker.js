@@ -25,26 +25,22 @@ async function gatherResponse(response) {
 }
 
 const getPriceByAddress = async (env) => {
+  const init = {
+    headers: {
+      'content-type': 'application/json;charset=UTF-8',
+      'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
+    },
+  };
   try {
     const response = await fetch(
       'https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?address=0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
-      {
-        headers: {
-          'content-type': 'application/json;charset=UTF-8',
-          'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
-        },
-      }
+      init
     );
 
     const response2 = await fetch(
       `https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=${await response.json()
         .data[1].id}`,
-      {
-        headers: {
-          'content-type': 'application/json;charset=UTF-8',
-          'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
-        },
-      }
+      init
     );
     const results = await gatherResponse(response2);
 
