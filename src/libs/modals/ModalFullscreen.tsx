@@ -61,7 +61,7 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
             </div>
           </div>
 
-          <div className="h-full overflow-y-hidden">{children}</div>
+          <div className="h-screen overflow-y-hidden">{children}</div>
         </div>
       </m.div>
     </Overlay>
