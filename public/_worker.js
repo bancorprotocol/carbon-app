@@ -32,7 +32,9 @@ const fetchCMCIdByAddress = async (env, address) => {
 
   const json = await res.json();
   if (json.status.error_code !== 0) {
-    throw new Error(json.status.error_message);
+    throw new Error(
+      json.status.error_message + ' fetchCMCIdByAddress ' + address
+    );
   }
 
   return Object.keys(json.data)[0];
@@ -46,20 +48,21 @@ const fetchCMCPriceById = async (env, id) => {
 
   const json = await res.json();
   if (json.status.error_code !== 0) {
-    throw new Error(json.status.error_message);
+    throw new Error(json.status.error_message + ' fetchCMCPriceById ' + id);
   }
 
   return json.data[id].quote;
 };
 
 const getPriceByAddress = async (env, request) => {
-  const { pathname } = new URL(request.url);
+  const { pathname, searchParams } = new URL(request.url);
+  // const convertString = searchParams.get('convert');
   const address = pathname.split('/')[2];
   try {
     const id = await fetchCMCIdByAddress(env, address);
     const results = await fetchCMCPriceById(env, id);
 
-    return new Response(results, {
+    return new Response(JSON.stringify(results), {
       headers: {
         'content-type': 'application/json;charset=UTF-8',
       },
