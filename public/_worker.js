@@ -19,7 +19,6 @@ const cmcBaseUrl = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/';
 
 const getCMCHeaders = (env) => ({
   headers: {
-    'content-type': 'application/json;charset=UTF-8',
     'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
   },
 });
@@ -70,7 +69,7 @@ const getPriceByAddress = async (env, request) => {
 
     return new Response(JSON.stringify(prices), {
       headers: {
-        'content-type': 'application/json;charset=UTF-8',
+        'content-type': 'application/json',
       },
     });
   } catch (ex) {
