@@ -24,22 +24,24 @@ async function gatherResponse(response) {
   return response.text();
 }
 
-const getPriceByAddress = async (env, address) => {
-  const init = {
-    headers: {
-      'content-type': 'application/json;charset=UTF-8',
-      'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
-    },
-  };
-  let response;
+const getPriceByAddress = async (env) => {
   try {
-    response = await fetch(
+    const response = await fetch(
       'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=5000&convert=USD',
-      init
+      {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8',
+          'X-CMC_PRO_API_KEY': env.CMC_API_KEY,
+        },
+      }
     );
     const results = await gatherResponse(response);
 
-    return new Response(results, init);
+    return new Response(results, {
+      headers: {
+        'content-type': 'application/json;charset=UTF-8',
+      },
+    });
   } catch (ex) {
     return new Response(ex.message, { status: 500 });
   }
@@ -59,7 +61,7 @@ export default {
         case '/api/price':
           return getPriceByAddress(env);
         default:
-          new Response('api endpoint not found', { status: 404 });
+          return new Response('api endpoint not found', { status: 404 });
       }
     }
 
