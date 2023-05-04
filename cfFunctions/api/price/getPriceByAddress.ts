@@ -3,11 +3,12 @@ import { getCMCPriceByAddress } from './getCMCPriceByAddress';
 
 export const getPriceByAddress = async (
   env: CFWorkerEnv,
-  address: string,
-  convertString: string
+  url: string,
+  address: string
 ) => {
   try {
-    const res = await getCMCPriceByAddress(env, address, convertString);
+    const convert = new URL(url).searchParams.get('convert') || 'USD';
+    const res = await getCMCPriceByAddress(env, address, convert);
 
     return new Response(JSON.stringify(res), {
       headers: {
