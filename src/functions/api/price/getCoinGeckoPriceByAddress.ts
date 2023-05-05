@@ -11,6 +11,8 @@ export const getCoinGeckoPriceByAddress = async (
     `${baseUrl}token_price/ethereum?contract_addresses=${address}&vs_currencies=${convert}`
   );
 
+  return 'hello';
+
   return await res.json();
 
   // const json = await res.json<{
