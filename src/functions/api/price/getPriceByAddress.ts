@@ -10,10 +10,13 @@ export const getPriceByAddress = async (
   const convert = new URL(url).searchParams.get('convert') || 'USD';
 
   // Add more price sources here
-  const promises = [
-    { provider: 'coingecko', fn: getCoinGeckoPriceByAddress },
-    { provider: 'cmc', fn: getCMCPriceByAddress },
-  ];
+  const promises = [];
+  if (env.COINGECKO_API_KEY) {
+    promises.push({ provider: 'coingecko', fn: getCoinGeckoPriceByAddress });
+  }
+  if (env.CMC_API_KEY) {
+    promises.push({ provider: 'coinmarketcap', fn: getCMCPriceByAddress });
+  }
 
   let res = { data: {}, provider: '' };
   let error;
