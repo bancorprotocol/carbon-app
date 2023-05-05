@@ -20,16 +20,37 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
 
   try {
     const data = await getPriceByAddress(env, request.url, address);
-    const response = new Response(JSON.stringify(data), {
-      headers: {
-        'content-type': 'application/json',
-        'Cache-Control': 'max-age:300',
-      },
-    });
+    const response = new Response(
+      JSON.stringify({
+        data,
+        status: {
+          timestamp: new Date().toUTCString(),
+          error_code: 0,
+          error_message: undefined,
+        },
+      }),
+      {
+        headers: {
+          'content-type': 'application/json',
+          'Cache-Control': 'max-age:300',
+        },
+      }
+    );
     waitUntil(cache.put(request, response.clone()));
 
     return response;
-  } catch (ex: any) {
-    return new Response(ex.message, { status: 500 });
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({
+        data: undefined,
+        status: {
+          timestamp: new Date().toUTCString(),
+          error_code: 500,
+          error_message:
+            error.message || 'Internal error: failed to get prices',
+        },
+      }),
+      { status: 500 }
+    );
   }
 };
