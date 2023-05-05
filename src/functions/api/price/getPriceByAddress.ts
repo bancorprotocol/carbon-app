@@ -19,7 +19,7 @@ export const getPriceByAddress = async (
       if (res) break;
     } catch (ex: any) {
       // TODO handle error and try next price source
-      throw new Response(ex.message, { status: 500 });
+      res = new Response(ex.message, { status: 500 });
     }
   }
 
