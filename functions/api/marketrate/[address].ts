@@ -23,7 +23,7 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
     const response = new Response(JSON.stringify(data), {
       headers: {
         'content-type': 'application/json',
-        'Cache-Control': 'max-age:120',
+        'Cache-Control': 'max-age:300',
       },
     });
     waitUntil(cache.put(request, response.clone()));
