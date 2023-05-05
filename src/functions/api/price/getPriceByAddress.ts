@@ -7,25 +7,21 @@ export const getPriceByAddress = async (
   url: string,
   address: string
 ) => {
-  try {
-    const convert = new URL(url).searchParams.get('convert') || 'USD';
+  const convert = new URL(url).searchParams.get('convert') || 'USD';
 
-    // Add more price sources here
-    const promises = [getCoinGeckoPriceByAddress, getCMCPriceByAddress];
+  // Add more price sources here
+  const promises = [getCoinGeckoPriceByAddress, getCMCPriceByAddress];
 
-    let res;
-    for (const promise of promises) {
-      try {
-        res = await promise(env, address, convert);
-        if (res) break;
-      } catch (ex: any) {
-        // TODO handle error and try next price source
-        return new Response(ex.message, { status: 500 });
-      }
+  let res;
+  for (const promise of promises) {
+    try {
+      res = await promise(env, address, convert);
+      if (res) break;
+    } catch (ex: any) {
+      // TODO handle error and try next price source
+      return new Response(ex.message, { status: 500 });
     }
-
-    return res;
-  } catch (ex: any) {
-    return new Response(ex.message, { status: 500 });
   }
+
+  return res;
 };
