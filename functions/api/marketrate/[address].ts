@@ -1,34 +1,60 @@
 import { CFWorkerEnv, getPriceByAddress } from './../../../src/functions';
 
+const buildPriceResponse = (
+  data: any = undefined,
+  provider: string | null = null,
+  error_code = 0,
+  error_message: string | null = null
+): Response => {
+  return new Response(
+    JSON.stringify({
+      data,
+      status: {
+        provider,
+        timestamp: new Date().toUTCString(),
+        error_code,
+        error_message: error_code
+          ? error_message || 'Internal error: failed to get prices'
+          : null,
+      },
+    }),
+    {
+      status: error_code || undefined,
+      headers: {
+        'content-type': 'application/json',
+        'Cache-Control': 'max-age:300',
+      },
+    }
+  );
+};
+
+const validateRequest = (
+  request: Request,
+  address: string | string[]
+): Response | undefined => {
+  if (
+    typeof address !== 'string' ||
+    !address.startsWith('0x') ||
+    address.length !== 42
+  ) {
+    return buildPriceResponse(
+      undefined,
+      undefined,
+      400,
+      'Bad request: address is not a valid Ethereum address'
+    );
+  }
+};
+
 export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   request,
   env,
   params: { address },
   waitUntil,
 }) => {
-  if (
-    typeof address !== 'string' ||
-    !address.startsWith('0x') ||
-    address.length !== 42
-  ) {
-    return new Response(
-      JSON.stringify({
-        data: undefined,
-        status: {
-          provider: undefined,
-          timestamp: new Date().toUTCString(),
-          error_code: 400,
-          error_message: 'Bad request: address is not a valid Ethereum address',
-        },
-      }),
-      {
-        status: 400,
-        headers: {
-          'content-type': 'application/json',
-        },
-      }
-    );
-  }
+  const invalidRequest = validateRequest(request, address);
+  if (invalidRequest) return invalidRequest;
+
   const cache = await caches.open('default');
 
   const match = await cache.match(request);
@@ -38,46 +64,20 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
     const { data, provider } = await getPriceByAddress(
       env,
       request.url,
-      address
+      address as string
     );
-    const response = new Response(
-      JSON.stringify({
-        data,
-        status: {
-          provider,
-          timestamp: new Date().toUTCString(),
-          error_code: null,
-          error_message: null,
-        },
-      }),
-      {
-        headers: {
-          'content-type': 'application/json',
-          'Cache-Control': 'max-age:300',
-        },
-      }
-    );
+    const response = buildPriceResponse(data, provider);
+
+    // TODO cache only successful responses?
     waitUntil(cache.put(request, response.clone()));
 
     return response;
   } catch (error: any) {
-    return new Response(
-      JSON.stringify({
-        data: undefined,
-        status: {
-          provider: undefined,
-          timestamp: new Date().toUTCString(),
-          error_code: 500,
-          error_message:
-            error.message || 'Internal error: failed to get prices',
-        },
-      }),
-      {
-        status: 500,
-        headers: {
-          'content-type': 'application/json',
-        },
-      }
+    return buildPriceResponse(
+      undefined,
+      undefined,
+      500,
+      error.message || 'Internal error: failed to get prices'
     );
   }
 };

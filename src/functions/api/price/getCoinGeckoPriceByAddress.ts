@@ -1,4 +1,4 @@
-import type { CFWorkerEnv } from 'functions/types';
+import type { CFWorkerEnv, CurrencyDict } from 'functions/types';
 
 const baseUrl = 'https://pro-api.coingecko.com/api/v3/simple/';
 
@@ -6,14 +6,14 @@ export const getCoinGeckoPriceByAddress = async (
   env: CFWorkerEnv,
   address: string,
   convert: string
-) => {
+): Promise<CurrencyDict> => {
   try {
     const res = await fetch(
-      `${baseUrl}token_price/ethereum?contract_addresses=${address}&vs_currencies=${convert}&include_last_updated_at=true`,
+      `${baseUrl}token_price/ethereum?contract_addresses=${address}&vs_currencies=${convert}`,
       {
         headers: {
           'content-type': 'application/json',
-          'x-cg-pro-api-key': env.COINGECKO_API_KEY || '',
+          'x-cg-pro-api-key': env.COINGECKO_API_KEY,
         },
       }
     );
@@ -27,11 +27,13 @@ export const getCoinGeckoPriceByAddress = async (
       json[firstKey] === undefined
     ) {
       throw new Error(
-        json.status?.error_message || json.error || 'Unknown error'
+        json.status?.error_message ||
+          json.error ||
+          'Internal error: failed to get prices'
       );
     }
 
-    const prices: { [k in string]: number } = {};
+    const prices: CurrencyDict = {};
     Object.keys(json[firstKey]).forEach((c) => {
       prices[c.toUpperCase()] = json[firstKey][c];
     });
