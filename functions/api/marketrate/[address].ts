@@ -1,9 +1,10 @@
 import { CFWorkerEnv, getPriceByAddress } from './../../../src/functions';
 
 export const onRequest: PagesFunction<CFWorkerEnv> = async ({
-  request: { url },
+  request,
   env,
   params: { address },
+  waitUntil,
 }) => {
   if (
     typeof address !== 'string' ||
@@ -12,6 +13,13 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   ) {
     return new Response('address is not valid', { status: 400 });
   }
+  const cache = await caches.open('default');
 
-  return getPriceByAddress(env, url, address);
+  const match = await cache.match(request);
+  if (match) return match;
+
+  const res = await getPriceByAddress(env, request.url, address);
+  waitUntil(cache.put(request, res.clone()));
+
+  return res;
 };
