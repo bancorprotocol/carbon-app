@@ -28,7 +28,7 @@ export const getPriceByAddress = async (
     }
   }
 
-  if (!Object.keys(res.data).length || !!error) {
+  if (!Object.keys(res.data).length) {
     throw error;
   }
 
