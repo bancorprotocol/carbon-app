@@ -18,8 +18,14 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   const match = await cache.match(request);
   if (match) return match;
 
-  const res = await getPriceByAddress(env, request.url, address);
-  waitUntil(cache.put(request, res.clone()));
+  const data = await getPriceByAddress(env, request.url, address);
+  const response = new Response(JSON.stringify(data), {
+    headers: {
+      'content-type': 'application/json',
+      'Cache-Control': 'max-age:120',
+    },
+  });
+  waitUntil(cache.put(request, response.clone()));
 
-  return res;
+  return response;
 };

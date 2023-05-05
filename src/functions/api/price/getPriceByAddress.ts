@@ -8,21 +8,21 @@ export const getPriceByAddress = async (
 ) => {
   try {
     const convert = new URL(url).searchParams.get('convert') || 'USD';
-    const promises = [getCMCPriceByAddress(env, address, convert)];
+
+    // Add more price sources here
+    const promises = [getCMCPriceByAddress];
 
     let res;
     for (const promise of promises) {
-      res = await promise;
-      if (res) break;
+      try {
+        res = await promise(env, address, convert);
+        if (res) break;
+      } catch {
+        // TODO handle error and try next price source
+      }
     }
-    // const res = await getCMCPriceByAddress(env, address, convert);
 
-    return new Response(JSON.stringify(res), {
-      headers: {
-        'content-type': 'application/json',
-        'Cache-Control': 'max-age:3600',
-      },
-    });
+    return res;
   } catch (ex: any) {
     return new Response(ex.message, { status: 500 });
   }
