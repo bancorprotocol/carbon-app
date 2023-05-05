@@ -18,8 +18,9 @@ export const getPriceByAddress = async (
       try {
         res = await promise(env, address, convert);
         if (res) break;
-      } catch {
+      } catch (ex: any) {
         // TODO handle error and try next price source
+        return new Response(ex.message, { status: 500 });
       }
     }
 
