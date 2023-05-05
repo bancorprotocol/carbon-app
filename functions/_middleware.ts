@@ -14,6 +14,7 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   if (pathname.startsWith('/api/')) {
     const origin = request.headers.get('origin');
     if (
+      origin !== null &&
       origin !== 'https://app.carbondefi.xyz' &&
       origin !== 'http://localhost:3000'
     ) {
