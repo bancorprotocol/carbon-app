@@ -11,7 +11,23 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
     !address.startsWith('0x') ||
     address.length !== 42
   ) {
-    return new Response('address is not valid', { status: 400 });
+    return new Response(
+      JSON.stringify({
+        data: undefined,
+        status: {
+          provider: undefined,
+          timestamp: new Date().toUTCString(),
+          error_code: 400,
+          error_message: 'Bad request: address is not a valid Ethereum address',
+        },
+      }),
+      {
+        status: 400,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
   }
   const cache = await caches.open('default');
 
