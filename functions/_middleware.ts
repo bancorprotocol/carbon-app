@@ -12,6 +12,11 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
 
   const { pathname } = new URL(request.url);
   if (pathname.startsWith('/api/')) {
+    const origin = request.headers.get('origin');
+    if (origin === 'https://app.carbondefi.xyz') {
+      return new Response('origin not allowed', { status: 403 });
+    }
+
     const response = await next();
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Max-Age', '86400');
