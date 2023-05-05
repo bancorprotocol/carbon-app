@@ -9,7 +9,7 @@ export const getCoinGeckoPriceByAddress = async (
 ) => {
   try {
     const res = await fetch(
-      `${baseUrl}token_price/ethereum?contract_addresses=${address}&vs_currencies=${convert}`,
+      `${baseUrl}token_price/ethereum?contract_addresses=${address}&vs_currencies=${convert}&include_last_updated_at=true`,
       {
         headers: {
           'content-type': 'application/json',
@@ -20,8 +20,15 @@ export const getCoinGeckoPriceByAddress = async (
 
     const json = await res.json<any>();
     const firstKey = Object.keys(json)[0];
-    if (!firstKey || firstKey === 'error' || json[firstKey] === undefined) {
-      throw new Error(json.error || 'Unknown error');
+    if (
+      !firstKey ||
+      firstKey === 'error' ||
+      (json.status?.error_code || 0) > 0 ||
+      json[firstKey] === undefined
+    ) {
+      throw new Error(
+        json.status?.error_message || json.error || 'Unknown error'
+      );
     }
 
     const prices: { [k in string]: { price: number; timestamp: number } } = {};
