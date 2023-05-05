@@ -10,7 +10,7 @@ export const getPriceByAddress = async (
   const convert = new URL(url).searchParams.get('convert') || 'USD';
 
   // Add more price sources here
-  const promises = [getCMCPriceByAddress, getCoinGeckoPriceByAddress];
+  const promises = [getCoinGeckoPriceByAddress, getCMCPriceByAddress];
 
   let res;
   for (const promise of promises) {
