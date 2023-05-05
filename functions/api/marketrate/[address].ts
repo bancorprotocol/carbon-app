@@ -18,14 +18,18 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   const match = await cache.match(request);
   if (match) return match;
 
-  const data = await getPriceByAddress(env, request.url, address);
-  const response = new Response(JSON.stringify(data), {
-    headers: {
-      'content-type': 'application/json',
-      'Cache-Control': 'max-age:120',
-    },
-  });
-  waitUntil(cache.put(request, response.clone()));
+  try {
+    const data = await getPriceByAddress(env, request.url, address);
+    const response = new Response(JSON.stringify(data), {
+      headers: {
+        'content-type': 'application/json',
+        'Cache-Control': 'max-age:120',
+      },
+    });
+    waitUntil(cache.put(request, response.clone()));
 
-  return response;
+    return response;
+  } catch (ex: any) {
+    return new Response(ex.message, { status: 500 });
+  }
 };

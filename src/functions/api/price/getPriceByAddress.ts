@@ -13,14 +13,19 @@ export const getPriceByAddress = async (
   const promises = [getCoinGeckoPriceByAddress, getCMCPriceByAddress];
 
   let res;
+  let error;
   for (const promise of promises) {
     try {
       res = await promise(env, address, convert);
       if (res) break;
     } catch (ex: any) {
       // TODO handle error and try next price source
-      res = new Response(ex.message, { status: 500 });
+      error = ex;
     }
+  }
+
+  if (!res && !!error) {
+    throw error;
   }
 
   return res;
