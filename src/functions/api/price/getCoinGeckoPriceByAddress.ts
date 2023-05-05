@@ -16,8 +16,6 @@ export const getCoinGeckoPriceByAddress = async (
     }
   );
 
-  return 'hello';
-
   return await res.json();
 
   // const json = await res.json<{

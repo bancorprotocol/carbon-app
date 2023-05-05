@@ -15,8 +15,8 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   }
   const cache = await caches.open('default');
 
-  const match = await cache.match(request);
-  if (match) return match;
+  // const match = await cache.match(request);
+  // if (match) return match;
 
   try {
     const data = await getPriceByAddress(env, request.url, address);
