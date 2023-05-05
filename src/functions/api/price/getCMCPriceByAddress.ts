@@ -57,12 +57,9 @@ export const getCMCPriceByAddress = async (
   const id = await fetchCMCIdByAddress(env, address);
   const res = await fetchCMCPriceById(env, id, convert);
 
-  const prices: { [k in string]: { price: number; timestamp: number } } = {};
+  const prices: { [k in string]: number } = {};
   Object.keys(res).forEach((c) => {
-    prices[c] = {
-      price: res[c].price,
-      timestamp: new Date(res[c].last_updated).getTime(),
-    };
+    prices[c] = res[c].price;
   });
 
   return prices;

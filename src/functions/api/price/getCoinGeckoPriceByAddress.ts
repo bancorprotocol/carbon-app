@@ -31,12 +31,9 @@ export const getCoinGeckoPriceByAddress = async (
       );
     }
 
-    const prices: { [k in string]: { price: number; timestamp: number } } = {};
+    const prices: { [k in string]: number } = {};
     Object.keys(json[firstKey]).forEach((c) => {
-      prices[c.toUpperCase()] = {
-        price: json[firstKey][c],
-        timestamp: new Date().getTime(),
-      };
+      prices[c.toUpperCase()] = json[firstKey][c];
     });
 
     if (Object.keys(prices).length === 0) {
