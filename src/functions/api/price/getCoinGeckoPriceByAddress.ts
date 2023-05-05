@@ -1,6 +1,6 @@
 import type { CFWorkerEnv } from 'functions/types';
 
-const baseUrl = 'https://api.coingecko.com/api/v3/simple/';
+const baseUrl = 'https://pro-api.coingecko.com/api/v3/simple/';
 
 export const getCoinGeckoPriceByAddress = async (
   env: CFWorkerEnv,
@@ -13,23 +13,15 @@ export const getCoinGeckoPriceByAddress = async (
       {
         headers: {
           'content-type': 'application/json',
+          'x-cg-pro-api-key': env.COINGECKO_API_KEY || '',
         },
       }
     );
-    return res.statusText;
 
-    const json = await res.json<{
-      [k in string]: {
-        [k in string]: number;
-      };
-    }>();
+    const json = await res.json<any>();
     const firstKey = Object.keys(json)[0];
     if (!firstKey || firstKey === 'error' || json[firstKey] === undefined) {
-      throw new Error(
-        (json.error || 'Unknown error') +
-          ' | getCoinGeckoPriceByAddress: ' +
-          address
-      );
+      throw new Error(json.error || 'Unknown error');
     }
 
     const prices: { [k in string]: { price: number; timestamp: number } } = {};
