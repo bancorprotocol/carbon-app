@@ -19,8 +19,8 @@ export const getPriceByAddress = async (
   let error;
   for (const promise of promises) {
     try {
-      res.data = await promise.fn(env, address, convert);
       res.provider = promise.provider;
+      res.data = await promise.fn(env, address, convert);
       if (Object.keys(res.data).length) break;
     } catch (ex: any) {
       // TODO handle error and try next price source
