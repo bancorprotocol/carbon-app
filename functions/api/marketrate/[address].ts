@@ -1,6 +1,6 @@
 import { CFWorkerEnv, getPriceByAddress } from './../../../src/functions';
 
-export const onRequest: PagesFunction<CFWorkerEnv> = async ({
+export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   request,
   env,
   params: { address },
@@ -15,15 +15,20 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   }
   const cache = await caches.open('default');
 
-  // const match = await cache.match(request);
-  // if (match) return match;
+  const match = await cache.match(request);
+  if (match) return match;
 
   try {
-    const data = await getPriceByAddress(env, request.url, address);
+    const { data, provider } = await getPriceByAddress(
+      env,
+      request.url,
+      address
+    );
     const response = new Response(
       JSON.stringify({
         data,
         status: {
+          provider,
           timestamp: new Date().toUTCString(),
           error_code: 0,
           error_message: undefined,
@@ -44,13 +49,19 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
       JSON.stringify({
         data: undefined,
         status: {
+          provider: undefined,
           timestamp: new Date().toUTCString(),
           error_code: 500,
           error_message:
             error.message || 'Internal error: failed to get prices',
         },
       }),
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
     );
   }
 };

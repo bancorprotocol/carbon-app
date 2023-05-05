@@ -1,5 +1,6 @@
 import type { CFWorkerEnv } from 'functions/types';
 import { getCoinGeckoPriceByAddress } from 'functions/api/price/getCoinGeckoPriceByAddress';
+import { getCMCPriceByAddress } from 'functions/api/price/getCMCPriceByAddress';
 
 export const getPriceByAddress = async (
   env: CFWorkerEnv,
@@ -9,14 +10,18 @@ export const getPriceByAddress = async (
   const convert = new URL(url).searchParams.get('convert') || 'USD';
 
   // Add more price sources here
-  const promises = [getCoinGeckoPriceByAddress];
+  const promises = [
+    { provider: 'coingecko', fn: getCoinGeckoPriceByAddress },
+    { provider: 'cmc', fn: getCMCPriceByAddress },
+  ];
 
-  let res;
+  let res = { data: {}, provider: '' };
   let error;
   for (const promise of promises) {
     try {
-      res = await promise(env, address, convert);
-      if (res) break;
+      res.data = await promise.fn(env, address, convert);
+      res.provider = promise.provider;
+      if (Object.keys(res.data).length) break;
     } catch (ex: any) {
       // TODO handle error and try next price source
       error = ex;
