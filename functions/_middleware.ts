@@ -13,7 +13,10 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   const { pathname } = new URL(request.url);
   if (pathname.startsWith('/api/')) {
     const origin = request.headers.get('origin');
-    if (origin !== 'https://app.carbondefi.xyz') {
+    if (
+      origin !== 'https://app.carbondefi.xyz' &&
+      origin !== 'http://localhost:3000'
+    ) {
       return new Response('origin not allowed', { status: 403 });
     }
 
