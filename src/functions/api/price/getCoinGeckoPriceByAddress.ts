@@ -17,7 +17,7 @@ export const getCoinGeckoPriceByAddress = async (
     };
   }>();
   const firstKey = Object.keys(json)[0];
-  if (!firstKey || firstKey === 'error') {
+  if (!firstKey || firstKey === 'error' || json[firstKey] === undefined) {
     throw new Error(
       (json.error || 'Unknown error') +
         ' | getCoinGeckoPriceByAddress: ' +
@@ -32,6 +32,14 @@ export const getCoinGeckoPriceByAddress = async (
       timestamp: new Date().getTime(),
     };
   });
+
+  if (Object.keys(prices).length === 0) {
+    throw new Error(
+      'Internal error: failed to get prices' +
+        ' | getCoinGeckoPriceByAddress: ' +
+        address
+    );
+  }
 
   return prices;
 };
