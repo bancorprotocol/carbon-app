@@ -13,9 +13,9 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   ) {
     return new Response(
       JSON.stringify({
-        data: undefined,
+        data: {},
         status: {
-          provider: undefined,
+          provider: '',
           timestamp: new Date().toUTCString(),
           error_code: 400,
           error_message: 'Bad request: address is not a valid Ethereum address',
@@ -47,7 +47,7 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
           provider,
           timestamp: new Date().toUTCString(),
           error_code: 0,
-          error_message: undefined,
+          error_message: '',
         },
       }),
       {
@@ -63,9 +63,9 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   } catch (error: any) {
     return new Response(
       JSON.stringify({
-        data: undefined,
+        data: {},
         status: {
-          provider: undefined,
+          provider: '',
           timestamp: new Date().toUTCString(),
           error_code: 500,
           error_message:
