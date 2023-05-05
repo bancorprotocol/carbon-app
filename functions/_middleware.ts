@@ -9,5 +9,14 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   if (isIpBlockedResponse) {
     return isIpBlockedResponse;
   }
-  return await next();
+
+  const { pathname } = new URL(request.url);
+  if (pathname.startsWith('/api/')) {
+    const response = await next();
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Max-Age', '86400');
+    return response;
+  }
+
+  return next();
 };
