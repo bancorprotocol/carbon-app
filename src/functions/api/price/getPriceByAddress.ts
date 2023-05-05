@@ -1,5 +1,4 @@
 import type { CFWorkerEnv } from 'functions/types';
-import { getCMCPriceByAddress } from 'functions/api/price/getCMCPriceByAddress';
 import { getCoinGeckoPriceByAddress } from 'functions/api/price/getCoinGeckoPriceByAddress';
 
 export const getPriceByAddress = async (
