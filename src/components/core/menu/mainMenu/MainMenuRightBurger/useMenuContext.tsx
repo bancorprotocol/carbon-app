@@ -74,7 +74,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
               items: [topSubMenuItem, ...itemsWithClickEvents],
             };
             const updatedStack = prev.push(newStackItem);
-            setMenuContext(updatedStack);
+            return updatedStack;
           }
         }
         return prev;
