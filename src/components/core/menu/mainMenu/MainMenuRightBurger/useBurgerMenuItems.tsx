@@ -18,6 +18,8 @@ export type MenuItemType = {
 
 export type MenuType = 'main' | 'resources' | 'currency';
 
+const iconStyles = 'h-32 w-32 md:h-20 md:w-20';
+
 export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
@@ -72,25 +74,25 @@ export const useBurgerMenuItems = () => {
               to={externalLinks.twitter}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconTwitter className="h-32 w-32 md:h-20 md:w-20" />
+              <IconTwitter className={iconStyles} />
             </Link>
             <Link
               to={externalLinks.youtube}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconYoutube className="h-32 w-32 md:h-20 md:w-20" />
+              <IconYoutube className={iconStyles} />
             </Link>
             <Link
               to={externalLinks.discord}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconDiscord className="h-32 w-32 md:h-20 md:w-20" />
+              <IconDiscord className={iconStyles} />
             </Link>
             <Link
               to={externalLinks.telegram}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconTelegram className="h-32 w-32 md:h-20 md:w-20" />
+              <IconTelegram className={iconStyles} />
             </Link>
           </div>
         ),
