@@ -40,7 +40,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   const rowVirtualizer = useVirtualizer({
     count: tradePairs2.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 50,
+    estimateSize: () => 55,
     overscan: 10,
   });
 
@@ -99,7 +99,9 @@ export const ModalTradeTokenListContent: FC<Props> = ({
               <div
                 key={`${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}
                 data-index={virtualRow.index}
-                className={'flex w-full items-center justify-between'}
+                className={
+                  'flex w-full items-center justify-between  rounded-12 px-8 hover:bg-black'
+                }
                 style={{
                   position: 'absolute',
                   height: `${virtualRow.size}px`,
@@ -108,7 +110,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
               >
                 <button
                   onClick={() => handleSelect(tradePair)}
-                  className={'flex items-center space-x-10 pl-10'}
+                  className={'flex w-full items-center space-x-10 pl-10'}
                 >
                   <TokensOverlap
                     tokens={[tradePair.baseToken, tradePair.quoteToken]}
@@ -141,9 +143,9 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   <IconStar
                     className={`${
                       isFavorite(tradePair)
-                        ? 'text-yellow-500/60'
-                        : 'text-white/20'
-                    } hover:text-yellow-500 w-30 transition`}
+                        ? 'fill-green text-green'
+                        : 'text-white/40'
+                    } w-20 transition hover:fill-white/80 hover:text-white/80`}
                   />
                 </button>
               </div>
