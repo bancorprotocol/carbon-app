@@ -26,9 +26,9 @@ export const MobileMenu = () => {
       ))}
       <div
         onClick={() => openModal('burgerMenu', undefined)}
-        className="flex h-30 cursor-pointer items-center hover:text-white"
+        className="flex h-30 w-24 cursor-pointer items-center hover:text-white"
       >
-        <IconDots className="h-5 w-min" />
+        <IconDots />
       </div>
     </div>
   );

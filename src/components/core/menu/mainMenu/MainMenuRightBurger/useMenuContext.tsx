@@ -11,12 +11,13 @@ export enum MenuItemActions {
 interface UseMenuContextProps<T> {
   mainMenu: T;
   menuMapping: Map<T, { title?: string; items: MenuItemType[] }>;
+  defaultState?: boolean;
 }
 
 export function useMenuContext<T>(props: UseMenuContextProps<T>) {
-  const { mainMenu, menuMapping } = props;
+  const { mainMenu, menuMapping, defaultState } = props;
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultState || false);
 
   const back = useCallback(() => {
     setMenuContext((prev) => prev.pop());
@@ -74,7 +75,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
               items: [topSubMenuItem, ...itemsWithClickEvents],
             };
             const updatedStack = prev.push(newStackItem);
-            setMenuContext(updatedStack);
+            return updatedStack;
           }
         }
         return prev;
@@ -83,9 +84,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
     [getTopSubMenuItem, menuMapping]
   );
 
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
+  const closeMenu = () => setIsOpen(false);
 
   const stack = ImmutableStack.create<
     { items: MenuItemType[]; title?: string } | undefined

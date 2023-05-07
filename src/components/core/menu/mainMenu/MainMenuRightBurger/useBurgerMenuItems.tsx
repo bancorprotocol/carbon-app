@@ -72,25 +72,25 @@ export const useBurgerMenuItems = () => {
               to={externalLinks.twitter}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconTwitter />
+              <IconTwitter className="h-32 w-32 md:h-20 md:w-20" />
             </Link>
             <Link
               to={externalLinks.youtube}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconYoutube />
+              <IconYoutube className="h-32 w-32 md:h-20 md:w-20" />
             </Link>
             <Link
               to={externalLinks.discord}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconDiscord />
+              <IconDiscord className="h-32 w-32 md:h-20 md:w-20" />
             </Link>
             <Link
               to={externalLinks.telegram}
               className="rounded-6 p-6 md:hover:bg-black"
             >
-              <IconTelegram />
+              <IconTelegram className="h-32 w-32 md:h-20 md:w-20" />
             </Link>
           </div>
         ),
