@@ -6,6 +6,7 @@ import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
+import { RoundedBackground } from 'components/common/RoundedBackground';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -73,7 +74,12 @@ export const ModalTradeTokenListContent: FC<Props> = ({
             } ${i > 0 ? 'justify-center' : ''}`}
             onClick={() => setSelectedList(category)}
           >
-            {`${category} (${tradePairs[category].length})`}
+            <div className="flex items-center gap-6 ">
+              {category}
+              <RoundedBackground
+                value={tradePairs[category].length.toString()}
+              />
+            </div>
           </button>
         ))}
       </div>

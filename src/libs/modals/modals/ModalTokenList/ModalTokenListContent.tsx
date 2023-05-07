@@ -5,6 +5,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
+import { RoundedBackground } from 'components/common/RoundedBackground';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -70,7 +71,10 @@ export const ModalTokenListContent: FC<Props> = ({
             } ${i > 0 ? 'justify-center' : ''}`}
             onClick={() => setSelectedList(category)}
           >
-            {`${category} (${tokens[category].length})`}
+            <div className="flex items-center gap-6 ">
+              {category}
+              <RoundedBackground value={tokens[category].length.toString()} />
+            </div>
           </button>
         ))}
       </div>
