@@ -1,11 +1,13 @@
-import { ReactNode } from 'react';
+import { ReactNode, FC } from 'react';
 
-export const RoundedBackground = ({
-  value,
-  className = '',
-}: {
+type RoundedBackgroundProps = {
   value: string | ReactNode;
   className?: string;
+};
+
+export const RoundedBackground: FC<RoundedBackgroundProps> = ({
+  value,
+  className = '',
 }) => {
   return (
     <div className={`rounded-full bg-white/10 px-6 ${className}`}>{value}</div>
