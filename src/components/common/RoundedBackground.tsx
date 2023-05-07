@@ -1,8 +1,10 @@
+import { ReactNode } from 'react';
+
 export const RoundedBackground = ({
   value,
   className = '',
 }: {
-  value: string;
+  value: string | ReactNode;
   className?: string;
 }) => {
   return (
