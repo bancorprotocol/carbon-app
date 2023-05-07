@@ -21,7 +21,7 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
   return (
     <div
       onClick={() => item.onClick && item.onClick()}
-      className={`text-18 md:text-16 ${
+      className={`text-18 md:text-16${
         disableHoverEffect ? 'p-4' : 'md:hover:bg-body p-10'
       } block cursor-pointer rounded-6 md:hover:text-white ${className}`}
     >

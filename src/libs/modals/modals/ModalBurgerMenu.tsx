@@ -29,26 +29,30 @@ export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
 
   return (
     <ModalSlideOver id={id} size={'md'}>
-      {currentMenuItems?.map((item, index) => {
-        return (
-          <div
-            key={`${index}_${item.content}`}
-            className={`border-grey5 ${
-              menuContext.size() === 1 ? 'first:border-b-2 last:border-t-2' : ''
-            }`}
-          >
-            <MenuItem
-              item={{
-                ...item,
-                hasSubMenu: !!item?.subMenu,
-                disableHoverEffect:
-                  menuContext.size() === 1 &&
-                  index === currentMenuItems.length - 1,
-              }}
-            />
-          </div>
-        );
-      })}
+      <div className="mt-10">
+        {currentMenuItems?.map((item, index) => {
+          return (
+            <div
+              key={`${index}_${item.content}`}
+              className={`border-grey5 py-4 ${
+                menuContext.size() === 1
+                  ? 'first:border-b-2 last:border-t-2'
+                  : ''
+              }`}
+            >
+              <MenuItem
+                item={{
+                  ...item,
+                  hasSubMenu: !!item?.subMenu,
+                  disableHoverEffect:
+                    menuContext.size() === 1 &&
+                    index === currentMenuItems.length - 1,
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
     </ModalSlideOver>
   );
 };
