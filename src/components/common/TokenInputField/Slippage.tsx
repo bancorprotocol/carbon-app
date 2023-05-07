@@ -16,7 +16,7 @@ export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
       <div className="flex-end flex gap-5">
         <div
           className={`ml-4 ${
-            slippage.gte(new BigNumber(-1)) && slippage.lte(new BigNumber(0))
+            slippage.gte(new BigNumber(-3)) && slippage.lte(new BigNumber(0))
               ? 'text-white/80'
               : isSlippagePositive
               ? 'text-green'
@@ -32,7 +32,7 @@ export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
             )}%)`
           )}
         </div>
-        {(slippage.lt(-1) || slippage.isEqualTo(0)) && (
+        {(slippage.lt(-3) || slippage.isEqualTo(0)) && (
           <IconWarning className="w-14 text-red" />
         )}
       </div>
