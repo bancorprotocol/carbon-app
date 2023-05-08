@@ -54,7 +54,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
                   forward(item);
                 };
               } else {
-                const originalClick = item.onClick;
+                const originalClick = item.onClick?.bind(item);
                 if (item.postClickAction === MenuItemActions.Back) {
                   item.onClick = () => {
                     originalClick && originalClick();
