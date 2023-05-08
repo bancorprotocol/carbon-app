@@ -8,7 +8,7 @@ export const MainMenu: FC = () => {
   const { aboveBreakpoint } = useBreakpoints();
 
   return (
-    <header className={`sticky top-0`}>
+    <header className={`sticky top-0 z-40`}>
       <div className={'main-menu'}>
         <MainMenuLeft />
         {aboveBreakpoint('md') && <MainMenuTrade />}

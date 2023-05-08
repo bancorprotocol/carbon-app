@@ -50,7 +50,7 @@
 
   .mobile-menu {
     height: var(--mobile-menu-height);
-    @apply bg-body sticky bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t border-lightGrey px-10 font-weight-500 text-white/50 dark:border-darkGrey md:hidden;
+    @apply bg-body z-40 sticky bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t border-lightGrey px-10 font-weight-500 text-white/50 dark:border-darkGrey md:hidden;
   }
 }
 
