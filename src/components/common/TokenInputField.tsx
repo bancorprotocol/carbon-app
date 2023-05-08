@@ -138,6 +138,7 @@ export const TokenInputField: FC<Props> = ({
       >
         {user && isBalanceLoading !== undefined && !withoutWallet ? (
           <button
+            tabIndex={-1}
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >

@@ -11,9 +11,10 @@ export const TabsMenuButton: FC<Props> = ({ children, isActive, ...props }) => {
   return (
     <Button
       variant={variant}
-      className={'rounded-8'}
+      size="sm"
+      className={`rounded-8 text-14`}
       fullWidth
-      {...{ ...props }}
+      {...props}
     >
       {children}
     </Button>

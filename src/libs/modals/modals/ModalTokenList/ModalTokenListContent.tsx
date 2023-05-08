@@ -61,7 +61,7 @@ export const ModalTokenListContent: FC<Props> = ({
 
   return (
     <div>
-      <div className={'my-20 grid w-full grid-cols-4'}>
+      <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
           <button
             key={category}
@@ -70,12 +70,9 @@ export const ModalTokenListContent: FC<Props> = ({
             } ${i > 0 ? 'justify-center' : ''}`}
             onClick={() => setSelectedList(category)}
           >
-            {category}
+            {`${category} (${tokens[category].length})`}
           </button>
         ))}
-        <div className="text-secondary flex items-end justify-end">
-          {_tokens.length} Tokens
-        </div>
       </div>
       <div
         ref={parentRef}
@@ -145,7 +142,7 @@ export const ModalTokenListContent: FC<Props> = ({
                         isFavorite(token)
                           ? 'text-yellow-500/60'
                           : 'text-white/20'
-                      } w-30 transition hover:text-yellow-500`}
+                      } hover:text-yellow-500 w-30 transition`}
                     />
                   </button>
                 </div>

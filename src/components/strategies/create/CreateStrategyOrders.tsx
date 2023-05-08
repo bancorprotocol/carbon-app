@@ -7,6 +7,7 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useStrategyEventData } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
+import { useWeb3 } from 'libs/web3';
 
 export const CreateStrategyOrders = ({
   base,
@@ -21,6 +22,7 @@ export const CreateStrategyOrders = ({
   strategyType,
   selectedStrategySettings,
 }: UseStrategyCreateReturn) => {
+  const { user } = useWeb3();
   const strategyEventData = useStrategyEventData({
     base,
     quote,
@@ -98,7 +100,7 @@ export const CreateStrategyOrders = ({
           onClick={onCreateStrategy}
           disabled={isCTAdisabled}
         >
-          Create Strategy
+          {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>
       </m.div>
     </>
