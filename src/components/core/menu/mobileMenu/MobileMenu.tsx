@@ -9,7 +9,7 @@ export const MobileMenu = () => {
   const { openModal } = useModal();
 
   return (
-    <div className={`mobile-menu`}>
+    <footer className={`mobile-menu`}>
       {menuItems.map(({ label, href }) => (
         <Link
           key={label}
@@ -30,6 +30,6 @@ export const MobileMenu = () => {
       >
         <IconDots />
       </div>
-    </div>
+    </footer>
   );
 };

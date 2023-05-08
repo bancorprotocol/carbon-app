@@ -18,6 +18,13 @@ export const MainContent: FC = () => {
   const sdk = useCarbonSDK();
 
   useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, [location.current]);
+
+  useEffect(() => {
     if (prevPathnameRef.current !== location.current.pathname) {
       carbonEvents.general.changePage({ referrer: prevPathnameRef.current });
 
