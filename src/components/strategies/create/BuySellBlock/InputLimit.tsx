@@ -4,6 +4,7 @@ import { ChangeEvent, FC, FocusEvent } from 'react';
 import { carbonEvents } from 'services/events';
 
 import { sanitizeNumberInput } from 'utils/helpers';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 export const InputLimit: FC<{
   price: string;
@@ -45,7 +46,7 @@ export const InputLimit: FC<{
       >
         <input
           type={'text'}
-          pattern="[0-9]*"
+          pattern={decimalNumberValidationRegex}
           inputMode="decimal"
           value={price}
           onChange={handleChange}
