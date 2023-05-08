@@ -39,7 +39,7 @@ export const WalletConnect = () => {
   const { openModal } = useModal();
 
   return (
-    <div className="md:h-[calc(100%-100px)]">
+    <div className="md:h-[calc(100vh-300px)] md:min-h-[400px]">
       <div
         className={
           'h-full justify-center rounded-10 border border-emphasis p-20 md:flex'
