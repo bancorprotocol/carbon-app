@@ -12,8 +12,8 @@ export const AutoTopScrollOutlet = () => {
   }, [location.current.pathname]);
 
   return (
-    <span ref={parentRef}>
+    <div className="h-full w-full" ref={parentRef}>
       <Outlet />
-    </span>
+    </div>
   );
 };
