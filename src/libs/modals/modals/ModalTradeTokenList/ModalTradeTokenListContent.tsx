@@ -6,7 +6,7 @@ import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { RoundedBackground } from 'components/common/RoundedBackground';
+import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -67,20 +67,12 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     <div>
       <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
-          <button
-            key={category}
-            className={`flex items-end justify-start capitalize transition hover:text-white ${
-              category === selectedList ? 'font-weight-500' : 'text-secondary'
-            } ${i > 0 ? 'justify-center' : ''}`}
-            onClick={() => setSelectedList(category)}
-          >
-            <div className="flex items-center gap-6 ">
-              {category}
-              <RoundedBackground
-                value={tradePairs[category].length.toString()}
-              />
-            </div>
-          </button>
+          <CategoryWithCounter
+            category={category}
+            numOfItemsInCategory={tradePairs[category].length}
+            setSelectedList={setSelectedList}
+            categoryIndex={i}
+          />
         ))}
       </div>
 

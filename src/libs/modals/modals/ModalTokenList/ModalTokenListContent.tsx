@@ -5,7 +5,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { RoundedBackground } from 'components/common/RoundedBackground';
+import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -64,18 +64,12 @@ export const ModalTokenListContent: FC<Props> = ({
     <div>
       <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
-          <button
-            key={category}
-            className={`flex items-end justify-start capitalize transition hover:text-white ${
-              category === selectedList ? 'font-weight-500' : 'text-secondary'
-            } ${i > 0 ? 'justify-center' : ''}`}
-            onClick={() => setSelectedList(category)}
-          >
-            <div className="flex items-center gap-6 ">
-              {category}
-              <RoundedBackground value={tokens[category].length.toString()} />
-            </div>
-          </button>
+          <CategoryWithCounter
+            category={category}
+            numOfItemsInCategory={tokens[category].length}
+            setSelectedList={setSelectedList}
+            categoryIndex={i}
+          />
         ))}
       </div>
       <div
