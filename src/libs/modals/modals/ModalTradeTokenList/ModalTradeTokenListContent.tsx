@@ -71,6 +71,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
             key={category}
             category={category}
             numOfItemsInCategory={tradePairs[category].length}
+            isActive={category === selectedList}
             setSelectedList={setSelectedList}
             categoryIndex={i}
           />

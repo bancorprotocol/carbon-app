@@ -68,6 +68,7 @@ export const ModalTokenListContent: FC<Props> = ({
             key={category}
             category={category}
             numOfItemsInCategory={tokens[category].length}
+            isActive={category === selectedList}
             setSelectedList={setSelectedList}
             categoryIndex={i}
           />
