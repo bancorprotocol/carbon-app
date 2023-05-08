@@ -20,7 +20,7 @@ export const App = () => {
   return (
     <>
       <MainMenu />
-      <main>
+      <main className={'flex-grow'}>
         <MainContent />
       </main>
       <MobileMenu />
