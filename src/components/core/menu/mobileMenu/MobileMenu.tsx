@@ -1,9 +1,12 @@
 import { Link, useLocation } from 'libs/routing';
 import { menuItems } from 'components/core/menu/menuItems';
 import { handleOnItemClick } from '../utils';
+import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
+import { useModal } from 'hooks/useModal';
 
 export const MobileMenu = () => {
   const location = useLocation();
+  const { openModal } = useModal();
 
   return (
     <div className={`mobile-menu`}>
@@ -21,6 +24,12 @@ export const MobileMenu = () => {
           {label}
         </Link>
       ))}
+      <div
+        onClick={() => openModal('burgerMenu', undefined)}
+        className="flex h-30 w-24 cursor-pointer items-center hover:text-white"
+      >
+        <IconDots />
+      </div>
     </div>
   );
 };
