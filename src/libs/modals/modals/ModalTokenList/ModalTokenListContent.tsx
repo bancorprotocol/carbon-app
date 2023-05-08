@@ -5,7 +5,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
+import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -64,7 +64,8 @@ export const ModalTokenListContent: FC<Props> = ({
     <div>
       <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
-          <CategoryWithCounter
+          <CategoryButtonWithCounter
+            key={category}
             category={category}
             numOfItemsInCategory={tokens[category].length}
             setSelectedList={setSelectedList}

@@ -9,7 +9,7 @@ type CategoryWithCounterProps = {
   isActive?: boolean;
 };
 
-export const CategoryWithCounter: FC<CategoryWithCounterProps> = ({
+export const CategoryButtonWithCounter: FC<CategoryWithCounterProps> = ({
   category,
   numOfItemsInCategory,
   setSelectedList,
@@ -18,7 +18,6 @@ export const CategoryWithCounter: FC<CategoryWithCounterProps> = ({
 }) => {
   return (
     <button
-      key={category}
       className={`flex items-end justify-start capitalize transition hover:text-white ${
         isActive ? 'font-weight-500' : 'text-secondary'
       } ${categoryIndex > 0 ? 'justify-center' : ''}`}
