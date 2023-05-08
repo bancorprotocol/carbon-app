@@ -5,6 +5,7 @@ import { Token } from 'libs/tokens';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
+import { Slippage } from './Slippage';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
@@ -41,8 +42,6 @@ export const TokenInputField: FC<Props> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const isSlippagePositive = slippage?.isGreaterThan(0);
-
   const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
   const fiatValueUsd = getFiatValue(value, true);
 
@@ -159,23 +158,11 @@ export const TokenInputField: FC<Props> = ({
         ) : (
           <div className={'h-16'} />
         )}
-        <div className="flex truncate">
-          {showFiatValue && <div>{getFiatAsString(value)}</div>}
-          {slippage && value && (
-            <div
-              className={`ml-4 ${
-                slippage.isEqualTo(0)
-                  ? 'text-white/80'
-                  : isSlippagePositive
-                  ? 'text-green'
-                  : 'text-red'
-              }`}
-            >
-              {`(${
-                slippage.isEqualTo(0) ? '' : isSlippagePositive ? '+' : '-'
-              }${sanitizeNumberInput(slippage.toString(), 2)}%)`}
-            </div>
+        <div className="flex">
+          {!slippage?.isEqualTo(0) && showFiatValue && (
+            <div>{getFiatAsString(value)}</div>
           )}
+          {slippage && value && <Slippage slippage={slippage} />}
         </div>
       </div>
     </div>

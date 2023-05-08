@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
-import { TokenInputField } from 'components/common/TokenInputField';
+import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
