@@ -6,6 +6,7 @@ import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 import { Slippage } from './Slippage';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
   value: string;
@@ -103,7 +104,7 @@ export const TokenInputField: FC<Props> = ({
         {
           <input
             type={'text'}
-            pattern="[0-9]*"
+            pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             ref={inputRef}
             value={
