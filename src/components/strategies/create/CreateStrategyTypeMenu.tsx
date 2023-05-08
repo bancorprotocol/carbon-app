@@ -101,7 +101,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                   search.strategyDirection &&
                 selectedStrategySettings?.search.strategySettings ===
                   search.strategySettings
-                  ? '!border-grey3'
+                  ? '!border-white/80'
                   : ''
               }`}
             >

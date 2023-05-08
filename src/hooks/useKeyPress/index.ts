@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export const useKeyPress = () => {
   const [keyPressed, setKeyPressed] = useState('');
+
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     setKeyPressed(event.key);
   }, []);

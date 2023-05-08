@@ -8,10 +8,11 @@ import { StrategyBlockManage } from 'components/strategies/overview/strategyBloc
 import { ReactComponent as IconDuplicate } from 'assets/icons/duplicate.svg';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
-import { carbonEvents } from 'services/events';
 
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { useOrder } from 'components/strategies/create/useOrder';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { carbonEvents } from 'services/events';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const [manage, setManage] = useState(false);
@@ -31,6 +32,14 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
     order0,
     order1,
   });
+
+  const handleOnDuplicateClick = () => {
+    carbonEvents.strategyEdit.strategyDuplicateClick({
+      ...strategyEventData,
+      strategyId: strategy.id,
+    });
+    duplicate(strategy);
+  };
 
   return (
     <m.div
@@ -57,18 +66,14 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
             <div className="text-secondary flex">ID: {strategy.idDisplay}</div>
           </div>
         </div>
-        <span
-          onClick={() => {
-            carbonEvents.strategyEdit.strategyDuplicateClick({
-              ...strategyEventData,
-              strategyId: strategy.id,
-            });
-            duplicate(strategy);
-          }}
-          className={`pointer-events-none flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis opacity-0 transition duration-300 ease-in-out hover:border-grey3 md:pointer-events-auto md:group-hover:opacity-100`}
-        >
-          <IconDuplicate className="h-18 w-18" />
-        </span>
+        <Tooltip element="Duplicate Strategy">
+          <span
+            className={`pointer-events-none flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis opacity-0 transition duration-300 ease-in-out hover:border-grey3 md:pointer-events-auto md:group-hover:opacity-100`}
+            onClick={handleOnDuplicateClick}
+          >
+            <IconDuplicate className="h-18 w-18" />
+          </span>
+        </Tooltip>
       </div>
       <hr className="border-silver dark:border-emphasis" />
       <StrategyBlockBuySell buy strategy={strategy} />

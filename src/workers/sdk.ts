@@ -1,3 +1,4 @@
+import './verbosity-setter';
 import * as Comlink from 'comlink';
 import {
   PayableOverrides,
