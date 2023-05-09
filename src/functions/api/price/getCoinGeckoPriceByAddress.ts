@@ -20,7 +20,7 @@ export const getCoinGeckoPriceByAddress = async (
       '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toLowerCase()
     ) {
       res = await fetch(
-        `${baseUrl}price?id=ethereum&vs_currencies=${convert}`,
+        `${baseUrl}price?ids=ethereum&vs_currencies=${convert}`,
         init
       );
     } else {
