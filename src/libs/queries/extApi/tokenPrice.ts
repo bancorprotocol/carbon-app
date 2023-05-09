@@ -3,24 +3,27 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { THIRTY_SEC_IN_MS } from 'utils/time';
 import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { useStore } from 'store';
-import { cryptoCompareAxios } from 'utils/cryptoCompare';
+import axios from 'axios';
 
-export const useGetTokenPrice = (symbol?: string) => {
+export const useGetTokenPrice = (address?: string) => {
   const {
     fiatCurrency: { availableCurrencies },
   } = useStore();
 
   return useQuery(
-    QueryKey.tokenPrice(symbol!),
+    QueryKey.tokenPrice(address!),
     async () => {
-      const result = await cryptoCompareAxios.get<FiatPriceDict>('data/price', {
-        params: { fsym: symbol, tsyms: availableCurrencies.join(',') },
-      });
+      const result = await axios.get<{ data: FiatPriceDict }>(
+        `api/marketrate/${address}`,
+        {
+          params: { convert: availableCurrencies.join(',') },
+        }
+      );
 
-      return result.data;
+      return result.data.data;
     },
     {
-      enabled: !!symbol && availableCurrencies.length > 0,
+      enabled: !!address && availableCurrencies.length > 0,
       refetchInterval: THIRTY_SEC_IN_MS,
     }
   );

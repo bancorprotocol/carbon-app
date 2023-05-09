@@ -10,7 +10,7 @@ export const useFiatCurrency = (token?: Token) => {
 
   const { selectedFiatCurrency, availableCurrencies } = fiatCurrency;
 
-  const tokenPriceQuery = useGetTokenPrice(token?.symbol);
+  const tokenPriceQuery = useGetTokenPrice(token?.address);
 
   const getFiatValue = useMemo(() => {
     return (value: string, usd = false) => {
