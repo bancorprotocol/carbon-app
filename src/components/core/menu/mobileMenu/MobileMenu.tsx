@@ -6,7 +6,7 @@ export const MobileMenu = () => {
   const location = useLocation();
 
   return (
-    <div className={`mobile-menu`}>
+    <footer className={`mobile-menu`}>
       {menuItems.map(({ label, href }) => (
         <Link
           key={label}
@@ -21,6 +21,6 @@ export const MobileMenu = () => {
           {label}
         </Link>
       ))}
-    </div>
+    </footer>
   );
 };

@@ -3,7 +3,7 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { Button } from 'components/common/button';
-import { TokenInputField } from 'components/common/TokenInputField';
+import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MatchActionBNStr } from '@bancor/carbon-sdk/';
 import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useModalTradeRouting';
