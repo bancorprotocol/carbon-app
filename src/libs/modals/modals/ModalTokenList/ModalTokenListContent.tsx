@@ -6,6 +6,7 @@ import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -65,15 +66,14 @@ export const ModalTokenListContent: FC<Props> = ({
     <div>
       <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
-          <button
+          <CategoryButtonWithCounter
             key={category}
-            className={`flex items-end justify-start capitalize transition hover:text-white ${
-              category === selectedList ? 'font-weight-500' : 'text-secondary'
-            } ${i > 0 ? 'justify-center' : ''}`}
-            onClick={() => setSelectedList(category)}
-          >
-            {`${category} (${tokens[category].length})`}
-          </button>
+            category={category}
+            numOfItemsInCategory={tokens[category].length}
+            isActive={category === selectedList}
+            setSelectedList={setSelectedList}
+            categoryIndex={i}
+          />
         ))}
       </div>
       <div

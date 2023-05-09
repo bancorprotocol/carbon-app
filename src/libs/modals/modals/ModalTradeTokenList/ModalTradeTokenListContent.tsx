@@ -7,6 +7,7 @@ import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -68,15 +69,14 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     <div>
       <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
-          <button
+          <CategoryButtonWithCounter
             key={category}
-            className={`flex items-end justify-start capitalize transition hover:text-white ${
-              category === selectedList ? 'font-weight-500' : 'text-secondary'
-            } ${i > 0 ? 'justify-center' : ''}`}
-            onClick={() => setSelectedList(category)}
-          >
-            {`${category} (${tradePairs[category].length})`}
-          </button>
+            category={category}
+            numOfItemsInCategory={tradePairs[category].length}
+            isActive={category === selectedList}
+            setSelectedList={setSelectedList}
+            categoryIndex={i}
+          />
         ))}
       </div>
 
