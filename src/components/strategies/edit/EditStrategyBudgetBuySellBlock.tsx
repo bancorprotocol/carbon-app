@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { TokenInputField } from 'components/common/TokenInputField';
+import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useGetTokenBalance } from 'libs/queries';
