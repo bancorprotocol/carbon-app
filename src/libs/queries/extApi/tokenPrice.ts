@@ -16,6 +16,9 @@ export const useGetTokenPrice = (address?: string) => {
       const result = await axios.get<{ data: FiatPriceDict }>(
         `api/marketrate/${address}`,
         {
+          headers: {
+            'x-carbon-auth-key': import.meta.env.VITE_CARBON_API_KEY,
+          },
           params: { convert: availableCurrencies.join(',') },
         }
       );
