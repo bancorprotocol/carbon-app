@@ -51,5 +51,3 @@ export const isAccountBlocked = (account?: string): boolean => {
     account?.toLowerCase() || ''
   );
 };
-
-export const IS_RESTRICTED_COUNTRY = true;

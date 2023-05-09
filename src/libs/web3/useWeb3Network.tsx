@@ -7,9 +7,11 @@ import {
 import { ConnectionType } from 'libs/web3/web3.constants';
 import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { IS_RESTRICTED_COUNTRY } from 'utils/restrictedAccounts';
+import { useStore } from 'store';
 
 export const useWeb3Network = () => {
+  const { isCountryBlocked } = useStore();
+
   const { connector } = useWeb3React();
 
   const network = getConnection(ConnectionType.NETWORK);
@@ -32,7 +34,7 @@ export const useWeb3Network = () => {
     try {
       await network.connector.activate();
       setIsNetworkActive(true);
-      if (IS_RESTRICTED_COUNTRY) {
+      if (isCountryBlocked || isCountryBlocked === null) {
         return;
       }
       if (IS_IN_IFRAME) {
@@ -52,7 +54,7 @@ export const useWeb3Network = () => {
       console.error('activateNetwork failed.', msg);
       setNetworkError(msg);
     }
-  }, [isNetworkActive, network.connector, networkError]);
+  }, [isCountryBlocked, isNetworkActive, network.connector, networkError]);
 
   useEffect(() => {
     void activateNetwork();

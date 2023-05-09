@@ -15,6 +15,7 @@ import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { SupportedChainId } from 'libs/web3/web3.constants';
+import { carbonApiAxios } from 'utils/carbonApi';
 
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.carbon.carbonController,
@@ -40,6 +41,7 @@ const getTokenDecimalMap = () => {
 export const useCarbonSDK = () => {
   const cache = useQueryClient();
   const {
+    setCountryBlocked,
     sdk: {
       isInitialized,
       setIsInitialized,
@@ -86,16 +88,20 @@ export const useCarbonSDK = () => {
       setIsLoading(true);
       const cacheData = lsService.getItem('sdkCompressedCacheData');
 
-      await carbonSDK.init(
-        RPC_URLS[SupportedChainId.MAINNET],
-        contractsConfig,
-        getTokenDecimalMap(),
-        cacheData
-      );
-      await carbonSDK.setOnChangeHandlers(
-        Comlink.proxy(onPairDataChangedCallback),
-        Comlink.proxy(onPairAddedToCacheCallback)
-      );
+      const [isBlocked] = await Promise.all([
+        carbonApiAxios.get<boolean>('check'),
+        carbonSDK.init(
+          RPC_URLS[SupportedChainId.MAINNET],
+          contractsConfig,
+          getTokenDecimalMap(),
+          cacheData
+        ),
+        carbonSDK.setOnChangeHandlers(
+          Comlink.proxy(onPairDataChangedCallback),
+          Comlink.proxy(onPairAddedToCacheCallback)
+        ),
+      ]);
+      setCountryBlocked(isBlocked.data);
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {
@@ -108,6 +114,7 @@ export const useCarbonSDK = () => {
     setIsLoading,
     onPairDataChangedCallback,
     onPairAddedToCacheCallback,
+    setCountryBlocked,
     setIsInitialized,
     setIsError,
   ]);

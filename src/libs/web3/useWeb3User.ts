@@ -3,11 +3,9 @@ import { ConnectionType, IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 import { getConnection } from 'libs/web3/web3.utils';
 import { Web3Provider } from '@ethersproject/providers';
 import { Connector } from '@web3-react/types';
-import {
-  IS_RESTRICTED_COUNTRY,
-  isAccountBlocked,
-} from 'utils/restrictedAccounts';
+import { isAccountBlocked } from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
+import { useStore } from 'store';
 
 type Props = {
   imposterAccount: string;
@@ -26,6 +24,7 @@ export const useWeb3User = ({
   connector,
   handleImposterAccount,
 }: Props) => {
+  const { isCountryBlocked } = useStore();
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
     lsService.getItem('isUncheckedSigner') || false
   );
@@ -52,13 +51,16 @@ export const useWeb3User = ({
     return provider?.getUncheckedSigner(user);
   }, [provider, user, walletProvider, isUncheckedSigner]);
 
-  const connect = useCallback(async (type: ConnectionType) => {
-    if (IS_RESTRICTED_COUNTRY) {
-      throw new Error('Your country is restricted from using this app.');
-    }
-    const { connector } = getConnection(type);
-    await connector.activate();
-  }, []);
+  const connect = useCallback(
+    async (type: ConnectionType) => {
+      if (isCountryBlocked || isCountryBlocked === null) {
+        throw new Error('Your country is restricted from using this app.');
+      }
+      const { connector } = getConnection(type);
+      await connector.activate();
+    },
+    [isCountryBlocked]
+  );
 
   const disconnect = useCallback(async () => {
     if (connector.deactivate) {
