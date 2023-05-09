@@ -1,5 +1,4 @@
 import type { CFWorkerEnv, CurrencyDict } from 'functions/types';
-import { config } from 'services/web3/config';
 
 const baseUrl = 'https://pro-api.coingecko.com/api/v3/simple/';
 
@@ -16,7 +15,10 @@ export const getCoinGeckoPriceByAddress = async (
   };
   try {
     let res: Response;
-    if (address.toLowerCase() === config.tokens.ETH.toLowerCase()) {
+    if (
+      address.toLowerCase() ===
+      '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toLowerCase()
+    ) {
       res = await fetch(
         `${baseUrl}price?id=ethereum&vs_currencies=${convert}`,
         init
