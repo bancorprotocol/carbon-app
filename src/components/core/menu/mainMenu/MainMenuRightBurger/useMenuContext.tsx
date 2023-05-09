@@ -48,7 +48,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
           if (data?.items) {
             const topSubMenuItem = getTopSubMenuItem(data?.title);
 
-            const itemsWithClickEvents = data?.items.map((item) => {
+            const itemsWithClickEvents = data.items.map((item) => {
               if (item.subMenu) {
                 item.onClick = () => {
                   forward(item);
@@ -86,9 +86,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
 
   const closeMenu = () => setIsOpen(false);
 
-  const stack = ImmutableStack.create<
-    { items: MenuItemType[]; title?: string } | undefined
-  >();
+  const stack = ImmutableStack.create<Menu | undefined>();
 
   const mainItemsWithNavigationEvents =
     menuMapping.get(mainMenu)?.items.map((item) => {
