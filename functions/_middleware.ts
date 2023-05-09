@@ -13,6 +13,11 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   const { pathname } = new URL(request.url);
   if (pathname.startsWith('/api/')) {
     const origin = request.headers.get('origin');
+    const authKey = request.headers.get('x-carbon-auth-key');
+    if (authKey !== env.VITE_CARBON_API_KEY) {
+      return new Response('permission denied', { status: 403 });
+    }
+
     if (
       origin !== null &&
       origin !== 'https://app.carbondefi.xyz' &&
