@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
 import { ImmutableStack } from 'utils/stack';
-import { MenuItemType } from './useBurgerMenuItems';
+import { Menu, MenuItemType } from './useBurgerMenuItems';
 
 export enum MenuItemActions {
   Close,
@@ -10,7 +10,7 @@ export enum MenuItemActions {
 
 interface UseMenuContextProps<T> {
   mainMenu: T;
-  menuMapping: Map<T, { title?: string; items: MenuItemType[] }>;
+  menuMapping: Map<T, Menu>;
   defaultState?: boolean;
 }
 
@@ -43,7 +43,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
   const forward = useCallback(
     (item: MenuItemType) => {
       setMenuContext((prev) => {
-        if (item?.subMenu) {
+        if (item.subMenu) {
           const data = menuMapping.get(item.subMenu as T);
           if (data?.items) {
             const topSubMenuItem = getTopSubMenuItem(data?.title);

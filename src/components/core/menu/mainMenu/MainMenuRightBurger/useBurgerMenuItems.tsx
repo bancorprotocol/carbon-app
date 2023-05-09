@@ -18,16 +18,15 @@ export type MenuItemType = {
 
 export type MenuType = 'main' | 'resources' | 'currency';
 
+export type Menu = { title?: string; items: MenuItemType[] };
+
 const iconStyles = 'h-32 w-32 md:h-20 md:w-20';
 
 export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
 
-  const menuMap = useMemo(
-    () => new Map<MenuType, { title?: string; items: MenuItemType[] }>(),
-    []
-  );
+  const menuMap = useMemo(() => new Map<MenuType, Menu>(), []);
 
   const mainItems = useMemo(
     (): MenuItemType[] => [
