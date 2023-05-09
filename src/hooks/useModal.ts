@@ -4,6 +4,7 @@ import { uuid } from 'utils/helpers';
 import { useStore } from 'store';
 import { ModalSchema } from 'libs/modals/modals';
 import { useKeyPress } from './useKeyPress';
+import { IS_RESTRICTED_COUNTRY } from 'utils/restrictedAccounts';
 
 export const useModal = () => {
   const {
@@ -15,6 +16,10 @@ export const useModal = () => {
 
   const openModal = useCallback(
     <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
+      if (key === 'wallet' && IS_RESTRICTED_COUNTRY) {
+        openModal('restrictedCountry', undefined);
+        return;
+      }
       setModalsOpen((prevState) => [...prevState, { id: uuid(), key, data }]);
     },
     [setModalsOpen]

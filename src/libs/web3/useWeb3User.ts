@@ -3,7 +3,10 @@ import { ConnectionType, IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
 import { getConnection } from 'libs/web3/web3.utils';
 import { Web3Provider } from '@ethersproject/providers';
 import { Connector } from '@web3-react/types';
-import { isAccountBlocked } from 'utils/restrictedAccounts';
+import {
+  IS_RESTRICTED_COUNTRY,
+  isAccountBlocked,
+} from 'utils/restrictedAccounts';
 import { lsService } from 'services/localeStorage';
 
 type Props = {
@@ -50,6 +53,9 @@ export const useWeb3User = ({
   }, [provider, user, walletProvider, isUncheckedSigner]);
 
   const connect = useCallback(async (type: ConnectionType) => {
+    if (IS_RESTRICTED_COUNTRY) {
+      throw new Error('Your country is restricted from using this app.');
+    }
     const { connector } = getConnection(type);
     await connector.activate();
   }, []);

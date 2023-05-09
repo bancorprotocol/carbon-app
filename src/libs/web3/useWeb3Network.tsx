@@ -7,6 +7,7 @@ import {
 import { ConnectionType } from 'libs/web3/web3.constants';
 import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { IS_RESTRICTED_COUNTRY } from 'utils/restrictedAccounts';
 
 export const useWeb3Network = () => {
   const { connector } = useWeb3React();
@@ -31,6 +32,9 @@ export const useWeb3Network = () => {
     try {
       await network.connector.activate();
       setIsNetworkActive(true);
+      if (IS_RESTRICTED_COUNTRY) {
+        return;
+      }
       if (IS_IN_IFRAME) {
         const c = getConnection(ConnectionType.GNOSIS_SAFE);
         return await c.connector.connectEagerly?.();
