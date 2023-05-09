@@ -1,5 +1,23 @@
 import { isIpBlocked, CFWorkerEnv } from './../src/functions';
 
+const build403Response = (message = 'permission denied'): Response => {
+  return new Response(
+    JSON.stringify({
+      status: {
+        timestamp: new Date().toUTCString(),
+        error_code: 403,
+        error_message: message,
+      },
+    }),
+    {
+      status: 403,
+      headers: {
+        'content-type': 'application/json',
+      },
+    }
+  );
+};
+
 export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   request,
   env,
@@ -15,7 +33,7 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
     const origin = request.headers.get('origin');
     const authKey = request.headers.get('x-carbon-auth-key');
     if (authKey !== env.VITE_CARBON_API_KEY) {
-      return new Response('permission denied', { status: 403 });
+      return build403Response();
     }
 
     if (
@@ -23,7 +41,7 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
       origin !== 'https://app.carbondefi.xyz' &&
       origin !== 'http://localhost:3000'
     ) {
-      return new Response('origin not allowed', { status: 403 });
+      return build403Response();
     }
 
     const response = await next();
