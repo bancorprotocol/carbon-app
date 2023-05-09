@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
-import { THIRTY_SEC_IN_MS } from 'utils/time';
+import { FIVE_MIN_IN_MS } from 'utils/time';
 import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { useStore } from 'store';
 import axios from 'axios';
@@ -24,7 +24,8 @@ export const useGetTokenPrice = (address?: string) => {
     },
     {
       enabled: !!address && availableCurrencies.length > 0,
-      refetchInterval: THIRTY_SEC_IN_MS,
+      refetchInterval: FIVE_MIN_IN_MS,
+      staleTime: FIVE_MIN_IN_MS,
     }
   );
 };
