@@ -55,14 +55,14 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
     return isIpBlockedResponse;
   }
 
-  const { pathname } = new URL(request.url);
+  const { pathname, searchParams } = new URL(request.url);
   if (pathname.startsWith('/api/')) {
     if (request.method === 'OPTIONS') {
       return buildOptionsResponse(request);
     }
 
     const referer = request.headers.get('referer');
-    const authKey = request.headers.get('x-carbon-auth-key');
+    const authKey = searchParams.get('key');
     if (authKey !== env.VITE_CARBON_API_KEY) {
       return build403Response();
     }
