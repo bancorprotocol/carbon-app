@@ -7,6 +7,7 @@ import { useKeyPress } from './useKeyPress';
 
 export const useModal = () => {
   const {
+    isCountryBlocked,
     modals: { setModalsOpen, modals, setModalsMinimized, activeModalId },
   } = useStore();
   const { open: modalsOpen, minimized: modalsMinimized } = modals;
@@ -15,9 +16,18 @@ export const useModal = () => {
 
   const openModal = useCallback(
     <T extends ModalKey>(key: T, data: ModalSchema[T]) => {
+      if (key === 'wallet') {
+        if (isCountryBlocked === null) {
+          return;
+        }
+        if (isCountryBlocked) {
+          openModal('restrictedCountry', undefined);
+          return;
+        }
+      }
       setModalsOpen((prevState) => [...prevState, { id: uuid(), key, data }]);
     },
-    [setModalsOpen]
+    [isCountryBlocked, setModalsOpen]
   );
 
   const closeModal = useCallback(

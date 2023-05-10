@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext } from 'react';
+import { createContext, FC, ReactNode, useContext, useState } from 'react';
 import {
   defaultTradeSettingsStore,
   TradeSettingsStore,
@@ -41,6 +41,8 @@ import {
 // ********************************** //
 
 interface StoreContext {
+  isCountryBlocked: boolean | null;
+  setCountryBlocked: (value: boolean | null) => void;
   sdk: SDKStore;
   tokens: TokensStore;
   strategies: StrategiesStore;
@@ -56,6 +58,8 @@ interface StoreContext {
 }
 
 const defaultValue: StoreContext = {
+  isCountryBlocked: null,
+  setCountryBlocked: () => {},
   sdk: defaultSDKStore,
   tokens: defaultTokensStore,
   strategies: defaultStrategiesStore,
@@ -81,6 +85,7 @@ export const useStore = () => {
 // ********************************** //
 
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [countryBlocked, setCountryBlocked] = useState<boolean | null>(null);
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -91,6 +96,8 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const strategies = useStrategiesStore();
 
   const value: StoreContext = {
+    isCountryBlocked: countryBlocked,
+    setCountryBlocked,
     sdk,
     tokens,
     strategies,

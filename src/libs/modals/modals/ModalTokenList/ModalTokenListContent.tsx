@@ -41,7 +41,7 @@ export const ModalTokenListContent: FC<Props> = ({
   const rowVirtualizer = useVirtualizer({
     count: _tokens.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 65,
+    estimateSize: () => 55,
     overscan: 10,
   });
 
@@ -103,7 +103,7 @@ export const ModalTokenListContent: FC<Props> = ({
                   transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
-                <div className="flex">
+                <div className="flex rounded-12 px-8 hover:bg-black">
                   <button
                     onClick={() => onSelect(token)}
                     className="flex w-full items-center"
@@ -142,9 +142,9 @@ export const ModalTokenListContent: FC<Props> = ({
                     <IconStar
                       className={`${
                         isFavorite(token)
-                          ? 'text-yellow-500/60'
-                          : 'text-white/20'
-                      } hover:text-yellow-500 w-30 transition`}
+                          ? 'fill-green text-green'
+                          : 'text-white/40'
+                      } w-20 transition hover:fill-white/80 hover:text-white/80`}
                     />
                   </button>
                 </div>

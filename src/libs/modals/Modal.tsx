@@ -11,6 +11,7 @@ export type ModalProps = {
   showCloseButton?: boolean;
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  onClose?: (id: string) => void;
 };
 
 const getSize = (size: 'sm' | 'md' | 'lg') => {
@@ -31,14 +32,20 @@ export const Modal: FC<ModalProps> = ({
   size = 'sm',
   showCloseButton = true,
   isLoading = false,
+  onClose,
 }) => {
   const { closeModal } = useModal();
+
+  const onCloseHandler = (id: string) => {
+    onClose && onClose(id);
+    closeModal(id);
+  };
 
   const sizeClass = getSize(size);
 
   return (
     <Overlay
-      onClick={() => closeModal(id)}
+      onClick={() => onCloseHandler(id)}
       className={'px-content items-center justify-center'}
     >
       <m.div
@@ -69,7 +76,7 @@ export const Modal: FC<ModalProps> = ({
             </div>
             <div>
               {showCloseButton ? (
-                <button className={'p-4'} onClick={() => closeModal(id)}>
+                <button className={'p-4'} onClick={() => onCloseHandler(id)}>
                   <IconX className={'w-12'} />
                 </button>
               ) : null}
