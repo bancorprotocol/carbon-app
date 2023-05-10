@@ -71,7 +71,7 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
       origin !== null &&
       origin !== 'https://app.carbondefi.xyz' &&
       origin !== 'http://localhost:3000' &&
-      !origin.includes('carbon-app-csq.pages.dev')
+      !origin.includes('carbon-app-csq.pages.devv')
     ) {
       return build403Response();
     }
