@@ -57,7 +57,7 @@ export const Modal: FC<ModalProps> = ({
         exit="exit"
       >
         <div
-          className={`relative flex h-full w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
+          className={`relative flex w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
         >
           {isLoading && (
             <div
