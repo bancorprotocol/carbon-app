@@ -71,7 +71,7 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
       !(
         referer &&
         (referer.startsWith('https://app.carbondefi.xyz') ||
-          referer.startsWith('http://localhost:3000') ||
+          referer.includes('localhost') ||
           referer.includes('carbon-app-csq.pages.dev'))
       )
     ) {
