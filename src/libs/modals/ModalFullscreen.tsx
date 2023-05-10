@@ -35,7 +35,7 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
         exit="exit"
       >
         <div
-          className={`relative flex h-full w-full flex-col overflow-hidden border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
+          className={`relative flex h-screen w-full flex-col overflow-hidden border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
         >
           {isLoading && (
             <div
@@ -54,14 +54,14 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
             </div>
             <div>
               {showCloseButton ? (
-                <button className={'p-4'} onClick={() => closeModal(id)}>
+                <button className={'p-10'} onClick={() => closeModal(id)}>
                   <IconX className={'w-12'} />
                 </button>
               ) : null}
             </div>
           </div>
 
-          <div className="h-screen overflow-y-hidden">{children}</div>
+          <div className="overflow-y-scroll">{children}</div>
         </div>
       </m.div>
     </Overlay>
@@ -70,8 +70,9 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
 
 const dropIn: Variants = {
   hidden: {
-    y: '100vh',
+    y: 0,
     scale: 0.7,
+    opacity: 0,
   },
   visible: {
     y: 0,
@@ -87,7 +88,7 @@ const dropIn: Variants = {
     },
   },
   exit: {
-    y: '100vh',
+    y: 0,
     opacity: 0,
     scale: 0.7,
     transition: {

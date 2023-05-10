@@ -63,7 +63,7 @@ export const ModalTokenListContent: FC<Props> = ({
     'This token is not part of any known token list. Always conduct your own research before trading.';
 
   return (
-    <div>
+    <>
       <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
           <CategoryButtonWithCounter
@@ -79,7 +79,7 @@ export const ModalTokenListContent: FC<Props> = ({
       <div
         ref={parentRef}
         style={{
-          height: `${aboveBreakpoint('md') ? '390px' : '100vh'}`,
+          height: `${aboveBreakpoint('md') ? '390px' : 'calc(100vh - 202px)'}`,
           overflow: 'auto',
         }}
       >
@@ -153,6 +153,6 @@ export const ModalTokenListContent: FC<Props> = ({
           })}
         </div>
       </div>
-    </div>
+    </>
   );
 };

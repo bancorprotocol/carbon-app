@@ -66,7 +66,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     'This token is not part of any known token list. Always conduct your own research before trading.';
 
   return (
-    <div>
+    <>
       <div className={'my-20 grid w-full grid-cols-3'}>
         {categories.map((category, i) => (
           <CategoryButtonWithCounter
@@ -83,7 +83,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
       <div
         ref={parentRef}
         style={{
-          height: `${aboveBreakpoint('md') ? '390px' : '100vh'}`,
+          height: `${aboveBreakpoint('md') ? '390px' : 'calc(100vh - 202px)'}`,
           overflow: 'auto',
         }}
       >
@@ -102,7 +102,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                 key={`${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}
                 data-index={virtualRow.index}
                 className={
-                  'flex w-full items-center justify-between  rounded-12 px-8 hover:bg-black'
+                  'flex w-full items-center justify-between rounded-12 px-8 hover:bg-black'
                 }
                 style={{
                   position: 'absolute',
@@ -155,6 +155,6 @@ export const ModalTradeTokenListContent: FC<Props> = ({
           })}
         </div>
       </div>
-    </div>
+    </>
   );
 };
