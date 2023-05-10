@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'api/';
+const BASE_URL = 'https://app.carbondefi.xyz/api/';
 
 const carbonApiAxios = axios.create({
   baseURL: BASE_URL,
