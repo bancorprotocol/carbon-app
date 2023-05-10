@@ -68,9 +68,12 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
     }
 
     if (
-      referer !== 'https://app.carbondefi.xyz' &&
-      referer !== 'http://localhost:3000' &&
-      !(referer && referer.includes('carbon-app-csq.pages.dev'))
+      !(
+        referer &&
+        (referer.startsWith('https://app.carbondefi.xyz') ||
+          referer.startsWith('http://localhost:3000/') ||
+          referer.includes('carbon-app-csq.pages.dev'))
+      )
     ) {
       return build403Response();
     }
