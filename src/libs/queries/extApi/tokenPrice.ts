@@ -3,7 +3,7 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
 import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { useStore } from 'store';
-import axios from 'axios';
+import { carbonApiAxios } from 'utils/carbonApi';
 
 export const useGetTokenPrice = (address?: string) => {
   const {
@@ -13,12 +13,9 @@ export const useGetTokenPrice = (address?: string) => {
   return useQuery(
     QueryKey.tokenPrice(address!),
     async () => {
-      const result = await axios.get<{ data: FiatPriceDict }>(
-        `api/marketrate/${address}`,
+      const result = await carbonApiAxios.get<{ data: FiatPriceDict }>(
+        `marketrate/${address}`,
         {
-          headers: {
-            'x-carbon-auth-key': import.meta.env.VITE_CARBON_API_KEY,
-          },
           params: { convert: availableCurrencies.join(',') },
         }
       );
