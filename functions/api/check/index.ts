@@ -1,6 +1,6 @@
 import { CFWorkerEnv } from './../../../src/functions';
 
-const BLOCKED_COUNTRIES = ['US'];
+const BLOCKED_COUNTRIES = ['US', 'DE', 'IL'];
 
 export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({ request }) => {
   const clientCountry = request.headers.get('CF-IPCountry') || '';
