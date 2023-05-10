@@ -61,16 +61,16 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
       return buildOptionsResponse(request);
     }
 
-    const origin = request.headers.get('origin');
+    const referer = request.headers.get('referer');
     const authKey = request.headers.get('x-carbon-auth-key');
     if (authKey !== env.VITE_CARBON_API_KEY) {
       return build403Response();
     }
 
     if (
-      origin !== 'https://app.carbondefi.xyz' &&
-      origin !== 'http://localhost:3000' &&
-      !(origin && origin.includes('carbon-app-csq.pages.devv'))
+      referer !== 'https://app.carbondefi.xyz' &&
+      referer !== 'http://localhost:3000' &&
+      !(referer && referer.includes('carbon-app-csq.pages.dev'))
     ) {
       return build403Response();
     }
