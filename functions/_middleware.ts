@@ -18,6 +18,32 @@ const build403Response = (message = 'permission denied'): Response => {
   );
 };
 
+const buildOptionsResponse = (request: Request): Response => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (
+    request.headers.get('Origin') !== null &&
+    request.headers.get('Access-Control-Request-Method') !== null &&
+    request.headers.get('Access-Control-Request-Headers') !== null
+  ) {
+    // Handle CORS pre-flight request.
+    return new Response(null, {
+      headers: corsHeaders,
+    });
+  } else {
+    // Handle standard OPTIONS request.
+    return new Response(null, {
+      headers: {
+        Allow: 'GET, HEAD, POST, OPTIONS',
+      },
+    });
+  }
+};
+
 export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   request,
   env,
@@ -30,6 +56,10 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
 
   const { pathname } = new URL(request.url);
   if (pathname.startsWith('/api/')) {
+    if (request.method === 'OPTIONS') {
+      return buildOptionsResponse(request);
+    }
+
     const origin = request.headers.get('origin');
     const authKey = request.headers.get('x-carbon-auth-key');
     if (authKey !== env.VITE_CARBON_API_KEY) {
