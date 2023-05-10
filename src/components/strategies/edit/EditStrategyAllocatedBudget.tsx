@@ -34,8 +34,8 @@ export const EditStrategyAllocatedBudget: FC<{
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const baseTokenPriceQuery = useGetTokenPrice(base.symbol);
-  const quoteTokenPriceQuery = useGetTokenPrice(quote.symbol);
+  const baseTokenPriceQuery = useGetTokenPrice(base.address);
+  const quoteTokenPriceQuery = useGetTokenPrice(quote.address);
   const isDistributeToggleOn =
     order.marginalPriceOption === MarginalPriceOptions.reset;
 
