@@ -1,6 +1,13 @@
 import { CFWorkerEnv } from './../../../src/functions';
 
-const BLOCKED_COUNTRIES = ['US', 'DE', 'IL'];
+const BLOCKED_COUNTRIES = [
+  'US', // USA
+  'PR', // Puerto Rico
+  'AS', // American Samoa
+  'GU', // Guam
+  'MP', // Northern Mariana Islands
+  'VI', // US Virgin Islands
+];
 
 export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({ request }) => {
   const clientCountry = request.headers.get('CF-IPCountry') || '';
