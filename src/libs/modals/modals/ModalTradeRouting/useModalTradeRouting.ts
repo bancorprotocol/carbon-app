@@ -27,8 +27,8 @@ export const useModalTradeRouting = ({
   const { user, provider } = useWeb3();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
-  const sourceFiatPrice = useGetTokenPrice(source.symbol);
-  const targetFiatPrice = useGetTokenPrice(target.symbol);
+  const sourceFiatPrice = useGetTokenPrice(source.address);
+  const targetFiatPrice = useGetTokenPrice(target.address);
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
 
   const [selected, setSelected] = useState<
