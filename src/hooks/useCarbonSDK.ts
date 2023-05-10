@@ -16,6 +16,7 @@ import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { SupportedChainId } from 'libs/web3/web3.constants';
 import { carbonApiAxios } from 'utils/carbonApi';
+import { useModal } from 'hooks/useModal';
 
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.carbon.carbonController,
@@ -51,6 +52,7 @@ export const useCarbonSDK = () => {
       setIsError,
     },
   } = useStore();
+  const { openModal } = useModal();
 
   const invalidateQueriesByPair = useCallback(
     (pair: TokenPair) => {
@@ -102,6 +104,12 @@ export const useCarbonSDK = () => {
         ),
       ]);
       setCountryBlocked(isBlocked.data);
+      if (
+        isBlocked.data &&
+        !lsService.getItem('hasSeenRestrictedCountryModal')
+      ) {
+        openModal('restrictedCountry', undefined);
+      }
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {
@@ -116,6 +124,7 @@ export const useCarbonSDK = () => {
     onPairAddedToCacheCallback,
     setCountryBlocked,
     setIsInitialized,
+    openModal,
     setIsError,
   ]);
 
