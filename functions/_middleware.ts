@@ -22,7 +22,8 @@ const buildOptionsResponse = (request: Request): Response => {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers':
+      'Access-Control-Allow-Headers, Origin, x-carbon-auth-key, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
   };
 
   if (
