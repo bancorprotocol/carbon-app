@@ -7,6 +7,6 @@ const carbonApiAxios = axios.create({
   baseURL: BASE_URL,
 });
 
-carbonApiAxios.defaults.params['key'] = import.meta.env.VITE_CARBON_API_KEY;
+carbonApiAxios.defaults.params = { key: import.meta.env.VITE_CARBON_API_KEY };
 
 export { carbonApiAxios };
