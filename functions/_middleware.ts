@@ -79,6 +79,11 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Max-Age', '86400');
     response.headers.set(
+      'Access-Control-Allow-Headers',
+      'Access-Control-Allow-Headers, Origin, x-carbon-auth-key, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
+    );
+
+    response.headers.set(
       'Access-Control-Allow-Methods',
       'GET, HEAD, POST, OPTIONS'
     );
