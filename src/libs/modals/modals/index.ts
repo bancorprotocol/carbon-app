@@ -31,6 +31,7 @@ import {
   ModalConfirmStrategyData,
 } from './ModalConfirmStrategy/ModalConfirmStrategy';
 import { ModalBurgerMenu } from './ModalBurgerMenu';
+import { ModalRestrictedCountry } from 'libs/modals/modals/ModalRestrictedCountry';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -44,6 +45,7 @@ export interface ModalSchema {
   tradeRouting: ModalTradeRoutingData;
   confirmStrategy: ModalConfirmStrategyData;
   burgerMenu: undefined;
+  restrictedCountry: undefined;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -60,4 +62,5 @@ export const MODAL_COMPONENTS: TModals = {
   tradeRouting: (props) => ModalTradeRouting(props),
   confirmStrategy: (props) => ModalConfirmStrategy(props),
   burgerMenu: (props) => ModalBurgerMenu(props),
+  restrictedCountry: (props) => ModalRestrictedCountry(props),
 };
