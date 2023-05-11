@@ -58,7 +58,27 @@ export const useWeb3Network = () => {
 
   useEffect(() => {
     void activateNetwork();
-  }, [activateNetwork, isCountryBlocked]);
+  }, [activateNetwork]);
+
+  useEffect(() => {
+    if (isCountryBlocked === false) {
+      if (IS_IN_IFRAME) {
+        const c = getConnection(ConnectionType.GNOSIS_SAFE);
+        c.connector.connectEagerly?.();
+        return;
+      }
+      if (IS_METAMASK_WALLET) {
+        const c = getConnection(ConnectionType.INJECTED);
+        c.connector.connectEagerly?.();
+        return;
+      }
+      if (IS_COINBASE_WALLET) {
+        const c = getConnection(ConnectionType.COINBASE_WALLET);
+        c.connector.connectEagerly?.();
+        return;
+      }
+    }
+  }, [isCountryBlocked]);
 
   return { provider, isNetworkActive, networkError, switchNetwork };
 };
