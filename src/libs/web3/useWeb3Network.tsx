@@ -58,7 +58,7 @@ export const useWeb3Network = () => {
 
   useEffect(() => {
     void activateNetwork();
-  }, [activateNetwork]);
+  }, [activateNetwork, isCountryBlocked]);
 
   return { provider, isNetworkActive, networkError, switchNetwork };
 };
