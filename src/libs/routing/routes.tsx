@@ -8,6 +8,20 @@ import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
 
+export const externalLinks = {
+  blog: 'http://blog.carbondefi.xyz',
+  analytics: 'http://analytics.carbondefi.xyz',
+  twitter: 'https://twitter.com/carbondefixyz',
+  youtube: 'https://www.youtube.com/c/BancorProtocol',
+  discord: 'https://discord.gg/bancor',
+  telegram: 'https://t.me/CarbonDeFixyz',
+  techDocs: 'https://docs.carbondefi.xyz/',
+  litePaper: 'https://carbondefi.xyz/litepaper',
+  whitepaper: 'https://carbondefi.xyz/whitepaper',
+  simulatorRepo: 'https://github.com/bancorprotocol/carbon-simulator',
+  interactiveSim: 'https://simulator.carbondefi.xyz/',
+};
+
 export const PathNames = {
   strategies: '/',
   trade: '/trade',
