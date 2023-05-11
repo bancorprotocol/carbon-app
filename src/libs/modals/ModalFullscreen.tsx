@@ -28,7 +28,7 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
     >
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto h-full w-full`}
+        className={`relative mx-auto h-screen w-full`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
@@ -61,7 +61,7 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
             </div>
           </div>
 
-          <div className="overflow-y-scroll">{children}</div>
+          <div>{children}</div>
         </div>
       </m.div>
     </Overlay>
