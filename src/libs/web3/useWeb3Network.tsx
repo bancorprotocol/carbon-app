@@ -34,27 +34,12 @@ export const useWeb3Network = () => {
     try {
       await network.connector.activate();
       setIsNetworkActive(true);
-      if (isCountryBlocked || isCountryBlocked === null) {
-        return;
-      }
-      if (IS_IN_IFRAME) {
-        const c = getConnection(ConnectionType.GNOSIS_SAFE);
-        return await c.connector.connectEagerly?.();
-      }
-      if (IS_METAMASK_WALLET) {
-        const c = getConnection(ConnectionType.INJECTED);
-        return await c.connector.connectEagerly?.();
-      }
-      if (IS_COINBASE_WALLET) {
-        const c = getConnection(ConnectionType.COINBASE_WALLET);
-        return await c.connector.connectEagerly?.();
-      }
     } catch (e: any) {
       const msg = e.message || 'Could not activate network: UNKNOWN ERROR';
       console.error('activateNetwork failed.', msg);
       setNetworkError(msg);
     }
-  }, [isCountryBlocked, isNetworkActive, network.connector, networkError]);
+  }, [isNetworkActive, network.connector, networkError]);
 
   useEffect(() => {
     void activateNetwork();
