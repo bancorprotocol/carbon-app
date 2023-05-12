@@ -10,9 +10,11 @@ export const ModalProvider: FC = () => {
 
   useEffect(() => {
     if (open.length > 0) {
+      document.documentElement.classList.add('overflow-hidden', 'h-screen');
       document.body.classList.add('overflow-hidden', 'h-screen');
     } else {
-      document.body.classList.remove('overflow-hidden h-screen');
+      document.documentElement.classList.remove('overflow-hidden', 'h-screen');
+      document.body.classList.remove('overflow-hidden', 'h-screen');
     }
   }, [open]);
 

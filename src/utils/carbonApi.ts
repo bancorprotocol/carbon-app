@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// const BASE_URL = 'https://app.carbondefi.xyz/api/';
-const BASE_URL =
-  'https://610-popup-view-fullscreen-on.carbon-app-csq.pages.dev/api/';
+const BASE_URL = 'api/';
+
 const carbonApiAxios = axios.create({
   baseURL: BASE_URL,
 });
