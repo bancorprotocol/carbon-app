@@ -1,10 +1,8 @@
-// auth.setup.ts
 import { test as setup } from '@playwright/test';
 
-const authFile = 'e2e/user.json';
+const userData = 'e2e/user.json';
 
-setup('authenticate', async ({ page }) => {
-  // Perform authentication steps. Replace these actions with your own.
+setup('Set RPC & Imposter Account', async ({ page }) => {
   await page.goto('http://localhost:3000/debug');
   await page.getByRole('button', { name: 'Accept All Cookies' }).click();
 
@@ -24,7 +22,5 @@ setup('authenticate', async ({ page }) => {
     .fill('0x3660F04B79751e31128f6378eAC70807e38f554E');
   await page.locator('#saveRpc').click();
 
-  // End of authentication steps.
-
-  await page.context().storageState({ path: authFile });
+  await page.context().storageState({ path: userData });
 });

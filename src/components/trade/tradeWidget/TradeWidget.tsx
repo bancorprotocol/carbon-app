@@ -23,7 +23,10 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
 
   return (
     <>
-      <div className={'grid grid-cols-1 gap-20 md:grid-cols-2'}>
+      <div
+        id="trade-content"
+        className={'grid grid-cols-1 gap-20 md:grid-cols-2'}
+      >
         {currentBreakpoint === 'sm' && (
           <TabsMenu>
             <TabsMenuButton

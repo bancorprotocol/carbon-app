@@ -4,5 +4,6 @@ test('Trade snapshot', async ({ page }) => {
   await page.goto('http://localhost:3000/trade');
   await page.getByRole('button', { name: 'Accept All Cookies' }).click();
 
+  await page.waitForSelector('div#trade-content');
   await expect(page).toHaveScreenshot('trade.png');
 });
