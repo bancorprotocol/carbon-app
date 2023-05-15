@@ -239,11 +239,6 @@ const getOrderBook = async (
 
   const totalSteps = getTotalSteps(buySteps, sellSteps);
 
-  console.log('jan totalSteps', totalSteps);
-  console.log('jan buySteps', buySteps.toNumber());
-  console.log('jan sellSteps', sellSteps.toNumber());
-  console.log('jan step', step.toString());
-
   const buy = buyHasLiq
     ? await buildOrderBook(
         true,
