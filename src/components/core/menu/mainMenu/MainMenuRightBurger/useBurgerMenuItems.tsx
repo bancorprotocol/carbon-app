@@ -40,6 +40,13 @@ export const useBurgerMenuItems = () => {
       },
       {
         content: (
+          <Link className="flex" to={externalLinks.faq}>
+            FAQ
+          </Link>
+        ),
+      },
+      {
+        content: (
           <Link className="flex" to={externalLinks.analytics}>
             Analytics
           </Link>
