@@ -219,6 +219,26 @@ const getOrderBook = async (
   const buyStartRate = hasOverlappingRates ? middleRate : maxBuy;
   const sellStartRate = hasOverlappingRates ? middleRate : minSellNormalized;
 
+  const getSteps = (start: Decimal, end: Decimal, step: Decimal): Decimal => {
+    const delta = end.minus(start);
+    return delta.div(step);
+  };
+
+  const buySteps = getSteps(minBuy, maxBuy, step);
+  const sellSteps = getSteps(minSellNormalized, maxSellNormalized, step);
+
+  const getTotalSteps = (buySteps: Decimal, sellSteps: Decimal): number => {
+    if (buySteps.gte(steps) && buySteps.gte(sellSteps)) {
+      return buySteps.floor().toNumber();
+    }
+    if (sellSteps.gte(steps) && sellSteps.gte(buySteps)) {
+      return sellSteps.floor().toNumber();
+    }
+    return steps;
+  };
+
+  const totalSteps = getTotalSteps(buySteps, sellSteps);
+
   const buy = buyHasLiq
     ? await buildOrderBook(
         true,
@@ -228,7 +248,7 @@ const getOrderBook = async (
         step,
         minBuy,
         maxBuy,
-        steps
+        totalSteps
       )
     : [];
 
@@ -241,7 +261,7 @@ const getOrderBook = async (
         step,
         minSell,
         maxSell,
-        steps
+        totalSteps
       )
     : [];
 
