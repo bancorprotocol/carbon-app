@@ -22,47 +22,40 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
   const { closeModal } = useModal();
 
   return (
-    <Overlay
-      onClick={() => closeModal(id)}
-      className={'items-center justify-center'}
-    >
+    <Overlay onClick={() => closeModal(id)} className={'items-end'}>
       <m.div
         onClick={(e) => e.stopPropagation()}
-        className={`relative mx-auto h-screen w-full`}
+        className={`h-90vh flex w-full flex-col overflow-hidden rounded-t-40 bg-emphasis p-20`}
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div
-          className={`relative flex h-screen w-full flex-col overflow-hidden border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
-        >
-          {isLoading && (
-            <div
-              className={
-                'statusBar absolute -mt-20 -ml-20 h-6 w-full bg-green/25'
-              }
-            />
-          )}
-          <div className={'flex justify-between'}>
-            <div>
-              {typeof title === 'string' ? (
-                <h2 className={'m-0'}>{title}</h2>
-              ) : (
-                title
-              )}
-            </div>
-            <div>
-              {showCloseButton ? (
-                <button className={'p-10'} onClick={() => closeModal(id)}>
-                  <IconX className={'w-12'} />
-                </button>
-              ) : null}
-            </div>
+        {isLoading && (
+          <div
+            className={
+              'statusBar absolute -mt-20 -ml-20 h-6 w-full bg-green/25'
+            }
+          />
+        )}
+        <div className={'flex justify-between'}>
+          <div>
+            {typeof title === 'string' ? (
+              <h2 className={'m-0'}>{title}</h2>
+            ) : (
+              title
+            )}
           </div>
-
-          <div>{children}</div>
+          <div>
+            {showCloseButton ? (
+              <button className={'p-10'} onClick={() => closeModal(id)}>
+                <IconX className={'w-12'} />
+              </button>
+            ) : null}
+          </div>
         </div>
+
+        <div>{children}</div>
       </m.div>
     </Overlay>
   );
@@ -70,9 +63,9 @@ export const ModalFullScreen: FC<ModalFullScreenProps> = ({
 
 const dropIn: Variants = {
   hidden: {
-    y: 0,
-    scale: 0.7,
-    opacity: 0,
+    y: '100vh',
+    // scale: 0.7,
+    // opacity: 0,
   },
   visible: {
     y: 0,
@@ -81,16 +74,16 @@ const dropIn: Variants = {
     transition: {
       delay: 0,
       duration: 0.5,
-      type: 'spring',
-      damping: 20,
-      mass: 1,
-      stiffness: 200,
+      // type: 'spring',
+      // damping: 20,
+      //  mass: 0.9,
+      //  stiffness: 200,
     },
   },
   exit: {
-    y: 0,
-    opacity: 0,
-    scale: 0.7,
+    y: '100vh',
+    // opacity: 0,
+    // scale: 0.7,
     transition: {
       duration: 0.5,
     },

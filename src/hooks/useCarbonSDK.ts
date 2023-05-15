@@ -90,8 +90,7 @@ export const useCarbonSDK = () => {
       setIsLoading(true);
       const cacheData = lsService.getItem('sdkCompressedCacheData');
 
-      const [isBlocked] = await Promise.all([
-        carbonApiAxios.get<boolean>('check'),
+      const [] = await Promise.all([
         carbonSDK.init(
           RPC_URLS[SupportedChainId.MAINNET],
           contractsConfig,
@@ -103,13 +102,7 @@ export const useCarbonSDK = () => {
           Comlink.proxy(onPairAddedToCacheCallback)
         ),
       ]);
-      setCountryBlocked(isBlocked.data);
-      if (
-        isBlocked.data &&
-        !lsService.getItem('hasSeenRestrictedCountryModal')
-      ) {
-        openModal('restrictedCountry', undefined);
-      }
+      setCountryBlocked(false);
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {

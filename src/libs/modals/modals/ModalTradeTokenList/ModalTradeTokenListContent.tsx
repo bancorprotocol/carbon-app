@@ -82,8 +82,9 @@ export const ModalTradeTokenListContent: FC<Props> = ({
 
       <div
         ref={parentRef}
+        id={'test'}
         style={{
-          height: `${aboveBreakpoint('md') ? '390px' : 'calc(100vh - 202px)'}`,
+          height: `${aboveBreakpoint('md') ? '390px' : `calc(100vh - 202px)`}`,
           overflow: 'auto',
         }}
       >

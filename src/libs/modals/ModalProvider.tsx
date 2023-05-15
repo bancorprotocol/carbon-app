@@ -2,6 +2,7 @@ import { FC, useEffect } from 'react';
 import { MODAL_COMPONENTS } from 'libs/modals/modals';
 import { AnimatePresence } from 'libs/motion';
 import { useModal } from 'hooks/useModal';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 export const ModalProvider: FC = () => {
   const {
@@ -10,9 +11,11 @@ export const ModalProvider: FC = () => {
 
   useEffect(() => {
     if (open.length > 0) {
+      disableBodyScroll(document.querySelector('#test')!);
       document.documentElement.classList.add('overflow-hidden', 'h-screen');
       document.body.classList.add('overflow-hidden', 'h-screen');
     } else {
+      clearAllBodyScrollLocks();
       document.documentElement.classList.remove('overflow-hidden', 'h-screen');
       document.body.classList.remove('overflow-hidden', 'h-screen');
     }

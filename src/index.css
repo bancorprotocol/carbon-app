@@ -8,14 +8,26 @@
   --blue: rgba(0, 181, 120, 0.25);
   --cyan: rgba(0, 181, 120, 0.25);
   --green: #00b578;
+  --app-height: 100vh;
 }
 
 @layer base {
+  .h-90vh {
+    height: 100vh;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: stretch;
+  }
+  .h-screen {
+    height: var(--app-height);
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: stretch;
+  }
   html,
   body,
   #root {
     @apply text-body bg-body min-h-screen font-gt-america;
-    min-height: -moz-available;
     min-height: -webkit-fill-available;
   }
 
