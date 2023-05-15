@@ -89,6 +89,7 @@
     "test": "vitest run",
     "test:e2e": "npx playwright test",
     "test:e2e-headed": "npx playwright test --ui",
+    "test:e2e-update": "npx playwright test --update-snapshots",
     "test:e2e-report": "npx playwright show-report"
   },
   "eslintConfig": {

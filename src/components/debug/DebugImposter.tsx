@@ -22,12 +22,15 @@ export const DebugImposter = () => {
     >
       <h2>Set Imposter Account</h2>
       <InputUserAccount
+        id="imposterAccount"
         label={'Imposter Account'}
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
 
-      <Button onClick={handleOnClick}>Save</Button>
+      <Button id="saveImposter" onClick={handleOnClick}>
+        Save
+      </Button>
     </div>
   );
 };
