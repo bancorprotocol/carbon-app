@@ -6,9 +6,6 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // require('dotenv').config();
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -22,6 +19,7 @@ export default defineConfig({
   use: {
     storageState: 'e2e/user.json',
     trace: 'on-first-retry',
+    viewport: { width: 1280, height: 720 },
   },
   projects: [
     { name: 'setup', testMatch: /.*\.setup\.ts/ },
