@@ -200,7 +200,7 @@ const ManageItem: FC<{
         element={tooltipText}
         interactive={false}
       >
-        <div
+        <button
           onClick={() => {
             action && action();
             setManage(false);
@@ -208,13 +208,13 @@ const ManageItem: FC<{
           className="hover:bg-body cursor-pointer rounded-6 p-12"
         >
           {title}
-        </div>
+        </button>
       </Tooltip>
     );
   }
 
   return (
-    <div
+    <button
       onClick={() => {
         action && action();
         setManage(false);
@@ -222,6 +222,6 @@ const ManageItem: FC<{
       className="hover:bg-body cursor-pointer rounded-6 p-12"
     >
       {title}
-    </div>
+    </button>
   );
 };
