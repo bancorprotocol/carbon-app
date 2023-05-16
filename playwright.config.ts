@@ -21,6 +21,9 @@ export default defineConfig({
     trace: 'on-first-retry',
     viewport: { width: 1280, height: 720 },
   },
+  expect: {
+    toHaveScreenshot: { threshold: 0.1 },
+  },
   projects: [
     { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
