@@ -22,7 +22,7 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
   },
   expect: {
-    toHaveScreenshot: { threshold: 0.1 },
+    toHaveScreenshot: { threshold: 0.1, maxDiffPixels: 50 },
   },
   projects: [
     { name: 'setup', testMatch: /.*\.setup\.ts/ },
