@@ -16,7 +16,10 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   /* Shared settings for all the projects below */
+  globalSetup: require.resolve('./global-setup'),
+  globalTeardown: require.resolve('./global-teardown'),
   use: {
+    baseURL: 'http://localhost:3000/',
     storageState: 'e2e/user.json',
     trace: 'on-first-retry',
     viewport: { width: 1280, height: 720 },
@@ -25,7 +28,10 @@ export default defineConfig({
     toHaveScreenshot: { threshold: 0.1, maxDiffPixels: 50 },
   },
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    {
+      name: 'setup',
+      testMatch: /global.setup\.ts/,
+    },
     {
       name: 'chromium',
       use: {
@@ -33,7 +39,6 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
-    /* Test against mobile */
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },

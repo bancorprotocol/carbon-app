@@ -205,7 +205,7 @@ const ManageItem: FC<{
             action && action();
             setManage(false);
           }}
-          className="hover:bg-body cursor-pointer rounded-6 p-12"
+          className="hover:bg-body block w-full cursor-pointer rounded-6 p-12 text-left"
         >
           {title}
         </button>
@@ -219,7 +219,7 @@ const ManageItem: FC<{
         action && action();
         setManage(false);
       }}
-      className="hover:bg-body cursor-pointer rounded-6 p-12"
+      className="hover:bg-body block w-full cursor-pointer rounded-6 p-12 text-left"
     >
       {title}
     </button>
