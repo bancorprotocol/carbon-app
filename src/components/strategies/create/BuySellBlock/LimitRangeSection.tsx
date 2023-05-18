@@ -100,14 +100,14 @@ export const LimitRangeSection: FC<Props> = ({
           buy={buy}
         />
       )}
-      <div
-        className={`!mt-4 flex items-center gap-10 font-mono text-12 text-warning-500 ${
-          !isOrdersOverlap || buy ? 'invisible' : ''
-        }`}
-      >
-        <IconWarning className="h-12 w-12" />
-        <div>{overlappingOrdersPricesMessage}</div>
-      </div>
+      {isOrdersOverlap && !buy && (
+        <div
+          className={`!mt-4 flex items-center gap-10 font-mono text-12 text-warning-500`}
+        >
+          <IconWarning className="h-12 w-12" />
+          <div>{overlappingOrdersPricesMessage}</div>
+        </div>
+      )}
     </div>
   );
 };
