@@ -5,6 +5,7 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const InputRange: FC<{
   min: string;
@@ -15,6 +16,7 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
+  isOrdersOverlap: boolean;
 }> = ({
   min,
   setMin,
@@ -24,6 +26,7 @@ export const InputRange: FC<{
   error,
   setRangeError,
   buy = false,
+  isOrdersOverlap,
 }) => {
   const errorMessage = 'Max Price must be higher than min price and not zero';
 
@@ -60,7 +63,7 @@ export const InputRange: FC<{
   const { getFiatAsString } = useFiatCurrency(token);
 
   return (
-    <div>
+    <div className="flex flex-col">
       <div className="flex space-x-6">
         <div
           className={`${
@@ -122,11 +125,12 @@ export const InputRange: FC<{
         </div>
       </div>
       <div
-        className={`mt-10 h-16 text-center text-12 text-red ${
+        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
           !error ? 'invisible' : ''
         }`}
       >
-        {error ? error : ''}
+        <IconWarning className="h-12 w-12" />
+        <div>{error ? error : ''}</div>
       </div>
     </div>
   );
