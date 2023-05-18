@@ -63,7 +63,7 @@ export const InputRange: FC<{
   const { getFiatAsString } = useFiatCurrency(token);
 
   return (
-    <div className="flex flex-col">
+    <div>
       <div className="flex space-x-6">
         <div
           className={`${
