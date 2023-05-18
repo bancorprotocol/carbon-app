@@ -14,7 +14,7 @@
   html,
   body,
   #root {
-    @apply text-body bg-body font-gt-america min-h-screen;
+    @apply text-body bg-body font-gt-america h-screen overflow-auto;
   }
 
   h1 {

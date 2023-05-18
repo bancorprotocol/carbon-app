@@ -7,6 +7,7 @@ import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
+import { useStore } from 'store';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -26,6 +27,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   onRemoveFavorite,
   onAddFavorite,
 }) => {
+  const { innerHeight } = useStore();
   const parentRef = useRef<HTMLDivElement>(null);
   const [selectedList, _setSelectedList] = useState<TradePairCategory>(
     lsService.getItem('tradePairsCategory') || 'popular'
@@ -81,7 +83,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
       <div
         ref={parentRef}
         style={{
-          height: `390px`,
+          height: innerHeight - 242,
           overflow: 'auto',
         }}
       >
