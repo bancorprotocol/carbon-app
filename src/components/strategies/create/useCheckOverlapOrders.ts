@@ -29,19 +29,7 @@ export const useCheckOverlapOrders = (
     } else {
       setIsOrdersOverlap(false);
     }
-  }, [
-    checkOverlap,
-    order0,
-    order0.isRange,
-    order0.max,
-    order0.min,
-    order0.price,
-    order1,
-    order1.isRange,
-    order1.max,
-    order1.min,
-    order1.price,
-  ]);
+  }, [checkOverlap, order0.max, order0.price, order1.min, order1.price]);
 
   return {
     isOrdersOverlap,

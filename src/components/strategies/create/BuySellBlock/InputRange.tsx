@@ -16,7 +16,6 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
-  isOrdersOverlap: boolean;
 }> = ({
   min,
   setMin,
@@ -26,7 +25,6 @@ export const InputRange: FC<{
   error,
   setRangeError,
   buy = false,
-  isOrdersOverlap,
 }) => {
   const errorMessage = 'Max Price must be higher than min price and not zero';
 
