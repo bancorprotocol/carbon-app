@@ -89,7 +89,6 @@ export const LimitRangeSection: FC<Props> = ({
           setRangeError={order.setRangeError}
           token={quote}
           buy={buy}
-          isOrdersOverlap={isOrdersOverlap}
         />
       ) : (
         <InputLimit
