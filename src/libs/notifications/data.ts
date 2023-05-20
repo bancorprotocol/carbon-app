@@ -3,6 +3,7 @@ import { NotificationsMap, NotificationNew } from 'libs/notifications/types';
 export interface NotificationSchema {
   generic: NotificationNew;
   reject: undefined;
+  revoke: { symbol: string; txHash: string };
   approve: { symbol: string; limited: boolean; txHash: string };
   approveError: { symbol: string };
   trade: { txHash: string; amount: string; from: string; to: string };
@@ -39,6 +40,17 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: `Failed ${symbol} approval for ${
       limited ? 'limited' : 'unlimited'
     } spending on the protocol.`,
+    showAlert: true,
+  }),
+  revoke: ({ symbol, txHash }) => ({
+    status: 'pending',
+    title: 'Revoking Token ...',
+    txHash,
+    description: `You are revoking ${symbol}.`,
+    successTitle: 'Token Revoked',
+    successDesc: `You have successfully revoked ${symbol}`,
+    failedTitle: 'Token Revoke Failed',
+    failedDesc: `Failed ${symbol} revoke`,
     showAlert: true,
   }),
   approveError: ({ symbol }) => ({

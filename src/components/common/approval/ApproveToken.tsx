@@ -42,7 +42,7 @@ export const ApproveToken: FC<Props> = ({
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
 
-  const onApprove = async () => {
+  const onApprove = async (isRevoked = false) => {
     if (!data || !token) {
       return console.error('No data loaded');
     }
@@ -51,6 +51,12 @@ export const ApproveToken: FC<Props> = ({
       { ...data, isLimited },
       {
         onSuccess: async (tx) => {
+          if (isRevoked) {
+            dispatchNotification('revoke', {
+              symbol: token.symbol,
+              txHash: tx.hash,
+            });
+          }
           dispatchNotification('approve', {
             symbol: token.symbol,
             txHash: tx.hash,
@@ -202,7 +208,7 @@ export const ApproveToken: FC<Props> = ({
 
               <Button
                 variant={'white'}
-                onClick={onApprove}
+                onClick={() => onApprove(!!data.nullApprovalRequired)}
                 size={'sm'}
                 className={'px-10 text-14'}
               >

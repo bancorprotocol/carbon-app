@@ -70,7 +70,7 @@ export const NotificationLine: FC<{
 
   useInterval(
     () => dismissAlert(notification.id),
-    isAlert ? 8000 : null,
+    notification.status === 'success' && isAlert ? 1000 : null,
     false
   );
 
