@@ -1,5 +1,6 @@
 import tw from 'tailwind-styled-components';
 import { m } from 'libs/motion';
+import { ReactComponent as IconX } from 'assets/icons/X.svg';
 
 export const CreateStrategyGraphContainer = tw.div<{ showGraph: boolean }>`
 flex
@@ -12,13 +13,13 @@ export const GraphTitle = tw.h2`
   font-weight-500
 `;
 
-export const CloseChartButton = tw.div`
+export const CloseChartLabelContainer = tw.div`
   flex
   items-center
   justify-center
 `;
 
-export const AnimatedGraphContainer = tw(m.div)`
+export const AnimatedGraph = tw(m.div)`
   flex
   h-[550px]
   flex-col 
@@ -27,3 +28,11 @@ export const AnimatedGraphContainer = tw(m.div)`
   p-20
   pb-40
 `;
+
+export const CloseIcon = tw(IconX)`
+  w-10 
+  md:mr-12`;
+
+export const CloseChart = tw.span`
+  hidden 
+  md:block`;

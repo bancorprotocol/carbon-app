@@ -2,14 +2,15 @@ import { FC } from 'react';
 import { items } from './variants';
 import { Button } from 'components/common/button';
 import { TradingviewChart } from 'components/tradingviewChart';
-import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { carbonEvents } from 'services/events';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import {
-  AnimatedGraphContainer,
-  CloseChartButton,
+  AnimatedGraph,
+  CloseChartLabelContainer,
   CreateStrategyGraphContainer,
   GraphTitle,
+  CloseIcon,
+  CloseChart,
 } from './CreateStrategyGraph.styles';
 
 type Props = Pick<
@@ -24,7 +25,7 @@ export const CreateStrategyGraph: FC<Props> = ({
 }) => {
   return (
     <CreateStrategyGraphContainer showGraph={showGraph}>
-      <AnimatedGraphContainer variants={items} key="createStrategyGraph">
+      <AnimatedGraph variants={items} key="createStrategyGraph">
         <div className="flex items-center justify-between">
           <GraphTitle>Price Chart</GraphTitle>
           <Button
@@ -36,14 +37,14 @@ export const CreateStrategyGraph: FC<Props> = ({
               setShowGraph(false);
             }}
           >
-            <CloseChartButton>
-              <IconX className={'w-10 md:mr-12'} />
-              <span className="hidden md:block">Close Chart</span>
-            </CloseChartButton>
+            <CloseChartLabelContainer>
+              <CloseIcon />
+              <CloseChart />
+            </CloseChartLabelContainer>
           </Button>
         </div>
         <TradingviewChart base={base} quote={quote} />
-      </AnimatedGraphContainer>
+      </AnimatedGraph>
     </CreateStrategyGraphContainer>
   );
 };
