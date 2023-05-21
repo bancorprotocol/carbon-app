@@ -6,6 +6,8 @@ import {
   useQueryClient,
 } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
+import { Dispatch, SetStateAction } from 'react';
+import { StrategyTxStatus } from './create/types';
 
 export const useDeleteStrategy = () => {
   const { user } = useWeb3();
@@ -15,6 +17,7 @@ export const useDeleteStrategy = () => {
 
   const deleteStrategy = async (
     strategy: Strategy,
+    setStrategyStatus: Dispatch<SetStateAction<StrategyTxStatus>>,
     successEventsCb?: () => void
   ) => {
     const { base, quote, id } = strategy;
@@ -22,6 +25,8 @@ export const useDeleteStrategy = () => {
     if (!base || !quote || !user) {
       throw new Error('error in delete strategy: missing data ');
     }
+
+    setStrategyStatus('processing');
 
     deleteMutation.mutate(
       {
@@ -34,6 +39,8 @@ export const useDeleteStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          setStrategyStatus('confirmed');
+
           successEventsCb?.();
 
           void cache.invalidateQueries({

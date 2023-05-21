@@ -6,11 +6,13 @@ import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 import { carbonEvents } from 'services/events';
-
 import { useStrategyEventData } from '../create/useStrategyEventData';
+import { StrategyTxStatus } from '../create/types';
+
+type EditStrategyPrices = 'editPrices' | 'renew';
 
 type EditStrategyPricesContentProps = {
-  type: 'editPrices' | 'renew';
+  type: EditStrategyPrices;
   strategy: Strategy;
 };
 
@@ -18,7 +20,9 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
-  const { renewStrategy, changeRateStrategy } = useUpdateStrategy();
+  const { renewStrategy, changeRateStrategy, isCtaDisabled, strategyStatus } =
+    useUpdateStrategy();
+
   const order0 = useOrder(
     type === 'renew'
       ? { ...strategy.order0, startRate: '', endRate: '' }
@@ -83,6 +87,19 @@ export const EditStrategyPricesContent = ({
       : +order.price > 0;
   };
 
+  const getCtaButtonText = (type: EditStrategyPrices) => {
+    const ctaButtonTextByStrategyTxStatus: {
+      [key in StrategyTxStatus]: string;
+    } = {
+      waitingForConfirmation: 'Waiting For Confirmation',
+      processing: 'Processing',
+      confirmed: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
+      none: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
+    };
+
+    return ctaButtonTextByStrategyTxStatus[strategyStatus];
+  };
+
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -102,17 +119,20 @@ export const EditStrategyPricesContent = ({
         type={type}
       />
       <Button
-        disabled={!isOrderValid(order0) || !isOrderValid(order1)}
+        disabled={
+          !isOrderValid(order0) || !isOrderValid(order1) || isCtaDisabled
+        }
         onClick={handleOnActionClick}
         className="mt-32"
         variant="white"
         size="lg"
         fullWidth
       >
-        {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
+        {getCtaButtonText(type)}
       </Button>
       <Button
         onClick={() => back()}
+        disabled={isCtaDisabled}
         className="mt-16"
         variant="secondary"
         size="lg"

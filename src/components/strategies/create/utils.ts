@@ -2,7 +2,7 @@ import {
   CreateStrategyActionProps,
   OrderWithSetters,
   StrategySettings,
-  StrategyTxStatusStatus,
+  StrategyTxStatus,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
 import { PathNames } from 'libs/routing';
@@ -132,7 +132,7 @@ export const checkErrors = (
 };
 
 export const ctaButtonTextByStrategyTxStatus: {
-  [key in StrategyTxStatusStatus]: string;
+  [key in StrategyTxStatus]: string;
 } = {
   waitingForConfirmation: 'Waiting For Confirmation',
   processing: 'Processing',

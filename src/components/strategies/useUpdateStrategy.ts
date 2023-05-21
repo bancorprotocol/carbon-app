@@ -9,6 +9,8 @@ import {
 } from 'libs/queries';
 import { PathNames, useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
+import { useState } from 'react';
+import { StrategyTxStatus } from './create/types';
 
 export const useUpdateStrategy = () => {
   const { user } = useWeb3();
@@ -16,6 +18,12 @@ export const useUpdateStrategy = () => {
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
   const navigate = useNavigate<MyLocationGenerics>();
+  const [strategyStatus, setStrategyStatus] =
+    useState<StrategyTxStatus>('none');
+
+  const isCtaDisabled =
+    strategyStatus === 'processing' ||
+    strategyStatus === 'waitingForConfirmation';
 
   const pauseStrategy = async (
     strategy: Strategy,
@@ -26,6 +34,8 @@ export const useUpdateStrategy = () => {
     if (!base || !quote || !user) {
       throw new Error('error in update strategy: missing data ');
     }
+
+    setStrategyStatus('processing');
 
     updateMutation.mutate(
       {
@@ -44,6 +54,7 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
+          setStrategyStatus('confirmed');
 
           successEventsCb?.();
           void cache.invalidateQueries({
@@ -68,6 +79,8 @@ export const useUpdateStrategy = () => {
       throw new Error('error in renew strategy: missing data ');
     }
 
+    setStrategyStatus('processing');
+
     updateMutation.mutate(
       {
         id,
@@ -85,7 +98,11 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
+
+          setTimeout(() => {
+            setStrategyStatus('confirmed');
+            navigate({ to: PathNames.strategies });
+          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -110,6 +127,8 @@ export const useUpdateStrategy = () => {
       throw new Error('error in change rates strategy: missing data ');
     }
 
+    setStrategyStatus('processing');
+
     updateMutation.mutate(
       {
         id,
@@ -127,7 +146,11 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
+
+          setTimeout(() => {
+            setStrategyStatus('confirmed');
+            navigate({ to: PathNames.strategies });
+          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -154,6 +177,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in withdraw strategy budget: missing data ');
     }
 
+    setStrategyStatus('processing');
     updateMutation.mutate(
       {
         id,
@@ -171,7 +195,11 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
+
+          setTimeout(() => {
+            setStrategyStatus('confirmed');
+            navigate({ to: PathNames.strategies });
+          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -198,6 +226,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in deposit strategy budget: missing data');
     }
 
+    setStrategyStatus('processing');
     updateMutation.mutate(
       {
         id,
@@ -215,7 +244,11 @@ export const useUpdateStrategy = () => {
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
+
+          setTimeout(() => {
+            setStrategyStatus('confirmed');
+            navigate({ to: PathNames.strategies });
+          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -236,5 +269,8 @@ export const useUpdateStrategy = () => {
     changeRateStrategy,
     withdrawBudget,
     depositBudget,
+    strategyStatus,
+    setStrategyStatus,
+    isCtaDisabled,
   };
 };

@@ -22,9 +22,10 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { pauseStrategy } = useUpdateStrategy();
+  const { pauseStrategy, strategyStatus, setStrategyStatus, isCtaDisabled } =
+    useUpdateStrategy();
   const { deleteStrategy } = useDeleteStrategy();
-  const data = getModalDataByType(type);
+  const data = getModalDataByType(type, strategyStatus);
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
   const strategyEventData = useStrategyEventData({
@@ -46,7 +47,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         });
         break;
       case 'delete':
-        deleteStrategy(strategy, () => {
+        deleteStrategy(strategy, setStrategyStatus, () => {
           carbonEvents.strategyEdit.strategyDelete({
             ...strategyEventData,
             strategyId: strategy.id,
@@ -69,6 +70,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         {data?.additionalContent}
         <Button
           onClick={handleOnActionClick}
+          disabled={isCtaDisabled}
           className="mt-32"
           variant="white"
           size="lg"
@@ -78,6 +80,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         </Button>
         <Button
           onClick={() => closeModal(id)}
+          disabled={isCtaDisabled}
           className="mt-16"
           variant="black"
           size="lg"

@@ -12,9 +12,12 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { getCtaButtonText } from './utils';
+
+export type EditStrategyBudget = 'withdraw' | 'deposit';
 
 type EditStrategyBudgetContentProps = {
-  type: 'withdraw' | 'deposit';
+  type: EditStrategyBudget;
   strategy: Strategy;
 };
 
@@ -22,7 +25,14 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
-  const { withdrawBudget, depositBudget } = useUpdateStrategy();
+  const {
+    withdrawBudget,
+    depositBudget,
+    isCtaDisabled,
+    strategyStatus,
+    setStrategyStatus,
+  } = useUpdateStrategy();
+
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
   const { provider } = useWeb3();
@@ -96,9 +106,11 @@ export const EditStrategyBudgetContent = ({
       depositOrWithdrawFunds();
     } else {
       if (approval.approvalRequired) {
+        setStrategyStatus('waitingForConfirmation');
         openModal('txConfirm', {
           approvalTokens: approval.tokens,
           onConfirm: depositOrWithdrawFunds,
+          onClose: () => setStrategyStatus('none'),
           buttonLabel: `Confirm Deposit`,
           eventData: {
             ...strategyEventData,
@@ -171,17 +183,18 @@ export const EditStrategyBudgetContent = ({
         type={type}
       />
       <Button
-        disabled={!isOrdersBudgetValid()}
+        disabled={!isOrdersBudgetValid() || isCtaDisabled}
         onClick={handleOnActionClick}
         className="mt-32"
         variant="white"
         size="lg"
         fullWidth
       >
-        {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
+        {getCtaButtonText(type, strategyStatus)}
       </Button>
       <Button
         onClick={() => back()}
+        disabled={isCtaDisabled}
         className="mt-16"
         variant="secondary"
         size="lg"
