@@ -16,7 +16,10 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
-import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
+import {
+  StrategyCreateLocationGenerics,
+  StrategyTxStatusStatus,
+} from 'components/strategies/create/types';
 import {
   handleStrategyDirection,
   handleStrategySettings,
@@ -45,6 +48,8 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
+  const [strategyStatus, setStrategyStatus] =
+    useState<StrategyTxStatusStatus>('none');
 
   const mutation = useCreateStrategyQuery();
 
@@ -96,6 +101,7 @@ export const useCreateStrategy = () => {
 
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired) {
+        setStrategyStatus('waitingForConfirmation');
         openModal('txConfirm', {
           approvalTokens,
           onConfirm: () =>
@@ -109,6 +115,7 @@ export const useCreateStrategy = () => {
               dispatchNotification,
               cache,
               navigate,
+              setStrategyStatus,
               strategyEventData,
             }),
           buttonLabel: 'Create Strategy',
@@ -133,6 +140,7 @@ export const useCreateStrategy = () => {
           dispatchNotification,
           cache,
           navigate,
+          setStrategyStatus,
           strategyEventData,
         });
       }
@@ -327,5 +335,6 @@ export const useCreateStrategy = () => {
     showTypeMenu,
     selectedStrategySettings,
     setSelectedStrategySettings,
+    strategyStatus,
   };
 };

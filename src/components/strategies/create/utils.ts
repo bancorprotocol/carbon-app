@@ -2,6 +2,7 @@ import {
   CreateStrategyActionProps,
   OrderWithSetters,
   StrategySettings,
+  StrategyTxStatusStatus,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
 import { PathNames } from 'libs/routing';
@@ -61,11 +62,14 @@ export const createStrategyAction = async ({
   mutation,
   dispatchNotification,
   navigate,
+  setStrategyStatus,
   strategyEventData,
 }: CreateStrategyActionProps) => {
   if (!base || !quote || !user) {
     throw new Error('error in create strategy: missing data ');
   }
+
+  setStrategyStatus('processing');
 
   mutation.mutate(
     {
@@ -96,7 +100,12 @@ export const createStrategyAction = async ({
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, quote.address),
         });
-        navigate({ to: PathNames.strategies });
+
+        setTimeout(() => {
+          setStrategyStatus('confirmed');
+          navigate({ to: PathNames.strategies });
+        }, 2000);
+
         console.log('tx confirmed');
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
@@ -119,4 +128,13 @@ export const checkErrors = (
     !order.budget || Number(order.budget) <= Number(balance);
 
   return (minMaxCorrect || priceCorrect) && budgetCorrect;
+};
+
+export const ctaButtonTextByStrategyTxStatus: {
+  [key in StrategyTxStatusStatus]: string;
+} = {
+  waitingForConfirmation: 'Waiting For Confirmation',
+  processing: 'Processing',
+  confirmed: 'Create Strategy',
+  none: 'Create Strategy',
 };
