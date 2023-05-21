@@ -220,7 +220,9 @@ export const useCreateStrategy = () => {
       approval.isError ||
       mutation.isLoading ||
       !isOrder0Valid ||
-      !isOrder1Valid
+      !isOrder1Valid ||
+      strategyStatus === 'processing' ||
+      strategyStatus === 'waitingForConfirmation'
     );
   }, [
     approval.isError,
@@ -234,6 +236,7 @@ export const useCreateStrategy = () => {
     order1.max,
     order1.min,
     order1.price,
+    strategyStatus,
     user,
   ]);
 
