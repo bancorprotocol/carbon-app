@@ -38,6 +38,8 @@ export const useBuySell = ({
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
+  const [tradeInProcess, setTradeInProcess] = useState(false);
+
   const { calcMaxInput } = useTradeAction({
     source,
     isTradeBySource,
@@ -77,6 +79,7 @@ export const useBuySell = ({
     sourceInput,
     isTradeBySource,
     onSuccess: (txHash: string) => {
+      setTradeInProcess(false);
       clearInputs();
       buy
         ? carbonEvents.trade.tradeBuy({
@@ -256,6 +259,7 @@ export const useBuySell = ({
         context: 'trade',
       });
     } else {
+      setTradeInProcess(true);
       void tradeFn();
     }
   }, [
@@ -384,5 +388,6 @@ export const useBuySell = ({
     calcSlippage,
     isTradeBySource,
     maxSourceAmountQuery,
+    tradeInProcess,
   };
 };
