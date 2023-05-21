@@ -1,6 +1,8 @@
 import { Notification } from 'libs/notifications/types';
 import { lsService } from 'services/localeStorage';
 
+export const PostNotificationCloseTimeMSec = 2000;
+
 export const getLSUserNotifications = (user?: string): Notification[] => {
   if (!user) return [];
   return lsService.getItem(`notifications-${user}`) || [];
