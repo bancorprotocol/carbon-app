@@ -53,7 +53,6 @@ export const ApproveToken: FC<Props> = ({
         onSuccess: async (tx) => {
           if (isRevoked) {
             dispatchNotification('revoke', {
-              symbol: token.symbol,
               txHash: tx.hash,
             });
           }
