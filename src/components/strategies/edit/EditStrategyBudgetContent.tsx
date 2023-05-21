@@ -184,9 +184,10 @@ export const EditStrategyBudgetContent = ({
       />
       <Button
         disabled={!isOrdersBudgetValid() || isCtaDisabled}
+        loading={isCtaDisabled}
         onClick={handleOnActionClick}
         className="mt-32"
-        variant="white"
+        variant={isCtaDisabled ? 'secondary' : 'white'}
         size="lg"
         fullWidth
       >

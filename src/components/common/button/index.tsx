@@ -14,13 +14,15 @@ export type ButtonHTMLProps = DetailedHTMLProps<
 > &
   AriaAttributes;
 
-export type ButtonProps = ButtonHTMLProps & VariantProps<typeof buttonStyles>;
+export type ButtonProps = ButtonHTMLProps &
+  VariantProps<typeof buttonStyles> & { loading?: boolean };
 
 export const Button: FC<ButtonProps> = ({
   variant,
   size,
   fullWidth,
   className,
+  loading,
   ...props
 }) => {
   return (
@@ -28,6 +30,15 @@ export const Button: FC<ButtonProps> = ({
     <m.button
       className={buttonStyles({ variant, size, fullWidth, class: className })}
       {...props}
-    />
+    >
+      {loading ? (
+        <div className="flex items-center justify-center">
+          <div className="text-white">{props.children}</div>
+          <div className="dot-pulse ml-20" />
+        </div>
+      ) : (
+        props.children
+      )}
+    </m.button>
   );
 };

@@ -101,6 +101,7 @@ export const CreateStrategyOrders = ({
           fullWidth
           onClick={onCreateStrategy}
           disabled={isCTAdisabled}
+          loading={isCTAdisabled}
         >
           {user
             ? ctaButtonTextByStrategyTxStatus[strategyStatus]

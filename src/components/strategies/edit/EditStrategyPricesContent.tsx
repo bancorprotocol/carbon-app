@@ -122,9 +122,10 @@ export const EditStrategyPricesContent = ({
         disabled={
           !isOrderValid(order0) || !isOrderValid(order1) || isCtaDisabled
         }
+        loading={isCtaDisabled}
         onClick={handleOnActionClick}
         className="mt-32"
-        variant="white"
+        variant={isCtaDisabled ? 'secondary' : 'white'}
         size="lg"
         fullWidth
       >
