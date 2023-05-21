@@ -70,7 +70,7 @@ export const NotificationLine: FC<{
 
   useInterval(
     () => dismissAlert(notification.id),
-    notification.status === 'success' && isAlert ? 1000 : null,
+    isAlert && notification.status !== 'pending' ? 2000 : null,
     false
   );
 
@@ -97,7 +97,7 @@ export const NotificationLine: FC<{
           {unix(notification.timestamp).fromNow(true)}
         </div>
         <button className="text-12 font-weight-500" onClick={handleCloseClick}>
-          Clear
+          {isAlert ? 'Close' : 'Clear'}
         </button>
       </div>
     </div>
