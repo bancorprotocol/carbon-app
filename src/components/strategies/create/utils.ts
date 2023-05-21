@@ -110,6 +110,7 @@ export const createStrategyAction = async ({
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e) => {
+        setStrategyStatus('none');
         console.error('create mutation failed', e);
       },
     }

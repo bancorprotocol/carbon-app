@@ -118,6 +118,7 @@ export const useCreateStrategy = () => {
               setStrategyStatus,
               strategyEventData,
             }),
+          onClose: () => setStrategyStatus('none'),
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
