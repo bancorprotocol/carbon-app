@@ -1,7 +1,13 @@
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'hooks/useModal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useCallback, useMemo, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import { Action } from '@bancor/carbon-sdk';
@@ -9,7 +15,9 @@ import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 
 type Props = {
   id: string;
-  data: ModalTradeRoutingData;
+  data: ModalTradeRoutingData & {
+    setTradeInProcess: Dispatch<SetStateAction<boolean>>;
+  };
 };
 
 export const useModalTradeRouting = ({
@@ -22,6 +30,7 @@ export const useModalTradeRouting = ({
     tradeActionsRes,
     onSuccess,
     buy = false,
+    setTradeInProcess,
   },
 }: Props) => {
   const { user, provider } = useWeb3();
@@ -80,6 +89,7 @@ export const useModalTradeRouting = ({
         isTradeBySource,
         sourceInput: data.totalSourceAmount,
         targetInput: data.totalTargetAmount,
+        setTradeInProcess,
       });
 
     if (approval.approvalRequired) {
@@ -101,6 +111,7 @@ export const useModalTradeRouting = ({
         },
       });
     } else {
+      setTradeInProcess(true);
       void tradeFn();
     }
   }, [
@@ -118,6 +129,7 @@ export const useModalTradeRouting = ({
     data?.totalSourceAmount,
     data?.totalTargetAmount,
     isTradeBySource,
+    setTradeInProcess,
     buy,
     getFiatValueSource,
     provider?.network?.name,

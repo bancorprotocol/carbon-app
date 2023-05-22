@@ -10,6 +10,7 @@ import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useMo
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
+import { useState } from 'react';
 
 export type ModalTradeRoutingData = {
   source: Token;
@@ -25,6 +26,8 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   id,
   data,
 }) => {
+  const [tradeInProcess, setTradeInProcess] = useState(false);
+
   const {
     selected,
     onSelect,
@@ -35,7 +38,10 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     totalSourceAmount,
     totalTargetAmount,
     disabledCTA,
-  } = useModalTradeRouting({ id, data });
+  } = useModalTradeRouting({
+    id,
+    data: { ...data, setTradeInProcess },
+  });
 
   return (
     <Modal id={id} title="Trade Routing" size={'md'}>
@@ -93,11 +99,22 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
       </div>
 
       <div className={'mt-20 flex w-full space-x-10'}>
-        <Button variant={'secondary'} fullWidth onClick={onCancel}>
+        <Button
+          variant={'secondary'}
+          fullWidth
+          onClick={onCancel}
+          disabled={tradeInProcess}
+        >
           Cancel
         </Button>
-        <Button fullWidth onClick={handleCTAClick} disabled={disabledCTA}>
-          Confirm
+        <Button
+          variant={tradeInProcess ? 'black' : 'white'}
+          fullWidth
+          onClick={handleCTAClick}
+          disabled={disabledCTA || tradeInProcess}
+          loading={tradeInProcess}
+        >
+          {tradeInProcess ? 'Waiting For Confirmation' : 'Confirm'}
         </Button>
       </div>
     </Modal>
