@@ -44,11 +44,8 @@ export type CreateStrategyActionProps = Pick<
   >;
   dispatchNotification: DispatchNotification;
   navigate: ReturnType<typeof useNavigate<StrategyCreateLocationGenerics>>;
-  setStrategyStatus: Dispatch<SetStateAction<StrategyTxStatus>>;
+  setStrategyStatus: Dispatch<SetStateAction<TxStatus>>;
   strategyEventData: StrategyEventType;
 };
 
-export type StrategyTxStatus =
-  | 'waitingForConfirmation'
-  | 'processing'
-  | 'initial';
+export type TxStatus = 'waitingForConfirmation' | 'processing' | 'initial';

@@ -7,7 +7,7 @@ import {
 } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { Dispatch, SetStateAction } from 'react';
-import { StrategyTxStatus } from './create/types';
+import { TxStatus } from './create/types';
 
 export const useDeleteStrategy = () => {
   const { user } = useWeb3();
@@ -17,7 +17,7 @@ export const useDeleteStrategy = () => {
 
   const deleteStrategy = async (
     strategy: Strategy,
-    setStrategyStatus: Dispatch<SetStateAction<StrategyTxStatus>>,
+    setStrategyStatus: Dispatch<SetStateAction<TxStatus>>,
     successEventsCb?: () => void
   ) => {
     const { base, quote, id } = strategy;

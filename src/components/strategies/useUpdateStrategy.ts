@@ -10,7 +10,7 @@ import {
 import { PathNames, useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
-import { StrategyTxStatus } from './create/types';
+import { TxStatus } from './create/types';
 
 export const useUpdateStrategy = () => {
   const { user } = useWeb3();
@@ -18,8 +18,7 @@ export const useUpdateStrategy = () => {
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
   const navigate = useNavigate<MyLocationGenerics>();
-  const [strategyStatus, setStrategyStatus] =
-    useState<StrategyTxStatus>('initial');
+  const [strategyStatus, setStrategyStatus] = useState<TxStatus>('initial');
 
   const isCtaDisabled =
     strategyStatus === 'processing' ||

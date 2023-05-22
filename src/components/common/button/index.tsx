@@ -33,7 +33,7 @@ export const Button: FC<ButtonProps> = ({
     >
       {loading ? (
         <div className="flex items-center justify-center">
-          <div className="text-white/70">{props.children}</div>
+          <div className="text-white/80">{props.children}</div>
           <div className="dot-pulse ml-20" />
         </div>
       ) : (

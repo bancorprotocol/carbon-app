@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
@@ -16,6 +16,7 @@ import {
   TradeEventType,
 } from 'services/events/types';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { TxStatus } from 'components/strategies/create/types';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -23,6 +24,7 @@ type Props = {
   error: unknown;
   eventData?: StrategyEventOrTradeEvent & TokenApprovalType;
   context?: 'depositStrategyFunds' | 'createStrategy' | 'trade';
+  setTxStatus: Dispatch<SetStateAction<TxStatus>>;
 };
 
 export const ApproveToken: FC<Props> = ({
@@ -31,6 +33,7 @@ export const ApproveToken: FC<Props> = ({
   error,
   eventData,
   context,
+  setTxStatus,
 }) => {
   const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
@@ -47,10 +50,13 @@ export const ApproveToken: FC<Props> = ({
       return console.error('No data loaded');
     }
     setTxBusy(true);
+    setTxStatus('waitingForConfirmation');
+
     await mutation.mutate(
       { ...data, isLimited },
       {
         onSuccess: async (tx) => {
+          setTxStatus('processing');
           dispatchNotification('approve', {
             symbol: token.symbol,
             txHash: tx.hash,
@@ -62,9 +68,11 @@ export const ApproveToken: FC<Props> = ({
           });
           setTxBusy(false);
           setTxSuccess(true);
+          setTxStatus('initial');
           handleTokenConfirmationApproveEvent();
         },
         onError: async () => {
+          setTxStatus('initial');
           dispatchNotification('approveError', { symbol: token.symbol });
           console.error('could not set approval');
           await cache.refetchQueries({

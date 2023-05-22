@@ -1,17 +1,17 @@
-import { StrategyTxStatus } from '../create/types';
+import { TxStatus } from '../create/types';
 import { EditStrategyBudget } from './EditStrategyBudgetContent';
 
 export const getCtaButtonText = (
   type: EditStrategyBudget,
-  status: StrategyTxStatus
+  status: TxStatus
 ) => {
-  const ctaButtonTextByStrategyTxStatus: {
-    [key in StrategyTxStatus]: string;
+  const ctaButtonTextByTxStatus: {
+    [key in TxStatus]: string;
   } = {
     waitingForConfirmation: 'Waiting For Confirmation',
     processing: 'Processing',
     initial: `${type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}`,
   };
 
-  return ctaButtonTextByStrategyTxStatus[status];
+  return ctaButtonTextByTxStatus[status];
 };

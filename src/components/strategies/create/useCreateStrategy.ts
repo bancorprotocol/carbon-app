@@ -18,7 +18,7 @@ import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 import {
   StrategyCreateLocationGenerics,
-  StrategyTxStatus,
+  TxStatus,
 } from 'components/strategies/create/types';
 import {
   handleStrategyDirection,
@@ -48,8 +48,7 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
-  const [strategyStatus, setStrategyStatus] =
-    useState<StrategyTxStatus>('initial');
+  const [strategyStatus, setStrategyStatus] = useState<TxStatus>('initial');
 
   const mutation = useCreateStrategyQuery();
 

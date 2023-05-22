@@ -7,7 +7,7 @@ import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
-import { StrategyTxStatus } from '../create/types';
+import { TxStatus } from '../create/types';
 
 type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -88,15 +88,15 @@ export const EditStrategyPricesContent = ({
   };
 
   const getCtaButtonText = (type: EditStrategyPrices) => {
-    const ctaButtonTextByStrategyTxStatus: {
-      [key in StrategyTxStatus]: string;
+    const ctaButtonTextByTxStatus: {
+      [key in TxStatus]: string;
     } = {
       waitingForConfirmation: 'Waiting For Confirmation',
       processing: 'Processing',
       initial: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
     };
 
-    return ctaButtonTextByStrategyTxStatus[strategyStatus];
+    return ctaButtonTextByTxStatus[strategyStatus];
   };
 
   return (

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
-import { StrategyTxStatus } from 'components/strategies/create/types';
+import { TxStatus } from 'components/strategies/create/types';
 
 export type MutateModalContentData = {
   modalTitle: string;
@@ -16,7 +16,7 @@ export type MutateModalContentData = {
 
 export const getModalDataByType = (
   type: 'pause' | 'delete',
-  strategyStatus: StrategyTxStatus
+  strategyStatus: TxStatus
 ): MutateModalContentData => {
   switch (type) {
     case 'pause':

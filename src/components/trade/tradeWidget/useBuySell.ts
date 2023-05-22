@@ -243,6 +243,7 @@ export const useBuySell = ({
         isTradeBySource,
         sourceInput: sourceInput,
         targetInput: targetInput,
+        setTradeInProcess,
       });
 
     if (approval.approvalRequired) {

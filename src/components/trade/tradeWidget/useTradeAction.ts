@@ -1,5 +1,5 @@
 import { useWeb3 } from 'libs/web3';
-import { useCallback, useMemo } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
 import { PopulatedTransaction } from 'ethers';
 import { TradeActionBNStr, carbonSDK } from 'libs/sdk';
@@ -17,6 +17,7 @@ type TradeProps = {
   isTradeBySource: boolean;
   sourceInput: string;
   targetInput: string;
+  setTradeInProcess: Dispatch<SetStateAction<boolean>>;
 };
 
 type Props = Pick<TradeProps, 'source' | 'isTradeBySource' | 'sourceInput'> & {
@@ -67,46 +68,54 @@ export const useTradeAction = ({
       sourceInput,
       targetInput,
       tradeActions,
+      setTradeInProcess,
     }: TradeProps) => {
       if (!user || !signer) {
         throw new Error('No user or signer');
       }
+      try {
+        let unsignedTx: PopulatedTransaction;
+        if (isTradeBySource) {
+          unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
+            source.address,
+            target.address,
+            tradeActions,
+            calcDeadline(deadline),
+            calcMinReturn(targetInput)
+          );
+        } else {
+          unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
+            source.address,
+            target.address,
+            tradeActions,
+            calcDeadline(deadline),
+            calcMaxInput(sourceInput)
+          );
+        }
 
-      let unsignedTx: PopulatedTransaction;
-      if (isTradeBySource) {
-        unsignedTx = await carbonSDK.composeTradeBySourceTransaction(
-          source.address,
-          target.address,
-          tradeActions,
-          calcDeadline(deadline),
-          calcMinReturn(targetInput)
+        const tx = await signer.sendTransaction(unsignedTx);
+        dispatchNotification('trade', {
+          txHash: tx.hash,
+          amount: sourceInput,
+          from: source.symbol,
+          to: target.symbol,
+        });
+        onSuccess?.(tx.hash);
+
+        void cache.invalidateQueries(
+          QueryKey.approval(
+            user,
+            source.address,
+            config.carbon.carbonController
+          )
         );
-      } else {
-        unsignedTx = await carbonSDK.composeTradeByTargetTransaction(
-          source.address,
-          target.address,
-          tradeActions,
-          calcDeadline(deadline),
-          calcMaxInput(sourceInput)
-        );
+
+        await tx.wait();
+        void cache.invalidateQueries(QueryKey.balance(user, source.address));
+        void cache.invalidateQueries(QueryKey.balance(user, target.address));
+      } catch (error) {
+        setTradeInProcess(false);
       }
-
-      const tx = await signer.sendTransaction(unsignedTx);
-      dispatchNotification('trade', {
-        txHash: tx.hash,
-        amount: sourceInput,
-        from: source.symbol,
-        to: target.symbol,
-      });
-      onSuccess?.(tx.hash);
-
-      void cache.invalidateQueries(
-        QueryKey.approval(user, source.address, config.carbon.carbonController)
-      );
-
-      await tx.wait();
-      void cache.invalidateQueries(QueryKey.balance(user, source.address));
-      void cache.invalidateQueries(QueryKey.balance(user, target.address));
     },
     [
       cache,

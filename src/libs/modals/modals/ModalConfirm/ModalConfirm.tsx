@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
@@ -16,6 +16,7 @@ import {
   handleAfterConfirmationEvent,
   handleOnRequestEvent,
 } from './utils';
+import { TxStatus } from 'components/strategies/create/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -26,6 +27,8 @@ export type ModalCreateConfirmData = {
   eventData?: (StrategyEventType | TradeEventType) &
     TokenApprovalType &
     TransactionConfirmationType;
+  txStatus?: TxStatus;
+  setTxStatus?: Dispatch<SetStateAction<TxStatus>>;
 };
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
@@ -41,6 +44,9 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
 }) => {
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
+  const [txStatus, setTxStatus] = useState<TxStatus>('initial');
+  const isCtaDisabled =
+    txStatus === 'processing' || txStatus === 'waitingForConfirmation';
 
   useEffect(() => {
     handleConfirmationPopupViewEvent(eventData, context);
@@ -63,14 +69,16 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
             error={error}
             eventData={eventData}
             context={context}
+            setTxStatus={setTxStatus}
           />
         ))}
       </div>
       <Button
         size="lg"
-        variant="white"
+        variant={isCtaDisabled ? 'black' : 'white'}
         fullWidth
-        disabled={approvalRequired}
+        loading={isCtaDisabled}
+        disabled={approvalRequired || isCtaDisabled}
         onClick={async () => {
           handleOnRequestEvent(eventData, context);
           closeModal(id);
@@ -78,7 +86,11 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
           handleAfterConfirmationEvent(eventData, context);
         }}
       >
-        {buttonLabel}
+        {txStatus === 'processing'
+          ? 'Processing'
+          : txStatus === 'waitingForConfirmation'
+          ? 'Waiting For Confirmation'
+          : buttonLabel}
       </Button>
     </Modal>
   );
