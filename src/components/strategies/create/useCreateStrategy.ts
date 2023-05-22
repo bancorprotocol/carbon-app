@@ -22,7 +22,7 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
-import { checkIfOrdersOverlaps } from '../utils';
+import { checkIfOrdersOverlap } from '../utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -47,7 +47,7 @@ export const useCreateStrategy = () => {
   const order0 = useOrder(templateStrategy?.order0);
 
   const isOrdersOverlap = useMemo(() => {
-    return checkIfOrdersOverlaps(order0, order1);
+    return checkIfOrdersOverlap(order0, order1);
   }, [order0, order1]);
 
   const mutation = useCreateStrategyQuery();

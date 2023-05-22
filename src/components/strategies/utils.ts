@@ -1,6 +1,6 @@
 import { OrderCreate } from './create/useOrder';
 
-export const checkIfOrdersOverlaps = (
+export const checkIfOrdersOverlap = (
   orderA: OrderCreate,
   orderB: OrderCreate
 ): boolean => {

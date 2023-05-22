@@ -9,7 +9,7 @@ import { carbonEvents } from 'services/events';
 
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { useMemo } from 'react';
-import { checkIfOrdersOverlaps } from '../utils';
+import { checkIfOrdersOverlap } from '../utils';
 
 type EditStrategyPricesContentProps = {
   type: 'editPrices' | 'renew';
@@ -33,7 +33,7 @@ export const EditStrategyPricesContent = ({
   );
 
   const isOrdersOverlap = useMemo(() => {
-    return checkIfOrdersOverlaps(order0, order1);
+    return checkIfOrdersOverlap(order0, order1);
   }, [order0, order1]);
 
   const {
