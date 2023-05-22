@@ -10,10 +10,7 @@ export const getCtaButtonText = (
   } = {
     waitingForConfirmation: 'Waiting For Confirmation',
     processing: 'Processing',
-    confirmed: `${
-      type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'
-    }`,
-    none: `${type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}`,
+    initial: `${type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}`,
   };
 
   return ctaButtonTextByStrategyTxStatus[status];

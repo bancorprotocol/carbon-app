@@ -246,9 +246,11 @@ export const useBuySell = ({
       });
 
     if (approval.approvalRequired) {
+      setTradeInProcess(true);
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
         onConfirm: tradeFn,
+        onClose: () => setTradeInProcess(false),
         buttonLabel: 'Confirm Trade',
         eventData: {
           ...eventData,

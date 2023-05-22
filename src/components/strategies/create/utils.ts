@@ -69,7 +69,7 @@ export const createStrategyAction = async ({
     throw new Error('error in create strategy: missing data ');
   }
 
-  setStrategyStatus('processing');
+  setStrategyStatus('waitingForConfirmation');
 
   mutation.mutate(
     {
@@ -90,6 +90,12 @@ export const createStrategyAction = async ({
     },
     {
       onSuccess: async (tx) => {
+        setStrategyStatus('processing');
+        setTimeout(() => {
+          navigate({ to: PathNames.strategies });
+          setStrategyStatus('initial');
+        }, 1500);
+
         dispatchNotification('createStrategy', { txHash: tx.hash });
         if (!tx) return;
         console.log('tx hash', tx.hash);
@@ -101,16 +107,11 @@ export const createStrategyAction = async ({
           queryKey: QueryKey.balance(user, quote.address),
         });
 
-        setTimeout(() => {
-          setStrategyStatus('confirmed');
-          navigate({ to: PathNames.strategies });
-        }, 2000);
-
         console.log('tx confirmed');
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e) => {
-        setStrategyStatus('none');
+        setStrategyStatus('initial');
         console.error('create mutation failed', e);
       },
     }
@@ -136,6 +137,5 @@ export const ctaButtonTextByStrategyTxStatus: {
 } = {
   waitingForConfirmation: 'Waiting For Confirmation',
   processing: 'Processing',
-  confirmed: 'Create Strategy',
-  none: 'Create Strategy',
+  initial: 'Create Strategy',
 };

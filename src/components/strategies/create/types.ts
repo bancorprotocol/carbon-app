@@ -51,5 +51,4 @@ export type CreateStrategyActionProps = Pick<
 export type StrategyTxStatus =
   | 'waitingForConfirmation'
   | 'processing'
-  | 'confirmed'
-  | 'none';
+  | 'initial';

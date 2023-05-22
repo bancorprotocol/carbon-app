@@ -49,7 +49,7 @@ export const useCreateStrategy = () => {
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
   const [strategyStatus, setStrategyStatus] =
-    useState<StrategyTxStatus>('none');
+    useState<StrategyTxStatus>('initial');
 
   const mutation = useCreateStrategyQuery();
 
@@ -118,7 +118,7 @@ export const useCreateStrategy = () => {
               setStrategyStatus,
               strategyEventData,
             }),
-          onClose: () => setStrategyStatus('none'),
+          onClose: () => setStrategyStatus('initial'),
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,

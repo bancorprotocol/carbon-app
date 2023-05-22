@@ -71,8 +71,9 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         <Button
           onClick={handleOnActionClick}
           disabled={isCtaDisabled}
+          loading={isCtaDisabled}
           className="mt-32"
-          variant="white"
+          variant={isCtaDisabled ? 'black' : 'white'}
           size="lg"
           fullWidth
         >

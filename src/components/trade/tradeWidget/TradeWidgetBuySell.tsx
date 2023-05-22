@@ -264,6 +264,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         disabled={
           !hasEnoughLiquidity || !maxSourceAmountQuery.data || tradeInProcess
         }
+        loading={tradeInProcess}
         onClick={handleTradeClick}
         variant={buy ? 'success' : 'error'}
         fullWidth

@@ -19,7 +19,7 @@ export const useUpdateStrategy = () => {
   const cache = useQueryClient();
   const navigate = useNavigate<MyLocationGenerics>();
   const [strategyStatus, setStrategyStatus] =
-    useState<StrategyTxStatus>('none');
+    useState<StrategyTxStatus>('initial');
 
   const isCtaDisabled =
     strategyStatus === 'processing' ||
@@ -35,7 +35,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in update strategy: missing data ');
     }
 
-    setStrategyStatus('processing');
+    setStrategyStatus('waitingForConfirmation');
 
     updateMutation.mutate(
       {
@@ -50,19 +50,24 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          setStrategyStatus('processing');
+          setTimeout(() => {
+            setStrategyStatus('initial');
+            successEventsCb?.();
+          }, 1500);
+
           dispatchNotification('pauseStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          setStrategyStatus('confirmed');
 
-          successEventsCb?.();
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
         },
         onError: (e) => {
+          setStrategyStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -79,7 +84,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in renew strategy: missing data ');
     }
 
-    setStrategyStatus('processing');
+    setStrategyStatus('waitingForConfirmation');
 
     updateMutation.mutate(
       {
@@ -94,15 +99,16 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          setStrategyStatus('processing');
+          setTimeout(() => {
+            navigate({ to: PathNames.strategies });
+            setStrategyStatus('initial');
+          }, 1500);
+
           dispatchNotification('renewStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-
-          setTimeout(() => {
-            setStrategyStatus('confirmed');
-            navigate({ to: PathNames.strategies });
-          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -111,6 +117,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setStrategyStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -127,7 +134,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in change rates strategy: missing data ');
     }
 
-    setStrategyStatus('processing');
+    setStrategyStatus('waitingForConfirmation');
 
     updateMutation.mutate(
       {
@@ -142,15 +149,16 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          setStrategyStatus('processing');
+          setTimeout(() => {
+            navigate({ to: PathNames.strategies });
+            setStrategyStatus('initial');
+          }, 1500);
+
           dispatchNotification('changeRatesStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-
-          setTimeout(() => {
-            setStrategyStatus('confirmed');
-            navigate({ to: PathNames.strategies });
-          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -159,6 +167,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setStrategyStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -177,7 +186,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in withdraw strategy budget: missing data ');
     }
 
-    setStrategyStatus('processing');
+    setStrategyStatus('waitingForConfirmation');
     updateMutation.mutate(
       {
         id,
@@ -191,15 +200,16 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          setStrategyStatus('processing');
+          setTimeout(() => {
+            navigate({ to: PathNames.strategies });
+            setStrategyStatus('initial');
+          }, 1500);
+
           dispatchNotification('withdrawStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-
-          setTimeout(() => {
-            setStrategyStatus('confirmed');
-            navigate({ to: PathNames.strategies });
-          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -208,6 +218,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setStrategyStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -226,7 +237,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in deposit strategy budget: missing data');
     }
 
-    setStrategyStatus('processing');
+    setStrategyStatus('waitingForConfirmation');
     updateMutation.mutate(
       {
         id,
@@ -240,15 +251,16 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          setStrategyStatus('processing');
+          setTimeout(() => {
+            navigate({ to: PathNames.strategies });
+            setStrategyStatus('initial');
+          }, 1500);
+
           dispatchNotification('depositStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-
-          setTimeout(() => {
-            setStrategyStatus('confirmed');
-            navigate({ to: PathNames.strategies });
-          }, 2000);
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -257,6 +269,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setStrategyStatus('initial');
           console.error('update mutation failed', e);
         },
       }

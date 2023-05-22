@@ -93,8 +93,7 @@ export const EditStrategyPricesContent = ({
     } = {
       waitingForConfirmation: 'Waiting For Confirmation',
       processing: 'Processing',
-      confirmed: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
-      none: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
+      initial: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
     };
 
     return ctaButtonTextByStrategyTxStatus[strategyStatus];

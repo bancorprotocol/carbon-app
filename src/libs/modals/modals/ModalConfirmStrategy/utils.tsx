@@ -27,7 +27,11 @@ export const getModalDataByType = (
         content:
           'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
         actionButton: `${
-          strategyStatus === 'processing' ? 'Processing' : 'Pause Strategy'
+          strategyStatus === 'processing'
+            ? 'Processing'
+            : strategyStatus === 'waitingForConfirmation'
+            ? 'Waiting for confirmation'
+            : 'Pause Strategy'
         }`,
       };
     case 'delete':
@@ -46,7 +50,11 @@ export const getModalDataByType = (
           </div>
         ),
         actionButton: `${
-          strategyStatus === 'processing' ? 'Processing' : 'Delete Strategy'
+          strategyStatus === 'processing'
+            ? 'Processing'
+            : strategyStatus === 'waitingForConfirmation'
+            ? 'Waiting for confirmation'
+            : 'Delete Strategy'
         }`,
         variant: 'error',
       };

@@ -26,7 +26,7 @@ export const useDeleteStrategy = () => {
       throw new Error('error in delete strategy: missing data ');
     }
 
-    setStrategyStatus('processing');
+    setStrategyStatus('waitingForConfirmation');
 
     deleteMutation.mutate(
       {
@@ -34,14 +34,16 @@ export const useDeleteStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          dispatchNotification('deleteStrategy', { txHash: tx.hash });
+          setStrategyStatus('processing');
+          setTimeout(() => {
+            setStrategyStatus('initial');
+            successEventsCb?.();
+          }, 2000);
 
+          dispatchNotification('deleteStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          setStrategyStatus('confirmed');
-
-          successEventsCb?.();
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -49,6 +51,7 @@ export const useDeleteStrategy = () => {
           console.log('tx confirmed');
         },
         onError: (e) => {
+          setStrategyStatus('initial');
           console.error('delete mutation failed', e);
         },
       }
