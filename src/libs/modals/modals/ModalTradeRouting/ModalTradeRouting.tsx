@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Action } from 'libs/sdk';
@@ -10,7 +11,6 @@ import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useMo
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
-import { useState } from 'react';
 
 export type ModalTradeRoutingData = {
   source: Token;

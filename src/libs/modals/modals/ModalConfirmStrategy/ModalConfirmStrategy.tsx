@@ -38,22 +38,29 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   const handleOnActionClick = () => {
     switch (type) {
       case 'pause':
-        pauseStrategy(strategy, () => {
-          carbonEvents.strategyEdit.strategyPause({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
-          closeModal(id);
-        });
+        pauseStrategy(
+          strategy,
+          () => {
+            carbonEvents.strategyEdit.strategyPause({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            });
+          },
+          () => closeModal(id)
+        );
         break;
       case 'delete':
-        deleteStrategy(strategy, setStrategyStatus, () => {
-          carbonEvents.strategyEdit.strategyDelete({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
-          closeModal(id);
-        });
+        deleteStrategy(
+          strategy,
+          setStrategyStatus,
+          () => {
+            carbonEvents.strategyEdit.strategyDelete({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            });
+          },
+          () => closeModal(id)
+        );
         break;
     }
   };

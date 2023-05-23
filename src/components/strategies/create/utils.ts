@@ -5,9 +5,12 @@ import {
   TxStatus,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
-import { PathNames } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
+import { Dispatch, SetStateAction } from 'react';
+import { MyLocationGenerics } from 'components/trade/useTradeTokens';
+import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 
 export const handleStrategySettings = (
   strategySettings?: StrategySettings,
@@ -90,11 +93,7 @@ export const createStrategyAction = async ({
     },
     {
       onSuccess: async (tx) => {
-        setStrategyStatus('processing');
-        setTimeout(() => {
-          navigate({ to: PathNames.strategies });
-          setStrategyStatus('initial');
-        }, 1500);
+        handleStrategyStatusAndRedirectToOverview(setStrategyStatus, navigate);
 
         dispatchNotification('createStrategy', { txHash: tx.hash });
         if (!tx) return;
@@ -116,6 +115,17 @@ export const createStrategyAction = async ({
       },
     }
   );
+};
+
+export const handleStrategyStatusAndRedirectToOverview = (
+  setStrategyStatus: Dispatch<SetStateAction<TxStatus>>,
+  navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
+) => {
+  setStrategyStatus('processing');
+  setTimeout(() => {
+    navigate && navigate({ to: PathNames.strategies });
+    setStrategyStatus('initial');
+  }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
 export const checkErrors = (

@@ -7,6 +7,7 @@ import {
 } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { Dispatch, SetStateAction } from 'react';
+import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { TxStatus } from './create/types';
 
 export const useDeleteStrategy = () => {
@@ -18,7 +19,8 @@ export const useDeleteStrategy = () => {
   const deleteStrategy = async (
     strategy: Strategy,
     setStrategyStatus: Dispatch<SetStateAction<TxStatus>>,
-    successEventsCb?: () => void
+    successEventsCb?: () => void,
+    beforeTxSuccessCb?: () => void
   ) => {
     const { base, quote, id } = strategy;
 
@@ -36,9 +38,9 @@ export const useDeleteStrategy = () => {
         onSuccess: async (tx) => {
           setStrategyStatus('processing');
           setTimeout(() => {
+            beforeTxSuccessCb?.();
             setStrategyStatus('initial');
-            successEventsCb?.();
-          }, 1500);
+          }, ONE_AND_A_HALF_SECONDS_IN_MS);
 
           dispatchNotification('deleteStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -49,6 +51,7 @@ export const useDeleteStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           setStrategyStatus('initial');

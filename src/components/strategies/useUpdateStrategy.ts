@@ -7,10 +7,12 @@ import {
   useQueryClient,
   useUpdateStrategyQuery,
 } from 'libs/queries';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
+import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { TxStatus } from './create/types';
+import { handleStrategyStatusAndRedirectToOverview } from './create/utils';
 
 export const useUpdateStrategy = () => {
   const { user } = useWeb3();
@@ -26,7 +28,8 @@ export const useUpdateStrategy = () => {
 
   const pauseStrategy = async (
     strategy: Strategy,
-    successEventsCb?: () => void
+    successEventsCb?: () => void,
+    beforeTxSuccessCb?: () => void
   ) => {
     const { base, quote, encoded, id } = strategy;
 
@@ -51,9 +54,9 @@ export const useUpdateStrategy = () => {
         onSuccess: async (tx) => {
           setStrategyStatus('processing');
           setTimeout(() => {
+            beforeTxSuccessCb?.();
             setStrategyStatus('initial');
-            successEventsCb?.();
-          }, 1500);
+          }, ONE_AND_A_HALF_SECONDS_IN_MS);
 
           dispatchNotification('pauseStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -64,6 +67,7 @@ export const useUpdateStrategy = () => {
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
           setStrategyStatus('initial');
@@ -98,11 +102,10 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          setStrategyStatus('processing');
-          setTimeout(() => {
-            navigate({ to: PathNames.strategies });
-            setStrategyStatus('initial');
-          }, 1500);
+          handleStrategyStatusAndRedirectToOverview(
+            setStrategyStatus,
+            navigate
+          );
 
           dispatchNotification('renewStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -148,11 +151,10 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          setStrategyStatus('processing');
-          setTimeout(() => {
-            navigate({ to: PathNames.strategies });
-            setStrategyStatus('initial');
-          }, 1500);
+          handleStrategyStatusAndRedirectToOverview(
+            setStrategyStatus,
+            navigate
+          );
 
           dispatchNotification('changeRatesStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -199,11 +201,10 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          setStrategyStatus('processing');
-          setTimeout(() => {
-            navigate({ to: PathNames.strategies });
-            setStrategyStatus('initial');
-          }, 1500);
+          handleStrategyStatusAndRedirectToOverview(
+            setStrategyStatus,
+            navigate
+          );
 
           dispatchNotification('withdrawStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -250,11 +251,10 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          setStrategyStatus('processing');
-          setTimeout(() => {
-            navigate({ to: PathNames.strategies });
-            setStrategyStatus('initial');
-          }, 1500);
+          handleStrategyStatusAndRedirectToOverview(
+            setStrategyStatus,
+            navigate
+          );
 
           dispatchNotification('depositStrategy', { txHash: tx.hash });
           if (!tx) return;

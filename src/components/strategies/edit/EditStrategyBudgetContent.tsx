@@ -12,7 +12,7 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { getCtaButtonText } from './utils';
+import { getCtaButtonTextStrategyBudget } from './utils';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -191,7 +191,7 @@ export const EditStrategyBudgetContent = ({
         size="lg"
         fullWidth
       >
-        {getCtaButtonText(type, strategyStatus)}
+        {getCtaButtonTextStrategyBudget(type, strategyStatus)}
       </Button>
       <Button
         onClick={() => back()}

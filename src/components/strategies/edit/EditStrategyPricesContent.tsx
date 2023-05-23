@@ -7,9 +7,9 @@ import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
-import { TxStatus } from '../create/types';
+import { getCtaButtonTextEditPrices } from './utils';
 
-type EditStrategyPrices = 'editPrices' | 'renew';
+export type EditStrategyPrices = 'editPrices' | 'renew';
 
 type EditStrategyPricesContentProps = {
   type: EditStrategyPrices;
@@ -87,18 +87,6 @@ export const EditStrategyPricesContent = ({
       : +order.price > 0;
   };
 
-  const getCtaButtonText = (type: EditStrategyPrices) => {
-    const ctaButtonTextByTxStatus: {
-      [key in TxStatus]: string;
-    } = {
-      waitingForConfirmation: 'Waiting or Confirmation',
-      processing: 'Processing',
-      initial: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
-    };
-
-    return ctaButtonTextByTxStatus[strategyStatus];
-  };
-
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -128,7 +116,7 @@ export const EditStrategyPricesContent = ({
         size="lg"
         fullWidth
       >
-        {getCtaButtonText(type)}
+        {getCtaButtonTextEditPrices(type, strategyStatus)}
       </Button>
       <Button
         onClick={() => back()}

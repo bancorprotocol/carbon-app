@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
@@ -16,7 +16,6 @@ import {
   handleAfterConfirmationEvent,
   handleOnRequestEvent,
 } from './utils';
-import { TxStatus } from 'components/strategies/create/types';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -27,8 +26,6 @@ export type ModalCreateConfirmData = {
   eventData?: (StrategyEventType | TradeEventType) &
     TokenApprovalType &
     TransactionConfirmationType;
-  txStatus?: TxStatus;
-  setTxStatus?: Dispatch<SetStateAction<TxStatus>>;
 };
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
