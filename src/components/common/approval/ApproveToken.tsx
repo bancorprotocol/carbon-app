@@ -42,7 +42,7 @@ export const ApproveToken: FC<Props> = ({
   const [txBusy, setTxBusy] = useState(false);
   const [txSuccess, setTxSuccess] = useState(false);
 
-  const onApprove = async (isRevoked = false) => {
+  const onApprove = async () => {
     if (!data || !token) {
       return console.error('No data loaded');
     }
@@ -50,18 +50,20 @@ export const ApproveToken: FC<Props> = ({
     await mutation.mutate(
       { ...data, isLimited },
       {
-        onSuccess: async (tx) => {
-          if (isRevoked) {
+        onSuccess: async (txArr) => {
+          const approveTx = txArr.length === 2 ? txArr[1] : txArr[0];
+          if (txArr.length === 2) {
+            const [revokeTx] = txArr;
             dispatchNotification('revoke', {
-              txHash: tx.hash,
+              txHash: revokeTx.hash,
             });
           }
           dispatchNotification('approve', {
             symbol: token.symbol,
-            txHash: tx.hash,
+            txHash: approveTx.hash,
             limited: isLimited,
           });
-          await tx.wait();
+          await approveTx.wait();
           await cache.refetchQueries({
             queryKey: QueryKey.approval(user!, data.address, data.spender),
           });
@@ -207,7 +209,7 @@ export const ApproveToken: FC<Props> = ({
 
               <Button
                 variant={'white'}
-                onClick={() => onApprove(!!data.nullApprovalRequired)}
+                onClick={onApprove}
                 size={'sm'}
                 className={'px-10 text-14'}
               >

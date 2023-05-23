@@ -96,14 +96,21 @@ export const useSetUserApproval = () => {
         address.toLowerCase()
       );
 
+      let revokeTx;
+
       if (isNullApprovalContract) {
         const allowanceWei = await Token(address).read.allowance(user, spender);
         if (allowanceWei.gt(0)) {
-          const tx = await Token(address).write.approve(spender, '0');
-          await tx.wait();
+          revokeTx = await Token(address).write.approve(spender, '0');
+          await revokeTx.wait();
         }
       }
-      return Token(address).write.approve(spender, amountWei);
+      const approveTx = await Token(address).write.approve(spender, amountWei);
+      if (revokeTx) {
+        return [revokeTx, approveTx];
+      }
+
+      return [approveTx];
     }
   );
 };
