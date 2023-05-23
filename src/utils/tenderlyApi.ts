@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { loadEnv } from 'vite';
+
+const env = loadEnv('', process.cwd(), '');
 
 const projectUrl = `account/bancor/project/frontend-forks`;
 const e2eTestBaseForkId = '5ac3ffc6-abcd-4fbd-8430-069d927cbff9';
@@ -7,7 +10,7 @@ const defaultNewForkName = 'e2e-disposable';
 const axiosOnTenderly = axios.create({
   baseURL: 'https://api.tenderly.co/api/v1',
   headers: {
-    'X-Access-Key': import.meta.env.VITE_TENDERLY_ACCESS_KEY || '',
+    'X-Access-Key': env.VITE_TENDERLY_ACCESS_KEY || '',
     'Content-Type': 'application/json',
   },
 });
@@ -27,3 +30,5 @@ export const duplicateFork = async (
 export const deleteFork = async (forkId: string) => {
   return axiosOnTenderly.delete(`${projectUrl}/fork/${forkId}`);
 };
+
+export {};

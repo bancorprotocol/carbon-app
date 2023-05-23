@@ -7,7 +7,6 @@ async function globalSetup(config: FullConfig) {
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(`${baseURL}/debug`);
-  await page.getByRole('button', { name: 'Accept All Cookies' }).click();
 
   try {
     forkId = await duplicateFork();
