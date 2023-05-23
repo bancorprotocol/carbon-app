@@ -5,6 +5,7 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const InputRange: FC<{
   min: string;
@@ -122,11 +123,12 @@ export const InputRange: FC<{
         </div>
       </div>
       <div
-        className={`mt-10 h-16 text-center text-12 text-red ${
+        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
           !error ? 'invisible' : ''
         }`}
       >
-        {error ? error : ''}
+        <IconWarning className="h-12 w-12" />
+        <div>{error ? error : ''}</div>
       </div>
     </div>
   );
