@@ -19,10 +19,7 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
   const origin = request.headers.get('origin');
   if (origin === 'http://localhost:3000') {
     response.headers.set('Access-Control-Max-Age', '86400');
-    response.headers.set(
-      'Access-Control-Allow-Origin',
-      'http://localhost:3000'
-    );
+    response.headers.set('Access-Control-Allow-Origin', '*');
   }
 
   // Validate API key
