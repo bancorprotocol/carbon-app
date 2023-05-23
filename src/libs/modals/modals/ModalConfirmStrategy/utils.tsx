@@ -16,7 +16,7 @@ export type MutateModalContentData = {
 
 export const getModalDataByType = (
   type: 'pause' | 'delete',
-  strategyStatus: TxStatus
+  strategyTxStatus: TxStatus
 ): MutateModalContentData => {
   switch (type) {
     case 'pause':
@@ -27,9 +27,9 @@ export const getModalDataByType = (
         content:
           'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
         actionButton: `${
-          strategyStatus === 'processing'
+          strategyTxStatus === 'processing'
             ? 'Processing'
-            : strategyStatus === 'waitingForConfirmation'
+            : strategyTxStatus === 'waitingForConfirmation'
             ? 'Waiting for confirmation'
             : 'Pause Strategy'
         }`,
@@ -50,9 +50,9 @@ export const getModalDataByType = (
           </div>
         ),
         actionButton: `${
-          strategyStatus === 'processing'
+          strategyTxStatus === 'processing'
             ? 'Processing'
-            : strategyStatus === 'waitingForConfirmation'
+            : strategyTxStatus === 'waitingForConfirmation'
             ? 'Waiting for confirmation'
             : 'Delete Strategy'
         }`,

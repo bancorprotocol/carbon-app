@@ -20,11 +20,11 @@ export const useUpdateStrategy = () => {
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
   const navigate = useNavigate<MyLocationGenerics>();
-  const [strategyStatus, setStrategyStatus] = useState<TxStatus>('initial');
+  const [strategyTxStatus, setStrategyTxStatus] = useState<TxStatus>('initial');
 
   const isCtaDisabled =
-    strategyStatus === 'processing' ||
-    strategyStatus === 'waitingForConfirmation';
+    strategyTxStatus === 'processing' ||
+    strategyTxStatus === 'waitingForConfirmation';
 
   const pauseStrategy = async (
     strategy: Strategy,
@@ -37,7 +37,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in update strategy: missing data ');
     }
 
-    setStrategyStatus('waitingForConfirmation');
+    setStrategyTxStatus('waitingForConfirmation');
 
     updateMutation.mutate(
       {
@@ -52,10 +52,10 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          setStrategyStatus('processing');
+          setStrategyTxStatus('processing');
           setTimeout(() => {
             beforeTxSuccessCb?.();
-            setStrategyStatus('initial');
+            setStrategyTxStatus('initial');
           }, ONE_AND_A_HALF_SECONDS_IN_MS);
 
           dispatchNotification('pauseStrategy', { txHash: tx.hash });
@@ -70,7 +70,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
-          setStrategyStatus('initial');
+          setStrategyTxStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -87,7 +87,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in renew strategy: missing data ');
     }
 
-    setStrategyStatus('waitingForConfirmation');
+    setStrategyTxStatus('waitingForConfirmation');
 
     updateMutation.mutate(
       {
@@ -103,7 +103,7 @@ export const useUpdateStrategy = () => {
       {
         onSuccess: async (tx) => {
           handleStrategyStatusAndRedirectToOverview(
-            setStrategyStatus,
+            setStrategyTxStatus,
             navigate
           );
 
@@ -119,7 +119,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
-          setStrategyStatus('initial');
+          setStrategyTxStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -136,7 +136,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in change rates strategy: missing data ');
     }
 
-    setStrategyStatus('waitingForConfirmation');
+    setStrategyTxStatus('waitingForConfirmation');
 
     updateMutation.mutate(
       {
@@ -152,7 +152,7 @@ export const useUpdateStrategy = () => {
       {
         onSuccess: async (tx) => {
           handleStrategyStatusAndRedirectToOverview(
-            setStrategyStatus,
+            setStrategyTxStatus,
             navigate
           );
 
@@ -168,7 +168,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
-          setStrategyStatus('initial');
+          setStrategyTxStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -187,7 +187,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in withdraw strategy budget: missing data ');
     }
 
-    setStrategyStatus('waitingForConfirmation');
+    setStrategyTxStatus('waitingForConfirmation');
     updateMutation.mutate(
       {
         id,
@@ -202,7 +202,7 @@ export const useUpdateStrategy = () => {
       {
         onSuccess: async (tx) => {
           handleStrategyStatusAndRedirectToOverview(
-            setStrategyStatus,
+            setStrategyTxStatus,
             navigate
           );
 
@@ -218,7 +218,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
-          setStrategyStatus('initial');
+          setStrategyTxStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -237,7 +237,7 @@ export const useUpdateStrategy = () => {
       throw new Error('error in deposit strategy budget: missing data');
     }
 
-    setStrategyStatus('waitingForConfirmation');
+    setStrategyTxStatus('waitingForConfirmation');
     updateMutation.mutate(
       {
         id,
@@ -252,7 +252,7 @@ export const useUpdateStrategy = () => {
       {
         onSuccess: async (tx) => {
           handleStrategyStatusAndRedirectToOverview(
-            setStrategyStatus,
+            setStrategyTxStatus,
             navigate
           );
 
@@ -268,7 +268,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
-          setStrategyStatus('initial');
+          setStrategyTxStatus('initial');
           console.error('update mutation failed', e);
         },
       }
@@ -281,8 +281,8 @@ export const useUpdateStrategy = () => {
     changeRateStrategy,
     withdrawBudget,
     depositBudget,
-    strategyStatus,
-    setStrategyStatus,
+    strategyTxStatus,
+    setStrategyTxStatus,
     isCtaDisabled,
   };
 };

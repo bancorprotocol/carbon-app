@@ -65,14 +65,14 @@ export const createStrategyAction = async ({
   mutation,
   dispatchNotification,
   navigate,
-  setStrategyStatus,
+  setStrategyTxStatus,
   strategyEventData,
 }: CreateStrategyActionProps) => {
   if (!base || !quote || !user) {
     throw new Error('error in create strategy: missing data ');
   }
 
-  setStrategyStatus('waitingForConfirmation');
+  setStrategyTxStatus('waitingForConfirmation');
 
   mutation.mutate(
     {
@@ -93,7 +93,10 @@ export const createStrategyAction = async ({
     },
     {
       onSuccess: async (tx) => {
-        handleStrategyStatusAndRedirectToOverview(setStrategyStatus, navigate);
+        handleStrategyStatusAndRedirectToOverview(
+          setStrategyTxStatus,
+          navigate
+        );
 
         dispatchNotification('createStrategy', { txHash: tx.hash });
         if (!tx) return;
@@ -110,7 +113,7 @@ export const createStrategyAction = async ({
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e) => {
-        setStrategyStatus('initial');
+        setStrategyTxStatus('initial');
         console.error('create mutation failed', e);
       },
     }
@@ -118,13 +121,13 @@ export const createStrategyAction = async ({
 };
 
 export const handleStrategyStatusAndRedirectToOverview = (
-  setStrategyStatus: Dispatch<SetStateAction<TxStatus>>,
+  setStrategyTxStatus: Dispatch<SetStateAction<TxStatus>>,
   navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
 ) => {
-  setStrategyStatus('processing');
+  setStrategyTxStatus('processing');
   setTimeout(() => {
     navigate && navigate({ to: PathNames.strategies });
-    setStrategyStatus('initial');
+    setStrategyTxStatus('initial');
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 

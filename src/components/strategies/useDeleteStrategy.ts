@@ -18,7 +18,7 @@ export const useDeleteStrategy = () => {
 
   const deleteStrategy = async (
     strategy: Strategy,
-    setStrategyStatus: Dispatch<SetStateAction<TxStatus>>,
+    setStrategyTxStatus: Dispatch<SetStateAction<TxStatus>>,
     successEventsCb?: () => void,
     beforeTxSuccessCb?: () => void
   ) => {
@@ -28,7 +28,7 @@ export const useDeleteStrategy = () => {
       throw new Error('error in delete strategy: missing data ');
     }
 
-    setStrategyStatus('waitingForConfirmation');
+    setStrategyTxStatus('waitingForConfirmation');
 
     deleteMutation.mutate(
       {
@@ -36,10 +36,10 @@ export const useDeleteStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          setStrategyStatus('processing');
+          setStrategyTxStatus('processing');
           setTimeout(() => {
             beforeTxSuccessCb?.();
-            setStrategyStatus('initial');
+            setStrategyTxStatus('initial');
           }, ONE_AND_A_HALF_SECONDS_IN_MS);
 
           dispatchNotification('deleteStrategy', { txHash: tx.hash });
@@ -54,7 +54,7 @@ export const useDeleteStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
-          setStrategyStatus('initial');
+          setStrategyTxStatus('initial');
           console.error('delete mutation failed', e);
         },
       }

@@ -22,7 +22,7 @@ export const CreateStrategyOrders = ({
   strategyDirection,
   strategyType,
   selectedStrategySettings,
-  strategyStatus,
+  strategyTxStatus,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
   const strategyEventData = useStrategyEventData({
@@ -103,7 +103,7 @@ export const CreateStrategyOrders = ({
           disabled={isCTAdisabled}
           loading={isCTAdisabled}
         >
-          {user ? ctaButtonTextByTxStatus[strategyStatus] : 'Connect Wallet'}
+          {user ? ctaButtonTextByTxStatus[strategyTxStatus] : 'Connect Wallet'}
         </Button>
       </m.div>
     </>

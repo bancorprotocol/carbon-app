@@ -48,7 +48,7 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
-  const [strategyStatus, setStrategyStatus] = useState<TxStatus>('initial');
+  const [strategyTxStatus, setStrategyTxStatus] = useState<TxStatus>('initial');
 
   const mutation = useCreateStrategyQuery();
 
@@ -100,7 +100,7 @@ export const useCreateStrategy = () => {
 
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired) {
-        setStrategyStatus('waitingForConfirmation');
+        setStrategyTxStatus('waitingForConfirmation');
         openModal('txConfirm', {
           approvalTokens,
           onConfirm: () =>
@@ -114,10 +114,10 @@ export const useCreateStrategy = () => {
               dispatchNotification,
               cache,
               navigate,
-              setStrategyStatus,
+              setStrategyTxStatus,
               strategyEventData,
             }),
-          onClose: () => setStrategyStatus('initial'),
+          onClose: () => setStrategyTxStatus('initial'),
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
@@ -140,7 +140,7 @@ export const useCreateStrategy = () => {
           dispatchNotification,
           cache,
           navigate,
-          setStrategyStatus,
+          setStrategyTxStatus,
           strategyEventData,
         });
       }
@@ -221,8 +221,8 @@ export const useCreateStrategy = () => {
       mutation.isLoading ||
       !isOrder0Valid ||
       !isOrder1Valid ||
-      strategyStatus === 'processing' ||
-      strategyStatus === 'waitingForConfirmation'
+      strategyTxStatus === 'processing' ||
+      strategyTxStatus === 'waitingForConfirmation'
     );
   }, [
     approval.isError,
@@ -236,7 +236,7 @@ export const useCreateStrategy = () => {
     order1.max,
     order1.min,
     order1.price,
-    strategyStatus,
+    strategyTxStatus,
     user,
   ]);
 
@@ -338,6 +338,6 @@ export const useCreateStrategy = () => {
     showTypeMenu,
     selectedStrategySettings,
     setSelectedStrategySettings,
-    strategyStatus,
+    strategyTxStatus,
   };
 };

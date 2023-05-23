@@ -20,7 +20,7 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
-  const { renewStrategy, changeRateStrategy, isCtaDisabled, strategyStatus } =
+  const { renewStrategy, changeRateStrategy, isCtaDisabled, strategyTxStatus } =
     useUpdateStrategy();
 
   const order0 = useOrder(
@@ -116,7 +116,7 @@ export const EditStrategyPricesContent = ({
         size="lg"
         fullWidth
       >
-        {getCtaButtonTextEditPrices(type, strategyStatus)}
+        {getCtaButtonTextEditPrices(type, strategyTxStatus)}
       </Button>
       <Button
         onClick={() => back()}

@@ -44,7 +44,7 @@ export type CreateStrategyActionProps = Pick<
   >;
   dispatchNotification: DispatchNotification;
   navigate: ReturnType<typeof useNavigate<StrategyCreateLocationGenerics>>;
-  setStrategyStatus: Dispatch<SetStateAction<TxStatus>>;
+  setStrategyTxStatus: Dispatch<SetStateAction<TxStatus>>;
   strategyEventData: StrategyEventType;
 };
 

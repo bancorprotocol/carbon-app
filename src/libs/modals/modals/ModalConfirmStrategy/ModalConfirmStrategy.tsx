@@ -22,10 +22,14 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { pauseStrategy, strategyStatus, setStrategyStatus, isCtaDisabled } =
-    useUpdateStrategy();
+  const {
+    pauseStrategy,
+    strategyTxStatus,
+    setStrategyTxStatus,
+    isCtaDisabled,
+  } = useUpdateStrategy();
   const { deleteStrategy } = useDeleteStrategy();
-  const data = getModalDataByType(type, strategyStatus);
+  const data = getModalDataByType(type, strategyTxStatus);
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
   const strategyEventData = useStrategyEventData({
@@ -52,7 +56,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
       case 'delete':
         deleteStrategy(
           strategy,
-          setStrategyStatus,
+          setStrategyTxStatus,
           () => {
             carbonEvents.strategyEdit.strategyDelete({
               ...strategyEventData,

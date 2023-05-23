@@ -29,8 +29,8 @@ export const EditStrategyBudgetContent = ({
     withdrawBudget,
     depositBudget,
     isCtaDisabled,
-    strategyStatus,
-    setStrategyStatus,
+    strategyTxStatus,
+    setStrategyTxStatus,
   } = useUpdateStrategy();
 
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
@@ -106,11 +106,11 @@ export const EditStrategyBudgetContent = ({
       depositOrWithdrawFunds();
     } else {
       if (approval.approvalRequired) {
-        setStrategyStatus('waitingForConfirmation');
+        setStrategyTxStatus('waitingForConfirmation');
         openModal('txConfirm', {
           approvalTokens: approval.tokens,
           onConfirm: depositOrWithdrawFunds,
-          onClose: () => setStrategyStatus('initial'),
+          onClose: () => setStrategyTxStatus('initial'),
           buttonLabel: `Confirm Deposit`,
           eventData: {
             ...strategyEventData,
@@ -191,7 +191,7 @@ export const EditStrategyBudgetContent = ({
         size="lg"
         fullWidth
       >
-        {getCtaButtonTextStrategyBudget(type, strategyStatus)}
+        {getCtaButtonTextStrategyBudget(type, strategyTxStatus)}
       </Button>
       <Button
         onClick={() => back()}
