@@ -5,7 +5,7 @@ import { EditStrategyPrices } from './EditStrategyPricesContent';
 export const ctaButtonTextByTxStatus: {
   [key in Exclude<TxStatus, 'initial'>]: string;
 } = {
-  waitingForConfirmation: 'Waiting or Confirmation',
+  waitingForConfirmation: 'Waiting for Confirmation',
   processing: 'Processing',
 };
 
