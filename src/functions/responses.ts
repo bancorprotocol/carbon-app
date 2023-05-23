@@ -37,6 +37,7 @@ export const buildOptionsResponse = (request: Request): Response => {
     return new Response(null, {
       headers: {
         Allow: 'GET, HEAD, POST, OPTIONS',
+        ...corsHeaders,
       },
     });
   }
