@@ -22,6 +22,9 @@ export const onRequest: PagesFunction<CFWorkerEnv> = async ({
     response.headers.set('Access-Control-Allow-Origin', '*');
   }
 
+  response.headers.set('Access-Control-Max-Age', '86400');
+  response.headers.set('Access-Control-Allow-Origin', '*');
+
   // Validate API key
   const authKey = request.headers.get('x-carbon-auth-key');
   if (authKey !== env.VITE_CARBON_API_KEY) {
