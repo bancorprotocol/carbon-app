@@ -8,6 +8,8 @@ import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock
 import { carbonEvents } from 'services/events';
 
 import { useStrategyEventData } from '../create/useStrategyEventData';
+import { useMemo } from 'react';
+import { checkIfOrdersOverlap } from '../utils';
 
 type EditStrategyPricesContentProps = {
   type: 'editPrices' | 'renew';
@@ -29,6 +31,11 @@ export const EditStrategyPricesContent = ({
       ? { ...strategy.order1, startRate: '', endRate: '' }
       : strategy.order1
   );
+
+  const isOrdersOverlap = useMemo(() => {
+    return checkIfOrdersOverlap(order0, order1);
+  }, [order0, order1]);
+
   const {
     history: { back },
   } = useLocation();
@@ -93,6 +100,7 @@ export const EditStrategyPricesContent = ({
         order={order0}
         balance={strategy.order0.balance}
         type={type}
+        isOrdersOverlap={isOrdersOverlap}
       />
       <EditStrategyPricesBuySellBlock
         base={strategy?.base}
@@ -100,6 +108,7 @@ export const EditStrategyPricesContent = ({
         order={order1}
         balance={strategy.order1.balance}
         type={type}
+        isOrdersOverlap={isOrdersOverlap}
       />
       <Button
         disabled={!isOrderValid(order0) || !isOrderValid(order1)}

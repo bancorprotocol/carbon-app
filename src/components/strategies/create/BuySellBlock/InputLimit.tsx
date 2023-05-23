@@ -2,9 +2,9 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { ChangeEvent, FC, FocusEvent } from 'react';
 import { carbonEvents } from 'services/events';
-
 import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const InputLimit: FC<{
   price: string;
@@ -59,10 +59,11 @@ export const InputLimit: FC<{
         <div className="font-mono text-12 text-white/60">{fiatAsString}</div>
       </div>
       <div
-        className={`mt-10 h-16 text-center text-12 text-red ${
+        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
           !error ? 'invisible' : ''
         }`}
       >
+        <IconWarning className="h-12 w-12" />
         {error ? error : ''}
       </div>
     </div>

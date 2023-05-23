@@ -10,6 +10,7 @@ import { PrivacyPage } from 'pages/privacy';
 
 export const externalLinks = {
   blog: 'http://blog.carbondefi.xyz',
+  faq: 'https://faq.carbondefi.xyz/',
   analytics: 'http://analytics.carbondefi.xyz',
   twitter: 'https://twitter.com/carbondefixyz',
   youtube: 'https://www.youtube.com/c/BancorProtocol',
