@@ -21,6 +21,7 @@ export const CreateStrategyOrders = ({
   strategyDirection,
   strategyType,
   selectedStrategySettings,
+  isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
   const strategyEventData = useStrategyEventData({
@@ -77,6 +78,7 @@ export const CreateStrategyOrders = ({
             tokenBalanceQuery={token1BalanceQuery}
             isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
             strategyType={strategyType}
+            isOrdersOverlap={isOrdersOverlap}
           />
         </m.div>
       )}
@@ -89,6 +91,7 @@ export const CreateStrategyOrders = ({
             tokenBalanceQuery={token0BalanceQuery}
             isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
             strategyType={strategyType}
+            isOrdersOverlap={isOrdersOverlap}
           />
         </m.div>
       )}

@@ -12,11 +12,12 @@ type EditStrategyPricesBuySellBlockProps = {
   balance?: string;
   buy?: boolean;
   type: EditTypes;
+  isOrdersOverlap: boolean;
 };
 
 export const EditStrategyPricesBuySellBlock: FC<
   EditStrategyPricesBuySellBlockProps
-> = ({ base, quote, balance, buy, order, type }) => {
+> = ({ base, quote, balance, buy, order, type, isOrdersOverlap }) => {
   return (
     <div
       className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-12 ${
@@ -32,6 +33,7 @@ export const EditStrategyPricesBuySellBlock: FC<
           balance,
           buy,
           order,
+          isOrdersOverlap,
           title: `${buy ? 'Buy' : 'Sell'} ${buy ? 'Low' : 'High'} ${
             base.symbol
           }`,
