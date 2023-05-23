@@ -96,7 +96,7 @@ export const useSetUserApproval = () => {
         address.toLowerCase()
       );
 
-      let revokeTx;
+      let revokeTx = undefined;
 
       if (isNullApprovalContract) {
         const allowanceWei = await Token(address).read.allowance(user, spender);
@@ -106,10 +106,10 @@ export const useSetUserApproval = () => {
         }
       }
       const approveTx = await Token(address).write.approve(spender, amountWei);
-      if (revokeTx) {
-        return [revokeTx, approveTx];
-      }
 
+      if (revokeTx) {
+        return [approveTx, revokeTx];
+      }
       return [approveTx];
     }
   );
