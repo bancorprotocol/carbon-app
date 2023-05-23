@@ -100,21 +100,13 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 
       <div className={'mt-20 flex w-full space-x-10'}>
         <Button
-          variant={'secondary'}
-          fullWidth
-          onClick={onCancel}
-          disabled={tradeInProcess}
-        >
-          Cancel
-        </Button>
-        <Button
           variant={tradeInProcess ? 'black' : 'white'}
           fullWidth
           onClick={handleCTAClick}
           disabled={disabledCTA || tradeInProcess}
           loading={tradeInProcess}
         >
-          {tradeInProcess ? 'Waiting For Confirmation' : 'Confirm'}
+          {tradeInProcess ? 'Waiting for Confirmation' : 'Confirm'}
         </Button>
       </div>
     </Modal>

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ApproveToken } from 'components/common/approval';
@@ -44,9 +44,6 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
 }) => {
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
-  const [txStatus, setTxStatus] = useState<TxStatus>('initial');
-  const isCtaDisabled =
-    txStatus === 'processing' || txStatus === 'waitingForConfirmation';
 
   useEffect(() => {
     handleConfirmationPopupViewEvent(eventData, context);
@@ -69,16 +66,14 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
             error={error}
             eventData={eventData}
             context={context}
-            setTxStatus={setTxStatus}
           />
         ))}
       </div>
       <Button
         size="lg"
-        variant={isCtaDisabled ? 'black' : 'white'}
+        variant={'white'}
         fullWidth
-        loading={isCtaDisabled}
-        disabled={approvalRequired || isCtaDisabled}
+        disabled={approvalRequired}
         onClick={async () => {
           handleOnRequestEvent(eventData, context);
           closeModal(id);
@@ -86,11 +81,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
           handleAfterConfirmationEvent(eventData, context);
         }}
       >
-        {txStatus === 'processing'
-          ? 'Processing'
-          : txStatus === 'waitingForConfirmation'
-          ? 'Waiting For Confirmation'
-          : buttonLabel}
+        {buttonLabel}
       </Button>
     </Modal>
   );

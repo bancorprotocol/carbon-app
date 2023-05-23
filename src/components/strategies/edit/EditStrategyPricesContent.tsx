@@ -91,7 +91,7 @@ export const EditStrategyPricesContent = ({
     const ctaButtonTextByTxStatus: {
       [key in TxStatus]: string;
     } = {
-      waitingForConfirmation: 'Waiting For Confirmation',
+      waitingForConfirmation: 'Waiting or Confirmation',
       processing: 'Processing',
       initial: `${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`,
     };

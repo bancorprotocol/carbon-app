@@ -38,7 +38,7 @@ export const useDeleteStrategy = () => {
           setTimeout(() => {
             setStrategyStatus('initial');
             successEventsCb?.();
-          }, 2000);
+          }, 1500);
 
           dispatchNotification('deleteStrategy', { txHash: tx.hash });
           if (!tx) return;

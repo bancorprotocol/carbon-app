@@ -135,7 +135,7 @@ export const checkErrors = (
 export const ctaButtonTextByTxStatus: {
   [key in TxStatus]: string;
 } = {
-  waitingForConfirmation: 'Waiting For Confirmation',
+  waitingForConfirmation: 'Waiting for Confirmation',
   processing: 'Processing',
   initial: 'Create Strategy',
 };
