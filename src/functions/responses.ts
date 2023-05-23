@@ -18,7 +18,7 @@ export const build403Response = (message = 'permission denied'): Response => {
 
 export const buildOptionsResponse = (request: Request): Response => {
   const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': 'http://localhost:3000',
     'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, x-carbon-auth-key',
   };
@@ -37,7 +37,6 @@ export const buildOptionsResponse = (request: Request): Response => {
     return new Response(null, {
       headers: {
         Allow: 'GET, HEAD, POST, OPTIONS',
-        ...corsHeaders,
       },
     });
   }
