@@ -101,6 +101,7 @@ export const useTradeAction = ({
           to: target.symbol,
         });
         onSuccess?.(tx.hash);
+        setTradeInProcess(false);
 
         void cache.invalidateQueries(
           QueryKey.approval(

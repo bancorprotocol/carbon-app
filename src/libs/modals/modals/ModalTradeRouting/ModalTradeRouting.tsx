@@ -34,7 +34,6 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     handleCTAClick,
     sourceFiatPrice,
     targetFiatPrice,
-    onCancel,
     totalSourceAmount,
     totalTargetAmount,
     disabledCTA,
