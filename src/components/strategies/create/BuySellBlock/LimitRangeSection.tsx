@@ -29,7 +29,7 @@ export const LimitRangeSection: FC<Props> = ({
   isOrdersOverlap,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
-  const tokenPriceQuery = useGetTokenPrice(buy ? base?.address : base?.address);
+  const tokenPriceQuery = useGetTokenPrice(base?.address);
   const { selectedFiatCurrency } = useFiatCurrency();
 
   const overlappingOrdersPricesMessage =
