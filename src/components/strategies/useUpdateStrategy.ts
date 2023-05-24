@@ -12,7 +12,7 @@ import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { TxStatus } from './create/types';
-import { handleStrategyStatusAndRedirectToOverview } from './create/utils';
+import { handleStrategyTxStatusAndRedirectToOverview } from './create/utils';
 
 export const useUpdateStrategy = () => {
   const { user } = useWeb3();
@@ -102,7 +102,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyStatusAndRedirectToOverview(
+          handleStrategyTxStatusAndRedirectToOverview(
             setStrategyTxStatus,
             navigate
           );
@@ -151,7 +151,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyStatusAndRedirectToOverview(
+          handleStrategyTxStatusAndRedirectToOverview(
             setStrategyTxStatus,
             navigate
           );
@@ -201,7 +201,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyStatusAndRedirectToOverview(
+          handleStrategyTxStatusAndRedirectToOverview(
             setStrategyTxStatus,
             navigate
           );
@@ -251,7 +251,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyStatusAndRedirectToOverview(
+          handleStrategyTxStatusAndRedirectToOverview(
             setStrategyTxStatus,
             navigate
           );

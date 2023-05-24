@@ -93,7 +93,7 @@ export const createStrategyAction = async ({
     },
     {
       onSuccess: async (tx) => {
-        handleStrategyStatusAndRedirectToOverview(
+        handleStrategyTxStatusAndRedirectToOverview(
           setStrategyTxStatus,
           navigate
         );
@@ -120,7 +120,7 @@ export const createStrategyAction = async ({
   );
 };
 
-export const handleStrategyStatusAndRedirectToOverview = (
+export const handleStrategyTxStatusAndRedirectToOverview = (
   setStrategyTxStatus: Dispatch<SetStateAction<TxStatus>>,
   navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
 ) => {
