@@ -1,13 +1,13 @@
 import { FC, ReactNode, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
+import { Token } from 'libs/tokens';
+import { useGetTokenPrice } from 'libs/queries';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { Token } from 'libs/tokens';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { useGetTokenPrice } from 'libs/queries';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 type Props = {
   base: Token;
@@ -45,13 +45,17 @@ export const LimitRangeSection: FC<Props> = ({
   };
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    const marketPrice = tokenPriceQuery.data?.[selectedFiatCurrency];
-    if (order.isRange) {
-      return new BigNumber(buy ? order.max : order.min)[buy ? 'gt' : 'lt'](
-        marketPrice || 0
-      );
+    const marketPrice = tokenPriceQuery.data?.[selectedFiatCurrency] || 0;
+
+    if (new BigNumber(marketPrice).gt(0)) {
+      if (order.isRange) {
+        return new BigNumber(buy ? order.max : order.min)[buy ? 'gt' : 'lt'](
+          marketPrice
+        );
+      }
+      return new BigNumber(order.price)[buy ? 'gt' : 'lt'](marketPrice);
     }
-    return new BigNumber(order.price)[buy ? 'gt' : 'lt'](marketPrice || 0);
+    return false;
   }, [
     buy,
     order.isRange,
@@ -129,18 +133,16 @@ export const LimitRangeSection: FC<Props> = ({
         />
       )}
       {isOrdersOverlap && !buy && (
-        <div
-          className={`!mt-4 flex items-center gap-10 font-mono text-12 text-warning-500`}
-        >
-          <IconWarning className="h-12 w-12" />
-          <div>{overlappingOrdersPricesMessage}</div>
-        </div>
+        <WarningMessageWithIcon
+          message={overlappingOrdersPricesMessage}
+          className="!mt-4"
+        />
       )}
       {isOrderAboveOrBelowMarketPrice && (
-        <div className="!mt-4 flex gap-10 font-mono text-12 text-warning-500">
-          <IconWarning className="h-12 w-12" />
-          <div>{warningMarketPriceMessage}</div>
-        </div>
+        <WarningMessageWithIcon
+          message={warningMarketPriceMessage}
+          className="!mt-4"
+        />
       )}
     </div>
   );
