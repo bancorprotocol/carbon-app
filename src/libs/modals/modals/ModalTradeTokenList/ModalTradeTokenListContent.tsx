@@ -81,6 +81,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
       </div>
 
       <div
+        id={'test'}
         ref={parentRef}
         style={{
           height: innerHeight - 242,
