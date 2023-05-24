@@ -69,6 +69,7 @@ export const useModalTradeRouting = ({
     onSuccess: () => {
       onSuccess();
       closeModal(id);
+      setTradeInProcess(false);
     },
   });
 
