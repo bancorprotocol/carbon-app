@@ -49,17 +49,16 @@ export const LimitRangeSection: FC<Props> = ({
       return new BigNumber(buy ? order.max : order.min)[buy ? 'gt' : 'lt'](
         marketPrice || 0
       );
-    } else {
-      return new BigNumber(order.price)[buy ? 'gt' : 'lt'](marketPrice || 0);
     }
+    return new BigNumber(order.price)[buy ? 'gt' : 'lt'](marketPrice || 0);
   }, [
-    tokenPriceQuery.data,
-    selectedFiatCurrency,
     buy,
     order.isRange,
     order.max,
     order.price,
     order.min,
+    tokenPriceQuery.data,
+    selectedFiatCurrency,
   ]);
 
   return (
