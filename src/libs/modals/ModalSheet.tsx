@@ -15,17 +15,6 @@ type Props = {
   onClose?: (id: string) => void;
 };
 
-const getSize = (size: 'sm' | 'md' | 'lg') => {
-  switch (size) {
-    case 'lg':
-      return 'max-w-[580px]';
-    case 'md':
-      return 'max-w-[480px]';
-    default:
-      return 'max-w-[380px]';
-  }
-};
-
 export const ModalSheet: FC<Props> = ({
   children,
   id,
@@ -42,8 +31,6 @@ export const ModalSheet: FC<Props> = ({
     onClose && onClose(id);
     closeModal(id);
   };
-
-  const sizeClass = getSize(size);
 
   return (
     <Overlay onClick={() => onCloseHandler(id)} className={'items-end'}>
