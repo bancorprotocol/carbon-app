@@ -43,12 +43,12 @@ export const StrategyBlockOrderStatus: FC<{
               <div className="flex flex-col gap-10">
                 <div className="text-14">Strategy Notification</div>
                 <div className="text-12 text-white/80">
-                  You can set notification to be informed every time some trade
-                  against your strategy.
+                  You can set a notification to be informed each time someone
+                  trades against your strategy.
                 </div>
                 <div className="text-12 text-white/80">
-                  It is a 3rd party service managed by{' '}
-                  <span className="font-weight-500">Hal.xyz</span>
+                  This is a third-party service managed by{' '}
+                  <span className="font-weight-500">hal.xyz</span>
                 </div>
                 <Button
                   className="mt-5 flex items-center justify-center"
