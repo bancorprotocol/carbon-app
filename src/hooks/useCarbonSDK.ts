@@ -15,7 +15,7 @@ import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { SupportedChainId } from 'libs/web3/web3.constants';
-import { carbonApiAxios } from 'utils/carbonApi';
+import { carbonApi } from 'utils/carbonApi';
 import { useModal } from 'hooks/useModal';
 
 const contractsConfig: ContractsConfig = {
@@ -91,7 +91,7 @@ export const useCarbonSDK = () => {
       const cacheData = lsService.getItem('sdkCompressedCacheData');
 
       const [isBlocked] = await Promise.all([
-        carbonApiAxios.get<boolean>('check'),
+        carbonApi.getCheck(),
         carbonSDK.init(
           RPC_URLS[SupportedChainId.MAINNET],
           contractsConfig,
@@ -103,11 +103,8 @@ export const useCarbonSDK = () => {
           Comlink.proxy(onPairAddedToCacheCallback)
         ),
       ]);
-      setCountryBlocked(isBlocked.data);
-      if (
-        isBlocked.data &&
-        !lsService.getItem('hasSeenRestrictedCountryModal')
-      ) {
+      setCountryBlocked(isBlocked);
+      if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
       }
       setIsInitialized(true);

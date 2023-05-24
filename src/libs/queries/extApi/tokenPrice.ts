@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
-import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { useStore } from 'store';
-import { carbonApiAxios } from 'utils/carbonApi';
+import { carbonApi } from 'utils/carbonApi';
 
 export const useGetTokenPrice = (address?: string) => {
   const {
@@ -12,18 +11,12 @@ export const useGetTokenPrice = (address?: string) => {
 
   return useQuery(
     QueryKey.tokenPrice(address!),
-    async () => {
-      const result = await carbonApiAxios.get<{ data: FiatPriceDict }>(
-        `marketrate/${address}`,
-        {
-          params: { convert: availableCurrencies.join(',') },
-        }
-      );
-
-      return result.data.data;
-    },
+    async () => carbonApi.getMarketRate(address!, availableCurrencies),
     {
-      enabled: !!address && availableCurrencies.length > 0,
+      enabled:
+        !!import.meta.env.VITE_CARBON_API_KEY &&
+        !!address &&
+        availableCurrencies.length > 0,
       refetchInterval: FIVE_MIN_IN_MS,
       staleTime: FIVE_MIN_IN_MS,
     }
