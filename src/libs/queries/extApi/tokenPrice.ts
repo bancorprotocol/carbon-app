@@ -13,7 +13,10 @@ export const useGetTokenPrice = (address?: string) => {
     QueryKey.tokenPrice(address!),
     async () => carbonApi.getMarketRate(address!, availableCurrencies),
     {
-      enabled: !!address && availableCurrencies.length > 0,
+      enabled:
+        !!import.meta.env.VITE_CARBON_API_KEY &&
+        !!address &&
+        availableCurrencies.length > 0,
       refetchInterval: FIVE_MIN_IN_MS,
       staleTime: FIVE_MIN_IN_MS,
     }
