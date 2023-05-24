@@ -1,4 +1,5 @@
 import { useLocation } from 'libs/routing';
+import { useMemo } from 'react';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
@@ -7,6 +8,7 @@ import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
+import { checkIfOrdersOverlap } from '../utils';
 import { getCtaButtonTextEditPrices } from './utils';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
@@ -33,6 +35,11 @@ export const EditStrategyPricesContent = ({
       ? { ...strategy.order1, startRate: '', endRate: '' }
       : strategy.order1
   );
+
+  const isOrdersOverlap = useMemo(() => {
+    return checkIfOrdersOverlap(order0, order1);
+  }, [order0, order1]);
+
   const {
     history: { back },
   } = useLocation();
@@ -97,6 +104,7 @@ export const EditStrategyPricesContent = ({
         order={order0}
         balance={strategy.order0.balance}
         type={type}
+        isOrdersOverlap={isOrdersOverlap}
       />
       <EditStrategyPricesBuySellBlock
         base={strategy?.base}
@@ -104,6 +112,7 @@ export const EditStrategyPricesContent = ({
         order={order1}
         balance={strategy.order1.balance}
         type={type}
+        isOrdersOverlap={isOrdersOverlap}
       />
       <Button
         disabled={

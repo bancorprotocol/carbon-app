@@ -12,7 +12,6 @@ import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
 import { carbonEvents } from 'services/events';
-
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
@@ -26,6 +25,7 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
+import { checkIfOrdersOverlap } from '../utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -49,6 +49,10 @@ export const useCreateStrategy = () => {
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
   const [strategyTxStatus, setStrategyTxStatus] = useState<TxStatus>('initial');
+
+  const isOrdersOverlap = useMemo(() => {
+    return checkIfOrdersOverlap(order0, order1);
+  }, [order0, order1]);
 
   const mutation = useCreateStrategyQuery();
 
@@ -339,5 +343,6 @@ export const useCreateStrategy = () => {
     selectedStrategySettings,
     setSelectedStrategySettings,
     strategyTxStatus,
+    isOrdersOverlap,
   };
 };

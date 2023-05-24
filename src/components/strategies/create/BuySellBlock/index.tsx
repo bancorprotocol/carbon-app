@@ -24,6 +24,7 @@ type Props = {
   buy?: boolean;
   isBudgetOptional?: boolean;
   strategyType?: StrategyType;
+  isOrdersOverlap: boolean;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -34,6 +35,7 @@ export const BuySellBlock: FC<Props> = ({
   isBudgetOptional,
   strategyType,
   buy = false,
+  isOrdersOverlap,
 }) => {
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
@@ -131,7 +133,9 @@ export const BuySellBlock: FC<Props> = ({
         </div>
       )}
 
-      <LimitRangeSection {...{ base, quote, order, buy, title, inputTitle }} />
+      <LimitRangeSection
+        {...{ base, quote, order, buy, title, inputTitle, isOrdersOverlap }}
+      />
       <div className={'flex items-center pt-10 text-14'}>
         <div
           className={

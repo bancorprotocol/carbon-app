@@ -4,6 +4,7 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { Token } from 'libs/tokens';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 type Props = {
   base: Token;
@@ -12,6 +13,7 @@ type Props = {
   title: ReactNode | string;
   inputTitle: ReactNode | string;
   buy?: boolean;
+  isOrdersOverlap: boolean;
 };
 
 export const LimitRangeSection: FC<Props> = ({
@@ -21,8 +23,11 @@ export const LimitRangeSection: FC<Props> = ({
   title,
   inputTitle,
   buy = false,
+  isOrdersOverlap,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
+  const overlappingOrdersPricesMessage =
+    'Notice: your Buy and Sell orders overlap';
 
   const handleRangeChange = () => {
     setIsRange(!isRange);
@@ -94,6 +99,14 @@ export const LimitRangeSection: FC<Props> = ({
           setPriceError={order.setPriceError}
           buy={buy}
         />
+      )}
+      {isOrdersOverlap && !buy && (
+        <div
+          className={`!mt-4 flex items-center gap-10 font-mono text-12 text-warning-500`}
+        >
+          <IconWarning className="h-12 w-12" />
+          <div>{overlappingOrdersPricesMessage}</div>
+        </div>
       )}
     </div>
   );

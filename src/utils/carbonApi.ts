@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { FiatPriceDict, FiatSymbol } from 'store/useFiatCurrencyStore';
 
-const BASE_URL = '/api/';
+let BASE_URL = '/api/';
+
+if (import.meta.env.VITE_DEV_MODE) {
+  BASE_URL = 'https://app.carbondefi.xyz/api/';
+}
 
 const carbonApiAxios = axios.create({
   baseURL: BASE_URL,

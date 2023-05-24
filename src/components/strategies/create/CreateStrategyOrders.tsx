@@ -8,7 +8,7 @@ import { useStrategyEventData } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
-import { ctaButtonTextByTxStatus } from '../edit/utils';
+import { ctaButtonTextByTxStatus } from '../utils';
 
 export const CreateStrategyOrders = ({
   base,
@@ -23,6 +23,7 @@ export const CreateStrategyOrders = ({
   strategyType,
   selectedStrategySettings,
   strategyTxStatus,
+  isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
   const strategyEventData = useStrategyEventData({
@@ -79,6 +80,7 @@ export const CreateStrategyOrders = ({
             tokenBalanceQuery={token1BalanceQuery}
             isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
             strategyType={strategyType}
+            isOrdersOverlap={isOrdersOverlap}
           />
         </m.div>
       )}
@@ -91,6 +93,7 @@ export const CreateStrategyOrders = ({
             tokenBalanceQuery={token0BalanceQuery}
             isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
             strategyType={strategyType}
+            isOrdersOverlap={isOrdersOverlap}
           />
         </m.div>
       )}

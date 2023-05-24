@@ -1,13 +1,7 @@
 import { TxStatus } from '../create/types';
+import { ctaButtonTextByTxStatus } from '../utils';
 import { EditStrategyBudget } from './EditStrategyBudgetContent';
 import { EditStrategyPrices } from './EditStrategyPricesContent';
-
-export const ctaButtonTextByTxStatus: {
-  [key in Exclude<TxStatus, 'initial'>]: string;
-} = {
-  waitingForConfirmation: 'Waiting for Confirmation',
-  processing: 'Processing',
-};
 
 export const getCtaButtonTextStrategyBudget = (
   type: EditStrategyBudget,

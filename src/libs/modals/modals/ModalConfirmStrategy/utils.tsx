@@ -3,7 +3,7 @@ import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { TxStatus } from 'components/strategies/create/types';
-import { ctaButtonTextByTxStatus } from 'components/strategies/edit/utils';
+import { ctaButtonTextByTxStatus } from 'components/strategies/utils';
 
 export type MutateModalContentData = {
   modalTitle: string;
