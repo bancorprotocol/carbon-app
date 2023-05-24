@@ -3,6 +3,7 @@ import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { TxStatus } from 'components/strategies/create/types';
+import { ctaButtonTextByTxStatus } from 'components/strategies/edit/utils';
 
 export type MutateModalContentData = {
   modalTitle: string;
@@ -27,13 +28,12 @@ export const getModalDataByType = (
         content:
           'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
         actionButton: `${
-          strategyTxStatus === 'processing'
-            ? 'Processing'
-            : strategyTxStatus === 'waitingForConfirmation'
-            ? 'Waiting for confirmation'
-            : 'Pause Strategy'
+          strategyTxStatus === 'initial'
+            ? 'Pause Strategy'
+            : ctaButtonTextByTxStatus[strategyTxStatus]
         }`,
       };
+
     case 'delete':
       return {
         modalTitle: 'Delete Strategy',
@@ -50,11 +50,9 @@ export const getModalDataByType = (
           </div>
         ),
         actionButton: `${
-          strategyTxStatus === 'processing'
-            ? 'Processing'
-            : strategyTxStatus === 'waitingForConfirmation'
-            ? 'Waiting for confirmation'
-            : 'Delete Strategy'
+          strategyTxStatus === 'initial'
+            ? 'Delete Strategy'
+            : ctaButtonTextByTxStatus[strategyTxStatus]
         }`,
         variant: 'error',
       };

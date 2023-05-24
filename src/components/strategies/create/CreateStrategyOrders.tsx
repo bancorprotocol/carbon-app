@@ -8,7 +8,7 @@ import { useStrategyEventData } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
-import { ctaButtonTextByTxStatus } from './utils';
+import { ctaButtonTextByTxStatus } from '../edit/utils';
 
 export const CreateStrategyOrders = ({
   base,
@@ -103,7 +103,11 @@ export const CreateStrategyOrders = ({
           disabled={isCTAdisabled}
           loading={isCTAdisabled}
         >
-          {user ? ctaButtonTextByTxStatus[strategyTxStatus] : 'Connect Wallet'}
+          {user
+            ? strategyTxStatus === 'initial'
+              ? 'Create Strategy'
+              : ctaButtonTextByTxStatus[strategyTxStatus]
+            : 'Connect Wallet'}
         </Button>
       </m.div>
     </>

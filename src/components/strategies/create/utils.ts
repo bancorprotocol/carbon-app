@@ -144,11 +144,3 @@ export const checkErrors = (
 
   return (minMaxCorrect || priceCorrect) && budgetCorrect;
 };
-
-export const ctaButtonTextByTxStatus: {
-  [key in TxStatus]: string;
-} = {
-  waitingForConfirmation: 'Waiting for Confirmation',
-  processing: 'Processing',
-  initial: 'Create Strategy',
-};
