@@ -8,6 +8,7 @@ interface Props {
   className?: string;
   autoFocus?: boolean;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+  placeholder?: string;
 }
 
 const defaultClassName =
@@ -19,6 +20,7 @@ export const SearchInput = ({
   className,
   autoFocus,
   onKeyDown,
+  placeholder = 'Search',
 }: Props) => {
   return (
     <div className="relative">
@@ -37,7 +39,7 @@ export const SearchInput = ({
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Search"
+        placeholder={placeholder}
         onKeyDown={onKeyDown}
         className={`${defaultClassName} ${className}`}
       />

@@ -38,6 +38,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         autoFocus
         value={search}
         setValue={setSearch}
+        placeholder={'Search by name or paste address'}
         className="mt-20 w-full rounded-8 py-10"
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
