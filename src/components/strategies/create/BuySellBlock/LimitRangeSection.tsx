@@ -34,6 +34,7 @@ export const LimitRangeSection: FC<Props> = ({
 
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
+
   const warningMarketPriceMessage = buy
     ? `Notice, you offer to buy ${base.symbol} above current market price`
     : `Notice, you offer to sell ${base.symbol} below current market price`;
