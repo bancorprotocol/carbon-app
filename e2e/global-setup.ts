@@ -1,5 +1,5 @@
 import { chromium, FullConfig } from '@playwright/test';
-import { deleteFork, duplicateFork } from './src/utils/tenderlyApi';
+import { deleteFork, duplicateFork } from '../src/utils/tenderlyApi';
 
 async function globalSetup(config: FullConfig) {
   let forkId;

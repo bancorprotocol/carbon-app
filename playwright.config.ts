@@ -16,8 +16,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   /* Shared settings for all the projects below */
-  globalSetup: require.resolve('./global-setup'),
-  globalTeardown: require.resolve('./global-teardown'),
+  globalSetup: require.resolve('./e2e/global-setup'),
+  globalTeardown: require.resolve('./e2e/global-teardown'),
   use: {
     baseURL: 'http://localhost:3000/',
     storageState: 'e2e/user.json',

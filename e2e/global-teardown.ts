@@ -1,4 +1,4 @@
-import { deleteFork } from './src/utils/tenderlyApi';
+import { deleteFork } from '../src/utils/tenderlyApi';
 
 async function globalTeardown() {
   process.env.ForkId && (await deleteFork(process.env.ForkId));
