@@ -7,6 +7,7 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { config } from 'services/web3/config';
 import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
+import { ContractTransaction } from 'ethers';
 
 export type GetUserApprovalProps = Pick<
   Token,
@@ -69,7 +70,9 @@ export const useSetUserApproval = () => {
       amount,
       decimals,
       isLimited,
-    }: SetUserApprovalProps) => {
+    }: SetUserApprovalProps): Promise<
+      [ContractTransaction, ContractTransaction | undefined]
+    > => {
       const isETH = address === config.tokens.ETH;
       if (isETH) {
         throw new Error('useSetUserApproval cannot approve ETH');
@@ -107,10 +110,7 @@ export const useSetUserApproval = () => {
       }
       const approveTx = await Token(address).write.approve(spender, amountWei);
 
-      if (revokeTx) {
-        return [approveTx, revokeTx];
-      }
-      return [approveTx];
+      return [approveTx, revokeTx];
     }
   );
 };
