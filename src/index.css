@@ -15,6 +15,9 @@
   body,
   #root {
     @apply text-body bg-body font-gt-america h-screen overflow-auto;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: stretch;
   }
 
   h1 {
