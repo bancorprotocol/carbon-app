@@ -87,8 +87,6 @@ export const createStrategyAction = async ({
     {
       onSuccess: async (tx) => {
         dispatchNotification('createStrategy', { txHash: tx.hash });
-        if (!tx) return;
-        console.log('tx hash', tx.hash);
         await tx.wait();
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, base.address),
@@ -97,11 +95,17 @@ export const createStrategyAction = async ({
           queryKey: QueryKey.balance(user, quote.address),
         });
         navigate({ to: PathNames.strategies });
-        console.log('tx confirmed');
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
-      onError: (e) => {
+      onError: (e: any) => {
         console.error('create mutation failed', e);
+        dispatchNotification('generic', {
+          status: 'failed',
+          title: 'Strategy creation failed',
+          description:
+            e.message || 'Unknown error - please try again or contact support',
+          showAlert: true,
+        });
       },
     }
   );
