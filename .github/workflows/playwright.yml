@@ -20,7 +20,7 @@ jobs:
       - name: Run Playwright tests
         env:
           TENDERLY_ACCESS_KEY: ${{ secrets.TENDERLY_ACCESS_KEY }}
-        run: yarn playwright test
+        run: yarn test:e2e
       - uses: actions/upload-artifact@v3
         if: always()
         with:
