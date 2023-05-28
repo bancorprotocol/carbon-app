@@ -6,7 +6,7 @@ import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 export type MutateModalContentData = {
   modalTitle: string;
   icon: ReactNode;
-  title: string;
+  subtitle: string;
   content: string;
   additionalContent?: ReactNode;
   actionButton: string;
@@ -14,34 +14,33 @@ export type MutateModalContentData = {
 };
 
 export const getModalDataByType = (
-  type: 'pause' | 'delete'
+  type: 'pause' | 'delete',
+  t: Function
 ): MutateModalContentData => {
   switch (type) {
     case 'pause':
       return {
-        modalTitle: 'Pause Strategy',
+        modalTitle: t('modal.pause.title'),
         icon: <IconPause className="h-16 w-16" />,
-        title: 'Are you sure you would like to pause your strategy?',
-        content:
-          'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
-        actionButton: 'Pause Strategy',
+        subtitle: t('modal.pause.subtitle'),
+        content: t('modal.pause.content'),
+        actionButton: t('modal.pause.actionButton'),
       };
     case 'delete':
       return {
-        modalTitle: 'Delete Strategy',
+        modalTitle: t('modal.delete.title'),
         icon: <IconTrash className="h-24 w-24" />,
-        title: 'Are you sure you would like to delete your strategy?',
-        content:
-          'All data on the strategy will be deleted. It will be impossible to restore them.',
+        subtitle: t('modal.delete.subtitle'),
+        content: t('modal.delete.content'),
         additionalContent: (
           <div className="mt-20 flex items-center">
             <IconWallet className="mr-10 h-12 w-12" />
             <div className="flex-1 text-14 font-weight-500 text-white/80">
-              All funds will be withdrawn to your wallet
+              {t('modal.delete.additionalContent')}
             </div>
           </div>
         ),
-        actionButton: 'Delete Strategy',
+        actionButton: t('modal.delete.actionButton'),
         variant: 'error',
       };
   }

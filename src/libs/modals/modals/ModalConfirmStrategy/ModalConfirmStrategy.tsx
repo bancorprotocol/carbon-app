@@ -9,8 +9,8 @@ import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { getModalDataByType } from './utils';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
-
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import { useTranslation } from 'libs/translations';
 
 export type ModalConfirmStrategyData = {
   strategy: Strategy;
@@ -24,9 +24,11 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   const { closeModal } = useModal();
   const { pauseStrategy } = useUpdateStrategy();
   const { deleteStrategy } = useDeleteStrategy();
-  const data = getModalDataByType(type);
+  const { t } = useTranslation();
+  const data = getModalDataByType(type, t);
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
+
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
@@ -63,7 +65,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         <IconTitleText
           variant={data?.variant}
           icon={data?.icon}
-          title={data?.title || ''}
+          title={data?.subtitle || ''}
           text={data?.content}
         />
         {data?.additionalContent}
@@ -83,7 +85,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
           size="lg"
           fullWidth
         >
-          Cancel
+          {t('common.cancelButton')}
         </Button>
       </div>
     </Modal>
