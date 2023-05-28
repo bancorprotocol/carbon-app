@@ -4,6 +4,8 @@ import { deleteFork, duplicateFork } from '../src/utils/tenderlyApi';
 async function globalSetup(config: FullConfig) {
   let forkId;
   const { baseURL, storageState } = config.projects[0].use;
+  console.log(baseURL, '-=-=-=-=-=- baseURL -=-=-=-=-=-');
+  console.log(storageState, '-=-=-=-=-=- storageState -=-=-=-=-=-');
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(`${baseURL}/debug`);
