@@ -1,19 +1,17 @@
 import { chromium, FullConfig } from '@playwright/test';
-import { deleteFork, duplicateFork } from '../src/utils/tenderlyApi';
 
 async function globalSetup(config: FullConfig) {
   let forkId;
   const { baseURL, storageState } = config.projects[0].use;
-  console.log(baseURL, '-=-=-=-=-=- baseURL -=-=-=-=-=-');
-  console.log(storageState, '-=-=-=-=-=- storageState -=-=-=-=-=-');
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(`${baseURL}/debug`);
 
   try {
-    forkId = await duplicateFork();
+    // forkId = await duplicateFork();
+    const forkId = '5ac3ffc6-abcd-4fbd-8430-069d927cbff9';
     console.log(forkId, '-=-=-=-=-=- Fork Created -=-=-=-=-=-');
-    process.env.ForkId = forkId;
+    // process.env.ForkId = forkId;
 
     await page
       .locator('#imposterAccount')
@@ -39,7 +37,7 @@ async function globalSetup(config: FullConfig) {
       error,
       `-=-=-=-=-=- global setup error - delete fork ${forkId}-=-=-=-=-=-`
     );
-    await deleteFork(forkId);
+    // await deleteFork(forkId);
   }
 }
 
