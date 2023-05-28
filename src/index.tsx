@@ -28,8 +28,10 @@ root.render(
             <Router>
               <Suspense
                 fallback={
-                  <div className={'h-80'}>
-                    <CarbonLogoLoading />
+                  <div className={'flex h-screen items-center justify-center'}>
+                    <div className="h-80">
+                      <CarbonLogoLoading />
+                    </div>
                   </div>
                 }
               >
