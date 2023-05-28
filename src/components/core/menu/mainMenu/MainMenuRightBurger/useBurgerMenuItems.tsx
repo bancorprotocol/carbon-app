@@ -8,6 +8,7 @@ import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
+import { useTranslation } from 'react-i18next';
 
 export type MenuItemType = {
   subMenu?: MenuType;
@@ -16,7 +17,7 @@ export type MenuItemType = {
   postClickAction?: MenuItemActions;
 };
 
-export type MenuType = 'main' | 'resources' | 'currency';
+export type MenuType = 'main' | 'resources' | 'currency' | 'languages';
 
 export type Menu = { title?: string; items: MenuItemType[] };
 
@@ -25,6 +26,7 @@ const iconStyles = 'h-32 w-32 md:h-20 md:w-20';
 export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
+  const { t, i18n } = useTranslation();
 
   const menuMap = useMemo(() => new Map<MenuType, Menu>(), []);
 
@@ -33,6 +35,10 @@ export const useBurgerMenuItems = () => {
       {
         subMenu: 'currency',
         content: <CurrencyMenuItemContent />,
+      },
+      {
+        subMenu: 'languages',
+        content: 'Language',
       },
       {
         subMenu: 'resources',
@@ -174,10 +180,29 @@ export const useBurgerMenuItems = () => {
     []
   );
 
+  const languagesItems = useMemo(
+    (): MenuItemType[] => [
+      {
+        content: (
+          <Link className="flex" onClick={() => i18n.changeLanguage('en')}>
+            English
+          </Link>
+        ),
+      },
+      {
+        content: (
+          <Link className="flex" onClick={() => i18n.changeLanguage('es')}>
+            Spanish
+          </Link>
+        ),
+      },
+    ],
+    [i18n]
+  );
+
   menuMap.set('main', { items: mainItems });
-
   menuMap.set('currency', { items: currencyItems, title: 'Currency' });
-
+  menuMap.set('languages', { items: languagesItems, title: 'Language' });
   menuMap.set('resources', { items: resourcesItems, title: 'Resources' });
 
   return {
