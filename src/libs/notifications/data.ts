@@ -32,14 +32,14 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     title: 'Approving Token ...',
     txHash,
     description: `You are approving ${symbol} for spending on the protocol.`,
-    successTitle: 'Token Approved',
+    successTitle: 'Success',
     successDesc: `You have successfully approved ${symbol} for ${
       limited ? 'limited' : 'unlimited'
     } spending on the protocol.`,
-    failedTitle: 'Token Approval Failed',
+    failedTitle: 'Transaction Failed',
     failedDesc: `Failed ${symbol} approval for ${
       limited ? 'limited' : 'unlimited'
-    } spending on the protocol.`,
+    }`,
     showAlert: true,
   }),
   revoke: ({ txHash }) => ({
@@ -47,9 +47,9 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     title: 'Revoking Past Approval',
     txHash,
     description: `You are revoking past approval.`,
-    successTitle: 'Token Revoked',
+    successTitle: 'Success',
     successDesc: `Your past approval was successfully revoked.`,
-    failedTitle: 'Token Revoke Failed',
+    failedTitle: 'Transaction Failed',
     failedDesc: `Failed to revoke past approval.`,
     showAlert: true,
   }),
