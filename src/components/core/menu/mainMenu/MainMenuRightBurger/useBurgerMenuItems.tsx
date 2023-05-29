@@ -8,7 +8,7 @@ import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'libs/translations';
 
 export type MenuItemType = {
   subMenu?: MenuType;
@@ -26,8 +26,7 @@ const iconStyles = 'h-32 w-32 md:h-20 md:w-20';
 export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
-  const { t, i18n } = useTranslation();
-
+  const { i18n } = useTranslation();
   const menuMap = useMemo(() => new Map<MenuType, Menu>(), []);
 
   const mainItems = useMemo(

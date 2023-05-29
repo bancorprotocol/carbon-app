@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
+import { TFunction } from 'libs/translations';
 
 export type MutateModalContentData = {
   modalTitle: string;
@@ -15,7 +16,7 @@ export type MutateModalContentData = {
 
 export const getModalDataByType = (
   type: 'pause' | 'delete',
-  t: Function
+  t: TFunction<string, undefined, string>
 ): MutateModalContentData => {
   switch (type) {
     case 'pause':

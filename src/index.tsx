@@ -8,12 +8,12 @@ import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import './languages/i18n';
 import 'global-shim';
 import 'init-sentry';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
-import '../languages/i18n';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
