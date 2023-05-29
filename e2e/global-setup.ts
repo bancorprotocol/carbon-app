@@ -4,10 +4,12 @@ async function globalSetup(config: FullConfig) {
   let forkId;
   const { baseURL, storageState } = config.projects[0].use;
   const browser = await chromium.launch();
-  const page = await browser.newPage();
+  const context = await browser.newContext();
+  const page = await context.newPage();
   await page.goto(`${baseURL}/debug`);
 
   try {
+    await context.tracing.start({ screenshots: true, snapshots: true });
     // forkId = await duplicateFork();
     const forkId = '5ac3ffc6-abcd-4fbd-8430-069d927cbff9';
     console.log(forkId, '-=-=-=-=-=- Fork Created -=-=-=-=-=-');
