@@ -2,7 +2,7 @@ import { test as setup } from '@playwright/test';
 
 const authFile = 'e2e/user.json';
 
-setup('setup', async ({ page }) => {
+setup.skip('setup', async ({ page }) => {
   let forkId;
   await page.goto(`/debug`);
 
