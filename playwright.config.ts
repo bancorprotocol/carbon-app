@@ -15,8 +15,6 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
-  /* Shared settings for all the projects below */
-  globalSetup: require.resolve('./e2e/global-setup'),
   globalTeardown: require.resolve('./e2e/global-teardown'),
   use: {
     baseURL: 'http://localhost:3000/',
@@ -27,14 +25,12 @@ export default defineConfig({
   expect: {
     toHaveScreenshot: {
       threshold: 0.2,
-      maxDiffPixelRatio: 0.2,
+      maxDiffPixels: 100,
+      maxDiffPixelRatio: 0.25,
     },
   },
   projects: [
-    {
-      name: 'setup',
-      testMatch: /global.setup\.ts/,
-    },
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
       use: {
