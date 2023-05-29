@@ -34,11 +34,19 @@ async function globalSetup(config: FullConfig) {
     await page.locator('#saveRpc').click();
 
     await page.context().storageState({ path: storageState as string });
+    await context.tracing.stop({
+      path: './test-results/setup-trace.zip',
+    });
+    await browser.close();
   } catch (error) {
     console.log(
       error,
       `-=-=-=-=-=- global setup error - delete fork ${forkId}-=-=-=-=-=-`
     );
+    await context.tracing.stop({
+      path: './test-results/failed-setup-trace.zip',
+    });
+    await browser.close();
     // await deleteFork(forkId);
   }
 }
