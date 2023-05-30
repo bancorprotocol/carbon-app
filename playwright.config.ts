@@ -15,7 +15,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
-  globalTeardown: require.resolve('./e2e/global-teardown'),
+  // globalTeardown: require.resolve('./e2e/global-teardown'),
   use: {
     baseURL: 'http://localhost:3000',
     storageState: 'e2e/user.json',
