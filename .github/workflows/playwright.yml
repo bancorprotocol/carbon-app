@@ -8,21 +8,19 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.34.3-jammy
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
       - name: Install dependencies
-        run: yarn
+        run: npm ci
       - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps chromium
+        run: npx playwright install --with-deps
       - name: Playwright Tests E2E
         env:
           TENDERLY_ACCESS_KEY: ${{ secrets.TENDERLY_ACCESS_KEY }}
-        run: yarn test:e2e --trace on
+        run: npx playwright test
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
