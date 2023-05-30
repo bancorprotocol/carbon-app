@@ -7,7 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
 // require('dotenv').config();
 
 const port = 3000;
-const baseURL = `http://127.0.0.1:${port}`;
+const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: './e2e',
@@ -48,7 +48,7 @@ export default defineConfig({
   ],
   webServer: {
     port,
-    command: `yarn vite --host --port ${port}`,
+    command: `yarn vite --port ${port}`,
     reuseExistingServer: !process.env.CI,
   },
 });
