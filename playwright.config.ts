@@ -6,11 +6,12 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // require('dotenv').config();
 
-const port = 3000;
+const port = 8000;
 const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: './e2e',
+  timeout: 30 * 1000,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -21,7 +22,7 @@ export default defineConfig({
   // globalTeardown: require.resolve('./e2e/global-teardown'),
   use: {
     baseURL,
-    storageState: 'e2e/user.json',
+    // storageState: 'e2e/user.json',
     trace: 'on-first-retry',
     viewport: { width: 1280, height: 720 },
   },
@@ -47,7 +48,7 @@ export default defineConfig({
   ],
   webServer: {
     port,
-    command: 'yarn start',
+    command: `yarn vite --port ${port}`,
     reuseExistingServer: !process.env.CI,
   },
 });
