@@ -11,18 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
+      - uses: microsoft/playwright-github-action@v1
         with:
           node-version: 18
       - name: Install dependencies
         run: yarn && yarn build
       - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps chromium
+        run: npx playwright install --with-deps
       - name: Playwright Tests E2E
         env:
           TENDERLY_ACCESS_KEY: ${{ secrets.TENDERLY_ACCESS_KEY }}
           CI: true
-        wait-on: 'http://localhost:3000'
-        run: yarn playwright test
+        run: npx playwright test
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
