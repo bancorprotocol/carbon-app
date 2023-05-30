@@ -23,6 +23,7 @@ const DefaultChildren = () => (
 export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
   return (
     <div
+      id="networkError"
       className={
         'mx-auto mt-100 w-[385px] space-y-16 rounded-10 bg-silver p-20'
       }
