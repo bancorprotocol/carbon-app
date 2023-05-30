@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: yarn
+        run: yarn && yarn build
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps chromium
       - name: Playwright Tests E2E
