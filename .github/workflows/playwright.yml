@@ -21,6 +21,7 @@ jobs:
         env:
           TENDERLY_ACCESS_KEY: ${{ secrets.TENDERLY_ACCESS_KEY }}
           CI: true
+        wait-on: 'http://localhost:3000'
         run: yarn playwright test
       - uses: actions/upload-artifact@v3
         if: failure()
