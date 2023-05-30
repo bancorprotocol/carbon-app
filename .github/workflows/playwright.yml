@@ -14,14 +14,14 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn
       - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps chromium
+        run: yarn playwright install --with-deps
       - name: Playwright Tests E2E
         env:
           TENDERLY_ACCESS_KEY: ${{ secrets.TENDERLY_ACCESS_KEY }}
           CI: true
-        run: yarn test:e2e --trace on
+        run: yarn playwright test
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
