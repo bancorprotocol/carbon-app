@@ -6,6 +6,9 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // require('dotenv').config();
 
+const port = 3000;
+const baseURL = `http://localhost:${port}`;
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -17,7 +20,7 @@ export default defineConfig({
   reporter: 'html',
   // globalTeardown: require.resolve('./e2e/global-teardown'),
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL,
     storageState: 'e2e/user.json',
     trace: 'on-first-retry',
     viewport: { width: 1280, height: 720 },
@@ -30,13 +33,11 @@ export default defineConfig({
     },
   },
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
       },
-      dependencies: ['setup'],
     },
     // {
     //   name: 'Mobile Chrome',
@@ -45,8 +46,8 @@ export default defineConfig({
     // },
   ],
   webServer: {
+    port,
     command: 'yarn start',
-    port: 3000,
     reuseExistingServer: !process.env.CI,
   },
 });
