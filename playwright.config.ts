@@ -48,7 +48,7 @@ export default defineConfig({
   ],
   webServer: {
     port,
-    command: `yarn vite --port ${port}`,
+    command: `yarn vite --host --port ${port}`,
     reuseExistingServer: !process.env.CI,
   },
 });
