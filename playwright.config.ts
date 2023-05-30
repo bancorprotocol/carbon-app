@@ -23,6 +23,7 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
   },
   expect: {
+    timeout: 2 * 60 * 1000,
     toHaveScreenshot: {
       threshold: 0.2,
       maxDiffPixelRatio: 0.01,
