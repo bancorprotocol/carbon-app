@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
+        run: yarn playwright install --with-deps chromium
       - name: Playwright Tests E2E
         env:
           TENDERLY_ACCESS_KEY: ${{ secrets.TENDERLY_ACCESS_KEY }}
