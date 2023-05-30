@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { wait } from '../src/utils/helpers';
 
 test('Trade snapshot', async ({ page }) => {
   await wait(30000);
@@ -12,3 +11,6 @@ test('Trade snapshot', async ({ page }) => {
   await wait(30000);
   await expect(error).toBeVisible();
 });
+
+export const wait = async (ms: number = 0) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
