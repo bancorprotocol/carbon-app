@@ -8,7 +8,7 @@ import { unix } from 'libs/dayjs';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
 import { Link } from 'libs/routing';
-import { THREE_SECONDS_IN_MS } from 'utils/time';
+import { FOUR_SECONDS_IN_MS } from 'utils/time';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
@@ -71,7 +71,7 @@ export const NotificationLine: FC<{
 
   useInterval(
     () => dismissAlert(notification.id),
-    isAlert && notification.status !== 'pending' ? THREE_SECONDS_IN_MS : null,
+    isAlert && notification.status !== 'pending' ? FOUR_SECONDS_IN_MS : null,
     false
   );
 
