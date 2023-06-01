@@ -1,10 +1,13 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
+import BigNumber from 'bignumber.js';
+import { Token } from 'libs/tokens';
+import { useGetTokenPrice } from 'libs/queries';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { Token } from 'libs/tokens';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 type Props = {
   base: Token;
@@ -26,13 +29,42 @@ export const LimitRangeSection: FC<Props> = ({
   isOrdersOverlap,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
+  const tokenPriceQuery = useGetTokenPrice(base?.address);
+  const { selectedFiatCurrency } = useFiatCurrency();
+
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
+
+  const warningMarketPriceMessage = buy
+    ? `Notice, you offer to buy ${base.symbol} above current market price`
+    : `Notice, you offer to sell ${base.symbol} below current market price`;
 
   const handleRangeChange = () => {
     setIsRange(!isRange);
     resetFields(true);
   };
+
+  const isOrderAboveOrBelowMarketPrice = useMemo(() => {
+    const marketPrice = tokenPriceQuery.data?.[selectedFiatCurrency] || 0;
+
+    if (new BigNumber(marketPrice).gt(0)) {
+      if (order.isRange) {
+        return new BigNumber(buy ? order.max : order.min)[buy ? 'gt' : 'lt'](
+          marketPrice
+        );
+      }
+      return new BigNumber(order.price)[buy ? 'gt' : 'lt'](marketPrice);
+    }
+    return false;
+  }, [
+    buy,
+    order.isRange,
+    order.max,
+    order.price,
+    order.min,
+    tokenPriceQuery.data,
+    selectedFiatCurrency,
+  ]);
 
   return (
     <div className={`space-y-12 text-left`}>
@@ -101,12 +133,16 @@ export const LimitRangeSection: FC<Props> = ({
         />
       )}
       {isOrdersOverlap && !buy && (
-        <div
-          className={`!mt-4 flex items-center gap-10 font-mono text-12 text-warning-500`}
-        >
-          <IconWarning className="h-12 w-12" />
-          <div>{overlappingOrdersPricesMessage}</div>
-        </div>
+        <WarningMessageWithIcon
+          message={overlappingOrdersPricesMessage}
+          className="!mt-4"
+        />
+      )}
+      {isOrderAboveOrBelowMarketPrice && (
+        <WarningMessageWithIcon
+          message={warningMarketPriceMessage}
+          className="!mt-4"
+        />
       )}
     </div>
   );
