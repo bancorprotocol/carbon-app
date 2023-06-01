@@ -48,7 +48,8 @@ export default defineConfig({
   ],
   webServer: {
     port,
-    command: `yarn vite --port ${port}`,
+    timeout: 120 * 1000, // time to launch server, 6o by default
+    command: `yarn build && yarn vite preview --port ${port}`,
     reuseExistingServer: !process.env.CI,
   },
 });
