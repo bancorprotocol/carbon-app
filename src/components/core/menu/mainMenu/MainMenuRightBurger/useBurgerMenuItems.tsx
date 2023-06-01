@@ -9,6 +9,7 @@ import { ReactComponent as IconV } from 'assets/icons/v.svg';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
 import { useTranslation } from 'libs/translations';
+import { SUPPORTED_LANGUAGES } from 'languages/i18n';
 
 export type MenuItemType = {
   subMenu?: MenuType;
@@ -180,22 +181,16 @@ export const useBurgerMenuItems = () => {
   );
 
   const languagesItems = useMemo(
-    (): MenuItemType[] => [
-      {
-        content: (
-          <Link className="flex" onClick={() => i18n.changeLanguage('en')}>
-            English
-          </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" onClick={() => i18n.changeLanguage('es')}>
-            Spanish
-          </Link>
-        ),
-      },
-    ],
+    (): MenuItemType[] =>
+      SUPPORTED_LANGUAGES.map(({ code, name }) => {
+        return {
+          content: (
+            <Link className="flex" onClick={() => i18n.changeLanguage(code)}>
+              {name}
+            </Link>
+          ),
+        };
+      }),
     [i18n]
   );
 
