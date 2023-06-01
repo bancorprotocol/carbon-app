@@ -185,9 +185,19 @@ export const useBurgerMenuItems = () => {
       SUPPORTED_LANGUAGES.map(({ code, name }) => {
         return {
           content: (
-            <Link className="flex" onClick={() => i18n.changeLanguage(code)}>
-              {name}
-            </Link>
+            <div
+              className="flex gap-20"
+              onClick={() => i18n.changeLanguage(code)}
+            >
+              <span>{name}</span>
+              <span className="flex items-center">
+                <IconV
+                  className={`invisible h-12 w-12 ${
+                    code === i18n.language ? '!visible' : ''
+                  }`}
+                />
+              </span>
+            </div>
           ),
         };
       }),
