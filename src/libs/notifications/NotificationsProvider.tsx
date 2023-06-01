@@ -27,27 +27,23 @@ export const NotificationAlerts: FC = () => {
   }, [user, setNotifications]);
 
   return (
-    <div className={'fixed absolute top-10 right-10'}>
-      <div className={'sticky z-50'}>
-        <AnimatePresence mode={'popLayout'}>
-          {alerts.map((n) => (
-            <motion.div
-              key={n.id}
-              layout
-              variants={notificationVariants}
-              whileHover="hover"
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className={
-                'mb-20 block w-[350px] rounded-10 bg-silver px-20 py-10'
-              }
-            >
-              <NotificationLine isAlert notification={n} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+    <div className={'fixed top-10 right-10 z-50'}>
+      <AnimatePresence mode={'popLayout'}>
+        {alerts.map((n) => (
+          <motion.div
+            key={n.id}
+            layout
+            variants={notificationVariants}
+            whileHover="hover"
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={'mb-20 block w-[350px] rounded-10 bg-silver px-20 py-10'}
+          >
+            <NotificationLine isAlert notification={n} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 };
