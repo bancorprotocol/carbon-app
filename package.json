@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.0.0-0",
-    "@bancor/carbon-sdk": "^0.0.75-DEV",
+    "@bancor/carbon-sdk": "^0.0.77-DEV",
     "@cloudflare/workers-types": "^4.20230419.0",
     "@coinbase/wallet-sdk": "^3.6.3",
     "@ethersproject/abi": "^5.0.0",
