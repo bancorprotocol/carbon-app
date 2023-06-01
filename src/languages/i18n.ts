@@ -17,7 +17,7 @@ export const SUPPORTED_LANGUAGES = [
 
 type SupportedLanguagesCodes = (typeof SUPPORTED_LANGUAGES)[number]['code'];
 
-type LanguageVersionObject = {
+type LanguageVersionMapping = {
   [key in SupportedLanguagesCodes]: string;
 };
 
@@ -38,7 +38,7 @@ i18n
           versions: SUPPORTED_LANGUAGES.reduce((acc, currLang) => {
             acc[currLang.code] = TRANSLATION_VERSION;
             return acc;
-          }, {} as LanguageVersionObject),
+          }, {} as LanguageVersionMapping),
         },
         {
           prefix: `${APP_ID}-${APP_VERSION}-`,

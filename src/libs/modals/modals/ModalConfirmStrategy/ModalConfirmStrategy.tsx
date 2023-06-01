@@ -85,7 +85,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
           size="lg"
           fullWidth
         >
-          {t('common.cancelButton')}
+          {t('common.cancelButton', 'Cancel')}
         </Button>
       </div>
     </Modal>
