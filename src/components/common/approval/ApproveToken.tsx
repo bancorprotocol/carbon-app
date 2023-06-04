@@ -37,6 +37,7 @@ export const ApproveToken: FC<Props> = ({
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
+
   const [isLimited, setIsLimited] = useState(false);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);

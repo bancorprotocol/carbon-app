@@ -26,7 +26,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   id,
   data,
 }) => {
-  const [tradeInProcess, setTradeInProcess] = useState(false);
+  const [isAwaiting, setIsAwaiting] = useState(false);
 
   const {
     selected,
@@ -39,7 +39,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     disabledCTA,
   } = useModalTradeRouting({
     id,
-    data: { ...data, setTradeInProcess },
+    data: { ...data, setIsAwaiting },
   });
 
   return (
@@ -99,13 +99,14 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 
       <div className={'mt-20 flex w-full space-x-10'}>
         <Button
-          variant={tradeInProcess ? 'black' : 'white'}
+          variant={'white'}
           fullWidth
           onClick={handleCTAClick}
-          disabled={disabledCTA || tradeInProcess}
-          loading={tradeInProcess}
+          disabled={disabledCTA}
+          loading={isAwaiting}
+          loadingChildren={isAwaiting && 'Waiting for Confirmation'}
         >
-          {tradeInProcess ? 'Waiting for Confirmation' : 'Confirm'}
+          Confirm
         </Button>
       </div>
     </Modal>

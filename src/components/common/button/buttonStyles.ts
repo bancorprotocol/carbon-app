@@ -15,6 +15,7 @@ export const buttonStyles = cva<ButtonVariants>(
     'transition duration-300 ease-in-out',
     'disabled:cursor-not-allowed',
     'disabled:opacity-40',
+    'flex justify-center items-center',
   ],
   {
     variants: {

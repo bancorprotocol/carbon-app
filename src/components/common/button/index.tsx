@@ -3,6 +3,7 @@ import {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
   FC,
+  ReactNode,
 } from 'react';
 import { VariantProps } from 'class-variance-authority';
 import { buttonStyles } from 'components/common/button/buttonStyles';
@@ -15,7 +16,10 @@ export type ButtonHTMLProps = DetailedHTMLProps<
   AriaAttributes;
 
 export type ButtonProps = ButtonHTMLProps &
-  VariantProps<typeof buttonStyles> & { loading?: boolean };
+  VariantProps<typeof buttonStyles> & {
+    loading?: boolean;
+    loadingChildren?: string | ReactNode;
+  };
 
 export const Button: FC<ButtonProps> = ({
   variant,
@@ -23,19 +27,21 @@ export const Button: FC<ButtonProps> = ({
   fullWidth,
   className,
   loading,
+  loadingChildren,
   ...props
 }) => {
   return (
     // @ts-ignore
     <m.button
       className={buttonStyles({ variant, size, fullWidth, class: className })}
+      disabled={props.disabled || loading}
       {...props}
     >
       {loading ? (
-        <div className="flex items-center justify-center">
-          <div className="text-white">{props.children}</div>
-          <div className="dot-pulse ml-20" />
-        </div>
+        <>
+          {loadingChildren || props.children}
+          <span className="dot-pulse ml-30 flex" />
+        </>
       ) : (
         props.children
       )}

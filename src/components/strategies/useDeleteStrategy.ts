@@ -8,7 +8,6 @@ import {
 import { useWeb3 } from 'libs/web3';
 import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
-import { TxStatus } from './create/types';
 
 export const useDeleteStrategy = () => {
   const { user } = useWeb3();
@@ -18,9 +17,9 @@ export const useDeleteStrategy = () => {
 
   const deleteStrategy = async (
     strategy: Strategy,
-    setStrategyTxStatus: Dispatch<SetStateAction<TxStatus>>,
+    setIsProcessing: Dispatch<SetStateAction<boolean>>,
     successEventsCb?: () => void,
-    beforeTxSuccessCb?: () => void
+    closeModalCb?: () => void
   ) => {
     const { base, quote, id } = strategy;
 
@@ -28,18 +27,16 @@ export const useDeleteStrategy = () => {
       throw new Error('error in delete strategy: missing data ');
     }
 
-    setStrategyTxStatus('waitingForConfirmation');
-
     deleteMutation.mutate(
       {
         id,
       },
       {
         onSuccess: async (tx) => {
-          setStrategyTxStatus('processing');
+          setIsProcessing(true);
           setTimeout(() => {
-            beforeTxSuccessCb?.();
-            setStrategyTxStatus('initial');
+            closeModalCb?.();
+            setIsProcessing(false);
           }, ONE_AND_A_HALF_SECONDS_IN_MS);
 
           dispatchNotification('deleteStrategy', { txHash: tx.hash });
@@ -54,7 +51,7 @@ export const useDeleteStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
-          setStrategyTxStatus('initial');
+          setIsProcessing(false);
           console.error('delete mutation failed', e);
         },
       }
@@ -63,5 +60,6 @@ export const useDeleteStrategy = () => {
 
   return {
     deleteStrategy,
+    deleteMutation,
   };
 };

@@ -1,4 +1,3 @@
-import { TxStatus } from './create/types';
 import { OrderCreate } from './create/useOrder';
 
 export const checkIfOrdersOverlap = (
@@ -14,11 +13,4 @@ export const checkIfOrdersOverlap = (
     return true;
   }
   return false;
-};
-
-export const ctaButtonTextByTxStatus: {
-  [key in Exclude<TxStatus, 'initial'>]: string;
-} = {
-  waitingForConfirmation: 'Waiting for Confirmation',
-  processing: 'Processing',
 };

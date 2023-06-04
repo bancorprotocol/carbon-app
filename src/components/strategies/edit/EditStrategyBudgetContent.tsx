@@ -12,7 +12,8 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { getCtaButtonTextStrategyBudget } from './utils';
+import { useMemo } from 'react';
+import { getStatusTextByTxStatus } from './utils';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -25,13 +26,8 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
-  const {
-    withdrawBudget,
-    depositBudget,
-    isCtaDisabled,
-    strategyTxStatus,
-    setStrategyTxStatus,
-  } = useUpdateStrategy();
+  const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
+    useUpdateStrategy();
 
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
@@ -46,6 +42,8 @@ export const EditStrategyBudgetContent = ({
     strategy.order1.balance,
     true
   ).toString();
+  const isAwaiting = updateMutation.isLoading;
+  const isLoading = isAwaiting || isProcessing;
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -106,11 +104,9 @@ export const EditStrategyBudgetContent = ({
       depositOrWithdrawFunds();
     } else {
       if (approval.approvalRequired) {
-        setStrategyTxStatus('waitingForConfirmation');
         openModal('txConfirm', {
           approvalTokens: approval.tokens,
           onConfirm: depositOrWithdrawFunds,
-          onClose: () => setStrategyTxStatus('initial'),
           buttonLabel: `Confirm Deposit`,
           eventData: {
             ...strategyEventData,
@@ -162,6 +158,10 @@ export const EditStrategyBudgetContent = ({
     return +order0.budget > 0 || +order1.budget > 0;
   };
 
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
+
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -183,19 +183,20 @@ export const EditStrategyBudgetContent = ({
         type={type}
       />
       <Button
-        disabled={!isOrdersBudgetValid() || isCtaDisabled}
-        loading={isCtaDisabled}
+        disabled={!isOrdersBudgetValid()}
+        loading={isLoading}
+        loadingChildren={loadingChildren}
         onClick={handleOnActionClick}
         className="mt-32"
-        variant={isCtaDisabled ? 'secondary' : 'white'}
+        variant={'white'}
         size="lg"
         fullWidth
       >
-        {getCtaButtonTextStrategyBudget(type, strategyTxStatus)}
+        {`${type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}`}
       </Button>
       <Button
         onClick={() => back()}
-        disabled={isCtaDisabled}
+        disabled={isLoading}
         className="mt-16"
         variant="secondary"
         size="lg"

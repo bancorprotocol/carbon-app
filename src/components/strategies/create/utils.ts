@@ -2,7 +2,6 @@ import {
   CreateStrategyActionProps,
   OrderWithSetters,
   StrategySettings,
-  TxStatus,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
 import { PathNames, useNavigate } from 'libs/routing';
@@ -65,14 +64,12 @@ export const createStrategyAction = async ({
   mutation,
   dispatchNotification,
   navigate,
-  setStrategyTxStatus,
+  setIsProcessing,
   strategyEventData,
 }: CreateStrategyActionProps) => {
   if (!base || !quote || !user) {
     throw new Error('error in create strategy: missing data ');
   }
-
-  setStrategyTxStatus('waitingForConfirmation');
 
   mutation.mutate(
     {
@@ -93,10 +90,7 @@ export const createStrategyAction = async ({
     },
     {
       onSuccess: async (tx) => {
-        handleStrategyTxStatusAndRedirectToOverview(
-          setStrategyTxStatus,
-          navigate
-        );
+        handleStrategyTxStatusAndRedirectToOverview(setIsProcessing, navigate);
 
         dispatchNotification('createStrategy', { txHash: tx.hash });
         if (!tx) return;
@@ -113,7 +107,7 @@ export const createStrategyAction = async ({
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e) => {
-        setStrategyTxStatus('initial');
+        setIsProcessing(false);
         console.error('create mutation failed', e);
       },
     }
@@ -121,13 +115,13 @@ export const createStrategyAction = async ({
 };
 
 export const handleStrategyTxStatusAndRedirectToOverview = (
-  setStrategyTxStatus: Dispatch<SetStateAction<TxStatus>>,
+  setIsProcessing: Dispatch<SetStateAction<boolean>>,
   navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
 ) => {
-  setStrategyTxStatus('processing');
+  setIsProcessing(true);
   setTimeout(() => {
     navigate && navigate({ to: PathNames.strategies });
-    setStrategyTxStatus('initial');
+    setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 

@@ -41,7 +41,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     calcSlippage,
     isTradeBySource,
     maxSourceAmountQuery,
-    tradeInProcess,
+    isAwaiting,
   } = useBuySell(props);
   const { source, target, sourceBalanceQuery, buy = false } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
@@ -159,9 +159,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   const getCtaButtonText = () => {
     if (user) {
-      if (tradeInProcess) {
-        return 'Waiting for Confirmation';
-      }
       return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
     } else {
       return 'Connect Wallet';
@@ -261,10 +258,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         />
       )}
       <Button
-        disabled={
-          !hasEnoughLiquidity || !maxSourceAmountQuery.data || tradeInProcess
-        }
-        loading={tradeInProcess}
+        disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
+        loading={isAwaiting}
+        loadingChildren={isAwaiting && 'Waiting for Confirmation'}
         onClick={handleTradeClick}
         variant={buy ? 'success' : 'error'}
         fullWidth

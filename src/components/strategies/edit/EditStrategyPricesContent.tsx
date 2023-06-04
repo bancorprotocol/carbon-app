@@ -9,7 +9,7 @@ import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock
 import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { checkIfOrdersOverlap } from '../utils';
-import { getCtaButtonTextEditPrices } from './utils';
+import { getStatusTextByTxStatus } from './utils';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -22,8 +22,10 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
-  const { renewStrategy, changeRateStrategy, isCtaDisabled, strategyTxStatus } =
+  const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
+  const isAwaiting = updateMutation.isLoading;
+  const isLoading = isAwaiting || isProcessing;
 
   const order0 = useOrder(
     type === 'renew'
@@ -94,6 +96,10 @@ export const EditStrategyPricesContent = ({
       : +order.price > 0;
   };
 
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
+
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -115,21 +121,20 @@ export const EditStrategyPricesContent = ({
         isOrdersOverlap={isOrdersOverlap}
       />
       <Button
-        disabled={
-          !isOrderValid(order0) || !isOrderValid(order1) || isCtaDisabled
-        }
-        loading={isCtaDisabled}
+        disabled={!isOrderValid(order0) || !isOrderValid(order1)}
+        loading={isLoading}
+        loadingChildren={loadingChildren}
         onClick={handleOnActionClick}
         className="mt-32"
-        variant={isCtaDisabled ? 'secondary' : 'white'}
+        variant={'white'}
         size="lg"
         fullWidth
       >
-        {getCtaButtonTextEditPrices(type, strategyTxStatus)}
+        {`${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`}
       </Button>
       <Button
         onClick={() => back()}
-        disabled={isCtaDisabled}
+        disabled={isLoading}
         className="mt-16"
         variant="secondary"
         size="lg"

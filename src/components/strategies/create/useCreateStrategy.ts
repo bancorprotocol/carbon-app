@@ -15,10 +15,7 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
-import {
-  StrategyCreateLocationGenerics,
-  TxStatus,
-} from 'components/strategies/create/types';
+import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
 import {
   handleStrategyDirection,
   handleStrategySettings,
@@ -48,7 +45,7 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
-  const [strategyTxStatus, setStrategyTxStatus] = useState<TxStatus>('initial');
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
@@ -104,7 +101,6 @@ export const useCreateStrategy = () => {
 
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired) {
-        setStrategyTxStatus('waitingForConfirmation');
         openModal('txConfirm', {
           approvalTokens,
           onConfirm: () =>
@@ -118,10 +114,9 @@ export const useCreateStrategy = () => {
               dispatchNotification,
               cache,
               navigate,
-              setStrategyTxStatus,
+              setIsProcessing,
               strategyEventData,
             }),
-          onClose: () => setStrategyTxStatus('initial'),
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
@@ -144,7 +139,7 @@ export const useCreateStrategy = () => {
           dispatchNotification,
           cache,
           navigate,
-          setStrategyTxStatus,
+          setIsProcessing,
           strategyEventData,
         });
       }
@@ -225,12 +220,12 @@ export const useCreateStrategy = () => {
       mutation.isLoading ||
       !isOrder0Valid ||
       !isOrder1Valid ||
-      strategyTxStatus === 'processing' ||
-      strategyTxStatus === 'waitingForConfirmation'
+      isProcessing
     );
   }, [
     approval.isError,
     approval.isLoading,
+    isProcessing,
     mutation.isLoading,
     order0.isRange,
     order0.max,
@@ -240,7 +235,6 @@ export const useCreateStrategy = () => {
     order1.max,
     order1.min,
     order1.price,
-    strategyTxStatus,
     user,
   ]);
 
@@ -327,6 +321,7 @@ export const useCreateStrategy = () => {
     setQuote,
     order0,
     order1,
+    isAwaiting: mutation.isLoading,
     createStrategy,
     openTokenListModal,
     showOrders,
@@ -342,7 +337,7 @@ export const useCreateStrategy = () => {
     showTypeMenu,
     selectedStrategySettings,
     setSelectedStrategySettings,
-    strategyTxStatus,
+    isProcessing,
     isOrdersOverlap,
   };
 };

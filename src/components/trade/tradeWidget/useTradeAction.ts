@@ -17,7 +17,7 @@ type TradeProps = {
   isTradeBySource: boolean;
   sourceInput: string;
   targetInput: string;
-  setTradeInProcess: Dispatch<SetStateAction<boolean>>;
+  setIsAwaiting: Dispatch<SetStateAction<boolean>>;
 };
 
 type Props = Pick<TradeProps, 'source' | 'isTradeBySource' | 'sourceInput'> & {
@@ -68,7 +68,7 @@ export const useTradeAction = ({
       sourceInput,
       targetInput,
       tradeActions,
-      setTradeInProcess,
+      setIsAwaiting,
     }: TradeProps) => {
       if (!user || !signer) {
         throw new Error('No user or signer');
@@ -114,7 +114,7 @@ export const useTradeAction = ({
         void cache.invalidateQueries(QueryKey.balance(user, source.address));
         void cache.invalidateQueries(QueryKey.balance(user, target.address));
       } catch (error) {
-        setTradeInProcess(false);
+        setIsAwaiting(false);
       }
     },
     [

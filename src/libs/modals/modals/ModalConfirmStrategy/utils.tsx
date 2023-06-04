@@ -2,8 +2,6 @@ import { ReactNode } from 'react';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
-import { TxStatus } from 'components/strategies/create/types';
-import { ctaButtonTextByTxStatus } from 'components/strategies/utils';
 
 export type MutateModalContentData = {
   modalTitle: string;
@@ -16,8 +14,7 @@ export type MutateModalContentData = {
 };
 
 export const getModalDataByType = (
-  type: 'pause' | 'delete',
-  strategyTxStatus: TxStatus
+  type: 'pause' | 'delete'
 ): MutateModalContentData => {
   switch (type) {
     case 'pause':
@@ -27,11 +24,7 @@ export const getModalDataByType = (
         title: 'Are you sure you would like to pause your strategy?',
         content:
           'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
-        actionButton: `${
-          strategyTxStatus === 'initial'
-            ? 'Pause Strategy'
-            : ctaButtonTextByTxStatus[strategyTxStatus]
-        }`,
+        actionButton: 'Pause Strategy',
       };
 
     case 'delete':
@@ -49,11 +42,7 @@ export const getModalDataByType = (
             </div>
           </div>
         ),
-        actionButton: `${
-          strategyTxStatus === 'initial'
-            ? 'Delete Strategy'
-            : ctaButtonTextByTxStatus[strategyTxStatus]
-        }`,
+        actionButton: 'Delete Strategy',
         variant: 'error',
       };
   }

@@ -16,7 +16,7 @@ import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 type Props = {
   id: string;
   data: ModalTradeRoutingData & {
-    setTradeInProcess: Dispatch<SetStateAction<boolean>>;
+    setIsAwaiting: Dispatch<SetStateAction<boolean>>;
   };
 };
 
@@ -30,7 +30,7 @@ export const useModalTradeRouting = ({
     tradeActionsRes,
     onSuccess,
     buy = false,
-    setTradeInProcess,
+    setIsAwaiting,
   },
 }: Props) => {
   const { user, provider } = useWeb3();
@@ -69,7 +69,7 @@ export const useModalTradeRouting = ({
     onSuccess: () => {
       onSuccess();
       closeModal(id);
-      setTradeInProcess(false);
+      setIsAwaiting(false);
     },
   });
 
@@ -90,15 +90,16 @@ export const useModalTradeRouting = ({
         isTradeBySource,
         sourceInput: data.totalSourceAmount,
         targetInput: data.totalTargetAmount,
-        setTradeInProcess,
+        setIsAwaiting,
       });
 
     if (approval.approvalRequired) {
-      setTradeInProcess(true);
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
-        onConfirm: tradeFn,
-        onClose: () => setTradeInProcess(false),
+        onConfirm: () => {
+          setIsAwaiting(true);
+          tradeFn();
+        },
         buttonLabel: 'Confirm Trade',
         eventData: {
           productType: 'trade',
@@ -114,7 +115,7 @@ export const useModalTradeRouting = ({
         },
       });
     } else {
-      setTradeInProcess(true);
+      setIsAwaiting(true);
       void tradeFn();
     }
   }, [
@@ -132,7 +133,7 @@ export const useModalTradeRouting = ({
     data?.totalSourceAmount,
     data?.totalTargetAmount,
     isTradeBySource,
-    setTradeInProcess,
+    setIsAwaiting,
     buy,
     getFiatValueSource,
     provider?.network?.name,

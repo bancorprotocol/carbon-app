@@ -38,7 +38,7 @@ export const useBuySell = ({
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
-  const [tradeInProcess, setTradeInProcess] = useState(false);
+  const [isAwaiting, setIsAwaiting] = useState(false);
 
   const { calcMaxInput } = useTradeAction({
     source,
@@ -79,7 +79,7 @@ export const useBuySell = ({
     sourceInput,
     isTradeBySource,
     onSuccess: (txHash: string) => {
-      setTradeInProcess(false);
+      setIsAwaiting(false);
       clearInputs();
       buy
         ? carbonEvents.trade.tradeBuy({
@@ -243,15 +243,16 @@ export const useBuySell = ({
         isTradeBySource,
         sourceInput: sourceInput,
         targetInput: targetInput,
-        setTradeInProcess,
+        setIsAwaiting,
       });
 
     if (approval.approvalRequired) {
-      setTradeInProcess(true);
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
-        onConfirm: tradeFn,
-        onClose: () => setTradeInProcess(false),
+        onConfirm: () => {
+          setIsAwaiting(true);
+          tradeFn();
+        },
         buttonLabel: 'Confirm Trade',
         eventData: {
           ...eventData,
@@ -262,7 +263,7 @@ export const useBuySell = ({
         context: 'trade',
       });
     } else {
-      setTradeInProcess(true);
+      setIsAwaiting(true);
       void tradeFn();
     }
   }, [
@@ -391,6 +392,6 @@ export const useBuySell = ({
     calcSlippage,
     isTradeBySource,
     maxSourceAmountQuery,
-    tradeInProcess,
+    isAwaiting,
   };
 };

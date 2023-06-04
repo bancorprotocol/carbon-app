@@ -138,8 +138,6 @@
   width: 7px;
   height: 7px;
   border-radius: 5px;
-  background-color: white;
-  color: white;
   box-shadow: 9999px 0 0 -5px;
   animation: dot-pulse 1.5s infinite linear;
   animation-delay: 0.25s;
@@ -152,8 +150,6 @@
   width: 7px;
   height: 7px;
   border-radius: 5px;
-  background-color: white;
-  color: white;
 }
 .dot-pulse::before {
   box-shadow: 9984px 0 0 -5px;
