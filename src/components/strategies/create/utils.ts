@@ -90,7 +90,7 @@ export const createStrategyAction = async ({
     },
     {
       onSuccess: async (tx) => {
-        handleStrategyTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+        handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
 
         dispatchNotification('createStrategy', { txHash: tx.hash });
         if (!tx) return;
@@ -114,7 +114,7 @@ export const createStrategyAction = async ({
   );
 };
 
-export const handleStrategyTxStatusAndRedirectToOverview = (
+export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
   navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
 ) => {

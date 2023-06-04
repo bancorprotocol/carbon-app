@@ -11,7 +11,7 @@ import { useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
-import { handleStrategyTxStatusAndRedirectToOverview } from './create/utils';
+import { handleTxStatusAndRedirectToOverview } from './create/utils';
 
 export const useUpdateStrategy = () => {
   const { user } = useWeb3();
@@ -93,10 +93,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyTxStatusAndRedirectToOverview(
-            setIsProcessing,
-            navigate
-          );
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
 
           dispatchNotification('renewStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -140,10 +137,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyTxStatusAndRedirectToOverview(
-            setIsProcessing,
-            navigate
-          );
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
 
           dispatchNotification('changeRatesStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -189,10 +183,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyTxStatusAndRedirectToOverview(
-            setIsProcessing,
-            navigate
-          );
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
 
           dispatchNotification('withdrawStrategy', { txHash: tx.hash });
           if (!tx) return;
@@ -238,10 +229,7 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
-          handleStrategyTxStatusAndRedirectToOverview(
-            setIsProcessing,
-            navigate
-          );
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
 
           dispatchNotification('depositStrategy', { txHash: tx.hash });
           if (!tx) return;

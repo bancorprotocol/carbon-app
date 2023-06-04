@@ -192,7 +192,7 @@ export const EditStrategyBudgetContent = ({
         size="lg"
         fullWidth
       >
-        {`${type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}`}
+        {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>
       <Button
         onClick={() => back()}

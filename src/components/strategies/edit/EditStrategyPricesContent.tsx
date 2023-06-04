@@ -1,5 +1,5 @@
-import { useLocation } from 'libs/routing';
 import { useMemo } from 'react';
+import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
@@ -130,7 +130,7 @@ export const EditStrategyPricesContent = ({
         size="lg"
         fullWidth
       >
-        {`${type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}`}
+        {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
       </Button>
       <Button
         onClick={() => back()}

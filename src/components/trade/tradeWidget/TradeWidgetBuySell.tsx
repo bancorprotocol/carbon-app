@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
@@ -10,7 +11,6 @@ import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useEffect } from 'react';
 import useInitEffect from 'hooks/useInitEffect';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
 
@@ -130,6 +130,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         });
   };
 
+  const ctaButtonText = useMemo(() => {
+    if (user) {
+      return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
+    }
+
+    return 'Connect Wallet';
+  }, [buy, source.symbol, target.symbol, user]);
+
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
 
@@ -155,14 +163,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       ? 'loading'
       : prettifyNumber(liquidityQuery.data);
     return `Liquidity: ${value} ${target.symbol}`;
-  };
-
-  const getCtaButtonText = () => {
-    if (user) {
-      return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
-    } else {
-      return 'Connect Wallet';
-    }
   };
 
   return (
@@ -266,7 +266,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         fullWidth
         className={'mt-20'}
       >
-        {getCtaButtonText()}
+        {ctaButtonText}
       </Button>
     </div>
   );
