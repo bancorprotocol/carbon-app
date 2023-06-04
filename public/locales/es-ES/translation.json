@@ -1,20 +1,22 @@
 {
-  "common": {
-    "cancelButton": "Cancelar"
-  },
   "modal": {
-    "delete": {
+    "deleteStrategy": {
       "title": "Eliminar Estrategia",
       "subtitle": "Estás seguro de que deseas eliminar tu estrategia?",
-      "content": "Se eliminarán todos los datos de la estrategia. Será imposible restaurarlos.",
-      "additionalContent": "Todos los fondos se retirarán a tu billetera",
-      "actionButton": "Eliminar Estrategia"
+      "content1": "Se eliminarán todos los datos de la estrategia. Será imposible restaurarlos.",
+      "content2": "Todos los fondos serán retirados a tu billetera",
+      "actionButton1": "Eliminar Estrategia",
+      "actionButton2": "Cancelar"
     },
-    "pause": {
+    "pauseStrategy": {
       "title": "Pausar Estrategia",
       "subtitle": "Estás seguro de que deseas pausar tu estrategia?",
-      "content": "Esto evitará que tu estrategia sea negociada, pero conservarás el acceso a los fondos asociados.",
-      "actionButton": "Pausar Estrategia"
+      "content": "Esto evitará que tu estrategia se negocie, pero seguirás teniendo acceso a los fondos asociados.",
+      "actionButton1": "Pausar Estrategia",
+      "actionButton2": "Cancelar"
     }
-  }
+  },
+  "navBar": {},
+  "trade": {},
+  "strategy": {}
 }

@@ -85,9 +85,15 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
           size="lg"
           fullWidth
         >
-          {t('common.cancelButton', 'Cancel')}
+          {type === 'delete'
+            ? t('modal.deleteStrategy.actionButton2')
+            : t('modal.pauseStrategy.actionButton2')}
         </Button>
       </div>
     </Modal>
   );
 };
+
+// TODO: Maybe it will be better of changing actionButton1 & 2 to ->
+// actionButton1 -> actionButtons.confirm
+// actionButton2 -> actionButtons.cancel

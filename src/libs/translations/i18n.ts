@@ -1,12 +1,12 @@
-import i18n from 'i18next';
 import {
   initReactI18next,
   LanguageDetector,
   ChainedBackend,
   LocalStorageBackend,
   HttpBackend,
+  i18n,
 } from 'libs/translations';
-import { APP_ID, APP_VERSION } from 'services/localeStorage';
+import { APP_ID, APP_VERSION } from 'utils/constants';
 
 const TRANSLATION_VERSION = 'v1';
 
@@ -33,7 +33,7 @@ i18n
       backendOptions: [
         {
           prefix: `${APP_ID}-${APP_VERSION}-`,
-          expirationTime: 7 * 24 * 60 * 60 * 1000, // 7 days
+          expirationTime: 30 * 24 * 60 * 60 * 1000, // 30 days
           defaultVersion: 'v1',
           versions: SUPPORTED_LANGUAGES.reduce((acc, currLang) => {
             acc[currLang.code] = TRANSLATION_VERSION;

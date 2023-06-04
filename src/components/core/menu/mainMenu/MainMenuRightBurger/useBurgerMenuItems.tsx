@@ -9,7 +9,7 @@ import { ReactComponent as IconV } from 'assets/icons/v.svg';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
 import { useTranslation } from 'libs/translations';
-import { SUPPORTED_LANGUAGES } from 'languages/i18n';
+import { SUPPORTED_LANGUAGES } from 'libs/translations/i18n';
 
 export type MenuItemType = {
   subMenu?: MenuType;
