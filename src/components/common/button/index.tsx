@@ -34,8 +34,8 @@ export const Button: FC<ButtonProps> = ({
     // @ts-ignore
     <m.button
       className={buttonStyles({ variant, size, fullWidth, class: className })}
-      disabled={props.disabled || loading}
       {...props}
+      disabled={props.disabled || loading}
     >
       {loading ? (
         <>
