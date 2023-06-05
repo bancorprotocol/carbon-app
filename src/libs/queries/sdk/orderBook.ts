@@ -1,4 +1,4 @@
-import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
@@ -23,7 +23,7 @@ export const useGetOrderBook = (
   base?: string,
   quote?: string
 ) => {
-  const { isInitialized } = useCarbonSDK();
+  const { isInitialized } = useCarbonInit();
 
   return useQuery({
     queryKey: QueryKey.tradeOrderBook([base!, quote!], steps),
@@ -35,7 +35,7 @@ export const useGetOrderBook = (
 };
 
 export const useGetOrderBookLastTradeBuy = (base?: string, quote?: string) => {
-  const { isInitialized } = useCarbonSDK();
+  const { isInitialized } = useCarbonInit();
 
   return useQuery({
     queryKey: QueryKey.tradeOrderBookLastTradeBuy([base!, quote!]),

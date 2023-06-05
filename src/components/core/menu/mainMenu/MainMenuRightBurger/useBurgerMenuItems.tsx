@@ -30,88 +30,85 @@ export const useBurgerMenuItems = () => {
   const { i18n } = useTranslation();
   const menuMap = useMemo(() => new Map<MenuType, Menu>(), []);
 
-  const mainItems = useMemo(
-    (): MenuItemType[] => [
-      {
-        subMenu: 'currency',
-        content: <CurrencyMenuItemContent />,
-      },
-      {
-        subMenu: 'languages',
-        content: 'Language',
-      },
-      {
-        subMenu: 'resources',
-        content: 'Resources',
-      },
-      {
-        content: (
-          <Link className="flex" to={externalLinks.faq}>
-            FAQ
+  const mainItems: MenuItemType[] = [
+    {
+      subMenu: 'currency',
+      content: <CurrencyMenuItemContent />,
+    },
+    {
+      subMenu: 'languages',
+      content: 'Language',
+    },
+    {
+      subMenu: 'resources',
+      content: 'Resources',
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.faq}>
+          FAQ
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.analytics}>
+          Analytics
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.blog}>
+          Blog
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={PathNames.terms}>
+          Terms of Use
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={PathNames.privacy}>
+          Privacy Policy
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <div className="flex w-full items-center justify-between">
+          <Link
+            to={externalLinks.twitter}
+            className="rounded-6 p-6 md:hover:bg-black"
+          >
+            <IconTwitter className={iconStyles} />
           </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" to={externalLinks.analytics}>
-            Analytics
+          <Link
+            to={externalLinks.youtube}
+            className="rounded-6 p-6 md:hover:bg-black"
+          >
+            <IconYoutube className={iconStyles} />
           </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" to={externalLinks.blog}>
-            Blog
+          <Link
+            to={externalLinks.discord}
+            className="rounded-6 p-6 md:hover:bg-black"
+          >
+            <IconDiscord className={iconStyles} />
           </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" to={PathNames.terms}>
-            Terms of Use
+          <Link
+            to={externalLinks.telegram}
+            className="rounded-6 p-6 md:hover:bg-black"
+          >
+            <IconTelegram className={iconStyles} />
           </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" to={PathNames.privacy}>
-            Privacy Policy
-          </Link>
-        ),
-      },
-      {
-        content: (
-          <div className="flex w-full items-center justify-between">
-            <Link
-              to={externalLinks.twitter}
-              className="rounded-6 p-6 md:hover:bg-black"
-            >
-              <IconTwitter className={iconStyles} />
-            </Link>
-            <Link
-              to={externalLinks.youtube}
-              className="rounded-6 p-6 md:hover:bg-black"
-            >
-              <IconYoutube className={iconStyles} />
-            </Link>
-            <Link
-              to={externalLinks.discord}
-              className="rounded-6 p-6 md:hover:bg-black"
-            >
-              <IconDiscord className={iconStyles} />
-            </Link>
-            <Link
-              to={externalLinks.telegram}
-              className="rounded-6 p-6 md:hover:bg-black"
-            >
-              <IconTelegram className={iconStyles} />
-            </Link>
-          </div>
-        ),
-      },
-    ],
-    []
-  );
+        </div>
+      ),
+    },
+  ];
 
   const currencyItems = useMemo(
     (): MenuItemType[] => [
@@ -141,44 +138,41 @@ export const useBurgerMenuItems = () => {
     [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency]
   );
 
-  const resourcesItems = useMemo(
-    (): MenuItemType[] => [
-      {
-        content: (
-          <Link className="flex" to={externalLinks.techDocs}>
-            Tech Docs
-          </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" to={externalLinks.litePaper}>
-            Litepaper
-          </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" to={externalLinks.whitepaper}>
-            Whitepaper
-          </Link>
-        ),
-      },
-      {
-        content: (
-          <Link className="flex" to={externalLinks.simulatorRepo}>
-            Simulator Repo
-          </Link>
-        ),
-      },
-      {
-        content: (
-          <Link to={externalLinks.interactiveSim}>Interactive Simulator</Link>
-        ),
-      },
-    ],
-    []
-  );
+  const resourcesItems: MenuItemType[] = [
+    {
+      content: (
+        <Link className="flex" to={externalLinks.techDocs}>
+          Tech Docs
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.litePaper}>
+          Litepaper
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.whitepaper}>
+          Whitepaper
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.simulatorRepo}>
+          Simulator Repo
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link to={externalLinks.interactiveSim}>Interactive Simulator</Link>
+      ),
+    },
+  ];
 
   const languagesItems = useMemo(
     (): MenuItemType[] =>
@@ -193,7 +187,7 @@ export const useBurgerMenuItems = () => {
               <span className="flex items-center">
                 <IconV
                   className={`invisible h-12 w-12 ${
-                    code === i18n.language ? '!visible' : ''
+                    i18n.language.includes(code) ? '!visible' : ''
                   }`}
                 />
               </span>

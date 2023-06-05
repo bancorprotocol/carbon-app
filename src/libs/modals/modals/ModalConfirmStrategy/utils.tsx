@@ -21,7 +21,7 @@ export const getModalDataByType = (
   switch (type) {
     case 'pause':
       return {
-        modalTitle: t('modal.pauseStrategy.modalTitle1'),
+        modalTitle: t('modal.pauseStrategy.modalTitle'),
         icon: <IconPause className="h-16 w-16" />,
         title: t('modal.pauseStrategy.title'),
         content: t('modal.pauseStrategy.content'),

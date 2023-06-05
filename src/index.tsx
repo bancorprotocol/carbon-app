@@ -9,7 +9,6 @@ import { Web3ReactWrapper } from 'libs/web3';
 import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
-import './libs/translations/i18n';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';

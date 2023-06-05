@@ -15,6 +15,7 @@ import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { SupportedChainId } from 'libs/web3/web3.constants';
+import { initI18n } from 'libs/translations/i18n';
 import { carbonApi } from 'utils/carbonApi';
 import { useModal } from 'hooks/useModal';
 
@@ -39,7 +40,7 @@ const getTokenDecimalMap = () => {
   );
 };
 
-export const useCarbonSDK = () => {
+export const useCarbonInit = () => {
   const cache = useQueryClient();
   const {
     setCountryBlocked,
@@ -107,10 +108,11 @@ export const useCarbonSDK = () => {
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
       }
+      await initI18n();
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {
-      console.error('Error initializing CarbonSDK', e);
+      console.error('Error initializing Carbon', e);
       setIsError(true);
     } finally {
       setIsLoading(false);

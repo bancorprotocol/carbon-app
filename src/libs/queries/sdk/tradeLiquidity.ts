@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 import { carbonSDK } from 'libs/sdk';
 
 export const useGetTradeLiquidity = (base?: string, quote?: string) => {
-  const { isInitialized } = useCarbonSDK();
+  const { isInitialized } = useCarbonInit();
 
   return useQuery({
     queryKey: QueryKey.tradeLiquidity([base!, quote!]),
