@@ -35,7 +35,7 @@ export const initI18n = async () => {
       debug: import.meta.env.VITE_DEV_MODE,
       detection: {
         lookupLocalStorage: `${APP_ID}-${APP_VERSION}-i18nextLng`,
-        lookupQuerystring: 'lng', // disable querystring in url
+        lookupQuerystring: '', // disable querystring in url
       },
       backend: {
         backends: [LocalStorageBackend, HttpBackend],
