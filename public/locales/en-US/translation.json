@@ -1,16 +1,16 @@
 {
   "modal": {
     "deleteStrategy": {
-      "title": "Delete Strategy",
-      "subtitle": "Are you sure you would like to delete your strategy?",
+      "modalTitle": "Delete Strategy",
+      "title": "Are you sure you would like to delete your strategy?",
       "content1": "All data on the strategy will be deleted. It will be impossible to restore them.",
       "content2": "All funds will be withdrawn to your wallet",
       "actionButton1": "Delete Strategy",
       "actionButton2": "Cancel"
     },
     "pauseStrategy": {
-      "title": "Pause Strategy",
-      "subtitle": "Are you sure you would like to pause your strategy?",
+      "modalTitle": "Pause Strategy",
+      "title": "Are you sure you would like to pause your strategy?",
       "content": "This will prevent your strategy from being traded against, however you will retain access to any associated funds.",
       "actionButton1": "Pause Strategy",
       "actionButton2": "Cancel"

@@ -28,6 +28,7 @@ i18n
   .init({
     fallbackLng: 'en-US',
     debug: import.meta.env.VITE_DEV_MODE,
+    load: 'languageOnly',
     backend: {
       backends: [LocalStorageBackend, HttpBackend],
       backendOptions: [
@@ -46,6 +47,11 @@ i18n
         },
       ],
     },
+    saveMissing: true,
   });
+
+i18n.on('missingKey', (_, _1, key) => {
+  throw new Error(`Missing key ${key}`);
+});
 
 export default i18n;

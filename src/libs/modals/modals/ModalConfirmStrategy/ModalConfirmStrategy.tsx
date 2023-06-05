@@ -65,7 +65,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         <IconTitleText
           variant={data?.variant}
           icon={data?.icon}
-          title={data?.subtitle || ''}
+          title={data?.title || ''}
           text={data?.content}
         />
         {data?.additionalContent}

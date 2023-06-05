@@ -7,7 +7,7 @@ import { TFunction } from 'libs/translations';
 export type MutateModalContentData = {
   modalTitle: string;
   icon: ReactNode;
-  subtitle: string;
+  title: string;
   content: string;
   additionalContent?: ReactNode;
   actionButton: string;
@@ -21,17 +21,17 @@ export const getModalDataByType = (
   switch (type) {
     case 'pause':
       return {
-        modalTitle: t('modal.pauseStrategy.title'),
+        modalTitle: t('modal.pauseStrategy.modalTitle1'),
         icon: <IconPause className="h-16 w-16" />,
-        subtitle: t('modal.pauseStrategy.subtitle'),
+        title: t('modal.pauseStrategy.title'),
         content: t('modal.pauseStrategy.content'),
         actionButton: t('modal.pauseStrategy.actionButton1'),
       };
     case 'delete':
       return {
-        modalTitle: t('modal.deleteStrategy.title'),
+        modalTitle: t('modal.deleteStrategy.modalTitle'),
         icon: <IconTrash className="h-24 w-24" />,
-        subtitle: t('modal.deleteStrategy.subtitle'),
+        title: t('modal.deleteStrategy.title'),
         content: t('modal.deleteStrategy.content1'),
         additionalContent: (
           <div className="mt-20 flex items-center">
