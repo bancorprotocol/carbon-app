@@ -17,8 +17,6 @@
     }
   },
   "navBar": {},
-  "trade": {
-    "buy": "buy"
-  },
+  "trade": {},
   "strategy": {}
 }

@@ -2,7 +2,7 @@ import {
   initReactI18next,
   LanguageDetector,
   ChainedBackend,
-  // LocalStorageBackend,
+  LocalStorageBackend,
   HttpBackend,
   i18n,
 } from 'libs/translations';
@@ -27,7 +27,7 @@ i18n
   .use(initReactI18next)
   .init({
     react: {
-      useSuspense: false,
+      useSuspense: true,
     },
     fallbackLng: 'en',
     load: 'languageOnly',
@@ -37,7 +37,7 @@ i18n
       lookupQuerystring: '', // disable querystring in url
     },
     backend: {
-      backends: [HttpBackend],
+      backends: [LocalStorageBackend, HttpBackend],
       backendOptions: [
         {
           prefix: `${APP_ID}-${APP_VERSION}-`,
@@ -61,10 +61,6 @@ i18n.on('missingKey', (_, _1, key) => {
   if (import.meta.env.VITE_DEV_MODE) {
     throw new Error(`Missing key ${key}`);
   }
-});
-
-i18n.on('languageChanged', (lng) => {
-  console.log(lng, '-=-=-=-=-=- lng -=-=-=-=-=-');
 });
 
 export default i18n;

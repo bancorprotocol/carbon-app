@@ -8,7 +8,7 @@ import { MainContent } from 'components/core/MainContent';
 let didInit = false;
 
 export const App = () => {
-  const { init, isInitialized } = useCarbonInit();
+  const { init } = useCarbonInit();
 
   useEffect(() => {
     if (!didInit) {
@@ -20,7 +20,7 @@ export const App = () => {
   return (
     <>
       <NotificationAlerts />
-      {isInitialized && <MainMenu />}
+      <MainMenu />
       <main className={'flex-grow'}>
         <MainContent />
       </main>

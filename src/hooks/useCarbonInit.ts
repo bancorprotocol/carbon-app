@@ -17,7 +17,6 @@ import { RPC_URLS } from 'libs/web3';
 import { SupportedChainId } from 'libs/web3/web3.constants';
 import { carbonApi } from 'utils/carbonApi';
 import { useModal } from 'hooks/useModal';
-import i18n from 'libs/translations/i18n';
 
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.carbon.carbonController,
@@ -54,9 +53,7 @@ export const useCarbonInit = () => {
     },
   } = useStore();
   const { openModal } = useModal();
-  i18n.on('initialized', () => {
-    console.log('-=-=-=-=-=- initialized -=-=-=-=-=-');
-  });
+
   const invalidateQueriesByPair = useCallback(
     (pair: TokenPair) => {
       void cache.invalidateQueries({
