@@ -32,3 +32,6 @@ yarn-error.log*
 
 # typechain
 /src/abis/types
+/test-results/
+/playwright-report/
+/playwright/.cache/
