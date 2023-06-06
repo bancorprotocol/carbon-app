@@ -15,9 +15,9 @@ import { lsService } from 'services/localeStorage';
 import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { SupportedChainId } from 'libs/web3/web3.constants';
-import { initI18n } from 'libs/translations/i18n';
 import { carbonApi } from 'utils/carbonApi';
 import { useModal } from 'hooks/useModal';
+import i18n from 'libs/translations/i18n';
 
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.carbon.carbonController,
@@ -54,7 +54,9 @@ export const useCarbonInit = () => {
     },
   } = useStore();
   const { openModal } = useModal();
-
+  i18n.on('initialized', () => {
+    console.log('-=-=-=-=-=- initialized -=-=-=-=-=-');
+  });
   const invalidateQueriesByPair = useCallback(
     (pair: TokenPair) => {
       void cache.invalidateQueries({
@@ -108,7 +110,6 @@ export const useCarbonInit = () => {
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
       }
-      await initI18n();
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {

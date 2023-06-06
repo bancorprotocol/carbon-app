@@ -9,14 +9,15 @@ import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { useTranslation } from 'libs/translations';
 
 export type TradePageProps = { base: Token; quote: Token };
 
 export const TradePage = () => {
+  const { t } = useTranslation();
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isLoading, isTradePairError } = useTradePairs();
-
   const isValidPair = !(!baseToken || !quoteToken);
 
   const noTokens = !baseToken && !quoteToken;
@@ -40,17 +41,20 @@ export const TradePage = () => {
       ) : isTradePairError || !isValidPair ? (
         <div>{!noTokens && <div>Not found</div>}</div>
       ) : (
-        <div className="px-content mt-50 grid grid-cols-1 gap-20 pb-30 md:grid-cols-12 xl:px-50">
-          <div className={'order-3 md:order-1 md:col-span-4 md:row-span-2'}>
-            <OrderBookWidget base={baseToken} quote={quoteToken} />
+        <>
+          <div>{t('trade.buy')}</div>
+          <div className="px-content mt-50 grid grid-cols-1 gap-20 pb-30 md:grid-cols-12 xl:px-50">
+            <div className={'order-3 md:order-1 md:col-span-4 md:row-span-2'}>
+              <OrderBookWidget base={baseToken} quote={quoteToken} />
+            </div>
+            <div className={'order-1 md:order-2 md:col-span-8'}>
+              <TradeWidget base={baseToken} quote={quoteToken} />
+            </div>
+            <div className={'order-2 md:order-3 md:col-span-8'}>
+              <DepthChartWidget base={baseToken} quote={quoteToken} />
+            </div>
           </div>
-          <div className={'order-1 md:order-2 md:col-span-8'}>
-            <TradeWidget base={baseToken} quote={quoteToken} />
-          </div>
-          <div className={'order-2 md:order-3 md:col-span-8'}>
-            <DepthChartWidget base={baseToken} quote={quoteToken} />
-          </div>
-        </div>
+        </>
       )}
     </>
   );
