@@ -47,16 +47,22 @@ export const ApproveToken: FC<Props> = ({
       return console.error('No data loaded');
     }
     setTxBusy(true);
-    await mutation.mutate(
+    mutation.mutate(
       { ...data, isLimited },
       {
-        onSuccess: async (tx) => {
+        onSuccess: async ([approve, revoke]) => {
+          revoke &&
+            dispatchNotification('revoke', {
+              txHash: revoke.hash,
+            });
+
           dispatchNotification('approve', {
             symbol: token.symbol,
-            txHash: tx.hash,
+            txHash: approve.hash,
             limited: isLimited,
           });
-          await tx.wait();
+
+          await approve.wait();
           await cache.refetchQueries({
             queryKey: QueryKey.approval(user!, data.address, data.spender),
           });

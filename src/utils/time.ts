@@ -1,5 +1,6 @@
 export const ONE_DAY_IN_MS = 86400000;
 export const TWO_SECONDS_IN_MS = 2000;
+export const FOUR_SECONDS_IN_MS = 4000;
 export const TEN_SEC_IN_MS = 10000;
 export const THIRTY_SEC_IN_MS = 30000;
 
