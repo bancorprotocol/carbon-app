@@ -10,7 +10,7 @@ import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
-import { getStatusTextByTxStatus } from 'components/strategies/edit/utils';
+import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { getModalDataByType } from './utils';
 
 export type ModalConfirmStrategyData = {

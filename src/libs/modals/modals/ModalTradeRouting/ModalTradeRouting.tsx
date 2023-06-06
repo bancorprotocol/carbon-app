@@ -104,7 +104,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           onClick={handleCTAClick}
           disabled={disabledCTA}
           loading={isAwaiting}
-          loadingChildren={isAwaiting && 'Waiting for Confirmation'}
+          loadingChildren={'Waiting for Confirmation'}
         >
           Confirm
         </Button>

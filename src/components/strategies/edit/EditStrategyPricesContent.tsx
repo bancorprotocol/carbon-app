@@ -9,7 +9,7 @@ import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock
 import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { checkIfOrdersOverlap } from '../utils';
-import { getStatusTextByTxStatus } from './utils';
+import { getStatusTextByTxStatus } from '../utils';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 

@@ -13,7 +13,7 @@ import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useMemo } from 'react';
-import { getStatusTextByTxStatus } from './utils';
+import { getStatusTextByTxStatus } from '../utils';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
