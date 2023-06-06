@@ -40,7 +40,7 @@ export const Button: FC<ButtonProps> = ({
       {loading ? (
         <>
           {loadingChildren || props.children}
-          <span className="dot-pulse ml-30 flex" />
+          <span className="dot-pulse ml-30" />
         </>
       ) : (
         props.children

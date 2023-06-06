@@ -133,6 +133,7 @@
 }
 
 .dot-pulse {
+  display:flex;
   position: relative;
   left: -9999px;
   width: 7px;
