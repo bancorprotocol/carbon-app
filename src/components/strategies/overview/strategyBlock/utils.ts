@@ -1,24 +1,25 @@
 import { Order, StrategyStatus } from 'libs/queries';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { i18n } from 'libs/translations';
 
 export const getStatusText = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
-    ? 'Active'
+    ? i18n.t('strategy.overview.block.status.active')
     : status === StrategyStatus.NoBudget
-    ? 'No Budget · Inactive'
+    ? i18n.t('strategy.overview.block.status.noBudget')
     : status === StrategyStatus.Paused
-    ? 'Paused - Inactive'
-    : 'Inactive';
+    ? i18n.t('strategy.overview.block.status.paused')
+    : i18n.t('strategy.overview.block.status.inactive');
 };
 
 export const getTooltipTextByStatus = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
-    ? 'Your strategy is active and ready'
+    ? i18n.t('strategy.overview.block.tooltips.active')
     : status === StrategyStatus.NoBudget
-    ? 'Your strategy has no associated funds. Consider depositing funds to activate it.'
+    ? i18n.t('strategy.overview.block.tooltips.noBudget')
     : status === StrategyStatus.Paused
-    ? 'Your strategy is currently paused. Edit the prices to activate it.'
-    : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
+    ? i18n.t('strategy.overview.block.tooltips.paused')
+    : i18n.t('strategy.overview.block.tooltips.inactive');
 };
 
 export const tooltipTextByStrategyEditOptionsId = {

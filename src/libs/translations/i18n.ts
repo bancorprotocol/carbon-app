@@ -2,8 +2,8 @@ import {
   initReactI18next,
   LanguageDetector,
   ChainedBackend,
-  LocalStorageBackend,
   HttpBackend,
+  LocalStorageBackend,
   i18n,
 } from 'libs/translations';
 import { APP_ID, APP_VERSION } from 'utils/constants';

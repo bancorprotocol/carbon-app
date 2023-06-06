@@ -4,13 +4,10 @@ import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { carbonEvents } from 'services/events';
 
 type Props = {
-  title?: string;
+  title: string;
   className?: string;
 };
-export const StrategyBlockCreate: FC<Props> = ({
-  title = 'Create Strategy',
-  className = '',
-}) => {
+export const StrategyBlockCreate: FC<Props> = ({ title, className = '' }) => {
   return (
     <Link
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}

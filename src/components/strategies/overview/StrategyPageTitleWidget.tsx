@@ -8,6 +8,7 @@ import {
   StrategyFilterSort,
 } from 'components/strategies/overview/StrategyFilterSort';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;
@@ -18,6 +19,8 @@ export const StrategyPageTitleWidget: FC<{
   setSort: (sort: StrategySort) => void;
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ search, setSearch, showFilter, sort, filter, setSort, setFilter }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="grid grid-cols-2 gap-10 md:flex md:items-center md:gap-20">
       {showFilter && (
@@ -44,7 +47,7 @@ export const StrategyPageTitleWidget: FC<{
             carbonEvents.strategy.newStrategyCreateClick(undefined)
           }
         >
-          Create Strategy
+          {t('strategy.overview.header.createStrategy')}
         </Button>
       </Link>
     </div>

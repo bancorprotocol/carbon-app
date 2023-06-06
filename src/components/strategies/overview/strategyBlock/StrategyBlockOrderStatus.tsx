@@ -1,12 +1,13 @@
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { StrategyStatus } from 'libs/queries';
 import { FC } from 'react';
-import { getStatusText, getTooltipTextByStatus } from './utils';
-import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { Button } from 'components/common/button';
-import { ReactComponent as IconActiveBell } from 'assets/icons/activeBell.svg';
+import { StrategyStatus } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
 import { StrategyEditEventType } from 'services/events/types';
 import { carbonEvents } from 'services/events';
+import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { Button } from 'components/common/button';
+import { ReactComponent as IconActiveBell } from 'assets/icons/activeBell.svg';
+import { getStatusText, getTooltipTextByStatus } from './utils';
 
 export const StrategyBlockOrderStatus: FC<{
   status: StrategyStatus;
@@ -14,11 +15,15 @@ export const StrategyBlockOrderStatus: FC<{
   showBudgetWarning?: boolean;
   strategyEventData: StrategyEditEventType;
 }> = ({ status, strategyId, strategyEventData, showBudgetWarning = false }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex justify-between rounded-8 border border-emphasis p-15">
       <div>
         <div className="flex gap-6">
-          <div className="text-secondary text-14">Order Status</div>
+          <div className="text-secondary text-14">
+            {t('strategy.overview.block.orderStatus')}
+          </div>
           {showBudgetWarning && (
             <WarningWithTooltip tooltipContent="Low balance might be skipped due to gas considerations" />
           )}
@@ -41,13 +46,14 @@ export const StrategyBlockOrderStatus: FC<{
             delay={0}
             element={
               <div className="flex flex-col gap-10">
-                <div className="text-14">Strategy Notification</div>
-                <div className="text-12 text-white/80">
-                  You can set a notification to be informed each time someone
-                  trades against your strategy.
+                <div className="text-14">
+                  {t('strategy.overview.block.notification.title')}
                 </div>
                 <div className="text-12 text-white/80">
-                  This is a third-party service managed by{' '}
+                  {t('strategy.overview.block.notification.content1')}
+                </div>
+                <div className="text-12 text-white/80">
+                  {t('strategy.overview.block.notification.content2')}{' '}
                   <span className="font-weight-500">hal.xyz</span>
                 </div>
                 <Button
@@ -64,7 +70,7 @@ export const StrategyBlockOrderStatus: FC<{
                     );
                   }}
                 >
-                  Manage Notification
+                  {t('strategy.overview.block.notification.actionButton')}
                 </Button>
               </div>
             }

@@ -18,5 +18,44 @@
   },
   "navBar": {},
   "trade": {},
-  "strategy": {}
+  "strategy": {
+    "overview": {
+      "block": {
+        "createFirstStrategy": "Create Your First Strategy",
+        "createStrategy": "Create Strategy",
+        "buy": "Buy",
+        "sell": "Sell",
+        "limitPrice": "Limit Price",
+        "priceRange": "Price Range",
+        "budget": "Budget",
+        "id": "ID",
+        "orderStatus": "Order Status",
+        "status": {
+          "active": "Active",
+          "noBudget": "No Budget · Inactive",
+          "paused": "Paused - Inactive",
+          "inactive": "Inactive"
+        },
+        "tooltips": {
+          "active": "Your strategy is active and ready",
+          "noBudget": "Your strategy has no associated funds. Consider depositing funds to activate it.",
+          "paused": "Your strategy is currently paused. Edit the prices to activate it.",
+          "inactive": "Your strategy is currently inactive. Consider activating it with funds and rates."
+        },
+        "notification": {
+          "title": "Strategy Notification",
+          "content1": "You can set a notification to be informed each time someone trades against your strategy.",
+          "content2": "This is a third-party service managed by",
+          "actionButton": "Manage Notification"
+        }
+      },
+      "header": {
+        "createStrategy": "Create Strategy",
+        "strategies": "Strategies",
+        "strategiesWithCount_zero": "Strategies",
+        "strategiesWithCount_one": "{{count}} Strategy",
+        "strategiesWithCount_other": "{{count}} Strategies"
+      }
+    }
+  }
 }
