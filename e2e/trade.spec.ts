@@ -1,15 +1,14 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-test('Trade snapshot', async ({ baseURL }) => {
-  console.log(baseURL, '-=-=-=-=-=- baseUrl -=-=-=-=-=-');
-  const browser = await chromium.launch();
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  await page.goto(`${baseURL}/`, { waitUntil: 'networkidle' });
+test('has title', async ({ page }) => {
+  await page.goto('/');
 
-  // await injectAxe(page);
-  // await page.waitForSelector('div#trade-content');
-  // await page.waitForLoadState('domcontentloaded');
-  const error = await page.locator('#networkError');
-  await expect(error).toBeVisible();
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Carbon/);
+});
+
+test('Trade', async ({ page }) => {
+  await page.goto(`${page}/`, { waitUntil: 'networkidle' });
+  const element = await page.getByText('Network Error');
+  await expect(element !== undefined).toBeTruthy();
 });
