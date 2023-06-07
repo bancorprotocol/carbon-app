@@ -23,6 +23,30 @@
       "actionButton2": "Cancel"
     }
   },
+  "navBar": {
+    "items": {
+      "item1": "Strategies",
+      "item2": "Trade",
+      "item3": "Debug"
+    },
+    "burgerMenu": {
+      "items": {
+        "item1": "Currency",
+        "item2": "Languages",
+        "item3": "Resources",
+        "item4": "FAQ",
+        "item5": "Analytics",
+        "item6": "Blog",
+        "item7": "Terms of Use",
+        "item8": "Privacy Policy",
+        "item9": "Tech Docs",
+        "item10": "Litepaper",
+        "item11": "Whitepaper",
+        "item12": "Simulator Repo",
+        "item13": "Interactive Simulator"
+      }
+    }
+  },
   "pages": {
     "strategyOverview": {
       "header": {

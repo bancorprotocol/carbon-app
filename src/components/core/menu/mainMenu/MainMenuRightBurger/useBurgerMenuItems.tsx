@@ -27,7 +27,7 @@ const iconStyles = 'h-32 w-32 md:h-20 md:w-20';
 export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const menuMap = useMemo(() => new Map<MenuType, Menu>(), []);
 
   const mainItems: MenuItemType[] = [
@@ -37,44 +37,44 @@ export const useBurgerMenuItems = () => {
     },
     {
       subMenu: 'languages',
-      content: 'Language',
+      content: t('navBar.burgerMenu.items.item2') || '',
     },
     {
       subMenu: 'resources',
-      content: 'Resources',
+      content: t('navBar.burgerMenu.items.item3') || '',
     },
     {
       content: (
         <Link className="flex" to={externalLinks.faq}>
-          FAQ
+          {t('navBar.burgerMenu.items.item4')}
         </Link>
       ),
     },
     {
       content: (
         <Link className="flex" to={externalLinks.analytics}>
-          Analytics
+          {t('navBar.burgerMenu.items.item5')}
         </Link>
       ),
     },
     {
       content: (
         <Link className="flex" to={externalLinks.blog}>
-          Blog
+          {t('navBar.burgerMenu.items.item6')}
         </Link>
       ),
     },
     {
       content: (
         <Link className="flex" to={PathNames.terms}>
-          Terms of Use
+          {t('navBar.burgerMenu.items.item7')}
         </Link>
       ),
     },
     {
       content: (
         <Link className="flex" to={PathNames.privacy}>
-          Privacy Policy
+          {t('navBar.burgerMenu.items.item8')}
         </Link>
       ),
     },
@@ -142,34 +142,36 @@ export const useBurgerMenuItems = () => {
     {
       content: (
         <Link className="flex" to={externalLinks.techDocs}>
-          Tech Docs
+          {t('navBar.burgerMenu.items.item9')}
         </Link>
       ),
     },
     {
       content: (
         <Link className="flex" to={externalLinks.litePaper}>
-          Litepaper
+          {t('navBar.burgerMenu.items.item10')}
         </Link>
       ),
     },
     {
       content: (
         <Link className="flex" to={externalLinks.whitepaper}>
-          Whitepaper
+          {t('navBar.burgerMenu.items.item11')}
         </Link>
       ),
     },
     {
       content: (
         <Link className="flex" to={externalLinks.simulatorRepo}>
-          Simulator Repo
+          {t('navBar.burgerMenu.items.item12')}
         </Link>
       ),
     },
     {
       content: (
-        <Link to={externalLinks.interactiveSim}>Interactive Simulator</Link>
+        <Link to={externalLinks.interactiveSim}>
+          {t('navBar.burgerMenu.items.item13')}
+        </Link>
       ),
     },
   ];
@@ -209,10 +211,11 @@ export const useBurgerMenuItems = () => {
 };
 
 const CurrencyMenuItemContent = () => {
+  const { t } = useTranslation();
   const { selectedFiatCurrency } = useFiatCurrency();
   return (
     <div className="flex w-full items-center justify-between">
-      <span>Currency</span>
+      <span>{t('navBar.burgerMenu.items.item1')}</span>
       <span className="mr-10 font-weight-500">{selectedFiatCurrency}</span>
     </div>
   );
