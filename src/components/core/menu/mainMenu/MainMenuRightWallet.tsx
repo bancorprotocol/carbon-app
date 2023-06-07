@@ -70,9 +70,9 @@ export const MainMenuRightWallet: FC = () => {
   }, [isSupportedNetwork, isUserBlocked]);
 
   const buttonText = useMemo(() => {
-    if (isUserBlocked) return 'Wallet Blocked';
-    if (!isSupportedNetwork) return 'Wrong Network';
-    if (!user) return t('common.actionButton1');
+    if (isUserBlocked) return t('navBar.walletMenu.states.state2');
+    if (!isSupportedNetwork) return t('navBar.walletMenu.states.state3');
+    if (!user) return t('navBar.walletMenu.states.state1');
     return shortenString(user);
   }, [isSupportedNetwork, isUserBlocked, t, user]);
 
@@ -112,7 +112,7 @@ export const MainMenuRightWallet: FC = () => {
               }
             >
               <IconETHLogo className={'w-16'} />
-              <span>Ethereum Network</span>
+              <span>{t('navBar.walletMenu.items.item1')}</span>
             </div>
           ) : (
             <button
@@ -121,7 +121,7 @@ export const MainMenuRightWallet: FC = () => {
                 'hover:bg-body flex w-full rounded-6 p-8 text-red/80  hover:text-red'
               }
             >
-              Switch Network
+              {t('navBar.walletMenu.items.item2')}
             </button>
           )}
           <button
@@ -131,7 +131,7 @@ export const MainMenuRightWallet: FC = () => {
             }
           >
             <IconDisconnect className={'w-16'} />
-            <span>Disconnect</span>
+            <span>{t('navBar.walletMenu.items.item3')}</span>
           </button>
         </div>
       </DropdownMenu>

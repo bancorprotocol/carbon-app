@@ -45,6 +45,18 @@
         "item12": "Simulator Repo",
         "item13": "Interactive Simulator"
       }
+    },
+    "walletMenu": {
+      "states": {
+        "state1": "Connect Wallet",
+        "state2": "Wallet Blocked",
+        "state3": "Wrong Network"
+      },
+      "items": {
+        "item1": "Ethereum Network",
+        "item2": "Switch Network",
+        "item3": "Disconnect"
+      }
     }
   },
   "pages": {
