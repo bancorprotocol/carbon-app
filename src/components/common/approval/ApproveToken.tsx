@@ -37,6 +37,7 @@ export const ApproveToken: FC<Props> = ({
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
+
   const [isLimited, setIsLimited] = useState(false);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
@@ -183,7 +184,7 @@ export const ApproveToken: FC<Props> = ({
 
         {data.approvalRequired ? (
           txBusy ? (
-            <div>please wait</div>
+            <div>Waiting for Confirmation</div>
           ) : (
             <div
               className={'flex h-82 flex-col items-end justify-center gap-10'}

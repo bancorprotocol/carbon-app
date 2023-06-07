@@ -45,6 +45,7 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
@@ -113,6 +114,7 @@ export const useCreateStrategy = () => {
               dispatchNotification,
               cache,
               navigate,
+              setIsProcessing,
               strategyEventData,
             }),
           buttonLabel: 'Create Strategy',
@@ -137,6 +139,7 @@ export const useCreateStrategy = () => {
           dispatchNotification,
           cache,
           navigate,
+          setIsProcessing,
           strategyEventData,
         });
       }
@@ -216,11 +219,13 @@ export const useCreateStrategy = () => {
       approval.isError ||
       mutation.isLoading ||
       !isOrder0Valid ||
-      !isOrder1Valid
+      !isOrder1Valid ||
+      isProcessing
     );
   }, [
     approval.isError,
     approval.isLoading,
+    isProcessing,
     mutation.isLoading,
     order0.isRange,
     order0.max,
@@ -316,6 +321,7 @@ export const useCreateStrategy = () => {
     setQuote,
     order0,
     order1,
+    isAwaiting: mutation.isLoading,
     createStrategy,
     openTokenListModal,
     showOrders,
@@ -331,6 +337,7 @@ export const useCreateStrategy = () => {
     showTypeMenu,
     selectedStrategySettings,
     setSelectedStrategySettings,
+    isProcessing,
     isOrdersOverlap,
   };
 };
