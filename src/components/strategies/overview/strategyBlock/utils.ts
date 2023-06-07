@@ -4,22 +4,22 @@ import { i18n } from 'libs/translations';
 
 export const getStatusText = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
-    ? i18n.t('strategy.overview.block.status.active')
+    ? i18n.t('pages.strategyOverview.card.section3.status.1')
     : status === StrategyStatus.NoBudget
-    ? i18n.t('strategy.overview.block.status.noBudget')
+    ? i18n.t('pages.strategyOverview.card.section3.status.2')
     : status === StrategyStatus.Paused
-    ? i18n.t('strategy.overview.block.status.paused')
-    : i18n.t('strategy.overview.block.status.inactive');
+    ? i18n.t('pages.strategyOverview.card.section3.status.3')
+    : i18n.t('pages.strategyOverview.card.section3.status.4');
 };
 
 export const getTooltipTextByStatus = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
-    ? i18n.t('strategy.overview.block.tooltips.active')
+    ? i18n.t('pages.strategyOverview.card.tooltips.7')
     : status === StrategyStatus.NoBudget
-    ? i18n.t('strategy.overview.block.tooltips.noBudget')
+    ? i18n.t('pages.strategyOverview.card.tooltips.8')
     : status === StrategyStatus.Paused
-    ? i18n.t('strategy.overview.block.tooltips.paused')
-    : i18n.t('strategy.overview.block.tooltips.inactive');
+    ? i18n.t('pages.strategyOverview.card.tooltips.9')
+    : i18n.t('pages.strategyOverview.card.tooltips.10');
 };
 
 export const tooltipTextByStrategyEditOptionsId = {

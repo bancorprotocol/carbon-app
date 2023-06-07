@@ -22,7 +22,7 @@ export const StrategyBlockOrderStatus: FC<{
       <div>
         <div className="flex gap-6">
           <div className="text-secondary text-14">
-            {t('strategy.overview.block.orderStatus')}
+            {t('pages.strategyOverview.card.section3.title')}
           </div>
           {showBudgetWarning && (
             <WarningWithTooltip tooltipContent="Low balance might be skipped due to gas considerations" />
@@ -47,13 +47,17 @@ export const StrategyBlockOrderStatus: FC<{
             element={
               <div className="flex flex-col gap-10">
                 <div className="text-14">
-                  {t('strategy.overview.block.notification.title')}
+                  {t('pages.strategyOverview.card.section3.notification.title')}
                 </div>
                 <div className="text-12 text-white/80">
-                  {t('strategy.overview.block.notification.content1')}
+                  {t(
+                    'pages.strategyOverview.card.section3.notification.content1'
+                  )}
                 </div>
                 <div className="text-12 text-white/80">
-                  {t('strategy.overview.block.notification.content2')}{' '}
+                  {t(
+                    'pages.strategyOverview.card.section3.notification.content2'
+                  )}{' '}
                   <span className="font-weight-500">hal.xyz</span>
                 </div>
                 <Button
@@ -70,7 +74,9 @@ export const StrategyBlockOrderStatus: FC<{
                     );
                   }}
                 >
-                  {t('strategy.overview.block.notification.actionButton')}
+                  {t(
+                    'pages.strategyOverview.card.section3.notification.actionButton'
+                  )}
                 </Button>
               </div>
             }

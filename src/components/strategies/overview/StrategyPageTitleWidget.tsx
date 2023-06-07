@@ -47,7 +47,7 @@ export const StrategyPageTitleWidget: FC<{
             carbonEvents.strategy.newStrategyCreateClick(undefined)
           }
         >
-          {t('strategy.overview.header.createStrategy')}
+          {t('pages.strategyOverview.header.actionButton')}
         </Button>
       </Link>
     </div>

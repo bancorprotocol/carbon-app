@@ -1,5 +1,5 @@
 {
-  "modal": {
+  "modals": {
     "deleteStrategy": {
       "modalTitle": "Delete Strategy",
       "title": "Are you sure you would like to delete your strategy?",
@@ -16,51 +16,57 @@
       "actionButton2": "Cancel"
     }
   },
-  "navBar": {},
-  "trade": {},
-  "strategy": {
-    "overview": {
-      "block": {
-        "createFirstStrategy": "Create Your First Strategy",
-        "createStrategy": "Create Strategy",
-        "buy": "Buy",
-        "sell": "Sell",
-        "limitPrice": "Limit Price",
-        "priceRange": "Price Range",
-        "budget": "Budget",
-        "id": "ID",
-        "orderStatus": "Order Status",
-        "status": {
-          "active": "Active",
-          "noBudget": "No Budget · Inactive",
-          "paused": "Paused - Inactive",
-          "inactive": "Inactive"
+  "pages": {
+    "strategyOverview": {
+      "header": {
+        "actionButton": "Create Strategy",
+        "title_zero": "Strategies",
+        "title_one": "{{count}} Strategy",
+        "title_other": "{{count}} Strategies"
+      },
+      "card": {
+        "title": "ID",
+        "actionButton1": "Create Your First Strategy",
+        "actionButton2": "Create Strategy",
+        "section1": {
+          "title": "Buy",
+          "content1": "Limit Price",
+          "content2": "Price Range",
+          "content3": "Budget"
+        },
+        "section2": {
+          "title": "Sell",
+          "content1": "Limit Price",
+          "content2": "Price Range",
+          "content3": "Budget"
+        },
+        "section3": {
+          "title": "Order Status",
+          "status": {
+            "1": "Active",
+            "2": "No Budget · Inactive",
+            "3": "Paused - Inactive",
+            "4": "Inactive"
+          },
+          "notification": {
+            "title": "Strategy Notification",
+            "content1": "You can set a notification to be informed each time someone trades against your strategy.",
+            "content2": "This is a third-party service managed by",
+            "actionButton": "Manage Notification"
+          }
         },
         "tooltips": {
-          "buy": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your 'Sell' order with tokens.",
-          "sell": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your 'Buy' order with tokens.",
-          "buyPrice": "This is the price in which you are willing to buy {{token}}.",
-          "sellPrice": "This is the price in which you are willing to sell {{token}}.",
-          "buyBudget": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
-          "sellBudget": "This is the available amount of {{token}} tokens that you are willing to sell.",
-          "active": "Your strategy is active and ready",
-          "noBudget": "Your strategy has no associated funds. Consider depositing funds to activate it.",
-          "paused": "Your strategy is currently paused. Edit the prices to activate it.",
-          "inactive": "Your strategy is currently inactive. Consider activating it with funds and rates."
-        },
-        "notification": {
-          "title": "Strategy Notification",
-          "content1": "You can set a notification to be informed each time someone trades against your strategy.",
-          "content2": "This is a third-party service managed by",
-          "actionButton": "Manage Notification"
+          "1": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your 'Sell' order with tokens.",
+          "2": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your 'Buy' order with tokens.",
+          "3": "This is the price in which you are willing to buy {{token}}.",
+          "4": "This is the price in which you are willing to sell {{token}}.",
+          "5": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
+          "6": "This is the available amount of {{token}} tokens that you are willing to sell.",
+          "7": "Your strategy is active and ready",
+          "8": "Your strategy has no associated funds. Consider depositing funds to activate it.",
+          "9": "Your strategy is currently paused. Edit the prices to activate it.",
+          "10": "Your strategy is currently inactive. Consider activating it with funds and rates."
         }
-      },
-      "header": {
-        "createStrategy": "Create Strategy",
-        "strategies": "Strategies",
-        "strategiesWithCount_zero": "Strategies",
-        "strategiesWithCount_one": "{{count}} Strategy",
-        "strategiesWithCount_other": "{{count}} Strategies"
       }
     }
   }

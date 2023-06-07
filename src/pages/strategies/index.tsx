@@ -39,7 +39,7 @@ export const StrategiesPage = () => {
   return (
     <Page
       title={
-        t('strategy.overview.header.strategiesWithCount', {
+        t('pages.strategyOverview.header.title', {
           count: strategies.data?.length || 0,
         }) || undefined
       }

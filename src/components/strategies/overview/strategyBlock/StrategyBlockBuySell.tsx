@@ -77,18 +77,18 @@ export const StrategyBlockBuySell: FC<{
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? t('strategy.overview.block.tooltips.buy', {
+              ? t('pages.strategyOverview.card.tooltips.1', {
                   token: token.symbol,
                 })
-              : t('strategy.overview.block.tooltips.sell', {
+              : t('pages.strategyOverview.card.tooltips.2', {
                   token: otherToken.symbol,
                 })
           }
         >
           <div className="flex items-center gap-6">
             {buy
-              ? t('strategy.overview.block.buy')
-              : t('strategy.overview.block.sell')}
+              ? t('pages.strategyOverview.card.section1.title')
+              : t('pages.strategyOverview.card.section2.title')}
             <Imager
               className="h-16 w-16"
               src={buy ? token.logoURI : otherToken.logoURI}
@@ -104,18 +104,26 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? t('strategy.overview.block.tooltips.buyPrice', {
+                ? t('pages.strategyOverview.card.tooltips.3', {
                     token: token.symbol,
                   })
-                : t('strategy.overview.block.tooltips.sellPrice', {
+                : t('pages.strategyOverview.card.tooltips.4', {
                     token: otherToken.symbol,
                   })
             }
           >
             <div className={`${buy ? 'text-green' : 'text-red'}`}>
               {limit
-                ? t('strategy.overview.block.limitPrice')
-                : t('strategy.overview.block.priceRange')}
+                ? t(
+                    `pages.strategyOverview.card.${
+                      buy ? 'section1' : 'section2'
+                    }.content1`
+                  )
+                : t(
+                    `pages.strategyOverview.card.${
+                      buy ? 'section1' : 'section2'
+                    }.content2`
+                  )}
             </div>
           </Tooltip>
           <Tooltip
@@ -143,17 +151,21 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? t('strategy.overview.block.tooltips.buyBudget', {
+                ? t('pages.strategyOverview.card.tooltips.5', {
                     buyToken: token.symbol,
                     sellToken: otherToken.symbol,
                   })
-                : t('strategy.overview.block.tooltips.sellBudget', {
+                : t('pages.strategyOverview.card.tooltips.6', {
                     token: otherToken.symbol,
                   })
             }
           >
             <div className="text-secondary !text-16">
-              {t('strategy.overview.block.budget')}
+              {t(
+                `pages.strategyOverview.card.${
+                  buy ? 'section1' : 'section2'
+                }.content3`
+              )}
             </div>
           </Tooltip>
           <div className="flex gap-7">

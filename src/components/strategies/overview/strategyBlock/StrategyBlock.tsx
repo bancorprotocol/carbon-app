@@ -66,7 +66,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
             }
 
             <div className="text-secondary flex">
-              {t('strategy.overview.block.id')}: {strategy.idDisplay}
+              {t('pages.strategyOverview.card.title')}: {strategy.idDisplay}
             </div>
           </div>
         </div>

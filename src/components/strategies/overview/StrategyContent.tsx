@@ -88,7 +88,7 @@ export const StrategyContent: FC<Props> = ({
           ))}
           <m.div variants={mItemVariant}>
             <StrategyBlockCreate
-              title={t('strategy.overview.block.createStrategy')}
+              title={t('pages.strategyOverview.card.actionButton2')}
             />
           </m.div>
         </m.div>

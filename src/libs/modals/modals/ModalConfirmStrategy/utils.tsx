@@ -21,28 +21,28 @@ export const getModalDataByType = (
   switch (type) {
     case 'pause':
       return {
-        modalTitle: t('modal.pauseStrategy.modalTitle'),
+        modalTitle: t('modals.pauseStrategy.modalTitle'),
         icon: <IconPause className="h-16 w-16" />,
-        title: t('modal.pauseStrategy.title'),
-        content: t('modal.pauseStrategy.content'),
-        actionButton: t('modal.pauseStrategy.actionButton1'),
+        title: t('modals.pauseStrategy.title'),
+        content: t('modals.pauseStrategy.content'),
+        actionButton: t('modals.pauseStrategy.actionButton1'),
       };
 
     case 'delete':
       return {
-        modalTitle: t('modal.deleteStrategy.modalTitle'),
+        modalTitle: t('modals.deleteStrategy.modalTitle'),
         icon: <IconTrash className="h-24 w-24" />,
-        title: t('modal.deleteStrategy.title'),
-        content: t('modal.deleteStrategy.content1'),
+        title: t('modals.deleteStrategy.title'),
+        content: t('modals.deleteStrategy.content1'),
         additionalContent: (
           <div className="mt-20 flex items-center">
             <IconWallet className="mr-10 h-12 w-12" />
             <div className="flex-1 text-14 font-weight-500 text-white/80">
-              {t('modal.deleteStrategy.content2')}
+              {t('modals.deleteStrategy.content2')}
             </div>
           </div>
         ),
-        actionButton: t('modal.deleteStrategy.actionButton1'),
+        actionButton: t('modals.deleteStrategy.actionButton1'),
         variant: 'error',
       };
   }
