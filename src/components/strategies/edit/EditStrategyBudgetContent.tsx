@@ -154,9 +154,9 @@ export const EditStrategyBudgetContent = ({
         );
   };
 
-  const isOrdersBudgetValid = () => {
+  const isOrdersBudgetValid = useMemo(() => {
     return +order0.budget > 0 || +order1.budget > 0;
-  };
+  }, [order0.budget, order1.budget]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -183,7 +183,7 @@ export const EditStrategyBudgetContent = ({
         type={type}
       />
       <Button
-        disabled={!isOrdersBudgetValid()}
+        disabled={!isOrdersBudgetValid}
         loading={isLoading}
         loadingChildren={loadingChildren}
         onClick={handleOnActionClick}
