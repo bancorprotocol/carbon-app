@@ -18,6 +18,7 @@ import {
   IS_METAMASK_WALLET,
 } from 'libs/web3/web3.utils';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   const props = { className: 'w-20' };
@@ -39,6 +40,7 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
 };
 
 export const MainMenuRightWallet: FC = () => {
+  const { t } = useTranslation();
   const {
     user,
     disconnect,
@@ -70,9 +72,9 @@ export const MainMenuRightWallet: FC = () => {
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
     if (!isSupportedNetwork) return 'Wrong Network';
-    if (!user) return 'Connect Wallet';
+    if (!user) return t('common.actionButton1');
     return shortenString(user);
-  }, [isSupportedNetwork, isUserBlocked, user]);
+  }, [isSupportedNetwork, isUserBlocked, t, user]);
 
   const buttonIcon = useMemo(() => {
     const props = { className: 'w-20' };

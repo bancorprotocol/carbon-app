@@ -54,10 +54,7 @@ export const InputLimit: FC<{
           value={price}
           onChange={handleChange}
           onFocus={handleFocus}
-          placeholder={
-            t('pages.strategyCreate.step2.placeholders.placeholder1') ||
-            undefined
-          }
+          placeholder={t('common.placeholders.placeholder1') || undefined}
           className={
             'mb-5 w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
           }

@@ -6,8 +6,10 @@ import { useEffect, useState } from 'react';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
+  const { t } = useTranslation();
   const { closeModal } = useModal();
   const { connect, user } = useWeb3();
   const [selectedConnection, setSelectedConnection] =
@@ -48,7 +50,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <Modal id={id} title={'Connect Wallet'} isLoading={isLoading}>
+    <Modal id={id} title={t('common.actionButton1')} isLoading={isLoading}>
       <div className={'mt-20'}>
         {isError ? (
           <div className={'flex flex-col items-center space-y-20'}>

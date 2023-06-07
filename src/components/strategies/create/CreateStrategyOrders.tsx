@@ -119,7 +119,9 @@ export const CreateStrategyOrders = ({
           loading={isProcessing || isAwaiting}
           loadingChildren={loadingChildren}
         >
-          {user ? 'Create Strategy' : 'Connect Wallet'}
+          {user
+            ? t('pages.strategyCreate.step2.actionButton')
+            : t('common.actionButton1')}
         </Button>
       </m.div>
     </>

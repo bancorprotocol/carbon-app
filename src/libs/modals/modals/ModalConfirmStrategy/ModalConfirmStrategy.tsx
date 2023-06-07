@@ -114,7 +114,3 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
     </Modal>
   );
 };
-
-// TODO: Maybe it will be better of changing actionButton1 & 2 to ->
-// actionButton1 -> actionButtons.confirm
-// actionButton2 -> actionButtons.cancel

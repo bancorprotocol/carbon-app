@@ -13,6 +13,7 @@ import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import useInitEffect from 'hooks/useInitEffect';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
+import { useTranslation } from 'libs/translations';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -23,6 +24,7 @@ export type TradeWidgetBuySellProps = {
 };
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
+  const { t } = useTranslation();
   const { user } = useWeb3();
   const {
     sourceInput,
@@ -135,8 +137,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
     }
 
-    return 'Connect Wallet';
-  }, [buy, source.symbol, target.symbol, user]);
+    return t('common.actionButton1');
+  }, [buy, source.symbol, t, target.symbol, user]);
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;

@@ -84,10 +84,7 @@ export const InputRange: FC<{
             inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
-            placeholder={
-              t('pages.strategyCreate.step2.placeholders.placeholder1') ||
-              undefined
-            }
+            placeholder={t('common.placeholders.placeholder1') || undefined}
             onFocus={handleFocus}
             className={
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
@@ -116,10 +113,7 @@ export const InputRange: FC<{
             inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
-            placeholder={
-              t('pages.strategyCreate.step2.placeholders.placeholder1') ||
-              undefined
-            }
+            placeholder={t('common.placeholders.placeholder1') || undefined}
             onFocus={handleFocus}
             className={
               'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'

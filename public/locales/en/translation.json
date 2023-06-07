@@ -1,4 +1,11 @@
 {
+  "common": {
+    "placeholders": {
+      "placeholder1": "Enter Price",
+      "placeholder2": "Enter Amount"
+    },
+    "actionButton1": "Connect Wallet"
+  },
   "modals": {
     "deleteStrategy": {
       "modalTitle": "Delete Strategy",
@@ -124,8 +131,10 @@
         "section2": {
           "title1": "Buy Low",
           "title2": "Sell High",
-          "subtitle1": "Set {{buyOrSell}} Price",
-          "subtitle2": "Set {{buyOrSell}} Budget",
+          "subtitle1": "Set Buy Price",
+          "subtitle2": "Set Sell Price",
+          "subtitle3": "Set Buy Budget",
+          "subtitle4": "Set Sell Budget",
           "content1": "buy",
           "content2": "sell",
           "content3": "per",
@@ -133,15 +142,16 @@
           "content5": "Insufficient balance"
         },
         "tooltips": {
-          "tooltip1": "This section will define the order details in which you are willing to {{buyOrSell}} {{token}} at.",
-          "tooltip2": "Define the price you are willing to {{buyOrSell}} {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
-          "tooltip3": "TODO BuySellBlock ",
-          "tooltip4": "TODO BuySellBlock"
+          "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.",
+          "tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.",
+          "tooltip3": "Define the price you are willing to buy {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
+          "tooltip4": "Define the price you are willing to sell {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
+          "tooltip5": "Note: this amount will re-fill once the 'Sell' order is used by traders.",
+          "tooltip6": "The amount of {{sellToken}} tokens you would like to use in order to buy {{buyToken}}. {{note}}",
+          "tooltip7": "Note: this amount will re-fill once the 'Buy' order is used by traders.",
+          "tooltip8": "The amount of {{buyToken}} tokens you would like to sell. {{note}}"
         },
-        "placeholders": {
-          "placeholder1": "Enter Price",
-          "placeholder2": "Enter Amount"
-        }
+        "actionButton": "Create Strategy"
       }
     }
   }

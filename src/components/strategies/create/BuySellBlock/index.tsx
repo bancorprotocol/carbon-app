@@ -52,12 +52,13 @@ export const BuySellBlock: FC<Props> = ({
     ? t('pages.strategyCreate.step2.section2.title1')
     : t('pages.strategyCreate.step2.section2.title2');
 
-  const tooltipText = t('pages.strategyCreate.step2.tooltips.tooltip1', {
-    token: base.symbol,
-    buyOrSell: buy
-      ? t('pages.strategyCreate.step2.section2.content1')
-      : t('pages.strategyCreate.step2.section2.content2'),
-  });
+  const tooltipText = buy
+    ? t('pages.strategyCreate.step2.tooltips.tooltip1', {
+        token: base.symbol,
+      })
+    : t('pages.strategyCreate.step2.tooltips.tooltip1', {
+        token: base.symbol,
+      });
 
   const title = (
     <>
@@ -84,25 +85,23 @@ export const BuySellBlock: FC<Props> = ({
       </div>
       <Tooltip
         sendEventOnMount={{ buy }}
-        element={t('pages.strategyCreate.step2.tooltips.tooltip2', {
-          buyToken: base.symbol,
-          sellToken: quote.symbol,
-          buyOrSell: buy
-            ? t('pages.strategyCreate.step2.section2.content1')
-            : t('pages.strategyCreate.step2.section2.content2'),
-        })}
+        element={
+          buy
+            ? t('pages.strategyCreate.step2.tooltips.tooltip3', {
+                buyToken: base.symbol,
+                sellToken: quote.symbol,
+              })
+            : t('pages.strategyCreate.step2.tooltips.tooltip3', {
+                buyToken: base.symbol,
+                sellToken: quote.symbol,
+              })
+        }
       >
         <div className={'text-14 font-weight-500 text-white/60'}>
           <span>
-            {t('pages.strategyCreate.step2.section2.subtitle1', {
-              buyOrSell: buy
-                ? capitalizeFirstChar(
-                    t('pages.strategyCreate.step2.section2.content1')
-                  )
-                : capitalizeFirstChar(
-                    t('pages.strategyCreate.step2.section2.content2')
-                  ),
-            })}
+            {buy
+              ? t('pages.strategyCreate.step2.section2.subtitle1')
+              : t('pages.strategyCreate.step2.section2.subtitle2')}
           </span>
           <span className={'ml-8 text-white/80'}>
             ({quote.symbol}{' '}
@@ -115,8 +114,6 @@ export const BuySellBlock: FC<Props> = ({
       </Tooltip>
     </>
   );
-  // TODO: Add translation to all tooltips
-  //  maybe split tooltips into two
 
   return (
     <div
@@ -180,32 +177,29 @@ export const BuySellBlock: FC<Props> = ({
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? `The amount of ${
-                  quote.symbol
-                } tokens you would like to use in order to buy ${
-                  base.symbol
-                }. ${
-                  strategyType === 'recurring'
-                    ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
-                    : ''
-                }`
-              : `The amount of ${base.symbol} tokens you would like to sell. ${
-                  strategyType === 'recurring'
-                    ? 'Note: this amount will re-fill once the "Buy" order is used by traders.'
-                    : ''
-                }`
+              ? t('pages.strategyCreate.step2.tooltips.tooltip6', {
+                  buyToken: base.symbol,
+                  sellToken: quote.symbol,
+                  note: `${
+                    strategyType === 'recurring'
+                      ? t('pages.strategyCreate.step2.tooltips.tooltip5')
+                      : ''
+                  }`,
+                })
+              : t('pages.strategyCreate.step2.tooltips.tooltip8', {
+                  buyToken: base.symbol,
+                  note: `${
+                    strategyType === 'recurring'
+                      ? t('pages.strategyCreate.step2.tooltips.tooltip7')
+                      : ''
+                  }`,
+                })
           }
         >
           <div className={'font-weight-500 text-white/60'}>
-            {t('pages.strategyCreate.step2.section2.subtitle2', {
-              buyOrSell: buy
-                ? capitalizeFirstChar(
-                    t('pages.strategyCreate.step2.section2.content1')
-                  )
-                : capitalizeFirstChar(
-                    t('pages.strategyCreate.step2.section2.content2')
-                  ),
-            })}
+            {buy
+              ? t('pages.strategyCreate.step2.section2.subtitle3')
+              : t('pages.strategyCreate.step2.section2.subtitle4')}
           </div>
         </Tooltip>
         {isBudgetOptional && (
