@@ -15,6 +15,8 @@ import {
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useNavigate } from 'libs/routing';
+import { useTranslation } from 'libs/translations';
+import { capitalizeFirstChar } from 'utils/strings';
 
 type Props = {
   base: Token;
@@ -37,6 +39,7 @@ export const BuySellBlock: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
@@ -45,10 +48,16 @@ export const BuySellBlock: FC<Props> = ({
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
-  const titleText = buy ? 'Buy Low' : 'Sell High';
-  const tooltipText = `This section will define the order details in which you are willing to ${
-    buy ? 'buy' : 'sell'
-  } ${base.symbol} at.`;
+  const titleText = buy
+    ? t('pages.strategyCreate.step2.section2.title1')
+    : t('pages.strategyCreate.step2.section2.title2');
+
+  const tooltipText = t('pages.strategyCreate.step2.tooltips.tooltip1', {
+    token: base.symbol,
+    buyOrSell: buy
+      ? t('pages.strategyCreate.step2.section2.content1')
+      : t('pages.strategyCreate.step2.section2.content2'),
+  });
 
   const title = (
     <>
@@ -75,20 +84,39 @@ export const BuySellBlock: FC<Props> = ({
       </div>
       <Tooltip
         sendEventOnMount={{ buy }}
-        element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
-          base.symbol
-        } at. Make sure the price is in ${quote.symbol} tokens.`}
+        element={t('pages.strategyCreate.step2.tooltips.tooltip2', {
+          buyToken: base.symbol,
+          sellToken: quote.symbol,
+          buyOrSell: buy
+            ? t('pages.strategyCreate.step2.section2.content1')
+            : t('pages.strategyCreate.step2.section2.content2'),
+        })}
       >
         <div className={'text-14 font-weight-500 text-white/60'}>
-          <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
+          <span>
+            {t('pages.strategyCreate.step2.section2.subtitle1', {
+              buyOrSell: buy
+                ? capitalizeFirstChar(
+                    t('pages.strategyCreate.step2.section2.content1')
+                  )
+                : capitalizeFirstChar(
+                    t('pages.strategyCreate.step2.section2.content2')
+                  ),
+            })}
+          </span>
           <span className={'ml-8 text-white/80'}>
-            ({quote.symbol} <span className={'text-white/60'}>per 1 </span>
+            ({quote.symbol}{' '}
+            <span className={'text-white/60'}>
+              {t('pages.strategyCreate.step2.section2.content3')} 1{' '}
+            </span>
             {base.symbol})
           </span>
         </div>
       </Tooltip>
     </>
   );
+  // TODO: Add translation to all tooltips
+  //  maybe split tooltips into two
 
   return (
     <div
@@ -113,7 +141,9 @@ export const BuySellBlock: FC<Props> = ({
               }}
               isActive={buy}
             >
-              Buy
+              {capitalizeFirstChar(
+                t('pages.strategyCreate.step2.section2.content1')
+              )}
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => {
@@ -127,7 +157,9 @@ export const BuySellBlock: FC<Props> = ({
               }}
               isActive={!buy}
             >
-              Sell
+              {capitalizeFirstChar(
+                t('pages.strategyCreate.step2.section2.content2')
+              )}
             </TabsMenuButton>
           </TabsMenu>
         </div>
@@ -165,11 +197,21 @@ export const BuySellBlock: FC<Props> = ({
           }
         >
           <div className={'font-weight-500 text-white/60'}>
-            Set {buy ? 'Buy' : 'Sell'} Budget{' '}
+            {t('pages.strategyCreate.step2.section2.subtitle2', {
+              buyOrSell: buy
+                ? capitalizeFirstChar(
+                    t('pages.strategyCreate.step2.section2.content1')
+                  )
+                : capitalizeFirstChar(
+                    t('pages.strategyCreate.step2.section2.content2')
+                  ),
+            })}
           </div>
         </Tooltip>
         {isBudgetOptional && (
-          <div className="ml-8 font-weight-500 text-white/40">Optional</div>
+          <div className="ml-8 font-weight-500 text-white/40">
+            {t('pages.strategyCreate.step2.section2.content4')}
+          </div>
         )}
       </div>
       <div>
@@ -187,7 +229,7 @@ export const BuySellBlock: FC<Props> = ({
             !insufficientBalance ? 'invisible' : ''
           }`}
         >
-          Insufficient balance
+          {t('pages.strategyCreate.step2.section2.content5')}
         </div>
       </div>
     </div>

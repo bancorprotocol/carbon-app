@@ -68,6 +68,81 @@
           "tooltip10": "Your strategy is currently inactive. Consider activating it with funds and rates."
         }
       }
+    },
+    "strategyCreate": {
+      "step1": {
+        "title": "Create Strategy",
+        "section1": {
+          "title": "Token Pair",
+          "content1": "Buy or Sell",
+          "content2": "With"
+        },
+        "section2": {
+          "title": "Strategy Type",
+          "strategyTypes": {
+            "type1": {
+              "title": "Recurring",
+              "content1": "Automated Link Orders",
+              "content2": "Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.",
+              "options": {
+                "option1": "2 Limits",
+                "option2": "2 Ranges",
+                "option3": "Custom"
+              }
+            },
+            "type2": {
+              "title": "Disposable",
+              "content1": "Single Use Order",
+              "content2": "An irreversible buy or sell order at a predefined price or range.",
+              "options": {
+                "option1": "Buy Limit",
+                "option2": "Buy Range",
+                "option3": "Sell Limit",
+                "option4": "Sell Range"
+              }
+            }
+          }
+        },
+        "tooltips": {
+          "tooltip1": "Select the Base token for the pair",
+          "tooltip2": "Select the Quote token for the pair (i.e. when selecting USDC, all rates would be denominated in USDC)",
+          "tooltip3": "Selecting the tokens you would like to create a strategy for.<br/><strong>Buy or Sell token</strong> (also called Base token) is the token you would like to buy or sell in the strategy. <br /> <strong>With token</strong> (also called Quote token) is the token you would denominate the rates in."
+        },
+        "actionButton": "Next Step"
+      },
+      "step2": {
+        "title_one": "Set Price",
+        "title_other": "Set Prices",
+        "chart": {
+          "title": "Price Chart",
+          "actionButton": "Close Chart"
+        },
+        "section1": {
+          "title1": "recurring",
+          "title2": "disposable"
+        },
+        "section2": {
+          "title1": "Buy Low",
+          "title2": "Sell High",
+          "subtitle1": "Set {{buyOrSell}} Price",
+          "subtitle2": "Set {{buyOrSell}} Budget",
+          "content1": "buy",
+          "content2": "sell",
+          "content3": "per",
+          "content4": "Optional",
+          "content5": "Insufficient balance"
+        },
+        "tooltips": {
+          "tooltip1": "This section will define the order details in which you are willing to {{buyOrSell}} {{token}} at.",
+          "tooltip2": "Define the price you are willing to {{buyOrSell}} {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
+          "tooltip3": "TODO BuySellBlock ",
+          "tooltip4": "TODO BuySellBlock"
+        },
+        "placeholders": {
+          "placeholder1": "Enter Price",
+          "placeholder2": "Enter Amount"
+        }
+      }
     }
   }
 }

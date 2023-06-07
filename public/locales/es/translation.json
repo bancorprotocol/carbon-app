@@ -1,5 +1,5 @@
 {
-  "modal": {
+  "modals": {
     "deleteStrategy": {
       "modalTitle": "Eliminar Estrategia",
       "title": "Estás seguro de que deseas eliminar tu estrategia?",

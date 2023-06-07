@@ -9,6 +9,7 @@ import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreat
 import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 const BlockIconTextDesc = ({
   icon,
@@ -43,6 +44,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   selectedStrategySettings,
   setSelectedStrategySettings,
 }) => {
+  const { t } = useTranslation();
   const {
     items: tabs,
     handleClick,
@@ -56,7 +58,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         className={'space-y-20 rounded-10 bg-silver p-20'}
         key={'createStrategyTypeMenu'}
       >
-        <h2>Strategy Type</h2>
+        <h2>{t('pages.strategyCreate.step1.section2.title')}</h2>
         <TabsMenu>
           {tabs.map(({ label, to, search }) => (
             <TabsMenuButton
@@ -76,16 +78,22 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           {strategyType === 'recurring' &&
             BlockIconTextDesc({
               icon: <IconArrows className={'h-18 w-18'} />,
-              title: 'Automated Linked Orders',
-              description:
-                'Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.',
+              title: t(
+                'pages.strategyCreate.step1.section2.strategyTypes.type1.content1'
+              ),
+              description: t(
+                'pages.strategyCreate.step1.section2.strategyTypes.type1.content2'
+              ),
             })}
           {strategyType === 'disposable' &&
             BlockIconTextDesc({
               icon: <IconArrowsTransparent className={'h-18 w-18'} />,
-              title: 'Single Use Order',
-              description:
-                'An irreversible buy or sell order at a predefined price or range.',
+              title: t(
+                'pages.strategyCreate.step1.section2.strategyTypes.type2.content1'
+              ),
+              description: t(
+                'pages.strategyCreate.step1.section2.strategyTypes.type2.content2'
+              ),
             })}
         </div>
 
@@ -132,7 +140,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           });
         }}
       >
-        Next Step
+        {t('pages.strategyCreate.step1.actionButton')}
       </Button>
     </>
   );

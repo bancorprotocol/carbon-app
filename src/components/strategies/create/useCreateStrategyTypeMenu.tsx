@@ -12,6 +12,7 @@ import { ReactComponent as IconSellLimit } from 'assets/icons/sell-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconTwoLimits } from 'assets/icons/two-limits.svg';
 import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strategy.svg';
+import { i18n } from 'libs/translations';
 
 type StrategyTypeItem = {
   label: string;
@@ -32,7 +33,9 @@ export const useCreateStrategyTypeMenu = (
 
   const types: StrategyTypeItem[] = [
     {
-      label: 'Recurring',
+      label: i18n.t(
+        'pages.strategyCreate.step1.section2.strategyTypes.type1.title'
+      ),
       to: PathNames.createStrategy,
       search: {
         base,
@@ -41,7 +44,9 @@ export const useCreateStrategyTypeMenu = (
       },
     },
     {
-      label: 'Disposable',
+      label: i18n.t(
+        'pages.strategyCreate.step1.section2.strategyTypes.type2.title'
+      ),
       to: PathNames.createStrategy,
       search: {
         base,
@@ -51,92 +56,112 @@ export const useCreateStrategyTypeMenu = (
     },
   ];
 
-  const typeRecurring: StrategyTypeItemSvg[] = [
-    {
-      label: '2 Limits',
-      svg: <IconTwoLimits className={'w-60'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'recurring',
-        strategySettings: 'limit',
+  const typeRecurring: StrategyTypeItemSvg[] = useMemo(
+    () => [
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type1.options.option1'
+        ),
+        svg: <IconTwoLimits className={'w-60'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'recurring',
+          strategySettings: 'limit',
+        },
       },
-    },
-    {
-      label: '2 Ranges',
-      svg: <IconTwoRanges className={'w-60'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'recurring',
-        strategySettings: 'range',
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type1.options.option2'
+        ),
+        svg: <IconTwoRanges className={'w-60'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'recurring',
+          strategySettings: 'range',
+        },
       },
-    },
-    {
-      label: 'Custom',
-      svg: <IconCustomStrategy className={'w-60'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'recurring',
-        strategySettings: 'custom',
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type1.options.option3'
+        ),
+        svg: <IconCustomStrategy className={'w-60'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'recurring',
+          strategySettings: 'custom',
+        },
       },
-    },
-  ];
+    ],
+    [base, quote]
+  );
 
-  const typeDisposable: StrategyTypeItemSvg[] = [
-    {
-      label: 'Buy Limit',
-      svg: <IconBuyLimit className={'w-60 text-green'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'disposable',
-        strategyDirection: 'buy',
-        strategySettings: 'limit',
+  const typeDisposable: StrategyTypeItemSvg[] = useMemo(
+    () => [
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option1'
+        ),
+        svg: <IconBuyLimit className={'w-60 text-green'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'disposable',
+          strategyDirection: 'buy',
+          strategySettings: 'limit',
+        },
       },
-    },
-    {
-      label: 'Buy Range',
-      svg: <IconBuyRange className={'w-60 text-green'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'disposable',
-        strategyDirection: 'buy',
-        strategySettings: 'range',
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option2'
+        ),
+        svg: <IconBuyRange className={'w-60 text-green'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'disposable',
+          strategyDirection: 'buy',
+          strategySettings: 'range',
+        },
       },
-    },
-    {
-      label: 'Sell Limit',
-      svg: <IconSellLimit className={'w-60 text-red'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'disposable',
-        strategyDirection: 'sell',
-        strategySettings: 'limit',
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option3'
+        ),
+        svg: <IconSellLimit className={'w-60 text-red'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'disposable',
+          strategyDirection: 'sell',
+          strategySettings: 'limit',
+        },
       },
-    },
-    {
-      label: 'Sell Range',
-      svg: <IconSellRange className={'w-60 text-red'} />,
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'disposable',
-        strategyDirection: 'sell',
-        strategySettings: 'range',
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option4'
+        ),
+        svg: <IconSellRange className={'w-60 text-red'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'disposable',
+          strategyDirection: 'sell',
+          strategySettings: 'range',
+        },
       },
-    },
-  ];
+    ],
+    [base, quote]
+  );
 
   const handleClick = (
     to: string,

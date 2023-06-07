@@ -6,6 +6,7 @@ import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useTranslation } from 'libs/translations';
 
 export const InputRange: FC<{
   min: string;
@@ -26,6 +27,7 @@ export const InputRange: FC<{
   setRangeError,
   buy = false,
 }) => {
+  const { t } = useTranslation();
   const errorMessage = 'Max Price must be higher than min price and not zero';
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +84,10 @@ export const InputRange: FC<{
             inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
-            placeholder="Enter Price"
+            placeholder={
+              t('pages.strategyCreate.step2.placeholders.placeholder1') ||
+              undefined
+            }
             onFocus={handleFocus}
             className={
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
@@ -111,7 +116,10 @@ export const InputRange: FC<{
             inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
-            placeholder={`Enter Price`}
+            placeholder={
+              t('pages.strategyCreate.step2.placeholders.placeholder1') ||
+              undefined
+            }
             onFocus={handleFocus}
             className={
               'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'

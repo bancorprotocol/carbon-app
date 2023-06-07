@@ -7,6 +7,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 import { Slippage } from './Slippage';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
+import { i18n } from 'libs/translations';
 
 type Props = {
   value: string;
@@ -33,7 +34,9 @@ export const TokenInputField: FC<Props> = ({
   isError,
   className,
   onKeystroke,
-  placeholder = 'Enter Amount',
+  placeholder = i18n.t(
+    'pages.strategyCreate.step2.placeholders.placeholder2'
+  ) || undefined,
   disabled,
   slippage,
   withoutWallet,

@@ -5,6 +5,7 @@ import { carbonEvents } from 'services/events';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useTranslation } from 'libs/translations';
 
 export const InputLimit: FC<{
   price: string;
@@ -14,6 +15,8 @@ export const InputLimit: FC<{
   setPriceError: (error: string) => void;
   buy?: boolean;
 }> = ({ price, setPrice, token, error, setPriceError, buy = false }) => {
+  const { t } = useTranslation();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const errorMessage = 'Price must be greater than 0';
     +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
@@ -51,7 +54,10 @@ export const InputLimit: FC<{
           value={price}
           onChange={handleChange}
           onFocus={handleFocus}
-          placeholder="Enter Price"
+          placeholder={
+            t('pages.strategyCreate.step2.placeholders.placeholder1') ||
+            undefined
+          }
           className={
             'mb-5 w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
           }
