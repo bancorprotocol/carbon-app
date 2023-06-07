@@ -42,11 +42,11 @@
         },
         "section3": {
           "title": "Order Status",
-          "status": {
-            "1": "Active",
-            "2": "No Budget · Inactive",
-            "3": "Paused - Inactive",
-            "4": "Inactive"
+          "statuses": {
+            "status1": "Active",
+            "status2": "No Budget · Inactive",
+            "status3": "Paused - Inactive",
+            "status4": "Inactive"
           },
           "notification": {
             "title": "Strategy Notification",
@@ -56,16 +56,16 @@
           }
         },
         "tooltips": {
-          "1": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your 'Sell' order with tokens.",
-          "2": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your 'Buy' order with tokens.",
-          "3": "This is the price in which you are willing to buy {{token}}.",
-          "4": "This is the price in which you are willing to sell {{token}}.",
-          "5": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
-          "6": "This is the available amount of {{token}} tokens that you are willing to sell.",
-          "7": "Your strategy is active and ready",
-          "8": "Your strategy has no associated funds. Consider depositing funds to activate it.",
-          "9": "Your strategy is currently paused. Edit the prices to activate it.",
-          "10": "Your strategy is currently inactive. Consider activating it with funds and rates."
+          "tooltip1": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your 'Sell' order with tokens.",
+          "tooltip2": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your 'Buy' order with tokens.",
+          "tooltip3": "This is the price in which you are willing to buy {{token}}.",
+          "tooltip4": "This is the price in which you are willing to sell {{token}}.",
+          "tooltip5": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
+          "tooltip6": "This is the available amount of {{token}} tokens that you are willing to sell.",
+          "tooltip7": "Your strategy is active and ready",
+          "tooltip8": "Your strategy has no associated funds. Consider depositing funds to activate it.",
+          "tooltip9": "Your strategy is currently paused. Edit the prices to activate it.",
+          "tooltip10": "Your strategy is currently inactive. Consider activating it with funds and rates."
         }
       }
     }

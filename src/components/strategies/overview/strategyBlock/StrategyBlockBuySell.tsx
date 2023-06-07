@@ -77,10 +77,10 @@ export const StrategyBlockBuySell: FC<{
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? t('pages.strategyOverview.card.tooltips.1', {
+              ? t('pages.strategyOverview.card.tooltips.tooltip1', {
                   token: token.symbol,
                 })
-              : t('pages.strategyOverview.card.tooltips.2', {
+              : t('pages.strategyOverview.card.tooltips.tooltip2', {
                   token: otherToken.symbol,
                 })
           }
@@ -104,10 +104,10 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? t('pages.strategyOverview.card.tooltips.3', {
+                ? t('pages.strategyOverview.card.tooltips.tooltip3', {
                     token: token.symbol,
                   })
-                : t('pages.strategyOverview.card.tooltips.4', {
+                : t('pages.strategyOverview.card.tooltips.tooltip4', {
                     token: otherToken.symbol,
                   })
             }
@@ -151,11 +151,11 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? t('pages.strategyOverview.card.tooltips.5', {
+                ? t('pages.strategyOverview.card.tooltips.tooltip5', {
                     buyToken: token.symbol,
                     sellToken: otherToken.symbol,
                   })
-                : t('pages.strategyOverview.card.tooltips.6', {
+                : t('pages.strategyOverview.card.tooltips.tooltip6', {
                     token: otherToken.symbol,
                   })
             }
