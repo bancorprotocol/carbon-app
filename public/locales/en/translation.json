@@ -37,6 +37,12 @@
           "inactive": "Inactive"
         },
         "tooltips": {
+          "buy": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your 'Sell' order with tokens.",
+          "sell": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your 'Buy' order with tokens.",
+          "buyPrice": "This is the price in which you are willing to buy {{token}}.",
+          "sellPrice": "This is the price in which you are willing to sell {{token}}.",
+          "buyBudget": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
+          "sellBudget": "This is the available amount of {{token}} tokens that you are willing to sell.",
           "active": "Your strategy is active and ready",
           "noBudget": "Your strategy has no associated funds. Consider depositing funds to activate it.",
           "paused": "Your strategy is currently paused. Edit the prices to activate it.",

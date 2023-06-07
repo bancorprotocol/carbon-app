@@ -77,8 +77,12 @@ export const StrategyBlockBuySell: FC<{
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
-              : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`
+              ? t('strategy.overview.block.tooltips.buy', {
+                  token: token.symbol,
+                })
+              : t('strategy.overview.block.tooltips.sell', {
+                  token: otherToken.symbol,
+                })
           }
         >
           <div className="flex items-center gap-6">
@@ -100,8 +104,12 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? `This is the price in which you are willing to buy ${token.symbol}.`
-                : `This is the price in which you are willing to sell ${otherToken.symbol}.`
+                ? t('strategy.overview.block.tooltips.buyPrice', {
+                    token: token.symbol,
+                  })
+                : t('strategy.overview.block.tooltips.sellPrice', {
+                    token: otherToken.symbol,
+                  })
             }
           >
             <div className={`${buy ? 'text-green' : 'text-red'}`}>
@@ -135,8 +143,13 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
-                : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`
+                ? t('strategy.overview.block.tooltips.buyBudget', {
+                    buyToken: token.symbol,
+                    sellToken: otherToken.symbol,
+                  })
+                : t('strategy.overview.block.tooltips.sellBudget', {
+                    token: otherToken.symbol,
+                  })
             }
           >
             <div className="text-secondary !text-16">
