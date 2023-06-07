@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
@@ -10,7 +11,6 @@ import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useEffect } from 'react';
 import useInitEffect from 'hooks/useInitEffect';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
 
@@ -41,6 +41,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     calcSlippage,
     isTradeBySource,
     maxSourceAmountQuery,
+    isAwaiting,
   } = useBuySell(props);
   const { source, target, sourceBalanceQuery, buy = false } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
@@ -128,6 +129,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           valueUsd: getFiatValueSource(sourceInput, true).toString(),
         });
   };
+
+  const ctaButtonText = useMemo(() => {
+    if (user) {
+      return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
+    }
+
+    return 'Connect Wallet';
+  }, [buy, source.symbol, target.symbol, user]);
 
   if (liquidityQuery?.isError) return <div>Error</div>;
   if (!source || !target) return null;
@@ -250,16 +259,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
       <Button
         disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
+        loading={isAwaiting}
+        loadingChildren={'Waiting for Confirmation'}
         onClick={handleTradeClick}
         variant={buy ? 'success' : 'error'}
         fullWidth
         className={'mt-20'}
       >
-        {user
-          ? buy
-            ? `Buy ${target.symbol}`
-            : `Sell ${source.symbol}`
-          : 'Connect Wallet'}
+        {ctaButtonText}
       </Button>
     </div>
   );

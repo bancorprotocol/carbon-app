@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
@@ -6,13 +7,14 @@ import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 import { carbonEvents } from 'services/events';
-
 import { useStrategyEventData } from '../create/useStrategyEventData';
-import { useMemo } from 'react';
 import { checkIfOrdersOverlap } from '../utils';
+import { getStatusTextByTxStatus } from '../utils';
+
+export type EditStrategyPrices = 'editPrices' | 'renew';
 
 type EditStrategyPricesContentProps = {
-  type: 'editPrices' | 'renew';
+  type: EditStrategyPrices;
   strategy: Strategy;
 };
 
@@ -20,7 +22,11 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
-  const { renewStrategy, changeRateStrategy } = useUpdateStrategy();
+  const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
+    useUpdateStrategy();
+  const isAwaiting = updateMutation.isLoading;
+  const isLoading = isAwaiting || isProcessing;
+
   const order0 = useOrder(
     type === 'renew'
       ? { ...strategy.order0, startRate: '', endRate: '' }
@@ -90,6 +96,10 @@ export const EditStrategyPricesContent = ({
       : +order.price > 0;
   };
 
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
+
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -112,9 +122,11 @@ export const EditStrategyPricesContent = ({
       />
       <Button
         disabled={!isOrderValid(order0) || !isOrderValid(order1)}
+        loading={isLoading}
+        loadingChildren={loadingChildren}
         onClick={handleOnActionClick}
         className="mt-32"
-        variant="white"
+        variant={'white'}
         size="lg"
         fullWidth
       >
@@ -122,6 +134,7 @@ export const EditStrategyPricesContent = ({
       </Button>
       <Button
         onClick={() => back()}
+        disabled={isLoading}
         className="mt-16"
         variant="secondary"
         size="lg"

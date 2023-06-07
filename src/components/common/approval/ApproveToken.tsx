@@ -37,6 +37,7 @@ export const ApproveToken: FC<Props> = ({
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
+
   const [isLimited, setIsLimited] = useState(false);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
@@ -47,16 +48,22 @@ export const ApproveToken: FC<Props> = ({
       return console.error('No data loaded');
     }
     setTxBusy(true);
-    await mutation.mutate(
+    mutation.mutate(
       { ...data, isLimited },
       {
-        onSuccess: async (tx) => {
+        onSuccess: async ([approve, revoke]) => {
+          revoke &&
+            dispatchNotification('revoke', {
+              txHash: revoke.hash,
+            });
+
           dispatchNotification('approve', {
             symbol: token.symbol,
-            txHash: tx.hash,
+            txHash: approve.hash,
             limited: isLimited,
           });
-          await tx.wait();
+
+          await approve.wait();
           await cache.refetchQueries({
             queryKey: QueryKey.approval(user!, data.address, data.spender),
           });
@@ -177,7 +184,7 @@ export const ApproveToken: FC<Props> = ({
 
         {data.approvalRequired ? (
           txBusy ? (
-            <div>please wait</div>
+            <div>Waiting for Confirmation</div>
           ) : (
             <div
               className={'flex h-82 flex-col items-end justify-center gap-10'}

@@ -27,6 +27,7 @@ export const getModalDataByType = (
         content: t('modal.pauseStrategy.content'),
         actionButton: t('modal.pauseStrategy.actionButton1'),
       };
+
     case 'delete':
       return {
         modalTitle: t('modal.deleteStrategy.modalTitle'),

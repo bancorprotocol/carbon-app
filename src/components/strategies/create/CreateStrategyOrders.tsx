@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { BuySellBlock } from './BuySellBlock';
@@ -8,6 +9,7 @@ import { useStrategyEventData } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
+import { getStatusTextByTxStatus } from '../utils';
 
 export const CreateStrategyOrders = ({
   base,
@@ -21,6 +23,8 @@ export const CreateStrategyOrders = ({
   strategyDirection,
   strategyType,
   selectedStrategySettings,
+  isProcessing,
+  isAwaiting,
   isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
@@ -46,6 +50,10 @@ export const CreateStrategyOrders = ({
     carbonEvents.strategy.strategyCreateClick(strategyEventData);
     createStrategy();
   };
+
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
     <>
@@ -102,6 +110,8 @@ export const CreateStrategyOrders = ({
           fullWidth
           onClick={onCreateStrategy}
           disabled={isCTAdisabled}
+          loading={isProcessing || isAwaiting}
+          loadingChildren={loadingChildren}
         >
           {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>
