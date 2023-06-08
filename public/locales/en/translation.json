@@ -48,6 +48,22 @@
       "modalTitle": "Connect Wallet",
       "actionButton": "I read and accept",
       "content1": "By connecting my wallet, I agree to the <1>terms & conditions</1> and <2>cookie & privacy policy</2> of this site."
+    },
+    "confirm": {
+      "modalTitle": "Confirm Transaction",
+      "subtitle": "Approve Tokens",
+      "content1": "Before updating {{token}} allowance, you are required to revoke it to 0.",
+      "content2": "is loading",
+      "content3": "Unknown Error",
+      "actionButton1": "Confirm",
+      "actionButton2": "Unlimited",
+      "actionButton3": "Approve",
+      "actionButton4": "Revoke and Approve",
+      "statuses": {
+        "status1": "Waiting for Confirmation",
+        "status2": "Approved",
+        "status3": "Pre-Approved"
+      }
     }
   },
   "navBar": {

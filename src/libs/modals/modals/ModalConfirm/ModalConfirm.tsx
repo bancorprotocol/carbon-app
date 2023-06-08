@@ -16,6 +16,7 @@ import {
   handleAfterConfirmationEvent,
   handleOnRequestEvent,
 } from './utils';
+import { i18n } from 'libs/translations';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -32,7 +33,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   data: {
     approvalTokens,
     onConfirm,
-    buttonLabel = 'Confirm',
+    buttonLabel = i18n.t('modals.confirm.actionButton1'),
     eventData,
     context,
   },
@@ -45,8 +46,10 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   }, [context, eventData]);
 
   return (
-    <Modal id={id} title="Confirm Transaction" size={'md'}>
-      <h3 className="text-secondary my-10">Approve Tokens</h3>
+    <Modal id={id} title={i18n.t('modals.confirm.modalTitle')} size={'md'}>
+      <h3 className="text-secondary my-10">
+        {i18n.t('modals.confirm.subtitle')}
+      </h3>
       <div className="mb-20 space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (
           <ApproveToken
