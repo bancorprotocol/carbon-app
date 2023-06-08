@@ -43,6 +43,11 @@
       "actionButton": "Reset All",
       "subtitle1": "Slippage Tolerance",
       "subtitle2": "Transaction Expiration Time"
+    },
+    "connectWallet": {
+      "modalTitle": "Connect Wallet",
+      "actionButton": "I read and accept",
+      "content1": "By connecting my wallet, I agree to the <1>terms & conditions</1> and <2>cookie & privacy policy</2> of this site."
     }
   },
   "navBar": {

@@ -50,7 +50,11 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <Modal id={id} title={t('common.actionButton1')} isLoading={isLoading}>
+    <Modal
+      id={id}
+      title={t('modals.connectWallet.modalTitle')}
+      isLoading={isLoading}
+    >
       <div className={'mt-20'}>
         {isError ? (
           <div className={'flex flex-col items-center space-y-20'}>
