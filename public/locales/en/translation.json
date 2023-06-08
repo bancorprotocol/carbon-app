@@ -66,6 +66,17 @@
   },
   "pages": {
     "strategyOverview": {
+      "noStrategyCard": {
+        "title": "Automate your Trading Strategies",
+        "subtitle": "A fully decentralized protocol for automating on-chain trading strategies.",
+        "actionButton": "Connect",
+        "content1": "On-chain Limit & Range Orders",
+        "content2": "Automated and Recurring strategies",
+        "content3": "Easily Adjustable",
+        "content4": "Rotating Liquidity",
+        "content5": "All standard ERC-20 tokens",
+        "content6": "MEV Resistant"
+      },
       "header": {
         "actionButton": "Create Strategy",
         "title_zero": "Strategies",
