@@ -4,7 +4,8 @@
       "placeholder1": "Enter Price",
       "placeholder2": "Enter Amount",
       "placeholder3": "Total Amount",
-      "placeholder4": "Search"
+      "placeholder4": "Search",
+      "placeholder5": "custom"
     },
     "actionButton1": "Connect Wallet",
     "content1": "Wallet:",
@@ -36,6 +37,12 @@
     },
     "selectTokenPair": {
       "modalTitle": "Select Token Pair"
+    },
+    "tradeSettings": {
+      "modalTitle": "Trade Settings",
+      "actionButton": "Reset All",
+      "subtitle1": "Slippage Tolerance",
+      "subtitle2": "Transaction Expiration Time"
     }
   },
   "navBar": {

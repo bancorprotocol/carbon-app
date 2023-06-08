@@ -1,8 +1,8 @@
-import { Token } from 'libs/tokens';
 import { Fragment } from 'react';
-import { carbonEvents } from 'services/events';
-
 import { useStore } from 'store';
+import { carbonEvents } from 'services/events';
+import { Token } from 'libs/tokens';
+import { useTranslation } from 'libs/translations';
 import { TradeSettingsRow } from './TradeSettingsRow';
 import { TradeSettingsData } from './utils';
 
@@ -15,6 +15,7 @@ export const TradeSettings = ({
   quote: Token;
   isAllSettingsDefault: boolean;
 }) => {
+  const { t } = useTranslation();
   const {
     trade: {
       settings: { slippage, setSlippage, deadline, setDeadline, presets },
@@ -24,7 +25,7 @@ export const TradeSettings = ({
   const settingsData: TradeSettingsData[] = [
     {
       id: 'slippageTolerance',
-      title: 'Slippage Tolerance',
+      title: t('modals.tradeSettings.subtitle1'),
       value: slippage,
       prepend: '+',
       append: '%',
@@ -40,7 +41,7 @@ export const TradeSettings = ({
     },
     {
       id: 'transactionExpiration',
-      title: 'Transaction Expiration Time',
+      title: t('modals.tradeSettings.subtitle2'),
       value: deadline,
       prepend: '',
       append: ' Min',
