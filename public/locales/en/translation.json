@@ -3,13 +3,17 @@
     "placeholders": {
       "placeholder1": "Enter Price",
       "placeholder2": "Enter Amount",
-      "placeholder3": "Total Amount"
+      "placeholder3": "Total Amount",
+      "placeholder4": "Search"
     },
     "actionButton1": "Connect Wallet",
     "content1": "Wallet:",
     "content2": "MAX",
     "content3": "loading",
-    "content4": "By TradingView"
+    "content4": "By TradingView",
+    "content5": "Popular",
+    "content6": "Favorites",
+    "content7": "All"
   },
   "modals": {
     "deleteStrategy": {
@@ -26,6 +30,12 @@
       "content": "This will prevent your strategy from being traded against, however you will retain access to any associated funds.",
       "actionButton1": "Pause Strategy",
       "actionButton2": "Cancel"
+    },
+    "selectToken": {
+      "modalTitle": "Select Token"
+    },
+    "selectTokenPair": {
+      "modalTitle": "Select Token Pair"
     }
   },
   "navBar": {
@@ -134,7 +144,8 @@
         "section1": {
           "title": "Token Pair",
           "content1": "Buy or Sell",
-          "content2": "With"
+          "content2": "With",
+          "content3": "Select Token"
         },
         "section2": {
           "title": "Strategy Type",

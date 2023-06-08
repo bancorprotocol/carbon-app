@@ -1,11 +1,11 @@
 import { FC, useMemo } from 'react';
-import { Imager } from 'components/common/imager/Imager';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
-import { Button, ButtonHTMLProps } from 'components/common/button';
-import { Tooltip } from '../tooltip/Tooltip';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useTranslation } from 'libs/translations';
+import { Imager } from 'components/common/imager/Imager';
+import { Button, ButtonHTMLProps } from 'components/common/button';
+import { Tooltip } from '../tooltip/Tooltip';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 
 type Props = ButtonHTMLProps & {
   symbol?: string;
@@ -79,7 +79,11 @@ export const SelectTokenButton: FC<Props> = ({
                   {description}
                 </div>
               )}
-              <div>{symbol ? symbol : 'Select Token'}</div>
+              <div>
+                {symbol
+                  ? symbol
+                  : t('pages.strategyCreate.step1.section1.content3')}
+              </div>
             </div>
           </div>
         </span>
