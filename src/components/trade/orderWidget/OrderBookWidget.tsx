@@ -1,10 +1,12 @@
 import { OrderBookWidgetHeader } from 'components/trade/orderWidget/OrderBookWidgetHeader';
 import { OrderBookWidgetRate } from 'components/trade/orderWidget/OrderBookWidgetRate';
 import { useOrderBookWidget } from 'components/trade/orderWidget/useOrderBookWidget';
+import { useTranslation } from 'libs/translations';
 import { TradePageProps } from 'pages/trade';
 import { OrderBookSide } from './OrderBookSide';
 
 export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
+  const { t } = useTranslation();
   const {
     data: { buy, sell, middleRate, middleRateFiat },
     isLoading,
@@ -14,7 +16,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
 
   return (
     <div className={'rounded-10 bg-silver p-20'}>
-      <h2>Orders</h2>
+      <h2>{t('pages.trade.section1.title')}</h2>
       <div className={'mt-20 font-mono'}>
         <OrderBookWidgetHeader
           baseSymbol={base.symbol}

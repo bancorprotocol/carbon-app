@@ -7,7 +7,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 import { Slippage } from './Slippage';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { i18n } from 'libs/translations';
+import { i18n, useTranslation } from 'libs/translations';
 
 type Props = {
   value: string;
@@ -39,6 +39,7 @@ export const TokenInputField: FC<Props> = ({
   slippage,
   withoutWallet,
 }) => {
+  const { t } = useTranslation();
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -142,16 +143,16 @@ export const TokenInputField: FC<Props> = ({
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >
-            Wallet:
+            {t('common.content1')}
             {isBalanceLoading ? (
-              'loading'
+              t('common.content3')
             ) : (
               <>
                 <span className="ml-5 text-white">
                   {prettifyNumber(balance || 0)}
                 </span>
                 <div className="ml-10 text-green group-hover:text-white">
-                  MAX
+                  {t('common.content3')}
                 </div>
               </>
             )}

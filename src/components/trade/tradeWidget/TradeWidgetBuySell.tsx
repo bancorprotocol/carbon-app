@@ -75,7 +75,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         buy,
         buyToken: target,
         sellToken: source,
-        message: 'No Liquidity Available',
+        message: t('pages.trade.errors.error3'),
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -134,13 +134,16 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   const ctaButtonText = useMemo(() => {
     if (user) {
-      return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
+      return buy
+        ? t('pages.trade.section2.actionButton3', { token: target.symbol })
+        : t('pages.trade.section2.actionButton4', { token: source.symbol });
     }
 
     return t('common.actionButton1');
   }, [buy, source.symbol, t, target.symbol, user]);
 
-  if (liquidityQuery?.isError) return <div>Error</div>;
+  if (liquidityQuery?.isError)
+    return <div>{t('pages.trade.errors.error2')}</div>;
   if (!source || !target) return null;
 
   const slippage = calcSlippage();
@@ -175,7 +178,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           : `Sell ${source.symbol} for ${target.symbol}`}
       </h2>
       <div className={'flex justify-between text-14'}>
-        <div className={'text-white/50'}>You pay</div>
+        <div className={'text-white/50'}>
+          {t('pages.trade.section2.subtitles.subtitle1')}
+        </div>
         {errorMsgSource && (
           <div className={`font-weight-500 text-red`}>{errorMsgSource}</div>
         )}
@@ -197,7 +202,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             disabled={!hasEnoughLiquidity}
           />
           <div className={'flex justify-between text-14'}>
-            <div className={'text-white/50'}>You receive</div>
+            <div className={'text-white/50'}>
+              {t('pages.trade.section2.subtitles.subtitle2')}
+            </div>
             {errorMsgTarget && (
               <div
                 className={`cursor-pointer font-weight-500 text-red`}
@@ -217,7 +224,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             setValue={(value) => {
               setTargetInput(value);
             }}
-            placeholder={'Total Amount'}
+            placeholder={t('common.placeholders.placeholder3') || ''}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}
@@ -242,14 +249,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                   placement={'left'}
                   element="You can view and manage the orders that are included in the trade."
                 >
-                  <span>Routing</span>
+                  <span>{t('pages.trade.section2.actionButton5')}</span>
                 </Tooltip>
               </button>
             )}
           </div>
           {IS_TENDERLY_FORK && (
             <div className={'text-secondary mt-5 text-right'}>
-              DEBUG: {getLiquidity()}
+              {t('pages.trade.section2.content1', { num: getLiquidity() })}
             </div>
           )}
         </>

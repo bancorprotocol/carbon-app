@@ -1,10 +1,12 @@
 import { FC } from 'react';
+import { useTranslation } from 'libs/translations';
 
 export type CopyrightProps = {
   symbol: string;
 };
 
 export const Copyright: FC<CopyrightProps> = ({ symbol }) => {
+  const { t } = useTranslation();
   const href = `https://www.tradingview.com/symbols/${symbol}`;
 
   return (
@@ -17,7 +19,7 @@ export const Copyright: FC<CopyrightProps> = ({ symbol }) => {
       >
         <span className="text-blue">{symbol} </span>
       </a>
-      By TradingView
+      {t('common.content4')}
     </div>
   );
 };

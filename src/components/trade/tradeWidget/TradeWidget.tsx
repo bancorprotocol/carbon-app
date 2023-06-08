@@ -7,8 +7,10 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useState } from 'react';
+import { useTranslation } from 'libs/translations';
 
 export const TradeWidget = ({ base, quote }: TradePageProps) => {
+  const { t } = useTranslation();
   const { currentBreakpoint } = useBreakpoints();
   const baseBalanceQuery = useGetTokenBalance(base);
   const quoteBalanceQuery = useGetTokenBalance(quote);
@@ -30,13 +32,13 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
               onClick={() => setMobileShowBuy(true)}
               isActive={mobileShowBuy}
             >
-              Buy
+              {t('pages.trade.section2.actionButton1')}
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => setMobileShowBuy(false)}
               isActive={!mobileShowBuy}
             >
-              Sell
+              {t('pages.trade.section2.actionButton2')}
             </TabsMenuButton>
           </TabsMenu>
         )}

@@ -2,9 +2,14 @@
   "common": {
     "placeholders": {
       "placeholder1": "Enter Price",
-      "placeholder2": "Enter Amount"
+      "placeholder2": "Enter Amount",
+      "placeholder3": "Total Amount"
     },
-    "actionButton1": "Connect Wallet"
+    "actionButton1": "Connect Wallet",
+    "content1": "Wallet:",
+    "content2": "MAX",
+    "content3": "loading",
+    "content4": "By TradingView"
   },
   "modals": {
     "deleteStrategy": {
@@ -188,6 +193,45 @@
           "tooltip8": "The amount of {{buyToken}} tokens you would like to sell. {{note}}"
         },
         "actionButton": "Create Strategy"
+      }
+    },
+    "trade": {
+      "errors": {
+        "error1": "Not Found",
+        "error2": "Error",
+        "error3": "No Liquidity Available",
+        "error4": "Please enter an amount",
+        "error5": "Insufficient balance",
+        "error6": "Please enter an amount",
+        "error7": "Available liquidity: {{num}} {{token}}",
+        "error8": "No available orders at this moment.",
+        "error9": "No Orders"
+      },
+      "section1": {
+        "title": "Orders",
+        "headers": {
+          "header1": "Price {{token}}",
+          "header2": "Amount {{token}}",
+          "header3": "Total"
+        }
+      },
+      "section2": {
+        "actionButton1": "Buy",
+        "actionButton2": "Sell",
+        "actionButton3": "Buy {{token}}",
+        "actionButton4": "Sell {{token}}",
+        "actionButton5": "Routing",
+        "actionButton6": "Create a Strategy.",
+        "subtitles": {
+          "subtitle1": "You pay",
+          "subtitle2": "You receive"
+        },
+        "content1": "DEBUG: {{num}}",
+        "content2": "You can"
+      },
+      "section3": {
+        "actionButton1": "Depth",
+        "actionButton2": "Price"
       }
     }
   }
