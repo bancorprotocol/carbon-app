@@ -1,6 +1,7 @@
+/* eslint-disable i18next/no-literal-string */
 import { FC } from 'react';
 import { StrategyStatus } from 'libs/queries';
-import { useTranslation } from 'libs/translations';
+import { Trans, useTranslation } from 'libs/translations';
 import { StrategyEditEventType } from 'services/events/types';
 import { carbonEvents } from 'services/events';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
@@ -55,10 +56,14 @@ export const StrategyBlockOrderStatus: FC<{
                   )}
                 </div>
                 <div className="text-12 text-white/80">
-                  {t(
-                    'pages.strategyOverview.card.section3.notification.content2'
-                  )}{' '}
-                  <span className="font-weight-500">hal.xyz</span>
+                  <Trans
+                    i18nKey={
+                      'pages.strategyOverview.card.section3.notification.content2'
+                    }
+                    components={{
+                      bold: <span className="font-weight-500"></span>,
+                    }}
+                  />
                 </div>
                 <Button
                   className="mt-5 flex items-center justify-center"

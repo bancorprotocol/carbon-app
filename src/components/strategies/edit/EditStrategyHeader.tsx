@@ -1,15 +1,10 @@
+import { useMemo } from 'react';
+import { carbonEvents } from 'services/events';
 import { useLocation } from 'libs/routing';
+import { useTranslation } from 'libs/translations';
+import { EditTypes } from './EditStrategyMain';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
-import { EditTypes } from './EditStrategyMain';
-import { carbonEvents } from 'services/events';
-
-export const titleByType: { [key in EditTypes]: string } = {
-  renew: 'Renew Strategy',
-  editPrices: 'Edit Prices',
-  deposit: 'Deposit Budget',
-  withdraw: 'Withdraw Budget',
-};
 
 type EditStrategyHeaderProps = {
   showGraph: boolean;
@@ -22,9 +17,17 @@ export const EditStrategyHeader = ({
   setShowGraph,
   type,
 }: EditStrategyHeaderProps) => {
+  const { t } = useTranslation();
   const {
     history: { back },
   } = useLocation();
+
+  const titleByType: { [key in EditTypes]: string } = {
+    renew: t('pages.strategyEdit.titles.title1'),
+    editPrices: t('pages.strategyEdit.titles.title2'),
+    deposit: t('pages.strategyEdit.titles.title3'),
+    withdraw: t('pages.strategyEdit.titles.title4'),
+  };
 
   return (
     <div

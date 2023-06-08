@@ -28,7 +28,7 @@ export const InputRange: FC<{
   buy = false,
 }) => {
   const { t } = useTranslation();
-  const errorMessage = 'Max Price must be higher than min price and not zero';
+  const errorMessage = t('common.errors.error1');
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
@@ -76,7 +76,9 @@ export const InputRange: FC<{
               token.symbol
             } at.`}
           >
-            <div className={'mb-5 text-12 text-white/60'}>Min</div>
+            <div className={'mb-5 text-12 text-white/60'}>
+              {t('common.content9')}
+            </div>
           </Tooltip>
           <input
             type={'text'}
@@ -105,7 +107,9 @@ export const InputRange: FC<{
               token.symbol
             } at.`}
           >
-            <div className={'mb-5 text-12 text-white/60'}>Max</div>
+            <div className={'mb-5 text-12 text-white/60'}>
+              {t('common.content10')}
+            </div>
           </Tooltip>
           <input
             type={'text'}

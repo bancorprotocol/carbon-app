@@ -17,6 +17,7 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -29,6 +30,7 @@ export const StrategyBlockManage: FC<{
   manage: boolean;
   setManage: (flag: boolean) => void;
 }> = ({ strategy, manage, setManage }) => {
+  const { t } = useTranslation();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
@@ -164,7 +166,7 @@ export const StrategyBlockManage: FC<{
             variant={'success-light'}
             onClick={onClick}
           >
-            Manage
+            {t('pages.strategyOverview.card.actionButton3')}
             <IconChevron className="w-12" />
           </Button>
         </div>

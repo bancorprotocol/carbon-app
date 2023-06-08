@@ -7,14 +7,38 @@
       "placeholder4": "Search",
       "placeholder5": "custom"
     },
-    "actionButton1": "Connect Wallet",
+    "actionButtons": {
+      "actionButton1": "Connect Wallet",
+      "actionButton2": "Change Network",
+      "actionButton3": "Disconnect Wallet",
+      "actionButton4": "Learn More",
+      "actionButton5": "Logout",
+      "actionButton6": "Contact Support",
+      "actionButton7": "Limit",
+      "actionButton8": "Range"
+    },
+    "warnings": {
+      "warning1": "Notice: your Buy and Sell orders overlap",
+      "warning2": "Notice, you offer to buy {{token}} above current market price",
+      "warning3": "Notice, you offer to sell {{token}} below current market price"
+    },
+    "errors": {
+      "error1": "Max Price must be higher than min price and not zero"
+    },
+    "tooltips": {
+      "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.<br /><bold>Limit</bold> will allow you to define a specific price point to buy the token at.<br/><bold>Range</bold> will allow you to define a range of prices to buy the token at.",
+      "tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.<br /><bold>Limit</bold> will allow you to define a specific price point to sell the token at.<br/><bold>Range</bold> will allow you to define a range of prices to sell the token at."
+    },
     "content1": "Wallet:",
     "content2": "MAX",
     "content3": "loading",
     "content4": "By TradingView",
     "content5": "Popular",
     "content6": "Favorites",
-    "content7": "All"
+    "content7": "All",
+    "content8": "Notice, price & slippage are unknown",
+    "content9": "Min",
+    "content10": "Max"
   },
   "modals": {
     "deleteStrategy": {
@@ -33,10 +57,15 @@
       "actionButton2": "Cancel"
     },
     "selectToken": {
-      "modalTitle": "Select Token"
+      "modalTitle": "Select Token",
+      "actionButton": "Import Token",
+      "content1": "Token not found",
+      "content2": "Unfortunately we couldn't find a token for the address you entered, try to <bold>import a new token.</bold>",
+      "content3": "Unfortunately we couldn't find the token you're looking for, try searching for it <bold>by address.</bold>"
     },
     "selectTokenPair": {
-      "modalTitle": "Select Token Pair"
+      "modalTitle": "Select Token Pair",
+      "error1": "Error: Unable to load token list"
     },
     "tradeSettings": {
       "modalTitle": "Trade Settings",
@@ -47,7 +76,8 @@
     "connectWallet": {
       "modalTitle": "Connect Wallet",
       "actionButton": "I read and accept",
-      "content1": "By connecting my wallet, I agree to the <1>terms & conditions</1> and <2>cookie & privacy policy</2> of this site."
+      "content1": "By connecting my wallet, I agree to the <1>terms & conditions</1> and <2>cookie & privacy policy</2> of this site.",
+      "error1": "{{error}} Error:"
     },
     "confirm": {
       "modalTitle": "Confirm Transaction",
@@ -64,9 +94,36 @@
         "status2": "Approved",
         "status3": "Pre-Approved"
       }
+    },
+    "tradeRouting": {
+      "modalTitle": "Trade Routing",
+      "actionButton1": "Confirm",
+      "actionButton2": "Confirm Trade",
+      "subtitle1": "Routing Table",
+      "subtitle2": "Confirm Trade",
+      "header1": "Average Price",
+      "tooltip1": "When managing the list of orders, your trade amounts will change to reflect these changes."
+    },
+    "restrictedCountry": {
+      "modalTitle": "I Understand"
+    },
+    "notification": {
+      "modalTitle": "Notifications",
+      "actionButton1": "Clear All",
+      "content1": "View on Etherscan"
+    },
+    "importToken": {
+      "modalTitle": "Import Token",
+      "content1": "Error: No token found for this address",
+      "content2": "View on Explorer",
+      "actionButtons": {
+        "actionButton1": "Import Token",
+        "actionButton2": "Cancel"
+      }
     }
   },
   "navBar": {
+    "actionButton": "Fork",
     "items": {
       "item1": "Strategies",
       "item2": "Trade",
@@ -113,10 +170,14 @@
         "content3": "Easily Adjustable",
         "content4": "Rotating Liquidity",
         "content5": "All standard ERC-20 tokens",
-        "content6": "MEV Resistant"
+        "content6": "MEV Resistant",
+        "content7": "Strategy Not Found"
       },
       "header": {
-        "actionButton": "Create Strategy",
+        "actionButton1": "Create Strategy",
+        "actionButton2": "Filter & Sort",
+        "subtitle1": "Sort By",
+        "subtitle2": "View",
         "title_zero": "Strategies",
         "title_one": "{{count}} Strategy",
         "title_other": "{{count}} Strategies"
@@ -125,6 +186,7 @@
         "title": "ID",
         "actionButton1": "Create Your First Strategy",
         "actionButton2": "Create Strategy",
+        "actionButton3": "Manage",
         "section1": {
           "title": "Buy",
           "content1": "Limit Price",
@@ -148,7 +210,7 @@
           "notification": {
             "title": "Strategy Notification",
             "content1": "You can set a notification to be informed each time someone trades against your strategy.",
-            "content2": "This is a third-party service managed by",
+            "content2": "This is a third-party service managed by <strong>hal.xyz<strong>",
             "actionButton": "Manage Notification"
           }
         },
@@ -204,7 +266,7 @@
         "tooltips": {
           "tooltip1": "Select the Base token for the pair",
           "tooltip2": "Select the Quote token for the pair (i.e. when selecting USDC, all rates would be denominated in USDC)",
-          "tooltip3": "Selecting the tokens you would like to create a strategy for.<br/><strong>Buy or Sell token</strong> (also called Base token) is the token you would like to buy or sell in the strategy. <br /> <strong>With token</strong> (also called Quote token) is the token you would denominate the rates in."
+          "tooltip3": "Selecting the tokens you would like to create a strategy for.<br/><bold>Buy or Sell token</bold> (also called Base token) is the token you would like to buy or sell in the strategy. <br /> <strong>With token</strong> (also called Quote token) is the token you would denominate the rates in."
         },
         "actionButton": "Next Step"
       },
@@ -243,6 +305,57 @@
           "tooltip8": "The amount of {{buyToken}} tokens you would like to sell. {{note}}"
         },
         "actionButton": "Create Strategy"
+      }
+    },
+    "strategyEdit": {
+      "titles": {
+        "title1": "Renew Strategy",
+        "title2": "Edit Prices",
+        "title3": "Deposit Budget",
+        "title4": "Withdraw Budget"
+      },
+      "chart": {
+        "title": "Price Chart",
+        "actionButton": "Close Chart"
+      },
+      "section1": {
+        "title": "ID: {{id}}"
+      },
+      "section2": {
+        "content1": "Optional",
+        "content2": "Insufficient balance",
+        "content3": "Buy",
+        "content4": "Sell",
+        "content5": "Allocated Budget",
+        "content6": "Distribute Across Entire Range",
+        "content7": "The budget is allocated to the entire newly set range and the asking price is updated.",
+        "content9": "Distribute To Unused Range",
+        "content10": "Price remains the same as it was. The budget is not allocated to the new range.",
+        "content11": "Strategy budget will be distribute across entire range",
+        "content12": "per 1",
+        "titles": {
+          "title1": "Withdraw {{buyOrSell}} Budget",
+          "title2": "Deposit {{buyOrSell}} Budget",
+          "title3": "Buy Low {{token}}",
+          "title4": "Sell High {{token}}"
+        },
+        "subtitles": {
+          "subtitle1": "Set Buy Price",
+          "subtitle2": "Set Sell Price"
+        }
+      },
+      "tooltips": {
+        "tooltip1": "Indicate the amount you wish to withdraw from the available 'allocated budget'",
+        "tooltip2": "Indicate the amount you wish to deposit from the available 'allocated budget'",
+        "tooltip3": "When updating the rates, the allocated budget will be distributed equally across the entire range",
+        "tooltip4": "This is the current available {{token}} budget you can withdraw"
+      },
+      "actionButtons": {
+        "actionButton1": "Cancel",
+        "actionButton2": "Renew Strategy",
+        "actionButton3": "Confirm Changes",
+        "actionButton4": "Confirm Withdraw",
+        "actionButton5": "Confirm Deposit"
       }
     },
     "trade": {

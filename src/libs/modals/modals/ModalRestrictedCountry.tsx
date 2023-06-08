@@ -1,12 +1,14 @@
+import { lsService } from 'services/localeStorage';
+import { useModal } from 'hooks/useModal';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
+import { useTranslation } from 'libs/translations';
 import { Button } from 'components/common/button';
-import { useModal } from 'hooks/useModal';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { lsService } from 'services/localeStorage';
 
 export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
+  const { t } = useTranslation();
   const { closeModal } = useModal();
 
   const onClose = () => {
@@ -27,7 +29,7 @@ export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
         />
       </div>
       <Button variant={'white'} fullWidth onClick={onClose} className={'mt-16'}>
-        I Understand
+        {t('modals.restrictedCountry.modalTitle')}
       </Button>
     </Modal>
   );

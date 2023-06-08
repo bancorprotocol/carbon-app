@@ -2,18 +2,21 @@ import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
+import { useTranslation } from 'libs/translations';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
+  const { t } = useTranslation();
   const { notifications, clearNotifications } = useNotifications();
   const reversedNotifications = notifications.slice().reverse();
+
   return (
     <ModalSlideOver
       id={id}
       title={
         <div className="flex w-full items-center justify-between">
-          Notifications
+          {t('modals.notification.modalTitle')}
           <button onClick={() => clearNotifications()} className="mr-20">
-            Clear All
+            {t('modals.notification.actionButton1')}
           </button>
         </div>
       }

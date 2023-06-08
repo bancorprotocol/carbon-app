@@ -77,7 +77,6 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         sellToken: source,
         message: t('pages.trade.errors.error3'),
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     buy,
     errorMsgSource,
@@ -139,7 +138,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         : t('pages.trade.section2.actionButton4', { token: source.symbol });
     }
 
-    return t('common.actionButton1');
+    return t('common.actionButtons.actionButton1');
   }, [buy, source.symbol, t, target.symbol, user]);
 
   if (liquidityQuery?.isError)

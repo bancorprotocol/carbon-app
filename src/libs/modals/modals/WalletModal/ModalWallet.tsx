@@ -59,8 +59,8 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
         {isError ? (
           <div className={'flex flex-col items-center space-y-20'}>
             <ModalWalletError
-              logoUrl={selectedConnection.logoUrl}
-              name={selectedConnection.name}
+              logoUrl={selectedConnection?.logoUrl}
+              name={selectedConnection?.name || ''}
               error={connectionError}
             />
           </div>

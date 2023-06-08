@@ -11,6 +11,7 @@ import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useMo
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
+import { useTranslation } from 'libs/translations';
 
 export type ModalTradeRoutingData = {
   source: Token;
@@ -26,6 +27,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   id,
   data,
 }) => {
+  const { t } = useTranslation();
   const [isAwaiting, setIsAwaiting] = useState(false);
 
   const {
@@ -43,13 +45,15 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   });
 
   return (
-    <Modal id={id} title="Trade Routing" size={'md'}>
+    <Modal id={id} title={t('modals.tradeRouting.modalTitle')} size={'md'}>
       <Tooltip
         element={
           'This is the list of orders your trade will use when executed.'
         }
       >
-        <div className={'text-secondary mt-20 mb-5'}>Routing Table</div>
+        <div className={'text-secondary mt-20 mb-5'}>
+          {t('modals.tradeRouting.subtitle1')}
+        </div>
       </Tooltip>
       <ModalTradeRoutingHeader
         baseSymbol={data.source.symbol}
@@ -70,8 +74,10 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           />
         ))}
       </div>
-      <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
-        <div className={'text-secondary mt-20 mb-5'}>Confirm Trade</div>
+      <Tooltip element={t('modals.tradeRouting.tooltip1')}>
+        <div className={'text-secondary mt-20 mb-5'}>
+          {t('modals.tradeRouting.subtitle2')}
+        </div>
       </Tooltip>
       <div className={'-space-y-10'}>
         <div className={'rounded-12 bg-black p-16'}>
@@ -106,7 +112,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           loading={isAwaiting}
           loadingChildren={'Waiting for Confirmation'}
         >
-          Confirm
+          {t('modals.tradeRouting.actionButton1')}
         </Button>
       </div>
     </Modal>

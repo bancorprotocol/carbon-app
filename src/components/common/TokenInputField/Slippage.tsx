@@ -4,8 +4,10 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from '../tooltip/Tooltip';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useTranslation } from 'libs/translations';
 
 export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
+  const { t } = useTranslation();
   const { selectedFiatCurrency } = useFiatCurrency();
   const isSlippagePositive = slippage?.isGreaterThan(0);
 
@@ -24,7 +26,7 @@ export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
           }`}
         >
           {slippage.isEqualTo(0) ? (
-            <div className="text-red">Notice, price & slippage are unknown</div>
+            <div className="text-red">{t('common.content8')}</div>
           ) : (
             `(${isSlippagePositive ? '+' : '-'}${sanitizeNumberInput(
               slippage.toString(),

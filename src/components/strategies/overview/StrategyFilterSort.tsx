@@ -3,6 +3,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { FC } from 'react';
+import { useTranslation } from 'libs/translations';
 
 export enum StrategyFilter {
   All,
@@ -57,6 +58,8 @@ export const StrategyFilterSort: FC<{
   setSort: (sort: StrategySort) => void;
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ sort, filter, setSort, setFilter }) => {
+  const { t } = useTranslation();
+
   return (
     <DropdownMenu
       button={(onClick) => (
@@ -65,12 +68,15 @@ export const StrategyFilterSort: FC<{
           variant="secondary"
           className="flex items-center gap-10"
         >
-          Filter & Sort <IconChevron className="w-14" />
+          {t('pages.strategyOverview.header.actionButton2')}{' '}
+          <IconChevron className="w-14" />
         </Button>
       )}
     >
       <div className="grid w-[300px] gap-20 p-10">
-        <div className="text-secondary text-20">Sort By</div>
+        <div className="text-secondary text-20">
+          {t('pages.strategyOverview.header.subtitle1')}
+        </div>
         <>
           {sortItems.map((sortItem) => (
             <FilterSortItem
@@ -84,7 +90,9 @@ export const StrategyFilterSort: FC<{
         </>
 
         <hr className="border-2 border-silver dark:border-emphasis" />
-        <div className="text-secondary">View</div>
+        <div className="text-secondary">
+          {t('pages.strategyOverview.header.subtitle2')}
+        </div>
 
         <>
           {filterItems.map((filterItem) => (

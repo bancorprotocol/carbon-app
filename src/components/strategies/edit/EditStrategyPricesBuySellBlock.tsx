@@ -4,6 +4,7 @@ import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/Lim
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from './EditStrategyMain';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
+import { useTranslation } from 'libs/translations';
 
 type EditStrategyPricesBuySellBlockProps = {
   base: Token;
@@ -18,6 +19,8 @@ type EditStrategyPricesBuySellBlockProps = {
 export const EditStrategyPricesBuySellBlock: FC<
   EditStrategyPricesBuySellBlockProps
 > = ({ base, quote, balance, buy, order, type, isOrdersOverlap }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-12 ${
@@ -34,14 +37,19 @@ export const EditStrategyPricesBuySellBlock: FC<
           buy,
           order,
           isOrdersOverlap,
-          title: `${buy ? 'Buy' : 'Sell'} ${buy ? 'Low' : 'High'} ${
-            base.symbol
-          }`,
+          title: buy
+            ? t('pages.strategyEdit.titles.title3', { token: base.symbol })
+            : t('pages.strategyEdit.titles.title4', { token: base.symbol }),
           inputTitle: (
             <div className="text-white/60">
-              {`Set ${buy ? 'Buy' : 'Sell'} Price `}
+              {buy
+                ? t('pages.strategyEdit.section2.subtitles.subtitle1')
+                : t('pages.strategyEdit.section2.subtitles.subtitle2')}{' '}
               <span className={'text-white/80'}>
-                ({quote.symbol} <span className="text-white/60">per 1 </span>
+                ({quote.symbol}{' '}
+                <span className="text-white/60">
+                  {t('pages.strategyEdit.section2.content12')}{' '}
+                </span>
                 {base.symbol})
               </span>
             </div>

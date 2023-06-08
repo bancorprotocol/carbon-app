@@ -121,7 +121,7 @@ export const CreateStrategyOrders = ({
         >
           {user
             ? t('pages.strategyCreate.step2.actionButton')
-            : t('common.actionButton1')}
+            : t('common.actionButtons.actionButton1')}
         </Button>
       </m.div>
     </>
