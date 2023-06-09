@@ -29,12 +29,12 @@ export const NotEnoughLiquidity = ({
         </div>
         <div>{t('pages.trade.errors.error8')}</div>
         <div>
-          {t('pages.trade.section2.content2')}
+          {t('pages.trade.section2.contents.content2')}
           <span
             onClick={() => duplicate({ base: source, quote: target })}
             className="cursor-pointer font-weight-500"
           >
-            {t('pages.trade.section2.actionButton6')}
+            {t('pages.trade.section2.actionButtons.actionButton6')}
           </span>
         </div>
       </div>

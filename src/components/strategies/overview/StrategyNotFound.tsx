@@ -11,7 +11,7 @@ export const StrategyNotFound = () => {
           <IconEllipse />
         </div>
         <div className="text-36">
-          {t('pages.strategyOverview.noStrategyCard.content7')}
+          {t('pages.strategyOverview.noStrategyCard.contents.content7')}
         </div>
       </div>
     </div>

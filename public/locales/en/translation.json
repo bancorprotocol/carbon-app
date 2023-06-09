@@ -97,11 +97,14 @@
     },
     "tradeRouting": {
       "modalTitle": "Trade Routing",
+      "section1": {
+        "title1": "Routing Table",
+        "header1": "Average Price"
+      },
+      "section2": {
+        "title1": "Confirm Trade"
+      },
       "actionButton1": "Confirm",
-      "actionButton2": "Confirm Trade",
-      "subtitle1": "Routing Table",
-      "subtitle2": "Confirm Trade",
-      "header1": "Average Price",
       "tooltip1": "When managing the list of orders, your trade amounts will change to reflect these changes."
     },
     "restrictedCountry": {
@@ -114,8 +117,10 @@
     },
     "importToken": {
       "modalTitle": "Import Token",
-      "content1": "Error: No token found for this address",
-      "content2": "View on Explorer",
+      "contents": {
+        "content1": "Error: No token found for this address",
+        "content2": "View on Explorer"
+      },
       "actionButtons": {
         "actionButton1": "Import Token",
         "actionButton2": "Cancel"
@@ -165,39 +170,51 @@
         "title": "Automate your Trading Strategies",
         "subtitle": "A fully decentralized protocol for automating on-chain trading strategies.",
         "actionButton": "Connect",
-        "content1": "On-chain Limit & Range Orders",
-        "content2": "Automated and Recurring strategies",
-        "content3": "Easily Adjustable",
-        "content4": "Rotating Liquidity",
-        "content5": "All standard ERC-20 tokens",
-        "content6": "MEV Resistant",
-        "content7": "Strategy Not Found"
+        "contents": {
+          "content1": "On-chain Limit & Range Orders",
+          "content2": "Automated and Recurring strategies",
+          "content3": "Easily Adjustable",
+          "content4": "Rotating Liquidity",
+          "content5": "All standard ERC-20 tokens",
+          "content6": "MEV Resistant",
+          "content7": "Strategy Not Found"
+        }
       },
       "header": {
-        "actionButton1": "Create Strategy",
-        "actionButton2": "Filter & Sort",
-        "subtitle1": "Sort By",
-        "subtitle2": "View",
         "title_zero": "Strategies",
         "title_one": "{{count}} Strategy",
-        "title_other": "{{count}} Strategies"
+        "title_other": "{{count}} Strategies",
+        "subtitles": {
+          "subtitle1": "Sort By",
+          "subtitle2": "View"
+        },
+        "actionButtons": {
+          "actionButton1": "Create Strategy",
+          "actionButton2": "Filter & Sort"
+        }
       },
       "card": {
-        "title": "ID",
-        "actionButton1": "Create Your First Strategy",
-        "actionButton2": "Create Strategy",
-        "actionButton3": "Manage",
+        "title": "ID: {{id}}",
+        "actionButtons": {
+          "actionButton1": "Create Your First Strategy",
+          "actionButton2": "Create Strategy",
+          "actionButton3": "Manage"
+        },
         "section1": {
           "title": "Buy",
-          "content1": "Limit Price",
-          "content2": "Price Range",
-          "content3": "Budget"
+          "contents": {
+            "content1": "Limit Price",
+            "content2": "Price Range",
+            "content3": "Budget"
+          }
         },
         "section2": {
           "title": "Sell",
-          "content1": "Limit Price",
-          "content2": "Price Range",
-          "content3": "Budget"
+          "contents": {
+            "content1": "Limit Price",
+            "content2": "Price Range",
+            "content3": "Budget"
+          }
         },
         "section3": {
           "title": "Order Status",
@@ -233,17 +250,21 @@
         "title": "Create Strategy",
         "section1": {
           "title": "Token Pair",
-          "content1": "Buy or Sell",
-          "content2": "With",
-          "content3": "Select Token"
+          "contents": {
+            "content1": "Buy or Sell",
+            "content2": "With",
+            "content3": "Select Token"
+          }
         },
         "section2": {
           "title": "Strategy Type",
           "strategyTypes": {
             "type1": {
               "title": "Recurring",
-              "content1": "Automated Link Orders",
-              "content2": "Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.",
+              "contents": {
+                "content1": "Automated Link Orders",
+                "content2": "Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa."
+              },
               "options": {
                 "option1": "2 Limits",
                 "option2": "2 Ranges",
@@ -252,8 +273,10 @@
             },
             "type2": {
               "title": "Disposable",
-              "content1": "Single Use Order",
-              "content2": "An irreversible buy or sell order at a predefined price or range.",
+              "contents": {
+                "content1": "Single Use Order",
+                "content2": "An irreversible buy or sell order at a predefined price or range."
+              },
               "options": {
                 "option1": "Buy Limit",
                 "option2": "Buy Range",
@@ -278,21 +301,29 @@
           "actionButton": "Close Chart"
         },
         "section1": {
-          "title1": "recurring",
-          "title2": "disposable"
+          "titles": {
+            "title1": "recurring",
+            "title2": "disposable"
+          }
         },
         "section2": {
-          "title1": "Buy Low",
-          "title2": "Sell High",
-          "subtitle1": "Set Buy Price",
-          "subtitle2": "Set Sell Price",
-          "subtitle3": "Set Buy Budget",
-          "subtitle4": "Set Sell Budget",
-          "content1": "buy",
-          "content2": "sell",
-          "content3": "per",
-          "content4": "Optional",
-          "content5": "Insufficient balance"
+          "titles": {
+            "title1": "Buy Low",
+            "title2": "Sell High"
+          },
+          "subtitles": {
+            "subtitle1": "Set Buy Price",
+            "subtitle2": "Set Sell Price",
+            "subtitle3": "Set Buy Budget",
+            "subtitle4": "Set Sell Budget"
+          },
+          "contents": {
+            "content1": "buy",
+            "content2": "sell",
+            "content3": "per",
+            "content4": "Optional",
+            "content5": "Insufficient balance"
+          }
         },
         "tooltips": {
           "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.",
@@ -322,17 +353,6 @@
         "title": "ID: {{id}}"
       },
       "section2": {
-        "content1": "Optional",
-        "content2": "Insufficient balance",
-        "content3": "Buy",
-        "content4": "Sell",
-        "content5": "Allocated Budget",
-        "content6": "Distribute Across Entire Range",
-        "content7": "The budget is allocated to the entire newly set range and the asking price is updated.",
-        "content9": "Distribute To Unused Range",
-        "content10": "Price remains the same as it was. The budget is not allocated to the new range.",
-        "content11": "Strategy budget will be distribute across entire range",
-        "content12": "per 1",
         "titles": {
           "title1": "Withdraw {{buyOrSell}} Budget",
           "title2": "Deposit {{buyOrSell}} Budget",
@@ -342,6 +362,19 @@
         "subtitles": {
           "subtitle1": "Set Buy Price",
           "subtitle2": "Set Sell Price"
+        },
+        "contents": {
+          "content1": "Optional",
+          "content2": "Insufficient balance",
+          "content3": "Buy",
+          "content4": "Sell",
+          "content5": "Allocated Budget",
+          "content6": "Distribute Across Entire Range",
+          "content7": "The budget is allocated to the entire newly set range and the asking price is updated.",
+          "content9": "Distribute To Unused Range",
+          "content10": "Price remains the same as it was. The budget is not allocated to the new range.",
+          "content11": "Strategy budget will be distribute across entire range",
+          "content12": "per 1"
         }
       },
       "tooltips": {
@@ -379,22 +412,28 @@
         }
       },
       "section2": {
-        "actionButton1": "Buy",
-        "actionButton2": "Sell",
-        "actionButton3": "Buy {{token}}",
-        "actionButton4": "Sell {{token}}",
-        "actionButton5": "Routing",
-        "actionButton6": "Create a Strategy.",
         "subtitles": {
           "subtitle1": "You pay",
           "subtitle2": "You receive"
         },
-        "content1": "DEBUG: {{num}}",
-        "content2": "You can"
+        "actionButtons": {
+          "actionButton1": "Buy",
+          "actionButton2": "Sell",
+          "actionButton3": "Buy {{token}}",
+          "actionButton4": "Sell {{token}}",
+          "actionButton5": "Routing",
+          "actionButton6": "Create a Strategy."
+        },
+        "contents": {
+          "content1": "DEBUG: {{num}}",
+          "content2": "You can"
+        }
       },
       "section3": {
-        "actionButton1": "Depth",
-        "actionButton2": "Price"
+        "actionButtons": {
+          "actionButton1": "Depth",
+          "actionButton2": "Price"
+        }
       }
     }
   }

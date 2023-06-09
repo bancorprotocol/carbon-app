@@ -117,12 +117,12 @@ export const StrategyBlockBuySell: FC<{
                 ? t(
                     `pages.strategyOverview.card.${
                       buy ? 'section1' : 'section2'
-                    }.content1`
+                    }.contents.content1`
                   )
                 : t(
                     `pages.strategyOverview.card.${
                       buy ? 'section1' : 'section2'
-                    }.content2`
+                    }.contents.content2`
                   )}
             </div>
           </Tooltip>
@@ -161,11 +161,9 @@ export const StrategyBlockBuySell: FC<{
             }
           >
             <div className="text-secondary !text-16">
-              {t(
-                `pages.strategyOverview.card.${
-                  buy ? 'section1' : 'section2'
-                }.content3`
-              )}
+              {buy
+                ? t(`pages.strategyOverview.card.section1.contents.content3`)
+                : t(`pages.strategyOverview.card.section2.contents.content3`)}
             </div>
           </Tooltip>
           <div className="flex gap-7">

@@ -82,7 +82,7 @@ export const SelectTokenButton: FC<Props> = ({
               <div>
                 {symbol
                   ? symbol
-                  : t('pages.strategyCreate.step1.section1.content3')}
+                  : t('pages.strategyCreate.step1.section1.contents.content3')}
               </div>
             </div>
           </div>

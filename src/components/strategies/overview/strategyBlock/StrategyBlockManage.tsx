@@ -166,7 +166,7 @@ export const StrategyBlockManage: FC<{
             variant={'success-light'}
             onClick={onClick}
           >
-            {t('pages.strategyOverview.card.actionButton3')}
+            {t('pages.strategyOverview.card.actionButtons.actionButton3')}
             <IconChevron className="w-12" />
           </Button>
         </div>

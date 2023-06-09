@@ -134,8 +134,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const ctaButtonText = useMemo(() => {
     if (user) {
       return buy
-        ? t('pages.trade.section2.actionButton3', { token: target.symbol })
-        : t('pages.trade.section2.actionButton4', { token: source.symbol });
+        ? t('pages.trade.section2.actionButtons.actionButton3', {
+            token: target.symbol,
+          })
+        : t('pages.trade.section2.actionButtons.actionButton4', {
+            token: source.symbol,
+          });
     }
 
     return t('common.actionButtons.actionButton1');
@@ -248,14 +252,18 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                   placement={'left'}
                   element="You can view and manage the orders that are included in the trade."
                 >
-                  <span>{t('pages.trade.section2.actionButton5')}</span>
+                  <span>
+                    {t('pages.trade.section2.actionButtons.actionButton5')}
+                  </span>
                 </Tooltip>
               </button>
             )}
           </div>
           {IS_TENDERLY_FORK && (
             <div className={'text-secondary mt-5 text-right'}>
-              {t('pages.trade.section2.content1', { num: getLiquidity() })}
+              {t('pages.trade.section2.contents.content1', {
+                num: getLiquidity(),
+              })}
             </div>
           )}
         </>

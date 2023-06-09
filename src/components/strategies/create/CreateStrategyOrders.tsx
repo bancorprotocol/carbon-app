@@ -76,8 +76,8 @@ export const CreateStrategyOrders = ({
 
           <div className="text-secondary capitalize">
             {strategyType === 'recurring'
-              ? t('pages.strategyCreate.step2.section1.title1')
-              : t('pages.strategyCreate.step2.section1.title2')}
+              ? t('pages.strategyCreate.step2.section1.titles.title1')
+              : t('pages.strategyCreate.step2.section1.titles.title2')}
           </div>
         </div>
       </m.div>

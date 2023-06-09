@@ -7,7 +7,7 @@ export const StrategyCreateFirst = () => {
   return (
     <div className="h-full p-20">
       <StrategyBlockCreate
-        title={t('pages.strategyOverview.card.actionButton1')}
+        title={t('pages.strategyOverview.card.actionButtons.actionButton1')}
         className="w-[270px] gap-[32px] text-center text-36"
       />
     </div>

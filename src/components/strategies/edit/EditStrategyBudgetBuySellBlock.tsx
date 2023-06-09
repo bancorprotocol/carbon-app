@@ -35,8 +35,8 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       : calculatedWalletBalance.lt(0);
 
   const buyOrSellText = buy
-    ? t('pages.strategyEdit.section2.content3')
-    : t('pages.strategyEdit.section2.content4');
+    ? t('pages.strategyEdit.section2.contents.content3')
+    : t('pages.strategyEdit.section2.contents.content4');
 
   return (
     <div
@@ -61,7 +61,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           </div>
           {isBudgetOptional && (
             <div className="ml-8 text-14 font-weight-500 text-white/40">
-              {t('pages.strategyEdit.section2.content1')}
+              {t('pages.strategyEdit.section2.contents.content1')}
             </div>
           )}
         </div>
@@ -88,7 +88,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           !insufficientBalance ? 'invisible' : ''
         }`}
       >
-        {t('pages.strategyEdit.section2.content2')}
+        {t('pages.strategyEdit.section2.contents.content2')}
       </div>
       <div className="pt-10">
         <EditStrategyAllocatedBudget

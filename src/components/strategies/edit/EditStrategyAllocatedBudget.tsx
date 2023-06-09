@@ -76,7 +76,7 @@ export const EditStrategyAllocatedBudget: FC<{
       <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
         <div className="flex items-center justify-between gap-16">
           <div className="flex w-auto items-center gap-6">
-            <div>{t('pages.strategyEdit.section2.content5')}</div>
+            <div>{t('pages.strategyEdit.section2.contents.content5')}</div>
             <Tooltip
               sendEventOnMount={{ buy }}
               iconClassName="h-13 mr-6 text-white/60"
@@ -130,7 +130,7 @@ export const EditStrategyAllocatedBudget: FC<{
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
               <span className="mr-5">
-                {t('pages.strategyEdit.section2.content6')}
+                {t('pages.strategyEdit.section2.contents.content6')}
               </span>
               <Tooltip
                 iconClassName="h-13 text-white/60"
@@ -142,10 +142,10 @@ export const EditStrategyAllocatedBudget: FC<{
                       </div>
                       <div>
                         <div className="text-12 font-weight-500 text-white">
-                          {t('pages.strategyEdit.section2.content6')}
+                          {t('pages.strategyEdit.section2.contents.content6')}
                         </div>
                         <div className="text-10 text-white/60">
-                          {t('pages.strategyEdit.section2.content7')}
+                          {t('pages.strategyEdit.section2.contents.content7')}
                         </div>
                       </div>
                     </div>
@@ -155,10 +155,10 @@ export const EditStrategyAllocatedBudget: FC<{
                       </div>
                       <div>
                         <div className="text-12 font-weight-500 text-white">
-                          {t('pages.strategyEdit.section2.content9')}
+                          {t('pages.strategyEdit.section2.contents.content9')}
                         </div>
                         <div className="text-10 text-white/60">
-                          {t('pages.strategyEdit.section2.content10')}
+                          {t('pages.strategyEdit.section2.contents.content10')}
                         </div>
                       </div>
                     </div>
@@ -187,7 +187,7 @@ export const EditStrategyAllocatedBudget: FC<{
             iconClassName="h-13 text-white/60"
             element={t('pages.strategyEdit.tooltips.tooltip3')}
           />
-          {t('pages.strategyEdit.section2.content11')}
+          {t('pages.strategyEdit.section2.contents.content11')}
         </div>
       )}
     </>

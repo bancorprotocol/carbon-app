@@ -48,7 +48,7 @@ export const EditStrategyPricesBuySellBlock: FC<
               <span className={'text-white/80'}>
                 ({quote.symbol}{' '}
                 <span className="text-white/60">
-                  {t('pages.strategyEdit.section2.content12')}{' '}
+                  {t('pages.strategyEdit.section2.contents.content12')}{' '}
                 </span>
                 {base.symbol})
               </span>

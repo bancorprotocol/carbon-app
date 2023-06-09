@@ -79,20 +79,20 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             BlockIconTextDesc({
               icon: <IconArrows className={'h-18 w-18'} />,
               title: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type1.content1'
+                'pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content1'
               ),
               description: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type1.content2'
+                'pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content2'
               ),
             })}
           {strategyType === 'disposable' &&
             BlockIconTextDesc({
               icon: <IconArrowsTransparent className={'h-18 w-18'} />,
               title: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type2.content1'
+                'pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content1'
               ),
               description: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type2.content2'
+                'pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content2'
               ),
             })}
         </div>

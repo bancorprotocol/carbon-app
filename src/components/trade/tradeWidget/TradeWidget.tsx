@@ -32,13 +32,13 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
               onClick={() => setMobileShowBuy(true)}
               isActive={mobileShowBuy}
             >
-              {t('pages.trade.section2.actionButton1')}
+              {t('pages.trade.section2.actionButtons.actionButton1')}
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => setMobileShowBuy(false)}
               isActive={!mobileShowBuy}
             >
-              {t('pages.trade.section2.actionButton2')}
+              {t('pages.trade.section2.actionButtons.actionButton2')}
             </TabsMenuButton>
           </TabsMenu>
         )}

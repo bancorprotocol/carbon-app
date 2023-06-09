@@ -27,7 +27,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
             !showTVChart ? 'bg-silver' : 'text-secondary'
           } w-[120px] px-10 py-4`}
         >
-          {t('pages.trade.section3.actionButton1')}
+          {t('pages.trade.section3.actionButtons.actionButton1')}
         </button>
         <button
           onClick={() => setShowTVChart(true)}
@@ -35,7 +35,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
             showTVChart ? 'bg-silver' : 'text-secondary'
           } w-[120px] px-10 py-4`}
         >
-          {t('pages.trade.section3.actionButton2')}
+          {t('pages.trade.section3.actionButtons.actionButton2')}
         </button>
       </div>
 

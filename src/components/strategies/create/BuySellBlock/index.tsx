@@ -49,8 +49,8 @@ export const BuySellBlock: FC<Props> = ({
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
   const titleText = buy
-    ? t('pages.strategyCreate.step2.section2.title1')
-    : t('pages.strategyCreate.step2.section2.title2');
+    ? t('pages.strategyCreate.step2.section2.titles.title1')
+    : t('pages.strategyCreate.step2.section2.titles.title2');
 
   const tooltipText = buy
     ? t('pages.strategyCreate.step2.tooltips.tooltip1', {
@@ -100,13 +100,13 @@ export const BuySellBlock: FC<Props> = ({
         <div className={'text-14 font-weight-500 text-white/60'}>
           <span>
             {buy
-              ? t('pages.strategyCreate.step2.section2.subtitle1')
-              : t('pages.strategyCreate.step2.section2.subtitle2')}
+              ? t('pages.strategyCreate.step2.section2.subtitles.subtitle1')
+              : t('pages.strategyCreate.step2.section2.subtitles.subtitle2')}
           </span>
           <span className={'ml-8 text-white/80'}>
             ({quote.symbol}{' '}
             <span className={'text-white/60'}>
-              {t('pages.strategyCreate.step2.section2.content3')} 1{' '}
+              {t('pages.strategyCreate.step2.section2.contents.content3')} 1{' '}
             </span>
             {base.symbol})
           </span>
@@ -139,7 +139,7 @@ export const BuySellBlock: FC<Props> = ({
               isActive={buy}
             >
               {capitalizeFirstChar(
-                t('pages.strategyCreate.step2.section2.content1')
+                t('pages.strategyCreate.step2.section2.contents.content1')
               )}
             </TabsMenuButton>
             <TabsMenuButton
@@ -155,7 +155,7 @@ export const BuySellBlock: FC<Props> = ({
               isActive={!buy}
             >
               {capitalizeFirstChar(
-                t('pages.strategyCreate.step2.section2.content2')
+                t('pages.strategyCreate.step2.section2.contents.content2')
               )}
             </TabsMenuButton>
           </TabsMenu>
@@ -198,13 +198,13 @@ export const BuySellBlock: FC<Props> = ({
         >
           <div className={'font-weight-500 text-white/60'}>
             {buy
-              ? t('pages.strategyCreate.step2.section2.subtitle3')
-              : t('pages.strategyCreate.step2.section2.subtitle4')}
+              ? t('pages.strategyCreate.step2.section2.subtitles.subtitle3')
+              : t('pages.strategyCreate.step2.section2.subtitles.subtitle4')}
           </div>
         </Tooltip>
         {isBudgetOptional && (
           <div className="ml-8 font-weight-500 text-white/40">
-            {t('pages.strategyCreate.step2.section2.content4')}
+            {t('pages.strategyCreate.step2.section2.contents.content4')}
           </div>
         )}
       </div>
@@ -223,7 +223,7 @@ export const BuySellBlock: FC<Props> = ({
             !insufficientBalance ? 'invisible' : ''
           }`}
         >
-          {t('pages.strategyCreate.step2.section2.content5')}
+          {t('pages.strategyCreate.step2.section2.contents.content5')}
         </div>
       </div>
     </div>

@@ -40,7 +40,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
           imgUrl={base?.logoURI}
           address={base?.address}
           description={
-            t('pages.strategyCreate.step1.section1.content1') || undefined
+            t('pages.strategyCreate.step1.section1.contents.content1') || ''
           }
           onClick={() => openTokenListModal(true)}
           isBaseToken
@@ -77,7 +77,9 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
               symbol={quote?.symbol}
               imgUrl={quote?.logoURI}
               address={quote?.address}
-              description={'With'}
+              description={
+                t('pages.strategyCreate.step1.section1.contents.content2') || ''
+              }
               onClick={() => openTokenListModal()}
             />
           </>

@@ -19,27 +19,27 @@ export const WalletConnect = () => {
     () => [
       {
         icon: <IconWallet1 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.content1'),
+        title: t('pages.strategyOverview.noStrategyCard.contents.content1'),
       },
       {
         icon: <IconWallet2 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.content2'),
+        title: t('pages.strategyOverview.noStrategyCard.contents.content2'),
       },
       {
         icon: <IconWallet3 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.content3'),
+        title: t('pages.strategyOverview.noStrategyCard.contents.content3'),
       },
       {
         icon: <IconWallet4 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.content4'),
+        title: t('pages.strategyOverview.noStrategyCard.contents.content4'),
       },
       {
         icon: <IconWallet5 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.content5'),
+        title: t('pages.strategyOverview.noStrategyCard.contents.content5'),
       },
       {
         icon: <IconWallet6 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.content6'),
+        title: t('pages.strategyOverview.noStrategyCard.contents.content6'),
       },
     ],
     [t]

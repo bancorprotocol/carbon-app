@@ -55,7 +55,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         <div
           className={`${blockClasses} flex items-center justify-center dark:bg-red/30`}
         >
-          {t('modals.importToken.content1')}
+          {t('modals.importToken.contents.content1')}
         </div>
       )}
       {data && (
@@ -69,7 +69,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
               }
             >
               <span className={'whitespace-nowrap'}>
-                {t('modals.importToken.content2')}
+                {t('modals.importToken.contents.content2')}
               </span>
               <IconLink className={'ml-4 inline-flex h-14'} />
             </Link>

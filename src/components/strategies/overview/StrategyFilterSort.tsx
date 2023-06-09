@@ -68,14 +68,14 @@ export const StrategyFilterSort: FC<{
           variant="secondary"
           className="flex items-center gap-10"
         >
-          {t('pages.strategyOverview.header.actionButton2')}{' '}
+          {t('pages.strategyOverview.header.actionButtons.actionButton2')}{' '}
           <IconChevron className="w-14" />
         </Button>
       )}
     >
       <div className="grid w-[300px] gap-20 p-10">
         <div className="text-secondary text-20">
-          {t('pages.strategyOverview.header.subtitle1')}
+          {t('pages.strategyOverview.header.subtitles.subtitle1')}
         </div>
         <>
           {sortItems.map((sortItem) => (
@@ -91,7 +91,7 @@ export const StrategyFilterSort: FC<{
 
         <hr className="border-2 border-silver dark:border-emphasis" />
         <div className="text-secondary">
-          {t('pages.strategyOverview.header.subtitle2')}
+          {t('pages.strategyOverview.header.subtitles.subtitle2')}
         </div>
 
         <>

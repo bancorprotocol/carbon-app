@@ -52,7 +52,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         }
       >
         <div className={'text-secondary mt-20 mb-5'}>
-          {t('modals.tradeRouting.subtitle1')}
+          {t('modals.tradeRouting.section1.title1')}
         </div>
       </Tooltip>
       <ModalTradeRoutingHeader
@@ -76,7 +76,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
       </div>
       <Tooltip element={t('modals.tradeRouting.tooltip1')}>
         <div className={'text-secondary mt-20 mb-5'}>
-          {t('modals.tradeRouting.subtitle2')}
+          {t('modals.tradeRouting.section2.title1')}
         </div>
       </Tooltip>
       <div className={'-space-y-10'}>

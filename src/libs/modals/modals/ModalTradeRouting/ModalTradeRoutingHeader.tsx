@@ -19,7 +19,7 @@ export const ModalTradeRoutingHeader: FC<Props> = ({
     >
       <div>{baseSymbol}</div>
       <div>{quoteSymbol}</div>
-      <div>{t('modals.tradeRouting.header1')}</div>
+      <div>{t('modals.tradeRouting.section1.header1')}</div>
     </div>
   );
 };
