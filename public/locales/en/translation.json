@@ -23,11 +23,13 @@
       "warning3": "Notice, you offer to sell {{token}} below current market price"
     },
     "errors": {
-      "error1": "Max Price must be higher than min price and not zero"
+      "error1": "Max Price must be higher than min price and not zero",
+      "error2": "Price must be greater than 0"
     },
     "tooltips": {
       "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.<br /><bold>Limit</bold> will allow you to define a specific price point to buy the token at.<br/><bold>Range</bold> will allow you to define a range of prices to buy the token at.",
-      "tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.<br /><bold>Limit</bold> will allow you to define a specific price point to sell the token at.<br/><bold>Range</bold> will allow you to define a range of prices to sell the token at."
+      "tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.<br /><bold>Limit</bold> will allow you to define a specific price point to sell the token at.<br/><bold>Range</bold> will allow you to define a range of prices to sell the token at.",
+      "tooltip3": "The slippage is calculated based on the {{currency}} value difference between the selected source and target tokens."
     },
     "statues": {
       "status1": "Waiting for Confirmation",
@@ -556,6 +558,9 @@
         "contents": {
           "content1": "DEBUG: {{num}}",
           "content2": "You can"
+        },
+        "tooltips": {
+          "tooltip1": "You can view and manage the orders that are included in the trade."
         }
       },
       "section3": {

@@ -13,7 +13,9 @@ export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
 
   return (
     <Tooltip
-      element={`The slippage is calculated based on the ${selectedFiatCurrency} value difference between the selected source and target tokens.`}
+      element={t('common.tooltips.tooltip3', {
+        currency: selectedFiatCurrency,
+      })}
     >
       <div className="flex-end flex gap-5">
         <div

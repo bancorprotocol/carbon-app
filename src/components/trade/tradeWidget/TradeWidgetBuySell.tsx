@@ -256,7 +256,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 <IconRouting className={'w-12'} />
                 <Tooltip
                   placement={'left'}
-                  element="You can view and manage the orders that are included in the trade."
+                  element={t('pages.trade.section2.tooltips.tooltip1')}
                 >
                   <span>
                     {t('pages.trade.section2.actionButtons.actionButton5')}

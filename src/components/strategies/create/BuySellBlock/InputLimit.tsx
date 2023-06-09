@@ -18,7 +18,7 @@ export const InputLimit: FC<{
   const { t } = useTranslation();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const errorMessage = 'Price must be greater than 0';
+    const errorMessage = t('common.errors.error2');
     +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
 
     if (+e.target.value > 0) {

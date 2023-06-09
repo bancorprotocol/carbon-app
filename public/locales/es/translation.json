@@ -23,11 +23,13 @@
       "warning3": "Aviso: ofrece vender {{token}} por debajo del precio de mercado actual"
     },
     "errors": {
-      "error1": "El precio máximo debe ser mayor que el precio mínimo y no puede ser cero"
+      "error1": "El precio máximo debe ser mayor que el precio mínimo y no puede ser cero",
+      "error2": "El precio debe ser mayor que 0"
     },
     "tooltips": {
       "tooltip1": "Esta sección definirá los detalles del pedido para comprar {{token}}.<br /><bold>Límite</bold> te permitirá definir un precio específico para comprar el token.<br/><bold>Rango</bold> te permitirá definir un rango de precios para comprar el token.",
-      "tooltip2": "Esta sección definirá los detalles del pedido para vender {{token}}.<br /><bold>Límite</bold> te permitirá definir un precio específico para vender el token.<br/><bold>Rango</bold> te permitirá definir un rango de precios para vender el token."
+      "tooltip2": "Esta sección definirá los detalles del pedido para vender {{token}}.<br /><bold>Límite</bold> te permitirá definir un precio específico para vender el token.<br/><bold>Rango</bold> te permitirá definir un rango de precios para vender el token.",
+      "tooltip3": "El deslizamiento se calcula en base a la diferencia de valor en {{currency}} entre los tokens de origen y destino seleccionados."
     },
     "statues": {
       "status1": "Esperando confirmación",
@@ -287,13 +289,24 @@
         "title_zero": "Estrategias",
         "title_one": "{{count}} Estrategia",
         "title_other": "{{count}} Estrategias",
-        "subtitles": {
-          "subtitle1": "Ordenar por",
-          "subtitle2": "Ver"
-        },
         "actionButtons": {
           "actionButton1": "Crear Estrategia",
           "actionButton2": "Filtrar y Ordenar"
+        },
+        "filterMenu": {
+          "items": {
+            "item1": "Recién Creados",
+            "item2": "Más Antiguos",
+            "item3": "Par (A->Z)",
+            "item4": "Par (Z->A)",
+            "item5": "Todos",
+            "item6": "Activos",
+            "item7": "Inactivos"
+          },
+          "subtitles": {
+            "subtitle1": "Ordenar Por",
+            "subtitle2": "Ver"
+          }
         }
       },
       "card": {
@@ -345,6 +358,17 @@
           "tooltip8": "Tu estrategia no tiene fondos asociados. Considera depositar fondos para activarla.",
           "tooltip9": "Tu estrategia está pausada actualmente. Edita los precios para activarla.",
           "tooltip10": "Tu estrategia está inactiva actualmente. Considera activarla con fondos y tasas."
+        },
+        "manageStrategy": {
+          "titles": {
+            "title1": "Eliminar Estrategia",
+            "title2": "Editar Precios",
+            "title3": "Depositar Fondos",
+            "title4": "Retirar Fondos",
+            "title5": "Duplicar Estrategia",
+            "title6": "Pausar Estrategia",
+            "title7": "Renovar Estrategia"
+          }
         }
       }
     },
@@ -535,6 +559,9 @@
         "contents": {
           "content1": "DEBUG: {{num}}",
           "content2": "Puedes"
+        },
+        "tooltips": {
+          "tooltip1": "Puedes ver y gestionar las órdenes que se incluyen en la transacción."
         }
       },
       "section3": {
