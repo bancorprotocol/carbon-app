@@ -1,0 +1,583 @@
+{
+  "common": {
+    "placeholders": {
+      "placeholder1": "Preis eingeben",
+      "placeholder2": "Menge eingeben",
+      "placeholder3": "Gesamtmenge",
+      "placeholder4": "Suche",
+      "placeholder5": "Benutzerdefiniert"
+    },
+    "actionButtons": {
+      "actionButton1": "Wallet verbinden",
+      "actionButton2": "Netzwerk ändern",
+      "actionButton3": "Wallet trennen",
+      "actionButton4": "Mehr erfahren",
+      "actionButton5": "Abmelden",
+      "actionButton6": "Support kontaktieren",
+      "actionButton7": "Limit",
+      "actionButton8": "Bereich"
+    },
+    "warnings": {
+      "warning1": "Hinweis: Ihre Kauf- und Verkaufsaufträge überlappen sich",
+      "warning2": "Hinweis: Sie bieten an, {{token}} über dem aktuellen Marktpreis zu kaufen",
+      "warning3": "Hinweis: Sie bieten an, {{token}} unter dem aktuellen Marktpreis zu verkaufen"
+    },
+    "errors": {
+      "error1": "Maximalpreis muss höher als Mindestpreis und nicht null sein",
+      "error2": "Preis muss größer als 0 sein"
+    },
+    "tooltips": {
+      "tooltip1": "In diesem Abschnitt werden die Auftragsdetails festgelegt, zu welchem Preis Sie {{token}} kaufen möchten.<br /><bold>Limit</bold> ermöglicht es Ihnen, einen bestimmten Preispunkt festzulegen, zu dem Sie das Token kaufen möchten.<br/><bold>Bereich</bold> ermöglicht es Ihnen, einen Bereich von Preisen festzulegen, zu dem Sie das Token kaufen möchten.",
+      "tooltip2": "In diesem Abschnitt werden die Auftragsdetails festgelegt, zu welchem Preis Sie {{token}} verkaufen möchten.<br /><bold>Limit</bold> ermöglicht es Ihnen, einen bestimmten Preispunkt festzulegen, zu dem Sie das Token verkaufen möchten.<br/><bold>Bereich</bold> ermöglicht es Ihnen, einen Bereich von Preisen festzulegen, zu dem Sie das Token verkaufen möchten.",
+      "tooltip3": "Die Slippage wird auf Basis des Wertunterschieds in {{currency}} zwischen den ausgewählten Ausgangs- und Ziel-Token berechnet.",
+      "tooltip4": "Der niedrigste Preis zum Kauf von {{token}}.",
+      "tooltip5": "Der niedrigste Preis zum Verkauf von {{token}}.",
+      "tooltip6": "Der höchste Preis zum Kauf von {{token}}.",
+      "tooltip7": "Der höchste Preis zum Verkauf von {{token}}."
+    },
+    "statuses": {
+      "status1": "Warten auf Bestätigung",
+      "status2": "Verarbeitung"
+    },
+    "contents": {
+      "content1": "Wallet:",
+      "content2": "MAX",
+      "content3": "Laden",
+      "content4": "Von TradingView",
+      "content5": "Beliebt",
+      "content6": "Favoriten",
+      "content7": "Alle",
+      "content8": "Hinweis: Preis und Slippage sind unbekannt",
+      "content9": "Min",
+      "content10": "Max"
+    }
+  },
+  "modals": {
+    "deleteStrategy": {
+      "modalTitle": "Strategie löschen",
+      "title": "Sind Sie sicher, dass Sie Ihre Strategie löschen möchten?",
+      "contents": {
+        "content1": "Alle Daten zur Strategie werden gelöscht. Sie können sie nicht wiederherstellen.",
+        "content2": "Alle Gelder werden auf Ihre Brieftasche überwiesen."
+      },
+      "actionButtons": {
+        "actionButton1": "Strategie löschen",
+        "actionButton2": "Abbrechen"
+      }
+    },
+    "pauseStrategy": {
+      "modalTitle": "Strategie pausieren",
+      "title": "Sind Sie sicher, dass Sie Ihre Strategie pausieren möchten?",
+      "content": "Dadurch wird verhindert, dass Ihre Strategie gehandelt wird, Sie behalten jedoch Zugriff auf die zugehörigen Gelder.",
+      "actionButtons": {
+        "actionButton1": "Strategie pausieren",
+        "actionButton2": "Abbrechen"
+      }
+    },
+    "selectToken": {
+      "modalTitle": "Token auswählen",
+      "actionButton": "Token importieren",
+      "contents": {
+        "content1": "Token nicht gefunden",
+        "content2": "Leider konnten wir kein Token für die eingegebene Adresse finden. Versuchen Sie, <bold>ein neues Token zu importieren.</bold>",
+        "content3": "Leider konnten wir das von Ihnen gesuchte Token nicht finden. Versuchen Sie, danach <bold>anhand der Adresse zu suchen.</bold>"
+      }
+    },
+    "selectTokenPair": {
+      "modalTitle": "Token-Paar auswählen",
+      "error1": "Fehler: Token-Liste konnte nicht geladen werden"
+    },
+    "tradeSettings": {
+      "modalTitle": "Handelseinstellungen",
+      "actionButton": "Alles zurücksetzen",
+      "section1": {
+        "title": "Slippage-Toleranz"
+      },
+      "section2": {
+        "title": "Transaktionsablaufzeit"
+      }
+    },
+    "connectWallet": {
+      "modalTitle": "Wallet verbinden",
+      "actionButton": "Ich habe gelesen und akzeptiere",
+      "content1": "Durch das Verbinden meiner Brieftasche stimme ich den <1>Allgemeinen Geschäftsbedingungen</1> und der <2>Cookie- und Datenschutzrichtlinie</2> dieser Website zu.",
+      "error1": "{{error}} Fehler:"
+    },
+    "confirm": {
+      "modalTitle": "Transaktion bestätigen",
+      "subtitle": "Tokens genehmigen",
+      "contents": {
+        "content1": "Bevor Sie die {{token}}-Zulassung aktualisieren, müssen Sie sie auf 0 widerrufen.",
+        "content2": "lädt",
+        "content3": "Unbekannter Fehler"
+      },
+      "actionButtons": {
+        "actionButton1": "Bestätigen",
+        "actionButton2": "Unbegrenzt",
+        "actionButton3": "Genehmigen",
+        "actionButton4": "Widerrufen und genehmigen",
+        "actionButton5": "Handel bestätigen"
+      },
+      "statuses": {
+        "status1": "Warten auf Bestätigung",
+        "status2": "Genehmigt",
+        "status3": "Vorab genehmigt"
+      }
+    },
+    "tradeRouting": {
+      "modalTitle": "Handelsrouting",
+      "section1": {
+        "title1": "Routing-Tabelle",
+        "header1": "Durchschnittspreis"
+      },
+      "section2": {
+        "title1": "Handel bestätigen"
+      },
+      "actionButtons": {
+        "actionButton1": "Bestätigen",
+        "actionButton2": "Handel bestätigen"
+      },
+      "tooltip1": "Beim Verwalten der Liste der Aufträge ändern sich Ihre Handelsbeträge entsprechend diesen Änderungen."
+    },
+    "restrictedCountry": {
+      "modalTitle": "Ich verstehe"
+    },
+    "notification": {
+      "modalTitle": "Benachrichtigungen",
+      "actionButton1": "Alle löschen",
+      "content1": "Auf Etherscan anzeigen"
+    },
+    "importToken": {
+      "modalTitle": "Token importieren",
+      "contents": {
+        "content1": "Fehler: Kein Token für diese Adresse gefunden",
+        "content2": "Auf Explorer anzeigen"
+      },
+      "actionButtons": {
+        "actionButton1": "Token importieren",
+        "actionButton2": "Abbrechen"
+      }
+    }
+  },
+  "navBar": {
+    "actionButton": "Fork",
+    "items": {
+      "item1": "Strategien",
+      "item2": "Handel",
+      "item3": "Debuggen"
+    },
+    "burgerMenu": {
+      "items": {
+        "item1": "Währung",
+        "item2": "Sprachen",
+        "item3": "Ressourcen",
+        "item4": "FAQ",
+        "item5": "Analytik",
+        "item6": "Blog",
+        "item7": "Nutzungsbedingungen",
+        "item8": "Datenschutzrichtlinie",
+        "item9": "Technische Dokumentation",
+        "item10": "Litepaper",
+        "item11": "Whitepaper",
+        "item12": "Simulator Repository"
+      }
+    },
+    "walletMenu": {
+      "states": {
+        "state1": "Wallet verbinden",
+        "state2": "Wallet blockiert",
+        "state3": "Falsches Netzwerk"
+      },
+      "items": {
+        "item1": "Ethereum-Netzwerk",
+        "item2": "Netzwerk wechseln",
+        "item3": "Trennen"
+      }
+    }
+  },
+  "notifications": {
+    "titles": {
+      "titles1": "Transaktion abgelehnt",
+      "titles2": "Token-Zustimmung wird überprüft ...",
+      "titles3": "Erfolg",
+      "titles4": "Transaktion fehlgeschlagen",
+      "titles5": "Frühere Zustimmung wird widerrufen",
+      "titles6": "Erfolg",
+      "titles7": "Transaktion fehlgeschlagen",
+      "titles8": "Token-Zustimmung fehlgeschlagen",
+      "titles9": "Ausstehende Bestätigung",
+      "titles10": "Erfolg",
+      "titles11": "Transaktion fehlgeschlagen",
+      "titles12": "Ausstehende Bestätigung",
+      "titles13": "Erfolg",
+      "titles14": "Transaktion fehlgeschlagen",
+      "titles15": "Ausstehende Bestätigung",
+      "titles16": "Erfolg",
+      "titles17": "Transaktion fehlgeschlagen",
+      "titles18": "Ausstehende Bestätigung",
+      "titles19": "Erfolg",
+      "titles20": "Transaktion fehlgeschlagen",
+      "titles21": "Ausstehende Bestätigung",
+      "titles22": "Erfolg",
+      "titles23": "Transaktion fehlgeschlagen",
+      "titles24": "Ausstehende Bestätigung",
+      "titles25": "Erfolg",
+      "titles26": "Transaktion fehlgeschlagen",
+      "titles27": "Ausstehende Bestätigung",
+      "titles28": "Erfolg",
+      "titles29": "Transaktion fehlgeschlagen",
+      "titles30": "Ausstehende Bestätigung",
+      "titles31": "Erfolg",
+      "titles32": "Transaktion fehlgeschlagen",
+      "titles33": "Ausstehende Bestätigung",
+      "titles34": "Erfolg",
+      "titles35": "Transaktion fehlgeschlagen"
+    },
+    "descriptions": {
+      "description1": "Du hast die Transaktion abgelehnt. Falls dies versehentlich passiert ist, versuche es bitte erneut.",
+      "description2": "Du bestätigst die Verwendung von {{token}} im Protokoll.",
+      "description3": "Du hast erfolgreich {{token}} für begrenzte Ausgaben im Protokoll bestätigt.",
+      "description4": "Du hast erfolgreich {{token}} für unbegrenzte Ausgaben im Protokoll bestätigt.",
+      "description5": "Fehler bei der Bestätigung von {{token}} für begrenzte Ausgaben",
+      "description6": "Fehler bei der Bestätigung von {{token}} für unbegrenzte Ausgaben",
+      "description7": "Du widerrufst die vorherige Zustimmung.",
+      "description8": "Deine vorherige Zustimmung wurde erfolgreich widerrufen.",
+      "description9": "Fehler beim Widerrufen der vorherigen Zustimmung.",
+      "description10": "Die Zustimmung für {{token}} ist fehlgeschlagen. Bitte versuche es erneut oder kontaktiere den Support.",
+      "description11": "Es wird eine neue Strategie erstellt.",
+      "description12": "Die neue Strategie wurde erfolgreich erstellt.",
+      "description13": "Das Erstellen der neuen Strategie ist fehlgeschlagen.",
+      "description14": "Deine Anfrage zur Pause der Strategie wird bearbeitet.",
+      "description15": "Deine Strategie wurde erfolgreich pausiert.",
+      "description16": "Deine Anfrage zur Pausierung deiner Strategie ist fehlgeschlagen.",
+      "description17": "Deine Anfrage zur Verlängerung der Strategie wird bearbeitet.",
+      "description18": "Deine Anfrage zur Verlängerung der Strategie wurde erfolgreich abgeschlossen.",
+      "description19": "Deine Anfrage zur Verlängerung der Strategie ist fehlgeschlagen.",
+      "description20": "Der Name der Strategie wird aktualisiert.",
+      "description21": "Der Name der Strategie wurde erfolgreich aktualisiert.",
+      "description22": "Die Aktualisierung des Strategie-Namens ist fehlgeschlagen.",
+      "description23": "Deine Auszahlungsanforderung wird bearbeitet.",
+      "description24": "Deine Auszahlungsanforderung wurde erfolgreich abgeschlossen.",
+      "description25": "Deine Auszahlungsanforderung ist fehlgeschlagen.",
+      "description26": "Deine Einzahlungsanforderung wird bearbeitet.",
+      "description27": "Deine Einzahlungsanforderung wurde erfolgreich abgeschlossen.",
+      "description28": "Deine Einzahlungsanforderung ist fehlgeschlagen.",
+      "description29": "Die Löschung der Strategie wird bearbeitet.",
+      "description30": "Die Strategie wurde erfolgreich gelöscht und alle damit verbundenen Gelder wurden auf deine Wallet abgehoben.",
+      "description31": "Die Löschung der Strategie ist fehlgeschlagen.",
+      "description32": "Deine Bearbeitungsanfrage wird bearbeitet.",
+      "description33": "Deine Strategie wurde erfolgreich aktualisiert.",
+      "description34": "Deine Bearbeitungsanfrage ist fehlgeschlagen.",
+      "description35": "Der Handel von {{amount}} {{from}} in {{to}} wird bearbeitet.",
+      "description36": "Der Handel von {{amount}} {{from}} in {{to}} wurde erfolgreich abgeschlossen.",
+      "description37": "Der Handel von {{amount}} {{from}} in {{to}} ist fehlgeschlagen."
+    }
+  },
+  "pages": {
+    "strategyOverview": {
+      "noStrategyCard": {
+        "title": "Automatisieren Sie Ihre Handelsstrategien",
+        "subtitle": "Ein vollständig dezentralisiertes Protokoll zur Automatisierung von On-Chain-Handelsstrategien.",
+        "actionButton": "Verbinden",
+        "contents": {
+          "content1": "On-Chain Limit & Range Orders",
+          "content2": "Automatisierte und wiederkehrende Strategien",
+          "content3": "Leicht anpassbar",
+          "content4": "Rotierende Liquidität",
+          "content5": "Alle standardmäßigen ERC-20-Token",
+          "content6": "MEV-resistent",
+          "content7": "Strategie nicht gefunden"
+        }
+      },
+      "header": {
+        "title_zero": "Strategien",
+        "title_one": "{{count}} Strategie",
+        "title_other": "{{count}} Strategien",
+        "actionButtons": {
+          "actionButton1": "Strategie erstellen",
+          "actionButton2": "Filtern & Sortieren"
+        },
+        "filterMenu": {
+          "items": {
+            "item1": "Zuletzt erstellt",
+            "item2": "Älteste erstellt",
+            "item3": "Paar (A->Z)",
+            "item4": "Paar (Z->A)",
+            "item5": "Alle",
+            "item6": "Aktiv",
+            "item7": "Inaktiv"
+          },
+          "subtitles": {
+            "subtitle1": "Sortieren nach",
+            "subtitle2": "Ansicht"
+          }
+        }
+      },
+      "card": {
+        "title": "ID: {{id}}",
+        "actionButtons": {
+          "actionButton1": "Erstellen Sie Ihre erste Strategie",
+          "actionButton2": "Strategie erstellen",
+          "actionButton3": "Verwalten"
+        },
+        "section1": {
+          "title": "Kaufen",
+          "contents": {
+            "content1": "Limitpreis",
+            "content2": "Preisspanne",
+            "content3": "Budget"
+          }
+        },
+        "section2": {
+          "title": "Verkaufen",
+          "contents": {
+            "content1": "Limitpreis",
+            "content2": "Preisspanne",
+            "content3": "Budget"
+          }
+        },
+        "section3": {
+          "title": "Auftragsstatus",
+          "statuses": {
+            "status1": "Aktiv",
+            "status2": "Kein Budget · Inaktiv",
+            "status3": "Pausiert - Inaktiv",
+            "status4": "Inaktiv"
+          },
+          "notification": {
+            "title": "Strategiebenachrichtigung",
+            "content1": "Sie können eine Benachrichtigung einstellen, um jedes Mal informiert zu werden, wenn jemand gegen Ihre Strategie handelt.",
+            "content2": "Dies ist ein von <strong>hal.xyz</strong> verwalteter Drittanbieterdienst.",
+            "actionButton": "Benachrichtigung verwalten"
+          }
+        },
+        "tooltips": {
+          "tooltip1": "Dieser Abschnitt gibt die Details an, zu denen Sie {{token}} kaufen möchten. Wenn ein Händler mit Ihrer Kauforder interagiert, füllt er Ihre 'Verkauf'-Order mit Tokens.",
+          "tooltip2": "Dieser Abschnitt gibt die Details an, zu denen Sie {{token}} verkaufen möchten. Wenn ein Händler mit Ihrer Verkaufsorder interagiert, füllt er Ihre 'Kauf'-Order mit Tokens.",
+          "tooltip3": "Dies ist der Preis, zu dem Sie {{token}} kaufen möchten.",
+          "tooltip4": "Dies ist der Preis, zu dem Sie {{token}} verkaufen möchten.",
+          "tooltip5": "Dies ist der verfügbare Betrag an {{sellToken}} Tokens, den Sie verwenden möchten, um {{buyToken}} zu kaufen.",
+          "tooltip6": "Dies ist der verfügbare Betrag an {{token}} Tokens, den Sie verkaufen möchten.",
+          "tooltip7": "Ihre Strategie ist aktiv und bereit.",
+          "tooltip8": "Ihre Strategie hat keine zugehörigen Mittel. Erwägen Sie eine Einzahlung, um sie zu aktivieren.",
+          "tooltip9": "Ihre Strategie ist derzeit pausiert. Bearbeiten Sie die Preise, um sie zu aktivieren.",
+          "tooltip10": "Ihre Strategie ist derzeit inaktiv. Erwägen Sie eine Aktivierung mit Mitteln und Preisen."
+        },
+        "manageStrategy": {
+          "titles": {
+            "title1": "Strategie löschen",
+            "title2": "Preise bearbeiten",
+            "title3": "Mittel einzahlen",
+            "title4": "Mittel abheben",
+            "title5": "Strategie duplizieren",
+            "title6": "Strategie pausieren",
+            "title7": "Strategie erneuern"
+          }
+        }
+      }
+    },
+    "strategyCreate": {
+      "step1": {
+        "title": "Strategie erstellen",
+        "section1": {
+          "title": "Token-Paar",
+          "contents": {
+            "content1": "Kaufen oder Verkaufen",
+            "content2": "Mit",
+            "content3": "Token auswählen"
+          }
+        },
+        "section2": {
+          "title": "Strategietyp",
+          "strategyTypes": {
+            "type1": {
+              "title": "Wiederkehrend",
+              "contents": {
+                "content1": "Automatisierte Link-Orders",
+                "content2": "Tokens, die in einer Kauforder erworben werden, stehen automatisch zum Handel in der verknüpften Verkaufsorder zur Verfügung und umgekehrt."
+              },
+              "options": {
+                "option1": "2 Grenzen",
+                "option2": "2 Bereiche",
+                "option3": "Benutzerdefiniert"
+              }
+            },
+            "type2": {
+              "title": "Einmalig",
+              "contents": {
+                "content1": "Einmalige Order",
+                "content2": "Eine nicht rückgängig zu machende Kauf- oder Verkaufsorder zu einem vordefinierten Preis oder Bereich."
+              },
+              "options": {
+                "option1": "Kaufgrenze",
+                "option2": "Kaufbereich",
+                "option3": "Verkaufsgrenze",
+                "option4": "Verkaufsbereich"
+              }
+            }
+          }
+        },
+        "tooltips": {
+          "tooltip1": "Wählen Sie das Basis-Token für das Paar aus.",
+          "tooltip2": "Wählen Sie das Kurs-Token für das Paar aus (d.h., wenn Sie USDC auswählen, werden alle Kurse in USDC angegeben).",
+          "tooltip3": "Wählen Sie die Tokens aus, für die Sie eine Strategie erstellen möchten.<br/><bold>Kaufen oder Verkaufen-Token</bold> (auch Basis-Token genannt) ist das Token, das Sie in der Strategie kaufen oder verkaufen möchten. <br /> <strong>Mit-Token</strong> (auch Kurs-Token genannt) ist das Token, in dem die Kurse angegeben werden."
+        },
+        "actionButton": "Nächster Schritt"
+      },
+      "step2": {
+        "title_one": "Preis festlegen",
+        "title_other": "Preise festlegen",
+        "chart": {
+          "title": "Preisdiagramm",
+          "actionButton": "Diagramm schließen"
+        },
+        "section1": {
+          "titles": {
+            "title1": "Wiederkehrend",
+            "title2": "Einmalig"
+          }
+        },
+        "section2": {
+          "titles": {
+            "title1": "Günstig kaufen",
+            "title2": "Hoch verkaufen"
+          },
+          "subtitles": {
+            "subtitle1": "Kaufpreis festlegen",
+            "subtitle2": "Verkaufspreis festlegen",
+            "subtitle3": "Kaufbudget festlegen",
+            "subtitle4": "Verkaufsbudget festlegen"
+          },
+          "contents": {
+            "content1": "kaufen",
+            "content2": "verkaufen",
+            "content3": "pro",
+            "content4": "Optional",
+            "content5": "Unzureichendes Guthaben"
+          }
+        },
+        "tooltips": {
+          "tooltip1": "Dieser Abschnitt legt die Bestelldetails fest, zu denen Sie {{token}} kaufen möchten.",
+          "tooltip2": "Dieser Abschnitt legt die Bestelldetails fest, zu denen Sie {{token}} verkaufen möchten.",
+          "tooltip3": "Legen Sie den Preis fest, zu dem Sie {{buyToken}} kaufen möchten. Stellen Sie sicher, dass der Preis in {{sellToken}}-Tokens angegeben ist.",
+          "tooltip4": "Legen Sie den Preis fest, zu dem Sie {{buyToken}} verkaufen möchten. Stellen Sie sicher, dass der Preis in {{sellToken}}-Tokens angegeben ist.",
+          "tooltip5": "Hinweis: Dieser Betrag wird wieder aufgefüllt, sobald die 'Verkauf'-Order von Händlern verwendet wird.",
+          "tooltip6": "Die Anzahl der {{sellToken}}-Tokens, die Sie verwenden möchten, um {{buyToken}} zu kaufen. {{note}}",
+          "tooltip7": "Hinweis: Dieser Betrag wird wieder aufgefüllt, sobald die 'Kauf'-Order von Händlern verwendet wird.",
+          "tooltip8": "Die Anzahl der {{buyToken}}-Tokens, die Sie verkaufen möchten. {{note}}"
+        },
+        "actionButton": "Strategie erstellen"
+      }
+    },
+    "strategyEdit": {
+      "titles": {
+        "title1": "Strategie erneuern",
+        "title2": "Preise bearbeiten",
+        "title3": "Budget einzahlen",
+        "title4": "Budget abheben"
+      },
+      "chart": {
+        "title": "Preisdiagramm",
+        "actionButton": "Diagramm schließen"
+      },
+      "section1": {
+        "title": "ID: {{id}}"
+      },
+      "section2": {
+        "titles": {
+          "title1": "{{buyOrSell}}-Budget abheben",
+          "title2": "{{buyOrSell}}-Budget einzahlen",
+          "title3": "Günstig {{token}} kaufen",
+          "title4": "Hoch {{token}} verkaufen"
+        },
+        "subtitles": {
+          "subtitle1": "Kaufpreis festlegen",
+          "subtitle2": "Verkaufspreis festlegen"
+        },
+        "contents": {
+          "content1": "Optional",
+          "content2": "Unzureichendes Guthaben",
+          "content3": "Kaufen",
+          "content4": "Verkaufen",
+          "content5": "Zugewiesenes Budget",
+          "content6": "Auf den gesamten Bereich verteilen",
+          "content7": "Das Budget wird auf den gesamten neu festgelegten Bereich verteilt und der Angebotspreis wird aktualisiert.",
+          "content9": "Auf unbenutzten Bereich verteilen",
+          "content10": "Der Preis bleibt wie zuvor. Das Budget wird nicht auf den neuen Bereich verteilt.",
+          "content11": "Das Strategiebudget wird auf den gesamten Bereich verteilt",
+          "content12": "pro 1"
+        }
+      },
+      "tooltips": {
+        "tooltip1": "Geben Sie den Betrag an, den Sie aus dem verfügbaren 'zugewiesenen Budget' abheben möchten",
+        "tooltip2": "Geben Sie den Betrag an, den Sie aus dem verfügbaren 'zugewiesenen Budget' einzahlen möchten",
+        "tooltip3": "Beim Aktualisieren der Preise wird das zugewiesene Budget gleichmäßig auf den gesamten Bereich verteilt",
+        "tooltip4": "Dies ist das aktuelle verfügbare {{token}}-Budget, das Sie abheben können"
+      },
+      "actionButtons": {
+        "actionButton1": "Abbrechen",
+        "actionButton2": "Strategie erneuern",
+        "actionButton3": "Änderungen bestätigen",
+        "actionButton4": "Abhebung bestätigen",
+        "actionButton5": "Einzahlung bestätigen"
+      }
+    },
+    "trade": {
+      "errors": {
+        "error1": "Nicht gefunden",
+        "error2": "Fehler",
+        "error3": "Keine Liquidität verfügbar",
+        "error4": "Bitte geben Sie einen Betrag ein",
+        "error5": "Unzureichendes Guthaben",
+        "error6": "Bitte geben Sie einen Betrag ein",
+        "error7": "Verfügbare Liquidität: {{num}} {{token}}",
+        "error8": "Derzeit keine verfügbaren Aufträge.",
+        "error9": "Keine Aufträge"
+      },
+      "section1": {
+        "title": "Aufträge",
+        "headers": {
+          "header1": "Preis {{token}}",
+          "header2": "Menge {{token}}",
+          "header3": "Gesamt"
+        },
+        "tooltips": {
+          "tooltip1": "Preispunkte in {{token}} angegeben",
+          "tooltip2": "Die Menge der verfügbaren {{token}}-Tokens in diesem Preispunkt",
+          "tooltip3": "Die verfügbare Liquidität in diesem Preispunkt, angegeben in {{token}}"
+        }
+      },
+      "section2": {
+        "titles": {
+          "title1": "{{baseToken}} mit {{quoteToken}} kaufen",
+          "title2": "{{baseToken}} für {{quoteToken}} verkaufen"
+        },
+        "subtitles": {
+          "subtitle1": "Sie zahlen",
+          "subtitle2": "Sie erhalten"
+        },
+        "actionButtons": {
+          "actionButton1": "Kaufen",
+          "actionButton2": "Verkaufen",
+          "actionButton3": "{{token}} kaufen",
+          "actionButton4": "{{token}} verkaufen",
+          "actionButton5": "Routing",
+          "actionButton6": "Strategie erstellen"
+        },
+        "contents": {
+          "content1": "DEBUG: {{num}}",
+          "content2": "Sie können"
+        },
+        "tooltips": {
+          "tooltip1": "Sie können die Aufträge anzeigen und verwalten, die in den Handel einbezogen sind."
+        }
+      },
+      "section3": {
+        "actionButtons": {
+          "actionButton1": "Tiefe",
+          "actionButton2": "Preis"
+        }
+      }
+    }
+  }
+}

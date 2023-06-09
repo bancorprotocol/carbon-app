@@ -13,6 +13,7 @@ const TRANSLATION_VERSION = 'v1.1';
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Spanish' },
+  { code: 'ge', name: 'German' },
 ] as const;
 
 type SupportedLanguagesCodes = (typeof SUPPORTED_LANGUAGES)[number]['code'];
