@@ -1,3 +1,4 @@
+import { i18n } from 'libs/translations';
 import { OrderCreate } from './create/useOrder';
 
 export const checkIfOrdersOverlap = (
@@ -20,10 +21,10 @@ export const getStatusTextByTxStatus = (
   isProcessing: boolean
 ): string | undefined => {
   if (isAwaiting) {
-    return 'Waiting for Confirmation';
+    return i18n.t('common.statues.status1') || '';
   }
   if (isProcessing) {
-    return 'Processing';
+    return i18n.t('common.statues.status2') || '';
   }
 
   return undefined;
