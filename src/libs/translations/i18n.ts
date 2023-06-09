@@ -52,6 +52,9 @@ i18n
         {
           prefix: `${APP_ID}-${APP_VERSION}-`,
           loadPath: '/locales/{{lng}}/{{ns}}.json',
+          requestOptions: {
+            cache: 'no-store',
+          },
         },
       ],
     },
