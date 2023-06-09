@@ -33,16 +33,18 @@
       "status1": "Waiting for Confirmation",
       "status2": "Processing"
     },
-    "content1": "Wallet:",
-    "content2": "MAX",
-    "content3": "loading",
-    "content4": "By TradingView",
-    "content5": "Popular",
-    "content6": "Favorites",
-    "content7": "All",
-    "content8": "Notice, price & slippage are unknown",
-    "content9": "Min",
-    "content10": "Max"
+    "contents": {
+      "content1": "Wallet:",
+      "content2": "MAX",
+      "content3": "loading",
+      "content4": "By TradingView",
+      "content5": "Popular",
+      "content6": "Favorites",
+      "content7": "All",
+      "content8": "Notice, price & slippage are unknown",
+      "content9": "Min",
+      "content10": "Max"
+    }
   },
   "modals": {
     "deleteStrategy": {

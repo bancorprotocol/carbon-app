@@ -21,13 +21,13 @@ export const CategoryButtonWithCounter: FC<CategoryWithCounterProps> = ({
 
   const translatedCategory = useMemo(() => {
     if (category === 'popular') {
-      return t('common.content5');
+      return t('common.contents.content5');
     }
     if (category === 'favorites') {
-      return t('common.content6');
+      return t('common.contents.content6');
     }
 
-    return t('common.content7');
+    return t('common.contents.content7');
   }, [category, t]);
 
   return (

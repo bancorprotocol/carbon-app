@@ -26,7 +26,7 @@ export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
           }`}
         >
           {slippage.isEqualTo(0) ? (
-            <div className="text-red">{t('common.content8')}</div>
+            <div className="text-red">{t('common.contents.content8')}</div>
           ) : (
             `(${isSlippagePositive ? '+' : '-'}${sanitizeNumberInput(
               slippage.toString(),

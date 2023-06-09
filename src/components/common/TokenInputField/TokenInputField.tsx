@@ -143,16 +143,16 @@ export const TokenInputField: FC<Props> = ({
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >
-            {t('common.content1')}
+            {t('common.contents.content1')}
             {isBalanceLoading ? (
-              t('common.content3')
+              t('common.contents.content3')
             ) : (
               <>
                 <span className="ml-5 text-white">
                   {prettifyNumber(balance || 0)}
                 </span>
                 <div className="ml-10 text-green group-hover:text-white">
-                  {t('common.content3')}
+                  {t('common.contents.content3')}
                 </div>
               </>
             )}

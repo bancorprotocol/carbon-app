@@ -121,7 +121,7 @@ export const EditStrategyAllocatedBudget: FC<{
                 onClick={() => showMaxCb()}
                 className="cursor-pointer font-weight-500 text-green"
               >
-                {t('common.content2')}
+                {t('common.contents.content2')}
               </div>
             )}
           </div>

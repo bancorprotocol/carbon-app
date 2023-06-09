@@ -77,7 +77,7 @@ export const InputRange: FC<{
             } at.`}
           >
             <div className={'mb-5 text-12 text-white/60'}>
-              {t('common.content9')}
+              {t('common.contents.content9')}
             </div>
           </Tooltip>
           <input
@@ -108,7 +108,7 @@ export const InputRange: FC<{
             } at.`}
           >
             <div className={'mb-5 text-12 text-white/60'}>
-              {t('common.content10')}
+              {t('common.contents.content10')}
             </div>
           </Tooltip>
           <input

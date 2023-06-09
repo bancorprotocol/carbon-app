@@ -19,7 +19,7 @@ export const Copyright: FC<CopyrightProps> = ({ symbol }) => {
       >
         <span className="text-blue">{symbol} </span>
       </a>
-      {t('common.content4')}
+      {t('common.contents.content4')}
     </div>
   );
 };
