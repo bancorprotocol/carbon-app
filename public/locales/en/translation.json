@@ -287,13 +287,24 @@
         "title_zero": "Strategies",
         "title_one": "{{count}} Strategy",
         "title_other": "{{count}} Strategies",
-        "subtitles": {
-          "subtitle1": "Sort By",
-          "subtitle2": "View"
-        },
         "actionButtons": {
           "actionButton1": "Create Strategy",
           "actionButton2": "Filter & Sort"
+        },
+        "filterMenu": {
+          "items": {
+            "item1": "Recently Created",
+            "item2": "Oldest Created",
+            "item3": "Pair (A->Z)",
+            "item4": "Pair (Z->A)",
+            "item5": "All",
+            "item6": "Active",
+            "item7": "inactive"
+          },
+          "subtitles": {
+            "subtitle1": "Sort By",
+            "subtitle2": "View"
+          }
         }
       },
       "card": {

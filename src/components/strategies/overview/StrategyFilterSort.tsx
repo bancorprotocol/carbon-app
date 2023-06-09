@@ -3,7 +3,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { FC } from 'react';
-import { useTranslation } from 'libs/translations';
+import { i18n, useTranslation } from 'libs/translations';
 
 export enum StrategyFilter {
   All,
@@ -18,40 +18,6 @@ export enum StrategySort {
   PairDescending,
 }
 
-const sortItems = [
-  {
-    title: 'Recently Created',
-    item: StrategySort.Recent,
-  },
-  {
-    title: 'Oldest Created',
-    item: StrategySort.Old,
-  },
-  {
-    title: 'Pair (A->Z)',
-    item: StrategySort.PairAscending,
-  },
-  {
-    title: 'Pair (Z->A)',
-    item: StrategySort.PairDescending,
-  },
-];
-
-const filterItems = [
-  {
-    title: 'All',
-    item: StrategyFilter.All,
-  },
-  {
-    title: 'Active',
-    item: StrategyFilter.Active,
-  },
-  {
-    title: 'Inactive',
-    item: StrategyFilter.Inactive,
-  },
-];
-
 export const StrategyFilterSort: FC<{
   filter: StrategyFilter;
   sort: StrategySort;
@@ -59,6 +25,40 @@ export const StrategyFilterSort: FC<{
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ sort, filter, setSort, setFilter }) => {
   const { t } = useTranslation();
+
+  const sortItems = [
+    {
+      title: t('pages.strategyOverview.header.filterMenu.items.item1'),
+      item: StrategySort.Recent,
+    },
+    {
+      title: t('pages.strategyOverview.header.filterMenu.items.item2'),
+      item: StrategySort.Old,
+    },
+    {
+      title: t('pages.strategyOverview.header.filterMenu.items.item3'),
+      item: StrategySort.PairAscending,
+    },
+    {
+      title: t('pages.strategyOverview.header.filterMenu.items.item4'),
+      item: StrategySort.PairDescending,
+    },
+  ];
+
+  const filterItems = [
+    {
+      title: t('pages.strategyOverview.header.filterMenu.items.item5'),
+      item: StrategyFilter.All,
+    },
+    {
+      title: t('pages.strategyOverview.header.filterMenu.items.item6'),
+      item: StrategyFilter.Active,
+    },
+    {
+      title: t('pages.strategyOverview.header.filterMenu.items.item7'),
+      item: StrategyFilter.Inactive,
+    },
+  ];
 
   return (
     <DropdownMenu
@@ -75,7 +75,7 @@ export const StrategyFilterSort: FC<{
     >
       <div className="grid w-[300px] gap-20 p-10">
         <div className="text-secondary text-20">
-          {t('pages.strategyOverview.header.subtitles.subtitle1')}
+          {t('pages.strategyOverview.header.filterMenu.subtitles.subtitle1')}
         </div>
         <>
           {sortItems.map((sortItem) => (
@@ -91,7 +91,7 @@ export const StrategyFilterSort: FC<{
 
         <hr className="border-2 border-silver dark:border-emphasis" />
         <div className="text-secondary">
-          {t('pages.strategyOverview.header.subtitles.subtitle2')}
+          {t('pages.strategyOverview.header.filterMenu.subtitles.subtitle2')}
         </div>
 
         <>
