@@ -25,7 +25,7 @@ export const getModalDataByType = (
         icon: <IconPause className="h-16 w-16" />,
         title: t('modals.pauseStrategy.title'),
         content: t('modals.pauseStrategy.content'),
-        actionButton: t('modals.pauseStrategy.actionButton1'),
+        actionButton: t('modals.pauseStrategy.actionButtons.actionButton1'),
       };
 
     case 'delete':
@@ -33,16 +33,16 @@ export const getModalDataByType = (
         modalTitle: t('modals.deleteStrategy.modalTitle'),
         icon: <IconTrash className="h-24 w-24" />,
         title: t('modals.deleteStrategy.title'),
-        content: t('modals.deleteStrategy.content1'),
+        content: t('modals.deleteStrategy.contents.content1'),
         additionalContent: (
           <div className="mt-20 flex items-center">
             <IconWallet className="mr-10 h-12 w-12" />
             <div className="flex-1 text-14 font-weight-500 text-white/80">
-              {t('modals.deleteStrategy.content2')}
+              {t('modals.deleteStrategy.contents.content2')}
             </div>
           </div>
         ),
-        actionButton: t('modals.deleteStrategy.actionButton1'),
+        actionButton: t('modals.deleteStrategy.actionButtons.actionButton1'),
         variant: 'error',
       };
   }

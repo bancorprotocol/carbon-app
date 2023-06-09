@@ -25,7 +25,7 @@ export const TradeSettings = ({
   const settingsData: TradeSettingsData[] = [
     {
       id: 'slippageTolerance',
-      title: t('modals.tradeSettings.subtitle1'),
+      title: t('modals.tradeSettings.section1.title'),
       value: slippage,
       prepend: '+',
       append: '%',
@@ -41,7 +41,7 @@ export const TradeSettings = ({
     },
     {
       id: 'transactionExpiration',
-      title: t('modals.tradeSettings.subtitle2'),
+      title: t('modals.tradeSettings.section2.title'),
       value: deadline,
       prepend: '',
       append: ' Min',

@@ -107,8 +107,8 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
           fullWidth
         >
           {type === 'delete'
-            ? t('modals.deleteStrategy.actionButton2')
-            : t('modals.pauseStrategy.actionButton2')}
+            ? t('modals.deleteStrategy.actionButtons.actionButton2')
+            : t('modals.pauseStrategy.actionButtons.actionButton2')}
         </Button>
       </div>
     </Modal>

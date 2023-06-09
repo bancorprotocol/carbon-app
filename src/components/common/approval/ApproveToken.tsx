@@ -160,9 +160,9 @@ export const ApproveToken: FC<Props> = ({
 
   if (!data || !token) {
     if (isLoading) {
-      return <div>{t('modals.confirm.content2')}</div>;
+      return <div>{t('modals.confirm.contents.content2')}</div>;
     }
-    return <div>{t('modals.confirm.content3')}</div>;
+    return <div>{t('modals.confirm.contents.content3')}</div>;
   }
 
   return (
@@ -197,7 +197,7 @@ export const ApproveToken: FC<Props> = ({
                       isLimited ? 'text-white/60' : 'text-white/85'
                     }`}
                   >
-                    {t('modals.confirm.actionButton2')}
+                    {t('modals.confirm.actionButtons.actionButton2')}
                   </div>
                   <Switch
                     variant={isLimited ? 'secondary' : 'white'}
@@ -215,8 +215,8 @@ export const ApproveToken: FC<Props> = ({
                 className={'px-10 text-14'}
               >
                 {data.nullApprovalRequired
-                  ? t('modals.confirm.actionButton4')
-                  : t('modals.confirm.actionButton3')}
+                  ? t('modals.confirm.actionButtons.actionButton4')
+                  : t('modals.confirm.actionButtons.actionButton3')}
               </Button>
             </div>
           )
@@ -235,7 +235,9 @@ export const ApproveToken: FC<Props> = ({
           <div>
             <IconWarning className={'w-16'} />
           </div>
-          <span>{t('modals.confirm.content1', { token: token.symbol })}</span>
+          <span>
+            {t('modals.confirm.contents.content1', { token: token.symbol })}
+          </span>
         </div>
       )}
     </>

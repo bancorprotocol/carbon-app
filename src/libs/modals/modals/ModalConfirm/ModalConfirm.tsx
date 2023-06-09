@@ -1,22 +1,22 @@
 import { useEffect } from 'react';
-import { Modal } from 'libs/modals/Modal';
-import { ModalFC } from 'libs/modals/modals.types';
-import { ApproveToken } from 'components/common/approval';
-import { Button } from 'components/common/button';
-import { useModal } from 'hooks/useModal';
-import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import {
   TokenApprovalType,
   TransactionConfirmationType,
   StrategyEventType,
   TradeEventType,
 } from 'services/events/types';
+import { Modal } from 'libs/modals/Modal';
+import { ModalFC } from 'libs/modals/modals.types';
+import { i18n } from 'libs/translations';
+import { useModal } from 'hooks/useModal';
+import { ApprovalToken, useApproval } from 'hooks/useApproval';
+import { ApproveToken } from 'components/common/approval';
+import { Button } from 'components/common/button';
 import {
   handleConfirmationPopupViewEvent,
   handleAfterConfirmationEvent,
   handleOnRequestEvent,
 } from './utils';
-import { i18n } from 'libs/translations';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -33,7 +33,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   data: {
     approvalTokens,
     onConfirm,
-    buttonLabel = i18n.t('modals.confirm.actionButton1'),
+    buttonLabel = i18n.t('modals.confirm.actionButtons.actionButton1'),
     eventData,
     context,
   },

@@ -44,24 +44,32 @@
     "deleteStrategy": {
       "modalTitle": "Delete Strategy",
       "title": "Are you sure you would like to delete your strategy?",
-      "content1": "All data on the strategy will be deleted. It will be impossible to restore them.",
-      "content2": "All funds will be withdrawn to your wallet",
-      "actionButton1": "Delete Strategy",
-      "actionButton2": "Cancel"
+      "contents": {
+        "content1": "All data on the strategy will be deleted. It will be impossible to restore them.",
+        "content2": "All funds will be withdrawn to your wallet"
+      },
+      "actionButtons": {
+        "actionButton1": "Delete Strategy",
+        "actionButton2": "Cancel"
+      }
     },
     "pauseStrategy": {
       "modalTitle": "Pause Strategy",
       "title": "Are you sure you would like to pause your strategy?",
       "content": "This will prevent your strategy from being traded against, however you will retain access to any associated funds.",
-      "actionButton1": "Pause Strategy",
-      "actionButton2": "Cancel"
+      "actionButtons": {
+        "actionButton1": "Pause Strategy",
+        "actionButton2": "Cancel"
+      }
     },
     "selectToken": {
       "modalTitle": "Select Token",
       "actionButton": "Import Token",
-      "content1": "Token not found",
-      "content2": "Unfortunately we couldn't find a token for the address you entered, try to <bold>import a new token.</bold>",
-      "content3": "Unfortunately we couldn't find the token you're looking for, try searching for it <bold>by address.</bold>"
+      "contents": {
+        "content1": "Token not found",
+        "content2": "Unfortunately we couldn't find a token for the address you entered, try to <bold>import a new token.</bold>",
+        "content3": "Unfortunately we couldn't find the token you're looking for, try searching for it <bold>by address.</bold>"
+      }
     },
     "selectTokenPair": {
       "modalTitle": "Select Token Pair",
@@ -70,8 +78,12 @@
     "tradeSettings": {
       "modalTitle": "Trade Settings",
       "actionButton": "Reset All",
-      "subtitle1": "Slippage Tolerance",
-      "subtitle2": "Transaction Expiration Time"
+      "section1": {
+        "title": "Slippage Tolerance"
+      },
+      "section2": {
+        "title": "Transaction Expiration Time"
+      }
     },
     "connectWallet": {
       "modalTitle": "Connect Wallet",
@@ -82,13 +94,17 @@
     "confirm": {
       "modalTitle": "Confirm Transaction",
       "subtitle": "Approve Tokens",
-      "content1": "Before updating {{token}} allowance, you are required to revoke it to 0.",
-      "content2": "is loading",
-      "content3": "Unknown Error",
-      "actionButton1": "Confirm",
-      "actionButton2": "Unlimited",
-      "actionButton3": "Approve",
-      "actionButton4": "Revoke and Approve",
+      "contents": {
+        "content1": "Before updating {{token}} allowance, you are required to revoke it to 0.",
+        "content2": "is loading",
+        "content3": "Unknown Error"
+      },
+      "actionButtons": {
+        "actionButton1": "Confirm",
+        "actionButton2": "Unlimited",
+        "actionButton3": "Approve",
+        "actionButton4": "Revoke and Approve"
+      },
       "statuses": {
         "status1": "Waiting for Confirmation",
         "status2": "Approved",

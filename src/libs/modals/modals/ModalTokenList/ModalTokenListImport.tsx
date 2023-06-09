@@ -15,7 +15,7 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
 
   const Text = () => (
     <Trans
-      i18nKey={'modals.selectToken.content2'}
+      i18nKey={'modals.selectToken.contents.content2'}
       components={{
         bold: <span className={'font-weight-500 dark:text-white'} />,
       }}
@@ -27,7 +27,7 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
       <div className={'mt-40 flex w-full flex-col items-center'}>
         <IconTitleText
           icon={<IconSearch />}
-          title={t('modals.selectToken.content1')}
+          title={t('modals.selectToken.contents.content1')}
           text={<Text />}
         />
         <Button variant={'white'} onClick={onClick} className={'my-30'}>
