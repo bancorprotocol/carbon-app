@@ -201,9 +201,18 @@ export const useBurgerMenuItems = () => {
   );
 
   menuMap.set('main', { items: mainItems });
-  menuMap.set('currency', { items: currencyItems, title: 'Currency' });
-  menuMap.set('languages', { items: languagesItems, title: 'Language' });
-  menuMap.set('resources', { items: resourcesItems, title: 'Resources' });
+  menuMap.set('currency', {
+    items: currencyItems,
+    title: t('navBar.burgerMenu.items.item1') || '',
+  });
+  menuMap.set('languages', {
+    items: languagesItems,
+    title: t('navBar.burgerMenu.items.item2') || '',
+  });
+  menuMap.set('resources', {
+    items: resourcesItems,
+    title: t('navBar.burgerMenu.items.item3') || '',
+  });
 
   return {
     menuMapping: menuMap,

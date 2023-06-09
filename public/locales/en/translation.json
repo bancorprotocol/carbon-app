@@ -109,7 +109,8 @@
         "actionButton1": "Confirm",
         "actionButton2": "Unlimited",
         "actionButton3": "Approve",
-        "actionButton4": "Revoke and Approve"
+        "actionButton4": "Revoke and Approve",
+        "actionButton5": "Confirm Trade"
       },
       "statuses": {
         "status1": "Waiting for Confirmation",
@@ -126,7 +127,10 @@
       "section2": {
         "title1": "Confirm Trade"
       },
-      "actionButton1": "Confirm",
+      "actionButtons": {
+        "actionButton1": "Confirm",
+        "actionButton2": "Confirm Trade"
+      },
       "tooltip1": "When managing the list of orders, your trade amounts will change to reflect these changes."
     },
     "restrictedCountry": {
@@ -169,8 +173,7 @@
         "item9": "Tech Docs",
         "item10": "Litepaper",
         "item11": "Whitepaper",
-        "item12": "Simulator Repo",
-        "item13": "Interactive Simulator"
+        "item12": "Simulator Repo"
       }
     },
     "walletMenu": {
@@ -342,6 +345,17 @@
           "tooltip8": "Your strategy has no associated funds. Consider depositing funds to activate it.",
           "tooltip9": "Your strategy is currently paused. Edit the prices to activate it.",
           "tooltip10": "Your strategy is currently inactive. Consider activating it with funds and rates."
+        },
+        "manageStrategy": {
+          "titles": {
+            "title1": "Delete Strategy",
+            "title2": "Edit Prices",
+            "title3": "Deposit Funds",
+            "title4": "Withdraw Funds",
+            "title5": "Duplicate Strategy",
+            "title6": "Pause Strategy",
+            "title7": "Renew Strategy"
+          }
         }
       }
     },
@@ -512,6 +526,10 @@
         }
       },
       "section2": {
+        "titles": {
+          "title1": "Buy {{baseToken}} with {{quoteToken}}",
+          "title2": "Sell {{baseToken}} for {{quoteToken}}"
+        },
         "subtitles": {
           "subtitle1": "You pay",
           "subtitle2": "You receive"

@@ -177,8 +177,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
       <h2 className={'mb-20'}>
         {buy
-          ? `Buy ${target.symbol} with ${source.symbol}`
-          : `Sell ${source.symbol} for ${target.symbol}`}
+          ? t('pages.trade.section2.titles.title1', {
+              baseToken: target.symbol,
+              quoteToken: source.symbol,
+            }) || ''
+          : t('pages.trade.section2.titles.title2', {
+              baseToken: source.symbol,
+              quoteToken: target.symbol,
+            }) || ''}
       </h2>
       <div className={'flex justify-between text-14'}>
         <div className={'text-white/50'}>
