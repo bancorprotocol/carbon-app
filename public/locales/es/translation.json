@@ -27,9 +27,13 @@
       "error2": "El precio debe ser mayor que 0"
     },
     "tooltips": {
-      "tooltip1": "Esta sección definirá los detalles del pedido para comprar {{token}}.<br /><bold>Límite</bold> te permitirá definir un precio específico para comprar el token.<br/><bold>Rango</bold> te permitirá definir un rango de precios para comprar el token.",
-      "tooltip2": "Esta sección definirá los detalles del pedido para vender {{token}}.<br /><bold>Límite</bold> te permitirá definir un precio específico para vender el token.<br/><bold>Rango</bold> te permitirá definir un rango de precios para vender el token.",
-      "tooltip3": "El deslizamiento se calcula en base a la diferencia de valor en {{currency}} entre los tokens de origen y destino seleccionados."
+      "tooltip1": "Esta sección definirá los detalles del pedido en los que estás dispuesto a comprar {{token}}.<br/><bold>Límite</bold> te permitirá definir un punto de precio específico para comprar el token.<br/><bold>Rango</bold> te permitirá definir un rango de precios para comprar el token.",
+      "tooltip2": "Esta sección definirá los detalles del pedido en los que estás dispuesto a vender {{token}}.<br/><bold>Límite</bold> te permitirá definir un punto de precio específico para vender el token.<br/><bold>Rango</bold> te permitirá definir un rango de precios para vender el token.",
+      "tooltip3": "El deslizamiento se calcula en función de la diferencia de valor en {{currency}} entre los tokens de origen y destino seleccionados.",
+      "tooltip4": "El precio más bajo para comprar {{token}}.",
+      "tooltip5": "El precio más bajo para vender {{token}}.",
+      "tooltip6": "El precio más alto para comprar {{token}}.",
+      "tooltip7": "El precio más alto para vender {{token}}."
     },
     "statues": {
       "status1": "Esperando confirmación",
@@ -537,6 +541,11 @@
           "header1": "Precio {{token}}",
           "header2": "Cantidad {{token}}",
           "header3": "Total"
+        },
+        "tooltips": {
+          "tooltip1": "Puntos de precio denominados en {{token}}",
+          "tooltip2": "La cantidad de tokens {{token}} disponibles en este punto de precio",
+          "tooltip3": "La liquidez disponible en este punto de precio denominada en {{token}}"
         }
       },
       "section2": {

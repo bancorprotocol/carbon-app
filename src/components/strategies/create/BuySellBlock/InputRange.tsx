@@ -72,9 +72,11 @@ export const InputRange: FC<{
         >
           <Tooltip
             sendEventOnMount={{ buy }}
-            element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
-              token.symbol
-            } at.`}
+            element={
+              buy
+                ? t('common.tooltips.tooltip4', { token: token.symbol })
+                : t('common.tooltips.tooltip5', { token: token.symbol })
+            }
           >
             <div className={'mb-5 text-12 text-white/60'}>
               {t('common.contents.content9')}
@@ -103,9 +105,11 @@ export const InputRange: FC<{
         >
           <Tooltip
             sendEventOnMount={{ buy }}
-            element={`The highest price to ${buy ? 'buy' : 'sell'} ${
-              token.symbol
-            } at.`}
+            element={
+              buy
+                ? t('common.tooltips.tooltip6', { token: token.symbol })
+                : t('common.tooltips.tooltip7', { token: token.symbol })
+            }
           >
             <div className={'mb-5 text-12 text-white/60'}>
               {t('common.contents.content10')}
