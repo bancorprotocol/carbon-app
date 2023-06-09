@@ -197,7 +197,7 @@ export const useBurgerMenuItems = () => {
           ),
         };
       }),
-    [i18n]
+    [i18n.language]
   );
 
   menuMap.set('main', { items: mainItems });
