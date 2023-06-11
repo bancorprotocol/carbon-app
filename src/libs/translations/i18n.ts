@@ -8,12 +8,13 @@ import {
 } from 'libs/translations';
 import { APP_ID, APP_VERSION } from 'utils/constants';
 
-const TRANSLATION_VERSION = 'v1.1';
+const TRANSLATION_VERSION = 'v1';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Spanish' },
   { code: 'ge', name: 'German' },
+  { code: 'he', name: 'Hebrew' },
 ] as const;
 
 type SupportedLanguagesCodes = (typeof SUPPORTED_LANGUAGES)[number]['code'];

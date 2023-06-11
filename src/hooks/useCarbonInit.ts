@@ -1,22 +1,23 @@
 import { useCallback } from 'react';
 import { useStore } from 'store';
 import { useQueryClient } from '@tanstack/react-query';
-import { config } from 'services/web3/config';
-import { carbonSDK } from 'libs/sdk';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ContractsConfig } from '@bancor/carbon-sdk/contracts-api';
+import { config } from 'services/web3/config';
+import { lsService } from 'services/localeStorage';
+import { carbonSDK } from 'libs/sdk';
+import { useModal } from 'hooks/useModal';
+import { QueryKey } from 'libs/queries';
+import { RPC_URLS } from 'libs/web3';
+import { useTranslation } from 'libs/translations';
+import { SupportedChainId } from 'libs/web3/web3.constants';
 import {
   buildTokenPairKey,
   mergeArraysRemovingDuplicates,
   setIntervalUsingTimeout,
 } from 'utils/helpers';
-import { lsService } from 'services/localeStorage';
-import { QueryKey } from 'libs/queries';
-import { RPC_URLS } from 'libs/web3';
-import { SupportedChainId } from 'libs/web3/web3.constants';
 import { carbonApi } from 'utils/carbonApi';
-import { useModal } from 'hooks/useModal';
 
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.carbon.carbonController,
@@ -40,6 +41,7 @@ const getTokenDecimalMap = () => {
 };
 
 export const useCarbonInit = () => {
+  const { i18n } = useTranslation();
   const cache = useQueryClient();
   const {
     setCountryBlocked,
@@ -53,6 +55,8 @@ export const useCarbonInit = () => {
     },
   } = useStore();
   const { openModal } = useModal();
+
+  document.body.dir = i18n.dir();
 
   const invalidateQueriesByPair = useCallback(
     (pair: TokenPair) => {

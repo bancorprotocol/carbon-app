@@ -44,7 +44,7 @@ export const TradeSettings = ({
       title: t('modals.tradeSettings.section2.title'),
       value: deadline,
       prepend: '',
-      append: ' Min',
+      append: ` ${t('common.contents.content9')}`,
       setValue: (value) => {
         setDeadline(value);
         carbonEvents.trade.tradeSettingsTransactionExpirationTimeChange({
