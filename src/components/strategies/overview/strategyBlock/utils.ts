@@ -23,15 +23,27 @@ export const getTooltipTextByStatus = (status: StrategyStatus) => {
 };
 
 export const tooltipTextByStrategyEditOptionsId = {
-  duplicateStrategy: 'Create a new strategy with the same details',
-  deleteStrategy:
-    'Delete the strategy and withdraw all associated funds to your wallet',
-  pauseStrategy: 'Deactivate the strategy by nulling the prices',
-  withdrawFunds: 'Withdraw funds from an existing strategy',
-  depositFunds: 'Deposit additional funds into an existing strategy',
-  editPrices:
-    'Edit the prices of your buy/sell orders within an existing strategy',
-  renewStrategy: 'Renew an inactive strategy',
+  duplicateStrategy: i18n.t(
+    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip1'
+  ),
+  deleteStrategy: i18n.t(
+    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip2'
+  ),
+  pauseStrategy: i18n.t(
+    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip3'
+  ),
+  withdrawFunds: i18n.t(
+    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip4'
+  ),
+  depositFunds: i18n.t(
+    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip5'
+  ),
+  editPrices: i18n.t(
+    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip6'
+  ),
+  renewStrategy: i18n.t(
+    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip7'
+  ),
 };
 
 type StrategyEditOption = typeof tooltipTextByStrategyEditOptionsId;

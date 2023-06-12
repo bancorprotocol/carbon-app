@@ -381,6 +381,15 @@
             "title5": "Duplicate Strategy",
             "title6": "Pause Strategy",
             "title7": "Renew Strategy"
+          },
+          "tooltips": {
+            "tooltip1": "Create a new strategy with the same details",
+            "tooltip2": "Delete the strategy and withdraw all associated funds to your wallet",
+            "tooltip3": "Deactivate the strategy by nulling the prices",
+            "tooltip4": "Withdraw funds from an existing strategy",
+            "tooltip5": "Deposit additional funds into an existing strategy",
+            "tooltip6": "Edit the prices of your buy/sell orders within an existing strategy",
+            "tooltip7": "Renew an inactive strategy"
           }
         }
       }
