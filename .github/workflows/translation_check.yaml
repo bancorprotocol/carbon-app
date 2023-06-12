@@ -25,7 +25,14 @@ jobs:
 
       - name: Check translation changes
         run: |
-          git diff --name-only HEAD^ -- HEAD > changed_files.txt
+          if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+            changed_files=$(git diff --name-only HEAD^..HEAD)
+          else
+            changed_files=$(git ls-tree --name-only HEAD)
+          fi
+
+          echo "$changed_files" > changed_files.txt
+
           if grep -E '^public/locales/(en|es)/translation\.json$' changed_files.txt; then
             current_version=$(grep -oP "(?<=TRANSLATION_VERSION = 'v)\d+" version.ts)
             if [ -z "$current_version" ]; then
