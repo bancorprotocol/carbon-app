@@ -26,6 +26,7 @@ export const StrategyFilterSort: FC<{
 }> = ({ sort, filter, setSort, setFilter }) => {
   const { t } = useTranslation();
 
+  // TODO: find better location
   const sortItems = [
     {
       title: t('pages.strategyOverview.header.filterMenu.items.item1'),

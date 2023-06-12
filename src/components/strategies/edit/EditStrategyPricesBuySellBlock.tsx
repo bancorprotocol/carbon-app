@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
+import { useTranslation } from 'libs/translations';
 import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from './EditStrategyMain';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
-import { useTranslation } from 'libs/translations';
 
 type EditStrategyPricesBuySellBlockProps = {
   base: Token;
