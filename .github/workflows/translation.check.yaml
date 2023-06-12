@@ -1,0 +1,38 @@
+name: Translation Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-translations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check translation changes
+        run: |
+          git diff --name-only HEAD^..HEAD > changed_files.txt
+          if grep -E '^public/locales/(en|es)/translation\.json$' changed_files.txt; then
+            if grep -qE 'TRANSLATION_VERSION[^a-zA-Z0-9_]v1[^a-zA-Z0-9_]' version.ts; then
+              echo "Error: TRANSLATION_VERSION is not incremented"
+              exit 1
+            else
+              echo "TRANSLATION_VERSION is incremented"
+            fi
+          else
+            echo "No translation files changed"
+          fi

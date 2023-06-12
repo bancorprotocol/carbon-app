@@ -3,19 +3,18 @@ import {
   LanguageDetector,
   ChainedBackend,
   HttpBackend,
-  LocalStorageBackend,
+  // LocalStorageBackend,
   i18n,
 } from 'libs/translations';
 import { APP_ID, APP_VERSION } from 'utils/constants';
-
-const TRANSLATION_VERSION = 'v1';
+import { TRANSLATION_VERSION } from './version';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Spanish' },
   { code: 'ge', name: 'German' },
   { code: 'he', name: 'Hebrew' },
-  { code: 'xx', name: 'test' },
+  { code: 'xx', name: 'Test' },
 ];
 
 type SupportedLanguagesCodes = (typeof SUPPORTED_LANGUAGES)[number]['code'];
@@ -40,7 +39,7 @@ i18n
       lookupQuerystring: '', // disable querystring in url
     },
     backend: {
-      backends: [LocalStorageBackend, HttpBackend],
+      backends: [HttpBackend],
       backendOptions: [
         {
           prefix: `${APP_ID}-${APP_VERSION}-`,
