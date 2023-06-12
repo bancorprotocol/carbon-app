@@ -24,7 +24,7 @@ jobs:
         run: yarn
 
       - name: Check translation changes
-        run:       run: |
+        run: |
           git diff --name-only HEAD^..HEAD > changed_files.txt
           if grep -E '^public/locales/(en|es)/translation\.json$' changed_files.txt; then
             current_version=$(grep -oP "(?<=TRANSLATION_VERSION = 'v)\d+" version.ts)
