@@ -34,14 +34,14 @@ jobs:
           echo "$changed_files" > changed_files.txt
 
           if grep -E '^public/locales/(en|es)/translation\.json$' changed_files.txt; then
-            current_version=$(grep -oP "(?<=TRANSLATION_VERSION = 'v)\d+" version.ts)
+            current_version=$(grep -oP "(?<=TRANSLATION_VERSION = 'v)\d+" src/libs/translations/version.ts)
             if [ -z "$current_version" ]; then
               echo "Error: TRANSLATION_VERSION is not set in version.ts"
               exit 1
             fi
             new_version=$((current_version + 1))
-            sed -i "s/TRANSLATION_VERSION = 'v$current_version';/TRANSLATION_VERSION = 'v$new_version';/" version.ts
-            git add version.ts
+            sed -i "s/TRANSLATION_VERSION = 'v$current_version';/TRANSLATION_VERSION = 'v$new_version';/" src/libs/translations/version.ts
+            git add src/libs/translations/version.ts
             git config user.name "Translation Bot"
             git config user.email "translation-bot@example.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
