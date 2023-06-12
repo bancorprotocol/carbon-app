@@ -1,7 +1,7 @@
 {
   "common": {
     "placeholders": {
-      "placeholder1": "Enter Price Test",
+      "placeholder1": "Enter Price",
       "placeholder2": "Enter Amount",
       "placeholder3": "Total Amount",
       "placeholder4": "Search",
