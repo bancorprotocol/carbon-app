@@ -37,7 +37,7 @@
       "tooltip6": "The highest price to buy {{token}} at.",
       "tooltip7": "The highest price to sell {{token}} at."
     },
-    "statues": {
+    "statuses": {
       "status1": "Waiting for Confirmation",
       "status2": "Processing"
     },

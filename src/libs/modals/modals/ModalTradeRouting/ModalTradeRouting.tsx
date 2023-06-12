@@ -106,7 +106,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           onClick={handleCTAClick}
           disabled={disabledCTA}
           loading={isAwaiting}
-          loadingChildren={t('common.statues.status1')}
+          loadingChildren={t('common.statuses.status1')}
         >
           {t('modals.tradeRouting.actionButtons.actionButton1')}
         </Button>

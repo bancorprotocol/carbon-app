@@ -282,7 +282,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       <Button
         disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
         loading={isAwaiting}
-        loadingChildren={t('common.statues.status1')}
+        loadingChildren={t('common.statuses.status1')}
         onClick={handleTradeClick}
         variant={buy ? 'success' : 'error'}
         fullWidth

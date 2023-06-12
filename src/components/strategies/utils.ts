@@ -21,10 +21,10 @@ export const getStatusTextByTxStatus = (
   isProcessing: boolean
 ): string | undefined => {
   if (isAwaiting) {
-    return i18n.t('common.statues.status1') || '';
+    return i18n.t('common.statuses.status1') || '';
   }
   if (isProcessing) {
-    return i18n.t('common.statues.status2') || '';
+    return i18n.t('common.statuses.status2') || '';
   }
 
   return undefined;

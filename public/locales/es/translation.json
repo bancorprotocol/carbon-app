@@ -35,7 +35,7 @@
       "tooltip6": "El precio más alto para comprar {{token}}.",
       "tooltip7": "El precio más alto para vender {{token}}."
     },
-    "statues": {
+    "statuses": {
       "status1": "Esperando confirmación",
       "status2": "Procesando"
     },
