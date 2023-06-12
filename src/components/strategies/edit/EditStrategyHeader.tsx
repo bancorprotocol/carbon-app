@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { useLocation } from 'libs/routing';
 import { useTranslation } from 'libs/translations';

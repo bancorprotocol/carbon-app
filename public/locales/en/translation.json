@@ -511,10 +511,12 @@
       },
       "section2": {
         "titles": {
-          "title1": "Withdraw {{buyOrSell}} Budget",
-          "title2": "Deposit {{buyOrSell}} Budget",
-          "title3": "Buy Low {{token}}",
-          "title4": "Sell High {{token}}"
+          "title1": "Withdraw Buy Budget",
+          "title2": "Withdraw Sell Budget",
+          "title3": "Deposit Buy Budget",
+          "title4": "Deposit Sell Budget",
+          "title5": "Buy Low {{token}}",
+          "title6": "Sell High {{token}}"
         },
         "subtitles": {
           "subtitle1": "Set Buy Price",

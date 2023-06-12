@@ -1,11 +1,11 @@
 import { m } from 'libs/motion';
+import { carbonEvents } from 'services/events';
+import { Token } from 'libs/tokens';
+import { useTranslation } from 'libs/translations';
 import { Button } from 'components/common/button';
 import { TradingviewChart } from 'components/tradingviewChart';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
-import { Token } from 'libs/tokens';
 import { list } from '../create/variants';
-import { carbonEvents } from 'services/events';
-import { useTranslation } from 'libs/translations';
 
 type EditStrategyGraphProps = {
   base: Token | undefined;

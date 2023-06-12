@@ -1,12 +1,12 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
+import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
+import { useGetTokenBalance } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useGetTokenBalance } from 'libs/queries';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
-import { useTranslation } from 'libs/translations';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -34,9 +34,16 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       ? new BigNumber(balance || 0).lt(order.budget)
       : calculatedWalletBalance.lt(0);
 
-  const buyOrSellText = buy
-    ? t('pages.strategyEdit.section2.contents.content3')
-    : t('pages.strategyEdit.section2.contents.content4');
+  const getTitle = () => {
+    if (type === 'withdraw') {
+      return buy
+        ? t('pages.strategyEdit.section2.titles.title1')
+        : t('pages.strategyEdit.section2.titles.title2');
+    }
+    return buy
+      ? t('pages.strategyEdit.section2.titles.title3')
+      : t('pages.strategyEdit.section2.titles.title4');
+  };
 
   return (
     <div
@@ -48,17 +55,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     >
       <div className="mb-10 flex items-center justify-between">
         <div className="flex items-center">
-          <div>
-            {`${
-              type === 'withdraw'
-                ? t('pages.strategyEdit.section2.titles.title1', {
-                    buyOrSell: buyOrSellText,
-                  })
-                : t('pages.strategyEdit.section2.titles.title2', {
-                    buyOrSell: buyOrSellText,
-                  })
-            }`}
-          </div>
+          <div>{getTitle()}</div>
           {isBudgetOptional && (
             <div className="ml-8 text-14 font-weight-500 text-white/40">
               {t('pages.strategyEdit.section2.contents.content1')}

@@ -38,8 +38,12 @@ export const EditStrategyPricesBuySellBlock: FC<
           order,
           isOrdersOverlap,
           title: buy
-            ? t('pages.strategyEdit.titles.title3', { token: base.symbol })
-            : t('pages.strategyEdit.titles.title4', { token: base.symbol }),
+            ? t('pages.strategyEdit.section2.titles.title5', {
+                token: base.symbol,
+              })
+            : t('pages.strategyEdit.section2.titles.title6', {
+                token: base.symbol,
+              }),
           inputTitle: (
             <div className="text-white/60">
               {buy
