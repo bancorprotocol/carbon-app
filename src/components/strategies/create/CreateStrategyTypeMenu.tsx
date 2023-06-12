@@ -30,7 +30,9 @@ const BlockIconTextDesc = ({
       </div>
       <div className={'flex-shrink space-y-6'}>
         <div className={'text-14 font-weight-500'}>{title}</div>
-        <div className={'text-12 text-white/60'}>{description}</div>
+        <div className={'min-h-[32px] text-12 text-white/60'}>
+          {description}
+        </div>
       </div>
     </div>
   );
