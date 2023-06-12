@@ -24,15 +24,21 @@ jobs:
         run: yarn
 
       - name: Check translation changes
-        run: |
+        run:       run: |
           git diff --name-only HEAD^..HEAD > changed_files.txt
           if grep -E '^public/locales/(en|es)/translation\.json$' changed_files.txt; then
-            if grep -qE 'TRANSLATION_VERSION[^a-zA-Z0-9_]v1[^a-zA-Z0-9_]' version.ts; then
-              echo "Error: TRANSLATION_VERSION is not incremented"
+            current_version=$(grep -oP "(?<=TRANSLATION_VERSION = 'v)\d+" version.ts)
+            if [ -z "$current_version" ]; then
+              echo "Error: TRANSLATION_VERSION is not set in version.ts"
               exit 1
-            else
-              echo "TRANSLATION_VERSION is incremented"
             fi
+            new_version=$((current_version + 1))
+            sed -i "s/TRANSLATION_VERSION = 'v$current_version';/TRANSLATION_VERSION = 'v$new_version';/" version.ts
+            git add version.ts
+            git config user.name "Translation Bot"
+            git config user.email "translation-bot@example.com"
+            git commit -m "Bump TRANSLATION_VERSION to v$new_version"
+            echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
             echo "No translation files changed"
           fi
