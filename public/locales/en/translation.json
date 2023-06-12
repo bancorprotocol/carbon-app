@@ -24,7 +24,9 @@
     },
     "errors": {
       "error1": "Max Price must be higher than min price and not zero",
-      "error2": "Price must be greater than 0"
+      "error2": "Price must be greater than 0",
+      "error3": "Wrong Network",
+      "error4": "Please connect to Ethereum Mainnet using your wallet or the button below"
     },
     "tooltips": {
       "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.<br /><bold>Limit</bold> will allow you to define a specific price point to buy the token at.<br/><bold>Range</bold> will allow you to define a range of prices to buy the token at.",
@@ -137,7 +139,10 @@
         "actionButton1": "Confirm",
         "actionButton2": "Confirm Trade"
       },
-      "tooltip1": "When managing the list of orders, your trade amounts will change to reflect these changes."
+      "tooltips": {
+        "tooltip1": "This is the list of orders your trade will use when executed.",
+        "tooltip2": "When managing the list of orders, your trade amounts will change to reflect these changes."
+      }
     },
     "restrictedCountry": {
       "modalTitle": "I Understand"
@@ -364,7 +369,8 @@
           "tooltip7": "Your strategy is active and ready",
           "tooltip8": "Your strategy has no associated funds. Consider depositing funds to activate it.",
           "tooltip9": "Your strategy is currently paused. Edit the prices to activate it.",
-          "tooltip10": "Your strategy is currently inactive. Consider activating it with funds and rates."
+          "tooltip10": "Your strategy is currently inactive. Consider activating it with funds and rates.",
+          "tooltip11": "Duplicate Strategy"
         },
         "manageStrategy": {
           "titles": {
@@ -547,7 +553,8 @@
         "tooltips": {
           "tooltip1": "Price points denominated in {{token}}",
           "tooltip2": "The amount of available {{token}} tokens in this price point",
-          "tooltip3": "The available liquidity in this price point denominated in {{token}}"
+          "tooltip3": "The available liquidity in this price point denominated in {{token}}",
+          "tooltip4": "The mid-market price based on the last trade"
         }
       },
       "section2": {
@@ -579,6 +586,10 @@
         "actionButtons": {
           "actionButton1": "Depth",
           "actionButton2": "Price"
+        },
+        "tooltips": {
+          "tooltip1": "Amount:",
+          "tooltip2": "Price:"
         }
       }
     }

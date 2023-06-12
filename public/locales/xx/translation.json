@@ -24,7 +24,9 @@
     },
     "errors": {
       "error1": "xxxxxxxxxxx",
-      "error2": "xxxxxxxxxxx"
+      "error2": "xxxxxxxxxxx",
+      "error3": "xxxxxxxxxxx",
+      "error4": "xxxxxxxxxxx"
     },
     "tooltips": {
       "tooltip1": "xxxxxxxxxxx",
@@ -137,7 +139,10 @@
         "actionButton1": "xxxxxxxxxxx",
         "actionButton2": "xxxxxxxxxxx"
       },
-      "tooltip1": "xxxxxxxxxxx"
+      "tooltips": {
+        "tooltip1": "xxxxxxxxxxx",
+        "tooltip2": "xxxxxxxxxxx"
+      }
     },
     "restrictedCountry": {
       "modalTitle": "xxxxxxxxxxx"
@@ -362,7 +367,8 @@
           "tooltip7": "xxxxxxxxxxx",
           "tooltip8": "xxxxxxxxxxx",
           "tooltip9": "xxxxxxxxxxx",
-          "tooltip10": "xxxxxxxxxxx"
+          "tooltip10": "xxxxxxxxxxx",
+          "tooltip11": "xxxxxxxxxxx"
         },
         "manageStrategy": {
           "titles": {
@@ -545,7 +551,8 @@
         "tooltips": {
           "tooltip1": "xxxxxxxxxxx",
           "tooltip2": "xxxxxxxxxxx",
-          "tooltip3": "xxxxxxxxxxx"
+          "tooltip3": "xxxxxxxxxxx",
+          "tooltip4": "xxxxxxxxxxx"
         }
       },
       "section2": {
@@ -577,6 +584,10 @@
         "actionButtons": {
           "actionButton1": "xxxxxxxxxxx",
           "actionButton2": "xxxxxxxxxxx"
+        },
+        "tooltips": {
+          "tooltip1": "xxxxxxxxxxx",
+          "tooltip2": "xxxxxxxxxxx"
         }
       }
     }

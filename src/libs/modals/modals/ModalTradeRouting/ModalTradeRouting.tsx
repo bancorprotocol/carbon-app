@@ -46,11 +46,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 
   return (
     <Modal id={id} title={t('modals.tradeRouting.modalTitle')} size={'md'}>
-      <Tooltip
-        element={
-          'This is the list of orders your trade will use when executed.'
-        }
-      >
+      <Tooltip element={t('modals.tradeRouting.tooltips.tooltip1')}>
         <div className={'text-secondary mt-20 mb-5'}>
           {t('modals.tradeRouting.section1.title1')}
         </div>
@@ -74,7 +70,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           />
         ))}
       </div>
-      <Tooltip element={t('modals.tradeRouting.tooltip1')}>
+      <Tooltip element={t('modals.tradeRouting.tooltips.tooltip2')}>
         <div className={'text-secondary mt-20 mb-5'}>
           {t('modals.tradeRouting.section2.title1')}
         </div>
