@@ -149,9 +149,11 @@
     },
     "importToken": {
       "modalTitle": "Token importieren",
+      "title": "Benutzung auf eigene Gefahr",
       "contents": {
         "content1": "Fehler: Kein Token für diese Adresse gefunden",
-        "content2": "Auf Explorer anzeigen"
+        "content2": "Auf dem Explorer anzeigen",
+        "content3": "Dieser Token erscheint nicht in der aktiven Tokenliste. Jeder kann einen Token erstellen, einschließlich gefälschter Versionen bestehender Tokens, die vorgeben, Projekte zu repräsentieren."
       },
       "actionButtons": {
         "actionButton1": "Token importieren",

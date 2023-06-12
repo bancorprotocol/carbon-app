@@ -149,9 +149,11 @@
     },
     "importToken": {
       "modalTitle": "Import Token",
+      "title": "Use at your own risk",
       "contents": {
         "content1": "Error: No token found for this address",
-        "content2": "View on Explorer"
+        "content2": "View on Explorer",
+        "content3": "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
       },
       "actionButtons": {
         "actionButton1": "Import Token",

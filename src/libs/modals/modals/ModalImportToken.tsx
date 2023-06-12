@@ -41,10 +41,8 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         <IconTitleText
           variant={'warning'}
           icon={<IconWarning />}
-          title={'Use at your own risk'}
-          text={
-            "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
-          }
+          title={t('modals.importToken.title')}
+          text={t('modals.importToken.contents.content3')}
         />
       </div>
 
