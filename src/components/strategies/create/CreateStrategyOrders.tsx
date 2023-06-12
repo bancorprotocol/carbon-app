@@ -10,6 +10,7 @@ import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
+import { CreateStrategyRangeWarning } from 'components/strategies/create/CreateStrategyRangeWarning';
 
 export const CreateStrategyOrders = ({
   base,
@@ -54,6 +55,20 @@ export const CreateStrategyOrders = ({
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
+
+  const showRangeWarning = useMemo(() => {
+    if (strategyType === 'recurring') {
+      return order0.isRange || order1.isRange;
+    }
+    if (strategyDirection === 'buy') {
+      return order0.isRange;
+    }
+    if (strategyDirection === 'sell') {
+      return order1.isRange;
+    }
+
+    return false;
+  }, [order0.isRange, order1.isRange, strategyDirection, strategyType]);
 
   return (
     <>
@@ -103,6 +118,9 @@ export const CreateStrategyOrders = ({
           />
         </m.div>
       )}
+
+      {showRangeWarning && <CreateStrategyRangeWarning />}
+
       <m.div variants={items} key={'createStrategyCTA'}>
         <Button
           variant={'success'}
