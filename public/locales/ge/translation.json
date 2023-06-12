@@ -136,8 +136,7 @@
       "actionButtons": {
         "actionButton1": "Bestätigen",
         "actionButton2": "Handel bestätigen"
-      },
-      "tooltip1": "Beim Verwalten der Liste der Aufträge ändern sich Ihre Handelsbeträge entsprechend diesen Änderungen."
+      }
     },
     "restrictedCountry": {
       "modalTitle": "Ich verstehe"

@@ -156,12 +156,14 @@
       "modalTitle": "xxxxxxxxxxx",
       "contents": {
         "content1": "xxxxxxxxxxx",
-        "content2": "xxxxxxxxxxx"
+        "content2": "xxxxxxxxxxx",
+        "content3": "xxxxxxxxx"
       },
       "actionButtons": {
         "actionButton1": "xxxxxxxxxxx",
         "actionButton2": "xxxxxxxxxxx"
-      }
+      },
+      "title": "xxxxxxxxxxx"
     }
   },
   "navBar": {

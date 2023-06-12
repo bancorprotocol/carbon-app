@@ -12,10 +12,8 @@ export const ErrorUserBlocked = () => {
   return (
     <ErrorWrapper
       icon={<IconWarning />}
-      title={'Wallet Blocked'}
-      text={
-        'For compliance reasons, this wallet has been blocked from using the Carbon App.'
-      }
+      title={t('common.errors.error11')}
+      text={t('common.errors.error12')}
       variant={'error'}
     >
       <div className={'space-y-10'}>

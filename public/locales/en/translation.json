@@ -26,7 +26,15 @@
       "error1": "Max Price must be higher than min price and not zero",
       "error2": "Price must be greater than 0",
       "error3": "Wrong Network",
-      "error4": "Please connect to Ethereum Mainnet using your wallet or the button below"
+      "error4": "Please connect to Ethereum Mainnet using your wallet or the button below",
+      "error5": "Network Error",
+      "error6": "Failed to establish RPC connection. Please check your network connection and try again.",
+      "error7": "Internal Error",
+      "error8": "Data sync using Carbon SDK has failed. Please contact support or try again.",
+      "error9": "Network Error",
+      "error10": "Failed to fetch token list. Please check your network connection and try again.",
+      "error11": "Wallet Blocked",
+      "error12": "For compliance reasons, this wallet has been blocked from using the Carbon App."
     },
     "tooltips": {
       "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.<br /><bold>Limit</bold> will allow you to define a specific price point to buy the token at.<br/><bold>Range</bold> will allow you to define a range of prices to buy the token at.",

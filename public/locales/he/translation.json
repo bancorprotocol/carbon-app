@@ -136,8 +136,7 @@
       "actionButtons": {
         "actionButton1": "אשר",
         "actionButton2": "אשר מסחר"
-      },
-      "tooltip1": "בעת ניהול רשימת ההזמנות, סכומי המסחר שלך ישתנו כדי לשקף את השינויים האלו."
+      }
     },
     "restrictedCountry": {
       "modalTitle": "הבנתי"
@@ -471,7 +470,6 @@
         "actionButton": "יצירת אסטרטגיה"
       }
     },
-
     "strategyEdit": {
       "titles": {
         "title1": "חידוש אסטרטגיה",

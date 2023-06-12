@@ -135,8 +135,7 @@
       "actionButtons": {
         "actionButton1": "Confirmar",
         "actionButton2": "Confirmar Operación"
-      },
-      "tooltip1": "Al gestionar la lista de órdenes, los montos de sus operaciones cambiarán para reflejar estos cambios."
+      }
     },
     "restrictedCountry": {
       "modalTitle": "Entiendo"
@@ -524,7 +523,6 @@
         "actionButton5": "Confirmar Depósito"
       }
     },
-
     "trade": {
       "errors": {
         "error1": "No Encontrado",

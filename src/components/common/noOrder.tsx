@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { ReactComponent as NoOrdersIcon } from 'assets/icons/bars.svg';
 import { i18n } from 'libs/translations';
+import { ReactComponent as NoOrdersIcon } from 'assets/icons/bars.svg';
 
 type NoOrdersProps = {
   text?: string;
