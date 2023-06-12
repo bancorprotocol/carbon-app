@@ -26,14 +26,14 @@ jobs:
       - name: Check translation changes
         run: |
           if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
-            changed_files=$(git diff --name-only HEAD^..HEAD)
+            changed_files=$(git diff --name-only --stat HEAD^..HEAD)
           else
             changed_files=$(git ls-tree --name-only HEAD)
           fi
 
           echo "$changed_files" > changed_files.txt
 
-          if grep -E '^public/locales/en/translation\.json$' changed_files.txt; then
+          if grep -E '^public/locales/en/translation\.json' changed_files.txt; then
             current_version=$(grep -oP "(?<=TRANSLATION_VERSION = 'v)\d+" src/libs/translations/version.ts)
             if [ -z "$current_version" ]; then
               echo "Error: TRANSLATION_VERSION is not set in version.ts"
