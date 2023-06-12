@@ -1,20 +1,20 @@
-import { useWeb3 } from 'libs/web3';
-import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
+import { useWeb3 } from 'libs/web3';
+import { carbonEvents } from 'services/events';
 import {
   useGetTradeLiquidity,
   useGetTradeData,
   useGetMaxSourceAmountByPair,
   useGetTokenPrice,
 } from 'libs/queries';
-import { prettifyNumber } from 'utils/helpers';
 import { Action, TradeActionBNStr, MatchActionBNStr } from 'libs/sdk';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import { carbonEvents } from 'services/events';
 import { useTranslation } from 'libs/translations';
+import { useModal } from 'hooks/useModal';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
+import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
+import { prettifyNumber } from 'utils/helpers';
 
 export const useBuySell = ({
   source,
@@ -319,7 +319,6 @@ export const useBuySell = ({
   }, [
     isTargetEmptyError,
     isLiquidityError,
-    t,
     liquidityQuery.data,
     target.symbol,
   ]);

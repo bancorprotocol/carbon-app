@@ -1,6 +1,7 @@
+import { ReactNode, useMemo } from 'react';
 import { useNavigate } from '@tanstack/react-location';
 import { PathNames } from 'libs/routing';
-import { ReactNode, useMemo } from 'react';
+import { i18n } from 'libs/translations';
 import {
   StrategyCreateLocationGenerics,
   StrategyType,
@@ -12,7 +13,6 @@ import { ReactComponent as IconSellLimit } from 'assets/icons/sell-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconTwoLimits } from 'assets/icons/two-limits.svg';
 import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strategy.svg';
-import { i18n } from 'libs/translations';
 
 type StrategyTypeItem = {
   label: string;

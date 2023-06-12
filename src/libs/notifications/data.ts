@@ -78,7 +78,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     description: i18n.t('notifications.descriptions.description11') || '',
     successTitle: i18n.t('notifications.titles.titles10') || '',
     successDesc: i18n.t('notifications.descriptions.description12') || '',
-    failedTitle: i18n.t('notifications.titles.titles10') || '',
+    failedTitle: i18n.t('notifications.titles.titles11') || '',
     failedDesc: i18n.t('notifications.descriptions.description13') || '',
     txHash: data.txHash,
     showAlert: true,

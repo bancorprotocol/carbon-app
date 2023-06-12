@@ -1,13 +1,13 @@
-import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
-import useInitEffect from 'hooks/useInitEffect';
-import { useGetTokenBalance } from 'libs/queries';
-import { TradePageProps } from 'pages/trade';
+import { useState } from 'react';
 import { carbonEvents } from 'services/events';
+import { useGetTokenBalance } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
+import useInitEffect from 'hooks/useInitEffect';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { TradePageProps } from 'pages/trade';
+import { TradeWidgetBuySell } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { useState } from 'react';
-import { useTranslation } from 'libs/translations';
 
 export const TradeWidget = ({ base, quote }: TradePageProps) => {
   const { t } = useTranslation();

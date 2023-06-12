@@ -1,5 +1,4 @@
-import { useTranslation } from 'libs/translations';
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 export interface SDKStore {
   isInitialized: boolean;
@@ -11,14 +10,9 @@ export interface SDKStore {
 }
 
 export const useSDKStore = (): SDKStore => {
-  const [_isInitialized, setIsInitialized] = useState(false);
-  const { ready } = useTranslation();
+  const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  const isInitialized = useMemo(() => {
-    return _isInitialized && ready;
-  }, [_isInitialized, ready]);
 
   return {
     isInitialized,

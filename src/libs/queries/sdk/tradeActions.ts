@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { QueryKey } from 'libs/queries';
-import { useCarbonInit } from 'hooks/useCarbonInit';
 import { MatchActionBNStr } from '@bancor/carbon-sdk';
-import { ONE_DAY_IN_MS } from 'utils/time';
+import { QueryKey } from 'libs/queries';
 import { carbonSDK } from 'libs/sdk';
+import { useCarbonInit } from 'hooks/useCarbonInit';
+import { ONE_DAY_IN_MS } from 'utils/time';
 
 type Props = {
   sourceToken: string;

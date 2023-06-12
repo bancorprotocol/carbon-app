@@ -15,35 +15,32 @@ export const WalletConnect = () => {
   const { openModal } = useModal();
 
   // TODO: think of better location for items
-  const items = useMemo(
-    () => [
-      {
-        icon: <IconWallet1 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.contents.content1'),
-      },
-      {
-        icon: <IconWallet2 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.contents.content2'),
-      },
-      {
-        icon: <IconWallet3 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.contents.content3'),
-      },
-      {
-        icon: <IconWallet4 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.contents.content4'),
-      },
-      {
-        icon: <IconWallet5 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.contents.content5'),
-      },
-      {
-        icon: <IconWallet6 className="h-20 w-20 text-green" />,
-        title: t('pages.strategyOverview.noStrategyCard.contents.content6'),
-      },
-    ],
-    [t]
-  );
+  const items = [
+    {
+      icon: <IconWallet1 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content1'),
+    },
+    {
+      icon: <IconWallet2 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content2'),
+    },
+    {
+      icon: <IconWallet3 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content3'),
+    },
+    {
+      icon: <IconWallet4 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content4'),
+    },
+    {
+      icon: <IconWallet5 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content5'),
+    },
+    {
+      icon: <IconWallet6 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content6'),
+    },
+  ];
 
   return (
     <div className="md:h-[calc(100vh-300px)] md:min-h-[400px]">

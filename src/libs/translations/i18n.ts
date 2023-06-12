@@ -9,6 +9,7 @@ import {
 import { APP_ID, APP_VERSION } from 'utils/constants';
 import { TRANSLATION_VERSION } from './version';
 
+// TODO: add local storage backend + remove not needed languages
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Spanish' },

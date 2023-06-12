@@ -1,8 +1,8 @@
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
-import { useNotifications } from 'hooks/useNotifications';
 import { useTranslation } from 'libs/translations';
+import { useNotifications } from 'hooks/useNotifications';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
   const { t } = useTranslation();

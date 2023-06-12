@@ -1,7 +1,7 @@
 import { FC } from 'react';
+import { Trans } from 'libs/translations';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
-import { Trans } from 'libs/translations';
 
 export const ModalTokenListNotFound: FC = () => {
   const Text = () => (

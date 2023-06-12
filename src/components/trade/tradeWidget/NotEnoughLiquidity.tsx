@@ -1,7 +1,7 @@
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Token } from 'libs/tokens';
 import { useTranslation } from 'libs/translations';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export type NotEnoughLiquidityProps = {
   source: Token;

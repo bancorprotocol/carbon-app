@@ -56,7 +56,7 @@ export const BuySellBlock: FC<Props> = ({
     ? t('pages.strategyCreate.step2.tooltips.tooltip1', {
         token: base.symbol,
       })
-    : t('pages.strategyCreate.step2.tooltips.tooltip1', {
+    : t('pages.strategyCreate.step2.tooltips.tooltip2', {
         token: base.symbol,
       });
 
@@ -91,7 +91,7 @@ export const BuySellBlock: FC<Props> = ({
                 buyToken: base.symbol,
                 sellToken: quote.symbol,
               })
-            : t('pages.strategyCreate.step2.tooltips.tooltip3', {
+            : t('pages.strategyCreate.step2.tooltips.tooltip4', {
                 buyToken: base.symbol,
                 sellToken: quote.symbol,
               })

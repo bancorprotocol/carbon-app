@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
+import { carbonEvents } from 'services/events';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Strategy } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
-import { carbonEvents } from 'services/events';
 import { Button } from 'components/common/button';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
@@ -12,7 +13,6 @@ import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { getModalDataByType } from './utils';
-import { useTranslation } from 'libs/translations';
 
 export type ModalConfirmStrategyData = {
   strategy: Strategy;

@@ -1,12 +1,12 @@
-import { useModal } from 'hooks/useModal';
+import { useEffect, useState } from 'react';
+import { carbonEvents } from 'services/events';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useWeb3, Connection } from 'libs/web3';
-import { useEffect, useState } from 'react';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
-import { carbonEvents } from 'services/events';
 import { useTranslation } from 'libs/translations';
+import { useModal } from 'hooks/useModal';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { t } = useTranslation();

@@ -1,15 +1,15 @@
 import { ReactElement, useMemo } from 'react';
 import { Link, PathNames } from 'libs/routing';
 import { externalLinks } from 'libs/routing/routes';
+import { useTranslation } from 'libs/translations';
+import { SUPPORTED_LANGUAGES } from 'libs/translations/i18n';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { MenuItemActions } from './useMenuContext';
 import { ReactComponent as IconTwitter } from 'assets/logos/twitter.svg';
 import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { MenuItemActions } from './useMenuContext';
-import { useTranslation } from 'libs/translations';
-import { SUPPORTED_LANGUAGES } from 'libs/translations/i18n';
 
 export type MenuItemType = {
   subMenu?: MenuType;

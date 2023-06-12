@@ -41,7 +41,7 @@ export const StrategiesPage = () => {
       title={
         t('pages.strategyOverview.header.title', {
           count: strategies.data?.length || 0,
-        }) || undefined
+        }) || ''
       }
       widget={
         <StrategyPageTitleWidget

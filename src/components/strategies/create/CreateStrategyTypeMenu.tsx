@@ -1,15 +1,15 @@
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { FC, ReactNode } from 'react';
-import { Button } from 'components/common/button';
-import { items } from 'components/strategies/create/variants';
-import { m } from 'libs/motion';
-import { UseStrategyCreateReturn } from 'components/strategies/create/index';
-import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
-import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
-import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
 import { carbonEvents } from 'services/events';
 import { useTranslation } from 'libs/translations';
+import { m } from 'libs/motion';
+import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
+import { TabsMenu } from 'components/common/tabs/TabsMenu';
+import { Button } from 'components/common/button';
+import { items } from 'components/strategies/create/variants';
+import { UseStrategyCreateReturn } from 'components/strategies/create/index';
+import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
+import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
+import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 
 const BlockIconTextDesc = ({
   icon,

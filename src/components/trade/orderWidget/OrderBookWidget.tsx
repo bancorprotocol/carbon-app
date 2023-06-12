@@ -1,7 +1,7 @@
+import { useTranslation } from 'libs/translations';
 import { OrderBookWidgetHeader } from 'components/trade/orderWidget/OrderBookWidgetHeader';
 import { OrderBookWidgetRate } from 'components/trade/orderWidget/OrderBookWidgetRate';
 import { useOrderBookWidget } from 'components/trade/orderWidget/useOrderBookWidget';
-import { useTranslation } from 'libs/translations';
 import { TradePageProps } from 'pages/trade';
 import { OrderBookSide } from './OrderBookSide';
 

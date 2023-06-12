@@ -1,12 +1,12 @@
-import { Imager } from 'components/common/imager/Imager';
 import { FC, useState } from 'react';
-import iconLedger from 'assets/logos/ledger.svg';
-import iconTrezor from 'assets/logos/trezor.svg';
+import { Trans, useTranslation } from 'libs/translations';
+import { Link, PathNames } from 'libs/routing';
 import { Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
-import { Link, PathNames } from 'libs/routing';
+import { Imager } from 'components/common/imager/Imager';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
-import { Trans, useTranslation } from 'libs/translations';
+import iconLedger from 'assets/logos/ledger.svg';
+import iconTrezor from 'assets/logos/trezor.svg';
 
 type Props = {
   onClick: (c: Connection) => Promise<void>;
