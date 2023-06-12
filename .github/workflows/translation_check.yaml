@@ -27,7 +27,7 @@ jobs:
         run: |
           translation_files_changed=false
 
-          if [ -n "$(git diff --name-only HEAD^ HEAD -- 'public/locales/en/translation.json' 'public/locales/es/translation.json')" ]; then
+          if [ -n "$(git diff --name-only HEAD^..HEAD -- 'public/locales/en/translation.json' 'public/locales/es/translation.json')" ]; then
             translation_files_changed=true
           fi
 
