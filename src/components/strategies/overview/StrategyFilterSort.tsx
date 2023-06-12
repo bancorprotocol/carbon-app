@@ -1,9 +1,9 @@
+import { FC } from 'react';
+import { useTranslation } from 'libs/translations';
 import { Button } from 'components/common/button';
+import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
-import { DropdownMenu } from 'components/common/dropdownMenu';
-import { FC } from 'react';
-import { i18n, useTranslation } from 'libs/translations';
 
 export enum StrategyFilter {
   All,

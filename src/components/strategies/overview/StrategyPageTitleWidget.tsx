@@ -1,14 +1,14 @@
+import { FC } from 'react';
+import { carbonEvents } from 'services/events';
+import { Link, PathNames } from 'libs/routing';
+import { useTranslation } from 'libs/translations';
 import { Button } from 'components/common/button';
 import { SearchInput } from 'components/common/searchInput';
-import { FC } from 'react';
-import { Link, PathNames } from 'libs/routing';
 import {
   StrategySort,
   StrategyFilter,
   StrategyFilterSort,
 } from 'components/strategies/overview/StrategyFilterSort';
-import { carbonEvents } from 'services/events';
-import { useTranslation } from 'libs/translations';
 
 export const StrategyPageTitleWidget: FC<{
   search: string;
