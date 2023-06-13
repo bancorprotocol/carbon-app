@@ -23,32 +23,25 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Check translation changes
+      - name: Check for translation changes
+        id: changes
         run: |
-          translation_files=("public/locales/es/translation.json")
-          translation_files_changed=false
-
-          for file in "${translation_files[@]}"; do
-            if [ -f "$file" ]; then
-              last_commit=$(git log -1 --format="%ct" -- "$file")
-              last_modified=$(stat -c %Y "$file")
-
-              if [ "$last_modified" -gt "$last_commit" ]; then
-                translation_files_changed=true
-                break
-              fi
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changes.txt
+          if grep -q "public/locales/es/translation.json" changes.txt; then
+            if grep -q "src/libs/translations/version.ts" changes.txt; then
+              echo "::set-output name=version_changed::true"
+            else
+              echo "::set-output name=version_changed::false"
             fi
-          done
-
-          branch=$(git branch --show-current)
-          version_file_changed=$(git diff --name-only "$branch" -- "src/libs/translations/version.ts" || echo "")
-
-          echo $version_file_changed
-
-          if [ "$version_file_changed" = "src/libs/translations/version.ts" ]; then
-            echo "Version file (src/libs/translations/version.ts) has not been modified."
-            exit 1  # Job Failed
           else
-            echo "Version file (src/libs/translations/version.ts) has been modified."
-            exit 0  # Job Success
+            echo "::set-output name=version_changed::false"
+          fi
+
+      - name: Fail or pass job based on changes
+        run: |
+          if [[ "${{ steps.changes.outputs.version_changed }}" == "true" ]]; then
+            echo "Version.ts modified along with translation file. Job passed!"
+          else
+            echo "Version.ts not modified along with translation file. Job failed!"
+            exit 1
           fi
