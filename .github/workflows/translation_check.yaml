@@ -40,9 +40,8 @@ jobs:
             fi
           done
 
-          branch=$(git branch --show-current)
-          remote_branch="origin/$branch"
-          version_file_changed=$(git diff --name-only "$remote_branch" -- "src/libs/translations/version.ts" || echo "")
+          branch=$(git rev-parse --abbrev-ref HEAD)
+          version_file_changed=$(git diff --name-only "origin/$branch" -- "src/libs/translations/version.ts" || echo "")
 
           echo $version_file_changed
 
