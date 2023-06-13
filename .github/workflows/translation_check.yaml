@@ -25,15 +25,14 @@ jobs:
 
       - name: Check translation changes
         run: |
-          # Get the commit SHAs for comparison
-          current_commit=$(git rev-parse HEAD)
-          previous_commit=$(git rev-parse HEAD^)
+          # Get the branch name for comparison
+          current_branch=$(git branch --show-current)
 
           # Check if the version.ts file has changed
-          version_changed=$(git diff --name-only $previous_commit $current_commit -- src/libs/translations/version.ts)
+          version_changed=$(git diff --name-only origin/main...$current_branch -- src/libs/translations/version.ts)
 
           # Check if any translation file has changed
-          translations_changed=$(git diff --name-only $previous_commit $current_commit -- 'public/locales/**/*.json' | grep -E '^public/locales/.+/translation\.json$' || true)
+          translations_changed=$(git diff --name-only origin/main...$current_branch -- 'public/locales/**/*.json' | grep -E '^public/locales/.+/translation\.json$' || true)
 
           # Fail the job if translations changed but version didn't
           if [[ -n $translations_changed && -z $version_changed ]]; then
