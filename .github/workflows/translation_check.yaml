@@ -40,9 +40,9 @@ jobs:
             fi
           done
 
-          branch=$(git rev-parse --abbrev-ref HEAD)
+          branch=$(git branch --show-current)
           remote_branch="origin/$branch"
-          version_file_changed=$(git diff --name-only "$remote_branch" -- "src/libs/translations/version.ts" || echo "src/libs/translations/version.ts")
+          version_file_changed=$(git diff --name-only "$remote_branch" -- "src/libs/translations/version.ts" || echo "")
 
           if [ "$version_file_changed" = "src/libs/translations/version.ts" ]; then
             echo "Version file (src/libs/translations/version.ts) has not been modified."
