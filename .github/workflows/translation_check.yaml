@@ -41,7 +41,7 @@ jobs:
           done
 
           branch=$(git branch --show-current)
-          version_file_changed=$(git diff --name-only "origin/$branch" -- "src/libs/translations/version.ts" || echo "")
+          version_file_changed=$(git diff --name-only "$branch" -- "src/libs/translations/version.ts" || echo "")
 
           echo $version_file_changed
 
