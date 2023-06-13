@@ -92,7 +92,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint --ext .tsx .",
-    "check-translations": "node src/libs/translations.checkTranslations.ts"
+    "check-translations": "node src/libs/translations/checkTranslations.ts"
   },
   "eslintConfig": {
     "extends": [
