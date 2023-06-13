@@ -26,23 +26,17 @@ jobs:
       - name: Check translation changes
         run: |
           # Check if the version.ts file has changed
-          if [[ -n $(git diff --name-only HEAD^ HEAD -- src/libs/translations/version.ts) ]]; then
+          if [[ $(git rev-list --count HEAD) -eq 1 ]]; then
             version_changed=true
           else
-            version_changed=false
+            version_changed=$(git diff --name-only HEAD^ HEAD -- src/libs/translations/version.ts)
           fi
 
           # Check if any translation file has changed
-          translations_changed=false
-          while IFS= read -r -d '' file; do
-            if [[ $file =~ /locales/.+/translation\.json ]]; then
-              translations_changed=true
-              break
-            fi
-          done < <(git diff --name-only HEAD^ HEAD)
+          translations_changed=$(git diff --name-only HEAD^ HEAD -- 'public/locales/**/*.json' | grep -E '^public/locales/.+/translation\.json$' || true)
 
           # Fail the job if translations changed but version didn't
-          if [[ $translations_changed == true && $version_changed == false ]]; then
+          if [[ -n $translations_changed && -z $version_changed ]]; then
             echo "Please update the version number"
             exit 1
           fi
