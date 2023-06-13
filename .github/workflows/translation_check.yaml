@@ -54,7 +54,7 @@ jobs:
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
 
              # Pull the latest changes from the remote branch
-            git pull origin "$GITHUB_HEAD_REF"
+            git pull --merge origin "$GITHUB_HEAD_REF"
 
             # Push the commit to the current branch
             git push origin HEAD
