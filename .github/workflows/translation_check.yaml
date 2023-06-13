@@ -52,6 +52,8 @@ jobs:
             git config user.name "Oz's Bot"
             git config user.email "oznasi1@gmail.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
+
+            branch_name=$(echo "${{ github.ref }}" | awk -F'/' '{print $3}')
             git push origin HEAD:"$branch_name"
             echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
