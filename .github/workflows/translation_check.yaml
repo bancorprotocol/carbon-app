@@ -52,7 +52,7 @@ jobs:
             git config user.name "Oz's Bot"
             git config user.email "oznasi1@gmail.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
-            git push
+            git push origin HEAD:"$branch_name"
             echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
             echo "No translation files changed"
