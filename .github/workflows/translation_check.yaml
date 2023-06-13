@@ -44,6 +44,8 @@ jobs:
           remote_branch="origin/$branch"
           version_file_changed=$(git diff --name-only "$remote_branch" -- "src/libs/translations/version.ts" || echo "")
 
+          echo $version_file_changed
+
           if [ "$version_file_changed" = "src/libs/translations/version.ts" ]; then
             echo "Version file (src/libs/translations/version.ts) has not been modified."
             exit 1  # Job Failed
