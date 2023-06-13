@@ -26,7 +26,7 @@ jobs:
       - name: Check translation changes
         run: |
           # Check if the version.ts file has changed
-          if [[ -n $(git diff --name-only HEAD^ HEAD -- src/libs/translations/version.ts) ]]; then
+          if [[ -n $(git diff --name-only $(git rev-list --max-parents=0 HEAD)..HEAD -- src/libs/translations/version.ts) ]]; then
             version_changed=true
           else
             version_changed=false
@@ -35,7 +35,7 @@ jobs:
           # Check if any translation file has changed
           translations_changed=false
           while IFS= read -r -d '' file; do
-            if [[ -n $(git diff --name-only HEAD^ HEAD -- "$file") ]]; then
+            if [[ -n $(git diff --name-only $(git rev-list --max-parents=0 HEAD)..HEAD -- "$file") ]]; then
               translations_changed=true
               break
             fi
