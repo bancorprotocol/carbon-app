@@ -26,7 +26,7 @@ jobs:
       - name: Check for translation changes
         id: changes
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changes.txt
+          git diff --name-only HEAD^ ${{ github.sha }} > changes.txt
           if grep -q "public/locales/es/translation.json" changes.txt; then
             if grep -q "src/libs/translations/version.ts" changes.txt; then
               echo "::set-output name=version_changed::true"
