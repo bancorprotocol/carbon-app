@@ -42,7 +42,12 @@ jobs:
 
           if [ "$translation_files_changed" = true ]; then
               echo "Translation files have been modified."
-              version_file_changed=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E "src/libs/translations/version.ts")
+          else
+            echo "No translation files changed"
+            exit 0  # Job success
+          fi
+
+           version_file_changed=$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E "src/libs/translations/version.ts")
               if [ -n "$version_file_changed" ]; then
                 echo "Version file (src/libs/translations/version.ts) has been modified."
                 exit 0  # Job success
@@ -50,7 +55,3 @@ jobs:
                 echo "Version file (src/libs/translations/version.ts) has not been modified."
                 exit 1  # Job failure
               fi
-          else
-            echo "No translation files changed"
-            exit 0  # Job success
-          fi
