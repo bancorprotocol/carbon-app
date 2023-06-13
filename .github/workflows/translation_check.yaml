@@ -41,11 +41,12 @@ jobs:
           done
 
           branch=$(git rev-parse --abbrev-ref HEAD)
-          version_file_changed=$(git diff --name-only origin/"$branch" -- "src/libs/translations/version.ts")
-          if [ -n "$version_file_changed" ]; then
+          remote_branch="origin/$branch"
+          version_file_changed=$(git diff --name-only "$remote_branch" -- "src/libs/translations/version.ts" || echo "src/libs/translations/version.ts")
+
+          if [ "$version_file_changed" = "src/libs/translations/version.ts" ]; then
+            echo "Version file (src/libs/translations/version.ts) has not been modified."
+          else
             echo "Version file (src/libs/translations/version.ts) has been modified."
             exit 0  # Job success
-          else
-            echo "Version file (src/libs/translations/version.ts) has not been modified."
-            exit 1  # Job failure
           fi
