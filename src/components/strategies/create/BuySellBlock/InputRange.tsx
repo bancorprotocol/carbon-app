@@ -1,12 +1,12 @@
 import { ChangeEvent, FC, FocusEvent } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { sanitizeNumberInput } from 'utils/helpers';
-import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
+import { Token } from 'libs/tokens';
+import { useTranslation } from 'libs/translations';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { useTranslation } from 'libs/translations';
 
 export const InputRange: FC<{
   min: string;

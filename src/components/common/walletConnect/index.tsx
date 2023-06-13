@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
@@ -60,7 +59,7 @@ export const WalletConnect = () => {
           </p>
 
           <Button
-            className="space-s-16 flex items-center justify-center"
+            className="flex items-center justify-center space-s-16"
             variant={'success'}
             onClick={() => openModal('wallet', undefined)}
             fullWidth
@@ -81,7 +80,7 @@ export const WalletConnect = () => {
         </div>
         <div className={'flex h-full flex-col justify-center space-y-33'}>
           {items.map((item, index) => (
-            <div className={'space-s-20 flex items-center'} key={index}>
+            <div className={'flex items-center space-s-20'} key={index}>
               {item.icon}
               <span className={'text-white/80'}>{item.title}</span>
             </div>

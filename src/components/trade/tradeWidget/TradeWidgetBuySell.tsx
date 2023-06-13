@@ -233,7 +233,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             setValue={(value) => {
               setTargetInput(value);
             }}
-            placeholder={t('common.placeholders.placeholder3') || ''}
+            placeholder={t('common.placeholders.placeholder3')}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}

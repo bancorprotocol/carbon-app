@@ -2,7 +2,7 @@ import { carbonEvents } from 'services/events';
 import { useLocation } from 'libs/routing';
 import { useTranslation } from 'libs/translations';
 import { EditTypes } from './EditStrategyMain';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 
 type EditStrategyHeaderProps = {
@@ -39,7 +39,9 @@ export const EditStrategyHeader = ({
           onClick={() => back()}
           className="h-40 w-40 rounded-full bg-emphasis"
         >
-          <IconChevron className="mx-auto w-14 rotate-90" />
+          <div className="rotate-180">
+            <ForwardArrow className="mx-auto w-14" />
+          </div>
         </button>
         {(type && titleByType[type]) || ''}
       </div>

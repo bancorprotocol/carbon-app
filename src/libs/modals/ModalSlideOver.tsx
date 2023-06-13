@@ -1,8 +1,9 @@
 import { FC, ReactNode } from 'react';
-import { useModal } from 'hooks/useModal';
 import { m, Variants } from 'libs/motion';
-import { ReactComponent as IconX } from 'assets/icons/X.svg';
+import { i18n } from 'libs/translations';
 import { Overlay } from 'libs/modals/Overlay';
+import { useModal } from 'hooks/useModal';
+import { ReactComponent as IconX } from 'assets/icons/X.svg';
 
 type Props = {
   children: ReactNode;
@@ -33,6 +34,28 @@ export const ModalSlideOver: FC<Props> = ({
   const { closeModal } = useModal();
 
   const sizeClass = getSize(size);
+
+  const dropIn: Variants = {
+    hidden: {
+      x: i18n.dir() === 'ltr' ? '100vh' : '-100vh',
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delay: 0,
+        duration: 0.5,
+      },
+    },
+    exit: {
+      x: i18n.dir() === 'ltr' ? '100vh' : '-100vh',
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
 
   return (
     <Overlay onClick={() => closeModal(id)} className={`justify-end`}>
@@ -71,26 +94,4 @@ export const ModalSlideOver: FC<Props> = ({
       </m.div>
     </Overlay>
   );
-};
-
-const dropIn: Variants = {
-  hidden: {
-    x: '100vh',
-  },
-  visible: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delay: 0,
-      duration: 0.5,
-    },
-  },
-  exit: {
-    x: '100vh',
-    opacity: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
 };

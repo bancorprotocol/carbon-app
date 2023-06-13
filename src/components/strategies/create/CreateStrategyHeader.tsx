@@ -7,6 +7,7 @@ import { m } from 'libs/motion';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { carbonEvents } from 'services/events';
 import { useTranslation } from 'libs/translations';
+import { ForwardArrow } from 'components/common/forwardArrow';
 
 export const CreateStrategyHeader = ({
   showGraph,
@@ -44,7 +45,9 @@ export const CreateStrategyHeader = ({
           onClick={() => back()}
           className="h-40 w-40 rounded-full bg-emphasis"
         >
-          <IconChevron className="mx-auto w-14 rotate-90" />
+          <div className="rotate-180">
+            <ForwardArrow className="mx-auto w-14" />
+          </div>
         </button>
         {title}
       </div>

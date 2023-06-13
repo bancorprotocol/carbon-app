@@ -1,11 +1,11 @@
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { Token } from 'libs/tokens';
 import { ChangeEvent, FC, FocusEvent } from 'react';
 import { carbonEvents } from 'services/events';
+import { Token } from 'libs/tokens';
+import { useTranslation } from 'libs/translations';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { useTranslation } from 'libs/translations';
 
 export const InputLimit: FC<{
   price: string;
