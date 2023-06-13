@@ -1,11 +1,12 @@
-import { Imager } from 'components/common/imager/Imager';
 import { FC, useState } from 'react';
-import iconLedger from 'assets/logos/ledger.svg';
-import iconTrezor from 'assets/logos/trezor.svg';
+import { Trans, useTranslation } from 'libs/translations';
+import { Link, PathNames } from 'libs/routing';
 import { Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
-import { Link, PathNames } from 'libs/routing';
+import { Imager } from 'components/common/imager/Imager';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
+import iconLedger from 'assets/logos/ledger.svg';
+import iconTrezor from 'assets/logos/trezor.svg';
 
 type Props = {
   onClick: (c: Connection) => Promise<void>;
@@ -30,36 +31,34 @@ const EXT_LINKS = [
 ];
 
 export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
+  const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
 
   const isDisabled = isLoading || !checked;
 
+  // TODO: Check Trans translation here - working good but not so readable
   return (
     <div className={'space-y-10'}>
       <div className={'mb-20 space-y-10 text-14 text-white/80'}>
         <p>
-          By connecting my wallet, I agree to the{' '}
-          <Link
-            to={PathNames.terms}
-            target={'_blank'}
-            className={'font-weight-500 text-white'}
-          >
-            terms & conditions
-          </Link>{' '}
-          and{' '}
-          <Link
-            target={'_blank'}
-            to={PathNames.privacy}
-            className={'font-weight-500 text-white'}
-          >
-            cookie & privacy policy
-          </Link>{' '}
-          of this site.{' '}
+          <Trans i18nKey={'modals.connectWallet.content1'}>
+            {''}
+            <Link
+              target={'_blank'}
+              to={PathNames.terms}
+              className={'font-weight-500 text-white'}
+            />
+            <Link
+              target={'_blank'}
+              to={PathNames.privacy}
+              className={'font-weight-500 text-white'}
+            />
+          </Trans>
         </p>
         <div className={'flex items-center space-x-10'}>
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
-            I read and accept
+            {t('modals.connectWallet.actionButton')}
           </button>
         </div>
       </div>

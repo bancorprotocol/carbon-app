@@ -10,6 +10,7 @@ import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
+import { useTranslation } from 'libs/translations';
 
 export const CreateStrategyOrders = ({
   base,
@@ -27,6 +28,7 @@ export const CreateStrategyOrders = ({
   isAwaiting,
   isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
+  const { t } = useTranslation();
   const { user } = useWeb3();
   const strategyEventData = useStrategyEventData({
     base,
@@ -72,7 +74,11 @@ export const CreateStrategyOrders = ({
             </div>
           }
 
-          <div className="text-secondary capitalize">{strategyType}</div>
+          <div className="text-secondary capitalize">
+            {strategyType === 'recurring'
+              ? t('pages.strategyCreate.step2.section1.titles.title1')
+              : t('pages.strategyCreate.step2.section1.titles.title2')}
+          </div>
         </div>
       </m.div>
 
@@ -113,7 +119,9 @@ export const CreateStrategyOrders = ({
           loading={isProcessing || isAwaiting}
           loadingChildren={loadingChildren}
         >
-          {user ? 'Create Strategy' : 'Connect Wallet'}
+          {user
+            ? t('pages.strategyCreate.step2.actionButton')
+            : t('common.actionButtons.actionButton1')}
         </Button>
       </m.div>
     </>

@@ -14,6 +14,7 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
+import { useTranslation } from 'libs/translations';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -26,6 +27,7 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
+  const { t } = useTranslation();
   const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
     useUpdateStrategy();
 
@@ -192,7 +194,9 @@ export const EditStrategyBudgetContent = ({
         size="lg"
         fullWidth
       >
-        {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
+        {type === 'withdraw'
+          ? t('pages.strategyEdit.actionButtons.actionButton4')
+          : t('pages.strategyEdit.actionButtons.actionButton5')}
       </Button>
       <Button
         onClick={() => back()}
@@ -202,7 +206,7 @@ export const EditStrategyBudgetContent = ({
         size="lg"
         fullWidth
       >
-        Cancel
+        {t('pages.strategyEdit.actionButtons.actionButton1')}
       </Button>
     </div>
   );

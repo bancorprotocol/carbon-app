@@ -1,0 +1,606 @@
+{
+  "common": {
+    "placeholders": {
+      "placeholder1": "xxxxxxxxxxx",
+      "placeholder2": "xxxxxxxxxxx",
+      "placeholder3": "xxxxxxxxxxx",
+      "placeholder4": "xxxxxxxxxxx",
+      "placeholder5": "xxxxxxxxxxx"
+    },
+    "actionButtons": {
+      "actionButton1": "xxxxxxxxxxx",
+      "actionButton2": "xxxxxxxxxxx",
+      "actionButton3": "xxxxxxxxxxx",
+      "actionButton4": "xxxxxxxxxxx",
+      "actionButton5": "xxxxxxxxxxx",
+      "actionButton6": "xxxxxxxxxxx",
+      "actionButton7": "xxxxxxxxxxx",
+      "actionButton8": "xxxxxxxxxxx"
+    },
+    "warnings": {
+      "warning1": "xxxxxxxxxxx",
+      "warning2": "xxxxxxxxxxx",
+      "warning3": "xxxxxxxxxxx"
+    },
+    "errors": {
+      "error1": "xxxxxxxxxxx",
+      "error2": "xxxxxxxxxxx",
+      "error3": "xxxxxxxxxxx",
+      "error4": "xxxxxxxxxxx"
+    },
+    "tooltips": {
+      "tooltip1": "xxxxxxxxxxx",
+      "tooltip2": "xxxxxxxxxxx",
+      "tooltip3": "xxxxxxxxxxx",
+      "tooltip4": "xxxxxxxxxxx",
+      "tooltip5": "xxxxxxxxxxx",
+      "tooltip6": "xxxxxxxxxxx",
+      "tooltip7": "xxxxxxxxxxx"
+    },
+    "statuses": {
+      "status1": "xxxxxxxxxxx",
+      "status2": "xxxxxxxxxxx"
+    },
+    "contents": {
+      "content1": "xxxxxxxxxxx",
+      "content2": "xxxxxxxxxxx",
+      "content3": "xxxxxxxxxxx",
+      "content4": "xxxxxxxxxxx",
+      "content5": "xxxxxxxxxxx",
+      "content6": "xxxxxxxxxxx",
+      "content7": "xxxxxxxxxxx",
+      "content8": "xxxxxxxxxxx",
+      "content9": "xxxxxxxxxxx",
+      "content10": "xxxxxxxxxxx"
+    }
+  },
+  "modals": {
+    "deleteStrategy": {
+      "modalTitle": "xxxxxxxxxxx",
+      "title": "xxxxxxxxxxx",
+      "contents": {
+        "content1": "xxxxxxxxxxx",
+        "content2": "xxxxxxxxxxx"
+      },
+      "actionButtons": {
+        "actionButton1": "xxxxxxxxxxx",
+        "actionButton2": "xxxxxxxxxxx"
+      }
+    },
+    "pauseStrategy": {
+      "modalTitle": "xxxxxxxxxxx",
+      "title": "xxxxxxxxxxx",
+      "content": "xxxxxxxxxxx",
+      "actionButtons": {
+        "actionButton1": "xxxxxxxxxxx",
+        "actionButton2": "xxxxxxxxxxx"
+      }
+    },
+    "selectToken": {
+      "modalTitle": "xxxxxxxxxxx",
+      "actionButton": "xxxxxxxxxxx",
+      "contents": {
+        "content1": "xxxxxxxxxxx",
+        "content2": "xxxxxxxxxxx",
+        "content3": "xxxxxxxxxxx"
+      }
+    },
+    "selectTokenPair": {
+      "modalTitle": "xxxxxxxxxxx",
+      "error1": "xxxxxxxxxxx"
+    },
+    "tradeSettings": {
+      "modalTitle": "xxxxxxxxxxx",
+      "actionButton": "xxxxxxxxxxx",
+      "section1": {
+        "title": "xxxxxxxxxxx"
+      },
+      "section2": {
+        "title": "xxxxxxxxxxx"
+      }
+    },
+    "connectWallet": {
+      "modalTitle": "xxxxxxxxxxx",
+      "actionButton": "xxxxxxxxxxx",
+      "content1": "xxxxxxxxxxx",
+      "error1": "xxxxxxxxxxx"
+    },
+    "confirm": {
+      "modalTitle": "xxxxxxxxxxx",
+      "subtitle": "xxxxxxxxxxx",
+      "contents": {
+        "content1": "xxxxxxxxxxx",
+        "content2": "xxxxxxxxxxx",
+        "content3": "xxxxxxxxxxx"
+      },
+      "actionButtons": {
+        "actionButton1": "xxxxxxxxxxx",
+        "actionButton2": "xxxxxxxxxxx",
+        "actionButton3": "xxxxxxxxxxx",
+        "actionButton4": "xxxxxxxxxxx",
+        "actionButton5": "xxxxxxxxxxx"
+      },
+      "statuses": {
+        "status1": "xxxxxxxxxxx",
+        "status2": "xxxxxxxxxxx",
+        "status3": "xxxxxxxxxxx"
+      }
+    },
+    "tradeRouting": {
+      "modalTitle": "xxxxxxxxxxx",
+      "section1": {
+        "title1": "xxxxxxxxxxx",
+        "header1": "xxxxxxxxxxx"
+      },
+      "section2": {
+        "title1": "xxxxxxxxxxx"
+      },
+      "actionButtons": {
+        "actionButton1": "xxxxxxxxxxx",
+        "actionButton2": "xxxxxxxxxxx"
+      },
+      "tooltips": {
+        "tooltip1": "xxxxxxxxxxx",
+        "tooltip2": "xxxxxxxxxxx"
+      }
+    },
+    "restrictedCountry": {
+      "modalTitle": "xxxxxxxxxxx"
+    },
+    "notification": {
+      "modalTitle": "xxxxxxxxxxx",
+      "actionButton1": "xxxxxxxxxxx",
+      "content1": "xxxxxxxxxxx"
+    },
+    "importToken": {
+      "modalTitle": "xxxxxxxxxxx",
+      "contents": {
+        "content1": "xxxxxxxxxxx",
+        "content2": "xxxxxxxxxxx",
+        "content3": "xxxxxxxxx"
+      },
+      "actionButtons": {
+        "actionButton1": "xxxxxxxxxxx",
+        "actionButton2": "xxxxxxxxxxx"
+      },
+      "title": "xxxxxxxxxxx"
+    }
+  },
+  "navBar": {
+    "actionButton": "xxxxxxxxxxx",
+    "items": {
+      "item1": "xxxxxxxxxxx",
+      "item2": "xxxxxxxxxxx",
+      "item3": "xxxxxxxxxxx"
+    },
+    "burgerMenu": {
+      "items": {
+        "item1": "xxxxxxxxxxx",
+        "item2": "xxxxxxxxxxx",
+        "item3": "xxxxxxxxxxx",
+        "item4": "xxxxxxxxxxx",
+        "item5": "xxxxxxxxxxx",
+        "item6": "xxxxxxxxxxx",
+        "item7": "xxxxxxxxxxx",
+        "item8": "xxxxxxxxxxx",
+        "item9": "xxxxxxxxxxx",
+        "item10": "xxxxxxxxxxx",
+        "item11": "xxxxxxxxxxx",
+        "item12": "xxxxxxxxxxx",
+        "item13": "xxxxxxxxxxx"
+      }
+    },
+    "walletMenu": {
+      "states": {
+        "state1": "xxxxxxxxxxx",
+        "state2": "xxxxxxxxxxx",
+        "state3": "xxxxxxxxxxx"
+      },
+      "items": {
+        "item1": "xxxxxxxxxxx",
+        "item2": "xxxxxxxxxxx",
+        "item3": "xxxxxxxxxxx"
+      }
+    }
+  },
+  "notifications": {
+    "titles": {
+      "titles1": "xxxxxxxxxxx",
+      "titles2": "xxxxxxxxxxx",
+      "titles3": "xxxxxxxxxxx",
+      "titles4": "xxxxxxxxxxx",
+      "titles5": "xxxxxxxxxxx",
+      "titles6": "xxxxxxxxxxx",
+      "titles7": "xxxxxxxxxxx",
+      "titles8": "xxxxxxxxxxx",
+      "titles9": "xxxxxxxxxxx",
+      "titles10": "xxxxxxxxxxx",
+      "titles11": "xxxxxxxxxxx",
+      "titles12": "xxxxxxxxxxx",
+      "titles13": "xxxxxxxxxxx",
+      "titles14": "xxxxxxxxxxx",
+      "titles15": "xxxxxxxxxxx",
+      "titles16": "xxxxxxxxxxx",
+      "titles17": "xxxxxxxxxxx",
+      "titles18": "xxxxxxxxxxx",
+      "titles19": "xxxxxxxxxxx",
+      "titles20": "xxxxxxxxxxx",
+      "titles21": "xxxxxxxxxxx",
+      "titles22": "xxxxxxxxxxx",
+      "titles23": "xxxxxxxxxxx",
+      "titles24": "xxxxxxxxxxx",
+      "titles25": "xxxxxxxxxxx",
+      "titles26": "xxxxxxxxxxx",
+      "titles27": "xxxxxxxxxxx",
+      "titles28": "xxxxxxxxxxx",
+      "titles29": "xxxxxxxxxxx",
+      "titles30": "xxxxxxxxxxx",
+      "titles31": "xxxxxxxxxxx",
+      "titles32": "xxxxxxxxxxx",
+      "titles33": "xxxxxxxxxxx",
+      "titles34": "xxxxxxxxxxx",
+      "titles35": "xxxxxxxxxxx"
+    },
+    "descriptions": {
+      "description1": "xxxxxxxxxxx",
+      "description2": "xxxxxxxxxxx",
+      "description3": "xxxxxxxxxxx",
+      "description4": "xxxxxxxxxxx",
+      "description5": "xxxxxxxxxxx",
+      "description6": "xxxxxxxxxxx",
+      "description7": "xxxxxxxxxxx",
+      "description8": "xxxxxxxxxxx",
+      "description9": "xxxxxxxxxxx",
+      "description10": "xxxxxxxxxxx",
+      "description11": "xxxxxxxxxxx",
+      "description12": "xxxxxxxxxxx",
+      "description13": "xxxxxxxxxxx",
+      "description14": "xxxxxxxxxxx",
+      "description15": "xxxxxxxxxxx",
+      "description16": "xxxxxxxxxxx",
+      "description17": "xxxxxxxxxxx",
+      "description18": "xxxxxxxxxxx",
+      "description19": "xxxxxxxxxxx",
+      "description20": "xxxxxxxxxxx",
+      "description21": "xxxxxxxxxxx",
+      "description22": "xxxxxxxxxxx",
+      "description23": "xxxxxxxxxxx",
+      "description24": "xxxxxxxxxxx",
+      "description25": "xxxxxxxxxxx",
+      "description26": "xxxxxxxxxxx",
+      "description27": "xxxxxxxxxxx",
+      "description28": "xxxxxxxxxxx",
+      "description29": "xxxxxxxxxxx",
+      "description30": "xxxxxxxxxxx",
+      "description31": "xxxxxxxxxxx",
+      "description32": "xxxxxxxxxxx",
+      "description33": "xxxxxxxxxxx",
+      "description34": "xxxxxxxxxxx",
+      "description35": "xxxxxxxxxxx",
+      "description36": "xxxxxxxxxxx",
+      "description37": "xxxxxxxxxxx"
+    }
+  },
+  "pages": {
+    "strategyOverview": {
+      "noStrategyCard": {
+        "title": "xxxxxxxxxxx",
+        "subtitle": "xxxxxxxxxxx",
+        "actionButton": "xxxxxxxxxxx",
+        "contents": {
+          "content1": "xxxxxxxxxxx",
+          "content2": "xxxxxxxxxxx",
+          "content3": "xxxxxxxxxxx",
+          "content4": "xxxxxxxxxxx",
+          "content5": "xxxxxxxxxxx",
+          "content6": "xxxxxxxxxxx",
+          "content7": "xxxxxxxxxxx"
+        }
+      },
+      "header": {
+        "title_zero": "xxxxxxxxxxx",
+        "title_one": "xxxxxxxxxxx",
+        "title_other": "xxxxxxxxxxx",
+        "actionButtons": {
+          "actionButton1": "xxxxxxxxxxx",
+          "actionButton2": "xxxxxxxxxxx"
+        },
+        "filterMenu": {
+          "items": {
+            "item1": "xxxxxxxxxxx",
+            "item2": "xxxxxxxxxxx",
+            "item3": "xxxxxxxxxxx",
+            "item4": "xxxxxxxxxxx",
+            "item5": "xxxxxxxxxxx",
+            "item6": "xxxxxxxxxxx",
+            "item7": "xxxxxxxxxxx"
+          },
+          "subtitles": {
+            "subtitle1": "xxxxxxxxxxx",
+            "subtitle2": "xxxxxxxxxxx"
+          }
+        }
+      },
+      "card": {
+        "title": "xxxxxxxxxxx",
+        "actionButtons": {
+          "actionButton1": "xxxxxxxxxxx",
+          "actionButton2": "xxxxxxxxxxx",
+          "actionButton3": "xxxxxxxxxxx"
+        },
+        "section1": {
+          "title": "xxxxxxxxxxx",
+          "contents": {
+            "content1": "xxxxxxxxxxx",
+            "content2": "xxxxxxxxxxx",
+            "content3": "xxxxxxxxxxx"
+          }
+        },
+        "section2": {
+          "title": "xxxxxxxxxxx",
+          "contents": {
+            "content1": "xxxxxxxxxxx",
+            "content2": "xxxxxxxxxxx",
+            "content3": "xxxxxxxxxxx"
+          }
+        },
+        "section3": {
+          "title": "xxxxxxxxxxx",
+          "statuses": {
+            "status1": "xxxxxxxxxxx",
+            "status2": "xxxxxxxxxxx",
+            "status3": "xxxxxxxxxxx",
+            "status4": "xxxxxxxxxxx"
+          },
+          "notification": {
+            "title": "xxxxxxxxxxx",
+            "content1": "xxxxxxxxxxx",
+            "content2": "xxxxxxxxxxx",
+            "actionButton": "xxxxxxxxxxx"
+          }
+        },
+        "tooltips": {
+          "tooltip1": "xxxxxxxxxxx",
+          "tooltip2": "xxxxxxxxxxx",
+          "tooltip3": "xxxxxxxxxxx",
+          "tooltip4": "xxxxxxxxxxx",
+          "tooltip5": "xxxxxxxxxxx",
+          "tooltip6": "xxxxxxxxxxx",
+          "tooltip7": "xxxxxxxxxxx",
+          "tooltip8": "xxxxxxxxxxx",
+          "tooltip9": "xxxxxxxxxxx",
+          "tooltip10": "xxxxxxxxxxx",
+          "tooltip11": "xxxxxxxxxxx"
+        },
+        "manageStrategy": {
+          "titles": {
+            "title1": "xxxxxxxxxxx",
+            "title2": "xxxxxxxxxxx",
+            "title3": "xxxxxxxxxxx",
+            "title4": "xxxxxxxxxxx",
+            "title5": "xxxxxxxxxxx",
+            "title6": "xxxxxxxxxxx",
+            "title7": "xxxxxxxxxxx"
+          },
+          "tooltips": {
+            "tooltip1": "xxxxxxxxxxx",
+            "tooltip2": "xxxxxxxxxxx",
+            "tooltip3": "xxxxxxxxxxx",
+            "tooltip4": "xxxxxxxxxxx",
+            "tooltip5": "xxxxxxxxxxx",
+            "tooltip6": "xxxxxxxxxxx",
+            "tooltip7": "xxxxxxxxxxx"
+          }
+        }
+      }
+    },
+    "strategyCreate": {
+      "step1": {
+        "title": "xxxxxxxxxxx",
+        "section1": {
+          "title": "xxxxxxxxxxx",
+          "contents": {
+            "content1": "xxxxxxxxxxx",
+            "content2": "xxxxxxxxxxx",
+            "content3": "xxxxxxxxxxx"
+          }
+        },
+        "section2": {
+          "title": "xxxxxxxxxxx",
+          "strategyTypes": {
+            "type1": {
+              "title": "xxxxxxxxxxx",
+              "contents": {
+                "content1": "xxxxxxxxxxx",
+                "content2": "xxxxxxxxxxx"
+              },
+              "options": {
+                "option1": "xxxxxxxxxxx",
+                "option2": "xxxxxxxxxxx",
+                "option3": "xxxxxxxxxxx"
+              }
+            },
+            "type2": {
+              "title": "xxxxxxxxxxx",
+              "contents": {
+                "content1": "xxxxxxxxxxx",
+                "content2": "xxxxxxxxxxx"
+              },
+              "options": {
+                "option1": "xxxxxxxxxxx",
+                "option2": "xxxxxxxxxxx",
+                "option3": "xxxxxxxxxxx",
+                "option4": "xxxxxxxxxxx"
+              }
+            }
+          }
+        },
+        "tooltips": {
+          "tooltip1": "xxxxxxxxxxx",
+          "tooltip2": "xxxxxxxxxxx",
+          "tooltip3": "xxxxxxxxxxx"
+        },
+        "actionButton": "xxxxxxxxxxx"
+      },
+      "step2": {
+        "title_one": "xxxxxxxxxxx",
+        "title_other": "xxxxxxxxxxx",
+        "chart": {
+          "title": "xxxxxxxxxxx",
+          "actionButton": "xxxxxxxxxxx"
+        },
+        "section1": {
+          "titles": {
+            "title1": "xxxxxxxxxxx",
+            "title2": "xxxxxxxxxxx"
+          }
+        },
+        "section2": {
+          "titles": {
+            "title1": "xxxxxxxxxxx",
+            "title2": "xxxxxxxxxxx"
+          },
+          "subtitles": {
+            "subtitle1": "xxxxxxxxxxx",
+            "subtitle2": "xxxxxxxxxxx",
+            "subtitle3": "xxxxxxxxxxx",
+            "subtitle4": "xxxxxxxxxxx"
+          },
+          "contents": {
+            "content1": "xxxxxxxxxxx",
+            "content2": "xxxxxxxxxxx",
+            "content3": "xxxxxxxxxxx",
+            "content4": "xxxxxxxxxxx",
+            "content5": "xxxxxxxxxxx"
+          }
+        },
+        "tooltips": {
+          "tooltip1": "xxxxxxxxxxx",
+          "tooltip2": "xxxxxxxxxxx",
+          "tooltip3": "xxxxxxxxxxx",
+          "tooltip4": "xxxxxxxxxxx",
+          "tooltip5": "xxxxxxxxxxx",
+          "tooltip6": "xxxxxxxxxxx",
+          "tooltip7": "xxxxxxxxxxx",
+          "tooltip8": "xxxxxxxxxxx"
+        },
+        "actionButton": "xxxxxxxxxxx"
+      }
+    },
+    "strategyEdit": {
+      "titles": {
+        "title1": "xxxxxxxxxxx",
+        "title2": "xxxxxxxxxxx",
+        "title3": "xxxxxxxxxxx",
+        "title4": "xxxxxxxxxxx"
+      },
+      "chart": {
+        "title": "xxxxxxxxxxx",
+        "actionButton": "xxxxxxxxxxx"
+      },
+      "section1": {
+        "title": "xxxxxxxxxxx"
+      },
+      "section2": {
+        "titles": {
+          "title1": "xxxxxxxxxxx",
+          "title2": "xxxxxxxxxxx",
+          "title3": "xxxxxxxxxxx",
+          "title4": "xxxxxxxxxxx"
+        },
+        "subtitles": {
+          "subtitle1": "xxxxxxxxxxx",
+          "subtitle2": "xxxxxxxxxxx"
+        },
+        "contents": {
+          "content1": "xxxxxxxxxxx",
+          "content2": "xxxxxxxxxxx",
+          "content3": "xxxxxxxxxxx",
+          "content4": "xxxxxxxxxxx",
+          "content5": "xxxxxxxxxxx",
+          "content6": "xxxxxxxxxxx",
+          "content7": "xxxxxxxxxxx",
+          "content9": "xxxxxxxxxxx",
+          "content10": "xxxxxxxxxxx",
+          "content11": "xxxxxxxxxxx",
+          "content12": "xxxxxxxxxxx"
+        }
+      },
+      "tooltips": {
+        "tooltip1": "xxxxxxxxxxx",
+        "tooltip2": "xxxxxxxxxxx",
+        "tooltip3": "xxxxxxxxxxx",
+        "tooltip4": "xxxxxxxxxxx"
+      },
+      "actionButtons": {
+        "actionButton1": "xxxxxxxxxxx",
+        "actionButton2": "xxxxxxxxxxx",
+        "actionButton3": "xxxxxxxxxxx",
+        "actionButton4": "xxxxxxxxxxx",
+        "actionButton5": "xxxxxxxxxxx"
+      }
+    },
+    "trade": {
+      "errors": {
+        "error1": "xxxxxxxxxxx",
+        "error2": "xxxxxxxxxxx",
+        "error3": "xxxxxxxxxxx",
+        "error4": "xxxxxxxxxxx",
+        "error5": "xxxxxxxxxxx",
+        "error6": "xxxxxxxxxxx",
+        "error7": "xxxxxxxxxxx",
+        "error8": "xxxxxxxxxxx",
+        "error9": "xxxxxxxxxxx"
+      },
+      "section1": {
+        "title": "xxxxxxxxxxx",
+        "headers": {
+          "header1": "xxxxxxxxxxx",
+          "header2": "xxxxxxxxxxx",
+          "header3": "xxxxxxxxxxx"
+        },
+        "tooltips": {
+          "tooltip1": "xxxxxxxxxxx",
+          "tooltip2": "xxxxxxxxxxx",
+          "tooltip3": "xxxxxxxxxxx",
+          "tooltip4": "xxxxxxxxxxx"
+        }
+      },
+      "section2": {
+        "titles": {
+          "title1": "xxxxxxxxxxx",
+          "title2": "xxxxxxxxxxx"
+        },
+        "subtitles": {
+          "subtitle1": "xxxxxxxxxxx",
+          "subtitle2": "xxxxxxxxxxx"
+        },
+        "actionButtons": {
+          "actionButton1": "xxxxxxxxxxx",
+          "actionButton2": "xxxxxxxxxxx",
+          "actionButton3": "xxxxxxxxxxx",
+          "actionButton4": "xxxxxxxxxxx",
+          "actionButton5": "xxxxxxxxxxx",
+          "actionButton6": "xxxxxxxxxxx"
+        },
+        "contents": {
+          "content1": "xxxxxxxxxxx",
+          "content2": "xxxxxxxxxxx"
+        },
+        "tooltips": {
+          "tooltip1": "xxxxxxxxxxx"
+        }
+      },
+      "section3": {
+        "actionButtons": {
+          "actionButton1": "xxxxxxxxxxx",
+          "actionButton2": "xxxxxxxxxxx"
+        },
+        "tooltips": {
+          "tooltip1": "xxxxxxxxxxx",
+          "tooltip2": "xxxxxxxxxxx"
+        }
+      }
+    }
+  }
+}

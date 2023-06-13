@@ -17,6 +17,7 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -29,6 +30,7 @@ export const StrategyBlockManage: FC<{
   manage: boolean;
   setManage: (flag: boolean) => void;
 }> = ({ strategy, manage, setManage }) => {
+  const { t } = useTranslation();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
@@ -50,7 +52,7 @@ export const StrategyBlockManage: FC<{
   const items: itemsType[] = [
     {
       id: 'deleteStrategy',
-      name: 'Delete Strategy',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title1'),
       action: () => {
         carbonEvents.strategyEdit.strategyDeleteClick({
           ...strategyEventData,
@@ -61,7 +63,7 @@ export const StrategyBlockManage: FC<{
     },
     {
       id: 'editPrices',
-      name: 'Edit Prices',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title2'),
       action: () => {
         setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyChangeRatesClick({
@@ -76,7 +78,7 @@ export const StrategyBlockManage: FC<{
     },
     {
       id: 'depositFunds',
-      name: 'Deposit Funds',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title3'),
       action: () => {
         setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyDepositClick({
@@ -93,7 +95,7 @@ export const StrategyBlockManage: FC<{
   if (strategy.status !== StrategyStatus.NoBudget) {
     items.push({
       id: 'withdrawFunds',
-      name: 'Withdraw Funds',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title4'),
       action: () => {
         setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyWithdrawClick({
@@ -110,7 +112,7 @@ export const StrategyBlockManage: FC<{
   if (belowBreakpoint('md')) {
     items.push({
       id: 'duplicateStrategy',
-      name: 'Duplicate Strategy',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title5'),
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick({
           ...strategyEventData,
@@ -123,7 +125,7 @@ export const StrategyBlockManage: FC<{
   if (strategy.status === StrategyStatus.Active) {
     items.push({
       id: 'pauseStrategy',
-      name: 'Pause Strategy',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title6'),
       action: () => {
         carbonEvents.strategyEdit.strategyPauseClick({
           ...strategyEventData,
@@ -137,7 +139,7 @@ export const StrategyBlockManage: FC<{
   if (strategy.status === StrategyStatus.Paused) {
     items.push({
       id: 'renewStrategy',
-      name: 'Renew Strategy',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title7'),
       action: () => {
         carbonEvents.strategyEdit.strategyRenewClick({
           ...strategyEventData,
@@ -164,7 +166,7 @@ export const StrategyBlockManage: FC<{
             variant={'success-light'}
             onClick={onClick}
           >
-            Manage
+            {t('pages.strategyOverview.card.actionButtons.actionButton3')}
             <IconChevron className="w-12" />
           </Button>
         </div>

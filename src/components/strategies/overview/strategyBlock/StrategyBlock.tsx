@@ -13,8 +13,10 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { useOrder } from 'components/strategies/create/useOrder';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
+  const { t } = useTranslation();
   const [manage, setManage] = useState(false);
   const { duplicate } = useDuplicateStrategy();
   const showBudgetWarning = useBudgetWarning(
@@ -63,10 +65,14 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
               </div>
             }
 
-            <div className="text-secondary flex">ID: {strategy.idDisplay}</div>
+            <div className="text-secondary flex">
+              {t('pages.strategyOverview.card.title', {
+                id: strategy.idDisplay,
+              })}
+            </div>
           </div>
         </div>
-        <Tooltip element="Duplicate Strategy">
+        <Tooltip element={t('pages.strategyOverview.card.tooltips.tooltip11')}>
           <span
             className={`pointer-events-none flex h-40 w-40 items-center justify-center rounded-8 border-2 border-emphasis bg-emphasis opacity-0 transition duration-300 ease-in-out hover:border-grey3 md:pointer-events-auto md:group-hover:opacity-100`}
             onClick={handleOnDuplicateClick}

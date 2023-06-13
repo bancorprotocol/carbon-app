@@ -1,11 +1,12 @@
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Token } from 'libs/tokens';
-import { SearchInput } from 'components/common/searchInput';
 import { useModalTradeTokenList } from 'libs/modals/modals/ModalTradeTokenList/useModalTradeTokenList';
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
+import { useTranslation } from 'libs/translations';
+import { SearchInput } from 'components/common/searchInput';
 
 export type TradePair = {
   baseToken: Token;
@@ -20,6 +21,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   id,
   data,
 }) => {
+  const { t } = useTranslation();
   const {
     tradePairs,
     isLoading,
@@ -34,7 +36,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   } = useModalTradeTokenList({ id, data });
 
   return (
-    <Modal id={id} title="Select Token Pair">
+    <Modal id={id} title={t('modals.selectTokenPair.modalTitle')}>
       <SearchInput
         autoFocus
         value={search}

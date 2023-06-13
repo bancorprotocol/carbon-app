@@ -6,6 +6,7 @@ import { items } from 'components/strategies/create/variants';
 import { m } from 'libs/motion';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 export const CreateStrategyHeader = ({
   showGraph,
@@ -13,21 +14,22 @@ export const CreateStrategyHeader = ({
   setShowGraph,
   strategyDirection,
 }: UseStrategyCreateReturn) => {
+  const { t } = useTranslation();
   const {
     history: { back },
   } = useLocation();
 
   const title = useMemo(() => {
     if (!showOrders) {
-      return 'Create Strategy';
+      return t('pages.strategyCreate.step1.title');
     }
     switch (strategyDirection) {
       case undefined:
-        return 'Set Prices';
+        return t('pages.strategyCreate.step2.title', { count: 2 });
       default:
-        return 'Set Price';
+        return t('pages.strategyCreate.step2.title', { count: 1 });
     }
-  }, [showOrders, strategyDirection]);
+  }, [showOrders, strategyDirection, t]);
 
   return (
     <m.div

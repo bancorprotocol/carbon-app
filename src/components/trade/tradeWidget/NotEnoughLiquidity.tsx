@@ -1,6 +1,7 @@
+import { Token } from 'libs/tokens';
+import { useTranslation } from 'libs/translations';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { Token } from 'libs/tokens';
 
 export type NotEnoughLiquidityProps = {
   source: Token;
@@ -11,6 +12,7 @@ export const NotEnoughLiquidity = ({
   source,
   target,
 }: NotEnoughLiquidityProps) => {
+  const { t } = useTranslation();
   const { duplicate } = useDuplicateStrategy();
 
   return (
@@ -22,15 +24,17 @@ export const NotEnoughLiquidity = ({
         <div className="mb-16 flex flex h-38 w-38 items-center justify-center rounded-full bg-red/10">
           <IconWarning className="h-16 w-16 fill-red/100" />
         </div>
-        <div className="mb-8 font-weight-500">No Liquidity Available</div>
-        <div>No available orders at this moment.</div>
+        <div className="mb-8 font-weight-500">
+          {t('pages.trade.errors.error3')}
+        </div>
+        <div>{t('pages.trade.errors.error8')}</div>
         <div>
-          {`You can `}
+          {t('pages.trade.section2.contents.content2')}
           <span
             onClick={() => duplicate({ base: source, quote: target })}
             className="cursor-pointer font-weight-500"
           >
-            Create a Strategy.
+            {t('pages.trade.section2.actionButtons.actionButton6')}
           </span>
         </div>
       </div>

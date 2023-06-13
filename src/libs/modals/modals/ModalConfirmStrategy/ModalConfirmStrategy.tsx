@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
+import { carbonEvents } from 'services/events';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Strategy } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
-import { carbonEvents } from 'services/events';
 import { Button } from 'components/common/button';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
@@ -23,6 +24,8 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
+  const { t } = useTranslation();
+  const data = getModalDataByType(type, t);
   const { pauseStrategy, isProcessing, setIsProcessing, updateMutation } =
     useUpdateStrategy();
 
@@ -30,9 +33,9 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   const isAwaiting =
     type === 'delete' ? deleteMutation.isLoading : updateMutation.isLoading;
   const isLoading = isAwaiting || isProcessing;
-  const data = getModalDataByType(type);
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
+
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
@@ -103,7 +106,9 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
           size="lg"
           fullWidth
         >
-          Cancel
+          {type === 'delete'
+            ? t('modals.deleteStrategy.actionButtons.actionButton2')
+            : t('modals.pauseStrategy.actionButtons.actionButton2')}
         </Button>
       </div>
     </Modal>

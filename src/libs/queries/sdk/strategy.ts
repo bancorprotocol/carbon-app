@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 import { useContract } from 'hooks/useContract';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
-import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 import { EncodedStrategyBNStr, StrategyUpdate } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
@@ -38,7 +38,7 @@ export interface Strategy {
 }
 
 export const useGetUserStrategies = () => {
-  const { isInitialized } = useCarbonSDK();
+  const { isInitialized } = useCarbonInit();
   const { user } = useWeb3();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();

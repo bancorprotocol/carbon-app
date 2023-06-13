@@ -1,15 +1,16 @@
 import { FC } from 'react';
-import { Link, PathNames } from 'libs/routing';
-import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { carbonEvents } from 'services/events';
+import { Link, PathNames } from 'libs/routing';
+import { i18n } from 'libs/translations';
+import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 
 type Props = {
   title?: string;
   className?: string;
 };
 export const StrategyBlockCreate: FC<Props> = ({
-  title = 'Create Strategy',
-  className = '',
+  title,
+  className = i18n.t('pages.strategyOverview.card.actionButtons.actionButton2'),
 }) => {
   return (
     <Link

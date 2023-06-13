@@ -1,14 +1,14 @@
-import { MainMenu, MobileMenu } from 'components/core/menu';
+import { useEffect } from 'react';
 import { NotificationAlerts } from 'libs/notifications';
 import { ModalProvider } from 'libs/modals';
-import { useCarbonSDK } from 'hooks/useCarbonSDK';
-import { useEffect } from 'react';
+import { useCarbonInit } from 'hooks/useCarbonInit';
+import { MainMenu, MobileMenu } from 'components/core/menu';
 import { MainContent } from 'components/core/MainContent';
 
 let didInit = false;
 
 export const App = () => {
-  const { init } = useCarbonSDK();
+  const { init } = useCarbonInit();
 
   useEffect(() => {
     if (!didInit) {

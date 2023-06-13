@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
@@ -8,35 +10,37 @@ import { ReactComponent as IconWallet4 } from 'assets/icons/wallet-4.svg';
 import { ReactComponent as IconWallet5 } from 'assets/icons/wallet-5.svg';
 import { ReactComponent as IconWallet6 } from 'assets/icons/wallet-6.svg';
 
-const items = [
-  {
-    icon: <IconWallet1 className="h-20 w-20 text-green" />,
-    title: 'On-chain Limit & Range Orders',
-  },
-  {
-    icon: <IconWallet2 className="h-20 w-20 text-green" />,
-    title: 'Automated and Recurring strategies',
-  },
-  {
-    icon: <IconWallet3 className="h-20 w-20 text-green" />,
-    title: 'Easily Adjustable',
-  },
-  {
-    icon: <IconWallet4 className="h-20 w-20 text-green" />,
-    title: 'Rotating Liquidity',
-  },
-  {
-    icon: <IconWallet5 className="h-20 w-20 text-green" />,
-    title: 'All standard ERC-20 tokens',
-  },
-  {
-    icon: <IconWallet6 className="h-20 w-20 text-green" />,
-    title: 'MEV Resistant',
-  },
-];
-
 export const WalletConnect = () => {
+  const { t } = useTranslation();
   const { openModal } = useModal();
+
+  // TODO: think of better location for items
+  const items = [
+    {
+      icon: <IconWallet1 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content1'),
+    },
+    {
+      icon: <IconWallet2 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content2'),
+    },
+    {
+      icon: <IconWallet3 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content3'),
+    },
+    {
+      icon: <IconWallet4 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content4'),
+    },
+    {
+      icon: <IconWallet5 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content5'),
+    },
+    {
+      icon: <IconWallet6 className="h-20 w-20 text-green" />,
+      title: t('pages.strategyOverview.noStrategyCard.contents.content6'),
+    },
+  ];
 
   return (
     <div className="md:h-[calc(100vh-300px)] md:min-h-[400px]">
@@ -50,10 +54,9 @@ export const WalletConnect = () => {
             'f-full flex flex-col justify-center space-y-30 md:w-[360px]'
           }
         >
-          <h1>Automate your Trading Strategies</h1>
+          <h1>{t('pages.strategyOverview.noStrategyCard.title')}</h1>
           <p className={'text-white/60'}>
-            A fully decentralized protocol for automating on-chain trading
-            strategies.
+            {t('pages.strategyOverview.noStrategyCard.subtitle')}
           </p>
 
           <Button
@@ -64,7 +67,9 @@ export const WalletConnect = () => {
             size={'lg'}
           >
             <IconWallet className="h-20 w-20" />
-            <span>Connect</span>
+            <span>
+              {t('pages.strategyOverview.noStrategyCard.actionButton')}
+            </span>
           </Button>
         </div>
         <div

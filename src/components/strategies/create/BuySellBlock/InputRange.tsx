@@ -6,6 +6,7 @@ import { Token } from 'libs/tokens';
 import { carbonEvents } from 'services/events';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useTranslation } from 'libs/translations';
 
 export const InputRange: FC<{
   min: string;
@@ -26,7 +27,8 @@ export const InputRange: FC<{
   setRangeError,
   buy = false,
 }) => {
-  const errorMessage = 'Max Price must be higher than min price and not zero';
+  const { t } = useTranslation();
+  const errorMessage = t('common.errors.error1');
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
@@ -70,11 +72,15 @@ export const InputRange: FC<{
         >
           <Tooltip
             sendEventOnMount={{ buy }}
-            element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
-              token.symbol
-            } at.`}
+            element={
+              buy
+                ? t('common.tooltips.tooltip4', { token: token.symbol })
+                : t('common.tooltips.tooltip5', { token: token.symbol })
+            }
           >
-            <div className={'mb-5 text-12 text-white/60'}>Min</div>
+            <div className={'mb-5 text-12 text-white/60'}>
+              {t('common.contents.content9')}
+            </div>
           </Tooltip>
           <input
             type={'text'}
@@ -82,7 +88,7 @@ export const InputRange: FC<{
             inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
-            placeholder="Enter Price"
+            placeholder={t('common.placeholders.placeholder1') || ''}
             onFocus={handleFocus}
             className={
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
@@ -99,11 +105,15 @@ export const InputRange: FC<{
         >
           <Tooltip
             sendEventOnMount={{ buy }}
-            element={`The highest price to ${buy ? 'buy' : 'sell'} ${
-              token.symbol
-            } at.`}
+            element={
+              buy
+                ? t('common.tooltips.tooltip6', { token: token.symbol })
+                : t('common.tooltips.tooltip7', { token: token.symbol })
+            }
           >
-            <div className={'mb-5 text-12 text-white/60'}>Max</div>
+            <div className={'mb-5 text-12 text-white/60'}>
+              {t('common.contents.content10')}
+            </div>
           </Tooltip>
           <input
             type={'text'}
@@ -111,7 +121,7 @@ export const InputRange: FC<{
             inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
-            placeholder={`Enter Price`}
+            placeholder={t('common.placeholders.placeholder1') || ''}
             onFocus={handleFocus}
             className={
               'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'

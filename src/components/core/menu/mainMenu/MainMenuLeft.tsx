@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import { menuItems } from 'components/core/menu/index';
+import { carbonEvents } from 'services/events';
 import { Link, PathNames, useLocation } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { carbonEvents } from 'services/events';
-
 import { handleOnItemClick } from '../utils';
+import { useMenuItems } from '../useMenuItems';
 
 export const MainMenuLeft: FC = () => {
   const location = useLocation();
+  const { menuItems } = useMenuItems();
 
   return (
     <div>
