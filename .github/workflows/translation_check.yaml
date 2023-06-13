@@ -42,7 +42,7 @@ jobs:
 
           if [ "$translation_files_changed" = true ]; then
               echo "Translation files have been modified."
-              version_file_changed=$(git diff-tree --no-commit-id --name-only -r HEAD | grep "src/libs/translations/version.ts")
+              version_file_changed=$(git diff --name-only HEAD^..HEAD | grep "src/libs/translations/version.ts")
               if [ -n "$version_file_changed" ]; then
                 echo "Version file (src/libs/translations/version.ts) has been modified."
                 exit 0  # Job success
