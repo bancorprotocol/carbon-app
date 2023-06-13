@@ -46,7 +46,8 @@ jobs:
 
           if [ "$version_file_changed" = "src/libs/translations/version.ts" ]; then
             echo "Version file (src/libs/translations/version.ts) has not been modified."
+            exit 1  # Job Failed
           else
             echo "Version file (src/libs/translations/version.ts) has been modified."
-            exit 0  # Job success
+            exit 0  # Job Success
           fi
