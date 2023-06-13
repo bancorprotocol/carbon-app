@@ -53,7 +53,7 @@ jobs:
             git config user.email "oznasi1@gmail.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
 
-            git push origin HEAD:"$GITHUB_REF"
+            git push origin HEAD:"refs/heads/$GITHUB_HEAD_REF"
 
             echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
