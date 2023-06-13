@@ -29,10 +29,10 @@ jobs:
           current_branch=$(git branch --show-current)
 
           # Check if the version.ts file has changed
-          version_changed=$(git diff --name-only origin/main...$current_branch -- src/libs/translations/version.ts)
+          version_changed=$(git diff --name-only main...$current_branch -- src/libs/translations/version.ts)
 
           # Check if any translation file has changed
-          translations_changed=$(git diff --name-only origin/main...$current_branch -- 'public/locales/**/*.json' | grep -E '^public/locales/.+/translation\.json$' || true)
+          translations_changed=$(git diff --name-only main...$current_branch -- 'public/locales/**/*.json' | grep -E '^public/locales/.+/translation\.json$' || true)
 
           # Fail the job if translations changed but version didn't
           if [[ -n $translations_changed && -z $version_changed ]]; then
