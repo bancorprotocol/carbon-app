@@ -46,11 +46,11 @@ jobs:
               echo "Error: TRANSLATION_VERSION is not set in version.ts"
               exit 1
             fi
-            new_version=$((current_version + 1))
+            new_version=$((current_version + 0.1))
             sed -i "s/TRANSLATION_VERSION = 'v$current_version';/TRANSLATION_VERSION = 'v$new_version';/" src/libs/translations/version.ts
             git add src/libs/translations/version.ts
-            git config user.name "Translation Bot"
-            git config user.email "translation-bot@example.com"
+            git config user.name "Oz's Bot"
+            git config user.email "oznasi1@gmail.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
             echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
