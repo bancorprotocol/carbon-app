@@ -53,8 +53,11 @@ jobs:
             git config user.email "oznasi1@gmail.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
 
+             # Pull the latest changes from the remote branch
             git pull origin "$GITHUB_HEAD_REF"
-            git push origin HEAD:"refs/heads/$GITHUB_HEAD_REF"
+
+            # Push the commit to the current branch
+            git push origin HEAD
 
             echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
