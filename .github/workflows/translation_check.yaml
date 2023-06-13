@@ -41,25 +41,8 @@ jobs:
           done
 
           if [ "$translation_files_changed" = true ]; then
-            current_version=$(grep -oP "(?<=TRANSLATION_VERSION = 'v)\d+" src/libs/translations/version.ts)
-            if [ -z "$current_version" ]; then
-              echo "Error: TRANSLATION_VERSION is not set in version.ts"
-              exit 1
-            fi
-            new_version=$((current_version + 1))
-            sed -i "s/TRANSLATION_VERSION = 'v$current_version';/TRANSLATION_VERSION = 'v$new_version';/" src/libs/translations/version.ts
-            git add src/libs/translations/version.ts
-            git config user.name "Oz's Bot"
-            git config user.email "oznasi1@gmail.com"
-            git commit -m "Bump TRANSLATION_VERSION to v$new_version"
-
-             # Pull the latest changes from the remote branch
-            git pull --rebase origin "$GITHUB_HEAD_REF"
-
-            # Push the commit to the current branch
-            git push origin HEAD
-
-            echo "TRANSLATION_VERSION is incremented to v$new_version"
+            echo "Error: Translation files have been modified. Please update the translations and commit the changes."
+            exit 1
           else
             echo "No translation files changed"
           fi
