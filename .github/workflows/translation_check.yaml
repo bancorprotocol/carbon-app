@@ -53,7 +53,9 @@ jobs:
             git config user.email "oznasi1@gmail.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
 
-            git push origin HEAD:"${GITHUB_REF#refs/heads/}"
+            base_branch="${GITHUB_REF#refs/pull/*/merge}"
+            git push origin HEAD:"$base_branch"
+            
             echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
             echo "No translation files changed"
