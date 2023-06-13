@@ -25,11 +25,11 @@ export const SearchInput = ({
 
   return (
     <div className="relative">
-      <IconSearch className="text-graphite dark:text-white-disabled absolute ml-14 w-16" />
+      <IconSearch className="text-graphite dark:text-white-disabled absolute w-16 ms-14" />
       {value.length > 0 && (
         <button
           onClick={() => setValue('')}
-          className="text-graphite hover:text-error absolute right-0 mr-14 h-full"
+          className="text-graphite hover:text-error absolute right-0 h-full me-14"
         >
           <IconClose className="w-12" />
         </button>

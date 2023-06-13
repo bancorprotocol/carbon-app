@@ -90,7 +90,7 @@ export const NotificationLine: FC<{
               className={'mt-10 flex items-center font-weight-500'}
             >
               {t('modals.notification.content1')}{' '}
-              <IconLink className="ml-6 w-14" />
+              <IconLink className="w-14 ms-6" />
             </Link>
           )}
         </div>

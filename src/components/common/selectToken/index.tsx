@@ -57,12 +57,12 @@ export const SelectTokenButton: FC<Props> = ({
             <Imager
               alt={'Token Logo'}
               src={imgUrl}
-              className={'mr-14 h-24 w-24 rounded-full'}
+              className={'h-24 w-24 rounded-full me-14'}
             />
           ) : (
             <div
               className={
-                'mr-14 flex h-24 w-24 items-center justify-center rounded-full bg-black'
+                'flex h-24 w-24 items-center justify-center rounded-full bg-black me-14'
               }
             >
               <IconPlus className={'h-16 w-16 p-2 text-green'} />

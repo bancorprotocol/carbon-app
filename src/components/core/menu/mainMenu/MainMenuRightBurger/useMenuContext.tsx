@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
-import { ImmutableStack } from 'utils/stack';
+import { useTranslation } from 'libs/translations';
 import { Menu, MenuItemType } from './useBurgerMenuItems';
+import { ImmutableStack } from 'utils/stack';
+import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
 
 export enum MenuItemActions {
   Close,
@@ -15,6 +16,7 @@ interface UseMenuContextProps<T> {
 }
 
 export function useMenuContext<T>(props: UseMenuContextProps<T>) {
+  const { i18n } = useTranslation();
   const { mainMenu, menuMapping, defaultState } = props;
 
   const [isOpen, setIsOpen] = useState(defaultState || false);
@@ -28,7 +30,9 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
       return {
         content: (
           <div className="flex items-center gap-10">
-            <IconArrow className="h-12 w-7 rotate-180" />
+            <IconArrow
+              className={`h-12 w-7 ${i18n.dir() === 'ltr' ? 'rotate-180' : ''}`}
+            />
             <span className="font-weight-500">{title}</span>
           </div>
         ),

@@ -36,7 +36,7 @@ export const getModalDataByType = (
         content: t('modals.deleteStrategy.contents.content1'),
         additionalContent: (
           <div className="mt-20 flex items-center">
-            <IconWallet className="mr-10 h-12 w-12" />
+            <IconWallet className="h-12 w-12 me-10" />
             <div className="flex-1 text-14 font-weight-500 text-white/80">
               {t('modals.deleteStrategy.contents.content2')}
             </div>

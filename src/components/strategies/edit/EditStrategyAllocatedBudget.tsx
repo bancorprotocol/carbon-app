@@ -73,13 +73,13 @@ export const EditStrategyAllocatedBudget: FC<{
 
   return (
     <>
-      <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
+      <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-start font-mono text-12 font-weight-500">
         <div className="flex items-center justify-between gap-16">
           <div className="flex w-auto items-center gap-6">
             <div>{t('pages.strategyEdit.section2.contents.content5')}</div>
             <Tooltip
               sendEventOnMount={{ buy }}
-              iconClassName="h-13 mr-6 text-white/60"
+              iconClassName="h-13 me-6 text-white/60"
               element={t('pages.strategyEdit.tooltips.tooltip4', {
                 token: buy ? quote?.symbol : base.symbol,
               })}
@@ -129,7 +129,7 @@ export const EditStrategyAllocatedBudget: FC<{
         {showDistribute && type !== 'editPrices' && (
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
-              <span className="mr-5">
+              <span className="me-5">
                 {t('pages.strategyEdit.section2.contents.content6')}
               </span>
               <Tooltip
@@ -182,7 +182,7 @@ export const EditStrategyAllocatedBudget: FC<{
         )}
       </div>
       {type === 'editPrices' && showDistribute && (
-        <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left  text-12 text-white/60">
+        <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-start  text-12 text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"
             element={t('pages.strategyEdit.tooltips.tooltip3')}

@@ -26,7 +26,15 @@
       "error1": "xxxxxxxxxxx",
       "error2": "xxxxxxxxxxx",
       "error3": "xxxxxxxxxxx",
-      "error4": "xxxxxxxxxxx"
+      "error4": "xxxxxxxxxxx",
+      "error10": "xxxxxxxx",
+      "error11": "xxxxxxxx",
+      "error12": "xxxxxxxx",
+      "error5": "xxxxxxxx",
+      "error6": "xxxxxxxx",
+      "error7": "xxxxxxxx",
+      "error8": "xxxxxxxx",
+      "error9": "xxxxxxxx"
     },
     "tooltips": {
       "tooltip1": "xxxxxxxxxxx",
@@ -506,7 +514,9 @@
           "title1": "xxxxxxxxxxx",
           "title2": "xxxxxxxxxxx",
           "title3": "xxxxxxxxxxx",
-          "title4": "xxxxxxxxxxx"
+          "title4": "xxxxxxxxxxx",
+          "title5": "xxxxxxxx",
+          "title6": "xxxxxxxx"
         },
         "subtitles": {
           "subtitle1": "xxxxxxxxxxx",

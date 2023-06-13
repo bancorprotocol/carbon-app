@@ -62,12 +62,12 @@ export const CreateStrategyOrders = ({
       <m.div
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'flex space-x-10 rounded-10 bg-silver p-20 pl-30'}
+        className={'flex rounded-10 bg-silver p-20 ps-30 space-s-10'}
       >
         <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
         <div>
           {
-            <div className="flex space-x-6">
+            <div className="flex space-s-6">
               <span>{base?.symbol}</span>
               <div className="text-secondary !text-16">/</div>
               <span>{quote?.symbol}</span>

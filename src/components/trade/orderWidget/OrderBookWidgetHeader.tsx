@@ -42,7 +42,7 @@ export const OrderBookWidgetHeader: FC<Props> = ({
           token: quoteSymbol,
         })}
       >
-        <div className={'text-right'}>
+        <div className={'text-end'}>
           {t('pages.trade.section1.headers.header3')}
         </div>
       </Tooltip>

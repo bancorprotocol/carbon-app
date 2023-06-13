@@ -45,7 +45,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
 
   return (
     <>
-      <div className={'flex items-center space-x-20'}>
+      <div className={'space-s-20 flex items-center'}>
         <Checkbox isChecked={isSelected} setIsChecked={onCheckboxClick} />
 
         <ModalTradeRoutingRowCell
@@ -55,7 +55,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           selectedFiatCurrency={selectedFiatCurrency}
         />
       </div>
-      <div className={'flex items-center space-x-10'}>
+      <div className={'space-s-10 flex items-center'}>
         <div
           className={
             'flex h-18 w-18 items-center justify-center rounded-full bg-silver'

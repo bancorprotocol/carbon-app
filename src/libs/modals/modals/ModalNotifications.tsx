@@ -15,7 +15,7 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
       title={
         <div className="flex w-full items-center justify-between">
           {t('modals.notification.modalTitle')}
-          <button onClick={() => clearNotifications()} className="mr-20">
+          <button onClick={() => clearNotifications()} className="me-20">
             {t('modals.notification.actionButton1')}
           </button>
         </div>

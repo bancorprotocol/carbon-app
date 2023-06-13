@@ -23,7 +23,7 @@ export const MainMenuRight: FC = () => {
   const { aboveBreakpoint } = useBreakpoints();
 
   return (
-    <div className={'flex items-center space-x-20'}>
+    <div className={'space-s-20 flex items-center'}>
       <TenderlyForkAlert />
       <MainMenuRightNotifications />
       {aboveBreakpoint('md') && (

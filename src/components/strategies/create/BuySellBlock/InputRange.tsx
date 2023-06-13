@@ -64,7 +64,7 @@ export const InputRange: FC<{
 
   return (
     <div>
-      <div className="flex space-x-6">
+      <div className="flex space-s-6">
         <div
           className={`${
             error ? 'border-red/50 text-red' : ''
@@ -133,7 +133,7 @@ export const InputRange: FC<{
         </div>
       </div>
       <div
-        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
+        className={`mt-10 flex h-16 items-center gap-10 text-start font-mono text-12 text-red ${
           !error ? 'invisible' : ''
         }`}
       >

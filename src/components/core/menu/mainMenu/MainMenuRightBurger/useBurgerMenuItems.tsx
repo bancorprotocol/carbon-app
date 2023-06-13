@@ -225,7 +225,7 @@ const CurrencyMenuItemContent = () => {
   return (
     <div className="flex w-full items-center justify-between">
       <span>{t('navBar.burgerMenu.items.item1')}</span>
-      <span className="mr-10 font-weight-500">{selectedFiatCurrency}</span>
+      <span className="font-weight-500 me-10">{selectedFiatCurrency}</span>
     </div>
   );
 };

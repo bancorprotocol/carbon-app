@@ -95,11 +95,11 @@ export const TokenInputField: FC<Props> = ({
       }}
     >
       <div className={`flex items-center justify-between`}>
-        <div className={'mr-10 flex flex-none items-center'}>
+        <div className={'flex flex-none items-center me-10'}>
           <Imager
             alt={'Token'}
             src={token.logoURI}
-            className={'mr-10 h-30 w-30 rounded-full'}
+            className={'h-30 w-30 rounded-full me-10'}
           />
           <span className={'font-weight-500'}>{token.symbol}</span>
         </div>
@@ -125,7 +125,7 @@ export const TokenInputField: FC<Props> = ({
             placeholder={placeholder}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
-            className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none ${
+            className={`w-full shrink bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none ${
               isError ? 'text-red' : 'text-white'
             }`}
             disabled={disabled}
@@ -148,10 +148,10 @@ export const TokenInputField: FC<Props> = ({
               t('common.contents.content3')
             ) : (
               <>
-                <span className="ml-5 text-white">
+                <span className="text-white ms-5">
                   {prettifyNumber(balance || 0)}
                 </span>
-                <div className="ml-10 text-green group-hover:text-white">
+                <div className="text-green ms-10 group-hover:text-white">
                   {t('common.contents.content3')}
                 </div>
               </>

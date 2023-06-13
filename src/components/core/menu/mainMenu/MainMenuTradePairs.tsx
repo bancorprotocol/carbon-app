@@ -25,7 +25,7 @@ export const MainMenuTradePairs: FC<Props> = ({ baseToken, quoteToken }) => {
         });
       }}
       className={
-        'flex items-center space-x-10 rounded-full bg-silver py-5 pl-15 pr-15'
+        'flex items-center rounded-full bg-silver py-5 ps-15 pe-15 space-s-10'
       }
     >
       <TokensOverlap tokens={[baseToken, quoteToken]} />

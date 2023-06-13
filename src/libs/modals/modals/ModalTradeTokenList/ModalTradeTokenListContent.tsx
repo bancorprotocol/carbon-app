@@ -110,7 +110,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
               >
                 <button
                   onClick={() => handleSelect(tradePair)}
-                  className={'flex w-full items-center space-x-10 pl-10'}
+                  className={'flex w-full items-center ps-10 space-s-10'}
                 >
                   <TokensOverlap
                     tokens={[tradePair.baseToken, tradePair.quoteToken]}
@@ -119,7 +119,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                     {tradePair.baseToken.symbol}
                     {tradePair.baseToken.isSuspicious && (
                       <WarningWithTooltip
-                        className="ml-5"
+                        className="ms-5"
                         tooltipContent={suspiciousTokenTooltipMsg}
                       />
                     )}
@@ -127,7 +127,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                     {tradePair.quoteToken.symbol}
                     {tradePair.quoteToken.isSuspicious && (
                       <WarningWithTooltip
-                        className="ml-5"
+                        className="ms-5"
                         tooltipContent={suspiciousTokenTooltipMsg}
                       />
                     )}

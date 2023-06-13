@@ -21,7 +21,7 @@ const BlockIconTextDesc = ({
   description: string;
 }) => {
   return (
-    <div className={'flex items-center space-x-20'}>
+    <div className={'space-s-20 flex items-center'}>
       <div
         className={
           'flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-6 bg-white/25'
@@ -97,7 +97,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             })}
         </div>
 
-        <div className={'flex space-x-14'}>
+        <div className={'space-s-14 flex'}>
           {selectedTabItems.map(({ label, svg, to, search }, i) => (
             <Button
               key={i}

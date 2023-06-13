@@ -62,7 +62,7 @@ export const InputLimit: FC<{
         <div className="font-mono text-12 text-white/60">{fiatAsString}</div>
       </div>
       <div
-        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
+        className={`mt-10 flex h-16 items-center gap-10 text-start font-mono text-12 text-red ${
           !error ? 'invisible' : ''
         }`}
       >

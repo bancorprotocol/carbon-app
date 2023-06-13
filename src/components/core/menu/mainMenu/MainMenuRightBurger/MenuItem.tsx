@@ -1,4 +1,5 @@
 import { FC, ReactElement } from 'react';
+import { useTranslation } from 'libs/translations';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
 
 type MenuItemProps = {
@@ -18,6 +19,8 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
     disableHoverEffect = false,
     className = '',
   } = item;
+  const { i18n } = useTranslation();
+
   return (
     <div
       onClick={() => item.onClick && item.onClick()}
@@ -29,7 +32,11 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
         className={`${hasSubMenu ? 'flex items-center justify-between' : ''}`}
       >
         {content}
-        {hasSubMenu && <IconArrow className="h-12 w-7" />}
+        {hasSubMenu && (
+          <IconArrow
+            className={`h-12 w-7 ${i18n.dir() === 'rtl' ? 'rotate-180' : ''}`}
+          />
+        )}
       </div>
     </div>
   );

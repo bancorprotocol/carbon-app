@@ -37,7 +37,7 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
           <h2>{t('modals.tradeSettings.modalTitle')}</h2>
           {!isAllSettingsDefault && (
             <button
-              className="mr-20 font-mono text-16 font-weight-500 text-white"
+              className="font-mono text-16 font-weight-500 text-white me-20"
               onClick={handleReset}
             >
               {t('modals.tradeSettings.actionButton')}

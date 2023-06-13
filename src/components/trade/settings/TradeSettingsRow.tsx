@@ -122,7 +122,7 @@ export const TradeSettingsRow: FC<{
           className={`mt-15 flex font-mono text-12 font-weight-500 text-warning-400`}
         >
           <IconWarning className={`w-14 ${isError ? 'text-red' : ''}`} />
-          <span className={`ml-5 ${isError ? 'text-red' : ''}`}>
+          <span className={`ms-5 ${isError ? 'text-red' : ''}`}>
             {warningMessage}
           </span>
         </div>

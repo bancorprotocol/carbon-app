@@ -39,7 +39,7 @@ export const EditStrategyGraph = ({
           }}
         >
           <div className="flex items-center justify-center">
-            <IconX className={'w-10 md:mr-12'} />
+            <IconX className={'w-10 md:me-12'} />
             <span className="hidden md:block">
               {t('pages.strategyEdit.chart.actionButton')}
             </span>

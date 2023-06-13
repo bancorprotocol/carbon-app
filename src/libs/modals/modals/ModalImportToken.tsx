@@ -69,7 +69,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
               <span className={'whitespace-nowrap'}>
                 {t('modals.importToken.contents.content2')}
               </span>
-              <IconLink className={'ml-4 inline-flex h-14'} />
+              <IconLink className={'inline-flex h-14 ms-4'} />
             </Link>
           </div>
           <div className={'flex items-center justify-between'}>

@@ -78,7 +78,7 @@ export const BuySellBlock: FC<Props> = ({
     <>
       <div
         className={
-          'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+          'flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] me-6'
         }
       >
         1
@@ -103,7 +103,7 @@ export const BuySellBlock: FC<Props> = ({
               ? t('pages.strategyCreate.step2.section2.subtitles.subtitle1')
               : t('pages.strategyCreate.step2.section2.subtitles.subtitle2')}
           </span>
-          <span className={'ml-8 text-white/80'}>
+          <span className={'text-white/80 ms-8'}>
             ({quote.symbol}{' '}
             <span className={'text-white/60'}>
               {t('pages.strategyCreate.step2.section2.contents.content3')} 1{' '}
@@ -168,7 +168,7 @@ export const BuySellBlock: FC<Props> = ({
       <div className={'flex items-center pt-10 text-14'}>
         <div
           className={
-            'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+            'flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] me-6'
           }
         >
           2
@@ -203,7 +203,7 @@ export const BuySellBlock: FC<Props> = ({
           </div>
         </Tooltip>
         {isBudgetOptional && (
-          <div className="ml-8 font-weight-500 text-white/40">
+          <div className="font-weight-500 text-white/40 ms-8">
             {t('pages.strategyCreate.step2.section2.contents.content4')}
           </div>
         )}
