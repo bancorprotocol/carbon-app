@@ -24,25 +24,4 @@ jobs:
         run: yarn
 
       - name: Check translation changes
-        run: |
-          translation_files=("public/locales/es/translation.json")
-          translation_files_changed=false
-
-          for file in "${translation_files[@]}"; do
-            if [ -f "$file" ]; then
-              last_commit=$(git log -1 --format="%ct" -- "$file")
-              last_modified=$(stat -c %Y "$file")
-
-              if [ "$last_modified" -gt "$last_commit" ]; then
-                translation_files_changed=true
-                break
-              fi
-            fi
-          done
-
-          if [ "$translation_files_changed" = true ]; then
-            echo "Error: Translation files have been modified. Please update the translations and commit the changes."
-            exit 1
-          else
-            echo "No translation files changed"
-          fi
+        run: yarn check-translations
