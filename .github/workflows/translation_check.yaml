@@ -53,7 +53,12 @@ jobs:
             git config user.email "oznasi1@gmail.com"
             git commit -m "Bump TRANSLATION_VERSION to v$new_version"
 
-            git push origin "${GITHUB_REF}"
+            branch_name="translation-update-$new_version"
+            git branch "$branch_name"
+            git checkout "$branch_name"
+
+            # Push the commit to the new branch
+            git push origin "$branch_name"
             echo "TRANSLATION_VERSION is incremented to v$new_version"
           else
             echo "No translation files changed"
