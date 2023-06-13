@@ -25,20 +25,32 @@ jobs:
 
       - name: Check translation changes
         run: |
-          # Get the branch name for comparison
-          current_branch=$(git branch --show-current)
+          translation_files=("public/locales/es/translation.json")
+          translation_files_changed=false
 
-          # Get the merge base commit SHA
-          merge_base=$(git merge-base main $current_branch)
+          for file in "${translation_files[@]}"; do
+            if [ -f "$file" ]; then
+              last_commit=$(git log -1 --format="%ct" -- "$file")
+              last_modified=$(stat -c %Y "$file")
 
-          # Check if the version.ts file has changed
-          version_changed=$(git diff --name-only --diff-filter=ACMRTUXB $merge_base...$current_branch -- src/libs/translations/version.ts)
+              if [ "$last_modified" -gt "$last_commit" ]; then
+                translation_files_changed=true
+                break
+              fi
+            fi
+          done
 
-          # Check if any translation file has changed
-          translations_changed=$(git diff --name-only --diff-filter=ACMRTUXB $merge_base...$current_branch -- 'public/locales/**/*.json' | grep -E '^public/locales/.+/translation\.json$' || true)
-
-          # Fail the job if translations changed but version didn't
-          if [[ -n $translations_changed && -z $version_changed ]]; then
-            echo "Please update the version number"
-            exit 1
+          if [ "$translation_files_changed" = true ]; then
+              echo "Translation files have been modified."
+              version_file_changed=$(git diff --name-only HEAD^..HEAD src/libs/translations/version.ts)
+              if [ -n "$version_file_changed" ]; then
+                echo "Version file (src/libs/translations/version.ts) has been modified."
+                exit 0  # Job success
+              else
+                echo "Version file (src/libs/translations/version.ts) has not been modified."
+                exit 1  # Job failure
+              fi
+          else
+            echo "No translation files changed"
+            exit 0  # Job success
           fi
