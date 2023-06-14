@@ -24,19 +24,28 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      - name: Get language list
+        id: get_languages
+        run: |
+          echo "languages=$(ls -d public/locales/*/ | xargs -n1 basename)"
+
       - name: Check for translation changes
         id: changes
         run: |
-          git diff --name-only HEAD^ ${{ github.sha }} > changes.txt
-          if grep -q "public/locales/es/translation.json" changes.txt; then
-            if grep -q "index.html" changes.txt; then
-              echo "version_changed=true" >> "$GITHUB_ENV"
+          touch changes.txt
+          for lang in ${{ steps.get_languages.outputs.languages }}; do
+            if [[ -f "public/locales/$lang/translation.json" ]]; then
+              git diff --quiet HEAD^ -- "public/locales/$lang/translation.json"
+              if [[ $? -eq 0 ]]; then
+                echo "Translation file 'public/locales/$lang/translation.json' not modified."
+              else
+                echo "Translation file 'public/locales/$lang/translation.json' modified."
+                echo "$lang" >> changes.txt
+              fi
             else
-              echo "version_changed=false" >> "$GITHUB_ENV"
+              echo "Translation file 'public/locales/$lang/translation.json' not found."
             fi
-          else
-            echo "translation_changed=false" >> "$GITHUB_ENV"
-          fi
+          done
 
       - name: Fail or pass job based on changes
         run: |
