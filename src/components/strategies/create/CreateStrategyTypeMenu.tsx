@@ -9,7 +9,6 @@ import { UseStrategyCreateReturn } from 'components/strategies/create/index';
 import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
 import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
-import { carbonEvents } from 'services/events';
 
 const BlockIconTextDesc = ({
   icon,
@@ -135,11 +134,6 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           )}
         </div>
       </m.div>
-
-      {(selectedStrategySettings?.search.strategySettings === 'range' ||
-        selectedStrategySettings?.search.strategySettings === 'custom') && (
-        <CreateStrategyRangeWarning />
-      )}
 
       <Button
         variant={'success'}
