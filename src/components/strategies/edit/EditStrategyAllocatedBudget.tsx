@@ -110,7 +110,7 @@ export const EditStrategyAllocatedBudget: FC<{
                   </span>
                 )}
                 <Imager
-                  className="ml-10 h-16 w-16"
+                  className="ml-10 h-16 w-16 rounded-full"
                   src={buy ? quote?.logoURI : base?.logoURI}
                   alt="token"
                 />
