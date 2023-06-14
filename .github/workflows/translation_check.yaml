@@ -42,10 +42,12 @@ jobs:
         run: |
           if [[ "${{ env.translation_changed }}" == false ]]; then
             echo "Translation did not change - we are good to go"
+            exit 0
           else
             if [[ "${{ env.version_changed }}" == true ]]; then
-                echo "Version.ts modified along with translation file. Job passed!"
-             else
+              echo "Version.ts modified along with translation file. Job passed!"
+              exit 0
+            else
               echo "Version.ts not modified along with translation file. Job failed!"
               exit 1
             fi
