@@ -102,7 +102,7 @@ export const useModalTradeRouting = ({
           setIsAwaiting(true);
           tradeFn();
         },
-        buttonLabel: t('modals.tradeRouting.actionButtons.actionButton2') || '',
+        buttonLabel: t('modals.tradeRouting.actionButtons.actionButton2'),
         eventData: {
           productType: 'trade',
           buy,

@@ -180,11 +180,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           ? t('pages.trade.section2.titles.title1', {
               baseToken: target.symbol,
               quoteToken: source.symbol,
-            }) || ''
+            })
           : t('pages.trade.section2.titles.title2', {
               baseToken: source.symbol,
               quoteToken: target.symbol,
-            }) || ''}
+            })}
       </h2>
       <div className={'flex justify-between text-14'}>
         <div className={'text-white/50'}>
@@ -233,7 +233,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             setValue={(value) => {
               setTargetInput(value);
             }}
-            placeholder={t('common.placeholders.placeholder3') || ''}
+            placeholder={t('common.placeholders.placeholder3')}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}

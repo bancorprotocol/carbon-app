@@ -38,11 +38,9 @@ export const StrategiesPage = () => {
 
   return (
     <Page
-      title={
-        t('pages.strategyOverview.header.title', {
-          count: strategies.data?.length || 0,
-        }) || ''
-      }
+      title={t('pages.strategyOverview.header.title', {
+        count: strategies.data?.length || 0,
+      })}
       widget={
         <StrategyPageTitleWidget
           sort={sort}

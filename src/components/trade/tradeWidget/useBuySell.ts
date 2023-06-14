@@ -255,7 +255,7 @@ export const useBuySell = ({
           setIsAwaiting(true);
           tradeFn();
         },
-        buttonLabel: t('modals.confirm.actionButtons.actionButton5') || '',
+        buttonLabel: t('modals.confirm.actionButtons.actionButton5'),
         eventData: {
           ...eventData,
           productType: 'trade',

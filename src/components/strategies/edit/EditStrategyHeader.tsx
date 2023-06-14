@@ -43,7 +43,7 @@ export const EditStrategyHeader = ({
             <ForwardArrow className="mx-auto w-14" />
           </div>
         </button>
-        {(type && titleByType[type]) || ''}
+        {type && titleByType[type]}
       </div>
       {!showGraph && (
         <button

@@ -37,11 +37,11 @@ export const useBurgerMenuItems = () => {
     },
     {
       subMenu: 'languages',
-      content: t('navBar.burgerMenu.items.item2') || '',
+      content: t('navBar.burgerMenu.items.item2'),
     },
     {
       subMenu: 'resources',
-      content: t('navBar.burgerMenu.items.item3') || '',
+      content: t('navBar.burgerMenu.items.item3'),
     },
     {
       content: (
@@ -203,15 +203,15 @@ export const useBurgerMenuItems = () => {
   menuMap.set('main', { items: mainItems });
   menuMap.set('currency', {
     items: currencyItems,
-    title: t('navBar.burgerMenu.items.item1') || '',
+    title: t('navBar.burgerMenu.items.item1'),
   });
   menuMap.set('languages', {
     items: languagesItems,
-    title: t('navBar.burgerMenu.items.item2') || '',
+    title: t('navBar.burgerMenu.items.item2'),
   });
   menuMap.set('resources', {
     items: resourcesItems,
-    title: t('navBar.burgerMenu.items.item3') || '',
+    title: t('navBar.burgerMenu.items.item3'),
   });
 
   return {

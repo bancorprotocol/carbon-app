@@ -37,9 +37,9 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
           address={base?.address}
-          description={
-            t('pages.strategyCreate.step1.section1.contents.content1') || ''
-          }
+          description={t(
+            'pages.strategyCreate.step1.section1.contents.content1'
+          )}
           onClick={() => openTokenListModal(true)}
           isBaseToken
         />
@@ -75,9 +75,9 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
               symbol={quote?.symbol}
               imgUrl={quote?.logoURI}
               address={quote?.address}
-              description={
-                t('pages.strategyCreate.step1.section1.contents.content2') || ''
-              }
+              description={t(
+                'pages.strategyCreate.step1.section1.contents.content2'
+              )}
               onClick={() => openTokenListModal()}
             />
           </>

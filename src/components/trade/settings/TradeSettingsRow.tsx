@@ -108,7 +108,7 @@ export const TradeSettingsRow: FC<{
           </Button>
         ))}
         <input
-          placeholder={t('common.placeholders.placeholder5') || ''}
+          placeholder={t('common.placeholders.placeholder5')}
           value={internalValue}
           onBlur={handleOnBlur}
           onChange={handleOnInputChange}

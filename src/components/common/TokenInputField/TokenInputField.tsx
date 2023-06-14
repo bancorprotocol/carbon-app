@@ -34,7 +34,7 @@ export const TokenInputField: FC<Props> = ({
   isError,
   className,
   onKeystroke,
-  placeholder = i18n.t('common.placeholders.placeholder2') || '', // TODO: check || ''
+  placeholder = i18n.t('common.placeholders.placeholder2'),
   disabled,
   slippage,
   withoutWallet,

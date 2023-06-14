@@ -40,7 +40,7 @@ export const SearchInput = ({
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder={t('common.placeholders.placeholder4') || ''}
+        placeholder={t('common.placeholders.placeholder4')}
         onKeyDown={onKeyDown}
         className={`${defaultClassName} ${className}`}
       />

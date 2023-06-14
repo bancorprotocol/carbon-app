@@ -32,6 +32,7 @@ i18n
     react: {
       useSuspense: true,
     },
+    returnNull: false,
     fallbackLng: 'en',
     load: 'languageOnly',
     debug: import.meta.env.VITE_DEV_MODE,
