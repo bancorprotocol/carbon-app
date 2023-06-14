@@ -33,17 +33,20 @@ jobs:
               echo "version_changed=true" >> "$GITHUB_ENV"
             else
               echo "version_changed=false" >> "$GITHUB_ENV"
-
             fi
           else
-            echo "version_changed=false" >> "$GITHUB_ENV"
+            echo "translation_changed=false" >> "$GITHUB_ENV"
           fi
 
       - name: Fail or pass job based on changes
         run: |
-          if [[ "${{ env.version_changed }}" == true ]]; then
-            echo "Version.ts modified along with translation file. Job passed!"
+          if [[ "${{ env.translation_changed }}" == false ]]; then
+            echo "Translation did not change - we are good to go"
           else
-            echo "Version.ts not modified along with translation file. Job failed!"
-            exit 1
+            if [[ "${{ env.version_changed }}" == true ]]; then
+                echo "Version.ts modified along with translation file. Job passed!"
+             else
+              echo "Version.ts not modified along with translation file. Job failed!"
+              exit 1
+            fi
           fi
