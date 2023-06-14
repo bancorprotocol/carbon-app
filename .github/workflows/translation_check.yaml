@@ -32,14 +32,12 @@ jobs:
       - name: Check for translation changes
         id: changes
         run: |
-          touch changes.txt
           echo "translation_changed=false" >> "$GITHUB_ENV"
           for lang in ${{ steps.get_languages.outputs.languages }}; do
             if [[ -f "public/locales/$lang/translation.json" ]]; then
               if git log -1 --name-only --oneline -- "public/locales/$lang/translation.json" | grep -q "public/locales/$lang/translation.json"; then
                 echo "Translation file 'public/locales/$lang/translation.json' modified."
                 echo "translation_changed=true" >> "$GITHUB_ENV"
-                echo "$lang" >> changes.txt
               else
                 echo "Translation file 'public/locales/$lang/translation.json' not modified."
               fi
@@ -52,15 +50,13 @@ jobs:
       - name: Check for version.ts changes
         id: version_changes
         run: |
-          touch version_changes.txt
-          if grep -q "src/libs/translations/version.ts" version_changes.txt; then
+          if git log -1 --name-only --oneline -- "src/libs/translations/version.ts" | grep -q "src/libs/translations/version.ts"; then
            if [[ $? -eq 0 ]]; then
              echo "version_changed=false" >> "$GITHUB_ENV"
              echo "Version file 'src/libs/translations/version.ts' not modified."
            else
              echo "version_changed=true" >> "$GITHUB_ENV"
              echo "Version file 'src/libs/translations/version.ts' modified."
-             echo "version" >> version_changes.txt
            fi
 
       - name: Fail or pass job based on changes
