@@ -27,14 +27,14 @@ jobs:
       - name: Get language list
         id: get_languages
         run: |
-          echo "languages=$(ls -d public/locales/*/ | xargs -n1 basename)" >> "$GITHUB_ENV"
+          echo "::set-output name=languages::$(ls -d public/locales/*/ | xargs -n1 basename)"
 
       - name: Check for translation changes
         id: changes
         run: |
           touch changes.txt
-          echo "translation_changed=false" >> "$GITHUB_ENV"
-          for lang in "${{ env.languages }}""; do
+          echo "translation_changed=true" >> "$GITHUB_ENV"
+          for lang in ${{ steps.get_languages.outputs.languages }}; do
             if [[ -f "public/locales/$lang/translation.json" ]]; then
               if git log -1 --name-only --oneline -- "public/locales/$lang/translation.json" | grep -q "public/locales/$lang/translation.json"; then
                 echo "Translation file 'public/locales/$lang/translation.json' modified."
