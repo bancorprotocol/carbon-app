@@ -52,14 +52,14 @@ jobs:
       - name: Check for version.ts changes
         id: version_changes
         run: |
-          if grep -q "src/libs/translations/version.ts" changes.txt; then
+          if grep -q "src/libs/translations/version.ts" version_changes.txt; then
            if [[ $? -eq 0 ]]; then
              echo "version_changed=false" >> "$GITHUB_ENV"
              echo "Version file 'src/libs/translations/version.ts' not modified."
            else
              echo "version_changed=true" >> "$GITHUB_ENV"
              echo "Version file 'src/libs/translations/version.ts' modified."
-             echo "version" >> changes.txt
+             echo "version" >> version_changes.txt
            fi
 
       - name: Fail or pass job based on changes
