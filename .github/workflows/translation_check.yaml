@@ -33,7 +33,7 @@ jobs:
         id: changes
         run: |
           touch changes.txt
-          echo "translation_changed=true" >> "$GITHUB_ENV"
+          echo "translation_changed=false" >> "$GITHUB_ENV"
           for lang in ${{ steps.get_languages.outputs.languages }}; do
             if [[ -f "public/locales/$lang/translation.json" ]]; then
               if git log -1 --name-only --oneline -- "public/locales/$lang/translation.json" | grep -q "public/locales/$lang/translation.json"; then
