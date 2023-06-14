@@ -12,12 +12,16 @@ import { TRANSLATION_VERSION } from './version';
 // TODO: add local storage backend + remove not needed languages
 // Remove after gets all languages + actual translations
 // TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
+// TODO: consider add pr for default fallback
 export const SUPPORTED_LANGUAGES = [
-  { code: 'en', name: 'English' },
-  { code: 'es', name: 'Spanish' },
-  { code: 'ge', name: 'German' },
-  { code: 'he', name: 'Hebrew' },
-  { code: 'xx', name: 'Test' },
+  { code: 'en', name: 'English (EN)' },
+  { code: 'es', name: 'Spanish (ES)' },
+  { code: 'ge', name: 'German (GE)' },
+  { code: 'he', name: 'Hebrew (HE)' },
+  { code: 'pr-BR', name: 'Portuguese (BR)' },
+  { code: 'pr-PT', name: 'Portuguese (PT)' },
+  { code: 'pr', name: 'Portuguese' },
+  { code: 'xx', name: 'Test (XX)' },
 ];
 
 type SupportedLanguagesCodes = (typeof SUPPORTED_LANGUAGES)[number]['code'];
@@ -36,7 +40,7 @@ i18n
     },
     returnNull: false,
     fallbackLng: 'en',
-    load: 'languageOnly',
+    load: 'all',
     debug: import.meta.env.VITE_DEV_MODE,
     detection: {
       lookupLocalStorage: `${APP_ID}-${APP_VERSION}-i18nextLng`,
