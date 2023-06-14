@@ -33,6 +33,7 @@ jobs:
         id: changes
         run: |
           touch changes.txt
+          echo "translation_changed=false" >> "$GITHUB_ENV"
           for lang in ${{ steps.get_languages.outputs.languages }}; do
             if [[ -f "public/locales/$lang/translation.json" ]]; then
               git diff --quiet HEAD^ -- "public/locales/$lang/translation.json"
@@ -40,6 +41,7 @@ jobs:
                 echo "Translation file 'public/locales/$lang/translation.json' not modified."
               else
                 echo "Translation file 'public/locales/$lang/translation.json' modified."
+                echo "translation_changed=true" >> "$GITHUB_ENV"
                 echo "$lang" >> changes.txt
               fi
             else
