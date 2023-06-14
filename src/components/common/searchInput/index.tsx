@@ -1,7 +1,7 @@
+import { KeyboardEventHandler } from 'react';
+import { useTranslation } from 'libs/translations';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
-import { useTranslation } from 'libs/translations';
-import { KeyboardEventHandler } from 'react';
 
 interface Props {
   value: string;

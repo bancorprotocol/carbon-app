@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'libs/translations';
 import { Menu, MenuItemType } from './useBurgerMenuItems';
 import { ImmutableStack } from 'utils/stack';
 import { ForwardArrow } from 'components/common/forwardArrow';
@@ -16,7 +15,6 @@ interface UseMenuContextProps<T> {
 }
 
 export function useMenuContext<T>(props: UseMenuContextProps<T>) {
-  const { i18n } = useTranslation();
   const { mainMenu, menuMapping, defaultState } = props;
 
   const [isOpen, setIsOpen] = useState(defaultState || false);

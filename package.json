@@ -91,7 +91,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest run",
-    "lint": "eslint --ext .tsx ."
+    "lint": "eslint --ext .tsx,.ts ."
   },
   "eslintConfig": {
     "extends": [

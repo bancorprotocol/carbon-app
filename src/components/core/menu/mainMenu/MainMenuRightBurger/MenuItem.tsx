@@ -1,5 +1,4 @@
 import { FC, ReactElement } from 'react';
-import { useTranslation } from 'libs/translations';
 import { ForwardArrow } from 'components/common/forwardArrow';
 
 type MenuItemProps = {
@@ -19,7 +18,6 @@ export const MenuItem: FC<MenuItemProps> = ({ item }) => {
     disableHoverEffect = false,
     className = '',
   } = item;
-  const { i18n } = useTranslation();
 
   return (
     <div

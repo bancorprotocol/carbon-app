@@ -1,19 +1,19 @@
 import { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
+import { carbonEvents } from 'services/events';
+import { Token } from 'libs/tokens';
+import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
+import { useTranslation } from 'libs/translations';
+import { UseQueryResult } from 'libs/queries';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import useInitEffect from 'hooks/useInitEffect';
 import { Button } from 'components/common/button';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
-import { Token } from 'libs/tokens';
-import { UseQueryResult } from 'libs/queries';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
-import { carbonEvents } from 'services/events';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import useInitEffect from 'hooks/useInitEffect';
-import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
-import { useTranslation } from 'libs/translations';
 
 export type TradeWidgetBuySellProps = {
   source: Token;

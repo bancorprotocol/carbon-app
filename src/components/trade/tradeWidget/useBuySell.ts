@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { useWeb3 } from 'libs/web3';
 import { carbonEvents } from 'services/events';
+import { useWeb3 } from 'libs/web3';
 import {
   useGetTradeLiquidity,
   useGetTradeData,

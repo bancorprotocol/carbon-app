@@ -1,13 +1,13 @@
 import { ChangeEvent, FC, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { Imager } from 'components/common/imager/Imager';
 import { Token } from 'libs/tokens';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useWeb3 } from 'libs/web3';
-import { Slippage } from './Slippage';
-import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { i18n, useTranslation } from 'libs/translations';
+import { useWeb3 } from 'libs/web3';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { Imager } from 'components/common/imager/Imager';
+import { Slippage } from './Slippage';
+import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
   value: string;

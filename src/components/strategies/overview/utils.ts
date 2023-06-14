@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { Strategy } from 'libs/queries';
-import { TFunction } from 'libs/translations';
+import { i18n } from 'libs/translations';
 import { StrategyFilter, StrategySort } from './StrategyFilterSort';
 
 export const getCompareFunctionBySortType = (sortType: StrategySort) => {
@@ -34,40 +34,37 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
         new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
   }
 };
-
-export const getSortAndFilterItems = (
-  t: TFunction<string, undefined, string>
-) => {
+export const getSortAndFilterItems = () => {
   const sortItems = [
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item1'),
+      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item1'),
       item: StrategySort.Recent,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item2'),
+      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item2'),
       item: StrategySort.Old,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item3'),
+      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item3'),
       item: StrategySort.PairAscending,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item4'),
+      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item4'),
       item: StrategySort.PairDescending,
     },
   ];
 
   const filterItems = [
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item5'),
+      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item5'),
       item: StrategyFilter.All,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item6'),
+      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item6'),
       item: StrategyFilter.Active,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item7'),
+      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item7'),
       item: StrategyFilter.Inactive,
     },
   ];

@@ -25,7 +25,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
 }) => {
   const { closeModal } = useModal();
   const { t } = useTranslation();
-  const data = getModalDataByType(type, t);
+  const data = getModalDataByType(type);
   const { pauseStrategy, isProcessing, setIsProcessing, updateMutation } =
     useUpdateStrategy();
 

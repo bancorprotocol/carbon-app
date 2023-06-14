@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
-import { m, Variants } from 'libs/motion';
-import { i18n } from 'libs/translations';
+import { m } from 'libs/motion';
 import { Overlay } from 'libs/modals/Overlay';
 import { useModal } from 'hooks/useModal';
+import { getInAndOutVariant } from './utils';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 
 type Props = {
@@ -32,37 +32,15 @@ export const ModalSlideOver: FC<Props> = ({
   showCloseButton = true,
 }) => {
   const { closeModal } = useModal();
-
+  const dropInAndOut = getInAndOutVariant();
   const sizeClass = getSize(size);
-
-  const dropIn: Variants = {
-    hidden: {
-      x: i18n.dir() === 'ltr' ? '100vh' : '-100vh',
-    },
-    visible: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        delay: 0,
-        duration: 0.5,
-      },
-    },
-    exit: {
-      x: i18n.dir() === 'ltr' ? '100vh' : '-100vh',
-      opacity: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
 
   return (
     <Overlay onClick={() => closeModal(id)} className={`justify-end`}>
       <m.div
         onClick={(e) => e.stopPropagation()}
         className={`relative w-full ${sizeClass}`}
-        variants={dropIn}
+        variants={dropInAndOut}
         initial="hidden"
         animate="visible"
         exit="exit"
