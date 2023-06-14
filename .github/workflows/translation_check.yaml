@@ -48,10 +48,18 @@ jobs:
               echo "Translation file 'public/locales/$lang/translation.json' not found."
             fi
           done
-          if grep -q "src/libs/translations/version.ts" changes.txt; then
-              echo "version_changed=true" >> "$GITHUB_ENV"
-            else
-              echo "version_changed=false" >> "$GITHUB_ENV"
+
+      - name: Check for version.ts changes
+        id: version_changes
+        run: |
+          git diff --quiet HEAD^ -- "src/libs/translations/version.ts"
+          if [[ $? -eq 0 ]]; then
+            echo "version_changed=false" >> "$GITHUB_ENV"
+            echo "Version file 'src/libs/translations/version.ts' not modified."
+          else
+            echo "version_changed=true" >> "$GITHUB_ENV"
+            echo "Version file 'src/libs/translations/version.ts' modified."
+            echo "version" >> changes.txt
           fi
 
       - name: Fail or pass job based on changes
