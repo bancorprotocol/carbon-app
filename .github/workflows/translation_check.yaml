@@ -52,6 +52,7 @@ jobs:
       - name: Check for version.ts changes
         id: version_changes
         run: |
+          touch version_changes.txt
           if grep -q "src/libs/translations/version.ts" version_changes.txt; then
            if [[ $? -eq 0 ]]; then
              echo "version_changed=false" >> "$GITHUB_ENV"
