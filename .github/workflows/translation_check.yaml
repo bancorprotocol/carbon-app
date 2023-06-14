@@ -48,7 +48,7 @@ jobs:
               echo "Translation file 'public/locales/$lang/translation.json' not found."
             fi
           done
-          if grep -q "index.html" changes.txt; then
+          if grep -q "src/libs/translations/version.ts" changes.txt; then
               echo "version_changed=true" >> "$GITHUB_ENV"
             else
               echo "version_changed=false" >> "$GITHUB_ENV"
