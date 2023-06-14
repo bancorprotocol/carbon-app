@@ -34,9 +34,10 @@ jobs:
         run: |
           echo "translation_changed=false" >> "$GITHUB_ENV"
           IFS=',' read -ra LANGUAGES <<< "${{ env.languages }}"
+          git diff --name-only HEAD^ ${{ github.sha }} > changes.txt  
           for lang in "${LANGUAGES[@]}"; do
-            if [[ -f "index.html" ]]; then
-              if git log -1 --name-only --oneline -- "index.html" | grep -q "index.html"; then
+            if [[ -f "public/locales/$lang/translation.json" ]]; then
+               if grep -q "public/locales/$lang/translation.json" changes.txt; then
                 echo "Translation file 'public/locales/$lang/translation.json' modified."
                 echo "translation_changed=true" >> "$GITHUB_ENV"
               else
