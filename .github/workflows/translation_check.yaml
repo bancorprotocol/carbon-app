@@ -50,8 +50,8 @@ jobs:
       - name: Check for version.ts changes
         id: version_changes
         run: |
-          git diff --quiet HEAD^ -- "src/libs/translations/version.ts"
-           if [[ $? -eq 0 ]]; then
+          git diff --name-only HEAD^ ${{ github.sha }} > version_changes.txt
+          if grep -q "public/locales/es/translation.json" version_changes.txt; then
              echo "version_changed=false" >> "$GITHUB_ENV"
              echo "Version file 'src/libs/translations/version.ts' not modified."
            else
