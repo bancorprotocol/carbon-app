@@ -60,7 +60,7 @@ jobs:
              echo "Version file 'src/libs/translations/version.ts' not modified."
            fi
 
-      - name: Fail or pass job based on changes ":pray:"
+      - name: Fail or pass job based on changes
         run: |
           if [[ "${{ env.translation_changed }}" == false ]]; then
             echo "Translation did not change - we are good to go"
