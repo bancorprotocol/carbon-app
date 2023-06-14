@@ -29,7 +29,7 @@ jobs:
         run: |
           git diff --name-only HEAD^ ${{ github.sha }} > changes.txt
           if grep -q "public/locales/es/translation.json" changes.txt; then
-            if grep -q "src/libs/translations/version.ts" changes.txt; then
+            if grep -q "index.html" changes.txt; then
               echo "version_changed=true" >> "$GITHUB_ENV"
             else
               echo "version_changed=false" >> "$GITHUB_ENV"
