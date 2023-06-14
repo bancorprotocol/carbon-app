@@ -50,13 +50,13 @@ jobs:
       - name: Check for version.ts changes
         id: version_changes
         run: |
-          git diff --name-only HEAD^ ${{ github.sha }} > version_changes.txt
-          if grep -q "public/locales/es/translation.json" version_changes.txt; then
-             echo "version_changed=false" >> "$GITHUB_ENV"
-             echo "Version file 'src/libs/translations/version.ts' not modified."
-           else
+          git diff --name-only HEAD^ ${{ github.sha }} > changes.txt
+          if grep -q "public/locales/es/translation.json" changes.txt; then
              echo "version_changed=true" >> "$GITHUB_ENV"
              echo "Version file 'src/libs/translations/version.ts' modified."
+           else
+             echo "version_changed=false" >> "$GITHUB_ENV"
+             echo "Version file 'src/libs/translations/version.ts' not modified."
            fi
 
       - name: Fail or pass job based on changes
