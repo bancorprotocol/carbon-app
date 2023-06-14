@@ -34,8 +34,12 @@ export const ModalCreateStratExpertMode: ModalFC<
         />
       </div>
 
-      <p className={'flex items-center text-warning-500'}>
-        <IconWarning className={'w-14'} />
+      <p
+        className={
+          'my-20 flex w-full items-center justify-center text-12 text-warning-500'
+        }
+      >
+        <IconWarning className={'mr-10 w-14'} />
         Only use range if you know what you are doing
       </p>
 
