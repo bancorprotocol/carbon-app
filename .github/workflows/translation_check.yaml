@@ -27,7 +27,7 @@ jobs:
       - name: Get language list
         id: get_languages
         run: |
-          echo "languages=$(ls -d public/locales/*/ | xargs -n1 basename)" >> "$GITHUB_ENV"
+          echo "languages=$(ls -d public/locales/*/ | xargs -n1 basename)" >> $GITHUB_ENV
 
       - name: Check for translation changes
         id: changes
