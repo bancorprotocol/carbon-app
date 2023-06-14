@@ -32,11 +32,12 @@ jobs:
       - name: Check for translation changes
         id: changes
         run: |
+          git diff --name-only HEAD^ ${{ github.sha }} > t_changes.txt
           echo "translation_changed=false" >> "$GITHUB_ENV"
           IFS=',' read -ra LANGUAGES <<< "${{ env.languages }}"
           for lang in "${LANGUAGES[@]}"; do
             if [[ -f "public/locales/$lang/translation.json" ]]; then
-              if git log -1 --name-only --oneline -- "public/locales/$lang/translation.json" | grep -q "public/locales/$lang/translation.json"; then
+              if grep -q "public/locales/$lang/translation.json" t_changes; then
                 echo "Translation file 'public/locales/$lang/translation.json' modified."
                 echo "translation_changed=true" >> "$GITHUB_ENV"
               else
