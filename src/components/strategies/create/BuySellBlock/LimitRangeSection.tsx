@@ -8,6 +8,8 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { lsService } from 'services/localeStorage';
+import { useModal } from 'hooks/useModal';
 
 type Props = {
   base: Token;
@@ -28,6 +30,7 @@ export const LimitRangeSection: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
 }) => {
+  const { openModal } = useModal();
   const { isRange, setIsRange, resetFields } = order;
   const tokenPriceQuery = useGetTokenPrice(base?.address);
   const { selectedFiatCurrency } = useFiatCurrency();
@@ -40,8 +43,17 @@ export const LimitRangeSection: FC<Props> = ({
     : `Notice, you offer to sell ${base.symbol} below current market price`;
 
   const handleRangeChange = () => {
-    setIsRange(!isRange);
-    resetFields(true);
+    if (!lsService.getItem('hasSeenCreateStratExpertMode')) {
+      openModal('createStratExpertMode', {
+        onConfirm: () => {
+          setIsRange(!isRange);
+          resetFields(true);
+        },
+      });
+    } else {
+      setIsRange(!isRange);
+      resetFields(true);
+    }
   };
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {

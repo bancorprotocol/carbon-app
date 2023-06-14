@@ -100,7 +100,7 @@ export const EditStrategyAllocatedBudget: FC<{
                 </>
               }
             >
-              <>
+              <div className={'flex items-center'}>
                 {balance && (
                   <span>
                     {sanitizeNumberInput(
@@ -110,11 +110,11 @@ export const EditStrategyAllocatedBudget: FC<{
                   </span>
                 )}
                 <Imager
-                  className="h-16 w-16"
+                  className="ml-10 h-16 w-16"
                   src={buy ? quote?.logoURI : base?.logoURI}
                   alt="token"
                 />
-              </>
+              </div>
             </Tooltip>
             {showMaxCb && (
               <div

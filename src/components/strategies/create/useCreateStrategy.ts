@@ -333,6 +333,7 @@ export const useCreateStrategy = () => {
     setShowGraph,
     showTokenSelection,
     strategyType,
+    strategySettings,
     strategyDirection,
     showTypeMenu,
     selectedStrategySettings,

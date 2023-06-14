@@ -12,6 +12,8 @@ import { ReactComponent as IconSellLimit } from 'assets/icons/sell-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconTwoLimits } from 'assets/icons/two-limits.svg';
 import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strategy.svg';
+import { useModal } from 'hooks/useModal';
+import { lsService } from 'services/localeStorage';
 
 type StrategyTypeItem = {
   label: string;
@@ -28,6 +30,7 @@ export const useCreateStrategyTypeMenu = (
   quote: string,
   strategyType?: StrategyType
 ) => {
+  const { openModal } = useModal();
   const navigate = useNavigate();
 
   const types: StrategyTypeItem[] = [
@@ -143,7 +146,16 @@ export const useCreateStrategyTypeMenu = (
     search: StrategyCreateLocationGenerics['Search'],
     replace?: boolean
   ) => {
-    navigate({ to, search, replace });
+    if (
+      search.strategySettings !== 'limit' &&
+      !lsService.getItem('hasSeenCreateStratExpertMode')
+    ) {
+      openModal('createStratExpertMode', {
+        onConfirm: () => navigate({ to, search, replace }),
+      });
+    } else {
+      navigate({ to, search, replace });
+    }
   };
 
   const selectedTabItems = useMemo(() => {
