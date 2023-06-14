@@ -10,6 +10,7 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { checkIfOrdersOverlap } from '../utils';
 import { getStatusTextByTxStatus } from '../utils';
+import { CreateStrategyRangeWarning } from 'components/strategies/create/CreateStrategyRangeWarning';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -100,8 +101,12 @@ export const EditStrategyPricesContent = ({
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
 
+  const showRangeWarning = useMemo(() => {
+    return order0.isRange || order1.isRange;
+  }, [order0.isRange, order1.isRange]);
+
   return (
-    <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
+    <div className="flex w-full flex-col items-center space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyPricesBuySellBlock
         buy
@@ -120,6 +125,9 @@ export const EditStrategyPricesContent = ({
         type={type}
         isOrdersOverlap={isOrdersOverlap}
       />
+
+      {showRangeWarning && <CreateStrategyRangeWarning />}
+
       <Button
         disabled={!isOrderValid(order0) || !isOrderValid(order1)}
         loading={isLoading}

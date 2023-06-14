@@ -10,6 +10,10 @@ import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
+import { useModal } from 'hooks/useModal';
+import { useNavigate } from '@tanstack/react-location';
+import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
+import { lsService } from 'services/localeStorage';
 
 export const CreateStrategyOrders = ({
   base,
@@ -22,12 +26,15 @@ export const CreateStrategyOrders = ({
   token1BalanceQuery,
   strategyDirection,
   strategyType,
+  strategySettings,
   selectedStrategySettings,
   isProcessing,
   isAwaiting,
   isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
+  const { openModal } = useModal();
+  const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const strategyEventData = useStrategyEventData({
     base,
     quote,
@@ -45,6 +52,22 @@ export const CreateStrategyOrders = ({
         strategyType: selectedStrategySettings.search.strategyType,
       });
   }, [strategyDirection]);
+
+  useInitEffect(() => {
+    if (lsService.getItem('hasSeenCreateStratExpertMode')) {
+      return;
+    }
+
+    if (strategySettings === 'range' || strategySettings === 'custom') {
+      openModal('createStratExpertMode', {
+        onClose: () =>
+          navigate({
+            search: (prev) => ({ ...prev, strategySettings: 'limit' }),
+            replace: true,
+          }),
+      });
+    }
+  }, [openModal, strategySettings]);
 
   const onCreateStrategy = () => {
     carbonEvents.strategy.strategyCreateClick(strategyEventData);
