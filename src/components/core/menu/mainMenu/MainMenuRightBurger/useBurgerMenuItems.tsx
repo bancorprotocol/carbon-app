@@ -28,7 +28,7 @@ export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
   const { t, i18n } = useTranslation();
-  const menuMap = useMemo(() => new Map<MenuType, Menu>(), []);
+  const menuMap = new Map<MenuType, Menu>();
 
   const mainItems: MenuItemType[] = [
     {
@@ -135,7 +135,12 @@ export const useBurgerMenuItems = () => {
         };
       }),
     ],
-    [availableCurrencies, selectedFiatCurrency, setSelectedFiatCurrency]
+    [
+      availableCurrencies,
+      selectedFiatCurrency,
+      setSelectedFiatCurrency,
+      i18n.language,
+    ]
   );
 
   const resourcesItems: MenuItemType[] = [
@@ -176,28 +181,26 @@ export const useBurgerMenuItems = () => {
     },
   ];
 
-  const languagesItems = useMemo(
-    (): MenuItemType[] =>
-      SUPPORTED_LANGUAGES.map(({ code, name }) => {
-        return {
-          content: (
-            <div
-              className="flex gap-20"
-              onClick={() => i18n.changeLanguage(code)}
-            >
-              <span>{name}</span>
-              <span className="flex items-center">
-                <IconV
-                  className={`invisible h-12 w-12 ${
-                    i18n.language.includes(code) ? '!visible' : ''
-                  }`}
-                />
-              </span>
-            </div>
-          ),
-        };
-      }),
-    [i18n.language]
+  const languagesItems: MenuItemType[] = SUPPORTED_LANGUAGES.map(
+    ({ code, name }) => {
+      return {
+        content: (
+          <div
+            className="flex gap-20"
+            onClick={() => i18n.changeLanguage(code)}
+          >
+            <span>{name}</span>
+            <span className="flex items-center">
+              <IconV
+                className={`invisible h-12 w-12 ${
+                  i18n.language.includes(code) ? '!visible' : ''
+                }`}
+              />
+            </span>
+          </div>
+        ),
+      };
+    }
   );
 
   menuMap.set('main', { items: mainItems });

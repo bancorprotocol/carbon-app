@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'libs/translations';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
+import { getSortAndFilterItems } from './utils';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 
@@ -25,41 +26,7 @@ export const StrategyFilterSort: FC<{
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ sort, filter, setSort, setFilter }) => {
   const { t } = useTranslation();
-
-  // TODO: find better location
-  const sortItems = [
-    {
-      title: t('pages.strategyOverview.header.filterMenu.items.item1'),
-      item: StrategySort.Recent,
-    },
-    {
-      title: t('pages.strategyOverview.header.filterMenu.items.item2'),
-      item: StrategySort.Old,
-    },
-    {
-      title: t('pages.strategyOverview.header.filterMenu.items.item3'),
-      item: StrategySort.PairAscending,
-    },
-    {
-      title: t('pages.strategyOverview.header.filterMenu.items.item4'),
-      item: StrategySort.PairDescending,
-    },
-  ];
-
-  const filterItems = [
-    {
-      title: t('pages.strategyOverview.header.filterMenu.items.item5'),
-      item: StrategyFilter.All,
-    },
-    {
-      title: t('pages.strategyOverview.header.filterMenu.items.item6'),
-      item: StrategyFilter.Active,
-    },
-    {
-      title: t('pages.strategyOverview.header.filterMenu.items.item7'),
-      item: StrategyFilter.Inactive,
-    },
-  ];
+  const { sortItems, filterItems } = getSortAndFilterItems(t);
 
   return (
     <DropdownMenu

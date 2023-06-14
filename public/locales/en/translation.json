@@ -110,7 +110,7 @@
     "connectWallet": {
       "modalTitle": "Connect Wallet",
       "actionButton": "I read and accept",
-      "content1": "By connecting my wallet, I agree to the <1>terms & conditions</1> and <2>cookie & privacy policy</2> of this site.",
+      "content1": "By connecting my wallet, I agree to the <0>terms & conditions</0> and <0>cookie & privacy policy</0> of this site.",
       "error1": "{{error}} Error:"
     },
     "confirm": {

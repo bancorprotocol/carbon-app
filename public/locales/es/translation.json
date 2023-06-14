@@ -100,7 +100,7 @@
     "connectWallet": {
       "modalTitle": "Conectar Billetera",
       "actionButton": "He leído y acepto",
-      "content1": "Al conectar mi billetera, acepto los <1>términos y condiciones</1> y la <2>política de cookies y privacidad</2> de este sitio.",
+      "content1": "Al conectar mi billetera, acepto los <0>términos y condiciones</0> y la <1>política de cookies y privacidad</1> de este sitio.",
       "error1": "{{error}} Error:"
     },
     "confirm": {

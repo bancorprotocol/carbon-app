@@ -177,25 +177,25 @@
   "navBar": {
     "actionButton": "xxxxxxxxxxx",
     "items": {
-      "item1": "xxxxxxxxxxx",
-      "item2": "xxxxxxxxxxx",
-      "item3": "xxxxxxxxxxx"
+      "item1": "xxxxxxxxxxxxx",
+      "item2": "xxxxxxxxxxxxxx",
+      "item3": "xxxxxxxxxxxxxxx"
     },
     "burgerMenu": {
       "items": {
-        "item1": "xxxxxxxxxxx",
-        "item2": "xxxxxxxxxxx",
-        "item3": "xxxxxxxxxxx",
-        "item4": "xxxxxxxxxxx",
-        "item5": "xxxxxxxxxxx",
-        "item6": "xxxxxxxxxxx",
-        "item7": "xxxxxxxxxxx",
-        "item8": "xxxxxxxxxxx",
-        "item9": "xxxxxxxxxxx",
-        "item10": "xxxxxxxxxxx",
-        "item11": "xxxxxxxxxxx",
-        "item12": "xxxxxxxxxxx",
-        "item13": "xxxxxxxxxxx"
+        "item1": "xxxxxxxxxx",
+        "item2": "xxxxxxxxx",
+        "item3": "xxxxxxxx",
+        "item4": "xxxxxxx",
+        "item5": "xxxxxx",
+        "item6": "xxxxx",
+        "item7": "xxxx",
+        "item8": "xxx",
+        "item9": "xx",
+        "item10": "x",
+        "item11": "xxxxxxxxxxxxxxx",
+        "item12": "xxxxxxxxxxxxxxxxx",
+        "item13": "xxxxxxxxxxxxxxxxxxx"
       }
     },
     "walletMenu": {
@@ -205,9 +205,9 @@
         "state3": "xxxxxxxxxxx"
       },
       "items": {
-        "item1": "xxxxxxxxxxx",
-        "item2": "xxxxxxxxxxx",
-        "item3": "xxxxxxxxxxx"
+        "item1": "xxxxxxxxxxxx",
+        "item2": "xxxxxxxxxxxxx",
+        "item3": "xxxxxxxxxxxxxx"
       }
     }
   },
@@ -315,13 +315,13 @@
         },
         "filterMenu": {
           "items": {
-            "item1": "xxxxxxxxxxx",
-            "item2": "xxxxxxxxxxx",
-            "item3": "xxxxxxxxxxx",
-            "item4": "xxxxxxxxxxx",
-            "item5": "xxxxxxxxxxx",
-            "item6": "xxxxxxxxxxx",
-            "item7": "xxxxxxxxxxx"
+            "item1": "xxxxxxxxxxxx",
+            "item2": "xxxxxxxxxxxxx",
+            "item3": "xxxxxxxxxxxxxx",
+            "item4": "xxxxxxxxxxxxxxx",
+            "item5": "xxxxxxxxxxxxxxxx",
+            "item6": "xxxxxxxxxxxxxxxxx",
+            "item7": "xxxxxxxxxxxxxxxxxx"
           },
           "subtitles": {
             "subtitle1": "xxxxxxxxxxx",

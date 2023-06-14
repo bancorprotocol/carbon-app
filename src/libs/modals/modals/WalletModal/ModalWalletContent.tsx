@@ -36,13 +36,11 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
 
   const isDisabled = isLoading || !checked;
 
-  // TODO: Check Trans translation here - working good but not so readable
   return (
     <div className={'space-y-10'}>
       <div className={'mb-20 space-y-10 text-14 text-white/80'}>
         <p>
           <Trans i18nKey={'modals.connectWallet.content1'}>
-            {''}
             <Link
               target={'_blank'}
               to={PathNames.terms}
@@ -55,7 +53,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
             />
           </Trans>
         </p>
-        <div className={'space-s-10 flex items-center'}>
+        <div className={'flex items-center space-s-10'}>
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
             {t('modals.connectWallet.actionButton')}

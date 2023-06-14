@@ -100,7 +100,7 @@
     "connectWallet": {
       "modalTitle": "Wallet verbinden",
       "actionButton": "Ich habe gelesen und akzeptiere",
-      "content1": "Durch das Verbinden meiner Brieftasche stimme ich den <1>Allgemeinen Geschäftsbedingungen</1> und der <2>Cookie- und Datenschutzrichtlinie</2> dieser Website zu.",
+      "content1": "Durch das Verbinden meiner Brieftasche stimme ich den <0>Allgemeinen Geschäftsbedingungen</0> und der <1>Cookie- und Datenschutzrichtlinie</1> dieser Website zu.",
       "error1": "{{error}} Fehler:"
     },
     "confirm": {

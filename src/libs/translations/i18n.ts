@@ -10,6 +10,8 @@ import { APP_ID, APP_VERSION } from 'utils/constants';
 import { TRANSLATION_VERSION } from './version';
 
 // TODO: add local storage backend + remove not needed languages
+// Remove after gets all languages + actual translations
+// TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Spanish' },
