@@ -52,7 +52,7 @@ jobs:
         id: version_changes
         run: |
           git diff --name-only HEAD^ ${{ github.sha }} > changes.txt
-          if grep -q "index.html" changes.txt; then
+          if grep -q "src/libs/translation.version.ts" changes.txt; then
              echo "version_changed=true" >> "$GITHUB_ENV"
              echo "Version file 'src/libs/translations/version.ts' modified."
            else
@@ -60,7 +60,7 @@ jobs:
              echo "Version file 'src/libs/translations/version.ts' not modified."
            fi
 
-      - name: Fail or pass job based on changes
+      - name: Fail or pass job based on changes ":pray:"
         run: |
           if [[ "${{ env.translation_changed }}" == false ]]; then
             echo "Translation did not change - we are good to go"
