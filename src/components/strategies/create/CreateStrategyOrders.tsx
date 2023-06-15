@@ -26,6 +26,7 @@ export const CreateStrategyOrders = ({
   token1BalanceQuery,
   strategyDirection,
   strategyType,
+  isDuplicate,
   strategySettings,
   selectedStrategySettings,
   isProcessing,
@@ -56,6 +57,15 @@ export const CreateStrategyOrders = ({
   useInitEffect(() => {
     if (lsService.getItem('hasSeenCreateStratExpertMode')) {
       return;
+    }
+
+    if (isDuplicate && (order0.isRange || order1.isRange)) {
+      openModal('createStratExpertMode', {
+        onClose: () => {
+          order0.setIsRange(false);
+          order1.setIsRange(false);
+        },
+      });
     }
 
     if (strategySettings === 'range' || strategySettings === 'custom') {
