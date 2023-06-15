@@ -12,7 +12,7 @@ import { TRANSLATION_VERSION } from './version';
 // TODO: add local storage backend + remove not needed languages
 // Remove after gets all languages + actual translations
 // TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
-// TODO: consider add pr for default fallback
+// Notice: only new notification translated at the current language.
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English (EN)' },
   { code: 'es', name: 'Spanish (ES)' },
