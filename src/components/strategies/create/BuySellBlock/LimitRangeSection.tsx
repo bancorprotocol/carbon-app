@@ -45,7 +45,8 @@ export const LimitRangeSection: FC<Props> = ({
   };
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    const tokenPrice = baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
+    const tokenMarketPrice =
+      baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
 
     if (order.isRange) {
       const isInputNotZero = buy
@@ -56,12 +57,14 @@ export const LimitRangeSection: FC<Props> = ({
         isInputNotZero &&
         new BigNumber(getFiatValue(buy ? order.max : order.min))[
           buy ? 'gt' : 'lt'
-        ](tokenPrice)
+        ](tokenMarketPrice)
       );
     }
     return (
       new BigNumber(order.price).gt(0) &&
-      new BigNumber(getFiatValue(order.price))[buy ? 'gt' : 'lt'](tokenPrice)
+      new BigNumber(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
+        tokenMarketPrice
+      )
     );
   }, [
     getFiatValue,
