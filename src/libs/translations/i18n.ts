@@ -17,10 +17,9 @@ import { TRANSLATION_VERSION } from './version';
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English (US)' },
   { code: 'es', name: 'Spanish (ES)' },
-  { code: 'ge', name: 'German (GE)' },
-  { code: 'he', name: 'Hebrew (HE)' },
-  { code: 'pr-BR', name: 'Portuguese (BR)' },
-  { code: 'pr-PT', name: 'Portuguese (PT)' },
+  { code: 'de', name: 'German (DE)' },
+  { code: 'he', name: 'Hebrew (IL)' },
+  { code: 'pt-BR', name: 'Portuguese (BR)' },
   { code: 'xx', name: 'Test (XX)' },
 ];
 
@@ -40,7 +39,7 @@ i18n
     },
     returnNull: false,
     fallbackLng: {
-      pr: ['pr-BR', 'pr-PT', 'en'],
+      pt: ['pt-BR', 'en'],
       default: ['en'],
     },
     load: 'all',
