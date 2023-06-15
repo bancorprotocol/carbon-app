@@ -14,7 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+        with:
+          fetch-depth: 2
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -43,7 +44,7 @@ jobs:
                 echo "Translation file 'public/locales/$lang/translation.json' not modified."
               fi
             else
-              echo "translation_changed=false" >> "$GITHUB_ENV"
+              echo "translation_changed=true" >> "$GITHUB_ENV"
               echo "Translation file 'public/locales/$lang/translation.json' not found."
             fi
           done
