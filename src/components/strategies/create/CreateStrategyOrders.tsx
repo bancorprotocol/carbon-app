@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { BuySellBlock } from './BuySellBlock';
@@ -14,6 +14,8 @@ import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-location';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
 import { lsService } from 'services/localeStorage';
+
+let didInit = false;
 
 export const CreateStrategyOrders = ({
   base,
@@ -54,7 +56,7 @@ export const CreateStrategyOrders = ({
       });
   }, [strategyDirection]);
 
-  useInitEffect(() => {
+  const handleExpertMode = useCallback(() => {
     if (lsService.getItem('hasSeenCreateStratExpertMode')) {
       return;
     }
@@ -77,7 +79,14 @@ export const CreateStrategyOrders = ({
           }),
       });
     }
-  }, [openModal, strategySettings]);
+  }, [isDuplicate, navigate, openModal, order0, order1, strategySettings]);
+
+  useEffect(() => {
+    if (!didInit) {
+      didInit = true;
+      void handleExpertMode();
+    }
+  }, [handleExpertMode]);
 
   const onCreateStrategy = () => {
     carbonEvents.strategy.strategyCreateClick(strategyEventData);
