@@ -15,12 +15,12 @@ import { TRANSLATION_VERSION } from './version';
 // TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
 // Notice: only new notification translated at the current language.
 export const SUPPORTED_LANGUAGES = [
-  { code: 'en', name: 'English (US)' },
-  { code: 'es', name: 'Spanish (ES)' },
-  { code: 'de', name: 'German (DE)' },
-  { code: 'he', name: 'Hebrew (IL)' },
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Español' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'he', name: 'עברית' },
   { code: 'pt-BR', name: 'Portuguese (BR)' },
-  { code: 'xx', name: 'Test (XX)' },
+  { code: 'xx', name: 'Test' },
 ];
 
 type SupportedLanguagesCodes = (typeof SUPPORTED_LANGUAGES)[number]['code'];

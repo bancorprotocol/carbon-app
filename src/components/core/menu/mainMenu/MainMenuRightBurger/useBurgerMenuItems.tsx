@@ -29,6 +29,9 @@ export const useBurgerMenuItems = () => {
     useFiatCurrency();
   const { t, i18n } = useTranslation();
   const menuMap = new Map<MenuType, Menu>();
+  const currentLangName = SUPPORTED_LANGUAGES.find(
+    ({ code }) => code === i18n.language
+  )?.name;
 
   const mainItems: MenuItemType[] = [
     {
@@ -37,7 +40,12 @@ export const useBurgerMenuItems = () => {
     },
     {
       subMenu: 'languages',
-      content: t('navBar.burgerMenu.items.item2'),
+      content: (
+        <div className="flex w-full items-center justify-between">
+          <span>{t('navBar.burgerMenu.items.item2')}</span>
+          <span className="font-weight-500 me-10">{currentLangName}</span>
+        </div>
+      ),
     },
     {
       subMenu: 'resources',

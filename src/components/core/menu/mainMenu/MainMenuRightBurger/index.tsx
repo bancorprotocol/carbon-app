@@ -20,7 +20,7 @@ export const MainMenuRightBurger: FC<{
     <DropdownMenu
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      className="rounded-[10px] py-8 px-8 text-16 font-weight-400 text-white"
+      className="w-[280px] rounded-[10px] py-8 px-8 text-16 font-weight-400 text-white"
       button={(onClick) => (
         <Button
           variant={'secondary'}
@@ -43,7 +43,9 @@ export const MainMenuRightBurger: FC<{
           <div
             key={`${index}_${item.content}`}
             className={`border-grey5 ${
-              menuContext.size() === 1 ? 'first:border-b-2 last:border-t-2' : ''
+              menuContext.size() === 1
+                ? `${index === 1 ? 'border-b-2' : ''} last:border-t-2`
+                : ''
             }`}
           >
             <MenuItem
