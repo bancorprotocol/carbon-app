@@ -125,11 +125,15 @@ export const useBurgerMenuItems = () => {
 
         return {
           content: (
-            <div className={`flex gap-20 ${isCurrencySelected ? '' : ''}`}>
+            <div
+              className={`flex justify-between gap-20 ${
+                isCurrencySelected ? '' : ''
+              }`}
+            >
               <span>{currency}</span>
               <span className="flex items-center">
                 <IconV
-                  className={`invisible h-12 w-12 ${
+                  className={`invisible h-12 w-12 me-8 ${
                     isCurrencySelected ? '!visible' : ''
                   }`}
                 />
@@ -194,13 +198,13 @@ export const useBurgerMenuItems = () => {
       return {
         content: (
           <div
-            className="flex gap-20"
+            className="flex justify-between gap-20"
             onClick={() => i18n.changeLanguage(code)}
           >
             <span>{name}</span>
             <span className="flex items-center">
               <IconV
-                className={`invisible h-12 w-12 ${
+                className={`invisible h-12 w-12 me-8 ${
                   i18n.language.includes(code) ? '!visible' : ''
                 }`}
               />
