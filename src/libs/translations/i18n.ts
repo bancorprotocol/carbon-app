@@ -10,6 +10,7 @@ import { APP_ID, APP_VERSION } from 'utils/constants';
 import { TRANSLATION_VERSION } from './version';
 
 // TODO: add local storage backend + remove not needed languages
+// TODO: add accent letter fonts.
 // Remove after gets all languages + actual translations
 // TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
 // Notice: only new notification translated at the current language.
