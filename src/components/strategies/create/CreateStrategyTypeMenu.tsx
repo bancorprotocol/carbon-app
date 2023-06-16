@@ -9,6 +9,8 @@ import { UseStrategyCreateReturn } from 'components/strategies/create/index';
 import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
 import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
+import { lsService } from 'services/localeStorage';
+import { useModal } from 'hooks/useModal';
 
 const BlockIconTextDesc = ({
   icon,
@@ -45,6 +47,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   selectedStrategySettings,
   setSelectedStrategySettings,
 }) => {
+  const { openModal } = useModal();
   const {
     items: tabs,
     handleClick,
@@ -115,7 +118,20 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 )}
                 <Button
                   variant={'black'}
-                  onClick={() => setSelectedStrategySettings({ to, search })}
+                  onClick={() => {
+                    if (
+                      (search.strategySettings === 'range' ||
+                        search.strategySettings === 'custom') &&
+                      !lsService.getItem('hasSeenCreateStratExpertMode')
+                    ) {
+                      openModal('createStratExpertMode', {
+                        onConfirm: () =>
+                          setSelectedStrategySettings({ to, search }),
+                      });
+                    } else {
+                      setSelectedStrategySettings({ to, search });
+                    }
+                  }}
                   fullWidth
                   className={`flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10  ${
                     selectedStrategySettings?.search.strategyDirection ===

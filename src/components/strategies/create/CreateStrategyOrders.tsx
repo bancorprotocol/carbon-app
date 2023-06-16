@@ -62,7 +62,7 @@ export const CreateStrategyOrders = ({
     }
 
     if (isDuplicate && (order0.isRange || order1.isRange)) {
-      openModal('createStratExpertMode', {
+      return openModal('createStratExpertMode', {
         onClose: () => {
           order0.setIsRange(false);
           order1.setIsRange(false);
@@ -71,7 +71,7 @@ export const CreateStrategyOrders = ({
     }
 
     if (strategySettings === 'range' || strategySettings === 'custom') {
-      openModal('createStratExpertMode', {
+      return openModal('createStratExpertMode', {
         onClose: () =>
           navigate({
             search: (prev) => ({ ...prev, strategySettings: 'limit' }),
