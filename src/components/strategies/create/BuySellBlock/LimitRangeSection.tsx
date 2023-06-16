@@ -32,8 +32,8 @@ export const LimitRangeSection: FC<Props> = ({
 }) => {
   const { openModal } = useModal();
   const { isRange, setIsRange, resetFields } = order;
-  const tokenPriceQuery = useGetTokenPrice(base?.address);
-  const { selectedFiatCurrency } = useFiatCurrency();
+  const baseTokenPriceQuery = useGetTokenPrice(base?.address);
+  const { getFiatValue, selectedFiatCurrency } = useFiatCurrency(quote);
 
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
@@ -57,25 +57,36 @@ export const LimitRangeSection: FC<Props> = ({
   };
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    const marketPrice = tokenPriceQuery.data?.[selectedFiatCurrency] || 0;
+    const tokenMarketPrice =
+      baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
 
-    if (new BigNumber(marketPrice).gt(0)) {
-      if (order.isRange) {
-        return new BigNumber(buy ? order.max : order.min)[buy ? 'gt' : 'lt'](
-          marketPrice
-        );
-      }
-      return new BigNumber(order.price)[buy ? 'gt' : 'lt'](marketPrice);
+    if (order.isRange) {
+      const isInputNotZero = buy
+        ? new BigNumber(order.max).gt(0)
+        : new BigNumber(order.min).gt(0);
+
+      return (
+        isInputNotZero &&
+        new BigNumber(getFiatValue(buy ? order.max : order.min))[
+          buy ? 'gt' : 'lt'
+        ](tokenMarketPrice)
+      );
     }
-    return false;
+    return (
+      new BigNumber(order.price).gt(0) &&
+      new BigNumber(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
+        tokenMarketPrice
+      )
+    );
   }, [
-    buy,
+    getFiatValue,
+    order.price,
     order.isRange,
     order.max,
-    order.price,
     order.min,
-    tokenPriceQuery.data,
+    baseTokenPriceQuery?.data,
     selectedFiatCurrency,
+    buy,
   ]);
 
   return (
