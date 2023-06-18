@@ -68,7 +68,7 @@ describe('MarketPriceIndication - desktop', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('99% below market');
+    const indicationText = screen.getByText('99.99% below market');
     expect(indicationText).toBeTruthy();
   });
 
