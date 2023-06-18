@@ -1,4 +1,3 @@
-import React from 'react';
 import { test, expect } from 'vitest';
 
 test('test App.tsx', () => {

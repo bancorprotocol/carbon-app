@@ -1,4 +1,4 @@
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useCallback, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
 import { useGetTokenPrice } from 'libs/queries';
@@ -31,6 +31,8 @@ export const LimitRangeSection: FC<Props> = ({
   const { isRange, setIsRange, resetFields } = order;
   const baseTokenPriceQuery = useGetTokenPrice(base?.address);
   const { getFiatValue, selectedFiatCurrency } = useFiatCurrency(quote);
+  const tokenMarketPrice =
+    baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
 
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
@@ -45,9 +47,6 @@ export const LimitRangeSection: FC<Props> = ({
   };
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    const tokenMarketPrice =
-      baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
-
     if (order.isRange) {
       const isInputNotZero = buy
         ? new BigNumber(order.max).gt(0)
@@ -67,15 +66,37 @@ export const LimitRangeSection: FC<Props> = ({
       )
     );
   }, [
-    getFiatValue,
-    order.price,
     order.isRange,
+    order.price,
     order.max,
     order.min,
-    baseTokenPriceQuery?.data,
-    selectedFiatCurrency,
+    getFiatValue,
     buy,
+    tokenMarketPrice,
   ]);
+
+  const getMarketPricePercentage = useCallback(
+    (price: string) => {
+      const fiatValue = getFiatValue(price);
+      return fiatValue.eq(0)
+        ? fiatValue
+        : new BigNumber(fiatValue)
+            .minus(tokenMarketPrice)
+            .div(tokenMarketPrice)
+            .times(100);
+    },
+    [getFiatValue, tokenMarketPrice]
+  );
+
+  const marketPricePercentage = useMemo(() => {
+    if (isRange) {
+      return {
+        min: getMarketPricePercentage(order.min),
+        max: getMarketPricePercentage(order.max),
+      };
+    }
+    return getMarketPricePercentage(order.price);
+  }, [getMarketPricePercentage, isRange, order.max, order.min, order.price]);
 
   return (
     <div className={`space-y-12 text-left`}>
@@ -121,7 +142,6 @@ export const LimitRangeSection: FC<Props> = ({
       </div>
 
       <div className={'flex items-center pt-10'}>{inputTitle}</div>
-
       {isRange ? (
         <InputRange
           min={order.min}
@@ -132,6 +152,9 @@ export const LimitRangeSection: FC<Props> = ({
           setRangeError={order.setRangeError}
           token={quote}
           buy={buy}
+          marketPricePercentages={
+            marketPricePercentage as { min: BigNumber; max: BigNumber }
+          }
         />
       ) : (
         <InputLimit
@@ -141,6 +164,7 @@ export const LimitRangeSection: FC<Props> = ({
           error={order.priceError}
           setPriceError={order.setPriceError}
           buy={buy}
+          marketPricePercentage={marketPricePercentage as BigNumber}
         />
       )}
       {isOrdersOverlap && !buy && (

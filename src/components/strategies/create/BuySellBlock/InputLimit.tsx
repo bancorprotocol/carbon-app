@@ -1,10 +1,12 @@
+import { ChangeEvent, FC, FocusEvent } from 'react';
+import BigNumber from 'bignumber.js';
+import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { ChangeEvent, FC, FocusEvent } from 'react';
-import { carbonEvents } from 'services/events';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 
 export const InputLimit: FC<{
   price: string;
@@ -13,7 +15,16 @@ export const InputLimit: FC<{
   error?: string;
   setPriceError: (error: string) => void;
   buy?: boolean;
-}> = ({ price, setPrice, token, error, setPriceError, buy = false }) => {
+  marketPricePercentage: BigNumber;
+}> = ({
+  price,
+  setPrice,
+  token,
+  error,
+  setPriceError,
+  marketPricePercentage,
+  buy = false,
+}) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const errorMessage = 'Price must be greater than 0';
     +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
@@ -56,7 +67,14 @@ export const InputLimit: FC<{
             'mb-5 w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
           }
         />
-        <div className="font-mono text-12 text-white/60">{fiatAsString}</div>
+        <div className="flex items-center gap-10">
+          <div className="break-all font-mono text-12 text-white/60">
+            {fiatAsString}
+          </div>
+          <MarketPriceIndication
+            marketPricePercentage={marketPricePercentage}
+          />
+        </div>
       </div>
       <div
         className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${

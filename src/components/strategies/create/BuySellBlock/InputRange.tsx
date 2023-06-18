@@ -1,9 +1,11 @@
 import { ChangeEvent, FC, FocusEvent } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { sanitizeNumberInput } from 'utils/helpers';
-import { Token } from 'libs/tokens';
+import BigNumber from 'bignumber.js';
 import { carbonEvents } from 'services/events';
+import { Token } from 'libs/tokens';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
+import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
@@ -16,6 +18,10 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
+  marketPricePercentages: {
+    min: BigNumber;
+    max: BigNumber;
+  };
 }> = ({
   min,
   setMin,
@@ -25,6 +31,7 @@ export const InputRange: FC<{
   error,
   setRangeError,
   buy = false,
+  marketPricePercentages,
 }) => {
   const errorMessage = 'Max Price must be higher than min price and not zero';
 
@@ -62,7 +69,7 @@ export const InputRange: FC<{
 
   return (
     <div>
-      <div className="flex space-x-6">
+      <div className="grid grid-cols-2 gap-6">
         <div
           className={`${
             error ? 'border-red/50 text-red' : ''
@@ -88,8 +95,14 @@ export const InputRange: FC<{
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="font-mono text-12 text-white/60">
-            {getFiatAsString(min)}
+          <div className="flex items-center justify-between gap-10">
+            <div className="break-all font-mono text-12 text-white/60">
+              {getFiatAsString(min)}
+            </div>
+            <MarketPriceIndication
+              marketPricePercentage={marketPricePercentages.min}
+              isRange
+            />
           </div>
         </div>
         <div
@@ -114,11 +127,17 @@ export const InputRange: FC<{
             placeholder={`Enter Price`}
             onFocus={handleFocus}
             className={
-              'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
+              'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="mt-6 font-mono text-12 text-white/60">
-            {getFiatAsString(max)}
+          <div className="flex items-center justify-between gap-10">
+            <div className="break-all font-mono text-12 text-white/60	">
+              {getFiatAsString(max)}
+            </div>
+            <MarketPriceIndication
+              marketPricePercentage={marketPricePercentages.max}
+              isRange
+            />
           </div>
         </div>
       </div>
