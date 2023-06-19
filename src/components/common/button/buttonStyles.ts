@@ -34,11 +34,11 @@ export const buttonStyles = cva<ButtonVariants>(
         ],
         success: [
           'bg-green border-2 border-green',
-          'hover:border-greenLight hover:disabled:border-green',
+          'hover:border-lightGreen hover:disabled:border-green',
         ],
         'success-light': [
           'bg-green/20 border-2 border-green/0 !text-green',
-          'hover:border-greenLight hover:!text-black hover:bg-green hover:disabled:border-green',
+          'hover:border-lightGreen hover:!text-black hover:bg-green hover:disabled:border-green',
         ],
         error: [
           'bg-red border-2 border-red',
