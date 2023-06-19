@@ -43,7 +43,13 @@ export const BuySellBlock: FC<Props> = ({
     !tokenBalanceQuery.isLoading &&
     new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
 
-  useStrategyEvents({ base, quote, order, buy, insufficientBalance });
+  useStrategyEvents({
+    base,
+    quote,
+    order,
+    buy,
+    insufficientBalance,
+  });
 
   const titleText = buy ? 'Buy Low' : 'Sell High';
   const tooltipText = `This section will define the order details in which you are willing to ${
@@ -134,7 +140,15 @@ export const BuySellBlock: FC<Props> = ({
       )}
 
       <LimitRangeSection
-        {...{ base, quote, order, buy, title, inputTitle, isOrdersOverlap }}
+        {...{
+          base,
+          quote,
+          order,
+          buy,
+          title,
+          inputTitle,
+          isOrdersOverlap,
+        }}
       />
       <div className={'flex items-center pt-10 text-14'}>
         <div

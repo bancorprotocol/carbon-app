@@ -23,6 +23,7 @@ import {
   checkErrors,
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
+import { useMarketIndication } from 'hooks/useMarketIndication';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -46,7 +47,20 @@ export const useCreateStrategy = () => {
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const { marketPricePercentage: buyMarketPricePercentage } =
+    useMarketIndication({
+      base,
+      quote,
+      order: order0,
+      buy: true,
+    });
 
+  const { marketPricePercentage: sellMarketPricePercentage } =
+    useMarketIndication({
+      base,
+      quote,
+      order: order1,
+    });
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
   }, [order0, order1]);
@@ -115,7 +129,11 @@ export const useCreateStrategy = () => {
               cache,
               navigate,
               setIsProcessing,
-              strategyEventData,
+              strategyEventData: {
+                ...strategyEventData,
+                buyMarketPricePercentage,
+                sellMarketPricePercentage,
+              },
             }),
           buttonLabel: 'Create Strategy',
           eventData: {
@@ -140,7 +158,11 @@ export const useCreateStrategy = () => {
           cache,
           navigate,
           setIsProcessing,
-          strategyEventData,
+          strategyEventData: {
+            ...strategyEventData,
+            buyMarketPricePercentage,
+            sellMarketPricePercentage,
+          },
         });
       }
     }

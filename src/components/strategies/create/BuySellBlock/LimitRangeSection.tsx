@@ -1,13 +1,11 @@
-import { FC, ReactNode, useCallback, useMemo } from 'react';
-import BigNumber from 'bignumber.js';
+import { FC, ReactNode } from 'react';
 import { Token } from 'libs/tokens';
-import { useGetTokenPrice } from 'libs/queries';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { useMarketIndication } from 'hooks/useMarketIndication';
 
 type Props = {
   base: Token;
@@ -29,10 +27,8 @@ export const LimitRangeSection: FC<Props> = ({
   isOrdersOverlap,
 }) => {
   const { isRange, setIsRange, resetFields } = order;
-  const baseTokenPriceQuery = useGetTokenPrice(base?.address);
-  const { getFiatValue, selectedFiatCurrency } = useFiatCurrency(quote);
-  const tokenMarketPrice =
-    baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
+  const { marketPricePercentage, isOrderAboveOrBelowMarketPrice } =
+    useMarketIndication({ base, quote, order, buy });
 
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
@@ -45,58 +41,6 @@ export const LimitRangeSection: FC<Props> = ({
     setIsRange(!isRange);
     resetFields(true);
   };
-
-  const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    if (order.isRange) {
-      const isInputNotZero = buy
-        ? new BigNumber(order.max).gt(0)
-        : new BigNumber(order.min).gt(0);
-
-      return (
-        isInputNotZero &&
-        new BigNumber(getFiatValue(buy ? order.max : order.min))[
-          buy ? 'gt' : 'lt'
-        ](tokenMarketPrice)
-      );
-    }
-    return (
-      new BigNumber(order.price).gt(0) &&
-      new BigNumber(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
-        tokenMarketPrice
-      )
-    );
-  }, [
-    order.isRange,
-    order.price,
-    order.max,
-    order.min,
-    getFiatValue,
-    buy,
-    tokenMarketPrice,
-  ]);
-
-  const getMarketPricePercentage = useCallback(
-    (price: string) => {
-      const fiatValue = getFiatValue(price);
-      return fiatValue.eq(0)
-        ? fiatValue
-        : new BigNumber(fiatValue)
-            .minus(tokenMarketPrice)
-            .div(tokenMarketPrice)
-            .times(100);
-    },
-    [getFiatValue, tokenMarketPrice]
-  );
-
-  const marketPricePercentage = useMemo(() => {
-    if (isRange) {
-      return {
-        min: getMarketPricePercentage(order.min),
-        max: getMarketPricePercentage(order.max),
-      };
-    }
-    return getMarketPricePercentage(order.price);
-  }, [getMarketPricePercentage, isRange, order.max, order.min, order.price]);
 
   return (
     <div className={`space-y-12 text-left`}>
@@ -152,9 +96,7 @@ export const LimitRangeSection: FC<Props> = ({
           setRangeError={order.setRangeError}
           token={quote}
           buy={buy}
-          marketPricePercentages={
-            marketPricePercentage as { min: BigNumber; max: BigNumber }
-          }
+          marketPricePercentages={marketPricePercentage}
         />
       ) : (
         <InputLimit
@@ -164,7 +106,7 @@ export const LimitRangeSection: FC<Props> = ({
           error={order.priceError}
           setPriceError={order.setPriceError}
           buy={buy}
-          marketPricePercentage={marketPricePercentage as BigNumber}
+          marketPricePercentage={marketPricePercentage}
         />
       )}
       {isOrdersOverlap && !buy && (
