@@ -121,11 +121,11 @@ export interface EventStrategySchema extends EventCategory {
     };
     gtmData: StrategyGTMEventType & {
       strategy_buy_low_token_market_price_percentage: string;
-      strategy_buy_low_token_min_market_price_percentage: string;
-      strategy_buy_low_token_max_market_price_percentage: string;
+      strategy_buy_low_token_market_min_price_percentage: string;
+      strategy_buy_low_token_market_max_price_percentage: string;
       strategy_sell_high_token_market_price_percentage: string;
-      strategy_sell_high_token_min_market_price_percentage: string;
-      strategy_sell_high_token_max_market_price_percentage: string;
+      strategy_sell_high_token_market_min_price_percentage: string;
+      strategy_sell_high_token_market_max_price_percentage: string;
     };
   };
   newStrategyNextStepClick: {
@@ -237,15 +237,15 @@ export const strategyEvents: CarbonEvents['strategy'] = {
         ...gtmStrategyData,
         strategy_buy_low_token_market_price_percentage:
           strategy.buyMarketPricePercentage.price.toString(),
-        strategy_buy_low_token_min_market_price_percentage:
+        strategy_buy_low_token_market_min_price_percentage:
           strategy.buyMarketPricePercentage.min.toString(),
-        strategy_buy_low_token_max_market_price_percentage:
+        strategy_buy_low_token_market_max_price_percentage:
           strategy.buyMarketPricePercentage.max.toString(),
         strategy_sell_high_token_market_price_percentage:
           strategy.sellMarketPricePercentage.price.toString(),
-        strategy_sell_high_token_min_market_price_percentage:
+        strategy_sell_high_token_market_min_price_percentage:
           strategy.sellMarketPricePercentage.min.toString(),
-        strategy_sell_high_token_max_market_price_percentage:
+        strategy_sell_high_token_market_max_price_percentage:
           strategy.sellMarketPricePercentage.max.toString(),
       });
   },
