@@ -9,6 +9,8 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { lsService } from 'services/localeStorage';
+import { useModal } from 'hooks/useModal';
 
 type Props = {
   base: Token;
@@ -30,9 +32,10 @@ export const LimitRangeSection: FC<Props> = ({
   isOrdersOverlap,
 }) => {
   const { t } = useTranslation();
+  const { openModal } = useModal();
   const { isRange, setIsRange, resetFields } = order;
-  const tokenPriceQuery = useGetTokenPrice(base?.address);
-  const { selectedFiatCurrency } = useFiatCurrency();
+  const baseTokenPriceQuery = useGetTokenPrice(base?.address);
+  const { getFiatValue, selectedFiatCurrency } = useFiatCurrency(quote);
 
   const overlappingOrdersPricesMessage = t('common.warnings.warning1');
 
@@ -41,30 +44,50 @@ export const LimitRangeSection: FC<Props> = ({
     : t('common.warnings.warning3', { token: base.symbol });
 
   const handleRangeChange = () => {
-    setIsRange(!isRange);
-    resetFields(true);
+    if (!lsService.getItem('hasSeenCreateStratExpertMode')) {
+      openModal('createStratExpertMode', {
+        onConfirm: () => {
+          setIsRange(!isRange);
+          resetFields(true);
+        },
+      });
+    } else {
+      setIsRange(!isRange);
+      resetFields(true);
+    }
   };
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    const marketPrice = tokenPriceQuery.data?.[selectedFiatCurrency] || 0;
+    const tokenMarketPrice =
+      baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
 
-    if (new BigNumber(marketPrice).gt(0)) {
-      if (order.isRange) {
-        return new BigNumber(buy ? order.max : order.min)[buy ? 'gt' : 'lt'](
-          marketPrice
-        );
-      }
-      return new BigNumber(order.price)[buy ? 'gt' : 'lt'](marketPrice);
+    if (order.isRange) {
+      const isInputNotZero = buy
+        ? new BigNumber(order.max).gt(0)
+        : new BigNumber(order.min).gt(0);
+
+      return (
+        isInputNotZero &&
+        new BigNumber(getFiatValue(buy ? order.max : order.min))[
+          buy ? 'gt' : 'lt'
+        ](tokenMarketPrice)
+      );
     }
-    return false;
+    return (
+      new BigNumber(order.price).gt(0) &&
+      new BigNumber(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
+        tokenMarketPrice
+      )
+    );
   }, [
-    buy,
+    getFiatValue,
+    order.price,
     order.isRange,
     order.max,
-    order.price,
     order.min,
-    tokenPriceQuery.data,
+    baseTokenPriceQuery?.data,
     selectedFiatCurrency,
+    buy,
   ]);
 
   return (

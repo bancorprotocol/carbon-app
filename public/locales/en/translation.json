@@ -172,6 +172,17 @@
         "actionButton1": "Import Token",
         "actionButton2": "Cancel"
       }
+    },
+    "expertMode": {
+      "modalTitle": "Expert Mode",
+      "title": "Range Pricing",
+      "contents": {
+        "content1": "Range Pricing will spread the allocated budget on a bonding curve and split it across multiple price points.",
+        "content2": "Only use range if you know what you are doing"
+      },
+      "actionButtons": {
+        "actionButton1": "Proceed with Range"
+      }
     }
   },
   "navBar": {
@@ -415,6 +426,9 @@
         },
         "section2": {
           "title": "Strategy Type",
+          "contents": {
+            "content1": "Recommended"
+          },
           "strategyTypes": {
             "type1": {
               "title": "Recurring",

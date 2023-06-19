@@ -38,6 +38,7 @@ interface LocalStorageSchema {
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };
   isUncheckedSigner: boolean;
   hasSeenRestrictedCountryModal: boolean;
+  hasSeenCreateStratExpertMode: boolean;
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>

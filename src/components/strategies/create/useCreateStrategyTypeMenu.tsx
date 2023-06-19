@@ -18,6 +18,7 @@ type StrategyTypeItem = {
   label: string;
   to: string;
   search: StrategyCreateLocationGenerics['Search'];
+  isRecommended?: boolean;
 };
 
 type StrategyTypeItemSvg = StrategyTypeItem & {
@@ -70,6 +71,7 @@ export const useCreateStrategyTypeMenu = (
           strategyType: 'recurring',
           strategySettings: 'limit',
         },
+        isRecommended: true,
       },
       {
         label: i18n.t(
@@ -116,6 +118,7 @@ export const useCreateStrategyTypeMenu = (
           strategyDirection: 'buy',
           strategySettings: 'limit',
         },
+        isRecommended: true,
       },
       {
         label: i18n.t(
@@ -130,6 +133,7 @@ export const useCreateStrategyTypeMenu = (
           strategyDirection: 'buy',
           strategySettings: 'range',
         },
+        isRecommended: true,
       },
       {
         label: i18n.t(

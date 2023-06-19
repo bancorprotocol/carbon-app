@@ -103,7 +103,7 @@ export const EditStrategyPricesContent = ({
   }, [isAwaiting, isProcessing]);
 
   return (
-    <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
+    <div className="flex w-full flex-col items-center space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyPricesBuySellBlock
         buy
@@ -122,6 +122,7 @@ export const EditStrategyPricesContent = ({
         type={type}
         isOrdersOverlap={isOrdersOverlap}
       />
+
       <Button
         disabled={!isOrderValid(order0) || !isOrderValid(order1)}
         loading={isLoading}
