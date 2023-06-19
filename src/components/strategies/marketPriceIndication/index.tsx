@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import BigNumber from 'bignumber.js';
-import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 type Props = {
@@ -13,10 +12,9 @@ export const MarketPriceIndication: FC<Props> = ({
   marketPricePercentage,
   isRange = false,
 }) => {
-  const { belowBreakpoint } = useBreakpoints();
   const isAbove = marketPricePercentage.gt(0);
 
-  if (marketPricePercentage.eq(0) || belowBreakpoint('md')) {
+  if (marketPricePercentage.eq(0)) {
     return null;
   }
 
@@ -32,17 +30,15 @@ export const MarketPriceIndication: FC<Props> = ({
     }
 
     return isAbove
-      ? marketPricePercentage.decimalPlaces(2)
-      : marketPricePercentage.decimalPlaces(2).times(-1);
+      ? marketPricePercentage.toFixed(2)
+      : marketPricePercentage.times(-1).toFixed(2);
   };
 
   const percentage = getMarketPricePercentage();
 
   return (
     <div
-      className={`flex items-center gap-5 rounded-6 bg-emphasis py-4 px-6 text-white/60 ${
-        isRange ? 'w-min' : ''
-      }`}
+      className={`flex items-center gap-5 rounded-6 bg-emphasis py-4 px-6 text-white/60`}
       data-testid="market-price-indication"
     >
       <div className="font-mono text-10">
@@ -51,7 +47,7 @@ export const MarketPriceIndication: FC<Props> = ({
         }`}
       </div>
       <Tooltip
-        iconClassName="h-11 w-11"
+        iconClassName="h-10 w-10"
         element="The percentage difference between the input price and the current market price of the token"
       />
     </div>

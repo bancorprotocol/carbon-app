@@ -7,16 +7,6 @@ vitest.mock('components/common/tooltip/Tooltip', () => ({
   Tooltip: vitest.fn(({ element }) => <div>{element}</div>),
 }));
 
-vitest.mock('hooks/useBreakpoints', () => {
-  return {
-    useBreakpoints: vitest.fn().mockImplementation(() => {
-      return {
-        belowBreakpoint: () => false,
-      };
-    }),
-  };
-});
-
 describe('MarketPriceIndication - desktop', () => {
   beforeEach(() => {
     cleanup(); // Clear the screen before each test
@@ -28,7 +18,7 @@ describe('MarketPriceIndication - desktop', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('5% above market');
+    const indicationText = screen.getByText('5.00% above market');
     expect(indicationText).toBeTruthy();
   });
 
@@ -58,7 +48,7 @@ describe('MarketPriceIndication - desktop', () => {
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
 
-    const indicationText = screen.getByText('6% below market');
+    const indicationText = screen.getByText('6.00% below market');
     expect(indicationText).toBeTruthy();
   });
 
@@ -83,7 +73,7 @@ describe('MarketPriceIndication - desktop', () => {
   });
 
   test('renders the market price indication with range text when isRange = true & positive', () => {
-    const marketPricePercentage = new BigNumber(3);
+    const marketPricePercentage = new BigNumber(3.1);
     render(
       <MarketPriceIndication
         marketPricePercentage={marketPricePercentage}
@@ -91,12 +81,12 @@ describe('MarketPriceIndication - desktop', () => {
       />
     );
 
-    const indicationText = screen.getByText('3% above');
+    const indicationText = screen.getByText('3.10% above');
     expect(indicationText).toBeTruthy();
   });
 
   test('renders the market price indication with range text when isRange = true & negative', () => {
-    const marketPricePercentage = new BigNumber(-3);
+    const marketPricePercentage = new BigNumber(-3.12345);
     render(
       <MarketPriceIndication
         marketPricePercentage={marketPricePercentage}
@@ -104,7 +94,7 @@ describe('MarketPriceIndication - desktop', () => {
       />
     );
 
-    const indicationText = screen.getByText('3% below');
+    const indicationText = screen.getByText('3.12% below');
     expect(indicationText).toBeTruthy();
   });
 });

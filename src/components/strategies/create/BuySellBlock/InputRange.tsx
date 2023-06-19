@@ -95,7 +95,7 @@ export const InputRange: FC<{
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="flex items-center justify-between gap-10">
+          <div className="flex flex-col items-start gap-4">
             <div className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(min)}
             </div>
@@ -130,7 +130,7 @@ export const InputRange: FC<{
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="flex items-center justify-between gap-10">
+          <div className="flex flex-col items-start gap-4">
             <div className="break-all font-mono text-12 text-white/60	">
               {getFiatAsString(max)}
             </div>
