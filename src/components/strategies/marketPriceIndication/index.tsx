@@ -11,11 +11,10 @@ export const MarketPriceIndication: FC<Props> = ({
   marketPricePercentage,
   isRange = false,
 }) => {
-  const isAbove = marketPricePercentage.gt(0);
-
   if (marketPricePercentage.eq(0)) {
     return null;
   }
+  const isAbove = marketPricePercentage.gt(0);
 
   const getMarketPricePercentage = () => {
     if (marketPricePercentage.gte(99.99)) {
