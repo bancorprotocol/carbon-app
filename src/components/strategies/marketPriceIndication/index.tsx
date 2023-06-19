@@ -5,7 +5,6 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 type Props = {
   marketPricePercentage: BigNumber;
   isRange?: boolean;
-  buy?: boolean;
 };
 
 export const MarketPriceIndication: FC<Props> = ({

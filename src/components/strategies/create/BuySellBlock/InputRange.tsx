@@ -131,7 +131,7 @@ export const InputRange: FC<{
             }
           />
           <div className="flex flex-col items-start gap-4">
-            <div className="break-all font-mono text-12 text-white/60	">
+            <div className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(max)}
             </div>
             <MarketPriceIndication
