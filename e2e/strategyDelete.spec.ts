@@ -8,7 +8,6 @@ test.describe('Delete strategy', () => {
     await page.getByRole('button', { name: 'Delete Strategy' }).first().click();
     const deleteStrategyModal = await page.locator('#modal');
     await deleteStrategyModal.waitFor({ state: 'visible' });
-    await page.evaluate(() => document.fonts.ready);
     expect(await deleteStrategyModal.screenshot()).toMatchSnapshot(
       'strategy-delete.png'
     );
