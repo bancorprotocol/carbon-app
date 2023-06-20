@@ -45,6 +45,7 @@ jobs:
               fi
             else
               echo "Translation file 'public/locales/$lang/translation.$lang.json' not found."
+              echo "translation_changed=true" >> "$GITHUB_ENV"
             fi
           done
 
