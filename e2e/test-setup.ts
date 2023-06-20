@@ -11,6 +11,7 @@ async function setupBeforeEach(page: Page) {
     forkId = await duplicateFork();
     console.log(forkId, '-=-=-=-=-=- Fork Created -=-=-=-=-=-');
     process.env.ForkId = forkId;
+    await page.waitForLoadState('networkidle');
 
     await page
       .locator('#imposterAccount')
