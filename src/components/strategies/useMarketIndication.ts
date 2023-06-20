@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useGetTokenPrice } from 'libs/queries';
 import { Token } from 'libs/tokens';
-import { useFiatCurrency } from './useFiatCurrency';
+import { useFiatCurrency } from '../../hooks/useFiatCurrency';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type MarketPricePercentage = {
@@ -11,7 +11,7 @@ export type MarketPricePercentage = {
   price: BigNumber;
 };
 
-export type UseMarketIndicationProps = {
+type UseMarketIndicationProps = {
   base: Token | undefined;
   quote: Token | undefined;
   order: OrderCreate;
@@ -35,13 +35,13 @@ export const useMarketIndication = ({
         ? new BigNumber(order.max).gt(0)
         : new BigNumber(order.min).gt(0);
 
-      return (
-        isInputNotZero &&
-        new BigNumber(getFiatValue(buy ? order.max : order.min))[
-          buy ? 'gt' : 'lt'
-        ](tokenMarketPrice)
-      );
+      const isAboveOrBelow = buy
+        ? new BigNumber(getFiatValue(order.max)).gt(tokenMarketPrice)
+        : new BigNumber(getFiatValue(order.min)).lt(tokenMarketPrice);
+
+      return isInputNotZero && isAboveOrBelow;
     }
+
     return (
       new BigNumber(order.price).gt(0) &&
       new BigNumber(getFiatValue(order.price))[buy ? 'gt' : 'lt'](

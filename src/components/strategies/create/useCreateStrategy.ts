@@ -23,7 +23,7 @@ import {
   checkErrors,
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
-import { useMarketIndication } from 'hooks/useMarketIndication';
+import { useMarketIndication } from 'components/strategies/useMarketIndication';
 
 const spenderAddress = config.carbon.carbonController;
 

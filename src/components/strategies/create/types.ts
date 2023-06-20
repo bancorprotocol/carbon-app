@@ -7,7 +7,7 @@ import { DispatchNotification } from 'libs/notifications/types';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
-import { MarketPricePercentage } from 'hooks/useMarketIndication';
+import { MarketPricePercentage } from 'components/strategies/useMarketIndication';
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';

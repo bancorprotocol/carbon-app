@@ -6,9 +6,9 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
-import { MarketPricePercentage } from 'hooks/useMarketIndication';
+import { MarketPricePercentage } from 'components/strategies/useMarketIndication';
 
-export const InputLimit: FC<{
+type InputLimitProps = {
   price: string;
   setPrice: (value: string) => void;
   token: Token;
@@ -16,7 +16,9 @@ export const InputLimit: FC<{
   setPriceError: (error: string) => void;
   buy?: boolean;
   marketPricePercentage: MarketPricePercentage;
-}> = ({
+};
+
+export const InputLimit: FC<InputLimitProps> = ({
   price,
   setPrice,
   token,

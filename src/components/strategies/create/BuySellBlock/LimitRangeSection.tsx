@@ -5,7 +5,7 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import { useMarketIndication } from 'hooks/useMarketIndication';
+import { useMarketIndication } from 'components/strategies/useMarketIndication';
 import { lsService } from 'services/localeStorage';
 import { useModal } from 'hooks/useModal';
 

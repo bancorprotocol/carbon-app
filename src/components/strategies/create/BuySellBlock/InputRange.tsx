@@ -1,5 +1,4 @@
 import { ChangeEvent, FC, FocusEvent } from 'react';
-import BigNumber from 'bignumber.js';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -8,8 +7,9 @@ import { MarketPriceIndication } from 'components/strategies/marketPriceIndicati
 import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { MarketPricePercentage } from 'components/strategies/useMarketIndication';
 
-export const InputRange: FC<{
+type InputRangeProps = {
   min: string;
   setMin: (value: string) => void;
   max: string;
@@ -18,11 +18,10 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
-  marketPricePercentages: {
-    min: BigNumber;
-    max: BigNumber;
-  };
-}> = ({
+  marketPricePercentages: MarketPricePercentage;
+};
+
+export const InputRange: FC<InputRangeProps> = ({
   min,
   setMin,
   max,
