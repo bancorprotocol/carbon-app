@@ -15,10 +15,10 @@ import { TRANSLATION_VERSION } from './version';
 // TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
 // Notice: only new notification translated at the current language.
 export const SUPPORTED_LANGUAGES = [
-  { code: 'en', name: 'English' },
-  { code: 'es', name: 'Español' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'he', name: 'עברית' },
+  { code: 'en-US', name: 'English' },
+  { code: 'es-ES', name: 'Español' },
+  { code: 'de-DE', name: 'Deutsch' },
+  { code: 'he-IL', name: 'עברית' },
   { code: 'pt-BR', name: 'Portuguese (BR)' },
   { code: 'xx', name: 'Test' },
 ];
@@ -39,14 +39,18 @@ i18n
     },
     returnNull: false,
     fallbackLng: {
-      pt: ['pt-BR', 'en'],
-      default: ['en'],
+      en: ['en-US'],
+      pt: ['pt-BR', 'en-US'],
+      de: ['de-DE', 'en-US'],
+      es: ['es-ES', 'en-US'],
+      he: ['he-IL', 'en-US'],
+      default: ['es-US'],
     },
     load: 'all',
     debug: import.meta.env.VITE_DEV_MODE,
     detection: {
       lookupLocalStorage: `${APP_ID}-${APP_VERSION}-i18nextLng`,
-      lookupQuerystring: '', // disable querystring in url
+      lookupQuerystring: 'lng', // disable querystring in url
     },
     backend: {
       backends: [HttpBackend],
