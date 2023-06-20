@@ -17,6 +17,10 @@
           "value": "true"
         },
         {
+          "name": "hasSeenRestrictedCountryModal",
+          "value": "true"
+        },
+        {
           "name": "carbon-v1-imposterAccount",
           "value": "\"0x75e89d5979e4f6fba9f97c104c2f0afb3f1dcb88\""
         },
