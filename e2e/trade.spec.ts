@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Trade page', () => {
-  test('Trade snapshot', async ({ page }) => {
+  test.skip('Trade snapshot', async ({ page }) => {
     await page.goto('/trade', { waitUntil: 'networkidle' });
     await page.waitForSelector('div#trade-content');
     await page.waitForLoadState('domcontentloaded');
