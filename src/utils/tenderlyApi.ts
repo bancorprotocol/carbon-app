@@ -6,7 +6,10 @@ const env = loadEnv('', process.cwd(), '');
 const projectUrl = `account/bancor/project/frontend-forks`;
 const e2eTestBaseForkId = '5ac3ffc6-abcd-4fbd-8430-069d927cbff9';
 const defaultNewForkName = 'e2e-disposable';
-
+console.log(
+  env.VITE_TENDERLY_ACCESS_KEY,
+  '-=-=-=-=-=- env.VITE_TENDERLY_ACCESS_KEY -=-=-=-=-=-'
+);
 const axiosOnTenderly = axios.create({
   baseURL: 'https://api.tenderly.co/api/v1',
   headers: {
