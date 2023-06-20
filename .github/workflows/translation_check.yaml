@@ -36,16 +36,16 @@ jobs:
           IFS=',' read -ra LANGUAGES <<< "${{ env.languages }}"
           git diff --name-only HEAD^ ${{ github.sha }} > changes.txt  
           for lang in "${LANGUAGES[@]}"; do
-            if [[ -f "public/locales/$lang/translation.json" ]]; then
-               if grep -q "public/locales/$lang/translation.json" changes.txt; then
-                echo "Translation file 'public/locales/$lang/translation.json' modified."
+            if [[ -f "public/locales/$lang/translation.$lang.json" ]]; then
+               if grep -q "public/locales/$lang/translation.$lang.json" changes.txt; then
+                echo "Translation file 'public/locales/$lang/translation.$lang.json' modified."
                 echo "translation_changed=true" >> "$GITHUB_ENV"
               else
-                echo "Translation file 'public/locales/$lang/translation.json' not modified."
+                echo "Translation file 'public/locales/$lang/translation.$lang.json' not modified."
               fi
             else
               echo "translation_changed=false" >> "$GITHUB_ENV"
-              echo "Translation file 'public/locales/$lang/translation.json' not found."
+              echo "Translation file 'public/locales/$lang/translation.$lang.json' not found."
             fi
           done
 
