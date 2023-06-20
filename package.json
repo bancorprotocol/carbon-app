@@ -87,7 +87,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest run",
-    "test:e2e": "playwright test",
+    "test:e2e": "npx playwright test",
     "test:e2e-headed": "playwright test --ui",
     "test:e2e-update": "playwright test --update-snapshots",
     "test:e2e-report": "playwright show-report"
