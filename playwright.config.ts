@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  * https://github.com/motdotla/dotenv
  */
 // require('dotenv').config();
-const port = 3000;
+const port = 5174;
 const baseURL = `http://localhost:${port}`;
 /**
  * See https://playwright.dev/docs/test-configuration.

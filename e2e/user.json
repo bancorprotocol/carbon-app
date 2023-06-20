@@ -2,7 +2,7 @@
   "cookies": [],
   "origins": [
     {
-      "origin": "http://localhost:3000",
+      "origin": "http://localhost:5174",
       "localStorage": [
         {
           "name": "carbon-v1-tokenListCache",
