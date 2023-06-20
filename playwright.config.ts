@@ -35,7 +35,6 @@ export default defineConfig({
     toHaveScreenshot: {
       threshold: 0.2,
       maxDiffPixelRatio: 0.2,
-      maxDiffPixels: 1000,
     },
   },
   /* Configure projects for major browsers */
