@@ -16,6 +16,9 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Run Playwright tests
+        env:
+          TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
+          CI: true
         run: yarn test:e2e
       - uses: actions/upload-artifact@v3
         if: always()
