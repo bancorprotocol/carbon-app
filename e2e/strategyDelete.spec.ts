@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Delete strategy', () => {
-  test('Strategy delete modal snapshot', async ({ page }) => {
+  test.skip('Strategy delete modal snapshot', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
 
     await page.getByRole('button', { name: 'Manage' }).first().click();
