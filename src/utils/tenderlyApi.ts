@@ -10,7 +10,7 @@ const defaultNewForkName = 'e2e-disposable';
 const axiosOnTenderly = axios.create({
   baseURL: 'https://api.tenderly.co/api/v1',
   headers: {
-    'X-Access-Key': env.TENDERLY_ACCESS_KEY || '',
+    'X-Access-Key': env.VITE_TENDERLY_ACCESS_KEY || '',
     'Content-Type': 'application/json',
   },
 });

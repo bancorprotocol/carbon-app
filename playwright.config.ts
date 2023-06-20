@@ -7,7 +7,6 @@ import { defineConfig, devices } from '@playwright/test';
 // require('dotenv').config();
 const port = 5174;
 const baseURL = `http://localhost:${port}`;
-console.log(process.env.CI, '-=-=-=-=-=- process.env.CI -=-=-=-=-=-');
 
 /**
  * See https://playwright.dev/docs/test-configuration.
