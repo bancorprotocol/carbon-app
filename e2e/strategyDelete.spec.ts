@@ -6,10 +6,6 @@ test.describe('Delete strategy', () => {
 
     await page.getByRole('button', { name: 'Manage' }).first().click();
     await page.getByRole('button', { name: 'Delete Strategy' }).first().click();
-    await page
-      .getByRole('button', { name: 'Create Strategy' })
-      .first()
-      .scrollIntoViewIfNeeded();
 
     expect(await page.locator('#modal').screenshot()).toMatchSnapshot(
       'strategy-delete.png'
