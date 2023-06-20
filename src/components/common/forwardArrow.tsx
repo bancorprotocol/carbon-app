@@ -17,13 +17,9 @@ export const ForwardArrow: FC<ForwardArrowProps> = ({
     i18n.dir() === 'rtl' ? 'rotate-180' : ''
   } ${className}`;
 
-  return (
-    <>
-      {arrowType === 'cut' ? (
-        <IconArrowCut className={newClassName} />
-      ) : (
-        <IconArrowFull className={newClassName} />
-      )}
-    </>
+  return arrowType === 'cut' ? (
+    <IconArrowCut className={newClassName} />
+  ) : (
+    <IconArrowFull className={newClassName} />
   );
 };
