@@ -51,7 +51,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       } group space-y-20 rounded-10 p-20`}
     >
       <div className="flex justify-between">
-        <div className={'space-s-10 flex'}>
+        <div className={'flex space-s-10'}>
           <TokensOverlap
             className="h-40 w-40"
             tokens={[strategy.base, strategy.quote]}

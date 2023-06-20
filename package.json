@@ -93,40 +93,6 @@
     "test": "vitest run",
     "lint": "eslint --ext .tsx,.ts ."
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "prettier",
-      "plugin:prettier/recommended"
-    ],
-    "plugins": [
-      "unused-imports"
-    ],
-    "rules": {
-      "@typescript-eslint/no-unused-vars": 0,
-      "unused-imports/no-unused-imports": "error",
-      "unused-imports/no-unused-vars": [
-        "warn",
-        {
-          "vars": "all",
-          "varsIgnorePattern": "^_",
-          "args": "after-used",
-          "argsIgnorePattern": "^_"
-        }
-      ],
-      "prettier/prettier": "warn"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/*.stories.*"
-        ],
-        "rules": {
-          "import/no-anonymous-default-export": "off"
-        }
-      }
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

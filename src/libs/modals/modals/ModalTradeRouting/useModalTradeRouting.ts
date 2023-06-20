@@ -136,6 +136,7 @@ export const useModalTradeRouting = ({
     data?.totalTargetAmount,
     isTradeBySource,
     setIsAwaiting,
+    t,
     buy,
     getFiatValueSource,
     provider?.network?.name,

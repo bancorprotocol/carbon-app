@@ -173,7 +173,7 @@ export const ApproveToken: FC<Props> = ({
         }
       >
         <div className={'space-y-6'}>
-          <div className={'space-s-10 flex items-center'}>
+          <div className={'flex items-center space-s-10'}>
             <Imager
               alt={'Token'}
               src={token.logoURI}
@@ -190,8 +190,8 @@ export const ApproveToken: FC<Props> = ({
             <div
               className={'flex h-82 flex-col items-end justify-center gap-10'}
             >
-              <div className={'space-s-8 flex items-center'}>
-                <div className={'space-s-10 flex items-center'}>
+              <div className={'flex items-center space-s-8'}>
+                <div className={'flex items-center space-s-10'}>
                   <div
                     className={`font-mono text-12 font-weight-500 transition-all ${
                       isLimited ? 'text-white/60' : 'text-white/85'
@@ -231,7 +231,7 @@ export const ApproveToken: FC<Props> = ({
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className={'space-s-20 flex font-mono text-14 text-warning-500'}>
+        <div className={'flex font-mono text-14 text-warning-500 space-s-20'}>
           <div>
             <IconWarning className={'w-16'} />
           </div>

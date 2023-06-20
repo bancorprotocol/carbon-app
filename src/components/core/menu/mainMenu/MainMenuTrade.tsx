@@ -9,7 +9,7 @@ export const MainMenuTrade = () => {
   if (!isTradePage || !baseToken || !quoteToken) return null;
 
   return (
-    <div className={'md:space-s-5 flex justify-between px-10 md:px-0'}>
+    <div className={'flex justify-between px-10 md:px-0 md:space-s-5'}>
       <MainMenuTradeSwitch baseToken={baseToken} quoteToken={quoteToken} />
       <MainMenuTradePairs baseToken={baseToken} quoteToken={quoteToken} />
       <MainMenuTradeSettings baseToken={baseToken} quoteToken={quoteToken} />
