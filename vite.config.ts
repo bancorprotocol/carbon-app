@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
         env.SENTRY_PROJECT &&
         env.SENTRY_AUTH_TOKEN
       ),
-      chunkSizeWarningLimit: 1600,
+      chunkSizeWarningLimit: 3500,
     },
     resolve: {
       alias: {
