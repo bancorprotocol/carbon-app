@@ -38,6 +38,8 @@ export const useBuySell = ({
   const [isLiquidityError, setIsLiquidityError] = useState(false);
   const [isSourceEmptyError, setIsSourceEmptyError] = useState(false);
   const [isTargetEmptyError, setIsTargetEmptyError] = useState(false);
+  const [isAwaiting, setIsAwaiting] = useState(false);
+
   const { calcMaxInput } = useTradeAction({
     source,
     isTradeBySource,
@@ -77,6 +79,7 @@ export const useBuySell = ({
     sourceInput,
     isTradeBySource,
     onSuccess: (txHash: string) => {
+      setIsAwaiting(false);
       clearInputs();
       buy
         ? carbonEvents.trade.tradeBuy({
@@ -240,12 +243,16 @@ export const useBuySell = ({
         isTradeBySource,
         sourceInput: sourceInput,
         targetInput: targetInput,
+        setIsAwaiting,
       });
 
     if (approval.approvalRequired) {
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
-        onConfirm: tradeFn,
+        onConfirm: () => {
+          setIsAwaiting(true);
+          tradeFn();
+        },
         buttonLabel: 'Confirm Trade',
         eventData: {
           ...eventData,
@@ -256,6 +263,7 @@ export const useBuySell = ({
         context: 'trade',
       });
     } else {
+      setIsAwaiting(true);
       void tradeFn();
     }
   }, [
@@ -384,5 +392,6 @@ export const useBuySell = ({
     calcSlippage,
     isTradeBySource,
     maxSourceAmountQuery,
+    isAwaiting,
   };
 };

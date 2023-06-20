@@ -26,6 +26,7 @@ export const getModalDataByType = (
           'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
         actionButton: 'Pause Strategy',
       };
+
     case 'delete':
       return {
         modalTitle: 'Delete Strategy',

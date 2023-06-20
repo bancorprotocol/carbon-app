@@ -45,6 +45,7 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
@@ -116,7 +117,20 @@ export const useCreateStrategy = () => {
       if (approval.approvalRequired) {
         return openModal('txConfirm', {
           approvalTokens,
-          onConfirm,
+          onConfirm: () =>
+            createStrategyAction({
+              base,
+              quote,
+              user,
+              mutation,
+              order0,
+              order1,
+              dispatchNotification,
+              cache,
+              navigate,
+              setIsProcessing,
+              strategyEventData,
+            }),
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
@@ -136,6 +150,19 @@ export const useCreateStrategy = () => {
           text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
           variant: 'warning',
           onConfirm,
+      } else {
+        createStrategyAction({
+          base,
+          quote,
+          user,
+          mutation,
+          order0,
+          order1,
+          dispatchNotification,
+          cache,
+          navigate,
+          setIsProcessing,
+          strategyEventData,
         });
       }
 
@@ -216,11 +243,13 @@ export const useCreateStrategy = () => {
       approval.isError ||
       mutation.isLoading ||
       !isOrder0Valid ||
-      !isOrder1Valid
+      !isOrder1Valid ||
+      isProcessing
     );
   }, [
     approval.isError,
     approval.isLoading,
+    isProcessing,
     mutation.isLoading,
     order0.isRange,
     order0.max,
@@ -316,6 +345,7 @@ export const useCreateStrategy = () => {
     setQuote,
     order0,
     order1,
+    isAwaiting: mutation.isLoading,
     createStrategy,
     openTokenListModal,
     showOrders,
@@ -327,10 +357,12 @@ export const useCreateStrategy = () => {
     setShowGraph,
     showTokenSelection,
     strategyType,
+    strategySettings,
     strategyDirection,
     showTypeMenu,
     selectedStrategySettings,
     setSelectedStrategySettings,
+    isProcessing,
     isOrdersOverlap,
   };
 };
