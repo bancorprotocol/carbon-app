@@ -138,7 +138,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "vite-plugin-chunk-split": "^0.4.7"
-  }
+  "devDependencies": {}
 }

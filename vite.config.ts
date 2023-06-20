@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -11,12 +10,7 @@ export default defineConfig(({ mode }) => {
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   const env = loadEnv(mode, process.cwd(), '');
 
-  const plugins: PluginOption[] = [
-    react(),
-    viteTsconfigPaths(),
-    svgrPlugin(),
-    chunkSplitPlugin(),
-  ];
+  const plugins: PluginOption[] = [react(), viteTsconfigPaths(), svgrPlugin()];
 
   // Put the Sentry vite plugin after all other plugins
   if (env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN) {
@@ -51,6 +45,7 @@ export default defineConfig(({ mode }) => {
         env.SENTRY_PROJECT &&
         env.SENTRY_AUTH_TOKEN
       ),
+      chunkSizeWarningLimit: 1600,
     },
     resolve: {
       alias: {
