@@ -3,6 +3,7 @@ import {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
   FC,
+  ReactNode,
 } from 'react';
 import { VariantProps } from 'class-variance-authority';
 import { buttonStyles } from 'components/common/button/buttonStyles';
@@ -14,13 +15,19 @@ export type ButtonHTMLProps = DetailedHTMLProps<
 > &
   AriaAttributes;
 
-export type ButtonProps = ButtonHTMLProps & VariantProps<typeof buttonStyles>;
+export type ButtonProps = ButtonHTMLProps &
+  VariantProps<typeof buttonStyles> & {
+    loading?: boolean;
+    loadingChildren?: string | ReactNode;
+  };
 
 export const Button: FC<ButtonProps> = ({
   variant,
   size,
   fullWidth,
   className,
+  loading,
+  loadingChildren,
   ...props
 }) => {
   return (
@@ -28,6 +35,16 @@ export const Button: FC<ButtonProps> = ({
     <m.button
       className={buttonStyles({ variant, size, fullWidth, class: className })}
       {...props}
-    />
+      disabled={props.disabled || loading}
+    >
+      {loading ? (
+        <>
+          {loadingChildren || props.children}
+          <span className="dot-pulse ml-30" />
+        </>
+      ) : (
+        props.children
+      )}
+    </m.button>
   );
 };

@@ -1,14 +1,16 @@
+import { FC, ReactNode, useEffect } from 'react';
+import { carbonEvents } from 'services/events';
+import { m } from 'libs/motion';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
-import { FC, ReactNode } from 'react';
 import { Button } from 'components/common/button';
 import { items } from 'components/strategies/create/variants';
-import { m } from 'libs/motion';
 import { UseStrategyCreateReturn } from 'components/strategies/create/index';
 import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
 import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
-import { carbonEvents } from 'services/events';
+import { lsService } from 'services/localeStorage';
+import { useModal } from 'hooks/useModal';
 
 const BlockIconTextDesc = ({
   icon,
@@ -30,7 +32,9 @@ const BlockIconTextDesc = ({
       </div>
       <div className={'flex-shrink space-y-6'}>
         <div className={'text-14 font-weight-500'}>{title}</div>
-        <div className={'h-32 text-12 text-white/60'}>{description}</div>
+        <div className={'min-h-[32px] text-12 text-white/60'}>
+          {description}
+        </div>
       </div>
     </div>
   );
@@ -43,11 +47,22 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   selectedStrategySettings,
   setSelectedStrategySettings,
 }) => {
+  const { openModal } = useModal();
   const {
     items: tabs,
     handleClick,
     selectedTabItems,
   } = useCreateStrategyTypeMenu(base?.address!, quote?.address!, strategyType);
+
+  useEffect(() => {
+    !selectedStrategySettings &&
+      setSelectedStrategySettings(selectedTabItems[0]);
+  }, [
+    selectedTabItems,
+    setSelectedStrategySettings,
+    handleClick,
+    selectedStrategySettings,
+  ]);
 
   return (
     <>
@@ -88,30 +103,54 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 'An irreversible buy or sell order at a predefined price or range.',
             })}
         </div>
-
-        <div className={'flex space-x-14'}>
-          {selectedTabItems.map(({ label, svg, to, search }, i) => (
-            <Button
-              key={i}
-              variant={'black'}
-              onClick={() => setSelectedStrategySettings({ to, search })}
-              fullWidth
-              className={`flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10 ${
-                selectedStrategySettings?.search.strategyDirection ===
-                  search.strategyDirection &&
-                selectedStrategySettings?.search.strategySettings ===
-                  search.strategySettings
-                  ? '!border-white/80'
-                  : ''
-              }`}
-            >
-              {svg}
-
-              <span className={'mt-10 text-14'}>{label}</span>
-            </Button>
-          ))}
+        <div
+          className={`${
+            strategyType === 'disposable' ? 'grid grid-cols-2' : 'flex'
+          } gap-12 pt-10 md:flex`}
+        >
+          {selectedTabItems.map(
+            ({ label, svg, to, search, isRecommended }, i) => (
+              <div key={`${label}-${i}`} className="relative flex flex-1">
+                {isRecommended && (
+                  <div className="absolute -top-16 left-1/2 z-10 -translate-x-1/2 rounded border-2 border-green/25 bg-darkGreen px-5 py-3 text-12 font-weight-500 text-green md:px-7 md:text-10">
+                    Recommended
+                  </div>
+                )}
+                <Button
+                  variant={'black'}
+                  onClick={() => {
+                    if (
+                      (search.strategySettings === 'range' ||
+                        search.strategySettings === 'custom') &&
+                      !lsService.getItem('hasSeenCreateStratExpertMode')
+                    ) {
+                      openModal('createStratExpertMode', {
+                        onConfirm: () =>
+                          setSelectedStrategySettings({ to, search }),
+                      });
+                    } else {
+                      setSelectedStrategySettings({ to, search });
+                    }
+                  }}
+                  fullWidth
+                  className={`flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10  ${
+                    selectedStrategySettings?.search.strategyDirection ===
+                      search.strategyDirection &&
+                    selectedStrategySettings?.search.strategySettings ===
+                      search.strategySettings
+                      ? 'border-2 !border-white/80'
+                      : ''
+                  }`}
+                >
+                  {svg}
+                  <span className={'mt-10 text-14'}>{label}</span>
+                </Button>
+              </div>
+            )
+          )}
         </div>
       </m.div>
+
       <Button
         variant={'success'}
         fullWidth

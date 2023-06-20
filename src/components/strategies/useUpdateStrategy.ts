@@ -7,8 +7,11 @@ import {
   useQueryClient,
   useUpdateStrategyQuery,
 } from 'libs/queries';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
+import { useState } from 'react';
+import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
+import { handleTxStatusAndRedirectToOverview } from './create/utils';
 
 export const useUpdateStrategy = () => {
   const { user } = useWeb3();
@@ -16,10 +19,12 @@ export const useUpdateStrategy = () => {
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
   const navigate = useNavigate<MyLocationGenerics>();
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const pauseStrategy = async (
     strategy: Strategy,
-    successEventsCb?: () => void
+    successEventsCb?: () => void,
+    closeModalCb?: () => void
   ) => {
     const { base, quote, encoded, id } = strategy;
 
@@ -40,18 +45,25 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          setIsProcessing(true);
+          setTimeout(() => {
+            closeModalCb?.();
+            setIsProcessing(false);
+          }, ONE_AND_A_HALF_SECONDS_IN_MS);
+
           dispatchNotification('pauseStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
 
-          successEventsCb?.();
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
           });
           console.log('tx confirmed');
+          successEventsCb?.();
         },
         onError: (e) => {
+          setIsProcessing(false);
           console.error('update mutation failed', e);
         },
       }
@@ -81,11 +93,12 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+
           dispatchNotification('renewStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -94,6 +107,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setIsProcessing(false);
           console.error('update mutation failed', e);
         },
       }
@@ -123,11 +137,12 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+
           dispatchNotification('changeRatesStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -136,6 +151,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setIsProcessing(false);
           console.error('update mutation failed', e);
         },
       }
@@ -167,11 +183,12 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+
           dispatchNotification('withdrawStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -180,6 +197,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setIsProcessing(false);
           console.error('update mutation failed', e);
         },
       }
@@ -211,11 +229,12 @@ export const useUpdateStrategy = () => {
       },
       {
         onSuccess: async (tx) => {
+          handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+
           dispatchNotification('depositStrategy', { txHash: tx.hash });
           if (!tx) return;
           console.log('tx hash', tx.hash);
           await tx.wait();
-          navigate({ to: PathNames.strategies });
 
           void cache.invalidateQueries({
             queryKey: QueryKey.strategies(user),
@@ -224,6 +243,7 @@ export const useUpdateStrategy = () => {
           successEventsCb?.();
         },
         onError: (e) => {
+          setIsProcessing(false);
           console.error('update mutation failed', e);
         },
       }
@@ -236,5 +256,8 @@ export const useUpdateStrategy = () => {
     changeRateStrategy,
     withdrawBudget,
     depositBudget,
+    isProcessing,
+    setIsProcessing,
+    updateMutation,
   };
 };

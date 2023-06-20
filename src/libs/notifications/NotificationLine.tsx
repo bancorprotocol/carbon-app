@@ -8,6 +8,7 @@ import { unix } from 'libs/dayjs';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
 import { Link } from 'libs/routing';
+import { FOUR_SECONDS_IN_MS } from 'utils/time';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
@@ -70,7 +71,7 @@ export const NotificationLine: FC<{
 
   useInterval(
     () => dismissAlert(notification.id),
-    isAlert ? 8000 : null,
+    isAlert && notification.status !== 'pending' ? FOUR_SECONDS_IN_MS : null,
     false
   );
 
@@ -97,7 +98,7 @@ export const NotificationLine: FC<{
           {unix(notification.timestamp).fromNow(true)}
         </div>
         <button className="text-12 font-weight-500" onClick={handleCloseClick}>
-          Clear
+          {isAlert ? 'Close' : 'Clear'}
         </button>
       </div>
     </div>

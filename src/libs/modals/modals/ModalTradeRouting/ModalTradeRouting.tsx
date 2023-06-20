@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Action } from 'libs/sdk';
@@ -25,17 +26,21 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   id,
   data,
 }) => {
+  const [isAwaiting, setIsAwaiting] = useState(false);
+
   const {
     selected,
     onSelect,
     handleCTAClick,
     sourceFiatPrice,
     targetFiatPrice,
-    onCancel,
     totalSourceAmount,
     totalTargetAmount,
     disabledCTA,
-  } = useModalTradeRouting({ id, data });
+  } = useModalTradeRouting({
+    id,
+    data: { ...data, setIsAwaiting },
+  });
 
   return (
     <Modal id={id} title="Trade Routing" size={'md'}>
@@ -93,10 +98,14 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
       </div>
 
       <div className={'mt-20 flex w-full space-x-10'}>
-        <Button variant={'secondary'} fullWidth onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button fullWidth onClick={handleCTAClick} disabled={disabledCTA}>
+        <Button
+          variant={'white'}
+          fullWidth
+          onClick={handleCTAClick}
+          disabled={disabledCTA}
+          loading={isAwaiting}
+          loadingChildren={'Waiting for Confirmation'}
+        >
           Confirm
         </Button>
       </div>
