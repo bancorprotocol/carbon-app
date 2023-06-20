@@ -61,7 +61,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 5174,
+      port: 3000,
     },
     plugins,
   };
