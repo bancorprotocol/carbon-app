@@ -172,6 +172,17 @@
         "actionButton2": "xxxxxxxxxxx"
       },
       "title": "xxxxxxxxxxx"
+    },
+    "expertMode": {
+      "actionButtons": {
+        "actionButton1": "xxxxxxxx"
+      },
+      "contents": {
+        "content1": "xxxxxxxx",
+        "content2": "xxxxxxxx"
+      },
+      "modalTitle": "xxxxxxxx",
+      "title": "xxxxxxxx"
     }
   },
   "navBar": {
@@ -441,6 +452,9 @@
                 "option4": "xxxxxxxxxxx"
               }
             }
+          },
+          "contents": {
+            "content1": "xxxxxxxx"
           }
         },
         "tooltips": {
