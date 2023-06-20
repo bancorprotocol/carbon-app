@@ -3,17 +3,15 @@ import {
   LanguageDetector,
   ChainedBackend,
   HttpBackend,
-  // LocalStorageBackend,
+  LocalStorageBackend,
   i18n,
 } from 'libs/translations';
 import { APP_ID, APP_VERSION } from 'utils/constants';
 import { TRANSLATION_VERSION } from './version';
 
-// TODO: add local storage backend + remove not needed languages
 // TODO: add accent letter fonts.
 // Remove after gets all languages + actual translations
 // TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
-// Notice: only new notification translated at the current language.
 export const SUPPORTED_LANGUAGES = [
   { code: 'en-US', name: 'English' },
   { code: 'es-ES', name: 'Español' },
@@ -38,6 +36,7 @@ i18n
       useSuspense: true,
     },
     returnNull: false,
+    load: 'currentOnly',
     fallbackLng: {
       en: ['en-US'],
       pt: ['pt-BR', 'en-US'],
@@ -46,14 +45,13 @@ i18n
       he: ['he-IL', 'en-US'],
       default: ['es-US'],
     },
-    load: 'all',
     debug: import.meta.env.VITE_DEV_MODE,
     detection: {
       lookupLocalStorage: `${APP_ID}-${APP_VERSION}-i18nextLng`,
       lookupQuerystring: '', // disable querystring in url
     },
     backend: {
-      backends: [HttpBackend],
+      backends: [LocalStorageBackend, HttpBackend],
       backendOptions: [
         {
           prefix: `${APP_ID}-${APP_VERSION}-`,
