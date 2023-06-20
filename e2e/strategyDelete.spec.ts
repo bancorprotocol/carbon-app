@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.skip('Strategy delete modal snapshot', async ({ page }) => {
+test('Strategy delete modal snapshot', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
 
   await page.getByRole('button', { name: 'Manage' }).first().click();
@@ -10,7 +10,9 @@ test.skip('Strategy delete modal snapshot', async ({ page }) => {
     .first()
     .scrollIntoViewIfNeeded();
 
-  await expect(page).toHaveScreenshot('strategy-delete.png');
+  expect(await page.locator('#modal').screenshot()).toMatchSnapshot(
+    'strategy-delete.png'
+  );
 });
 
 test.skip('Strategy deleted successfully', async ({ page }) => {
