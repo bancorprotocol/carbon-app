@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { loadEnv } from 'vite';
 
-const env = loadEnv('', process.cwd(), '');
+const env = loadEnv('', process.cwd());
 
 const projectUrl = `account/bancor/project/frontend-forks`;
 const e2eTestBaseForkId = '5ac3ffc6-abcd-4fbd-8430-069d927cbff9';

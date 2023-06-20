@@ -7,6 +7,7 @@ export const CarbonLogoLoading = ({
 }) => {
   return (
     <svg
+      data-testid="logo-animation"
       width="100%"
       height="100%"
       viewBox="0 0 672 866"

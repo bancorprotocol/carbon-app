@@ -5,8 +5,8 @@ import { defineConfig, devices } from '@playwright/test';
  * https://github.com/motdotla/dotenv
  */
 // require('dotenv').config();
-const port = 5174;
-const baseURL = `http://localhost:${port}`;
+const port = 3000;
+export const baseURL = `http://localhost:${port}`;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -24,12 +24,12 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  globalSetup: require.resolve('./e2e/global-setup'),
-  globalTeardown: require.resolve('./e2e/global-teardown'),
+  // globalSetup: require.resolve('./e2e/global-setup'),
+  // globalTeardown: require.resolve('./e2e/global-teardown'),
   use: {
     baseURL,
     trace: 'on-first-retry',
-    storageState: 'e2e/user.json',
+    // storageState: 'e2e/user.json',
     viewport: { width: 1280, height: 720 },
   },
   expect: {
@@ -69,6 +69,6 @@ export default defineConfig({
   webServer: {
     port,
     command: `yarn build && yarn serve --port ${port}`,
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
   },
 });
