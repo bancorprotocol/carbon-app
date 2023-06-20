@@ -18,7 +18,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'de-DE', name: 'Deutsch' },
   { code: 'he-IL', name: 'עברית' },
   { code: 'pt-BR', name: 'Portuguese (BR)' },
-  { code: 'xx', name: 'Test' },
+  { code: 'xx-XX', name: 'Test' },
 ];
 
 type SupportedLanguagesCodes = (typeof SUPPORTED_LANGUAGES)[number]['code'];
