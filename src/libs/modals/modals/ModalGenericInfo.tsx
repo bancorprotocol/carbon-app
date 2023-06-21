@@ -55,7 +55,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
         {buttonLabel}
       </Button>
       <Button
-        variant={'secondary'}
+        variant={'black'}
         fullWidth
         onClick={() => closeModal(id)}
         className={'mt-16'}

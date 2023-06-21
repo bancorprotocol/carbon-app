@@ -115,6 +115,15 @@ export const useCreateStrategy = () => {
       });
 
     if (sourceCorrect && targetCorrect) {
+      if (!+order0.budget && !+order1.budget) {
+        return openModal('genericInfo', {
+          title: 'Empty Strategy Warning',
+          text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
+          variant: 'warning',
+          onConfirm,
+        });
+      }
+
       if (approval.approvalRequired) {
         return openModal('txConfirm', {
           approvalTokens,
@@ -129,15 +138,6 @@ export const useCreateStrategy = () => {
             blockchainNetwork: provider?.network?.name || '',
           },
           context: 'createStrategy',
-        });
-      }
-
-      if (!+order0.budget && !+order1.budget) {
-        return openModal('genericInfo', {
-          title: 'Empty Strategy Warning',
-          text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
-          variant: 'warning',
-          onConfirm,
         });
       }
 
