@@ -124,8 +124,8 @@ export const CreateStrategyOrders = ({
             'mt-10 flex items-center text-12 font-weight-400 text-white/60'
           }
         >
-          <IconWarning className={'mr-10 -ml-6 w-14'} /> Tax, rebase and
-          non-standard tokens are not supported
+          <IconWarning className={'mr-10 -ml-6 w-14 flex-shrink-0'} /> Tax,
+          rebase and non-standard tokens are not supported
         </div>
       </m.div>
 
