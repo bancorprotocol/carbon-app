@@ -14,6 +14,7 @@ import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-location';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
 import { lsService } from 'services/localeStorage';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 let didInit = false;
 
@@ -102,19 +103,29 @@ export const CreateStrategyOrders = ({
       <m.div
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'flex space-x-10 rounded-10 bg-silver p-20 pl-30'}
+        className={'rounded-10 bg-silver p-20 pl-30'}
       >
-        <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
-        <div>
-          {
-            <div className="flex space-x-6">
-              <span>{base?.symbol}</span>
-              <div className="text-secondary !text-16">/</div>
-              <span>{quote?.symbol}</span>
-            </div>
-          }
+        <div className={'flex space-x-10'}>
+          <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
+          <div>
+            {
+              <div className="flex space-x-6">
+                <span>{base?.symbol}</span>
+                <div className="text-secondary !text-16">/</div>
+                <span>{quote?.symbol}</span>
+              </div>
+            }
 
-          <div className="text-secondary capitalize">{strategyType}</div>
+            <div className="text-secondary capitalize">{strategyType}</div>
+          </div>
+        </div>
+        <div
+          className={
+            'mt-10 flex items-center text-12 font-weight-400 text-white/60'
+          }
+        >
+          <IconWarning className={'mr-10 -ml-6 w-14'} /> Tax, rebase and
+          non-standard tokens are not supported
         </div>
       </m.div>
 
