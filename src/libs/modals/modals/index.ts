@@ -36,6 +36,7 @@ import {
   ModalGenericInfo,
   ModalGenericInfoData,
 } from 'libs/modals/modals/ModalGenericInfo';
+import {
   ModalCreateStratExpertMode,
   ModalCreateStratExpertModeData,
 } from 'libs/modals/modals/ModalCreateStratExpertMode';

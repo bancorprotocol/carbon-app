@@ -111,26 +111,14 @@ export const useCreateStrategy = () => {
         cache,
         navigate,
         strategyEventData,
+        setIsProcessing,
       });
 
     if (sourceCorrect && targetCorrect) {
       if (approval.approvalRequired) {
         return openModal('txConfirm', {
           approvalTokens,
-          onConfirm: () =>
-            createStrategyAction({
-              base,
-              quote,
-              user,
-              mutation,
-              order0,
-              order1,
-              dispatchNotification,
-              cache,
-              navigate,
-              setIsProcessing,
-              strategyEventData,
-            }),
+          onConfirm,
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
@@ -150,19 +138,6 @@ export const useCreateStrategy = () => {
           text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
           variant: 'warning',
           onConfirm,
-      } else {
-        createStrategyAction({
-          base,
-          quote,
-          user,
-          mutation,
-          order0,
-          order1,
-          dispatchNotification,
-          cache,
-          navigate,
-          setIsProcessing,
-          strategyEventData,
         });
       }
 

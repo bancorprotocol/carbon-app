@@ -103,7 +103,7 @@ export const createStrategyAction = async ({
         navigate({ to: PathNames.strategies });
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
-      onError: (e) => {
+      onError: (e: any) => {
         setIsProcessing(false);
         console.error('create mutation failed', e);
         dispatchNotification('generic', {
