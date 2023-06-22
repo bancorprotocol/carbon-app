@@ -106,13 +106,15 @@ export const createStrategyAction = async ({
       onError: (e: any) => {
         setIsProcessing(false);
         console.error('create mutation failed', e);
-        dispatchNotification('generic', {
-          status: 'failed',
-          title: 'Strategy creation failed',
-          description:
-            e.message || 'Unknown error - please try again or contact support',
-          showAlert: true,
-        });
+        // TODO add error notification
+        // TODO handle user rejected transaction
+        // dispatchNotification('generic', {
+        //   status: 'failed',
+        //   title: 'Strategy creation failed',
+        //   description:
+        //     e.message || 'Unknown error - please try again or contact support',
+        //   showAlert: true,
+        // });
       },
     }
   );
