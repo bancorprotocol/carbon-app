@@ -43,7 +43,7 @@ i18n
       de: ['de-DE', 'en-US'],
       es: ['es-ES', 'en-US'],
       he: ['he-IL', 'en-US'],
-      default: ['es-US'],
+      default: ['en-US'],
     },
     debug: import.meta.env.VITE_DEV_MODE,
     detection: {
