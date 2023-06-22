@@ -38,15 +38,15 @@ export const useBurgerMenuItems = () => {
       subMenu: 'currency',
       content: <CurrencyMenuItemContent />,
     },
-    {
-      subMenu: 'languages',
-      content: (
-        <div className="flex w-full items-center justify-between">
-          <span>{t('navBar.burgerMenu.items.item2')}</span>
-          <span className="font-weight-500 me-10">{currentLangName}</span>
-        </div>
-      ),
-    },
+    // {
+    //   subMenu: 'languages',
+    //   content: (
+    //     <div className="flex w-full items-center justify-between">
+    //       <span>{t('navBar.burgerMenu.items.item2')}</span>
+    //       <span className="font-weight-500 me-10">{currentLangName}</span>
+    //     </div>
+    //   ),
+    // },
     {
       subMenu: 'resources',
       content: t('navBar.burgerMenu.items.item3'),
