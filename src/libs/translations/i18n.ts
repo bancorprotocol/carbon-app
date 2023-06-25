@@ -45,7 +45,7 @@ i18n
     debug: import.meta.env.VITE_DEV_MODE,
     detection: {
       lookupLocalStorage: `${APP_ID}-${APP_VERSION}-i18nextLng`,
-      lookupQuerystring: '', // disable querystring in url
+      lookupQuerystring: import.meta.env.VITE_DEV_MODE ? 'lng' : '', // disable querystring in url in prod
     },
     backend: {
       backends: [LocalStorageBackend, HttpBackend],
