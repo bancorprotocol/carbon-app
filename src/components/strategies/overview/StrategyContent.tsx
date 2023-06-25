@@ -74,7 +74,7 @@ export const StrategyContent: FC<Props> = ({
         </>
       ) : (
         <m.div
-          id="strategies"
+          data-testid="strategies"
           key={'strategies'}
           className={
             'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'

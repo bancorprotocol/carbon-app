@@ -1,10 +1,13 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from './fixture';
 
 test.describe('Overview strategy', () => {
-  test.skip('Strategy overview snapshot', async ({ page }) => {
+  test('Strategy overview snapshot', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    await page.locator('#strategies').isVisible();
-    await page.waitForLoadState('domcontentloaded');
-    await expect(page).toHaveScreenshot('strategy-overview.png');
+    await page.getByTestId('strategies').isVisible();
+    await page.waitForLoadState('load');
+    await expect(await page.screenshot()).toMatchSnapshot(
+      'strategy-overview.png'
+    );
   });
 });
