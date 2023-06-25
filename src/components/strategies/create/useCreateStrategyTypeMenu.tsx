@@ -122,21 +122,6 @@ export const useCreateStrategyTypeMenu = (
       },
       {
         label: i18n.t(
-          'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option2'
-        ),
-        svg: <IconBuyRange className={'w-60 text-green'} />,
-        to: PathNames.createStrategy,
-        search: {
-          base,
-          quote,
-          strategyType: 'disposable',
-          strategyDirection: 'buy',
-          strategySettings: 'range',
-        },
-        isRecommended: true,
-      },
-      {
-        label: i18n.t(
           'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option3'
         ),
         svg: <IconSellLimit className={'w-60 text-red'} />,
@@ -147,6 +132,21 @@ export const useCreateStrategyTypeMenu = (
           strategyType: 'disposable',
           strategyDirection: 'sell',
           strategySettings: 'limit',
+        },
+        isRecommended: true,
+      },
+      {
+        label: i18n.t(
+          'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option2'
+        ),
+        svg: <IconBuyRange className={'w-60 text-green'} />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'disposable',
+          strategyDirection: 'buy',
+          strategySettings: 'range',
         },
       },
       {

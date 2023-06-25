@@ -433,7 +433,7 @@
             "type1": {
               "title": "Recurring",
               "contents": {
-                "content1": "Automated Link Orders",
+                "content1": "Automated Linked Orders",
                 "content2": "Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa."
               },
               "options": {
@@ -501,10 +501,10 @@
           "tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.",
           "tooltip3": "Define the price you are willing to buy {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
           "tooltip4": "Define the price you are willing to sell {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
-          "tooltip5": "Note: this amount will re-fill once the 'Sell' order is used by traders.",
-          "tooltip6": "The amount of {{sellToken}} tokens you would like to use in order to buy {{buyToken}}. {{note}}",
-          "tooltip7": "Note: this amount will re-fill once the 'Buy' order is used by traders.",
-          "tooltip8": "The amount of {{buyToken}} tokens you would like to sell. {{note}}"
+          "tooltip5": "Note: this amount will re-fill once the \"Sell\" order is used by traders.",
+          "tooltip6": "The amount of {{sellToken}} tokens you would like to use in order to buy {{buyToken}}.",
+          "tooltip7": "Note: this amount will re-fill once the \"Buy\" order is used by traders.",
+          "tooltip8": "The amount of {{buyToken}} tokens you would like to sell."
         },
         "actionButton": "Create Strategy"
       }
@@ -579,8 +579,8 @@
       "section1": {
         "title": "Orders",
         "headers": {
-          "header1": "Price {{token}}",
-          "header2": "Amount {{token}}",
+          "header1": "Price ({{token}})",
+          "header2": "Amount ({{token}})",
           "header3": "Total"
         },
         "tooltips": {

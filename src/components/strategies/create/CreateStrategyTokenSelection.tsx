@@ -28,7 +28,12 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         <Tooltip
           sendEventOnMount={{ buy: undefined }}
           element={
-            <Trans i18nKey={'pages.strategyCreate.step1.tooltips.tooltip1'} />
+            <Trans
+              i18nKey={'pages.strategyCreate.step1.tooltips.tooltip3'}
+              components={{
+                bold: <span className={'font-weight-500'} />,
+              }}
+            />
           }
         />
       </div>

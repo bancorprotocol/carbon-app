@@ -22,32 +22,40 @@ export const getTooltipTextByStatus = (status: StrategyStatus) => {
     : i18n.t('pages.strategyOverview.card.tooltips.tooltip10');
 };
 
-export const tooltipTextByStrategyEditOptionsId = {
-  duplicateStrategy: i18n.t(
-    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip1'
-  ),
-  deleteStrategy: i18n.t(
-    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip2'
-  ),
-  pauseStrategy: i18n.t(
-    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip3'
-  ),
-  withdrawFunds: i18n.t(
-    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip4'
-  ),
-  depositFunds: i18n.t(
-    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip5'
-  ),
-  editPrices: i18n.t(
-    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip6'
-  ),
-  renewStrategy: i18n.t(
-    'pages.strategyOverview.card.manageStrategy.tooltips.tooltip7'
-  ),
+const tooltipTextByStrategyEditOptionsId = () => {
+  return {
+    duplicateStrategy: i18n.t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip1'
+    ),
+    deleteStrategy: i18n.t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip2'
+    ),
+    pauseStrategy: i18n.t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip3'
+    ),
+    withdrawFunds: i18n.t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip4'
+    ),
+    depositFunds: i18n.t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip5'
+    ),
+    editPrices: i18n.t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip6'
+    ),
+    renewStrategy: i18n.t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip7'
+    ),
+  };
+};
+
+export const getTooltipTextByStrategyEditOptionsId = (
+  id: StrategyEditOptionId
+) => {
+  return tooltipTextByStrategyEditOptionsId()[id];
 };
 
 type StrategyEditOption = typeof tooltipTextByStrategyEditOptionsId;
-export type StrategyEditOptionId = keyof StrategyEditOption;
+export type StrategyEditOptionId = keyof ReturnType<StrategyEditOption>;
 
 type getPriceParams = {
   prettified?: boolean;

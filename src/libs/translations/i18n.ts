@@ -12,6 +12,7 @@ import { TRANSLATION_VERSION } from './version';
 // TODO: add accent letter fonts.
 // Remove after gets all languages + actual translations
 // TODO: Fix en json - walletConnect.connect1 -> decrease tags 1->0, 2->1
+// TODO: Update mainMenu design, separators, width.
 export const SUPPORTED_LANGUAGES = [
   { code: 'en-US', name: 'English' },
   { code: 'es-ES', name: 'Español' },
@@ -43,6 +44,10 @@ i18n
       de: ['de-DE', 'en-US'],
       es: ['es-ES', 'en-US'],
       he: ['he-IL', 'en-US'],
+      'pt-BR': ['en-US'],
+      'de-DE': ['en-US'],
+      'es-ES': ['en-US'],
+      'he-IL': ['en-US'],
       default: ['en-US'],
     },
     debug: import.meta.env.VITE_DEV_MODE,

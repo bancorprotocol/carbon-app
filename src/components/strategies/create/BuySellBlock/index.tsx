@@ -177,23 +177,21 @@ export const BuySellBlock: FC<Props> = ({
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? t('pages.strategyCreate.step2.tooltips.tooltip6', {
+              ? `${t('pages.strategyCreate.step2.tooltips.tooltip6', {
                   buyToken: base.symbol,
                   sellToken: quote.symbol,
-                  note: `${
-                    strategyType === 'recurring'
-                      ? t('pages.strategyCreate.step2.tooltips.tooltip5')
-                      : ''
-                  }`,
-                })
-              : t('pages.strategyCreate.step2.tooltips.tooltip8', {
+                })} ${
+                  strategyType === 'recurring'
+                    ? t('pages.strategyCreate.step2.tooltips.tooltip5')
+                    : ''
+                }`
+              : `${t('pages.strategyCreate.step2.tooltips.tooltip8', {
                   buyToken: base.symbol,
-                  note: `${
-                    strategyType === 'recurring'
-                      ? t('pages.strategyCreate.step2.tooltips.tooltip7')
-                      : ''
-                  }`,
-                })
+                })} ${
+                  strategyType === 'recurring'
+                    ? t('pages.strategyCreate.step2.tooltips.tooltip7')
+                    : ''
+                }`
           }
         >
           <div className={'font-weight-500 text-white/60'}>
