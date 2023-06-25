@@ -33,7 +33,7 @@ export const DebugTenderlyRPC = () => {
       <h2>Set Tenderly RPC</h2>
       <Label label={'RPC URL'}>
         <Input
-          id="rpcUrl"
+          data-testid="rpcUrl"
           value={urlInput}
           onChange={(e) => setUrlInput(e.target.value)}
           fullWidth
@@ -44,7 +44,7 @@ export const DebugTenderlyRPC = () => {
         <>
           <Label label={'Carbon Controller Contract'}>
             <Input
-              id="controller"
+              data-testid="controller"
               value={carbonControllerInput}
               onChange={(e) => setCarbonControllerInput(e.target.value)}
               fullWidth
@@ -53,7 +53,7 @@ export const DebugTenderlyRPC = () => {
 
           <Label label={'Carbon Voucher Contract'}>
             <Input
-              id="voucher"
+              data-testid="voucher"
               value={voucherAddressInput}
               onChange={(e) => setVoucherAddressInput(e.target.value)}
               fullWidth
@@ -74,7 +74,7 @@ export const DebugTenderlyRPC = () => {
         <span>Unchecked Signer</span>
       </div>
 
-      <Button id="saveRpc" onClick={handleOnClick}>
+      <Button data-testid="saveRpc" onClick={handleOnClick}>
         Save
       </Button>
     </div>

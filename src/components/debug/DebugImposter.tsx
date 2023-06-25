@@ -22,13 +22,13 @@ export const DebugImposter = () => {
     >
       <h2>Set Imposter Account</h2>
       <InputUserAccount
-        id="imposterAccount"
+        data-testid="imposterAccount"
         label={'Imposter Account'}
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
 
-      <Button id="saveImposter" onClick={handleOnClick}>
+      <Button data-testid="saveImposter" onClick={handleOnClick}>
         Save
       </Button>
     </div>

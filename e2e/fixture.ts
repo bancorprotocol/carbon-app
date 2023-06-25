@@ -1,48 +1,12 @@
+import { deleteFork } from '../src/utils/tenderlyApi';
+import { setupBeforeEach } from './test-setup';
 import { test as base } from '@playwright/test';
-import { deleteFork, duplicateFork } from '../src/utils/tenderlyApi';
 
-export const newTest = base.extend({
+export const test = base.extend({
   page: async ({ page }, use) => {
-    let forkId;
-
-    await page.goto(`/debug`);
-
-    try {
-      forkId = await duplicateFork();
-      console.log(forkId, '-=-=-=-=-=- Fork Created -=-=-=-=-=-');
-      process.env.ForkId = forkId;
-      await page.waitForLoadState('load');
-
-      await page
-        .locator('#imposterAccount')
-        .fill('0x75e89d5979e4f6fba9f97c104c2f0afb3f1dcb88');
-      await page.locator('#saveImposter').click();
-
-      await page
-        .locator('#rpcUrl')
-        .fill(`https://rpc.tenderly.co/fork/${forkId}`);
-      await page
-        .locator('#controller')
-        .fill('0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1');
-      await page
-        .locator('#voucher')
-        .fill('0x3660F04B79751e31128f6378eAC70807e38f554E');
-      await page.locator('#checkbox').first().click();
-
-      await page.locator('#saveRpc').click();
-
-      // await page.context().storageState({ path: 'user.json' as string });
-    } catch (error) {
-      console.log(
-        error,
-        `-=-=-=-=-=- global setup error - delete fork ${forkId}-=-=-=-=-=-`
-      );
-      await deleteFork(forkId);
-    }
+    const forkIdCreated = await setupBeforeEach(page);
     await use(page);
-    if (process.env.ForkId) {
-      await deleteFork(process.env.ForkId);
-    }
-    console.log(process.env.ForkId, '-=-=-=-=-=- Fork Deleted -=-=-=-=-=-');
+    await deleteFork(forkIdCreated);
+    console.log(forkIdCreated, '-=-=-=-=-=- Fork Deleted -=-=-=-=-=-');
   },
 });

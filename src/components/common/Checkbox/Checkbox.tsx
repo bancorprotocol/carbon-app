@@ -13,7 +13,7 @@ export const Checkbox: FC<Props> = ({ isChecked, setIsChecked }) => {
 
   return (
     <div
-      id="checkbox"
+      data-testid="checkbox"
       className={`${classNames} ${borderColor}`}
       onClick={() => setIsChecked(!isChecked)}
     >

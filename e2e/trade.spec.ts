@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
-import { newTest } from './fixture';
+import { test } from './fixture';
 
-newTest.describe('Trade page', () => {
-  newTest('Trade snapshot', async ({ page }) => {
+test.describe('Trade page', () => {
+  test('Trade snapshot', async ({ page }) => {
     await page.goto('/trade');
     await page
       .getByTestId('logo-animation')
