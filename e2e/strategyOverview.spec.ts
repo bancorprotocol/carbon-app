@@ -7,6 +7,8 @@ test.describe('Overview strategy', () => {
     await page.getByTestId('strategies').isVisible();
     await page.waitForLoadState('load');
     await page.getByTestId('CreateStrategyHeader');
+    await page.getByTestId('logoAnimation').last().waitFor({ state: 'hidden' });
+
     await expect(await page.screenshot()).toMatchSnapshot(
       'strategy-overview.png'
     );

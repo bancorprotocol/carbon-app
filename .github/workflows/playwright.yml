@@ -18,6 +18,10 @@ jobs:
       - name: Run Playwright tests
         env:
           VITE_TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
+          VITE_ALCHEMY_KEY: ${{ secrets.VITE_ALCHEMY_KEY }}
+          VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
+          VITE_CARBON_API_KEY: ${{ secrets.VITE_CARBON_API_KEY }}
+          VITE_DEV_MODE: true
           CI: true
         run: yarn test:e2e
       - uses: actions/upload-artifact@v3

@@ -13,7 +13,7 @@ test.describe('Pause strategy', () => {
     );
   });
 
-  test.only('Strategy paused successfully', async ({ page }) => {
+  test('Strategy paused successfully', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'Manage' }).first().click();
     await page.getByRole('button', { name: 'Pause Strategy' }).first().click();
