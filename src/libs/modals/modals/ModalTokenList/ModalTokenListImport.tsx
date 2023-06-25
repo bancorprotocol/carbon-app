@@ -17,7 +17,7 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
     <Trans
       i18nKey={'modals.selectToken.contents.content2'}
       components={{
-        bold: <span className={'font-weight-500 dark:text-white'} />,
+        strong: <span className={'font-weight-500 dark:text-white'} />,
       }}
     />
   );

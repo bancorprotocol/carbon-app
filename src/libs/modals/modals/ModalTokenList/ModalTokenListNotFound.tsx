@@ -8,7 +8,7 @@ export const ModalTokenListNotFound: FC = () => {
     <Trans
       i18nKey={'modals.selectToken.contents.content3'}
       components={{
-        bold: <span className={'font-weight-500 dark:text-white'} />,
+        strong: <span className={'font-weight-500 dark:text-white'} />,
       }}
     />
   );

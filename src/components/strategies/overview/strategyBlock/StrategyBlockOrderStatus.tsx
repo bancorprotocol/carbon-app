@@ -60,9 +60,6 @@ export const StrategyBlockOrderStatus: FC<{
                     i18nKey={
                       'pages.strategyOverview.card.section3.notification.content2'
                     }
-                    components={{
-                      bold: <span className="font-weight-500"></span>,
-                    }}
                   />
                 </div>
                 <Button

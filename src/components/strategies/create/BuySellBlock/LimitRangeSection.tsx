@@ -123,9 +123,6 @@ export const LimitRangeSection: FC<Props> = ({
                 i18nKey={
                   buy ? 'common.tooltips.tooltip1' : 'common.tooltips.tooltip2'
                 }
-                components={{
-                  bold: <span className={'font-weight-500'} />,
-                }}
               />
             }
           />
