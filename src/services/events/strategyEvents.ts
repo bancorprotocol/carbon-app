@@ -15,7 +15,7 @@ import {
   StrategyEventTypeBase,
   StrategySellEventType,
 } from './types';
-import { MarketPricePercentage } from 'components/strategies/useMarketIndication';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 export interface EventStrategySchema extends EventCategory {
   strategyErrorShow: {

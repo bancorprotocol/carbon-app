@@ -6,7 +6,7 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
-import { MarketPricePercentage } from 'components/strategies/useMarketIndication';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 type InputLimitProps = {
   price: string;

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useGetTokenPrice } from 'libs/queries';
 import { Token } from 'libs/tokens';
-import { useFiatCurrency } from '../../hooks/useFiatCurrency';
+import { useFiatCurrency } from '../../../hooks/useFiatCurrency';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type MarketPricePercentage = {

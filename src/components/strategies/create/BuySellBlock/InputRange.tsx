@@ -7,7 +7,7 @@ import { MarketPriceIndication } from 'components/strategies/marketPriceIndicati
 import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { MarketPricePercentage } from 'components/strategies/useMarketIndication';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 type InputRangeProps = {
   min: string;

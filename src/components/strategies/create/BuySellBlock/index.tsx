@@ -140,15 +140,7 @@ export const BuySellBlock: FC<Props> = ({
       )}
 
       <LimitRangeSection
-        {...{
-          base,
-          quote,
-          order,
-          buy,
-          title,
-          inputTitle,
-          isOrdersOverlap,
-        }}
+        {...{ base, quote, order, buy, title, inputTitle, isOrdersOverlap }}
       />
       <div className={'flex items-center pt-10 text-14'}>
         <div
