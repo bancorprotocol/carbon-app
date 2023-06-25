@@ -113,28 +113,39 @@ export const useCreateStrategy = () => {
       return openModal('wallet', undefined);
     }
 
+    const onConfirm = () =>
+      createStrategyAction({
+        base,
+        quote,
+        user,
+        mutation,
+        order0,
+        order1,
+        dispatchNotification,
+        cache,
+        navigate,
+        strategyEventData: {
+          ...strategyEventData,
+          buyMarketPricePercentage,
+          sellMarketPricePercentage,
+        },
+        setIsProcessing,
+      });
+
     if (sourceCorrect && targetCorrect) {
+      if (!+order0.budget && !+order1.budget) {
+        return openModal('genericInfo', {
+          title: 'Empty Strategy Warning',
+          text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
+          variant: 'warning',
+          onConfirm,
+        });
+      }
+
       if (approval.approvalRequired) {
-        openModal('txConfirm', {
+        return openModal('txConfirm', {
           approvalTokens,
-          onConfirm: () =>
-            createStrategyAction({
-              base,
-              quote,
-              user,
-              mutation,
-              order0,
-              order1,
-              dispatchNotification,
-              cache,
-              navigate,
-              setIsProcessing,
-              strategyEventData: {
-                ...strategyEventData,
-                buyMarketPricePercentage,
-                sellMarketPricePercentage,
-              },
-            }),
+          onConfirm,
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
@@ -146,25 +157,9 @@ export const useCreateStrategy = () => {
           },
           context: 'createStrategy',
         });
-      } else {
-        createStrategyAction({
-          base,
-          quote,
-          user,
-          mutation,
-          order0,
-          order1,
-          dispatchNotification,
-          cache,
-          navigate,
-          setIsProcessing,
-          strategyEventData: {
-            ...strategyEventData,
-            buyMarketPricePercentage,
-            sellMarketPricePercentage,
-          },
-        });
       }
+
+      await onConfirm();
     }
   };
 
