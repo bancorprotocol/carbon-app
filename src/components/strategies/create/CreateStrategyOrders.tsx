@@ -15,6 +15,7 @@ import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-location';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
 import { lsService } from 'services/localeStorage';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 let didInit = false;
 
@@ -104,23 +105,32 @@ export const CreateStrategyOrders = ({
       <m.div
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'flex rounded-10 bg-silver p-20 ps-30 space-s-10'}
+        className={'rounded-10 bg-silver p-20 ps-30'}
       >
-        <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
-        <div>
-          {
-            <div className="flex space-s-6">
-              <span>{base?.symbol}</span>
-              <div className="text-secondary !text-16">/</div>
-              <span>{quote?.symbol}</span>
+        <div className={'flex space-s-10'}>
+          <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
+          <div>
+            {
+              <div className="flex space-s-6">
+                <span>{base?.symbol}</span>
+                <div className="text-secondary !text-16">/</div>
+                <span>{quote?.symbol}</span>
+              </div>
+            }
+            <div className="text-secondary capitalize">
+              {strategyType === 'recurring'
+                ? t('pages.strategyCreate.step2.section1.titles.title1')
+                : t('pages.strategyCreate.step2.section1.titles.title2')}
             </div>
-          }
-
-          <div className="text-secondary capitalize">
-            {strategyType === 'recurring'
-              ? t('pages.strategyCreate.step2.section1.titles.title1')
-              : t('pages.strategyCreate.step2.section1.titles.title2')}
           </div>
+        </div>
+        <div
+          className={
+            'mt-10 flex items-center text-12 font-weight-400 text-white/60'
+          }
+        >
+          <IconWarning className={'w-14 flex-shrink-0 -ms-6 me-10'} /> Rebasing
+          and fee-on-transfer tokens are not supported
         </div>
       </m.div>
 
