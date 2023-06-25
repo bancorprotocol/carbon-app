@@ -40,5 +40,9 @@ export const newTest = base.extend({
       await deleteFork(forkId);
     }
     await use(page);
+    if (process.env.ForkId) {
+      await deleteFork(process.env.ForkId);
+    }
+    console.log(process.env.ForkId, '-=-=-=-=-=- Fork Deleted -=-=-=-=-=-');
   },
 });
