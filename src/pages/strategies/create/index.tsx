@@ -16,6 +16,7 @@ export const CreateStrategyPage = () => {
   return (
     <AnimatePresence mode={'sync'}>
       <m.div
+        data-testid="createStrategyPage"
         className={`flex flex-col items-center space-y-20 p-20 ${
           showGraph ? 'justify-between' : 'justify-center'
         }`}
