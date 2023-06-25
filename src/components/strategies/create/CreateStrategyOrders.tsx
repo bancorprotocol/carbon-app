@@ -129,8 +129,8 @@ export const CreateStrategyOrders = ({
             'mt-10 flex items-center text-12 font-weight-400 text-white/60'
           }
         >
-          <IconWarning className={'w-14 flex-shrink-0 -ms-6 me-10'} /> Rebasing
-          and fee-on-transfer tokens are not supported
+          <IconWarning className={'w-14 flex-shrink-0 -ms-6 me-10'} />
+          {t('pages.strategyCreate.step2.section1.contents.content1')}
         </div>
       </m.div>
 

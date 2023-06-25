@@ -475,6 +475,9 @@
           "titles": {
             "title1": "recurring",
             "title2": "disposable"
+          },
+          "contents": {
+            "content1": "Rebasing and fee-on-transfer tokens are not supported"
           }
         },
         "section2": {
