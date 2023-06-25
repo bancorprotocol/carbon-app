@@ -6,6 +6,7 @@ test.describe('Overview strategy', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByTestId('strategies').isVisible();
     await page.waitForLoadState('load');
+    await page.getByTestId('CreateStrategyHeader');
     await expect(await page.screenshot()).toMatchSnapshot(
       'strategy-overview.png'
     );

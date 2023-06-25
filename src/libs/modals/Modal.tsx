@@ -49,7 +49,7 @@ export const Modal: FC<Props> = ({
       className={'px-content items-center justify-center'}
     >
       <m.div
-        id="modal"
+        data-testid="modal"
         onClick={(e) => e.stopPropagation()}
         className={`relative mx-auto w-full ${sizeClass}`}
         variants={dropIn}

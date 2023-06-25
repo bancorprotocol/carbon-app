@@ -31,6 +31,7 @@ export const CreateStrategyHeader = ({
 
   return (
     <m.div
+      data-testid="CreateStrategyHeader"
       variants={items}
       key={'createStrategyHeader'}
       className={`flex w-full flex-row justify-between ${

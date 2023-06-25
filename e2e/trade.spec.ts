@@ -8,7 +8,7 @@ test.describe('Trade page', () => {
     await page
       .getByTestId('orderbookCell')
       .last()
-      .waitFor({ state: 'visible' });
+      .waitFor({ state: 'attached' });
     await page.getByTestId('orderBookWidgetRate').waitFor({ state: 'visible' });
     await expect(await page.screenshot()).toMatchSnapshot('trade.png');
   });
