@@ -21,6 +21,7 @@ export const OrderBookWidgetRow: FC<Props> = ({
   return (
     <>
       <div
+        data-testid="orderbookCell"
         className={`${buy ? 'text-green' : 'text-red'} overflow-x-hidden py-4`}
       >
         <Tooltip element={`${rate} ${quote.symbol}`}>
@@ -28,13 +29,19 @@ export const OrderBookWidgetRow: FC<Props> = ({
         </Tooltip>
       </div>
 
-      <div className={'overflow-x-hidden py-4 text-right text-white/80'}>
+      <div
+        data-testid="orderbookCell"
+        className={'overflow-x-hidden py-4 text-right text-white/80'}
+      >
         <Tooltip element={`${amount} ${base.symbol}`}>
           <span>{prettifyNumber(amount, { highPrecision: true })}</span>
         </Tooltip>
       </div>
 
-      <div className={'overflow-x-hidden py-4 text-right text-white/80'}>
+      <div
+        data-testid="orderbookCell"
+        className={'overflow-x-hidden py-4 text-right text-white/80'}
+      >
         <Tooltip element={`${total} ${quote.symbol}`}>
           <span>{prettifyNumber(total, { highPrecision: true })}</span>
         </Tooltip>

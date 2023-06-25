@@ -18,6 +18,7 @@ export const OrderBookWidgetRate: FC<Props> = ({
 }) => {
   return (
     <div
+      data-testid="orderBookWidgetRate"
       className={`-mx-10 my-10 flex items-center rounded-8 bg-silver px-10 py-10 text-16`}
     >
       <Tooltip element="The mid-market price based on the last trade">
