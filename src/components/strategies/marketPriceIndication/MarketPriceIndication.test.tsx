@@ -7,7 +7,7 @@ vitest.mock('components/common/tooltip/Tooltip', () => ({
   Tooltip: vitest.fn(({ element }) => <div>{element}</div>),
 }));
 
-describe('MarketPriceIndication - desktop', () => {
+describe('MarketPriceIndication', () => {
   beforeEach(() => {
     cleanup(); // Clear the screen before each test
   });

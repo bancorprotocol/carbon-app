@@ -2604,6 +2604,13 @@
     loupe "^2.3.6"
     pretty-format "^27.5.1"
 
+"@vitest/web-worker@^0.32.2":
+  version "0.32.2"
+  resolved "https://registry.yarnpkg.com/@vitest/web-worker/-/web-worker-0.32.2.tgz#e1dd55123b82a0f6f4679b90cde08523963a73bf"
+  integrity sha512-9Eq2LiYiPrEjR8Si6auMNlpdHQFjsoqTUighQ0UrH2jSmRiHo8kM10lxwjxjHeYMU8nIAcqTahQnzCB3Ctqx1w==
+  dependencies:
+    debug "^4.3.4"
+
 "@walletconnect/browser-utils@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@walletconnect/browser-utils/-/browser-utils-1.8.0.tgz#33c10e777aa6be86c713095b5206d63d32df0951"
