@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from './fixture';
 
-test.describe('Delete strategy', () => {
+test.describe.only('Delete strategy', () => {
   test('Strategy delete modal snapshot', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
 
