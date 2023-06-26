@@ -35,7 +35,14 @@ export const OrderBookWidgetRate: FC<Props> = ({
               />
             </div>
           )}
-          {fiatRate && <span className="ml-8 text-white/60">{fiatRate}</span>}
+          {fiatRate && (
+            <span
+              data-testid="orderBookWidgetRateFiatRate"
+              className="ml-8 text-white/60"
+            >
+              {fiatRate}
+            </span>
+          )}
         </span>
       </Tooltip>
     </div>

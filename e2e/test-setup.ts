@@ -2,7 +2,7 @@ import { Page } from 'playwright';
 import { baseURL } from '../playwright.config';
 import { deleteFork, duplicateFork } from '../src/utils/tenderlyApi';
 
-async function setupBeforeEach(page: Page) {
+export const setupBeforeEach = async (page: Page) => {
   let forkId;
 
   await page.goto(`${baseURL}/debug`);
@@ -27,11 +27,9 @@ async function setupBeforeEach(page: Page) {
     await page.getByTestId('checkbox').first().click();
     await page.getByTestId('saveRpc').click();
   } catch (error) {
-    console.log(error, `-=-=-=-=-=- error - delete fork ${forkId} -=-=-=-=-=-`);
+    console.log(error, `-=-=-=-=-=- Error - Delete Fork ${forkId} -=-=-=-=-=-`);
     await deleteFork(forkId);
   } finally {
     return forkId;
   }
-}
-
-export { setupBeforeEach };
+};

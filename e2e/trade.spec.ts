@@ -10,6 +10,11 @@ test.describe('Trade page', () => {
       .last()
       .waitFor({ state: 'attached' });
     await page.getByTestId('orderBookWidgetRate').waitFor({ state: 'visible' });
-    await expect(await page.screenshot()).toMatchSnapshot('trade.png');
+
+    await expect(
+      await page.screenshot({
+        mask: [page.getByTestId('orderBookWidgetRateFiatRate')],
+      })
+    ).toMatchSnapshot('trade.png');
   });
 });

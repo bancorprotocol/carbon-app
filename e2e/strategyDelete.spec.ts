@@ -20,12 +20,12 @@ test.describe('Delete strategy', () => {
     await page.getByRole('button', { name: 'Manage' }).first().click();
     await page.getByRole('button', { name: 'Delete Strategy' }).first().click();
 
-    const modal = await page.getByTestId('modal');
-    await modal
+    const deleteStrategyModal = await page.getByTestId('modal');
+    await deleteStrategyModal
       .getByRole('button', { name: 'Delete Strategy' })
       .first()
       .click();
-    await modal.waitFor({ state: 'hidden' });
+    await deleteStrategyModal.waitFor({ state: 'detached' });
     const strategies = await page.getByText('1 Strategies');
     await expect(strategies).toBeVisible();
   });

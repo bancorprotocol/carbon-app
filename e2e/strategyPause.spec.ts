@@ -23,7 +23,7 @@ test.describe('Pause strategy', () => {
       .getByRole('button', { name: 'Pause Strategy' })
       .first()
       .click();
-    await pauseStrategyModal.waitFor({ state: 'hidden' });
+    await pauseStrategyModal.waitFor({ state: 'detached' });
     const notification = await page.getByText(
       'Your strategy was successfully paused.'
     );
