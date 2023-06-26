@@ -3,13 +3,13 @@ import { test } from './fixture';
 
 test.describe('Trade page', () => {
   test('Trade snapshot', async ({ page }) => {
-    await page.goto('/trade');
+    await page.goto('/trade', { waitUntil: 'networkidle' });
     await page.getByTestId('logoAnimation').last().waitFor({ state: 'hidden' });
     await page.getByTestId('orderBookWidgetRate').waitFor({ state: 'visible' });
     await page
       .getByTestId('orderbookCell')
       .last()
-      .waitFor({ state: 'visible' });
+      .waitFor({ state: 'attached' });
 
     await expect(
       await page.screenshot({
