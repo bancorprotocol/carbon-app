@@ -18,9 +18,9 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
   },
   expect: {
-    toHaveScreenshot: {
-      threshold: 0.3,
-      maxDiffPixelRatio: 0.3,
+    toMatchSnapshot: {
+      threshold: 0.2,
+      maxDiffPixelRatio: 0.2,
     },
   },
   projects: [
