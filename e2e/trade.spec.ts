@@ -13,7 +13,7 @@ test.describe.only('Trade page', () => {
 
     await expect(
       await page.screenshot({
-        mask: [page.getByTestId('orderBookWidgetRateFiatRate')],
+        mask: [page.getByTestId('orderBookWidgetRate')],
       })
     ).toMatchSnapshot('trade.png');
   });
