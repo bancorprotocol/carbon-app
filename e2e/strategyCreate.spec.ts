@@ -10,6 +10,8 @@ test.describe.only('Create strategy', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForLoadState('load');
     await page.getByTestId('createStrategyPage').waitFor({ state: 'visible' });
+    await page.evaluate(() => document.fonts.ready);
+
     await expect(await page.screenshot()).toMatchSnapshot(
       'strategy-create.png'
     );
