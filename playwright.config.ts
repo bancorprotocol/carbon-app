@@ -33,7 +33,7 @@ export default defineConfig({
   ],
   webServer: {
     port,
-    command: `yarn serve --port ${port}`,
+    command: `yarn build && yarn serve --port ${port}`,
     reuseExistingServer: !process.env.CI,
   },
 });
