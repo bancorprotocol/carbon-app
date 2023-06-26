@@ -152,7 +152,7 @@ export const TokenInputField: FC<Props> = ({
                   {prettifyNumber(balance || 0)}
                 </span>
                 <div className="text-green ms-10 group-hover:text-white">
-                  {t('common.contents.content3')}
+                  {t('common.contents.content2')}
                 </div>
               </>
             )}

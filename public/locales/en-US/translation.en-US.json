@@ -110,7 +110,7 @@
     "connectWallet": {
       "modalTitle": "Connect Wallet",
       "actionButton": "I read and accept",
-      "content1": "By connecting my wallet, I agree to the <0>terms & conditions</0> and <0>cookie & privacy policy</0> of this site.",
+      "content1": "By connecting my wallet, I agree to the <0>terms & conditions</0> and <1>cookie & privacy policy</1> of this site.",
       "error1": "{{error}} Error:"
     },
     "confirm": {
@@ -379,8 +379,8 @@
           }
         },
         "tooltips": {
-          "tooltip1": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your 'Sell' order with tokens.",
-          "tooltip2": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your 'Buy' order with tokens.",
+          "tooltip1": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your \"Sell\" order with tokens.",
+          "tooltip2": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your \"Buy\" order with tokens.",
           "tooltip3": "This is the price in which you are willing to buy {{token}}.",
           "tooltip4": "This is the price in which you are willing to sell {{token}}.",
           "tooltip5": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
@@ -554,8 +554,8 @@
         }
       },
       "tooltips": {
-        "tooltip1": "Indicate the amount you wish to withdraw from the available 'allocated budget'",
-        "tooltip2": "Indicate the amount you wish to deposit from the available 'allocated budget'",
+        "tooltip1": "Indicate the amount you wish to withdraw from the available \"allocated budget\"",
+        "tooltip2": "Indicate the amount you wish to deposit from the available \"allocated budget\"",
         "tooltip3": "When updating the rates, the allocated budget will be distributed equally across the entire range",
         "tooltip4": "This is the current available {{token}} budget you can withdraw"
       },
