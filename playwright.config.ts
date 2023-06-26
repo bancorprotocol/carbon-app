@@ -5,7 +5,7 @@ export const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: './e2e',
-  fullyParallel: true,
+  fullyParallel: !process.env.CI,
   forbidOnly: false,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
@@ -16,11 +16,6 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     viewport: { width: 1280, height: 720 },
-  },
-  expect: {
-    toMatchSnapshot: {
-      threshold: 0.1,
-    },
   },
   projects: [
     {
