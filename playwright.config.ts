@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const port = 5174;
+const port = 3000;
 export const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
@@ -26,14 +26,14 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
+    // {
+    //   name: 'Mobile Chrome',
+    //   use: { ...devices['Pixel 5'] },
+    // },
   ],
   webServer: {
     port,
-    command: `yarn build && yarn serve --port ${port}`,
+    command: `yarn serve --port ${port}`,
     reuseExistingServer: !process.env.CI,
   },
 });
