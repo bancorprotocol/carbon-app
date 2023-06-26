@@ -17,6 +17,11 @@ export default defineConfig({
     video: 'retain-on-failure',
     viewport: { width: 1280, height: 720 },
   },
+  expect: {
+    toMatchSnapshot: {
+      threshold: 0.1,
+    },
+  },
   projects: [
     {
       name: 'chromium',
