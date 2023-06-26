@@ -45,7 +45,7 @@ export const CreateStrategyHeader = ({
         >
           <IconChevron className="mx-auto w-14 rotate-90" />
         </button>
-        {title}
+        <span>{title}</span>
       </div>
       {!showGraph && showOrders && (
         <button

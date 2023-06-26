@@ -51,7 +51,7 @@ export const BuySellBlock: FC<Props> = ({
   } ${base.symbol} at.`;
 
   const title = (
-    <>
+    <div className="flex items-center gap-6">
       <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
         <span>{titleText}</span>
       </Tooltip>
@@ -61,7 +61,7 @@ export const BuySellBlock: FC<Props> = ({
         className={'mx-6 h-18 w-18 rounded-full'}
       />
       <span>{base.symbol}</span>
-    </>
+    </div>
   );
 
   const inputTitle = (
