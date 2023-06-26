@@ -93,8 +93,6 @@ export const createStrategyAction = async ({
         handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
 
         dispatchNotification('createStrategy', { txHash: tx.hash });
-        if (!tx) return;
-        console.log('tx hash', tx.hash);
         await tx.wait();
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, base.address),
@@ -102,13 +100,21 @@ export const createStrategyAction = async ({
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, quote.address),
         });
-
-        console.log('tx confirmed');
+        navigate({ to: PathNames.strategies });
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
-      onError: (e) => {
+      onError: (e: any) => {
         setIsProcessing(false);
         console.error('create mutation failed', e);
+        // TODO add error notification
+        // TODO handle user rejected transaction
+        // dispatchNotification('generic', {
+        //   status: 'failed',
+        //   title: 'Strategy creation failed',
+        //   description:
+        //     e.message || 'Unknown error - please try again or contact support',
+        //   showAlert: true,
+        // });
       },
     }
   );
