@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 import { test } from './fixture';
 
 test.describe('Trade page', () => {
-  test('Trade snapshot', async ({ page }) => {
+  test.only('Trade snapshot', async ({ page }) => {
     await page.goto('/trade');
     await page.getByTestId('logoAnimation').last().waitFor({ state: 'hidden' });
     await page
