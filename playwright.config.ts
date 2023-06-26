@@ -22,10 +22,6 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    },
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
