@@ -3,9 +3,9 @@ on:
   issue_comment:
     types: [created]
 jobs:
-  build:
+  ozbuild:
     if: contains(github.event.comment.body, '/test') && github.event.issue.pull_request
-    name: Tests
+    name: oztest
     runs-on: ubuntu-latest
 
     strategy:
