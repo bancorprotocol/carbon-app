@@ -1,4 +1,4 @@
-name: Test On Comment
+name: 'Test On Comment'
 
 on:
   issue_comment:
@@ -6,7 +6,8 @@ on:
 
 jobs:
   test_on_comment:
-    if: contains(github.event.comment.body, '/test') && github.event.issue.pull_request
+    name: 'test on comment job'
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/doron')
     runs-on: ubuntu-latest
 
     strategy:
