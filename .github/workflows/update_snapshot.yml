@@ -1,68 +1,66 @@
-# This workflow's goal is forcing an update of the reference snapshots used
-# by Playwright tests. It runs whenever you post a new pull request comment
-# that strictly matches the "/update-snapshots".
-# From a high-level perspective, it works like this:
-# 1. Because of a GitHub Action limitation, this workflow is triggered on every
-#    comment posted on a issue or pull request. We manually interrupt it unless
-#    the comment content strictly matches "/update-snapshots" and we're in a
-#    pull request.
-# 2. Use the GitHub API to grab the information about the branch name and SHA of
-#    the latest commit of the current pull request.
-# 3. Update the Playwright reference snapshots based on the UI of this branch.
-# 4. Commit the newly generated Playwright reference snapshots into this branch.
-name: Update Snapshots
+name: 'Deploy on Comment'
 
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
 on:
-  # It looks like you can't target PRs-only comments:
-  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_comment-use-issue_comment
-  # So we must run this workflow every time a new comment is added to issues
-  # and pull requests
   issue_comment:
     types: [created]
 
 jobs:
-  updatesnapshots:
+  deploy:
+    name: Deploy
+    # Only run if it#s a PR and the comment contains /deploy
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/deploy')
     runs-on: ubuntu-latest
-    # Run this job only on comments of pull requests that strictly match
-    # the "/update-snapshots" string
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/update-snapshots')
-    timeout-minutes: 60
+
     steps:
-      # Checkout and do a deep fetch to load all commit IDs
-      - uses: actions/checkout@v3
+      - name: Get branch of PR
+        uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+
+      - name: Set latest commit status as pending
+        uses: myrotvorets/set-commit-status-action@master
         with:
-          fetch-depth: 0 # Load all commits
+          sha: ${{ steps.comment-branch.outputs.head_sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      # Get the SHA and branch name of the comment's pull request
-      # We must use the GitHub API to retrieve these information because they're
-      # not accessibile within workflows triggered by "issue_comment"
-      - name: Get SHA and branch name
-        id: get-branch-and-sha
+          status: pending
+
+      - name: Checkout PR branch ${{ steps.comment-branch.outputs.head_ref }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+
+      - name: Setup Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      # Do the actual deployment (exit randomly with 0 or 1)
+      - name: Deploy
         run: |
-          sha_and_branch=$(\
-            curl \
-              -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-              https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} \
-            | jq -r '.head.sha," ",.head.ref');
-          echo "::set-output name=sha::$(echo $sha_and_branch | cut -d " " -f 1)";
-          echo "::set-output name=branch::$(echo $sha_and_branch | cut -d " " -f 2)"
-      # Checkout the comment's branch
-      - name: Fetch Branch
-        run: git fetch
-      - name: Checkout Branch
-        run: git checkout ${{ steps.get-branch-and-sha.outputs.branch }}
-      # Setup testing environment
-      - uses: actions/setup-node@v2
+          echo "Deploying..."
+          exit $(($RANDOM%2))
+
+      - name: Add workflow result as comment on PR
+        uses: actions/github-script@v6
+        if: always()
         with:
-          node-version: '14.x'
-      - name: Install dependencies
-        run: npm install
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-      # Update the snapshots based on the current UI
-      - name: Update snapshots
-        run: npx playwright test --update-snapshots --reporter=list
-      # Commit the changes to the pull request branch
-      - uses: stefanzweifel/git-auto-commit-action@v4
+          script: |
+            const name = '${{ github.workflow	}}';
+            const url = '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}';
+            const success = '${{ job.status }}' === 'success';
+            const body = `${name}: ${success ? 'succeeded ✅' : 'failed ❌'}\n${url}`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            })
+
+      - name: Set latest commit status as ${{ job.status }}
+        uses: myrotvorets/set-commit-status-action@master
+        if: always()
         with:
-          commit_message: '[CI] Update Snapshots'
+          sha: ${{ steps.comment-branch.outputs.head_sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
