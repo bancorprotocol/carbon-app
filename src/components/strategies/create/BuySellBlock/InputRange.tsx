@@ -4,11 +4,13 @@ import { Token } from 'libs/tokens';
 import { useTranslation } from 'libs/translations';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
-export const InputRange: FC<{
+type InputRangeProps = {
   min: string;
   setMin: (value: string) => void;
   max: string;
@@ -17,7 +19,10 @@ export const InputRange: FC<{
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
-}> = ({
+  marketPricePercentages: MarketPricePercentage;
+};
+
+export const InputRange: FC<InputRangeProps> = ({
   min,
   setMin,
   max,
@@ -26,6 +31,7 @@ export const InputRange: FC<{
   error,
   setRangeError,
   buy = false,
+  marketPricePercentages,
 }) => {
   const { t } = useTranslation();
   const errorMessage = t('common.errors.error1');
@@ -64,7 +70,7 @@ export const InputRange: FC<{
 
   return (
     <div>
-      <div className="flex space-s-6">
+      <div className="grid grid-cols-2 gap-6">
         <div
           className={`${
             error ? 'border-red/50 text-red' : ''
@@ -94,8 +100,14 @@ export const InputRange: FC<{
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="font-mono text-12 text-white/60">
-            {getFiatAsString(min)}
+          <div className="flex flex-col items-start gap-4">
+            <div className="break-all font-mono text-12 text-white/60">
+              {getFiatAsString(min)}
+            </div>
+            <MarketPriceIndication
+              marketPricePercentage={marketPricePercentages.min}
+              isRange
+            />
           </div>
         </div>
         <div
@@ -124,11 +136,17 @@ export const InputRange: FC<{
             placeholder={t('common.placeholders.placeholder1')}
             onFocus={handleFocus}
             className={
-              'w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
+              'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="mt-6 font-mono text-12 text-white/60">
-            {getFiatAsString(max)}
+          <div className="flex flex-col items-start gap-4">
+            <div className="break-all font-mono text-12 text-white/60">
+              {getFiatAsString(max)}
+            </div>
+            <MarketPriceIndication
+              marketPricePercentage={marketPricePercentages.max}
+              isRange
+            />
           </div>
         </div>
       </div>
