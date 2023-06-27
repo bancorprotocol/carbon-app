@@ -52,6 +52,8 @@
     height: var(--mobile-menu-height);
     @apply bg-body z-40 sticky bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t border-lightGrey px-10 font-weight-500 text-white/50 dark:border-darkGrey md:hidden;
   }
+
+
 }
 
 @layer utilities {
@@ -195,4 +197,20 @@
   60%, 100% {
     box-shadow: 10014px 0 0 -5px;
   }
+}
+
+.react-modal-sheet-backdrop {
+  /* custom styles */
+}
+.react-modal-sheet-container {
+  @apply !bg-black;
+}
+.react-modal-sheet-header {
+  /* custom styles */
+}
+.react-modal-sheet-drag-indicator {
+  /* custom styles */
+}
+.react-modal-sheet-content {
+  /* custom styles */
 }

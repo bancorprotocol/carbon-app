@@ -40,6 +40,7 @@ import {
   ModalCreateStratExpertMode,
   ModalCreateStratExpertModeData,
 } from 'libs/modals/modals/ModalCreateStratExpertMode';
+import { ModalSheetTest } from 'libs/modals/modals/ModalSheetTest';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -56,6 +57,7 @@ export interface ModalSchema {
   restrictedCountry: undefined;
   genericInfo: ModalGenericInfoData;
   createStratExpertMode: ModalCreateStratExpertModeData;
+  sheetTest: undefined;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -75,4 +77,5 @@ export const MODAL_COMPONENTS: TModals = {
   restrictedCountry: (props) => ModalRestrictedCountry(props),
   genericInfo: (props) => ModalGenericInfo(props),
   createStratExpertMode: (props) => ModalCreateStratExpertMode(props),
+  sheetTest: (props) => ModalSheetTest(props),
 };

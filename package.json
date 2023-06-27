@@ -66,6 +66,7 @@
     "prettier-plugin-tailwindcss": "^0.1.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-modal-sheet": "^2.0.0",
     "react-popper": "^2.3.0",
     "source-map-explorer": "^2.5.3",
     "tailwindcss": "3.1.8",

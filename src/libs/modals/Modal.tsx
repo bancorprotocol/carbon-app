@@ -4,7 +4,7 @@ import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
 
-type Props = {
+export type ModalProps = {
   children: ReactNode;
   id: string;
   title?: string | ReactNode;
@@ -25,7 +25,7 @@ const getSize = (size: 'sm' | 'md' | 'lg') => {
   }
 };
 
-export const Modal: FC<Props> = ({
+export const Modal: FC<ModalProps> = ({
   children,
   id,
   title,
