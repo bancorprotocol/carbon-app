@@ -109,7 +109,7 @@ export const EditStrategyBudgetContent = ({
         openModal('txConfirm', {
           approvalTokens: approval.tokens,
           onConfirm: depositOrWithdrawFunds,
-          buttonLabel: `Confirm Deposit`,
+          buttonLabel: t('pages.strategyEdit.actionButtons.actionButton5'),
           eventData: {
             ...strategyEventData,
             productType: 'strategy',

@@ -43,7 +43,8 @@
       "tooltip4": "xxxxxxxxxxx",
       "tooltip5": "xxxxxxxxxxx",
       "tooltip6": "xxxxxxxxxxx",
-      "tooltip7": "xxxxxxxxxxx"
+      "tooltip7": "xxxxxxxxxxx",
+      "tooltip8": "xxxxxxxx"
     },
     "statuses": {
       "status1": "xxxxxxxxxxx",
@@ -59,7 +60,11 @@
       "content7": "xxxxxxxxxxx",
       "content8": "xxxxxxxxxxx",
       "content9": "xxxxxxxxxxx",
-      "content10": "xxxxxxxxxxx"
+      "content10": "xxxxxxxxxxx",
+      "content11": "xxxxxxxx",
+      "content12": "xxxxxxxx",
+      "content13": "xxxxxxxx",
+      "content14": "xxxxxxxx"
     }
   },
   "modals": {
@@ -182,6 +187,16 @@
         "content2": "xxxxxxxx"
       },
       "modalTitle": "xxxxxxxx",
+      "title": "xxxxxxxx"
+    },
+    "genericInfo": {
+      "actionButtons": {
+        "actionButton1": "xxxxxxxx",
+        "actionButton2": "xxxxxxxx"
+      },
+      "contents": {
+        "content1": "xxxxxxxx"
+      },
       "title": "xxxxxxxx"
     }
   },

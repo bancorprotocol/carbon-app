@@ -43,7 +43,8 @@
       "tooltip4": "The lowest price to buy {{token}} at.",
       "tooltip5": "The lowest price to sell {{token}} at.",
       "tooltip6": "The highest price to buy {{token}} at.",
-      "tooltip7": "The highest price to sell {{token}} at."
+      "tooltip7": "The highest price to sell {{token}} at.",
+      "tooltip8": "The percentage difference between the input price and the current market price of the token"
     },
     "statuses": {
       "status1": "Waiting for Confirmation",
@@ -59,7 +60,11 @@
       "content7": "All",
       "content8": "Notice, price & slippage are unknown",
       "content9": "Min",
-      "content10": "Max"
+      "content10": "Max",
+      "content11": "{{percentage}}% below",
+      "content12": "{{percentage}}% above",
+      "content13": "{{percentage}}% below market",
+      "content14": "{{percentage}}% above market"
     }
   },
   "modals": {
@@ -182,6 +187,16 @@
       },
       "actionButtons": {
         "actionButton1": "Proceed with Range"
+      }
+    },
+    "genericInfo": {
+      "title": "Empty Strategy Warning",
+      "contents": {
+        "content1": "You are about to create a strategy with no associated budget. It will be inactive until you deposit funds."
+      },
+      "actionButtons": {
+        "actionButton1": "Confirm",
+        "actionButton2": "Cancel"
       }
     }
   },

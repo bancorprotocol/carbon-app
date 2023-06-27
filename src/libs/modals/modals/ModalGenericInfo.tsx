@@ -7,6 +7,7 @@ import { ReactComponent as IconError } from 'assets/icons/times.svg';
 
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
+import { i18n, useTranslation } from 'libs/translations';
 
 export type ModalGenericInfoData = {
   title: string;
@@ -18,8 +19,15 @@ export type ModalGenericInfoData = {
 
 export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
   id,
-  data: { variant = 'error', title, text, buttonLabel = 'Confirm', onConfirm },
+  data: {
+    variant = 'error',
+    title,
+    text,
+    buttonLabel = i18n.t('modals.genericInfo.actionButtons.actionButton1'),
+    onConfirm,
+  },
 }) => {
+  const { t } = useTranslation();
   const { closeModal } = useModal();
 
   const icon = useMemo(() => {
@@ -60,7 +68,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
         onClick={() => closeModal(id)}
         className={'mt-16'}
       >
-        Cancel
+        {t('modals.genericInfo.actionButtons.actionButton2')}
       </Button>
     </Modal>
   );
