@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { BuySellBlock } from './BuySellBlock';
@@ -8,6 +9,14 @@ import { useStrategyEventData } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
+import { getStatusTextByTxStatus } from '../utils';
+import { useModal } from 'hooks/useModal';
+import { useNavigate } from '@tanstack/react-location';
+import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
+import { lsService } from 'services/localeStorage';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+
+let didInit = false;
 
 export const CreateStrategyOrders = ({
   base,
@@ -20,10 +29,16 @@ export const CreateStrategyOrders = ({
   token1BalanceQuery,
   strategyDirection,
   strategyType,
+  isDuplicate,
+  strategySettings,
   selectedStrategySettings,
+  isProcessing,
+  isAwaiting,
   isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
+  const { openModal } = useModal();
+  const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const strategyEventData = useStrategyEventData({
     base,
     quote,
@@ -42,29 +57,75 @@ export const CreateStrategyOrders = ({
       });
   }, [strategyDirection]);
 
+  const handleExpertMode = useCallback(() => {
+    if (lsService.getItem('hasSeenCreateStratExpertMode')) {
+      return;
+    }
+
+    if (isDuplicate && (order0.isRange || order1.isRange)) {
+      return openModal('createStratExpertMode', {
+        onClose: () => {
+          order0.setIsRange(false);
+          order1.setIsRange(false);
+        },
+      });
+    }
+
+    if (strategySettings === 'range' || strategySettings === 'custom') {
+      return openModal('createStratExpertMode', {
+        onClose: () =>
+          navigate({
+            search: (prev) => ({ ...prev, strategySettings: 'limit' }),
+            replace: true,
+          }),
+      });
+    }
+  }, [isDuplicate, navigate, openModal, order0, order1, strategySettings]);
+
+  useEffect(() => {
+    if (!didInit) {
+      didInit = true;
+      void handleExpertMode();
+    }
+  }, [handleExpertMode]);
+
   const onCreateStrategy = () => {
     carbonEvents.strategy.strategyCreateClick(strategyEventData);
     createStrategy();
   };
+
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
     <>
       <m.div
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'flex space-x-10 rounded-10 bg-silver p-20 pl-30'}
+        className={'rounded-10 bg-silver p-20 pl-30'}
       >
-        <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
-        <div>
-          {
-            <div className="flex space-x-6">
-              <span>{base?.symbol}</span>
-              <div className="text-secondary !text-16">/</div>
-              <span>{quote?.symbol}</span>
-            </div>
-          }
+        <div className={'flex space-x-10'}>
+          <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
+          <div>
+            {
+              <div className="flex space-x-6">
+                <span>{base?.symbol}</span>
+                <div className="text-secondary !text-16">/</div>
+                <span>{quote?.symbol}</span>
+              </div>
+            }
 
-          <div className="text-secondary capitalize">{strategyType}</div>
+            <div className="text-secondary capitalize">{strategyType}</div>
+          </div>
+        </div>
+        <div
+          className={
+            'mt-10 flex items-center text-12 font-weight-400 text-white/60'
+          }
+        >
+          <IconWarning className={'mr-10 -ml-6 w-14 flex-shrink-0'} /> Rebasing
+          and fee-on-transfer tokens are not supported
         </div>
       </m.div>
 
@@ -102,6 +163,8 @@ export const CreateStrategyOrders = ({
           fullWidth
           onClick={onCreateStrategy}
           disabled={isCTAdisabled}
+          loading={isProcessing || isAwaiting}
+          loadingChildren={loadingChildren}
         >
           {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>

@@ -1,7 +1,13 @@
 import { useWeb3 } from 'libs/web3';
 import { useModal } from 'hooks/useModal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useCallback, useMemo, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import { Action } from '@bancor/carbon-sdk';
@@ -9,7 +15,9 @@ import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 
 type Props = {
   id: string;
-  data: ModalTradeRoutingData;
+  data: ModalTradeRoutingData & {
+    setIsAwaiting: Dispatch<SetStateAction<boolean>>;
+  };
 };
 
 export const useModalTradeRouting = ({
@@ -22,6 +30,7 @@ export const useModalTradeRouting = ({
     tradeActionsRes,
     onSuccess,
     buy = false,
+    setIsAwaiting,
   },
 }: Props) => {
   const { user, provider } = useWeb3();
@@ -60,6 +69,7 @@ export const useModalTradeRouting = ({
     onSuccess: () => {
       onSuccess();
       closeModal(id);
+      setIsAwaiting(false);
     },
   });
 
@@ -80,12 +90,16 @@ export const useModalTradeRouting = ({
         isTradeBySource,
         sourceInput: data.totalSourceAmount,
         targetInput: data.totalTargetAmount,
+        setIsAwaiting,
       });
 
     if (approval.approvalRequired) {
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
-        onConfirm: tradeFn,
+        onConfirm: () => {
+          setIsAwaiting(true);
+          tradeFn();
+        },
         buttonLabel: 'Confirm Trade',
         eventData: {
           productType: 'trade',
@@ -101,6 +115,7 @@ export const useModalTradeRouting = ({
         },
       });
     } else {
+      setIsAwaiting(true);
       void tradeFn();
     }
   }, [
@@ -118,6 +133,7 @@ export const useModalTradeRouting = ({
     data?.totalSourceAmount,
     data?.totalTargetAmount,
     isTradeBySource,
+    setIsAwaiting,
     buy,
     getFiatValueSource,
     provider?.network?.name,

@@ -4,9 +4,12 @@ import {
   StrategySettings,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
-import { PathNames } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
+import { Dispatch, SetStateAction } from 'react';
+import { MyLocationGenerics } from 'components/trade/useTradeTokens';
+import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 
 export const handleStrategySettings = (
   strategySettings?: StrategySettings,
@@ -61,6 +64,7 @@ export const createStrategyAction = async ({
   mutation,
   dispatchNotification,
   navigate,
+  setIsProcessing,
   strategyEventData,
 }: CreateStrategyActionProps) => {
   if (!base || !quote || !user) {
@@ -86,9 +90,9 @@ export const createStrategyAction = async ({
     },
     {
       onSuccess: async (tx) => {
+        handleTxStatusAndRedirectToOverview(setIsProcessing, navigate);
+
         dispatchNotification('createStrategy', { txHash: tx.hash });
-        if (!tx) return;
-        console.log('tx hash', tx.hash);
         await tx.wait();
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, base.address),
@@ -97,14 +101,34 @@ export const createStrategyAction = async ({
           queryKey: QueryKey.balance(user, quote.address),
         });
         navigate({ to: PathNames.strategies });
-        console.log('tx confirmed');
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
-      onError: (e) => {
+      onError: (e: any) => {
+        setIsProcessing(false);
         console.error('create mutation failed', e);
+        // TODO add error notification
+        // TODO handle user rejected transaction
+        // dispatchNotification('generic', {
+        //   status: 'failed',
+        //   title: 'Strategy creation failed',
+        //   description:
+        //     e.message || 'Unknown error - please try again or contact support',
+        //   showAlert: true,
+        // });
       },
     }
   );
+};
+
+export const handleTxStatusAndRedirectToOverview = (
+  setIsProcessing: Dispatch<SetStateAction<boolean>>,
+  navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
+) => {
+  setIsProcessing(true);
+  setTimeout(() => {
+    navigate && navigate({ to: PathNames.strategies });
+    setIsProcessing(false);
+  }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
 
 export const checkErrors = (

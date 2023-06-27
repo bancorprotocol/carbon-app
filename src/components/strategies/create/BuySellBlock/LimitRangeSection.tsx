@@ -1,10 +1,13 @@
 import { FC, ReactNode } from 'react';
+import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { Token } from 'libs/tokens';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { lsService } from 'services/localeStorage';
+import { useModal } from 'hooks/useModal';
 
 type Props = {
   base: Token;
@@ -25,13 +28,30 @@ export const LimitRangeSection: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
 }) => {
+  const { openModal } = useModal();
   const { isRange, setIsRange, resetFields } = order;
+  const { marketPricePercentage, isOrderAboveOrBelowMarketPrice } =
+    useMarketIndication({ base, quote, order, buy });
+
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
 
+  const warningMarketPriceMessage = buy
+    ? `Notice, you offer to buy ${base.symbol} above current market price`
+    : `Notice, you offer to sell ${base.symbol} below current market price`;
+
   const handleRangeChange = () => {
-    setIsRange(!isRange);
-    resetFields(true);
+    if (!lsService.getItem('hasSeenCreateStratExpertMode')) {
+      openModal('createStratExpertMode', {
+        onConfirm: () => {
+          setIsRange(!isRange);
+          resetFields(true);
+        },
+      });
+    } else {
+      setIsRange(!isRange);
+      resetFields(true);
+    }
   };
 
   return (
@@ -78,7 +98,6 @@ export const LimitRangeSection: FC<Props> = ({
       </div>
 
       <div className={'flex items-center pt-10'}>{inputTitle}</div>
-
       {isRange ? (
         <InputRange
           min={order.min}
@@ -89,6 +108,7 @@ export const LimitRangeSection: FC<Props> = ({
           setRangeError={order.setRangeError}
           token={quote}
           buy={buy}
+          marketPricePercentages={marketPricePercentage}
         />
       ) : (
         <InputLimit
@@ -98,15 +118,20 @@ export const LimitRangeSection: FC<Props> = ({
           error={order.priceError}
           setPriceError={order.setPriceError}
           buy={buy}
+          marketPricePercentage={marketPricePercentage}
         />
       )}
       {isOrdersOverlap && !buy && (
-        <div
-          className={`!mt-4 flex items-center gap-10 font-mono text-12 text-warning-500`}
-        >
-          <IconWarning className="h-12 w-12" />
-          <div>{overlappingOrdersPricesMessage}</div>
-        </div>
+        <WarningMessageWithIcon
+          message={overlappingOrdersPricesMessage}
+          className="!mt-4"
+        />
+      )}
+      {isOrderAboveOrBelowMarketPrice && (
+        <WarningMessageWithIcon
+          message={warningMarketPriceMessage}
+          className="!mt-4"
+        />
       )}
     </div>
   );

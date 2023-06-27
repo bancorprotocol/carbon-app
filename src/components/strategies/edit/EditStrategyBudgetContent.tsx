@@ -12,9 +12,13 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useMemo } from 'react';
+import { getStatusTextByTxStatus } from '../utils';
+
+export type EditStrategyBudget = 'withdraw' | 'deposit';
 
 type EditStrategyBudgetContentProps = {
-  type: 'withdraw' | 'deposit';
+  type: EditStrategyBudget;
   strategy: Strategy;
 };
 
@@ -22,7 +26,9 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
-  const { withdrawBudget, depositBudget } = useUpdateStrategy();
+  const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
+    useUpdateStrategy();
+
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
   const { provider } = useWeb3();
@@ -36,6 +42,8 @@ export const EditStrategyBudgetContent = ({
     strategy.order1.balance,
     true
   ).toString();
+  const isAwaiting = updateMutation.isLoading;
+  const isLoading = isAwaiting || isProcessing;
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -146,9 +154,13 @@ export const EditStrategyBudgetContent = ({
         );
   };
 
-  const isOrdersBudgetValid = () => {
+  const isOrdersBudgetValid = useMemo(() => {
     return +order0.budget > 0 || +order1.budget > 0;
-  };
+  }, [order0.budget, order1.budget]);
+
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
@@ -171,10 +183,12 @@ export const EditStrategyBudgetContent = ({
         type={type}
       />
       <Button
-        disabled={!isOrdersBudgetValid()}
+        disabled={!isOrdersBudgetValid}
+        loading={isLoading}
+        loadingChildren={loadingChildren}
         onClick={handleOnActionClick}
         className="mt-32"
-        variant="white"
+        variant={'white'}
         size="lg"
         fullWidth
       >
@@ -182,6 +196,7 @@ export const EditStrategyBudgetContent = ({
       </Button>
       <Button
         onClick={() => back()}
+        disabled={isLoading}
         className="mt-16"
         variant="secondary"
         size="lg"

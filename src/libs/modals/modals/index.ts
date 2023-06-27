@@ -32,6 +32,14 @@ import {
 } from './ModalConfirmStrategy/ModalConfirmStrategy';
 import { ModalBurgerMenu } from './ModalBurgerMenu';
 import { ModalRestrictedCountry } from 'libs/modals/modals/ModalRestrictedCountry';
+import {
+  ModalGenericInfo,
+  ModalGenericInfoData,
+} from 'libs/modals/modals/ModalGenericInfo';
+import {
+  ModalCreateStratExpertMode,
+  ModalCreateStratExpertModeData,
+} from 'libs/modals/modals/ModalCreateStratExpertMode';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -46,6 +54,8 @@ export interface ModalSchema {
   confirmStrategy: ModalConfirmStrategyData;
   burgerMenu: undefined;
   restrictedCountry: undefined;
+  genericInfo: ModalGenericInfoData;
+  createStratExpertMode: ModalCreateStratExpertModeData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -63,4 +73,6 @@ export const MODAL_COMPONENTS: TModals = {
   confirmStrategy: (props) => ModalConfirmStrategy(props),
   burgerMenu: (props) => ModalBurgerMenu(props),
   restrictedCountry: (props) => ModalRestrictedCountry(props),
+  genericInfo: (props) => ModalGenericInfo(props),
+  createStratExpertMode: (props) => ModalCreateStratExpertMode(props),
 };

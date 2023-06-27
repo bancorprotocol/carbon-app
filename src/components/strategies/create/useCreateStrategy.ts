@@ -23,6 +23,7 @@ import {
   checkErrors,
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
+import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -45,7 +46,21 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const { marketPricePercentage: buyMarketPricePercentage } =
+    useMarketIndication({
+      base,
+      quote,
+      order: order0,
+      buy: true,
+    });
 
+  const { marketPricePercentage: sellMarketPricePercentage } =
+    useMarketIndication({
+      base,
+      quote,
+      order: order1,
+    });
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
   }, [order0, order1]);
@@ -98,23 +113,39 @@ export const useCreateStrategy = () => {
       return openModal('wallet', undefined);
     }
 
+    const onConfirm = () =>
+      createStrategyAction({
+        base,
+        quote,
+        user,
+        mutation,
+        order0,
+        order1,
+        dispatchNotification,
+        cache,
+        navigate,
+        strategyEventData: {
+          ...strategyEventData,
+          buyMarketPricePercentage,
+          sellMarketPricePercentage,
+        },
+        setIsProcessing,
+      });
+
     if (sourceCorrect && targetCorrect) {
+      if (!+order0.budget && !+order1.budget) {
+        return openModal('genericInfo', {
+          title: 'Empty Strategy Warning',
+          text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
+          variant: 'warning',
+          onConfirm,
+        });
+      }
+
       if (approval.approvalRequired) {
-        openModal('txConfirm', {
+        return openModal('txConfirm', {
           approvalTokens,
-          onConfirm: () =>
-            createStrategyAction({
-              base,
-              quote,
-              user,
-              mutation,
-              order0,
-              order1,
-              dispatchNotification,
-              cache,
-              navigate,
-              strategyEventData,
-            }),
+          onConfirm,
           buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
@@ -126,20 +157,9 @@ export const useCreateStrategy = () => {
           },
           context: 'createStrategy',
         });
-      } else {
-        createStrategyAction({
-          base,
-          quote,
-          user,
-          mutation,
-          order0,
-          order1,
-          dispatchNotification,
-          cache,
-          navigate,
-          strategyEventData,
-        });
       }
+
+      await onConfirm();
     }
   };
 
@@ -216,11 +236,13 @@ export const useCreateStrategy = () => {
       approval.isError ||
       mutation.isLoading ||
       !isOrder0Valid ||
-      !isOrder1Valid
+      !isOrder1Valid ||
+      isProcessing
     );
   }, [
     approval.isError,
     approval.isLoading,
+    isProcessing,
     mutation.isLoading,
     order0.isRange,
     order0.max,
@@ -316,6 +338,7 @@ export const useCreateStrategy = () => {
     setQuote,
     order0,
     order1,
+    isAwaiting: mutation.isLoading,
     createStrategy,
     openTokenListModal,
     showOrders,
@@ -327,10 +350,12 @@ export const useCreateStrategy = () => {
     setShowGraph,
     showTokenSelection,
     strategyType,
+    strategySettings,
     strategyDirection,
     showTypeMenu,
     selectedStrategySettings,
     setSelectedStrategySettings,
+    isProcessing,
     isOrdersOverlap,
   };
 };

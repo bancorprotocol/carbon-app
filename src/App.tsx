@@ -31,12 +31,12 @@ export const App = () => {
 
   return (
     <>
+      <NotificationAlerts />
       <MainMenu />
       <main className={'flex-grow'}>
         <MainContent />
       </main>
       <MobileMenu />
-      <NotificationAlerts />
       <ModalProvider />
     </>
   );

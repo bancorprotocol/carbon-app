@@ -87,7 +87,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         Import Token
       </Button>
       <Button
-        variant={'secondary'}
+        variant={'black'}
         fullWidth
         onClick={() => closeModal(id)}
         className={'mt-16'}

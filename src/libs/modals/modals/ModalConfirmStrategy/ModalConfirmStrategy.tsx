@@ -1,16 +1,17 @@
+import { useMemo } from 'react';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { Button } from 'components/common/button';
-import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
+import { useModal } from 'hooks/useModal';
+import { carbonEvents } from 'services/events';
+import { Button } from 'components/common/button';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { getModalDataByType } from './utils';
 import { useOrder } from 'components/strategies/create/useOrder';
-import { carbonEvents } from 'services/events';
-
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import { getStatusTextByTxStatus } from 'components/strategies/utils';
+import { getModalDataByType } from './utils';
 
 export type ModalConfirmStrategyData = {
   strategy: Strategy;
@@ -22,8 +23,13 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { pauseStrategy } = useUpdateStrategy();
-  const { deleteStrategy } = useDeleteStrategy();
+  const { pauseStrategy, isProcessing, setIsProcessing, updateMutation } =
+    useUpdateStrategy();
+
+  const { deleteStrategy, deleteMutation } = useDeleteStrategy();
+  const isAwaiting =
+    type === 'delete' ? deleteMutation.isLoading : updateMutation.isLoading;
+  const isLoading = isAwaiting || isProcessing;
   const data = getModalDataByType(type);
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
@@ -37,25 +43,36 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   const handleOnActionClick = () => {
     switch (type) {
       case 'pause':
-        pauseStrategy(strategy, () => {
-          carbonEvents.strategyEdit.strategyPause({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
-          closeModal(id);
-        });
+        pauseStrategy(
+          strategy,
+          () => {
+            carbonEvents.strategyEdit.strategyPause({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            });
+          },
+          () => closeModal(id)
+        );
         break;
       case 'delete':
-        deleteStrategy(strategy, () => {
-          carbonEvents.strategyEdit.strategyDelete({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
-          closeModal(id);
-        });
+        deleteStrategy(
+          strategy,
+          setIsProcessing,
+          () => {
+            carbonEvents.strategyEdit.strategyDelete({
+              ...strategyEventData,
+              strategyId: strategy.id,
+            });
+          },
+          () => closeModal(id)
+        );
         break;
     }
   };
+
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
     <Modal id={id} title={data?.modalTitle}>
@@ -69,8 +86,10 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         {data?.additionalContent}
         <Button
           onClick={handleOnActionClick}
+          loading={isLoading}
+          loadingChildren={loadingChildren}
           className="mt-32"
-          variant="white"
+          variant={'white'}
           size="lg"
           fullWidth
         >
@@ -78,6 +97,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
         </Button>
         <Button
           onClick={() => closeModal(id)}
+          disabled={isLoading}
           className="mt-16"
           variant="black"
           size="lg"
