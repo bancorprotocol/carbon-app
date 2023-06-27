@@ -22,14 +22,14 @@ on:
 
 jobs:
   updatesnapshots:
+    runs-on: ubuntu-latest
     # Run this job only on comments of pull requests that strictly match
     # the "/update-snapshots" string
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/update-snapshots')
     timeout-minutes: 60
-    runs-on: ubuntu-latest
     steps:
       # Checkout and do a deep fetch to load all commit IDs
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Load all commits
           token: ${{ secrets.GITHUB_TOKEN }}
