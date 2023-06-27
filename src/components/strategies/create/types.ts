@@ -7,6 +7,7 @@ import { DispatchNotification } from 'libs/notifications/types';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
@@ -45,5 +46,8 @@ export type CreateStrategyActionProps = Pick<
   dispatchNotification: DispatchNotification;
   navigate: ReturnType<typeof useNavigate<StrategyCreateLocationGenerics>>;
   setIsProcessing: Dispatch<SetStateAction<boolean>>;
-  strategyEventData: StrategyEventType;
+  strategyEventData: StrategyEventType & {
+    buyMarketPricePercentage: MarketPricePercentage;
+    sellMarketPricePercentage: MarketPricePercentage;
+  };
 };

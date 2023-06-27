@@ -15,6 +15,7 @@ import {
   StrategyEventTypeBase,
   StrategySellEventType,
 } from './types';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 export interface EventStrategySchema extends EventCategory {
   strategyErrorShow: {
@@ -114,8 +115,18 @@ export interface EventStrategySchema extends EventCategory {
     gtmData: StrategyGTMEventType;
   };
   strategyCreate: {
-    input: StrategyEventType;
-    gtmData: StrategyGTMEventType;
+    input: StrategyEventType & {
+      buyMarketPricePercentage: MarketPricePercentage;
+      sellMarketPricePercentage: MarketPricePercentage;
+    };
+    gtmData: StrategyGTMEventType & {
+      strategy_buy_low_token_market_price_percentage: string;
+      strategy_buy_low_token_market_min_price_percentage: string;
+      strategy_buy_low_token_market_max_price_percentage: string;
+      strategy_sell_high_token_market_price_percentage: string;
+      strategy_sell_high_token_market_min_price_percentage: string;
+      strategy_sell_high_token_market_max_price_percentage: string;
+    };
   };
   newStrategyNextStepClick: {
     input: StrategyEventTypeBase;
@@ -220,8 +231,23 @@ export const strategyEvents: CarbonEvents['strategy'] = {
   },
   strategyCreate: (strategy) => {
     const gtmStrategyData = prepareGtmStrategyData(strategy);
+
     gtmStrategyData &&
-      sendGTMEvent('strategy', 'strategyCreate', gtmStrategyData);
+      sendGTMEvent('strategy', 'strategyCreate', {
+        ...gtmStrategyData,
+        strategy_buy_low_token_market_price_percentage:
+          strategy.buyMarketPricePercentage.price.toString(),
+        strategy_buy_low_token_market_min_price_percentage:
+          strategy.buyMarketPricePercentage.min.toString(),
+        strategy_buy_low_token_market_max_price_percentage:
+          strategy.buyMarketPricePercentage.max.toString(),
+        strategy_sell_high_token_market_price_percentage:
+          strategy.sellMarketPricePercentage.price.toString(),
+        strategy_sell_high_token_market_min_price_percentage:
+          strategy.sellMarketPricePercentage.min.toString(),
+        strategy_sell_high_token_market_max_price_percentage:
+          strategy.sellMarketPricePercentage.max.toString(),
+      });
   },
   newStrategyNextStepClick: ({
     baseToken,
