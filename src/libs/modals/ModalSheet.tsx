@@ -30,7 +30,7 @@ export const ModalSheet: FC<ModalProps> = ({
         exit="exit"
       >
         <div
-          className={`flex w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
+          className={`flex w-full flex-col overflow-hidden rounded-t-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
         >
           {isLoading && (
             <div
