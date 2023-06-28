@@ -6,9 +6,9 @@ jobs:
   updatesnapshots:
     if: ${{ github.event.issue.pull_request && github.event.comment.body == '/update-snapshots'}}
     timeout-minutes: 20
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -20,15 +20,15 @@ jobs:
               -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
               https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} \
             | jq -r '.head.sha," ",.head.ref');
-          echo "::set-output name=sha::$(echo $sha_and_branch | cut -d " " -f 1)";
-          echo "::set-output name=branch::$(echo $sha_and_branch | cut -d " " -f 2)"
+          echo "sha=$(echo $sha_and_branch | cut -d " " -f 1)" >> $GITHUB_OUTPUT
+          echo "branch=$(echo $sha_and_branch | cut -d " " -f 2)" >> $GITHUB_OUTPUT
       - name: Fetch Branch
         run: git fetch
       - name: Checkout Branch
         run: git checkout ${{ steps.get-branch-and-sha.outputs.branch }}
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: '19'
       - name: Install dependencies
         run: yarn
       - name: Install Playwright browsers
