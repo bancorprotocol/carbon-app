@@ -8,6 +8,7 @@ import { ModalTokenListContent } from 'libs/modals/modals/ModalTokenList/ModalTo
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -17,6 +18,8 @@ export type ModalTokenListData = {
 };
 
 export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
+  const { belowBreakpoint } = useBreakpoints();
+
   const {
     search,
     setSearch,
@@ -35,7 +38,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   return (
     <ModalOrMobileSheet id={id} title={'Select Token'}>
       <SearchInput
-        autoFocus
+        autoFocus={belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"

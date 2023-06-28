@@ -6,6 +6,7 @@ import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalToke
 import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export type TradePair = {
   baseToken: Token;
@@ -20,6 +21,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   id,
   data,
 }) => {
+  const { belowBreakpoint } = useBreakpoints();
   const {
     tradePairs,
     isLoading,
@@ -36,7 +38,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   return (
     <ModalOrMobileSheet id={id} title="Select Token Pair">
       <SearchInput
-        autoFocus={false}
+        autoFocus={belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
