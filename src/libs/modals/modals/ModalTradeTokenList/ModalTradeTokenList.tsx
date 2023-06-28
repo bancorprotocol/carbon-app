@@ -5,7 +5,7 @@ import { useModalTradeTokenList } from 'libs/modals/modals/ModalTradeTokenList/u
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
-import { ModalSheet } from 'libs/modals/ModalSheet';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type TradePair = {
   baseToken: Token;
@@ -34,7 +34,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   } = useModalTradeTokenList({ id, data });
 
   return (
-    <ModalSheet id={id} title="Select Token Pair">
+    <ModalOrMobileSheet id={id} title="Select Token Pair">
       <SearchInput
         autoFocus={false}
         value={search}
@@ -64,6 +64,6 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
           onRemoveFavorite={removeFavoritePair}
         />
       )}
-    </ModalSheet>
+    </ModalOrMobileSheet>
   );
 };

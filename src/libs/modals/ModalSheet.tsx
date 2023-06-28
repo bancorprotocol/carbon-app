@@ -1,32 +1,19 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
-import { useStore } from 'store';
+import { ModalProps } from 'libs/modals/modals.types';
 
-type Props = {
-  children: ReactNode;
-  id: string;
-  title?: string | ReactNode;
-  showCloseButton?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  isLoading?: boolean;
-  onClose?: (id: string) => void;
-};
-
-export const ModalSheet: FC<Props> = ({
+export const ModalSheet: FC<ModalProps> = ({
   children,
   id,
   title,
-  size = 'sm',
   showCloseButton = true,
   isLoading = false,
   onClose,
 }) => {
   const { closeModal } = useModal();
-  const { innerHeight } = useStore();
-
   const onCloseHandler = (id: string) => {
     onClose && onClose(id);
     closeModal(id);
@@ -79,25 +66,17 @@ export const ModalSheet: FC<Props> = ({
 const dropIn: Variants = {
   hidden: {
     height: '0%',
-    // scale: 0.7,
   },
   visible: {
     height: 'auto',
     opacity: 1,
-    // scale: 1,
     transition: {
       delay: 0,
       duration: 0.5,
-      // type: 'spring',
-      // damping: 20,
-      // mass: 1,
-      // stiffness: 200,
     },
   },
   exit: {
     height: '0%',
-    // opacity: 0,
-    //scale: 0.7,
     transition: {
       duration: 0.5,
     },

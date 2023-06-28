@@ -1,18 +1,9 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { m, Variants } from 'libs/motion';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
-
-type Props = {
-  children: ReactNode;
-  id: string;
-  title?: string | ReactNode;
-  showCloseButton?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  isLoading?: boolean;
-  onClose?: (id: string) => void;
-};
+import { ModalProps } from 'libs/modals/modals.types';
 
 const getSize = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
@@ -25,7 +16,7 @@ const getSize = (size: 'sm' | 'md' | 'lg') => {
   }
 };
 
-export const Modal: FC<Props> = ({
+export const Modal: FC<ModalProps> = ({
   children,
   id,
   title,

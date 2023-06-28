@@ -6,6 +6,7 @@ import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
+import { useStore } from 'store';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -25,6 +26,7 @@ export const ModalTokenListContent: FC<Props> = ({
   onAddFavorite,
   onRemoveFavorite,
 }) => {
+  const { innerHeight } = useStore();
   const parentRef = useRef<HTMLDivElement>(null);
   const [selectedList, _setSelectedList] = useState<ChooseTokenCategory>(
     lsService.getItem('chooseTokenCategory') || 'popular'
@@ -75,9 +77,10 @@ export const ModalTokenListContent: FC<Props> = ({
         ))}
       </div>
       <div
+        id={'test'}
         ref={parentRef}
         style={{
-          height: `390px`,
+          height: innerHeight - 242,
           overflow: 'auto',
         }}
       >
