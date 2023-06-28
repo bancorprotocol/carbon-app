@@ -31,7 +31,7 @@ export const TradePage = () => {
     <>
       {belowBreakpoint('md') && <MainMenuTrade />}
 
-      {!isLoading ? (
+      {isLoading ? (
         <div className={'flex flex-grow items-center justify-center'}>
           <div className={'h-80'}>
             <CarbonLogoLoading />
