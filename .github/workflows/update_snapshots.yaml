@@ -1,0 +1,46 @@
+name: Update Snapshots
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  updatesnapshots:
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/update-snapshots'}}
+    timeout-minutes: 20
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get SHA and branch name
+        id: get-branch-and-sha
+        run: |
+          sha_and_branch=$(\
+            curl \
+              -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+              https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }} \
+            | jq -r '.head.sha," ",.head.ref');
+          echo "sha=$(echo $sha_and_branch | cut -d " " -f 1)" >> $GITHUB_OUTPUT
+          echo "branch=$(echo $sha_and_branch | cut -d " " -f 2)" >> $GITHUB_OUTPUT
+      - name: Fetch Branch
+        run: git fetch
+      - name: Checkout Branch
+        run: git checkout ${{ steps.get-branch-and-sha.outputs.branch }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '19'
+      - name: Install dependencies
+        run: yarn
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Update snapshots
+        env:
+          VITE_TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
+          VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
+          VITE_CARBON_API_KEY: ${{ secrets.VITE_CARBON_API_KEY }}
+          VITE_DEV_MODE: true
+          CI: true
+        run: npx playwright test --update-snapshots --reporter=list
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: '[CI] Update Snapshots'
