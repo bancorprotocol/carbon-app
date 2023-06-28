@@ -26,7 +26,7 @@ cleanForkTest.describe('Delete strategy', () => {
       .first()
       .click();
     await deleteStrategyModal.waitFor({ state: 'detached' });
-    const strategies = await page.getByText('1 Strategies');
+    const strategies = await page.getByText('2 Strategies');
     await expect(strategies).toBeVisible();
   });
 });

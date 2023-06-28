@@ -13,6 +13,7 @@ cleanForkTest.describe('Trade page', () => {
 
     await expect(
       await page.screenshot({
+        fullPage: true,
         mask: [page.getByTestId('orderBookWidgetRate')],
       })
     ).toMatchSnapshot('trade.png');

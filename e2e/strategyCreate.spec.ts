@@ -11,7 +11,7 @@ cleanForkTest.describe('Create strategy', () => {
     await page.waitForLoadState('load');
     await page.getByTestId('createStrategyPage').waitFor({ state: 'visible' });
 
-    await expect(await page.screenshot()).toMatchSnapshot(
+    await expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
       'strategy-create.png'
     );
   });

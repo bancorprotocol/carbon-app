@@ -9,7 +9,7 @@ cleanForkTest.describe('Overview strategy', () => {
     await page.getByTestId('CreateStrategyHeader');
     await page.getByTestId('logoAnimation').last().waitFor({ state: 'hidden' });
 
-    await expect(await page.screenshot()).toMatchSnapshot(
+    await expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
       'strategy-overview.png'
     );
   });
