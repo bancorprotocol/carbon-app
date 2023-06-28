@@ -14,10 +14,14 @@
   html,
   body,
   #root {
-    @apply text-body bg-body font-gt-america h-screen overflow-auto;
+    @apply text-body bg-body font-gt-america h-screen w-full;
     height: -moz-available;
     height: -webkit-fill-available;
     height: stretch;
+  }
+
+  #root {
+    @apply flex flex-col overflow-auto;
   }
 
   h1 {
