@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
-import { test } from './fixture';
+import { cleanForkTest } from './fixture';
 
-test.describe.only('Delete strategy', () => {
-  test('Strategy delete modal snapshot', async ({ page }) => {
+cleanForkTest.describe('Delete strategy', () => {
+  cleanForkTest('Strategy delete modal snapshot', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
 
     await page.getByRole('button', { name: 'Manage' }).first().click();
@@ -14,7 +14,7 @@ test.describe.only('Delete strategy', () => {
     );
   });
 
-  test('Strategy deleted successfully', async ({ page }) => {
+  cleanForkTest('Strategy deleted successfully', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
 
     await page.getByRole('button', { name: 'Manage' }).first().click();

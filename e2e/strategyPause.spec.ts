@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
-import { test } from './fixture';
+import { cleanForkTest } from './fixture';
 
-test.describe.only('Pause strategy', () => {
-  test('Strategy pause modal snapshot', async ({ page }) => {
+cleanForkTest.describe('Pause strategy', () => {
+  cleanForkTest('Strategy pause modal snapshot', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'Manage' }).first().click();
     await page.getByRole('button', { name: 'Pause Strategy' }).first().click();
@@ -13,7 +13,7 @@ test.describe.only('Pause strategy', () => {
     );
   });
 
-  test('Strategy paused successfully', async ({ page }) => {
+  cleanForkTest('Strategy paused successfully', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'Manage' }).first().click();
     await page.getByRole('button', { name: 'Pause Strategy' }).first().click();

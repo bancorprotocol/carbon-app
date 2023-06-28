@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
-import { test } from './fixture';
+import { cleanForkTest } from './fixture';
 
-test.describe('Trade page', () => {
-  test('Trade snapshot', async ({ page }) => {
+cleanForkTest.describe('Trade page', () => {
+  cleanForkTest('Trade snapshot', async ({ page }) => {
     await page.goto('/trade', { waitUntil: 'networkidle' });
     await page.getByTestId('logoAnimation').last().waitFor({ state: 'hidden' });
     await page.getByTestId('orderBookWidgetRate').waitFor({ state: 'visible' });
