@@ -14,7 +14,7 @@
   html,
   body,
   #root {
-    @apply text-body bg-body font-gt-america h-screen w-full;
+    @apply text-body bg-body font-gt-america w-full h-screen;
     height: -moz-available;
     height: -webkit-fill-available;
     height: stretch;
@@ -76,7 +76,7 @@
   }
 
   .px-content {
-    @apply px-10 md:px-20;
+    @apply px-10 md:px-20 w-full;
   }
 
   .text-body {
