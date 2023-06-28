@@ -27,6 +27,7 @@ test.describe.only('Pause strategy', () => {
     const notification = await page.getByText(
       'Your strategy was successfully paused.'
     );
+
     await expect(notification).toBeVisible();
   });
 });
