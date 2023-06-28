@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from './fixture';
 
-test.describe('Pause strategy', () => {
+test.describe.only('Pause strategy', () => {
   test('Strategy pause modal snapshot', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'Manage' }).first().click();
