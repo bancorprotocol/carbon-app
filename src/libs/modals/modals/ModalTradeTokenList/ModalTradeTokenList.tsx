@@ -38,7 +38,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   return (
     <ModalOrMobileSheet id={id} title="Select Token Pair">
       <SearchInput
-        autoFocus={belowBreakpoint('md')}
+        autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
