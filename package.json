@@ -90,7 +90,7 @@
     "test:e2e": "npx playwright test",
     "test:e2e-headed": "playwright test --ui",
     "test:e2e-report": "playwright show-report",
-    "test:e2e-update": "playwright test --update-snapshots --reporter=list"
+    "test:e2e-update": "playwright test --update-snapshots"
   },
   "eslintConfig": {
     "extends": [
