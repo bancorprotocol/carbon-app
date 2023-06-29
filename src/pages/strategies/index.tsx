@@ -36,7 +36,7 @@ export const StrategiesPage = () => {
 
   return (
     <Page
-      title={`${strategies.data?.length || ''} Strategies`}
+      title={`${strategies.data?.length || ''} Strategies Jan`}
       widget={
         <StrategyPageTitleWidget
           sort={sort}
