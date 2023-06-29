@@ -29,7 +29,8 @@ export const setupBeforeEach = async (page: Page) => {
   } catch (error) {
     console.log(error, `-=-=-=-=-=- Error - Delete Fork ${forkId} -=-=-=-=-=-`);
     await deleteFork(forkId);
-  } finally {
-    return forkId;
+    return null;
   }
+
+  return forkId;
 };
