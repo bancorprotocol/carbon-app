@@ -15,14 +15,17 @@ jobs:
           node-version: 19
       - name: Install dependencies
         run: yarn
-      - name: Run Playwright tests
+      - name: Run Tests & Update Snapshots
         env:
           VITE_TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
           VITE_CARBON_API_KEY: ${{ secrets.VITE_CARBON_API_KEY }}
           VITE_DEV_MODE: true
           CI: true
-        run: yarn test:e2e
+        run: yarn test:e2e-update
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: '[CI] Update Snapshots'
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
