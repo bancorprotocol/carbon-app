@@ -31,5 +31,6 @@ export default defineConfig({
     port,
     command: `yarn build && yarn serve --port ${port}`,
     reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
   },
 });
