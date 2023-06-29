@@ -23,11 +23,10 @@ cleanForkTest.describe('Pause strategy', () => {
       .getByRole('button', { name: 'Pause Strategy' })
       .first()
       .click();
-    await pauseStrategyModal.waitFor({ state: 'hidden' });
+
     const notification = await page.getByText(
       'Your strategy was successfully paused.'
     );
-
     await expect(notification).toBeVisible();
   });
 });

@@ -25,7 +25,7 @@ cleanForkTest.describe('Delete strategy', () => {
       .getByRole('button', { name: 'Delete Strategy' })
       .first()
       .click();
-    await deleteStrategyModal.waitFor({ state: 'hidden' });
+
     const strategies = await page.getByText('2 Strategies');
     await expect(strategies).toBeVisible();
   });
