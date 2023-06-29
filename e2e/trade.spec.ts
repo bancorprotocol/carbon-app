@@ -6,7 +6,6 @@ cleanForkTest.describe('Trade page', () => {
     await page.goto('/trade', { waitUntil: 'networkidle' });
     await page.getByTestId('logoAnimation').last().waitFor({ state: 'hidden' });
     await page.getByTestId('orderBookWidgetRate').waitFor({ state: 'visible' });
-
     await page
       .getByTestId('orderbookCell')
       .last()
