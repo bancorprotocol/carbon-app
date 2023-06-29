@@ -15,10 +15,6 @@ import { TRANSLATION_VERSION } from './version';
 // TODO: Update mainMenu design, separators, width.
 export const SUPPORTED_LANGUAGES = [
   { code: 'en-US', name: 'English' },
-  { code: 'es-ES', name: 'Español' },
-  { code: 'de-DE', name: 'Deutsch' },
-  { code: 'he-IL', name: 'עברית' },
-  { code: 'pt-BR', name: 'Portuguese (BR)' },
   { code: 'xx-XX', name: 'Test' },
 ];
 

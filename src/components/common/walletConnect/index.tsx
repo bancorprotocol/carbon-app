@@ -2,7 +2,7 @@ import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
-import { getProductDescriptionItems } from './utils';
+import { getProductDescriptionItems } from './items';
 
 export const WalletConnect = () => {
   const { t } = useTranslation();
