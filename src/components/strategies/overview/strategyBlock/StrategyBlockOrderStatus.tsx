@@ -30,13 +30,13 @@ export const StrategyBlockOrderStatus: FC<{
           )}
         </div>
         <div>
-          <Tooltip element={getTooltipTextByStatus(status)}>
+          <Tooltip element={getTooltipTextByStatus(status, t)}>
             <span
               className={`${
                 status === StrategyStatus.Active ? 'text-green' : 'text-red'
               } `}
             >
-              {getStatusText(status)}
+              {getStatusText(status, t)}
             </span>
           </Tooltip>
         </div>

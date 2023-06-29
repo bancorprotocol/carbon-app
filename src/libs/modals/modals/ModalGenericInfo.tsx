@@ -4,10 +4,9 @@ import { Button } from 'components/common/button';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconError } from 'assets/icons/times.svg';
-
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
-import { i18n, useTranslation } from 'libs/translations';
+import { useTranslation } from 'libs/translations';
 
 export type ModalGenericInfoData = {
   title: string;
@@ -19,13 +18,7 @@ export type ModalGenericInfoData = {
 
 export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
   id,
-  data: {
-    variant = 'error',
-    title,
-    text,
-    buttonLabel = i18n.t('modals.genericInfo.actionButtons.actionButton1'),
-    onConfirm,
-  },
+  data: { variant = 'error', title, text, buttonLabel, onConfirm },
 }) => {
   const { t } = useTranslation();
   const { closeModal } = useModal();
@@ -60,7 +53,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
         }}
         className={'my-16'}
       >
-        {buttonLabel}
+        {buttonLabel || t('modals.genericInfo.actionButtons.actionButton1')}
       </Button>
       <Button
         variant={'black'}

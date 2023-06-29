@@ -97,8 +97,8 @@ export const CreateStrategyOrders = ({
   };
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing);
-  }, [isAwaiting, isProcessing]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
+  }, [isAwaiting, isProcessing, t]);
 
   return (
     <>

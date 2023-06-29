@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
-import { i18n, useTranslation } from 'libs/translations';
+import { useTranslation } from 'libs/translations';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Imager } from 'components/common/imager/Imager';
@@ -34,7 +34,7 @@ export const TokenInputField: FC<Props> = ({
   isError,
   className,
   onKeystroke,
-  placeholder = i18n.t('common.placeholders.placeholder2'),
+  placeholder,
   disabled,
   slippage,
   withoutWallet,
@@ -122,7 +122,7 @@ export const TokenInputField: FC<Props> = ({
             }
             size={1}
             onChange={handleChange}
-            placeholder={placeholder}
+            placeholder={placeholder || t('common.placeholders.placeholder2')}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
             className={`w-full shrink bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none ${

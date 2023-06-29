@@ -1,57 +1,66 @@
 import { Order, StrategyStatus } from 'libs/queries';
+import { TFunction } from 'libs/translations';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { i18n } from 'libs/translations';
 
-export const getStatusText = (status: StrategyStatus) => {
+export const getStatusText = (
+  status: StrategyStatus,
+  t: TFunction<string, undefined, string>
+) => {
   return status === StrategyStatus.Active
-    ? i18n.t('pages.strategyOverview.card.section3.statuses.status1')
+    ? t('pages.strategyOverview.card.section3.statuses.status1')
     : status === StrategyStatus.NoBudget
-    ? i18n.t('pages.strategyOverview.card.section3.statuses.status2')
+    ? t('pages.strategyOverview.card.section3.statuses.status2')
     : status === StrategyStatus.Paused
-    ? i18n.t('pages.strategyOverview.card.section3.statuses.status3')
-    : i18n.t('pages.strategyOverview.card.section3.statuses.status4');
+    ? t('pages.strategyOverview.card.section3.statuses.status3')
+    : t('pages.strategyOverview.card.section3.statuses.status4');
 };
 
-export const getTooltipTextByStatus = (status: StrategyStatus) => {
+export const getTooltipTextByStatus = (
+  status: StrategyStatus,
+  t: TFunction<string, undefined, string>
+) => {
   return status === StrategyStatus.Active
-    ? i18n.t('pages.strategyOverview.card.tooltips.tooltip7')
+    ? t('pages.strategyOverview.card.tooltips.tooltip7')
     : status === StrategyStatus.NoBudget
-    ? i18n.t('pages.strategyOverview.card.tooltips.tooltip8')
+    ? t('pages.strategyOverview.card.tooltips.tooltip8')
     : status === StrategyStatus.Paused
-    ? i18n.t('pages.strategyOverview.card.tooltips.tooltip9')
-    : i18n.t('pages.strategyOverview.card.tooltips.tooltip10');
+    ? t('pages.strategyOverview.card.tooltips.tooltip9')
+    : t('pages.strategyOverview.card.tooltips.tooltip10');
 };
 
-const tooltipTextByStrategyEditOptionsId = () => {
+const tooltipTextByStrategyEditOptionsId = (
+  t: TFunction<string, undefined, string>
+) => {
   return {
-    duplicateStrategy: i18n.t(
+    duplicateStrategy: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip1'
     ),
-    deleteStrategy: i18n.t(
+    deleteStrategy: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip2'
     ),
-    pauseStrategy: i18n.t(
+    pauseStrategy: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip3'
     ),
-    withdrawFunds: i18n.t(
+    withdrawFunds: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip4'
     ),
-    depositFunds: i18n.t(
+    depositFunds: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip5'
     ),
-    editPrices: i18n.t(
+    editPrices: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip6'
     ),
-    renewStrategy: i18n.t(
+    renewStrategy: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip7'
     ),
   };
 };
 
 export const getTooltipTextByStrategyEditOptionsId = (
-  id: StrategyEditOptionId
+  id: StrategyEditOptionId,
+  t: TFunction<string, undefined, string>
 ) => {
-  return tooltipTextByStrategyEditOptionsId()[id];
+  return tooltipTextByStrategyEditOptionsId(t)[id];
 };
 
 type StrategyEditOption = typeof tooltipTextByStrategyEditOptionsId;

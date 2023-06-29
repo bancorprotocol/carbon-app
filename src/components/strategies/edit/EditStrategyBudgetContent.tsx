@@ -161,8 +161,8 @@ export const EditStrategyBudgetContent = ({
   }, [order0.budget, order1.budget]);
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing);
-  }, [isAwaiting, isProcessing]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
+  }, [isAwaiting, isProcessing, t]);
 
   return (
     <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">

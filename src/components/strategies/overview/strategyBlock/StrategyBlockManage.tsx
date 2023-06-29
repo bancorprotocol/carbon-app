@@ -192,7 +192,8 @@ const ManageItem: FC<{
   setManage: (flag: boolean) => void;
   action?: () => void;
 }> = ({ title, id, setManage, action }) => {
-  const tooltipText = getTooltipTextByStrategyEditOptionsId(id);
+  const { t } = useTranslation();
+  const tooltipText = getTooltipTextByStrategyEditOptionsId(id, t);
   const { belowBreakpoint } = useBreakpoints();
 
   if (tooltipText) {

@@ -7,7 +7,7 @@ import { getProductDescriptionItems } from './utils';
 export const WalletConnect = () => {
   const { t } = useTranslation();
   const { openModal } = useModal();
-  const items = getProductDescriptionItems();
+  const items = getProductDescriptionItems(t);
 
   return (
     <div className="md:h-[calc(100vh-300px)] md:min-h-[400px]">

@@ -7,7 +7,7 @@ import {
 } from 'services/events/types';
 import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
-import { i18n } from 'libs/translations';
+import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import { ApproveToken } from 'components/common/approval';
@@ -30,14 +30,9 @@ export type ModalCreateConfirmData = {
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   id,
-  data: {
-    approvalTokens,
-    onConfirm,
-    buttonLabel = i18n.t('modals.confirm.actionButtons.actionButton1'),
-    eventData,
-    context,
-  },
+  data: { approvalTokens, onConfirm, buttonLabel, eventData, context },
 }) => {
+  const { t } = useTranslation();
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
 
@@ -46,10 +41,8 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   }, [context, eventData]);
 
   return (
-    <Modal id={id} title={i18n.t('modals.confirm.modalTitle')} size={'md'}>
-      <h3 className="text-secondary my-10">
-        {i18n.t('modals.confirm.subtitle')}
-      </h3>
+    <Modal id={id} title={t('modals.confirm.modalTitle')} size={'md'}>
+      <h3 className="text-secondary my-10">{t('modals.confirm.subtitle')}</h3>
       <div className="mb-20 space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (
           <ApproveToken
@@ -74,7 +67,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
           handleAfterConfirmationEvent(eventData, context);
         }}
       >
-        {buttonLabel}
+        {buttonLabel || t('modals.confirm.actionButtons.actionButton1')}
       </Button>
     </Modal>
   );

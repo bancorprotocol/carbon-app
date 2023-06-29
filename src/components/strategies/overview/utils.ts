@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Strategy } from 'libs/queries';
-import { i18n } from 'libs/translations';
 import { StrategyFilter, StrategySort } from './StrategyFilterSort';
+import { TFunction } from 'libs/translations';
 
 export const getCompareFunctionBySortType = (sortType: StrategySort) => {
   let firstPairComparison: number;
@@ -34,37 +34,39 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
         new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
   }
 };
-export const getSortAndFilterItems = () => {
+export const getSortAndFilterItems = (
+  t: TFunction<string, undefined, string>
+) => {
   const sortItems = [
     {
-      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item1'),
+      title: t('pages.strategyOverview.header.filterMenu.items.item1'),
       item: StrategySort.Recent,
     },
     {
-      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item2'),
+      title: t('pages.strategyOverview.header.filterMenu.items.item2'),
       item: StrategySort.Old,
     },
     {
-      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item3'),
+      title: t('pages.strategyOverview.header.filterMenu.items.item3'),
       item: StrategySort.PairAscending,
     },
     {
-      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item4'),
+      title: t('pages.strategyOverview.header.filterMenu.items.item4'),
       item: StrategySort.PairDescending,
     },
   ];
 
   const filterItems = [
     {
-      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item5'),
+      title: t('pages.strategyOverview.header.filterMenu.items.item5'),
       item: StrategyFilter.All,
     },
     {
-      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item6'),
+      title: t('pages.strategyOverview.header.filterMenu.items.item6'),
       item: StrategyFilter.Active,
     },
     {
-      title: i18n.t('pages.strategyOverview.header.filterMenu.items.item7'),
+      title: t('pages.strategyOverview.header.filterMenu.items.item7'),
       item: StrategyFilter.Inactive,
     },
   ];

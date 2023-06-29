@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import { useNavigate } from '@tanstack/react-location';
 import { PathNames } from 'libs/routing';
-import { i18n } from 'libs/translations';
+import { useTranslation } from 'libs/translations';
 import {
   StrategyCreateLocationGenerics,
   StrategyType,
@@ -31,12 +31,10 @@ export const useCreateStrategyTypeMenu = (
   strategyType?: StrategyType
 ) => {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const types: StrategyTypeItem[] = [
     {
-      label: i18n.t(
-        'pages.strategyCreate.step1.section2.strategyTypes.type1.title'
-      ),
+      label: t('pages.strategyCreate.step1.section2.strategyTypes.type1.title'),
       to: PathNames.createStrategy,
       search: {
         base,
@@ -45,9 +43,7 @@ export const useCreateStrategyTypeMenu = (
       },
     },
     {
-      label: i18n.t(
-        'pages.strategyCreate.step1.section2.strategyTypes.type2.title'
-      ),
+      label: t('pages.strategyCreate.step1.section2.strategyTypes.type2.title'),
       to: PathNames.createStrategy,
       search: {
         base,
@@ -60,7 +56,7 @@ export const useCreateStrategyTypeMenu = (
   const typeRecurring: StrategyTypeItemSvg[] = useMemo(
     () => [
       {
-        label: i18n.t(
+        label: t(
           'pages.strategyCreate.step1.section2.strategyTypes.type1.options.option1'
         ),
         svg: <IconTwoLimits className={'w-60'} />,
@@ -74,7 +70,7 @@ export const useCreateStrategyTypeMenu = (
         isRecommended: true,
       },
       {
-        label: i18n.t(
+        label: t(
           'pages.strategyCreate.step1.section2.strategyTypes.type1.options.option2'
         ),
         svg: <IconTwoRanges className={'w-60'} />,
@@ -87,7 +83,7 @@ export const useCreateStrategyTypeMenu = (
         },
       },
       {
-        label: i18n.t(
+        label: t(
           'pages.strategyCreate.step1.section2.strategyTypes.type1.options.option3'
         ),
         svg: <IconCustomStrategy className={'w-60'} />,
@@ -100,13 +96,13 @@ export const useCreateStrategyTypeMenu = (
         },
       },
     ],
-    [base, quote]
+    [base, quote, t]
   );
 
   const typeDisposable: StrategyTypeItemSvg[] = useMemo(
     () => [
       {
-        label: i18n.t(
+        label: t(
           'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option1'
         ),
         svg: <IconBuyLimit className={'w-60 text-green'} />,
@@ -121,7 +117,7 @@ export const useCreateStrategyTypeMenu = (
         isRecommended: true,
       },
       {
-        label: i18n.t(
+        label: t(
           'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option3'
         ),
         svg: <IconSellLimit className={'w-60 text-red'} />,
@@ -136,7 +132,7 @@ export const useCreateStrategyTypeMenu = (
         isRecommended: true,
       },
       {
-        label: i18n.t(
+        label: t(
           'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option2'
         ),
         svg: <IconBuyRange className={'w-60 text-green'} />,
@@ -150,7 +146,7 @@ export const useCreateStrategyTypeMenu = (
         },
       },
       {
-        label: i18n.t(
+        label: t(
           'pages.strategyCreate.step1.section2.strategyTypes.type2.options.option4'
         ),
         svg: <IconSellRange className={'w-60 text-red'} />,
@@ -164,7 +160,7 @@ export const useCreateStrategyTypeMenu = (
         },
       },
     ],
-    [base, quote]
+    [base, quote, t]
   );
 
   const handleClick = (

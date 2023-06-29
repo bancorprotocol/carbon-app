@@ -25,7 +25,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
 }) => {
   const { closeModal } = useModal();
   const { t } = useTranslation();
-  const data = getModalDataByType(type);
+  const data = getModalDataByType(type, t);
   const { pauseStrategy, isProcessing, setIsProcessing, updateMutation } =
     useUpdateStrategy();
 
@@ -74,8 +74,8 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   };
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing);
-  }, [isAwaiting, isProcessing]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
+  }, [isAwaiting, isProcessing, t]);
 
   return (
     <Modal id={id} title={data?.modalTitle}>
