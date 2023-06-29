@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { cleanForkTest } from './fixture';
 
-cleanForkTest.describe.only('Overview strategy', () => {
+cleanForkTest.describe('Overview strategy', () => {
   cleanForkTest('Strategy overview snapshot', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.getByTestId('strategies').isVisible();

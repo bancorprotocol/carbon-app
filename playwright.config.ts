@@ -6,7 +6,7 @@ export const baseURL = `http://localhost:${port}`;
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: !process.env.CI,
-  forbidOnly: false,
+  forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
