@@ -55,6 +55,8 @@ interface StoreContext {
     settings: OrderBookSettingsStore;
   };
   fiatCurrency: FiatCurrencyStore;
+  innerHeight: number;
+  setInnerHeight: (value: number) => void;
 }
 
 const defaultValue: StoreContext = {
@@ -72,6 +74,8 @@ const defaultValue: StoreContext = {
     settings: defaultOrderBookSettingsStore,
   },
   fiatCurrency: defaultFiatCurrencyStore,
+  innerHeight: 0,
+  setInnerHeight: () => {},
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -86,6 +90,7 @@ export const useStore = () => {
 
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [countryBlocked, setCountryBlocked] = useState<boolean | null>(null);
+  const [innerHeight, setInnerHeight] = useState<number>(window.innerHeight);
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -110,6 +115,8 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
       settings: orderBookSettings,
     },
     fiatCurrency,
+    innerHeight,
+    setInnerHeight,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;

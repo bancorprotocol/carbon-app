@@ -1,8 +1,11 @@
 import { FC } from 'react';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
+import { useStore } from 'store';
 
 export const ModalTokenListNotFound: FC = () => {
+  const { innerHeight } = useStore();
+
   const Text = () => (
     <>
       <span>
@@ -14,7 +17,10 @@ export const ModalTokenListNotFound: FC = () => {
   );
 
   return (
-    <div className={'my-40 flex w-full flex-col items-center'}>
+    <div
+      className={'my-40 flex w-full flex-col items-center'}
+      style={{ height: innerHeight - 258 }}
+    >
       <IconTitleText
         title={'Token not found'}
         icon={<IconSearch />}

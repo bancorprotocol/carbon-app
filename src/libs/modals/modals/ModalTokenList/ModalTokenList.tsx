@@ -1,4 +1,3 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Token } from 'libs/tokens';
 import { SearchInput } from 'components/common/searchInput';
@@ -8,6 +7,8 @@ import { ModalTokenListNotFound } from 'libs/modals/modals/ModalTokenList/ModalT
 import { ModalTokenListContent } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -17,6 +18,8 @@ export type ModalTokenListData = {
 };
 
 export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
+  const { belowBreakpoint } = useBreakpoints();
+
   const {
     search,
     setSearch,
@@ -33,9 +36,9 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   } = useModalTokenList({ id, data });
 
   return (
-    <Modal id={id} title={'Select Token'}>
+    <ModalOrMobileSheet id={id} title={'Select Token'}>
       <SearchInput
-        autoFocus
+        autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
@@ -66,6 +69,6 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
           onRemoveFavorite={removeFavoriteToken}
         />
       )}
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

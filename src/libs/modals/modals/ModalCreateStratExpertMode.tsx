@@ -1,10 +1,10 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useModal } from 'hooks/useModal';
 import { lsService } from 'services/localeStorage';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalCreateStratExpertModeData = {
   onConfirm?: Function;
@@ -22,7 +22,7 @@ export const ModalCreateStratExpertMode: ModalFC<
   };
 
   return (
-    <Modal id={id} title={'Expert Mode'} onClose={onClose}>
+    <ModalOrMobileSheet id={id} title={'Expert Mode'} onClose={onClose}>
       <div className={'mt-40'}>
         <IconTitleText
           variant={'success'}
@@ -46,6 +46,6 @@ export const ModalCreateStratExpertMode: ModalFC<
       <Button variant={'white'} fullWidth onClick={onClick}>
         Proceed with Range
       </Button>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };
