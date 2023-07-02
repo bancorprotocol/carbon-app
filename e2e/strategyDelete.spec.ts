@@ -8,7 +8,7 @@ cleanForkTest.describe('Delete strategy', () => {
     await page.getByRole('button', { name: 'Manage' }).first().click();
     await page.getByRole('button', { name: 'Delete Strategy' }).first().click();
     const deleteStrategyModal = await page.getByTestId('modal');
-    await deleteStrategyModal.waitFor({ state: 'visible' });
+
     expect(await deleteStrategyModal.screenshot()).toMatchSnapshot(
       'strategy-delete.png'
     );
