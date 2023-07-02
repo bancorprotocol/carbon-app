@@ -4,10 +4,12 @@ import { ModalProvider } from 'libs/modals';
 import { useCarbonSDK } from 'hooks/useCarbonSDK';
 import { useEffect } from 'react';
 import { MainContent } from 'components/core/MainContent';
+import { useStore } from 'store';
 
 let didInit = false;
 
 export const App = () => {
+  const { setInnerHeight } = useStore();
   const { init } = useCarbonSDK();
 
   useEffect(() => {
@@ -17,11 +19,21 @@ export const App = () => {
     }
   }, [init]);
 
+  useEffect(() => {
+    window.addEventListener('resize', (e) => {
+      // @ts-ignore
+      const h = e.target?.innerHeight || 0;
+      console.log(h);
+      setInnerHeight(h);
+    });
+    return () => window.removeEventListener('resize', () => {});
+  }, [setInnerHeight]);
+
   return (
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className={'flex-grow'}>
+      <main className={'flex w-full flex-grow flex-col'}>
         <MainContent />
       </main>
       <MobileMenu />

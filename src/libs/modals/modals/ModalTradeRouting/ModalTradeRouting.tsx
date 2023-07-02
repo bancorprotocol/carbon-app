@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
@@ -11,6 +10,7 @@ import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useMo
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalTradeRoutingData = {
   source: Token;
@@ -43,7 +43,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   });
 
   return (
-    <Modal id={id} title="Trade Routing" size={'md'}>
+    <ModalOrMobileSheet id={id} title="Trade Routing" size={'md'}>
       <Tooltip
         element={
           'This is the list of orders your trade will use when executed.'
@@ -109,6 +109,6 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           Confirm
         </Button>
       </div>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

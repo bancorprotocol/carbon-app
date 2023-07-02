@@ -1,4 +1,3 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Token } from 'libs/tokens';
 import { SearchInput } from 'components/common/searchInput';
@@ -6,6 +5,8 @@ import { useModalTradeTokenList } from 'libs/modals/modals/ModalTradeTokenList/u
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export type TradePair = {
   baseToken: Token;
@@ -20,6 +21,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   id,
   data,
 }) => {
+  const { belowBreakpoint } = useBreakpoints();
   const {
     tradePairs,
     isLoading,
@@ -34,9 +36,9 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   } = useModalTradeTokenList({ id, data });
 
   return (
-    <Modal id={id} title="Select Token Pair">
+    <ModalOrMobileSheet id={id} title="Select Token Pair">
       <SearchInput
-        autoFocus
+        autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
         className="mt-20 w-full rounded-8 py-10"
@@ -64,6 +66,6 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
           onRemoveFavorite={removeFavoritePair}
         />
       )}
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

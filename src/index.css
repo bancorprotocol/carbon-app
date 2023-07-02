@@ -14,7 +14,14 @@
   html,
   body,
   #root {
-    @apply text-body bg-body font-gt-america min-h-screen;
+    @apply text-body bg-body font-gt-america w-full h-screen;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: stretch;
+  }
+
+  #root {
+    @apply flex flex-col overflow-auto;
   }
 
   h1 {
@@ -69,7 +76,7 @@
   }
 
   .px-content {
-    @apply px-10 md:px-20;
+    @apply px-10 md:px-20 w-full;
   }
 
   .text-body {
