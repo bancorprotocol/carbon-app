@@ -333,7 +333,7 @@
       },
       "header": {
         "title_zero": "Strategies",
-        "title_one": "{{count}} Strategyyyy",
+        "title_one": "{{count}} Strategy",
         "title_other": "{{count}} Strategies",
         "actionButtons": {
           "actionButton1": "Create Strategy",
