@@ -7,6 +7,7 @@ import { Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
+import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
 
 export const externalLinks = {
   blog: 'http://blog.carbondefi.xyz',
@@ -37,6 +38,19 @@ export const routes: Route[] = [
   {
     path: PathNames.strategies,
     element: <StrategiesPage />,
+    // children: [
+    //   {
+    //     element: <div>Strategies</div>,
+    //   },
+    //   {
+    //     path: 'portfolio',
+    //     element: <StrategiesPortfolioPage />,
+    //   },
+    // ],
+  },
+  {
+    path: '/portfolio',
+    element: <StrategiesPortfolioPage />,
   },
   {
     id: 'trade',

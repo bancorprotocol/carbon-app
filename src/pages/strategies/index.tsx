@@ -11,6 +11,7 @@ import {
 } from 'components/strategies/overview/StrategyFilterSort';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { lsService } from 'services/localeStorage';
+import { Outlet } from 'libs/routing';
 
 export const StrategiesPage = () => {
   const { user } = useWeb3();
@@ -50,6 +51,7 @@ export const StrategiesPage = () => {
       }
       hideTitle={currentBreakpoint === 'sm' && !user}
     >
+      <Outlet />
       {user ? (
         <StrategyContent
           strategies={strategies}
