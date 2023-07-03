@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { carbonEvents } from 'services/events';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useWeb3, Connection } from 'libs/web3';

@@ -10,13 +10,7 @@ import {
   StrategyEventType,
   TradeEventType,
 } from 'services/events/types';
-import { Modal } from 'libs/modals/Modal';
-import { ModalFC } from 'libs/modals/modals.types';
 import { useTranslation } from 'libs/translations';
-import { useModal } from 'hooks/useModal';
-import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import { ApproveToken } from 'components/common/approval';
-import { Button } from 'components/common/button';
 import {
   handleConfirmationPopupViewEvent,
   handleAfterConfirmationEvent,
@@ -47,7 +41,11 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   }, [context, eventData]);
 
   return (
-    <ModalOrMobileSheet id={id} title={t('modals.confirm.modalTitle')} size={'md'}>
+    <ModalOrMobileSheet
+      id={id}
+      title={t('modals.confirm.modalTitle')}
+      size={'md'}
+    >
       <h3 className="text-secondary my-10">{t('modals.confirm.subtitle')}</h3>
       <div className="mb-20 space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (

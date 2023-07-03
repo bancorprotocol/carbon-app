@@ -1,4 +1,3 @@
-import { lsService } from 'services/localeStorage';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useTranslation } from 'libs/translations';

@@ -1,6 +1,5 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { m } from 'libs/motion';
-import { Overlay } from 'libs/modals/Overlay';
 import { useModal } from 'hooks/useModal';
 import { getInAndOutVariant } from './utils';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
