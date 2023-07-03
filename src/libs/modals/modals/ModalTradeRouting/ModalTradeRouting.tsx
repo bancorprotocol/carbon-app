@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
@@ -12,6 +11,7 @@ import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/Modal
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { useTranslation } from 'libs/translations';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalTradeRoutingData = {
   source: Token;
@@ -45,7 +45,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   });
 
   return (
-    <Modal id={id} title={t('modals.tradeRouting.modalTitle')} size={'md'}>
+    <ModalOrMobileSheet id={id} title={t('modals.tradeRouting.modalTitle')} size={'md'}>
       <Tooltip element={t('modals.tradeRouting.tooltips.tooltip1')}>
         <div className={'text-secondary mt-20 mb-5'}>
           {t('modals.tradeRouting.section1.title1')}
@@ -111,6 +111,6 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           {t('modals.tradeRouting.actionButtons.actionButton1')}
         </Button>
       </div>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

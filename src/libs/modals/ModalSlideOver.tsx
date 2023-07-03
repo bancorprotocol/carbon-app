@@ -4,14 +4,8 @@ import { Overlay } from 'libs/modals/Overlay';
 import { useModal } from 'hooks/useModal';
 import { getInAndOutVariant } from './utils';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
-
-type Props = {
-  children: ReactNode;
-  id: string;
-  title?: string | ReactNode;
-  showCloseButton?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-};
+import { Overlay } from 'libs/modals/Overlay';
+import { ModalProps } from 'libs/modals/modals.types';
 
 const getSize = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
@@ -24,7 +18,7 @@ const getSize = (size: 'sm' | 'md' | 'lg') => {
   }
 };
 
-export const ModalSlideOver: FC<Props> = ({
+export const ModalSlideOver: FC<ModalProps> = ({
   children,
   id,
   title,

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { carbonEvents } from 'services/events';
-import { Modal } from 'libs/modals/Modal';
+import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useWeb3, Connection } from 'libs/web3';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { useTranslation } from 'libs/translations';
-import { useModal } from 'hooks/useModal';
+import { carbonEvents } from 'services/events';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <Modal
+    <ModalOrMobileSheet
       id={id}
       title={t('modals.connectWallet.modalTitle')}
       isLoading={isLoading}
@@ -68,6 +69,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
           <ModalWalletContent onClick={onClickConnect} isLoading={isLoading} />
         )}
       </div>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

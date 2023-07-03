@@ -1,12 +1,25 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { MODAL_COMPONENTS } from 'libs/modals/modals';
 import { AnimatePresence } from 'libs/motion';
 import { useModal } from 'hooks/useModal';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 export const ModalProvider: FC = () => {
   const {
     modals: { open },
   } = useModal();
+
+  useEffect(() => {
+    if (open.length > 0) {
+      disableBodyScroll(document.querySelector('#bodyScrollTarget')!);
+      document.documentElement.classList.add('overflow-hidden');
+      document.body.classList.add('overflow-hidden');
+    } else {
+      clearAllBodyScrollLocks();
+      document.documentElement.classList.remove('overflow-hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+  }, [open]);
 
   return (
     <AnimatePresence initial={false}>

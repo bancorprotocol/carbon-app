@@ -1,4 +1,3 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useGetTokenData } from 'libs/queries/chain/token';
 import { Button } from 'components/common/button';
@@ -11,6 +10,7 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { Link } from 'libs/routing';
 import { useTranslation } from 'libs/translations';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalImportTokenData = {
   address: string;
@@ -36,7 +36,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   const blockClasses = 'my-20 h-80 rounded-8';
 
   return (
-    <Modal id={id} title={t('modals.importToken.modalTitle')}>
+    <ModalOrMobileSheet id={id} title={t('modals.importToken.modalTitle')}>
       <div className={'mt-40'}>
         <IconTitleText
           variant={'warning'}
@@ -96,6 +96,6 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       >
         {t('modals.importToken.actionButtons.actionButton2')}
       </Button>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

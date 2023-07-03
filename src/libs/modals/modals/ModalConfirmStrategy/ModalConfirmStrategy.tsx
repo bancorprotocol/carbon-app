@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { carbonEvents } from 'services/events';
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Strategy } from 'libs/queries';
 import { useTranslation } from 'libs/translations';
@@ -13,6 +12,7 @@ import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { getModalDataByType } from './utils';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalConfirmStrategyData = {
   strategy: Strategy;
@@ -78,7 +78,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   }, [isAwaiting, isProcessing, t]);
 
   return (
-    <Modal id={id} title={data?.modalTitle}>
+    <ModalOrMobileSheet id={id} title={data?.modalTitle}>
       <div className="mt-24 flex flex-col items-center text-center font-weight-500">
         <IconTitleText
           variant={data?.variant}
@@ -111,6 +111,6 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
             : t('modals.pauseStrategy.actionButtons.actionButton2')}
         </Button>
       </div>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

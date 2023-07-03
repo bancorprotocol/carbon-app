@@ -1,5 +1,15 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { ModalSchema } from 'libs/modals/modals';
+
+export type ModalProps = {
+  children: ReactNode;
+  id: string;
+  title?: string | ReactNode;
+  showCloseButton?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  isLoading?: boolean;
+  onClose?: (id: string) => void;
+};
 
 export type TModals = {
   [key in keyof ModalSchema]: FC<{ id: string; data: ModalSchema[key] }>;
@@ -11,15 +21,6 @@ export interface ModalOpen {
   id: string;
   key: ModalKey;
   data: ModalSchema[ModalKey];
-}
-
-export interface ModalContext {
-  modals: { open: ModalOpen[]; minimized: ModalOpen[] };
-  openModal: <T extends ModalKey>(key: T, data: ModalSchema[T]) => void;
-  closeModal: (id: string) => void;
-  activeModalId: string | null;
-  minimizeModal: (id: string) => void;
-  maximizeModal: (id: string) => void;
 }
 
 export type ModalFC<D> = FC<{

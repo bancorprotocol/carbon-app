@@ -1,4 +1,3 @@
-import { Modal } from 'libs/modals/Modal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Button } from 'components/common/button';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
@@ -7,6 +6,7 @@ import { ReactComponent as IconError } from 'assets/icons/times.svg';
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
 import { useTranslation } from 'libs/translations';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalGenericInfoData = {
   title: string;
@@ -35,7 +35,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
   }, [variant]);
 
   return (
-    <Modal id={id}>
+    <ModalOrMobileSheet id={id}>
       <div className={'mt-40'}>
         <IconTitleText
           variant={variant}
@@ -63,6 +63,6 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
       >
         {t('modals.genericInfo.actionButtons.actionButton2')}
       </Button>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };

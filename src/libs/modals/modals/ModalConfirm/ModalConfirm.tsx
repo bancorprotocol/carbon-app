@@ -1,4 +1,9 @@
 import { useEffect } from 'react';
+import { ModalFC } from 'libs/modals/modals.types';
+import { ApproveToken } from 'components/common/approval';
+import { Button } from 'components/common/button';
+import { useModal } from 'hooks/useModal';
+import { ApprovalToken, useApproval } from 'hooks/useApproval';
 import {
   TokenApprovalType,
   TransactionConfirmationType,
@@ -17,6 +22,7 @@ import {
   handleAfterConfirmationEvent,
   handleOnRequestEvent,
 } from './utils';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalCreateConfirmData = {
   approvalTokens: ApprovalToken[];
@@ -41,7 +47,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   }, [context, eventData]);
 
   return (
-    <Modal id={id} title={t('modals.confirm.modalTitle')} size={'md'}>
+    <ModalOrMobileSheet id={id} title={t('modals.confirm.modalTitle')} size={'md'}>
       <h3 className="text-secondary my-10">{t('modals.confirm.subtitle')}</h3>
       <div className="mb-20 space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (
@@ -69,6 +75,6 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       >
         {buttonLabel || t('modals.confirm.actionButtons.actionButton1')}
       </Button>
-    </Modal>
+    </ModalOrMobileSheet>
   );
 };
