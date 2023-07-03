@@ -21,22 +21,27 @@ const tableColumns = [
   columnHelper.accessor('token.symbol', {
     header: 'Token',
     cell: (info) => info.getValue(),
+    enableSorting: false,
   }),
   columnHelper.accessor('share', {
     header: 'Share',
     cell: (info) => info.getValue().toString(),
+    enableSorting: true,
   }),
   columnHelper.accessor('amount', {
     header: 'Amount',
     cell: (info) => info.getValue().toString(),
+    enableSorting: false,
   }),
   columnHelper.accessor('value', {
     header: 'Value',
     cell: (info) => info.getValue().toString(),
+    enableSorting: false,
   }),
   columnHelper.accessor('strategies', {
     header: 'Strategies',
     cell: (info) => info.getValue().length,
+    enableSorting: false,
   }),
 ];
 
@@ -139,5 +144,12 @@ export const useStrategyPortfolio = () => {
     );
   }, [selectedFiatCurrency, strategiesQuery.data, tokenPriceMap, totalValue]);
 
-  return { tableData, tableColumns, totalValue };
+  const isLoading = useMemo(() => {
+    return (
+      strategiesQuery.isLoading ||
+      tokenPriceQueries.some((query) => query.isLoading)
+    );
+  }, [strategiesQuery.isLoading, tokenPriceQueries]);
+
+  return { tableData, tableColumns, totalValue, isLoading };
 };
