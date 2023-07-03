@@ -2,7 +2,7 @@ import { Table } from 'libs/table';
 import {
   StrategyPortfolioData,
   useStrategyPortfolio,
-} from 'components/strategies/portfolio/useStrategyPortfolio';
+} from 'components/strategies/portfolio';
 
 export const StrategiesPortfolioPage = () => {
   const { tableData, tableColumns, totalValue, isLoading } =
