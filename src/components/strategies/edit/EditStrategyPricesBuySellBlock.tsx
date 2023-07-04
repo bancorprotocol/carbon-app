@@ -37,6 +37,7 @@ export const EditStrategyPricesBuySellBlock: FC<
           buy,
           order,
           isOrdersOverlap,
+          isEdit: true,
           title: buy
             ? t('pages.strategyEdit.section2.titles.title5', {
                 token: base.symbol,
