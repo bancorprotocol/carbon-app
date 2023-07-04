@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
-import { useOrder } from 'components/strategies/create/useOrder';
+import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
@@ -92,6 +92,14 @@ export const EditStrategyPricesContent = ({
         );
   };
 
+  const isOrderValid = (order: OrderCreate) => {
+    if (!order.isRange) {
+      return true;
+    }
+
+    return +order.min > 0 && +order.max > 0 && +order.max > +order.min;
+  };
+
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
   }, [isAwaiting, isProcessing, t]);
@@ -118,6 +126,7 @@ export const EditStrategyPricesContent = ({
       />
 
       <Button
+        disabled={!isOrderValid(order0) || !isOrderValid(order1)}
         loading={isLoading}
         loadingChildren={loadingChildren}
         onClick={handleOnActionClick}

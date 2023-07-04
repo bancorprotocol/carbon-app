@@ -18,6 +18,7 @@ type Props = {
   inputTitle: ReactNode | string;
   buy?: boolean;
   isOrdersOverlap: boolean;
+  isEdit?: boolean;
 };
 
 export const LimitRangeSection: FC<Props> = ({
@@ -28,6 +29,7 @@ export const LimitRangeSection: FC<Props> = ({
   inputTitle,
   buy = false,
   isOrdersOverlap,
+  isEdit,
 }) => {
   const { t } = useTranslation();
   const { openModal } = useModal();
@@ -111,7 +113,7 @@ export const LimitRangeSection: FC<Props> = ({
           token={quote}
           price={order.price}
           setPrice={order.setPrice}
-          error={order.priceError}
+          error={isEdit ? undefined : order.priceError}
           setPriceError={order.setPriceError}
           buy={buy}
           marketPricePercentage={marketPricePercentage}
