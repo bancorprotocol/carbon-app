@@ -12,7 +12,7 @@ export const ModalTradeRoutingRowCell: FC<{
 }> = ({ logoURI, amount, fiatAmount, selectedFiatCurrency }) => {
   return (
     <div>
-      <div className={'flex items-center space-x-8 '}>
+      <div className={'flex items-center space-s-8 '}>
         <Imager src={logoURI} alt={'Token Logo'} className={'w-14'} />
         <span className={'font-mono text-14 font-weight-500'}>
           {prettifyNumber(amount)}

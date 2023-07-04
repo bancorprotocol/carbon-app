@@ -9,9 +9,7 @@ import {
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
-
-const APP_ID = 'carbon';
-const APP_VERSION = 'v1';
+import { APP_ID, APP_VERSION } from 'utils/constants';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!

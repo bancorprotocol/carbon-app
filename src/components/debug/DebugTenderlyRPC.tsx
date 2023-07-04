@@ -61,7 +61,7 @@ export const DebugTenderlyRPC = () => {
 
       <div
         className={
-          'flex w-full items-center space-x-20 rounded-full bg-black px-20 py-10'
+          'space-s-20 flex w-full items-center rounded-full bg-black px-20 py-10'
         }
       >
         <Checkbox

@@ -1,17 +1,17 @@
 import { FC } from 'react';
-import { menuItems } from 'components/core/menu/index';
+import { carbonEvents } from 'services/events';
 import { Link, PathNames, useLocation } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { carbonEvents } from 'services/events';
-
 import { handleOnItemClick } from '../utils';
+import { useMenuItems } from '../useMenuItems';
 
 export const MainMenuLeft: FC = () => {
   const location = useLocation();
+  const { menuItems } = useMenuItems();
 
   return (
     <div>
-      <div className={'flex items-center space-x-24'}>
+      <div className={'flex items-center space-s-24'}>
         <Link
           to={PathNames.strategies}
           onClick={() => carbonEvents.navigation.navHomeClick(undefined)}
@@ -19,7 +19,7 @@ export const MainMenuLeft: FC = () => {
           <LogoCarbon className={'w-34'} />
         </Link>
 
-        <div className={'hidden space-x-24 md:block'}>
+        <div className={'hidden space-s-24 md:block'}>
           {menuItems.map(({ label, href }) => (
             <Link
               onClick={() => handleOnItemClick(href)}

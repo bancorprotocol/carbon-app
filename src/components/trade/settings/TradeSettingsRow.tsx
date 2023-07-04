@@ -1,15 +1,15 @@
-import { Button } from 'components/common/button';
-import { sanitizeNumberInput } from 'utils/helpers';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { carbonEvents } from 'services/events';
-
+import { useTranslation } from 'libs/translations';
+import { Token } from 'libs/tokens';
 import {
   isValidValue,
   TradeSettingsData,
   warningMessageIfOutOfRange,
 } from './utils';
-import { Token } from 'libs/tokens';
+import { sanitizeNumberInput } from 'utils/helpers';
+import { Button } from 'components/common/button';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 const buttonClasses =
   'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
@@ -24,6 +24,7 @@ export const TradeSettingsRow: FC<{
   item: TradeSettingsData;
   isAllSettingsDefault: boolean;
 }> = ({ base, quote, item, isAllSettingsDefault }) => {
+  const { t } = useTranslation();
   const [internalValue, setInternalValue] = useState(
     item.presets.includes(item.value) ? '' : item.value
   );
@@ -107,7 +108,7 @@ export const TradeSettingsRow: FC<{
           </Button>
         ))}
         <input
-          placeholder={'custom'}
+          placeholder={t('common.placeholders.placeholder5')}
           value={internalValue}
           onBlur={handleOnBlur}
           onChange={handleOnInputChange}
@@ -121,7 +122,7 @@ export const TradeSettingsRow: FC<{
           className={`mt-15 flex font-mono text-12 font-weight-500 text-warning-400`}
         >
           <IconWarning className={`w-14 ${isError ? 'text-red' : ''}`} />
-          <span className={`ml-5 ${isError ? 'text-red' : ''}`}>
+          <span className={`ms-5 ${isError ? 'text-red' : ''}`}>
             {warningMessage}
           </span>
         </div>

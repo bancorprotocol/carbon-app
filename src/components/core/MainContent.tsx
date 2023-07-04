@@ -5,7 +5,7 @@ import { ErrorUnsupportedNetwork } from 'components/core/error/ErrorUnsupportedN
 import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnection';
 import { useTokens } from 'hooks/useTokens';
 import { ErrorTokenList } from 'components/core/error/ErrorTokenList';
-import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
 import { carbonEvents } from 'services/events';
 import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';
@@ -15,7 +15,7 @@ export const MainContent: FC = () => {
   const location = useLocation();
   const prevPathnameRef = useRef('');
   const tokens = useTokens();
-  const sdk = useCarbonSDK();
+  const sdk = useCarbonInit();
 
   useEffect(() => {
     document.documentElement.scrollTo({

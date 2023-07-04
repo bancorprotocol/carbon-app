@@ -1,3 +1,4 @@
+import { useTranslation } from 'libs/translations';
 import { FC } from 'react';
 
 type Props = {
@@ -8,6 +9,8 @@ export const ModalTradeRoutingHeader: FC<Props> = ({
   baseSymbol,
   quoteSymbol,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={
@@ -16,7 +19,7 @@ export const ModalTradeRoutingHeader: FC<Props> = ({
     >
       <div>{baseSymbol}</div>
       <div>{quoteSymbol}</div>
-      <div>Average Price</div>
+      <div>{t('modals.tradeRouting.section1.header1')}</div>
     </div>
   );
 };

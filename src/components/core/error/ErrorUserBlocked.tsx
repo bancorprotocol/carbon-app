@@ -1,18 +1,19 @@
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
 import { useWeb3 } from 'libs/web3';
-import { Button } from 'components/common/button';
 import { Link } from 'libs/routing';
+import { useTranslation } from 'libs/translations';
+import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
+import { Button } from 'components/common/button';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const ErrorUserBlocked = () => {
+  const { t } = useTranslation();
   const { disconnect } = useWeb3();
+
   return (
     <ErrorWrapper
       icon={<IconWarning />}
-      title={'Wallet Blocked'}
-      text={
-        'For compliance reasons, this wallet has been blocked from using the Carbon App.'
-      }
+      title={t('common.errors.error11')}
+      text={t('common.errors.error12')}
       variant={'error'}
     >
       <div className={'space-y-10'}>
@@ -22,10 +23,10 @@ export const ErrorUserBlocked = () => {
           }
           className={'w-full'}
         >
-          <Button fullWidth>Learn More</Button>
+          <Button fullWidth>{t('common.actionButtons.actionButton4')}</Button>
         </Link>
         <Button variant={'black'} onClick={disconnect} fullWidth>
-          Logout
+          {t('common.actionButtons.actionButton5')}
         </Button>
       </div>
     </ErrorWrapper>

@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'libs/routing';
-import { menuItems } from 'components/core/menu/menuItems';
 import { handleOnItemClick } from '../utils';
 import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
 import { useModal } from 'hooks/useModal';
+import { useMenuItems } from '../useMenuItems';
 
 export const MobileMenu = () => {
   const location = useLocation();
   const { openModal } = useModal();
+  const { menuItems } = useMenuItems();
 
   return (
     <footer className={`mobile-menu`}>

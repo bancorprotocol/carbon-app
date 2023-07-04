@@ -11,8 +11,10 @@ import {
 } from 'components/strategies/overview/StrategyFilterSort';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { lsService } from 'services/localeStorage';
+import { useTranslation } from 'libs/translations';
 
 export const StrategiesPage = () => {
+  const { t } = useTranslation();
   const { user } = useWeb3();
   const { currentBreakpoint } = useBreakpoints();
   const strategies = useGetUserStrategies();
@@ -36,7 +38,9 @@ export const StrategiesPage = () => {
 
   return (
     <Page
-      title={`${strategies.data?.length || ''} Strategies`}
+      title={t('pages.strategyOverview.header.title', {
+        count: strategies.data?.length || 0,
+      })}
       widget={
         <StrategyPageTitleWidget
           sort={sort}
