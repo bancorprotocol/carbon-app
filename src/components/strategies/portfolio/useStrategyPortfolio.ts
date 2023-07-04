@@ -2,7 +2,6 @@ import { Order, Strategy, useGetUserStrategies } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
-import { createColumnHelper } from 'libs/table';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -14,36 +13,6 @@ export interface StrategyPortfolioData {
   value: BigNumber;
   strategies: Strategy[];
 }
-
-const columnHelper = createColumnHelper<StrategyPortfolioData>();
-
-const tableColumns = [
-  columnHelper.accessor('token.symbol', {
-    header: 'Token',
-    cell: (info) => info.getValue(),
-    enableSorting: false,
-  }),
-  columnHelper.accessor('share', {
-    header: 'Share',
-    cell: (info) => info.getValue().toString(),
-    enableSorting: true,
-  }),
-  columnHelper.accessor('amount', {
-    header: 'Amount',
-    cell: (info) => info.getValue().toString(),
-    enableSorting: false,
-  }),
-  columnHelper.accessor('value', {
-    header: 'Value',
-    cell: (info) => info.getValue().toString(),
-    enableSorting: false,
-  }),
-  columnHelper.accessor('strategies', {
-    header: 'Strategies',
-    cell: (info) => info.getValue().length,
-    enableSorting: false,
-  }),
-];
 
 export const useStrategyPortfolio = () => {
   const { selectedFiatCurrency } = useFiatCurrency();
@@ -151,5 +120,5 @@ export const useStrategyPortfolio = () => {
     );
   }, [strategiesQuery.isLoading, tokenPriceQueries]);
 
-  return { tableData, tableColumns, totalValue, isLoading };
+  return { tableData, totalValue, isLoading };
 };
