@@ -1,18 +1,19 @@
+import { useState } from 'react';
 import { Highcharts, HighchartsReact } from 'libs/charts';
-import { NoOrders } from 'components/common/noOrder';
+import { useTranslation } from 'libs/translations';
 import { useDepthChartWidget } from './useDepthChartWidget';
 import { TradePageProps } from 'pages/trade';
+import { NoOrders } from 'components/common/noOrder';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
-import { useState } from 'react';
 
 export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
+  const { t } = useTranslation();
   const { buyOrders, sellOrders, getOptions, isLoading } = useDepthChartWidget(
     base,
     quote
   );
   const [showTVChart, setShowTVChart] = useState(false);
-
   const options = getOptions(buyOrders, sellOrders);
 
   const isError = (!buyOrders && !sellOrders) || !base || !quote || !options;
@@ -26,7 +27,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
             !showTVChart ? 'bg-silver' : 'text-secondary'
           } w-[120px] px-10 py-4`}
         >
-          Depth
+          {t('pages.trade.section3.actionButtons.actionButton1')}
         </button>
         <button
           onClick={() => setShowTVChart(true)}
@@ -34,7 +35,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
             showTVChart ? 'bg-silver' : 'text-secondary'
           } w-[120px] px-10 py-4`}
         >
-          Price
+          {t('pages.trade.section3.actionButtons.actionButton2')}
         </button>
       </div>
 

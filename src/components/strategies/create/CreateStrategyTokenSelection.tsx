@@ -1,19 +1,20 @@
+import { FC } from 'react';
+import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
-import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
+import { PathNames, useNavigate } from 'libs/routing';
+import { Trans, useTranslation } from 'libs/translations';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
-import { items } from './variants';
-import { carbonEvents } from 'services/events';
-
-import { FC } from 'react';
-import { PathNames, useNavigate } from 'libs/routing';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
+import { items } from './variants';
+import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 
 export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
   base,
   quote,
   openTokenListModal,
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -23,19 +24,11 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
       key={'strategyCreateTokenSelection'}
     >
       <div className="mb-14 flex items-center justify-between">
-        <h2>Token Pair</h2>
+        <h2>{t('pages.strategyCreate.step1.section1.title')}</h2>
         <Tooltip
           sendEventOnMount={{ buy: undefined }}
           element={
-            <div>
-              Selecting the tokens you would like to create a strategy for.
-              <br />
-              <b>Buy or Sell token</b> (also called Base token) is the token you
-              would like to buy or sell in the strategy.
-              <br />
-              <b>With token</b> (also called Quote token) is the token you would
-              denominate the rates in.
-            </div>
+            <Trans i18nKey={'pages.strategyCreate.step1.tooltips.tooltip3'} />
           }
         />
       </div>
@@ -44,7 +37,9 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
           address={base?.address}
-          description="Buy or Sell"
+          description={t(
+            'pages.strategyCreate.step1.section1.contents.content1'
+          )}
           onClick={() => openTokenListModal(true)}
           isBaseToken
         />
@@ -80,7 +75,9 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
               symbol={quote?.symbol}
               imgUrl={quote?.logoURI}
               address={quote?.address}
-              description={'With'}
+              description={t(
+                'pages.strategyCreate.step1.section1.contents.content2'
+              )}
               onClick={() => openTokenListModal()}
             />
           </>

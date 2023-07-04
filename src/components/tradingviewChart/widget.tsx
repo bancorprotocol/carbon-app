@@ -1,3 +1,4 @@
+import { useTranslation } from 'libs/translations';
 import React, { createRef, useEffect } from 'react';
 
 declare const TradingView: any;
@@ -36,6 +37,7 @@ type ScriptHTML = {
 };
 
 export const Widget: React.FC<WidgetProps> = ({ symbol }) => {
+  const { i18n } = useTranslation();
   const containerId = 'tradingview_container';
   const ref: { current: HTMLDivElement | null } = createRef();
 
@@ -49,7 +51,7 @@ export const Widget: React.FC<WidgetProps> = ({ symbol }) => {
       theme: 'dark',
       style: '1',
       range: '5D',
-      locale: 'en',
+      locale: i18n.language || 'en',
       toolbar_bg: '#f1f3f6',
       enable_publishing: false,
       withdateranges: true,
@@ -77,7 +79,7 @@ export const Widget: React.FC<WidgetProps> = ({ symbol }) => {
         refValue.removeChild(refValue.firstChild);
       }
     };
-  }, [ref, symbol]);
+  }, [ref, symbol, i18n.language]);
 
   return <div ref={ref} id={containerId} />;
 };

@@ -1,21 +1,23 @@
 import { FC } from 'react';
 import { Strategy, StrategyStatus } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Imager } from 'components/common/imager/Imager';
+import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { TokenPrice } from './TokenPrice';
 import {
   getFiatDisplayValue,
   prettifyNumber,
   sanitizeNumberInput,
 } from 'utils/helpers';
-import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { TokenPrice } from './TokenPrice';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { getPrice } from './utils';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
   buy?: boolean;
 }> = ({ strategy, buy = false }) => {
+  const { t } = useTranslation();
   const token = buy ? strategy.base : strategy.quote;
   const otherToken = buy ? strategy.quote : strategy.base;
   const order = buy ? strategy.order0 : strategy.order1;
@@ -75,12 +77,18 @@ export const StrategyBlockBuySell: FC<{
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
-              : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`
+              ? t('pages.strategyOverview.card.tooltips.tooltip1', {
+                  token: token.symbol,
+                })
+              : t('pages.strategyOverview.card.tooltips.tooltip2', {
+                  token: otherToken.symbol,
+                })
           }
         >
           <div className="flex items-center gap-6">
-            {buy ? 'Buy' : 'Sell'}
+            {buy
+              ? t('pages.strategyOverview.card.section1.title')
+              : t('pages.strategyOverview.card.section2.title')}
             <Imager
               className="h-16 w-16"
               src={buy ? token.logoURI : otherToken.logoURI}
@@ -96,12 +104,26 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? `This is the price in which you are willing to buy ${token.symbol}.`
-                : `This is the price in which you are willing to sell ${otherToken.symbol}.`
+                ? t('pages.strategyOverview.card.tooltips.tooltip3', {
+                    token: token.symbol,
+                  })
+                : t('pages.strategyOverview.card.tooltips.tooltip4', {
+                    token: otherToken.symbol,
+                  })
             }
           >
             <div className={`${buy ? 'text-green' : 'text-red'}`}>
-              {limit ? 'Limit Price' : 'Price Range'}
+              {limit
+                ? t(
+                    `pages.strategyOverview.card.${
+                      buy ? 'section1' : 'section2'
+                    }.contents.content1`
+                  )
+                : t(
+                    `pages.strategyOverview.card.${
+                      buy ? 'section1' : 'section2'
+                    }.contents.content2`
+                  )}
             </div>
           </Tooltip>
           <Tooltip
@@ -129,11 +151,20 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
-                : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`
+                ? t('pages.strategyOverview.card.tooltips.tooltip5', {
+                    buyToken: token.symbol,
+                    sellToken: otherToken.symbol,
+                  })
+                : t('pages.strategyOverview.card.tooltips.tooltip6', {
+                    token: otherToken.symbol,
+                  })
             }
           >
-            <div className="text-secondary !text-16">Budget</div>
+            <div className="text-secondary !text-16">
+              {buy
+                ? t(`pages.strategyOverview.card.section1.contents.content3`)
+                : t(`pages.strategyOverview.card.section2.contents.content3`)}
+            </div>
           </Tooltip>
           <div className="flex gap-7">
             <Tooltip

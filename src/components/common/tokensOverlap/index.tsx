@@ -20,7 +20,7 @@ export const TokensOverlap = ({
           alt="Token Logo"
           className={`${className} h-30 w-30 !rounded-full border border-fog bg-fog dark:border-black dark:bg-black`}
           style={{
-            marginLeft: tokens.length > 1 ? `${'-10'}px` : '0px',
+            marginInlineStart: tokens.length > 1 ? `${'-10'}px` : '0px',
           }}
         />
       ))}
@@ -28,7 +28,7 @@ export const TokensOverlap = ({
         <div
           className={`flex h-30 w-30 items-center justify-center rounded-full bg-fog text-12 dark:bg-black`}
           style={{
-            marginLeft: `${'-10'}px`,
+            marginInlineStart: `${'-10'}px`,
           }}
         >
           +{tokenCount - maxLogos}

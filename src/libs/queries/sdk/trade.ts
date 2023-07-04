@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
 import BigNumber from 'bignumber.js';
-import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 import { Action, TradeActionBNStr } from 'libs/sdk';
 import { MatchActionBNStr } from '@bancor/carbon-sdk';
 import { carbonSDK } from 'libs/sdk';
@@ -30,7 +30,7 @@ export const useGetTradeData = ({
   targetToken,
   enabled,
 }: Props) => {
-  const { isInitialized } = useCarbonSDK();
+  const { isInitialized } = useCarbonInit();
 
   return useQuery<GetTradeDataResult>(
     QueryKey.tradeData([sourceToken, targetToken], isTradeBySource, input),

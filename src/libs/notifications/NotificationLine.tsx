@@ -9,6 +9,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
 import { Link } from 'libs/routing';
 import { FOUR_SECONDS_IN_MS } from 'utils/time';
+import { useTranslation } from 'libs/translations';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
@@ -59,6 +60,7 @@ export const NotificationLine: FC<{
   notification: Notification;
   isAlert?: boolean;
 }> = ({ notification, isAlert }) => {
+  const { t } = useTranslation();
   const { removeNotification, dismissAlert } = useNotifications();
 
   const handleCloseClick = () => {
@@ -87,7 +89,8 @@ export const NotificationLine: FC<{
               to={getExplorerLink('tx', notification.txHash)}
               className={'mt-10 flex items-center font-weight-500'}
             >
-              View on Etherscan <IconLink className="ml-6 w-14" />
+              {t('modals.notification.content1')}{' '}
+              <IconLink className="w-14 ms-6" />
             </Link>
           )}
         </div>

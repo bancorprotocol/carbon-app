@@ -1,5 +1,6 @@
+import { FC, useMemo } from 'react';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
-import { FC } from 'react';
+import { useTranslation } from 'libs/translations';
 
 type CategoryWithCounterProps = {
   category: ChooseTokenCategory;
@@ -16,6 +17,19 @@ export const CategoryButtonWithCounter: FC<CategoryWithCounterProps> = ({
   categoryIndex,
   isActive = false,
 }) => {
+  const { t } = useTranslation();
+
+  const translatedCategory = useMemo(() => {
+    if (category === 'popular') {
+      return t('common.contents.content5');
+    }
+    if (category === 'favorites') {
+      return t('common.contents.content6');
+    }
+
+    return t('common.contents.content7');
+  }, [category, t]);
+
   return (
     <button
       className={`flex items-end justify-start capitalize transition hover:text-white ${
@@ -24,7 +38,7 @@ export const CategoryButtonWithCounter: FC<CategoryWithCounterProps> = ({
       onClick={() => setSelectedList(category)}
     >
       <div className="flex items-center gap-6 ">
-        {category}
+        {translatedCategory}
         <div className={`rounded-full bg-white/10 px-6`}>
           {numOfItemsInCategory}
         </div>

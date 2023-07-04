@@ -1,4 +1,4 @@
 export { MainMenu } from 'components/core/menu/mainMenu/MainMenu';
-export { menuItems } from 'components/core/menu/menuItems';
+export { useMenuItems } from 'components/core/menu/useMenuItems';
 export { MobileMenu } from 'components/core/menu/mobileMenu/MobileMenu';
-export type { MenuItem } from 'components/core/menu/menuItems';
+export type { MenuItem } from 'components/core/menu/useMenuItems';

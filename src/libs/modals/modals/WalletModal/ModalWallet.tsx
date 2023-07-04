@@ -1,13 +1,15 @@
+import { useEffect, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { useWeb3, Connection } from 'libs/web3';
-import { useEffect, useState } from 'react';
 import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletError';
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
+import { useTranslation } from 'libs/translations';
 import { carbonEvents } from 'services/events';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
+  const { t } = useTranslation();
   const { closeModal } = useModal();
   const { connect, user } = useWeb3();
   const [selectedConnection, setSelectedConnection] =
@@ -48,13 +50,17 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   };
 
   return (
-    <ModalOrMobileSheet id={id} title={'Connect Wallet'} isLoading={isLoading}>
+    <ModalOrMobileSheet
+      id={id}
+      title={t('modals.connectWallet.modalTitle')}
+      isLoading={isLoading}
+    >
       <div className={'mt-20'}>
         {isError ? (
           <div className={'flex flex-col items-center space-y-20'}>
             <ModalWalletError
-              logoUrl={selectedConnection.logoUrl}
-              name={selectedConnection.name}
+              logoUrl={selectedConnection?.logoUrl}
+              name={selectedConnection?.name || ''}
               error={connectionError}
             />
           </div>

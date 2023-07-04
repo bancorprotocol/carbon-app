@@ -1,42 +1,13 @@
+import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
-import { ReactComponent as IconWallet1 } from 'assets/icons/wallet-1.svg';
-import { ReactComponent as IconWallet2 } from 'assets/icons/wallet-2.svg';
-import { ReactComponent as IconWallet3 } from 'assets/icons/wallet-3.svg';
-import { ReactComponent as IconWallet4 } from 'assets/icons/wallet-4.svg';
-import { ReactComponent as IconWallet5 } from 'assets/icons/wallet-5.svg';
-import { ReactComponent as IconWallet6 } from 'assets/icons/wallet-6.svg';
-
-const items = [
-  {
-    icon: <IconWallet1 className="h-20 w-20 text-green" />,
-    title: 'On-chain Limit & Range Orders',
-  },
-  {
-    icon: <IconWallet2 className="h-20 w-20 text-green" />,
-    title: 'Automated and Recurring strategies',
-  },
-  {
-    icon: <IconWallet3 className="h-20 w-20 text-green" />,
-    title: 'Easily Adjustable',
-  },
-  {
-    icon: <IconWallet4 className="h-20 w-20 text-green" />,
-    title: 'Rotating Liquidity',
-  },
-  {
-    icon: <IconWallet5 className="h-20 w-20 text-green" />,
-    title: 'All standard ERC-20 tokens',
-  },
-  {
-    icon: <IconWallet6 className="h-20 w-20 text-green" />,
-    title: 'MEV Resistant',
-  },
-];
+import { getProductDescriptionItems } from './items';
 
 export const WalletConnect = () => {
+  const { t } = useTranslation();
   const { openModal } = useModal();
+  const items = getProductDescriptionItems(t);
 
   return (
     <div className="md:h-[calc(100vh-300px)] md:min-h-[400px]">
@@ -50,21 +21,22 @@ export const WalletConnect = () => {
             'f-full flex flex-col justify-center space-y-30 md:w-[360px]'
           }
         >
-          <h1>Automate your Trading Strategies</h1>
+          <h1>{t('pages.strategyOverview.noStrategyCard.title')}</h1>
           <p className={'text-white/60'}>
-            A fully decentralized protocol for automating on-chain trading
-            strategies.
+            {t('pages.strategyOverview.noStrategyCard.subtitle')}
           </p>
 
           <Button
-            className="flex items-center justify-center space-x-16"
+            className="flex items-center justify-center space-s-16"
             variant={'success'}
             onClick={() => openModal('wallet', undefined)}
             fullWidth
             size={'lg'}
           >
             <IconWallet className="h-20 w-20" />
-            <span>Connect</span>
+            <span>
+              {t('pages.strategyOverview.noStrategyCard.actionButton')}
+            </span>
           </Button>
         </div>
         <div
@@ -76,7 +48,7 @@ export const WalletConnect = () => {
         </div>
         <div className={'flex h-full flex-col justify-center space-y-33'}>
           {items.map((item, index) => (
-            <div className={'flex items-center space-x-20'} key={index}>
+            <div className={'flex items-center space-s-20'} key={index}>
               {item.icon}
               <span className={'text-white/80'}>{item.title}</span>
             </div>

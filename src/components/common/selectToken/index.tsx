@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { useBreakpoints } from 'hooks/useBreakpoints';
+import { useTranslation } from 'libs/translations';
 import { Imager } from 'components/common/imager/Imager';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { Button, ButtonHTMLProps } from 'components/common/button';
 import { Tooltip } from '../tooltip/Tooltip';
-import { useBreakpoints } from 'hooks/useBreakpoints';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 
 type Props = ButtonHTMLProps & {
   symbol?: string;
@@ -23,25 +24,26 @@ export const SelectTokenButton: FC<Props> = ({
   isBaseToken,
   ...props
 }) => {
+  const { t } = useTranslation();
   const { belowBreakpoint } = useBreakpoints();
 
-  const getTooltipText = () => {
+  const tooltipText = useMemo(() => {
     if (isBaseToken) {
       return symbol
         ? `${symbol}: ${address}`
-        : 'Select the Base token for the pair';
+        : t('pages.strategyCreate.step1.tooltips.tooltip1');
     }
 
     return symbol
       ? `${symbol}: ${address}`
-      : 'Select the Quote token for the pair (i.e. when selecting USDC, all rates would be denominated in USDC)';
-  };
+      : t('pages.strategyCreate.step1.tooltips.tooltip2');
+  }, [address, isBaseToken, symbol, t]);
 
   return (
     <Tooltip
       disabled={belowBreakpoint('md')}
       maxWidth={430}
-      element={getTooltipText()}
+      element={tooltipText}
       sendEventOnMount={{ buy: undefined }}
     >
       <Button
@@ -55,12 +57,12 @@ export const SelectTokenButton: FC<Props> = ({
             <Imager
               alt={'Token Logo'}
               src={imgUrl}
-              className={'mr-14 h-24 w-24 rounded-full'}
+              className={'h-24 w-24 rounded-full me-14'}
             />
           ) : (
             <div
               className={
-                'mr-14 flex h-24 w-24 items-center justify-center rounded-full bg-black'
+                'flex h-24 w-24 items-center justify-center rounded-full bg-black me-14'
               }
             >
               <IconPlus className={'h-16 w-16 p-2 text-green'} />
@@ -77,7 +79,11 @@ export const SelectTokenButton: FC<Props> = ({
                   {description}
                 </div>
               )}
-              <div>{symbol ? symbol : 'Select Token'}</div>
+              <div>
+                {symbol
+                  ? symbol
+                  : t('pages.strategyCreate.step1.section1.contents.content3')}
+              </div>
             </div>
           </div>
         </span>

@@ -171,7 +171,7 @@ export const DebugCreateStrategy = () => {
         {allTokens.map((t) => (
           <div
             key={t.address}
-            className={'flex items-center space-x-10 rounded-18 bg-black p-5'}
+            className={'space-s-10 flex items-center rounded-18 bg-black p-5'}
           >
             <Checkbox
               isChecked={t.selected}

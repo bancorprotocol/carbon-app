@@ -10,6 +10,7 @@ import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
+import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { useNavigate } from '@tanstack/react-location';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
@@ -36,6 +37,7 @@ export const CreateStrategyOrders = ({
   isAwaiting,
   isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
+  const { t } = useTranslation();
   const { user } = useWeb3();
   const { openModal } = useModal();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
@@ -95,28 +97,31 @@ export const CreateStrategyOrders = ({
   };
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing);
-  }, [isAwaiting, isProcessing]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
+  }, [isAwaiting, isProcessing, t]);
 
   return (
     <>
       <m.div
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'rounded-10 bg-silver p-20 pl-30'}
+        className={'rounded-10 bg-silver p-20 ps-30'}
       >
-        <div className={'flex space-x-10'}>
+        <div className={'flex space-s-10'}>
           <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
           <div>
             {
-              <div className="flex space-x-6">
+              <div className="flex space-s-6">
                 <span>{base?.symbol}</span>
                 <div className="text-secondary !text-16">/</div>
                 <span>{quote?.symbol}</span>
               </div>
             }
-
-            <div className="text-secondary capitalize">{strategyType}</div>
+            <div className="text-secondary capitalize">
+              {strategyType === 'recurring'
+                ? t('pages.strategyCreate.step2.section1.titles.title1')
+                : t('pages.strategyCreate.step2.section1.titles.title2')}
+            </div>
           </div>
         </div>
         <div
@@ -124,8 +129,8 @@ export const CreateStrategyOrders = ({
             'mt-10 flex items-center text-12 font-weight-400 text-white/60'
           }
         >
-          <IconWarning className={'mr-10 -ml-6 w-14 flex-shrink-0'} /> Rebasing
-          and fee-on-transfer tokens are not supported
+          <IconWarning className={'w-14 flex-shrink-0 -ms-6 me-10'} />
+          {t('pages.strategyCreate.step2.section1.contents.content1')}
         </div>
       </m.div>
 
@@ -166,7 +171,9 @@ export const CreateStrategyOrders = ({
           loading={isProcessing || isAwaiting}
           loadingChildren={loadingChildren}
         >
-          {user ? 'Create Strategy' : 'Connect Wallet'}
+          {user
+            ? t('pages.strategyCreate.step2.actionButton')
+            : t('common.actionButtons.actionButton1')}
         </Button>
       </m.div>
     </>

@@ -1,5 +1,6 @@
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Strategy } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
 
 type EditStrategyOverlapTokensProps = {
   strategy: Strategy;
@@ -8,10 +9,12 @@ type EditStrategyOverlapTokensProps = {
 export const EditStrategyOverlapTokens = ({
   strategy,
 }: EditStrategyOverlapTokensProps) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={
-        'bg-secondary flex w-full items-center space-x-10 rounded-10 p-15 pl-30 font-mono'
+        'bg-secondary flex w-full items-center rounded-10 p-15 font-mono ps-30 space-s-10'
       }
     >
       <TokensOverlap
@@ -26,7 +29,9 @@ export const EditStrategyOverlapTokens = ({
             <span>{strategy.quote.symbol}</span>
           </div>
         }
-        <div className="text-secondary flex">ID: {strategy.idDisplay}</div>
+        <div className="text-secondary flex">
+          {t('pages.strategyEdit.section1.title', { id: strategy.idDisplay })}
+        </div>
       </div>
     </div>
   );
