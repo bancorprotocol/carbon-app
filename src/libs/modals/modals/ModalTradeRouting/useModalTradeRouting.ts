@@ -1,6 +1,3 @@
-import { useWeb3 } from 'libs/web3';
-import { useModal } from 'hooks/useModal';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import {
   Dispatch,
   SetStateAction,
@@ -8,10 +5,14 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import { Action } from '@bancor/carbon-sdk';
+import { useWeb3 } from 'libs/web3';
+import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
+import { useTranslation } from 'libs/translations';
 import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
+import { useModal } from 'hooks/useModal';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 
 type Props = {
   id: string;
@@ -33,6 +34,7 @@ export const useModalTradeRouting = ({
     setIsAwaiting,
   },
 }: Props) => {
+  const { t } = useTranslation();
   const { user, provider } = useWeb3();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
@@ -100,7 +102,7 @@ export const useModalTradeRouting = ({
           setIsAwaiting(true);
           tradeFn();
         },
-        buttonLabel: 'Confirm Trade',
+        buttonLabel: t('modals.tradeRouting.actionButtons.actionButton2'),
         eventData: {
           productType: 'trade',
           buy,
@@ -134,6 +136,7 @@ export const useModalTradeRouting = ({
     data?.totalTargetAmount,
     isTradeBySource,
     setIsAwaiting,
+    t,
     buy,
     getFiatValueSource,
     provider?.network?.name,

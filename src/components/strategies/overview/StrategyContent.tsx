@@ -12,6 +12,7 @@ import { StrategyBlockCreate } from 'components/strategies/overview/strategyBloc
 import { getCompareFunctionBySortType } from './utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'libs/translations';
 
 type Props = {
   strategies: ReturnType<typeof useGetUserStrategies>;
@@ -27,7 +28,7 @@ export const StrategyContent: FC<Props> = ({
   filter,
 }) => {
   const compareFunction = getCompareFunctionBySortType(sort);
-
+  const { t } = useTranslation();
   const filteredStrategies = useMemo(() => {
     const searchLC = search.toLowerCase();
 
@@ -86,7 +87,12 @@ export const StrategyContent: FC<Props> = ({
             <StrategyBlock key={s.id} strategy={s} />
           ))}
           <m.div variants={mItemVariant}>
-            <StrategyBlockCreate />
+            <StrategyBlockCreate
+              title={
+                t('pages.strategyOverview.card.actionButtons.actionButton2') ||
+                ''
+              }
+            />
           </m.div>
         </m.div>
       )}

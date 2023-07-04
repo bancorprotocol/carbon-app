@@ -4,7 +4,7 @@ import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { useContract } from 'hooks/useContract';
 import { useTokens } from 'hooks/useTokens';
 import { ONE_DAY_IN_MS } from 'utils/time';
-import { useCarbonSDK } from 'hooks/useCarbonSDK';
+import { useCarbonInit } from 'hooks/useCarbonInit';
 import { carbonSDK } from 'libs/sdk';
 import { lsService } from 'services/localeStorage';
 
@@ -17,7 +17,7 @@ const getCachedData = () => {
 };
 
 export const useGetTradePairsData = () => {
-  const { isInitialized } = useCarbonSDK();
+  const { isInitialized } = useCarbonInit();
   const { Token } = useContract();
   const { tokens, getTokenById, importToken } = useTokens();
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ReactComponent as IconArrow } from 'assets/icons/arrow-cut.svg';
-import { ImmutableStack } from 'utils/stack';
 import { Menu, MenuItemType } from './useBurgerMenuItems';
+import { ImmutableStack } from 'utils/stack';
+import { ForwardArrow } from 'components/common/forwardArrow';
 
 export enum MenuItemActions {
   Close,
@@ -28,7 +28,9 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
       return {
         content: (
           <div className="flex items-center gap-10">
-            <IconArrow className="h-12 w-7 rotate-180" />
+            <span className="rotate-180">
+              <ForwardArrow />
+            </span>
             <span className="font-weight-500">{title}</span>
           </div>
         ),

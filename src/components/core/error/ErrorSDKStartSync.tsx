@@ -1,14 +1,15 @@
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useTranslation } from 'libs/translations';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const ErrorSDKStartSync = () => {
+  const { t } = useTranslation();
+
   return (
     <ErrorWrapper
       icon={<IconWarning />}
-      title={'Internal Error'}
-      text={
-        'Data sync using Carbon SDK has failed. Please contact support or try again.'
-      }
+      title={t('common.errors.error7')}
+      text={t('common.errors.error8')}
       variant={'error'}
     />
   );

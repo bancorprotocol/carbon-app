@@ -1,10 +1,11 @@
 import { FC } from 'react';
+import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
+import { useGetTokenBalance } from 'libs/queries';
+import { useTranslation } from 'libs/translations';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useGetTokenBalance } from 'libs/queries';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
@@ -16,6 +17,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
   isBudgetOptional?: boolean;
   type: 'deposit' | 'withdraw';
 }> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
+  const { t } = useTranslation();
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
   const tokenBalanceQuery = buy
@@ -32,9 +34,20 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       ? new BigNumber(balance || 0).lt(order.budget)
       : calculatedWalletBalance.lt(0);
 
+  const getTitle = () => {
+    if (type === 'withdraw') {
+      return buy
+        ? t('pages.strategyEdit.section2.titles.title1')
+        : t('pages.strategyEdit.section2.titles.title2');
+    }
+    return buy
+      ? t('pages.strategyEdit.section2.titles.title3')
+      : t('pages.strategyEdit.section2.titles.title4');
+  };
+
   return (
     <div
-      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-left ${
+      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-start ${
         buy
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
@@ -42,24 +55,23 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     >
       <div className="mb-10 flex items-center justify-between">
         <div className="flex items-center">
-          <div>
-            {`${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
-            {buy ? 'Buy' : 'Sell'} Budget
-          </div>
+          <div>{getTitle()}</div>
           {isBudgetOptional && (
-            <div className="ml-8 text-14 font-weight-500 text-white/40">
-              Optional
+            <div className="text-14 font-weight-500 text-white/40 ms-8">
+              {t('pages.strategyEdit.section2.contents.content1')}
             </div>
           )}
         </div>
         <Tooltip
-          element={`Indicate the amount you wish to ${
-            type === 'withdraw' ? 'withdraw' : 'deposit'
-          } from the available "allocated budget"`}
+          element={
+            type === 'withdraw'
+              ? t('pages.strategyEdit.tooltips.tooltip1')
+              : t('pages.strategyEdit.tooltips.tooltip2')
+          }
         />
       </div>
       <TokenInputField
-        className={'mr-4 rounded-16 bg-black p-16'}
+        className={'rounded-16 bg-black p-16 me-4'}
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}
@@ -73,7 +85,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           !insufficientBalance ? 'invisible' : ''
         }`}
       >
-        Insufficient balance
+        {t('pages.strategyEdit.section2.contents.content2')}
       </div>
       <div className="pt-10">
         <EditStrategyAllocatedBudget

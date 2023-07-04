@@ -15,6 +15,8 @@ import {
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useNavigate } from 'libs/routing';
+import { useTranslation } from 'libs/translations';
+import { capitalizeFirstChar } from 'utils/strings';
 
 type Props = {
   base: Token;
@@ -37,6 +39,7 @@ export const BuySellBlock: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
@@ -45,10 +48,17 @@ export const BuySellBlock: FC<Props> = ({
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
-  const titleText = buy ? 'Buy Low' : 'Sell High';
-  const tooltipText = `This section will define the order details in which you are willing to ${
-    buy ? 'buy' : 'sell'
-  } ${base.symbol} at.`;
+  const titleText = buy
+    ? t('pages.strategyCreate.step2.section2.titles.title1')
+    : t('pages.strategyCreate.step2.section2.titles.title2');
+
+  const tooltipText = buy
+    ? t('pages.strategyCreate.step2.tooltips.tooltip1', {
+        token: base.symbol,
+      })
+    : t('pages.strategyCreate.step2.tooltips.tooltip2', {
+        token: base.symbol,
+      });
 
   const title = (
     <>
@@ -68,21 +78,36 @@ export const BuySellBlock: FC<Props> = ({
     <>
       <div
         className={
-          'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+          'flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] me-6'
         }
       >
         1
       </div>
       <Tooltip
         sendEventOnMount={{ buy }}
-        element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
-          base.symbol
-        } at. Make sure the price is in ${quote.symbol} tokens.`}
+        element={
+          buy
+            ? t('pages.strategyCreate.step2.tooltips.tooltip3', {
+                buyToken: base.symbol,
+                sellToken: quote.symbol,
+              })
+            : t('pages.strategyCreate.step2.tooltips.tooltip4', {
+                buyToken: base.symbol,
+                sellToken: quote.symbol,
+              })
+        }
       >
         <div className={'text-14 font-weight-500 text-white/60'}>
-          <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
-          <span className={'ml-8 text-white/80'}>
-            ({quote.symbol} <span className={'text-white/60'}>per 1 </span>
+          <span>
+            {buy
+              ? t('pages.strategyCreate.step2.section2.subtitles.subtitle1')
+              : t('pages.strategyCreate.step2.section2.subtitles.subtitle2')}
+          </span>
+          <span className={'text-white/80 ms-8'}>
+            ({quote.symbol}{' '}
+            <span className={'text-white/60'}>
+              {t('pages.strategyCreate.step2.section2.contents.content3')} 1{' '}
+            </span>
             {base.symbol})
           </span>
         </div>
@@ -113,7 +138,9 @@ export const BuySellBlock: FC<Props> = ({
               }}
               isActive={buy}
             >
-              Buy
+              {capitalizeFirstChar(
+                t('pages.strategyCreate.step2.section2.contents.content1')
+              )}
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => {
@@ -127,7 +154,9 @@ export const BuySellBlock: FC<Props> = ({
               }}
               isActive={!buy}
             >
-              Sell
+              {capitalizeFirstChar(
+                t('pages.strategyCreate.step2.section2.contents.content2')
+              )}
             </TabsMenuButton>
           </TabsMenu>
         </div>
@@ -139,7 +168,7 @@ export const BuySellBlock: FC<Props> = ({
       <div className={'flex items-center pt-10 text-14'}>
         <div
           className={
-            'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+            'flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] me-6'
           }
         >
           2
@@ -148,28 +177,33 @@ export const BuySellBlock: FC<Props> = ({
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? `The amount of ${
-                  quote.symbol
-                } tokens you would like to use in order to buy ${
-                  base.symbol
-                }. ${
+              ? `${t('pages.strategyCreate.step2.tooltips.tooltip6', {
+                  buyToken: base.symbol,
+                  sellToken: quote.symbol,
+                })} ${
                   strategyType === 'recurring'
-                    ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
+                    ? t('pages.strategyCreate.step2.tooltips.tooltip5')
                     : ''
                 }`
-              : `The amount of ${base.symbol} tokens you would like to sell. ${
+              : `${t('pages.strategyCreate.step2.tooltips.tooltip8', {
+                  buyToken: base.symbol,
+                })} ${
                   strategyType === 'recurring'
-                    ? 'Note: this amount will re-fill once the "Buy" order is used by traders.'
+                    ? t('pages.strategyCreate.step2.tooltips.tooltip7')
                     : ''
                 }`
           }
         >
           <div className={'font-weight-500 text-white/60'}>
-            Set {buy ? 'Buy' : 'Sell'} Budget{' '}
+            {buy
+              ? t('pages.strategyCreate.step2.section2.subtitles.subtitle3')
+              : t('pages.strategyCreate.step2.section2.subtitles.subtitle4')}
           </div>
         </Tooltip>
         {isBudgetOptional && (
-          <div className="ml-8 font-weight-500 text-white/40">Optional</div>
+          <div className="font-weight-500 text-white/40 ms-8">
+            {t('pages.strategyCreate.step2.section2.contents.content4')}
+          </div>
         )}
       </div>
       <div>
@@ -187,7 +221,7 @@ export const BuySellBlock: FC<Props> = ({
             !insufficientBalance ? 'invisible' : ''
           }`}
         >
-          Insufficient balance
+          {t('pages.strategyCreate.step2.section2.contents.content5')}
         </div>
       </div>
     </div>

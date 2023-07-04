@@ -6,7 +6,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import BigNumber from 'bignumber.js';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { ModalTradeRoutingRowCell } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRowCell';
-import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
+import { ForwardArrow } from 'components/common/forwardArrow';
 
 type ModalTradeRoutingRowProps = {
   action: Action;
@@ -45,7 +45,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
 
   return (
     <>
-      <div className={'flex items-center space-x-20'}>
+      <div className={'flex items-center space-s-20'}>
         <Checkbox isChecked={isSelected} setIsChecked={onCheckboxClick} />
 
         <ModalTradeRoutingRowCell
@@ -55,13 +55,13 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           selectedFiatCurrency={selectedFiatCurrency}
         />
       </div>
-      <div className={'flex items-center space-x-10'}>
+      <div className={'flex items-center space-s-10'}>
         <div
           className={
             'flex h-18 w-18 items-center justify-center rounded-full bg-silver'
           }
         >
-          <IconArrow className={'w-8'} />
+          <ForwardArrow arrowType="full" />
         </div>
 
         <ModalTradeRoutingRowCell

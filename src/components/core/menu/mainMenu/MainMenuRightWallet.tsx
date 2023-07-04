@@ -18,6 +18,7 @@ import {
   IS_METAMASK_WALLET,
 } from 'libs/web3/web3.utils';
 import { carbonEvents } from 'services/events';
+import { useTranslation } from 'libs/translations';
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   const props = { className: 'w-20' };
@@ -39,6 +40,7 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
 };
 
 export const MainMenuRightWallet: FC = () => {
+  const { t } = useTranslation();
   const {
     user,
     disconnect,
@@ -68,11 +70,11 @@ export const MainMenuRightWallet: FC = () => {
   }, [isSupportedNetwork, isUserBlocked]);
 
   const buttonText = useMemo(() => {
-    if (isUserBlocked) return 'Wallet Blocked';
-    if (!isSupportedNetwork) return 'Wrong Network';
-    if (!user) return 'Connect Wallet';
+    if (isUserBlocked) return t('navBar.walletMenu.states.state2');
+    if (!isSupportedNetwork) return t('navBar.walletMenu.states.state3');
+    if (!user) return t('navBar.walletMenu.states.state1');
     return shortenString(user);
-  }, [isSupportedNetwork, isUserBlocked, user]);
+  }, [isSupportedNetwork, isUserBlocked, t, user]);
 
   const buttonIcon = useMemo(() => {
     const props = { className: 'w-20' };
@@ -95,7 +97,7 @@ export const MainMenuRightWallet: FC = () => {
               carbonEvents.navigation.navWalletClick(undefined);
               onClick();
             }}
-            className={'flex items-center space-x-10 pl-20'}
+            className={'flex items-center ps-20 space-s-10'}
           >
             {buttonIcon}
             <span>{buttonText}</span>
@@ -106,11 +108,11 @@ export const MainMenuRightWallet: FC = () => {
           {isSupportedNetwork ? (
             <div
               className={
-                'flex w-full items-center space-x-10 p-8 font-weight-400'
+                'flex w-full items-center p-8 font-weight-400 space-s-10'
               }
             >
               <IconETHLogo className={'w-16'} />
-              <span>Ethereum Network</span>
+              <span>{t('navBar.walletMenu.items.item1')}</span>
             </div>
           ) : (
             <button
@@ -119,17 +121,17 @@ export const MainMenuRightWallet: FC = () => {
                 'hover:bg-body flex w-full rounded-6 p-8 text-red/80  hover:text-red'
               }
             >
-              Switch Network
+              {t('navBar.walletMenu.items.item2')}
             </button>
           )}
           <button
             onClick={onDisconnect}
             className={
-              'hover:bg-body flex w-full items-center space-x-10 rounded-6 p-8'
+              'hover:bg-body flex w-full items-center rounded-6 p-8 space-s-10'
             }
           >
             <IconDisconnect className={'w-16'} />
-            <span>Disconnect</span>
+            <span>{t('navBar.walletMenu.items.item3')}</span>
           </button>
         </div>
       </DropdownMenu>
@@ -140,7 +142,7 @@ export const MainMenuRightWallet: FC = () => {
     <Button
       variant={buttonVariant}
       onClick={onClickOpenModal}
-      className={'flex items-center space-x-10'}
+      className={'flex items-center space-s-10'}
     >
       {buttonIcon}
       <span>{buttonText}</span>

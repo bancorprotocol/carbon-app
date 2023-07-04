@@ -10,6 +10,7 @@ import {
   StrategyEventType,
   TradeEventType,
 } from 'services/events/types';
+import { useTranslation } from 'libs/translations';
 import {
   handleConfirmationPopupViewEvent,
   handleAfterConfirmationEvent,
@@ -29,14 +30,9 @@ export type ModalCreateConfirmData = {
 
 export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   id,
-  data: {
-    approvalTokens,
-    onConfirm,
-    buttonLabel = 'Confirm',
-    eventData,
-    context,
-  },
+  data: { approvalTokens, onConfirm, buttonLabel, eventData, context },
 }) => {
+  const { t } = useTranslation();
   const { closeModal } = useModal();
   const { approvalQuery, approvalRequired } = useApproval(approvalTokens);
 
@@ -45,8 +41,12 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   }, [context, eventData]);
 
   return (
-    <ModalOrMobileSheet id={id} title="Confirm Transaction" size={'md'}>
-      <h3 className="text-secondary my-10">Approve Tokens</h3>
+    <ModalOrMobileSheet
+      id={id}
+      title={t('modals.confirm.modalTitle')}
+      size={'md'}
+    >
+      <h3 className="text-secondary my-10">{t('modals.confirm.subtitle')}</h3>
       <div className="mb-20 space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (
           <ApproveToken
@@ -71,7 +71,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
           handleAfterConfirmationEvent(eventData, context);
         }}
       >
-        {buttonLabel}
+        {buttonLabel || t('modals.confirm.actionButtons.actionButton1')}
       </Button>
     </ModalOrMobileSheet>
   );

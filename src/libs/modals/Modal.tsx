@@ -53,7 +53,7 @@ export const Modal: FC<ModalProps> = ({
           {isLoading && (
             <div
               className={
-                'statusBar absolute -mt-20 -ml-20 h-6 w-full bg-green/25'
+                'statusBar absolute -mt-20 h-6 w-full bg-green/25 -ms-20'
               }
             />
           )}

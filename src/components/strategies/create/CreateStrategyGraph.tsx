@@ -7,6 +7,7 @@ import { carbonEvents } from 'services/events';
 
 import { FC } from 'react';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
+import { useTranslation } from 'libs/translations';
 
 type Props = Pick<
   UseStrategyCreateReturn,
@@ -18,6 +19,8 @@ export const CreateStrategyGraph: FC<Props> = ({
   showGraph,
   setShowGraph,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`flex flex-col ${showGraph ? 'flex-1' : 'absolute right-20'}`}
@@ -28,7 +31,9 @@ export const CreateStrategyGraph: FC<Props> = ({
         className="flex h-[550px] flex-col rounded-10 bg-silver p-20 pb-40 md:sticky md:top-80"
       >
         <div className="flex items-center justify-between">
-          <h2 className="mb-20 font-weight-500">Price Chart</h2>
+          <h2 className="mb-20 font-weight-500">
+            {t('pages.strategyCreate.step2.chart.title')}
+          </h2>
           <Button
             className={`mb-20 self-end`}
             variant="secondary"
@@ -39,8 +44,10 @@ export const CreateStrategyGraph: FC<Props> = ({
             }}
           >
             <div className="flex items-center justify-center">
-              <IconX className={'w-10 md:mr-12'} />
-              <span className="hidden md:block">Close Chart</span>
+              <IconX className={'w-10 md:me-12'} />
+              <span className="hidden md:block">
+                {t('pages.strategyCreate.step2.chart.actionButton')}
+              </span>
             </div>
           </Button>
         </div>

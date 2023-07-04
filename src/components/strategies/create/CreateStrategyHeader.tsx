@@ -1,11 +1,12 @@
-import { useLocation } from 'libs/routing';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { useMemo } from 'react';
-import { items } from 'components/strategies/create/variants';
-import { m } from 'libs/motion';
-import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { carbonEvents } from 'services/events';
+import { useLocation } from 'libs/routing';
+import { useTranslation } from 'libs/translations';
+import { m } from 'libs/motion';
+import { items } from 'components/strategies/create/variants';
+import { UseStrategyCreateReturn } from 'components/strategies/create';
+import { ForwardArrow } from 'components/common/forwardArrow';
+import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 
 export const CreateStrategyHeader = ({
   showGraph,
@@ -13,21 +14,22 @@ export const CreateStrategyHeader = ({
   setShowGraph,
   strategyDirection,
 }: UseStrategyCreateReturn) => {
+  const { t } = useTranslation();
   const {
     history: { back },
   } = useLocation();
 
   const title = useMemo(() => {
     if (!showOrders) {
-      return 'Create Strategy';
+      return t('pages.strategyCreate.step1.title');
     }
     switch (strategyDirection) {
       case undefined:
-        return 'Set Prices';
+        return t('pages.strategyCreate.step2.title', { count: 2 });
       default:
-        return 'Set Price';
+        return t('pages.strategyCreate.step2.title', { count: 1 });
     }
-  }, [showOrders, strategyDirection]);
+  }, [showOrders, strategyDirection, t]);
 
   return (
     <m.div
@@ -42,7 +44,9 @@ export const CreateStrategyHeader = ({
           onClick={() => back()}
           className="h-40 w-40 rounded-full bg-emphasis"
         >
-          <IconChevron className="mx-auto w-14 rotate-90" />
+          <div className="rotate-180">
+            <ForwardArrow className="mx-auto w-14" />
+          </div>
         </button>
         {title}
       </div>

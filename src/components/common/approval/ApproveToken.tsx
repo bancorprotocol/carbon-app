@@ -16,6 +16,7 @@ import {
   TradeEventType,
 } from 'services/events/types';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useTranslation } from 'libs/translations';
 
 type Props = {
   data?: ApprovalTokenResult;
@@ -32,12 +33,12 @@ export const ApproveToken: FC<Props> = ({
   eventData,
   context,
 }) => {
+  const { t } = useTranslation();
   const { dispatchNotification } = useNotifications();
   const { user } = useWeb3();
   const { getTokenById } = useTokens();
   const token = getTokenById(data?.address || '');
   const mutation = useSetUserApproval();
-
   const [isLimited, setIsLimited] = useState(false);
   const cache = useQueryClient();
   const [txBusy, setTxBusy] = useState(false);
@@ -159,9 +160,9 @@ export const ApproveToken: FC<Props> = ({
 
   if (!data || !token) {
     if (isLoading) {
-      return <div>is loading</div>;
+      return <div>{t('modals.confirm.contents.content2')}</div>;
     }
-    return <div>Unknown Error</div>;
+    return <div>{t('modals.confirm.contents.content3')}</div>;
   }
 
   return (
@@ -172,7 +173,7 @@ export const ApproveToken: FC<Props> = ({
         }
       >
         <div className={'space-y-6'}>
-          <div className={'flex items-center space-x-10'}>
+          <div className={'flex items-center space-s-10'}>
             <Imager
               alt={'Token'}
               src={token.logoURI}
@@ -184,19 +185,19 @@ export const ApproveToken: FC<Props> = ({
 
         {data.approvalRequired ? (
           txBusy ? (
-            <div>Waiting for Confirmation</div>
+            <div>{t('modals.confirm.statuses.status1')}</div>
           ) : (
             <div
               className={'flex h-82 flex-col items-end justify-center gap-10'}
             >
-              <div className={'flex items-center space-x-8'}>
-                <div className={'flex items-center space-x-10'}>
+              <div className={'flex items-center space-s-8'}>
+                <div className={'flex items-center space-s-10'}>
                   <div
                     className={`font-mono text-12 font-weight-500 transition-all ${
                       isLimited ? 'text-white/60' : 'text-white/85'
                     }`}
                   >
-                    Unlimited
+                    {t('modals.confirm.actionButtons.actionButton2')}
                   </div>
                   <Switch
                     variant={isLimited ? 'secondary' : 'white'}
@@ -213,26 +214,29 @@ export const ApproveToken: FC<Props> = ({
                 size={'sm'}
                 className={'px-10 text-14'}
               >
-                {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}
+                {data.nullApprovalRequired
+                  ? t('modals.confirm.actionButtons.actionButton4')
+                  : t('modals.confirm.actionButtons.actionButton3')}
               </Button>
             </div>
           )
         ) : (
           <div className={'text-green'}>
-            {txSuccess ? 'Approved' : 'Pre-Approved'}
+            {txSuccess
+              ? t('modals.confirm.statuses.status2')
+              : t('modals.confirm.statuses.status3')}
           </div>
         )}
 
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className={'flex space-x-20 font-mono text-14 text-warning-500'}>
+        <div className={'flex font-mono text-14 text-warning-500 space-s-20'}>
           <div>
             <IconWarning className={'w-16'} />
           </div>
           <span>
-            Before updating {token.symbol} allowance, you are required to revoke
-            it to 0.
+            {t('modals.confirm.contents.content1', { token: token.symbol })}
           </span>
         </div>
       )}
