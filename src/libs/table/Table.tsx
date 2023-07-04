@@ -11,6 +11,7 @@ import { TFoot } from 'libs/table/TFoot';
 import { TPagination } from 'libs/table/TPagination';
 import { useState } from 'react';
 import { SortingState } from 'libs/table/types';
+import { cn } from 'utils/helpers';
 
 interface TableProps<D extends object> {
   columns: ColumnDef<D, any>[];
@@ -38,13 +39,13 @@ export const Table = <D extends object>({
   });
 
   return (
-    <>
+    <div className={cn('flex', 'flex-col', 'rounded-10', 'bg-silver')}>
       <table>
         <THead table={table} />
         <TBody table={table} />
         <TFoot table={table} />
       </table>
       <TPagination table={table} />
-    </>
+    </div>
   );
 };
