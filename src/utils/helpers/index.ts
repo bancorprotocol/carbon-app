@@ -3,6 +3,8 @@ import numbro from 'numbro';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { FiatSymbol } from 'store/useFiatCurrencyStore';
 import { TokenPair } from '@bancor/carbon-sdk';
+import { ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export const isProduction = window
   ? window.location.host.includes('carbondefi.xyz')
@@ -250,4 +252,8 @@ export const getLowestBits = (decimal: string, bits: number = 128): string => {
   const bigIntFromLowerBits = BigInt('0b' + lowerBits);
 
   return bigIntFromLowerBits.toString();
+};
+
+export const cn = (...inputs: ClassValue[]) => {
+  return twMerge(clsx(inputs));
 };
