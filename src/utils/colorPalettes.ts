@@ -1,0 +1,1 @@
+export const DATA_TABLE_COLOR_PALETTE = ['#1AB99B', '#F0C514', '#81CCB8'];
