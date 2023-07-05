@@ -5,6 +5,7 @@ export {
   useNavigate,
   useRouter,
   useSearch,
+  useMatch,
 } from '@tanstack/react-location';
 export type { MakeGenerics, LinkPropsType } from '@tanstack/react-location';
 export { PathNames } from 'libs/routing/routes';
