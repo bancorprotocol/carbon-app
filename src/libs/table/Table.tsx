@@ -4,6 +4,7 @@ import {
   ColumnDef,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
 } from '@tanstack/react-table';
 import { THead } from 'libs/table/THead';
 import { TBody } from 'libs/table/TBody';
@@ -17,12 +18,14 @@ interface TableProps<D extends object> {
   columns: ColumnDef<D, any>[];
   data: D[];
   initialSorting?: SortingState<D>;
+  onRowClick?: (row: Row<D>) => void;
 }
 
 export const Table = <D extends object>({
   data,
   columns,
   initialSorting = [],
+  onRowClick,
 }: TableProps<D>) => {
   const [sorting, setSorting] = useState<SortingState<D>>(initialSorting);
 
@@ -42,7 +45,7 @@ export const Table = <D extends object>({
     <div className={cn('flex', 'flex-col', 'rounded-10', 'bg-silver')}>
       <table>
         <THead table={table} />
-        <TBody table={table} />
+        <TBody table={table} onRowClick={onRowClick} />
         <TFoot table={table} />
       </table>
       <TPagination table={table} />

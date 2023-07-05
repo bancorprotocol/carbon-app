@@ -1,7 +1,12 @@
-import { flexRender, Table } from '@tanstack/react-table';
+import { flexRender, Row, Table } from '@tanstack/react-table';
 import { cn } from 'utils/helpers';
 
-export const TBody = <D extends object>({ table }: { table: Table<D> }) => {
+interface Props<D> {
+  table: Table<D>;
+  onRowClick?: (row: Row<D>) => void;
+}
+
+export const TBody = <D extends object>({ table, onRowClick }: Props<D>) => {
   return (
     <tbody className={cn('border-b-2', 'border-emphasis')}>
       {table.getRowModel().rows.map((row) => (
@@ -11,8 +16,12 @@ export const TBody = <D extends object>({ table }: { table: Table<D> }) => {
             'h-64',
             'text-18',
             'font-weight-500',
-            'hover:bg-darkSilver'
+            'hover:bg-darkSilver',
+            onRowClick && 'cursor-pointer'
           )}
+          onClick={() => {
+            onRowClick && onRowClick(row);
+          }}
         >
           {row.getVisibleCells().map((cell) => (
             <td key={cell.id}>
