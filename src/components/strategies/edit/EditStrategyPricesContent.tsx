@@ -56,13 +56,13 @@ export const EditStrategyPricesContent = ({
   const handleOnActionClick = () => {
     const newOrder0 = {
       balance: strategy.order0.balance,
-      startRate: order0.isRange ? order0.min : order0.price,
-      endRate: order0.isRange ? order0.max : order0.price,
+      startRate: (order0.isRange ? order0.min : order0.price) || '0',
+      endRate: (order0.isRange ? order0.max : order0.price) || '0',
     };
     const newOrder1 = {
       balance: strategy.order1.balance,
-      startRate: order1.isRange ? order1.min : order1.price,
-      endRate: order1.isRange ? order1.max : order1.price,
+      startRate: (order1.isRange ? order1.min : order1.price) || '0',
+      endRate: (order1.isRange ? order1.max : order1.price) || '0',
     };
 
     type === 'renew'
@@ -93,9 +93,11 @@ export const EditStrategyPricesContent = ({
   };
 
   const isOrderValid = (order: OrderCreate) => {
-    return order.isRange
-      ? +order.min > 0 && +order.max > 0 && +order.max > +order.min
-      : +order.price > 0;
+    if (!order.isRange) {
+      return true;
+    }
+
+    return +order.min > 0 && +order.max > 0 && +order.max > +order.min;
   };
 
   const loadingChildren = useMemo(() => {
