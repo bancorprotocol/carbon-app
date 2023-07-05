@@ -6,6 +6,7 @@ import { Token } from 'libs/tokens';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { Imager } from 'components/common/imager/Imager';
 import { DATA_TABLE_COLOR_PALETTE } from 'utils/colorPalettes';
+import { useNavigate } from 'libs/routing';
 
 type Props = {
   data: StrategyPortfolioData[];
@@ -61,11 +62,16 @@ const tableColumns = [
 ];
 
 export const PortfolioAllTokensDesktop: FC<Props> = ({ data }) => {
+  const navigate = useNavigate();
+
   return (
     <Table<StrategyPortfolioData>
       columns={tableColumns}
       data={data}
       initialSorting={[{ id: 'share', desc: true }]}
+      onRowClick={(row) =>
+        navigate({ to: `/portfolio/${row.original.token.address}` })
+      }
     />
   );
 };

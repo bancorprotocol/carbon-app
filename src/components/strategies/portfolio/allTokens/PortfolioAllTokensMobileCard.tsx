@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { DATA_TABLE_COLOR_PALETTE } from 'utils/colorPalettes';
 import { Imager } from 'components/common/imager/Imager';
+import { Link } from 'libs/routing';
 
 type Props = {
   index: number;
@@ -11,7 +12,8 @@ type Props = {
 
 export const PortfolioAllTokensMobileCard: FC<Props> = ({ index, data }) => {
   return (
-    <div
+    <Link
+      to={`/portfolio/${data.token.address}`}
       className={cn(
         'flex',
         'items-center',
@@ -57,7 +59,7 @@ export const PortfolioAllTokensMobileCard: FC<Props> = ({ index, data }) => {
           value={`$${prettifyNumber(data.value)} USD`}
         />
       </div>
-    </div>
+    </Link>
   );
 };
 

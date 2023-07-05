@@ -1,6 +1,5 @@
 import { useWeb3 } from 'libs/web3';
 import { WalletConnect } from 'components/common/walletConnect';
-import { StrategyContent } from 'components/strategies/overview';
 import { StrategyPageTitleWidget } from 'components/strategies/overview/StrategyPageTitleWidget';
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
@@ -11,7 +10,7 @@ import {
 } from 'components/strategies/overview/StrategyFilterSort';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { lsService } from 'services/localeStorage';
-import { Outlet } from 'libs/routing';
+import { Link, Outlet } from 'libs/routing';
 import { useTranslation } from 'libs/translations';
 
 export const StrategiesPage = () => {
@@ -55,17 +54,8 @@ export const StrategiesPage = () => {
       }
       hideTitle={currentBreakpoint === 'sm' && !user}
     >
-      <Outlet />
-      {user ? (
-        <StrategyContent
-          strategies={strategies}
-          search={search}
-          filter={filter}
-          sort={sort}
-        />
-      ) : (
-        <WalletConnect />
-      )}
+      <Link to={'portfolio'}>Portfolio</Link>
+      {user ? <Outlet /> : <WalletConnect />}
     </Page>
   );
 };
