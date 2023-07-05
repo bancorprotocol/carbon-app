@@ -3,7 +3,7 @@ import { cn } from 'utils/helpers';
 
 export const TBody = <D extends object>({ table }: { table: Table<D> }) => {
   return (
-    <tbody>
+    <tbody className={cn('border-b-2', 'border-emphasis')}>
       {table.getRowModel().rows.map((row) => (
         <tr
           key={row.id}

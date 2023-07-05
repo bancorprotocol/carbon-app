@@ -3,10 +3,11 @@ import {
   StrategyPortfolioData,
   useStrategyPortfolio,
 } from 'components/strategies/portfolio';
-import { cn } from 'utils/helpers';
+import { cn, prettifyNumber } from 'utils/helpers';
 import { CellContext } from '@tanstack/react-table';
 import { Token } from 'libs/tokens';
 import { Imager } from 'components/common/imager/Imager';
+import { Page } from 'components/common/page';
 
 const colorPalette = ['#1AB99B', '#F0C514', '#81CCB8'];
 
@@ -36,20 +37,22 @@ const CellToken = (info: CellContext<StrategyPortfolioData, Token>) => {
 
 const tableColumns = [
   columnHelper.accessor('token', {
-    header: 'Token',
+    header: () => <span className={cn('ps-20')}>Token</span>,
     cell: CellToken,
   }),
   columnHelper.accessor('share', {
     header: 'Share',
-    cell: (info) => info.getValue().toString(),
+    cell: (info) => `${info.getValue().toFixed(2)} %`,
   }),
   columnHelper.accessor('amount', {
     header: 'Amount',
-    cell: (info) => info.getValue().toString(),
+    cell: (info) =>
+      `${prettifyNumber(info.getValue())} ${info.row.original.token.symbol}`,
   }),
   columnHelper.accessor('value', {
     header: 'Value',
-    cell: (info) => info.getValue().toString(),
+    // TODO dont hardcode fiat currency
+    cell: (info) => `$${prettifyNumber(info.getValue())} USD`,
   }),
   columnHelper.accessor('strategies', {
     header: 'Strategies',
@@ -61,7 +64,7 @@ export const StrategiesPortfolioPage = () => {
   const { tableData, totalValue, isLoading } = useStrategyPortfolio();
 
   return (
-    <>
+    <Page title={'portfolio'}>
       <div>
         {!isLoading && (
           <div>
@@ -75,6 +78,6 @@ export const StrategiesPortfolioPage = () => {
           </div>
         )}
       </div>
-    </>
+    </Page>
   );
 };
