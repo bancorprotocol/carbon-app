@@ -1,0 +1,1 @@
+export { useStrategyPortfolioToken } from './useStrategyPortfolioToken';

@@ -12,6 +12,7 @@ export interface StrategyPortfolioData {
   amount: BigNumber;
   value: BigNumber;
   strategies: Strategy[];
+  fiatPrice: number;
 }
 
 export const useStrategyPortfolio = () => {
@@ -90,6 +91,7 @@ export const useStrategyPortfolio = () => {
               amount,
               value,
               strategies: [strategy],
+              fiatPrice: tokenPrice,
             };
 
             map.set(token.symbol, item);

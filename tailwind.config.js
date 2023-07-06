@@ -342,6 +342,7 @@ module.exports = {
         'serif',
       ],
       mono: [
+        'GT America Mono',
         'ui-monospace',
         'SFMono-Regular',
         'Menlo',
