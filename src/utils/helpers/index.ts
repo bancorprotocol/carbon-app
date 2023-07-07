@@ -257,3 +257,22 @@ export const getLowestBits = (decimal: string, bits: number = 128): string => {
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
+
+export const sortObjectArray = <D extends object>(
+  array: D[],
+  property: keyof D,
+  customSort?: (a: D, b: D) => 1 | -1 | 0
+): D[] => {
+  return array.sort(
+    customSort
+      ? customSort
+      : (a, b) => {
+          if (a[property] > b[property]) {
+            return 1;
+          } else if (a[property] < b[property]) {
+            return -1;
+          }
+          return 0;
+        }
+  );
+};

@@ -2,6 +2,7 @@ import { useStrategyPortfolio } from 'components/strategies/portfolio';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { Order, Strategy } from 'libs/queries';
+import { sortObjectArray } from 'utils/helpers';
 
 export interface StrategyPortfolioTokenData {
   amount: BigNumber;
@@ -23,7 +24,7 @@ export const useStrategyPortfolioToken = ({ address }: { address: string }) => {
     if (!selectedToken) {
       return [];
     }
-    return selectedToken.strategies.map((strategy) => {
+    const unsorted = selectedToken.strategies.map((strategy) => {
       let amount = new BigNumber(0);
       let value = new BigNumber(0);
       let share = new BigNumber(0);
@@ -49,6 +50,10 @@ export const useStrategyPortfolioToken = ({ address }: { address: string }) => {
         strategy,
       };
     });
+
+    return sortObjectArray(unsorted, 'share', (a, b) =>
+      a.share.gt(b.share) ? -1 : 1
+    );
   }, [address, selectedToken]);
 
   return { tableData, isLoading, selectedToken };

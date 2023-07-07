@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { sortObjectArray } from 'utils/helpers';
 
 export interface StrategyPortfolioData {
   token: Token;
@@ -71,7 +72,7 @@ export const useStrategyPortfolio = () => {
     const data = strategiesQuery.data;
     if (!data) return [];
 
-    return data.reduce(
+    const unsorted = data.reduce(
       ((map) => (acc: StrategyPortfolioData[], strategy) => {
         const handleData = (token: Token, order: Order) => {
           const fiatPriceDict = tokenPriceMap.get(token.address);
@@ -112,6 +113,10 @@ export const useStrategyPortfolio = () => {
         return acc;
       })(new Map<string, StrategyPortfolioData>()),
       []
+    );
+    // TODO cleanup sort function
+    return sortObjectArray(unsorted, 'share', (a, b) =>
+      a.share.gt(b.share) ? -1 : 1
     );
   }, [selectedFiatCurrency, strategiesQuery.data, tokenPriceMap, totalValue]);
 

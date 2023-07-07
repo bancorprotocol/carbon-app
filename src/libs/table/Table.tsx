@@ -19,6 +19,7 @@ interface TableProps<D extends object> {
   data: D[];
   initialSorting?: SortingState<D>;
   onRowClick?: (row: Row<D>) => void;
+  manualSorting?: boolean;
 }
 
 export const Table = <D extends object>({
@@ -26,6 +27,7 @@ export const Table = <D extends object>({
   columns,
   initialSorting = [],
   onRowClick,
+  manualSorting,
 }: TableProps<D>) => {
   const [sorting, setSorting] = useState<SortingState<D>>(initialSorting);
 
@@ -39,6 +41,8 @@ export const Table = <D extends object>({
     getPaginationRowModel: getPaginationRowModel<D>(),
     getSortedRowModel: getSortedRowModel<D>(),
     onSortingChange: setSorting,
+    manualSorting,
+    enableSorting: !manualSorting,
   });
 
   return (

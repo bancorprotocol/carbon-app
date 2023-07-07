@@ -68,10 +68,10 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({ data }) => {
     <Table<StrategyPortfolioData>
       columns={tableColumns}
       data={data}
-      initialSorting={[{ id: 'share', desc: true }]}
       onRowClick={(row) =>
         navigate({ to: `/portfolio/${row.original.token.address}` })
       }
+      manualSorting
     />
   );
 };
