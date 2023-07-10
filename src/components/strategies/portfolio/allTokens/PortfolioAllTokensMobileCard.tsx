@@ -1,7 +1,7 @@
 import { StrategyPortfolioData } from 'components/strategies/portfolio/useStrategyPortfolio';
 import { FC } from 'react';
 import { cn, prettifyNumber } from 'utils/helpers';
-import { DATA_TABLE_COLOR_PALETTE } from 'utils/colorPalettes';
+import { getColorByIndex } from 'utils/colorPalettes';
 import { Imager } from 'components/common/imager/Imager';
 import { Link } from 'libs/routing';
 
@@ -25,7 +25,7 @@ export const PortfolioAllTokensMobileCard: FC<Props> = ({ index, data }) => {
     >
       <div
         className={cn('w-4', 'h-88', 'rounded-r-2')}
-        style={{ backgroundColor: DATA_TABLE_COLOR_PALETTE[index] }}
+        style={{ backgroundColor: getColorByIndex(index) }}
       />
 
       <div

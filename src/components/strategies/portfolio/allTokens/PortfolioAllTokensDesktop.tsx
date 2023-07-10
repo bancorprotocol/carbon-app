@@ -5,7 +5,7 @@ import { CellContext } from '@tanstack/react-table';
 import { Token } from 'libs/tokens';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { Imager } from 'components/common/imager/Imager';
-import { DATA_TABLE_COLOR_PALETTE } from 'utils/colorPalettes';
+import { getColorByIndex } from 'utils/colorPalettes';
 import { useNavigate } from 'libs/routing';
 
 type Props = {
@@ -23,7 +23,7 @@ const CellToken = (info: CellContext<StrategyPortfolioData, Token>) => {
       <div
         className={cn('h-32', 'w-4', 'bg-blue', 'rounded-r-2')}
         style={{
-          backgroundColor: DATA_TABLE_COLOR_PALETTE[i],
+          backgroundColor: getColorByIndex(i),
         }}
       />
       <Imager

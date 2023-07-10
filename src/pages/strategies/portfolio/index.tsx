@@ -2,35 +2,24 @@ import {
   useStrategyPortfolio,
   PortfolioAllTokens,
 } from 'components/strategies/portfolio';
-import { PortfolioPieChart } from 'components/strategies/portfolio/allTokens/PortfolioPieChart';
-import { cn } from 'utils/helpers';
+import { usePortfolioAllTokens } from 'components/strategies/portfolio/allTokens/usePortfolioAllTokens';
+import { PortfolioLayout } from 'components/strategies/portfolio/PortfolioLayout';
+import { PortfolioPieChart } from 'components/strategies/portfolio/token/PortfolioTokenPieChart';
 
 export const StrategiesPortfolioPage = () => {
   const { tableData, totalValue, isLoading } = useStrategyPortfolio();
+  const { pieChartOptions } = usePortfolioAllTokens(tableData);
 
   return (
-    <>
-      {!isLoading && (
-        <div className={cn('flex space-x-20')}>
-          <div
-            className={
-              'relative h-[400px] w-[400px] flex-shrink-0 rounded-10 bg-silver'
-            }
-          >
-            <div
-              className={
-                'absolute flex h-full w-full items-center justify-center'
-              }
-            >
-              {totalValue.toString()}
-            </div>
-            <PortfolioPieChart data={tableData} />
-          </div>
-          <div className={cn('w-full')}>
-            <PortfolioAllTokens data={tableData} />
-          </div>
-        </div>
-      )}
-    </>
+    <PortfolioLayout
+      isLoading={isLoading}
+      tableElement={<PortfolioAllTokens data={tableData} />}
+      pieChartElement={
+        <PortfolioPieChart
+          options={pieChartOptions}
+          centerElement={totalValue.toFixed(2)}
+        />
+      }
+    />
   );
 };

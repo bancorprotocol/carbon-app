@@ -1,3 +1,6 @@
+import { PortfolioLayout } from 'components/strategies/portfolio/PortfolioLayout';
+import { PortfolioPieChart } from 'components/strategies/portfolio/token/PortfolioTokenPieChart';
+import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
 import { useMatch } from 'libs/routing';
 import { useStrategyPortfolioToken } from 'components/strategies/portfolio';
 import { createColumnHelper, Table } from 'libs/table';
@@ -40,22 +43,26 @@ export const StrategiesPortfolioTokenPage = () => {
   const { tableData, isLoading, selectedToken } = useStrategyPortfolioToken({
     address,
   });
+  const { pieChartOptions } = usePortfolioToken(tableData);
 
   return (
-    <div>
-      PortfolioToken: {address}
-      <div>
-        <div>
-          Total Value {selectedToken?.value.toString()}{' '}
-          {selectedToken?.token.symbol || null}
-        </div>
-      </div>
-      {/*<pre>{JSON.stringify(tableData, null, 2)}</pre>*/}
-      <Table<StrategyPortfolioTokenData>
-        columns={tableColumns}
-        data={tableData}
-        initialSorting={[{ id: 'share', desc: true }]}
-      />
-    </div>
+    <PortfolioLayout
+      isLoading={isLoading}
+      tableElement={
+        <Table<StrategyPortfolioTokenData>
+          columns={tableColumns}
+          data={tableData}
+          initialSorting={[{ id: 'share', desc: true }]}
+        />
+      }
+      pieChartElement={
+        <PortfolioPieChart
+          options={pieChartOptions}
+          centerElement={`${selectedToken?.value.toString()} ${
+            selectedToken?.token.symbol || null
+          }`}
+        />
+      }
+    />
   );
 };

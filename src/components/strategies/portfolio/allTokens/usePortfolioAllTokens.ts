@@ -1,18 +1,17 @@
-import { Highcharts, HighchartsReact, Options } from 'libs/charts';
 import { StrategyPortfolioData } from 'components/strategies/portfolio/useStrategyPortfolio';
-import { DATA_TABLE_COLOR_PALETTE } from 'utils/colorPalettes';
+import { useBreakpoints } from 'hooks/useBreakpoints';
+import { Options } from 'libs/charts';
+import { getColorByIndex } from 'utils/colorPalettes';
 import { prettifyNumber } from 'utils/helpers';
 
-export const PortfolioPieChart = ({
-  data,
-}: {
-  data: StrategyPortfolioData[];
-}) => {
-  const options: Options = {
+export const usePortfolioAllTokens = (data: StrategyPortfolioData[]) => {
+  const { belowBreakpoint } = useBreakpoints();
+
+  const pieChartOptions: Options = {
     chart: {
       type: 'pie',
       backgroundColor: 'transparent',
-      height: 400,
+      height: belowBreakpoint('md') ? '100%' : 400,
     },
     title: {
       text: '',
@@ -36,7 +35,7 @@ export const PortfolioPieChart = ({
         return (
           '<div class="p-10 text-14 text-white !font-weight-500 space-y-12">' +
           '<div class="flex items-center w-[230px] space-x-10">' +
-          '<img width="30" height="30" src="' +
+          '<img alt="Token Logo" width="30" height="30" src="' +
           data[this.colorIndex].token.logoURI +
           '" />' +
           '<span class="text-16">' +
@@ -60,6 +59,7 @@ export const PortfolioPieChart = ({
           '<div class="flex justify-between">' +
           '<span class="text-white/60">Value</span>' +
           prettifyNumber(data[this.colorIndex].value) +
+          // TODO dont hardcode fiat currency
           ' ????' +
           '</div>' +
           '</div>'
@@ -78,12 +78,12 @@ export const PortfolioPieChart = ({
         data: data.map((item, i) => ({
           name: item.token.symbol,
           y: item.share.toNumber(),
-          color: DATA_TABLE_COLOR_PALETTE[i],
+          color: getColorByIndex(i),
           borderColor: '#161617',
         })),
       },
     ],
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return { pieChartOptions };
 };

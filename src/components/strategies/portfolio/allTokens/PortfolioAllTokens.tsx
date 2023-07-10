@@ -11,7 +11,7 @@ type Props = {
 export const PortfolioAllTokens: FC<Props> = ({ data }) => {
   const { belowBreakpoint } = useBreakpoints();
 
-  if (belowBreakpoint('md')) {
+  if (belowBreakpoint('lg')) {
     return <PortfolioAllTokensMobile data={data} />;
   }
 
