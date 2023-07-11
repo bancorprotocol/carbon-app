@@ -13,6 +13,7 @@ type Props = {
 export const PortfolioAllTokensMobileCard: FC<Props> = ({ index, data }) => {
   return (
     <Link
+      // TODO remove hardcoded path
       to={`/portfolio/${data.token.address}`}
       className={cn(
         'flex',
@@ -25,6 +26,7 @@ export const PortfolioAllTokensMobileCard: FC<Props> = ({ index, data }) => {
     >
       <div
         className={cn('w-4', 'h-88', 'rounded-r-2')}
+        // TODO refactor to use tailwind utility
         style={{ backgroundColor: getColorByIndex(index) }}
       />
 

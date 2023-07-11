@@ -1,47 +1,40 @@
+import { StrategyPageTabs } from 'components/strategies/StrategyPageTabs';
 import { useWeb3 } from 'libs/web3';
 import { WalletConnect } from 'components/common/walletConnect';
 import { StrategyPageTitleWidget } from 'components/strategies/overview/StrategyPageTitleWidget';
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
-import { useState } from 'react';
-import {
-  StrategyFilter,
-  StrategySort,
-} from 'components/strategies/overview/StrategyFilterSort';
-import { useBreakpoints } from 'hooks/useBreakpoints';
-import { lsService } from 'services/localeStorage';
-import { Link, Outlet } from 'libs/routing';
-import { useTranslation } from 'libs/translations';
+import { useMemo } from 'react';
+import { Outlet, useLocation } from 'libs/routing';
+import { useStore } from 'store';
+import { cn } from 'utils/helpers';
 
 export const StrategiesPage = () => {
-  const { t } = useTranslation();
+  const {
+    current: { pathname },
+  } = useLocation();
   const { user } = useWeb3();
-  const { currentBreakpoint } = useBreakpoints();
   const strategies = useGetUserStrategies();
-  const [search, setSearch] = useState('');
-  const [sort, _setSort] = useState<StrategySort>(
-    lsService.getItem('strategyOverviewSort') || StrategySort.Old
-  );
-  const [filter, _setFilter] = useState<StrategyFilter>(
-    lsService.getItem('strategyOverviewFilter') || StrategyFilter.All
-  );
+  const {
+    strategies: { search, setSearch, sort, setSort, filter, setFilter },
+  } = useStore();
 
-  const setSort = (sort: StrategySort) => {
-    _setSort(sort);
-    lsService.setItem('strategyOverviewSort', sort);
-  };
+  const showFilter = useMemo(() => {
+    if (strategies.data) {
+      return strategies.data.length > 2;
+    }
 
-  const setFilter = (filter: StrategyFilter) => {
-    _setFilter(filter);
-    lsService.setItem('strategyOverviewFilter', filter);
-  };
+    return false;
+  }, [strategies.data]);
 
   return (
-    <Page
-      title={t('pages.strategyOverview.header.title', {
-        count: strategies.data?.length || 0,
-      })}
-      widget={
+    <Page>
+      <div className={cn('mb-20 flex items-center justify-between')}>
+        <StrategyPageTabs
+          currentPathname={pathname}
+          strategyCount={strategies.data?.length || 0}
+        />
+
         <StrategyPageTitleWidget
           sort={sort}
           filter={filter}
@@ -49,12 +42,10 @@ export const StrategiesPage = () => {
           setFilter={setFilter}
           search={search}
           setSearch={setSearch}
-          showFilter={!!(strategies.data && strategies.data.length > 2)}
+          showFilter={showFilter}
         />
-      }
-      hideTitle={currentBreakpoint === 'sm' && !user}
-    >
-      <Link to={'portfolio'}>Portfolio</Link>
+      </div>
+
       {user ? <Outlet /> : <WalletConnect />}
     </Page>
   );

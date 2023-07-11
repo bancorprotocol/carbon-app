@@ -43,6 +43,7 @@ export const StrategiesPortfolioTokenPage = () => {
   const { tableData, isLoading, selectedToken } = useStrategyPortfolioToken({
     address,
   });
+
   const { pieChartOptions } = usePortfolioToken(tableData);
 
   return (
