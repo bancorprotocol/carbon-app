@@ -25,35 +25,46 @@ export const StrategyPageTabs = ({ strategyCount, currentPathname }: Props) => {
   ];
 
   return (
-    <div>
-      <div
-        className={cn(
-          'inline-flex',
-          'space-x-10',
-          'rounded-full',
-          'border-silver',
-          'p-5',
-          'border-2'
-        )}
-      >
-        {tabs.map(({ label, href, icon, badge }) => (
-          <Link to={href}>
-            <Button variant={currentPathname === href ? 'secondary' : 'black'}>
-              {icon}
-              <span className={'ml-10'}>{label}</span>
-              {badge !== undefined && (
-                <span
-                  className={
-                    'ml-10 flex h-18 w-18 items-center justify-center rounded-full bg-white/10 text-10'
-                  }
-                >
-                  {badge}
-                </span>
-              )}
-            </Button>
-          </Link>
-        ))}
-      </div>
+    <div
+      className={cn(
+        'h-40',
+        'w-full md:w-auto',
+        'flex',
+        'space-x-10',
+        'rounded-full',
+        'border-silver',
+        'border-2',
+        'p-4'
+      )}
+    >
+      {tabs.map(({ label, href, icon, badge }) => (
+        <Link to={href} key={href} className={'w-full'}>
+          <Button
+            variant={currentPathname === href ? 'secondary' : 'black'}
+            className={cn('h-full', '!w-full md:w-auto')}
+          >
+            {icon}
+            <span className={'ml-10'}>{label}</span>
+            {badge !== undefined && (
+              <span
+                className={cn(
+                  'ml-10',
+                  'flex',
+                  'h-18',
+                  'w-18',
+                  'items-center',
+                  'justify-center',
+                  'rounded-full',
+                  'bg-white/10',
+                  'text-10'
+                )}
+              >
+                {badge}
+              </span>
+            )}
+          </Button>
+        </Link>
+      ))}
     </div>
   );
 };
