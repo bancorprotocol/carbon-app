@@ -18,16 +18,16 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
     },
     plotOptions: {
       pie: {
-        slicedOffset: 10,
-        borderWidth: 6,
-        borderColor: '#161617 !important',
+        //slicedOffset: 10,
+        //borderWidth: 6,
+        borderColor: 'transparent',
       },
     },
     credits: {
       enabled: false,
     },
     tooltip: {
-      borderRadius: 12,
+      //borderRadius: 12,
       backgroundColor: '#212123',
       borderWidth: 0,
       useHTML: true,

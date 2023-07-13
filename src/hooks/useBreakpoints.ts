@@ -40,16 +40,14 @@ export const useBreakpoints = () => {
     [width]
   );
 
-  useEffect(() => {
-    const track = (innerWidth?: number) => {
-      setWidth(innerWidth || defaultWidth);
-    };
-    window?.addEventListener('resize', (e) =>
-      // @ts-ignore
-      track(e.currentTarget?.innerWidth)
-    );
-    return () => window?.removeEventListener('resize', () => track());
+  const track = useCallback(() => {
+    setWidth(window.innerWidth || defaultWidth);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('resize', track);
+    return () => window.removeEventListener('resize', track);
+  }, [track]);
 
   return { width, currentBreakpoint, aboveBreakpoint, belowBreakpoint };
 };
