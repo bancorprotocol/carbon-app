@@ -23,6 +23,7 @@ const buildPriceResponse = (
       headers: {
         'content-type': 'application/json',
         'Cache-Control': 'max-age:60',
+        expires: new Date(Date.now() + 60 * 1000).toUTCString(),
       },
     }
   );
