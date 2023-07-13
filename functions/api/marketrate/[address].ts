@@ -55,9 +55,6 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   const invalidRequest = validateRequest(request, address);
   if (invalidRequest) return invalidRequest;
 
-  // tmp: delete old cache cache
-  await caches.delete('default');
-
   const cache = await caches.open('marketrate');
 
   const match = await cache.match(request);
