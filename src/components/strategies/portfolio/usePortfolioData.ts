@@ -16,7 +16,7 @@ export interface PortfolioData {
   fiatPrice: number;
 }
 
-export const usePortfolio = () => {
+export const usePortfolioData = () => {
   const { selectedFiatCurrency } = useFiatCurrency();
   const strategiesQuery = useGetUserStrategies();
 

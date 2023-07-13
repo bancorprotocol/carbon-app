@@ -1,3 +1,5 @@
+import { CellContext } from '@tanstack/react-table';
+import { getColorByIndex } from 'utils/colorPalettes';
 import { PortfolioTokenData } from './usePortfolioToken';
 import { createColumnHelper, Table } from 'libs/table';
 import { FC } from 'react';
@@ -10,10 +12,27 @@ export type PortfolioTokenProps = {
 
 const columnHelper = createColumnHelper<PortfolioTokenData>();
 
+const CellID = (info: CellContext<PortfolioTokenData, string>) => {
+  const i = info.table.getSortedRowModel().flatRows.indexOf(info.row);
+  const id = info.getValue();
+
+  return (
+    <div className={cn('flex', 'items-center', 'space-s-16')}>
+      <div
+        className={cn('h-32', 'w-4', 'bg-blue', 'rounded-r-2')}
+        style={{
+          backgroundColor: getColorByIndex(i),
+        }}
+      />
+      <div>{id}</div>
+    </div>
+  );
+};
+
 const tableColumns = [
   columnHelper.accessor('strategy.idDisplay', {
     header: () => <span className={cn('ps-20')}>ID</span>,
-    cell: (info) => info.getValue(),
+    cell: CellID,
   }),
   columnHelper.accessor('strategy', {
     header: 'Pair',

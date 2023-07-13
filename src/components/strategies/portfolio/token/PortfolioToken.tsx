@@ -1,4 +1,6 @@
+import { Imager } from 'components/common/imager/Imager';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
+import { cn, prettifyNumber } from 'utils/helpers';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
 import { PortfolioTokenDesktop } from './PortfolioTokenDesktop';
@@ -28,9 +30,33 @@ export const PortfolioToken = () => {
       pieChartElement={
         <PortfolioPieChart
           options={pieChartOptions}
-          centerElement={`${selectedToken?.value.toString()} ${
-            selectedToken?.token.symbol || null
-          }`}
+          centerElement={
+            <div
+              className={cn('flex', 'flex-col', 'items-center', 'space-y-6')}
+            >
+              <div
+                className={cn(
+                  'flex',
+                  'items-center',
+                  'font-weight-500',
+                  'text-18'
+                )}
+              >
+                <Imager
+                  alt={'Token Logo'}
+                  src={selectedToken?.token.logoURI}
+                  className={'h-24 w-24 me-10'}
+                />
+                {selectedToken?.token.symbol}
+              </div>
+              <div className={cn('text-24', 'font-weight-500')}>
+                ${prettifyNumber(selectedToken?.value || 0)} ???
+              </div>
+              <div className={cn('text-white/60', 'font-weight-500')}>
+                {selectedToken?.strategies.length} Strategies
+              </div>
+            </div>
+          }
           isLoading={isLoading}
         />
       }

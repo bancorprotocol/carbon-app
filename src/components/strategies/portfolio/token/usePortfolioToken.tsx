@@ -1,4 +1,4 @@
-import { usePortfolio } from 'components/strategies/portfolio/usePortfolio';
+import { usePortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { Order, Strategy } from 'libs/queries';
@@ -12,7 +12,7 @@ export interface PortfolioTokenData {
 }
 
 export const usePortfolioToken = ({ address }: { address: string }) => {
-  const { tableData: sourceData, isLoading } = usePortfolio();
+  const { tableData: sourceData, isLoading } = usePortfolioData();
 
   const selectedToken = useMemo(() => {
     return sourceData.find(

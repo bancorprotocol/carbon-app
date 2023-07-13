@@ -1,4 +1,4 @@
-import { PortfolioData } from 'components/strategies/portfolio/usePortfolio';
+import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { FC } from 'react';
 import { createColumnHelper, Table } from 'libs/table';
 import { CellContext } from '@tanstack/react-table';
@@ -55,10 +55,6 @@ const tableColumns = [
     header: 'Value',
     // TODO dont hardcode fiat currency
     cell: (info) => `$${prettifyNumber(info.getValue())} USD`,
-  }),
-  columnHelper.accessor('strategies', {
-    header: 'Strategies',
-    cell: (info) => info.getValue().length,
   }),
 ];
 

@@ -1,5 +1,5 @@
 import { Imager } from 'components/common/imager/Imager';
-import { PortfolioData } from 'components/strategies/portfolio/usePortfolio';
+import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { FC } from 'react';
 import {
   CardSection,

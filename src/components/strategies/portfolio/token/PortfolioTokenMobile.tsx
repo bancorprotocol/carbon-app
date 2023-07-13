@@ -14,10 +14,17 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
   return (
     <div className={cn('space-y-20')}>
       {data.map((value, i) => (
-        <PortfolioMobileCard key={i} index={i}>
+        <PortfolioMobileCard
+          key={i}
+          index={i}
+          gridColsClassName={'grid-cols-3'}
+        >
+          <CardSection title={'ID'} value={`ID ${value.strategy.idDisplay}`} />
+
           <CardSection
-            title={'Amount'}
-            value={`${prettifyNumber(value.amount)}`}
+            title={'Pair'}
+            // TODO create build pair name helper
+            value={`${value.strategy.base.symbol}/${value.strategy.quote.symbol}`}
           />
 
           <CardSection title={'Share'} value={`${value.share.toFixed(2)} %`} />
@@ -26,6 +33,11 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
             title={'Value'}
             // TODO dont hardcode fiat currency
             value={`$${prettifyNumber(value.value)} USD`}
+          />
+
+          <CardSection
+            title={'Amount'}
+            value={`${prettifyNumber(value.amount)}`}
           />
         </PortfolioMobileCard>
       ))}

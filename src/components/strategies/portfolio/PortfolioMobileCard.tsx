@@ -7,6 +7,7 @@ type Props = {
   children: ReactNode;
   index: number;
   href?: string;
+  gridColsClassName?: string;
 };
 
 const wrapperClasses = cn(
@@ -18,7 +19,12 @@ const wrapperClasses = cn(
   'space-x-20'
 );
 
-export const PortfolioMobileCard: FC<Props> = ({ index, href, children }) => {
+export const PortfolioMobileCard: FC<Props> = ({
+  index,
+  href,
+  children,
+  gridColsClassName = 'grid-cols-2',
+}) => {
   const content = (
     <>
       <div
@@ -30,10 +36,10 @@ export const PortfolioMobileCard: FC<Props> = ({ index, href, children }) => {
       <div
         className={cn(
           'grid',
-          'grid-cols-2',
           'gap-10',
           'w-full',
-          'font-weight-500'
+          'font-weight-500',
+          gridColsClassName
         )}
       >
         {children}
