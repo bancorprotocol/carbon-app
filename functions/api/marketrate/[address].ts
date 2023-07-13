@@ -22,7 +22,7 @@ const buildPriceResponse = (
       status: error_code || undefined,
       headers: {
         'content-type': 'application/json',
-        'Cache-Control': 'max-age:300',
+        'Cache-Control': 'max-age:60',
       },
     }
   );
@@ -55,7 +55,10 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   const invalidRequest = validateRequest(request, address);
   if (invalidRequest) return invalidRequest;
 
-  const cache = await caches.open('default');
+  // tmp: delete old cache cache
+  await caches.delete('default');
+
+  const cache = await caches.open('marketrate');
 
   const match = await cache.match(request);
   if (match) return match;
