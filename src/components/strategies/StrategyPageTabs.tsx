@@ -9,17 +9,35 @@ interface Props {
   currentPathname: string;
 }
 
+const isPathnameMatch = (
+  current: string,
+  href: string,
+  hrefMatches: string[]
+) => {
+  if (current === '/' && href === '/') {
+    return true;
+  }
+
+  if (href === '/' && current !== '/') {
+    return false;
+  }
+
+  return hrefMatches.some((x) => current.startsWith(x));
+};
+
 export const StrategyPageTabs = ({ strategyCount, currentPathname }: Props) => {
   const tabs = [
     {
       label: 'Overview',
       href: PathNames.strategies,
+      hrefMatches: [PathNames.strategies],
       icon: <IconOverview className={'h-18 w-18'} />,
       badge: strategyCount,
     },
     {
       label: 'Portfolio',
       href: PathNames.portfolio,
+      hrefMatches: [PathNames.portfolio, `${PathNames.portfolio}/0x`],
       icon: <IconPieChart className={'h-18 w-18'} />,
     },
   ];
@@ -37,10 +55,14 @@ export const StrategyPageTabs = ({ strategyCount, currentPathname }: Props) => {
         'p-4'
       )}
     >
-      {tabs.map(({ label, href, icon, badge }) => (
+      {tabs.map(({ label, href, icon, badge, hrefMatches }) => (
         <Link to={href} key={href} className={'w-full'}>
           <Button
-            variant={currentPathname === href ? 'secondary' : 'black'}
+            variant={
+              isPathnameMatch(currentPathname, href, hrefMatches)
+                ? 'secondary'
+                : 'black'
+            }
             className={cn('h-full', '!w-full md:w-auto')}
           >
             {icon}

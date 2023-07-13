@@ -31,7 +31,7 @@ const CellID = (info: CellContext<PortfolioTokenData, string>) => {
 
 const tableColumns = [
   columnHelper.accessor('strategy.idDisplay', {
-    header: () => <span className={cn('ps-20')}>ID</span>,
+    header: 'ID',
     cell: CellID,
   }),
   columnHelper.accessor('strategy', {

@@ -7,12 +7,20 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
       {table.getHeaderGroups().map((headerGroup) => (
         <tr key={headerGroup.id} className={cn('h-64')}>
           {headerGroup.headers.map((header) => (
-            <th key={header.id} colSpan={header.colSpan}>
+            <th
+              key={header.id}
+              colSpan={header.colSpan}
+              className={cn(
+                'text-left',
+                'first:ps-20',
+                'last:text-right',
+                'last:pe-20'
+              )}
+            >
               {header.isPlaceholder ? null : (
                 <div
                   {...{
                     className: cn(
-                      'text-left',
                       '!font-mono',
                       'text-16',
                       'font-weight-500',

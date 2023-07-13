@@ -6,20 +6,35 @@ interface Props {
   desktopView: ReactNode;
   mobileView: ReactNode;
   pieChartElement: ReactNode;
+  headerElement?: ReactNode;
 }
 
 export const PortfolioLayout: FC<Props> = ({
   desktopView,
   mobileView,
   pieChartElement,
+  headerElement,
 }) => {
-  const { belowBreakpoint } = useBreakpoints();
+  const { belowBreakpoint, currentBreakpoint } = useBreakpoints();
 
   return (
     <div className={cn('flex flex-col gap-20 md:flex-row')}>
+      {!!headerElement && belowBreakpoint('md') && headerElement}
+
       {pieChartElement}
+
       <div className={cn('w-full')}>
-        {belowBreakpoint('lg') ? mobileView : desktopView}
+        {belowBreakpoint('lg') ? (
+          <>
+            {!!headerElement && currentBreakpoint === 'md' && headerElement}
+            {mobileView}
+          </>
+        ) : (
+          <>
+            {headerElement}
+            {desktopView}
+          </>
+        )}
       </div>
     </div>
   );

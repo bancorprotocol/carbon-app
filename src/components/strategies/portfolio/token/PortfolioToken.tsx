@@ -1,12 +1,12 @@
-import { Imager } from 'components/common/imager/Imager';
+import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
+import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
-import { cn, prettifyNumber } from 'utils/helpers';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
 import { PortfolioTokenDesktop } from './PortfolioTokenDesktop';
 import { PortfolioTokenMobile } from './PortfolioTokenMobile';
 import { usePortfolioTokenPieChart } from './usePortfolioTokenPieChart';
-import { useMatch } from 'libs/routing';
+import { PathNames, useMatch } from 'libs/routing';
 
 export const PortfolioToken = () => {
   const {
@@ -21,6 +21,13 @@ export const PortfolioToken = () => {
 
   return (
     <PortfolioLayout
+      headerElement={
+        <PortfolioTokenHeader
+          backLinkHref={PathNames.portfolio}
+          symbol={selectedToken?.token.symbol}
+          logoURI={selectedToken?.token.logoURI}
+        />
+      }
       desktopView={
         <PortfolioTokenDesktop data={tableData} isLoading={isLoading} />
       }
@@ -30,33 +37,7 @@ export const PortfolioToken = () => {
       pieChartElement={
         <PortfolioPieChart
           options={pieChartOptions}
-          centerElement={
-            <div
-              className={cn('flex', 'flex-col', 'items-center', 'space-y-6')}
-            >
-              <div
-                className={cn(
-                  'flex',
-                  'items-center',
-                  'font-weight-500',
-                  'text-18'
-                )}
-              >
-                <Imager
-                  alt={'Token Logo'}
-                  src={selectedToken?.token.logoURI}
-                  className={'h-24 w-24 me-10'}
-                />
-                {selectedToken?.token.symbol}
-              </div>
-              <div className={cn('text-24', 'font-weight-500')}>
-                ${prettifyNumber(selectedToken?.value || 0)} ???
-              </div>
-              <div className={cn('text-white/60', 'font-weight-500')}>
-                {selectedToken?.strategies.length} Strategies
-              </div>
-            </div>
-          }
+          centerElement={<PortfolioTokenPieChartCenter data={selectedToken} />}
           isLoading={isLoading}
         />
       }

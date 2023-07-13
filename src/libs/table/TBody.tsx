@@ -32,9 +32,11 @@ export const TBody = <D extends object>({
             key={row.id}
             className={cn(
               'h-64',
+              '!text-white/80',
               'text-18',
               'font-weight-500',
               'hover:bg-darkSilver',
+              'hover:!text-white',
               onRowClick && 'cursor-pointer'
             )}
             onClick={() => {
@@ -42,7 +44,7 @@ export const TBody = <D extends object>({
             }}
           >
             {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
+              <td key={cell.id} className={cn('last:text-right', 'last:pe-20')}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}

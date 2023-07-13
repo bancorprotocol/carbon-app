@@ -39,7 +39,7 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
 
 const tableColumns = [
   columnHelper.accessor('token', {
-    header: () => <span className={cn('ps-20')}>Token</span>,
+    header: 'Token',
     cell: CellToken,
   }),
   columnHelper.accessor('share', {
