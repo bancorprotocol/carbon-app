@@ -7,7 +7,7 @@ import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sortObjectArray } from 'utils/helpers';
 
-export interface StrategyPortfolioData {
+export interface PortfolioData {
   token: Token;
   share: BigNumber;
   amount: BigNumber;
@@ -16,7 +16,7 @@ export interface StrategyPortfolioData {
   fiatPrice: number;
 }
 
-export const useStrategyPortfolio = () => {
+export const usePortfolio = () => {
   const { selectedFiatCurrency } = useFiatCurrency();
   const strategiesQuery = useGetUserStrategies();
 
@@ -68,12 +68,12 @@ export const useStrategyPortfolio = () => {
     }, new BigNumber(0));
   }, [selectedFiatCurrency, strategiesQuery.data, tokenPriceMap]);
 
-  const tableData: StrategyPortfolioData[] = useMemo(() => {
+  const tableData: PortfolioData[] = useMemo(() => {
     const data = strategiesQuery.data;
     if (!data) return [];
 
     const unsorted = data.reduce(
-      ((map) => (acc: StrategyPortfolioData[], strategy) => {
+      ((map) => (acc: PortfolioData[], strategy) => {
         const handleData = (token: Token, order: Order) => {
           const fiatPriceDict = tokenPriceMap.get(token.address);
           const tokenPrice = fiatPriceDict?.[selectedFiatCurrency] || 0;
@@ -111,7 +111,7 @@ export const useStrategyPortfolio = () => {
         handleData(strategy.base, strategy.order1);
 
         return acc;
-      })(new Map<string, StrategyPortfolioData>()),
+      })(new Map<string, PortfolioData>()),
       []
     );
     // TODO cleanup sort function

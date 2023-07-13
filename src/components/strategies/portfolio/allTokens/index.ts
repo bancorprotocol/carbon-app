@@ -1,1 +1,1 @@
-export { PortfolioAllTokens } from 'components/strategies/portfolio/allTokens/PortfolioAllTokens';
+export { PortfolioAllTokens } from './PortfolioAllTokens';

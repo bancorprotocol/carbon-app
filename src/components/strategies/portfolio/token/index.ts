@@ -1,1 +1,1 @@
-export { useStrategyPortfolioToken } from './useStrategyPortfolioToken';
+export { PortfolioToken } from './PortfolioToken';

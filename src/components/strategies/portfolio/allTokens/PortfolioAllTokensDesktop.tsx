@@ -1,4 +1,4 @@
-import { StrategyPortfolioData } from 'components/strategies/portfolio/useStrategyPortfolio';
+import { PortfolioData } from 'components/strategies/portfolio/usePortfolio';
 import { FC } from 'react';
 import { createColumnHelper, Table } from 'libs/table';
 import { CellContext } from '@tanstack/react-table';
@@ -9,12 +9,13 @@ import { getColorByIndex } from 'utils/colorPalettes';
 import { useNavigate } from 'libs/routing';
 
 type Props = {
-  data: StrategyPortfolioData[];
+  data: PortfolioData[];
+  isLoading: boolean;
 };
 
-const columnHelper = createColumnHelper<StrategyPortfolioData>();
+const columnHelper = createColumnHelper<PortfolioData>();
 
-const CellToken = (info: CellContext<StrategyPortfolioData, Token>) => {
+const CellToken = (info: CellContext<PortfolioData, Token>) => {
   const i = info.table.getSortedRowModel().flatRows.indexOf(info.row);
   const { symbol, logoURI } = info.getValue();
 
@@ -61,17 +62,18 @@ const tableColumns = [
   }),
 ];
 
-export const PortfolioAllTokensDesktop: FC<Props> = ({ data }) => {
+export const PortfolioAllTokensDesktop: FC<Props> = ({ data, isLoading }) => {
   const navigate = useNavigate();
 
   return (
-    <Table<StrategyPortfolioData>
+    <Table<PortfolioData>
       columns={tableColumns}
       data={data}
       onRowClick={(row) =>
         navigate({ to: `/portfolio/${row.original.token.address}` })
       }
       manualSorting
+      isLoading={isLoading}
     />
   );
 };

@@ -1,9 +1,9 @@
-import { StrategyPortfolioTokenData } from 'components/strategies/portfolio/token/useStrategyPortfolioToken';
+import { PortfolioTokenData } from './usePortfolioToken';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Options } from 'libs/charts';
 import { getColorByIndex } from 'utils/colorPalettes';
 
-export const usePortfolioToken = (data: StrategyPortfolioTokenData[]) => {
+export const usePortfolioTokenPieChart = (data: PortfolioTokenData[]) => {
   const { belowBreakpoint } = useBreakpoints();
 
   const pieChartOptions: Options = {

@@ -20,6 +20,7 @@ interface TableProps<D extends object> {
   initialSorting?: SortingState<D>;
   onRowClick?: (row: Row<D>) => void;
   manualSorting?: boolean;
+  isLoading?: boolean;
 }
 
 export const Table = <D extends object>({
@@ -28,6 +29,7 @@ export const Table = <D extends object>({
   initialSorting = [],
   onRowClick,
   manualSorting,
+  isLoading,
 }: TableProps<D>) => {
   const [sorting, setSorting] = useState<SortingState<D>>(initialSorting);
 
@@ -49,7 +51,7 @@ export const Table = <D extends object>({
     <div className={cn('flex', 'flex-col', 'rounded-10', 'bg-silver')}>
       <table>
         <THead table={table} />
-        <TBody table={table} onRowClick={onRowClick} />
+        <TBody table={table} onRowClick={onRowClick} isLoading={isLoading} />
         <TFoot table={table} />
       </table>
       <TPagination table={table} />

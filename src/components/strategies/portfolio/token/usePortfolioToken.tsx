@@ -1,18 +1,18 @@
-import { useStrategyPortfolio } from 'components/strategies/portfolio';
+import { usePortfolio } from 'components/strategies/portfolio/usePortfolio';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { Order, Strategy } from 'libs/queries';
 import { sortObjectArray } from 'utils/helpers';
 
-export interface StrategyPortfolioTokenData {
+export interface PortfolioTokenData {
   amount: BigNumber;
   value: BigNumber;
   share: BigNumber;
   strategy: Strategy;
 }
 
-export const useStrategyPortfolioToken = ({ address }: { address: string }) => {
-  const { tableData: sourceData, isLoading } = useStrategyPortfolio();
+export const usePortfolioToken = ({ address }: { address: string }) => {
+  const { tableData: sourceData, isLoading } = usePortfolio();
 
   const selectedToken = useMemo(() => {
     return sourceData.find(
@@ -20,7 +20,7 @@ export const useStrategyPortfolioToken = ({ address }: { address: string }) => {
     );
   }, [sourceData, address]);
 
-  const tableData = useMemo<StrategyPortfolioTokenData[]>(() => {
+  const tableData = useMemo<PortfolioTokenData[]>(() => {
     if (!selectedToken) {
       return [];
     }

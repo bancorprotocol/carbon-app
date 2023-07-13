@@ -1,27 +1,26 @@
+import { useBreakpoints } from 'hooks/useBreakpoints';
 import { FC, ReactNode } from 'react';
 import { cn } from 'utils/helpers';
 
 interface Props {
-  tableElement: ReactNode;
+  desktopView: ReactNode;
+  mobileView: ReactNode;
   pieChartElement: ReactNode;
-  isLoading: boolean;
-  isError?: boolean;
 }
 
 export const PortfolioLayout: FC<Props> = ({
-  tableElement,
+  desktopView,
+  mobileView,
   pieChartElement,
-  isError,
-  isLoading,
 }) => {
+  const { belowBreakpoint } = useBreakpoints();
+
   return (
-    <>
-      {!isLoading && (
-        <div className={cn('flex flex-col gap-20 md:flex-row')}>
-          {pieChartElement}
-          <div className={cn('w-full')}>{tableElement}</div>
-        </div>
-      )}
-    </>
+    <div className={cn('flex flex-col gap-20 md:flex-row')}>
+      {pieChartElement}
+      <div className={cn('w-full')}>
+        {belowBreakpoint('lg') ? mobileView : desktopView}
+      </div>
+    </div>
   );
 };
