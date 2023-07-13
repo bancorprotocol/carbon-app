@@ -22,7 +22,7 @@ const buildPriceResponse = (
       status: error_code || undefined,
       headers: {
         'content-type': 'application/json',
-        'Cache-Control': 'max-age:60',
+        'Cache-Control': 'max-age=60',
         expires: new Date(Date.now() + 60 * 1000).toUTCString(),
       },
     }
@@ -60,10 +60,11 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
 
   const match = await cache.match(request);
   if (match) {
-    const age = match.headers.get('Age');
-    if (age && parseInt(age) < 60) {
-      return match;
-    }
+    return match;
+    // const age = match.headers.get('Age');
+    // if (age && parseInt(age) < 60) {
+    //   return match;
+    // }
   }
 
   try {
