@@ -34,6 +34,7 @@ type ScriptHTML = {
   hide_side_toolbar?: boolean;
   save_image?: boolean;
   container_id: string;
+  allow_symbol_change: boolean;
 };
 
 export const Widget: React.FC<WidgetProps> = ({ symbol }) => {
@@ -58,6 +59,7 @@ export const Widget: React.FC<WidgetProps> = ({ symbol }) => {
       hide_side_toolbar: false,
       save_image: false,
       container_id: containerId,
+      allow_symbol_change: true,
     };
 
     if (ref.current) {
