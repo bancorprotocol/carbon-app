@@ -59,7 +59,12 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   const cache = await caches.open('marketrate');
 
   const match = await cache.match(request);
-  if (match) return match;
+  if (match) {
+    const age = match.headers.get('Age');
+    if (age && parseInt(age) < 60) {
+      return match;
+    }
+  }
 
   try {
     const { data, provider } = await getPriceByAddress(
