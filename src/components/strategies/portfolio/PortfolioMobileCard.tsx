@@ -29,7 +29,6 @@ export const PortfolioMobileCard: FC<Props> = ({
     <>
       <div
         className={cn('w-4', 'h-88', 'rounded-r-2')}
-        // TODO refactor to use tailwind utility
         style={{ backgroundColor: getColorByIndex(index) }}
       />
 
@@ -68,4 +67,8 @@ export const CardSection: FC<{ title: string; value: string }> = ({
       <div>{value}</div>
     </div>
   );
+};
+
+export const PortfolioMobileCardLoading: FC = () => {
+  return <div className={cn(wrapperClasses, 'animate-pulse')} />;
 };
