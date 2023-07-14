@@ -117,8 +117,10 @@ export const usePortfolioData = () => {
       })(new Map<string, PortfolioData>()),
       []
     );
+
     // TODO cleanup sort function
-    return sortObjectArray(unsorted, 'share', (a, b) =>
+    const nonZero = unsorted.filter((item) => !item.share.isZero());
+    return sortObjectArray(nonZero, 'share', (a, b) =>
       a.share.gt(b.share) ? -1 : 1
     );
   }, [selectedFiatCurrency, strategiesQuery.data, tokenPriceMap, totalValue]);
