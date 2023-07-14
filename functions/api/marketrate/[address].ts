@@ -22,7 +22,8 @@ const buildPriceResponse = (
       status: error_code || undefined,
       headers: {
         'content-type': 'application/json',
-        'Cache-Control': 'max-age:300',
+        'Cache-Control': 's-maxage=60',
+        // expires: new Date(Date.now() + 60 * 1000).toUTCString(),
       },
     }
   );
@@ -55,10 +56,12 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({
   const invalidRequest = validateRequest(request, address);
   if (invalidRequest) return invalidRequest;
 
-  const cache = await caches.open('default');
+  const cache = await caches.open('marketrate');
 
   const match = await cache.match(request);
-  if (match) return match;
+  if (match) {
+    return match;
+  }
 
   try {
     const { data, provider } = await getPriceByAddress(
