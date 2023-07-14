@@ -83,26 +83,24 @@ const getDefaultNumberoOptions = (round = false) => {
   };
 };
 
+interface PrettifyNumberOptions {
+  usd?: boolean;
+  hideSymbol?: boolean;
+  abbreviate?: boolean;
+  highPrecision?: boolean;
+  round?: boolean;
+}
+
 export function prettifyNumber(num: number | string | BigNumber): string;
 
 export function prettifyNumber(
   num: number | string | BigNumber,
-  options?: {
-    usd?: boolean;
-    abbreviate?: boolean;
-    highPrecision?: boolean;
-    round?: boolean;
-  }
+  options?: PrettifyNumberOptions
 ): string;
 
 export function prettifyNumber(
   num: number | string | BigNumber,
-  options?: {
-    usd?: boolean;
-    abbreviate?: boolean;
-    highPrecision?: boolean;
-    round?: boolean;
-  }
+  options?: PrettifyNumberOptions
 ): string {
   const {
     usd = false,
@@ -142,23 +140,21 @@ export function prettifyNumber(
 
 const handlePrettifyNumberUsd = (
   num: BigNumber,
-  options?: {
-    usd?: boolean;
-    abbreviate?: boolean;
-    highPrecision?: boolean;
-    round?: boolean;
-  }
+  options?: PrettifyNumberOptions
 ) => {
   const {
     abbreviate = false,
+    hideSymbol = false,
     highPrecision = false,
     round = false,
   } = options || {};
 
-  if (num.lte(0)) return '$0.00';
-  if (num.lt(0.01)) return '< $0.01';
+  const symbol = hideSymbol ? '' : '$';
+
+  if (num.lte(0)) return `${symbol}0.00`;
+  if (num.lt(0.01)) return `< ${symbol}0.01`;
   if (abbreviate && num.gt(999999))
-    return `$${numbro(num).format({
+    return `${symbol}${numbro(num).format({
       ...prettifyNumberAbbreviateFormat,
       ...(round && {
         roundingFunction: (num) => Math.round(num),
@@ -166,9 +162,9 @@ const handlePrettifyNumberUsd = (
     })}`;
   if (!highPrecision) {
     if (num.gt(100))
-      return `$${numbro(num).format(getDefaultNumberoOptions(round))}`;
+      return `${symbol}${numbro(num).format(getDefaultNumberoOptions(round))}`;
   }
-  return `$${numbro(num).format({
+  return `${symbol}${numbro(num).format({
     ...getDefaultNumberoOptions(round),
     mantissa: 2,
   })}`;
@@ -275,4 +271,18 @@ export const sortObjectArray = <D extends object>(
           return 0;
         }
   );
+};
+
+export const isPathnameMatch = (
+  current: string,
+  href: string,
+  hrefMatches: string[]
+) => {
+  if (current === '/' && href === '/') {
+    return true;
+  }
+
+  return hrefMatches
+    .filter((x) => x !== '/')
+    .some((x) => current.startsWith(x));
 };

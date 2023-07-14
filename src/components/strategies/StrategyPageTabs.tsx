@@ -2,28 +2,12 @@ import { Button } from 'components/common/button';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { Link, PathNames } from 'libs/routing';
-import { cn } from 'utils/helpers';
+import { cn, isPathnameMatch } from 'utils/helpers';
 
 interface Props {
   strategyCount: number;
   currentPathname: string;
 }
-
-const isPathnameMatch = (
-  current: string,
-  href: string,
-  hrefMatches: string[]
-) => {
-  if (current === '/' && href === '/') {
-    return true;
-  }
-
-  if (href === '/' && current !== '/') {
-    return false;
-  }
-
-  return hrefMatches.some((x) => current.startsWith(x));
-};
 
 export const StrategyPageTabs = ({ strategyCount, currentPathname }: Props) => {
   const tabs = [
@@ -37,7 +21,7 @@ export const StrategyPageTabs = ({ strategyCount, currentPathname }: Props) => {
     {
       label: 'Portfolio',
       href: PathNames.portfolio,
-      hrefMatches: [PathNames.portfolio, `${PathNames.portfolio}/0x`],
+      hrefMatches: [PathNames.portfolio, PathNames.portfolioToken('0x')],
       icon: <IconPieChart className={'h-18 w-18'} />,
     },
   ];
