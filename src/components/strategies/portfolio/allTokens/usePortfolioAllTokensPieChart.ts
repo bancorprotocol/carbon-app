@@ -97,7 +97,7 @@ export const usePortfolioAllTokensPieChart = (data: PortfolioData[]) => {
         },
       ],
     }),
-    [belowBreakpoint, data]
+    [belowBreakpoint, data, selectedFiatCurrency]
   );
 
   return { pieChartOptions };
