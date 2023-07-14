@@ -1,12 +1,17 @@
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
-import { FC } from 'react';
+import {
+  buildAmountString,
+  buildPercentageString,
+} from 'components/strategies/portfolio/utils';
+import { FC, useMemo } from 'react';
 import { createColumnHelper, Table } from 'libs/table';
 import { CellContext } from '@tanstack/react-table';
 import { Token } from 'libs/tokens';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { useStore } from 'store';
+import { cn, getFiatDisplayValue } from 'utils/helpers';
 import { Imager } from 'components/common/imager/Imager';
 import { getColorByIndex } from 'utils/colorPalettes';
-import { useNavigate } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 
 type Props = {
   data: PortfolioData[];
@@ -37,36 +42,43 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
   );
 };
 
-const tableColumns = [
-  columnHelper.accessor('token', {
-    header: 'Token',
-    cell: CellToken,
-  }),
-  columnHelper.accessor('share', {
-    header: 'Share',
-    cell: (info) => `${info.getValue().toFixed(2)} %`,
-  }),
-  columnHelper.accessor('amount', {
-    header: 'Amount',
-    cell: (info) =>
-      `${prettifyNumber(info.getValue())} ${info.row.original.token.symbol}`,
-  }),
-  columnHelper.accessor('value', {
-    header: 'Value',
-    // TODO dont hardcode fiat currency
-    cell: (info) => `$${prettifyNumber(info.getValue())} USD`,
-  }),
-];
-
 export const PortfolioAllTokensDesktop: FC<Props> = ({ data, isLoading }) => {
   const navigate = useNavigate();
+
+  const {
+    fiatCurrency: { selectedFiatCurrency },
+  } = useStore();
+
+  const tableColumns = useMemo(
+    () => [
+      columnHelper.accessor('token', {
+        header: 'Token',
+        cell: CellToken,
+      }),
+      columnHelper.accessor('share', {
+        header: 'Share',
+        cell: (info) => buildPercentageString(info.getValue()),
+      }),
+      columnHelper.accessor('amount', {
+        header: 'Amount',
+        cell: (info) =>
+          buildAmountString(info.getValue(), info.row.original.token),
+      }),
+      columnHelper.accessor('value', {
+        header: 'Value',
+        cell: (info) =>
+          getFiatDisplayValue(info.getValue(), selectedFiatCurrency),
+      }),
+    ],
+    [selectedFiatCurrency]
+  );
 
   return (
     <Table<PortfolioData>
       columns={tableColumns}
       data={data}
       onRowClick={(row) =>
-        navigate({ to: `/portfolio/${row.original.token.address}` })
+        navigate({ to: PathNames.portfolioToken(row.original.token.address) })
       }
       manualSorting
       isLoading={isLoading}

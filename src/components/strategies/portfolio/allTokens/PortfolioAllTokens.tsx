@@ -1,4 +1,4 @@
-import { cn, prettifyNumber } from 'utils/helpers';
+import { PortfolioAllTokensPieChartCenter } from 'components/strategies/portfolio/allTokens/PortfolioAllTokensPieChartCenter';
 import { PortfolioAllTokensDesktop } from './PortfolioAllTokensDesktop';
 import { PortfolioAllTokensMobile } from './PortfolioAllTokensMobile';
 import { usePortfolioAllTokensPieChart } from 'components/strategies/portfolio/allTokens/usePortfolioAllTokensPieChart';
@@ -22,16 +22,10 @@ export const PortfolioAllTokens = () => {
         <PortfolioPieChart
           options={pieChartOptions}
           centerElement={
-            <div
-              className={cn('flex', 'flex-col', 'items-center', 'space-y-6')}
-            >
-              <div className={cn('text-24', 'font-weight-500')}>
-                ${prettifyNumber(totalValue)} ???
-              </div>
-              <div className={cn('text-white/60', 'font-weight-500')}>
-                {tableData.length} Assets
-              </div>
-            </div>
+            <PortfolioAllTokensPieChartCenter
+              totalValue={totalValue}
+              assetsCount={tableData.length}
+            />
           }
           isLoading={isLoading}
         />

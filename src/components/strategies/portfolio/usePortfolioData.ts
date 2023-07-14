@@ -3,8 +3,8 @@ import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
+import { useStore } from 'store';
 import { FiatPriceDict } from 'store/useFiatCurrencyStore';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { sortObjectArray } from 'utils/helpers';
 
 export interface PortfolioData {
@@ -17,7 +17,10 @@ export interface PortfolioData {
 }
 
 export const usePortfolioData = () => {
-  const { selectedFiatCurrency } = useFiatCurrency();
+  const {
+    fiatCurrency: { selectedFiatCurrency },
+  } = useStore();
+
   const strategiesQuery = useGetUserStrategies();
 
   const uniqueTokens = useMemo(() => {

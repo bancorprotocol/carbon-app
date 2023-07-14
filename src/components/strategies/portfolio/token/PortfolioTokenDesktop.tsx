@@ -1,11 +1,19 @@
 import { CellContext } from '@tanstack/react-table';
+import {
+  buildAmountString,
+  buildPairNameByStrategy,
+  buildPercentageString,
+} from 'components/strategies/portfolio/utils';
+import { Token } from 'libs/tokens';
+import { useStore } from 'store';
 import { getColorByIndex } from 'utils/colorPalettes';
 import { PortfolioTokenData } from './usePortfolioToken';
 import { createColumnHelper, Table } from 'libs/table';
-import { FC } from 'react';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { FC, useMemo } from 'react';
+import { cn, getFiatDisplayValue } from 'utils/helpers';
 
 export type PortfolioTokenProps = {
+  selectedToken: Token;
   data: PortfolioTokenData[];
   isLoading: boolean;
 };
@@ -29,37 +37,42 @@ const CellID = (info: CellContext<PortfolioTokenData, string>) => {
   );
 };
 
-const tableColumns = [
-  columnHelper.accessor('strategy.idDisplay', {
-    header: 'ID',
-    cell: CellID,
-  }),
-  columnHelper.accessor('strategy', {
-    header: 'Pair',
-    cell: (info) => {
-      const { base, quote } = info.getValue();
-      return `${base.symbol}/${quote.symbol}`;
-    },
-  }),
-  columnHelper.accessor('share', {
-    header: 'Share',
-    cell: (info) => `${info.getValue().toFixed(2)} %`,
-  }),
-  columnHelper.accessor('amount', {
-    header: 'Amount',
-    cell: (info) => `${prettifyNumber(info.getValue())} ????`,
-  }),
-  columnHelper.accessor('value', {
-    header: 'Value',
-    // TODO dont hardcode fiat currency
-    cell: (info) => `$${prettifyNumber(info.getValue())} ???`,
-  }),
-];
-
 export const PortfolioTokenDesktop: FC<PortfolioTokenProps> = ({
+  selectedToken,
   data,
   isLoading,
 }) => {
+  const {
+    fiatCurrency: { selectedFiatCurrency },
+  } = useStore();
+
+  const tableColumns = useMemo(
+    () => [
+      columnHelper.accessor('strategy.idDisplay', {
+        header: 'ID',
+        cell: CellID,
+      }),
+      columnHelper.accessor('strategy', {
+        header: 'Pair',
+        cell: (info) => buildPairNameByStrategy(info.getValue()),
+      }),
+      columnHelper.accessor('share', {
+        header: 'Share',
+        cell: (info) => buildPercentageString(info.getValue()),
+      }),
+      columnHelper.accessor('amount', {
+        header: 'Amount',
+        cell: (info) => buildAmountString(info.getValue(), selectedToken),
+      }),
+      columnHelper.accessor('value', {
+        header: 'Value',
+        cell: (info) =>
+          getFiatDisplayValue(info.getValue(), selectedFiatCurrency),
+      }),
+    ],
+    [selectedFiatCurrency, selectedToken]
+  );
+
   return (
     <Table<PortfolioTokenData>
       columns={tableColumns}

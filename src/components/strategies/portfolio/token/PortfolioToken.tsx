@@ -19,6 +19,10 @@ export const PortfolioToken = () => {
 
   const { pieChartOptions } = usePortfolioTokenPieChart(tableData);
 
+  if (!selectedToken && !isLoading) {
+    return <div>error token not found</div>;
+  }
+
   return (
     <PortfolioLayout
       headerElement={
@@ -29,10 +33,20 @@ export const PortfolioToken = () => {
         />
       }
       desktopView={
-        <PortfolioTokenDesktop data={tableData} isLoading={isLoading} />
+        <PortfolioTokenDesktop
+          data={tableData}
+          isLoading={isLoading}
+          // TODO selectedToken should not be undefined
+          selectedToken={selectedToken?.token!}
+        />
       }
       mobileView={
-        <PortfolioTokenMobile data={tableData} isLoading={isLoading} />
+        <PortfolioTokenMobile
+          data={tableData}
+          isLoading={isLoading}
+          // TODO selectedToken should not be undefined
+          selectedToken={selectedToken?.token!}
+        />
       }
       pieChartElement={
         <PortfolioPieChart

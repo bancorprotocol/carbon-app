@@ -1,16 +1,27 @@
 import { PortfolioTokenProps } from 'components/strategies/portfolio/token/PortfolioTokenDesktop';
+import {
+  buildAmountString,
+  buildPairNameByStrategy,
+  buildPercentageString,
+} from 'components/strategies/portfolio/utils';
 import { FC } from 'react';
 import {
   CardSection,
   PortfolioMobileCard,
 } from 'components/strategies/portfolio/PortfolioMobileCard';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { useStore } from 'store';
+import { cn, getFiatDisplayValue } from 'utils/helpers';
 
 // TODO add loading animation
 export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
   data,
   isLoading,
+  selectedToken,
 }) => {
+  const {
+    fiatCurrency: { selectedFiatCurrency },
+  } = useStore();
+
   return (
     <div className={cn('space-y-20')}>
       {data.map((value, i) => (
@@ -23,21 +34,22 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
 
           <CardSection
             title={'Pair'}
-            // TODO create build pair name helper
-            value={`${value.strategy.base.symbol}/${value.strategy.quote.symbol}`}
+            value={buildPairNameByStrategy(value.strategy)}
           />
 
-          <CardSection title={'Share'} value={`${value.share.toFixed(2)} %`} />
+          <CardSection
+            title={'Share'}
+            value={buildPercentageString(value.share)}
+          />
 
           <CardSection
             title={'Value'}
-            // TODO dont hardcode fiat currency
-            value={`$${prettifyNumber(value.value)} USD`}
+            value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
           />
 
           <CardSection
             title={'Amount'}
-            value={`${prettifyNumber(value.amount)}`}
+            value={buildAmountString(value.amount, selectedToken)}
           />
         </PortfolioMobileCard>
       ))}

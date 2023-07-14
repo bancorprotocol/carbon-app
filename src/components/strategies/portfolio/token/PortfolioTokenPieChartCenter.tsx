@@ -1,13 +1,18 @@
 import { Imager } from 'components/common/imager/Imager';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { FC } from 'react';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { useStore } from 'store';
+import { cn, getFiatDisplayValue } from 'utils/helpers';
 
 type Props = {
   data?: PortfolioData;
 };
 
 export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
+  const {
+    fiatCurrency: { selectedFiatCurrency },
+  } = useStore();
+
   // TODO handle error state
   if (!data) return null;
 
@@ -22,7 +27,7 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
         {data.token.symbol}
       </div>
       <div className={cn('text-24', 'font-weight-500')}>
-        ${prettifyNumber(data.value || 0)} ???
+        {getFiatDisplayValue(data.value, selectedFiatCurrency)}
       </div>
       <div className={cn('text-white/60', 'font-weight-500')}>
         {data.strategies.length} Strategies

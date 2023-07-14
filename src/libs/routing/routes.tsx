@@ -28,7 +28,8 @@ export const externalLinks = {
 
 export const PathNames = {
   strategies: '/',
-  portfolio: '/portfolio',
+  portfolio: '/strategies/portfolio',
+  portfolioToken: (address: string) => `/strategies/portfolio/token/${address}`,
   trade: '/trade',
   debug: '/debug',
   createStrategy: '/strategies/create',
@@ -87,12 +88,11 @@ export const routes: Route[] = [
     element: <StrategiesPage />,
     children: [
       {
-        // TODO remove hardcoded path
         path: '/',
         element: <StrategiesOverviewPage />,
       },
       {
-        path: 'portfolio',
+        path: 'strategies/portfolio',
         element: <Outlet />,
         children: [
           {
@@ -100,7 +100,7 @@ export const routes: Route[] = [
             element: <StrategiesPortfolioPage />,
           },
           {
-            path: ':address',
+            path: 'token/:address',
             element: <StrategiesPortfolioTokenPage />,
           },
         ],

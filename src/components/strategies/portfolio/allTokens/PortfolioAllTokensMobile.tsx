@@ -1,11 +1,17 @@
 import { Imager } from 'components/common/imager/Imager';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
+import {
+  buildAmountString,
+  buildPercentageString,
+} from 'components/strategies/portfolio/utils';
+import { PathNames } from 'libs/routing';
 import { FC } from 'react';
 import {
   CardSection,
   PortfolioMobileCard,
 } from 'components/strategies/portfolio/PortfolioMobileCard';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { useStore } from 'store';
+import { cn, getFiatDisplayValue } from 'utils/helpers';
 
 type Props = {
   data: PortfolioData[];
@@ -14,14 +20,17 @@ type Props = {
 
 // TODO add loading animation
 export const PortfolioAllTokensMobile: FC<Props> = ({ data, isLoading }) => {
+  const {
+    fiatCurrency: { selectedFiatCurrency },
+  } = useStore();
+
   return (
     <div className={cn('space-y-20')}>
       {data.map((value, i) => (
         <PortfolioMobileCard
           key={i}
           index={i}
-          // TODO remove hardcoded href
-          href={`/portfolio/${value.token.address}`}
+          href={PathNames.portfolioToken(value.token.address)}
         >
           <div className={cn('flex', 'items-center', 'text-18')}>
             <Imager
@@ -34,15 +43,17 @@ export const PortfolioAllTokensMobile: FC<Props> = ({ data, isLoading }) => {
 
           <CardSection
             title={'Amount'}
-            value={`${prettifyNumber(value.amount)} ${value.token.symbol}`}
+            value={buildAmountString(value.amount, value.token)}
           />
 
-          <CardSection title={'Share'} value={`${value.share.toFixed(2)} %`} />
+          <CardSection
+            title={'Share'}
+            value={buildPercentageString(value.share)}
+          />
 
           <CardSection
             title={'Value'}
-            // TODO dont hardcode fiat currency
-            value={`$${prettifyNumber(value.value)} USD`}
+            value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
           />
         </PortfolioMobileCard>
       ))}
