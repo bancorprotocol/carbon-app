@@ -1,5 +1,6 @@
 import { Imager } from 'components/common/imager/Imager';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
+import { buildAmountString } from 'components/strategies/portfolio/utils';
 import { FC } from 'react';
 import { useStore } from 'store';
 import { cn, getFiatDisplayValue } from 'utils/helpers';
@@ -26,8 +27,11 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
         />
         {data.token.symbol}
       </div>
-      <div className={cn('text-24', 'font-weight-500')}>
+      <div className={cn('text-20', 'font-weight-500')}>
         {getFiatDisplayValue(data.value, selectedFiatCurrency)}
+      </div>
+      <div className={cn('!text-white/60', 'font-weight-500')}>
+        {buildAmountString(data.amount, data.token)}
       </div>
       <div className={cn('text-white/60', 'font-weight-500')}>
         {data.strategies.length} Strategies

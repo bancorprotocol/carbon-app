@@ -1,17 +1,20 @@
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { Highcharts, HighchartsReact, Options } from 'libs/charts';
 import { ReactNode } from 'react';
+import { cn } from 'utils/helpers';
 
 interface Props {
   centerElement?: ReactNode;
   options?: Options;
   isLoading?: boolean;
+  hideChart?: boolean;
 }
 
 export const PortfolioPieChart = ({
   centerElement,
   options,
   isLoading,
+  hideChart,
 }: Props) => {
   return (
     <div
@@ -31,7 +34,35 @@ export const PortfolioPieChart = ({
         )}
       </div>
 
-      {!isLoading && (
+      {hideChart && (
+        <div
+          className={cn(
+            'flex',
+            'justify-center',
+            'items-center',
+            'w-full',
+            'h-full'
+          )}
+        >
+          <div
+            className={cn(
+              'flex',
+              'justify-center',
+              'items-center',
+              'w-4/5',
+              'rounded-full',
+              'h-4/5',
+              'bg-emphasis'
+            )}
+          >
+            <div
+              className={cn('w-4/5', 'rounded-full', 'h-4/5', 'bg-silver')}
+            ></div>
+          </div>
+        </div>
+      )}
+
+      {!isLoading && !hideChart && (
         <HighchartsReact highcharts={Highcharts} options={options} />
       )}
     </div>

@@ -57,6 +57,7 @@ export const PortfolioToken = () => {
           options={pieChartOptions}
           centerElement={<PortfolioTokenPieChartCenter data={selectedToken} />}
           isLoading={isLoading}
+          hideChart={selectedToken?.value.isZero()}
         />
       }
     />

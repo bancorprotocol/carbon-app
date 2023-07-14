@@ -87,7 +87,7 @@ export const usePortfolioTokenPieChart = (
             enabled: false,
           },
           data: data.map((item, i) => ({
-            name: '??????',
+            name: item.strategy.idDisplay,
             y: item.share.toNumber(),
             color: getColorByIndex(i),
             borderColor: '#161617',
