@@ -17,7 +17,11 @@ export const PortfolioToken = () => {
     address,
   });
 
-  const { pieChartOptions } = usePortfolioTokenPieChart(tableData);
+  const { pieChartOptions } = usePortfolioTokenPieChart(
+    tableData,
+    // TODO fix undefined token
+    selectedToken?.token!
+  );
 
   if (!selectedToken && !isLoading) {
     return <div>error token not found</div>;
