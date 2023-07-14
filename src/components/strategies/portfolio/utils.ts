@@ -8,6 +8,7 @@ export const buildPairNameByStrategy = ({ base, quote }: Strategy) => {
 };
 
 export const buildPercentageString = (percentage: BigNumber) => {
+  if (percentage.isZero()) return '0.00%';
   if (percentage.isNaN()) return '0.00%';
   if (percentage.lt(0.01)) return '< 0.01%';
   return `${percentage.toFixed(2)}%`;
