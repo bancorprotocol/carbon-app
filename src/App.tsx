@@ -25,7 +25,6 @@ export const App = () => {
     window.addEventListener('resize', (e) => {
       // @ts-ignore
       const h = e.target?.innerHeight || 0;
-      console.log(h);
       setInnerHeight(h);
     });
     return () => window.removeEventListener('resize', () => {});

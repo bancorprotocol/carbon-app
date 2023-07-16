@@ -14,10 +14,12 @@ const screens: Screens = {
   '2xl': 1536,
 };
 
-const defaultWidth = window?.innerWidth || 0;
+const getWidth = () => {
+  return window?.innerWidth || 0;
+};
 
 export const useBreakpoints = () => {
-  const [width, setWidth] = useState(defaultWidth);
+  const [width, setWidth] = useState(getWidth);
 
   const currentBreakpoint = useMemo(() => {
     return Object.keys(screens).reduce(
@@ -41,7 +43,7 @@ export const useBreakpoints = () => {
   );
 
   const track = useCallback(() => {
-    setWidth(window.innerWidth || defaultWidth);
+    setWidth(getWidth);
   }, []);
 
   useEffect(() => {
@@ -49,5 +51,5 @@ export const useBreakpoints = () => {
     return () => window.removeEventListener('resize', track);
   }, [track]);
 
-  return { width, currentBreakpoint, aboveBreakpoint, belowBreakpoint };
+  return { currentBreakpoint, aboveBreakpoint, belowBreakpoint };
 };
