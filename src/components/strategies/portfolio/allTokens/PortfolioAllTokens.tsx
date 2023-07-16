@@ -5,10 +5,14 @@ import { usePortfolioAllTokensPieChart } from 'components/strategies/portfolio/a
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
 import { usePortfolioData } from 'components/strategies/portfolio/usePortfolioData';
+import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 
 export const PortfolioAllTokens = () => {
   const { tableData, totalValue, isLoading } = usePortfolioData();
   const { pieChartOptions } = usePortfolioAllTokensPieChart(tableData);
+
+  if (!isLoading && tableData && tableData.length === 0)
+    return <StrategyCreateFirst />;
 
   return (
     <PortfolioLayout
