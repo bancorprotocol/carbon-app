@@ -51,7 +51,7 @@ export const StrategyPageTabs = ({ strategyCount, currentPathname }: Props) => {
           >
             {icon}
             <span className={'ml-10'}>{label}</span>
-            {badge !== undefined && (
+            {!!badge && (
               <span
                 className={cn(
                   'ml-10',
