@@ -32,15 +32,7 @@ export const PortfolioMobileCard: FC<Props> = ({
         style={{ backgroundColor: getColorByIndex(index) }}
       />
 
-      <div
-        className={cn(
-          'grid',
-          'gap-10',
-          'w-full',
-          'font-weight-500',
-          gridColsClassName
-        )}
-      >
+      <div className={cn('grid', 'gap-10', 'w-full', gridColsClassName)}>
         {children}
       </div>
     </>

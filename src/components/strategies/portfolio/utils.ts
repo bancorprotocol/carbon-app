@@ -14,6 +14,10 @@ export const buildPercentageString = (percentage: BigNumber) => {
   return `${percentage.toFixed(2)}%`;
 };
 
-export const buildAmountString = (amount: BigNumber, { symbol }: Token) => {
-  return `${prettifyNumber(amount)} ${symbol}`;
+export const buildAmountString = (
+  amount: BigNumber,
+  { symbol }: Token,
+  highPrecision: boolean = true
+) => {
+  return `${prettifyNumber(amount, { highPrecision })} ${symbol}`;
 };
