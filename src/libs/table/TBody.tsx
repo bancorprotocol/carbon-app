@@ -33,8 +33,7 @@ export const TBody = <D extends object>({
             className={cn(
               'h-64',
               '!text-white/80',
-              'text-18',
-              'font-weight-500',
+              'text-16',
               'hover:bg-darkSilver',
               'hover:!text-white',
               onRowClick && 'cursor-pointer'
