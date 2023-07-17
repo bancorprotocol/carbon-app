@@ -38,7 +38,7 @@ export const StrategiesPage = () => {
   }, [belowBreakpoint, pathname, strategies.data]);
 
   return (
-    <Page>
+    <Page hideTitle={true}>
       <div className={cn('mb-20 flex items-center justify-between')}>
         <StrategyPageTabs
           currentPathname={pathname}
