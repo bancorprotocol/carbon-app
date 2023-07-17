@@ -53,6 +53,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
       <div className="flex justify-between">
         <div className={'flex space-s-10'}>
           <TokensOverlap
+            // TODO fix token logo classes
             className="h-40 w-40"
             tokens={[strategy.base, strategy.quote]}
           />

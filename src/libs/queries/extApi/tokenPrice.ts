@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
 import { useStore } from 'store';
@@ -21,4 +21,25 @@ export const useGetTokenPrice = (address?: string) => {
       staleTime: FIVE_MIN_IN_MS,
     }
   );
+};
+
+export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
+  const {
+    fiatCurrency: { availableCurrencies },
+  } = useStore();
+
+  return useQueries({
+    queries: addresses.map((address) => {
+      return {
+        queryKey: QueryKey.tokenPrice(address),
+        queryFn: () => carbonApi.getMarketRate(address, availableCurrencies),
+        enabled:
+          !!import.meta.env.VITE_CARBON_API_KEY &&
+          !!address &&
+          availableCurrencies.length > 0,
+        refetchInterval: FIVE_MIN_IN_MS,
+        staleTime: FIVE_MIN_IN_MS,
+      };
+    }),
+  });
 };

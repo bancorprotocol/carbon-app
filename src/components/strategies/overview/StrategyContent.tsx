@@ -1,10 +1,8 @@
 import { FC, useMemo } from 'react';
 import { StrategyStatus, useGetUserStrategies } from 'libs/queries';
-import {
-  StrategyFilter,
-  StrategySort,
-} from 'components/strategies/overview/StrategyFilterSort';
+import { StrategyFilter } from 'components/strategies/overview/StrategyFilterSort';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
+import { useStore } from 'store';
 import { StrategyNotFound } from './StrategyNotFound';
 import { m, mItemVariant, mListVariant } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
@@ -16,17 +14,12 @@ import { useTranslation } from 'libs/translations';
 
 type Props = {
   strategies: ReturnType<typeof useGetUserStrategies>;
-  search: string;
-  sort: StrategySort;
-  filter: StrategyFilter;
 };
 
-export const StrategyContent: FC<Props> = ({
-  strategies,
-  sort,
-  search,
-  filter,
-}) => {
+export const StrategyContent: FC<Props> = ({ strategies }) => {
+  const {
+    strategies: { search, sort, filter },
+  } = useStore();
   const compareFunction = getCompareFunctionBySortType(sort);
   const { t } = useTranslation();
   const filteredStrategies = useMemo(() => {

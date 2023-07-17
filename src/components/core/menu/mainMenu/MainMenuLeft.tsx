@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { Link, PathNames, useLocation } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
+import { isPathnameMatch } from 'utils/helpers';
 import { handleOnItemClick } from '../utils';
 import { useMenuItems } from '../useMenuItems';
 
@@ -20,13 +21,13 @@ export const MainMenuLeft: FC = () => {
         </Link>
 
         <div className={'hidden space-s-24 md:block'}>
-          {menuItems.map(({ label, href }) => (
+          {menuItems.map(({ label, href, hrefMatches }) => (
             <Link
               onClick={() => handleOnItemClick(href)}
               key={label}
               to={href}
               className={`px-3 py-3 transition-colors duration-300 ${
-                href === location.current.pathname
+                isPathnameMatch(location.current.pathname, href, hrefMatches)
                   ? 'text-white'
                   : 'hover:text-white'
               }`}

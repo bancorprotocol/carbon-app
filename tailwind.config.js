@@ -44,6 +44,7 @@ module.exports = {
       fog: '#F4F4F4',
       emphasis: '#212123',
       silver: '#161617',
+      darkSilver: '#111112',
     }),
     columns: {
       auto: 'auto',
@@ -341,6 +342,7 @@ module.exports = {
         'serif',
       ],
       mono: [
+        'GT America Mono',
         'ui-monospace',
         'SFMono-Regular',
         'Menlo',

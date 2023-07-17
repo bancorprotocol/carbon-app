@@ -3,10 +3,13 @@ import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
 import { TermsPage } from 'pages/terms';
-import { Route } from '@tanstack/react-location';
+import { Outlet, Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
+import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
+import { StrategiesOverviewPage } from 'pages/strategies/overview';
+import { StrategiesPortfolioTokenPage } from 'pages/strategies/portfolio/token';
 
 export const externalLinks = {
   blog: 'http://blog.carbondefi.xyz',
@@ -25,6 +28,8 @@ export const externalLinks = {
 
 export const PathNames = {
   strategies: '/',
+  portfolio: '/strategies/portfolio',
+  portfolioToken: (address: string) => `/strategies/portfolio/token/${address}`,
   trade: '/trade',
   debug: '/debug',
   createStrategy: '/strategies/create',
@@ -34,10 +39,6 @@ export const PathNames = {
 };
 
 export const routes: Route[] = [
-  {
-    path: PathNames.strategies,
-    element: <StrategiesPage />,
-  },
   {
     id: 'trade',
     path: PathNames.trade,
@@ -82,5 +83,28 @@ export const routes: Route[] = [
   {
     path: PathNames.debug,
     element: <DebugPage />,
+  },
+  {
+    element: <StrategiesPage />,
+    children: [
+      {
+        path: '/',
+        element: <StrategiesOverviewPage />,
+      },
+      {
+        path: 'strategies/portfolio',
+        element: <Outlet />,
+        children: [
+          {
+            path: '/',
+            element: <StrategiesPortfolioPage />,
+          },
+          {
+            path: 'token/:address',
+            element: <StrategiesPortfolioTokenPage />,
+          },
+        ],
+      },
+    ],
   },
 ];
