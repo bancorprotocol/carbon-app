@@ -116,6 +116,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   className={'flex w-full items-center ps-10 space-s-10'}
                 >
                   <TokensOverlap
+                    className="h-30 w-30"
                     tokens={[tradePair.baseToken, tradePair.quoteToken]}
                   />
                   <span className={'flex font-weight-500'}>
