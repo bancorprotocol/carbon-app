@@ -11,6 +11,8 @@ import { useStore } from 'store';
 import Decimal from 'decimal.js';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
+const ROW_AMOUNT_MIN_THRESHOLD = 0.0001;
+
 Decimal.set({
   precision: 100,
   rounding: Decimal.ROUND_HALF_DOWN,
@@ -46,7 +48,7 @@ const buildOrders = (
     .map(({ amount, rate, total }, i) =>
       _subtractPrevAmount(data, amount, rate, total, i)
     )
-    .filter(({ amount }) => amount !== '0')
+    .filter(({ amount }) => new Decimal(amount).gte(ROW_AMOUNT_MIN_THRESHOLD))
     .splice(0, buckets)
     .map(({ amount, rate, total }) => ({
       rate: new Decimal(rate).toFixed(quoteDecimals, 1),
