@@ -37,11 +37,12 @@ const getHeaders = (env: CFWorkerEnv): RequestInit<RequestInitCfProperties> => {
 };
 
 const getRoiData = async (env: CFWorkerEnv) => {
-  const res: any = await fetch(
+  const response = await fetch(
     'https://api.dune.com/api/v1/query/2738515/results',
     getHeaders(env)
   );
-  if (res?.result) return res.result;
+  const json: any = await response.json();
+  if (json?.result) return JSON.stringify(json.result);
   throw new Error('ROI data contains no results field');
 };
 
