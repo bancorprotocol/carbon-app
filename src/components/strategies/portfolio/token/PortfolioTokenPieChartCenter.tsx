@@ -34,8 +34,13 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
         {buildAmountString(data.amount, data.token)}
       </div>
       <div className={cn('text-white/60', 'font-weight-500')}>
-        {data.strategies.length} Strategies
+        {getStrategyText(data.strategies.length)}
       </div>
     </div>
   );
 };
+
+function getStrategyText(numStrategies: number) {
+  const text = numStrategies > 1 ? 'Strategies' : 'Strategy';
+  return `${numStrategies} ${text}`;
+}
