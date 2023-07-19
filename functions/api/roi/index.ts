@@ -22,7 +22,7 @@ const buildRoiResponse = (
       status: error_code || undefined,
       headers: {
         'content-type': 'application/json',
-        'Cache-Control': 's-maxage=60',
+        'Cache-Control': 's-maxage=300',
       },
     }
   );
