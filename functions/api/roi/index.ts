@@ -42,7 +42,7 @@ const getRoiData = async (env: CFWorkerEnv) => {
     getHeaders(env)
   );
   const json: any = await response.json();
-  if (json?.result) return json.result;
+  if (json?.result?.rows) return json.result.rows;
   throw new Error('ROI data contains no results field');
 };
 

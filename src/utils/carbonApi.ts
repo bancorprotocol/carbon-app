@@ -1,5 +1,27 @@
 import axios from 'axios';
-import { FiatPriceDict, FiatSymbol } from 'store/useFiatCurrencyStore';
+
+export const AVAILABLE_CURRENCIES = [
+  'USD',
+  'EUR',
+  'JPY',
+  'GBP',
+  'AUD',
+  'CAD',
+  'CHF',
+  'CNH',
+] as const;
+
+export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
+
+export type FiatPriceDict = {
+  [k in FiatSymbol]: number;
+};
+
+export type RoiRow = {
+  APR: string;
+  ROI: string;
+  id: string;
+};
 
 let BASE_URL = '/api/';
 
@@ -34,6 +56,13 @@ const carbonApi = {
         params: { convert: convert.join(',') },
       }
     );
+    return data;
+  },
+  getRoi: async (): Promise<RoiRow[]> => {
+    const {
+      data: { data },
+    } = await carbonApiAxios.get<{ data: RoiRow[] }>('roi');
+    console.log(data);
     return data;
   },
 };

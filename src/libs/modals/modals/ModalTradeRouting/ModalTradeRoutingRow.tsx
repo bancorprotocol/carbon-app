@@ -1,12 +1,12 @@
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
-import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { FC } from 'react';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import BigNumber from 'bignumber.js';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { ModalTradeRoutingRowCell } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRowCell';
 import { ForwardArrow } from 'components/common/forwardArrow';
+import { FiatPriceDict } from 'utils/carbonApi';
 
 type ModalTradeRoutingRowProps = {
   action: Action;

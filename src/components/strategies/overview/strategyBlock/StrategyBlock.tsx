@@ -14,6 +14,7 @@ import { useOrder } from 'components/strategies/create/useOrder';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { carbonEvents } from 'services/events';
 import { useTranslation } from 'libs/translations';
+import { useRoi } from 'hooks/useRoi';
 
 export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   const { t } = useTranslation();
@@ -34,6 +35,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
     order0,
     order1,
   });
+  const { strategyRoi } = useRoi(strategy.id);
 
   const handleOnDuplicateClick = () => {
     carbonEvents.strategyEdit.strategyDuplicateClick({
@@ -70,6 +72,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
               {t('pages.strategyOverview.card.title', {
                 id: strategy.idDisplay,
               })}
+              {strategyRoi?.toString() || 'no ROI'}
             </div>
           </div>
         </div>
