@@ -4,12 +4,12 @@ import { Notification } from 'libs/notifications';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
-import { FiatSymbol } from 'store/useFiatCurrencyStore';
 import {
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
 import { APP_ID, APP_VERSION } from 'utils/constants';
+import { FiatSymbol } from 'utils/carbonApi';
 
 // ************************** /
 // BEWARE!! Keys are not to be removed or changed without setting a proper clean-up and migration logic in place!! Same for changing the app version!

@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import numbro from 'numbro';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { FiatSymbol } from 'store/useFiatCurrencyStore';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { FiatSymbol } from 'utils/carbonApi';
 
 export const isProduction = window
   ? window.location.host.includes('carbondefi.xyz')
