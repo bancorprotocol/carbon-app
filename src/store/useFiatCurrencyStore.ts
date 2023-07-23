@@ -4,6 +4,7 @@ import { lsService } from 'services/localeStorage';
 const AVAILABLE_CURRENCIES = [
   'USD',
   'EUR',
+  'ETH',
   'JPY',
   'GBP',
   'AUD',
