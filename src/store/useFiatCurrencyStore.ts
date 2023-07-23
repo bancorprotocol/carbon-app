@@ -4,13 +4,13 @@ import { lsService } from 'services/localeStorage';
 const AVAILABLE_CURRENCIES = [
   'USD',
   'EUR',
-  'ETH',
   'JPY',
   'GBP',
   'AUD',
   'CAD',
   'CHF',
   'CNH',
+  'ETH',
 ] as const;
 
 export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
