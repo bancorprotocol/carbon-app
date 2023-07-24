@@ -9,6 +9,7 @@ export const AVAILABLE_CURRENCIES = [
   'CAD',
   'CHF',
   'CNH',
+  'ETH',
 ] as const;
 
 export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
