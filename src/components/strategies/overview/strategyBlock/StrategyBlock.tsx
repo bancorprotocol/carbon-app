@@ -72,7 +72,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
               {t('pages.strategyOverview.card.title', {
                 id: strategy.idDisplay,
               })}
-              {strategyRoi?.toString() || 'no ROI'}
+              {strategyRoi?.roi.toString() || 'no ROI'}
             </div>
           </div>
         </div>

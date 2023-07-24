@@ -62,7 +62,6 @@ const carbonApi = {
     const {
       data: { data },
     } = await carbonApiAxios.get<{ data: RoiRow[] }>('roi');
-    console.log(data);
     return data;
   },
 };
