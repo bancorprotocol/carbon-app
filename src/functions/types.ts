@@ -4,6 +4,7 @@ export interface CFWorkerEnv {
   COINGECKO_API_KEY: string;
   VITE_CARBON_API_KEY?: string;
   ASSETS: Fetcher;
+  DUNE_API_KEY: string;
 }
 
 interface ObjectWithKeys<T> {
