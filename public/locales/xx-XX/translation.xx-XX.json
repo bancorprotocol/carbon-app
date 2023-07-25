@@ -1,648 +1,406 @@
 {
-  "common": {
-    "placeholders": {
-      "placeholder1": "xxxxxxxxxxx",
-      "placeholder2": "xxxxxxxxxxxx",
-      "placeholder3": "xxxxxxxxxxx",
-      "placeholder4": "xxxxxxxxxxx",
-      "placeholder5": "xxxxxxxxxxx"
-    },
-    "actionButtons": {
-      "actionButton1": "xxxxxxxxxxx",
-      "actionButton2": "xxxxxxxxxxx",
-      "actionButton3": "xxxxxxxxxxx",
-      "actionButton4": "xxxxxxxxxxx",
-      "actionButton5": "xxxxxxxxxxx",
-      "actionButton6": "xxxxxxxxxxx",
-      "actionButton7": "xxxxxxxxxxx",
-      "actionButton8": "xxxxxxxxxxx"
-    },
-    "warnings": {
-      "warning1": "xxxxxxxxxxx",
-      "warning2": "xxxxxxxxxxx",
-      "warning3": "xxxxxxxxxxx"
-    },
-    "errors": {
-      "error1": "xxxxxxxxxxx",
-      "error2": "xxxxxxxxxxx",
-      "error3": "xxxxxxxxxxx",
-      "error4": "xxxxxxxxxxx",
-      "error10": "xxxxxxxx",
-      "error11": "xxxxxxxx",
-      "error12": "xxxxxxxx",
-      "error5": "xxxxxxxx",
-      "error6": "xxxxxxxx",
-      "error7": "xxxxxxxx",
-      "error8": "xxxxxxxx",
-      "error9": "xxxxxxxx"
-    },
-    "tooltips": {
-      "tooltip1": "xxxxxxxxxxx",
-      "tooltip2": "xxxxxxxxxxx",
-      "tooltip3": "xxxxxxxxxxx",
-      "tooltip4": "xxxxxxxxxxx",
-      "tooltip5": "xxxxxxxxxxx",
-      "tooltip6": "xxxxxxxxxxx",
-      "tooltip7": "xxxxxxxxxxx",
-      "tooltip8": "xxxxxxxx"
-    },
-    "statuses": {
-      "status1": "xxxxxxxxxxx",
-      "status2": "xxxxxxxxxxx"
-    },
-    "contents": {
-      "content1": "xxxxxxxxxxx",
-      "content2": "xxxxxxxxxxx",
-      "content3": "xxxxxxxxxxx",
-      "content4": "xxxxxxxxxxx",
-      "content5": "xxxxxxxxxxx",
-      "content6": "xxxxxxxxxxx",
-      "content7": "xxxxxxxxxxx",
-      "content8": "xxxxxxxxxxx",
-      "content9": "xxxxxxxxxxx",
-      "content10": "xxxxxxxxxxx",
-      "content11": "xxxxxxxx",
-      "content12": "xxxxxxxx",
-      "content13": "xxxxxxxx",
-      "content14": "xxxxxxxx"
-    }
-  },
-  "modals": {
-    "deleteStrategy": {
-      "modalTitle": "xxxxxxxxxxx",
-      "title": "xxxxxxxxxxx",
-      "contents": {
-        "content1": "xxxxxxxxxxx",
-        "content2": "xxxxxxxxxxx"
-      },
-      "actionButtons": {
-        "actionButton1": "xxxxxxxxxxx",
-        "actionButton2": "xxxxxxxxxxx"
-      }
-    },
-    "pauseStrategy": {
-      "modalTitle": "xxxxxxxxxxx",
-      "title": "xxxxxxxxxxx",
-      "content": "xxxxxxxxxxx",
-      "actionButtons": {
-        "actionButton1": "xxxxxxxxxxx",
-        "actionButton2": "xxxxxxxxxxx"
-      }
-    },
-    "selectToken": {
-      "modalTitle": "xxxxxxxxxxx",
-      "actionButton": "xxxxxxxxxxx",
-      "contents": {
-        "content1": "xxxxxxxxxxx",
-        "content2": "xxxxxxxxxxx",
-        "content3": "xxxxxxxxxxx"
-      }
-    },
-    "selectTokenPair": {
-      "modalTitle": "xxxxxxxxxxx",
-      "error1": "xxxxxxxxxxx"
-    },
-    "tradeSettings": {
-      "modalTitle": "xxxxxxxxxxx",
-      "actionButton": "xxxxxxxxxxx",
-      "section1": {
-        "title": "xxxxxxxxxxx"
-      },
-      "section2": {
-        "title": "xxxxxxxxxxx"
-      }
-    },
-    "connectWallet": {
-      "modalTitle": "xxxxxxxxxxx",
-      "actionButton": "xxxxxxxxxxx",
-      "content1": "xxxxxxxxxxx",
-      "error1": "xxxxxxxxxxx"
-    },
-    "confirm": {
-      "modalTitle": "xxxxxxxxxxx",
-      "subtitle": "xxxxxxxxxxx",
-      "contents": {
-        "content1": "xxxxxxxxxxx",
-        "content2": "xxxxxxxxxxx",
-        "content3": "xxxxxxxxxxx"
-      },
-      "actionButtons": {
-        "actionButton1": "xxxxxxxxxxx",
-        "actionButton2": "xxxxxxxxxxx",
-        "actionButton3": "xxxxxxxxxxx",
-        "actionButton4": "xxxxxxxxxxx",
-        "actionButton5": "xxxxxxxxxxx"
-      },
-      "statuses": {
-        "status1": "xxxxxxxxxxx",
-        "status2": "xxxxxxxxxxx",
-        "status3": "xxxxxxxxxxx"
-      }
-    },
-    "tradeRouting": {
-      "modalTitle": "xxxxxxxxxxx",
-      "section1": {
-        "title1": "xxxxxxxxxxx",
-        "header1": "xxxxxxxxxxx"
-      },
-      "section2": {
-        "title1": "xxxxxxxxxxx"
-      },
-      "actionButtons": {
-        "actionButton1": "xxxxxxxxxxx",
-        "actionButton2": "xxxxxxxxxxx"
-      },
-      "tooltips": {
-        "tooltip1": "xxxxxxxxxxx",
-        "tooltip2": "xxxxxxxxxxx"
-      }
-    },
-    "restrictedCountry": {
-      "modalTitle": "xxxxxxxxxxx"
-    },
-    "notification": {
-      "modalTitle": "xxxxxxxxxxx",
-      "actionButton1": "xxxxxxxxxxx",
-      "content1": "xxxxxxxxxxx"
-    },
-    "importToken": {
-      "modalTitle": "xxxxxxxxxxx",
-      "contents": {
-        "content1": "xxxxxxxxxxx",
-        "content2": "xxxxxxxxxxx",
-        "content3": "xxxxxxxxx"
-      },
-      "actionButtons": {
-        "actionButton1": "xxxxxxxxxxx",
-        "actionButton2": "xxxxxxxxxxx"
-      },
-      "title": "xxxxxxxxxxx"
-    },
-    "expertMode": {
-      "actionButtons": {
-        "actionButton1": "xxxxxxxx"
-      },
-      "contents": {
-        "content1": "xxxxxxxx",
-        "content2": "xxxxxxxx"
-      },
-      "modalTitle": "xxxxxxxx",
-      "title": "xxxxxxxx"
-    },
-    "genericInfo": {
-      "actionButtons": {
-        "actionButton1": "xxxxxxxx",
-        "actionButton2": "xxxxxxxx"
-      },
-      "contents": {
-        "content1": "xxxxxxxx"
-      },
-      "title": "xxxxxxxx"
-    }
-  },
-  "navBar": {
-    "actionButton": "xxxxxxxxxxx",
-    "items": {
-      "item1": "xxxxxxxxxxxxx",
-      "item2": "xxxxxxxxxxxxxx",
-      "item3": "xxxxxxxxxxxxxxx"
-    },
-    "burgerMenu": {
-      "items": {
-        "item1": "xxxxxxxxxx",
-        "item2": "xxxxxxxxx",
-        "item3": "xxxxxxxx",
-        "item4": "xxxxxxx",
-        "item5": "xxxxxx",
-        "item6": "xxxxx",
-        "item7": "xxxx",
-        "item8": "xxx",
-        "item9": "xx",
-        "item10": "x",
-        "item11": "xxxxxxxxxxxxxxx",
-        "item12": "xxxxxxxxxxxxxxxxx",
-        "item13": "xxxxxxxxxxxxxxxxxxx"
-      }
-    },
-    "walletMenu": {
-      "states": {
-        "state1": "xxxxxxxxxxx",
-        "state2": "xxxxxxxxxxx",
-        "state3": "xxxxxxxxxxx"
-      },
-      "items": {
-        "item1": "xxxxxxxxxxxx",
-        "item2": "xxxxxxxxxxxxx",
-        "item3": "xxxxxxxxxxxxxx"
-      }
-    }
-  },
-  "notifications": {
-    "titles": {
-      "titles1": "xxxxxxxxxxx",
-      "titles2": "xxxxxxxxxxx",
-      "titles3": "xxxxxxxxxxx",
-      "titles4": "xxxxxxxxxxx",
-      "titles5": "xxxxxxxxxxx",
-      "titles6": "xxxxxxxxxxx",
-      "titles7": "xxxxxxxxxxx",
-      "titles8": "xxxxxxxxxxx",
-      "titles9": "xxxxxxxxxxx",
-      "titles10": "xxxxxxxxxxx",
-      "titles11": "xxxxxxxxxxx",
-      "titles12": "xxxxxxxxxxx",
-      "titles13": "xxxxxxxxxxx",
-      "titles14": "xxxxxxxxxxx",
-      "titles15": "xxxxxxxxxxx",
-      "titles16": "xxxxxxxxxxx",
-      "titles17": "xxxxxxxxxxx",
-      "titles18": "xxxxxxxxxxx",
-      "titles19": "xxxxxxxxxxx",
-      "titles20": "xxxxxxxxxxx",
-      "titles21": "xxxxxxxxxxx",
-      "titles22": "xxxxxxxxxxx",
-      "titles23": "xxxxxxxxxxx",
-      "titles24": "xxxxxxxxxxx",
-      "titles25": "xxxxxxxxxxx",
-      "titles26": "xxxxxxxxxxx",
-      "titles27": "xxxxxxxxxxx",
-      "titles28": "xxxxxxxxxxx",
-      "titles29": "xxxxxxxxxxx",
-      "titles30": "xxxxxxxxxxx",
-      "titles31": "xxxxxxxxxxx",
-      "titles32": "xxxxxxxxxxx",
-      "titles33": "xxxxxxxxxxx",
-      "titles34": "xxxxxxxxxxx",
-      "titles35": "xxxxxxxxxxx"
-    },
-    "descriptions": {
-      "description1": "xxxxxxxxxxx",
-      "description2": "xxxxxxxxxxx",
-      "description3": "xxxxxxxxxxx",
-      "description4": "xxxxxxxxxxx",
-      "description5": "xxxxxxxxxxx",
-      "description6": "xxxxxxxxxxx",
-      "description7": "xxxxxxxxxxx",
-      "description8": "xxxxxxxxxxx",
-      "description9": "xxxxxxxxxxx",
-      "description10": "xxxxxxxxxxx",
-      "description11": "xxxxxxxxxxx",
-      "description12": "xxxxxxxxxxx",
-      "description13": "xxxxxxxxxxx",
-      "description14": "xxxxxxxxxxx",
-      "description15": "xxxxxxxxxxx",
-      "description16": "xxxxxxxxxxx",
-      "description17": "xxxxxxxxxxx",
-      "description18": "xxxxxxxxxxx",
-      "description19": "xxxxxxxxxxx",
-      "description20": "xxxxxxxxxxx",
-      "description21": "xxxxxxxxxxx",
-      "description22": "xxxxxxxxxxx",
-      "description23": "xxxxxxxxxxx",
-      "description24": "xxxxxxxxxxx",
-      "description25": "xxxxxxxxxxx",
-      "description26": "xxxxxxxxxxx",
-      "description27": "xxxxxxxxxxx",
-      "description28": "xxxxxxxxxxx",
-      "description29": "xxxxxxxxxxx",
-      "description30": "xxxxxxxxxxx",
-      "description31": "xxxxxxxxxxx",
-      "description32": "xxxxxxxxxxx",
-      "description33": "xxxxxxxxxxx",
-      "description34": "xxxxxxxxxxx",
-      "description35": "xxxxxxxxxxx",
-      "description36": "xxxxxxxxxxx",
-      "description37": "xxxxxxxxxxx"
-    }
-  },
-  "pages": {
-    "strategyOverview": {
-      "noStrategyCard": {
-        "title": "xxxxxxxxxxx",
-        "subtitle": "xxxxxxxxxxx",
-        "actionButton": "xxxxxxxxxxx",
-        "contents": {
-          "content1": "xxxxxxxxxxx",
-          "content2": "xxxxxxxxxxx",
-          "content3": "xxxxxxxxxxx",
-          "content4": "xxxxxxxxxxx",
-          "content5": "xxxxxxxxxxx",
-          "content6": "xxxxxxxxxxx",
-          "content7": "xxxxxxxxxxx"
-        }
-      },
-      "header": {
-        "title_zero": "xxxxxxxxxxx",
-        "title_one": "xxxxxxxxxxx",
-        "title_other": "xxxxxxxxxxx",
-        "actionButtons": {
-          "actionButton1": "xxxxxxxxxxx",
-          "actionButton2": "xxxxxxxxxxx"
-        },
-        "filterMenu": {
-          "items": {
-            "item1": "xxxxxxxxxxxx",
-            "item2": "xxxxxxxxxxxxx",
-            "item3": "xxxxxxxxxxxxxx",
-            "item4": "xxxxxxxxxxxxxxx",
-            "item5": "xxxxxxxxxxxxxxxx",
-            "item6": "xxxxxxxxxxxxxxxxx",
-            "item7": "xxxxxxxxxxxxxxxxxx"
-          },
-          "subtitles": {
-            "subtitle1": "xxxxxxxxxxx",
-            "subtitle2": "xxxxxxxxxxx"
-          }
-        }
-      },
-      "card": {
-        "title": "xxxxxxxxxxx",
-        "actionButtons": {
-          "actionButton1": "xxxxxxxxxxx",
-          "actionButton2": "xxxxxxxxxxx",
-          "actionButton3": "xxxxxxxxxxx"
-        },
-        "section1": {
-          "title": "xxxxxxxxxxx",
-          "contents": {
-            "content1": "xxxxxxxxxxx",
-            "content2": "xxxxxxxxxxx",
-            "content3": "xxxxxxxxxxx"
-          }
-        },
-        "section2": {
-          "title": "xxxxxxxxxxx",
-          "contents": {
-            "content1": "xxxxxxxxxxx",
-            "content2": "xxxxxxxxxxx",
-            "content3": "xxxxxxxxxxx"
-          }
-        },
-        "section3": {
-          "title": "xxxxxxxxxxx",
-          "statuses": {
-            "status1": "xxxxxxxxxxx",
-            "status2": "xxxxxxxxxxx",
-            "status3": "xxxxxxxxxxx",
-            "status4": "xxxxxxxxxxx"
-          },
-          "notification": {
-            "title": "xxxxxxxxxxx",
-            "content1": "xxxxxxxxxxx",
-            "content2": "xxxxxxxxxxx",
-            "actionButton": "xxxxxxxxxxx"
-          }
-        },
-        "tooltips": {
-          "tooltip1": "xxxxxxxxxxx",
-          "tooltip2": "xxxxxxxxxxx",
-          "tooltip3": "xxxxxxxxxxx",
-          "tooltip4": "xxxxxxxxxxx",
-          "tooltip5": "xxxxxxxxxxx",
-          "tooltip6": "xxxxxxxxxxx",
-          "tooltip7": "xxxxxxxxxxx",
-          "tooltip8": "xxxxxxxxxxx",
-          "tooltip9": "xxxxxxxxxxx",
-          "tooltip10": "xxxxxxxxxxx",
-          "tooltip11": "xxxxxxxxxxx"
-        },
-        "manageStrategy": {
-          "titles": {
-            "title1": "xxxxxxxxxxx",
-            "title2": "xxxxxxxxxxx",
-            "title3": "xxxxxxxxxxx",
-            "title4": "xxxxxxxxxxx",
-            "title5": "xxxxxxxxxxx",
-            "title6": "xxxxxxxxxxx",
-            "title7": "xxxxxxxxxxx"
-          },
-          "tooltips": {
-            "tooltip1": "xxxxxxxxxxx",
-            "tooltip2": "xxxxxxxxxxx",
-            "tooltip3": "xxxxxxxxxxx",
-            "tooltip4": "xxxxxxxxxxx",
-            "tooltip5": "xxxxxxxxxxx",
-            "tooltip6": "xxxxxxxxxxx",
-            "tooltip7": "xxxxxxxxxxx"
-          }
-        }
-      }
-    },
-    "strategyCreate": {
-      "step1": {
-        "title": "xxxxxxxxxxx",
-        "section1": {
-          "title": "xxxxxxxxxxx",
-          "contents": {
-            "content1": "xxxxxxxxxxx",
-            "content2": "xxxxxxxxxxx",
-            "content3": "xxxxxxxxxxx"
-          }
-        },
-        "section2": {
-          "title": "xxxxxxxxxxx",
-          "strategyTypes": {
-            "type1": {
-              "title": "xxxxxxxxxxx",
-              "contents": {
-                "content1": "xxxxxxxxxxx",
-                "content2": "xxxxxxxxxxx"
-              },
-              "options": {
-                "option1": "xxxxxxxxxxx",
-                "option2": "xxxxxxxxxxx",
-                "option3": "xxxxxxxxxxx"
-              }
-            },
-            "type2": {
-              "title": "xxxxxxxxxxx",
-              "contents": {
-                "content1": "xxxxxxxxxxx",
-                "content2": "xxxxxxxxxxx"
-              },
-              "options": {
-                "option1": "xxxxxxxxxxx",
-                "option2": "xxxxxxxxxxx",
-                "option3": "xxxxxxxxxxx",
-                "option4": "xxxxxxxxxxx"
-              }
-            }
-          },
-          "contents": {
-            "content1": "xxxxxxxx"
-          }
-        },
-        "tooltips": {
-          "tooltip1": "xxxxxxxxxxx",
-          "tooltip2": "xxxxxxxxxxx",
-          "tooltip3": "xxxxxxxxxxx"
-        },
-        "actionButton": "xxxxxxxxxxx"
-      },
-      "step2": {
-        "title_one": "xxxxxxxxxxx",
-        "title_other": "xxxxxxxxxxx",
-        "chart": {
-          "title": "xxxxxxxxxxx",
-          "actionButton": "xxxxxxxxxxx"
-        },
-        "section1": {
-          "titles": {
-            "title1": "xxxxxxxxxxx",
-            "title2": "xxxxxxxxxxx"
-          },
-          "contents": {
-            "content1": "xxxxxxxxxxx"
-          }
-        },
-        "section2": {
-          "titles": {
-            "title1": "xxxxxxxxxxx",
-            "title2": "xxxxxxxxxxx"
-          },
-          "subtitles": {
-            "subtitle1": "xxxxxxxxxxx",
-            "subtitle2": "xxxxxxxxxxx",
-            "subtitle3": "xxxxxxxxxxx",
-            "subtitle4": "xxxxxxxxxxx"
-          },
-          "contents": {
-            "content1": "xxxxxxxxxxx",
-            "content2": "xxxxxxxxxxx",
-            "content3": "xxxxxxxxxxx",
-            "content4": "xxxxxxxxxxx",
-            "content5": "xxxxxxxxxxx"
-          }
-        },
-        "tooltips": {
-          "tooltip1": "xxxxxxxxxxx",
-          "tooltip2": "xxxxxxxxxxx",
-          "tooltip3": "xxxxxxxxxxx",
-          "tooltip4": "xxxxxxxxxxx",
-          "tooltip5": "xxxxxxxxxxx",
-          "tooltip6": "xxxxxxxxxxx",
-          "tooltip7": "xxxxxxxxxxx",
-          "tooltip8": "xxxxxxxxxxx"
-        },
-        "actionButton": "xxxxxxxxxxx"
-      }
-    },
-    "strategyEdit": {
-      "titles": {
-        "title1": "xxxxxxxxxxx",
-        "title2": "xxxxxxxxxxx",
-        "title3": "xxxxxxxxxxx",
-        "title4": "xxxxxxxxxxx"
-      },
-      "chart": {
-        "title": "xxxxxxxxxxx",
-        "actionButton": "xxxxxxxxxxx"
-      },
-      "section1": {
-        "title": "xxxxxxxxxxx"
-      },
-      "section2": {
-        "titles": {
-          "title1": "xxxxxxxxxxx",
-          "title2": "xxxxxxxxxxx",
-          "title3": "xxxxxxxxxxx",
-          "title4": "xxxxxxxxxxx",
-          "title5": "xxxxxxxx",
-          "title6": "xxxxxxxx"
-        },
-        "subtitles": {
-          "subtitle1": "xxxxxxxxxxx",
-          "subtitle2": "xxxxxxxxxxx"
-        },
-        "contents": {
-          "content1": "xxxxxxxxxxx",
-          "content2": "xxxxxxxxxxx",
-          "content3": "xxxxxxxxxxx",
-          "content4": "xxxxxxxxxxx",
-          "content5": "xxxxxxxxxxx",
-          "content6": "xxxxxxxxxxx",
-          "content7": "xxxxxxxxxxx",
-          "content9": "xxxxxxxxxxx",
-          "content10": "xxxxxxxxxxx",
-          "content11": "xxxxxxxxxxx",
-          "content12": "xxxxxxxxxxx"
-        }
-      },
-      "tooltips": {
-        "tooltip1": "xxxxxxxxxxx",
-        "tooltip2": "xxxxxxxxxxx",
-        "tooltip3": "xxxxxxxxxxx",
-        "tooltip4": "xxxxxxxxxxx"
-      },
-      "actionButtons": {
-        "actionButton1": "xxxxxxxxxxx",
-        "actionButton2": "xxxxxxxxxxx",
-        "actionButton3": "xxxxxxxxxxx",
-        "actionButton4": "xxxxxxxxxxx",
-        "actionButton5": "xxxxxxxxxxx"
-      }
-    },
-    "trade": {
-      "errors": {
-        "error1": "xxxxxxxxxxx",
-        "error2": "xxxxxxxxxxx",
-        "error3": "xxxxxxxxxxx",
-        "error4": "xxxxxxxxxxx",
-        "error5": "xxxxxxxxxxx",
-        "error6": "xxxxxxxxxxx",
-        "error7": "xxxxxxxxxxx",
-        "error8": "xxxxxxxxxxx",
-        "error9": "xxxxxxxxxxx"
-      },
-      "section1": {
-        "title": "xxxxxxxxxxx",
-        "headers": {
-          "header1": "xxxxxxxxxxx",
-          "header2": "xxxxxxxxxxx",
-          "header3": "xxxxxxxxxxx"
-        },
-        "tooltips": {
-          "tooltip1": "xxxxxxxxxxx",
-          "tooltip2": "xxxxxxxxxxx",
-          "tooltip3": "xxxxxxxxxxx",
-          "tooltip4": "xxxxxxxxxxx"
-        }
-      },
-      "section2": {
-        "titles": {
-          "title1": "xxxxxxxxxxx",
-          "title2": "xxxxxxxxxxx"
-        },
-        "subtitles": {
-          "subtitle1": "xxxxxxxxxxx",
-          "subtitle2": "xxxxxxxxxxx"
-        },
-        "actionButtons": {
-          "actionButton1": "xxxxxxxxxxx",
-          "actionButton2": "xxxxxxxxxxx",
-          "actionButton3": "xxxxxxxxxxx",
-          "actionButton4": "xxxxxxxxxxx",
-          "actionButton5": "xxxxxxxxxxx",
-          "actionButton6": "xxxxxxxxxxx"
-        },
-        "contents": {
-          "content1": "xxxxxxxxxxx",
-          "content2": "xxxxxxxxxxx"
-        },
-        "tooltips": {
-          "tooltip1": "xxxxxxxxxxx"
-        }
-      },
-      "section3": {
-        "actionButtons": {
-          "actionButton1": "xxxxxxxxxxx",
-          "actionButton2": "xxxxxxxxxxx"
-        },
-        "tooltips": {
-          "tooltip1": "xxxxxxxxxxx",
-          "tooltip2": "xxxxxxxxxxx"
-        }
-      }
-    }
-  }
+  "common.placeholders.placeholder1": "xxxxxx xxxxxxx",
+  "common.placeholders.placeholder2": "xxxxxx xxxxxxx",
+  "common.placeholders.placeholder3": "xxxxxx xxxxxxx",
+  "common.placeholders.placeholder4": "xxxxxx xxxxxxx",
+  "common.placeholders.placeholder5": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton3": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton4": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton5": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton6": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton7": "xxxxxx xxxxxxx",
+  "common.actionButtons.actionButton8": "xxxxxx xxxxxxx",
+  "common.warnings.warning1": "xxxxxx xxxxxxx",
+  "common.warnings.warning2": "xxxxxx xxxxxxx",
+  "common.warnings.warning3": "xxxxxx xxxxxxx",
+  "common.errors.error1": "xxxxxx xxxxxxx",
+  "common.errors.error2": "xxxxxx xxxxxxx",
+  "common.errors.error3": "xxxxxx xxxxxxx",
+  "common.errors.error4": "xxxxxx xxxxxxx",
+  "common.errors.error5": "xxxxxx xxxxxxx",
+  "common.errors.error6": "xxxxxx xxxxxxx",
+  "common.errors.error7": "xxxxxx xxxxxxx",
+  "common.errors.error8": "xxxxxx xxxxxxx",
+  "common.errors.error9": "xxxxxx xxxxxxx",
+  "common.errors.error10": "xxxxxx xxxxxxx",
+  "common.errors.error11": "xxxxxx xxxxxxx",
+  "common.errors.error12": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip3": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip4": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip5": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip6": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip7": "xxxxxx xxxxxxx",
+  "common.tooltips.tooltip8": "xxxxxx xxxxxxx",
+  "common.statuses.status1": "xxxxxx xxxxxxx",
+  "common.statuses.status2": "xxxxxx xxxxxxx",
+  "common.contents.content1": "xxxxxx xxxxxxx",
+  "common.contents.content2": "xxxxxx xxxxxxx",
+  "common.contents.content3": "xxxxxx xxxxxxx",
+  "common.contents.content4": "xxxxxx xxxxxxx",
+  "common.contents.content5": "xxxxxx xxxxxxx",
+  "common.contents.content6": "xxxxxx xxxxxxx",
+  "common.contents.content7": "xxxxxx xxxxxxx",
+  "common.contents.content8": "xxxxxx xxxxxxx",
+  "common.contents.content9": "xxxxxx xxxxxxx",
+  "common.contents.content10": "xxxxxx xxxxxxx",
+  "common.contents.content11": "xxxxxx xxxxxxx",
+  "common.contents.content12": "xxxxxx xxxxxxx",
+  "common.contents.content13": "xxxxxx xxxxxxx",
+  "common.contents.content14": "xxxxxx xxxxxxx",
+  "modals.deleteStrategy.modalTitle": "xxxxxx xxxxxxx",
+  "modals.deleteStrategy.title": "xxxxxx xxxxxxx",
+  "modals.deleteStrategy.contents.content1": "xxxxxx xxxxxxx",
+  "modals.deleteStrategy.contents.content2": "xxxxxx xxxxxxx",
+  "modals.deleteStrategy.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "modals.deleteStrategy.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "modals.pauseStrategy.modalTitle": "xxxxxx xxxxxxx",
+  "modals.pauseStrategy.title": "xxxxxx xxxxxxx",
+  "modals.pauseStrategy.content": "xxxxxx xxxxxxx",
+  "modals.pauseStrategy.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "modals.pauseStrategy.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "modals.selectToken.modalTitle": "xxxxxx xxxxxxx",
+  "modals.selectToken.actionButton": "xxxxxx xxxxxxx",
+  "modals.selectToken.contents.content1": "xxxxxx xxxxxxx",
+  "modals.selectToken.contents.content2": "xxxxxx xxxxxxx",
+  "modals.selectToken.contents.content3": "xxxxxx xxxxxxx",
+  "modals.selectTokenPair.modalTitle": "xxxxxx xxxxxxx",
+  "modals.selectTokenPair.error1": "xxxxxx xxxxxxx",
+  "modals.tradeSettings.modalTitle": "xxxxxx xxxxxxx",
+  "modals.tradeSettings.actionButton": "xxxxxx xxxxxxx",
+  "modals.tradeSettings.section1.title": "xxxxxx xxxxxxx",
+  "modals.tradeSettings.section2.title": "xxxxxx xxxxxxx",
+  "modals.connectWallet.modalTitle": "xxxxxx xxxxxxx",
+  "modals.connectWallet.actionButton": "xxxxxx xxxxxxx",
+  "modals.connectWallet.content1": "xxxxxx xxxxxxx",
+  "modals.connectWallet.error1": "xxxxxx xxxxxxx",
+  "modals.confirm.modalTitle": "xxxxxx xxxxxxx",
+  "modals.confirm.subtitle": "xxxxxx xxxxxxx",
+  "modals.confirm.contents.content1": "xxxxxx xxxxxxx",
+  "modals.confirm.contents.content2": "xxxxxx xxxxxxx",
+  "modals.confirm.contents.content3": "xxxxxx xxxxxxx",
+  "modals.confirm.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "modals.confirm.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "modals.confirm.actionButtons.actionButton3": "xxxxxx xxxxxxx",
+  "modals.confirm.actionButtons.actionButton4": "xxxxxx xxxxxxx",
+  "modals.confirm.actionButtons.actionButton5": "xxxxxx xxxxxxx",
+  "modals.confirm.statuses.status1": "xxxxxx xxxxxxx",
+  "modals.confirm.statuses.status2": "xxxxxx xxxxxxx",
+  "modals.confirm.statuses.status3": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.modalTitle": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.section1.title1": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.section1.header1": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.section2.title1": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "modals.tradeRouting.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "modals.restrictedCountry.modalTitle": "xxxxxx xxxxxxx",
+  "modals.notification.modalTitle": "xxxxxx xxxxxxx",
+  "modals.notification.actionButton1": "xxxxxx xxxxxxx",
+  "modals.notification.content1": "xxxxxx xxxxxxx",
+  "modals.importToken.modalTitle": "xxxxxx xxxxxxx",
+  "modals.importToken.title": "xxxxxx xxxxxxx",
+  "modals.importToken.contents.content1": "xxxxxx xxxxxxx",
+  "modals.importToken.contents.content2": "xxxxxx xxxxxxx",
+  "modals.importToken.contents.content3": "xxxxxx xxxxxxx",
+  "modals.importToken.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "modals.importToken.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "modals.expertMode.modalTitle": "xxxxxx xxxxxxx",
+  "modals.expertMode.title": "xxxxxx xxxxxxx",
+  "modals.expertMode.contents.content1": "xxxxxx xxxxxxx",
+  "modals.expertMode.contents.content2": "xxxxxx xxxxxxx",
+  "modals.expertMode.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "modals.genericInfo.title": "xxxxxx xxxxxxx",
+  "modals.genericInfo.contents.content1": "xxxxxx xxxxxxx",
+  "modals.genericInfo.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "modals.genericInfo.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "navBar.actionButton": "xxxxxx xxxxxxx",
+  "navBar.items.item1": "xxxxxx xxxxxxx",
+  "navBar.items.item2": "xxxxxx xxxxxxx",
+  "navBar.items.item3": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item1": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item2": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item3": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item4": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item5": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item6": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item7": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item8": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item9": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item10": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item11": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item12": "xxxxxx xxxxxxx",
+  "navBar.burgerMenu.items.item13": "xxxxxx xxxxxxx",
+  "navBar.walletMenu.states.state1": "xxxxxx xxxxxxx",
+  "navBar.walletMenu.states.state2": "xxxxxx xxxxxxx",
+  "navBar.walletMenu.states.state3": "xxxxxx xxxxxxx",
+  "navBar.walletMenu.items.item1": "xxxxxx xxxxxxx",
+  "navBar.walletMenu.items.item2": "xxxxxx xxxxxxx",
+  "navBar.walletMenu.items.item3": "xxxxxx xxxxxxx",
+  "notifications.titles.titles1": "xxxxxx xxxxxxx",
+  "notifications.titles.titles2": "xxxxxx xxxxxxx",
+  "notifications.titles.titles3": "xxxxxx xxxxxxx",
+  "notifications.titles.titles4": "xxxxxx xxxxxxx",
+  "notifications.titles.titles5": "xxxxxx xxxxxxx",
+  "notifications.titles.titles6": "xxxxxx xxxxxxx",
+  "notifications.titles.titles7": "xxxxxx xxxxxxx",
+  "notifications.titles.titles8": "xxxxxx xxxxxxx",
+  "notifications.titles.titles9": "xxxxxx xxxxxxx",
+  "notifications.titles.titles10": "xxxxxx xxxxxxx",
+  "notifications.titles.titles11": "xxxxxx xxxxxxx",
+  "notifications.titles.titles12": "xxxxxx xxxxxxx",
+  "notifications.titles.titles13": "xxxxxx xxxxxxx",
+  "notifications.titles.titles14": "xxxxxx xxxxxxx",
+  "notifications.titles.titles15": "xxxxxx xxxxxxx",
+  "notifications.titles.titles16": "xxxxxx xxxxxxx",
+  "notifications.titles.titles17": "xxxxxx xxxxxxx",
+  "notifications.titles.titles18": "xxxxxx xxxxxxx",
+  "notifications.titles.titles19": "xxxxxx xxxxxxx",
+  "notifications.titles.titles20": "xxxxxx xxxxxxx",
+  "notifications.titles.titles21": "xxxxxx xxxxxxx",
+  "notifications.titles.titles22": "xxxxxx xxxxxxx",
+  "notifications.titles.titles23": "xxxxxx xxxxxxx",
+  "notifications.titles.titles24": "xxxxxx xxxxxxx",
+  "notifications.titles.titles25": "xxxxxx xxxxxxx",
+  "notifications.titles.titles26": "xxxxxx xxxxxxx",
+  "notifications.titles.titles27": "xxxxxx xxxxxxx",
+  "notifications.titles.titles28": "xxxxxx xxxxxxx",
+  "notifications.titles.titles29": "xxxxxx xxxxxxx",
+  "notifications.titles.titles30": "xxxxxx xxxxxxx",
+  "notifications.titles.titles31": "xxxxxx xxxxxxx",
+  "notifications.titles.titles32": "xxxxxx xxxxxxx",
+  "notifications.titles.titles33": "xxxxxx xxxxxxx",
+  "notifications.titles.titles34": "xxxxxx xxxxxxx",
+  "notifications.titles.titles35": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description1": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description2": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description3": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description4": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description5": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description6": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description7": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description8": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description9": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description10": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description11": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description12": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description13": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description14": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description15": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description16": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description17": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description18": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description19": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description20": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description21": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description22": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description23": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description24": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description25": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description26": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description27": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description28": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description29": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description30": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description31": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description32": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description33": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description34": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description35": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description36": "xxxxxx xxxxxxx",
+  "notifications.descriptions.description37": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.title": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.subtitle": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.actionButton": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.contents.content3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.contents.content4": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.contents.content5": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.contents.content6": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.noStrategyCard.contents.content7": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.title_zero": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.title_one": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.title_other": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.items.item1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.items.item2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.items.item3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.items.item4": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.items.item5": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.items.item6": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.items.item7": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.subtitles.subtitle1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.header.filterMenu.subtitles.subtitle2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.title": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.actionButtons.actionButton3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section1.title": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section1.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section1.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section1.contents.content3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section2.title": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section2.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section2.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section2.contents.content3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.title": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.statuses.status1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.statuses.status2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.statuses.status3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.statuses.status4": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.notification.title": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.notification.content1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.notification.content2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.section3.notification.actionButton": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip4": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip5": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip6": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip7": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip8": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip9": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip10": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.tooltips.tooltip11": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.titles.title1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.titles.title2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.titles.title3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.titles.title4": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.titles.title5": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.titles.title6": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.titles.title7": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip3": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip4": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip5": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip6": "xxxxxx xxxxxxx",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip7": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.title": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section1.title": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section1.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section1.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section1.contents.content3": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.title": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.title": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.options.option1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.options.option2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.options.option3": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.title": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option3": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option4": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.tooltips.tooltip3": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step1.actionButton": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.title_one": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.title_other": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.chart.title": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.chart.actionButton": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section1.titles.title1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section1.titles.title2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section1.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.titles.title1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.titles.title2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle3": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle4": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.contents.content3": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.contents.content4": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.section2.contents.content5": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip3": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip4": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip5": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip6": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip7": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.tooltips.tooltip8": "xxxxxx xxxxxxx",
+  "pages.strategyCreate.step2.actionButton": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.titles.title1": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.titles.title2": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.titles.title3": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.titles.title4": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.chart.title": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.chart.actionButton": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section1.title": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.titles.title1": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.titles.title2": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.titles.title3": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.titles.title4": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.titles.title5": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.titles.title6": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.subtitles.subtitle1": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.subtitles.subtitle2": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content1": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content2": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content3": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content4": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content5": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content6": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content7": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content9": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content10": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content11": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.section2.contents.content12": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.tooltips.tooltip3": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.tooltips.tooltip4": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.actionButtons.actionButton3": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.actionButtons.actionButton4": "xxxxxx xxxxxxx",
+  "pages.strategyEdit.actionButtons.actionButton5": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error1": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error2": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error3": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error4": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error5": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error6": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error7": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error8": "xxxxxx xxxxxxx",
+  "pages.trade.errors.error9": "xxxxxx xxxxxxx",
+  "pages.trade.section1.title": "xxxxxx xxxxxxx",
+  "pages.trade.section1.headers.header1": "xxxxxx xxxxxxx",
+  "pages.trade.section1.headers.header2": "xxxxxx xxxxxxx",
+  "pages.trade.section1.headers.header3": "xxxxxx xxxxxxx",
+  "pages.trade.section1.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.trade.section1.tooltips.tooltip2": "xxxxxx xxxxxxx",
+  "pages.trade.section1.tooltips.tooltip3": "xxxxxx xxxxxxx",
+  "pages.trade.section1.tooltips.tooltip4": "xxxxxx xxxxxxx",
+  "pages.trade.section2.titles.title1": "xxxxxx xxxxxxx",
+  "pages.trade.section2.titles.title2": "xxxxxx xxxxxxx",
+  "pages.trade.section2.subtitles.subtitle1": "xxxxxx xxxxxxx",
+  "pages.trade.section2.subtitles.subtitle2": "xxxxxx xxxxxxx",
+  "pages.trade.section2.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "pages.trade.section2.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "pages.trade.section2.actionButtons.actionButton3": "xxxxxx xxxxxxx",
+  "pages.trade.section2.actionButtons.actionButton4": "xxxxxx xxxxxxx",
+  "pages.trade.section2.actionButtons.actionButton5": "xxxxxx xxxxxxx",
+  "pages.trade.section2.actionButtons.actionButton6": "xxxxxx xxxxxxx",
+  "pages.trade.section2.contents.content1": "xxxxxx xxxxxxx",
+  "pages.trade.section2.contents.content2": "xxxxxx xxxxxxx",
+  "pages.trade.section2.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.trade.section3.actionButtons.actionButton1": "xxxxxx xxxxxxx",
+  "pages.trade.section3.actionButtons.actionButton2": "xxxxxx xxxxxxx",
+  "pages.trade.section3.tooltips.tooltip1": "xxxxxx xxxxxxx",
+  "pages.trade.section3.tooltips.tooltip2": "xxxxxx xxxxxxx"
 }

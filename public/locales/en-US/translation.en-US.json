@@ -1,648 +1,406 @@
 {
-  "common": {
-    "placeholders": {
-      "placeholder1": "Enter Price",
-      "placeholder2": "Enter Amount",
-      "placeholder3": "Total Amount",
-      "placeholder4": "Search",
-      "placeholder5": "custom"
-    },
-    "actionButtons": {
-      "actionButton1": "Connect Wallet",
-      "actionButton2": "Change Network",
-      "actionButton3": "Disconnect Wallet",
-      "actionButton4": "Learn More",
-      "actionButton5": "Logout",
-      "actionButton6": "Contact Support",
-      "actionButton7": "Limit",
-      "actionButton8": "Range"
-    },
-    "warnings": {
-      "warning1": "Notice: your Buy and Sell orders overlap",
-      "warning2": "Notice, you offer to buy {{token}} above current market price",
-      "warning3": "Notice, you offer to sell {{token}} below current market price"
-    },
-    "errors": {
-      "error1": "Max Price must be higher than min price and not zero",
-      "error2": "Price must be greater than 0",
-      "error3": "Wrong Network",
-      "error4": "Please connect to Ethereum Mainnet using your wallet or the button below",
-      "error5": "Network Error",
-      "error6": "Failed to establish RPC connection. Please check your network connection and try again.",
-      "error7": "Internal Error",
-      "error8": "Data sync using Carbon SDK has failed. Please contact support or try again.",
-      "error9": "Network Error",
-      "error10": "Failed to fetch token list. Please check your network connection and try again.",
-      "error11": "Wallet Blocked",
-      "error12": "For compliance reasons, this wallet has been blocked from using the Carbon App."
-    },
-    "tooltips": {
-      "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.<br /><strong>Limit</strong> will allow you to define a specific price point to buy the token at.<br/><strong>Range</strong> will allow you to define a range of prices to buy the token at.",
-      "tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.<br /><strong>Limit</strong> will allow you to define a specific price point to sell the token at.<br/><strong>Range</strong> will allow you to define a range of prices to sell the token at.",
-      "tooltip3": "The slippage is calculated based on the {{currency}} value difference between the selected source and target tokens.",
-      "tooltip4": "The lowest price to buy {{token}} at.",
-      "tooltip5": "The lowest price to sell {{token}} at.",
-      "tooltip6": "The highest price to buy {{token}} at.",
-      "tooltip7": "The highest price to sell {{token}} at.",
-      "tooltip8": "The percentage difference between the input price and the current market price of the token"
-    },
-    "statuses": {
-      "status1": "Waiting for Confirmation",
-      "status2": "Processing"
-    },
-    "contents": {
-      "content1": "Wallet:",
-      "content2": "MAX",
-      "content3": "loading",
-      "content4": "By TradingView",
-      "content5": "Popular",
-      "content6": "Favorites",
-      "content7": "All",
-      "content8": "Notice, price & slippage are unknown",
-      "content9": "Min",
-      "content10": "Max",
-      "content11": "{{percentage}}% below",
-      "content12": "{{percentage}}% above",
-      "content13": "{{percentage}}% below market",
-      "content14": "{{percentage}}% above market"
-    }
-  },
-  "modals": {
-    "deleteStrategy": {
-      "modalTitle": "Delete Strategy",
-      "title": "Are you sure you would like to delete your strategy?",
-      "contents": {
-        "content1": "All data on the strategy will be deleted. It will be impossible to restore them.",
-        "content2": "All funds will be withdrawn to your wallet"
-      },
-      "actionButtons": {
-        "actionButton1": "Delete Strategy",
-        "actionButton2": "Cancel"
-      }
-    },
-    "pauseStrategy": {
-      "modalTitle": "Pause Strategy",
-      "title": "Are you sure you would like to pause your strategy?",
-      "content": "This will prevent your strategy from being traded against, however you will retain access to any associated funds.",
-      "actionButtons": {
-        "actionButton1": "Pause Strategy",
-        "actionButton2": "Cancel"
-      }
-    },
-    "selectToken": {
-      "modalTitle": "Select Token",
-      "actionButton": "Import Token",
-      "contents": {
-        "content1": "Token not found",
-        "content2": "Unfortunately we couldn't find a token for the address you entered, try to <strong>import a new token.</strong>",
-        "content3": "Unfortunately we couldn't find the token you're looking for, try searching for it <strong>by address.</strong>"
-      }
-    },
-    "selectTokenPair": {
-      "modalTitle": "Select Token Pair",
-      "error1": "Error: Unable to load token list"
-    },
-    "tradeSettings": {
-      "modalTitle": "Trade Settings",
-      "actionButton": "Reset All",
-      "section1": {
-        "title": "Slippage Tolerance"
-      },
-      "section2": {
-        "title": "Transaction Expiration Time"
-      }
-    },
-    "connectWallet": {
-      "modalTitle": "Connect Wallet",
-      "actionButton": "I read and accept",
-      "content1": "By connecting my wallet, I agree to the <0>terms & conditions</0> and <1>cookie & privacy policy</1> of this site.",
-      "error1": "{{error}} Error:"
-    },
-    "confirm": {
-      "modalTitle": "Confirm Transaction",
-      "subtitle": "Approve Tokens",
-      "contents": {
-        "content1": "Before updating {{token}} allowance, you are required to revoke it to 0.",
-        "content2": "is loading",
-        "content3": "Unknown Error"
-      },
-      "actionButtons": {
-        "actionButton1": "Confirm",
-        "actionButton2": "Unlimited",
-        "actionButton3": "Approve",
-        "actionButton4": "Revoke and Approve",
-        "actionButton5": "Confirm Trade"
-      },
-      "statuses": {
-        "status1": "Waiting for Confirmation",
-        "status2": "Approved",
-        "status3": "Pre-Approved"
-      }
-    },
-    "tradeRouting": {
-      "modalTitle": "Trade Routing",
-      "section1": {
-        "title1": "Routing Table",
-        "header1": "Average Price"
-      },
-      "section2": {
-        "title1": "Confirm Trade"
-      },
-      "actionButtons": {
-        "actionButton1": "Confirm",
-        "actionButton2": "Confirm Trade"
-      },
-      "tooltips": {
-        "tooltip1": "This is the list of orders your trade will use when executed.",
-        "tooltip2": "When managing the list of orders, your trade amounts will change to reflect these changes."
-      }
-    },
-    "restrictedCountry": {
-      "modalTitle": "I Understand"
-    },
-    "notification": {
-      "modalTitle": "Notifications",
-      "actionButton1": "Clear All",
-      "content1": "View on Etherscan"
-    },
-    "importToken": {
-      "modalTitle": "Import Token",
-      "title": "Use at your own risk",
-      "contents": {
-        "content1": "Error: No token found for this address",
-        "content2": "View on Explorer",
-        "content3": "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
-      },
-      "actionButtons": {
-        "actionButton1": "Import Token",
-        "actionButton2": "Cancel"
-      }
-    },
-    "expertMode": {
-      "modalTitle": "Expert Mode",
-      "title": "Range Pricing",
-      "contents": {
-        "content1": "Range Pricing will spread the allocated budget on a bonding curve and split it across multiple price points.",
-        "content2": "Only use range if you know what you are doing"
-      },
-      "actionButtons": {
-        "actionButton1": "Proceed with Range"
-      }
-    },
-    "genericInfo": {
-      "title": "Empty Strategy Warning",
-      "contents": {
-        "content1": "You are about to create a strategy with no associated budget. It will be inactive until you deposit funds."
-      },
-      "actionButtons": {
-        "actionButton1": "Confirm",
-        "actionButton2": "Cancel"
-      }
-    }
-  },
-  "navBar": {
-    "actionButton": "Fork",
-    "items": {
-      "item1": "Strategies",
-      "item2": "Trade",
-      "item3": "Debug"
-    },
-    "burgerMenu": {
-      "items": {
-        "item1": "Currency",
-        "item2": "Languages",
-        "item3": "Resources",
-        "item4": "FAQ",
-        "item5": "Analytics",
-        "item6": "Blog",
-        "item7": "Terms of Use",
-        "item8": "Privacy Policy",
-        "item9": "Tech Docs",
-        "item10": "Litepaper",
-        "item11": "Whitepaper",
-        "item12": "Simulator Repo",
-        "item13": "Interactive Simulator"
-      }
-    },
-    "walletMenu": {
-      "states": {
-        "state1": "Connect Wallet",
-        "state2": "Wallet Blocked",
-        "state3": "Wrong Network"
-      },
-      "items": {
-        "item1": "Ethereum Network",
-        "item2": "Switch Network",
-        "item3": "Disconnect"
-      }
-    }
-  },
-  "notifications": {
-    "titles": {
-      "titles1": "Transaction Rejected",
-      "titles2": "Approving Token ...",
-      "titles3": "Success",
-      "titles4": "Transaction Failed",
-      "titles5": "Revoking Past Approval",
-      "titles6": "Success",
-      "titles7": "Transaction Failed",
-      "titles8": "Approve Token failed",
-      "titles9": "Pending Confirmation",
-      "titles10": "Success",
-      "titles11": "Transaction Failed",
-      "titles12": "Pending Confirmation",
-      "titles13": "Success",
-      "titles14": "Transaction Failed",
-      "titles15": "Pending Confirmation",
-      "titles16": "Success",
-      "titles17": "Transaction Failed",
-      "titles18": "Pending Confirmation",
-      "titles19": "Success",
-      "titles20": "Transaction Failed",
-      "titles21": "Pending Confirmation",
-      "titles22": "Success",
-      "titles23": "Transaction Failed",
-      "titles24": "Pending Confirmation",
-      "titles25": "Success",
-      "titles26": "Transaction Failed",
-      "titles27": "Pending Confirmation",
-      "titles28": "Success",
-      "titles29": "Transaction Failed",
-      "titles30": "Pending Confirmation",
-      "titles31": "Success",
-      "titles32": "Transaction Failed",
-      "titles33": "Pending Confirmation",
-      "titles34": "Success",
-      "titles35": "Transaction Failed"
-    },
-    "descriptions": {
-      "description1": "You rejected the transaction. If this was by mistake, please try again.",
-      "description2": "You are approving {{token}} for spending on the protocol.",
-      "description3": "You have successfully approved {{token}} for limited spending on the protocol.",
-      "description4": "You have successfully approved {{token}} for unlimited spending on the protocol.",
-      "description5": "Failed {{token}} approval for limited",
-      "description6": "Failed {{token}} approval for unlimited",
-      "description7": "You are revoking previous approval.",
-      "description8": "Your previous approval was successfully revoked.",
-      "description9": "Failed to revoke previous approval.",
-      "description10": "Approval for {{token}} has failed. Please try again or contact support.",
-      "description11": "New strategy is being created.",
-      "description12": "New strategy was successfully created.",
-      "description13": "New strategy creation has failed.",
-      "description14": "Your request to pause the strategy is being processed.",
-      "description15": "Your strategy was successfully paused.",
-      "description16": "Your request to pause your strategy has failed.",
-      "description17": "Your request to renew the strategy is being processed.",
-      "description18": "Your request to renew the strategy was successfully completed.",
-      "description19": "Your request to renew the strategy has failed.",
-      "description20": "Strategy name is being updated.",
-      "description21": "Strategy name was updated successfully.",
-      "description22": "Strategy name update have failed.",
-      "description23": "Your withdraw request is being processed.",
-      "description24": "Your withdraw request was successfully completed.",
-      "description25": "Your withdraw request has failed.",
-      "description26": "Your deposit request is being processed.",
-      "description27": "Your deposit request was successfully completed.",
-      "description28": "Your deposit request have failed.",
-      "description29": "Strategy deletion is being processed.",
-      "description30": "Strategy was successfully deleted and all associated funds have been withdrawn to your wallet.",
-      "description31": "Strategy deletion have failed.",
-      "description32": "Your edit request is being processed.",
-      "description33": "Your strategy was successfully updated.",
-      "description34": "Your edit request has failed.",
-      "description35": "Trading {{amount}} {{from}} for {{to}} is being processed.",
-      "description36": "Trading {{amount}} {{from}} for {{to}} was successfully completed.",
-      "description37": "Trading {{amount}} {{from}} for {{to}} have failed."
-    }
-  },
-  "pages": {
-    "strategyOverview": {
-      "noStrategyCard": {
-        "title": "Automate your Trading Strategies",
-        "subtitle": "A fully decentralized protocol for automating on-chain trading strategies.",
-        "actionButton": "Connect",
-        "contents": {
-          "content1": "On-chain Limit & Range Orders",
-          "content2": "Automated and Recurring strategies",
-          "content3": "Easily Adjustable",
-          "content4": "Rotating Liquidity",
-          "content5": "All standard ERC-20 tokens",
-          "content6": "MEV Resistant",
-          "content7": "Strategy Not Found"
-        }
-      },
-      "header": {
-        "title_zero": "Strategies",
-        "title_one": "{{count}} Strategy",
-        "title_other": "{{count}} Strategies",
-        "actionButtons": {
-          "actionButton1": "Create Strategy",
-          "actionButton2": "Filter & Sort"
-        },
-        "filterMenu": {
-          "items": {
-            "item1": "Recently Created",
-            "item2": "Oldest Created",
-            "item3": "Pair (A->Z)",
-            "item4": "Pair (Z->A)",
-            "item5": "All",
-            "item6": "Active",
-            "item7": "inactive"
-          },
-          "subtitles": {
-            "subtitle1": "Sort By",
-            "subtitle2": "View"
-          }
-        }
-      },
-      "card": {
-        "title": "ID: {{id}}",
-        "actionButtons": {
-          "actionButton1": "Create Your First Strategy",
-          "actionButton2": "Create Strategy",
-          "actionButton3": "Manage"
-        },
-        "section1": {
-          "title": "Buy",
-          "contents": {
-            "content1": "Limit Price",
-            "content2": "Price Range",
-            "content3": "Budget"
-          }
-        },
-        "section2": {
-          "title": "Sell",
-          "contents": {
-            "content1": "Limit Price",
-            "content2": "Price Range",
-            "content3": "Budget"
-          }
-        },
-        "section3": {
-          "title": "Order Status",
-          "statuses": {
-            "status1": "Active",
-            "status2": "No Budget · Inactive",
-            "status3": "Paused - Inactive",
-            "status4": "Inactive"
-          },
-          "notification": {
-            "title": "Strategy Notification",
-            "content1": "You can set a notification to be informed each time someone trades against your strategy.",
-            "content2": "This is a third-party service managed by <strong>hal.xyz<strong>",
-            "actionButton": "Manage Notification"
-          }
-        },
-        "tooltips": {
-          "tooltip1": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your \"Sell\" order with tokens.",
-          "tooltip2": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your \"Buy\" order with tokens.",
-          "tooltip3": "This is the price in which you are willing to buy {{token}}.",
-          "tooltip4": "This is the price in which you are willing to sell {{token}}.",
-          "tooltip5": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
-          "tooltip6": "This is the available amount of {{token}} tokens that you are willing to sell.",
-          "tooltip7": "Your strategy is active and ready",
-          "tooltip8": "Your strategy has no associated funds. Consider depositing funds to activate it.",
-          "tooltip9": "Your strategy is currently paused. Edit the prices to activate it.",
-          "tooltip10": "Your strategy is currently inactive. Consider activating it with funds and rates.",
-          "tooltip11": "Duplicate Strategy"
-        },
-        "manageStrategy": {
-          "titles": {
-            "title1": "Delete Strategy",
-            "title2": "Edit Prices",
-            "title3": "Deposit Funds",
-            "title4": "Withdraw Funds",
-            "title5": "Duplicate Strategy",
-            "title6": "Pause Strategy",
-            "title7": "Renew Strategy"
-          },
-          "tooltips": {
-            "tooltip1": "Create a new strategy with the same details",
-            "tooltip2": "Delete the strategy and withdraw all associated funds to your wallet",
-            "tooltip3": "Deactivate the strategy by nulling the prices",
-            "tooltip4": "Withdraw funds from an existing strategy",
-            "tooltip5": "Deposit additional funds into an existing strategy",
-            "tooltip6": "Edit the prices of your buy/sell orders within an existing strategy",
-            "tooltip7": "Renew an inactive strategy"
-          }
-        }
-      }
-    },
-    "strategyCreate": {
-      "step1": {
-        "title": "Create Strategy",
-        "section1": {
-          "title": "Token Pair",
-          "contents": {
-            "content1": "Buy or Sell",
-            "content2": "With",
-            "content3": "Select Token"
-          }
-        },
-        "section2": {
-          "title": "Strategy Type",
-          "contents": {
-            "content1": "Recommended"
-          },
-          "strategyTypes": {
-            "type1": {
-              "title": "Recurring",
-              "contents": {
-                "content1": "Automated Linked Orders",
-                "content2": "Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa."
-              },
-              "options": {
-                "option1": "2 Limits",
-                "option2": "2 Ranges",
-                "option3": "Custom"
-              }
-            },
-            "type2": {
-              "title": "Disposable",
-              "contents": {
-                "content1": "Single Use Order",
-                "content2": "An irreversible buy or sell order at a predefined price or range."
-              },
-              "options": {
-                "option1": "Buy Limit",
-                "option2": "Buy Range",
-                "option3": "Sell Limit",
-                "option4": "Sell Range"
-              }
-            }
-          }
-        },
-        "tooltips": {
-          "tooltip1": "Select the Base token for the pair",
-          "tooltip2": "Select the Quote token for the pair (i.e. when selecting USDC, all rates would be denominated in USDC)",
-          "tooltip3": "Selecting the tokens you would like to create a strategy for.<br/><strong>Buy or Sell token</strong> (also called Base token) is the token you would like to buy or sell in the strategy. <br /> <strong>With token</strong> (also called Quote token) is the token you would denominate the rates in."
-        },
-        "actionButton": "Next Step"
-      },
-      "step2": {
-        "title_one": "Set Price",
-        "title_other": "Set Prices",
-        "chart": {
-          "title": "Price Chart",
-          "actionButton": "Close Chart"
-        },
-        "section1": {
-          "titles": {
-            "title1": "recurring",
-            "title2": "disposable"
-          },
-          "contents": {
-            "content1": "Rebasing and fee-on-transfer tokens are not supported"
-          }
-        },
-        "section2": {
-          "titles": {
-            "title1": "Buy Low",
-            "title2": "Sell High"
-          },
-          "subtitles": {
-            "subtitle1": "Set Buy Price",
-            "subtitle2": "Set Sell Price",
-            "subtitle3": "Set Buy Budget",
-            "subtitle4": "Set Sell Budget"
-          },
-          "contents": {
-            "content1": "buy",
-            "content2": "sell",
-            "content3": "per",
-            "content4": "Optional",
-            "content5": "Insufficient balance"
-          }
-        },
-        "tooltips": {
-          "tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.",
-          "tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.",
-          "tooltip3": "Define the price you are willing to buy {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
-          "tooltip4": "Define the price you are willing to sell {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
-          "tooltip5": "Note: this amount will re-fill once the \"Sell\" order is used by traders.",
-          "tooltip6": "The amount of {{sellToken}} tokens you would like to use in order to buy {{buyToken}}.",
-          "tooltip7": "Note: this amount will re-fill once the \"Buy\" order is used by traders.",
-          "tooltip8": "The amount of {{buyToken}} tokens you would like to sell."
-        },
-        "actionButton": "Create Strategy"
-      }
-    },
-    "strategyEdit": {
-      "titles": {
-        "title1": "Renew Strategy",
-        "title2": "Edit Prices",
-        "title3": "Deposit Budget",
-        "title4": "Withdraw Budget"
-      },
-      "chart": {
-        "title": "Price Chart",
-        "actionButton": "Close Chart"
-      },
-      "section1": {
-        "title": "ID: {{id}}"
-      },
-      "section2": {
-        "titles": {
-          "title1": "Withdraw Buy Budget",
-          "title2": "Withdraw Sell Budget",
-          "title3": "Deposit Buy Budget",
-          "title4": "Deposit Sell Budget",
-          "title5": "Buy Low {{token}}",
-          "title6": "Sell High {{token}}"
-        },
-        "subtitles": {
-          "subtitle1": "Set Buy Price",
-          "subtitle2": "Set Sell Price"
-        },
-        "contents": {
-          "content1": "Optional",
-          "content2": "Insufficient balance",
-          "content3": "Buy",
-          "content4": "Sell",
-          "content5": "Allocated Budget",
-          "content6": "Distribute Across Entire Range",
-          "content7": "The budget is allocated to the entire newly set range and the asking price is updated.",
-          "content9": "Distribute To Unused Range",
-          "content10": "Price remains the same as it was. The budget is not allocated to the new range.",
-          "content11": "Strategy budget will be distribute across entire range",
-          "content12": "per 1"
-        }
-      },
-      "tooltips": {
-        "tooltip1": "Indicate the amount you wish to withdraw from the available \"allocated budget\"",
-        "tooltip2": "Indicate the amount you wish to deposit from the available \"allocated budget\"",
-        "tooltip3": "When updating the rates, the allocated budget will be distributed equally across the entire range",
-        "tooltip4": "This is the current available {{token}} budget you can withdraw"
-      },
-      "actionButtons": {
-        "actionButton1": "Cancel",
-        "actionButton2": "Renew Strategy",
-        "actionButton3": "Confirm Changes",
-        "actionButton4": "Confirm Withdraw",
-        "actionButton5": "Confirm Deposit"
-      }
-    },
-    "trade": {
-      "errors": {
-        "error1": "Not Found",
-        "error2": "Error",
-        "error3": "No Liquidity Available",
-        "error4": "Please enter an amount",
-        "error5": "Insufficient balance",
-        "error6": "Please enter an amount",
-        "error7": "Available liquidity: {{num}} {{token}}",
-        "error8": "No available orders at this moment.",
-        "error9": "No Orders"
-      },
-      "section1": {
-        "title": "Orders",
-        "headers": {
-          "header1": "Price ({{token}})",
-          "header2": "Amount ({{token}})",
-          "header3": "Total"
-        },
-        "tooltips": {
-          "tooltip1": "Price points denominated in {{token}}",
-          "tooltip2": "The amount of available {{token}} tokens in this price point",
-          "tooltip3": "The available liquidity in this price point denominated in {{token}}",
-          "tooltip4": "The mid-market price based on the last trade"
-        }
-      },
-      "section2": {
-        "titles": {
-          "title1": "Buy {{baseToken}} with {{quoteToken}}",
-          "title2": "Sell {{baseToken}} for {{quoteToken}}"
-        },
-        "subtitles": {
-          "subtitle1": "You pay",
-          "subtitle2": "You receive"
-        },
-        "actionButtons": {
-          "actionButton1": "Buy",
-          "actionButton2": "Sell",
-          "actionButton3": "Buy {{token}}",
-          "actionButton4": "Sell {{token}}",
-          "actionButton5": "Routing",
-          "actionButton6": "Create a Strategy."
-        },
-        "contents": {
-          "content1": "DEBUG: {{num}}",
-          "content2": "You can"
-        },
-        "tooltips": {
-          "tooltip1": "You can view and manage the orders that are included in the trade."
-        }
-      },
-      "section3": {
-        "actionButtons": {
-          "actionButton1": "Depth",
-          "actionButton2": "Price"
-        },
-        "tooltips": {
-          "tooltip1": "Amount:",
-          "tooltip2": "Price:"
-        }
-      }
-    }
-  }
+  "common.placeholders.placeholder1": "Enter Price",
+  "common.placeholders.placeholder2": "Enter Amount",
+  "common.placeholders.placeholder3": "Total Amount",
+  "common.placeholders.placeholder4": "Search",
+  "common.placeholders.placeholder5": "custom",
+  "common.actionButtons.actionButton1": "Connect Wallet",
+  "common.actionButtons.actionButton2": "Change Network",
+  "common.actionButtons.actionButton3": "Disconnect Wallet",
+  "common.actionButtons.actionButton4": "Learn More",
+  "common.actionButtons.actionButton5": "Logout",
+  "common.actionButtons.actionButton6": "Contact Support",
+  "common.actionButtons.actionButton7": "Limit",
+  "common.actionButtons.actionButton8": "Range",
+  "common.warnings.warning1": "Notice: your Buy and Sell orders overlap",
+  "common.warnings.warning2": "Notice, you offer to buy {{token}} above current market price",
+  "common.warnings.warning3": "Notice, you offer to sell {{token}} below current market price",
+  "common.errors.error1": "Max Price must be higher than min price and not zero",
+  "common.errors.error2": "Price must be greater than 0",
+  "common.errors.error3": "Wrong Network",
+  "common.errors.error4": "Please connect to Ethereum Mainnet using your wallet or the button below",
+  "common.errors.error5": "Network Error",
+  "common.errors.error6": "Failed to establish RPC connection. Please check your network connection and try again.",
+  "common.errors.error7": "Internal Error",
+  "common.errors.error8": "Data sync using Carbon SDK has failed. Please contact support or try again.",
+  "common.errors.error9": "Network Error",
+  "common.errors.error10": "Failed to fetch token list. Please check your network connection and try again.",
+  "common.errors.error11": "Wallet Blocked",
+  "common.errors.error12": "For compliance reasons, this wallet has been blocked from using the Carbon App.",
+  "common.tooltips.tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.<br /><strong>Limit</strong> will allow you to define a specific price point to buy the token at.<br/><strong>Range</strong> will allow you to define a range of prices to buy the token at.",
+  "common.tooltips.tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.<br /><strong>Limit</strong> will allow you to define a specific price point to sell the token at.<br/><strong>Range</strong> will allow you to define a range of prices to sell the token at.",
+  "common.tooltips.tooltip3": "The slippage is calculated based on the {{currency}} value difference between the selected source and target tokens.",
+  "common.tooltips.tooltip4": "The lowest price to buy {{token}} at.",
+  "common.tooltips.tooltip5": "The lowest price to sell {{token}} at.",
+  "common.tooltips.tooltip6": "The highest price to buy {{token}} at.",
+  "common.tooltips.tooltip7": "The highest price to sell {{token}} at.",
+  "common.tooltips.tooltip8": "The percentage difference between the input price and the current market price of the token",
+  "common.statuses.status1": "Waiting for Confirmation",
+  "common.statuses.status2": "Processing",
+  "common.contents.content1": "Wallet:",
+  "common.contents.content2": "MAX",
+  "common.contents.content3": "loading",
+  "common.contents.content4": "By TradingView",
+  "common.contents.content5": "Popular",
+  "common.contents.content6": "Favorites",
+  "common.contents.content7": "All",
+  "common.contents.content8": "Notice, price & slippage are unknown",
+  "common.contents.content9": "Min",
+  "common.contents.content10": "Max",
+  "common.contents.content11": "{{percentage}}% below",
+  "common.contents.content12": "{{percentage}}% above",
+  "common.contents.content13": "{{percentage}}% below market",
+  "common.contents.content14": "{{percentage}}% above market",
+  "modals.deleteStrategy.modalTitle": "Delete Strategy",
+  "modals.deleteStrategy.title": "Are you sure you would like to delete your strategy?",
+  "modals.deleteStrategy.contents.content1": "All data on the strategy will be deleted. It will be impossible to restore them.",
+  "modals.deleteStrategy.contents.content2": "All funds will be withdrawn to your wallet",
+  "modals.deleteStrategy.actionButtons.actionButton1": "Delete Strategy",
+  "modals.deleteStrategy.actionButtons.actionButton2": "Cancel",
+  "modals.pauseStrategy.modalTitle": "Pause Strategy",
+  "modals.pauseStrategy.title": "Are you sure you would like to pause your strategy?",
+  "modals.pauseStrategy.content": "This will prevent your strategy from being traded against, however you will retain access to any associated funds.",
+  "modals.pauseStrategy.actionButtons.actionButton1": "Pause Strategy",
+  "modals.pauseStrategy.actionButtons.actionButton2": "Cancel",
+  "modals.selectToken.modalTitle": "Select Token",
+  "modals.selectToken.actionButton": "Import Token",
+  "modals.selectToken.contents.content1": "Token not found",
+  "modals.selectToken.contents.content2": "Unfortunately we couldn't find a token for the address you entered, try to <strong>import a new token.</strong>",
+  "modals.selectToken.contents.content3": "Unfortunately we couldn't find the token you're looking for, try searching for it <strong>by address.</strong>",
+  "modals.selectTokenPair.modalTitle": "Select Token Pair",
+  "modals.selectTokenPair.error1": "Error: Unable to load token list",
+  "modals.tradeSettings.modalTitle": "Trade Settings",
+  "modals.tradeSettings.actionButton": "Reset All",
+  "modals.tradeSettings.section1.title": "Slippage Tolerance",
+  "modals.tradeSettings.section2.title": "Transaction Expiration Time",
+  "modals.connectWallet.modalTitle": "Connect Wallet",
+  "modals.connectWallet.actionButton": "I read and accept",
+  "modals.connectWallet.content1": "By connecting my wallet, I agree to the <0>terms & conditions</0> and <1>cookie & privacy policy</1> of this site.",
+  "modals.connectWallet.error1": "{{error}} Error:",
+  "modals.confirm.modalTitle": "Confirm Transaction",
+  "modals.confirm.subtitle": "Approve Tokens",
+  "modals.confirm.contents.content1": "Before updating {{token}} allowance, you are required to revoke it to 0.",
+  "modals.confirm.contents.content2": "is loading",
+  "modals.confirm.contents.content3": "Unknown Error",
+  "modals.confirm.actionButtons.actionButton1": "Confirm",
+  "modals.confirm.actionButtons.actionButton2": "Unlimited",
+  "modals.confirm.actionButtons.actionButton3": "Approve",
+  "modals.confirm.actionButtons.actionButton4": "Revoke and Approve",
+  "modals.confirm.actionButtons.actionButton5": "Confirm Trade",
+  "modals.confirm.statuses.status1": "Waiting for Confirmation",
+  "modals.confirm.statuses.status2": "Approved",
+  "modals.confirm.statuses.status3": "Pre-Approved",
+  "modals.tradeRouting.modalTitle": "Trade Routing",
+  "modals.tradeRouting.section1.title1": "Routing Table",
+  "modals.tradeRouting.section1.header1": "Average Price",
+  "modals.tradeRouting.section2.title1": "Confirm Trade",
+  "modals.tradeRouting.actionButtons.actionButton1": "Confirm",
+  "modals.tradeRouting.actionButtons.actionButton2": "Confirm Trade",
+  "modals.tradeRouting.tooltips.tooltip1": "This is the list of orders your trade will use when executed.",
+  "modals.tradeRouting.tooltips.tooltip2": "When managing the list of orders, your trade amounts will change to reflect these changes.",
+  "modals.restrictedCountry.modalTitle": "I Understand",
+  "modals.notification.modalTitle": "Notifications",
+  "modals.notification.actionButton1": "Clear All",
+  "modals.notification.content1": "View on Etherscan",
+  "modals.importToken.modalTitle": "Import Token",
+  "modals.importToken.title": "Use at your own risk",
+  "modals.importToken.contents.content1": "Error: No token found for this address",
+  "modals.importToken.contents.content2": "View on Explorer",
+  "modals.importToken.contents.content3": "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects.",
+  "modals.importToken.actionButtons.actionButton1": "Import Token",
+  "modals.importToken.actionButtons.actionButton2": "Cancel",
+  "modals.expertMode.modalTitle": "Expert Mode",
+  "modals.expertMode.title": "Range Pricing",
+  "modals.expertMode.contents.content1": "Range Pricing will spread the allocated budget on a bonding curve and split it across multiple price points.",
+  "modals.expertMode.contents.content2": "Only use range if you know what you are doing",
+  "modals.expertMode.actionButtons.actionButton1": "Proceed with Range",
+  "modals.genericInfo.title": "Empty Strategy Warning",
+  "modals.genericInfo.contents.content1": "You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.",
+  "modals.genericInfo.actionButtons.actionButton1": "Confirm",
+  "modals.genericInfo.actionButtons.actionButton2": "Cancel",
+  "navBar.actionButton": "Fork",
+  "navBar.items.item1": "Strategies",
+  "navBar.items.item2": "Trade",
+  "navBar.items.item3": "Debug",
+  "navBar.burgerMenu.items.item1": "Currency",
+  "navBar.burgerMenu.items.item2": "Languages",
+  "navBar.burgerMenu.items.item3": "Resources",
+  "navBar.burgerMenu.items.item4": "FAQ",
+  "navBar.burgerMenu.items.item5": "Analytics",
+  "navBar.burgerMenu.items.item6": "Blog",
+  "navBar.burgerMenu.items.item7": "Terms of Use",
+  "navBar.burgerMenu.items.item8": "Privacy Policy",
+  "navBar.burgerMenu.items.item9": "Tech Docs",
+  "navBar.burgerMenu.items.item10": "Litepaper",
+  "navBar.burgerMenu.items.item11": "Whitepaper",
+  "navBar.burgerMenu.items.item12": "Simulator Repo",
+  "navBar.burgerMenu.items.item13": "Interactive Simulator",
+  "navBar.walletMenu.states.state1": "Connect Wallet",
+  "navBar.walletMenu.states.state2": "Wallet Blocked",
+  "navBar.walletMenu.states.state3": "Wrong Network",
+  "navBar.walletMenu.items.item1": "Ethereum Network",
+  "navBar.walletMenu.items.item2": "Switch Network",
+  "navBar.walletMenu.items.item3": "Disconnect",
+  "notifications.titles.titles1": "Transaction Rejected",
+  "notifications.titles.titles2": "Approving Token ...",
+  "notifications.titles.titles3": "Success",
+  "notifications.titles.titles4": "Transaction Failed",
+  "notifications.titles.titles5": "Revoking Past Approval",
+  "notifications.titles.titles6": "Success",
+  "notifications.titles.titles7": "Transaction Failed",
+  "notifications.titles.titles8": "Approve Token failed",
+  "notifications.titles.titles9": "Pending Confirmation",
+  "notifications.titles.titles10": "Success",
+  "notifications.titles.titles11": "Transaction Failed",
+  "notifications.titles.titles12": "Pending Confirmation",
+  "notifications.titles.titles13": "Success",
+  "notifications.titles.titles14": "Transaction Failed",
+  "notifications.titles.titles15": "Pending Confirmation",
+  "notifications.titles.titles16": "Success",
+  "notifications.titles.titles17": "Transaction Failed",
+  "notifications.titles.titles18": "Pending Confirmation",
+  "notifications.titles.titles19": "Success",
+  "notifications.titles.titles20": "Transaction Failed",
+  "notifications.titles.titles21": "Pending Confirmation",
+  "notifications.titles.titles22": "Success",
+  "notifications.titles.titles23": "Transaction Failed",
+  "notifications.titles.titles24": "Pending Confirmation",
+  "notifications.titles.titles25": "Success",
+  "notifications.titles.titles26": "Transaction Failed",
+  "notifications.titles.titles27": "Pending Confirmation",
+  "notifications.titles.titles28": "Success",
+  "notifications.titles.titles29": "Transaction Failed",
+  "notifications.titles.titles30": "Pending Confirmation",
+  "notifications.titles.titles31": "Success",
+  "notifications.titles.titles32": "Transaction Failed",
+  "notifications.titles.titles33": "Pending Confirmation",
+  "notifications.titles.titles34": "Success",
+  "notifications.titles.titles35": "Transaction Failed",
+  "notifications.descriptions.description1": "You rejected the transaction. If this was by mistake, please try again.",
+  "notifications.descriptions.description2": "You are approving {{token}} for spending on the protocol.",
+  "notifications.descriptions.description3": "You have successfully approved {{token}} for limited spending on the protocol.",
+  "notifications.descriptions.description4": "You have successfully approved {{token}} for unlimited spending on the protocol.",
+  "notifications.descriptions.description5": "Failed {{token}} approval for limited",
+  "notifications.descriptions.description6": "Failed {{token}} approval for unlimited",
+  "notifications.descriptions.description7": "You are revoking previous approval.",
+  "notifications.descriptions.description8": "Your previous approval was successfully revoked.",
+  "notifications.descriptions.description9": "Failed to revoke previous approval.",
+  "notifications.descriptions.description10": "Approval for {{token}} has failed. Please try again or contact support.",
+  "notifications.descriptions.description11": "New strategy is being created.",
+  "notifications.descriptions.description12": "New strategy was successfully created.",
+  "notifications.descriptions.description13": "New strategy creation has failed.",
+  "notifications.descriptions.description14": "Your request to pause the strategy is being processed.",
+  "notifications.descriptions.description15": "Your strategy was successfully paused.",
+  "notifications.descriptions.description16": "Your request to pause your strategy has failed.",
+  "notifications.descriptions.description17": "Your request to renew the strategy is being processed.",
+  "notifications.descriptions.description18": "Your request to renew the strategy was successfully completed.",
+  "notifications.descriptions.description19": "Your request to renew the strategy has failed.",
+  "notifications.descriptions.description20": "Strategy name is being updated.",
+  "notifications.descriptions.description21": "Strategy name was updated successfully.",
+  "notifications.descriptions.description22": "Strategy name update have failed.",
+  "notifications.descriptions.description23": "Your withdraw request is being processed.",
+  "notifications.descriptions.description24": "Your withdraw request was successfully completed.",
+  "notifications.descriptions.description25": "Your withdraw request has failed.",
+  "notifications.descriptions.description26": "Your deposit request is being processed.",
+  "notifications.descriptions.description27": "Your deposit request was successfully completed.",
+  "notifications.descriptions.description28": "Your deposit request have failed.",
+  "notifications.descriptions.description29": "Strategy deletion is being processed.",
+  "notifications.descriptions.description30": "Strategy was successfully deleted and all associated funds have been withdrawn to your wallet.",
+  "notifications.descriptions.description31": "Strategy deletion have failed.",
+  "notifications.descriptions.description32": "Your edit request is being processed.",
+  "notifications.descriptions.description33": "Your strategy was successfully updated.",
+  "notifications.descriptions.description34": "Your edit request has failed.",
+  "notifications.descriptions.description35": "Trading {{amount}} {{from}} for {{to}} is being processed.",
+  "notifications.descriptions.description36": "Trading {{amount}} {{from}} for {{to}} was successfully completed.",
+  "notifications.descriptions.description37": "Trading {{amount}} {{from}} for {{to}} have failed.",
+  "pages.strategyOverview.noStrategyCard.title": "Automate your Trading Strategies",
+  "pages.strategyOverview.noStrategyCard.subtitle": "A fully decentralized protocol for automating on-chain trading strategies.",
+  "pages.strategyOverview.noStrategyCard.actionButton": "Connect",
+  "pages.strategyOverview.noStrategyCard.contents.content1": "On-chain Limit & Range Orders",
+  "pages.strategyOverview.noStrategyCard.contents.content2": "Automated and Recurring strategies",
+  "pages.strategyOverview.noStrategyCard.contents.content3": "Easily Adjustable",
+  "pages.strategyOverview.noStrategyCard.contents.content4": "Rotating Liquidity",
+  "pages.strategyOverview.noStrategyCard.contents.content5": "All standard ERC-20 tokens",
+  "pages.strategyOverview.noStrategyCard.contents.content6": "MEV Resistant",
+  "pages.strategyOverview.noStrategyCard.contents.content7": "Strategy Not Found",
+  "pages.strategyOverview.header.title_zero": "Strategies",
+  "pages.strategyOverview.header.title_one": "{{count}} Strategy",
+  "pages.strategyOverview.header.title_other": "{{count}} Strategies",
+  "pages.strategyOverview.header.actionButtons.actionButton1": "Create Strategy",
+  "pages.strategyOverview.header.actionButtons.actionButton2": "Filter & Sort",
+  "pages.strategyOverview.header.filterMenu.items.item1": "Recently Created",
+  "pages.strategyOverview.header.filterMenu.items.item2": "Oldest Created",
+  "pages.strategyOverview.header.filterMenu.items.item3": "Pair (A->Z)",
+  "pages.strategyOverview.header.filterMenu.items.item4": "Pair (Z->A)",
+  "pages.strategyOverview.header.filterMenu.items.item5": "All",
+  "pages.strategyOverview.header.filterMenu.items.item6": "Active",
+  "pages.strategyOverview.header.filterMenu.items.item7": "inactive",
+  "pages.strategyOverview.header.filterMenu.subtitles.subtitle1": "Sort By",
+  "pages.strategyOverview.header.filterMenu.subtitles.subtitle2": "View",
+  "pages.strategyOverview.card.title": "ID: {{id}}",
+  "pages.strategyOverview.card.actionButtons.actionButton1": "Create Your First Strategy",
+  "pages.strategyOverview.card.actionButtons.actionButton2": "Create Strategy",
+  "pages.strategyOverview.card.actionButtons.actionButton3": "Manage",
+  "pages.strategyOverview.card.section1.title": "Buy",
+  "pages.strategyOverview.card.section1.contents.content1": "Limit Price",
+  "pages.strategyOverview.card.section1.contents.content2": "Price Range",
+  "pages.strategyOverview.card.section1.contents.content3": "Budget",
+  "pages.strategyOverview.card.section2.title": "Sell",
+  "pages.strategyOverview.card.section2.contents.content1": "Limit Price",
+  "pages.strategyOverview.card.section2.contents.content2": "Price Range",
+  "pages.strategyOverview.card.section2.contents.content3": "Budget",
+  "pages.strategyOverview.card.section3.title": "Order Status",
+  "pages.strategyOverview.card.section3.statuses.status1": "Active",
+  "pages.strategyOverview.card.section3.statuses.status2": "No Budget · Inactive",
+  "pages.strategyOverview.card.section3.statuses.status3": "Paused - Inactive",
+  "pages.strategyOverview.card.section3.statuses.status4": "Inactive",
+  "pages.strategyOverview.card.section3.notification.title": "Strategy Notification",
+  "pages.strategyOverview.card.section3.notification.content1": "You can set a notification to be informed each time someone trades against your strategy.",
+  "pages.strategyOverview.card.section3.notification.content2": "This is a third-party service managed by <strong>hal.xyz<strong>",
+  "pages.strategyOverview.card.section3.notification.actionButton": "Manage Notification",
+  "pages.strategyOverview.card.tooltips.tooltip1": "This section indicates the details to which you are willing to buy {{token}} at. When a trader interact with your buy order, it will fill up your \"Sell\" order with tokens.",
+  "pages.strategyOverview.card.tooltips.tooltip2": "This section indicates the details to which you are willing to sell {{token}} at. When a trader interact with your sell order, it will fill up your \"Buy\" order with tokens.",
+  "pages.strategyOverview.card.tooltips.tooltip3": "This is the price in which you are willing to buy {{token}}.",
+  "pages.strategyOverview.card.tooltips.tooltip4": "This is the price in which you are willing to sell {{token}}.",
+  "pages.strategyOverview.card.tooltips.tooltip5": "This is the available amount of {{sellToken}} tokens that you are willing to use in order to buy {{buyToken}}.",
+  "pages.strategyOverview.card.tooltips.tooltip6": "This is the available amount of {{token}} tokens that you are willing to sell.",
+  "pages.strategyOverview.card.tooltips.tooltip7": "Your strategy is active and ready",
+  "pages.strategyOverview.card.tooltips.tooltip8": "Your strategy has no associated funds. Consider depositing funds to activate it.",
+  "pages.strategyOverview.card.tooltips.tooltip9": "Your strategy is currently paused. Edit the prices to activate it.",
+  "pages.strategyOverview.card.tooltips.tooltip10": "Your strategy is currently inactive. Consider activating it with funds and rates.",
+  "pages.strategyOverview.card.tooltips.tooltip11": "Duplicate Strategy",
+  "pages.strategyOverview.card.manageStrategy.titles.title1": "Delete Strategy",
+  "pages.strategyOverview.card.manageStrategy.titles.title2": "Edit Prices",
+  "pages.strategyOverview.card.manageStrategy.titles.title3": "Deposit Funds",
+  "pages.strategyOverview.card.manageStrategy.titles.title4": "Withdraw Funds",
+  "pages.strategyOverview.card.manageStrategy.titles.title5": "Duplicate Strategy",
+  "pages.strategyOverview.card.manageStrategy.titles.title6": "Pause Strategy",
+  "pages.strategyOverview.card.manageStrategy.titles.title7": "Renew Strategy",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip1": "Create a new strategy with the same details",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip2": "Delete the strategy and withdraw all associated funds to your wallet",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip3": "Deactivate the strategy by nulling the prices",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip4": "Withdraw funds from an existing strategy",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip5": "Deposit additional funds into an existing strategy",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip6": "Edit the prices of your buy/sell orders within an existing strategy",
+  "pages.strategyOverview.card.manageStrategy.tooltips.tooltip7": "Renew an inactive strategy",
+  "pages.strategyCreate.step1.title": "Create Strategy",
+  "pages.strategyCreate.step1.section1.title": "Token Pair",
+  "pages.strategyCreate.step1.section1.contents.content1": "Buy or Sell",
+  "pages.strategyCreate.step1.section1.contents.content2": "With",
+  "pages.strategyCreate.step1.section1.contents.content3": "Select Token",
+  "pages.strategyCreate.step1.section2.title": "Strategy Type",
+  "pages.strategyCreate.step1.section2.contents.content1": "Recommended",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.title": "Recurring",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content1": "Automated Linked Orders",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content2": "Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.options.option1": "2 Limits",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.options.option2": "2 Ranges",
+  "pages.strategyCreate.step1.section2.strategyTypes.type1.options.option3": "Custom",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.title": "Disposable",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content1": "Single Use Order",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content2": "An irreversible buy or sell order at a predefined price or range.",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option1": "Buy Limit",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option2": "Buy Range",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option3": "Sell Limit",
+  "pages.strategyCreate.step1.section2.strategyTypes.type2.options.option4": "Sell Range",
+  "pages.strategyCreate.step1.tooltips.tooltip1": "Select the Base token for the pair",
+  "pages.strategyCreate.step1.tooltips.tooltip2": "Select the Quote token for the pair (i.e. when selecting USDC, all rates would be denominated in USDC)",
+  "pages.strategyCreate.step1.tooltips.tooltip3": "Selecting the tokens you would like to create a strategy for.<br/><strong>Buy or Sell token</strong> (also called Base token) is the token you would like to buy or sell in the strategy. <br /> <strong>With token</strong> (also called Quote token) is the token you would denominate the rates in.",
+  "pages.strategyCreate.step1.actionButton": "Next Step",
+  "pages.strategyCreate.step2.title_one": "Set Price",
+  "pages.strategyCreate.step2.title_other": "Set Prices",
+  "pages.strategyCreate.step2.chart.title": "Price Chart",
+  "pages.strategyCreate.step2.chart.actionButton": "Close Chart",
+  "pages.strategyCreate.step2.section1.titles.title1": "recurring",
+  "pages.strategyCreate.step2.section1.titles.title2": "disposable",
+  "pages.strategyCreate.step2.section1.contents.content1": "Rebasing and fee-on-transfer tokens are not supported",
+  "pages.strategyCreate.step2.section2.titles.title1": "Buy Low",
+  "pages.strategyCreate.step2.section2.titles.title2": "Sell High",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle1": "Set Buy Price",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle2": "Set Sell Price",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle3": "Set Buy Budget",
+  "pages.strategyCreate.step2.section2.subtitles.subtitle4": "Set Sell Budget",
+  "pages.strategyCreate.step2.section2.contents.content1": "buy",
+  "pages.strategyCreate.step2.section2.contents.content2": "sell",
+  "pages.strategyCreate.step2.section2.contents.content3": "per",
+  "pages.strategyCreate.step2.section2.contents.content4": "Optional",
+  "pages.strategyCreate.step2.section2.contents.content5": "Insufficient balance",
+  "pages.strategyCreate.step2.tooltips.tooltip1": "This section will define the order details in which you are willing to buy {{token}} at.",
+  "pages.strategyCreate.step2.tooltips.tooltip2": "This section will define the order details in which you are willing to sell {{token}} at.",
+  "pages.strategyCreate.step2.tooltips.tooltip3": "Define the price you are willing to buy {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
+  "pages.strategyCreate.step2.tooltips.tooltip4": "Define the price you are willing to sell {{buyToken}} at. Make sure the price is in {{sellToken}} tokens.",
+  "pages.strategyCreate.step2.tooltips.tooltip5": "Note: this amount will re-fill once the \"Sell\" order is used by traders.",
+  "pages.strategyCreate.step2.tooltips.tooltip6": "The amount of {{sellToken}} tokens you would like to use in order to buy {{buyToken}}.",
+  "pages.strategyCreate.step2.tooltips.tooltip7": "Note: this amount will re-fill once the \"Buy\" order is used by traders.",
+  "pages.strategyCreate.step2.tooltips.tooltip8": "The amount of {{buyToken}} tokens you would like to sell.",
+  "pages.strategyCreate.step2.actionButton": "Create Strategy",
+  "pages.strategyEdit.titles.title1": "Renew Strategy",
+  "pages.strategyEdit.titles.title2": "Edit Prices",
+  "pages.strategyEdit.titles.title3": "Deposit Budget",
+  "pages.strategyEdit.titles.title4": "Withdraw Budget",
+  "pages.strategyEdit.chart.title": "Price Chart",
+  "pages.strategyEdit.chart.actionButton": "Close Chart",
+  "pages.strategyEdit.section1.title": "ID: {{id}}",
+  "pages.strategyEdit.section2.titles.title1": "Withdraw Buy Budget",
+  "pages.strategyEdit.section2.titles.title2": "Withdraw Sell Budget",
+  "pages.strategyEdit.section2.titles.title3": "Deposit Buy Budget",
+  "pages.strategyEdit.section2.titles.title4": "Deposit Sell Budget",
+  "pages.strategyEdit.section2.titles.title5": "Buy Low {{token}}",
+  "pages.strategyEdit.section2.titles.title6": "Sell High {{token}}",
+  "pages.strategyEdit.section2.subtitles.subtitle1": "Set Buy Price",
+  "pages.strategyEdit.section2.subtitles.subtitle2": "Set Sell Price",
+  "pages.strategyEdit.section2.contents.content1": "Optional",
+  "pages.strategyEdit.section2.contents.content2": "Insufficient balance",
+  "pages.strategyEdit.section2.contents.content3": "Buy",
+  "pages.strategyEdit.section2.contents.content4": "Sell",
+  "pages.strategyEdit.section2.contents.content5": "Allocated Budget",
+  "pages.strategyEdit.section2.contents.content6": "Distribute Across Entire Range",
+  "pages.strategyEdit.section2.contents.content7": "The budget is allocated to the entire newly set range and the asking price is updated.",
+  "pages.strategyEdit.section2.contents.content9": "Distribute To Unused Range",
+  "pages.strategyEdit.section2.contents.content10": "Price remains the same as it was. The budget is not allocated to the new range.",
+  "pages.strategyEdit.section2.contents.content11": "Strategy budget will be distribute across entire range",
+  "pages.strategyEdit.section2.contents.content12": "per 1",
+  "pages.strategyEdit.tooltips.tooltip1": "Indicate the amount you wish to withdraw from the available \"allocated budget\"",
+  "pages.strategyEdit.tooltips.tooltip2": "Indicate the amount you wish to deposit from the available \"allocated budget\"",
+  "pages.strategyEdit.tooltips.tooltip3": "When updating the rates, the allocated budget will be distributed equally across the entire range",
+  "pages.strategyEdit.tooltips.tooltip4": "This is the current available {{token}} budget you can withdraw",
+  "pages.strategyEdit.actionButtons.actionButton1": "Cancel",
+  "pages.strategyEdit.actionButtons.actionButton2": "Renew Strategy",
+  "pages.strategyEdit.actionButtons.actionButton3": "Confirm Changes",
+  "pages.strategyEdit.actionButtons.actionButton4": "Confirm Withdraw",
+  "pages.strategyEdit.actionButtons.actionButton5": "Confirm Deposit",
+  "pages.trade.errors.error1": "Not Found",
+  "pages.trade.errors.error2": "Error",
+  "pages.trade.errors.error3": "No Liquidity Available",
+  "pages.trade.errors.error4": "Please enter an amount",
+  "pages.trade.errors.error5": "Insufficient balance",
+  "pages.trade.errors.error6": "Please enter an amount",
+  "pages.trade.errors.error7": "Available liquidity: {{num}} {{token}}",
+  "pages.trade.errors.error8": "No available orders at this moment.",
+  "pages.trade.errors.error9": "No Orders",
+  "pages.trade.section1.title": "Orders",
+  "pages.trade.section1.headers.header1": "Price ({{token}})",
+  "pages.trade.section1.headers.header2": "Amount ({{token}})",
+  "pages.trade.section1.headers.header3": "Total",
+  "pages.trade.section1.tooltips.tooltip1": "Price points denominated in {{token}}",
+  "pages.trade.section1.tooltips.tooltip2": "The amount of available {{token}} tokens in this price point",
+  "pages.trade.section1.tooltips.tooltip3": "The available liquidity in this price point denominated in {{token}}",
+  "pages.trade.section1.tooltips.tooltip4": "The mid-market price based on the last trade",
+  "pages.trade.section2.titles.title1": "Buy {{baseToken}} with {{quoteToken}}",
+  "pages.trade.section2.titles.title2": "Sell {{baseToken}} for {{quoteToken}}",
+  "pages.trade.section2.subtitles.subtitle1": "You pay",
+  "pages.trade.section2.subtitles.subtitle2": "You receive",
+  "pages.trade.section2.actionButtons.actionButton1": "Buy",
+  "pages.trade.section2.actionButtons.actionButton2": "Sell",
+  "pages.trade.section2.actionButtons.actionButton3": "Buy {{token}}",
+  "pages.trade.section2.actionButtons.actionButton4": "Sell {{token}}",
+  "pages.trade.section2.actionButtons.actionButton5": "Routing",
+  "pages.trade.section2.actionButtons.actionButton6": "Create a Strategy.",
+  "pages.trade.section2.contents.content1": "DEBUG: {{num}}",
+  "pages.trade.section2.contents.content2": "You can",
+  "pages.trade.section2.tooltips.tooltip1": "You can view and manage the orders that are included in the trade.",
+  "pages.trade.section3.actionButtons.actionButton1": "Depth",
+  "pages.trade.section3.actionButtons.actionButton2": "Price",
+  "pages.trade.section3.tooltips.tooltip1": "Amount:",
+  "pages.trade.section3.tooltips.tooltip2": "Price:"
 }
