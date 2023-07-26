@@ -24,6 +24,7 @@ export const externalLinks = {
   whitepaper: 'https://carbondefi.xyz/whitepaper',
   simulatorRepo: 'https://github.com/bancorprotocol/carbon-simulator',
   interactiveSim: 'https://simulator.carbondefi.xyz/',
+  roiLearnMore: 'https://faq.carbondefi.xyz/strategy-roi-and-apr',
 };
 
 export const PathNames = {

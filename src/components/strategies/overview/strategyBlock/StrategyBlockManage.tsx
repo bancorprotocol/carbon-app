@@ -34,7 +34,6 @@ export const StrategyBlockManage: FC<{
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
-  const { belowBreakpoint } = useBreakpoints();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
 
@@ -51,17 +50,6 @@ export const StrategyBlockManage: FC<{
 
   const items: itemsType[] = [
     {
-      id: 'deleteStrategy',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title1'),
-      action: () => {
-        carbonEvents.strategyEdit.strategyDeleteClick({
-          ...strategyEventData,
-          strategyId: strategy.id,
-        });
-        openModal('confirmStrategy', { strategy, type: 'delete' });
-      },
-    },
-    {
       id: 'editPrices',
       name: t('pages.strategyOverview.card.manageStrategy.titles.title2'),
       action: () => {
@@ -77,21 +65,52 @@ export const StrategyBlockManage: FC<{
       },
     },
     {
-      id: 'depositFunds',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title3'),
+      id: 'duplicateStrategy',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title5'),
       action: () => {
-        setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyDepositClick({
+        carbonEvents.strategyEdit.strategyDuplicateClick({
           ...strategyEventData,
           strategyId: strategy.id,
         });
-        navigate({
-          to: PathNames.editStrategy,
-          search: { type: 'deposit' },
-        });
+        duplicate(strategy);
       },
     },
   ];
+
+  if (strategy.status === StrategyStatus.Active) {
+    items.push({
+      id: 'manageNotifications',
+      name: t('pages.strategyOverview.card.manageStrategy.titles.title8'),
+      action: () => {
+        carbonEvents.strategyEdit.strategyManageNotificationClick({
+          ...strategyEventData,
+          strategyId: strategy.id,
+        });
+        window?.open(
+          `https://app.hal.xyz/recipes/carbon-track-strategy-updated?strategy_id=${strategy.id}`,
+          '_blank',
+          'noopener'
+        );
+      },
+    });
+  }
+
+  items.push({
+    id: 'depositFunds',
+    name: t('pages.strategyOverview.card.manageStrategy.titles.title3'),
+    action: () => {
+      setStrategyToEdit(strategy);
+      carbonEvents.strategyEdit.strategyDepositClick({
+        ...strategyEventData,
+        strategyId: strategy.id,
+      });
+      navigate({
+        to: PathNames.editStrategy,
+        search: { type: 'deposit' },
+      });
+    },
+  });
+
   if (strategy.status !== StrategyStatus.NoBudget) {
     items.push({
       id: 'withdrawFunds',
@@ -109,19 +128,7 @@ export const StrategyBlockManage: FC<{
       },
     });
   }
-  if (belowBreakpoint('md')) {
-    items.push({
-      id: 'duplicateStrategy',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title5'),
-      action: () => {
-        carbonEvents.strategyEdit.strategyDuplicateClick({
-          ...strategyEventData,
-          strategyId: strategy.id,
-        });
-        duplicate(strategy);
-      },
-    });
-  }
+
   if (strategy.status === StrategyStatus.Active) {
     items.push({
       id: 'pauseStrategy',
@@ -153,6 +160,18 @@ export const StrategyBlockManage: FC<{
       },
     });
   }
+
+  items.push({
+    id: 'deleteStrategy',
+    name: t('pages.strategyOverview.card.manageStrategy.titles.title1'),
+    action: () => {
+      carbonEvents.strategyEdit.strategyDeleteClick({
+        ...strategyEventData,
+        strategyId: strategy.id,
+      });
+      openModal('confirmStrategy', { strategy, type: 'delete' });
+    },
+  });
 
   return (
     <DropdownMenu
