@@ -7,68 +7,85 @@ import { Link } from 'libs/routing';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 
-export const StrategyBlockRoi: FC<{
+export interface StrategyBlockRoiProps {
   strategyId: string;
-}> = ({ strategyId }) => {
+}
+
+export const StrategyBlockRoi: FC<StrategyBlockRoiProps> = ({ strategyId }) => {
   const { strategyRoi } = useRoi(strategyId);
   const roi = strategyRoi?.roi ?? new BigNumber(0);
   const apr = strategyRoi?.apr ?? new BigNumber(0);
   const roiFormatted = formatNumber(roi);
   const aprFormatted = formatNumber(apr);
 
+  const tooltipContentRoi = <TooltipContent roi={true} />;
+  const tooltipContentApr = <TooltipContent roi={false} />;
+
   return (
     <div className="flex rounded-8 border border-emphasis">
-      <div className="w-1/2 border-r border-emphasis p-12">
-        <div className="text-secondary flex items-center gap-4">
-          {'ROI'}
-          <Tooltip element={getTooltipElement(true)}>
-            <IconTooltip className="h-10 w-10" />
-          </Tooltip>
-        </div>
-        <div
-          className={`text-24 ${
-            roiFormatted.negative ? 'text-red' : 'text-green'
-          }`}
-        >
-          {roiFormatted.value}
-        </div>
-      </div>
-      <div className="w-1/2 p-12">
-        <div className="text-secondary flex items-center gap-4">
-          {`Est. APR`}
-          <Tooltip element={getTooltipElement(false)}>
-            <IconTooltip className="h-10 w-10" />
-          </Tooltip>{' '}
-        </div>
-        <div
-          className={`text-24 ${
-            aprFormatted.negative ? 'text-red' : 'text-green'
-          }`}
-        >
-          {aprFormatted.value}
-        </div>
-      </div>
+      <StatsBlock
+        label={'ROI'}
+        value={roiFormatted.value}
+        negative={roiFormatted.negative}
+        tooltipContent={tooltipContentRoi}
+        isRightBorder={true}
+      />
+      <StatsBlock
+        label={'Est. APR'}
+        value={aprFormatted.value}
+        negative={aprFormatted.negative}
+        tooltipContent={tooltipContentApr}
+        isRightBorder={false}
+      />
     </div>
   );
 };
 
-const getTooltipElement = (roi: boolean) => {
-  return (
-    <div className="text-14">
-      <span className="align-middle ">
-        {roi
-          ? 'Total returns of the strategy from the creation. '
-          : 'Using the daily average ROI to estimate yearly returns. '}
+const TooltipContent: FC<{ roi: boolean }> = ({ roi }) => (
+  <>
+    <span className="align-middle">
+      {roi
+        ? 'Total returns of the strategy from the creation. '
+        : 'Using the daily average ROI to estimate yearly returns. '}
+    </span>
+    <Link to={externalLinks.roiLearnMore} className="text-green">
+      <span className="align-middle">
+        {`Learn how ${roi ? 'ROI' : 'APR'} is calculated.`}{' '}
       </span>
-      <Link to={externalLinks.roiLearnMore} className="text-green">
-        <span className="align-middle">
-          {`Learn how ${roi ? 'ROI' : 'APR'} is calculated.`}{' '}
-        </span>
-        <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
-      </Link>
+      <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
+    </Link>
+  </>
+);
+
+interface StatsBlockProps {
+  label: string;
+  value: string;
+  negative: boolean;
+  tooltipContent: JSX.Element;
+  isRightBorder: boolean;
+}
+
+const StatsBlock: FC<StatsBlockProps> = ({
+  label,
+  value,
+  negative,
+  tooltipContent,
+  isRightBorder,
+}) => (
+  <div
+    className={`w-1/2 p-12 ${isRightBorder ? 'border-r border-emphasis' : ''}`}
+  >
+    <div className="text-secondary flex items-center gap-4">
+      {label}
+      <Tooltip element={tooltipContent}>
+        <IconTooltip className="h-10 w-10" />
+      </Tooltip>
     </div>
-  );
-};
+    <div className={`text-24 ${negative ? 'text-red' : 'text-green'}`}>
+      {value}
+    </div>
+  </div>
+);
 
 const formatNumber = (num: BigNumber): { value: string; negative: boolean } => {
   if (num.isZero()) {
