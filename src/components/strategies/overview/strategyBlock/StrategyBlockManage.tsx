@@ -25,6 +25,8 @@ type itemsType = {
   action?: () => void;
 };
 
+type separatorType = number;
+
 export const StrategyBlockManage: FC<{
   strategy: Strategy;
   manage: boolean;
@@ -48,7 +50,7 @@ export const StrategyBlockManage: FC<{
     strategies: { setStrategyToEdit },
   } = useStore();
 
-  const items: itemsType[] = [
+  const items: (itemsType | separatorType)[] = [
     {
       id: 'editPrices',
       name: t('pages.strategyOverview.card.manageStrategy.titles.title2'),
@@ -95,6 +97,9 @@ export const StrategyBlockManage: FC<{
     });
   }
 
+  // separator
+  items.push(0);
+
   items.push({
     id: 'depositFunds',
     name: t('pages.strategyOverview.card.manageStrategy.titles.title3'),
@@ -128,6 +133,9 @@ export const StrategyBlockManage: FC<{
       },
     });
   }
+
+  // separator
+  items.push(1);
 
   if (strategy.status === StrategyStatus.Active) {
     items.push({
@@ -192,15 +200,23 @@ export const StrategyBlockManage: FC<{
       )}
       className="z-10 w-full !p-10"
     >
-      {items.map(({ name, action, id }) => (
-        <ManageItem
-          key={id}
-          title={name}
-          setManage={setManage}
-          action={action}
-          id={id}
-        />
-      ))}
+      {items.map((item) => {
+        if (typeof item === 'number') {
+          return <hr key={item} className="border-1  my-10 border-grey5" />;
+        }
+
+        const { name, id, action } = item;
+
+        return (
+          <ManageItem
+            key={id}
+            title={name}
+            setManage={setManage}
+            action={action}
+            id={id}
+          />
+        );
+      })}
     </DropdownMenu>
   );
 };
