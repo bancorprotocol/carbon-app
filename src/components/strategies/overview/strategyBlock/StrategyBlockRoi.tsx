@@ -17,12 +17,12 @@ export const StrategyBlockRoi: FC<{
   const aprFormatted = formatNumber(apr);
 
   return (
-    <div className={'flex rounded-8 border border-emphasis'}>
-      <div className={'w-1/2 border-r border-emphasis p-12'}>
-        <div className={'text-secondary flex items-center gap-4'}>
+    <div className="flex rounded-8 border border-emphasis">
+      <div className="w-1/2 border-r border-emphasis p-12">
+        <div className="text-secondary flex items-center gap-4">
           {'ROI'}
           <Tooltip element={getTooltipElement(true)}>
-            <IconTooltip className={'h-10 w-10'} />
+            <IconTooltip className="h-10 w-10" />
           </Tooltip>
         </div>
         <div
@@ -33,11 +33,11 @@ export const StrategyBlockRoi: FC<{
           {roiFormatted.value}
         </div>
       </div>
-      <div className={'w-1/2 p-12'}>
-        <div className={'text-secondary flex items-center gap-4'}>
+      <div className="w-1/2 p-12">
+        <div className="text-secondary flex items-center gap-4">
           {`Est. APR`}
           <Tooltip element={getTooltipElement(false)}>
-            <IconTooltip className={'h-10 w-10'} />
+            <IconTooltip className="h-10 w-10" />
           </Tooltip>{' '}
         </div>
         <div
@@ -54,17 +54,17 @@ export const StrategyBlockRoi: FC<{
 
 const getTooltipElement = (roi: boolean) => {
   return (
-    <div className={'text-14'}>
-      <span className={'align-middle '}>
+    <div className="text-14">
+      <span className="align-middle ">
         {roi
           ? 'Total returns of the strategy from the creation. '
           : 'Using the daily average ROI to estimate yearly returns. '}
       </span>
-      <Link to={externalLinks.roiLearnMore} className={'text-green'}>
-        <span className={'align-middle'}>
+      <Link to={externalLinks.roiLearnMore} className="text-green">
+        <span className="align-middle">
           {`Learn how ${roi ? 'ROI' : 'APR'} is calculated.`}{' '}
         </span>
-        <IconLink className={'mb-1 inline-block h-14 w-14 align-middle'} />
+        <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
       </Link>
     </div>
   );
