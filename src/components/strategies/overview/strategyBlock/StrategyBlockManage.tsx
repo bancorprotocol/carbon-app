@@ -25,7 +25,7 @@ type itemsType = {
   action?: () => void;
 };
 
-type separatorType = number;
+type separatorCounterType = number;
 
 export const StrategyBlockManage: FC<{
   strategy: Strategy;
@@ -50,7 +50,7 @@ export const StrategyBlockManage: FC<{
     strategies: { setStrategyToEdit },
   } = useStore();
 
-  const items: (itemsType | separatorType)[] = [
+  const items: (itemsType | separatorCounterType)[] = [
     {
       id: 'editPrices',
       name: t('pages.strategyOverview.card.manageStrategy.titles.title2'),
