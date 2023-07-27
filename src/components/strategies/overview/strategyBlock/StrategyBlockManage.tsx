@@ -85,11 +85,7 @@ export const StrategyBlockManage: FC<{
           ...strategyEventData,
           strategyId: strategy.id,
         });
-        window?.open(
-          `https://app.hal.xyz/recipes/carbon-track-strategy-updated?strategy_id=${strategy.id}`,
-          '_blank',
-          'noopener'
-        );
+        openModal('manageNotifications', { strategyId: strategy.id });
       },
     },
   ];

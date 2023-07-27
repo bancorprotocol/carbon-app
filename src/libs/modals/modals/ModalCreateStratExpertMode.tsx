@@ -24,7 +24,11 @@ export const ModalCreateStratExpertMode: ModalFC<
   };
 
   return (
-    <ModalOrMobileSheet id={id} title={t('modals.expertMode.modalTitle')} onClose={onClose}>
+    <ModalOrMobileSheet
+      id={id}
+      title={t('modals.expertMode.modalTitle')}
+      onClose={onClose}
+    >
       <div className={'mt-40'}>
         <IconTitleText
           variant={'success'}
