@@ -77,10 +77,7 @@ export const StrategyBlockManage: FC<{
         duplicate(strategy);
       },
     },
-  ];
-
-  if (strategy.status === StrategyStatus.Active) {
-    items.push({
+    {
       id: 'manageNotifications',
       name: t('pages.strategyOverview.card.manageStrategy.titles.title8'),
       action: () => {
@@ -94,8 +91,8 @@ export const StrategyBlockManage: FC<{
           'noopener'
         );
       },
-    });
-  }
+    },
+  ];
 
   // separator
   items.push(0);
