@@ -286,3 +286,22 @@ export const isPathnameMatch = (
     .filter((x) => x !== '/')
     .some((x) => current.startsWith(x));
 };
+
+export const formatNumberWithApproximation = (
+  num: BigNumber,
+  { isPercentage = false, approximateBelow = 0.01 } = {}
+): { value: string; negative: boolean } => {
+  const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
+
+  if (num.isZero()) {
+    return { value: addPercentage('0'), negative: false };
+  } else if (num.gt(0) && num.lt(approximateBelow)) {
+    return { value: addPercentage(`< ${approximateBelow}`), negative: false };
+  } else if (num.gte(approximateBelow)) {
+    return { value: addPercentage(num.toFormat(2)), negative: false };
+  } else if (num.gt(-1 * approximateBelow)) {
+    return { value: addPercentage(`> -${approximateBelow}`), negative: true };
+  } else {
+    return { value: addPercentage(num.toFormat(2)), negative: true };
+  }
+};

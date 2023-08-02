@@ -1,11 +1,12 @@
 import { FC } from 'react';
-import { useRoi } from 'hooks/useRoi';
+import { useRoi } from 'components/strategies/overview/useRoi';
 import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { externalLinks } from 'libs/routing/routes';
 import { Link } from 'libs/routing';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import { formatNumberWithApproximation } from 'utils/helpers';
 
 export interface StrategyBlockRoiProps {
   strategyId: string;
@@ -13,90 +14,41 @@ export interface StrategyBlockRoiProps {
 
 export const StrategyBlockRoi: FC<StrategyBlockRoiProps> = ({ strategyId }) => {
   const { strategyRoi } = useRoi(strategyId);
-  const roi = strategyRoi?.roi ?? new BigNumber(0);
-  const apr = strategyRoi?.apr ?? new BigNumber(0);
-  const roiFormatted = formatNumber(roi);
-  const aprFormatted = formatNumber(apr);
-
-  const tooltipContentRoi = <TooltipContent roi={true} />;
-  const tooltipContentApr = <TooltipContent roi={false} />;
+  const roi = strategyRoi ?? new BigNumber(0);
+  const roiFormatted = formatNumberWithApproximation(roi, {
+    isPercentage: true,
+    approximateBelow: 0.01,
+  });
 
   return (
     <div className="flex rounded-8 border border-emphasis">
-      <StatsBlock
-        label={'ROI'}
-        value={roiFormatted.value}
-        negative={roiFormatted.negative}
-        tooltipContent={tooltipContentRoi}
-        isRightBorder={true}
-      />
-      <StatsBlock
-        label={'Est. APR'}
-        value={aprFormatted.value}
-        negative={aprFormatted.negative}
-        tooltipContent={tooltipContentApr}
-        isRightBorder={false}
-      />
+      <div className="w-1/2 p-12">
+        <div className="text-secondary flex items-center gap-4">
+          {'ROI'}
+          <Tooltip element={<TooltipContent />}>
+            <IconTooltip className="h-10 w-10" />
+          </Tooltip>
+        </div>
+        <div
+          className={`text-24 ${
+            roiFormatted.negative ? 'text-red' : 'text-green'
+          }`}
+        >
+          {roiFormatted.value}
+        </div>
+      </div>
     </div>
   );
 };
 
-const TooltipContent: FC<{ roi: boolean }> = ({ roi }) => (
+const TooltipContent: FC<{}> = () => (
   <>
     <span className="align-middle">
-      {roi
-        ? 'Total returns of the strategy from the creation. '
-        : 'Using the daily average ROI to estimate yearly returns. '}
+      {'Total returns of the strategy from the creation. '}
     </span>
     <Link to={externalLinks.roiLearnMore} className="text-green">
-      <span className="align-middle">
-        {`Learn how ${roi ? 'ROI' : 'APR'} is calculated.`}{' '}
-      </span>
+      <span className="align-middle">{`Learn how ROI is calculated.`} </span>
       <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
     </Link>
   </>
 );
-
-interface StatsBlockProps {
-  label: string;
-  value: string;
-  negative: boolean;
-  tooltipContent: JSX.Element;
-  isRightBorder: boolean;
-}
-
-const StatsBlock: FC<StatsBlockProps> = ({
-  label,
-  value,
-  negative,
-  tooltipContent,
-  isRightBorder,
-}) => (
-  <div
-    className={`w-1/2 p-12 ${isRightBorder ? 'border-r border-emphasis' : ''}`}
-  >
-    <div className="text-secondary flex items-center gap-4">
-      {label}
-      <Tooltip element={tooltipContent}>
-        <IconTooltip className="h-10 w-10" />
-      </Tooltip>
-    </div>
-    <div className={`text-24 ${negative ? 'text-red' : 'text-green'}`}>
-      {value}
-    </div>
-  </div>
-);
-
-const formatNumber = (num: BigNumber): { value: string; negative: boolean } => {
-  if (num.isZero()) {
-    return { value: '0%', negative: false };
-  } else if (num.gt(0) && num.lt(0.01)) {
-    return { value: '< 0.01%', negative: false };
-  } else if (num.gte(0.01)) {
-    return { value: num.toFormat(2) + '%', negative: false };
-  } else if (num.gt(-0.01)) {
-    return { value: '> -0.01%', negative: true };
-  } else {
-    return { value: num.toFormat(1) + '%', negative: true };
-  }
-};

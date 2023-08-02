@@ -9,7 +9,7 @@ export const useRoi = (strategyId: string) => {
     const rows = roiQuery.data || [];
     const row = rows.find((roiRow) => roiRow.id === strategyId);
     if (!!row) {
-      return { roi: new BigNumber(row.ROI), apr: new BigNumber(row.APR) };
+      return new BigNumber(row.ROI);
     }
 
     return undefined;

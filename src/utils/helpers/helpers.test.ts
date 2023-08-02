@@ -1,7 +1,8 @@
-import { prettifyNumber } from '.';
-import { test, it, expect } from 'vitest';
+import { prettifyNumber, formatNumberWithApproximation } from '.';
+import { describe, it, expect } from 'vitest';
+import BigNumber from 'bignumber.js';
 
-test('prettifyNumber', () => {
+describe('prettifyNumber', () => {
   it('should return 0 for input lower then 0', () => {
     expect(prettifyNumber(-5000)).toEqual('0');
   });
@@ -48,20 +49,20 @@ test('prettifyNumber', () => {
     expect(prettifyNumber(0.0000001)).toEqual('< 0.000001');
   });
 
-  test('should return "1,321,965,595" for large number', () => {
+  it('should return "1,321,965,595" for large number', () => {
     expect(prettifyNumber(1321965595)).toEqual('1,321,965,595');
   });
 
-  test('should return "1,321,965,595" for large number and usd  true', () => {
+  it('should return "1,321,965,595" for large number and usd  true', () => {
     expect(prettifyNumber(1321965595, { usd: true })).toEqual('$1,321,965,595');
   });
 
-  test('Check rounding is correct - default = math.floor', () => {
+  it('Check rounding is correct - default = math.floor', () => {
     expect(prettifyNumber(18999.999999999851769955)).toEqual('18,999');
     expect(prettifyNumber(19999.999999999986138278)).toEqual('19,999');
   });
 
-  test('Check rounding is correct - math.round', () => {
+  it('Check rounding is correct - math.round', () => {
     expect(prettifyNumber(18999.999999999851769955, { round: true })).toEqual(
       '19,000'
     );
@@ -70,7 +71,7 @@ test('prettifyNumber', () => {
     );
   });
 
-  test('Check rounding is correct - usd = true', () => {
+  it('Check rounding is correct - usd = true', () => {
     expect(prettifyNumber(18999.999999999851769955, { usd: true })).toEqual(
       '$18,999'
     );
@@ -79,9 +80,79 @@ test('prettifyNumber', () => {
     ).toEqual('$20,000');
   });
 
-  test('Remove redundant zero', () => {
+  it('Remove redundant zero', () => {
     expect(prettifyNumber('18.00000')).toEqual('18');
     expect(prettifyNumber('18.120000')).toEqual('18.12');
     expect(prettifyNumber('18.12345678910000')).toEqual('18.12');
+  });
+});
+
+describe('formatNumberWithApproximation', () => {
+  const testCases: [
+    BigNumber,
+    { isPercentage?: boolean; approximateBelow?: number },
+    { value: string; negative: boolean }
+  ][] = [
+    [new BigNumber(0), {}, { value: '0', negative: false }],
+    [
+      new BigNumber(0),
+      { isPercentage: true },
+      { value: '0%', negative: false },
+    ],
+    [
+      new BigNumber(0.005),
+      { approximateBelow: 0.2, isPercentage: true },
+      { value: '< 0.2%', negative: false },
+    ],
+    [
+      new BigNumber(0.01),
+      { approximateBelow: 0.01 },
+      { value: '0.01', negative: false },
+    ],
+    [
+      new BigNumber(54.321),
+      { approximateBelow: 0.01 },
+      { value: '54.32', negative: false },
+    ],
+    [
+      new BigNumber(23.456),
+      { approximateBelow: 0.01 },
+      { value: '23.46', negative: false },
+    ],
+    [
+      new BigNumber(-0.005),
+      { approximateBelow: 0.01 },
+      { value: '> -0.01', negative: true },
+    ],
+    [
+      new BigNumber(-0.01),
+      { approximateBelow: 0.01, isPercentage: true },
+      { value: '-0.01%', negative: true },
+    ],
+    [
+      new BigNumber(-0.02),
+      { approximateBelow: 0.01 },
+      { value: '-0.02', negative: true },
+    ],
+    [
+      new BigNumber(-34.567),
+      { approximateBelow: 0.01 },
+      { value: '-34.57', negative: true },
+    ],
+  ];
+
+  testCases.forEach(([num, options, expected]) => {
+    const percentageInfo = options.isPercentage ? ' with percentage' : '';
+    const approximationInfo = options.approximateBelow
+      ? ` and approximation below ${options.approximateBelow}`
+      : '';
+    const description = `Formats ${num.toString()}${percentageInfo}${approximationInfo} as ${
+      expected.value
+    }, negative: ${expected.negative}`;
+
+    it(description, () => {
+      const result = formatNumberWithApproximation(num, options);
+      expect(result).to.deep.equal(expected);
+    });
   });
 });
