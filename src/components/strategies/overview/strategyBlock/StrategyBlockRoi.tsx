@@ -44,7 +44,7 @@ export const StrategyBlockRoi: FC<StrategyBlockRoiProps> = ({ strategyId }) => {
 const TooltipContent: FC<{}> = () => (
   <>
     <span className="align-middle">
-      {'Total returns of the strategy from the creation. '}
+      {'Total percentage returns of the strategy from its creation. '}
     </span>
     <Link to={externalLinks.roiLearnMore} className="text-green">
       <span className="align-middle">{`Learn how ROI is calculated.`} </span>
