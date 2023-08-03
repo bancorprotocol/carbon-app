@@ -294,7 +294,7 @@ export const formatNumberWithApproximation = (
   const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
 
   if (num.isZero()) {
-    return { value: addPercentage('0'), negative: false };
+    return { value: addPercentage('0.00'), negative: false };
   } else if (num.gt(0) && num.lt(approximateBelow)) {
     return { value: addPercentage(`< ${approximateBelow}`), negative: false };
   } else if (num.gte(approximateBelow)) {

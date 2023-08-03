@@ -93,11 +93,11 @@ describe('formatNumberWithApproximation', () => {
     { isPercentage?: boolean; approximateBelow?: number },
     { value: string; negative: boolean }
   ][] = [
-    [new BigNumber(0), {}, { value: '0', negative: false }],
+    [new BigNumber(0), {}, { value: '0.00', negative: false }],
     [
       new BigNumber(0),
       { isPercentage: true },
-      { value: '0%', negative: false },
+      { value: '0.00%', negative: false },
     ],
     [
       new BigNumber(0.005),
