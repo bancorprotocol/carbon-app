@@ -19,7 +19,6 @@ export type FiatPriceDict = {
 };
 
 export type RoiRow = {
-  APR: string;
   ROI: string;
   id: string;
 };
@@ -32,6 +31,10 @@ if (import.meta.env.VITE_DEV_MODE) {
 
 const carbonApiAxios = axios.create({
   baseURL: BASE_URL,
+});
+
+const newApiAxios = axios.create({
+  baseURL: 'https://api.carbondefi.xyz/v1/',
 });
 
 carbonApiAxios.defaults.headers.common['x-carbon-auth-key'] =
@@ -60,9 +63,7 @@ const carbonApi = {
     return data;
   },
   getRoi: async (): Promise<RoiRow[]> => {
-    const {
-      data: { data },
-    } = await carbonApiAxios.get<{ data: RoiRow[] }>('roi');
+    const { data } = await newApiAxios.get<RoiRow[]>('roi');
     return data;
   },
 };
