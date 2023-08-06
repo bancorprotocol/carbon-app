@@ -1,23 +1,6 @@
 import { useState } from 'react';
 import { lsService } from 'services/localeStorage';
-
-const AVAILABLE_CURRENCIES = [
-  'USD',
-  'EUR',
-  'JPY',
-  'GBP',
-  'AUD',
-  'CAD',
-  'CHF',
-  'CNH',
-  'ETH',
-] as const;
-
-export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
-
-export type FiatPriceDict = {
-  [k in FiatSymbol]: number;
-};
+import { AVAILABLE_CURRENCIES, FiatSymbol } from 'utils/carbonApi';
 
 export interface FiatCurrencyStore {
   availableCurrencies: readonly FiatSymbol[];

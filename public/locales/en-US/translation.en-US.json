@@ -409,12 +409,13 @@
         "manageStrategy": {
           "titles": {
             "title1": "Delete Strategy",
-            "title2": "Edit Prices",
+            "title2": "Edit Rates",
             "title3": "Deposit Funds",
             "title4": "Withdraw Funds",
             "title5": "Duplicate Strategy",
             "title6": "Pause Strategy",
-            "title7": "Renew Strategy"
+            "title7": "Renew Strategy",
+            "title8": "Manage Notifications"
           },
           "tooltips": {
             "tooltip1": "Create a new strategy with the same details",
@@ -423,7 +424,8 @@
             "tooltip4": "Withdraw funds from an existing strategy",
             "tooltip5": "Deposit additional funds into an existing strategy",
             "tooltip6": "Edit the prices of your buy/sell orders within an existing strategy",
-            "tooltip7": "Renew an inactive strategy"
+            "tooltip7": "Renew an inactive strategy",
+            "tooltip8": "Get notified when someone trades against your strategy"
           }
         }
       }

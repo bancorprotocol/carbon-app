@@ -6,6 +6,8 @@ export namespace QueryKey {
   export const chain = ['chain'];
   export const extAPI = ['ext-api'];
 
+  export const roi = () => [...extAPI, 'roi'];
+
   export const tokens = () => [...extAPI, 'tokens'];
   export const tokenPrice = (address: string) => [
     ...extAPI,

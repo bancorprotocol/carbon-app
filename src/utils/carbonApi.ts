@@ -1,5 +1,27 @@
 import axios from 'axios';
-import { FiatPriceDict, FiatSymbol } from 'store/useFiatCurrencyStore';
+
+export const AVAILABLE_CURRENCIES = [
+  'USD',
+  'EUR',
+  'JPY',
+  'GBP',
+  'AUD',
+  'CAD',
+  'CHF',
+  'CNH',
+  'ETH',
+] as const;
+
+export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
+
+export type FiatPriceDict = {
+  [k in FiatSymbol]: number;
+};
+
+export type RoiRow = {
+  ROI: string;
+  id: string;
+};
 
 let BASE_URL = '/api/';
 
@@ -9,6 +31,10 @@ if (import.meta.env.VITE_DEV_MODE) {
 
 const carbonApiAxios = axios.create({
   baseURL: BASE_URL,
+});
+
+const newApiAxios = axios.create({
+  baseURL: 'https://api.carbondefi.xyz/v1/',
 });
 
 carbonApiAxios.defaults.headers.common['x-carbon-auth-key'] =
@@ -34,6 +60,10 @@ const carbonApi = {
         params: { convert: convert.join(',') },
       }
     );
+    return data;
+  },
+  getRoi: async (): Promise<RoiRow[]> => {
+    const { data } = await newApiAxios.get<RoiRow[]>('roi');
     return data;
   },
 };

@@ -53,6 +53,9 @@ const tooltipTextByStrategyEditOptionsId = (
     renewStrategy: t(
       'pages.strategyOverview.card.manageStrategy.tooltips.tooltip7'
     ),
+    manageNotifications: t(
+      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip8'
+    ),
   };
 };
 
