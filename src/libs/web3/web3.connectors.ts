@@ -93,7 +93,7 @@ const [web3WalletConnect, web3WalletConnectHooks] =
           metadata: {
             name: 'Carbon',
             description:
-              'Carbon by Bancor is a fully decentralized protocol for automating onchain trading strategies',
+              'Trade tokens or create automated onchain trading strategies',
             url: 'https://app.carbondefi.xyz',
             icons: ['https://app.carbondefi.xyz/logo512.png'],
           },
