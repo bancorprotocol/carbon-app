@@ -8,7 +8,7 @@ export const useRoi = (strategyId: string) => {
   const strategyRoi = useMemo(() => {
     const rows = roiQuery.data || [];
     const row = rows.find((roiRow) => roiRow.id === strategyId);
-    if (!!row) {
+    if (!!row && !!row.ROI) {
       return new BigNumber(row.ROI);
     }
 
