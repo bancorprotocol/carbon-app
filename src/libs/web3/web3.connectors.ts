@@ -1,6 +1,6 @@
 import { initializeConnector } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
-import { WalletConnect } from '@web3-react/walletconnect';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
@@ -86,8 +86,19 @@ const [web3WalletConnect, web3WalletConnectHooks] =
       new WalletConnect({
         actions,
         options: {
+          projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
           rpc: RPC_URLS,
-          qrcode: true,
+          showQrModal: true,
+          chains: [SupportedChainId.MAINNET],
+          metadata: {
+            name: 'Carbon',
+            description:
+              'Carbon by Bancor is a fully decentralized protocol for automating onchain trading strategies',
+            url: 'https://carbondefi.xyz',
+            icons: [
+              'https://framerusercontent.com/images/D1WVXSMjy685PBCppUxU9FVYE.svg',
+            ],
+          },
         },
         onError,
       })
