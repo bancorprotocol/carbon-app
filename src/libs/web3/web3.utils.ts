@@ -1,3 +1,4 @@
+import { isAddress } from 'ethers/lib/utils';
 import { ConnectionType } from 'libs/web3/web3.constants';
 import {
   coinbaseWalletConnection,
@@ -32,25 +33,27 @@ export const getConnection = (c: ConnectionType) => {
 export const attemptToConnectWallet = async (
   t: ConnectionType,
   activate?: boolean
-) => {
-  const { connector: c, name } = getConnection(t);
-  let isSuccess = false;
+): Promise<{ success: boolean }> => {
+  const { connector: c, name, hooks } = getConnection(t);
   try {
     if (activate) {
       await c.activate();
     } else {
       await c.connectEagerly?.();
     }
+    const user = hooks.useAccount();
+    if (!user || !isAddress(user)) {
+      console.error('No or Invalid user address');
+      return { success: false };
+    }
     lsService.setItem('connectionType', t);
     console.log(`connected to ${name}`);
-    isSuccess = true;
-  } catch (e) {
+    return { success: true };
+  } catch (e: any) {
     console.error(`error connecting to ${name}`, e);
-  }
-  if (isSuccess) {
-    throw new Error(
-      `User connected successfully. Cancel further connection attempts`
-    );
+    return {
+      success: false,
+    };
   }
 };
 
@@ -67,3 +70,23 @@ export const IS_COINBASE_WALLET =
 export const IS_METAMASK_BROWSER = isMobile && IS_METAMASK_WALLET;
 
 export const IS_COINBASE_BROWSER = isMobile && IS_COINBASE_WALLET;
+
+const NATIVE_APP_BROWSERS = [
+  {
+    enabled: IS_IN_IFRAME,
+    type: ConnectionType.GNOSIS_SAFE,
+    activate: true,
+  },
+  {
+    enabled: IS_COINBASE_BROWSER,
+    type: ConnectionType.COINBASE_WALLET,
+    activate: true,
+  },
+  {
+    enabled: IS_METAMASK_BROWSER,
+    type: ConnectionType.INJECTED,
+    activate: true,
+  },
+];
+
+export const isNativeAppBrowser = NATIVE_APP_BROWSERS.find((x) => x.enabled);

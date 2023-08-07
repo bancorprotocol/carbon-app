@@ -3,9 +3,7 @@ import { ConnectionType } from 'libs/web3/web3.constants';
 import {
   attemptToConnectWallet,
   getConnection,
-  IS_COINBASE_BROWSER,
-  IS_IN_IFRAME,
-  IS_METAMASK_BROWSER,
+  isNativeAppBrowser,
 } from 'libs/web3/web3.utils';
 import { useCallback, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
@@ -50,36 +48,24 @@ export const useWeb3Network = () => {
 
   useAsyncEffect(async () => {
     if (isCountryBlocked === false) {
-      // Attempt to connect to wallet eagerly
-      try {
-        if (IS_IN_IFRAME) {
-          await attemptToConnectWallet(ConnectionType.GNOSIS_SAFE, true);
+      // Attempt to autologin to native app browser
+      if (isNativeAppBrowser) {
+        const { success } = await attemptToConnectWallet(
+          isNativeAppBrowser.type,
+          isNativeAppBrowser.activate
+        );
+        if (success) {
+          return; // If successfully connected, stop further connection attempts
         }
-        if (IS_COINBASE_BROWSER) {
-          await attemptToConnectWallet(ConnectionType.COINBASE_WALLET, true);
-        }
-        if (IS_METAMASK_BROWSER) {
-          await attemptToConnectWallet(ConnectionType.INJECTED, true);
-        }
-      } catch (e: any) {
-        // throws if successfully connected to stop further attempts
-        console.log(e.message);
-        return;
       }
 
-      // Attempt to connect previous session
+      // Attempt to autologin to normal previous session, if exists
       const storedConnection = lsService.getItem('connectionType');
       if (storedConnection !== undefined) {
-        try {
-          await attemptToConnectWallet(
-            storedConnection,
-            storedConnection === ConnectionType.COINBASE_WALLET
-          );
-        } catch (e: any) {
-          // throws if successfully connected to stop further attempts
-          console.log(e.message);
-          return;
-        }
+        await attemptToConnectWallet(
+          storedConnection,
+          storedConnection === ConnectionType.COINBASE_WALLET
+        );
       }
     }
   }, [isCountryBlocked]);

@@ -64,27 +64,28 @@ export const useWeb3User = ({
   );
 
   const disconnect = useCallback(async () => {
-    if (connector.deactivate) {
+    try {
+      if (!connector.deactivate) {
+        throw new Error('connector does not have a deactivate method');
+      }
+      await connector.deactivate();
+      console.log('successfully deactivated connector');
+    } catch (e) {
+      console.error(
+        'failed to deactivate connector, attempting to reset state instead.',
+        e
+      );
       try {
-        await connector.deactivate();
-        console.log('successfully deactivated connector');
+        await connector.resetState();
+        console.log('successfully reset connector state');
       } catch (e) {
         console.error(
-          'failed to deactivate connector, attempting to reset state instead',
+          'failed to reset connector state, user not logged out',
           e
         );
-        try {
-          await connector.resetState();
-          console.log('successfully reset connector state');
-        } catch (e) {
-          console.error(
-            'failed to reset connector state, user not logged out',
-            e
-          );
-        } finally {
-          handleImposterAccount();
-          lsService.removeItem('connectionType');
-        }
+      } finally {
+        handleImposterAccount();
+        lsService.removeItem('connectionType');
       }
     }
   }, [connector, handleImposterAccount]);
