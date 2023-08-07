@@ -70,6 +70,7 @@ export const useWeb3User = ({
       await connector.resetState();
     }
     handleImposterAccount();
+    lsService.removeItem('connectionType');
   }, [connector, handleImposterAccount]);
 
   return {
