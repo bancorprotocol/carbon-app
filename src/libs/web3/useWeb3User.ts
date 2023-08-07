@@ -67,21 +67,26 @@ export const useWeb3User = ({
     if (connector.deactivate) {
       try {
         await connector.deactivate();
+        console.log('successfully deactivated connector');
       } catch (e) {
         console.error(
           'failed to deactivate connector, attempting to reset state instead',
           e
         );
-      }
-    } else {
-      try {
-        await connector.resetState();
-      } catch (e) {
-        console.error('failed to reset connector state', e);
+        try {
+          await connector.resetState();
+          console.log('successfully reset connector state');
+        } catch (e) {
+          console.error(
+            'failed to reset connector state, user not logged out',
+            e
+          );
+        } finally {
+          handleImposterAccount();
+          lsService.removeItem('connectionType');
+        }
       }
     }
-    handleImposterAccount();
-    lsService.removeItem('connectionType');
   }, [connector, handleImposterAccount]);
 
   return {
