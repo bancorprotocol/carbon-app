@@ -99,7 +99,7 @@ export const MainMenuRightWallet: FC = () => {
             className={'flex items-center ps-20 space-s-10'}
           >
             {buttonIcon}
-            <span>{buttonText}</span> {}
+            <span>{buttonText}</span>
           </Button>
         )}
       >
