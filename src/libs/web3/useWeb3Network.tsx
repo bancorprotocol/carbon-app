@@ -62,10 +62,7 @@ export const useWeb3Network = () => {
       // Attempt to autologin to normal previous session, if exists
       const storedConnection = lsService.getItem('connectionType');
       if (storedConnection !== undefined) {
-        await attemptToConnectWallet(
-          storedConnection,
-          storedConnection === ConnectionType.COINBASE_WALLET
-        );
+        await attemptToConnectWallet(storedConnection);
       }
     }
   }, [isCountryBlocked]);
