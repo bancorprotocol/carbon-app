@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import numbro from 'numbro';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { FiatSymbol } from 'store/useFiatCurrencyStore';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { FiatSymbol } from 'utils/carbonApi';
 
 export const isProduction = window
   ? window.location.host.includes('carbondefi.xyz')
@@ -285,4 +285,23 @@ export const isPathnameMatch = (
   return hrefMatches
     .filter((x) => x !== '/')
     .some((x) => current.startsWith(x));
+};
+
+export const formatNumberWithApproximation = (
+  num: BigNumber,
+  { isPercentage = false, approximateBelow = 0.01 } = {}
+): { value: string; negative: boolean } => {
+  const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
+
+  if (num.isZero()) {
+    return { value: addPercentage('0.00'), negative: false };
+  } else if (num.gt(0) && num.lt(approximateBelow)) {
+    return { value: addPercentage(`< ${approximateBelow}`), negative: false };
+  } else if (num.gte(approximateBelow)) {
+    return { value: addPercentage(num.toFormat(2)), negative: false };
+  } else if (num.gt(-1 * approximateBelow)) {
+    return { value: addPercentage(`> -${approximateBelow}`), negative: true };
+  } else {
+    return { value: addPercentage(num.toFormat(2)), negative: true };
+  }
 };

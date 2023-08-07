@@ -5,8 +5,8 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
-import { FiatPriceDict } from 'store/useFiatCurrencyStore';
 import { sortObjectArray } from 'utils/helpers';
+import { FiatPriceDict } from 'utils/carbonApi';
 
 export interface PortfolioData {
   token: Token;
