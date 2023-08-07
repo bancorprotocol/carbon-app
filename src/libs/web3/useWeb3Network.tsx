@@ -11,7 +11,7 @@ import { useStore } from 'store';
 import useAsyncEffect from 'use-async-effect';
 
 export const useWeb3Network = () => {
-  const { isCountryBlocked } = useStore();
+  const { isCountryBlocked, setSelectedWallet } = useStore();
 
   const { connector } = useWeb3React();
 
@@ -55,6 +55,7 @@ export const useWeb3Network = () => {
           isNativeAppBrowser.activate
         );
         if (success) {
+          setSelectedWallet(isNativeAppBrowser.type);
           return; // If successfully connected, stop further connection attempts
         }
       }
@@ -62,7 +63,10 @@ export const useWeb3Network = () => {
       // Attempt to autologin to normal previous session, if exists
       const storedConnection = lsService.getItem('connectionType');
       if (storedConnection !== undefined) {
-        await attemptToConnectWallet(storedConnection);
+        const { success } = await attemptToConnectWallet(storedConnection);
+        if (success) {
+          setSelectedWallet(storedConnection);
+        }
       }
     }
   }, [isCountryBlocked]);

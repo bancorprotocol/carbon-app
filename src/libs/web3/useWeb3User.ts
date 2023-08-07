@@ -24,7 +24,7 @@ export const useWeb3User = ({
   connector,
   handleImposterAccount,
 }: Props) => {
-  const { isCountryBlocked } = useStore();
+  const { isCountryBlocked, setSelectedWallet } = useStore();
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
     lsService.getItem('isUncheckedSigner') || false
   );
@@ -59,8 +59,9 @@ export const useWeb3User = ({
       const { connector } = getConnection(type);
       await connector.activate();
       lsService.setItem('connectionType', type);
+      setSelectedWallet(type);
     },
-    [isCountryBlocked]
+    [isCountryBlocked, setSelectedWallet]
   );
 
   const disconnect = useCallback(async () => {
@@ -86,9 +87,10 @@ export const useWeb3User = ({
       } finally {
         handleImposterAccount();
         lsService.removeItem('connectionType');
+        setSelectedWallet(null);
       }
     }
-  }, [connector, handleImposterAccount]);
+  }, [connector, handleImposterAccount, setSelectedWallet]);
 
   return {
     user,

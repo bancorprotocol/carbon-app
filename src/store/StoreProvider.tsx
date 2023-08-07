@@ -1,4 +1,13 @@
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { ConnectionType } from 'libs/web3';
+import {
+  createContext,
+  Dispatch,
+  FC,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useState,
+} from 'react';
 import {
   defaultTradeSettingsStore,
   TradeSettingsStore,
@@ -57,6 +66,8 @@ interface StoreContext {
   fiatCurrency: FiatCurrencyStore;
   innerHeight: number;
   setInnerHeight: (value: number) => void;
+  selectedWallet: ConnectionType | null;
+  setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
 }
 
 const defaultValue: StoreContext = {
@@ -76,6 +87,8 @@ const defaultValue: StoreContext = {
   fiatCurrency: defaultFiatCurrencyStore,
   innerHeight: 0,
   setInnerHeight: () => {},
+  selectedWallet: null,
+  setSelectedWallet: () => {},
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -91,6 +104,9 @@ export const useStore = () => {
 export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [countryBlocked, setCountryBlocked] = useState<boolean | null>(null);
   const [innerHeight, setInnerHeight] = useState<number>(window.innerHeight);
+  const [selectedWallet, setSelectedWallet] = useState<ConnectionType | null>(
+    null
+  );
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -117,6 +133,8 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     fiatCurrency,
     innerHeight,
     setInnerHeight,
+    selectedWallet,
+    setSelectedWallet,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;

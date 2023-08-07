@@ -1,4 +1,3 @@
-import { isAddress } from 'ethers/lib/utils';
 import { ConnectionType } from 'libs/web3/web3.constants';
 import {
   coinbaseWalletConnection,
@@ -34,17 +33,12 @@ export const attemptToConnectWallet = async (
   t: ConnectionType,
   activate?: boolean
 ): Promise<{ success: boolean }> => {
-  const { connector: c, name, hooks } = getConnection(t);
+  const { connector: c, name } = getConnection(t);
   try {
     if (activate) {
       await c.activate();
     } else {
       await c.connectEagerly?.();
-    }
-    const user = hooks.useAccount();
-    if (!user || !isAddress(user)) {
-      console.error('No or Invalid user address');
-      return { success: false };
     }
     lsService.setItem('connectionType', t);
     console.log(`connected to ${name}`);
