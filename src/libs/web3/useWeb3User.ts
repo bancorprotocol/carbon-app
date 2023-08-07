@@ -71,7 +71,7 @@ export const useWeb3User = ({
       await connector.deactivate();
       console.log('successfully deactivated connector');
     } catch (e) {
-      console.error(
+      console.warn(
         'failed to deactivate connector, attempting to reset state instead.',
         e
       );
