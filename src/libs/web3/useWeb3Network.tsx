@@ -62,6 +62,9 @@ export const useWeb3Network = () => {
         c.connector.connectEagerly?.();
         return;
       }
+      const c = getConnection(ConnectionType.WALLET_CONNECT);
+      c.connector.connectEagerly?.();
+      return;
     }
   }, [isCountryBlocked]);
 
