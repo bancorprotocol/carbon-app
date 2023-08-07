@@ -1,13 +1,16 @@
-import {
-  getConnection,
-  IS_COINBASE_WALLET,
-  IS_IN_IFRAME,
-  IS_METAMASK_WALLET,
-} from 'libs/web3/web3.utils';
-import { ConnectionType } from 'libs/web3/web3.constants';
-import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { ConnectionType } from 'libs/web3/web3.constants';
+import {
+  attemptToConnectWallet,
+  getConnection,
+  IS_COINBASE_BROWSER,
+  IS_IN_IFRAME,
+  IS_METAMASK_BROWSER,
+} from 'libs/web3/web3.utils';
+import { useCallback, useEffect, useState } from 'react';
+import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
+import useAsyncEffect from 'use-async-effect';
 
 export const useWeb3Network = () => {
   const { isCountryBlocked } = useStore();
@@ -45,26 +48,36 @@ export const useWeb3Network = () => {
     void activateNetwork();
   }, [activateNetwork]);
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (isCountryBlocked === false) {
-      if (IS_IN_IFRAME) {
-        const c = getConnection(ConnectionType.GNOSIS_SAFE);
-        c.connector.connectEagerly?.();
+      // Attempt to connect to wallet eagerly
+      try {
+        if (IS_IN_IFRAME) {
+          await attemptToConnectWallet(ConnectionType.GNOSIS_SAFE, true);
+        }
+        if (IS_COINBASE_BROWSER) {
+          await attemptToConnectWallet(ConnectionType.COINBASE_WALLET, true);
+        }
+        if (IS_METAMASK_BROWSER) {
+          await attemptToConnectWallet(ConnectionType.INJECTED, true);
+        }
+      } catch (e: any) {
+        // throws if successfully connected to stop further attempts
+        console.log(e.message);
         return;
       }
-      if (IS_METAMASK_WALLET) {
-        const c = getConnection(ConnectionType.INJECTED);
-        c.connector.connectEagerly?.();
-        return;
+
+      // Attempt to connect previous session
+      const storedConnection = lsService.getItem('connectionType');
+      if (storedConnection !== undefined) {
+        try {
+          await attemptToConnectWallet(storedConnection, true);
+        } catch (e: any) {
+          // throws if successfully connected to stop further attempts
+          console.log(e.message);
+          return;
+        }
       }
-      if (IS_COINBASE_WALLET) {
-        const c = getConnection(ConnectionType.COINBASE_WALLET);
-        c.connector.connectEagerly?.();
-        return;
-      }
-      const c = getConnection(ConnectionType.WALLET_CONNECT);
-      c.connector.connectEagerly?.();
-      return;
     }
   }, [isCountryBlocked]);
 

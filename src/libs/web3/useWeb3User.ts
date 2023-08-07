@@ -58,6 +58,7 @@ export const useWeb3User = ({
       }
       const { connector } = getConnection(type);
       await connector.activate();
+      lsService.setItem('connectionType', type);
     },
     [isCountryBlocked]
   );
