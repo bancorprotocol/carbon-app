@@ -50,6 +50,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         process: 'process/browser',
         buffer: 'buffer',
+        crypto: 'crypto-browserify',
         stream: 'stream-browserify',
         assert: 'assert',
         http: 'stream-http',
