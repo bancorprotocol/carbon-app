@@ -71,7 +71,7 @@ export const useWeb3Network = () => {
       const storedConnection = lsService.getItem('connectionType');
       if (storedConnection !== undefined) {
         try {
-          await attemptToConnectWallet(storedConnection, true);
+          await attemptToConnectWallet(storedConnection);
         } catch (e: any) {
           // throws if successfully connected to stop further attempts
           console.log(e.message);
