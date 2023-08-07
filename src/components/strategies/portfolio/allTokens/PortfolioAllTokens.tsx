@@ -2,7 +2,6 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokensPieChartCenter } from 'components/strategies/portfolio/allTokens/PortfolioAllTokensPieChartCenter';
 import { Strategy } from 'libs/queries';
-import { PathNames, useNavigate } from 'libs/routing';
 import { PortfolioAllTokensDesktop } from './PortfolioAllTokensDesktop';
 import { PortfolioAllTokensMobile } from './PortfolioAllTokensMobile';
 import { usePortfolioAllTokensPieChart } from 'components/strategies/portfolio/allTokens/usePortfolioAllTokensPieChart';

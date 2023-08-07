@@ -1,5 +1,5 @@
 import { UseQueryResult } from '@tanstack/react-query';
-import { Order, Strategy, useGetUserStrategies } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
