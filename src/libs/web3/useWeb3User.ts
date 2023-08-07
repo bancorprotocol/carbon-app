@@ -65,9 +65,20 @@ export const useWeb3User = ({
 
   const disconnect = useCallback(async () => {
     if (connector.deactivate) {
-      await connector.deactivate();
+      try {
+        await connector.deactivate();
+      } catch (e) {
+        console.error(
+          'failed to deactivate connector, attempting to reset state instead',
+          e
+        );
+      }
     } else {
-      await connector.resetState();
+      try {
+        await connector.resetState();
+      } catch (e) {
+        console.error('failed to reset connector state', e);
+      }
     }
     handleImposterAccount();
     lsService.removeItem('connectionType');
