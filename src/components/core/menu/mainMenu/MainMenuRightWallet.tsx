@@ -1,42 +1,43 @@
-import { FC, useMemo } from 'react';
-import { useModal } from 'hooks/useModal';
-import { useWeb3 } from 'libs/web3';
-import { shortenString } from 'utils/helpers';
-import { Button } from 'components/common/button';
-import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ReactComponent as IconDisconnect } from 'assets/icons/disconnect.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { ReactComponent as IconETHLogo } from 'assets/logos/ethlogo.svg';
-import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
 import { ReactComponent as IconCoinbaseLogo } from 'assets/logos/coinbase.svg';
+import { ReactComponent as IconETHLogo } from 'assets/logos/ethlogo.svg';
 import { ReactComponent as IconGnosisLogo } from 'assets/logos/gnosis.svg';
 import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
-import {
-  IS_COINBASE_WALLET,
-  IS_IN_IFRAME,
-  IS_METAMASK_WALLET,
-} from 'libs/web3/web3.utils';
-import { carbonEvents } from 'services/events';
+import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
+import { ReactComponent as IconWalletConnectLogo } from 'assets/logos/walletConnect.svg';
+import { Button } from 'components/common/button';
+import { DropdownMenu } from 'components/common/dropdownMenu';
+import { useModal } from 'hooks/useModal';
 import { useTranslation } from 'libs/translations';
+import { ConnectionType, useWeb3 } from 'libs/web3';
+import { FC, useMemo } from 'react';
+import { carbonEvents } from 'services/events';
+import { useStore } from 'store';
+import { shortenString } from 'utils/helpers';
+
+const iconProps = { className: 'w-20' };
 
 const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
-  const props = { className: 'w-20' };
+  const { selectedWallet } = useStore();
 
   if (isImposter) {
-    return <IconImposterLogo {...props} />;
-  }
-  if (IS_IN_IFRAME) {
-    return <IconGnosisLogo {...props} />;
-  }
-  if (IS_METAMASK_WALLET) {
-    return <IconMetaMaskLogo {...props} />;
-  }
-  if (IS_COINBASE_WALLET) {
-    return <IconCoinbaseLogo {...props} />;
+    return <IconImposterLogo {...iconProps} />;
   }
 
-  return <IconWallet {...props} />;
+  switch (selectedWallet) {
+    case ConnectionType.INJECTED:
+      return <IconMetaMaskLogo {...iconProps} />;
+    case ConnectionType.WALLET_CONNECT:
+      return <IconWalletConnectLogo {...iconProps} />;
+    case ConnectionType.COINBASE_WALLET:
+      return <IconCoinbaseLogo {...iconProps} />;
+    case ConnectionType.GNOSIS_SAFE:
+      return <IconGnosisLogo {...iconProps} />;
+    default:
+      return <IconWallet {...iconProps} />;
+  }
 };
 
 export const MainMenuRightWallet: FC = () => {
@@ -77,12 +78,10 @@ export const MainMenuRightWallet: FC = () => {
   }, [isSupportedNetwork, isUserBlocked, t, user]);
 
   const buttonIcon = useMemo(() => {
-    const props = { className: 'w-20' };
-
-    if (isUserBlocked) return <IconWarning {...props} />;
-    if (!isSupportedNetwork) return <IconWarning {...props} />;
-    if (!user) return <IconWallet {...props} />;
-    return <WalletIcon {...props} isImposter={isImposter} />;
+    if (isUserBlocked) return <IconWarning {...iconProps} />;
+    if (!isSupportedNetwork) return <IconWarning {...iconProps} />;
+    if (!user) return <IconWallet {...iconProps} />;
+    return <WalletIcon isImposter={isImposter} />;
   }, [isSupportedNetwork, isUserBlocked, user, isImposter]);
 
   if (user) {
