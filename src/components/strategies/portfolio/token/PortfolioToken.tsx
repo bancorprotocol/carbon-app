@@ -1,20 +1,24 @@
+import { UseQueryResult } from '@tanstack/react-query';
 import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
 import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
+import { Strategy } from 'libs/queries';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
 import { PortfolioTokenDesktop } from './PortfolioTokenDesktop';
 import { PortfolioTokenMobile } from './PortfolioTokenMobile';
 import { usePortfolioTokenPieChart } from './usePortfolioTokenPieChart';
-import { PathNames, useMatch } from 'libs/routing';
+import { PathNames } from 'libs/routing';
 
-export const PortfolioToken = () => {
-  const {
-    params: { address },
-  } = useMatch();
+interface Props {
+  address: string;
+  strategiesQuery: UseQueryResult<Strategy[], unknown>;
+}
 
+export const PortfolioToken = ({ strategiesQuery, address }: Props) => {
   const { tableData, isLoading, selectedToken } = usePortfolioToken({
     address,
+    strategiesQuery,
   });
 
   const { pieChartOptions } = usePortfolioTokenPieChart(

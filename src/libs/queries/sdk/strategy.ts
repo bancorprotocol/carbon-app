@@ -37,9 +37,12 @@ export interface Strategy {
   encoded: EncodedStrategyBNStr;
 }
 
-export const useGetUserStrategies = () => {
+interface Props {
+  user?: string;
+}
+
+export const useGetUserStrategies = ({ user }: Props) => {
   const { isInitialized } = useCarbonInit();
-  const { user } = useWeb3();
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 

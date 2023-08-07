@@ -1,9 +1,14 @@
 import { DebugPage } from 'pages/debug';
+import { ExplorerPage } from 'pages/explorer';
+import { ExplorerTypePage } from 'pages/explorer/type';
+import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
+import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
+import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
 import { TermsPage } from 'pages/terms';
-import { Outlet, Route } from '@tanstack/react-location';
+import { Navigate, Outlet, Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
@@ -36,6 +41,7 @@ export const PathNames = {
   editStrategy: '/strategies/edit',
   terms: '/terms',
   privacy: '/privacy',
+  explorer: '/explorer',
 };
 
 export const routes: Route[] = [
@@ -83,6 +89,94 @@ export const routes: Route[] = [
   {
     path: PathNames.debug,
     element: <DebugPage />,
+  },
+  {
+    element: <Outlet />,
+    path: '/muh',
+    children: [
+      {
+        path: '/',
+        element: <Navigate replace to={'wallet'} />,
+      },
+      {
+        path: ':type',
+        element: <ExplorerPage />,
+        children: [
+          {
+            path: '/',
+            element: <ExplorerTypePage />,
+          },
+          {
+            path: ':search',
+            element: <Outlet />,
+            children: [
+              {
+                path: '/',
+                element: <ExplorerTypeOverviewPage />,
+              },
+              {
+                path: 'portfolio',
+                element: <Outlet />,
+                children: [
+                  {
+                    path: '/',
+                    element: <ExplorerTypePortfolioPage />,
+                  },
+                  {
+                    path: 'token/:address',
+                    element: <ExplorerTypePortfolioTokenPage />,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <Outlet />,
+    path: PathNames.explorer,
+    children: [
+      {
+        path: '/',
+        element: <Navigate replace to={'wallet'} />,
+      },
+      {
+        path: ':type/:search',
+        element: <ExplorerPage />,
+        children: [
+          {
+            path: '/',
+            element: <ExplorerTypeOverviewPage />,
+          },
+          {
+            path: 'portfolio',
+            element: <Outlet />,
+            children: [
+              {
+                path: '/',
+                element: <ExplorerTypePortfolioPage />,
+              },
+              {
+                path: 'token/:address',
+                element: <ExplorerTypePortfolioTokenPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: ':type',
+        element: <ExplorerPage />,
+        children: [
+          {
+            path: '/',
+            element: <ExplorerTypePage />,
+          },
+        ],
+      },
+    ],
   },
   {
     element: <StrategiesPage />,

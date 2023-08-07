@@ -1,3 +1,4 @@
+import { UseQueryResult } from '@tanstack/react-query';
 import { Order, Strategy, useGetUserStrategies } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
@@ -15,13 +16,14 @@ export interface PortfolioData {
   strategies: Strategy[];
   fiatPrice: number;
 }
+interface Props {
+  strategiesQuery: UseQueryResult<Strategy[], unknown>;
+}
 
-export const usePortfolioData = () => {
+export const usePortfolioData = ({ strategiesQuery }: Props) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
-
-  const strategiesQuery = useGetUserStrategies();
 
   const uniqueTokens = useMemo(() => {
     const data = strategiesQuery.data;
