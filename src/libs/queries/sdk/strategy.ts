@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Token as TokenContract } from 'abis/types';
 import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
@@ -8,7 +9,11 @@ import { useContract } from 'hooks/useContract';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonInit } from 'hooks/useCarbonInit';
-import { EncodedStrategyBNStr, StrategyUpdate } from '@bancor/carbon-sdk';
+import {
+  EncodedStrategyBNStr,
+  StrategyUpdate,
+  Strategy as SDKStrategy,
+} from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
@@ -37,6 +42,88 @@ export interface Strategy {
   encoded: EncodedStrategyBNStr;
 }
 
+const buildStrategiesHelper = async ({
+  strategies,
+  getTokenById,
+  importToken,
+  Token,
+}: {
+  strategies: SDKStrategy[];
+  getTokenById: (id: string) => Token | undefined;
+  importToken: (token: Token) => void;
+  Token: (address: string) => { read: TokenContract };
+}) => {
+  const _getTknData = async (address: string) => {
+    const data = await fetchTokenData(Token, address);
+    importToken(data);
+    return data;
+  };
+
+  const promises = strategies.map(async (s) => {
+    const base = getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
+    const quote =
+      getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
+
+    const sellLow = new BigNumber(s.sellPriceLow);
+    const sellHigh = new BigNumber(s.sellPriceHigh);
+    const sellBudget = new BigNumber(s.sellBudget);
+
+    const buyLow = new BigNumber(s.buyPriceLow);
+    const buyHight = new BigNumber(s.buyPriceHigh);
+    const buyBudget = new BigNumber(s.buyBudget);
+
+    const offCurve =
+      sellLow.isZero() &&
+      sellHigh.isZero() &&
+      buyLow.isZero() &&
+      buyHight.isZero();
+
+    const noBudget = sellBudget.isZero() && buyBudget.isZero();
+
+    const status =
+      noBudget && offCurve
+        ? StrategyStatus.Inactive
+        : offCurve
+        ? StrategyStatus.Paused
+        : noBudget
+        ? StrategyStatus.NoBudget
+        : StrategyStatus.Active;
+
+    // ATTENTION *****************************
+    // This is the buy order | UI order 0 and CONTRACT order 1
+    // ATTENTION *****************************
+    const order0: Order = {
+      balance: s.buyBudget,
+      startRate: s.buyPriceLow,
+      endRate: s.buyPriceHigh,
+    };
+
+    // ATTENTION *****************************
+    // This is the sell order | UI order 1 and CONTRACT order 0
+    // ATTENTION *****************************
+    const order1: Order = {
+      balance: s.sellBudget,
+      startRate: s.sellPriceLow,
+      endRate: s.sellPriceHigh,
+    };
+
+    const strategy: Strategy = {
+      id: s.id,
+      idDisplay: getLowestBits(s.id),
+      base,
+      quote,
+      order0,
+      order1,
+      status,
+      encoded: s.encoded,
+    };
+
+    return strategy;
+  });
+
+  return await Promise.all(promises);
+};
+
 interface Props {
   user?: string;
 }
@@ -51,79 +138,42 @@ export const useGetUserStrategies = ({ user }: Props) => {
     async () => {
       if (!user) return [];
 
-      console.log('Fetching strategies...');
       const strategies = await carbonSDK.getUserStrategies(user);
-      console.log('Fetched strategies', strategies);
-      const _getTknData = async (address: string) => {
-        const data = await fetchTokenData(Token, address);
-        importToken(data);
-        return data;
-      };
-
-      const promises = strategies.map(async (s) => {
-        const base =
-          getTokenById(s.baseToken) || (await _getTknData(s.baseToken));
-        const quote =
-          getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
-
-        const sellLow = new BigNumber(s.sellPriceLow);
-        const sellHigh = new BigNumber(s.sellPriceHigh);
-        const sellBudget = new BigNumber(s.sellBudget);
-
-        const buyLow = new BigNumber(s.buyPriceLow);
-        const buyHight = new BigNumber(s.buyPriceHigh);
-        const buyBudget = new BigNumber(s.buyBudget);
-
-        const offCurve =
-          sellLow.isZero() &&
-          sellHigh.isZero() &&
-          buyLow.isZero() &&
-          buyHight.isZero();
-
-        const noBudget = sellBudget.isZero() && buyBudget.isZero();
-
-        const status =
-          noBudget && offCurve
-            ? StrategyStatus.Inactive
-            : offCurve
-            ? StrategyStatus.Paused
-            : noBudget
-            ? StrategyStatus.NoBudget
-            : StrategyStatus.Active;
-
-        // ATTENTION *****************************
-        // This is the buy order | UI order 0 and CONTRACT order 1
-        // ATTENTION *****************************
-        const order0: Order = {
-          balance: s.buyBudget,
-          startRate: s.buyPriceLow,
-          endRate: s.buyPriceHigh,
-        };
-
-        // ATTENTION *****************************
-        // This is the sell order | UI order 1 and CONTRACT order 0
-        // ATTENTION *****************************
-        const order1: Order = {
-          balance: s.sellBudget,
-          startRate: s.sellPriceLow,
-          endRate: s.sellPriceHigh,
-        };
-
-        const strategy: Strategy = {
-          id: s.id,
-          idDisplay: getLowestBits(s.id),
-          base,
-          quote,
-          order0,
-          order1,
-          status,
-          encoded: s.encoded,
-        };
-
-        return strategy;
+      return await buildStrategiesHelper({
+        strategies,
+        getTokenById,
+        importToken,
+        Token,
       });
+    },
+    {
+      enabled: tokens.length > 0 && isInitialized,
+      staleTime: ONE_DAY_IN_MS,
+      retry: false,
+    }
+  );
+};
 
-      return await Promise.all(promises);
+interface PropsPair {
+  token0: string;
+  token1: string;
+}
+
+export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
+  const { isInitialized } = useCarbonInit();
+  const { tokens, getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
+
+  return useQuery<Strategy[]>(
+    QueryKey.strategiesByPair(token0, token1),
+    async () => {
+      const strategies = await carbonSDK.getStrategiesByPair(token0, token1);
+      return await buildStrategiesHelper({
+        strategies,
+        getTokenById,
+        importToken,
+        Token,
+      });
     },
     {
       enabled: tokens.length > 0 && isInitialized,
