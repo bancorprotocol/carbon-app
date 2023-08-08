@@ -1,8 +1,9 @@
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
-import { useGetUserStrategies } from 'libs/queries';
+import { useGetPairStrategies, useGetUserStrategies } from 'libs/queries';
 import { useMatch, useNavigate } from 'libs/routing';
+import { config } from 'services/web3/config';
 
 export const ExplorerTypePortfolioPage = () => {
   const {
@@ -18,7 +19,12 @@ export const ExplorerTypePortfolioPage = () => {
   const getHref = (row: PortfolioData) =>
     `/explorer/${type}/${search}/portfolio/token/${row.token.address}`;
 
-  const strategiesQuery = useGetUserStrategies({ user: search });
+  // TODO check search is valid address
+  //const strategiesByUserQuery = useGetUserStrategies({ user: search });
+  const strategiesByPairQuery = useGetPairStrategies({
+    token1: config.tokens.ETH.toLowerCase(),
+    token0: config.tokens.DAI.toLowerCase(),
+  });
 
   switch (type) {
     case 'wallet': {
@@ -27,7 +33,7 @@ export const ExplorerTypePortfolioPage = () => {
           <div>Explorer Wallet Portfolio Page</div>
           <div>user: {search}</div>
           <PortfolioAllTokens
-            strategiesQuery={strategiesQuery}
+            strategiesQuery={strategiesByPairQuery}
             onRowClick={onRowClick}
             getHref={getHref}
           />
@@ -40,6 +46,7 @@ export const ExplorerTypePortfolioPage = () => {
         <>
           <div>Explorer Token Pair Portfolio Page</div>
           <div>token pair: {search}</div>
+          <pre>{JSON.stringify(strategiesByPairQuery.data, null, 2)}</pre>
         </>
       );
     }

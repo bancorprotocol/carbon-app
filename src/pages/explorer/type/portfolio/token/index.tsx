@@ -7,7 +7,9 @@ export const ExplorerTypePortfolioTokenPage = () => {
     params: { type, search, address },
   } = useMatch();
 
-  const strategiesQuery = useGetUserStrategies({ user: search });
+  const strategiesQuery = useGetUserStrategies({
+    user: type === 'wallet' ? search : undefined,
+  });
 
   switch (type) {
     case 'wallet': {

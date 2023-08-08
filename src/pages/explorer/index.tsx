@@ -21,7 +21,7 @@ export const ExplorerPage = () => {
 
   const navigate = useNavigate();
 
-  const strategies = useGetUserStrategies({ user: params.search });
+  // const strategies = useGetUserStrategies({ user: params.search });
 
   const tabs: StrategyTab[] = [
     {
@@ -29,7 +29,7 @@ export const ExplorerPage = () => {
       href: `/explorer/${params.type}/${params.search}`,
       hrefMatches: [`/explorer/${params.type}/${params.search}`],
       icon: <IconOverview className={'h-18 w-18'} />,
-      badge: strategies.data?.length || 0,
+      // badge: strategies.data?.length || 0,
     },
     {
       label: 'Portfolio',

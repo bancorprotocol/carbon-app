@@ -1,13 +1,21 @@
 import { StrategyContent } from 'components/strategies/overview';
-import { useGetUserStrategies } from 'libs/queries';
+import { useGetPairStrategies, useGetUserStrategies } from 'libs/queries';
 import { useMatch } from 'libs/routing';
+import { config } from 'services/web3/config';
 
 export const ExplorerTypeOverviewPage = () => {
   const {
     params: { type, search },
   } = useMatch();
 
-  const strategies = useGetUserStrategies({ user: search });
+  // TODO check search is valid address
+  const strategiesByUserQuery = useGetUserStrategies({
+    user: type === 'wallet' ? search : undefined,
+  });
+  const strategiesByPairQuery = useGetPairStrategies({
+    token1: config.tokens.ETH.toLowerCase(),
+    token0: config.tokens.DAI.toLowerCase(),
+  });
 
   switch (type) {
     case 'wallet': {
@@ -15,7 +23,7 @@ export const ExplorerTypeOverviewPage = () => {
         <>
           <div>Explorer Wallet Overview Page</div>
           <div>user: {search}</div>
-          <StrategyContent strategies={strategies} />
+          <StrategyContent strategies={strategiesByUserQuery} />
         </>
       );
     }
@@ -24,6 +32,7 @@ export const ExplorerTypeOverviewPage = () => {
         <>
           <div>Explorer Token Pair Overview Page</div>
           <div>token pair: {search}</div>
+          <StrategyContent strategies={strategiesByPairQuery} />
         </>
       );
     }
