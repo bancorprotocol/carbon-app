@@ -24,7 +24,7 @@ export const useWeb3User = ({
   connector,
   handleImposterAccount,
 }: Props) => {
-  const { isCountryBlocked } = useStore();
+  const { isCountryBlocked, setSelectedWallet } = useStore();
   const [isUncheckedSigner, _setIsUncheckedSigner] = useState(
     lsService.getItem('isUncheckedSigner') || false
   );
@@ -58,18 +58,39 @@ export const useWeb3User = ({
       }
       const { connector } = getConnection(type);
       await connector.activate();
+      lsService.setItem('connectionType', type);
+      setSelectedWallet(type);
     },
-    [isCountryBlocked]
+    [isCountryBlocked, setSelectedWallet]
   );
 
   const disconnect = useCallback(async () => {
-    if (connector.deactivate) {
+    try {
+      if (!connector.deactivate) {
+        throw new Error('connector does not have a deactivate method');
+      }
       await connector.deactivate();
-    } else {
-      await connector.resetState();
+      console.log('successfully deactivated connector');
+    } catch (e) {
+      console.warn(
+        'failed to deactivate connector, attempting to reset state instead.',
+        e
+      );
+      try {
+        await connector.resetState();
+        console.log('successfully reset connector state');
+      } catch (e) {
+        console.error(
+          'failed to reset connector state, user not logged out',
+          e
+        );
+      } finally {
+        handleImposterAccount();
+        lsService.removeItem('connectionType');
+        setSelectedWallet(null);
+      }
     }
-    handleImposterAccount();
-  }, [connector, handleImposterAccount]);
+  }, [connector, handleImposterAccount, setSelectedWallet]);
 
   return {
     user,

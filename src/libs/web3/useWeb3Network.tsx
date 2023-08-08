@@ -1,16 +1,17 @@
-import {
-  getConnection,
-  IS_COINBASE_WALLET,
-  IS_IN_IFRAME,
-  IS_METAMASK_WALLET,
-} from 'libs/web3/web3.utils';
-import { ConnectionType } from 'libs/web3/web3.constants';
-import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { ConnectionType } from 'libs/web3/web3.constants';
+import {
+  attemptToConnectWallet,
+  getConnection,
+  isNativeAppBrowser,
+} from 'libs/web3/web3.utils';
+import { useCallback, useEffect, useState } from 'react';
+import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
+import useAsyncEffect from 'use-async-effect';
 
 export const useWeb3Network = () => {
-  const { isCountryBlocked } = useStore();
+  const { isCountryBlocked, setSelectedWallet } = useStore();
 
   const { connector } = useWeb3React();
 
@@ -45,22 +46,27 @@ export const useWeb3Network = () => {
     void activateNetwork();
   }, [activateNetwork]);
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (isCountryBlocked === false) {
-      if (IS_IN_IFRAME) {
-        const c = getConnection(ConnectionType.GNOSIS_SAFE);
-        c.connector.connectEagerly?.();
-        return;
+      // Attempt to autologin to native app browser
+      if (isNativeAppBrowser) {
+        const { success } = await attemptToConnectWallet(
+          isNativeAppBrowser.type,
+          isNativeAppBrowser.activate
+        );
+        if (success) {
+          setSelectedWallet(isNativeAppBrowser.type);
+          return; // If successfully connected, stop further connection attempts
+        }
       }
-      if (IS_METAMASK_WALLET) {
-        const c = getConnection(ConnectionType.INJECTED);
-        c.connector.connectEagerly?.();
-        return;
-      }
-      if (IS_COINBASE_WALLET) {
-        const c = getConnection(ConnectionType.COINBASE_WALLET);
-        c.connector.connectEagerly?.();
-        return;
+
+      // Attempt to autologin to normal previous session, if exists
+      const storedConnection = lsService.getItem('connectionType');
+      if (storedConnection !== undefined) {
+        const { success } = await attemptToConnectWallet(storedConnection);
+        if (success) {
+          setSelectedWallet(storedConnection);
+        }
       }
     }
   }, [isCountryBlocked]);
