@@ -1,7 +1,7 @@
+import { uniqBy } from 'lodash';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useTokensQuery } from 'libs/queries';
-import { mergeArraysRemovingDuplicates } from 'utils/helpers';
 
 export interface TokensStore {
   tokens: Token[];
@@ -19,10 +19,9 @@ export const useTokensStore = (): TokensStore => {
 
   const tokens = useMemo(() => {
     if (tokensQuery.data && tokensQuery.data.length) {
-      return mergeArraysRemovingDuplicates(
-        tokensQuery.data,
-        importedTokens,
-        'address'
+      return uniqBy(
+        [...tokensQuery.data, ...importedTokens],
+        (token) => token.address
       );
     }
     return [];
