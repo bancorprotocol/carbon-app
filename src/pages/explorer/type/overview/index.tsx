@@ -1,5 +1,5 @@
 import { StrategyContent } from 'components/strategies/overview';
-import { useExplorer } from 'pages/explorer/useExplorer';
+import { useExplorer } from 'components/explorer/useExplorer';
 
 export const ExplorerTypeOverviewPage = () => {
   const {

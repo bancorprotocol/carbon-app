@@ -7,8 +7,8 @@ import {
   StrategyPageTabs,
   StrategyTab,
 } from 'components/strategies/StrategyPageTabs';
-import { Link, Outlet, useLocation } from 'libs/routing';
-import { useExplorer } from 'pages/explorer/useExplorer';
+import { Link, Outlet, PathNames, useLocation } from 'libs/routing';
+import { useExplorer } from 'components/explorer/useExplorer';
 import { useEffect, useState } from 'react';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
@@ -29,25 +29,22 @@ export const ExplorerPage = () => {
 
   useEffect(() => {
     if (slug) {
-      setSearch(slug.toUpperCase());
+      setSearch(slug.toUpperCase().replace('-', '/'));
     }
   }, [slug, setSearch]);
 
   const tabs: StrategyTab[] = [
     {
       label: 'Overview',
-      href: `/explorer/${type}/${slug}`,
-      hrefMatches: [`/explorer/${type}/${slug}`],
+      href: PathNames.explorerOverview(type, slug!),
+      hrefMatches: [],
       icon: <IconOverview className={'h-18 w-18'} />,
       // badge: strategies.data?.length || 0,
     },
     {
       label: 'Portfolio',
-      href: `/explorer/${type}/${slug}/portfolio`,
-      hrefMatches: [
-        `/explorer/${type}/${slug}/portfolio`,
-        `/explorer/${type}/${slug}/portfolio/token/0x`,
-      ],
+      href: PathNames.explorerPortfolio(type, slug!),
+      hrefMatches: [PathNames.explorerPortfolioToken(type, slug!, '0x')],
       icon: <IconPieChart className={'h-18 w-18'} />,
     },
   ];
@@ -55,7 +52,7 @@ export const ExplorerPage = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   if (type !== 'wallet' && type !== 'token-pair') {
-    return <Navigate to="/explorer/wallet" />;
+    return <Navigate to={PathNames.explorer('wallet')} />;
   }
 
   return (
@@ -106,12 +103,11 @@ export const ExplorerPage = () => {
                     {filteredPairs.map((pair) => {
                       const slug =
                         `${pair.baseToken.symbol}-${pair.quoteToken.symbol}`.toLowerCase();
-                      const href = `/explorer/token-pair/${slug}`;
 
                       return (
                         <Link
-                          to={href}
-                          key={href}
+                          to={PathNames.explorerOverview('token-pair', slug)}
+                          key={slug}
                           className={cn('flex px-10 py-5 hover:bg-white/10')}
                           onClick={() => {
                             setShowSuggestions(false);
@@ -130,7 +126,10 @@ export const ExplorerPage = () => {
             size={'sm'}
             className={'shrink-0'}
             onClick={() => {
-              navigate({ to: `/explorer/${type}/${search}` });
+              const slug = search.replace('/', '-').toLowerCase();
+              navigate({
+                to: PathNames.explorerOverview(type, slug),
+              });
             }}
           >
             Search

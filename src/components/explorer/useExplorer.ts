@@ -1,7 +1,7 @@
 import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { useMatch } from 'libs/routing';
-import { useExplorerPairs } from 'pages/explorer/type/useExplorerPairs';
-import { useExplorerWallet } from 'pages/explorer/type/useExplorerWallet';
+import { useExplorerPairs } from 'components/explorer/useExplorerPairs';
+import { useExplorerWallet } from 'components/explorer/useExplorerWallet';
 
 interface Props {
   search?: string;

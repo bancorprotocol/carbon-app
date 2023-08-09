@@ -1,5 +1,5 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
-import { useExplorer } from 'pages/explorer/useExplorer';
+import { useExplorer } from 'components/explorer/useExplorer';
 
 export const ExplorerTypePortfolioTokenPage = () => {
   const {
@@ -28,6 +28,4 @@ export const ExplorerTypePortfolioTokenPage = () => {
       );
     }
   }
-
-  return null;
 };

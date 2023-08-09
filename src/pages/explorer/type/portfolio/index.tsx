@@ -2,7 +2,7 @@ import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useNavigate } from 'libs/routing';
-import { useExplorer } from 'pages/explorer/useExplorer';
+import { useExplorer } from 'components/explorer/useExplorer';
 
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();

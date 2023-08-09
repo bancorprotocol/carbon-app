@@ -1,3 +1,4 @@
+import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { DebugPage } from 'pages/debug';
 import { ExplorerPage } from 'pages/explorer';
 import { ExplorerTypePage } from 'pages/explorer/type';
@@ -36,13 +37,27 @@ export const PathNames = {
   strategies: '/',
   portfolio: '/strategies/portfolio',
   portfolioToken: (address: string) => `/strategies/portfolio/token/${address}`,
+  explorer: (type: ExplorerRouteGenerics['Params']['type']) =>
+    `/explorer/${type}`,
+  explorerOverview: (
+    type: ExplorerRouteGenerics['Params']['type'],
+    slug: string
+  ) => `/explorer/${type}/${slug}`,
+  explorerPortfolio: (
+    type: ExplorerRouteGenerics['Params']['type'],
+    slug: string
+  ) => `/explorer/${type}/${slug}/portfolio`,
+  explorerPortfolioToken: (
+    type: ExplorerRouteGenerics['Params']['type'],
+    slug: string,
+    address: string
+  ) => `/explorer/${type}/${slug}/portfolio/token/${address}`,
   trade: '/trade',
   debug: '/debug',
   createStrategy: '/strategies/create',
   editStrategy: '/strategies/edit',
   terms: '/terms',
   privacy: '/privacy',
-  explorer: '/explorer',
 };
 
 export const routes: Route[] = [
@@ -93,7 +108,7 @@ export const routes: Route[] = [
   },
   {
     element: <Outlet />,
-    path: PathNames.explorer,
+    path: 'explorer',
     children: [
       {
         path: '/',
