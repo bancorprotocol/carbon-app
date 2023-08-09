@@ -93,50 +93,6 @@ export const routes: Route[] = [
   },
   {
     element: <Outlet />,
-    path: '/muh',
-    children: [
-      {
-        path: '/',
-        element: <Navigate replace to={'wallet'} />,
-      },
-      {
-        path: ':type',
-        element: <ExplorerPage />,
-        children: [
-          {
-            path: '/',
-            element: <ExplorerTypePage />,
-          },
-          {
-            path: ':search',
-            element: <Outlet />,
-            children: [
-              {
-                path: '/',
-                element: <ExplorerTypeOverviewPage />,
-              },
-              {
-                path: 'portfolio',
-                element: <Outlet />,
-                children: [
-                  {
-                    path: '/',
-                    element: <ExplorerTypePortfolioPage />,
-                  },
-                  {
-                    path: 'token/:address',
-                    element: <ExplorerTypePortfolioTokenPage />,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <Outlet />,
     path: PathNames.explorer,
     children: [
       {
@@ -144,7 +100,7 @@ export const routes: Route[] = [
         element: <Navigate replace to={'wallet'} />,
       },
       {
-        path: ':type/:search',
+        path: ':type/:slug',
         element: <ExplorerPage />,
         children: [
           {

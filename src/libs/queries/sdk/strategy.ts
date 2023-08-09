@@ -155,8 +155,8 @@ export const useGetUserStrategies = ({ user }: Props) => {
 };
 
 interface PropsPair {
-  token0: string;
-  token1: string;
+  token0?: string;
+  token1?: string;
 }
 
 export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
@@ -167,20 +167,14 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
   return useQuery<Strategy[]>(
     QueryKey.strategiesByPair(token0, token1),
     async () => {
-      try {
-        console.log('strategies jan start');
-        const strategies = await carbonSDK.getStrategiesByPair(token0, token1);
-        console.log('strategies jan', strategies);
-        return await buildStrategiesHelper({
-          strategies,
-          getTokenById,
-          importToken,
-          Token,
-        });
-      } catch (e) {
-        console.error('jan', e);
-        return [];
-      }
+      if (!token0 || !token1) return [];
+      const strategies = await carbonSDK.getStrategiesByPair(token0, token1);
+      return await buildStrategiesHelper({
+        strategies,
+        getTokenById,
+        importToken,
+        Token,
+      });
     },
     {
       enabled: tokens.length > 0 && isInitialized,

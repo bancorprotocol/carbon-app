@@ -1,56 +1,55 @@
 import { Row } from '@tanstack/react-table';
+import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useGetPairStrategies, useGetUserStrategies } from 'libs/queries';
 import { useMatch, useNavigate } from 'libs/routing';
-import { config } from 'services/web3/config';
+import { useExplorer } from 'pages/explorer/useExplorer';
 
 export const ExplorerTypePortfolioPage = () => {
   const {
-    params: { type, search },
-  } = useMatch();
+    params: { type, slug },
+  } = useMatch<ExplorerRouteGenerics>();
   const navigate = useNavigate();
 
   const onRowClick = (row: Row<PortfolioData>) =>
     navigate({
-      to: `/explorer/${type}/${search}/portfolio/token/${row.original.token.address}`,
+      to: `/explorer/${type}/${slug}/portfolio/token/${row.original.token.address}`,
     });
 
   const getHref = (row: PortfolioData) =>
-    `/explorer/${type}/${search}/portfolio/token/${row.token.address}`;
+    `/explorer/${type}/${slug}/portfolio/token/${row.token.address}`;
 
-  // TODO check search is valid address
-  //const strategiesByUserQuery = useGetUserStrategies({ user: search });
+  const strategiesByUserQuery = useGetUserStrategies({
+    user: type === 'wallet' ? slug : undefined,
+  });
+
+  const { exactMatch } = useExplorer({
+    slug: type === 'token-pair' ? slug : '',
+  });
   const strategiesByPairQuery = useGetPairStrategies({
-    token1: config.tokens.ETH.toLowerCase(),
-    token0: config.tokens.DAI.toLowerCase(),
+    token0: exactMatch?.baseToken.address,
+    token1: exactMatch?.quoteToken.address,
   });
 
   switch (type) {
     case 'wallet': {
       return (
-        <>
-          <div>Explorer Wallet Portfolio Page</div>
-          <div>user: {search}</div>
-          <PortfolioAllTokens
-            strategiesQuery={strategiesByPairQuery}
-            onRowClick={onRowClick}
-            getHref={getHref}
-          />
-          ;
-        </>
+        <PortfolioAllTokens
+          strategiesQuery={strategiesByUserQuery}
+          onRowClick={onRowClick}
+          getHref={getHref}
+        />
       );
     }
     case 'token-pair': {
       return (
-        <>
-          <div>Explorer Token Pair Portfolio Page</div>
-          <div>token pair: {search}</div>
-          <pre>{JSON.stringify(strategiesByPairQuery.data, null, 2)}</pre>
-        </>
+        <PortfolioAllTokens
+          strategiesQuery={strategiesByPairQuery}
+          onRowClick={onRowClick}
+          getHref={getHref}
+        />
       );
     }
   }
-
-  return <div>ups</div>;
 };

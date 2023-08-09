@@ -1,42 +1,33 @@
+import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { StrategyContent } from 'components/strategies/overview';
 import { useGetPairStrategies, useGetUserStrategies } from 'libs/queries';
 import { useMatch } from 'libs/routing';
-import { config } from 'services/web3/config';
+import { useExplorer } from 'pages/explorer/useExplorer';
 
 export const ExplorerTypeOverviewPage = () => {
   const {
-    params: { type, search },
-  } = useMatch();
+    params: { type, slug },
+  } = useMatch<ExplorerRouteGenerics>();
 
   // TODO check search is valid address
   const strategiesByUserQuery = useGetUserStrategies({
-    user: type === 'wallet' ? search : undefined,
+    user: type === 'wallet' ? slug : undefined,
+  });
+
+  const { exactMatch } = useExplorer({
+    slug: type === 'token-pair' ? slug : '',
   });
   const strategiesByPairQuery = useGetPairStrategies({
-    token1: config.tokens.ETH.toLowerCase(),
-    token0: config.tokens.DAI.toLowerCase(),
+    token0: exactMatch?.baseToken.address,
+    token1: exactMatch?.quoteToken.address,
   });
 
   switch (type) {
     case 'wallet': {
-      return (
-        <>
-          <div>Explorer Wallet Overview Page</div>
-          <div>user: {search}</div>
-          <StrategyContent strategies={strategiesByUserQuery} />
-        </>
-      );
+      return <StrategyContent strategies={strategiesByUserQuery} />;
     }
     case 'token-pair': {
-      return (
-        <>
-          <div>Explorer Token Pair Overview Page</div>
-          <div>token pair: {search}</div>
-          <StrategyContent strategies={strategiesByPairQuery} />
-        </>
-      );
+      return <StrategyContent strategies={strategiesByPairQuery} />;
     }
   }
-
-  return <div>ups</div>;
 };

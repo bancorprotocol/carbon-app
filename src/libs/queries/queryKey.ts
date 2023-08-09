@@ -20,7 +20,7 @@ export namespace QueryKey {
     'user',
     user,
   ];
-  export const strategiesByPair = (token0: string, token1: string) => [
+  export const strategiesByPair = (token0?: string, token1?: string) => [
     ...sdk,
     'strategies',
     'pair',
