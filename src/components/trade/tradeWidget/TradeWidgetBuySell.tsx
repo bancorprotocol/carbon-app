@@ -82,7 +82,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     errorMsgSource,
     errorMsgTarget,
     getFiatValueSource,
+    hasEnoughLiquidity,
     liquidityQuery.isLoading,
+    source,
+    sourceInput,
+    t,
+    target,
   ]);
 
   useInitEffect(() => {
@@ -163,8 +168,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ${target.symbol}`;
   };
 
-  const showRouting =
-    rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
+  const showRouting = rate && rate !== '0';
 
   const getLiquidity = () => {
     const value = liquidityQuery.isLoading
