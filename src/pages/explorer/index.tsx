@@ -9,7 +9,7 @@ import {
 } from 'components/strategies/StrategyPageTabs';
 import { Link, Outlet, useLocation } from 'libs/routing';
 import { useExplorer } from 'pages/explorer/useExplorer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { cn, wait } from 'utils/helpers';
@@ -20,24 +20,33 @@ export const ExplorerPage = () => {
     current: { pathname },
   } = useLocation();
 
-  const { search, setSearch, filteredPairs, routeParams } = useExplorer();
+  const [search, setSearch] = useState('');
 
-  // const strategies = useGetUserStrategies({ user: params.slug });
+  const {
+    usePairs: { filteredPairs },
+    routeParams: { type, slug },
+  } = useExplorer({ search });
+
+  useEffect(() => {
+    if (slug) {
+      setSearch(slug.toUpperCase());
+    }
+  }, [slug, setSearch]);
 
   const tabs: StrategyTab[] = [
     {
       label: 'Overview',
-      href: `/explorer/${routeParams.type}/${routeParams.slug}`,
-      hrefMatches: [`/explorer/${routeParams.type}/${routeParams.slug}`],
+      href: `/explorer/${type}/${slug}`,
+      hrefMatches: [`/explorer/${type}/${slug}`],
       icon: <IconOverview className={'h-18 w-18'} />,
       // badge: strategies.data?.length || 0,
     },
     {
       label: 'Portfolio',
-      href: `/explorer/${routeParams.type}/${routeParams.slug}/portfolio`,
+      href: `/explorer/${type}/${slug}/portfolio`,
       hrefMatches: [
-        `/explorer/${routeParams.type}/${routeParams.slug}/portfolio`,
-        `/explorer/${routeParams.type}/${routeParams.slug}/portfolio/token/0x`,
+        `/explorer/${type}/${slug}/portfolio`,
+        `/explorer/${type}/${slug}/portfolio/token/0x`,
       ],
       icon: <IconPieChart className={'h-18 w-18'} />,
     },
@@ -45,7 +54,7 @@ export const ExplorerPage = () => {
 
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  if (routeParams.type !== 'wallet' && routeParams.type !== 'token-pair') {
+  if (type !== 'wallet' && type !== 'token-pair') {
     return <Navigate to="/explorer/wallet" />;
   }
 
@@ -60,9 +69,7 @@ export const ExplorerPage = () => {
           >
             <div className={'shrink-0'}>
               <DropdownMenu
-                button={(onClick) => (
-                  <button onClick={onClick}>{routeParams.type}</button>
-                )}
+                button={(onClick) => <button onClick={onClick}>{type}</button>}
               >
                 <div>
                   <Link to="/explorer/wallet" onClick={() => setSearch('')}>
@@ -88,34 +95,34 @@ export const ExplorerPage = () => {
                   setShowSuggestions(false);
                 }}
               />
-              {filteredPairs.length > 0 && showSuggestions && (
-                <div
-                  className={
-                    'absolute z-30 mt-20 w-full overflow-hidden rounded-10 bg-emphasis'
-                  }
-                >
-                  {filteredPairs.map((pair) => {
-                    const slug =
-                      `${pair.baseToken.symbol}-${pair.quoteToken.symbol}`.toLowerCase();
-                    // const name =
-                    //   `${pair.baseToken.symbol}/${pair.quoteToken.symbol}`.toUpperCase();
-                    const href = `/explorer/token-pair/${slug}`;
+              {type === 'token-pair' &&
+                filteredPairs.length > 0 &&
+                showSuggestions && (
+                  <div
+                    className={
+                      'absolute z-30 mt-20 w-full overflow-hidden rounded-10 bg-emphasis'
+                    }
+                  >
+                    {filteredPairs.map((pair) => {
+                      const slug =
+                        `${pair.baseToken.symbol}-${pair.quoteToken.symbol}`.toLowerCase();
+                      const href = `/explorer/token-pair/${slug}`;
 
-                    return (
-                      <Link
-                        to={href}
-                        key={href}
-                        className={cn('flex px-10 py-5 hover:bg-white/10')}
-                        onClick={() => {
-                          setShowSuggestions(false);
-                        }}
-                      >
-                        <PairLogoName pair={pair} />
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
+                      return (
+                        <Link
+                          to={href}
+                          key={href}
+                          className={cn('flex px-10 py-5 hover:bg-white/10')}
+                          onClick={() => {
+                            setShowSuggestions(false);
+                          }}
+                        >
+                          <PairLogoName pair={pair} />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
             </div>
           </div>
           <Button
@@ -123,13 +130,14 @@ export const ExplorerPage = () => {
             size={'sm'}
             className={'shrink-0'}
             onClick={() => {
-              navigate({ to: `/explorer/${routeParams.type}/${search}` });
+              navigate({ to: `/explorer/${type}/${search}` });
             }}
           >
             Search
           </Button>
         </div>
-        <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
+
+        {slug && <StrategyPageTabs currentPathname={pathname} tabs={tabs} />}
         <Outlet />
       </div>
     </Page>

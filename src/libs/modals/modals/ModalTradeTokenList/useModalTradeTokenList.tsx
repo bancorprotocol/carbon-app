@@ -5,6 +5,7 @@ import {
   ModalTradeTokenListData,
   TradePair,
 } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
+import { useState } from 'react';
 
 type Props = {
   id: string;
@@ -22,7 +23,11 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
     removeFavoritePair,
   } = useTradePairs();
   const { closeModal } = useModal();
-  const { search, setSearch, filteredPairs } = usePairSearch({
+
+  const [search, setSearch] = useState('');
+
+  const { filteredPairs } = usePairSearch({
+    search,
     pairs: tradePairs,
   });
 

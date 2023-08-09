@@ -1,27 +1,20 @@
-import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { PortfolioToken } from 'components/strategies/portfolio';
-import { useGetPairStrategies } from 'libs/queries';
-import { useMatch } from 'libs/routing';
 import { useExplorer } from 'pages/explorer/useExplorer';
 
 export const ExplorerTypePortfolioTokenPage = () => {
   const {
-    params: { type, slug, address },
-  } = useMatch<ExplorerRouteGenerics>();
+    usePairs,
+    useWallet,
+    routeParams: { address, type },
+  } = useExplorer();
 
-  const { exactMatch } = useExplorer({
-    slug: type === 'token-pair' ? slug : '',
-  });
-  const strategiesByPairQuery = useGetPairStrategies({
-    token0: exactMatch?.baseToken.address,
-    token1: exactMatch?.quoteToken.address,
-  });
+  if (!address) return <div>error no address provided</div>;
 
   switch (type) {
     case 'wallet': {
       return (
         <PortfolioToken
-          strategiesQuery={strategiesByPairQuery}
+          strategiesQuery={useWallet.strategiesQuery}
           address={address}
         />
       );
@@ -29,7 +22,7 @@ export const ExplorerTypePortfolioTokenPage = () => {
     case 'token-pair': {
       return (
         <PortfolioToken
-          strategiesQuery={strategiesByPairQuery}
+          strategiesQuery={usePairs.strategiesQuery}
           address={address}
         />
       );
