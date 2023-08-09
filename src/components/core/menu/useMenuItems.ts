@@ -29,8 +29,11 @@ export const useMenuItems = () => {
     },
     {
       label: 'Explorer',
-      href: PathNames.explorer,
-      hrefMatches: [PathNames.explorer],
+      href: PathNames.explorer('wallet'),
+      hrefMatches: [
+        PathNames.explorer('wallet'),
+        PathNames.explorer('token-pair'),
+      ],
     },
     ...(isProduction
       ? []
