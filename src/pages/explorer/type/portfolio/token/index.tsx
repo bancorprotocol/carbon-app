@@ -1,11 +1,12 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
 import { useExplorer } from 'components/explorer';
+import { PathNames } from 'libs/routing';
 
 export const ExplorerTypePortfolioTokenPage = () => {
   const {
     usePairs,
     useWallet,
-    routeParams: { address, type },
+    routeParams: { address, type, slug },
   } = useExplorer();
 
   if (!address) return <div>error no address provided</div>;
@@ -22,6 +23,10 @@ export const ExplorerTypePortfolioTokenPage = () => {
   };
 
   return (
-    <PortfolioToken strategiesQuery={getStrategiesQuery()} address={address} />
+    <PortfolioToken
+      strategiesQuery={getStrategiesQuery()}
+      address={address}
+      backLinkHref={PathNames.explorerPortfolio(type, slug!)}
+    />
   );
 };

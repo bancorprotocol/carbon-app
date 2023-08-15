@@ -24,7 +24,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
   const [_showSuggestions, setShowSuggestions] = useState(false);
 
   const onSearchHandler = useCallback(() => {
-    const slug = props.search.replace('/', '-').toLowerCase();
+    const slug = props.search.replace('/', '-').replace(' ', '-').toLowerCase();
     navigate({
       to: PathNames.explorerOverview(props.type, slug),
     });

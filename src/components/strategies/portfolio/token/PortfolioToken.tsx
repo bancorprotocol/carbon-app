@@ -8,14 +8,18 @@ import { PortfolioPieChart } from './../PortfolioPieChart';
 import { PortfolioTokenDesktop } from './PortfolioTokenDesktop';
 import { PortfolioTokenMobile } from './PortfolioTokenMobile';
 import { usePortfolioTokenPieChart } from './usePortfolioTokenPieChart';
-import { PathNames } from 'libs/routing';
 
 interface Props {
   address: string;
   strategiesQuery: UseQueryResult<Strategy[], unknown>;
+  backLinkHref: string;
 }
 
-export const PortfolioToken = ({ strategiesQuery, address }: Props) => {
+export const PortfolioToken = ({
+  strategiesQuery,
+  address,
+  backLinkHref,
+}: Props) => {
   const { tableData, isLoading, selectedToken } = usePortfolioToken({
     address,
     strategiesQuery,
@@ -35,7 +39,7 @@ export const PortfolioToken = ({ strategiesQuery, address }: Props) => {
     <PortfolioLayout
       headerElement={
         <PortfolioTokenHeader
-          backLinkHref={PathNames.portfolio}
+          backLinkHref={backLinkHref}
           symbol={selectedToken?.token.symbol}
           logoURI={selectedToken?.token.logoURI}
         />

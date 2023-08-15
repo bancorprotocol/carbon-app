@@ -34,7 +34,7 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className={'mt-50 flex w-full flex-grow flex-col'}>
+      <main className={'mt-80 flex w-full flex-grow flex-col'}>
         <MainContent />
       </main>
       <MobileMenu />

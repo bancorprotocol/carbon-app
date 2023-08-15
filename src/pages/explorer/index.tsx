@@ -49,8 +49,8 @@ export const ExplorerPage = () => {
   }
 
   return (
-    <Page>
-      <div className={'space-y-20'}>
+    <Page hideTitle>
+      <div className={'flex flex-grow flex-col space-y-30'}>
         <ExplorerSearch
           type={type}
           filteredPairs={filteredPairs}

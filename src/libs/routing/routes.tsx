@@ -1,4 +1,4 @@
-import { ExplorerRouteGenerics } from 'components/explorer/utils';
+import { ExplorerRouteGenerics } from 'components/explorer';
 import { DebugPage } from 'pages/debug';
 import { ExplorerPage } from 'pages/explorer';
 import { ExplorerTypePage } from 'pages/explorer/type';
