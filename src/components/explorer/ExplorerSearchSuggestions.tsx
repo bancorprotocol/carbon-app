@@ -1,14 +1,14 @@
 import { PairLogoName } from 'components/common/PairLogoName';
 import { ExplorerSearchProps } from 'components/explorer/ExplorerSearch';
 import { Link, PathNames } from 'libs/routing';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, memo, SetStateAction } from 'react';
 import { cn } from 'utils/helpers';
 
 interface Props extends Pick<ExplorerSearchProps, 'filteredPairs'> {
   setShowSuggestions: Dispatch<SetStateAction<boolean>>;
 }
 
-export const ExplorerSearchSuggestions: FC<Props> = (props) => {
+const ExplorerSearchSuggestions: FC<Props> = (props) => {
   return (
     <div
       className={
@@ -24,7 +24,7 @@ export const ExplorerSearchSuggestions: FC<Props> = (props) => {
             We couldn't find any strategies
           </div>
           <div className={'text-secondary'}>
-            Please make sure your search input is correct or try searcing by a
+            Please make sure your search input is correct or try searching by a
             different token pair
           </div>
         </div>
@@ -52,3 +52,5 @@ export const ExplorerSearchSuggestions: FC<Props> = (props) => {
     </div>
   );
 };
+
+export default memo(ExplorerSearchSuggestions);
