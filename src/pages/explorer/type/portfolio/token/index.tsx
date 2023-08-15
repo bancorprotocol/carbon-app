@@ -1,5 +1,5 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
-import { useExplorer } from 'components/explorer/useExplorer';
+import { useExplorer } from 'components/explorer';
 
 export const ExplorerTypePortfolioTokenPage = () => {
   const {
@@ -10,22 +10,18 @@ export const ExplorerTypePortfolioTokenPage = () => {
 
   if (!address) return <div>error no address provided</div>;
 
-  switch (type) {
-    case 'wallet': {
-      return (
-        <PortfolioToken
-          strategiesQuery={useWallet.strategiesQuery}
-          address={address}
-        />
-      );
+  const getStrategiesQuery = () => {
+    switch (type) {
+      case 'wallet': {
+        return useWallet.strategiesQuery;
+      }
+      case 'token-pair': {
+        return usePairs.strategiesQuery;
+      }
     }
-    case 'token-pair': {
-      return (
-        <PortfolioToken
-          strategiesQuery={usePairs.strategiesQuery}
-          address={address}
-        />
-      );
-    }
-  }
+  };
+
+  return (
+    <PortfolioToken strategiesQuery={getStrategiesQuery()} address={address} />
+  );
 };

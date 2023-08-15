@@ -1,5 +1,5 @@
 import { StrategyContent } from 'components/strategies/overview';
-import { useExplorer } from 'components/explorer/useExplorer';
+import { useExplorer } from 'components/explorer';
 
 export const ExplorerTypeOverviewPage = () => {
   const {
@@ -8,12 +8,16 @@ export const ExplorerTypeOverviewPage = () => {
     routeParams: { type },
   } = useExplorer();
 
-  switch (type) {
-    case 'wallet': {
-      return <StrategyContent strategies={useWallet.strategiesQuery} />;
+  const getStrategiesQuery = () => {
+    switch (type) {
+      case 'wallet': {
+        return useWallet.strategiesQuery;
+      }
+      case 'token-pair': {
+        return usePairs.strategiesQuery;
+      }
     }
-    case 'token-pair': {
-      return <StrategyContent strategies={usePairs.strategiesQuery} />;
-    }
-  }
+  };
+
+  return <StrategyContent strategies={getStrategiesQuery()} isExplorer />;
 };

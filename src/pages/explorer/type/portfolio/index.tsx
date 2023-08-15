@@ -2,7 +2,7 @@ import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useNavigate } from 'libs/routing';
-import { useExplorer } from 'components/explorer/useExplorer';
+import { useExplorer } from 'components/explorer';
 
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();
@@ -21,24 +21,22 @@ export const ExplorerTypePortfolioPage = () => {
   const getHref = (row: PortfolioData) =>
     `/explorer/${type}/${slug}/portfolio/token/${row.token.address}`;
 
-  switch (type) {
-    case 'wallet': {
-      return (
-        <PortfolioAllTokens
-          strategiesQuery={useWallet.strategiesQuery}
-          onRowClick={onRowClick}
-          getHref={getHref}
-        />
-      );
+  const getStrategiesQuery = () => {
+    switch (type) {
+      case 'wallet': {
+        return useWallet.strategiesQuery;
+      }
+      case 'token-pair': {
+        return usePairs.strategiesQuery;
+      }
     }
-    case 'token-pair': {
-      return (
-        <PortfolioAllTokens
-          strategiesQuery={usePairs.strategiesQuery}
-          onRowClick={onRowClick}
-          getHref={getHref}
-        />
-      );
-    }
-  }
+  };
+
+  return (
+    <PortfolioAllTokens
+      strategiesQuery={getStrategiesQuery()}
+      onRowClick={onRowClick}
+      getHref={getHref}
+    />
+  );
 };
