@@ -5,6 +5,7 @@ import {
   StrategyPageTabs,
   StrategyTab,
 } from 'components/strategies/StrategyPageTabs';
+import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { Outlet, PathNames, useLocation } from 'libs/routing';
 import { useEffect, useState } from 'react';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
@@ -16,17 +17,23 @@ export const ExplorerPage = () => {
   } = useLocation();
 
   const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebouncedValue(search, 200);
 
   const {
     usePairs: { filteredPairs },
     routeParams: { type, slug },
-  } = useExplorer({ search });
+  } = useExplorer({ search: debouncedSearch });
 
   useEffect(() => {
     if (slug) {
-      setSearch(slug.toUpperCase().replace('-', '/'));
+      if (type === 'token-pair') {
+        return setSearch(slug.toUpperCase().replace('-', '/'));
+      }
+      if (type === 'wallet') {
+        return setSearch(slug.toLowerCase());
+      }
     }
-  }, [slug, setSearch]);
+  }, [slug, setSearch, type]);
 
   const tabs: StrategyTab[] = [
     {

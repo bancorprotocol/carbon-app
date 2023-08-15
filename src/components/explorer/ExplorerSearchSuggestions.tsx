@@ -15,25 +15,40 @@ export const ExplorerSearchSuggestions: FC<Props> = (props) => {
         'absolute left-0 z-30 mt-20 max-h-[300px] w-full overflow-hidden overflow-y-scroll rounded-10 bg-emphasis py-10'
       }
     >
-      {props.filteredPairs.map((pair) => {
-        const slug =
-          `${pair.baseToken.symbol}-${pair.quoteToken.symbol}`.toLowerCase();
+      <div className={'text-secondary ml-20 mb-8 font-weight-500'}>
+        {props.filteredPairs.length} Results
+      </div>
+      {props.filteredPairs.length === 0 ? (
+        <div className={'ml-20'}>
+          <div className={'font-weight-500'}>
+            We couldn't find any strategies
+          </div>
+          <div className={'text-secondary'}>
+            Please make sure your search input is correct or try searcing by a
+            different token pair
+          </div>
+        </div>
+      ) : (
+        props.filteredPairs.map((pair) => {
+          const slug =
+            `${pair.baseToken.symbol}-${pair.quoteToken.symbol}`.toLowerCase();
 
-        return (
-          <Link
-            to={PathNames.explorerOverview('token-pair', slug)}
-            key={slug}
-            className={cn(
-              'flex items-center space-x-10 px-30 py-10 hover:bg-white/10'
-            )}
-            onClick={() => {
-              props.setShowSuggestions(false);
-            }}
-          >
-            <PairLogoName pair={pair} />
-          </Link>
-        );
-      })}
+          return (
+            <Link
+              to={PathNames.explorerOverview('token-pair', slug)}
+              key={slug}
+              className={cn(
+                'flex items-center space-x-10 px-30 py-10 hover:bg-white/10'
+              )}
+              onClick={() => {
+                props.setShowSuggestions(false);
+              }}
+            >
+              <PairLogoName pair={pair} />
+            </Link>
+          );
+        })
+      )}
     </div>
   );
 };
