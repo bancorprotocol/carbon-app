@@ -48,9 +48,9 @@ export const ExplorerSearchInput: FC<Props> = (props) => {
       )}
       onChange={(e) => {
         props.setSearch(e.target.value);
-        // if (props.type === 'token-pair') {
-        //   props.setShowSuggestions(true);
-        // }
+        if (props.type === 'token-pair') {
+          props.setShowSuggestions(true);
+        }
       }}
       onFocus={() => props.setShowSuggestions(true)}
       onBlur={async () => {

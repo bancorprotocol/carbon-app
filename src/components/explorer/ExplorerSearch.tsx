@@ -4,7 +4,7 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ExplorerSearchDropdownButton } from 'components/explorer/ExplorerSearchDropdownButton';
 import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchDropdownItems';
 import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
-import { ExplorerSearchSuggestions } from 'components/explorer/ExplorerSearchSuggestions';
+import ExplorerSearchSuggestions from 'components/explorer/ExplorerSearchSuggestions';
 import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { utils } from 'ethers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
@@ -87,10 +87,13 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
           <div className={'shrink-0'}>
             <DropdownMenu
               button={(onClick) => (
-                <ExplorerSearchDropdownButton onClick={onClick} {...props} />
+                <ExplorerSearchDropdownButton
+                  onClick={onClick}
+                  type={props.type}
+                />
               )}
             >
-              <ExplorerSearchDropdownItems {...props} />
+              <ExplorerSearchDropdownItems setSearch={props.setSearch} />
             </DropdownMenu>
           </div>
           <div className={'h-20 w-1 bg-white/40'}></div>
@@ -104,7 +107,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
 
             {showSuggestions && (
               <ExplorerSearchSuggestions
-                {...props}
+                filteredPairs={props.filteredPairs}
                 setShowSuggestions={setShowSuggestions}
               />
             )}
