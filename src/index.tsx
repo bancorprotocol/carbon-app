@@ -15,6 +15,14 @@ import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
 
+// get rid of trailing slash in url by redirecting to the same url without the slash
+if (
+  window.location.pathname !== '/' &&
+  window.location.pathname.endsWith('/')
+) {
+  window.location.pathname = window.location.pathname.slice(0, -1);
+}
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
