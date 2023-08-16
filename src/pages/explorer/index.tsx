@@ -1,4 +1,3 @@
-import { Navigate } from '@tanstack/react-location';
 import { Page } from 'components/common/page';
 import { ExplorerSearch, useExplorer } from 'components/explorer';
 import {
@@ -6,7 +5,7 @@ import {
   StrategyTab,
 } from 'components/strategies/StrategyPageTabs';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
-import { Outlet, PathNames, useLocation } from 'libs/routing';
+import { Outlet, PathNames, useLocation, Navigate } from 'libs/routing';
 import { useEffect, useState } from 'react';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';

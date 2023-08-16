@@ -1,4 +1,3 @@
-import { useLocation } from '@tanstack/react-location';
 import { ExplorerSearchProps } from 'components/explorer/ExplorerSearch';
 import { Link, PathNames } from 'libs/routing';
 import { FC } from 'react';
@@ -6,8 +5,6 @@ import { FC } from 'react';
 type Props = Pick<ExplorerSearchProps, 'setSearch'>;
 
 export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
-  const { current } = useLocation();
-
   const items = [
     {
       label: 'Wallet',

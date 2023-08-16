@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-location';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ExplorerSearchDropdownButton } from 'components/explorer/ExplorerSearchDropdownButton';
@@ -8,7 +7,7 @@ import ExplorerSearchSuggestions from 'components/explorer/ExplorerSearchSuggest
 import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { utils } from 'ethers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { PathNames } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 import {
   Dispatch,
   FC,
