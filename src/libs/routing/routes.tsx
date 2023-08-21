@@ -116,6 +116,13 @@ export const routes: Route[] = [
       },
       {
         path: ':type/:slug',
+        search: (_search) => {
+          // if pathname contains either /wallet/something or /token-pair/something return true
+          if (document.location.pathname.match(/\/(wallet|token-pair)\/.+/)) {
+            return true;
+          }
+          return false;
+        },
         element: <ExplorerPage />,
         children: [
           {
