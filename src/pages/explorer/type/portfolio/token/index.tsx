@@ -22,9 +22,11 @@ export const ExplorerTypePortfolioTokenPage = () => {
     }
   };
 
+  const strategiesQuery = getStrategiesQuery();
+
   return (
     <PortfolioToken
-      strategiesQuery={getStrategiesQuery()}
+      strategiesQuery={strategiesQuery}
       address={address}
       backLinkHref={PathNames.explorerPortfolio(type, slug!)}
     />

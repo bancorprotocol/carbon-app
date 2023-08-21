@@ -32,9 +32,11 @@ export const ExplorerTypePortfolioPage = () => {
     }
   };
 
+  const strategiesQuery = getStrategiesQuery();
+
   return (
     <PortfolioAllTokens
-      strategiesQuery={getStrategiesQuery()}
+      strategiesQuery={strategiesQuery}
       onRowClick={onRowClick}
       getHref={getHref}
     />

@@ -19,5 +19,7 @@ export const ExplorerTypeOverviewPage = () => {
     }
   };
 
-  return <StrategyContent strategies={getStrategiesQuery()} isExplorer />;
+  const strategiesQuery = getStrategiesQuery();
+
+  return <StrategyContent strategies={strategiesQuery} isExplorer />;
 };
