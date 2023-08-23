@@ -30,6 +30,7 @@ export const externalLinks = {
   whitepaper: 'https://carbondefi.xyz/whitepaper',
   simulatorRepo: 'https://github.com/bancorprotocol/carbon-simulator',
   interactiveSim: 'https://simulator.carbondefi.xyz/',
+  duneDashboard: 'https://dune.com/bancor/carbon-by-bancor',
   roiLearnMore: 'https://faq.carbondefi.xyz/strategy-roi-and-apr',
 };
 

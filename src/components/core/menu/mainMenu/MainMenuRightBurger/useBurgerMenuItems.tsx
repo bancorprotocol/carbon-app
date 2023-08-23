@@ -186,8 +186,15 @@ export const useBurgerMenuItems = () => {
     },
     {
       content: (
-        <Link to={externalLinks.interactiveSim}>
+        <Link className="flex" to={externalLinks.interactiveSim}>
           {t('navBar.burgerMenu.items.item13')}
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.duneDashboard}>
+          {t('navBar.burgerMenu.items.item14')}
         </Link>
       ),
     },
