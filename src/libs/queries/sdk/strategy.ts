@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Token as TokenContract } from 'abis/types';
+import { utils } from 'ethers';
 import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
@@ -133,10 +134,12 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
+  const isValidAddres = utils.isAddress(user?.toLowerCase() || '');
+
   return useQuery<Strategy[]>(
     QueryKey.strategies(user),
     async () => {
-      if (!user) return [];
+      if (!user || !isValidAddres) return [];
 
       const strategies = await carbonSDK.getUserStrategies(user);
       return await buildStrategiesHelper({

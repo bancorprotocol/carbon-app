@@ -27,9 +27,15 @@ export const ExplorerPage = () => {
   const [debouncedSearch] = useDebouncedValue(search, 200);
 
   const {
-    usePairs: { filteredPairs },
+    usePairs,
+    useWallet,
     routeParams: { type, slug },
   } = useExplorer({ search: debouncedSearch });
+
+  const strategies =
+    type === 'wallet'
+      ? useWallet.strategiesQuery.data
+      : usePairs.strategiesQuery.data;
 
   useEffect(() => {
     if (slug) {
@@ -48,7 +54,7 @@ export const ExplorerPage = () => {
       href: PathNames.explorerOverview(type, slug!),
       hrefMatches: [],
       icon: <IconOverview className={'h-18 w-18'} />,
-      // badge: strategies.data?.length || 0,
+      badge: strategies?.length || 0,
     },
     {
       label: 'Portfolio',
@@ -67,7 +73,7 @@ export const ExplorerPage = () => {
       <div className={'flex flex-grow flex-col space-y-30'}>
         <ExplorerSearch
           type={type}
-          filteredPairs={filteredPairs}
+          filteredPairs={usePairs.filteredPairs}
           search={search}
           setSearch={setSearch}
         />

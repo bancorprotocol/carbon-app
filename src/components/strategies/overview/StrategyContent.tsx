@@ -1,11 +1,18 @@
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import { Breakpoint, useBreakpoints } from 'hooks/useBreakpoints';
-import { FC, Fragment, memo, useLayoutEffect, useMemo, useRef } from 'react';
+import {
+  FC,
+  Fragment,
+  memo,
+  ReactNode,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { Strategy, StrategyStatus } from 'libs/queries';
 import { StrategyFilter } from 'components/strategies/overview/StrategyFilterSort';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { useStore } from 'store';
-import { StrategyNotFound } from './StrategyNotFound';
 import { m } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
@@ -28,12 +35,14 @@ type Props = {
   strategies?: Strategy[];
   isLoading?: boolean;
   isExplorer?: boolean;
+  emptyElement: ReactNode;
 };
 
 export const _StrategyContent: FC<Props> = ({
   strategies,
   isExplorer,
   isLoading,
+  emptyElement,
 }) => {
   const {
     strategies: { search, sort, filter },
@@ -75,9 +84,6 @@ export const _StrategyContent: FC<Props> = ({
     for (let i = 0; i < arr.length; i += itemsPerRow) {
       result.push(arr.slice(i, i + itemsPerRow));
     }
-    if (result[result.length - 1]?.length === itemsPerRow) {
-      result.push([]);
-    }
     return result;
   }, [currentBreakpoint, filteredStrategies]);
 
@@ -90,7 +96,8 @@ export const _StrategyContent: FC<Props> = ({
 
   const items = rowVirtualizer.getVirtualItems();
 
-  if (strategies && strategies.length === 0) return <StrategyCreateFirst />;
+  if (strategies && strategies.length === 0 && !isExplorer)
+    return <StrategyCreateFirst />;
 
   return (
     <>
@@ -109,7 +116,7 @@ export const _StrategyContent: FC<Props> = ({
               </div>
             </m.div>
           ) : (
-            <StrategyNotFound />
+            emptyElement
           )}
         </>
       ) : (
@@ -146,12 +153,15 @@ export const _StrategyContent: FC<Props> = ({
                 ))}
               </Fragment>
             ))}
-            <StrategyBlockCreate
-              title={
-                t('pages.strategyOverview.card.actionButtons.actionButton2') ||
-                ''
-              }
-            />
+            {!isExplorer && (
+              <StrategyBlockCreate
+                title={
+                  t(
+                    'pages.strategyOverview.card.actionButtons.actionButton2'
+                  ) || ''
+                }
+              />
+            )}
           </div>
         </div>
       )}

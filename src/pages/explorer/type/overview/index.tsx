@@ -1,5 +1,5 @@
 import { StrategyContent } from 'components/strategies/overview';
-import { useExplorer } from 'components/explorer';
+import { ExplorerEmpty, useExplorer } from 'components/explorer';
 
 export const ExplorerTypeOverviewPage = () => {
   const {
@@ -26,6 +26,15 @@ export const ExplorerTypeOverviewPage = () => {
       strategies={strategiesQuery.data}
       isExplorer
       isLoading={strategiesQuery.isLoading}
+      emptyElement={
+        <ExplorerEmpty
+          variant={'error'}
+          title={"We couldn't find any strategies"}
+          text={
+            'Try entering a different wallet address or choose a different token pair or reset your filters.'
+          }
+        />
+      }
     />
   );
 };
