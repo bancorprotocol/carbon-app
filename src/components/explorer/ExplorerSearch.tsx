@@ -44,7 +44,10 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
       if (isInvalidAddress) {
         return;
       }
-      if (props.search.length === 0 || props.filteredPairs.length === 0) {
+      if (props.search.length === 0) {
+        return;
+      }
+      if (props.type === 'token-pair' && props.filteredPairs.length === 0) {
         return;
       }
       const value = v || props.search;
