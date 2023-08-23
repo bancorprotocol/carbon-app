@@ -1,5 +1,6 @@
 import { Page } from 'components/common/page';
 import { ExplorerSearch, useExplorer } from 'components/explorer';
+import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -9,11 +10,16 @@ import { Outlet, PathNames, useLocation, Navigate } from 'libs/routing';
 import { useEffect, useState } from 'react';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
+import { useStore } from 'store';
 
 export const ExplorerPage = () => {
   const {
     current: { pathname },
   } = useLocation();
+
+  const {
+    strategies: { sort, setSort, filter, setFilter },
+  } = useStore();
 
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebouncedValue(search, 200);
@@ -63,7 +69,19 @@ export const ExplorerPage = () => {
           search={search}
           setSearch={setSearch}
         />
-        {slug && <StrategyPageTabs currentPathname={pathname} tabs={tabs} />}
+        {slug && (
+          <div className={'flex items-center justify-between'}>
+            <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
+            {pathname === PathNames.explorerOverview(type, slug!) && (
+              <StrategyFilterSort
+                sort={sort}
+                filter={filter}
+                setSort={setSort}
+                setFilter={setFilter}
+              />
+            )}
+          </div>
+        )}
         <Outlet />
       </div>
     </Page>
