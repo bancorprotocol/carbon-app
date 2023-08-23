@@ -5,6 +5,7 @@ import {
   StrategyPageTabs,
   StrategyTab,
 } from 'components/strategies/StrategyPageTabs';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { Outlet, PathNames, useLocation, Navigate } from 'libs/routing';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { useStore } from 'store';
 
 export const ExplorerPage = () => {
+  const { aboveBreakpoint } = useBreakpoints();
   const {
     current: { pathname },
   } = useLocation();
@@ -72,14 +74,15 @@ export const ExplorerPage = () => {
         {slug && (
           <div className={'flex items-center justify-between'}>
             <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-            {pathname === PathNames.explorerOverview(type, slug!) && (
-              <StrategyFilterSort
-                sort={sort}
-                filter={filter}
-                setSort={setSort}
-                setFilter={setFilter}
-              />
-            )}
+            {aboveBreakpoint('md') &&
+              pathname === PathNames.explorerOverview(type, slug!) && (
+                <StrategyFilterSort
+                  sort={sort}
+                  filter={filter}
+                  setSort={setSort}
+                  setFilter={setFilter}
+                />
+              )}
           </div>
         )}
         <Outlet />
