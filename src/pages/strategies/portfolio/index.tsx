@@ -18,7 +18,8 @@ export const StrategiesPortfolioPage = () => {
 
   return (
     <PortfolioAllTokens
-      strategiesQuery={strategiesQuery}
+      strategies={strategiesQuery.data}
+      isLoading={strategiesQuery.isLoading}
       getHref={getHref}
       onRowClick={onRowClick}
     />

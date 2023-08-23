@@ -1,7 +1,7 @@
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import { Breakpoint, useBreakpoints } from 'hooks/useBreakpoints';
-import { FC, Fragment, useLayoutEffect, useMemo, useRef } from 'react';
-import { Strategy, StrategyStatus, useGetUserStrategies } from 'libs/queries';
+import { FC, Fragment, memo, useLayoutEffect, useMemo, useRef } from 'react';
+import { Strategy, StrategyStatus } from 'libs/queries';
 import { StrategyFilter } from 'components/strategies/overview/StrategyFilterSort';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { useStore } from 'store';
@@ -25,11 +25,16 @@ const getItemsPerRow = (breakpoint: Breakpoint) => {
 };
 
 type Props = {
-  strategies: ReturnType<typeof useGetUserStrategies>;
+  strategies?: Strategy[];
+  isLoading?: boolean;
   isExplorer?: boolean;
 };
 
-export const StrategyContent: FC<Props> = ({ strategies, isExplorer }) => {
+export const _StrategyContent: FC<Props> = ({
+  strategies,
+  isExplorer,
+  isLoading,
+}) => {
   const {
     strategies: { search, sort, filter },
   } = useStore();
@@ -38,7 +43,7 @@ export const StrategyContent: FC<Props> = ({ strategies, isExplorer }) => {
   const filteredStrategies = useMemo(() => {
     const searchLC = search.toLowerCase();
 
-    const filtered = strategies.data?.filter(
+    const filtered = strategies?.filter(
       (strategy) =>
         (strategy.base.symbol.toLowerCase().includes(searchLC) ||
           strategy.quote.symbol.toLowerCase().includes(searchLC)) &&
@@ -52,7 +57,7 @@ export const StrategyContent: FC<Props> = ({ strategies, isExplorer }) => {
     return filtered?.sort((a, b) => {
       return compareFunction(a, b);
     });
-  }, [search, strategies.data, filter, compareFunction]);
+  }, [search, strategies, filter, compareFunction]);
 
   const parentRef = useRef<HTMLDivElement>(null);
   const parentOffsetRef = useRef(0);
@@ -85,16 +90,13 @@ export const StrategyContent: FC<Props> = ({ strategies, isExplorer }) => {
 
   const items = rowVirtualizer.getVirtualItems();
 
-  if (strategies && strategies.data && strategies.data.length === 0)
-    return <StrategyCreateFirst />;
+  if (strategies && strategies.length === 0) return <StrategyCreateFirst />;
 
   return (
     <>
-      {!filteredStrategies ||
-      filteredStrategies.length === 0 ||
-      strategies.isLoading ? (
+      {!filteredStrategies || filteredStrategies.length === 0 || isLoading ? (
         <>
-          {strategies.isLoading ? (
+          {isLoading ? (
             <m.div
               key={'loading'}
               className={'flex flex-grow items-center justify-center'}
@@ -156,3 +158,10 @@ export const StrategyContent: FC<Props> = ({ strategies, isExplorer }) => {
     </>
   );
 };
+
+export const StrategyContent = memo(
+  _StrategyContent,
+  (prevProps, nextProps) =>
+    prevProps.isLoading === nextProps.isLoading &&
+    prevProps.strategies?.length === nextProps.strategies?.length
+);

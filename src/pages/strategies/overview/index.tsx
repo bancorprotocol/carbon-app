@@ -6,5 +6,10 @@ export const StrategiesOverviewPage = () => {
   const { user } = useWeb3();
   const strategies = useGetUserStrategies({ user });
 
-  return <StrategyContent strategies={strategies} />;
+  return (
+    <StrategyContent
+      strategies={strategies.data}
+      isLoading={strategies.isLoading}
+    />
+  );
 };

@@ -21,5 +21,11 @@ export const ExplorerTypeOverviewPage = () => {
 
   const strategiesQuery = getStrategiesQuery();
 
-  return <StrategyContent strategies={strategiesQuery} isExplorer />;
+  return (
+    <StrategyContent
+      strategies={strategiesQuery.data}
+      isExplorer
+      isLoading={strategiesQuery.isLoading}
+    />
+  );
 };

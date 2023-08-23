@@ -1,8 +1,8 @@
-import { UseQueryResult } from '@tanstack/react-query';
 import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
 import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
 import { Strategy } from 'libs/queries';
+import { memo } from 'react';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
 import { PortfolioTokenDesktop } from './PortfolioTokenDesktop';
@@ -11,18 +11,21 @@ import { usePortfolioTokenPieChart } from './usePortfolioTokenPieChart';
 
 interface Props {
   address: string;
-  strategiesQuery: UseQueryResult<Strategy[], unknown>;
+  strategies?: Strategy[];
+  isLoading?: boolean;
   backLinkHref: string;
 }
 
-export const PortfolioToken = ({
-  strategiesQuery,
+const _PortfolioToken = ({
+  strategies,
+  isLoading: _isLoading,
   address,
   backLinkHref,
 }: Props) => {
   const { tableData, isLoading, selectedToken } = usePortfolioToken({
     address,
-    strategiesQuery,
+    strategies,
+    isLoading: _isLoading,
   });
 
   const { pieChartOptions } = usePortfolioTokenPieChart(
@@ -71,3 +74,11 @@ export const PortfolioToken = ({
     />
   );
 };
+
+export const PortfolioToken = memo(
+  _PortfolioToken,
+  (prev, next) =>
+    prev.address === next.address &&
+    prev.isLoading === next.isLoading &&
+    prev.strategies?.length === next.strategies?.length
+);

@@ -1,4 +1,3 @@
-import { UseQueryResult } from '@tanstack/react-query';
 import { usePortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
@@ -14,12 +13,18 @@ export interface PortfolioTokenData {
 
 interface Props {
   address: string;
-  strategiesQuery: UseQueryResult<Strategy[], unknown>;
+  strategies?: Strategy[];
+  isLoading?: boolean;
 }
 
-export const usePortfolioToken = ({ address, strategiesQuery }: Props) => {
+export const usePortfolioToken = ({
+  address,
+  strategies,
+  isLoading: _isLoading,
+}: Props) => {
   const { tableData: sourceData, isLoading } = usePortfolioData({
-    strategiesQuery,
+    strategies,
+    isLoading: _isLoading,
   });
 
   const selectedToken = useMemo(() => {

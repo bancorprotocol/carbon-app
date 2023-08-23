@@ -1,7 +1,7 @@
-import { UseQueryResult } from '@tanstack/react-query';
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokensPieChartCenter } from 'components/strategies/portfolio/allTokens/PortfolioAllTokensPieChartCenter';
 import { Strategy } from 'libs/queries';
+import { memo } from 'react';
 import { PortfolioAllTokensDesktop } from './PortfolioAllTokensDesktop';
 import { PortfolioAllTokensMobile } from './PortfolioAllTokensMobile';
 import { usePortfolioAllTokensPieChart } from 'components/strategies/portfolio/allTokens/usePortfolioAllTokensPieChart';
@@ -13,18 +13,21 @@ import {
 } from 'components/strategies/portfolio/usePortfolioData';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 interface Props {
-  strategiesQuery: UseQueryResult<Strategy[], unknown>;
+  strategies?: Strategy[];
+  isLoading?: boolean;
   onRowClick: (row: Row<PortfolioData>) => void;
   getHref: (row: PortfolioData) => string;
 }
 
-export const PortfolioAllTokens = ({
-  strategiesQuery,
+const _PortfolioAllTokens = ({
+  strategies,
+  isLoading: _isLoading,
   onRowClick,
   getHref,
 }: Props) => {
   const { tableData, totalValue, isLoading } = usePortfolioData({
-    strategiesQuery,
+    strategies,
+    isLoading: _isLoading,
   });
   const { pieChartOptions } = usePortfolioAllTokensPieChart(tableData);
 
@@ -62,3 +65,10 @@ export const PortfolioAllTokens = ({
     />
   );
 };
+
+export const PortfolioAllTokens = memo(
+  _PortfolioAllTokens,
+  (prev, next) =>
+    prev.isLoading === next.isLoading &&
+    prev.strategies?.length === next.strategies?.length
+);

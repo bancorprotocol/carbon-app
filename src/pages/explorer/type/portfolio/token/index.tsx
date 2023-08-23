@@ -26,7 +26,8 @@ export const ExplorerTypePortfolioTokenPage = () => {
 
   return (
     <PortfolioToken
-      strategiesQuery={strategiesQuery}
+      strategies={strategiesQuery.data}
+      isLoading={strategiesQuery.isLoading}
       address={address}
       backLinkHref={PathNames.explorerPortfolio(type, slug!)}
     />

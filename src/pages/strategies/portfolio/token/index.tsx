@@ -13,7 +13,8 @@ export const StrategiesPortfolioTokenPage = () => {
 
   return (
     <PortfolioToken
-      strategiesQuery={strategiesQuery}
+      strategies={strategiesQuery.data}
+      isLoading={strategiesQuery.isLoading}
       address={address}
       backLinkHref={PathNames.portfolio}
     />
