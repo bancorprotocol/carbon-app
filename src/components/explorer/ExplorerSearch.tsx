@@ -111,6 +111,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
               <ExplorerSearchSuggestions
                 filteredPairs={props.filteredPairs}
                 setShowSuggestions={setShowSuggestions}
+                setSearch={props.setSearch}
               />
             )}
           </div>

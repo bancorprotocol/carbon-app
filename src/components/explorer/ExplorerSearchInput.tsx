@@ -12,7 +12,7 @@ export const ExplorerSearchInput: FC<Props> = (props) => {
   const placeholder =
     props.type === 'wallet'
       ? 'Search by wallet address'
-      : 'Search by Token pair';
+      : 'Search by token pair';
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {

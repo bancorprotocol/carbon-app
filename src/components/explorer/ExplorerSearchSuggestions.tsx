@@ -4,7 +4,8 @@ import { Link, PathNames } from 'libs/routing';
 import { Dispatch, FC, memo, SetStateAction } from 'react';
 import { cn } from 'utils/helpers';
 
-interface Props extends Pick<ExplorerSearchProps, 'filteredPairs'> {
+interface Props
+  extends Pick<ExplorerSearchProps, 'filteredPairs' | 'setSearch'> {
   setShowSuggestions: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -32,6 +33,7 @@ const ExplorerSearchSuggestions: FC<Props> = (props) => {
         props.filteredPairs.map((pair) => {
           const slug =
             `${pair.baseToken.symbol}-${pair.quoteToken.symbol}`.toLowerCase();
+          const name = `${pair.baseToken.symbol}/${pair.quoteToken.symbol}`;
 
           return (
             <Link
@@ -42,6 +44,7 @@ const ExplorerSearchSuggestions: FC<Props> = (props) => {
               )}
               onClick={() => {
                 props.setShowSuggestions(false);
+                props.setSearch(name);
               }}
             >
               <PairLogoName pair={pair} />

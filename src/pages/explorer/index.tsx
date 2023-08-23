@@ -45,6 +45,8 @@ export const ExplorerPage = () => {
       if (type === 'wallet') {
         return setSearch(slug.toLowerCase());
       }
+    } else {
+      setSearch('');
     }
   }, [slug, setSearch, type]);
 
