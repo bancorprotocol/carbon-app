@@ -78,7 +78,5 @@ const _PortfolioToken = ({
 export const PortfolioToken = memo(
   _PortfolioToken,
   (prev, next) =>
-    prev.address === next.address &&
-    prev.isLoading === next.isLoading &&
-    prev.strategies?.length === next.strategies?.length
+    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
 );

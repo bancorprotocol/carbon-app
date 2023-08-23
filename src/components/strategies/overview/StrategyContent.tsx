@@ -161,7 +161,6 @@ export const _StrategyContent: FC<Props> = ({
 
 export const StrategyContent = memo(
   _StrategyContent,
-  (prevProps, nextProps) =>
-    prevProps.isLoading === nextProps.isLoading &&
-    prevProps.strategies?.length === nextProps.strategies?.length
+  (prev, next) =>
+    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
 );
