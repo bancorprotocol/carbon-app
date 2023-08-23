@@ -40,6 +40,7 @@ export const ExplorerTypePortfolioPage = () => {
       isLoading={strategiesQuery.isLoading}
       onRowClick={onRowClick}
       getHref={getHref}
+      isExplorer
     />
   );
 };

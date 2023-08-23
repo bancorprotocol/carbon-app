@@ -1,4 +1,5 @@
 import { Row } from '@tanstack/react-table';
+import { ExplorerEmptyError } from 'components/explorer';
 import { PortfolioAllTokensPieChartCenter } from 'components/strategies/portfolio/allTokens/PortfolioAllTokensPieChartCenter';
 import { Strategy } from 'libs/queries';
 import { memo } from 'react';
@@ -15,6 +16,7 @@ import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCrea
 interface Props {
   strategies?: Strategy[];
   isLoading?: boolean;
+  isExplorer?: boolean;
   onRowClick: (row: Row<PortfolioData>) => void;
   getHref: (row: PortfolioData) => string;
 }
@@ -22,6 +24,7 @@ interface Props {
 const _PortfolioAllTokens = ({
   strategies,
   isLoading: _isLoading,
+  isExplorer,
   onRowClick,
   getHref,
 }: Props) => {
@@ -31,8 +34,12 @@ const _PortfolioAllTokens = ({
   });
   const { pieChartOptions } = usePortfolioAllTokensPieChart(tableData);
 
-  if (!isLoading && tableData && tableData.length === 0)
+  if (!isLoading && tableData && tableData.length === 0) {
+    if (isExplorer) {
+      return <ExplorerEmptyError />;
+    }
     return <StrategyCreateFirst />;
+  }
 
   return (
     <PortfolioLayout

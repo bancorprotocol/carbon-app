@@ -21,12 +21,8 @@ export const ExplorerSearchInput: FC<Props> = (props) => {
     if (e.key !== 'Enter') {
       return;
     }
-    if (
-      !props.isError &&
-      props.search.length > 0 &&
-      props.filteredPairs.length > 0
-    ) {
-      if (props.type === 'token-pair') {
+    if (!props.isError && props.search.length > 0) {
+      if (props.type === 'token-pair' && props.filteredPairs.length > 0) {
         const slug =
           `${props.filteredPairs[0].baseToken.symbol}-${props.filteredPairs[0].quoteToken.symbol}`.toLowerCase();
         props.setShowSuggestions(false);
