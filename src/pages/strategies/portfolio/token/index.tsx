@@ -1,5 +1,22 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
+import { useGetUserStrategies } from 'libs/queries';
+import { PathNames, useMatch } from 'libs/routing';
+import { useWeb3 } from 'libs/web3';
 
 export const StrategiesPortfolioTokenPage = () => {
-  return <PortfolioToken />;
+  const { user } = useWeb3();
+  const {
+    params: { address },
+  } = useMatch();
+
+  const strategiesQuery = useGetUserStrategies({ user });
+
+  return (
+    <PortfolioToken
+      strategies={strategiesQuery.data}
+      isLoading={strategiesQuery.isLoading}
+      address={address}
+      backLinkHref={PathNames.portfolio}
+    />
+  );
 };

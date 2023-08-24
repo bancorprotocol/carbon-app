@@ -80,7 +80,7 @@ export const FAUCET_TOKENS: FaucetToken[] = [
   },
 ];
 
-const FAUCET_AMOUNT = 100;
+const FAUCET_AMOUNT = 100000;
 
 export const tenderlyFaucetTransferETH = async (user: string) => {
   const ethSigner = getUncheckedSigner(ETH_DONOR_ACCOUNT);

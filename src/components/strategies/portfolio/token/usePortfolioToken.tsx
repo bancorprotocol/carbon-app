@@ -11,8 +11,21 @@ export interface PortfolioTokenData {
   strategy: Strategy;
 }
 
-export const usePortfolioToken = ({ address }: { address: string }) => {
-  const { tableData: sourceData, isLoading } = usePortfolioData();
+interface Props {
+  address: string;
+  strategies?: Strategy[];
+  isLoading?: boolean;
+}
+
+export const usePortfolioToken = ({
+  address,
+  strategies,
+  isLoading: _isLoading,
+}: Props) => {
+  const { tableData: sourceData, isLoading } = usePortfolioData({
+    strategies,
+    isLoading: _isLoading,
+  });
 
   const selectedToken = useMemo(() => {
     return sourceData.find(
