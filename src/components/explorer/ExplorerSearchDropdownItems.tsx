@@ -17,7 +17,7 @@ export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
   ];
 
   return (
-    <div className={'flex w-full flex-col space-y-10 font-weight-500'}>
+    <div className={'flex w-full flex-col space-y-10 font-weight-400'}>
       {items.map(({ label, href }) => (
         <Link key={href} to={href} onClick={() => setSearch('')}>
           {label}
