@@ -18,6 +18,8 @@ import {
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
+import { RoiRow } from 'utils/carbonApi';
+import { useGetRoi } from '../extApi/roi';
 
 export enum StrategyStatus {
   Active,
@@ -41,6 +43,15 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
+  roi: BigNumber;
+}
+
+interface StrategiesHelperProps {
+  strategies: SDKStrategy[];
+  getTokenById: (id: string) => Token | undefined;
+  importToken: (token: Token) => void;
+  Token: (address: string) => { read: TokenContract };
+  roiData: RoiRow[];
 }
 
 const buildStrategiesHelper = async ({
@@ -48,12 +59,8 @@ const buildStrategiesHelper = async ({
   getTokenById,
   importToken,
   Token,
-}: {
-  strategies: SDKStrategy[];
-  getTokenById: (id: string) => Token | undefined;
-  importToken: (token: Token) => void;
-  Token: (address: string) => { read: TokenContract };
-}) => {
+  roiData,
+}: StrategiesHelperProps) => {
   const _getTknData = async (address: string) => {
     const data = await fetchTokenData(Token, address);
     importToken(data);
@@ -108,6 +115,8 @@ const buildStrategiesHelper = async ({
       endRate: s.sellPriceHigh,
     };
 
+    const roi = new BigNumber(roiData.find((r) => r.id === s.id)?.ROI || 0);
+
     const strategy: Strategy = {
       id: s.id,
       idDisplay: getLowestBits(s.id),
@@ -117,6 +126,7 @@ const buildStrategiesHelper = async ({
       order1,
       status,
       encoded: s.encoded,
+      roi,
     };
 
     return strategy;
@@ -136,6 +146,8 @@ export const useGetUserStrategies = ({ user }: Props) => {
 
   const isValidAddres = utils.isAddress(user?.toLowerCase() || '');
 
+  const roiQuery = useGetRoi();
+
   return useQuery<Strategy[]>(
     QueryKey.strategies(user),
     async () => {
@@ -147,10 +159,11 @@ export const useGetUserStrategies = ({ user }: Props) => {
         getTokenById,
         importToken,
         Token,
+        roiData: roiQuery.data || [],
       });
     },
     {
-      enabled: tokens.length > 0 && isInitialized,
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
@@ -167,6 +180,8 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
+  const roiQuery = useGetRoi();
+
   return useQuery<Strategy[]>(
     QueryKey.strategiesByPair(token0, token1),
     async () => {
@@ -177,10 +192,11 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
         getTokenById,
         importToken,
         Token,
+        roiData: roiQuery.data || [],
       });
     },
     {
-      enabled: tokens.length > 0 && isInitialized,
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
