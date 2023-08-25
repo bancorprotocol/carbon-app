@@ -54,12 +54,9 @@ const carbonApi = {
   ): Promise<FiatPriceDict> => {
     const {
       data: { data },
-    } = await carbonApiAxios.get<{ data: FiatPriceDict }>(
-      `marketrate/${address}`,
-      {
-        params: { convert: convert.join(',') },
-      }
-    );
+    } = await newApiAxios.get<{ data: FiatPriceDict }>(`market-rate`, {
+      params: { address, convert: convert.join(',') },
+    });
     return data;
   },
   getRoi: async (): Promise<RoiRow[]> => {
