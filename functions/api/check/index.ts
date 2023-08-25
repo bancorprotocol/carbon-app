@@ -38,17 +38,21 @@ const LIMITED_COUNTRIES = [
   'VI', // US Virgin Islands
 ];
 
+const getCheckResponse = (value: boolean) => {
+  return new Response(JSON.stringify(value), {
+    status: 200,
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
 export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({ request }) => {
   const { hostname } = new URL(request.url);
   const isBlockedHost = BLOCKED_HOSTS.includes(hostname);
 
   if (isBlockedHost) {
-    return new Response(JSON.stringify(true), {
-      status: 200,
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
+    return getCheckResponse(true);
   }
 
   const clientCountry = request.headers.get('CF-IPCountry') || '';
@@ -56,18 +60,8 @@ export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({ request }) => {
     NO_NO_COUNTRIES.concat(LIMITED_COUNTRIES).includes(clientCountry);
 
   if (isBlockedCountry) {
-    return new Response(JSON.stringify(true), {
-      status: 200,
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
+    return getCheckResponse(true);
   }
 
-  return new Response(JSON.stringify(false), {
-    status: 200,
-    headers: {
-      'content-type': 'application/json',
-    },
-  });
+  return getCheckResponse(false);
 };
