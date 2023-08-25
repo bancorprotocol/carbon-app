@@ -12,7 +12,7 @@ export const useMenuItems = () => {
   const { t } = useTranslation();
   const menuItems: MenuItem[] = [
     {
-      label: t('navBar.items.item1'),
+      label: 'My Strategies',
       href: PathNames.strategies,
       hrefMatches: [
         PathNames.strategies,
