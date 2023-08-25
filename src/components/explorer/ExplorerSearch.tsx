@@ -95,9 +95,12 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
                   type={props.type}
                 />
               )}
-              className={'mt-10 -ml-17'}
+              className={'mt-10 -ml-17 !px-10 !py-10'}
             >
-              <ExplorerSearchDropdownItems setSearch={props.setSearch} />
+              <ExplorerSearchDropdownItems
+                setSearch={props.setSearch}
+                type={props.type}
+              />
             </DropdownMenu>
           </div>
           <div className={'h-20 w-1 bg-white/40'}></div>
