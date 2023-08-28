@@ -7,6 +7,7 @@ import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import BigNumber from 'bignumber.js';
 import { useContract } from 'hooks/useContract';
+import { config } from 'services/web3/config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonInit } from 'hooks/useCarbonInit';
@@ -135,11 +136,12 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { Token } = useContract();
 
   const isValidAddres = utils.isAddress(user?.toLowerCase() || '');
+  const isZeroAddress = user === config.tokens.ZERO;
 
   return useQuery<Strategy[]>(
     QueryKey.strategies(user),
     async () => {
-      if (!user || !isValidAddres) return [];
+      if (!user || !isValidAddres || isZeroAddress) return [];
 
       const strategies = await carbonSDK.getUserStrategies(user);
       return await buildStrategiesHelper({

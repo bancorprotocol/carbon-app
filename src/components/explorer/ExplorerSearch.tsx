@@ -16,6 +16,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -33,9 +34,10 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
 
   const isInvalidAddress = useMemo(() => {
     return (
-      props.search.length > 0 &&
-      props.type === 'wallet' &&
-      !utils.isAddress(props.search.toLowerCase())
+      (props.search.length > 0 &&
+        props.type === 'wallet' &&
+        !utils.isAddress(props.search.toLowerCase())) ||
+      props.search === config.tokens.ZERO
     );
   }, [props.search, props.type]);
 
