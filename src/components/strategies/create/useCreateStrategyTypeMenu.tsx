@@ -1,6 +1,5 @@
 import { ReactNode, useMemo } from 'react';
-import { useNavigate } from '@tanstack/react-location';
-import { PathNames } from 'libs/routing';
+import { PathNames, useNavigate } from 'libs/routing';
 import { useTranslation } from 'libs/translations';
 import {
   StrategyCreateLocationGenerics,

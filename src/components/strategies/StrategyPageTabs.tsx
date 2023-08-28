@@ -1,31 +1,21 @@
 import { Button } from 'components/common/button';
-import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
-import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
-import { Link, PathNames } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { cn, isPathnameMatch } from 'utils/helpers';
 
+export interface StrategyTab {
+  label: string;
+  href: string;
+  hrefMatches: string[];
+  icon: JSX.Element;
+  badge?: number;
+}
+
 interface Props {
-  strategyCount: number;
+  tabs: StrategyTab[];
   currentPathname: string;
 }
 
-export const StrategyPageTabs = ({ strategyCount, currentPathname }: Props) => {
-  const tabs = [
-    {
-      label: 'Overview',
-      href: PathNames.strategies,
-      hrefMatches: [PathNames.strategies],
-      icon: <IconOverview className={'h-18 w-18'} />,
-      badge: strategyCount,
-    },
-    {
-      label: 'Portfolio',
-      href: PathNames.portfolio,
-      hrefMatches: [PathNames.portfolio, PathNames.portfolioToken('0x')],
-      icon: <IconPieChart className={'h-18 w-18'} />,
-    },
-  ];
-
+export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
   return (
     <div
       className={cn(

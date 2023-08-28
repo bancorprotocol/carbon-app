@@ -6,12 +6,23 @@ import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlo
 import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { useTranslation } from 'libs/translations';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { cn } from 'utils/helpers';
 import { getStatusText, getTooltipTextByStatus } from './utils';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
 import { StrategyBlockRoi } from './StrategyBlockRoi';
 
-export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
+interface Props {
+  strategy: Strategy;
+  className?: string;
+  isExplorer?: boolean;
+}
+
+export const StrategyBlock: FC<Props> = ({
+  strategy,
+  className,
+  isExplorer,
+}) => {
   const { t } = useTranslation();
   const [manage, setManage] = useState(false);
   const showBudgetWarning = useBudgetWarning(
@@ -24,9 +35,11 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
   return (
     <m.div
       variants={mItemVariant}
-      className={`${
-        strategy.status === StrategyStatus.Active ? 'bg-silver' : 'bg-content'
-      } group space-y-20 rounded-10 p-20`}
+      className={cn(
+        strategy.status === StrategyStatus.Active ? 'bg-silver' : 'bg-content',
+        'group space-y-20 rounded-10 p-20',
+        className
+      )}
     >
       <div className="flex justify-between">
         <div className={'flex space-s-10'}>
@@ -74,6 +87,7 @@ export const StrategyBlock: FC<{ strategy: Strategy }> = ({ strategy }) => {
         manage={manage}
         setManage={setManage}
         strategy={strategy}
+        isExplorer={isExplorer}
       />
     </m.div>
   );

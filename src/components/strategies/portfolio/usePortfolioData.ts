@@ -1,4 +1,4 @@
-import { Order, Strategy, useGetUserStrategies } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
@@ -15,16 +15,21 @@ export interface PortfolioData {
   strategies: Strategy[];
   fiatPrice: number;
 }
+interface Props {
+  strategies?: Strategy[];
+  isLoading?: boolean;
+}
 
-export const usePortfolioData = () => {
+export const usePortfolioData = ({
+  strategies,
+  isLoading: _isLoading,
+}: Props) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
 
-  const strategiesQuery = useGetUserStrategies();
-
   const uniqueTokens = useMemo(() => {
-    const data = strategiesQuery.data;
+    const data = strategies;
     if (!data) return [];
 
     const tokens = new Set<string>();
@@ -35,7 +40,7 @@ export const usePortfolioData = () => {
     });
 
     return Array.from(tokens);
-  }, [strategiesQuery.data]);
+  }, [strategies]);
 
   const tokenPriceQueries = useGetMultipleTokenPrices(uniqueTokens);
 
@@ -50,7 +55,7 @@ export const usePortfolioData = () => {
   }, [tokenPriceQueries, uniqueTokens]);
 
   const totalValue = useMemo(() => {
-    const data = strategiesQuery.data;
+    const data = strategies;
     if (!data) return new BigNumber(0);
 
     return data.reduce((acc, strategy) => {
@@ -69,10 +74,10 @@ export const usePortfolioData = () => {
       const fiatAmount = fiatAmountQuote.plus(fiatAmountBase);
       return acc.plus(fiatAmount);
     }, new BigNumber(0));
-  }, [selectedFiatCurrency, strategiesQuery.data, tokenPriceMap]);
+  }, [selectedFiatCurrency, strategies, tokenPriceMap]);
 
   const tableData: PortfolioData[] = useMemo(() => {
-    const data = strategiesQuery.data;
+    const data = strategies;
     if (!data) return [];
 
     const unsorted = data.reduce(
@@ -122,14 +127,11 @@ export const usePortfolioData = () => {
     return sortObjectArray(unsorted, 'share', (a, b) =>
       a.share.gt(b.share) ? -1 : 1
     );
-  }, [selectedFiatCurrency, strategiesQuery.data, tokenPriceMap, totalValue]);
+  }, [selectedFiatCurrency, strategies, tokenPriceMap, totalValue]);
 
   const isLoading = useMemo(() => {
-    return (
-      strategiesQuery.isLoading ||
-      tokenPriceQueries.some((query) => query.isLoading)
-    );
-  }, [strategiesQuery.isLoading, tokenPriceQueries]);
+    return _isLoading || tokenPriceQueries.some((query) => query.isLoading);
+  }, [_isLoading, tokenPriceQueries]);
 
   return { tableData, totalValue, isLoading };
 };
