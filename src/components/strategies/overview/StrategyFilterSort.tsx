@@ -17,6 +17,8 @@ export enum StrategySort {
   Old,
   PairAscending,
   PairDescending,
+  RoiAscending,
+  RoiDescending,
 }
 
 export const StrategyFilterSort: FC<{

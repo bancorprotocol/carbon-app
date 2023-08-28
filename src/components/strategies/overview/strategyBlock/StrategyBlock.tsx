@@ -80,7 +80,7 @@ export const StrategyBlock: FC<Props> = ({
           </div>
         </div>
       </div>
-      <StrategyBlockRoi strategyId={strategy.id} />
+      <StrategyBlockRoi roi={strategy.roi} />
       <StrategyBlockBuySell buy strategy={strategy} />
       <StrategyBlockBuySell strategy={strategy} />
       <StrategyBlockManage
