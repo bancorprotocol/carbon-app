@@ -88,14 +88,19 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
         >
           <div className={'shrink-0'}>
             <DropdownMenu
+              placement={'bottom-start'}
               button={(onClick) => (
                 <ExplorerSearchDropdownButton
                   onClick={onClick}
                   type={props.type}
                 />
               )}
+              className={'mt-10 -ml-17 !px-10 !py-10'}
             >
-              <ExplorerSearchDropdownItems setSearch={props.setSearch} />
+              <ExplorerSearchDropdownItems
+                setSearch={props.setSearch}
+                type={props.type}
+              />
             </DropdownMenu>
           </div>
           <div className={'h-20 w-1 bg-white/40'}></div>
@@ -120,10 +125,10 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
         <Button
           variant={'success'}
           size={'md'}
-          className={'w-40 shrink-0 px-0 md:w-[180px]'}
+          className={'w-40 shrink-0 !px-0 md:w-[180px]'}
           onClick={() => onSearchHandler()}
         >
-          <IconSearch className={'h-16 w-16 md:hidden'} />
+          <IconSearch className={'h-16 w-16 md:mr-8'} />
           <span className={'hidden md:block'}>Search</span>
         </Button>
       </div>
