@@ -34,7 +34,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
 
   return (
     <div
-      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-start ${
+      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-left ${
         buy
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
@@ -47,7 +47,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
             {buy ? 'Buy' : 'Sell'} Budget
           </div>
           {isBudgetOptional && (
-            <div className="text-14 font-weight-500 text-white/40 ms-8">
+            <div className="ml-8 text-14 font-weight-500 text-white/40">
               Optional
             </div>
           )}
@@ -59,7 +59,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         />
       </div>
       <TokenInputField
-        className={'rounded-16 bg-black p-16 me-4'}
+        className={'mr-4 rounded-16 bg-black p-16'}
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}

@@ -232,7 +232,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               <button
                 onClick={openTradeRouteModal}
                 className={
-                  'space-s-10 flex hidden text-start hover:text-white md:flex'
+                  'flex hidden space-x-10 text-left hover:text-white md:flex'
                 }
               >
                 <IconRouting className={'w-12'} />
@@ -246,7 +246,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             )}
           </div>
           {IS_TENDERLY_FORK && (
-            <div className={'text-secondary mt-5 text-end'}>
+            <div className={'text-secondary mt-5 text-right'}>
               DEBUG: {getLiquidity()}
             </div>
           )}

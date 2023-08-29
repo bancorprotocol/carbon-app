@@ -22,7 +22,7 @@ const BlockIconTextDesc = ({
   description: string;
 }) => {
   return (
-    <div className={'flex items-center space-s-20'}>
+    <div className={'flex items-center space-x-20'}>
       <div
         className={
           'flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-6 bg-white/25'

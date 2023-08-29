@@ -36,7 +36,7 @@ export const getModalDataByType = (
           'All data on the strategy will be deleted. It will be impossible to restore them.',
         additionalContent: (
           <div className="mt-20 flex items-center">
-            <IconWallet className="h-12 w-12 me-10" />
+            <IconWallet className="mr-10 h-12 w-12" />
             <div className="flex-1 text-14 font-weight-500 text-white/80">
               All funds will be withdrawn to your wallet
             </div>

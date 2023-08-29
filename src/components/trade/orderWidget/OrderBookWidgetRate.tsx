@@ -27,14 +27,14 @@ export const OrderBookWidgetRate: FC<Props> = ({
             <div
               className={`${
                 buy ? 'rotate-180 bg-green/25' : 'bg-red/25'
-              } flex h-20 w-20 items-center justify-center rounded-full ms-8`}
+              } ml-8 flex h-20 w-20 items-center justify-center rounded-full`}
             >
               <IconArrow
                 className={`${buy ? 'text-green' : 'text-red'} w-10`}
               />
             </div>
           )}
-          {fiatRate && <span className="text-white/60 ms-8">{fiatRate}</span>}
+          {fiatRate && <span className="ml-8 text-white/60">{fiatRate}</span>}
         </span>
       </Tooltip>
     </div>

@@ -115,12 +115,12 @@ export const ModalTokenListContent: FC<Props> = ({
                       alt={`${token.symbol} Token`}
                       className="h-32 w-32 !rounded-full"
                     />
-                    <div className="grid justify-items-start ms-15">
+                    <div className="ml-15 grid justify-items-start">
                       <div className="flex">
                         {token.symbol}
                         {token.isSuspicious && (
                           <WarningWithTooltip
-                            className="ms-5"
+                            className="ml-5"
                             tooltipContent={suspiciousTokenTooltipMsg}
                           />
                         )}

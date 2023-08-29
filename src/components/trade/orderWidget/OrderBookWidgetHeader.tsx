@@ -27,7 +27,7 @@ export const OrderBookWidgetHeader: FC<Props> = ({
       <Tooltip
         element={`The available liquidity in this price point denominated in ${quoteSymbol}`}
       >
-        <div className={'text-end'}>Total</div>
+        <div className={'text-right'}>Total</div>
       </Tooltip>
     </div>
   );

@@ -118,7 +118,7 @@ export const useBurgerMenuItems = () => {
               <span>{currency}</span>
               <span className="flex items-center">
                 <IconV
-                  className={`me-8 invisible h-12 w-12 ${
+                  className={`invisible h-12 w-12 ${
                     isCurrencySelected ? '!visible' : ''
                   }`}
                 />
@@ -200,7 +200,7 @@ const CurrencyMenuItemContent = () => {
   return (
     <div className="flex w-full items-center justify-between">
       <span>Currency</span>
-      <span className="me-10 font-weight-500">{selectedFiatCurrency}</span>
+      <span className="mr-10 font-weight-500">{selectedFiatCurrency}</span>
     </div>
   );
 };

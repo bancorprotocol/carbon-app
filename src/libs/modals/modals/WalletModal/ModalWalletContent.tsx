@@ -14,7 +14,7 @@ type Props = {
 
 const textClasses = 'text-16 font-weight-500';
 const buttonClasses =
-  'flex h-44 w-full items-center space-s-16 rounded-8 px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
+  'flex h-44 w-full items-center space-x-16 rounded-8 px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
 
 const EXT_LINKS = [
   {
@@ -56,7 +56,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
           </Link>{' '}
           of this site.{' '}
         </p>
-        <div className={'space-s-10 flex items-center'}>
+        <div className={'flex items-center space-x-10'}>
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
             I read and accept

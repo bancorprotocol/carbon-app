@@ -87,7 +87,7 @@ export const NotificationLine: FC<{
               to={getExplorerLink('tx', notification.txHash)}
               className={'mt-10 flex items-center font-weight-500'}
             >
-              View on Etherscan <IconLink className="ms-6 w-14" />
+              View on Etherscan <IconLink className="ml-6 w-14" />
             </Link>
           )}
         </div>

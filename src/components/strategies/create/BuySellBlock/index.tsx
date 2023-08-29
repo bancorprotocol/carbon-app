@@ -68,7 +68,7 @@ export const BuySellBlock: FC<Props> = ({
     <>
       <div
         className={
-          'flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] me-6'
+          'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
         }
       >
         1
@@ -139,7 +139,7 @@ export const BuySellBlock: FC<Props> = ({
       <div className={'flex items-center pt-10 text-14'}>
         <div
           className={
-            'flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] me-6'
+            'mr-6 flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
           }
         >
           2
@@ -169,7 +169,7 @@ export const BuySellBlock: FC<Props> = ({
           </div>
         </Tooltip>
         {isBudgetOptional && (
-          <div className="font-weight-500 text-white/40 ms-8">Optional</div>
+          <div className="ml-8 font-weight-500 text-white/40">Optional</div>
         )}
       </div>
       <div>

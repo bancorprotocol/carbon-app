@@ -25,7 +25,7 @@ export const WalletConnect = () => {
           </p>
 
           <Button
-            className="flex items-center justify-center space-s-16"
+            className="flex items-center justify-center space-x-16"
             variant={'success'}
             onClick={() => openModal('wallet', undefined)}
             fullWidth
@@ -44,7 +44,7 @@ export const WalletConnect = () => {
         </div>
         <div className={'flex h-full flex-col justify-center space-y-33'}>
           {items.map((item, index) => (
-            <div className={'flex items-center space-s-20'} key={index}>
+            <div className={'flex items-center space-x-20'} key={index}>
               {item.icon}
               <span className={'text-white/80'}>{item.title}</span>
             </div>

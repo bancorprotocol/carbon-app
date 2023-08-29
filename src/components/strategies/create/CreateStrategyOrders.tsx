@@ -103,13 +103,13 @@ export const CreateStrategyOrders = ({
       <m.div
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'rounded-10 bg-silver p-20 ps-30'}
+        className={'rounded-10 bg-silver p-20 pl-30'}
       >
-        <div className={'flex space-s-10'}>
+        <div className={'flex space-x-10'}>
           <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
           <div>
             {
-              <div className="flex space-s-6">
+              <div className="flex space-x-6">
                 <span>{base?.symbol}</span>
                 <div className="text-secondary !text-16">/</div>
                 <span>{quote?.symbol}</span>
@@ -123,7 +123,7 @@ export const CreateStrategyOrders = ({
             'mt-10 flex items-center text-12 font-weight-400 text-white/60'
           }
         >
-          <IconWarning className={'w-14 flex-shrink-0 -ms-6 me-10'} /> Rebasing
+          <IconWarning className={'ml-6 mr-10 w-14 flex-shrink-0'} /> Rebasing
           and fee-on-transfer tokens are not supported
         </div>
       </m.div>

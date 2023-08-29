@@ -94,7 +94,7 @@ export const MainMenuRightWallet: FC = () => {
               carbonEvents.navigation.navWalletClick(undefined);
               onClick();
             }}
-            className={'flex items-center ps-20 space-s-10'}
+            className={'flex items-center space-x-10 pl-20'}
           >
             {buttonIcon}
             <span>{buttonText}</span>
@@ -105,7 +105,7 @@ export const MainMenuRightWallet: FC = () => {
           {isSupportedNetwork ? (
             <div
               className={
-                'flex w-full items-center p-8 font-weight-400 space-s-10'
+                'flex w-full items-center space-x-10 p-8 font-weight-400'
               }
             >
               <IconETHLogo className={'w-16'} />
@@ -124,7 +124,7 @@ export const MainMenuRightWallet: FC = () => {
           <button
             onClick={onDisconnect}
             className={
-              'hover:bg-body flex w-full items-center rounded-6 p-8 space-s-10'
+              'hover:bg-body flex w-full items-center space-x-10 rounded-6 p-8'
             }
           >
             <IconDisconnect className={'w-16'} />
@@ -139,7 +139,7 @@ export const MainMenuRightWallet: FC = () => {
     <Button
       variant={buttonVariant}
       onClick={onClickOpenModal}
-      className={'flex items-center space-s-10'}
+      className={'flex items-center space-x-10'}
     >
       {buttonIcon}
       <span>{buttonText}</span>

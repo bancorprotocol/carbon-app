@@ -57,7 +57,7 @@ export const LimitRangeSection: FC<Props> = ({
   };
 
   return (
-    <div className={`space-y-12 text-start`}>
+    <div className={`space-y-12 text-left`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">{title}</div>
         <div className="flex items-center gap-10 text-14">

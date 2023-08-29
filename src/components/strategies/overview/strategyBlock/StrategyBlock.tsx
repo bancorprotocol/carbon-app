@@ -40,7 +40,7 @@ export const StrategyBlock: FC<Props> = ({
       )}
     >
       <div className="flex justify-between">
-        <div className={'space-s-10 flex'}>
+        <div className={'flex space-x-10'}>
           <TokensOverlap
             // TODO fix token logo classes
             className="h-40 w-40"

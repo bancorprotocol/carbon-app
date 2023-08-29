@@ -11,7 +11,7 @@ export const MainMenuLeft: FC = () => {
 
   return (
     <div>
-      <div className={'space-s-24 flex items-center'}>
+      <div className={'flex items-center space-x-24'}>
         <Link
           to={PathNames.strategies}
           onClick={() => carbonEvents.navigation.navHomeClick(undefined)}
@@ -19,7 +19,7 @@ export const MainMenuLeft: FC = () => {
           <LogoCarbon className={'w-34'} />
         </Link>
 
-        <div className={'space-s-24 hidden md:block'}>
+        <div className={'hidden space-x-24 md:block'}>
           {menuItems.map(({ label, href, hrefMatches }) => (
             <Link
               onClick={() => handleOnItemClick(href)}

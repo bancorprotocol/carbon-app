@@ -11,7 +11,7 @@ export const EditStrategyOverlapTokens = ({
   return (
     <div
       className={
-        'bg-secondary flex w-full items-center rounded-10 p-15 font-mono ps-30 space-s-10'
+        'bg-secondary flex w-full items-center space-x-10 rounded-10 p-15 pl-30 font-mono'
       }
     >
       <TokensOverlap
