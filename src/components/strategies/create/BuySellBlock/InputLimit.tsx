@@ -66,7 +66,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           onFocus={handleFocus}
           placeholder="Enter Price"
           className={
-            'mb-5 w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
+            'mb-5 w-full bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none'
           }
         />
         <div className="flex items-center gap-10">

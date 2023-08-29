@@ -129,7 +129,7 @@ export const EditStrategyAllocatedBudget: FC<{
         {showDistribute && type !== 'editPrices' && (
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
-              <span className="me-5">Distribute Across Entire Range</span>
+              <span className="mr-5">Distribute Across Entire Range</span>
               <Tooltip
                 iconClassName="h-13 text-white/60"
                 element={

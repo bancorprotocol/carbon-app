@@ -25,7 +25,7 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
   const { symbol, logoURI } = info.getValue();
 
   return (
-    <div className={cn('flex', 'items-center', 'space-s-16')}>
+    <div className={cn('flex', 'items-center', 'space-x-16')}>
       <div
         className={cn('h-32', 'w-4', 'bg-blue', 'rounded-r-2')}
         style={{

@@ -12,9 +12,9 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
               colSpan={header.colSpan}
               className={cn(
                 'text-left',
-                'first:ps-20',
+                'first:pl-20',
                 'last:text-right',
-                'last:pe-20'
+                'last:pr-20'
               )}
             >
               {header.isPlaceholder ? null : (
