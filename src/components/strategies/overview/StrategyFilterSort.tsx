@@ -26,7 +26,7 @@ export const StrategyFilterSort: FC<{
   setSort: (sort: StrategySort) => void;
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ sort, filter, setSort, setFilter }) => {
-  const { sortItems, filterItems } = getSortAndFilterItems(t);
+  const { sortItems, filterItems } = getSortAndFilterItems();
 
   return (
     <DropdownMenu
