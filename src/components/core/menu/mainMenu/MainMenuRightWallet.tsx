@@ -10,7 +10,6 @@ import { ReactComponent as IconWalletConnectLogo } from 'assets/logos/walletConn
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
-import { useTranslation } from 'libs/translations';
 import { ConnectionType, useWeb3 } from 'libs/web3';
 import { FC, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
@@ -41,7 +40,6 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
 };
 
 export const MainMenuRightWallet: FC = () => {
-  const { t } = useTranslation();
   const {
     user,
     disconnect,
@@ -71,11 +69,11 @@ export const MainMenuRightWallet: FC = () => {
   }, [isSupportedNetwork, isUserBlocked]);
 
   const buttonText = useMemo(() => {
-    if (isUserBlocked) return t('navBar.walletMenu.states.state2');
-    if (!isSupportedNetwork) return t('navBar.walletMenu.states.state3');
-    if (!user) return t('navBar.walletMenu.states.state1');
+    if (isUserBlocked) return 'Wallet Blocked';
+    if (!isSupportedNetwork) return 'Wrong Network';
+    if (!user) return 'Connect Wallet';
     return shortenString(user);
-  }, [isSupportedNetwork, isUserBlocked, t, user]);
+  }, [isSupportedNetwork, isUserBlocked, user]);
 
   const buttonIcon = useMemo(() => {
     if (isUserBlocked) return <IconWarning {...iconProps} />;
@@ -111,7 +109,7 @@ export const MainMenuRightWallet: FC = () => {
               }
             >
               <IconETHLogo className={'w-16'} />
-              <span>{t('navBar.walletMenu.items.item1')}</span>
+              <span>Ethereum Network</span>
             </div>
           ) : (
             <button
@@ -120,7 +118,7 @@ export const MainMenuRightWallet: FC = () => {
                 'hover:bg-body flex w-full rounded-6 p-8 text-red/80  hover:text-red'
               }
             >
-              {t('navBar.walletMenu.items.item2')}
+              Switch Network
             </button>
           )}
           <button
@@ -130,7 +128,7 @@ export const MainMenuRightWallet: FC = () => {
             }
           >
             <IconDisconnect className={'w-16'} />
-            <span>{t('navBar.walletMenu.items.item3')}</span>
+            <span>Disconnect</span>
           </button>
         </div>
       </DropdownMenu>

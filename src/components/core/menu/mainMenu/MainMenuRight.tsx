@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { IS_TENDERLY_FORK } from 'libs/web3';
-import { useTranslation } from 'libs/translations';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRightWallet';
 import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';
@@ -9,11 +8,9 @@ import { MainMenuRightBurger } from './MainMenuRightBurger';
 import { useBurgerMenuItems } from './MainMenuRightBurger/useBurgerMenuItems';
 
 const TenderlyForkAlert = () => {
-  const { t } = useTranslation();
-
   return IS_TENDERLY_FORK ? (
     <Button variant={'error'} size={'sm'} className={'px-8'}>
-      {t('navBar.actionButton')}
+      Fork
     </Button>
   ) : null;
 };

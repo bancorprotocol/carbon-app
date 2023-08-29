@@ -1,6 +1,5 @@
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { carbonEvents } from 'services/events';
-import { useTranslation } from 'libs/translations';
 import { Token } from 'libs/tokens';
 import {
   isValidValue,
@@ -24,7 +23,6 @@ export const TradeSettingsRow: FC<{
   item: TradeSettingsData;
   isAllSettingsDefault: boolean;
 }> = ({ base, quote, item, isAllSettingsDefault }) => {
-  const { t } = useTranslation();
   const [internalValue, setInternalValue] = useState(
     item.presets.includes(item.value) ? '' : item.value
   );
@@ -108,7 +106,7 @@ export const TradeSettingsRow: FC<{
           </Button>
         ))}
         <input
-          placeholder={t('common.placeholders.placeholder5')}
+          placeholder={'custom'}
           value={internalValue}
           onBlur={handleOnBlur}
           onChange={handleOnInputChange}

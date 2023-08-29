@@ -10,7 +10,6 @@ import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import 'libs/translations/i18n';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';

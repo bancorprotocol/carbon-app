@@ -15,8 +15,6 @@ import {
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { useNavigate } from 'libs/routing';
-import { useTranslation } from 'libs/translations';
-import { capitalizeFirstChar } from 'utils/strings';
 
 type Props = {
   base: Token;
@@ -39,7 +37,6 @@ export const BuySellBlock: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
 }) => {
-  const { t } = useTranslation();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
@@ -48,17 +45,10 @@ export const BuySellBlock: FC<Props> = ({
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
-  const titleText = buy
-    ? t('pages.strategyCreate.step2.section2.titles.title1')
-    : t('pages.strategyCreate.step2.section2.titles.title2');
-
-  const tooltipText = buy
-    ? t('pages.strategyCreate.step2.tooltips.tooltip1', {
-        token: base.symbol,
-      })
-    : t('pages.strategyCreate.step2.tooltips.tooltip2', {
-        token: base.symbol,
-      });
+  const titleText = buy ? 'Buy Low' : 'Sell High';
+  const tooltipText = `This section will define the order details in which you are willing to ${
+    buy ? 'buy' : 'sell'
+  } ${base.symbol} at.`;
 
   const title = (
     <>
@@ -85,29 +75,14 @@ export const BuySellBlock: FC<Props> = ({
       </div>
       <Tooltip
         sendEventOnMount={{ buy }}
-        element={
-          buy
-            ? t('pages.strategyCreate.step2.tooltips.tooltip3', {
-                buyToken: base.symbol,
-                sellToken: quote.symbol,
-              })
-            : t('pages.strategyCreate.step2.tooltips.tooltip4', {
-                buyToken: base.symbol,
-                sellToken: quote.symbol,
-              })
-        }
+        element={`Define the price you are willing to ${buy ? 'buy' : 'sell'} ${
+          base.symbol
+        } at. Make sure the price is in ${quote.symbol} tokens.`}
       >
         <div className={'text-14 font-weight-500 text-white/60'}>
-          <span>
-            {buy
-              ? t('pages.strategyCreate.step2.section2.subtitles.subtitle1')
-              : t('pages.strategyCreate.step2.section2.subtitles.subtitle2')}
-          </span>
-          <span className={'text-white/80 ms-8'}>
-            ({quote.symbol}{' '}
-            <span className={'text-white/60'}>
-              {t('pages.strategyCreate.step2.section2.contents.content3')} 1{' '}
-            </span>
+          <span>Set {buy ? 'Buy' : 'Sell'} Price</span>
+          <span className={'ml-8 text-white/80'}>
+            ({quote.symbol} <span className={'text-white/60'}>per 1 </span>
             {base.symbol})
           </span>
         </div>
@@ -138,9 +113,7 @@ export const BuySellBlock: FC<Props> = ({
               }}
               isActive={buy}
             >
-              {capitalizeFirstChar(
-                t('pages.strategyCreate.step2.section2.contents.content1')
-              )}
+              Buy
             </TabsMenuButton>
             <TabsMenuButton
               onClick={() => {
@@ -154,9 +127,7 @@ export const BuySellBlock: FC<Props> = ({
               }}
               isActive={!buy}
             >
-              {capitalizeFirstChar(
-                t('pages.strategyCreate.step2.section2.contents.content2')
-              )}
+              Sell
             </TabsMenuButton>
           </TabsMenu>
         </div>
@@ -177,33 +148,28 @@ export const BuySellBlock: FC<Props> = ({
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? `${t('pages.strategyCreate.step2.tooltips.tooltip6', {
-                  buyToken: base.symbol,
-                  sellToken: quote.symbol,
-                })} ${
+              ? `The amount of ${
+                  quote.symbol
+                } tokens you would like to use in order to buy ${
+                  base.symbol
+                }. ${
                   strategyType === 'recurring'
-                    ? t('pages.strategyCreate.step2.tooltips.tooltip5')
+                    ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
                     : ''
                 }`
-              : `${t('pages.strategyCreate.step2.tooltips.tooltip8', {
-                  buyToken: base.symbol,
-                })} ${
+              : `The amount of ${base.symbol} tokens you would like to sell. ${
                   strategyType === 'recurring'
-                    ? t('pages.strategyCreate.step2.tooltips.tooltip7')
+                    ? 'Note: this amount will re-fill once the "Buy" order is used by traders.'
                     : ''
                 }`
           }
         >
           <div className={'font-weight-500 text-white/60'}>
-            {buy
-              ? t('pages.strategyCreate.step2.section2.subtitles.subtitle3')
-              : t('pages.strategyCreate.step2.section2.subtitles.subtitle4')}
+            Set {buy ? 'Buy' : 'Sell'} Budget{' '}
           </div>
         </Tooltip>
         {isBudgetOptional && (
-          <div className="font-weight-500 text-white/40 ms-8">
-            {t('pages.strategyCreate.step2.section2.contents.content4')}
-          </div>
+          <div className="font-weight-500 text-white/40 ms-8">Optional</div>
         )}
       </div>
       <div>
@@ -221,7 +187,7 @@ export const BuySellBlock: FC<Props> = ({
             !insufficientBalance ? 'invisible' : ''
           }`}
         >
-          {t('pages.strategyCreate.step2.section2.contents.content5')}
+          Insufficient balance
         </div>
       </div>
     </div>

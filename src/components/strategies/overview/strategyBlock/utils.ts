@@ -1,73 +1,41 @@
 import { Order, StrategyStatus } from 'libs/queries';
-import { TFunction } from 'libs/translations';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 
-export const getStatusText = (
-  status: StrategyStatus,
-  t: TFunction<string, undefined, string>
-) => {
+export const getStatusText = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
-    ? t('pages.strategyOverview.card.section3.statuses.status1')
+    ? 'Active'
     : status === StrategyStatus.NoBudget
-    ? t('pages.strategyOverview.card.section3.statuses.status2')
+    ? 'No Budget - Inactive'
     : status === StrategyStatus.Paused
-    ? t('pages.strategyOverview.card.section3.statuses.status3')
-    : t('pages.strategyOverview.card.section3.statuses.status4');
+    ? 'Paused - Inactive'
+    : 'Inactive';
 };
 
-export const getTooltipTextByStatus = (
-  status: StrategyStatus,
-  t: TFunction<string, undefined, string>
-) => {
+export const getTooltipTextByStatus = (status: StrategyStatus) => {
   return status === StrategyStatus.Active
-    ? t('pages.strategyOverview.card.tooltips.tooltip7')
+    ? 'Your strategy is active and ready'
     : status === StrategyStatus.NoBudget
-    ? t('pages.strategyOverview.card.tooltips.tooltip8')
+    ? 'Your strategy has no associated funds. Consider depositing funds to activate it.'
     : status === StrategyStatus.Paused
-    ? t('pages.strategyOverview.card.tooltips.tooltip9')
-    : t('pages.strategyOverview.card.tooltips.tooltip10');
+    ? 'Your strategy is currently paused. Edit the prices to activate it.'
+    : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
 };
 
-const tooltipTextByStrategyEditOptionsId = (
-  t: TFunction<string, undefined, string>
-) => {
-  return {
-    duplicateStrategy: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip1'
-    ),
-    deleteStrategy: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip2'
-    ),
-    pauseStrategy: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip3'
-    ),
-    withdrawFunds: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip4'
-    ),
-    depositFunds: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip5'
-    ),
-    editPrices: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip6'
-    ),
-    renewStrategy: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip7'
-    ),
-    manageNotifications: t(
-      'pages.strategyOverview.card.manageStrategy.tooltips.tooltip8'
-    ),
-  };
-};
-
-export const getTooltipTextByStrategyEditOptionsId = (
-  id: StrategyEditOptionId,
-  t: TFunction<string, undefined, string>
-) => {
-  return tooltipTextByStrategyEditOptionsId(t)[id];
+export const tooltipTextByStrategyEditOptionsId = {
+  duplicateStrategy: 'Create a new strategy with the same details',
+  deleteStrategy:
+    'Delete the strategy and withdraw all associated funds to your wallet',
+  pauseStrategy: 'Deactivate the strategy by nulling the prices',
+  withdrawFunds: 'Withdraw funds from an existing strategy',
+  depositFunds: 'Deposit additional funds into an existing strategy',
+  editPrices:
+    'Edit the prices of your buy/sell orders within an existing strategy',
+  renewStrategy: 'Renew an inactive strategy',
+  manageNotifications: 'Get notified when someone trades against your strategy',
 };
 
 type StrategyEditOption = typeof tooltipTextByStrategyEditOptionsId;
-export type StrategyEditOptionId = keyof ReturnType<StrategyEditOption>;
+export type StrategyEditOptionId = keyof StrategyEditOption;
 
 type getPriceParams = {
   prettified?: boolean;

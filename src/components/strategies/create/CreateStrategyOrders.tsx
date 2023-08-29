@@ -10,7 +10,6 @@ import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
 import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
-import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
 import { lsService } from 'services/localeStorage';
@@ -37,7 +36,6 @@ export const CreateStrategyOrders = ({
   isAwaiting,
   isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
-  const { t } = useTranslation();
   const { user } = useWeb3();
   const { openModal } = useModal();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
@@ -97,8 +95,8 @@ export const CreateStrategyOrders = ({
   };
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
-  }, [isAwaiting, isProcessing, t]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
     <>
@@ -117,11 +115,7 @@ export const CreateStrategyOrders = ({
                 <span>{quote?.symbol}</span>
               </div>
             }
-            <div className="text-secondary capitalize">
-              {strategyType === 'recurring'
-                ? t('pages.strategyCreate.step2.section1.titles.title1')
-                : t('pages.strategyCreate.step2.section1.titles.title2')}
-            </div>
+            <div className="text-secondary capitalize">{strategyType}</div>
           </div>
         </div>
         <div
@@ -129,8 +123,8 @@ export const CreateStrategyOrders = ({
             'mt-10 flex items-center text-12 font-weight-400 text-white/60'
           }
         >
-          <IconWarning className={'w-14 flex-shrink-0 -ms-6 me-10'} />
-          {t('pages.strategyCreate.step2.section1.contents.content1')}
+          <IconWarning className={'w-14 flex-shrink-0 -ms-6 me-10'} /> Rebasing
+          and fee-on-transfer tokens are not supported
         </div>
       </m.div>
 
@@ -171,9 +165,7 @@ export const CreateStrategyOrders = ({
           loading={isProcessing || isAwaiting}
           loadingChildren={loadingChildren}
         >
-          {user
-            ? t('pages.strategyCreate.step2.actionButton')
-            : t('common.actionButtons.actionButton1')}
+          {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>
       </m.div>
     </>

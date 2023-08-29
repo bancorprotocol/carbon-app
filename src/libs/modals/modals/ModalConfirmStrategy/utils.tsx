@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
-import { TFunction } from 'libs/translations';
 
 export type MutateModalContentData = {
   modalTitle: string;
@@ -15,34 +14,35 @@ export type MutateModalContentData = {
 };
 
 export const getModalDataByType = (
-  type: 'pause' | 'delete',
-  t: TFunction<string, undefined, string>
+  type: 'pause' | 'delete'
 ): MutateModalContentData => {
   switch (type) {
     case 'pause':
       return {
-        modalTitle: t('modals.pauseStrategy.modalTitle'),
+        modalTitle: 'Pause Strategy',
         icon: <IconPause className="h-16 w-16" />,
-        title: t('modals.pauseStrategy.title'),
-        content: t('modals.pauseStrategy.content'),
-        actionButton: t('modals.pauseStrategy.actionButtons.actionButton1'),
+        title: 'Are you sure you would like to pause your strategy?',
+        content:
+          'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
+        actionButton: 'Pause Strategy',
       };
 
     case 'delete':
       return {
-        modalTitle: t('modals.deleteStrategy.modalTitle'),
+        modalTitle: 'Delete Strategy',
         icon: <IconTrash className="h-24 w-24" />,
-        title: t('modals.deleteStrategy.title'),
-        content: t('modals.deleteStrategy.contents.content1'),
+        title: 'Are you sure you would like to delete your strategy?',
+        content:
+          'All data on the strategy will be deleted. It will be impossible to restore them.',
         additionalContent: (
           <div className="mt-20 flex items-center">
             <IconWallet className="h-12 w-12 me-10" />
             <div className="flex-1 text-14 font-weight-500 text-white/80">
-              {t('modals.deleteStrategy.contents.content2')}
+              All funds will be withdrawn to your wallet
             </div>
           </div>
         ),
-        actionButton: t('modals.deleteStrategy.actionButtons.actionButton1'),
+        actionButton: 'Delete Strategy',
         variant: 'error',
       };
   }

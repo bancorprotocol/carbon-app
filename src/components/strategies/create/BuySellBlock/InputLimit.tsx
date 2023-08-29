@@ -7,7 +7,6 @@ import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { useTranslation } from 'libs/translations';
 
 type InputLimitProps = {
   price: string;
@@ -28,10 +27,8 @@ export const InputLimit: FC<InputLimitProps> = ({
   marketPricePercentage,
   buy = false,
 }) => {
-  const { t } = useTranslation();
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const errorMessage = t('common.errors.error2');
+    const errorMessage = 'Price must be greater than 0';
     +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
 
     if (+e.target.value > 0) {
@@ -67,7 +64,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           value={price}
           onChange={handleChange}
           onFocus={handleFocus}
-          placeholder={t('common.placeholders.placeholder1')}
+          placeholder="Enter Price"
           className={
             'mb-5 w-full bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none'
           }

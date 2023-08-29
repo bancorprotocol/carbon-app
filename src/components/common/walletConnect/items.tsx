@@ -4,37 +4,30 @@ import { ReactComponent as IconWallet3 } from 'assets/icons/wallet-3.svg';
 import { ReactComponent as IconWallet4 } from 'assets/icons/wallet-4.svg';
 import { ReactComponent as IconWallet5 } from 'assets/icons/wallet-5.svg';
 import { ReactComponent as IconWallet6 } from 'assets/icons/wallet-6.svg';
-import { TFunction } from 'libs/translations';
 
-export const getProductDescriptionItems = (
-  t: TFunction<string, undefined, string>
-) => {
-  const items = [
-    {
-      icon: <IconWallet1 className="h-20 w-20 text-green" />,
-      title: t('pages.strategyOverview.noStrategyCard.contents.content1'),
-    },
-    {
-      icon: <IconWallet2 className="h-20 w-20 text-green" />,
-      title: t('pages.strategyOverview.noStrategyCard.contents.content2'),
-    },
-    {
-      icon: <IconWallet3 className="h-20 w-20 text-green" />,
-      title: t('pages.strategyOverview.noStrategyCard.contents.content3'),
-    },
-    {
-      icon: <IconWallet4 className="h-20 w-20 text-green" />,
-      title: t('pages.strategyOverview.noStrategyCard.contents.content4'),
-    },
-    {
-      icon: <IconWallet5 className="h-20 w-20 text-green" />,
-      title: t('pages.strategyOverview.noStrategyCard.contents.content5'),
-    },
-    {
-      icon: <IconWallet6 className="h-20 w-20 text-green" />,
-      title: t('pages.strategyOverview.noStrategyCard.contents.content6'),
-    },
-  ];
-
-  return items;
-};
+export const items = [
+  {
+    icon: <IconWallet1 className="h-20 w-20 text-green" />,
+    title: 'On-chain Limit & Range Orders',
+  },
+  {
+    icon: <IconWallet2 className="h-20 w-20 text-green" />,
+    title: 'Automated and Recurring strategies',
+  },
+  {
+    icon: <IconWallet3 className="h-20 w-20 text-green" />,
+    title: 'Easily Adjustable',
+  },
+  {
+    icon: <IconWallet4 className="h-20 w-20 text-green" />,
+    title: 'Rotating Liquidity',
+  },
+  {
+    icon: <IconWallet5 className="h-20 w-20 text-green" />,
+    title: 'All standard ERC-20 tokens',
+  },
+  {
+    icon: <IconWallet6 className="h-20 w-20 text-green" />,
+    title: 'MEV Resistant',
+  },
+];

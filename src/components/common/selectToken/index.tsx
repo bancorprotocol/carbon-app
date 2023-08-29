@@ -1,6 +1,5 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useTranslation } from 'libs/translations';
 import { Imager } from 'components/common/imager/Imager';
 import { Button, ButtonHTMLProps } from 'components/common/button';
 import { Tooltip } from '../tooltip/Tooltip';
@@ -24,26 +23,25 @@ export const SelectTokenButton: FC<Props> = ({
   isBaseToken,
   ...props
 }) => {
-  const { t } = useTranslation();
   const { belowBreakpoint } = useBreakpoints();
 
-  const tooltipText = useMemo(() => {
+  const getTooltipText = () => {
     if (isBaseToken) {
       return symbol
         ? `${symbol}: ${address}`
-        : t('pages.strategyCreate.step1.tooltips.tooltip1');
+        : 'Select the Base token for the pair';
     }
 
     return symbol
       ? `${symbol}: ${address}`
-      : t('pages.strategyCreate.step1.tooltips.tooltip2');
-  }, [address, isBaseToken, symbol, t]);
+      : 'Select the Quote token for the pair (i.e. when selecting USDC, all rates would be denominated in USDC)';
+  };
 
   return (
     <Tooltip
       disabled={belowBreakpoint('md')}
       maxWidth={430}
-      element={tooltipText}
+      element={getTooltipText()}
       sendEventOnMount={{ buy: undefined }}
     >
       <Button
@@ -57,12 +55,12 @@ export const SelectTokenButton: FC<Props> = ({
             <Imager
               alt={'Token Logo'}
               src={imgUrl}
-              className={'h-24 w-24 rounded-full me-14'}
+              className={'me-14 h-24 w-24 rounded-full'}
             />
           ) : (
             <div
               className={
-                'flex h-24 w-24 items-center justify-center rounded-full bg-black me-14'
+                'me-14 flex h-24 w-24 items-center justify-center rounded-full bg-black'
               }
             >
               <IconPlus className={'h-16 w-16 p-2 text-green'} />
@@ -79,11 +77,7 @@ export const SelectTokenButton: FC<Props> = ({
                   {description}
                 </div>
               )}
-              <div>
-                {symbol
-                  ? symbol
-                  : t('pages.strategyCreate.step1.section1.contents.content3')}
-              </div>
+              <div>{symbol ? symbol : 'Select Token'}</div>
             </div>
           </div>
         </span>

@@ -9,7 +9,6 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
 import { Link } from 'libs/routing';
 import { FOUR_SECONDS_IN_MS } from 'utils/time';
-import { useTranslation } from 'libs/translations';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
@@ -21,13 +20,13 @@ const StatusIcon = (status: NotificationStatus) => {
       );
     case 'success':
       return (
-        <div className="flex flex h-38 w-38 items-center justify-center rounded-full bg-green/10">
+        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-green/10">
           <IconCheck className="w-11 text-green" />
         </div>
       );
     case 'failed':
       return (
-        <div className="flex flex h-38 w-38 items-center justify-center rounded-full bg-red/10">
+        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-red/10">
           <IconTimes className="w-11 text-red" />
         </div>
       );
@@ -60,7 +59,6 @@ export const NotificationLine: FC<{
   notification: Notification;
   isAlert?: boolean;
 }> = ({ notification, isAlert }) => {
-  const { t } = useTranslation();
   const { removeNotification, dismissAlert } = useNotifications();
 
   const handleCloseClick = () => {
@@ -89,8 +87,7 @@ export const NotificationLine: FC<{
               to={getExplorerLink('tx', notification.txHash)}
               className={'mt-10 flex items-center font-weight-500'}
             >
-              {t('modals.notification.content1')}{' '}
-              <IconLink className="w-14 ms-6" />
+              View on Etherscan <IconLink className="ms-6 w-14" />
             </Link>
           )}
         </div>

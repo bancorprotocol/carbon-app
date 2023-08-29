@@ -11,13 +11,12 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import {
   StrategyEditOptionId,
-  getTooltipTextByStrategyEditOptionsId,
+  tooltipTextByStrategyEditOptionsId,
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
-import { useTranslation } from 'libs/translations';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -40,7 +39,6 @@ export const StrategyBlockManage: FC<Props> = ({
   setManage,
   isExplorer,
 }) => {
-  const { t } = useTranslation();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
@@ -61,7 +59,7 @@ export const StrategyBlockManage: FC<Props> = ({
   const items: (itemsType | separatorCounterType)[] = [
     {
       id: 'duplicateStrategy',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title5'),
+      name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick({
           ...strategyEventData,
@@ -72,7 +70,7 @@ export const StrategyBlockManage: FC<Props> = ({
     },
     {
       id: 'manageNotifications',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title8'),
+      name: 'Manage Notifications',
       action: () => {
         carbonEvents.strategyEdit.strategyManageNotificationClick({
           ...strategyEventData,
@@ -86,7 +84,7 @@ export const StrategyBlockManage: FC<Props> = ({
   if (!isExplorer) {
     items.push({
       id: 'editPrices',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title2'),
+      name: 'Edit Rates',
       action: () => {
         setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyChangeRatesClick({
@@ -105,7 +103,7 @@ export const StrategyBlockManage: FC<Props> = ({
 
     items.push({
       id: 'depositFunds',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title3'),
+      name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyDepositClick({
@@ -122,7 +120,7 @@ export const StrategyBlockManage: FC<Props> = ({
     if (strategy.status !== StrategyStatus.NoBudget) {
       items.push({
         id: 'withdrawFunds',
-        name: t('pages.strategyOverview.card.manageStrategy.titles.title4'),
+        name: 'Withdraw Funds',
         action: () => {
           setStrategyToEdit(strategy);
           carbonEvents.strategyEdit.strategyWithdrawClick({
@@ -143,7 +141,7 @@ export const StrategyBlockManage: FC<Props> = ({
     if (strategy.status === StrategyStatus.Active) {
       items.push({
         id: 'pauseStrategy',
-        name: t('pages.strategyOverview.card.manageStrategy.titles.title6'),
+        name: 'Pause Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyPauseClick({
             ...strategyEventData,
@@ -157,7 +155,7 @@ export const StrategyBlockManage: FC<Props> = ({
     if (strategy.status === StrategyStatus.Paused) {
       items.push({
         id: 'renewStrategy',
-        name: t('pages.strategyOverview.card.manageStrategy.titles.title7'),
+        name: 'Renew Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyRenewClick({
             ...strategyEventData,
@@ -174,7 +172,7 @@ export const StrategyBlockManage: FC<Props> = ({
 
     items.push({
       id: 'deleteStrategy',
-      name: t('pages.strategyOverview.card.manageStrategy.titles.title1'),
+      name: 'Delete Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDeleteClick({
           ...strategyEventData,
@@ -197,7 +195,7 @@ export const StrategyBlockManage: FC<Props> = ({
             variant={'success-light'}
             onClick={onClick}
           >
-            {t('pages.strategyOverview.card.actionButtons.actionButton3')}
+            Manage
             <IconChevron className="w-12" />
           </Button>
         </div>
@@ -231,8 +229,7 @@ const ManageItem: FC<{
   setManage: (flag: boolean) => void;
   action?: () => void;
 }> = ({ title, id, setManage, action }) => {
-  const { t } = useTranslation();
-  const tooltipText = getTooltipTextByStrategyEditOptionsId(id, t);
+  const tooltipText = tooltipTextByStrategyEditOptionsId?.[id];
   const { belowBreakpoint } = useBreakpoints();
 
   if (tooltipText) {

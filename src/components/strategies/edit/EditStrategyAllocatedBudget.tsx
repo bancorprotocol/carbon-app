@@ -2,7 +2,6 @@ import { FC, useEffect, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
-import { useTranslation } from 'libs/translations';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Imager } from 'components/common/imager/Imager';
@@ -32,7 +31,6 @@ export const EditStrategyAllocatedBudget: FC<{
   showMaxCb?: () => void;
   type: EditTypes;
 }> = ({ base, quote, balance, order, showMaxCb, type, buy = false }) => {
-  const { t } = useTranslation();
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
@@ -76,13 +74,15 @@ export const EditStrategyAllocatedBudget: FC<{
       <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-start font-mono text-12 font-weight-500">
         <div className="flex items-center justify-between gap-16">
           <div className="flex w-auto items-center gap-6">
-            <div>{t('pages.strategyEdit.section2.contents.content5')}</div>
+            <div>Allocated Budget</div>
             <Tooltip
               sendEventOnMount={{ buy }}
-              iconClassName="h-13 me-6 text-white/60"
-              element={t('pages.strategyEdit.tooltips.tooltip4', {
-                token: buy ? quote?.symbol : base.symbol,
-              })}
+              iconClassName="h-13 mr-6 text-white/60"
+              element={
+                buy
+                  ? `This is the current available ${quote?.symbol} budget you can withdraw`
+                  : `This is the current available ${base?.symbol} budget you can withdraw`
+              }
             />
           </div>
           <div className="flex flex-1 justify-end gap-8">
@@ -121,7 +121,7 @@ export const EditStrategyAllocatedBudget: FC<{
                 onClick={() => showMaxCb()}
                 className="cursor-pointer font-weight-500 text-green"
               >
-                {t('common.contents.content2')}
+                MAX
               </div>
             )}
           </div>
@@ -129,9 +129,7 @@ export const EditStrategyAllocatedBudget: FC<{
         {showDistribute && type !== 'editPrices' && (
           <div className="mt-10 flex justify-between">
             <div className="flex items-center">
-              <span className="me-5">
-                {t('pages.strategyEdit.section2.contents.content6')}
-              </span>
+              <span className="me-5">Distribute Across Entire Range</span>
               <Tooltip
                 iconClassName="h-13 text-white/60"
                 element={
@@ -142,10 +140,11 @@ export const EditStrategyAllocatedBudget: FC<{
                       </div>
                       <div>
                         <div className="text-12 font-weight-500 text-white">
-                          {t('pages.strategyEdit.section2.contents.content6')}
+                          Distribute Across Entire Range
                         </div>
                         <div className="text-10 text-white/60">
-                          {t('pages.strategyEdit.section2.contents.content7')}
+                          The budget is allocated to the entire newly set range
+                          and the asking price is updated.
                         </div>
                       </div>
                     </div>
@@ -155,10 +154,11 @@ export const EditStrategyAllocatedBudget: FC<{
                       </div>
                       <div>
                         <div className="text-12 font-weight-500 text-white">
-                          {t('pages.strategyEdit.section2.contents.content9')}
+                          Distribute To Unused Range
                         </div>
                         <div className="text-10 text-white/60">
-                          {t('pages.strategyEdit.section2.contents.content10')}
+                          Price remains the same as it was. The budget is not
+                          allocated to the new range.
                         </div>
                       </div>
                     </div>
@@ -185,9 +185,11 @@ export const EditStrategyAllocatedBudget: FC<{
         <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-start  text-12 text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"
-            element={t('pages.strategyEdit.tooltips.tooltip3')}
+            element={
+              'When updating the rates, the allocated budget will be distributed equally across the entire range'
+            }
           />
-          {t('pages.strategyEdit.section2.contents.content11')}
+          Strategy budget will be distribute across entire range
         </div>
       )}
     </>

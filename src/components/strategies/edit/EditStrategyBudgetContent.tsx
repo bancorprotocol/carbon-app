@@ -14,7 +14,6 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
-import { useTranslation } from 'libs/translations';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -27,7 +26,6 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
-  const { t } = useTranslation();
   const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
     useUpdateStrategy();
 
@@ -109,7 +107,7 @@ export const EditStrategyBudgetContent = ({
         openModal('txConfirm', {
           approvalTokens: approval.tokens,
           onConfirm: depositOrWithdrawFunds,
-          buttonLabel: t('pages.strategyEdit.actionButtons.actionButton5'),
+          buttonLabel: `Confirm Deposit`,
           eventData: {
             ...strategyEventData,
             productType: 'strategy',
@@ -161,11 +159,11 @@ export const EditStrategyBudgetContent = ({
   }, [order0.budget, order1.budget]);
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
-  }, [isAwaiting, isProcessing, t]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
-    <div className="flex w-full flex-col items-center space-y-20 space-y-20 text-center font-weight-500 md:w-[400px]">
+    <div className="flex w-full flex-col items-center space-y-20 text-center font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyBudgetBuySellBlock
         buy
@@ -194,9 +192,7 @@ export const EditStrategyBudgetContent = ({
         size="lg"
         fullWidth
       >
-        {type === 'withdraw'
-          ? t('pages.strategyEdit.actionButtons.actionButton4')
-          : t('pages.strategyEdit.actionButtons.actionButton5')}
+        {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>
       <Button
         onClick={() => back()}
@@ -206,7 +202,7 @@ export const EditStrategyBudgetContent = ({
         size="lg"
         fullWidth
       >
-        {t('pages.strategyEdit.actionButtons.actionButton1')}
+        Cancel
       </Button>
     </div>
   );

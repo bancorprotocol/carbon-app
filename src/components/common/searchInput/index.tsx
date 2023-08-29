@@ -1,5 +1,4 @@
 import { KeyboardEventHandler } from 'react';
-import { useTranslation } from 'libs/translations';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 
@@ -21,8 +20,6 @@ export const SearchInput = ({
   autoFocus,
   onKeyDown,
 }: Props) => {
-  const { t } = useTranslation();
-
   return (
     <div className="relative">
       <IconSearch className="text-graphite dark:text-white-disabled absolute w-16 ms-14" />
@@ -40,7 +37,7 @@ export const SearchInput = ({
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder={t('common.placeholders.placeholder4')}
+        placeholder="Search"
         onKeyDown={onKeyDown}
         className={`${defaultClassName} ${className}`}
       />

@@ -1,13 +1,11 @@
 import { Button } from 'components/common/button';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { Link, PathNames, useLocation } from 'libs/routing';
-import { useTranslation } from 'libs/translations';
 import { carbonEvents } from 'services/events';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { cn, isPathnameMatch } from 'utils/helpers';
 
 export const CreateStrategyCTA = () => {
-  const { t } = useTranslation();
   const { belowBreakpoint } = useBreakpoints();
 
   return (
@@ -23,7 +21,7 @@ export const CreateStrategyCTA = () => {
         {belowBreakpoint('md') ? (
           <IconPlus className={'h-14 w-14'} />
         ) : (
-          t('pages.strategyOverview.header.actionButtons.actionButton1')
+          'Create Strategy'
         )}
       </Button>
     </Link>

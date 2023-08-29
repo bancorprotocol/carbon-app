@@ -1,4 +1,3 @@
-import { TFunction } from 'libs/translations';
 import { OrderCreate } from './create/useOrder';
 
 export const checkIfOrdersOverlap = (
@@ -18,14 +17,13 @@ export const checkIfOrdersOverlap = (
 
 export const getStatusTextByTxStatus = (
   isAwaiting: boolean,
-  isProcessing: boolean,
-  t: TFunction<string, undefined, string>
+  isProcessing: boolean
 ): string | undefined => {
   if (isAwaiting) {
-    return t('common.statuses.status1');
+    return 'Waiting for Confirmation';
   }
   if (isProcessing) {
-    return t('common.statuses.status2');
+    return 'Processing';
   }
 
   return undefined;

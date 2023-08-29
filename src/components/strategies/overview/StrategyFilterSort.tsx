@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useTranslation } from 'libs/translations';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { getSortAndFilterItems } from './utils';
@@ -27,7 +26,6 @@ export const StrategyFilterSort: FC<{
   setSort: (sort: StrategySort) => void;
   setFilter: (sort: StrategyFilter) => void;
 }> = ({ sort, filter, setSort, setFilter }) => {
-  const { t } = useTranslation();
   const { sortItems, filterItems } = getSortAndFilterItems(t);
 
   return (
@@ -38,15 +36,12 @@ export const StrategyFilterSort: FC<{
           variant="secondary"
           className="flex items-center gap-10"
         >
-          {t('pages.strategyOverview.header.actionButtons.actionButton2')}{' '}
-          <IconChevron className="w-14" />
+          Filter & Sort <IconChevron className="w-14" />
         </Button>
       )}
     >
       <div className="grid w-[300px] gap-20 p-10">
-        <div className="text-secondary text-20">
-          {t('pages.strategyOverview.header.filterMenu.subtitles.subtitle1')}
-        </div>
+        <div className="text-secondary text-20">Sort By</div>
         <>
           {sortItems.map((sortItem) => (
             <FilterSortItem
@@ -60,9 +55,7 @@ export const StrategyFilterSort: FC<{
         </>
 
         <hr className="border-2 border-silver dark:border-emphasis" />
-        <div className="text-secondary">
-          {t('pages.strategyOverview.header.filterMenu.subtitles.subtitle2')}
-        </div>
+        <div className="text-secondary">View</div>
 
         <>
           {filterItems.map((filterItem) => (

@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
-import { useTranslation } from 'libs/translations';
 import { UseQueryResult } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import useInitEffect from 'hooks/useInitEffect';
@@ -24,7 +23,6 @@ export type TradeWidgetBuySellProps = {
 };
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
-  const { t } = useTranslation();
   const { user } = useWeb3();
   const {
     sourceInput,
@@ -75,7 +73,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         buy,
         buyToken: target,
         sellToken: source,
-        message: t('pages.trade.errors.error3'),
+        message: 'No Liquidity Available',
       });
   }, [
     buy,
@@ -133,20 +131,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   const ctaButtonText = useMemo(() => {
     if (user) {
-      return buy
-        ? t('pages.trade.section2.actionButtons.actionButton3', {
-            token: target.symbol,
-          })
-        : t('pages.trade.section2.actionButtons.actionButton4', {
-            token: source.symbol,
-          });
+      return buy ? `Buy ${target.symbol}` : `Sell ${source.symbol}`;
     }
 
-    return t('common.actionButtons.actionButton1');
-  }, [buy, source.symbol, t, target.symbol, user]);
+    return 'Connect Wallet';
+  }, [buy, source.symbol, target.symbol, user]);
 
-  if (liquidityQuery?.isError)
-    return <div>{t('pages.trade.errors.error2')}</div>;
+  if (liquidityQuery?.isError) return <div>Error</div>;
+
   if (!source || !target) return null;
 
   const slippage = calcSlippage();
@@ -177,19 +169,11 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     <div className={`flex flex-col rounded-12 bg-silver p-20`}>
       <h2 className={'mb-20'}>
         {buy
-          ? t('pages.trade.section2.titles.title1', {
-              baseToken: target.symbol,
-              quoteToken: source.symbol,
-            })
-          : t('pages.trade.section2.titles.title2', {
-              baseToken: source.symbol,
-              quoteToken: target.symbol,
-            })}
+          ? `Buy ${target.symbol} with ${source.symbol}`
+          : `Sell ${source.symbol} for ${target.symbol}`}
       </h2>
       <div className={'flex justify-between text-14'}>
-        <div className={'text-white/50'}>
-          {t('pages.trade.section2.subtitles.subtitle1')}
-        </div>
+        <div className={'text-white/50'}>You pay</div>
         {errorMsgSource && (
           <div className={`font-weight-500 text-red`}>{errorMsgSource}</div>
         )}
@@ -211,9 +195,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             disabled={!hasEnoughLiquidity}
           />
           <div className={'flex justify-between text-14'}>
-            <div className={'text-white/50'}>
-              {t('pages.trade.section2.subtitles.subtitle2')}
-            </div>
+            <div className={'text-white/50'}>You receive</div>
             {errorMsgTarget && (
               <div
                 className={`cursor-pointer font-weight-500 text-red`}
@@ -233,7 +215,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             setValue={(value) => {
               setTargetInput(value);
             }}
-            placeholder={t('common.placeholders.placeholder3')}
+            placeholder={'Total Amount'}
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}
@@ -250,26 +232,22 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               <button
                 onClick={openTradeRouteModal}
                 className={
-                  'flex hidden text-start space-s-10 hover:text-white md:flex'
+                  'space-s-10 flex hidden text-start hover:text-white md:flex'
                 }
               >
                 <IconRouting className={'w-12'} />
                 <Tooltip
                   placement={'left'}
-                  element={t('pages.trade.section2.tooltips.tooltip1')}
+                  element="You can view and manage the orders that are included in the trade."
                 >
-                  <span>
-                    {t('pages.trade.section2.actionButtons.actionButton5')}
-                  </span>
+                  <span>Routing</span>
                 </Tooltip>
               </button>
             )}
           </div>
           {IS_TENDERLY_FORK && (
             <div className={'text-secondary mt-5 text-end'}>
-              {t('pages.trade.section2.contents.content1', {
-                num: getLiquidity(),
-              })}
+              DEBUG: {getLiquidity()}
             </div>
           )}
         </>
@@ -282,7 +260,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       <Button
         disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
         loading={isAwaiting}
-        loadingChildren={t('common.statuses.status1')}
+        loadingChildren={'Waiting for Confirmation'}
         onClick={handleTradeClick}
         variant={buy ? 'success' : 'error'}
         fullWidth

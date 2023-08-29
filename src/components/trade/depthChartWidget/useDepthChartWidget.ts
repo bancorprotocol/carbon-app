@@ -4,10 +4,8 @@ import { useStore } from 'store';
 import { Options } from 'libs/charts';
 import { OrderRow, useGetOrderBook } from 'libs/queries';
 import { Token } from 'libs/tokens';
-import { useTranslation } from 'libs/translations';
 
 export const useDepthChartWidget = (base?: Token, quote?: Token) => {
-  const { t } = useTranslation();
   const {
     orderBook: {
       settings: { steps, depthChartBuckets },
@@ -157,11 +155,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
         },
         tooltip: {
           headerFormat: ' ',
-          pointFormat: `${t(
-            'pages.trade.section3.tooltips.tooltip1'
-          )} {point.y} ${base?.symbol}<br/>${t(
-            'pages.trade.section3.tooltips.tooltip2'
-          )} {point.x} ${quote?.symbol}`,
+          pointFormat: `Amount: {point.y} ${base?.symbol}<br/>Price: {point.x} ${quote?.symbol}`,
           valueDecimals: undefined,
           borderRadius: 12,
           backgroundColor: '#212123',
