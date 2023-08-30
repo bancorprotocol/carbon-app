@@ -82,7 +82,7 @@ export const StrategyBlockBuySell: FC<{
           <div className="flex items-center gap-6">
             {buy ? 'Buy' : 'Sell'}
             <Imager
-              className="h-16 w-16"
+              className="h-16 w-16 rounded-full"
               src={buy ? token.logoURI : otherToken.logoURI}
               alt="token"
             />
@@ -151,7 +151,7 @@ export const StrategyBlockBuySell: FC<{
               <div className="flex items-center gap-7">
                 {prettifiedBudget}
                 <Imager
-                  className="h-16 w-16"
+                  className="h-16 w-16 rounded-full"
                   src={otherToken.logoURI}
                   alt="token"
                 />
