@@ -13,7 +13,11 @@ export const ModalTradeRoutingRowCell: FC<{
   return (
     <div>
       <div className={'flex items-center space-x-8 '}>
-        <Imager src={logoURI} alt={'Token Logo'} className={'w-14'} />
+        <Imager
+          src={logoURI}
+          alt={'Token Logo'}
+          className={'w-14 rounded-full'}
+        />
         <span className={'font-mono text-14 font-weight-500'}>
           {prettifyNumber(amount)}
         </span>
