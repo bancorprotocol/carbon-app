@@ -23,7 +23,7 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
         <Imager
           alt={'Token Logo'}
           src={data.token.logoURI}
-          className={'mr-10 h-24 w-24'}
+          className={'mr-10 h-24 w-24 rounded-full'}
         />
         {data.token.symbol}
       </div>
