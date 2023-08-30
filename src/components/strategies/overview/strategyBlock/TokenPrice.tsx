@@ -9,7 +9,9 @@ export const TokenPrice: FC<{
   return (
     <div className={`flex items-center gap-7 ${className}`}>
       {price}
-      {iconSrc && <Imager className="h-16 w-16" src={iconSrc} alt="token" />}
+      {iconSrc && (
+        <Imager className="h-16 w-16 rounded-full" src={iconSrc} alt="token" />
+      )}
     </div>
   );
 };
