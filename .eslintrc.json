@@ -13,8 +13,7 @@
   "extends": [
     "react-app",
     "prettier",
-    "plugin:prettier/recommended",
-    "plugin:i18next/recommended"
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": 0,

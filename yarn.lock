@@ -1155,10 +1155,10 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
-"@bancor/carbon-sdk@^0.0.79-DEV":
-  version "0.0.79-DEV"
-  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.79-DEV.tgz#168fddc1239c82927a2384b0a88276bf1d79ebb4"
-  integrity sha512-1039lqroQQejnSuvIJkf2Y0nbG6kthngXr+wjzDHijH9Ie0x4P/2BllAIhlGMpY3m3MP3ScA7Sb/sFVG1oYUcQ==
+"@bancor/carbon-sdk@^0.0.84-DEV":
+  version "0.0.84-DEV"
+  resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.84-DEV.tgz#3a3ae5d5524661726ad2d5f503dc4e69866f4700"
+  integrity sha512-AKXsGOR77I2++FW//hMLFf3Fv7L7ES52pmMUylskluoKxxr6AZgXo//L2dzyff1JxxsP3Zhjj7L+O78qwNS4Bw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
@@ -6760,6 +6760,15 @@ postcss@^8.4.14, postcss@^8.4.18, postcss@^8.4.26:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+postcss@^8.4.27:
+  version "8.4.28"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.28.tgz#c6cc681ed00109072816e1557f889ef51cf950a5"
+  integrity sha512-Z7V5j0cq8oEKyejIKfpD8b4eBy9cwW2JWPk0+fB1HOAMsfHbnAXLLS+PfVWlzMSLQaWttKDt607I0XHmpE67Vw==
+  dependencies:
+    nanoid "^3.3.6"
+    picocolors "^1.0.0"
+    source-map-js "^1.0.2"
+
 preact@^10.5.9:
   version "10.16.0"
   resolved "https://registry.yarnpkg.com/preact/-/preact-10.16.0.tgz#68a06d70b191b8a313ea722d61e09c6b2a79a37e"
@@ -7156,6 +7165,13 @@ rollup@^3.25.2:
   version "3.27.2"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.27.2.tgz#59adc973504408289be89e5978e938ce852c9520"
   integrity sha512-YGwmHf7h2oUHkVBT248x0yt6vZkYQ3/rvE5iQuVBh3WO8GcJ6BNeOkpoX1yMHIiBm18EMLjBPIoUDkhgnyxGOQ==
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+rollup@^3.27.1:
+  version "3.28.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.28.1.tgz#fb44aa6d5e65c7e13fd5bcfff266d0c4ea9ba433"
+  integrity sha512-R9OMQmIHJm9znrU3m3cpE8uhN0fGdXiawME7aZIpQqvpS/85+Vt1Hq1/yVIcYfOmaQiHjvXkQAoJukvLpau6Yw==
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -8030,7 +8046,7 @@ vite-tsconfig-paths@^4.2.0:
     globrex "^0.1.2"
     tsconfck "^2.1.0"
 
-"vite@^3.0.0 || ^4.0.0", vite@^4.2.3:
+"vite@^3.0.0 || ^4.0.0":
   version "4.4.8"
   resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.8.tgz#31e4a438f8748695c68bd57ffd262ba93540fdf7"
   integrity sha512-LONawOUUjxQridNWGQlNizfKH89qPigK36XhMI7COMGztz8KNY0JHim7/xDd71CZwGT4HtSRgI7Hy+RlhG0Gvg==
@@ -8038,6 +8054,17 @@ vite-tsconfig-paths@^4.2.0:
     esbuild "^0.18.10"
     postcss "^8.4.26"
     rollup "^3.25.2"
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+vite@^4.4.9:
+  version "4.4.9"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.9.tgz#1402423f1a2f8d66fd8d15e351127c7236d29d3d"
+  integrity sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==
+  dependencies:
+    esbuild "^0.18.10"
+    postcss "^8.4.27"
+    rollup "^3.27.1"
   optionalDependencies:
     fsevents "~2.3.2"
 

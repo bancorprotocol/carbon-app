@@ -5,17 +5,17 @@ import {
 } from 'components/strategies/portfolio/utils';
 import { FC, useMemo } from 'react';
 import { createColumnHelper, Table } from 'libs/table';
-import { CellContext } from '@tanstack/react-table';
+import { CellContext, Row } from '@tanstack/react-table';
 import { Token } from 'libs/tokens';
 import { useStore } from 'store';
 import { cn, getFiatDisplayValue } from 'utils/helpers';
 import { Imager } from 'components/common/imager/Imager';
 import { getColorByIndex } from 'utils/colorPalettes';
-import { PathNames, useNavigate } from 'libs/routing';
 
 type Props = {
   data: PortfolioData[];
   isLoading: boolean;
+  onRowClick: (row: Row<PortfolioData>) => void;
 };
 
 const columnHelper = createColumnHelper<PortfolioData>();
@@ -42,9 +42,11 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
   );
 };
 
-export const PortfolioAllTokensDesktop: FC<Props> = ({ data, isLoading }) => {
-  const navigate = useNavigate();
-
+export const PortfolioAllTokensDesktop: FC<Props> = ({
+  data,
+  isLoading,
+  onRowClick,
+}) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
@@ -77,9 +79,7 @@ export const PortfolioAllTokensDesktop: FC<Props> = ({ data, isLoading }) => {
     <Table<PortfolioData>
       columns={tableColumns}
       data={data}
-      onRowClick={(row) =>
-        navigate({ to: PathNames.portfolioToken(row.original.token.address) })
-      }
+      onRowClick={onRowClick}
       manualSorting
       isLoading={isLoading}
     />

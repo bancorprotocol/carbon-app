@@ -52,24 +52,24 @@ export const usePortfolioTokenPieChart = (
             '<div class="p-10 text-14 text-white !font-weight-500 space-y-12 w-[230px]">' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">ID</span>' +
-            data[this.colorIndex].strategy.idDisplay +
+            data[this.point.index].strategy.idDisplay +
             '</div>' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">Pair</span>' +
-            buildPairNameByStrategy(data[this.colorIndex].strategy) +
+            buildPairNameByStrategy(data[this.point.index].strategy) +
             '</div>' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">Share</span>' +
-            buildPercentageString(data[this.colorIndex].share) +
+            buildPercentageString(data[this.point.index].share) +
             '</div>' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">Amount</span>' +
-            buildAmountString(data[this.colorIndex].amount, token) +
+            buildAmountString(data[this.point.index].amount, token) +
             '</div>' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">Value</span>' +
             getFiatDisplayValue(
-              data[this.colorIndex].value,
+              data[this.point.index].value,
               selectedFiatCurrency
             ) +
             '</div>' +
@@ -91,6 +91,7 @@ export const usePortfolioTokenPieChart = (
             y: item.share.toNumber(),
             color: getColorByIndex(i),
             borderColor: '#161617',
+            index: i,
           })),
         },
       ],

@@ -5,7 +5,7 @@ import { useTranslation } from 'libs/translations';
 import { SUPPORTED_LANGUAGES } from 'libs/translations/i18n';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
-import { ReactComponent as IconTwitter } from 'assets/logos/twitter.svg';
+import { ReactComponent as IconX } from 'assets/logos/x.svg';
 import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
@@ -90,10 +90,10 @@ export const useBurgerMenuItems = () => {
       content: (
         <div className="flex w-full items-center justify-between">
           <Link
-            to={externalLinks.twitter}
+            to={externalLinks.x}
             className="rounded-6 p-6 md:hover:bg-black"
           >
-            <IconTwitter className={iconStyles} />
+            <IconX className={iconStyles} />
           </Link>
           <Link
             to={externalLinks.youtube}
@@ -186,8 +186,15 @@ export const useBurgerMenuItems = () => {
     },
     {
       content: (
-        <Link to={externalLinks.interactiveSim}>
+        <Link className="flex" to={externalLinks.interactiveSim}>
           {t('navBar.burgerMenu.items.item13')}
+        </Link>
+      ),
+    },
+    {
+      content: (
+        <Link className="flex" to={externalLinks.duneDashboard}>
+          {t('navBar.burgerMenu.items.item14')}
         </Link>
       ),
     },

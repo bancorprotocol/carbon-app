@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.0.0-0",
-    "@bancor/carbon-sdk": "^0.0.79-DEV",
+    "@bancor/carbon-sdk": "^0.0.84-DEV",
     "@cloudflare/workers-types": "^4.20230717.0",
     "@coinbase/wallet-sdk": "^3.6.3",
     "@ethersproject/abi": "^5.0.0",
@@ -85,7 +85,7 @@
     "typescript": "^4.4.2",
     "ua-parser-js": "^1.0.35",
     "use-async-effect": "^2.2.7",
-    "vite": "^4.2.3",
+    "vite": "^4.4.9",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.29.8",

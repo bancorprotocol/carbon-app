@@ -1,4 +1,4 @@
-import { CreateStrategyCTA } from 'components/strategies/create/CreateStrategyCTA';
+import { CreateStrategyCTAMobile } from 'components/strategies/create/CreateStrategyCTA';
 import { useEffect } from 'react';
 import { NotificationAlerts } from 'libs/notifications';
 import { ModalProvider } from 'libs/modals';
@@ -6,7 +6,6 @@ import { useCarbonInit } from 'hooks/useCarbonInit';
 import { MainMenu, MobileMenu } from 'components/core/menu';
 import { MainContent } from 'components/core/MainContent';
 import { useStore } from 'store';
-import { cn } from 'utils/helpers';
 
 let didInit = false;
 
@@ -34,14 +33,12 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className={'flex w-full flex-grow flex-col'}>
+      <main className={'my-80 flex w-full flex-grow flex-col'}>
         <MainContent />
       </main>
       <MobileMenu />
       <ModalProvider />
-      <div className={cn('fixed', 'bottom-100', 'right-30', 'md:hidden')}>
-        <CreateStrategyCTA />
-      </div>
+      <CreateStrategyCTAMobile />
     </>
   );
 };

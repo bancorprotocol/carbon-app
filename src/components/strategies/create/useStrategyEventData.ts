@@ -1,10 +1,10 @@
-import { useSearch } from '@tanstack/react-location';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { StrategyCreateLocationGenerics } from './types';
 import { OrderCreate } from './useOrder';
+import { useSearch } from 'libs/routing';
 
 export const useStrategyEventData = ({
   base,

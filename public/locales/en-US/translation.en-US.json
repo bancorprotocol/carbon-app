@@ -221,7 +221,8 @@
         "item10": "Litepaper",
         "item11": "Whitepaper",
         "item12": "Simulator Repo",
-        "item13": "Interactive Simulator"
+        "item13": "Interactive Simulator",
+        "item14": "Dune Dashboard"
       }
     },
     "walletMenu": {
@@ -347,7 +348,7 @@
             "item4": "Pair (Z->A)",
             "item5": "All",
             "item6": "Active",
-            "item7": "inactive"
+            "item7": "Inactive"
           },
           "subtitles": {
             "subtitle1": "Sort By",

@@ -253,7 +253,7 @@ export const isPathnameMatch = (
   href: string,
   hrefMatches: string[]
 ) => {
-  if (current === '/' && href === '/') {
+  if (current === href) {
     return true;
   }
 
