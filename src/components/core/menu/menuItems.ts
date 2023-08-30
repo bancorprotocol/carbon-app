@@ -9,7 +9,7 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   {
-    label: 'Strategies',
+    label: 'My Strategies',
     href: PathNames.strategies,
     hrefMatches: [
       PathNames.strategies,
