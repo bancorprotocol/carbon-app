@@ -3,7 +3,7 @@ import { useSetUserApproval } from 'libs/queries/chain/approval';
 import { Button } from 'components/common/button';
 import { Switch } from 'components/common/switch';
 import { ApprovalTokenResult } from 'hooks/useApproval';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
@@ -172,10 +172,10 @@ export const ApproveToken: FC<Props> = ({
       >
         <div className={'space-y-6'}>
           <div className={'flex items-center space-x-10'}>
-            <Imager
+            <LogoImager
               alt={'Token'}
               src={token.logoURI}
-              className={'h-30 w-30 rounded-full'}
+              className={'h-30 w-30'}
             />
             <div className={'font-weight-500'}>{token.symbol}</div>
           </div>

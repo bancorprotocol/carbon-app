@@ -4,7 +4,7 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPrice';
@@ -109,8 +109,8 @@ export const EditStrategyAllocatedBudget: FC<{
                     )}
                   </span>
                 )}
-                <Imager
-                  className="ml-10 h-16 w-16 rounded-full"
+                <LogoImager
+                  className="ml-10 h-16 w-16"
                   src={buy ? quote?.logoURI : base?.logoURI}
                   alt="token"
                 />

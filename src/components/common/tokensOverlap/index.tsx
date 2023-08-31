@@ -1,5 +1,5 @@
 import { Token } from 'libs/tokens';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 
 export const TokensOverlap = ({
   tokens,
@@ -14,11 +14,11 @@ export const TokensOverlap = ({
   return (
     <div className="flex">
       {tokens.slice(0, maxLogos).map((token, idx) => (
-        <Imager
+        <LogoImager
           key={token.symbol + idx}
           src={token.logoURI}
           alt="Token Logo"
-          className={`${className} !rounded-full border border-fog bg-fog dark:border-black dark:bg-black`}
+          className={`${className} border border-fog bg-fog dark:border-black dark:bg-black`}
           style={{
             marginLeft: tokens.length > 1 ? `${'-10'}px` : '0px',
           }}

@@ -1,4 +1,4 @@
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { Link } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
@@ -42,10 +42,10 @@ export const PortfolioTokenHeader: FC<Props> = ({
       >
         <IconBack className={'h-10'} />
       </Link>
-      <Imager
+      <LogoImager
         alt={'Token Logo'}
         src={logoURI}
-        className={'mx-16 h-32 w-32 rounded-full'}
+        className={'mx-16 h-32 w-32'}
       />
       <span>{symbol ?? 'N/A'}</span>
     </div>

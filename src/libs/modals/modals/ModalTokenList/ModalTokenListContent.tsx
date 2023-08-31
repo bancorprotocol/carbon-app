@@ -1,4 +1,4 @@
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
@@ -110,10 +110,10 @@ export const ModalTokenListContent: FC<Props> = ({
                     className="flex w-full items-center"
                     style={{ height: `${virtualRow.size}px` }}
                   >
-                    <Imager
+                    <LogoImager
                       src={token.logoURI}
                       alt={`${token.symbol} Token`}
-                      className="h-32 w-32 !rounded-full"
+                      className="h-32 w-32"
                     />
                     <div className="ml-15 grid justify-items-start">
                       <div className="flex">

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { Button, ButtonHTMLProps } from 'components/common/button';
 import { Tooltip } from '../tooltip/Tooltip';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
@@ -52,10 +52,10 @@ export const SelectTokenButton: FC<Props> = ({
       >
         <span className={'flex items-center text-16 font-weight-500'}>
           {symbol ? (
-            <Imager
+            <LogoImager
               alt={'Token Logo'}
               src={imgUrl}
-              className={'mr-14 h-24 w-24 rounded-full'}
+              className={'mr-14 h-24 w-24'}
             />
           ) : (
             <div

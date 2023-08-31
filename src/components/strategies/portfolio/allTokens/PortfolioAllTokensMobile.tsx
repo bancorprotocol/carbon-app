@@ -1,4 +1,4 @@
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import {
   buildAmountString,
@@ -37,10 +37,10 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
         : data.map((value, i) => (
             <PortfolioMobileCard key={i} index={i} href={getHref(value)}>
               <div className={cn('flex', 'items-center', 'text-18')}>
-                <Imager
+                <LogoImager
                   src={value.token.logoURI}
                   alt={'Token Logo'}
-                  className={cn('w-36', 'h-36', 'rounded-full', 'mr-10')}
+                  className={cn('w-36', 'h-36', 'mr-10')}
                 />
                 {value.token.symbol}
               </div>

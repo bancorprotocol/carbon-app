@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
@@ -94,10 +94,10 @@ export const TokenInputField: FC<Props> = ({
     >
       <div className={`flex items-center justify-between`}>
         <div className={'mr-10 flex flex-none items-center'}>
-          <Imager
+          <LogoImager
             alt={'Token'}
             src={token.logoURI}
-            className={'mr-10 h-30 w-30 rounded-full'}
+            className={'mr-10 h-30 w-30'}
           />
           <span className={'font-weight-500'}>{token.symbol}</span>
         </div>

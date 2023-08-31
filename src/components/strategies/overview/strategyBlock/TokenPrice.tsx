@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 
 export const TokenPrice: FC<{
   price: string;
@@ -10,7 +10,7 @@ export const TokenPrice: FC<{
     <div className={`flex items-center gap-7 ${className}`}>
       {price}
       {iconSrc && (
-        <Imager className="h-16 w-16 rounded-full" src={iconSrc} alt="token" />
+        <LogoImager className="h-16 w-16" src={iconSrc} alt="token" />
       )}
     </div>
   );

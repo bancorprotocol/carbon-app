@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { ReactComponent as IconArrow } from 'assets/icons/arrow.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { shortenString } from 'utils/helpers';
@@ -33,11 +33,7 @@ export const SelectTokens: FC<Props> = ({
           'bg-body -mr-13 flex w-[140px] flex-grow items-center rounded-12 py-10 px-18'
         }
       >
-        <Imager
-          alt={''}
-          src={imgUrl0}
-          className={'mr-8 h-30 w-30 rounded-full'}
-        />
+        <LogoImager alt={''} src={imgUrl0} className={'mr-8 h-30 w-30'} />
         <div className={'mr-auto text-16 font-weight-500'}>
           {symbol0 ? shortenString(symbol0, '...', 5) : 'Select'}
         </div>
@@ -58,7 +54,7 @@ export const SelectTokens: FC<Props> = ({
           'bg-body -ml-13 flex w-[140px] flex-grow items-center rounded-12 py-10 px-18'
         }
       >
-        <Imager
+        <LogoImager
           alt={''}
           src={imgUrl1}
           className={'mr-8 h-30 w-30 rounded-full'}
