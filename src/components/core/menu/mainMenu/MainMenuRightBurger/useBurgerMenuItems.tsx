@@ -25,7 +25,7 @@ const iconStyles = 'h-32 w-32 md:h-20 md:w-20';
 export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
     useFiatCurrency();
-  const menuMap = useMemo(() => new Map<MenuType, Menu>(), []);
+  const menuMap = new Map<MenuType, Menu>();
 
   const mainItems: MenuItemType[] = [
     {
