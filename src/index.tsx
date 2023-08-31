@@ -1,6 +1,6 @@
 import 'global-shim';
 import 'init-sentry';
-import React, { Suspense } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { App } from 'App';
@@ -9,7 +9,6 @@ import { Web3ReactWrapper } from 'libs/web3';
 import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
-import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
@@ -25,17 +24,7 @@ root.render(
         <Web3ReactWrapper>
           <LazyMotion>
             <Router>
-              <Suspense
-                fallback={
-                  <div className={'flex h-screen items-center justify-center'}>
-                    <div className="h-80">
-                      <CarbonLogoLoading />
-                    </div>
-                  </div>
-                }
-              >
-                <App />
-              </Suspense>
+              <App />
             </Router>
           </LazyMotion>
         </Web3ReactWrapper>
