@@ -19,6 +19,7 @@ import { StrategiesPortfolioTokenPage } from 'pages/strategies/portfolio/token';
 
 export const externalLinks = {
   blog: 'http://blog.carbondefi.xyz',
+  coingecko: 'https://www.coingecko.com/en/exchanges/carbon',
   faq: 'https://faq.carbondefi.xyz/',
   analytics: 'http://analytics.carbondefi.xyz',
   x: 'https://x.com/carbondefixyz',

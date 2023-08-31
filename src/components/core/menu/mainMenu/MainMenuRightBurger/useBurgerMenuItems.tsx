@@ -59,6 +59,13 @@ export const useBurgerMenuItems = () => {
     },
     {
       content: (
+        <Link className="flex" to={externalLinks.coingecko}>
+          Carbon on Coingecko
+        </Link>
+      ),
+    },
+    {
+      content: (
         <Link className="flex" to={PathNames.terms}>
           Terms of Use
         </Link>
