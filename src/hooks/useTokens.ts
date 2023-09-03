@@ -11,7 +11,7 @@ export const useTokens = () => {
   } = useStore();
 
   const getTokenById = useCallback(
-    (id: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
+    (id?: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
     [tokensMap]
   );
 
