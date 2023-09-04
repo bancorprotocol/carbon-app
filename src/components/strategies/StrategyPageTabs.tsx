@@ -17,7 +17,8 @@ interface Props {
 
 export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
   return (
-    <div
+    <nav
+      aria-label="Strategy Panels"
       className={cn(
         'h-40',
         'w-full md:w-auto',
@@ -30,7 +31,12 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
       )}
     >
       {tabs.map(({ label, href, icon, badge, hrefMatches }) => (
-        <Link to={href} key={href} className={'w-full'}>
+        <Link
+          to={href}
+          key={href}
+          className={'w-full'}
+          aria-current={href === currentPathname ? 'location' : 'false'}
+        >
           <Button
             variant={
               isPathnameMatch(currentPathname, href, hrefMatches)
@@ -61,6 +67,6 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
           </Button>
         </Link>
       ))}
-    </div>
+    </nav>
   );
 };
