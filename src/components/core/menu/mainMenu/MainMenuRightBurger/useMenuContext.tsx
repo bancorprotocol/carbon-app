@@ -61,6 +61,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
                   item.onClick = () => {
                     originalClick && originalClick();
                     setMenuContext(updatedStack.pop());
+                    closeMenu();
                   };
                 } else {
                   item.onClick = () => {
