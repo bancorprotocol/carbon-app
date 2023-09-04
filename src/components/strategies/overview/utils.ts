@@ -29,6 +29,11 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
         }
         return b.quote.symbol.localeCompare(a.quote.symbol);
       };
+    case StrategySort.RoiAscending:
+      return (a: Strategy, b: Strategy) => a.roi.minus(b.roi).toNumber();
+    case StrategySort.RoiDescending:
+      return (a: Strategy, b: Strategy) =>
+        a.roi.minus(b.roi).times(-1).toNumber();
     default:
       return (a: Strategy, b: Strategy) =>
         new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
@@ -53,6 +58,14 @@ export const getSortAndFilterItems = (
     {
       title: t('pages.strategyOverview.header.filterMenu.items.item4'),
       item: StrategySort.PairDescending,
+    },
+    {
+      title: 'ROI (Ascending)',
+      item: StrategySort.RoiAscending,
+    },
+    {
+      title: 'ROI (Descending)',
+      item: StrategySort.RoiDescending,
     },
   ];
 

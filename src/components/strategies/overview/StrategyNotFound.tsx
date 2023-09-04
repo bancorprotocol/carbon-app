@@ -5,7 +5,7 @@ export const StrategyNotFound = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex h-screen items-center justify-center p-20">
+    <div className="flex flex-grow items-center justify-center p-20">
       <div className=" w-[209px] text-center font-weight-500">
         <div className="mx-auto mb-32 w-80 rounded-full bg-silver p-16">
           <IconEllipse />

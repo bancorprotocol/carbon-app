@@ -1,9 +1,15 @@
+import { ExplorerRouteGenerics } from 'components/explorer';
 import { DebugPage } from 'pages/debug';
+import { ExplorerPage } from 'pages/explorer';
+import { ExplorerTypePage } from 'pages/explorer/type';
+import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
+import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
+import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
 import { TermsPage } from 'pages/terms';
-import { Outlet, Route } from '@tanstack/react-location';
+import { Navigate, Outlet, Route } from '@tanstack/react-location';
 import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
@@ -32,6 +38,21 @@ export const PathNames = {
   strategies: '/',
   portfolio: '/strategies/portfolio',
   portfolioToken: (address: string) => `/strategies/portfolio/token/${address}`,
+  explorer: (type: ExplorerRouteGenerics['Params']['type']) =>
+    `/explorer/${type}`,
+  explorerOverview: (
+    type: ExplorerRouteGenerics['Params']['type'],
+    slug: string
+  ) => `/explorer/${type}/${slug}`,
+  explorerPortfolio: (
+    type: ExplorerRouteGenerics['Params']['type'],
+    slug: string
+  ) => `/explorer/${type}/${slug}/portfolio`,
+  explorerPortfolioToken: (
+    type: ExplorerRouteGenerics['Params']['type'],
+    slug: string,
+    address: string
+  ) => `/explorer/${type}/${slug}/portfolio/token/${address}`,
   trade: '/trade',
   debug: '/debug',
   createStrategy: '/strategies/create',
@@ -85,6 +106,57 @@ export const routes: Route[] = [
   {
     path: PathNames.debug,
     element: <DebugPage />,
+  },
+  {
+    element: <Outlet />,
+    path: 'explorer',
+    children: [
+      {
+        path: '/',
+        element: <Navigate replace to={'wallet'} />,
+      },
+      {
+        path: ':type/:slug',
+        search: (_search) => {
+          // if pathname contains either /wallet/something or /token-pair/something return true
+          if (document.location.pathname.match(/\/(wallet|token-pair)\/.+/)) {
+            return true;
+          }
+          return false;
+        },
+        element: <ExplorerPage />,
+        children: [
+          {
+            path: '/',
+            element: <ExplorerTypeOverviewPage />,
+          },
+          {
+            path: 'portfolio',
+            element: <Outlet />,
+            children: [
+              {
+                path: '/',
+                element: <ExplorerTypePortfolioPage />,
+              },
+              {
+                path: 'token/:address',
+                element: <ExplorerTypePortfolioTokenPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: ':type',
+        element: <ExplorerPage />,
+        children: [
+          {
+            path: '/',
+            element: <ExplorerTypePage />,
+          },
+        ],
+      },
+    ],
   },
   {
     element: <StrategiesPage />,

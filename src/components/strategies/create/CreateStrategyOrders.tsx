@@ -12,10 +12,10 @@ import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
 import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
-import { useNavigate } from '@tanstack/react-location';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useNavigate } from 'libs/routing';
 
 let didInit = false;
 
@@ -77,7 +77,7 @@ export const CreateStrategyOrders = ({
       return openModal('createStratExpertMode', {
         onClose: () =>
           navigate({
-            search: (prev) => ({ ...prev, strategySettings: 'limit' }),
+            search: (prev: any) => ({ ...prev, strategySettings: 'limit' }),
             replace: true,
           }),
       });

@@ -1,20 +1,31 @@
 import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
 import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
+import { Strategy } from 'libs/queries';
+import { memo } from 'react';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
 import { PortfolioTokenDesktop } from './PortfolioTokenDesktop';
 import { PortfolioTokenMobile } from './PortfolioTokenMobile';
 import { usePortfolioTokenPieChart } from './usePortfolioTokenPieChart';
-import { PathNames, useMatch } from 'libs/routing';
 
-export const PortfolioToken = () => {
-  const {
-    params: { address },
-  } = useMatch();
+interface Props {
+  address: string;
+  strategies?: Strategy[];
+  isLoading?: boolean;
+  backLinkHref: string;
+}
 
+const _PortfolioToken = ({
+  strategies,
+  isLoading: _isLoading,
+  address,
+  backLinkHref,
+}: Props) => {
   const { tableData, isLoading, selectedToken } = usePortfolioToken({
     address,
+    strategies,
+    isLoading: _isLoading,
   });
 
   const { pieChartOptions } = usePortfolioTokenPieChart(
@@ -31,7 +42,7 @@ export const PortfolioToken = () => {
     <PortfolioLayout
       headerElement={
         <PortfolioTokenHeader
-          backLinkHref={PathNames.portfolio}
+          backLinkHref={backLinkHref}
           symbol={selectedToken?.token.symbol}
           logoURI={selectedToken?.token.logoURI}
         />
@@ -63,3 +74,9 @@ export const PortfolioToken = () => {
     />
   );
 };
+
+export const PortfolioToken = memo(
+  _PortfolioToken,
+  (prev, next) =>
+    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
+);

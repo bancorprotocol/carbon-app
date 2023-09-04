@@ -14,7 +14,20 @@ export namespace QueryKey {
     'token-price',
     address,
   ];
-  export const strategies = (user?: string) => [...sdk, 'strategies', user];
+  export const strategies = (user?: string) => [
+    ...sdk,
+    'strategies',
+    'user',
+    user,
+  ];
+  export const strategiesByPair = (token0?: string, token1?: string) => [
+    ...sdk,
+    'strategies',
+    'pair',
+    token0,
+    token1,
+  ];
+
   export const approval = (user: string, token: string, spender: string) => [
     ...chain,
     'approval',

@@ -6,6 +6,8 @@ export const TPagination = <D extends object>({
 }: {
   table: Table<D>;
 }) => {
+  const pageCount = table.getPageCount();
+
   return (
     <div
       className={cn(
@@ -61,7 +63,7 @@ export const TPagination = <D extends object>({
           )}
         >
           {table.getState().pagination.pageIndex + 1}{' '}
-          <span className={cn('text-white/60')}>/</span> {table.getPageCount()}
+          <span className={cn('text-white/60')}>/</span> {pageCount}
         </span>
 
         <button
@@ -72,7 +74,7 @@ export const TPagination = <D extends object>({
         </button>
 
         <button
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          onClick={() => table.setPageIndex(pageCount - 1)}
           disabled={!table.getCanNextPage()}
         >
           Last

@@ -55,8 +55,6 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
       name: 'Wrapped Ethereum',
     },
   ];
-  const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
-  tokens.push(...lsImportedTokens);
 
   const merged = tokenList
     .flatMap((list) => list.tokens)
@@ -65,8 +63,11 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
       ...token,
       address: utils.getAddress(token.address),
     }));
-
   tokens.push(...merged);
+
+  const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
+  lsService.removeItem('importedTokens');
+  tokens.push(...lsImportedTokens);
 
   return uniqBy(tokens, (token: Token) => token.address);
 };

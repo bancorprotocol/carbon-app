@@ -4,7 +4,6 @@ import {
   buildAmountString,
   buildPercentageString,
 } from 'components/strategies/portfolio/utils';
-import { PathNames } from 'libs/routing';
 import { FC } from 'react';
 import {
   CardSection,
@@ -17,9 +16,14 @@ import { cn, getFiatDisplayValue } from 'utils/helpers';
 type Props = {
   data: PortfolioData[];
   isLoading: boolean;
+  getHref: (row: PortfolioData) => string;
 };
 
-export const PortfolioAllTokensMobile: FC<Props> = ({ data, isLoading }) => {
+export const PortfolioAllTokensMobile: FC<Props> = ({
+  data,
+  isLoading,
+  getHref,
+}) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
@@ -31,11 +35,7 @@ export const PortfolioAllTokensMobile: FC<Props> = ({ data, isLoading }) => {
             <PortfolioMobileCardLoading key={i} />
           ))
         : data.map((value, i) => (
-            <PortfolioMobileCard
-              key={i}
-              index={i}
-              href={PathNames.portfolioToken(value.token.address)}
-            >
+            <PortfolioMobileCard key={i} index={i} href={getHref(value)}>
               <div className={cn('flex', 'items-center', 'text-18')}>
                 <Imager
                   src={value.token.logoURI}
