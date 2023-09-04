@@ -4,42 +4,27 @@ import { cn, wait } from 'utils/helpers';
 
 interface Props extends ExplorerSearchProps {
   setShowSuggestions: Dispatch<SetStateAction<boolean>>;
-  onSearchHandler: (v?: string) => void;
   isError?: boolean;
 }
 
 export const ExplorerSearchInput: FC<Props> = (props) => {
-  const placeholder =
+  const label =
     props.type === 'wallet'
       ? 'Search by wallet address'
       : 'Search by token pair';
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      return props.setSearch('');
-    }
-    if (e.key !== 'Enter') {
-      return;
-    }
-    if (!props.isError && props.search.length > 0) {
-      if (props.type === 'token-pair' && props.filteredPairs.length > 0) {
-        const slug =
-          `${props.filteredPairs[0].baseToken.symbol}-${props.filteredPairs[0].quoteToken.symbol}`.toLowerCase();
-        props.setShowSuggestions(false);
-        return props.onSearchHandler(slug);
-      }
-
-      return props.onSearchHandler();
-    }
+    if (e.key === 'Escape') props.setSearch('');
   };
 
   return (
     <input
       type="search"
       value={props.search}
-      placeholder={placeholder}
+      placeholder={label}
+      aria-label={label}
       className={cn(
-        'w-full flex-grow appearance-none bg-black outline-none',
+        'w-full flex-grow bg-black outline-none',
         props.isError && 'text-red'
       )}
       onChange={(e) => {

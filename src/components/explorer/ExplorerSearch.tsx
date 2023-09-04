@@ -11,6 +11,7 @@ import { PathNames, useNavigate } from 'libs/routing';
 import {
   Dispatch,
   FC,
+  FormEventHandler,
   SetStateAction,
   useCallback,
   useMemo,
@@ -67,11 +68,20 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
     ]
   );
 
+  const submitSearch: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    if (props.type === 'wallet' && isInvalidAddress) return;
+    onSearchHandler();
+  };
+
   const showSuggestions = props.type === 'token-pair' && _showSuggestions;
 
   return (
     <search role="search" className={'relative'}>
-      <div className={cn('flex space-x-4 md:space-x-20')}>
+      <form
+        onSubmit={submitSearch}
+        className={cn('flex space-x-4 md:space-x-20')}
+      >
         <div
           className={cn(
             'relative',
@@ -110,7 +120,6 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
             <ExplorerSearchInput
               {...props}
               setShowSuggestions={setShowSuggestions}
-              onSearchHandler={onSearchHandler}
               isError={isInvalidAddress}
             />
 
@@ -125,15 +134,15 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
         </div>
 
         <Button
+          type="submit"
           variant={'success'}
           size={'md'}
           className={'w-40 shrink-0 !px-0 md:w-[180px]'}
-          onClick={() => onSearchHandler()}
         >
           <IconSearch className={'h-16 w-16 md:mr-8'} />
           <span className={'hidden md:block'}>Search</span>
         </Button>
-      </div>
+      </form>
       {isInvalidAddress && (
         <div
           className={
