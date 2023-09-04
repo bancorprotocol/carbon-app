@@ -21,6 +21,7 @@ import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 
 export interface ExplorerSearchProps {
   type: ExplorerRouteGenerics['Params']['type'];
@@ -68,7 +69,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
     ]
   );
 
-  const submitSearch: FormEventHandler<HTMLFormElement> = (e) => {
+  const submitHandler: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (props.type === 'wallet' && isInvalidAddress) return;
     onSearchHandler();
@@ -79,7 +80,8 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
   return (
     <search role="search" className={'relative'}>
       <form
-        onSubmit={submitSearch}
+        onSubmit={submitHandler}
+        onReset={() => props.setSearch('')}
         className={cn('flex space-x-4 md:space-x-20')}
       >
         <div
@@ -122,6 +124,14 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
               setShowSuggestions={setShowSuggestions}
               isError={isInvalidAddress}
             />
+            {props.search.length > 0 && (
+              <button
+                type="reset"
+                className="text-graphite hover:text-error absolute right-0 h-full me-14"
+              >
+                <IconClose className="w-12" />
+              </button>
+            )}
 
             {showSuggestions && (
               <ExplorerSearchSuggestions
