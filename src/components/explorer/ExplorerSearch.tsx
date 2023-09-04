@@ -78,8 +78,9 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
   const showSuggestions = props.type === 'token-pair' && _showSuggestions;
 
   return (
-    <search role="search" className={'relative'}>
+    <div className={'relative'}>
       <form
+        role="search"
         onSubmit={submitHandler}
         onReset={() => props.setSearch('')}
         className={cn('flex space-x-4 md:space-x-20')}
@@ -160,6 +161,6 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
           Invalid Wallet Address
         </div>
       )}
-    </search>
+    </div>
   );
 };
