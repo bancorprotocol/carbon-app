@@ -202,31 +202,6 @@ export const setIntervalUsingTimeout = (
   return intervalId;
 };
 
-export const mergeArraysRemovingDuplicates = <
-  A extends Array<object>,
-  K extends Extract<keyof A[number], string>
->(
-  array1: A,
-  array2: A,
-  key: K
-): A[number][] => {
-  const mergedArray: A[number][] = [...array1, ...array2];
-  const uniqueArray: A[number][] = [];
-
-  const ids = new Set<number>();
-
-  for (const item of mergedArray) {
-    // @ts-ignore
-    if (!ids.has(item[key])) {
-      // @ts-ignore
-      ids.add(item[key]);
-      uniqueArray.push(item);
-    }
-  }
-
-  return uniqueArray;
-};
-
 export const convertCase = (input: string, toSnakeCase: boolean): string => {
   if (toSnakeCase) {
     return input.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
@@ -278,7 +253,7 @@ export const isPathnameMatch = (
   href: string,
   hrefMatches: string[]
 ) => {
-  if (current === '/' && href === '/') {
+  if (current === href) {
     return true;
   }
 

@@ -33,7 +33,7 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className={'flex w-full flex-grow flex-col'}>
+      <main className={'my-80 flex w-full flex-grow flex-col'}>
         <MainContent />
       </main>
       <MobileMenu />

@@ -9,7 +9,7 @@ export const Page: FC<{
   return (
     <div
       className={
-        'px-content mx-auto h-full max-w-[1280px] pb-30 pt-20 xl:px-50'
+        'px-content mx-auto flex max-w-[1280px] flex-grow flex-col pb-30 pt-20 xl:px-50'
       }
     >
       {!hideTitle && (

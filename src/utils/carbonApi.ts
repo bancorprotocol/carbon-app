@@ -8,7 +8,7 @@ export const AVAILABLE_CURRENCIES = [
   'AUD',
   'CAD',
   'CHF',
-  'CNH',
+  'CNY',
   'ETH',
 ] as const;
 

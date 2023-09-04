@@ -12,11 +12,7 @@ import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
 import { useTranslation } from 'libs/translations';
 import { SupportedChainId } from 'libs/web3/web3.constants';
-import {
-  buildTokenPairKey,
-  mergeArraysRemovingDuplicates,
-  setIntervalUsingTimeout,
-} from 'utils/helpers';
+import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { carbonApi } from 'utils/carbonApi';
 
 const contractsConfig: ContractsConfig = {
@@ -32,11 +28,8 @@ const persistSdkCacheDump = async () => {
 
 const getTokenDecimalMap = () => {
   const tokens = lsService.getItem('tokenListCache')?.tokens || [];
-  const importedTokens = lsService.getItem('importedTokens') || [];
   return new Map(
-    mergeArraysRemovingDuplicates(tokens, importedTokens, 'address').map(
-      (token) => [token.address.toLowerCase(), token.decimals]
-    )
+    tokens.map((token) => [token.address.toLowerCase(), token.decimals])
   );
 };
 
