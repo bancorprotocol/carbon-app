@@ -106,7 +106,7 @@ export const TradeSettingsRow: FC<{
           </Button>
         ))}
         <input
-          placeholder={'custom'}
+          placeholder={'Custom'}
           value={internalValue}
           onBlur={handleOnBlur}
           onChange={handleOnInputChange}
