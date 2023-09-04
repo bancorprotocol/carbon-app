@@ -1,3 +1,4 @@
+import { utils } from 'ethers';
 import { useCallback, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { lsService } from 'services/localeStorage';
@@ -11,24 +12,23 @@ export const useTokens = () => {
   } = useStore();
 
   const getTokenById = useCallback(
-    (id: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
+    (id?: string) => (id ? tokensMap.get(id.toLowerCase()) : undefined),
     [tokensMap]
   );
 
   const importToken = useCallback(
     (token: Token) => {
+      const normalizedAddress = utils.getAddress(token.address);
       const exists =
-        tokensMap.has(token.address) ||
-        !!importedTokens.find((tkn) => tkn.address === token.address);
+        tokensMap.has(normalizedAddress) ||
+        !!importedTokens.find((tkn) => tkn.address === normalizedAddress);
       if (exists) return;
 
       const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
-      const existsInLs = !!lsImportedTokens.find(
-        (tkn) => tkn.address === token.address
-      );
-      if (existsInLs) return;
-
-      const newTokens = [...lsImportedTokens, token];
+      const newTokens = [
+        ...lsImportedTokens,
+        { ...token, address: normalizedAddress },
+      ];
       setImportedTokens(newTokens);
       lsService.setItem('importedTokens', newTokens);
     },

@@ -98,7 +98,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
       return orderBy(sanitizedTokens, 'symbol', 'asc');
     }
 
-    const isAddress = utils.isAddress(search);
+    const isAddress = utils.isAddress(search.toLowerCase());
     if (isAddress) {
       const found = sanitizedTokens.find(
         (token) => token.address.toLowerCase() === search.toLowerCase()
@@ -114,7 +114,7 @@ export const useModalTokenList = ({ id, data }: Props) => {
   }, [search, sanitizedTokens, fuse]);
 
   const showImportToken = useMemo(() => {
-    const isValidAddress = utils.isAddress(search);
+    const isValidAddress = utils.isAddress(search.toLowerCase());
     return (
       isValidAddress &&
       !filteredTokens.find(

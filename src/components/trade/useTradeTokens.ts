@@ -21,8 +21,8 @@ export const useTradeTokens = () => {
   const { getTokenById } = useTokens();
   const search = useSearch<MyLocationGenerics>();
 
-  const baseToken = getTokenById(search.base!);
-  const quoteToken = getTokenById(search.quote!);
+  const baseToken = getTokenById(search.base);
+  const quoteToken = getTokenById(search.quote);
 
   const goToPair = (base: string, quote: string, replace?: boolean) =>
     navigate({ to: PathNames.trade, search: { base, quote }, replace });
