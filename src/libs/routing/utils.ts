@@ -7,6 +7,7 @@ function toValue(mix: string | undefined) {
   if (str === 'false') return false;
   if (str === 'true') return true;
   if (str.startsWith('0x')) return str;
+  if (str.startsWith('0X')) return str;
   return +str * 0 === 0 ? +str : str;
 }
 
