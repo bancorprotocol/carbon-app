@@ -272,6 +272,8 @@ const sdkExposed = {
   hasLiquidityByPair: (baseToken: string, quoteToken: string) =>
     carbonSDK.hasLiquidityByPair(baseToken, quoteToken),
   getUserStrategies: (address: string) => carbonSDK.getUserStrategies(address),
+  getStrategiesByPair: (token0: string, token1: string) =>
+    carbonSDK.getStrategiesByPair(token0, token1),
   createBuySellStrategy: (
     baseToken: string,
     quoteToken: string,

@@ -1,11 +1,10 @@
+import { PairLogoName } from 'components/common/PairLogoName';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
-import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
-import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
 import { useStore } from 'store';
 
@@ -62,9 +61,6 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     [favoritesMap]
   );
 
-  const suspiciousTokenTooltipMsg =
-    'This token is not part of any known token list. Always conduct your own research before trading.';
-
   return (
     <div>
       <div className={'my-20 grid w-full grid-cols-3'}>
@@ -115,27 +111,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   onClick={() => handleSelect(tradePair)}
                   className={'flex w-full items-center ps-10 space-s-10'}
                 >
-                  <TokensOverlap
-                    className="h-30 w-30"
-                    tokens={[tradePair.baseToken, tradePair.quoteToken]}
-                  />
-                  <span className={'flex font-weight-500'}>
-                    {tradePair.baseToken.symbol}
-                    {tradePair.baseToken.isSuspicious && (
-                      <WarningWithTooltip
-                        className="ms-5"
-                        tooltipContent={suspiciousTokenTooltipMsg}
-                      />
-                    )}
-                    <span className={'px-5 text-white/60'}>/</span>
-                    {tradePair.quoteToken.symbol}
-                    {tradePair.quoteToken.isSuspicious && (
-                      <WarningWithTooltip
-                        className="ms-5"
-                        tooltipContent={suspiciousTokenTooltipMsg}
-                      />
-                    )}
-                  </span>
+                  <PairLogoName pair={tradePair} />
                 </button>
                 <button
                   onClick={() =>

@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useRoi } from 'components/strategies/overview/useRoi';
 import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { externalLinks } from 'libs/routing/routes';
@@ -8,13 +7,11 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { formatNumberWithApproximation } from 'utils/helpers';
 
-export interface StrategyBlockRoiProps {
-  strategyId: string;
+interface Props {
+  roi: BigNumber;
 }
 
-export const StrategyBlockRoi: FC<StrategyBlockRoiProps> = ({ strategyId }) => {
-  const { strategyRoi } = useRoi(strategyId);
-  const roi = strategyRoi ?? new BigNumber(0);
+export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
   const roiFormatted = formatNumberWithApproximation(roi, {
     isPercentage: true,
     approximateBelow: 0.01,

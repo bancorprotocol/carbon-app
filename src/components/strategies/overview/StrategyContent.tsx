@@ -1,22 +1,49 @@
-import { FC, useMemo } from 'react';
-import { StrategyStatus, useGetUserStrategies } from 'libs/queries';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { Breakpoint, useBreakpoints } from 'hooks/useBreakpoints';
+import {
+  FC,
+  Fragment,
+  memo,
+  ReactNode,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react';
+import { Strategy, StrategyStatus } from 'libs/queries';
 import { StrategyFilter } from 'components/strategies/overview/StrategyFilterSort';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { useStore } from 'store';
-import { StrategyNotFound } from './StrategyNotFound';
-import { m, mItemVariant, mListVariant } from 'libs/motion';
+import { m } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 import { getCompareFunctionBySortType } from './utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'libs/translations';
 
-type Props = {
-  strategies: ReturnType<typeof useGetUserStrategies>;
+const getItemsPerRow = (breakpoint: Breakpoint) => {
+  switch (breakpoint) {
+    case 'sm':
+      return 1;
+    case 'md':
+      return 2;
+    default:
+      return 3;
+  }
 };
 
-export const StrategyContent: FC<Props> = ({ strategies }) => {
+type Props = {
+  strategies?: Strategy[];
+  isLoading?: boolean;
+  isExplorer?: boolean;
+  emptyElement: ReactNode;
+};
+
+export const _StrategyContent: FC<Props> = ({
+  strategies,
+  isExplorer,
+  isLoading,
+  emptyElement,
+}) => {
   const {
     strategies: { search, sort, filter },
   } = useStore();
@@ -25,7 +52,7 @@ export const StrategyContent: FC<Props> = ({ strategies }) => {
   const filteredStrategies = useMemo(() => {
     const searchLC = search.toLowerCase();
 
-    const filtered = strategies.data?.filter(
+    const filtered = strategies?.filter(
       (strategy) =>
         (strategy.base.symbol.toLowerCase().includes(searchLC) ||
           strategy.quote.symbol.toLowerCase().includes(searchLC)) &&
@@ -39,21 +66,47 @@ export const StrategyContent: FC<Props> = ({ strategies }) => {
     return filtered?.sort((a, b) => {
       return compareFunction(a, b);
     });
-  }, [search, strategies.data, filter, compareFunction]);
+  }, [search, strategies, filter, compareFunction]);
 
-  if (strategies && strategies.data && strategies.data.length === 0)
+  const parentRef = useRef<HTMLDivElement>(null);
+  const parentOffsetRef = useRef(0);
+
+  const { currentBreakpoint } = useBreakpoints();
+
+  useLayoutEffect(() => {
+    parentOffsetRef.current = parentRef.current?.offsetTop ?? 0;
+  }, []);
+
+  const rows = useMemo(() => {
+    const itemsPerRow = getItemsPerRow(currentBreakpoint);
+    const arr = filteredStrategies ?? [];
+    const result: Strategy[][] = [];
+    for (let i = 0; i < arr.length; i += itemsPerRow) {
+      result.push(arr.slice(i, i + itemsPerRow));
+    }
+    return result;
+  }, [currentBreakpoint, filteredStrategies]);
+
+  const rowVirtualizer = useWindowVirtualizer({
+    count: rows.length,
+    scrollMargin: parentOffsetRef.current,
+    estimateSize: () => 600,
+    // overscan: 3,
+  });
+
+  const items = rowVirtualizer.getVirtualItems();
+
+  if (strategies && strategies.length === 0 && !isExplorer)
     return <StrategyCreateFirst />;
 
   return (
-    <AnimatePresence exitBeforeEnter={true}>
-      {!filteredStrategies ||
-      filteredStrategies.length === 0 ||
-      strategies.isLoading ? (
+    <>
+      {!filteredStrategies || filteredStrategies.length === 0 || isLoading ? (
         <>
-          {strategies.isLoading ? (
+          {isLoading ? (
             <m.div
               key={'loading'}
-              className={'flex h-[80%] items-center justify-center'}
+              className={'flex flex-grow items-center justify-center'}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
@@ -63,32 +116,61 @@ export const StrategyContent: FC<Props> = ({ strategies }) => {
               </div>
             </m.div>
           ) : (
-            <StrategyNotFound />
+            emptyElement
           )}
         </>
       ) : (
-        <m.div
-          key={'strategies'}
-          className={
-            'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
-          }
-          variants={mListVariant}
-          initial={'hidden'}
-          animate={'visible'}
+        <div
+          ref={parentRef}
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            width: '100%',
+            position: 'relative',
+          }}
         >
-          {filteredStrategies?.map((s) => (
-            <StrategyBlock key={s.id} strategy={s} />
-          ))}
-          <m.div variants={mItemVariant}>
-            <StrategyBlockCreate
-              title={
-                t('pages.strategyOverview.card.actionButtons.actionButton2') ||
-                ''
-              }
-            />
-          </m.div>
-        </m.div>
+          <div
+            className={
+              'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
+            }
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              transform: `translateY(${
+                items[0].start - rowVirtualizer.options.scrollMargin
+              }px)`,
+            }}
+          >
+            {items.map((virtualRow) => (
+              <Fragment key={virtualRow.key}>
+                {rows[virtualRow.index].map((s) => (
+                  <StrategyBlock
+                    key={s.id}
+                    strategy={s}
+                    isExplorer={isExplorer}
+                  />
+                ))}
+              </Fragment>
+            ))}
+            {!isExplorer && (
+              <StrategyBlockCreate
+                title={
+                  t(
+                    'pages.strategyOverview.card.actionButtons.actionButton2'
+                  ) || ''
+                }
+              />
+            )}
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
+
+export const StrategyContent = memo(
+  _StrategyContent,
+  (prev, next) =>
+    JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
+);

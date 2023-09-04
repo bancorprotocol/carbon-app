@@ -15,7 +15,7 @@ export const StrategyBlockCreate: FC<Props> = ({ title, className = '' }) => {
     <Link
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       to={PathNames.createStrategy}
-      className="bg-content flex h-full items-center justify-center rounded-10 py-50"
+      className="bg-content flex h-full h-[600px] items-center justify-center rounded-10 py-50"
     >
       <div
         className={`${className} flex flex-col items-center gap-24 text-24 font-weight-500 md:text-[32px]`}
