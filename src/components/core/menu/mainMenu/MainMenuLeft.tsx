@@ -8,7 +8,6 @@ import { menuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
   const pathname = useLocation().current.pathname;
-  const { menuItems } = useMenuItems();
 
   return (
     <nav aria-label="Main" className={'flex items-center space-x-24'}>
