@@ -117,18 +117,15 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
               />
             </DropdownMenu>
           </div>
-          <div className={'h-20 w-1 bg-white/40'}></div>
-          <div className={'w-full flex-grow md:relative'}>
+          <div role="separator" className={'h-20 w-1 bg-white/40'}></div>
+          <div className={'flex w-full flex-grow items-center md:relative'}>
             <ExplorerSearchInput
               {...props}
               setShowSuggestions={setShowSuggestions}
               isError={isInvalidAddress}
             />
             {props.search.length > 0 && (
-              <button
-                type="reset"
-                className="text-graphite hover:text-error absolute right-0 h-full me-14"
-              >
+              <button type="reset">
                 <IconClose className="w-12" />
               </button>
             )}

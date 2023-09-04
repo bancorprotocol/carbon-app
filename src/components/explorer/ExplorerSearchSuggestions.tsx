@@ -13,7 +13,7 @@ const ExplorerSearchSuggestions: FC<Props> = (props) => {
   return (
     <div
       className={
-        'absolute left-0 z-30 mt-20 max-h-[300px] w-full overflow-hidden overflow-y-scroll rounded-10 bg-emphasis py-10'
+        'absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-scroll rounded-10 bg-emphasis py-10 md:mt-20'
       }
     >
       <div className={'text-secondary ml-20 mb-8 font-weight-500'}>
