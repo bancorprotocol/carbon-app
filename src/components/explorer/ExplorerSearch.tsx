@@ -70,7 +70,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
   const showSuggestions = props.type === 'token-pair' && _showSuggestions;
 
   return (
-    <div className={'relative'}>
+    <search role="search" className={'relative'}>
       <div className={cn('flex space-x-4 md:space-x-20')}>
         <div
           className={cn(
@@ -144,6 +144,6 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
           Invalid Wallet Address
         </div>
       )}
-    </div>
+    </search>
   );
 };

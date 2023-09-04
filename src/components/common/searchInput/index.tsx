@@ -12,7 +12,7 @@ interface Props {
 }
 
 const defaultClassName =
-  'block pl-[38px] pr-[38px] dark:placeholder-white-disabled dark:bg-charcoal rounded-full focus:outline-none';
+  'block pl-[38px] pr-[38px] dark:placeholder-white-disabled dark:bg-charcoal rounded-full focus:outline-none appearance-none';
 
 export const SearchInput = ({
   value,
@@ -37,7 +37,7 @@ export const SearchInput = ({
 
       <input
         autoFocus={autoFocus}
-        type="text"
+        type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={t('common.placeholders.placeholder4')}

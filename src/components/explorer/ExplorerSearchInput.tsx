@@ -35,11 +35,11 @@ export const ExplorerSearchInput: FC<Props> = (props) => {
 
   return (
     <input
-      type="text"
+      type="search"
       value={props.search}
       placeholder={placeholder}
       className={cn(
-        'w-full flex-grow bg-black outline-none',
+        'w-full flex-grow appearance-none bg-black outline-none',
         props.isError && 'text-red'
       )}
       onChange={(e) => {
