@@ -6,7 +6,7 @@ import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { LimitRangeSection } from './LimitRangeSection';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { useStrategyEvents } from './useStrategyEvents';
 import {
   StrategyCreateLocationGenerics,
@@ -55,10 +55,10 @@ export const BuySellBlock: FC<Props> = ({
       <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
         <span>{titleText}</span>
       </Tooltip>
-      <Imager
+      <LogoImager
         alt={'Token'}
         src={base.logoURI}
-        className={'mx-6 h-18 w-18 rounded-full'}
+        className={'mx-6 h-18 w-18'}
       />
       <span>{base.symbol}</span>
     </>

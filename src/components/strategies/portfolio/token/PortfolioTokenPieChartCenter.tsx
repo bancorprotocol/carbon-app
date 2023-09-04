@@ -1,4 +1,4 @@
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { buildAmountString } from 'components/strategies/portfolio/utils';
 import { FC } from 'react';
@@ -20,7 +20,7 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
   return (
     <div className={cn('flex', 'flex-col', 'items-center', 'space-y-6')}>
       <div className={cn('flex', 'items-center', 'font-weight-500', 'text-18')}>
-        <Imager
+        <LogoImager
           alt={'Token Logo'}
           src={data.token.logoURI}
           className={'mr-10 h-24 w-24'}

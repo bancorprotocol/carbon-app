@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Strategy, StrategyStatus } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from './TokenPrice';
@@ -81,7 +81,7 @@ export const StrategyBlockBuySell: FC<{
         >
           <div className="flex items-center gap-6">
             {buy ? 'Buy' : 'Sell'}
-            <Imager
+            <LogoImager
               className="h-16 w-16"
               src={buy ? token.logoURI : otherToken.logoURI}
               alt="token"
@@ -150,7 +150,7 @@ export const StrategyBlockBuySell: FC<{
             >
               <div className="flex items-center gap-7">
                 {prettifiedBudget}
-                <Imager
+                <LogoImager
                   className="h-16 w-16"
                   src={otherToken.logoURI}
                   alt="token"
