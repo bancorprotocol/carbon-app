@@ -1,5 +1,3 @@
-import { CFWorkerEnv } from './../../../src/functions';
-
 const BLOCKED_HOSTS = ['carbon-app-csq.pages.dev'];
 
 const NO_NO_COUNTRIES = [
@@ -47,7 +45,7 @@ const getCheckResponse = (value: boolean) => {
   });
 };
 
-export const onRequestGet: PagesFunction<CFWorkerEnv> = async ({ request }) => {
+export const onRequestGet: PagesFunction = async ({ request }) => {
   const { hostname } = new URL(request.url);
   const isBlockedHost = BLOCKED_HOSTS.includes(hostname);
 

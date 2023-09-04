@@ -37,9 +37,6 @@ const newApiAxios = axios.create({
   baseURL: 'https://api.carbondefi.xyz/v1/',
 });
 
-carbonApiAxios.defaults.headers.common['x-carbon-auth-key'] =
-  import.meta.env.VITE_CARBON_API_KEY;
-
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (import.meta.env.VITE_DEV_MODE) {
