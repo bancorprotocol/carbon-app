@@ -10,7 +10,6 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { checkIfOrdersOverlap } from '../utils';
 import { getStatusTextByTxStatus } from '../utils';
-import { useTranslation } from 'libs/translations';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -23,7 +22,6 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
-  const { t } = useTranslation();
   const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
   const isAwaiting = updateMutation.isLoading;
@@ -101,8 +99,8 @@ export const EditStrategyPricesContent = ({
   };
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
-  }, [isAwaiting, isProcessing, t]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
     <div className="flex w-full flex-col items-center space-y-20 text-center font-weight-500 md:w-[400px]">
@@ -135,9 +133,7 @@ export const EditStrategyPricesContent = ({
         size="lg"
         fullWidth
       >
-        {type === 'renew'
-          ? t('pages.strategyEdit.actionButtons.actionButton2')
-          : t('pages.strategyEdit.actionButtons.actionButton3')}
+        {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
       </Button>
       <Button
         onClick={() => back()}
@@ -147,7 +143,7 @@ export const EditStrategyPricesContent = ({
         size="lg"
         fullWidth
       >
-        {t('pages.strategyEdit.actionButtons.actionButton1')}
+        Cancel
       </Button>
     </div>
   );

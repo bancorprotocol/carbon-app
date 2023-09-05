@@ -1,6 +1,5 @@
 import { FC, ReactNode } from 'react';
 import { Token } from 'libs/tokens';
-import { Trans, useTranslation } from 'libs/translations';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
@@ -31,17 +30,17 @@ export const LimitRangeSection: FC<Props> = ({
   isOrdersOverlap,
   isEdit,
 }) => {
-  const { t } = useTranslation();
   const { openModal } = useModal();
   const { isRange, setIsRange, resetFields } = order;
   const { marketPricePercentage, isOrderAboveOrBelowMarketPrice } =
     useMarketIndication({ base, quote, order, buy });
 
-  const overlappingOrdersPricesMessage = t('common.warnings.warning1');
+  const overlappingOrdersPricesMessage =
+    'Notice: your Buy and Sell orders overlap';
 
   const warningMarketPriceMessage = buy
-    ? t('common.warnings.warning2', { token: base.symbol })
-    : t('common.warnings.warning3', { token: base.symbol });
+    ? `Notice, you offer to buy ${base.symbol} above current market price`
+    : `Notice, you offer to sell ${base.symbol} below current market price`;
 
   const handleRangeChange = () => {
     if (!lsService.getItem('hasSeenCreateStratExpertMode')) {
@@ -58,7 +57,7 @@ export const LimitRangeSection: FC<Props> = ({
   };
 
   return (
-    <div className={`space-y-12 text-start`}>
+    <div className={`space-y-12 text-left`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-18">{title}</div>
         <div className="flex items-center gap-10 text-14">
@@ -70,7 +69,7 @@ export const LimitRangeSection: FC<Props> = ({
                 !isRange ? 'bg-silver' : 'text-secondary'
               } px-10 py-4`}
             >
-              {t('common.actionButtons.actionButton7')}
+              Limit
             </button>
             <button
               tabIndex={-1}
@@ -79,18 +78,22 @@ export const LimitRangeSection: FC<Props> = ({
                 isRange ? 'bg-silver' : 'text-secondary'
               } px-10 py-4`}
             >
-              {t('common.actionButtons.actionButton8')}
+              Range
             </button>
           </div>
           <Tooltip
             sendEventOnMount={{ buy }}
             element={
-              <Trans
-                values={{ token: base.symbol }}
-                i18nKey={
-                  buy ? 'common.tooltips.tooltip1' : 'common.tooltips.tooltip2'
-                }
-              />
+              <>
+                This section will define the order details in which you are
+                willing to {buy ? 'buy' : 'sell'} {base.symbol} at.
+                <br />
+                <b>Limit</b> will allow you to define a specific price point to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+                <br />
+                <b>Range</b> will allow you to define a range of prices to{' '}
+                {buy ? 'buy' : 'sell'} the token at.
+              </>
             }
           />
         </div>

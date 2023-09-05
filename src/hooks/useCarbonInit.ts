@@ -10,7 +10,6 @@ import { carbonSDK } from 'libs/sdk';
 import { useModal } from 'hooks/useModal';
 import { QueryKey } from 'libs/queries';
 import { RPC_URLS } from 'libs/web3';
-import { useTranslation } from 'libs/translations';
 import { SupportedChainId } from 'libs/web3/web3.constants';
 import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { carbonApi } from 'utils/carbonApi';
@@ -33,8 +32,18 @@ const getTokenDecimalMap = () => {
   );
 };
 
+const removeOldI18nKeys = () => {
+  Object.keys(localStorage).forEach((key) => {
+    if (
+      key.match(/carbon-v\d-[a-z]{2}-[A-Z]{2}-translation/) ||
+      key.includes('i18nextLng')
+    ) {
+      localStorage.removeItem(key);
+    }
+  });
+};
+
 export const useCarbonInit = () => {
-  const { i18n } = useTranslation();
   const cache = useQueryClient();
   const {
     setCountryBlocked,
@@ -48,8 +57,6 @@ export const useCarbonInit = () => {
     },
   } = useStore();
   const { openModal } = useModal();
-
-  document.body.dir = i18n.dir();
 
   const invalidateQueriesByPair = useCallback(
     (pair: TokenPair) => {
@@ -104,6 +111,9 @@ export const useCarbonInit = () => {
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
       }
+
+      removeOldI18nKeys();
+
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {

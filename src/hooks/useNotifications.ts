@@ -7,13 +7,11 @@ import {
 } from 'libs/notifications/types';
 import { setLSUserNotifications } from 'libs/notifications/utils';
 import { useCallback } from 'react';
-import { getNotificationMap } from 'libs/notifications/data';
+import { NOTIFICATIONS_MAP } from 'libs/notifications/data';
 import { uuid } from 'utils/helpers';
 import { dayjs } from 'libs/dayjs';
-import { useTranslation } from 'libs/translations';
 
 export const useNotifications = () => {
-  const { t } = useTranslation();
   const { user, provider } = useWeb3();
   const {
     notifications: { notifications, setNotifications, alerts, hasPendingTx },
@@ -51,7 +49,7 @@ export const useNotifications = () => {
         const newNotifications = [
           ...prev,
           {
-            ...getNotificationMap(t)[key](data),
+            ...NOTIFICATIONS_MAP[key](data),
             id: uuid(),
             timestamp: dayjs().unix(),
           },
@@ -63,7 +61,7 @@ export const useNotifications = () => {
         return newNotifications;
       });
     },
-    [setNotifications, t, user]
+    [setNotifications, user]
   );
 
   const removeNotification = useCallback(

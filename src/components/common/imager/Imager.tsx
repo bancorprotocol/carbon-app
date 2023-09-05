@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import genericToken from 'assets/icons/generic_token.svg';
+import { cn } from 'utils/helpers';
 
 export const useImager = (
   src: string = genericToken,
@@ -67,4 +68,8 @@ export const Imager = ({
   return (
     <img {...props} src={source} alt={alt} loading={lazy ? 'lazy' : 'eager'} />
   );
+};
+
+export const LogoImager = ({ className, ...props }: ImageProps) => {
+  return <Imager {...props} className={cn('rounded-full', className)} />;
 };

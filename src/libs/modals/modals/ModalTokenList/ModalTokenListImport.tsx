@@ -3,11 +3,9 @@ import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { Trans, useTranslation } from 'libs/translations';
 import { useStore } from 'store';
 
 export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
-  const { t } = useTranslation();
   const { openModal } = useModal();
   const { innerHeight } = useStore();
 
@@ -16,12 +14,16 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
   };
 
   const Text = () => (
-    <Trans
-      i18nKey={'modals.selectToken.contents.content2'}
-      components={{
-        strong: <span className={'font-weight-500 dark:text-white'} />,
-      }}
-    />
+    <>
+      <span>
+        Unfortunately we couldn't find a token for the address you entered, try
+        to
+      </span>
+      <span className={'font-weight-500 dark:text-white'}>
+        {' '}
+        import a new token.
+      </span>
+    </>
   );
 
   return (
@@ -32,11 +34,11 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
       >
         <IconTitleText
           icon={<IconSearch />}
-          title={t('modals.selectToken.contents.content1')}
+          title={'Token not found'}
           text={<Text />}
         />
         <Button variant={'white'} onClick={onClick} className={'my-30'}>
-          {t('modals.selectToken.actionButton')}
+          Import Token
         </Button>
       </div>
     </>

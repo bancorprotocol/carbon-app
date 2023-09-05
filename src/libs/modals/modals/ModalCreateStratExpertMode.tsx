@@ -4,7 +4,6 @@ import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useModal } from 'hooks/useModal';
 import { lsService } from 'services/localeStorage';
-import { useTranslation } from 'libs/translations';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalCreateStratExpertModeData = {
@@ -15,7 +14,6 @@ export type ModalCreateStratExpertModeData = {
 export const ModalCreateStratExpertMode: ModalFC<
   ModalCreateStratExpertModeData
 > = ({ id, data: { onConfirm, onClose } }) => {
-  const { t } = useTranslation();
   const { closeModal } = useModal();
   const onClick = () => {
     onConfirm && onConfirm();
@@ -24,17 +22,15 @@ export const ModalCreateStratExpertMode: ModalFC<
   };
 
   return (
-    <ModalOrMobileSheet
-      id={id}
-      title={t('modals.expertMode.modalTitle')}
-      onClose={onClose}
-    >
+    <ModalOrMobileSheet id={id} title={'Expert Mode'} onClose={onClose}>
       <div className={'mt-40'}>
         <IconTitleText
           variant={'success'}
           icon={<IconWarning />}
-          title={t('modals.expertMode.title')}
-          text={t('modals.expertMode.contents.content1')}
+          title={'Range Pricing'}
+          text={
+            'Range Pricing will spread the allocated budget on a bonding curve and split it across multiple price points.'
+          }
         />
       </div>
 
@@ -44,11 +40,11 @@ export const ModalCreateStratExpertMode: ModalFC<
         }
       >
         <IconWarning className={'mr-10 w-14'} />
-        {t('modals.expertMode.contents.content2')}
+        Only use range if you know what you are doing
       </p>
 
       <Button variant={'white'} fullWidth onClick={onClick}>
-        {t('modals.expertMode.actionButtons.actionButton1')}
+        Proceed with Range
       </Button>
     </ModalOrMobileSheet>
   );

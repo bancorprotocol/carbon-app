@@ -10,7 +10,6 @@ import { useModalTradeRouting } from 'libs/modals/modals/ModalTradeRouting/useMo
 import { ModalTradeRoutingRow } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRow';
 import { ModalTradeRoutingHeader } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingHeader';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
-import { useTranslation } from 'libs/translations';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalTradeRoutingData = {
@@ -27,7 +26,6 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   id,
   data,
 }) => {
-  const { t } = useTranslation();
   const [isAwaiting, setIsAwaiting] = useState(false);
 
   const {
@@ -45,18 +43,20 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   });
 
   return (
-    <ModalOrMobileSheet id={id} title={t('modals.tradeRouting.modalTitle')} size={'md'}>
-      <Tooltip element={t('modals.tradeRouting.tooltips.tooltip1')}>
-        <div className={'text-secondary mt-20 mb-5'}>
-          {t('modals.tradeRouting.section1.title1')}
-        </div>
+    <ModalOrMobileSheet id={id} title="Trade Routing" size={'md'}>
+      <Tooltip
+        element={
+          'This is the list of orders your trade will use when executed.'
+        }
+      >
+        <div className={'text-secondary mt-20 mb-5'}>Routing Table</div>
       </Tooltip>
       <ModalTradeRoutingHeader
         baseSymbol={data.source.symbol}
         quoteSymbol={data.target.symbol}
       />
 
-      <div className="mt-2 grid max-h-[210px] grid-cols-3 gap-10 overflow-y-auto rounded-t-4 rounded-b-10 bg-black p-10 ps-20">
+      <div className="mt-2 grid max-h-[210px] grid-cols-3 gap-10 overflow-y-auto rounded-t-4 rounded-b-10 bg-black p-10 pl-20">
         {selected.map((action, index) => (
           <ModalTradeRoutingRow
             key={index}
@@ -70,10 +70,8 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           />
         ))}
       </div>
-      <Tooltip element={t('modals.tradeRouting.tooltips.tooltip2')}>
-        <div className={'text-secondary mt-20 mb-5'}>
-          {t('modals.tradeRouting.section2.title1')}
-        </div>
+      <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
+        <div className={'text-secondary mt-20 mb-5'}>Confirm Trade</div>
       </Tooltip>
       <div className={'-space-y-10'}>
         <div className={'rounded-12 bg-black p-16'}>
@@ -99,16 +97,16 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         </div>
       </div>
 
-      <div className={'mt-20 flex w-full space-s-10'}>
+      <div className={'mt-20 flex w-full space-x-10'}>
         <Button
           variant={'white'}
           fullWidth
           onClick={handleCTAClick}
           disabled={disabledCTA}
           loading={isAwaiting}
-          loadingChildren={t('common.statuses.status1')}
+          loadingChildren={'Waiting for Confirmation'}
         >
-          {t('modals.tradeRouting.actionButtons.actionButton1')}
+          Confirm
         </Button>
       </div>
     </ModalOrMobileSheet>

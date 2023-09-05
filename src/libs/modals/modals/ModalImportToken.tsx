@@ -9,7 +9,6 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { Link } from 'libs/routing';
-import { useTranslation } from 'libs/translations';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalImportTokenData = {
@@ -20,7 +19,6 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   id,
   data: { address },
 }) => {
-  const { t } = useTranslation();
   const { closeModal } = useModal();
   const { data, isLoading, isError } = useGetTokenData(address);
   const { importToken } = useTokens();
@@ -36,13 +34,15 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   const blockClasses = 'my-20 h-80 rounded-8';
 
   return (
-    <ModalOrMobileSheet id={id} title={t('modals.importToken.modalTitle')}>
+    <ModalOrMobileSheet id={id} title={'Import Token'}>
       <div className={'mt-40'}>
         <IconTitleText
           variant={'warning'}
           icon={<IconWarning />}
-          title={t('modals.importToken.title')}
-          text={t('modals.importToken.contents.content3')}
+          title={'Use at your own risk'}
+          text={
+            "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
+          }
         />
       </div>
 
@@ -53,7 +53,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         <div
           className={`${blockClasses} flex items-center justify-center dark:bg-red/30`}
         >
-          {t('modals.importToken.contents.content1')}
+          Error: No token found for this address
         </div>
       )}
       {data && (
@@ -66,10 +66,8 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
                 'flex items-center text-14 font-weight-500 text-warning-500'
               }
             >
-              <span className={'whitespace-nowrap'}>
-                {t('modals.importToken.contents.content2')}
-              </span>
-              <IconLink className={'inline-flex h-14 ms-4'} />
+              <span className={'whitespace-nowrap'}>View on Explorer</span>
+              <IconLink className={'ml-4 inline-flex h-14'} />
             </Link>
           </div>
           <div className={'flex items-center justify-between'}>
@@ -86,7 +84,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         onClick={onClick}
         disabled={isLoading || isError}
       >
-        {t('modals.importToken.actionButtons.actionButton1')}
+        Import Token
       </Button>
       <Button
         variant={'black'}
@@ -94,7 +92,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         onClick={() => closeModal(id)}
         className={'mt-16'}
       >
-        {t('modals.importToken.actionButtons.actionButton2')}
+        Cancel
       </Button>
     </ModalOrMobileSheet>
   );

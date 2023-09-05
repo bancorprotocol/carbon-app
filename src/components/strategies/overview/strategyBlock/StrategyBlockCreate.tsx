@@ -2,15 +2,15 @@ import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { Link, PathNames } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
-import { useTranslation } from 'libs/translations';
 
 type Props = {
   title?: string;
   className?: string;
 };
-export const StrategyBlockCreate: FC<Props> = ({ title, className = '' }) => {
-  const { t } = useTranslation();
-
+export const StrategyBlockCreate: FC<Props> = ({
+  title = 'Create Strategy',
+  className = '',
+}) => {
   return (
     <Link
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
@@ -24,8 +24,7 @@ export const StrategyBlockCreate: FC<Props> = ({ title, className = '' }) => {
           <IconPlus className="p-24 text-green md:p-26" />
         </div>
         <span className="w-[185px] text-center leading-9 md:w-[210px]">
-          {title ||
-            t('pages.strategyOverview.card.actionButtons.actionButton2')}
+          {title}
         </span>
       </div>
     </Link>
