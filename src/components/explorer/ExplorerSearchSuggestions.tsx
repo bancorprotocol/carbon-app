@@ -16,60 +16,59 @@ import styles from './explorer.module.css';
 
 interface Props extends Omit<ExplorerSearchProps, 'type'> {}
 
-function isOption(el?: Element | null): el is HTMLElement {
+const isOption = (el?: Element | null): el is HTMLElement => {
   return el instanceof HTMLElement && el.getAttribute('role') === 'option';
-}
+};
 
-function getSelectedOption(root: HTMLElement | null) {
+const getSelectedOption = (root: HTMLElement | null) => {
   const selector = '[role="option"][aria-selected="true"]';
   return root?.querySelector<HTMLElement>(selector);
-}
+};
 
-function selectOption(element?: HTMLElement | null) {
+const selectOption = (element?: HTMLElement | null) => {
   if (!element) return;
   element.setAttribute('aria-selected', 'true');
   element.scrollIntoView({ block: 'nearest' });
-}
+};
 
-function selectFirstOption(root: HTMLElement | null) {
+const selectFirstOption = (root: HTMLElement | null) => {
   getSelectedOption(root)?.setAttribute('aria-selected', 'false');
   const selector = '[role="option"]:first-of-type';
   const firstOption = root?.querySelector<HTMLElement>(selector);
   selectOption(firstOption);
-}
+};
 
-function selectLastOption(root: HTMLElement | null) {
+const selectLastOption = (root: HTMLElement | null) => {
   getSelectedOption(root)?.setAttribute('aria-selected', 'false');
   const selector = '[role="option"]:last-of-type';
   const lastOption = root?.querySelector<HTMLElement>(selector);
   selectOption(lastOption);
-}
+};
 
-function selectNextSibling(root: HTMLElement | null) {
+const selectNextSibling = (root: HTMLElement | null) => {
   const selected = getSelectedOption(root);
   if (!selected) return selectFirstOption(root);
   const next = selected.nextElementSibling;
   if (!isOption(next)) return selectFirstOption(root);
   selected.setAttribute('aria-selected', 'false');
   selectOption(next);
-}
+};
 
-function selectPreviousSibling(root: HTMLElement | null) {
+const selectPreviousSibling = (root: HTMLElement | null) => {
   const selected = getSelectedOption(root);
   if (!selected) return selectLastOption(root);
   const previous = selected.previousElementSibling;
   if (!isOption(previous)) return selectLastOption(root);
   selected.setAttribute('aria-selected', 'false');
   selectOption(previous);
-}
-
+};
 
 const ExplorerSearchSuggestions: FC<Props> = (props) => {
   const listboxId = useId();
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
-  function onKeyDownHandler(e: KeyboardEvent<HTMLInputElement>) {
+  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (!open && e.key === 'Escape') {
       (e.target as HTMLInputElement).value = '';
       return props.setSearch('');
@@ -87,7 +86,7 @@ const ExplorerSearchSuggestions: FC<Props> = (props) => {
     if (e.key === 'End') selectLastOption(root.current);
     if (e.key === 'ArrowDown') selectNextSibling(root.current);
     if (e.key === 'ArrowUp') selectPreviousSibling(root.current);
-  }
+  };
 
   const suggestionListProps = {
     setOpen,
@@ -149,14 +148,14 @@ interface SuggestionListProps
 }
 
 const SuggestionList: FC<SuggestionListProps> = (props) => {
-  function select(name: string) {
+  const select = (name: string) => {
     const selector = `input[aria-controls="${props.listboxId}"]`;
     const input = document.querySelector<HTMLInputElement>(selector);
     if (!input) return;
     input.value = name;
     input.form?.requestSubmit();
     props.setOpen(false);
-  }
+  };
 
   return (
     <ul
