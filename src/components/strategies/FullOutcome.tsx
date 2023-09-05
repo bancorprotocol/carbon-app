@@ -2,10 +2,12 @@ import { Token } from 'libs/tokens';
 import { FC, useMemo } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { AcquireAmountProps, getAcquiredAmount } from 'utils/fullOutcome';
+import { cn } from 'utils/helpers';
 
 interface FullOutcomeProps extends AcquireAmountProps {
   base: Token;
   quote: Token;
+  className?: string;
 }
 
 const roundTokenAmount = (amount: string, token: Token) => {
@@ -24,17 +26,16 @@ export const FullOutcomeCreateStrategy: FC<FullOutcomeProps> = (props) => {
   const result = useMemo(() => getAcquiredAmount(props), [props]);
   if (!result) return <></>;
   const { amount, mean } = result;
-  const sourceToken = props.buy ? props.quote : props.base;
   const targetToken = props.buy ? props.base : props.quote;
   return (
-    <p className="text-12 text-white/60">
+    <p className={cn('text-start text-12 text-white/60', props.className)}>
       If the order is 100% filled, you will receive.&nbsp;
       <b title={tokenAmount(amount, targetToken)}>
         {roundTokenAmount(amount, targetToken)}
       </b>
       &nbsp;at an average price of&nbsp;
-      <b title={tokenAmount(mean, sourceToken)}>
-        {roundTokenAmount(mean, sourceToken)}
+      <b title={tokenAmount(mean, props.quote)}>
+        {roundTokenAmount(mean, props.quote)}
       </b>
       &nbsp;per <b>1 {props.base.symbol}</b>.&nbsp;
       <a
