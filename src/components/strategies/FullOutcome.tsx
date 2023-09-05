@@ -2,11 +2,13 @@ import { Token } from 'libs/tokens';
 import { FC, useMemo } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { AcquireAmountProps, getAcquiredAmount } from 'utils/fullOutcome';
-import { cn } from 'utils/helpers';
+import Decimal from 'decimal.js';
 
 interface FullOutcomeProps extends AcquireAmountProps {
   base: Token;
   quote: Token;
+  /** Amount deposed on a strategy or withdrawed from it */
+  budgetUpdate?: string;
   className?: string;
 }
 
@@ -22,14 +24,34 @@ const tokenAmount = (amount: string, token: Token) => {
   return `${value} ${token.symbol}`;
 };
 
+export const getUpdatedBudget = (
+  type: 'deposit' | 'withdraw',
+  balance?: string,
+  update?: string
+) => {
+  const base = new Decimal(balance || '0');
+  const delta = new Decimal(update || '0');
+  if (type === 'deposit') return base.add(delta).toString();
+  return base.sub(delta).toString();
+};
+
 export const FullOutcomeCreateStrategy: FC<FullOutcomeProps> = (props) => {
   const result = useMemo(() => getAcquiredAmount(props), [props]);
   if (!result) return <></>;
   const { amount, mean } = result;
   const targetToken = props.buy ? props.base : props.quote;
+  const hasBudgetUpdate = props.budgetUpdate && Number(props.budgetUpdate) > 0;
+
+  // Note: Tailwind merge will override text-12 with text-start for some reason
+  const textClasses = [
+    'text-start text-12 text-white/60',
+    props.className ?? '',
+  ].join(' ');
+
   return (
-    <p className={cn('text-start text-12 text-white/60', props.className)}>
-      If the order is 100% filled, you will receive.&nbsp;
+    <p className={textClasses}>
+      {hasBudgetUpdate && 'Based on updated budget, '}
+      If the order is 100% filled, you will receive&nbsp;
       <b title={tokenAmount(amount, targetToken)}>
         {roundTokenAmount(amount, targetToken)}
       </b>

@@ -6,6 +6,7 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
+import { FullOutcomeCreateStrategy, getUpdatedBudget } from '../FullOutcome';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -83,6 +84,17 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           })}
         />
       </div>
+      <FullOutcomeCreateStrategy
+        className="mt-20"
+        price={order.price}
+        min={order.min}
+        max={order.max}
+        budget={getUpdatedBudget(type, balance, order.budget)}
+        budgetUpdate={order.budget}
+        buy={buy}
+        base={base}
+        quote={quote}
+      />
     </div>
   );
 };
