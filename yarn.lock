@@ -1114,7 +1114,7 @@
     core-js-pure "^3.30.2"
     regenerator-runtime "^0.13.11"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7", "@babel/runtime@^7.17.2", "@babel/runtime@^7.19.4", "@babel/runtime@^7.20.6", "@babel/runtime@^7.20.7", "@babel/runtime@^7.21.5", "@babel/runtime@^7.22.3", "@babel/runtime@^7.22.6", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7", "@babel/runtime@^7.17.2", "@babel/runtime@^7.20.7", "@babel/runtime@^7.22.6", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.22.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.6.tgz#57d64b9ae3cff1d67eb067ae117dac087f5bd438"
   integrity sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==
@@ -4085,13 +4085,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-cross-fetch@3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.6.tgz#bae05aa31a4da760969756318feeee6e70f15d6c"
-  integrity sha512-riRvo06crlE8HiqOwIpQhxwdOk4fOeR7FVM/wXoxchFEqMNUjvbs3bfo4OTgMEMHzppd4DxFBDbyySj8Cv781g==
-  dependencies:
-    node-fetch "^2.6.11"
-
 cross-fetch@^3.1.4, cross-fetch@^3.1.5:
   version "3.1.8"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.8.tgz#0327eba65fd68a7d119f8fb2bf9334a1a7956f82"
@@ -4646,14 +4639,6 @@ eslint-plugin-flowtype@^8.0.3:
   dependencies:
     lodash "^4.17.21"
     string-natural-compare "^3.0.1"
-
-eslint-plugin-i18next@^6.0.2:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-i18next/-/eslint-plugin-i18next-6.0.3.tgz#a388f9982deb040102c1c4498e4dc38d9bd6ffd9"
-  integrity sha512-RtQXYfg6PZCjejIQ/YG+dUj/x15jPhufJ9hUDGH0kCpJ6CkVMAWOQ9exU1CrbPmzeykxLjrXkjAaOZF/V7+DOA==
-  dependencies:
-    lodash "^4.17.21"
-    requireindex "~1.1.0"
 
 eslint-plugin-import@^2.25.3:
   version "2.28.0"
@@ -5451,13 +5436,6 @@ html-encoding-sniffer@^3.0.0:
   dependencies:
     whatwg-encoding "^2.0.0"
 
-html-parse-stringify@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/html-parse-stringify/-/html-parse-stringify-3.0.1.tgz#dfc1017347ce9f77c8141a507f233040c59c55d2"
-  integrity sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==
-  dependencies:
-    void-elements "3.1.0"
-
 http-proxy-agent@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/http-proxy-agent/-/http-proxy-agent-5.0.0.tgz#5129800203520d434f142bc78ff3c170800f2b43"
@@ -5481,49 +5459,6 @@ humanize-ms@^1.2.1:
   integrity sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==
   dependencies:
     ms "^2.0.0"
-
-i18next-browser-languagedetector@^7.0.1:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-7.1.0.tgz#01876fac51f86b78975e79b48ccb62e2313a2d7d"
-  integrity sha512-cr2k7u1XJJ4HTOjM9GyOMtbOA47RtUoWRAtt52z43r3AoMs2StYKyjS3URPhzHaf+mn10hY9dZWamga5WPQjhA==
-  dependencies:
-    "@babel/runtime" "^7.19.4"
-
-i18next-chained-backend@^4.2.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/i18next-chained-backend/-/i18next-chained-backend-4.4.0.tgz#e81ab29bd62ba3ad68f448de506aab8ceb1fa7b1"
-  integrity sha512-I+mG0Bly9lbUk8kPZYbJuV7zPY0QDueOJ9yiUqz9o/RX2Mb7eC8RrfwtTX1QhVZmT9KSs9Oq5VDVLxPOeXBIgg==
-  dependencies:
-    "@babel/runtime" "^7.22.3"
-    i18next-resources-to-backend "1.1.4"
-
-i18next-http-backend@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-2.2.1.tgz#cdb7efbafa46ce8f237d9db443f62514664a3bdf"
-  integrity sha512-ZXIdn/8NJIBJ0X4hzXfc3STYxKrCKh1fYjji9HPyIpEJfvTvy8/ZlTl8RuTizzCPj2ZcWrfaecyOMKs6bQ7u5A==
-  dependencies:
-    cross-fetch "3.1.6"
-
-i18next-localstorage-backend@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/i18next-localstorage-backend/-/i18next-localstorage-backend-4.1.1.tgz#a27d38b3e933f911c03bfabc03ebd889b90eaf2b"
-  integrity sha512-gz3OP6m0jygF2SAzarDSFpaziYzF8mS8DP/pEUze+kDquzHTz2sy/eshcSkmFEYyGXMC037xUtlT97bNGlpZPA==
-  dependencies:
-    "@babel/runtime" "^7.20.6"
-
-i18next-resources-to-backend@1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/i18next-resources-to-backend/-/i18next-resources-to-backend-1.1.4.tgz#d139ca0cacc270dcc90b7926e192f4cd5aa4db60"
-  integrity sha512-hMyr9AOmIea17AOaVe1srNxK/l3mbk81P7Uf3fdcjlw3ehZy3UNTd0OP3EEi6yu4J02kf9jzhCcjokz6AFlEOg==
-  dependencies:
-    "@babel/runtime" "^7.21.5"
-
-i18next@^22.5.0:
-  version "22.5.1"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.5.1.tgz#99df0b318741a506000c243429a7352e5f44d424"
-  integrity sha512-8TGPgM3pAD+VRsMtUMNknRz3kzqwp/gPALrWMsDnmC1mKqJwpWyooQRLMcbTwq8z8YwSmuj+ZYvc+xCuEpkssA==
-  dependencies:
-    "@babel/runtime" "^7.20.6"
 
 iconv-lite@0.6.3:
   version "0.6.3"
@@ -6340,7 +6275,7 @@ node-addon-api@^2.0.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-2.0.2.tgz#432cfa82962ce494b132e9d72a15b29f71ff5d32"
   integrity sha512-Ntyt4AIXyaLIuMHF6IOoTakB3K+RWxwtsHNRxllEoA6vPwP9o4866g6YWDLUdnucilZhmkxiHwHr11gAENw+QA==
 
-node-fetch@^2.6.11, node-fetch@^2.6.12, node-fetch@^2.6.7:
+node-fetch@^2.6.12, node-fetch@^2.6.7:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.12.tgz#02eb8e22074018e3d5a83016649d04df0e348fba"
   integrity sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==
@@ -6950,14 +6885,6 @@ react-fast-compare@^3.0.1:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.2.tgz#929a97a532304ce9fee4bcae44234f1ce2c21d49"
   integrity sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==
 
-react-i18next@^12.3.1:
-  version "12.3.1"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-12.3.1.tgz#30134a41a2a71c61dc69c6383504929aed1c99e7"
-  integrity sha512-5v8E2XjZDFzK7K87eSwC7AJcAkcLt5xYZ4+yTPDAW1i7C93oOY1dnr4BaQM7un4Hm+GmghuiPvevWwlca5PwDA==
-  dependencies:
-    "@babel/runtime" "^7.20.6"
-    html-parse-stringify "^3.0.1"
-
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -7100,11 +7027,6 @@ require-main-filename@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
-
-requireindex@~1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.1.0.tgz#e5404b81557ef75db6e49c5a72004893fe03e162"
-  integrity sha512-LBnkqsDE7BZKvqylbmn7lTIVdpx4K/QCduRATpO5R+wtPmky/a8pN1bO2D6wXppn1497AJF9mNjqAXr6bdl9jg==
 
 requires-port@^1.0.0:
   version "1.0.0"
@@ -7604,11 +7526,6 @@ tailwind-merge@^1.13.2:
   resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-1.14.0.tgz#e677f55d864edc6794562c63f5001f45093cdb8b"
   integrity sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==
 
-tailwindcss-rtl@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/tailwindcss-rtl/-/tailwindcss-rtl-0.9.0.tgz#270da04492081620478ebf73819fc285fe724a54"
-  integrity sha512-y7yC8QXjluDBEFMSX33tV6xMYrf0B3sa+tOB5JSQb6/G6laBU313a+Z+qxu55M1Qyn8tDMttjomsA8IsJD+k+w==
-
 tailwindcss@3.1.8:
   version "3.1.8"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.1.8.tgz#4f8520550d67a835d32f2f4021580f9fddb7b741"
@@ -8097,11 +8014,6 @@ vitest@^0.29.8:
     vite "^3.0.0 || ^4.0.0"
     vite-node "0.29.8"
     why-is-node-running "^2.2.2"
-
-void-elements@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
-  integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
 
 w3c-xmlserializer@^4.0.0:
   version "4.0.0"

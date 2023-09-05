@@ -5,7 +5,6 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconError } from 'assets/icons/times.svg';
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
-import { useTranslation } from 'libs/translations';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalGenericInfoData = {
@@ -18,9 +17,8 @@ export type ModalGenericInfoData = {
 
 export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
   id,
-  data: { variant = 'error', title, text, buttonLabel, onConfirm },
+  data: { variant = 'error', title, text, buttonLabel = 'Confirm', onConfirm },
 }) => {
-  const { t } = useTranslation();
   const { closeModal } = useModal();
 
   const icon = useMemo(() => {
@@ -53,7 +51,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
         }}
         className={'my-16'}
       >
-        {buttonLabel || t('modals.genericInfo.actionButtons.actionButton1')}
+        {buttonLabel}
       </Button>
       <Button
         variant={'black'}
@@ -61,7 +59,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
         onClick={() => closeModal(id)}
         className={'mt-16'}
       >
-        {t('modals.genericInfo.actionButtons.actionButton2')}
+        Cancel
       </Button>
     </ModalOrMobileSheet>
   );

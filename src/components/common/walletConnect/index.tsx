@@ -1,13 +1,10 @@
-import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
-import { getProductDescriptionItems } from './items';
+import { items } from './items';
 
 export const WalletConnect = () => {
-  const { t } = useTranslation();
   const { openModal } = useModal();
-  const items = getProductDescriptionItems(t);
 
   return (
     <div className="md:h-[calc(100vh-300px)] md:min-h-[400px]">
@@ -21,22 +18,21 @@ export const WalletConnect = () => {
             'f-full flex flex-col justify-center space-y-30 md:w-[360px]'
           }
         >
-          <h1>{t('pages.strategyOverview.noStrategyCard.title')}</h1>
+          <h1>Automate your Trading Strategies</h1>
           <p className={'text-white/60'}>
-            {t('pages.strategyOverview.noStrategyCard.subtitle')}
+            A fully decentralized protocol for automating on-chain trading
+            strategies.
           </p>
 
           <Button
-            className="flex items-center justify-center space-s-16"
+            className="flex items-center justify-center space-x-16"
             variant={'success'}
             onClick={() => openModal('wallet', undefined)}
             fullWidth
             size={'lg'}
           >
             <IconWallet className="h-20 w-20" />
-            <span>
-              {t('pages.strategyOverview.noStrategyCard.actionButton')}
-            </span>
+            <span>Connect</span>
           </Button>
         </div>
         <div
@@ -48,7 +44,7 @@ export const WalletConnect = () => {
         </div>
         <div className={'flex h-full flex-col justify-center space-y-33'}>
           {items.map((item, index) => (
-            <div className={'flex items-center space-s-20'} key={index}>
+            <div className={'flex items-center space-x-20'} key={index}>
               {item.icon}
               <span className={'text-white/80'}>{item.title}</span>
             </div>

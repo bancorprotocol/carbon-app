@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { Trans, useTranslation } from 'libs/translations';
 import { Link, PathNames } from 'libs/routing';
 import { Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
@@ -15,7 +14,7 @@ type Props = {
 
 const textClasses = 'text-16 font-weight-500';
 const buttonClasses =
-  'flex h-44 w-full items-center space-s-16 rounded-8 px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
+  'flex h-44 w-full items-center space-x-16 rounded-8 px-10 hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent';
 
 const EXT_LINKS = [
   {
@@ -31,7 +30,6 @@ const EXT_LINKS = [
 ];
 
 export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
-  const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
 
   const isDisabled = isLoading || !checked;
@@ -40,23 +38,28 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
     <div className={'space-y-10'}>
       <div className={'mb-20 space-y-10 text-14 text-white/80'}>
         <p>
-          <Trans i18nKey={'modals.connectWallet.content1'}>
-            <Link
-              target={'_blank'}
-              to={PathNames.terms}
-              className={'font-weight-500 text-white'}
-            />
-            <Link
-              target={'_blank'}
-              to={PathNames.privacy}
-              className={'font-weight-500 text-white'}
-            />
-          </Trans>
+          By connecting my wallet, I agree to the{' '}
+          <Link
+            to={PathNames.terms}
+            target={'_blank'}
+            className={'font-weight-500 text-white'}
+          >
+            terms & conditions
+          </Link>{' '}
+          and{' '}
+          <Link
+            target={'_blank'}
+            to={PathNames.privacy}
+            className={'font-weight-500 text-white'}
+          >
+            cookie & privacy policy
+          </Link>{' '}
+          of this site.{' '}
         </p>
-        <div className={'flex items-center space-s-10'}>
+        <div className={'flex items-center space-x-10'}>
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
-            {t('modals.connectWallet.actionButton')}
+            I read and accept
           </button>
         </div>
       </div>

@@ -1,6 +1,5 @@
 import { carbonEvents } from 'services/events';
 import { useLocation } from 'libs/routing';
-import { useTranslation } from 'libs/translations';
 import { EditTypes } from './EditStrategyMain';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
@@ -16,16 +15,15 @@ export const EditStrategyHeader = ({
   setShowGraph,
   type,
 }: EditStrategyHeaderProps) => {
-  const { t } = useTranslation();
   const {
     history: { back },
   } = useLocation();
 
   const titleByType: { [key in EditTypes]: string } = {
-    renew: t('pages.strategyEdit.titles.title1'),
-    editPrices: t('pages.strategyEdit.titles.title2'),
-    deposit: t('pages.strategyEdit.titles.title3'),
-    withdraw: t('pages.strategyEdit.titles.title4'),
+    renew: 'Renew Strategy',
+    editPrices: 'Edit Prices',
+    deposit: 'Deposit Budget',
+    withdraw: 'Withdraw Budget',
   };
 
   return (

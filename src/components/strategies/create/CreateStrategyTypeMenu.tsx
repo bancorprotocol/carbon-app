@@ -1,6 +1,5 @@
 import { FC, ReactNode, useEffect } from 'react';
 import { carbonEvents } from 'services/events';
-import { useTranslation } from 'libs/translations';
 import { m } from 'libs/motion';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
@@ -23,7 +22,7 @@ const BlockIconTextDesc = ({
   description: string;
 }) => {
   return (
-    <div className={'flex items-center space-s-20'}>
+    <div className={'flex items-center space-x-20'}>
       <div
         className={
           'flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-6 bg-white/25'
@@ -48,7 +47,6 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   selectedStrategySettings,
   setSelectedStrategySettings,
 }) => {
-  const { t } = useTranslation();
   const { openModal } = useModal();
   const {
     items: tabs,
@@ -73,7 +71,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         className={'space-y-20 rounded-10 bg-silver p-20'}
         key={'createStrategyTypeMenu'}
       >
-        <h2>{t('pages.strategyCreate.step1.section2.title')}</h2>
+        <h2>Strategy Type</h2>
         <TabsMenu>
           {tabs.map(({ label, to, search }) => (
             <TabsMenuButton
@@ -93,22 +91,16 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           {strategyType === 'recurring' &&
             BlockIconTextDesc({
               icon: <IconArrows className={'h-18 w-18'} />,
-              title: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content1'
-              ),
-              description: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type1.contents.content2'
-              ),
+              title: 'Automated Linked Orders',
+              description:
+                'Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.',
             })}
           {strategyType === 'disposable' &&
             BlockIconTextDesc({
               icon: <IconArrowsTransparent className={'h-18 w-18'} />,
-              title: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content1'
-              ),
-              description: t(
-                'pages.strategyCreate.step1.section2.strategyTypes.type2.contents.content2'
-              ),
+              title: 'Single Use Order',
+              description:
+                'An irreversible buy or sell order at a predefined price or range.',
             })}
         </div>
         <div
@@ -121,7 +113,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
               <div key={`${label}-${i}`} className="relative flex flex-1">
                 {isRecommended && (
                   <div className="absolute -top-16 left-1/2 z-10 -translate-x-1/2 rounded border-2 border-green/25 bg-darkGreen px-5 py-3 text-12 font-weight-500 text-green md:px-7 md:text-10">
-                    {t('pages.strategyCreate.step1.section2.contents.content1')}
+                    Recommended
                   </div>
                 )}
                 <Button
@@ -179,7 +171,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           });
         }}
       >
-        {t('pages.strategyCreate.step1.actionButton')}
+        Next Step
       </Button>
     </>
   );

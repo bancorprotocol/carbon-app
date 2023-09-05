@@ -4,7 +4,6 @@ import { useModalTradeTokenList } from 'libs/modals/modals/ModalTradeTokenList/u
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTradeTokenListContent } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
-import { useTranslation } from 'libs/translations';
 import { SearchInput } from 'components/common/searchInput';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { useBreakpoints } from 'hooks/useBreakpoints';
@@ -22,7 +21,6 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   id,
   data,
 }) => {
-  const { t } = useTranslation();
   const { belowBreakpoint } = useBreakpoints();
   const {
     tradePairs,
@@ -38,7 +36,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
   } = useModalTradeTokenList({ id, data });
 
   return (
-    <ModalOrMobileSheet id={id} title={t('modals.selectTokenPair.modalTitle')}>
+    <ModalOrMobileSheet id={id} title="Select Token Pair">
       <SearchInput
         autoFocus={!belowBreakpoint('md')}
         value={search}

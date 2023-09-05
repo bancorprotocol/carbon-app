@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { ModalFC } from 'libs/modals/modals.types';
 import { Strategy } from 'libs/queries';
-import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { Button } from 'components/common/button';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
@@ -24,8 +23,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   data: { strategy, type },
 }) => {
   const { closeModal } = useModal();
-  const { t } = useTranslation();
-  const data = getModalDataByType(type, t);
+  const data = getModalDataByType(type);
   const { pauseStrategy, isProcessing, setIsProcessing, updateMutation } =
     useUpdateStrategy();
 
@@ -74,8 +72,8 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
   };
 
   const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing, t);
-  }, [isAwaiting, isProcessing, t]);
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
 
   return (
     <ModalOrMobileSheet id={id} title={data?.modalTitle}>
@@ -106,9 +104,7 @@ export const ModalConfirmStrategy: ModalFC<ModalConfirmStrategyData> = ({
           size="lg"
           fullWidth
         >
-          {type === 'delete'
-            ? t('modals.deleteStrategy.actionButtons.actionButton2')
-            : t('modals.pauseStrategy.actionButtons.actionButton2')}
+          Cancel
         </Button>
       </div>
     </ModalOrMobileSheet>

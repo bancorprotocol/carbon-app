@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { m } from 'libs/motion';
+import { m, Variants } from 'libs/motion';
 import { useModal } from 'hooks/useModal';
-import { getInAndOutVariant } from './utils';
 import { ReactComponent as IconX } from 'assets/icons/X.svg';
 import { Overlay } from 'libs/modals/Overlay';
 import { ModalProps } from 'libs/modals/modals.types';
@@ -25,7 +24,6 @@ export const ModalSlideOver: FC<ModalProps> = ({
   showCloseButton = true,
 }) => {
   const { closeModal } = useModal();
-  const dropInAndOut = getInAndOutVariant();
   const sizeClass = getSize(size);
 
   return (
@@ -33,7 +31,7 @@ export const ModalSlideOver: FC<ModalProps> = ({
       <m.div
         onClick={(e) => e.stopPropagation()}
         className={`relative w-full ${sizeClass}`}
-        variants={dropInAndOut}
+        variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
@@ -65,4 +63,26 @@ export const ModalSlideOver: FC<ModalProps> = ({
       </m.div>
     </Overlay>
   );
+};
+
+const dropIn: Variants = {
+  hidden: {
+    x: '100vh',
+  },
+  visible: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: 0,
+      duration: 0.5,
+    },
+  },
+  exit: {
+    x: '100vh',
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
 };

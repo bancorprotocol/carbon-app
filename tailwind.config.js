@@ -908,5 +908,5 @@ module.exports = {
       50: '50',
     },
   },
-  plugins: [require('tailwindcss-rtl')],
+  plugins: [],
 };
