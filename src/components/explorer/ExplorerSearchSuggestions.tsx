@@ -11,7 +11,7 @@ import {
   useState,
 } from 'react';
 import { cn } from 'utils/helpers';
-import { ReactComponent as IconClose } from 'assets/icons/times.svg';
+import { ExplorerSearchInputContainer } from './ExplorerSearchInputContainer';
 import styles from './explorer.module.css';
 
 interface Props extends Omit<ExplorerSearchProps, 'type'> {}
@@ -95,41 +95,39 @@ const ExplorerSearchSuggestions: FC<Props> = (props) => {
   };
 
   return (
-    <div ref={root} className={styles.inputContainer}>
-      <input
-        name="search"
-        type="search"
-        role="combobox"
-        autoComplete="off"
-        aria-controls={listboxId}
-        aria-autocomplete="both"
-        aria-expanded={open}
-        defaultValue={props.search}
-        placeholder="Search by token pair"
-        aria-label="Search by token pair"
-        className={styles.searchInput}
-        onChange={(e) => props.setSearch(e.target.value)}
-        onKeyDown={onKeyDownHandler}
-        onBlur={() => setOpen(false)}
-        onFocus={() => setOpen(true)}
-      />
-      {!!props.search && (
-        <button type="reset" aria-label="Clear">
-          <IconClose className="w-12" />
-        </button>
-      )}
+    <ExplorerSearchInputContainer
+      containerRef={root}
+      role="combobox"
+      autoComplete="off"
+      aria-controls={listboxId}
+      aria-autocomplete="both"
+      aria-expanded={open}
+      defaultValue={props.search}
+      placeholder="Search by token pair"
+      aria-label="Search by token pair"
+      className={styles.searchInput}
+      onChange={(e) => props.setSearch(e.target.value)}
+      onKeyDown={onKeyDownHandler}
+      onBlur={() => setOpen(false)}
+      onFocus={() => setOpen(true)}
+      search={props.search}
+      setSearch={props.setSearch}
+    >
       {open && !props.filteredPairs.length && <EmptySuggestion />}
       {open && !!props.filteredPairs.length && (
         <SuggestionList {...suggestionListProps} />
       )}
-    </div>
+    </ExplorerSearchInputContainer>
   );
 };
+
+const popupClasses =
+  'absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-auto rounded-10 bg-emphasis py-10 md:mt-20';
 
 const EmptySuggestion: FC = () => {
   const emptyId = useId();
   return (
-    <article aria-labelledby={emptyId} className={cn(styles.popup, 'px-30')}>
+    <article aria-labelledby={emptyId} className={cn(popupClasses, 'px-30')}>
       <h3 id={emptyId} className={'font-weight-500'}>
         We couldn't find any strategies
       </h3>
@@ -161,7 +159,7 @@ const SuggestionList: FC<SuggestionListProps> = (props) => {
     <ul
       role="listbox"
       id={props.listboxId}
-      className={styles.popup}
+      className={popupClasses}
       tabIndex={-1}
     >
       <h3 className="text-secondary ml-20 mb-8 font-weight-500">
@@ -177,7 +175,10 @@ const SuggestionList: FC<SuggestionListProps> = (props) => {
             key={slug.toLowerCase()}
             onMouseDown={(e) => e.preventDefault()} // prevent blur on click
             onClick={() => select(name)}
-            className={styles.option}
+            className={cn(
+              styles.option,
+              'flex cursor-pointer items-center space-x-10 px-30 py-10 hover:bg-white/20'
+            )}
           >
             <PairLogoName pair={pair} />
           </li>
