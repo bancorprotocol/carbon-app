@@ -32,6 +32,17 @@ const getTokenDecimalMap = () => {
   );
 };
 
+const removeOldI18nKeys = () => {
+  Object.keys(localStorage).forEach((key) => {
+    if (
+      key.match(/carbon-v\d-[a-z]{2}-[A-Z]{2}-translation/) ||
+      key.includes('i18nextLng')
+    ) {
+      localStorage.removeItem(key);
+    }
+  });
+};
+
 export const useCarbonInit = () => {
   const cache = useQueryClient();
   const {
@@ -100,6 +111,9 @@ export const useCarbonInit = () => {
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
       }
+
+      removeOldI18nKeys();
+
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
     } catch (e) {
