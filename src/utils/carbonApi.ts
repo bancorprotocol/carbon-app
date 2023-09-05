@@ -37,9 +37,6 @@ const newApiAxios = axios.create({
   baseURL: 'https://api.carbondefi.xyz/v1/',
 });
 
-carbonApiAxios.defaults.headers.common['x-carbon-auth-key'] =
-  import.meta.env.VITE_CARBON_API_KEY;
-
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (import.meta.env.VITE_DEV_MODE) {
@@ -54,12 +51,9 @@ const carbonApi = {
   ): Promise<FiatPriceDict> => {
     const {
       data: { data },
-    } = await carbonApiAxios.get<{ data: FiatPriceDict }>(
-      `marketrate/${address}`,
-      {
-        params: { convert: convert.join(',') },
-      }
-    );
+    } = await newApiAxios.get<{ data: FiatPriceDict }>(`market-rate`, {
+      params: { address, convert: convert.join(',') },
+    });
     return data;
   },
   getRoi: async (): Promise<RoiRow[]> => {
