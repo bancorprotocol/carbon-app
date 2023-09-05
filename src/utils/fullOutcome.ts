@@ -5,7 +5,7 @@ export interface AcquireAmountProps {
   min: string;
   max: string;
   price: string;
-  buy: boolean;
+  buy?: boolean;
 }
 
 export const geoMean = (min: string, max: string) => {

@@ -4,6 +4,7 @@ import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/Lim
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from './EditStrategyMain';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
+import { FullOutcomeCreateStrategy } from '../FullOutcome';
 
 type EditStrategyPricesBuySellBlockProps = {
   base: Token;
@@ -61,6 +62,16 @@ export const EditStrategyPricesBuySellBlock: FC<
           }}
         />
       </div>
+      <FullOutcomeCreateStrategy
+        className="mt-20"
+        price={order.price}
+        min={order.min}
+        max={order.max}
+        budget={order.budget}
+        buy={buy}
+        base={base}
+        quote={quote}
+      />
     </div>
   );
 };
