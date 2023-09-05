@@ -1,0 +1,24 @@
+.input-container {
+  @apply flex flex-grow;
+}
+
+.search-input {
+  @apply w-full flex-grow bg-transparent;
+}
+.search-input:focus-visible {
+  @apply outline-none;
+}
+
+.popup {
+  @apply absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-auto rounded-10 bg-emphasis py-10 md:mt-20;
+}
+
+.option {
+  @apply flex items-center space-x-10 px-30 py-10 cursor-pointer;
+}
+.option[aria-selected="true"] {
+  @apply bg-white/10;
+}
+.option:hover {
+  @apply bg-white/20;
+}
