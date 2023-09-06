@@ -12,6 +12,7 @@ import { EditTypes } from './EditStrategyMain';
 import { getFiatDisplayValue, sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
+import { TooltipPrice, TooltipPriceProps } from './tooltip/TooltipPrice';
 
 const shouldDisplayDistributeByType: {
   [key in EditTypes]: boolean;
@@ -69,11 +70,21 @@ export const EditStrategyAllocatedBudget: FC<{
     selectedFiatCurrency
   );
 
+  const tooltipPriceProps: Omit<TooltipPriceProps, 'price'> = {
+    buy,
+    quote,
+    base,
+    budgetFiat,
+  };
+
   return (
     <>
-      <div className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500">
-        <div className="flex items-center justify-between gap-16">
-          <div className="flex w-auto items-center gap-6">
+      <div
+        role="table"
+        className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500"
+      >
+        <div role="row" className="flex items-center justify-between gap-16">
+          <div role="columnheader" className="flex w-auto items-center gap-6">
             <div>Allocated Budget</div>
             <Tooltip
               sendEventOnMount={{ buy }}
@@ -85,7 +96,7 @@ export const EditStrategyAllocatedBudget: FC<{
               }
             />
           </div>
-          <div className="flex flex-1 justify-end gap-8">
+          <div role="cell" className="flex flex-1 justify-end gap-8">
             <Tooltip
               element={
                 <>
@@ -126,9 +137,38 @@ export const EditStrategyAllocatedBudget: FC<{
             )}
           </div>
         </div>
+
+        <div
+          role="row"
+          className="mt-10 flex items-center justify-between gap-16"
+        >
+          <div role="columnheader" className="flex items-center">
+            {buy ? 'Buy' : 'Sell'} Price
+          </div>
+          <div role="cell" className="flex flex-1 justify-end gap-8">
+            <div className={'flex items-center'}>
+              {/* Limit Strategy Price */}
+              <TooltipPrice price={order.price} {...tooltipPriceProps} />
+              {/* Range Strategy Price */}
+              {!!order.min && !!order.max && (
+                <>
+                  <TooltipPrice price={order.min} {...tooltipPriceProps} />
+                  -
+                  <TooltipPrice price={order.max} {...tooltipPriceProps} />
+                </>
+              )}
+              <LogoImager
+                className="ml-10 h-16 w-16"
+                src={quote?.logoURI}
+                alt="token"
+              />
+            </div>
+          </div>
+        </div>
+
         {showDistribute && type !== 'editPrices' && (
-          <div className="mt-10 flex justify-between">
-            <div className="flex items-center">
+          <div role="row" className="mt-10 flex justify-between">
+            <div role="columnheader" className="flex items-center">
               <span className="mr-5">Distribute Across Entire Range</span>
               <Tooltip
                 iconClassName="h-13 text-white/60"
@@ -167,6 +207,7 @@ export const EditStrategyAllocatedBudget: FC<{
               />
             </div>
             <Switch
+              role="cell"
               variant={isDistributeToggleOn ? 'white' : 'black'}
               isOn={isDistributeToggleOn}
               setIsOn={(isOn) =>
@@ -182,7 +223,10 @@ export const EditStrategyAllocatedBudget: FC<{
         )}
       </div>
       {type === 'editPrices' && showDistribute && (
-        <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60">
+        <div
+          role="row"
+          className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60"
+        >
           <Tooltip
             iconClassName="h-13 text-white/60"
             element={

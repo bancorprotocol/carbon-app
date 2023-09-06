@@ -14,7 +14,7 @@ import {
 } from 'components/strategies/create/types';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { FullOutcomeCreateStrategy } from 'components/strategies/FullOutcome';
+import { FullOutcome } from 'components/strategies/FullOutcome';
 import { useNavigate } from 'libs/routing';
 
 type Props = {
@@ -191,7 +191,7 @@ export const BuySellBlock: FC<Props> = ({
           Insufficient balance
         </div>
       </div>
-      <FullOutcomeCreateStrategy
+      <FullOutcome
         price={order.price}
         min={order.min}
         max={order.max}

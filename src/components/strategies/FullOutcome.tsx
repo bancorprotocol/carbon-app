@@ -35,7 +35,7 @@ export const getUpdatedBudget = (
   return base.sub(delta).toString();
 };
 
-export const FullOutcomeCreateStrategy: FC<FullOutcomeProps> = (props) => {
+export const FullOutcome: FC<FullOutcomeProps> = (props) => {
   const result = useMemo(() => getAcquiredAmount(props), [props]);
   if (!result) return <></>;
   const { amount, mean } = result;
