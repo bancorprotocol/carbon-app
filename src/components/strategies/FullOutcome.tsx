@@ -3,7 +3,7 @@ import { FC, useMemo } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { FullOutcomeParams, getFullOutcome } from 'utils/fullOutcome';
 import Decimal from 'decimal.js';
-import { prettifyNumber } from 'utils/helpers';
+import { cn, prettifyNumber } from 'utils/helpers';
 
 interface FullOutcomeProps extends FullOutcomeParams {
   base: Token;
@@ -31,14 +31,8 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
   const targetToken = props.buy ? props.base : props.quote;
   const hasBudgetUpdate = props.budgetUpdate && Number(props.budgetUpdate) > 0;
 
-  // Note: tailwind-merge will override text-12 with text-start for some reason
-  const textClasses = [
-    'text-start text-12 text-white/60',
-    props.className ?? '',
-  ].join(' ');
-
   return (
-    <p className={textClasses}>
+    <p className={cn('text-start text-12 text-white/60', props.className)}>
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
       <b>
