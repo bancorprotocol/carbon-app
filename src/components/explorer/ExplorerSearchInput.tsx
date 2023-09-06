@@ -19,7 +19,7 @@ export const ExplorerSearchInput: FC<Props> = (props) => {
       aria-label="Search by wallet address"
       onKeyDown={onKeyDownHandler}
       search={props.search}
-      setSearch={props.setSearch}
+      onChange={(e) => props.setSearch(e.target.value)}
     />
   );
 };
