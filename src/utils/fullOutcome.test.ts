@@ -22,7 +22,7 @@ describe('fullOutcome', () => {
     });
   });
 
-  describe('Acquired Amount', () => {
+  describe('Full Outcome', () => {
     const base: FullOutcomeParams = {
       budget: '1',
       min: '',
