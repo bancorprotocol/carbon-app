@@ -55,7 +55,7 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
         href="https://faq.carbondefi.xyz/order-execution/100-fill-estimation"
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-4 text-green underline"
+        className="inline-flex items-center gap-4 font-weight-500 text-green"
       >
         <span>Learn More</span>
         <IconLink className="inline h-12 w-12" />
