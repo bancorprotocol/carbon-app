@@ -4,7 +4,6 @@ import { m, mItemVariant } from 'libs/motion';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
-import { useTranslation } from 'libs/translations';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { cn } from 'utils/helpers';
 import { getStatusText, getTooltipTextByStatus } from './utils';
@@ -23,7 +22,6 @@ export const StrategyBlock: FC<Props> = ({
   className,
   isExplorer,
 }) => {
-  const { t } = useTranslation();
   const [manage, setManage] = useState(false);
   const showBudgetWarning = useBudgetWarning(
     strategy.base,
@@ -42,7 +40,7 @@ export const StrategyBlock: FC<Props> = ({
       )}
     >
       <div className="flex justify-between">
-        <div className={'flex space-s-10'}>
+        <div className={'flex space-x-10'}>
           <TokensOverlap
             // TODO fix token logo classes
             className="h-40 w-40"
@@ -57,11 +55,9 @@ export const StrategyBlock: FC<Props> = ({
               </div>
             }
             <div className="text-secondary flex gap-10">
-              {t('pages.strategyOverview.card.title', {
-                id: strategy.idDisplay,
-              })}
+              ID: {strategy.idDisplay}
               <div className="flex gap-10">
-                <Tooltip element={getTooltipTextByStatus(strategy.status, t)}>
+                <Tooltip element={getTooltipTextByStatus(strategy.status)}>
                   <span
                     className={`${
                       strategy.status === StrategyStatus.Active
@@ -69,7 +65,7 @@ export const StrategyBlock: FC<Props> = ({
                         : 'text-red'
                     } `}
                   >
-                    {getStatusText(strategy.status, t)}
+                    {getStatusText(strategy.status)}
                   </span>
                 </Tooltip>
                 {showBudgetWarning && (

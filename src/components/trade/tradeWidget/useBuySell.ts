@@ -9,7 +9,6 @@ import {
   useGetTokenPrice,
 } from 'libs/queries';
 import { Action, TradeActionBNStr, MatchActionBNStr } from 'libs/sdk';
-import { useTranslation } from 'libs/translations';
 import { useModal } from 'hooks/useModal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
@@ -22,7 +21,6 @@ export const useBuySell = ({
   sourceBalanceQuery,
   buy = false,
 }: TradeWidgetBuySellProps) => {
-  const { t } = useTranslation();
   const { user, provider } = useWeb3();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
@@ -255,7 +253,7 @@ export const useBuySell = ({
           setIsAwaiting(true);
           tradeFn();
         },
-        buttonLabel: t('modals.confirm.actionButtons.actionButton5'),
+        buttonLabel: 'Confirm Trade',
         eventData: {
           ...eventData,
           productType: 'trade',
@@ -298,23 +296,22 @@ export const useBuySell = ({
 
   const errorMsgSource = useMemo(() => {
     if (isSourceEmptyError) {
-      return t('pages.trade.errors.error4');
+      return 'Please enter an amount';
     }
 
     if (errorBaseBalanceSufficient) {
-      return t('pages.trade.errors.error5');
+      return 'Insufficient balance';
     }
-  }, [errorBaseBalanceSufficient, isSourceEmptyError, t]);
+  }, [errorBaseBalanceSufficient, isSourceEmptyError]);
 
   const errorMsgTarget = useMemo(() => {
     if (isTargetEmptyError) {
-      return t('pages.trade.errors.error6');
+      return 'Please enter an amount';
     }
     if (isLiquidityError) {
-      return t('pages.trade.errors.error7', {
-        num: prettifyNumber(liquidityQuery.data || '0'),
-        token: target.symbol,
-      });
+      return `Available liquidity: ${prettifyNumber(
+        liquidityQuery.data || '0'
+      )} ${target.symbol}`;
     }
   }, [
     isTargetEmptyError,

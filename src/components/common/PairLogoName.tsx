@@ -20,7 +20,7 @@ export const PairLogoName: FC<Props> = ({
         {baseToken.symbol}
         {baseToken.isSuspicious && (
           <WarningWithTooltip
-            className="ms-5"
+            className="ml-5"
             tooltipContent={suspiciousTokenTooltipMsg}
           />
         )}
@@ -28,7 +28,7 @@ export const PairLogoName: FC<Props> = ({
         {quoteToken.symbol}
         {quoteToken.isSuspicious && (
           <WarningWithTooltip
-            className="ms-5"
+            className="ml-5"
             tooltipContent={suspiciousTokenTooltipMsg}
           />
         )}

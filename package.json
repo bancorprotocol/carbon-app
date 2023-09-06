@@ -61,11 +61,6 @@
     "fuse.js": "^6.6.2",
     "highcharts": "^11.1.0",
     "highcharts-react-official": "^3.2.0",
-    "i18next": "^22.5.0",
-    "i18next-browser-languagedetector": "^7.0.1",
-    "i18next-chained-backend": "^4.2.0",
-    "i18next-http-backend": "^2.2.1",
-    "i18next-localstorage-backend": "^4.1.1",
     "jsdom": "^21.1.1",
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
@@ -76,7 +71,6 @@
     "prettier-plugin-tailwindcss": "^0.1.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^12.3.1",
     "react-popper": "^2.3.0",
     "source-map-explorer": "^2.5.3",
     "tailwind-merge": "^1.13.2",
@@ -89,7 +83,10 @@
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.29.8",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.0",
+    "@types/ua-parser-js": "^0.7.36",
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9"
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir \"src/abis/types\" \"src/abis/**/*.json\"",
@@ -112,12 +109,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/ua-parser-js": "^0.7.36",
-    "@typescript-eslint/eslint-plugin": "^5.59.9",
-    "@typescript-eslint/parser": "^5.59.9",
-    "eslint-plugin-i18next": "^6.0.2",
-    "tailwindcss-rtl": "^0.9.0"
   }
 }

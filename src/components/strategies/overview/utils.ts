@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { Strategy } from 'libs/queries';
 import { StrategyFilter, StrategySort } from './StrategyFilterSort';
-import { TFunction } from 'libs/translations';
 
 export const getCompareFunctionBySortType = (sortType: StrategySort) => {
   let firstPairComparison: number;
@@ -39,24 +38,22 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
         new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
   }
 };
-export const getSortAndFilterItems = (
-  t: TFunction<string, undefined, string>
-) => {
+export const getSortAndFilterItems = () => {
   const sortItems = [
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item1'),
+      title: 'Recently Created',
       item: StrategySort.Recent,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item2'),
+      title: 'Oldest Created',
       item: StrategySort.Old,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item3'),
+      title: 'Pair (A->Z)',
       item: StrategySort.PairAscending,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item4'),
+      title: 'Pair (Z->A)',
       item: StrategySort.PairDescending,
     },
     {
@@ -71,15 +68,15 @@ export const getSortAndFilterItems = (
 
   const filterItems = [
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item5'),
+      title: 'All',
       item: StrategyFilter.All,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item6'),
+      title: 'Active',
       item: StrategyFilter.Active,
     },
     {
-      title: t('pages.strategyOverview.header.filterMenu.items.item7'),
+      title: 'Inactive',
       item: StrategyFilter.Inactive,
     },
   ];

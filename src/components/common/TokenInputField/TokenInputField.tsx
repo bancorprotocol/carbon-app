@@ -1,10 +1,9 @@
 import { ChangeEvent, FC, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
-import { useTranslation } from 'libs/translations';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
@@ -34,12 +33,11 @@ export const TokenInputField: FC<Props> = ({
   isError,
   className,
   onKeystroke,
-  placeholder,
+  placeholder = 'Enter Amount',
   disabled,
   slippage,
   withoutWallet,
 }) => {
-  const { t } = useTranslation();
   const { user } = useWeb3();
   const [isFocused, setIsFocused] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -95,11 +93,11 @@ export const TokenInputField: FC<Props> = ({
       }}
     >
       <div className={`flex items-center justify-between`}>
-        <div className={'flex flex-none items-center me-10'}>
-          <Imager
+        <div className={'mr-10 flex flex-none items-center'}>
+          <LogoImager
             alt={'Token'}
             src={token.logoURI}
-            className={'h-30 w-30 rounded-full me-10'}
+            className={'mr-10 h-30 w-30'}
           />
           <span className={'font-weight-500'}>{token.symbol}</span>
         </div>
@@ -122,10 +120,10 @@ export const TokenInputField: FC<Props> = ({
             }
             size={1}
             onChange={handleChange}
-            placeholder={placeholder || t('common.placeholders.placeholder2')}
+            placeholder={placeholder}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
-            className={`w-full shrink bg-transparent text-end font-mono text-18 font-weight-500 focus:outline-none ${
+            className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none ${
               isError ? 'text-red' : 'text-white'
             }`}
             disabled={disabled}
@@ -143,16 +141,16 @@ export const TokenInputField: FC<Props> = ({
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >
-            {t('common.contents.content1')}
+            Wallet:
             {isBalanceLoading ? (
-              t('common.contents.content3')
+              'loading'
             ) : (
               <>
-                <span className="text-white ms-5">
+                <span className="ml-5 text-white">
                   {prettifyNumber(balance || 0)}
                 </span>
-                <div className="text-green ms-10 group-hover:text-white">
-                  {t('common.contents.content2')}
+                <div className="ml-10 text-green group-hover:text-white">
+                  MAX
                 </div>
               </>
             )}

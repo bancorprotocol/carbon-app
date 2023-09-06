@@ -1,6 +1,5 @@
 import { FC, ReactNode } from 'react';
 import { Link } from 'libs/routing';
-import { useTranslation } from 'libs/translations';
 import {
   IconTitleText,
   IconTitleTextProps,
@@ -11,19 +10,15 @@ type Props = IconTitleTextProps & {
   children?: ReactNode;
 };
 
-const DefaultChildren = () => {
-  const { t } = useTranslation();
-
-  return (
-    <div>
-      <Link to={'https://faq.carbondefi.xyz/'}>
-        <Button variant={'error'} fullWidth>
-          {t('common.actionButtons.actionButton6')}
-        </Button>
-      </Link>
-    </div>
-  );
-};
+const DefaultChildren = () => (
+  <div>
+    <Link to={'https://faq.carbondefi.xyz/'}>
+      <Button variant={'error'} fullWidth>
+        Contact Support
+      </Button>
+    </Link>
+  </div>
+);
 
 export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
   return (

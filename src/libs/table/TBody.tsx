@@ -43,7 +43,7 @@ export const TBody = <D extends object>({
             }}
           >
             {row.getVisibleCells().map((cell) => (
-              <td key={cell.id} className={cn('last:text-right', 'last:pe-20')}>
+              <td key={cell.id} className={cn('last:text-right', 'last:pr-20')}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}

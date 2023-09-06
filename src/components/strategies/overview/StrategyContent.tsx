@@ -18,7 +18,6 @@ import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 import { getCompareFunctionBySortType } from './utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { useTranslation } from 'libs/translations';
 
 const getItemsPerRow = (breakpoint: Breakpoint) => {
   switch (breakpoint) {
@@ -48,7 +47,6 @@ export const _StrategyContent: FC<Props> = ({
     strategies: { search, sort, filter },
   } = useStore();
   const compareFunction = getCompareFunctionBySortType(sort);
-  const { t } = useTranslation();
   const filteredStrategies = useMemo(() => {
     const searchLC = search.toLowerCase();
 
@@ -153,15 +151,7 @@ export const _StrategyContent: FC<Props> = ({
                 ))}
               </Fragment>
             ))}
-            {!isExplorer && (
-              <StrategyBlockCreate
-                title={
-                  t(
-                    'pages.strategyOverview.card.actionButtons.actionButton2'
-                  ) || ''
-                }
-              />
-            )}
+            {!isExplorer && <StrategyBlockCreate />}
           </div>
         </div>
       )}

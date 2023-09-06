@@ -9,12 +9,10 @@ import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { useTranslation } from 'libs/translations';
 
 export type TradePageProps = { base: Token; quote: Token };
 
 export const TradePage = () => {
-  const { t } = useTranslation();
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isLoading, isTradePairError } = useTradePairs();
@@ -39,7 +37,7 @@ export const TradePage = () => {
           </div>
         </div>
       ) : isTradePairError || !isValidPair ? (
-        <div>{!noTokens && <div>{t('pages.trade.errors.error1')}</div>}</div>
+        <div>{!noTokens && <div>Not found</div>}</div>
       ) : (
         <div className="px-content mt-25 grid grid-cols-1 gap-20 pb-30 md:grid-cols-12 xl:px-50">
           <div className={'order-3 md:order-1 md:col-span-4 md:row-span-2'}>

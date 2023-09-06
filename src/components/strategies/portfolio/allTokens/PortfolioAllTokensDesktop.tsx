@@ -9,7 +9,7 @@ import { CellContext, Row } from '@tanstack/react-table';
 import { Token } from 'libs/tokens';
 import { useStore } from 'store';
 import { cn, getFiatDisplayValue } from 'utils/helpers';
-import { Imager } from 'components/common/imager/Imager';
+import { LogoImager } from 'components/common/imager/Imager';
 import { getColorByIndex } from 'utils/colorPalettes';
 
 type Props = {
@@ -25,18 +25,14 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
   const { symbol, logoURI } = info.getValue();
 
   return (
-    <div className={cn('flex', 'items-center', 'space-s-16')}>
+    <div className={cn('flex', 'items-center', 'space-x-16')}>
       <div
         className={cn('h-32', 'w-4', 'bg-blue', 'rounded-r-2')}
         style={{
           backgroundColor: getColorByIndex(i),
         }}
       />
-      <Imager
-        alt={'Token Logo'}
-        src={logoURI}
-        className={'h-32 w-32 rounded-full'}
-      />
+      <LogoImager alt={'Token Logo'} src={logoURI} className={'h-32 w-32'} />
       <div>{symbol}</div>
     </div>
   );

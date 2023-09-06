@@ -24,14 +24,12 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { useTranslation } from 'libs/translations';
 
 const spenderAddress = config.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
 export const useCreateStrategy = () => {
-  const { t } = useTranslation();
   const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
@@ -137,8 +135,8 @@ export const useCreateStrategy = () => {
     if (sourceCorrect && targetCorrect) {
       if (!+order0.budget && !+order1.budget) {
         return openModal('genericInfo', {
-          title: t('modals.genericInfo.title'),
-          text: t('modals.genericInfo.contents.content1'),
+          title: 'Empty Strategy Warning',
+          text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
           variant: 'warning',
           onConfirm,
         });
@@ -148,7 +146,7 @@ export const useCreateStrategy = () => {
         return openModal('txConfirm', {
           approvalTokens,
           onConfirm,
-          buttonLabel: t('pages.strategyCreate.step2.actionButton'),
+          buttonLabel: 'Create Strategy',
           eventData: {
             ...strategyEventData,
             productType: 'strategy',

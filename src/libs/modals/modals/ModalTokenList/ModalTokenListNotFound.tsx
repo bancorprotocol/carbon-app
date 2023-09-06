@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Trans } from 'libs/translations';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { useStore } from 'store';
@@ -8,12 +7,13 @@ export const ModalTokenListNotFound: FC = () => {
   const { innerHeight } = useStore();
 
   const Text = () => (
-    <Trans
-      i18nKey={'modals.selectToken.contents.content3'}
-      components={{
-        strong: <span className={'font-weight-500 dark:text-white'} />,
-      }}
-    />
+    <>
+      <span>
+        Unfortunately we couldn't find the token you're looking for, try
+        searching for it
+      </span>
+      <span className={'font-weight-500 dark:text-white'}> by address.</span>
+    </>
   );
 
   return (

@@ -109,7 +109,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
               >
                 <button
                   onClick={() => handleSelect(tradePair)}
-                  className={'flex w-full items-center ps-10 space-s-10'}
+                  className={'flex w-full items-center space-x-10 pl-10'}
                 >
                   <PairLogoName pair={tradePair} />
                 </button>

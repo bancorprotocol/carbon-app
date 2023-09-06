@@ -3,7 +3,6 @@ import { carbonEvents } from 'services/events';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalSlideOver } from 'libs/modals/ModalSlideOver';
 import { Token } from 'libs/tokens';
-import { useTranslation } from 'libs/translations';
 import { TradeSettings } from 'components/trade/settings/TradeSettings';
 
 export type ModalTradeSettingsData = {
@@ -15,7 +14,6 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
   id,
   data,
 }) => {
-  const { t } = useTranslation();
   const {
     trade: {
       settings: { resetAll, isAllSettingsDefault },
@@ -34,13 +32,13 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
       id={id}
       title={
         <div className="flex flex-1 items-center justify-between">
-          <h2>{t('modals.tradeSettings.modalTitle')}</h2>
+          <h2>Trade Settings</h2>
           {!isAllSettingsDefault && (
             <button
-              className="font-mono text-16 font-weight-500 text-white me-20"
+              className="mr-20 font-mono text-16 font-weight-500 text-white"
               onClick={handleReset}
             >
-              {t('modals.tradeSettings.actionButton')}
+              Reset All
             </button>
           )}
         </div>
