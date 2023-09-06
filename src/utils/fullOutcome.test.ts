@@ -7,7 +7,8 @@ describe('fullOutcome', () => {
     it('should return undefined if min is greater or equal to max', () => {
       expect(geoMean('100', '10')).toBeUndefined();
     });
-    it('should return undefined if min or max is negative', () => {
+    it('should return undefined if min or max is 0 or negative', () => {
+      expect(geoMean('0', '10')).toBeUndefined();
       expect(geoMean('-100', '10')).toBeUndefined();
       expect(geoMean('-100', '-10')).toBeUndefined();
     });

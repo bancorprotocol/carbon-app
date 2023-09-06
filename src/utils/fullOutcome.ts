@@ -16,8 +16,8 @@ export interface FullOutcomeParams {
 export const geoMean = (min: string, max: string) => {
   const lowRate = new Decimal(min);
   const highRate = new Decimal(max);
-  if (lowRate.lt(0)) return;
-  if (highRate.lt(0)) return;
+  if (lowRate.lte(0)) return;
+  if (highRate.lte(0)) return;
   if (lowRate.gt(highRate)) return;
   return lowRate.mul(highRate).pow(0.5);
 };
