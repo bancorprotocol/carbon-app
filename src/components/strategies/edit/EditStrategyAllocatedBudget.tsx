@@ -163,10 +163,7 @@ export const EditStrategyAllocatedBudget: FC<{
         )}
       </div>
       {type === 'editPrices' && showDistribute && (
-        <div
-          role="row"
-          className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60"
-        >
+        <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"
             element={
