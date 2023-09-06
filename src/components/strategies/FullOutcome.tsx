@@ -50,7 +50,7 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
         {prettifyNumber(mean)}&nbsp;
         {props.quote.symbol}
       </b>
-      &nbsp; per <b>1 {props.base.symbol}</b>.&nbsp;
+      &nbsp;per <b>1 {props.base.symbol}</b>.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/order-execution/100-fill-estimation"
         target="_blank"
