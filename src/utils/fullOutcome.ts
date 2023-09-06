@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 
-export interface AcquireAmountProps {
+export interface FullOutcomeParams {
   budget: string;
   min: string;
   max: string;
@@ -15,13 +15,13 @@ export const geoMean = (min: string, max: string) => {
   return lowRate.mul(highRate).pow(0.5);
 };
 
-export const getAcquiredAmount = ({
+export const getFullOutcome = ({
   budget,
   min,
   max,
   price,
   buy,
-}: AcquireAmountProps) => {
+}: FullOutcomeParams) => {
   if (!budget) return;
   if (!price && (!min || !max)) return;
   const mean = price ? geoMean(price, price) : geoMean(min, max);

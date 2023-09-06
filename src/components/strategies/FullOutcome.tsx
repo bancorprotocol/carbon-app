@@ -1,10 +1,10 @@
 import { Token } from 'libs/tokens';
 import { FC, useMemo } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { AcquireAmountProps, getAcquiredAmount } from 'utils/fullOutcome';
+import { FullOutcomeParams, getFullOutcome } from 'utils/fullOutcome';
 import Decimal from 'decimal.js';
 
-interface FullOutcomeProps extends AcquireAmountProps {
+interface FullOutcomeProps extends FullOutcomeParams {
   base: Token;
   quote: Token;
   /** Amount deposed on a strategy or withdrawed from it */
@@ -36,7 +36,7 @@ export const getUpdatedBudget = (
 };
 
 export const FullOutcome: FC<FullOutcomeProps> = (props) => {
-  const result = useMemo(() => getAcquiredAmount(props), [props]);
+  const result = useMemo(() => getFullOutcome(props), [props]);
   if (!result) return <></>;
   const { amount, mean } = result;
   const targetToken = props.buy ? props.base : props.quote;
