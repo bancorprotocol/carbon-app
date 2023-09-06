@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { FullOutcomeParams, getFullOutcome } from 'utils/fullOutcome';
 import Decimal from 'decimal.js';
+import { prettifyNumber } from 'utils/helpers';
 
 interface FullOutcomeProps extends FullOutcomeParams {
   base: Token;
@@ -11,18 +12,6 @@ interface FullOutcomeProps extends FullOutcomeParams {
   budgetUpdate?: string;
   className?: string;
 }
-
-const roundTokenAmount = (amount: string, token: Token) => {
-  const value = new Intl.NumberFormat('en-US').format(Number(amount));
-  return `${value} ${token.symbol}`;
-};
-
-const tokenAmount = (amount: string, token: Token) => {
-  const value = new Intl.NumberFormat('en-US', {
-    maximumSignificantDigits: token.decimals,
-  }).format(Number(amount));
-  return `${value} ${token.symbol}`;
-};
 
 export const getUpdatedBudget = (
   type: 'deposit' | 'withdraw',
@@ -42,7 +31,7 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
   const targetToken = props.buy ? props.base : props.quote;
   const hasBudgetUpdate = props.budgetUpdate && Number(props.budgetUpdate) > 0;
 
-  // Note: Tailwind merge will override text-12 with text-start for some reason
+  // Note: tailwind-merge will override text-12 with text-start for some reason
   const textClasses = [
     'text-start text-12 text-white/60',
     props.className ?? '',
@@ -52,17 +41,20 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
     <p className={textClasses}>
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
-      <b title={tokenAmount(amount, targetToken)}>
-        {roundTokenAmount(amount, targetToken)}
+      <b>
+        {prettifyNumber(amount)}&nbsp;
+        {targetToken.symbol}
       </b>
       &nbsp;at an average price of&nbsp;
-      <b title={tokenAmount(mean, props.quote)}>
-        {roundTokenAmount(mean, props.quote)}
+      <b>
+        {prettifyNumber(mean)}&nbsp;
+        {props.quote.symbol}
       </b>
-      &nbsp;per <b>1 {props.base.symbol}</b>.&nbsp;
+      &nbsp;{props.quote.symbol} per <b>1 {props.base.symbol}</b>.&nbsp;
       <a
-        href="/"
+        href="https://faq.carbondefi.xyz/order-execution/100-fill-estimation"
         target="_blank"
+        rel="noreferrer"
         className="inline-flex items-center gap-4 text-green underline"
       >
         <span>Learn More</span>

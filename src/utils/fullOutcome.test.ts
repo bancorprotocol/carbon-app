@@ -7,7 +7,10 @@ describe('fullOutcome', () => {
     it('should return undefined if min is greater or equal to max', () => {
       expect(geoMean('100', '10')).toBeUndefined();
     });
-
+    it('should return undefined if min or max is negative', () => {
+      expect(geoMean('-100', '10')).toBeUndefined();
+      expect(geoMean('-100', '-10')).toBeUndefined();
+    });
     it('should return same price for limit price', () => {
       expect(geoMean('100', '100')).toEqual(new Decimal('100'));
     });
@@ -26,7 +29,7 @@ describe('fullOutcome', () => {
       price: '',
       buy: true,
     };
-    it('should return undefined if no budget', () => {
+    it('should return undefined if no budget, 0 or a negative value', () => {
       const input = {
         buy: true,
         price: '1',
@@ -35,6 +38,8 @@ describe('fullOutcome', () => {
         budget: '',
       };
       expect(getFullOutcome(input)).toBeUndefined();
+      expect(getFullOutcome({ ...input, budget: '0' })).toBeUndefined();
+      expect(getFullOutcome({ ...input, budget: '-1' })).toBeUndefined();
     });
     it('should return undefined if neither price nor min&max', () => {
       const noPriceOrMinAndMax = { ...base, price: '', min: '', max: '' };

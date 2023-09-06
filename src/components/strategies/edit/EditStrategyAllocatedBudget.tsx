@@ -1,18 +1,14 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import BigNumber from 'bignumber.js';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { LogoImager } from 'components/common/imager/Imager';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPrice';
 import { EditTypes } from './EditStrategyMain';
-import { getFiatDisplayValue, sanitizeNumberInput } from 'utils/helpers';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
-import { TooltipPrice, TooltipPriceProps } from './tooltip/TooltipPrice';
+import { TooltipTokenAmount } from './tooltip/TooltipTokenAmount';
+import { TooltipTokenRange } from './tooltip/TooltipTokenRange';
 
 const shouldDisplayDistributeByType: {
   [key in EditTypes]: boolean;
@@ -34,9 +30,6 @@ export const EditStrategyAllocatedBudget: FC<{
 }> = ({ base, quote, balance, order, showMaxCb, type, buy = false }) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
-  const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
-  const baseTokenPriceQuery = useGetTokenPrice(base.address);
-  const quoteTokenPriceQuery = useGetTokenPrice(quote.address);
   const isDistributeToggleOn =
     order.marginalPriceOption === MarginalPriceOptions.reset;
 
@@ -54,28 +47,6 @@ export const EditStrategyAllocatedBudget: FC<{
     }
     firstTime.current = false;
   }, [order.max, order.min, order.budget, order.isRange, type]);
-
-  const getTokenFiat = (value: string) => {
-    return buy
-      ? new BigNumber(value || 0).times(
-          quoteTokenPriceQuery.data?.[selectedFiatCurrency] || 0
-        )
-      : new BigNumber(value || 0).times(
-          baseTokenPriceQuery.data?.[selectedFiatCurrency] || 0
-        );
-  };
-
-  const budgetFiat = getFiatDisplayValue(
-    getTokenFiat(balance || ''),
-    selectedFiatCurrency
-  );
-
-  const tooltipPriceProps: Omit<TooltipPriceProps, 'price'> = {
-    buy,
-    quote,
-    base,
-    budgetFiat,
-  };
 
   return (
     <>
@@ -97,74 +68,43 @@ export const EditStrategyAllocatedBudget: FC<{
             />
           </div>
           <div role="cell" className="flex flex-1 justify-end gap-8">
-            <Tooltip
-              element={
-                <>
-                  <TokenPrice
-                    price={sanitizeNumberInput(
-                      balance || '',
-                      buy ? quote.decimals : base.decimals
-                    )}
-                    iconSrc={buy ? quote?.logoURI : base?.logoURI}
-                  />
-                  <TokenPrice className="text-white/60" price={budgetFiat} />
-                </>
-              }
-            >
-              <div className={'flex items-center'}>
-                {balance && (
-                  <span>
-                    {sanitizeNumberInput(
-                      balance,
-                      buy ? quote?.decimals : base?.decimals
-                    )}
-                  </span>
-                )}
-                <LogoImager
-                  className="ml-10 h-16 w-16"
-                  src={buy ? quote?.logoURI : base?.logoURI}
-                  alt="token"
-                />
-              </div>
-            </Tooltip>
+            <TooltipTokenAmount
+              amount={balance ?? ''}
+              token={buy ? quote : base}
+            />
             {showMaxCb && (
-              <div
+              <button
                 onClick={() => showMaxCb()}
                 className="cursor-pointer font-weight-500 text-green"
               >
                 MAX
-              </div>
+              </button>
             )}
           </div>
         </div>
 
-        <div
-          role="row"
-          className="mt-10 flex items-center justify-between gap-16"
-        >
-          <div role="columnheader" className="flex items-center">
-            {buy ? 'Buy' : 'Sell'} Price
-          </div>
-          <div role="cell" className="flex flex-1 justify-end gap-8">
-            <div className={'flex items-center'}>
-              {/* Limit Strategy Price */}
-              <TooltipPrice price={order.price} {...tooltipPriceProps} />
-              {/* Range Strategy Price */}
-              {!!order.min && !!order.max && (
-                <>
-                  <TooltipPrice price={order.min} {...tooltipPriceProps} />
-                  -
-                  <TooltipPrice price={order.max} {...tooltipPriceProps} />
-                </>
-              )}
-              <LogoImager
-                className="ml-10 h-16 w-16"
-                src={quote?.logoURI}
-                alt="token"
-              />
+        {type !== 'editPrices' && (
+          <div
+            role="row"
+            className="mt-10 flex items-center justify-between gap-16"
+          >
+            <div role="columnheader" className="flex items-center">
+              {buy ? 'Buy' : 'Sell'} Price
+            </div>
+            <div role="cell" className="flex flex-1 justify-end gap-8">
+              <div className={'flex items-center'}>
+                {/* Limit Strategy Price */}
+                {!!order.price && (
+                  <TooltipTokenAmount amount={order.price} token={quote} />
+                )}
+                {/* Range Strategy Price */}
+                {!!order.min && !!order.max && (
+                  <TooltipTokenRange range={order} token={quote} />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {showDistribute && type !== 'editPrices' && (
           <div role="row" className="mt-10 flex justify-between">
