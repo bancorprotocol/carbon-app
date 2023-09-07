@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { useStore } from 'store';
+import { pairSearchKey } from 'utils/pairSearch';
 
 export const ExplorerPage = () => {
   const { aboveBreakpoint } = useBreakpoints();
@@ -32,23 +33,24 @@ export const ExplorerPage = () => {
     routeParams: { type, slug },
   } = useExplorer({ search: debouncedSearch });
 
+  const { nameMap, filteredPairs } = usePairs;
   const strategies =
     type === 'wallet'
       ? useWallet.strategiesQuery.data
       : usePairs.strategiesQuery.data;
 
   useEffect(() => {
-    if (slug) {
-      if (type === 'token-pair') {
-        return setSearch(slug.toUpperCase().replace('-', '/'));
-      }
-      if (type === 'wallet') {
-        return setSearch(slug.toLowerCase());
-      }
-    } else {
-      setSearch('');
+    if (!slug) return setSearch('');
+    if (type === 'token-pair') {
+      const content = nameMap.has(slug)
+        ? nameMap.get(slug)
+        : nameMap.get(pairSearchKey(slug));
+      return setSearch(content ?? slug);
     }
-  }, [slug, setSearch, type]);
+    if (type === 'wallet') {
+      return setSearch(slug.toLowerCase());
+    }
+  }, [slug, setSearch, type, nameMap]);
 
   const tabs: StrategyTab[] = [
     {
@@ -75,7 +77,7 @@ export const ExplorerPage = () => {
       <div className={'flex flex-grow flex-col space-y-30'}>
         <ExplorerSearch
           type={type}
-          filteredPairs={usePairs.filteredPairs}
+          filteredPairs={filteredPairs}
           search={search}
           setSearch={setSearch}
         />
