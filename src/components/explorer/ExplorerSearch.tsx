@@ -3,7 +3,7 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ExplorerSearchDropdownButton } from 'components/explorer/ExplorerSearchDropdownButton';
 import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchDropdownItems';
 import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
-import ExplorerSearchSuggestions from 'components/explorer/ExplorerSearchSuggestions';
+import ExplorerSearchSuggestions from 'components/explorer/suggestion';
 import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { utils } from 'ethers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
@@ -11,10 +11,10 @@ import { PathNames, useNavigate } from 'libs/routing';
 import {
   Dispatch,
   FC,
+  FormEvent,
   SetStateAction,
   useCallback,
   useMemo,
-  useState,
 } from 'react';
 import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
@@ -31,7 +31,6 @@ export interface ExplorerSearchProps {
 
 export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
   const navigate = useNavigate();
-  const [_showSuggestions, setShowSuggestions] = useState(false);
 
   const isInvalidAddress = useMemo(() => {
     return (
@@ -44,16 +43,16 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
 
   const onSearchHandler = useCallback(
     (v?: string) => {
+      const value = v || props.search;
       if (isInvalidAddress) {
         return;
       }
-      if (props.search.length === 0) {
+      if (value.length === 0) {
         return;
       }
       if (props.type === 'token-pair' && props.filteredPairs.length === 0) {
         return;
       }
-      const value = v || props.search;
       const slug = toPairSlug(value);
       navigate({
         to: PathNames.explorerOverview(props.type, slug),
@@ -68,11 +67,35 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
     ]
   );
 
-  const showSuggestions = props.type === 'token-pair' && _showSuggestions;
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (props.type === 'wallet' && isInvalidAddress) return;
+    const data = new FormData(e.target as HTMLFormElement);
+    const value = data.get('search')?.toString();
+    onSearchHandler(value);
+  };
+
+  const resetHandler = (e: FormEvent<HTMLFormElement>) => {
+    props.setSearch('');
+    const selector = 'input[name="search"]';
+    const input = (e.target as Element).querySelector<HTMLElement>(selector);
+    input?.focus();
+  };
+
+  const suggestionProps = {
+    filteredPairs: props.filteredPairs,
+    search: props.search,
+    setSearch: props.setSearch,
+  };
 
   return (
     <div className={'relative'}>
-      <div className={cn('flex space-x-4 md:space-x-20')}>
+      <form
+        role="search"
+        onSubmit={submitHandler}
+        onReset={resetHandler}
+        className={cn('flex space-x-4 md:space-x-20')}
+      >
         <div
           className={cn(
             'relative',
@@ -106,35 +129,25 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
               />
             </DropdownMenu>
           </div>
-          <div className={'h-20 w-1 bg-white/40'}></div>
-          <div className={'w-full flex-grow md:relative'}>
-            <ExplorerSearchInput
-              {...props}
-              setShowSuggestions={setShowSuggestions}
-              onSearchHandler={onSearchHandler}
-              isError={isInvalidAddress}
-            />
-
-            {showSuggestions && (
-              <ExplorerSearchSuggestions
-                filteredPairs={props.filteredPairs}
-                setShowSuggestions={setShowSuggestions}
-                setSearch={props.setSearch}
-              />
+          <div role="separator" className={'h-20 w-1 bg-white/40'}></div>
+          <div className={'flex w-full flex-grow items-center md:relative'}>
+            {props.type === 'token-pair' && (
+              <ExplorerSearchSuggestions {...suggestionProps} />
             )}
+            {props.type === 'wallet' && <ExplorerSearchInput {...props} />}
           </div>
         </div>
 
         <Button
+          type="submit"
           variant={'success'}
           size={'md'}
           className={'w-40 shrink-0 !px-0 md:w-[180px]'}
-          onClick={() => onSearchHandler()}
         >
           <IconSearch className={'h-16 w-16 md:mr-8'} />
           <span className={'hidden md:block'}>Search</span>
         </Button>
-      </div>
+      </form>
       {isInvalidAddress && (
         <div
           className={

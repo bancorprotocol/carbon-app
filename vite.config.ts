@@ -46,6 +46,11 @@ export default defineConfig(({ mode }) => {
         env.SENTRY_AUTH_TOKEN
       ),
     },
+    css: {
+      modules: {
+        localsConvention: 'camelCaseOnly',
+      }
+    },
     resolve: {
       alias: {
         process: 'process/browser',
