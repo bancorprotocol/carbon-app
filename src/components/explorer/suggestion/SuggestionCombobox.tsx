@@ -56,7 +56,7 @@ export const SuggestionCombobox: FC<Props> = (props) => {
       defaultValue={props.search}
       placeholder="Search by token pair"
       aria-label="Search by token pair"
-      onChange={(e) => props.setSearch(e.target.value)}
+      onInput={(e) => props.setSearch((e.target as HTMLInputElement).value)}
       onKeyDown={onKeyDownHandler}
       onBlur={() => setOpen(false)}
       onFocus={() => setOpen(true)}
