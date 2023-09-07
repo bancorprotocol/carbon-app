@@ -4,7 +4,11 @@ import { ExplorerSearchDropdownButton } from 'components/explorer/ExplorerSearch
 import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchDropdownItems';
 import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
-import { ExplorerRouteGenerics } from 'components/explorer/utils';
+import {
+  ExplorerRouteGenerics,
+  searchSeparators,
+  slugSeparator,
+} from 'components/explorer/utils';
 import { utils } from 'ethers';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { PathNames, useNavigate } from 'libs/routing';
@@ -52,7 +56,14 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
       if (props.type === 'token-pair' && props.filteredPairs.length === 0) {
         return;
       }
-      const slug = value.replace('/', '_').replace(' ', '_').toLowerCase();
+
+      let slug = '';
+      searchSeparators.forEach((separator) => {
+        if (value.includes(separator)) {
+          slug = value.replace(separator, slugSeparator).toLowerCase();
+        }
+      });
+
       navigate({
         to: PathNames.explorerOverview(props.type, slug),
       });

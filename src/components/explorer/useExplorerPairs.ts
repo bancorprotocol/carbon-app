@@ -1,4 +1,7 @@
-import { ExplorerRouteGenerics } from 'components/explorer/utils';
+import {
+  ExplorerRouteGenerics,
+  slugSeparator,
+} from 'components/explorer/utils';
 import { usePairSearch } from 'hooks/usePairSearch';
 import { useGetPairStrategies, useGetTradePairsData } from 'libs/queries';
 import { useMemo } from 'react';
@@ -17,7 +20,7 @@ export const useExplorerPairs = ({ search = '', params: { slug } }: Props) => {
   });
 
   const exactMatch = useMemo(() => {
-    const [symbol0, symbol1] = slug?.toLowerCase().split('_') ?? [];
+    const [symbol0, symbol1] = slug?.toLowerCase().split(slugSeparator) ?? [];
     return (pairsQuery.data ?? []).find(
       (pair) =>
         pair.baseToken.symbol.toLowerCase() === symbol0 &&

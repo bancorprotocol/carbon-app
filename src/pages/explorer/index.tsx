@@ -1,5 +1,6 @@
 import { Page } from 'components/common/page';
 import { ExplorerSearch, useExplorer } from 'components/explorer';
+import { nameSeparator, slugSeparator } from 'components/explorer/utils';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import {
   StrategyPageTabs,
@@ -40,7 +41,9 @@ export const ExplorerPage = () => {
   useEffect(() => {
     if (slug) {
       if (type === 'token-pair') {
-        return setSearch(slug.toUpperCase().replace('_', '/'));
+        return setSearch(
+          slug.toUpperCase().replace(slugSeparator, nameSeparator)
+        );
       }
       if (type === 'wallet') {
         return setSearch(slug.toLowerCase());

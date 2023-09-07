@@ -1,3 +1,4 @@
+import { nameSeparator, slugSeparator } from 'components/explorer/utils';
 import { Dispatch, FC, SetStateAction } from 'react';
 import { ExplorerSearchProps } from '../ExplorerSearch';
 import { suggestionClasses } from './utils';
@@ -31,8 +32,8 @@ export const SuggestionList: FC<Props> = (props) => {
         {props.filteredPairs.length} Results
       </h3>
       {props.filteredPairs.map((pair, i) => {
-        const slug = `${pair.baseToken.symbol}_${pair.quoteToken.symbol}`;
-        const name = `${pair.baseToken.symbol}/${pair.quoteToken.symbol}`;
+        const slug = `${pair.baseToken.symbol}${slugSeparator}${pair.quoteToken.symbol}`;
+        const name = `${pair.baseToken.symbol}${nameSeparator}${pair.quoteToken.symbol}`;
         return (
           <li
             role="option"

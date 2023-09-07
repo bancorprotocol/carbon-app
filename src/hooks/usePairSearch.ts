@@ -1,3 +1,4 @@
+import { searchSeparators } from 'components/explorer/utils';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { orderBy } from 'lodash';
 import { useMemo } from 'react';
@@ -10,20 +11,17 @@ interface Props {
 export const usePairSearch = ({ pairs, search }: Props) => {
   const filteredPairs = useMemo(() => {
     const searchLowerCase = search.toLowerCase();
-    const splitSpace = searchLowerCase.split(' ');
-    const splitSlash = searchLowerCase.split('/');
 
     let value0 = searchLowerCase;
     let value1 = '';
 
-    if (splitSpace.length === 2) {
-      value0 = splitSpace[0];
-      value1 = splitSpace[1];
-    }
-    if (splitSlash.length === 2) {
-      value0 = splitSlash[0];
-      value1 = splitSlash[1];
-    }
+    searchSeparators.forEach((separator) => {
+      if (searchLowerCase.includes(separator)) {
+        const split = searchLowerCase.split(separator);
+        value0 = split[0];
+        value1 = split[1];
+      }
+    });
 
     const baseTokens = pairs.filter((pair) =>
       pair.baseToken.symbol.toLowerCase().includes(value0)
