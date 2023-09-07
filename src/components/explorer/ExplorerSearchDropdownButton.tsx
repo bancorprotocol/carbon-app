@@ -10,6 +10,7 @@ interface Props extends Pick<ExplorerSearchProps, 'type'> {
 
 export const ExplorerSearchDropdownButton: FC<Props> = ({ onClick, type }) => (
   <button
+    type="button"
     onClick={onClick}
     className={'flex items-center justify-between font-weight-500 md:w-[140px]'}
   >
