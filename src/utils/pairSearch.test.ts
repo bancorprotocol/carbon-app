@@ -381,12 +381,12 @@ describe('Pair Key Search', () => {
       expect(result.at(-1)?.endsWith('dai')).toBeTruthy();
     });
     it('should be in alphabetic order in the same group (base / quote)', () => {
-      const result = searchKey('dai');
+      const result = searchKey('eth');
       expect(result.at(0)).toBe('eth_0x0');
       expect(result.at(1)).toBe('eth_ankreth');
       expect(result.at(2)).toBe('eth_ant');
-      expect(result.at(-1)).toBe('wizard_eth');
-      expect(result.at(-2)).toBe('zcn_eth');
+      expect(result.at(-1)).toBe('zcn_eth');
+      expect(result.at(-2)).toBe('xwizard_eth');
     });
   });
 });
