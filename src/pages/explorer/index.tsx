@@ -40,7 +40,7 @@ export const ExplorerPage = () => {
   useEffect(() => {
     if (slug) {
       if (type === 'token-pair') {
-        return setSearch(slug.toUpperCase().replace('-', '/'));
+        return setSearch(slug.toUpperCase().replace('_', '/'));
       }
       if (type === 'wallet') {
         return setSearch(slug.toLowerCase());

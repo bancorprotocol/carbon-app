@@ -52,7 +52,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
       if (props.type === 'token-pair' && props.filteredPairs.length === 0) {
         return;
       }
-      const slug = value.replace('/', '-').replace(' ', '-').toLowerCase();
+      const slug = value.replace('/', '_').replace(' ', '_').toLowerCase();
       navigate({
         to: PathNames.explorerOverview(props.type, slug),
       });

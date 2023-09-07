@@ -17,7 +17,7 @@ export const useExplorerPairs = ({ search = '', params: { slug } }: Props) => {
   });
 
   const exactMatch = useMemo(() => {
-    const [symbol0, symbol1] = slug?.toLowerCase().split('-') ?? [];
+    const [symbol0, symbol1] = slug?.toLowerCase().split('_') ?? [];
     return (pairsQuery.data ?? []).find(
       (pair) =>
         pair.baseToken.symbol.toLowerCase() === symbol0 &&
