@@ -18,6 +18,7 @@ import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 import { getCompareFunctionBySortType } from './utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { pairName, pairSearchKey } from 'utils/pairSearch';
 
 const getItemsPerRow = (breakpoint: Breakpoint) => {
   switch (breakpoint) {
@@ -47,24 +48,27 @@ export const _StrategyContent: FC<Props> = ({
     strategies: { search, sort, filter },
   } = useStore();
   const compareFunction = getCompareFunctionBySortType(sort);
+  const searchKey = pairSearchKey(search);
   const filteredStrategies = useMemo(() => {
-    const searchLC = search.toLowerCase();
-
-    const filtered = strategies?.filter(
-      (strategy) =>
-        (strategy.base.symbol.toLowerCase().includes(searchLC) ||
-          strategy.quote.symbol.toLowerCase().includes(searchLC)) &&
-        (filter === StrategyFilter.All ||
-          (filter === StrategyFilter.Active &&
-            strategy.status === StrategyStatus.Active) ||
-          (filter === StrategyFilter.Inactive &&
-            strategy.status !== StrategyStatus.Active))
-    );
-
-    return filtered?.sort((a, b) => {
-      return compareFunction(a, b);
+    const filtered = strategies?.filter((strategy) => {
+      if (
+        filter === StrategyFilter.Active &&
+        strategy.status !== StrategyStatus.Active
+      ) {
+        return false;
+      }
+      if (
+        filter === StrategyFilter.Inactive &&
+        strategy.status === StrategyStatus.Active
+      ) {
+        return false;
+      }
+      if (!searchKey) return true;
+      const name = pairName(strategy.base, strategy.quote);
+      return pairSearchKey(name).includes(searchKey);
     });
-  }, [search, strategies, filter, compareFunction]);
+    return filtered?.sort(compareFunction);
+  }, [searchKey, strategies, filter, compareFunction]);
 
   const parentRef = useRef<HTMLDivElement>(null);
   const parentOffsetRef = useRef(0);

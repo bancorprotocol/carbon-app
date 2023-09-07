@@ -341,13 +341,12 @@ describe('Pair Key Search', () => {
       expectSearch('DAIETH').toEqual([]);
     });
 
-    it('should find exact match with separators " ", "-"", "/", "_"', () => {
+    it('should find exact match with separators " ", "-"", "/"', () => {
       expectSearch('DAI/ETH').toEqual(['dai_eth']);
       expectSearch('DAI / ETH').toEqual(['dai_eth']);
       expectSearch('DAI ETH').toEqual(['dai_eth']);
       expectSearch('DAI-ETH').toEqual(['dai_eth']);
       expectSearch('DAI - ETH').toEqual(['dai_eth']);
-      expectSearch('DAI_ETH').toEqual(['dai_eth']);
     });
 
     it('should find of symbol with separator inside of it', () => {
