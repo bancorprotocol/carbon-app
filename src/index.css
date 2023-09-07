@@ -207,3 +207,7 @@
     box-shadow: 10014px 0 0 -5px;
   }
 }
+
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
