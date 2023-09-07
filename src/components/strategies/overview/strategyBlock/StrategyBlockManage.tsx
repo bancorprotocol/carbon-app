@@ -11,7 +11,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import {
   StrategyEditOptionId,
-  tooltipTextByStrategyEditOptionsId,
+  getTooltipTextByStrategyEditOptionsId,
 } from './utils';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
@@ -216,6 +216,7 @@ export const StrategyBlockManage: FC<Props> = ({
             setManage={setManage}
             action={action}
             id={id}
+            isExplorer={isExplorer}
           />
         );
       })}
@@ -228,8 +229,9 @@ const ManageItem: FC<{
   id: StrategyEditOptionId;
   setManage: (flag: boolean) => void;
   action?: () => void;
-}> = ({ title, id, setManage, action }) => {
-  const tooltipText = tooltipTextByStrategyEditOptionsId?.[id];
+  isExplorer?: boolean;
+}> = ({ title, id, setManage, action, isExplorer }) => {
+  const tooltipText = getTooltipTextByStrategyEditOptionsId(isExplorer)?.[id];
   const { belowBreakpoint } = useBreakpoints();
 
   if (tooltipText) {
