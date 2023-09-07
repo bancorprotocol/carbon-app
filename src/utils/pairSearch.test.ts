@@ -322,7 +322,7 @@ const keyNameRecord = {
   eth_guise: 'ETH/GUISE',
   shares_weth: 'SHARES/WETH',
   eth_ant: 'ETH/ANT',
-  usdc_parq: 'USDC/PARQ'
+  usdc_parq: 'USDC/PARQ',
 };
 const nameMap = new Map<string, string>(Object.entries(keyNameRecord));
 
