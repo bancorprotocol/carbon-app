@@ -52,9 +52,7 @@ export const getFiatDisplayValue = (
   fiatValue: BigNumber | string | number,
   currentCurrency: FiatSymbol
 ) => {
-  return `${prettifyNumber(fiatValue, {
-    usd: ['USD', 'CAD', 'AUD'].includes(currentCurrency),
-  })} ${currentCurrency}`;
+  return `${prettifyNumber(fiatValue, { currentCurrency })}`;
 };
 
 const prettifyNumberAbbreviateFormat: numbro.Format = {
@@ -84,10 +82,10 @@ const getDefaultNumberoOptions = (round = false) => {
 };
 
 interface PrettifyNumberOptions {
-  usd?: boolean;
-  hideSymbol?: boolean;
   abbreviate?: boolean;
+  currentCurrency?: FiatSymbol;
   highPrecision?: boolean;
+  locale?: string;
   round?: boolean;
 }
 
@@ -103,15 +101,14 @@ export function prettifyNumber(
   options?: PrettifyNumberOptions
 ): string {
   const {
-    usd = false,
     abbreviate = false,
     highPrecision = false,
     round = false,
   } = options || {};
 
   const bigNum = new BigNumber(num);
-  if (usd) {
-    return handlePrettifyNumberUsd(bigNum, options);
+  if (options?.currentCurrency) {
+    return handlePrettifyNumberCurrency(bigNum, options);
   }
 
   if (bigNum.lte(0)) return '0';
@@ -138,36 +135,63 @@ export function prettifyNumber(
   })}`;
 }
 
-const handlePrettifyNumberUsd = (
+const handlePrettifyNumberCurrency = (
   num: BigNumber,
   options?: PrettifyNumberOptions
 ) => {
   const {
     abbreviate = false,
-    hideSymbol = false,
     highPrecision = false,
+    locale = 'en-US',
+    currentCurrency = 'USD',
     round = false,
   } = options || {};
 
-  const symbol = hideSymbol ? '' : '$';
+  const nfCurrencyOptionsDefault: Intl.NumberFormatOptions = {
+    style: 'currency',
+    currency: currentCurrency,
+    // @ts-ignore: supportedValuesOf supported from TypeScript 5.1
+    currencyDisplay: Intl.supportedValuesOf('currency').includes(
+      currentCurrency
+    )
+      ? 'symbol'
+      : 'name',
+    useGrouping: true,
+    // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
+    roundingMode: round ? 'halfExpand' : 'floor',
+  };
 
-  if (num.lte(0)) return `${symbol}0.00`;
-  if (num.lt(0.01)) return `< ${symbol}0.01`;
+  if (num.lte(0))
+    return Intl.NumberFormat(locale, nfCurrencyOptionsDefault)
+      .format(0)
+      .toString();
+  if (num.lte(0.01))
+    return (
+      '< ' +
+      Intl.NumberFormat(locale, {
+        ...nfCurrencyOptionsDefault,
+        minimumFractionDigits: 2,
+      })
+        .format(0.01)
+        .toString()
+    );
   if (abbreviate && num.gt(999999))
-    return `${symbol}${numbro(num).format({
-      ...prettifyNumberAbbreviateFormat,
-      ...(round && {
-        roundingFunction: (num) => Math.round(num),
-      }),
-    })}`;
-  if (!highPrecision) {
-    if (num.gt(100))
-      return `${symbol}${numbro(num).format(getDefaultNumberoOptions(round))}`;
-  }
-  return `${symbol}${numbro(num).format({
-    ...getDefaultNumberoOptions(round),
-    mantissa: 2,
-  })}`;
+    return Intl.NumberFormat(locale, {
+      ...nfCurrencyOptionsDefault,
+      notation: 'compact',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 1,
+    }).format(num.toNumber());
+
+  if (!highPrecision && num.gt(100))
+    return Intl.NumberFormat(locale, {
+      ...nfCurrencyOptionsDefault,
+      maximumFractionDigits: 0,
+    }).format(num.toNumber());
+
+  return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
+    num.toNumber()
+  );
 };
 
 export const wait = async (ms: number = 0) =>
