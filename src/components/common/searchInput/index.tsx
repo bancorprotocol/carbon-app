@@ -34,7 +34,7 @@ export const SearchInput = ({
 
       <input
         autoFocus={autoFocus}
-        type="text"
+        type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Search"
