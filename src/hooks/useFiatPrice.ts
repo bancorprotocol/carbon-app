@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { useFiatCurrency } from './useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { getFiatDisplayValue } from 'utils/helpers';
 

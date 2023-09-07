@@ -2,7 +2,6 @@ import { Token } from 'libs/tokens';
 import { FC, useMemo } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { FullOutcomeParams, getFullOutcome } from 'utils/fullOutcome';
-import Decimal from 'decimal.js';
 import { prettifyNumber } from 'utils/helpers';
 
 interface FullOutcomeProps extends FullOutcomeParams {
@@ -12,17 +11,6 @@ interface FullOutcomeProps extends FullOutcomeParams {
   budgetUpdate?: string;
   className?: string;
 }
-
-export const getUpdatedBudget = (
-  type: 'deposit' | 'withdraw',
-  balance?: string,
-  update?: string
-) => {
-  const base = new Decimal(balance || '0');
-  const delta = new Decimal(update || '0');
-  if (type === 'deposit') return base.add(delta).toString();
-  return base.sub(delta).toString();
-};
 
 export const FullOutcome: FC<FullOutcomeProps> = (props) => {
   const result = useMemo(() => getFullOutcome(props), [props]);
@@ -41,16 +29,16 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
     <p className={textClasses}>
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
-      <b>
+      <b className="font-weight-500">
         {prettifyNumber(amount)}&nbsp;
         {targetToken.symbol}
       </b>
       &nbsp;at an average price of&nbsp;
-      <b>
+      <b className="font-weight-500">
         {prettifyNumber(mean)}&nbsp;
         {props.quote.symbol}
       </b>
-      &nbsp;per <b>1 {props.base.symbol}</b>.&nbsp;
+      &nbsp;per <b className="font-weight-500">1 {props.base.symbol}</b>.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/order-execution/100-fill-estimation"
         target="_blank"

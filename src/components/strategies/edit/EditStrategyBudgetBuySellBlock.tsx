@@ -6,7 +6,8 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
-import { FullOutcome, getUpdatedBudget } from '../FullOutcome';
+import { FullOutcome } from '../FullOutcome';
+import { getUpdatedBudget } from 'utils/fullOutcome';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;

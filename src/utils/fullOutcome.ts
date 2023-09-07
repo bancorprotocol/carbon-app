@@ -47,3 +47,15 @@ export const getFullOutcome = ({
     amount: amount.toString(),
   };
 };
+
+/** Update existing balance with the update from user input */
+export const getUpdatedBudget = (
+  type: 'deposit' | 'withdraw',
+  balance?: string,
+  update?: string
+) => {
+  const base = new Decimal(balance || '0');
+  const delta = new Decimal(update || '0');
+  if (type === 'deposit') return base.add(delta).toString();
+  return base.sub(delta).toString();
+};

@@ -3,7 +3,7 @@ import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPr
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { useFiatPrice } from '../../useFiatPrice';
+import { useFiatPrice } from 'hooks/useFiatPrice';
 import { LogoImager } from 'components/common/imager/Imager';
 
 export interface TooltipPriceProps {
