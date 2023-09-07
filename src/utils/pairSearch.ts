@@ -15,26 +15,26 @@ const pairSearchExp = new RegExp('(\\s|-|/){1,}', 'g');
 
 type PairMaps = ReturnType<typeof createPairMaps>;
 
-export const pairName = (base: Token, quote: Token) => {
+export const toPairName = (base: Token, quote: Token) => {
   return `${base.symbol}/${quote.symbol}`;
 };
 
-export const pairSearchKey = (value: string, regex: RegExp = pairSearchExp) => {
+export const toPairSlug = (value: string, regex: RegExp = pairSearchExp) => {
   return value.toLowerCase().replaceAll(regex, '_');
 };
 
 export const createPairMaps = (
   pairs: TradePair[],
-  transformKeyExp: RegExp = pairSearchExp
+  transformSlugExp: RegExp = pairSearchExp
 ) => {
   const pairMap = new Map<string, TradePair>();
   const nameMap = new Map<string, string>();
   for (const pair of pairs) {
     const { baseToken: base, quoteToken: quote } = pair;
-    const name = pairName(base, quote);
-    const key = pairSearchKey(name, transformKeyExp);
-    pairMap.set(key, pair);
-    nameMap.set(key, name);
+    const name = toPairName(base, quote);
+    const slug = toPairSlug(name, transformSlugExp);
+    pairMap.set(slug, pair);
+    nameMap.set(slug, name);
   }
   return { pairMap, nameMap };
 };
@@ -45,24 +45,24 @@ export const createPairMaps = (
  * - **keys** are used to filter, they should have been built with `createPairMaps` with the same regex than this function
  * - **names** are used to sort, they include a separator between each token's symbol
  * @param search Input that can includes theses separators defined by the regex in params
- * @param transformKeyExp A regex used to normalize search. By default it remove these separators: " ", "-", "/"
+ * @param transformSlugExp A regex used to normalize search. By default it replace these separators " ", "-", "/" with "_"
  * @returns List of pair keys that match the input in the right order
  */
 export const searchPairKeys = (
   nameMap: Map<string, string>,
   search: string,
-  transformKeyExp: RegExp = pairSearchExp
+  transformSlugExp: RegExp = pairSearchExp
 ) => {
-  const keySearch = pairSearchKey(search, transformKeyExp);
-  const keys = [];
-  for (const key of nameMap.keys()) {
-    if (key.includes(keySearch)) keys.push(key);
+  const searchSlug = toPairSlug(search, transformSlugExp);
+  const slugs = [];
+  for (const slug of nameMap.keys()) {
+    if (slug.includes(searchSlug)) slugs.push(slug);
   }
-  return keys.sort((a, b) => {
-    if (a.startsWith(keySearch)) {
-      if (!b.startsWith(keySearch)) return -1;
+  return slugs.sort((a, b) => {
+    if (a.startsWith(searchSlug)) {
+      if (!b.startsWith(searchSlug)) return -1;
     } else {
-      if (b.startsWith(keySearch)) return 1;
+      if (b.startsWith(searchSlug)) return 1;
     }
     return nameMap.get(a)!.localeCompare(nameMap.get(b)!);
   });
@@ -72,10 +72,10 @@ export const searchPairKeys = (
 export const searchPairTrade = (
   pairMaps: PairMaps,
   search: string,
-  transformKeyExp: RegExp = pairSearchExp
+  transformSlugExp: RegExp = pairSearchExp
 ) => {
   const { pairMap, nameMap } = pairMaps;
   if (!search) return Array.from(pairMap.values());
-  const keys = searchPairKeys(nameMap, search, transformKeyExp);
+  const keys = searchPairKeys(nameMap, search, transformSlugExp);
   return keys.map((key) => pairMap.get(key)).filter(exist);
 };

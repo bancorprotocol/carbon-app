@@ -2,7 +2,7 @@ import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { usePairSearch } from 'hooks/usePairSearch';
 import { useGetPairStrategies, useGetTradePairsData } from 'libs/queries';
 import { useMemo } from 'react';
-import { pairSearchKey } from 'utils/pairSearch';
+import { toPairSlug } from 'utils/pairSearch';
 
 interface Props {
   search?: string;
@@ -21,7 +21,7 @@ export const useExplorerPairs = ({ search = '', params: { slug } }: Props) => {
     if (!slug) return;
     return pairMap.has(slug)
       ? pairMap.get(slug)
-      : pairMap.get(pairSearchKey(slug));
+      : pairMap.get(toPairSlug(slug));
   }, [pairMap, slug]);
 
   const strategiesQuery = useGetPairStrategies({

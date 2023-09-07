@@ -20,7 +20,7 @@ import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { pairSearchKey } from 'utils/pairSearch';
+import { toPairSlug } from 'utils/pairSearch';
 
 export interface ExplorerSearchProps {
   type: ExplorerRouteGenerics['Params']['type'];
@@ -54,7 +54,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
         return;
       }
       const value = v || props.search;
-      const slug = pairSearchKey(value);
+      const slug = toPairSlug(value);
       navigate({
         to: PathNames.explorerOverview(props.type, slug),
       });

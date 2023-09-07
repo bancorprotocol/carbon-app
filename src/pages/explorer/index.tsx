@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { useStore } from 'store';
-import { pairSearchKey } from 'utils/pairSearch';
+import { toPairSlug } from 'utils/pairSearch';
 
 export const ExplorerPage = () => {
   const { aboveBreakpoint } = useBreakpoints();
@@ -44,7 +44,7 @@ export const ExplorerPage = () => {
     if (type === 'token-pair') {
       const content = nameMap.has(slug)
         ? nameMap.get(slug)
-        : nameMap.get(pairSearchKey(slug));
+        : nameMap.get(toPairSlug(slug));
       return setSearch(content ?? slug);
     }
     if (type === 'wallet') {

@@ -18,7 +18,7 @@ import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
 import { getCompareFunctionBySortType } from './utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { pairName, pairSearchKey } from 'utils/pairSearch';
+import { toPairName, toPairSlug } from 'utils/pairSearch';
 
 const getItemsPerRow = (breakpoint: Breakpoint) => {
   switch (breakpoint) {
@@ -48,7 +48,7 @@ export const _StrategyContent: FC<Props> = ({
     strategies: { search, sort, filter },
   } = useStore();
   const compareFunction = getCompareFunctionBySortType(sort);
-  const searchKey = pairSearchKey(search);
+  const searchSlug = toPairSlug(search);
   const filteredStrategies = useMemo(() => {
     const filtered = strategies?.filter((strategy) => {
       if (
@@ -63,12 +63,12 @@ export const _StrategyContent: FC<Props> = ({
       ) {
         return false;
       }
-      if (!searchKey) return true;
-      const name = pairName(strategy.base, strategy.quote);
-      return pairSearchKey(name).includes(searchKey);
+      if (!searchSlug) return true;
+      const name = toPairName(strategy.base, strategy.quote);
+      return toPairSlug(name).includes(searchSlug);
     });
     return filtered?.sort(compareFunction);
-  }, [searchKey, strategies, filter, compareFunction]);
+  }, [searchSlug, strategies, filter, compareFunction]);
 
   const parentRef = useRef<HTMLDivElement>(null);
   const parentOffsetRef = useRef(0);
