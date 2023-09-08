@@ -73,7 +73,7 @@ export const createFork = async (body: CreateForkBody) => {
     body: JSON.stringify(body),
     headers,
   });
-  if (!res.ok) throw new Error(res.statusText);
+  if (!res.ok) throw tenderlyError(res);
   const result: CreateForkResponse = await res.json();
   return result.simulation_fork;
 };
@@ -87,7 +87,7 @@ export const getFork = async (forkId: string) => {
     method: 'GET',
     headers,
   });
-  if (!res.ok) throw new Error(res.statusText);
+  if (!res.ok) throw tenderlyError(res);
   const result: GetForkResponse = await res.json();
   return result.simulation_fork;
 };
@@ -97,6 +97,20 @@ export const deleteFork = async (forkId: string) => {
     method: 'DELETE',
     headers,
   });
-  if (!res.ok) throw new Error(res.statusText);
+  if (!res.ok) throw tenderlyError(res);
   // Delete returns No Content
 };
+
+interface TenderlyError {
+  id: string;
+  slug: string;
+  message: string;
+}
+interface TenderlyErrorResponse {
+  error: TenderlyError;
+}
+const tenderlyError = async (res: Response) => {
+  const { status, statusText } = res;
+  const { error }: TenderlyErrorResponse = await res.json();
+  return new Error(`[${status} ${statusText}] ${error?.message}`);
+}

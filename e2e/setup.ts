@@ -10,7 +10,7 @@ const browsers = { chromium, firefox, webkit };
 type BrowserName = keyof typeof browsers;
 
 async function globalSetup(config: FullConfig) {
-  console.log('Setting up the Tenderly');
+  console.log('Setting up Tenderly Fork');
   console.time('Fork is setup');
 
   // Create a Fork
