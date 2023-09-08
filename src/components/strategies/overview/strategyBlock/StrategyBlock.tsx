@@ -31,7 +31,7 @@ export const StrategyBlock: FC<Props> = ({
   );
 
   return (
-    <m.div
+    <m.li
       variants={mItemVariant}
       className={cn(
         strategy.status === StrategyStatus.Active ? 'bg-silver' : 'bg-content',
@@ -85,6 +85,6 @@ export const StrategyBlock: FC<Props> = ({
         strategy={strategy}
         isExplorer={isExplorer}
       />
-    </m.div>
+    </m.li>
   );
 };
