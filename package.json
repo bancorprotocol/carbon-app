@@ -10,6 +10,7 @@
     "@ethersproject/abi": "^5.0.0",
     "@ethersproject/bytes": "^5.0.0",
     "@ethersproject/providers": "^5.7.1",
+    "@playwright/test": "^1.37.1",
     "@popperjs/core": "^2.11.6",
     "@sentry/react": "^7.48.0",
     "@sentry/vite-plugin": "^0.7.2",
