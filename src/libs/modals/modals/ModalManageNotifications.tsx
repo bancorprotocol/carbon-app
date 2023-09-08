@@ -36,7 +36,7 @@ export const ModalManageNotifications: ModalFC<
         }
       >
         {
-          'You can set notification to be informed every time some trade against your strategy.'
+          'Elevate your experience by customizing notifications that keep you in the loop with every trade executed against this strategy.'
         }
       </p>
       <p
@@ -44,7 +44,7 @@ export const ModalManageNotifications: ModalFC<
           'text-secondary my-20 flex w-full items-center justify-center text-12'
         }
       >
-        {'It is a 3rd party service managed by Hal.xyz'}
+        {'A 3rd party service managed by Hal.xyz'}
       </p>
 
       <Button variant={'white'} fullWidth onClick={onClick}>
