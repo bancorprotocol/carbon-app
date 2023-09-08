@@ -21,7 +21,7 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
 
   // Note: tailwind-merge will override text-12 with text-start for some reason
   const textClasses = [
-    'text-start text-12 text-white/60',
+    'text-start text-12 text-white/60 pb-10',
     props.className ?? '',
   ].join(' ');
 
