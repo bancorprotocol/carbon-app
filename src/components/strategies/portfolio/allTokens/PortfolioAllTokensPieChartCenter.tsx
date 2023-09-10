@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { FC } from 'react';
 import { useStore } from 'store';
 import { cn, getFiatDisplayValue } from 'utils/helpers';
 
 type Props = {
-  totalValue: BigNumber;
+  totalValue: Decimal;
   assetsCount: number;
 };
 

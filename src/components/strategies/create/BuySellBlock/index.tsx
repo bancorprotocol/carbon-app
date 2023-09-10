@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Token } from 'libs/tokens';
@@ -41,7 +41,7 @@ export const BuySellBlock: FC<Props> = ({
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
-    new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
+    new Decimal(tokenBalanceQuery.data || 0).lt(order.budget || 0);
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 

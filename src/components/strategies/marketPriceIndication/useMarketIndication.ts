@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { useGetTokenPrice } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from '../../../hooks/useFiatCurrency';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type MarketPricePercentage = {
-  min: BigNumber;
-  max: BigNumber;
-  price: BigNumber;
+  min: Decimal;
+  max: Decimal;
+  price: Decimal;
 };
 
 type UseMarketIndicationProps = {
@@ -32,19 +32,19 @@ export const useMarketIndication = ({
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
     if (order.isRange) {
       const isInputNotZero = buy
-        ? new BigNumber(order.max).gt(0)
-        : new BigNumber(order.min).gt(0);
+        ? new Decimal(order.max).gt(0)
+        : new Decimal(order.min).gt(0);
 
       const isAboveOrBelow = buy
-        ? new BigNumber(getFiatValue(order.max)).gt(tokenMarketPrice)
-        : new BigNumber(getFiatValue(order.min)).lt(tokenMarketPrice);
+        ? new Decimal(getFiatValue(order.max)).gt(tokenMarketPrice)
+        : new Decimal(getFiatValue(order.min)).lt(tokenMarketPrice);
 
       return isInputNotZero && isAboveOrBelow;
     }
 
     return (
-      new BigNumber(order.price).gt(0) &&
-      new BigNumber(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
+      new Decimal(order.price || '0').gt(0) &&
+      new Decimal(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
         tokenMarketPrice
       )
     );
@@ -63,7 +63,7 @@ export const useMarketIndication = ({
       const fiatValue = getFiatValue(price);
       return fiatValue.eq(0)
         ? fiatValue
-        : new BigNumber(fiatValue)
+        : new Decimal(fiatValue)
             .minus(tokenMarketPrice)
             .div(tokenMarketPrice)
             .times(100);

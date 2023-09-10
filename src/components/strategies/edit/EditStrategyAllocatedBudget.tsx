@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -56,10 +56,10 @@ export const EditStrategyAllocatedBudget: FC<{
 
   const getTokenFiat = (value: string) => {
     return buy
-      ? new BigNumber(value || 0).times(
+      ? new Decimal(value || 0).times(
           quoteTokenPriceQuery.data?.[selectedFiatCurrency] || 0
         )
-      : new BigNumber(value || 0).times(
+      : new Decimal(value || 0).times(
           baseTokenPriceQuery.data?.[selectedFiatCurrency] || 0
         );
   };

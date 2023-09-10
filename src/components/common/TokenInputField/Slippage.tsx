@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from '../tooltip/Tooltip';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
-export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
+export const Slippage: FC<{ slippage: Decimal }> = ({ slippage }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
-  const isSlippagePositive = slippage?.isGreaterThan(0);
+  const isSlippagePositive = slippage?.gt(0);
 
   return (
     <Tooltip
@@ -16,14 +16,14 @@ export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
       <div className="flex-end flex gap-5">
         <div
           className={`ml-4 ${
-            slippage.gte(new BigNumber(-3)) && slippage.lte(new BigNumber(0))
+            slippage.gte(new Decimal(-3)) && slippage.lte(0)
               ? 'text-white/80'
               : isSlippagePositive
               ? 'text-green'
               : 'text-red'
           }`}
         >
-          {slippage.isEqualTo(0) ? (
+          {slippage.isZero() ? (
             <div className="text-red">Notice, price & slippage are unknown</div>
           ) : (
             `(${isSlippagePositive ? '+' : '-'}${sanitizeNumberInput(
@@ -32,7 +32,7 @@ export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
             )}%)`
           )}
         </div>
-        {(slippage.lt(-3) || slippage.isEqualTo(0)) && (
+        {(slippage.lt(-3) || slippage.isZero()) && (
           <IconWarning className="w-14 text-red" />
         )}
       </div>

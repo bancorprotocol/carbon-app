@@ -2,7 +2,7 @@ import { useWeb3 } from 'libs/web3';
 import { useMutation, useQueries } from '@tanstack/react-query';
 import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { QueryKey } from 'libs/queries/queryKey';
 import { config } from 'services/web3/config';
 import { useContract } from 'hooks/useContract';
@@ -36,7 +36,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
 
         const isETH = t.address === config.tokens.ETH;
         if (isETH) {
-          return new BigNumber(shrinkToken(UNLIMITED_WEI, t.decimals));
+          return new Decimal(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
 
         const allowance = await Token(t.address).read.allowance(
@@ -44,7 +44,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           t.spender
         );
 
-        return new BigNumber(shrinkToken(allowance.toString(), t.decimals));
+        return new Decimal(shrinkToken(allowance.toString(), t.decimals));
       },
       enabled: !!user,
       onError: (error: any) => {

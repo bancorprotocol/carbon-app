@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { Strategy } from 'libs/queries';
 import { StrategyFilter, StrategySort } from './StrategyFilterSort';
 
@@ -8,10 +8,10 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
   switch (sortType) {
     case StrategySort.Recent:
       return (a: Strategy, b: Strategy) =>
-        new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
+        new Decimal(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
     case StrategySort.Old:
       return (a: Strategy, b: Strategy) =>
-        new BigNumber(a.idDisplay).minus(b.idDisplay).toNumber();
+        new Decimal(a.idDisplay).minus(b.idDisplay).toNumber();
     case StrategySort.PairAscending:
       return (a: Strategy, b: Strategy) => {
         firstPairComparison = a.base.symbol.localeCompare(b.base.symbol);
@@ -35,7 +35,7 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
         a.roi.minus(b.roi).times(-1).toNumber();
     default:
       return (a: Strategy, b: Strategy) =>
-        new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
+        new Decimal(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
   }
 };
 export const getSortAndFilterItems = () => {
