@@ -2,9 +2,7 @@ import Decimal from 'decimal.js';
 
 export const expandToken = (amount: string | number, precision: number) => {
   const trimmed = new Decimal(amount).toFixed(precision, 1);
-  return new Decimal(trimmed)
-    .times(new Decimal(10).pow(precision))
-    .toFixed(0);
+  return new Decimal(trimmed).times(new Decimal(10).pow(precision)).toFixed(0);
 };
 
 export const shrinkToken = (
