@@ -4,7 +4,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-    type: [ready_for_review]
+    type: [opened, reopened, synchronizen, ready_for_review]
 jobs:
   e2e:
     timeout-minutes: 60
@@ -30,6 +30,7 @@ jobs:
           # TODO: Update with the new secret when set
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
           CI: true
+          DRAFT: ${{ github.event.pull_request.draft }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -37,5 +38,6 @@ jobs:
           path: playwright-report/
           retention-days: 30
       - uses: stefanzweifel/git-auto-commit-action@v4
+        if: github.event.pull_request.draft == false
         with:
           commit_message: '[CI] Update Screenshots'
