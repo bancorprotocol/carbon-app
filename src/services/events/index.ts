@@ -1,3 +1,4 @@
+import { explorerEvents } from './explorerEvents';
 import { generalEvents } from './generalEvents';
 import { CarbonEvents } from './googleTagManager/types';
 import { navigationEvents } from './navigationEvents';
@@ -17,4 +18,5 @@ export const carbonEvents: CarbonEvents = {
   trade: tradeEvents,
   transactionConfirmation: transactionConfirmationEvents,
   tokenApproval: tokenApprovalEvents,
+  explorer: explorerEvents,
 };
