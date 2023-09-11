@@ -20,6 +20,7 @@ import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { toPairSlug } from 'utils/pairSearch';
 
 export interface ExplorerSearchProps {
   type: ExplorerRouteGenerics['Params']['type'];
@@ -52,7 +53,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
       if (props.type === 'token-pair' && props.filteredPairs.length === 0) {
         return;
       }
-      const slug = value.replace('/', '-').replace(' ', '-').toLowerCase();
+      const slug = toPairSlug(value);
       navigate({
         to: PathNames.explorerOverview(props.type, slug),
       });
