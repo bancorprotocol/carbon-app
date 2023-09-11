@@ -20,7 +20,7 @@ export interface StrategiesStore {
 export const useStrategiesStore = (): StrategiesStore => {
   const [search, setSearch] = useState('');
   const [sort, _setSort] = useState<StrategySort>(
-    lsService.getItem('strategyOverviewSort') || StrategySort.Old
+    lsService.getItem('strategyOverviewSort') || StrategySort.RoiDescending
   );
   const [filter, _setFilter] = useState<StrategyFilter>(
     lsService.getItem('strategyOverviewFilter') || StrategyFilter.All
@@ -56,7 +56,7 @@ export const useStrategiesStore = (): StrategiesStore => {
 export const defaultStrategiesStore: StrategiesStore = {
   filter: StrategyFilter.All,
   setFilter: () => {},
-  sort: StrategySort.Old,
+  sort: StrategySort.RoiDescending,
   setSort: () => {},
   search: '',
   setSearch: () => {},

@@ -103,7 +103,7 @@ export const _StrategyContent: FC<Props> = ({
 
   return (
     <>
-      {!filteredStrategies || filteredStrategies.length === 0 || isLoading ? (
+      {!filteredStrategies?.length || isLoading ? (
         <>
           {isLoading ? (
             <m.div

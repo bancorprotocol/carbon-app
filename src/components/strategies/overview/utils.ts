@@ -35,7 +35,7 @@ export const getCompareFunctionBySortType = (sortType: StrategySort) => {
         a.roi.minus(b.roi).times(-1).toNumber();
     default:
       return (a: Strategy, b: Strategy) =>
-        new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
+        a.roi.minus(b.roi).times(-1).toNumber();
   }
 };
 export const getSortAndFilterItems = () => {
