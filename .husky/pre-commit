@@ -3,4 +3,4 @@
 
 echo "Running pre-commit hook"
 
-yarn test && yarn build && yarn lint
+yarn pre-commit
