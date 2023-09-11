@@ -11,17 +11,28 @@ export const getStatusText = (status: StrategyStatus) => {
     : 'Inactive';
 };
 
-export const getTooltipTextByStatus = (status: StrategyStatus) => {
+export const getTooltipTextByStatus = (
+  isExplorer: boolean | undefined,
+  status: StrategyStatus
+) => {
   return status === StrategyStatus.Active
-    ? 'Your strategy is active and ready'
+    ? isExplorer
+      ? 'This strategy is currently active and ready to process trades.'
+      : 'Your strategy is active and ready.'
     : status === StrategyStatus.NoBudget
-    ? 'Your strategy has no associated funds. Consider depositing funds to activate it.'
+    ? isExplorer
+      ? 'This strategy has no associated funds and will not process trades.'
+      : 'Your strategy has no associated funds. Consider depositing funds to activate it.'
     : status === StrategyStatus.Paused
-    ? 'Your strategy is currently paused. Edit the prices to activate it.'
+    ? isExplorer
+      ? 'This strategy is currently paused and will not process trades.'
+      : 'Your strategy is currently paused. Edit the prices to activate it.'
+    : isExplorer
+    ? 'This strategy is currently inactive and will not process trades.'
     : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
 };
 
-export const tooltipTextByStrategyEditOptionsId = {
+const tooltipTextByStrategyEditOptionsId = {
   duplicateStrategy: 'Create a new strategy with the same details',
   deleteStrategy:
     'Delete the strategy and withdraw all associated funds to your wallet',
@@ -32,6 +43,18 @@ export const tooltipTextByStrategyEditOptionsId = {
     'Edit the prices of your buy/sell orders within an existing strategy',
   renewStrategy: 'Renew an inactive strategy',
   manageNotifications: 'Get notified when someone trades against your strategy',
+};
+
+export const getTooltipTextByStrategyEditOptionsId = (
+  isExplorer: boolean | undefined
+) => {
+  return {
+    ...tooltipTextByStrategyEditOptionsId,
+    ...(isExplorer && {
+      manageNotifications:
+        'Get notified when someone trades against this strategy',
+    }),
+  };
 };
 
 type StrategyEditOption = typeof tooltipTextByStrategyEditOptionsId;
