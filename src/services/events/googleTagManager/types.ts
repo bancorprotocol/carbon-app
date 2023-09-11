@@ -1,3 +1,4 @@
+import { EventExplorerSchema } from '../explorerEvents';
 import { EventGeneralSchema } from '../generalEvents';
 import { EventNavigationSchema } from '../navigationEvents';
 import { EventStrategyEditSchema } from '../strategyEditEvents';
@@ -102,6 +103,7 @@ interface CarbonEventSchema extends CarbonEventsBase {
   trade: EventTradeSchema;
   transactionConfirmation: EventTransactionConfirmationSchema;
   tokenApproval: EventTokenApprovalSchema;
+  explorer: EventExplorerSchema;
 }
 
 export type SendEventFn = <

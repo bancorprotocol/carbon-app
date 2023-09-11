@@ -3,30 +3,40 @@ import { Link, PathNames } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconCheck } from 'assets/icons/v.svg';
+import { explorerEvents } from 'services/events/explorerEvents';
+import { ExplorerType } from './utils';
 
 type Props = Pick<ExplorerSearchProps, 'setSearch' | 'type'>;
 
-export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch, type }) => {
+export const ExplorerSearchDropdownItems: FC<Props> = ({
+  setSearch,
+  type: currentType,
+}) => {
   const items = [
     {
+      type: 'wallet' as const,
       label: 'Wallet',
-      href: PathNames.explorer('wallet'),
-      active: type === 'wallet',
+      active: currentType === 'wallet',
     },
     {
+      type: 'token-pair' as const,
       label: 'Token Pair',
-      href: PathNames.explorer('token-pair'),
-      active: type === 'token-pair',
+      active: currentType === 'token-pair',
     },
   ];
 
+  const clickHanlder = (type: ExplorerType) => {
+    setSearch('');
+    explorerEvents.exploreSearchTypeChange(type);
+  };
+
   return (
     <div className={'flex w-full flex-col space-y-10 font-weight-400'}>
-      {items.map(({ label, href, active }) => (
+      {items.map(({ label, type, active }) => (
         <Link
-          key={href}
-          to={href}
-          onClick={() => setSearch('')}
+          key={type}
+          to={PathNames.explorer(type)}
+          onClick={() => clickHanlder(type)}
           className={cn(
             'hover:bg-body rounded-6 p-10',
             active && 'flex items-center justify-between'
