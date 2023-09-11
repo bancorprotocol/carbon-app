@@ -9,7 +9,6 @@ jobs:
   e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push (see auto-commit below)
       contents: write
