@@ -6,6 +6,8 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TradePairCategory } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenListContent';
 import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 import {
+  EnumStrategyFilter,
+  EnumStrategySort,
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
@@ -32,8 +34,8 @@ interface LocalStorageSchema {
   tradeMaxOrders: string;
   chooseTokenCategory: ChooseTokenCategory;
   carbonControllerAddress: string;
-  strategyOverviewFilter: StrategyFilter;
-  strategyOverviewSort: StrategySort;
+  strategyOverviewFilter: StrategyFilter | EnumStrategyFilter;
+  strategyOverviewSort: StrategySort | EnumStrategySort;
   voucherContractAddress: string;
   tokenListCache: { tokens: Token[]; timestamp: number };
   sdkCompressedCacheData: string;
