@@ -57,7 +57,9 @@ export const StrategyBlock: FC<Props> = ({
             <div className="text-secondary flex gap-10">
               ID: {strategy.idDisplay}
               <div className="flex gap-10">
-                <Tooltip element={getTooltipTextByStatus(strategy.status)}>
+                <Tooltip
+                  element={getTooltipTextByStatus(isExplorer, strategy.status)}
+                >
                   <span
                     className={`${
                       strategy.status === StrategyStatus.Active
