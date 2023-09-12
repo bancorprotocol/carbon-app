@@ -41,7 +41,7 @@ export const useTradeAction = ({
 
   const calcMinReturn = useCallback(
     (amount: string) => {
-      const slippageBn = new Decimal(slippage).div(100);
+      const slippageBn = new Decimal(slippage || 0).div(100);
       return new Decimal(1).minus(slippageBn).times(amount).toString();
     },
     [slippage]
@@ -49,14 +49,14 @@ export const useTradeAction = ({
 
   const calcMaxInput = useCallback(
     (amount: string) => {
-      const slippageBn = new Decimal(slippage).div(100);
+      const slippageBn = new Decimal(slippage || 0).div(100);
       return new Decimal(1).plus(slippageBn).times(amount).toString();
     },
     [slippage]
   );
 
   const calcDeadline = useCallback((value: string) => {
-    const deadlineInMs = new Decimal(value).times(60).times(1000);
+    const deadlineInMs = new Decimal(value || 0).times(60).times(1000);
     return deadlineInMs.plus(Date.now()).toString();
   }, []);
 

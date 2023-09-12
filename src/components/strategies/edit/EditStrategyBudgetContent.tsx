@@ -60,16 +60,16 @@ export const EditStrategyBudgetContent = ({
   } = useLocation();
 
   const calculatedOrder0Budget = !!order0.budget
-    ? new Decimal(strategy.order0.balance)?.[
+    ? new Decimal(strategy.order0.balance || 0)?.[
         type === 'withdraw' ? 'minus' : 'plus'
-      ](new Decimal(order0.budget))
-    : new Decimal(strategy.order0.balance);
+      ](new Decimal(order0.budget || 0))
+    : new Decimal(strategy.order0.balance || 0);
 
   const calculatedOrder1Budget = !!order1.budget
-    ? new Decimal(strategy.order1.balance)?.[
+    ? new Decimal(strategy.order1.balance || 0)?.[
         type === 'withdraw' ? 'minus' : 'plus'
-      ](new Decimal(order1.budget))
-    : new Decimal(strategy.order1.balance);
+      ](new Decimal(order1.budget || 0))
+    : new Decimal(strategy.order1.balance || 0);
 
   const handleEvents = () => {
     type === 'withdraw'

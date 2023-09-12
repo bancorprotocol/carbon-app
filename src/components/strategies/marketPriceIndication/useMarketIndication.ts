@@ -32,8 +32,8 @@ export const useMarketIndication = ({
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
     if (order.isRange) {
       const isInputNotZero = buy
-        ? new Decimal(order.max).gt(0)
-        : new Decimal(order.min).gt(0);
+        ? new Decimal(order.max || 0).gt(0)
+        : new Decimal(order.min || 0).gt(0);
 
       const isAboveOrBelow = buy
         ? new Decimal(getFiatValue(order.max)).gt(tokenMarketPrice)
@@ -63,10 +63,7 @@ export const useMarketIndication = ({
       const fiatValue = getFiatValue(price);
       return fiatValue.eq(0)
         ? fiatValue
-        : new Decimal(fiatValue)
-            .minus(tokenMarketPrice)
-            .div(tokenMarketPrice)
-            .times(100);
+        : fiatValue.minus(tokenMarketPrice).div(tokenMarketPrice).times(100);
     };
 
     return {
