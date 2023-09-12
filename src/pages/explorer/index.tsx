@@ -1,6 +1,10 @@
 import { Page } from 'components/common/page';
 import { ExplorerSearch, useExplorer } from 'components/explorer';
-import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
+import {
+  StrategyFilter,
+  StrategyFilterSort,
+  StrategySort,
+} from 'components/strategies/overview/StrategyFilterSort';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -13,6 +17,7 @@ import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { useStore } from 'store';
 import { toPairSlug } from 'utils/pairSearch';
+import { explorerEvents } from 'services/events/explorerEvents';
 
 export const ExplorerPage = () => {
   const { aboveBreakpoint } = useBreakpoints();
@@ -20,12 +25,19 @@ export const ExplorerPage = () => {
     current: { pathname },
   } = useLocation();
 
-  const {
-    strategies: { sort, setSort, filter, setFilter },
-  } = useStore();
-
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebouncedValue(search, 200);
+
+  const { strategies } = useStore();
+  const { sort, filter } = strategies;
+  const setSort = (sort: StrategySort) => {
+    explorerEvents.exploreSearchResultsFilterSort({ search, sort, filter });
+    strategies.setSort(sort);
+  };
+  const setFilter = (filter: StrategyFilter) => {
+    explorerEvents.exploreSearchResultsFilterSort({ search, sort, filter });
+    strategies.setFilter(filter);
+  };
 
   const {
     usePairs,
@@ -34,7 +46,7 @@ export const ExplorerPage = () => {
   } = useExplorer({ search: debouncedSearch });
 
   const { nameMap, filteredPairs } = usePairs;
-  const strategies =
+  const strategyList =
     type === 'wallet'
       ? useWallet.strategiesQuery.data
       : usePairs.strategiesQuery.data;
@@ -58,7 +70,7 @@ export const ExplorerPage = () => {
       href: PathNames.explorerOverview(type, slug!),
       hrefMatches: [],
       icon: <IconOverview className={'h-18 w-18'} />,
-      badge: strategies?.length || 0,
+      badge: strategyList?.length || 0,
     },
     {
       label: 'Portfolio',

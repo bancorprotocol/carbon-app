@@ -7,7 +7,6 @@ import {
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Strategy } from 'libs/queries';
 import { lsService } from 'services/localeStorage';
-import { explorerEvents } from 'services/events/explorerEvents';
 
 export interface StrategiesStore {
   search: string;
@@ -65,19 +64,11 @@ export const useStrategiesStore = (): StrategiesStore => {
   const setSort = (sort: StrategySort) => {
     _setSort(sort);
     lsService.setItem('strategyOverviewSort', sort);
-    // use global location because local useLocation is not available here
-    if (window.location.pathname.startsWith('/explorer')) {
-      explorerEvents.exploreSearchResultsFilterSort({ search, sort, filter });
-    }
   };
 
   const setFilter = (filter: StrategyFilter) => {
     _setFilter(filter);
     lsService.setItem('strategyOverviewFilter', filter);
-    // use global location because local useLocation is not available here
-    if (window.location.pathname.startsWith('/explorer')) {
-      explorerEvents.exploreSearchResultsFilterSort({ search, sort, filter });
-    }
   };
 
   // TODO clean up edit strategy
