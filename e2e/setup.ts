@@ -4,6 +4,8 @@ import { CreateForkBody, createFork, forkRpcUrl } from './utils/tenderly';
 const forkConfig: CreateForkBody = {
   network_id: '1',
   alias: 'E2E-CI',
+  // Sep-12-2023
+  block_number: 18120000,
 };
 
 const browsers = { chromium, firefox, webkit };
