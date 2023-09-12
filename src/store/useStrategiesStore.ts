@@ -66,8 +66,7 @@ export const useStrategiesStore = (): StrategiesStore => {
     _setSort(sort);
     lsService.setItem('strategyOverviewSort', sort);
     // use global location because local useLocation is not available here
-    // eslint-disable-next-line no-restricted-globals
-    if (location.pathname.startsWith('/explorer')) {
+    if (window.location.pathname.startsWith('/explorer')) {
       explorerEvents.exploreSearchResultsFilterSort({ search, sort, filter });
     }
   };
@@ -76,8 +75,7 @@ export const useStrategiesStore = (): StrategiesStore => {
     _setFilter(filter);
     lsService.setItem('strategyOverviewFilter', filter);
     // use global location because local useLocation is not available here
-    // eslint-disable-next-line no-restricted-globals
-    if (location.pathname.startsWith('/explorer')) {
+    if (window.location.pathname.startsWith('/explorer')) {
       explorerEvents.exploreSearchResultsFilterSort({ search, sort, filter });
     }
   };
