@@ -44,12 +44,8 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
   const onSearchHandler = useCallback(
     (v?: string) => {
       const value = v || props.search;
-      if (isInvalidAddress) {
-        return;
-      }
-      if (value.length === 0) {
-        return;
-      }
+      if (isInvalidAddress) return;
+      if (value.length === 0) return;
       if (props.type === 'token-pair' && props.filteredPairs.length === 0) {
         return;
       }
