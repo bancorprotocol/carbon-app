@@ -205,12 +205,6 @@ export const useBuySell = ({
     resetError();
   }, [source.address, target.address]);
 
-  console.log('user', user);
-  console.log('sourceBalanceQuery', sourceBalanceQuery);
-  console.log('sourceBalanceQuery.data', sourceBalanceQuery.data);
-  console.log('isTradeBySource', isTradeBySource);
-  console.log('sourceInput', sourceInput);
-
   const errorBaseBalanceSufficient =
     !!user &&
     new Decimal(sourceBalanceQuery.data || 0).lt(
