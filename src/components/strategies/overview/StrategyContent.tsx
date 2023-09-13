@@ -10,7 +10,6 @@ import {
   useRef,
 } from 'react';
 import { Strategy, StrategyStatus } from 'libs/queries';
-import { StrategyFilter } from 'components/strategies/overview/StrategyFilterSort';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { useStore } from 'store';
 import { m } from 'libs/motion';
@@ -51,16 +50,10 @@ export const _StrategyContent: FC<Props> = ({
   const searchSlug = toPairSlug(search);
   const filteredStrategies = useMemo(() => {
     const filtered = strategies?.filter((strategy) => {
-      if (
-        filter === StrategyFilter.Active &&
-        strategy.status !== StrategyStatus.Active
-      ) {
+      if (filter === 'active' && strategy.status !== StrategyStatus.Active) {
         return false;
       }
-      if (
-        filter === StrategyFilter.Inactive &&
-        strategy.status === StrategyStatus.Active
-      ) {
+      if (filter === 'inactive' && strategy.status === StrategyStatus.Active) {
         return false;
       }
       if (!searchSlug) return true;
