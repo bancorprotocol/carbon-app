@@ -1,6 +1,6 @@
 import { deleteFork } from './utils/tenderly';
 
-async function globalTeardown() {
+const globalTeardown = async () => {
   console.log('Removing current fork');
   console.time('Fork removed');
 
@@ -8,6 +8,6 @@ async function globalTeardown() {
   if (forkId) await deleteFork(forkId);
 
   console.timeEnd('Fork removed');
-}
+};
 
 export default globalTeardown;
