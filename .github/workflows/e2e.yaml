@@ -27,7 +27,6 @@ jobs:
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
           VITE_CARBON_API_KEY: ${{ secrets.VITE_CARBON_API_KEY }}
           VITE_DEV_MODE: true
-          # TODO: Update with the new secret when set
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
           CI: true
           DRAFT: ${{ github.event.pull_request.draft }}
@@ -37,7 +36,16 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Import GPG key
         if: github.event.pull_request.draft == false
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+      - name: Commit changes
+        if: github.event.pull_request.draft == false
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: '[CI] Update Screenshots'
