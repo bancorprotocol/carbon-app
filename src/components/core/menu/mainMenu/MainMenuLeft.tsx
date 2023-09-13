@@ -23,6 +23,7 @@ export const MainMenuLeft: FC = () => {
           const isSamePage = isPathnameMatch(pathname, href, hrefMatches);
           return (
             <Link
+              key={label}
               onClick={() => handleOnItemClick(href)}
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}
