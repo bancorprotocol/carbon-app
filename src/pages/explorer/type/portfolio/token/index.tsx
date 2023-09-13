@@ -1,33 +1,18 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
 import { useExplorer } from 'components/explorer';
 import { PathNames } from 'libs/routing';
+import { useExplorerParams } from 'components/explorer/useExplorerParams';
 
 export const ExplorerTypePortfolioTokenPage = () => {
-  const {
-    usePairs,
-    useWallet,
-    routeParams: { address, type, slug },
-  } = useExplorer();
+  const { strategies, isLoading } = useExplorer();
+  const { address, type, slug } = useExplorerParams();
 
   if (!address) return <div>error no address provided</div>;
 
-  const getStrategiesQuery = () => {
-    switch (type) {
-      case 'wallet': {
-        return useWallet.strategiesQuery;
-      }
-      case 'token-pair': {
-        return usePairs.strategiesQuery;
-      }
-    }
-  };
-
-  const strategiesQuery = getStrategiesQuery();
-
   return (
     <PortfolioToken
-      strategies={strategiesQuery.data}
-      isLoading={strategiesQuery.isLoading}
+      strategies={strategies}
+      isLoading={isLoading}
       address={address}
       backLinkHref={PathNames.explorerPortfolio(type, slug!)}
     />

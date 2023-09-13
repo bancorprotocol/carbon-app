@@ -13,7 +13,7 @@ import { Token } from 'libs/tokens';
  */
 const pairSearchExp = new RegExp('(\\s|-|/){1,}', 'g');
 
-type PairMaps = ReturnType<typeof createPairMaps>;
+export type PairMaps = ReturnType<typeof createPairMaps>;
 
 export const toPairName = (base: Token, quote: Token) => {
   return `${base.symbol}/${quote.symbol}`;
@@ -24,7 +24,7 @@ export const toPairSlug = (value: string, regex: RegExp = pairSearchExp) => {
 };
 
 export const createPairMaps = (
-  pairs: TradePair[],
+  pairs: TradePair[] = [],
   transformSlugExp: RegExp = pairSearchExp
 ) => {
   const pairMap = new Map<string, TradePair>();
@@ -70,11 +70,11 @@ export const searchPairKeys = (
 
 /** Filter and search PairTrades based on a search input */
 export const searchPairTrade = (
-  pairMaps: PairMaps,
+  pairMap: Map<string, TradePair>,
+  nameMap: Map<string, string>,
   search: string,
   transformSlugExp: RegExp = pairSearchExp
 ) => {
-  const { pairMap, nameMap } = pairMaps;
   if (!search) return Array.from(pairMap.values());
   const keys = searchPairKeys(nameMap, search, transformSlugExp);
   return keys.map((key) => pairMap.get(key)).filter(exist);

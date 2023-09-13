@@ -1,4 +1,12 @@
-import { FC, KeyboardEvent, useId, useRef, useState } from 'react';
+import {
+  Dispatch,
+  FC,
+  KeyboardEvent,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   getSelectedOption,
   selectFirstOption,
@@ -9,14 +17,24 @@ import {
 import { ExplorerSearchInputContainer } from '../ExplorerSearchInputContainer';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { ExplorerSearchProps } from '../ExplorerSearch';
+import { searchPairTrade } from 'utils/pairSearch';
+import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 
-interface Props extends Omit<ExplorerSearchProps, 'type'> {}
+interface Props {
+  nameMap: Map<string, string>;
+  pairMap: Map<string, TradePair>;
+  search: string;
+  setSearch: Dispatch<string>;
+}
 
 export const SuggestionCombobox: FC<Props> = (props) => {
   const listboxId = useId();
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+
+  const filteredPairs = useMemo(() => {
+    return searchPairTrade(props.pairMap, props.nameMap, props.search);
+  }, [props.pairMap, props.nameMap, props.search]);
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (!open && e.key === 'Escape') {
@@ -41,7 +59,7 @@ export const SuggestionCombobox: FC<Props> = (props) => {
   const suggestionListProps = {
     setOpen,
     listboxId,
-    filteredPairs: props.filteredPairs,
+    filteredPairs,
   };
 
   return (
@@ -53,16 +71,16 @@ export const SuggestionCombobox: FC<Props> = (props) => {
       aria-controls={listboxId}
       aria-autocomplete="both"
       aria-expanded={open}
-      defaultValue={props.search}
+      value={props.search}
       placeholder="Search by token pair"
       aria-label="Search by token pair"
-      onInput={(e) => props.setSearch((e.target as HTMLInputElement).value)}
+      onChange={(e) => props.setSearch(e.target.value)}
       onKeyDown={onKeyDownHandler}
       onBlur={() => setOpen(false)}
       onFocus={() => setOpen(true)}
     >
-      {open && !props.filteredPairs.length && <SuggestionEmpty />}
-      {open && !!props.filteredPairs.length && (
+      {open && !filteredPairs.length && <SuggestionEmpty />}
+      {open && !!filteredPairs.length && (
         <SuggestionList {...suggestionListProps} />
       )}
     </ExplorerSearchInputContainer>

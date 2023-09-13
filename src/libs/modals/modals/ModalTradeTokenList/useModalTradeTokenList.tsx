@@ -1,11 +1,11 @@
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { useModal } from 'hooks/useModal';
-import { usePairSearch } from 'hooks/usePairSearch';
 import {
   ModalTradeTokenListData,
   TradePair,
 } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { createPairMaps, searchPairTrade } from 'utils/pairSearch';
 
 type Props = {
   id: string;
@@ -26,10 +26,12 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
 
   const [search, setSearch] = useState('');
 
-  const { filteredPairs } = usePairSearch({
-    search,
-    pairs: tradePairs,
-  });
+  const { pairMap, nameMap } = useMemo(() => {
+    return createPairMaps(tradePairs ?? []);
+  }, [tradePairs]);
+  const filteredPairs = useMemo(() => {
+    return searchPairTrade(pairMap, nameMap, search);
+  }, [pairMap, nameMap, search]);
 
   const handleSelect = (tradePair: TradePair) => {
     data.onClick(tradePair);
