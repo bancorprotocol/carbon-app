@@ -19,10 +19,8 @@ async function globalSetup(config: FullConfig) {
   const fork = await createFork(forkConfig);
   process.env['TENDERLY_FORK_ID'] = fork.id;
   const rpcUrl = forkRpcUrl(fork.id);
-  // TODO: remove this address after test
-  const imposter = '0x4a3ca0cb4dcf6bc573ca4b538cab5fb0e01b5f19';
   // Binance address
-  // const imposter = '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503';
+  const imposter = '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503';
 
   // On each browser, fill the Debug form and save localStorage in storageState
   const setupProjects = config.projects.map(async (project) => {
