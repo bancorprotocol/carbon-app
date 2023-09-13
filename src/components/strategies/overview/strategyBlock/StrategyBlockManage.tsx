@@ -269,7 +269,7 @@ const ManageItem: FC<{
           setManage(false);
         }}
         disabled={disabled}
-        className={cn('rounded-6 p-12', {
+        className={cn('w-full rounded-6 p-12 text-left', {
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
           'hover:bg-body': !disabled,
