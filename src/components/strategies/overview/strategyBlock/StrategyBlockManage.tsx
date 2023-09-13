@@ -96,7 +96,7 @@ export const StrategyBlockManage: FC<Props> = ({
     items.push({
       id: 'walletOwner',
       name: 'View Owner’s Strategies',
-      action: async () => {
+      action: () => {
         navigate({
           to: PathNames.explorerOverview('wallet', owner.data ?? ''),
         });
@@ -262,22 +262,21 @@ const ManageItem: FC<{
 
   const Content = () => {
     return (
-      <div
+      <button
+        type="button"
         onClick={() => {
-          if (disabled) return;
-
           action && action();
           setManage(false);
         }}
+        disabled={disabled}
         className={cn('rounded-6 p-12', {
-          'cursor-pointer': !disabled,
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
           'hover:bg-body': !disabled,
         })}
       >
         {title}
-      </div>
+      </button>
     );
   };
 
