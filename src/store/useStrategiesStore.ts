@@ -1,4 +1,6 @@
 import {
+  EnumStrategyFilter,
+  EnumStrategySort,
   StrategyFilter,
   StrategySort,
 } from 'components/strategies/overview/StrategyFilterSort';
@@ -17,14 +19,47 @@ export interface StrategiesStore {
   setStrategyToEdit: Dispatch<SetStateAction<Strategy | undefined>>;
 }
 
+/** Used for local storage migration */
+export const strategySortMapping: Record<EnumStrategySort, StrategySort> = {
+  [EnumStrategySort.Recent]: 'recent',
+  [EnumStrategySort.Old]: 'old',
+  [EnumStrategySort.PairAscending]: 'pairAsc',
+  [EnumStrategySort.PairDescending]: 'pairDesc',
+  [EnumStrategySort.RoiAscending]: 'roiAsc',
+  [EnumStrategySort.RoiDescending]: 'roiDesc',
+};
+const isEnumSort = (
+  sort: StrategySort | EnumStrategySort
+): sort is EnumStrategySort => sort in strategySortMapping;
+
+export const getSortFromLS = (): StrategySort => {
+  const sort = lsService.getItem('strategyOverviewSort');
+  if (sort === undefined) return 'roiDesc';
+  return isEnumSort(sort) ? strategySortMapping[sort] : sort;
+};
+
+/** Used for local storage migration */
+export const strategyFilterMapping: Record<EnumStrategyFilter, StrategyFilter> =
+  {
+    [EnumStrategyFilter.All]: 'all',
+    [EnumStrategyFilter.Active]: 'active',
+    [EnumStrategyFilter.Inactive]: 'inactive',
+  };
+
+const isEnumFilter = (
+  filter: StrategyFilter | EnumStrategyFilter
+): filter is EnumStrategyFilter => filter in strategyFilterMapping;
+
+export const getFilterFromLS = (): StrategyFilter => {
+  const filter = lsService.getItem('strategyOverviewFilter');
+  if (filter === undefined) return 'all';
+  return isEnumFilter(filter) ? strategyFilterMapping[filter] : filter;
+};
+
 export const useStrategiesStore = (): StrategiesStore => {
   const [search, setSearch] = useState('');
-  const [sort, _setSort] = useState<StrategySort>(
-    lsService.getItem('strategyOverviewSort') || StrategySort.Old
-  );
-  const [filter, _setFilter] = useState<StrategyFilter>(
-    lsService.getItem('strategyOverviewFilter') || StrategyFilter.All
-  );
+  const [sort, _setSort] = useState<StrategySort>(getSortFromLS());
+  const [filter, _setFilter] = useState<StrategyFilter>(getFilterFromLS());
 
   const setSort = (sort: StrategySort) => {
     _setSort(sort);
@@ -54,9 +89,9 @@ export const useStrategiesStore = (): StrategiesStore => {
 };
 
 export const defaultStrategiesStore: StrategiesStore = {
-  filter: StrategyFilter.All,
+  filter: 'all',
   setFilter: () => {},
-  sort: StrategySort.Old,
+  sort: 'roiDesc',
   setSort: () => {},
   search: '',
   setSearch: () => {},

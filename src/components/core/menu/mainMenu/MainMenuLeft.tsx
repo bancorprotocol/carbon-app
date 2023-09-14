@@ -19,10 +19,11 @@ export const MainMenuLeft: FC = () => {
       </Link>
 
       <div className={'hidden space-x-24 md:block'}>
-        {menuItems.map(({ label, href, hrefMatches }) => {
+        {menuItems.map(({ label, href, hrefMatches }, index) => {
           const isSamePage = isPathnameMatch(pathname, href, hrefMatches);
           return (
             <Link
+              key={index}
               onClick={() => handleOnItemClick(href)}
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}
