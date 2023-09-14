@@ -1,5 +1,5 @@
 {
-  "**/*.{ts,tsx,json,md,css}": [
+  "**/*.{ts,tsx,css}": [
     "eslint --fix --fix-type problem",
     "prettier --write"
   ]
