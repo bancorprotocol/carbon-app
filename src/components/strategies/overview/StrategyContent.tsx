@@ -123,7 +123,8 @@ export const _StrategyContent: FC<Props> = ({
             position: 'relative',
           }}
         >
-          <div
+          <ul
+            data-testid="strategies-list"
             className={
               'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
             }
@@ -149,7 +150,7 @@ export const _StrategyContent: FC<Props> = ({
               </Fragment>
             ))}
             {!isExplorer && <StrategyBlockCreate />}
-          </div>
+          </ul>
         </div>
       )}
     </>
