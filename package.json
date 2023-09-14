@@ -99,7 +99,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint --ext .tsx,.ts .",
-    "pre-commit": "yarn lint-staged && yarn test && yarn build"
+    "pre-commit": "yarn lint-staged && yarn test"
   },
   "browserslist": {
     "production": [
