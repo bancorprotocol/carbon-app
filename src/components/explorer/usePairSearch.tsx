@@ -17,7 +17,6 @@ interface PairProviderProps {
   children: ReactNode;
 }
 export const PairProvider: FC<PairProviderProps> = ({ children }) => {
-  // PAIR
   const { data: pairs } = useGetTradePairsData();
   const value = useMemo(() => {
     return createPairMaps(pairs);

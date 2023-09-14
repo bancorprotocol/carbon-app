@@ -114,11 +114,11 @@ export const _ExplorerSearch: FC = () => {
             <DropdownMenu
               placement={'bottom-start'}
               button={(onClick) => (
-                <ExplorerSearchDropdownButton onClick={onClick} type={type} />
+                <ExplorerSearchDropdownButton onClick={onClick} />
               )}
               className={'mt-10 -ml-17 !px-10 !py-10'}
             >
-              <ExplorerSearchDropdownItems setSearch={setSearch} type={type} />
+              <ExplorerSearchDropdownItems setSearch={setSearch} />
             </DropdownMenu>
           </div>
           <div role="separator" className={'h-20 w-1 bg-white/40'}></div>

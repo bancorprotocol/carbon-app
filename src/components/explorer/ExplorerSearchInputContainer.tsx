@@ -1,13 +1,11 @@
-import { ExplorerSearchProps } from 'components/explorer/ExplorerSearch';
 import { FC, JSX, RefObject } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconClose } from 'assets/icons/times.svg';
 
 type InputAttributes = JSX.IntrinsicElements['input'];
-interface Props
-  extends Pick<ExplorerSearchProps, 'search'>,
-    Omit<InputAttributes, 'type'> {
+interface Props extends Omit<InputAttributes, 'type'> {
   containerRef?: RefObject<HTMLDivElement>;
+  search: string;
 }
 
 export const ExplorerSearchInputContainer: FC<Props> = (props) => {

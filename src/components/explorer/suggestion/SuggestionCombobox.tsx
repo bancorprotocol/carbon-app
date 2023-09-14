@@ -28,18 +28,19 @@ interface Props {
 }
 
 export const SuggestionCombobox: FC<Props> = (props) => {
+  const { pairMap, nameMap, search, setSearch } = props;
   const listboxId = useId();
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
   const filteredPairs = useMemo(() => {
-    return searchPairTrade(props.pairMap, props.nameMap, props.search);
-  }, [props.pairMap, props.nameMap, props.search]);
+    return searchPairTrade(pairMap, nameMap, search);
+  }, [pairMap, nameMap, search]);
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (!open && e.key === 'Escape') {
       (e.target as HTMLInputElement).value = '';
-      return props.setSearch('');
+      return setSearch('');
     }
     if (!open) return setOpen(true);
 
@@ -65,16 +66,16 @@ export const SuggestionCombobox: FC<Props> = (props) => {
   return (
     <ExplorerSearchInputContainer
       containerRef={root}
-      search={props.search}
+      search={search}
       role="combobox"
       autoComplete="off"
       aria-controls={listboxId}
       aria-autocomplete="both"
       aria-expanded={open}
-      value={props.search}
+      value={search}
       placeholder="Search by token pair"
       aria-label="Search by token pair"
-      onChange={(e) => props.setSearch(e.target.value)}
+      onChange={(e) => setSearch(e.target.value)}
       onKeyDown={onKeyDownHandler}
       onBlur={() => setOpen(false)}
       onFocus={() => setOpen(true)}

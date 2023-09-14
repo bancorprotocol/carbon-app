@@ -8,6 +8,7 @@ export const useExplorer = () => {
   const { slug, type } = useExplorerParams();
   const { pairMap, nameMap } = usePairs();
 
+  // PAIR
   const exactMatch = useMemo(() => {
     if (!slug) return;
     return pairMap.has(slug)
@@ -23,6 +24,7 @@ export const useExplorer = () => {
   const walletQuery = useGetUserStrategies({
     user: type === 'wallet' ? slug : undefined,
   });
+
   const query = type === 'wallet' ? walletQuery : pairQuery;
   return {
     pairMap,
