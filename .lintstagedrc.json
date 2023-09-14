@@ -1,6 +1,6 @@
 {
   "**/*.{ts,tsx,json,md,css}": [
-    "prettier --write",
-    "eslint --fix --fix-type problem"
+    "eslint --fix --fix-type problem",
+    "prettier --write"
   ]
 }
