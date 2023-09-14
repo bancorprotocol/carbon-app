@@ -150,12 +150,13 @@ const handlePrettifyNumberCurrency = (
   const nfCurrencyOptionsDefault: Intl.NumberFormatOptions = {
     style: 'currency',
     currency: currentCurrency,
-    // @ts-ignore: supportedValuesOf supported from TypeScript 5.1
-    currencyDisplay: Intl.supportedValuesOf('currency').includes(
-      currentCurrency
-    )
-      ? 'symbol'
-      : 'name',
+    currencyDisplay:
+      // @ts-ignore: supportedValuesOf supported from TypeScript 5.1
+      Intl.supportedValuesOf &&
+      // @ts-ignore: supportedValuesOf supported from TypeScript 5.1
+      Intl.supportedValuesOf('currency').includes(currentCurrency)
+        ? 'symbol'
+        : 'name',
     useGrouping: true,
     // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     roundingMode: round ? 'halfExpand' : 'floor',
