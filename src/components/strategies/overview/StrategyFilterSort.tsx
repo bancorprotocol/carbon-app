@@ -5,13 +5,30 @@ import { getSortAndFilterItems } from './utils';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 
-export enum StrategyFilter {
+export const strategyFilter = {
+  all: 'All',
+  active: 'Active',
+  inactive: 'Inactive',
+};
+export type StrategyFilter = keyof typeof strategyFilter;
+
+export enum EnumStrategyFilter {
   All,
   Active,
   Inactive,
 }
 
-export enum StrategySort {
+export const strategySort = {
+  recent: 'Recently Created',
+  old: 'Oldest Created',
+  pairAsc: 'Pair (A->Z)',
+  pairDesc: 'Pair (Z->A)',
+  roiAsc: 'ROI (Ascending)',
+  roiDesc: 'ROI (Descending)',
+};
+export type StrategySort = keyof typeof strategySort;
+
+export enum EnumStrategySort {
   Recent,
   Old,
   PairAscending,

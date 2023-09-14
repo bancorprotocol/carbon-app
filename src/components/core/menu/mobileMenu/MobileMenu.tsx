@@ -11,9 +11,9 @@ export const MobileMenu = () => {
 
   return (
     <footer className={`mobile-menu`}>
-      {menuItems.map(({ label, href, hrefMatches }) => (
+      {menuItems.map(({ label, href, hrefMatches }, index) => (
         <Link
-          key={label}
+          key={index}
           onClick={() => handleOnItemClick(href)}
           to={href}
           className={`px-3 py-3 ${
