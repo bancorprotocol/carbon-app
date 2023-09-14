@@ -65,13 +65,16 @@ export const DebugTenderlyRPC = () => {
         }
       >
         <Checkbox
+          data-testid="unchecked-signer"
           isChecked={isUncheckedSigner}
           setIsChecked={setIsUncheckedSigner}
         />
         <span>Unchecked Signer</span>
       </div>
 
-      <Button onClick={handleOnClick}>Save</Button>
+      <Button data-testid="save-rpc" onClick={handleOnClick}>
+        Save
+      </Button>
     </div>
   );
 };
