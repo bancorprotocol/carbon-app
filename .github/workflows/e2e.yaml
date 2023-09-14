@@ -37,7 +37,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
       - name: Import GPG key
-        id: import_gpg
+        id: import-gpg
         if: github.event.pull_request.draft == false
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -50,5 +50,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: '[CI] Update Screenshots'
-          commit_user_name: ${{ steps.import_gpg.name }}
-          commit_user_email: ${{ steps.import_gpg.email }}
+          commit_user_name: ${{ steps.import-gpg.outputs.name }}
+          commit_user_email: ${{ steps.import-gpg.outputs.email }}
