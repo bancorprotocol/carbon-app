@@ -112,22 +112,17 @@ export const BuySellBlock: FC<Props> = ({
       }`}
     >
       {strategyType === 'disposable' && (
-        <div className={'mb-30'}>
-          <TabsMenu>
-            <TabsMenuButton
-              onClick={() => changeStrategy('buy')}
-              isActive={buy}
-            >
-              Buy
-            </TabsMenuButton>
-            <TabsMenuButton
-              onClick={() => changeStrategy('sell')}
-              isActive={!buy}
-            >
-              Sell
-            </TabsMenuButton>
-          </TabsMenu>
-        </div>
+        <TabsMenu>
+          <TabsMenuButton onClick={() => changeStrategy('buy')} isActive={buy}>
+            Buy
+          </TabsMenuButton>
+          <TabsMenuButton
+            onClick={() => changeStrategy('sell')}
+            isActive={!buy}
+          >
+            Sell
+          </TabsMenuButton>
+        </TabsMenu>
       )}
 
       <BuySellHeader {...headerProps}>

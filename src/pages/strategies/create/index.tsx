@@ -28,13 +28,16 @@ export const CreateStrategyPage = () => {
         <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
           {showGraph && <CreateStrategyGraph {...createStrategy} />}
 
-          <div className="flex w-full flex-col gap-20 md:w-[440px]">
-            {showTokenSelection && (
-              <CreateStrategyTokenSelection {...createStrategy} />
-            )}
-            {showTypeMenu && <CreateStrategyTypeMenu {...createStrategy} />}
-            {showOrders && <CreateStrategyOrders {...createStrategy} />}
-          </div>
+          {!showOrders && (
+            <div className="flex flex-col gap-20 md:w-[440px]">
+              {showTokenSelection && (
+                <CreateStrategyTokenSelection {...createStrategy} />
+              )}
+              {showTypeMenu && <CreateStrategyTypeMenu {...createStrategy} />}
+            </div>
+          )}
+
+          {showOrders && <CreateStrategyOrders {...createStrategy} />}
         </div>
       </m.div>
     </AnimatePresence>

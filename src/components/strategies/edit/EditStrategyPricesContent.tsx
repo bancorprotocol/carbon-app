@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
@@ -51,7 +51,8 @@ export const EditStrategyPricesContent = ({
     order0,
     order1,
   });
-  const handleOnActionClick = () => {
+  const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const newOrder0 = {
       balance: strategy.order0.balance,
       startRate: (order0.isRange ? order0.min : order0.price) || '0',
@@ -103,7 +104,11 @@ export const EditStrategyPricesContent = ({
   }, [isAwaiting, isProcessing]);
 
   return (
-    <div className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]">
+    <form
+      onSubmit={(e) => handleOnActionClick(e)}
+      onReset={() => back()}
+      className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]"
+    >
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyPricesBuySellBlock
         buy
@@ -124,11 +129,10 @@ export const EditStrategyPricesContent = ({
       />
 
       <Button
+        type="submit"
         disabled={!isOrderValid(order0) || !isOrderValid(order1)}
         loading={isLoading}
         loadingChildren={loadingChildren}
-        onClick={handleOnActionClick}
-        className="mt-32"
         variant={'white'}
         size="lg"
         fullWidth
@@ -136,15 +140,14 @@ export const EditStrategyPricesContent = ({
         {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
       </Button>
       <Button
-        onClick={() => back()}
+        type="reset"
         disabled={isLoading}
-        className="mt-16"
         variant="secondary"
         size="lg"
         fullWidth
       >
         Cancel
       </Button>
-    </div>
+    </form>
   );
 };

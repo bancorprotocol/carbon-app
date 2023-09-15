@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { BuySellBlock } from './BuySellBlock';
@@ -89,7 +89,8 @@ export const CreateStrategyOrders = ({
     }
   }, [handleExpertMode]);
 
-  const onCreateStrategy = () => {
+  const onCreateStrategy = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     carbonEvents.strategy.strategyCreateClick(strategyEventData);
     createStrategy();
   };
@@ -99,7 +100,10 @@ export const CreateStrategyOrders = ({
   }, [isAwaiting, isProcessing]);
 
   return (
-    <>
+    <form
+      onSubmit={(e) => onCreateStrategy(e)}
+      className="flex flex-col gap-20 md:w-[440px]"
+    >
       <m.header
         variants={items}
         key={'createStrategyBuyTokens'}
@@ -153,10 +157,10 @@ export const CreateStrategyOrders = ({
       )}
       <m.div variants={items} key={'createStrategyCTA'}>
         <Button
+          type="submit"
           variant={'success'}
           size={'lg'}
           fullWidth
-          onClick={onCreateStrategy}
           disabled={isCTAdisabled}
           loading={isProcessing || isAwaiting}
           loadingChildren={loadingChildren}
@@ -164,6 +168,6 @@ export const CreateStrategyOrders = ({
           {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>
       </m.div>
-    </>
+    </form>
   );
 };

@@ -35,18 +35,20 @@ export const BuySellHeader: FC<Props> = (props) => {
       <div className="flex items-center gap-10 text-14">
         <div className="bg-body flex items-center rounded-[100px] p-2">
           <button
+            type="button"
             tabIndex={!isRange ? -1 : 0}
             onClick={() => handleRangeChange()}
-            className={`font-500 rounded-40 ${
+            className={`rounded-40 font-weight-500 ${
               !isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
           >
             Limit
           </button>
           <button
+            type="button"
             tabIndex={isRange ? -1 : 0}
             onClick={() => handleRangeChange()}
-            className={`font-500 rounded-40 ${
+            className={`rounded-40 font-weight-500 ${
               isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
           >

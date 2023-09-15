@@ -135,7 +135,7 @@ export const InputRange: FC<InputRangeProps> = ({
               'mb-5 w-full bg-transparent font-mono text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="flex flex-col items-start gap-4">
+          <div className="flex items-center gap-4">
             <div className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(max)}
             </div>
