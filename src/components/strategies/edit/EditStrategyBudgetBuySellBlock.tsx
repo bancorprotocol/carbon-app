@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useId } from 'react';
 import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
@@ -8,6 +8,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -18,6 +19,8 @@ export const EditStrategyBudgetBuySellBlock: FC<{
   isBudgetOptional?: boolean;
   type: 'deposit' | 'withdraw';
 }> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
+  const inputId = useId();
+  const titleId = useId();
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
   const tokenBalanceQuery = buy
@@ -35,33 +38,35 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       : calculatedWalletBalance.lt(0);
 
   return (
-    <div
-      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-left ${
+    <section
+      aria-labelledby={titleId}
+      className={`bg-secondary flex flex-col gap-20 rounded-6 border-l-2 p-20 text-left ${
         buy
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
       }`}
     >
-      <div className="mb-10 flex items-center justify-between">
-        <div className="flex items-center">
-          <div>
+      <header className="flex items-center justify-between">
+        <h3 id={titleId} className="flex items-center gap-8 text-18">
+          <span>
             {`${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
             {buy ? 'Buy' : 'Sell'} Budget
-          </div>
+          </span>
           {isBudgetOptional && (
-            <div className="ml-8 text-14 font-weight-500 text-white/40">
+            <span className="text-14 font-weight-500 text-white/40">
               Optional
-            </div>
+            </span>
           )}
-        </div>
+        </h3>
         <Tooltip
           element={`Indicate the amount you wish to ${
             type === 'withdraw' ? 'withdraw' : 'deposit'
           } from the available "allocated budget"`}
         />
-      </div>
+      </header>
       <TokenInputField
-        className={'mr-4 rounded-16 bg-black p-16'}
+        id={inputId}
+        className={'rounded-16 bg-black p-16'}
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}
@@ -70,23 +75,24 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         balance={tokenBalanceQuery.data}
         withoutWallet={type === 'withdraw'}
       />
-      <div
-        className={`mt-10 text-center text-12 text-red ${
-          !insufficientBalance ? 'invisible' : ''
-        }`}
-      >
-        Insufficient balance
-      </div>
-      <div className="pt-10">
-        <EditStrategyAllocatedBudget
-          {...{ order, base, quote, balance, buy, type }}
-          {...(type === 'withdraw' && {
-            showMaxCb: () => order.setBudget(balance || ''),
-          })}
-        />
-      </div>
+      {insufficientBalance && (
+        <output
+          htmlFor={inputId}
+          role="alert"
+          aria-live="polite"
+          className={`flex items-center gap-10 font-mono text-12 text-red`}
+        >
+          <IconWarning className="h-12 w-12" />
+          <span>Insufficient balance</span>
+        </output>
+      )}
+      <EditStrategyAllocatedBudget
+        {...{ order, base, quote, balance, buy, type }}
+        {...(type === 'withdraw' && {
+          showMaxCb: () => order.setBudget(balance || ''),
+        })}
+      />
       <FullOutcome
-        className="mt-20"
         price={order.price}
         min={order.min}
         max={order.max}
@@ -96,6 +102,6 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         base={base}
         quote={quote}
       />
-    </div>
+    </section>
   );
 };

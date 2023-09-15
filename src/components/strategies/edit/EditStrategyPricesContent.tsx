@@ -103,7 +103,7 @@ export const EditStrategyPricesContent = ({
   }, [isAwaiting, isProcessing]);
 
   return (
-    <div className="flex w-full flex-col items-center space-y-20 text-center font-weight-500 md:w-[400px]">
+    <div className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]">
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyPricesBuySellBlock
         buy

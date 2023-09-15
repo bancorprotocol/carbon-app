@@ -19,14 +19,8 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
   const targetToken = props.buy ? props.base : props.quote;
   const hasBudgetUpdate = props.budgetUpdate && Number(props.budgetUpdate) > 0;
 
-  // Note: tailwind-merge will override text-12 with text-start for some reason
-  const textClasses = [
-    'text-start text-12 text-white/60 pb-10',
-    props.className ?? '',
-  ].join(' ');
-
   return (
-    <p className={textClasses}>
+    <p className="text-12 text-white/60">
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
       <b className="font-weight-500">

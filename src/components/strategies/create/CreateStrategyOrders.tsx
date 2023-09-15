@@ -100,33 +100,31 @@ export const CreateStrategyOrders = ({
 
   return (
     <>
-      <m.div
+      <m.header
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'rounded-10 bg-silver p-20'}
+        className={'flex flex-col gap-10 rounded-10 bg-silver p-20'}
       >
-        <div className={'flex space-x-10'}>
-          <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
+        <div className={'flex gap-10'}>
+          <TokensOverlap className="h-32 w-32" tokens={[base!, quote!]} />
           <div>
-            {
-              <div className="flex space-x-6">
-                <span>{base?.symbol}</span>
-                <div className="text-secondary !text-16">/</div>
-                <span>{quote?.symbol}</span>
-              </div>
-            }
+            <h2 className="flex gap-6 text-14">
+              <span>{base?.symbol}</span>
+              <span role="separator" className="text-secondary">
+                /
+              </span>
+              <span>{quote?.symbol}</span>
+            </h2>
             <div className="text-secondary capitalize">{strategyType}</div>
           </div>
         </div>
-        <div
-          className={
-            'mt-10 flex items-center text-12 font-weight-400 text-white/60'
-          }
+        <p
+          className={'flex items-center text-12 font-weight-400 text-white/60'}
         >
           <IconWarning className={'ml-6 mr-10 w-14 flex-shrink-0'} /> Rebasing
           and fee-on-transfer tokens are not supported
-        </div>
-      </m.div>
+        </p>
+      </m.header>
 
       {(strategyDirection === 'buy' || !strategyDirection) && (
         <BuySellBlock

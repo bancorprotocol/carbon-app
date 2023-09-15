@@ -55,7 +55,7 @@ export const EditStrategyPricesBuySellBlock: FC<
   return (
     <section
       aria-labelledby={titleId}
-      className={`bg-secondary w-full rounded-6 border-l-2 p-20 text-12 ${
+      className={`bg-secondary flex w-full flex-col gap-20 rounded-6 border-l-2 p-20 text-12 ${
         buy
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
@@ -69,7 +69,6 @@ export const EditStrategyPricesBuySellBlock: FC<
       <LimitRangeSection {...sectionProps} />
       <EditStrategyAllocatedBudget {...budgetProps} />
       <FullOutcome
-        className="mt-20"
         price={order.price}
         min={order.min}
         max={order.max}
