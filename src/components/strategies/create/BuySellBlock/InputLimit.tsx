@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent } from 'react';
+import { ChangeEvent, FC, FocusEvent, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
@@ -27,6 +27,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   marketPricePercentage,
   buy = false,
 }) => {
+  const inputId = useId();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const errorMessage = 'Price must be greater than 0';
     +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
@@ -51,22 +52,24 @@ export const InputLimit: FC<InputLimitProps> = ({
   const fiatAsString = getFiatAsString(price);
 
   return (
-    <div>
+    <>
       <div
         className={`${
-          error && 'border-red/50 text-red'
-        } bg-body flex flex-col items-end rounded-16 border-2 border-black p-16`}
+          error ? 'border-red/50 text-red' : 'border-black'
+        } bg-body flex flex-col items-end rounded-16 border-2 p-16`}
       >
         <input
-          type={'text'}
+          id={inputId}
+          type="number"
           pattern={decimalNumberValidationRegex}
           inputMode="decimal"
           value={price}
           onChange={handleChange}
           onFocus={handleFocus}
+          aria-label="Enter Price"
           placeholder="Enter Price"
           className={
-            'mb-5 w-full bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none'
+            'mb-5 w-full bg-transparent text-start font-mono text-18 font-weight-500 focus:outline-none'
           }
         />
         <div className="flex items-center gap-10">
@@ -78,14 +81,17 @@ export const InputLimit: FC<InputLimitProps> = ({
           />
         </div>
       </div>
-      <div
-        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
-          !error ? 'invisible' : ''
-        }`}
-      >
-        <IconWarning className="h-12 w-12" />
-        {error ? error : ''}
-      </div>
-    </div>
+      {error && (
+        <output
+          htmlFor={inputId}
+          role="alert"
+          aria-live="polite"
+          className={`flex items-center gap-10 font-mono text-12 text-red`}
+        >
+          <IconWarning className="h-12 w-12" />
+          <span>{error}</span>
+        </output>
+      )}
+    </>
   );
 };

@@ -13,14 +13,14 @@ export const TokensOverlap = ({
   const tokenCount = tokens.length;
   return (
     <div className="flex">
-      {tokens.slice(0, maxLogos).map((token, idx) => (
+      {tokens.slice(0, maxLogos).map((token, index) => (
         <LogoImager
-          key={token.symbol + idx}
+          key={token.symbol + index}
           src={token.logoURI}
           alt="Token Logo"
           className={`${className} border border-fog bg-fog dark:border-black dark:bg-black`}
           style={{
-            marginLeft: tokens.length > 1 ? `${'-10'}px` : '0px',
+            marginLeft: index > 0 ? '-10px' : '0px',
           }}
         />
       ))}
@@ -28,7 +28,7 @@ export const TokensOverlap = ({
         <div
           className={`flex h-30 w-30 items-center justify-center rounded-full bg-fog text-12 dark:bg-black`}
           style={{
-            marginLeft: `${'-10'}px`,
+            marginLeft: '-10px',
           }}
         >
           +{tokenCount - maxLogos}

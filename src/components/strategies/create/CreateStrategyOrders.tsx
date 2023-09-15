@@ -103,7 +103,7 @@ export const CreateStrategyOrders = ({
       <m.div
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'rounded-10 bg-silver p-20 pl-30'}
+        className={'rounded-10 bg-silver p-20'}
       >
         <div className={'flex space-x-10'}>
           <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
@@ -129,31 +129,29 @@ export const CreateStrategyOrders = ({
       </m.div>
 
       {(strategyDirection === 'buy' || !strategyDirection) && (
-        <m.div variants={items} key={'createStrategyBuyOrder'}>
-          <BuySellBlock
-            base={base!}
-            quote={quote!}
-            order={order0}
-            buy
-            tokenBalanceQuery={token1BalanceQuery}
-            isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-            strategyType={strategyType}
-            isOrdersOverlap={isOrdersOverlap}
-          />
-        </m.div>
+        <BuySellBlock
+          key={'createStrategyBuyOrder'}
+          base={base!}
+          quote={quote!}
+          order={order0}
+          buy
+          tokenBalanceQuery={token1BalanceQuery}
+          isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+          strategyType={strategyType}
+          isOrdersOverlap={isOrdersOverlap}
+        />
       )}
       {(strategyDirection === 'sell' || !strategyDirection) && (
-        <m.div variants={items} key={'createStrategySellOrder'}>
-          <BuySellBlock
-            base={base!}
-            quote={quote!}
-            order={order1}
-            tokenBalanceQuery={token0BalanceQuery}
-            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-            strategyType={strategyType}
-            isOrdersOverlap={isOrdersOverlap}
-          />
-        </m.div>
+        <BuySellBlock
+          key={'createStrategySellOrder'}
+          base={base!}
+          quote={quote!}
+          order={order1}
+          tokenBalanceQuery={token0BalanceQuery}
+          isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+          strategyType={strategyType}
+          isOrdersOverlap={isOrdersOverlap}
+        />
       )}
       <m.div variants={items} key={'createStrategyCTA'}>
         <Button

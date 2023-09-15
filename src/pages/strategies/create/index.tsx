@@ -28,7 +28,7 @@ export const CreateStrategyPage = () => {
         <div className="flex w-full flex-col gap-20 md:flex-row-reverse md:justify-center">
           {showGraph && <CreateStrategyGraph {...createStrategy} />}
 
-          <div className="w-full space-y-20 md:w-[440px]">
+          <div className="flex w-full flex-col gap-20 md:w-[440px]">
             {showTokenSelection && (
               <CreateStrategyTokenSelection {...createStrategy} />
             )}

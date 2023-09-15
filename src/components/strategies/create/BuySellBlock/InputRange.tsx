@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent } from 'react';
+import { ChangeEvent, FC, FocusEvent, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -32,6 +32,8 @@ export const InputRange: FC<InputRangeProps> = ({
   buy = false,
   marketPricePercentages,
 }) => {
+  const inputMinId = useId();
+  const inputMaxId = useId();
   const errorMessage = 'Max Price must be higher than min price and not zero';
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,12 +69,12 @@ export const InputRange: FC<InputRangeProps> = ({
   const { getFiatAsString } = useFiatCurrency(token);
 
   return (
-    <div>
+    <>
       <div className="grid grid-cols-2 gap-6">
         <div
           className={`${
-            error ? 'border-red/50 text-red' : ''
-          } bg-body w-full rounded-r-4 rounded-l-16 border-2 border-black p-16`}
+            error ? 'border-red/50 text-red' : 'border-black'
+          } bg-body w-full rounded-r-4 rounded-l-16 border-2 p-16`}
         >
           <Tooltip
             sendEventOnMount={{ buy }}
@@ -83,11 +85,13 @@ export const InputRange: FC<InputRangeProps> = ({
             <div className={'mb-5 text-12 text-white/60'}>Min</div>
           </Tooltip>
           <input
-            type={'text'}
+            id={inputMinId}
+            type="number"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={min}
             onChange={handleChangeMin}
+            aria-label="Minimal price"
             placeholder="Enter Price"
             onFocus={handleFocus}
             className={
@@ -118,11 +122,13 @@ export const InputRange: FC<InputRangeProps> = ({
             <div className={'mb-5 text-12 text-white/60'}>Max</div>
           </Tooltip>
           <input
-            type={'text'}
+            id={inputMaxId}
+            type="number"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={max}
             onChange={handleChangeMax}
+            aria-label="Maximal price"
             placeholder="Enter Price"
             onFocus={handleFocus}
             className={
@@ -140,14 +146,17 @@ export const InputRange: FC<InputRangeProps> = ({
           </div>
         </div>
       </div>
-      <div
-        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
-          !error ? 'invisible' : ''
-        }`}
-      >
-        <IconWarning className="h-12 w-12" />
-        <div>{error ? error : ''}</div>
-      </div>
-    </div>
+      {error && (
+        <output
+          htmlFor={`${inputMinId} ${inputMaxId}`}
+          role="alert"
+          aria-live="polite"
+          className={`flex items-center gap-10 font-mono text-12 text-red`}
+        >
+          <IconWarning className="h-12 w-12" />
+          <span>{error}</span>
+        </output>
+      )}
+    </>
   );
 };

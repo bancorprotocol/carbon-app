@@ -9,6 +9,7 @@ import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
+  id: string;
   value: string;
   setValue?: (value: string) => void;
   token: Token;
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export const TokenInputField: FC<Props> = ({
+  id,
   value,
   setValue = () => {},
   token,
@@ -78,7 +80,7 @@ export const TokenInputField: FC<Props> = ({
 
   return (
     <div
-      className={`cursor-text ${
+      className={`flex cursor-text flex-col gap-8 p-16 ${
         isFocused || isActive ? 'ring-2 ring-white/50' : ''
       } transition-all duration-200 ${
         isError ? 'ring-2 ring-red/50' : ''
@@ -93,46 +95,47 @@ export const TokenInputField: FC<Props> = ({
       }}
     >
       <div className={`flex items-center justify-between`}>
-        <div className={'mr-10 flex flex-none items-center'}>
+        <input
+          id={id}
+          type="number"
+          pattern={decimalNumberValidationRegex}
+          inputMode="decimal"
+          ref={inputRef}
+          value={
+            value === '...'
+              ? value
+              : !isFocused
+              ? !value
+                ? ''
+                : !isActive
+                ? value
+                : value
+              : value
+          }
+          size={1}
+          onChange={handleChange}
+          placeholder={placeholder}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
+          className={`grow bg-transparent font-mono text-18 font-weight-500 focus:outline-none ${
+            isError ? 'text-red' : 'text-white'
+          }`}
+          disabled={disabled}
+        />
+        <div
+          className={`flex items-center gap-6 rounded-[20px] bg-emphasis p-6`}
+        >
           <LogoImager
             alt={'Token'}
             src={token.logoURI}
-            className={'mr-10 h-30 w-30'}
+            className={'h-20 w-20'}
           />
           <span className={'font-weight-500'}>{token.symbol}</span>
         </div>
-        {
-          <input
-            type={'text'}
-            pattern={decimalNumberValidationRegex}
-            inputMode="decimal"
-            ref={inputRef}
-            value={
-              value === '...'
-                ? value
-                : !isFocused
-                ? !value
-                  ? ''
-                  : !isActive
-                  ? value
-                  : value
-                : value
-            }
-            size={1}
-            onChange={handleChange}
-            placeholder={placeholder}
-            onFocus={handleOnFocus}
-            onBlur={handleOnBlur}
-            className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none ${
-              isError ? 'text-red' : 'text-white'
-            }`}
-            disabled={disabled}
-          />
-        }
       </div>
       <div
         className={
-          'text-secondary mt-10 flex items-center justify-between gap-10 font-mono !text-12 font-weight-500'
+          'text-secondary flex items-center justify-end gap-10 font-mono !text-12 font-weight-500'
         }
       >
         {user && isBalanceLoading !== undefined && !withoutWallet ? (
