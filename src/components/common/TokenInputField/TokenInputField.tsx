@@ -9,7 +9,7 @@ import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
-  id: string;
+  id?: string;
   value: string;
   setValue?: (value: string) => void;
   token: Token;
