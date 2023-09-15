@@ -37,7 +37,7 @@ export const BuySellHeader: FC<Props> = (props) => {
           <button
             tabIndex={!isRange ? -1 : 0}
             onClick={() => handleRangeChange()}
-            className={`rounded-40 ${
+            className={`font-500 rounded-40 ${
               !isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
           >
@@ -46,7 +46,7 @@ export const BuySellHeader: FC<Props> = (props) => {
           <button
             tabIndex={isRange ? -1 : 0}
             onClick={() => handleRangeChange()}
-            className={`rounded-40 ${
+            className={`font-500 rounded-40 ${
               isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
           >
