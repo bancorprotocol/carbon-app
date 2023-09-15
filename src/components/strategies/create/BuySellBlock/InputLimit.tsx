@@ -60,7 +60,7 @@ export const InputLimit: FC<InputLimitProps> = ({
       >
         <input
           id={inputId}
-          type="number"
+          type="text"
           pattern={decimalNumberValidationRegex}
           inputMode="decimal"
           value={price}

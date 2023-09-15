@@ -97,7 +97,7 @@ export const TokenInputField: FC<Props> = ({
       <div className={`flex items-center justify-between`}>
         <input
           id={id}
-          type="number"
+          type="text"
           pattern={decimalNumberValidationRegex}
           inputMode="decimal"
           ref={inputRef}

@@ -86,7 +86,7 @@ export const InputRange: FC<InputRangeProps> = ({
           </Tooltip>
           <input
             id={inputMinId}
-            type="number"
+            type="text"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={min}
@@ -123,7 +123,7 @@ export const InputRange: FC<InputRangeProps> = ({
           </Tooltip>
           <input
             id={inputMaxId}
-            type="number"
+            type="text"
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={max}
