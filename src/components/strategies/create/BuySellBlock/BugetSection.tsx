@@ -66,12 +66,12 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <div className={'font-weight-500 text-white/60'}>
+          <span className={'font-weight-500 text-white/60'}>
             Set {buy ? 'Buy' : 'Sell'} Budget{' '}
-          </div>
+          </span>
         </Tooltip>
         {isBudgetOptional && (
-          <div className="ml-8 font-weight-500 text-white/40">Optional</div>
+          <span className="ml-8 font-weight-500 text-white/40">Optional</span>
         )}
       </legend>
       <TokenInputField

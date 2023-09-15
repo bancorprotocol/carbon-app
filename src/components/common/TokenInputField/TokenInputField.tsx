@@ -135,38 +135,36 @@ export const TokenInputField: FC<Props> = ({
       </div>
       <div
         className={
-          'text-secondary flex items-center justify-end gap-10 font-mono !text-12 font-weight-500'
+          'text-secondary flex items-center justify-between gap-10 font-mono !text-12 font-weight-500'
         }
       >
+        <p>
+          {!slippage?.isEqualTo(0) && showFiatValue && (
+            <span>{getFiatAsString(value)}</span>
+          )}
+          {slippage && value && <Slippage slippage={slippage} />}
+        </p>
         {user && isBalanceLoading !== undefined && !withoutWallet ? (
           <button
             tabIndex={-1}
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >
-            Wallet:
+            Wallet:&nbsp;
             {isBalanceLoading ? (
               'loading'
             ) : (
               <>
-                <span className="ml-5 text-white">
-                  {prettifyNumber(balance || 0)}
+                <span className="text-white">
+                  {prettifyNumber(balance || 0)}&nbsp;
                 </span>
-                <div className="ml-10 text-green group-hover:text-white">
-                  MAX
-                </div>
+                <b className="text-green group-hover:text-white">MAX</b>
               </>
             )}
           </button>
         ) : (
           <div className={'h-16'} />
         )}
-        <div className="flex">
-          {!slippage?.isEqualTo(0) && showFiatValue && (
-            <div>{getFiatAsString(value)}</div>
-          )}
-          {slippage && value && <Slippage slippage={slippage} />}
-        </div>
       </div>
     </div>
   );

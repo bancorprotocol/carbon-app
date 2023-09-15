@@ -56,7 +56,7 @@ export const InputLimit: FC<InputLimitProps> = ({
       <div
         className={`${
           error ? 'border-red/50 text-red' : 'border-black'
-        } bg-body flex flex-col items-end rounded-16 border-2 p-16`}
+        } bg-body flex flex-col rounded-16 border-2 p-16`}
       >
         <input
           id={inputId}
@@ -72,14 +72,14 @@ export const InputLimit: FC<InputLimitProps> = ({
             'mb-5 w-full bg-transparent text-start font-mono text-18 font-weight-500 focus:outline-none'
           }
         />
-        <div className="flex items-center gap-10">
-          <div className="break-all font-mono text-12 text-white/60">
+        <p className="flex items-center gap-8">
+          <span className="break-all font-mono text-12 text-white/60">
             {fiatAsString}
-          </div>
+          </span>
           <MarketPriceIndication
             marketPricePercentage={marketPricePercentage.price}
           />
-        </div>
+        </p>
       </div>
       {error && (
         <output

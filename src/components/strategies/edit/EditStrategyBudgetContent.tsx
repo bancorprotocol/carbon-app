@@ -187,8 +187,7 @@ export const EditStrategyBudgetContent = ({
         loading={isLoading}
         loadingChildren={loadingChildren}
         onClick={handleOnActionClick}
-        className="mt-32"
-        variant={'white'}
+        variant="white"
         size="lg"
         fullWidth
       >
@@ -197,7 +196,6 @@ export const EditStrategyBudgetContent = ({
       <Button
         onClick={() => back()}
         disabled={isLoading}
-        className="mt-16"
         variant="secondary"
         size="lg"
         fullWidth
