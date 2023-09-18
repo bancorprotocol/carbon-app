@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
 import useAsyncEffect from 'use-async-effect';
+import { carbonEvents } from 'services/events';
 
 export const useWeb3Network = () => {
   const { isCountryBlocked, setSelectedWallet } = useStore();
@@ -56,6 +57,12 @@ export const useWeb3Network = () => {
         );
         if (success) {
           setSelectedWallet(isNativeAppBrowser.type);
+
+          carbonEvents.wallet.walletConnect({
+            address: undefined,
+            name: network?.name || '',
+          });
+
           return; // If successfully connected, stop further connection attempts
         }
       }
@@ -66,6 +73,10 @@ export const useWeb3Network = () => {
         const { success } = await attemptToConnectWallet(storedConnection);
         if (success) {
           setSelectedWallet(storedConnection);
+          carbonEvents.wallet.walletConnect({
+            address: undefined,
+            name: network?.name || '',
+          });
         }
       }
     }
