@@ -117,7 +117,7 @@ export const TokenInputField: FC<Props> = ({
           placeholder={placeholder}
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
-          className={`grow bg-transparent font-mono text-18 font-weight-500 focus:outline-none ${
+          className={`grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none ${
             isError ? 'text-red' : 'text-white'
           }`}
           disabled={disabled}
@@ -134,17 +134,13 @@ export const TokenInputField: FC<Props> = ({
         </div>
       </div>
       <div
-        className={
-          'text-secondary flex items-center justify-between gap-10 font-mono !text-12 font-weight-500'
-        }
+        className={`flex flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500`}
       >
-        <p>
-          {!slippage?.isEqualTo(0) && showFiatValue && (
-            <span>{getFiatAsString(value)}</span>
-          )}
+        <p className="break-all text-white/60">
+          {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
-        {user && isBalanceLoading !== undefined && !withoutWallet ? (
+        {user && isBalanceLoading !== undefined && !withoutWallet && (
           <button
             type="button"
             onClick={handleBalanceClick}
@@ -162,8 +158,6 @@ export const TokenInputField: FC<Props> = ({
               </>
             )}
           </button>
-        ) : (
-          <div className={'h-16'} />
         )}
       </div>
     </div>

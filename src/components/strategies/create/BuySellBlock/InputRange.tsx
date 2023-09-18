@@ -95,7 +95,7 @@ export const InputRange: FC<InputRangeProps> = ({
             placeholder="Enter Price"
             onFocus={handleFocus}
             className={
-              'mb-5 w-full bg-transparent text-18 font-weight-500 focus:outline-none'
+              'mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none'
             }
           />
           <p className="flex flex-wrap items-center gap-4">
@@ -132,7 +132,7 @@ export const InputRange: FC<InputRangeProps> = ({
             placeholder="Enter Price"
             onFocus={handleFocus}
             className={
-              'mb-5 w-full bg-transparent text-18 font-weight-500 focus:outline-none'
+              'mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none'
             }
           />
           <div className="flex flex-wrap items-center gap-4">

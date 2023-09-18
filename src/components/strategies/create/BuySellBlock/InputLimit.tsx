@@ -69,10 +69,10 @@ export const InputLimit: FC<InputLimitProps> = ({
           aria-label="Enter Price"
           placeholder="Enter Price"
           className={
-            'mb-5 w-full bg-transparent text-start text-18 font-weight-500 focus:outline-none'
+            'mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none'
           }
         />
-        <p className="flex items-center gap-8">
+        <p className="flex flex-wrap items-center gap-8">
           <span className="break-all font-mono text-12 text-white/60">
             {fiatAsString}
           </span>
