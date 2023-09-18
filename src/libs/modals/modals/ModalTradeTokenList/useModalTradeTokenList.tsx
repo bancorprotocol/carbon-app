@@ -5,7 +5,7 @@ import {
   TradePair,
 } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { useMemo, useState } from 'react';
-import { usePairs } from 'store/usePairStore';
+import { usePairs } from 'hooks/usePairs';
 import { searchPairTrade } from 'utils/pairSearch';
 
 type Props = {

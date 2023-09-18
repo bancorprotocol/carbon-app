@@ -7,7 +7,7 @@ import { config } from 'services/web3/config';
 import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';
 import { toPairName } from 'utils/pairSearch';
-import { usePairs } from 'store/usePairStore';
+import { usePairs } from 'hooks/usePairs';
 
 export const useTradePairs = () => {
   const { user } = useWeb3();

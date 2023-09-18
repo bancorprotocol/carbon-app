@@ -21,7 +21,7 @@ import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
-import { usePairs } from 'store/usePairStore';
+import { usePairs } from 'hooks/usePairs';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();

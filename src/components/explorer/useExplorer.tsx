@@ -2,7 +2,7 @@ import { useGetPairStrategies, useGetUserStrategies } from 'libs/queries';
 import { useMemo } from 'react';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
-import { usePairs } from 'store/usePairStore';
+import { usePairs } from 'hooks/usePairs';
 
 export const useExplorer = () => {
   const { slug, type } = useExplorerParams();
