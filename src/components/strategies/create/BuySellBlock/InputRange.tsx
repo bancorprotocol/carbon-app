@@ -98,7 +98,7 @@ export const InputRange: FC<InputRangeProps> = ({
               'mb-5 w-full bg-transparent text-18 font-weight-500 focus:outline-none'
             }
           />
-          <p className="flex items-center gap-4">
+          <p className="flex flex-wrap items-center gap-4">
             <span className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(min)}
             </span>
@@ -135,7 +135,7 @@ export const InputRange: FC<InputRangeProps> = ({
               'mb-5 w-full bg-transparent text-18 font-weight-500 focus:outline-none'
             }
           />
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(max)}
             </div>
