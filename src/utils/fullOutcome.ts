@@ -8,12 +8,20 @@ export interface FullOutcomeParams {
   buy?: boolean;
 }
 
+const isStringNumber = (value: string) => {
+  if (typeof value !== 'string') return false;
+  if (!value) return false;
+  if (isNaN(Number(value))) return false;
+  return true;
+};
+
 /**
  * Performe geometric mean on a range of positive values
  * @param min Should be lte max
  * @param max Should be gte min
  */
 export const geoMean = (min: string, max: string) => {
+  if (!isStringNumber(min) || !isStringNumber(max)) return;
   const lowRate = new Decimal(min);
   const highRate = new Decimal(max);
   if (lowRate.lte(0)) return;
@@ -30,8 +38,7 @@ export const getFullOutcome = ({
   price,
   buy,
 }: FullOutcomeParams) => {
-  if (!budget) return;
-  if (!price && (!min || !max)) return;
+  if (!isStringNumber(budget)) return;
 
   const _budget = new Decimal(budget);
   if (_budget.lte(0)) return;
