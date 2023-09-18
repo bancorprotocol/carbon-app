@@ -1,6 +1,5 @@
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { exist } from './helpers/filter';
-import { Token } from 'libs/tokens';
 
 /**
  * Remove " ", "-", "/" from a string
@@ -15,7 +14,10 @@ const pairSearchExp = new RegExp('(\\s|-|/){1,}', 'g');
 
 export type PairMaps = ReturnType<typeof createPairMaps>;
 
-export const toPairName = (base: Token, quote: Token) => {
+export const toPairName = (
+  base: { symbol: string },
+  quote: { symbol: string }
+) => {
   return `${base.symbol}/${quote.symbol}`;
 };
 

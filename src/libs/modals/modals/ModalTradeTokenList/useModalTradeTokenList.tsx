@@ -5,7 +5,8 @@ import {
   TradePair,
 } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { useMemo, useState } from 'react';
-import { createPairMaps, searchPairTrade } from 'utils/pairSearch';
+import { usePairs } from 'store/usePairStore';
+import { searchPairTrade } from 'utils/pairSearch';
 
 type Props = {
   id: string;
@@ -14,24 +15,19 @@ type Props = {
 
 export const useModalTradeTokenList = ({ id, data }: Props) => {
   const {
-    tradePairs,
-    isLoading,
-    isError,
     tradePairsPopular,
     favoritePairs,
     addFavoritePair,
     removeFavoritePair,
   } = useTradePairs();
+  const pairs = usePairs();
   const { closeModal } = useModal();
 
   const [search, setSearch] = useState('');
 
-  const { pairMap, nameMap } = useMemo(() => {
-    return createPairMaps(tradePairs ?? []);
-  }, [tradePairs]);
   const filteredPairs = useMemo(() => {
-    return searchPairTrade(pairMap, nameMap, search);
-  }, [pairMap, nameMap, search]);
+    return searchPairTrade(pairs.map, pairs.names, search);
+  }, [pairs.map, pairs.names, search]);
 
   const handleSelect = (tradePair: TradePair) => {
     data.onClick(tradePair);
@@ -41,8 +37,8 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
   return {
     tradePairs: filteredPairs,
     tradePairsPopular,
-    isLoading,
-    isError,
+    isLoading: pairs.isLoading,
+    isError: pairs.isError,
     handleSelect,
     search,
     setSearch,

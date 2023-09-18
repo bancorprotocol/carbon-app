@@ -21,11 +21,11 @@ import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
-import { usePairs } from './usePairSearch';
+import { usePairs } from 'store/usePairStore';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
-  const { nameMap, pairMap } = usePairs();
+  const pairs = usePairs();
   const { type, slug } = useExplorerParams();
   const [search, setSearch] = useState(slug ?? '');
 
@@ -39,24 +39,24 @@ export const _ExplorerSearch: FC = () => {
     if (!slug) return setSearch('');
     if (type === 'wallet') return setSearch(slug);
     if (type === 'token-pair') {
-      const content = nameMap.has(slug)
-        ? nameMap.get(slug)
-        : nameMap.get(toPairSlug(slug));
+      const content = pairs.names.has(slug)
+        ? pairs.names.get(slug)
+        : pairs.names.get(toPairSlug(slug));
       return setSearch(content || slug);
     }
-  }, [slug, type, nameMap]);
+  }, [slug, type, pairs.names]);
 
   const onSearchHandler = useCallback(
     (value: string) => {
       if (value.length === 0) return;
       const slug = toPairSlug(value);
-      if (type === 'token-pair' && !nameMap.has(slug)) return;
+      if (type === 'token-pair' && !pairs.names.has(slug)) return;
       if (type === 'wallet' && isInvalidAddress) return;
       navigate({
         to: PathNames.explorerOverview(type, slug),
       });
     },
-    [isInvalidAddress, navigate, nameMap, type]
+    [isInvalidAddress, navigate, pairs.names, type]
   );
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -80,8 +80,8 @@ export const _ExplorerSearch: FC = () => {
   };
 
   const suggestionProps = {
-    pairMap,
-    nameMap,
+    pairMap: pairs.map,
+    nameMap: pairs.names,
     search,
     setSearch,
   };

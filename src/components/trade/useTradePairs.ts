@@ -1,13 +1,13 @@
 import { PathNames, useSearch, useNavigate } from 'libs/routing';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'hooks/useModal';
-import { useGetTradePairsData } from 'libs/queries/sdk/pairs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { config } from 'services/web3/config';
 import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';
-import { buildPairKey } from 'utils/helpers';
+import { toPairName } from 'utils/pairSearch';
+import { usePairs } from 'store/usePairStore';
 
 export const useTradePairs = () => {
   const { user } = useWeb3();
@@ -16,7 +16,7 @@ export const useTradePairs = () => {
   const navigate = useNavigate<MyLocationGenerics>();
   const search = useSearch<MyLocationGenerics>();
 
-  const pairsQuery = useGetTradePairsData();
+  const pairs = usePairs();
 
   const onTradePairSelect = (tradePair: TradePair) => {
     navigate({
@@ -28,25 +28,12 @@ export const useTradePairs = () => {
     });
   };
 
-  const tradePairs = useMemo<TradePair[]>(() => {
-    if (!pairsQuery.data) {
-      return [];
-    }
-    return pairsQuery.data;
-  }, [pairsQuery.data]);
-
-  const tradePairsMap = useMemo(
-    () => new Map(tradePairs.map((p) => [buildPairKey(p), p])),
-    [tradePairs]
-  );
-
   const getTradePair = useCallback(
     (base: string, quote: string): TradePair | undefined => {
-      return tradePairsMap.get(
-        [base.toLowerCase(), quote.toLowerCase()].join('-')
-      );
+      const name = toPairName({ symbol: base }, { symbol: quote });
+      return pairs.map.get(name);
     },
-    [tradePairsMap]
+    [pairs.map]
   );
 
   const tradePairsPopular = useMemo(
@@ -95,7 +82,7 @@ export const useTradePairs = () => {
     [user]
   );
 
-  const isTradePairError = !tradePairs.some(
+  const isTradePairError = !Array.from(pairs.map.values()).some(
     (item) =>
       item.baseToken.address.toLowerCase() === search.base?.toLowerCase() &&
       item.quoteToken.address.toLowerCase() === search.quote?.toLowerCase()
@@ -106,10 +93,9 @@ export const useTradePairs = () => {
   };
 
   return {
-    tradePairs,
     openTradePairList,
-    isLoading: pairsQuery.isLoading,
-    isError: pairsQuery.isError,
+    isLoading: pairs.isLoading,
+    isError: pairs.isError,
     isTradePairError,
     tradePairsPopular,
     favoritePairs,

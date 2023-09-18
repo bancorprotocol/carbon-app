@@ -2,19 +2,19 @@ import { useGetPairStrategies, useGetUserStrategies } from 'libs/queries';
 import { useMemo } from 'react';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
-import { usePairs } from './usePairSearch';
+import { usePairs } from 'store/usePairStore';
 
 export const useExplorer = () => {
   const { slug, type } = useExplorerParams();
-  const { pairMap, nameMap } = usePairs();
+  const pairs = usePairs();
 
   // PAIR
   const exactMatch = useMemo(() => {
     if (!slug) return;
-    return pairMap.has(slug)
-      ? pairMap.get(slug)
-      : pairMap.get(toPairSlug(slug));
-  }, [pairMap, slug]);
+    return pairs.map.has(slug)
+      ? pairs.map.get(slug)
+      : pairs.map.get(toPairSlug(slug));
+  }, [pairs.map, slug]);
   const pairQuery = useGetPairStrategies({
     token0: exactMatch?.baseToken.address,
     token1: exactMatch?.quoteToken.address,
@@ -27,8 +27,6 @@ export const useExplorer = () => {
 
   const query = type === 'wallet' ? walletQuery : pairQuery;
   return {
-    pairMap,
-    nameMap,
     strategies: query.data ?? [],
     isLoading: query.isLoading,
   };
