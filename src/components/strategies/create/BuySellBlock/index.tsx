@@ -51,7 +51,7 @@ export const BuySellBlock: FC<Props> = ({
     <>
       <span
         className={
-          'flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]'
+          'flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60'
         }
       >
         1
@@ -63,8 +63,10 @@ export const BuySellBlock: FC<Props> = ({
         } at. Make sure the price is in ${quote.symbol} tokens.`}
       >
         <>
-          <span>Set {buy ? 'Buy' : 'Sell'} Price </span>
-          <span className={'text-white/80'}>
+          <span className="text-white/80">
+            Set {buy ? 'Buy' : 'Sell'} Price&nbsp;
+          </span>
+          <span className="text-white/60">
             ({quote.symbol} per 1 {base.symbol})
           </span>
         </>

@@ -33,13 +33,12 @@ export const EditStrategyPricesBuySellBlock: FC<
     isOrdersOverlap,
     isEdit: true,
     inputTitle: (
-      <h4 className="text-white/60">
-        {`Set ${buy ? 'Buy' : 'Sell'} Price `}
-        <span className={'text-white/80'}>
-          ({quote.symbol} <span className="text-white/60">per 1 </span>
-          {base.symbol})
+      <>
+        <span className="text-white/80">Set {buy ? 'Buy' : 'Sell'} Price</span>
+        <span className="text-white/60">
+          ({quote.symbol} per 1 {base.symbol})
         </span>
-      </h4>
+      </>
     ),
   };
 

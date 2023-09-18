@@ -39,10 +39,10 @@ export const BudgetSection: FC<Props> = ({
   return (
     <fieldset className="flex flex-col gap-8">
       <legend
-        className={`mb-11 flex items-center gap-6 text-14 font-weight-500 text-white/60`}
+        className={`mb-11 flex items-center gap-6 text-14 font-weight-500`}
       >
         <span
-          className={`flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px]`}
+          className={`flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60`}
         >
           2
         </span>
@@ -66,12 +66,12 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <span className={'font-weight-500 text-white/60'}>
-            Set {buy ? 'Buy' : 'Sell'} Budget{' '}
+          <span className={'text-white/80'}>
+            Set {buy ? 'Buy' : 'Sell'} Budget&nbsp;
           </span>
         </Tooltip>
         {isBudgetOptional && (
-          <span className="ml-8 font-weight-500 text-white/40">Optional</span>
+          <span className="ml-8 font-weight-500 text-white/60">Optional</span>
         )}
       </legend>
       <TokenInputField
