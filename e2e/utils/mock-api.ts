@@ -15,7 +15,7 @@ export const mockApi = async (page: Page) => {
       return route.continue();
     }
     const result = {};
-    for (const currency of marketRate[address]) {
+    for (const currency of currencies) {
       result[currency] = marketRate[address][currency];
     }
     return route.fulfill({ json: result });
