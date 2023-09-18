@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent, useId } from 'react';
+import { ChangeEvent, FC, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
@@ -44,19 +44,18 @@ export const InputLimit: FC<InputLimitProps> = ({
     setPrice(sanitizeNumberInput(e.target.value));
   };
 
-  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
-    e.target.select();
-  };
-
   const { getFiatAsString } = useFiatCurrency(token);
   const fiatAsString = getFiatAsString(price);
 
   return (
     <>
       <div
-        className={`${
-          error ? 'border-red/50 text-red' : 'border-black'
-        } bg-body flex flex-col rounded-16 border-2 p-16`}
+        className={`
+          bg-body flex cursor-text flex-col rounded-16 border-2 p-16
+          focus-within:border-white/50
+          ${error ? '!border-red/50' : 'border-black'} 
+        `}
+        onClick={() => document.getElementById(inputId)?.focus()}
       >
         <input
           id={inputId}
@@ -65,12 +64,13 @@ export const InputLimit: FC<InputLimitProps> = ({
           inputMode="decimal"
           value={price}
           onChange={handleChange}
-          onFocus={handleFocus}
+          onFocus={(e) => e.target.select()}
           aria-label="Enter Price"
           placeholder="Enter Price"
-          className={
-            'mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none'
-          }
+          className={`
+            mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
+            ${error ? 'text-red' : ''}
+          `}
         />
         <p className="flex flex-wrap items-center gap-8">
           <span className="break-all font-mono text-12 text-white/60">

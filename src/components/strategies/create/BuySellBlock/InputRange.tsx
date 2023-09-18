@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent, useId } from 'react';
+import { ChangeEvent, FC, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -62,19 +62,18 @@ export const InputRange: FC<InputRangeProps> = ({
     }
   };
 
-  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
-    e.target.select();
-  };
-
   const { getFiatAsString } = useFiatCurrency(token);
 
   return (
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className={`${
-            error ? 'border-red/50 text-red' : 'border-black'
-          } bg-body w-full rounded-r-4 rounded-l-16 border-2 p-16`}
+          className={`
+            bg-body w-full cursor-text rounded-r-4 rounded-l-16 border-2 p-16
+            focus-within:border-white/50
+            ${error ? '!border-red/50' : 'border-black'}
+          `}
+          onClick={() => document.getElementById(inputMinId)?.focus()}
         >
           <Tooltip
             sendEventOnMount={{ buy }}
@@ -90,13 +89,14 @@ export const InputRange: FC<InputRangeProps> = ({
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={min}
-            onChange={handleChangeMin}
             aria-label="Minimal price"
             placeholder="Enter Price"
-            onFocus={handleFocus}
-            className={
-              'mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none'
-            }
+            className={`
+              mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
+              ${error ? 'text-red' : ''}
+            `}
+            onChange={handleChangeMin}
+            onFocus={(e) => e.target.select()}
           />
           <p className="flex flex-wrap items-center gap-4">
             <span className="break-all font-mono text-12 text-white/60">
@@ -109,9 +109,12 @@ export const InputRange: FC<InputRangeProps> = ({
           </p>
         </div>
         <div
-          className={`${
-            error ? 'border-red/50 text-red' : ''
-          } bg-body w-full rounded-r-16 rounded-l-4 border-2 border-black p-16`}
+          className={`
+            bg-body w-full cursor-text rounded-r-16 rounded-l-4 border-2 border-black p-16
+            focus-within:border-white/50
+            ${error ? '!border-red/50' : ''}
+          `}
+          onClick={() => document.getElementById(inputMaxId)?.focus()}
         >
           <Tooltip
             sendEventOnMount={{ buy }}
@@ -127,18 +130,19 @@ export const InputRange: FC<InputRangeProps> = ({
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={max}
-            onChange={handleChangeMax}
             aria-label="Maximal price"
             placeholder="Enter Price"
-            onFocus={handleFocus}
-            className={
-              'mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none'
-            }
+            className={`
+              mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
+              ${error ? 'text-red' : ''}
+            `}
+            onChange={handleChangeMax}
+            onFocus={(e) => e.target.select()}
           />
           <div className="flex flex-wrap items-center gap-4">
-            <div className="break-all font-mono text-12 text-white/60">
+            <p className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(max)}
-            </div>
+            </p>
             <MarketPriceIndication
               marketPricePercentage={marketPricePercentages.max}
               isRange

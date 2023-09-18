@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
@@ -41,23 +41,9 @@ export const TokenInputField: FC<Props> = ({
   withoutWallet,
 }) => {
   const { user } = useWeb3();
-  const [isFocused, setIsFocused] = useState(false);
-  const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
   const fiatValueUsd = getFiatValue(value, true);
-
-  const handleOnFocus = () => {
-    inputRef.current?.select();
-    !disabled && setIsFocused(true);
-    if (value === '...') {
-      setValue('');
-    }
-  };
-
-  const handleOnBlur = () => {
-    setIsFocused(false);
-  };
 
   const handleChange = ({
     target: { value },
@@ -80,19 +66,13 @@ export const TokenInputField: FC<Props> = ({
 
   return (
     <div
-      className={`flex cursor-text flex-col gap-8 p-16 ${
-        isFocused || isActive ? 'ring-2 ring-white/50' : ''
-      } transition-all duration-200 ${
-        isError ? 'ring-2 ring-red/50' : ''
-      } ${className}`}
-      onMouseDown={() => !disabled && setIsActive(true)}
-      onMouseUp={() => !disabled && setIsActive(false)}
-      onFocus={handleOnFocus}
-      onClick={() => {
-        if (disabled) return;
-        setIsFocused(true);
-        inputRef.current?.focus();
-      }}
+      className={`
+        flex cursor-text flex-col gap-8 border-2 border-black p-16
+        focus-within:border-white/50
+        ${isError ? '!border-red/50' : ''}
+        ${className}
+      `}
+      onClick={() => inputRef.current?.focus()}
     >
       <div className={`flex items-center justify-between`}>
         <input
@@ -101,25 +81,15 @@ export const TokenInputField: FC<Props> = ({
           pattern={decimalNumberValidationRegex}
           inputMode="decimal"
           ref={inputRef}
-          value={
-            value === '...'
-              ? value
-              : !isFocused
-              ? !value
-                ? ''
-                : !isActive
-                ? value
-                : value
-              : value
-          }
+          value={value}
           size={1}
           onChange={handleChange}
           placeholder={placeholder}
-          onFocus={handleOnFocus}
-          onBlur={handleOnBlur}
-          className={`grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none ${
-            isError ? 'text-red' : 'text-white'
-          }`}
+          onFocus={(e) => e.target.select()}
+          className={`
+            grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
+            ${isError ? 'text-red' : ''}
+          `}
           disabled={disabled}
         />
         <div
@@ -136,7 +106,7 @@ export const TokenInputField: FC<Props> = ({
       <div
         className={`flex flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500`}
       >
-        <p className="break-all text-white/60">
+        <p className="flex break-all text-white/60">
           {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
