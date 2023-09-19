@@ -1,3 +1,15 @@
+/**
+ * Get the latest market rate & roi and write it in e2e/mocks
+ * Run this script **only** if you need to update the mocked data for E2E tests
+ * How to run: `node ./scripts/mock-api.mjs`
+ *
+ * ⚠️ If you run the script:
+ * - E2E tests will likely fail for value based on these mocks, so you'll need to update them.
+ * - visual tests will fail too
+ *
+ * Last ran on 18th Sep 2023
+ */
+
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { cwd } from 'process';
