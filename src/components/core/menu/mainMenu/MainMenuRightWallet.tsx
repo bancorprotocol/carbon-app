@@ -11,7 +11,8 @@ import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
 import { ConnectionType, useWeb3 } from 'libs/web3';
-import { FC, useMemo } from 'react';
+import { getConnection } from 'libs/web3/web3.utils';
+import { FC, useMemo, useEffect } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { shortenString } from 'utils/helpers';
@@ -48,6 +49,7 @@ export const MainMenuRightWallet: FC = () => {
     isUserBlocked,
     switchNetwork,
   } = useWeb3();
+  const { selectedWallet } = useStore();
   const { openModal } = useModal();
 
   const onClickOpenModal = () => {
@@ -61,6 +63,15 @@ export const MainMenuRightWallet: FC = () => {
       address: user,
     });
   };
+
+  useEffect(() => {
+    if (!!user && selectedWallet != null) {
+      carbonEvents.wallet.walletConnect({
+        address: user,
+        name: getConnection(selectedWallet)?.name || '',
+      });
+    }
+  }, [user, selectedWallet]);
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
