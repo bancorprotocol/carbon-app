@@ -16,7 +16,7 @@ export const Slippage: FC<{ slippage: Decimal }> = ({ slippage }) => {
       <div className="flex-end flex gap-5">
         <div
           className={`ml-4 ${
-            slippage.gte(new Decimal(-3)) && slippage.lte(0)
+            slippage.gte(-3) && slippage.lte(0)
               ? 'text-white/80'
               : isSlippagePositive
               ? 'text-green'
