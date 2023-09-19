@@ -1,12 +1,12 @@
 import { FC, useState } from 'react';
-import { Strategy, StrategyStatus } from 'libs/queries';
+import { Strategy } from 'libs/queries';
 import { m, mItemVariant } from 'libs/motion';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { cn } from 'utils/helpers';
-import { getStatusText, getTooltipTextByStatus } from './utils';
+import { getTooltipTextByStatus, statusText } from './utils';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { useBudgetWarning } from 'components/strategies/useBudgetWarning';
 import { StrategyBlockRoi } from './StrategyBlockRoi';
@@ -34,7 +34,7 @@ export const StrategyBlock: FC<Props> = ({
     <m.li
       variants={mItemVariant}
       className={cn(
-        strategy.status === StrategyStatus.Active ? 'bg-silver' : 'bg-content',
+        strategy.status === 'active' ? 'bg-silver' : 'bg-content',
         'group space-y-20 rounded-10 p-20',
         className
       )}
@@ -62,12 +62,10 @@ export const StrategyBlock: FC<Props> = ({
                 >
                   <span
                     className={`${
-                      strategy.status === StrategyStatus.Active
-                        ? 'text-green'
-                        : 'text-red'
+                      strategy.status === 'active' ? 'text-green' : 'text-red'
                     } `}
                   >
-                    {getStatusText(strategy.status)}
+                    {statusText[strategy.status]}
                   </span>
                 </Tooltip>
                 {showBudgetWarning && (
