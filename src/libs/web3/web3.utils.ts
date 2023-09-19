@@ -8,26 +8,22 @@ import {
 } from 'libs/web3/web3.connectors';
 import { lsService } from 'services/localeStorage';
 import { UAParser } from 'ua-parser-js';
+import { Connection } from './web3.types';
 
 const parser = new UAParser(window.navigator.userAgent);
 const { type } = parser.getDevice();
 
 export const isMobile = type === 'mobile' || type === 'tablet';
 
-export const getConnection = (c: ConnectionType) => {
-  switch (c) {
-    case ConnectionType.INJECTED:
-      return injectedConnection;
-    case ConnectionType.COINBASE_WALLET:
-      return coinbaseWalletConnection;
-    case ConnectionType.WALLET_CONNECT:
-      return walletConnectConnection;
-    case ConnectionType.NETWORK:
-      return networkConnection;
-    case ConnectionType.GNOSIS_SAFE:
-      return gnosisSafeConnection;
-  }
+const connections: Record<ConnectionType, Connection> = {
+  injected: injectedConnection,
+  coinbaseWallet: coinbaseWalletConnection,
+  walletConnect: walletConnectConnection,
+  gnosisSafe: gnosisSafeConnection,
+  network: networkConnection,
 };
+
+export const getConnection = (c: ConnectionType) => connections[c];
 
 export const attemptToConnectWallet = async (
   t: ConnectionType,
@@ -68,19 +64,19 @@ export const IS_COINBASE_BROWSER = isMobile && IS_COINBASE_WALLET;
 const NATIVE_APP_BROWSERS = [
   {
     enabled: IS_IN_IFRAME,
-    type: ConnectionType.GNOSIS_SAFE,
+    type: 'gnosisSafe',
     activate: true,
   },
   {
     enabled: IS_COINBASE_BROWSER,
-    type: ConnectionType.COINBASE_WALLET,
+    type: 'coinbaseWallet',
     activate: true,
   },
   {
     enabled: IS_METAMASK_BROWSER,
-    type: ConnectionType.INJECTED,
+    type: 'injected',
     activate: true,
   },
-];
+] as const;
 
 export const isNativeAppBrowser = NATIVE_APP_BROWSERS.find((x) => x.enabled);
