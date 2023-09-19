@@ -21,10 +21,6 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
         window?.OneTrust?.AllowAll();
         window?.OneTrust?.Close();
       }
-      carbonEvents.wallet.walletConnect({
-        address: user,
-        name: selectedConnection?.name || '',
-      });
     }
   }, [isConnected, selectedConnection?.name, user]);
 
