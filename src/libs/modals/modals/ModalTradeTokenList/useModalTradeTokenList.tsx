@@ -1,11 +1,12 @@
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { useModal } from 'hooks/useModal';
-import { usePairSearch } from 'hooks/usePairSearch';
 import {
   ModalTradeTokenListData,
   TradePair,
 } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { usePairs } from 'hooks/usePairs';
+import { searchPairTrade } from 'utils/pairSearch';
 
 type Props = {
   id: string;
@@ -14,22 +15,19 @@ type Props = {
 
 export const useModalTradeTokenList = ({ id, data }: Props) => {
   const {
-    tradePairs,
-    isLoading,
-    isError,
     tradePairsPopular,
     favoritePairs,
     addFavoritePair,
     removeFavoritePair,
   } = useTradePairs();
+  const pairs = usePairs();
   const { closeModal } = useModal();
 
   const [search, setSearch] = useState('');
 
-  const { filteredPairs } = usePairSearch({
-    search,
-    pairs: tradePairs,
-  });
+  const filteredPairs = useMemo(() => {
+    return searchPairTrade(pairs.map, pairs.names, search);
+  }, [pairs.map, pairs.names, search]);
 
   const handleSelect = (tradePair: TradePair) => {
     data.onClick(tradePair);
@@ -39,8 +37,8 @@ export const useModalTradeTokenList = ({ id, data }: Props) => {
   return {
     tradePairs: filteredPairs,
     tradePairsPopular,
-    isLoading,
-    isError,
+    isLoading: pairs.isLoading,
+    isError: pairs.isError,
     handleSelect,
     search,
     setSearch,
