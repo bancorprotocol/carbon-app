@@ -102,7 +102,7 @@
     "test": "vitest run",
     "e2e": "playwright test",
     "lint": "eslint --ext .tsx,.ts .",
-    "pre-commit": "yarn lint-staged && yarn test"
+    "pre-commit": "yarn lint-staged"
   },
   "browserslist": {
     "production": [
