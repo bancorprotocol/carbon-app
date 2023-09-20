@@ -43,6 +43,7 @@ const tooltipTextByStrategyEditOptionsId = {
     'Edit the prices of your buy/sell orders within an existing strategy',
   renewStrategy: 'Renew an inactive strategy',
   manageNotifications: 'Get notified when someone trades against your strategy',
+  walletOwner: 'View all strategies from the owner of this strategy',
 };
 
 export const getTooltipTextByStrategyEditOptionsId = (

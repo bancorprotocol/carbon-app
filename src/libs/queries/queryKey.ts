@@ -43,6 +43,8 @@ export namespace QueryKey {
     token,
   ];
 
+  export const voucherOwner = (id?: string) => [...chain, 'voucherOwner', id];
+
   export const token = (token: string) => [...chain, 'token', token];
   export const pairs = () => [...sdk, 'pairs'];
 
