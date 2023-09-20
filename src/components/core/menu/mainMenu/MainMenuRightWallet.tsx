@@ -85,6 +85,7 @@ export const MainMenuRightWallet: FC = () => {
   if (user) {
     return (
       <DropdownMenu
+        offset={24}
         placement="bottom-end"
         className="rounded-[10px] p-8"
         button={(attr) => (
@@ -92,9 +93,9 @@ export const MainMenuRightWallet: FC = () => {
             variant={buttonVariant}
             className="flex items-center space-x-10 pl-20"
             {...attr}
-            onClick={() => {
+            onClick={(e) => {
               carbonEvents.navigation.navWalletClick(undefined);
-              attr.onClick();
+              attr.onClick(e);
             }}
           >
             {buttonIcon}

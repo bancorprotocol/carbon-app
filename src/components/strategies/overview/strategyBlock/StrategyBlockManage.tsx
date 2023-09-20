@@ -224,7 +224,7 @@ export const StrategyBlockManage: FC<Props> = ({
           </Button>
         </div>
       )}
-      className="z-10 w-full p-10"
+      className="z-10 p-10"
     >
       {items.map((item) => {
         if (typeof item === 'number') {

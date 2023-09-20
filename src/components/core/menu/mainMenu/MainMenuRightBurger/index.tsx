@@ -18,17 +18,19 @@ export const MainMenuRightBurger: FC<{
 
   return (
     <DropdownMenu
+      offset={24}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
+      placement="bottom"
       className="rounded-[10px] p-8 text-16 font-weight-400 text-white"
       button={(attr) => (
         <Button
           variant="secondary"
           className="relative !p-0"
           {...attr}
-          onClick={() => {
+          onClick={(e) => {
             setIsOpen(true);
-            attr.onClick();
+            attr.onClick(e);
           }}
         >
           <span className="flex h-36 w-36 items-center justify-center">
