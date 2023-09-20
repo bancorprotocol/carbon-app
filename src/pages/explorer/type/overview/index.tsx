@@ -2,30 +2,12 @@ import { StrategyContent } from 'components/strategies/overview';
 import { ExplorerEmptyError, useExplorer } from 'components/explorer';
 
 export const ExplorerTypeOverviewPage = () => {
-  const {
-    usePairs,
-    useWallet,
-    routeParams: { type },
-  } = useExplorer();
-
-  const getStrategiesQuery = () => {
-    switch (type) {
-      case 'wallet': {
-        return useWallet.strategiesQuery;
-      }
-      case 'token-pair': {
-        return usePairs.strategiesQuery;
-      }
-    }
-  };
-
-  const strategiesQuery = getStrategiesQuery();
-
+  const { strategies, isLoading } = useExplorer();
   return (
     <StrategyContent
-      strategies={strategiesQuery.data}
+      strategies={strategies}
       isExplorer
-      isLoading={strategiesQuery.isLoading}
+      isLoading={isLoading}
       emptyElement={<ExplorerEmptyError />}
     />
   );

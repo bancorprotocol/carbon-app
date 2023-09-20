@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
 import { Strategy, StrategyStatus } from 'libs/queries';
-import { PathNames, useNavigate } from 'libs/routing';
+import { PathNames, useMatch, useNavigate } from 'libs/routing';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 import { DropdownMenu } from 'components/common/dropdownMenu';
@@ -17,11 +17,15 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useOrder } from 'components/strategies/create/useOrder';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
+import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
+import { cn } from 'utils/helpers';
+import { ExplorerRouteGenerics } from 'components/explorer';
 
 type itemsType = {
   id: StrategyEditOptionId;
   name: string;
   action?: () => void;
+  disabled?: boolean;
 };
 
 type separatorCounterType = number;
@@ -44,6 +48,13 @@ export const StrategyBlockManage: FC<Props> = ({
   const navigate = useNavigate<EditStrategyLocationGenerics>();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
+  const {
+    params: { type },
+  } = useMatch<ExplorerRouteGenerics>();
+
+  const owner = useGetVoucherOwner(
+    manage && type === 'token-pair' ? strategy.id : undefined
+  );
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -80,6 +91,19 @@ export const StrategyBlockManage: FC<Props> = ({
       },
     },
   ];
+
+  if (isExplorer && type === 'token-pair') {
+    items.push({
+      id: 'walletOwner',
+      name: 'View Owner’s Strategies',
+      action: () => {
+        navigate({
+          to: PathNames.explorerOverview('wallet', owner.data ?? ''),
+        });
+      },
+      disabled: !owner.data,
+    });
+  }
 
   if (!isExplorer) {
     items.push({
@@ -207,7 +231,7 @@ export const StrategyBlockManage: FC<Props> = ({
           return <hr key={item} className="border-1  my-10 border-grey5" />;
         }
 
-        const { name, id, action } = item;
+        const { name, id, action, disabled } = item;
 
         return (
           <ManageItem
@@ -217,6 +241,7 @@ export const StrategyBlockManage: FC<Props> = ({
             action={action}
             id={id}
             isExplorer={isExplorer}
+            disabled={disabled}
           />
         );
       })}
@@ -230,9 +255,30 @@ const ManageItem: FC<{
   setManage: (flag: boolean) => void;
   action?: () => void;
   isExplorer?: boolean;
-}> = ({ title, id, setManage, action, isExplorer }) => {
+  disabled?: boolean;
+}> = ({ title, id, setManage, action, isExplorer, disabled }) => {
   const tooltipText = getTooltipTextByStrategyEditOptionsId(isExplorer)?.[id];
   const { belowBreakpoint } = useBreakpoints();
+
+  const Content = () => {
+    return (
+      <button
+        type="button"
+        onClick={() => {
+          action && action();
+          setManage(false);
+        }}
+        disabled={disabled}
+        className={cn('w-full rounded-6 p-12 text-left', {
+          'cursor-not-allowed': disabled,
+          'opacity-60': disabled,
+          'hover:bg-body': !disabled,
+        })}
+      >
+        {title}
+      </button>
+    );
+  };
 
   if (tooltipText) {
     return (
@@ -241,28 +287,10 @@ const ManageItem: FC<{
         element={tooltipText}
         interactive={false}
       >
-        <div
-          onClick={() => {
-            action && action();
-            setManage(false);
-          }}
-          className="hover:bg-body cursor-pointer rounded-6 p-12"
-        >
-          {title}
-        </div>
+        <Content />
       </Tooltip>
     );
   }
 
-  return (
-    <div
-      onClick={() => {
-        action && action();
-        setManage(false);
-      }}
-      className="hover:bg-body cursor-pointer rounded-6 p-12"
-    >
-      {title}
-    </div>
-  );
+  return <Content />;
 };
