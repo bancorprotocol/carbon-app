@@ -20,15 +20,16 @@ export const MainMenuRightBurger: FC<{
     <DropdownMenu
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      className="rounded-[10px] py-8 px-8 text-16 font-weight-400 text-white"
-      button={(onClick) => (
+      className="rounded-[10px] p-8 text-16 font-weight-400 text-white"
+      button={(attr) => (
         <Button
-          variant={'secondary'}
+          variant="secondary"
+          className="relative !p-0"
+          {...attr}
           onClick={() => {
             setIsOpen(true);
-            onClick();
+            attr.onClick();
           }}
-          className={'relative !p-0'}
         >
           <span className="flex h-36 w-36 items-center justify-center">
             <span className="relative flex inline-flex h-36 w-36 items-center justify-center rounded-full">

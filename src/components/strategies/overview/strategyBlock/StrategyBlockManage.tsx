@@ -211,20 +211,20 @@ export const StrategyBlockManage: FC<Props> = ({
     <DropdownMenu
       isOpen={manage}
       setIsOpen={setManage}
-      button={(onClick) => (
+      button={(attr) => (
         <div className="rounded-20 bg-black">
           <Button
+            {...attr}
             className="flex items-center justify-center gap-8"
             fullWidth
-            variant={'success-light'}
-            onClick={onClick}
+            variant="success-light"
           >
             Manage
             <IconChevron className="w-12" />
           </Button>
         </div>
       )}
-      className="z-10 w-full !p-10"
+      className="z-10 w-full p-10"
     >
       {items.map((item) => {
         if (typeof item === 'number') {
