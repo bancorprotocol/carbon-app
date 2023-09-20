@@ -4,6 +4,17 @@ import Decimal from 'decimal.js';
 
 describe('fullOutcome', () => {
   describe('Geo Mean', () => {
+    it('should return undefined if string values are not numbers', () => {
+      expect(geoMean('a', '0')).toBeUndefined();
+      expect(geoMean('0', 'a')).toBeUndefined();
+      expect(geoMean('0', undefined as any)).toBeUndefined();
+      expect(geoMean('0', null as any)).toBeUndefined();
+    });
+    it('should return undefined if no min or max is provided', () => {
+      expect(geoMean('', '')).toBeUndefined();
+      expect(geoMean('', '10')).toBeUndefined();
+      expect(geoMean('10', '')).toBeUndefined();
+    });
     it('should return undefined if min is greater or equal to max', () => {
       expect(geoMean('100', '10')).toBeUndefined();
     });
