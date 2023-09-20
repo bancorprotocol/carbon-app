@@ -1,25 +1,30 @@
-import { ExplorerSearchProps } from 'components/explorer/ExplorerSearch';
-import { FC, KeyboardEvent } from 'react';
+import { Dispatch, FC, KeyboardEvent } from 'react';
 import { ExplorerSearchInputContainer } from './ExplorerSearchInputContainer';
 
-interface Props extends ExplorerSearchProps {
-  isError?: boolean;
+interface Props {
+  invalid: boolean;
+  search: string;
+  setSearch: Dispatch<string>;
 }
 
-export const ExplorerSearchInput: FC<Props> = (props) => {
+export const ExplorerSearchInput: FC<Props> = ({
+  invalid,
+  search,
+  setSearch,
+}) => {
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') props.setSearch('');
+    if (e.key === 'Escape') setSearch('');
   };
 
   return (
     <ExplorerSearchInputContainer
-      value={props.search}
-      className={props.isError ? 'text-red' : ''}
+      value={search}
+      className={invalid ? 'text-red' : ''}
       placeholder="Search by wallet address"
       aria-label="Search by wallet address"
       onKeyDown={onKeyDownHandler}
-      search={props.search}
-      onChange={(e) => props.setSearch(e.target.value)}
+      search={search}
+      onChange={(e) => setSearch(e.target.value)}
     />
   );
 };
