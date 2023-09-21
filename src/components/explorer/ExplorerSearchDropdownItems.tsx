@@ -1,12 +1,15 @@
-import { ExplorerSearchProps } from 'components/explorer/ExplorerSearch';
 import { Link, PathNames } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconCheck } from 'assets/icons/v.svg';
+import { useExplorerParams } from './useExplorerParams';
 
-type Props = Pick<ExplorerSearchProps, 'setSearch' | 'type'>;
+interface Props {
+  setSearch: (sarch: string) => void;
+}
 
-export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch, type }) => {
+export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
+  const { type } = useExplorerParams();
   const items = [
     {
       label: 'Wallet',
