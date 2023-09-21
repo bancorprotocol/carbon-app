@@ -4,6 +4,57 @@ import { DropdownMenu } from 'components/common/dropdownMenu';
 import { getSortAndFilterItems } from './utils';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
+import { lsService } from 'services/localeStorage';
+
+// [START] Used for localstorage migration: Remove it after Nov 2023
+export enum EnumStrategySort {
+  Recent,
+  Old,
+  PairAscending,
+  PairDescending,
+  RoiAscending,
+  RoiDescending,
+}
+export const strategySortMapping: Record<EnumStrategySort, StrategySort> = {
+  [EnumStrategySort.Recent]: 'recent',
+  [EnumStrategySort.Old]: 'old',
+  [EnumStrategySort.PairAscending]: 'pairAsc',
+  [EnumStrategySort.PairDescending]: 'pairDesc',
+  [EnumStrategySort.RoiAscending]: 'roiAsc',
+  [EnumStrategySort.RoiDescending]: 'roiDesc',
+};
+const isEnumSort = (
+  sort: StrategySort | EnumStrategySort
+): sort is EnumStrategySort => sort in strategySortMapping;
+
+export const getSortFromLS = (): StrategySort => {
+  const sort = lsService.getItem('strategyOverviewSort');
+  if (sort === undefined) return 'roiDesc';
+  return isEnumSort(sort) ? strategySortMapping[sort] : sort;
+};
+
+export enum EnumStrategyFilter {
+  All,
+  Active,
+  Inactive,
+}
+export const strategyFilterMapping: Record<EnumStrategyFilter, StrategyFilter> =
+  {
+    [EnumStrategyFilter.All]: 'all',
+    [EnumStrategyFilter.Active]: 'active',
+    [EnumStrategyFilter.Inactive]: 'inactive',
+  };
+
+const isEnumFilter = (
+  filter: StrategyFilter | EnumStrategyFilter
+): filter is EnumStrategyFilter => filter in strategyFilterMapping;
+
+export const getFilterFromLS = (): StrategyFilter => {
+  const filter = lsService.getItem('strategyOverviewFilter');
+  if (filter === undefined) return 'all';
+  return isEnumFilter(filter) ? strategyFilterMapping[filter] : filter;
+};
+// [END]
 
 export const strategyFilter = {
   all: 'All',
@@ -11,12 +62,6 @@ export const strategyFilter = {
   inactive: 'Inactive',
 };
 export type StrategyFilter = keyof typeof strategyFilter;
-
-export enum EnumStrategyFilter {
-  All,
-  Active,
-  Inactive,
-}
 
 export const strategySort = {
   recent: 'Recently Created',
@@ -27,15 +72,6 @@ export const strategySort = {
   roiDesc: 'ROI (Descending)',
 };
 export type StrategySort = keyof typeof strategySort;
-
-export enum EnumStrategySort {
-  Recent,
-  Old,
-  PairAscending,
-  PairDescending,
-  RoiAscending,
-  RoiDescending,
-}
 
 export const StrategyFilterSort: FC<{
   filter: StrategyFilter;
