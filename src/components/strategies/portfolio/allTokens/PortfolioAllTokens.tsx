@@ -76,5 +76,6 @@ const _PortfolioAllTokens = ({
 export const PortfolioAllTokens = memo(
   _PortfolioAllTokens,
   (prev, next) =>
+    prev.isLoading === next.isLoading &&
     JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
 );

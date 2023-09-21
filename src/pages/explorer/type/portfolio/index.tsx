@@ -3,15 +3,12 @@ import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useNavigate } from 'libs/routing';
 import { useExplorer } from 'components/explorer';
+import { useExplorerParams } from 'components/explorer/useExplorerParams';
 
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();
-
-  const {
-    usePairs,
-    useWallet,
-    routeParams: { type, slug },
-  } = useExplorer();
+  const { strategies, isLoading } = useExplorer();
+  const { type, slug } = useExplorerParams();
 
   const onRowClick = (row: Row<PortfolioData>) =>
     navigate({
@@ -21,23 +18,10 @@ export const ExplorerTypePortfolioPage = () => {
   const getHref = (row: PortfolioData) =>
     `/explorer/${type}/${slug}/portfolio/token/${row.token.address}`;
 
-  const getStrategiesQuery = () => {
-    switch (type) {
-      case 'wallet': {
-        return useWallet.strategiesQuery;
-      }
-      case 'token-pair': {
-        return usePairs.strategiesQuery;
-      }
-    }
-  };
-
-  const strategiesQuery = getStrategiesQuery();
-
   return (
     <PortfolioAllTokens
-      strategies={strategiesQuery.data}
-      isLoading={strategiesQuery.isLoading}
+      strategies={strategies}
+      isLoading={isLoading}
       onRowClick={onRowClick}
       getHref={getHref}
       isExplorer
