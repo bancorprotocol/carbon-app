@@ -92,7 +92,7 @@ export const BudgetSection: FC<Props> = ({
           className={`flex items-center gap-10 font-mono text-12 text-red`}
         >
           <IconWarning className="h-12 w-12" />
-          <span>Insufficient balance</span>
+          <span className="flex-1">Insufficient balance</span>
         </output>
       )}
     </fieldset>

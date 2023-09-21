@@ -106,7 +106,7 @@ export const TokenInputField: FC<Props> = ({
       <div
         className={`flex flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500`}
       >
-        <p className="flex break-all text-white/60">
+        <p className="flex items-center gap-5 text-white/60">
           {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
