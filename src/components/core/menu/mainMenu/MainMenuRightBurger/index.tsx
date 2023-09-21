@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { ReactComponent as IconBurger } from 'assets/icons/burger.svg';
-import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useMenuContext } from './useMenuContext';
 import { Menu, MenuType } from './useBurgerMenuItems';
 import { MenuItem } from './MenuItem';
+import { buttonStyles } from 'components/common/button/buttonStyles';
+import { cn } from 'utils/helpers';
 
 export const MainMenuRightBurger: FC<{
   menuMapping: Map<MenuType, Menu>;
@@ -23,10 +24,12 @@ export const MainMenuRightBurger: FC<{
       placement="bottom"
       className="rounded-[10px] p-8 text-16 font-weight-400 text-white"
       button={(attr) => (
-        <Button
-          variant="secondary"
-          className="relative !p-0"
+        <button
           {...attr}
+          className={cn(
+            buttonStyles({ variant: 'secondary' }),
+            'relative !p-0'
+          )}
           onClick={(e) => {
             setIsOpen(true);
             attr.onClick(e);
@@ -37,7 +40,7 @@ export const MainMenuRightBurger: FC<{
               <IconBurger className="h-14" />
             </span>
           </span>
-        </Button>
+        </button>
       )}
     >
       {currentMenuItems?.map((item, index) => {

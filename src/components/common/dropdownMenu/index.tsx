@@ -16,12 +16,12 @@ import {
 } from '@floating-ui/react';
 import { cn } from 'utils/helpers';
 
-export interface MenuTriggerAttributes {
+export interface MenuButtonProps {
   onClick: (e: MouseEvent) => void;
 }
 
 type Props = {
-  button: (attr: MenuTriggerAttributes) => ReactNode;
+  button: (attr: MenuButtonProps) => ReactNode;
   children: ReactNode;
   isOpen?: boolean;
   setIsOpen?: Dispatch<boolean>;
@@ -73,11 +73,11 @@ export const DropdownMenu: FC<Props> = ({
     useRole(context),
   ]);
 
+  const buttonProps = getReferenceProps({ ref: refs.setReference }) as any;
+
   return (
-    // TODO: See how to pass ref to button without breaking UI
-    // by passing ref to button we can focus back on it after close
-    <div className="relative" ref={refs.setReference}>
-      {button(getReferenceProps() as any)}
+    <>
+      {button(buttonProps)}
       <FloatingPortal>
         {isMounted && menuOpen && (
           <FloatingFocusManager context={context} modal={false}>
@@ -97,6 +97,6 @@ export const DropdownMenu: FC<Props> = ({
           </FloatingFocusManager>
         )}
       </FloatingPortal>
-    </div>
+    </>
   );
 };

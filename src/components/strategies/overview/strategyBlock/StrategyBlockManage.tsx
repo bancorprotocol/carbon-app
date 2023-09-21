@@ -6,7 +6,6 @@ import { PathNames, useMatch, useNavigate } from 'libs/routing';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { Button } from 'components/common/button';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import {
@@ -20,6 +19,7 @@ import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
 import { ExplorerRouteGenerics } from 'components/explorer';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -211,20 +211,21 @@ export const StrategyBlockManage: FC<Props> = ({
     <DropdownMenu
       isOpen={manage}
       setIsOpen={setManage}
+      className="z-10 p-10"
       button={(attr) => (
         <div className="rounded-20 bg-black">
-          <Button
+          <button
             {...attr}
-            className="flex items-center justify-center gap-8"
-            fullWidth
-            variant="success-light"
+            className={cn(
+              buttonStyles({ fullWidth: true, variant: 'success-light' }),
+              'flex items-center justify-center gap-8'
+            )}
           >
             Manage
             <IconChevron className="w-12" />
-          </Button>
+          </button>
         </div>
       )}
-      className="z-10 p-10"
     >
       {items.map((item) => {
         if (typeof item === 'number') {
