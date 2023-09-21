@@ -59,7 +59,7 @@ export const StrategyFilterSort: FC<{
   return (
     <DropdownMenu
       placement="bottom-end"
-      className="w-[300px] p-16"
+      className="min-w-[300px] p-16"
       button={(attr) => (
         <button
           type="button"

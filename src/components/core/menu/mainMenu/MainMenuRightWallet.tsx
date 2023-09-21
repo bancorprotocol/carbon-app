@@ -85,7 +85,6 @@ export const MainMenuRightWallet: FC = () => {
   if (user) {
     return (
       <DropdownMenu
-        offset={24}
         placement="bottom-end"
         className="rounded-[10px] p-8"
         button={(attr) => (

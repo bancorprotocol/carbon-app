@@ -18,7 +18,6 @@ export const MainMenuRightBurger: FC<{
 
   return (
     <DropdownMenu
-      offset={24}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       placement="bottom"

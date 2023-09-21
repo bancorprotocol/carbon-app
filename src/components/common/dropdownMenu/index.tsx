@@ -3,7 +3,6 @@ import {
   Placement,
   FloatingFocusManager,
   FloatingPortal,
-  autoUpdate,
   flip,
   offset,
   shift,
@@ -13,6 +12,7 @@ import {
   useInteractions,
   useRole,
   useTransitionStyles,
+  size,
 } from '@floating-ui/react';
 import { cn } from 'utils/helpers';
 
@@ -40,22 +40,33 @@ export const DropdownMenu: FC<Props> = ({
   offset: offsetValue = 8,
 }) => {
   const tooltipId = useId();
-  const outsideState = setIsOpen !== undefined && isOpen !== undefined;
 
+  // Open can be managed by the parent or inside this component
   const [open, setOpen] = useState(false);
-
+  const outsideState = setIsOpen !== undefined && isOpen !== undefined;
   const menuOpen = (outsideState && isOpen) || (!outsideState && open);
 
+  // By default size is the same than the reference element
+  const referenceSize = size({
+    apply({ rects, elements }) {
+      Object.assign(elements.floating.style, {
+        width: `${rects.reference.width}px`,
+      });
+    },
+  });
+
+  // Get properties to calculate positioning
   const { refs, floatingStyles, context } = useFloating({
     placement: placement ?? 'bottom',
     open: menuOpen,
     onOpenChange: outsideState ? setIsOpen : setOpen,
-    middleware: [offset(offsetValue), flip(), shift()],
-    whileElementsMounted: autoUpdate,
+    middleware: [offset(offsetValue), flip(), shift(), referenceSize],
   });
 
+  // Default transition provides a fadein on enter
   const { isMounted, styles: transition } = useTransitionStyles(context);
 
+  // Generate props to manage reference button & floating element
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useClick(context),
     useDismiss(context),
@@ -74,7 +85,8 @@ export const DropdownMenu: FC<Props> = ({
               id={tooltipId}
               ref={refs.setFloating}
               className={cn(
-                `w-fit min-w-[200px] rounded border border-b-lightGrey shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-emphasis`,
+                // z-index is above header/footer
+                `z-50 min-w-[200px] rounded border border-b-lightGrey shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-emphasis`,
                 className
               )}
               style={{ ...floatingStyles, ...transition }}
