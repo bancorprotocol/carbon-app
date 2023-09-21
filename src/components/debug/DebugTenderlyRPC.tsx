@@ -72,7 +72,9 @@ export const DebugTenderlyRPC = () => {
         <span>Unchecked Signer</span>
       </div>
 
-      <Button data-testid="save-rpc" onClick={handleOnClick}>Save</Button>
+      <Button data-testid="save-rpc" onClick={handleOnClick}>
+        Save
+      </Button>
     </div>
   );
 };
