@@ -10,7 +10,6 @@ import {
   useRef,
 } from 'react';
 import { Strategy } from 'libs/queries';
-import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { m } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
@@ -68,9 +67,6 @@ export const _StrategyContent: FC<Props> = ({
 
   const items = rowVirtualizer.getVirtualItems();
 
-  if (strategies && strategies.length === 0 && !isExplorer) {
-    return <StrategyCreateFirst />;
-  }
   if (isLoading) {
     return (
       <m.div
@@ -86,6 +82,7 @@ export const _StrategyContent: FC<Props> = ({
       </m.div>
     );
   }
+
   if (!strategies?.length) return emptyElement;
 
   return (

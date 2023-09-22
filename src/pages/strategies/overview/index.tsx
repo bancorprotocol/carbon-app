@@ -1,5 +1,5 @@
 import { StrategyContent } from 'components/strategies/overview';
-import { StrategyNotFound } from 'components/strategies/overview/StrategyNotFound';
+import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const StrategiesOverviewPage = () => {
@@ -8,7 +8,7 @@ export const StrategiesOverviewPage = () => {
     <StrategyContent
       strategies={strategies}
       isLoading={isLoading}
-      emptyElement={<StrategyNotFound />}
+      emptyElement={<StrategyCreateFirst />}
     />
   );
 };
