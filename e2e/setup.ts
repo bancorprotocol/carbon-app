@@ -46,6 +46,7 @@ async function globalSetup(config: FullConfig) {
   });
   await Promise.all(setupProjects);
   console.timeEnd('Fork is setup');
+  console.log('RPC URL:', rpcUrl);
 }
 
 export default globalSetup;

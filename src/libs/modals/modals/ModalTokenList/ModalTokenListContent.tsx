@@ -1,11 +1,19 @@
 import { LogoImager } from 'components/common/imager/Imager';
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Token } from 'libs/tokens';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
-import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
+import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 import { useStore } from 'store';
 
 const categories = ['popular', 'favorites', 'all'] as const;
@@ -62,20 +70,28 @@ export const ModalTokenListContent: FC<Props> = ({
   const suspiciousTokenTooltipMsg =
     'This token is not part of any known token list. Always conduct your own research before trading.';
 
+  const selectCatergory = (e: FormEvent<HTMLFieldSetElement>) => {
+    if (e.target instanceof HTMLInputElement) {
+      setSelectedList(e.target.value as ChooseTokenCategory);
+    }
+  };
+
   return (
-    <div>
-      <div className={'my-20 grid w-full grid-cols-3'}>
-        {categories.map((category, i) => (
-          <CategoryButtonWithCounter
+    <>
+      <fieldset
+        aria-label="Filter tokens"
+        className="my-20 grid w-full grid-cols-3 px-4"
+        onChange={selectCatergory}
+      >
+        {categories.map((category) => (
+          <CategoryWithCounter
             key={category}
             category={category}
             numOfItemsInCategory={tokens[category].length}
             isActive={category === selectedList}
-            setSelectedList={setSelectedList}
-            categoryIndex={i}
           />
         ))}
-      </div>
+      </fieldset>
       <div
         id={'bodyScrollTarget'}
         ref={parentRef}
@@ -84,17 +100,18 @@ export const ModalTokenListContent: FC<Props> = ({
           overflow: 'auto',
         }}
       >
-        <div
+        <ul
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
             width: '100%',
             position: 'relative',
           }}
+          data-testid="select-token-list"
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
             const token = _tokens[virtualRow.index];
             return (
-              <div
+              <li
                 key={virtualRow.key}
                 data-index={virtualRow.index}
                 className={'w-full'}
@@ -109,6 +126,7 @@ export const ModalTokenListContent: FC<Props> = ({
                     onClick={() => onSelect(token)}
                     className="flex w-full items-center"
                     style={{ height: `${virtualRow.size}px` }}
+                    data-testid={`select-token-${token.symbol}`}
                   >
                     <LogoImager
                       src={token.logoURI}
@@ -149,11 +167,11 @@ export const ModalTokenListContent: FC<Props> = ({
                     />
                   </button>
                 </div>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
-    </div>
+    </>
   );
 };

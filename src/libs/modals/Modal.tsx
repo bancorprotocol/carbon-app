@@ -40,6 +40,7 @@ export const Modal: FC<ModalProps> = ({
       className={'px-content items-center justify-center'}
     >
       <m.div
+        data-testid="modal"
         onClick={(e) => e.stopPropagation()}
         className={`relative mx-auto w-full ${sizeClass}`}
         variants={dropIn}
@@ -60,7 +61,9 @@ export const Modal: FC<ModalProps> = ({
           <div className={'flex justify-between'}>
             <div>
               {typeof title === 'string' ? (
-                <h2 className={'m-0'}>{title}</h2>
+                <h2 id="modal-title" className={'m-0'}>
+                  {title}
+                </h2>
               ) : (
                 title
               )}
