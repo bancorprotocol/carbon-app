@@ -4,7 +4,7 @@ import {
   FC,
   Fragment,
   memo,
-  ReactNode,
+  ReactElement,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -27,10 +27,10 @@ const getItemsPerRow = (breakpoint: Breakpoint) => {
 };
 
 type Props = {
-  strategies?: Strategy[];
-  isLoading?: boolean;
+  strategies: Strategy[];
+  isLoading: boolean;
+  emptyElement: ReactElement;
   isExplorer?: boolean;
-  emptyElement: ReactNode;
 };
 
 export const _StrategyContent: FC<Props> = ({
