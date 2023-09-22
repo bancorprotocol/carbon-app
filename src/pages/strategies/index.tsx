@@ -10,10 +10,10 @@ import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
 import { Outlet, PathNames, useLocation } from 'libs/routing';
-import { useStore } from 'store';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
+import { useStrategies } from 'store/useStrategiesStore';
 
 export const StrategiesPage = () => {
   const {
@@ -22,9 +22,8 @@ export const StrategiesPage = () => {
   const { belowBreakpoint } = useBreakpoints();
   const { user } = useWeb3();
   const strategies = useGetUserStrategies({ user });
-  const {
-    strategies: { search, setSearch, sort, setSort, filter, setFilter },
-  } = useStore();
+  const { search, setSearch, sort, setSort, filter, setFilter } =
+    useStrategies();
 
   const showFilter = useMemo(() => {
     if (pathname !== PathNames.strategies) {

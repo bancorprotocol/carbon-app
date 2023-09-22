@@ -2,7 +2,6 @@ import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useExplorer } from './useExplorer';
 import { useExplorerParams } from './useExplorerParams';
 import { useLocation } from '@tanstack/react-location';
-import { useStore } from 'store';
 import { PathNames } from 'libs/routing';
 import {
   StrategyPageTabs,
@@ -11,19 +10,16 @@ import {
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
+import { useStrategies } from 'hooks/useStrategies';
 
 export const ExplorerTabs = () => {
   const { aboveBreakpoint } = useBreakpoints();
   const { strategies } = useExplorer();
   const { slug, type } = useExplorerParams();
-
+  const { sort, setSort, filter, setFilter } = useStrategies();
   const {
     current: { pathname },
   } = useLocation();
-
-  const {
-    strategies: { sort, setSort, filter, setFilter },
-  } = useStore();
 
   const tabs: StrategyTab[] = [
     {
