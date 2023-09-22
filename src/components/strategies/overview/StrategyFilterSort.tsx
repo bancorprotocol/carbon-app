@@ -5,6 +5,7 @@ import { getSortAndFilterItems } from './utils';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { lsService } from 'services/localeStorage';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 // [START] Used for localstorage migration: Remove it after Nov 2023
 export enum EnumStrategySort {
@@ -73,12 +74,8 @@ export const strategySort = {
 };
 export type StrategySort = keyof typeof strategySort;
 
-export const StrategyFilterSort: FC<{
-  filter: StrategyFilter;
-  sort: StrategySort;
-  setSort: (sort: StrategySort) => void;
-  setFilter: (sort: StrategyFilter) => void;
-}> = ({ sort, filter, setSort, setFilter }) => {
+export const StrategyFilterSort = () => {
+  const { filter, sort, setFilter, setSort } = useStrategyCtx();
   const { sortItems, filterItems } = getSortAndFilterItems();
 
   return (

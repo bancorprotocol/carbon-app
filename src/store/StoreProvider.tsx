@@ -39,6 +39,11 @@ import {
   OrderBookSettingsStore,
   useOrderBookSettingsStore,
 } from 'store/useOrderBookSettingsStore';
+import {
+  defaultStrategyToEdit,
+  StrategyToEditStore,
+  useStrategyToEdit,
+} from './useStrategyToEdit';
 
 // ********************************** //
 // STORE CONTEXT
@@ -62,6 +67,7 @@ interface StoreContext {
   setInnerHeight: (value: number) => void;
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
+  strategies: StrategyToEditStore;
 }
 
 const defaultValue: StoreContext = {
@@ -82,6 +88,7 @@ const defaultValue: StoreContext = {
   setInnerHeight: () => {},
   selectedWallet: null,
   setSelectedWallet: () => {},
+  strategies: defaultStrategyToEdit,
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -107,6 +114,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const modals = useModalStore();
   const tokens = useTokensStore();
   const fiatCurrency = useFiatCurrencyStore();
+  const strategies = useStrategyToEdit();
 
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
@@ -126,6 +134,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setInnerHeight,
     selectedWallet,
     setSelectedWallet,
+    strategies,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;

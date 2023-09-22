@@ -11,13 +11,10 @@ import {
 } from 'react';
 import { Strategy } from 'libs/queries';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
-import { useStore } from 'store';
 import { m } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
-import { getCompareFunctionBySortType } from './utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { toPairName, toPairSlug } from 'utils/pairSearch';
 
 const getItemsPerRow = (breakpoint: Breakpoint) => {
   switch (breakpoint) {
@@ -43,26 +40,6 @@ export const _StrategyContent: FC<Props> = ({
   isLoading,
   emptyElement,
 }) => {
-  const {
-    strategies: { search, sort, filter },
-  } = useStore();
-  const compareFunction = getCompareFunctionBySortType(sort);
-  const searchSlug = toPairSlug(search);
-  const filteredStrategies = useMemo(() => {
-    const filtered = strategies?.filter((strategy) => {
-      if (filter === 'active' && strategy.status !== 'active') {
-        return false;
-      }
-      if (filter === 'inactive' && strategy.status === 'active') {
-        return false;
-      }
-      if (!searchSlug) return true;
-      const name = toPairName(strategy.base, strategy.quote);
-      return toPairSlug(name).includes(searchSlug);
-    });
-    return filtered?.sort(compareFunction);
-  }, [searchSlug, strategies, filter, compareFunction]);
-
   const parentRef = useRef<HTMLDivElement>(null);
   const parentOffsetRef = useRef(0);
 
@@ -74,13 +51,13 @@ export const _StrategyContent: FC<Props> = ({
 
   const rows = useMemo(() => {
     const itemsPerRow = getItemsPerRow(currentBreakpoint);
-    const arr = filteredStrategies ?? [];
+    const arr = strategies ?? [];
     const result: Strategy[][] = [];
     for (let i = 0; i < arr.length; i += itemsPerRow) {
       result.push(arr.slice(i, i + itemsPerRow));
     }
     return result;
-  }, [currentBreakpoint, filteredStrategies]);
+  }, [currentBreakpoint, strategies]);
 
   const rowVirtualizer = useWindowVirtualizer({
     count: rows.length,
@@ -91,69 +68,60 @@ export const _StrategyContent: FC<Props> = ({
 
   const items = rowVirtualizer.getVirtualItems();
 
-  if (strategies && strategies.length === 0 && !isExplorer)
+  if (strategies && strategies.length === 0 && !isExplorer) {
     return <StrategyCreateFirst />;
+  }
+  if (isLoading) {
+    return (
+      <m.div
+        key={'loading'}
+        className={'flex flex-grow items-center justify-center'}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className={'h-80'}>
+          <CarbonLogoLoading />
+        </div>
+      </m.div>
+    );
+  }
+  if (!strategies?.length) return emptyElement;
 
   return (
-    <>
-      {!filteredStrategies || filteredStrategies.length === 0 || isLoading ? (
-        <>
-          {isLoading ? (
-            <m.div
-              key={'loading'}
-              className={'flex flex-grow items-center justify-center'}
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <div className={'h-80'}>
-                <CarbonLogoLoading />
-              </div>
-            </m.div>
-          ) : (
-            emptyElement
-          )}
-        </>
-      ) : (
-        <div
-          ref={parentRef}
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: '100%',
-            position: 'relative',
-          }}
-        >
-          <ul
-            data-testid="strategies-list"
-            className={
-              'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
-            }
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              transform: `translateY(${
-                items[0].start - rowVirtualizer.options.scrollMargin
-              }px)`,
-            }}
-          >
-            {items.map((virtualRow) => (
-              <Fragment key={virtualRow.key}>
-                {rows[virtualRow.index].map((s) => (
-                  <StrategyBlock
-                    key={s.id}
-                    strategy={s}
-                    isExplorer={isExplorer}
-                  />
-                ))}
-              </Fragment>
+    <div
+      ref={parentRef}
+      style={{
+        height: `${rowVirtualizer.getTotalSize()}px`,
+        width: '100%',
+        position: 'relative',
+      }}
+    >
+      <ul
+        data-testid="strategies-list"
+        className={
+          'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
+        }
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          transform: `translateY(${
+            items[0].start - rowVirtualizer.options.scrollMargin
+          }px)`,
+        }}
+      >
+        {items.map((virtualRow) => (
+          <Fragment key={virtualRow.key}>
+            {rows[virtualRow.index].map((s) => (
+              <StrategyBlock key={s.id} strategy={s} isExplorer={isExplorer} />
             ))}
-            {!isExplorer && <StrategyBlockCreate />}
-          </ul>
-        </div>
-      )}
-    </>
+          </Fragment>
+        ))}
+        {!isExplorer && <StrategyBlockCreate />}
+      </ul>
+    </div>
   );
 };
 
