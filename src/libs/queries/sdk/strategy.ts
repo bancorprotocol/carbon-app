@@ -21,6 +21,7 @@ import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { RoiRow } from 'utils/carbonApi';
 import { useGetRoi } from '../extApi/roi';
+import { useGetAddressFromEnsName } from '../chain/ens';
 
 export enum StrategyStatus {
   Active,
@@ -145,17 +146,20 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
-  const isValidAddres = utils.isAddress(user?.toLowerCase() || '');
-  const isZeroAddress = user === config.tokens.ZERO;
+  const ensName = useGetAddressFromEnsName(user || '');
+  const address: string = ensName?.data || user || '';
+
+  const isValidAddress = utils.isAddress(address.toLowerCase());
+  const isZeroAddress = address === config.tokens.ZERO;
 
   const roiQuery = useGetRoi();
 
   return useQuery<Strategy[]>(
-    QueryKey.strategies(user),
+    QueryKey.strategies(address),
     async () => {
-      if (!user || !isValidAddres || isZeroAddress) return [];
+      if (!address || !isValidAddress || isZeroAddress) return [];
 
-      const strategies = await carbonSDK.getUserStrategies(user);
+      const strategies = await carbonSDK.getUserStrategies(address);
       return await buildStrategiesHelper({
         strategies,
         getTokenById,
@@ -165,7 +169,11 @@ export const useGetUserStrategies = ({ user }: Props) => {
       });
     },
     {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      enabled:
+        tokens.length > 0 &&
+        isInitialized &&
+        roiQuery.isSuccess &&
+        ensName.isSuccess,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
