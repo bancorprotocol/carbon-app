@@ -3,6 +3,7 @@ export * from 'libs/queries/sdk/strategy';
 export * from 'libs/queries/extApi/tokens';
 export * from 'libs/queries/queryKey';
 export * from 'libs/queries/chain/balance';
+export * from 'libs/queries/chain/ens';
 export * from 'libs/queries/sdk/pairs';
 export * from 'libs/queries/sdk/trade';
 export * from 'libs/queries/sdk/tradeLiquidity';

@@ -36,6 +36,8 @@ export namespace QueryKey {
     spender,
   ];
 
+  export const ens = (address: string) => [...chain, 'ens', address];
+
   export const balance = (user: string, token: string) => [
     ...chain,
     'balance',
