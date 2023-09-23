@@ -17,8 +17,7 @@ export const useGetEnsName = (address: string) => {
         // Already checks reverse resolution
         return await provider.lookupAddress(address);
       }
-
-      return;
+      return '';
     },
     {
       enabled: !!address && !!provider,
@@ -39,7 +38,7 @@ export const useGetAddressFromEnsName = (ens: string) => {
       if (isValidEnsName(ens)) {
         return await provider.resolveName(ens);
       }
-      return;
+      return '';
     },
     {
       enabled: !!ens && !!provider,
