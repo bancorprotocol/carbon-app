@@ -47,7 +47,7 @@ export const useGetAddressFromEnsName = (ens: string) => {
   );
 };
 
-export const isValidEnsName = (ens: string) => {
+export const isValidEnsName = (ens: string | undefined) => {
   const ensFormatRegex = /[\w\p{RGI_Emoji}]+\.\w+/v;
   return !!ens && ens.match(ensFormatRegex);
 };
