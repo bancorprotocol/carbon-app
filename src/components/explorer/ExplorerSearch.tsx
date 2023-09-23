@@ -22,17 +22,22 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
+import { isValidEnsName } from 'libs/queries';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
   const { type, slug } = useExplorerParams();
+  console.log(`slug: ${slug}`);
   const [search, setSearch] = useState(slug ?? '');
 
   const isInvalidAddress = useMemo(() => {
     if (type !== 'wallet' || !search.length) return false;
     if (search === config.tokens.ZERO) return true;
-    return !utils.isAddress(search.toLowerCase());
+    return !(
+      utils.isAddress(search.toLowerCase()) ||
+      isValidEnsName(search.toLowerCase())
+    );
   }, [search, type]);
 
   useEffect(() => {
