@@ -20,7 +20,6 @@ test.describe('Strategies', () => {
     // Select Base
     await page.getByTestId('select-base-token').click();
     await waitFor(page, 'modal');
-    // Search
     await page.getByLabel('Select Token').fill('eth');
     await page.getByTestId('select-token-ETH').click();
     await page.getByTestId('modal').waitFor({ state: 'detached' });
@@ -32,12 +31,23 @@ test.describe('Strategies', () => {
     await page.getByTestId('select-token-DAI').click();
     await page.getByText('Next Step').click();
 
-    await page.getByTestId('buy-input-limit').fill('1500');
-    await page.getByTestId('buy-input-budget').fill('5000');
-    await page.getByTestId('sell-input-limit').fill('1700');
-    await page.getByTestId('sell-input-budget').fill('2');
+    // Fill Buy fields
+    const buy = page.getByTestId('buy-section');
+    await buy.getByTestId('input-limit').fill('1500');
+    await buy.getByTestId('input-budget').fill('5000');
+    await expect(buy.getByTestId('outcome-target')).toHaveText('3.33 ETH');
+    await expect(buy.getByTestId('outcome-quote')).toHaveText('1,500 DAI');
+
+    // Fill Sell fields
+    const sell = page.getByTestId('sell-section');
+    await sell.getByTestId('input-limit').fill('1700');
+    await sell.getByTestId('input-budget').fill('2');
+    await expect(sell.getByTestId('outcome-target')).toHaveText('3,400 DAI');
+    await expect(sell.getByTestId('outcome-quote')).toHaveText('1,700 DAI');
+
     await page.getByText('Create Strategy').click();
 
+    // Accept approval
     const approvalModal = await waitFor(page, 'modal');
     const ethMsg = approvalModal.getByTestId('msg-ETH');
     await expect(ethMsg).toHaveText('Pre-Approved');
@@ -48,7 +58,7 @@ test.describe('Strategies', () => {
 
     await page.waitForURL('/');
 
-    // Verify data
+    // Verify strategy data
     const strategies = page.locator('[data-testid="strategy-list"] > li');
     await expect(strategies).toHaveCount(1);
     const [strategy] = await strategies.all();

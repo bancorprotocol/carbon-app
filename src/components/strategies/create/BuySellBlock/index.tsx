@@ -112,6 +112,7 @@ export const BuySellBlock: FC<Props> = ({
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
       }`}
+      data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {strategyType === 'disposable' && (
         <TabsMenu>

@@ -20,15 +20,15 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
   const hasBudgetUpdate = props.budgetUpdate && Number(props.budgetUpdate) > 0;
 
   return (
-    <p className="text-12 text-white/60">
+    <p className="text-12 text-white/60" data-testid="full-outcome">
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
-      <b className="break-words font-weight-500">
+      <b className="break-words font-weight-500" data-testid="outcome-target">
         {prettifyNumber(amount)}&nbsp;
         {targetToken.symbol}
       </b>
       &nbsp;at an average price of&nbsp;
-      <b className="break-words font-weight-500">
+      <b className="break-words font-weight-500" data-testid="outcome-quote">
         {prettifyNumber(mean)}&nbsp;
         {props.quote.symbol}
       </b>
