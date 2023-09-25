@@ -4,14 +4,14 @@ import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { utils } from 'ethers';
 
-export const useGetEnsName = (address: string) => {
+export const useGetEnsFromAddress = (address: string) => {
   const { provider } = useWeb3();
 
   return useQuery(
     QueryKey.ensFromAddress(address),
     async () => {
       if (!provider) {
-        throw new Error('useGetEnsName no provider provided');
+        throw new Error('useGetEnsFromAddress no provider provided');
       }
       if (utils.isAddress(address.toLowerCase())) {
         // Already checks reverse resolution
@@ -26,14 +26,14 @@ export const useGetEnsName = (address: string) => {
   );
 };
 
-export const useGetAddressFromEnsName = (ens: string) => {
+export const useGetAddressFromEns = (ens: string) => {
   const { provider } = useWeb3();
 
   return useQuery(
     QueryKey.ensToAddress(ens),
     async () => {
       if (!provider) {
-        throw new Error('useGetEnsName no provider provided');
+        throw new Error('useGetAddressFromEns no provider provided');
       }
       if (isValidEnsName(ens)) {
         return await provider.resolveName(ens);

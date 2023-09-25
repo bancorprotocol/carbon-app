@@ -21,7 +21,7 @@ import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { RoiRow } from 'utils/carbonApi';
 import { useGetRoi } from '../extApi/roi';
-import { useGetAddressFromEnsName } from '../chain/ens';
+import { useGetAddressFromEns } from '../chain/ens';
 
 export enum StrategyStatus {
   Active,
@@ -146,7 +146,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
-  const ensAddress = useGetAddressFromEnsName(user || '');
+  const ensAddress = useGetAddressFromEns(user || '');
   const address: string = ensAddress?.data || user || '';
 
   const isValidAddress = utils.isAddress(address.toLowerCase());

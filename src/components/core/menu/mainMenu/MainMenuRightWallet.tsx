@@ -15,7 +15,7 @@ import { FC, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { shortenString } from 'utils/helpers';
-import { useGetEnsName } from '../../../../libs/queries/chain/ens';
+import { useGetEnsFromAddress } from '../../../../libs/queries/chain/ens';
 
 const iconProps = { className: 'w-20' };
 
@@ -63,7 +63,7 @@ export const MainMenuRightWallet: FC = () => {
     });
   };
 
-  const { data: ensName } = useGetEnsName(user || '');
+  const { data: ensName } = useGetEnsFromAddress(user || '');
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error';
