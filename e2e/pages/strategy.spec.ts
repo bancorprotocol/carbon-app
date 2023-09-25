@@ -5,15 +5,20 @@ import { setupImposter } from '../utils/debug';
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
-    await Promise.all([mockApi(page), setupImposter(page)]);
+    await mockApi(page);
   });
   test('First Strategy Page', async ({ page }) => {
+    // We need a fix address when taking screenshot
+    await setupImposter(page, {
+      address: '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503',
+    });
     await navigateTo(page, '/');
     await page.getByTestId('first-strategy').waitFor({ state: 'visible' });
     await screenshot(page, 'first-strategy');
   });
 
   test('Create Limit Strategy ETH->DAI', async ({ page }) => {
+    await setupImposter(page);
     await navigateTo(page, '/');
     await page.getByTestId('create-strategy-desktop').click();
 
