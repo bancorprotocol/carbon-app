@@ -56,7 +56,7 @@ export const TokenInputField: FC<Props> = ({
   const handleBalanceClick = () => {
     if (balance === value) return;
     if (balance) {
-      const balanceValue = new Decimal(balance || 0).toFixed(token.decimals);
+      const balanceValue = new Decimal(balance).toFixed(token.decimals);
       setValue(balanceValue);
     }
     onKeystroke && onKeystroke();
