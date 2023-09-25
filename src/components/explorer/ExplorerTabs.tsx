@@ -17,9 +17,8 @@ export const ExplorerTabs = () => {
   const { strategies } = useExplorer();
   const { slug, type } = useExplorerParams();
 
-  const {
-    current: { pathname },
-  } = useLocation();
+  // To support emojis in ens domains
+  const pathname = decodeURIComponent(useLocation().current.pathname);
 
   const {
     strategies: { sort, setSort, filter, setFilter },
