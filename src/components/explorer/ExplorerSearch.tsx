@@ -28,7 +28,6 @@ export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
   const { type, slug } = useExplorerParams();
-  console.log(`slug: ${slug}`);
   const [search, setSearch] = useState(slug ?? '');
 
   const isInvalidAddress = useMemo(() => {
