@@ -146,8 +146,8 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
-  const ensName = useGetAddressFromEnsName(user || '');
-  const address: string = ensName?.data || user || '';
+  const ensAddress = useGetAddressFromEnsName(user || '');
+  const address: string = ensAddress?.data || user || '';
 
   const isValidAddress = utils.isAddress(address.toLowerCase());
   const isZeroAddress = address === config.tokens.ZERO;
@@ -173,7 +173,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
         tokens.length > 0 &&
         isInitialized &&
         roiQuery.isSuccess &&
-        ensName.isSuccess,
+        ensAddress.isSuccess,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
