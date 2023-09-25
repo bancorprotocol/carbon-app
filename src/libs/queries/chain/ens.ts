@@ -8,7 +8,7 @@ export const useGetEnsName = (address: string) => {
   const { provider } = useWeb3();
 
   return useQuery(
-    QueryKey.ens(address),
+    QueryKey.ensFromAddress(address),
     async () => {
       if (!provider) {
         throw new Error('useGetEnsName no provider provided');
@@ -30,7 +30,7 @@ export const useGetAddressFromEnsName = (ens: string) => {
   const { provider } = useWeb3();
 
   return useQuery(
-    QueryKey.ens(ens),
+    QueryKey.ensToAddress(ens),
     async () => {
       if (!provider) {
         throw new Error('useGetEnsName no provider provided');
