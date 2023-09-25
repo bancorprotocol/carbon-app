@@ -65,7 +65,9 @@
     "fuse.js": "^6.6.2",
     "highcharts": "^11.1.0",
     "highcharts-react-official": "^3.2.0",
+    "husky": "^8.0.3",
     "jsdom": "^21.1.1",
+    "lint-staged": "^14.0.1",
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
     "numbro": "^2.3.6",
@@ -91,14 +93,15 @@
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir \"src/abis/types\" \"src/abis/**/*.json\"",
-    "postinstall": "yarn compile-abis",
+    "postinstall": "yarn compile-abis && yarn husky install",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest run",
     "e2e": "playwright test",
-    "lint": "eslint --ext .tsx,.ts ."
+    "lint": "eslint --ext .tsx,.ts .",
+    "pre-commit": "yarn lint-staged"
   },
   "browserslist": {
     "production": [

@@ -1,8 +1,8 @@
 import {
-  EnumStrategyFilter,
-  EnumStrategySort,
   StrategyFilter,
   StrategySort,
+  getFilterFromLS,
+  getSortFromLS,
 } from 'components/strategies/overview/StrategyFilterSort';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Strategy } from 'libs/queries';
@@ -18,43 +18,6 @@ export interface StrategiesStore {
   strategyToEdit: Strategy | undefined;
   setStrategyToEdit: Dispatch<SetStateAction<Strategy | undefined>>;
 }
-
-/** Used for local storage migration */
-export const strategySortMapping: Record<EnumStrategySort, StrategySort> = {
-  [EnumStrategySort.Recent]: 'recent',
-  [EnumStrategySort.Old]: 'old',
-  [EnumStrategySort.PairAscending]: 'pairAsc',
-  [EnumStrategySort.PairDescending]: 'pairDesc',
-  [EnumStrategySort.RoiAscending]: 'roiAsc',
-  [EnumStrategySort.RoiDescending]: 'roiDesc',
-};
-const isEnumSort = (
-  sort: StrategySort | EnumStrategySort
-): sort is EnumStrategySort => sort in strategySortMapping;
-
-export const getSortFromLS = (): StrategySort => {
-  const sort = lsService.getItem('strategyOverviewSort');
-  if (sort === undefined) return 'roiDesc';
-  return isEnumSort(sort) ? strategySortMapping[sort] : sort;
-};
-
-/** Used for local storage migration */
-export const strategyFilterMapping: Record<EnumStrategyFilter, StrategyFilter> =
-  {
-    [EnumStrategyFilter.All]: 'all',
-    [EnumStrategyFilter.Active]: 'active',
-    [EnumStrategyFilter.Inactive]: 'inactive',
-  };
-
-const isEnumFilter = (
-  filter: StrategyFilter | EnumStrategyFilter
-): filter is EnumStrategyFilter => filter in strategyFilterMapping;
-
-export const getFilterFromLS = (): StrategyFilter => {
-  const filter = lsService.getItem('strategyOverviewFilter');
-  if (filter === undefined) return 'all';
-  return isEnumFilter(filter) ? strategyFilterMapping[filter] : filter;
-};
 
 export const useStrategiesStore = (): StrategiesStore => {
   const [search, setSearch] = useState('');

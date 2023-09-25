@@ -1,4 +1,4 @@
-import { ConnectionType } from 'libs/web3';
+import { ConnectionType, EnumConnectionType } from 'libs/web3';
 import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 import { Token } from 'libs/tokens';
 import { Notification } from 'libs/notifications';
@@ -19,7 +19,7 @@ import { FiatSymbol } from 'utils/carbonApi';
 // ************************** /
 
 interface LocalStorageSchema {
-  connectionType: ConnectionType;
+  connectionType: ConnectionType | EnumConnectionType;
   tenderlyRpc: string;
   imposterAccount: string;
   importedTokens: Token[];

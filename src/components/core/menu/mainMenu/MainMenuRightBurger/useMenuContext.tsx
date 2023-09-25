@@ -3,10 +3,7 @@ import { Menu, MenuItemType } from './useBurgerMenuItems';
 import { ImmutableStack } from 'utils/stack';
 import { ForwardArrow } from 'components/common/forwardArrow';
 
-export enum MenuItemActions {
-  Close,
-  Back,
-}
+export type MenuItemActions = 'close' | 'back';
 
 interface UseMenuContextProps<T> {
   mainMenu: T;
@@ -57,7 +54,7 @@ export function useMenuContext<T>(props: UseMenuContextProps<T>) {
                 };
               } else {
                 const originalClick = item.onClick?.bind(item);
-                if (item.postClickAction === MenuItemActions.Back) {
+                if (item.postClickAction === 'back') {
                   item.onClick = () => {
                     originalClick && originalClick();
                     setMenuContext(updatedStack.pop());

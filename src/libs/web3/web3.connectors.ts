@@ -4,11 +4,7 @@ import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { Network } from '@web3-react/network';
 import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import {
-  ConnectionType,
-  RPC_URLS,
-  SupportedChainId,
-} from 'libs/web3/web3.constants';
+import { RPC_URLS, SupportedChainId } from 'libs/web3/web3.constants';
 import { Connection } from 'libs/web3/web3.types';
 import iconMetaMask from 'assets/logos/metamask.svg';
 import iconWalletConnect from 'assets/logos/walletConnect.svg';
@@ -42,7 +38,7 @@ const [web3Network, web3NetworkHooks] = initializeConnector<Network>(
 export const networkConnection: Connection = {
   connector: web3Network,
   hooks: web3NetworkHooks,
-  type: ConnectionType.NETWORK,
+  type: 'network',
   name: 'Network',
 };
 
@@ -56,7 +52,7 @@ const [web3Injected, web3InjectedHooks] = initializeConnector<MetaMask>(
 export const injectedConnection: Connection = {
   connector: web3Injected,
   hooks: web3InjectedHooks,
-  type: ConnectionType.INJECTED,
+  type: 'injected',
   name: 'MetaMask',
   logoUrl: iconMetaMask,
 };
@@ -71,7 +67,7 @@ const [web3GnosisSafe, web3GnosisSafeHooks] = initializeConnector<GnosisSafe>(
 export const gnosisSafeConnection: Connection = {
   connector: web3GnosisSafe,
   hooks: web3GnosisSafeHooks,
-  type: ConnectionType.GNOSIS_SAFE,
+  type: 'gnosisSafe',
   name: 'Gnosis Safe',
   logoUrl: iconGnosis,
 };
@@ -104,7 +100,7 @@ const [web3WalletConnect, web3WalletConnectHooks] =
 export const walletConnectConnection: Connection = {
   connector: web3WalletConnect,
   hooks: web3WalletConnectHooks,
-  type: ConnectionType.WALLET_CONNECT,
+  type: 'walletConnect',
   name: 'WalletConnect',
   logoUrl: iconWalletConnect,
 };
@@ -130,7 +126,7 @@ const [web3CoinbaseWallet, web3CoinbaseWalletHooks] =
 export const coinbaseWalletConnection: Connection = {
   connector: web3CoinbaseWallet,
   hooks: web3CoinbaseWalletHooks,
-  type: ConnectionType.COINBASE_WALLET,
+  type: 'coinbaseWallet',
   name: 'Coinbase Wallet',
   logoUrl: iconCoinbase,
 };

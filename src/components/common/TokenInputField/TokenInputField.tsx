@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, useRef } from 'react';
 import Decimal from 'decimal.js';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
@@ -9,6 +9,7 @@ import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
+  id?: string;
   value: string;
   setValue?: (value: string) => void;
   token: Token;
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export const TokenInputField: FC<Props> = ({
+  id,
   value,
   setValue = () => {},
   token,
@@ -39,23 +41,9 @@ export const TokenInputField: FC<Props> = ({
   withoutWallet,
 }) => {
   const { user } = useWeb3();
-  const [isFocused, setIsFocused] = useState(false);
-  const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
   const fiatValueUsd = getFiatValue(value, true);
-
-  const handleOnFocus = () => {
-    inputRef.current?.select();
-    !disabled && setIsFocused(true);
-    if (value === '...') {
-      setValue('');
-    }
-  };
-
-  const handleOnBlur = () => {
-    setIsFocused(false);
-  };
 
   const handleChange = ({
     target: { value },
@@ -78,92 +66,69 @@ export const TokenInputField: FC<Props> = ({
 
   return (
     <div
-      className={`cursor-text ${
-        isFocused || isActive ? 'ring-2 ring-white/50' : ''
-      } transition-all duration-200 ${
-        isError ? 'ring-2 ring-red/50' : ''
-      } ${className}`}
-      onMouseDown={() => !disabled && setIsActive(true)}
-      onMouseUp={() => !disabled && setIsActive(false)}
-      onFocus={handleOnFocus}
-      onClick={() => {
-        if (disabled) return;
-        setIsFocused(true);
-        inputRef.current?.focus();
-      }}
+      className={`
+        flex cursor-text flex-col gap-8 border-2 border-black p-16
+        focus-within:border-white/50
+        ${isError ? '!border-red/50' : ''}
+        ${className}
+      `}
+      onClick={() => inputRef.current?.focus()}
     >
       <div className={`flex items-center justify-between`}>
-        <div className={'mr-10 flex flex-none items-center'}>
+        <input
+          id={id}
+          type="text"
+          pattern={decimalNumberValidationRegex}
+          inputMode="decimal"
+          ref={inputRef}
+          value={value}
+          size={1}
+          onChange={handleChange}
+          placeholder={placeholder}
+          onFocus={(e) => e.target.select()}
+          className={`
+            grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
+            ${isError ? 'text-red' : ''}
+          `}
+          disabled={disabled}
+        />
+        <div
+          className={`flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8`}
+        >
           <LogoImager
             alt={'Token'}
             src={token.logoURI}
-            className={'mr-10 h-30 w-30'}
+            className={'h-20 w-20'}
           />
           <span className={'font-weight-500'}>{token.symbol}</span>
         </div>
-        {
-          <input
-            type={'text'}
-            pattern={decimalNumberValidationRegex}
-            inputMode="decimal"
-            ref={inputRef}
-            value={
-              value === '...'
-                ? value
-                : !isFocused
-                ? !value
-                  ? ''
-                  : !isActive
-                  ? value
-                  : value
-                : value
-            }
-            size={1}
-            onChange={handleChange}
-            placeholder={placeholder}
-            onFocus={handleOnFocus}
-            onBlur={handleOnBlur}
-            className={`w-full shrink bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none ${
-              isError ? 'text-red' : 'text-white'
-            }`}
-            disabled={disabled}
-          />
-        }
       </div>
       <div
-        className={
-          'text-secondary mt-10 flex items-center justify-between gap-10 font-mono !text-12 font-weight-500'
-        }
+        className={`flex flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500`}
       >
-        {user && isBalanceLoading !== undefined && !withoutWallet ? (
+        <p className="flex items-center gap-5 text-white/60">
+          {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
+          {slippage && value && <Slippage slippage={slippage} />}
+        </p>
+        {user && isBalanceLoading !== undefined && !withoutWallet && (
           <button
-            tabIndex={-1}
+            type="button"
             onClick={handleBalanceClick}
             className={'group flex items-center'}
           >
-            Wallet:
+            Wallet:&nbsp;
             {isBalanceLoading ? (
               'loading'
             ) : (
               <>
-                <span className="ml-5 text-white">
-                  {prettifyNumber(balance || 0)}
+                <span className="text-white">
+                  {prettifyNumber(balance || 0)}&nbsp;
                 </span>
-                <div className="ml-10 text-green group-hover:text-white">
-                  MAX
-                </div>
+                <b className="text-green group-hover:text-white">MAX</b>
               </>
             )}
           </button>
-        ) : (
-          <div className={'h-16'} />
         )}
-        <div className="flex">
-          {!slippage?.isZero() && showFiatValue && (
-            <div>{getFiatAsString(value)}</div>
-          )}
-          {slippage && value && <Slippage slippage={slippage} />}
-        </div>
       </div>
     </div>
   );
