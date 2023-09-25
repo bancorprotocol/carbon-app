@@ -36,11 +36,6 @@ async function globalSetup(config: FullConfig) {
     await page.getByTestId('unchecked-signer').click();
     await page.getByTestId('save-rpc').click();
     await page.waitForURL(`${baseURL}/debug`);
-
-    // SET Imposter Account
-    await page.getByLabel('Imposter Account').fill(imposter);
-    await page.getByTestId('save-imposter').click();
-
     await page.context().storageState({ path: storageState as string });
     await browser.close();
   });
