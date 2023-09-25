@@ -38,5 +38,11 @@ test.describe('Strategies', () => {
     await page.getByTestId('select-token-DAI').click();
 
     await page.getByText('Next Step').click();
+
+    await page.getByTestId('buy-input-limit').fill('1500');
+    await page.getByTestId('buy-input-budget').fill('5000');
+    await page.getByTestId('sell-input-limit').fill('1700');
+    await page.getByTestId('sell-input-budget').fill('2');
+    await page.getByText('Create Strategy').click();
   });
 });

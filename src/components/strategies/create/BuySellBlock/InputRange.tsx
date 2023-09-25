@@ -35,6 +35,7 @@ export const InputRange: FC<InputRangeProps> = ({
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMessage = 'Max Price must be higher than min price and not zero';
+  const testIdPrefix = buy ? 'buy' : 'sell';
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
@@ -97,6 +98,7 @@ export const InputRange: FC<InputRangeProps> = ({
             `}
             onChange={handleChangeMin}
             onFocus={(e) => e.target.select()}
+            data-testid={`${testIdPrefix}-input-range-min`}
           />
           <p className="flex flex-wrap items-center gap-4">
             <span className="break-all font-mono text-12 text-white/60">
@@ -138,6 +140,7 @@ export const InputRange: FC<InputRangeProps> = ({
             `}
             onChange={handleChangeMax}
             onFocus={(e) => e.target.select()}
+            data-testid={`${testIdPrefix}-input-range-max`}
           />
           <div className="flex flex-wrap items-center gap-4">
             <p className="break-all font-mono text-12 text-white/60">

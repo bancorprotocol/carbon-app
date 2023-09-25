@@ -30,6 +30,7 @@ export const BudgetSection: FC<Props> = ({
 }) => {
   const inputId = useId();
   const budgetToken = buy ? quote : base;
+  const testIdPrefix = buy ? 'buy' : 'sell';
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
     new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
@@ -83,6 +84,7 @@ export const BudgetSection: FC<Props> = ({
         isBalanceLoading={tokenBalanceQuery.isLoading}
         balance={tokenBalanceQuery.data}
         isError={insufficientBalance}
+        data-testid={`${testIdPrefix}-input-budget`}
       />
       {insufficientBalance && (
         <output
