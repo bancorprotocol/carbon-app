@@ -26,6 +26,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
       'You rejected the transaction. If this was by mistake, please try again.',
     showAlert: true,
     nonPersistent: true,
+    testid: 'reject',
   }),
   approve: ({ symbol, limited, txHash }) => ({
     status: 'pending',
@@ -41,6 +42,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
       limited ? 'limited' : 'unlimited'
     }`,
     showAlert: true,
+    testid: 'approve',
   }),
   revoke: ({ txHash }) => ({
     status: 'pending',
@@ -52,12 +54,14 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedTitle: 'Transaction Failed',
     failedDesc: `Failed to revoke previous approval.`,
     showAlert: true,
+    testid: 'revoke',
   }),
   approveError: ({ symbol }) => ({
     status: 'failed',
     title: 'Approve Token failed',
     description: `Approval for ${symbol} has failed. Please try again or contact support.`,
     showAlert: true,
+    testid: 'approve-error',
   }),
   createStrategy: (data) => ({
     status: 'pending',
@@ -69,6 +73,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'New strategy creation has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'create-strategy',
   }),
   pauseStrategy: (data) => ({
     status: 'pending',
@@ -80,6 +85,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'Your request to pause your strategy has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'pause-strategy',
   }),
   renewStrategy: (data) => ({
     status: 'pending',
@@ -92,6 +98,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'Your request to renew the strategy has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'renew-strategy',
   }),
   editStrategyName: (data) => ({
     status: 'pending',
@@ -103,6 +110,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'Strategy name update has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'edit-strategy-name',
   }),
   withdrawStrategy: (data) => ({
     status: 'pending',
@@ -114,6 +122,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'Your withdrawal request has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'withdraw-strategy',
   }),
   depositStrategy: (data) => ({
     status: 'pending',
@@ -125,6 +134,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'Your deposit request has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'deposit-strategy',
   }),
   deleteStrategy: (data) => ({
     status: 'pending',
@@ -137,6 +147,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'Strategy deletion has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'delete-strategy',
   }),
   changeRatesStrategy: (data) => ({
     status: 'pending',
@@ -148,6 +159,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: 'Your edit request has failed.',
     txHash: data.txHash,
     showAlert: true,
+    testid: 'change-rates-strategy',
   }),
   trade: ({ amount, txHash, to, from }) => ({
     status: 'pending',
@@ -159,5 +171,6 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     failedDesc: `Trading ${amount} ${from} for ${to} has failed.`,
     txHash,
     showAlert: true,
+    testid: 'trade',
   }),
 };

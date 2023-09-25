@@ -211,15 +211,16 @@ export const ApproveToken: FC<Props> = ({
                 onClick={onApprove}
                 size={'sm'}
                 className={'px-10 text-14'}
+                data-testid={`approve-${token.symbol}`}
               >
                 {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}
               </Button>
             </div>
           )
         ) : (
-          <div className={'text-green'}>
+          <span className="text-green" data-testid={`msg-${token.symbol}`}>
             {txSuccess ? 'Approved' : 'Pre-Approved'}
-          </div>
+          </span>
         )}
 
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
