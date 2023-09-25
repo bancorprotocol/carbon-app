@@ -11,7 +11,7 @@ import { Button } from 'components/common/button';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
-import { ConnectionType, useWeb3 } from 'libs/web3';
+import { useWeb3 } from 'libs/web3';
 import { FC, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
@@ -27,13 +27,13 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
   }
 
   switch (selectedWallet) {
-    case ConnectionType.INJECTED:
+    case 'injected':
       return <IconMetaMaskLogo {...iconProps} />;
-    case ConnectionType.WALLET_CONNECT:
+    case 'walletConnect':
       return <IconWalletConnectLogo {...iconProps} />;
-    case ConnectionType.COINBASE_WALLET:
+    case 'coinbaseWallet':
       return <IconCoinbaseLogo {...iconProps} />;
-    case ConnectionType.GNOSIS_SAFE:
+    case 'gnosisSafe':
       return <IconGnosisLogo {...iconProps} />;
     default:
       return <IconWallet {...iconProps} />;

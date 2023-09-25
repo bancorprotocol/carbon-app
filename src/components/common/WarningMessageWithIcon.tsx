@@ -11,11 +11,13 @@ export const WarningMessageWithIcon: FC<WarningMessageWithIconProps> = ({
   className,
 }) => {
   return (
-    <div
+    <output
+      role="alert"
+      aria-live="polite"
       className={`flex items-center gap-10 font-mono text-12 text-warning-500 ${className}`}
     >
       <IconWarning className="h-12 w-12" />
-      <div>{message}</div>
-    </div>
+      <span className="flex-1">{message}</span>
+    </output>
   );
 };

@@ -1,5 +1,7 @@
 const TENDERLY_ACCESS_KEY = process.env['TENDERLY_ACCESS_KEY'];
-if (!TENDERLY_ACCESS_KEY) throw new Error('No TENDERLY_ACCESS_KEY provided in .env');
+if (!TENDERLY_ACCESS_KEY) {
+  throw new Error('No TENDERLY_ACCESS_KEY provided in .env');
+}
 
 const baseUrl = `https://api.tenderly.co/api/v1/account/bancor/project/carbon-test-forks/fork`;
 const headers = {

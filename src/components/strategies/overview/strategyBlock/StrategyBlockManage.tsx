@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
-import { Strategy, StrategyStatus } from 'libs/queries';
+import { Strategy } from 'libs/queries';
 import { PathNames, useMatch, useNavigate } from 'libs/routing';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
@@ -141,7 +141,7 @@ export const StrategyBlockManage: FC<Props> = ({
       },
     });
 
-    if (strategy.status !== StrategyStatus.NoBudget) {
+    if (strategy.status !== 'noBudget') {
       items.push({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
@@ -162,7 +162,7 @@ export const StrategyBlockManage: FC<Props> = ({
     // separator
     items.push(1);
 
-    if (strategy.status === StrategyStatus.Active) {
+    if (strategy.status === 'active') {
       items.push({
         id: 'pauseStrategy',
         name: 'Pause Strategy',
@@ -176,7 +176,7 @@ export const StrategyBlockManage: FC<Props> = ({
       });
     }
 
-    if (strategy.status === StrategyStatus.Paused) {
+    if (strategy.status === 'paused') {
       items.push({
         id: 'renewStrategy',
         name: 'Renew Strategy',

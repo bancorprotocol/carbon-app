@@ -52,21 +52,21 @@ export const EditStrategyAllocatedBudget: FC<{
     <>
       <div
         role="table"
-        className="flex w-full flex-col rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500"
+        className="flex flex-col gap-10 rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500"
       >
         <div role="row" className="flex items-center justify-between gap-16">
-          <div role="columnheader" className="flex w-auto items-center gap-6">
-            <div>Allocated Budget</div>
+          <p role="columnheader" className="flex w-auto items-center gap-6">
+            Allocated Budget
             <Tooltip
               sendEventOnMount={{ buy }}
-              iconClassName="h-13 mr-6 text-white/60"
+              iconClassName="h-13 text-white/60"
               element={
                 buy
                   ? `This is the current available ${quote?.symbol} budget you can withdraw`
                   : `This is the current available ${base?.symbol} budget you can withdraw`
               }
             />
-          </div>
+          </p>
           <div role="cell" className="flex flex-1 justify-end gap-8">
             <TooltipTokenAmount
               amount={balance ?? ''}
@@ -74,6 +74,7 @@ export const EditStrategyAllocatedBudget: FC<{
             />
             {showMaxCb && (
               <button
+                type="button"
                 onClick={() => showMaxCb()}
                 className="cursor-pointer font-weight-500 text-green"
               >
@@ -84,13 +85,8 @@ export const EditStrategyAllocatedBudget: FC<{
         </div>
 
         {type !== 'editPrices' && (
-          <div
-            role="row"
-            className="mt-10 flex items-center justify-between gap-16"
-          >
-            <div role="columnheader" className="flex items-center">
-              {buy ? 'Buy' : 'Sell'} Price
-            </div>
+          <div role="row" className="flex items-center justify-between gap-16">
+            <p role="columnheader">{buy ? 'Buy' : 'Sell'} Price</p>
             <div role="cell" className="flex flex-1 justify-end gap-8">
               <div className={'flex items-center'}>
                 {/* Limit Strategy Price */}
@@ -107,8 +103,8 @@ export const EditStrategyAllocatedBudget: FC<{
         )}
 
         {showDistribute && type !== 'editPrices' && (
-          <div role="row" className="mt-10 flex justify-between">
-            <div role="columnheader" className="flex items-center">
+          <div role="row" className="flex justify-between">
+            <p role="columnheader" className="flex items-center">
               <span className="mr-5">Distribute Across Entire Range</span>
               <Tooltip
                 iconClassName="h-13 text-white/60"
@@ -145,7 +141,7 @@ export const EditStrategyAllocatedBudget: FC<{
                   </div>
                 }
               />
-            </div>
+            </p>
             <Switch
               role="cell"
               variant={isDistributeToggleOn ? 'white' : 'black'}
@@ -163,7 +159,7 @@ export const EditStrategyAllocatedBudget: FC<{
         )}
       </div>
       {type === 'editPrices' && showDistribute && (
-        <div className="mt-10 flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60">
+        <div className="flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"
             element={
