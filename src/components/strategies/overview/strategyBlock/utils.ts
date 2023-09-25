@@ -1,29 +1,26 @@
 import { Order, StrategyStatus } from 'libs/queries';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 
-export const getStatusText = (status: StrategyStatus) => {
-  return status === StrategyStatus.Active
-    ? 'Active'
-    : status === StrategyStatus.NoBudget
-    ? 'No Budget - Inactive'
-    : status === StrategyStatus.Paused
-    ? 'Paused - Inactive'
-    : 'Inactive';
+export const statusText: Record<StrategyStatus, string> = {
+  active: 'Active',
+  inactive: 'Inactive',
+  noBudget: 'No Budget - Inactive',
+  paused: 'Paused - Inactive',
 };
 
 export const getTooltipTextByStatus = (
   isExplorer: boolean | undefined,
   status: StrategyStatus
 ) => {
-  return status === StrategyStatus.Active
+  return status === 'active'
     ? isExplorer
       ? 'This strategy is currently active and ready to process trades.'
       : 'Your strategy is active and ready.'
-    : status === StrategyStatus.NoBudget
+    : status === 'noBudget'
     ? isExplorer
       ? 'This strategy has no associated funds and will not process trades.'
       : 'Your strategy has no associated funds. Consider depositing funds to activate it.'
-    : status === StrategyStatus.Paused
+    : status === 'paused'
     ? isExplorer
       ? 'This strategy is currently paused and will not process trades.'
       : 'Your strategy is currently paused. Edit the prices to activate it.'

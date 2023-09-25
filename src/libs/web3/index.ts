@@ -1,6 +1,7 @@
 export {
-  ConnectionType,
-  SELECTABLE_CONNECTION_TYPES,
+  type ConnectionType,
+  EnumConnectionType,
+  selectableConnectionTypes,
   IS_TENDERLY_FORK,
   RPC_URLS,
 } from 'libs/web3/web3.constants';

@@ -1,21 +1,20 @@
 import { useWeb3React } from '@web3-react/core';
-import { ConnectionType } from 'libs/web3/web3.constants';
 import {
   attemptToConnectWallet,
   getConnection,
   isNativeAppBrowser,
 } from 'libs/web3/web3.utils';
 import { useCallback, useEffect, useState } from 'react';
-import { lsService } from 'services/localeStorage';
 import { useStore } from 'store';
 import useAsyncEffect from 'use-async-effect';
+import { getConnectionTypeFromLS } from './web3.constants';
 
 export const useWeb3Network = () => {
   const { isCountryBlocked, setSelectedWallet } = useStore();
 
   const { connector } = useWeb3React();
 
-  const network = getConnection(ConnectionType.NETWORK);
+  const network = getConnection('network');
 
   const provider = network.hooks.useProvider();
 
@@ -61,7 +60,7 @@ export const useWeb3Network = () => {
       }
 
       // Attempt to autologin to normal previous session, if exists
-      const storedConnection = lsService.getItem('connectionType');
+      const storedConnection = getConnectionTypeFromLS();
       if (storedConnection !== undefined) {
         const { success } = await attemptToConnectWallet(storedConnection);
         if (success) {

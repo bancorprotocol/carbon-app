@@ -128,7 +128,7 @@ export const useBurgerMenuItems = () => {
           onClick: () => {
             setSelectedFiatCurrency(currency);
           },
-          postClickAction: MenuItemActions.Back,
+          postClickAction: 'back' as const,
         };
       }),
     ],

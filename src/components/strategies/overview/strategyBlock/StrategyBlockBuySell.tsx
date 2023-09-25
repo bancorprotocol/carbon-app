@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Strategy, StrategyStatus } from 'libs/queries';
+import { Strategy } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
@@ -21,7 +21,7 @@ export const StrategyBlockBuySell: FC<{
   const order = buy ? strategy.order0 : strategy.order1;
   const otherOrder = buy ? strategy.order1 : strategy.order1;
   const limit = order.startRate === order.endRate;
-  const active = strategy.status === StrategyStatus.Active;
+  const active = strategy.status === 'active';
   const { selectedFiatCurrency, getFiatValue: getFiatValueBase } =
     useFiatCurrency(token);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(otherToken);

@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Link, PathNames } from 'libs/routing';
-import { Connection, SELECTABLE_CONNECTION_TYPES } from 'libs/web3';
+import { Connection, selectableConnectionTypes } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
 import { Imager } from 'components/common/imager/Imager';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
@@ -64,7 +64,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
         </div>
       </div>
 
-      {SELECTABLE_CONNECTION_TYPES.map(getConnection).map((c) => (
+      {selectableConnectionTypes.map(getConnection).map((c) => (
         <button
           key={c.type}
           onClick={() => onClick(c)}
