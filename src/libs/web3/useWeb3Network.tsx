@@ -5,7 +5,6 @@ import {
   isNativeAppBrowser,
 } from 'libs/web3/web3.utils';
 import { useCallback, useEffect, useState } from 'react';
-
 import { useStore } from 'store';
 import useAsyncEffect from 'use-async-effect';
 import { getConnectionTypeFromLS } from './web3.constants';
