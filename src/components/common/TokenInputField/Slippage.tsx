@@ -1,41 +1,37 @@
 import { FC } from 'react';
 import BigNumber from 'bignumber.js';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { cn, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from '../tooltip/Tooltip';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
-export const Slippage: FC<{ slippage: BigNumber }> = ({ slippage }) => {
+interface Props {
+  slippage: BigNumber;
+}
+
+const slippageColor = (slippage: BigNumber) => {
+  if (slippage?.gt(0)) return 'text-green';
+  if (slippage?.isEqualTo(0)) return 'text-red';
+  if (slippage?.lt(-3)) return 'text-red';
+  return 'text-white/80';
+};
+
+export const Slippage: FC<Props> = ({ slippage }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
-  const isSlippagePositive = slippage?.isGreaterThan(0);
+  const slippageValue = sanitizeNumberInput(slippage.toString(), 2);
+  const textColor = slippageColor(slippage);
 
   return (
     <Tooltip
       element={`The slippage is calculated based on the ${selectedFiatCurrency} value difference between the selected source and target tokens.`}
     >
-      <div className="flex-end flex gap-5">
-        <div
-          className={`ml-4 ${
-            slippage.gte(new BigNumber(-3)) && slippage.lte(new BigNumber(0))
-              ? 'text-white/80'
-              : isSlippagePositive
-              ? 'text-green'
-              : 'text-red'
-          }`}
-        >
-          {slippage.isEqualTo(0) ? (
-            <div className="text-red">Notice, price & slippage are unknown</div>
-          ) : (
-            `(${isSlippagePositive ? '+' : '-'}${sanitizeNumberInput(
-              slippage.toString(),
-              2
-            )}%)`
-          )}
-        </div>
-        {(slippage.lt(-3) || slippage.isEqualTo(0)) && (
-          <IconWarning className="w-14 text-red" />
-        )}
-      </div>
+      <span className={cn('flex flex-1 items-center gap-5', textColor)}>
+        {slippage?.eq(0) && <IconWarning className="h-12 w-12" />}
+        {slippage?.gt(0) && <>(+{slippageValue}%)</>}
+        {slippage?.lt(0) && <>(-{slippageValue}%)</>}
+        {slippage?.eq(0) && <>Notice: price & slippage are unknown</>}
+        {slippage.lt(-3) && <IconWarning className="h-12 w-12" />}
+      </span>
     </Tooltip>
   );
 };
