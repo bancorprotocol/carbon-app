@@ -6,7 +6,6 @@ import { setupImposter } from '../utils/debug';
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
     await Promise.all([mockApi(page), setupImposter(page)]);
-    await mockApi(page);
   });
   test('First Strategy Page', async ({ page }) => {
     await navigateTo(page, '/');
