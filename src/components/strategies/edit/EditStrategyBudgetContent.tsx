@@ -12,7 +12,7 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { useMemo } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
@@ -99,7 +99,8 @@ export const EditStrategyBudgetContent = ({
         });
   };
 
-  const handleOnActionClick = () => {
+  const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (type === 'withdraw') {
       depositOrWithdrawFunds();
     } else {
@@ -163,7 +164,11 @@ export const EditStrategyBudgetContent = ({
   }, [isAwaiting, isProcessing]);
 
   return (
-    <div className="flex w-full flex-col items-center space-y-20 text-center font-weight-500 md:w-[400px]">
+    <form
+      onSubmit={(e) => handleOnActionClick(e)}
+      onReset={() => back()}
+      className="flex w-full flex-col gap-20 text-center font-weight-500 md:w-[400px]"
+    >
       <EditStrategyOverlapTokens strategy={strategy} />
       <EditStrategyBudgetBuySellBlock
         buy
@@ -183,27 +188,25 @@ export const EditStrategyBudgetContent = ({
         type={type}
       />
       <Button
+        type="submit"
         disabled={!isOrdersBudgetValid}
         loading={isLoading}
         loadingChildren={loadingChildren}
-        onClick={handleOnActionClick}
-        className="mt-32"
-        variant={'white'}
+        variant="white"
         size="lg"
         fullWidth
       >
         {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>
       <Button
-        onClick={() => back()}
+        type="reset"
         disabled={isLoading}
-        className="mt-16"
         variant="secondary"
         size="lg"
         fullWidth
       >
         Cancel
       </Button>
-    </div>
+    </form>
   );
 };
