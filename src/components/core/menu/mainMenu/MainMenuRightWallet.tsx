@@ -15,7 +15,7 @@ import { FC, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { shortenString } from 'utils/helpers';
-import { useGetEnsFromAddress } from '../../../../libs/queries/chain/ens';
+import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
 
 const iconProps = { className: 'w-20' };
 
