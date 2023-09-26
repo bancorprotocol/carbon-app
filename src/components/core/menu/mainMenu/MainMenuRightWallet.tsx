@@ -95,6 +95,7 @@ export const MainMenuRightWallet: FC = () => {
               onClick();
             }}
             className={'flex items-center space-x-10 pl-20'}
+            data-testid="user-wallet"
           >
             {buttonIcon}
             <span>{buttonText}</span>

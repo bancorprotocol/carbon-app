@@ -9,6 +9,8 @@ export const screenshot = (target: Page | Locator, name: string) => {
   return target.screenshot({
     type: 'jpeg',
     path: `e2e/screenshots/${name}.jpg`,
+    mask: [target.getByTestId('user-wallet')],
+    maskColor: '#303030',
   });
 };
 
