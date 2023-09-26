@@ -20,8 +20,8 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { RoiRow } from 'utils/carbonApi';
-import { useGetRoi } from '../extApi/roi';
-import { useGetAddressFromEns } from '../chain/ens';
+import { useGetRoi } from 'libs/queries/extApi/roi';
+import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
