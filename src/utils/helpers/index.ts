@@ -5,6 +5,7 @@ import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { FiatSymbol } from 'utils/carbonApi';
+import Graphemer from 'graphemer';
 
 export const isProduction = window
   ? window.location.host.includes('carbondefi.xyz')
@@ -39,12 +40,17 @@ export const shortenString = (
   separator = '...',
   toLength = 13
 ): string => {
-  if (string.length <= toLength) {
+  const splitter = new Graphemer();
+  const stringArray = splitter.splitGraphemes(string);
+
+  if (stringArray.length <= toLength) {
     return string;
   }
   const startEndLength = Math.floor((toLength - separator.length) / 2);
-  const start = string.substring(0, startEndLength);
-  const end = string.substring(string.length - startEndLength, string.length);
+  const start = stringArray.slice(0, startEndLength).join('');
+  const end = stringArray
+    .slice(stringArray.length - startEndLength, stringArray.length)
+    .join('');
   return start + separator + end;
 };
 
