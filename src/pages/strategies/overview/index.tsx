@@ -6,6 +6,7 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 export const StrategiesOverviewPage = () => {
   const { strategies, isLoading, search } = useStrategyCtx();
   const emptyElement = search ? <StrategyNotFound /> : <StrategyCreateFirst />;
+
   return (
     <StrategyContent
       strategies={strategies}
