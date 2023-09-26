@@ -1,6 +1,43 @@
-import { prettifyNumber, formatNumberWithApproximation } from '.';
+import {
+  prettifyNumber,
+  formatNumberWithApproximation,
+  shortenString,
+} from '.';
 import { describe, it, expect } from 'vitest';
 import BigNumber from 'bignumber.js';
+
+describe('shortenString', () => {
+  const testCases: [string, string | undefined, number | undefined, string][] =
+    [
+      ['', undefined, undefined, ''],
+      ['abcdefghijklmnopqrstuvwxyz', undefined, undefined, 'abcde...vwxyz'],
+      ['abcdefghijklmnopqrstuvwxyz', '-', undefined, 'abcdef-uvwxyz'],
+      ['abcdefghijklmnopqrstuvwxyz', undefined, 7, 'ab...yz'],
+      ['🐶🐶🐶🐶🐶', undefined, undefined, '🐶🐶🐶🐶🐶'],
+      [
+        '🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶🐶',
+        undefined,
+        undefined,
+        '🐶🐶🐶🐶🐶...🐶🐶🐶🐶🐶',
+      ],
+      ['👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧', undefined, undefined, '👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧'],
+      [
+        '👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧',
+        undefined,
+        undefined,
+        '👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧...👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧👩‍👩‍👧‍👧',
+      ],
+    ];
+
+  testCases.forEach(([stringToShorten, separator, toLength, expected]) => {
+    const description = `shortenString('${stringToShorten}', ${separator}, ${toLength}) should return '${expected}'`;
+
+    it(description, () => {
+      const result = shortenString(stringToShorten, separator, toLength);
+      expect(result).toEqual(expected);
+    });
+  });
+});
 
 describe('prettifyNumber', () => {
   it('should return 0 for input lower then 0', () => {
