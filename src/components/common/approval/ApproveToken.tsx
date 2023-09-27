@@ -165,11 +165,7 @@ export const ApproveToken: FC<Props> = ({
 
   return (
     <>
-      <div
-        className={
-          'bg-content flex h-85 items-center justify-between rounded px-20'
-        }
-      >
+      <div className="bg-content flex h-85 items-center justify-between rounded px-20">
         <div className={'space-y-6'}>
           <div className={'flex items-center space-x-10'}>
             <LogoImager

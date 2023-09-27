@@ -19,5 +19,6 @@ export const setupImposter = async (
     await page.getByText('Get money').click();
     // Note: we are not waiting for fund to arrive to speed up test.
     // Wait for it at the beginning of the test if it relies on fund right away
+    // Example: await waitFor(page, 'balance-DAI');
   }
 };

@@ -24,6 +24,7 @@ export const Modal: FC<ModalProps> = ({
   showCloseButton = true,
   isLoading = false,
   onClose,
+  'data-testid': testId,
 }) => {
   const { closeModal } = useModal();
 
@@ -37,10 +38,10 @@ export const Modal: FC<ModalProps> = ({
   return (
     <Overlay
       onClick={() => onCloseHandler(id)}
-      className={'px-content items-center justify-center'}
+      className="px-content items-center justify-center"
     >
       <m.div
-        data-testid="modal"
+        data-testid="modal-container"
         onClick={(e) => e.stopPropagation()}
         className={`relative mx-auto w-full ${sizeClass}`}
         variants={dropIn}
@@ -49,19 +50,16 @@ export const Modal: FC<ModalProps> = ({
         exit="exit"
       >
         <div
-          className={`relative flex w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis`}
+          data-testid={testId}
+          className="relative flex w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis"
         >
           {isLoading && (
-            <div
-              className={
-                'statusBar absolute -mt-20 ml-20 h-6 w-full bg-green/25'
-              }
-            />
+            <div className="statusBar absolute -mt-20 ml-20 h-6 w-full bg-green/25" />
           )}
-          <div className={'flex justify-between'}>
+          <div className="flex justify-between">
             <div>
               {typeof title === 'string' ? (
-                <h2 id="modal-title" className={'m-0'}>
+                <h2 id="modal-title" className="m-0">
                   {title}
                 </h2>
               ) : (
