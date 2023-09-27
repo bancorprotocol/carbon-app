@@ -11,7 +11,8 @@ export const ModalProvider: FC = () => {
 
   useEffect(() => {
     if (open.length > 0) {
-      disableBodyScroll(document.querySelector('#bodyScrollTarget')!);
+      const scrollTarget = document.querySelector('#bodyScrollTarget');
+      if (scrollTarget) disableBodyScroll(scrollTarget);
       document.documentElement.classList.add('overflow-hidden');
       document.body.classList.add('overflow-hidden');
     } else {
