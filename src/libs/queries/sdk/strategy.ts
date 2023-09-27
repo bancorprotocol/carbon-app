@@ -142,9 +142,9 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { Token } = useContract();
 
   const ensAddress = useGetAddressFromEns(user || '');
-  const address: string = ensAddress?.data || user || '';
+  const address: string = (ensAddress?.data || user || '').toLowerCase();
 
-  const isValidAddress = utils.isAddress(address.toLowerCase());
+  const isValidAddress = utils.isAddress(address);
   const isZeroAddress = address === config.tokens.ZERO;
 
   const roiQuery = useGetRoi();
