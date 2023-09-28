@@ -39,10 +39,10 @@ export const TradeSettings = ({
     },
     {
       id: 'transactionExpiration',
-      title: 'Transaction Expiration Time',
+      title: 'Transaction Expiration Time (min)',
       value: deadline,
       prepend: '',
-      append: ' Min',
+      append: '',
       setValue: (value) => {
         setDeadline(value);
         carbonEvents.trade.tradeSettingsTransactionExpirationTimeChange({
