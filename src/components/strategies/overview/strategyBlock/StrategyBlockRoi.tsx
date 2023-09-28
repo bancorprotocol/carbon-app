@@ -18,33 +18,31 @@ export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
   });
 
   return (
-    <div className="flex rounded-8 border-2 border-emphasis">
-      <div className="w-1/2 p-12">
-        <div className="text-secondary flex items-center gap-4">
-          {'ROI'}
-          <Tooltip element={<TooltipContent />}>
-            <IconTooltip className="h-10 w-10" />
-          </Tooltip>
-        </div>
-        <div
-          className={`text-24 ${
-            roiFormatted.negative ? 'text-red' : 'text-green'
-          }`}
-        >
-          {roiFormatted.value}
-        </div>
-      </div>
-    </div>
+    <article className="flex flex-col rounded-8 border-2 border-emphasis p-16">
+      <Tooltip element={<TooltipContent />}>
+        <h4 className="text-secondary flex items-center gap-4 font-mono">
+          ROI
+          <IconTooltip className="h-10 w-10" />
+        </h4>
+      </Tooltip>
+      <p
+        className={`text-18 font-weight-500 ${
+          roiFormatted.negative ? 'text-red' : 'text-green'
+        }`}
+      >
+        {roiFormatted.value}
+      </p>
+    </article>
   );
 };
 
 const TooltipContent: FC<{}> = () => (
   <>
     <span className="align-middle">
-      {'Total percentage returns of the strategy from its creation. '}
+      Total percentage returns of the strategy from its creation.
     </span>
     <Link to={externalLinks.roiLearnMore} className="text-green">
-      <span className="align-middle">{`Learn how ROI is calculated.`} </span>
+      <span className="align-middle">Learn how ROI is calculated.</span>
       <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
     </Link>
   </>
