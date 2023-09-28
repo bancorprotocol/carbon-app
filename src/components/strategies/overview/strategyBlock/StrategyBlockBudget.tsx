@@ -17,6 +17,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   const quoteFiat = useFiatCurrency(strategy.quote);
   const baseFiatBalance = baseFiat.getFiatValue(strategy.order1.balance);
   const quoteFiatBalance = quoteFiat.getFiatValue(strategy.order0.balance);
+  const noFiatValue = !baseFiat.hasFiatValue() && !quoteFiat.hasFiatValue();
   const totalBalance = baseFiatBalance.plus(quoteFiatBalance);
   const budgetFormatted = prettifyNumber(totalBalance, {
     currentCurrency: baseFiat.selectedFiatCurrency,
@@ -30,7 +31,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
           <IconTooltip className="h-10 w-10" />
         </h4>
       </Tooltip>
-      {totalBalance.eq(0) ? (
+      {noFiatValue ? (
         <p className="text-18 font-weight-500 text-white/60">...</p>
       ) : (
         <p className="text-18 font-weight-500">{budgetFormatted}</p>
