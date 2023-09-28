@@ -18,7 +18,7 @@ export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
   });
 
   return (
-    <div className="flex rounded-8 border border-emphasis">
+    <div className="flex rounded-8 border-2 border-emphasis">
       <div className="w-1/2 p-12">
         <div className="text-secondary flex items-center gap-4">
           {'ROI'}
