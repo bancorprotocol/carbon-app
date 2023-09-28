@@ -21,9 +21,9 @@ export const StrategyBlockBuySell: FC<{
   const limit = order.startRate === order.endRate;
   const testIdPrefix = `${buy ? 'buy' : 'sell'}-${limit ? 'limit' : 'range'}`;
   const active = strategy.status === 'active';
-  const { selectedFiatCurrency, getFiatValue: getFiatValueBase } =
-    useFiatCurrency(token);
-  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(otherToken);
+  const baseFiat = useFiatCurrency(token);
+  const quoteFiat = useFiatCurrency(otherToken);
+  const currency = baseFiat.selectedFiatCurrency;
 
   const prettifiedPrice = getPrice({
     order,
@@ -39,25 +39,24 @@ export const StrategyBlockBuySell: FC<{
   });
 
   const fiatStartRate = buy
-    ? getFiatValueQuote(order.startRate)
-    : getFiatValueBase(otherOrder.startRate);
+    ? quoteFiat.getFiatValue(order.startRate)
+    : baseFiat.getFiatValue(otherOrder.startRate);
 
   const fiatEndRate = buy
-    ? getFiatValueQuote(order.endRate)
-    : getFiatValueBase(otherOrder.endRate);
+    ? quoteFiat.getFiatValue(order.endRate)
+    : baseFiat.getFiatValue(otherOrder.endRate);
 
-  const fullFiatPrices = `${getFiatDisplayValue(
-    fiatStartRate,
-    selectedFiatCurrency
-  )} ${
-    !limit ? ` - ${getFiatDisplayValue(fiatEndRate, selectedFiatCurrency)}` : ''
+  const fullFiatPrices = `${getFiatDisplayValue(fiatStartRate, currency)} ${
+    !limit ? ` - ${getFiatDisplayValue(fiatEndRate, currency)}` : ''
   }`;
 
   const prettifiedBudget = prettifyNumber(order.balance, {
     abbreviate: order.balance.length > 10,
   });
-  const budget = getFiatValueQuote(buy ? order.balance : otherOrder.balance);
-  const fullFiatBudget = getFiatDisplayValue(budget, selectedFiatCurrency);
+  const balance = buy ? order.balance : otherOrder.balance;
+  const budget = quoteFiat.getFiatValue(balance);
+  const quoteHasFiatValue = quoteFiat.hasFiatValue();
+  const fullFiatBudget = getFiatDisplayValue(budget, currency);
 
   return (
     <article className={cn('flex flex-col gap-16 p-16', className)}>
@@ -72,15 +71,7 @@ export const StrategyBlockBuySell: FC<{
         {/* BUDGET */}
         <dt className="flex items-center gap-4 font-mono text-white/60">
           Budget
-          {budget.eq(0) && (
-            <Tooltip
-              sendEventOnMount={{ buy }}
-              element={`There is no ${selectedFiatCurrency} value for this token.`}
-            >
-              <WarningIcon className="h-8 w-8 text-warning-500" />
-            </Tooltip>
-          )}
-          {budget.gt(0) && (
+          {quoteHasFiatValue && (
             <Tooltip
               sendEventOnMount={{ buy }}
               element={
@@ -90,6 +81,14 @@ export const StrategyBlockBuySell: FC<{
               }
             >
               <TooltipIcon className="h-8 w-8" />
+            </Tooltip>
+          )}
+          {!quoteHasFiatValue && (
+            <Tooltip
+              sendEventOnMount={{ buy }}
+              element={`There is no ${currency} value for this token.`}
+            >
+              <WarningIcon className="h-8 w-8 text-warning-500" />
             </Tooltip>
           )}
         </dt>

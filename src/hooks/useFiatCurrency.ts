@@ -12,11 +12,15 @@ export const useFiatCurrency = (token?: Token) => {
 
   const tokenPriceQuery = useGetTokenPrice(token?.address);
 
+  /** Verify that the token has a fiat value */
+  const hasFiatValue = () => {
+    return typeof tokenPriceQuery.data?.[selectedFiatCurrency] === 'number';
+  };
+
   const getFiatValue = useMemo(() => {
     return (value: string, usd = false) => {
       const currency = usd ? availableCurrencies[0] : selectedFiatCurrency;
       const fiatValue = tokenPriceQuery.data?.[currency];
-      // TODO: return undefined instead
       if (!fiatValue) return new BigNumber(0);
       return new BigNumber(value || 0).times(fiatValue);
     };
@@ -25,6 +29,7 @@ export const useFiatCurrency = (token?: Token) => {
   return {
     ...fiatCurrency,
     useGetTokenPrice,
+    hasFiatValue,
     getFiatValue,
     getFiatAsString: (value: string) =>
       getFiatDisplayValue(getFiatValue(value), selectedFiatCurrency),

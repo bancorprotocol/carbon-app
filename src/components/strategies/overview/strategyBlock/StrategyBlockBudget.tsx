@@ -15,8 +15,8 @@ interface Props {
 export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   const baseFiat = useFiatCurrency(strategy.base);
   const quoteFiat = useFiatCurrency(strategy.quote);
-  const baseFiatBalance = baseFiat.getFiatValue(strategy.order0.balance);
-  const quoteFiatBalance = quoteFiat.getFiatValue(strategy.order1.balance);
+  const baseFiatBalance = baseFiat.getFiatValue(strategy.order1.balance);
+  const quoteFiatBalance = quoteFiat.getFiatValue(strategy.order0.balance);
   const totalBalance = baseFiatBalance.plus(quoteFiatBalance);
   const budgetFormatted = prettifyNumber(totalBalance, {
     currentCurrency: baseFiat.selectedFiatCurrency,
