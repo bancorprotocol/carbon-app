@@ -109,7 +109,7 @@ export const StrategyBlockBuySell: FC<{
 
         {/* PRICE */}
         <dt className="mt-16 flex items-center gap-4 font-mono text-white/60">
-          {limit ? 'Limit Price' : 'Price Range'}
+          {limit ? 'Limit Price' : 'Range Price'}
           <Tooltip
             sendEventOnMount={{ buy }}
             element={
