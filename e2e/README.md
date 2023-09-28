@@ -1,6 +1,11 @@
 # E2E
 
 ### Local
+Install Playwright browsers
+```shell
+yarn playwright install
+```
+
 Headless mode : 
 ```shell
 yarn e2e
@@ -50,6 +55,12 @@ await expect(first.getTestId('strategy-pair')).toHaveText('ETH/DAI');
 
 
 ## Common Errors
+
+- **Error**: `Executable doesn't exist`
+- **Solution**: run `yarn playwright install`
+- **Description**: Browsers are not installed locally yet
+
+---
 
 - **Error**: `Page is closed`
 - **Solution**: Increase timeout of test

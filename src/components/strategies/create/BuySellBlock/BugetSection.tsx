@@ -30,7 +30,6 @@ export const BudgetSection: FC<Props> = ({
 }) => {
   const inputId = useId();
   const budgetToken = buy ? quote : base;
-  const testIdPrefix = buy ? 'buy' : 'sell';
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
     new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
@@ -39,12 +38,8 @@ export const BudgetSection: FC<Props> = ({
 
   return (
     <fieldset className="flex flex-col gap-8">
-      <legend
-        className={`mb-11 flex items-center gap-6 text-14 font-weight-500`}
-      >
-        <span
-          className={`flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60`}
-        >
+      <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
           2
         </span>
         <Tooltip
