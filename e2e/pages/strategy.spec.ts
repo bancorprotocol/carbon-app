@@ -37,8 +37,8 @@ test.describe('Strategies', () => {
     // Fill Buy fields
     const buy = page.getByTestId('buy-section');
     await buy.getByTestId('input-limit').fill('1500');
-    await buy.getByTestId('input-budget').fill('5000');
-    await expect(buy.getByTestId('outcome-value')).toHaveText('3.33 ETH');
+    await buy.getByTestId('input-budget').fill('10');
+    await expect(buy.getByTestId('outcome-value')).toHaveText('0.006666 ETH');
     await expect(buy.getByTestId('outcome-quote')).toHaveText('1,500 DAI');
 
     // Fill Sell fields
@@ -76,7 +76,7 @@ test.describe('Strategies', () => {
     await expect(strategy.getByTestId('token-pair')).toHaveText('ETH/DAI');
     await expect(strategy.getByTestId('status')).toHaveText('Active');
     await expect(strategy.getByTestId('buy-limit-price')).toHaveText('1,500');
-    await expect(strategy.getByTestId('buy-limit-budget')).toHaveText('5,000');
+    await expect(strategy.getByTestId('buy-limit-budget')).toHaveText('10');
     await expect(strategy.getByTestId('sell-limit-price')).toHaveText('1,700');
     await expect(strategy.getByTestId('sell-limit-budget')).toHaveText('2');
   });
