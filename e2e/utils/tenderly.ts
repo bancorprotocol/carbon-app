@@ -1,9 +1,12 @@
+const TENDERLY_ACCOUNT = process.env['TENDERLY_ACCOUNT'];
+if (!TENDERLY_ACCOUNT) throw new Error('No TENDERLY_ACCOUNT provided in .env');
+const TENDERLY_PROJECT = process.env['TENDERLY_PROJECT'];
+if (!TENDERLY_PROJECT) throw new Error('No TENDERLY_PROJECT provided in .env');
 const TENDERLY_ACCESS_KEY = process.env['TENDERLY_ACCESS_KEY'];
-if (!TENDERLY_ACCESS_KEY) {
+if (!TENDERLY_ACCESS_KEY)
   throw new Error('No TENDERLY_ACCESS_KEY provided in .env');
-}
 
-const baseUrl = `https://api.tenderly.co/api/v1/account/bancor/project/carbon-test-forks/fork`;
+const baseUrl = `https://api.tenderly.co/api/v1/account/${TENDERLY_ACCOUNT}/project/${TENDERLY_PROJECT}/fork`;
 const headers = {
   'Content-Type': 'application/json',
   'X-Access-Key': TENDERLY_ACCESS_KEY,

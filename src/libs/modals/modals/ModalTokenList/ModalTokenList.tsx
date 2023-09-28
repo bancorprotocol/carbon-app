@@ -36,8 +36,10 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
   } = useModalTokenList({ id, data });
 
   return (
-    <ModalOrMobileSheet id={id} title={'Select Token'}>
+    <ModalOrMobileSheet id={id} title="Select Token">
       <SearchInput
+        aria-labelledby="modal-title"
+        aria-description="search by token symbol"
         autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
