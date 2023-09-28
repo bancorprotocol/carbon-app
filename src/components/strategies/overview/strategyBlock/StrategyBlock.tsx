@@ -41,7 +41,7 @@ export const StrategyBlock: FC<Props> = ({
         <div className="mr-auto flex flex-col">
           <h3 className="flex gap-6 text-18" data-testid="token-pair">
             <span>{base.symbol}</span>
-            <span className="text-secondary !text-16">/</span>
+            <span className="self-align-center text-secondary !text-16">/</span>
             <span>{quote.symbol}</span>
           </h3>
           <p className="flex items-center gap-8 text-12 text-white/60">
@@ -55,16 +55,17 @@ export const StrategyBlock: FC<Props> = ({
               </span>
             )}
             {strategy.status !== 'active' && (
-              <>
-                <span data-testid="status" className="text-red">
-                  {statusText[strategy.status]}
-                </span>
-                <Tooltip
-                  element={getTooltipTextByStatus(isExplorer, strategy.status)}
+              <Tooltip
+                element={getTooltipTextByStatus(isExplorer, strategy.status)}
+              >
+                <span
+                  className="inline-flex items-center gap-4 text-red"
+                  data-testid="status"
                 >
-                  <TooltipIcon className="h-10 w-10" />
-                </Tooltip>
-              </>
+                  {statusText.inactive}
+                  <TooltipIcon className="h-10 w-10 text-red" />
+                </span>
+              </Tooltip>
             )}
           </p>
         </div>

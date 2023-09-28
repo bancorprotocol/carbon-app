@@ -12,7 +12,6 @@ import {
   useInteractions,
   useRole,
   useTransitionStyles,
-  size,
 } from '@floating-ui/react';
 import { cn } from 'utils/helpers';
 
@@ -46,21 +45,12 @@ export const DropdownMenu: FC<Props> = ({
   const outsideState = setIsOpen !== undefined && isOpen !== undefined;
   const menuOpen = (outsideState && isOpen) || (!outsideState && open);
 
-  // By default size is the same than the reference element
-  const referenceSize = size({
-    apply({ rects, elements }) {
-      Object.assign(elements.floating.style, {
-        width: `${rects.reference.width}px`,
-      });
-    },
-  });
-
   // Get properties to calculate positioning
   const { refs, floatingStyles, context } = useFloating({
     placement: placement ?? 'bottom',
     open: menuOpen,
     onOpenChange: outsideState ? setIsOpen : setOpen,
-    middleware: [offset(offsetValue), flip(), shift(), referenceSize],
+    middleware: [offset(offsetValue), flip(), shift()],
   });
 
   // Default transition provides a fadein on enter

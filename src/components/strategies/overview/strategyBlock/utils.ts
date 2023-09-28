@@ -15,19 +15,19 @@ export const getTooltipTextByStatus = (
   if (status === 'active') {
     return isExplorer
       ? 'This strategy is currently active and ready to process trades.'
-      : 'Your strategy is active and ready.';
+      : '';
   } else if (status === 'noBudget') {
     return isExplorer
       ? 'This strategy has no associated funds and will not process trades.'
-      : 'Your strategy has no associated funds. Consider depositing funds to activate it.';
+      : 'Strategy is out of budget.';
   } else if (status === 'paused') {
     return isExplorer
       ? 'This strategy is currently paused and will not process trades.'
-      : 'Your strategy is currently paused. Edit the prices to activate it.';
+      : 'The strategy is paused. Price indicators are reset.';
   } else {
     return isExplorer
       ? 'This strategy is currently inactive and will not process trades.'
-      : 'Your strategy is currently inactive. Consider activating it with funds and rates.';
+      : 'The strategy is paused and is out of budget. Price indicators are reset.';
   }
 };
 
