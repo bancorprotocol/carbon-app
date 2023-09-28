@@ -19,6 +19,7 @@ export const DebugNotifications = () => {
             description: 'test',
             status: 'pending',
             showAlert: true,
+            testid: 'generic-test',
           })
         }
       >
@@ -34,6 +35,7 @@ export const DebugNotifications = () => {
             successTitle: 'Success',
             successDesc: 'this is a success story',
             showAlert: true,
+            testid: 'generic-success',
           })
         }
       >
@@ -49,6 +51,7 @@ export const DebugNotifications = () => {
             failedTitle: 'Failed',
             failedDesc: 'this is a failed story',
             showAlert: true,
+            testid: 'generic-failed',
           })
         }
       >

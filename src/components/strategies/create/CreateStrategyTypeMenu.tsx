@@ -11,6 +11,7 @@ import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-tra
 import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
 import { lsService } from 'services/localeStorage';
 import { useModal } from 'hooks/useModal';
+import { cn } from 'utils/helpers';
 
 const BlockIconTextDesc = ({
   icon,
@@ -112,9 +113,9 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             ({ label, svg, to, search, isRecommended }, i) => (
               <div key={`${label}-${i}`} className="relative flex flex-1">
                 {isRecommended && (
-                  <div className="absolute -top-16 left-1/2 z-10 -translate-x-1/2 rounded border-2 border-green/25 bg-darkGreen px-5 py-3 text-12 font-weight-500 text-green md:px-7 md:text-10">
+                  <span className="absolute -top-16 left-1/2 z-10 -translate-x-1/2 rounded border-2 border-green/25 bg-darkGreen px-5 py-3 text-12 font-weight-500 text-green md:px-7 md:text-10">
                     Recommended
-                  </div>
+                  </span>
                 )}
                 <Button
                   variant={'black'}
@@ -133,14 +134,15 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                     }
                   }}
                   fullWidth
-                  className={`flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10  ${
+                  className={cn(
+                    'flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10',
                     selectedStrategySettings?.search.strategyDirection ===
                       search.strategyDirection &&
-                    selectedStrategySettings?.search.strategySettings ===
-                      search.strategySettings
+                      selectedStrategySettings?.search.strategySettings ===
+                        search.strategySettings
                       ? 'border-2 !border-white/80'
                       : ''
-                  }`}
+                  )}
                 >
                   {svg}
                   <span className={'mt-10 text-14'}>{label}</span>
@@ -152,9 +154,9 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
       </m.div>
 
       <Button
-        variant={'success'}
+        variant="success"
         fullWidth
-        size={'lg'}
+        size="lg"
         disabled={!selectedStrategySettings}
         onClick={() => {
           handleClick(

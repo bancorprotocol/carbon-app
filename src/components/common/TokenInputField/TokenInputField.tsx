@@ -23,6 +23,7 @@ type Props = {
   disabled?: boolean;
   slippage?: Decimal | null;
   withoutWallet?: boolean;
+  'data-testid'?: string;
 };
 
 export const TokenInputField: FC<Props> = ({
@@ -39,6 +40,7 @@ export const TokenInputField: FC<Props> = ({
   disabled,
   slippage,
   withoutWallet,
+  'data-testid': testid,
 }) => {
   const { user } = useWeb3();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -91,6 +93,7 @@ export const TokenInputField: FC<Props> = ({
             ${isError ? 'text-red' : ''}
           `}
           disabled={disabled}
+          data-testid={testid}
         />
         <div
           className={`flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8`}

@@ -92,7 +92,7 @@ export const _ExplorerSearch: FC = () => {
         role="search"
         onSubmit={submitHandler}
         onReset={resetHandler}
-        className={cn('flex space-x-4 md:space-x-20')}
+        className="flex gap-16"
       >
         <div
           className={cn(
@@ -110,19 +110,17 @@ export const _ExplorerSearch: FC = () => {
             isInvalidAddress && 'border-red'
           )}
         >
-          <div className={'shrink-0'}>
+          <div className="shrink-0">
             <DropdownMenu
-              placement={'bottom-start'}
-              button={(onClick) => (
-                <ExplorerSearchDropdownButton onClick={onClick} />
-              )}
-              className={'mt-10 -ml-17 !px-10 !py-10'}
+              placement="bottom-start"
+              className="mt-10 -ml-17 p-10"
+              button={(attr) => <ExplorerSearchDropdownButton {...attr} />}
             >
               <ExplorerSearchDropdownItems setSearch={setSearch} />
             </DropdownMenu>
           </div>
-          <div role="separator" className={'h-20 w-1 bg-white/40'}></div>
-          <div className={'flex w-full flex-grow items-center md:relative'}>
+          <div role="separator" className="h-20 w-1 bg-white/40"></div>
+          <div className="flex w-full flex-grow items-center md:relative">
             {type === 'token-pair' && (
               <ExplorerSearchSuggestions {...suggestionProps} />
             )}
