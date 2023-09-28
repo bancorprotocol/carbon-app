@@ -31,7 +31,7 @@ export const FAUCET_TOKENS: FaucetToken[] = [
     symbol: 'DAI',
   },
   {
-    donorAccount: '0xa744a64dfd51e4fee3360f1ec1509d329047d7db',
+    donorAccount: '0xF977814e90dA44bFA03b6295A0616a897441aceC',
     tokenContract: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c',
     decimals: 18,
     symbol: 'BNT',
@@ -43,13 +43,13 @@ export const FAUCET_TOKENS: FaucetToken[] = [
     symbol: 'PARQ',
   },
   {
-    donorAccount: '0x218b95be3ed99141b0144dba6ce88807c4ad7c09',
+    donorAccount: '0xccF4429DB6322D5C611ee964527D42E5d685DD6a',
     tokenContract: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
     decimals: 8,
     symbol: 'WBTC',
   },
   {
-    donorAccount: '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8',
+    donorAccount: '0x480234599362dC7a76cd99D09738A626F6d77e5F',
     tokenContract: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
     decimals: 18,
     symbol: 'BNB',
@@ -80,7 +80,7 @@ export const FAUCET_TOKENS: FaucetToken[] = [
   },
 ];
 
-const FAUCET_AMOUNT = 100000;
+const FAUCET_AMOUNT = 1000;
 
 export const tenderlyFaucetTransferETH = async (user: string) => {
   const ethSigner = getUncheckedSigner(ETH_DONOR_ACCOUNT);
