@@ -114,8 +114,8 @@ export const StrategyBlockBuySell: FC<{
             sendEventOnMount={{ buy }}
             element={
               buy
-                ? `This is the price in which you are willing to buy ${token.symbol}.`
-                : `This is the price in which you are willing to sell ${otherToken.symbol}.`
+                ? `This is the price at which you are willing to buy ${token.symbol}.`
+                : `This is the price at which you are willing to sell ${otherToken.symbol}.`
             }
           >
             <TooltipIcon className="h-8 w-8" />

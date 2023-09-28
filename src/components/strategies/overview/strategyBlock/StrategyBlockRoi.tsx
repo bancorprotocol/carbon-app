@@ -16,6 +16,7 @@ export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
     isPercentage: true,
     approximateBelow: 0.01,
   });
+  const color = roi.gte(0) ? 'text-green' : 'text-red';
 
   return (
     <article className="flex flex-col rounded-8 border-2 border-emphasis p-16">
@@ -25,13 +26,7 @@ export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
           <IconTooltip className="h-10 w-10" />
         </h4>
       </Tooltip>
-      <p
-        className={`text-18 font-weight-500 ${
-          roiFormatted.negative ? 'text-red' : 'text-green'
-        }`}
-      >
-        {roiFormatted.value}
-      </p>
+      <p className={`text-18 font-weight-500 ${color}`}>{roiFormatted.value}</p>
     </article>
   );
 };
