@@ -27,6 +27,8 @@ jobs:
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
           VITE_CARBON_API_KEY: ${{ secrets.VITE_CARBON_API_KEY }}
           VITE_DEV_MODE: true
+          TENDERLY_ACCOUNT: bancor
+          TENDERLY_PROJECT: carbon-test-forks
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
           CI: true
           DRAFT: ${{ github.event.pull_request.draft }}
