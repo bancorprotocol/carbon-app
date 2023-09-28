@@ -99,6 +99,7 @@ export const MainMenuRightWallet: FC = () => {
               carbonEvents.navigation.navWalletClick(undefined);
               attr.onClick(e);
             }}
+            data-testid="user-wallet"
           >
             {buttonIcon}
             <span>{buttonText}</span>

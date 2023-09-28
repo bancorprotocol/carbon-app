@@ -21,6 +21,7 @@ export const StrategyBlockBuySell: FC<{
   const order = buy ? strategy.order0 : strategy.order1;
   const otherOrder = buy ? strategy.order1 : strategy.order1;
   const limit = order.startRate === order.endRate;
+  const testIdPrefix = `${buy ? 'buy' : 'sell'}-${limit ? 'limit' : 'range'}`;
   const active = strategy.status === 'active';
   const { selectedFiatCurrency, getFiatValue: getFiatValueBase } =
     useFiatCurrency(token);
@@ -110,18 +111,17 @@ export const StrategyBlockBuySell: FC<{
             element={
               <>
                 <div>
-                  {`${fullPrice} ${buy ? otherToken.symbol : token.symbol}`}
+                  {fullPrice} {buy ? otherToken.symbol : token.symbol}
                 </div>
                 <TokenPrice className="text-white/60" price={fullFiatPrices} />
               </>
             }
           >
-            <div>
-              <TokenPrice
-                price={prettifiedPrice}
-                iconSrc={buy ? otherToken.logoURI : token.logoURI}
-              />
-            </div>
+            <TokenPrice
+              price={prettifiedPrice}
+              iconSrc={buy ? otherToken.logoURI : token.logoURI}
+              data-testid={`${testIdPrefix}-price`}
+            />
           </Tooltip>
         </div>
         <div className="mb-10 flex items-center justify-between">
@@ -148,7 +148,10 @@ export const StrategyBlockBuySell: FC<{
                 </>
               }
             >
-              <div className="flex items-center gap-7">
+              <div
+                className="flex items-center gap-7"
+                data-testid={`${testIdPrefix}-budget`}
+              >
                 {prettifiedBudget}
                 <LogoImager
                   className="h-16 w-16"

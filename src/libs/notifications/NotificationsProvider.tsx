@@ -27,10 +27,13 @@ export const NotificationAlerts: FC = () => {
   }, [user, setNotifications]);
 
   return (
-    <div className={'fixed top-10 right-10 z-50'}>
+    <ul
+      className={'fixed top-10 right-10 z-50'}
+      data-testid="notification-list"
+    >
       <AnimatePresence mode={'popLayout'}>
         {alerts.map((n) => (
-          <motion.div
+          <motion.li
             key={n.id}
             layout
             variants={notificationVariants}
@@ -39,12 +42,13 @@ export const NotificationAlerts: FC = () => {
             animate="animate"
             exit="exit"
             className={'mb-20 block w-[350px] rounded-10 bg-silver px-20 py-10'}
+            data-testid={`notification-${n.testid}`}
           >
             <NotificationLine isAlert notification={n} />
-          </motion.div>
+          </motion.li>
         ))}
       </AnimatePresence>
-    </div>
+    </ul>
   );
 };
 
