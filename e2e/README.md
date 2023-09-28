@@ -1,17 +1,27 @@
 # E2E
 
 ### Local
+
 Install Playwright browsers
 ```shell
 yarn playwright install
 ```
 
-Headless mode : 
+E2E tests call Tenderly API to create a fork of mainnet at a specific blockNumber. You need to have a [Tenderly account](https://tenderly.co/).
+
+Add in your .env : 
+```bash
+TENDERLY_ACCOUNT=bancor  # account or organisation
+TENDERLY_PROJECT=carbon-test-forks
+TENDERLY_ACCESS_KEY=...
+```
+
+Run in headless mode : 
 ```shell
 yarn e2e
 ```
 
-UI mode :
+Run in UI mode :
 ```shell
 yarn e2e --ui
 ```
