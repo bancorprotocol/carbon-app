@@ -14,11 +14,11 @@ export const useFiatCurrency = (token?: Token) => {
 
   const getFiatValue = useMemo(() => {
     return (value: string, usd = false) => {
-      return new BigNumber(value || 0).times(
-        tokenPriceQuery.data?.[
-          usd ? availableCurrencies[0] : selectedFiatCurrency
-        ] || 0
-      );
+      const currency = usd ? availableCurrencies[0] : selectedFiatCurrency;
+      const fiatValue = tokenPriceQuery.data?.[currency];
+      // TODO: return undefined instead
+      if (!fiatValue) return new BigNumber(0);
+      return new BigNumber(value || 0).times(fiatValue);
     };
   }, [availableCurrencies, selectedFiatCurrency, tokenPriceQuery.data]);
 

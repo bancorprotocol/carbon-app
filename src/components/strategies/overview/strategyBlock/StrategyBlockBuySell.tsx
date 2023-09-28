@@ -2,20 +2,18 @@ import { FC } from 'react';
 import { Strategy } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
-import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as TooltipIcon } from 'assets/icons/tooltip.svg';
+import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { TokenPrice } from './TokenPrice';
-import {
-  getFiatDisplayValue,
-  prettifyNumber,
-  sanitizeNumberInput,
-} from 'utils/helpers';
+import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 import { getPrice } from './utils';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
   buy?: boolean;
-}> = ({ strategy, buy = false }) => {
+  className?: string;
+}> = ({ strategy, buy = false, className }) => {
   const token = buy ? strategy.base : strategy.quote;
   const otherToken = buy ? strategy.quote : strategy.base;
   const order = buy ? strategy.order0 : strategy.order1;
@@ -55,10 +53,6 @@ export const StrategyBlockBuySell: FC<{
     !limit ? ` - ${getFiatDisplayValue(fiatEndRate, selectedFiatCurrency)}` : ''
   }`;
 
-  const fullBudget = sanitizeNumberInput(
-    buy ? order.balance : otherOrder.balance,
-    buy ? token.decimals : otherToken.decimals
-  );
   const prettifiedBudget = prettifyNumber(order.balance, {
     abbreviate: order.balance.length > 10,
   });
@@ -66,33 +60,57 @@ export const StrategyBlockBuySell: FC<{
   const fullFiatBudget = getFiatDisplayValue(budget, selectedFiatCurrency);
 
   return (
-    <div
-      className={`rounded-8 border border-emphasis p-12 ${
-        active ? '' : 'opacity-35'
-      }`}
-    >
-      <div className="flex items-center gap-6">
-        <Tooltip
-          sendEventOnMount={{ buy }}
-          element={
-            buy
-              ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interacts with your buy order, it will fill up your "Sell" order with tokens.`
-              : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interacts with your sell order, it will fill up your "Buy" order with tokens.`
-          }
+    <article className={cn('flex flex-col gap-16 p-16', className)}>
+      {buy ? (
+        <h4 className="text-16 font-weight-500 text-green">Buy</h4>
+      ) : (
+        <h4 className="text-16 font-weight-500 text-red">Sell</h4>
+      )}
+      <dl
+        className={`flex flex-col gap-8 text-12 ${active ? '' : 'opacity-50'}`}
+      >
+        {/* BUDGET */}
+        <dt className="flex items-center gap-4 font-mono text-white/60">
+          Budget
+          {budget.eq(0) && (
+            <Tooltip
+              sendEventOnMount={{ buy }}
+              element={`There is no ${selectedFiatCurrency} value for this token.`}
+            >
+              <WarningIcon className="h-8 w-8 text-warning-500" />
+            </Tooltip>
+          )}
+          {budget.gt(0) && (
+            <Tooltip
+              sendEventOnMount={{ buy }}
+              element={
+                buy
+                  ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
+                  : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`
+              }
+            >
+              <TooltipIcon className="h-8 w-8" />
+            </Tooltip>
+          )}
+        </dt>
+        <dd
+          className="inline-flex items-center gap-4"
+          data-testid={`${testIdPrefix}-budget`}
         >
-          <div className="flex items-center gap-6">
-            {buy ? 'Buy' : 'Sell'}
-            <LogoImager
-              className="h-16 w-16"
-              src={buy ? token.logoURI : otherToken.logoURI}
-              alt="token"
-            />
-          </div>
-        </Tooltip>
-      </div>
-      <hr className="my-12 border-silver dark:border-emphasis" />
-      <div>
-        <div className="mb-5 flex items-center justify-between">
+          <LogoImager
+            className="h-16 w-16"
+            src={otherToken.logoURI}
+            alt="token"
+          />
+          {prettifiedBudget}
+        </dd>
+        <dd className="font-mono text-white/60">
+          {budget.eq(0) ? '...' : fullFiatBudget}
+        </dd>
+
+        {/* PRICE */}
+        <dt className="mt-16 flex items-center gap-4 font-mono text-white/60">
+          {limit ? 'Limit Price' : 'Price Range'}
           <Tooltip
             sendEventOnMount={{ buy }}
             element={
@@ -101,18 +119,16 @@ export const StrategyBlockBuySell: FC<{
                 : `This is the price in which you are willing to sell ${otherToken.symbol}.`
             }
           >
-            <div className={`${buy ? 'text-green' : 'text-red'}`}>
-              {limit ? 'Limit Price' : 'Price Range'}
-            </div>
+            <TooltipIcon className="h-8 w-8" />
           </Tooltip>
+        </dt>
+        <dd>
           <Tooltip
             sendEventOnMount={{ buy }}
             maxWidth={430}
             element={
               <>
-                <div>
-                  {fullPrice} {buy ? otherToken.symbol : token.symbol}
-                </div>
+                {fullPrice} {buy ? otherToken.symbol : token.symbol}
                 <TokenPrice className="text-white/60" price={fullFiatPrices} />
               </>
             }
@@ -123,47 +139,8 @@ export const StrategyBlockBuySell: FC<{
               data-testid={`${testIdPrefix}-price`}
             />
           </Tooltip>
-        </div>
-        <div className="mb-10 flex items-center justify-between">
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={
-              buy
-                ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
-                : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`
-            }
-          >
-            <div className="text-secondary !text-16">Budget</div>
-          </Tooltip>
-          <div className="flex gap-7">
-            <Tooltip
-              sendEventOnMount={{ buy }}
-              element={
-                <>
-                  <div>{`${fullBudget} ${otherToken.symbol}`}</div>
-                  <TokenPrice
-                    className="text-white/60"
-                    price={fullFiatBudget}
-                  />
-                </>
-              }
-            >
-              <div
-                className="flex items-center gap-7"
-                data-testid={`${testIdPrefix}-budget`}
-              >
-                {prettifiedBudget}
-                <LogoImager
-                  className="h-16 w-16"
-                  src={otherToken.logoURI}
-                  alt="token"
-                />
-              </div>
-            </Tooltip>
-          </div>
-        </div>
-        <BuySellPriceRangeIndicator buy={buy} limit={limit} />
-      </div>
-    </div>
+        </dd>
+      </dl>
+    </article>
   );
 };

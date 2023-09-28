@@ -30,8 +30,17 @@ export const StrategyBlock: FC<Props> = ({
       <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
       <StrategyBlockRoi roi={strategy.roi} />
       <StrategyBlockBudget strategy={strategy} />
-      <StrategyBlockBuySell buy strategy={strategy} />
-      <StrategyBlockBuySell strategy={strategy} />
+      <div className="col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] rounded-8 border-2 border-emphasis">
+        <StrategyBlockBuySell
+          strategy={strategy}
+          buy
+          className="border-r-2 border-emphasis"
+        />
+        <StrategyBlockBuySell strategy={strategy} />
+        <div className="col-start-1 col-end-3 border-t-2 border-emphasis">
+          {/* Chart goes here */}
+        </div>
+      </div>
     </m.li>
   );
 };

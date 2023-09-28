@@ -52,7 +52,7 @@ export const getFiatDisplayValue = (
   fiatValue: BigNumber | string | number,
   currentCurrency: FiatSymbol
 ) => {
-  return `${prettifyNumber(fiatValue, { currentCurrency })}`;
+  return prettifyNumber(fiatValue, { currentCurrency });
 };
 
 const prettifyNumberAbbreviateFormat: numbro.Format = {
