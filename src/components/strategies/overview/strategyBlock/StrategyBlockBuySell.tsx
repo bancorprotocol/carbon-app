@@ -76,8 +76,8 @@ export const StrategyBlockBuySell: FC<{
           sendEventOnMount={{ buy }}
           element={
             buy
-              ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interact with your buy order, it will fill up your "Sell" order with tokens.`
-              : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interact with your sell order, it will fill up your "Buy" order with tokens.`
+              ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interacts with your buy order, it will fill up your "Sell" order with tokens.`
+              : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interacts with your sell order, it will fill up your "Buy" order with tokens.`
           }
         >
           <div className="flex items-center gap-6">
