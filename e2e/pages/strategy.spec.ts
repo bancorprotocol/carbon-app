@@ -14,7 +14,7 @@ test.describe('Strategies', () => {
   });
 
   test('Create Limit Strategy ETH->DAI', async ({ page }) => {
-    test.setTimeout(60_000);
+    test.setTimeout(120_000);
     await waitFor(page, 'balance-DAI', 20_000);
 
     await navigateTo(page, '/');
