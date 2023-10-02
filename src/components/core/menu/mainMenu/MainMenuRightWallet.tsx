@@ -8,6 +8,7 @@ import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
 import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
 import { ReactComponent as IconWalletConnectLogo } from 'assets/logos/walletConnect.svg';
 import { Button } from 'components/common/button';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
 
@@ -16,7 +17,7 @@ import { getConnection } from 'libs/web3/web3.utils';
 import { FC, useMemo, useEffect } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
-import { shortenString } from 'utils/helpers';
+import { cn, shortenString } from 'utils/helpers';
 
 const iconProps = { className: 'w-20' };
 
@@ -98,19 +99,23 @@ export const MainMenuRightWallet: FC = () => {
     return (
       <DropdownMenu
         placement="bottom-end"
-        className="rounded-[10px] py-8 px-8"
-        button={(onClick) => (
-          <Button
-            variant={buttonVariant}
-            onClick={() => {
+        className="rounded-[10px] p-8"
+        button={(attr) => (
+          <button
+            {...attr}
+            className={cn(
+              buttonStyles({ variant: buttonVariant }),
+              'flex items-center space-x-10 pl-20'
+            )}
+            onClick={(e) => {
               carbonEvents.navigation.navWalletClick(undefined);
-              onClick();
+              attr.onClick(e);
             }}
-            className={'flex items-center space-x-10 pl-20'}
+            data-testid="user-wallet"
           >
             {buttonIcon}
             <span>{buttonText}</span>
-          </Button>
+          </button>
         )}
       >
         <div className={'w-[180px] space-y-10 font-weight-400 text-white'}>

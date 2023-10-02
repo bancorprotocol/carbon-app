@@ -15,6 +15,7 @@ export interface Notification {
   failedDesc?: string;
   showAlert?: boolean;
   nonPersistent?: boolean;
+  testid: string;
 }
 
 export type DispatchNotification = <T extends keyof NotificationSchema>(

@@ -1,12 +1,21 @@
 import { PairLogoName } from 'components/common/PairLogoName';
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  FC,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
-import { CategoryButtonWithCounter } from 'libs/modals/modals/common/CategoryButtonWithCounter';
+import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 import { useStore } from 'store';
+import { ChooseTokenCategory } from '../ModalTokenList/ModalTokenListContent';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -61,20 +70,28 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     [favoritesMap]
   );
 
+  const selectCatergory = (e: FormEvent<HTMLFieldSetElement>) => {
+    if (e.target instanceof HTMLInputElement) {
+      setSelectedList(e.target.value as ChooseTokenCategory);
+    }
+  };
+
   return (
     <div>
-      <div className={'my-20 grid w-full grid-cols-3'}>
-        {categories.map((category, i) => (
-          <CategoryButtonWithCounter
+      <fieldset
+        aria-label="Filter tokens"
+        className="my-20 grid w-full grid-cols-3 px-4"
+        onChange={selectCatergory}
+      >
+        {categories.map((category) => (
+          <CategoryWithCounter
             key={category}
             category={category}
             numOfItemsInCategory={tradePairs[category].length}
             isActive={category === selectedList}
-            setSelectedList={setSelectedList}
-            categoryIndex={i}
           />
         ))}
-      </div>
+      </fieldset>
 
       <div
         id={'bodyScrollTarget'}

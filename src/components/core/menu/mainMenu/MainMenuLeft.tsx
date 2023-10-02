@@ -10,7 +10,11 @@ export const MainMenuLeft: FC = () => {
   const pathname = useLocation().current.pathname;
 
   return (
-    <nav aria-label="Main" className={'flex items-center space-x-24'}>
+    <nav
+      className="flex items-center space-x-24"
+      aria-label="Main"
+      data-testid="main-nav"
+    >
       <Link
         to={PathNames.strategies}
         onClick={() => carbonEvents.navigation.navHomeClick(undefined)}

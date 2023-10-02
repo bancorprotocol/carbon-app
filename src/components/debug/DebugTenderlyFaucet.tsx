@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { config } from 'services/web3/config';
 import { Button } from 'components/common/button';
 import { QueryKey } from 'libs/queries';
+import { FormEvent } from 'react';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -23,7 +24,8 @@ export const DebugTenderlyFaucet = () => {
   const queryClient = useQueryClient();
   const queries = useGetTokenBalances(TOKENS);
 
-  const handleOnClick = async () => {
+  const handleOnSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     if (!user) {
       console.error('user is undefined');
       return;
@@ -34,35 +36,38 @@ export const DebugTenderlyFaucet = () => {
       queryKey: QueryKey.balance(user, config.tokens.ETH),
     });
 
-    for await (const tkn of FAUCET_TOKENS) {
-      try {
-        await tenderlyFaucetTransferTKN(tkn, user);
-        await queryClient.invalidateQueries({
-          queryKey: QueryKey.balance(user, tkn.tokenContract),
-        });
-      } catch (e) {
-        console.error('faucet failed for ', tkn.tokenContract, e);
-      }
+    for (const tkn of FAUCET_TOKENS) {
+      console.log('Token', tkn);
+      tenderlyFaucetTransferTKN(tkn, user)
+        .then(() => {
+          const queryKey = QueryKey.balance(user, tkn.tokenContract);
+          return queryClient.invalidateQueries({ queryKey });
+        })
+        .catch((e) =>
+          console.error('faucet failed for ', tkn.tokenContract, e)
+        );
     }
   };
 
   return (
-    <div
-      className={
-        'bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20'
-      }
+    <form
+      className="bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20"
+      onSubmit={handleOnSubmit}
     >
       <h2>Tenderly Faucet</h2>
 
-      <div>
+      <ul>
         {queries.map((t, i) => (
-          <div key={i}>
-            {t.data} {TOKENS[i].symbol}
-          </div>
+          <li key={i}>
+            {!!t.data && t.data !== '0' && (
+              <span data-testid={`balance-${TOKENS[i].symbol}`}>{t.data}</span>
+            )}
+            <span> {TOKENS[i].symbol}</span>
+          </li>
         ))}
-      </div>
+      </ul>
 
-      <Button onClick={handleOnClick}>Get money</Button>
-    </div>
+      <Button type="submit">Get money</Button>
+    </form>
   );
 };
