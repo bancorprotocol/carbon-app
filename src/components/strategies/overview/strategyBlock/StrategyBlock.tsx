@@ -7,6 +7,7 @@ import { cn } from 'utils/helpers';
 import { StrategyBlockRoi } from './StrategyBlockRoi';
 import { StrategyBlockBudget } from './StrategyBlockBudget';
 import { StrategyBlockHeader } from './StrategyBlockHeader';
+import { StrategyGraph } from './StrategyGraph';
 
 interface Props {
   strategy: Strategy;
@@ -38,7 +39,7 @@ export const StrategyBlock: FC<Props> = ({
         />
         <StrategyBlockBuySell strategy={strategy} />
         <div className="col-start-1 col-end-3 border-t-2 border-emphasis">
-          {/* Chart goes here */}
+          <StrategyGraph />
         </div>
       </div>
     </m.li>
