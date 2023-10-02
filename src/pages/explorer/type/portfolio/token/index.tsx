@@ -1,11 +1,11 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
-import { useExplorer } from 'components/explorer';
 import { PathNames } from 'libs/routing';
 import { useExplorerParams } from 'components/explorer/useExplorerParams';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const ExplorerTypePortfolioTokenPage = () => {
-  const { strategies, isLoading } = useExplorer();
   const { address, type, slug } = useExplorerParams();
+  const { strategies, isLoading } = useStrategyCtx();
 
   if (!address) return <div>error no address provided</div>;
 
