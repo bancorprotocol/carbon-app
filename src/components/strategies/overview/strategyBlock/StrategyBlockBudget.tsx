@@ -26,7 +26,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   return (
     <article className="flex flex-col rounded-8 border-2 border-emphasis p-16">
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-secondary flex items-center gap-4 font-mono">
+        <h4 className="text-secondary flex items-center gap-4 font-mono !text-12">
           Total Budget
           <IconTooltip className="h-10 w-10" />
         </h4>
@@ -47,7 +47,6 @@ const TooltipContent: FC = () => {
     <p>
       Sum of the {fiatSymbol} value of the token budgets.&nbsp;
       <Link to={externalLinks.roiLearnMore} className="text-green">
-        <span>Learn how ROI is calculated.</span>
         <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
       </Link>
     </p>

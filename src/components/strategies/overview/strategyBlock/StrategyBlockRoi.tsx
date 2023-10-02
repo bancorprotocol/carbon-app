@@ -21,7 +21,7 @@ export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
   return (
     <article className="flex flex-col rounded-8 border-2 border-emphasis p-16">
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-secondary flex items-center gap-4 font-mono">
+        <h4 className="text-secondary flex items-center gap-4 font-mono !text-12">
           ROI
           <IconTooltip className="h-10 w-10" />
         </h4>
@@ -34,7 +34,7 @@ export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
 const TooltipContent: FC<{}> = () => (
   <>
     <span className="align-middle">
-      Total percentage returns of the strategy from its creation.
+      Total percentage returns of the strategy from its creation.&nbsp;
     </span>
     <Link to={externalLinks.roiLearnMore} className="text-green">
       <span className="align-middle">Learn how ROI is calculated.</span>

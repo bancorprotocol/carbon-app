@@ -92,24 +92,36 @@ export const StrategyBlockBuySell: FC<{
             </Tooltip>
           )}
         </dt>
-        <dd
-          className="inline-flex items-center gap-4"
-          data-testid={`${testIdPrefix}-budget`}
-        >
-          <LogoImager
-            className="h-16 w-16"
-            src={otherToken.logoURI}
-            alt="token"
-          />
-          {prettifiedBudget}
+        <dd data-testid={`${testIdPrefix}-budget`}>
+          <Tooltip
+            element={
+              <span className="inline-flex items-center gap-4">
+                <LogoImager
+                  className="h-16 w-16"
+                  src={otherToken.logoURI}
+                  alt="token"
+                />
+                {order.balance.toString()}
+              </span>
+            }
+          >
+            <span className="inline-flex items-center gap-4">
+              <LogoImager
+                className="h-16 w-16"
+                src={otherToken.logoURI}
+                alt="token"
+              />
+              {prettifiedBudget}
+            </span>
+          </Tooltip>
         </dd>
         <dd className="font-mono text-white/60">
-          {budget.eq(0) ? '...' : fullFiatBudget}
+          {quoteHasFiatValue ? fullFiatBudget : '...'}
         </dd>
 
         {/* PRICE */}
         <dt className="mt-16 flex items-center gap-4 font-mono text-white/60">
-          {limit ? 'Limit Price' : 'Range Price'}
+          Price
           <Tooltip
             sendEventOnMount={{ buy }}
             element={
