@@ -36,7 +36,7 @@ export const ExplorerTabs = () => {
   ];
 
   return (
-    <div className={'flex items-center justify-between'}>
+    <div className={'flex items-center justify-between gap-16'}>
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
       {aboveBreakpoint('md') &&
         pathname === PathNames.explorerOverview(type, slug!) && (

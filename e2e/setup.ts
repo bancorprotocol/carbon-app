@@ -19,9 +19,6 @@ async function globalSetup(config: FullConfig) {
   const fork = await createFork(forkConfig);
   process.env['TENDERLY_FORK_ID'] = fork.id;
   const rpcUrl = forkRpcUrl(fork.id);
-  // Binance address
-  const imposter = '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503';
-
   // On each browser, fill the Debug form and save localStorage in storageState
   const setupProjects = config.projects.map(async (project) => {
     if (!(project.name in browsers)) return;
@@ -36,16 +33,12 @@ async function globalSetup(config: FullConfig) {
     await page.getByTestId('unchecked-signer').click();
     await page.getByTestId('save-rpc').click();
     await page.waitForURL(`${baseURL}/debug`);
-
-    // SET Imposter Account
-    await page.getByLabel('Imposter Account').fill(imposter);
-    await page.getByTestId('save-imposter').click();
-
     await page.context().storageState({ path: storageState as string });
     await browser.close();
   });
   await Promise.all(setupProjects);
   console.timeEnd('Fork is setup');
+  console.log('RPC URL:', rpcUrl);
 }
 
 export default globalSetup;

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useId } from 'react';
 import { Notification, NotificationStatus } from 'libs/notifications/types';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTimes } from 'assets/icons/times.svg';
@@ -59,6 +59,7 @@ export const NotificationLine: FC<{
   notification: Notification;
   isAlert?: boolean;
 }> = ({ notification, isAlert }) => {
+  const titleId = useId();
   const { removeNotification, dismissAlert } = useNotifications();
 
   const handleCloseClick = () => {
@@ -76,12 +77,16 @@ export const NotificationLine: FC<{
   );
 
   return (
-    <div className="flex gap-16">
+    <article aria-labelledby={titleId} className="flex gap-16">
       <div className="self-center">{StatusIcon(notification.status)}</div>
       <div className="w-full">
-        {getTitleByStatus(notification)}
+        <h3 id={titleId} data-testid="notif-title">
+          {getTitleByStatus(notification)}
+        </h3>
         <div className="text-14 text-charcoal/80 dark:text-white/80">
-          <div>{getDescriptionByStatus(notification)}</div>
+          <p data-testid="notif-description">
+            {getDescriptionByStatus(notification)}
+          </p>
           {notification.txHash && (
             <Link
               to={getExplorerLink('tx', notification.txHash)}
@@ -101,6 +106,6 @@ export const NotificationLine: FC<{
           {isAlert ? 'Close' : 'Clear'}
         </button>
       </div>
-    </div>
+    </article>
   );
 };

@@ -23,9 +23,10 @@ export const StrategyBlock: FC<Props> = ({
   isExplorer,
 }) => {
   const [manage, setManage] = useState(false);
+  const { base, quote } = strategy;
   const showBudgetWarning = useBudgetWarning(
-    strategy.base,
-    strategy.quote,
+    base,
+    quote,
     strategy.order0.balance,
     strategy.order1.balance
   );
@@ -39,21 +40,19 @@ export const StrategyBlock: FC<Props> = ({
         className
       )}
     >
-      <div className="flex justify-between">
+      <header className="flex justify-between">
         <div className={'flex space-x-10'}>
           <TokensOverlap
             // TODO fix token logo classes
             className="h-40 w-40"
-            tokens={[strategy.base, strategy.quote]}
+            tokens={[base, quote]}
           />
           <div>
-            {
-              <div className="flex gap-6">
-                <span>{strategy.base.symbol}</span>
-                <div className="text-secondary !text-16">/</div>
-                <span>{strategy.quote.symbol}</span>
-              </div>
-            }
+            <h3 className="flex gap-6" data-testid="token-pair">
+              <span>{base.symbol}</span>
+              <span className="text-secondary !text-16">/</span>
+              <span>{quote.symbol}</span>
+            </h3>
             <div className="text-secondary flex gap-10">
               ID: {strategy.idDisplay}
               <div className="flex gap-10">
@@ -61,9 +60,10 @@ export const StrategyBlock: FC<Props> = ({
                   element={getTooltipTextByStatus(isExplorer, strategy.status)}
                 >
                   <span
-                    className={`${
+                    className={
                       strategy.status === 'active' ? 'text-green' : 'text-red'
-                    } `}
+                    }
+                    data-testid="status"
                   >
                     {statusText[strategy.status]}
                   </span>
@@ -75,7 +75,7 @@ export const StrategyBlock: FC<Props> = ({
             </div>
           </div>
         </div>
-      </div>
+      </header>
       <StrategyBlockRoi roi={strategy.roi} />
       <StrategyBlockBuySell buy strategy={strategy} />
       <StrategyBlockBuySell strategy={strategy} />

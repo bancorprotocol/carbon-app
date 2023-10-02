@@ -1,16 +1,33 @@
-import { FC, ReactNode, useState } from 'react';
-import { Placement } from '@popperjs/core';
-import { useTooltip } from 'libs/tooltip';
-import { m, Variants } from 'libs/motion';
-import { useOutsideClick } from 'hooks/useOutsideClick';
+import { Dispatch, FC, MouseEvent, ReactNode, useId, useState } from 'react';
+import {
+  Placement,
+  FloatingFocusManager,
+  FloatingPortal,
+  flip,
+  offset,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useRole,
+  useTransitionStyles,
+  size,
+} from '@floating-ui/react';
+import { cn } from 'utils/helpers';
+
+export interface MenuButtonProps {
+  onClick: (e: MouseEvent) => void;
+}
 
 type Props = {
-  button: (onClick: () => void) => ReactNode;
+  button: (attr: MenuButtonProps) => ReactNode;
   children: ReactNode;
   isOpen?: boolean;
-  setIsOpen?: (open: boolean) => void;
+  setIsOpen?: Dispatch<boolean>;
   className?: string;
   placement?: Placement;
+  offset?: number;
 };
 
 export const DropdownMenu: FC<Props> = ({
@@ -20,55 +37,66 @@ export const DropdownMenu: FC<Props> = ({
   setIsOpen,
   placement,
   className = '',
+  offset: offsetValue = 8,
 }) => {
-  const outsideState = setIsOpen !== undefined && isOpen !== undefined;
+  const tooltipId = useId();
 
-  const { itemRef, tooltipRef, styles } = useTooltip({
-    placement,
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [0, 8],
-        },
-      },
-    ],
-  });
-
+  // Open can be managed by the parent or inside this component
   const [open, setOpen] = useState(false);
-  useOutsideClick(itemRef, () =>
-    outsideState ? setIsOpen(false) : setOpen(false)
-  );
+  const outsideState = setIsOpen !== undefined && isOpen !== undefined;
   const menuOpen = (outsideState && isOpen) || (!outsideState && open);
 
-  return (
-    <m.div
-      ref={itemRef}
-      initial={false}
-      animate={menuOpen ? 'open' : 'closed'}
-      className={'relative'}
-    >
-      {button(() => {
-        if (outsideState) setIsOpen(!isOpen);
-        else setOpen(!open);
-      })}
-      <m.div
-        ref={tooltipRef}
-        className={`z-30 min-w-[200px] rounded border border-b-lightGrey px-24 py-16 shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-emphasis ${className}`}
-        variants={menuVariants}
-        style={{ ...styles.popper, pointerEvents: menuOpen ? 'auto' : 'none' }}
-      >
-        {children}
-      </m.div>
-    </m.div>
-  );
-};
+  // By default size is the same than the reference element
+  const referenceSize = size({
+    apply({ rects, elements }) {
+      Object.assign(elements.floating.style, {
+        width: `${rects.reference.width}px`,
+      });
+    },
+  });
 
-const menuVariants: Variants = {
-  open: {
-    opacity: 1,
-  },
-  closed: {
-    opacity: 0,
-  },
+  // Get properties to calculate positioning
+  const { refs, floatingStyles, context } = useFloating({
+    placement: placement ?? 'bottom',
+    open: menuOpen,
+    onOpenChange: outsideState ? setIsOpen : setOpen,
+    middleware: [offset(offsetValue), flip(), shift(), referenceSize],
+  });
+
+  // Default transition provides a fadein on enter
+  const { isMounted, styles: transition } = useTransitionStyles(context);
+
+  // Generate props to manage reference button & floating element
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    useClick(context),
+    useDismiss(context),
+    useRole(context),
+  ]);
+
+  const buttonProps = getReferenceProps({ ref: refs.setReference }) as any;
+
+  return (
+    <>
+      {button(buttonProps)}
+      <FloatingPortal>
+        {isMounted && menuOpen && (
+          <FloatingFocusManager context={context} modal={false}>
+            <div
+              id={tooltipId}
+              ref={refs.setFloating}
+              className={cn(
+                // z-index is above header/footer
+                `z-50 min-w-[200px] rounded border border-b-lightGrey shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-emphasis`,
+                className
+              )}
+              style={{ ...floatingStyles, ...transition }}
+              {...getFloatingProps()}
+            >
+              {children}
+            </div>
+          </FloatingFocusManager>
+        )}
+      </FloatingPortal>
+    </>
+  );
 };

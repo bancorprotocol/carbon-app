@@ -9,6 +9,7 @@ export type ModalProps = {
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   onClose?: (id: string) => void;
+  'data-testid'?: string;
 };
 
 export type TModals = {

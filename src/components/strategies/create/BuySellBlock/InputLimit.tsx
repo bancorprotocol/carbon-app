@@ -28,6 +28,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   buy = false,
 }) => {
   const inputId = useId();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const errorMessage = 'Price must be greater than 0';
     +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
@@ -71,6 +72,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
             ${error ? 'text-red' : ''}
           `}
+          data-testid="input-limit"
         />
         <p className="flex flex-wrap items-center gap-8">
           <span className="break-all font-mono text-12 text-white/60">
@@ -86,7 +88,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className={`flex items-center gap-10 font-mono text-12 text-red`}
+          className="flex items-center gap-10 font-mono text-12 text-red"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">{error}</span>
