@@ -1,4 +1,3 @@
-import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useExplorerParams } from './useExplorerParams';
 import { useLocation } from '@tanstack/react-location';
 import { PathNames } from 'libs/routing';
@@ -12,7 +11,6 @@ import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilte
 import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const ExplorerTabs = () => {
-  const { aboveBreakpoint } = useBreakpoints();
   const { strategies } = useStrategyCtx();
   const { slug, type } = useExplorerParams();
   const {
@@ -36,12 +34,11 @@ export const ExplorerTabs = () => {
   ];
 
   return (
-    <div className={'flex items-center justify-between gap-16'}>
+    <div className="flex items-center justify-between gap-16">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-      {aboveBreakpoint('md') &&
-        pathname === PathNames.explorerOverview(type, slug!) && (
-          <StrategyFilterSort />
-        )}
+      {pathname === PathNames.explorerOverview(type, slug!) && (
+        <StrategyFilterSort />
+      )}
     </div>
   );
 };
