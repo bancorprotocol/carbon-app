@@ -1,13 +1,11 @@
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
-import { useGetUserStrategies } from 'libs/queries';
+import { useStrategyCtx } from 'hooks/useStrategies';
 import { PathNames, useNavigate } from 'libs/routing';
-import { useWeb3 } from 'libs/web3';
 
 export const StrategiesPortfolioPage = () => {
-  const { user } = useWeb3();
-  const strategiesQuery = useGetUserStrategies({ user });
+  const { strategies, isLoading } = useStrategyCtx();
   const navigate = useNavigate();
 
   const onRowClick = (row: Row<PortfolioData>) =>
@@ -18,8 +16,8 @@ export const StrategiesPortfolioPage = () => {
 
   return (
     <PortfolioAllTokens
-      strategies={strategiesQuery.data}
-      isLoading={strategiesQuery.isLoading}
+      strategies={strategies}
+      isLoading={isLoading}
       getHref={getHref}
       onRowClick={onRowClick}
     />

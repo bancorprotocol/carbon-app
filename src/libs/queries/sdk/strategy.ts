@@ -151,7 +151,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
       if (!user || !isValidAddres || isZeroAddress) return [];
 
       const strategies = await carbonSDK.getUserStrategies(user);
-      return await buildStrategiesHelper({
+      return buildStrategiesHelper({
         strategies,
         getTokenById,
         importToken,
