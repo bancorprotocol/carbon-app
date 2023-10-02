@@ -35,15 +35,15 @@ import {
   useFiatCurrencyStore,
 } from 'store/useFiatCurrencyStore';
 import {
-  defaultStrategiesStore,
-  StrategiesStore,
-  useStrategiesStore,
-} from './useStrategiesStore';
-import {
   defaultOrderBookSettingsStore,
   OrderBookSettingsStore,
   useOrderBookSettingsStore,
 } from 'store/useOrderBookSettingsStore';
+import {
+  defaultStrategyToEdit,
+  StrategyToEditStore,
+  useStrategyToEdit,
+} from './useStrategyToEdit';
 
 // ********************************** //
 // STORE CONTEXT
@@ -54,7 +54,6 @@ interface StoreContext {
   setCountryBlocked: (value: boolean | null) => void;
   sdk: SDKStore;
   tokens: TokensStore;
-  strategies: StrategiesStore;
   notifications: NotificationsStore;
   modals: ModalStore;
   trade: {
@@ -68,6 +67,7 @@ interface StoreContext {
   setInnerHeight: (value: number) => void;
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
+  strategies: StrategyToEditStore;
 }
 
 const defaultValue: StoreContext = {
@@ -75,7 +75,6 @@ const defaultValue: StoreContext = {
   setCountryBlocked: () => {},
   sdk: defaultSDKStore,
   tokens: defaultTokensStore,
-  strategies: defaultStrategiesStore,
   notifications: defaultNotificationsStore,
   modals: defaultModalStore,
   trade: {
@@ -89,6 +88,7 @@ const defaultValue: StoreContext = {
   setInnerHeight: () => {},
   selectedWallet: null,
   setSelectedWallet: () => {},
+  strategies: defaultStrategyToEdit,
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -114,14 +114,13 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const modals = useModalStore();
   const tokens = useTokensStore();
   const fiatCurrency = useFiatCurrencyStore();
-  const strategies = useStrategiesStore();
+  const strategies = useStrategyToEdit();
 
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
     sdk,
     tokens,
-    strategies,
     notifications,
     modals,
     trade: {
@@ -135,6 +134,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setInnerHeight,
     selectedWallet,
     setSelectedWallet,
+    strategies,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;
