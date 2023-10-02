@@ -32,3 +32,8 @@ yarn-error.log*
 
 # typechain
 /src/abis/types
+
+# e2e
+e2e/results
+e2e/storage.json
+playwright-report

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FocusEvent } from 'react';
+import { ChangeEvent, FC, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
@@ -27,6 +27,8 @@ export const InputLimit: FC<InputLimitProps> = ({
   marketPricePercentage,
   buy = false,
 }) => {
+  const inputId = useId();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const errorMessage = 'Price must be greater than 0';
     +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
@@ -43,49 +45,55 @@ export const InputLimit: FC<InputLimitProps> = ({
     setPrice(sanitizeNumberInput(e.target.value));
   };
 
-  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
-    e.target.select();
-  };
-
   const { getFiatAsString } = useFiatCurrency(token);
   const fiatAsString = getFiatAsString(price);
 
   return (
-    <div>
+    <>
       <div
-        className={`${
-          error && 'border-red/50 text-red'
-        } bg-body flex flex-col items-end rounded-16 border-2 border-black p-16`}
+        className={`
+          bg-body flex cursor-text flex-col rounded-16 border-2 p-16
+          focus-within:border-white/50
+          ${error ? '!border-red/50' : 'border-black'} 
+        `}
+        onClick={() => document.getElementById(inputId)?.focus()}
       >
         <input
-          type={'text'}
+          id={inputId}
+          type="text"
           pattern={decimalNumberValidationRegex}
           inputMode="decimal"
           value={price}
           onChange={handleChange}
-          onFocus={handleFocus}
+          onFocus={(e) => e.target.select()}
+          aria-label="Enter Price"
           placeholder="Enter Price"
-          className={
-            'mb-5 w-full bg-transparent text-right font-mono text-18 font-weight-500 focus:outline-none'
-          }
+          className={`
+            mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
+            ${error ? 'text-red' : ''}
+          `}
+          data-testid="input-limit"
         />
-        <div className="flex items-center gap-10">
-          <div className="break-all font-mono text-12 text-white/60">
+        <p className="flex flex-wrap items-center gap-8">
+          <span className="break-all font-mono text-12 text-white/60">
             {fiatAsString}
-          </div>
+          </span>
           <MarketPriceIndication
             marketPricePercentage={marketPricePercentage.price}
           />
-        </div>
+        </p>
       </div>
-      <div
-        className={`mt-10 flex h-16 items-center gap-10 text-left font-mono text-12 text-red ${
-          !error ? 'invisible' : ''
-        }`}
-      >
-        <IconWarning className="h-12 w-12" />
-        {error ? error : ''}
-      </div>
-    </div>
+      {error && (
+        <output
+          htmlFor={inputId}
+          role="alert"
+          aria-live="polite"
+          className="flex items-center gap-10 font-mono text-12 text-red"
+        >
+          <IconWarning className="h-12 w-12" />
+          <span className="flex-1">{error}</span>
+        </output>
+      )}
+    </>
   );
 };

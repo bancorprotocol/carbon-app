@@ -9,7 +9,7 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { Strategy, StrategyStatus } from 'libs/queries';
+import { Strategy } from 'libs/queries';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { useStore } from 'store';
 import { m } from 'libs/motion';
@@ -50,10 +50,10 @@ export const _StrategyContent: FC<Props> = ({
   const searchSlug = toPairSlug(search);
   const filteredStrategies = useMemo(() => {
     const filtered = strategies?.filter((strategy) => {
-      if (filter === 'active' && strategy.status !== StrategyStatus.Active) {
+      if (filter === 'active' && strategy.status !== 'active') {
         return false;
       }
-      if (filter === 'inactive' && strategy.status === StrategyStatus.Active) {
+      if (filter === 'inactive' && strategy.status === 'active') {
         return false;
       }
       if (!searchSlug) return true;
@@ -123,7 +123,8 @@ export const _StrategyContent: FC<Props> = ({
             position: 'relative',
           }}
         >
-          <div
+          <ul
+            data-testid="strategy-list"
             className={
               'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
             }
@@ -149,7 +150,7 @@ export const _StrategyContent: FC<Props> = ({
               </Fragment>
             ))}
             {!isExplorer && <StrategyBlockCreate />}
-          </div>
+          </ul>
         </div>
       )}
     </>
@@ -159,5 +160,6 @@ export const _StrategyContent: FC<Props> = ({
 export const StrategyContent = memo(
   _StrategyContent,
   (prev, next) =>
+    prev.isLoading === next.isLoading &&
     JSON.stringify(prev.strategies) === JSON.stringify(next.strategies)
 );

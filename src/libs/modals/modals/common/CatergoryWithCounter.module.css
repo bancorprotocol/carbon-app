@@ -1,0 +1,3 @@
+.radio:focus-visible + label {
+  outline: auto;
+}

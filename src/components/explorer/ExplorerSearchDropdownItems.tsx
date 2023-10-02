@@ -1,17 +1,17 @@
-import { ExplorerSearchProps } from 'components/explorer/ExplorerSearch';
 import { Link, PathNames } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconCheck } from 'assets/icons/v.svg';
-import { explorerEvents } from 'services/events/explorerEvents';
+import { useExplorerParams } from './useExplorerParams';
 import { ExplorerType } from './utils';
+import { explorerEvents } from 'services/events/explorerEvents';
 
-type Props = Pick<ExplorerSearchProps, 'setSearch' | 'type'>;
+interface Props {
+  setSearch: (sarch: string) => void;
+}
 
-export const ExplorerSearchDropdownItems: FC<Props> = ({
-  setSearch,
-  type: currentType,
-}) => {
+export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
+  const { type: currentType } = useExplorerParams();
   const items = [
     {
       type: 'wallet' as const,

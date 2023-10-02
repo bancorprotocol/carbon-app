@@ -1,4 +1,12 @@
-import { FC, KeyboardEvent, useId, useRef, useState } from 'react';
+import {
+  Dispatch,
+  FC,
+  KeyboardEvent,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   getSelectedOption,
   selectFirstOption,
@@ -9,19 +17,30 @@ import {
 import { ExplorerSearchInputContainer } from '../ExplorerSearchInputContainer';
 import { SuggestionList } from './SuggestionList';
 import { SuggestionEmpty } from './SuggestionEmpty';
-import { ExplorerSearchProps } from '../ExplorerSearch';
+import { searchPairTrade } from 'utils/pairSearch';
+import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 
-interface Props extends Omit<ExplorerSearchProps, 'type'> {}
+interface Props {
+  nameMap: Map<string, string>;
+  pairMap: Map<string, TradePair>;
+  search: string;
+  setSearch: Dispatch<string>;
+}
 
 export const SuggestionCombobox: FC<Props> = (props) => {
+  const { pairMap, nameMap, search, setSearch } = props;
   const listboxId = useId();
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
+  const filteredPairs = useMemo(() => {
+    return searchPairTrade(pairMap, nameMap, search);
+  }, [pairMap, nameMap, search]);
+
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (!open && e.key === 'Escape') {
       (e.target as HTMLInputElement).value = '';
-      return props.setSearch('');
+      return setSearch('');
     }
     if (!open) return setOpen(true);
 
@@ -41,28 +60,28 @@ export const SuggestionCombobox: FC<Props> = (props) => {
   const suggestionListProps = {
     setOpen,
     listboxId,
-    filteredPairs: props.filteredPairs,
+    filteredPairs,
   };
 
   return (
     <ExplorerSearchInputContainer
       containerRef={root}
-      search={props.search}
+      search={search}
       role="combobox"
       autoComplete="off"
       aria-controls={listboxId}
       aria-autocomplete="both"
       aria-expanded={open}
-      defaultValue={props.search}
+      value={search}
       placeholder="Search by token pair"
       aria-label="Search by token pair"
-      onInput={(e) => props.setSearch((e.target as HTMLInputElement).value)}
+      onChange={(e) => setSearch(e.target.value)}
       onKeyDown={onKeyDownHandler}
       onBlur={() => setOpen(false)}
       onFocus={() => setOpen(true)}
     >
-      {open && !props.filteredPairs.length && <SuggestionEmpty />}
-      {open && !!props.filteredPairs.length && (
+      {open && !filteredPairs.length && <SuggestionEmpty />}
+      {open && !!filteredPairs.length && (
         <SuggestionList {...suggestionListProps} />
       )}
     </ExplorerSearchInputContainer>

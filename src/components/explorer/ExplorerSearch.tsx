@@ -1,89 +1,91 @@
+import {
+  FC,
+  FormEvent,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Button } from 'components/common/button';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { ExplorerSearchDropdownButton } from 'components/explorer/ExplorerSearchDropdownButton';
 import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchDropdownItems';
 import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
-import { ExplorerRouteGenerics } from 'components/explorer/utils';
 import { utils } from 'ethers';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { PathNames, useNavigate } from 'libs/routing';
-import {
-  Dispatch,
-  FC,
-  FormEvent,
-  SetStateAction,
-  useCallback,
-  useMemo,
-} from 'react';
 import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { toPairSlug } from 'utils/pairSearch';
+import { useExplorerParams } from './useExplorerParams';
+import { usePairs } from 'hooks/usePairs';
 import { explorerEvents } from 'services/events/explorerEvents';
 
-export interface ExplorerSearchProps {
-  type: ExplorerRouteGenerics['Params']['type'];
-  filteredPairs: TradePair[];
-  search: string;
-  setSearch: Dispatch<SetStateAction<string>>;
-}
-
-export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
+export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
+  const pairs = usePairs();
+  const { type, slug } = useExplorerParams();
+  const [search, setSearch] = useState(slug ?? '');
 
   const isInvalidAddress = useMemo(() => {
-    return (
-      (props.search.length > 0 &&
-        props.type === 'wallet' &&
-        !utils.isAddress(props.search.toLowerCase())) ||
-      props.search === config.tokens.ZERO
-    );
-  }, [props.search, props.type]);
+    if (type !== 'wallet' || !search.length) return false;
+    if (search === config.tokens.ZERO) return true;
+    return !utils.isAddress(search.toLowerCase());
+  }, [search, type]);
+
+  useEffect(() => {
+    if (!slug) return setSearch('');
+    if (type === 'wallet') return setSearch(slug);
+    if (type === 'token-pair') {
+      const content = pairs.names.has(slug)
+        ? pairs.names.get(slug)
+        : pairs.names.get(toPairSlug(slug));
+      return setSearch(content || slug);
+    }
+  }, [slug, type, pairs.names]);
 
   const onSearchHandler = useCallback(
-    (v?: string) => {
-      const value = v || props.search;
-      if (isInvalidAddress) return;
+    (value: string) => {
       if (value.length === 0) return;
-      if (props.type === 'token-pair' && props.filteredPairs.length === 0) {
-        return;
-      }
-      explorerEvents.exploreSearch(value);
       const slug = toPairSlug(value);
+      if (type === 'token-pair' && !pairs.names.has(slug)) return;
+      if (type === 'wallet' && isInvalidAddress) return;
+      explorerEvents.exploreSearch(value);
       navigate({
-        to: PathNames.explorerOverview(props.type, slug),
+        to: PathNames.explorerOverview(type, slug),
       });
     },
-    [
-      isInvalidAddress,
-      navigate,
-      props.filteredPairs.length,
-      props.search,
-      props.type,
-    ]
+    [isInvalidAddress, navigate, pairs.names, type]
   );
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (props.type === 'wallet' && isInvalidAddress) return;
     const data = new FormData(e.target as HTMLFormElement);
     const value = data.get('search')?.toString();
-    onSearchHandler(value);
+    if (value) onSearchHandler(value);
   };
 
   const resetHandler = (e: FormEvent<HTMLFormElement>) => {
-    props.setSearch('');
+    setSearch('');
     const selector = 'input[name="search"]';
     const input = (e.target as Element).querySelector<HTMLElement>(selector);
     input?.focus();
   };
 
+  const inputProps = {
+    invalid: isInvalidAddress,
+    search,
+    setSearch,
+  };
+
   const suggestionProps = {
-    filteredPairs: props.filteredPairs,
-    search: props.search,
-    setSearch: props.setSearch,
+    pairMap: pairs.map,
+    nameMap: pairs.names,
+    search,
+    setSearch,
   };
 
   return (
@@ -92,7 +94,7 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
         role="search"
         onSubmit={submitHandler}
         onReset={resetHandler}
-        className={cn('flex space-x-4 md:space-x-20')}
+        className="flex gap-16"
       >
         <div
           className={cn(
@@ -110,29 +112,21 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
             isInvalidAddress && 'border-red'
           )}
         >
-          <div className={'shrink-0'}>
+          <div className="shrink-0">
             <DropdownMenu
-              placement={'bottom-start'}
-              button={(onClick) => (
-                <ExplorerSearchDropdownButton
-                  onClick={onClick}
-                  type={props.type}
-                />
-              )}
-              className={'mt-10 -ml-17 !px-10 !py-10'}
+              placement="bottom-start"
+              className="mt-10 -ml-17 p-10"
+              button={(attr) => <ExplorerSearchDropdownButton {...attr} />}
             >
-              <ExplorerSearchDropdownItems
-                setSearch={props.setSearch}
-                type={props.type}
-              />
+              <ExplorerSearchDropdownItems setSearch={setSearch} />
             </DropdownMenu>
           </div>
-          <div role="separator" className={'h-20 w-1 bg-white/40'}></div>
-          <div className={'flex w-full flex-grow items-center md:relative'}>
-            {props.type === 'token-pair' && (
+          <div role="separator" className="h-20 w-1 bg-white/40"></div>
+          <div className="flex w-full flex-grow items-center md:relative">
+            {type === 'token-pair' && (
               <ExplorerSearchSuggestions {...suggestionProps} />
             )}
-            {props.type === 'wallet' && <ExplorerSearchInput {...props} />}
+            {type === 'wallet' && <ExplorerSearchInput {...inputProps} />}
           </div>
         </div>
 
@@ -159,3 +153,5 @@ export const ExplorerSearch: FC<ExplorerSearchProps> = (props) => {
     </div>
   );
 };
+
+export const ExplorerSearch = memo(_ExplorerSearch);

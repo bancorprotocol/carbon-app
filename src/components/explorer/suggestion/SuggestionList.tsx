@@ -1,12 +1,13 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { ExplorerSearchProps } from '../ExplorerSearch';
 import { suggestionClasses } from './utils';
 import { cn } from 'utils/helpers';
 import { PairLogoName } from 'components/common/PairLogoName';
 import styles from './suggestion.module.css';
+import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 
-interface Props extends Pick<ExplorerSearchProps, 'filteredPairs'> {
+interface Props {
   listboxId: string;
+  filteredPairs: TradePair[];
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 

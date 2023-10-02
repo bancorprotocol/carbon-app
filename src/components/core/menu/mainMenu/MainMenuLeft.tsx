@@ -10,7 +10,11 @@ export const MainMenuLeft: FC = () => {
   const pathname = useLocation().current.pathname;
 
   return (
-    <nav aria-label="Main" className={'flex items-center space-x-24'}>
+    <nav
+      className="flex items-center space-x-24"
+      aria-label="Main"
+      data-testid="main-nav"
+    >
       <Link
         to={PathNames.strategies}
         onClick={() => carbonEvents.navigation.navHomeClick(undefined)}
@@ -19,10 +23,11 @@ export const MainMenuLeft: FC = () => {
       </Link>
 
       <div className={'hidden space-x-24 md:block'}>
-        {menuItems.map(({ label, href, hrefMatches }) => {
+        {menuItems.map(({ label, href, hrefMatches }, index) => {
           const isSamePage = isPathnameMatch(pathname, href, hrefMatches);
           return (
             <Link
+              key={index}
               onClick={() => handleOnItemClick(href)}
               to={href}
               aria-current={isSamePage ? 'page' : 'false'}

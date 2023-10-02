@@ -2,18 +2,16 @@ import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
 import { FC, ReactNode } from 'react';
 import { Connector } from '@web3-react/types';
 import { CarbonWeb3Provider } from 'libs/web3/Web3Provider';
-import { SELECTABLE_CONNECTION_TYPES } from 'libs/web3/web3.constants';
+import { selectableConnectionTypes } from 'libs/web3/web3.constants';
 import { getConnection } from 'libs/web3/web3.utils';
 
 // ********************************** //
 // WEB3 REACT LIBRARY WRAPPER
 // ********************************** //
 
-const connectors: [Connector, Web3ReactHooks][] =
-  SELECTABLE_CONNECTION_TYPES.map(getConnection).map(({ hooks, connector }) => [
-    connector,
-    hooks,
-  ]);
+const connectors: [Connector, Web3ReactHooks][] = selectableConnectionTypes
+  .map(getConnection)
+  .map(({ hooks, connector }) => [connector, hooks]);
 
 const key = 'Web3ReactProviderKey';
 

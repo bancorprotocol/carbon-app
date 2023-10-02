@@ -27,7 +27,9 @@ export const DebugImposter = () => {
         onChange={(e) => setInput(e.target.value)}
       />
 
-      <Button onClick={handleOnClick}>Save</Button>
+      <Button data-testid="save-imposter" onClick={handleOnClick}>
+        Save
+      </Button>
     </div>
   );
 };

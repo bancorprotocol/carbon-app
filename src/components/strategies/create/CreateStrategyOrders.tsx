@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo } from 'react';
 import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
 import { BuySellBlock } from './BuySellBlock';
@@ -89,7 +89,8 @@ export const CreateStrategyOrders = ({
     }
   }, [handleExpertMode]);
 
-  const onCreateStrategy = () => {
+  const onCreateStrategy = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     carbonEvents.strategy.strategyCreateClick(strategyEventData);
     createStrategy();
   };
@@ -99,68 +100,67 @@ export const CreateStrategyOrders = ({
   }, [isAwaiting, isProcessing]);
 
   return (
-    <>
-      <m.div
+    <form
+      onSubmit={(e) => onCreateStrategy(e)}
+      className="flex flex-col gap-20 md:w-[440px]"
+    >
+      <m.header
         variants={items}
         key={'createStrategyBuyTokens'}
-        className={'rounded-10 bg-silver p-20 pl-30'}
+        className={'flex flex-col gap-10 rounded-10 bg-silver p-20'}
       >
-        <div className={'flex space-x-10'}>
-          <TokensOverlap className="h-40 w-40" tokens={[base!, quote!]} />
+        <div className={'flex gap-10'}>
+          <TokensOverlap className="h-32 w-32" tokens={[base!, quote!]} />
           <div>
-            {
-              <div className="flex space-x-6">
-                <span>{base?.symbol}</span>
-                <div className="text-secondary !text-16">/</div>
-                <span>{quote?.symbol}</span>
-              </div>
-            }
+            <h2 className="flex gap-6 text-14">
+              <span>{base?.symbol}</span>
+              <span role="separator" className="text-secondary">
+                /
+              </span>
+              <span>{quote?.symbol}</span>
+            </h2>
             <div className="text-secondary capitalize">{strategyType}</div>
           </div>
         </div>
-        <div
-          className={
-            'mt-10 flex items-center text-12 font-weight-400 text-white/60'
-          }
+        <p
+          className={'flex items-center text-12 font-weight-400 text-white/60'}
         >
           <IconWarning className={'ml-6 mr-10 w-14 flex-shrink-0'} /> Rebasing
           and fee-on-transfer tokens are not supported
-        </div>
-      </m.div>
+        </p>
+      </m.header>
 
       {(strategyDirection === 'buy' || !strategyDirection) && (
-        <m.div variants={items} key={'createStrategyBuyOrder'}>
-          <BuySellBlock
-            base={base!}
-            quote={quote!}
-            order={order0}
-            buy
-            tokenBalanceQuery={token1BalanceQuery}
-            isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-            strategyType={strategyType}
-            isOrdersOverlap={isOrdersOverlap}
-          />
-        </m.div>
+        <BuySellBlock
+          key={'createStrategyBuyOrder'}
+          base={base!}
+          quote={quote!}
+          order={order0}
+          buy
+          tokenBalanceQuery={token1BalanceQuery}
+          isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+          strategyType={strategyType}
+          isOrdersOverlap={isOrdersOverlap}
+        />
       )}
       {(strategyDirection === 'sell' || !strategyDirection) && (
-        <m.div variants={items} key={'createStrategySellOrder'}>
-          <BuySellBlock
-            base={base!}
-            quote={quote!}
-            order={order1}
-            tokenBalanceQuery={token0BalanceQuery}
-            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-            strategyType={strategyType}
-            isOrdersOverlap={isOrdersOverlap}
-          />
-        </m.div>
+        <BuySellBlock
+          key={'createStrategySellOrder'}
+          base={base!}
+          quote={quote!}
+          order={order1}
+          tokenBalanceQuery={token0BalanceQuery}
+          isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+          strategyType={strategyType}
+          isOrdersOverlap={isOrdersOverlap}
+        />
       )}
       <m.div variants={items} key={'createStrategyCTA'}>
         <Button
+          type="submit"
           variant={'success'}
           size={'lg'}
           fullWidth
-          onClick={onCreateStrategy}
           disabled={isCTAdisabled}
           loading={isProcessing || isAwaiting}
           loadingChildren={loadingChildren}
@@ -168,6 +168,6 @@ export const CreateStrategyOrders = ({
           {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>
       </m.div>
-    </>
+    </form>
   );
 };

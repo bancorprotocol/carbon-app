@@ -22,12 +22,7 @@ import { getLowestBits } from 'utils/helpers';
 import { RoiRow } from 'utils/carbonApi';
 import { useGetRoi } from '../extApi/roi';
 
-export enum StrategyStatus {
-  Active,
-  NoBudget,
-  Paused,
-  Inactive,
-}
+export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
 export interface Order {
   balance: string;
@@ -91,12 +86,12 @@ const buildStrategiesHelper = async ({
 
     const status =
       noBudget && offCurve
-        ? StrategyStatus.Inactive
+        ? 'inactive'
         : offCurve
-        ? StrategyStatus.Paused
+        ? 'paused'
         : noBudget
-        ? StrategyStatus.NoBudget
-        : StrategyStatus.Active;
+        ? 'noBudget'
+        : 'active';
 
     // ATTENTION *****************************
     // This is the buy order | UI order 0 and CONTRACT order 1

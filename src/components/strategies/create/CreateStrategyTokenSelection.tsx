@@ -16,7 +16,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
   const navigate = useNavigate();
 
   return (
-    <m.div
+    <m.article
       variants={items}
       className="bg-secondary rounded-10 p-20"
       key={'strategyCreateTokenSelection'}
@@ -79,12 +79,12 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
               symbol={quote?.symbol}
               imgUrl={quote?.logoURI}
               address={quote?.address}
-              description={'With'}
+              description="With"
               onClick={() => openTokenListModal()}
             />
           </>
         )}
       </div>
-    </m.div>
+    </m.article>
   );
 };
