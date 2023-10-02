@@ -70,13 +70,13 @@ export const _StrategyContent: FC<Props> = ({
   if (isLoading) {
     return (
       <m.div
-        key={'loading'}
-        className={'flex flex-grow items-center justify-center'}
+        key="loading"
+        className="flex flex-grow items-center justify-center"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0 }}
       >
-        <div className={'h-80'}>
+        <div className="h-80">
           <CarbonLogoLoading />
         </div>
       </m.div>
@@ -96,9 +96,7 @@ export const _StrategyContent: FC<Props> = ({
     >
       <ul
         data-testid="strategies-list"
-        className={
-          'grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25'
-        }
+        className="grid grid-cols-1 gap-20 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-25"
         style={{
           position: 'absolute',
           top: 0,
