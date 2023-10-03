@@ -4,7 +4,7 @@ import { externalLinks } from 'libs/routing/routes';
 import { Link } from 'libs/routing';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { prettifyNumber } from 'utils/helpers';
+import { cn, prettifyNumber } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Strategy } from 'libs/queries';
 
@@ -31,11 +31,15 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
           <IconTooltip className="h-10 w-10" />
         </h4>
       </Tooltip>
-      {noFiatValue ? (
-        <p className="text-18 font-weight-500 text-white/60">...</p>
-      ) : (
-        <p className="text-18 font-weight-500">{budgetFormatted}</p>
-      )}
+      <p
+        className={cn(
+          'text-18 font-weight-500',
+          noFiatValue ? 'text-white/60' : ''
+        )}
+        data-testid="total-budget"
+      >
+        {noFiatValue ? '...' : budgetFormatted}
+      </p>
     </article>
   );
 };

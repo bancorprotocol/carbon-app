@@ -16,8 +16,7 @@ export const StrategyBlockBuySell: FC<{
   const otherToken = buy ? strategy.quote : strategy.base;
   const order = buy ? strategy.order0 : strategy.order1;
   const otherOrder = buy ? strategy.order1 : strategy.order1;
-  const limit = order.startRate === order.endRate;
-  const testIdPrefix = `${buy ? 'buy' : 'sell'}-${limit ? 'limit' : 'range'}`;
+  const testIdPrefix = `${buy ? 'buy' : 'sell'}`;
   const active = strategy.status === 'active';
   const baseFiat = useFiatCurrency(token);
   const quoteFiat = useFiatCurrency(otherToken);
@@ -93,7 +92,10 @@ export const StrategyBlockBuySell: FC<{
           </>
         </Tooltip>
       </p>
-      <p className="font-mono text-12 text-white/60">
+      <p
+        data-testid={`${testIdPrefix}-budget-fiat`}
+        className="font-mono text-12 text-white/60"
+      >
         {quoteHasFiatValue ? fullFiatBudget : '...'}
       </p>
     </article>

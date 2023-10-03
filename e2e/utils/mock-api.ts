@@ -6,7 +6,7 @@ export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {
     return route.fulfill({ json: roi });
   });
-  await page.route('**/*/market-rate', (route) => {
+  await page.route('**/*/market-rate?*', (route) => {
     const url = new URL(route.request().url());
     const address = url.searchParams.get('address');
     const currencies = url.searchParams.get('convert')?.split(',');
@@ -14,10 +14,10 @@ export const mockApi = async (page: Page) => {
     if (!address || !currencies || !marketRate[address]) {
       return route.continue();
     }
-    const result = {};
+    const data = {};
     for (const currency of currencies) {
-      result[currency] = marketRate[address][currency];
+      data[currency] = marketRate[address][currency];
     }
-    return route.fulfill({ json: result });
+    return route.fulfill({ json: { data } });
   });
 };
