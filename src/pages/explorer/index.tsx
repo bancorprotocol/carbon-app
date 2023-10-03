@@ -53,7 +53,7 @@ const ExplorerEvents = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, sort]);
 
-  // This will be triggered a
+  // This ensure all useEffect have been triggered once before setting mounted to true
   useEffect(() => setMounted(true), [setMounted]);
   return <></>;
 };
