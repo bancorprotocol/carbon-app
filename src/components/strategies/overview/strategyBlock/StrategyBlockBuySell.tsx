@@ -5,9 +5,7 @@ import { LogoImager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as TooltipIcon } from 'assets/icons/tooltip.svg';
 import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
-import { TokenPrice } from './TokenPrice';
 import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
-import { getPrice } from './utils';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
@@ -24,32 +22,6 @@ export const StrategyBlockBuySell: FC<{
   const baseFiat = useFiatCurrency(token);
   const quoteFiat = useFiatCurrency(otherToken);
   const currency = baseFiat.selectedFiatCurrency;
-
-  const prettifiedPrice = getPrice({
-    order,
-    limit,
-    prettified: true,
-    decimals: buy ? otherToken.decimals : token.decimals,
-  });
-
-  const fullPrice = getPrice({
-    order,
-    limit,
-    decimals: buy ? otherToken.decimals : token.decimals,
-  });
-
-  const fiatStartRate = buy
-    ? quoteFiat.getFiatValue(order.startRate)
-    : baseFiat.getFiatValue(otherOrder.startRate);
-
-  const fiatEndRate = buy
-    ? quoteFiat.getFiatValue(order.endRate)
-    : baseFiat.getFiatValue(otherOrder.endRate);
-
-  const fullFiatPrices = `${getFiatDisplayValue(fiatStartRate, currency)} ${
-    !limit ? ` - ${getFiatDisplayValue(fiatEndRate, currency)}` : ''
-  }`;
-
   const prettifiedBudget = prettifyNumber(order.balance, {
     abbreviate: order.balance.length > 10,
   });
@@ -59,99 +31,71 @@ export const StrategyBlockBuySell: FC<{
   const fullFiatBudget = getFiatDisplayValue(budget, currency);
 
   return (
-    <article className={cn('flex flex-col gap-16 p-16', className)}>
-      {buy ? (
-        <h4 className="text-16 font-weight-500 text-green">Buy</h4>
-      ) : (
-        <h4 className="text-16 font-weight-500 text-red">Sell</h4>
+    <article
+      className={cn(
+        'flex flex-col gap-4 p-16',
+        active ? '' : 'opacity-50',
+        className
       )}
-      <dl
-        className={`flex flex-col gap-8 text-12 ${active ? '' : 'opacity-50'}`}
-      >
-        {/* BUDGET */}
-        <dt className="flex items-center gap-4 font-mono text-white/60">
-          Budget
+    >
+      {buy ? (
+        <header className="flex items-center gap-4">
+          <h4 className="font-mono text-12 text-green">
+            Buy {token.symbol} Budget
+          </h4>
           {quoteHasFiatValue && (
             <Tooltip
-              sendEventOnMount={{ buy }}
-              element={
-                buy
-                  ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
-                  : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`
-              }
+              element={`This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`}
             >
-              <TooltipIcon className="h-8 w-8" />
+              <TooltipIcon className="h-10 w-10 text-white/60" />
             </Tooltip>
           )}
           {!quoteHasFiatValue && (
-            <Tooltip
-              sendEventOnMount={{ buy }}
-              element={`There is no ${currency} value for this token.`}
-            >
-              <WarningIcon className="h-8 w-8 text-warning-500" />
+            <Tooltip element={`There is no ${currency} value for this token.`}>
+              <WarningIcon className="h-10 w-10 text-warning-500" />
             </Tooltip>
           )}
-        </dt>
-        <dd data-testid={`${testIdPrefix}-budget`}>
-          <Tooltip
-            element={
-              <span className="inline-flex items-center gap-4">
-                <LogoImager
-                  className="h-16 w-16"
-                  src={otherToken.logoURI}
-                  alt="token"
-                />
-                {order.balance.toString()}
-              </span>
-            }
-          >
+        </header>
+      ) : (
+        <header className="flex items-center gap-4">
+          <h4 className="font-mono text-12 text-red">
+            Sell {otherToken.symbol} Budget
+          </h4>
+          {quoteHasFiatValue && (
+            <Tooltip
+              element={`This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`}
+            >
+              <TooltipIcon className="h-10 w-10 text-white/60" />
+            </Tooltip>
+          )}
+          {!quoteHasFiatValue && (
+            <Tooltip element={`There is no ${currency} value for this token.`}>
+              <WarningIcon className="h-10 w-10 text-warning-500" />
+            </Tooltip>
+          )}
+        </header>
+      )}
+      <p data-testid={`${testIdPrefix}-budget`}>
+        <Tooltip
+          element={
             <span className="inline-flex items-center gap-4">
               <LogoImager
                 className="h-16 w-16"
                 src={otherToken.logoURI}
                 alt="token"
               />
-              {prettifiedBudget}
+              {order.balance.toString()}
             </span>
-          </Tooltip>
-        </dd>
-        <dd className="font-mono text-white/60">
-          {quoteHasFiatValue ? fullFiatBudget : '...'}
-        </dd>
-
-        {/* PRICE */}
-        <dt className="mt-16 flex items-center gap-4 font-mono text-white/60">
-          Price
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={
-              buy
-                ? `This is the price at which you are willing to buy ${token.symbol}.`
-                : `This is the price at which you are willing to sell ${otherToken.symbol}.`
-            }
-          >
-            <TooltipIcon className="h-8 w-8" />
-          </Tooltip>
-        </dt>
-        <dd>
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            maxWidth={430}
-            element={
-              <>
-                {fullPrice} {buy ? otherToken.symbol : token.symbol}
-                <TokenPrice className="text-white/60" price={fullFiatPrices} />
-              </>
-            }
-          >
-            <TokenPrice
-              price={prettifiedPrice}
-              iconSrc={buy ? otherToken.logoURI : token.logoURI}
-              data-testid={`${testIdPrefix}-price`}
-            />
-          </Tooltip>
-        </dd>
-      </dl>
+          }
+        >
+          <>
+            {prettifiedBudget} {otherToken.symbol}
+          </>
+        </Tooltip>
+      </p>
+      <p className="font-mono text-12 text-white/60">
+        {quoteHasFiatValue ? fullFiatBudget : '...'}
+      </p>
     </article>
   );
 };

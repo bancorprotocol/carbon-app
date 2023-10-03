@@ -4,5 +4,5 @@
 }
 .strategy-list > li {
   content-visibility: auto;
-  contain-intrinsic-size: auto 480px;
+  contain-intrinsic-size: auto 410px;
 }
