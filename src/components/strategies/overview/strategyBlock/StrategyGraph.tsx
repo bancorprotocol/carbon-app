@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
 import { utils } from '@bancor/carbon-sdk';
-import './StrategyGraph.css';
+import style from './StrategyGraph.module.css';
 
 interface Props {
   strategy: Strategy;
@@ -101,9 +101,11 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       `${x(sellFrom)},${sellFrom < buy.from ? baseline : top}`,
     ]);
 
+  console.log({ buy, sell, width, steps });
+
   return (
     <svg
-      className="strategy-graph"
+      className={style.strategyGraph}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -253,7 +255,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         )}
       </g>
 
-      <g className="buySellAreas" clip-path="url(#left-to-right)">
+      <g className="buySellAreas" clipPath="url(#left-to-right)">
         <g className="buy">
           {buy.from !== buy.to && (
             <>
