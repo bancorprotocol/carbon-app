@@ -61,9 +61,6 @@ export interface EventExplorerSchema extends EventCategory {
 }
 
 function toGmtExplorerSearch({ type, slug, strategies }: ExplorerSearchInput) {
-  const tokens = strategies
-    .map((s) => [s.base.address, s.quote.address])
-    .flat();
   return {
     explore_search_type: type,
     explore_search_wallet: type === 'wallet' && slug ? slug : null,
@@ -74,7 +71,6 @@ function toGmtExplorerSearch({ type, slug, strategies }: ExplorerSearchInput) {
     explore_search_quote_token:
       type === 'token-pair' && slug ? slug.split('_').pop()! : null,
     explore_search_strategies_results: strategies.length,
-    explore_search_portfolio_results: new Set(tokens).size,
   };
 }
 
