@@ -20,7 +20,6 @@ export const StrategyBlock: FC<Props> = ({
   className,
   isExplorer,
 }) => {
-  console.log('Rerender');
   return (
     <m.li
       variants={mItemVariant}
