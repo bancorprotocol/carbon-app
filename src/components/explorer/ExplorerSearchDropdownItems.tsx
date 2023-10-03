@@ -3,8 +3,6 @@ import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconCheck } from 'assets/icons/v.svg';
 import { useExplorerParams } from './useExplorerParams';
-import { ExplorerType } from './utils';
-import { explorerEvents } from 'services/events/explorerEvents';
 
 interface Props {
   setSearch: (sarch: string) => void;
@@ -25,18 +23,13 @@ export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
     },
   ];
 
-  const clickHanlder = (type: ExplorerType) => {
-    setSearch('');
-    explorerEvents.exploreSearchTypeChange(type);
-  };
-
   return (
     <div className={'flex w-full flex-col space-y-10 font-weight-400'}>
       {items.map(({ label, type, active }) => (
         <Link
           key={type}
           to={PathNames.explorer(type)}
-          onClick={() => clickHanlder(type)}
+          onClick={() => setSearch('')}
           className={cn(
             'hover:bg-body rounded-6 p-10',
             active && 'flex items-center justify-between'

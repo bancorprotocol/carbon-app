@@ -5,8 +5,10 @@ import {
   useExplorer,
   useExplorerParams,
 } from 'components/explorer';
-import { StrategyProvider } from 'hooks/useStrategies';
+import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
+import { useEffect, useState } from 'react';
+import { explorerEvents } from 'services/events/explorerEvents';
 export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const query = useExplorer();
@@ -17,7 +19,8 @@ export const ExplorerPage = () => {
   return (
     <Page hideTitle>
       <StrategyProvider query={query}>
-        <div className={'flex flex-grow flex-col space-y-30'}>
+        <ExplorerEvents />
+        <div className="flex flex-grow flex-col space-y-30">
           <ExplorerSearch />
           {slug && <ExplorerTabs />}
           <Outlet />
@@ -25,4 +28,32 @@ export const ExplorerPage = () => {
       </StrategyProvider>
     </Page>
   );
+};
+
+const ExplorerEvents = () => {
+  const [mounted, setMounted] = useState(false);
+  const { slug, type } = useExplorerParams();
+  const { strategies, filter, sort } = useStrategyCtx();
+
+  useEffect(() => {
+    if (!mounted) return;
+    explorerEvents.typeChange(type);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type]);
+
+  useEffect(() => {
+    if (!slug) return;
+    explorerEvents.search({ type, slug, strategies });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
+
+  useEffect(() => {
+    if (!mounted || !slug) return;
+    explorerEvents.resultsFilterSort({ type, slug, strategies, filter, sort });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, sort]);
+
+  // This will be triggered a
+  useEffect(() => setMounted(true), [setMounted]);
+  return <></>;
 };

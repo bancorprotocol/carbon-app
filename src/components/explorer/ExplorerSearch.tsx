@@ -22,7 +22,6 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
-import { explorerEvents } from 'services/events/explorerEvents';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
@@ -53,7 +52,6 @@ export const _ExplorerSearch: FC = () => {
       const slug = toPairSlug(value);
       if (type === 'token-pair' && !pairs.names.has(slug)) return;
       if (type === 'wallet' && isInvalidAddress) return;
-      explorerEvents.exploreSearch(value);
       navigate({
         to: PathNames.explorerOverview(type, slug),
       });
