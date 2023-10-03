@@ -1,0 +1,29 @@
+.strategy-graph {
+  font-family: GT America;
+  width: 100%;
+  height: unset;
+  aspect-ratio: 400 / 130;
+}
+
+.strategy-graph g.buySellAreas:hover g.buy:not(:hover) {
+  opacity: 0.25;
+}
+.strategy-graph g.buySellAreas:hover g.sell:not(:hover) {
+  opacity: 0.25;
+}
+
+.strategy-graph .lineBuySell:hover {
+  stroke-width: 4;
+}
+
+.strategy-graph .buyAreaMarginalPrice:hover {
+  opacity: 0.8;
+}
+
+.strategy-graph .sellAreaMarginalPrice:hover {
+  opacity: 0.8;
+}
+
+.strategy-graph .priceLine {
+  transition: all 0.5s;
+}

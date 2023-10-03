@@ -20,6 +20,7 @@ export const StrategyBlock: FC<Props> = ({
   className,
   isExplorer,
 }) => {
+  console.log('Rerender');
   return (
     <m.li
       variants={mItemVariant}
@@ -39,7 +40,7 @@ export const StrategyBlock: FC<Props> = ({
         />
         <StrategyBlockBuySell strategy={strategy} />
         <div className="col-start-1 col-end-3 border-t-2 border-emphasis">
-          <StrategyGraph />
+          <StrategyGraph strategy={strategy} />
         </div>
       </div>
     </m.li>
