@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Strategy } from 'libs/queries';
 import { utils } from '@bancor/carbon-sdk';
 import style from './StrategyGraph.module.css';
+import { sanitizeNumberInput } from 'utils/helpers';
 
 interface Props {
   strategy: Strategy;
@@ -30,24 +31,25 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const sellMarginalRate = utils.decodeOrder(sellEncoded).marginalRate;
 
   const buy = {
-    from: round(Number(buyOrder.startRate)),
-    to: round(Number(buyOrder.endRate)),
-    marginalPrice: round(Number(buyMarginalRate)),
+    from: Number(sanitizeNumberInput(buyOrder.startRate)),
+    to: Number(sanitizeNumberInput(buyOrder.endRate)),
+    marginalPrice: Number(sanitizeNumberInput(buyMarginalRate)),
   };
   const sell = {
-    from: round(Number(sellOrder.startRate)),
-    to: round(Number(sellOrder.endRate)),
-    marginalPrice: round(Number(sellMarginalRate)),
+    from: Number(sanitizeNumberInput(sellOrder.startRate)),
+    to: Number(sanitizeNumberInput(sellOrder.endRate)),
+    marginalPrice: Number(sanitizeNumberInput(sellMarginalRate)),
   };
 
-  const middlePoint = (sell.to + buy.from) / 2;
+  const center = (sell.to + buy.from) / 2;
+  const delta = (sell.to - buy.from) / 2;
 
   // TODO: Change to the real value
-  const currentPrice = round(middlePoint);
+  const currentPrice = center;
 
   // Graph zoom
-  const from = middlePoint / 3;
-  const to = (middlePoint * 5) / 3;
+  const from = center - delta * 1.25;
+  const to = center + delta * 1.25;
   const ratio = width / (to - from);
   const step = width / 30;
   const steps = Array(30)
@@ -139,7 +141,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           <use href="#carbonLogo" x="8" y="16" />
         </pattern>
         <clipPath id="left-to-right">
-          <rect x="0" y="0" width={width} height="100">
+          <rect x="0" y="0" width={width} height={height}>
             <animate
               attributeName="width"
               values="0;400"
