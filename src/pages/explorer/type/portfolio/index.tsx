@@ -2,13 +2,13 @@ import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useNavigate } from 'libs/routing';
-import { useExplorer } from 'components/explorer';
 import { useExplorerParams } from 'components/explorer/useExplorerParams';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();
-  const { strategies, isLoading } = useExplorer();
   const { type, slug } = useExplorerParams();
+  const { strategies, isLoading } = useStrategyCtx();
 
   const onRowClick = (row: Row<PortfolioData>) =>
     navigate({
@@ -19,12 +19,14 @@ export const ExplorerTypePortfolioPage = () => {
     `/explorer/${type}/${slug}/portfolio/token/${row.token.address}`;
 
   return (
-    <PortfolioAllTokens
-      strategies={strategies}
-      isLoading={isLoading}
-      onRowClick={onRowClick}
-      getHref={getHref}
-      isExplorer
-    />
+    <>
+      <PortfolioAllTokens
+        strategies={strategies}
+        isLoading={isLoading}
+        onRowClick={onRowClick}
+        getHref={getHref}
+        isExplorer
+      />
+    </>
   );
 };
