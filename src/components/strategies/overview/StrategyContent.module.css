@@ -1,0 +1,8 @@
+.strategy-list {
+  contain: content;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.strategy-list > li {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
+}
