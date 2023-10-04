@@ -1,15 +1,12 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
-import { utils } from '@bancor/carbon-sdk';
+import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import style from './StrategyGraph.module.css';
-import { sanitizeNumberInput } from 'utils/helpers';
 
 interface Props {
   strategy: Strategy;
   buy?: boolean;
 }
-
-const round = (v: number) => Math.round(v * 1000) / 1000;
 
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
   // SVG ratio
@@ -25,20 +22,15 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const buyOrder = strategy.order0;
   const sellOrder = strategy.order1;
 
-  const buyEncoded = utils.encodedOrderStrToBN(strategy.encoded.order0);
-  const buyMarginalRate = utils.decodeOrder(buyEncoded).marginalRate;
-  const sellEncoded = utils.encodedOrderStrToBN(strategy.encoded.order1);
-  const sellMarginalRate = utils.decodeOrder(sellEncoded).marginalRate;
-
   const buy = {
     from: Number(sanitizeNumberInput(buyOrder.startRate)),
     to: Number(sanitizeNumberInput(buyOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(buyMarginalRate)),
+    marginalPrice: Number(sanitizeNumberInput(buyOrder.marginalRate)),
   };
   const sell = {
     from: Number(sanitizeNumberInput(sellOrder.startRate)),
     to: Number(sanitizeNumberInput(sellOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(sellMarginalRate)),
+    marginalPrice: Number(sanitizeNumberInput(sellOrder.marginalRate)),
   };
 
   const center = (sell.to + buy.from) / 2;
@@ -103,7 +95,10 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       `${x(sellFrom)},${sellFrom < buy.from ? baseline : top}`,
     ]);
 
-  console.log({ buy, sell, width, steps });
+  const prettyPrice = prettifyNumber(currentPrice, { round: true });
+  const formattedPrice = `${prettyPrice} ${strategy.quote.symbol}`;
+  const maxChar = Math.max(formattedPrice.length, 'Out of Range'.length);
+  const textBoxWidth = `${maxChar + 2}ch`;
 
   return (
     <svg
@@ -175,27 +170,33 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
               fill="#404040"
               x={steps[1] - 1}
               y="10"
-              width="100"
+              width={textBoxWidth}
               height="30"
               rx="4"
             />
             <text
               fill="white"
-              x={steps[1] + 50}
+              x={steps[1]}
               y="14"
               dominantBaseline="hanging"
-              textAnchor="middle"
+              textAnchor="start"
               fontSize="12"
+              style={{
+                transform: `translateX(1ch)`,
+              }}
             >
-              {currentPrice}
+              {formattedPrice}
             </text>
             <text
               fill="white"
-              x={x(from + 50)}
+              x={steps[1]}
               y="28"
               dominantBaseline="hanging"
-              textAnchor="middle"
+              textAnchor="start"
               fontSize="12"
+              style={{
+                transform: `translateX(1ch)`,
+              }}
             >
               Out of Range
             </text>
@@ -205,11 +206,14 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           <>
             <rect
               fill="#404040"
-              x={x(currentPrice) - 30}
+              x={x(currentPrice)}
               y="10"
-              width="60"
+              width={`${formattedPrice.length + 2}ch`}
               height="15"
               rx="4"
+              style={{
+                transform: `translateX(-${(formattedPrice.length + 2) / 2}ch)`,
+              }}
             />
             <text
               fill="white"
@@ -219,7 +223,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
               textAnchor="middle"
               fontSize="12"
             >
-              {currentPrice}
+              {formattedPrice}
             </text>
           </>
         )}
@@ -227,29 +231,38 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           <>
             <rect
               fill="#404040"
-              x={steps[steps.length - 1] + 1 - 100}
+              x={steps[steps.length - 1] + 1}
               y="10"
-              width="100"
+              width={textBoxWidth}
               height="30"
               rx="4"
+              style={{
+                transform: `translateX(-${formattedPrice.length + 2}ch)`,
+              }}
             />
             <text
               fill="white"
-              x={steps[steps.length - 1] - 50}
+              x={steps[steps.length - 1]}
               y="14"
               dominantBaseline="hanging"
-              textAnchor="middle"
+              textAnchor="end"
               fontSize="12"
+              style={{
+                transform: `translateX(-1ch)`,
+              }}
             >
-              {currentPrice}
+              {formattedPrice}
             </text>
             <text
               fill="white"
-              x={x(to - 50)}
+              x={steps[steps.length - 1]}
               y="28"
               dominantBaseline="hanging"
-              textAnchor="middle"
+              textAnchor="end"
               fontSize="12"
+              style={{
+                transform: `translateX(-1ch)`,
+              }}
             >
               Out of Range
             </text>
