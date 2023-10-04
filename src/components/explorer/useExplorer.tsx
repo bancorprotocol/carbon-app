@@ -25,9 +25,5 @@ export const useExplorer = () => {
     user: type === 'wallet' ? slug : undefined,
   });
 
-  const query = type === 'wallet' ? walletQuery : pairQuery;
-  return {
-    strategies: query.data ?? [],
-    isLoading: query.isLoading,
-  };
+  return type === 'wallet' ? walletQuery : pairQuery;
 };
