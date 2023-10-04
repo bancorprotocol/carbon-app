@@ -211,16 +211,16 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         </clipPath>
       </defs>
 
-      <g className="axes" stroke="#404040">
+      <g className={style.axes} stroke="#404040">
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
         {steps.map((x) => (
           <line key={x} x1={x} y1={baseline} x2={x} y2={tick} />
         ))}
       </g>
 
-      <g className="current-price">
+      <g className={style.currentPrice}>
         <path
-          className="priceLine"
+          className={style.priceLine}
           stroke="#404040"
           strokeWidth="2"
           d={`M ${Math.max(
@@ -334,16 +334,16 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         )}
       </g>
 
-      <g className="buySellAreas" clipPath="url(#left-to-right)">
+      <g className={style.buySellAreas} clipPath="url(#left-to-right)">
         {buyOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
-              <g className="buy">
+              <g className={style.buy}>
                 <>
                   {!buyOrderIsLimit && (
                     <>
                       <polygon
-                        className="buyArea"
+                        className={style.buyArea}
                         fill="#00B578"
                         fillOpacity="0.25"
                         points={Array.from(
@@ -358,7 +358,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       {buy.marginalPrice < buy.to &&
                         buy.marginalPrice >= buy.from && (
-                          <g className="buyAreaMarginalPrice">
+                          <g className={style.buyAreaMarginalPrice}>
                             <polygon
                               fill="url(#buy-pattern)"
                               fillOpacity="0.25"
@@ -369,7 +369,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                           </g>
                         )}
                       <line
-                        className="lineBuySell"
+                        className={style.lineBuySell}
                         stroke="#00B578"
                         strokeWidth="2"
                         x1={x(buy.from)}
@@ -380,7 +380,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                     </>
                   )}
                   <line
-                    className="lineBuySell"
+                    className={style.lineBuySell}
                     stroke="#00B578"
                     strokeWidth="2"
                     x1={x(buy.to)}
@@ -400,12 +400,12 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         {sellOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
-              <g className="sell">
+              <g className={style.sell}>
                 <>
                   {!sellOrderIsLimit && (
                     <>
                       <polygon
-                        className="sellArea"
+                        className={style.sellArea}
                         fill="#D86371"
                         fillOpacity="0.25"
                         points={Array.from(
@@ -420,7 +420,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       {sell.marginalPrice < sell.to &&
                         sell.marginalPrice >= sell.from && (
-                          <g className="sellAreaMarginalPrice">
+                          <g className={style.sellAreaMarginalPrice}>
                             <polygon
                               fillOpacity="0.25"
                               fill="url(#sell-pattern)"
@@ -431,7 +431,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                           </g>
                         )}
                       <line
-                        className="lineBuySell"
+                        className={style.lineBuySell}
                         stroke="#D86371"
                         strokeWidth="2"
                         x1={x(sell.from)}
@@ -442,7 +442,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                     </>
                   )}
                   <line
-                    className="lineBuySell"
+                    className={style.lineBuySell}
                     stroke="#D86371"
                     strokeWidth="2"
                     x1={x(sell.to)}
