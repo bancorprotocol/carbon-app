@@ -30,6 +30,7 @@ export const BudgetSection: FC<Props> = ({
 }) => {
   const inputId = useId();
   const budgetToken = buy ? quote : base;
+
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
     new Decimal(tokenBalanceQuery.data || 0).lt(order.budget || 0);
