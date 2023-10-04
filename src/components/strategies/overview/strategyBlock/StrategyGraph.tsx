@@ -71,6 +71,14 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
     .fill(null)
     .map((_, i) => i * step);
 
+  const pricePoints = [
+    from + (1 / 3) * (center - from),
+    from + (2 / 3) * (center - from),
+    center,
+    to - (2 / 3) * (to - center),
+    to - (1 / 3) * (to - center),
+  ];
+
   // X position
   const x = (value: number) => (value - from) * ratio;
 
@@ -458,6 +466,21 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
             </FloatTooltipContent>
           </FloatTooltip>
         )}
+      </g>
+      <g className={style.pricePoints}>
+        {pricePoints.map((point) => (
+          <text
+            fill="white"
+            x={x(point)}
+            y={baseline + 10}
+            dominantBaseline="hanging"
+            textAnchor="middle"
+            fontSize="12"
+            opacity="60%"
+          >
+            {prettifyNumber(point, { round: true })}
+          </text>
+        ))}
       </g>
     </svg>
   );
