@@ -38,11 +38,26 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
     marginalPrice: Number(sanitizeNumberInput(sellOrder.marginalRate)),
   };
 
+  const buyOrderExists: boolean = buy.from !== 0 && buy.to !== 0;
+  const sellOrderExists: boolean = sell.from !== 0 && sell.to !== 0;
+  const buyOrderIsLimit: boolean = buy.from === buy.to;
+  const sellOrderIsLimit: boolean = sell.from === sell.to;
+
   const center =
-    ((sell.to !== 0 ? sell.to : buy.to) +
-      (buy.from !== 0 ? buy.from : sell.from)) /
-    2;
-  const delta = (sell.to - buy.from) / 2;
+    !buyOrderExists && !sellOrderExists
+      ? 1000 // TODO: Replace with currentPrice
+      : ((sellOrderExists ? sell.to : buy.to) +
+          (buyOrderExists ? buy.from : sell.from)) /
+        2;
+
+  const delta =
+    (!buyOrderExists && !sellOrderExists) ||
+    (!buyOrderExists && sellOrderIsLimit) ||
+    (!sellOrderExists && buyOrderIsLimit)
+      ? center * 1.5
+      : ((sellOrderExists ? sell.to : buy.to) -
+          (buyOrderExists ? buy.from : sell.from)) /
+        2;
 
   // TODO: Change to the real value
   const currentPrice = center;
@@ -67,41 +82,61 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const sellFromInBuy = sell.from < buy.to && sell.from >= buy.from;
   const sellToInBuy = sell.to <= buy.to && sell.to > buy.from;
 
-  const getBuyPoints = (buyFrom: number, buyTo: number) =>
-    new Set([
-      `${x(buyFrom)},${baseline}`,
-      `${x(buyTo)},${baseline}`,
-      `${x(buyTo)},${buyToInSell ? middle : top}`,
-      `${x(Math.min(buyTo, sell.to))},${buyToInSell ? middle : top}`,
-      `${x(Math.min(buyTo, sell.to))},${buyTo < sell.from ? top : middle}`,
-      `${x(Math.max(buyFrom, Math.min(buyTo, sell.from)))},${
-        buyTo < sell.from ? top : middle
-      }`,
-      `${x(Math.max(buyFrom, Math.min(buyTo, sell.from)))},${
-        sell.from < buyFrom ? middle : top
-      }`,
-      `${x(buyFrom)},${sell.from < buyFrom ? middle : top}`,
-    ]);
+  const getBuyPoints = (buyFrom: number, buyTo: number) => {
+    if (sellOrderExists) {
+      return new Set([
+        `${x(buyFrom)},${baseline}`,
+        `${x(buyTo)},${baseline}`,
+        `${x(buyTo)},${buyToInSell ? middle : top}`,
+        `${x(Math.min(buyTo, sell.to))},${buyToInSell ? middle : top}`,
+        `${x(Math.min(buyTo, sell.to))},${buyTo < sell.from ? top : middle}`,
+        `${x(Math.max(buyFrom, Math.min(buyTo, sell.from)))},${
+          buyTo < sell.from ? top : middle
+        }`,
+        `${x(Math.max(buyFrom, Math.min(buyTo, sell.from)))},${
+          sell.from < buyFrom ? middle : top
+        }`,
+        `${x(buyFrom)},${sell.from < buyFrom ? middle : top}`,
+      ]);
+    } else {
+      return new Set([
+        `${x(buyFrom)},${baseline}`,
+        `${x(buyFrom)},${top}`,
+        `${x(buyTo)},${top}`,
+        `${x(buyTo)},${baseline}`,
+      ]);
+    }
+  };
 
-  const getSellPoints = (sellFrom: number, sellTo: number) =>
-    new Set([
-      `${x(sellFrom)},${top}`,
-      `${x(sellTo)},${top}`,
-      `${x(sellTo)},${buy.to > sellTo ? middle : baseline}`,
-      `${x(Math.min(sellTo, Math.max(sellFrom, buy.to)))},${
-        buy.to > sellTo ? middle : baseline
-      }`,
-      `${x(Math.min(sellTo, Math.max(sellFrom, buy.to)))},${
-        sellFrom > buy.to ? baseline : middle
-      }`,
-      `${x(Math.max(sellFrom, buy.from))},${
-        sellFrom > buy.to ? baseline : middle
-      }`,
-      `${x(Math.max(sellFrom, buy.from))},${
-        sellFrom < buy.from ? baseline : top
-      }`,
-      `${x(sellFrom)},${sellFrom < buy.from ? baseline : top}`,
-    ]);
+  const getSellPoints = (sellFrom: number, sellTo: number) => {
+    if (buyOrderExists) {
+      return new Set([
+        `${x(sellFrom)},${top}`,
+        `${x(sellTo)},${top}`,
+        `${x(sellTo)},${buy.to > sellTo ? middle : baseline}`,
+        `${x(Math.min(sellTo, Math.max(sellFrom, buy.to)))},${
+          buy.to > sellTo ? middle : baseline
+        }`,
+        `${x(Math.min(sellTo, Math.max(sellFrom, buy.to)))},${
+          sellFrom > buy.to ? baseline : middle
+        }`,
+        `${x(Math.max(sellFrom, buy.from))},${
+          sellFrom > buy.to ? baseline : middle
+        }`,
+        `${x(Math.max(sellFrom, buy.from))},${
+          sellFrom < buy.from ? baseline : top
+        }`,
+        `${x(sellFrom)},${sellFrom < buy.from ? baseline : top}`,
+      ]);
+    } else {
+      return new Set([
+        `${x(sellFrom)},${baseline}`,
+        `${x(sellFrom)},${top}`,
+        `${x(sellTo)},${top}`,
+        `${x(sellTo)},${baseline}`,
+      ]);
+    }
+  };
 
   const prettyPrice = prettifyNumber(currentPrice, { round: true });
   const formattedPrice = `${prettyPrice} ${strategy.quote.symbol}`;
@@ -300,12 +335,12 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       </g>
 
       <g className="buySellAreas" clipPath="url(#left-to-right)">
-        {buy.from !== 0 && buy.to !== 0 && (
+        {buyOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
               <g className="buy">
                 <>
-                  {buy.from !== buy.to && (
+                  {!buyOrderIsLimit && (
                     <>
                       <polygon
                         className="buyArea"
@@ -314,22 +349,25 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         points={Array.from(
                           getBuyPoints(
                             buy.from,
-                            buy.marginalPrice < buy.to &&
-                              buy.marginalPrice >= buy.from
+                            buy.marginalPrice >= buy.from &&
+                              buy.marginalPrice < buy.to
                               ? buy.marginalPrice
                               : buy.to
                           )
                         ).join(' ')}
                       />
-                      <g className="buyAreaMarginalPrice">
-                        <polygon
-                          fill="url(#buy-pattern)"
-                          fillOpacity="0.25"
-                          points={Array.from(
-                            getBuyPoints(buy.marginalPrice, buy.to)
-                          ).join(' ')}
-                        />
-                      </g>
+                      {buy.marginalPrice < buy.to &&
+                        buy.marginalPrice >= buy.from && (
+                          <g className="buyAreaMarginalPrice">
+                            <polygon
+                              fill="url(#buy-pattern)"
+                              fillOpacity="0.25"
+                              points={Array.from(
+                                getBuyPoints(buy.marginalPrice, buy.to)
+                              ).join(' ')}
+                            />
+                          </g>
+                        )}
                       <line
                         className="lineBuySell"
                         stroke="#00B578"
@@ -359,12 +397,12 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           </FloatTooltip>
         )}
 
-        {sell.from !== 0 && sell.to !== 0 && (
+        {sellOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
               <g className="sell">
                 <>
-                  {sell.from !== sell.to && (
+                  {!sellOrderIsLimit && (
                     <>
                       <polygon
                         className="sellArea"
@@ -372,23 +410,26 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         fillOpacity="0.25"
                         points={Array.from(
                           getSellPoints(
-                            sell.marginalPrice <= sell.to &&
-                              sell.marginalPrice > sell.from
+                            sell.marginalPrice > sell.from &&
+                              sell.marginalPrice <= sell.to
                               ? sell.marginalPrice
                               : sell.from,
                             sell.to
                           )
                         ).join(' ')}
                       />
-                      <g className="sellAreaMarginalPrice">
-                        <polygon
-                          fillOpacity="0.25"
-                          fill="url(#sell-pattern)"
-                          points={Array.from(
-                            getSellPoints(sell.from, sell.marginalPrice)
-                          ).join(' ')}
-                        />
-                      </g>
+                      {sell.marginalPrice < sell.to &&
+                        sell.marginalPrice >= sell.from && (
+                          <g className="sellAreaMarginalPrice">
+                            <polygon
+                              fillOpacity="0.25"
+                              fill="url(#sell-pattern)"
+                              points={Array.from(
+                                getSellPoints(sell.from, sell.marginalPrice)
+                              ).join(' ')}
+                            />
+                          </g>
+                        )}
                       <line
                         className="lineBuySell"
                         stroke="#D86371"
