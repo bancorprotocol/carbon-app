@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
@@ -147,7 +147,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
     if (buy) {
       return `1 ${target.symbol} = ${
-        rate && rate !== '0' ? prettifyNumber(new BigNumber(1).div(rate)) : '--'
+        rate && rate !== '0' ? prettifyNumber(new Decimal(1).div(rate)) : '--'
       } ${source.symbol}`;
     }
     return `1 ${source.symbol} =

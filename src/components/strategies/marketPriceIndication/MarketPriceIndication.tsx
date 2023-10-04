@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 type MarketPriceIndicationProps = {
-  marketPricePercentage: BigNumber;
+  marketPricePercentage: Decimal;
   isRange?: boolean;
 };
 
