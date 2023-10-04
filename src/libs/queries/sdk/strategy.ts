@@ -5,7 +5,7 @@ import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { useContract } from 'hooks/useContract';
 import { config } from 'services/web3/config';
 import { ONE_DAY_IN_MS } from 'utils/time';
@@ -40,7 +40,7 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
-  roi: BigNumber;
+  roi: Decimal;
 }
 
 interface StrategiesHelperProps {
@@ -69,13 +69,13 @@ const buildStrategiesHelper = async ({
     const quote =
       getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
 
-    const sellLow = new BigNumber(s.sellPriceLow);
-    const sellHigh = new BigNumber(s.sellPriceHigh);
-    const sellBudget = new BigNumber(s.sellBudget);
+    const sellLow = new Decimal(s.sellPriceLow);
+    const sellHigh = new Decimal(s.sellPriceHigh);
+    const sellBudget = new Decimal(s.sellBudget);
 
-    const buyLow = new BigNumber(s.buyPriceLow);
-    const buyHight = new BigNumber(s.buyPriceHigh);
-    const buyBudget = new BigNumber(s.buyBudget);
+    const buyLow = new Decimal(s.buyPriceLow);
+    const buyHight = new Decimal(s.buyPriceHigh);
+    const buyBudget = new Decimal(s.buyBudget);
 
     const offCurve =
       sellLow.isZero() &&
@@ -114,7 +114,7 @@ const buildStrategiesHelper = async ({
       marginalRate: s.sellPriceMarginal,
     };
 
-    const roi = new BigNumber(roiData.find((r) => r.id === s.id)?.ROI || 0);
+    const roi = new Decimal(roiData.find((r) => r.id === s.id)?.ROI || 0);
 
     const strategy: Strategy = {
       id: s.id,

@@ -1,22 +1,20 @@
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 
 export const expandToken = (amount: string | number, precision: number) => {
-  const trimmed = new BigNumber(amount).toFixed(precision, 1);
-  return new BigNumber(trimmed)
-    .times(new BigNumber(10).pow(precision))
-    .toFixed(0);
+  const trimmed = new Decimal(amount).toFixed(precision, 1);
+  return new Decimal(trimmed).times(new Decimal(10).pow(precision)).toFixed(0);
 };
 
 export const shrinkToken = (
-  amount: string | number | BigNumber,
+  amount: string | number | Decimal,
   precision: number,
   chopZeros = false
 ) => {
-  const bigNumAmount = new BigNumber(amount);
-  if (bigNumAmount.isEqualTo(0)) return '0';
+  const bigNumAmount = new Decimal(amount);
+  if (bigNumAmount.isZero()) return '0';
   const res = bigNumAmount
-    .div(new BigNumber(10).pow(precision))
-    .toFixed(precision, BigNumber.ROUND_DOWN);
+    .div(new Decimal(10).pow(precision))
+    .toFixed(precision, Decimal.ROUND_DOWN);
 
-  return chopZeros ? new BigNumber(res).toString() : res;
+  return chopZeros ? new Decimal(res).toString() : res;
 };

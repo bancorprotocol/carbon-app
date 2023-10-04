@@ -1,17 +1,17 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { cn, sanitizeNumberInput } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from '../tooltip/Tooltip';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 interface Props {
-  slippage: BigNumber;
+  slippage: Decimal;
 }
 
-const slippageColor = (slippage: BigNumber) => {
+const slippageColor = (slippage: Decimal) => {
   if (slippage?.gt(0)) return 'text-green';
-  if (slippage?.isEqualTo(0)) return 'text-red';
+  if (slippage?.isZero()) return 'text-red';
   if (slippage?.lt(-3)) return 'text-red';
   return 'text-white/80';
 };

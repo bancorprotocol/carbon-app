@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useRef } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -21,7 +21,7 @@ type Props = {
   onKeystroke?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
-  slippage?: BigNumber | null;
+  slippage?: Decimal | null;
   withoutWallet?: boolean;
   'data-testid'?: string;
 };
@@ -58,7 +58,7 @@ export const TokenInputField: FC<Props> = ({
   const handleBalanceClick = () => {
     if (balance === value) return;
     if (balance) {
-      const balanceValue = new BigNumber(balance).toFixed(token.decimals);
+      const balanceValue = new Decimal(balance).toFixed(token.decimals);
       setValue(balanceValue);
     }
     onKeystroke && onKeystroke();
@@ -102,7 +102,7 @@ export const TokenInputField: FC<Props> = ({
       </div>
       <div className="flex flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
         <p className="flex items-center gap-5 text-white/60">
-          {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
+          {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
         {user && isBalanceLoading !== undefined && !withoutWallet && (

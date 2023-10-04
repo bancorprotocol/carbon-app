@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { Strategy } from 'libs/queries';
@@ -60,16 +60,16 @@ export const EditStrategyBudgetContent = ({
   } = useLocation();
 
   const calculatedOrder0Budget = !!order0.budget
-    ? new BigNumber(strategy.order0.balance)?.[
+    ? new Decimal(strategy.order0.balance || 0)?.[
         type === 'withdraw' ? 'minus' : 'plus'
-      ](new BigNumber(order0.budget))
-    : new BigNumber(strategy.order0.balance);
+      ](new Decimal(order0.budget))
+    : new Decimal(strategy.order0.balance || 0);
 
   const calculatedOrder1Budget = !!order1.budget
-    ? new BigNumber(strategy.order1.balance)?.[
+    ? new Decimal(strategy.order1.balance || 0)?.[
         type === 'withdraw' ? 'minus' : 'plus'
-      ](new BigNumber(order1.budget))
-    : new BigNumber(strategy.order1.balance);
+      ](new Decimal(order1.budget))
+    : new Decimal(strategy.order1.balance || 0);
 
   const handleEvents = () => {
     type === 'withdraw'
