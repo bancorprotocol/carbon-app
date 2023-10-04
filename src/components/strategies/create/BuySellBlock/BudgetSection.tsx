@@ -32,7 +32,7 @@ export const BudgetSection: FC<Props> = ({
   const budgetToken = buy ? quote : base;
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
-    new Decimal(tokenBalanceQuery.data || 0).lt(order.budget);
+    new Decimal(tokenBalanceQuery.data || 0).lt(order.budget || 0);
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
