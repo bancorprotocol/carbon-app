@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { ModalOpen } from 'libs/modals/modals.types';
 
 export interface ModalStore {
@@ -12,18 +12,12 @@ export const useModalStore = (): ModalStore => {
   const [modalsOpen, setModalsOpen] = useState<ModalOpen[]>([]);
   const [modalsMinimized, setModalsMinimized] = useState<ModalOpen[]>([]);
 
-  const modals = useMemo(
-    () => ({
-      open: modalsOpen,
-      minimized: modalsMinimized,
-    }),
-    [modalsMinimized, modalsOpen]
-  );
+  const modals = {
+    open: modalsOpen,
+    minimized: modalsMinimized,
+  };
 
-  const activeModalId = useMemo(
-    () => modalsOpen[modalsOpen.length - 1]?.id ?? null,
-    [modalsOpen]
-  );
+  const activeModalId = modalsOpen[modalsOpen.length - 1]?.id ?? null;
 
   return {
     modals,
