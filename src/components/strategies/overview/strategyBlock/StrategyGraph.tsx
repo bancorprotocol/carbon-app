@@ -38,7 +38,10 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
     marginalPrice: Number(sanitizeNumberInput(sellOrder.marginalRate)),
   };
 
-  const center = (sell.to + buy.from) / 2;
+  const center =
+    ((sell.to !== 0 ? sell.to : buy.to) +
+      (buy.from !== 0 ? buy.from : sell.from)) /
+    2;
   const delta = (sell.to - buy.from) / 2;
 
   // TODO: Change to the real value
@@ -132,22 +135,41 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           />
         </symbol>
         <pattern
-          id="Pattern"
-          x="0"
-          y="0"
+          id="base-pattern"
           width="15"
           height="25"
           patternUnits="userSpaceOnUse"
-        >
+        />
+        <pattern href="#base-pattern" id="buy-pattern">
           <use href="#carbonLogo" x="0" y="4" />
           <use href="#carbonLogo" x="8" y="16" />
+          <rect
+            x="0"
+            y="0"
+            width="15"
+            height="25"
+            fill="#00B578"
+            fillOpacity="0.2"
+          />
+        </pattern>
+        <pattern href="#base-pattern" id="sell-pattern">
+          <use href="#carbonLogo" x="0" y="4" />
+          <use href="#carbonLogo" x="8" y="16" />
+          <rect
+            x="0"
+            y="0"
+            width="15"
+            height="25"
+            fill="#D86371"
+            fillOpacity="0.2"
+          />
         </pattern>
         <clipPath id="left-to-right">
           <rect x="0" y="0" width={width} height={height}>
             <animate
               attributeName="width"
-              values="0;400"
-              dur="3s"
+              values={`0;${width}`}
+              dur="1.5s"
               fill="freeze"
             />
           </rect>
@@ -278,129 +300,123 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       </g>
 
       <g className="buySellAreas" clipPath="url(#left-to-right)">
-        <FloatTooltip>
-          <FloatTooltipTrigger>
-            <g className="buy">
-              {buy.from !== buy.to && (
+        {buy.from !== 0 && buy.to !== 0 && (
+          <FloatTooltip>
+            <FloatTooltipTrigger>
+              <g className="buy">
                 <>
-                  <polygon
-                    className="buyArea"
-                    fill="#00B578"
-                    fillOpacity="0.25"
-                    points={Array.from(
-                      getBuyPoints(
-                        buy.from,
-                        Math.min(buy.marginalPrice, buy.to)
-                      )
-                    ).join(' ')}
-                  />
-                  {buy.marginalPrice < buy.to &&
-                    buy.marginalPrice > buy.from && (
+                  {buy.from !== buy.to && (
+                    <>
+                      <polygon
+                        className="buyArea"
+                        fill="#00B578"
+                        fillOpacity="0.25"
+                        points={Array.from(
+                          getBuyPoints(
+                            buy.from,
+                            buy.marginalPrice < buy.to &&
+                              buy.marginalPrice >= buy.from
+                              ? buy.marginalPrice
+                              : buy.to
+                          )
+                        ).join(' ')}
+                      />
                       <g className="buyAreaMarginalPrice">
                         <polygon
-                          fill="#00B578"
-                          opacity="0.15"
-                          points={Array.from(
-                            getBuyPoints(buy.marginalPrice, buy.to)
-                          ).join(' ')}
-                        />
-                        <polygon
-                          fill="url(#Pattern)"
+                          fill="url(#buy-pattern)"
                           fillOpacity="0.25"
                           points={Array.from(
                             getBuyPoints(buy.marginalPrice, buy.to)
                           ).join(' ')}
                         />
                       </g>
-                    )}
+                      <line
+                        className="lineBuySell"
+                        stroke="#00B578"
+                        strokeWidth="2"
+                        x1={x(buy.from)}
+                        y1={baseline}
+                        x2={x(buy.from)}
+                        y2={buyFromInSell ? middle : top}
+                      />
+                    </>
+                  )}
                   <line
                     className="lineBuySell"
                     stroke="#00B578"
                     strokeWidth="2"
-                    x1={x(buy.from)}
+                    x1={x(buy.to)}
                     y1={baseline}
-                    x2={x(buy.from)}
-                    y2={buyFromInSell ? middle : top}
+                    x2={x(buy.to)}
+                    y2={buyToInSell ? middle : top}
                   />
                 </>
-              )}
-              <line
-                className="lineBuySell"
-                stroke="#00B578"
-                strokeWidth="2"
-                x1={x(buy.to)}
-                y1={baseline}
-                x2={x(buy.to)}
-                y2={buyToInSell ? middle : top}
-              />
-            </g>
-          </FloatTooltipTrigger>
-          <FloatTooltipContent>
-            <OrderTooltip strategy={strategy} buy />
-          </FloatTooltipContent>
-        </FloatTooltip>
+              </g>
+            </FloatTooltipTrigger>
+            <FloatTooltipContent>
+              <OrderTooltip strategy={strategy} buy />
+            </FloatTooltipContent>
+          </FloatTooltip>
+        )}
 
-        <FloatTooltip>
-          <FloatTooltipTrigger>
-            <g className="sell">
-              {sell.from !== sell.to && (
+        {sell.from !== 0 && sell.to !== 0 && (
+          <FloatTooltip>
+            <FloatTooltipTrigger>
+              <g className="sell">
                 <>
-                  <polygon
-                    className="sellArea"
-                    fill="#D86371"
-                    fillOpacity="0.25"
-                    points={Array.from(
-                      getSellPoints(
-                        Math.max(sell.from, sell.marginalPrice),
-                        sell.to
-                      )
-                    ).join(' ')}
-                  />
-                  {sell.marginalPrice < sell.to &&
-                    sell.marginalPrice > sell.from && (
+                  {sell.from !== sell.to && (
+                    <>
+                      <polygon
+                        className="sellArea"
+                        fill="#D86371"
+                        fillOpacity="0.25"
+                        points={Array.from(
+                          getSellPoints(
+                            sell.marginalPrice <= sell.to &&
+                              sell.marginalPrice > sell.from
+                              ? sell.marginalPrice
+                              : sell.from,
+                            sell.to
+                          )
+                        ).join(' ')}
+                      />
                       <g className="sellAreaMarginalPrice">
                         <polygon
-                          fill="#D86371"
-                          opacity="0.15"
-                          points={Array.from(
-                            getSellPoints(sell.from, sell.marginalPrice)
-                          ).join(' ')}
-                        />
-                        <polygon
-                          fill="url(#Pattern)"
-                          fillOpacity="0.4"
+                          fillOpacity="0.25"
+                          fill="url(#sell-pattern)"
                           points={Array.from(
                             getSellPoints(sell.from, sell.marginalPrice)
                           ).join(' ')}
                         />
                       </g>
-                    )}
+                      <line
+                        className="lineBuySell"
+                        stroke="#D86371"
+                        strokeWidth="2"
+                        x1={x(sell.from)}
+                        x2={x(sell.from)}
+                        y1={sellFromInBuy ? middle : baseline}
+                        y2={top}
+                      />
+                    </>
+                  )}
                   <line
                     className="lineBuySell"
                     stroke="#D86371"
                     strokeWidth="2"
-                    x1={x(sell.from)}
-                    x2={x(sell.from)}
-                    y1={sellFromInBuy ? middle : baseline}
+                    x1={x(sell.to)}
+                    x2={x(sell.to)}
+                    y1={sellToInBuy ? middle : baseline}
                     y2={top}
                   />
                 </>
-              )}
-              <line
-                className="lineBuySell"
-                stroke="#D86371"
-                strokeWidth="2"
-                x1={x(sell.to)}
-                x2={x(sell.to)}
-                y1={sellToInBuy ? middle : baseline}
-                y2={top}
-              />
-            </g>
-          </FloatTooltipTrigger>
-          <FloatTooltipContent>
-            <OrderTooltip strategy={strategy} />
-          </FloatTooltipContent>
-        </FloatTooltip>
+              </g>
+            </FloatTooltipTrigger>
+            <FloatTooltipContent>
+              <OrderTooltip strategy={strategy} />
+            </FloatTooltipContent>
+          </FloatTooltip>
+        )}
       </g>
     </svg>
   );
