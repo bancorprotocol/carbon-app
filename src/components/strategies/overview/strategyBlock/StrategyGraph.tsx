@@ -1,11 +1,16 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import {
+  FloatTooltip,
+  FloatTooltipContent,
+  FloatTooltipTrigger,
+} from 'components/common/tooltip/FloatTooltip';
+import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import style from './StrategyGraph.module.css';
 
 interface Props {
   strategy: Strategy;
-  buy?: boolean;
 }
 
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
@@ -99,6 +104,8 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const formattedPrice = `${prettyPrice} ${strategy.quote.symbol}`;
   const maxChar = Math.max(formattedPrice.length, 'Out of Range'.length);
   const textBoxWidth = `${maxChar + 2}ch`;
+
+  // return <OrderTooltip strategy={strategy} buy/>
 
   return (
     <svg
@@ -271,112 +278,203 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       </g>
 
       <g className="buySellAreas" clipPath="url(#left-to-right)">
-        <g className="buy">
-          {buy.from !== buy.to && (
-            <>
-              <polygon
-                className="buyArea"
-                fill="#00B578"
-                fillOpacity="0.25"
-                points={Array.from(
-                  getBuyPoints(buy.from, Math.min(buy.marginalPrice, buy.to))
-                ).join(' ')}
-              />
-              {buy.marginalPrice < buy.to && buy.marginalPrice > buy.from && (
-                <g className="buyAreaMarginalPrice">
+        <FloatTooltip>
+          <FloatTooltipTrigger>
+            <g className="buy">
+              {buy.from !== buy.to && (
+                <>
                   <polygon
+                    className="buyArea"
                     fill="#00B578"
-                    opacity="0.15"
-                    points={Array.from(
-                      getBuyPoints(buy.marginalPrice, buy.to)
-                    ).join(' ')}
-                  />
-                  <polygon
-                    fill="url(#Pattern)"
                     fillOpacity="0.25"
                     points={Array.from(
-                      getBuyPoints(buy.marginalPrice, buy.to)
+                      getBuyPoints(
+                        buy.from,
+                        Math.min(buy.marginalPrice, buy.to)
+                      )
                     ).join(' ')}
                   />
-                </g>
+                  {buy.marginalPrice < buy.to &&
+                    buy.marginalPrice > buy.from && (
+                      <g className="buyAreaMarginalPrice">
+                        <polygon
+                          fill="#00B578"
+                          opacity="0.15"
+                          points={Array.from(
+                            getBuyPoints(buy.marginalPrice, buy.to)
+                          ).join(' ')}
+                        />
+                        <polygon
+                          fill="url(#Pattern)"
+                          fillOpacity="0.25"
+                          points={Array.from(
+                            getBuyPoints(buy.marginalPrice, buy.to)
+                          ).join(' ')}
+                        />
+                      </g>
+                    )}
+                  <line
+                    className="lineBuySell"
+                    stroke="#00B578"
+                    strokeWidth="2"
+                    x1={x(buy.from)}
+                    y1={baseline}
+                    x2={x(buy.from)}
+                    y2={buyFromInSell ? middle : top}
+                  />
+                </>
               )}
               <line
                 className="lineBuySell"
                 stroke="#00B578"
                 strokeWidth="2"
-                x1={x(buy.from)}
+                x1={x(buy.to)}
                 y1={baseline}
-                x2={x(buy.from)}
-                y2={buyFromInSell ? middle : top}
+                x2={x(buy.to)}
+                y2={buyToInSell ? middle : top}
               />
-            </>
-          )}
-          <line
-            className="lineBuySell"
-            stroke="#00B578"
-            strokeWidth="2"
-            x1={x(buy.to)}
-            y1={baseline}
-            x2={x(buy.to)}
-            y2={buyToInSell ? middle : top}
-          />
-        </g>
+            </g>
+          </FloatTooltipTrigger>
+          <FloatTooltipContent>
+            <OrderTooltip strategy={strategy} buy />
+          </FloatTooltipContent>
+        </FloatTooltip>
 
-        <g className="sell">
-          {sell.from !== sell.to && (
-            <>
-              <polygon
-                className="sellArea"
-                fill="#D86371"
-                fillOpacity="0.25"
-                points={Array.from(
-                  getSellPoints(
-                    Math.max(sell.from, sell.marginalPrice),
-                    sell.to
-                  )
-                ).join(' ')}
-              />
-              {sell.marginalPrice < sell.to &&
-                sell.marginalPrice > sell.from && (
-                  <g className="sellAreaMarginalPrice">
-                    <polygon
-                      fill="#D86371"
-                      opacity="0.15"
-                      points={Array.from(
-                        getSellPoints(sell.from, sell.marginalPrice)
-                      ).join(' ')}
-                    />
-                    <polygon
-                      fill="url(#Pattern)"
-                      fillOpacity="0.4"
-                      points={Array.from(
-                        getSellPoints(sell.from, sell.marginalPrice)
-                      ).join(' ')}
-                    />
-                  </g>
-                )}
+        <FloatTooltip>
+          <FloatTooltipTrigger>
+            <g className="sell">
+              {sell.from !== sell.to && (
+                <>
+                  <polygon
+                    className="sellArea"
+                    fill="#D86371"
+                    fillOpacity="0.25"
+                    points={Array.from(
+                      getSellPoints(
+                        Math.max(sell.from, sell.marginalPrice),
+                        sell.to
+                      )
+                    ).join(' ')}
+                  />
+                  {sell.marginalPrice < sell.to &&
+                    sell.marginalPrice > sell.from && (
+                      <g className="sellAreaMarginalPrice">
+                        <polygon
+                          fill="#D86371"
+                          opacity="0.15"
+                          points={Array.from(
+                            getSellPoints(sell.from, sell.marginalPrice)
+                          ).join(' ')}
+                        />
+                        <polygon
+                          fill="url(#Pattern)"
+                          fillOpacity="0.4"
+                          points={Array.from(
+                            getSellPoints(sell.from, sell.marginalPrice)
+                          ).join(' ')}
+                        />
+                      </g>
+                    )}
+                  <line
+                    className="lineBuySell"
+                    stroke="#D86371"
+                    strokeWidth="2"
+                    x1={x(sell.from)}
+                    x2={x(sell.from)}
+                    y1={sellFromInBuy ? middle : baseline}
+                    y2={top}
+                  />
+                </>
+              )}
               <line
                 className="lineBuySell"
                 stroke="#D86371"
                 strokeWidth="2"
-                x1={x(sell.from)}
-                x2={x(sell.from)}
-                y1={sellFromInBuy ? middle : baseline}
+                x1={x(sell.to)}
+                x2={x(sell.to)}
+                y1={sellToInBuy ? middle : baseline}
                 y2={top}
               />
-            </>
-          )}
-          <line
-            className="lineBuySell"
-            stroke="#D86371"
-            strokeWidth="2"
-            x1={x(sell.to)}
-            x2={x(sell.to)}
-            y1={sellToInBuy ? middle : baseline}
-            y2={top}
-          />
-        </g>
+            </g>
+          </FloatTooltipTrigger>
+          <FloatTooltipContent>
+            <OrderTooltip strategy={strategy} />
+          </FloatTooltipContent>
+        </FloatTooltip>
       </g>
     </svg>
+  );
+};
+
+interface OrderTooltipProps {
+  strategy: Strategy;
+  buy?: boolean;
+}
+
+const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
+  const order = buy ? strategy.order0 : strategy.order1;
+  const limit = order.startRate === order.endRate;
+  const marginalPrice = prettifyNumber(order.marginalRate);
+  const { quote, base } = strategy;
+  const color = buy ? 'text-green' : 'text-red';
+  return (
+    <article className="flex flex-col gap-16">
+      <h3 className={cn('text-16 font-weight-500', color)}>
+        {buy ? 'Buy' : 'Sell'} {quote.symbol}
+      </h3>
+      {limit && (
+        <table className="border-separate rounded-8 border border-white/40">
+          <tbody>
+            <tr>
+              <th className="p-8 text-start text-12 font-weight-400 text-white/60">
+                Price
+              </th>
+              <td className="p-8 text-end text-12">
+                {prettifyNumber(order.startRate)} {base.symbol}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+      {!limit && (
+        <table className="border-separate rounded-8 border border-white/40">
+          <tbody>
+            <tr>
+              <th className="p-8 pb-4 text-start text-12 font-weight-400 text-white/60">
+                Min Price
+              </th>
+              <td className="p-8 pb-4 text-end text-12">
+                {prettifyNumber(order.startRate)} {base.symbol}
+              </td>
+            </tr>
+            <tr>
+              <th className="p-8 pt-4 text-start text-12 font-weight-400 text-white/60">
+                Max Price
+              </th>
+              <td className="p-8 pt-4 text-end text-12">
+                {prettifyNumber(order.endRate)} {base.symbol}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+      <p className="text-12 text-white/60">
+        Current marginal price is {marginalPrice} {base.symbol} per 1&nbsp;
+        {quote.symbol}
+      </p>
+      <p className="text-12 text-white/60">
+        *Want to know about prices and their meaning?
+        <br />
+        <a
+          href="https://faq.carbondefi.xyz"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-4 font-weight-500 text-green"
+        >
+          <span>Learn More</span>
+          <IconLink className="inline h-12 w-12" />
+        </a>
+      </p>
+    </article>
   );
 };
