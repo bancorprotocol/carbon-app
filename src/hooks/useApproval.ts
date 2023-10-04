@@ -29,10 +29,10 @@ export const useApproval = (data: ApprovalToken[]) => {
       const newData: ApprovalTokenResult | undefined = q.data && {
         ...data[i],
         allowance: q.data.toString(),
-        approvalRequired: q.data.lt(amount),
+        approvalRequired: q.data.lt(amount || 0),
         isNullApprovalToken,
         nullApprovalRequired:
-          isNullApprovalToken && q.data.gt(0) && q.data.lt(amount),
+          isNullApprovalToken && q.data.gt(0) && q.data.lt(amount || 0),
       };
       return {
         ...q,

@@ -1,8 +1,5 @@
-import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useExplorer } from './useExplorer';
 import { useExplorerParams } from './useExplorerParams';
 import { useLocation } from '@tanstack/react-location';
-import { useStore } from 'store';
 import { PathNames } from 'libs/routing';
 import {
   StrategyPageTabs,
@@ -11,19 +8,14 @@ import {
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const ExplorerTabs = () => {
-  const { aboveBreakpoint } = useBreakpoints();
-  const { strategies } = useExplorer();
+  const { strategies } = useStrategyCtx();
   const { slug, type } = useExplorerParams();
-
   const {
     current: { pathname },
   } = useLocation();
-
-  const {
-    strategies: { sort, setSort, filter, setFilter },
-  } = useStore();
 
   const tabs: StrategyTab[] = [
     {
@@ -42,17 +34,11 @@ export const ExplorerTabs = () => {
   ];
 
   return (
-    <div className={'flex items-center justify-between'}>
+    <div className="flex items-center justify-between gap-16">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-      {aboveBreakpoint('md') &&
-        pathname === PathNames.explorerOverview(type, slug!) && (
-          <StrategyFilterSort
-            sort={sort}
-            filter={filter}
-            setSort={setSort}
-            setFilter={setFilter}
-          />
-        )}
+      {pathname === PathNames.explorerOverview(type, slug!) && (
+        <StrategyFilterSort />
+      )}
     </div>
   );
 };

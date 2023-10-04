@@ -16,8 +16,8 @@ import { FullOutcome } from 'components/strategies/FullOutcome';
 import { useNavigate } from 'libs/routing';
 import { BuySellHeader } from './Header';
 import { m } from 'libs/motion';
-import { items } from '../variants';
-import { BudgetSection } from './BugetSection';
+import { items } from 'components/strategies/create/variants';
+import { BudgetSection } from 'components/strategies/create/BuySellBlock/BudgetSection';
 
 type Props = {
   base: Token;
@@ -112,6 +112,7 @@ export const BuySellBlock: FC<Props> = ({
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
       }`}
+      data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {strategyType === 'disposable' && (
         <TabsMenu>

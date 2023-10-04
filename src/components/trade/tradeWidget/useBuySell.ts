@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import {
@@ -117,7 +117,7 @@ export const useBuySell = ({
         return false;
       }
 
-      return new BigNumber(sourceInput).gt(maxSourceAmountQuery.data || 0);
+      return new Decimal(sourceInput).gt(maxSourceAmountQuery.data || 0);
     };
 
     const checkTarget = () => {
@@ -125,7 +125,7 @@ export const useBuySell = ({
         return false;
       }
 
-      return new BigNumber(targetInput).gt(liquidityQuery.data || 0);
+      return new Decimal(targetInput).gt(liquidityQuery.data || 0);
     };
 
     const set = () => setIsLiquidityError(true);
@@ -173,7 +173,7 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      if (new BigNumber(targetInput).gt(liquidityQuery.data || 0)) {
+      if (new Decimal(targetInput).gt(new Decimal(liquidityQuery.data || 0))) {
         setIsLiquidityError(true);
         setSourceInput('...');
         return;
@@ -207,8 +207,8 @@ export const useBuySell = ({
 
   const errorBaseBalanceSufficient =
     !!user &&
-    new BigNumber(sourceBalanceQuery.data || 0).lt(
-      isTradeBySource ? sourceInput : calcMaxInput(sourceInput)
+    new Decimal(sourceBalanceQuery.data || 0).lt(
+      (isTradeBySource ? sourceInput : calcMaxInput(sourceInput)) || 0
     );
 
   const handleCTAClick = useCallback(() => {
@@ -343,22 +343,22 @@ export const useBuySell = ({
 
   const getTokenFiat = useCallback(
     (value: string, query: any) => {
-      return new BigNumber(value || 0).times(
+      return new Decimal(value || 0).times(
         query.data?.[selectedFiatCurrency] || 0
       );
     },
     [selectedFiatCurrency]
   );
 
-  const calcSlippage = useCallback((): BigNumber | null => {
+  const calcSlippage = useCallback((): Decimal | null => {
     const sourceFiat = getTokenFiat(sourceInput, sourceTokenPriceQuery);
     const targetFiat = getTokenFiat(targetInput, targetTokenPriceQuery);
 
-    if (sourceFiat.isEqualTo(0) || targetFiat.isEqualTo(0)) {
-      return new BigNumber(0);
+    if (sourceFiat.isZero() || targetFiat.isZero()) {
+      return new Decimal(0);
     }
     const diff = targetFiat.div(sourceFiat);
-    const slippage = diff.minus(new BigNumber(1)).times(100);
+    const slippage = diff.minus(new Decimal(1)).times(100);
 
     if (slippage.isFinite()) {
       return slippage;

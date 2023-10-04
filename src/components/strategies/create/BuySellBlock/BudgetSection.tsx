@@ -5,7 +5,7 @@ import { StrategyType } from '../types';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { OrderCreate } from '../useOrder';
 import { UseQueryResult } from '@tanstack/react-query';
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { useStrategyEvents } from './useStrategyEvents';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
@@ -30,20 +30,17 @@ export const BudgetSection: FC<Props> = ({
 }) => {
   const inputId = useId();
   const budgetToken = buy ? quote : base;
+
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
-    new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
+    new Decimal(tokenBalanceQuery.data || 0).lt(order.budget || 0);
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
   return (
     <fieldset className="flex flex-col gap-8">
-      <legend
-        className={`mb-11 flex items-center gap-6 text-14 font-weight-500`}
-      >
-        <span
-          className={`flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60`}
-        >
+      <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
           2
         </span>
         <Tooltip
@@ -83,6 +80,7 @@ export const BudgetSection: FC<Props> = ({
         isBalanceLoading={tokenBalanceQuery.isLoading}
         balance={tokenBalanceQuery.data}
         isError={insufficientBalance}
+        data-testid="input-budget"
       />
       {insufficientBalance && (
         <output

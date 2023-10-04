@@ -45,20 +45,26 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
   }, [context, eventData]);
 
   return (
-    <ModalOrMobileSheet id={id} title="Confirm Transaction" size={'md'}>
+    <ModalOrMobileSheet
+      id={id}
+      title="Confirm Transaction"
+      size="md"
+      data-testid="approval-modal"
+    >
       <h3 className="text-secondary my-10">Approve Tokens</h3>
-      <div className="mb-20 space-y-20">
+      <ul className="mb-20 space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (
-          <ApproveToken
-            key={i}
-            data={data}
-            isLoading={isLoading}
-            error={error}
-            eventData={eventData}
-            context={context}
-          />
+          <li key={i}>
+            <ApproveToken
+              data={data}
+              isLoading={isLoading}
+              error={error}
+              eventData={eventData}
+              context={context}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
       <Button
         size="lg"
         variant={'white'}

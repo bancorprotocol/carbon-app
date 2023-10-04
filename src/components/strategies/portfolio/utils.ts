@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import Decimal from 'decimal.js';
 import { Strategy } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { prettifyNumber } from 'utils/helpers';
@@ -7,7 +7,7 @@ export const buildPairNameByStrategy = ({ base, quote }: Strategy) => {
   return `${base.symbol}/${quote.symbol}`;
 };
 
-export const buildPercentageString = (percentage: BigNumber) => {
+export const buildPercentageString = (percentage: Decimal) => {
   if (percentage.isZero()) return '0.00%';
   if (percentage.isNaN()) return '0.00%';
   if (percentage.lt(0.01)) return '< 0.01%';
@@ -15,7 +15,7 @@ export const buildPercentageString = (percentage: BigNumber) => {
 };
 
 export const buildAmountString = (
-  amount: BigNumber,
+  amount: Decimal,
   { symbol }: Token,
   highPrecision: boolean = true
 ) => {

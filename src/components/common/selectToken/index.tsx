@@ -25,6 +25,7 @@ export const SelectTokenButton: FC<Props> = ({
 }) => {
   const { belowBreakpoint } = useBreakpoints();
 
+  const testId = isBaseToken ? 'select-base-token' : 'select-quote-token';
   const getTooltipText = () => {
     if (isBaseToken) {
       return symbol
@@ -45,6 +46,7 @@ export const SelectTokenButton: FC<Props> = ({
       sendEventOnMount={{ buy: undefined }}
     >
       <Button
+        data-testid={testId}
         variant={symbol ? 'black' : 'success'}
         className={`flex h-52 items-center justify-between rounded-12 px-14 ${className}`}
         fullWidth
