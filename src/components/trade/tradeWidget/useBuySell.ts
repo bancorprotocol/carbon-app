@@ -343,8 +343,7 @@ export const useBuySell = ({
 
   const getTokenFiat = useCallback(
     (value: string, query: any) => {
-      if (value === '...') return new Decimal(0);
-      return new Decimal(value || 0).times(
+      return tryDecimal(value || 0).times(
         query.data?.[selectedFiatCurrency] || 0
       );
     },
