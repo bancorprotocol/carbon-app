@@ -14,6 +14,7 @@ export const useFiatCurrency = (token?: Token) => {
 
   const getFiatValue = useMemo(() => {
     return (value: string, usd = false) => {
+      if (value === '...') return new Decimal('NaN');
       return new Decimal(value || 0).times(
         tokenPriceQuery.data?.[
           usd ? availableCurrencies[0] : selectedFiatCurrency

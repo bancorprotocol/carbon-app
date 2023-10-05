@@ -173,7 +173,11 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      if (new Decimal(targetInput).gt(new Decimal(liquidityQuery.data || 0))) {
+      if (
+        targetInput === '' ||
+        targetInput === '...' ||
+        new Decimal(targetInput).gt(new Decimal(liquidityQuery.data || 0))
+      ) {
         setIsLiquidityError(true);
         setSourceInput('...');
         return;
@@ -343,6 +347,7 @@ export const useBuySell = ({
 
   const getTokenFiat = useCallback(
     (value: string, query: any) => {
+      if (value === '...') return new Decimal(0);
       return new Decimal(value || 0).times(
         query.data?.[selectedFiatCurrency] || 0
       );

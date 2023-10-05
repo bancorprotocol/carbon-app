@@ -49,8 +49,12 @@ export const useTradeAction = ({
 
   const calcMaxInput = useCallback(
     (amount: string) => {
+      if (amount === '...') return 'NaN';
       const slippageBn = new Decimal(slippage || 0).div(100);
-      return new Decimal(1).plus(slippageBn).times(amount).toString();
+      return new Decimal(1)
+        .plus(slippageBn)
+        .times(amount || 0)
+        .toString();
     },
     [slippage]
   );
