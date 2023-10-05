@@ -1,8 +1,5 @@
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { externalLinks } from 'libs/routing/routes';
-import { Link } from 'libs/routing';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -24,7 +21,12 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   });
 
   return (
-    <article className="flex flex-col rounded-8 border-2 border-emphasis p-16">
+    <article
+      className={cn(
+        'flex flex-col rounded-8 border-2 border-emphasis p-16',
+        strategy.status === 'active' ? '' : 'opacity-50'
+      )}
+    >
       <Tooltip element={<TooltipContent />}>
         <h4 className="text-secondary flex items-center gap-4 font-mono !text-12">
           Total Budget
@@ -47,12 +49,5 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
 const TooltipContent: FC = () => {
   const currency = useFiatCurrency();
   const fiatSymbol = currency.selectedFiatCurrency;
-  return (
-    <p>
-      Sum of the {fiatSymbol} value of the token budgets.&nbsp;
-      <Link to={externalLinks.roiLearnMore} className="text-green">
-        <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
-      </Link>
-    </p>
-  );
+  return <p>Sum of the {fiatSymbol} value of the token budgets.</p>;
 };

@@ -29,6 +29,10 @@ export const StrategyBlockBuySell: FC<{
   const quoteHasFiatValue = quoteFiat.hasFiatValue();
   const fullFiatBudget = getFiatDisplayValue(budget, currency);
 
+  const buyTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`;
+  const sellTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`;
+  const noCurrencyTooltip = `There is no ${currency} value for this token.`;
+
   return (
     <article
       className={cn(
@@ -43,14 +47,20 @@ export const StrategyBlockBuySell: FC<{
             Buy {token.symbol} Budget
           </h4>
           {quoteHasFiatValue && (
-            <Tooltip
-              element={`This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`}
-            >
+            <Tooltip element={buyTooltip}>
               <TooltipIcon className="h-10 w-10 text-white/60" />
             </Tooltip>
           )}
           {!quoteHasFiatValue && (
-            <Tooltip element={`There is no ${currency} value for this token.`}>
+            <Tooltip
+              element={
+                <p>
+                  {buyTooltip}
+                  <br />
+                  {noCurrencyTooltip}
+                </p>
+              }
+            >
               <WarningIcon className="h-10 w-10 text-warning-500" />
             </Tooltip>
           )}
@@ -61,20 +71,26 @@ export const StrategyBlockBuySell: FC<{
             Sell {otherToken.symbol} Budget
           </h4>
           {quoteHasFiatValue && (
-            <Tooltip
-              element={`This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`}
-            >
+            <Tooltip element={sellTooltip}>
               <TooltipIcon className="h-10 w-10 text-white/60" />
             </Tooltip>
           )}
           {!quoteHasFiatValue && (
-            <Tooltip element={`There is no ${currency} value for this token.`}>
+            <Tooltip
+              element={
+                <p>
+                  {sellTooltip}
+                  <br />
+                  {noCurrencyTooltip}
+                </p>
+              }
+            >
               <WarningIcon className="h-10 w-10 text-warning-500" />
             </Tooltip>
           )}
         </header>
       )}
-      <p data-testid={`${testIdPrefix}-budget`}>
+      <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
         <Tooltip
           element={
             <span className="inline-flex items-center gap-4">

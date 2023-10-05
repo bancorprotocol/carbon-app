@@ -1,17 +1,18 @@
 import { FC } from 'react';
-import Decimal from 'decimal.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { externalLinks } from 'libs/routing/routes';
 import { Link } from 'libs/routing';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { formatNumberWithApproximation } from 'utils/helpers';
+import { cn, formatNumberWithApproximation } from 'utils/helpers';
+import { Strategy } from 'libs/queries';
 
 interface Props {
-  roi: Decimal;
+  strategy: Strategy;
 }
 
-export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
+export const StrategyBlockRoi: FC<Props> = ({ strategy }) => {
+  const roi = strategy.roi;
   const roiFormatted = formatNumberWithApproximation(roi, {
     isPercentage: true,
     approximateBelow: 0.01,
@@ -19,7 +20,12 @@ export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
   const color = roi.gte(0) ? 'text-green' : 'text-red';
 
   return (
-    <article className="flex flex-col rounded-8 border-2 border-emphasis p-16">
+    <article
+      className={cn(
+        'flex flex-col rounded-8 border-2 border-emphasis p-16',
+        strategy.status === 'active' ? '' : 'opacity-50'
+      )}
+    >
       <Tooltip element={<TooltipContent />}>
         <h4 className="text-secondary flex items-center gap-4 font-mono !text-12">
           ROI

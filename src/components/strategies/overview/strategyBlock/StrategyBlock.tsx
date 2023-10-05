@@ -29,9 +29,14 @@ export const StrategyBlock: FC<Props> = ({
       )}
     >
       <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
-      <StrategyBlockRoi roi={strategy.roi} />
+      <StrategyBlockRoi strategy={strategy} />
       <StrategyBlockBudget strategy={strategy} />
-      <div className="col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] rounded-8 border-2 border-emphasis">
+      <div
+        className={cn(
+          'col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] rounded-8 border-2 border-emphasis',
+          strategy.status === 'active' ? '' : 'opacity-50'
+        )}
+      >
         <StrategyBlockBuySell
           strategy={strategy}
           buy
