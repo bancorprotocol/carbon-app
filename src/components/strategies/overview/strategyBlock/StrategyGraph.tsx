@@ -8,22 +8,27 @@ import {
 } from 'components/common/tooltip/FloatTooltip';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import style from './StrategyGraph.module.css';
+import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 
 interface Props {
   strategy: Strategy;
 }
 
+// SVG ratio
+const height = 130;
+const width = 400;
+
+// Y positions
+const baseline = 100; // Line above text
+const middle = 75; // Where two polygons can intersect
+const top = 50; // End of the polygons
+const tick = 87; // Where the ticks end, from baseline
+const step = width / 30;
+const steps = Array(30)
+  .fill(null)
+  .map((_, i) => i * step);
+
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
-  // SVG ratio
-  const height = 130;
-  const width = 400;
-
-  // Y positions
-  const baseline = 100; // Line above text
-  const middle = 75; // Where two polygons can intersect
-  const top = 50; // End of the polygons
-  const tick = 87; // Where the ticks end, from baseline
-
   const buyOrder = strategy.order0;
   const sellOrder = strategy.order1;
 
@@ -60,16 +65,11 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         2;
 
   // TODO: Change to the real value
-  const currentPrice = center;
+  // const currentPrice = center;
 
   // Graph zoom
   const from = center - delta * 1.25;
   const to = center + delta * 1.25;
-  const ratio = width / (to - from);
-  const step = width / 30;
-  const steps = Array(30)
-    .fill(null)
-    .map((_, i) => i * step);
 
   const pricePoints = [
     from + (1 / 3) * (center - from),
@@ -80,10 +80,8 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   ];
 
   // X position
+  const ratio = width / (to - from);
   const x = (value: number) => (value - from) * ratio;
-
-  const currentPriceTooLow = x(currentPrice) < steps[1];
-  const currentPriceTooHigh = x(currentPrice) > steps[steps.length - 1];
 
   const buyFromInSell = buy.from < sell.to && buy.from >= sell.from;
   const buyToInSell = buy.to < sell.to && buy.to >= sell.from;
@@ -145,13 +143,6 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       ]);
     }
   };
-
-  const prettyPrice = prettifyNumber(currentPrice, { round: true });
-  const formattedPrice = `${prettyPrice} ${strategy.quote.symbol}`;
-  const maxChar = Math.max(formattedPrice.length, 'Out of Range'.length);
-  const textBoxWidth = `${maxChar + 2}ch`;
-
-  // return <OrderTooltip strategy={strategy} buy/>
 
   return (
     <svg
@@ -226,121 +217,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         ))}
       </g>
 
-      <g className={style.currentPrice}>
-        <path
-          className={style.priceLine}
-          stroke="#404040"
-          strokeWidth="2"
-          d={`M ${Math.max(
-            steps[1],
-            Math.min(steps[steps.length - 1], x(currentPrice))
-          )} ${baseline} V 25`}
-        />
-        {currentPriceTooLow && (
-          <>
-            <rect
-              fill="#404040"
-              x={steps[1] - 1}
-              y="10"
-              width={textBoxWidth}
-              height="30"
-              rx="4"
-            />
-            <text
-              fill="white"
-              x={steps[1]}
-              y="14"
-              dominantBaseline="hanging"
-              textAnchor="start"
-              fontSize="12"
-              style={{
-                transform: `translateX(1ch)`,
-              }}
-            >
-              {formattedPrice}
-            </text>
-            <text
-              fill="white"
-              x={steps[1]}
-              y="28"
-              dominantBaseline="hanging"
-              textAnchor="start"
-              fontSize="12"
-              style={{
-                transform: `translateX(1ch)`,
-              }}
-            >
-              Out of Range
-            </text>
-          </>
-        )}
-        {!currentPriceTooLow && !currentPriceTooHigh && (
-          <>
-            <rect
-              fill="#404040"
-              x={x(currentPrice)}
-              y="10"
-              width={`${formattedPrice.length + 2}ch`}
-              height="15"
-              rx="4"
-              style={{
-                transform: `translateX(-${(formattedPrice.length + 2) / 2}ch)`,
-              }}
-            />
-            <text
-              fill="white"
-              x={x(currentPrice)}
-              y="14"
-              dominantBaseline="hanging"
-              textAnchor="middle"
-              fontSize="12"
-            >
-              {formattedPrice}
-            </text>
-          </>
-        )}
-        {currentPriceTooHigh && (
-          <>
-            <rect
-              fill="#404040"
-              x={steps[steps.length - 1] + 1}
-              y="10"
-              width={textBoxWidth}
-              height="30"
-              rx="4"
-              style={{
-                transform: `translateX(-${formattedPrice.length + 2}ch)`,
-              }}
-            />
-            <text
-              fill="white"
-              x={steps[steps.length - 1]}
-              y="14"
-              dominantBaseline="hanging"
-              textAnchor="end"
-              fontSize="12"
-              style={{
-                transform: `translateX(-1ch)`,
-              }}
-            >
-              {formattedPrice}
-            </text>
-            <text
-              fill="white"
-              x={steps[steps.length - 1]}
-              y="28"
-              dominantBaseline="hanging"
-              textAnchor="end"
-              fontSize="12"
-              style={{
-                transform: `translateX(-1ch)`,
-              }}
-            >
-              Out of Range
-            </text>
-          </>
-        )}
-      </g>
+      <CurrentPrice strategy={strategy} x={x} />
 
       <g className={style.buySellAreas} clipPath="url(#left-to-right)">
         {buyOrderExists && (
@@ -483,6 +360,159 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         ))}
       </g>
     </svg>
+  );
+};
+
+interface CurrentPriceProps extends Props {
+  x: (value: number) => number;
+}
+
+export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
+  const currentPrice = useCompareTokenPrice(
+    strategy.base.address,
+    strategy.quote.address
+  );
+  if (!currentPrice) return <></>;
+  const price = x(currentPrice);
+  const tooLow = price < steps[1];
+  const tooHigh = price > steps[steps.length - 1];
+  const inRange = !tooLow && !tooHigh;
+  const prettyPrice = prettifyNumber(currentPrice, { round: true });
+  const formattedPrice = `${prettyPrice} ${strategy.quote.symbol}`;
+
+  // Out of Range
+  const maxChar = Math.max(formattedPrice.length, 'Out of Range'.length);
+  const outRangeWidth = `${maxChar + 2}ch`;
+  // In Range
+  const inRangeWidth = `${formattedPrice.length + 2}ch`;
+  const baseDelta = `${(formattedPrice.length + 2) / 2}ch`; // 6ch
+
+  const deltaStart = price - steps[1];
+  const deltaEnd = steps[steps.length - 1] - price;
+  const translateStart = `min(${baseDelta}, ${deltaStart}px)`;
+  const translateEnd = `max((${inRangeWidth}  / 2) - ${deltaEnd}px, 0px)`;
+  const translateRect = `translateX(calc(-1 * (${translateStart} + ${translateEnd})))`;
+  const translateText = `translateX(calc(-1 * (${translateStart} + ${translateEnd} - 1.5ch)))`;
+
+  return (
+    <g className={style.currentPrice}>
+      <path
+        className={style.priceLine}
+        stroke="#404040"
+        strokeWidth="2"
+        d={`M ${Math.max(
+          steps[1],
+          Math.min(steps[steps.length - 1], price)
+        )} ${baseline} V 25`}
+      />
+      {tooLow && (
+        <>
+          <rect
+            fill="#404040"
+            x={steps[1] - 1}
+            y="6"
+            width={outRangeWidth}
+            height="36"
+            rx="4"
+          />
+          <text
+            fill="white"
+            x={steps[1]}
+            y="14"
+            dominantBaseline="hanging"
+            textAnchor="start"
+            fontSize="12"
+            style={{
+              transform: `translateX(1ch)`,
+            }}
+          >
+            {formattedPrice}
+          </text>
+          <text
+            fill="white"
+            x={steps[1]}
+            y="28"
+            dominantBaseline="hanging"
+            textAnchor="start"
+            fontSize="12"
+            style={{
+              transform: `translateX(1ch)`,
+            }}
+          >
+            Out of Range
+          </text>
+        </>
+      )}
+      {inRange && (
+        <>
+          <rect
+            fill="#404040"
+            x={price}
+            y="6"
+            width={inRangeWidth}
+            height="20"
+            rx="4"
+            style={{
+              transform: translateRect,
+            }}
+          />
+          <text
+            fill="white"
+            x={price}
+            y="14"
+            dominantBaseline="hanging"
+            textAnchor="start"
+            fontSize="12"
+            style={{
+              transform: translateText,
+            }}
+          >
+            {formattedPrice}
+          </text>
+        </>
+      )}
+      {tooHigh && (
+        <>
+          <rect
+            fill="#404040"
+            x={steps[steps.length - 2]}
+            y="6"
+            width={outRangeWidth}
+            height="36"
+            rx="4"
+            style={{
+              transform: `translateX(-${formattedPrice.length + 2}ch)`,
+            }}
+          />
+          <text
+            fill="white"
+            x={steps[steps.length - 1]}
+            y="14"
+            dominantBaseline="hanging"
+            textAnchor="end"
+            fontSize="12"
+            style={{
+              transform: `translateX(-1ch)`,
+            }}
+          >
+            {formattedPrice}
+          </text>
+          <text
+            fill="white"
+            x={steps[steps.length - 1]}
+            y="28"
+            dominantBaseline="hanging"
+            textAnchor="end"
+            fontSize="12"
+            style={{
+              transform: `translateX(-1ch)`,
+            }}
+          >
+            Out of Range
+          </text>
+        </>
+      )}
+    </g>
   );
 };
 

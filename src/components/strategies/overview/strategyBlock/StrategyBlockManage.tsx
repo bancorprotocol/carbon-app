@@ -235,9 +235,8 @@ export const StrategyBlockManage: FC<Props> = ({
           const { name, id, action, disabled } = item;
 
           return (
-            <li role="none">
+            <li key={id} role="none">
               <ManageItem
-                key={id}
                 title={name}
                 setManage={setManage}
                 action={action}
