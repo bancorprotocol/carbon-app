@@ -172,10 +172,10 @@ export const useBuySell = ({
   }, [bySourceQuery.data]);
 
   useEffect(() => {
+    const invalidValue = targetInput === '' || targetInput === '...';
     if (byTargetQuery.data) {
       if (
-        targetInput === '' ||
-        targetInput === '...' ||
+        invalidValue ||
         new Decimal(targetInput).gt(new Decimal(liquidityQuery.data || 0))
       ) {
         setIsLiquidityError(true);
