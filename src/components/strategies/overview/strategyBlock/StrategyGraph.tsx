@@ -475,7 +475,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
         <>
           <rect
             fill="#404040"
-            x={steps[steps.length - 2]}
+            x={steps[steps.length - 1] + 1}
             y="6"
             width={outRangeWidth}
             height="36"
