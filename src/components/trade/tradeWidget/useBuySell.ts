@@ -13,7 +13,7 @@ import { useModal } from 'hooks/useModal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import { prettifyNumber } from 'utils/helpers';
+import { prettifyNumber, tryDecimal } from 'utils/helpers';
 
 export const useBuySell = ({
   source,
@@ -172,12 +172,8 @@ export const useBuySell = ({
   }, [bySourceQuery.data]);
 
   useEffect(() => {
-    const invalidValue = targetInput === '' || targetInput === '...';
     if (byTargetQuery.data) {
-      if (
-        invalidValue ||
-        new Decimal(targetInput).gt(new Decimal(liquidityQuery.data || 0))
-      ) {
+      if (tryDecimal(targetInput).gt(new Decimal(liquidityQuery.data || 0))) {
         setIsLiquidityError(true);
         setSourceInput('...');
         return;

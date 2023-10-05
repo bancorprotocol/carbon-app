@@ -9,6 +9,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
+import { tryDecimal } from 'utils/helpers';
 
 type TradeProps = {
   source: Token;
@@ -49,11 +50,10 @@ export const useTradeAction = ({
 
   const calcMaxInput = useCallback(
     (amount: string) => {
-      if (amount === '...') return 'NaN';
       const slippageBn = new Decimal(slippage || 0).div(100);
       return new Decimal(1)
         .plus(slippageBn)
-        .times(amount || 0)
+        .times(tryDecimal(amount || 0))
         .toString();
     },
     [slippage]
