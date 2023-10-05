@@ -45,7 +45,7 @@ export const StrategyBlockManage: FC<Props> = ({
   setManage,
   isExplorer,
 }) => {
-  const { strategies } = useStrategyCtx();
+  const { strategies, sort, filter } = useStrategyCtx();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
@@ -100,7 +100,7 @@ export const StrategyBlockManage: FC<Props> = ({
       id: 'walletOwner',
       name: 'View Owner’s Strategies',
       action: () => {
-        const event = { type, slug, strategyEvent, strategies };
+        const event = { type, slug, strategyEvent, strategies, sort, filter };
         explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
           to: PathNames.explorerOverview('wallet', owner.data ?? ''),
@@ -206,8 +206,8 @@ export const StrategyBlockManage: FC<Props> = ({
             onClick={(e) => {
               attr.onClick(e);
               if (isExplorer) {
-                const event = { type, slug, strategyEvent, strategies };
-                explorerEvents.manageClick(event);
+                const baseEvent = { type, slug, strategies, sort, filter };
+                explorerEvents.manageClick({ ...baseEvent, strategyEvent });
               }
             }}
             className={cn(

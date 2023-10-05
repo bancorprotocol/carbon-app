@@ -43,15 +43,21 @@ const ExplorerEvents = () => {
 
   useEffect(() => {
     if (!slug || isLoading) return;
-    explorerEvents.search({ type, slug, strategies });
+    explorerEvents.search({ type, slug, strategies, filter, sort });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, isLoading]);
 
   useEffect(() => {
     if (!mounted || !slug) return;
-    explorerEvents.resultsFilterSort({ type, slug, strategies, filter, sort });
+    explorerEvents.resultsFilter({ type, slug, strategies, filter, sort });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, sort]);
+  }, [filter]);
+
+  useEffect(() => {
+    if (!mounted || !slug) return;
+    explorerEvents.resultsSort({ type, slug, strategies, filter, sort });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort]);
 
   // This ensure all useEffect have been triggered once before setting mounted to true
   useEffect(() => setMounted(true), [setMounted]);

@@ -13,6 +13,8 @@ interface ExplorerSearchInput {
   type: ExplorerType;
   slug?: string;
   strategies: Strategy[];
+  filter: string;
+  sort: string;
 }
 
 interface ExploreSearch {
@@ -21,6 +23,8 @@ interface ExploreSearch {
   explore_search_token_pair: string | null;
   explore_search_base_token: string | null;
   explore_search_quote_token: string | null;
+  explore_search_sort: string | null;
+  explore_search_filter: string | null;
   explore_search_strategies_results: number;
   explore_search_portfolio_results: number;
 }
@@ -36,13 +40,21 @@ export interface EventExplorerSchema extends EventCategory {
     input: ExplorerSearchInput;
     gtmData: ExploreSearch;
   };
-  resultsFilterSort: {
+  resultsFilter: {
     input: ExplorerSearchInput & {
       filter: StrategyFilter;
+    };
+    gtmData: ExploreSearch & {
+      explore_search_results_change_type: 'filter';
+      explore_search_filter: StrategyFilter;
+    };
+  };
+  resultsSort: {
+    input: ExplorerSearchInput & {
       sort: StrategySort;
     };
     gtmData: ExploreSearch & {
-      explore_search_filter: StrategyFilter;
+      explore_search_results_change_type: 'sort';
       explore_search_sort: StrategySort;
     };
   };
@@ -60,7 +72,8 @@ export interface EventExplorerSchema extends EventCategory {
   };
 }
 
-function toGmtExplorerSearch({ type, slug, strategies }: ExplorerSearchInput) {
+function toGmtExplorerSearch(input: ExplorerSearchInput) {
+  const { type, slug, strategies, filter, sort } = input;
   return {
     explore_search_type: type,
     explore_search_wallet: type === 'wallet' && slug ? slug : null,
@@ -71,6 +84,8 @@ function toGmtExplorerSearch({ type, slug, strategies }: ExplorerSearchInput) {
     explore_search_quote_token:
       type === 'token-pair' && slug ? slug.split('_').pop()! : null,
     explore_search_strategies_results: strategies.length,
+    explore_search_sort: sort,
+    explore_search_filter: filter,
   };
 }
 
@@ -83,22 +98,26 @@ export const explorerEvents: CarbonEvents['explorer'] = {
   search: (event) => {
     sendGTMEvent('explorer', 'exploreSearch', toGmtExplorerSearch(event));
   },
-  resultsFilterSort: ({ type, slug, strategies, filter, sort }) => {
-    sendGTMEvent('explorer', 'exploreSearchResultsFilterSort', {
-      ...toGmtExplorerSearch({ type, slug, strategies }),
-      explore_search_filter: filter,
-      explore_search_sort: sort,
+  resultsFilter: ({ type, slug, strategies, filter, sort }) => {
+    sendGTMEvent('explorer', 'exploreSearchResultsFilter', {
+      ...toGmtExplorerSearch({ type, slug, strategies, filter, sort }),
     });
   },
-  manageClick: ({ type, slug, strategies, strategyEvent }) => {
+  resultsSort: ({ type, slug, strategies, filter, sort }) => {
+    sendGTMEvent('explorer', 'exploreSearchResultsSort', {
+      ...toGmtExplorerSearch({ type, slug, strategies, filter, sort }),
+    });
+  },
+  manageClick: ({ type, slug, strategies, strategyEvent, filter, sort }) => {
     sendGTMEvent('explorer', 'exploreSearchManageClick', {
-      ...toGmtExplorerSearch({ type, slug, strategies }),
+      ...toGmtExplorerSearch({ type, slug, strategies, filter, sort }),
       ...prepareGtmStrategyData(strategyEvent),
     });
   },
-  viewOwnersStrategiesClick: ({ type, slug, strategies, strategyEvent }) => {
+  viewOwnersStrategiesClick: (input) => {
+    const { type, slug, strategies, strategyEvent, filter, sort } = input;
     sendGTMEvent('explorer', 'exploreSearchViewOwnersStrategiesClick', {
-      ...toGmtExplorerSearch({ type, slug, strategies }),
+      ...toGmtExplorerSearch({ type, slug, strategies, filter, sort }),
       ...prepareGtmStrategyData(strategyEvent),
     });
   },
