@@ -53,7 +53,7 @@ export const useTradeAction = ({
       const slippageBn = new Decimal(slippage || 0).div(100);
       return new Decimal(1)
         .plus(slippageBn)
-        .times(tryDecimal(amount || 0))
+        .times(tryDecimal(amount))
         .toString();
     },
     [slippage]
