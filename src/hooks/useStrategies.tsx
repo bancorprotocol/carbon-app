@@ -49,7 +49,9 @@ export const useStrategyFilter = (query: StrateyQuery) => {
 
     // Sort
     const compareFunction = getCompareFunctionBySortType(sort);
-    return filtered?.sort(compareFunction);
+    return filtered
+      ?.sort(compareFunction)
+      .sort((a) => (a.status === 'active' ? -1 : 1));
   }, [search, query.data, filter, sort]);
 
   return {
