@@ -1,6 +1,6 @@
 import { prettifyNumber, formatNumberWithApproximation } from '.';
 import { describe, it, expect } from 'vitest';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 
 describe('prettifyNumber', () => {
   it('should return 0 for input lower then 0', () => {
@@ -194,53 +194,53 @@ describe('prettifyNumber', () => {
 
 describe('formatNumberWithApproximation', () => {
   const testCases: [
-    Decimal,
+    BigNumber,
     { isPercentage?: boolean; approximateBelow?: number },
     { value: string; negative: boolean }
   ][] = [
-    [new Decimal(0), {}, { value: '0.00', negative: false }],
+    [new BigNumber(0), {}, { value: '0.00', negative: false }],
     [
-      new Decimal(0),
+      new BigNumber(0),
       { isPercentage: true },
       { value: '0.00%', negative: false },
     ],
     [
-      new Decimal(0.005),
+      new BigNumber(0.005),
       { approximateBelow: 0.2, isPercentage: true },
       { value: '< 0.2%', negative: false },
     ],
     [
-      new Decimal(0.01),
+      new BigNumber(0.01),
       { approximateBelow: 0.01 },
       { value: '0.01', negative: false },
     ],
     [
-      new Decimal(54.321),
+      new BigNumber(54.321),
       { approximateBelow: 0.01 },
       { value: '54.32', negative: false },
     ],
     [
-      new Decimal(23.456),
+      new BigNumber(23.456),
       { approximateBelow: 0.01 },
       { value: '23.46', negative: false },
     ],
     [
-      new Decimal(-0.005),
+      new BigNumber(-0.005),
       { approximateBelow: 0.01 },
       { value: '> -0.01', negative: true },
     ],
     [
-      new Decimal(-0.01),
+      new BigNumber(-0.01),
       { approximateBelow: 0.01, isPercentage: true },
       { value: '-0.01%', negative: true },
     ],
     [
-      new Decimal(-0.02),
+      new BigNumber(-0.02),
       { approximateBelow: 0.01 },
       { value: '-0.02', negative: true },
     ],
     [
-      new Decimal(-34.567),
+      new BigNumber(-34.567),
       { approximateBelow: 0.01 },
       { value: '-34.57', negative: true },
     ],

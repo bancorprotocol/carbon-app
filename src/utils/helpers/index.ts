@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import numbro from 'numbro';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TokenPair } from '@bancor/carbon-sdk';
@@ -49,7 +49,7 @@ export const shortenString = (
 };
 
 export const getFiatDisplayValue = (
-  fiatValue: Decimal | string | number,
+  fiatValue: BigNumber | string | number,
   currentCurrency: FiatSymbol
 ) => {
   return `${prettifyNumber(fiatValue, { currentCurrency })}`;
@@ -89,15 +89,15 @@ interface PrettifyNumberOptions {
   round?: boolean;
 }
 
-export function prettifyNumber(num: number | string | Decimal): string;
+export function prettifyNumber(num: number | string | BigNumber): string;
 
 export function prettifyNumber(
-  num: number | string | Decimal,
+  num: number | string | BigNumber,
   options?: PrettifyNumberOptions
 ): string;
 
 export function prettifyNumber(
-  num: number | string | Decimal,
+  num: number | string | BigNumber,
   options?: PrettifyNumberOptions
 ): string {
   const {
@@ -106,7 +106,7 @@ export function prettifyNumber(
     round = false,
   } = options || {};
 
-  const bigNum = new Decimal(num);
+  const bigNum = new BigNumber(num);
   if (options?.currentCurrency) {
     return handlePrettifyNumberCurrency(bigNum, options);
   }
@@ -114,7 +114,7 @@ export function prettifyNumber(
   if (bigNum.lte(0)) return '0';
   if (bigNum.lt(0.000001)) return '< 0.000001';
   if (abbreviate && bigNum.gt(999999))
-    return numbro(bigNum.toString()).format({
+    return numbro(bigNum).format({
       ...prettifyNumberAbbreviateFormat,
       ...(round && {
         roundingFunction: (num) => Math.round(num),
@@ -122,21 +122,21 @@ export function prettifyNumber(
     });
   if (!highPrecision) {
     if (bigNum.gte(1000))
-      return numbro(bigNum.toString()).format(getDefaultNumberoOptions(round));
+      return numbro(bigNum).format(getDefaultNumberoOptions(round));
     if (bigNum.gte(2))
-      return `${numbro(bigNum.toString()).format({
+      return `${numbro(bigNum).format({
         ...getDefaultNumberoOptions(round),
         mantissa: 2,
       })}`;
   }
-  return `${numbro(bigNum.toString()).format({
+  return `${numbro(bigNum).format({
     ...getDefaultNumberoOptions(round),
     mantissa: 6,
   })}`;
 }
 
 const handlePrettifyNumberCurrency = (
-  num: Decimal,
+  num: BigNumber,
   options?: PrettifyNumberOptions
 ) => {
   const {
@@ -288,7 +288,7 @@ export const isPathnameMatch = (
 };
 
 export const formatNumberWithApproximation = (
-  num: Decimal,
+  num: BigNumber,
   { isPercentage = false, approximateBelow = 0.01 } = {}
 ): { value: string; negative: boolean } => {
   const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
@@ -298,11 +298,11 @@ export const formatNumberWithApproximation = (
   } else if (num.gt(0) && num.lt(approximateBelow)) {
     return { value: addPercentage(`< ${approximateBelow}`), negative: false };
   } else if (num.gte(approximateBelow)) {
-    return { value: addPercentage(num.toFixed(2)), negative: false };
+    return { value: addPercentage(num.toFormat(2)), negative: false };
   } else if (num.gt(-1 * approximateBelow)) {
     return { value: addPercentage(`> -${approximateBelow}`), negative: true };
   } else {
-    return { value: addPercentage(num.toFixed(2)), negative: true };
+    return { value: addPercentage(num.toFormat(2)), negative: true };
   }
 };
 
