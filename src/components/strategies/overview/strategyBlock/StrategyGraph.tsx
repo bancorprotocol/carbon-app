@@ -355,7 +355,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
             fontSize="12"
             opacity="60%"
           >
-            {prettifyNumber(point, { round: true })}
+            {prettifyNumber(point, { abbreviate: true, round: true })}
           </text>
         ))}
       </g>
