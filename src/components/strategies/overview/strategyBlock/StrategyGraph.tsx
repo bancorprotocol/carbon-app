@@ -303,8 +303,8 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                           )
                         ).join(' ')}
                       />
-                      {sell.marginalPrice < sell.to &&
-                        sell.marginalPrice >= sell.from && (
+                      {sell.marginalPrice <= sell.to &&
+                        sell.marginalPrice > sell.from && (
                           <g className={style.sellAreaMarginalPrice}>
                             <polygon
                               fillOpacity="0.25"
