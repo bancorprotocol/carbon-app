@@ -3,13 +3,12 @@ import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
 import { PopulatedTransaction } from 'ethers';
 import { TradeActionBNStr, carbonSDK } from 'libs/sdk';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
-import { tryDecimal } from 'utils/helpers';
 
 type TradeProps = {
   source: Token;
@@ -42,25 +41,22 @@ export const useTradeAction = ({
 
   const calcMinReturn = useCallback(
     (amount: string) => {
-      const slippageBn = new Decimal(slippage || 0).div(100);
-      return new Decimal(1).minus(slippageBn).times(amount).toString();
+      const slippageBn = new BigNumber(slippage).div(100);
+      return new BigNumber(1).minus(slippageBn).times(amount).toString();
     },
     [slippage]
   );
 
   const calcMaxInput = useCallback(
     (amount: string) => {
-      const slippageBn = new Decimal(slippage || 0).div(100);
-      return new Decimal(1)
-        .plus(slippageBn)
-        .times(tryDecimal(amount))
-        .toString();
+      const slippageBn = new BigNumber(slippage).div(100);
+      return new BigNumber(1).plus(slippageBn).times(amount).toString();
     },
     [slippage]
   );
 
   const calcDeadline = useCallback((value: string) => {
-    const deadlineInMs = new Decimal(value || 0).times(60).times(1000);
+    const deadlineInMs = new BigNumber(value).times(60).times(1000);
     return deadlineInMs.plus(Date.now()).toString();
   }, []);
 
