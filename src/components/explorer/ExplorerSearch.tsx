@@ -22,22 +22,31 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
-import { isValidEnsName } from 'libs/queries';
+import { isValidEnsName, useGetAddressFromEns } from 'libs/queries';
+import { useDebouncedValue } from 'hooks/useDebouncedValue';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
   const { type, slug } = useExplorerParams();
   const [search, setSearch] = useState(slug ?? '');
+  const [debouncedSearch] = useDebouncedValue<string>(search, 1000); // Debounce search input for ens query
+
+  const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
+  const isInvalidEnsAddress =
+    !!ensAddressQuery.isSuccess && !ensAddressQuery.data;
+  const waitingForQuery = debouncedSearch !== search;
 
   const isInvalidAddress = useMemo(() => {
     if (type !== 'wallet' || !search.length) return false;
     if (search === config.tokens.ZERO) return true;
-    return !(
-      utils.isAddress(search.toLowerCase()) ||
-      isValidEnsName(search.toLowerCase())
+
+    return (
+      !utils.isAddress(search.toLowerCase()) &&
+      (!isValidEnsName(search.toLowerCase()) ||
+        (isInvalidEnsAddress && !waitingForQuery))
     );
-  }, [search, type]);
+  }, [type, search, isInvalidEnsAddress, waitingForQuery]);
 
   useEffect(() => {
     if (!slug) return setSearch('');
