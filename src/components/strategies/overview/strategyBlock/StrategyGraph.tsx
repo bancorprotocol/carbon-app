@@ -524,7 +524,13 @@ interface OrderTooltipProps {
 const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const order = buy ? strategy.order0 : strategy.order1;
   const limit = order.startRate === order.endRate;
-  const marginalPrice = prettifyNumber(order.marginalRate);
+  const priceOption = {
+    abbreviate: order.endRate.length > 10,
+    round: true,
+  };
+  const startPrice = prettifyNumber(order.startRate, priceOption);
+  const endPrice = prettifyNumber(order.marginalRate, priceOption);
+  const marginalPrice = prettifyNumber(order.marginalRate, priceOption);
   const { quote, base } = strategy;
   const color = buy ? 'text-green' : 'text-red';
   return (
@@ -540,7 +546,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Price
               </th>
               <td className="p-8 text-end text-12">
-                {prettifyNumber(order.startRate)} {base.symbol}
+                {startPrice} {base.symbol}
               </td>
             </tr>
           </tbody>
@@ -554,7 +560,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Min Price
               </th>
               <td className="p-8 pb-4 text-end text-12">
-                {prettifyNumber(order.startRate)} {base.symbol}
+                {endPrice} {base.symbol}
               </td>
             </tr>
             <tr>
