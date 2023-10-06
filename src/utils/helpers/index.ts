@@ -305,11 +305,3 @@ export const formatNumberWithApproximation = (
     return { value: addPercentage(num.toFormat(2)), negative: true };
   }
 };
-
-export const tryDecimal = (value: number | string | Decimal): Decimal => {
-  try {
-    return new Decimal(value);
-  } catch {
-    return new Decimal('NaN');
-  }
-};
