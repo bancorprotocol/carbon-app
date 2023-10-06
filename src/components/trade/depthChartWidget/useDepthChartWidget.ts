@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { useStore } from 'store';
 import { Options } from 'libs/charts';
 import { OrderRow, useGetOrderBook } from 'libs/queries';
@@ -35,8 +35,8 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
       let rate;
 
       return new Array(depthChartBuckets + 2).fill(0).map((_, i) => {
-        rate = new Decimal(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
-          new Decimal(data?.step || 0).times(i)
+        rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
+          new BigNumber(data?.step || 0).times(i)
         );
 
         return [+(+rate).toFixed(quote?.decimals), 0];
