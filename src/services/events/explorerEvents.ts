@@ -23,8 +23,8 @@ interface ExploreSearch {
   explore_search_token_pair: string | null;
   explore_search_base_token: string | null;
   explore_search_quote_token: string | null;
-  explore_search_sort: string | null;
-  explore_search_filter: string | null;
+  explore_search_active_sort: string | null;
+  explore_search_active_filter: string | null;
   explore_search_strategies_results: number;
   explore_search_portfolio_results: number;
 }
@@ -84,8 +84,8 @@ function toGmtExplorerSearch(input: ExplorerSearchInput) {
     explore_search_quote_token:
       type === 'token-pair' && slug ? slug.split('_').pop()! : null,
     explore_search_strategies_results: strategies.length,
-    explore_search_sort: sort,
-    explore_search_filter: filter,
+    explore_search_active_sort: sort,
+    explore_search_active_filter: filter,
   };
 }
 
