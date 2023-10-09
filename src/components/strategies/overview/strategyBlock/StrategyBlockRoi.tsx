@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { externalLinks } from 'libs/routing/routes';
 import { Link } from 'libs/routing';
@@ -8,7 +8,7 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { formatNumberWithApproximation } from 'utils/helpers';
 
 interface Props {
-  roi: Decimal;
+  roi: BigNumber;
 }
 
 export const StrategyBlockRoi: FC<Props> = ({ roi }) => {
