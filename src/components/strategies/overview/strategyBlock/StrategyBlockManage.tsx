@@ -19,6 +19,8 @@ import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
 import { ExplorerRouteGenerics } from 'components/explorer';
+import { explorerEvents } from 'services/events/explorerEvents';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -42,13 +44,14 @@ export const StrategyBlockManage: FC<Props> = ({
   setManage,
   isExplorer,
 }) => {
+  const { strategies, sort, filter } = useStrategyCtx();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
   const {
-    params: { type },
+    params: { type, slug },
   } = useMatch<ExplorerRouteGenerics>();
 
   const owner = useGetVoucherOwner(
@@ -61,6 +64,10 @@ export const StrategyBlockManage: FC<Props> = ({
     order0,
     order1,
   });
+  const strategyEvent = {
+    ...strategyEventData,
+    strategyId: strategy.id,
+  };
 
   const {
     strategies: { setStrategyToEdit },
@@ -71,10 +78,7 @@ export const StrategyBlockManage: FC<Props> = ({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
-        carbonEvents.strategyEdit.strategyDuplicateClick({
-          ...strategyEventData,
-          strategyId: strategy.id,
-        });
+        carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
         duplicate(strategy);
       },
     },
@@ -82,10 +86,9 @@ export const StrategyBlockManage: FC<Props> = ({
       id: 'manageNotifications',
       name: 'Manage Notifications',
       action: () => {
-        carbonEvents.strategyEdit.strategyManageNotificationClick({
-          ...strategyEventData,
-          strategyId: strategy.id,
-        });
+        carbonEvents.strategyEdit.strategyManageNotificationClick(
+          strategyEvent
+        );
         openModal('manageNotifications', { strategyId: strategy.id });
       },
     },
@@ -96,6 +99,8 @@ export const StrategyBlockManage: FC<Props> = ({
       id: 'walletOwner',
       name: 'View Owner’s Strategies',
       action: () => {
+        const event = { type, slug, strategyEvent, strategies, sort, filter };
+        explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
           to: PathNames.explorerOverview('wallet', owner.data ?? ''),
         });
@@ -110,10 +115,7 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Edit Rates',
       action: () => {
         setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyChangeRatesClick({
-          ...strategyEventData,
-          strategyId: strategy.id,
-        });
+        carbonEvents.strategyEdit.strategyChangeRatesClick(strategyEvent);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'editPrices' },
@@ -129,10 +131,7 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Deposit Funds',
       action: () => {
         setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyDepositClick({
-          ...strategyEventData,
-          strategyId: strategy.id,
-        });
+        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'deposit' },
@@ -146,10 +145,7 @@ export const StrategyBlockManage: FC<Props> = ({
         name: 'Withdraw Funds',
         action: () => {
           setStrategyToEdit(strategy);
-          carbonEvents.strategyEdit.strategyWithdrawClick({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
+          carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
           navigate({
             to: PathNames.editStrategy,
             search: { type: 'withdraw' },
@@ -166,10 +162,7 @@ export const StrategyBlockManage: FC<Props> = ({
         id: 'pauseStrategy',
         name: 'Pause Strategy',
         action: () => {
-          carbonEvents.strategyEdit.strategyPauseClick({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
+          carbonEvents.strategyEdit.strategyPauseClick(strategyEvent);
           openModal('confirmStrategy', { strategy, type: 'pause' });
         },
       });
@@ -180,10 +173,7 @@ export const StrategyBlockManage: FC<Props> = ({
         id: 'renewStrategy',
         name: 'Renew Strategy',
         action: () => {
-          carbonEvents.strategyEdit.strategyRenewClick({
-            ...strategyEventData,
-            strategyId: strategy.id,
-          });
+          carbonEvents.strategyEdit.strategyRenewClick(strategyEvent);
           setStrategyToEdit(strategy);
           navigate({
             to: PathNames.editStrategy,
@@ -197,10 +187,7 @@ export const StrategyBlockManage: FC<Props> = ({
       id: 'deleteStrategy',
       name: 'Delete Strategy',
       action: () => {
-        carbonEvents.strategyEdit.strategyDeleteClick({
-          ...strategyEventData,
-          strategyId: strategy.id,
-        });
+        carbonEvents.strategyEdit.strategyDeleteClick(strategyEvent);
         openModal('confirmStrategy', { strategy, type: 'delete' });
       },
     });
@@ -214,6 +201,13 @@ export const StrategyBlockManage: FC<Props> = ({
       button={(attr) => (
         <button
           {...attr}
+          onClick={(e) => {
+            attr.onClick(e);
+            if (isExplorer) {
+              const baseEvent = { type, slug, strategies, sort, filter };
+              explorerEvents.manageClick({ ...baseEvent, strategyEvent });
+            }
+          }}
           role="menuitem"
           aria-label="Manage strategy"
           className={`
