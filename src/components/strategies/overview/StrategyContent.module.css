@@ -3,6 +3,6 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 .strategy-list > li {
-  /* content-visibility: auto; */ // to prevent no tooltips when scrolling down
+  /* content-visibility: auto; */ /* to prevent no tooltips when scrolling down */
   contain-intrinsic-size: auto 410px;
 }
