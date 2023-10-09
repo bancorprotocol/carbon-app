@@ -22,7 +22,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { toPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
-import { isValidEnsName, useGetAddressFromEns } from 'libs/queries';
+import { useGetAddressFromEns } from 'libs/queries';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 
 export const _ExplorerSearch: FC = () => {
@@ -33,9 +33,11 @@ export const _ExplorerSearch: FC = () => {
   const [debouncedSearch] = useDebouncedValue<string>(search, 1000); // Debounce search input for ens query
 
   const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
+
   const isInvalidEnsAddress =
     !!ensAddressQuery.isSuccess && !ensAddressQuery.data;
-  const waitingForQuery = debouncedSearch !== search;
+
+  const waitingToFetchEns = debouncedSearch !== search;
 
   const isInvalidAddress = useMemo(() => {
     if (type !== 'wallet' || !search.length) return false;
@@ -43,10 +45,10 @@ export const _ExplorerSearch: FC = () => {
 
     return (
       !utils.isAddress(search.toLowerCase()) &&
-      (!isValidEnsName(search.toLowerCase()) ||
-        (isInvalidEnsAddress && !waitingForQuery))
+      isInvalidEnsAddress &&
+      !waitingToFetchEns
     );
-  }, [type, search, isInvalidEnsAddress, waitingForQuery]);
+  }, [type, search, isInvalidEnsAddress, waitingToFetchEns]);
 
   useEffect(() => {
     if (!slug) return setSearch('');
