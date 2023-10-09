@@ -246,7 +246,6 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                           <g className={style.buyAreaMarginalPrice}>
                             <polygon
                               fill="url(#buy-pattern)"
-                              fillOpacity="0.25"
                               points={Array.from(
                                 getBuyPoints(buy.marginalPrice, buy.to)
                               ).join(' ')}
@@ -307,7 +306,6 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         sell.marginalPrice > sell.from && (
                           <g className={style.sellAreaMarginalPrice}>
                             <polygon
-                              fillOpacity="0.25"
                               fill="url(#sell-pattern)"
                               points={Array.from(
                                 getSellPoints(sell.from, sell.marginalPrice)
@@ -381,7 +379,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
   const formattedPrice = `${prettyPrice} ${strategy.quote.symbol}`;
 
   // Out of Range
-  const maxChar = Math.max(formattedPrice.length, 'Out of Range'.length);
+  const maxChar = Math.max(formattedPrice.length, '(off-scale)'.length);
   const outRangeWidth = `${maxChar + 2}ch`;
   // In Range
   const inRangeWidth = `${formattedPrice.length + 2}ch`;
@@ -418,7 +416,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
           <text
             fill="white"
             x={steps[1]}
-            y="14"
+            y="13"
             dominantBaseline="hanging"
             textAnchor="start"
             fontSize="12"
@@ -439,7 +437,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
               transform: `translateX(1ch)`,
             }}
           >
-            Out of Range
+            (off-scale)
           </text>
         </>
       )}
@@ -459,7 +457,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
           <text
             fill="white"
             x={price}
-            y="14"
+            y="13"
             dominantBaseline="hanging"
             textAnchor="start"
             fontSize="12"
@@ -487,7 +485,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
           <text
             fill="white"
             x={steps[steps.length - 1]}
-            y="14"
+            y="13"
             dominantBaseline="hanging"
             textAnchor="end"
             fontSize="12"
@@ -508,7 +506,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
               transform: `translateX(-1ch)`,
             }}
           >
-            Out of Range
+            (off-scale)
           </text>
         </>
       )}
@@ -529,7 +527,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
     round: true,
   };
   const startPrice = prettifyNumber(order.startRate, priceOption);
-  const endPrice = prettifyNumber(order.marginalRate, priceOption);
+  const endPrice = prettifyNumber(order.endRate, priceOption);
   const marginalPrice = prettifyNumber(order.marginalRate, priceOption);
   const { quote, base } = strategy;
   const color = buy ? 'text-green' : 'text-red';
@@ -560,7 +558,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Min Price
               </th>
               <td className="p-8 pb-4 text-end text-12">
-                {endPrice} {base.symbol}
+                {startPrice} {base.symbol}
               </td>
             </tr>
             <tr>
@@ -568,7 +566,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Max Price
               </th>
               <td className="p-8 pt-4 text-end text-12">
-                {prettifyNumber(order.endRate)} {base.symbol}
+                {endPrice} {base.symbol}
               </td>
             </tr>
           </tbody>
@@ -579,7 +577,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         {quote.symbol}
       </p>
       <p className="text-12 text-white/60">
-        *Want to know about prices and their meaning?
+        • Want to know about prices and their meaning?
         <br />
         <a
           href="https://faq.carbondefi.xyz"
