@@ -512,7 +512,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             height="36"
             rx="4"
             style={{
-              transform: `translateX(-${formattedPrice.length + 2}ch)`,
+              transform: `translateX(-${outRangeWidth}ch)`,
             }}
           />
           <text
