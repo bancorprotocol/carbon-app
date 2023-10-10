@@ -527,7 +527,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const { quote, base } = strategy;
   const color = buy ? 'text-green' : 'text-red';
   return (
-    <article className="flex flex-col gap-16">
+    <article className="flex flex-col gap-16 text-12">
       <h3 className={cn('text-16 font-weight-500', color)}>
         {buy ? 'Buy' : 'Sell'} {quote.symbol}
       </h3>
@@ -535,10 +535,10 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         <table className="border-separate rounded-8 border border-white/40">
           <tbody>
             <tr>
-              <th className="p-8 text-start text-12 font-weight-400 text-white/60">
+              <th className="p-8 text-start font-weight-400 text-white/60">
                 Price
               </th>
-              <td className="p-8 text-end text-12">
+              <td className="p-8 text-end">
                 {startPrice} {base.symbol}
               </td>
             </tr>
@@ -549,41 +549,37 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         <table className="border-separate rounded-8 border border-white/40">
           <tbody>
             <tr>
-              <th className="p-8 pb-4 text-start text-12 font-weight-400 text-white/60">
+              <th className="p-8 pb-4 text-start font-weight-400 text-white/60">
                 Min Price
               </th>
-              <td className="p-8 pb-4 text-end text-12">
+              <td className="p-8 pb-4 text-end">
                 {startPrice} {base.symbol}
               </td>
             </tr>
             <tr>
-              <th className="p-8 pt-4 text-start text-12 font-weight-400 text-white/60">
+              <th className="p-8 pt-4 text-start font-weight-400 text-white/60">
                 Max Price
               </th>
-              <td className="p-8 pt-4 text-end text-12">
+              <td className="p-8 pt-4 text-end">
                 {endPrice} {base.symbol}
               </td>
             </tr>
           </tbody>
         </table>
       )}
-      <p className="text-12 text-white/60">
+      <p className="text-white/60">
         Current marginal price is {marginalPrice} {base.symbol} per 1&nbsp;
         {quote.symbol}
       </p>
-      <p className="text-12 text-white/60">
-        • Want to know about prices and their meaning?
-        <br />
-        <a
-          href="https://faq.carbondefi.xyz"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-4 font-weight-500 text-green"
-        >
-          <span>Learn More</span>
-          <IconLink className="inline h-12 w-12" />
-        </a>
-      </p>
+      <a
+        href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-4 font-weight-500 text-green"
+      >
+        <span>Learn More about marginal price</span>
+        <IconLink className="inline h-12 w-12" />
+      </a>
     </article>
   );
 };
