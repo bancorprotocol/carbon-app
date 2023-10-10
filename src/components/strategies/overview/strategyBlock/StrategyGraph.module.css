@@ -13,7 +13,8 @@
   opacity: 0.25;
 }
 
-.strategy-graph .lineBuySell:hover {
+.strategy-graph .lineBuySell:hover,
+.strategy-graph .rectBuySell:hover line {
   stroke-width: 4;
 }
 

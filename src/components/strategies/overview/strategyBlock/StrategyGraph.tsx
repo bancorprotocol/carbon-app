@@ -255,17 +255,36 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         x2={x(buy.from)}
                         y2={buyFromInSell ? middle : top}
                       />
+                      <line
+                        className={style.lineBuySell}
+                        stroke="#00B578"
+                        strokeWidth="2"
+                        x1={x(buy.to)}
+                        y1={baseline}
+                        x2={x(buy.to)}
+                        y2={buyToInSell ? middle : top}
+                      />
                     </>
                   )}
-                  <line
-                    className={style.lineBuySell}
-                    stroke="#00B578"
-                    strokeWidth="2"
-                    x1={x(buy.to)}
-                    y1={baseline}
-                    x2={x(buy.to)}
-                    y2={buyToInSell ? middle : top}
-                  />
+                  {buyOrderIsLimit && (
+                    <g className={style.rectBuySell}>
+                      <rect
+                        x={x(buy.to) - 10}
+                        y={top}
+                        width="20"
+                        height={baseline - top}
+                        fill="transparent"
+                      />
+                      <line
+                        stroke="#00B578"
+                        strokeWidth="2"
+                        x1={x(buy.to)}
+                        y1={baseline}
+                        x2={x(buy.to)}
+                        y2={buyToInSell ? middle : top}
+                      />
+                    </g>
+                  )}
                 </>
               </g>
             </FloatTooltipTrigger>
@@ -314,17 +333,36 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         y1={sellFromInBuy ? middle : baseline}
                         y2={top}
                       />
+                      <line
+                        className={style.lineBuySell}
+                        stroke="#D86371"
+                        strokeWidth="2"
+                        x1={x(sell.to)}
+                        x2={x(sell.to)}
+                        y1={sellToInBuy ? middle : baseline}
+                        y2={top}
+                      />
                     </>
                   )}
-                  <line
-                    className={style.lineBuySell}
-                    stroke="#D86371"
-                    strokeWidth="2"
-                    x1={x(sell.to)}
-                    x2={x(sell.to)}
-                    y1={sellToInBuy ? middle : baseline}
-                    y2={top}
-                  />
+                  {sellOrderIsLimit && (
+                    <g className={style.rectBuySell}>
+                      <rect
+                        x={x(sell.to) - 10}
+                        y={top}
+                        width="20"
+                        height={baseline - top}
+                        fill="transparent"
+                      />
+                      <line
+                        stroke="#D86371"
+                        strokeWidth="2"
+                        x1={x(sell.to)}
+                        x2={x(sell.to)}
+                        y1={sellToInBuy ? middle : baseline}
+                        y2={top}
+                      />
+                    </g>
+                  )}
                 </>
               </g>
             </FloatTooltipTrigger>
