@@ -30,7 +30,7 @@ export const _ExplorerSearch: FC = () => {
   const pairs = usePairs();
   const { type, slug } = useExplorerParams();
   const [search, setSearch] = useState(slug ?? '');
-  const [debouncedSearch] = useDebouncedValue<string>(search, 1000); // Debounce search input for ens query
+  const [debouncedSearch] = useDebouncedValue<string>(search, 300); // Debounce search input for ens query
 
   const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
 
