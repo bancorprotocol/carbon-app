@@ -9,6 +9,7 @@ import {
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import style from './StrategyGraph.module.css';
 import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
+import { Token } from 'libs/tokens';
 
 interface Props {
   strategy: Strategy;
@@ -31,6 +32,10 @@ const steps = Array(30)
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const buyOrder = strategy.order0;
   const sellOrder = strategy.order1;
+  const currentPrice = useCompareTokenPrice(
+    strategy.base.address,
+    strategy.quote.address
+  );
 
   const buy = {
     from: Number(sanitizeNumberInput(buyOrder.startRate)),
@@ -43,26 +48,20 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
     marginalPrice: Number(sanitizeNumberInput(sellOrder.marginalRate)),
   };
 
-  const buyOrderExists: boolean = buy.from !== 0 && buy.to !== 0;
-  const sellOrderExists: boolean = sell.from !== 0 && sell.to !== 0;
-  const buyOrderIsLimit: boolean = buy.from === buy.to;
-  const sellOrderIsLimit: boolean = sell.from === sell.to;
+  const buyOrderExists = buy.from !== 0 && buy.to !== 0;
+  const sellOrderExists = sell.from !== 0 && sell.to !== 0;
+  const buyOrderIsLimit = buy.from === buy.to;
+  const sellOrderIsLimit = sell.from === sell.to;
 
-  const center =
-    !buyOrderExists && !sellOrderExists
-      ? 1000 // TODO: Replace with currentPrice
-      : ((sellOrderExists ? sell.to : buy.to) +
-          (buyOrderExists ? buy.from : sell.from)) /
-        2;
+  const max = Math.max(buy.to, sell.to);
+  const min =
+    buy.from && sell.from
+      ? Math.min(buy.from, sell.from)
+      : Math.max(buy.from, sell.from);
 
-  const delta =
-    (!buyOrderExists && !sellOrderExists) ||
-    (!buyOrderExists && sellOrderIsLimit) ||
-    (!sellOrderExists && buyOrderIsLimit)
-      ? center * 1.5
-      : ((sellOrderExists ? sell.to : buy.to) -
-          (buyOrderExists ? buy.from : sell.from)) /
-        2;
+  const hasSpan = min && max && min !== max;
+  const center = hasSpan ? (min + max) / 2 : currentPrice ?? 1000;
+  const delta = hasSpan ? (max - min) / 2 : center * 1.5;
 
   // Graph zoom
   const from = center - delta * 1.25;
@@ -214,7 +213,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         ))}
       </g>
 
-      <CurrentPrice strategy={strategy} x={x} />
+      <CurrentPrice currentPrice={currentPrice} x={x} token={strategy.quote} />
 
       <g className={style.buySellAreas} clipPath="url(#left-to-right)">
         {buyOrderExists && (
@@ -336,9 +335,9 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         )}
       </g>
       <g className={style.pricePoints}>
-        {pricePoints.map((point) => (
+        {pricePoints.map((point, i) => (
           <text
-            key={point}
+            key={i}
             fill="white"
             x={x(point)}
             y={baseline + 10}
@@ -355,22 +354,24 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   );
 };
 
-interface CurrentPriceProps extends Props {
+interface CurrentPriceProps {
+  currentPrice?: number;
+  token: Token;
   x: (value: number) => number;
 }
 
-export const CurrentPrice: FC<CurrentPriceProps> = ({ strategy, x }) => {
-  const currentPrice = useCompareTokenPrice(
-    strategy.base.address,
-    strategy.quote.address
-  );
+export const CurrentPrice: FC<CurrentPriceProps> = ({
+  currentPrice,
+  token,
+  x,
+}) => {
   if (!currentPrice) return <></>;
   const price = x(currentPrice);
   const tooLow = price < steps[1];
   const tooHigh = price > steps[steps.length - 1];
   const inRange = !tooLow && !tooHigh;
   const prettyPrice = prettifyNumber(currentPrice, { round: true });
-  const formattedPrice = `${prettyPrice} ${strategy.quote.symbol}`;
+  const formattedPrice = `${prettyPrice} ${token.symbol}`;
 
   // Out of Range
   const maxChar = Math.max(formattedPrice.length, '(off-scale)'.length);
