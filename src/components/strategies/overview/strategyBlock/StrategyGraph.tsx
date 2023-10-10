@@ -64,9 +64,6 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           (buyOrderExists ? buy.from : sell.from)) /
         2;
 
-  // TODO: Change to the real value
-  // const currentPrice = center;
-
   // Graph zoom
   const from = center - delta * 1.25;
   const to = center + delta * 1.25;
@@ -243,14 +240,12 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       {buy.marginalPrice < buy.to &&
                         buy.marginalPrice >= buy.from && (
-                          <g className={style.buyAreaMarginalPrice}>
-                            <polygon
-                              fill="url(#buy-pattern)"
-                              points={Array.from(
-                                getBuyPoints(buy.marginalPrice, buy.to)
-                              ).join(' ')}
-                            />
-                          </g>
+                          <polygon
+                            fill="url(#buy-pattern)"
+                            points={Array.from(
+                              getBuyPoints(buy.marginalPrice, buy.to)
+                            ).join(' ')}
+                          />
                         )}
                       <line
                         className={style.lineBuySell}
@@ -304,14 +299,12 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       {sell.marginalPrice <= sell.to &&
                         sell.marginalPrice > sell.from && (
-                          <g className={style.sellAreaMarginalPrice}>
-                            <polygon
-                              fill="url(#sell-pattern)"
-                              points={Array.from(
-                                getSellPoints(sell.from, sell.marginalPrice)
-                              ).join(' ')}
-                            />
-                          </g>
+                          <polygon
+                            fill="url(#sell-pattern)"
+                            points={Array.from(
+                              getSellPoints(sell.from, sell.marginalPrice)
+                            ).join(' ')}
+                          />
                         )}
                       <line
                         className={style.lineBuySell}
@@ -345,6 +338,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       <g className={style.pricePoints}>
         {pricePoints.map((point) => (
           <text
+            key={point}
             fill="white"
             x={x(point)}
             y={baseline + 10}

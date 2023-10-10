@@ -17,14 +17,6 @@
   stroke-width: 4;
 }
 
-.strategy-graph .buyAreaMarginalPrice:hover {
-  opacity: 0.8;
-}
-
-.strategy-graph .sellAreaMarginalPrice:hover {
-  opacity: 0.8;
-}
-
 .strategy-graph .priceLine {
   transition: all 0.5s;
 }
