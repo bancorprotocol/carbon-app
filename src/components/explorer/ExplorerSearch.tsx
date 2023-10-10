@@ -34,10 +34,10 @@ export const _ExplorerSearch: FC = () => {
 
   const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
 
-  const isInvalidEnsAddress =
-    !!ensAddressQuery.isSuccess && !ensAddressQuery.data;
+  const isInvalidEnsAddress = !ensAddressQuery.data;
 
-  const waitingToFetchEns = debouncedSearch !== search;
+  const waitingToFetchEns =
+    debouncedSearch !== search || !ensAddressQuery.isSuccess;
 
   const isInvalidAddress = useMemo(() => {
     if (type !== 'wallet' || !search.length) return false;
@@ -66,12 +66,12 @@ export const _ExplorerSearch: FC = () => {
       if (value.length === 0) return;
       const slug = toPairSlug(value);
       if (type === 'token-pair' && !pairs.names.has(slug)) return;
-      if (type === 'wallet' && isInvalidAddress) return;
+      if (type === 'wallet' && (waitingToFetchEns || isInvalidAddress)) return;
       navigate({
         to: PathNames.explorerOverview(type, slug),
       });
     },
-    [isInvalidAddress, navigate, pairs.names, type]
+    [waitingToFetchEns, isInvalidAddress, navigate, pairs.names, type]
   );
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
