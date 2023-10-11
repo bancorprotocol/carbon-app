@@ -19,7 +19,7 @@ import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { toPairSlug } from 'utils/pairSearch';
+import { fromPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
 
@@ -41,7 +41,7 @@ export const _ExplorerSearch: FC = () => {
     if (type === 'token-pair') {
       const content = pairs.names.has(slug)
         ? pairs.names.get(slug)
-        : pairs.names.get(toPairSlug(slug));
+        : pairs.names.get(fromPairSlug(slug));
       return setSearch(content || slug);
     }
   }, [slug, type, pairs.names]);
@@ -49,7 +49,7 @@ export const _ExplorerSearch: FC = () => {
   const onSearchHandler = useCallback(
     (value: string) => {
       if (value.length === 0) return;
-      const slug = toPairSlug(value);
+      const slug = fromPairSlug(value);
       if (type === 'token-pair' && !pairs.names.has(slug)) return;
       if (type === 'wallet' && isInvalidAddress) return;
       navigate({

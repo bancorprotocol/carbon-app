@@ -94,14 +94,14 @@ export const ModalTradeTokenListContent: FC<Props> = ({
       </fieldset>
 
       <div
-        id={'bodyScrollTarget'}
+        id="bodyScrollTarget"
         ref={parentRef}
         style={{
           height: innerHeight - 242,
           overflow: 'auto',
         }}
       >
-        <div
+        <ul
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
             width: '100%',
@@ -112,7 +112,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
             const tradePair = tradePairs2[virtualRow.index];
 
             return (
-              <div
+              <li
                 key={`${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}
                 data-index={virtualRow.index}
                 className={
@@ -145,10 +145,10 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                     } w-20 transition hover:fill-white/80 hover:text-white/80`}
                   />
                 </button>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </div>
   );

@@ -14,6 +14,10 @@ const pairSearchExp = new RegExp('(\\s|-|/){1,}', 'g');
 
 export type PairMaps = ReturnType<typeof createPairMaps>;
 
+/**
+ * Transform a pair of symbols to a pair name
+ * pair name is used to be displayed
+ */
 export const toPairName = (
   base: { symbol: string },
   quote: { symbol: string }
@@ -21,7 +25,19 @@ export const toPairName = (
   return `${base.symbol}/${quote.symbol}`;
 };
 
-export const toPairSlug = (value: string, regex: RegExp = pairSearchExp) => {
+/**
+ * Transform pair symbols to pair key
+ * pair key is used to access a pair in the map
+ */
+export const toPairKey = (base: string, quote: string) => {
+  return `${base}_${quote}`.toLowerCase();
+};
+
+/**
+ * Transform a slug into a pair key
+ * slug comes from a search (query params or input)
+ */
+export const fromPairSlug = (value: string, regex: RegExp = pairSearchExp) => {
   return value.toLowerCase().replaceAll(regex, '_');
 };
 
@@ -34,9 +50,9 @@ export const createPairMaps = (
   for (const pair of pairs) {
     const { baseToken: base, quoteToken: quote } = pair;
     const name = toPairName(base, quote);
-    const slug = toPairSlug(name, transformSlugExp);
-    pairMap.set(slug, pair);
-    nameMap.set(slug, name);
+    const key = fromPairSlug(name, transformSlugExp);
+    pairMap.set(key, pair);
+    nameMap.set(key, name);
   }
   return { pairMap, nameMap };
 };
@@ -55,7 +71,7 @@ export const searchPairKeys = (
   search: string,
   transformSlugExp: RegExp = pairSearchExp
 ) => {
-  const searchSlug = toPairSlug(search, transformSlugExp);
+  const searchSlug = fromPairSlug(search, transformSlugExp);
   const slugs = [];
   for (const slug of nameMap.keys()) {
     if (slug.includes(searchSlug)) slugs.push(slug);
