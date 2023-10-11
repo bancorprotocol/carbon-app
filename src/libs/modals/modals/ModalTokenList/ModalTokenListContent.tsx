@@ -93,7 +93,7 @@ export const ModalTokenListContent: FC<Props> = ({
         ))}
       </fieldset>
       <div
-        id={'bodyScrollTarget'}
+        id="bodyScrollTarget"
         ref={parentRef}
         style={{
           height: innerHeight - 242,
@@ -114,7 +114,7 @@ export const ModalTokenListContent: FC<Props> = ({
               <li
                 key={virtualRow.key}
                 data-index={virtualRow.index}
-                className={'w-full'}
+                className="w-full"
                 style={{
                   position: 'absolute',
                   height: `${virtualRow.size}px`,
