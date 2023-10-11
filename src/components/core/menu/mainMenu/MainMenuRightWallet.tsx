@@ -111,6 +111,7 @@ export const MainMenuRightWallet: FC = () => {
 };
 
 const ConnectedMenu: FC = () => {
+  const { toaster } = useStore();
   const { setMenuOpen } = useMenuCtx();
   const { user, disconnect, isSupportedNetwork, switchNetwork } = useWeb3();
 
@@ -125,6 +126,7 @@ const ConnectedMenu: FC = () => {
     if (!user) return;
     await navigator.clipboard.writeText(user);
     setMenuOpen(false);
+    toaster.addToast('Address copied in Clipboard 👍');
   };
 
   return (
