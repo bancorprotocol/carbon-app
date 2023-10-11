@@ -22,18 +22,33 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { fromPairSlug } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
+import { useGetAddressFromEns } from 'libs/queries';
+import { useDebouncedValue } from 'hooks/useDebouncedValue';
 
 export const _ExplorerSearch: FC = () => {
   const navigate = useNavigate();
   const pairs = usePairs();
   const { type, slug } = useExplorerParams();
   const [search, setSearch] = useState(slug ?? '');
+  const [debouncedSearch] = useDebouncedValue<string>(search, 300); // Debounce search input for ens query
+
+  const ensAddressQuery = useGetAddressFromEns(debouncedSearch.toLowerCase());
+
+  const isInvalidEnsAddress = !ensAddressQuery.data;
+
+  const waitingToFetchEns =
+    debouncedSearch !== search || !ensAddressQuery.isSuccess;
 
   const isInvalidAddress = useMemo(() => {
     if (type !== 'wallet' || !search.length) return false;
     if (search === config.tokens.ZERO) return true;
-    return !utils.isAddress(search.toLowerCase());
-  }, [search, type]);
+
+    return (
+      !utils.isAddress(search.toLowerCase()) &&
+      isInvalidEnsAddress &&
+      !waitingToFetchEns
+    );
+  }, [type, search, isInvalidEnsAddress, waitingToFetchEns]);
 
   useEffect(() => {
     if (!slug) return setSearch('');
@@ -51,12 +66,12 @@ export const _ExplorerSearch: FC = () => {
       if (value.length === 0) return;
       const slug = fromPairSlug(value);
       if (type === 'token-pair' && !pairs.names.has(slug)) return;
-      if (type === 'wallet' && isInvalidAddress) return;
+      if (type === 'wallet' && (waitingToFetchEns || isInvalidAddress)) return;
       navigate({
         to: PathNames.explorerOverview(type, slug),
       });
     },
-    [isInvalidAddress, navigate, pairs.names, type]
+    [waitingToFetchEns, isInvalidAddress, navigate, pairs.names, type]
   );
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
