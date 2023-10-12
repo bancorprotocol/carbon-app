@@ -52,7 +52,7 @@ export const ModalSheet: FC<ModalProps> = ({
             </div>
           </div>
 
-          <div className="overflow-y-hidden">{children}</div>
+          <div className="flex h-[70vh] flex-col">{children}</div>
         </div>
       </m.div>
     </Overlay>

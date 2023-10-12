@@ -41,11 +41,9 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
-        className="mt-20 w-full rounded-8 py-10"
+        className="mt-20 rounded-8"
         onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleSelect(tradePairs[0]);
-          }
+          if (e.key === 'Enter') handleSelect(tradePairs[0]);
         }}
       />
 
