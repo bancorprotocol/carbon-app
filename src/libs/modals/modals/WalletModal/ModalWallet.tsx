@@ -49,19 +49,17 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
 
   return (
     <ModalOrMobileSheet id={id} title="Connect Wallet" isLoading={isLoading}>
-      <div className={'mt-20'}>
-        {isError ? (
-          <div className={'flex flex-col items-center space-y-20'}>
-            <ModalWalletError
-              logoUrl={selectedConnection.logoUrl}
-              name={selectedConnection.name}
-              error={connectionError}
-            />
-          </div>
-        ) : (
-          <ModalWalletContent onClick={onClickConnect} isLoading={isLoading} />
-        )}
-      </div>
+      {isError ? (
+        <div className={'flex flex-col items-center space-y-20'}>
+          <ModalWalletError
+            logoUrl={selectedConnection.logoUrl}
+            name={selectedConnection.name}
+            error={connectionError}
+          />
+        </div>
+      ) : (
+        <ModalWalletContent onClick={onClickConnect} isLoading={isLoading} />
+      )}
     </ModalOrMobileSheet>
   );
 };
