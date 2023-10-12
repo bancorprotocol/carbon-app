@@ -43,7 +43,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
-        className="mt-20 w-full rounded-8"
+        className="rounded-8"
         onKeyDown={(e) => {
           if (e.key === 'Enter') onSelect(filteredTokens[0]);
         }}

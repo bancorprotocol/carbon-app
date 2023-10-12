@@ -78,7 +78,7 @@ export const ModalTokenListContent: FC<Props> = ({
     <>
       <fieldset
         aria-label="Filter tokens"
-        className="my-20 grid w-full grid-cols-3 px-4"
+        className="grid grid-cols-3 px-4"
         onChange={selectCatergory}
       >
         {categories.map((category) => (

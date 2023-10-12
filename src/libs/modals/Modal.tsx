@@ -51,31 +51,25 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="relative flex w-full flex-col overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis"
+          className="relative flex w-full flex-col gap-20 overflow-hidden rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis"
         >
           {isLoading && (
             <div className="statusBar absolute -mt-20 ml-20 h-6 w-full bg-green/25" />
           )}
-          <div className="flex justify-between">
-            <div>
-              {typeof title === 'string' ? (
-                <h2 id="modal-title" className="m-0">
-                  {title}
-                </h2>
-              ) : (
-                title
-              )}
-            </div>
-            <div>
-              {showCloseButton ? (
-                <button className="p-4" onClick={() => onCloseHandler(id)}>
-                  <IconX className="w-12" />
-                </button>
-              ) : null}
-            </div>
-          </div>
+          <header className="flex justify-between">
+            {typeof title === 'string' ? (
+              <h2 id="modal-title">{title}</h2>
+            ) : (
+              title
+            )}
+            {showCloseButton && (
+              <button className="p-4" onClick={() => onCloseHandler(id)}>
+                <IconX className="w-12" />
+              </button>
+            )}
+          </header>
 
-          <div className="flex h-[70vh] flex-col">{children}</div>
+          <div className="flex h-[70vh] flex-col gap-20">{children}</div>
         </div>
       </m.div>
     </Overlay>
