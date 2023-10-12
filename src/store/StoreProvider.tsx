@@ -43,12 +43,12 @@ import {
   defaultStrategyToEdit,
   StrategyToEditStore,
   useStrategyToEdit,
-} from './useStrategyToEdit';
+} from 'store/useStrategyToEdit';
 import {
   defaultToastStore,
   ToastStore,
   useToastStore,
-} from './useToasterStore';
+} from 'store/useToasterStore';
 
 // ********************************** //
 // STORE CONTEXT
