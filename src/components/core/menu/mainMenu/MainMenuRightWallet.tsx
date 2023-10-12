@@ -17,6 +17,7 @@ import { FC, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
+import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
 
 const iconProps = { className: 'w-20' };
 
@@ -50,6 +51,8 @@ export const MainMenuRightWallet: FC = () => {
     openModal('wallet', undefined);
   };
 
+  const { data: ensName } = useGetEnsFromAddress(user || '');
+
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error-light';
     if (!isSupportedNetwork) return 'error-light';
@@ -60,8 +63,8 @@ export const MainMenuRightWallet: FC = () => {
     if (isUserBlocked) return 'Wallet Blocked';
     if (!isSupportedNetwork) return 'Wrong Network';
     if (!user) return 'Connect Wallet';
-    return shortenString(user);
-  }, [isSupportedNetwork, isUserBlocked, user]);
+    return shortenString(ensName || user);
+  }, [ensName, isSupportedNetwork, isUserBlocked, user]);
 
   const buttonIcon = useMemo(() => {
     if (isUserBlocked) return <IconWarning {...iconProps} />;
