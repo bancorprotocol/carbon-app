@@ -13,9 +13,9 @@ import { useStrategyCtx } from 'hooks/useStrategies';
 export const ExplorerTabs = () => {
   const { strategies } = useStrategyCtx();
   const { slug, type } = useExplorerParams();
-  const {
-    current: { pathname },
-  } = useLocation();
+
+  // To support emojis in ens domains
+  const pathname = decodeURIComponent(useLocation().current.pathname);
 
   const tabs: StrategyTab[] = [
     {
