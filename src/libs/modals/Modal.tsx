@@ -69,7 +69,7 @@ export const Modal: FC<ModalProps> = ({
             )}
           </header>
 
-          <div className="flex h-[70vh] flex-col gap-20">{children}</div>
+          <div className="flex max-h-[70vh] flex-col gap-20">{children}</div>
         </div>
       </m.div>
     </Overlay>

@@ -89,7 +89,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
           />
         ))}
       </fieldset>
-      <div ref={parentRef} className="flex-1 overflow-auto p-8">
+      <div ref={parentRef} className="h-[70vh] overflow-auto p-8">
         <ul
           className="relative"
           style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
