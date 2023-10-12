@@ -68,8 +68,8 @@ export const Modal: FC<ModalProps> = ({
             </div>
             <div>
               {showCloseButton ? (
-                <button className={'p-4'} onClick={() => onCloseHandler(id)}>
-                  <IconX className={'w-12'} />
+                <button className="p-4" onClick={() => onCloseHandler(id)}>
+                  <IconX className="w-12" />
                 </button>
               ) : null}
             </div>
