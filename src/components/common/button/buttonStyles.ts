@@ -9,7 +9,6 @@ type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
 export const buttonStyles = cva<ButtonVariants>(
   [
-    'text-black',
     'font-weight-500',
     'rounded-full px-30',
     'transition duration-300 ease-in-out',
@@ -25,7 +24,7 @@ export const buttonStyles = cva<ButtonVariants>(
           'hover:border-grey3 hover:disabled:black',
         ],
         white: [
-          'bg-white border-2 border-white',
+          'bg-white border-2 border-white !text-black',
           'hover:border-grey4 hover:disabled:border-white',
         ],
         secondary: [
@@ -33,7 +32,7 @@ export const buttonStyles = cva<ButtonVariants>(
           'hover:border-grey3 hover:disabled:border-emphasis',
         ],
         success: [
-          'bg-green border-2 border-green',
+          'bg-green border-2 border-green !text-black',
           'hover:border-lightGreen hover:disabled:border-green',
         ],
         'success-light': [
@@ -41,8 +40,12 @@ export const buttonStyles = cva<ButtonVariants>(
           'hover:border-lightGreen hover:!text-black hover:bg-green hover:disabled:border-green',
         ],
         error: [
-          'bg-red border-2 border-red',
+          'bg-red border-2 border-red !text-black',
           'hover:border-redLight hover:disabled:border-red',
+        ],
+        'error-light': [
+          'bg-red/25 !text-red',
+          'hover:bg-red/50 hover:!text-white',
         ],
       },
       size: {
