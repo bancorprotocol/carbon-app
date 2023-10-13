@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { FullOutcomeParams, geoMean, getFullOutcome } from './fullOutcome';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from '../libs/safedecimal';
 
 describe('fullOutcome', () => {
   describe('Geo Mean', () => {
@@ -24,13 +24,11 @@ describe('fullOutcome', () => {
       expect(geoMean('-100', '-10')).toBeUndefined();
     });
     it('should return same price for limit price', () => {
-      expect(geoMean('100', '100')).toEqual(new BigNumber('100'));
+      expect(geoMean('100', '100')).toEqual(new SafeDecimal('100'));
     });
 
     it('should return mean price for range price', () => {
-      // Decimal: 158.1138830084189666
-      // BigNumber: 158.11388300841896659994
-      const mean = new BigNumber('158.11388300841896659994');
+      const mean = new SafeDecimal('158.1138830084189666');
       expect(geoMean('100', '250')).toEqual(mean);
     });
   });
@@ -84,20 +82,16 @@ describe('fullOutcome', () => {
       });
     });
     describe('Range rate', () => {
-      it('[Buy] should return 1.83532587096449412726 with min 1600, max 1900 & budget 3200', () => {
-        // Decimal: 1.8353258709644941273
-        // BigNumber: 1.83532587096449412726
+      it('[Buy] should return 1.8353258709644941273 with min 1600, max 1900 & budget 3200', () => {
         const input = {
           ...base,
           min: '1600',
           max: '1900',
           budget: '3200',
         };
-        expect(getFullOutcome(input)?.amount).toBe('1.83532587096449412726');
+        expect(getFullOutcome(input)?.amount).toBe('1.8353258709644941273');
       });
-      it('[Sell] should return 4623.31050222673233768765 with min 1800, max 1900 & budget 2.5', () => {
-        // Decimal: 4623.3105022267323378
-        // BigNumber: 4623.31050222673233768765
+      it('[Sell] should return 4623.3105022267323378 with min 1800, max 1900 & budget 2.5', () => {
         const input = {
           ...base,
           buy: false,
@@ -105,7 +99,7 @@ describe('fullOutcome', () => {
           max: '1900',
           budget: '2.5',
         };
-        expect(getFullOutcome(input)?.amount).toBe('4623.31050222673233768765');
+        expect(getFullOutcome(input)?.amount).toBe('4623.3105022267323378');
       });
     });
   });

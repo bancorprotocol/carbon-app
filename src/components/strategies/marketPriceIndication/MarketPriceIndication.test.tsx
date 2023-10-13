@@ -1,6 +1,6 @@
 import { test, expect, describe, beforeEach, vitest } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from '../../../libs/safedecimal';
 import { MarketPriceIndication } from './index';
 
 vitest.mock('components/common/tooltip/Tooltip', () => ({
@@ -17,7 +17,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication correctly for positive percentage', () => {
-    const marketPricePercentage = new BigNumber(5);
+    const marketPricePercentage = new SafeDecimal(5);
     render(
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
@@ -27,7 +27,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication correctly for positive percentage - greater than 99.99', () => {
-    const marketPricePercentage = new BigNumber(100);
+    const marketPricePercentage = new SafeDecimal(100);
     render(
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
@@ -37,7 +37,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication correctly for positive percentage - smaller than 0.01', () => {
-    const marketPricePercentage = new BigNumber(0.001);
+    const marketPricePercentage = new SafeDecimal(0.001);
     render(
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
@@ -47,7 +47,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication correctly for negative percentage', () => {
-    const marketPricePercentage = new BigNumber(-6);
+    const marketPricePercentage = new SafeDecimal(-6);
     render(
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
@@ -57,7 +57,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication correctly for negative percentage - lower than 99.99', () => {
-    const marketPricePercentage = new BigNumber(-100);
+    const marketPricePercentage = new SafeDecimal(-100);
     render(
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
@@ -67,7 +67,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication correctly for zero percentage', async () => {
-    const marketPricePercentage = new BigNumber(0);
+    const marketPricePercentage = new SafeDecimal(0);
     render(
       <MarketPriceIndication marketPricePercentage={marketPricePercentage} />
     );
@@ -77,7 +77,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication with range text when isRange = true & positive', () => {
-    const marketPricePercentage = new BigNumber(3.1);
+    const marketPricePercentage = new SafeDecimal(3.1);
     render(
       <MarketPriceIndication
         marketPricePercentage={marketPricePercentage}
@@ -90,7 +90,7 @@ describe('MarketPriceIndication', () => {
   });
 
   test('renders the market price indication with range text when isRange = true & negative', () => {
-    const marketPricePercentage = new BigNumber(-3.12345);
+    const marketPricePercentage = new SafeDecimal(-3.12345);
     render(
       <MarketPriceIndication
         marketPricePercentage={marketPricePercentage}
