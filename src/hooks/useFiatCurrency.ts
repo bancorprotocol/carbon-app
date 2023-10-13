@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useGetTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
@@ -14,7 +14,7 @@ export const useFiatCurrency = (token?: Token) => {
 
   const getFiatValue = useMemo(() => {
     return (value: string, usd = false) => {
-      return new BigNumber(value || 0).times(
+      return new SafeDecimal(value || 0).times(
         tokenPriceQuery.data?.[
           usd ? availableCurrencies[0] : selectedFiatCurrency
         ] || 0

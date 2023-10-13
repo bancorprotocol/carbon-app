@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { LogoImager } from 'components/common/imager/Imager';
 import { getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 import { FiatSymbol } from 'utils/carbonApi';
 
 export const ModalTradeRoutingRowCell: FC<{
   logoURI?: string;
-  amount: string | BigNumber;
-  fiatAmount: string | BigNumber;
+  amount: string | SafeDecimal;
+  fiatAmount: string | SafeDecimal;
   selectedFiatCurrency: FiatSymbol;
 }> = ({ logoURI, amount, fiatAmount, selectedFiatCurrency }) => {
   return (

@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
 import { PopulatedTransaction } from 'ethers';
 import { TradeActionBNStr, carbonSDK } from 'libs/sdk';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
@@ -41,22 +41,22 @@ export const useTradeAction = ({
 
   const calcMinReturn = useCallback(
     (amount: string) => {
-      const slippageBn = new BigNumber(slippage).div(100);
-      return new BigNumber(1).minus(slippageBn).times(amount).toString();
+      const slippageBn = new SafeDecimal(slippage).div(100);
+      return new SafeDecimal(1).minus(slippageBn).times(amount).toString();
     },
     [slippage]
   );
 
   const calcMaxInput = useCallback(
     (amount: string) => {
-      const slippageBn = new BigNumber(slippage).div(100);
-      return new BigNumber(1).plus(slippageBn).times(amount).toString();
+      const slippageBn = new SafeDecimal(slippage).div(100);
+      return new SafeDecimal(1).plus(slippageBn).times(amount).toString();
     },
     [slippage]
   );
 
   const calcDeadline = useCallback((value: string) => {
-    const deadlineInMs = new BigNumber(value).times(60).times(1000);
+    const deadlineInMs = new SafeDecimal(value).times(60).times(1000);
     return deadlineInMs.plus(Date.now()).toString();
   }, []);
 

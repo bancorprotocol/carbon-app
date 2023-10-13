@@ -5,7 +5,7 @@ import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useContract } from 'hooks/useContract';
 import { config } from 'services/web3/config';
 import { ONE_DAY_IN_MS } from 'utils/time';
@@ -40,7 +40,7 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
-  roi: BigNumber;
+  roi: SafeDecimal;
 }
 
 interface StrategiesHelperProps {
@@ -69,13 +69,13 @@ const buildStrategiesHelper = async ({
     const quote =
       getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
 
-    const sellLow = new BigNumber(s.sellPriceLow);
-    const sellHigh = new BigNumber(s.sellPriceHigh);
-    const sellBudget = new BigNumber(s.sellBudget);
+    const sellLow = new SafeDecimal(s.sellPriceLow);
+    const sellHigh = new SafeDecimal(s.sellPriceHigh);
+    const sellBudget = new SafeDecimal(s.sellBudget);
 
-    const buyLow = new BigNumber(s.buyPriceLow);
-    const buyHight = new BigNumber(s.buyPriceHigh);
-    const buyBudget = new BigNumber(s.buyBudget);
+    const buyLow = new SafeDecimal(s.buyPriceLow);
+    const buyHight = new SafeDecimal(s.buyPriceHigh);
+    const buyBudget = new SafeDecimal(s.buyBudget);
 
     const offCurve =
       sellLow.isZero() &&
@@ -112,7 +112,7 @@ const buildStrategiesHelper = async ({
       endRate: s.sellPriceHigh,
     };
 
-    const roi = new BigNumber(roiData.find((r) => r.id === s.id)?.ROI || 0);
+    const roi = new SafeDecimal(roiData.find((r) => r.id === s.id)?.ROI || 0);
 
     const strategy: Strategy = {
       id: s.id,

@@ -2,7 +2,7 @@ import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { ModalTradeRoutingRowCell } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRowCell';
 import { ForwardArrow } from 'components/common/forwardArrow';
@@ -28,14 +28,14 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   handleClick,
 }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
-  const averagePrice = new BigNumber(sourceAmount).div(targetAmount);
+  const averagePrice = new SafeDecimal(sourceAmount).div(targetAmount);
   const averagePriceFiat = averagePrice.times(
     sourceFiatPrice?.[selectedFiatCurrency] || 0
   );
-  const sourceAmountFiat = new BigNumber(sourceAmount).times(
+  const sourceAmountFiat = new SafeDecimal(sourceAmount).times(
     sourceFiatPrice?.[selectedFiatCurrency] || 0
   );
-  const targetAmountFiat = new BigNumber(targetAmount).times(
+  const targetAmountFiat = new SafeDecimal(targetAmount).times(
     targetFiatPrice?.[selectedFiatCurrency] || 0
   );
 
