@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 
 describe('SafeDecimal', () => {
   describe('valid input', () => {
-    it('should return a Decimal if input is valid string', () => {
+    it('should return a valid output if input is valid string', () => {
       expect(new SafeDecimal('4321123122321')).toEqual(
         new SafeDecimal('4321123122321')
       );
@@ -11,12 +11,23 @@ describe('SafeDecimal', () => {
       expect(new SafeDecimal('0.425').toString()).toEqual('0.425');
       expect(new SafeDecimal('.425').toString()).toEqual('0.425');
     });
-    it('should return a SafeDecimal if input is valid number', () => {
+    it('should return a valid output if input is valid number', () => {
       expect(new SafeDecimal(4321123122321).toString()).toEqual(
         '4321123122321'
       );
       expect(new SafeDecimal(42.5).toString()).toEqual('42.5');
       expect(new SafeDecimal(0.0425).toString()).toEqual('0.0425');
+    });
+    it('should return a valid output if input is exponential number', () => {
+      expect(new SafeDecimal('1E-5').toString()).toEqual('0.00001');
+      expect(new SafeDecimal('10E0').toString()).toEqual('10');
+      expect(new SafeDecimal('10E20').toString()).toEqual('1e+21');
+    });
+    it('should return a valid output if input is a negative number', () => {
+      expect(new SafeDecimal('-1E-5').toString()).toEqual('-0.00001');
+      expect(new SafeDecimal('-.035').toString()).toEqual('-0.035');
+      expect(new SafeDecimal('-312.34').toString()).toEqual('-312.34');
+      expect(new SafeDecimal('-312').toString()).toEqual('-312');
     });
   });
   describe('invalid input', () => {
@@ -27,6 +38,9 @@ describe('SafeDecimal', () => {
     });
     it('should return NaN for empty string input', () => {
       expect(new SafeDecimal('').toString()).toEqual('NaN');
+    });
+    it('should return NaN for string with extra non-decimal characters input', () => {
+      expect(new SafeDecimal('312312ffff').toString()).toEqual('NaN');
     });
   });
   describe('other input', () => {
