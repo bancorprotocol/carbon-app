@@ -80,7 +80,8 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-        duplicate(strategy);
+        openModal('duplicateStrategy', { strategyId: strategy.id });
+        // duplicate(strategy);
       },
     },
     {

@@ -44,6 +44,10 @@ import {
   ModalManageNotifications,
   ModalManageNotificationsData,
 } from './ModalManageNotifications';
+import {
+  ModalDuplicateStrategy,
+  ModalDuplicateStrategyData,
+} from './ModalDuplicateStrategy';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -61,6 +65,7 @@ export interface ModalSchema {
   genericInfo: ModalGenericInfoData;
   createStratExpertMode: ModalCreateStratExpertModeData;
   manageNotifications: ModalManageNotificationsData;
+  duplicateStrategy: ModalDuplicateStrategyData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -81,4 +86,5 @@ export const MODAL_COMPONENTS: TModals = {
   genericInfo: (props) => ModalGenericInfo(props),
   createStratExpertMode: (props) => ModalCreateStratExpertMode(props),
   manageNotifications: (props) => ModalManageNotifications(props),
+  duplicateStrategy: (props) => ModalDuplicateStrategy(props),
 };
