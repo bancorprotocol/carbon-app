@@ -2,8 +2,10 @@ import { Decimal } from 'decimal.js';
 
 function sanitizeDecimal(value: Decimal.Value) {
   if (typeof value === 'string') {
-    if (!isNaN(parseFloat(value))) {
-      return value.trim();
+    const isNumeric = /^-?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
+    const trimmedNumber = value.trim();
+    if (isNumeric.test(trimmedNumber)) {
+      return trimmedNumber;
     } else {
       return 'NaN';
     }
