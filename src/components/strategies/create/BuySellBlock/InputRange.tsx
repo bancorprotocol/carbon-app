@@ -36,7 +36,7 @@ export const InputRange: FC<InputRangeProps> = ({
 }) => {
   const inputMinId = useId();
   const inputMaxId = useId();
-  const errorMessage = 'Max Price must be higher than min price and not zero';
+  const errorMessage = 'Max price must be higher than min price and not zero';
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
