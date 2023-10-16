@@ -1,6 +1,6 @@
 import { test, expect, describe, beforeEach, vitest } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import { SafeDecimal } from '../../../libs/safedecimal';
+import { SafeDecimal } from 'libs/safedecimal';
 import { MarketPriceIndication } from './index';
 
 vitest.mock('components/common/tooltip/Tooltip', () => ({

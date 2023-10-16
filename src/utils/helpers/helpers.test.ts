@@ -4,7 +4,7 @@ import {
   shortenString,
 } from '.';
 import { describe, it, expect } from 'vitest';
-import { SafeDecimal } from '../../libs/safedecimal';
+import { SafeDecimal } from 'libs/safedecimal';
 
 describe('shortenString', () => {
   const testCases: [string, string | undefined, number | undefined, string][] =

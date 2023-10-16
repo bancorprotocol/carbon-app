@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { FullOutcomeParams, geoMean, getFullOutcome } from './fullOutcome';
-import { SafeDecimal } from '../libs/safedecimal';
+import { FullOutcomeParams, geoMean, getFullOutcome } from 'utils/fullOutcome';
+import { SafeDecimal } from 'libs/safedecimal';
 
 describe('fullOutcome', () => {
   describe('Geo Mean', () => {
