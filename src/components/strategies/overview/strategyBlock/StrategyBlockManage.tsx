@@ -113,7 +113,7 @@ export const StrategyBlockManage: FC<Props> = ({
   if (!isExplorer) {
     items.push({
       id: 'editPrices',
-      name: 'Edit Rates',
+      name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyChangeRatesClick(strategyEvent);
