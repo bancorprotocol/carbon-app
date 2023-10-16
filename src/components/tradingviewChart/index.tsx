@@ -11,9 +11,12 @@ export type TradingviewChartProps = {
 
 export const TradingviewChart: FC<TradingviewChartProps> = memo(
   ({ base, quote }) => {
+    // we can force WETH for ETH because it's duplicated in pairsToExchangeMapping
+    const baseSymbol = base?.symbol === 'ETH' ? 'WETH' : base?.symbol;
+    const quoteSymbol = quote?.symbol === 'ETH' ? 'WETH' : quote?.symbol;
     const symbol =
-      pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`] ||
-      `BINANCE:${base?.symbol}${quote?.symbol}`;
+      pairsToExchangeMapping[`${baseSymbol}${quoteSymbol}`] ||
+      `UNISWAP3ETH:${baseSymbol}${quoteSymbol}`;
 
     return (
       <div>

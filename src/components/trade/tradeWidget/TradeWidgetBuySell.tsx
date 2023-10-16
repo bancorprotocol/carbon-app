@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
+import { FormEvent, useEffect, useId, useMemo } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
@@ -23,6 +23,7 @@ export type TradeWidgetBuySellProps = {
 };
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
+  const id = useId();
   const { user } = useWeb3();
   const {
     sourceInput,
@@ -112,7 +113,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     }
   }, [buy, targetInput, sourceInput]);
 
-  const handleTradeClick = () => {
+  const handleTrade = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     handleCTAClick();
     buy
       ? carbonEvents.trade.tradeBuyClick({
@@ -168,22 +170,30 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   };
 
   return (
-    <div className={`flex flex-col rounded-12 bg-silver p-20`}>
-      <h2 className={'mb-20'}>
+    <form
+      onSubmit={handleTrade}
+      className="flex flex-col rounded-12 bg-silver p-20"
+    >
+      <h2 className="mb-20">
         {buy
           ? `Buy ${target.symbol} with ${source.symbol}`
           : `Sell ${source.symbol} for ${target.symbol}`}
       </h2>
-      <div className={'flex justify-between text-14'}>
-        <div className={'text-white/50'}>You pay</div>
+      <header className="flex justify-between text-14">
+        <label htmlFor={`${id}-pay`} className="text-white/50">
+          You pay
+        </label>
         {errorMsgSource && (
-          <div className={`font-weight-500 text-red`}>{errorMsgSource}</div>
+          <output htmlFor={`${id}-pay`} className="font-weight-500 text-red">
+            {errorMsgSource}
+          </output>
         )}
-      </div>
+      </header>
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
           <TokenInputField
-            className={'mb-20 mt-5 rounded-12 bg-black p-16'}
+            id={`${id}-pay`}
+            className="mb-20 mt-5 rounded-12 bg-black p-16"
             token={source}
             isBalanceLoading={sourceBalanceQuery.isLoading}
             value={sourceInput}
@@ -196,59 +206,56 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             isError={!!errorMsgSource}
             disabled={!hasEnoughLiquidity}
           />
-          <div className={'flex justify-between text-14'}>
-            <div className={'text-white/50'}>You receive</div>
+          <header className="flex justify-between text-14">
+            <label htmlFor={`${id}-receive`} className="text-white/50">
+              You receive
+            </label>
             {errorMsgTarget && (
-              <div
-                className={`cursor-pointer font-weight-500 text-red`}
+              <button
+                type="button"
+                className="cursor-pointer font-weight-500 text-red"
                 onClick={() => {
                   onInputChange(false);
                   setTargetInput(liquidityQuery.data || '0');
                 }}
               >
                 {errorMsgTarget}
-              </div>
+              </button>
             )}
-          </div>
+          </header>
           <TokenInputField
-            className={'mt-5 rounded-b-4 rounded-t-12 bg-black p-16'}
+            id={`${id}-receive`}
+            className="mt-5 rounded-b-4 rounded-t-12 bg-black p-16"
             token={target}
             value={targetInput}
-            setValue={(value) => {
-              setTargetInput(value);
-            }}
-            placeholder={'Total Amount'}
+            setValue={(value) => setTargetInput(value)}
+            placeholder="Total Amount"
             onKeystroke={() => onInputChange(false)}
             isLoading={bySourceQuery.isFetching}
             isError={!!errorMsgTarget}
             slippage={slippage}
             disabled={!hasEnoughLiquidity}
           />
-          <div
-            className={
-              'mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80'
-            }
-          >
-            <span>{getRate()}</span>
+          <footer className="mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80">
+            <p>{getRate()}</p>
             {showRouting && (
               <button
+                type="button"
                 onClick={openTradeRouteModal}
-                className={
-                  'flex hidden space-x-10 text-left hover:text-white md:flex'
-                }
+                className="flex hidden space-x-10 text-left hover:text-white md:flex"
               >
-                <IconRouting className={'w-12'} />
+                <IconRouting className="w-12" />
                 <Tooltip
-                  placement={'left'}
+                  placement="left"
                   element="You can view and manage the orders that are included in the trade."
                 >
                   <span>Routing</span>
                 </Tooltip>
               </button>
             )}
-          </div>
+          </footer>
           {IS_TENDERLY_FORK && (
-            <div className={'text-secondary mt-5 text-right'}>
+            <div className="text-secondary mt-5 text-right">
               DEBUG: {getLiquidity()}
             </div>
           )}
@@ -260,16 +267,16 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         />
       )}
       <Button
+        type="submit"
         disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
         loading={isAwaiting}
-        loadingChildren={'Waiting for Confirmation'}
-        onClick={handleTradeClick}
+        loadingChildren="Waiting for Confirmation"
         variant={buy ? 'success' : 'error'}
         fullWidth
-        className={'mt-20'}
+        className="mt-20"
       >
         {ctaButtonText}
       </Button>
-    </div>
+    </form>
   );
 };
