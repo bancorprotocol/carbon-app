@@ -1,4 +1,13 @@
-import { Dispatch, FC, MouseEvent, ReactNode, useId, useState } from 'react';
+import {
+  Dispatch,
+  FC,
+  MouseEvent,
+  ReactNode,
+  createContext,
+  useContext,
+  useId,
+  useState,
+} from 'react';
 import {
   Placement,
   FloatingFocusManager,
@@ -29,6 +38,15 @@ type Props = {
   placement?: Placement;
   offset?: number;
 };
+
+interface MenuCtx {
+  setMenuOpen: Dispatch<boolean>;
+}
+
+const MenuContext = createContext<MenuCtx>({
+  setMenuOpen: () => undefined,
+});
+export const useMenuCtx = () => useContext(MenuContext);
 
 export const DropdownMenu: FC<Props> = ({
   children,
@@ -76,7 +94,7 @@ export const DropdownMenu: FC<Props> = ({
   const buttonProps = getReferenceProps({ ref: refs.setReference }) as any;
 
   return (
-    <>
+    <MenuContext.Provider value={{ setMenuOpen: setOpen }}>
       {button(buttonProps)}
       <FloatingPortal>
         {isMounted && menuOpen && (
@@ -86,7 +104,7 @@ export const DropdownMenu: FC<Props> = ({
               ref={refs.setFloating}
               className={cn(
                 // z-index is above header/footer
-                `z-50 min-w-[200px] rounded border border-b-lightGrey shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-emphasis`,
+                'z-50 min-w-[200px] rounded border border-b-lightGrey shadow-lg backdrop-blur-2xl dark:border-darkGrey dark:bg-emphasis',
                 className
               )}
               style={{ ...floatingStyles, ...transition }}
@@ -97,6 +115,6 @@ export const DropdownMenu: FC<Props> = ({
           </FloatingFocusManager>
         )}
       </FloatingPortal>
-    </>
+    </MenuContext.Provider>
   );
 };

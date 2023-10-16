@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { Strategy } from 'libs/queries';
 import {
   StrategyFilter,
@@ -9,8 +9,8 @@ import {
 
 const sortFn: Record<StrategySort, (a: Strategy, b: Strategy) => number> = {
   recent: (a, b) =>
-    new Decimal(a.idDisplay).minus(b.idDisplay).times(-1).toNumber(),
-  old: (a, b) => new Decimal(a.idDisplay).minus(b.idDisplay).toNumber(),
+    new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber(),
+  old: (a, b) => new BigNumber(a.idDisplay).minus(b.idDisplay).toNumber(),
   pairAsc: (a, b) => {
     return (
       a.base.symbol.localeCompare(b.base.symbol) ||

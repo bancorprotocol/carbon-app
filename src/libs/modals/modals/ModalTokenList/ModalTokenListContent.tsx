@@ -14,7 +14,6 @@ import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { WarningWithTooltip } from 'components/common/WarningWithTooltip/WarningWithTooltip';
 import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
-import { useStore } from 'store';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type ChooseTokenCategory = (typeof categories)[number];
@@ -34,7 +33,6 @@ export const ModalTokenListContent: FC<Props> = ({
   onAddFavorite,
   onRemoveFavorite,
 }) => {
-  const { innerHeight } = useStore();
   const parentRef = useRef<HTMLDivElement>(null);
   const [selectedList, _setSelectedList] = useState<ChooseTokenCategory>(
     lsService.getItem('chooseTokenCategory') || 'popular'
@@ -80,7 +78,7 @@ export const ModalTokenListContent: FC<Props> = ({
     <>
       <fieldset
         aria-label="Filter tokens"
-        className="my-20 grid w-full grid-cols-3 px-4"
+        className="grid grid-cols-3 px-4"
         onChange={selectCatergory}
       >
         {categories.map((category) => (
@@ -92,81 +90,64 @@ export const ModalTokenListContent: FC<Props> = ({
           />
         ))}
       </fieldset>
-      <div
-        id={'bodyScrollTarget'}
-        ref={parentRef}
-        style={{
-          height: innerHeight - 242,
-          overflow: 'auto',
-        }}
-      >
+      <div ref={parentRef} className="h-[70vh] overflow-auto p-8">
         <ul
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: '100%',
-            position: 'relative',
-          }}
-          data-testid="select-token-list"
+          className="relative"
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
         >
-          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            const token = _tokens[virtualRow.index];
+          {rowVirtualizer.getVirtualItems().map((row) => {
+            const token = _tokens[row.index];
+            const style = {
+              height: `${row.size}px`,
+              transform: `translateY(${row.start}px)`,
+            } as const;
             return (
               <li
-                key={virtualRow.key}
-                data-index={virtualRow.index}
-                className={'w-full'}
-                style={{
-                  position: 'absolute',
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${virtualRow.start}px)`,
-                }}
+                key={token.address}
+                className="absolute inset-0 flex items-center justify-between rounded-12 hover:bg-black"
+                style={style}
               >
-                <div className="flex rounded-12 px-8 hover:bg-black">
-                  <button
-                    onClick={() => onSelect(token)}
-                    className="flex w-full items-center"
-                    style={{ height: `${virtualRow.size}px` }}
-                    data-testid={`select-token-${token.symbol}`}
-                  >
-                    <LogoImager
-                      src={token.logoURI}
-                      alt={`${token.symbol} Token`}
-                      className="h-32 w-32"
-                    />
-                    <div className="ml-15 grid justify-items-start">
-                      <div className="flex">
-                        {token.symbol}
-                        {token.isSuspicious && (
-                          <WarningWithTooltip
-                            className="ml-5"
-                            tooltipContent={suspiciousTokenTooltipMsg}
-                          />
-                        )}
-                      </div>
-                      <div className="text-secondary text-12">
-                        {
-                          // TODO: add tailwind line camp
-                          token.name ?? token.symbol
-                        }
-                      </div>
+                <button
+                  onClick={() => onSelect(token)}
+                  className="flex flex-1 items-center gap-10 p-8"
+                  data-testid={`select-token-${token.symbol}`}
+                >
+                  <LogoImager
+                    src={token.logoURI}
+                    alt={`${token.symbol} Token`}
+                    className="h-32 w-32"
+                  />
+                  <div className="ml-15 grid justify-items-start">
+                    <div className="flex">
+                      {token.symbol}
+                      {token.isSuspicious && (
+                        <WarningWithTooltip
+                          className="ml-5"
+                          tooltipContent={suspiciousTokenTooltipMsg}
+                        />
+                      )}
                     </div>
-                  </button>
-                  <button
-                    onClick={() =>
+                    <div className="text-secondary max-w-full truncate text-12">
+                      {token.name ?? token.symbol}
+                    </div>
+                  </div>
+                </button>
+                <button
+                  className="p-8"
+                  onClick={() =>
+                    isFavorite(token)
+                      ? onRemoveFavorite(token)
+                      : onAddFavorite(token)
+                  }
+                >
+                  <IconStar
+                    className={`${
                       isFavorite(token)
-                        ? onRemoveFavorite(token)
-                        : onAddFavorite(token)
-                    }
-                  >
-                    <IconStar
-                      className={`${
-                        isFavorite(token)
-                          ? 'fill-green text-green'
-                          : 'text-white/40'
-                      } w-20 transition hover:fill-white/80 hover:text-white/80`}
-                    />
-                  </button>
-                </div>
+                        ? 'fill-green text-green'
+                        : 'text-white/40'
+                    } w-20 transition hover:fill-white/80 hover:text-white/80`}
+                  />
+                </button>
               </li>
             );
           })}

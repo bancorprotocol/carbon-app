@@ -5,7 +5,7 @@ import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { useContract } from 'hooks/useContract';
 import { config } from 'services/web3/config';
 import { ONE_DAY_IN_MS } from 'utils/time';
@@ -20,7 +20,8 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { RoiRow } from 'utils/carbonApi';
-import { useGetRoi } from '../extApi/roi';
+import { useGetRoi } from 'libs/queries/extApi/roi';
+import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -39,7 +40,7 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
-  roi: Decimal;
+  roi: BigNumber;
 }
 
 interface StrategiesHelperProps {
@@ -68,13 +69,13 @@ const buildStrategiesHelper = async ({
     const quote =
       getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
 
-    const sellLow = new Decimal(s.sellPriceLow);
-    const sellHigh = new Decimal(s.sellPriceHigh);
-    const sellBudget = new Decimal(s.sellBudget);
+    const sellLow = new BigNumber(s.sellPriceLow);
+    const sellHigh = new BigNumber(s.sellPriceHigh);
+    const sellBudget = new BigNumber(s.sellBudget);
 
-    const buyLow = new Decimal(s.buyPriceLow);
-    const buyHight = new Decimal(s.buyPriceHigh);
-    const buyBudget = new Decimal(s.buyBudget);
+    const buyLow = new BigNumber(s.buyPriceLow);
+    const buyHight = new BigNumber(s.buyPriceHigh);
+    const buyBudget = new BigNumber(s.buyBudget);
 
     const offCurve =
       sellLow.isZero() &&
@@ -111,7 +112,7 @@ const buildStrategiesHelper = async ({
       endRate: s.sellPriceHigh,
     };
 
-    const roi = new Decimal(roiData.find((r) => r.id === s.id)?.ROI || 0);
+    const roi = new BigNumber(roiData.find((r) => r.id === s.id)?.ROI || 0);
 
     const strategy: Strategy = {
       id: s.id,
@@ -140,17 +141,20 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
-  const isValidAddres = utils.isAddress(user?.toLowerCase() || '');
-  const isZeroAddress = user === config.tokens.ZERO;
+  const ensAddress = useGetAddressFromEns(user || '');
+  const address: string = (ensAddress?.data || user || '').toLowerCase();
+
+  const isValidAddress = utils.isAddress(address);
+  const isZeroAddress = address === config.tokens.ZERO;
 
   const roiQuery = useGetRoi();
 
   return useQuery<Strategy[]>(
-    QueryKey.strategies(user),
+    QueryKey.strategies(address),
     async () => {
-      if (!user || !isValidAddres || isZeroAddress) return [];
+      if (!address || !isValidAddress || isZeroAddress) return [];
 
-      const strategies = await carbonSDK.getUserStrategies(user);
+      const strategies = await carbonSDK.getUserStrategies(address);
       return buildStrategiesHelper({
         strategies,
         getTokenById,
@@ -160,7 +164,11 @@ export const useGetUserStrategies = ({ user }: Props) => {
       });
     },
     {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      enabled:
+        tokens.length > 0 &&
+        isInitialized &&
+        roiQuery.isSuccess &&
+        ensAddress.isSuccess,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }

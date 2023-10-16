@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { useCarbonInit } from 'hooks/useCarbonInit';
 import { Action, TradeActionBNStr } from 'libs/sdk';
 import { MatchActionBNStr } from '@bancor/carbon-sdk';
@@ -36,7 +36,7 @@ export const useGetTradeData = ({
     QueryKey.tradeData([sourceToken, targetToken], isTradeBySource, input),
     async () => {
       const hasInvalidInput =
-        input === '' || isNaN(Number(input)) || new Decimal(input).isZero();
+        input === '' || isNaN(Number(input)) || new BigNumber(input).isZero();
 
       if (hasInvalidInput) {
         return {
