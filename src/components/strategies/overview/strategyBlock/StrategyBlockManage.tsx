@@ -145,12 +145,8 @@ export const StrategyBlockManage: FC<Props> = ({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
         action: () => {
-          setStrategyToEdit(strategy);
+          openModal('confirmWithdrawStrategy', { strategy });
           carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
-          navigate({
-            to: PathNames.editStrategy,
-            search: { type: 'withdraw' },
-          });
         },
       });
     }
@@ -164,7 +160,7 @@ export const StrategyBlockManage: FC<Props> = ({
         name: 'Pause Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyPauseClick(strategyEvent);
-          openModal('confirmStrategy', { strategy, type: 'pause' });
+          openModal('confirmPauseStrategy', { strategy, strategyEvent });
         },
       });
     }
@@ -189,7 +185,7 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Delete Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDeleteClick(strategyEvent);
-        openModal('confirmStrategy', { strategy, type: 'delete' });
+        openModal('confirmDeleteStrategy', { strategy, strategyEvent });
       },
     });
   }
