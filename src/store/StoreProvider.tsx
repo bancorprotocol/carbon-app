@@ -43,7 +43,12 @@ import {
   defaultStrategyToEdit,
   StrategyToEditStore,
   useStrategyToEdit,
-} from './useStrategyToEdit';
+} from 'store/useStrategyToEdit';
+import {
+  defaultToastStore,
+  ToastStore,
+  useToastStore,
+} from 'store/useToasterStore';
 
 // ********************************** //
 // STORE CONTEXT
@@ -68,6 +73,7 @@ interface StoreContext {
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
   strategies: StrategyToEditStore;
+  toaster: ToastStore;
 }
 
 const defaultValue: StoreContext = {
@@ -89,6 +95,7 @@ const defaultValue: StoreContext = {
   selectedWallet: null,
   setSelectedWallet: () => {},
   strategies: defaultStrategyToEdit,
+  toaster: defaultToastStore,
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -115,6 +122,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const tokens = useTokensStore();
   const fiatCurrency = useFiatCurrencyStore();
   const strategies = useStrategyToEdit();
+  const toaster = useToastStore();
 
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
@@ -135,6 +143,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     selectedWallet,
     setSelectedWallet,
     strategies,
+    toaster,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;
