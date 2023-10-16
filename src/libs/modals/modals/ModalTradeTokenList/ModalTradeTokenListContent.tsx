@@ -9,13 +9,12 @@ import {
   useState,
 } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
-import { useVirtualizer } from '@tanstack/react-virtual';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
 import { buildPairKey } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
-import { useStore } from 'store';
 import { ChooseTokenCategory } from '../ModalTokenList/ModalTokenListContent';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -35,7 +34,6 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   onRemoveFavorite,
   onAddFavorite,
 }) => {
-  const { innerHeight } = useStore();
   const parentRef = useRef<HTMLDivElement>(null);
   const [selectedList, _setSelectedList] = useState<TradePairCategory>(
     lsService.getItem('tradePairsCategory') || 'popular'
@@ -45,11 +43,10 @@ export const ModalTradeTokenListContent: FC<Props> = ({
     _setSelectedList(category);
     lsService.setItem('tradePairsCategory', category);
   };
-
-  const tradePairs2 = !!search ? tradePairs.all : tradePairs[selectedList];
+  const pairs = !!search ? tradePairs.all : tradePairs[selectedList];
 
   const rowVirtualizer = useVirtualizer({
-    count: tradePairs2.length,
+    count: pairs.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 55,
     overscan: 10,
@@ -77,10 +74,10 @@ export const ModalTradeTokenListContent: FC<Props> = ({
   };
 
   return (
-    <div>
+    <>
       <fieldset
         aria-label="Filter tokens"
-        className="my-20 grid w-full grid-cols-3 px-4"
+        className="grid grid-cols-3 px-4"
         onChange={selectCatergory}
       >
         {categories.map((category) => (
@@ -92,45 +89,31 @@ export const ModalTradeTokenListContent: FC<Props> = ({
           />
         ))}
       </fieldset>
-
-      <div
-        id="bodyScrollTarget"
-        ref={parentRef}
-        style={{
-          height: innerHeight - 242,
-          overflow: 'auto',
-        }}
-      >
+      <div ref={parentRef} className="h-[70vh] overflow-auto p-8">
         <ul
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: '100%',
-            position: 'relative',
-          }}
+          className="relative"
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
         >
-          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            const tradePair = tradePairs2[virtualRow.index];
-
+          {rowVirtualizer.getVirtualItems().map((row) => {
+            const tradePair = pairs[row.index];
+            const style = {
+              height: `${row.size}px`,
+              transform: `translateY(${row.start}px)`,
+            } as const;
             return (
               <li
-                key={`${selectedList}-${virtualRow.key}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}
-                data-index={virtualRow.index}
-                className={
-                  'flex w-full items-center justify-between  rounded-12 px-8 hover:bg-black'
-                }
-                style={{
-                  position: 'absolute',
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${virtualRow.start}px)`,
-                }}
+                key={`${selectedList}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}
+                className="absolute inset-0 flex items-center justify-between rounded-12 hover:bg-black"
+                style={style}
               >
                 <button
+                  className="flex flex-1 items-center gap-10 p-8"
                   onClick={() => handleSelect(tradePair)}
-                  className={'flex w-full items-center space-x-10 pl-10'}
                 >
                   <PairLogoName pair={tradePair} />
                 </button>
                 <button
+                  className="p-8"
                   onClick={() =>
                     isFavorite(tradePair)
                       ? onRemoveFavorite(tradePair)
@@ -150,6 +133,6 @@ export const ModalTradeTokenListContent: FC<Props> = ({
           })}
         </ul>
       </div>
-    </div>
+    </>
   );
 };
