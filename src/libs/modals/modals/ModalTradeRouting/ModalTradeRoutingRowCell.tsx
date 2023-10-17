@@ -11,16 +11,16 @@ export const ModalTradeRoutingRowCell: FC<{
   selectedFiatCurrency: FiatSymbol;
 }> = ({ logoURI, amount, fiatAmount, selectedFiatCurrency }) => {
   return (
-    <div>
-      <div className={'flex items-center space-x-8 '}>
-        <LogoImager src={logoURI} alt={'Token Logo'} className={'w-14'} />
-        <span className={'font-mono text-14 font-weight-500'}>
+    <div className="inline-flex flex-col text-left">
+      <p className="inline-flex items-center gap-8">
+        <LogoImager src={logoURI} alt="Token Logo" className="w-14" />
+        <span className="font-mono text-14 font-weight-500">
           {prettifyNumber(amount)}
         </span>
-      </div>
-      <div className={'text-secondary'}>
+      </p>
+      <p className="font-mono text-12 font-weight-500 text-white/60">
         {getFiatDisplayValue(fiatAmount, selectedFiatCurrency)}
-      </div>
+      </p>
     </div>
   );
 };

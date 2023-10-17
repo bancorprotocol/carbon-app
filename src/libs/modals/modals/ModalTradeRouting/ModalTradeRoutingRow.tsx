@@ -44,40 +44,45 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   };
 
   return (
-    <>
-      <div className={'flex items-center space-x-20'}>
-        <Checkbox isChecked={isSelected} setIsChecked={onCheckboxClick} />
-
+    <tr>
+      <td className="border-t border-emphasis p-8">
+        <Checkbox
+          isChecked={isSelected}
+          setIsChecked={onCheckboxClick}
+          className="m-auto"
+        />
+      </td>
+      <td className="border-t border-emphasis p-8 text-center">
         <ModalTradeRoutingRowCell
           amount={sourceAmount}
           fiatAmount={sourceAmountFiat}
           logoURI={source.logoURI}
           selectedFiatCurrency={selectedFiatCurrency}
         />
-      </div>
-      <div className={'flex items-center space-x-10'}>
-        <div
-          className={
-            'flex h-18 w-18 items-center justify-center rounded-full bg-silver'
-          }
-        >
-          <ForwardArrow arrowType="full" />
-        </div>
-
+      </td>
+      <td className="border-t border-emphasis text-center">
+        <ForwardArrow
+          arrowType="full"
+          className="inline h-18 w-18 rounded-full bg-silver p-4 text-white/60"
+        />
+      </td>
+      <td className="border-t border-emphasis p-8 text-center">
         <ModalTradeRoutingRowCell
           amount={targetAmount}
           fiatAmount={targetAmountFiat}
           logoURI={target.logoURI}
           selectedFiatCurrency={selectedFiatCurrency}
         />
-      </div>
+      </td>
 
-      <ModalTradeRoutingRowCell
-        amount={averagePrice}
-        fiatAmount={averagePriceFiat}
-        logoURI={source.logoURI}
-        selectedFiatCurrency={selectedFiatCurrency}
-      />
-    </>
+      <td className="border-t border-emphasis p-8 text-center">
+        <ModalTradeRoutingRowCell
+          amount={averagePrice}
+          fiatAmount={averagePriceFiat}
+          logoURI={source.logoURI}
+          selectedFiatCurrency={selectedFiatCurrency}
+        />
+      </td>
+    </tr>
   );
 };
