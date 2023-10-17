@@ -154,13 +154,13 @@ const FilterSortItem: FC<{
         type="radio"
         name={name}
         value={item}
-        className="peer absolute inset-0 opacity-0"
+        className="peer absolute opacity-0"
       />
       <label
         htmlFor={id}
         className={`
           flex cursor-pointer items-center justify-between rounded-6 py-8 px-16
-          hover:bg-black/90
+          px-16 hover:bg-black/90
           peer-focus-visible:outline peer-focus-visible:outline-1
         `}
       >

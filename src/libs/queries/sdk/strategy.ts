@@ -29,6 +29,7 @@ export interface Order {
   balance: string;
   startRate: string;
   endRate: string;
+  marginalRate: string;
 }
 
 export interface Strategy {
@@ -101,6 +102,7 @@ const buildStrategiesHelper = async ({
       balance: s.buyBudget,
       startRate: s.buyPriceLow,
       endRate: s.buyPriceHigh,
+      marginalRate: s.buyPriceMarginal,
     };
 
     // ATTENTION *****************************
@@ -110,6 +112,7 @@ const buildStrategiesHelper = async ({
       balance: s.sellBudget,
       startRate: s.sellPriceLow,
       endRate: s.sellPriceHigh,
+      marginalRate: s.sellPriceMarginal,
     };
 
     const roi = new BigNumber(roiData.find((r) => r.id === s.id)?.ROI || 0);
