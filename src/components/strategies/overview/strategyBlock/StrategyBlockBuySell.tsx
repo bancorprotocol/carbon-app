@@ -2,168 +2,116 @@ import { FC } from 'react';
 import { Strategy } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
-import { BuySellPriceRangeIndicator } from 'components/common/buySellPriceRangeIndicator/BuySellPriceRangeIndicator';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { TokenPrice } from './TokenPrice';
-import {
-  getFiatDisplayValue,
-  prettifyNumber,
-  sanitizeNumberInput,
-} from 'utils/helpers';
-import { getPrice } from './utils';
+import { ReactComponent as TooltipIcon } from 'assets/icons/tooltip.svg';
+import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
+import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 
 export const StrategyBlockBuySell: FC<{
   strategy: Strategy;
   buy?: boolean;
-}> = ({ strategy, buy = false }) => {
+  className?: string;
+}> = ({ strategy, buy = false, className }) => {
   const token = buy ? strategy.base : strategy.quote;
   const otherToken = buy ? strategy.quote : strategy.base;
   const order = buy ? strategy.order0 : strategy.order1;
   const otherOrder = buy ? strategy.order1 : strategy.order1;
-  const limit = order.startRate === order.endRate;
-  const testIdPrefix = `${buy ? 'buy' : 'sell'}-${limit ? 'limit' : 'range'}`;
+  const testIdPrefix = `${buy ? 'buy' : 'sell'}`;
   const active = strategy.status === 'active';
-  const { selectedFiatCurrency, getFiatValue: getFiatValueBase } =
-    useFiatCurrency(token);
-  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(otherToken);
-
-  const prettifiedPrice = getPrice({
-    order,
-    limit,
-    prettified: true,
-    decimals: buy ? otherToken.decimals : token.decimals,
-  });
-
-  const fullPrice = getPrice({
-    order,
-    limit,
-    decimals: buy ? otherToken.decimals : token.decimals,
-  });
-
-  const fiatStartRate = buy
-    ? getFiatValueQuote(order.startRate)
-    : getFiatValueBase(otherOrder.startRate);
-
-  const fiatEndRate = buy
-    ? getFiatValueQuote(order.endRate)
-    : getFiatValueBase(otherOrder.endRate);
-
-  const fullFiatPrices = `${getFiatDisplayValue(
-    fiatStartRate,
-    selectedFiatCurrency
-  )} ${
-    !limit ? ` - ${getFiatDisplayValue(fiatEndRate, selectedFiatCurrency)}` : ''
-  }`;
-
-  const fullBudget = sanitizeNumberInput(
-    buy ? order.balance : otherOrder.balance,
-    buy ? token.decimals : otherToken.decimals
-  );
+  const baseFiat = useFiatCurrency(token);
+  const quoteFiat = useFiatCurrency(otherToken);
+  const currency = baseFiat.selectedFiatCurrency;
   const prettifiedBudget = prettifyNumber(order.balance, {
     abbreviate: order.balance.length > 10,
   });
-  const budget = getFiatValueQuote(buy ? order.balance : otherOrder.balance);
-  const fullFiatBudget = getFiatDisplayValue(budget, selectedFiatCurrency);
+  const balance = buy ? order.balance : otherOrder.balance;
+  const budget = quoteFiat.getFiatValue(balance);
+  const quoteHasFiatValue = quoteFiat.hasFiatValue();
+  const fullFiatBudget = getFiatDisplayValue(budget, currency);
+
+  const buyTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`;
+  const sellTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`;
+  const noCurrencyTooltip = `There is no ${currency} value for this token.`;
 
   return (
-    <div
-      className={`rounded-8 border border-emphasis p-12 ${
-        active ? '' : 'opacity-35'
-      }`}
+    <article
+      className={cn(
+        'flex flex-col gap-4 p-16',
+        active ? '' : 'opacity-50',
+        className
+      )}
     >
-      <div className="flex items-center gap-6">
-        <Tooltip
-          sendEventOnMount={{ buy }}
-          element={
-            buy
-              ? `This section indicates the details to which you are willing to buy ${token.symbol} at. When a trader interacts with your buy order, it will fill up your "Sell" order with tokens.`
-              : `This section indicates the details to which you are willing to sell ${otherToken.symbol} at. When a trader interacts with your sell order, it will fill up your "Buy" order with tokens.`
-          }
-        >
-          <div className="flex items-center gap-6">
-            {buy ? 'Buy' : 'Sell'}
-            <LogoImager
-              className="h-16 w-16"
-              src={buy ? token.logoURI : otherToken.logoURI}
-              alt="token"
-            />
-          </div>
-        </Tooltip>
-      </div>
-      <hr className="my-12 border-silver dark:border-emphasis" />
-      <div>
-        <div className="mb-5 flex items-center justify-between">
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={
-              buy
-                ? `This is the price in which you are willing to buy ${token.symbol}.`
-                : `This is the price in which you are willing to sell ${otherToken.symbol}.`
-            }
-          >
-            <div className={`${buy ? 'text-green' : 'text-red'}`}>
-              {limit ? 'Limit Price' : 'Price Range'}
-            </div>
-          </Tooltip>
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            maxWidth={430}
-            element={
-              <>
-                <div>
-                  {fullPrice} {buy ? otherToken.symbol : token.symbol}
-                </div>
-                <TokenPrice className="text-white/60" price={fullFiatPrices} />
-              </>
-            }
-          >
-            <TokenPrice
-              price={prettifiedPrice}
-              iconSrc={buy ? otherToken.logoURI : token.logoURI}
-              data-testid={`${testIdPrefix}-price`}
-            />
-          </Tooltip>
-        </div>
-        <div className="mb-10 flex items-center justify-between">
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={
-              buy
-                ? `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`
-                : `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`
-            }
-          >
-            <div className="text-secondary !text-16">Budget</div>
-          </Tooltip>
-          <div className="flex gap-7">
+      {buy ? (
+        <header className="flex items-center gap-4">
+          <h4 className="font-mono text-12 text-green">Buy {token.symbol}</h4>
+          {quoteHasFiatValue && (
+            <Tooltip element={buyTooltip}>
+              <TooltipIcon className="h-10 w-10 text-white/60" />
+            </Tooltip>
+          )}
+          {!quoteHasFiatValue && (
             <Tooltip
-              sendEventOnMount={{ buy }}
               element={
-                <>
-                  <div>{`${fullBudget} ${otherToken.symbol}`}</div>
-                  <TokenPrice
-                    className="text-white/60"
-                    price={fullFiatBudget}
-                  />
-                </>
+                <p>
+                  {buyTooltip}
+                  <br />
+                  {noCurrencyTooltip}
+                </p>
               }
             >
-              <div
-                className="flex items-center gap-7"
-                data-testid={`${testIdPrefix}-budget`}
-              >
-                {prettifiedBudget}
-                <LogoImager
-                  className="h-16 w-16"
-                  src={otherToken.logoURI}
-                  alt="token"
-                />
-              </div>
+              <WarningIcon className="h-10 w-10 text-warning-500" />
             </Tooltip>
-          </div>
-        </div>
-        <BuySellPriceRangeIndicator buy={buy} limit={limit} />
-      </div>
-    </div>
+          )}
+        </header>
+      ) : (
+        <header className="flex items-center gap-4">
+          <h4 className="font-mono text-12 text-red">
+            Sell {otherToken.symbol}
+          </h4>
+          {quoteHasFiatValue && (
+            <Tooltip element={sellTooltip}>
+              <TooltipIcon className="h-10 w-10 text-white/60" />
+            </Tooltip>
+          )}
+          {!quoteHasFiatValue && (
+            <Tooltip
+              element={
+                <p>
+                  {sellTooltip}
+                  <br />
+                  {noCurrencyTooltip}
+                </p>
+              }
+            >
+              <WarningIcon className="h-10 w-10 text-warning-500" />
+            </Tooltip>
+          )}
+        </header>
+      )}
+      <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
+        <Tooltip
+          element={
+            <span className="inline-flex items-center gap-4">
+              <LogoImager
+                className="h-16 w-16"
+                src={otherToken.logoURI}
+                alt="token"
+              />
+              {order.balance.toString()}
+            </span>
+          }
+        >
+          <>
+            {prettifiedBudget} {otherToken.symbol}
+          </>
+        </Tooltip>
+      </p>
+      <p
+        data-testid={`${testIdPrefix}-budget-fiat`}
+        className="font-mono text-12 text-white/60"
+      >
+        {quoteHasFiatValue ? fullFiatBudget : '...'}
+      </p>
+    </article>
   );
 };

@@ -24,7 +24,7 @@ export const PairLogoName: FC<Props> = ({
             tooltipContent={suspiciousTokenTooltipMsg}
           />
         )}
-        <span className={'px-5 text-white/60'}>/</span>
+        <span className="px-5 text-white/60">/</span>
         {quoteToken.symbol}
         {quoteToken.isSuspicious && (
           <WarningWithTooltip

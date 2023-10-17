@@ -7,24 +7,44 @@ import {
   strategySort,
 } from './StrategyFilterSort';
 
+/** There are multiple inactive status, so we cannot just do a.status !== b.status */
+const differentStatus = (a: Strategy, b: Strategy) => {
+  if (a.status === 'active' && b.status !== 'active') return true;
+  if (b.status === 'active' && a.status !== 'active') return true;
+  return false;
+};
+
 const sortFn: Record<StrategySort, (a: Strategy, b: Strategy) => number> = {
-  recent: (a, b) =>
-    new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber(),
-  old: (a, b) => new BigNumber(a.idDisplay).minus(b.idDisplay).toNumber(),
+  recent: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
+    return new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
+  },
+  old: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
+    return new BigNumber(a.idDisplay).minus(b.idDisplay).toNumber();
+  },
   pairAsc: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return (
       a.base.symbol.localeCompare(b.base.symbol) ||
       a.quote.symbol.localeCompare(b.quote.symbol)
     );
   },
   pairDesc: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return (
       b.base.symbol.localeCompare(a.base.symbol) ||
       b.quote.symbol.localeCompare(a.quote.symbol)
     );
   },
-  roiAsc: (a, b) => a.roi.minus(b.roi).toNumber(),
-  roiDesc: (a, b) => a.roi.minus(b.roi).times(-1).toNumber(),
+  roiAsc: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
+    return a.roi.minus(b.roi).toNumber();
+  },
+  roiDesc: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
+    return a.roi.minus(b.roi).times(-1).toNumber();
+  },
 };
 
 export const getCompareFunctionBySortType = (sortType: StrategySort) => {

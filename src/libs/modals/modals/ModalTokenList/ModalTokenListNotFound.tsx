@@ -18,7 +18,7 @@ export const ModalTokenListNotFound: FC = () => {
 
   return (
     <div
-      className={'my-40 flex w-full flex-col items-center'}
+      className="my-40 flex w-full flex-col items-center"
       style={{ height: innerHeight - 258 }}
     >
       <IconTitleText

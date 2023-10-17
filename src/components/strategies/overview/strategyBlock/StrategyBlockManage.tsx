@@ -7,7 +7,7 @@ import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateS
 import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
 import {
   StrategyEditOptionId,
   getTooltipTextByStrategyEditOptionsId,
@@ -19,7 +19,6 @@ import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
 import { ExplorerRouteGenerics } from 'components/explorer';
-import { buttonStyles } from 'components/common/button/buttonStyles';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 
@@ -198,48 +197,51 @@ export const StrategyBlockManage: FC<Props> = ({
     <DropdownMenu
       isOpen={manage}
       setIsOpen={setManage}
-      className="z-10 p-10"
+      className="z-10 w-fit p-10"
       button={(attr) => (
-        <div className="rounded-20 bg-black">
-          <button
-            {...attr}
-            onClick={(e) => {
-              attr.onClick(e);
-              if (isExplorer) {
-                const baseEvent = { type, slug, strategies, sort, filter };
-                explorerEvents.manageClick({ ...baseEvent, strategyEvent });
-              }
-            }}
-            className={cn(
-              buttonStyles({ fullWidth: true, variant: 'success-light' }),
-              'flex items-center justify-center gap-8'
-            )}
-          >
-            Manage
-            <IconChevron className="w-12" />
-          </button>
-        </div>
+        <button
+          {...attr}
+          onClick={(e) => {
+            attr.onClick(e);
+            if (isExplorer) {
+              const baseEvent = { type, slug, strategies, sort, filter };
+              explorerEvents.manageClick({ ...baseEvent, strategyEvent });
+            }
+          }}
+          role="menuitem"
+          aria-label="Manage strategy"
+          className={`
+            self-center rounded-8 border-2 border-emphasis p-8
+            hover:bg-white/10
+            active:bg-white/20
+          `}
+        >
+          <IconGear className="h-24 w-24" />
+        </button>
       )}
     >
-      {items.map((item) => {
-        if (typeof item === 'number') {
-          return <hr key={item} className="border-1  my-10 border-grey5" />;
-        }
+      <ul role="menu">
+        {items.map((item) => {
+          if (typeof item === 'number') {
+            return <hr key={item} className="border-1  my-10 border-grey5" />;
+          }
 
-        const { name, id, action, disabled } = item;
+          const { name, id, action, disabled } = item;
 
-        return (
-          <ManageItem
-            key={id}
-            title={name}
-            setManage={setManage}
-            action={action}
-            id={id}
-            isExplorer={isExplorer}
-            disabled={disabled}
-          />
-        );
-      })}
+          return (
+            <li key={id} role="none">
+              <ManageItem
+                title={name}
+                setManage={setManage}
+                action={action}
+                id={id}
+                isExplorer={isExplorer}
+                disabled={disabled}
+              />
+            </li>
+          );
+        })}
+      </ul>
     </DropdownMenu>
   );
 };
@@ -258,6 +260,7 @@ const ManageItem: FC<{
   const Content = () => {
     return (
       <button
+        role="menuitem"
         type="button"
         onClick={() => {
           action && action();

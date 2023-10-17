@@ -81,6 +81,8 @@ module.exports = {
       ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
       pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       bounce: 'bounce 1s infinite',
+      slideUp:
+        'fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) both, translateY 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
     },
     aspectRatio: {
       auto: 'auto',
@@ -551,6 +553,16 @@ module.exports = {
         '50%': {
           transform: 'none',
           animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
+        },
+      },
+      fade: {
+        from: {
+          opacity: 0,
+        },
+      },
+      translateY: {
+        from: {
+          transform: 'translateY(100%)',
         },
       },
     },
