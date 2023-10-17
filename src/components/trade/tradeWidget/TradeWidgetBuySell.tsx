@@ -106,12 +106,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       valueUsd: getFiatValueSource(targetInput, true).toString(),
     };
 
-    if (!isTradeBySource && sourceInput) {
+    if (!isTradeBySource) {
       buy
         ? carbonEvents.trade.tradeBuyReceiveSet(tradeData)
         : carbonEvents.trade.tradeSellReceiveSet(tradeData);
     }
-  }, [buy, targetInput, sourceInput]);
+  }, [buy, targetInput]);
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
