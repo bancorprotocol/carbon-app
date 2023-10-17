@@ -10,11 +10,12 @@ import {
 } from 'react';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList/ModalTradeTokenList';
 import { ReactComponent as IconStar } from 'assets/icons/star.svg';
-import { buildPairKey } from 'utils/helpers';
+import { buildPairKey, cn } from 'utils/helpers';
 import { lsService } from 'services/localeStorage';
 import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 import { ChooseTokenCategory } from '../ModalTokenList/ModalTokenListContent';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { toPairKey } from 'utils/pairSearch';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -96,19 +97,22 @@ export const ModalTradeTokenListContent: FC<Props> = ({
         >
           {rowVirtualizer.getVirtualItems().map((row) => {
             const tradePair = pairs[row.index];
+            const { baseToken: base, quoteToken: quote } = tradePair;
+            const pairKey = toPairKey(base.symbol, quote.symbol);
             const style = {
               height: `${row.size}px`,
               transform: `translateY(${row.start}px)`,
             } as const;
             return (
               <li
-                key={`${selectedList}-${tradePair.baseToken.address}-${tradePair.quoteToken.address}`}
+                key={`${selectedList}-${pairKey}`}
                 className="absolute inset-0 flex items-center justify-between rounded-12 hover:bg-black"
                 style={style}
               >
                 <button
                   className="flex flex-1 items-center gap-10 p-8"
                   onClick={() => handleSelect(tradePair)}
+                  data-testid={`select-${pairKey}`}
                 >
                   <PairLogoName pair={tradePair} />
                 </button>
@@ -121,11 +125,12 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                   }
                 >
                   <IconStar
-                    className={`${
+                    className={cn(
+                      'w-20 transition hover:fill-white/80 hover:text-white/80',
                       isFavorite(tradePair)
                         ? 'fill-green text-green'
                         : 'text-white/40'
-                    } w-20 transition hover:fill-white/80 hover:text-white/80`}
+                    )}
                   />
                 </button>
               </li>

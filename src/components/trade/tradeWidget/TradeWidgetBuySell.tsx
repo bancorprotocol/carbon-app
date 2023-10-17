@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useId, useMemo } from 'react';
+import { FormEvent, useEffect, useId, useMemo, JSX } from 'react';
 import BigNumber from 'bignumber.js';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
@@ -14,13 +14,13 @@ import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 
-export type TradeWidgetBuySellProps = {
+type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
+export interface TradeWidgetBuySellProps extends FormAttributes {
   source: Token;
   target: Token;
   buy?: boolean;
   sourceBalanceQuery: UseQueryResult<string>;
-  targetBalanceQuery: UseQueryResult<string>;
-};
+}
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
@@ -44,7 +44,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     maxSourceAmountQuery,
     isAwaiting,
   } = useBuySell(props);
-  const { source, target, sourceBalanceQuery, buy = false } = props;
+  const {
+    source,
+    target,
+    sourceBalanceQuery,
+    buy = false,
+    ...formProps
+  } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
@@ -169,6 +175,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   return (
     <form
+      {...formProps}
       onSubmit={handleTrade}
       className="flex flex-col rounded-12 bg-silver p-20"
     >
