@@ -1,5 +1,6 @@
 import { Token } from 'libs/tokens';
 import { LogoImager } from 'components/common/imager/Imager';
+import { cn } from 'utils/helpers';
 
 export const TokensOverlap = ({
   tokens,
@@ -18,7 +19,11 @@ export const TokensOverlap = ({
           key={token.symbol + index}
           src={token.logoURI}
           alt="Token Logo"
-          className={`${className} border border-fog bg-fog dark:border-black dark:bg-black`}
+          title={token.symbol}
+          className={cn(
+            'border border-fog bg-fog dark:border-black dark:bg-black',
+            className
+          )}
           style={{
             marginLeft: index > 0 ? '-10px' : '0px',
           }}
