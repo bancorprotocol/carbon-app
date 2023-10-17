@@ -53,7 +53,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           <Tooltip element="This is the list of orders your trade will use when executed.">
             <legend className="text-secondary">Routing Table</legend>
           </Tooltip>
-          <table className="rounded bg-silver">
+          <table className="rounded bg-black">
             <thead>
               <tr>
                 <th>{/* checkbox */}</th>
