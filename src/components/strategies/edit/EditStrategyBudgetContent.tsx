@@ -132,11 +132,13 @@ export const EditStrategyBudgetContent = ({
         balance: calculatedOrder0Budget.toString(),
         startRate: order0.price || order0.min,
         endRate: order0.max,
+        marginalRate: strategy.order0.marginalRate,
       },
       order1: {
         balance: calculatedOrder1Budget.toString(),
         startRate: order1.price || order1.min,
         endRate: order1.max,
+        marginalRate: strategy.order1.marginalRate,
       },
     };
 

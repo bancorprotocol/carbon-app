@@ -12,6 +12,11 @@ export const useFiatCurrency = (token?: Token) => {
 
   const tokenPriceQuery = useGetTokenPrice(token?.address);
 
+  /** Verify that the token has a fiat value */
+  const hasFiatValue = () => {
+    return typeof tokenPriceQuery.data?.[selectedFiatCurrency] === 'number';
+  };
+
   const getFiatValue = useMemo(() => {
     return (value: string, usd = false) => {
       return new SafeDecimal(value || 0).times(
@@ -25,6 +30,7 @@ export const useFiatCurrency = (token?: Token) => {
   return {
     ...fiatCurrency,
     useGetTokenPrice,
+    hasFiatValue,
     getFiatValue,
     getFiatAsString: (value: string) =>
       getFiatDisplayValue(getFiatValue(value), selectedFiatCurrency),

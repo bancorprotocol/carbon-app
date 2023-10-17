@@ -57,11 +57,13 @@ export const EditStrategyPricesContent = ({
       balance: strategy.order0.balance,
       startRate: (order0.isRange ? order0.min : order0.price) || '0',
       endRate: (order0.isRange ? order0.max : order0.price) || '0',
+      marginalRate: strategy.order0.marginalRate,
     };
     const newOrder1 = {
       balance: strategy.order1.balance,
       startRate: (order1.isRange ? order1.min : order1.price) || '0',
       endRate: (order1.isRange ? order1.max : order1.price) || '0',
+      marginalRate: strategy.order1.marginalRate,
     };
 
     type === 'renew'

@@ -109,7 +109,7 @@ export const TokenInputField: FC<Props> = ({
           <button
             type="button"
             onClick={handleBalanceClick}
-            className={'group flex items-center'}
+            className="group flex items-center"
           >
             Wallet:&nbsp;
             {isBalanceLoading ? (
