@@ -25,17 +25,17 @@ export const ModalSheet: FC<ModalProps> = ({
       <m.div
         data-testid="modal-container"
         onClick={(e) => e.stopPropagation()}
-        className={`w-full`}
+        className="w-full"
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="flex w-full flex-col gap-20 overflow-hidden rounded-t-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis">
+        <div className="flex w-full flex-col gap-16 rounded-t-10 border-0 bg-white p-16 outline-none focus:outline-none dark:bg-emphasis">
           {isLoading && (
             <div className="statusBar absolute -mt-20 -ml-20 h-6 w-full bg-green/25" />
           )}
-          <header data-testid={testId} className="flex justify-between">
+          <header data-testid={testId} className="flex justify-between p-8">
             {typeof title === 'string' ? <h2>{title}</h2> : title}
             {showCloseButton && (
               <button className="p-4" onClick={() => onCloseHandler(id)}>
@@ -43,7 +43,9 @@ export const ModalSheet: FC<ModalProps> = ({
               </button>
             )}
           </header>
-          <div className="flex max-h-[70vh] flex-col gap-20">{children}</div>
+          <div className="flex max-h-[70vh] flex-col gap-20 overflow-auto p-8">
+            {children}
+          </div>
         </div>
       </m.div>
     </Overlay>
