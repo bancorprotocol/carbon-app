@@ -112,21 +112,11 @@ export const useBuySell = ({
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
   const checkLiquidity = () => {
-    const checkSource = () => {
-      if (sourceInput === '' || sourceInput === '...') {
-        return false;
-      }
+    const checkSource = () =>
+      new SafeDecimal(sourceInput).gt(maxSourceAmountQuery.data || 0);
 
-      return new SafeDecimal(sourceInput).gt(maxSourceAmountQuery.data || 0);
-    };
-
-    const checkTarget = () => {
-      if (targetInput === '' || targetInput === '...') {
-        return false;
-      }
-
-      return new SafeDecimal(targetInput).gt(liquidityQuery.data || 0);
-    };
+    const checkTarget = () =>
+      new SafeDecimal(targetInput).gt(liquidityQuery.data || 0);
 
     const set = () => setIsLiquidityError(true);
     setIsLiquidityError(false);
@@ -173,12 +163,6 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      if (new SafeDecimal(targetInput).gt(liquidityQuery.data || 0)) {
-        setIsLiquidityError(true);
-        setSourceInput('...');
-        return;
-      }
-
       const {
         totalSourceAmount,
         tradeActions,
