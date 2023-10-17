@@ -13,11 +13,11 @@ export const StrategyPageTitleWidget: FC<{
     <div className="flex items-center gap-20">
       {showFilter && (
         <>
-          <div className={'order-last col-span-2 md:order-first'}>
+          <div className="order-last col-span-2 md:order-first">
             <SearchInput
               value={search}
               setValue={setSearch}
-              className="h-40 w-full"
+              className="rounded-full"
             />
           </div>
           <StrategyFilterSort />
