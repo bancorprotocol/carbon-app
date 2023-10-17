@@ -36,7 +36,7 @@ export const useGetTradeData = ({
     QueryKey.tradeData([sourceToken, targetToken], isTradeBySource, input),
     async () => {
       const hasInvalidInput =
-        input === '' || isNaN(Number(input)) || new SafeDecimal(input).isZero();
+        new SafeDecimal(input).isNaN() || new SafeDecimal(input).isZero();
 
       if (hasInvalidInput) {
         return {
