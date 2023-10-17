@@ -124,11 +124,13 @@ export const useBuySell = ({
     if (isTradeBySource) {
       if (checkSource()) {
         setTargetInput('...');
+        setRate('');
         return set();
       }
     } else {
       if (checkTarget()) {
         setSourceInput('...');
+        setRate('');
         return set();
       }
     }
