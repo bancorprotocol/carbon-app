@@ -64,7 +64,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         buy,
         buyToken: target,
         sellToken: source,
-        valueUsd: getFiatValueSource(sourceInput, true).toString(),
+        valueUsd: getFiatValueSource(targetInput, true).toString(),
         message: errorMsgTarget || '',
       });
 
@@ -103,7 +103,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       buy,
       buyToken: target,
       sellToken: source,
-      valueUsd: getFiatValueSource(sourceInput, true).toString(),
+      valueUsd: getFiatValueSource(targetInput, true).toString(),
     };
 
     if (!isTradeBySource && sourceInput) {
@@ -179,18 +179,21 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           ? `Buy ${target.symbol} with ${source.symbol}`
           : `Sell ${source.symbol} for ${target.symbol}`}
       </h2>
-      <header className="flex justify-between text-14">
-        <label htmlFor={`${id}-pay`} className="text-white/50">
-          You pay
-        </label>
-        {errorMsgSource && (
-          <output htmlFor={`${id}-pay`} className="font-weight-500 text-red">
-            {errorMsgSource}
-          </output>
-        )}
-      </header>
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
+          <header className="flex justify-between text-14">
+            <label htmlFor={`${id}-pay`} className="text-white/50">
+              You pay
+            </label>
+            {errorMsgSource && (
+              <output
+                htmlFor={`${id}-pay`}
+                className="font-weight-500 text-red"
+              >
+                {errorMsgSource}
+              </output>
+            )}
+          </header>
           <TokenInputField
             id={`${id}-pay`}
             className="mb-20 mt-5 rounded-12 bg-black p-16"
