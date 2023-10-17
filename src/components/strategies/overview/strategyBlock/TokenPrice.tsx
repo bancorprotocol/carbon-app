@@ -17,13 +17,13 @@ export const TokenPrice: FC<Props> = ({
 }) => {
   return (
     <div
-      className={cn('flex items-center gap-7', className)}
+      className={cn('flex items-center gap-4', className)}
       data-testid={testId}
     >
-      {price}
       {iconSrc && (
         <LogoImager className="h-16 w-16" src={iconSrc} alt="token" />
       )}
+      {price}
     </div>
   );
 };

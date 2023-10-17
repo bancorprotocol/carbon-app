@@ -75,9 +75,9 @@ test.describe('Strategies', () => {
     const [strategy] = await strategies.all();
     await expect(strategy.getByTestId('token-pair')).toHaveText('ETH/DAI');
     await expect(strategy.getByTestId('status')).toHaveText('Active');
-    await expect(strategy.getByTestId('buy-limit-price')).toHaveText('1,500');
-    await expect(strategy.getByTestId('buy-limit-budget')).toHaveText('10');
-    await expect(strategy.getByTestId('sell-limit-price')).toHaveText('1,700');
-    await expect(strategy.getByTestId('sell-limit-budget')).toHaveText('2');
+    await expect(strategy.getByTestId('total-budget')).toHaveText('$3,344');
+    await expect(strategy.getByTestId('buy-budget')).toHaveText('10 DAI');
+    await expect(strategy.getByTestId('buy-budget-fiat')).toHaveText('$10.00');
+    await expect(strategy.getByTestId('sell-budget-fiat')).toHaveText('$3,334');
   });
 });
