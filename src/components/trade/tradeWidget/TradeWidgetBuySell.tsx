@@ -245,7 +245,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               <button
                 type="button"
                 onClick={openTradeRouteModal}
-                className="flex hidden space-x-10 text-left hover:text-white md:flex"
+                className="hidden space-x-10 text-left hover:text-white md:flex"
               >
                 <IconRouting className="w-12" />
                 <Tooltip
