@@ -16,7 +16,7 @@ export const screenshot = (target: Page | Locator, name: string) => {
 
 const urlNames = {
   '/': 'My Strategies',
-  '/trade': 'Trade',
+  '/trade?*': 'Trade',
   '/explorer': 'Explorer',
   '/debug': 'Debug',
 };
@@ -24,7 +24,7 @@ const urlNames = {
 /** Use soft navigation instead of reloading the page */
 export const navigateTo = async (page: Page, url: keyof typeof urlNames) => {
   await page.getByTestId('main-nav').getByText(urlNames[url]).click();
-  await page.waitForURL(`${url}?*`);
+  await page.waitForURL(url);
 };
 
 export const waitFor = async (page: Page, testId: string, timeout = 10_000) => {
