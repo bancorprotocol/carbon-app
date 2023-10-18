@@ -15,7 +15,6 @@ import { lsService } from 'services/localeStorage';
 import { CategoryWithCounter } from 'libs/modals/modals/common/CategoryWithCounter';
 import { ChooseTokenCategory } from '../ModalTokenList/ModalTokenListContent';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { toPairKey } from 'utils/pairSearch';
 
 const categories = ['popular', 'favorites', 'all'] as const;
 export type TradePairCategory = (typeof categories)[number];
@@ -98,7 +97,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
           {rowVirtualizer.getVirtualItems().map((row) => {
             const tradePair = pairs[row.index];
             const { baseToken: base, quoteToken: quote } = tradePair;
-            const pairKey = toPairKey(base.symbol, quote.symbol);
+            const pairKey = `${base.symbol}_${quote.symbol}`;
             const style = {
               height: `${row.size}px`,
               transform: `translateY(${row.start}px)`,

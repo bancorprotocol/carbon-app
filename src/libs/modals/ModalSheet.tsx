@@ -38,7 +38,11 @@ export const ModalSheet: FC<ModalProps> = ({
           <header data-testid={testId} className="flex justify-between">
             {typeof title === 'string' ? <h2>{title}</h2> : title}
             {showCloseButton && (
-              <button className="p-4" onClick={() => onCloseHandler(id)}>
+              <button
+                data-testid="modal-close"
+                className="p-4"
+                onClick={() => onCloseHandler(id)}
+              >
                 <IconX className="w-12" />
               </button>
             )}

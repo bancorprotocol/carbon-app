@@ -79,6 +79,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             value={totalSourceAmount}
             token={data.source}
             disabled
+            data-testid="confirm-source"
           />
         </div>
         <div
@@ -93,6 +94,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             value={totalTargetAmount}
             token={data.target}
             disabled
+            data-testid="confirm-target"
           />
         </div>
       </div>

@@ -248,6 +248,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 type="button"
                 onClick={openTradeRouteModal}
                 className="flex hidden space-x-10 text-left hover:text-white md:flex"
+                data-testid="routing"
               >
                 <IconRouting className="w-12" />
                 <Tooltip
@@ -279,6 +280,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         variant={buy ? 'success' : 'error'}
         fullWidth
         className="mt-20"
+        data-testid="submit"
       >
         {ctaButtonText}
       </Button>

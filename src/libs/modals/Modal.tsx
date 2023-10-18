@@ -63,7 +63,11 @@ export const Modal: FC<ModalProps> = ({
               title
             )}
             {showCloseButton && (
-              <button className="p-4" onClick={() => onCloseHandler(id)}>
+              <button
+                data-testid="modal-close"
+                className="p-4"
+                onClick={() => onCloseHandler(id)}
+              >
                 <IconX className="w-12" />
               </button>
             )}
