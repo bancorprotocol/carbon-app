@@ -76,7 +76,7 @@ export const TokenInputField: FC<Props> = ({
       `}
       onClick={() => inputRef.current?.focus()}
     >
-      <div className={`flex items-center justify-between`}>
+      <div className="flex items-center justify-between">
         <input
           id={id}
           type="text"
@@ -95,20 +95,12 @@ export const TokenInputField: FC<Props> = ({
           disabled={disabled}
           data-testid={testid}
         />
-        <div
-          className={`flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8`}
-        >
-          <LogoImager
-            alt={'Token'}
-            src={token.logoURI}
-            className={'h-20 w-20'}
-          />
-          <span className={'font-weight-500'}>{token.symbol}</span>
+        <div className="flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8">
+          <LogoImager alt="Token" src={token.logoURI} className="h-20 w-20" />
+          <span className="font-weight-500">{token.symbol}</span>
         </div>
       </div>
-      <div
-        className={`flex flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500`}
-      >
+      <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
         <p className="flex items-center gap-5 text-white/60">
           {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
@@ -117,7 +109,7 @@ export const TokenInputField: FC<Props> = ({
           <button
             type="button"
             onClick={handleBalanceClick}
-            className={'group flex items-center'}
+            className="group flex items-center"
           >
             Wallet:&nbsp;
             {isBalanceLoading ? (

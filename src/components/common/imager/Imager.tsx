@@ -66,7 +66,13 @@ export const Imager = ({
   const { source } = useImager(src, fallbackSrc);
 
   return (
-    <img {...props} src={source} alt={alt} loading={lazy ? 'lazy' : 'eager'} />
+    <img
+      {...props}
+      src={source}
+      alt={alt}
+      loading={lazy ? 'lazy' : 'eager'}
+      decoding={lazy ? 'async' : 'auto'}
+    />
   );
 };
 
