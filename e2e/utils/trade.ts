@@ -12,7 +12,6 @@ interface TradeConfig {
 
 export const testTrade = async (page: Page, config: TradeConfig) => {
   const { mode, source, target, sourceValue, targetValue } = config;
-  await waitFor(page, `balance-${source}`, 20_000);
   await navigateTo(page, '/trade?*');
 
   // Select pair
