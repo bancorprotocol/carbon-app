@@ -16,14 +16,12 @@ export const useCompareTokenPrice = (
 
 export const useGetTokenPrice = (address?: string) => {
   const {
-    fiatCurrency: { availableCurrencies, selectedFiatCurrency },
+    fiatCurrency: { availableCurrencies },
   } = useStore();
 
-  // This is a hotfix because server wasn't able to provide multiple currency
-  // TODO: remove selectedFiatCurrency from queryKey & query with availableCurrencies once server is ok again
   return useQuery(
-    [...QueryKey.tokenPrice(address!), selectedFiatCurrency],
-    async () => carbonApi.getMarketRate(address!, [selectedFiatCurrency]),
+    QueryKey.tokenPrice(address!),
+    async () => carbonApi.getMarketRate(address!, availableCurrencies),
     {
       enabled: !!address && availableCurrencies.length > 0,
       refetchInterval: FIVE_MIN_IN_MS,
@@ -34,16 +32,14 @@ export const useGetTokenPrice = (address?: string) => {
 
 export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
   const {
-    fiatCurrency: { availableCurrencies, selectedFiatCurrency },
+    fiatCurrency: { availableCurrencies },
   } = useStore();
 
-  // This is a hotfix because server wasn't able to provide multiple currency
-  // TODO: remove selectedFiatCurrency from queryKey & query with availableCurrencies once server is ok again
   return useQueries({
     queries: addresses.map((address) => {
       return {
-        queryKey: [...QueryKey.tokenPrice(address), selectedFiatCurrency],
-        queryFn: () => carbonApi.getMarketRate(address, [selectedFiatCurrency]),
+        queryKey: QueryKey.tokenPrice(address),
+        queryFn: () => carbonApi.getMarketRate(address, availableCurrencies),
         enabled: !!address && availableCurrencies.length > 0,
         refetchInterval: FIVE_MIN_IN_MS,
         staleTime: FIVE_MIN_IN_MS,
