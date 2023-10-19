@@ -576,7 +576,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Price
               </th>
               <td className="p-8 text-end">
-                {startPrice} {base.symbol}
+                {startPrice} {quote.symbol}
               </td>
             </tr>
           </tbody>
@@ -590,7 +590,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Min Price
               </th>
               <td className="p-8 pb-4 text-end">
-                {startPrice} {base.symbol}
+                {startPrice} {quote.symbol}
               </td>
             </tr>
             <tr>
@@ -598,7 +598,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Max Price
               </th>
               <td className="p-8 pt-4 text-end">
-                {endPrice} {base.symbol}
+                {endPrice} {quote.symbol}
               </td>
             </tr>
           </tbody>
