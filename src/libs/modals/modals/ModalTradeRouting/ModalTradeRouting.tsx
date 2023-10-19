@@ -48,45 +48,48 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
 
   return (
     <ModalOrMobileSheet id={id} title="Trade Routing" size="md">
-      <form className="flex flex-col gap-20" onSubmit={submit}>
-        <fieldset className="flex flex-col gap-8">
+      <form className="flex max-h-[inherit] flex-col gap-20" onSubmit={submit}>
+        <fieldset className="flex flex-col gap-8 overflow-auto">
           <Tooltip element="This is the list of orders your trade will use when executed.">
             <legend className="text-secondary">Routing Table</legend>
           </Tooltip>
-          <table className="rounded bg-black">
-            <thead>
-              <tr>
-                <th>{/* checkbox */}</th>
-                <th className="py-8 font-mono text-14 font-weight-500 text-white/60">
-                  {source.symbol}
-                </th>
-                <th>{/* Arrow */}</th>
-                <th className="py-8 font-mono text-14 font-weight-500 text-white/60">
-                  {target.symbol}
-                </th>
-                <th className="py-8 font-mono text-14 font-weight-500 text-white/60">
-                  Avg Price
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {selected.map((action) => (
-                <ModalTradeRoutingRow
-                  key={action.id}
-                  action={action}
-                  source={data.source}
-                  target={data.target}
-                  sourceFiatPrice={sourceFiatPrice.data}
-                  targetFiatPrice={targetFiatPrice.data}
-                  isSelected={action.isSelected}
-                  handleClick={onSelect}
-                />
-              ))}
-            </tbody>
-          </table>
+          {/* Use this  */}
+          <div className="overflow-auto rounded">
+            <table className="w-full bg-black text-left">
+              <thead>
+                <tr>
+                  <th className="sticky top-0 bg-black">{/* checkbox */}</th>
+                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                    {source.symbol}
+                  </th>
+                  <th className="sticky top-0 bg-black">{/* Arrow */}</th>
+                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                    {target.symbol}
+                  </th>
+                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                    Avg Price
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {selected.map((action) => (
+                  <ModalTradeRoutingRow
+                    key={action.id}
+                    action={action}
+                    source={data.source}
+                    target={data.target}
+                    sourceFiatPrice={sourceFiatPrice.data}
+                    targetFiatPrice={targetFiatPrice.data}
+                    isSelected={action.isSelected}
+                    handleClick={onSelect}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </fieldset>
 
-        <fieldset className="flex flex-col gap-8">
+        <fieldset className="flex flex-1 flex-col gap-8">
           <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
             <legend className="text-secondary">Confirm Trade</legend>
           </Tooltip>
@@ -112,6 +115,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           disabled={disabledCTA}
           loading={isAwaiting}
           loadingChildren="Waiting for Confirmation"
+          className="shrink-0"
         >
           Confirm
         </Button>

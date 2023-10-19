@@ -52,7 +52,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           className="m-auto"
         />
       </td>
-      <td className="border-t border-emphasis p-8 text-center">
+      <td className="border-t border-emphasis p-8">
         <ModalTradeRoutingRowCell
           amount={sourceAmount}
           fiatAmount={sourceAmountFiat}
@@ -60,13 +60,13 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           selectedFiatCurrency={selectedFiatCurrency}
         />
       </td>
-      <td className="border-t border-emphasis text-center">
+      <td className="border-t border-emphasis">
         <ForwardArrow
           arrowType="full"
           className="inline h-18 w-18 rounded-full bg-silver p-4 text-white/60"
         />
       </td>
-      <td className="border-t border-emphasis p-8 text-center">
+      <td className="border-t border-emphasis p-8">
         <ModalTradeRoutingRowCell
           amount={targetAmount}
           fiatAmount={targetAmountFiat}
@@ -75,7 +75,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
         />
       </td>
 
-      <td className="border-t border-emphasis p-8 text-center">
+      <td className="border-t border-emphasis p-8">
         <ModalTradeRoutingRowCell
           amount={averagePrice}
           fiatAmount={averagePriceFiat}

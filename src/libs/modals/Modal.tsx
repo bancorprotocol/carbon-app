@@ -51,12 +51,12 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="relative flex w-full flex-col gap-16 rounded-10 border-0 bg-white p-16 outline-none focus:outline-none dark:bg-emphasis"
+          className="relative flex w-full flex-col gap-16 rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis"
         >
           {isLoading && (
             <div className="statusBar absolute -mt-20 ml-20 h-6 w-full bg-green/25" />
           )}
-          <header className="flex justify-between p-8">
+          <header className="flex justify-between">
             {typeof title === 'string' ? (
               <h2 id="modal-title">{title}</h2>
             ) : (
@@ -69,7 +69,7 @@ export const Modal: FC<ModalProps> = ({
             )}
           </header>
 
-          <div className="flex max-h-[70vh] flex-col gap-20 overflow-auto p-8">
+          <div className="flex max-h-[70vh] flex-col gap-20 overflow-auto">
             {children}
           </div>
         </div>
