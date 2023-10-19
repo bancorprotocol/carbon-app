@@ -15,7 +15,7 @@ import {
 } from 'react';
 import { Strategy, UseQueryResult } from 'libs/queries';
 import { lsService } from 'services/localeStorage';
-import { toPairName, toPairSlug } from 'utils/pairSearch';
+import { toPairName, fromPairSlug } from 'utils/pairSearch';
 import { getCompareFunctionBySortType } from 'components/strategies/overview/utils';
 
 type StrateyQuery = UseQueryResult<Strategy[], unknown>;
@@ -44,7 +44,7 @@ export const useStrategyFilter = (query: StrateyQuery) => {
       }
       if (!search) return true;
       const name = toPairName(strategy.base, strategy.quote);
-      return toPairSlug(name).includes(search);
+      return fromPairSlug(name).includes(search);
     });
 
     // Sort

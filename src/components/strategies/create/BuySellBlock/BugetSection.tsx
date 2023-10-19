@@ -5,7 +5,7 @@ import { StrategyType } from '../types';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { OrderCreate } from '../useOrder';
 import { UseQueryResult } from '@tanstack/react-query';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { useStrategyEvents } from './useStrategyEvents';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
@@ -30,10 +30,9 @@ export const BudgetSection: FC<Props> = ({
 }) => {
   const inputId = useId();
   const budgetToken = buy ? quote : base;
-
   const insufficientBalance =
     !tokenBalanceQuery.isLoading &&
-    new Decimal(tokenBalanceQuery.data || 0).lt(order.budget || 0);
+    new BigNumber(tokenBalanceQuery.data || 0).lt(order.budget);
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 

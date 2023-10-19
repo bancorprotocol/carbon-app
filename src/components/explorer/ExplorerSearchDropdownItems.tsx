@@ -9,26 +9,26 @@ interface Props {
 }
 
 export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
-  const { type } = useExplorerParams();
+  const { type: currentType } = useExplorerParams();
   const items = [
     {
+      type: 'wallet' as const,
       label: 'Wallet',
-      href: PathNames.explorer('wallet'),
-      active: type === 'wallet',
+      active: currentType === 'wallet',
     },
     {
+      type: 'token-pair' as const,
       label: 'Token Pair',
-      href: PathNames.explorer('token-pair'),
-      active: type === 'token-pair',
+      active: currentType === 'token-pair',
     },
   ];
 
   return (
     <div className={'flex w-full flex-col space-y-10 font-weight-400'}>
-      {items.map(({ label, href, active }) => (
+      {items.map(({ label, type, active }) => (
         <Link
-          key={href}
-          to={href}
+          key={type}
+          to={PathNames.explorer(type)}
           onClick={() => setSearch('')}
           className={cn(
             'hover:bg-body rounded-6 p-10',

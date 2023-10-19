@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useRef } from 'react';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -21,7 +21,7 @@ type Props = {
   onKeystroke?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
-  slippage?: Decimal | null;
+  slippage?: BigNumber | null;
   withoutWallet?: boolean;
   'data-testid'?: string;
 };
@@ -58,7 +58,7 @@ export const TokenInputField: FC<Props> = ({
   const handleBalanceClick = () => {
     if (balance === value) return;
     if (balance) {
-      const balanceValue = new Decimal(balance).toFixed(token.decimals);
+      const balanceValue = new BigNumber(balance).toFixed(token.decimals);
       setValue(balanceValue);
     }
     onKeystroke && onKeystroke();
@@ -76,7 +76,7 @@ export const TokenInputField: FC<Props> = ({
       `}
       onClick={() => inputRef.current?.focus()}
     >
-      <div className={`flex items-center justify-between`}>
+      <div className="flex items-center justify-between">
         <input
           id={id}
           type="text"
@@ -95,29 +95,21 @@ export const TokenInputField: FC<Props> = ({
           disabled={disabled}
           data-testid={testid}
         />
-        <div
-          className={`flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8`}
-        >
-          <LogoImager
-            alt={'Token'}
-            src={token.logoURI}
-            className={'h-20 w-20'}
-          />
-          <span className={'font-weight-500'}>{token.symbol}</span>
+        <div className="flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8">
+          <LogoImager alt="Token" src={token.logoURI} className="h-20 w-20" />
+          <span className="font-weight-500">{token.symbol}</span>
         </div>
       </div>
-      <div
-        className={`flex flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500`}
-      >
+      <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
         <p className="flex items-center gap-5 text-white/60">
-          {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
+          {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
         {user && isBalanceLoading !== undefined && !withoutWallet && (
           <button
             type="button"
             onClick={handleBalanceClick}
-            className={'group flex items-center'}
+            className="group flex items-center"
           >
             Wallet:&nbsp;
             {isBalanceLoading ? (

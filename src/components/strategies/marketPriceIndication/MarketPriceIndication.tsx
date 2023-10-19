@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import Decimal from 'decimal.js';
+import BigNumber from 'bignumber.js';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 type MarketPriceIndicationProps = {
-  marketPricePercentage: Decimal;
+  marketPricePercentage: BigNumber;
   isRange?: boolean;
 };
 
@@ -36,13 +36,11 @@ export const MarketPriceIndication: FC<MarketPriceIndicationProps> = ({
 
   return (
     <span
-      className={`flex items-center gap-5 rounded-6 bg-emphasis py-4 px-6 text-white/60`}
+      className="flex items-center gap-5 rounded-6 bg-emphasis py-4 px-6 text-white/60"
       data-testid="market-price-indication"
     >
       <span className="font-mono text-10">
-        {`${percentage}% ${isAbove ? 'above' : 'below'} ${
-          isRange ? '' : 'market'
-        }`}
+        {percentage}% {isAbove ? 'above' : 'below'} {isRange ? '' : 'market'}
       </span>
       <Tooltip
         iconClassName="h-10 w-10"

@@ -3,10 +3,9 @@ import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
-import { config } from 'services/web3/config';
 import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';
-import { toPairName } from 'utils/pairSearch';
+import { toPairKey } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
 
 export const useTradePairs = () => {
@@ -29,20 +28,18 @@ export const useTradePairs = () => {
   };
 
   const getTradePair = useCallback(
-    (base: string, quote: string): TradePair | undefined => {
-      const name = toPairName({ symbol: base }, { symbol: quote });
-      return pairs.map.get(name);
+    (base: string, quote: string) => {
+      const key = toPairKey(base, quote);
+      return pairs.map.get(key);
     },
     [pairs.map]
   );
 
-  const tradePairsPopular = useMemo(
-    () =>
-      popularPairs
-        .map(([base, quote]) => getTradePair(base, quote))
-        .filter((p) => !!p) as TradePair[],
-    [getTradePair]
-  );
+  const tradePairsPopular = useMemo(() => {
+    return popularPairs
+      .map(([base, quote]) => getTradePair(base, quote))
+      .filter((p) => !!p) as TradePair[];
+  }, [getTradePair]);
 
   const [favoritePairs, _setFavoritePairs] = useState<TradePair[]>(
     lsService.getItem(`favoriteTradePairs-${user}`) || []
@@ -104,30 +101,28 @@ export const useTradePairs = () => {
   };
 };
 
-const { ETH, DAI, BNT, USDT, WBTC, USDC, SHIB } = config.tokens;
-
 const popularPairs: string[][] = [
-  [ETH, USDC],
-  [ETH, USDT],
-  [ETH, DAI],
-  [ETH, WBTC],
-  [BNT, USDC],
-  [BNT, USDT],
-  [BNT, DAI],
-  [BNT, ETH],
-  [BNT, WBTC],
-  [WBTC, USDC],
-  [WBTC, USDT],
-  [WBTC, DAI],
-  [WBTC, ETH],
-  [USDT, USDC],
-  [USDC, USDT],
-  [USDT, DAI],
-  [USDC, DAI],
-  [DAI, USDC],
-  [DAI, USDT],
-  [SHIB, USDT],
-  [SHIB, USDC],
-  [SHIB, DAI],
-  [SHIB, ETH],
+  ['ETH', 'USDC'],
+  ['ETH', 'USDT'],
+  ['ETH', 'DAI'],
+  ['ETH', 'WBTC'],
+  ['BNT', 'USDC'],
+  ['BNT', 'USDT'],
+  ['BNT', 'DAI'],
+  ['BNT', 'ETH'],
+  ['BNT', 'WBTC'],
+  ['WBTC', 'USDC'],
+  ['WBTC', 'USDT'],
+  ['WBTC', 'DAI'],
+  ['WBTC', 'ETH'],
+  ['USDT', 'USDC'],
+  ['USDC', 'USDT'],
+  ['USDT', 'DAI'],
+  ['USDC', 'DAI'],
+  ['DAI', 'USDC'],
+  ['DAI', 'USDT'],
+  ['SHIB', 'USDT'],
+  ['SHIB', 'USDC'],
+  ['SHIB', 'DAI'],
+  ['SHIB', 'ETH'],
 ];

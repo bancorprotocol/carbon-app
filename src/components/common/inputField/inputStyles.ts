@@ -46,6 +46,13 @@ export const inputStyles = cva<InputVariants>(
           'outline-red',
           'focus:outline-red',
         ],
+        'error-light': [
+          'outline',
+          'outline-offset-2',
+          'outline-2',
+          'outline-red',
+          'focus:outline-red',
+        ],
       },
       size: {
         sm: ['text-12', 'h-30'],
