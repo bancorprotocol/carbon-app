@@ -13,18 +13,17 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
   } = useOrderBookWidget(base.address, quote.address);
 
   return (
-    <div className={'rounded-10 bg-silver p-20'}>
-      <h2>Orders</h2>
-      <div className={'mt-20 font-mono'}>
+    <section
+      aria-labelledby="order-title"
+      className="rounded-10 bg-silver p-20"
+    >
+      <h2 id="order-title">Orders</h2>
+      <div className="mt-20 font-mono">
         <OrderBookWidgetHeader
           baseSymbol={base.symbol}
           quoteSymbol={quote.symbol}
         />
-        <div
-          className={
-            'mt-2 rounded-b-10 rounded-t-4 bg-black px-20 py-8 text-14'
-          }
-        >
+        <div className="mt-2 rounded-b-10 rounded-t-4 bg-black px-20 py-8 text-14">
           <OrderBookSide
             isLoading={isLoading}
             orders={sell}
@@ -46,6 +45,6 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };

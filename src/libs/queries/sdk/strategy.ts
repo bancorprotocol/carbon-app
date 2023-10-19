@@ -20,7 +20,8 @@ import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
 import { getLowestBits } from 'utils/helpers';
 import { RoiRow } from 'utils/carbonApi';
-import { useGetRoi } from '../extApi/roi';
+import { useGetRoi } from 'libs/queries/extApi/roi';
+import { useGetAddressFromEns } from 'libs/queries/chain/ens';
 
 export type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
@@ -28,6 +29,7 @@ export interface Order {
   balance: string;
   startRate: string;
   endRate: string;
+  marginalRate: string;
 }
 
 export interface Strategy {
@@ -100,6 +102,7 @@ const buildStrategiesHelper = async ({
       balance: s.buyBudget,
       startRate: s.buyPriceLow,
       endRate: s.buyPriceHigh,
+      marginalRate: s.buyPriceMarginal,
     };
 
     // ATTENTION *****************************
@@ -109,6 +112,7 @@ const buildStrategiesHelper = async ({
       balance: s.sellBudget,
       startRate: s.sellPriceLow,
       endRate: s.sellPriceHigh,
+      marginalRate: s.sellPriceMarginal,
     };
 
     const roi = new BigNumber(roiData.find((r) => r.id === s.id)?.ROI || 0);
@@ -140,18 +144,21 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const { tokens, getTokenById, importToken } = useTokens();
   const { Token } = useContract();
 
-  const isValidAddres = utils.isAddress(user?.toLowerCase() || '');
-  const isZeroAddress = user === config.tokens.ZERO;
+  const ensAddress = useGetAddressFromEns(user || '');
+  const address: string = (ensAddress?.data || user || '').toLowerCase();
+
+  const isValidAddress = utils.isAddress(address);
+  const isZeroAddress = address === config.tokens.ZERO;
 
   const roiQuery = useGetRoi();
 
   return useQuery<Strategy[]>(
-    QueryKey.strategies(user),
+    QueryKey.strategies(address),
     async () => {
-      if (!user || !isValidAddres || isZeroAddress) return [];
+      if (!address || !isValidAddress || isZeroAddress) return [];
 
-      const strategies = await carbonSDK.getUserStrategies(user);
-      return await buildStrategiesHelper({
+      const strategies = await carbonSDK.getUserStrategies(address);
+      return buildStrategiesHelper({
         strategies,
         getTokenById,
         importToken,
@@ -160,7 +167,11 @@ export const useGetUserStrategies = ({ user }: Props) => {
       });
     },
     {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      enabled:
+        tokens.length > 0 &&
+        isInitialized &&
+        roiQuery.isSuccess &&
+        ensAddress.isSuccess,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }

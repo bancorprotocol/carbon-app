@@ -5,6 +5,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { ReactComponent as IconFilter } from 'assets/icons/filter.svg';
 import { lsService } from 'services/localeStorage';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 // [START] Used for localstorage migration: Remove it after Nov 2023
 export enum EnumStrategySort {
@@ -73,12 +74,8 @@ export const strategySort = {
 };
 export type StrategySort = keyof typeof strategySort;
 
-export const StrategyFilterSort: FC<{
-  filter: StrategyFilter;
-  sort: StrategySort;
-  setSort: (sort: StrategySort) => void;
-  setFilter: (sort: StrategyFilter) => void;
-}> = ({ sort, filter, setSort, setFilter }) => {
+export const StrategyFilterSort = () => {
+  const { filter, sort, setFilter, setSort } = useStrategyCtx();
   const { sortItems, filterItems } = getSortAndFilterItems();
 
   const onSortChange = (event: FormEvent<HTMLFieldSetElement>) => {
@@ -157,13 +154,13 @@ const FilterSortItem: FC<{
         type="radio"
         name={name}
         value={item}
-        className="peer absolute inset-0 opacity-0"
+        className="peer absolute opacity-0"
       />
       <label
         htmlFor={id}
         className={`
           flex cursor-pointer items-center justify-between rounded-6 py-8 px-16
-          hover:bg-black/90
+          px-16 hover:bg-black/90
           peer-focus-visible:outline peer-focus-visible:outline-1
         `}
       >

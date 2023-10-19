@@ -1,39 +1,26 @@
 import { CreateStrategyCTA } from 'components/strategies/create/CreateStrategyCTA';
 import { FC } from 'react';
 import { SearchInput } from 'components/common/searchInput';
-import {
-  StrategySort,
-  StrategyFilter,
-  StrategyFilterSort,
-} from 'components/strategies/overview/StrategyFilterSort';
+import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import { cn } from 'utils/helpers';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const StrategyPageTitleWidget: FC<{
-  search: string;
-  setSearch: (value: string) => void;
   showFilter: boolean;
-  sort: StrategySort;
-  filter: StrategyFilter;
-  setSort: (sort: StrategySort) => void;
-  setFilter: (sort: StrategyFilter) => void;
-}> = ({ search, setSearch, showFilter, sort, filter, setSort, setFilter }) => {
+}> = ({ showFilter }) => {
+  const { search, setSearch } = useStrategyCtx();
   return (
     <div className="flex items-center gap-20">
       {showFilter && (
         <>
-          <div className={'order-last col-span-2 md:order-first'}>
+          <div className="order-last col-span-2 md:order-first">
             <SearchInput
               value={search}
               setValue={setSearch}
-              className="h-40 w-full"
+              className="rounded-full"
             />
           </div>
-          <StrategyFilterSort
-            sort={sort}
-            filter={filter}
-            setSort={setSort}
-            setFilter={setFilter}
-          />
+          <StrategyFilterSort />
         </>
       )}
 

@@ -1,17 +1,17 @@
 import { StrategyContent } from 'components/strategies/overview';
+import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { StrategyNotFound } from 'components/strategies/overview/StrategyNotFound';
-import { useGetUserStrategies } from 'libs/queries';
-import { useWeb3 } from 'libs/web3';
+import { useStrategyCtx } from 'hooks/useStrategies';
 
 export const StrategiesOverviewPage = () => {
-  const { user } = useWeb3();
-  const strategies = useGetUserStrategies({ user });
+  const { strategies, isLoading, search } = useStrategyCtx();
+  const emptyElement = search ? <StrategyNotFound /> : <StrategyCreateFirst />;
 
   return (
     <StrategyContent
-      strategies={strategies.data}
-      isLoading={strategies.isLoading}
-      emptyElement={<StrategyNotFound />}
+      strategies={strategies}
+      isLoading={isLoading}
+      emptyElement={emptyElement}
     />
   );
 };

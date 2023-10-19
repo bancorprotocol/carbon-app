@@ -1,9 +1,10 @@
 import BigNumber from 'bignumber.js';
 import numbro from 'numbro';
-import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import Graphemer from 'graphemer';
+import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { FiatSymbol } from 'utils/carbonApi';
 
 export const isProduction = window
@@ -39,12 +40,17 @@ export const shortenString = (
   separator = '...',
   toLength = 13
 ): string => {
-  if (string.length <= toLength) {
+  const splitter = new Graphemer();
+  const stringArray = splitter.splitGraphemes(string);
+
+  if (stringArray.length <= toLength) {
     return string;
   }
   const startEndLength = Math.floor((toLength - separator.length) / 2);
-  const start = string.substring(0, startEndLength);
-  const end = string.substring(string.length - startEndLength, string.length);
+  const start = stringArray.slice(0, startEndLength).join('');
+  const end = stringArray
+    .slice(stringArray.length - startEndLength, stringArray.length)
+    .join('');
   return start + separator + end;
 };
 
@@ -52,7 +58,7 @@ export const getFiatDisplayValue = (
   fiatValue: BigNumber | string | number,
   currentCurrency: FiatSymbol
 ) => {
-  return `${prettifyNumber(fiatValue, { currentCurrency })}`;
+  return prettifyNumber(fiatValue, { currentCurrency });
 };
 
 const prettifyNumberAbbreviateFormat: numbro.Format = {
