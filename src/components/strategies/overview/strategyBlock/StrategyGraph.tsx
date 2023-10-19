@@ -566,7 +566,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   return (
     <article className="flex flex-col gap-16 text-12">
       <h3 className={cn('text-16 font-weight-500', color)}>
-        {buy ? 'Buy' : 'Sell'} {quote.symbol}
+        {buy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
         <table className="border-separate rounded-8 border border-white/40">
