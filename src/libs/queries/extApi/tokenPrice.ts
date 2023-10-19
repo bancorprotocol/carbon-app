@@ -16,12 +16,12 @@ export const useCompareTokenPrice = (
 
 export const useGetTokenPrice = (address?: string) => {
   const {
-    fiatCurrency: { availableCurrencies },
+    fiatCurrency: { availableCurrencies, selectedFiatCurrency },
   } = useStore();
 
   return useQuery(
     QueryKey.tokenPrice(address!),
-    async () => carbonApi.getMarketRate(address!, availableCurrencies),
+    async () => carbonApi.getMarketRate(address!, [selectedFiatCurrency]),
     {
       enabled: !!address && availableCurrencies.length > 0,
       refetchInterval: FIVE_MIN_IN_MS,
