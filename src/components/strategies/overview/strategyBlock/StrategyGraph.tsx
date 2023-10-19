@@ -605,8 +605,8 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       <p className="text-white/60">
-        Current marginal price is {marginalPrice} {base.symbol} per 1&nbsp;
-        {quote.symbol}
+        Current marginal price is {marginalPrice} {quote.symbol} per 1&nbsp;
+        {base.symbol}
       </p>
       <a
         href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
