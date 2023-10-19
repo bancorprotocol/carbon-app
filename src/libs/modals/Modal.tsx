@@ -51,7 +51,7 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="relative flex w-full flex-col gap-16 rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis"
+          className="relative flex w-full flex-col gap-20 rounded-10 border-0 bg-white p-20 outline-none focus:outline-none dark:bg-emphasis"
         >
           {isLoading && (
             <div className="statusBar absolute -mt-20 ml-20 h-6 w-full bg-green/25" />
