@@ -32,14 +32,14 @@ export const useGetTokenPrice = (address?: string) => {
 
 export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
   const {
-    fiatCurrency: { availableCurrencies },
+    fiatCurrency: { availableCurrencies, selectedFiatCurrency },
   } = useStore();
 
   return useQueries({
     queries: addresses.map((address) => {
       return {
         queryKey: QueryKey.tokenPrice(address),
-        queryFn: () => carbonApi.getMarketRate(address, availableCurrencies),
+        queryFn: () => carbonApi.getMarketRate(address, [selectedFiatCurrency]),
         enabled: !!address && availableCurrencies.length > 0,
         refetchInterval: FIVE_MIN_IN_MS,
         staleTime: FIVE_MIN_IN_MS,
