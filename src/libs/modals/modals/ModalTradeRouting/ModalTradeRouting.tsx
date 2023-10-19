@@ -49,9 +49,15 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   return (
     <ModalOrMobileSheet id={id} title="Trade Routing" size="md">
       <form className="flex max-h-[inherit] flex-col gap-20" onSubmit={submit}>
-        <article className="flex flex-col gap-8 overflow-auto">
+        <div
+          role="group"
+          aria-labelledby="routing-table"
+          className="flex flex-col gap-8 overflow-auto"
+        >
           <Tooltip element="This is the list of orders your trade will use when executed.">
-            <h3 className="text-secondary">Routing Table</h3>
+            <h3 id="routing-table" className="text-secondary">
+              Routing Table
+            </h3>
           </Tooltip>
           {/* Wrap table to keep rounded visual on overflow */}
           <div className="overflow-auto rounded">
@@ -87,11 +93,17 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
               </tbody>
             </table>
           </div>
-        </article>
+        </div>
 
-        <article className="flex flex-col gap-8">
+        <div
+          role="group"
+          aria-labelledby="confirm-table"
+          className="flex flex-col gap-8"
+        >
           <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
-            <h3 className="text-secondary">Confirm Trade</h3>
+            <h3 id="confirm-table" className="text-secondary">
+              Confirm Trade
+            </h3>
           </Tooltip>
           <TokenInputField
             value={totalSourceAmount}
@@ -106,7 +118,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             disabled
             className="-mt-16 rounded-12 bg-black"
           />
-        </article>
+        </div>
 
         <Button
           type="submit"
