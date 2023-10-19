@@ -62,7 +62,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
           onClick={editPrices}
           disabled={isAwaiting || isProcessing}
           to={PathNames.editStrategy}
-          search={{ type: 'price' }}
+          search={{ type: 'editPrices' }}
           className={cn(
             'row-span-2 self-center',
             buttonStyles({ variant: 'white' })

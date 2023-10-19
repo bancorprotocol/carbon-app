@@ -36,7 +36,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         <Link
           onClick={edit}
           to={PathNames.editStrategy}
-          search={{ type: 'price' }}
+          search={{ type: 'editPrices' }}
           className={cn(
             'row-span-2 self-center',
             buttonStyles({ variant: 'white' })
