@@ -566,7 +566,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   return (
     <article className="flex flex-col gap-16 text-12">
       <h3 className={cn('text-16 font-weight-500', color)}>
-        {buy ? 'Buy' : 'Sell'} {quote.symbol}
+        {buy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
         <table className="border-separate rounded-8 border border-white/40">
@@ -576,7 +576,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Price
               </th>
               <td className="p-8 text-end">
-                {startPrice} {base.symbol}
+                {startPrice} {quote.symbol}
               </td>
             </tr>
           </tbody>
@@ -590,7 +590,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Min Price
               </th>
               <td className="p-8 pb-4 text-end">
-                {startPrice} {base.symbol}
+                {startPrice} {quote.symbol}
               </td>
             </tr>
             <tr>
@@ -598,15 +598,15 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
                 Max Price
               </th>
               <td className="p-8 pt-4 text-end">
-                {endPrice} {base.symbol}
+                {endPrice} {quote.symbol}
               </td>
             </tr>
           </tbody>
         </table>
       )}
       <p className="text-white/60">
-        Current marginal price is {marginalPrice} {base.symbol} per 1&nbsp;
-        {quote.symbol}
+        Current marginal price is {marginalPrice} {quote.symbol} per 1&nbsp;
+        {base.symbol}
       </p>
       <a
         href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
