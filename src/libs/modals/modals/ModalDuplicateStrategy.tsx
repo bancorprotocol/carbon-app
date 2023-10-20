@@ -20,9 +20,9 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
 }) => {
   const { closeModal } = useModal();
   const { duplicate } = useDuplicateStrategy();
+  const undercutDifference = 0.01;
 
   const undercutStrategy = () => {
-    const undercutDifference = 0.01;
     const undercuttedStrategy = {
       ...strategy,
       order0: {
@@ -45,13 +45,13 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       },
     };
 
-    closeModal(id);
     duplicate(undercuttedStrategy);
+    closeModal(id);
   };
 
   const duplicateStrategy = () => {
-    closeModal(id);
     duplicate(strategy);
+    closeModal(id);
   };
 
   return (
@@ -62,9 +62,11 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
           <IconCopy className="h-16 w-16 text-green" />
         </div>
-        <h3 className="grid text-14 font-weight-500">Copy as Is</h3>
+        <h3 className="text-14 font-weight-500">Copy as Is</h3>
         <Button
+          type="button"
           onClick={duplicateStrategy}
+          aria-label="duplicate strategy"
           className={cn(
             'row-span-2 self-center',
             buttonStyles({ variant: 'white' })
@@ -80,9 +82,11 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
           <IconCut className="h-16 w-16 text-green" />
         </div>
-        <h3 className="grid text-14 font-weight-500">Undercut the Strategy</h3>
+        <h3 className="text-14 font-weight-500">Undercut the Strategy</h3>
         <Button
+          type="button"
           onClick={undercutStrategy}
+          aria-label="undercut strategy"
           className={cn(
             'row-span-2 self-center',
             buttonStyles({ variant: 'white' })
