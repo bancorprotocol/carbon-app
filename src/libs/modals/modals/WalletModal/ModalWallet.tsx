@@ -6,6 +6,7 @@ import { ModalWalletError } from 'libs/modals/modals/WalletModal/ModalWalletErro
 import { ModalWalletContent } from 'libs/modals/modals/WalletModal/ModalWalletContent';
 import { carbonEvents } from 'services/events';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { useStore } from 'store';
 
 export const ModalWallet: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
@@ -14,6 +15,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
     useState<Connection | null>(null);
   const [connectionError, setConnectionError] = useState('');
   const [isConnected, setIsConnected] = useState(false);
+  const { setIsManualConnect } = useStore();
 
   useEffect(() => {
     if (isConnected) {
@@ -21,11 +23,16 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
         window?.OneTrust?.AllowAll();
         window?.OneTrust?.Close();
       }
+      carbonEvents.wallet.walletConnect({
+        address: user,
+        name: selectedConnection?.name || '',
+      });
     }
-  }, [isConnected, selectedConnection?.name, user]);
+  }, [isConnected, selectedConnection?.name, user, setIsManualConnect]);
 
   useEffect(() => {
     carbonEvents.wallet.walletConnectPopupView(undefined);
+    setIsManualConnect(false);
   }, []);
 
   const isLoading = selectedConnection !== null && !connectionError;
@@ -37,6 +44,7 @@ export const ModalWallet: ModalFC<undefined> = ({ id }) => {
       await connect(c.type);
       closeModal(id);
       setIsConnected(true);
+      setIsManualConnect(true);
     } catch (e: any) {
       console.error(`Modal Wallet onClickConnect error: `, e);
       setConnectionError(e.message || 'Unknown connection error.');

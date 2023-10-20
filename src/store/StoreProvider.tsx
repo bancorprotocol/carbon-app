@@ -72,6 +72,8 @@ interface StoreContext {
   setInnerHeight: (value: number) => void;
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
+  isManualConnect: boolean;
+  setIsManualConnect: (value: boolean) => void;
   strategies: StrategyToEditStore;
   toaster: ToastStore;
 }
@@ -94,6 +96,8 @@ const defaultValue: StoreContext = {
   setInnerHeight: () => {},
   selectedWallet: null,
   setSelectedWallet: () => {},
+  isManualConnect: false,
+  setIsManualConnect: () => {},
   strategies: defaultStrategyToEdit,
   toaster: defaultToastStore,
 };
@@ -114,6 +118,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedWallet, setSelectedWallet] = useState<ConnectionType | null>(
     null
   );
+  const [isManualConnect, setIsManualConnect] = useState<boolean>(false);
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -127,6 +132,8 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
+    isManualConnect,
+    setIsManualConnect,
     sdk,
     tokens,
     notifications,

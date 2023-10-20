@@ -13,6 +13,13 @@ export interface EventWalletSchema extends EventCategory {
       wallet_name: string;
     };
   };
+  walletAutoConnect: {
+    input: { address: string | undefined; name: string };
+    gtmData: {
+      wallet_id: string | undefined;
+      wallet_name: string;
+    };
+  };
   walletDisconnect: {
     input: { address: string | undefined };
     gtmData: { wallet_id: string | undefined };
@@ -22,6 +29,12 @@ export interface EventWalletSchema extends EventCategory {
 export const walletEvents: CarbonEvents['wallet'] = {
   walletConnect: ({ name, address }) => {
     sendGTMEvent('wallet', 'walletConnect', {
+      wallet_name: name,
+      wallet_id: address,
+    });
+  },
+  walletAutoConnect: ({ name, address }) => {
+    sendGTMEvent('wallet', 'walletAutoConnect', {
       wallet_name: name,
       wallet_id: address,
     });

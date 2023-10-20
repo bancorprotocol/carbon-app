@@ -46,7 +46,7 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
 
 export const MainMenuRightWallet: FC = () => {
   const { user, isSupportedNetwork, isImposter, isUserBlocked } = useWeb3();
-  const { selectedWallet } = useStore();
+  const { selectedWallet, isManualConnect, setIsManualConnect } = useStore();
   const { openModal } = useModal();
 
   const onClickOpenModal = () => {
@@ -55,14 +55,20 @@ export const MainMenuRightWallet: FC = () => {
   };
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
+  const userConnected = !!user && selectedWallet != null;
+
+  if (userConnected && isManualConnect) {
+    setIsManualConnect(false); // Expect an auto wallet connection next
+  }
 
   useEffect(() => {
-    if (!!user && selectedWallet != null) {
-      carbonEvents.wallet.walletConnect({
+    if (userConnected && !isManualConnect) {
+      carbonEvents.wallet.walletAutoConnect({
         address: user,
         name: getConnection(selectedWallet)?.name || '',
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, selectedWallet]);
 
   const buttonVariant = useMemo(() => {
