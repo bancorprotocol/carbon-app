@@ -20,31 +20,28 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
       aria-label="Strategy Panels"
       className="flex w-full gap-2 rounded-full border-2 border-silver p-6 text-14 md:w-auto"
     >
-      {tabs.map(({ label, href, icon, badge, hrefMatches }) => (
-        <Link
-          to={href}
-          key={href}
-          className={cn(
-            'flex w-full items-center justify-center gap-4 rounded-full py-5 md:px-10',
-            isPathnameMatch(currentPathname, href, hrefMatches)
-              ? 'bg-secondary'
-              : 'bg-transparent'
-          )}
-          aria-current={
-            isPathnameMatch(currentPathname, href, hrefMatches)
-              ? 'location'
-              : 'false'
-          }
-        >
-          {icon}
-          <span>{label}</span>
-          {!!badge && (
-            <span className="grid h-18 w-18 place-items-center rounded-full bg-white/10 text-10">
-              {badge}
-            </span>
-          )}
-        </Link>
-      ))}
+      {tabs.map(({ label, href, icon, badge, hrefMatches }) => {
+        const active = isPathnameMatch(currentPathname, href, hrefMatches);
+        return (
+          <Link
+            to={href}
+            key={href}
+            className={cn(
+              'flex w-full items-center justify-center gap-4 rounded-full py-5 md:px-10',
+              active ? 'bg-secondary' : 'bg-transparent text-white/60'
+            )}
+            aria-current={active ? 'location' : 'false'}
+          >
+            {icon}
+            <span>{label}</span>
+            {!!badge && (
+              <span className="grid h-18 w-18 place-items-center rounded-full bg-white/10 text-10">
+                {badge}
+              </span>
+            )}
+          </Link>
+        );
+      })}
     </nav>
   );
 };
