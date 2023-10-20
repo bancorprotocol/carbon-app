@@ -3,7 +3,6 @@ import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { PathNames, useMatch, useNavigate } from 'libs/routing';
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -45,7 +44,6 @@ export const StrategyBlockManage: FC<Props> = ({
   isExplorer,
 }) => {
   const { strategies, sort, filter } = useStrategyCtx();
-  const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate<EditStrategyLocationGenerics>();
   const order0 = useOrder(strategy.order0);
@@ -79,8 +77,7 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-        openModal('duplicateStrategy', { strategyId: strategy.id });
-        // duplicate(strategy);
+        openModal('duplicateStrategy', { strategy: strategy });
       },
     },
     {
