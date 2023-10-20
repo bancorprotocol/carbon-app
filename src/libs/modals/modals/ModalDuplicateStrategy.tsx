@@ -87,7 +87,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
           <Button
             type="button"
             onClick={onClick}
-            aria-label={`${title.toLowerCase()} strategy`}
+            aria-label={title.toLowerCase()}
             className={cn(
               'row-span-2 self-center',
               buttonStyles({ variant: 'white' })
