@@ -54,50 +54,50 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
     closeModal(id);
   };
 
+  const duplicateOptions = [
+    {
+      icon: IconCopy,
+      title: 'Copy as Is',
+      onClick: duplicateStrategy,
+      description:
+        'Duplicate the strategy with the existing values (price, budget)',
+    },
+    {
+      icon: IconCut,
+      title: 'Undercut the Strategy',
+      onClick: undercutStrategy,
+      description:
+        'Set prices at 0.1% tighter spread and try to get filled ahead',
+    },
+  ];
+
   return (
     <ModalOrMobileSheet id={id} title="Duplicate Strategy">
       <p className="text-secondary font-weight-400">Select your option.</p>
 
-      <article className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16">
-        <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
-          <IconCopy className="h-16 w-16 text-green" />
-        </div>
-        <h3 className="text-14 font-weight-500">Copy as Is</h3>
-        <Button
-          type="button"
-          onClick={duplicateStrategy}
-          aria-label="duplicate strategy"
-          className={cn(
-            'row-span-2 self-center',
-            buttonStyles({ variant: 'white' })
-          )}
+      {duplicateOptions.map(({ icon: Icon, title, onClick, description }) => (
+        <article
+          key={title}
+          className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16"
         >
-          Select
-        </Button>
-        <p className="text-12 font-weight-400 text-white/60">
-          Duplicate the strategy with the existing values (price, budget)
-        </p>
-      </article>
-      <article className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16">
-        <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
-          <IconCut className="h-16 w-16 text-green" />
-        </div>
-        <h3 className="text-14 font-weight-500">Undercut the Strategy</h3>
-        <Button
-          type="button"
-          onClick={undercutStrategy}
-          aria-label="undercut strategy"
-          className={cn(
-            'row-span-2 self-center',
-            buttonStyles({ variant: 'white' })
-          )}
-        >
-          Select
-        </Button>
-        <p className="text-12 text-white/80">
-          Set prices at 0.1% tighter spread and try to get filled ahead
-        </p>
-      </article>
+          <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
+            <Icon className="h-16 w-16 text-green" />
+          </div>
+          <h3 className="text-14 font-weight-500">{title}</h3>
+          <Button
+            type="button"
+            onClick={onClick}
+            aria-label={`${title.toLowerCase()} strategy`}
+            className={cn(
+              'row-span-2 self-center',
+              buttonStyles({ variant: 'white' })
+            )}
+          >
+            Select
+          </Button>
+          <p className="text-12 font-weight-400 text-white/60">{description}</p>
+        </article>
+      ))}
     </ModalOrMobileSheet>
   );
 };
