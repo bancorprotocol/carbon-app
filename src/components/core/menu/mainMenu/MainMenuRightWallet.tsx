@@ -63,7 +63,7 @@ export const MainMenuRightWallet: FC = () => {
 
   useEffect(() => {
     if (userConnected && !isManualConnect) {
-      carbonEvents.wallet.walletAutoConnect({
+      carbonEvents.wallet.walletConnected({
         address: user,
         name: getConnection(selectedWallet)?.name || '',
       });

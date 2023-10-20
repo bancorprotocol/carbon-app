@@ -13,7 +13,7 @@ export interface EventWalletSchema extends EventCategory {
       wallet_name: string;
     };
   };
-  walletAutoConnect: {
+  walletConnected: {
     input: { address: string | undefined; name: string };
     gtmData: {
       wallet_id: string | undefined;
@@ -24,6 +24,10 @@ export interface EventWalletSchema extends EventCategory {
     input: { address: string | undefined };
     gtmData: { wallet_id: string | undefined };
   };
+  walletDisconnected: {
+    input: undefined;
+    gtmData: undefined;
+  };
 }
 
 export const walletEvents: CarbonEvents['wallet'] = {
@@ -33,8 +37,8 @@ export const walletEvents: CarbonEvents['wallet'] = {
       wallet_id: address,
     });
   },
-  walletAutoConnect: ({ name, address }) => {
-    sendGTMEvent('wallet', 'walletAutoConnect', {
+  walletConnected: ({ name, address }) => {
+    sendGTMEvent('wallet', 'walletConnected', {
       wallet_name: name,
       wallet_id: address,
     });
@@ -46,5 +50,8 @@ export const walletEvents: CarbonEvents['wallet'] = {
     sendGTMEvent('wallet', 'walletDisconnect', {
       wallet_id: address,
     });
+  },
+  walletDisconnected: () => {
+    sendGTMEvent('wallet', 'walletDisconnected', undefined);
   },
 };
