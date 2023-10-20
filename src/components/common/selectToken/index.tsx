@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { LogoImager } from 'components/common/imager/Imager';
-import { Button, ButtonHTMLProps } from 'components/common/button';
+import { ButtonHTMLProps } from 'components/common/button';
 import { Tooltip } from '../tooltip/Tooltip';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import { cn } from 'utils/helpers';
 
 type Props = ButtonHTMLProps & {
   symbol?: string;
@@ -45,46 +46,28 @@ export const SelectTokenButton: FC<Props> = ({
       element={getTooltipText()}
       sendEventOnMount={{ buy: undefined }}
     >
-      <Button
+      <button
         data-testid={testId}
-        variant={symbol ? 'black' : 'success'}
-        className={`flex h-52 items-center justify-between rounded-12 px-14 ${className}`}
-        fullWidth
+        className={cn(
+          'flex w-full items-center gap-8 rounded-12 p-10',
+          symbol ? 'bg-black text-white' : 'bg-green text-black',
+          className
+        )}
         {...props}
       >
-        <span className={'flex items-center text-16 font-weight-500'}>
-          {symbol ? (
-            <LogoImager
-              alt={'Token Logo'}
-              src={imgUrl}
-              className={'mr-14 h-24 w-24'}
-            />
-          ) : (
-            <div
-              className={
-                'mr-14 flex h-24 w-24 items-center justify-center rounded-full bg-black'
-              }
-            >
-              <IconPlus className={'h-16 w-16 p-2 text-green'} />
-            </div>
-          )}
-          <div className={'flex flex-col items-start'}>
-            <div className={'flex flex-col items-start'}>
-              {description && (
-                <div
-                  className={`text-12 ${
-                    symbol ? 'text-white/60' : 'text-black/60'
-                  }`}
-                >
-                  {description}
-                </div>
-              )}
-              <div>{symbol ? symbol : 'Select Token'}</div>
-            </div>
+        {symbol ? (
+          <LogoImager alt="Token Logo" src={imgUrl} width="30" height="30" />
+        ) : (
+          <div className="grid h-30 w-30 place-items-center rounded-full bg-black">
+            <IconPlus className="h-16 w-16 p-2 text-green" />
           </div>
-        </span>
-        <IconChevron className="w-14" />
-      </Button>
+        )}
+        <div className="flex-1 text-left">
+          {description && <p className="text-12 opacity-60">{description}</p>}
+          <p>{symbol ? symbol : 'Select Token'}</p>
+        </div>
+        <IconChevron className="h-20 w-20" />
+      </button>
     </Tooltip>
   );
 };

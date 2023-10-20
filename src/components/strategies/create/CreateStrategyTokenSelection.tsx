@@ -15,13 +15,31 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
 }) => {
   const navigate = useNavigate();
 
+  const swapTokens = () => {
+    if (base && quote) {
+      carbonEvents.strategy.strategyTokenSwap({
+        updatedBase: quote.symbol,
+        updatedQuote: base.symbol,
+      });
+      navigate({
+        to: PathNames.createStrategy,
+        search: (search) => ({
+          ...search,
+          base: quote.address,
+          quote: base.address,
+        }),
+        replace: true,
+      });
+    }
+  };
+
   return (
     <m.article
       variants={items}
       className="bg-secondary rounded-10 p-20"
-      key={'strategyCreateTokenSelection'}
+      key="strategyCreateTokenSelection"
     >
-      <div className="mb-14 flex items-center justify-between">
+      <header className="mb-15 flex items-center justify-between">
         <h2>Token Pair</h2>
         <Tooltip
           sendEventOnMount={{ buy: undefined }}
@@ -37,8 +55,8 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
             </div>
           }
         />
-      </div>
-      <div className={'-space-y-15'}>
+      </header>
+      <div className="-space-y-15">
         <SelectTokenButton
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
@@ -49,32 +67,13 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         />
         {!!base && (
           <>
-            <div
-              className={
-                'relative z-10 mx-auto flex h-40 w-40 items-center justify-center rounded-full border-[5px] border-silver bg-black'
-              }
+            <button
+              className="relative z-10 mx-auto grid h-40 w-40 place-items-center rounded-full border-[5px] border-silver bg-black"
+              onClick={swapTokens}
+              disabled={!base || !quote}
             >
-              <IconArrow
-                onClick={() => {
-                  if (base && quote) {
-                    carbonEvents.strategy.strategyTokenSwap({
-                      updatedBase: quote.symbol,
-                      updatedQuote: base.symbol,
-                    });
-                    navigate({
-                      to: PathNames.createStrategy,
-                      search: (search) => ({
-                        ...search,
-                        base: quote.address,
-                        quote: base.address,
-                      }),
-                      replace: true,
-                    });
-                  }
-                }}
-                className={`w-12 ${base && quote ? 'cursor-pointer' : ''}`}
-              />
-            </div>
+              <IconArrow className="h-12 w-12" />
+            </button>
             <SelectTokenButton
               symbol={quote?.symbol}
               imgUrl={quote?.logoURI}
