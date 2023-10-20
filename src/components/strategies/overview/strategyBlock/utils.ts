@@ -32,7 +32,8 @@ export const getTooltipTextByStatus = (
 };
 
 const tooltipTextByStrategyEditOptionsId = {
-  duplicateStrategy: 'Create a new strategy with the same details',
+  duplicateStrategy:
+    'Create a new strategy with the same details or undercut it',
   deleteStrategy:
     'Delete the strategy and withdraw all associated funds to your wallet',
   pauseStrategy: 'Deactivate the strategy by nulling the prices',
