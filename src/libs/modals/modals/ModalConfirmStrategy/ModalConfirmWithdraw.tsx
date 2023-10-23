@@ -8,9 +8,12 @@ import { useStore } from 'store';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { cn } from 'utils/helpers';
+import { carbonEvents } from 'services/events';
+import { StrategyEditEventType } from 'services/events/types';
 
 export interface ModalConfirmWithdrawData {
   strategy: Strategy;
+  strategyEvent: StrategyEditEventType;
 }
 
 export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
@@ -19,8 +22,13 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
 }) => {
   const { strategies } = useStore();
   const { closeModal } = useModal();
+  const { strategyEvent } = data;
 
   const edit = () => {
+    carbonEvents.strategyEdit.strategyEditPricesClick({
+      origin: 'withdraw',
+      ...strategyEvent,
+    });
     strategies.setStrategyToEdit(data.strategy);
     closeModal(id);
   };
