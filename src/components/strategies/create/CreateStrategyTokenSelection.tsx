@@ -56,11 +56,10 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
           }
         />
       </header>
-      <div className="-space-y-15">
+      <div className="flex flex-col -space-y-15">
         <SelectTokenButton
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
-          address={base?.address}
           description="Buy or Sell"
           onClick={() => openTokenListModal(true)}
           isBaseToken
@@ -77,7 +76,6 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
             <SelectTokenButton
               symbol={quote?.symbol}
               imgUrl={quote?.logoURI}
-              address={quote?.address}
               description="With"
               onClick={() => openTokenListModal()}
             />
