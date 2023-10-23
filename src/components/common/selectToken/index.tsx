@@ -27,6 +27,7 @@ export const SelectTokenButton: FC<Props> = ({
   const { belowBreakpoint } = useBreakpoints();
 
   const testId = isBaseToken ? 'select-base-token' : 'select-quote-token';
+  const text = isBaseToken ? 'Select base token' : 'Select quote token';
   const getTooltipText = () => {
     if (isBaseToken) {
       return symbol
@@ -64,7 +65,7 @@ export const SelectTokenButton: FC<Props> = ({
         )}
         <div className="flex-1 text-left">
           {description && <p className="text-12 opacity-60">{description}</p>}
-          <p>{symbol ? symbol : 'Select Token'}</p>
+          <p>{symbol ?? text}</p>
         </div>
         <IconChevron className="h-20 w-20" />
       </button>
