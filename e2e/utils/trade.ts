@@ -28,7 +28,6 @@ export const testTrade = async (page: Page, config: TradeConfig) => {
   await waitModalOpen(page);
   const pair = mode === 'buy' ? [target, source] : [source, target];
   page.getByTestId('search-token-pair').fill(`${pair.join(' ')}`);
-  // TODO: expect "all" is checked
   const select = await waitFor(page, `select-${pair.join('_')}`);
   await select.click();
   await waitModalClose(page);
