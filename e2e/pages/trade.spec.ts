@@ -9,14 +9,14 @@ test.describe('Trade', () => {
     await Promise.all([mockApi(page), setupImposter(page)]);
   });
 
-  test('Buy ETH with DAI', async ({ page }) => {
+  test('Buy ETH with USDC', async ({ page }) => {
     test.setTimeout(120_000);
     await testTrade(page, {
       mode: 'buy',
-      source: 'DAI',
+      source: 'USDC',
       target: 'ETH',
       sourceValue: '100',
-      targetValue: '0.033646767200145424',
+      targetValue: '0.059554032010090174',
     });
   });
 

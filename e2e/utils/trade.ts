@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Page, expect } from '@playwright/test';
 import { navigateTo, waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
@@ -10,8 +11,16 @@ interface TradeConfig {
   targetValue: string;
 }
 
+const getBalance = (page: Page, token: string) => {
+  return page.getByTestId(`balance-${token}`);
+};
+
 export const testTrade = async (page: Page, config: TradeConfig) => {
   const { mode, source, target, sourceValue, targetValue } = config;
+  const balance = {
+    source: await getBalance(page, source).textContent(),
+    target: await getBalance(page, target).textContent(),
+  };
   await navigateTo(page, '/trade?*');
 
   // Select pair
@@ -57,4 +66,15 @@ export const testTrade = async (page: Page, config: TradeConfig) => {
   // Verify form empty
   expect(form.getByLabel('You Pay')).toHaveValue('');
   expect(form.getByLabel('You Receive')).toHaveValue('');
+
+  await navigateTo(page, '/debug');
+  // We need regexp because the balance as trailing 0.
+  const nextSource = new RegExp(
+    (Number(balance.source) - Number(sourceValue)).toString()
+  );
+  const nextTarget = new RegExp(
+    (Number(balance.target) + Number(targetValue)).toString()
+  );
+  await expect(getBalance(page, source)).toHaveText(nextSource);
+  await expect(getBalance(page, target)).toHaveText(nextTarget);
 };
