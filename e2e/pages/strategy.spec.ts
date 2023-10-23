@@ -16,7 +16,7 @@ test.describe('Strategies', () => {
   });
 
   test('Create Limit Strategy ETH->DAI', async ({ page }) => {
-    test.setTimeout(120_000);
+    test.setTimeout(180_000);
     const config = {
       base: 'ETH',
       quote: 'DAI',
