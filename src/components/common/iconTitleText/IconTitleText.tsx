@@ -22,22 +22,22 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
       case 'success':
         return 'text-green bg-green/25';
       default:
-        return 'bg-black/50';
+        return 'bg-emphasis';
     }
   };
 
   const variantClass = getVariantClass();
 
   return (
-    <div className={'flex flex-col items-center'}>
+    <div className="flex flex-col items-center">
       <div
         className={`flex h-60 w-60 items-center justify-center rounded-full p-18 ${variantClass}`}
       >
         {icon}
       </div>
-      <h2 className={'my-16'}>{title}</h2>
+      <h2 className="my-16 text-center">{title}</h2>
       {text && (
-        <p className={'text-secondary text-center font-weight-400'}>{text}</p>
+        <p className="text-secondary text-center font-weight-400">{text}</p>
       )}
     </div>
   );

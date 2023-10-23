@@ -34,14 +34,14 @@ export const StrategiesPage = () => {
       label: 'Overview',
       href: PathNames.strategies,
       hrefMatches: [PathNames.strategies],
-      icon: <IconOverview className={'h-18 w-18'} />,
+      icon: <IconOverview className="h-18 w-18" />,
       badge: query.data?.length,
     },
     {
       label: 'Portfolio',
       href: PathNames.portfolio,
       hrefMatches: [PathNames.portfolio, PathNames.portfolioToken('0x')],
-      icon: <IconPieChart className={'h-18 w-18'} />,
+      icon: <IconPieChart className="h-18 w-18" />,
     },
   ];
 

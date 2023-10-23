@@ -14,14 +14,14 @@ export const CreateStrategyPage = () => {
     createStrategy;
 
   return (
-    <AnimatePresence mode={'sync'}>
+    <AnimatePresence mode="sync">
       <m.div
-        className={`flex flex-col items-center space-y-20 p-20 ${
+        className={`flex flex-col items-center gap-20 p-20 ${
           showGraph ? 'justify-between' : 'justify-center'
         }`}
         variants={list}
-        initial={'hidden'}
-        animate={'visible'}
+        initial="hidden"
+        animate="visible"
       >
         <CreateStrategyHeader {...createStrategy} />
 
