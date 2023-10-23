@@ -29,26 +29,15 @@ export const ModalManageNotifications: ModalFC<
         icon={<IconNotification />}
         title="Strategy Notification"
       />
-
-      <p
-        className={
-          'text-secondary my-20 flex w-full items-center justify-center text-center'
-        }
-      >
-        {
-          'Elevate your experience by customizing notifications that keep you in the loop with every trade executed against this strategy.'
-        }
+      <p className="text-secondary flex w-full items-center justify-center text-center">
+        Elevate your experience by customizing notifications that keep you in
+        the loop with every trade executed against this strategy.
       </p>
-      <p
-        className={
-          'text-secondary my-20 flex w-full items-center justify-center text-12'
-        }
-      >
-        {'A 3rd party service managed by Hal.xyz'}
+      <p className="text-secondary flex w-full items-center justify-center text-12">
+        A 3rd party service managed by Hal.xyz
       </p>
-
-      <Button variant={'white'} fullWidth onClick={onClick}>
-        {'Manage Notification'}
+      <Button variant="white" fullWidth onClick={onClick}>
+        Manage Notification
       </Button>
     </ModalOrMobileSheet>
   );
