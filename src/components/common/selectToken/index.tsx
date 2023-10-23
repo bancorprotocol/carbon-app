@@ -41,7 +41,7 @@ export const SelectTokenButton: FC<Props> = ({
         </div>
       )}
       <div className="flex-1 text-left">
-        {description && <p className="text-12 opacity-60">{description}</p>}
+        {description && <p className="text-12 opacity-90">{description}</p>}
         <p>{symbol ?? text}</p>
       </div>
       <IconChevron className="h-20 w-20" />
