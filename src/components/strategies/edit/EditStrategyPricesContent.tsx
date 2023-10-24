@@ -86,7 +86,7 @@ export const EditStrategyPricesContent = ({
             order1: newOrder1,
           },
           () =>
-            carbonEvents.strategyEdit.strategyChangeRates({
+            carbonEvents.strategyEdit.strategyEditPrices({
               ...strategyEventData,
               strategyId: strategy.id,
             })
