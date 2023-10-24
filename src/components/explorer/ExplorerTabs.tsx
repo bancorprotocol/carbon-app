@@ -22,14 +22,14 @@ export const ExplorerTabs = () => {
       label: 'Overview',
       href: PathNames.explorerOverview(type, slug!),
       hrefMatches: [],
-      icon: <IconOverview className={'h-18 w-18'} />,
+      icon: <IconOverview className="h-18 w-18" />,
       badge: strategies?.length || 0,
     },
     {
       label: 'Portfolio',
       href: PathNames.explorerPortfolio(type, slug!),
       hrefMatches: [PathNames.explorerPortfolioToken(type, slug!, '0x')],
-      icon: <IconPieChart className={'h-18 w-18'} />,
+      icon: <IconPieChart className="h-18 w-18" />,
     },
   ];
 
