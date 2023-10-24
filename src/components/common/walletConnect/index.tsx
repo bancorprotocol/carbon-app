@@ -10,11 +10,13 @@ export const WalletConnect = () => {
   return (
     <section
       aria-labelledby="wallet-connect-title"
-      className="m-20 mt-32 flex flex-1 flex-col justify-evenly gap-32 rounded-10 border border-emphasis py-24 px-32 md:flex-row md:items-center"
+      className="flex flex-1 flex-col justify-evenly gap-32 rounded-10 border border-emphasis py-24 px-32 md:mt-32 md:flex-row md:items-center"
     >
       <article className="flex flex-col justify-center md:w-[360px] md:items-start">
-        <h1 id="wallet-connect-title">Automate your Trading Strategies</h1>
-        <p className="mt-24 mb-40 text-white/60">
+        <h1 id="wallet-connect-title" className="text-30 md:text-36">
+          Automate your Trading Strategies
+        </h1>
+        <p className="mt-16 mb-24 text-white/60 md:mt-24 md:mb-40">
           A fully decentralized protocol for automating on-chain trading
           strategies.
         </p>
