@@ -16,6 +16,7 @@ type ModalTradeRoutingRowProps = {
   targetFiatPrice?: FiatPriceDict;
   isSelected: boolean;
   handleClick: (id: string) => void;
+  buy?: boolean;
 };
 
 export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
@@ -25,18 +26,27 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   sourceFiatPrice,
   targetFiatPrice,
   isSelected,
+  buy,
   handleClick,
 }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
-  const averagePrice = new BigNumber(sourceAmount).div(targetAmount);
-  const averagePriceFiat = averagePrice.times(
-    sourceFiatPrice?.[selectedFiatCurrency] || 0
-  );
+
   const sourceAmountFiat = new BigNumber(sourceAmount).times(
     sourceFiatPrice?.[selectedFiatCurrency] || 0
   );
+
   const targetAmountFiat = new BigNumber(targetAmount).times(
     targetFiatPrice?.[selectedFiatCurrency] || 0
+  );
+
+  const averageToken = buy ? source : target;
+  const averageFiatPrice = buy ? sourceFiatPrice : targetFiatPrice;
+  const averageAmount = buy
+    ? new BigNumber(sourceAmount).div(targetAmount)
+    : new BigNumber(targetAmount).div(sourceAmount);
+
+  const averagePriceFiat = averageAmount.times(
+    averageFiatPrice?.[selectedFiatCurrency] || 0
   );
 
   const onCheckboxClick = () => {
@@ -77,9 +87,9 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
 
       <td className="border-t border-emphasis p-8">
         <ModalTradeRoutingRowCell
-          amount={averagePrice}
+          amount={averageAmount}
           fiatAmount={averagePriceFiat}
-          logoURI={source.logoURI}
+          logoURI={averageToken.logoURI}
           selectedFiatCurrency={selectedFiatCurrency}
         />
       </td>

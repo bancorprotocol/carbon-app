@@ -88,6 +88,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                     targetFiatPrice={targetFiatPrice.data}
                     isSelected={action.isSelected}
                     handleClick={onSelect}
+                    buy={data.buy}
                   />
                 ))}
               </tbody>
