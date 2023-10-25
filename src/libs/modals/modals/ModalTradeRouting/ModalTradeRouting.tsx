@@ -52,7 +52,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         <div
           role="group"
           aria-labelledby="routing-table"
-          className="flex flex-col gap-8 overflow-auto"
+          className="flex min-h-[130px] flex-col gap-8 overflow-auto"
         >
           <Tooltip element="This is the list of orders your trade will use when executed.">
             <h3 id="routing-table" className="text-secondary">
