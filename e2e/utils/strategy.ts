@@ -29,14 +29,14 @@ export const prepareLimitStrategy = async (
   // Select Base
   await page.getByTestId('select-base-token').click();
   await waitModalOpen(page);
-  await page.getByLabel('Select Token').fill('eth');
+  await page.getByLabel('Select Token').fill(base);
   await page.getByTestId(`select-token-${base}`).click();
   await waitModalClose(page);
 
   // Select Quote
   await page.getByTestId('select-quote-token').click();
   await waitModalOpen(page);
-  await page.getByLabel('Select Token').fill('dai');
+  await page.getByLabel('Select Token').fill(quote);
   await page.getByTestId(`select-token-${quote}`).click();
   await page.getByText('Next Step').click();
 
