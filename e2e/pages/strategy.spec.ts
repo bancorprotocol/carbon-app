@@ -31,6 +31,8 @@ test.describe('Strategies', () => {
     };
     const { base, quote } = config;
     await waitFor(page, `balance-${quote}`, 20_000);
+
+    await navigateTo(page, '/');
     await prepareLimitStrategy(page, config);
 
     // Assert 100% outcome

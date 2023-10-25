@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Page } from '@playwright/test';
-import { navigateTo } from './operators';
 import { checkApproval, waitModalClose, waitModalOpen } from './modal';
 
 interface LimitField {
@@ -23,7 +22,6 @@ export const prepareLimitStrategy = async (
   config: LimitStrategyConfig
 ) => {
   const { base, quote, buy, sell } = config;
-  await navigateTo(page, '/');
   await page.getByTestId('create-strategy-desktop').click();
 
   // Select Base
