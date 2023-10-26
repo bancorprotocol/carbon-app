@@ -1,12 +1,8 @@
-import { useModal } from 'hooks/useModal';
-import { Button } from 'components/common/button';
 import { items } from './items';
+import { Link } from '@tanstack/react-location';
+import { buttonStyles } from '../button/buttonStyles';
 
 export const WalletConnect = () => {
-  const { openModal } = useModal();
-
-  const onClick = () => openModal('wallet', undefined);
-
   return (
     <section
       aria-labelledby="wallet-connect-title"
@@ -21,9 +17,12 @@ export const WalletConnect = () => {
           strategies.
         </p>
 
-        <Button variant="success" size="lg" onClick={onClick}>
+        <Link
+          to="/strategies/create"
+          className={buttonStyles({ variant: 'success', size: 'lg' })}
+        >
           Create strategy
-        </Button>
+        </Link>
       </article>
       <hr className="border-t border-emphasis md:h-[300px] md:border-r" />
       <ul className="flex flex-col justify-center gap-30">
