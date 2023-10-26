@@ -375,7 +375,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         {pricePoints.map((point, i) => (
           <text
             key={i}
-            fill="white"
+            fill="currentColor"
             x={x(point)}
             y={baseline + 10}
             dominantBaseline="hanging"
@@ -446,7 +446,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             rx="4"
           />
           <text
-            fill="white"
+            fill="currentColor"
             x={steps[1]}
             y="13"
             dominantBaseline="hanging"
@@ -459,7 +459,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             {formattedPrice}
           </text>
           <text
-            fill="white"
+            fill="currentColor"
             x={steps[1]}
             y="28"
             dominantBaseline="hanging"
@@ -487,7 +487,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             }}
           />
           <text
-            fill="white"
+            fill="currentColor"
             x={price}
             y="13"
             dominantBaseline="hanging"
@@ -515,7 +515,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             }}
           />
           <text
-            fill="white"
+            fill="currentColor"
             x={steps[steps.length - 1]}
             y="13"
             dominantBaseline="hanging"
@@ -528,7 +528,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             {formattedPrice}
           </text>
           <text
-            fill="white"
+            fill="currentColor"
             x={steps[steps.length - 1]}
             y="28"
             dominantBaseline="hanging"
