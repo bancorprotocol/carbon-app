@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useId, useState } from 'react';
 import { ModalFC } from '../../modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
@@ -18,6 +18,7 @@ export type ModalTradeRoutingData = {
   tradeActionsWei: MatchActionBNStr[];
   isTradeBySource: boolean;
   onSuccess: Function;
+  sourceBalance: string;
   buy?: boolean;
 };
 
@@ -25,6 +26,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   id,
   data,
 }) => {
+  const sourceInputId = useId();
   const [isAwaiting, setIsAwaiting] = useState(false);
   const { source, target } = data;
   const {
@@ -36,6 +38,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     totalSourceAmount,
     totalTargetAmount,
     disabledCTA,
+    errorMsg,
   } = useModalTradeRouting({
     id,
     data: { ...data, setIsAwaiting },
@@ -101,14 +104,26 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           aria-labelledby="confirm-table"
           className="flex flex-col gap-8"
         >
-          <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
-            <h3 id="confirm-table" className="text-secondary">
-              Confirm Trade
-            </h3>
-          </Tooltip>
+          <header className="flex items-center justify-between">
+            <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
+              <h3 id="confirm-table" className="text-secondary">
+                Confirm Trade
+              </h3>
+            </Tooltip>
+            {errorMsg && (
+              <output
+                htmlFor={sourceInputId}
+                className="text-12 font-weight-500 text-red"
+              >
+                {errorMsg}
+              </output>
+            )}
+          </header>
           <TokenInputField
+            id={sourceInputId}
             value={totalSourceAmount}
             token={data.source}
+            isError={!!errorMsg}
             disabled
             className="-mb-16 rounded-12 bg-black"
           />
