@@ -60,6 +60,8 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           isChecked={isSelected}
           setIsChecked={onCheckboxClick}
           className="m-auto"
+          aria-label={`${sourceAmount} ${source.name} per ${targetAmount} ${target.name}`}
+          tabIndex={-1}
         />
       </td>
       <td className="border-t border-emphasis p-8">

@@ -1,4 +1,11 @@
-import { FormEvent, useId, useState } from 'react';
+import {
+  FormEvent,
+  KeyboardEvent,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { ModalFC } from '../../modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
@@ -10,6 +17,7 @@ import { useModalTradeRouting } from './useModalTradeRouting';
 import { ModalTradeRoutingRow } from './ModalTradeRoutingRow';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
+import { Checkbox } from 'components/common/Checkbox/Checkbox';
 
 export type ModalTradeRoutingData = {
   source: Token;
@@ -27,6 +35,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
   data,
 }) => {
   const sourceInputId = useId();
+  const table = useRef<HTMLTableElement>(null);
   const [isAwaiting, setIsAwaiting] = useState(false);
   const { source, target } = data;
   const {
@@ -43,10 +52,51 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     id,
     data: { ...data, setIsAwaiting },
   });
+  const [allChecked, setAllChecked] = useState(true);
+
+  useEffect(() => {
+    if (allChecked) {
+      for (const select of selected) {
+        if (!select.isSelected) onSelect(select.id);
+      }
+    } else {
+      for (const select of selected) {
+        if (select.isSelected) onSelect(select.id);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allChecked]);
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleCTAClick();
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    const key = e.key;
+    if (e.ctrlKey && e.key === 'a') {
+      e.preventDefault();
+      setAllChecked(!allChecked);
+    }
+    if (['Home', 'End', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
+      e.preventDefault();
+      const btns = table.current?.querySelectorAll('button');
+      if (!btns) return;
+      if (key === 'Home') btns.item(0)?.focus();
+      else if (key === 'End') btns.item(btns.length - 1).focus();
+      else {
+        for (let i = 0; i < btns.length; i++) {
+          if (btns.item(i) === document.activeElement) {
+            const nextIndex =
+              e.key === 'ArrowDown'
+                ? (i + 1) % btns.length
+                : (i + btns.length - 1) % btns.length;
+            return btns.item(nextIndex).focus();
+          }
+        }
+        btns.item(0).focus();
+      }
+    }
   };
 
   return (
@@ -64,10 +114,21 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           </Tooltip>
           {/* Wrap table to keep rounded visual on overflow */}
           <div className="overflow-auto rounded">
-            <table className="w-full bg-black text-left">
+            <table
+              ref={table}
+              className="w-full bg-black text-left"
+              onKeyDown={onKeyDown}
+            >
               <thead>
                 <tr>
-                  <th className="sticky top-0 bg-black">{/* checkbox */}</th>
+                  <th className="sticky top-0 bg-black p-8">
+                    <Checkbox
+                      className="m-auto"
+                      isChecked={allChecked}
+                      setIsChecked={setAllChecked}
+                      aria-label="toggle all orders"
+                    />
+                  </th>
                   <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
                     {source.symbol}
                   </th>
