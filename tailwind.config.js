@@ -7,6 +7,9 @@ function createTwConfigValues(start, end, step) {
   return obj;
 }
 
+const hue = 235;
+const chroma = 0.02;
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
@@ -20,9 +23,7 @@ module.exports = {
       '2xl': '1536px',
     },
     colors: ({ colors }) => ({
-      white: colors.white,
       transparent: colors.transparent,
-      black: colors.black,
       primary: colors.blue,
       secondary: colors.gray,
       success: colors.green,
@@ -35,16 +36,18 @@ module.exports = {
       redLight: '#EFC1C6',
       error: colors.red,
       warning: colors.orange,
-      charcoal: '#18181A',
-      darkGrey: '#303034',
-      lightGrey: '#E4E4E6',
       grey3: '#343435',
       grey4: '#B7B7B7',
       grey5: '#36363C',
       fog: '#F4F4F4',
-      emphasis: '#212123',
-      silver: '#161617',
-      darkSilver: '#111112',
+      white: colors.white,
+      lightGrey: `oklch(92% ${chroma} ${hue})`,
+      darkGrey: `oklch(31% ${chroma} ${hue})`,
+      emphasis: `oklch(25% ${chroma} ${hue})`,
+      charcoal: `oklch(21% ${chroma} ${hue})`,
+      silver: `oklch(20% ${chroma / 2} ${hue})`,
+      darkSilver: `oklch(18% ${chroma / 2} ${hue})`,
+      black: `oklch(13% ${chroma / 2} ${hue})`,
     }),
     columns: {
       auto: 'auto',
