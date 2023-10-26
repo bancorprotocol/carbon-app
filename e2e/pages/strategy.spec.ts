@@ -1,9 +1,10 @@
-/* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import { navigateTo, screenshot, waitFor } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
 import { setupImposter } from '../utils/debug';
-import { createStrategy, prepareLimitStrategy } from '../utils/strategy';
+import { StrategyDriver } from '../utils/strategy';
+import { checkApproval } from '../utils/modal';
+import { NotificationDriver } from '../utils/notification';
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
@@ -33,29 +34,29 @@ test.describe('Strategies', () => {
     await waitFor(page, `balance-${quote}`, 20_000);
 
     await navigateTo(page, '/');
-    await prepareLimitStrategy(page, config);
+    const driver = new StrategyDriver(page, config);
+    await page.getByTestId('create-strategy-desktop').click();
+    await driver.selectBase();
+    await driver.selectQuote();
+    const buy = await driver.fillLimit('buy');
+    const sell = await driver.fillLimit('sell');
 
     // Assert 100% outcome
-    const buy = page.getByTestId('buy-section');
-    await expect(buy.getByTestId('outcome-value')).toHaveText(
-      `0.006666 ${base}`
-    );
-    await expect(buy.getByTestId('outcome-quote')).toHaveText(`1,500 ${quote}`);
-    const sell = page.getByTestId('sell-section');
-    await expect(sell.getByTestId('outcome-value')).toHaveText(
-      `3,400 ${quote}`
-    );
-    await expect(sell.getByTestId('outcome-quote')).toHaveText(
-      `1,700 ${quote}`
-    );
+    await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
+    await expect(buy.outcomeQuote()).toHaveText(`1,500 ${quote}`);
+    await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
+    await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
 
-    await createStrategy(page, config);
+    await driver.submit();
+
+    await checkApproval(page, [base, quote]);
+
     await page.waitForURL('/', { timeout: 10_000 });
 
     // Verfiy notification
-    const notif = page.getByTestId('notification-create-strategy');
-    await expect(notif.getByTestId('notif-title')).toHaveText('Success');
-    await expect(notif.getByTestId('notif-description')).toHaveText(
+    const notif = new NotificationDriver(page, 'create-strategy');
+    await expect(notif.getTitle()).toHaveText('Success');
+    await expect(notif.getDescription()).toHaveText(
       'New strategy was successfully created.'
     );
 
