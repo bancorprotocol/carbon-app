@@ -7,8 +7,8 @@ function createTwConfigValues(start, end, step) {
   return obj;
 }
 
-const hue = 235;
-const chroma = 0.02;
+const hue = 'var(--hue, 250)';
+const chroma = 'var(--chroma, 0.02)';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -45,9 +45,9 @@ module.exports = {
       darkGrey: `oklch(31% ${chroma} ${hue})`,
       emphasis: `oklch(25% ${chroma} ${hue})`,
       charcoal: `oklch(21% ${chroma} ${hue})`,
-      silver: `oklch(20% ${chroma / 2} ${hue})`,
-      darkSilver: `oklch(18% ${chroma / 2} ${hue})`,
-      black: `oklch(13% ${chroma / 2} ${hue})`,
+      silver: `oklch(20% calc(${chroma}/2) ${hue})`,
+      darkSilver: `oklch(18% calc(${chroma}/2) ${hue})`,
+      black: `oklch(13% calc(${chroma}/2) ${hue})`,
     }),
     columns: {
       auto: 'auto',
