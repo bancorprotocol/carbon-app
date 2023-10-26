@@ -1,7 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { Page, expect } from '@playwright/test';
 import { waitFor } from './operators';
-import { closeModal, waitModalClose, waitModalOpen } from './modal';
+import {
+  checkApproval,
+  closeModal,
+  waitModalClose,
+  waitModalOpen,
+} from './modal';
 import { NotificationDriver } from './notification';
 
 interface TradeConfig {
@@ -74,12 +79,7 @@ export const testTrade = async (page: Page, config: TradeConfig) => {
   await driver.submit();
 
   // Token approval
-  const approvalModal = await waitModalOpen(page);
-  await approvalModal.getByTestId(`approve-${source}`).click();
-  const approvalMsg = await waitFor(page, `msg-${source}`);
-  await expect(approvalMsg).toHaveText('Approved');
-  await approvalModal.getByText('Confirm Trade').click();
-  await waitModalClose(page);
+  await checkApproval(page, [config.source]);
 
   // Verify notification
   const notif = new NotificationDriver(page, 'trade');
