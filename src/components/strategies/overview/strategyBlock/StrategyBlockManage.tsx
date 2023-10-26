@@ -21,6 +21,7 @@ import { cn } from 'utils/helpers';
 import { ExplorerRouteGenerics } from 'components/explorer';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { strategyEditEvents } from 'services/events/strategyEditEvents';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -115,7 +116,10 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyChangeRatesClick(strategyEvent);
+        carbonEvents.strategyEdit.strategyEditPricesClick({
+          origin: 'manage',
+          ...strategyEvent,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'editPrices' },
@@ -144,7 +148,7 @@ export const StrategyBlockManage: FC<Props> = ({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
         action: () => {
-          openModal('confirmWithdrawStrategy', { strategy });
+          openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
           carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
         },
       });
@@ -202,6 +206,8 @@ export const StrategyBlockManage: FC<Props> = ({
             if (isExplorer) {
               const baseEvent = { type, slug, strategies, sort, filter };
               explorerEvents.manageClick({ ...baseEvent, strategyEvent });
+            } else {
+              strategyEditEvents.strategyManageClick(strategyEvent);
             }
           }}
           role="menuitem"

@@ -51,7 +51,7 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="relative flex w-full flex-col gap-20 overflow-hidden rounded-10 border-0 bg-white bg-silver p-20 outline-none focus:outline-none"
+          className="relative flex w-full flex-col gap-20 rounded-10 border-0 bg-white bg-silver p-20 outline-none focus:outline-none"
         >
           {isLoading && (
             <div className="statusBar absolute -mt-20 ml-20 h-6 w-full bg-green/25" />
@@ -73,7 +73,9 @@ export const Modal: FC<ModalProps> = ({
             )}
           </header>
 
-          <div className="flex max-h-[70vh] flex-col gap-20">{children}</div>
+          <div className="flex max-h-[70vh] flex-col gap-20 overflow-auto">
+            {children}
+          </div>
         </div>
       </m.div>
     </Overlay>

@@ -44,6 +44,10 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   };
 
   const editPrices = () => {
+    carbonEvents.strategyEdit.strategyEditPricesClick({
+      origin: 'delete',
+      ...strategyEvent,
+    });
     strategies.setStrategyToEdit(strategy);
     closeModal(id);
   };
