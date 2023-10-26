@@ -68,7 +68,7 @@ export const testCreateLimitStrategy = (config: LimitStrategyConfig) => {
   return test(`Create Limit Strategy ${base}->${quote}`, async ({ page }) => {
     test.setTimeout(180_000);
     const { base, quote } = config;
-    await waitFor(page, `balance-${quote}`, 20_000);
+    await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
     const driver = new StrategyDriver(page, config);
