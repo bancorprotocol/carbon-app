@@ -1,21 +1,26 @@
-import { forwardRef } from 'react';
+import { forwardRef, JSX } from 'react';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconTokenPair } from 'assets/icons/token-pair.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useExplorerParams } from './useExplorerParams';
-import { MenuButtonProps } from 'components/common/dropdownMenu';
+import { cn } from 'utils/helpers';
+
+type ButtonAttributes = JSX.IntrinsicElements['button'];
 
 export const ExplorerSearchDropdownButton = forwardRef<
   HTMLButtonElement,
-  MenuButtonProps
+  ButtonAttributes
 >((props, ref) => {
   const { type } = useExplorerParams();
   return (
     <button
       ref={ref}
       type="button"
-      className="flex items-center gap-10 font-weight-500"
       {...props}
+      className={cn(
+        'flex items-center gap-10 font-weight-500',
+        props.className
+      )}
     >
       {type === 'wallet' && (
         <>

@@ -21,6 +21,7 @@ import { searchPairTrade } from 'utils/pairSearch';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 
 interface Props {
+  id: string;
   nameMap: Map<string, string>;
   pairMap: Map<string, TradePair>;
   search: string;
@@ -28,7 +29,7 @@ interface Props {
 }
 
 export const SuggestionCombobox: FC<Props> = (props) => {
-  const { pairMap, nameMap, search, setSearch } = props;
+  const { id, pairMap, nameMap, search, setSearch } = props;
   const listboxId = useId();
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -65,6 +66,7 @@ export const SuggestionCombobox: FC<Props> = (props) => {
 
   return (
     <ExplorerSearchInputContainer
+      id={id}
       containerRef={root}
       search={search}
       role="combobox"

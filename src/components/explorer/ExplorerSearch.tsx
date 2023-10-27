@@ -4,6 +4,7 @@ import {
   memo,
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useState,
 } from 'react';
@@ -26,6 +27,7 @@ import { useGetAddressFromEns } from 'libs/queries';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 
 export const _ExplorerSearch: FC = () => {
+  const inputId = useId();
   const navigate = useNavigate();
   const pairs = usePairs();
   const { type, slug } = useExplorerParams();
@@ -89,12 +91,14 @@ export const _ExplorerSearch: FC = () => {
   };
 
   const inputProps = {
+    id: inputId,
     invalid: isInvalidAddress,
     search,
     setSearch,
   };
 
   const suggestionProps = {
+    id: inputId,
     pairMap: pairs.map,
     nameMap: pairs.names,
     search,
@@ -102,7 +106,7 @@ export const _ExplorerSearch: FC = () => {
   };
 
   return (
-    <div className={'relative'}>
+    <div className="relative">
       <form
         role="search"
         onSubmit={submitHandler}
@@ -111,29 +115,19 @@ export const _ExplorerSearch: FC = () => {
       >
         <div
           className={cn(
-            'relative',
-            'flex',
-            'h-40',
-            'w-full',
-            'items-center',
-            'space-x-8',
-            'rounded-full',
-            'border',
-            'border-green',
-            'px-16',
-            'md:space-x-16',
-            isInvalidAddress && 'border-red'
+            'relative flex h-40 w-full items-center gap-8 rounded-full border-2 border-emphasis px-16 focus-within:border-green md:gap-16',
+            isInvalidAddress && 'focus-within:border-red'
           )}
         >
-          <div className="shrink-0">
-            <DropdownMenu
-              placement="bottom-start"
-              className="mt-10 -ml-17 p-10"
-              button={(attr) => <ExplorerSearchDropdownButton {...attr} />}
-            >
-              <ExplorerSearchDropdownItems setSearch={setSearch} />
-            </DropdownMenu>
-          </div>
+          <DropdownMenu
+            placement="bottom-start"
+            className="mt-10 -ml-17 p-10"
+            button={(attr) => (
+              <ExplorerSearchDropdownButton className="shrink-0" {...attr} />
+            )}
+          >
+            <ExplorerSearchDropdownItems setSearch={setSearch} />
+          </DropdownMenu>
           <div role="separator" className="h-20 w-1 bg-white/40"></div>
           <div className="flex w-full flex-grow items-center md:relative">
             {type === 'token-pair' && (
@@ -145,23 +139,22 @@ export const _ExplorerSearch: FC = () => {
 
         <Button
           type="submit"
-          variant={'success'}
-          size={'md'}
-          className={'w-40 shrink-0 !px-0 md:w-[180px]'}
+          variant="success"
+          size="md"
+          className="w-40 shrink-0 !px-0 md:w-[180px]"
         >
-          <IconSearch className={'h-16 w-16 md:mr-8'} />
-          <span className={'hidden md:block'}>Search</span>
+          <IconSearch className="h-16 w-16 md:mr-8" />
+          <span className="hidden md:block">Search</span>
         </Button>
       </form>
       {isInvalidAddress && (
-        <div
-          className={
-            'absolute mt-4 flex items-center font-mono text-14 text-red'
-          }
+        <output
+          htmlFor={inputId}
+          className="absolute mt-4 flex items-center font-mono text-14 text-red"
         >
-          <IconWarning className={'mr-10 h-16 w-16'} />
+          <IconWarning className="mr-10 h-16 w-16" />
           Invalid Wallet Address
-        </div>
+        </output>
       )}
     </div>
   );

@@ -2,12 +2,14 @@ import { Dispatch, FC, KeyboardEvent } from 'react';
 import { ExplorerSearchInputContainer } from './ExplorerSearchInputContainer';
 
 interface Props {
+  id: string;
   invalid: boolean;
   search: string;
   setSearch: Dispatch<string>;
 }
 
 export const ExplorerSearchInput: FC<Props> = ({
+  id,
   invalid,
   search,
   setSearch,
@@ -18,6 +20,7 @@ export const ExplorerSearchInput: FC<Props> = ({
 
   return (
     <ExplorerSearchInputContainer
+      id={id}
       value={search}
       className={invalid ? 'text-red' : ''}
       placeholder="Search by wallet address"
