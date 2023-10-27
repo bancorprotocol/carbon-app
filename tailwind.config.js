@@ -7,8 +7,10 @@ function createTwConfigValues(start, end, step) {
   return obj;
 }
 
-const hue = 'var(--hue, 250)';
-const chroma = 'var(--chroma, 0.02)';
+const chroma = 'var(--background-chroma, 0.02)';
+const hue = 'var(--background-hue, 250)';
+const buyHue = 'var(--buy-hue, 160)';
+const sellHue = 'var(--sell-hue, 15)';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -29,10 +31,10 @@ module.exports = {
       success: colors.green,
       blue: '#2962FF',
       lightBlue: '#9db2bd',
-      green: '#00B578',
+      green: `oklch(70% 0.2 ${buyHue})`, // '#00B578',
       lightGreen: '#85E1C2',
       darkGreen: '#002D1E',
-      red: '#D86371',
+      red: `oklch(70% 0.2 ${sellHue})`, // '#D86371',
       redLight: '#EFC1C6',
       error: colors.red,
       warning: colors.orange,

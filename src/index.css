@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --hue: 250;
-  --chroma: 0.02;
+  --background-chroma: 0.02;
+  --background-hue: 250;
+  --buy-hue: 160;
+  --sell-hue: 15;
   --main-menu-height: 80px;
   --mobile-menu-height: 80px;
   --blue: rgba(0, 181, 120, 0.25);
