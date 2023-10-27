@@ -114,6 +114,7 @@ export const useTradeAction = ({
         void cache.invalidateQueries(QueryKey.balance(user, source.address));
         void cache.invalidateQueries(QueryKey.balance(user, target.address));
       } catch (error) {
+        console.error(error);
         setIsAwaiting(false);
       }
     },
