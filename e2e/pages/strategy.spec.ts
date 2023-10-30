@@ -2,10 +2,9 @@ import { test, expect } from '@playwright/test';
 import { navigateTo, screenshot, waitFor } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
 import { setupImposter } from '../utils/DebugDriver';
-import { CreateStrategyDriver } from '../utils/strategy';
+import { CreateStrategyDriver, MyStrategyDriver } from '../utils/strategy';
 import { NotificationDriver } from '../utils/NotificationDriver';
 import { checkApproval } from '../utils/modal';
-import { MyStrategyDriver } from '../utils/strategy/MyStrategyDriver';
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
