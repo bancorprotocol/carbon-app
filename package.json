@@ -86,11 +86,13 @@
     "typescript": "^4.4.2",
     "ua-parser-js": "^1.0.35",
     "use-async-effect": "^2.2.7",
+    "viem": "^1.18.0",
     "vite": "^4.4.9",
     "vite-plugin-rewrite-all": "^1.0.1",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.29.8",
+    "wagmi": "^1.4.5",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
