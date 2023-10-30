@@ -6,12 +6,12 @@ import {
   useState,
 } from 'react';
 import { Action } from '@bancor/carbon-sdk';
-import { useWeb3 } from 'libs/web3';
 import { ModalTradeRoutingData } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 import { useModal } from 'hooks/useModal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
+import { useAccount, useNetwork } from 'wagmi';
 
 type Props = {
   id: string;
@@ -33,7 +33,8 @@ export const useModalTradeRouting = ({
     setIsAwaiting,
   },
 }: Props) => {
-  const { user, provider } = useWeb3();
+  const { address: user } = useAccount();
+  const { chain } = useNetwork();
   const { openModal, closeModal } = useModal();
   const { useGetTokenPrice } = useFiatCurrency();
   const sourceFiatPrice = useGetTokenPrice(source.address);
@@ -111,7 +112,7 @@ export const useModalTradeRouting = ({
             true
           ).toString(),
           approvalTokens: approval.tokens,
-          blockchainNetwork: provider?.network?.name || '',
+          blockchainNetwork: chain?.name || '',
         },
       });
     } else {
@@ -136,7 +137,7 @@ export const useModalTradeRouting = ({
     setIsAwaiting,
     buy,
     getFiatValueSource,
-    provider?.network?.name,
+    chain?.name,
   ]);
 
   const onSelect = (id: string) => {

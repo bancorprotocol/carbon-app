@@ -10,12 +10,12 @@ import { config } from 'services/web3/config';
 import { wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
+import { useAccount } from 'wagmi';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -29,7 +29,7 @@ const spender = config.carbon.carbonController;
 
 export const DebugCreateStrategy = () => {
   const count = useRef(0);
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const { openModal } = useModal();
   const queryClient = useQueryClient();
   const createMutation = useCreateStrategyQuery();

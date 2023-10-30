@@ -8,13 +8,13 @@ import {
   useUpdateStrategyQuery,
 } from 'libs/queries';
 import { useNavigate } from 'libs/routing';
-import { useWeb3 } from 'libs/web3';
 import { useState } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { handleTxStatusAndRedirectToOverview } from './create/utils';
+import { useAccount } from 'wagmi';
 
 export const useUpdateStrategy = () => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const { dispatchNotification } = useNotifications();
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();

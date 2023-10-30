@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useId, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
-import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
+import { IS_TENDERLY_FORK } from 'libs/web3';
 import { UseQueryResult } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import useInitEffect from 'hooks/useInitEffect';
@@ -13,6 +13,7 @@ import { useBuySell } from 'components/trade/tradeWidget/useBuySell';
 import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
+import { useAccount } from 'wagmi';
 
 export type TradeWidgetBuySellProps = {
   source: Token;
@@ -24,7 +25,7 @@ export type TradeWidgetBuySellProps = {
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const {
     sourceInput,
     setSourceInput,

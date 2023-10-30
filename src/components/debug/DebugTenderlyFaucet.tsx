@@ -3,13 +3,13 @@ import {
   tenderlyFaucetTransferETH,
   tenderlyFaucetTransferTKN,
 } from 'utils/tenderly';
-import { useWeb3 } from 'libs/web3';
 import { useGetTokenBalances } from 'libs/queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
 import { config } from 'services/web3/config';
 import { Button } from 'components/common/button';
 import { QueryKey } from 'libs/queries';
 import { FormEvent } from 'react';
+import { useAccount } from 'wagmi';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -20,7 +20,7 @@ const TOKENS = FAUCET_TOKENS.map((tkn) => ({
 TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
 
 export const DebugTenderlyFaucet = () => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const queryClient = useQueryClient();
   const queries = useGetTokenBalances(TOKENS);
 

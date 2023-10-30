@@ -8,7 +8,6 @@ import { PathNames, useNavigate, useSearch } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
-import { useWeb3 } from 'libs/web3';
 import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
 import { carbonEvents } from 'services/events';
@@ -24,6 +23,7 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { useAccount, useNetwork } from 'wagmi';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -33,7 +33,8 @@ export const useCreateStrategy = () => {
   const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
-  const { user, provider } = useWeb3();
+  const { address: user } = useAccount();
+  const { chain } = useNetwork();
   const { openModal } = useModal();
   const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
   const [quote, setQuote] = useState<Token | undefined>(
@@ -153,7 +154,7 @@ export const useCreateStrategy = () => {
             approvalTokens: approval.tokens,
             buyToken: base,
             sellToken: quote,
-            blockchainNetwork: provider?.network?.name || '',
+            blockchainNetwork: chain?.name || '',
           },
           context: 'createStrategy',
         });

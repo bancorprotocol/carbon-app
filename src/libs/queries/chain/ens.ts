@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { useWeb3 } from 'libs/web3';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { utils } from 'ethers';
+import { useEthersProvider } from 'libs/web3/useEthersProvider';
 
 export const useGetEnsFromAddress = (address: string) => {
-  const { provider } = useWeb3();
+  const provider = useEthersProvider();
 
   return useQuery(
     QueryKey.ensFromAddress(address),
@@ -27,7 +27,7 @@ export const useGetEnsFromAddress = (address: string) => {
 };
 
 export const useGetAddressFromEns = (ens: string) => {
-  const { provider } = useWeb3();
+  const provider = useEthersProvider();
 
   return useQuery(
     QueryKey.ensToAddress(ens),

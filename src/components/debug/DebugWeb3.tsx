@@ -1,16 +1,14 @@
-import { useWeb3 } from 'libs/web3';
 import { shortenString } from 'utils/helpers';
 import { IS_TENDERLY_FORK } from 'libs/web3/web3.constants';
+import { useAccount, useBlockNumber, useNetwork } from 'wagmi';
+import { useWeb3Imposter } from 'libs/web3/useWeb3Imposter';
+import { isAccountBlocked } from 'utils/restrictedAccounts';
 
 export const DebugWeb3 = () => {
-  const {
-    chainId,
-    user,
-    isImposter,
-    isNetworkActive,
-    networkError,
-    isUserBlocked,
-  } = useWeb3();
+  const { address: user } = useAccount();
+  const { chain } = useNetwork();
+  const { error: networkError } = useBlockNumber();
+  const { isImposter } = useWeb3Imposter();
 
   return (
     <div
@@ -22,16 +20,16 @@ export const DebugWeb3 = () => {
       <div className={'bg-body w-full space-y-3 rounded-10 p-10'}>
         <div className={'flex justify-between'}>
           <div>ChainID:</div>
-          <div>{chainId}</div>
+          <div>{chain?.id}</div>
         </div>
         <div className={'flex justify-between'}>
           <div>Network Active:</div>
-          <div>{isNetworkActive ? 'true' : 'false'}</div>
+          <div>{!networkError ? 'true' : 'false'}</div>
         </div>
         {networkError && (
           <div className={'flex flex-col justify-between'}>
             <div>Network Error:</div>
-            <div>{networkError}</div>
+            <div>{networkError.message}</div>
           </div>
         )}
         <div className={'flex justify-between'}>
@@ -48,7 +46,7 @@ export const DebugWeb3 = () => {
         </div>
         <div className={'flex justify-between'}>
           <div>Blocked:</div>
-          <div>{isUserBlocked ? 'true' : 'false'}</div>
+          <div>{isAccountBlocked(user) ? 'true' : 'false'}</div>
         </div>
       </div>
     </div>

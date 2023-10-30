@@ -1,10 +1,12 @@
-import { useWeb3 } from 'libs/web3';
 import { Token__factory, Voucher__factory } from 'abis/types';
 import { useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
+import { useEthersProvider } from 'libs/web3/useEthersProvider';
+import { useEthersSigner } from 'libs/web3/useEthersSigner';
 
 export const useContract = () => {
-  const { provider, signer } = useWeb3();
+  const provider = useEthersProvider();
+  const signer = useEthersSigner();
 
   const Token = useCallback(
     (address: string) => ({

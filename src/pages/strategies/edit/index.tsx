@@ -1,13 +1,13 @@
 import { EditStrategyMain } from 'components/strategies/edit';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { PathNames, useNavigate } from 'libs/routing';
-import { useWeb3 } from 'libs/web3';
+import { useAccount } from 'wagmi';
 import { useEffect } from 'react';
 import { useStore } from 'store';
 import { StrategiesPage } from '..';
 
 export const EditStrategyPage = () => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const {
     strategies: { strategyToEdit },
   } = useStore();

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Button } from 'components/common/button';
 import { Input, InputUserAccount, Label } from 'components/common/inputField';
-import { useWeb3 } from 'libs/web3';
 import { QueryKey, useQueryClient } from 'libs/queries';
 import { useContract } from 'hooks/useContract';
+import { useAccount } from 'wagmi';
 
 export const DebugTransferNFT = () => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const [inputId, setInputId] = useState('');
   const [inputRecipient, setInputRecipient] = useState('');
   const cache = useQueryClient();

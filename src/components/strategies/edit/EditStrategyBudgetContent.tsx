@@ -10,10 +10,10 @@ import { useModal } from 'hooks/useModal';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
-import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
+import { useNetwork } from 'wagmi';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -31,7 +31,7 @@ export const EditStrategyBudgetContent = ({
 
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
-  const { provider } = useWeb3();
+  const { chain } = useNetwork();
   const { getFiatValue: getFiatValueBase } = useFiatCurrency(strategy.base);
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(strategy.quote);
   const buyBudgetUsd = getFiatValueQuote(
@@ -115,7 +115,7 @@ export const EditStrategyBudgetContent = ({
             approvalTokens: approval.tokens,
             buyToken: strategy.base,
             sellToken: strategy.quote,
-            blockchainNetwork: provider?.network?.name || '',
+            blockchainNetwork: chain?.name || '',
           },
           context: 'depositStrategyFunds',
         });

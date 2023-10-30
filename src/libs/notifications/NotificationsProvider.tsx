@@ -1,4 +1,4 @@
-import { useWeb3 } from 'libs/web3';
+import { useAccount } from 'wagmi';
 import { FC, useEffect } from 'react';
 import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -7,7 +7,7 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
 
 export const NotificationAlerts: FC = () => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const { alerts, notifications, checkStatus, setNotifications } =
     useNotifications();
 

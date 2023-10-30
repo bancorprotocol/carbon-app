@@ -1,5 +1,4 @@
 import { FC, useEffect, useRef } from 'react';
-import { useWeb3 } from 'libs/web3';
 import { Outlet, PathNames, useLocation } from 'libs/routing';
 import { ErrorUnsupportedNetwork } from 'components/core/error/ErrorUnsupportedNetwork';
 import { ErrorNetworkConnection } from 'components/core/error/ErrorNetworkConnection';
@@ -9,9 +8,13 @@ import { useCarbonInit } from 'hooks/useCarbonInit';
 import { ErrorSDKStartSync } from 'components/core/error/ErrorSDKStartSync';
 import { carbonEvents } from 'services/events';
 import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';
+import { useAccount, useBlockNumber, useNetwork } from 'wagmi';
+import { isAccountBlocked } from 'utils/restrictedAccounts';
 
 export const MainContent: FC = () => {
-  const web3 = useWeb3();
+  const { address: user } = useAccount();
+  const { chain } = useNetwork();
+  const { error: networkError } = useBlockNumber();
   const location = useLocation();
   const prevPathnameRef = useRef('');
   const tokens = useTokens();
@@ -40,11 +43,11 @@ export const MainContent: FC = () => {
     return <Outlet />;
   }
 
-  if (!web3.isSupportedNetwork) {
+  if (chain?.unsupported) {
     return <ErrorUnsupportedNetwork />;
   }
 
-  if (web3.networkError) {
+  if (networkError) {
     return <ErrorNetworkConnection />;
   }
 
@@ -56,7 +59,7 @@ export const MainContent: FC = () => {
     return <ErrorTokenList />;
   }
 
-  if (web3.isUserBlocked) {
+  if (isAccountBlocked(user)) {
     return <ErrorUserBlocked />;
   }
 

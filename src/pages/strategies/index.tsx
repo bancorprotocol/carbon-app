@@ -3,7 +3,7 @@ import {
   StrategyTab,
 } from 'components/strategies/StrategyPageTabs';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { useWeb3 } from 'libs/web3';
+import { useAccount } from 'wagmi';
 import { WalletConnect } from 'components/common/walletConnect';
 import { StrategyPageTitleWidget } from 'components/strategies/overview/StrategyPageTitleWidget';
 import { useGetUserStrategies } from 'libs/queries';
@@ -19,7 +19,7 @@ export const StrategiesPage = () => {
     current: { pathname },
   } = useLocation();
   const { belowBreakpoint } = useBreakpoints();
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const query = useGetUserStrategies({ user });
 
   const showFilter = useMemo(() => {

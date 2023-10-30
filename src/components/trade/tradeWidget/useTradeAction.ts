@@ -1,4 +1,3 @@
-import { useWeb3 } from 'libs/web3';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { config } from 'services/web3/config';
 import { PopulatedTransaction } from 'ethers';
@@ -9,6 +8,8 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useStore } from 'store';
 import { Token } from 'libs/tokens';
 import { useApproval } from 'hooks/useApproval';
+import { useAccount } from 'wagmi';
+import { useEthersSigner } from 'libs/web3/useEthersSigner';
 
 type TradeProps = {
   source: Token;
@@ -37,7 +38,8 @@ export const useTradeAction = ({
   } = useStore();
   const { dispatchNotification } = useNotifications();
   const cache = useQueryClient();
-  const { user, signer } = useWeb3();
+  const { address: user } = useAccount();
+  const signer = useEthersSigner();
 
   const calcMinReturn = useCallback(
     (amount: string) => {

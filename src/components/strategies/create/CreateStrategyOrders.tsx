@@ -8,13 +8,13 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useStrategyEventData } from './useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import useInitEffect from 'hooks/useInitEffect';
-import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
 import { useModal } from 'hooks/useModal';
 import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useNavigate } from 'libs/routing';
+import { useAccount } from 'wagmi';
 
 let didInit = false;
 
@@ -36,7 +36,7 @@ export const CreateStrategyOrders = ({
   isAwaiting,
   isOrdersOverlap,
 }: UseStrategyCreateReturn) => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const { openModal } = useModal();
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const strategyEventData = useStrategyEventData({

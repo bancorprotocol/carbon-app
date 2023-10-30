@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { carbonEvents } from 'services/events';
-import { useWeb3 } from 'libs/web3';
 import {
   useGetTradeLiquidity,
   useGetTradeData,
@@ -14,6 +13,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { TradeWidgetBuySellProps } from 'components/trade/tradeWidget/TradeWidgetBuySell';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
 import { prettifyNumber } from 'utils/helpers';
+import { useAccount, useNetwork } from 'wagmi';
 
 export const useBuySell = ({
   source,
@@ -21,7 +21,8 @@ export const useBuySell = ({
   sourceBalanceQuery,
   buy = false,
 }: TradeWidgetBuySellProps) => {
-  const { user, provider } = useWeb3();
+  const { address: user } = useAccount();
+  const { chain } = useNetwork();
   const { openModal } = useModal();
   const { selectedFiatCurrency } = useFiatCurrency();
   const sourceTokenPriceQuery = useGetTokenPrice(source.address);
@@ -62,17 +63,10 @@ export const useBuySell = ({
       buy,
       buyToken: target,
       sellToken: source,
-      blockchainNetwork: provider?.network?.name || '',
+      blockchainNetwork: chain?.name || '',
       valueUsd: getFiatValueSource(sourceInput, true).toString(),
     };
-  }, [
-    buy,
-    getFiatValueSource,
-    provider?.network?.name,
-    source,
-    sourceInput,
-    target,
-  ]);
+  }, [buy, getFiatValueSource, chain?.name, source, sourceInput, target]);
 
   const { trade, approval } = useTradeAction({
     source,
@@ -258,7 +252,7 @@ export const useBuySell = ({
           ...eventData,
           productType: 'trade',
           approvalTokens: approval.tokens,
-          blockchainNetwork: provider?.network?.name || '',
+          blockchainNetwork: chain?.name || '',
         },
         context: 'trade',
       });
@@ -276,7 +270,7 @@ export const useBuySell = ({
     eventData,
     isLiquidityError,
     isTradeBySource,
-    provider?.network?.name,
+    chain?.name,
     maxSourceAmountQuery.isFetching,
     openModal,
     source,

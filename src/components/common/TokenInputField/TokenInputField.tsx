@@ -1,12 +1,12 @@
 import { ChangeEvent, FC, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import { Token } from 'libs/tokens';
-import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
 import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
+import { useAccount } from 'wagmi';
 
 type Props = {
   id?: string;
@@ -42,7 +42,7 @@ export const TokenInputField: FC<Props> = ({
   withoutWallet,
   'data-testid': testid,
 }) => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const inputRef = useRef<HTMLInputElement>(null);
   const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
   const fiatValueUsd = getFiatValue(value, true);

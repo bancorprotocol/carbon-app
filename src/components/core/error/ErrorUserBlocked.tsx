@@ -1,11 +1,11 @@
-import { useWeb3 } from 'libs/web3';
 import { Link } from 'libs/routing';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useDisconnect } from 'wagmi';
 
 export const ErrorUserBlocked = () => {
-  const { disconnect } = useWeb3();
+  const { disconnect } = useDisconnect();
 
   return (
     <ErrorWrapper
@@ -25,7 +25,7 @@ export const ErrorUserBlocked = () => {
         >
           <Button fullWidth>Learn More</Button>
         </Link>
-        <Button variant={'black'} onClick={disconnect} fullWidth>
+        <Button variant={'black'} onClick={() => disconnect()} fullWidth>
           Logout
         </Button>
       </div>

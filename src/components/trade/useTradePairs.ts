@@ -4,12 +4,12 @@ import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { lsService } from 'services/localeStorage';
-import { useWeb3 } from 'libs/web3';
+import { useAccount } from 'wagmi';
 import { toPairKey } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
 
 export const useTradePairs = () => {
-  const { user } = useWeb3();
+  const { address: user } = useAccount();
   const { openModal } = useModal();
 
   const navigate = useNavigate<MyLocationGenerics>();
