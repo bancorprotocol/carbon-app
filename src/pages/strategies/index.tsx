@@ -10,7 +10,6 @@ import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
 import { Outlet, PathNames, useLocation } from 'libs/routing';
-import { cn } from 'utils/helpers';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
@@ -48,11 +47,15 @@ export const StrategiesPage = () => {
   return (
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
-        <div className={cn('mb-20 flex items-center justify-between')}>
-          <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-
-          <StrategyPageTitleWidget showFilter={showFilter} />
-        </div>
+        {user && (
+          <header
+            role="toolbar"
+            className="mb-20 flex items-center justify-between"
+          >
+            <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
+            <StrategyPageTitleWidget showFilter={showFilter} />
+          </header>
+        )}
 
         {user ? <Outlet /> : <WalletConnect />}
       </StrategyProvider>
