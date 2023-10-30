@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { waitModalClose, waitModalOpen } from './modal';
+import { waitModalClose, waitModalOpen } from '../modal';
 
 interface LimitField {
   price: string;
@@ -18,7 +18,7 @@ interface LimitStrategyConfig extends BaseConfig {
 
 type Mode = 'buy' | 'sell';
 
-export class StrategyDriver {
+export class CreateStrategyDriver {
   constructor(private page: Page, private config: LimitStrategyConfig) {}
 
   getLimitForm(mode: Mode) {

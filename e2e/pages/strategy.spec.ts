@@ -2,9 +2,10 @@ import { test, expect } from '@playwright/test';
 import { navigateTo, screenshot, waitFor } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
 import { setupImposter } from '../utils/DebugDriver';
-import { StrategyDriver } from '../utils/StrategyDriver';
+import { CreateStrategyDriver } from '../utils/strategy';
 import { NotificationDriver } from '../utils/NotificationDriver';
 import { checkApproval } from '../utils/modal';
+import { MyStrategyDriver } from '../utils/strategy/MyStrategyDriver';
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
@@ -34,12 +35,12 @@ test.describe('Strategies', () => {
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
-    const driver = new StrategyDriver(page, config);
+    const createForm = new CreateStrategyDriver(page, config);
     await page.getByTestId('create-strategy-desktop').click();
-    await driver.selectBase();
-    await driver.selectQuote();
-    const buy = await driver.fillLimit('buy');
-    const sell = await driver.fillLimit('sell');
+    await createForm.selectBase();
+    await createForm.selectQuote();
+    const buy = await createForm.fillLimit('buy');
+    const sell = await createForm.fillLimit('sell');
 
     // Assert 100% outcome
     await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
@@ -47,7 +48,7 @@ test.describe('Strategies', () => {
     await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
     await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
 
-    await driver.submit();
+    await createForm.submit();
 
     await checkApproval(page, [base, quote]);
 
@@ -61,10 +62,10 @@ test.describe('Strategies', () => {
     );
 
     // Verify strategy data
-    const strategies = page.locator('[data-testid="strategy-list"] > li');
-    await strategies.waitFor({ state: 'visible' });
-    await expect(strategies).toHaveCount(1);
-    const [strategy] = await strategies.all();
+    const myStrategies = new MyStrategyDriver(page);
+    const strategies = await myStrategies.getAllStrategy();
+    expect(strategies.length).toBe(1);
+    const strategy = strategies[0];
     await expect(strategy.getByTestId('token-pair')).toHaveText(
       `${base}/${quote}`
     );
