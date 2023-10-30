@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { navigateTo, screenshot, waitFor } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
 import { setupImposter } from '../utils/DebugDriver';

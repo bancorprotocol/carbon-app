@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, setupImposter } from '../utils/debug';
+import { DebugDriver, setupImposter } from '../utils/DebugDriver';
 import { testTrade } from '../utils/trade';
 import { navigateTo } from '../utils/operators';
 

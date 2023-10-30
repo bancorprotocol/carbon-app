@@ -7,7 +7,7 @@ import {
   waitModalClose,
   waitModalOpen,
 } from './modal';
-import { NotificationDriver } from './notification';
+import { NotificationDriver } from './NotificationDriver';
 
 interface TradeConfig {
   mode: 'buy' | 'sell';
