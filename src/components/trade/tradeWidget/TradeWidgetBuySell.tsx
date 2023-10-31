@@ -157,8 +157,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ${target.symbol}`;
   };
 
-  const showRouting =
-    rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
+  const showRouting = rate && rate !== '0';
+  const disabledCTA =
+    !!errorMsgSource ||
+    !!errorMsgTarget ||
+    !hasEnoughLiquidity ||
+    !maxSourceAmountQuery.data;
 
   const getLiquidity = () => {
     const value = liquidityQuery.isLoading
@@ -266,7 +270,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
       <Button
         type="submit"
-        disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
+        disabled={disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
         variant={buy ? 'success' : 'error'}
