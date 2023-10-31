@@ -117,7 +117,8 @@ export const _ExplorerSearch: FC = () => {
           className={cn(
             'relative flex h-40 w-full items-center gap-8 rounded-full border-2 border-emphasis px-16 focus-within:border-green md:gap-16',
             isInvalidAddress && 'focus-within:border-red',
-            !slug && 'border-green'
+            !slug && 'border-green',
+            !slug && isInvalidAddress && 'border-red'
           )}
         >
           <DropdownMenu
