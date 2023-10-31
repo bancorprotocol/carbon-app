@@ -1729,6 +1729,11 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.1.4.tgz#19654d1026cc410975d46445180e70a5089b3e7d"
   integrity sha512-qprfWkn82Iw821mcKofJ5Pk9wgioHicxcQMxx+5zt5GSKoqdWvgG5AxVmpmUUjzTLPVSH5auBrhI93Deayn/DA==
 
+"@gisatcz/cross-package-react-context@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@gisatcz/cross-package-react-context/-/cross-package-react-context-0.2.0.tgz#e8626ed8693e053b858353e2253143201fabc30c"
+  integrity sha512-E7aR/o1ArpXETO8bQi+Hltj3duHeZiLjR+x1VZrCDs3jplSLGoy+oqCcqNNE1BamTBa0YQTs8Go1Q1dtt3LEUg==
+
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.10.tgz#5a3ffe32cc9306365fb3fd572596cd602d5e12d2"
@@ -2428,6 +2433,11 @@
     "@svgr/hast-util-to-babel-ast" "^6.5.1"
     svg-parser "^2.0.4"
 
+"@tanstack/history@0.0.1-beta.198":
+  version "0.0.1-beta.198"
+  resolved "https://registry.yarnpkg.com/@tanstack/history/-/history-0.0.1-beta.198.tgz#23be5513c762ab17dc82e02293b30ebbce0bcd5d"
+  integrity sha512-iqmFTXXH8Swy18SdwT9N441EbXfiazXxSxjDMdV+RHd0OKASYkJ57GIYidtDw7AP4pW9mhLNLmeBrHwSgU/1gw==
+
 "@tanstack/match-sorter-utils@^8.7.0":
   version "8.8.4"
   resolved "https://registry.yarnpkg.com/@tanstack/match-sorter-utils/-/match-sorter-utils-8.8.4.tgz#0b2864d8b7bac06a9f84cb903d405852cc40a457"
@@ -2465,6 +2475,26 @@
     "@tanstack/query-core" "4.32.6"
     use-sync-external-store "^1.2.0"
 
+"@tanstack/react-router@^0.0.1-beta.198":
+  version "0.0.1-beta.198"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-router/-/react-router-0.0.1-beta.198.tgz#7ce6128590279f5f72373c6379fd4e4a1f17da9d"
+  integrity sha512-AxR4VPTyHeF0YCB2oddMNsXV79Lt0ijDVeQOvYCvISpP2BJxO/Nr9QGewemcPw1xBm9OqpCcxXe7eUKJxFyOyw==
+  dependencies:
+    "@babel/runtime" "^7.16.7"
+    "@gisatcz/cross-package-react-context" "^0.2.0"
+    "@tanstack/react-store" "^0.0.1"
+    "@tanstack/router-core" "0.0.1-beta.198"
+    tiny-invariant "^1.3.1"
+    tiny-warning "^1.0.3"
+
+"@tanstack/react-store@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-store/-/react-store-0.0.1.tgz#8b642309047c38584893ccac64f9c1e52f191a48"
+  integrity sha512-UMAHrm1FjehpfnSCi5Uel7fdoYM8fk2ovyHmoTBv4SPS66hLLEEVPQhALrIkJ0OSi1h+p96HapCFNqlavZADIA==
+  dependencies:
+    "@tanstack/store" "0.0.1"
+    use-sync-external-store "^1.2.0"
+
 "@tanstack/react-table@^8.9.3":
   version "8.9.3"
   resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.9.3.tgz#03a52e9e15f65c82a8c697a445c42bfca0c5cfc4"
@@ -2478,6 +2508,23 @@
   integrity sha512-D1mDMf4UPbrtHRZZriCly5bXTBMhylslm4dhcHqTtDJ6brQcgGmk8YD9JdWBGWfGSWPKoh2x1H3e7eh+hgPXtQ==
   dependencies:
     "@tanstack/virtual-core" "3.0.0-beta.54"
+
+"@tanstack/router-core@0.0.1-beta.198":
+  version "0.0.1-beta.198"
+  resolved "https://registry.yarnpkg.com/@tanstack/router-core/-/router-core-0.0.1-beta.198.tgz#45c04bc09aed8b8f6b0f333b9f0197028bfbc21a"
+  integrity sha512-4chqtzl28YMyrmVfT94ZFz/NAP/dYd+PaqvKFfJTlbpghvRsaJYSysRGRqMpySQE7dFUSlAzi9OVk16r7FCROA==
+  dependencies:
+    "@babel/runtime" "^7.16.7"
+    "@gisatcz/cross-package-react-context" "^0.2.0"
+    "@tanstack/history" "0.0.1-beta.198"
+    "@tanstack/store" "^0.0.1"
+    tiny-invariant "^1.3.1"
+    tiny-warning "^1.0.3"
+
+"@tanstack/store@0.0.1", "@tanstack/store@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/store/-/store-0.0.1.tgz#319c687921fee8896b92c4e512344eae4aa3f272"
+  integrity sha512-Hq5mwC9oPD1HVRIsgxASYtJQAv5x7k42SMXBq2b/fMYrtMf7WMkOArOMs/ExoNED214Ql94Ft4zVWr0u2D6a6w==
 
 "@tanstack/table-core@8.9.3":
   version "8.9.3"
@@ -7809,6 +7856,16 @@ thread-stream@^0.15.1:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
+
+tiny-invariant@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.3.1.tgz#8560808c916ef02ecfd55e66090df23a4b7aa642"
+  integrity sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==
+
+tiny-warning@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
+  integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
 
 tinybench@^2.3.1:
   version "2.5.0"
