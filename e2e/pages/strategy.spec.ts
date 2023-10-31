@@ -12,12 +12,13 @@ test.describe('Strategies', () => {
   });
   test('First Strategy Page', async ({ page }) => {
     await navigateTo(page, '/');
-    await page.getByTestId('first-strategy').waitFor({ state: 'visible' });
+    const driver = new MyStrategyDriver(page);
+    await driver.firstStrategy().waitFor({ state: 'visible' });
     await screenshot(page, 'first-strategy');
   });
 
-  test(`Create Limit Strategy ETH->DAI`, async ({ page }) => {
-    const config = {
+  const configs = [
+    {
       base: 'ETH',
       quote: 'DAI',
       buy: {
@@ -28,50 +29,53 @@ test.describe('Strategies', () => {
         price: '1700',
         budget: '2',
       },
-    };
-    test.setTimeout(180_000);
+    },
+  ];
+
+  for (const config of configs) {
     const { base, quote } = config;
-    await waitFor(page, `balance-${quote}`, 30_000);
+    test(`Create Limit Strategy ${base}->${quote}`, async ({ page }) => {
+      test.setTimeout(180_000);
+      await waitFor(page, `balance-${quote}`, 30_000);
 
-    await navigateTo(page, '/');
-    const createForm = new CreateStrategyDriver(page, config);
-    await page.getByTestId('create-strategy-desktop').click();
-    await createForm.selectBase();
-    await createForm.selectQuote();
-    const buy = await createForm.fillLimit('buy');
-    const sell = await createForm.fillLimit('sell');
+      await navigateTo(page, '/');
+      const myStrategies = new MyStrategyDriver(page);
+      const createForm = new CreateStrategyDriver(page, config);
+      await myStrategies.createStrategy();
+      await createForm.selectBase();
+      await createForm.selectQuote();
+      const buy = await createForm.fillLimit('buy');
+      const sell = await createForm.fillLimit('sell');
 
-    // Assert 100% outcome
-    await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
-    await expect(buy.outcomeQuote()).toHaveText(`1,500 ${quote}`);
-    await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
-    await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
+      // Assert 100% outcome
+      await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
+      await expect(buy.outcomeQuote()).toHaveText(`1,500 ${quote}`);
+      await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
+      await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
 
-    await createForm.submit();
+      await createForm.submit();
 
-    await checkApproval(page, [base, quote]);
+      await checkApproval(page, [base, quote]);
 
-    await page.waitForURL('/', { timeout: 10_000 });
+      await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'New strategy was successfully created.'
-    );
+      // Verfiy notification
+      const notif = new NotificationDriver(page, 'create-strategy');
+      await expect(notif.getTitle()).toHaveText('Success');
+      await expect(notif.getDescription()).toHaveText(
+        'New strategy was successfully created.'
+      );
 
-    // Verify strategy data
-    const myStrategies = new MyStrategyDriver(page);
-    const strategies = await myStrategies.getAllStrategy();
-    expect(strategies.length).toBe(1);
-    const strategy = strategies[0];
-    await expect(strategy.getByTestId('token-pair')).toHaveText(
-      `${base}/${quote}`
-    );
-    await expect(strategy.getByTestId('status')).toHaveText('Active');
-    await expect(strategy.getByTestId('total-budget')).toHaveText('$3,344');
-    await expect(strategy.getByTestId('buy-budget')).toHaveText(`10 ${quote}`);
-    await expect(strategy.getByTestId('buy-budget-fiat')).toHaveText('$10.00');
-    await expect(strategy.getByTestId('sell-budget-fiat')).toHaveText('$3,334');
-  });
+      // Verify strategy data
+      const strategies = await myStrategies.getAllStrategy();
+      await expect(strategies).toHaveCount(1);
+      const strategy = await myStrategies.getStrategy(1);
+      await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
+      await expect(strategy.status()).toHaveText('Active');
+      await expect(strategy.totalBudget()).toHaveText('$3,344');
+      await expect(strategy.buyBudget()).toHaveText(`10 ${quote}`);
+      await expect(strategy.buyBudgetFiat()).toHaveText('$10.00');
+      await expect(strategy.sellBudgetFiat()).toHaveText('$3,334');
+    });
+  }
 });

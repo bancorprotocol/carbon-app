@@ -1,13 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Page, expect } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { waitFor } from './operators';
-import {
-  checkApproval,
-  closeModal,
-  waitModalClose,
-  waitModalOpen,
-} from './modal';
-import { NotificationDriver } from './NotificationDriver';
+import { closeModal, waitModalClose, waitModalOpen } from './modal';
 
 interface TradeConfig {
   mode: 'buy' | 'sell';
@@ -60,35 +54,3 @@ export class TradeDriver {
     return this.form.getByTestId('submit').click();
   }
 }
-
-export const testTrade = async (page: Page, config: TradeConfig) => {
-  const driver = new TradeDriver(page, config);
-  const { source, target, sourceValue, targetValue } = config;
-
-  // Select pair
-  await driver.selectPair();
-  await driver.setPay();
-  await expect(driver.getReceiveInput()).toHaveValue(targetValue);
-
-  // Verify routing
-  const routing = await driver.openRouting();
-  await expect(routing.getSource()).toHaveValue(sourceValue);
-  await expect(routing.getTarget()).toHaveValue(targetValue);
-  await routing.close();
-
-  await driver.submit();
-
-  // Token approval
-  await checkApproval(page, [config.source]);
-
-  // Verify notification
-  const notif = new NotificationDriver(page, 'trade');
-  await expect(notif.getTitle()).toHaveText('Success');
-  await expect(notif.getDescription()).toHaveText(
-    `Trading ${sourceValue} ${source} for ${target} was successfully completed.`
-  );
-
-  // Verify form empty
-  expect(driver.getPayInput()).toHaveValue('');
-  expect(driver.getReceiveInput()).toHaveValue('');
-};
