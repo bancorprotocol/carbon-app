@@ -1,44 +1,38 @@
-import { useModal } from 'hooks/useModal';
-import { Button } from 'components/common/button';
-import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { items } from './items';
+import { Link } from '@tanstack/react-location';
+import { buttonStyles } from '../button/buttonStyles';
 
 export const WalletConnect = () => {
-  const { openModal } = useModal();
-
   return (
-    <div className="md:h-[calc(100vh-300px)] md:min-h-[400px]">
-      <div className="h-full justify-center rounded-10 border border-emphasis p-20 md:flex">
-        <div className="f-full flex flex-col justify-center space-y-30 md:w-[360px]">
-          <h1>Automate your Trading Strategies</h1>
-          <p className="text-white/60">
-            A fully decentralized protocol for automating on-chain trading
-            strategies.
-          </p>
+    <section
+      aria-labelledby="wallet-connect-title"
+      className="flex flex-1 flex-col justify-evenly gap-32 rounded-10 border border-emphasis py-24 px-32 md:mt-32 md:flex-row md:items-center"
+    >
+      <article className="flex flex-col justify-center md:w-[360px] md:items-start">
+        <h1 id="wallet-connect-title" className="text-30 md:text-36">
+          Automate your Trading Strategies
+        </h1>
+        <p className="mt-16 mb-24 text-white/60 md:mt-24 md:mb-40">
+          A fully decentralized protocol for automating on-chain trading
+          strategies.
+        </p>
 
-          <Button
-            className="flex items-center justify-center space-x-16"
-            variant="success"
-            onClick={() => openModal('wallet', undefined)}
-            fullWidth
-            size={'lg'}
-          >
-            <IconWallet className="h-20 w-20" />
-            <span>Connect</span>
-          </Button>
-        </div>
-        <div className="my-50 flex items-center md:mx-50 md:my-0 md:h-full md:w-1">
-          <div className="h-1 w-[300px] bg-silver md:h-[300px] md:w-1"></div>
-        </div>
-        <div className="flex h-full flex-col justify-center space-y-33">
-          {items.map((item, index) => (
-            <div className="flex items-center space-x-20" key={index}>
-              {item.icon}
-              <span className="text-white/80">{item.title}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+        <Link
+          to="/strategies/create"
+          className={buttonStyles({ variant: 'success', size: 'lg' })}
+        >
+          Create strategy
+        </Link>
+      </article>
+      <hr className="border-t border-emphasis md:h-[300px] md:border-r" />
+      <ul className="flex flex-col justify-center gap-30">
+        {items.map((item, index) => (
+          <li className="flex items-center gap-20" key={index}>
+            {item.icon}
+            <span className="text-white/80">{item.title}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 };
