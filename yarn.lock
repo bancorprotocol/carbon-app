@@ -2433,11 +2433,6 @@
     "@svgr/hast-util-to-babel-ast" "^6.5.1"
     svg-parser "^2.0.4"
 
-"@tanstack/history@0.0.1-beta.198":
-  version "0.0.1-beta.198"
-  resolved "https://registry.yarnpkg.com/@tanstack/history/-/history-0.0.1-beta.198.tgz#23be5513c762ab17dc82e02293b30ebbce0bcd5d"
-  integrity sha512-iqmFTXXH8Swy18SdwT9N441EbXfiazXxSxjDMdV+RHd0OKASYkJ57GIYidtDw7AP4pW9mhLNLmeBrHwSgU/1gw==
-
 "@tanstack/match-sorter-utils@^8.7.0":
   version "8.8.4"
   resolved "https://registry.yarnpkg.com/@tanstack/match-sorter-utils/-/match-sorter-utils-8.8.4.tgz#0b2864d8b7bac06a9f84cb903d405852cc40a457"
@@ -2475,15 +2470,15 @@
     "@tanstack/query-core" "4.32.6"
     use-sync-external-store "^1.2.0"
 
-"@tanstack/react-router@^0.0.1-beta.198":
-  version "0.0.1-beta.198"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-router/-/react-router-0.0.1-beta.198.tgz#7ce6128590279f5f72373c6379fd4e4a1f17da9d"
-  integrity sha512-AxR4VPTyHeF0YCB2oddMNsXV79Lt0ijDVeQOvYCvISpP2BJxO/Nr9QGewemcPw1xBm9OqpCcxXe7eUKJxFyOyw==
+"@tanstack/react-router@0.0.1-beta.193":
+  version "0.0.1-beta.193"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-router/-/react-router-0.0.1-beta.193.tgz#4c70ef27ca24730ae095bf3d9d09b6a7973fb58a"
+  integrity sha512-sbNSX6Luac8Q0Hrs8f8Srk9vDqCzbTXzEDmxlsyetrxNpcxrZQDOPIEDZZDwm/jVTiisgtP+ea1LVvS44U+8eQ==
   dependencies:
     "@babel/runtime" "^7.16.7"
     "@gisatcz/cross-package-react-context" "^0.2.0"
     "@tanstack/react-store" "^0.0.1"
-    "@tanstack/router-core" "0.0.1-beta.198"
+    "@tanstack/router-core" "0.0.1-beta.193"
     tiny-invariant "^1.3.1"
     tiny-warning "^1.0.3"
 
@@ -2509,14 +2504,13 @@
   dependencies:
     "@tanstack/virtual-core" "3.0.0-beta.54"
 
-"@tanstack/router-core@0.0.1-beta.198":
-  version "0.0.1-beta.198"
-  resolved "https://registry.yarnpkg.com/@tanstack/router-core/-/router-core-0.0.1-beta.198.tgz#45c04bc09aed8b8f6b0f333b9f0197028bfbc21a"
-  integrity sha512-4chqtzl28YMyrmVfT94ZFz/NAP/dYd+PaqvKFfJTlbpghvRsaJYSysRGRqMpySQE7dFUSlAzi9OVk16r7FCROA==
+"@tanstack/router-core@0.0.1-beta.193":
+  version "0.0.1-beta.193"
+  resolved "https://registry.yarnpkg.com/@tanstack/router-core/-/router-core-0.0.1-beta.193.tgz#791cfa4ecd1ca9e8f68b8e1b1a3df2bfb617580f"
+  integrity sha512-ZjCAAaPu8za0qcgAKehIajwrMGrQMSRWMNgWBDJKmbjKY68YYYKcPVzq012Pyfk4+6wKx5eHl3DVyD0ywogq0Q==
   dependencies:
     "@babel/runtime" "^7.16.7"
     "@gisatcz/cross-package-react-context" "^0.2.0"
-    "@tanstack/history" "0.0.1-beta.198"
     "@tanstack/store" "^0.0.1"
     tiny-invariant "^1.3.1"
     tiny-warning "^1.0.3"
