@@ -1,4 +1,3 @@
-import { useNavigate } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { QueryClient, UseMutationResult } from '@tanstack/react-query';
 import { TransactionResponse } from '@ethersproject/providers';
@@ -8,6 +7,7 @@ import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { NavigateOptions } from '@tanstack/react-router';
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
@@ -42,7 +42,7 @@ export type CreateStrategyActionProps = Pick<
     unknown
   >;
   dispatchNotification: DispatchNotification;
-  navigate: ReturnType<typeof useNavigate>;
+  navigate: (opts: NavigateOptions) => Promise<void>;
   setIsProcessing: Dispatch<SetStateAction<boolean>>;
   strategyEventData: StrategyEventType & {
     buyMarketPricePercentage: MarketPricePercentage;
