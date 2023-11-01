@@ -5,6 +5,8 @@ import { useWeb3 } from 'libs/web3';
 import { useEffect } from 'react';
 import { useStore } from 'store';
 import { StrategiesPage } from '..';
+import { Route } from '@tanstack/react-router';
+import { appRoute } from 'App';
 
 export const EditStrategyPage = () => {
   const { user } = useWeb3();
@@ -25,3 +27,9 @@ export const EditStrategyPage = () => {
     <StrategiesPage />
   );
 };
+
+export const editStrategyPage = new Route({
+  getParentRoute: () => appRoute,
+  path: PathNames.editStrategy,
+  component: EditStrategyPage,
+});

@@ -1,7 +1,10 @@
-import { Link as TanstackLink, LinkPropsType } from '@tanstack/react-location';
+import { Link as TanstackLink } from '@tanstack/react-router';
 import { FC } from 'react';
 
-export const Link: FC<LinkPropsType> = ({ to, children, ...props }) => {
+type GetProps<T> = T extends FC<infer I> ? I : never;
+type LinkProps = GetProps<typeof TanstackLink<any>>;
+
+export const Link: FC<LinkProps> = ({ to, children, ...props }) => {
   if (typeof to === 'string' && to.startsWith('http')) {
     if (typeof children === 'function') {
       return (

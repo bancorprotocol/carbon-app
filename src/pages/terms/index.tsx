@@ -1,3 +1,5 @@
+import { Route } from '@tanstack/react-router';
+import { appRoute } from 'App';
 import { Page } from 'components/common/page';
 
 const content = [
@@ -1141,3 +1143,9 @@ export const TermsPage = () => {
     </Page>
   );
 };
+
+export const termPage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/terms',
+  component: TermsPage,
+});

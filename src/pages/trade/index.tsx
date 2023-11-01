@@ -9,10 +9,13 @@ import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { appRoute } from 'App';
+import { Route } from '@tanstack/react-router';
+import { getLastVisitedPair } from 'libs/routing/utils';
 
 export type TradePageProps = { base: Token; quote: Token };
 
-export const TradePage = () => {
+const TradePage = () => {
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isLoading, isTradePairError } = useTradePairs();
@@ -54,3 +57,13 @@ export const TradePage = () => {
     </>
   );
 };
+
+export const tradePage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/trade',
+  component: TradePage,
+  validateSearch: (search) => {
+    if (search.base && search.quote) return search;
+    return { ...search, ...getLastVisitedPair() };
+  },
+});

@@ -18,7 +18,6 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
-import { ExplorerRouteGenerics } from 'components/explorer';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
@@ -53,7 +52,7 @@ export const StrategyBlockManage: FC<Props> = ({
   const order1 = useOrder(strategy.order1);
   const {
     params: { type, slug },
-  } = useMatch<ExplorerRouteGenerics>();
+  } = useMatch({ strict: false });
 
   const owner = useGetVoucherOwner(
     manage && type === 'token-pair' ? strategy.id : undefined

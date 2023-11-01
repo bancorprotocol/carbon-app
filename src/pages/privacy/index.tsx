@@ -1,3 +1,5 @@
+import { Route } from '@tanstack/react-router';
+import { appRoute } from 'App';
 import { Page } from 'components/common/page';
 
 const content = [
@@ -632,3 +634,9 @@ export const PrivacyPage = () => {
     </Page>
   );
 };
+
+export const privacyPage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/privacy',
+  component: PrivacyPage,
+});

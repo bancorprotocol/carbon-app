@@ -280,14 +280,14 @@ export const sortObjectArray = <D extends object>(
 };
 
 export const isPathnameMatch = (
-  current: string,
+  currentPath: string,
   href: string,
   hrefMatches: string[]
 ) => {
-  if (current === href) {
-    return true;
-  }
-
+  const current = currentPath.endsWith('/')
+    ? currentPath.slice(0, -1)
+    : currentPath;
+  if (current === href) return true;
   return hrefMatches
     .filter((x) => x !== '/')
     .some((x) => current.startsWith(x));

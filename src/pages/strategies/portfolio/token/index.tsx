@@ -6,7 +6,7 @@ export const StrategiesPortfolioTokenPage = () => {
   const { strategies, isLoading } = useStrategyCtx();
   const {
     params: { address },
-  } = useMatch();
+  } = useMatch({ strict: false });
 
   return (
     <PortfolioToken

@@ -1,4 +1,4 @@
-import { MakeGenerics, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { QueryClient, UseMutationResult } from '@tanstack/react-query';
 import { TransactionResponse } from '@ethersproject/providers';
