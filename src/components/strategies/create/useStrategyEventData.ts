@@ -2,9 +2,9 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumberInput } from 'utils/helpers';
-import { StrategyCreateLocationGenerics } from './types';
 import { OrderCreate } from './useOrder';
 import { useSearch } from 'libs/routing';
+import { StrategyCreateSearch } from './types';
 
 export const useStrategyEventData = ({
   base,
@@ -21,7 +21,7 @@ export const useStrategyEventData = ({
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
   const lowBudgetUsd = getFiatValueQuote(order0?.budget, true).toString();
   const highBudgetUsd = getFiatValueBase(order1?.budget, true).toString();
-  const search = useSearch<StrategyCreateLocationGenerics>();
+  const search: StrategyCreateSearch = useSearch({ strict: false });
 
   return {
     buyOrderType: order0?.isRange ? 'range' : 'limit',

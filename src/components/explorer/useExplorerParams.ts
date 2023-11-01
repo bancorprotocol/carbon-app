@@ -1,9 +1,8 @@
-import { useMatch } from 'libs/routing';
+import { useParams } from 'libs/routing';
 import { ExplorerParams } from './utils';
 
 export const useExplorerParams = () => {
-  const match = useMatch({ strict: false });
-  const params: ExplorerParams = match.params;
+  const params: ExplorerParams = useParams({ strict: false });
 
   // To support emojis in ens domains
   const decodedSlug = params.slug && decodeURIComponent(params.slug);

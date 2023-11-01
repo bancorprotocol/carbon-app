@@ -1,5 +1,4 @@
 import {
-  MakeGenerics,
   PathNames,
   useSearch,
   useRouterState,
@@ -7,19 +6,17 @@ import {
 } from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
 
-export type MyLocationGenerics = MakeGenerics<{
-  Search: {
-    base: string;
-    quote: string;
-  };
-}>;
+export interface MyLocationSearch {
+  base: string;
+  quote: string;
+}
 
 export const useTradeTokens = () => {
-  const navigate = useNavigate<MyLocationGenerics>();
+  const navigate = useNavigate();
   const { location } = useRouterState();
   const isTradePage = location.pathname === PathNames.trade;
   const { getTokenById } = useTokens();
-  const search = useSearch<MyLocationGenerics>();
+  const search: MyLocationSearch = useSearch({ strict: false });
 
   const baseToken = getTokenById(search.base);
   const quoteToken = getTokenById(search.quote);

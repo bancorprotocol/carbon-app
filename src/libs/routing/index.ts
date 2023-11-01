@@ -5,7 +5,7 @@ export {
   useNavigate,
   useRouter,
   useSearch,
-  useMatch,
+  useParams,
   Navigate,
 } from '@tanstack/react-router';
 export { Link } from 'libs/routing/Link';

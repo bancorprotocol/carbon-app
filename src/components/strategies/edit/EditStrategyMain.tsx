@@ -4,15 +4,13 @@ import { EditStrategyHeader } from './EditStrategyHeader';
 import { EditStrategyLayout } from './EditStrategyLayout';
 import { list } from '../create/variants';
 import { Strategy } from 'libs/queries';
-import { MakeGenerics, useSearch } from 'libs/routing';
+import { useSearch } from 'libs/routing';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
-export type EditStrategyLocationGenerics = MakeGenerics<{
-  Search: {
-    type: EditTypes;
-  };
-}>;
+export interface EditStratgySearch {
+  type: EditTypes;
+}
 
 export const EditStrategyMain = ({
   strategy,
@@ -20,8 +18,7 @@ export const EditStrategyMain = ({
   strategy: Strategy | undefined;
 }) => {
   const [showGraph, setShowGraph] = useState(true);
-  const search = useSearch<EditStrategyLocationGenerics>();
-  const { type } = search;
+  const { type }: EditStratgySearch = useSearch({ strict: false });
 
   return (
     <m.div

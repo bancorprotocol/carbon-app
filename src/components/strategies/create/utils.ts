@@ -8,7 +8,6 @@ import { PathNames, useNavigate } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 
 export const handleStrategySettings = (
@@ -122,11 +121,11 @@ export const createStrategyAction = async ({
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
-  navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
+  navigate?: ReturnType<typeof useNavigate>
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
-    navigate && navigate({ to: PathNames.strategies });
+    navigate?.({ to: PathNames.strategies });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
