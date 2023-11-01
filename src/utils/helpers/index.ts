@@ -284,9 +284,11 @@ export const isPathnameMatch = (
   href: string,
   hrefMatches: string[]
 ) => {
-  const current = currentPath.endsWith('/')
-    ? currentPath.slice(0, -1)
-    : currentPath;
+  // Remove trailing /
+  const current =
+    currentPath !== '/' && currentPath.endsWith('/')
+      ? currentPath.slice(0, -1)
+      : currentPath;
   if (current === href) return true;
   return hrefMatches
     .filter((x) => x !== '/')
