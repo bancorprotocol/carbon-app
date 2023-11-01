@@ -67,7 +67,7 @@ test.describe('Strategies', () => {
       );
 
       // Verify strategy data
-      const strategies = await myStrategies.getAllStrategy();
+      const strategies = await myStrategies.getAllStrategies();
       await expect(strategies).toHaveCount(1);
       const strategy = await myStrategies.getStrategy(1);
       await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
