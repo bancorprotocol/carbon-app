@@ -9,6 +9,12 @@ import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
+import { appRoute } from 'App';
+import { Route } from '@tanstack/react-router';
+import { explorerTypePage } from './type';
+import { explorerOverviewPage } from './type/overview';
+import { explorerPortfolioLayout } from './type/portfolio';
+
 export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const query = useExplorer();
@@ -63,3 +69,32 @@ const ExplorerEvents = () => {
   useEffect(() => setMounted(true), [setMounted]);
   return <></>;
 };
+
+export const explorerLayout = new Route({
+  getParentRoute: () => appRoute,
+  path: 'explorer',
+});
+
+const explorerRedirect = new Route({
+  getParentRoute: () => explorerLayout,
+  path: '/',
+  component: () => <Navigate to="/explorer/wallet" />,
+});
+
+export const explorerPage = new Route({
+  getParentRoute: () => explorerLayout,
+  path: '$type',
+  component: ExplorerPage,
+});
+
+export const explorerResultLayout = new Route({
+  getParentRoute: () => explorerPage,
+  path: '$type/$slug',
+});
+
+explorerLayout.addChildren([explorerRedirect, explorerPage]);
+explorerPage.addChildren([explorerTypePage, explorerResultLayout]);
+explorerResultLayout.addChildren([
+  explorerOverviewPage,
+  explorerPortfolioLayout,
+]);

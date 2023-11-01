@@ -4,6 +4,9 @@ import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData'
 import { useNavigate } from 'libs/routing';
 import { useExplorerParams } from 'components/explorer/useExplorerParams';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { Route } from '@tanstack/react-router';
+import { explorerResultLayout } from 'pages/explorer';
+import { explorerPortfolioTokenPage } from './token';
 
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();
@@ -30,3 +33,18 @@ export const ExplorerTypePortfolioPage = () => {
     </>
   );
 };
+
+export const explorerPortfolioLayout = new Route({
+  getParentRoute: () => explorerResultLayout,
+  path: 'portfolio',
+});
+
+export const explorerPortfolioPage = new Route({
+  getParentRoute: () => explorerPortfolioLayout,
+  path: '/',
+  component: ExplorerTypePortfolioPage,
+});
+explorerPortfolioLayout.addChildren([
+  explorerPortfolioPage,
+  explorerPortfolioTokenPage,
+]);

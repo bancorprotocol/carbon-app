@@ -13,6 +13,10 @@ import { Outlet, PathNames, useRouterState } from 'libs/routing';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
+import { Route } from '@tanstack/react-router';
+import { appRoute } from 'App';
+import { strategyOverviewPage } from './overview';
+import { strategyPortflioLayout } from './portfolio';
 
 export const StrategiesPage = () => {
   const { pathname } = useRouterState().location;
@@ -60,3 +64,10 @@ export const StrategiesPage = () => {
     </Page>
   );
 };
+
+export const myStrategyLayout = new Route({
+  getParentRoute: () => appRoute,
+  id: 'my-strategy-layout',
+  component: StrategiesPage,
+});
+myStrategyLayout.addChildren([strategyOverviewPage, strategyPortflioLayout]);
