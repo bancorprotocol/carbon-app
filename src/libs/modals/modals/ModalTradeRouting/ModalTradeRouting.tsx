@@ -186,6 +186,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             token={data.source}
             isError={!!errorMsg}
             disabled
+            data-testid="confirm-source"
             className="-mb-16 rounded-12 bg-black"
           />
           <IconArrow className="z-10 mx-auto h-24 w-24 rounded-full bg-silver p-5" />
@@ -193,6 +194,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             value={totalTargetAmount}
             token={data.target}
             disabled
+            data-testid="confirm-target"
             className="-mt-16 rounded-12 bg-black"
           />
         </div>

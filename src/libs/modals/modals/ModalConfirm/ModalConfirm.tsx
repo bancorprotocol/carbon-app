@@ -76,6 +76,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
           await onConfirm();
           handleAfterConfirmationEvent(eventData, context);
         }}
+        data-testid="approve-submit"
       >
         {buttonLabel}
       </Button>
