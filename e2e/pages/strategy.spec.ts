@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { navigateTo, screenshot, waitFor } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
-import { setupImposter } from '../utils/debug';
+import { setupImposter } from '../utils/DebugDriver';
+import { CreateStrategyDriver, MyStrategyDriver } from '../utils/strategy';
+import { NotificationDriver } from '../utils/NotificationDriver';
+import { checkApproval } from '../utils/modal';
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
@@ -9,75 +12,70 @@ test.describe('Strategies', () => {
   });
   test('First Strategy Page', async ({ page }) => {
     await navigateTo(page, '/');
-    await page.getByTestId('first-strategy').waitFor({ state: 'visible' });
+    const driver = new MyStrategyDriver(page);
+    await driver.firstStrategy().waitFor({ state: 'visible' });
     await screenshot(page, 'first-strategy');
   });
 
-  test('Create Limit Strategy ETH->DAI', async ({ page }) => {
-    test.setTimeout(120_000);
-    await waitFor(page, 'balance-DAI', 20_000);
+  const configs = [
+    {
+      base: 'ETH',
+      quote: 'DAI',
+      buy: {
+        price: '1500',
+        budget: '10',
+      },
+      sell: {
+        price: '1700',
+        budget: '2',
+      },
+    },
+  ];
 
-    await navigateTo(page, '/');
-    await page.getByTestId('create-strategy-desktop').click();
+  for (const config of configs) {
+    const { base, quote } = config;
+    test(`Create Limit Strategy ${base}->${quote}`, async ({ page }) => {
+      test.setTimeout(180_000);
+      await waitFor(page, `balance-${quote}`, 30_000);
 
-    // Select Base
-    await page.getByTestId('select-base-token').click();
-    await waitFor(page, 'modal-container');
-    await page.getByLabel('Select Token').fill('eth');
-    await page.getByTestId('select-token-ETH').click();
-    await page.getByTestId('modal-container').waitFor({ state: 'detached' });
+      await navigateTo(page, '/');
+      const myStrategies = new MyStrategyDriver(page);
+      const createForm = new CreateStrategyDriver(page, config);
+      await myStrategies.createStrategy();
+      await createForm.selectBase();
+      await createForm.selectQuote();
+      const buy = await createForm.fillLimit('buy');
+      const sell = await createForm.fillLimit('sell');
 
-    // Select Quote
-    await page.getByTestId('select-quote-token').click();
-    await waitFor(page, 'modal-container');
-    await page.getByLabel('Select Token').fill('dai');
-    await page.getByTestId('select-token-DAI').click();
-    await page.getByText('Next Step').click();
+      // Assert 100% outcome
+      await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
+      await expect(buy.outcomeQuote()).toHaveText(`1,500 ${quote}`);
+      await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
+      await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
 
-    // Fill Buy fields
-    const buy = page.getByTestId('buy-section');
-    await buy.getByTestId('input-limit').fill('1500');
-    await buy.getByTestId('input-budget').fill('10');
-    await expect(buy.getByTestId('outcome-value')).toHaveText('0.006666 ETH');
-    await expect(buy.getByTestId('outcome-quote')).toHaveText('1,500 DAI');
+      await createForm.submit();
 
-    // Fill Sell fields
-    const sell = page.getByTestId('sell-section');
-    await sell.getByTestId('input-limit').fill('1700');
-    await sell.getByTestId('input-budget').fill('2');
-    await expect(sell.getByTestId('outcome-value')).toHaveText('3,400 DAI');
-    await expect(sell.getByTestId('outcome-quote')).toHaveText('1,700 DAI');
+      await checkApproval(page, [base, quote]);
 
-    await page.getByText('Create Strategy').click();
+      await page.waitForURL('/', { timeout: 10_000 });
 
-    // Accept approval
-    const approvalModal = await waitFor(page, 'approval-modal');
-    const ethMsg = approvalModal.getByTestId('msg-ETH');
-    await expect(ethMsg).toHaveText('Pre-Approved');
-    await approvalModal.getByTestId('approve-DAI').click();
-    const daiApprovalMsg = await waitFor(page, 'msg-DAI');
-    await expect(daiApprovalMsg).toHaveText('Approved');
-    await approvalModal.getByText('Create Strategy').click();
+      // Verfiy notification
+      const notif = new NotificationDriver(page, 'create-strategy');
+      await expect(notif.getTitle()).toHaveText('Success');
+      await expect(notif.getDescription()).toHaveText(
+        'New strategy was successfully created.'
+      );
 
-    await page.waitForURL('/', { timeout: 10_000 });
-
-    // Verfiy notification
-    const notif = page.getByTestId('notification-create-strategy');
-    await expect(notif.getByTestId('notif-title')).toHaveText('Success');
-    await expect(notif.getByTestId('notif-description')).toHaveText(
-      'New strategy was successfully created.'
-    );
-
-    // Verify strategy data
-    const strategies = page.locator('[data-testid="strategy-list"] > li');
-    await strategies.waitFor({ state: 'visible' });
-    await expect(strategies).toHaveCount(1);
-    const [strategy] = await strategies.all();
-    await expect(strategy.getByTestId('token-pair')).toHaveText('ETH/DAI');
-    await expect(strategy.getByTestId('status')).toHaveText('Active');
-    await expect(strategy.getByTestId('total-budget')).toHaveText('$3,344');
-    await expect(strategy.getByTestId('buy-budget')).toHaveText('10 DAI');
-    await expect(strategy.getByTestId('buy-budget-fiat')).toHaveText('$10.00');
-    await expect(strategy.getByTestId('sell-budget-fiat')).toHaveText('$3,334');
-  });
+      // Verify strategy data
+      const strategies = await myStrategies.getAllStrategies();
+      await expect(strategies).toHaveCount(1);
+      const strategy = await myStrategies.getStrategy(1);
+      await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
+      await expect(strategy.status()).toHaveText('Active');
+      await expect(strategy.totalBudget()).toHaveText('$3,344');
+      await expect(strategy.buyBudget()).toHaveText(`10 ${quote}`);
+      await expect(strategy.buyBudgetFiat()).toHaveText('$10.00');
+      await expect(strategy.sellBudgetFiat()).toHaveText('$3,334');
+    });
+  }
 });
