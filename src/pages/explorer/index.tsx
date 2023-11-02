@@ -89,7 +89,7 @@ export const explorerPage = new Route({
 
 export const explorerResultLayout = new Route({
   getParentRoute: () => explorerPage,
-  path: '$type/$slug',
+  path: '$slug',
 });
 
 explorerLayout.addChildren([explorerRedirect, explorerPage]);

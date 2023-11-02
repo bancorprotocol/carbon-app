@@ -10,18 +10,29 @@ import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { appRoute } from 'App';
-import { Route } from '@tanstack/react-router';
+import { Route, useNavigate, useSearch } from '@tanstack/react-router';
 import { getLastVisitedPair } from 'libs/routing/utils';
 
+export interface TradeSearch {
+  base: string;
+  quote: string;
+}
 export type TradePageProps = { base: Token; quote: Token };
 
 const TradePage = () => {
+  const navigate = useNavigate();
+  const search: TradeSearch = useSearch({ strict: false });
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isLoading, isTradePairError } = useTradePairs();
   const isValidPair = !(!baseToken || !quoteToken);
-
   const noTokens = !baseToken && !quoteToken;
+
+  useEffect(() => {
+    console.log({ search });
+    if (search.base && search.quote) return;
+    navigate({ search: { ...search, ...getLastVisitedPair() } });
+  }, [search, navigate]);
 
   useEffect(() => {
     if (baseToken && quoteToken) {
@@ -62,8 +73,4 @@ export const tradePage = new Route({
   getParentRoute: () => appRoute,
   path: '/trade',
   component: TradePage,
-  validateSearch: (search) => {
-    if (search.base && search.quote) return search;
-    return { ...search, ...getLastVisitedPair() };
-  },
 });
