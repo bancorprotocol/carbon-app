@@ -3,16 +3,17 @@ import { Link, PathNames, useRouterState } from 'libs/routing';
 import { carbonEvents } from 'services/events';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { isPathnameMatch } from 'utils/helpers';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 export const CreateStrategyCTA = () => {
   return (
-    <Link to={PathNames.createStrategy} data-testid="create-strategy-desktop">
-      <Button
-        variant="success"
-        onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
-      >
-        Create Strategy
-      </Button>
+    <Link
+      to={PathNames.createStrategy}
+      className={buttonStyles({ variant: 'success' })}
+      data-testid="create-strategy-desktop"
+      onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
+    >
+      Create Strategy
     </Link>
   );
 };
