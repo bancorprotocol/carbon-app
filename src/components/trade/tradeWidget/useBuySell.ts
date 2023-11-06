@@ -308,6 +308,7 @@ export const useBuySell = ({
 
   const openTradeRouteModal = useCallback(() => {
     openModal('tradeRouting', {
+      sourceBalance: sourceBalanceQuery.data ?? '0',
       tradeActionsWei,
       tradeActionsRes,
       source,
@@ -325,6 +326,7 @@ export const useBuySell = ({
     target,
     tradeActionsRes,
     tradeActionsWei,
+    sourceBalanceQuery,
   ]);
 
   const getTokenFiat = useCallback(

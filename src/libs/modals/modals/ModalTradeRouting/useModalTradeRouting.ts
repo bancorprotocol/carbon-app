@@ -12,6 +12,7 @@ import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 import { useModal } from 'hooks/useModal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
+import BigNumber from 'bignumber.js';
 
 type Props = {
   id: string;
@@ -30,6 +31,7 @@ export const useModalTradeRouting = ({
     tradeActionsRes,
     onSuccess,
     buy = false,
+    sourceBalance,
     setIsAwaiting,
   },
 }: Props) => {
@@ -61,11 +63,12 @@ export const useModalTradeRouting = ({
     targetToken: target.address,
     actionsWei: selectedActionsWei,
   });
+  const sourceInput = data?.totalSourceAmount || '0';
 
-  const { trade, approval } = useTradeAction({
+  const { trade, calcMaxInput, approval } = useTradeAction({
     source,
     isTradeBySource,
-    sourceInput: data?.totalSourceAmount || '0',
+    sourceInput,
     onSuccess: () => {
       onSuccess();
       closeModal(id);
@@ -88,7 +91,7 @@ export const useModalTradeRouting = ({
         target,
         tradeActions: data.tradeActions,
         isTradeBySource,
-        sourceInput: data.totalSourceAmount,
+        sourceInput,
         targetInput: data.totalTargetAmount,
         setIsAwaiting,
       });
@@ -149,14 +152,18 @@ export const useModalTradeRouting = ({
     );
   };
 
+  const totalSourceAmount = data?.totalSourceAmount || '0';
+  const totalTargetAmount = data?.totalTargetAmount || '0';
+  const insufficientBalance = new BigNumber(sourceBalance).lt(
+    isTradeBySource ? sourceInput : calcMaxInput(sourceInput)
+  );
+  const errorMsg = insufficientBalance ? 'Insufficient Balance' : '';
   const onCancel = useCallback(() => {
     closeModal(id);
   }, [closeModal, id]);
 
-  const disabledCTA = useMemo(
-    () => !selectedIDs.length || isLoading || isError,
-    [isError, isLoading, selectedIDs.length]
-  );
+  const disabledCTA =
+    !selectedIDs.length || isLoading || isError || insufficientBalance;
 
   return {
     selected,
@@ -165,8 +172,9 @@ export const useModalTradeRouting = ({
     sourceFiatPrice,
     targetFiatPrice,
     onCancel,
-    totalSourceAmount: data?.totalSourceAmount || '0',
-    totalTargetAmount: data?.totalTargetAmount || '0',
+    totalSourceAmount,
+    totalTargetAmount,
     disabledCTA,
+    errorMsg,
   };
 };

@@ -1,5 +1,5 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { FormEvent, useEffect, useId, useMemo } from 'react';
+import { FormEvent, useEffect, useId, useMemo, JSX } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
@@ -14,13 +14,13 @@ import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 
-export type TradeWidgetBuySellProps = {
+type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
+export interface TradeWidgetBuySellProps extends FormAttributes {
   source: Token;
   target: Token;
   buy?: boolean;
   sourceBalanceQuery: UseQueryResult<string>;
-  targetBalanceQuery: UseQueryResult<string>;
-};
+}
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
@@ -44,7 +44,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     maxSourceAmountQuery,
     isAwaiting,
   } = useBuySell(props);
-  const { source, target, sourceBalanceQuery, buy = false } = props;
+  const {
+    source,
+    target,
+    sourceBalanceQuery,
+    buy = false,
+    ...formProps
+  } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
@@ -159,8 +165,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ${target.symbol}`;
   };
 
-  const showRouting =
-    rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
+  const showRouting = rate && rate !== '0';
+  const disabledCTA =
+    !!errorMsgSource ||
+    !!errorMsgTarget ||
+    !hasEnoughLiquidity ||
+    !maxSourceAmountQuery.data;
 
   const getLiquidity = () => {
     const value = liquidityQuery.isLoading
@@ -171,6 +181,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   return (
     <form
+      {...formProps}
       onSubmit={handleTrade}
       className="flex flex-col rounded-12 bg-silver p-20"
     >
@@ -245,7 +256,8 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
               <button
                 type="button"
                 onClick={openTradeRouteModal}
-                className="hidden space-x-10 text-left hover:text-white md:flex"
+                className="flex hidden space-x-10 text-left hover:text-white md:flex"
+                data-testid="routing"
               >
                 <IconRouting className="w-12" />
                 <Tooltip
@@ -271,12 +283,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
       <Button
         type="submit"
-        disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
+        disabled={disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
         variant={buy ? 'success' : 'error'}
         fullWidth
         className="mt-20"
+        data-testid="submit"
       >
         {ctaButtonText}
       </Button>
