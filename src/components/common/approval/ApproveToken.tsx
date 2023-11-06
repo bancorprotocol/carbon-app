@@ -171,9 +171,9 @@ export const ApproveToken: FC<Props> = ({
             <LogoImager
               alt={'Token'}
               src={token.logoURI}
-              className={'h-30 w-30'}
+              className="h-30 w-30"
             />
-            <div className={'font-weight-500'}>{token.symbol}</div>
+            <div className="font-weight-500">{token.symbol}</div>
           </div>
         </div>
 
@@ -181,11 +181,9 @@ export const ApproveToken: FC<Props> = ({
           txBusy ? (
             <div>Waiting for Confirmation</div>
           ) : (
-            <div
-              className={'flex h-82 flex-col items-end justify-center gap-10'}
-            >
-              <div className={'flex items-center space-x-8'}>
-                <div className={'flex items-center space-x-10'}>
+            <div className="flex h-82 flex-col items-end justify-center gap-10">
+              <div className="flex items-center space-x-8">
+                <div className="flex items-center space-x-10">
                   <div
                     className={`font-mono text-12 font-weight-500 transition-all ${
                       isLimited ? 'text-white/60' : 'text-white/85'
@@ -203,10 +201,10 @@ export const ApproveToken: FC<Props> = ({
               </div>
 
               <Button
-                variant={'white'}
+                variant="white"
                 onClick={onApprove}
-                size={'sm'}
-                className={'px-10 text-14'}
+                size="sm"
+                className="px-10 text-14"
                 data-testid={`approve-${token.symbol}`}
               >
                 {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}
@@ -222,9 +220,9 @@ export const ApproveToken: FC<Props> = ({
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className={'flex space-x-20 font-mono text-14 text-warning-500'}>
+        <div className="flex space-x-20 font-mono text-14 text-warning-500">
           <div>
-            <IconWarning className={'w-16'} />
+            <IconWarning className="w-16" />
           </div>
           <span>
             Before updating {token.symbol} allowance, you are required to revoke

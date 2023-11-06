@@ -15,7 +15,7 @@ export const Overlay: FC<Props> = ({ children, onClick, className }) => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      className={`fixed inset-0 z-40 flex overflow-hidden bg-black/40 outline-none backdrop-blur focus:outline-none ${className}`}
+      className={`fixed inset-0 z-40 flex overflow-hidden bg-black/70 outline-none backdrop-blur focus:outline-none ${className}`}
     >
       {children}
     </m.div>

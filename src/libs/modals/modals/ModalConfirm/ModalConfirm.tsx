@@ -52,7 +52,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       data-testid="approval-modal"
     >
       <h3 className="text-secondary my-10">Approve Tokens</h3>
-      <ul className="mb-20 space-y-20">
+      <ul className="space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (
           <li key={i}>
             <ApproveToken
@@ -76,6 +76,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
           await onConfirm();
           handleAfterConfirmationEvent(eventData, context);
         }}
+        data-testid="approve-submit"
       >
         {buttonLabel}
       </Button>
