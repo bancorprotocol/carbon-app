@@ -2,6 +2,7 @@ import { useRef, FC, KeyboardEvent, useState } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn } from 'utils/helpers';
 import styles from './SpeadInput.module.css';
+import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 interface Props {
   value: number;
@@ -50,6 +51,7 @@ export const SpreadInput: FC<Props> = ({ value, options }) => {
               value={option}
               checked={spread === option}
               tabIndex={spread === option ? 0 : -1}
+              onChange={() => setSpread(option)}
               onFocus={() => setSpread(option)}
             />
             <label
@@ -63,7 +65,7 @@ export const SpreadInput: FC<Props> = ({ value, options }) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'flex flex-1 justify-center rounded bg-black p-16 text-center',
+            'flex min-w-0 flex-1 justify-center rounded bg-black p-16 text-center',
             'focus-within:outline focus-within:outline-2',
             !options.includes(spread) && 'outline outline-1 outline-white/60',
             spread <= 0 && 'text-red outline-red',
@@ -72,19 +74,21 @@ export const SpreadInput: FC<Props> = ({ value, options }) => {
         >
           <input
             id="spread-custom"
-            className="bg-transparent text-center outline-none placeholder:text-white/40"
+            className="min-w-0 bg-transparent text-center outline-none placeholder:text-white/40"
             name="spread"
             type="number"
+            inputMode="decimal"
             min="0.01"
             max="100"
             step="0.01"
+            pattern={decimalNumberValidationRegex}
             aria-label="Set custom"
             placeholder="Set custom"
             tabIndex={options.includes(spread) ? -1 : 0}
-            // Use Number(value) to trigger invalid warning
-            onBlur={(e) => setSpread(Number(e.target.value))}
             // Use valueAsNumber to not trigger invalid warning
             onFocus={(e) => setSpread(e.target.valueAsNumber)}
+            // Use Number(value) to trigger invalid warning
+            onBlur={(e) => setSpread(Number(e.target.value))}
           />
           <span className={styles.suffix}>%</span>
         </div>
