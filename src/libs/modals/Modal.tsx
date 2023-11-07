@@ -51,10 +51,10 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="relative flex w-full flex-col gap-20 rounded-10 border-0 bg-white bg-silver p-20 outline-none focus:outline-none"
+          className="relative flex w-full flex-col gap-20 overflow-hidden rounded-10 border-0 bg-white bg-silver p-20 outline-none focus:outline-none"
         >
           {isLoading && (
-            <div className="statusBar absolute -mt-20 ml-20 h-6 w-full bg-green/25" />
+            <div className="statusBar absolute inset-x-0 top-0 h-6 bg-green/25" />
           )}
           <header className="flex justify-between">
             {typeof title === 'string' ? (
@@ -63,7 +63,11 @@ export const Modal: FC<ModalProps> = ({
               title
             )}
             {showCloseButton && (
-              <button className="p-4" onClick={() => onCloseHandler(id)}>
+              <button
+                data-testid="modal-close"
+                className="p-4"
+                onClick={() => onCloseHandler(id)}
+              >
                 <IconX className="w-12" />
               </button>
             )}

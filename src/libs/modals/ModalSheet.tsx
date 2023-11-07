@@ -31,14 +31,18 @@ export const ModalSheet: FC<ModalProps> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="flex w-full flex-col gap-20 rounded-t-10 border-0 bg-white bg-silver p-20 outline-none focus:outline-none">
+        <div className="relative flex w-full flex-col gap-20 overflow-hidden rounded-t-10 border-0 bg-white bg-silver p-20 outline-none focus:outline-none">
           {isLoading && (
-            <div className="statusBar absolute -mt-20 -ml-20 h-6 w-full bg-green/25" />
+            <div className="statusBar absolute inset-x-0 top-0 h-6 bg-green/25" />
           )}
           <header data-testid={testId} className="flex justify-between">
             {typeof title === 'string' ? <h2>{title}</h2> : title}
             {showCloseButton && (
-              <button className="p-4" onClick={() => onCloseHandler(id)}>
+              <button
+                data-testid="modal-close"
+                className="p-4"
+                onClick={() => onCloseHandler(id)}
+              >
                 <IconX className="w-12" />
               </button>
             )}

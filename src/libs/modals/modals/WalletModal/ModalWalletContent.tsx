@@ -35,28 +35,28 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
   const isDisabled = isLoading || !checked;
 
   return (
-    <div className={'space-y-10'}>
-      <div className={'mb-20 space-y-10 text-14 text-white/80'}>
+    <div className="space-y-10">
+      <div className="mb-20 space-y-10 text-14 text-white/80">
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link
             to={PathNames.terms}
-            target={'_blank'}
-            className={'font-weight-500 text-white'}
+            target="_blank"
+            className="font-weight-500 text-white"
           >
             terms & conditions
           </Link>{' '}
           and{' '}
           <Link
-            target={'_blank'}
+            target="_blank"
             to={PathNames.privacy}
-            className={'font-weight-500 text-white'}
+            className="font-weight-500 text-white"
           >
             cookie & privacy policy
           </Link>{' '}
           of this site.{' '}
         </p>
-        <div className={'flex items-center space-x-10'}>
+        <div className="flex items-center space-x-10">
           <Checkbox isChecked={checked} setIsChecked={setChecked} />
           <button onClick={() => setChecked((prev) => !prev)}>
             I read and accept
@@ -71,7 +71,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
           className={buttonClasses}
           disabled={isDisabled}
         >
-          <Imager alt={'Wallet Logo'} src={c.logoUrl} className={'w-24'} />
+          <Imager alt="Wallet Logo" src={c.logoUrl} className="w-24" />
           <span className={textClasses}>{c.name}</span>
         </button>
       ))}
@@ -87,8 +87,8 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
           }`}
           disabled={isDisabled}
         >
-          <div className={'flex w-24 justify-center'}>
-            <Imager alt={'Wallet Logo'} src={logoUrl} className={'h-24'} />
+          <div className="flex w-24 justify-center">
+            <Imager alt="Wallet Logo" src={logoUrl} className="h-24" />
           </div>
           <span className={textClasses}>{name}</span>
         </Link>
