@@ -1,11 +1,8 @@
-import { Route } from '@tanstack/react-router';
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { PathNames, useNavigate } from 'libs/routing';
-import { myStrategyLayout } from '..';
-import { strategyPortflioTokenPage } from './token';
 
 export const StrategiesPortfolioPage = () => {
   const { strategies, isLoading } = useStrategyCtx();
@@ -26,17 +23,3 @@ export const StrategiesPortfolioPage = () => {
     />
   );
 };
-
-export const strategyPortflioLayout = new Route({
-  getParentRoute: () => myStrategyLayout,
-  path: 'strategies/portfolio',
-});
-export const strategyPortflioPage = new Route({
-  getParentRoute: () => strategyPortflioLayout,
-  path: '/',
-  component: StrategiesPortfolioPage,
-});
-strategyPortflioLayout.addChildren([
-  strategyPortflioPage,
-  strategyPortflioTokenPage,
-]);

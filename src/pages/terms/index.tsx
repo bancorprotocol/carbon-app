@@ -1143,9 +1143,3 @@ export const TermsPage = () => {
     </Page>
   );
 };
-
-export const termPage = new Route({
-  getParentRoute: () => appRoute,
-  path: '/terms',
-  component: TermsPage,
-});

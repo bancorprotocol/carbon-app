@@ -1,6 +1,4 @@
-import { Route } from '@tanstack/react-router';
 import { ExplorerEmpty } from 'components/explorer';
-import { explorerPage } from '..';
 
 export const ExplorerTypePage = () => {
   return (
@@ -13,9 +11,3 @@ export const ExplorerTypePage = () => {
     />
   );
 };
-
-export const explorerTypePage = new Route({
-  getParentRoute: () => explorerPage,
-  path: '/',
-  component: ExplorerTypePage,
-});

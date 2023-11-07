@@ -7,8 +7,6 @@ import { CreateStrategyGraph } from 'components/strategies/create/CreateStrategy
 import { CreateStrategyTokenSelection } from 'components/strategies/create/CreateStrategyTokenSelection';
 import { CreateStrategyTypeMenu } from 'components/strategies/create/CreateStrategyTypeMenu';
 import { CreateStrategyOrders } from 'components/strategies/create/CreateStrategyOrders';
-import { Route } from '@tanstack/react-router';
-import { appRoute } from 'App';
 
 export const CreateStrategyPage = () => {
   const createStrategy = useCreateStrategy();
@@ -45,19 +43,3 @@ export const CreateStrategyPage = () => {
     </AnimatePresence>
   );
 };
-
-export const createStrategyPage = new Route({
-  getParentRoute: () => appRoute,
-  path: '/strategies/create',
-  component: CreateStrategyPage,
-  validateSearch: (search) => {
-    if (
-      search.strategyType === 'recurring' ||
-      search.strategyType === 'disposable' ||
-      search.encodedStrategy
-    ) {
-      return search;
-    }
-    return { ...search, strategyType: 'recurring' };
-  },
-});

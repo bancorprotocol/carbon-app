@@ -9,8 +9,6 @@ import { DebugNotifications } from 'components/debug/DebugNotifications';
 import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
 import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 import { DebugOrderBook } from 'components/debug/DebugOrderBook';
-import { Route } from '@tanstack/react-router';
-import { appRoute } from 'App';
 
 export const DebugPage = () => {
   return (
@@ -30,9 +28,3 @@ export const DebugPage = () => {
     </Page>
   );
 };
-
-export const debugPage = new Route({
-  getParentRoute: () => appRoute,
-  path: '/debug',
-  component: DebugPage,
-});
