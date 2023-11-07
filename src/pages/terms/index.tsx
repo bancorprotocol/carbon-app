@@ -1,5 +1,3 @@
-import { Route } from '@tanstack/react-router';
-import { appRoute } from 'App';
 import { Page } from 'components/common/page';
 
 const content = [
