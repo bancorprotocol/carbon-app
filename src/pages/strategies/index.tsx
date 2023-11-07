@@ -10,7 +10,6 @@ import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
 import { Outlet, PathNames, useLocation } from 'libs/routing';
-import { cn } from 'utils/helpers';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
@@ -34,25 +33,29 @@ export const StrategiesPage = () => {
       label: 'Overview',
       href: PathNames.strategies,
       hrefMatches: [PathNames.strategies],
-      icon: <IconOverview className={'h-18 w-18'} />,
+      icon: <IconOverview className="h-18 w-18" />,
       badge: query.data?.length,
     },
     {
       label: 'Portfolio',
       href: PathNames.portfolio,
       hrefMatches: [PathNames.portfolio, PathNames.portfolioToken('0x')],
-      icon: <IconPieChart className={'h-18 w-18'} />,
+      icon: <IconPieChart className="h-18 w-18" />,
     },
   ];
 
   return (
     <Page hideTitle={true}>
       <StrategyProvider query={query}>
-        <div className={cn('mb-20 flex items-center justify-between')}>
-          <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-
-          <StrategyPageTitleWidget showFilter={showFilter} />
-        </div>
+        {user && (
+          <header
+            role="toolbar"
+            className="mb-20 flex items-center justify-between"
+          >
+            <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
+            <StrategyPageTitleWidget showFilter={showFilter} />
+          </header>
+        )}
 
         {user ? <Outlet /> : <WalletConnect />}
       </StrategyProvider>

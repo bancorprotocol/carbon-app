@@ -7,7 +7,17 @@ import {
 import { prepareGtmStrategyData } from './strategyEvents';
 import { StrategyEditEventType } from './types';
 
+const editPricesOrigin = {
+  manage: 'Manage',
+  withdraw: 'Manage->Withdraw Funds',
+  delete: 'Manage->Delete Strategy',
+};
+
 export interface EventStrategyEditSchema extends EventCategory {
+  strategyManageClick: {
+    input: StrategyEditEventType;
+    gtmData: StrategyEditGTMEventType;
+  };
   strategyDuplicateClick: {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
@@ -20,11 +30,13 @@ export interface EventStrategyEditSchema extends EventCategory {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
-  strategyChangeRatesClick: {
-    input: StrategyEditEventType;
-    gtmData: StrategyEditGTMEventType;
+  strategyEditPricesClick: {
+    input: StrategyEditEventType & {
+      origin: keyof typeof editPricesOrigin;
+    };
+    gtmData: StrategyEditGTMEventType & { event_origin: string };
   };
-  strategyChangeRates: {
+  strategyEditPrices: {
     input: StrategyEditEventType;
     gtmData: StrategyEditGTMEventType;
   };
@@ -87,6 +99,14 @@ export interface EventStrategyEditSchema extends EventCategory {
 }
 
 export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
+  strategyManageClick: (strategy) => {
+    const gtmData = prepareGtmStrategyData(strategy);
+    gtmData &&
+      sendGTMEvent('strategyEdit', 'strategyManageClick', {
+        ...gtmData,
+        strategy_id: strategy.strategyId,
+      });
+  },
   strategyDuplicateClick: (strategy) => {
     const gtmData = prepareGtmStrategyData(strategy);
     gtmData &&
@@ -111,18 +131,19 @@ export const strategyEditEvents: CarbonEvents['strategyEdit'] = {
         strategy_id: strategy.strategyId,
       });
   },
-  strategyChangeRatesClick: (strategy) => {
+  strategyEditPricesClick: ({ origin, ...strategy }) => {
     const gtmData = prepareGtmStrategyData(strategy);
     gtmData &&
-      sendGTMEvent('strategyEdit', 'strategyChangeRatesClick', {
+      sendGTMEvent('strategyEdit', 'strategyEditPricesClick', {
         ...gtmData,
         strategy_id: strategy.strategyId,
+        event_origin: editPricesOrigin[origin],
       });
   },
-  strategyChangeRates: (strategy) => {
+  strategyEditPrices: (strategy) => {
     const gtmData = prepareGtmStrategyData(strategy);
     gtmData &&
-      sendGTMEvent('strategyEdit', 'strategyChangeRates', {
+      sendGTMEvent('strategyEdit', 'strategyEditPrices', {
         ...gtmData,
         strategy_id: strategy.strategyId,
       });

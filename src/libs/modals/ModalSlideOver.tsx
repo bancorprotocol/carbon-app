@@ -12,7 +12,7 @@ const getSize = (size: 'sm' | 'md' | 'lg') => {
     case 'md':
       return 'max-w-[480px]';
     default:
-      return 'max-w-[380px]';
+      return 'max-w-[390px]';
   }
 };
 

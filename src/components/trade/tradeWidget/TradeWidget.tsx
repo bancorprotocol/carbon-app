@@ -47,7 +47,7 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
             source={quote}
             target={base}
             sourceBalanceQuery={quoteBalanceQuery}
-            targetBalanceQuery={baseBalanceQuery}
+            data-testid="buy-form"
           />
         )}
 
@@ -56,7 +56,7 @@ export const TradeWidget = ({ base, quote }: TradePageProps) => {
             source={base}
             target={quote}
             sourceBalanceQuery={baseBalanceQuery}
-            targetBalanceQuery={quoteBalanceQuery}
+            data-testid="sell-form"
           />
         )}
       </div>
