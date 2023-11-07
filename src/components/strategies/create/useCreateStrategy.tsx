@@ -24,6 +24,7 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { prepareSymmetricOrders } from './symmetric/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -35,6 +36,7 @@ export const useCreateStrategy = () => {
   const navigate = useNavigate<StrategyCreateLocationGenerics>();
   const { user, provider } = useWeb3();
   const { openModal } = useModal();
+  const [spreadPPM, setSpreadPPM] = useState(0.05);
   const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
   const [quote, setQuote] = useState<Token | undefined>(
     templateStrategy?.quote
@@ -68,6 +70,14 @@ export const useCreateStrategy = () => {
   const mutation = useCreateStrategyQuery();
 
   const search = useSearch<StrategyCreateLocationGenerics>();
+  const {
+    base: baseAddress,
+    quote: quoteAddress,
+    strategySettings,
+    strategyDirection,
+    strategyType,
+  } = search;
+  const { getTokenById } = useTokens();
   const [selectedStrategySettings, setSelectedStrategySettings] = useState<
     | {
         to: string;
@@ -113,14 +123,16 @@ export const useCreateStrategy = () => {
       return openModal('wallet', undefined);
     }
 
-    const onConfirm = () =>
-      createStrategyAction({
+    const onConfirm = () => {
+      const orders =
+        strategySettings === 'symmetric'
+          ? prepareSymmetricOrders({ order0, order1, spreadPPM })
+          : { order0, order1 };
+      return createStrategyAction({
         base,
         quote,
         user,
         mutation,
-        order0,
-        order1,
         dispatchNotification,
         cache,
         navigate,
@@ -130,7 +142,9 @@ export const useCreateStrategy = () => {
           sellMarketPricePercentage,
         },
         setIsProcessing,
+        ...orders,
       });
+    };
 
     if (sourceCorrect && targetCorrect) {
       if (!+order0.budget && !+order1.budget) {
@@ -219,50 +233,40 @@ export const useCreateStrategy = () => {
   };
 
   const isCTAdisabled = useMemo(() => {
-    if (!user) {
-      return false;
+    if (!user) return false;
+    if (approval.isLoading) return true;
+    if (approval.isError) return true;
+    if (mutation.isLoading) return true;
+    if (isProcessing) return true;
+
+    if (strategySettings === 'symmetric') {
+      const { min, max } = order0;
+      const isSpreadValid = spreadPPM > 0 && spreadPPM <= 10;
+      const isRangeValue = +min > 0 && +max > 0 && +min < +max;
+      return !isSpreadValid || !isRangeValue;
+    } else {
+      const isOrder0Valid = order0.isRange
+        ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
+        : +order0.price >= 0 && order0.price !== '';
+      const isOrder1Valid = order1.isRange
+        ? +order1.min > 0 && +order1.max > 0 && +order1.min < +order1.max
+        : +order1.price >= 0 && order1.price !== '';
+      return !isOrder0Valid || !isOrder1Valid;
     }
-
-    const isOrder0Valid = order0.isRange
-      ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
-      : +order0.price >= 0 && order0.price !== '';
-
-    const isOrder1Valid = order1.isRange
-      ? +order1.min > 0 && +order1.max > 0 && +order1.min < +order1.max
-      : +order1.price >= 0 && order1.price !== '';
-
-    return (
-      approval.isLoading ||
-      approval.isError ||
-      mutation.isLoading ||
-      !isOrder0Valid ||
-      !isOrder1Valid ||
-      isProcessing
-    );
   }, [
-    approval.isError,
-    approval.isLoading,
-    isProcessing,
-    mutation.isLoading,
-    order0.isRange,
-    order0.max,
-    order0.min,
-    order0.price,
-    order1.isRange,
-    order1.max,
-    order1.min,
-    order1.price,
     user,
-  ]);
-
-  const {
-    base: baseAddress,
-    quote: quoteAddress,
+    approval.isLoading,
+    approval.isError,
+    mutation.isLoading,
+    isProcessing,
     strategySettings,
-    strategyDirection,
-    strategyType,
-  } = search;
-  const { getTokenById } = useTokens();
+    order0,
+    spreadPPM,
+    order1.isRange,
+    order1.min,
+    order1.max,
+    order1.price,
+  ]);
 
   useEffect(() => {
     setSelectedStrategySettings(undefined);
@@ -357,5 +361,7 @@ export const useCreateStrategy = () => {
     setSelectedStrategySettings,
     isProcessing,
     isOrdersOverlap,
+    spreadPPM,
+    setSpreadPPM,
   };
 };

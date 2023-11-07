@@ -39,28 +39,30 @@ export const InputRange: FC<InputRangeProps> = ({
   const errorMessage = 'Max price must be higher than min price and not zero';
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
+    const minValue = Number(e.target.value);
     setMin(sanitizeNumberInput(e.target.value));
-    if (!max || (+e.target.value > 0 && +max > +e.target.value)) {
-      setRangeError('');
-    } else {
+    if (!!max && (minValue <= 0 || minValue >= +max)) {
       carbonEvents.strategy.strategyErrorShow({
         buy,
         message: errorMessage,
       });
       setRangeError(errorMessage);
+    } else {
+      setRangeError('');
     }
   };
 
   const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
+    const maxValue = Number(e.target.value);
     setMax(sanitizeNumberInput(e.target.value));
-    if (!min || (+e.target.value > 0 && +e.target.value > +min)) {
-      setRangeError('');
-    } else {
+    if (!!min && (+min <= 0 || +min >= maxValue)) {
       carbonEvents.strategy.strategyErrorShow({
         buy,
         message: errorMessage,
       });
       setRangeError(errorMessage);
+    } else {
+      setRangeError('');
     }
   };
 
@@ -83,7 +85,7 @@ export const InputRange: FC<InputRangeProps> = ({
               base.symbol
             } at.`}
           >
-            <div className={'mb-5 text-12 text-white/60'}>Min</div>
+            <div className="mb-5 text-12 text-white/60">Min</div>
           </Tooltip>
           <input
             id={inputMinId}
@@ -159,7 +161,7 @@ export const InputRange: FC<InputRangeProps> = ({
           htmlFor={`${inputMinId} ${inputMaxId}`}
           role="alert"
           aria-live="polite"
-          className={`flex items-center gap-10 font-mono text-12 text-red`}
+          className="flex items-center gap-10 font-mono text-12 text-red"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">{error}</span>

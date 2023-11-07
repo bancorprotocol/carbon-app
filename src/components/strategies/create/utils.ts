@@ -28,8 +28,8 @@ export const handleStrategySettings = (
       functions.forEach((fn) => fn(true));
       break;
     }
-    case 'custom': {
-      functions.forEach((fn, i) => fn(i % 2 !== 0));
+    case 'symmetric': {
+      functions.forEach((fn) => fn(true));
       break;
     }
   }
@@ -37,7 +37,7 @@ export const handleStrategySettings = (
 
 export const handleStrategyDirection = (
   strategyDirection: 'buy' | 'sell' | undefined,
-  strategySettings: 'limit' | 'range' | 'custom' | undefined,
+  strategySettings: 'limit' | 'range' | 'symmetric' | undefined,
   order1: OrderWithSetters,
   order0: OrderWithSetters
 ) => {

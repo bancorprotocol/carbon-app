@@ -36,6 +36,8 @@ export const CreateStrategyOrders = ({
   isProcessing,
   isAwaiting,
   isOrdersOverlap,
+  spreadPPM,
+  setSpreadPPM,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
   const { openModal } = useModal();
@@ -130,7 +132,18 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {strategySettings === 'symmetric' && <CreateSymmetricStrategy />}
+      {strategySettings === 'symmetric' && (
+        <CreateSymmetricStrategy
+          base={base}
+          quote={quote}
+          order0={order0}
+          order1={order1}
+          token0BalanceQuery={token0BalanceQuery}
+          token1BalanceQuery={token1BalanceQuery}
+          spreadPPM={spreadPPM}
+          setSpreadPPM={setSpreadPPM}
+        />
+      )}
       {strategySettings !== 'symmetric' && (
         <>
           {(strategyDirection === 'buy' || !strategyDirection) && (
