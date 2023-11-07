@@ -14,7 +14,8 @@ type InputRangeProps = {
   setMin: (value: string) => void;
   max: string;
   setMax: (value: string) => void;
-  token: Token;
+  quote: Token;
+  base: Token;
   buy?: boolean;
   error?: string;
   setRangeError: (error: string) => void;
@@ -26,7 +27,8 @@ export const InputRange: FC<InputRangeProps> = ({
   setMin,
   max,
   setMax,
-  token,
+  quote,
+  base,
   error,
   setRangeError,
   buy = false,
@@ -34,7 +36,7 @@ export const InputRange: FC<InputRangeProps> = ({
 }) => {
   const inputMinId = useId();
   const inputMaxId = useId();
-  const errorMessage = 'Max Price must be higher than min price and not zero';
+  const errorMessage = 'Max price must be higher than min price and not zero';
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
@@ -62,7 +64,7 @@ export const InputRange: FC<InputRangeProps> = ({
     }
   };
 
-  const { getFiatAsString } = useFiatCurrency(token);
+  const { getFiatAsString } = useFiatCurrency(quote);
 
   return (
     <>
@@ -78,7 +80,7 @@ export const InputRange: FC<InputRangeProps> = ({
           <Tooltip
             sendEventOnMount={{ buy }}
             element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
-              token.symbol
+              base.symbol
             } at.`}
           >
             <div className={'mb-5 text-12 text-white/60'}>Min</div>
@@ -89,7 +91,7 @@ export const InputRange: FC<InputRangeProps> = ({
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={min}
-            aria-label="Minimal price"
+            aria-label="Minimum price"
             placeholder="Enter Price"
             className={`
               mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
@@ -120,7 +122,7 @@ export const InputRange: FC<InputRangeProps> = ({
           <Tooltip
             sendEventOnMount={{ buy }}
             element={`The highest price to ${buy ? 'buy' : 'sell'} ${
-              token.symbol
+              base.symbol
             } at.`}
           >
             <div className={'mb-5 text-12 text-white/60'}>Max</div>
@@ -131,7 +133,7 @@ export const InputRange: FC<InputRangeProps> = ({
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={max}
-            aria-label="Maximal price"
+            aria-label="Maximum price"
             placeholder="Enter Price"
             className={`
               mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none

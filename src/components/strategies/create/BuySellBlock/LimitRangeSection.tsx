@@ -51,7 +51,8 @@ export const LimitRangeSection: FC<Props> = ({
           setMax={order.setMax}
           error={order.rangeError}
           setRangeError={order.setRangeError}
-          token={quote}
+          quote={quote}
+          base={base}
           buy={buy}
           marketPricePercentages={marketPricePercentage}
         />
