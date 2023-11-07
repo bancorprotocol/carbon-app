@@ -15,6 +15,7 @@ import { StrategyCreateLocationGenerics } from 'components/strategies/create/typ
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useNavigate } from 'libs/routing';
+import { CreateSymmetricStrategy } from './symmetric/CreateSymmetricStrategy';
 
 let didInit = false;
 
@@ -47,14 +48,15 @@ export const CreateStrategyOrders = ({
   });
 
   useInitEffect(() => {
-    selectedStrategySettings?.search.strategyType === 'disposable' &&
-      carbonEvents.strategy.strategyDirectionChange({
-        baseToken: base,
-        quoteToken: quote,
-        strategySettings: selectedStrategySettings.search.strategySettings,
-        strategyDirection: strategyDirection,
-        strategyType: selectedStrategySettings.search.strategyType,
-      });
+    if (selectedStrategySettings?.search.strategyType !== 'disposable') return;
+    const { strategyType, strategySettings } = selectedStrategySettings.search;
+    carbonEvents.strategy.strategyDirectionChange({
+      baseToken: base,
+      quoteToken: quote,
+      strategyDirection: strategyDirection,
+      strategySettings,
+      strategyType,
+    });
   }, [strategyDirection]);
 
   const handleExpertMode = useCallback(() => {
@@ -71,7 +73,7 @@ export const CreateStrategyOrders = ({
       });
     }
 
-    if (strategySettings === 'range' || strategySettings === 'custom') {
+    if (strategySettings === 'range') {
       return openModal('createStratExpertMode', {
         onClose: () =>
           navigate({
@@ -106,10 +108,10 @@ export const CreateStrategyOrders = ({
     >
       <m.header
         variants={items}
-        key={'createStrategyBuyTokens'}
-        className={'flex flex-col gap-10 rounded-10 bg-silver p-20'}
+        key="createStrategyBuyTokens"
+        className="flex flex-col gap-10 rounded-10 bg-silver p-20"
       >
-        <div className={'flex gap-10'}>
+        <div className="flex gap-10">
           <TokensOverlap className="h-32 w-32" tokens={[base!, quote!]} />
           <div>
             <h2 className="flex gap-6 text-14">
@@ -122,40 +124,43 @@ export const CreateStrategyOrders = ({
             <div className="text-secondary capitalize">{strategyType}</div>
           </div>
         </div>
-        <p
-          className={'flex items-center text-12 font-weight-400 text-white/60'}
-        >
-          <IconWarning className={'ml-6 mr-10 w-14 flex-shrink-0'} /> Rebasing
+        <p className="flex items-center text-12 font-weight-400 text-white/60">
+          <IconWarning className="ml-6 mr-10 w-14 flex-shrink-0" /> Rebasing and
           and fee-on-transfer tokens are not supported
         </p>
       </m.header>
 
-      {(strategyDirection === 'buy' || !strategyDirection) && (
-        <BuySellBlock
-          key={'createStrategyBuyOrder'}
-          base={base!}
-          quote={quote!}
-          order={order0}
-          buy
-          tokenBalanceQuery={token1BalanceQuery}
-          isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-          strategyType={strategyType}
-          isOrdersOverlap={isOrdersOverlap}
-        />
+      {strategySettings === 'symmetric' && <CreateSymmetricStrategy />}
+      {strategySettings !== 'symmetric' && (
+        <>
+          {(strategyDirection === 'buy' || !strategyDirection) && (
+            <BuySellBlock
+              key="createStrategyBuyOrder"
+              base={base!}
+              quote={quote!}
+              order={order0}
+              buy
+              tokenBalanceQuery={token1BalanceQuery}
+              isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+              strategyType={strategyType}
+              isOrdersOverlap={isOrdersOverlap}
+            />
+          )}
+          {(strategyDirection === 'sell' || !strategyDirection) && (
+            <BuySellBlock
+              key="createStrategySellOrder"
+              base={base!}
+              quote={quote!}
+              order={order1}
+              tokenBalanceQuery={token0BalanceQuery}
+              isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+              strategyType={strategyType}
+              isOrdersOverlap={isOrdersOverlap}
+            />
+          )}
+        </>
       )}
-      {(strategyDirection === 'sell' || !strategyDirection) && (
-        <BuySellBlock
-          key={'createStrategySellOrder'}
-          base={base!}
-          quote={quote!}
-          order={order1}
-          tokenBalanceQuery={token0BalanceQuery}
-          isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-          strategyType={strategyType}
-          isOrdersOverlap={isOrdersOverlap}
-        />
-      )}
-      <m.div variants={items} key={'createStrategyCTA'}>
+      <m.div variants={items} key="createStrategyCTA">
         <Button
           type="submit"
           variant={'success'}

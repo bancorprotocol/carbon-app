@@ -11,7 +11,7 @@ import { MarketPricePercentage } from 'components/strategies/marketPriceIndicati
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
-export type StrategySettings = 'limit' | 'range' | 'custom';
+export type StrategySettings = 'limit' | 'range' | 'symmetric';
 
 export type StrategyCreateLocationGenerics = MakeGenerics<{
   Search: {

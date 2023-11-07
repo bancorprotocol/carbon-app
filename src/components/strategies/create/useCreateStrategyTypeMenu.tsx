@@ -10,7 +10,7 @@ import { ReactComponent as IconSellRange } from 'assets/icons/sell-range.svg';
 import { ReactComponent as IconSellLimit } from 'assets/icons/sell-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconTwoLimits } from 'assets/icons/two-limits.svg';
-import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strategy.svg';
+import { ReactComponent as IconSymmetricStrategy } from 'assets/icons/symmetric-strategy.svg';
 
 type StrategyTypeItem = {
   label: string;
@@ -54,7 +54,7 @@ export const useCreateStrategyTypeMenu = (
     () => [
       {
         label: '2 Limits',
-        svg: <IconTwoLimits className={'w-60'} />,
+        svg: <IconTwoLimits className="w-60" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -66,7 +66,7 @@ export const useCreateStrategyTypeMenu = (
       },
       {
         label: '2 Ranges',
-        svg: <IconTwoRanges className={'w-60'} />,
+        svg: <IconTwoRanges className="w-60" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -74,16 +74,17 @@ export const useCreateStrategyTypeMenu = (
           strategyType: 'recurring',
           strategySettings: 'range',
         },
+        isRecommended: true,
       },
       {
-        label: 'Custom',
-        svg: <IconCustomStrategy className={'w-60'} />,
+        label: 'Symmetric',
+        svg: <IconSymmetricStrategy className="w-60" />,
         to: PathNames.createStrategy,
         search: {
           base,
           quote,
           strategyType: 'recurring',
-          strategySettings: 'custom',
+          strategySettings: 'symmetric',
         },
       },
     ],
@@ -94,7 +95,7 @@ export const useCreateStrategyTypeMenu = (
     () => [
       {
         label: 'Buy Limit',
-        svg: <IconBuyLimit className={'w-60 text-green'} />,
+        svg: <IconBuyLimit className="w-60 text-green" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -107,7 +108,7 @@ export const useCreateStrategyTypeMenu = (
       },
       {
         label: 'Sell Limit',
-        svg: <IconSellLimit className={'w-60 text-red'} />,
+        svg: <IconSellLimit className="w-60 text-red" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -120,7 +121,7 @@ export const useCreateStrategyTypeMenu = (
       },
       {
         label: 'Buy Range',
-        svg: <IconBuyRange className={'w-60 text-green'} />,
+        svg: <IconBuyRange className="w-60 text-green" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -132,7 +133,7 @@ export const useCreateStrategyTypeMenu = (
       },
       {
         label: 'Sell Range',
-        svg: <IconSellRange className={'w-60 text-red'} />,
+        svg: <IconSellRange className="w-60 text-red" />,
         to: PathNames.createStrategy,
         search: {
           base,

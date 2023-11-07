@@ -23,19 +23,13 @@ const BlockIconTextDesc = ({
   description: string;
 }) => {
   return (
-    <div className={'flex items-center space-x-20'}>
-      <div
-        className={
-          'flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-6 bg-white/25'
-        }
-      >
+    <div className="flex items-center space-x-20">
+      <div className="flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-6 bg-white/25">
         {icon}
       </div>
-      <div className={'flex-shrink space-y-6'}>
-        <div className={'text-14 font-weight-500'}>{title}</div>
-        <div className={'min-h-[32px] text-12 text-white/60'}>
-          {description}
-        </div>
+      <div className="flex-shrink space-y-6">
+        <div className="text-14 font-weight-500">{title}</div>
+        <div className="min-h-[32px] text-12 text-white/60">{description}</div>
       </div>
     </div>
   );
@@ -69,8 +63,8 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     <>
       <m.div
         variants={items}
-        className={'space-y-20 rounded-10 bg-silver p-20'}
-        key={'createStrategyTypeMenu'}
+        className="space-y-20 rounded-10 bg-silver p-20"
+        key="createStrategyTypeMenu"
       >
         <h2>Strategy Type</h2>
         <TabsMenu>
@@ -91,7 +85,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         <div>
           {strategyType === 'recurring' &&
             BlockIconTextDesc({
-              icon: <IconArrows className={'h-18 w-18'} />,
+              icon: <IconArrows className="h-18 w-18" />,
               title: 'Automated Linked Orders',
               description:
                 'Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.',
@@ -118,11 +112,10 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                   </span>
                 )}
                 <Button
-                  variant={'black'}
+                  variant="black"
                   onClick={() => {
                     if (
-                      (search.strategySettings === 'range' ||
-                        search.strategySettings === 'custom') &&
+                      search.strategySettings === 'range' &&
                       !lsService.getItem('hasSeenCreateStratExpertMode')
                     ) {
                       openModal('createStratExpertMode', {
@@ -145,7 +138,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                   )}
                 >
                   {svg}
-                  <span className={'mt-10 text-14'}>{label}</span>
+                  <span className="mt-10 text-14">{label}</span>
                 </Button>
               </div>
             )

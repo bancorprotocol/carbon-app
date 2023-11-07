@@ -9,6 +9,7 @@ import { MarketPriceIndication } from 'components/strategies/marketPriceIndicati
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 type InputLimitProps = {
+  id?: string;
   price: string;
   setPrice: (value: string) => void;
   token: Token;
@@ -19,6 +20,7 @@ type InputLimitProps = {
 };
 
 export const InputLimit: FC<InputLimitProps> = ({
+  id,
   price,
   setPrice,
   token,
@@ -56,10 +58,10 @@ export const InputLimit: FC<InputLimitProps> = ({
           focus-within:border-white/50
           ${error ? '!border-red/50' : 'border-black'} 
         `}
-        onClick={() => document.getElementById(inputId)?.focus()}
+        onClick={() => document.getElementById(id ?? inputId)?.focus()}
       >
         <input
-          id={inputId}
+          id={id ?? inputId}
           type="text"
           pattern={decimalNumberValidationRegex}
           inputMode="decimal"
@@ -85,7 +87,7 @@ export const InputLimit: FC<InputLimitProps> = ({
       </div>
       {error && (
         <output
-          htmlFor={inputId}
+          htmlFor={id ?? inputId}
           role="alert"
           aria-live="polite"
           className="flex items-center gap-10 font-mono text-12 text-red"
