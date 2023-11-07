@@ -7,7 +7,6 @@ import { MainMenu, MobileMenu } from 'components/core/menu';
 import { MainContent } from 'components/core/MainContent';
 import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
-import { RootRoute } from '@tanstack/react-router';
 
 let didInit = false;
 
@@ -45,7 +44,3 @@ export const App = () => {
     </>
   );
 };
-
-export const appRoute = new RootRoute({
-  component: App,
-});

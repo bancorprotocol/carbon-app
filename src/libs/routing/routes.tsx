@@ -6,8 +6,8 @@ import { DebugPage } from 'pages/debug';
 import { TermsPage } from 'pages/terms';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
-import { appRoute } from 'App';
-import { Navigate, Route } from '@tanstack/react-router';
+import { App } from 'App';
+import { Navigate, RootRoute, Route } from '@tanstack/react-router';
 import { PathNames } from './pathnames';
 import { ExplorerTypePage } from 'pages/explorer/type';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
@@ -33,6 +33,10 @@ export const externalLinks = {
   duneDashboard: 'https://dune.com/bancor/carbon-by-bancor',
   roiLearnMore: 'https://faq.carbondefi.xyz/strategy-roi-and-apr',
 };
+
+export const appRoute = new RootRoute({
+  component: App,
+});
 
 const termPage = new Route({
   getParentRoute: () => appRoute,
