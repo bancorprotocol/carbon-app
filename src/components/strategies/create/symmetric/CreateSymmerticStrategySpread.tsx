@@ -41,7 +41,7 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
         onKeyDown={onKeyDown}
       >
         {options.map((option) => (
-          <div className={styles.spreadOption}>
+          <div key={option} className={styles.spreadOption}>
             <input
               id={'spread-' + option}
               name="spreadppm"
@@ -54,7 +54,7 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             />
             <label
               htmlFor={'spread-' + option}
-              className="cursor-pointer rounded bg-black p-16 text-center text-white/40"
+              className="block cursor-pointer rounded bg-black p-16 text-center text-white/40"
             >
               {option}%
             </label>
