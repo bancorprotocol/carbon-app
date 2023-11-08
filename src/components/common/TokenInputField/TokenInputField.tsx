@@ -69,7 +69,7 @@ export const TokenInputField: FC<Props> = ({
   return (
     <div
       className={`
-        flex cursor-text flex-col gap-8 border-2 border-black p-16
+        flex cursor-text flex-col gap-8 border border-black p-16
         focus-within:border-white/50
         ${isError ? '!border-red/50' : ''}
         ${className}
