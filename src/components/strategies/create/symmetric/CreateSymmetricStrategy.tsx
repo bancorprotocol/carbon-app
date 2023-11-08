@@ -80,7 +80,10 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             1
           </span>
           <h3 className="flex-1 text-18 font-weight-500">
-            Set Price Range ({quote?.symbol} per {base?.symbol})
+            Set Price Range&nbsp;
+            <span className="text-white/40">
+              ({quote?.symbol} per {base?.symbol})
+            </span>
           </h3>
           {/* TODO add tooltip text here */}
           <Tooltip element={''}>
@@ -95,6 +98,8 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             max={order0.max}
             setMin={order0.setMin}
             setMax={order0.setMax}
+            minLabel="Min Buy Price"
+            maxLabel="Max Sell Price"
             error={order0.rangeError}
             warnings={priceWarnings}
             setRangeError={order0.setRangeError}

@@ -12,8 +12,10 @@ import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon
 
 type InputRangeProps = {
   min: string;
+  minLabel?: string;
   setMin: (value: string) => void;
   max: string;
+  maxLabel?: string;
   setMax: (value: string) => void;
   quote: Token;
   base: Token;
@@ -26,8 +28,10 @@ type InputRangeProps = {
 
 export const InputRange: FC<InputRangeProps> = ({
   min,
+  minLabel = 'Min',
   setMin,
   max,
+  maxLabel = 'Max',
   setMax,
   quote,
   base,
@@ -93,7 +97,9 @@ export const InputRange: FC<InputRangeProps> = ({
               base.symbol
             } at.`}
           >
-            <div className="mb-5 text-12 text-white/60">Min</div>
+            <label htmlFor={inputMinId} className="mb-5 text-12 text-white/60">
+              {minLabel}
+            </label>
           </Tooltip>
           <input
             id={inputMinId}
@@ -101,7 +107,6 @@ export const InputRange: FC<InputRangeProps> = ({
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={min}
-            aria-label="Minimum price"
             placeholder="Enter Price"
             className={`
               mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
@@ -136,7 +141,9 @@ export const InputRange: FC<InputRangeProps> = ({
               base.symbol
             } at.`}
           >
-            <div className="mb-5 text-12 text-white/60">Max</div>
+            <label htmlFor={inputMinId} className="mb-5 text-12 text-white/60">
+              {maxLabel}
+            </label>
           </Tooltip>
           <input
             id={inputMaxId}
@@ -144,7 +151,6 @@ export const InputRange: FC<InputRangeProps> = ({
             pattern={decimalNumberValidationRegex}
             inputMode="decimal"
             value={max}
-            aria-label="Maximum price"
             placeholder="Enter Price"
             className={`
               mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
