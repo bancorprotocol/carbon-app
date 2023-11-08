@@ -8,6 +8,7 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 type InputRangeProps = {
   min: string;
@@ -18,6 +19,7 @@ type InputRangeProps = {
   base: Token;
   buy?: boolean;
   error?: string;
+  warnings?: string[];
   setRangeError: (error: string) => void;
   marketPricePercentages: MarketPricePercentage;
 };
@@ -33,20 +35,24 @@ export const InputRange: FC<InputRangeProps> = ({
   setRangeError,
   buy = false,
   marketPricePercentages,
+  warnings,
 }) => {
   const inputMinId = useId();
   const inputMaxId = useId();
-  const errorMessage = 'Max price must be higher than min price and not zero';
+  const errorMinMax = 'Maximum price must be higher than the minimum price';
+  const errorAboveZero = 'Price must be greater than 0';
+  const showWarning = !error && warnings?.length;
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     const minValue = Number(e.target.value);
     setMin(sanitizeNumberInput(e.target.value));
     if (!!max && (minValue <= 0 || minValue >= +max)) {
+      const message = minValue <= 0 ? errorAboveZero : errorMinMax;
       carbonEvents.strategy.strategyErrorShow({
         buy,
-        message: errorMessage,
+        message,
       });
-      setRangeError(errorMessage);
+      setRangeError(message);
     } else {
       setRangeError('');
     }
@@ -56,11 +62,12 @@ export const InputRange: FC<InputRangeProps> = ({
     const maxValue = Number(e.target.value);
     setMax(sanitizeNumberInput(e.target.value));
     if (!!min && (+min <= 0 || +min >= maxValue)) {
+      const message = +min <= 0 ? errorAboveZero : errorMinMax;
       carbonEvents.strategy.strategyErrorShow({
         buy,
-        message: errorMessage,
+        message: message,
       });
-      setRangeError(errorMessage);
+      setRangeError(message);
     } else {
       setRangeError('');
     }
@@ -73,9 +80,10 @@ export const InputRange: FC<InputRangeProps> = ({
       <div className="grid grid-cols-2 gap-6">
         <div
           className={`
-            bg-body w-full cursor-text rounded-r-4 rounded-l-16 border-2 p-16
-            focus-within:border-white/50
-            ${error ? '!border-red/50' : 'border-black'}
+            bg-body w-full cursor-text rounded-r-4 rounded-l-16 border border-black p-16
+            focus-within:border-white/50 
+            ${error ? '!border-red/50' : ''}
+            ${showWarning ? '!border-warning-400' : ''}
           `}
           onClick={() => document.getElementById(inputMinId)?.focus()}
         >
@@ -115,9 +123,10 @@ export const InputRange: FC<InputRangeProps> = ({
         </div>
         <div
           className={`
-            bg-body w-full cursor-text rounded-r-16 rounded-l-4 border-2 border-black p-16
+            bg-body w-full cursor-text rounded-r-16 rounded-l-4 border border-black p-16
             focus-within:border-white/50
             ${error ? '!border-red/50' : ''}
+            ${showWarning ? '!border-warning-400' : ''}
           `}
           onClick={() => document.getElementById(inputMaxId)?.focus()}
         >
@@ -127,7 +136,7 @@ export const InputRange: FC<InputRangeProps> = ({
               base.symbol
             } at.`}
           >
-            <div className={'mb-5 text-12 text-white/60'}>Max</div>
+            <div className="mb-5 text-12 text-white/60">Max</div>
           </Tooltip>
           <input
             id={inputMaxId}
@@ -156,7 +165,7 @@ export const InputRange: FC<InputRangeProps> = ({
           </div>
         </div>
       </div>
-      {error && (
+      {error ? (
         <output
           htmlFor={`${inputMinId} ${inputMaxId}`}
           role="alert"
@@ -166,6 +175,10 @@ export const InputRange: FC<InputRangeProps> = ({
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">{error}</span>
         </output>
+      ) : (
+        warnings?.map((warning, i) => (
+          <WarningMessageWithIcon key={i} message={warning} />
+        ))
       )}
     </>
   );

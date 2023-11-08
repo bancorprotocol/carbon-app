@@ -1,7 +1,6 @@
 import { useRef, FC, KeyboardEvent, Dispatch, SetStateAction } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn } from 'utils/helpers';
-import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import styles from './CreateSymmerticStrategySpread.module.css';
 
 interface Props {
@@ -76,17 +75,16 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             name="spreadppm"
             type="number"
             inputMode="decimal"
-            min="0.0001"
+            min="0"
             max="10"
-            step="0.01"
-            pattern={decimalNumberValidationRegex}
+            step="0.1"
             aria-label="Set custom"
             placeholder="Set custom"
             tabIndex={inOptions ? -1 : 0}
             // Use valueAsNumber to not trigger invalid warning
             onFocus={(e) => setSpreadPPM(e.target.valueAsNumber)}
             // Use Number(value) to trigger invalid warning
-            onBlur={(e) => setSpreadPPM(Number(e.target.value))}
+            onChange={(e) => setSpreadPPM(Number(e.target.value))}
           />
           <span className={styles.suffix}>%</span>
         </div>

@@ -1,6 +1,9 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication';
+import {
+  MarketPricePercentage,
+  useMarketIndication,
+} from 'components/strategies/marketPriceIndication';
 import { CreateSymmerticStrategySpread } from './CreateSymmerticStrategySpread';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { InputRange } from '../BuySellBlock/InputRange';
@@ -21,6 +24,14 @@ export interface SymmetricStrategyProps {
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
 
+const getPriceWarnings = ({ min, max }: MarketPricePercentage): string[] => {
+  const aboveOrBelowMarket = min.gt(0) || max.lt(0);
+  if (!aboveOrBelowMarket) return [];
+  return [
+    'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.',
+  ];
+};
+
 export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
   const { base, quote, order0, spreadPPM, setSpreadPPM } = props;
   const { marketPricePercentage } = useMarketIndication({
@@ -29,6 +40,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
     order: order0,
     buy: true,
   });
+  const priceWarnings = getPriceWarnings(marketPricePercentage);
 
   return (
     <>
@@ -83,6 +95,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             setMin={order0.setMin}
             setMax={order0.setMax}
             error={order0.rangeError}
+            warnings={priceWarnings}
             setRangeError={order0.setRangeError}
             marketPricePercentages={marketPricePercentage}
           />
