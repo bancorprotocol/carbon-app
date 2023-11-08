@@ -28,7 +28,6 @@ export const TradePage = () => {
   const noTokens = !baseToken && !quoteToken;
 
   useEffect(() => {
-    console.log({ search });
     if (search.base && search.quote) return;
     navigate({ search: { ...search, ...getLastVisitedPair() } });
   }, [search, navigate]);
