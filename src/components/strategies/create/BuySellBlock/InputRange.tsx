@@ -141,7 +141,7 @@ export const InputRange: FC<InputRangeProps> = ({
               base.symbol
             } at.`}
           >
-            <label htmlFor={inputMinId} className="mb-5 text-12 text-white/60">
+            <label htmlFor={inputMaxId} className="mb-5 text-12 text-white/60">
               {maxLabel}
             </label>
           </Tooltip>
