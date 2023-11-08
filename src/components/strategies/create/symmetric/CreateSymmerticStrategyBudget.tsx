@@ -27,22 +27,22 @@ export const CreateSymmerticStrategyBudget: FC<SymmetricStrategyProps> = (
   if (minAboveMarket) {
     return (
       <>
-        <TokenBudget token={base} order={order0} query={token0BalanceQuery} />
+        <TokenBudget token={base} order={order1} query={token0BalanceQuery} />
         <Explaination base={base} buy />
       </>
     );
   } else if (maxBelowMarket) {
     return (
       <>
-        <TokenBudget token={quote} order={order1} query={token1BalanceQuery} />
+        <TokenBudget token={quote} order={order0} query={token1BalanceQuery} />
         <Explaination base={base} />
       </>
     );
   } else {
     return (
       <>
-        <TokenBudget token={quote} order={order1} query={token1BalanceQuery} />
-        <TokenBudget token={base} order={order0} query={token0BalanceQuery} />
+        <TokenBudget token={quote} order={order0} query={token1BalanceQuery} />
+        <TokenBudget token={base} order={order1} query={token0BalanceQuery} />
       </>
     );
   }
