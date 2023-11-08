@@ -37,7 +37,7 @@ export const handleStrategySettings = (
 
 export const handleStrategyDirection = (
   strategyDirection: 'buy' | 'sell' | undefined,
-  strategySettings: 'limit' | 'range' | 'symmetric' | undefined,
+  strategySettings: StrategySettings | undefined,
   order1: OrderWithSetters,
   order0: OrderWithSetters
 ) => {

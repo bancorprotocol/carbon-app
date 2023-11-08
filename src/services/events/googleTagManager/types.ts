@@ -1,3 +1,4 @@
+import { StrategySettings } from 'components/strategies/create/types';
 import { EventExplorerSchema } from '../explorerEvents';
 import { EventGeneralSchema } from '../generalEvents';
 import { EventNavigationSchema } from '../navigationEvents';
@@ -55,7 +56,7 @@ export interface StrategyGTMEventTypeBase {
   strategy_quote_token: string;
   strategy_type?: 'recurring' | 'disposable';
   strategy_direction?: 'buy' | 'sell' | undefined;
-  strategy_settings?: 'limit' | 'range' | 'custom';
+  strategy_settings?: StrategySettings;
 }
 
 export interface StrategyBuyGTMEventType {

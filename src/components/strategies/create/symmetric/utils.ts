@@ -6,6 +6,7 @@ interface SymmetricStrategy {
   order1: OrderCreate;
   spreadPPM: number;
 }
+// TODO: Remove budget if minAboveMarket or maxBelowMarket
 export const prepareSymmetricOrders = (props: SymmetricStrategy) => {
   const { order0, order1, spreadPPM } = props;
   const min = new BigNumber(order0.min);
