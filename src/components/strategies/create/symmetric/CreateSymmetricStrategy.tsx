@@ -87,9 +87,10 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        {base && (
+        {base && quote && (
           <InputRange
-            token={base}
+            base={base}
+            quote={quote}
             min={order0.min}
             max={order0.max}
             setMin={order0.setMin}
