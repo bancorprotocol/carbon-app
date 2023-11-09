@@ -5,13 +5,15 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import BigNumber from 'bignumber.js';
 import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
-import { useComparePrice } from 'hooks/useComparePrice';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
+import BigNumber from 'bignumber.js';
 
-export const CreateSymmerticStrategyBudget: FC<SymmetricStrategyProps> = (
-  props
-) => {
+interface Props extends SymmetricStrategyProps {
+  marketPricePercentage: MarketPricePercentage;
+}
+
+export const CreateSymmerticStrategyBudget: FC<Props> = (props) => {
   const {
     base,
     quote,
@@ -19,19 +21,18 @@ export const CreateSymmerticStrategyBudget: FC<SymmetricStrategyProps> = (
     order1,
     token0BalanceQuery,
     token1BalanceQuery,
+    marketPricePercentage,
   } = props;
-  const { baseFiat, quoteFiat } = useComparePrice({ base, quote });
-  // Note: in the context of symmetric strategy order0 is same as order1
-  const minAboveMarket = baseFiat.lt(quoteFiat.times(order0.min));
-  const maxBelowMarket = baseFiat.gt(quoteFiat.times(order0.max));
-  if (minAboveMarket) {
+  const maxBelowMarket = marketPricePercentage.max.lt(0);
+  const minAboveMarket = marketPricePercentage.min.gt(0);
+  if (maxBelowMarket) {
     return (
       <>
         <TokenBudget token={base} order={order1} query={token0BalanceQuery} />
         <Explaination base={base} buy />
       </>
     );
-  } else if (maxBelowMarket) {
+  } else if (minAboveMarket) {
     return (
       <>
         <TokenBudget token={quote} order={order0} query={token1BalanceQuery} />

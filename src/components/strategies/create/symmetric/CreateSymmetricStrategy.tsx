@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import {
   MarketPricePercentage,
@@ -12,6 +12,8 @@ import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
 import { UseQueryResult } from '@tanstack/react-query';
 import { CreateSymmerticStrategyBudget } from './CreateSymmerticStrategyBudget';
+import { CreateSymmerticStrategyGraph } from './CreateSymmerticStrategyGraph';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 export interface SymmetricStrategyProps {
   base?: Token;
@@ -34,6 +36,7 @@ const getPriceWarnings = ({ min, max }: MarketPricePercentage): string[] => {
 
 export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
   const { base, quote, order0, spreadPPM, setSpreadPPM } = props;
+  const marketPrice = useMarketPrice({ base, quote });
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
@@ -41,6 +44,14 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
     buy: true,
   });
   const priceWarnings = getPriceWarnings(marketPricePercentage);
+
+  // Initialize order
+  useEffect(() => {
+    // TODO: check why marketPrice is 0
+    order0.setMin(marketPrice.times(0.999).toString());
+    order0.setMax(marketPrice.times(1.001).toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -72,7 +83,10 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <svg></svg>
+        <CreateSymmerticStrategyGraph
+          {...props}
+          marketPrice={marketPrice.toNumber()}
+        />
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8">
@@ -135,7 +149,10 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <CreateSymmerticStrategyBudget {...props} />
+        <CreateSymmerticStrategyBudget
+          {...props}
+          marketPricePercentage={marketPricePercentage}
+        />
       </article>
     </>
   );

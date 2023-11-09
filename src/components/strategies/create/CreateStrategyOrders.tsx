@@ -132,7 +132,7 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {strategySettings === 'symmetric' && (
+      {strategySettings === 'symmetric' && base && quote && (
         <CreateSymmetricStrategy
           base={base}
           quote={quote}
