@@ -1,4 +1,11 @@
-import { FC, MouseEvent as ReactMouseEvent } from 'react';
+import {
+  FC,
+  MouseEvent as ReactMouseEvent,
+  WheelEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
 import { prettifyNumber } from 'utils/helpers';
 import BigNumber from 'bignumber.js';
@@ -19,14 +26,14 @@ interface GetPointConfig {
   marginalSell: number;
 }
 
-const getBoundaries = (props: Props) => {
+const getBoundaries = (props: Props, zoom: number) => {
   const min = new BigNumber(props.order0.min || '0');
   const max = new BigNumber(props.order0.max || '0');
   const marketPrice = new BigNumber(props.marketPrice);
   const minMean = marketPrice.lt(min) ? marketPrice : min;
   const maxMean = marketPrice.gt(max) ? marketPrice : max;
   const mean = minMean.plus(maxMean).div(2);
-  const padding = maxMean.minus(minMean).times(0.1);
+  const padding = maxMean.minus(minMean).times(zoom);
   return {
     left: minMean.minus(padding),
     right: maxMean.plus(padding),
@@ -108,8 +115,10 @@ const getMarginalSellPoint = (config: GetPointConfig) => {
 };
 
 export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
+  const svg = useRef<SVGSVGElement>(null);
+  const [zoom, setZoom] = useState(0.4);
   const { marketPrice, quote, order0, spreadPPM } = props;
-  const { left, right, mean, meanLeft, meanRight } = getBoundaries(props);
+  const { left, right, mean, meanLeft, meanRight } = getBoundaries(props, zoom);
 
   const baseWidth = right.minus(left);
   const width = baseWidth.toNumber();
@@ -237,10 +246,25 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     document.removeEventListener('mouseup', dragEnd);
   };
 
+  const onWheel = (e: WheelEvent) => {
+    const delta = e.deltaY / (10 * Math.abs(e.deltaY));
+    const value = Math.max(0.2, Math.min(zoom + delta, 0.8));
+    setZoom(value);
+  };
+  useEffect(() => {
+    const ref = svg.current;
+    const handler = (e: Event) => e.preventDefault();
+    ref?.addEventListener('wheel', handler, { passive: false });
+    return () => ref?.removeEventListener('wheel', handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <svg
+      ref={svg}
       className="aspect-[400/250] w-full rounded bg-black font-mono"
       viewBox={`${left} 0 ${width} ${height}`}
+      onWheel={onWheel}
     >
       {/* Pattern */}
       <defs>
