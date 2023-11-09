@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, MouseEvent as ReactMouseEvent } from 'react';
 import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
 import { prettifyNumber } from 'utils/helpers';
 import BigNumber from 'bignumber.js';
@@ -171,8 +171,8 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const spread = ((max - min) * spreadPPM) / 100;
   const buyMax = max - spread;
   const sellMin = min + spread;
-  const marginalBuy = Math.min(marketPrice - spread, buyMax);
-  const marginalSell = Math.max(marketPrice + spread, sellMin);
+  const marginalBuy = Math.min(marketPrice - spread / 2, buyMax);
+  const marginalSell = Math.max(marketPrice + spread / 2, sellMin);
   const config = {
     top,
     middle,
@@ -188,6 +188,43 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const marginalBuyPoints = getMarginalBuyPoint(config);
   const sellPoints = getSellPoint(config);
   const marginalSellPoints = getMarginalSellPoint(config);
+
+  let draggedHandler: 'buy' | 'sell' | undefined;
+  const position: Partial<{ buy: number; sell: number }> = {};
+  const translateHandler = (translate: number) => {
+    const g = document.getElementById(`${draggedHandler}-handler`);
+    g?.style.setProperty('transform', `translateX(${translate * ratio}px)`);
+  };
+  const dragStart = (e: ReactMouseEvent, mode: 'buy' | 'sell') => {
+    position[mode] ||= e.clientX;
+    draggedHandler = mode;
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+  };
+  const drag = (e: MouseEvent) => {
+    if (!draggedHandler) return;
+    position[draggedHandler] ||= 0;
+    const initialPosition = position[draggedHandler] ?? 0;
+    translateHandler(e.clientX - initialPosition);
+  };
+  const dragEnd = (e: MouseEvent) => {
+    if (draggedHandler) {
+      const initialPosition = position[draggedHandler] ?? 0;
+      const delta = e.clientX - initialPosition;
+      if (draggedHandler === 'buy') {
+        const min = Number(order0.min) + delta * ratio;
+        order0.setMin(min.toString());
+      } else {
+        const max = Number(order0.max) + delta * ratio;
+        order0.setMax(max.toString());
+      }
+      position[draggedHandler] = 0;
+      translateHandler(0);
+      draggedHandler = undefined;
+    }
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', dragEnd);
+  };
 
   return (
     <svg
@@ -245,42 +282,6 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
 
       {/* Buy */}
       <g>
-        <g className="buy-handler">
-          <rect
-            x={min - 11 * ratio}
-            y={top - 1 * ratio}
-            width={12 * ratio}
-            height={24 * ratio}
-            fill="#00B578"
-            rx={4 * ratio}
-          />
-          <line
-            x1={min - 7 * ratio}
-            x2={min - 7 * ratio}
-            y1={top + 19 * ratio}
-            y2={top + 4 * ratio}
-            stroke="black"
-            strokeOpacity="0.5"
-            strokeWidth={ratio}
-          />
-          <line
-            x1={min - 3 * ratio}
-            x2={min - 3 * ratio}
-            y1={top + 19 * ratio}
-            y2={top + 4 * ratio}
-            stroke="black"
-            strokeOpacity="0.5"
-            strokeWidth={ratio}
-          />
-        </g>
-        <line
-          x1={min}
-          x2={min}
-          y1={bottom}
-          y2={top + 20 * ratio}
-          stroke="#00B578"
-          strokeWidth={2 * ratio}
-        />
         {buyPoints && (
           <polygon points={buyPoints} fill="#00B578" fillOpacity="0.35" />
         )}
@@ -314,42 +315,6 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
         {marginalSellPoints && (
           <polygon points={marginalSellPoints} fill="url(#sell-pattern)" />
         )}
-        <line
-          x1={max}
-          x2={max}
-          y1={bottom}
-          y2={top + 20 * ratio}
-          stroke="#D86371"
-          strokeWidth={2 * ratio}
-        />
-        <g className="sell-handler">
-          <rect
-            x={max - 1 * ratio}
-            y={top - 1 * ratio}
-            width={12 * ratio}
-            height={24 * ratio}
-            fill="#D86371"
-            rx={4 * ratio}
-          />
-          <line
-            x1={max + 7 * ratio}
-            x2={max + 7 * ratio}
-            y1={top + 19 * ratio}
-            y2={top + 4 * ratio}
-            stroke="black"
-            strokeOpacity="0.5"
-            strokeWidth={ratio}
-          />
-          <line
-            x1={max + 3 * ratio}
-            x2={max + 3 * ratio}
-            y1={top + 19 * ratio}
-            y2={top + 4 * ratio}
-            stroke="black"
-            strokeOpacity="0.5"
-            strokeWidth={ratio}
-          />
-        </g>
       </g>
       {/* Price line */}
       <g>
@@ -389,6 +354,88 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
         <text {...marketIndicator.text} fill="white">
           {marketValue}
         </text>
+      </g>
+
+      {/* Handlers: must be at the end to always be above the graph */}
+      <g
+        id="buy-handler"
+        className="cursor-ew-resize"
+        onMouseDown={(e) => dragStart(e, 'buy')}
+      >
+        <rect
+          x={min - 11 * ratio}
+          y={top - 1 * ratio}
+          width={12 * ratio}
+          height={24 * ratio}
+          fill="#00B578"
+          rx={4 * ratio}
+        />
+        <line
+          x1={min - 7 * ratio}
+          x2={min - 7 * ratio}
+          y1={top + 19 * ratio}
+          y2={top + 4 * ratio}
+          stroke="black"
+          strokeOpacity="0.5"
+          strokeWidth={ratio}
+        />
+        <line
+          x1={min - 3 * ratio}
+          x2={min - 3 * ratio}
+          y1={top + 19 * ratio}
+          y2={top + 4 * ratio}
+          stroke="black"
+          strokeOpacity="0.5"
+          strokeWidth={ratio}
+        />
+        <line
+          x1={min}
+          x2={min}
+          y1={bottom}
+          y2={top + 20 * ratio}
+          stroke="#00B578"
+          strokeWidth={2 * ratio}
+        />
+      </g>
+      <g
+        id="sell-handler"
+        className="cursor-ew-resize"
+        onMouseDown={(e) => dragStart(e, 'sell')}
+      >
+        <rect
+          x={max - 1 * ratio}
+          y={top - 1 * ratio}
+          width={12 * ratio}
+          height={24 * ratio}
+          fill="#D86371"
+          rx={4 * ratio}
+        />
+        <line
+          x1={max + 7 * ratio}
+          x2={max + 7 * ratio}
+          y1={top + 19 * ratio}
+          y2={top + 4 * ratio}
+          stroke="black"
+          strokeOpacity="0.5"
+          strokeWidth={ratio}
+        />
+        <line
+          x1={max + 3 * ratio}
+          x2={max + 3 * ratio}
+          y1={top + 19 * ratio}
+          y2={top + 4 * ratio}
+          stroke="black"
+          strokeOpacity="0.5"
+          strokeWidth={ratio}
+        />
+        <line
+          x1={max}
+          x2={max}
+          y1={bottom}
+          y2={top + 20 * ratio}
+          stroke="#D86371"
+          strokeWidth={2 * ratio}
+        />
       </g>
     </svg>
   );

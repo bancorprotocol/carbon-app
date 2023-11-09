@@ -82,10 +82,8 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             aria-label="Set custom"
             placeholder="Set custom"
             tabIndex={inOptions ? -1 : 0}
-            // Use valueAsNumber to not trigger invalid warning
-            onFocus={(e) => setSpreadPPM(e.target.valueAsNumber)}
-            // Use Number(value) to trigger invalid warning
-            onChange={(e) => setSpreadPPM(Number(e.target.value))}
+            onFocus={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
+            onChange={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
           />
           <span className={styles.suffix}>%</span>
         </div>
