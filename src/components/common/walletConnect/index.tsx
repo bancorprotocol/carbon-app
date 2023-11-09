@@ -1,5 +1,5 @@
 import { items } from './items';
-import { Link } from '@tanstack/react-location';
+import { Link } from 'libs/routing';
 import { buttonStyles } from '../button/buttonStyles';
 
 export const WalletConnect = () => {

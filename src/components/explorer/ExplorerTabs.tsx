@@ -1,6 +1,5 @@
 import { useExplorerParams } from './useExplorerParams';
-import { useLocation } from '@tanstack/react-location';
-import { PathNames } from 'libs/routing';
+import { PathNames, useRouterState } from 'libs/routing';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -15,7 +14,8 @@ export const ExplorerTabs = () => {
   const { slug, type } = useExplorerParams();
 
   // To support emojis in ens domains
-  const pathname = decodeURIComponent(useLocation().current.pathname);
+  const { location } = useRouterState();
+  const pathname = decodeURIComponent(location.pathname);
 
   const tabs: StrategyTab[] = [
     {

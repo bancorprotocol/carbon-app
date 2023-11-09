@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { carbonEvents } from 'services/events';
-import { useLocation } from 'libs/routing';
 import { m } from 'libs/motion';
+import { useRouter } from 'libs/routing';
 import { items } from 'components/strategies/create/variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { ForwardArrow } from 'components/common/forwardArrow';
@@ -14,10 +14,7 @@ export const CreateStrategyHeader = ({
   setShowGraph,
   strategyDirection,
 }: UseStrategyCreateReturn) => {
-  const {
-    history: { back },
-  } = useLocation();
-
+  const { history } = useRouter();
   const title = useMemo(() => {
     if (!showOrders) {
       return 'Create Strategy';
@@ -40,7 +37,7 @@ export const CreateStrategyHeader = ({
       )}
     >
       <button
-        onClick={() => back()}
+        onClick={() => history.back()}
         className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
       >
         <ForwardArrow className="h-18 w-18 rotate-180" />
