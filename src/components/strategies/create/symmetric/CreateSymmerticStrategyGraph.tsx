@@ -189,28 +189,39 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const sellPoints = getSellPoint(config);
   const marginalSellPoints = getMarginalSellPoint(config);
 
+  ///////////////
+  // Draggable //
+  ///////////////
+
   let draggedHandler: 'buy' | 'sell' | undefined;
-  const position: Partial<{ buy: number; sell: number }> = {};
+  let initialPosition = 0;
+  let minMaxDelta = (max - min) / ratio;
+
+  const getDelta = (e: MouseEvent) => {
+    return draggedHandler === 'buy'
+      ? Math.min(e.clientX - initialPosition, minMaxDelta)
+      : Math.max(e.clientX - initialPosition, -minMaxDelta);
+  };
+
   const translateHandler = (translate: number) => {
     const g = document.getElementById(`${draggedHandler}-handler`);
     g?.style.setProperty('transform', `translateX(${translate * ratio}px)`);
   };
+
   const dragStart = (e: ReactMouseEvent, mode: 'buy' | 'sell') => {
-    position[mode] ||= e.clientX;
+    initialPosition ||= e.clientX;
     draggedHandler = mode;
     document.addEventListener('mousemove', drag);
     document.addEventListener('mouseup', dragEnd);
   };
   const drag = (e: MouseEvent) => {
     if (!draggedHandler) return;
-    position[draggedHandler] ||= 0;
-    const initialPosition = position[draggedHandler] ?? 0;
-    translateHandler(e.clientX - initialPosition);
+    const delta = getDelta(e);
+    translateHandler(delta);
   };
   const dragEnd = (e: MouseEvent) => {
     if (draggedHandler) {
-      const initialPosition = position[draggedHandler] ?? 0;
-      const delta = e.clientX - initialPosition;
+      const delta = getDelta(e);
       if (draggedHandler === 'buy') {
         const min = Number(order0.min) + delta * ratio;
         order0.setMin(min.toString());
@@ -218,8 +229,8 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
         const max = Number(order0.max) + delta * ratio;
         order0.setMax(max.toString());
       }
-      position[draggedHandler] = 0;
       translateHandler(0);
+      initialPosition = 0;
       draggedHandler = undefined;
     }
     document.removeEventListener('mousemove', drag);
