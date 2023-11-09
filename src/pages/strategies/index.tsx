@@ -9,15 +9,13 @@ import { StrategyPageTitleWidget } from 'components/strategies/overview/Strategy
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
-import { Outlet, PathNames, useLocation } from 'libs/routing';
+import { Outlet, PathNames, useRouterState } from 'libs/routing';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
 
 export const StrategiesPage = () => {
-  const {
-    current: { pathname },
-  } = useLocation();
+  const { pathname } = useRouterState().location;
   const { belowBreakpoint } = useBreakpoints();
   const { user } = useWeb3();
   const query = useGetUserStrategies({ user });

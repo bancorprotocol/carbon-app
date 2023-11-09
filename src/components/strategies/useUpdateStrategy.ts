@@ -1,5 +1,4 @@
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { useNotifications } from 'hooks/useNotifications';
 import {
   QueryKey,
@@ -18,7 +17,7 @@ export const useUpdateStrategy = () => {
   const { dispatchNotification } = useNotifications();
   const updateMutation = useUpdateStrategyQuery();
   const cache = useQueryClient();
-  const navigate = useNavigate<MyLocationGenerics>();
+  const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const pauseStrategy = async (

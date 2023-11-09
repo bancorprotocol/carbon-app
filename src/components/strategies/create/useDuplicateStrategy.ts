@@ -1,11 +1,9 @@
-import { MakeGenerics, PathNames, useNavigate, useSearch } from 'libs/routing';
+import { PathNames, useNavigate, useSearch } from 'libs/routing';
 import { Strategy } from 'libs/queries';
 
-type MyLocationGenerics = MakeGenerics<{
-  Search: {
-    strategy: string;
-  };
-}>;
+interface MyLocationSearch {
+  strategy: string;
+}
 
 const isValid = (strategy: Strategy) => {
   return (
@@ -34,8 +32,8 @@ const decodeStrategyAndValidate = (
 };
 
 export const useDuplicateStrategy = () => {
-  const navigate = useNavigate<MyLocationGenerics>();
-  const search = useSearch<MyLocationGenerics>();
+  const navigate = useNavigate();
+  const search: MyLocationSearch = useSearch({ strict: false });
   const { strategy: urlStrategy } = search;
 
   const duplicate = (strategy: Partial<Strategy>) => {

@@ -2,9 +2,8 @@ import { FC } from 'react';
 import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
-import { PathNames, useMatch, useNavigate } from 'libs/routing';
+import { PathNames, useNavigate, useParams } from 'libs/routing';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
-import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
@@ -18,10 +17,10 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
-import { ExplorerRouteGenerics } from 'components/explorer';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
+import { ExplorerParams } from 'components/explorer/utils';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -48,12 +47,10 @@ export const StrategyBlockManage: FC<Props> = ({
   const { strategies, sort, filter } = useStrategyCtx();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
-  const navigate = useNavigate<EditStrategyLocationGenerics>();
+  const navigate = useNavigate();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-  const {
-    params: { type, slug },
-  } = useMatch<ExplorerRouteGenerics>();
+  const { type, slug }: ExplorerParams = useParams({ strict: false });
 
   const owner = useGetVoucherOwner(
     manage && type === 'token-pair' ? strategy.id : undefined
