@@ -70,7 +70,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         buy,
         buyToken: target,
         sellToken: source,
-        valueUsd: getFiatValueSource(targetInput, true).toString(),
+        valueUsd: getFiatValueSource(sourceInput, true).toString(),
         message: errorMsgTarget || '',
       });
 
