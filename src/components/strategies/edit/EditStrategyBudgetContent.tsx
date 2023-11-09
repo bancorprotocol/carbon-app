@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
-import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { Strategy } from 'libs/queries';
+import { useRouter } from 'libs/routing';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { EditStrategyBudgetBuySellBlock } from './EditStrategyBudgetBuySellBlock';
@@ -26,6 +26,7 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
+  const { history } = useRouter();
   const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
     useUpdateStrategy();
 
@@ -54,10 +55,6 @@ export const EditStrategyBudgetContent = ({
 
   const { approval } = useEditStrategy(strategy, order0, order1);
   const { openModal } = useModal();
-
-  const {
-    history: { back },
-  } = useLocation();
 
   const calculatedOrder0Budget = !!order0.budget
     ? new BigNumber(strategy.order0.balance)?.[
@@ -168,7 +165,7 @@ export const EditStrategyBudgetContent = ({
   return (
     <form
       onSubmit={(e) => handleOnActionClick(e)}
-      onReset={() => back()}
+      onReset={() => history.back()}
       className="flex w-full flex-col gap-20 text-center font-weight-500 md:w-[400px]"
     >
       <EditStrategyOverlapTokens strategy={strategy} />

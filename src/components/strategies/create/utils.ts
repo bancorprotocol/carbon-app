@@ -4,12 +4,12 @@ import {
   StrategySettings,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
-import { PathNames, useNavigate } from 'libs/routing';
+import { PathNames } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
+import { NavigateOptions } from '@tanstack/react-router';
 
 export const handleStrategySettings = (
   strategySettings?: StrategySettings,
@@ -122,11 +122,11 @@ export const createStrategyAction = async ({
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
-  navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
+  navigate?: (opts: NavigateOptions) => Promise<void>
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
-    navigate && navigate({ to: PathNames.strategies });
+    navigate?.({ to: PathNames.strategies });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };

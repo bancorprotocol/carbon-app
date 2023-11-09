@@ -1,9 +1,9 @@
 import { FormEvent, useMemo } from 'react';
-import { useLocation } from 'libs/routing';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Strategy } from 'libs/queries';
+import { useRouter } from 'libs/routing';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
 import { carbonEvents } from 'services/events';
@@ -22,6 +22,7 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
+  const { history } = useRouter();
   const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
   const isAwaiting = updateMutation.isLoading;
@@ -42,9 +43,6 @@ export const EditStrategyPricesContent = ({
     return checkIfOrdersOverlap(order0, order1);
   }, [order0, order1]);
 
-  const {
-    history: { back },
-  } = useLocation();
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
     quote: strategy.quote,
@@ -86,7 +84,7 @@ export const EditStrategyPricesContent = ({
             order1: newOrder1,
           },
           () =>
-            carbonEvents.strategyEdit.strategyChangeRates({
+            carbonEvents.strategyEdit.strategyEditPrices({
               ...strategyEventData,
               strategyId: strategy.id,
             })
@@ -108,7 +106,7 @@ export const EditStrategyPricesContent = ({
   return (
     <form
       onSubmit={(e) => handleOnActionClick(e)}
-      onReset={() => back()}
+      onReset={() => history.back()}
       className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -135,7 +133,7 @@ export const EditStrategyPricesContent = ({
         disabled={!isOrderValid(order0) || !isOrderValid(order1)}
         loading={isLoading}
         loadingChildren={loadingChildren}
-        variant={'white'}
+        variant="white"
         size="lg"
         fullWidth
       >

@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import { PathNames, useNavigate } from 'libs/routing';
 import {
-  StrategyCreateLocationGenerics,
+  StrategyCreateSearch,
   StrategyType,
 } from 'components/strategies/create/types';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
@@ -15,7 +15,7 @@ import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strate
 type StrategyTypeItem = {
   label: string;
   to: string;
-  search: StrategyCreateLocationGenerics['Search'];
+  search: StrategyCreateSearch;
   isRecommended?: boolean;
 };
 
@@ -148,7 +148,7 @@ export const useCreateStrategyTypeMenu = (
 
   const handleClick = (
     to: string,
-    search: StrategyCreateLocationGenerics['Search'],
+    search: StrategyCreateSearch,
     replace?: boolean
   ) => {
     navigate({ to, search, replace });

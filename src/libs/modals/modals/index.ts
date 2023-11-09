@@ -27,9 +27,9 @@ import {
   ModalTradeRoutingData,
 } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRouting';
 import {
-  ModalConfirmStrategy,
-  ModalConfirmStrategyData,
-} from './ModalConfirmStrategy/ModalConfirmStrategy';
+  ModalConfirmPause,
+  ModalConfirmPauseData,
+} from './ModalConfirmStrategy/ModalConfirmPause';
 import { ModalBurgerMenu } from './ModalBurgerMenu';
 import { ModalRestrictedCountry } from 'libs/modals/modals/ModalRestrictedCountry';
 import {
@@ -48,6 +48,14 @@ import {
   ModalDuplicateStrategy,
   ModalDuplicateStrategyData,
 } from './ModalDuplicateStrategy';
+import {
+  ModalConfirmWithdraw,
+  ModalConfirmWithdrawData,
+} from './ModalConfirmStrategy/ModalConfirmWithdraw';
+import {
+  ModalConfirmDelete,
+  ModalConfirmDeleteData,
+} from './ModalConfirmStrategy/ModalConfirmDelete';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -59,13 +67,15 @@ export interface ModalSchema {
   notifications: undefined;
   tradeSettings: ModalTradeSettingsData;
   tradeRouting: ModalTradeRoutingData;
-  confirmStrategy: ModalConfirmStrategyData;
   burgerMenu: undefined;
   restrictedCountry: undefined;
   genericInfo: ModalGenericInfoData;
   createStratExpertMode: ModalCreateStratExpertModeData;
   manageNotifications: ModalManageNotificationsData;
   duplicateStrategy: ModalDuplicateStrategyData;
+  confirmPauseStrategy: ModalConfirmPauseData;
+  confirmWithdrawStrategy: ModalConfirmWithdrawData;
+  confirmDeleteStrategy: ModalConfirmDeleteData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -80,11 +90,13 @@ export const MODAL_COMPONENTS: TModals = {
   tradeTokenList: (props) => ModalTradeTokenList(props),
   tradeSettings: (props) => ModalTradeSettings(props),
   tradeRouting: (props) => ModalTradeRouting(props),
-  confirmStrategy: (props) => ModalConfirmStrategy(props),
   burgerMenu: (props) => ModalBurgerMenu(props),
   restrictedCountry: (props) => ModalRestrictedCountry(props),
   genericInfo: (props) => ModalGenericInfo(props),
   createStratExpertMode: (props) => ModalCreateStratExpertMode(props),
   manageNotifications: (props) => ModalManageNotifications(props),
   duplicateStrategy: (props) => ModalDuplicateStrategy(props),
+  confirmPauseStrategy: (props) => ModalConfirmPause(props),
+  confirmWithdrawStrategy: (props) => ModalConfirmWithdraw(props),
+  confirmDeleteStrategy: (props) => ModalConfirmDelete(props),
 };

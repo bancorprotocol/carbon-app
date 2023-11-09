@@ -1,8 +1,9 @@
 import { carbonEvents } from 'services/events';
-import { useLocation } from 'libs/routing';
 import { EditTypes } from './EditStrategyMain';
+import { useRouter } from 'libs/routing';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
+import { cn } from 'utils/helpers';
 
 type EditStrategyHeaderProps = {
   showGraph: boolean;
@@ -15,10 +16,7 @@ export const EditStrategyHeader = ({
   setShowGraph,
   type,
 }: EditStrategyHeaderProps) => {
-  const {
-    history: { back },
-  } = useLocation();
-
+  const { history } = useRouter();
   const titleByType: { [key in EditTypes]: string } = {
     renew: 'Renew Strategy',
     editPrices: 'Edit Prices',
@@ -27,33 +25,32 @@ export const EditStrategyHeader = ({
   };
 
   return (
-    <div
-      className={`flex w-full flex-row justify-between ${
+    <header
+      className={cn(
+        'flex w-full items-center gap-16',
         showGraph ? '' : 'md:w-[400px]'
-      }`}
+      )}
     >
-      <div className="flex items-center gap-16 text-24">
-        <button
-          onClick={() => back()}
-          className="h-40 w-40 rounded-full bg-emphasis"
-        >
-          <div className="rotate-180">
-            <ForwardArrow className="mx-auto w-14" />
-          </div>
-        </button>
+      <button
+        onClick={() => history.back()}
+        className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
+      >
+        <ForwardArrow className="h-18 w-18 rotate-180" />
+      </button>
+      <h1 className="flex-1 text-24 font-weight-500">
         {type && titleByType[type]}
-      </div>
+      </h1>
       {!showGraph && (
         <button
           onClick={() => {
             carbonEvents.strategy.strategyChartOpen(undefined);
             setShowGraph(true);
           }}
-          className="h-40 w-40 self-end rounded-full bg-emphasis"
+          className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
         >
-          <IconCandles className="mx-auto w-14" />
+          <IconCandles className="h-18 w-18" />
         </button>
       )}
-    </div>
+    </header>
   );
 };

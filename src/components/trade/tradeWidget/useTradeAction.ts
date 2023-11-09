@@ -42,7 +42,7 @@ export const useTradeAction = ({
   const calcMinReturn = useCallback(
     (amount: string) => {
       const slippageBn = new BigNumber(slippage).div(100);
-      return new BigNumber(1).minus(slippageBn).times(amount).toString();
+      return new BigNumber(1).minus(slippageBn).times(amount).toFixed();
     },
     [slippage]
   );
@@ -50,7 +50,7 @@ export const useTradeAction = ({
   const calcMaxInput = useCallback(
     (amount: string) => {
       const slippageBn = new BigNumber(slippage).div(100);
-      return new BigNumber(1).plus(slippageBn).times(amount).toString();
+      return new BigNumber(1).plus(slippageBn).times(amount).toFixed();
     },
     [slippage]
   );
@@ -114,6 +114,7 @@ export const useTradeAction = ({
         void cache.invalidateQueries(QueryKey.balance(user, source.address));
         void cache.invalidateQueries(QueryKey.balance(user, target.address));
       } catch (error) {
+        console.error(error);
         setIsAwaiting(false);
       }
     },

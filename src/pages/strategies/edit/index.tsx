@@ -1,5 +1,4 @@
 import { EditStrategyMain } from 'components/strategies/edit';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { PathNames, useNavigate } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { useEffect } from 'react';
@@ -11,7 +10,7 @@ export const EditStrategyPage = () => {
   const {
     strategies: { strategyToEdit },
   } = useStore();
-  const navigate = useNavigate<MyLocationGenerics>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user || !strategyToEdit) {

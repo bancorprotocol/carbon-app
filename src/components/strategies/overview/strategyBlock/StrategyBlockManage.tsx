@@ -2,8 +2,7 @@ import { FC } from 'react';
 import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
-import { PathNames, useMatch, useNavigate } from 'libs/routing';
-import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
+import { PathNames, useNavigate, useParams } from 'libs/routing';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
@@ -17,9 +16,10 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
-import { ExplorerRouteGenerics } from 'components/explorer';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { strategyEditEvents } from 'services/events/strategyEditEvents';
+import { ExplorerParams } from 'components/explorer/utils';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -45,12 +45,10 @@ export const StrategyBlockManage: FC<Props> = ({
 }) => {
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
-  const navigate = useNavigate<EditStrategyLocationGenerics>();
+  const navigate = useNavigate();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-  const {
-    params: { type, slug },
-  } = useMatch<ExplorerRouteGenerics>();
+  const { type, slug }: ExplorerParams = useParams({ strict: false });
 
   const owner = useGetVoucherOwner(
     manage && type === 'token-pair' ? strategy.id : undefined
@@ -110,10 +108,13 @@ export const StrategyBlockManage: FC<Props> = ({
   if (!isExplorer) {
     items.push({
       id: 'editPrices',
-      name: 'Edit Rates',
+      name: 'Edit Prices',
       action: () => {
         setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyChangeRatesClick(strategyEvent);
+        carbonEvents.strategyEdit.strategyEditPricesClick({
+          origin: 'manage',
+          ...strategyEvent,
+        });
         navigate({
           to: PathNames.editStrategy,
           search: { type: 'editPrices' },
@@ -142,12 +143,8 @@ export const StrategyBlockManage: FC<Props> = ({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
         action: () => {
-          setStrategyToEdit(strategy);
+          openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
           carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
-          navigate({
-            to: PathNames.editStrategy,
-            search: { type: 'withdraw' },
-          });
         },
       });
     }
@@ -161,7 +158,7 @@ export const StrategyBlockManage: FC<Props> = ({
         name: 'Pause Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyPauseClick(strategyEvent);
-          openModal('confirmStrategy', { strategy, type: 'pause' });
+          openModal('confirmPauseStrategy', { strategy, strategyEvent });
         },
       });
     }
@@ -186,7 +183,7 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Delete Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDeleteClick(strategyEvent);
-        openModal('confirmStrategy', { strategy, type: 'delete' });
+        openModal('confirmDeleteStrategy', { strategy, strategyEvent });
       },
     });
   }
@@ -204,6 +201,8 @@ export const StrategyBlockManage: FC<Props> = ({
             if (isExplorer) {
               const baseEvent = { type, slug, strategies, sort, filter };
               explorerEvents.manageClick({ ...baseEvent, strategyEvent });
+            } else {
+              strategyEditEvents.strategyManageClick(strategyEvent);
             }
           }}
           role="menuitem"

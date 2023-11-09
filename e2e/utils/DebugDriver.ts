@@ -22,3 +22,11 @@ export const setupImposter = async (
     // Example: await waitFor(page, 'balance-DAI');
   }
 };
+
+export class DebugDriver {
+  constructor(private page: Page) {}
+
+  getBalance(token: string) {
+    return this.page.getByTestId(`balance-${token}`);
+  }
+}

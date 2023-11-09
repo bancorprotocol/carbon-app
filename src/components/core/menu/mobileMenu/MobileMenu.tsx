@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'libs/routing';
+import { Link, useRouterState } from 'libs/routing';
 import { isPathnameMatch } from 'utils/helpers';
 import { handleOnItemClick } from '../utils';
 import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
@@ -6,7 +6,7 @@ import { useModal } from 'hooks/useModal';
 import { menuItems } from 'components/core/menu/menuItems';
 
 export const MobileMenu = () => {
-  const location = useLocation();
+  const { location } = useRouterState();
   const { openModal } = useModal();
 
   return (
@@ -17,7 +17,7 @@ export const MobileMenu = () => {
           onClick={() => handleOnItemClick(href)}
           to={href}
           className={`px-3 py-3 ${
-            isPathnameMatch(location.current.pathname, href, hrefMatches)
+            isPathnameMatch(location.pathname, href, hrefMatches)
               ? 'text-white'
               : 'hover:text-white'
           }`}
