@@ -48,7 +48,9 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
   // Initialize order
   useEffect(() => {
     // TODO: only trigger the effect once
-    if (marketPrice && order0.min === '0' && order0.max === '0') {
+    const hasMin = !!order0.min && order0.min !== '0';
+    const hasMax = !!order0.max && order0.max !== '0';
+    if (marketPrice.gt(0) && !hasMin && !hasMax) {
       order0.setMin(marketPrice.times(0.999).toString());
       order0.setMax(marketPrice.times(1.001).toString());
     }
