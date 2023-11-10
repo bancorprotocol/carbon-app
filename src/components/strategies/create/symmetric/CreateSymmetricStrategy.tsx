@@ -47,11 +47,13 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
 
   // Initialize order
   useEffect(() => {
-    // TODO: check why marketPrice is 0
-    order0.setMin(marketPrice.times(0.999).toString());
-    order0.setMax(marketPrice.times(1.001).toString());
+    // TODO: only trigger the effect once
+    if (marketPrice && order0.min === '0' && order0.max === '0') {
+      order0.setMin(marketPrice.times(0.999).toString());
+      order0.setMax(marketPrice.times(1.001).toString());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [marketPrice]);
 
   return (
     <>

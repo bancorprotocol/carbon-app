@@ -34,16 +34,6 @@ const getBoundaries = (props: Props, zoom: number) => {
   };
 };
 
-interface GetPointConfig {
-  bottom: number;
-  middle: number;
-  top: number;
-  min: number;
-  max: number;
-  marketPrice: number;
-  spreadPPM: number;
-}
-
 interface PointConfig {
   bottom: number;
   middle: number;
@@ -241,13 +231,6 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     'marginal-sell-polygon': getMarginalSellPoint,
   };
 
-  const dragStart = (e: ReactMouseEvent, mode: 'buy' | 'sell') => {
-    initialPosition = e.clientX;
-    draggedHandler = mode;
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', dragEnd);
-  };
-
   // Get new min & max based on current handler
   const updateMinMax = (e: MouseEvent) => {
     const delta = getDelta(e);
@@ -264,14 +247,23 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     }
   };
 
+  const dragStart = (e: ReactMouseEvent, mode: 'buy' | 'sell') => {
+    initialPosition = e.clientX;
+    draggedHandler = mode;
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+  };
+
   const drag = (e: MouseEvent) => {
     if (!draggedHandler) return;
     const { newMin, newMax } = updateMinMax(e);
+
+    // Translate handlers
     translateHandler('buy', newMin - min);
     translateHandler('sell', newMax - max);
-    const config = getPointConfig({ min: newMin, max: newMax });
 
     // Update points
+    const config = getPointConfig({ min: newMin, max: newMax });
     for (const [id, update] of Object.entries(updatePoints)) {
       document.getElementById(id)?.setAttribute('points', update(config));
     }
@@ -377,21 +369,17 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
 
       {/* Buy */}
       <g>
-        {buyPoints && (
-          <polygon
-            id="buy-polygon"
-            points={buyPoints}
-            fill="#00B578"
-            fillOpacity="0.35"
-          />
-        )}
-        {marginalBuyPoints && (
-          <polygon
-            id="marginal-buy-polygon"
-            points={marginalBuyPoints}
-            fill="url(#buy-pattern)"
-          />
-        )}
+        <polygon
+          id="buy-polygon"
+          points={buyPoints}
+          fill="#00B578"
+          fillOpacity="0.35"
+        />
+        <polygon
+          id="marginal-buy-polygon"
+          points={marginalBuyPoints}
+          fill="url(#buy-pattern)"
+        />
         <line
           id="buy-max-line"
           x1={buyMax}
@@ -414,22 +402,17 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
           stroke="#D86371"
           strokeWidth={2 * ratio}
         />
-        {sellPoints && (
-          <polygon
-            id="sell-polygon"
-            points={sellPoints}
-            fill="#D86371"
-            fillOpacity="0.35"
-          />
-        )}
-        {/* Sell marginal price */}
-        {marginalSellPoints && (
-          <polygon
-            id="marginal-sell-polygon"
-            points={marginalSellPoints}
-            fill="url(#sell-pattern)"
-          />
-        )}
+        <polygon
+          id="sell-polygon"
+          points={sellPoints}
+          fill="#D86371"
+          fillOpacity="0.35"
+        />
+        <polygon
+          id="marginal-sell-polygon"
+          points={marginalSellPoints}
+          fill="url(#sell-pattern)"
+        />
       </g>
       {/* Price line */}
       <g>
