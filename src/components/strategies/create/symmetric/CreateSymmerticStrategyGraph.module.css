@@ -1,0 +1,9 @@
+.handler-tooltip {
+  opacity: 0;
+}
+.graph.drag .handler-tooltip {
+  opacity: 1;
+}
+.handler:hover .handler-tooltip {
+  opacity: 1;
+}

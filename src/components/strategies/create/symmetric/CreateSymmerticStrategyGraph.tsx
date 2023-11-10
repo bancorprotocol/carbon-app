@@ -7,11 +7,17 @@ import {
   useState,
 } from 'react';
 import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
-import { prettifyNumber } from 'utils/helpers';
+import { cn, prettifyNumber } from 'utils/helpers';
+import {
+  MarketPricePercentage,
+  getMarketPricePercentage,
+} from 'components/strategies/marketPriceIndication';
 import BigNumber from 'bignumber.js';
+import styles from './CreateSymmerticStrategyGraph.module.css';
 
 interface Props extends SymmetricStrategyProps {
   marketPrice: number;
+  marketPricePercentage: MarketPricePercentage;
 }
 
 const clamp = (min: number, value: number, max: number) =>
@@ -120,6 +126,7 @@ const getMarginalSellPoint = (config: PointConfig) => {
 export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
+  const [dragging, setDragging] = useState('');
   const { marketPrice, quote, order0, spreadPPM } = props;
   const { left, right, mean, meanLeft, meanRight } = getBoundaries(props, zoom);
 
@@ -151,9 +158,9 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
 
   // Market price
   const marketValue = `${prettifyNumber(marketPrice)} ${quote?.symbol}`;
-  const fontRatio = 1 / 2;
+  const fontRatio = fontSize / 2;
   const padding = 4 * ratio;
-  const rectWidth = marketValue.length * (fontSize * fontRatio) + 4 * padding;
+  const rectWidth = marketValue.length * fontRatio + 4 * padding;
   const rectLeft = marketPrice - rectWidth / 2;
   const rectTop = bottom - (172 + 16) * ratio;
   const marketIndicator = {
@@ -201,11 +208,59 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     max: Number(order0.max),
   });
   const { min, max, sellMin, buyMax } = config;
+  const minValue = prettifyNumber(min);
+  const minPercent = getMarketPricePercentage(props.marketPricePercentage.min);
+  const maxValue = prettifyNumber(max);
+  const maxPercent = getMarketPricePercentage(props.marketPricePercentage.max);
 
   const buyPoints = getBuyPoint(config);
   const marginalBuyPoints = getMarginalBuyPoint(config);
   const sellPoints = getSellPoint(config);
   const marginalSellPoints = getMarginalSellPoint(config);
+
+  /////////////
+  // TOOLTIP //
+  /////////////
+  const buyTooltipTextLength = Math.max(minValue.length, minPercent.length + 1);
+  const buyTooltipWidth = buyTooltipTextLength * fontRatio + 4 * padding;
+  const buyTooltip = {
+    rect: {
+      x: min - buyTooltipWidth / 2,
+      y: top - 3 * fontSize - 4 * padding,
+      width: buyTooltipWidth,
+      height: 2 * fontSize + 4 * padding,
+      fill: '#212123',
+      rx: 4 * ratio,
+    },
+    text: {
+      x: min,
+      fontSize: fontSize,
+      fill: 'white',
+      textAnchor: 'middle',
+    },
+  };
+
+  const sellTooltipTextLength = Math.max(
+    maxValue.length,
+    maxPercent.length + 1
+  );
+  const sellTooltipWidth = sellTooltipTextLength * fontRatio + 4 * padding;
+  const sellTooltip = {
+    rect: {
+      x: max - sellTooltipWidth / 2,
+      y: top - 3 * fontSize - 4 * padding,
+      width: sellTooltipWidth,
+      height: 2 * fontSize + 4 * padding,
+      fill: '#212123',
+      rx: 4 * ratio,
+    },
+    text: {
+      x: max,
+      fontSize: fontSize,
+      fill: 'white',
+      textAnchor: 'middle',
+    },
+  };
 
   ///////////////
   // Draggable //
@@ -250,6 +305,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const dragStart = (e: ReactMouseEvent, mode: 'buy' | 'sell') => {
     initialPosition = e.clientX;
     draggedHandler = mode;
+    setDragging(styles.drag);
     document.addEventListener('mousemove', drag);
     document.addEventListener('mouseup', dragEnd);
   };
@@ -275,10 +331,22 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     const sellMinLine = document.getElementById('sell-min-line');
     sellMinLine?.setAttribute('x1', config.sellMin.toString());
     sellMinLine?.setAttribute('x2', config.sellMin.toString());
+
+    // Update tooltip
+    const priceSelector = `#${draggedHandler}-handler .tooltip-price`;
+    const tooltipPrice = document.querySelector(priceSelector);
+    const priceValue = draggedHandler === 'buy' ? newMin : newMax;
+    if (tooltipPrice) tooltipPrice.textContent = prettifyNumber(priceValue);
+    const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
+    const tooltipPercent = document.querySelector(percentSelector);
+    const percent = (100 * (priceValue - marketPrice)) / marketPrice;
+    const percentValue = getMarketPricePercentage(new BigNumber(percent));
+    if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
   };
 
   const dragEnd = (e: MouseEvent) => {
     if (draggedHandler) {
+      setDragging('');
       const { newMin, newMax } = updateMinMax(e);
       order0.setMin(newMin.toString());
       order0.setMax(newMax.toString());
@@ -314,7 +382,11 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   return (
     <svg
       ref={svg}
-      className="aspect-[400/250] w-full rounded bg-black font-mono"
+      className={cn(
+        styles.graph,
+        dragging,
+        'aspect-[400/250] w-full rounded bg-black font-mono'
+      )}
       viewBox={`${left} 0 ${width} ${height}`}
       onWheel={onWheel}
     >
@@ -457,9 +529,27 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
       {/* Handlers: must be at the end to always be above the graph */}
       <g
         id="buy-handler"
-        className="cursor-ew-resize"
+        className={cn(styles.handler, 'cursor-ew-resize')}
         onMouseDown={(e) => dragStart(e, 'buy')}
       >
+        <g className={styles.handlerTooltip}>
+          <rect {...buyTooltip.rect} />
+          <text
+            className="tooltip-price"
+            y={top - 2 * fontSize - 3 * padding}
+            {...buyTooltip.text}
+          >
+            {minValue}
+          </text>
+          <text
+            className="tooltip-percent"
+            y={top - 1 * fontSize - 2 * padding}
+            fillOpacity="0.4"
+            {...buyTooltip.text}
+          >
+            {minPercent}%
+          </text>
+        </g>
         <rect
           x={min - 11 * ratio}
           y={top - 1 * ratio}
@@ -497,9 +587,27 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
       </g>
       <g
         id="sell-handler"
-        className="cursor-ew-resize"
+        className={cn(styles.handler, 'cursor-ew-resize')}
         onMouseDown={(e) => dragStart(e, 'sell')}
       >
+        <g className={styles.handlerTooltip}>
+          <rect {...sellTooltip.rect} />
+          <text
+            className="tooltip-price"
+            y={top - 2 * fontSize - 3 * padding}
+            {...sellTooltip.text}
+          >
+            {maxValue}
+          </text>
+          <text
+            className="tooltip-percent"
+            y={top - 1 * fontSize - 2 * padding}
+            fillOpacity="0.4"
+            {...sellTooltip.text}
+          >
+            {maxPercent}%
+          </text>
+        </g>
         <rect
           x={max - 1 * ratio}
           y={top - 1 * ratio}

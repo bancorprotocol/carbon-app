@@ -90,6 +90,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
         <CreateSymmerticStrategyGraph
           {...props}
           marketPrice={marketPrice.toNumber()}
+          marketPricePercentage={marketPricePercentage}
         />
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
