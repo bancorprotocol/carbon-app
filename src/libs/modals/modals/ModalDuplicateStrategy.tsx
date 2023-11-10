@@ -5,8 +5,6 @@ import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateS
 import { Strategy } from 'libs/queries';
 import { ReactComponent as IconCut } from 'assets/icons/cut.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
-import { buttonStyles } from 'components/common/button/buttonStyles';
-import { cn } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import Decimal from 'decimal.js';
 
@@ -85,13 +83,11 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
           </div>
           <h3 className="text-14 font-weight-500">{title}</h3>
           <Button
+            variant="white"
             type="button"
             onClick={onClick}
             aria-label={title.toLowerCase()}
-            className={cn(
-              'row-span-2 self-center',
-              buttonStyles({ variant: 'white' })
-            )}
+            className="row-span-2 self-center"
           >
             Select
           </Button>
