@@ -370,8 +370,9 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   //////////////
 
   const onWheel = (e: WheelEvent) => {
+    if (!e.deltaY) return;
     const delta = e.deltaY / (10 * Math.abs(e.deltaY));
-    const value = Math.max(0.2, Math.min(zoom + delta, 0.8));
+    const value = clamp(0.2, zoom + delta, 0.8);
     setZoom(value);
   };
   // onWheel doesn't support preventDefault as it's a passive event.
