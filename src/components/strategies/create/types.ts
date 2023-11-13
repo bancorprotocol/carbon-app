@@ -1,4 +1,3 @@
-import { MakeGenerics, useNavigate } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { QueryClient, UseMutationResult } from '@tanstack/react-query';
 import { TransactionResponse } from '@ethersproject/providers';
@@ -8,20 +7,19 @@ import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { NavigateOptions } from '@tanstack/react-router';
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
 export type StrategySettings = 'limit' | 'range' | 'symmetric';
 
-export type StrategyCreateLocationGenerics = MakeGenerics<{
-  Search: {
-    base?: string;
-    quote?: string;
-    strategyType?: StrategyType;
-    strategyDirection?: StrategyDirection;
-    strategySettings?: StrategySettings;
-  };
-}>;
+export interface StrategyCreateSearch {
+  base?: string;
+  quote?: string;
+  strategyType?: StrategyType;
+  strategyDirection?: StrategyDirection;
+  strategySettings?: StrategySettings;
+}
 
 export type OrderWithSetters = {
   setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
@@ -44,7 +42,7 @@ export type CreateStrategyActionProps = Pick<
     unknown
   >;
   dispatchNotification: DispatchNotification;
-  navigate: ReturnType<typeof useNavigate<StrategyCreateLocationGenerics>>;
+  navigate: (opts: NavigateOptions) => Promise<void>;
   setIsProcessing: Dispatch<SetStateAction<boolean>>;
   strategyEventData: StrategyEventType & {
     buyMarketPricePercentage: MarketPricePercentage;

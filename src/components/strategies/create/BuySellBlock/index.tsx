@@ -6,7 +6,6 @@ import { UseQueryResult } from 'libs/queries';
 import { LimitRangeSection } from './LimitRangeSection';
 import { LogoImager } from 'components/common/imager/Imager';
 import {
-  StrategyCreateLocationGenerics,
   StrategyDirection,
   StrategyType,
 } from 'components/strategies/create/types';
@@ -41,7 +40,7 @@ export const BuySellBlock: FC<Props> = ({
   isOrdersOverlap,
 }) => {
   const titleId = useId();
-  const navigate = useNavigate<StrategyCreateLocationGenerics>();
+  const navigate = useNavigate();
 
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'

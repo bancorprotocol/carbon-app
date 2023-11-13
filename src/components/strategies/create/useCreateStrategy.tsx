@@ -15,7 +15,7 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
-import { StrategyCreateLocationGenerics } from 'components/strategies/create/types';
+import { StrategyCreateSearch } from 'components/strategies/create/types';
 import {
   handleStrategyDirection,
   handleStrategySettings,
@@ -33,7 +33,7 @@ export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 export const useCreateStrategy = () => {
   const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
-  const navigate = useNavigate<StrategyCreateLocationGenerics>();
+  const navigate = useNavigate();
   const { user, provider } = useWeb3();
   const { openModal } = useModal();
   const [spreadPPM, setSpreadPPM] = useState(0.05);
@@ -69,7 +69,7 @@ export const useCreateStrategy = () => {
 
   const mutation = useCreateStrategyQuery();
 
-  const search = useSearch<StrategyCreateLocationGenerics>();
+  const search: StrategyCreateSearch = useSearch({ strict: false });
   const {
     base: baseAddress,
     quote: quoteAddress,
@@ -81,7 +81,7 @@ export const useCreateStrategy = () => {
   const [selectedStrategySettings, setSelectedStrategySettings] = useState<
     | {
         to: string;
-        search: StrategyCreateLocationGenerics['Search'];
+        search: StrategyCreateSearch;
       }
     | undefined
   >();
@@ -217,7 +217,11 @@ export const useCreateStrategy = () => {
 
       navigate({
         to: PathNames.createStrategy,
-        search: (search) => ({ ...search, base: b, quote: q }),
+        search: (search: StrategyCreateSearch) => ({
+          ...search,
+          base: b,
+          quote: q,
+        }),
         replace: true,
       });
       order0.resetFields();

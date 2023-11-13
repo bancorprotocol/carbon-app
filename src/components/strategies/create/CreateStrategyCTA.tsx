@@ -1,5 +1,5 @@
 import { Button } from 'components/common/button';
-import { Link, PathNames, useLocation } from 'libs/routing';
+import { Link, PathNames, useRouterState } from 'libs/routing';
 import { carbonEvents } from 'services/events';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { isPathnameMatch } from 'utils/helpers';
@@ -19,9 +19,7 @@ export const CreateStrategyCTA = () => {
 };
 
 export const CreateStrategyCTAMobile = () => {
-  const {
-    current: { pathname },
-  } = useLocation();
+  const { pathname } = useRouterState().location;
 
   const showCTA = isPathnameMatch(pathname, '/', [
     PathNames.strategies,
