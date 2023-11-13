@@ -32,3 +32,11 @@ export const waitFor = async (page: Page, testId: string, timeout = 10_000) => {
   await locator.waitFor({ state: 'visible', timeout });
   return locator;
 };
+
+const numberFormatter = Intl.NumberFormat('en');
+const currencyFormatter = Intl.NumberFormat('en', {
+  style: 'currency',
+  currency: 'USD',
+});
+export const formatNumber = (v: number) => numberFormatter.format(v);
+export const formatFiat = (v: number) => currencyFormatter.format(v);

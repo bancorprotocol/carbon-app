@@ -27,6 +27,7 @@ export const StrategyBlock: FC<Props> = ({
         'grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded-10 bg-silver p-24',
         className
       )}
+      data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}
     >
       <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
       <StrategyBlockRoi strategy={strategy} />

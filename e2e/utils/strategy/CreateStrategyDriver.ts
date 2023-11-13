@@ -36,7 +36,7 @@ type StrategyType = 'recurring' | 'disposable';
 type StrategySettings =
   | 'two-limits'
   | 'two-ranges'
-  | 'symmetrics'
+  | 'symmetric'
   | `${Mode}-range`
   | `${Mode}-limit`;
 

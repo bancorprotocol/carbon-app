@@ -29,9 +29,9 @@ const testStrategy = {
 
       // Assert 100% outcome
       await expect(buyForm.outcomeValue()).toHaveText(`0.006666 ${base}`);
-      await expect(buyForm.outcomeQuote()).toHaveText(`${buy.min} ${quote}`);
+      await expect(buyForm.outcomeQuote()).toHaveText(`1,500 ${quote}`);
       await expect(sellForm.outcomeValue()).toHaveText(`3,400 ${quote}`);
-      await expect(sellForm.outcomeQuote()).toHaveText(`${sell.min} ${quote}`);
+      await expect(sellForm.outcomeQuote()).toHaveText(`1,700 ${quote}`);
 
       await createForm.submit();
 
@@ -59,7 +59,7 @@ const testStrategy = {
     });
   },
   symmetric: (config: CreateStrategyConfig) => {
-    const { base, quote, buy, sell, totalBudget } = config;
+    const { base, quote } = config;
     return test(`Create Symmetric Strategy ${base}->${quote}`, async ({
       page,
     }) => {
@@ -72,7 +72,7 @@ const testStrategy = {
       await myStrategies.createStrategy();
       await createForm.selectToken('base');
       await createForm.selectToken('quote');
-      await createForm.selectSetting('symmetrics');
+      await createForm.selectSetting('symmetric');
       await createForm.nextStep();
       await createForm.fillSymmetric();
 
@@ -139,8 +139,8 @@ test.describe('Strategies', () => {
     {
       type: 'recurring',
       setting: 'symmetric',
-      base: 'BNT',
-      quote: 'ETH',
+      base: 'ETH',
+      quote: 'BNT',
       totalBudget: '$3,344',
       buy: {
         min: '1500',
@@ -149,8 +149,8 @@ test.describe('Strategies', () => {
         budgetFiat: '$10.00',
       },
       sell: {
-        min: '1500',
-        max: '2000',
+        min: '1000',
+        max: '4000',
         budget: '2',
         budgetFiat: '$3,334',
       },
