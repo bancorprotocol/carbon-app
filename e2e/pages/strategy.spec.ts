@@ -12,7 +12,7 @@ import { checkApproval } from '../utils/modal';
 
 const testStrategy = {
   limit: (config: CreateStrategyConfig) => {
-    const { base, quote } = config;
+    const { base, quote, buy, sell, totalBudget } = config;
     return test(`Create Limit Strategy ${base}->${quote}`, async ({ page }) => {
       test.setTimeout(180_000);
       await waitFor(page, `balance-${quote}`, 30_000);
@@ -24,14 +24,14 @@ const testStrategy = {
       await createForm.selectToken('base');
       await createForm.selectToken('quote');
       await createForm.nextStep();
-      const buy = await createForm.fillLimit('buy');
-      const sell = await createForm.fillLimit('sell');
+      const buyForm = await createForm.fillLimit('buy');
+      const sellForm = await createForm.fillLimit('sell');
 
       // Assert 100% outcome
-      await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
-      await expect(buy.outcomeQuote()).toHaveText(`1,500 ${quote}`);
-      await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
-      await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
+      await expect(buyForm.outcomeValue()).toHaveText(`0.006666 ${base}`);
+      await expect(buyForm.outcomeQuote()).toHaveText(`${buy.min} ${quote}`);
+      await expect(sellForm.outcomeValue()).toHaveText(`3,400 ${quote}`);
+      await expect(sellForm.outcomeQuote()).toHaveText(`${sell.min} ${quote}`);
 
       await createForm.submit();
 
@@ -52,14 +52,14 @@ const testStrategy = {
       const strategy = await myStrategies.getStrategy(1);
       await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
       await expect(strategy.status()).toHaveText('Active');
-      await expect(strategy.totalBudget()).toHaveText('$3,344');
-      await expect(strategy.buyBudget()).toHaveText(`10 ${quote}`);
-      await expect(strategy.buyBudgetFiat()).toHaveText('$10.00');
-      await expect(strategy.sellBudgetFiat()).toHaveText('$3,334');
+      await expect(strategy.totalBudget()).toHaveText(totalBudget);
+      await expect(strategy.buyBudget()).toHaveText(`${buy.budget} ${quote}`);
+      await expect(strategy.buyBudgetFiat()).toHaveText(buy.budgetFiat);
+      await expect(strategy.sellBudgetFiat()).toHaveText(sell.budgetFiat);
     });
   },
   symmetric: (config: CreateStrategyConfig) => {
-    const { base, quote } = config;
+    const { base, quote, buy, sell, totalBudget } = config;
     return test(`Create Symmetric Strategy ${base}->${quote}`, async ({
       page,
     }) => {
@@ -72,20 +72,17 @@ const testStrategy = {
       await myStrategies.createStrategy();
       await createForm.selectToken('base');
       await createForm.selectToken('quote');
-      // const buy = await createForm.fillLimit('buy');
-      // const sell = await createForm.fillLimit('sell');
+      await createForm.selectSetting('symmetrics');
+      await createForm.nextStep();
+      await createForm.fillSymmetric();
 
-      // // Assert 100% outcome
-      // await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
-      // await expect(buy.outcomeQuote()).toHaveText(`1,500 ${quote}`);
-      // await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
-      // await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
+      // TODO Assert budget
 
-      // await createForm.submit();
+      await createForm.submit();
 
-      // await checkApproval(page, [base, quote]);
+      await checkApproval(page, [base, quote]);
 
-      // await page.waitForURL('/', { timeout: 10_000 });
+      await page.waitForURL('/', { timeout: 10_000 });
 
       // // Verfiy notification
       // const notif = new NotificationDriver(page, 'create-strategy');
@@ -100,10 +97,10 @@ const testStrategy = {
       // const strategy = await myStrategies.getStrategy(1);
       // await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
       // await expect(strategy.status()).toHaveText('Active');
-      // await expect(strategy.totalBudget()).toHaveText('$3,344');
+      // await expect(strategy.totalBudget()).toHaveText(totalBudget);
       // await expect(strategy.buyBudget()).toHaveText(`10 ${quote}`);
-      // await expect(strategy.buyBudgetFiat()).toHaveText('$10.00');
-      // await expect(strategy.sellBudgetFiat()).toHaveText('$3,334');
+      // await expect(strategy.buyBudgetFiat()).toHaveText(buy.budgetFiat);
+      // await expect(strategy.sellBudgetFiat()).toHaveText(sell.budgetFiat);
     });
   },
 };
@@ -125,15 +122,18 @@ test.describe('Strategies', () => {
       setting: 'limit',
       base: 'ETH',
       quote: 'DAI',
+      totalBudget: '$3,344',
       buy: {
         min: '1500',
         max: '1500',
         budget: '10',
+        budgetFiat: '$10.00',
       },
       sell: {
         min: '1700',
         max: '1700',
         budget: '2',
+        budgetFiat: '$3,334',
       },
     },
     {
@@ -141,16 +141,20 @@ test.describe('Strategies', () => {
       setting: 'symmetric',
       base: 'BNT',
       quote: 'ETH',
+      totalBudget: '$3,344',
       buy: {
         min: '1500',
         max: '2000',
         budget: '10',
+        budgetFiat: '$10.00',
       },
       sell: {
         min: '1500',
         max: '2000',
         budget: '2',
+        budgetFiat: '$3,334',
       },
+      spread: '5',
     },
   ];
 

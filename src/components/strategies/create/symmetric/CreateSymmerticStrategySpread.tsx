@@ -84,6 +84,7 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             tabIndex={inOptions ? -1 : 0}
             onFocus={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
             onChange={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
+            data-testid="spread-input"
           />
           <span className={styles.suffix}>%</span>
         </div>

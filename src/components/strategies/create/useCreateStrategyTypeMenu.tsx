@@ -17,6 +17,7 @@ type StrategyTypeItem = {
   to: string;
   search: StrategyCreateSearch;
   isRecommended?: boolean;
+  testid: string;
 };
 
 type StrategyTypeItemSvg = StrategyTypeItem & {
@@ -38,6 +39,7 @@ export const useCreateStrategyTypeMenu = (
         quote,
         strategyType: 'recurring',
       },
+      testid: 'recurring',
     },
     {
       label: 'Disposable',
@@ -47,6 +49,7 @@ export const useCreateStrategyTypeMenu = (
         quote,
         strategyType: 'disposable',
       },
+      testid: 'disposable',
     },
   ];
 
@@ -63,6 +66,7 @@ export const useCreateStrategyTypeMenu = (
           strategySettings: 'limit',
         },
         isRecommended: true,
+        testid: 'two-limits',
       },
       {
         label: '2 Ranges',
@@ -75,6 +79,7 @@ export const useCreateStrategyTypeMenu = (
           strategySettings: 'range',
         },
         isRecommended: true,
+        testid: 'two-ranges',
       },
       {
         label: 'Symmetric',
@@ -86,6 +91,7 @@ export const useCreateStrategyTypeMenu = (
           strategyType: 'recurring',
           strategySettings: 'symmetric',
         },
+        testid: 'symmetric',
       },
     ],
     [base, quote]
@@ -105,6 +111,7 @@ export const useCreateStrategyTypeMenu = (
           strategySettings: 'limit',
         },
         isRecommended: true,
+        testid: 'buy-limit',
       },
       {
         label: 'Sell Limit',
@@ -118,6 +125,7 @@ export const useCreateStrategyTypeMenu = (
           strategySettings: 'limit',
         },
         isRecommended: true,
+        testid: 'sell-limit',
       },
       {
         label: 'Buy Range',
@@ -130,6 +138,7 @@ export const useCreateStrategyTypeMenu = (
           strategyDirection: 'buy',
           strategySettings: 'range',
         },
+        testid: 'buy-range',
       },
       {
         label: 'Sell Range',
@@ -142,6 +151,7 @@ export const useCreateStrategyTypeMenu = (
           strategyDirection: 'sell',
           strategySettings: 'range',
         },
+        testid: 'sell-range',
       },
     ],
     [base, quote]

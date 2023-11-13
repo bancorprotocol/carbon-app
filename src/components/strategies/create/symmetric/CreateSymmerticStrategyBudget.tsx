@@ -92,7 +92,7 @@ const TokenBudget: FC<TokenBudgetProps> = (props) => {
         isBalanceLoading={query.isLoading}
         balance={query.data}
         isError={insufficientBalance}
-        data-testid="input-budget"
+        data-testid={`input-budget-${token.symbol}`}
       />
       {insufficientBalance && (
         <output

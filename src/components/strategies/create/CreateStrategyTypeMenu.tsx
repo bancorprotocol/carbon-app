@@ -68,7 +68,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
       >
         <h2>Strategy Type</h2>
         <TabsMenu>
-          {tabs.map(({ label, to, search }) => (
+          {tabs.map(({ label, to, search, testid }) => (
             <TabsMenuButton
               key={label}
               onClick={() => {
@@ -76,6 +76,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 handleClick(to, search, true);
               }}
               isActive={search.strategyType === strategyType}
+              data-testid={testid}
             >
               {label}
             </TabsMenuButton>
@@ -104,7 +105,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           } gap-12 pt-10 md:flex`}
         >
           {selectedTabItems.map(
-            ({ label, svg, to, search, isRecommended }, i) => (
+            ({ label, svg, to, search, isRecommended, testid }, i) => (
               <div key={`${label}-${i}`} className="relative flex flex-1">
                 {isRecommended && (
                   <span className="absolute -top-16 left-1/2 z-10 -translate-x-1/2 rounded border-2 border-green/25 bg-darkGreen px-5 py-3 text-12 font-weight-500 text-green md:px-7 md:text-10">
@@ -136,6 +137,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                       ? 'border-2 !border-white/80'
                       : ''
                   )}
+                  data-testid={testid}
                 >
                   {svg}
                   <span className="mt-10 text-14">{label}</span>
