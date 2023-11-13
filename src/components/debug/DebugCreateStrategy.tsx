@@ -9,7 +9,7 @@ import { FAUCET_TOKENS } from 'utils/tenderly';
 import { config } from 'services/web3/config';
 import { wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
 import { useApproval } from 'hooks/useApproval';
@@ -117,13 +117,13 @@ export const DebugCreateStrategy = () => {
         order0: {
           max: buyMax,
           min: buyMin,
-          budget: new BigNumber(balance1).div(total + 1).toFixed(2),
+          budget: new SafeDecimal(balance1).div(total + 1).toFixed(2),
           price: buyMax === buyMin ? buyMax : '0',
         },
         order1: {
           max: sellMax,
           min: sellMin,
-          budget: new BigNumber(balance0).div(total + 1).toFixed(2),
+          budget: new SafeDecimal(balance0).div(total + 1).toFixed(2),
           price: sellMax === sellMin ? sellMax : '0',
         },
       };

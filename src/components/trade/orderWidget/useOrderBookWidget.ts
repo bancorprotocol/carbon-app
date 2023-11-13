@@ -8,14 +8,14 @@ import { useMemo } from 'react';
 import { orderBy } from 'lodash';
 import { useTokens } from 'hooks/useTokens';
 import { useStore } from 'store';
-import Decimal from 'decimal.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 const ROW_AMOUNT_MIN_THRESHOLD = 0.0001;
 
-Decimal.set({
+SafeDecimal.set({
   precision: 100,
-  rounding: Decimal.ROUND_HALF_DOWN,
+  rounding: SafeDecimal.ROUND_HALF_DOWN,
   toExpNeg: -30,
   toExpPos: 30,
 });
@@ -28,8 +28,8 @@ const _subtractPrevAmount = (
   i: number
 ) => {
   const prevAmount = data[i - 1]?.amount || '0';
-  const newAmount = new Decimal(amount).minus(prevAmount);
-  const newTotal = new Decimal(rate).times(newAmount);
+  const newAmount = new SafeDecimal(amount).minus(prevAmount);
+  const newTotal = new SafeDecimal(rate).times(newAmount);
 
   return {
     rate,
@@ -48,12 +48,14 @@ const buildOrders = (
     .map(({ amount, rate, total }, i) =>
       _subtractPrevAmount(data, amount, rate, total, i)
     )
-    .filter(({ amount }) => new Decimal(amount).gte(ROW_AMOUNT_MIN_THRESHOLD))
+    .filter(({ amount }) =>
+      new SafeDecimal(amount).gte(ROW_AMOUNT_MIN_THRESHOLD)
+    )
     .splice(0, buckets)
     .map(({ amount, rate, total }) => ({
-      rate: new Decimal(rate).toFixed(quoteDecimals, 1),
-      amount: new Decimal(amount).toFixed(baseDecimals, 1),
-      total: new Decimal(total).toFixed(quoteDecimals, 1),
+      rate: new SafeDecimal(rate).toFixed(quoteDecimals, 1),
+      amount: new SafeDecimal(amount).toFixed(baseDecimals, 1),
+      total: new SafeDecimal(total).toFixed(quoteDecimals, 1),
     }));
 };
 

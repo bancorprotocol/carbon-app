@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js';
 import numbro from 'numbro';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { SafeDecimal } from '../../libs/safedecimal';
 import { FiatSymbol } from 'utils/carbonApi';
 
 export const isProduction = window
@@ -55,7 +55,7 @@ export const shortenString = (
 };
 
 export const getFiatDisplayValue = (
-  fiatValue: BigNumber | string | number,
+  fiatValue: SafeDecimal | string | number,
   currentCurrency: FiatSymbol
 ) => {
   return prettifyNumber(fiatValue, { currentCurrency });
@@ -95,15 +95,15 @@ interface PrettifyNumberOptions {
   round?: boolean;
 }
 
-export function prettifyNumber(num: number | string | BigNumber): string;
+export function prettifyNumber(num: number | string | SafeDecimal): string;
 
 export function prettifyNumber(
-  num: number | string | BigNumber,
+  num: number | string | SafeDecimal,
   options?: PrettifyNumberOptions
 ): string;
 
 export function prettifyNumber(
-  num: number | string | BigNumber,
+  num: number | string | SafeDecimal,
   options?: PrettifyNumberOptions
 ): string {
   const {
@@ -112,7 +112,7 @@ export function prettifyNumber(
     round = false,
   } = options || {};
 
-  const bigNum = new BigNumber(num);
+  const bigNum = new SafeDecimal(num);
   if (options?.currentCurrency) {
     return handlePrettifyNumberCurrency(bigNum, options);
   }
@@ -142,7 +142,7 @@ export function prettifyNumber(
 }
 
 const handlePrettifyNumberCurrency = (
-  num: BigNumber,
+  num: SafeDecimal,
   options?: PrettifyNumberOptions
 ) => {
   const {
@@ -296,7 +296,7 @@ export const isPathnameMatch = (
 };
 
 export const formatNumberWithApproximation = (
-  num: BigNumber,
+  num: SafeDecimal,
   { isPercentage = false, approximateBelow = 0.01 } = {}
 ): { value: string; negative: boolean } => {
   const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
@@ -306,10 +306,10 @@ export const formatNumberWithApproximation = (
   } else if (num.gt(0) && num.lt(approximateBelow)) {
     return { value: addPercentage(`< ${approximateBelow}`), negative: false };
   } else if (num.gte(approximateBelow)) {
-    return { value: addPercentage(num.toFormat(2)), negative: false };
+    return { value: addPercentage(num.toFixed(2)), negative: false };
   } else if (num.gt(-1 * approximateBelow)) {
     return { value: addPercentage(`> -${approximateBelow}`), negative: true };
   } else {
-    return { value: addPercentage(num.toFormat(2)), negative: true };
+    return { value: addPercentage(num.toFixed(2)), negative: true };
   }
 };
