@@ -8,12 +8,11 @@ import {
 } from 'react';
 import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
 import { cn, prettifyNumber } from 'utils/helpers';
-import {
-  MarketPricePercentage,
-  getMarketPricePercentage,
-} from 'components/strategies/marketPriceIndication';
+import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
+import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import BigNumber from 'bignumber.js';
 import styles from './CreateSymmerticStrategyGraph.module.css';
+import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
 
 interface Props extends SymmetricStrategyProps {
   marketPrice: number;
@@ -133,14 +132,16 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const baseWidth = right.minus(left);
   const width = baseWidth.toNumber();
   const ratio = width / 400;
-  const height = 250 * ratio;
+  const height = 265 * ratio;
   const fontSize = 11 * ratio;
 
-  // Price line
+  ////////////////
+  // Price line //
+  ////////////////
   const bottom = height - 28 * ratio;
   const priceStep = right.minus(left).div(40);
   const priceStepHeight = bottom - 10 * ratio;
-  const steps = new Array(Math.floor(width))
+  const steps = new Array(40)
     .fill(null)
     .map((_, i) => left.plus(priceStep.times(i)).toString());
 
@@ -156,7 +157,9 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const middle = bottom - 62 * ratio;
   const top = middle - 62 * ratio;
 
-  // Market price
+  //////////////////
+  // Market price //
+  //////////////////
   const marketValue = `${prettifyNumber(marketPrice)} ${quote?.symbol}`;
   const fontRatio = fontSize / 2;
   const padding = 4 * ratio;
@@ -184,7 +187,9 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     },
   };
 
-  // Polygons
+  //////////////
+  // Polygons //
+  //////////////
   const getPointConfig = ({ min, max }: { min: number; max: number }) => {
     const spread = ((max - min) * spreadPPM) / 100;
     const buyMax = max - spread;
@@ -208,10 +213,11 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     max: Number(order0.max),
   });
   const { min, max, sellMin, buyMax } = config;
+  const marketPercent = props.marketPricePercentage;
   const minValue = prettifyNumber(min);
-  const minPercent = getMarketPricePercentage(props.marketPricePercentage.min);
+  const minPercent = getSignedMarketPricePercentage(marketPercent.min);
   const maxValue = prettifyNumber(max);
-  const maxPercent = getMarketPricePercentage(props.marketPricePercentage.max);
+  const maxPercent = getSignedMarketPricePercentage(marketPercent.max);
 
   const buyPoints = getBuyPoint(config);
   const marginalBuyPoints = getMarginalBuyPoint(config);
@@ -340,7 +346,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
     const tooltipPercent = document.querySelector(percentSelector);
     const percent = (100 * (priceValue - marketPrice)) / marketPrice;
-    const percentValue = getMarketPricePercentage(new BigNumber(percent));
+    const percentValue = getSignedMarketPricePercentage(new BigNumber(percent));
     if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
   };
 
@@ -380,269 +386,295 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   }, []);
 
   return (
-    <svg
-      ref={svg}
-      className={cn(
-        styles.graph,
-        dragging,
-        'aspect-[400/250] w-full rounded bg-black font-mono'
-      )}
-      viewBox={`${left} 0 ${width} ${height}`}
-      onWheel={onWheel}
-    >
-      {/* Pattern */}
-      <defs>
-        <symbol
-          id="carbonLogo"
-          width={8 * ratio}
-          height={8 * ratio}
-          viewBox="0 0 672 886"
-          fill="dark"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M236.253 0.40625H543.432L590.851 151.443L516.258 259.817L671.892 562.311L597.058 641.054L667.572 865.583H3.43463L31.0508 642.298L0.482422 563.705L34.4791 195.043H66.9848L73.1824 56.3078L236.253 0.40625ZM86.5195 195.043H130.749L109.676 572.069H24.6749L51.0225 639.81L25.5123 846.068H329.049L339.284 534.202L265.803 380.763L236.207 259.029H361.697L442.063 641.054H597.058L671.892 562.311H526.547L404.627 204.8H488.529L516.258 259.817L590.851 151.443H273.103L240.312 19.9215L92.085 70.458L86.5195 195.043Z"
-            opacity="0.4"
-          />
-        </symbol>
-        <pattern
-          id="base-pattern"
-          width={15 * ratio}
-          height={25 * ratio}
-          patternUnits="userSpaceOnUse"
-        />
-        <pattern href="#base-pattern" id="buy-pattern">
-          <use href="#carbonLogo" x="0" y={4 * ratio} fill="#00B578" />
-          <use href="#carbonLogo" x={8 * ratio} y={16 * ratio} fill="#00B578" />
-          <rect
-            x="0"
-            y="0"
+    <figure className="relative">
+      <figcaption className="absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 font-mono text-10 text-white/60">
+        <span>Market price provided by CoinGecko</span>
+        <IconCoinGecko className="h-8 w-8" />
+        <span role="separator">·</span>
+        <span>Spead {spreadPPM}%</span>
+      </figcaption>
+      <svg
+        ref={svg}
+        aria-label="Price range"
+        aria-description="Interactive graph to select the price range"
+        className={cn(
+          styles.graph,
+          dragging,
+          'aspect-[400/265] w-full rounded bg-black font-mono'
+        )}
+        viewBox={`${left} 0 ${width} ${height}`}
+        onWheel={onWheel}
+      >
+        {/* Pattern */}
+        <defs>
+          <symbol
+            id="carbonLogo"
+            width={8 * ratio}
+            height={8 * ratio}
+            viewBox="0 0 672 886"
+            fill="dark"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M236.253 0.40625H543.432L590.851 151.443L516.258 259.817L671.892 562.311L597.058 641.054L667.572 865.583H3.43463L31.0508 642.298L0.482422 563.705L34.4791 195.043H66.9848L73.1824 56.3078L236.253 0.40625ZM86.5195 195.043H130.749L109.676 572.069H24.6749L51.0225 639.81L25.5123 846.068H329.049L339.284 534.202L265.803 380.763L236.207 259.029H361.697L442.063 641.054H597.058L671.892 562.311H526.547L404.627 204.8H488.529L516.258 259.817L590.851 151.443H273.103L240.312 19.9215L92.085 70.458L86.5195 195.043Z"
+              opacity="0.4"
+            />
+          </symbol>
+          <pattern
+            id="base-pattern"
             width={15 * ratio}
             height={25 * ratio}
-            fill="#00B578"
-            fillOpacity="0.05"
+            patternUnits="userSpaceOnUse"
           />
-        </pattern>
-        <pattern href="#base-pattern" id="sell-pattern">
-          <use href="#carbonLogo" x="0" y={4 * ratio} fill="#D86371" />
-          <use href="#carbonLogo" x={8 * ratio} y={16 * ratio} fill="#D86371" />
-          <rect
-            x="0"
-            y="0"
-            width={15 * ratio}
-            height={25 * ratio}
-            fill="#D86371"
-            fillOpacity="0.05"
-          />
-        </pattern>
-      </defs>
+          <pattern href="#base-pattern" id="buy-pattern">
+            <use href="#carbonLogo" x="0" y={4 * ratio} fill="#00B578" />
+            <use
+              href="#carbonLogo"
+              x={8 * ratio}
+              y={16 * ratio}
+              fill="#00B578"
+            />
+            <rect
+              x="0"
+              y="0"
+              width={15 * ratio}
+              height={25 * ratio}
+              fill="#00B578"
+              fillOpacity="0.05"
+            />
+          </pattern>
+          <pattern href="#base-pattern" id="sell-pattern">
+            <use href="#carbonLogo" x="0" y={4 * ratio} fill="#D86371" />
+            <use
+              href="#carbonLogo"
+              x={8 * ratio}
+              y={16 * ratio}
+              fill="#D86371"
+            />
+            <rect
+              x="0"
+              y="0"
+              width={15 * ratio}
+              height={25 * ratio}
+              fill="#D86371"
+              fillOpacity="0.05"
+            />
+          </pattern>
+        </defs>
 
-      {/* Buy */}
-      <g>
-        <polygon
-          id="buy-polygon"
-          points={buyPoints}
-          fill="#00B578"
-          fillOpacity="0.35"
-        />
-        <polygon
-          id="marginal-buy-polygon"
-          points={marginalBuyPoints}
-          fill="url(#buy-pattern)"
-        />
-        <line
-          id="buy-max-line"
-          x1={buyMax}
-          x2={buyMax}
-          y1={middle}
-          y2={top}
-          stroke="#00B578"
-          strokeWidth={2 * ratio}
-        />
-      </g>
+        <g className={styles.content}>
+          {/* Buy */}
+          <g>
+            <polygon
+              id="buy-polygon"
+              points={buyPoints}
+              fill="#00B578"
+              fillOpacity="0.35"
+            />
+            <polygon
+              id="marginal-buy-polygon"
+              points={marginalBuyPoints}
+              fill="url(#buy-pattern)"
+            />
+            <line
+              id="buy-max-line"
+              x1={buyMax}
+              x2={buyMax}
+              y1={middle}
+              y2={top}
+              stroke="#00B578"
+              strokeWidth={2 * ratio}
+            />
+          </g>
 
-      {/* Sell */}
-      <g>
-        <line
-          id="sell-min-line"
-          x1={sellMin}
-          x2={sellMin}
-          y1={bottom}
-          y2={middle}
-          stroke="#D86371"
-          strokeWidth={2 * ratio}
-        />
-        <polygon
-          id="sell-polygon"
-          points={sellPoints}
-          fill="#D86371"
-          fillOpacity="0.35"
-        />
-        <polygon
-          id="marginal-sell-polygon"
-          points={marginalSellPoints}
-          fill="url(#sell-pattern)"
-        />
-      </g>
-      {/* Price line */}
-      <g>
-        <line
-          x1={left.toString()}
-          x2={right.toString()}
-          y1={bottom}
-          y2={bottom}
-          stroke="#212123"
-          strokeWidth={ratio}
-        />
-        {steps.map((step) => (
-          <line
-            key={step}
-            x1={step}
-            x2={step}
-            y1={bottom}
-            y2={priceStepHeight}
-            stroke="#212123"
-            strokeWidth={ratio}
-          />
-        ))}
-        <text x={meanLeft.toString()} {...priceIndicator}>
-          {prettifyNumber(meanLeft)}
-        </text>
-        <text x={mean.toString()} {...priceIndicator}>
-          {prettifyNumber(mean)}
-        </text>
-        <text x={meanRight.toString()} {...priceIndicator}>
-          {prettifyNumber(meanRight)}
-        </text>
-      </g>
-      {/* Market Price */}
-      <g>
-        <line {...marketIndicator.line} stroke="#404040" strokeWidth={ratio} />
-        <rect {...marketIndicator.rect} fill="#404040" />
-        <text {...marketIndicator.text} fill="white">
-          {marketValue}
-        </text>
-      </g>
+          {/* Sell */}
+          <g>
+            <line
+              id="sell-min-line"
+              x1={sellMin}
+              x2={sellMin}
+              y1={bottom}
+              y2={middle}
+              stroke="#D86371"
+              strokeWidth={2 * ratio}
+            />
+            <polygon
+              id="sell-polygon"
+              points={sellPoints}
+              fill="#D86371"
+              fillOpacity="0.35"
+            />
+            <polygon
+              id="marginal-sell-polygon"
+              points={marginalSellPoints}
+              fill="url(#sell-pattern)"
+            />
+          </g>
+          {/* Price line */}
+          <g>
+            <line
+              x1={left.toString()}
+              x2={right.toString()}
+              y1={bottom}
+              y2={bottom}
+              stroke="#212123"
+              strokeWidth={ratio}
+            />
+            {steps.map((step) => (
+              <line
+                key={step}
+                x1={step}
+                x2={step}
+                y1={bottom}
+                y2={priceStepHeight}
+                stroke="#212123"
+                strokeWidth={ratio}
+              />
+            ))}
+            <text x={meanLeft.toString()} {...priceIndicator}>
+              {prettifyNumber(meanLeft)}
+            </text>
+            <text x={mean.toString()} {...priceIndicator}>
+              {prettifyNumber(mean)}
+            </text>
+            <text x={meanRight.toString()} {...priceIndicator}>
+              {prettifyNumber(meanRight)}
+            </text>
+          </g>
+          {/* Market Price */}
+          <g>
+            <line
+              {...marketIndicator.line}
+              stroke="#404040"
+              strokeWidth={ratio}
+            />
+            <rect {...marketIndicator.rect} fill="#404040" />
+            <text {...marketIndicator.text} fill="white">
+              {marketValue}
+            </text>
+          </g>
 
-      {/* Handlers: must be at the end to always be above the graph */}
-      <g
-        id="buy-handler"
-        className={cn(styles.handler, 'cursor-ew-resize')}
-        onMouseDown={(e) => dragStart(e, 'buy')}
-      >
-        <g className={styles.handlerTooltip}>
-          <rect {...buyTooltip.rect} />
-          <text
-            className="tooltip-price"
-            y={top - 2 * fontSize - 3 * padding}
-            {...buyTooltip.text}
+          {/* Handlers: must be at the end to always be above the graph */}
+          <g
+            id="buy-handler"
+            className={cn(styles.handler, 'cursor-ew-resize')}
+            onMouseDown={(e) => dragStart(e, 'buy')}
           >
-            {minValue}
-          </text>
-          <text
-            className="tooltip-percent"
-            y={top - 1 * fontSize - 2 * padding}
-            fillOpacity="0.4"
-            {...buyTooltip.text}
+            <g className={styles.handlerTooltip}>
+              <rect {...buyTooltip.rect} />
+              <text
+                className="tooltip-price"
+                y={top - 2 * fontSize - 3 * padding}
+                {...buyTooltip.text}
+              >
+                {minValue}
+              </text>
+              <text
+                className="tooltip-percent"
+                y={top - 1 * fontSize - 2 * padding}
+                fillOpacity="0.4"
+                {...buyTooltip.text}
+              >
+                {minPercent}%
+              </text>
+            </g>
+            <rect
+              x={min - 11 * ratio}
+              y={top - 1 * ratio}
+              width={12 * ratio}
+              height={24 * ratio}
+              fill="#00B578"
+              rx={4 * ratio}
+            />
+            <line
+              x1={min - 7 * ratio}
+              x2={min - 7 * ratio}
+              y1={top + 19 * ratio}
+              y2={top + 4 * ratio}
+              stroke="black"
+              strokeOpacity="0.5"
+              strokeWidth={ratio}
+            />
+            <line
+              x1={min - 3 * ratio}
+              x2={min - 3 * ratio}
+              y1={top + 19 * ratio}
+              y2={top + 4 * ratio}
+              stroke="black"
+              strokeOpacity="0.5"
+              strokeWidth={ratio}
+            />
+            <line
+              x1={min}
+              x2={min}
+              y1={bottom}
+              y2={top + 20 * ratio}
+              stroke="#00B578"
+              strokeWidth={2 * ratio}
+            />
+          </g>
+          <g
+            id="sell-handler"
+            className={cn(styles.handler, 'cursor-ew-resize')}
+            onMouseDown={(e) => dragStart(e, 'sell')}
           >
-            {minPercent}%
-          </text>
+            <g className={styles.handlerTooltip}>
+              <rect {...sellTooltip.rect} />
+              <text
+                className="tooltip-price"
+                y={top - 2 * fontSize - 3 * padding}
+                {...sellTooltip.text}
+              >
+                {maxValue}
+              </text>
+              <text
+                className="tooltip-percent"
+                y={top - 1 * fontSize - 2 * padding}
+                fillOpacity="0.4"
+                {...sellTooltip.text}
+              >
+                {maxPercent}%
+              </text>
+            </g>
+            <rect
+              x={max - 1 * ratio}
+              y={top - 1 * ratio}
+              width={12 * ratio}
+              height={24 * ratio}
+              fill="#D86371"
+              rx={4 * ratio}
+            />
+            <line
+              x1={max + 7 * ratio}
+              x2={max + 7 * ratio}
+              y1={top + 19 * ratio}
+              y2={top + 4 * ratio}
+              stroke="black"
+              strokeOpacity="0.5"
+              strokeWidth={ratio}
+            />
+            <line
+              x1={max + 3 * ratio}
+              x2={max + 3 * ratio}
+              y1={top + 19 * ratio}
+              y2={top + 4 * ratio}
+              stroke="black"
+              strokeOpacity="0.5"
+              strokeWidth={ratio}
+            />
+            <line
+              x1={max}
+              x2={max}
+              y1={bottom}
+              y2={top + 20 * ratio}
+              stroke="#D86371"
+              strokeWidth={2 * ratio}
+            />
+          </g>
         </g>
-        <rect
-          x={min - 11 * ratio}
-          y={top - 1 * ratio}
-          width={12 * ratio}
-          height={24 * ratio}
-          fill="#00B578"
-          rx={4 * ratio}
-        />
-        <line
-          x1={min - 7 * ratio}
-          x2={min - 7 * ratio}
-          y1={top + 19 * ratio}
-          y2={top + 4 * ratio}
-          stroke="black"
-          strokeOpacity="0.5"
-          strokeWidth={ratio}
-        />
-        <line
-          x1={min - 3 * ratio}
-          x2={min - 3 * ratio}
-          y1={top + 19 * ratio}
-          y2={top + 4 * ratio}
-          stroke="black"
-          strokeOpacity="0.5"
-          strokeWidth={ratio}
-        />
-        <line
-          x1={min}
-          x2={min}
-          y1={bottom}
-          y2={top + 20 * ratio}
-          stroke="#00B578"
-          strokeWidth={2 * ratio}
-        />
-      </g>
-      <g
-        id="sell-handler"
-        className={cn(styles.handler, 'cursor-ew-resize')}
-        onMouseDown={(e) => dragStart(e, 'sell')}
-      >
-        <g className={styles.handlerTooltip}>
-          <rect {...sellTooltip.rect} />
-          <text
-            className="tooltip-price"
-            y={top - 2 * fontSize - 3 * padding}
-            {...sellTooltip.text}
-          >
-            {maxValue}
-          </text>
-          <text
-            className="tooltip-percent"
-            y={top - 1 * fontSize - 2 * padding}
-            fillOpacity="0.4"
-            {...sellTooltip.text}
-          >
-            {maxPercent}%
-          </text>
-        </g>
-        <rect
-          x={max - 1 * ratio}
-          y={top - 1 * ratio}
-          width={12 * ratio}
-          height={24 * ratio}
-          fill="#D86371"
-          rx={4 * ratio}
-        />
-        <line
-          x1={max + 7 * ratio}
-          x2={max + 7 * ratio}
-          y1={top + 19 * ratio}
-          y2={top + 4 * ratio}
-          stroke="black"
-          strokeOpacity="0.5"
-          strokeWidth={ratio}
-        />
-        <line
-          x1={max + 3 * ratio}
-          x2={max + 3 * ratio}
-          y1={top + 19 * ratio}
-          y2={top + 4 * ratio}
-          stroke="black"
-          strokeOpacity="0.5"
-          strokeWidth={ratio}
-        />
-        <line
-          x1={max}
-          x2={max}
-          y1={bottom}
-          y2={top + 20 * ratio}
-          stroke="#D86371"
-          strokeWidth={2 * ratio}
-        />
-      </g>
-    </svg>
+      </svg>
+    </figure>
   );
 };

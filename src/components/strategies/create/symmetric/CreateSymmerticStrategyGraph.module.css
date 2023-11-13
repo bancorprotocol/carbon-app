@@ -4,6 +4,6 @@
 .graph.drag .handler-tooltip {
   opacity: 1;
 }
-.handler:hover .handler-tooltip {
+.content:hover .handler-tooltip {
   opacity: 1;
 }
