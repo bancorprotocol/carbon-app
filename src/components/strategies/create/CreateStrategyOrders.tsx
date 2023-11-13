@@ -107,6 +107,7 @@ export const CreateStrategyOrders = ({
     <form
       onSubmit={(e) => onCreateStrategy(e)}
       className="flex flex-col gap-20 md:w-[440px]"
+      data-testid="create-strategy-form"
     >
       <m.header
         variants={items}

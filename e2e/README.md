@@ -64,7 +64,8 @@ await expect(first.getTestId('strategy-pair')).toHaveText('ETH/DAI');
 ```
 
 As we use the same network for all tests, mutating a strategy in one test might impact the other. For now, we'll try to use different pairs of token for each test to avoid side effect : 
-- `ETH/DAI`: Create strategy
+- `ETH/DAI`: Create limit strategy
+- `BNT/ETH`: Create symmetric strategy
 - `ETH/USDC`: Trade Buy
 - `USDC/USDT`: Trade Sell
 
