@@ -317,6 +317,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   };
 
   const drag = (e: MouseEvent) => {
+    e.preventDefault();
     if (!draggedHandler) return;
     const { newMin, newMax } = updateMinMax(e);
 
