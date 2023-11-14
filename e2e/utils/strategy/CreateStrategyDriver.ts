@@ -3,10 +3,10 @@ import { waitModalClose, waitModalOpen } from '../modal';
 
 /** Min & max should be equal for limit strategy */
 interface PriceField {
-  min: string;
-  max: string;
-  budget: string;
-  budgetFiat: string;
+  min: number;
+  max: number;
+  budget: number;
+  budgetFiat: number;
 }
 
 interface BaseConfig {
@@ -26,7 +26,7 @@ export interface LimiStrategyConfig extends BaseConfig {
 export interface SymmetricStrategyConfig extends BaseConfig {
   type: 'recurring';
   setting: 'symmetric';
-  spread: string;
+  spread: number;
 }
 
 export type CreateStrategyConfig = LimiStrategyConfig | SymmetricStrategyConfig;
@@ -81,17 +81,17 @@ export class CreateStrategyDriver {
   async fillLimit(mode: Mode) {
     const { min, budget } = this.config[mode];
     const form = this.getLimitForm(mode);
-    await form.limit().fill(min);
-    await form.budget().fill(budget);
+    await form.limit().fill(min.toString());
+    await form.budget().fill(budget.toString());
     return form;
   }
   async fillSymmetric() {
     const config = this.config as SymmetricStrategyConfig;
     const form = this.getSymmetricForm();
-    await form.min().fill(config.buy.min);
-    await form.max().fill(config.sell.max);
-    await form.budgetBase().fill(config.sell.budget);
-    await form.spread().fill(config.spread);
+    await form.min().fill(config.buy.min.toString());
+    await form.max().fill(config.sell.max.toString());
+    await form.budgetBase().fill(config.sell.budget.toString());
+    await form.spread().fill(config.spread.toString());
     return form;
   }
   nextStep() {
