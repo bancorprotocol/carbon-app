@@ -24,6 +24,15 @@ export class MyStrategyDriver {
       buyBudgetFiat: () => strategy.getByTestId('buy-budget-fiat'),
       sellBudget: () => strategy.getByTestId('sell-budget'),
       sellBudgetFiat: () => strategy.getByTestId('sell-budget-fiat'),
+      priceTooltip: async (mode: 'buy' | 'sell') => {
+        await strategy.getByTestId(`polygon-${mode}`).hover();
+        const tooltip = this.page.getByTestId('order-tooltip');
+        return {
+          minPrice: () => tooltip.getByTestId('min-price'),
+          maxPrice: () => tooltip.getByTestId('max-price'),
+          marginalPrice: () => tooltip.getByTestId('marginal-price'),
+        };
+      },
     };
   }
 

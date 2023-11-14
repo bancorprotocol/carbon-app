@@ -59,7 +59,7 @@ const testStrategy = {
     });
   },
   symmetric: (config: CreateStrategyConfig) => {
-    const { base, quote } = config;
+    const { base, quote, buy, sell, totalBudget } = config;
     return test(`Create Symmetric Strategy ${base}->${quote}`, async ({
       page,
     }) => {
@@ -80,7 +80,7 @@ const testStrategy = {
 
       await createForm.submit();
 
-      await checkApproval(page, [base, quote]);
+      // await checkApproval(page, [base, quote]);
 
       await page.waitForURL('/', { timeout: 10_000 });
 
@@ -91,16 +91,23 @@ const testStrategy = {
       //   'New strategy was successfully created.'
       // );
 
-      // // Verify strategy data
-      // const strategies = await myStrategies.getAllStrategies();
-      // await expect(strategies).toHaveCount(1);
-      // const strategy = await myStrategies.getStrategy(1);
-      // await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
-      // await expect(strategy.status()).toHaveText('Active');
-      // await expect(strategy.totalBudget()).toHaveText(totalBudget);
-      // await expect(strategy.buyBudget()).toHaveText(`10 ${quote}`);
-      // await expect(strategy.buyBudgetFiat()).toHaveText(buy.budgetFiat);
-      // await expect(strategy.sellBudgetFiat()).toHaveText(sell.budgetFiat);
+      // Verify strategy data
+      const strategies = await myStrategies.getAllStrategies();
+      await expect(strategies).toHaveCount(1);
+      const strategy = await myStrategies.getStrategy(1);
+      await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
+      await expect(strategy.status()).toHaveText('Active');
+      await expect(strategy.totalBudget()).toHaveText(totalBudget);
+      await expect(strategy.buyBudget()).toHaveText(`0 ${quote}`);
+      await expect(strategy.buyBudgetFiat()).toHaveText(buy.budgetFiat);
+      await expect(strategy.sellBudget()).toHaveText(`2 ${base}`);
+      await expect(strategy.sellBudgetFiat()).toHaveText(sell.budgetFiat);
+      const buyTooltip = await strategy.priceTooltip('buy');
+      await expect(buyTooltip.minPrice()).toHaveText(buy.min);
+      await expect(buyTooltip.maxPrice()).toHaveText(buy.max);
+      const sellTooltip = await strategy.priceTooltip('sell');
+      await expect(sellTooltip.minPrice()).toHaveText(sell.min);
+      await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
     });
   },
 };
@@ -141,20 +148,20 @@ test.describe('Strategies', () => {
       setting: 'symmetric',
       base: 'ETH',
       quote: 'BNT',
-      totalBudget: '$3,344',
+      totalBudget: '$3,334',
       buy: {
-        min: '1500',
-        max: '2000',
-        budget: '10',
-        budgetFiat: '$10.00',
+        min: '2000',
+        max: '2,900', // Use to verify
+        budget: '0', // Use to verify
+        budgetFiat: '$0.00',
       },
       sell: {
-        min: '1000',
-        max: '4000',
+        min: '2,100', // Use to verify
+        max: '3000',
         budget: '2',
         budgetFiat: '$3,334',
       },
-      spread: '5',
+      spread: '10',
     },
   ];
 
