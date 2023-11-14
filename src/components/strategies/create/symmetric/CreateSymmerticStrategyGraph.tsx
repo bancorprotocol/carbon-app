@@ -163,7 +163,8 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const marketValue = `${prettifyNumber(marketPrice)} ${quote?.symbol}`;
   const fontRatio = fontSize / 2;
   const padding = 4 * ratio;
-  const rectWidth = marketValue.length * fontRatio + 4 * padding;
+  const rectWidth = marketValue.length * fontRatio + 5 * padding;
+  const rectHeight = fontSize + 3 * padding;
   const rectLeft = marketPrice - rectWidth / 2;
   const rectTop = bottom - (172 + 16) * ratio;
   const marketIndicator = {
@@ -177,13 +178,15 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
       x: rectLeft,
       y: rectTop,
       width: rectWidth,
-      height: fontSize + padding,
+      height: rectHeight,
       rx: 4 * ratio,
     },
     text: {
-      x: rectLeft + padding,
-      y: rectTop + fontSize,
+      x: marketPrice,
+      y: rectTop + rectHeight / 2,
       fontSize,
+      textAnchor: 'middle',
+      dominantBaseline: 'middle',
     },
   };
 
@@ -295,14 +298,15 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   // Get new min & max based on current handler
   const updateMinMax = (e: MouseEvent) => {
     const delta = getDelta(e);
+    const lowest = Math.max(0, left.toNumber());
     if (draggedHandler === 'buy') {
       return {
-        newMin: clamp(left.toNumber(), min + delta, max),
+        newMin: clamp(lowest, min + delta, max),
         newMax: clamp(max, max + delta - distance, right.toNumber()),
       };
     } else {
       return {
-        newMin: clamp(left.toNumber(), min + delta + distance, min),
+        newMin: clamp(lowest, min + delta + distance, min),
         newMax: clamp(min, max + delta, right.toNumber()),
       };
     }

@@ -53,7 +53,7 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             />
             <label
               htmlFor={'spread-' + option}
-              className="block cursor-pointer rounded bg-black p-16 text-center text-white/40 hover:outline hover:outline-1"
+              className="block cursor-pointer rounded-8 bg-black p-16 text-center text-white/40 hover:outline hover:outline-1"
             >
               {option}%
             </label>
@@ -62,7 +62,7 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'flex min-w-0 flex-1 justify-center rounded bg-black p-16 text-center',
+            'flex min-w-0 flex-1 justify-center rounded-8 bg-black p-16 text-center',
             'hover:outline hover:outline-1',
             'focus-within:outline focus-within:outline-2',
             !inOptions && 'outline outline-1 outline-white/60',

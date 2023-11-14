@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useId } from 'react';
+import { ChangeEvent, FC, useEffect, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -47,34 +47,29 @@ export const InputRange: FC<InputRangeProps> = ({
   const errorAboveZero = 'Price must be greater than 0';
   const showWarning = !error && warnings?.length;
 
-  const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
-    const minValue = Number(e.target.value);
-    setMin(sanitizeNumberInput(e.target.value));
-    if (!!max && (minValue <= 0 || minValue >= +max)) {
-      const message = minValue <= 0 ? errorAboveZero : errorMinMax;
+  // Handle errors
+  useEffect(() => {
+    if (!min || !max) return;
+    const minValue = Number(min);
+    const maxValue = Number(max);
+    let error = '';
+    if (minValue >= maxValue) error = errorMinMax;
+    if (minValue <= 0 || maxValue <= 0) error = errorAboveZero;
+    setRangeError(error);
+    if (error) {
       carbonEvents.strategy.strategyErrorShow({
         buy,
-        message,
+        message: error,
       });
-      setRangeError(message);
-    } else {
-      setRangeError('');
     }
+  }, [min, max, setRangeError, buy]);
+
+  const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
+    setMin(sanitizeNumberInput(e.target.value));
   };
 
   const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
-    const maxValue = Number(e.target.value);
     setMax(sanitizeNumberInput(e.target.value));
-    if (!!min && (+min <= 0 || +min >= maxValue)) {
-      const message = +min <= 0 ? errorAboveZero : errorMinMax;
-      carbonEvents.strategy.strategyErrorShow({
-        buy,
-        message: message,
-      });
-      setRangeError(message);
-    } else {
-      setRangeError('');
-    }
   };
 
   const { getFiatAsString } = useFiatCurrency(quote);

@@ -28,15 +28,15 @@ export const CreateSymmerticStrategyBudget: FC<Props> = (props) => {
   if (maxBelowMarket) {
     return (
       <>
-        <TokenBudget token={base} order={order1} query={token0BalanceQuery} />
-        <Explaination base={base} buy />
+        <TokenBudget token={quote} order={order0} query={token1BalanceQuery} />
+        <Explaination base={base} />
       </>
     );
   } else if (minAboveMarket) {
     return (
       <>
-        <TokenBudget token={quote} order={order0} query={token1BalanceQuery} />
-        <Explaination base={base} />
+        <TokenBudget token={base} order={order1} query={token0BalanceQuery} />
+        <Explaination base={base} buy />
       </>
     );
   } else {

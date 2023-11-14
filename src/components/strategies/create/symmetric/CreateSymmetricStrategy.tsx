@@ -101,7 +101,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
           <h3 className="flex-1 text-18 font-weight-500">
             Set Price Range&nbsp;
             <span className="text-white/40">
-              ({quote?.symbol} per {base?.symbol})
+              ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
           {/* TODO add tooltip text here */}
