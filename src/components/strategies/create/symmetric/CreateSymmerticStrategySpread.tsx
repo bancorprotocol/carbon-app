@@ -14,6 +14,12 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
   const inOptions = options.includes(spreadPPM);
   const hasError = spreadPPM <= 0 || spreadPPM > 10;
 
+  const selectSpread = (value: number) => {
+    setSpreadPPM(value);
+    const input = document.getElementById('spread-custom');
+    (input as HTMLInputElement).value = '';
+  };
+
   const onKeyDown = (e: KeyboardEvent) => {
     const fieldset = root.current!;
     const inputs = fieldset.querySelectorAll('input');
@@ -48,8 +54,8 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
               value={option}
               checked={spreadPPM === option}
               tabIndex={spreadPPM === option ? 0 : -1}
-              onChange={() => setSpreadPPM(option)}
-              onFocus={() => setSpreadPPM(option)}
+              onChange={() => selectSpread(option)}
+              onFocus={() => selectSpread(option)}
             />
             <label
               htmlFor={'spread-' + option}
@@ -65,7 +71,7 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             'flex min-w-0 flex-1 justify-center rounded-8 bg-black p-16 text-center',
             'hover:outline hover:outline-1',
             'focus-within:outline focus-within:outline-2',
-            !inOptions && 'outline outline-1 outline-white/60',
+            spreadPPM && !inOptions && 'outline outline-1 outline-white/60',
             hasError && 'text-red outline-red',
             spreadPPM && inOptions && 'text-white/40'
           )}
@@ -82,8 +88,11 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             aria-label="Set custom"
             placeholder="Set custom"
             tabIndex={inOptions ? -1 : 0}
-            onFocus={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
             onChange={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
+            onFocus={(e) => setSpreadPPM(e.target.valueAsNumber)}
+            onBlur={(e) => {
+              if (options.includes(e.target.valueAsNumber)) e.target.value = '';
+            }}
             data-testid="spread-input"
           />
           <span className={styles.suffix}>%</span>
