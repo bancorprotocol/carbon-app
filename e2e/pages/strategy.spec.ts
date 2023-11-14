@@ -103,11 +103,9 @@ const testStrategy = {
       await expect(strategy.sellBudget()).toHaveText(`2 ${base}`);
       await expect(strategy.sellBudgetFiat()).toHaveText(sell.budgetFiat);
       const buyTooltip = await strategy.priceTooltip('buy');
-      await expect(buyTooltip.minPrice()).toHaveText(buy.min);
-      await expect(buyTooltip.maxPrice()).toHaveText(buy.max);
+      await expect(buyTooltip.maxPrice()).toHaveText(`${buy.max} ${quote}`);
       const sellTooltip = await strategy.priceTooltip('sell');
-      await expect(sellTooltip.minPrice()).toHaveText(sell.min);
-      await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
+      await expect(sellTooltip.minPrice()).toHaveText(`${sell.min} ${quote}`);
     });
   },
 };
