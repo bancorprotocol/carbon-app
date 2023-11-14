@@ -7,6 +7,7 @@ import { MainMenu, MobileMenu } from 'components/core/menu';
 import { MainContent } from 'components/core/MainContent';
 import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
+import './polyfills';
 
 let didInit = false;
 
