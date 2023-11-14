@@ -7,7 +7,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props extends SymmetricStrategyProps {
   marketPricePercentage: MarketPricePercentage;
@@ -79,7 +79,7 @@ const TokenBudget: FC<TokenBudgetProps> = (props) => {
   if (!token) return <></>;
 
   const insufficientBalance =
-    !query.isLoading && new BigNumber(query.data || 0).lt(order.budget);
+    !query.isLoading && new SafeDecimal(query.data || 0).lt(order.budget);
 
   return (
     <>

@@ -1,9 +1,9 @@
 import type { FiatSymbol } from 'utils/carbonApi';
+import { SafeDecimal } from 'libs/safedecimal';
 import numbro from 'numbro';
-import BigNumber from 'bignumber.js';
 
 export const getFiatDisplayValue = (
-  fiatValue: BigNumber | string | number,
+  fiatValue: SafeDecimal | string | number,
   currentCurrency: FiatSymbol
 ) => {
   return prettifyNumber(fiatValue, { currentCurrency });
@@ -43,13 +43,15 @@ interface PrettifyNumberOptions {
   round?: boolean;
 }
 
-export function prettifyNumber(num: number | string | BigNumber): string;
+export function prettifyNumber(num: number | string | SafeDecimal): string;
+
 export function prettifyNumber(
-  num: number | string | BigNumber,
+  num: number | string | SafeDecimal,
   options?: PrettifyNumberOptions
 ): string;
+
 export function prettifyNumber(
-  num: number | string | BigNumber,
+  num: number | string | SafeDecimal,
   options?: PrettifyNumberOptions
 ): string {
   const {
@@ -58,7 +60,7 @@ export function prettifyNumber(
     round = false,
   } = options || {};
 
-  const bigNum = new BigNumber(num);
+  const bigNum = new SafeDecimal(num);
   if (options?.currentCurrency) {
     return handlePrettifyNumberCurrency(bigNum, options);
   }
@@ -88,7 +90,7 @@ export function prettifyNumber(
 }
 
 const handlePrettifyNumberCurrency = (
-  num: BigNumber,
+  num: SafeDecimal,
   options?: PrettifyNumberOptions
 ) => {
   const {

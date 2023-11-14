@@ -10,9 +10,9 @@ import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
-import BigNumber from 'bignumber.js';
-import styles from './CreateSymmerticStrategyGraph.module.css';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
+import { SafeDecimal } from 'libs/safedecimal';
+import styles from './CreateSymmerticStrategyGraph.module.css';
 
 interface Props extends SymmetricStrategyProps {
   marketPrice: number;
@@ -23,9 +23,9 @@ const clamp = (min: number, value: number, max: number) =>
   Math.min(max, Math.max(value, min));
 
 const getBoundaries = (props: Props, zoom: number) => {
-  const min = new BigNumber(props.order0.min || '0');
-  const max = new BigNumber(props.order0.max || '0');
-  const marketPrice = new BigNumber(props.marketPrice);
+  const min = new SafeDecimal(props.order0.min || '0');
+  const max = new SafeDecimal(props.order0.max || '0');
+  const marketPrice = new SafeDecimal(props.marketPrice);
   const minMean = marketPrice.lt(min) ? marketPrice : min;
   const maxMean = marketPrice.gt(max) ? marketPrice : max;
   const mean = minMean.plus(maxMean).div(2);
@@ -350,8 +350,9 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     if (tooltipPrice) tooltipPrice.textContent = prettifyNumber(priceValue);
     const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
     const tooltipPercent = document.querySelector(percentSelector);
-    const percent = (100 * (priceValue - marketPrice)) / marketPrice;
-    const percentValue = getSignedMarketPricePercentage(new BigNumber(percent));
+    const percentValue = getSignedMarketPricePercentage(
+      new SafeDecimal((100 * (priceValue - marketPrice)) / marketPrice)
+    );
     if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
   };
 
