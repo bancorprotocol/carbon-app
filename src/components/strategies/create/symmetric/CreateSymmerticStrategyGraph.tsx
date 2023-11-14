@@ -33,8 +33,8 @@ const getBoundaries = (props: Props, zoom: number) => {
   return {
     left: minMean.minus(padding),
     right: maxMean.plus(padding),
-    meanLeft: minMean.plus(mean).div(2),
-    meanRight: maxMean.plus(mean).div(2),
+    minMean,
+    maxMean,
     mean,
   };
 };
@@ -127,7 +127,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
   const { marketPrice, quote, order0, spreadPPM } = props;
-  const { left, right, mean, meanLeft, meanRight } = getBoundaries(props, zoom);
+  const { left, right, mean, minMean, maxMean } = getBoundaries(props, zoom);
 
   const baseWidth = right.minus(left);
   const width = baseWidth.toNumber();
@@ -135,15 +135,27 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const height = 265 * ratio;
   const fontSize = 11 * ratio;
 
+  const bottom = height - 28 * ratio;
+  const middle = bottom - 62 * ratio;
+  const top = middle - 62 * ratio;
+
   ////////////////
   // Price line //
   ////////////////
-  const bottom = height - 28 * ratio;
   const priceStep = right.minus(left).div(40);
   const priceStepHeight = bottom - 10 * ratio;
   const steps = new Array(40)
     .fill(null)
     .map((_, i) => left.plus(priceStep.times(i)).toString());
+
+  const priceDistance = maxMean.minus(minMean).div(2);
+  const prices = [
+    mean.minus(priceDistance.times(2)),
+    mean.minus(priceDistance),
+    mean,
+    mean.plus(priceDistance),
+    mean.plus(priceDistance.times(2)),
+  ].map((v) => v.toString());
 
   const priceIndicator = {
     y: bottom + 10 * ratio,
@@ -153,9 +165,6 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     fill: 'white',
     fillOpacity: 0.6,
   };
-
-  const middle = bottom - 62 * ratio;
-  const top = middle - 62 * ratio;
 
   //////////////////
   // Market price //
@@ -194,7 +203,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   // Polygons //
   //////////////
   const getPointConfig = ({ min, max }: { min: number; max: number }) => {
-    const spread = ((max - min) * spreadPPM) / 100;
+    const spread = ((max - min) * (spreadPPM || 0)) / 100;
     const buyMax = max - spread;
     const sellMin = min + spread;
     const marginalBuy = Math.min(marketPrice - spread / 2, buyMax);
@@ -398,7 +407,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
         <span>Market price provided by CoinGecko</span>
         <IconCoinGecko className="h-8 w-8" />
         <span role="separator">·</span>
-        <span>Spead {spreadPPM}%</span>
+        <span>Spead {spreadPPM || 0}%</span>
       </figcaption>
       <svg
         ref={svg}
@@ -540,15 +549,11 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
                 strokeWidth={ratio}
               />
             ))}
-            <text x={meanLeft.toString()} {...priceIndicator}>
-              {prettifyNumber(meanLeft)}
-            </text>
-            <text x={mean.toString()} {...priceIndicator}>
-              {prettifyNumber(mean)}
-            </text>
-            <text x={meanRight.toString()} {...priceIndicator}>
-              {prettifyNumber(meanRight)}
-            </text>
+            {prices.map((price) => (
+              <text x={price.toString()} {...priceIndicator}>
+                {prettifyNumber(price)}
+              </text>
+            ))}
           </g>
           {/* Market Price */}
           <g>
