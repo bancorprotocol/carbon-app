@@ -1,10 +1,9 @@
-import BigNumber from 'bignumber.js';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-
+import type { SafeDecimal } from 'libs/safedecimal';
 export * from './prettifyNumber';
 
 export const isProduction = window
@@ -149,7 +148,7 @@ export const isPathnameMatch = (
 };
 
 export const formatNumberWithApproximation = (
-  num: BigNumber,
+  num: SafeDecimal,
   { isPercentage = false, approximateBelow = 0.01 } = {}
 ): { value: string; negative: boolean } => {
   const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
@@ -159,10 +158,10 @@ export const formatNumberWithApproximation = (
   } else if (num.gt(0) && num.lt(approximateBelow)) {
     return { value: addPercentage(`< ${approximateBelow}`), negative: false };
   } else if (num.gte(approximateBelow)) {
-    return { value: addPercentage(num.toFormat(2)), negative: false };
+    return { value: addPercentage(num.toFixed(2)), negative: false };
   } else if (num.gt(-1 * approximateBelow)) {
     return { value: addPercentage(`> -${approximateBelow}`), negative: true };
   } else {
-    return { value: addPercentage(num.toFormat(2)), negative: true };
+    return { value: addPercentage(num.toFixed(2)), negative: true };
   }
 };

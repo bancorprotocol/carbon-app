@@ -12,7 +12,7 @@ import { useGetTradeActionsQuery } from 'libs/queries/sdk/tradeActions';
 import { useModal } from 'hooks/useModal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useTradeAction } from 'components/trade/tradeWidget/useTradeAction';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 
 type Props = {
   id: string;
@@ -154,7 +154,7 @@ export const useModalTradeRouting = ({
 
   const totalSourceAmount = data?.totalSourceAmount || '0';
   const totalTargetAmount = data?.totalTargetAmount || '0';
-  const insufficientBalance = new BigNumber(sourceBalance).lt(
+  const insufficientBalance = new SafeDecimal(sourceBalance).lt(
     isTradeBySource ? sourceInput : calcMaxInput(sourceInput)
   );
   const errorMsg = insufficientBalance ? 'Insufficient Balance' : '';

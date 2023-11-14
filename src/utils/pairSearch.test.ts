@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { searchPairKeys } from './pairSearch';
+import { searchPairKeys } from 'utils/pairSearch';
 
 // Snapshot of the tokens available on the app on September 2023
 const keyNameRecord = {

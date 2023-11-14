@@ -4,7 +4,7 @@ import {
   shortenString,
 } from '.';
 import { describe, it, expect } from 'vitest';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 
 describe('shortenString', () => {
   const testCases: [string, string | undefined, number | undefined, string][] =
@@ -231,53 +231,53 @@ describe('prettifyNumber', () => {
 
 describe('formatNumberWithApproximation', () => {
   const testCases: [
-    BigNumber,
+    SafeDecimal,
     { isPercentage?: boolean; approximateBelow?: number },
     { value: string; negative: boolean }
   ][] = [
-    [new BigNumber(0), {}, { value: '0.00', negative: false }],
+    [new SafeDecimal(0), {}, { value: '0.00', negative: false }],
     [
-      new BigNumber(0),
+      new SafeDecimal(0),
       { isPercentage: true },
       { value: '0.00%', negative: false },
     ],
     [
-      new BigNumber(0.005),
+      new SafeDecimal(0.005),
       { approximateBelow: 0.2, isPercentage: true },
       { value: '< 0.2%', negative: false },
     ],
     [
-      new BigNumber(0.01),
+      new SafeDecimal(0.01),
       { approximateBelow: 0.01 },
       { value: '0.01', negative: false },
     ],
     [
-      new BigNumber(54.321),
+      new SafeDecimal(54.321),
       { approximateBelow: 0.01 },
       { value: '54.32', negative: false },
     ],
     [
-      new BigNumber(23.456),
+      new SafeDecimal(23.456),
       { approximateBelow: 0.01 },
       { value: '23.46', negative: false },
     ],
     [
-      new BigNumber(-0.005),
+      new SafeDecimal(-0.005),
       { approximateBelow: 0.01 },
       { value: '> -0.01', negative: true },
     ],
     [
-      new BigNumber(-0.01),
+      new SafeDecimal(-0.01),
       { approximateBelow: 0.01, isPercentage: true },
       { value: '-0.01%', negative: true },
     ],
     [
-      new BigNumber(-0.02),
+      new SafeDecimal(-0.02),
       { approximateBelow: 0.01 },
       { value: '-0.02', negative: true },
     ],
     [
-      new BigNumber(-34.567),
+      new SafeDecimal(-34.567),
       { approximateBelow: 0.01 },
       { value: '-34.57', negative: true },
     ],

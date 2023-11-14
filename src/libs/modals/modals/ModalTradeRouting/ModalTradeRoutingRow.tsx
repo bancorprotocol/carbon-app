@@ -2,7 +2,7 @@ import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { ModalTradeRoutingRowCell } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRowCell';
 import { ForwardArrow } from 'components/common/forwardArrow';
@@ -31,19 +31,19 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
 }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
 
-  const sourceAmountFiat = new BigNumber(sourceAmount).times(
+  const sourceAmountFiat = new SafeDecimal(sourceAmount).times(
     sourceFiatPrice?.[selectedFiatCurrency] || 0
   );
 
-  const targetAmountFiat = new BigNumber(targetAmount).times(
+  const targetAmountFiat = new SafeDecimal(targetAmount).times(
     targetFiatPrice?.[selectedFiatCurrency] || 0
   );
 
   const averageToken = buy ? source : target;
   const averageFiatPrice = buy ? sourceFiatPrice : targetFiatPrice;
   const averageAmount = buy
-    ? new BigNumber(sourceAmount).div(targetAmount)
-    : new BigNumber(targetAmount).div(sourceAmount);
+    ? new SafeDecimal(sourceAmount).div(targetAmount)
+    : new SafeDecimal(targetAmount).div(sourceAmount);
 
   const averagePriceFiat = averageAmount.times(
     averageFiatPrice?.[selectedFiatCurrency] || 0

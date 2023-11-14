@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Strategy } from 'libs/queries';
 import {
   StrategyFilter,
@@ -17,11 +17,11 @@ const differentStatus = (a: Strategy, b: Strategy) => {
 const sortFn: Record<StrategySort, (a: Strategy, b: Strategy) => number> = {
   recent: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
-    return new BigNumber(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
+    return new SafeDecimal(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
   },
   old: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
-    return new BigNumber(a.idDisplay).minus(b.idDisplay).toNumber();
+    return new SafeDecimal(a.idDisplay).minus(b.idDisplay).toNumber();
   },
   pairAsc: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;

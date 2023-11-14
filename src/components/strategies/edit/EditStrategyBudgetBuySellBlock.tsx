@@ -1,5 +1,5 @@
 import { FC, useId } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -28,13 +28,13 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
 
-  const calculatedWalletBalance = new BigNumber(
+  const calculatedWalletBalance = new SafeDecimal(
     tokenBalanceQuery.data || 0
-  ).minus(new BigNumber(order.budget || 0));
+  ).minus(new SafeDecimal(order.budget || 0));
 
   const insufficientBalance =
     type === 'withdraw'
-      ? new BigNumber(balance || 0).lt(order.budget)
+      ? new SafeDecimal(balance || 0).lt(order.budget)
       : calculatedWalletBalance.lt(0);
 
   return (
