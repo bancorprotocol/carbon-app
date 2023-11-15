@@ -550,7 +550,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
               />
             ))}
             {prices.map((price) => (
-              <text x={price.toString()} {...priceIndicator}>
+              <text key={price} x={price.toString()} {...priceIndicator}>
                 {prettifyNumber(price)}
               </text>
             ))}

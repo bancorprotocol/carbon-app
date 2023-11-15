@@ -45,14 +45,11 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
   });
   const priceWarnings = getPriceWarnings(marketPricePercentage);
 
-  // Initialize order
+  // Initialize order ()
   useEffect(() => {
-    // TODO: only trigger the effect once
-    const hasMin = !!order0.min && order0.min !== '0';
-    const hasMax = !!order0.max && order0.max !== '0';
-    if (marketPrice.gt(0) && !hasMin && !hasMax) {
-      order0.setMin(marketPrice.times(0.999).toString());
-      order0.setMax(marketPrice.times(1.001).toString());
+    if (marketPrice > 0 && !order0.min && !order0.max) {
+      order0.setMin((marketPrice * 0.999).toString());
+      order0.setMax((marketPrice * 1.001).toString());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice]);
@@ -89,7 +86,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
         </header>
         <CreateSymmerticStrategyGraph
           {...props}
-          marketPrice={marketPrice.toNumber()}
+          marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
         />
       </article>

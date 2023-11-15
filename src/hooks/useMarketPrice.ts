@@ -1,6 +1,5 @@
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from './useFiatCurrency';
-import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   base?: Token;
@@ -12,6 +11,6 @@ export const useMarketPrice = ({ base, quote }: Props) => {
   const { data: quotePriceMap } = useGetTokenPrice(quote?.address);
   const basePrice = basePriceMap?.[selectedFiatCurrency] || 0;
   const quotePrice = quotePriceMap?.[selectedFiatCurrency] || 0;
-  if (!basePrice || !quotePrice) return new SafeDecimal(0);
-  return new SafeDecimal(basePrice).div(quotePrice);
+  if (!basePrice || !quotePrice) return 0;
+  return basePrice / quotePrice;
 };
