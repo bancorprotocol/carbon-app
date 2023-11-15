@@ -45,7 +45,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
   });
   const priceWarnings = getPriceWarnings(marketPricePercentage);
 
-  // Initialize order ()
+  // Initialize order when market price is available
   useEffect(() => {
     if (marketPrice > 0 && !order0.min && !order0.max) {
       order0.setMin((marketPrice * 0.999).toString());
@@ -135,6 +135,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
           </Tooltip>
         </header>
         <CreateSymmerticStrategySpread
+          defaultValue={0.05}
           options={[0.01, 0.05, 0.1]}
           spreadPPM={spreadPPM}
           setSpreadPPM={setSpreadPPM}

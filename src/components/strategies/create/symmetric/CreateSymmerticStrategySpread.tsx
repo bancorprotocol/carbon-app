@@ -4,12 +4,14 @@ import { cn } from 'utils/helpers';
 import styles from './CreateSymmerticStrategySpread.module.css';
 
 interface Props {
+  /** Value used to fallback to when custom input is empty */
+  defaultValue: number;
   options: number[];
   spreadPPM: number;
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
 export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
-  const { options, spreadPPM, setSpreadPPM } = props;
+  const { defaultValue, options, spreadPPM, setSpreadPPM } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spreadPPM);
   const hasError = spreadPPM <= 0 || spreadPPM > 10;
@@ -89,9 +91,9 @@ export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
             placeholder="Set custom"
             tabIndex={inOptions ? -1 : 0}
             onChange={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
-            onFocus={(e) => setSpreadPPM(e.target.valueAsNumber)}
             onBlur={(e) => {
               if (options.includes(e.target.valueAsNumber)) e.target.value = '';
+              else if (!spreadPPM) setSpreadPPM(defaultValue);
             }}
             data-testid="spread-input"
           />

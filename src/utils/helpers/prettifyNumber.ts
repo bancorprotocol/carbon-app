@@ -148,3 +148,18 @@ const handlePrettifyNumberCurrency = (
     num.toNumber()
   );
 };
+
+/**
+ * Work around prettifyNumber to support signed number
+ * @dev this function is not meant to remains, so it doesn't support all cases supported by prettifyNumber
+ * @todo(#909) update prettifyNumber and remove this function
+ */
+export const prettifySignedNumber = (
+  num: number | string | SafeDecimal,
+  options?: PrettifyNumberOptions
+) => {
+  const bigNum = new SafeDecimal(num);
+  return bigNum.lt(0)
+    ? `-${prettifyNumber(bigNum.abs(), options)}`
+    : prettifyNumber(bigNum, options);
+};

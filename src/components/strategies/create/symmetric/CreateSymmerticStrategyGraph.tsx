@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn, prettifySignedNumber } from 'utils/helpers';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
@@ -147,6 +147,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   const steps = new Array(40)
     .fill(null)
     .map((_, i) => left.plus(priceStep.times(i)).toString());
+  const stepPoints = Array.from(new Set(steps));
 
   const priceDistance = maxMean.minus(minMean).div(2);
   const prices = [
@@ -155,7 +156,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     mean,
     mean.plus(priceDistance),
     mean.plus(priceDistance.times(2)),
-  ].map((v) => v.toString());
+  ];
 
   const priceIndicator = {
     y: bottom + 10 * ratio,
@@ -169,7 +170,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   //////////////////
   // Market price //
   //////////////////
-  const marketValue = `${prettifyNumber(marketPrice)} ${quote?.symbol}`;
+  const marketValue = `${prettifySignedNumber(marketPrice)} ${quote?.symbol}`;
   const fontRatio = fontSize / 2;
   const padding = 4 * ratio;
   const rectWidth = marketValue.length * fontRatio + 5 * padding;
@@ -203,7 +204,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   // Polygons //
   //////////////
   const getPointConfig = ({ min, max }: { min: number; max: number }) => {
-    const spread = ((max - min) * (spreadPPM || 0)) / 100;
+    const spread = ((max - min) * clamp(0, spreadPPM || 0, 10)) / 100;
     const buyMax = max - spread;
     const sellMin = min + spread;
     const marginalBuy = Math.min(marketPrice - spread / 2, buyMax);
@@ -226,9 +227,9 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
   });
   const { min, max, sellMin, buyMax } = config;
   const marketPercent = props.marketPricePercentage;
-  const minValue = prettifyNumber(min);
+  const minValue = prettifySignedNumber(min);
   const minPercent = getSignedMarketPricePercentage(marketPercent.min);
-  const maxValue = prettifyNumber(max);
+  const maxValue = prettifySignedNumber(max);
   const maxPercent = getSignedMarketPricePercentage(marketPercent.max);
 
   const buyPoints = getBuyPoint(config);
@@ -356,7 +357,8 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
     const priceSelector = `#${draggedHandler}-handler .tooltip-price`;
     const tooltipPrice = document.querySelector(priceSelector);
     const priceValue = draggedHandler === 'buy' ? newMin : newMax;
-    if (tooltipPrice) tooltipPrice.textContent = prettifyNumber(priceValue);
+    if (tooltipPrice)
+      tooltipPrice.textContent = prettifySignedNumber(priceValue);
     const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
     const tooltipPercent = document.querySelector(percentSelector);
     const percentValue = getSignedMarketPricePercentage(
@@ -538,7 +540,7 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
               stroke="#212123"
               strokeWidth={ratio}
             />
-            {steps.map((step) => (
+            {stepPoints.map((step) => (
               <line
                 key={step}
                 x1={step}
@@ -550,8 +552,12 @@ export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
               />
             ))}
             {prices.map((price) => (
-              <text key={price} x={price.toString()} {...priceIndicator}>
-                {prettifyNumber(price)}
+              <text
+                key={price.toString()}
+                x={price.toString()}
+                {...priceIndicator}
+              >
+                {prettifySignedNumber(price)}
               </text>
             ))}
           </g>
