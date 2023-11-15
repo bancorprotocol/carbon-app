@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import {
   fiatPrice,
@@ -102,8 +101,6 @@ const testStrategy = {
 
       await createForm.submit();
 
-      // await checkApproval(page, [base, quote]);
-
       await page.waitForURL('/', { timeout: 10_000 });
 
       // Verfiy notification
@@ -163,7 +160,6 @@ test.describe('Strategies', () => {
       setting: 'limit',
       base: 'ETH',
       quote: 'DAI',
-      totalBudget: '$3,344',
       buy: {
         min: 1500,
         max: 1500,
@@ -182,20 +178,19 @@ test.describe('Strategies', () => {
       setting: 'symmetric',
       base: 'ETH',
       quote: 'BNT',
-      totalBudget: '$3,334',
       buy: {
-        min: 2000,
-        max: 2900, // Use to verify
-        budget: 0, // Use to verify
+        min: 3000,
+        max: 4900,
+        budget: 0,
         budgetFiat: 0,
       },
       sell: {
-        min: 2100, // Use to verify
-        max: 3000,
+        min: 3100,
+        max: 5000,
         budget: 2,
         budgetFiat: 3334,
       },
-      spread: 10,
+      spread: 5,
     },
   ];
 

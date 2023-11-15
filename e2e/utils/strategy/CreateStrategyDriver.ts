@@ -12,7 +12,6 @@ interface PriceField {
 interface BaseConfig {
   base: string;
   quote: string;
-  totalBudget: string;
   type: StrategyType;
   setting: 'limit' | 'range' | 'symmetric';
   buy: PriceField;
