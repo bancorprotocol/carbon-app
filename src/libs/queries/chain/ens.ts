@@ -36,7 +36,7 @@ export const useGetAddressFromEns = (ens: string) => {
         throw new Error('useGetAddressFromEns no provider provided');
       }
       if (isValidEnsName(ens)) {
-        return await provider.resolveName(ens);
+        return provider.resolveName(ens);
       }
       return '';
     },
@@ -47,7 +47,13 @@ export const useGetAddressFromEns = (ens: string) => {
   );
 };
 
-export const isValidEnsName = (ens: string | undefined) => {
-  const ensFormatRegex = /[\w\p{RGI_Emoji}]+\.\w+/v;
-  return !!ens && ens.match(ensFormatRegex);
-};
+let ensRegex: RegExp;
+try {
+  // Support emojis
+  ensRegex = new RegExp(/[\w\p{RGI_Emoji}]+\.\w+/, 'v');
+} catch (err) {
+  // If no support, fallback to "any string with at least one dot and no whitespace"
+  ensRegex = new RegExp(/^[^ ]*\.[^ ]*$/);
+}
+
+export const isValidEnsName = (ens?: string) => !!ens && ensRegex.test(ens);
