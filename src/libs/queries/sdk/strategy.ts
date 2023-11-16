@@ -44,6 +44,14 @@ export interface Strategy {
   roi: SafeDecimal;
 }
 
+export interface StrategyWithFiat extends Strategy {
+  fiatBudget: {
+    total: SafeDecimal;
+    quote: SafeDecimal;
+    base: SafeDecimal;
+  };
+}
+
 interface StrategiesHelperProps {
   strategies: SDKStrategy[];
   getTokenById: (id: string) => Token | undefined;
