@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Strategy } from 'libs/queries';
+import { StrategyWithFiat } from 'libs/queries';
 import { m, mItemVariant } from 'libs/motion';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 
@@ -10,7 +10,7 @@ import { StrategyBlockHeader } from './StrategyBlockHeader';
 import { StrategyGraph } from './StrategyGraph';
 
 interface Props {
-  strategy: Strategy;
+  strategy: StrategyWithFiat;
   className?: string;
   isExplorer?: boolean;
 }

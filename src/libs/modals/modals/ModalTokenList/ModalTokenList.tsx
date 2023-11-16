@@ -9,6 +9,7 @@ import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalToke
 import { SearchInput } from 'components/common/searchInput';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { KeyboardEvent } from 'react';
 
 export type ModalTokenListData = {
   onClick: (token: Token) => void;
@@ -35,6 +36,12 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
     popularTokens,
   } = useModalTokenList({ id, data });
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' && !!filteredTokens.length) {
+      onSelect(filteredTokens[0]);
+    }
+  };
+
   return (
     <ModalOrMobileSheet id={id} title="Select Token">
       <SearchInput
@@ -44,9 +51,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         value={search}
         setValue={setSearch}
         className="rounded-8"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') onSelect(filteredTokens[0]);
-        }}
+        onKeyDown={handleKeyDown}
       />
       {isError ? (
         <ModalTokenListError />
