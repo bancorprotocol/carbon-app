@@ -141,6 +141,12 @@ export function prettifyNumber(
   })}`;
 }
 
+const getDisplayCurrency = (currency: string) => {
+  if (!Intl.supportedValuesOf) return 'symbol';
+  if (Intl.supportedValuesOf('currency').includes(currency)) return 'symbol';
+  return 'name';
+};
+
 const handlePrettifyNumberCurrency = (
   num: SafeDecimal,
   options?: PrettifyNumberOptions
@@ -156,13 +162,7 @@ const handlePrettifyNumberCurrency = (
   const nfCurrencyOptionsDefault: Intl.NumberFormatOptions = {
     style: 'currency',
     currency: currentCurrency,
-    currencyDisplay:
-      // @ts-ignore: supportedValuesOf supported from TypeScript 5.1
-      Intl.supportedValuesOf &&
-      // @ts-ignore: supportedValuesOf supported from TypeScript 5.1
-      Intl.supportedValuesOf('currency').includes(currentCurrency)
-        ? 'symbol'
-        : 'name',
+    currencyDisplay: getDisplayCurrency(currentCurrency),
     useGrouping: true,
     // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     roundingMode: round ? 'halfExpand' : 'floor',
@@ -190,11 +190,13 @@ const handlePrettifyNumberCurrency = (
       maximumFractionDigits: 1,
     }).format(num.toNumber());
 
-  if (!highPrecision && num.gt(100))
+  if (!highPrecision && num.gt(100)) {
     return Intl.NumberFormat(locale, {
       ...nfCurrencyOptionsDefault,
+      minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(num.toNumber());
+  }
 
   return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
     num.toNumber()
