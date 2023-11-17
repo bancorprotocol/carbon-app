@@ -142,7 +142,9 @@ export function prettifyNumber(
 }
 
 const getDisplayCurrency = (currency: string) => {
+  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
   if (!Intl.supportedValuesOf) return 'symbol';
+  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
   if (Intl.supportedValuesOf('currency').includes(currency)) return 'symbol';
   return 'name';
 };
