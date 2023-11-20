@@ -8,10 +8,7 @@ import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreat
 import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
-import { lsService } from 'services/localeStorage';
-import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
-import { StrategyCreateSearch } from './types';
 import styles from './CreateStrategyTypeMenu.module.css';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
@@ -22,7 +19,6 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   setSelectedStrategySettings,
 }) => {
   const list = useRef<HTMLUListElement>(null);
-  const { openModal } = useModal();
   const { items, handleClick } = useCreateStrategyTypeMenu(
     base?.address!,
     quote?.address!
@@ -45,19 +41,6 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
       setSelectedStrategySettings(items[0]);
     }
   }, [selectedStrategySettings, items, setSelectedStrategySettings]);
-
-  const select = (to: string, search: StrategyCreateSearch) => {
-    if (
-      search.strategySettings === 'range' &&
-      !lsService.getItem('hasSeenCreateStratExpertMode')
-    ) {
-      openModal('createStratExpertMode', {
-        onConfirm: () => setSelectedStrategySettings({ to, search }),
-      });
-    } else {
-      setSelectedStrategySettings({ to, search });
-    }
-  };
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
@@ -103,11 +86,11 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 role="tab"
                 aria-controls={'panel-' + id}
                 aria-selected={selectedId === id}
-                onClick={() => select(to, search)}
+                onClick={() => setSelectedStrategySettings({ to, search })}
                 className={cn(
-                  'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-12 py-16 text-14',
-                  'focus-visible:outline focus-visible:outline-1 focus-visible:outline-white/60',
-                  selectedId === id ? 'border-2 !border-white/80' : ''
+                  'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-12 py-16 text-14 outline-white/60',
+                  'focus-visible:outline focus-visible:outline-1',
+                  selectedId === id ? 'outline outline-white/80' : ''
                 )}
                 data-testid={id}
               >
