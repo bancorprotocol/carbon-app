@@ -1,0 +1,9 @@
+.details .chevron {
+  width: 14px;
+  height: 14px;
+  transform: rotate(-90deg);
+  transition: transform 0.1s ease-in-out;
+}
+.details[open] .chevron {
+  transform: rotate(0);
+}

@@ -1,39 +1,18 @@
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, KeyboardEvent, useEffect, useMemo, useRef } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
-import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
-import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { Button } from 'components/common/button';
-import { items } from 'components/strategies/create/variants';
+import { items as itemsVariant } from 'components/strategies/create/variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create/index';
 import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
-import { ReactComponent as IconArrowsTransparent } from 'assets/icons/arrows-transparent.svg';
-import { ReactComponent as IconArrows } from 'assets/icons/arrows.svg';
+import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
+import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
+import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { lsService } from 'services/localeStorage';
 import { useModal } from 'hooks/useModal';
 import { cn } from 'utils/helpers';
-
-const BlockIconTextDesc = ({
-  icon,
-  title,
-  description,
-}: {
-  icon: ReactNode;
-  title: string;
-  description: string;
-}) => {
-  return (
-    <div className="flex items-center space-x-20">
-      <div className="flex h-32 w-32 flex-shrink-0 items-center justify-center rounded-6 bg-white/25">
-        {icon}
-      </div>
-      <div className="flex-shrink space-y-6">
-        <div className="text-14 font-weight-500">{title}</div>
-        <div className="min-h-[32px] text-12 text-white/60">{description}</div>
-      </div>
-    </div>
-  );
-};
+import { StrategyCreateSearch } from './types';
+import styles from './CreateStrategyTypeMenu.module.css';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
@@ -42,110 +21,143 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   selectedStrategySettings,
   setSelectedStrategySettings,
 }) => {
+  const list = useRef<HTMLUListElement>(null);
   const { openModal } = useModal();
-  const {
-    items: tabs,
-    handleClick,
-    selectedTabItems,
-  } = useCreateStrategyTypeMenu(base?.address!, quote?.address!, strategyType);
+  const { items, handleClick } = useCreateStrategyTypeMenu(
+    base?.address!,
+    quote?.address!
+  );
+
+  const selectedId = useMemo(() => {
+    if (!selectedStrategySettings) return;
+    const search = selectedStrategySettings.search;
+    const item = items.find((item) => {
+      return (
+        item.search.strategySettings === search.strategySettings &&
+        item.search.strategyDirection === search.strategyDirection
+      );
+    });
+    return item?.id;
+  }, [selectedStrategySettings, items]);
 
   useEffect(() => {
-    !selectedStrategySettings &&
-      setSelectedStrategySettings(selectedTabItems[0]);
-  }, [
-    selectedTabItems,
-    setSelectedStrategySettings,
-    handleClick,
-    selectedStrategySettings,
-  ]);
+    if (!selectedStrategySettings) {
+      setSelectedStrategySettings(items[0]);
+    }
+  }, [selectedStrategySettings, items, setSelectedStrategySettings]);
+
+  const select = (to: string, search: StrategyCreateSearch) => {
+    if (
+      search.strategySettings === 'range' &&
+      !lsService.getItem('hasSeenCreateStratExpertMode')
+    ) {
+      openModal('createStratExpertMode', {
+        onConfirm: () => setSelectedStrategySettings({ to, search }),
+      });
+    } else {
+      setSelectedStrategySettings({ to, search });
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      const btns = list.current?.querySelectorAll('button');
+      if (!btns) return;
+      for (let i = 0; i < btns.length; i++) {
+        if (btns[i] !== document.activeElement) continue;
+        const nextIndex =
+          e.key === 'ArrowRight'
+            ? i + (1 % btns.length)
+            : (i - 1 + btns.length) % btns.length;
+        return btns[nextIndex].focus();
+      }
+    }
+  };
 
   return (
     <>
       <m.div
-        variants={items}
+        variants={itemsVariant}
         className="space-y-20 rounded-10 bg-silver p-20"
         key="createStrategyTypeMenu"
       >
         <h2>Strategy Type</h2>
-        <TabsMenu>
-          {tabs.map(({ label, to, search, testid }) => (
-            <TabsMenuButton
-              key={label}
-              onClick={() => {
-                setSelectedStrategySettings(undefined);
-                handleClick(to, search, true);
-              }}
-              isActive={search.strategyType === strategyType}
-              data-testid={testid}
-            >
-              {label}
-            </TabsMenuButton>
-          ))}
-        </TabsMenu>
-
-        <div>
-          {strategyType === 'recurring' &&
-            BlockIconTextDesc({
-              icon: <IconArrows className="h-18 w-18" />,
-              title: 'Automated Linked Orders',
-              description:
-                'Tokens acquired in a buy order become automatically available to trade in the linked sell order, and vice versa.',
-            })}
-          {strategyType === 'disposable' &&
-            BlockIconTextDesc({
-              icon: <IconArrowsTransparent className={'h-18 w-18'} />,
-              title: 'Single Use Order',
-              description:
-                'An irreversible buy or sell order at a predefined price or range.',
-            })}
-        </div>
-        <div
-          className={`${
-            strategyType === 'disposable' ? 'grid grid-cols-2' : 'flex'
-          } gap-12 pt-10 md:flex`}
+        <ul
+          ref={list}
+          onKeyDown={handleKeyDown}
+          role="tablist"
+          className="flex gap-8"
         >
-          {selectedTabItems.map(
-            ({ label, svg, to, search, isRecommended, testid }, i) => (
-              <div key={`${label}-${i}`} className="relative flex flex-1">
-                {isRecommended && (
-                  <span className="absolute -top-16 left-1/2 z-10 -translate-x-1/2 rounded border-2 border-green/25 bg-darkGreen px-5 py-3 text-12 font-weight-500 text-green md:px-7 md:text-10">
-                    Recommended
-                  </span>
-                )}
-                <Button
-                  variant="black"
-                  onClick={() => {
-                    if (
-                      search.strategySettings === 'range' &&
-                      !lsService.getItem('hasSeenCreateStratExpertMode')
-                    ) {
-                      openModal('createStratExpertMode', {
-                        onConfirm: () =>
-                          setSelectedStrategySettings({ to, search }),
-                      });
-                    } else {
-                      setSelectedStrategySettings({ to, search });
-                    }
-                  }}
-                  fullWidth
-                  className={cn(
-                    'flex h-auto flex-col items-center justify-center rounded-10 px-0 py-10',
-                    selectedStrategySettings?.search.strategyDirection ===
-                      search.strategyDirection &&
-                      selectedStrategySettings?.search.strategySettings ===
-                        search.strategySettings
-                      ? 'border-2 !border-white/80'
-                      : ''
-                  )}
-                  data-testid={testid}
+          {items.map(({ search, to, isRecommended, svg, id, label }) => (
+            <li role="none" key={id} className="relative flex-1">
+              {isRecommended && (
+                <span
+                  aria-label="Recommended"
+                  className="absolute top-8 right-8 rounded bg-darkGreen p-4 text-green"
                 >
-                  {svg}
-                  <span className="mt-10 text-14">{label}</span>
-                </Button>
-              </div>
-            )
-          )}
-        </div>
+                  <IconStar aria-hidden className="h-10 w-10" />
+                </span>
+              )}
+              <button
+                id={'tab-' + id}
+                role="tab"
+                aria-controls={'panel-' + id}
+                aria-selected={selectedId === id}
+                onClick={() => select(to, search)}
+                className={cn(
+                  'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-12 py-16 text-14',
+                  'focus-visible:outline focus-visible:outline-1 focus-visible:outline-white/60',
+                  selectedId === id ? 'border-2 !border-white/80' : ''
+                )}
+                data-testid={id}
+              >
+                {svg}
+                <span
+                  className={selectedId === id ? 'text-white' : 'text-white/40'}
+                >
+                  {label}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        {items.map(({ id, label, description, benefits, isRecommended }) => (
+          <article
+            role="tabpanel"
+            id={'panel-' + id}
+            aria-labelledby={'tab-' + id}
+            key={id}
+            className={cn(
+              'flex flex-col gap-16',
+              selectedId === id ? '' : 'hidden'
+            )}
+          >
+            <hgroup>
+              <h3 className="text-14 font-weight-500">{label}</h3>
+              <p className="text-12 text-white/80">{description}</p>
+            </hgroup>
+            <h4 className="text-12 font-weight-500">Benefits</h4>
+            {benefits.map(({ summary, details }, i) => (
+              /** @ts-ignore: name in details only work in chromium */
+              <details key={i} className={styles.details} name="accordion">
+                <summary className="mb-4 flex cursor-pointer items-center gap-8 text-12 text-white/80">
+                  <IconCheck className="h-14 w-14 text-green" />
+                  {summary}
+                  <IconChevron className={styles.chevron} />
+                </summary>
+                <p className="pl-22 text-10 text-white/60">{details}</p>
+              </details>
+            ))}
+            {isRecommended && (
+              <p className="flex gap-8 text-12 text-white/40">
+                <span className="rounded bg-darkGreen p-4 text-green">
+                  <IconStar aria-hidden className="h-10 w-10" />
+                </span>
+                Carbon Signature Features
+              </p>
+            )}
+          </article>
+        ))}
       </m.div>
 
       <Button
@@ -154,6 +166,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         size="lg"
         disabled={!selectedStrategySettings}
         onClick={() => {
+          const search = selectedStrategySettings?.search;
           handleClick(
             selectedStrategySettings?.to!,
             selectedStrategySettings?.search!
@@ -161,9 +174,8 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           carbonEvents.strategy.newStrategyNextStepClick({
             baseToken: base,
             quoteToken: quote,
-            strategySettings: selectedStrategySettings?.search.strategySettings,
-            strategyDirection:
-              selectedStrategySettings?.search.strategyDirection,
+            strategySettings: search?.strategySettings,
+            strategyDirection: search?.strategyDirection,
             strategyType: strategyType,
           });
         }}
