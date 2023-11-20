@@ -1,13 +1,13 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { OrderCreate } from '../useOrder';
 
-interface SymmetricStrategy {
+interface OverlappingStrategy {
   order0: OrderCreate;
   order1: OrderCreate;
   spreadPPM: number;
 }
 // TODO: Remove budget if minAboveMarket or maxBelowMarket
-export const prepareSymmetricOrders = (props: SymmetricStrategy) => {
+export const prepareOverlappingOrders = (props: OverlappingStrategy) => {
   const { order0, order1, spreadPPM } = props;
   const min = new SafeDecimal(order0.min);
   const max = new SafeDecimal(order0.max);

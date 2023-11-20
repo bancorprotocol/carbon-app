@@ -13,7 +13,7 @@ interface BaseConfig {
   base: string;
   quote: string;
   type: StrategyType;
-  setting: 'limit' | 'range' | 'symmetric';
+  setting: 'limit' | 'range' | 'overlapping';
   buy: PriceField;
   sell: PriceField;
 }
@@ -22,20 +22,22 @@ export interface LimiStrategyConfig extends BaseConfig {
   type: 'recurring';
   setting: 'limit';
 }
-export interface SymmetricStrategyConfig extends BaseConfig {
+export interface OverlappingStrategyConfig extends BaseConfig {
   type: 'recurring';
-  setting: 'symmetric';
+  setting: 'overlapping';
   spread: number;
 }
 
-export type CreateStrategyConfig = LimiStrategyConfig | SymmetricStrategyConfig;
+export type CreateStrategyConfig =
+  | LimiStrategyConfig
+  | OverlappingStrategyConfig;
 
 type Mode = 'buy' | 'sell';
 type StrategyType = 'recurring' | 'disposable';
 type StrategySettings =
   | 'two-limits'
   | 'two-ranges'
-  | 'symmetric'
+  | 'overlapping'
   | `${Mode}-range`
   | `${Mode}-limit`;
 
@@ -52,7 +54,7 @@ export class CreateStrategyDriver {
     };
   }
 
-  getSymmetricForm() {
+  getOverlappingForm() {
     const form = this.page.getByTestId('create-strategy-form');
     return {
       min: () => form.getByLabel('Min Buy Price'),
@@ -84,9 +86,9 @@ export class CreateStrategyDriver {
     await form.budget().fill(budget.toString());
     return form;
   }
-  async fillSymmetric() {
-    const config = this.config as SymmetricStrategyConfig;
-    const form = this.getSymmetricForm();
+  async fillOverlapping() {
+    const config = this.config as OverlappingStrategyConfig;
+    const form = this.getOverlappingForm();
     await form.min().fill(config.buy.min.toString());
     await form.max().fill(config.sell.max.toString());
     await form.budgetBase().fill(config.sell.budget.toString());

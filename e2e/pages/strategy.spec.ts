@@ -79,9 +79,9 @@ const testStrategy = {
       );
     });
   },
-  symmetric: (config: CreateStrategyConfig) => {
+  overlapping: (config: CreateStrategyConfig) => {
     const { base, quote, buy, sell } = config;
-    return test(`Create Symmetric Strategy ${base}->${quote}`, async ({
+    return test(`Create Overlapping Strategy ${base}->${quote}`, async ({
       page,
     }) => {
       test.setTimeout(180_000);
@@ -93,9 +93,9 @@ const testStrategy = {
       await myStrategies.createStrategy();
       await createForm.selectToken('base');
       await createForm.selectToken('quote');
-      await createForm.selectSetting('symmetric');
+      await createForm.selectSetting('overlapping');
       await createForm.nextStep();
-      await createForm.fillSymmetric();
+      await createForm.fillOverlapping();
 
       // TODO Assert budget
 
@@ -175,7 +175,7 @@ test.describe('Strategies', () => {
     },
     {
       type: 'recurring',
-      setting: 'symmetric',
+      setting: 'overlapping',
       base: 'ETH',
       quote: 'BNT',
       buy: {

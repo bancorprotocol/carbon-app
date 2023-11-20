@@ -6,15 +6,15 @@ import {
   useRef,
   useState,
 } from 'react';
-import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
+import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { cn, prettifySignedNumber } from 'utils/helpers';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
 import { SafeDecimal } from 'libs/safedecimal';
-import styles from './CreateSymmerticStrategyGraph.module.css';
+import styles from './CreateOverlappingStrategyGraph.module.css';
 
-interface Props extends SymmetricStrategyProps {
+interface Props extends OverlappingStrategyProps {
   marketPrice: number;
   marketPricePercentage: MarketPricePercentage;
 }
@@ -122,7 +122,7 @@ const getMarginalSellPoint = (config: PointConfig) => {
   ].join(' ');
 };
 
-export const CreateSymmerticStrategyGraph: FC<Props> = (props) => {
+export const CreateOverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');

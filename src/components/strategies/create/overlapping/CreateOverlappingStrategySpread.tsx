@@ -1,7 +1,7 @@
 import { useRef, FC, KeyboardEvent, Dispatch, SetStateAction } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn } from 'utils/helpers';
-import styles from './CreateSymmerticStrategySpread.module.css';
+import styles from './CreateOverlappingStrategySpread.module.css';
 
 interface Props {
   /** Value used to fallback to when custom input is empty */
@@ -10,7 +10,7 @@ interface Props {
   spreadPPM: number;
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
-export const CreateSymmerticStrategySpread: FC<Props> = (props) => {
+export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
   const { defaultValue, options, spreadPPM, setSpreadPPM } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spreadPPM);

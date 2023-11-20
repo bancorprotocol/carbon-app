@@ -24,7 +24,7 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { prepareSymmetricOrders } from './symmetric/utils';
+import { prepareOverlappingOrders } from './overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -125,8 +125,8 @@ export const useCreateStrategy = () => {
 
     const onConfirm = () => {
       const orders =
-        strategySettings === 'symmetric'
-          ? prepareSymmetricOrders({ order0, order1, spreadPPM })
+        strategySettings === 'overlapping'
+          ? prepareOverlappingOrders({ order0, order1, spreadPPM })
           : { order0, order1 };
       return createStrategyAction({
         base,
@@ -243,7 +243,7 @@ export const useCreateStrategy = () => {
     if (mutation.isLoading) return true;
     if (isProcessing) return true;
 
-    if (strategySettings === 'symmetric') {
+    if (strategySettings === 'overlapping') {
       const { min, max } = order0;
       const isSpreadValid = spreadPPM > 0 && spreadPPM <= 10;
       const isRangeValue = +min > 0 && +max > 0 && +min < +max;

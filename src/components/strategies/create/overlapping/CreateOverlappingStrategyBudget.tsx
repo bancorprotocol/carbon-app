@@ -5,15 +5,15 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { SymmetricStrategyProps } from './CreateSymmetricStrategy';
+import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { SafeDecimal } from 'libs/safedecimal';
 
-interface Props extends SymmetricStrategyProps {
+interface Props extends OverlappingStrategyProps {
   marketPricePercentage: MarketPricePercentage;
 }
 
-export const CreateSymmerticStrategyBudget: FC<Props> = (props) => {
+export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   const {
     base,
     quote,

@@ -28,7 +28,7 @@ export const handleStrategySettings = (
       functions.forEach((fn) => fn(true));
       break;
     }
-    case 'symmetric': {
+    case 'overlapping': {
       functions.forEach((fn) => fn(true));
       break;
     }

@@ -4,7 +4,7 @@ import { StrategyCreateSearch } from 'components/strategies/create/types';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
-import { ReactComponent as IconSymmetricStrategy } from 'assets/icons/symmetric-strategy.svg';
+import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
 
 interface StrategyTypeItem {
   id: string;
@@ -90,6 +90,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           strategyDirection: 'buy',
           strategySettings: 'range',
         },
+        isRecommended: true,
         id: 'range-order',
       },
       {
@@ -125,7 +126,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
         id: 'two-ranges',
       },
       {
-        label: 'Symmetric',
+        label: 'Overlapping Liquidity',
         description:
           'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does',
         benefits: [
@@ -140,15 +141,15 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
               'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
           },
         ],
-        svg: <IconSymmetricStrategy className="w-60" />,
+        svg: <IconOverlappingStrategy className="w-60" />,
         to: PathNames.createStrategy,
         search: {
           base,
           quote,
           strategyType: 'recurring',
-          strategySettings: 'symmetric',
+          strategySettings: 'overlapping',
         },
-        id: 'symmetric',
+        id: 'overlapping',
       },
     ],
     [base, quote]

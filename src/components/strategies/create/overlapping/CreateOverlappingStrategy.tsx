@@ -4,18 +4,18 @@ import {
   MarketPricePercentage,
   useMarketIndication,
 } from 'components/strategies/marketPriceIndication';
-import { CreateSymmerticStrategySpread } from './CreateSymmerticStrategySpread';
+import { CreateOverlappingStrategySpread } from './CreateOverlappingStrategySpread';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { InputRange } from '../BuySellBlock/InputRange';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
 import { UseQueryResult } from '@tanstack/react-query';
-import { CreateSymmerticStrategyBudget } from './CreateSymmerticStrategyBudget';
-import { CreateSymmerticStrategyGraph } from './CreateSymmerticStrategyGraph';
+import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudget';
+import { CreateOverlappingStrategyGraph } from './CreateOverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 
-export interface SymmetricStrategyProps {
+export interface OverlappingStrategyProps {
   base?: Token;
   quote?: Token;
   order0: OrderCreate;
@@ -34,7 +34,9 @@ const getPriceWarnings = ({ min, max }: MarketPricePercentage): string[] => {
   ];
 };
 
-export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
+export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
+  props
+) => {
   const { base, quote, order0, spreadPPM, setSpreadPPM } = props;
   const marketPrice = useMarketPrice({ base, quote });
   const { marketPricePercentage } = useMarketIndication({
@@ -58,7 +60,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
     <>
       <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-silver p-20">
         <h4 className="flex items-center gap-8 text-14 font-weight-500">
-          Discover Symmetric Strategies
+          Discover Overlapping Strategies
           <span className="rounded-8 bg-darkGreen px-8 py-4 text-10 text-green">
             NEW
           </span>
@@ -84,7 +86,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <CreateSymmerticStrategyGraph
+        <CreateOverlappingStrategyGraph
           {...props}
           marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
@@ -134,7 +136,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <CreateSymmerticStrategySpread
+        <CreateOverlappingStrategySpread
           defaultValue={0.05}
           options={[0.01, 0.05, 0.1]}
           spreadPPM={spreadPPM}
@@ -152,7 +154,7 @@ export const CreateSymmetricStrategy: FC<SymmetricStrategyProps> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <CreateSymmerticStrategyBudget
+        <CreateOverlappingStrategyBudget
           {...props}
           marketPricePercentage={marketPricePercentage}
         />

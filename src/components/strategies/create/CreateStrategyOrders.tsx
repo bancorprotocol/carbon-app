@@ -14,7 +14,7 @@ import { useModal } from 'hooks/useModal';
 import { lsService } from 'services/localeStorage';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useNavigate } from 'libs/routing';
-import { CreateSymmetricStrategy } from './symmetric/CreateSymmetricStrategy';
+import { CreateOverlappingStrategy } from './overlapping/CreateOverlappingStrategy';
 
 let didInit = false;
 
@@ -132,8 +132,8 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {strategySettings === 'symmetric' && base && quote && (
-        <CreateSymmetricStrategy
+      {strategySettings === 'overlapping' && base && quote && (
+        <CreateOverlappingStrategy
           base={base}
           quote={quote}
           order0={order0}
@@ -144,7 +144,7 @@ export const CreateStrategyOrders = ({
           setSpreadPPM={setSpreadPPM}
         />
       )}
-      {strategySettings !== 'symmetric' && (
+      {strategySettings !== 'overlapping' && (
         <>
           {(strategyDirection === 'buy' || !strategyDirection) && (
             <BuySellBlock
