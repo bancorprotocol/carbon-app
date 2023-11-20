@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { PathNames, useNavigate, useParams } from 'libs/routing';
@@ -67,10 +66,6 @@ export const StrategyBlockManage: FC<Props> = ({
     strategyId: strategy.id,
   };
 
-  const {
-    strategies: { setStrategyToEdit },
-  } = useStore();
-
   const items: (itemsType | separatorCounterType)[] = [
     {
       id: 'duplicateStrategy',
@@ -112,13 +107,13 @@ export const StrategyBlockManage: FC<Props> = ({
       id: 'editPrices',
       name: 'Edit Prices',
       action: () => {
-        setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyEditPricesClick({
           origin: 'manage',
           ...strategyEvent,
         });
         navigate({
           to: PathNames.editStrategy,
+          params: { strategyId: strategy.id },
           search: { type: 'editPrices' },
         });
       },
@@ -131,10 +126,10 @@ export const StrategyBlockManage: FC<Props> = ({
       id: 'depositFunds',
       name: 'Deposit Funds',
       action: () => {
-        setStrategyToEdit(strategy);
         carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
         navigate({
           to: PathNames.editStrategy,
+          params: { strategyId: strategy.id },
           search: { type: 'deposit' },
         });
       },
@@ -171,9 +166,9 @@ export const StrategyBlockManage: FC<Props> = ({
         name: 'Renew Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyRenewClick(strategyEvent);
-          setStrategyToEdit(strategy);
           navigate({
             to: PathNames.editStrategy,
+            params: { strategyId: strategy.id },
             search: { type: 'renew' },
           });
         },
