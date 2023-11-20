@@ -1,4 +1,11 @@
-import { FC, KeyboardEvent, useEffect, useMemo, useRef } from 'react';
+import {
+  FC,
+  KeyboardEvent,
+  SyntheticEvent,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
 import { Button } from 'components/common/button';
@@ -54,6 +61,14 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             : (i - 1 + btns.length) % btns.length;
         return btns[nextIndex].focus();
       }
+    }
+  };
+
+  const toggleAccordion = (e: SyntheticEvent, id: string) => {
+    const selector = `details[name="accordion-${id}"]`;
+    const details = document.querySelectorAll<HTMLDetailsElement>(selector);
+    for (const detail of details) {
+      if (!detail.contains(e.target as Node)) detail.open = false;
     }
   };
 
@@ -121,9 +136,16 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             </hgroup>
             <h4 className="text-12 font-weight-500">Benefits</h4>
             {benefits.map(({ summary, details }, i) => (
-              /** @ts-ignore: name in details only work in chromium */
-              <details key={i} className={styles.details} name="accordion">
-                <summary className="mb-4 flex cursor-pointer items-center gap-8 text-12 text-white/80">
+              <details
+                key={i}
+                className={styles.details}
+                /** @ts-ignore: name in details only work in chromium */
+                name={'accordion-' + id}
+              >
+                <summary
+                  onClick={(e) => toggleAccordion(e, id)}
+                  className="mb-4 flex cursor-pointer items-center gap-8 text-12 text-white/80"
+                >
                   <IconCheck className="h-14 w-14 text-green" />
                   {summary}
                   <IconChevron className={styles.chevron} />
