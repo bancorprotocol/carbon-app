@@ -17,6 +17,7 @@ import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
 import styles from './CreateStrategyTypeMenu.module.css';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
@@ -30,6 +31,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     base?.address!,
     quote?.address!
   );
+  const { aboveBreakpoint } = useBreakpoints();
 
   const selectedId = useMemo(() => {
     if (!selectedStrategySettings) return;
@@ -76,7 +78,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     <>
       <m.div
         variants={itemsVariant}
-        className="space-y-20 rounded-10 bg-silver p-20"
+        className="flex flex-col gap-20 rounded-10 bg-silver p-20"
         key="createStrategyTypeMenu"
       >
         <h2>Strategy Type</h2>
@@ -84,13 +86,13 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           ref={list}
           onKeyDown={handleKeyDown}
           role="tablist"
-          className="flex gap-8"
+          className="grid grid-cols-4 gap-8"
         >
           {items.map(({ search, to, isRecommended, svg, id, label }) => (
-            <li role="none" key={id} className="relative flex-1">
+            <li role="none" key={id} className="relative">
               {isRecommended && (
                 <span
-                  aria-label="Recommended"
+                  aria-labelledby={'legend-' + id}
                   className="absolute top-8 right-8 rounded bg-darkGreen p-4 text-green"
                 >
                   <IconStar aria-hidden className="h-10 w-10" />
@@ -103,7 +105,8 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 aria-selected={selectedId === id}
                 onClick={() => setSelectedStrategySettings({ to, search })}
                 className={cn(
-                  'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-12 py-16 text-14 outline-white/60',
+                  'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-8 py-16 text-14 outline-white/60',
+                  'md:px-12',
                   'focus-visible:outline focus-visible:outline-1',
                   selectedId === id ? 'outline outline-white/80' : ''
                 )}
@@ -111,9 +114,11 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
               >
                 {svg}
                 <span
-                  className={selectedId === id ? 'text-white' : 'text-white/40'}
+                  className={`text-12 md:text-14 ${
+                    selectedId === id ? 'text-white' : 'text-white/40'
+                  }`}
                 >
-                  {label}
+                  {aboveBreakpoint('md') ? label : label.split(' ')[0]}
                 </span>
               </button>
             </li>
@@ -131,7 +136,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             )}
           >
             <hgroup>
-              <h3 className="text-14 font-weight-500">{label}</h3>
+              <h3 className="mb-8 text-14 font-weight-500">{label}</h3>
               <p className="text-12 text-white/80">{description}</p>
             </hgroup>
             <h4 className="text-12 font-weight-500">Benefits</h4>
@@ -150,11 +155,16 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                   {summary}
                   <IconChevron className={styles.chevron} />
                 </summary>
-                <p className="pl-22 text-10 text-white/60">{details}</p>
+                <p className="pl-22 text-10 text-white/60 md:text-12">
+                  {details}
+                </p>
               </details>
             ))}
             {isRecommended && (
-              <p className="flex gap-8 text-12 text-white/40">
+              <p
+                id={'legend-' + id}
+                className="flex gap-8 text-12 text-white/40"
+              >
                 <span className="rounded bg-darkGreen p-4 text-green">
                   <IconStar aria-hidden className="h-10 w-10" />
                 </span>

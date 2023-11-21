@@ -23,7 +23,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
   const items: StrategyTypeItem[] = useMemo(
     () => [
       {
-        label: 'Buy Limit',
+        label: 'Limit Order',
         description:
           'A single disposable buy or sell order at a specific price',
         benefits: [
@@ -43,7 +43,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
               'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
           },
         ],
-        svg: <IconBuyLimit className="w-60" />,
+        svg: <IconBuyLimit className="w-full" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -81,7 +81,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
               'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
           },
         ],
-        svg: <IconBuyRange className="w-60" />,
+        svg: <IconBuyRange className="w-full" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -114,7 +114,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
               'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
           },
         ],
-        svg: <IconTwoRanges className="w-60" />,
+        svg: <IconTwoRanges className="w-full" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -141,7 +141,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
               'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
           },
         ],
-        svg: <IconOverlappingStrategy className="w-60" />,
+        svg: <IconOverlappingStrategy className="w-full" />,
         to: PathNames.createStrategy,
         search: {
           base,
