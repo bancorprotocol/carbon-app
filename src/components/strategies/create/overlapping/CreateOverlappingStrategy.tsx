@@ -60,7 +60,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice]);
+  }, [marketPrice, order0.min, order0.max]);
 
   return (
     <>
