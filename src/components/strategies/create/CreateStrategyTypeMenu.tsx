@@ -59,7 +59,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         if (btns[i] !== document.activeElement) continue;
         const nextIndex =
           e.key === 'ArrowRight'
-            ? i + (1 % btns.length)
+            ? (i + 1) % btns.length
             : (i - 1 + btns.length) % btns.length;
         return btns[nextIndex].focus();
       }
@@ -108,7 +108,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                   'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-8 py-16 text-14 outline-white/60',
                   'md:px-12',
                   'focus-visible:outline focus-visible:outline-1',
-                  selectedId === id ? 'outline outline-white/80' : ''
+                  selectedId === id ? 'outline outline-1 outline-white' : ''
                 )}
                 data-testid={id}
               >
