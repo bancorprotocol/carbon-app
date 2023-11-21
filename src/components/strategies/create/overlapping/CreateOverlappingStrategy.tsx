@@ -49,27 +49,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   // Initialize order when market price is available
   useEffect(() => {
-    console.log({ marketPrice, min: order0.min, max: order0.max });
     if (marketPrice > 0 && !order0.min && !order0.max) {
       order0.setMin((marketPrice * 0.999).toString());
       order0.setMax((marketPrice * 1.001).toString());
-      console.log('Set min max', {
-        min: (marketPrice * 0.999).toString(),
-        max: (marketPrice * 1.001).toString(),
-      });
     }
-  }, [
-    marketPrice,
-    order0.min,
-    order0.max,
-    order0.setMin,
-    order0.setMax,
-    order0,
-  ]);
-
-  useEffect(() => {
-    console.log('Min max updated', { min: order0.min, max: order0.max });
-  }, [order0.min, order0.max]);
+  }, [marketPrice, order0]);
 
   return (
     <>
