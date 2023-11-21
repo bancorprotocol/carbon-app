@@ -12,18 +12,15 @@ interface PriceField {
 interface BaseConfig {
   base: string;
   quote: string;
-  type: StrategyType;
   setting: 'limit' | 'range' | 'overlapping';
   buy: PriceField;
   sell: PriceField;
 }
 
 export interface LimiStrategyConfig extends BaseConfig {
-  type: 'recurring';
   setting: 'limit';
 }
 export interface OverlappingStrategyConfig extends BaseConfig {
-  type: 'recurring';
   setting: 'overlapping';
   spread: number;
 }
@@ -33,7 +30,6 @@ export type CreateStrategyConfig =
   | OverlappingStrategyConfig;
 
 type Mode = 'buy' | 'sell';
-type StrategyType = 'recurring' | 'disposable';
 type StrategySettings =
   | 'two-limits'
   | 'two-ranges'
@@ -72,9 +68,6 @@ export class CreateStrategyDriver {
     await this.page.getByLabel('Select Token').fill(token);
     await this.page.getByTestId(`select-token-${token}`).click();
     await waitModalClose(this.page);
-  }
-  selectType(strategyType: StrategyType) {
-    return this.page.getByTestId(strategyType).click();
   }
   selectSetting(strategySettings: StrategySettings) {
     return this.page.getByTestId(strategySettings).click();

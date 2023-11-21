@@ -156,7 +156,6 @@ test.describe('Strategies', () => {
 
   const configs: CreateStrategyConfig[] = [
     {
-      type: 'recurring',
       setting: 'limit',
       base: 'ETH',
       quote: 'DAI',
@@ -174,7 +173,6 @@ test.describe('Strategies', () => {
       },
     },
     {
-      type: 'recurring',
       setting: 'overlapping',
       base: 'ETH',
       quote: 'BNT',
