@@ -18,6 +18,7 @@ import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
 import styles from './CreateStrategyTypeMenu.module.css';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { StrategyCreateSearch } from './types';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
@@ -66,6 +67,11 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     }
   };
 
+  const selectSetting = (to: string, search: StrategyCreateSearch) => {
+    setSelectedStrategySettings({ to, search });
+    document.querySelectorAll('details').forEach((d) => (d.open = false));
+  };
+
   const toggleAccordion = (e: SyntheticEvent, id: string) => {
     const selector = `details[name="accordion-${id}"]`;
     const details = document.querySelectorAll<HTMLDetailsElement>(selector);
@@ -103,7 +109,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 role="tab"
                 aria-controls={'panel-' + id}
                 aria-selected={selectedId === id}
-                onClick={() => setSelectedStrategySettings({ to, search })}
+                onClick={() => selectSetting(to, search)}
                 className={cn(
                   'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-8 py-16 text-14 outline-white/60',
                   'md:px-12',
