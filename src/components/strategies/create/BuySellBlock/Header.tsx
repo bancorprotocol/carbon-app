@@ -2,6 +2,8 @@ import { FC, ReactNode } from 'react';
 import { OrderCreate } from '../useOrder';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
+import { useNavigate } from 'libs/routing';
+import { StrategyCreateSearch } from '../types';
 
 interface Props {
   children: ReactNode;
@@ -10,11 +12,32 @@ interface Props {
   buy?: boolean;
 }
 
+const updateSettings = (
+  search: StrategyCreateSearch,
+  buy: boolean,
+  to: 'limit' | 'range'
+) => {
+  if (search.strategyType === 'disposable') return to;
+  const settings = search.strategySettings?.split('_') as [string, string];
+  const index = buy ? 0 : 1;
+  settings[index] = to;
+  return settings.join('_');
+};
+
 export const BuySellHeader: FC<Props> = (props) => {
+  const navigate = useNavigate();
   const { order, buy, children, base } = props;
-  const { isRange, setIsRange, resetFields } = order;
+  const { isRange, resetFields } = order;
   const handleRangeChange = () => {
-    setIsRange(!isRange);
+    navigate({
+      search: (search) => {
+        const to = isRange ? 'limit' : 'range';
+        const strategySettings = updateSettings(search, !!buy, to);
+        return { ...search, strategySettings };
+      },
+      replace: true,
+      resetScroll: false,
+    });
     resetFields(true);
   };
   return (

@@ -12,27 +12,17 @@ import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
 import { NavigateOptions } from '@tanstack/react-router';
 
 export const handleStrategySettings = (
-  strategySettings?: StrategySettings,
+  settings?: StrategySettings,
   functions?: ((value: boolean) => void)[]
 ) => {
-  if (!functions || !strategySettings) {
-    return;
-  }
-
-  switch (strategySettings) {
-    case 'limit': {
-      functions.forEach((fn) => fn(false));
-      break;
-    }
-    case 'range': {
-      functions.forEach((fn) => fn(true));
-      break;
-    }
-    case 'overlapping': {
-      functions.forEach((fn) => fn(true));
-      break;
-    }
-  }
+  if (!functions || !settings) return;
+  if (settings === 'overlapping') return functions.forEach((fn) => fn(true));
+  if (settings === 'range') return functions.forEach((fn) => fn(true));
+  if (settings === 'limit') return functions.forEach((fn) => fn(false));
+  const [fn1, fn2] = functions;
+  const [setting1, setting2] = settings.split('_');
+  fn1(setting1 === 'range');
+  fn2(setting2 === 'range');
 };
 
 export const handleStrategyDirection = (

@@ -285,8 +285,6 @@ export const useCreateStrategy = () => {
 
     switch (strategyType) {
       case 'disposable': {
-        order0.resetFields();
-        order1.resetFields();
         handleStrategyDirection(
           strategyDirection,
           strategySettings,
@@ -296,8 +294,6 @@ export const useCreateStrategy = () => {
         break;
       }
       case 'recurring': {
-        order0.resetFields();
-        order1.resetFields();
         handleStrategySettings(strategySettings, [
           order0.setIsRange,
           order1.setIsRange,

@@ -11,7 +11,12 @@ import { NavigateOptions } from '@tanstack/react-router';
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
-export type StrategySettings = 'limit' | 'range' | 'overlapping';
+
+export type LimitRange = 'limit' | 'range';
+export type StrategySettings =
+  | LimitRange
+  | `${LimitRange}_${LimitRange}`
+  | 'overlapping';
 
 export interface StrategyCreateSearch {
   base?: string;
