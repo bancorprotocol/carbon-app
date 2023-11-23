@@ -15,7 +15,11 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
-import { StrategyCreateSearch } from 'components/strategies/create/types';
+import {
+  StrategyCreateSearch,
+  StrategySettings,
+  StrategyType,
+} from 'components/strategies/create/types';
 import {
   handleStrategyDirection,
   handleStrategySettings,
@@ -29,6 +33,14 @@ import { prepareOverlappingOrders } from './overlapping/utils';
 const spenderAddress = config.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
+
+export function toStrategyType(
+  strategySettings?: StrategySettings
+): StrategyType | undefined {
+  if (!strategySettings) return;
+  if (['limit', 'range'].includes(strategySettings)) return 'disposable';
+  return 'recurring';
+}
 
 export const useCreateStrategy = () => {
   const { templateStrategy } = useDuplicateStrategy();
@@ -75,8 +87,8 @@ export const useCreateStrategy = () => {
     quote: quoteAddress,
     strategySettings,
     strategyDirection,
-    strategyType,
   } = search;
+  const strategyType = toStrategyType(strategySettings);
   const { getTokenById } = useTokens();
   const [selectedStrategySettings, setSelectedStrategySettings] = useState<
     | {

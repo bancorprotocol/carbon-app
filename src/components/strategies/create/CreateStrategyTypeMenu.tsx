@@ -116,7 +116,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                   'focus-visible:outline focus-visible:outline-1',
                   selectedId === id ? 'outline outline-1 outline-white' : ''
                 )}
-                data-testid={id}
+                data-testid={search.strategySettings}
               >
                 {svg}
                 <span

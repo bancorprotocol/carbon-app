@@ -21,7 +21,6 @@ export type StrategySettings =
 export interface StrategyCreateSearch {
   base?: string;
   quote?: string;
-  strategyType?: StrategyType;
   strategyDirection?: StrategyDirection;
   strategySettings?: StrategySettings;
 }

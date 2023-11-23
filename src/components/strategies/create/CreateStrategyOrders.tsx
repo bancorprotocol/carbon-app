@@ -12,6 +12,7 @@ import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { CreateOverlappingStrategy } from './overlapping/CreateOverlappingStrategy';
+import { toStrategyType } from './useCreateStrategy';
 
 export const CreateStrategyOrders = ({
   base,
@@ -41,14 +42,15 @@ export const CreateStrategyOrders = ({
   });
 
   useInitEffect(() => {
-    if (selectedStrategySettings?.search.strategyType !== 'disposable') return;
-    const { strategyType, strategySettings } = selectedStrategySettings.search;
+    const settings = selectedStrategySettings?.search.strategySettings;
+    const type = toStrategyType(settings);
+    if (!settings || type !== 'disposable') return;
     carbonEvents.strategy.strategyDirectionChange({
       baseToken: base,
       quoteToken: quote,
       strategyDirection: strategyDirection,
-      strategySettings,
-      strategyType,
+      strategySettings: settings,
+      strategyType: type,
     });
   }, [strategyDirection]);
 

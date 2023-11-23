@@ -66,16 +66,6 @@ const createStrategyPage = new Route({
   getParentRoute: () => appRoute,
   path: '/strategies/create',
   component: CreateStrategyPage,
-  validateSearch: (search) => {
-    if (
-      search.strategyType === 'recurring' ||
-      search.strategyType === 'disposable' ||
-      search.encodedStrategy
-    ) {
-      return search;
-    }
-    return { ...search, strategyType: 'recurring' };
-  },
 });
 
 const editStrategyPage = new Route({

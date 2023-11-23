@@ -29,7 +29,9 @@ const testStrategy = {
       await myStrategies.createStrategy();
       await createForm.selectToken('base');
       await createForm.selectToken('quote');
+      await createForm.selectSetting('range_range');
       await createForm.nextStep();
+
       const buyForm = await createForm.fillLimit('buy');
       const sellForm = await createForm.fillLimit('sell');
 

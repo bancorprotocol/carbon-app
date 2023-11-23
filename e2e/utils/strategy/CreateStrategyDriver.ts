@@ -30,12 +30,7 @@ export type CreateStrategyConfig =
   | OverlappingStrategyConfig;
 
 type Mode = 'buy' | 'sell';
-type StrategySettings =
-  | 'two-limits'
-  | 'two-ranges'
-  | 'overlapping'
-  | `${Mode}-range`
-  | `${Mode}-limit`;
+type StrategySettings = 'limit' | 'range' | 'range_range' | 'overlapping';
 
 export class CreateStrategyDriver {
   constructor(private page: Page, private config: CreateStrategyConfig) {}
@@ -47,6 +42,9 @@ export class CreateStrategyDriver {
       budget: () => form.getByTestId('input-budget'),
       outcomeValue: () => form.getByTestId('outcome-value'),
       outcomeQuote: () => form.getByTestId('outcome-quote'),
+      setSetting: (setting: 'limit' | 'range') => {
+        return form.getByTestId(`select-${setting}`).click();
+      },
     };
   }
 
@@ -75,6 +73,7 @@ export class CreateStrategyDriver {
   async fillLimit(mode: Mode) {
     const { min, budget } = this.config[mode];
     const form = this.getLimitForm(mode);
+    await form.setSetting('limit');
     await form.limit().fill(min.toString());
     await form.budget().fill(budget.toString());
     return form;

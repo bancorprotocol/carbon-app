@@ -48,7 +48,6 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
         search: {
           base,
           quote,
-          strategyType: 'disposable',
           strategyDirection: 'buy',
           strategySettings: 'limit',
         },
@@ -86,7 +85,6 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
         search: {
           base,
           quote,
-          strategyType: 'disposable',
           strategyDirection: 'buy',
           strategySettings: 'range',
         },
@@ -119,7 +117,6 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
         search: {
           base,
           quote,
-          strategyType: 'recurring',
           strategySettings: 'range_range',
         },
         isRecommended: true,
@@ -146,7 +143,6 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
         search: {
           base,
           quote,
-          strategyType: 'recurring',
           strategySettings: 'overlapping',
         },
         id: 'overlapping',

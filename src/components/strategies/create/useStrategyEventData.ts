@@ -5,6 +5,7 @@ import { sanitizeNumberInput } from 'utils/helpers';
 import { OrderCreate } from './useOrder';
 import { useSearch } from 'libs/routing';
 import { StrategyCreateSearch } from './types';
+import { toStrategyType } from './useCreateStrategy';
 
 export const useStrategyEventData = ({
   base,
@@ -40,6 +41,6 @@ export const useStrategyEventData = ({
     sellTokenPriceMax: sanitizeNumberInput(order1.max, 18),
     strategyDirection: search?.strategyDirection,
     strategySettings: search?.strategySettings,
-    strategyType: search?.strategyType,
+    strategyType: toStrategyType(search?.strategySettings),
   };
 };

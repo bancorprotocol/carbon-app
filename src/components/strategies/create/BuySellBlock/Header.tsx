@@ -4,6 +4,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { useNavigate } from 'libs/routing';
 import { StrategyCreateSearch } from '../types';
+import { toStrategyType } from '../useCreateStrategy';
 
 interface Props {
   children: ReactNode;
@@ -17,7 +18,8 @@ const updateSettings = (
   buy: boolean,
   to: 'limit' | 'range'
 ) => {
-  if (search.strategyType === 'disposable') return to;
+  const strategyType = toStrategyType(search.strategySettings);
+  if (strategyType === 'disposable') return to;
   const settings = search.strategySettings?.split('_') as [string, string];
   const index = buy ? 0 : 1;
   settings[index] = to;
@@ -52,6 +54,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={`rounded-40 font-weight-500 ${
               !isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="select-limit"
           >
             Limit
           </button>
@@ -62,6 +65,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={`rounded-40 font-weight-500 ${
               isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="select-range"
           >
             Range
           </button>
