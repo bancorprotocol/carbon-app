@@ -83,7 +83,7 @@ export const InputRange: FC<InputRangeProps> = ({
               base.symbol
             } at.`}
           >
-            <div className={'mb-5 text-12 text-white/60'}>Min</div>
+            <div className="mb-5 text-12 text-white/60">Min</div>
           </Tooltip>
           <input
             id={inputMinId}
@@ -125,7 +125,7 @@ export const InputRange: FC<InputRangeProps> = ({
               base.symbol
             } at.`}
           >
-            <div className={'mb-5 text-12 text-white/60'}>Max</div>
+            <div className="mb-5 text-12 text-white/60">Max</div>
           </Tooltip>
           <input
             id={inputMaxId}

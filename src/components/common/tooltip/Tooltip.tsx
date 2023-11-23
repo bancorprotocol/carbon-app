@@ -24,9 +24,11 @@ export const Tooltip: FC<
   sendEventOnMount,
   disabled = false,
   children = (
-    <IconTooltip
-      className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
-    />
+    <span>
+      <IconTooltip
+        className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
+      />
+    </span>
   ),
   ...props
 }) => {
@@ -86,7 +88,7 @@ export const Tooltip: FC<
       onHide={onHide}
       {...props}
     >
-      <div>{children}</div>
+      {children}
     </Tippy>
   );
 };
