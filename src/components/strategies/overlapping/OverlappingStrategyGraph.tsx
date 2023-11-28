@@ -447,7 +447,6 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
         className={cn(
           styles.graph,
           dragging,
-          disabled ? styles.disabled : '',
           'aspect-[400/265] w-full rounded bg-black font-mono'
         )}
         viewBox={`${left} 0 ${width} ${height}`}
@@ -628,14 +627,16 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 {minPercent}%
               </text>
             </g>
-            <rect
-              x={min - 11 * ratio}
-              y={top - 1 * ratio}
-              width={12 * ratio}
-              height={24 * ratio}
-              fill="#00B578"
-              rx={4 * ratio}
-            />
+            {!disabled && (
+              <rect
+                x={min - 11 * ratio}
+                y={top - 1 * ratio}
+                width={12 * ratio}
+                height={24 * ratio}
+                fill="#00B578"
+                rx={4 * ratio}
+              />
+            )}
             <line
               x1={min - 7 * ratio}
               x2={min - 7 * ratio}
@@ -658,14 +659,14 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x1={min}
               x2={min}
               y1={bottom}
-              y2={top + 20 * ratio}
+              y2={top}
               stroke="#00B578"
               strokeWidth={2 * ratio}
             />
           </g>
           <g
             id="sell-handler"
-            className={cn(styles.handler, 'cursor-ew-resize')}
+            className={cn(styles.handler, disabled ? '' : 'cursor-ew-resize')}
             onMouseDown={(e) => dragStart(e, 'sell')}
           >
             <g className={styles.handlerTooltip}>
@@ -686,14 +687,16 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 {maxPercent}%
               </text>
             </g>
-            <rect
-              x={max - 1 * ratio}
-              y={top - 1 * ratio}
-              width={12 * ratio}
-              height={24 * ratio}
-              fill="#D86371"
-              rx={4 * ratio}
-            />
+            {!disabled && (
+              <rect
+                x={max - 1 * ratio}
+                y={top - 1 * ratio}
+                width={12 * ratio}
+                height={24 * ratio}
+                fill="#D86371"
+                rx={4 * ratio}
+              />
+            )}
             <line
               x1={max + 7 * ratio}
               x2={max + 7 * ratio}
@@ -716,7 +719,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x1={max}
               x2={max}
               y1={bottom}
-              y2={top + 20 * ratio}
+              y2={top}
               stroke="#D86371"
               strokeWidth={2 * ratio}
             />
