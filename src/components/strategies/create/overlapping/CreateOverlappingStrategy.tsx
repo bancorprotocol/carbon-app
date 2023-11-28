@@ -12,8 +12,8 @@ import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
 import { UseQueryResult } from '@tanstack/react-query';
 import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudget';
-import { CreateOverlappingStrategyGraph } from './CreateOverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
+import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -85,8 +85,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <CreateOverlappingStrategyGraph
+        <OverlappingStrategyGraph
           {...props}
+          order={order0}
           marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
         />

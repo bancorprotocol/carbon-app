@@ -26,8 +26,8 @@ export const EditStrategyMain = ({
         showGraph ? 'justify-between' : 'justify-center'
       }`}
       variants={list}
-      initial={'hidden'}
-      animate={'visible'}
+      initial="hidden"
+      animate="visible"
     >
       <EditStrategyHeader {...{ showGraph, setShowGraph, type }} />
       {type && strategy && (

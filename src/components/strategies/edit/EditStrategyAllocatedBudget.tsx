@@ -153,7 +153,7 @@ export const EditStrategyAllocatedBudget: FC<{
                     : MarginalPriceOptions.maintain
                 )
               }
-              size={'sm'}
+              size="sm"
             />
           </div>
         )}

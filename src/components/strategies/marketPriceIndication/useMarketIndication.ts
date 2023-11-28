@@ -3,7 +3,6 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { useGetTokenPrice } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from '../../../hooks/useFiatCurrency';
-import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type MarketPricePercentage = {
   min: SafeDecimal;
@@ -14,7 +13,10 @@ export type MarketPricePercentage = {
 type UseMarketIndicationProps = {
   base: Token | undefined;
   quote: Token | undefined;
-  order: OrderCreate;
+  order: {
+    min: string;
+    max: string;
+  };
   buy?: boolean;
 };
 
@@ -30,7 +32,8 @@ export const useMarketIndication = ({
     baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    if (order.isRange) {
+    const isRange = order.min !== order.max;
+    if (isRange) {
       const isInputNotZero = buy
         ? new SafeDecimal(order.max).gt(0)
         : new SafeDecimal(order.min).gt(0);
@@ -41,22 +44,14 @@ export const useMarketIndication = ({
 
       return isInputNotZero && isAboveOrBelow;
     }
-
+    const price = new SafeDecimal(order.min);
     return (
-      new SafeDecimal(order.price).gt(0) &&
-      new SafeDecimal(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
+      price.gt(0) &&
+      new SafeDecimal(getFiatValue(order.min))[buy ? 'gt' : 'lt'](
         tokenMarketPrice
       )
     );
-  }, [
-    order.isRange,
-    order.price,
-    order.max,
-    order.min,
-    getFiatValue,
-    buy,
-    tokenMarketPrice,
-  ]);
+  }, [order.max, order.min, getFiatValue, buy, tokenMarketPrice]);
 
   const marketPricePercentage = useMemo(() => {
     const getMarketPricePercentage = (price: string) => {
@@ -68,13 +63,13 @@ export const useMarketIndication = ({
             .div(tokenMarketPrice)
             .times(100);
     };
-
+    const price = order.min === order.max ? order.min : '';
     return {
       min: getMarketPricePercentage(order.min),
       max: getMarketPricePercentage(order.max),
-      price: getMarketPricePercentage(order.price),
+      price: getMarketPricePercentage(price),
     };
-  }, [getFiatValue, order.max, order.min, order.price, tokenMarketPrice]);
+  }, [getFiatValue, order.max, order.min, tokenMarketPrice]);
 
   return {
     isOrderAboveOrBelowMarketPrice,
