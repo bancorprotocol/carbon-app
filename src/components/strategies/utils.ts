@@ -46,3 +46,8 @@ export const getSpreadPPM = (strategy: Strategy) => {
   const totalDelta = max.minus(min);
   return sellDelta.div(totalDelta).times(100);
 };
+
+export const getRoundedSpreadPPM = (strategy: Strategy) => {
+  const spreadPPRM = getSpreadPPM(strategy);
+  return Number(spreadPPRM.toFixed(2));
+};

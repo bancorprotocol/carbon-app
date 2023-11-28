@@ -4,7 +4,7 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { getSpreadPPM } from 'components/strategies/utils';
+import { getRoundedSpreadPPM } from 'components/strategies/utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
@@ -26,7 +26,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
 
   const marketPrice = useMarketPrice({ base, quote });
-  const spreadPPM = getSpreadPPM(strategy).round();
+  const spreadPPM = getRoundedSpreadPPM(strategy);
   const min = order0.min;
   const max = order1.max;
   const { marketPricePercentage } = useMarketIndication({
@@ -53,7 +53,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           order={{ min, max }}
           marketPrice={marketPrice}
-          spreadPPM={spreadPPM.toNumber()}
+          spreadPPM={spreadPPM}
           marketPricePercentage={marketPricePercentage}
           disabled
         />
