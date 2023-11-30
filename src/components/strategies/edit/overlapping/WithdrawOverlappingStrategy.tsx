@@ -87,7 +87,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
       quote.address,
       order0.min,
-      order0.max, // In create we only use order0 for now
+      order1.max,
       marketPrice.toString(),
       spreadPPM.toString(),
       sellBudget ?? '0'
@@ -111,7 +111,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       order0.min,
-      order0.max, // In create we only use order0 for now
+      order1.max,
       marketPrice.toString(),
       spreadPPM.toString(),
       buyBudget ?? '0'
