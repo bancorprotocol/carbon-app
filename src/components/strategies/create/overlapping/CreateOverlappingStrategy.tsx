@@ -1,11 +1,11 @@
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import {
   MarketPricePercentage,
   useMarketIndication,
 } from 'components/strategies/marketPriceIndication';
 import { CreateOverlappingStrategySpread } from './CreateOverlappingStrategySpread';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { InputRange } from '../BuySellBlock/InputRange';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
@@ -156,6 +156,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         </header>
         <CreateOverlappingStrategyBudget
           {...props}
+          marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
         />
       </article>

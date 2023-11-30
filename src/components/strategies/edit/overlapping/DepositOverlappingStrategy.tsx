@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -9,8 +9,15 @@ import { useMarketIndication } from 'components/strategies/marketPriceIndication
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { DepositBudgetInput } from 'components/strategies/common/DepositBudgetInput';
 import { SafeDecimal } from 'libs/safedecimal';
+import { BudgetInput } from 'components/strategies/common/BudgetInput';
+import { DepositAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
+import { carbonSDK } from 'libs/sdk';
+import {
+  getBuyMarginalPrice,
+  getSellMarginalPrice,
+  getSpread,
+} from 'components/strategies/overlapping/utils';
 
 interface Props {
   strategy: Strategy;
@@ -37,6 +44,97 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   const aboveMarket = new SafeDecimal(min).gt(marketPrice);
   const belowMarket = new SafeDecimal(max).lt(marketPrice);
+
+  // TODO: Move this into useOverlappingBudget
+  const [anchoredOrder, setAnchoderOrder] = useState('buy');
+
+  const setBuyBudget = async (sellBudget: string) => {
+    if (!base || !quote) return;
+    if (!sellBudget) {
+      order0.setBudget('');
+      order0.setMarginalPrice('');
+      order1.setMarginalPrice('');
+      return;
+    }
+    const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
+      quote.address,
+      order0.min,
+      order0.max, // In create we only use order0 for now
+      marketPrice.toString(),
+      spreadPPM.toString(),
+      sellBudget ?? '0'
+    );
+    order0.setBudget(buyBudget);
+    const spread = getSpread(Number(order1.min), Number(order0.max), spreadPPM);
+    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spread);
+    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spread);
+    order1.setMarginalPrice(buyMarginalPrice.toString());
+    order0.setMarginalPrice(sellMarginalPrice.toString());
+  };
+
+  const setSellBudget = async (buyBudget: string) => {
+    if (!base || !quote) return;
+    if (!buyBudget) {
+      order1.setBudget('');
+      order1.setMarginalPrice('');
+      order0.setMarginalPrice('');
+      return;
+    }
+    const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
+      base.address,
+      order0.min,
+      order0.max, // In create we only use order0 for now
+      marketPrice.toString(),
+      spreadPPM.toString(),
+      buyBudget ?? '0'
+    );
+    order1.setBudget(sellBudget);
+    const spread = getSpread(Number(order0.min), Number(order1.max), spreadPPM);
+    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spread);
+    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spread);
+    order0.setMarginalPrice(buyMarginalPrice.toString());
+    order1.setMarginalPrice(sellMarginalPrice.toString());
+  };
+
+  // Update budget on market price change
+  useEffect(() => {
+    if (anchoredOrder === 'buy') setSellBudget(order0.budget);
+    if (anchoredOrder === 'sell') setBuyBudget(order1.budget);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketPrice]);
+
+  const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
+    if (new SafeDecimal(balance).lt(order.budget)) {
+      order.setBudgetError('Insufficient balance');
+    } else {
+      order.setBudgetError('');
+    }
+  };
+
+  // Check for error when buy budget changes
+  useEffect(() => {
+    const balance = tokenBaseBalanceQuery.data ?? '0';
+    checkInsufficientBalance(balance, order0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order0.budget]);
+
+  // Check for error when sell budget changes
+  useEffect(() => {
+    const balance = tokenQuoteBalanceQuery.data ?? '0';
+    checkInsufficientBalance(balance, order1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order1.budget]);
+
+  const onBuyBudgetChange = (value: string) => {
+    order0.setBudget(value);
+    setAnchoderOrder('buy');
+    setSellBudget(value);
+  };
+  const onSellBudgetChange = (value: string) => {
+    order1.setBudget(value);
+    setAnchoderOrder('sell');
+    setBuyBudget(value);
+  };
 
   return (
     <>
@@ -67,23 +165,33 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           </Tooltip>
         </header>
         {!aboveMarket && (
-          <DepositBudgetInput
-            base={base}
-            quote={quote}
-            query={tokenBaseBalanceQuery}
+          <BudgetInput
+            token={quote}
+            query={tokenQuoteBalanceQuery}
             order={order0}
             currentBudget={strategy.order0.balance}
-            buy
-          />
+            onChange={onBuyBudgetChange}
+          >
+            <DepositAllocatedBudget
+              token={quote}
+              currentBudget={strategy.order0.balance}
+              buy
+            />
+          </BudgetInput>
         )}
         {!belowMarket && (
-          <DepositBudgetInput
-            base={base}
-            quote={quote}
-            query={tokenQuoteBalanceQuery}
+          <BudgetInput
+            token={base}
+            query={tokenBaseBalanceQuery}
             order={order1}
             currentBudget={strategy.order1.balance}
-          />
+            onChange={onSellBudgetChange}
+          >
+            <DepositAllocatedBudget
+              token={base}
+              currentBudget={strategy.order1.balance}
+            />
+          </BudgetInput>
         )}
         <footer className="flex items-center gap-8">
           <IconAction className="h-16 w-16" />

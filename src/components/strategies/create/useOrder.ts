@@ -19,6 +19,8 @@ export interface OrderCreate {
   setPriceError: (value: string) => void;
   budgetError: string;
   setBudgetError: (value: string) => void;
+  marginalPrice: string;
+  setMarginalPrice: (value: string) => void;
   marginalPriceOption: MarginalPriceOptions;
   setMarginalPriceOption: (value: MarginalPriceOptions) => void;
   resetFields: (skipBudget?: boolean, skipPrice?: boolean) => void;
@@ -37,6 +39,7 @@ export const useOrder = (order?: Order) => {
   );
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
+  const [marginalPrice, setMarginalPrice] = useState('');
   const [budgetError, setBudgetError] = useState('');
   const [isRange, setIsRange] = useState(order?.startRate !== order?.endRate);
   const [marginalPriceOption, setMarginalPriceOption] = useState(
@@ -75,6 +78,8 @@ export const useOrder = (order?: Order) => {
     setPriceError,
     budgetError,
     setBudgetError,
+    marginalPrice,
+    setMarginalPrice,
     marginalPriceOption,
     setMarginalPriceOption,
     resetFields,

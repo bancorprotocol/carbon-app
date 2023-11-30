@@ -46,8 +46,8 @@ export const useCreateStrategy = () => {
 
   const token0BalanceQuery = useGetTokenBalance(base);
   const token1BalanceQuery = useGetTokenBalance(quote);
-  const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
+  const order1 = useOrder(templateStrategy?.order1);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { marketPricePercentage: buyMarketPricePercentage } =
     useMarketIndication({

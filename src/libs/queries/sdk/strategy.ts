@@ -216,6 +216,7 @@ interface CreateStrategyOrder {
   min: string;
   max: string;
   price: string;
+  marginalPrice: string;
 }
 
 type TokenAddressDecimals = Pick<Token, 'address' | 'decimals'>;
@@ -261,9 +262,11 @@ export const useCreateStrategyQuery = () => {
         base.address,
         quote.address,
         order0Low,
+        order0.marginalPrice,
         order0Max,
         order0Budget,
         order1Low,
+        order1.marginalPrice,
         order1Max,
         order1Budget
       );

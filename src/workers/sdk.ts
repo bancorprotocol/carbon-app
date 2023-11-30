@@ -278,9 +278,11 @@ const sdkExposed = {
     baseToken: string,
     quoteToken: string,
     buyPriceLow: string,
+    buyPriceMarginal: string,
     buyPriceHigh: string,
     buyBudget: string,
     sellPriceLow: string,
+    sellPriceMarginal: string,
     sellPriceHigh: string,
     sellBudget: string,
     overrides?: PayableOverrides | undefined
@@ -289,9 +291,11 @@ const sdkExposed = {
       baseToken,
       quoteToken,
       buyPriceLow,
+      buyPriceMarginal,
       buyPriceHigh,
       buyBudget,
       sellPriceLow,
+      sellPriceMarginal,
       sellPriceHigh,
       sellBudget,
       overrides
@@ -372,6 +376,15 @@ const sdkExposed = {
     sdkCache.getLatestTradeByPair(source, target),
   getMaxSourceAmountByPair: (source: string, target: string) =>
     carbonSDK.getMaxSourceAmountByPair(source, target),
+  calculateOverlappingStrategyParams: ((...params) => {
+    return carbonSDK.calculateOverlappingStrategyPrices(...params);
+  }) as Toolkit['calculateOverlappingStrategyPrices'],
+  calculateOverlappingStrategyBuyBudget: ((...params) => {
+    return carbonSDK.calculateOverlappingStrategyBuyBudget(...params);
+  }) as Toolkit['calculateOverlappingStrategyBuyBudget'],
+  calculateOverlappingStrategySellBudget: ((...params) => {
+    return carbonSDK.calculateOverlappingStrategySellBudget(...params);
+  }) as Toolkit['calculateOverlappingStrategySellBudget'],
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;
