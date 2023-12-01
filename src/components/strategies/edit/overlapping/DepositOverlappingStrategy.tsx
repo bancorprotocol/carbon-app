@@ -149,7 +149,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
         <OverlappingStrategyGraph
           base={base}
           quote={quote}
-          order={{ min, max }}
+          order0={order0}
+          order1={order1}
           marketPrice={marketPrice}
           spreadPPM={spreadPPM}
           marketPricePercentage={marketPricePercentage}
