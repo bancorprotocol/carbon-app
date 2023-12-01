@@ -24,7 +24,6 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { prepareOverlappingOrders } from './overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -124,10 +123,7 @@ export const useCreateStrategy = () => {
     }
 
     const onConfirm = () => {
-      const orders =
-        strategySettings === 'overlapping'
-          ? prepareOverlappingOrders({ order0, order1, spreadPPM })
-          : { order0, order1 };
+      const orders = { order0, order1 };
       return createStrategyAction({
         base,
         quote,
@@ -242,12 +238,20 @@ export const useCreateStrategy = () => {
     if (approval.isError) return true;
     if (mutation.isLoading) return true;
     if (isProcessing) return true;
+    if (order0.budgetError) return true;
+    if (order1.budgetError) return true;
 
     if (strategySettings === 'overlapping') {
-      const { min, max } = order0;
-      const isSpreadValid = spreadPPM > 0 && spreadPPM <= 10;
-      const isRangeValue = +min > 0 && +max > 0 && +min < +max;
-      return !isSpreadValid || !isRangeValue;
+      const min = Number(order0.min);
+      const buyMax = Number(order0.max);
+      const marginalBuy = Number(order0.marginalPrice);
+      const sellMin = Number(order1.min);
+      const max = Number(order1.max);
+      const marginalSell = Number(order1.marginalPrice);
+      if (buyMax < marginalSell) return true;
+      if (sellMin > marginalBuy) return true;
+      if (spreadPPM < 0 || spreadPPM > 10) return true;
+      if (min < 0 || min > max) return true;
     } else {
       const isOrder0Valid = order0.isRange
         ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
@@ -257,19 +261,27 @@ export const useCreateStrategy = () => {
         : +order1.price >= 0 && order1.price !== '';
       return !isOrder0Valid || !isOrder1Valid;
     }
+    return false;
   }, [
     user,
     approval.isLoading,
     approval.isError,
     mutation.isLoading,
     isProcessing,
-    strategySettings,
-    order0,
-    spreadPPM,
-    order1.isRange,
+    order0.budgetError,
+    order0.min,
+    order0.max,
+    order0.marginalPrice,
+    order0.isRange,
+    order0.price,
+    order1.budgetError,
     order1.min,
     order1.max,
+    order1.marginalPrice,
+    order1.isRange,
     order1.price,
+    strategySettings,
+    spreadPPM,
   ]);
 
   useEffect(() => {

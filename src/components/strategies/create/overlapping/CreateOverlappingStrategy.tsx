@@ -14,6 +14,12 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudget';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
+import {
+  getBuyMarginalPrice,
+  getBuyMax,
+  getSellMarginalPrice,
+  getSellMin,
+} from 'components/strategies/overlapping/utils';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -37,7 +43,7 @@ const getPriceWarnings = ({ min, max }: MarketPricePercentage): string[] => {
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
 ) => {
-  const { base, quote, order0, spreadPPM, setSpreadPPM } = props;
+  const { base, quote, order0, order1, spreadPPM, setSpreadPPM } = props;
   const marketPrice = useMarketPrice({ base, quote });
   const { marketPricePercentage } = useMarketIndication({
     base,
@@ -49,11 +55,25 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   // Initialize order when market price is available
   useEffect(() => {
-    if (marketPrice > 0 && !order0.min && !order0.max) {
+    if (marketPrice > 0 && !order0.min && !order1.max) {
       order0.setMin((marketPrice * 0.999).toString());
-      order0.setMax((marketPrice * 1.001).toString());
+      order1.setMax((marketPrice * 1.001).toString());
     }
-  }, [marketPrice, order0]);
+  }, [marketPrice, order0, order1]);
+
+  useEffect(() => {
+    if (!spreadPPM) return;
+    const buyMax = getBuyMax(Number(order1.max), spreadPPM);
+    const sellMin = getSellMin(Number(order0.min), spreadPPM);
+    const marginalBuy = getBuyMarginalPrice(marketPrice, spreadPPM);
+    const marginalSell = getSellMarginalPrice(marketPrice, spreadPPM);
+    if (sellMin > marginalBuy) {
+      // TODO
+    } else if (buyMax < marginalSell) {
+      // TODO
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketPrice, spreadPPM]);
 
   return (
     <>
@@ -87,7 +107,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         </header>
         <OverlappingStrategyGraph
           {...props}
-          order={order0}
+          order0={order0}
+          order1={order1}
           marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
         />
@@ -113,9 +134,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             base={base}
             quote={quote}
             min={order0.min}
-            max={order0.max}
+            max={order1.max}
             setMin={order0.setMin}
-            setMax={order0.setMax}
+            setMax={order1.setMax}
             minLabel="Min Buy Price"
             maxLabel="Max Sell Price"
             error={order0.rangeError}

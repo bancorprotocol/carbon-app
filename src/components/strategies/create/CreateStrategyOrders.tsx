@@ -136,8 +136,8 @@ export const CreateStrategyOrders = ({
       <m.div variants={items} key="createStrategyCTA">
         <Button
           type="submit"
-          variant={'success'}
-          size={'lg'}
+          variant="success"
+          size="lg"
           fullWidth
           disabled={isCTAdisabled}
           loading={isProcessing || isAwaiting}

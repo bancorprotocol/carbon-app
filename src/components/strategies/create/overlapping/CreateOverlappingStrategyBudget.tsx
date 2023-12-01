@@ -1,9 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
-import { UseQueryResult } from '@tanstack/react-query';
-import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
@@ -11,9 +8,11 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { carbonSDK } from 'libs/sdk';
 import {
   getBuyMarginalPrice,
+  getBuyMax,
   getSellMarginalPrice,
-  getSpread,
-} from 'components/strategies/overlapping/utils';
+  getSellMin,
+} from '../../overlapping/utils';
+import { BudgetInput } from 'components/strategies/common/BudgetInput';
 
 interface Props extends OverlappingStrategyProps {
   marketPricePercentage: MarketPricePercentage;
@@ -36,6 +35,28 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   const minAboveMarket = marketPricePercentage.min.gt(0);
   const [anchoredOrder, setAnchoderOrder] = useState('buy');
 
+  const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
+    if (new SafeDecimal(balance).lt(order.budget)) {
+      order.setBudgetError('Insufficient balance');
+    } else {
+      order.setBudgetError('');
+    }
+  };
+
+  // Check for error when buy budget changes
+  useEffect(() => {
+    const balance = token1BalanceQuery.data ?? '0';
+    checkInsufficientBalance(balance, order0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order0.budget]);
+
+  // Check for error when sell budget changes
+  useEffect(() => {
+    const balance = token0BalanceQuery.data ?? '0';
+    checkInsufficientBalance(balance, order1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order1.budget]);
+
   const setBuyBudget = async (sellBudget: string) => {
     if (!base || !quote) return;
     if (!sellBudget) {
@@ -47,15 +68,14 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
       quote.address,
       order0.min,
-      order0.max, // In create we only use order0 for now
+      order1.max,
       marketPrice.toString(),
       spreadPPM.toString(),
       sellBudget ?? '0'
     );
     order0.setBudget(buyBudget);
-    const spread = getSpread(Number(order1.min), Number(order0.max), spreadPPM);
-    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spread);
-    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spread);
+    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
+    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
     order1.setMarginalPrice(buyMarginalPrice.toString());
     order0.setMarginalPrice(sellMarginalPrice.toString());
   };
@@ -71,25 +91,34 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       order0.min,
-      order0.max, // In create we only use order0 for now
+      order1.max,
       marketPrice.toString(),
       spreadPPM.toString(),
       buyBudget ?? '0'
     );
     order1.setBudget(sellBudget);
-    const spread = getSpread(Number(order0.min), Number(order1.max), spreadPPM);
-    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spread);
-    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spread);
+    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
+    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
     order0.setMarginalPrice(buyMarginalPrice.toString());
     order1.setMarginalPrice(sellMarginalPrice.toString());
   };
 
   // Update budget on price change
   useEffect(() => {
+    if (new SafeDecimal(order1.max).lt(marketPrice)) setAnchoderOrder('buy');
+    if (new SafeDecimal(order0.min).gt(marketPrice)) setAnchoderOrder('sell');
     if (anchoredOrder === 'buy') setSellBudget(order0.budget);
     if (anchoredOrder === 'sell') setBuyBudget(order1.budget);
+    const buyMax = getBuyMax(Number(order1.max), spreadPPM);
+    const sellMin = getSellMin(Number(order0.min), spreadPPM);
+    order0.setMax(buyMax.toString());
+    order1.setMin(sellMin.toString());
+    const marginalBuy = getBuyMarginalPrice(marketPrice, spreadPPM);
+    const marginalSell = getSellMarginalPrice(marketPrice, spreadPPM);
+    order0.setMarginalPrice(marginalBuy.toString());
+    order1.setMarginalPrice(marginalSell.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.min, order0.max, marketPrice]);
+  }, [order0.min, order1.max, marketPrice]);
 
   const onBuyBudgetChange = (value: string) => {
     order0.setBudget(value);
@@ -102,10 +131,12 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     setBuyBudget(value);
   };
 
+  if (!quote || !base) return <></>;
+
   if (maxBelowMarket) {
     return (
       <>
-        <TokenBudget
+        <BudgetInput
           token={quote}
           order={order0}
           query={token1BalanceQuery}
@@ -117,7 +148,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   } else if (minAboveMarket) {
     return (
       <>
-        <TokenBudget
+        <BudgetInput
           token={base}
           order={order1}
           query={token0BalanceQuery}
@@ -129,13 +160,13 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   } else {
     return (
       <>
-        <TokenBudget
+        <BudgetInput
           token={quote}
           order={order0}
           query={token1BalanceQuery}
           onChange={onBuyBudgetChange}
         />
-        <TokenBudget
+        <BudgetInput
           token={base}
           order={order1}
           query={token0BalanceQuery}
@@ -162,47 +193,5 @@ const Explaination: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
         <IconLink className="h-12 w-12" />
       </a>
     </p>
-  );
-};
-
-interface TokenBudgetProps {
-  token?: Token;
-  order: OrderCreate;
-  query: UseQueryResult<string, any>;
-  onChange: (value: string) => void;
-}
-
-const TokenBudget: FC<TokenBudgetProps> = (props) => {
-  const { token, order, query, onChange } = props;
-  if (!token) return <></>;
-
-  const insufficientBalance =
-    !query.isLoading && new SafeDecimal(query.data || 0).lt(order.budget);
-
-  return (
-    <>
-      <TokenInputField
-        id={`${token.symbol}-budget`}
-        className="rounded-16 bg-black p-16"
-        value={order.budget}
-        setValue={onChange}
-        token={token}
-        isBalanceLoading={query.isLoading}
-        balance={query.data}
-        isError={insufficientBalance}
-        data-testid={`input-budget-${token.symbol}`}
-      />
-      {insufficientBalance && (
-        <output
-          htmlFor={`${token.symbol}-budget`}
-          role="alert"
-          aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-red"
-        >
-          <IconWarning className="h-12 w-12" />
-          <span className="flex-1">Insufficient balance</span>
-        </output>
-      )}
-    </>
   );
 };

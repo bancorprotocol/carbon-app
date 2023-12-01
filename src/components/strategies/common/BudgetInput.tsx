@@ -7,10 +7,9 @@ import { UseQueryResult } from '@tanstack/react-query';
 
 interface Props {
   id?: string;
-  children: ReactNode;
+  children?: ReactNode;
   order: OrderCreate;
   token: Token;
-  currentBudget: string;
   query: UseQueryResult<string>;
   onChange: (value: string) => void;
   withoutWallet?: boolean;

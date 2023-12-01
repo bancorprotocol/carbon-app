@@ -4,7 +4,7 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { getRoundedSpreadPPM } from 'components/strategies/utils';
+import { getRoundedSpreadPPM } from '../../overlapping/utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
@@ -169,7 +169,6 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
             token={quote}
             query={tokenQuoteBalanceQuery}
             order={order0}
-            currentBudget={strategy.order0.balance}
             onChange={onBuyBudgetChange}
           >
             <DepositAllocatedBudget
@@ -184,7 +183,6 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
             token={base}
             query={tokenBaseBalanceQuery}
             order={order1}
-            currentBudget={strategy.order1.balance}
             onChange={onSellBudgetChange}
           >
             <DepositAllocatedBudget

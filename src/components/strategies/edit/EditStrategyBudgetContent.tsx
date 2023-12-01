@@ -13,7 +13,8 @@ import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useMemo } from 'react';
-import { getStatusTextByTxStatus, isOverlappingStrategy } from '../utils';
+import { getStatusTextByTxStatus } from '../utils';
+import { isOverlappingStrategy } from '../overlapping/utils';
 import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
 import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
 

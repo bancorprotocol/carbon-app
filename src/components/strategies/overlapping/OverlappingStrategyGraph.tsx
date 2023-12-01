@@ -13,6 +13,13 @@ import { getSignedMarketPricePercentage } from 'components/strategies/marketPric
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import styles from './OverlappingStrategyGraph.module.css';
+import {
+  getBuyMarginalPrice,
+  getBuyMax,
+  getSellMarginalPrice,
+  getSellMin,
+} from './utils';
+import { OrderCreate } from '../create/useOrder';
 
 type Props = EnableProps | DisableProps;
 
@@ -21,12 +28,8 @@ interface EnableProps {
   marketPricePercentage: MarketPricePercentage;
   base?: Token;
   quote?: Token;
-  order: {
-    min: string;
-    max: string;
-    setMin: (v: string) => void;
-    setMax: (v: string) => void;
-  };
+  order0: OrderCreate;
+  order1: OrderCreate;
   spreadPPM: number;
   disabled?: false;
 }
@@ -36,10 +39,8 @@ interface DisableProps {
   marketPricePercentage: MarketPricePercentage;
   base?: Token;
   quote?: Token;
-  order: {
-    min: string;
-    max: string;
-  };
+  order0: OrderCreate;
+  order1: OrderCreate;
   spreadPPM: number;
   disabled: true;
 }
@@ -48,8 +49,8 @@ const clamp = (min: number, value: number, max: number) =>
   Math.min(max, Math.max(value, min));
 
 const getBoundaries = (props: Props, zoom: number) => {
-  const min = new SafeDecimal(props.order.min || '0');
-  const max = new SafeDecimal(props.order.max || '0');
+  const min = new SafeDecimal(props.order0.min || '0');
+  const max = new SafeDecimal(props.order1.max || '0');
   const marketPrice = new SafeDecimal(props.marketPrice);
   const minMean = marketPrice.lt(min) ? marketPrice : min;
   const maxMean = marketPrice.gt(max) ? marketPrice : max;
@@ -78,63 +79,48 @@ interface PointConfig {
 
 const getBuyPoint = (config: PointConfig) => {
   const { top, middle, bottom, min, sellMin, marginalBuy } = config;
-  if (marginalBuy <= min) return '';
   const max = Math.min(sellMin, marginalBuy);
   return [
     [min, top].join(','),
-    [marginalBuy, top].join(','),
-    [marginalBuy, middle].join(','),
+    [max, top].join(','),
     [max, middle].join(','),
-    [max, bottom].join(','),
+    [marginalBuy, middle].join(','),
+    [marginalBuy, bottom].join(','),
     [min, bottom].join(','),
   ].join(' ');
 };
 
 const getMarginalBuyPoint = (config: PointConfig) => {
-  const { top, middle, bottom, buyMax, sellMin, marginalBuy } = config;
-  if (marginalBuy >= buyMax) return '';
-  if (marginalBuy >= sellMin) {
-    return [
-      [marginalBuy, top],
-      [buyMax, top].join(','),
-      [buyMax, middle].join(','),
-      [marginalBuy, middle].join(','),
-    ].join(' ');
-  } else {
-    return [
-      [marginalBuy, top],
-      [buyMax, top].join(','),
-      [buyMax, middle].join(','),
-      [sellMin, middle].join(','),
-      [sellMin, bottom].join(','),
-      [marginalBuy, bottom].join(','),
-    ].join(' ');
-  }
+  const { middle, bottom, buyMax, marginalBuy } = config;
+  return [
+    [marginalBuy, middle],
+    [buyMax, middle].join(','),
+    [buyMax, bottom].join(','),
+    [marginalBuy, bottom].join(','),
+  ].join(' ');
 };
 
 const getSellPoint = (config: PointConfig) => {
   const { top, middle, bottom, max, buyMax, marginalSell } = config;
-  if (marginalSell >= max) return '';
   const min = Math.max(buyMax, marginalSell);
   return [
-    [min, top].join(','),
+    [marginalSell, top].join(','),
     [max, top].join(','),
     [max, bottom].join(','),
-    [marginalSell, bottom].join(','),
-    [marginalSell, middle].join(','),
+    [min, bottom].join(','),
     [min, middle].join(','),
+    [marginalSell, middle].join(','),
   ].join(' ');
 };
 
 const getMarginalSellPoint = (config: PointConfig) => {
   const { top, middle, bottom, buyMax, sellMin, marginalSell } = config;
-  if (marginalSell <= sellMin) return '';
   if (marginalSell <= buyMax) {
     return [
-      [sellMin, bottom].join(','),
       [sellMin, middle].join(','),
+      [sellMin, top].join(','),
+      [marginalSell, top].join(','),
       [marginalSell, middle].join(','),
-      [marginalSell, bottom].join(','),
     ].join(' ');
   }
   return [
@@ -151,7 +137,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
-  const { marketPrice, quote, order, spreadPPM } = props;
+  const { marketPrice, quote, order0, order1, spreadPPM } = props;
   const { left, right, mean, minMean, maxMean } = getBoundaries(props, zoom);
   const disabled = !!props.disabled;
 
@@ -230,11 +216,10 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   // Polygons //
   //////////////
   const getPointConfig = ({ min, max }: { min: number; max: number }) => {
-    const spread = ((max - min) * clamp(0, spreadPPM || 0, 10)) / 100;
-    const buyMax = max - spread;
-    const sellMin = min + spread;
-    const marginalBuy = Math.min(marketPrice - spread / 2, buyMax);
-    const marginalSell = Math.max(marketPrice + spread / 2, sellMin);
+    const buyMax = clamp(min, getBuyMax(max, spreadPPM), max);
+    const sellMin = clamp(min, getSellMin(min, spreadPPM), max);
+    const marginalBuy = getBuyMarginalPrice(marketPrice, spreadPPM);
+    const marginalSell = getSellMarginalPrice(marketPrice, spreadPPM);
     return {
       top,
       middle,
@@ -243,13 +228,13 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       max,
       buyMax,
       sellMin,
-      marginalBuy: Math.max(marginalBuy, min),
-      marginalSell: Math.min(marginalSell, max),
+      marginalBuy: clamp(sellMin, marginalBuy, buyMax),
+      marginalSell: clamp(sellMin, marginalSell, buyMax),
     };
   };
   const config = getPointConfig({
-    min: Number(order.min),
-    max: Number(order.max),
+    min: Number(order0.min),
+    max: Number(order1.max),
   });
   const { min, max, sellMin, buyMax } = config;
   const marketPercent = props.marketPricePercentage;
@@ -321,7 +306,22 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const translateHandler = (mode: 'buy' | 'sell', x: number) => {
     const g = document.getElementById(`${mode}-handler`);
-    g?.style.setProperty('transform', `translateX(${x}px)`);
+    if (!g) return;
+    g.dataset.delta = x.toString();
+    g.style.setProperty('transform', `translateX(${x}px)`);
+  };
+
+  const getHandlerDelta = (mode: 'buy' | 'sell') => {
+    return document.getElementById(`${mode}-handler`)?.dataset.delta ?? '0';
+  };
+
+  const getDraggedMin = () => {
+    const delta = Number(getHandlerDelta('buy'));
+    return (min + delta).toString();
+  };
+  const getDraggedMax = () => {
+    const delta = Number(getHandlerDelta('sell'));
+    return (max + delta).toString();
   };
 
   const updatePoints = {
@@ -332,7 +332,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   };
 
   // Get new min & max based on current handler
-  const updateMinMax = (e: MouseEvent) => {
+  const updatedMinMax = (e: MouseEvent) => {
     const delta = getDelta(e);
     const lowest = Math.max(0, left.toNumber());
     if (draggedHandler === 'buy') {
@@ -360,14 +360,19 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const drag = (e: MouseEvent) => {
     e.preventDefault();
     if (!draggedHandler) return;
-    const { newMin, newMax } = updateMinMax(e);
+    const { newMin, newMax } = updatedMinMax(e);
+
+    // Update points
+    const config = getPointConfig({ min: newMin, max: newMax });
+
+    // Checks
+    if (config.sellMin === config.marginalBuy) return;
+    if (config.buyMax === config.marginalSell) return;
 
     // Translate handlers
     translateHandler('buy', newMin - min);
     translateHandler('sell', newMax - max);
 
-    // Update points
-    const config = getPointConfig({ min: newMin, max: newMax });
     for (const [id, update] of Object.entries(updatePoints)) {
       document.getElementById(id)?.setAttribute('points', update(config));
     }
@@ -394,14 +399,11 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     if (tooltipPercent) tooltipPercent.textContent = `${percentValue}%`;
   };
 
-  const dragEnd = (e: MouseEvent) => {
+  const dragEnd = () => {
     if (draggedHandler) {
       setDragging('');
-      const { newMin, newMax } = updateMinMax(e);
-      if ('setMin' in order && 'setMax' in order) {
-        order.setMin(newMin.toString());
-        order.setMax(newMax.toString());
-      }
+      order0.setMin(getDraggedMin());
+      order1.setMax(getDraggedMax());
       translateHandler('buy', 0);
       translateHandler('sell', 0);
       initialPosition = 0;
@@ -529,8 +531,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               id="buy-max-line"
               x1={buyMax}
               x2={buyMax}
-              y1={middle}
-              y2={top}
+              y1={bottom}
+              y2={middle}
               stroke="#00B578"
               strokeWidth={2 * ratio}
             />
@@ -542,8 +544,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               id="sell-min-line"
               x1={sellMin}
               x2={sellMin}
-              y1={bottom}
-              y2={middle}
+              y1={middle}
+              y2={top}
               stroke="#D86371"
               strokeWidth={2 * ratio}
             />
