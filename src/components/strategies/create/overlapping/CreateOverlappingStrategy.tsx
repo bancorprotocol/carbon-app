@@ -31,7 +31,12 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
-    order: order0,
+    order: {
+      min: order0.min,
+      max: order1.max,
+      price: '',
+      isRange: true,
+    },
     buy: true,
   });
 
