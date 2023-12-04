@@ -12,11 +12,12 @@ interface Props {
   token: Token;
   query: UseQueryResult<string>;
   onChange: (value: string) => void;
+  disabled?: boolean;
   withoutWallet?: boolean;
 }
 
 export const BudgetInput: FC<Props> = (props) => {
-  const { id, order, token, query, children, withoutWallet, onChange } = props;
+  const { id, order, token, query, children, onChange } = props;
   const inputId = useId();
   const balance = query.data ?? '0';
 
@@ -29,9 +30,10 @@ export const BudgetInput: FC<Props> = (props) => {
         setValue={onChange}
         token={token}
         isBalanceLoading={query.isLoading}
-        isError={!!order.budgetError}
         balance={balance}
-        withoutWallet={withoutWallet}
+        isError={!!order.budgetError}
+        withoutWallet={!!props.withoutWallet}
+        disabled={!!props.disabled}
       />
       {!!order.budgetError && (
         <output

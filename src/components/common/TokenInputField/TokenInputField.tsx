@@ -91,6 +91,7 @@ export const TokenInputField: FC<Props> = ({
           className={`
             grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
             ${isError ? 'text-red' : ''}
+            ${disabled ? 'text-white/40' : ''}
           `}
           disabled={disabled}
           data-testid={testid}
@@ -107,6 +108,7 @@ export const TokenInputField: FC<Props> = ({
         </p>
         {user && isBalanceLoading !== undefined && !withoutWallet && (
           <button
+            disabled={disabled}
             type="button"
             onClick={handleBalanceClick}
             className="group flex items-center"
@@ -119,7 +121,13 @@ export const TokenInputField: FC<Props> = ({
                 <span className="text-white">
                   {prettifyNumber(balance || 0)}&nbsp;
                 </span>
-                <b className="text-green group-hover:text-white">MAX</b>
+                <b
+                  className={`group-hover:text-white ${
+                    disabled ? 'text-green/40' : 'text-green'
+                  }`}
+                >
+                  MAX
+                </b>
               </>
             )}
           </button>

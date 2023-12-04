@@ -3,7 +3,6 @@ import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { SafeDecimal } from 'libs/safedecimal';
 import { carbonSDK } from 'libs/sdk';
 import {
@@ -15,7 +14,6 @@ import {
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 
 interface Props extends OverlappingStrategyProps {
-  marketPricePercentage: MarketPricePercentage;
   marketPrice: number;
 }
 
@@ -28,11 +26,10 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     marketPrice,
     token0BalanceQuery,
     token1BalanceQuery,
-    marketPricePercentage,
     spreadPPM,
   } = props;
-  const maxBelowMarket = marketPricePercentage.max.lt(0);
-  const minAboveMarket = marketPricePercentage.min.gt(0);
+  const minAboveMarket = new SafeDecimal(order0.min).gte(order0.marginalPrice);
+  const maxBelowMarket = new SafeDecimal(order1.max).lte(order1.marginalPrice);
   const [anchoredOrder, setAnchoderOrder] = useState('buy');
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
@@ -105,18 +102,20 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 
   // Update budget on price change
   useEffect(() => {
-    if (new SafeDecimal(order1.max).lt(marketPrice)) setAnchoderOrder('buy');
-    if (new SafeDecimal(order0.min).gt(marketPrice)) setAnchoderOrder('sell');
-    if (anchoredOrder === 'buy') setSellBudget(order0.budget);
-    if (anchoredOrder === 'sell') setBuyBudget(order1.budget);
+    if (maxBelowMarket) {
+      setAnchoderOrder('buy');
+      setSellBudget(order0.budget);
+    } else if (minAboveMarket) {
+      setAnchoderOrder('sell');
+      setBuyBudget(order1.budget);
+    } else {
+      if (anchoredOrder === 'buy') setSellBudget(order0.budget);
+      if (anchoredOrder === 'sell') setBuyBudget(order1.budget);
+    }
     const buyMax = getBuyMax(Number(order1.max), spreadPPM);
     const sellMin = getSellMin(Number(order0.min), spreadPPM);
     order0.setMax(buyMax.toString());
     order1.setMin(sellMin.toString());
-    const marginalBuy = getBuyMarginalPrice(marketPrice, spreadPPM);
-    const marginalSell = getSellMarginalPrice(marketPrice, spreadPPM);
-    order0.setMarginalPrice(marginalBuy.toString());
-    order1.setMarginalPrice(marginalSell.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.min, order1.max, marketPrice, spreadPPM]);
 
@@ -132,49 +131,26 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   };
 
   if (!quote || !base) return <></>;
-
-  if (maxBelowMarket) {
-    return (
-      <>
-        <BudgetInput
-          token={quote}
-          order={order0}
-          query={token1BalanceQuery}
-          onChange={onBuyBudgetChange}
-        />
-        <Explaination base={base} buy />
-      </>
-    );
-  } else if (minAboveMarket) {
-    return (
-      <>
-        <BudgetInput
-          token={base}
-          order={order1}
-          query={token0BalanceQuery}
-          onChange={onSellBudgetChange}
-        />
-        <Explaination base={base} />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <BudgetInput
-          token={quote}
-          order={order0}
-          query={token1BalanceQuery}
-          onChange={onBuyBudgetChange}
-        />
-        <BudgetInput
-          token={base}
-          order={order1}
-          query={token0BalanceQuery}
-          onChange={onSellBudgetChange}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <BudgetInput
+        token={quote}
+        order={order0}
+        query={token1BalanceQuery}
+        onChange={onBuyBudgetChange}
+        disabled={minAboveMarket}
+      />
+      {minAboveMarket && <Explaination base={base} buy />}
+      <BudgetInput
+        token={base}
+        order={order1}
+        query={token0BalanceQuery}
+        onChange={onSellBudgetChange}
+        disabled={maxBelowMarket}
+      />
+      {maxBelowMarket && <Explaination base={base} />}
+    </>
+  );
 };
 
 const Explaination: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {

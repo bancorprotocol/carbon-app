@@ -140,11 +140,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <CreateOverlappingStrategyBudget
-          {...props}
-          marketPrice={marketPrice}
-          marketPricePercentage={marketPricePercentage}
-        />
+        <CreateOverlappingStrategyBudget {...props} marketPrice={marketPrice} />
       </article>
     </>
   );
