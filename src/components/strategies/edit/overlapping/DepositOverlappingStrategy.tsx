@@ -16,7 +16,6 @@ import { carbonSDK } from 'libs/sdk';
 import {
   getBuyMarginalPrice,
   getSellMarginalPrice,
-  getSpread,
 } from 'components/strategies/overlapping/utils';
 
 interface Props {
@@ -65,9 +64,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       sellBudget ?? '0'
     );
     order0.setBudget(buyBudget);
-    const spread = getSpread(Number(order1.min), Number(order0.max), spreadPPM);
-    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spread);
-    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spread);
+    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
+    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
     order1.setMarginalPrice(buyMarginalPrice.toString());
     order0.setMarginalPrice(sellMarginalPrice.toString());
   };
@@ -89,9 +87,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       buyBudget ?? '0'
     );
     order1.setBudget(sellBudget);
-    const spread = getSpread(Number(order0.min), Number(order1.max), spreadPPM);
-    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spread);
-    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spread);
+    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
+    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
     order0.setMarginalPrice(buyMarginalPrice.toString());
     order1.setMarginalPrice(sellMarginalPrice.toString());
   };
@@ -197,7 +194,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           <p className="text-12 text-white/60">
             Price range and liquidity spread remain unchanged.&nbsp;
             <a
-              href="."
+              href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-4 font-weight-500 text-green"

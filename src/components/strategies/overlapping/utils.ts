@@ -37,24 +37,16 @@ export const getMaxBuyMin = (sellMax: number, spreadPPM: number) => {
 };
 
 export const isOverlappingStrategy = (strategy: Strategy) => {
-  const { order0, order1 } = strategy;
-  const buyStart = new SafeDecimal(order1.startRate);
-  const buyEnd = new SafeDecimal(order1.endRate);
-  const sellStart = new SafeDecimal(order0.startRate);
-  const sellEnd = new SafeDecimal(order0.endRate);
-  const deltaStart = sellStart.minus(buyStart);
-  const deltaSEnd = sellEnd.minus(buyEnd);
-  return deltaStart.minus(deltaSEnd).abs().lt(0.0001);
+  const buyMax = new SafeDecimal(strategy.order0.endRate);
+  const sellMin = new SafeDecimal(strategy.order1.startRate);
+  return buyMax.gt(sellMin);
 };
 
 export const getSpreadPPM = (strategy: Strategy) => {
   const { order0, order1 } = strategy;
-  const min = new SafeDecimal(order0.startRate);
-  const buyMax = new SafeDecimal(order0.endRate);
-  const max = new SafeDecimal(order1.endRate);
-  const sellDelta = max.minus(buyMax);
-  const totalDelta = max.minus(min);
-  return sellDelta.div(totalDelta).times(100);
+  const buyMax = Number(order0.endRate);
+  const sellMax = Number(order1.endRate);
+  return (sellMax / buyMax - 1) * 100;
 };
 
 export const getRoundedSpreadPPM = (strategy: Strategy) => {

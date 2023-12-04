@@ -55,11 +55,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         <p className="text-12 text-white/60">
           Learn more about the new type of strategy creation.
         </p>
-        {/* TODO: Set url */}
         <a
-          href="/"
+          href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy"
           target="_blank"
           className="row-span-2 flex items-center gap-4 self-center justify-self-end text-12 font-weight-500 text-green"
+          rel="noreferrer"
         >
           Learn More
           <IconLink className="h-12 w-12" />
@@ -68,8 +68,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8">
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
+          <Tooltip element="Drag and drop your strategy buy and sell prices.">
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
@@ -92,8 +91,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
+          <Tooltip element="Indicate the strategy exact buy and sell prices.">
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
@@ -114,8 +112,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             2
           </span>
           <h3 className="flex-1 text-18 font-weight-500">Indicate Spread</h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
+          <Tooltip element="The gap between the Buy and Sell orders price.">
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
@@ -134,8 +131,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             3
           </span>
           <h3 className="flex-1 text-18 font-weight-500">Set Budgets</h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
+          <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values.">
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
