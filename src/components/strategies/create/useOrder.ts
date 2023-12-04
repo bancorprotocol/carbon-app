@@ -51,6 +51,7 @@ export const useOrder = (order?: Order) => {
       setMin('');
       setMax('');
       setPrice('');
+      setMarginalPrice('');
       setPriceError('');
       setRangeError('');
     }

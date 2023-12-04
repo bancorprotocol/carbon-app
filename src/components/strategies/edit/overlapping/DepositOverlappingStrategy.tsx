@@ -39,7 +39,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
-    order: { min, max },
+    order: { min, max, price: '', isRange: true },
   });
 
   const aboveMarket = new SafeDecimal(min).gt(marketPrice);

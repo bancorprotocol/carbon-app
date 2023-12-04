@@ -16,6 +16,8 @@ import styles from './OverlappingStrategyGraph.module.css';
 import {
   getBuyMarginalPrice,
   getBuyMax,
+  getMaxBuyMin,
+  getMinSellMax,
   getSellMarginalPrice,
   getSellMin,
 } from './utils';
@@ -78,59 +80,73 @@ interface PointConfig {
 }
 
 const getBuyPoint = (config: PointConfig) => {
-  const { top, middle, bottom, min, sellMin, marginalBuy } = config;
-  const max = Math.min(sellMin, marginalBuy);
+  const { top, middle, bottom, min, sellMin, buyMax, marginalBuy } = config;
+  const maxTop = Math.min(sellMin, marginalBuy);
+  const maxBottom = Math.min(buyMax, marginalBuy);
   return [
     [min, top].join(','),
-    [max, top].join(','),
-    [max, middle].join(','),
-    [marginalBuy, middle].join(','),
-    [marginalBuy, bottom].join(','),
+    [maxTop, top].join(','),
+    [maxTop, middle].join(','),
+    [maxBottom, middle].join(','),
+    [maxBottom, bottom].join(','),
     [min, bottom].join(','),
   ].join(' ');
 };
 
 const getMarginalBuyPoint = (config: PointConfig) => {
-  const { middle, bottom, buyMax, marginalBuy } = config;
-  return [
-    [marginalBuy, middle],
-    [buyMax, middle].join(','),
-    [buyMax, bottom].join(','),
-    [marginalBuy, bottom].join(','),
-  ].join(' ');
+  const { middle, top, bottom, buyMax, sellMin, marginalBuy } = config;
+  if (sellMin >= marginalBuy) {
+    return [
+      [marginalBuy, top].join(','),
+      [sellMin, top].join(','),
+      [sellMin, middle].join(','),
+      [buyMax, middle].join(','),
+      [buyMax, bottom].join(','),
+      [marginalBuy, bottom].join(','),
+    ].join(' ');
+  } else {
+    return [
+      [marginalBuy, middle].join(','),
+      [buyMax, middle].join(','),
+      [buyMax, bottom].join(','),
+      [marginalBuy, bottom].join(','),
+    ].join(' ');
+  }
 };
 
 const getSellPoint = (config: PointConfig) => {
-  const { top, middle, bottom, max, buyMax, marginalSell } = config;
-  const min = Math.max(buyMax, marginalSell);
+  const { top, middle, bottom, max, buyMax, marginalSell, sellMin } = config;
+  const minTop = Math.max(sellMin, marginalSell);
+  const minBottom = Math.max(buyMax, marginalSell);
   return [
-    [marginalSell, top].join(','),
+    [minTop, top].join(','),
     [max, top].join(','),
     [max, bottom].join(','),
-    [min, bottom].join(','),
-    [min, middle].join(','),
-    [marginalSell, middle].join(','),
+    [minBottom, bottom].join(','),
+    [minBottom, middle].join(','),
+    [minTop, middle].join(','),
   ].join(' ');
 };
 
 const getMarginalSellPoint = (config: PointConfig) => {
   const { top, middle, bottom, buyMax, sellMin, marginalSell } = config;
-  if (marginalSell <= buyMax) {
+  if (marginalSell >= buyMax) {
     return [
+      [sellMin, top].join(','),
+      [marginalSell, top].join(','),
+      [marginalSell, bottom].join(','),
+      [buyMax, bottom].join(','),
+      [buyMax, middle].join(','),
       [sellMin, middle].join(','),
+    ].join(' ');
+  } else {
+    return [
       [sellMin, top].join(','),
       [marginalSell, top].join(','),
       [marginalSell, middle].join(','),
+      [sellMin, middle].join(','),
     ].join(' ');
   }
-  return [
-    [sellMin, bottom].join(','),
-    [sellMin, middle].join(','),
-    [buyMax, middle].join(','),
-    [buyMax, top].join(','),
-    [marginalSell, top].join(','),
-    [marginalSell, bottom].join(','),
-  ].join(' ');
 };
 
 export const OverlappingStrategyGraph: FC<Props> = (props) => {
@@ -228,8 +244,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       max,
       buyMax,
       sellMin,
-      marginalBuy: clamp(sellMin, marginalBuy, buyMax),
-      marginalSell: clamp(sellMin, marginalSell, buyMax),
+      marginalBuy: clamp(min, marginalBuy, buyMax),
+      marginalSell: clamp(sellMin, marginalSell, max),
     };
   };
   const config = getPointConfig({
@@ -331,19 +347,22 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     'marginal-sell-polygon': getMarginalSellPoint,
   };
 
+  const minSellMax = getMinSellMax(Number(order0.min), spreadPPM);
+  const maxBuyMin = getMaxBuyMin(Number(order1.max), spreadPPM);
+
   // Get new min & max based on current handler
   const updatedMinMax = (e: MouseEvent) => {
     const delta = getDelta(e);
     const lowest = Math.max(0, left.toNumber());
     if (draggedHandler === 'buy') {
       return {
-        newMin: clamp(lowest, min + delta, max),
+        newMin: clamp(lowest, min + delta, maxBuyMin),
         newMax: clamp(max, max + delta - distance, right.toNumber()),
       };
     } else {
       return {
         newMin: clamp(lowest, min + delta + distance, min),
-        newMax: clamp(min, max + delta, right.toNumber()),
+        newMax: clamp(minSellMax, max + delta, right.toNumber()),
       };
     }
   };
@@ -364,10 +383,6 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
     // Update points
     const config = getPointConfig({ min: newMin, max: newMax });
-
-    // Checks
-    if (config.sellMin === config.marginalBuy) return;
-    if (config.buyMax === config.marginalSell) return;
 
     // Translate handlers
     translateHandler('buy', newMin - min);

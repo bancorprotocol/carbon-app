@@ -2,12 +2,16 @@ import { useRef, FC, KeyboardEvent, Dispatch, SetStateAction } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn } from 'utils/helpers';
 import styles from './CreateOverlappingStrategySpread.module.css';
+import { OrderCreate } from '../useOrder';
+import { getMaxSpreadPPM } from 'components/strategies/overlapping/utils';
 
 interface Props {
   /** Value used to fallback to when custom input is empty */
   defaultValue: number;
   options: number[];
   spreadPPM: number;
+  order0: OrderCreate;
+  order1: OrderCreate;
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
 export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
@@ -15,11 +19,30 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spreadPPM);
   const hasError = spreadPPM <= 0 || spreadPPM > 10;
+  const { order0, order1 } = props;
+  const buyMin = Number(order0.min);
+  const sellMax = Number(order1.max);
+  const maxSpreadPPM = Math.round(getMaxSpreadPPM(buyMin, sellMax) * 100) / 100;
+
+  const setCustomSpread = (value: number) => {
+    const input = document.getElementById('spread-custom');
+    if (value > maxSpreadPPM) {
+      setSpreadPPM(maxSpreadPPM);
+      (input as HTMLInputElement).value = maxSpreadPPM.toFixed(2);
+    } else {
+      setSpreadPPM(value);
+    }
+  };
 
   const selectSpread = (value: number) => {
-    setSpreadPPM(value);
     const input = document.getElementById('spread-custom');
-    (input as HTMLInputElement).value = '';
+    if (value > maxSpreadPPM) {
+      setSpreadPPM(maxSpreadPPM);
+      (input as HTMLInputElement).value = maxSpreadPPM.toFixed(2);
+    } else {
+      setSpreadPPM(value);
+      (input as HTMLInputElement).value = '';
+    }
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -86,14 +109,14 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
             inputMode="decimal"
             min="0"
             max="10"
-            step="0.1"
+            step="0.01"
             aria-label="Set custom"
             placeholder="Set custom"
             tabIndex={inOptions ? -1 : 0}
-            onChange={(e) => setSpreadPPM(Number(e.target.value ?? '0'))}
+            onChange={(e) => setCustomSpread(Number(e.target.value ?? '0'))}
             onBlur={(e) => {
               if (options.includes(e.target.valueAsNumber)) e.target.value = '';
-              else if (!spreadPPM) setSpreadPPM(defaultValue);
+              else if (!spreadPPM) setCustomSpread(defaultValue);
             }}
             data-testid="spread-input"
           />

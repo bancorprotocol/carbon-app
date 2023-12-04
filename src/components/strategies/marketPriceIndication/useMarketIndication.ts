@@ -14,8 +14,10 @@ type UseMarketIndicationProps = {
   base: Token | undefined;
   quote: Token | undefined;
   order: {
+    isRange: boolean;
     min: string;
     max: string;
+    price: string;
   };
   buy?: boolean;
 };
@@ -32,8 +34,7 @@ export const useMarketIndication = ({
     baseTokenPriceQuery?.data?.[selectedFiatCurrency] || 0;
 
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
-    const isRange = order.min !== order.max;
-    if (isRange) {
+    if (order.isRange) {
       const isInputNotZero = buy
         ? new SafeDecimal(order.max).gt(0)
         : new SafeDecimal(order.min).gt(0);
@@ -44,14 +45,21 @@ export const useMarketIndication = ({
 
       return isInputNotZero && isAboveOrBelow;
     }
-    const price = new SafeDecimal(order.min);
     return (
-      price.gt(0) &&
+      new SafeDecimal(order.price).gt(0) &&
       new SafeDecimal(getFiatValue(order.min))[buy ? 'gt' : 'lt'](
         tokenMarketPrice
       )
     );
-  }, [order.max, order.min, getFiatValue, buy, tokenMarketPrice]);
+  }, [
+    order.isRange,
+    order.price,
+    order.max,
+    order.min,
+    getFiatValue,
+    buy,
+    tokenMarketPrice,
+  ]);
 
   const marketPricePercentage = useMemo(() => {
     const getMarketPricePercentage = (price: string) => {
@@ -63,13 +71,12 @@ export const useMarketIndication = ({
             .div(tokenMarketPrice)
             .times(100);
     };
-    const price = order.min === order.max ? order.min : '';
     return {
       min: getMarketPricePercentage(order.min),
       max: getMarketPricePercentage(order.max),
-      price: getMarketPricePercentage(price),
+      price: getMarketPricePercentage(order.price),
     };
-  }, [getFiatValue, order.max, order.min, tokenMarketPrice]);
+  }, [getFiatValue, order.max, order.min, order.price, tokenMarketPrice]);
 
   return {
     isOrderAboveOrBelowMarketPrice,

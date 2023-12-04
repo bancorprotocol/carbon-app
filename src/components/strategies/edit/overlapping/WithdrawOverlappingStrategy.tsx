@@ -42,7 +42,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
-    order: { min, max },
+    order: { min, max, price: '', isRange: true },
   });
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {

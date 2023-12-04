@@ -1,12 +1,8 @@
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
-import {
-  MarketPricePercentage,
-  useMarketIndication,
-} from 'components/strategies/marketPriceIndication';
+import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { CreateOverlappingStrategySpread } from './CreateOverlappingStrategySpread';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { InputRange } from '../BuySellBlock/InputRange';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
@@ -14,12 +10,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudget';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
-import {
-  getBuyMarginalPrice,
-  getBuyMax,
-  getSellMarginalPrice,
-  getSellMin,
-} from 'components/strategies/overlapping/utils';
+import { CreateOverlappingRange } from './CreateOverlappingRange';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -32,14 +23,6 @@ export interface OverlappingStrategyProps {
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
 
-const getPriceWarnings = ({ min, max }: MarketPricePercentage): string[] => {
-  const aboveOrBelowMarket = min.gt(0) || max.lt(0);
-  if (!aboveOrBelowMarket) return [];
-  return [
-    'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.',
-  ];
-};
-
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
 ) => {
@@ -51,7 +34,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     order: order0,
     buy: true,
   });
-  const priceWarnings = getPriceWarnings(marketPricePercentage);
 
   // Initialize order when market price is available
   useEffect(() => {
@@ -60,20 +42,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       order1.setMax((marketPrice * 1.001).toString());
     }
   }, [marketPrice, order0, order1]);
-
-  useEffect(() => {
-    if (!spreadPPM) return;
-    const buyMax = getBuyMax(Number(order1.max), spreadPPM);
-    const sellMin = getSellMin(Number(order0.min), spreadPPM);
-    const marginalBuy = getBuyMarginalPrice(marketPrice, spreadPPM);
-    const marginalSell = getSellMarginalPrice(marketPrice, spreadPPM);
-    if (sellMin > marginalBuy) {
-      // TODO
-    } else if (buyMax < marginalSell) {
-      // TODO
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spreadPPM]);
 
   return (
     <>
@@ -130,19 +98,13 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           </Tooltip>
         </header>
         {base && quote && (
-          <InputRange
+          <CreateOverlappingRange
             base={base}
             quote={quote}
-            min={order0.min}
-            max={order1.max}
-            setMin={order0.setMin}
-            setMax={order1.setMax}
-            minLabel="Min Buy Price"
-            maxLabel="Max Sell Price"
-            error={order0.rangeError}
-            warnings={priceWarnings}
-            setRangeError={order0.setRangeError}
-            marketPricePercentages={marketPricePercentage}
+            order0={order0}
+            order1={order1}
+            spreadPPM={spreadPPM}
+            marketPricePercentage={marketPricePercentage}
           />
         )}
       </article>
@@ -158,6 +120,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           </Tooltip>
         </header>
         <CreateOverlappingStrategySpread
+          order0={order0}
+          order1={order1}
           defaultValue={0.05}
           options={[0.01, 0.05, 0.1]}
           spreadPPM={spreadPPM}

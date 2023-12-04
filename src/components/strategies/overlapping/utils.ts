@@ -5,12 +5,12 @@ export const getSpread = (min: number, max: number, spreadPPM: number) => {
   return ((max - min) * spreadPPM) / 100;
 };
 
-export const getBuyMax = (max: number, spreadPPM: number) => {
-  return max / (1 + spreadPPM / 100);
+export const getBuyMax = (sellMax: number, spreadPPM: number) => {
+  return sellMax / (1 + spreadPPM / 100);
 };
 
-export const getSellMin = (min: number, spreadPPM: number) => {
-  return min * (1 + spreadPPM / 100);
+export const getSellMin = (buyMin: number, spreadPPM: number) => {
+  return buyMin * (1 + spreadPPM / 100);
 };
 
 export const getBuyMarginalPrice = (marketPrice: number, spreadPPM: number) => {
@@ -22,6 +22,18 @@ export const getSellMarginalPrice = (
   spreadPPM: number
 ) => {
   return marketPrice * (1 + spreadPPM / 100) ** 0.5;
+};
+
+export const getMaxSpreadPPM = (buyMin: number, sellMax: number) => {
+  return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
+};
+
+export const getMinSellMax = (buyMin: number, spreadPPM: number) => {
+  return buyMin / (1 - spreadPPM / 100) ** 2;
+};
+
+export const getMaxBuyMin = (sellMax: number, spreadPPM: number) => {
+  return sellMax * (1 - spreadPPM / 100) ** 2;
 };
 
 export const isOverlappingStrategy = (strategy: Strategy) => {
