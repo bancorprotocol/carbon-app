@@ -118,7 +118,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     order0.setMarginalPrice(marginalBuy.toString());
     order1.setMarginalPrice(marginalSell.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.min, order1.max, marketPrice]);
+  }, [order0.min, order1.max, marketPrice, spreadPPM]);
 
   const onBuyBudgetChange = (value: string) => {
     order0.setBudget(value);
