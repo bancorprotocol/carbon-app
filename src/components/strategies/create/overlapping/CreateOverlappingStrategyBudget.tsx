@@ -30,6 +30,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   } = props;
   const minAboveMarket = new SafeDecimal(order0.min).gte(order0.marginalPrice);
   const maxBelowMarket = new SafeDecimal(order1.max).lte(order1.marginalPrice);
+
   const [anchoredOrder, setAnchoderOrder] = useState('buy');
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
@@ -73,16 +74,16 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     order0.setBudget(buyBudget);
     const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
     const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
-    order1.setMarginalPrice(buyMarginalPrice.toString());
-    order0.setMarginalPrice(sellMarginalPrice.toString());
+    order0.setMarginalPrice(buyMarginalPrice.toString());
+    order1.setMarginalPrice(sellMarginalPrice.toString());
   };
 
   const setSellBudget = async (buyBudget: string) => {
     if (!base || !quote) return;
     if (!buyBudget) {
       order1.setBudget('');
-      order1.setMarginalPrice('');
       order0.setMarginalPrice('');
+      order1.setMarginalPrice('');
       return;
     }
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(

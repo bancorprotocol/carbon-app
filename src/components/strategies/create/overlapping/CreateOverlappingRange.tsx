@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { OrderCreate } from '../useOrder';
 import { InputRange } from '../BuySellBlock/InputRange';
 import { Token } from 'libs/tokens';
@@ -30,18 +30,27 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
     props;
   const priceWarnings = getPriceWarnings(marketPricePercentage);
 
-  const setBuyMin = (value: string) => {
-    order0.setMin(value);
-    const buyMin = Number(value);
-    const minSellMax = getMinSellMax(buyMin, spreadPPM);
-    if (minSellMax > Number(order1.max)) order1.setMax(minSellMax.toString());
-  };
-  const setSellMax = (value: string) => {
-    order1.setMax(value);
-    const sellMax = Number(value);
-    const maxBuyMin = getMaxBuyMin(sellMax, spreadPPM);
-    if (maxBuyMin < Number(order0.min)) order0.setMin(maxBuyMin.toString());
-  };
+  // Update sell.max on buy.min change if needed
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const buyMin = Number(order0.min);
+      const minSellMax = getMinSellMax(buyMin, spreadPPM);
+      if (minSellMax > Number(order1.max)) order1.setMax(minSellMax.toString());
+    }, 300);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order0.min, order1.setMax]);
+
+  // Update buy.min on sell.max change if needed
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const sellMax = Number(order1.max);
+      const maxBuyMin = getMaxBuyMin(sellMax, spreadPPM);
+      if (maxBuyMin < Number(order0.min)) order0.setMin(maxBuyMin.toString());
+    }, 300);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order1.max, order0.setMin]);
 
   return (
     <InputRange
@@ -49,8 +58,8 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
       quote={quote}
       min={order0.min}
       max={order1.max}
-      setMin={setBuyMin}
-      setMax={setSellMax}
+      setMin={order0.setMin}
+      setMax={order1.setMax}
       minLabel="Min Buy Price"
       maxLabel="Max Sell Price"
       setRangeError={order0.setRangeError} // Should not happen as we force price

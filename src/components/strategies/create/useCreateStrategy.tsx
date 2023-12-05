@@ -243,13 +243,7 @@ export const useCreateStrategy = () => {
 
     if (strategySettings === 'overlapping') {
       const min = Number(order0.min);
-      const buyMax = Number(order0.max);
-      const marginalBuy = Number(order0.marginalPrice);
-      const sellMin = Number(order1.min);
       const max = Number(order1.max);
-      const marginalSell = Number(order1.marginalPrice);
-      if (buyMax < marginalSell) return true;
-      if (sellMin > marginalBuy) return true;
       if (spreadPPM < 0 || spreadPPM > 10) return true;
       if (min < 0 || min > max) return true;
     } else {
@@ -271,13 +265,11 @@ export const useCreateStrategy = () => {
     order0.budgetError,
     order0.min,
     order0.max,
-    order0.marginalPrice,
     order0.isRange,
     order0.price,
     order1.budgetError,
     order1.min,
     order1.max,
-    order1.marginalPrice,
     order1.isRange,
     order1.price,
     strategySettings,

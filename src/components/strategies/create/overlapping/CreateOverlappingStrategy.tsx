@@ -11,6 +11,10 @@ import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudg
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
 import { CreateOverlappingRange } from './CreateOverlappingRange';
+import {
+  getBuyMarginalPrice,
+  getSellMarginalPrice,
+} from 'components/strategies/overlapping/utils';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -45,8 +49,19 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     if (marketPrice > 0 && !order0.min && !order1.max) {
       order0.setMin((marketPrice * 0.999).toString());
       order1.setMax((marketPrice * 1.001).toString());
+      const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
+      const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
+      order0.setMarginalPrice(buyMarginalPrice.toString());
+      order1.setMarginalPrice(sellMarginalPrice.toString());
     }
-  }, [marketPrice, order0, order1]);
+  }, [
+    marketPrice,
+    order0,
+    order1,
+    spreadPPM,
+    order0.setMarginalPrice,
+    order1.setMarginalPrice,
+  ]);
 
   return (
     <>

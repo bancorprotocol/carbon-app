@@ -269,9 +269,22 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   /////////////
   const buyTooltipTextLength = Math.max(minValue.length, minPercent.length + 1);
   const buyTooltipWidth = buyTooltipTextLength * fontRatio + 4 * padding;
+  const baseBuyTooltipX = min - buyTooltipWidth / 2;
+
+  const sellTooltipTextLength = Math.max(
+    maxValue.length,
+    maxPercent.length + 1
+  );
+  const sellTooltipWidth = sellTooltipTextLength * fontRatio + 4 * padding;
+  const baseSellTooltipX = max - sellTooltipWidth / 2;
+
+  const buyTooltipX = Math.min(
+    baseBuyTooltipX,
+    baseSellTooltipX - sellTooltipWidth
+  );
   const buyTooltip = {
     rect: {
-      x: min - buyTooltipWidth / 2,
+      x: buyTooltipX,
       y: top - 3 * fontSize - 4 * padding,
       width: buyTooltipWidth,
       height: 2 * fontSize + 4 * padding,
@@ -279,21 +292,16 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       rx: 4 * ratio,
     },
     text: {
-      x: min,
+      x: buyTooltipX + buyTooltipWidth / 2,
       fontSize: fontSize,
       fill: 'white',
       textAnchor: 'middle',
     },
   };
 
-  const sellTooltipTextLength = Math.max(
-    maxValue.length,
-    maxPercent.length + 1
-  );
-  const sellTooltipWidth = sellTooltipTextLength * fontRatio + 4 * padding;
   const sellTooltip = {
     rect: {
-      x: max - sellTooltipWidth / 2,
+      x: baseSellTooltipX,
       y: top - 3 * fontSize - 4 * padding,
       width: sellTooltipWidth,
       height: 2 * fontSize + 4 * padding,

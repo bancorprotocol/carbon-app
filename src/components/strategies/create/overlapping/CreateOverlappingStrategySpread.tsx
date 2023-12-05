@@ -25,23 +25,24 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
   const maxSpreadPPM = Math.round(getMaxSpreadPPM(buyMin, sellMax) * 100) / 100;
 
   const setCustomSpread = (value: number) => {
-    const input = document.getElementById('spread-custom');
+    const input = document.getElementById('spread-custom') as HTMLInputElement;
     if (value > maxSpreadPPM) {
       setSpreadPPM(maxSpreadPPM);
-      (input as HTMLInputElement).value = maxSpreadPPM.toFixed(2);
+      input.value = maxSpreadPPM.toFixed(2);
     } else {
       setSpreadPPM(value);
     }
   };
 
   const selectSpread = (value: number) => {
-    const input = document.getElementById('spread-custom');
+    const input = document.getElementById('spread-custom') as HTMLInputElement;
     if (value > maxSpreadPPM) {
       setSpreadPPM(maxSpreadPPM);
-      (input as HTMLInputElement).value = maxSpreadPPM.toFixed(2);
+      input.value = maxSpreadPPM.toFixed(2);
+      input.focus();
     } else {
       setSpreadPPM(value);
-      (input as HTMLInputElement).value = '';
+      input.value = '';
     }
   };
 

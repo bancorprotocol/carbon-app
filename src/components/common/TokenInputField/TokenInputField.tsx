@@ -92,6 +92,7 @@ export const TokenInputField: FC<Props> = ({
             grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
             ${isError ? 'text-red' : ''}
             ${disabled ? 'text-white/40' : ''}
+            ${disabled ? 'cursor-not-allowed' : ''}
           `}
           disabled={disabled}
           data-testid={testid}
