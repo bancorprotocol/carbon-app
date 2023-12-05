@@ -68,14 +68,14 @@ export const createStrategyAction = async ({
       order0: {
         budget: order0.budget,
         min: order0.min,
-        marginalPrice: order0.marginalPrice || order0.min,
+        marginalPrice: order0.marginalPrice,
         max: order0.max,
         price: order0.price,
       },
       order1: {
         budget: order1.budget,
         min: order1.min,
-        marginalPrice: order1.marginalPrice || order1.max,
+        marginalPrice: order1.marginalPrice,
         max: order1.max,
         price: order1.price,
       },
