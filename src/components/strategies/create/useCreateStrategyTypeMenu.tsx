@@ -120,7 +120,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           base,
           quote,
           strategyType: 'recurring',
-          strategySettings: 'range_range',
+          strategySettings: 'range',
         },
         isRecommended: true,
         id: 'two-ranges',

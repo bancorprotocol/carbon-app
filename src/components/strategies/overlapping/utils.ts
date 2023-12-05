@@ -39,6 +39,7 @@ export const getMaxBuyMin = (sellMax: number, spreadPPM: number) => {
 export const isOverlappingStrategy = (strategy: Strategy) => {
   const buyMax = new SafeDecimal(strategy.order0.endRate);
   const sellMin = new SafeDecimal(strategy.order1.startRate);
+  if (sellMin.eq(0)) return false; // Limit strategy with only buy
   return buyMax.gt(sellMin);
 };
 

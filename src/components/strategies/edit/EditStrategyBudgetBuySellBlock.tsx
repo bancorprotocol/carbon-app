@@ -66,7 +66,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       </header>
       <TokenInputField
         id={inputId}
-        className={'rounded-16 bg-black p-16'}
+        className="rounded-16 bg-black p-16"
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}
@@ -80,7 +80,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className={`flex items-center gap-10 font-mono text-12 text-red`}
+          className="flex items-center gap-10 font-mono text-12 text-red"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">Insufficient balance</span>

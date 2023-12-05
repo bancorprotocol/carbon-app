@@ -13,10 +13,7 @@ export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
 
 export type LimitRange = 'limit' | 'range';
-export type StrategySettings =
-  | LimitRange
-  | `${LimitRange}_${LimitRange}`
-  | 'overlapping';
+export type StrategySettings = LimitRange | 'overlapping';
 
 export interface StrategyCreateSearch {
   base?: string;
