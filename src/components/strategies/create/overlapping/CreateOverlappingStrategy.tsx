@@ -49,7 +49,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       const max = (marketPrice * 1.001).toString();
       order0.setMin(min);
       order1.setMax(max);
-      const params = await carbonSDK.calculateOverlappingStrategyParams(
+      const params = await carbonSDK.calculateOverlappingStrategyPrices(
         quote.address,
         order0.min,
         order1.max,
