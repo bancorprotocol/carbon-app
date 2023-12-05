@@ -50,14 +50,20 @@ interface DisableProps {
 const clamp = (min: number, value: number, max: number) =>
   Math.min(max, Math.max(value, min));
 
-const getBoundaries = (props: Props, zoom: number) => {
-  const min = new SafeDecimal(props.order0.min || '0');
-  const max = new SafeDecimal(props.order1.max || '0');
-  const marketPrice = new SafeDecimal(props.marketPrice);
+interface BoundariesParams {
+  min: number;
+  max: number;
+  marketPrice: number;
+  zoom: number;
+}
+const getBoundaries = (params: BoundariesParams) => {
+  const min = new SafeDecimal(params.min || '0');
+  const max = new SafeDecimal(params.max || '0');
+  const marketPrice = new SafeDecimal(params.marketPrice);
   const minMean = marketPrice.lt(min) ? marketPrice : min;
   const maxMean = marketPrice.gt(max) ? marketPrice : max;
   const mean = minMean.plus(maxMean).div(2);
-  const padding = maxMean.minus(minMean).times(zoom);
+  const padding = maxMean.minus(minMean).times(params.zoom);
   return {
     left: minMean.minus(padding),
     right: maxMean.plus(padding),
@@ -153,8 +159,18 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
-  const { marketPrice, quote, order0, order1, spreadPPM } = props;
-  const { left, right, mean, minMean, maxMean } = getBoundaries(props, zoom);
+  const { quote, order0, order1, spreadPPM } = props;
+  // Make sure the distance is always large enough to avoid blurry behavior
+  const xFactor = 100 / (Number(order1.max) - Number(order0.min));
+
+  const marketPrice = props.marketPrice * xFactor;
+
+  const { left, right, mean, minMean, maxMean } = getBoundaries({
+    min: Number(props.order0.min) * xFactor,
+    max: Number(props.order1.max) * xFactor,
+    marketPrice,
+    zoom,
+  });
   const disabled = !!props.disabled;
 
   const baseWidth = right.minus(left);
@@ -198,7 +214,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   //////////////////
   // Market price //
   //////////////////
-  const marketValue = `${prettifySignedNumber(marketPrice)} ${quote?.symbol}`;
+  const marketPriceText = prettifySignedNumber(marketPrice / xFactor);
+  const marketValue = `${marketPriceText} ${quote?.symbol}`;
   const fontRatio = fontSize / 2;
   const padding = 4 * ratio;
   const rectWidth = marketValue.length * fontRatio + 5 * padding;
@@ -249,14 +266,14 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     };
   };
   const config = getPointConfig({
-    min: Number(order0.min),
-    max: Number(order1.max),
+    min: Number(order0.min) * xFactor,
+    max: Number(order1.max) * xFactor,
   });
   const { min, max, sellMin, buyMax } = config;
   const marketPercent = props.marketPricePercentage;
-  const minValue = prettifySignedNumber(min);
+  const minValue = prettifySignedNumber(min / xFactor);
   const minPercent = getSignedMarketPricePercentage(marketPercent.min);
-  const maxValue = prettifySignedNumber(max);
+  const maxValue = prettifySignedNumber(max / xFactor);
   const maxPercent = getSignedMarketPricePercentage(marketPercent.max);
 
   const buyPoints = getBuyPoint(config);
@@ -341,11 +358,11 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const getDraggedMin = () => {
     const delta = Number(getHandlerDelta('buy'));
-    return (min + delta).toString();
+    return ((min + delta) / xFactor).toString();
   };
   const getDraggedMax = () => {
     const delta = Number(getHandlerDelta('sell'));
-    return (max + delta).toString();
+    return ((max + delta) / xFactor).toString();
   };
 
   const updatePoints = {
@@ -355,8 +372,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     'marginal-sell-polygon': getMarginalSellPoint,
   };
 
-  const minSellMax = getMinSellMax(Number(order0.min), spreadPPM);
-  const maxBuyMin = getMaxBuyMin(Number(order1.max), spreadPPM);
+  const minSellMax = getMinSellMax(Number(order0.min) * xFactor, spreadPPM);
+  const maxBuyMin = getMaxBuyMin(Number(order1.max) * xFactor, spreadPPM);
 
   // Get new min & max based on current handler
   const updatedMinMax = (e: MouseEvent) => {
@@ -413,7 +430,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     const tooltipPrice = document.querySelector(priceSelector);
     const priceValue = draggedHandler === 'buy' ? newMin : newMax;
     if (tooltipPrice)
-      tooltipPrice.textContent = prettifySignedNumber(priceValue);
+      tooltipPrice.textContent = prettifySignedNumber(priceValue / xFactor);
     const percentSelector = `#${draggedHandler}-handler .tooltip-percent`;
     const tooltipPercent = document.querySelector(percentSelector);
     const percentValue = getSignedMarketPricePercentage(
@@ -611,7 +628,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 x={price.toString()}
                 {...priceIndicator}
               >
-                {prettifySignedNumber(price)}
+                {prettifySignedNumber(price.div(xFactor))}
               </text>
             ))}
           </g>
