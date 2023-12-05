@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { CreateOverlappingStrategySpread } from './CreateOverlappingStrategySpread';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
@@ -11,10 +11,8 @@ import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudg
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
 import { CreateOverlappingRange } from './CreateOverlappingRange';
-import {
-  getBuyMarginalPrice,
-  getSellMarginalPrice,
-} from 'components/strategies/overlapping/utils';
+import { carbonSDK } from 'libs/sdk';
+import useAsyncEffect from 'use-async-effect';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -45,14 +43,23 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   });
 
   // Initialize order when market price is available
-  useEffect(() => {
-    if (marketPrice > 0 && !order0.min && !order1.max) {
-      order0.setMin((marketPrice * 0.999).toString());
-      order1.setMax((marketPrice * 1.001).toString());
-      const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
-      const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
-      order0.setMarginalPrice(buyMarginalPrice.toString());
-      order1.setMarginalPrice(sellMarginalPrice.toString());
+  useAsyncEffect(async () => {
+    if (quote && base && marketPrice > 0 && !order0.min && !order1.max) {
+      const min = (marketPrice * 0.999).toString();
+      const max = (marketPrice * 1.001).toString();
+      order0.setMin(min);
+      order1.setMax(max);
+      const params = await carbonSDK.calculateOverlappingStrategyParams(
+        quote.address,
+        order0.min,
+        order1.max,
+        marketPrice.toString(),
+        spreadPPM.toString()
+      );
+      order0.setMax(params.buyPriceHigh);
+      order0.setMarginalPrice(params.buyPriceMarginal);
+      order1.setMin(params.sellPriceLow);
+      order1.setMarginalPrice(params.sellPriceMarginal);
     }
   }, [
     marketPrice,

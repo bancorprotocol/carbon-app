@@ -47,7 +47,7 @@ export const useMarketIndication = ({
     }
     return (
       new SafeDecimal(order.price).gt(0) &&
-      new SafeDecimal(getFiatValue(order.min))[buy ? 'gt' : 'lt'](
+      new SafeDecimal(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
         tokenMarketPrice
       )
     );

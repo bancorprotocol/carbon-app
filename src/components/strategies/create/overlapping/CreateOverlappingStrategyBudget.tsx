@@ -5,12 +5,7 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { SafeDecimal } from 'libs/safedecimal';
 import { carbonSDK } from 'libs/sdk';
-import {
-  getBuyMarginalPrice,
-  getBuyMax,
-  getSellMarginalPrice,
-  getSellMin,
-} from '../../overlapping/utils';
+import { getBuyMax, getSellMin } from '../../overlapping/utils';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 
 interface Props extends OverlappingStrategyProps {
@@ -57,12 +52,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 
   const setBuyBudget = async (sellBudget: string) => {
     if (!base || !quote) return;
-    if (!sellBudget) {
-      order0.setBudget('');
-      order0.setMarginalPrice('');
-      order1.setMarginalPrice('');
-      return;
-    }
+    if (!sellBudget) return order0.setBudget('');
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
       quote.address,
       order0.min,
@@ -72,20 +62,22 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       sellBudget ?? '0'
     );
     order0.setBudget(buyBudget);
-    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
-    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
-    order0.setMarginalPrice(buyMarginalPrice.toString());
-    order1.setMarginalPrice(sellMarginalPrice.toString());
+    const params = await carbonSDK.calculateOverlappingStrategyParams(
+      quote.address,
+      order0.min,
+      order1.max,
+      marketPrice.toString(),
+      spreadPPM.toString()
+    );
+    order0.setMax(params.buyPriceHigh);
+    order0.setMarginalPrice(params.buyPriceMarginal);
+    order1.setMin(params.sellPriceLow);
+    order1.setMarginalPrice(params.sellPriceMarginal);
   };
 
   const setSellBudget = async (buyBudget: string) => {
     if (!base || !quote) return;
-    if (!buyBudget) {
-      order1.setBudget('');
-      order0.setMarginalPrice('');
-      order1.setMarginalPrice('');
-      return;
-    }
+    if (!buyBudget) return order1.setBudget('');
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       order0.min,
@@ -95,10 +87,17 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       buyBudget ?? '0'
     );
     order1.setBudget(sellBudget);
-    const buyMarginalPrice = getBuyMarginalPrice(marketPrice, spreadPPM);
-    const sellMarginalPrice = getSellMarginalPrice(marketPrice, spreadPPM);
-    order0.setMarginalPrice(buyMarginalPrice.toString());
-    order1.setMarginalPrice(sellMarginalPrice.toString());
+    const params = await carbonSDK.calculateOverlappingStrategyParams(
+      quote.address,
+      order0.min,
+      order1.max,
+      marketPrice.toString(),
+      spreadPPM.toString()
+    );
+    order0.setMax(params.buyPriceHigh);
+    order0.setMarginalPrice(params.buyPriceMarginal);
+    order1.setMin(params.sellPriceLow);
+    order1.setMarginalPrice(params.sellPriceMarginal);
   };
 
   // Update budget on price change
