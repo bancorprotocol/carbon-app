@@ -80,6 +80,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     if (!buyBudget) return order1.setBudget('');
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
+      quote.address,
       order0.min,
       order1.max,
       marketPrice.toString(),
