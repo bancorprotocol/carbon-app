@@ -5,7 +5,7 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { SafeDecimal } from 'libs/safedecimal';
 import { carbonSDK } from 'libs/sdk';
-import { getBuyMax, getSellMin } from '../../overlapping/utils';
+import { isMinAboveMarket, isMaxBelowMarket } from '../../overlapping/utils';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 
 interface Props extends OverlappingStrategyProps {
@@ -23,8 +23,8 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     token1BalanceQuery,
     spreadPPM,
   } = props;
-  const minAboveMarket = new SafeDecimal(order0.min).gte(order0.marginalPrice);
-  const maxBelowMarket = new SafeDecimal(order1.max).lte(order1.marginalPrice);
+  const minAboveMarket = isMinAboveMarket(order0, quote);
+  const maxBelowMarket = isMaxBelowMarket(order1, quote);
 
   const [anchoredOrder, setAnchoderOrder] = useState('buy');
 
@@ -52,16 +52,6 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 
   const setBuyBudget = async (sellBudget: string) => {
     if (!base || !quote) return;
-    if (!sellBudget) return order0.setBudget('');
-    const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
-      quote.address,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spreadPPM.toString(),
-      sellBudget ?? '0'
-    );
-    order0.setBudget(buyBudget);
     const params = await carbonSDK.calculateOverlappingStrategyPrices(
       quote.address,
       order0.min,
@@ -69,6 +59,15 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       marketPrice.toString(),
       spreadPPM.toString()
     );
+    const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
+      quote.address,
+      params.buyPriceLow,
+      params.sellPriceHigh,
+      params.marketPrice,
+      spreadPPM.toString(),
+      sellBudget || '0'
+    );
+    if (sellBudget) order0.setBudget(buyBudget);
     order0.setMin(params.buyPriceLow);
     order0.setMax(params.buyPriceHigh);
     order0.setMarginalPrice(params.buyPriceMarginal);
@@ -79,17 +78,6 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 
   const setSellBudget = async (buyBudget: string) => {
     if (!base || !quote) return;
-    if (!buyBudget) return order1.setBudget('');
-    const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
-      base.address,
-      quote.address,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spreadPPM.toString(),
-      buyBudget ?? '0'
-    );
-    order1.setBudget(sellBudget);
     const params = await carbonSDK.calculateOverlappingStrategyPrices(
       quote.address,
       order0.min,
@@ -97,12 +85,22 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       marketPrice.toString(),
       spreadPPM.toString()
     );
+    const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
+      base.address,
+      quote.address,
+      params.buyPriceLow,
+      params.sellPriceHigh,
+      params.marketPrice,
+      spreadPPM.toString(),
+      buyBudget || '0'
+    );
     order0.setMin(params.buyPriceLow);
     order0.setMax(params.buyPriceHigh);
     order0.setMarginalPrice(params.buyPriceMarginal);
     order1.setMin(params.sellPriceLow);
     order1.setMax(params.sellPriceHigh);
     order1.setMarginalPrice(params.sellPriceMarginal);
+    if (buyBudget) order1.setBudget(sellBudget);
   };
 
   // Update budget on price change
@@ -117,10 +115,6 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       if (anchoredOrder === 'buy') setSellBudget(order0.budget);
       if (anchoredOrder === 'sell') setBuyBudget(order1.budget);
     }
-    const buyMax = getBuyMax(Number(order1.max), spreadPPM);
-    const sellMin = getSellMin(Number(order0.min), spreadPPM);
-    order0.setMax(buyMax.toString());
-    order1.setMin(sellMin.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.min, order1.max, marketPrice, spreadPPM]);
 

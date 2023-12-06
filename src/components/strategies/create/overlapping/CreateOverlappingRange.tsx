@@ -6,6 +6,8 @@ import { MarketPricePercentage } from 'components/strategies/marketPriceIndicati
 import {
   getMaxBuyMin,
   getMinSellMax,
+  isMaxBelowMarket,
+  isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 
 interface Props {
@@ -17,9 +19,8 @@ interface Props {
   spreadPPM: number;
 }
 
-const getPriceWarnings = ({ min, max }: MarketPricePercentage): string[] => {
-  const aboveOrBelowMarket = min.gt(0) || max.lt(0);
-  if (!aboveOrBelowMarket) return [];
+const getPriceWarnings = (isOutOfMarket: boolean): string[] => {
+  if (!isOutOfMarket) return [];
   return [
     'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.',
   ];
@@ -28,7 +29,10 @@ const getPriceWarnings = ({ min, max }: MarketPricePercentage): string[] => {
 export const CreateOverlappingRange: FC<Props> = (props) => {
   const { base, quote, order0, order1, spreadPPM, marketPricePercentage } =
     props;
-  const priceWarnings = getPriceWarnings(marketPricePercentage);
+  const minAboveMarket = isMinAboveMarket(order0, quote);
+  const maxBelowMarket = isMaxBelowMarket(order1, quote);
+  console.log({ minAboveMarket, maxBelowMarket });
+  const priceWarnings = getPriceWarnings(minAboveMarket || maxBelowMarket);
 
   // Update sell.max on buy.min change if needed
   useEffect(() => {
