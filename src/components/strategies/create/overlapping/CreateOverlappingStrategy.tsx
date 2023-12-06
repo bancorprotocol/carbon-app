@@ -13,6 +13,7 @@ import { OverlappingStrategyGraph } from 'components/strategies/overlapping/Over
 import { CreateOverlappingRange } from './CreateOverlappingRange';
 import { carbonSDK } from 'libs/sdk';
 import useAsyncEffect from 'use-async-effect';
+import { Toolkit } from '@bancor/carbon-sdk/strategy-management';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -24,6 +25,11 @@ export interface OverlappingStrategyProps {
   spreadPPM: number;
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
+
+export type SetOverlappingParams = (
+  min: string,
+  max: string
+) => ReturnType<Toolkit['calculateOverlappingStrategyPrices']>;
 
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
@@ -42,39 +48,33 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     buy: true,
   });
 
+  const setOverlappingParams = async (min: string, max: string) => {
+    const params = await carbonSDK.calculateOverlappingStrategyPrices(
+      quote!.address,
+      min,
+      max,
+      marketPrice.toString(),
+      spreadPPM.toString()
+    );
+    order0.setMin(params.buyPriceLow);
+    order0.setMax(params.buyPriceHigh);
+    order0.setMarginalPrice(params.buyPriceMarginal);
+    order1.setMin(params.sellPriceLow);
+    order1.setMax(params.sellPriceHigh);
+    order1.setMarginalPrice(params.sellPriceMarginal);
+    return params;
+  };
+
   // Initialize order when market price is available
   useAsyncEffect(async () => {
     if (quote && base && marketPrice > 0 && !order0.min && !order1.max) {
-      const min = (marketPrice * 0.999).toString();
-      const max = (marketPrice * 1.001).toString();
+      const min = (marketPrice * 0.999).toFixed(quote.decimals);
+      const max = (marketPrice * 1.001).toFixed(quote.decimals);
       order0.setMin(min);
       order1.setMax(max);
-      try {
-        const params = await carbonSDK.calculateOverlappingStrategyPrices(
-          quote.address,
-          min,
-          max,
-          marketPrice.toString(),
-          spreadPPM.toString()
-        );
-        order0.setMin(params.buyPriceLow);
-        order0.setMax(params.buyPriceHigh);
-        order0.setMarginalPrice(params.buyPriceMarginal);
-        order1.setMin(params.sellPriceLow);
-        order1.setMax(params.sellPriceHigh);
-        order1.setMarginalPrice(params.sellPriceMarginal);
-      } catch (err) {
-        console.error(err);
-      }
+      setOverlappingParams(min, max);
     }
-  }, [
-    marketPrice,
-    order0,
-    order1,
-    spreadPPM,
-    order0.setMarginalPrice,
-    order1.setMarginalPrice,
-  ]);
+  }, [marketPrice, order0, order1, spreadPPM]);
 
   return (
     <>
@@ -111,6 +111,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           order1={order1}
           marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
+          setOverlappingParams={setOverlappingParams}
         />
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
@@ -168,7 +169,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        <CreateOverlappingStrategyBudget {...props} marketPrice={marketPrice} />
+        <CreateOverlappingStrategyBudget
+          {...props}
+          marketPrice={marketPrice}
+          setOverlappingParams={setOverlappingParams}
+        />
       </article>
     </>
   );

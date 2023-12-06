@@ -174,7 +174,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 <span className="rounded bg-darkGreen p-4 text-green">
                   <IconStar aria-hidden className="h-10 w-10" />
                 </span>
-                Carbon Signature Features
+                Carbon Signature Feature
               </p>
             )}
           </article>

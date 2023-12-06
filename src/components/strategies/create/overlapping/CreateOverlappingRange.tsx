@@ -31,7 +31,7 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
     props;
   const minAboveMarket = isMinAboveMarket(order0, quote);
   const maxBelowMarket = isMaxBelowMarket(order1, quote);
-  console.log({ minAboveMarket, maxBelowMarket });
+
   const priceWarnings = getPriceWarnings(minAboveMarket || maxBelowMarket);
 
   // Update sell.max on buy.min change if needed

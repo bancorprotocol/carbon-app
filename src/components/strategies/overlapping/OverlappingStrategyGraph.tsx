@@ -34,6 +34,7 @@ interface EnableProps {
   order1: OrderCreate;
   spreadPPM: number;
   disabled?: false;
+  setOverlappingParams: (min: string, max: string) => any;
 }
 
 interface DisableProps {
@@ -442,8 +443,9 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const dragEnd = () => {
     if (draggedHandler) {
       setDragging('');
-      order0.setMin(getDraggedMin());
-      order1.setMax(getDraggedMax());
+      if ('setOverlappingParams' in props) {
+        props.setOverlappingParams(getDraggedMin(), getDraggedMax());
+      }
       translateHandler('buy', 0);
       translateHandler('sell', 0);
       initialPosition = 0;

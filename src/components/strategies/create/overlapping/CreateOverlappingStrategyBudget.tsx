@@ -2,7 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
+import {
+  OverlappingStrategyProps,
+  SetOverlappingParams,
+} from './CreateOverlappingStrategy';
 import { SafeDecimal } from 'libs/safedecimal';
 import { carbonSDK } from 'libs/sdk';
 import { isMinAboveMarket, isMaxBelowMarket } from '../../overlapping/utils';
@@ -10,6 +13,7 @@ import { BudgetInput } from 'components/strategies/common/BudgetInput';
 
 interface Props extends OverlappingStrategyProps {
   marketPrice: number;
+  setOverlappingParams: SetOverlappingParams;
 }
 
 export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
@@ -22,6 +26,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     token0BalanceQuery,
     token1BalanceQuery,
     spreadPPM,
+    setOverlappingParams,
   } = props;
   const minAboveMarket = isMinAboveMarket(order0, quote);
   const maxBelowMarket = isMaxBelowMarket(order1, quote);
@@ -52,13 +57,8 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 
   const setBuyBudget = async (sellBudget: string) => {
     if (!base || !quote) return;
-    const params = await carbonSDK.calculateOverlappingStrategyPrices(
-      quote.address,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spreadPPM.toString()
-    );
+    const params = await setOverlappingParams(order0.min, order1.max);
+    if (!sellBudget) return;
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
       quote.address,
       params.buyPriceLow,
@@ -67,24 +67,13 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       spreadPPM.toString(),
       sellBudget || '0'
     );
-    if (sellBudget) order0.setBudget(buyBudget);
-    order0.setMin(params.buyPriceLow);
-    order0.setMax(params.buyPriceHigh);
-    order0.setMarginalPrice(params.buyPriceMarginal);
-    order1.setMin(params.sellPriceLow);
-    order1.setMax(params.sellPriceHigh);
-    order1.setMarginalPrice(params.sellPriceMarginal);
+    order0.setBudget(buyBudget);
   };
 
   const setSellBudget = async (buyBudget: string) => {
     if (!base || !quote) return;
-    const params = await carbonSDK.calculateOverlappingStrategyPrices(
-      quote.address,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spreadPPM.toString()
-    );
+    const params = await setOverlappingParams(order0.min, order1.max);
+    if (!buyBudget) return;
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       quote.address,
@@ -94,16 +83,10 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       spreadPPM.toString(),
       buyBudget || '0'
     );
-    order0.setMin(params.buyPriceLow);
-    order0.setMax(params.buyPriceHigh);
-    order0.setMarginalPrice(params.buyPriceMarginal);
-    order1.setMin(params.sellPriceLow);
-    order1.setMax(params.sellPriceHigh);
-    order1.setMarginalPrice(params.sellPriceMarginal);
-    if (buyBudget) order1.setBudget(sellBudget);
+    order1.setBudget(sellBudget);
   };
 
-  // Update budget on price change
+  // Update budget on price or spread change
   useEffect(() => {
     if (maxBelowMarket) {
       setAnchoderOrder('buy');
@@ -158,11 +141,11 @@ const Explaination: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
       The market price is outside the ranges you set for&nbsp;
       {buy ? 'buying' : 'selling'}&nbsp;
       {base?.symbol}. Budget for buying {base?.symbol} is not required.&nbsp;
-      {/* TODO: add url */}
       <a
-        href="/"
+        href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"
         className="inline-flex items-center gap-4 text-12 font-weight-500 text-green"
+        rel="noreferrer"
       >
         Learn More
         <IconLink className="h-12 w-12" />
