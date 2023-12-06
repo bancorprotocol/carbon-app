@@ -19,10 +19,6 @@ export const handleStrategySettings = (
   if (settings === 'overlapping') return functions.forEach((fn) => fn(true));
   if (settings === 'range') return functions.forEach((fn) => fn(true));
   if (settings === 'limit') return functions.forEach((fn) => fn(false));
-  const [fn1, fn2] = functions;
-  const [setting1, setting2] = settings.split('_');
-  fn1(setting1 === 'range');
-  fn2(setting2 === 'range');
 };
 
 export const handleStrategyDirection = (
