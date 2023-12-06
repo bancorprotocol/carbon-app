@@ -14,6 +14,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
 import { carbonSDK } from 'libs/sdk';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 interface Props {
   strategy: Strategy;
@@ -39,6 +40,12 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     quote,
     order: { min, max, price: '', isRange: true },
   });
+
+  useEffect(() => {
+    order0.setMarginalPriceOption(MarginalPriceOptions.maintain);
+    order1.setMarginalPriceOption(MarginalPriceOptions.maintain);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
     if (new SafeDecimal(balance).lt(order.budget)) {
@@ -105,12 +112,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   return (
     <>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
-        <header className="flex items-center gap-8">
+        <header>
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -126,21 +129,20 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Withdraw Budget</h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
+          <Tooltip element='Indicate the amount you wish to deposit from the available "allocated budget"'>
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
         {!aboveMarket && (
           <BudgetInput
-            token={base}
-            query={tokenBaseBalanceQuery}
+            token={quote}
+            query={tokenQuoteBalanceQuery}
             order={order0}
             onChange={onBuyBudgetChange}
             withoutWallet
           >
             <WithdrawAllocatedBudget
-              token={base}
+              token={quote}
               order={order0}
               currentBudget={strategy.order0.balance}
               buy
@@ -149,17 +151,16 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
         )}
         {!belowMarket && (
           <BudgetInput
-            token={quote}
-            query={tokenQuoteBalanceQuery}
+            token={base}
+            query={tokenBaseBalanceQuery}
             order={order1}
             onChange={onSellBudgetChange}
             withoutWallet
           >
             <WithdrawAllocatedBudget
-              token={quote}
+              token={base}
               order={order1}
               currentBudget={strategy.order1.balance}
-              buy
             />
           </BudgetInput>
         )}

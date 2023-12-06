@@ -13,6 +13,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { DepositAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
 import { carbonSDK } from 'libs/sdk';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 
 interface Props {
   strategy: Strategy;
@@ -39,6 +40,12 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   const aboveMarket = new SafeDecimal(min).gt(marketPrice);
   const belowMarket = new SafeDecimal(max).lt(marketPrice);
+
+  useEffect(() => {
+    order0.setMarginalPriceOption(MarginalPriceOptions.maintain);
+    order1.setMarginalPriceOption(MarginalPriceOptions.maintain);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setBuyBudget = async (sellBudget: string) => {
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
@@ -99,12 +106,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
   return (
     <>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
-        <header className="flex items-center gap-8">
+        <header>
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -120,8 +123,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Deposit Budget</h3>
-          {/* TODO add tooltip text here */}
-          <Tooltip element={''}>
+          <Tooltip element='Indicate the amount you wish to deposit to the available "wallet budget"'>
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
