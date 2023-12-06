@@ -71,7 +71,6 @@ export const isMinAboveMarket = (buyOrder: OrderCreate, quote?: Token) => {
     .eq(wei);
 };
 export const isMaxBelowMarket = (sellOrder: OrderCreate, quote?: Token) => {
-  console.log({ sellOrder, quote });
   const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
   return new SafeDecimal(sellOrder.max)
     .minus(sellOrder.marginalPrice)
