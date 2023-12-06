@@ -49,17 +49,23 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       const max = (marketPrice * 1.001).toString();
       order0.setMin(min);
       order1.setMax(max);
-      const params = await carbonSDK.calculateOverlappingStrategyPrices(
-        quote.address,
-        order0.min,
-        order1.max,
-        marketPrice.toString(),
-        spreadPPM.toString()
-      );
-      order0.setMax(params.buyPriceHigh);
-      order0.setMarginalPrice(params.buyPriceMarginal);
-      order1.setMin(params.sellPriceLow);
-      order1.setMarginalPrice(params.sellPriceMarginal);
+      try {
+        const params = await carbonSDK.calculateOverlappingStrategyPrices(
+          quote.address,
+          min,
+          max,
+          marketPrice.toString(),
+          spreadPPM.toString()
+        );
+        order0.setMin(params.buyPriceLow);
+        order0.setMax(params.buyPriceHigh);
+        order0.setMarginalPrice(params.buyPriceMarginal);
+        order1.setMin(params.sellPriceLow);
+        order1.setMax(params.sellPriceHigh);
+        order1.setMarginalPrice(params.sellPriceMarginal);
+      } catch (err) {
+        console.error(err);
+      }
     }
   }, [
     marketPrice,

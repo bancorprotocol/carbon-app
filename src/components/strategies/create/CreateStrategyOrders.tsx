@@ -24,13 +24,13 @@ export const CreateStrategyOrders = ({
   token1BalanceQuery,
   strategyDirection,
   strategyType,
-  strategySettings,
   selectedStrategySettings,
   isProcessing,
   isAwaiting,
   isOrdersOverlap,
   spreadPPM,
   setSpreadPPM,
+  isOverlapping,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
   const strategyEventData = useStrategyEventData({
@@ -92,7 +92,7 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {strategySettings === 'overlapping' && base && quote && (
+      {isOverlapping && base && quote && (
         <CreateOverlappingStrategy
           base={base}
           quote={quote}
@@ -104,7 +104,7 @@ export const CreateStrategyOrders = ({
           setSpreadPPM={setSpreadPPM}
         />
       )}
-      {strategySettings !== 'overlapping' && (
+      {!isOverlapping && (
         <>
           {(strategyDirection === 'buy' || !strategyDirection) && (
             <BuySellBlock

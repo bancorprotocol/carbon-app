@@ -41,14 +41,14 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     const balance = token1BalanceQuery.data ?? '0';
     checkInsufficientBalance(balance, order0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.budget]);
+  }, [order0.budget, token1BalanceQuery.data]);
 
   // Check for error when sell budget changes
   useEffect(() => {
     const balance = token0BalanceQuery.data ?? '0';
     checkInsufficientBalance(balance, order1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order1.budget]);
+  }, [order1.budget, token0BalanceQuery.data]);
 
   const setBuyBudget = async (sellBudget: string) => {
     if (!base || !quote) return;
@@ -69,9 +69,11 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       marketPrice.toString(),
       spreadPPM.toString()
     );
+    order0.setMin(params.buyPriceLow);
     order0.setMax(params.buyPriceHigh);
     order0.setMarginalPrice(params.buyPriceMarginal);
     order1.setMin(params.sellPriceLow);
+    order1.setMax(params.sellPriceHigh);
     order1.setMarginalPrice(params.sellPriceMarginal);
   };
 
@@ -95,9 +97,11 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       marketPrice.toString(),
       spreadPPM.toString()
     );
+    order0.setMin(params.buyPriceLow);
     order0.setMax(params.buyPriceHigh);
     order0.setMarginalPrice(params.buyPriceMarginal);
     order1.setMin(params.sellPriceLow);
+    order1.setMax(params.sellPriceHigh);
     order1.setMarginalPrice(params.sellPriceMarginal);
   };
 

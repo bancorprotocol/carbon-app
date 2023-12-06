@@ -24,6 +24,7 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { isOverlappingStrategy } from '../overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -76,6 +77,9 @@ export const useCreateStrategy = () => {
     strategyDirection,
     strategyType,
   } = search;
+  const isOverlapping =
+    strategySettings === 'overlapping' ||
+    isOverlappingStrategy({ order0, order1 });
   const { getTokenById } = useTokens();
   const [selectedStrategySettings, setSelectedStrategySettings] = useState<
     | {
@@ -241,7 +245,7 @@ export const useCreateStrategy = () => {
     if (order0.budgetError) return true;
     if (order1.budgetError) return true;
 
-    if (strategySettings === 'overlapping') {
+    if (isOverlapping) {
       const min = Number(order0.min);
       const max = Number(order1.max);
       if (spreadPPM < 0 || spreadPPM > 10) return true;
@@ -272,8 +276,8 @@ export const useCreateStrategy = () => {
     order1.max,
     order1.isRange,
     order1.price,
-    strategySettings,
     spreadPPM,
+    isOverlapping,
   ]);
 
   useEffect(() => {
@@ -371,5 +375,6 @@ export const useCreateStrategy = () => {
     isOrdersOverlap,
     spreadPPM,
     setSpreadPPM,
+    isOverlapping,
   };
 };
