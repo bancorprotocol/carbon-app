@@ -36,7 +36,6 @@ export const useCreateStrategy = () => {
   const navigate = useNavigate();
   const { user, provider } = useWeb3();
   const { openModal } = useModal();
-  const [spreadPPM, setSpreadPPM] = useState(0.05);
   const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
   const [quote, setQuote] = useState<Token | undefined>(
     templateStrategy?.quote
@@ -48,6 +47,8 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order0 = useOrder(templateStrategy?.order0);
   const order1 = useOrder(templateStrategy?.order1);
+  const [spreadPPM, setSpreadPPM] = useState(0.05);
+
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { marketPricePercentage: buyMarketPricePercentage } =
     useMarketIndication({
@@ -77,9 +78,15 @@ export const useCreateStrategy = () => {
     strategyDirection,
     strategyType,
   } = search;
-  const isOverlapping =
-    strategySettings === 'overlapping' ||
-    isOverlappingStrategy({ order0, order1 });
+
+  const isOverlapping = useMemo(() => {
+    return (
+      strategySettings === 'overlapping' ||
+      isOverlappingStrategy({ order0, order1 })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [strategySettings]);
+
   const { getTokenById } = useTokens();
   const [selectedStrategySettings, setSelectedStrategySettings] = useState<
     | {
