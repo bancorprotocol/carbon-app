@@ -66,7 +66,8 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
       setMax={order1.setMax}
       minLabel="Min Buy Price"
       maxLabel="Max Sell Price"
-      setRangeError={order0.setRangeError} // Should not happen as we force price
+      error={order0.rangeError}
+      setRangeError={order0.setRangeError}
       warnings={priceWarnings}
       marketPricePercentages={marketPricePercentage}
     />
