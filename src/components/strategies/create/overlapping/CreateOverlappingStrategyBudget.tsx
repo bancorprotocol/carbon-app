@@ -131,6 +131,21 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         disabled={maxBelowMarket}
       />
       {maxBelowMarket && <Explaination base={base} />}
+      {!minAboveMarket && !maxBelowMarket && (
+        <p className="text-12 text-white/60">
+          The required 2nd budget will be calculated to maintain overlapping
+          dynamics.&nbsp;
+          <a
+            href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
+            target="_blank"
+            className="inline-flex items-center gap-4 text-12 font-weight-500 text-green"
+            rel="noreferrer"
+          >
+            Learn More
+            <IconLink className="h-12 w-12" />
+          </a>
+        </p>
+      )}
     </>
   );
 };
