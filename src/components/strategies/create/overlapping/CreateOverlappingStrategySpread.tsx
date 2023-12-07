@@ -105,6 +105,7 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
           <input
             id="spread-custom"
             className="min-w-0 bg-transparent text-center outline-none placeholder:text-white/40"
+            defaultValue={options.includes(spreadPPM) ? '' : spreadPPM}
             name="spreadppm"
             type="number"
             inputMode="decimal"

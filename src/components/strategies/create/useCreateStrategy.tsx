@@ -24,7 +24,10 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { isOverlappingStrategy } from '../overlapping/utils';
+import {
+  getRoundedSpreadPPM,
+  isOverlappingStrategy,
+} from '../overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -47,7 +50,10 @@ export const useCreateStrategy = () => {
   const token1BalanceQuery = useGetTokenBalance(quote);
   const order0 = useOrder(templateStrategy?.order0);
   const order1 = useOrder(templateStrategy?.order1);
-  const [spreadPPM, setSpreadPPM] = useState(0.05);
+  const baseSpread = templateStrategy
+    ? getRoundedSpreadPPM(templateStrategy)
+    : 0.05;
+  const [spreadPPM, setSpreadPPM] = useState(baseSpread);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { marketPricePercentage: buyMarketPricePercentage } =
