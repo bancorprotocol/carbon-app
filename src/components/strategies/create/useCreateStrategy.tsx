@@ -248,7 +248,7 @@ export const useCreateStrategy = () => {
     if (isOverlapping) {
       const min = Number(order0.min);
       const max = Number(order1.max);
-      if (spreadPPM < 0 || spreadPPM > 10) return true;
+      if (spreadPPM < 0 || spreadPPM > 100) return true;
       if (min < 0 || min > max) return true;
     } else {
       const isOrder0Valid = order0.isRange

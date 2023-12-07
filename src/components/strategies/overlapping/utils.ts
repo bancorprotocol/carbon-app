@@ -68,12 +68,12 @@ export const isMinAboveMarket = (buyOrder: OrderCreate, quote?: Token) => {
   return new SafeDecimal(buyOrder.min)
     .minus(buyOrder.marginalPrice)
     .abs()
-    .eq(wei);
+    .lte(wei.times(2));
 };
 export const isMaxBelowMarket = (sellOrder: OrderCreate, quote?: Token) => {
   const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
   return new SafeDecimal(sellOrder.max)
     .minus(sellOrder.marginalPrice)
     .abs()
-    .eq(wei);
+    .lte(wei.times(2));
 };

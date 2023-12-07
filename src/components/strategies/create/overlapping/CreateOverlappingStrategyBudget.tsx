@@ -58,6 +58,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   const setBuyBudget = async (sellBudget: string) => {
     if (!base || !quote) return;
     const params = await setOverlappingParams(order0.min, order1.max);
+    if (!params) return;
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
       quote.address,
       params.buyPriceLow,
@@ -72,6 +73,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   const setSellBudget = async (buyBudget: string) => {
     if (!base || !quote) return;
     const params = await setOverlappingParams(order0.min, order1.max);
+    if (!params) return;
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       quote.address,

@@ -162,7 +162,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const [dragging, setDragging] = useState('');
   const { quote, order0, order1, spreadPPM } = props;
   // Make sure the distance is always large enough to avoid blurry behavior
-  const xFactor = 1000 / (Number(order1.max) - Number(order0.min));
+  const delta = Number(order1.max) - Number(order0.min) || 1;
+  const xFactor = delta <= 1 ? 1 / delta : 1;
 
   const marketPrice = props.marketPrice * xFactor;
 
@@ -359,11 +360,11 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const getDraggedMin = () => {
     const delta = Number(getHandlerDelta('buy'));
-    return ((min + delta) / xFactor).toString();
+    return ((min + delta) / xFactor).toFixed(quote!.decimals);
   };
   const getDraggedMax = () => {
     const delta = Number(getHandlerDelta('sell'));
-    return ((max + delta) / xFactor).toString();
+    return ((max + delta) / xFactor).toFixed(quote!.decimals);
   };
 
   const updatePoints = {

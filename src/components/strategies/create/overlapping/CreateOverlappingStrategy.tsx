@@ -25,11 +25,15 @@ export interface OverlappingStrategyProps {
   spreadPPM: number;
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
+type FromPromise<T> = T extends Promise<infer I> ? I : never;
+type StrategyPrices = FromPromise<
+  ReturnType<Toolkit['calculateOverlappingStrategyPrices']>
+>;
 
 export type SetOverlappingParams = (
   min: string,
   max: string
-) => ReturnType<Toolkit['calculateOverlappingStrategyPrices']>;
+) => Promise<StrategyPrices | undefined>;
 
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
@@ -49,6 +53,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   });
 
   const setOverlappingParams = async (min: string, max: string) => {
+    if (!min || !max) return;
     const params = await carbonSDK.calculateOverlappingStrategyPrices(
       quote!.address,
       min,
@@ -56,11 +61,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       marketPrice.toString(),
       spreadPPM.toString()
     );
-    order0.setMin(params.buyPriceLow);
+    order0.setMin(min);
     order0.setMax(params.buyPriceHigh);
     order0.setMarginalPrice(params.buyPriceMarginal);
     order1.setMin(params.sellPriceLow);
-    order1.setMax(params.sellPriceHigh);
+    order1.setMax(max);
     order1.setMarginalPrice(params.sellPriceMarginal);
     return params;
   };
@@ -70,8 +75,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     if (quote && base && marketPrice > 0 && !order0.min && !order1.max) {
       const min = (marketPrice * 0.999).toFixed(quote.decimals);
       const max = (marketPrice * 1.001).toFixed(quote.decimals);
-      order0.setMin(min);
-      order1.setMax(max);
       setOverlappingParams(min, max);
     }
   }, [marketPrice, order0, order1, spreadPPM]);
@@ -146,7 +149,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             2
           </span>
           <h3 className="flex-1 text-18 font-weight-500">Indicate Spread</h3>
-          <Tooltip element="The gap between the Buy and Sell orders price.">
+          <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>

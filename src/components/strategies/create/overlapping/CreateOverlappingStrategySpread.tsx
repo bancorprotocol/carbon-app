@@ -18,7 +18,7 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
   const { defaultValue, options, spreadPPM, setSpreadPPM } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spreadPPM);
-  const hasError = spreadPPM <= 0 || spreadPPM > 10;
+  const hasError = spreadPPM <= 0 || spreadPPM > 100;
   const { order0, order1 } = props;
   const buyMin = Number(order0.min);
   const sellMax = Number(order1.max);
@@ -109,7 +109,7 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
             type="number"
             inputMode="decimal"
             min="0"
-            max="10"
+            max="100"
             step="0.01"
             aria-label="Set custom"
             placeholder="Set custom"
@@ -133,13 +133,13 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
           <span>The spread should be above 0%</span>
         </output>
       )}
-      {spreadPPM > 10 && (
+      {spreadPPM > 100 && (
         <output
           htmlFor="spread-custom"
           className="flex items-center gap-8 font-mono text-12 text-red"
         >
           <IconWarning className="h-12 w-12" />
-          <span>The spread should be equal or below 10%</span>
+          <span>The spread should be equal or below 100%</span>
         </output>
       )}
     </>

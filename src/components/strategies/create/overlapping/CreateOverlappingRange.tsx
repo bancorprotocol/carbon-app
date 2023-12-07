@@ -40,7 +40,7 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
       const buyMin = Number(order0.min);
       const minSellMax = getMinSellMax(buyMin, spreadPPM);
       if (minSellMax > Number(order1.max)) order1.setMax(minSellMax.toString());
-    }, 300);
+    }, 500);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.min, order1.setMax]);
@@ -51,7 +51,7 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
       const sellMax = Number(order1.max);
       const maxBuyMin = getMaxBuyMin(sellMax, spreadPPM);
       if (maxBuyMin < Number(order0.min)) order0.setMin(maxBuyMin.toString());
-    }, 300);
+    }, 500);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max, order0.setMin]);
