@@ -1,6 +1,5 @@
 import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
-import { OrderCreate } from '../create/useOrder';
 import { Token } from 'libs/tokens';
 
 export const getBuyMax = (sellMax: number, spreadPPM: number) => {
@@ -63,14 +62,22 @@ export const getRoundedSpreadPPM = (strategy: Strategy) => {
   return Number(spreadPPRM.toFixed(2));
 };
 
-export const isMinAboveMarket = (buyOrder: OrderCreate, quote?: Token) => {
+interface BuyOrder {
+  min: string;
+  marginalPrice: string;
+}
+export const isMinAboveMarket = (buyOrder: BuyOrder, quote?: Token) => {
   const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
   return new SafeDecimal(buyOrder.min)
     .minus(buyOrder.marginalPrice)
     .abs()
     .lte(wei.times(2));
 };
-export const isMaxBelowMarket = (sellOrder: OrderCreate, quote?: Token) => {
+interface SellOrder {
+  max: string;
+  marginalPrice: string;
+}
+export const isMaxBelowMarket = (sellOrder: SellOrder, quote?: Token) => {
   const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
   return new SafeDecimal(sellOrder.max)
     .minus(sellOrder.marginalPrice)

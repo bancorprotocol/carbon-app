@@ -195,7 +195,10 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     .map((_, i) => left.plus(priceStep.times(i)).toString());
   const stepPoints = Array.from(new Set(steps));
 
-  const priceDistance = maxMean.minus(minMean).div(2);
+  const priceDistance = maxMean.eq(minMean)
+    ? new SafeDecimal(1)
+    : maxMean.minus(minMean).div(2);
+
   const prices = [
     mean.minus(priceDistance.times(2)),
     mean.minus(priceDistance),
@@ -350,8 +353,13 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const translateHandler = (mode: 'buy' | 'sell', x: number) => {
     const g = document.getElementById(`${mode}-handler`);
     if (!g) return;
-    g.dataset.delta = x.toString();
-    g.style.setProperty('transform', `translateX(${x}px)`);
+    if (x) {
+      g.dataset.delta = x.toString();
+      g.style.setProperty('transform', `translateX(${x}px)`);
+    } else {
+      g.dataset.delta = '';
+      g.style.removeProperty('transform');
+    }
   };
 
   const getHandlerDelta = (mode: 'buy' | 'sell') => {
@@ -360,10 +368,12 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const getDraggedMin = () => {
     const delta = Number(getHandlerDelta('buy'));
+    if (!delta) return;
     return ((min + delta) / xFactor).toFixed(quote!.decimals);
   };
   const getDraggedMax = () => {
     const delta = Number(getHandlerDelta('sell'));
+    if (!delta) return;
     return ((max + delta) / xFactor).toFixed(quote!.decimals);
   };
 
@@ -444,9 +454,11 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const dragEnd = () => {
     if (draggedHandler) {
       setDragging('');
-      if ('setOverlappingParams' in props) {
-        props.setOverlappingParams(getDraggedMin(), getDraggedMax());
-      }
+      const newMin = getDraggedMin();
+      const newMax = getDraggedMax();
+      if (newMin) order0.setMin(newMin);
+      if (newMax) order1.setMax(newMax);
+      // TODO: clear draggedMin & max
       translateHandler('buy', 0);
       translateHandler('sell', 0);
       initialPosition = 0;
