@@ -32,19 +32,18 @@ export const InputLimit: FC<InputLimitProps> = ({
   const inputId = useId();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const errorMessage = 'Price must be greater than 0';
-    +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
-
-    if (+e.target.value > 0) {
+    const value = sanitizeNumberInput(e.target.value);
+    if (Number(value) > 0) {
       setPriceError('');
     } else {
+      const errorMessage = 'Price must be greater than 0';
       carbonEvents.strategy.strategyErrorShow({
         buy,
         message: errorMessage,
       });
       setPriceError(errorMessage);
     }
-    setPrice(sanitizeNumberInput(e.target.value));
+    setPrice(value);
   };
 
   const { getFiatAsString } = useFiatCurrency(token);
