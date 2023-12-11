@@ -50,8 +50,13 @@ export const useDuplicateStrategy = () => {
     });
   };
 
+  const decoded = decodeStrategyAndValidate(urlStrategy);
+  // marginal price should be calculated based on prices
+  if (decoded?.order0.marginalRate) decoded.order0.marginalRate = '';
+  if (decoded?.order1.marginalRate) decoded.order1.marginalRate = '';
+
   return {
     duplicate,
-    templateStrategy: decodeStrategyAndValidate(urlStrategy),
+    templateStrategy: decoded,
   };
 };
