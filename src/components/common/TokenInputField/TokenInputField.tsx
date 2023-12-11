@@ -123,9 +123,11 @@ export const TokenInputField: FC<Props> = ({
                   {prettifyNumber(balance || 0)}&nbsp;
                 </span>
                 <b
-                  className={`group-hover:text-white ${
-                    disabled ? 'text-green/40' : 'text-green'
-                  }`}
+                  className={
+                    disabled
+                      ? 'text-green/40'
+                      : 'text-green group-hover:text-white'
+                  }
                 >
                   MAX
                 </b>

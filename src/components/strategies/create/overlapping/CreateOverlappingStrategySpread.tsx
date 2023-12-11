@@ -1,4 +1,11 @@
-import { useRef, FC, KeyboardEvent, Dispatch, SetStateAction } from 'react';
+import {
+  useRef,
+  FC,
+  KeyboardEvent,
+  Dispatch,
+  SetStateAction,
+  useState,
+} from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn } from 'utils/helpers';
 import styles from './CreateOverlappingStrategySpread.module.css';
@@ -14,6 +21,11 @@ interface Props {
   order1: OrderCreate;
   setSpreadPPM: Dispatch<SetStateAction<number>>;
 }
+
+const getWarning = (maxSpreadPPM: number) => {
+  return `Given price range, max spread cannot exceed ${maxSpreadPPM}%`;
+};
+
 export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
   const { defaultValue, options, spreadPPM, setSpreadPPM } = props;
   const root = useRef<HTMLDivElement>(null);
@@ -23,13 +35,16 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
   const buyMin = Number(order0.min);
   const sellMax = Number(order1.max);
   const maxSpreadPPM = Math.round(getMaxSpreadPPM(buyMin, sellMax) * 100) / 100;
+  const [warning, setWarning] = useState('');
 
   const setCustomSpread = (value: number) => {
     const input = document.getElementById('spread-custom') as HTMLInputElement;
     if (value > maxSpreadPPM) {
+      setWarning(getWarning(maxSpreadPPM));
       setSpreadPPM(maxSpreadPPM);
       input.value = maxSpreadPPM.toFixed(2);
     } else {
+      setWarning('');
       setSpreadPPM(value);
     }
   };
@@ -37,10 +52,12 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
   const selectSpread = (value: number) => {
     const input = document.getElementById('spread-custom') as HTMLInputElement;
     if (value > maxSpreadPPM) {
+      setWarning(getWarning(maxSpreadPPM));
       setSpreadPPM(maxSpreadPPM);
       input.value = maxSpreadPPM.toFixed(2);
       input.focus();
     } else {
+      setWarning('');
       setSpreadPPM(value);
       input.value = '';
     }
@@ -125,6 +142,15 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
           <span className={styles.suffix}>%</span>
         </div>
       </div>
+      {spreadPPM && warning && (
+        <output
+          htmlFor="spread-custom"
+          className="flex items-center gap-8 font-mono text-12 text-warning-500"
+        >
+          <IconWarning className="h-12 w-12" />
+          <span>{warning}</span>
+        </output>
+      )}
       {spreadPPM <= 0 && (
         <output
           htmlFor="spread-custom"

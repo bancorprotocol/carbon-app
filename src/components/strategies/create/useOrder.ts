@@ -39,7 +39,7 @@ export const useOrder = (order?: Order) => {
   );
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
-  const [marginalPrice, setMarginalPrice] = useState(order?.marginalRate ?? '');
+  const [marginalPrice, setMarginalPrice] = useState('');
   const [budgetError, setBudgetError] = useState('');
   const [isRange, setIsRange] = useState(order?.startRate !== order?.endRate);
   const [marginalPriceOption, setMarginalPriceOption] = useState(

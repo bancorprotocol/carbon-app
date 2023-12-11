@@ -32,10 +32,17 @@ interface WithdrawProps {
   token: Token;
   order: OrderCreate;
   buy?: boolean;
+  setBudget?: (value: string) => void;
 }
 
 export const WithdrawAllocatedBudget: FC<WithdrawProps> = (props) => {
-  const { currentBudget, token, order, buy } = props;
+  const {
+    currentBudget,
+    token,
+    order,
+    buy,
+    setBudget = order.setBudget,
+  } = props;
   return (
     <div className="flex items-center justify-between gap-16 rounded-8 border border-emphasis py-8 px-16 font-mono text-12 font-weight-500">
       <p className="flex flex-1 items-center gap-6">
@@ -49,7 +56,7 @@ export const WithdrawAllocatedBudget: FC<WithdrawProps> = (props) => {
       <TooltipTokenAmount amount={currentBudget} token={token} />
       <button
         type="button"
-        onClick={() => order.setBudget(currentBudget)}
+        onClick={() => setBudget(currentBudget)}
         className="cursor-pointer font-weight-500 text-green"
       >
         MAX

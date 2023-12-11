@@ -19,7 +19,6 @@ import {
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
-import useAsyncEffect from 'use-async-effect';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -125,47 +124,49 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   }, [marketPrice, spreadPPM]);
 
   // Update on buyMin changes
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (!order0.min) return;
     const min = order0.min;
     const max = order1.max;
+    setOverlappingParams(min, max).then((params) => {
+      const marginalPrice = params.buyPriceMarginal;
+      if (isMinAboveMarket({ min, marginalPrice }, quote)) {
+        setAnchoderOrder('sell');
+        setBuyBudget(order1.budget, min, max);
+      } else {
+        if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+        if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
+      }
+    });
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(min), spreadPPM);
       if (Number(max) < minSellMax) order1.setMax(minSellMax.toFixed(decimals));
     }, 500);
-    const params = await setOverlappingParams(min, max);
-    const marginalPrice = params.buyPriceMarginal;
-    if (isMinAboveMarket({ min, marginalPrice }, quote)) {
-      setAnchoderOrder('sell');
-      setBuyBudget(order1.budget, min, max);
-    } else {
-      if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-      if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-    }
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.min]);
 
   // Update on sellMax changes
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (!order1.max) return;
     const min = order0.min;
     const max = order1.max;
+    setOverlappingParams(min, max).then((params) => {
+      const marginalPrice = params.sellPriceMarginal;
+      if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
+        setAnchoderOrder('buy');
+        setSellBudget(order0.budget, min, max);
+      } else {
+        if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+        if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
+      }
+    });
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(max), spreadPPM);
       if (Number(min) > maxBuyMin) order0.setMin(maxBuyMin.toFixed(decimals));
     }, 500);
-    const params = await setOverlappingParams(min, max);
-    const marginalPrice = params.sellPriceMarginal;
-    if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
-      setAnchoderOrder('buy');
-      setSellBudget(order0.budget, min, max);
-    } else {
-      if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-      if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-    }
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);

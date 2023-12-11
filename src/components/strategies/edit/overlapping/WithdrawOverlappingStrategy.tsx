@@ -4,7 +4,11 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { getRoundedSpreadPPM } from '../../overlapping/utils';
+import {
+  getRoundedSpreadPPM,
+  isMaxBelowMarket,
+  isMinAboveMarket,
+} from '../../overlapping/utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
@@ -57,20 +61,20 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
   // Check for error when buy budget changes
   useEffect(() => {
-    const balance = tokenBaseBalanceQuery.data ?? '0';
+    const balance = strategy.order0.balance;
     checkInsufficientBalance(balance, order0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.budget]);
 
   // Check for error when sell budget changes
   useEffect(() => {
-    const balance = tokenQuoteBalanceQuery.data ?? '0';
+    const balance = strategy.order1.balance;
     checkInsufficientBalance(balance, order1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.budget]);
 
-  const aboveMarket = new SafeDecimal(min).gt(marketPrice);
-  const belowMarket = new SafeDecimal(max).lt(marketPrice);
+  const aboveMarket = isMinAboveMarket(order0, quote);
+  const belowMarket = isMaxBelowMarket(order1, quote);
   const withdrawAll =
     (order0.budget || '0') === strategy.order0.balance &&
     (order1.budget || '0') === strategy.order1.balance;
@@ -133,37 +137,37 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        {!aboveMarket && (
-          <BudgetInput
+        <BudgetInput
+          token={quote}
+          query={tokenQuoteBalanceQuery}
+          order={order0}
+          onChange={onBuyBudgetChange}
+          disabled={aboveMarket}
+          withoutWallet
+        >
+          <WithdrawAllocatedBudget
             token={quote}
-            query={tokenQuoteBalanceQuery}
             order={order0}
-            onChange={onBuyBudgetChange}
-            withoutWallet
-          >
-            <WithdrawAllocatedBudget
-              token={quote}
-              order={order0}
-              currentBudget={strategy.order0.balance}
-              buy
-            />
-          </BudgetInput>
-        )}
-        {!belowMarket && (
-          <BudgetInput
+            currentBudget={strategy.order0.balance}
+            setBudget={onBuyBudgetChange}
+            buy
+          />
+        </BudgetInput>
+        <BudgetInput
+          token={base}
+          query={tokenBaseBalanceQuery}
+          order={order1}
+          onChange={onSellBudgetChange}
+          disabled={belowMarket}
+          withoutWallet
+        >
+          <WithdrawAllocatedBudget
             token={base}
-            query={tokenBaseBalanceQuery}
             order={order1}
-            onChange={onSellBudgetChange}
-            withoutWallet
-          >
-            <WithdrawAllocatedBudget
-              token={base}
-              order={order1}
-              currentBudget={strategy.order1.balance}
-            />
-          </BudgetInput>
-        )}
+            currentBudget={strategy.order1.balance}
+            setBudget={onSellBudgetChange}
+          />
+        </BudgetInput>
         <footer className="flex items-center gap-8">
           {!withdrawAll && (
             <>

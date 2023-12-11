@@ -4,7 +4,11 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { getRoundedSpreadPPM } from '../../overlapping/utils';
+import {
+  getRoundedSpreadPPM,
+  isMaxBelowMarket,
+  isMinAboveMarket,
+} from '../../overlapping/utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
@@ -38,8 +42,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     order: { min, max, price: '', isRange: true },
   });
 
-  const aboveMarket = new SafeDecimal(min).gt(marketPrice);
-  const belowMarket = new SafeDecimal(max).lt(marketPrice);
+  const aboveMarket = isMinAboveMarket(order0, quote);
+  const belowMarket = isMaxBelowMarket(order1, quote);
 
   useEffect(() => {
     order0.setMarginalPriceOption(MarginalPriceOptions.maintain);
@@ -82,14 +86,14 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   // Check for error when buy budget changes
   useEffect(() => {
-    const balance = tokenBaseBalanceQuery.data ?? '0';
+    const balance = tokenQuoteBalanceQuery.data ?? '0';
     checkInsufficientBalance(balance, order0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.budget]);
 
   // Check for error when sell budget changes
   useEffect(() => {
-    const balance = tokenQuoteBalanceQuery.data ?? '0';
+    const balance = tokenBaseBalanceQuery.data ?? '0';
     checkInsufficientBalance(balance, order1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.budget]);
@@ -127,33 +131,31 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
-        {!aboveMarket && (
-          <BudgetInput
+        <BudgetInput
+          token={quote}
+          query={tokenQuoteBalanceQuery}
+          order={order0}
+          onChange={onBuyBudgetChange}
+          disabled={aboveMarket}
+        >
+          <DepositAllocatedBudget
             token={quote}
-            query={tokenQuoteBalanceQuery}
-            order={order0}
-            onChange={onBuyBudgetChange}
-          >
-            <DepositAllocatedBudget
-              token={quote}
-              currentBudget={strategy.order0.balance}
-              buy
-            />
-          </BudgetInput>
-        )}
-        {!belowMarket && (
-          <BudgetInput
+            currentBudget={strategy.order0.balance}
+            buy
+          />
+        </BudgetInput>
+        <BudgetInput
+          token={base}
+          query={tokenBaseBalanceQuery}
+          order={order1}
+          onChange={onSellBudgetChange}
+          disabled={belowMarket}
+        >
+          <DepositAllocatedBudget
             token={base}
-            query={tokenBaseBalanceQuery}
-            order={order1}
-            onChange={onSellBudgetChange}
-          >
-            <DepositAllocatedBudget
-              token={base}
-              currentBudget={strategy.order1.balance}
-            />
-          </BudgetInput>
-        )}
+            currentBudget={strategy.order1.balance}
+          />
+        </BudgetInput>
         <footer className="flex items-center gap-8">
           <IconAction className="h-16 w-16" />
           <p className="text-12 text-white/60">
