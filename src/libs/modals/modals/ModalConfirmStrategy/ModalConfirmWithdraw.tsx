@@ -10,6 +10,7 @@ import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { cn } from 'utils/helpers';
 import { carbonEvents } from 'services/events';
 import { StrategyEditEventType } from 'services/events/types';
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 
 export interface ModalConfirmWithdrawData {
   strategy: Strategy;
@@ -22,7 +23,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
 }) => {
   const { strategies } = useStore();
   const { closeModal } = useModal();
-  const { strategyEvent } = data;
+  const { strategyEvent, strategy } = data;
 
   const edit = () => {
     carbonEvents.strategyEdit.strategyEditPricesClick({
@@ -39,23 +40,25 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         icon={<IconWallet className="h-24 w-24" />}
         title="Are you sure you would like to withdraw your funds?"
       />
-      <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-white/10 p-16">
-        <h3 className="text-14 font-weight-500">Did you know ?</h3>
-        <Link
-          onClick={edit}
-          to={PathNames.editStrategy}
-          search={{ type: 'editPrices' }}
-          className={cn(
-            'row-span-2 self-center',
-            buttonStyles({ variant: 'white' })
-          )}
-        >
-          Edit Prices
-        </Link>
-        <p className="text-12 text-white/80">
-          Editing prices is cheaper and keeps your strategy working for you.
-        </p>
-      </article>
+      {!isOverlappingStrategy(strategy) && (
+        <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-white/10 p-16">
+          <h3 className="text-14 font-weight-500">Did you know ?</h3>
+          <Link
+            onClick={edit}
+            to={PathNames.editStrategy}
+            search={{ type: 'editPrices' }}
+            className={cn(
+              'row-span-2 self-center',
+              buttonStyles({ variant: 'white' })
+            )}
+          >
+            Edit Prices
+          </Link>
+          <p className="text-12 text-white/80">
+            Editing prices is cheaper and keeps your strategy working for you.
+          </p>
+        </article>
+      )}
       <Link
         onClick={edit}
         to={PathNames.editStrategy}
