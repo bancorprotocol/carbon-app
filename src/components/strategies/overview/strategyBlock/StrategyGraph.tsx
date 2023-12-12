@@ -621,7 +621,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         rel="noreferrer"
         className="inline-flex items-center gap-4 font-weight-500 text-green"
       >
-        <span>Learn More about marginal price</span>
+        <span>Learn more about marginal price</span>
         <IconLink className="inline h-12 w-12" />
       </a>
     </article>
