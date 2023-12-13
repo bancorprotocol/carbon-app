@@ -80,6 +80,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     (order1.budget || '0') === strategy.order1.balance;
 
   const setBuyBudget = async (sellBudget: string) => {
+    if (!sellBudget) return order0.setBudget('');
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
       base.address,
       quote.address,
@@ -93,6 +94,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setSellBudget = async (buyBudget: string) => {
+    if (!buyBudget) return order1.setBudget('');
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       quote.address,
