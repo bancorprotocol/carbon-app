@@ -53,6 +53,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   const setBuyBudget = async (sellBudget: string) => {
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
+      base.address,
       quote.address,
       order0.min,
       order1.max,

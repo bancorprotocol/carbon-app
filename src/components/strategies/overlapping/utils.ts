@@ -71,7 +71,7 @@ export const isMinAboveMarket = (buyOrder: BuyOrder, quote?: Token) => {
   return new SafeDecimal(buyOrder.min)
     .minus(buyOrder.marginalPrice)
     .abs()
-    .lte(wei.times(2));
+    .lt(wei);
 };
 interface SellOrder {
   max: string;
@@ -82,5 +82,5 @@ export const isMaxBelowMarket = (sellOrder: SellOrder, quote?: Token) => {
   return new SafeDecimal(sellOrder.max)
     .minus(sellOrder.marginalPrice)
     .abs()
-    .lte(wei.times(2));
+    .lt(wei);
 };
