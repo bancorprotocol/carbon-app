@@ -143,7 +143,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(min), spreadPPM);
       if (Number(max) < minSellMax) order1.setMax(minSellMax.toFixed(decimals));
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.min]);
@@ -167,7 +167,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(max), spreadPPM);
       if (Number(min) > maxBuyMin) order0.setMin(maxBuyMin.toFixed(decimals));
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);

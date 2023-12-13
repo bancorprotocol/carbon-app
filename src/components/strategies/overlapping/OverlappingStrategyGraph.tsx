@@ -253,6 +253,23 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   //////////////
   // Polygons //
   //////////////
+
+  /** Config returned if Graph is disabled */
+  const getStaticConfig = () => {
+    return {
+      top,
+      middle,
+      bottom,
+      min: Number(order0.min) * xFactor,
+      max: Number(order1.max) * xFactor,
+      buyMax: Number(order0.max) * xFactor,
+      sellMin: Number(order1.min) * xFactor,
+      marginalBuy: Number(order0.marginalPrice) * xFactor,
+      marginalSell: Number(order1.marginalPrice) * xFactor,
+    };
+  };
+
+  /** Config returned if Graph is dynamic */
   const getPointConfig = ({ min, max }: { min: number; max: number }) => {
     const buyMax = clamp(min, getBuyMax(max, spreadPPM), max);
     const sellMin = clamp(min, getSellMin(min, spreadPPM), max);
@@ -270,10 +287,15 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       marginalSell: clamp(sellMin, marginalSell, max),
     };
   };
-  const config = getPointConfig({
-    min: Number(order0.min) * xFactor,
-    max: Number(order1.max) * xFactor,
-  });
+  const getConfig = () => {
+    if (disabled) return getStaticConfig();
+    return getPointConfig({
+      min: Number(order0.min) * xFactor,
+      max: Number(order1.max) * xFactor,
+    });
+  };
+
+  const config = getConfig();
   const { min, max, sellMin, buyMax } = config;
   const marketPercent = props.marketPricePercentage;
   const minValue = prettifySignedNumber(min / xFactor);
