@@ -88,7 +88,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       order1.max,
       marketPrice.toString(),
       spreadPPM.toString(),
-      sellBudget ?? '0'
+      sellBudget
     );
     order0.setBudget(buyBudget);
   };
@@ -102,7 +102,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       order1.max,
       marketPrice.toString(),
       spreadPPM.toString(),
-      buyBudget ?? '0'
+      buyBudget
     );
     order1.setBudget(sellBudget);
   };

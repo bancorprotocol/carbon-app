@@ -1287,7 +1287,7 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@bancor/carbon-sdk@^0.0.92-DEV":
+"@bancor/carbon-sdk@0.0.92-DEV":
   version "0.0.92-DEV"
   resolved "https://registry.yarnpkg.com/@bancor/carbon-sdk/-/carbon-sdk-0.0.92-DEV.tgz#ce60423d433a18272701d25fc0c959213c6b3608"
   integrity sha512-2wpy8tysS6LhDAp12KZkJmbQieqN4qdMWZgbsinuRX81mMx87GhlLsqAA93UVMxebpAHaV8ImmRvBS/xLNEB2Q==

@@ -480,7 +480,6 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       const newMax = getDraggedMax();
       if (newMin) order0.setMin(newMin);
       if (newMax) order1.setMax(newMax);
-      // TODO: clear draggedMin & max
       translateHandler('buy', 0);
       translateHandler('sell', 0);
       initialPosition = 0;

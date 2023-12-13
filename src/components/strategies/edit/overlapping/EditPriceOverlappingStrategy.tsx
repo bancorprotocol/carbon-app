@@ -62,15 +62,17 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote) return;
+    if (!sellBudget) return order0.setBudget('');
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
+      base.address,
       quote.address,
       buyMin,
       sellMax,
       marketPrice.toString(),
       spreadPPM.toString(),
-      sellBudget || '0'
+      sellBudget
     );
-    order0.setBudget(sellBudget ? buyBudget : '');
+    order0.setBudget(buyBudget);
   };
 
   const setSellBudget = async (
@@ -79,6 +81,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote) return;
+    if (!buyBudget) order1.setBudget('');
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       quote.address,
@@ -86,9 +89,9 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       sellMax,
       marketPrice.toString(),
       spreadPPM.toString(),
-      buyBudget || '0'
+      buyBudget
     );
-    order1.setBudget(buyBudget ? sellBudget : '');
+    order1.setBudget(sellBudget);
   };
 
   // Initialize order when market price is available
