@@ -92,7 +92,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
           ref={list}
           onKeyDown={handleKeyDown}
           role="tablist"
-          className="grid grid-cols-4 gap-8"
+          className={`grid grid-cols-${items.length} gap-8`}
         >
           {items.map(({ search, to, isRecommended, svg, id, label }) => (
             <li role="none" key={id} className="relative">

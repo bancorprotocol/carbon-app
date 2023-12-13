@@ -5,6 +5,7 @@ import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
+import { useStore } from 'store';
 
 interface StrategyTypeItem {
   id: string;
@@ -18,7 +19,11 @@ interface StrategyTypeItem {
 }
 
 export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
+  const { debug } = useStore();
   const navigate = useNavigate();
+  const filterItems = debug.debugState.showOverlapping
+    ? () => true
+    : (item: StrategyTypeItem) => item.id !== 'overlapping';
 
   const items: StrategyTypeItem[] = useMemo(
     () => [
@@ -163,5 +168,8 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
     navigate({ to, search, replace });
   };
 
-  return { items, handleClick };
+  return {
+    items: items.filter(filterItems),
+    handleClick,
+  };
 };
