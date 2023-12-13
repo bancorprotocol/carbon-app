@@ -125,33 +125,33 @@ export const StrategyBlockManage: FC<Props> = ({
           });
         },
       });
-    }
 
-    // separator
-    items.push(0);
+      // separator
+      items.push(0);
 
-    items.push({
-      id: 'depositFunds',
-      name: 'Deposit Funds',
-      action: () => {
-        setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
-        navigate({
-          to: PathNames.editStrategy,
-          search: { type: 'deposit' },
-        });
-      },
-    });
-
-    if (strategy.status !== 'noBudget') {
       items.push({
-        id: 'withdrawFunds',
-        name: 'Withdraw Funds',
+        id: 'depositFunds',
+        name: 'Deposit Funds',
         action: () => {
-          openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
-          carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
+          setStrategyToEdit(strategy);
+          carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
+          navigate({
+            to: PathNames.editStrategy,
+            search: { type: 'deposit' },
+          });
         },
       });
+
+      if (strategy.status !== 'noBudget') {
+        items.push({
+          id: 'withdrawFunds',
+          name: 'Withdraw Funds',
+          action: () => {
+            openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
+            carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
+          },
+        });
+      }
     }
 
     // separator
