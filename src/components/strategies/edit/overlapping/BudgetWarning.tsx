@@ -3,19 +3,24 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FC } from 'react';
 
-const budgetWarnings: Record<BudgetWarnings, string[]> = {
-  'below->below': [],
+const budgetWarnings = {
+  'dust->below': [],
+  'dust->within': [],
+  'dust->above': [],
   'below->within': [],
   'below->above': [],
   'within->below': [],
-  'within->within': [],
   'within->above': [],
   'above->below': [],
   'above->within': [],
-  'above->above': [],
 };
-type PriceMode = 'below' | 'within' | 'above';
-export type BudgetWarnings = `${PriceMode}->${PriceMode}`;
+type PriceMode = 'dust' | 'below' | 'within' | 'above';
+export type BudgetState = `${PriceMode}->${PriceMode}`;
+type BudgetWarnings = keyof typeof budgetWarnings;
+
+export function hasBudgetWarning(state: BudgetState): state is BudgetWarnings {
+  return state in budgetWarnings;
+}
 
 interface Props {
   warning: BudgetWarnings;

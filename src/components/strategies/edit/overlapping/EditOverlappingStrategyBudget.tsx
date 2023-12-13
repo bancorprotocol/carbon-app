@@ -7,7 +7,7 @@ import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { BudgetWarning, BudgetWarnings } from './BudgetWarning';
+import { BudgetWarning, BudgetState, hasBudgetWarning } from './BudgetWarning';
 
 interface Props {
   strategy: Strategy;
@@ -19,6 +19,13 @@ interface Props {
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
   setSellBudget: (buyBudget: string, min: string, max: string) => any;
 }
+
+const getWarning = (order0: OrderCreate, order1: OrderCreate, quote: Token) => {
+  // TODO
+  // const [previous, current] = warning.split('->');
+  // const next = getWarning(order0, order1, quote);
+  // setWarning(`${current}->${next}`);
+};
 
 export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const {
@@ -34,13 +41,11 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const maxBelowMarket = isMaxBelowMarket(order1, quote);
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
-  const [warning, setWarning] = useState<BudgetWarnings | ''>('');
+  const [warning, setWarning] = useState<BudgetState>('within->within');
 
   useEffect(() => {
     // TODO set the warning here based on previous state
-    // const [previous, current] = warning.split('->');
-    // const next = getWarning(order0, order1, quote);
-    // setWarning(`${current}->${next}`);
+    // setWarning(getWarning(order0, order1, quote));
   }, [order0.min, order0.marginalPrice, order1.max, order1.marginalPrice]);
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
@@ -77,7 +82,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   };
 
   if (!quote || !base) return <></>;
-  if (warning) return <BudgetWarning warning={warning} />;
+  if (hasBudgetWarning(warning)) return <BudgetWarning warning={warning} />;
   return (
     <>
       <BudgetInput
