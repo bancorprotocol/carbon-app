@@ -32,6 +32,7 @@ interface WithdrawProps {
   token: Token;
   order: OrderCreate;
   buy?: boolean;
+  disabled?: boolean;
   setBudget?: (value: string) => void;
 }
 
@@ -41,6 +42,7 @@ export const WithdrawAllocatedBudget: FC<WithdrawProps> = (props) => {
     token,
     order,
     buy,
+    disabled,
     setBudget = order.setBudget,
   } = props;
   return (
@@ -57,9 +59,13 @@ export const WithdrawAllocatedBudget: FC<WithdrawProps> = (props) => {
       <button
         type="button"
         onClick={() => setBudget(currentBudget)}
-        className="cursor-pointer font-weight-500 text-green"
+        className={
+          disabled
+            ? 'pointer-events-none text-green/40'
+            : 'text-green hover:text-white'
+        }
       >
-        MAX
+        RESET
       </button>
     </div>
   );

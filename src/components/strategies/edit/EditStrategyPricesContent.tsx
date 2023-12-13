@@ -10,6 +10,8 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from '../create/useStrategyEventData';
 import { checkIfOrdersOverlap } from '../utils';
 import { getStatusTextByTxStatus } from '../utils';
+import { isOverlappingStrategy } from '../overlapping/utils';
+import { EditPriceOverlappingStrategy } from './overlapping/EditPriceOverlappingStrategy';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -22,6 +24,7 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
+  const isOverlapping = isOverlappingStrategy(strategy);
   const { history } = useRouter();
   const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
@@ -52,17 +55,18 @@ export const EditStrategyPricesContent = ({
   const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newOrder0 = {
-      balance: strategy.order0.balance,
+      balance: order0.budget || strategy.order0.balance,
       startRate: (order0.isRange ? order0.min : order0.price) || '0',
       endRate: (order0.isRange ? order0.max : order0.price) || '0',
-      marginalRate: strategy.order0.marginalRate,
+      marginalRate: order0.marginalPrice || strategy.order0.marginalRate,
     };
     const newOrder1 = {
-      balance: strategy.order1.balance,
+      balance: order1.budget || strategy.order1.balance,
       startRate: (order1.isRange ? order1.min : order1.price) || '0',
       endRate: (order1.isRange ? order1.max : order1.price) || '0',
-      marginalRate: strategy.order1.marginalRate,
+      marginalRate: order1.marginalPrice || strategy.order1.marginalRate,
     };
+    console.log({ newOrder0, newOrder1 });
 
     type === 'renew'
       ? renewStrategy(
@@ -110,23 +114,34 @@ export const EditStrategyPricesContent = ({
       className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
-      <EditStrategyPricesBuySellBlock
-        buy
-        base={strategy?.base}
-        quote={strategy?.quote}
-        order={order0}
-        balance={strategy.order0.balance}
-        type={type}
-        isOrdersOverlap={isOrdersOverlap}
-      />
-      <EditStrategyPricesBuySellBlock
-        base={strategy?.base}
-        quote={strategy?.quote}
-        order={order1}
-        balance={strategy.order1.balance}
-        type={type}
-        isOrdersOverlap={isOrdersOverlap}
-      />
+      {isOverlapping && (
+        <EditPriceOverlappingStrategy
+          strategy={strategy}
+          order0={order0}
+          order1={order1}
+        />
+      )}
+      {!isOverlapping && (
+        <>
+          <EditStrategyPricesBuySellBlock
+            buy
+            base={strategy?.base}
+            quote={strategy?.quote}
+            order={order0}
+            balance={strategy.order0.balance}
+            type={type}
+            isOrdersOverlap={isOrdersOverlap}
+          />
+          <EditStrategyPricesBuySellBlock
+            base={strategy?.base}
+            quote={strategy?.quote}
+            order={order1}
+            balance={strategy.order1.balance}
+            type={type}
+            isOrdersOverlap={isOrdersOverlap}
+          />
+        </>
+      )}
 
       <Button
         type="submit"

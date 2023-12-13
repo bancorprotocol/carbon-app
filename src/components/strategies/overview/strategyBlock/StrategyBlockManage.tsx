@@ -21,7 +21,6 @@ import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { ExplorerParams } from 'components/explorer/utils';
-import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -110,23 +109,21 @@ export const StrategyBlockManage: FC<Props> = ({
   }
 
   if (!isExplorer) {
-    if (!isOverlappingStrategy(strategy, debug)) {
-      items.push({
-        id: 'editPrices',
-        name: 'Edit Prices',
-        action: () => {
-          setStrategyToEdit(strategy);
-          carbonEvents.strategyEdit.strategyEditPricesClick({
-            origin: 'manage',
-            ...strategyEvent,
-          });
-          navigate({
-            to: PathNames.editStrategy,
-            search: { type: 'editPrices' },
-          });
-        },
-      });
-    }
+    items.push({
+      id: 'editPrices',
+      name: 'Edit Prices',
+      action: () => {
+        setStrategyToEdit(strategy);
+        carbonEvents.strategyEdit.strategyEditPricesClick({
+          origin: 'manage',
+          ...strategyEvent,
+        });
+        navigate({
+          to: PathNames.editStrategy,
+          search: { type: 'editPrices' },
+        });
+      },
+    });
 
     // separator
     items.push(0);
