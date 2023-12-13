@@ -1,5 +1,6 @@
 import { PathNames, useNavigate, useSearch } from 'libs/routing';
 import { Strategy } from 'libs/queries';
+import { isOverlappingStrategy } from '../overlapping/utils';
 
 interface MyLocationSearch {
   strategy: string;
@@ -54,6 +55,11 @@ export const useDuplicateStrategy = () => {
   // marginal price should be calculated based on prices
   if (decoded?.order0.marginalRate) decoded.order0.marginalRate = '';
   if (decoded?.order1.marginalRate) decoded.order1.marginalRate = '';
+  // Remove balance if overlapping strategy because market price changed
+  if (decoded && isOverlappingStrategy(decoded)) {
+    decoded.order0.balance = '';
+    decoded.order1.balance = '';
+  }
 
   return {
     duplicate,
