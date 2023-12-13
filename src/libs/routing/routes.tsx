@@ -1,4 +1,5 @@
 import { ExplorerPage } from 'pages/explorer';
+import { SimulatorPage } from 'pages/simulator';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
@@ -183,6 +184,12 @@ explorerResultLayout.addChildren([
   explorerPortfolioLayout,
 ]);
 
+const simPage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/simulator',
+  component: SimulatorPage,
+});
+
 export const routeTree = appRoute.addChildren([
   termPage,
   privacyPage,
@@ -192,4 +199,5 @@ export const routeTree = appRoute.addChildren([
   editStrategyPage,
   explorerLayout,
   myStrategyLayout,
+  simPage,
 ]);

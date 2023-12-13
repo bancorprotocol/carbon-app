@@ -24,4 +24,5 @@ export const PathNames = {
   editStrategy: '/strategies/edit',
   terms: '/terms',
   privacy: '/privacy',
+  simulator: '/simulator',
 };

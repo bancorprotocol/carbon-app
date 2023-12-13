@@ -32,6 +32,11 @@ export const menuItems: MenuItem[] = [
       PathNames.explorer('token-pair'),
     ],
   },
+  {
+    label: 'Sim',
+    href: PathNames.simulator,
+    hrefMatches: [PathNames.simulator],
+  },
   ...(isProduction
     ? []
     : [
