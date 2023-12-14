@@ -19,6 +19,7 @@ import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
 import { carbonSDK } from 'libs/sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { geoMean } from 'utils/fullOutcome';
 
 interface Props {
   strategy: Strategy;
@@ -35,7 +36,9 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
 
-  const marketPrice = useMarketPrice({ base, quote });
+  const externalMarketPrice = useMarketPrice({ base, quote });
+  const oldMarketPrice = geoMean(order0.marginalPrice, order1.marginalPrice)!;
+
   const spreadPPM = getRoundedSpreadPPM(strategy);
   const min = order0.min;
   const max = order1.max;
@@ -79,6 +82,16 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     (order0.budget || '0') === strategy.order0.balance &&
     (order1.budget || '0') === strategy.order1.balance;
 
+  const getMarketPrice = () => {
+    if (aboveMarket || new SafeDecimal(strategy.order0.balance).eq(0)) {
+      return order0.min;
+    }
+    if (belowMarket || new SafeDecimal(strategy.order1.balance).eq(0)) {
+      return order1.max;
+    }
+    return oldMarketPrice.toString();
+  };
+
   const setBuyBudget = async (sellBudget: string) => {
     if (!sellBudget) return order0.setBudget('');
     const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
@@ -86,7 +99,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       quote.address,
       order0.min,
       order1.max,
-      marketPrice.toString(),
+      getMarketPrice(),
       spreadPPM.toString(),
       sellBudget
     );
@@ -100,7 +113,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       quote.address,
       order0.min,
       order1.max,
-      marketPrice.toString(),
+      getMarketPrice(),
       spreadPPM.toString(),
       buyBudget
     );
@@ -127,7 +140,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           order0={order0}
           order1={order1}
-          marketPrice={marketPrice}
+          marketPrice={externalMarketPrice}
           spreadPPM={spreadPPM}
           marketPricePercentage={marketPricePercentage}
           disabled
@@ -145,7 +158,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           query={tokenQuoteBalanceQuery}
           order={order0}
           onChange={onBuyBudgetChange}
-          disabled={aboveMarket}
+          disabled={aboveMarket || order0.min === '0'}
           withoutWallet
         >
           <WithdrawAllocatedBudget
@@ -161,7 +174,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           query={tokenBaseBalanceQuery}
           order={order1}
           onChange={onSellBudgetChange}
-          disabled={belowMarket}
+          disabled={belowMarket || order1.max === '0'}
           withoutWallet
         >
           <WithdrawAllocatedBudget

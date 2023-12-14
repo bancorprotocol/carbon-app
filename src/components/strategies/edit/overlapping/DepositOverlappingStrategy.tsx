@@ -155,7 +155,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           query={tokenQuoteBalanceQuery}
           order={order0}
           onChange={onBuyBudgetChange}
-          disabled={aboveMarket}
+          disabled={aboveMarket || order0.min === '0'}
         >
           <DepositAllocatedBudget
             token={quote}
@@ -169,7 +169,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           query={tokenBaseBalanceQuery}
           order={order1}
           onChange={onSellBudgetChange}
-          disabled={belowMarket}
+          disabled={belowMarket || order1.max === '0'}
         >
           <DepositAllocatedBudget
             token={base}
