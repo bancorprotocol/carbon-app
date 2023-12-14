@@ -14,7 +14,6 @@ export const Page: FC<{
           {widget && widget}
         </div>
       )}
-
       {children}
     </div>
   );

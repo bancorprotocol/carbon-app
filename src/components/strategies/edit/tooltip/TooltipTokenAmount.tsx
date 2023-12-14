@@ -3,7 +3,7 @@ import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPr
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { useFiatPrice } from 'hooks/useFiatPrice';
+import { useFiatValue } from 'hooks/useFiatValue';
 import { LogoImager } from 'components/common/imager/Imager';
 
 export interface TooltipPriceProps {
@@ -14,7 +14,7 @@ export interface TooltipPriceProps {
 
 export const TooltipTokenAmount: FC<TooltipPriceProps> = (props) => {
   const { amount, token, className } = props;
-  const fiatPrice = useFiatPrice({ price: amount, token });
+  const fiatPrice = useFiatValue({ price: amount, token });
   const fullAmount = sanitizeNumberInput(amount, token.decimals);
   return (
     <Tooltip

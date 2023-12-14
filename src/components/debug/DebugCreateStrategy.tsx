@@ -117,12 +117,14 @@ export const DebugCreateStrategy = () => {
         order0: {
           max: buyMax,
           min: buyMin,
+          marginalPrice: buyMin,
           budget: new SafeDecimal(balance1).div(total + 1).toFixed(2),
           price: buyMax === buyMin ? buyMax : '0',
         },
         order1: {
           max: sellMax,
           min: sellMin,
+          marginalPrice: sellMax,
           budget: new SafeDecimal(balance0).div(total + 1).toFixed(2),
           price: sellMax === sellMin ? sellMax : '0',
         },

@@ -3,7 +3,6 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { useGetTokenPrice } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from '../../../hooks/useFiatCurrency';
-import { OrderCreate } from 'components/strategies/create/useOrder';
 
 export type MarketPricePercentage = {
   min: SafeDecimal;
@@ -14,7 +13,12 @@ export type MarketPricePercentage = {
 type UseMarketIndicationProps = {
   base: Token | undefined;
   quote: Token | undefined;
-  order: OrderCreate;
+  order: {
+    isRange: boolean;
+    min: string;
+    max: string;
+    price: string;
+  };
   buy?: boolean;
 };
 
@@ -41,7 +45,6 @@ export const useMarketIndication = ({
 
       return isInputNotZero && isAboveOrBelow;
     }
-
     return (
       new SafeDecimal(order.price).gt(0) &&
       new SafeDecimal(getFiatValue(order.price))[buy ? 'gt' : 'lt'](
@@ -68,7 +71,6 @@ export const useMarketIndication = ({
             .div(tokenMarketPrice)
             .times(100);
     };
-
     return {
       min: getMarketPricePercentage(order.min),
       max: getMarketPricePercentage(order.max),
