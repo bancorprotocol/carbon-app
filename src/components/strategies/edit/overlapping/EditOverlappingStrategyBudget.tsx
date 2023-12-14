@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
+import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isMinAboveMarket, isMaxBelowMarket } from '../../overlapping/utils';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
@@ -11,9 +12,10 @@ import {
   BudgetWarning,
   BudgetState,
   hasBudgetWarning,
-  PricePosition,
+  splitBudgetState,
 } from './BudgetWarning';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { prettifyNumber } from 'utils/helpers';
 
 interface Props {
   strategy: Strategy;
@@ -25,6 +27,12 @@ interface Props {
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
   setSellBudget: (buyBudget: string, min: string, max: string) => any;
 }
+
+const balanceChange = (oldBalance: string, newBudget: string) => {
+  if (!oldBalance || !newBudget) return;
+  if (new SafeDecimal(oldBalance).eq(newBudget)) return;
+  return new SafeDecimal(newBudget).minus(oldBalance);
+};
 
 export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const {
@@ -41,6 +49,15 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
 
+  const quoteBalanceChange = balanceChange(
+    strategy.order0.balance,
+    order0.budget
+  );
+  const baseBalanceChange = balanceChange(
+    strategy.order1.balance,
+    order1.budget
+  );
+
   const getPosition = () => {
     if (minAboveMarket) return 'above';
     if (maxBelowMarket) return 'below';
@@ -51,7 +68,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const [budgetState, setBudgetState] = useState<BudgetState>(initialState);
 
   useEffect(() => {
-    const [_, current] = budgetState.split('->') as [any, PricePosition];
+    const [_, current] = splitBudgetState(budgetState);
     const next = getPosition();
     setBudgetState(`${current}->${next}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +112,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     return (
       <BudgetWarning
         base={base}
-        warning={budgetState}
+        state={budgetState}
         setState={setBudgetState}
       />
     );
@@ -121,6 +138,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
           disabled={minAboveMarket}
           buy
         />
+        <BudgetMessage token={quote} change={quoteBalanceChange} />
       </BudgetInput>
       <BudgetInput
         token={base}
@@ -136,6 +154,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
           disabled={maxBelowMarket}
           setBudget={onSellBudgetChange}
         />
+        <BudgetMessage token={base} change={baseBalanceChange} />
       </BudgetInput>
       {maxBelowMarket && <Explaination base={base} />}
       {!minAboveMarket && !maxBelowMarket && (
@@ -174,4 +193,36 @@ const Explaination: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
       </a>
     </p>
   );
+};
+
+const BudgetMessage: FC<{ token: Token; change?: SafeDecimal }> = (props) => {
+  const { change, token } = props;
+  if (!change || change.eq(0)) return <></>;
+  if (change.gt(0)) {
+    return (
+      <div className="flex items-center gap-8">
+        <IconArrowDown className="h-16 w-16 rotate-180 text-green" />
+        <p className="text-12 font-weight-400 text-white/60">
+          You will deposit&nbsp;
+          <b className="text-green">
+            {prettifyNumber(change)} {token.symbol}
+          </b>
+          &nbsp;to your wallet balance
+        </p>
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex items-center gap-8">
+        <IconArrowDown className="h-16 w-16 text-red" />
+        <p className="text-12 font-weight-400 text-white/60">
+          You will withdraw&nbsp;
+          <b className="text-red">
+            {prettifyNumber(change.abs())} {token.symbol}
+          </b>
+          &nbsp;to your wallet balance
+        </p>
+      </div>
+    );
+  }
 };

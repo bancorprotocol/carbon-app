@@ -36,19 +36,19 @@ type BudgetWarnings = keyof typeof budgetWarnings;
 export function hasBudgetWarning(state: BudgetState): state is BudgetWarnings {
   return state in budgetWarnings;
 }
+export function splitBudgetState(state: BudgetState) {
+  return state.split('->') as [PricePosition, PricePosition];
+}
 
 interface Props {
   base: Token;
-  warning: BudgetWarnings;
+  state: BudgetWarnings;
   setState: (state: BudgetState) => void;
 }
 
-export const BudgetWarning: FC<Props> = ({ base, warning, setState }) => {
+export const BudgetWarning: FC<Props> = ({ base, state, setState }) => {
   const validate = () => {
-    const [prev, current] = warning.split('->') as [
-      PricePosition,
-      PricePosition
-    ];
+    const [_, current] = splitBudgetState(state);
     setState(`${current}->${current}`);
   };
   return (
@@ -64,7 +64,7 @@ export const BudgetWarning: FC<Props> = ({ base, warning, setState }) => {
         Due to the strategy edits, the following budget changes are needed:
       </p>
       <ol className="flex flex-col gap-8">
-        {budgetWarnings[warning].map((text, i) => (
+        {budgetWarnings[state].map((text, i) => (
           <li key={text(base.symbol)} className="flex items-center gap-8">
             <svg width="14" height="14" viewBox="0 0 14 14">
               <circle cx="7" cy="7" r="7" fill="white" fillOpacity="0.1" />

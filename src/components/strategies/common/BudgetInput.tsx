@@ -23,7 +23,7 @@ export const BudgetInput: FC<Props> = (props) => {
   const balance = query.data ?? '0';
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-16">
       <TokenInputField
         id={id ?? inputId}
         className="rounded-16 bg-black p-16"
