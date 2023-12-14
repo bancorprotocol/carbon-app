@@ -8,7 +8,7 @@ type CandlesticksProps = {
 };
 
 export function Candlesticks({ xScale, yScale }: CandlesticksProps) {
-  const { data } = useD3Chart<CandlestickData[]>();
+  const { data } = useD3Chart<CandlestickData>();
 
   return (
     <>

@@ -1,25 +1,8 @@
-import { useChartDimensions } from 'libs/d3/useChartDimensions';
 import { isNil } from 'lodash';
-import { createContext, FC, useContext, useRef } from 'react';
+import { createContext, forwardRef, useContext, useRef } from 'react';
 import { D3ChartContext, D3ChartData, D3ChartProviderProps } from './types';
 
-const defaultValue: D3ChartContext = {
-  // @ts-ignore
-  svgRef: null,
-  dms: {
-    width: 0,
-    height: 0,
-    marginTop: 0,
-    marginRight: 0,
-    marginBottom: 0,
-    marginLeft: 0,
-    boundedWidth: 0,
-    boundedHeight: 0,
-  },
-  data: [],
-};
-
-const D3ChartCTX = createContext(defaultValue);
+const D3ChartCTX = createContext<D3ChartContext | undefined>(undefined);
 
 export const useD3Chart = <Data extends D3ChartData>() => {
   const ctx = useContext(D3ChartCTX);
@@ -30,23 +13,23 @@ export const useD3Chart = <Data extends D3ChartData>() => {
   return { ...ctx, data };
 };
 
-export const D3ChartProvider: FC<D3ChartProviderProps> = ({
-  children,
-  settings,
-  data,
-}) => {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [wrapperRef, dms] = useChartDimensions(settings);
+export const D3ChartProvider = forwardRef<HTMLDivElement, D3ChartProviderProps>(
+  ({ children, dms, data, xScale }, ref) => {
+    const svgRef = useRef<SVGSVGElement>(null);
 
-  return (
-    <D3ChartCTX.Provider value={{ svgRef, dms, data }}>
-      <div ref={wrapperRef} className={'bg-white text-black'}>
-        <svg ref={svgRef} width={dms.width} height={dms.height}>
-          <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-            {children}
-          </g>
-        </svg>
-      </div>
-    </D3ChartCTX.Provider>
-  );
-};
+    return (
+      <D3ChartCTX.Provider value={{ svgRef, dms, data, xScale }}>
+        <div ref={ref} className={'bg-white text-black'}>
+          <div>asd {dms.width}</div>
+          {dms.width > 0 && dms.height > 0 && (
+            <svg ref={svgRef} width={dms.width} height={dms.height}>
+              <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
+                {children}
+              </g>
+            </svg>
+          )}
+        </div>
+      </D3ChartCTX.Provider>
+    );
+  }
+);

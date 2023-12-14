@@ -1,14 +1,33 @@
-// import { D3ChartSettingsProps } from 'libs/d3/types';
+import { SimulatorReturn } from 'libs/queries';
+import { createContext, FC, ReactNode, useContext } from 'react';
 
-// const chartSettings: D3ChartSettingsProps = {
-//   width: 0,
-//   height: 500,
-//   marginTop: 20,
-//   marginBottom: 40,
-//   marginLeft: 40,
-//   marginRight: 20,
-// };
+interface SimulatorContext extends SimulatorReturn {}
 
-export const SimulatorProvider = () => {
-  // return <D3ChartProvider settings={settings} data={data}></D3ChartProvider>;
+const defaultValue: SimulatorContext = {
+  data: [],
+  bounds: {
+    bidMin: 0,
+    bidMax: 0,
+    askMin: 0,
+    askMax: 0,
+  },
+};
+
+const SimulatorCTX = createContext(defaultValue);
+
+export const useSimulator = () => {
+  return useContext(SimulatorCTX);
+};
+
+interface SimulatorProviderProps extends SimulatorReturn {
+  children: ReactNode;
+}
+
+export const SimulatorProvider: FC<SimulatorProviderProps> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <SimulatorCTX.Provider value={props}>{children}</SimulatorCTX.Provider>
+  );
 };

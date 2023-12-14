@@ -12,19 +12,22 @@ import { date } from './date';
 import { price } from './price';
 
 export const simMockData: SimulatorReturn = {
-  data: date.map((_, i) => ({
-    date: i,
-    price: Number(price[i]),
-    ask: Number(ask[i]),
-    bid: Number(bid[i]),
-    portfolioOverHodl: Number(portfolioHodlQuotient[i]),
-    portfolioValue: Number(portfolioValue[i]),
-    hodlValue: Number(hodlValue[i]),
-    balanceCASH: Number(balanceTkn1[i]),
-    balanceRISK: Number(balanceTkn2[i]),
-    portionCASH: Number(cashPortion[i]),
-    portionRISK: 1,
-  })),
+  data: date
+    .map((d, i) => ({
+      // date: new Date(d).getTime(),
+      date: i,
+      price: Number(price[i]),
+      ask: Number(ask[i]),
+      bid: Number(bid[i]),
+      portfolioOverHodl: Number(portfolioHodlQuotient[i]),
+      portfolioValue: Number(portfolioValue[i]),
+      hodlValue: Number(hodlValue[i]),
+      balanceCASH: Number(balanceTkn1[i]),
+      balanceRISK: Number(balanceTkn2[i]),
+      portionCASH: Number(cashPortion[i]),
+      portionRISK: 1,
+    }))
+    .filter((x) => !(x.date % 20)),
   bounds: {
     askMin: Number(bounds.ask.min),
     askMax: Number(bounds.ask.max),
