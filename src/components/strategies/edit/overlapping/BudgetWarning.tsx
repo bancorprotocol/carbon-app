@@ -3,14 +3,31 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FC } from 'react';
+import { Token } from 'libs/tokens';
 
 const budgetWarnings = {
-  'below->within': ['below->within'],
-  'below->above': ['below->above'],
-  'within->below': ['within->below'],
-  'within->above': ['within->above'],
-  'above->below': ['above->below'],
-  'above->within': ['above->within'],
+  'below->within': [
+    (base: string) =>
+      `Deposit new Sell ${base} budget. This is needed to support the overlapping dynamics of the strategy.`,
+    (base: string) =>
+      `Redistribute the existing Buy ${base} budget to be concentrated across the updated active range.`,
+  ],
+  'within->below': [
+    (base: string) =>
+      `Redistribute the existing Buy ${base} budget to be concentrated across the updated active range.`,
+    (base: string) => `Withdraw the existing Sell ${base} budget.`,
+  ],
+  'within->above': [
+    (base: string) =>
+      `Redistribute the existing Sell ${base} budget to be concentrated across the updated active range.`,
+    (base: string) => `Withdraw the existing Buy ${base} budget.`,
+  ],
+  'above->within': [
+    (base: string) =>
+      `Deposit new Buy ${base} budget. This is needed to support the overlapping dynamics of the strategy.`,
+    (base: string) =>
+      `Redistribute the existing Sell ${base} budget to be concentrated across the updated active range.`,
+  ],
 };
 export type PricePosition = 'below' | 'within' | 'above';
 export type BudgetState = `${PricePosition}->${PricePosition}`;
@@ -21,11 +38,12 @@ export function hasBudgetWarning(state: BudgetState): state is BudgetWarnings {
 }
 
 interface Props {
+  base: Token;
   warning: BudgetWarnings;
   setState: (state: BudgetState) => void;
 }
 
-export const BudgetWarning: FC<Props> = ({ warning, setState }) => {
+export const BudgetWarning: FC<Props> = ({ base, warning, setState }) => {
   const validate = () => {
     const [prev, current] = warning.split('->') as [
       PricePosition,
@@ -34,7 +52,7 @@ export const BudgetWarning: FC<Props> = ({ warning, setState }) => {
     setState(`${current}->${current}`);
   };
   return (
-    <article className="flex w-full flex-col gap-20 rounded-10 border border-warning-500 bg-silver p-20">
+    <article className="flex w-full flex-col gap-16 rounded-10 border border-warning-500 bg-silver p-20">
       <header className="flex items-center gap-8 ">
         <IconWarning className="h-14 w-14 text-warning-500" />
         <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
@@ -45,24 +63,19 @@ export const BudgetWarning: FC<Props> = ({ warning, setState }) => {
       <p className="text-12 font-weight-400 text-white/60">
         Due to the strategy edits, the following budget changes are needed:
       </p>
-      <ol>
+      <ol className="flex flex-col gap-8">
         {budgetWarnings[warning].map((text, i) => (
-          <li key={text} className="flex items-center gap-8">
+          <li key={text(base.symbol)} className="flex items-center gap-8">
             <svg width="14" height="14" viewBox="0 0 14 14">
-              <circle cx="7" cy="7" r="7" fill="black" fillOpacity="0.1" />
+              <circle cx="7" cy="7" r="7" fill="white" fillOpacity="0.1" />
               {/* eslint-disable-next-line prettier/prettier */}
-              <text
-                x="7"
-                y="7"
-                textAnchor="middle"
-                fontSize="8"
-                fill="white"
-                dominantBaseline="middle"
-              >
+              <text x="7" y="10" textAnchor="middle" fontSize="8" fill="white">
                 {i + 1}
               </text>
             </svg>
-            <p className="text-12 font-weight-400 text-white/60">{text}</p>
+            <p className="flex-1 text-12 font-weight-400 text-white/60">
+              {text(base.symbol)}
+            </p>
           </li>
         ))}
       </ol>

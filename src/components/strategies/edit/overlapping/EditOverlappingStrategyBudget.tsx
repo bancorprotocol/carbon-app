@@ -41,13 +41,10 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
 
-  const getPosition = (options?: { withDust: boolean }) => {
-    if (!options?.withDust) {
-      if (minAboveMarket) return 'above';
-      if (maxBelowMarket) return 'below';
-      return 'within';
-    }
-    // TODO: add dust
+  const getPosition = () => {
+    if (minAboveMarket) return 'above';
+    if (maxBelowMarket) return 'below';
+    return 'within';
   };
 
   const initialState = `${getPosition()}->${getPosition()}` as const;
@@ -56,7 +53,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   useEffect(() => {
     const [_, current] = budgetState.split('->') as [any, PricePosition];
     const next = getPosition();
-    // setBudgetState(`${current}->${next}`);
+    setBudgetState(`${current}->${next}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.marginalPrice, order1.marginalPrice]);
 
@@ -95,7 +92,13 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
 
   if (!quote || !base) return <></>;
   if (hasBudgetWarning(budgetState)) {
-    return <BudgetWarning warning={budgetState} setState={setBudgetState} />;
+    return (
+      <BudgetWarning
+        base={base}
+        warning={budgetState}
+        setState={setBudgetState}
+      />
+    );
   }
   return (
     <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
