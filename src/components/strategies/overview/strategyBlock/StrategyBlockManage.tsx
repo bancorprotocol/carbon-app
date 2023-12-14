@@ -45,6 +45,7 @@ export const StrategyBlockManage: FC<Props> = ({
   setManage,
   isExplorer,
 }) => {
+  const { debug } = useStore();
   const { strategies, sort, filter } = useStrategyCtx();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
@@ -109,7 +110,7 @@ export const StrategyBlockManage: FC<Props> = ({
   }
 
   if (!isExplorer) {
-    if (!isOverlappingStrategy(strategy)) {
+    if (!isOverlappingStrategy(strategy, debug)) {
       items.push({
         id: 'editPrices',
         name: 'Edit Prices',
@@ -125,33 +126,33 @@ export const StrategyBlockManage: FC<Props> = ({
           });
         },
       });
+    }
 
-      // separator
-      items.push(0);
+    // separator
+    items.push(0);
 
+    items.push({
+      id: 'depositFunds',
+      name: 'Deposit Funds',
+      action: () => {
+        setStrategyToEdit(strategy);
+        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
+        navigate({
+          to: PathNames.editStrategy,
+          search: { type: 'deposit' },
+        });
+      },
+    });
+
+    if (strategy.status !== 'noBudget') {
       items.push({
-        id: 'depositFunds',
-        name: 'Deposit Funds',
+        id: 'withdrawFunds',
+        name: 'Withdraw Funds',
         action: () => {
-          setStrategyToEdit(strategy);
-          carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
-          navigate({
-            to: PathNames.editStrategy,
-            search: { type: 'deposit' },
-          });
+          openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
+          carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
         },
       });
-
-      if (strategy.status !== 'noBudget') {
-        items.push({
-          id: 'withdrawFunds',
-          name: 'Withdraw Funds',
-          action: () => {
-            openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
-            carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
-          },
-        });
-      }
     }
 
     // separator

@@ -1,6 +1,7 @@
 import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
+import { DebugStore } from 'store/useDebugStore';
 
 export const getBuyMax = (sellMax: number, spreadPPM: number) => {
   return sellMax / (1 + spreadPPM / 100);
@@ -40,7 +41,11 @@ interface StrategyInput {
   order0: StrategyOrderInput;
   order1: StrategyOrderInput;
 }
-export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
+export const isOverlappingStrategy = (
+  { order0, order1 }: StrategyInput,
+  debug: DebugStore // TODO: remove this for edit strategy PR
+) => {
+  if (!debug.debugState.showOverlapping) return false;
   const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
   const sellLow = 'startRate' in order1 ? order1.startRate : order1.min;
   const buyMax = new SafeDecimal(buyHigh);

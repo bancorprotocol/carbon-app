@@ -25,7 +25,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   id,
   data,
 }) => {
-  const { strategies } = useStore();
+  const { strategies, debug } = useStore();
   const { closeModal } = useModal();
   const { strategy, strategyEvent } = data;
 
@@ -61,7 +61,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
         title="Are you sure you would like to delete your strategy?"
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
-      {!isOverlappingStrategy(strategy) && (
+      {!isOverlappingStrategy(strategy, debug) && (
         <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-emphasis p-16">
           <h3 className="text-14 font-weight-500">Did you know ?</h3>
           <Link

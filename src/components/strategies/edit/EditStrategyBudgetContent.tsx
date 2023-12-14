@@ -17,6 +17,7 @@ import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
 import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
+import { useStore } from 'store';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -29,7 +30,8 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
-  const isOverlapping = isOverlappingStrategy(strategy);
+  const { debug } = useStore();
+  const isOverlapping = isOverlappingStrategy(strategy, debug);
 
   const { history } = useRouter();
   const { withdrawBudget, depositBudget, isProcessing, updateMutation } =

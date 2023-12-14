@@ -28,12 +28,14 @@ import {
   getRoundedSpreadPPM,
   isOverlappingStrategy,
 } from '../overlapping/utils';
+import { useStore } from 'store';
 
 const spenderAddress = config.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
 export const useCreateStrategy = () => {
+  const { debug } = useStore();
   const { templateStrategy } = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate();
@@ -88,7 +90,7 @@ export const useCreateStrategy = () => {
   const isOverlapping = useMemo(() => {
     return (
       strategySettings === 'overlapping' ||
-      isOverlappingStrategy({ order0, order1 })
+      isOverlappingStrategy({ order0, order1 }, debug)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [strategySettings]);
