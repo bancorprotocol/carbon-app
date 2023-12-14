@@ -47,6 +47,9 @@ export class CreateStrategyDriver {
       budget: () => form.getByTestId('input-budget'),
       outcomeValue: () => form.getByTestId('outcome-value'),
       outcomeQuote: () => form.getByTestId('outcome-quote'),
+      setting: (setting: 'limit' | 'range') => {
+        return form.getByTestId(`tab-${setting}`);
+      },
     };
   }
 
@@ -55,8 +58,8 @@ export class CreateStrategyDriver {
     return {
       min: () => form.getByLabel('Min Buy Price'),
       max: () => form.getByLabel('Max Sell Price'),
-      budgetBase: () => form.getByTestId(`input-budget-${this.config.base}`),
-      budgetQuote: () => form.getByTestId(`input-budget-${this.config.quote}`),
+      budgetBase: () => form.getByTestId('input-budget-base'),
+      budgetQuote: () => form.getByTestId('input-budget-quote'),
       spread: () => form.getByTestId('spread-input'),
     };
   }
@@ -75,6 +78,7 @@ export class CreateStrategyDriver {
   async fillLimit(mode: Mode) {
     const { min, budget } = this.config[mode];
     const form = this.getLimitForm(mode);
+    await form.setting('limit').click();
     await form.limit().fill(min.toString());
     await form.budget().fill(budget.toString());
     return form;

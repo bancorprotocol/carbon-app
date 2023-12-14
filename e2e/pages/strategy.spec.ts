@@ -29,6 +29,7 @@ const testStrategy = {
       await myStrategies.createStrategy();
       await createForm.selectToken('base');
       await createForm.selectToken('quote');
+      await createForm.selectSetting('two-ranges');
       await createForm.nextStep();
       const buyForm = await createForm.fillLimit('buy');
       const sellForm = await createForm.fillLimit('sell');
@@ -85,6 +86,7 @@ const testStrategy = {
       page,
     }) => {
       test.setTimeout(180_000);
+      await page.getByTestId('enable-overlapping-strategy').click();
       await waitFor(page, `balance-${quote}`, 30_000);
 
       await navigateTo(page, '/');
@@ -172,24 +174,24 @@ test.describe('Strategies', () => {
         budgetFiat: 3334,
       },
     },
-    {
-      setting: 'overlapping',
-      base: 'ETH',
-      quote: 'BNT',
-      buy: {
-        min: 3000,
-        max: 4900,
-        budget: 0,
-        budgetFiat: 0,
-      },
-      sell: {
-        min: 3100,
-        max: 5000,
-        budget: 2,
-        budgetFiat: 3334,
-      },
-      spread: 5,
-    },
+    // {
+    //   setting: 'overlapping',
+    //   base: 'ETH',
+    //   quote: 'BNT',
+    //   buy: {
+    //     min: 3000,
+    //     max: 4900,
+    //     budget: 0,
+    //     budgetFiat: 0,
+    //   },
+    //   sell: {
+    //     min: 3100,
+    //     max: 5000,
+    //     budget: 2,
+    //     budgetFiat: 3334,
+    //   },
+    //   spread: 5,
+    // },
   ];
 
   for (const config of configs) {

@@ -13,7 +13,7 @@ export const DebugOverlapping = () => {
       <h2>Overlapping Strategy</h2>
       <div className="flex items-center gap-8">
         <Checkbox
-          data-testid="unchecked-signer"
+          data-testid="enable-overlapping-strategy"
           isChecked={debug.debugState.showOverlapping}
           setIsChecked={toggleOverlapping}
         />

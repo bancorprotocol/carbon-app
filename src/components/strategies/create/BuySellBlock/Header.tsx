@@ -29,6 +29,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={`rounded-40 font-weight-500 ${
               !isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="tab-limit"
           >
             Limit
           </button>
@@ -39,6 +40,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={`rounded-40 font-weight-500 ${
               isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="tab-range"
           >
             Range
           </button>

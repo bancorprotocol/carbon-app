@@ -14,6 +14,7 @@ interface Props {
   onChange: (value: string) => void;
   disabled?: boolean;
   withoutWallet?: boolean;
+  'data-testid'?: string;
 }
 
 export const BudgetInput: FC<Props> = (props) => {
@@ -34,6 +35,7 @@ export const BudgetInput: FC<Props> = (props) => {
         isError={!!order.budgetError}
         withoutWallet={!!props.withoutWallet}
         disabled={!!props.disabled}
+        data-testid={props['data-testid']}
       />
       {!!order.budgetError && (
         <output
