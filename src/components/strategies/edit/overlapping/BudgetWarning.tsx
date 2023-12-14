@@ -6,6 +6,12 @@ import { FC } from 'react';
 import { Token } from 'libs/tokens';
 
 const budgetWarnings = {
+  'dust->below': [
+    (base: string) => `Withdraw the existing Buy ${base} budget.`,
+  ],
+  'dust->above': [
+    (base: string) => `Withdraw the existing Buy ${base} budget.`,
+  ],
   'below->within': [
     (base: string) =>
       `Deposit new Sell ${base} budget. This is needed to support the overlapping dynamics of the strategy.`,
@@ -29,7 +35,7 @@ const budgetWarnings = {
       `Redistribute the existing Sell ${base} budget to be concentrated across the updated active range.`,
   ],
 };
-export type PricePosition = 'below' | 'within' | 'above';
+export type PricePosition = 'dust' | 'below' | 'within' | 'above';
 export type BudgetState = `${PricePosition}->${PricePosition}`;
 type BudgetWarnings = keyof typeof budgetWarnings;
 

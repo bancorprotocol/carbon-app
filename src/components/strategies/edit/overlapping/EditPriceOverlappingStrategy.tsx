@@ -97,13 +97,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   // Initialize order when market price is available
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
-    if (!order0.min && !order1.max) {
-      const min = (marketPrice * 0.999).toFixed(quote.decimals);
-      const max = (marketPrice * 1.001).toFixed(quote.decimals);
-      setOverlappingParams(min, max);
-    } else {
-      setOverlappingParams(order0.min, order1.max);
-    }
+    setOverlappingParams(order0.min, order1.max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spreadPPM]);
 

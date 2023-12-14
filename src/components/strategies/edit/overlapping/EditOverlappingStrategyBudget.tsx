@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
@@ -48,6 +48,8 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const maxBelowMarket = isMaxBelowMarket(order1, quote);
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
+  const [hasChanged, setHasChanged] = useState(false);
+  const mounted = useRef(false);
 
   const quoteBalanceChange = balanceChange(
     strategy.order0.balance,
@@ -64,10 +66,25 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     return 'within';
   };
 
-  const initialState = `${getPosition()}->${getPosition()}` as const;
-  const [budgetState, setBudgetState] = useState<BudgetState>(initialState);
+  const getInitialState = (): BudgetState => {
+    if (minAboveMarket && new SafeDecimal(strategy.order0.balance).gt(0)) {
+      return 'above->dust';
+    }
+    if (maxBelowMarket && new SafeDecimal(strategy.order1.balance).gt(0)) {
+      return 'below->dust';
+    }
+    return `${getPosition()}->${getPosition()}` as const;
+  };
+
+  const [budgetState, setBudgetState] = useState(getInitialState());
 
   useEffect(() => {
+    if (mounted.current) setHasChanged(true);
+    else mounted.current = true;
+  }, [order0.min, order1.max]);
+
+  useEffect(() => {
+    if (!hasChanged) return;
     const [_, current] = splitBudgetState(budgetState);
     const next = getPosition();
     setBudgetState(`${current}->${next}`);
