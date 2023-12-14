@@ -9,7 +9,6 @@ import { DebugNotifications } from 'components/debug/DebugNotifications';
 import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
 import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 import { DebugOrderBook } from 'components/debug/DebugOrderBook';
-import { DebugOverlapping } from 'components/debug/DebugOverlapping';
 
 export const DebugPage = () => {
   return (
@@ -25,7 +24,6 @@ export const DebugPage = () => {
         <DebugCreateStrategy />
         <DebugFiatCurrency />
         <DebugOrderBook />
-        <DebugOverlapping />
       </div>
     </Page>
   );
