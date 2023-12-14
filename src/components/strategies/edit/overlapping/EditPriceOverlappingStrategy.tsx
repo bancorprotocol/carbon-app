@@ -175,7 +175,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8">
           <h3 className="flex-1 text-18 font-weight-500">
-            Set Price Range&nbsp;
+            Edit Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
@@ -196,7 +196,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="flex w-full flex-col gap-10 rounded-10 bg-silver p-20">
         <header className="mb-10 flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Indicate Spread</h3>
+          <h3 className="flex-1 text-18 font-weight-500">Edit Spread</h3>
           <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
@@ -210,22 +210,14 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setSpreadPPM={setSpreadPPM}
         />
       </article>
-      <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
-        <header className="flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Set Budgets</h3>
-          <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
-        </header>
-        <EditOverlappingStrategyBudget
-          {...props}
-          marketPrice={marketPrice}
-          anchoredOrder={anchoredOrder}
-          setAnchoderOrder={setAnchoderOrder}
-          setBuyBudget={setBuyBudget}
-          setSellBudget={setSellBudget}
-        />
-      </article>
+      <EditOverlappingStrategyBudget
+        {...props}
+        marketPrice={marketPrice}
+        anchoredOrder={anchoredOrder}
+        setAnchoderOrder={setAnchoderOrder}
+        setBuyBudget={setBuyBudget}
+        setSellBudget={setSellBudget}
+      />
     </>
   );
 };

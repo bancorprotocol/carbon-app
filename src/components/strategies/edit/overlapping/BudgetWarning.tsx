@@ -1,21 +1,19 @@
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FC } from 'react';
 
 const budgetWarnings = {
-  'dust->below': [],
-  'dust->within': [],
-  'dust->above': [],
-  'below->within': [],
-  'below->above': [],
-  'within->below': [],
-  'within->above': [],
-  'above->below': [],
-  'above->within': [],
+  'below->within': ['below->within'],
+  'below->above': ['below->above'],
+  'within->below': ['within->below'],
+  'within->above': ['within->above'],
+  'above->below': ['above->below'],
+  'above->within': ['above->within'],
 };
-type PriceMode = 'dust' | 'below' | 'within' | 'above';
-export type BudgetState = `${PriceMode}->${PriceMode}`;
+export type PricePosition = 'below' | 'within' | 'above';
+export type BudgetState = `${PricePosition}->${PricePosition}`;
 type BudgetWarnings = keyof typeof budgetWarnings;
 
 export function hasBudgetWarning(state: BudgetState): state is BudgetWarnings {
@@ -24,32 +22,53 @@ export function hasBudgetWarning(state: BudgetState): state is BudgetWarnings {
 
 interface Props {
   warning: BudgetWarnings;
+  setState: (state: BudgetState) => void;
 }
 
-export const BudgetWarning: FC<Props> = ({ warning }) => {
+export const BudgetWarning: FC<Props> = ({ warning, setState }) => {
+  const validate = () => {
+    const [prev, current] = warning.split('->') as [
+      PricePosition,
+      PricePosition
+    ];
+    setState(`${current}->${current}`);
+  };
   return (
-    <article>
-      <header>
+    <article className="flex w-full flex-col gap-20 rounded-10 border border-warning-500 bg-silver p-20">
+      <header className="flex items-center gap-8 ">
         <IconWarning className="h-14 w-14 text-warning-500" />
-        <h3>Edit Budgets</h3>
-        {/* TODO */}
-        <Tooltip element="" />
+        <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
+        <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values.">
+          <IconTooltip className="h-14 w-14 text-white/60" />
+        </Tooltip>
       </header>
-      <p>Due to the strategy edits, the following budget changes are needed:</p>
+      <p className="text-12 font-weight-400 text-white/60">
+        Due to the strategy edits, the following budget changes are needed:
+      </p>
       <ol>
         {budgetWarnings[warning].map((text, i) => (
-          <li key={text}>
+          <li key={text} className="flex items-center gap-8">
             <svg width="14" height="14" viewBox="0 0 14 14">
-              <circle cx="7" cy="7" r="7" />
-              <text x="7" y="7" textAnchor="middle">
+              <circle cx="7" cy="7" r="7" fill="black" fillOpacity="0.1" />
+              {/* eslint-disable-next-line prettier/prettier */}
+              <text
+                x="7"
+                y="7"
+                textAnchor="middle"
+                fontSize="8"
+                fill="white"
+                dominantBaseline="middle"
+              >
                 {i + 1}
               </text>
             </svg>
-            {text}
+            <p className="text-12 font-weight-400 text-white/60">{text}</p>
           </li>
         ))}
       </ol>
-      <button className={buttonStyles()}>I understand</button>
+      <button className={buttonStyles()} onClick={validate}>
+        I understand
+      </button>
     </article>
   );
 };

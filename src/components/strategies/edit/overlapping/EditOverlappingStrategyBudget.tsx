@@ -7,7 +7,13 @@ import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { BudgetWarning, BudgetState, hasBudgetWarning } from './BudgetWarning';
+import {
+  BudgetWarning,
+  BudgetState,
+  hasBudgetWarning,
+  PricePosition,
+} from './BudgetWarning';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 interface Props {
   strategy: Strategy;
@@ -19,13 +25,6 @@ interface Props {
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
   setSellBudget: (buyBudget: string, min: string, max: string) => any;
 }
-
-const getWarning = (order0: OrderCreate, order1: OrderCreate, quote: Token) => {
-  // TODO
-  // const [previous, current] = warning.split('->');
-  // const next = getWarning(order0, order1, quote);
-  // setWarning(`${current}->${next}`);
-};
 
 export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const {
@@ -41,12 +40,25 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const maxBelowMarket = isMaxBelowMarket(order1, quote);
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
-  const [warning, setWarning] = useState<BudgetState>('within->within');
+
+  const getPosition = (options?: { withDust: boolean }) => {
+    if (!options?.withDust) {
+      if (minAboveMarket) return 'above';
+      if (maxBelowMarket) return 'below';
+      return 'within';
+    }
+    // TODO: add dust
+  };
+
+  const initialState = `${getPosition()}->${getPosition()}` as const;
+  const [budgetState, setBudgetState] = useState<BudgetState>(initialState);
 
   useEffect(() => {
-    // TODO set the warning here based on previous state
-    // setWarning(getWarning(order0, order1, quote));
-  }, [order0.min, order0.marginalPrice, order1.max, order1.marginalPrice]);
+    const [_, current] = budgetState.split('->') as [any, PricePosition];
+    const next = getPosition();
+    // setBudgetState(`${current}->${next}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order0.marginalPrice, order1.marginalPrice]);
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
     if (new SafeDecimal(balance).lt(order.budget)) {
@@ -82,9 +94,15 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   };
 
   if (!quote || !base) return <></>;
-  if (hasBudgetWarning(warning)) return <BudgetWarning warning={warning} />;
+  if (hasBudgetWarning(budgetState)) {
+    return <BudgetWarning warning={budgetState} setState={setBudgetState} />;
+  }
   return (
-    <>
+    <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
+      <header className="flex items-center gap-8 ">
+        <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
+        <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
+      </header>
       <BudgetInput
         token={quote}
         query={tokenQuoteBalanceQuery}
@@ -132,7 +150,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
           </a>
         </p>
       )}
-    </>
+    </article>
   );
 };
 
