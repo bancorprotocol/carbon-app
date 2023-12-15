@@ -142,7 +142,7 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
           <span className={styles.suffix}>%</span>
         </div>
       </div>
-      {spreadPPM && warning && (
+      {warning && spreadPPM && (
         <output
           htmlFor="spread-custom"
           className="flex items-center gap-8 font-mono text-12 text-warning-500"
