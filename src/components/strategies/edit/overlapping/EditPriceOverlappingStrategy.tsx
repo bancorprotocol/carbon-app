@@ -22,6 +22,7 @@ interface Props {
   strategy: Strategy;
   order0: OrderCreate;
   order1: OrderCreate;
+  setOverlappingError: (error: string) => void;
 }
 
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
@@ -38,6 +39,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   const [spreadPPM, setSpreadPPM] = useState(getRoundedSpreadPPM(strategy));
   const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
+  const [mounted, setMounted] = useState(false);
 
   const setOverlappingParams = async (min: string, max: string) => {
     const params = await carbonSDK.calculateOverlappingStrategyPrices(
@@ -97,6 +99,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   // Initialize order when market price is available
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
+    if (!mounted) return setMounted(true);
     setOverlappingParams(order0.min, order1.max);
     if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
     if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
@@ -106,6 +109,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   // Update on buyMin changes
   useEffect(() => {
     if (!order0.min) return;
+    if (!mounted) return setMounted(true);
     const min = order0.min;
     const max = order1.max;
     setOverlappingParams(min, max).then((params) => {
@@ -122,7 +126,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(min), spreadPPM);
       if (Number(max) < minSellMax) order1.setMax(minSellMax.toFixed(decimals));
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.min]);
@@ -130,6 +134,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   // Update on sellMax changes
   useEffect(() => {
     if (!order1.max) return;
+    if (!mounted) return setMounted(true);
     const min = order0.min;
     const max = order1.max;
     setOverlappingParams(min, max).then((params) => {
@@ -146,7 +151,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(max), spreadPPM);
       if (Number(min) > maxBuyMin) order0.setMin(maxBuyMin.toFixed(decimals));
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);

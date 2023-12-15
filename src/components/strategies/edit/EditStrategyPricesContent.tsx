@@ -1,4 +1,4 @@
-import { FormEvent, useMemo } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
@@ -30,6 +30,7 @@ export const EditStrategyPricesContent = ({
     useUpdateStrategy();
   const isAwaiting = updateMutation.isLoading;
   const isLoading = isAwaiting || isProcessing;
+  const [overlappingError, setOverlappingError] = useState('');
 
   const order0 = useOrder(
     type === 'renew'
@@ -66,7 +67,6 @@ export const EditStrategyPricesContent = ({
       endRate: (order1.isRange ? order1.max : order1.price) || '0',
       marginalRate: order1.marginalPrice || strategy.order1.marginalRate,
     };
-    console.log({ newOrder0, newOrder1 });
 
     type === 'renew'
       ? renewStrategy(
@@ -96,10 +96,10 @@ export const EditStrategyPricesContent = ({
   };
 
   const isOrderValid = (order: OrderCreate) => {
-    if (!order.isRange) {
-      return true;
-    }
-
+    if (order.budgetError) return false;
+    if (!order.isRange) return order.priceError;
+    if (order.rangeError) return false;
+    if (overlappingError) return false;
     return +order.min > 0 && +order.max > 0 && +order.max > +order.min;
   };
 
@@ -119,6 +119,7 @@ export const EditStrategyPricesContent = ({
           strategy={strategy}
           order0={order0}
           order1={order1}
+          setOverlappingError={setOverlappingError}
         />
       )}
       {!isOverlapping && (

@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
@@ -26,6 +26,7 @@ interface Props {
   setAnchoderOrder: (value: 'buy' | 'sell') => any;
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
   setSellBudget: (buyBudget: string, min: string, max: string) => any;
+  setOverlappingError: (error: string) => void;
 }
 
 const balanceChange = (oldBalance: string, newBudget: string) => {
@@ -39,17 +40,23 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     strategy,
     order0,
     order1,
+    marketPrice,
     setAnchoderOrder,
     setBuyBudget,
     setSellBudget,
+    setOverlappingError,
   } = props;
   const { quote, base } = strategy;
   const minAboveMarket = isMinAboveMarket(order0, quote);
   const maxBelowMarket = isMaxBelowMarket(order1, quote);
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
-  const [hasChanged, setHasChanged] = useState(false);
-  const mounted = useRef(false);
+
+  // We need to use external market price for the initial state in case of dust
+  const disableBuy =
+    minAboveMarket || new SafeDecimal(order0.min).gt(marketPrice);
+  const disableSell =
+    maxBelowMarket || new SafeDecimal(order1.max).lt(marketPrice);
 
   const quoteBalanceChange = balanceChange(
     strategy.order0.balance,
@@ -63,31 +70,33 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
   const getPosition = () => {
     if (minAboveMarket) return 'above';
     if (maxBelowMarket) return 'below';
-    return 'within';
+    return 'around';
   };
 
   const getInitialState = (): BudgetState => {
     if (minAboveMarket && new SafeDecimal(strategy.order0.balance).gt(0)) {
-      return 'above->dust';
+      return 'dust->above';
     }
     if (maxBelowMarket && new SafeDecimal(strategy.order1.balance).gt(0)) {
-      return 'below->dust';
+      return 'dust->below';
     }
     return `${getPosition()}->${getPosition()}` as const;
   };
 
   const [budgetState, setBudgetState] = useState(getInitialState());
 
+  // Set error on one of the order to disabled CTA
   useEffect(() => {
-    if (mounted.current) setHasChanged(true);
-    else mounted.current = true;
-  }, [order0.min, order1.max]);
+    const [prev, current] = splitBudgetState(budgetState);
+    if (prev !== current) setOverlappingError('need validation');
+    else setOverlappingError('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [budgetState]);
 
   useEffect(() => {
-    if (!hasChanged) return;
-    const [_, current] = splitBudgetState(budgetState);
+    const [prev] = splitBudgetState(budgetState);
     const next = getPosition();
-    setBudgetState(`${current}->${next}`);
+    setBudgetState(`${prev}->${next}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order0.marginalPrice, order1.marginalPrice]);
 
@@ -129,6 +138,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     return (
       <BudgetWarning
         base={base}
+        quote={quote}
         state={budgetState}
         setState={setBudgetState}
       />
@@ -145,14 +155,14 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         query={tokenQuoteBalanceQuery}
         order={order0}
         onChange={onBuyBudgetChange}
-        disabled={minAboveMarket}
+        disabled={disableBuy}
       >
         <WithdrawAllocatedBudget
           token={quote}
           order={order0}
           currentBudget={strategy.order0.balance}
           setBudget={onBuyBudgetChange}
-          disabled={minAboveMarket}
+          disabled={disableBuy}
           buy
         />
         <BudgetMessage token={quote} change={quoteBalanceChange} />
@@ -162,13 +172,13 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         query={tokenBaseBalanceQuery}
         order={order1}
         onChange={onSellBudgetChange}
-        disabled={maxBelowMarket}
+        disabled={disableSell}
       >
         <WithdrawAllocatedBudget
           token={base}
           order={order1}
           currentBudget={strategy.order1.balance}
-          disabled={maxBelowMarket}
+          disabled={disableSell}
           setBudget={onSellBudgetChange}
         />
         <BudgetMessage token={base} change={baseBalanceChange} />
