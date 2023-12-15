@@ -14,6 +14,7 @@ import { StrategyEditEventType } from 'services/events/types';
 import { carbonEvents } from 'services/events';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 
 export interface ModalConfirmDeleteData {
   strategy: Strategy;
@@ -24,7 +25,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   id,
   data,
 }) => {
-  const { strategies } = useStore();
+  const { strategies, debug } = useStore();
   const { closeModal } = useModal();
   const { strategy, strategyEvent } = data;
 
@@ -60,24 +61,26 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
         title="Are you sure you would like to delete your strategy?"
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
-      <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-emphasis p-16">
-        <h3 className="text-14 font-weight-500">Did you know ?</h3>
-        <Link
-          onClick={editPrices}
-          disabled={isAwaiting || isProcessing}
-          to={PathNames.editStrategy}
-          search={{ type: 'editPrices' }}
-          className={cn(
-            'row-span-2 self-center',
-            buttonStyles({ variant: 'white' })
-          )}
-        >
-          Edit Prices
-        </Link>
-        <p className="text-12 text-white/80">
-          Editing prices is cheaper and keeps your strategy working for you.
-        </p>
-      </article>
+      {!isOverlappingStrategy(strategy, debug) && (
+        <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-emphasis p-16">
+          <h3 className="text-14 font-weight-500">Did you know ?</h3>
+          <Link
+            onClick={editPrices}
+            disabled={isAwaiting || isProcessing}
+            to={PathNames.editStrategy}
+            search={{ type: 'editPrices' }}
+            className={cn(
+              'row-span-2 self-center',
+              buttonStyles({ variant: 'white' })
+            )}
+          >
+            Edit Prices
+          </Link>
+          <p className="text-12 text-white/80">
+            Editing prices is cheaper and keeps your strategy working for you.
+          </p>
+        </article>
+      )}
       <Button
         variant="white"
         onClick={onClick}

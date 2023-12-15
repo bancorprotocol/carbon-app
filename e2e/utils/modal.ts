@@ -23,5 +23,4 @@ export const checkApproval = async (page: Page, tokens: string[]) => {
     }
   }
   await modal.getByTestId('approve-submit').click();
-  await closeModal(page);
 };

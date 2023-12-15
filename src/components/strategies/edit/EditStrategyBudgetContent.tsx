@@ -14,6 +14,10 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
+import { isOverlappingStrategy } from '../overlapping/utils';
+import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
+import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
+import { useStore } from 'store';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -26,6 +30,9 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
+  const { debug } = useStore();
+  const isOverlapping = isOverlappingStrategy(strategy, debug);
+
   const { history } = useRouter();
   const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
     useUpdateStrategy();
@@ -155,8 +162,10 @@ export const EditStrategyBudgetContent = ({
   };
 
   const isOrdersBudgetValid = useMemo(() => {
+    if (order0.budgetError) return false;
+    if (order1.budgetError) return false;
     return +order0.budget > 0 || +order1.budget > 0;
-  }, [order0.budget, order1.budget]);
+  }, [order0.budget, order0.budgetError, order1.budget, order1.budgetError]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -166,26 +175,44 @@ export const EditStrategyBudgetContent = ({
     <form
       onSubmit={(e) => handleOnActionClick(e)}
       onReset={() => history.back()}
-      className="flex w-full flex-col gap-20 text-center font-weight-500 md:w-[400px]"
+      className="flex w-full flex-col gap-20 md:w-[400px]"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
-      <EditStrategyBudgetBuySellBlock
-        buy
-        base={strategy?.base}
-        quote={strategy?.quote}
-        order={order0}
-        balance={strategy.order0.balance}
-        isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-        type={type}
-      />
-      <EditStrategyBudgetBuySellBlock
-        base={strategy?.base}
-        quote={strategy?.quote}
-        order={order1}
-        balance={strategy.order1.balance}
-        isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-        type={type}
-      />
+      {isOverlapping && type === 'deposit' && (
+        <DepositOverlappingStrategy
+          strategy={strategy}
+          order0={order0}
+          order1={order1}
+        />
+      )}
+      {isOverlapping && type === 'withdraw' && (
+        <WithdrawOverlappingStrategy
+          strategy={strategy}
+          order0={order0}
+          order1={order1}
+        />
+      )}
+      {!isOverlapping && (
+        <>
+          <EditStrategyBudgetBuySellBlock
+            buy
+            base={strategy?.base}
+            quote={strategy?.quote}
+            order={order0}
+            balance={strategy.order0.balance}
+            isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
+            type={type}
+          />
+          <EditStrategyBudgetBuySellBlock
+            base={strategy?.base}
+            quote={strategy?.quote}
+            order={order1}
+            balance={strategy.order1.balance}
+            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+            type={type}
+          />
+        </>
+      )}
       <Button
         type="submit"
         disabled={!isOrdersBudgetValid}

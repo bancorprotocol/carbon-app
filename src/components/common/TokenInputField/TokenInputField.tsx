@@ -69,7 +69,7 @@ export const TokenInputField: FC<Props> = ({
   return (
     <div
       className={`
-        flex cursor-text flex-col gap-8 border-2 border-black p-16
+        flex cursor-text flex-col gap-8 border border-black p-16
         focus-within:border-white/50
         ${isError ? '!border-red/50' : ''}
         ${className}
@@ -91,6 +91,8 @@ export const TokenInputField: FC<Props> = ({
           className={`
             grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
             ${isError ? 'text-red' : ''}
+            ${disabled ? 'text-white/40' : ''}
+            ${disabled ? 'cursor-not-allowed' : ''}
           `}
           disabled={disabled}
           data-testid={testid}
@@ -107,6 +109,7 @@ export const TokenInputField: FC<Props> = ({
         </p>
         {user && isBalanceLoading !== undefined && !withoutWallet && (
           <button
+            disabled={disabled}
             type="button"
             onClick={handleBalanceClick}
             className="group flex items-center"
@@ -119,7 +122,15 @@ export const TokenInputField: FC<Props> = ({
                 <span className="text-white">
                   {prettifyNumber(balance || 0)}&nbsp;
                 </span>
-                <b className="text-green group-hover:text-white">MAX</b>
+                <b
+                  className={
+                    disabled
+                      ? 'text-green/40'
+                      : 'text-green group-hover:text-white'
+                  }
+                >
+                  MAX
+                </b>
               </>
             )}
           </button>

@@ -62,7 +62,7 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <span className={'text-white/80'}>
+          <span className="text-white/80">
             Set {buy ? 'Buy' : 'Sell'} Budget&nbsp;
           </span>
         </Tooltip>
@@ -72,7 +72,7 @@ export const BudgetSection: FC<Props> = ({
       </legend>
       <TokenInputField
         id={inputId}
-        className={'rounded-16 bg-black p-16'}
+        className="rounded-16 bg-black p-16"
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}
@@ -86,7 +86,7 @@ export const BudgetSection: FC<Props> = ({
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className={`flex items-center gap-10 font-mono text-12 text-red`}
+          className="flex items-center gap-10 font-mono text-12 text-red"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">Insufficient balance</span>
