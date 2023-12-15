@@ -115,6 +115,8 @@ export const useUpdateStrategy = () => {
 
   const changeRateStrategy = async (
     strategy: Strategy,
+    buyMarginalPrice?: MarginalPriceOptions,
+    sellMarginalPrice?: MarginalPriceOptions,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
@@ -133,6 +135,8 @@ export const useUpdateStrategy = () => {
           sellPriceLow: order1.startRate,
           sellPriceHigh: order1.endRate,
         },
+        buyMarginalPrice,
+        sellMarginalPrice,
       },
       {
         onSuccess: async (tx) => {
