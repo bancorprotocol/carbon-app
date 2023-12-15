@@ -149,7 +149,7 @@ export const EditStrategyBudgetContent = ({
 
     const getMarginalOption = (order: OrderCreate) => {
       if (order.marginalPriceOption) return order.marginalPriceOption;
-      if (!order.budget) return undefined;
+      if (!Number(order.budget)) return undefined;
       return MarginalPriceOptions.reset;
     };
 
