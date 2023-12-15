@@ -121,7 +121,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       const max = (marketPrice * 1.001).toFixed(quote.decimals);
       setOverlappingParams(min, max);
     } else {
-      setOverlappingParams(order0.min, order1.max);
+      const min = order0.min;
+      const max = order1.max;
+      setOverlappingParams(min, max);
+      if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+      if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spreadPPM]);

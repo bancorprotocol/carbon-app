@@ -19,7 +19,7 @@ export const DepositAllocatedBudget: FC<DepositProps> = (props) => {
         <Tooltip
           sendEventOnMount={{ buy }}
           iconClassName="h-13 text-white/60"
-          element={`This is the current available ${token.symbol} budget you can withdraw`}
+          element={`This is the current available ${token.symbol} budget in your strategy`}
         />
       </p>
       <TooltipTokenAmount amount={currentBudget} token={token} />

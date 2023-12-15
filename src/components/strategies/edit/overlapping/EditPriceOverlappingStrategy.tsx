@@ -98,6 +98,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     setOverlappingParams(order0.min, order1.max);
+    if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+    if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spreadPPM]);
 

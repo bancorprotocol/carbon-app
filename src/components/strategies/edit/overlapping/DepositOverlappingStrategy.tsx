@@ -146,7 +146,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Deposit Budget</h3>
-          <Tooltip element='Indicate the amount you wish to deposit to the available "wallet budget"'>
+          <Tooltip element='Indicate the amount you wish to deposit from the available "allocated budget"'>
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>

@@ -149,7 +149,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Withdraw Budget</h3>
-          <Tooltip element='Indicate the amount you wish to deposit from the available "allocated budget"'>
+          <Tooltip element='Indicate the amount you wish to withdraw to the available "wallet budget"'>
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
