@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { simMockData } from 'libs/queries/extApi/mockData';
 import { QueryKey } from 'libs/queries/queryKey';
+import { carbonApi } from 'utils/carbonApi';
 import { FIVE_MIN_IN_MS } from 'utils/time';
 
 export interface SimulatorParams {
@@ -117,6 +117,30 @@ export const useGetSimulator = (params: SimulatorParams) => {
   return useQuery<SimulatorReturn>(
     QueryKey.simulator(params),
     async () => {
+      const res = await carbonApi.getSimulator(params);
+
+      const data: SimulatorReturn = {
+        data: res.dates.map((d, i) => ({
+          date: i,
+          price: Number(res.RISK.price[i]),
+          ask: Number(res.RISK.ask[i]),
+          bid: Number(res.CASH.bid[i]),
+          balanceRISK: Number(res.RISK.balance[i]),
+          portionRISK: Number(res.RISK.portion[i]),
+          balanceCASH: Number(res.CASH.balance[i]),
+          portionCASH: Number(res.CASH.portion[i]),
+          portfolioValue: Number(res.CASH.portfolio_value[i]),
+          hodlValue: Number(res.CASH.hodl_value[i]),
+          portfolioOverHodl: Number(res.portfolio_over_hodl_quotient[i]),
+        })),
+        bounds: {
+          askMax: Number(res.RISK.max_ask),
+          askMin: Number(res.RISK.ask_lower_bound),
+          bidMax: Number(res.CASH.bid_upper_bound),
+          bidMin: Number(res.CASH.min_bid),
+        },
+      };
+
       // const res = await carbonApi.getSimulator(params);
       //
       // const data: SimulatorOutput = {
@@ -143,7 +167,7 @@ export const useGetSimulator = (params: SimulatorParams) => {
       //   },
       // };
 
-      return simMockData;
+      return data;
     },
     {
       staleTime: FIVE_MIN_IN_MS,

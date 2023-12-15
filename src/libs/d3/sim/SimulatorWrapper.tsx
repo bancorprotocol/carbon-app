@@ -1,4 +1,5 @@
 import { extent, scaleLinear } from 'd3';
+import { D3ChartSimulatorPortfolioOverHodle } from 'libs/d3/charts/simulatorPortfolioOverHodl';
 import { D3ChartSimulatorPrice } from 'libs/d3/charts/simulatorPrice';
 import { D3ChartProvider } from 'libs/d3/D3ChartProvider';
 import { D3ChartSettingsProps } from 'libs/d3/types';
@@ -7,19 +8,19 @@ import { SimulatorData, SimulatorParams, useGetSimulator } from 'libs/queries';
 import { useCallback, useEffect, useState } from 'react';
 
 const mockParams: SimulatorParams = {
-  token0: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  token1: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
-  start: 1690813173,
-  end: 1702349173,
-  startingPortfolioValue: 100,
-  highRangeHighPriceCash: 0.4,
-  highRangeLowPriceCash: 0.3,
-  lowRangeHighPriceCash: 0.2,
-  lowRangeLowPriceCash: 0.1,
-  startRateHighRange: 0.3,
-  startRateLowRange: 0.1,
-  cashProportion: 0,
-  riskProportion: 100,
+  token0: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
+  token1: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  start: 1672491600,
+  end: 1701262800,
+  startingPortfolioValue: 123546, // 10 BTC * 18,67 + 20 ETH
+  highRangeHighPriceCash: 0.619452,
+  highRangeLowPriceCash: 0.522466,
+  lowRangeHighPriceCash: 0.44,
+  lowRangeLowPriceCash: 0.3275,
+  startRateHighRange: 0.522466,
+  startRateLowRange: 0.44,
+  cashProportion: 100, //
+  riskProportion: 1,
   networkFee: 0.00142331163646665,
 };
 
@@ -93,20 +94,22 @@ export const SimulatorWrapper = () => {
         {!queryData?.data.length ? (
           <div>no data</div>
         ) : (
-          <D3ChartProvider
-            ref={wrapperRef}
-            data={{ data, bounds: queryData.bounds }}
-            xScale={xScale}
-            dms={dms}
-          >
-            <D3ChartSimulatorPrice />
-          </D3ChartProvider>
+          <>
+            <D3ChartProvider
+              ref={wrapperRef}
+              data={{ data, bounds: queryData.bounds }}
+              xScale={xScale}
+              dms={dms}
+            >
+              <D3ChartSimulatorPrice />
+            </D3ChartProvider>
+            <D3ChartSimulatorPortfolioOverHodle
+              settings={chartSettings}
+              data={{ data, bounds: queryData.bounds }}
+            />
+          </>
         )}
       </div>
-
-      {/*<D3ChartSimulatorPortfolioOverHodle*/}
-      {/*  settings={chartSettings}*/}
-      {/*/>*/}
 
       {/*<D3ChartSimulatorBalance settings={chartSettings} />*/}
     </>

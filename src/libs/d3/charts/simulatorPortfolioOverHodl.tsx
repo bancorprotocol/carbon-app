@@ -1,5 +1,6 @@
 import { D3ChartProvider, useD3Chart } from 'libs/d3/D3ChartProvider';
 import { D3ChartSettingsProps } from 'libs/d3/types';
+import { useChartDimensions } from 'libs/d3/useChartDimensions';
 import { SimulatorData, SimulatorReturn } from 'libs/queries';
 import { useEffect } from 'react';
 import { scaleLinear, extent, axisBottom, axisLeft, select, line } from 'd3';
@@ -13,8 +14,13 @@ export const D3ChartSimulatorPortfolioOverHodle = ({
   data,
   settings,
 }: Props) => {
+  const [wrapperRef, dms] = useChartDimensions(settings);
+  const xScale = scaleLinear()
+    .domain(extent(data.data, (d) => d.date) as [number, number])
+    .range([0, dms.boundedWidth]);
+
   return (
-    <D3ChartProvider settings={settings} data={data}>
+    <D3ChartProvider dms={dms} data={data} ref={wrapperRef} xScale={xScale}>
       <Chart />
     </D3ChartProvider>
   );
@@ -49,7 +55,9 @@ function Chart() {
     const svg = select(svgRef.current).select('g');
 
     const yDomain = () => {
-      const domain = extent(data, (d) => d.portfolioOverHodl);
+      // const domain = extent(data, (d) => d.portfolioOverHodl);
+      const domain = extent(data, (d) => d.portfolioValue);
+
       const min = domain[0] || 0;
       const max = domain[1] || 0;
 
@@ -73,7 +81,8 @@ function Chart() {
 
     const lineGenerator = line<SimulatorData>()
       .x((d) => xScale(d.date))
-      .y((d) => yScale(d.portfolioOverHodl));
+      // .y((d) => yScale(d.portfolioOverHodl));
+      .y((d) => yScale(d.portfolioValue));
 
     svg.selectAll('.price').attr('d', lineGenerator(data));
   }, [data, dms.boundedHeight, dms.boundedWidth, svgRef]);
