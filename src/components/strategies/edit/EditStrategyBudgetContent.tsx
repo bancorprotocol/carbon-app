@@ -130,43 +130,38 @@ export const EditStrategyBudgetContent = ({
     }
   };
 
+  const getMarginalOption = (order: OrderCreate) => {
+    if (!Number(order.budget) || !order.budget) return undefined;
+    if (order.marginalPriceOption) return order.marginalPriceOption;
+
+    return MarginalPriceOptions.reset;
+  };
+
   const depositOrWithdrawFunds = () => {
+    const buyOption = getMarginalOption(order0);
+    const sellOption = getMarginalOption(order1);
+
     const updatedStrategy = {
       ...strategy,
       order0: {
-        balance: calculatedOrder0Budget.toString(),
+        balance: buyOption ? calculatedOrder0Budget.toString() : undefined,
         startRate: order0.price || order0.min,
         endRate: order0.max,
         marginalRate: strategy.order0.marginalRate,
       },
       order1: {
-        balance: calculatedOrder1Budget.toString(),
+        balance: sellOption ? calculatedOrder1Budget.toString() : undefined,
         startRate: order1.price || order1.min,
         endRate: order1.max,
         marginalRate: strategy.order1.marginalRate,
       },
     };
 
-    const getMarginalOption = (order: OrderCreate) => {
-      if (!Number(order.budget) || !order.budget) return undefined;
-      if (order.marginalPriceOption) return order.marginalPriceOption;
+    const action = type === 'withdraw' ? withdrawBudget : depositBudget;
 
-      return MarginalPriceOptions.reset;
-    };
-
-    type === 'withdraw'
-      ? withdrawBudget(
-          updatedStrategy,
-          getMarginalOption(order0),
-          getMarginalOption(order1),
-          handleEvents
-        )
-      : depositBudget(
-          updatedStrategy,
-          getMarginalOption(order0),
-          getMarginalOption(order1),
-          handleEvents
-        );
+    // TODO fix type error AtLeastOneOf fieldsToUpdate
+    // @ts-ignore
+    void action(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
   const isOrdersBudgetValid = useMemo(() => {
