@@ -1,31 +1,17 @@
-import { D3ChartProvider, useD3Chart } from 'libs/d3/D3ChartProvider';
-import { D3ChartSettingsProps } from 'libs/d3/types';
+import { useD3Chart } from 'libs/d3/D3ChartProvider';
 import { SimulatorReturn } from 'libs/queries';
 import { useEffect } from 'react';
 import { scaleLinear, scaleBand, max, axisBottom, axisLeft, select } from 'd3';
 
-type Props = {
-  data: SimulatorReturn;
-  settings: D3ChartSettingsProps;
-};
-
-export const D3ChartSimulatorBalance = ({ data, settings }: Props) => {
-  return (
-    <D3ChartProvider settings={settings} data={data}>
-      <Chart />
-    </D3ChartProvider>
-  );
-};
-
-function Chart() {
+export const D3ChartSimulatorBalance = () => {
   const {
     svgRef,
     data: { data },
     dms,
   } = useD3Chart<SimulatorReturn>();
 
-  const balanceCASH = data[data.length - 1].balanceCASH;
-  const balanceRISK = data[data.length - 1].balanceRISK;
+  const balanceCASH = data.length ? data[data.length - 1].balanceCASH : 0;
+  const balanceRISK = data.length ? data[data.length - 1].balanceRISK : 0;
 
   useEffect(() => {
     const svg = select(svgRef.current).select('g');
@@ -84,4 +70,4 @@ function Chart() {
   }, [balanceCASH, balanceRISK, dms.boundedHeight, dms.boundedWidth, svgRef]);
 
   return <></>;
-}
+};

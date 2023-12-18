@@ -1,4 +1,5 @@
 import { extent, scaleLinear } from 'd3';
+import { D3ChartSimulatorBalance } from 'libs/d3/charts/simulatorBalance/SimulatorBalance';
 import { D3ChartSimulatorPortfolioOverHodle } from 'libs/d3/charts/simulatorPortfolioOverHodl';
 import { D3ChartSimulatorPrice } from 'libs/d3/charts/simulatorPrice';
 import { D3ChartProvider } from 'libs/d3/D3ChartProvider';
@@ -40,7 +41,10 @@ let i = 0;
 const times: number[] = [];
 
 export const SimulatorWrapper = () => {
-  const [wrapperRef, dms] = useChartDimensions(chartSettings);
+  const [priceRef, priceDms] = useChartDimensions(chartSettings);
+  const [portfolioRef, portfolioDms] = useChartDimensions(chartSettings);
+  const [balanceRef, balanceDms] = useChartDimensions(chartSettings);
+
   const { data: queryData, isLoading, error } = useGetSimulator(mockParams);
   const [data, setData] = useState<SimulatorData[]>([]);
 
@@ -85,33 +89,53 @@ export const SimulatorWrapper = () => {
 
   const xScale = scaleLinear()
     .domain(extent(data, (d) => d.date) as [number, number])
-    .range([0, dms.boundedWidth]);
+    .range([0, priceDms.boundedWidth]);
 
   return (
     <>
-      <div ref={wrapperRef}>
-        <div>{timer}</div>
-        {!queryData?.data.length ? (
-          <div>no data</div>
-        ) : (
-          <>
+      <div>{timer}</div>
+      <div className={'grid grid-cols-2 gap-20'}>
+        <div ref={priceRef} className={'bg-white text-black'}>
+          {isLoading ? (
+            <div>loading</div>
+          ) : (
             <D3ChartProvider
-              ref={wrapperRef}
-              data={{ data, bounds: queryData.bounds }}
+              data={{ data, bounds: queryData!.bounds }}
               xScale={xScale}
-              dms={dms}
+              dms={priceDms}
             >
               <D3ChartSimulatorPrice />
             </D3ChartProvider>
-            <D3ChartSimulatorPortfolioOverHodle
-              settings={chartSettings}
-              data={{ data, bounds: queryData.bounds }}
-            />
-          </>
-        )}
-      </div>
+          )}
+        </div>
+        <div ref={portfolioRef} className={'bg-white text-black'}>
+          {isLoading ? (
+            <div>loading</div>
+          ) : (
+            <D3ChartProvider
+              data={{ data, bounds: queryData!.bounds }}
+              xScale={xScale}
+              dms={portfolioDms}
+            >
+              <D3ChartSimulatorPortfolioOverHodle />
+            </D3ChartProvider>
+          )}
+        </div>
 
-      {/*<D3ChartSimulatorBalance settings={chartSettings} />*/}
+        <div ref={balanceRef} className={'bg-white text-black'}>
+          {isLoading ? (
+            <div>loading</div>
+          ) : (
+            <D3ChartProvider
+              data={{ data, bounds: queryData!.bounds }}
+              xScale={xScale}
+              dms={balanceDms}
+            >
+              <D3ChartSimulatorBalance />
+            </D3ChartProvider>
+          )}
+        </div>
+      </div>
     </>
   );
 };

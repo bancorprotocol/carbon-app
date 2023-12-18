@@ -121,7 +121,7 @@ export const useGetSimulator = (params: SimulatorParams) => {
 
       const data: SimulatorReturn = {
         data: res.dates.map((d, i) => ({
-          date: i,
+          date: d,
           price: Number(res.RISK.price[i]),
           ask: Number(res.RISK.ask[i]),
           bid: Number(res.CASH.bid[i]),

@@ -1,4 +1,5 @@
 import { D3SimPriceRange } from 'libs/d3/charts/simulatorPrice/D3SimPriceRange';
+import { D3XAxis } from 'libs/d3/charts/simulatorPrice/D3XAxis';
 import {
   getAccessor,
   getPriceDomain,
@@ -7,7 +8,7 @@ import { useD3Chart } from 'libs/d3/D3ChartProvider';
 import { D3LinePath } from 'libs/d3/primitives/D3LinePath';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';
 import { useEffect } from 'react';
-import { scaleLinear, axisBottom, axisLeft, select } from 'd3';
+import { scaleLinear, axisLeft, select } from 'd3';
 
 export const D3ChartSimulatorPrice = () => {
   const {
@@ -45,7 +46,7 @@ export const D3ChartSimulatorPrice = () => {
 
   return (
     <>
-      <XAxis />
+      <D3XAxis />
       <g className="y-axis"></g>
       {/*<g className="y2-axis" transform={`translate(${dms.boundedWidth},0)`}></g>*/}
       <D3SimPriceRange type={'bid'} yScale={yLeftScale} />
@@ -55,17 +56,5 @@ export const D3ChartSimulatorPrice = () => {
       {/*<D3LinePath data={data} xAcc={xAcc} yAcc={hodlAcc} />*/}
       {/*<D3LinePath data={data} xAcc={xAcc} yAcc={portionAcc} />*/}
     </>
-  );
-};
-
-const XAxis = () => {
-  const { svgRef, xScale, dms } = useD3Chart<SimulatorReturn>();
-
-  useEffect(() => {
-    select(svgRef.current).select('.x-axis').call(axisBottom(xScale));
-  }, [xScale]);
-
-  return (
-    <g className="x-axis" transform={`translate(0,${dms.boundedHeight})`}></g>
   );
 };

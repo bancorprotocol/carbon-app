@@ -14,21 +14,27 @@ export const useD3Chart = <Data extends D3ChartData>() => {
 };
 
 export const D3ChartProvider = forwardRef<HTMLDivElement, D3ChartProviderProps>(
-  ({ children, dms, data, xScale }, ref) => {
+  (
+    {
+      children,
+      dms,
+      data = {
+        data: [],
+        bounds: { askMax: 0, askMin: 0, bidMax: 0, bidMin: 0 },
+      },
+      xScale,
+    },
+    ref
+  ) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
     return (
       <D3ChartCTX.Provider value={{ svgRef, dms, data, xScale }}>
-        <div ref={ref} className={'bg-white text-black'}>
-          <div>asd {dms.width}</div>
-          {dms.width > 0 && dms.height > 0 && (
-            <svg ref={svgRef} width={dms.width} height={dms.height}>
-              <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-                {children}
-              </g>
-            </svg>
-          )}
-        </div>
+        <svg ref={svgRef} width={dms.width} height={dms.height}>
+          <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
+            {children}
+          </g>
+        </svg>
       </D3ChartCTX.Provider>
     );
   }
