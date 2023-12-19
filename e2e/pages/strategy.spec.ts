@@ -174,24 +174,24 @@ test.describe('Strategies', () => {
         budgetFiat: 3334,
       },
     },
-    // {
-    //   setting: 'overlapping',
-    //   base: 'ETH',
-    //   quote: 'BNT',
-    //   buy: {
-    //     min: 3000,
-    //     max: 4900,
-    //     budget: 0,
-    //     budgetFiat: 0,
-    //   },
-    //   sell: {
-    //     min: 3100,
-    //     max: 5000,
-    //     budget: 2,
-    //     budgetFiat: 3334,
-    //   },
-    //   spread: 5,
-    // },
+    {
+      setting: 'overlapping',
+      base: 'ETH',
+      quote: 'BNT',
+      buy: {
+        min: 3000,
+        max: 4900,
+        budget: 0,
+        budgetFiat: 0,
+      },
+      sell: {
+        min: 3100,
+        max: 5000,
+        budget: 2,
+        budgetFiat: 3334,
+      },
+      spread: 5,
+    },
   ];
 
   for (const config of configs) {
