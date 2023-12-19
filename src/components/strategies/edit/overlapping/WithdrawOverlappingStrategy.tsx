@@ -97,6 +97,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const sellBudget = new SafeDecimal(value ?? '0').plus(order1.budget ?? '0');
     const resultBuyBudget =
       await carbonSDK.calculateOverlappingStrategyBuyBudget(
+        base.address,
         quote.address,
         order0.min,
         order1.max,
@@ -116,6 +117,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const resultSellBudget =
       await carbonSDK.calculateOverlappingStrategySellBudget(
         base.address,
+        quote.address,
         order0.min,
         order1.max,
         getMarketPrice(),
