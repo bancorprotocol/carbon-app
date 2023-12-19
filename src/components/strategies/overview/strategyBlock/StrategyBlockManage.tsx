@@ -80,8 +80,8 @@ export const StrategyBlockManage: FC<Props> = ({
   if (
     !isOverlapping ||
     (isOverlapping &&
-      new SafeDecimal(strategy.order0.balance).gt(0) &&
-      new SafeDecimal(strategy.order1.balance).gt(0))
+      (new SafeDecimal(strategy.order0.balance).gt(0) ||
+        new SafeDecimal(strategy.order1.balance).gt(0)))
   ) {
     items.push({
       id: 'duplicateStrategy',
