@@ -65,9 +65,11 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     return oldMarketPrice.toString();
   };
 
-  const setBuyBudget = async (value: string) => {
-    if (!value) return order0.setBudget('');
-    const sellBudget = new SafeDecimal(value ?? '0').plus(order1.budget ?? '0');
+  const setBuyBudget = async (sellBudgetDelta: string) => {
+    if (!sellBudgetDelta) return order0.setBudget('');
+    const sellBudget = new SafeDecimal(sellBudgetDelta ?? '0').plus(
+      order1.budget ?? '0'
+    );
     const resultBuyBudget =
       await carbonSDK.calculateOverlappingStrategyBuyBudget(
         base.address,
@@ -84,9 +86,11 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     order0.setBudget(buyBudget.toString());
   };
 
-  const setSellBudget = async (value: string) => {
-    if (!value) return order1.setBudget('');
-    const buyBudget = new SafeDecimal(value ?? '0').plus(order0.budget ?? '0');
+  const setSellBudget = async (buyBudgetDelta: string) => {
+    if (!buyBudgetDelta) return order1.setBudget('');
+    const buyBudget = new SafeDecimal(buyBudgetDelta ?? '0').plus(
+      order0.budget ?? '0'
+    );
     const resultSellBudget =
       await carbonSDK.calculateOverlappingStrategySellBudget(
         base.address,
