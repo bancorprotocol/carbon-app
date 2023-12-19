@@ -86,7 +86,6 @@ const testStrategy = {
       page,
     }) => {
       test.setTimeout(180_000);
-      await page.getByTestId('enable-overlapping-strategy').click();
       await waitFor(page, `balance-${quote}`, 30_000);
 
       await navigateTo(page, '/');
