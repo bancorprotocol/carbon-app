@@ -31,7 +31,8 @@ export const EditStrategyAllocatedBudget: FC<{
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const isDistributeToggleOn =
-    order.marginalPriceOption === MarginalPriceOptions.reset;
+    order.marginalPriceOption === MarginalPriceOptions.reset ||
+    !order.marginalPriceOption;
 
   useEffect(() => {
     if (
