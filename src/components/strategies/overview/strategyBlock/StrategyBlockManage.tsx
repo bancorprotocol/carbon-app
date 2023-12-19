@@ -1,3 +1,4 @@
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { FC } from 'react';
 import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
@@ -44,7 +45,6 @@ export const StrategyBlockManage: FC<Props> = ({
   setManage,
   isExplorer,
 }) => {
-  const { debug } = useStore();
   const { strategies, sort, filter } = useStrategyCtx();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
@@ -56,6 +56,8 @@ export const StrategyBlockManage: FC<Props> = ({
   const owner = useGetVoucherOwner(
     manage && type === 'token-pair' ? strategy.id : undefined
   );
+
+  const isOverlapping = isOverlappingStrategy(strategy);
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -109,21 +111,23 @@ export const StrategyBlockManage: FC<Props> = ({
   }
 
   if (!isExplorer) {
-    items.push({
-      id: 'editPrices',
-      name: 'Edit Prices',
-      action: () => {
-        setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyEditPricesClick({
-          origin: 'manage',
-          ...strategyEvent,
-        });
-        navigate({
-          to: PathNames.editStrategy,
-          search: { type: 'editPrices' },
-        });
-      },
-    });
+    if (!isOverlapping) {
+      items.push({
+        id: 'editPrices',
+        name: 'Edit Prices',
+        action: () => {
+          setStrategyToEdit(strategy);
+          carbonEvents.strategyEdit.strategyEditPricesClick({
+            origin: 'manage',
+            ...strategyEvent,
+          });
+          navigate({
+            to: PathNames.editStrategy,
+            search: { type: 'editPrices' },
+          });
+        },
+      });
+    }
 
     // separator
     items.push(0);
