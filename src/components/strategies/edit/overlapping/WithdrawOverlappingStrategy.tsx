@@ -94,8 +94,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
   const setBuyBudget = async (sellBudgetDelta: string) => {
     if (!sellBudgetDelta) return order0.setBudget('');
-    const sellBudget = new SafeDecimal(sellBudgetDelta ?? '0').plus(
-      order1.budget ?? '0'
+    const sellBudget = new SafeDecimal(sellBudgetDelta || '0').plus(
+      order1.budget || '0'
     );
     const resultBuyBudget =
       await carbonSDK.calculateOverlappingStrategyBuyBudget(
@@ -108,15 +108,15 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
         sellBudget.toString()
       );
     const buyBudget = new SafeDecimal(resultBuyBudget).minus(
-      order0.budget ?? '0'
+      order0.budget || '0'
     );
     order0.setBudget(buyBudget.lt(0) ? '0' : buyBudget.toString());
   };
 
   const setSellBudget = async (buyBudgetDelta: string) => {
     if (!buyBudgetDelta) return order1.setBudget('');
-    const buyBudget = new SafeDecimal(buyBudgetDelta ?? '0').plus(
-      order0.budget ?? '0'
+    const buyBudget = new SafeDecimal(buyBudgetDelta || '0').plus(
+      order0.budget || '0'
     );
     const resultSellBudget =
       await carbonSDK.calculateOverlappingStrategySellBudget(
@@ -129,7 +129,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
         buyBudget.toString()
       );
     const sellBudget = new SafeDecimal(resultSellBudget).minus(
-      order1.budget ?? '0'
+      order1.budget || '0'
     );
     order1.setBudget(sellBudget.lt(0) ? '0' : sellBudget.toString());
   };
