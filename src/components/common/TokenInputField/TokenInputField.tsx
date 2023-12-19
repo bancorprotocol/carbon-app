@@ -129,7 +129,7 @@ export const TokenInputField: FC<Props> = ({
                       : 'text-green group-hover:text-white'
                   }
                 >
-                  TOP UP
+                  MAX
                 </b>
               </>
             )}
