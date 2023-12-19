@@ -150,8 +150,17 @@ export const StrategyBlockManage: FC<Props> = ({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
         action: () => {
-          openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
           carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
+
+          if (isOverlapping) {
+            setStrategyToEdit(strategy);
+            navigate({
+              to: PathNames.editStrategy,
+              search: { type: 'withdraw' },
+            });
+          } else {
+            openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
+          }
         },
       });
     }
