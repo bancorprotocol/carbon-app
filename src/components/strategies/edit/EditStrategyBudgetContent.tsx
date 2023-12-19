@@ -144,13 +144,13 @@ export const EditStrategyBudgetContent = ({
     const updatedStrategy = {
       ...strategy,
       order0: {
-        balance: buyOption ? calculatedOrder0Budget.toString() : undefined,
+        balance: calculatedOrder0Budget.toString(),
         startRate: order0.price || order0.min,
         endRate: order0.max,
         marginalRate: strategy.order0.marginalRate,
       },
       order1: {
-        balance: sellOption ? calculatedOrder1Budget.toString() : undefined,
+        balance: calculatedOrder1Budget.toString(),
         startRate: order1.price || order1.min,
         endRate: order1.max,
         marginalRate: strategy.order1.marginalRate,
@@ -158,9 +158,6 @@ export const EditStrategyBudgetContent = ({
     };
 
     const action = type === 'withdraw' ? withdrawBudget : depositBudget;
-
-    // TODO fix type error AtLeastOneOf fieldsToUpdate
-    // @ts-ignore
     void action(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
