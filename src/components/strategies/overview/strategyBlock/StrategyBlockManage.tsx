@@ -74,26 +74,30 @@ export const StrategyBlockManage: FC<Props> = ({
     strategies: { setStrategyToEdit },
   } = useStore();
 
-  const items: (itemsType | separatorCounterType)[] = [
-    {
+  const items: (itemsType | separatorCounterType)[] = [];
+
+  if (
+    !isOverlapping ||
+    (isOverlapping && order0.budget !== '0' && order1.budget !== '0')
+  ) {
+    items.push({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
         duplicate(strategy);
       },
+    });
+  }
+
+  items.push({
+    id: 'manageNotifications',
+    name: 'Manage Notifications',
+    action: () => {
+      carbonEvents.strategyEdit.strategyManageNotificationClick(strategyEvent);
+      openModal('manageNotifications', { strategyId: strategy.id });
     },
-    {
-      id: 'manageNotifications',
-      name: 'Manage Notifications',
-      action: () => {
-        carbonEvents.strategyEdit.strategyManageNotificationClick(
-          strategyEvent
-        );
-        openModal('manageNotifications', { strategyId: strategy.id });
-      },
-    },
-  ];
+  });
 
   if (isExplorer && type === 'token-pair') {
     items.push({
@@ -129,21 +133,25 @@ export const StrategyBlockManage: FC<Props> = ({
       });
     }
 
-    // separator
-    items.push(0);
-
-    items.push({
-      id: 'depositFunds',
-      name: 'Deposit Funds',
-      action: () => {
-        setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
-        navigate({
-          to: PathNames.editStrategy,
-          search: { type: 'deposit' },
-        });
-      },
-    });
+    if (
+      !isOverlapping ||
+      (isOverlapping && order0.budget !== '0' && order1.budget !== '0')
+    ) {
+      // separator
+      items.push(0);
+      items.push({
+        id: 'depositFunds',
+        name: 'Deposit Funds',
+        action: () => {
+          setStrategyToEdit(strategy);
+          carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
+          navigate({
+            to: PathNames.editStrategy,
+            search: { type: 'deposit' },
+          });
+        },
+      });
+    }
 
     if (strategy.status !== 'noBudget') {
       items.push({
