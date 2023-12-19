@@ -1,3 +1,4 @@
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Button } from 'components/common/button';
 import { Strategy } from 'libs/queries';
@@ -129,7 +130,17 @@ export const EditStrategyBudgetContent = ({
     }
   };
 
+  const getMarginalOption = (order: OrderCreate) => {
+    if (!Number(order.budget) || !order.budget) return undefined;
+    if (order.marginalPriceOption) return order.marginalPriceOption;
+
+    return MarginalPriceOptions.reset;
+  };
+
   const depositOrWithdrawFunds = () => {
+    const buyOption = getMarginalOption(order0);
+    const sellOption = getMarginalOption(order1);
+
     const updatedStrategy = {
       ...strategy,
       order0: {
@@ -146,19 +157,8 @@ export const EditStrategyBudgetContent = ({
       },
     };
 
-    type === 'withdraw'
-      ? withdrawBudget(
-          updatedStrategy,
-          order0.marginalPriceOption,
-          order1.marginalPriceOption,
-          handleEvents
-        )
-      : depositBudget(
-          updatedStrategy,
-          order0.marginalPriceOption,
-          order1.marginalPriceOption,
-          handleEvents
-        );
+    const action = type === 'withdraw' ? withdrawBudget : depositBudget;
+    void action(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
   const isOrdersBudgetValid = useMemo(() => {
