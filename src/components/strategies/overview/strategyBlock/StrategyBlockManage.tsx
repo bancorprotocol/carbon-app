@@ -1,4 +1,5 @@
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { SafeDecimal } from 'libs/safedecimal';
 import { FC } from 'react';
 import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
@@ -78,7 +79,9 @@ export const StrategyBlockManage: FC<Props> = ({
 
   if (
     !isOverlapping ||
-    (isOverlapping && order0.budget !== '0' && order1.budget !== '0')
+    (isOverlapping &&
+      new SafeDecimal(strategy.order0.balance).gt(0) &&
+      new SafeDecimal(strategy.order1.balance).gt(0))
   ) {
     items.push({
       id: 'duplicateStrategy',
@@ -135,7 +138,9 @@ export const StrategyBlockManage: FC<Props> = ({
 
     if (
       !isOverlapping ||
-      (isOverlapping && order0.budget !== '0' && order1.budget !== '0')
+      (isOverlapping &&
+        new SafeDecimal(strategy.order0.balance).gt(0) &&
+        new SafeDecimal(strategy.order1.balance).gt(0))
     ) {
       // separator
       items.push(0);
