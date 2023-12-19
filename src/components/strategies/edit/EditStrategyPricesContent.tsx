@@ -1,8 +1,9 @@
 import { FormEvent, useMemo, useState } from 'react';
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Button } from 'components/common/button';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
-import { Strategy } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { useRouter } from 'libs/routing';
 import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
 import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
@@ -68,6 +69,13 @@ export const EditStrategyPricesContent = ({
       marginalRate: order1.marginalPrice || strategy.order1.marginalRate,
     };
 
+    const getMarginalOption = (oldOrder: Order, newOrder: Order) => {
+      if (oldOrder.startRate !== newOrder.startRate)
+        return MarginalPriceOptions.reset;
+      if (oldOrder.endRate !== newOrder.endRate)
+        return MarginalPriceOptions.reset;
+    };
+
     type === 'renew'
       ? renewStrategy(
           {
@@ -87,6 +95,8 @@ export const EditStrategyPricesContent = ({
             order0: newOrder0,
             order1: newOrder1,
           },
+          getMarginalOption(strategy.order0, newOrder0),
+          getMarginalOption(strategy.order1, newOrder1),
           () =>
             carbonEvents.strategyEdit.strategyEditPrices({
               ...strategyEventData,
