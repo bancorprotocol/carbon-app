@@ -1,8 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
-interface DebugState {
-  showOverlapping: boolean;
-}
+export interface DebugState {}
 
 export interface DebugStore {
   debugState: DebugState;
@@ -10,9 +8,8 @@ export interface DebugStore {
 }
 
 export const useDebugStore = (): DebugStore => {
-  const [debugState, setDebugState] = useState<DebugState>({
-    showOverlapping: false,
-  });
+  // Keep this alive for future need
+  const [debugState, setDebugState] = useState<DebugState>({});
 
   return {
     debugState,

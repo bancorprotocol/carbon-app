@@ -1,3 +1,4 @@
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
@@ -14,7 +15,6 @@ import { StrategyEditEventType } from 'services/events/types';
 import { carbonEvents } from 'services/events';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
-import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 
 export interface ModalConfirmDeleteData {
   strategy: Strategy;
@@ -25,7 +25,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   id,
   data,
 }) => {
-  const { strategies, debug } = useStore();
+  const { strategies } = useStore();
   const { closeModal } = useModal();
   const { strategy, strategyEvent } = data;
 
@@ -34,6 +34,8 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   const isAwaiting = deleteMutation.isLoading;
   const loadingChildren = getStatusTextByTxStatus(isAwaiting, isProcessing);
   const isLoading = deleteMutation.isLoading || isProcessing;
+
+  const isOverlapping = isOverlappingStrategy(strategy);
 
   const onClick = () => {
     deleteStrategy(
@@ -61,7 +63,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
         title="Are you sure you would like to delete your strategy?"
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
-      {!isOverlappingStrategy(strategy, debug) && (
+      {!isOverlapping && (
         <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-emphasis p-16">
           <h3 className="text-14 font-weight-500">Did you know ?</h3>
           <Link
@@ -81,6 +83,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
           </p>
         </article>
       )}
+
       <Button
         variant="white"
         onClick={onClick}

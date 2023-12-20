@@ -1,62 +1,45 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { Token } from 'libs/tokens';
-import { OrderCreate } from '../useOrder';
-import { UseQueryResult } from '@tanstack/react-query';
-import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudget';
-import { useMarketPrice } from 'hooks/useMarketPrice';
-import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
-import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
-import { CreateOverlappingRange } from './CreateOverlappingRange';
-import { carbonSDK } from 'libs/sdk';
-import { Toolkit } from '@bancor/carbon-sdk/strategy-management';
+import { FC, useEffect, useState } from 'react';
+import { OrderCreate } from 'components/strategies/create/useOrder';
+import { Strategy } from 'libs/queries';
 import {
   getMaxBuyMin,
   getMinSellMax,
+  getRoundedSpreadPPM,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { useMarketIndication } from 'components/strategies/marketPriceIndication';
+import { carbonSDK } from 'libs/sdk';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
+import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
+import { OverlappingRange } from 'components/strategies/overlapping/OverlappingRange';
+import { EditOverlappingStrategyBudget } from './EditOverlappingStrategyBudget';
 
-export interface OverlappingStrategyProps {
-  base?: Token;
-  quote?: Token;
+interface Props {
+  strategy: Strategy;
   order0: OrderCreate;
   order1: OrderCreate;
-  token0BalanceQuery: UseQueryResult<string, any>;
-  token1BalanceQuery: UseQueryResult<string, any>;
-  spreadPPM: number;
-  setSpreadPPM: Dispatch<SetStateAction<number>>;
+  setOverlappingError: (error: string) => void;
 }
-type FromPromise<T> = T extends Promise<infer I> ? I : never;
-type StrategyPrices = FromPromise<
-  ReturnType<Toolkit['calculateOverlappingStrategyPrices']>
->;
 
-export type SetOverlappingParams = (
-  min: string,
-  max: string
-) => Promise<StrategyPrices | undefined>;
-
-export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
-  props
-) => {
-  const { base, quote, order0, order1, spreadPPM, setSpreadPPM } = props;
+export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
+  const { strategy, order0, order1 } = props;
+  const { base, quote } = strategy;
+  const min = order0.min;
+  const max = order1.max;
   const marketPrice = useMarketPrice({ base, quote });
-  const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
-    order: {
-      min: order0.min,
-      max: order1.max,
-      price: '',
-      isRange: true,
-    },
-    buy: true,
+    order: { min, max, price: '', isRange: true },
   });
+
+  const [spreadPPM, setSpreadPPM] = useState(getRoundedSpreadPPM(strategy));
+  const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
+  const [mounted, setMounted] = useState(false);
 
   const setOverlappingParams = async (min: string, max: string) => {
     const params = await carbonSDK.calculateOverlappingStrategyPrices(
@@ -100,7 +83,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     sellMax: string
   ) => {
     if (!base || !quote) return;
-    if (!buyBudget) return order1.setBudget('');
+    if (!buyBudget) order1.setBudget('');
     const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
       base.address,
       quote.address,
@@ -116,23 +99,17 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   // Initialize order when market price is available
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
-    if (!order0.min && !order1.max) {
-      const min = (marketPrice * 0.999).toFixed(quote.decimals);
-      const max = (marketPrice * 1.001).toFixed(quote.decimals);
-      setOverlappingParams(min, max);
-    } else {
-      const min = order0.min;
-      const max = order1.max;
-      setOverlappingParams(min, max);
-      if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-      if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-    }
+    if (!mounted) return setMounted(true);
+    setOverlappingParams(order0.min, order1.max);
+    if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+    if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spreadPPM]);
 
   // Update on buyMin changes
   useEffect(() => {
     if (!order0.min) return;
+    if (!mounted) return setMounted(true);
     const min = order0.min;
     const max = order1.max;
     setOverlappingParams(min, max).then((params) => {
@@ -157,6 +134,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   // Update on sellMax changes
   useEffect(() => {
     if (!order1.max) return;
+    if (!mounted) return setMounted(true);
     const min = order0.min;
     const max = order1.max;
     setOverlappingParams(min, max).then((params) => {
@@ -180,49 +158,25 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   return (
     <>
-      <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-silver p-20">
-        <h4 className="flex items-center gap-8 text-14 font-weight-500">
-          Discover Overlapping Strategies
-          <span className="rounded-8 bg-darkGreen px-8 py-4 text-10 text-green">
-            NEW
-          </span>
-        </h4>
-        <p className="text-12 text-white/60">
-          Learn more about the new type of strategy creation.
-        </p>
-        <a
-          href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy"
-          target="_blank"
-          className="row-span-2 flex items-center gap-4 self-center justify-self-end text-12 font-weight-500 text-green"
-          rel="noreferrer"
-        >
-          Learn More
-          <IconLink className="h-12 w-12" />
-        </a>
-      </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
-        <header className="flex items-center gap-8">
+      <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
+        <header>
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
-          <Tooltip element="Drag and drop your strategy buy and sell prices.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
         </header>
         <OverlappingStrategyGraph
-          {...props}
+          base={base}
+          quote={quote}
           order0={order0}
           order1={order1}
           marketPrice={marketPrice}
+          spreadPPM={spreadPPM}
           marketPricePercentage={marketPricePercentage}
           setOverlappingParams={setOverlappingParams}
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-            1
-          </span>
           <h3 className="flex-1 text-18 font-weight-500">
-            Set Price Range&nbsp;
+            Edit Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
@@ -232,7 +186,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           </Tooltip>
         </header>
         {base && quote && (
-          <CreateOverlappingRange
+          <OverlappingRange
             base={base}
             quote={quote}
             order0={order0}
@@ -241,12 +195,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           />
         )}
       </article>
-      <article className="flex flex-col gap-10 rounded-10 bg-silver p-20">
+      <article className="flex w-full flex-col gap-10 rounded-10 bg-silver p-20">
         <header className="mb-10 flex items-center gap-8 ">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-            2
-          </span>
-          <h3 className="flex-1 text-18 font-weight-500">Indicate Spread</h3>
+          <h3 className="flex-1 text-18 font-weight-500">Edit Spread</h3>
           <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
@@ -260,25 +211,14 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           setSpreadPPM={setSpreadPPM}
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
-        <header className="flex items-center gap-8 ">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-            3
-          </span>
-          <h3 className="flex-1 text-18 font-weight-500">Set Budgets</h3>
-          <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
-        </header>
-        <CreateOverlappingStrategyBudget
-          {...props}
-          marketPrice={marketPrice}
-          anchoredOrder={anchoredOrder}
-          setAnchoderOrder={setAnchoderOrder}
-          setBuyBudget={setBuyBudget}
-          setSellBudget={setSellBudget}
-        />
-      </article>
+      <EditOverlappingStrategyBudget
+        {...props}
+        marketPrice={marketPrice}
+        anchoredOrder={anchoredOrder}
+        setAnchoderOrder={setAnchoderOrder}
+        setBuyBudget={setBuyBudget}
+        setSellBudget={setSellBudget}
+      />
     </>
   );
 };

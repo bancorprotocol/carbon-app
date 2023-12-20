@@ -1,3 +1,5 @@
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { SafeDecimal } from 'libs/safedecimal';
 import { FC } from 'react';
 import { useStore } from 'store';
 import { useModal } from 'hooks/useModal';
@@ -21,7 +23,6 @@ import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { ExplorerParams } from 'components/explorer/utils';
-import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -45,7 +46,6 @@ export const StrategyBlockManage: FC<Props> = ({
   setManage,
   isExplorer,
 }) => {
-  const { debug } = useStore();
   const { strategies, sort, filter } = useStrategyCtx();
   const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
@@ -57,6 +57,8 @@ export const StrategyBlockManage: FC<Props> = ({
   const owner = useGetVoucherOwner(
     manage && type === 'token-pair' ? strategy.id : undefined
   );
+
+  const isOverlapping = isOverlappingStrategy(strategy);
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -73,26 +75,32 @@ export const StrategyBlockManage: FC<Props> = ({
     strategies: { setStrategyToEdit },
   } = useStore();
 
-  const items: (itemsType | separatorCounterType)[] = [
-    {
+  const items: (itemsType | separatorCounterType)[] = [];
+
+  if (
+    !isOverlapping ||
+    (isOverlapping &&
+      (new SafeDecimal(strategy.order0.balance).gt(0) ||
+        new SafeDecimal(strategy.order1.balance).gt(0)))
+  ) {
+    items.push({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
         duplicate(strategy);
       },
+    });
+  }
+
+  items.push({
+    id: 'manageNotifications',
+    name: 'Manage Notifications',
+    action: () => {
+      carbonEvents.strategyEdit.strategyManageNotificationClick(strategyEvent);
+      openModal('manageNotifications', { strategyId: strategy.id });
     },
-    {
-      id: 'manageNotifications',
-      name: 'Manage Notifications',
-      action: () => {
-        carbonEvents.strategyEdit.strategyManageNotificationClick(
-          strategyEvent
-        );
-        openModal('manageNotifications', { strategyId: strategy.id });
-      },
-    },
-  ];
+  });
 
   if (isExplorer && type === 'token-pair') {
     items.push({
@@ -110,7 +118,7 @@ export const StrategyBlockManage: FC<Props> = ({
   }
 
   if (!isExplorer) {
-    if (!isOverlappingStrategy(strategy, debug)) {
+    if (!isOverlapping) {
       items.push({
         id: 'editPrices',
         name: 'Edit Prices',
@@ -128,29 +136,44 @@ export const StrategyBlockManage: FC<Props> = ({
       });
     }
 
-    // separator
-    items.push(0);
-
-    items.push({
-      id: 'depositFunds',
-      name: 'Deposit Funds',
-      action: () => {
-        setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
-        navigate({
-          to: PathNames.editStrategy,
-          search: { type: 'deposit' },
-        });
-      },
-    });
+    if (
+      !isOverlapping ||
+      (isOverlapping &&
+        (new SafeDecimal(strategy.order0.balance).gt(0) ||
+          new SafeDecimal(strategy.order1.balance).gt(0)))
+    ) {
+      // separator
+      items.push(0);
+      items.push({
+        id: 'depositFunds',
+        name: 'Deposit Funds',
+        action: () => {
+          setStrategyToEdit(strategy);
+          carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
+          navigate({
+            to: PathNames.editStrategy,
+            search: { type: 'deposit' },
+          });
+        },
+      });
+    }
 
     if (strategy.status !== 'noBudget') {
       items.push({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
         action: () => {
-          openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
           carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
+
+          if (isOverlapping) {
+            setStrategyToEdit(strategy);
+            navigate({
+              to: PathNames.editStrategy,
+              search: { type: 'withdraw' },
+            });
+          } else {
+            openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
+          }
         },
       });
     }

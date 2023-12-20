@@ -8,9 +8,9 @@ import {
 } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn } from 'utils/helpers';
-import styles from './CreateOverlappingStrategySpread.module.css';
-import { OrderCreate } from '../useOrder';
+import { OrderCreate } from '../create/useOrder';
 import { getMaxSpreadPPM } from 'components/strategies/overlapping/utils';
+import styles from './OverlappingStrategySpread.module.css';
 
 interface Props {
   /** Value used to fallback to when custom input is empty */
@@ -26,7 +26,7 @@ const getWarning = (maxSpreadPPM: number) => {
   return `Given price range, max spread cannot exceed ${maxSpreadPPM}%`;
 };
 
-export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
+export const OverlappingStrategySpread: FC<Props> = (props) => {
   const { defaultValue, options, spreadPPM, setSpreadPPM } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spreadPPM);
@@ -142,7 +142,7 @@ export const CreateOverlappingStrategySpread: FC<Props> = (props) => {
           <span className={styles.suffix}>%</span>
         </div>
       </div>
-      {spreadPPM && warning && (
+      {warning && spreadPPM && (
         <output
           htmlFor="spread-custom"
           className="flex items-center gap-8 font-mono text-12 text-warning-500"
