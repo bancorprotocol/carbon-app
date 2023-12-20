@@ -1,6 +1,6 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
-import { FC, useId } from 'react';
+import { FC, useEffect, useId } from 'react';
 import { StrategyType } from '../types';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { OrderCreate } from '../useOrder';
@@ -35,6 +35,14 @@ export const BudgetSection: FC<Props> = ({
     new SafeDecimal(tokenBalanceQuery.data || 0).lt(order.budget);
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
+
+  useEffect(() => {
+    if (insufficientBalance) {
+      order.setBudgetError('Insufficient balance');
+    } else {
+      order.setBudgetError('');
+    }
+  }, [insufficientBalance, order]);
 
   return (
     <fieldset className="flex flex-col gap-8">

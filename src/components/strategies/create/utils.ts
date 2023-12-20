@@ -31,10 +31,12 @@ export const handleStrategyDirection = (
     case 'buy':
       handleStrategySettings(strategySettings, [order1.setIsRange]);
       order0.setPrice('0');
+      order0.setIsRange(false);
       break;
     case 'sell': {
       handleStrategySettings(strategySettings, [order0.setIsRange]);
       order1.setPrice('0');
+      order1.setIsRange(false);
       break;
     }
   }
