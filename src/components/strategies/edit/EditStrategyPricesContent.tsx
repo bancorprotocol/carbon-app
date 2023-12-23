@@ -105,9 +105,9 @@ export const EditStrategyPricesContent = ({
         );
   };
 
-  const isOrderValid = (order: OrderCreate) => {
+  const isOrderValid = (order: OrderCreate): boolean => {
     if (order.budgetError) return false;
-    if (!order.isRange) return order.priceError;
+    if (!order.isRange) return !order.priceError;
     if (order.rangeError) return false;
     if (overlappingError) return false;
     return +order.min > 0 && +order.max > 0 && +order.max > +order.min;
