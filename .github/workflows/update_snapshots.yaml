@@ -22,7 +22,7 @@ jobs:
             | jq -r '.head.sha," ",.head.ref');
           echo "sha=$(echo $sha_and_branch | cut -d " " -f 1)" >> $GITHUB_OUTPUT
           echo "branch=$(echo $sha_and_branch | cut -d " " -f 2)" >> $GITHUB_OUTPUT
-      - name: Fetch Branch
+      - name: Fetch Branch 2
         run: git fetch
       - name: Checkout Branch
         run: git checkout ${{ steps.get-branch-and-sha.outputs.branch }}
