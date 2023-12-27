@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  SimulatorInput,
   SimulatorParams,
   SimulatorResult,
 } from 'libs/queries/extApi/simulator';
@@ -68,6 +69,15 @@ const carbonApi = {
     const { data } = await newApiAxios.get<SimulatorResult>('simulator', {
       params,
     });
+    return data;
+  },
+  getSimulator2: async (params: SimulatorInput): Promise<SimulatorResult> => {
+    const { data } = await newApiAxios.get<SimulatorResult>(
+      'simulate-create-strategy',
+      {
+        params,
+      }
+    );
     return data;
   },
 };

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
 import { carbonApi } from 'utils/carbonApi';
 import { FIVE_MIN_IN_MS } from 'utils/time';
@@ -20,22 +20,18 @@ export interface SimulatorParams {
   networkFee: number;
 }
 
-// interface SimulatorInput {
-//   start: number;
-//   end: number;
-//   baseToken: string;
-//   baseBudget: number;
-//   quoteToken: string;
-//   quoteBudget: number;
-//   quotePortfolio: number;
-//   sellMax: number;
-//   sellMin: number;
-//   sellStart: number;
-//   buyMax: number;
-//   buyMin: number;
-//   buyStart: number;
-//   networkFee: number;
-// }
+export interface SimulatorInput {
+  start: string;
+  end: string;
+  baseToken: string;
+  baseBudget: string;
+  quoteToken: string;
+  quoteBudget: string;
+  sellMax: string;
+  sellMin: string;
+  buyMax: string;
+  buyMin: string;
+}
 //
 // interface SimulatorOutput {
 //   data: Array<SimulatorData2>;
@@ -66,25 +62,25 @@ export interface SimulatorParams {
 export interface SimulatorResult {
   CASH: {
     balance: string[];
-    bid: string[];
-    bid_upper_bound: string;
     fee: string[];
-    hodl_value: string[];
-    min_bid: string;
-    portfolio_value: string[];
-    portion: string[];
   };
   RISK: {
-    ask: string[];
-    ask_lower_bound: string;
     balance: string[];
     fee: string[];
-    max_ask: string;
-    portion: string[];
-    price: string[];
   };
   dates: number[];
-  portfolio_over_hodl_quotient: string[];
+  min_bid: string;
+  max_bid: string;
+  min_ask: string;
+  max_ask: string;
+  bid: string[];
+  ask: string[];
+  hodl_value: string[];
+  portfolio_cash: string[];
+  portfolio_risk: string[];
+  portfolio_value: string[];
+  portfolio_over_hodl: string[];
+  price: string[];
 }
 
 export type SimulatorData = {
@@ -122,22 +118,22 @@ export const useGetSimulator = (params: SimulatorParams) => {
       const data: SimulatorReturn = {
         data: res.dates.map((d, i) => ({
           date: d,
-          price: Number(res.RISK.price[i]),
-          ask: Number(res.RISK.ask[i]),
-          bid: Number(res.CASH.bid[i]),
+          price: Number(res.price[i]),
+          ask: Number(res.ask[i]),
+          bid: Number(res.bid[i]),
           balanceRISK: Number(res.RISK.balance[i]),
-          portionRISK: Number(res.RISK.portion[i]),
+          portionRISK: Number(res.portfolio_risk[i]),
           balanceCASH: Number(res.CASH.balance[i]),
-          portionCASH: Number(res.CASH.portion[i]),
-          portfolioValue: Number(res.CASH.portfolio_value[i]),
-          hodlValue: Number(res.CASH.hodl_value[i]),
-          portfolioOverHodl: Number(res.portfolio_over_hodl_quotient[i]),
+          portionCASH: Number(res.portfolio_cash[i]),
+          portfolioValue: Number(res.portfolio_value[i]),
+          hodlValue: Number(res.hodl_value[i]),
+          portfolioOverHodl: Number(res.portfolio_over_hodl[i]),
         })),
         bounds: {
-          askMax: Number(res.RISK.max_ask),
-          askMin: Number(res.RISK.ask_lower_bound),
-          bidMax: Number(res.CASH.bid_upper_bound),
-          bidMin: Number(res.CASH.min_bid),
+          askMax: Number(res.max_ask),
+          askMin: Number(res.min_ask),
+          bidMax: Number(res.max_bid),
+          bidMin: Number(res.min_bid),
         },
       };
 
@@ -174,4 +170,36 @@ export const useGetSimulator = (params: SimulatorParams) => {
       retry: false,
     }
   );
+};
+
+export const useMutateSimulator = () => {
+  return useMutation({
+    mutationFn: async (params: SimulatorInput) => {
+      const res = await carbonApi.getSimulator2(params);
+
+      const data: SimulatorReturn = {
+        data: res.dates.map((d, i) => ({
+          date: d,
+          price: Number(res.price[i]),
+          ask: Number(res.ask[i]),
+          bid: Number(res.bid[i]),
+          balanceRISK: Number(res.RISK.balance[i]),
+          portionRISK: Number(res.portfolio_risk[i]),
+          balanceCASH: Number(res.CASH.balance[i]),
+          portionCASH: Number(res.portfolio_cash[i]),
+          portfolioValue: Number(res.portfolio_value[i]),
+          hodlValue: Number(res.hodl_value[i]),
+          portfolioOverHodl: Number(res.portfolio_over_hodl[i]),
+        })),
+        bounds: {
+          askMax: Number(res.max_ask),
+          askMin: Number(res.min_ask),
+          bidMax: Number(res.max_bid),
+          bidMin: Number(res.min_bid),
+        },
+      };
+
+      return data;
+    },
+  });
 };

@@ -1,12 +1,18 @@
 import { extent, scaleLinear } from 'd3';
+import { D3ChartLine } from 'libs/d3/charts/D3ChartLine';
 import { D3ChartSimulatorBalance } from 'libs/d3/charts/simulatorBalance/SimulatorBalance';
-import { D3ChartSimulatorPortfolioOverHodle } from 'libs/d3/charts/simulatorPortfolioOverHodl';
 import { D3ChartSimulatorPrice } from 'libs/d3/charts/simulatorPrice';
 import { D3ChartProvider } from 'libs/d3/D3ChartProvider';
+import { SimInput } from 'libs/d3/sim/SimInput';
 import { D3ChartSettingsProps } from 'libs/d3/types';
 import { useChartDimensions } from 'libs/d3/useChartDimensions';
-import { SimulatorData, SimulatorParams, useGetSimulator } from 'libs/queries';
-import { useCallback, useEffect, useState } from 'react';
+import {
+  SimulatorData,
+  SimulatorParams,
+  SimulatorReturn,
+  useMutateSimulator,
+} from 'libs/queries';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 const mockParams: SimulatorParams = {
   token0: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
@@ -41,12 +47,14 @@ let i = 0;
 const times: number[] = [];
 
 export const SimulatorWrapper = () => {
-  const [priceRef, priceDms] = useChartDimensions(chartSettings);
-  const [portfolioRef, portfolioDms] = useChartDimensions(chartSettings);
-  const [balanceRef, balanceDms] = useChartDimensions(chartSettings);
-
-  const { data: queryData, isLoading, error } = useGetSimulator(mockParams);
+  // const { data: queryData, isLoading, error } = useGetSimulator(mockParams);
   const [data, setData] = useState<SimulatorData[]>([]);
+  const {
+    mutateAsync,
+    isLoading,
+    error,
+    data: queryData,
+  } = useMutateSimulator();
 
   const [timer, setTimer] = useState('');
 
@@ -71,6 +79,7 @@ export const SimulatorWrapper = () => {
       requestAnimationFrame(startAnimation);
     } else {
       console.log('ended');
+      init2 = false;
     }
   }, [queryData]);
 
@@ -83,59 +92,111 @@ export const SimulatorWrapper = () => {
     startAnimation();
   }, [startAnimation, queryData]);
 
-  if (error) {
-    return <div>error</div>;
-  }
+  // if (isLoading) {
+  //   return <div>error</div>;
+  // }
 
-  const xScale = scaleLinear()
-    .domain(extent(data, (d) => d.date) as [number, number])
-    .range([0, priceDms.boundedWidth]);
+  const simData: SimulatorReturn | undefined = queryData && {
+    data,
+    bounds: queryData.bounds,
+  };
 
   return (
     <>
       <div>{timer}</div>
-      <div className={'grid grid-cols-2 gap-20'}>
-        <div ref={priceRef} className={'bg-white text-black'}>
-          {isLoading ? (
-            <div>loading</div>
-          ) : (
-            <D3ChartProvider
-              data={{ data, bounds: queryData!.bounds }}
-              xScale={xScale}
-              dms={priceDms}
-            >
-              <D3ChartSimulatorPrice />
-            </D3ChartProvider>
-          )}
-        </div>
-        <div ref={portfolioRef} className={'bg-white text-black'}>
-          {isLoading ? (
-            <div>loading</div>
-          ) : (
-            <D3ChartProvider
-              data={{ data, bounds: queryData!.bounds }}
-              xScale={xScale}
-              dms={portfolioDms}
-            >
-              <D3ChartSimulatorPortfolioOverHodle />
-            </D3ChartProvider>
-          )}
-        </div>
 
-        <div ref={balanceRef} className={'bg-white text-black'}>
-          {isLoading ? (
-            <div>loading</div>
-          ) : (
-            <D3ChartProvider
-              data={{ data, bounds: queryData!.bounds }}
-              xScale={xScale}
-              dms={balanceDms}
-            >
-              <D3ChartSimulatorBalance />
-            </D3ChartProvider>
-          )}
+      <SimInput mutate={mutateAsync} />
+
+      {error && <div>error</div>}
+
+      {queryData && (
+        <div className={'grid grid-cols-1 gap-20'}>
+          <h2>Price in Quote</h2>
+          <SimChartWrapper
+            isLoading={isLoading}
+            data={simData}
+            settings={chartSettings}
+          >
+            <D3ChartSimulatorPrice />
+          </SimChartWrapper>
+
+          <h2>Carbon Strategy Over Hodl Quotient (in %)</h2>
+          <SimChartWrapper
+            isLoading={isLoading}
+            data={simData}
+            settings={chartSettings}
+          >
+            <D3ChartLine accessorKey={'portfolioOverHodl'} />
+          </SimChartWrapper>
+
+          <h2>Total Carbon Strategy Value (in QUOTE)</h2>
+          <SimChartWrapper
+            isLoading={isLoading}
+            data={simData}
+            settings={chartSettings}
+          >
+            <D3ChartLine accessorKey={'portfolioValue'} />
+          </SimChartWrapper>
+
+          <h2>Budget BASE</h2>
+          <SimChartWrapper
+            isLoading={isLoading}
+            data={simData}
+            settings={chartSettings}
+          >
+            <D3ChartLine accessorKey={'balanceRISK'} />
+          </SimChartWrapper>
+
+          <h2>Budget QUOTE</h2>
+          <SimChartWrapper
+            isLoading={isLoading}
+            data={simData}
+            settings={chartSettings}
+          >
+            <D3ChartLine accessorKey={'balanceCASH'} />
+          </SimChartWrapper>
+
+          <h2>Balance change</h2>
+          <SimChartWrapper
+            isLoading={isLoading}
+            data={simData}
+            settings={chartSettings}
+          >
+            <D3ChartSimulatorBalance />
+          </SimChartWrapper>
         </div>
-      </div>
+      )}
     </>
+  );
+};
+
+const SimChartWrapper = ({
+  children,
+  isLoading,
+  data,
+  settings,
+}: {
+  children: ReactNode;
+  isLoading: boolean;
+  data?: SimulatorReturn;
+  settings: D3ChartSettingsProps;
+}) => {
+  const [ref, dms] = useChartDimensions(settings);
+  const dataset = data?.data || [];
+
+  const xScale = scaleLinear()
+    .domain(extent(dataset, (d) => d.date) as [number, number])
+    .range([0, dms.boundedWidth]);
+
+  return (
+    <div ref={ref} className={'bg-white text-black'}>
+      {isLoading || !data ? (
+        <div>loading</div>
+      ) : (
+        <D3ChartProvider data={data} xScale={xScale} dms={dms}>
+          {children}
+        </D3ChartProvider>
+      )}
+    </div>
   );
 };
