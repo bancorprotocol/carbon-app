@@ -42,6 +42,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const [mounted, setMounted] = useState(false);
 
   const setOverlappingParams = async (min: string, max: string) => {
+    if (!min || !max) return;
     const params = await carbonSDK.calculateOverlappingStrategyPrices(
       quote!.address,
       min,
@@ -113,6 +114,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const min = order0.min;
     const max = order1.max;
     setOverlappingParams(min, max).then((params) => {
+      if (!params) return;
       const marginalPrice = params.buyPriceMarginal;
       if (isMinAboveMarket({ min, marginalPrice }, quote)) {
         setAnchoderOrder('sell');
@@ -138,6 +140,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const min = order0.min;
     const max = order1.max;
     setOverlappingParams(min, max).then((params) => {
+      if (!params) return;
       const marginalPrice = params.sellPriceMarginal;
       if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
         setAnchoderOrder('buy');
