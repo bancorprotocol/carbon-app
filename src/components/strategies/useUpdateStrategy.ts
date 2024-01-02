@@ -1,3 +1,4 @@
+import { StrategyUpdate } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { useNotifications } from 'hooks/useNotifications';
 import {
@@ -115,6 +116,8 @@ export const useUpdateStrategy = () => {
 
   const changeRateStrategy = async (
     strategy: Strategy,
+    buyMarginalPrice?: MarginalPriceOptions,
+    sellMarginalPrice?: MarginalPriceOptions,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
@@ -133,6 +136,8 @@ export const useUpdateStrategy = () => {
           sellPriceLow: order1.startRate,
           sellPriceHigh: order1.endRate,
         },
+        buyMarginalPrice,
+        sellMarginalPrice,
       },
       {
         onSuccess: async (tx) => {
@@ -169,14 +174,21 @@ export const useUpdateStrategy = () => {
       throw new Error('error in withdraw strategy budget: missing data ');
     }
 
+    const fieldsToUpdate: StrategyUpdate = Object.assign({});
+
+    if (buyMarginalPrice) {
+      fieldsToUpdate.buyBudget = order0.balance;
+    }
+
+    if (sellMarginalPrice) {
+      fieldsToUpdate.sellBudget = order1.balance;
+    }
+
     updateMutation.mutate(
       {
         id,
         encoded,
-        fieldsToUpdate: {
-          buyBudget: order0.balance,
-          sellBudget: order1.balance,
-        },
+        fieldsToUpdate,
         buyMarginalPrice,
         sellMarginalPrice,
       },
@@ -215,14 +227,21 @@ export const useUpdateStrategy = () => {
       throw new Error('error in deposit strategy budget: missing data');
     }
 
+    const fieldsToUpdate: StrategyUpdate = Object.assign({});
+
+    if (buyMarginalPrice) {
+      fieldsToUpdate.buyBudget = order0.balance;
+    }
+
+    if (sellMarginalPrice) {
+      fieldsToUpdate.sellBudget = order1.balance;
+    }
+
     updateMutation.mutate(
       {
         id,
         encoded,
-        fieldsToUpdate: {
-          buyBudget: order0.balance,
-          sellBudget: order1.balance,
-        },
+        fieldsToUpdate,
         buyMarginalPrice,
         sellMarginalPrice,
       },

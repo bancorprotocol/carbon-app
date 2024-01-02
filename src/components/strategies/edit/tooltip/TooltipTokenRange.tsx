@@ -3,7 +3,7 @@ import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPr
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { useFiatPrice } from 'hooks/useFiatPrice';
+import { useFiatValue } from 'hooks/useFiatValue';
 import { LogoImager } from 'components/common/imager/Imager';
 
 export interface TooltipPriceProps {
@@ -21,8 +21,8 @@ export const TooltipTokenRange: FC<TooltipPriceProps> = ({
   className,
 }) => {
   const { min, max } = range;
-  const minFiatPrice = useFiatPrice({ price: min, token });
-  const maxFiatPrice = useFiatPrice({ price: max, token });
+  const minFiatPrice = useFiatValue({ price: min, token });
+  const maxFiatPrice = useFiatValue({ price: max, token });
   const minFullPrice = sanitizeNumberInput(min, token.decimals);
   const maxFullPrice = sanitizeNumberInput(max, token.decimals);
   return (

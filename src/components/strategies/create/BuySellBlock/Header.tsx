@@ -1,7 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { useModal } from 'hooks/useModal';
 import { OrderCreate } from '../useOrder';
-import { lsService } from 'services/localeStorage';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 
@@ -14,20 +12,10 @@ interface Props {
 
 export const BuySellHeader: FC<Props> = (props) => {
   const { order, buy, children, base } = props;
-  const { openModal } = useModal();
   const { isRange, setIsRange, resetFields } = order;
   const handleRangeChange = () => {
-    if (!lsService.getItem('hasSeenCreateStratExpertMode')) {
-      openModal('createStratExpertMode', {
-        onConfirm: () => {
-          setIsRange(!isRange);
-          resetFields(true);
-        },
-      });
-    } else {
-      setIsRange(!isRange);
-      resetFields(true);
-    }
+    setIsRange(!isRange);
+    resetFields(true);
   };
   return (
     <header className="flex items-center justify-between">
@@ -41,6 +29,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={`rounded-40 font-weight-500 ${
               !isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="tab-limit"
           >
             Limit
           </button>
@@ -51,6 +40,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             className={`rounded-40 font-weight-500 ${
               isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="tab-range"
           >
             Range
           </button>
