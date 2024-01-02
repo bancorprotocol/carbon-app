@@ -24,6 +24,23 @@ export class MyStrategyDriver {
       buyBudgetFiat: () => strategy.getByTestId('buy-budget-fiat'),
       sellBudget: () => strategy.getByTestId('sell-budget'),
       sellBudgetFiat: () => strategy.getByTestId('sell-budget-fiat'),
+      priceTooltip: async (mode: 'buy' | 'sell') => {
+        // Note: locator.hover() doesn't work because of polygon form I think
+        const position = await strategy
+          .getByTestId(`polygon-${mode}`)
+          .boundingBox();
+        if (!position?.x || !position?.y) throw new Error('No polygon found');
+        const x =
+          mode === 'buy' ? position.x + 2 : position.x + position.width - 2;
+        const y = position.y + 2;
+        await this.page.mouse.move(x, y);
+        const tooltip = this.page.getByTestId('order-tooltip');
+        return {
+          minPrice: () => tooltip.getByTestId('min-price'),
+          maxPrice: () => tooltip.getByTestId('max-price'),
+          marginalPrice: () => tooltip.getByTestId('marginal-price'),
+        };
+      },
     };
   }
 

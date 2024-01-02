@@ -3,12 +3,12 @@ import { useFiatCurrency } from './useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { getFiatDisplayValue } from 'utils/helpers';
 
-interface FiatPriceParams {
+interface FiatValueParams {
   token: Token;
   price?: string;
 }
 
-export const useFiatPrice = ({ price, token }: FiatPriceParams) => {
+export const useFiatValue = ({ price, token }: FiatValueParams) => {
   const { selectedFiatCurrency, useGetTokenPrice } = useFiatCurrency();
   const { data: fiatPriceMap } = useGetTokenPrice(token.address);
   const fiatPrice = fiatPriceMap?.[selectedFiatCurrency] || 0;

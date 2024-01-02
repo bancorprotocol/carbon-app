@@ -34,7 +34,7 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
 
   return (
     <ModalOrMobileSheet id={id}>
-      <div className={'mt-40'}>
+      <div className="my-20">
         <IconTitleText
           variant={variant}
           icon={icon}
@@ -43,22 +43,16 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
         />
       </div>
       <Button
-        variant={'white'}
+        variant="white"
         fullWidth
         onClick={() => {
           closeModal(id);
           onConfirm();
         }}
-        className={'my-16'}
       >
         {buttonLabel}
       </Button>
-      <Button
-        variant={'black'}
-        fullWidth
-        onClick={() => closeModal(id)}
-        className={'mt-16'}
-      >
+      <Button variant="black" fullWidth onClick={() => closeModal(id)}>
         Cancel
       </Button>
     </ModalOrMobileSheet>

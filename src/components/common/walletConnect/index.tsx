@@ -13,8 +13,7 @@ export const WalletConnect = () => {
           Automate your Trading Strategies
         </h1>
         <p className="mt-16 mb-24 text-white/60 md:mt-24 md:mb-40">
-          A fully decentralized protocol for automating on-chain trading
-          strategies.
+          A decentralized protocol for automating on-chain trading strategies.
         </p>
 
         <Link

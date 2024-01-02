@@ -44,6 +44,7 @@ import {
   ToastStore,
   useToastStore,
 } from 'store/useToasterStore';
+import { DebugStore, defaultDebugStore, useDebugStore } from './useDebugStore';
 
 // ********************************** //
 // STORE CONTEXT
@@ -68,6 +69,7 @@ interface StoreContext {
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
   toaster: ToastStore;
+  debug: DebugStore;
 }
 
 const defaultValue: StoreContext = {
@@ -89,6 +91,7 @@ const defaultValue: StoreContext = {
   selectedWallet: null,
   setSelectedWallet: () => {},
   toaster: defaultToastStore,
+  debug: defaultDebugStore,
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -115,6 +118,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const tokens = useTokensStore();
   const fiatCurrency = useFiatCurrencyStore();
   const toaster = useToastStore();
+  const debug = useDebugStore();
 
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
@@ -135,6 +139,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     selectedWallet,
     setSelectedWallet,
     toaster,
+    debug,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;
