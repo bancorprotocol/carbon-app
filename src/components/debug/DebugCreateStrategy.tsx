@@ -16,12 +16,9 @@ import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
-import {
-  getBuyMarginalPrice,
-  getSellMarginalPrice,
-} from 'components/strategies/overlapping/utils';
 import { carbonApi } from 'utils/carbonApi';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { carbonSDK } from 'libs/sdk';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -135,18 +132,20 @@ export const DebugCreateStrategy = () => {
       },
     };
     if (spread) {
-      const [basePrice, quotePrice] = await Promise.all([
-        carbonApi.getMarketRate(base.address, [selectedFiatCurrency]),
-        carbonApi.getMarketRate(quote.address, [selectedFiatCurrency]),
+      const price = await carbonApi.getMarketRate(quote.address, [
+        selectedFiatCurrency,
       ]);
-      strategy.order0.marginalPrice = getBuyMarginalPrice(
-        quotePrice[selectedFiatCurrency],
-        Number(spread)
-      ).toString();
-      strategy.order1.marginalPrice = getSellMarginalPrice(
-        basePrice[selectedFiatCurrency],
-        Number(spread)
-      ).toString();
+      const params = await carbonSDK.calculateOverlappingStrategyPrices(
+        quote.address,
+        buyMin,
+        sellMax,
+        price[selectedFiatCurrency].toString(),
+        spread
+      );
+      strategy.order0.max = params.buyPriceHigh;
+      strategy.order0.marginalPrice = params.buyPriceMarginal;
+      strategy.order1.min = params.sellPriceLow;
+      strategy.order1.marginalPrice = params.sellPriceMarginal;
     }
 
     for (let i = 0; i <= rounds - 1; i++) {
@@ -220,8 +219,8 @@ export const DebugCreateStrategy = () => {
           />
         </Label>
         <p>
-          Spread will be used to get marginal price, you still need to set the
-          correct values below
+          Spread will create an overlapping strategy. You still need to set the
+          correct budget.
         </p>
       </fieldset>
 
@@ -236,11 +235,12 @@ export const DebugCreateStrategy = () => {
             data-testid="buyMin"
           />
         </Label>
-        <Label label="Max">
+        <Label label={`Max ${spread ? '(Disabled)' : ''}`}>
           <Input
             type="text"
             value={buyMax}
             fullWidth
+            disabled={!!spread}
             onChange={(e) => setBuyMax(e.target.value)}
             data-testid="buyMax"
           />
@@ -257,11 +257,12 @@ export const DebugCreateStrategy = () => {
       </fieldset>
       <fieldset className="flex w-full flex-col gap-8 rounded border border-white/60 p-16">
         <legend>Sell High {baseSymbol}</legend>
-        <Label label="Min">
+        <Label label={`Min ${spread ? '(Disabled)' : ''}`}>
           <Input
             type="text"
             value={sellMin}
             fullWidth
+            disabled={!!spread}
             onChange={(e) => setSellMin(e.target.value)}
             data-testid="sellMin"
           />
