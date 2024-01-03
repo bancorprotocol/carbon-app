@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { cn, prettifySignedNumber } from 'utils/helpers';
+import { cn, prettifySignedNumber, sanitizeInputOnBlur } from 'utils/helpers';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
@@ -160,15 +160,17 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
   const { quote, order0, order1, spread } = props;
+  const baseMin = Number(sanitizeInputOnBlur(order0.min));
+  const baseMax = Number(sanitizeInputOnBlur(order1.max));
   // Make sure the distance is always large enough to avoid blurry behavior
-  const delta = Number(order1.max) - Number(order0.min) || 1;
+  const delta = baseMax - baseMin || 1;
   const xFactor = delta <= 1 ? 1 / delta : 1;
 
   const marketPrice = props.marketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
-    min: Number(props.order0.min) * xFactor,
-    max: Number(props.order1.max) * xFactor,
+    min: baseMin * xFactor,
+    max: baseMax * xFactor,
     marketPrice,
     zoom,
   });
@@ -259,8 +261,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       top,
       middle,
       bottom,
-      min: Number(order0.min) * xFactor,
-      max: Number(order1.max) * xFactor,
+      min: baseMin * xFactor,
+      max: baseMax * xFactor,
       buyMax: Number(order0.max) * xFactor,
       sellMin: Number(order1.min) * xFactor,
       marginalBuy: Number(order0.marginalPrice) * xFactor,
@@ -289,8 +291,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const getConfig = () => {
     if (disabled) return getStaticConfig();
     return getPointConfig({
-      min: Number(order0.min) * xFactor,
-      max: Number(order1.max) * xFactor,
+      min: baseMin * xFactor,
+      max: baseMax * xFactor,
     });
   };
 
@@ -405,8 +407,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     'marginal-sell-polygon': getMarginalSellPoint,
   };
 
-  const minSellMax = getMinSellMax(Number(order0.min) * xFactor, spread);
-  const maxBuyMin = getMaxBuyMin(Number(order1.max) * xFactor, spread);
+  const minSellMax = getMinSellMax(baseMin * xFactor, spread);
+  const maxBuyMin = getMaxBuyMin(baseMax * xFactor, spread);
 
   // Get new min & max based on current handler
   const updatedMinMax = (e: MouseEvent) => {
