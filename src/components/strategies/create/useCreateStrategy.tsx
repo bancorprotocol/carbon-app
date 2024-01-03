@@ -22,7 +22,7 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
-import { checkIfOrdersOverlap } from '../utils';
+import { checkIfOrdersOverlap, isValidRange } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import {
   getRoundedSpreadPPM,
@@ -259,20 +259,17 @@ export const useCreateStrategy = () => {
     if (order1.budgetError) return true;
 
     if (isOverlapping) {
-      const min = Number(order0.min);
-      const max = Number(order1.max);
       if (spreadPPM <= 0 || spreadPPM >= 100) return true;
-      if (min <= 0 || min >= max) return true;
+      return isValidRange(order0.min, order1.max);
     } else {
       const isOrder0Valid = order0.isRange
-        ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
+        ? isValidRange(order0.min, order0.max)
         : +order0.price >= 0 && order0.price !== '';
       const isOrder1Valid = order1.isRange
-        ? +order1.min > 0 && +order1.max > 0 && +order1.min < +order1.max
+        ? isValidRange(order1.min, order1.max)
         : +order1.price >= 0 && order1.price !== '';
       return !isOrder0Valid || !isOrder1Valid;
     }
-    return false;
   }, [
     user,
     approval.isLoading,

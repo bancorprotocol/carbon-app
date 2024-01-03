@@ -1,10 +1,10 @@
-import { ChangeEvent, FC, useEffect, useId } from 'react';
+import { ChangeEvent, FocusEvent, FC, useEffect, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeInputOnBlur, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
@@ -50,8 +50,8 @@ export const InputRange: FC<InputRangeProps> = ({
   // Handle errors
   useEffect(() => {
     if (!min || !max) return;
-    const minValue = Number(min);
-    const maxValue = Number(max);
+    const minValue = min === '.' ? 0 : Number(min);
+    const maxValue = max === '.' ? 0 : Number(max);
     let error = '';
     if (minValue >= maxValue) error = errorMinMax;
     if (minValue <= 0 || maxValue <= 0) error = errorAboveZero;
@@ -67,9 +67,15 @@ export const InputRange: FC<InputRangeProps> = ({
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumberInput(e.target.value));
   };
+  const handleBlurMin = (e: FocusEvent<HTMLInputElement>) => {
+    setMin(sanitizeInputOnBlur(e.target.value));
+  };
 
   const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
     setMax(sanitizeNumberInput(e.target.value));
+  };
+  const handleBlurMax = (e: FocusEvent<HTMLInputElement>) => {
+    setMax(sanitizeInputOnBlur(e.target.value));
   };
 
   const { getFiatAsString } = useFiatCurrency(quote);
@@ -109,6 +115,7 @@ export const InputRange: FC<InputRangeProps> = ({
             `}
             onChange={handleChangeMin}
             onFocus={(e) => e.target.select()}
+            onBlur={handleBlurMin}
             data-testid="input-range-min"
           />
           <p className="flex flex-wrap items-center gap-4">
@@ -153,6 +160,7 @@ export const InputRange: FC<InputRangeProps> = ({
             `}
             onChange={handleChangeMax}
             onFocus={(e) => e.target.select()}
+            onBlur={handleBlurMax}
             data-testid="input-range-max"
           />
           <div className="flex flex-wrap items-center gap-4">

@@ -19,6 +19,7 @@ import {
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
+import { isValidRange } from 'components/strategies/utils';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -119,11 +120,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     if (!order0.min && !order1.max) {
       const min = (marketPrice * 0.999).toFixed(quote.decimals);
       const max = (marketPrice * 1.001).toFixed(quote.decimals);
-      setOverlappingParams(min, max);
+      if (isValidRange(min, max)) setOverlappingParams(min, max);
     } else {
       const min = order0.min;
       const max = order1.max;
-      if (min && max) setOverlappingParams(min, max);
+      if (isValidRange(min, max)) setOverlappingParams(min, max);
       if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
       if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     }
@@ -135,7 +136,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     const min = order0.min;
     const max = order1.max;
     if (!min) return;
-    if (max) {
+    if (isValidRange(min, max)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.buyPriceMarginal;
         if (isMinAboveMarket({ min, marginalPrice }, quote)) {
@@ -161,7 +162,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     const min = order0.min;
     const max = order1.max;
     if (!max) return;
-    if (min) {
+    if (isValidRange(min, max)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.sellPriceMarginal;
         if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
@@ -217,7 +218,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           order1={order1}
           marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
-          setOverlappingParams={setOverlappingParams}
         />
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">

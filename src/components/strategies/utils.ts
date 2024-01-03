@@ -1,5 +1,11 @@
 import { OrderCreate } from './create/useOrder';
 
+export const isValidRange = (minStr: string, maxStr: string) => {
+  const min = Number(minStr);
+  const max = Number(maxStr);
+  return !isNaN(min) && !isNaN(max) && min > 0 && min < max;
+};
+
 export const checkIfOrdersOverlap = (
   orderA: OrderCreate,
   orderB: OrderCreate

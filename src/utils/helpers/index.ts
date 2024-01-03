@@ -34,6 +34,13 @@ export const sanitizeNumberInput = (
   else return sanitized;
 };
 
+export const sanitizeInputOnBlur = (value: string) => {
+  if (value === '.') return '0';
+  if (value.startsWith('.')) return `0${value}`;
+  if (value.endsWith('.')) return value.slice(0, -1);
+  return value;
+};
+
 export const shortenString = (
   string: string,
   separator = '...',

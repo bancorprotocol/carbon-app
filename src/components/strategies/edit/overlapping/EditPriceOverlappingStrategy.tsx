@@ -17,6 +17,7 @@ import { OverlappingStrategyGraph } from 'components/strategies/overlapping/Over
 import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
 import { OverlappingRange } from 'components/strategies/overlapping/OverlappingRange';
 import { EditOverlappingStrategyBudget } from './EditOverlappingStrategyBudget';
+import { isValidRange } from 'components/strategies/utils';
 
 interface Props {
   strategy: Strategy;
@@ -100,7 +101,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!mounted) return setMounted(true);
-    if (order0.min && order1.max) setOverlappingParams(order0.min, order1.max);
+    if (isValidRange(min, max)) setOverlappingParams(order0.min, order1.max);
     if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
     if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +113,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const max = order1.max;
     if (!min) return;
     if (!mounted) return setMounted(true);
-    if (max) {
+    if (isValidRange(min, max)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.buyPriceMarginal;
         if (isMinAboveMarket({ min, marginalPrice }, quote)) {
@@ -139,7 +140,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const max = order1.max;
     if (!max) return;
     if (!mounted) return setMounted(true);
-    if (min) {
+    if (isValidRange(min, max)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.sellPriceMarginal;
         if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
@@ -174,7 +175,6 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           marketPrice={marketPrice}
           spreadPPM={spreadPPM}
           marketPricePercentage={marketPricePercentage}
-          setOverlappingParams={setOverlappingParams}
         />
       </article>
       <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">

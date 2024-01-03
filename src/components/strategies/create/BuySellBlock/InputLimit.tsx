@@ -1,8 +1,8 @@
-import { ChangeEvent, FC, useId } from 'react';
+import { ChangeEvent, FC, FocusEvent, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeInputOnBlur, sanitizeNumberInput } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
@@ -45,6 +45,9 @@ export const InputLimit: FC<InputLimitProps> = ({
     }
     setPrice(value);
   };
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    setPrice(sanitizeInputOnBlur(e.target.value));
+  };
 
   const { getFiatAsString } = useFiatCurrency(token);
   const fiatAsString = getFiatAsString(price);
@@ -67,6 +70,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           value={price}
           onChange={handleChange}
           onFocus={(e) => e.target.select()}
+          onBlur={handleBlur}
           aria-label="Enter Price"
           placeholder="Enter Price"
           className={`
