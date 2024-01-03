@@ -4,7 +4,7 @@ import { Strategy } from 'libs/queries';
 import {
   getMaxBuyMin,
   getMinSellMax,
-  getRoundedSpreadPPM,
+  getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
@@ -38,7 +38,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     order: { min, max, price: '', isRange: true },
   });
 
-  const [spreadPPM, setSpreadPPM] = useState(getRoundedSpreadPPM(strategy));
+  const [spread, setSpread] = useState(getRoundedSpread(strategy));
   const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
   const [mounted, setMounted] = useState(false);
 
@@ -48,7 +48,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       min,
       max,
       marketPrice.toString(),
-      spreadPPM.toString()
+      spread.toString()
     );
     order0.setMin(min);
     order0.setMax(params.buyPriceHigh);
@@ -72,7 +72,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       buyMin,
       sellMax,
       marketPrice.toString(),
-      spreadPPM.toString(),
+      spread.toString(),
       sellBudget
     );
     order0.setBudget(buyBudget);
@@ -91,7 +91,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       buyMin,
       sellMax,
       marketPrice.toString(),
-      spreadPPM.toString(),
+      spread.toString(),
       buyBudget
     );
     order1.setBudget(sellBudget);
@@ -105,7 +105,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
     if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spreadPPM]);
+  }, [marketPrice, spread]);
 
   // Update on buyMin changes
   useEffect(() => {
@@ -127,7 +127,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     }
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const minSellMax = getMinSellMax(Number(min), spreadPPM);
+      const minSellMax = getMinSellMax(Number(min), spread);
       if (Number(max) < minSellMax) order1.setMax(minSellMax.toFixed(decimals));
     }, 1000);
     return () => clearTimeout(timeout);
@@ -154,7 +154,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     }
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const maxBuyMin = getMaxBuyMin(Number(max), spreadPPM);
+      const maxBuyMin = getMaxBuyMin(Number(max), spread);
       if (Number(min) > maxBuyMin) order0.setMin(maxBuyMin.toFixed(decimals));
     }, 1000);
     return () => clearTimeout(timeout);
@@ -173,7 +173,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           order0={order0}
           order1={order1}
           marketPrice={marketPrice}
-          spreadPPM={spreadPPM}
+          spread={spread}
           marketPricePercentage={marketPricePercentage}
         />
       </article>
@@ -211,8 +211,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           order1={order1}
           defaultValue={0.05}
           options={[0.01, 0.05, 0.1]}
-          spreadPPM={spreadPPM}
-          setSpreadPPM={setSpreadPPM}
+          spread={spread}
+          setSpread={setSpread}
         />
       </article>
       <EditOverlappingStrategyBudget

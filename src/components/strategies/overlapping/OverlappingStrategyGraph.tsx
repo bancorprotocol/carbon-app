@@ -32,7 +32,7 @@ interface EnableProps {
   quote?: Token;
   order0: OrderCreate;
   order1: OrderCreate;
-  spreadPPM: number;
+  spread: number;
   disabled?: false;
 }
 
@@ -43,7 +43,7 @@ interface DisableProps {
   quote?: Token;
   order0: OrderCreate;
   order1: OrderCreate;
-  spreadPPM: number;
+  spread: number;
   disabled: true;
 }
 
@@ -159,7 +159,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
-  const { quote, order0, order1, spreadPPM } = props;
+  const { quote, order0, order1, spread } = props;
   // Make sure the distance is always large enough to avoid blurry behavior
   const delta = Number(order1.max) - Number(order0.min) || 1;
   const xFactor = delta <= 1 ? 1 / delta : 1;
@@ -270,10 +270,10 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   /** Config returned if Graph is dynamic */
   const getPointConfig = ({ min, max }: { min: number; max: number }) => {
-    const buyMax = clamp(min, getBuyMax(max, spreadPPM), max);
-    const sellMin = clamp(min, getSellMin(min, spreadPPM), max);
-    const marginalBuy = getBuyMarginalPrice(marketPrice, spreadPPM);
-    const marginalSell = getSellMarginalPrice(marketPrice, spreadPPM);
+    const buyMax = clamp(min, getBuyMax(max, spread), max);
+    const sellMin = clamp(min, getSellMin(min, spread), max);
+    const marginalBuy = getBuyMarginalPrice(marketPrice, spread);
+    const marginalSell = getSellMarginalPrice(marketPrice, spread);
     return {
       top,
       middle,
@@ -405,8 +405,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     'marginal-sell-polygon': getMarginalSellPoint,
   };
 
-  const minSellMax = getMinSellMax(Number(order0.min) * xFactor, spreadPPM);
-  const maxBuyMin = getMaxBuyMin(Number(order1.max) * xFactor, spreadPPM);
+  const minSellMax = getMinSellMax(Number(order0.min) * xFactor, spread);
+  const maxBuyMin = getMaxBuyMin(Number(order1.max) * xFactor, spread);
 
   // Get new min & max based on current handler
   const updatedMinMax = (e: MouseEvent) => {
@@ -515,7 +515,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
         <span>Market price provided by CoinGecko</span>
         <IconCoinGecko className="h-8 w-8" />
         <span role="separator">·</span>
-        <span>Spread {spreadPPM || 0}%</span>
+        <span>Spread {spread || 0}%</span>
       </figcaption>
       <svg
         ref={svg}

@@ -2,35 +2,32 @@ import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 
-export const getBuyMax = (sellMax: number, spreadPPM: number) => {
-  return sellMax / (1 + spreadPPM / 100);
+export const getBuyMax = (sellMax: number, spread: number) => {
+  return sellMax / (1 + spread / 100);
 };
 
-export const getSellMin = (buyMin: number, spreadPPM: number) => {
-  return buyMin * (1 + spreadPPM / 100);
+export const getSellMin = (buyMin: number, spread: number) => {
+  return buyMin * (1 + spread / 100);
 };
 
-export const getBuyMarginalPrice = (marketPrice: number, spreadPPM: number) => {
-  return marketPrice / (1 + spreadPPM / 100) ** 0.5;
+export const getBuyMarginalPrice = (marketPrice: number, spread: number) => {
+  return marketPrice / (1 + spread / 100) ** 0.5;
 };
 
-export const getSellMarginalPrice = (
-  marketPrice: number,
-  spreadPPM: number
-) => {
-  return marketPrice * (1 + spreadPPM / 100) ** 0.5;
+export const getSellMarginalPrice = (marketPrice: number, spread: number) => {
+  return marketPrice * (1 + spread / 100) ** 0.5;
 };
 
-export const getMaxSpreadPPM = (buyMin: number, sellMax: number) => {
+export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
 };
 
-export const getMinSellMax = (buyMin: number, spreadPPM: number) => {
-  return buyMin / (1 - spreadPPM / 100) ** 2;
+export const getMinSellMax = (buyMin: number, spread: number) => {
+  return buyMin / (1 - spread / 100) ** 2;
 };
 
-export const getMaxBuyMin = (sellMax: number, spreadPPM: number) => {
-  return sellMax * (1 - spreadPPM / 100) ** 2;
+export const getMaxBuyMin = (sellMax: number, spread: number) => {
+  return sellMax * (1 - spread / 100) ** 2;
 };
 
 type StrategyOrderInput =
@@ -50,15 +47,15 @@ export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   return buyMax.gte(sellMin);
 };
 
-export const getSpreadPPM = (strategy: Strategy) => {
+export const getSpread = (strategy: Strategy) => {
   const { order0, order1 } = strategy;
   const buyMax = Number(order0.endRate);
   const sellMax = Number(order1.endRate);
   return (sellMax / buyMax - 1) * 100;
 };
 
-export const getRoundedSpreadPPM = (strategy: Strategy) => {
-  const spreadPPRM = getSpreadPPM(strategy);
+export const getRoundedSpread = (strategy: Strategy) => {
+  const spreadPPRM = getSpread(strategy);
   return Number(spreadPPRM.toFixed(2));
 };
 

@@ -24,10 +24,7 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap, isValidRange } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import {
-  getRoundedSpreadPPM,
-  isOverlappingStrategy,
-} from '../overlapping/utils';
+import { getRoundedSpread, isOverlappingStrategy } from '../overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -51,9 +48,9 @@ export const useCreateStrategy = () => {
   const order0 = useOrder(templateStrategy?.order0);
   const order1 = useOrder(templateStrategy?.order1);
   const baseSpread = templateStrategy
-    ? getRoundedSpreadPPM(templateStrategy)
+    ? getRoundedSpread(templateStrategy)
     : 0.05;
-  const [spreadPPM, setSpreadPPM] = useState(baseSpread);
+  const [spread, setSpread] = useState(baseSpread);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { marketPricePercentage: buyMarketPricePercentage } =
@@ -259,7 +256,7 @@ export const useCreateStrategy = () => {
     if (order1.budgetError) return true;
 
     if (isOverlapping) {
-      if (spreadPPM <= 0 || spreadPPM >= 100) return true;
+      if (spread <= 0 || spread >= 100) return true;
       return isValidRange(order0.min, order1.max);
     } else {
       const isOrder0Valid = order0.isRange
@@ -286,7 +283,7 @@ export const useCreateStrategy = () => {
     order1.max,
     order1.isRange,
     order1.price,
-    spreadPPM,
+    spread,
     isOverlapping,
   ]);
 
@@ -383,8 +380,8 @@ export const useCreateStrategy = () => {
     setSelectedStrategySettings,
     isProcessing,
     isOrdersOverlap,
-    spreadPPM,
-    setSpreadPPM,
+    spread,
+    setSpread,
     isOverlapping,
   };
 };

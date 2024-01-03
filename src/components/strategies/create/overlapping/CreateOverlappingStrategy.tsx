@@ -28,8 +28,8 @@ export interface OverlappingStrategyProps {
   order1: OrderCreate;
   token0BalanceQuery: UseQueryResult<string, any>;
   token1BalanceQuery: UseQueryResult<string, any>;
-  spreadPPM: number;
-  setSpreadPPM: Dispatch<SetStateAction<number>>;
+  spread: number;
+  setSpread: Dispatch<SetStateAction<number>>;
 }
 type FromPromise<T> = T extends Promise<infer I> ? I : never;
 type StrategyPrices = FromPromise<
@@ -44,7 +44,7 @@ export type SetOverlappingParams = (
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
 ) => {
-  const { base, quote, order0, order1, spreadPPM, setSpreadPPM } = props;
+  const { base, quote, order0, order1, spread, setSpread } = props;
   const marketPrice = useMarketPrice({ base, quote });
   const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
   const { marketPricePercentage } = useMarketIndication({
@@ -65,7 +65,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       min,
       max,
       marketPrice.toString(),
-      spreadPPM.toString()
+      spread.toString()
     );
     order0.setMin(min);
     order0.setMax(params.buyPriceHigh);
@@ -89,7 +89,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       buyMin,
       sellMax,
       marketPrice.toString(),
-      spreadPPM.toString(),
+      spread.toString(),
       sellBudget
     );
     order0.setBudget(buyBudget);
@@ -108,7 +108,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       buyMin,
       sellMax,
       marketPrice.toString(),
-      spreadPPM.toString(),
+      spread.toString(),
       buyBudget
     );
     order1.setBudget(sellBudget);
@@ -129,7 +129,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spreadPPM]);
+  }, [marketPrice, spread]);
 
   // Update on buyMin changes
   useEffect(() => {
@@ -150,7 +150,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const minSellMax = getMinSellMax(Number(min), spreadPPM);
+      const minSellMax = getMinSellMax(Number(min), spread);
       if (Number(max) < minSellMax) order1.setMax(minSellMax.toFixed(decimals));
     }, 1000);
     return () => clearTimeout(timeout);
@@ -176,7 +176,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const maxBuyMin = getMaxBuyMin(Number(max), spreadPPM);
+      const maxBuyMin = getMaxBuyMin(Number(max), spread);
       if (Number(min) > maxBuyMin) order0.setMin(maxBuyMin.toFixed(decimals));
     }, 1000);
     return () => clearTimeout(timeout);
@@ -260,8 +260,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           order1={order1}
           defaultValue={0.05}
           options={[0.01, 0.05, 0.1]}
-          spreadPPM={spreadPPM}
-          setSpreadPPM={setSpreadPPM}
+          spread={spread}
+          setSpread={setSpread}
         />
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
