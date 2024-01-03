@@ -24,7 +24,11 @@ import {
 } from 'components/strategies/create/utils';
 import { checkIfOrdersOverlap, isValidRange } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { getRoundedSpread, isOverlappingStrategy } from '../overlapping/utils';
+import {
+  getRoundedSpread,
+  isOverlappingStrategy,
+  isValidSpread,
+} from '../overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -256,8 +260,7 @@ export const useCreateStrategy = () => {
     if (order1.budgetError) return true;
 
     if (isOverlapping) {
-      if (spread <= 0 || spread >= 100) return true;
-      return isValidRange(order0.min, order1.max);
+      return !isValidSpread(spread) || !isValidRange(order0.min, order1.max);
     } else {
       const isOrder0Valid = order0.isRange
         ? isValidRange(order0.min, order0.max)

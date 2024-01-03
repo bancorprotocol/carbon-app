@@ -7,6 +7,7 @@ import {
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
+  isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
@@ -101,7 +102,9 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!mounted) return setMounted(true);
-    if (isValidRange(min, max)) setOverlappingParams(order0.min, order1.max);
+    if (isValidRange(min, max) && isValidSpread(spread)) {
+      setOverlappingParams(order0.min, order1.max);
+    }
     if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
     if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +116,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const max = order1.max;
     if (!min) return;
     if (!mounted) return setMounted(true);
-    if (isValidRange(min, max)) {
+    if (isValidRange(min, max) && isValidSpread(spread)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.buyPriceMarginal;
         if (isMinAboveMarket({ min, marginalPrice }, quote)) {
@@ -140,7 +143,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const max = order1.max;
     if (!max) return;
     if (!mounted) return setMounted(true);
-    if (isValidRange(min, max)) {
+    if (isValidRange(min, max) && isValidSpread(spread)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.sellPriceMarginal;
         if (isMaxBelowMarket({ max, marginalPrice }, quote)) {

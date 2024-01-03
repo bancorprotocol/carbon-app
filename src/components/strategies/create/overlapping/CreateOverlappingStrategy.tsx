@@ -18,6 +18,7 @@ import {
   getMinSellMax,
   isMaxBelowMarket,
   isMinAboveMarket,
+  isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { isValidRange } from 'components/strategies/utils';
 
@@ -124,7 +125,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     } else {
       const min = order0.min;
       const max = order1.max;
-      if (isValidRange(min, max)) setOverlappingParams(min, max);
+      if (isValidRange(min, max) && isValidSpread(spread)) {
+        setOverlappingParams(min, max);
+      }
       if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
       if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     }
@@ -136,7 +139,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     const min = order0.min;
     const max = order1.max;
     if (!min) return;
-    if (isValidRange(min, max)) {
+    if (isValidRange(min, max) && isValidSpread(spread)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.buyPriceMarginal;
         if (isMinAboveMarket({ min, marginalPrice }, quote)) {
@@ -162,7 +165,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     const min = order0.min;
     const max = order1.max;
     if (!max) return;
-    if (isValidRange(min, max)) {
+    if (isValidRange(min, max) && isValidSpread(spread)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.sellPriceMarginal;
         if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
