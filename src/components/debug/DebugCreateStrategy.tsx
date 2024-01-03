@@ -10,13 +10,18 @@ import { FAUCET_TOKENS } from 'utils/tenderly';
 import { config } from 'services/web3/config';
 import { wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
-import { SafeDecimal } from 'libs/safedecimal';
 import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
+import {
+  getBuyMarginalPrice,
+  getSellMarginalPrice,
+} from 'components/strategies/overlapping/utils';
+import { carbonApi } from 'utils/carbonApi';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -47,6 +52,7 @@ export const DebugCreateStrategy = () => {
   const [sellMin, setSellMin] = useState('0');
   const [sellMax, setSellMax] = useState('0');
   const [sellBudget, setSellBudget] = useState('0');
+  const [spread, setSpread] = useState('');
   const selectedTokens = useMemo(() => {
     return allTokens
       .filter((t) => t.selected && t.count > 0)
@@ -56,6 +62,7 @@ export const DebugCreateStrategy = () => {
   const baseSymbol = selectedTokens?.[0]?.symbol ?? '';
   const quoteSymbol = selectedTokens?.[1]?.symbol ?? '';
 
+  const { selectedFiatCurrency } = useFiatCurrency();
   const balanceQueries = useGetTokenBalances(selectedTokens);
 
   const perRound = 1;
@@ -105,34 +112,46 @@ export const DebugCreateStrategy = () => {
   };
 
   const create = async () => {
-    if (!user) {
-      console.error('user is undefined');
-      return;
-    }
+    if (!user) throw new Error('user is undefined');
     setIsRunning(true);
+    const base = selectedTokens[0];
+    const quote = selectedTokens[1];
+    const strategy: CreateStrategyParams = {
+      base,
+      quote,
+      order0: {
+        max: buyMax,
+        min: buyMin,
+        marginalPrice: '',
+        budget: buyBudget,
+        price: buyMax === buyMin ? buyMax : '',
+      },
+      order1: {
+        max: sellMax,
+        min: sellMin,
+        marginalPrice: '',
+        budget: sellBudget,
+        price: sellMax === sellMin ? sellMax : '',
+      },
+    };
+    if (spread) {
+      const [basePrice, quotePrice] = await Promise.all([
+        carbonApi.getMarketRate(base.address, [selectedFiatCurrency]),
+        carbonApi.getMarketRate(quote.address, [selectedFiatCurrency]),
+      ]);
+      strategy.order0.marginalPrice = getBuyMarginalPrice(
+        quotePrice[selectedFiatCurrency],
+        Number(spread)
+      ).toString();
+      strategy.order1.marginalPrice = getSellMarginalPrice(
+        basePrice[selectedFiatCurrency],
+        Number(spread)
+      ).toString();
+    }
 
-    for await (const _ of Array.from({ length: rounds })) {
-      const base = selectedTokens[0];
-      const quote = selectedTokens[1];
+    for (let i = 0; i <= rounds - 1; i++) {
+      setIndex(i);
       try {
-        const strategy: CreateStrategyParams = {
-          base,
-          quote,
-          order0: {
-            max: buyMax,
-            min: buyMin,
-            marginalPrice: '', // Let createMutation handle this
-            budget: buyBudget,
-            price: buyMax === buyMin ? buyMax : '0',
-          },
-          order1: {
-            max: sellMax,
-            min: sellMin,
-            marginalPrice: '', // Let createMutation handle this
-            budget: sellBudget,
-            price: sellMax === sellMin ? sellMax : '0',
-          },
-        };
         await createMutation.mutateAsync(strategy);
         await wait(interval * 1000);
         await queryClient.invalidateQueries({
@@ -155,8 +174,6 @@ export const DebugCreateStrategy = () => {
           quote.address,
           e
         );
-      } finally {
-        setIndex((i) => i + 1);
       }
     }
     setIsRunning(false);
@@ -189,6 +206,23 @@ export const DebugCreateStrategy = () => {
           <p>{`Base: ${baseSymbol || 'not selected'}`}</p>
           <p>{`Quote: ${quoteSymbol || 'not selected'}`}</p>
         </footer>
+      </fieldset>
+
+      <fieldset className="flex w-full flex-col gap-8 rounded border border-white/60 p-16">
+        <legend>Overlapping Spread</legend>
+        <Label label="Spread">
+          <Input
+            type="text"
+            value={spread}
+            fullWidth
+            onChange={(e) => setSpread(e.target.value)}
+            data-testid="spread"
+          />
+        </Label>
+        <p>
+          Spread will be used to get marginal price, you still need to set the
+          correct values below
+        </p>
       </fieldset>
 
       <fieldset className="flex w-full flex-col gap-8 rounded border border-white/60 p-16">
