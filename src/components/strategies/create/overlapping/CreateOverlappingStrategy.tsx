@@ -42,6 +42,10 @@ export type SetOverlappingParams = (
   max: string
 ) => Promise<StrategyPrices | undefined>;
 
+const roundDecimal = (value: number, precision: number) => {
+  return Number(value.toFixed(precision)).toString();
+};
+
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
 ) => {
@@ -154,7 +158,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(min), spread);
-      if (Number(max) < minSellMax) order1.setMax(minSellMax.toFixed(decimals));
+      if (Number(max) < minSellMax) {
+        order1.setMax(roundDecimal(minSellMax, decimals));
+      }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -180,7 +186,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(max), spread);
-      if (Number(min) > maxBuyMin) order0.setMin(maxBuyMin.toFixed(decimals));
+      if (Number(min) > maxBuyMin) {
+        order0.setMin(roundDecimal(maxBuyMin, decimals));
+      }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
