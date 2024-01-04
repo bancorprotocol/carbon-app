@@ -20,7 +20,7 @@ describe('Test helpers', () => {
     expect(sanitizeNumber('1,1')).toBe('1.1');
     expect(sanitizeNumber('10')).toBe('10');
     expect(sanitizeNumber('01.10')).toBe('01.10');
-    expect(sanitizeNumber('0.1000000', 3)).toBe('1.100');
+    expect(sanitizeNumber('0.1000000', 3)).toBe('0.100');
   });
   test('formatNumber', () => {
     expect(formatNumber('.')).toBe('0');
