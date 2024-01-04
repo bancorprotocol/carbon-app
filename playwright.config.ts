@@ -17,7 +17,7 @@ export default defineConfig({
   forbidOnly: !!isCI,
   retries: isCI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: isCI ? 1 : undefined,
+  workers: isCI ? 6 : undefined,
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
 
