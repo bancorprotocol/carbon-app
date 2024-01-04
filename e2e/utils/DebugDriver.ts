@@ -25,7 +25,7 @@ export const setupFork = async (
   const rpcUrl = forkRpcUrl(fork.id);
   // SET RPC-URL
   await page.getByLabel('RPC URL').fill(rpcUrl);
-  await page.context().storageState({ path: storageState });
+  // await page.context().storageState({ path: storageState });
   await page.getByTestId('unchecked-signer').click();
   await page.getByTestId('save-rpc').click();
   await page.waitForURL(`/debug`);
