@@ -162,6 +162,7 @@ export const EditStrategyPricesContent = ({
         variant="white"
         size="lg"
         fullWidth
+        data-testid="edit-strategy-prices-submit"
       >
         {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
       </Button>

@@ -1,5 +1,18 @@
 import { Page } from 'playwright-core';
 
+// TODO import type `StrategyEditOptionId`
+type IDs =
+  | 'duplicateStrategy'
+  | 'manageNotifications'
+  | 'walletOwner'
+  | 'depositFunds'
+  | 'pauseStrategy'
+  | 'renewStrategy'
+  | 'editPrices'
+  | 'deleteStrategy'
+  | 'withdrawFunds';
+type ManageStrategyID = `manage-strategy-${IDs}`;
+
 export class MyStrategyDriver {
   constructor(private page: Page) {}
 
@@ -41,6 +54,9 @@ export class MyStrategyDriver {
           marginalPrice: () => tooltip.getByTestId('marginal-price'),
         };
       },
+      manageButton: () => strategy.getByTestId('manage-strategy-btn'),
+      getManageDropdownItem: (id: ManageStrategyID) =>
+        this.page.getByTestId(id),
     };
   }
 

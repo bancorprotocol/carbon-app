@@ -50,6 +50,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
         variant="white"
         size="lg"
         fullWidth
+        data-testid="pause-strategy-btn"
       >
         Pause Strategy
       </Button>

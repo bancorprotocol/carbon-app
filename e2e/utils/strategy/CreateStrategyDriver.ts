@@ -43,7 +43,7 @@ export class CreateStrategyDriver {
   getLimitForm(mode: Mode) {
     const form = this.page.getByTestId(`${mode}-section`);
     return {
-      limit: () => form.getByTestId('input-limit'),
+      limit: () => form.getByTestId(`input-limit-${mode}`),
       budget: () => form.getByTestId('input-budget'),
       outcomeValue: () => form.getByTestId('outcome-value'),
       outcomeQuote: () => form.getByTestId('outcome-quote'),
