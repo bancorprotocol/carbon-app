@@ -19,7 +19,7 @@ async function globalSetup(config: FullConfig) {
     //
     const browser = await browsers[project.name as BrowserName].launch();
     const page = await browser.newPage();
-    //   await page.goto(`${baseURL}/debug`);
+    await page.goto(`${baseURL}/debug`);
     //   // SET RPC-URL
     //   await page.getByLabel('RPC URL').fill(rpcUrl);
     //   await page.getByTestId('unchecked-signer').click();
