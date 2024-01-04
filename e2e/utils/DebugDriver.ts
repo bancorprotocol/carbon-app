@@ -29,6 +29,7 @@ export const setupFork = async (
   await page.getByTestId('unchecked-signer').click();
   await page.getByTestId('save-rpc').click();
   await page.waitForURL(`/debug`);
+  await page.context().storageState({ path: storageState as string });
 };
 
 export const removeFork = async (testInfo: TestInfo) => {
