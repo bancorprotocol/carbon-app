@@ -97,15 +97,9 @@ export const DebugCreateStrategy = () => {
 
   const total = useMemo(() => rounds * perRound, [perRound, rounds]);
 
-  const approval = useApproval(approvalTokens);
-
   const createStrategies = async (e: FormEvent) => {
     e.preventDefault();
-    if (approval.approvalRequired) {
-      openModal('txConfirm', { approvalTokens, onConfirm: create });
-    } else {
-      create();
-    }
+    openModal('txConfirm', { approvalTokens, onConfirm: create });
   };
 
   const create = async () => {
