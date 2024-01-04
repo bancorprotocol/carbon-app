@@ -21,9 +21,7 @@ export class MyStrategyDriver {
   }
 
   async getAllStrategies() {
-    const strategies = this.page.locator('[data-testid="strategy-list"] > li');
-    await strategies.waitFor({ state: 'visible' });
-    return strategies;
+    return this.page.locator('[data-testid="strategy-list"] > li');
   }
 
   async getStrategy(index: number) {

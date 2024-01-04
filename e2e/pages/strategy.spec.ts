@@ -8,7 +8,7 @@ import {
   waitFor,
 } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
-import { setupImposter } from '../utils/DebugDriver';
+import { removeFork, setupFork, setupImposter } from '../utils/DebugDriver';
 import {
   CreateStrategyConfig,
   CreateStrategyDriver,
@@ -145,9 +145,14 @@ const testStrategy = {
 };
 
 test.describe('Strategies', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, storageState }, testInfo) => {
+    await setupFork(page, testInfo, storageState as string);
     await Promise.all([mockApi(page), setupImposter(page)]);
   });
+  test.afterEach(async ({}, testInfo) => {
+    await removeFork(testInfo);
+  });
+
   test('First Strategy Page', async ({ page }) => {
     await navigateTo(page, '/');
     const driver = new MyStrategyDriver(page);
@@ -436,6 +441,7 @@ test.describe('Strategies', () => {
     await expect(notif.getDescription()).toHaveText(
       'New strategy was successfully created.'
     );
+    await page.waitForTimeout(2000);
 
     // Verify strategy data
     const strategies = await myStrategies.getAllStrategies();
