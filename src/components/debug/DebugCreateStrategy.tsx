@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { Button } from 'components/common/button';
 import {
   CreateStrategyParams,
@@ -36,7 +36,7 @@ export const DebugCreateStrategy = () => {
   const { openModal } = useModal();
   const queryClient = useQueryClient();
   const createMutation = useCreateStrategyQuery();
-  const [rounds, setRounds] = useState(10);
+  const [rounds, setRounds] = useState(1);
   const [index, setIndex] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [interval, setInterval] = useState(0);
@@ -175,13 +175,49 @@ export const DebugCreateStrategy = () => {
     setIsRunning(false);
   };
 
+  const onShortcutChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (!e.target.value) return;
+    const value = JSON.parse(e.target.value);
+    setSpread(value.spread || '');
+    const base = allTokens.find((t) => t.symbol === value.base)?.address;
+    const quote = allTokens.find((t) => t.symbol === value.quote)?.address;
+    if (base) selectToken(base);
+    if (quote) selectToken(quote);
+    setBuyMin(value.buy.min);
+    setBuyMax(value.buy.max);
+    setBuyBudget(value.buy.budget);
+    setSellMin(value.sell.min);
+    setSellMax(value.sell.max);
+    setSellBudget(value.sell.budget);
+    setRounds(value.amount ? Number(value.amount) : 1);
+  };
+
   return (
     <form
       onSubmit={createStrategies}
-      className="bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20"
+      className="bg-secondary flex flex-col space-y-20 rounded-18 p-20"
     >
-      <h2>Create Strategy</h2>
-      <fieldset className="flex w-full flex-col gap-16 rounded border border-white/60 p-16">
+      <h2 className="text-center">Create Strategy</h2>
+
+      <div className="flex flex-col gap-8">
+        <label htmlFor="strategy-json-shortcut">JSON Shortcut</label>
+        <textarea
+          id="strategy-json-shortcut"
+          className="rounded-18 bg-black px-16 py-8"
+          placeholder="Enter a Strategy template in JSON format"
+          onChange={onShortcutChange}
+          aria-describedby="strategy-json-shortcut-description"
+          data-testid="strategy-json-shortcut"
+        ></textarea>
+        <p
+          id="strategy-json-shortcut-description"
+          className="text-12 text-white/60"
+        >
+          Used by E2E to prefill the form
+        </p>
+      </div>
+
+      <fieldset className="flex flex-col gap-16 rounded border border-white/60 p-16">
         <legend>Tokens</legend>
         <ul className="flex flex-col gap-8">
           {allTokens.map((t) => (
@@ -198,13 +234,13 @@ export const DebugCreateStrategy = () => {
             </li>
           ))}
         </ul>
-        <footer className="flex w-full justify-between">
+        <footer className="flex justify-between">
           <p>{`Base: ${baseSymbol || 'not selected'}`}</p>
           <p>{`Quote: ${quoteSymbol || 'not selected'}`}</p>
         </footer>
       </fieldset>
 
-      <fieldset className="flex w-full flex-col gap-8 rounded border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
         <legend>Overlapping Spread</legend>
         <Label label="Spread">
           <Input
@@ -212,16 +248,17 @@ export const DebugCreateStrategy = () => {
             value={spread}
             fullWidth
             onChange={(e) => setSpread(e.target.value)}
+            aria-describedby="strategy-spread-description"
             data-testid="spread"
           />
         </Label>
-        <p>
+        <p id="strategy-spread-description" className="text-12 text-white/60">
           Spread will create an overlapping strategy. You still need to set the
           correct budget.
         </p>
       </fieldset>
 
-      <fieldset className="flex w-full flex-col gap-8 rounded border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
         <legend>Buy Low {baseSymbol}</legend>
         <Label label="Min">
           <Input
@@ -252,7 +289,7 @@ export const DebugCreateStrategy = () => {
           />
         </Label>
       </fieldset>
-      <fieldset className="flex w-full flex-col gap-8 rounded border border-white/60 p-16">
+      <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
         <legend>Sell High {baseSymbol}</legend>
         <Label label={`Min ${spread ? '(Disabled)' : ''}`}>
           <Input
