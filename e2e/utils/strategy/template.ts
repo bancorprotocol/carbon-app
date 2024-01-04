@@ -34,6 +34,15 @@ export interface CreateStrategyTemplate {
   spread?: string;
 }
 
+interface OverlappingParams {
+  pair: TokenPair;
+  buyMin: string;
+  buyBudget: string;
+  sellMax: string;
+  sellBudget: string;
+  spread: string;
+}
+
 type TokenPair = `${DebugTokens}->${DebugTokens}`;
 const emptyOrder = () => ({ min: '0', max: '0', budget: '0' });
 const fromPair = (pair: TokenPair) => {
@@ -84,18 +93,19 @@ export const createDebugStrategy = {
     buy,
     sell,
   }),
-  overlapping: (pair: TokenPair, min: string, max: string, spread: string) => {
+  overlapping: (params: OverlappingParams) => {
+    const { pair, buyMin, sellMax, spread, buyBudget, sellBudget } = params;
     return {
       ...fromPair(pair),
       buy: {
-        min,
-        max: getBuyMax(Number(max), Number(spread)).toString(),
-        budget: '', // TODO: set budget
+        min: buyMin,
+        max: getBuyMax(Number(sellMax), Number(spread)).toString(),
+        budget: buyBudget,
       },
       sell: {
-        min: getSellMin(Number(min), Number(spread)).toString(),
-        max,
-        budget: '',
+        min: getSellMin(Number(buyMin), Number(spread)).toString(),
+        max: sellMax,
+        budget: sellBudget,
       },
       spread,
     };

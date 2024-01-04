@@ -16,9 +16,9 @@ import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
-import { carbonApi } from 'utils/carbonApi';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { carbonSDK } from 'libs/sdk';
+import { getMarketPrice } from 'hooks/useMarketPrice';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -132,14 +132,12 @@ export const DebugCreateStrategy = () => {
       },
     };
     if (spread) {
-      const price = await carbonApi.getMarketRate(quote.address, [
-        selectedFiatCurrency,
-      ]);
+      const price = await getMarketPrice(base, quote, selectedFiatCurrency);
       const params = await carbonSDK.calculateOverlappingStrategyPrices(
         quote.address,
         buyMin,
         sellMax,
-        price[selectedFiatCurrency].toString(),
+        price.toString(),
         spread
       );
       strategy.order0.max = params.buyPriceHigh;
@@ -147,7 +145,6 @@ export const DebugCreateStrategy = () => {
       strategy.order1.min = params.sellPriceLow;
       strategy.order1.marginalPrice = params.sellPriceMarginal;
     }
-
     for (let i = 0; i <= rounds - 1; i++) {
       setIndex(i);
       try {
