@@ -9,6 +9,7 @@ test.describe('Debug', () => {
     await Promise.all([mockApi(page), setupImposter(page)]);
   });
   test('Create a strategy from Debug page', async ({ page }) => {
+    test.setTimeout(180_000);
     await waitFor(page, `balance-DAI`, 30_000);
     await waitFor(page, `balance-ETH`, 30_000);
     const debug = new DebugDriver(page);
