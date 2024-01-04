@@ -21,6 +21,7 @@ import {
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { isValidRange } from 'components/strategies/utils';
+import { sanitizeNumber } from 'utils/helpers';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -41,10 +42,6 @@ export type SetOverlappingParams = (
   min: string,
   max: string
 ) => Promise<StrategyPrices | undefined>;
-
-const roundDecimal = (value: number, precision: number) => {
-  return Number(value.toFixed(precision)).toString();
-};
 
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
@@ -159,7 +156,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(min), spread);
       if (Number(max) < minSellMax) {
-        order1.setMax(roundDecimal(minSellMax, decimals));
+        order1.setMax(sanitizeNumber(minSellMax.toString(), decimals));
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -187,7 +184,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(max), spread);
       if (Number(min) > maxBuyMin) {
-        order0.setMin(roundDecimal(maxBuyMin, decimals));
+        order0.setMin(sanitizeNumber(maxBuyMin.toString(), decimals));
       }
     }, 1000);
     return () => clearTimeout(timeout);

@@ -2,7 +2,7 @@ import { ChangeEvent, FC, FocusEvent, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { sanitizeInputOnBlur, sanitizeNumberInput } from 'utils/helpers';
+import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
@@ -32,7 +32,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   const inputId = useId();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = sanitizeNumberInput(e.target.value);
+    const value = sanitizeNumber(e.target.value);
     if (Number(value) > 0) {
       setPriceError('');
     } else {
@@ -46,7 +46,7 @@ export const InputLimit: FC<InputLimitProps> = ({
     setPrice(value);
   };
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    setPrice(sanitizeInputOnBlur(e.target.value));
+    setPrice(formatNumber(e.target.value));
   };
 
   const { getFiatAsString } = useFiatCurrency(token);

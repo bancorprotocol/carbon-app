@@ -4,7 +4,7 @@ import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
-import { sanitizeInputOnBlur, sanitizeNumberInput } from 'utils/helpers';
+import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
@@ -50,8 +50,8 @@ export const InputRange: FC<InputRangeProps> = ({
   // Handle errors
   useEffect(() => {
     if (!min || !max) return;
-    const minValue = min === '.' ? 0 : Number(min);
-    const maxValue = max === '.' ? 0 : Number(max);
+    const minValue = Number(formatNumber(min));
+    const maxValue = Number(formatNumber(max));
     let error = '';
     if (minValue >= maxValue) error = errorMinMax;
     if (minValue <= 0 || maxValue <= 0) error = errorAboveZero;
@@ -65,17 +65,17 @@ export const InputRange: FC<InputRangeProps> = ({
   }, [min, max, setRangeError, buy]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
-    setMin(sanitizeNumberInput(e.target.value));
+    setMin(sanitizeNumber(e.target.value));
   };
   const handleBlurMin = (e: FocusEvent<HTMLInputElement>) => {
-    setMin(sanitizeInputOnBlur(e.target.value));
+    setMin(formatNumber(e.target.value));
   };
 
   const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
-    setMax(sanitizeNumberInput(e.target.value));
+    setMax(sanitizeNumber(e.target.value));
   };
   const handleBlurMax = (e: FocusEvent<HTMLInputElement>) => {
-    setMax(sanitizeInputOnBlur(e.target.value));
+    setMax(formatNumber(e.target.value));
   };
 
   const { getFiatAsString } = useFiatCurrency(quote);

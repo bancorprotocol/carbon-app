@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { cn, prettifySignedNumber, sanitizeInputOnBlur } from 'utils/helpers';
+import { cn, prettifySignedNumber, formatNumber } from 'utils/helpers';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
@@ -160,8 +160,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
   const { quote, order0, order1, spread } = props;
-  const baseMin = Number(sanitizeInputOnBlur(order0.min));
-  const baseMax = Number(sanitizeInputOnBlur(order1.max));
+  const baseMin = Number(formatNumber(order0.min));
+  const baseMax = Number(formatNumber(order1.max));
   // Make sure the distance is always large enough to avoid blurry behavior
   const delta = baseMax - baseMin || 1;
   const xFactor = delta <= 1 ? 1 / delta : 1;

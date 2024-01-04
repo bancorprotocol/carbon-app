@@ -3,8 +3,7 @@ import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import type { SafeDecimal } from 'libs/safedecimal';
-export * from './prettifyNumber';
+export * from './number';
 
 export const isProduction = window
   ? window.location.host.includes('carbondefi.xyz')
@@ -16,27 +15,6 @@ export const uuid = () => {
       v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
-};
-
-export const sanitizeNumberInput = (
-  input: string,
-  precision?: number
-): string => {
-  const sanitized = input
-    .replace(/,/, '.')
-    .replace(/[^\d.]/g, '')
-    .replace(/\./, 'x')
-    .replace(/\./g, '')
-    .replace(/x/, '.');
-  if (!precision) return sanitized;
-  const [integer, decimals] = sanitized.split('.');
-  if (decimals) return `${integer}.${decimals.substring(0, precision)}`;
-  else return sanitized;
-};
-
-export const sanitizeInputOnBlur = (value: string) => {
-  if (value === '.') return '0';
-  return Number(value).toString();
 };
 
 export const shortenString = (
@@ -150,23 +128,4 @@ export const isPathnameMatch = (
   return hrefMatches
     .filter((x) => x !== '/')
     .some((x) => current.startsWith(x));
-};
-
-export const formatNumberWithApproximation = (
-  num: SafeDecimal,
-  { isPercentage = false, approximateBelow = 0.01 } = {}
-): { value: string; negative: boolean } => {
-  const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
-
-  if (num.isZero()) {
-    return { value: addPercentage('0.00'), negative: false };
-  } else if (num.gt(0) && num.lt(approximateBelow)) {
-    return { value: addPercentage(`< ${approximateBelow}`), negative: false };
-  } else if (num.gte(approximateBelow)) {
-    return { value: addPercentage(num.toFixed(2)), negative: false };
-  } else if (num.gt(-1 * approximateBelow)) {
-    return { value: addPercentage(`> -${approximateBelow}`), negative: true };
-  } else {
-    return { value: addPercentage(num.toFixed(2)), negative: true };
-  }
 };

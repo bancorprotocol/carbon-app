@@ -5,11 +5,7 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
-import {
-  prettifyNumber,
-  sanitizeInputOnBlur,
-  sanitizeNumberInput,
-} from 'utils/helpers';
+import { prettifyNumber, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
@@ -54,13 +50,13 @@ export const TokenInputField: FC<Props> = ({
   const handleChange = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNumberInput(value, token.decimals);
+    const sanitized = sanitizeNumber(value, token.decimals);
     setValue(sanitized);
     onKeystroke && onKeystroke();
   };
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    setValue(sanitizeInputOnBlur(e.target.value));
+    setValue(formatNumber(e.target.value));
   };
 
   const handleBalanceClick = () => {

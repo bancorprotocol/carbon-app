@@ -9,7 +9,7 @@ import {
   ChangeEvent,
 } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { cn, sanitizeInputOnBlur, sanitizeNumberInput } from 'utils/helpers';
+import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { OrderCreate } from '../create/useOrder';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import styles from './OverlappingStrategySpread.module.css';
@@ -77,7 +77,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
     const value = Number(e.target.value);
     const maxSpread = round(getMaxSpread(buyMin, sellMax));
     if (isNaN(value)) {
-      e.target.value = sanitizeNumberInput(e.target.value);
+      e.target.value = sanitizeNumber(e.target.value);
     } else if (value > maxSpread) {
       setWarning(getWarning(maxSpread));
       setSpread(maxSpread);
@@ -92,7 +92,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
     if (options.includes(e.target.valueAsNumber)) {
       e.target.value = '';
     } else {
-      const value = sanitizeInputOnBlur(e.target.value);
+      const value = formatNumber(e.target.value);
       if (!value || !Number(value)) {
         setSpread(defaultValue);
         e.target.value = '';
