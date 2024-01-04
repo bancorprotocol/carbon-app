@@ -11,7 +11,6 @@ test.describe('Debug', () => {
   test('Create a strategy from Debug page', async ({ page }) => {
     await waitFor(page, `balance-DAI`, 30_000);
     await waitFor(page, `balance-ETH`, 30_000);
-    page.waitForTimeout(10_000);
     const debug = new DebugDriver(page);
     await debug.createStrategy({
       base: 'ETH',
