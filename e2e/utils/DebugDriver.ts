@@ -14,11 +14,7 @@ const forkConfig: CreateForkBody = {
   block_number: 18120000,
 };
 
-export const setupFork = async (
-  page: Page,
-  testInfo: TestInfo,
-  storageState: string
-) => {
+export const setupFork = async (page: Page, testInfo: TestInfo) => {
   await page.goto('/debug');
   const fork = await createFork(forkConfig);
   process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`] = fork.id;
@@ -29,7 +25,7 @@ export const setupFork = async (
   await page.getByTestId('unchecked-signer').click();
   await page.getByTestId('save-rpc').click();
   await page.waitForURL(`/debug`);
-  await page.context().storageState({ path: storageState as string });
+  // await page.context().storageState({ path: storageState as string });
 };
 
 export const removeFork = async (testInfo: TestInfo) => {
