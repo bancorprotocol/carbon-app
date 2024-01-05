@@ -22,7 +22,12 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
-import { checkIfOrdersOverlap, isValidRange } from '../utils';
+import {
+  checkIfOrdersOverlap,
+  isEmptyOrder,
+  isValidOrder,
+  isValidRange,
+} from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import {
   getRoundedSpread,
@@ -261,14 +266,12 @@ export const useCreateStrategy = () => {
 
     if (isOverlapping) {
       return !isValidSpread(spread) || !isValidRange(order0.min, order1.max);
+    } else if (strategyType === 'recurring') {
+      return !isValidOrder(order0) || !isValidOrder(order1);
+    } else if (strategyDirection === 'buy') {
+      return !isValidOrder(order0) || !isEmptyOrder(order1);
     } else {
-      const isOrder0Valid = order0.isRange
-        ? isValidRange(order0.min, order0.max)
-        : +order0.price >= 0 && order0.price !== '';
-      const isOrder1Valid = order1.isRange
-        ? isValidRange(order1.min, order1.max)
-        : +order1.price >= 0 && order1.price !== '';
-      return !isOrder0Valid || !isOrder1Valid;
+      return !isValidOrder(order1) || !isEmptyOrder(order0);
     }
   }, [
     user,
@@ -276,18 +279,12 @@ export const useCreateStrategy = () => {
     approval.isError,
     mutation.isLoading,
     isProcessing,
-    order0.budgetError,
-    order0.min,
-    order0.max,
-    order0.isRange,
-    order0.price,
-    order1.budgetError,
-    order1.min,
-    order1.max,
-    order1.isRange,
-    order1.price,
-    spread,
+    order0,
+    order1,
     isOverlapping,
+    strategyType,
+    strategyDirection,
+    spread,
   ]);
 
   useEffect(() => {
