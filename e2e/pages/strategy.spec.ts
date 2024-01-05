@@ -145,7 +145,7 @@ const testStrategy = {
 };
 
 test.describe('Strategies', () => {
-  test.beforeEach(async ({ page, browser }, testInfo) => {
+  test.beforeEach(async ({ page }, testInfo) => {
     await setupFork(page, testInfo);
     await Promise.all([mockApi(page), setupImposter(page)]);
   });
