@@ -32,7 +32,7 @@ export const EditStrategyMain: FC<Props> = ({ strategy, isLoading }) => {
       animate="visible"
     >
       <EditStrategyHeader {...{ showGraph, setShowGraph, type }} />
-      {isLoading && <CarbonLogoLoading className="my-40 w-80" />}
+      {isLoading && <CarbonLogoLoading className="my-40 w-60" />}
       {!isLoading && type && strategy && (
         <EditStrategyLayout
           {...{
