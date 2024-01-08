@@ -22,6 +22,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import { isValidRange } from 'components/strategies/utils';
 import { sanitizeNumber } from 'utils/helpers';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -120,17 +121,29 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!order0.min && !order1.max) {
-      const min = (marketPrice * 0.999).toFixed(quote.decimals);
-      const max = (marketPrice * 1.001).toFixed(quote.decimals);
+      const _marketPrice = new SafeDecimal(marketPrice);
+      const min = _marketPrice.times(0.999).toFixed(quote.decimals);
+      const max = _marketPrice.times(1.001).toFixed(quote.decimals);
       if (isValidRange(min, max)) setOverlappingParams(min, max);
     } else {
       const min = order0.min;
       const max = order1.max;
       if (isValidRange(min, max) && isValidSpread(spread)) {
-        setOverlappingParams(min, max);
+        setOverlappingParams(min, max).then((params) => {
+          const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
+          const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
+          if (isMinAboveMarket(buyOrder, quote)) {
+            setAnchoderOrder('sell');
+            setBuyBudget(order1.budget, min, max);
+          } else if (isMaxBelowMarket(sellOrder, quote)) {
+            setAnchoderOrder('buy');
+            setSellBudget(order0.budget, min, max);
+          } else {
+            if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+            if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
+          }
+        });
       }
-      if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-      if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
