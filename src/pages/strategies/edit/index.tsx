@@ -23,9 +23,6 @@ export const EditStrategyPage = () => {
     }
   }, [user, strategyId, strategies, isLoading, navigate]);
 
-  return user && strategy ? (
-    <EditStrategyMain strategy={strategy} />
-  ) : (
-    <StrategiesPage />
-  );
+  if (!user) return <StrategiesPage />;
+  return <EditStrategyMain strategy={strategy} isLoading={isLoading} />;
 };
