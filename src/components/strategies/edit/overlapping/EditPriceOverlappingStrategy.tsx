@@ -103,10 +103,21 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!mounted) return setMounted(true);
     if (isValidRange(min, max) && isValidSpread(spread)) {
-      setOverlappingParams(order0.min, order1.max);
+      setOverlappingParams(min, max).then((params) => {
+        const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
+        const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
+        if (isMinAboveMarket(buyOrder, quote)) {
+          setAnchoderOrder('sell');
+          setBuyBudget(order1.budget, min, max);
+        } else if (isMaxBelowMarket(sellOrder, quote)) {
+          setAnchoderOrder('buy');
+          setSellBudget(order0.budget, min, max);
+        } else {
+          if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+          if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
+        }
+      });
     }
-    if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-    if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
 
