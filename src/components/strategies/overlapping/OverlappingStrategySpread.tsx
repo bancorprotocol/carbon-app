@@ -148,13 +148,11 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
             name="spread"
             type="text"
             inputMode="decimal"
-            min="0"
-            max="100"
-            step="0.01"
             aria-label="Set custom"
             placeholder="Set custom"
             tabIndex={inOptions ? -1 : 0}
             onChange={onCustomChange}
+            onFocus={(e) => e.target.select()}
             onBlur={onCustomBlur}
             data-testid="spread-input"
           />
