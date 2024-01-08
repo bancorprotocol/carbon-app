@@ -71,13 +71,22 @@ export const useDuplicateStrategy = () => {
   };
 
   const decoded = decodeStrategyAndValidate(urlStrategy);
-  // marginal price should be calculated based on prices
-  if (decoded?.order0.marginalRate) decoded.order0.marginalRate = '';
-  if (decoded?.order1.marginalRate) decoded.order1.marginalRate = '';
-  // Remove balance if overlapping strategy because market price changed
-  if (decoded && isOverlappingStrategy(decoded)) {
-    decoded.order0.balance = '';
-    decoded.order1.balance = '';
+  if (decoded) {
+    // marginal price should be calculated based on prices
+    if (decoded.order0.marginalRate) decoded.order0.marginalRate = '';
+    if (decoded.order1.marginalRate) decoded.order1.marginalRate = '';
+
+    // Remove balance if overlapping strategy because market price changed
+    if (isOverlappingStrategy(decoded)) {
+      decoded.order0.balance = '';
+      decoded.order1.balance = '';
+    }
+
+    // Clear order balance for opposite direction in disposable
+    if (decoded.strategyType === 'disposable') {
+      if (decoded.strategyDirection === 'buy') decoded.order1.balance = '';
+      if (decoded.strategyDirection === 'sell') decoded.order0.balance = '';
+    }
   }
 
   return {
