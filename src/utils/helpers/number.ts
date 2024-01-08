@@ -25,8 +25,8 @@ export const sanitizeNumber = (input: string, precision?: number): string => {
 
 /** Format string number to look like a real number */
 export const formatNumber = (value: string) => {
-  if (value === '.') return '0';
-  return Number(value).toString();
+  if (!value || value === '.') return '0';
+  return new SafeDecimal(value).toString();
 };
 
 const prettifyNumberAbbreviateFormat: numbro.Format = {

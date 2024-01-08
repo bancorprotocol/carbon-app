@@ -68,14 +68,16 @@ export const InputRange: FC<InputRangeProps> = ({
     setMin(sanitizeNumber(e.target.value));
   };
   const handleBlurMin = (e: FocusEvent<HTMLInputElement>) => {
-    setMin(formatNumber(e.target.value));
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setMin(formatted);
   };
 
   const handleChangeMax = (e: ChangeEvent<HTMLInputElement>) => {
     setMax(sanitizeNumber(e.target.value));
   };
   const handleBlurMax = (e: FocusEvent<HTMLInputElement>) => {
-    setMax(formatNumber(e.target.value));
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setMax(formatted);
   };
 
   const { getFiatAsString } = useFiatCurrency(quote);

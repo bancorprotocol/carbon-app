@@ -46,7 +46,8 @@ export const InputLimit: FC<InputLimitProps> = ({
     setPrice(value);
   };
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    setPrice(formatNumber(e.target.value));
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setPrice(formatted);
   };
 
   const { getFiatAsString } = useFiatCurrency(token);

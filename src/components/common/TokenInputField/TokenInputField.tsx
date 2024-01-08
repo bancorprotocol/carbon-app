@@ -56,7 +56,8 @@ export const TokenInputField: FC<Props> = ({
   };
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    setValue(formatNumber(e.target.value));
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setValue(formatted);
   };
 
   const handleBalanceClick = () => {
