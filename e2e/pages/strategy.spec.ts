@@ -86,7 +86,6 @@ const testStrategy = {
       page,
     }) => {
       test.setTimeout(180_000);
-      await page.getByTestId('enable-overlapping-strategy').click();
       await waitFor(page, `balance-${quote}`, 30_000);
 
       await navigateTo(page, '/');
@@ -103,7 +102,9 @@ const testStrategy = {
 
       await createForm.submit();
 
-      await page.waitForURL('/', { timeout: 10_000 });
+      await checkApproval(page, [base, quote]);
+
+      await page.waitForURL('/', { timeout: 20_000 });
 
       // Verfiy notification
       const notif = new NotificationDriver(page, 'create-strategy');
@@ -133,13 +134,14 @@ const testStrategy = {
       await expect(strategy.sellBudgetFiat()).toHaveText(
         fiatPrice(sell.budgetFiat)
       );
-      const buyTooltip = await strategy.priceTooltip('buy');
-      await expect(buyTooltip.maxPrice()).toHaveText(
-        tokenPrice(buy.max, quote)
-      );
       const sellTooltip = await strategy.priceTooltip('sell');
       await expect(sellTooltip.minPrice()).toHaveText(
         tokenPrice(sell.min, quote)
+      );
+      await sellTooltip.waitForDetached();
+      const buyTooltip = await strategy.priceTooltip('buy');
+      await expect(buyTooltip.maxPrice()).toHaveText(
+        tokenPrice(buy.max, quote)
       );
     });
   },
@@ -174,24 +176,24 @@ test.describe('Strategies', () => {
         budgetFiat: 3334,
       },
     },
-    // {
-    //   setting: 'overlapping',
-    //   base: 'ETH',
-    //   quote: 'BNT',
-    //   buy: {
-    //     min: 3000,
-    //     max: 4900,
-    //     budget: 0,
-    //     budgetFiat: 0,
-    //   },
-    //   sell: {
-    //     min: 3100,
-    //     max: 5000,
-    //     budget: 2,
-    //     budgetFiat: 3334,
-    //   },
-    //   spread: 5,
-    // },
+    {
+      setting: 'overlapping',
+      base: 'BNT',
+      quote: 'USDC',
+      buy: {
+        min: 0.3,
+        max: 0.545454,
+        budget: 12.501572,
+        budgetFiat: 12.5,
+      },
+      sell: {
+        min: 0.33,
+        max: 0.6,
+        budget: 30,
+        budgetFiat: 12.61,
+      },
+      spread: 10, // Need a large spread for tooltip test
+    },
   ];
 
   for (const config of configs) {

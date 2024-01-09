@@ -86,10 +86,10 @@ export class CreateStrategyDriver {
   async fillOverlapping() {
     const config = this.config as OverlappingStrategyConfig;
     const form = this.getOverlappingForm();
-    await form.min().fill(config.buy.min.toString());
     await form.max().fill(config.sell.max.toString());
-    await form.budgetBase().fill(config.sell.budget.toString());
+    await form.min().fill(config.buy.min.toString());
     await form.spread().fill(config.spread.toString());
+    await form.budgetBase().fill(config.sell.budget.toString());
     return form;
   }
   nextStep() {
