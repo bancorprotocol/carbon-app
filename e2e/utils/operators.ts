@@ -23,7 +23,7 @@ const urlNames = {
   '/debug': 'Debug',
 };
 
-/** Use soft navigation instead of reloading the page */
+/** Use soft navigation instead of reloading the page. */
 export const navigateTo = async (page: Page, url: keyof typeof urlNames) => {
   await page.getByTestId('main-nav').getByText(urlNames[url]).click();
   await page.waitForURL(url);
