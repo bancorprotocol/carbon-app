@@ -9,24 +9,29 @@ interface ImposterConfig {
   /** Won't need  */
   noMoney?: boolean;
 }
-export const setupImposter = async (
-  page: Page,
-  config: ImposterConfig = {}
-) => {
-  await page.goto('/debug');
-  const address = config.address ?? Wallet.createRandom().address;
-  await page.getByLabel('Imposter Account').fill(address);
-  await page.getByTestId('save-imposter').click();
-  if (!config.noMoney) {
-    await page.getByText('Get money').click();
-    // Note: we are not waiting for fund to arrive to speed up test.
-    // Wait for it at the beginning of the test if it relies on fund right away
-    // Example: await waitFor(page, 'balance-DAI');
-  }
-};
 
 export class DebugDriver {
   constructor(private page: Page) {}
+
+  visit() {
+    return this.page.goto('/debug');
+  }
+
+  setE2E() {
+    return this.page.getByTestId('is-e2e-checkbox').click();
+  }
+
+  async setupImposter(config: ImposterConfig = {}) {
+    const address = config.address ?? Wallet.createRandom().address;
+    await this.page.getByLabel('Imposter Account').fill(address);
+    await this.page.getByTestId('save-imposter').click();
+    if (!config.noMoney) {
+      await this.page.getByText('Get money').click();
+      // Note: we are not waiting for fund to arrive to speed up test.
+      // Wait for it at the beginning of the test if it relies on fund right away
+      // Example: await waitFor(page, 'balance-DAI');
+    }
+  }
 
   getBalance(token: string) {
     return this.page.getByTestId(`balance-${token}`);

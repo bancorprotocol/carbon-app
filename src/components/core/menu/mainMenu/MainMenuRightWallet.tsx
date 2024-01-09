@@ -45,6 +45,7 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
 export const MainMenuRightWallet: FC = () => {
   const { user, isSupportedNetwork, isImposter, isUserBlocked } = useWeb3();
   const { openModal } = useModal();
+  const { debug } = useStore();
 
   const onClickOpenModal = () => {
     carbonEvents.navigation.navWalletConnectClick(undefined);
@@ -92,7 +93,9 @@ export const MainMenuRightWallet: FC = () => {
             data-testid="user-wallet"
           >
             {buttonIcon}
-            <span>{buttonText}</span>
+            <span className={debug.debugState.isE2E ? 'font-mono' : ''}>
+              {buttonText}
+            </span>
           </button>
         )}
       >

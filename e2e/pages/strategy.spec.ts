@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
-import { setupImposter } from '../utils/DebugDriver';
+import { DebugDriver } from '../utils/DebugDriver';
 import {
   CreateStrategyConfig,
   CreateStrategyDriver,
@@ -147,7 +147,9 @@ const testStrategy = {
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
-    await Promise.all([mockApi(page), setupImposter(page)]);
+    const debug = new DebugDriver(page);
+    await debug.visit();
+    await Promise.all([mockApi(page), debug.setupImposter(), debug.setE2E()]);
   });
   test('First Strategy Page', async ({ page }) => {
     await navigateTo(page, '/');

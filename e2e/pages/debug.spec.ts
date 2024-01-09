@@ -1,12 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { navigateTo, waitFor } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, setupImposter } from '../utils/DebugDriver';
+import { DebugDriver } from '../utils/DebugDriver';
 import { MyStrategyDriver } from '../utils/strategy';
 
 test.describe('Debug', () => {
   test.beforeEach(async ({ page }) => {
-    await Promise.all([mockApi(page), setupImposter(page)]);
+    const debug = new DebugDriver(page);
+    await debug.visit();
+    await Promise.all([mockApi(page), debug.setupImposter(), debug.setE2E()]);
   });
   test('Create a strategy from Debug page', async ({ page }) => {
     test.setTimeout(180_000);
