@@ -20,6 +20,7 @@ interface RangeOrder {
   min: string;
   max: string;
   budget: string;
+  budgetFiat?: string;
 }
 interface LimitOrder {
   price: string;

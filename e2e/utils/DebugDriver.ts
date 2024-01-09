@@ -1,4 +1,5 @@
 import { Page, TestInfo } from '@playwright/test';
+import { waitFor } from './../utils/operators';
 import {
   CreateForkBody,
   createFork,
@@ -69,6 +70,10 @@ export class DebugDriver {
     // TODO: use textarea shortcut instead of filling each field.
     // Currently this revert with Dai/insufficient-allowance for some reason
     // await this.page.getByTestId('strategy-json-shortcut').fill(JSON.stringify(template));
+    for (const token of [base, quote]) {
+      await waitFor(this.page, `balance-${token}`, 30_000);
+    }
+
     await this.page.getByTestId('spread').fill(spread ?? '');
     await this.page.getByTestId(`token-${base}`).click();
     await this.page.getByTestId(`token-${quote}`).click();

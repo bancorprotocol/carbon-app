@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { ManageStrategyDriver } from './../utils/strategy/ManageStrategyDriver';
+import { CreateStrategyTemplate } from './../utils/strategy/template';
 import { Page } from 'playwright-core';
 import {
   fiatPrice,
@@ -202,289 +204,243 @@ test.describe('Strategies', () => {
     testStrategy[config.setting](config);
   }
 
-  test('Edit Price Strategy', async ({ page }) => {
-    test.setTimeout(180_000);
+  const configsNew: CreateStrategyTemplate[] = [
+    {
+      base: 'ETH',
+      quote: 'DAI',
+      buy: {
+        min: '1500',
+        max: '1500',
+        budget: '10',
+        budgetFiat: '10',
+      },
+      sell: {
+        min: '1700',
+        max: '1700',
+        budget: '2',
+        budgetFiat: '3334',
+      },
+    },
+  ];
 
-    const strategy = await createStrategyTest(configs[0], page);
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
-    const value = await strategy
-      .getManageDropdownItem('manage-strategy-editPrices')
-      .innerText();
-    expect(value).toBe('Edit Prices');
-    await strategy.getManageDropdownItem('manage-strategy-editPrices').click();
+  test('Edit Price Strategy', async ({ page }) => {
+    test.setTimeout(45_000);
+    const config = configsNew[0];
+
+    const manage = new ManageStrategyDriver(page);
+    const strategy = await manage.createStrategy(config);
+    await strategy.clickManageEntry('manage-strategy-editPrices');
+
     await page.waitForURL('/strategies/edit?type=editPrices', {
       timeout: 10_000,
     });
-    await page.getByTestId('input-limit-buy').fill('1000');
-    await page.getByTestId('input-limit-sell').fill('1200');
+
+    const newBuyPrice = (parseFloat(config.buy.max) / 2).toString();
+    const newSellPrice = (parseFloat(config.sell.max) / 2).toString();
+
+    await manage.fillLimitPrice('buy', newBuyPrice);
+    await manage.fillLimitPrice('sell', newSellPrice);
     await page.getByTestId('edit-strategy-prices-submit').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
     const notif = new NotificationDriver(page, 'change-rates-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
       'Your strategy was successfully updated.'
     );
-    // await page.
+
+    // TODO Assert new prices from tooltips
   });
 
   test('Deposit Strategy', async ({ page }) => {
-    test.setTimeout(180_000);
-    const { base, quote, buy, sell } = configs[0];
+    test.setTimeout(45_000);
+    const config = configsNew[0];
+    const { base, quote, buy, sell } = config;
 
-    const strategy = await createStrategyTest(configs[0], page);
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
+    const buyBudget = parseFloat(buy.budget);
+    const sellBudget = parseFloat(sell.budget);
+    const depositBuyBudget = buyBudget / 2;
+    const depositSellBudget = sellBudget / 2;
+    const newBuyBudget = (buyBudget + depositBuyBudget).toString();
+    const newSellBudget = (sellBudget + depositSellBudget).toString();
 
-    await strategy
-      .getManageDropdownItem('manage-strategy-depositFunds')
-      .click();
+    const manage = new ManageStrategyDriver(page);
+    const strategy = await manage.createStrategy(config);
+    await strategy.clickManageEntry('manage-strategy-depositFunds');
 
-    await page.waitForURL('/strategies/edit?type=deposit', {
-      timeout: 10_000,
-    });
-
-    // await page.waitForTimeout(5000);
-
-    await page
-      .getByTestId('budget-deposit-buy-input')
-      .fill((configs[0].buy.budget / 2).toString());
-    await page
-      .getByTestId('budget-deposit-sell-input')
-      .fill((configs[0].sell.budget / 2).toString());
+    await manage.waitForEditPage('deposit');
+    await manage.fillBudget('deposit', 'buy', depositBuyBudget);
+    await manage.fillBudget('deposit', 'sell', depositSellBudget);
 
     await page.getByTestId('deposit-withdraw-confirm-btn').click();
-
-    // await checkApproval(page, [base, quote]);
-
     await page.waitForURL('/', { timeout: 20_000 });
 
-    // Verfiy notification
     const notif = new NotificationDriver(page, 'deposit-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
       'Your deposit request was successfully completed.'
     );
 
-    const myStrategies = new MyStrategyDriver(page);
-
-    // Verify strategy data
-    const strategies = await myStrategies.getAllStrategies();
-    await expect(strategies).toHaveCount(1);
-    const strategyNew = await myStrategies.getStrategy(1);
-    await expect(strategyNew.pair()).toHaveText(`${base}/${quote}`);
-    await expect(strategyNew.status()).toHaveText('Active');
-    await expect(strategyNew.buyBudget()).toHaveText(
-      tokenPrice(buy.budget + buy.budget / 2, quote)
+    await expect(strategy.buyBudget()).toHaveText(
+      tokenPrice(newBuyBudget, quote)
     );
-    await expect(strategyNew.sellBudget()).toHaveText(
-      tokenPrice(sell.budget + sell.budget / 2, base)
+    await expect(strategy.sellBudget()).toHaveText(
+      tokenPrice(newSellBudget, base)
     );
   });
 
   test('Withdraw Strategy', async ({ page }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(45_000);
+    const config = configsNew[0];
+    const { base, quote, buy, sell } = config;
 
-    const strategy = await createStrategyTest(configs[0], page);
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
+    const buyBudget = parseFloat(buy.budget);
+    const sellBudget = parseFloat(sell.budget);
+    const withdrawBuyBudget = buyBudget / 2;
+    const withdrawSellBudget = sellBudget / 2;
 
-    await strategy
-      .getManageDropdownItem('manage-strategy-withdrawFunds')
-      .click();
+    const manage = new ManageStrategyDriver(page);
+    const strategy = await manage.createStrategy(config);
+    await strategy.clickManageEntry('manage-strategy-withdrawFunds');
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('withdraw-strategy-btn').click();
 
-    await page.waitForURL('/strategies/edit?type=withdraw', {
-      timeout: 10_000,
-    });
-
-    await page.waitForTimeout(5000);
-
-    await page
-      .getByTestId('budget-withdraw-buy-input')
-      .fill((configs[0].buy.budget / 2).toString());
-    await page
-      .getByTestId('budget-withdraw-sell-input')
-      .fill((configs[0].sell.budget / 2).toString());
+    await manage.waitForEditPage('withdraw');
+    await manage.fillBudget('withdraw', 'buy', withdrawBuyBudget);
+    await manage.fillBudget('withdraw', 'sell', withdrawSellBudget);
 
     await page.getByTestId('deposit-withdraw-confirm-btn').click();
-    await page.waitForTimeout(5000);
-
     await page.waitForURL('/', { timeout: 20_000 });
 
-    // Verfiy notification
     const notif = new NotificationDriver(page, 'withdraw-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
       'Your withdrawal request was successfully completed.'
     );
 
-    const myStrategies = new MyStrategyDriver(page);
-    const { base, quote, buy, sell } = configs[0];
-
-    // Verify strategy data
-    const strategies = await myStrategies.getAllStrategies();
-    await expect(strategies).toHaveCount(1);
-    const strategyNew = await myStrategies.getStrategy(1);
-    await expect(strategyNew.pair()).toHaveText(`${base}/${quote}`);
-    await expect(strategyNew.status()).toHaveText('Active');
-    await expect(strategyNew.buyBudget()).toHaveText(
-      tokenPrice(buy.budget / 2, quote)
+    await expect(strategy.buyBudget()).toHaveText(
+      tokenPrice(withdrawBuyBudget, quote)
     );
-    await expect(strategyNew.sellBudget()).toHaveText(
-      tokenPrice(sell.budget / 2, base)
+    await expect(strategy.sellBudget()).toHaveText(
+      tokenPrice(withdrawSellBudget, base)
     );
   });
 
-  test('Pause Strategy', async ({ page }) => {
-    test.setTimeout(180_000);
-
-    const strategy = await createStrategyTest(configs[0], page);
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
-
-    await strategy
-      .getManageDropdownItem('manage-strategy-pauseStrategy')
-      .click();
+  const pauseStrategy = async (page: Page, config: CreateStrategyTemplate) => {
+    const manage = new ManageStrategyDriver(page);
+    const strategy = await manage.createStrategy(config);
+    await strategy.clickManageEntry('manage-strategy-pauseStrategy');
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('pause-strategy-btn').click();
 
-    // Verfiy notification
     const notif = new NotificationDriver(page, 'pause-strategy');
-
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
       'Your strategy was successfully paused.'
     );
+
+    await expect(strategy.status()).toHaveText('Inactive');
+
+    return { strategy, manage };
+  };
+
+  test('Pause Strategy', async ({ page }) => {
+    test.setTimeout(45_000);
+    const config = configsNew[0];
+    await pauseStrategy(page, config);
   });
 
   test('Renew Strategy', async ({ page }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(45_000);
+    const config = configsNew[0];
+    const { strategy, manage } = await pauseStrategy(page, config);
 
-    const strategy = await createStrategyTest(configs[0], page);
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
-
-    await strategy
-      .getManageDropdownItem('manage-strategy-pauseStrategy')
-      .click();
-
-    const modalPause = await waitModalOpen(page);
-    await modalPause.getByTestId('pause-strategy-btn').click();
-
-    // Verfiy notification
-    const notifPause = new NotificationDriver(page, 'pause-strategy');
-
-    await expect(notifPause.getTitle()).toHaveText('Success');
-    await expect(notifPause.getDescription()).toHaveText(
-      'Your strategy was successfully paused.'
-    );
-
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
-
-    await strategy
-      .getManageDropdownItem('manage-strategy-renewStrategy')
-      .click();
-
-    await page.waitForURL('/strategies/edit?type=renew', {
-      timeout: 10_000,
-    });
-    await page.getByTestId('input-limit-buy').fill('1000');
-    await page.getByTestId('input-limit-sell').fill('1200');
+    await strategy.clickManageEntry('manage-strategy-renewStrategy');
+    await manage.waitForEditPage('renew');
+    await manage.fillLimitPrice('buy', config.buy.max);
+    await manage.fillLimitPrice('sell', config.sell.max);
     await page.getByTestId('edit-strategy-prices-submit').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
     const notifRenew = new NotificationDriver(page, 'renew-strategy');
     await expect(notifRenew.getTitle()).toHaveText('Success');
     await expect(notifRenew.getDescription()).toHaveText(
       'Your request to renew the strategy was successfully completed.'
     );
+
+    await expect(strategy.status()).toHaveText('Active');
+    // TODO Assert new prices from tooltips
   });
 
   test('Duplicate Strategy', async ({ page }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(45_000);
+    const config = configsNew[0];
+    const { base, quote, buy, sell } = config;
+    const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
+    const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
 
-    const strategy = await createStrategyTest(configs[0], page);
-    await page.waitForTimeout(10000);
-
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
-
-    await strategy
-      .getManageDropdownItem('manage-strategy-duplicateStrategy')
-      .click();
+    const manage = new ManageStrategyDriver(page);
+    const strategy = await manage.createStrategy(config);
+    await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
 
     await page.waitForURL('/strategies/create?strategy=*', {
       timeout: 10_000,
     });
 
-    const myStrategies = new MyStrategyDriver(page);
-    const createForm = new CreateStrategyDriver(page, configs[0]);
-
-    const { base, quote, buy, sell } = configs[0];
-
-    await createForm.submit();
-    // await checkApproval(page, [base, quote]);
-
+    await page.getByText('Create Strategy').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
     const notif = new NotificationDriver(page, 'create-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
       'New strategy was successfully created.'
     );
-    await page.waitForTimeout(2000);
 
-    // Verify strategy data
+    const myStrategies = new MyStrategyDriver(page);
     const strategies = await myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
+
     const strategyDuplicate = await myStrategies.getStrategy(2);
     await expect(strategyDuplicate.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategyDuplicate.status()).toHaveText('Active');
     await expect(strategyDuplicate.totalBudget()).toHaveText(
-      fiatPrice(buy.budgetFiat + sell.budgetFiat)
+      fiatPrice(buyBudgetFiat + sellBudgetFiat)
     );
     await expect(strategyDuplicate.buyBudget()).toHaveText(
       tokenPrice(buy.budget, quote)
     );
     await expect(strategyDuplicate.buyBudgetFiat()).toHaveText(
-      fiatPrice(buy.budgetFiat)
+      fiatPrice(buyBudgetFiat)
     );
     await expect(strategyDuplicate.sellBudget()).toHaveText(
       tokenPrice(sell.budget, base)
     );
     await expect(strategyDuplicate.sellBudgetFiat()).toHaveText(
-      fiatPrice(sell.budgetFiat)
+      fiatPrice(sellBudgetFiat)
     );
   });
 
   test('Delete Strategy', async ({ page }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(45_000);
+    const config = configsNew[0];
 
-    const strategy = await createStrategyTest(configs[0], page);
-    await strategy.manageButton().click();
-    await waitFor(page, 'manage-strategy-dropdown', 10_000);
-
-    await strategy
-      .getManageDropdownItem('manage-strategy-deleteStrategy')
-      .click();
+    const manage = new ManageStrategyDriver(page);
+    const strategy = await manage.createStrategy(config);
+    await strategy.clickManageEntry('manage-strategy-deleteStrategy');
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('delete-strategy-btn').click();
 
-    // Verfiy notification
     const notif = new NotificationDriver(page, 'delete-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
       'Strategy was successfully deleted and all associated funds have been withdrawn to your wallet.'
     );
+
+    const myStrategies = new MyStrategyDriver(page);
+    const strategies = await myStrategies.getAllStrategies();
+    await expect(strategies).toHaveCount(0);
   });
 });

@@ -1,3 +1,4 @@
+import { waitFor } from './../../utils/operators';
 import { Page } from 'playwright-core';
 
 // TODO import type `StrategyEditOptionId`
@@ -52,9 +53,11 @@ export class MyStrategyDriver {
           marginalPrice: () => tooltip.getByTestId('marginal-price'),
         };
       },
-      manageButton: () => strategy.getByTestId('manage-strategy-btn'),
-      getManageDropdownItem: (id: ManageStrategyID) =>
-        this.page.getByTestId(id),
+      clickManageEntry: async (id: ManageStrategyID) => {
+        await strategy.getByTestId('manage-strategy-btn').click();
+        await waitFor(this.page, 'manage-strategy-dropdown', 10_000);
+        await this.page.getByTestId(id).click();
+      },
     };
   }
 

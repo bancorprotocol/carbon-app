@@ -38,6 +38,6 @@ export const waitFor = async (page: Page, testId: string, timeout = 10_000) => {
 export const fiatPrice = (price: number) => {
   return pn(price, { currentCurrency: 'USD' });
 };
-export const tokenPrice = (price: number, token: string) => {
+export const tokenPrice = (price: number | string, token: string) => {
   return `${pn(price)} ${token}`;
 };
