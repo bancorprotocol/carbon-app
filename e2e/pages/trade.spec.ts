@@ -13,8 +13,8 @@ import { checkApproval } from '../utils/modal';
 import { NotificationDriver } from '../utils/NotificationDriver';
 
 test.describe('Trade', () => {
-  test.beforeEach(async ({ page, storageState }, testInfo) => {
-    await setupFork(page, testInfo, storageState as string);
+  test.beforeEach(async ({ page }, testInfo) => {
+    await setupFork(page, testInfo);
     await Promise.all([mockApi(page), setupImposter(page)]);
   });
 
