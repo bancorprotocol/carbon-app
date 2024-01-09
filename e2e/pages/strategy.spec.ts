@@ -15,6 +15,7 @@ import {
 } from '../utils/strategy';
 import { NotificationDriver } from '../utils/NotificationDriver';
 import { checkApproval } from '../utils/modal';
+import { MainMenuDriver } from '../utils/MainMenuDriver';
 
 const testStrategy = {
   limit: (config: CreateStrategyConfig) => {
@@ -100,11 +101,16 @@ const testStrategy = {
       const overlappingForm = await createForm.fillOverlapping();
       expect(overlappingForm.max()).toHaveValue(config.sell.max.toString());
 
-      await screenshot(page, `[Create Overlapping Strategy] Form`);
+      const mainMenu = new MainMenuDriver(page);
+      await mainMenu.hide();
+      await screenshot(
+        overlappingForm.locator,
+        `[Create Overlapping Strategy] Form`
+      );
+      await mainMenu.show();
+
       await createForm.submit();
-
       await checkApproval(page, [base, quote]);
-
       await page.waitForURL('/', { timeout: 10_000 });
 
       // Verfiy notification
