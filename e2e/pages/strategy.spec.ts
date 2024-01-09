@@ -22,7 +22,7 @@ import { checkApproval, waitModalOpen } from '../utils/modal';
 const createStrategyTest = async (config: CreateStrategyConfig, page: Page) => {
   const { base, quote, buy, sell } = config;
 
-  test.setTimeout(180_000);
+  test.setTimeout(45_000);
   await waitFor(page, `balance-${quote}`, 30_000);
 
   await navigateTo(page, '/');
@@ -86,7 +86,7 @@ const testStrategy = {
     return test(`Create Overlapping Strategy ${base}->${quote}`, async ({
       page,
     }) => {
-      test.setTimeout(180_000);
+      test.setTimeout(45_000);
       await page.getByTestId('enable-overlapping-strategy').click();
       await waitFor(page, `balance-${quote}`, 30_000);
 
