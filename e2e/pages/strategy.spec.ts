@@ -21,11 +21,10 @@ import { checkApproval, waitModalOpen } from '../utils/modal';
 
 const testStrategy = {
   limit: (config: CreateStrategyConfig) => {
-    const { base, quote } = config;
+    const { base, quote, buy, sell } = config;
     return test(`Create Limit Strategy ${base}->${quote}`, async ({ page }) => {
-      const { base, quote, buy, sell } = config;
-
       test.setTimeout(45_000);
+
       await waitFor(page, `balance-${quote}`, 30_000);
 
       await navigateTo(page, '/');
