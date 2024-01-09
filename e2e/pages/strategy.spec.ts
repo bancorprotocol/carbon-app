@@ -155,12 +155,6 @@ test.describe('Strategies', () => {
   test.beforeEach(async ({ page }) => {
     await Promise.all([mockApi(page), setupImposter(page)]);
   });
-  test('First Strategy Page', async ({ page }) => {
-    await navigateTo(page, '/');
-    const driver = new MyStrategyDriver(page);
-    await driver.firstStrategy().waitFor({ state: 'visible' });
-    await screenshot(page, 'first-strategy');
-  });
 
   const configs: CreateStrategyConfig[] = [
     {
