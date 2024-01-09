@@ -56,6 +56,7 @@ export class CreateStrategyDriver {
   getOverlappingForm() {
     const form = this.page.getByTestId('create-strategy-form');
     return {
+      locator: form,
       min: () => form.getByLabel('Min Buy Price'),
       max: () => form.getByLabel('Max Sell Price'),
       budgetBase: () => form.getByTestId('input-budget-base'),

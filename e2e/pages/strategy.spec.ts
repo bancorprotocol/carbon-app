@@ -96,15 +96,16 @@ const testStrategy = {
       await createForm.selectToken('quote');
       await createForm.selectSetting('overlapping');
       await createForm.nextStep();
-      await createForm.fillOverlapping();
 
-      // TODO Assert budget
+      const overlappingForm = await createForm.fillOverlapping();
+      expect(overlappingForm.max()).toHaveValue(config.sell.max.toString());
 
+      await screenshot(page, `[Create Overlapping Strategy] Form`);
       await createForm.submit();
 
       await checkApproval(page, [base, quote]);
 
-      await page.waitForURL('/', { timeout: 20_000 });
+      await page.waitForURL('/', { timeout: 10_000 });
 
       // Verfiy notification
       const notif = new NotificationDriver(page, 'create-strategy');
@@ -143,6 +144,9 @@ const testStrategy = {
       await expect(buyTooltip.maxPrice()).toHaveText(
         tokenPrice(buy.max, quote)
       );
+      await buyTooltip.waitForDetached();
+      await notif.close();
+      await screenshot(page, `[Create Overlapping Strategy] My Strategy`);
     });
   },
 };
