@@ -516,7 +516,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
         <span>Market price provided by CoinGecko</span>
         <IconCoinGecko className="h-8 w-8" />
         <span role="separator">·</span>
-        <span>Spead {spreadPPM || 0}%</span>
+        <span>Spread {spreadPPM || 0}%</span>
       </figcaption>
       <svg
         ref={svg}
