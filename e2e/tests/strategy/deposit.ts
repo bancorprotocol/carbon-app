@@ -6,7 +6,6 @@ import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDrive
 
 export const depositStrategyTest = (config: CreateStrategyTemplate) => {
   return test('Deposit', async ({ page }) => {
-    test.setTimeout(45_000);
     const { base, quote, buy, sell } = config;
 
     const buyBudget = parseFloat(buy.budget);

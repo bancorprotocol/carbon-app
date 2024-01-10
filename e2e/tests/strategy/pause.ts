@@ -29,7 +29,6 @@ export const pauseStrategy = async (
 
 export const pauseStrategyTest = (config: CreateStrategyTemplate) => {
   return test('Pause', async ({ page }) => {
-    test.setTimeout(45_000);
     await pauseStrategy(page, config);
   });
 };

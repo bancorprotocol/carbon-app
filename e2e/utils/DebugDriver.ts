@@ -50,7 +50,6 @@ export class DebugDriver {
     await this.page.getByLabel('RPC URL').fill(rpcUrl);
     await this.page.getByTestId('unchecked-signer').click();
     await this.page.getByTestId('save-rpc').click();
-    await this.page.waitForURL(`/debug`, { timeout: 20_000 });
   }
 
   async setupImposter(config: ImposterConfig = {}) {
