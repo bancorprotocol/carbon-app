@@ -1,14 +1,17 @@
 import { expect, test } from '@playwright/test';
-import { CreateStrategyTemplate } from '../../utils/strategy/template';
-import { checkApproval } from '../../utils/modal';
-import { NotificationDriver } from '../../utils/NotificationDriver';
+import { CreateStrategyTemplate } from '../../../utils/strategy/template';
+import { checkApproval } from '../../../utils/modal';
+import { NotificationDriver } from '../../../utils/NotificationDriver';
 import {
   fiatPrice,
   navigateTo,
   tokenPrice,
   waitFor,
-} from '../../utils/operators';
-import { CreateStrategyDriver, MyStrategyDriver } from '../../utils/strategy';
+} from '../../../utils/operators';
+import {
+  CreateStrategyDriver,
+  MyStrategyDriver,
+} from '../../../utils/strategy';
 
 export const createRecurringStrategy = (testCase: CreateStrategyTemplate) => {
   const { base, quote, buy, sell } = testCase;
