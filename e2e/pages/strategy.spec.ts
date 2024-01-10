@@ -13,7 +13,7 @@ import {
   StrategyType,
 } from './../utils/strategy/template';
 import { mockApi } from '../utils/mock-api';
-import { removeFork, setupFork, setupImposter } from '../utils/DebugDriver';
+import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
 
 type Config = CreateStrategyTemplate & { type: StrategyType };
 
@@ -67,8 +67,11 @@ const createStrategy: CreateStrategy = {
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    await setupFork(page, testInfo);
-    await Promise.all([mockApi(page), setupImposter(page)]);
+    await setupFork(testInfo);
+    const debug = new DebugDriver(page);
+    await debug.visit();
+    await debug.setRpcUrl(testInfo);
+    await Promise.all([mockApi(page), debug.setupImposter()]);
   });
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);
