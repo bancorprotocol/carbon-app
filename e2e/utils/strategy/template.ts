@@ -27,7 +27,11 @@ interface LimitOrder {
   budget: string;
 }
 
-export const STRATEGY_TYPES = ['Recurring', 'Range', 'Overlapping'] as const;
+export const STRATEGY_TYPES = [
+  'Recurring',
+  'Disposable',
+  'Overlapping',
+] as const;
 
 export type StrategyType = (typeof STRATEGY_TYPES)[number];
 
