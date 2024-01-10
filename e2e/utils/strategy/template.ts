@@ -44,7 +44,7 @@ export interface CreateStrategyTemplate {
   spread?: string;
 }
 
-interface OverlappingParams {
+export interface OverlappingParams {
   pair: TokenPair;
   buyMin: string;
   buyBudget: string;

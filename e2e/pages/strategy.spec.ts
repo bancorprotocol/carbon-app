@@ -1,31 +1,26 @@
 import { test } from '@playwright/test';
-import { createRecurringStrategy } from '../tests/strategy/createRecurring';
-import { createOverlappingStrategy } from './../tests/strategy/createOverlapping';
-import { deleteStrategyTest } from './../tests/strategy/delete';
-import { duplicateStrategyTest } from './../tests/strategy/duplicate';
-import { renewStrategyTest } from './../tests/strategy/renew';
-import { pauseStrategyTest } from './../tests/strategy/pause';
-import { withdrawStrategyTest } from './../tests/strategy/withdraw';
-import { depositStrategyTest } from './../tests/strategy/deposit';
-import { editPriceStrategyTest } from '../tests/strategy/edit';
-import {
-  CreateStrategyTemplate,
-  StrategyType,
-} from './../utils/strategy/template';
+import * as recurring from '../tests/strategy/recurring/';
+import * as disposable from '../tests/strategy/recurring/';
+import * as overlapping from '../tests/strategy/recurring/';
+
+import { StrategyType } from './../utils/strategy/template';
 import { navigateTo, screenshot } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
 import { removeFork, setupFork, setupImposter } from '../utils/DebugDriver';
-import { MyStrategyDriver } from '../utils/strategy';
+import {
+  MyStrategyDriver,
+  OverlappingStrategyTestCase,
+  RecurringStrategyTestCase,
+} from '../utils/strategy';
 
-type TestCase = CreateStrategyTemplate & { type: StrategyType };
-
-type CreateStrategy = {
-  [key in StrategyType]: (c: CreateStrategyTemplate) => void;
+type TestCase = (RecurringStrategyTestCase | OverlappingStrategyTestCase) & {
+  type: StrategyType;
 };
 
 const testCases: TestCase[] = [
   {
     type: 'Recurring',
+    setting: 'limit_limit',
     base: 'ETH',
     quote: 'DAI',
     buy: {
@@ -60,12 +55,6 @@ const testCases: TestCase[] = [
   // },
 ];
 
-const createStrategy: CreateStrategy = {
-  Recurring: createRecurringStrategy,
-  Overlapping: createOverlappingStrategy,
-  Range: () => {},
-};
-
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     await setupFork(page, testInfo);
@@ -82,16 +71,18 @@ test.describe('Strategies', () => {
     await screenshot(page, 'first-strategy');
   });
 
+  const testStrategies = {
+    Recurring: recurring,
+    Disposable: disposable,
+    Overlapping: overlapping,
+  };
+
   for (const testCase of testCases) {
-    test.describe(testCase.type, () => {
-      createStrategy[testCase.type](testCase);
-      editPriceStrategyTest(testCase);
-      depositStrategyTest(testCase);
-      withdrawStrategyTest(testCase);
-      pauseStrategyTest(testCase);
-      renewStrategyTest(testCase);
-      duplicateStrategyTest(testCase);
-      deleteStrategyTest(testCase);
+    test.describe(testCase.type + ' ' + testCase.setting, () => {
+      const testSuite = testStrategies[testCase.type];
+      for (const [, testFn] of Object.entries(testSuite)) {
+        testFn(testCase);
+      }
     });
   }
 });

@@ -2,24 +2,8 @@ import { Page } from '@playwright/test';
 import { CreateStrategyTemplate } from './../../utils/strategy/template';
 import { waitModalClose, waitModalOpen } from '../modal';
 
-/** Min & max should be equal for limit strategy */
-interface PriceField {
-  min: number;
-  max: number;
-  budget: number;
-  budgetFiat: number;
-}
-
-interface BaseTestCase {
-  base: string;
-  quote: string;
-  setting: 'recurring' | 'disposable' | 'overlapping';
-  buy: PriceField;
-  sell: PriceField;
-}
-
-export interface RecurringStrategyTestCase extends BaseTestCase {
-  setting: 'recurring';
+export interface RecurringStrategyTestCase extends CreateStrategyTemplate {
+  setting: 'limit_limit' | 'range_range' | 'limit_range' | 'range_limit';
 }
 export interface OverlappingStrategyTestCase extends CreateStrategyTemplate {
   setting: 'overlapping';
