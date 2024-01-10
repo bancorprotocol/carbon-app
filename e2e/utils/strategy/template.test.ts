@@ -2,9 +2,9 @@ import { describe, test, expect } from 'vitest';
 import { createDebugStrategy } from './template';
 
 describe('Test create strategy template', () => {
-  // Recurring Limit
-  test('recurringLimitBuy', () => {
-    const strategy = createDebugStrategy.recurringLimitBuy('ETH->DAI', {
+  // Limit
+  test('limitBuy', () => {
+    const strategy = createDebugStrategy.limitBuy('ETH->DAI', {
       price: '100',
       budget: '100',
     });
@@ -23,8 +23,8 @@ describe('Test create strategy template', () => {
       },
     });
   });
-  test('recurringLimitSell', () => {
-    const strategy = createDebugStrategy.recurringLimitSell('ETH->DAI', {
+  test('limitSell', () => {
+    const strategy = createDebugStrategy.limitSell('ETH->DAI', {
       price: '100',
       budget: '100',
     });
@@ -43,8 +43,8 @@ describe('Test create strategy template', () => {
       },
     });
   });
-  test('recurringLimitBuySell', () => {
-    const strategy = createDebugStrategy.recurringLimitBuySell(
+  test('limitBuySell', () => {
+    const strategy = createDebugStrategy.limitBuySell(
       'ETH->DAI',
       {
         price: '100',
@@ -70,9 +70,9 @@ describe('Test create strategy template', () => {
       },
     });
   });
-  // Recurring Range
-  test('recurringRangeBuy', () => {
-    const strategy = createDebugStrategy.recurringRangeBuy('ETH->DAI', {
+  // Range
+  test('rangeBuy', () => {
+    const strategy = createDebugStrategy.rangeBuy('ETH->DAI', {
       min: '100',
       max: '200',
       budget: '100',
@@ -92,8 +92,8 @@ describe('Test create strategy template', () => {
       },
     });
   });
-  test('recurringRangeSell', () => {
-    const strategy = createDebugStrategy.recurringRangeSell('ETH->DAI', {
+  test('rangeSell', () => {
+    const strategy = createDebugStrategy.rangeSell('ETH->DAI', {
       min: '100',
       max: '200',
       budget: '100',
@@ -113,8 +113,8 @@ describe('Test create strategy template', () => {
       },
     });
   });
-  test('recurringRangeBuySell', () => {
-    const strategy = createDebugStrategy.recurringRangeBuySell(
+  test('rangeBuySell', () => {
+    const strategy = createDebugStrategy.rangeBuySell(
       'ETH->DAI',
       {
         min: '100',

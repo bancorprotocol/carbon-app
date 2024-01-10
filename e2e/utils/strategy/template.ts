@@ -65,23 +65,17 @@ const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
   budget: order.budget,
 });
 export const createDebugStrategy = {
-  recurringLimitBuy: (
-    pair: TokenPair,
-    buy: LimitOrder
-  ): CreateStrategyTemplate => ({
+  limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy: fromLimitOrder(buy),
     sell: emptyOrder(),
   }),
-  recurringLimitSell: (
-    pair: TokenPair,
-    sell: LimitOrder
-  ): CreateStrategyTemplate => ({
+  limitSell: (pair: TokenPair, sell: LimitOrder): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell: fromLimitOrder(sell),
   }),
-  recurringLimitBuySell: (
+  limitBuySell: (
     pair: TokenPair,
     buy: LimitOrder,
     sell: LimitOrder
@@ -90,23 +84,17 @@ export const createDebugStrategy = {
     buy: fromLimitOrder(buy),
     sell: fromLimitOrder(sell),
   }),
-  recurringRangeBuy: (
-    pair: TokenPair,
-    buy: RangeOrder
-  ): CreateStrategyTemplate => ({
+  rangeBuy: (pair: TokenPair, buy: RangeOrder): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy,
     sell: emptyOrder(),
   }),
-  recurringRangeSell: (
-    pair: TokenPair,
-    sell: RangeOrder
-  ): CreateStrategyTemplate => ({
+  rangeSell: (pair: TokenPair, sell: RangeOrder): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell,
   }),
-  recurringRangeBuySell: (
+  rangeBuySell: (
     pair: TokenPair,
     buy: RangeOrder,
     sell: RangeOrder
