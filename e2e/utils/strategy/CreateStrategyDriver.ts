@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import { CreateStrategyTemplate } from './../../utils/strategy/template';
 import { waitModalClose, waitModalOpen } from '../modal';
 
 /** Min & max should be equal for limit strategy */
@@ -20,9 +21,9 @@ interface BaseConfig {
 export interface LimiStrategyConfig extends BaseConfig {
   setting: 'limit';
 }
-export interface OverlappingStrategyConfig extends BaseConfig {
+export interface OverlappingStrategyConfig extends CreateStrategyTemplate {
   setting: 'overlapping';
-  spread: number;
+  spread: string;
 }
 
 export type CreateStrategyConfig =
@@ -38,12 +39,12 @@ type StrategySettings =
   | `${Mode}-limit`;
 
 export class CreateStrategyDriver {
-  constructor(private page: Page, private config: CreateStrategyConfig) {}
+  constructor(private page: Page, private config: CreateStrategyTemplate) {}
 
   getLimitForm(mode: Mode) {
     const form = this.page.getByTestId(`${mode}-section`);
     return {
-      limit: () => form.getByTestId('input-limit'),
+      limit: () => form.getByTestId(`input-limit-${mode}`),
       budget: () => form.getByTestId('input-budget'),
       outcomeValue: () => form.getByTestId('outcome-value'),
       outcomeQuote: () => form.getByTestId('outcome-quote'),

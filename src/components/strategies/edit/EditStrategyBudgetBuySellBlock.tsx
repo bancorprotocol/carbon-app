@@ -82,6 +82,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         isError={insufficientBalance}
         balance={tokenBalanceQuery.data}
         withoutWallet={type === 'withdraw'}
+        data-testid={`budget-${type}-${buy ? 'buy' : 'sell'}-input`}
       />
       {insufficientBalance && (
         <output
