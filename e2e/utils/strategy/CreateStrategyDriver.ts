@@ -13,13 +13,13 @@ interface PriceField {
 interface BaseConfig {
   base: string;
   quote: string;
-  setting: 'limit' | 'range' | 'overlapping';
+  setting: 'recurring' | 'disposable' | 'overlapping';
   buy: PriceField;
   sell: PriceField;
 }
 
-export interface LimiStrategyConfig extends BaseConfig {
-  setting: 'limit';
+export interface RecurringStrategyConfig extends BaseConfig {
+  setting: 'recurring';
 }
 export interface OverlappingStrategyConfig extends CreateStrategyTemplate {
   setting: 'overlapping';
@@ -27,7 +27,7 @@ export interface OverlappingStrategyConfig extends CreateStrategyTemplate {
 }
 
 export type CreateStrategyConfig =
-  | LimiStrategyConfig
+  | RecurringStrategyConfig
   | OverlappingStrategyConfig;
 
 type Mode = 'buy' | 'sell';
@@ -41,10 +41,10 @@ type StrategySettings =
 export class CreateStrategyDriver {
   constructor(private page: Page, private config: CreateStrategyTemplate) {}
 
-  getLimitForm(mode: Mode) {
+  getRecurringLimitForm(mode: Mode) {
     const form = this.page.getByTestId(`${mode}-section`);
     return {
-      limit: () => form.getByTestId(`input-limit-${mode}`),
+      price: () => form.getByTestId(`input-limit-${mode}`),
       budget: () => form.getByTestId('input-budget'),
       outcomeValue: () => form.getByTestId('outcome-value'),
       outcomeQuote: () => form.getByTestId('outcome-quote'),
@@ -76,11 +76,11 @@ export class CreateStrategyDriver {
   selectSetting(strategySettings: StrategySettings) {
     return this.page.getByTestId(strategySettings).click();
   }
-  async fillLimit(mode: Mode) {
+  async fillRecurringLimit(mode: Mode) {
     const { min, budget } = this.config[mode];
-    const form = this.getLimitForm(mode);
+    const form = this.getRecurringLimitForm(mode);
     await form.setting('limit').click();
-    await form.limit().fill(min.toString());
+    await form.price().fill(min.toString());
     await form.budget().fill(budget.toString());
     return form;
   }

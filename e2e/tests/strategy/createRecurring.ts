@@ -1,16 +1,16 @@
 import { expect, test } from '@playwright/test';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { checkApproval } from './../../utils/modal';
-import { NotificationDriver } from './../../utils/NotificationDriver';
+import { CreateStrategyTemplate } from '../../utils/strategy/template';
+import { checkApproval } from '../../utils/modal';
+import { NotificationDriver } from '../../utils/NotificationDriver';
 import {
   fiatPrice,
   navigateTo,
   tokenPrice,
   waitFor,
-} from './../../utils/operators';
-import { CreateStrategyDriver, MyStrategyDriver } from './../../utils/strategy';
+} from '../../utils/operators';
+import { CreateStrategyDriver, MyStrategyDriver } from '../../utils/strategy';
 
-export const createLimitStrategy = (config: CreateStrategyTemplate) => {
+export const createRecurringStrategy = (config: CreateStrategyTemplate) => {
   const { base, quote, buy, sell } = config;
   const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
   const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
@@ -28,8 +28,8 @@ export const createLimitStrategy = (config: CreateStrategyTemplate) => {
     await createForm.selectToken('quote');
     await createForm.selectSetting('two-ranges');
     await createForm.nextStep();
-    const buyForm = await createForm.fillLimit('buy');
-    const sellForm = await createForm.fillLimit('sell');
+    const buyForm = await createForm.fillRecurringLimit('buy');
+    const sellForm = await createForm.fillRecurringLimit('sell');
 
     // Assert 100% outcome
     await expect(buyForm.outcomeValue()).toHaveText(`0.006666 ${base}`);

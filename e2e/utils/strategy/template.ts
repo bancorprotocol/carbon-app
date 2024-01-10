@@ -27,7 +27,7 @@ interface LimitOrder {
   budget: string;
 }
 
-export const STRATEGY_TYPES = ['Limit', 'Range', 'Overlapping'] as const;
+export const STRATEGY_TYPES = ['Recurring', 'Range', 'Overlapping'] as const;
 
 export type StrategyType = (typeof STRATEGY_TYPES)[number];
 
@@ -61,17 +61,23 @@ const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
   budget: order.budget,
 });
 export const createDebugStrategy = {
-  limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyTemplate => ({
+  recurringLimitBuy: (
+    pair: TokenPair,
+    buy: LimitOrder
+  ): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy: fromLimitOrder(buy),
     sell: emptyOrder(),
   }),
-  limitSell: (pair: TokenPair, sell: LimitOrder): CreateStrategyTemplate => ({
+  recurringLimitSell: (
+    pair: TokenPair,
+    sell: LimitOrder
+  ): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell: fromLimitOrder(sell),
   }),
-  limitBuySell: (
+  recurringLimitBuySell: (
     pair: TokenPair,
     buy: LimitOrder,
     sell: LimitOrder
@@ -80,17 +86,23 @@ export const createDebugStrategy = {
     buy: fromLimitOrder(buy),
     sell: fromLimitOrder(sell),
   }),
-  rangeBuy: (pair: TokenPair, buy: RangeOrder): CreateStrategyTemplate => ({
+  recurringRangeBuy: (
+    pair: TokenPair,
+    buy: RangeOrder
+  ): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy,
     sell: emptyOrder(),
   }),
-  rangeSell: (pair: TokenPair, sell: RangeOrder): CreateStrategyTemplate => ({
+  recurringRangeSell: (
+    pair: TokenPair,
+    sell: RangeOrder
+  ): CreateStrategyTemplate => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell,
   }),
-  rangeBuySell: (
+  recurringRangeBuySell: (
     pair: TokenPair,
     buy: RangeOrder,
     sell: RangeOrder

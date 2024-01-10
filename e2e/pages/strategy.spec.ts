@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { createLimitStrategy } from './../tests/strategy/createLimit';
+import { createRecurringStrategy } from '../tests/strategy/createRecurring';
 import { createOverlappingStrategy } from './../tests/strategy/createOverlapping';
 import { deleteStrategyTest } from './../tests/strategy/delete';
 import { duplicateStrategyTest } from './../tests/strategy/duplicate';
@@ -25,7 +25,7 @@ type CreateStrategy = {
 
 const configs: Config[] = [
   {
-    type: 'Limit',
+    type: 'Recurring',
     base: 'ETH',
     quote: 'DAI',
     buy: {
@@ -61,7 +61,7 @@ const configs: Config[] = [
 ];
 
 const createStrategy: CreateStrategy = {
-  Limit: createLimitStrategy,
+  Recurring: createRecurringStrategy,
   Overlapping: createOverlappingStrategy,
   Range: () => {},
 };
