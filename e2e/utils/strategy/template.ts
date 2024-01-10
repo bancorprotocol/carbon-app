@@ -28,9 +28,9 @@ interface LimitOrder {
 }
 
 export const STRATEGY_TYPES = [
-  'Recurring',
-  'Disposable',
-  'Overlapping',
+  'recurring',
+  'disposable',
+  'overlapping',
 ] as const;
 
 export type StrategyType = (typeof STRATEGY_TYPES)[number];

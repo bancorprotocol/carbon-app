@@ -19,7 +19,7 @@ type TestCase = (RecurringStrategyTestCase | OverlappingStrategyTestCase) & {
 
 const testCases: TestCase[] = [
   {
-    type: 'Recurring',
+    type: 'recurring',
     setting: 'limit_limit',
     base: 'ETH',
     quote: 'DAI',
@@ -72,9 +72,9 @@ test.describe('Strategies', () => {
   });
 
   const testStrategies = {
-    Recurring: recurring,
-    Disposable: disposable,
-    Overlapping: overlapping,
+    recurring,
+    disposable,
+    overlapping,
   };
 
   for (const testCase of testCases) {
