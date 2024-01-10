@@ -78,7 +78,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
             ${error ? 'text-red' : ''}
           `}
-          data-testid="input-limit"
+          data-testid={`input-limit-${buy ? 'buy' : 'sell'}`}
         />
         <p className="flex flex-wrap items-center gap-8">
           <span className="break-all font-mono text-12 text-white/60">
