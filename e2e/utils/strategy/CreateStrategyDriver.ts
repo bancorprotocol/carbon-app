@@ -10,7 +10,7 @@ interface PriceField {
   budgetFiat: number;
 }
 
-interface BaseConfig {
+interface BaseTestCase {
   base: string;
   quote: string;
   setting: 'recurring' | 'disposable' | 'overlapping';
@@ -18,17 +18,17 @@ interface BaseConfig {
   sell: PriceField;
 }
 
-export interface RecurringStrategyConfig extends BaseConfig {
+export interface RecurringStrategyTestCase extends BaseTestCase {
   setting: 'recurring';
 }
-export interface OverlappingStrategyConfig extends CreateStrategyTemplate {
+export interface OverlappingStrategyTestCase extends CreateStrategyTemplate {
   setting: 'overlapping';
   spread: string;
 }
 
-export type CreateStrategyConfig =
-  | RecurringStrategyConfig
-  | OverlappingStrategyConfig;
+export type CreateStrategyTestCase =
+  | RecurringStrategyTestCase
+  | OverlappingStrategyTestCase;
 
 type Mode = 'buy' | 'sell';
 type StrategySettings =
@@ -39,7 +39,7 @@ type StrategySettings =
   | `${Mode}-limit`;
 
 export class CreateStrategyDriver {
-  constructor(private page: Page, private config: CreateStrategyTemplate) {}
+  constructor(private page: Page, private testCase: CreateStrategyTemplate) {}
 
   getRecurringLimitForm(mode: Mode) {
     const form = this.page.getByTestId(`${mode}-section`);
@@ -66,7 +66,7 @@ export class CreateStrategyDriver {
   }
 
   async selectToken(tokenType: 'base' | 'quote') {
-    const token = this.config[tokenType];
+    const token = this.testCase[tokenType];
     await this.page.getByTestId(`select-${tokenType}-token`).click();
     await waitModalOpen(this.page);
     await this.page.getByLabel('Select Token').fill(token);
@@ -77,7 +77,7 @@ export class CreateStrategyDriver {
     return this.page.getByTestId(strategySettings).click();
   }
   async fillRecurringLimit(mode: Mode) {
-    const { min, budget } = this.config[mode];
+    const { min, budget } = this.testCase[mode];
     const form = this.getRecurringLimitForm(mode);
     await form.setting('limit').click();
     await form.price().fill(min.toString());
@@ -85,12 +85,12 @@ export class CreateStrategyDriver {
     return form;
   }
   async fillOverlapping() {
-    const config = this.config as OverlappingStrategyConfig;
+    const testCase = this.testCase as OverlappingStrategyTestCase;
     const form = this.getOverlappingForm();
-    await form.min().fill(config.buy.min.toString());
-    await form.max().fill(config.sell.max.toString());
-    await form.budgetBase().fill(config.sell.budget.toString());
-    await form.spread().fill(config.spread.toString());
+    await form.min().fill(testCase.buy.min.toString());
+    await form.max().fill(testCase.sell.max.toString());
+    await form.budgetBase().fill(testCase.sell.budget.toString());
+    await form.spread().fill(testCase.spread.toString());
     return form;
   }
   nextStep() {

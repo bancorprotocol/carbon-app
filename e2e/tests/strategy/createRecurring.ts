@@ -10,8 +10,8 @@ import {
 } from '../../utils/operators';
 import { CreateStrategyDriver, MyStrategyDriver } from '../../utils/strategy';
 
-export const createRecurringStrategy = (config: CreateStrategyTemplate) => {
-  const { base, quote, buy, sell } = config;
+export const createRecurringStrategy = (testCase: CreateStrategyTemplate) => {
+  const { base, quote, buy, sell } = testCase;
   const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
   const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
 
@@ -22,7 +22,7 @@ export const createRecurringStrategy = (config: CreateStrategyTemplate) => {
 
     await navigateTo(page, '/');
     const myStrategies = new MyStrategyDriver(page);
-    const createForm = new CreateStrategyDriver(page, config);
+    const createForm = new CreateStrategyDriver(page, testCase);
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');

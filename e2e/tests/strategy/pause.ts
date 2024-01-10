@@ -7,10 +7,10 @@ import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDrive
 
 export const pauseStrategy = async (
   page: Page,
-  config: CreateStrategyTemplate
+  testCase: CreateStrategyTemplate
 ) => {
   const manage = new ManageStrategyDriver(page);
-  const strategy = await manage.createStrategy(config);
+  const strategy = await manage.createStrategy(testCase);
   await strategy.clickManageEntry('manage-strategy-pauseStrategy');
 
   const modal = await waitModalOpen(page);
@@ -27,9 +27,9 @@ export const pauseStrategy = async (
   return { strategy, manage };
 };
 
-export const pauseStrategyTest = (config: CreateStrategyTemplate) => {
+export const pauseStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Pause', async ({ page }) => {
     test.setTimeout(45_000);
-    await pauseStrategy(page, config);
+    await pauseStrategy(page, testCase);
   });
 };

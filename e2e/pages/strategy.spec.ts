@@ -17,13 +17,13 @@ import { mockApi } from '../utils/mock-api';
 import { removeFork, setupFork, setupImposter } from '../utils/DebugDriver';
 import { MyStrategyDriver } from '../utils/strategy';
 
-type Config = CreateStrategyTemplate & { type: StrategyType };
+type TestCase = CreateStrategyTemplate & { type: StrategyType };
 
 type CreateStrategy = {
   [key in StrategyType]: (c: CreateStrategyTemplate) => void;
 };
 
-const configs: Config[] = [
+const testCases: TestCase[] = [
   {
     type: 'Recurring',
     base: 'ETH',
@@ -82,16 +82,16 @@ test.describe('Strategies', () => {
     await screenshot(page, 'first-strategy');
   });
 
-  for (const config of configs) {
-    test.describe(config.type, () => {
-      createStrategy[config.type](config);
-      editPriceStrategyTest(config);
-      depositStrategyTest(config);
-      withdrawStrategyTest(config);
-      pauseStrategyTest(config);
-      renewStrategyTest(config);
-      duplicateStrategyTest(config);
-      deleteStrategyTest(config);
+  for (const testCase of testCases) {
+    test.describe(testCase.type, () => {
+      createStrategy[testCase.type](testCase);
+      editPriceStrategyTest(testCase);
+      depositStrategyTest(testCase);
+      withdrawStrategyTest(testCase);
+      pauseStrategyTest(testCase);
+      renewStrategyTest(testCase);
+      duplicateStrategyTest(testCase);
+      deleteStrategyTest(testCase);
     });
   }
 });
