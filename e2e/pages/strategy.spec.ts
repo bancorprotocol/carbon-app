@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import * as recurring from '../tests/strategy/recurring/';
-import * as disposable from '../tests/strategy/recurring/';
-import * as overlapping from '../tests/strategy/recurring/';
+import * as disposable from '../tests/strategy/disposable/';
+import * as overlapping from '../tests/strategy/overlapping/';
 
 import { StrategyType } from './../utils/strategy/template';
 import { navigateTo, screenshot } from '../utils/operators';
