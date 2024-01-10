@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { pauseStrategy } from './../../tests/strategy/pause';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
+import { pauseStrategy } from './pause';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
 
 export const renewStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Renew', async ({ page }) => {

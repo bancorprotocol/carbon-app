@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { pauseStrategy } from './../../../tests/strategy/pause';
+import { pauseStrategy } from './pause';
 import { CreateStrategyTemplate } from './../../../utils/strategy/template';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 

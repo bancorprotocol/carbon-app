@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { waitModalOpen } from './../../utils/modal';
+import { waitModalOpen } from './../../../utils/modal';
 import { Page } from 'playwright-core';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
 export const pauseStrategy = async (
   page: Page,

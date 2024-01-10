@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
 export const editPriceStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Edit Price', async ({ page }) => {

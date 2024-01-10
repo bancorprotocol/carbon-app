@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { MyStrategyDriver } from './../../utils/strategy';
-import { waitModalOpen } from './../../utils/modal';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { MyStrategyDriver } from './../../../utils/strategy';
+import { waitModalOpen } from './../../../utils/modal';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
 export const deleteStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Delete', async ({ page }) => {

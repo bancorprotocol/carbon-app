@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { tokenPrice } from './../../utils/operators';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { tokenPrice } from './../../../utils/operators';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
 export const depositStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Deposit', async ({ page }) => {

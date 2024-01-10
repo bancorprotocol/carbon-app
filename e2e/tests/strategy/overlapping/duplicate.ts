@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { MyStrategyDriver } from './../../utils/strategy';
-import { fiatPrice, tokenPrice } from './../../utils/operators';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { MyStrategyDriver } from './../../../utils/strategy';
+import { fiatPrice, tokenPrice } from './../../../utils/operators';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
 export const duplicateStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Duplicate', async ({ page }) => {

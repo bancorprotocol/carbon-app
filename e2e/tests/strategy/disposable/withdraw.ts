@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { waitModalOpen } from './../../utils/modal';
-import { tokenPrice } from './../../utils/operators';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { waitModalOpen } from './../../../utils/modal';
+import { tokenPrice } from './../../../utils/operators';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
 export const withdrawStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Withdraw', async ({ page }) => {
