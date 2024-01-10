@@ -20,11 +20,17 @@ interface RangeOrder {
   min: string;
   max: string;
   budget: string;
+  budgetFiat?: string;
 }
 interface LimitOrder {
   price: string;
   budget: string;
 }
+
+export const STRATEGY_TYPES = ['Limit', 'Range', 'Overlapping'] as const;
+
+export type StrategyType = (typeof STRATEGY_TYPES)[number];
+
 export interface CreateStrategyTemplate {
   base: DebugTokens;
   quote: DebugTokens;

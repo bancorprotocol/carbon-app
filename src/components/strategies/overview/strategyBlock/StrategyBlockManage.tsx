@@ -241,12 +241,13 @@ export const StrategyBlockManage: FC<Props> = ({
             hover:bg-white/10
             active:bg-white/20
           `}
+          data-testid="manage-strategy-btn"
         >
           <IconGear className="h-24 w-24" />
         </button>
       )}
     >
-      <ul role="menu">
+      <ul role="menu" data-testid={'manage-strategy-dropdown'}>
         {items.map((item) => {
           if (typeof item === 'number') {
             return <hr key={item} className="border-1  my-10 border-grey5" />;
@@ -298,6 +299,7 @@ const ManageItem: FC<{
           'opacity-60': disabled,
           'hover:bg-body': !disabled,
         })}
+        data-testid={`manage-strategy-${id}`}
       >
         {title}
       </button>

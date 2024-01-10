@@ -1,15 +1,25 @@
 /* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, setupImposter } from '../utils/DebugDriver';
+import {
+  DebugDriver,
+  removeFork,
+  setupFork,
+  setupImposter,
+} from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
 import { navigateTo } from '../utils/operators';
 import { checkApproval } from '../utils/modal';
 import { NotificationDriver } from '../utils/NotificationDriver';
 
 test.describe('Trade', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    await setupFork(page, testInfo);
     await Promise.all([mockApi(page), setupImposter(page)]);
+  });
+
+  test.afterEach(async ({}, testInfo) => {
+    await removeFork(testInfo);
   });
 
   const configs = [

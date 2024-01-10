@@ -89,6 +89,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
         onClick={onClick}
         loading={isLoading}
         loadingChildren={loadingChildren}
+        data-testid="delete-strategy-btn"
       >
         Delete Strategy
       </Button>
