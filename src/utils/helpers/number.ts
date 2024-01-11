@@ -176,6 +176,8 @@ const handlePrettifyNumberCurrency = (
     useGrouping: true,
     // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
     roundingMode: round ? 'halfExpand' : 'floor',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   };
 
   if (num.lte(0))
@@ -213,11 +215,9 @@ const handlePrettifyNumberCurrency = (
     }).format(num.toNumber());
 
   if (!highPrecision && num.gt(100)) {
-    return Intl.NumberFormat(locale, {
-      ...nfCurrencyOptionsDefault,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(num.toNumber());
+    return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
+      num.toNumber()
+    );
   }
 
   return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
