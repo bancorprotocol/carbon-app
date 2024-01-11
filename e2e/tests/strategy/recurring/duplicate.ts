@@ -4,6 +4,7 @@ import { fiatPrice, tokenPrice } from './../../../utils/operators';
 import { CreateStrategyTemplate } from './../../../utils/strategy/template';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
+import { waitModalOpen } from '../../../utils/modal';
 
 export const duplicateStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Duplicate', async ({ page }) => {
@@ -14,6 +15,9 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTemplate) => {
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
+
+    const modal = await waitModalOpen(page);
+    await modal.getByTestId('duplicate-strategy-btn').click();
 
     await page.waitForURL('/strategies/create?strategy=*', {
       timeout: 10_000,

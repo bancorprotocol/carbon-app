@@ -59,6 +59,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       onClick: duplicateStrategy,
       description:
         'Duplicate the strategy with the existing values (price, budget)',
+      testId: 'duplicate-strategy-btn',
     },
     {
       icon: IconCut,
@@ -66,6 +67,7 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       onClick: undercutStrategy,
       description:
         'Set prices at 0.1% tighter spread and try to get filled ahead',
+      testId: 'undercut-strategy-btn',
     },
   ];
 
@@ -73,27 +75,32 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
     <ModalOrMobileSheet id={id} title="Duplicate Strategy">
       <p className="text-secondary font-weight-400">Select your option.</p>
 
-      {duplicateOptions.map(({ icon: Icon, title, onClick, description }) => (
-        <article
-          key={title}
-          className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16"
-        >
-          <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
-            <Icon className="h-16 w-16 text-green" />
-          </div>
-          <h3 className="text-14 font-weight-500">{title}</h3>
-          <Button
-            variant="white"
-            type="button"
-            onClick={onClick}
-            aria-label={title.toLowerCase()}
-            className="row-span-2 self-center"
+      {duplicateOptions.map(
+        ({ icon: Icon, title, onClick, description, testId }) => (
+          <article
+            key={title}
+            className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16"
           >
-            Select
-          </Button>
-          <p className="text-12 font-weight-400 text-white/60">{description}</p>
-        </article>
-      ))}
+            <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
+              <Icon className="h-16 w-16 text-green" />
+            </div>
+            <h3 className="text-14 font-weight-500">{title}</h3>
+            <Button
+              variant="white"
+              type="button"
+              onClick={onClick}
+              aria-label={title.toLowerCase()}
+              className="row-span-2 self-center"
+              data-testid={testId}
+            >
+              Select
+            </Button>
+            <p className="text-12 font-weight-400 text-white/60">
+              {description}
+            </p>
+          </article>
+        )
+      )}
     </ModalOrMobileSheet>
   );
 };
