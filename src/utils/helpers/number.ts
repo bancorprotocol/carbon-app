@@ -99,6 +99,8 @@ interface PrettifyNumberOptions {
   highPrecision?: boolean;
   locale?: string;
   round?: boolean;
+  fullValue?: boolean;
+  decimals?: number;
 }
 
 export function prettifyNumber(num: number | string | SafeDecimal): string;
@@ -121,6 +123,13 @@ export function prettifyNumber(
   const bigNum = new SafeDecimal(num);
   if (options?.currentCurrency) {
     return handlePrettifyNumberCurrency(bigNum, options);
+  }
+
+  if (options?.fullValue) {
+    return numbro(bigNum).format({
+      ...getDefaultNumberoOptions(round),
+      mantissa: options.decimals ?? 6,
+    });
   }
 
   if (bigNum.lte(0)) return '0';
@@ -179,6 +188,13 @@ const handlePrettifyNumberCurrency = (
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   };
+
+  if (options?.fullValue) {
+    return Intl.NumberFormat(locale, {
+      ...nfCurrencyOptionsDefault,
+      maximumFractionDigits: options.decimals ?? 100,
+    }).format(num.toNumber());
+  }
 
   if (num.lte(0))
     return Intl.NumberFormat(locale, nfCurrencyOptionsDefault)
