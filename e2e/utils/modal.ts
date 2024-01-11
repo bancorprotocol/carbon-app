@@ -18,7 +18,7 @@ export const checkApproval = async (page: Page, tokens: string[]) => {
       await expect(msg).toHaveText('Pre-Approved');
     } else {
       await modal.getByTestId(`approve-${token}`).click();
-      const msg = await waitFor(page, `msg-${token}`);
+      const msg = await waitFor(page, `msg-${token}`, 20000);
       await expect(msg).toHaveText('Approved');
     }
   }

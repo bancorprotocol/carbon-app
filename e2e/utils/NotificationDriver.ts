@@ -11,7 +11,9 @@ type NotificationType =
   | 'withdraw-strategy'
   | 'delete-strategy'
   | 'change-rates-strategy'
-  | 'trade';
+  | 'trade'
+  | 'pause-strategy'
+  | 'deposit-strategy';
 
 export class NotificationDriver {
   private notif = this.page.getByTestId(`notification-${this.type}`);
