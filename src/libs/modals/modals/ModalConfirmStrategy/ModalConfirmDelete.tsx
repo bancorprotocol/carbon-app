@@ -5,7 +5,6 @@ import { ModalFC } from '../../modals.types';
 import { Link, PathNames } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Strategy } from 'libs/queries';
-import { useStore } from 'store';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconTrash } from 'assets/icons/trash.svg';
 import { cn } from 'utils/helpers';
@@ -25,7 +24,6 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
   id,
   data,
 }) => {
-  const { strategies } = useStore();
   const { closeModal } = useModal();
   const { strategy, strategyEvent } = data;
 
@@ -51,7 +49,6 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
       origin: 'delete',
       ...strategyEvent,
     });
-    strategies.setStrategyToEdit(strategy);
     closeModal(id);
   };
 
@@ -70,6 +67,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
             onClick={editPrices}
             disabled={isAwaiting || isProcessing}
             to={PathNames.editStrategy}
+            params={{ strategyId: strategy.id }}
             search={{ type: 'editPrices' }}
             className={cn(
               'row-span-2 self-center',

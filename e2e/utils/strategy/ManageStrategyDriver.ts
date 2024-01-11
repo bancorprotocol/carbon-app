@@ -15,8 +15,8 @@ export class ManageStrategyDriver {
     return await myStrategies.getStrategy(1);
   }
 
-  async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew') {
-    await this.page.waitForURL(`/strategies/edit?type=${type}`, {
+  async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
+    await this.page.waitForURL(`/strategies/edit/*?type=${type}`, {
       timeout: 10_000,
     });
   }
