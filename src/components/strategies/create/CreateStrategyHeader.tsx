@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import { carbonEvents } from 'services/events';
-import { useLocation } from 'libs/routing';
 import { m } from 'libs/motion';
+import { useRouter } from 'libs/routing';
 import { items } from 'components/strategies/create/variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
+import { cn } from 'utils/helpers';
 
 export const CreateStrategyHeader = ({
   showGraph,
@@ -13,10 +14,7 @@ export const CreateStrategyHeader = ({
   setShowGraph,
   strategyDirection,
 }: UseStrategyCreateReturn) => {
-  const {
-    history: { back },
-  } = useLocation();
-
+  const { history } = useRouter();
   const title = useMemo(() => {
     if (!showOrders) {
       return 'Create Strategy';
@@ -30,35 +28,32 @@ export const CreateStrategyHeader = ({
   }, [showOrders, strategyDirection]);
 
   return (
-    <m.div
+    <m.header
       variants={items}
-      key={'createStrategyHeader'}
-      className={`flex w-full flex-row justify-between ${
+      key="createStrategyHeader"
+      className={cn(
+        'flex w-full items-center gap-16',
         showGraph ? '' : 'md:w-[440px]'
-      }`}
+      )}
     >
-      <div className="flex items-center gap-16 text-24">
-        <button
-          onClick={() => back()}
-          className="h-40 w-40 rounded-full bg-emphasis"
-        >
-          <div className="rotate-180">
-            <ForwardArrow className="mx-auto w-14" />
-          </div>
-        </button>
-        {title}
-      </div>
+      <button
+        onClick={() => history.back()}
+        className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
+      >
+        <ForwardArrow className="h-18 w-18 rotate-180" />
+      </button>
+      <h1 className="flex-1 text-24 font-weight-500">{title}</h1>
       {!showGraph && showOrders && (
         <button
           onClick={() => {
             carbonEvents.strategy.strategyChartOpen(undefined);
             setShowGraph(true);
           }}
-          className="h-40 w-40 self-end rounded-full bg-emphasis"
+          className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
         >
-          <IconCandles className="mx-auto w-14" />
+          <IconCandles className="h-18 w-18" />
         </button>
       )}
-    </m.div>
+    </m.header>
   );
 };

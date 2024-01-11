@@ -9,6 +9,7 @@ import { MarketPriceIndication } from 'components/strategies/marketPriceIndicati
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 type InputLimitProps = {
+  id?: string;
   price: string;
   setPrice: (value: string) => void;
   token: Token;
@@ -19,6 +20,7 @@ type InputLimitProps = {
 };
 
 export const InputLimit: FC<InputLimitProps> = ({
+  id,
   price,
   setPrice,
   token,
@@ -30,19 +32,18 @@ export const InputLimit: FC<InputLimitProps> = ({
   const inputId = useId();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const errorMessage = 'Price must be greater than 0';
-    +e.target.value > 0 ? setPriceError('') : setPriceError(errorMessage);
-
-    if (+e.target.value > 0) {
+    const value = sanitizeNumberInput(e.target.value);
+    if (Number(value) > 0) {
       setPriceError('');
     } else {
+      const errorMessage = 'Price must be greater than 0';
       carbonEvents.strategy.strategyErrorShow({
         buy,
         message: errorMessage,
       });
       setPriceError(errorMessage);
     }
-    setPrice(sanitizeNumberInput(e.target.value));
+    setPrice(value);
   };
 
   const { getFiatAsString } = useFiatCurrency(token);
@@ -52,14 +53,14 @@ export const InputLimit: FC<InputLimitProps> = ({
     <>
       <div
         className={`
-          bg-body flex cursor-text flex-col rounded-16 border-2 p-16
+          bg-body flex cursor-text flex-col rounded-16 border p-16
           focus-within:border-white/50
           ${error ? '!border-red/50' : 'border-black'} 
         `}
-        onClick={() => document.getElementById(inputId)?.focus()}
+        onClick={() => document.getElementById(id ?? inputId)?.focus()}
       >
         <input
-          id={inputId}
+          id={id ?? inputId}
           type="text"
           pattern={decimalNumberValidationRegex}
           inputMode="decimal"
@@ -72,7 +73,7 @@ export const InputLimit: FC<InputLimitProps> = ({
             mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
             ${error ? 'text-red' : ''}
           `}
-          data-testid="input-limit"
+          data-testid={`input-limit-${buy ? 'buy' : 'sell'}`}
         />
         <p className="flex flex-wrap items-center gap-8">
           <span className="break-all font-mono text-12 text-white/60">
@@ -85,7 +86,7 @@ export const InputLimit: FC<InputLimitProps> = ({
       </div>
       {error && (
         <output
-          htmlFor={inputId}
+          htmlFor={id ?? inputId}
           role="alert"
           aria-live="polite"
           className="flex items-center gap-10 font-mono text-12 text-red"

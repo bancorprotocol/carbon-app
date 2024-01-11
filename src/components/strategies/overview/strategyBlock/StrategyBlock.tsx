@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Strategy } from 'libs/queries';
+import { StrategyWithFiat } from 'libs/queries';
 import { m, mItemVariant } from 'libs/motion';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 
@@ -10,7 +10,7 @@ import { StrategyBlockHeader } from './StrategyBlockHeader';
 import { StrategyGraph } from './StrategyGraph';
 
 interface Props {
-  strategy: Strategy;
+  strategy: StrategyWithFiat;
   className?: string;
   isExplorer?: boolean;
 }
@@ -27,6 +27,7 @@ export const StrategyBlock: FC<Props> = ({
         'grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded-10 bg-silver p-24',
         className
       )}
+      data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}
     >
       <StrategyBlockHeader strategy={strategy} isExplorer={isExplorer} />
       <StrategyBlockRoi strategy={strategy} />

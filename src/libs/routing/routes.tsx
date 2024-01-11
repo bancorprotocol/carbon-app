@@ -1,21 +1,21 @@
-import { ExplorerRouteGenerics } from 'components/explorer';
-import { DebugPage } from 'pages/debug';
 import { ExplorerPage } from 'pages/explorer';
-import { ExplorerTypePage } from 'pages/explorer/type';
-import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
-import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
-import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
 import { StrategiesPage } from 'pages/strategies';
 import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
+import { DebugPage } from 'pages/debug';
 import { TermsPage } from 'pages/terms';
-import { Navigate, Outlet, Route } from '@tanstack/react-location';
-import { getLastVisitedPair } from 'libs/routing/utils';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
-import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
+import { App } from 'App';
+import { Navigate, RootRoute, Route } from '@tanstack/react-router';
+import { PathNames } from './pathnames';
+import { ExplorerTypePage } from 'pages/explorer/type';
+import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
+import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
+import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
 import { StrategiesOverviewPage } from 'pages/strategies/overview';
 import { StrategiesPortfolioTokenPage } from 'pages/strategies/portfolio/token';
+import { StrategiesPortfolioPage } from 'pages/strategies/portfolio';
 
 export const externalLinks = {
   blog: 'http://blog.carbondefi.xyz',
@@ -34,151 +34,162 @@ export const externalLinks = {
   roiLearnMore: 'https://faq.carbondefi.xyz/strategy-roi-and-apr',
 };
 
-export const PathNames = {
-  strategies: '/',
-  portfolio: '/strategies/portfolio',
-  portfolioToken: (address: string) => `/strategies/portfolio/token/${address}`,
-  explorer: (type: ExplorerRouteGenerics['Params']['type']) =>
-    `/explorer/${type}`,
-  explorerOverview: (
-    type: ExplorerRouteGenerics['Params']['type'],
-    slug: string
-  ) => `/explorer/${type}/${slug}`,
-  explorerPortfolio: (
-    type: ExplorerRouteGenerics['Params']['type'],
-    slug: string
-  ) => `/explorer/${type}/${slug}/portfolio`,
-  explorerPortfolioToken: (
-    type: ExplorerRouteGenerics['Params']['type'],
-    slug: string,
-    address: string
-  ) => `/explorer/${type}/${slug}/portfolio/token/${address}`,
-  trade: '/trade',
-  debug: '/debug',
-  createStrategy: '/strategies/create',
-  editStrategy: '/strategies/edit',
-  terms: '/terms',
-  privacy: '/privacy',
-};
+export const appRoute = new RootRoute({
+  component: App,
+});
 
-export const routes: Route[] = [
-  {
-    id: 'trade',
-    path: PathNames.trade,
-    element: <TradePage />,
-    searchFilters: [
-      (search) => {
-        if (search.base && search.quote) {
-          return search;
-        }
-        return { ...search, ...getLastVisitedPair() };
-      },
-    ],
+const termPage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/terms',
+  component: TermsPage,
+});
+
+const privacyPage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/privacy',
+  component: PrivacyPage,
+});
+
+const debugPage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/debug',
+  component: DebugPage,
+});
+
+const tradePage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/trade',
+  component: TradePage,
+});
+
+const createStrategyPage = new Route({
+  getParentRoute: () => appRoute,
+  path: '/strategies/create',
+  component: CreateStrategyPage,
+  validateSearch: (search) => {
+    if (
+      search.strategyType === 'recurring' ||
+      search.strategyType === 'disposable' ||
+      search.strategy
+    ) {
+      return search;
+    }
+    return { ...search, strategyType: 'recurring' };
   },
-  {
-    path: PathNames.createStrategy,
-    element: <CreateStrategyPage />,
-    searchFilters: [
-      (search) => {
-        if (
-          search.strategyType === 'recurring' ||
-          search.strategyType === 'disposable' ||
-          search.encodedStrategy
-        ) {
-          return search;
-        }
-        return { ...search, strategyType: 'recurring' };
-      },
-    ],
-  },
-  {
-    path: PathNames.editStrategy,
-    element: <EditStrategyPage />,
-  },
-  {
-    path: PathNames.terms,
-    element: <TermsPage />,
-  },
-  {
-    path: PathNames.privacy,
-    element: <PrivacyPage />,
-  },
-  {
-    path: PathNames.debug,
-    element: <DebugPage />,
-  },
-  {
-    element: <Outlet />,
-    path: 'explorer',
-    children: [
-      {
-        path: '/',
-        element: <Navigate replace to={'wallet'} />,
-      },
-      {
-        path: ':type/:slug',
-        search: (_search) => {
-          // if pathname contains either /wallet/something or /token-pair/something return true
-          if (document.location.pathname.match(/\/(wallet|token-pair)\/.+/)) {
-            return true;
-          }
-          return false;
-        },
-        element: <ExplorerPage />,
-        children: [
-          {
-            path: '/',
-            element: <ExplorerTypeOverviewPage />,
-          },
-          {
-            path: 'portfolio',
-            element: <Outlet />,
-            children: [
-              {
-                path: '/',
-                element: <ExplorerTypePortfolioPage />,
-              },
-              {
-                path: 'token/:address',
-                element: <ExplorerTypePortfolioTokenPage />,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: ':type',
-        element: <ExplorerPage />,
-        children: [
-          {
-            path: '/',
-            element: <ExplorerTypePage />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <StrategiesPage />,
-    children: [
-      {
-        path: '/',
-        element: <StrategiesOverviewPage />,
-      },
-      {
-        path: 'strategies/portfolio',
-        element: <Outlet />,
-        children: [
-          {
-            path: '/',
-            element: <StrategiesPortfolioPage />,
-          },
-          {
-            path: 'token/:address',
-            element: <StrategiesPortfolioTokenPage />,
-          },
-        ],
-      },
-    ],
-  },
-];
+});
+
+const editStrategyPage = new Route({
+  getParentRoute: () => appRoute,
+  path: PathNames.editStrategy,
+  component: EditStrategyPage,
+});
+
+// MY STRATEGY
+export const myStrategyLayout = new Route({
+  getParentRoute: () => appRoute,
+  id: 'my-strategy-layout',
+  component: StrategiesPage,
+});
+
+export const strategyOverviewPage = new Route({
+  getParentRoute: () => myStrategyLayout,
+  path: '/',
+  component: StrategiesOverviewPage,
+});
+export const strategyPortflioLayout = new Route({
+  getParentRoute: () => myStrategyLayout,
+  path: 'strategies/portfolio',
+});
+
+export const strategyPortflioTokenPage = new Route({
+  getParentRoute: () => strategyPortflioLayout,
+  path: 'token/$address',
+  component: StrategiesPortfolioTokenPage,
+});
+
+export const strategyPortflioPage = new Route({
+  getParentRoute: () => strategyPortflioLayout,
+  path: '/',
+  component: StrategiesPortfolioPage,
+});
+strategyPortflioLayout.addChildren([
+  strategyPortflioPage,
+  strategyPortflioTokenPage,
+]);
+
+myStrategyLayout.addChildren([strategyOverviewPage, strategyPortflioLayout]);
+
+// EXPLORER
+const explorerLayout = new Route({
+  getParentRoute: () => appRoute,
+  path: 'explorer',
+});
+
+const explorerRedirect = new Route({
+  getParentRoute: () => explorerLayout,
+  path: '/',
+  component: () => <Navigate to="/explorer/wallet" />,
+});
+
+const explorerPage = new Route({
+  getParentRoute: () => explorerLayout,
+  path: '$type',
+  component: ExplorerPage,
+});
+
+const explorerResultLayout = new Route({
+  getParentRoute: () => explorerPage,
+  path: '$slug',
+});
+
+const explorerTypePage = new Route({
+  getParentRoute: () => explorerPage,
+  path: '/',
+  component: ExplorerTypePage,
+});
+
+const explorerOverviewPage = new Route({
+  getParentRoute: () => explorerResultLayout,
+  path: '/',
+  component: ExplorerTypeOverviewPage,
+});
+
+const explorerPortfolioLayout = new Route({
+  getParentRoute: () => explorerResultLayout,
+  path: 'portfolio',
+});
+
+const explorerPortfolioPage = new Route({
+  getParentRoute: () => explorerPortfolioLayout,
+  path: '/',
+  component: ExplorerTypePortfolioPage,
+});
+
+const explorerPortfolioTokenPage = new Route({
+  getParentRoute: () => explorerPortfolioLayout,
+  path: 'token/$address',
+  component: ExplorerTypePortfolioTokenPage,
+});
+
+explorerPortfolioLayout.addChildren([
+  explorerPortfolioPage,
+  explorerPortfolioTokenPage,
+]);
+
+explorerLayout.addChildren([explorerRedirect, explorerPage]);
+explorerPage.addChildren([explorerTypePage, explorerResultLayout]);
+explorerResultLayout.addChildren([
+  explorerOverviewPage,
+  explorerPortfolioLayout,
+]);
+
+export const routeTree = appRoute.addChildren([
+  termPage,
+  privacyPage,
+  debugPage,
+  tradePage,
+  createStrategyPage,
+  editStrategyPage,
+  explorerLayout,
+  myStrategyLayout,
+]);

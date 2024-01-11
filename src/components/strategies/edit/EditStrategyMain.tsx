@@ -1,39 +1,39 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { m } from 'libs/motion';
 import { EditStrategyHeader } from './EditStrategyHeader';
 import { EditStrategyLayout } from './EditStrategyLayout';
 import { list } from '../create/variants';
 import { Strategy } from 'libs/queries';
-import { MakeGenerics, useSearch } from 'libs/routing';
+import { useSearch } from 'libs/routing';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
-export type EditStrategyLocationGenerics = MakeGenerics<{
-  Search: {
-    type: EditTypes;
-  };
-}>;
+export interface EditStratgySearch {
+  type: EditTypes;
+}
 
-export const EditStrategyMain = ({
-  strategy,
-}: {
-  strategy: Strategy | undefined;
-}) => {
+interface Props {
+  strategy?: Strategy;
+  isLoading: boolean;
+}
+
+export const EditStrategyMain: FC<Props> = ({ strategy, isLoading }) => {
   const [showGraph, setShowGraph] = useState(true);
-  const search = useSearch<EditStrategyLocationGenerics>();
-  const { type } = search;
+  const { type }: EditStratgySearch = useSearch({ strict: false });
 
   return (
     <m.div
-      className={`flex flex-col items-center space-y-20 p-20 ${
+      className={`flex flex-col items-center gap-20 p-20 ${
         showGraph ? 'justify-between' : 'justify-center'
       }`}
       variants={list}
-      initial={'hidden'}
-      animate={'visible'}
+      initial="hidden"
+      animate="visible"
     >
       <EditStrategyHeader {...{ showGraph, setShowGraph, type }} />
-      {type && strategy && (
+      {isLoading && <CarbonLogoLoading className="my-40 w-60" />}
+      {!isLoading && type && strategy && (
         <EditStrategyLayout
           {...{
             strategy,

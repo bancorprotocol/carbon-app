@@ -1,5 +1,5 @@
-import { FormEvent, useEffect, useId, useMemo } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
+import { FormEvent, useEffect, useId, useMemo, JSX } from 'react';
 import { carbonEvents } from 'services/events';
 import { Token } from 'libs/tokens';
 import { IS_TENDERLY_FORK, useWeb3 } from 'libs/web3';
@@ -14,13 +14,13 @@ import { NotEnoughLiquidity } from './NotEnoughLiquidity';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconRouting } from 'assets/icons/routing.svg';
 
-export type TradeWidgetBuySellProps = {
+type FormAttributes = Omit<JSX.IntrinsicElements['form'], 'target'>;
+export interface TradeWidgetBuySellProps extends FormAttributes {
   source: Token;
   target: Token;
   buy?: boolean;
   sourceBalanceQuery: UseQueryResult<string>;
-  targetBalanceQuery: UseQueryResult<string>;
-};
+}
 
 export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
   const id = useId();
@@ -44,7 +44,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     maxSourceAmountQuery,
     isAwaiting,
   } = useBuySell(props);
-  const { source, target, sourceBalanceQuery, buy = false } = props;
+  const {
+    source,
+    target,
+    sourceBalanceQuery,
+    buy = false,
+    ...formProps
+  } = props;
   const hasEnoughLiquidity = +liquidityQuery?.data! > 0;
 
   const { getFiatValue: getFiatValueSource } = useFiatCurrency(source);
@@ -103,15 +109,15 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       buy,
       buyToken: target,
       sellToken: source,
-      valueUsd: getFiatValueSource(sourceInput, true).toString(),
+      valueUsd: getFiatValueSource(targetInput, true).toString(),
     };
 
-    if (!isTradeBySource && sourceInput) {
+    if (!isTradeBySource) {
       buy
         ? carbonEvents.trade.tradeBuyReceiveSet(tradeData)
         : carbonEvents.trade.tradeSellReceiveSet(tradeData);
     }
-  }, [buy, targetInput, sourceInput]);
+  }, [buy, targetInput]);
 
   const handleTrade = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -149,7 +155,9 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
     if (buy) {
       return `1 ${target.symbol} = ${
-        rate && rate !== '0' ? prettifyNumber(new BigNumber(1).div(rate)) : '--'
+        rate && rate !== '0'
+          ? prettifyNumber(new SafeDecimal(1).div(rate))
+          : '--'
       } ${source.symbol}`;
     }
     return `1 ${source.symbol} =
@@ -157,8 +165,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         ${target.symbol}`;
   };
 
-  const showRouting =
-    rate && rate !== '0' && !errorMsgTarget && !errorMsgSource;
+  const showRouting = rate && rate !== '0';
+  const disabledCTA =
+    !!errorMsgSource ||
+    !!errorMsgTarget ||
+    !hasEnoughLiquidity ||
+    !maxSourceAmountQuery.data;
 
   const getLiquidity = () => {
     const value = liquidityQuery.isLoading
@@ -169,6 +181,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
 
   return (
     <form
+      {...formProps}
       onSubmit={handleTrade}
       className="flex flex-col rounded-12 bg-silver p-20"
     >
@@ -177,18 +190,21 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           ? `Buy ${target.symbol} with ${source.symbol}`
           : `Sell ${source.symbol} for ${target.symbol}`}
       </h2>
-      <header className="flex justify-between text-14">
-        <label htmlFor={`${id}-pay`} className="text-white/50">
-          You pay
-        </label>
-        {errorMsgSource && (
-          <output htmlFor={`${id}-pay`} className="font-weight-500 text-red">
-            {errorMsgSource}
-          </output>
-        )}
-      </header>
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
+          <header className="flex justify-between text-14">
+            <label htmlFor={`${id}-pay`} className="text-white/50">
+              You pay
+            </label>
+            {errorMsgSource && (
+              <output
+                htmlFor={`${id}-pay`}
+                className="font-weight-500 text-red"
+              >
+                {errorMsgSource}
+              </output>
+            )}
+          </header>
           <TokenInputField
             id={`${id}-pay`}
             className="mb-20 mt-5 rounded-12 bg-black p-16"
@@ -241,6 +257,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
                 type="button"
                 onClick={openTradeRouteModal}
                 className="flex hidden space-x-10 text-left hover:text-white md:flex"
+                data-testid="routing"
               >
                 <IconRouting className="w-12" />
                 <Tooltip
@@ -266,12 +283,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       )}
       <Button
         type="submit"
-        disabled={!hasEnoughLiquidity || !maxSourceAmountQuery.data}
+        disabled={disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
         variant={buy ? 'success' : 'error'}
         fullWidth
         className="mt-20"
+        data-testid="submit"
       >
         {ctaButtonText}
       </Button>

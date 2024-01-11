@@ -1,6 +1,5 @@
 import { useExplorerParams } from './useExplorerParams';
-import { useLocation } from '@tanstack/react-location';
-import { PathNames } from 'libs/routing';
+import { PathNames, useRouterState } from 'libs/routing';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -15,21 +14,22 @@ export const ExplorerTabs = () => {
   const { slug, type } = useExplorerParams();
 
   // To support emojis in ens domains
-  const pathname = decodeURIComponent(useLocation().current.pathname);
+  const { location } = useRouterState();
+  const pathname = decodeURIComponent(location.pathname);
 
   const tabs: StrategyTab[] = [
     {
       label: 'Overview',
       href: PathNames.explorerOverview(type, slug!),
       hrefMatches: [],
-      icon: <IconOverview className={'h-18 w-18'} />,
+      icon: <IconOverview className="h-18 w-18" />,
       badge: strategies?.length || 0,
     },
     {
       label: 'Portfolio',
       href: PathNames.explorerPortfolio(type, slug!),
       hrefMatches: [PathNames.explorerPortfolioToken(type, slug!, '0x')],
-      icon: <IconPieChart className={'h-18 w-18'} />,
+      icon: <IconPieChart className="h-18 w-18" />,
     },
   ];
 

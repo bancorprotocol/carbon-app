@@ -1,13 +1,13 @@
-export { Router } from 'libs/routing/router';
+export { router } from 'libs/routing/router';
+export { PathNames } from './pathnames';
 export {
-  Outlet,
-  useLocation,
+  useRouterState,
   useNavigate,
   useRouter,
   useSearch,
-  useMatch,
+  useParams,
   Navigate,
-} from '@tanstack/react-location';
-export type { MakeGenerics, LinkPropsType } from '@tanstack/react-location';
-export { PathNames } from 'libs/routing/routes';
+  useScrollRestoration,
+} from '@tanstack/react-router';
 export { Link } from 'libs/routing/Link';
+export { Outlet } from '@tanstack/react-router';

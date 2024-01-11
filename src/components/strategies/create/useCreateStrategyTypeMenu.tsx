@@ -1,100 +1,49 @@
 import { ReactNode, useMemo } from 'react';
 import { PathNames, useNavigate } from 'libs/routing';
-import {
-  StrategyCreateLocationGenerics,
-  StrategyType,
-} from 'components/strategies/create/types';
+import { StrategyCreateSearch } from 'components/strategies/create/types';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
-import { ReactComponent as IconSellRange } from 'assets/icons/sell-range.svg';
-import { ReactComponent as IconSellLimit } from 'assets/icons/sell-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
-import { ReactComponent as IconTwoLimits } from 'assets/icons/two-limits.svg';
-import { ReactComponent as IconCustomStrategy } from 'assets/icons/custom-strategy.svg';
+import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
 
-type StrategyTypeItem = {
+interface StrategyTypeItem {
+  id: string;
   label: string;
+  description: string;
+  benefits: { summary: string; details: string }[];
   to: string;
-  search: StrategyCreateLocationGenerics['Search'];
+  search: StrategyCreateSearch;
   isRecommended?: boolean;
-};
-
-type StrategyTypeItemSvg = StrategyTypeItem & {
   svg: ReactNode;
-};
+}
 
-export const useCreateStrategyTypeMenu = (
-  base: string,
-  quote: string,
-  strategyType?: StrategyType
-) => {
+export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
   const navigate = useNavigate();
-  const types: StrategyTypeItem[] = [
-    {
-      label: 'Recurring',
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'recurring',
-      },
-    },
-    {
-      label: 'Disposable',
-      to: PathNames.createStrategy,
-      search: {
-        base,
-        quote,
-        strategyType: 'disposable',
-      },
-    },
-  ];
 
-  const typeRecurring: StrategyTypeItemSvg[] = useMemo(
+  const items: StrategyTypeItem[] = useMemo(
     () => [
       {
-        label: '2 Limits',
-        svg: <IconTwoLimits className={'w-60'} />,
-        to: PathNames.createStrategy,
-        search: {
-          base,
-          quote,
-          strategyType: 'recurring',
-          strategySettings: 'limit',
-        },
-        isRecommended: true,
-      },
-      {
-        label: '2 Ranges',
-        svg: <IconTwoRanges className={'w-60'} />,
-        to: PathNames.createStrategy,
-        search: {
-          base,
-          quote,
-          strategyType: 'recurring',
-          strategySettings: 'range',
-        },
-      },
-      {
-        label: 'Custom',
-        svg: <IconCustomStrategy className={'w-60'} />,
-        to: PathNames.createStrategy,
-        search: {
-          base,
-          quote,
-          strategyType: 'recurring',
-          strategySettings: 'custom',
-        },
-      },
-    ],
-    [base, quote]
-  );
-
-  const typeDisposable: StrategyTypeItemSvg[] = useMemo(
-    () => [
-      {
-        label: 'Buy Limit',
-        svg: <IconBuyLimit className={'w-60 text-green'} />,
+        label: 'Limit Order',
+        description:
+          'A single disposable buy or sell order at a specific price',
+        benefits: [
+          {
+            summary: 'Orders are irreversible',
+            details:
+              'Similar to a limit order on a centralized exchange, an order will not be undone should the market retrace.',
+          },
+          {
+            summary: 'Adjustable',
+            details:
+              'Easily edit without withdrawing funds. Adjust orders onchain, saving time and gas.',
+          },
+          {
+            summary: 'No trading or gas fees on filled orders',
+            details:
+              'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+          },
+        ],
+        svg: <IconBuyLimit className="w-full" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -104,23 +53,35 @@ export const useCreateStrategyTypeMenu = (
           strategySettings: 'limit',
         },
         isRecommended: true,
+        id: 'buy-limit',
       },
       {
-        label: 'Sell Limit',
-        svg: <IconSellLimit className={'w-60 text-red'} />,
-        to: PathNames.createStrategy,
-        search: {
-          base,
-          quote,
-          strategyType: 'disposable',
-          strategyDirection: 'sell',
-          strategySettings: 'limit',
-        },
-        isRecommended: true,
-      },
-      {
-        label: 'Buy Range',
-        svg: <IconBuyRange className={'w-60 text-green'} />,
+        label: 'Range Order',
+        description:
+          'A single disposable buy or sell order within a custom price range',
+        benefits: [
+          {
+            summary: 'Scale In or Out',
+            details:
+              'No need to time the market or create multiple orders within two desired price points.',
+          },
+          {
+            summary: 'Irreversible Partial Fills',
+            details:
+              'Whether partially or fully filled, trades are irreversible, and you no longer need to worry about an order being undone should the market retrace.',
+          },
+          {
+            summary: 'Adjustable',
+            details:
+              'Easily adjust prices without having to withdraw and redeposit funds, saving time and gas.',
+          },
+          {
+            summary: 'No trading or gas fees on filled orders',
+            details:
+              'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+          },
+        ],
+        svg: <IconBuyRange className="w-full" />,
         to: PathNames.createStrategy,
         search: {
           base,
@@ -129,18 +90,66 @@ export const useCreateStrategyTypeMenu = (
           strategyDirection: 'buy',
           strategySettings: 'range',
         },
+        isRecommended: true,
+        id: 'range-order',
       },
       {
-        label: 'Sell Range',
-        svg: <IconSellRange className={'w-60 text-red'} />,
+        label: 'Recurring Order',
+        description:
+          'Create buy and sell orders (limit or range) that are linked together. Newly acquired funds automatically rotate between them, creating an endless trading cycle without need for manual intervention',
+        benefits: [
+          {
+            summary: 'Rotating Liquidity',
+            details:
+              'Tokens acquired in a buy order instantaneously fund the linked sell order and vice versa. Compound profits with a custom trading strategy designed to run continuously.',
+          },
+          {
+            summary: 'Adjustable',
+            details:
+              'Easily edit without withdrawing funds. Adjust orders onchain, saving time and gas.',
+          },
+          {
+            summary: 'No trading or gas fees on filled orders',
+            details:
+              'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+          },
+        ],
+        svg: <IconTwoRanges className="w-full" />,
         to: PathNames.createStrategy,
         search: {
           base,
           quote,
-          strategyType: 'disposable',
-          strategyDirection: 'sell',
+          strategyType: 'recurring',
           strategySettings: 'range',
         },
+        isRecommended: true,
+        id: 'two-ranges',
+      },
+      {
+        label: 'Overlapping Liquidity',
+        description:
+          'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does',
+        benefits: [
+          {
+            summary: 'Adjustable',
+            details:
+              'Easily adjust prices without having to withdraw and redeposit funds, saving time and gas.',
+          },
+          {
+            summary: 'No trading or gas fees on filled orders',
+            details:
+              'Makers pay no gas when a trade is executed, and there are currently no maker fees on Carbon DeFi.',
+          },
+        ],
+        svg: <IconOverlappingStrategy className="w-full" />,
+        to: PathNames.createStrategy,
+        search: {
+          base,
+          quote,
+          strategyType: 'recurring',
+          strategySettings: 'overlapping',
+        },
+        id: 'overlapping',
       },
     ],
     [base, quote]
@@ -148,22 +157,11 @@ export const useCreateStrategyTypeMenu = (
 
   const handleClick = (
     to: string,
-    search: StrategyCreateLocationGenerics['Search'],
+    search: StrategyCreateSearch,
     replace?: boolean
   ) => {
     navigate({ to, search, replace });
   };
 
-  const selectedTabItems = useMemo(() => {
-    switch (strategyType) {
-      case 'recurring':
-        return typeRecurring;
-      case 'disposable':
-        return typeDisposable;
-      default:
-        return [];
-    }
-  }, [typeRecurring, typeDisposable, strategyType]);
-
-  return { items: types, handleClick, selectedTabItems };
+  return { items, handleClick };
 };

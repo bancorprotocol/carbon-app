@@ -4,40 +4,26 @@ import {
   StrategySettings,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
-import { PathNames, useNavigate } from 'libs/routing';
+import { PathNames } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
+import { NavigateOptions } from '@tanstack/react-router';
 
 export const handleStrategySettings = (
-  strategySettings?: StrategySettings,
+  settings?: StrategySettings,
   functions?: ((value: boolean) => void)[]
 ) => {
-  if (!functions || !strategySettings) {
-    return;
-  }
-
-  switch (strategySettings) {
-    case 'limit': {
-      functions.forEach((fn) => fn(false));
-      break;
-    }
-    case 'range': {
-      functions.forEach((fn) => fn(true));
-      break;
-    }
-    case 'custom': {
-      functions.forEach((fn, i) => fn(i % 2 !== 0));
-      break;
-    }
-  }
+  if (!functions || !settings) return;
+  if (settings === 'overlapping') return functions.forEach((fn) => fn(true));
+  if (settings === 'range') return functions.forEach((fn) => fn(true));
+  if (settings === 'limit') return functions.forEach((fn) => fn(false));
 };
 
 export const handleStrategyDirection = (
   strategyDirection: 'buy' | 'sell' | undefined,
-  strategySettings: 'limit' | 'range' | 'custom' | undefined,
+  strategySettings: StrategySettings | undefined,
   order1: OrderWithSetters,
   order0: OrderWithSetters
 ) => {
@@ -45,10 +31,12 @@ export const handleStrategyDirection = (
     case 'buy':
       handleStrategySettings(strategySettings, [order1.setIsRange]);
       order0.setPrice('0');
+      order0.setIsRange(false);
       break;
     case 'sell': {
       handleStrategySettings(strategySettings, [order0.setIsRange]);
       order1.setPrice('0');
+      order1.setIsRange(false);
       break;
     }
   }
@@ -78,12 +66,14 @@ export const createStrategyAction = async ({
       order0: {
         budget: order0.budget,
         min: order0.min,
+        marginalPrice: order0.marginalPrice,
         max: order0.max,
         price: order0.price,
       },
       order1: {
         budget: order1.budget,
         min: order1.min,
+        marginalPrice: order1.marginalPrice,
         max: order1.max,
         price: order1.price,
       },
@@ -122,11 +112,11 @@ export const createStrategyAction = async ({
 
 export const handleTxStatusAndRedirectToOverview = (
   setIsProcessing: Dispatch<SetStateAction<boolean>>,
-  navigate?: ReturnType<typeof useNavigate<MyLocationGenerics>>
+  navigate?: (opts: NavigateOptions) => Promise<void>
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
-    navigate && navigate({ to: PathNames.strategies });
+    navigate?.({ to: PathNames.strategies });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };

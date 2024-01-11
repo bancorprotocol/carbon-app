@@ -1,8 +1,8 @@
-import { useMatch } from '@tanstack/react-location';
-import { ExplorerRouteGenerics } from './utils';
+import { useParams } from 'libs/routing';
+import { ExplorerParams } from './utils';
 
 export const useExplorerParams = () => {
-  const { params } = useMatch<ExplorerRouteGenerics>();
+  const params: ExplorerParams = useParams({ strict: false });
 
   // To support emojis in ens domains
   const decodedSlug = params.slug && decodeURIComponent(params.slug);

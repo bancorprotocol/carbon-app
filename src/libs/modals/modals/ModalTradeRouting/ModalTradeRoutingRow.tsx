@@ -2,7 +2,7 @@ import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { ModalTradeRoutingRowCell } from 'libs/modals/modals/ModalTradeRouting/ModalTradeRoutingRowCell';
 import { ForwardArrow } from 'components/common/forwardArrow';
@@ -16,6 +16,7 @@ type ModalTradeRoutingRowProps = {
   targetFiatPrice?: FiatPriceDict;
   isSelected: boolean;
   handleClick: (id: string) => void;
+  buy?: boolean;
 };
 
 export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
@@ -25,18 +26,27 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   sourceFiatPrice,
   targetFiatPrice,
   isSelected,
+  buy,
   handleClick,
 }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
-  const averagePrice = new BigNumber(sourceAmount).div(targetAmount);
-  const averagePriceFiat = averagePrice.times(
+
+  const sourceAmountFiat = new SafeDecimal(sourceAmount).times(
     sourceFiatPrice?.[selectedFiatCurrency] || 0
   );
-  const sourceAmountFiat = new BigNumber(sourceAmount).times(
-    sourceFiatPrice?.[selectedFiatCurrency] || 0
-  );
-  const targetAmountFiat = new BigNumber(targetAmount).times(
+
+  const targetAmountFiat = new SafeDecimal(targetAmount).times(
     targetFiatPrice?.[selectedFiatCurrency] || 0
+  );
+
+  const averageToken = buy ? source : target;
+  const averageFiatPrice = buy ? sourceFiatPrice : targetFiatPrice;
+  const averageAmount = buy
+    ? new SafeDecimal(sourceAmount).div(targetAmount)
+    : new SafeDecimal(targetAmount).div(sourceAmount);
+
+  const averagePriceFiat = averageAmount.times(
+    averageFiatPrice?.[selectedFiatCurrency] || 0
   );
 
   const onCheckboxClick = () => {
@@ -44,40 +54,47 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
   };
 
   return (
-    <>
-      <div className={'flex items-center space-x-20'}>
-        <Checkbox isChecked={isSelected} setIsChecked={onCheckboxClick} />
-
+    <tr>
+      <td className="border-t border-emphasis p-8">
+        <Checkbox
+          isChecked={isSelected}
+          setIsChecked={onCheckboxClick}
+          className="m-auto"
+          aria-label={`${sourceAmount} ${source.name} per ${targetAmount} ${target.name}`}
+          tabIndex={-1}
+        />
+      </td>
+      <td className="border-t border-emphasis p-8">
         <ModalTradeRoutingRowCell
           amount={sourceAmount}
           fiatAmount={sourceAmountFiat}
           logoURI={source.logoURI}
           selectedFiatCurrency={selectedFiatCurrency}
         />
-      </div>
-      <div className={'flex items-center space-x-10'}>
-        <div
-          className={
-            'flex h-18 w-18 items-center justify-center rounded-full bg-silver'
-          }
-        >
-          <ForwardArrow arrowType="full" />
-        </div>
-
+      </td>
+      <td className="border-t border-emphasis">
+        <ForwardArrow
+          arrowType="full"
+          className="inline h-18 w-18 rounded-full bg-silver p-4 text-white/60"
+        />
+      </td>
+      <td className="border-t border-emphasis p-8">
         <ModalTradeRoutingRowCell
           amount={targetAmount}
           fiatAmount={targetAmountFiat}
           logoURI={target.logoURI}
           selectedFiatCurrency={selectedFiatCurrency}
         />
-      </div>
+      </td>
 
-      <ModalTradeRoutingRowCell
-        amount={averagePrice}
-        fiatAmount={averagePriceFiat}
-        logoURI={source.logoURI}
-        selectedFiatCurrency={selectedFiatCurrency}
-      />
-    </>
+      <td className="border-t border-emphasis p-8">
+        <ModalTradeRoutingRowCell
+          amount={averageAmount}
+          fiatAmount={averagePriceFiat}
+          logoURI={averageToken.logoURI}
+          selectedFiatCurrency={selectedFiatCurrency}
+        />
+      </td>
+    </tr>
   );
 };

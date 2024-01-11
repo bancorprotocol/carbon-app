@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
-import { Link, PathNames, useLocation } from 'libs/routing';
+import { Link, PathNames, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 import { isPathnameMatch } from 'utils/helpers';
 import { handleOnItemClick } from '../utils';
 import { menuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
-  const pathname = useLocation().current.pathname;
+  const pathname = useRouterState().location.pathname;
 
   return (
     <nav

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Strategy } from 'libs/queries';
+import { StrategyWithFiat } from 'libs/queries';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -8,26 +8,23 @@ import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
 import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
 
 export const StrategyBlockBuySell: FC<{
-  strategy: Strategy;
+  strategy: StrategyWithFiat;
   buy?: boolean;
   className?: string;
 }> = ({ strategy, buy = false, className }) => {
   const token = buy ? strategy.base : strategy.quote;
   const otherToken = buy ? strategy.quote : strategy.base;
   const order = buy ? strategy.order0 : strategy.order1;
-  const otherOrder = buy ? strategy.order1 : strategy.order1;
   const testIdPrefix = `${buy ? 'buy' : 'sell'}`;
   const active = strategy.status === 'active';
-  const baseFiat = useFiatCurrency(token);
-  const quoteFiat = useFiatCurrency(otherToken);
-  const currency = baseFiat.selectedFiatCurrency;
+  const otherTokenFiat = useFiatCurrency(otherToken);
+  const currency = otherTokenFiat.selectedFiatCurrency;
   const prettifiedBudget = prettifyNumber(order.balance, {
     abbreviate: order.balance.length > 10,
   });
-  const balance = buy ? order.balance : otherOrder.balance;
-  const budget = quoteFiat.getFiatValue(balance);
-  const quoteHasFiatValue = quoteFiat.hasFiatValue();
-  const fullFiatBudget = getFiatDisplayValue(budget, currency);
+  const hasFiatValue = otherTokenFiat.hasFiatValue();
+  const fiatBudget = buy ? strategy.fiatBudget.quote : strategy.fiatBudget.base;
+  const fiatBudgetValue = getFiatDisplayValue(fiatBudget, currency);
 
   const buyTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to use in order to buy ${token.symbol}.`;
   const sellTooltip = `This is the available amount of ${otherToken.symbol} tokens that you are willing to sell.`;
@@ -44,12 +41,14 @@ export const StrategyBlockBuySell: FC<{
       {buy ? (
         <header className="flex items-center gap-4">
           <h4 className="font-mono text-12 text-green">Buy {token.symbol}</h4>
-          {quoteHasFiatValue && (
+          {hasFiatValue && (
             <Tooltip element={buyTooltip}>
-              <TooltipIcon className="h-10 w-10 text-white/60" />
+              <span>
+                <TooltipIcon className="h-10 w-10 text-white/60" />
+              </span>
             </Tooltip>
           )}
-          {!quoteHasFiatValue && (
+          {!hasFiatValue && (
             <Tooltip
               element={
                 <p>
@@ -59,7 +58,9 @@ export const StrategyBlockBuySell: FC<{
                 </p>
               }
             >
-              <WarningIcon className="h-10 w-10 text-warning-500" />
+              <span>
+                <WarningIcon className="h-10 w-10 text-warning-500" />
+              </span>
             </Tooltip>
           )}
         </header>
@@ -68,12 +69,14 @@ export const StrategyBlockBuySell: FC<{
           <h4 className="font-mono text-12 text-red">
             Sell {otherToken.symbol}
           </h4>
-          {quoteHasFiatValue && (
+          {hasFiatValue && (
             <Tooltip element={sellTooltip}>
-              <TooltipIcon className="h-10 w-10 text-white/60" />
+              <span>
+                <TooltipIcon className="h-10 w-10 text-white/60" />
+              </span>
             </Tooltip>
           )}
-          {!quoteHasFiatValue && (
+          {!hasFiatValue && (
             <Tooltip
               element={
                 <p>
@@ -83,34 +86,34 @@ export const StrategyBlockBuySell: FC<{
                 </p>
               }
             >
-              <WarningIcon className="h-10 w-10 text-warning-500" />
+              <span>
+                <WarningIcon className="h-10 w-10 text-warning-500" />
+              </span>
             </Tooltip>
           )}
         </header>
       )}
-      <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
-        <Tooltip
-          element={
-            <span className="inline-flex items-center gap-4">
-              <LogoImager
-                className="h-16 w-16"
-                src={otherToken.logoURI}
-                alt="token"
-              />
-              {order.balance.toString()}
-            </span>
-          }
-        >
-          <>
-            {prettifiedBudget} {otherToken.symbol}
-          </>
-        </Tooltip>
-      </p>
+      <Tooltip
+        element={
+          <span className="inline-flex items-center gap-4">
+            <LogoImager
+              className="h-16 w-16"
+              src={otherToken.logoURI}
+              alt="token"
+            />
+            {order.balance.toString()}
+          </span>
+        }
+      >
+        <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
+          {prettifiedBudget} {otherToken.symbol}
+        </p>
+      </Tooltip>
       <p
         data-testid={`${testIdPrefix}-budget-fiat`}
         className="font-mono text-12 text-white/60"
       >
-        {quoteHasFiatValue ? fullFiatBudget : '...'}
+        {hasFiatValue ? fiatBudgetValue : '...'}
       </p>
     </article>
   );

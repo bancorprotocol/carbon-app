@@ -9,6 +9,7 @@ import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
+
 export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const query = useExplorer();

@@ -38,9 +38,7 @@ export const LimitRangeSection: FC<Props> = ({
 
   return (
     <fieldset className="flex flex-col gap-8">
-      <legend
-        className={`mb-11 flex items-center gap-6 text-14 font-weight-500`}
-      >
+      <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
         {inputTitle}
       </legend>
       {isRange ? (
@@ -51,7 +49,8 @@ export const LimitRangeSection: FC<Props> = ({
           setMax={order.setMax}
           error={order.rangeError}
           setRangeError={order.setRangeError}
-          token={quote}
+          quote={quote}
+          base={base}
           buy={buy}
           marketPricePercentages={marketPricePercentage}
         />

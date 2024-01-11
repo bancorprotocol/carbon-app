@@ -45,6 +45,8 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         onKeyDown={(e) => {
           if (e.key === 'Enter') handleSelect(tradePairs[0]);
         }}
+        aria-label="Search Token Pair"
+        data-testid="search-token-pair"
       />
 
       {isError ? (
