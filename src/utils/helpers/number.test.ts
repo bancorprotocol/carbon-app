@@ -51,12 +51,10 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return ¥0 for input lower then 0 and currentCurrency is JPY', () => {
-        expect(prettifyNumber(-10, { currentCurrency: 'JPY' })).toEqual('¥0');
-      });
-
-      test('should return "$0.00" for input 0 and no currentCurrency selected', () => {
-        expect(prettifyNumber(0)).toEqual('0');
+      test('should return ¥0.00 for input lower then 0 and currentCurrency is JPY', () => {
+        expect(prettifyNumber(-10, { currentCurrency: 'JPY' })).toEqual(
+          '¥0.00'
+        );
       });
 
       test('should return "$0.00" for input 0 and currentCurrency is USD', () => {
@@ -73,12 +71,8 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return "¥0" for input 0 and currentCurrency is JPY', () => {
-        expect(prettifyNumber(0, { currentCurrency: 'JPY' })).toEqual('¥0');
-      });
-
-      test('should return "0" for input 0 and no currentCurrency selected', () => {
-        expect(prettifyNumber(0, {})).toEqual('0');
+      test('should return "¥0.00" for input 0 and currentCurrency is JPY', () => {
+        expect(prettifyNumber(0, { currentCurrency: 'JPY' })).toEqual('¥0.00');
       });
 
       test('should return "$0.001" for input 0.001 and currentCurrency is USD', () => {
@@ -139,33 +133,33 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return "¥1" for input 1.2345 and currentCurrency is JPY', () => {
+      test('should return "¥1.23" for input 1.2345 and currentCurrency is JPY', () => {
         expect(prettifyNumber(1.2345, { currentCurrency: 'JPY' })).toEqual(
-          '¥1'
+          '¥1.23'
         );
       });
 
-      test('should return "$123,456,789" for input 123456789 and currentCurrency is USD', () => {
+      test('should return "$123,456,789.00" for input 123456789 and currentCurrency is USD', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'USD' })).toEqual(
-          '$123,456,789'
+          '$123,456,789.00'
         );
       });
 
-      test('should return "€123,456,789" for input 123456789 and currentCurrency is EUR', () => {
+      test('should return "€123,456,789.00" for input 123456789 and currentCurrency is EUR', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'EUR' })).toEqual(
-          '€123,456,789'
+          '€123,456,789.00'
         );
       });
 
-      test('should return "123,456,789 ETH" for input 123456789 and currentCurrency is ETH', () => {
+      test('should return "123,456,789.00 ETH" for input 123456789 and currentCurrency is ETH', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'ETH' })).toEqual(
-          '123,456,789 ETH'
+          '123,456,789.00 ETH'
         );
       });
 
-      test('should return "¥123,456,789" for input 123456789 and currentCurrency is JPY', () => {
+      test('should return "¥123,456,789.00" for input 123456789 and currentCurrency is JPY', () => {
         expect(prettifyNumber(123456789, { currentCurrency: 'JPY' })).toEqual(
-          '¥123,456,789'
+          '¥123,456,789.00'
         );
       });
 
@@ -189,6 +183,10 @@ describe('Test helpers', () => {
     });
 
     describe('Numbers', () => {
+      test('should return "0" for input 0 and no currentCurrency selected', () => {
+        expect(prettifyNumber(0)).toEqual('0');
+      });
+
       test('should return "1.2M" for input 1234567 and no currentCurrency selected', () => {
         expect(prettifyNumber(1234567, { abbreviate: true })).toEqual('1.2 m');
       });
@@ -211,9 +209,9 @@ describe('Test helpers', () => {
         expect(prettifyNumber(1321965595)).toEqual('1,321,965,595');
       });
 
-      test('should return "$1,321,965,595" for large number and currentCurrency is USD', () => {
+      test('should return "$1,321,965,595.00" for large number and currentCurrency is USD', () => {
         expect(prettifyNumber(1321965595, { currentCurrency: 'USD' })).toEqual(
-          '$1,321,965,595'
+          '$1,321,965,595.00'
         );
       });
 
@@ -234,13 +232,13 @@ describe('Test helpers', () => {
       test('Check rounding is correct - currentCurrency is USD', () => {
         expect(
           prettifyNumber(18999.999999999851769955, { currentCurrency: 'USD' })
-        ).toEqual('$18,999');
+        ).toEqual('$18,999.99');
         expect(
           prettifyNumber(19999.999999999986138278, {
             round: true,
             currentCurrency: 'USD',
           })
-        ).toEqual('$20,000');
+        ).toEqual('$20,000.00');
       });
 
       test('Remove redundant zero', () => {
