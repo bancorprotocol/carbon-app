@@ -1,18 +1,28 @@
 /* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, setupImposter } from '../utils/DebugDriver';
+import {
+  DebugDriver,
+  removeFork,
+  setupFork,
+  setupImposter,
+} from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
 import { navigateTo } from '../utils/operators';
 import { checkApproval } from '../utils/modal';
 import { NotificationDriver } from '../utils/NotificationDriver';
 
 test.describe('Trade', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    await setupFork(page, testInfo);
     await Promise.all([mockApi(page), setupImposter(page)]);
   });
 
-  const configs = [
+  test.afterEach(async ({}, testInfo) => {
+    await removeFork(testInfo);
+  });
+
+  const testCases = [
     {
       mode: 'buy' as const,
       source: 'USDC',
@@ -29,8 +39,8 @@ test.describe('Trade', () => {
     },
   ];
 
-  for (const config of configs) {
-    const { mode, source, target, sourceValue, targetValue } = config;
+  for (const testCase of testCases) {
+    const { mode, source, target, sourceValue, targetValue } = testCase;
     const testName =
       mode === 'buy'
         ? `Buy ${target} with ${source}`
@@ -41,13 +51,13 @@ test.describe('Trade', () => {
       // Store current balance
       const debug = new DebugDriver(page);
       const balance = {
-        source: await debug.getBalance(config.source).textContent(),
-        target: await debug.getBalance(config.target).textContent(),
+        source: await debug.getBalance(testCase.source).textContent(),
+        target: await debug.getBalance(testCase.target).textContent(),
       };
 
       // Test Trade
       await navigateTo(page, '/trade?*');
-      const driver = new TradeDriver(page, config);
+      const driver = new TradeDriver(page, testCase);
 
       // Select pair
       await driver.selectPair();
@@ -63,7 +73,7 @@ test.describe('Trade', () => {
       await driver.submit();
 
       // Token approval
-      await checkApproval(page, [config.source]);
+      await checkApproval(page, [testCase.source]);
 
       // Verify notification
       const notif = new NotificationDriver(page, 'trade');
@@ -80,12 +90,12 @@ test.describe('Trade', () => {
       // Check balance diff
       await navigateTo(page, '/debug');
 
-      const sourceDelta = Number(balance.source) - Number(config.sourceValue);
+      const sourceDelta = Number(balance.source) - Number(testCase.sourceValue);
       const nextSource = new RegExp(sourceDelta.toString());
-      await expect(debug.getBalance(config.source)).toHaveText(nextSource);
-      const targetDelta = Number(balance.target) + Number(config.targetValue);
+      await expect(debug.getBalance(testCase.source)).toHaveText(nextSource);
+      const targetDelta = Number(balance.target) + Number(testCase.targetValue);
       const nextTarget = new RegExp(targetDelta.toString());
-      await expect(debug.getBalance(config.target)).toHaveText(nextTarget);
+      await expect(debug.getBalance(testCase.target)).toHaveText(nextTarget);
     });
   }
 });
