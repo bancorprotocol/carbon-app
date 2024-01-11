@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { PathNames, useNavigate, useParams } from 'libs/routing';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
@@ -45,6 +46,7 @@ export const StrategyBlockManage: FC<Props> = ({
   isExplorer,
 }) => {
   const { strategies, sort, filter } = useStrategyCtx();
+  const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
   const navigate = useNavigate();
   const order0 = useOrder(strategy.order0);
@@ -81,7 +83,11 @@ export const StrategyBlockManage: FC<Props> = ({
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-        openModal('duplicateStrategy', { strategy: strategy });
+        if (!isOverlapping) {
+          openModal('duplicateStrategy', { strategy: strategy });
+        } else {
+          duplicate(strategy);
+        }
       },
     });
   }
