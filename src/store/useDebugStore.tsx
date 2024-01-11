@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
-export interface DebugState {}
+export interface DebugState {
+  isE2E: boolean;
+}
 
 export interface DebugStore {
   debugState: DebugState;
@@ -9,7 +11,9 @@ export interface DebugStore {
 
 export const useDebugStore = (): DebugStore => {
   // Keep this alive for future need
-  const [debugState, setDebugState] = useState<DebugState>({});
+  const [debugState, setDebugState] = useState<DebugState>({
+    isE2E: false,
+  });
 
   return {
     debugState,
@@ -18,6 +22,6 @@ export const useDebugStore = (): DebugStore => {
 };
 
 export const defaultDebugStore: DebugStore = {
-  debugState: { showOverlapping: false },
+  debugState: { isE2E: false },
   setDebugState: () => {},
 };
