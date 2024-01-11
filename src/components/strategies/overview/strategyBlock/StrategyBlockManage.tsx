@@ -256,16 +256,15 @@ export const StrategyBlockManage: FC<Props> = ({
           const { name, id, action, disabled } = item;
 
           return (
-            <li key={id} role="none">
-              <ManageItem
-                title={name}
-                setManage={setManage}
-                action={action}
-                id={id}
-                isExplorer={isExplorer}
-                disabled={disabled}
-              />
-            </li>
+            <ManageItem
+              key={id}
+              title={name}
+              setManage={setManage}
+              action={action}
+              id={id}
+              isExplorer={isExplorer}
+              disabled={disabled}
+            />
           );
         })}
       </ul>
@@ -313,10 +312,16 @@ const ManageItem: FC<{
         element={tooltipText}
         interactive={false}
       >
-        <Content />
+        <li role="none">
+          <Content />
+        </li>
       </Tooltip>
     );
   }
 
-  return <Content />;
+  return (
+    <li role="none">
+      <Content />
+    </li>
+  );
 };
