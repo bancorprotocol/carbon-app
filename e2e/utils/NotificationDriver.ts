@@ -25,4 +25,11 @@ export class NotificationDriver {
   getDescription() {
     return this.notif.getByTestId('notif-description');
   }
+  async close() {
+    const isVisible = await this.notif.isVisible();
+    if (isVisible) {
+      this.notif.getByTestId('notif-close').click();
+      return this.notif.waitFor({ state: 'detached' });
+    }
+  }
 }

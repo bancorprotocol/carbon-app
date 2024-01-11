@@ -5,7 +5,6 @@ import { NotificationDriver } from './../../../utils/NotificationDriver';
 
 export const renewStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Renew', async ({ page }) => {
-    test.setTimeout(45_000);
     const { strategy, manage } = await pauseStrategy(page, testCase);
 
     await strategy.clickManageEntry('manage-strategy-renewStrategy');
