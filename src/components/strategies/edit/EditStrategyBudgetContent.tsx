@@ -219,6 +219,7 @@ export const EditStrategyBudgetContent = ({
         variant="white"
         size="lg"
         fullWidth
+        data-testid="deposit-withdraw-confirm-btn"
       >
         {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>
