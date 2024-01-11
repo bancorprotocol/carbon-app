@@ -11,9 +11,7 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTemplate) => {
     const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-editPrices');
 
-    await page.waitForURL('/strategies/edit?type=editPrices', {
-      timeout: 10_000,
-    });
+    await manage.waitForEditPage('editPrices');
 
     const newBuyPrice = (parseFloat(testCase.buy.max) / 2).toString();
     const newSellPrice = (parseFloat(testCase.sell.max) / 2).toString();
