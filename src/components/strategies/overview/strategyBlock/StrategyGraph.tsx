@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
-import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
   FloatTooltipContent,
@@ -38,14 +38,14 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   );
 
   const buy = {
-    from: Number(sanitizeNumberInput(buyOrder.startRate)),
-    to: Number(sanitizeNumberInput(buyOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(buyOrder.marginalRate)),
+    from: Number(sanitizeNumber(buyOrder.startRate)),
+    to: Number(sanitizeNumber(buyOrder.endRate)),
+    marginalPrice: Number(sanitizeNumber(buyOrder.marginalRate)),
   };
   const sell = {
-    from: Number(sanitizeNumberInput(sellOrder.startRate)),
-    to: Number(sanitizeNumberInput(sellOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(sellOrder.marginalRate)),
+    from: Number(sanitizeNumber(sellOrder.startRate)),
+    to: Number(sanitizeNumber(sellOrder.endRate)),
+    marginalPrice: Number(sanitizeNumber(sellOrder.marginalRate)),
   };
 
   const buyOrderExists = buy.from !== 0 && buy.to !== 0;
@@ -218,7 +218,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         {buyOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
-              <g className={style.buy}>
+              <g className={style.buy} data-testid="polygon-buy">
                 <>
                   {!buyOrderIsLimit && (
                     <>
@@ -296,7 +296,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         {sellOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
-              <g className={style.sell}>
+              <g className={style.sell} data-testid="polygon-sell">
                 <>
                   {!sellOrderIsLimit && (
                     <>
@@ -564,7 +564,10 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const { quote, base } = strategy;
   const color = buy ? 'text-green' : 'text-red';
   return (
-    <article className="flex flex-col gap-16 text-12">
+    <article
+      className="flex flex-col gap-16 text-12"
+      data-testid="order-tooltip"
+    >
       <h3 className={cn('text-16 font-weight-500', color)}>
         {buy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
@@ -589,7 +592,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
               <th className="p-8 pb-4 text-start font-weight-400 text-white/60">
                 Min Price
               </th>
-              <td className="p-8 pb-4 text-end">
+              <td className="p-8 pb-4 text-end" data-testid="min-price">
                 {startPrice} {quote.symbol}
               </td>
             </tr>
@@ -597,7 +600,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
               <th className="p-8 pt-4 text-start font-weight-400 text-white/60">
                 Max Price
               </th>
-              <td className="p-8 pt-4 text-end">
+              <td className="p-8 pt-4 text-end" data-testid="max-price">
                 {endPrice} {quote.symbol}
               </td>
             </tr>
@@ -605,7 +608,11 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       <p className="text-white/60">
-        Current marginal price is {marginalPrice} {quote.symbol} per 1&nbsp;
+        Current marginal price is&nbsp;
+        <span data-testid="marginal-price">
+          {marginalPrice} {quote.symbol}
+        </span>
+        &nbsp;per 1&nbsp;
         {base.symbol}
       </p>
       <a
@@ -614,7 +621,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         rel="noreferrer"
         className="inline-flex items-center gap-4 font-weight-500 text-green"
       >
-        <span>Learn More about marginal price</span>
+        <span>Learn more about marginal price</span>
         <IconLink className="inline h-12 w-12" />
       </a>
     </article>

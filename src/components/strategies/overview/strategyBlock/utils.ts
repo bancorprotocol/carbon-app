@@ -1,5 +1,5 @@
 import { Order, StrategyStatus } from 'libs/queries';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { prettifyNumber, sanitizeNumber } from 'utils/helpers';
 
 export const statusText: Record<StrategyStatus, string> = {
   active: 'Active',
@@ -87,7 +87,7 @@ export const getPrice = ({
         : ''
     }`;
   }
-  return `${sanitizeNumberInput(order.startRate, decimals)} ${
-    !limit ? ` - ${sanitizeNumberInput(order.endRate, decimals)}` : ''
+  return `${sanitizeNumber(order.startRate, decimals)} ${
+    !limit ? ` - ${sanitizeNumber(order.endRate, decimals)}` : ''
   }`;
 };

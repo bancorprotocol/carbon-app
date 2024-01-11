@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.0.0-0",
-    "@bancor/carbon-sdk": "0.0.85-DEV",
+    "@bancor/carbon-sdk": "^0.0.94-DEV",
     "@cloudflare/workers-types": "^4.20230717.0",
     "@coinbase/wallet-sdk": "^3.6.3",
     "@ethersproject/abi": "^5.0.0",
@@ -45,7 +45,6 @@
     "@web3-react/walletconnect-v2": "^8.5.0",
     "autoprefixer": "^10.4.12",
     "axios": "^1.1.3",
-    "bignumber.js": "^9.1.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "buffer": "^6.0.3",
     "class-variance-authority": "^0.2.4",
@@ -89,7 +88,7 @@
     "vite": "^4.4.9",
     "vite-plugin-rewrite-all": "^1.0.1",
     "vite-plugin-svgr": "^2.4.0",
-    "vite-tsconfig-paths": "^4.2.0",
+    "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.29.8",
     "web-vitals": "^2.1.0"
   },

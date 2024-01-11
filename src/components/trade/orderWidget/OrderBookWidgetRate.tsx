@@ -17,10 +17,8 @@ export const OrderBookWidgetRate: FC<Props> = ({
   isLoading,
 }) => {
   return (
-    <div
-      className={`-mx-10 my-10 flex items-center rounded-8 bg-silver px-10 py-10 text-16`}
-    >
-      <Tooltip element={'The mid-market price based on the last trade'}>
+    <div className="-mx-10 my-10 flex items-center rounded-8 bg-silver px-10 py-10 text-16">
+      <Tooltip element="The mid-market price based on the last trade">
         <span className="flex items-center ">
           {prettifyNumber(rate)}
           {!isLoading && (

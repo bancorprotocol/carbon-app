@@ -29,12 +29,23 @@ export const sendGTMEvent: SendEventFn = (type, event, data) => {
       });
     }
     case 'wallet': {
-      return sendGTM({
-        event: `CE ${snakeCaseEvent}`,
-        user_properties: dataObj,
-        event_properties: {},
-        wallet: dataObj,
-      });
+      if (
+        ['wallet_connected', 'wallet_disconnected'].includes(snakeCaseEvent)
+      ) {
+        return sendGTM({
+          event: `${snakeCaseEvent}`,
+          user_properties: dataObj,
+          event_properties: {},
+          wallet: dataObj,
+        });
+      } else {
+        return sendGTM({
+          event: `CE ${snakeCaseEvent}`,
+          user_properties: dataObj,
+          event_properties: {},
+          wallet: dataObj,
+        });
+      }
     }
     default:
       return sendGTM({

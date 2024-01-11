@@ -1,5 +1,5 @@
 import { FC, memo, ReactElement } from 'react';
-import { Strategy } from 'libs/queries';
+import { StrategyWithFiat } from 'libs/queries';
 import { m } from 'libs/motion';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock';
@@ -8,7 +8,7 @@ import { cn } from 'utils/helpers';
 import styles from './StrategyContent.module.css';
 
 type Props = {
-  strategies: Strategy[];
+  strategies: StrategyWithFiat[];
   isLoading: boolean;
   emptyElement: ReactElement;
   isExplorer?: boolean;

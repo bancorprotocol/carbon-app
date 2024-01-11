@@ -37,10 +37,6 @@ import {
   ModalGenericInfoData,
 } from 'libs/modals/modals/ModalGenericInfo';
 import {
-  ModalCreateStratExpertMode,
-  ModalCreateStratExpertModeData,
-} from 'libs/modals/modals/ModalCreateStratExpertMode';
-import {
   ModalManageNotifications,
   ModalManageNotificationsData,
 } from './ModalManageNotifications';
@@ -70,7 +66,6 @@ export interface ModalSchema {
   burgerMenu: undefined;
   restrictedCountry: undefined;
   genericInfo: ModalGenericInfoData;
-  createStratExpertMode: ModalCreateStratExpertModeData;
   manageNotifications: ModalManageNotificationsData;
   duplicateStrategy: ModalDuplicateStrategyData;
   confirmPauseStrategy: ModalConfirmPauseData;
@@ -93,7 +88,6 @@ export const MODAL_COMPONENTS: TModals = {
   burgerMenu: (props) => ModalBurgerMenu(props),
   restrictedCountry: (props) => ModalRestrictedCountry(props),
   genericInfo: (props) => ModalGenericInfo(props),
-  createStratExpertMode: (props) => ModalCreateStratExpertMode(props),
   manageNotifications: (props) => ModalManageNotifications(props),
   duplicateStrategy: (props) => ModalDuplicateStrategy(props),
   confirmPauseStrategy: (props) => ModalConfirmPause(props),

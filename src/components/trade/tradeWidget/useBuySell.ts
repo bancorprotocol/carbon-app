@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import {
@@ -112,21 +112,11 @@ export const useBuySell = ({
   const liquidityQuery = useGetTradeLiquidity(source.address, target.address);
 
   const checkLiquidity = () => {
-    const checkSource = () => {
-      if (sourceInput === '' || sourceInput === '...') {
-        return false;
-      }
+    const checkSource = () =>
+      new SafeDecimal(sourceInput).gt(maxSourceAmountQuery.data || 0);
 
-      return new BigNumber(sourceInput).gt(maxSourceAmountQuery.data || 0);
-    };
-
-    const checkTarget = () => {
-      if (targetInput === '' || targetInput === '...') {
-        return false;
-      }
-
-      return new BigNumber(targetInput).gt(liquidityQuery.data || 0);
-    };
+    const checkTarget = () =>
+      new SafeDecimal(targetInput).gt(liquidityQuery.data || 0);
 
     const set = () => setIsLiquidityError(true);
     setIsLiquidityError(false);
@@ -173,12 +163,6 @@ export const useBuySell = ({
 
   useEffect(() => {
     if (byTargetQuery.data) {
-      if (new BigNumber(targetInput).gt(liquidityQuery.data || 0)) {
-        setIsLiquidityError(true);
-        setSourceInput('...');
-        return;
-      }
-
       const {
         totalSourceAmount,
         tradeActions,
@@ -207,7 +191,7 @@ export const useBuySell = ({
 
   const errorBaseBalanceSufficient =
     !!user &&
-    new BigNumber(sourceBalanceQuery.data || 0).lt(
+    new SafeDecimal(sourceBalanceQuery.data || 0).lt(
       isTradeBySource ? sourceInput : calcMaxInput(sourceInput)
     );
 
@@ -345,22 +329,22 @@ export const useBuySell = ({
 
   const getTokenFiat = useCallback(
     (value: string, query: any) => {
-      return new BigNumber(value || 0).times(
+      return new SafeDecimal(value || 0).times(
         query.data?.[selectedFiatCurrency] || 0
       );
     },
     [selectedFiatCurrency]
   );
 
-  const calcSlippage = useCallback((): BigNumber | null => {
+  const calcSlippage = useCallback((): SafeDecimal | null => {
     const sourceFiat = getTokenFiat(sourceInput, sourceTokenPriceQuery);
     const targetFiat = getTokenFiat(targetInput, targetTokenPriceQuery);
 
-    if (sourceFiat.isEqualTo(0) || targetFiat.isEqualTo(0)) {
-      return new BigNumber(0);
+    if (sourceFiat.isZero() || targetFiat.isZero()) {
+      return new SafeDecimal(0);
     }
     const diff = targetFiat.div(sourceFiat);
-    const slippage = diff.minus(new BigNumber(1)).times(100);
+    const slippage = diff.minus(new SafeDecimal(1)).times(100);
 
     if (slippage.isFinite()) {
       return slippage;

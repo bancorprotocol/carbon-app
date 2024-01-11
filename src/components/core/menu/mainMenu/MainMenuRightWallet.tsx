@@ -12,8 +12,10 @@ import { Button } from 'components/common/button';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { DropdownMenu, useMenuCtx } from 'components/common/dropdownMenu';
 import { useModal } from 'hooks/useModal';
+
 import { useWeb3 } from 'libs/web3';
-import { FC, useMemo } from 'react';
+import { getConnection } from 'libs/web3/web3.utils';
+import { FC, useMemo, useEffect } from 'react';
 import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
@@ -44,7 +46,9 @@ const WalletIcon = ({ isImposter }: { isImposter: boolean }) => {
 
 export const MainMenuRightWallet: FC = () => {
   const { user, isSupportedNetwork, isImposter, isUserBlocked } = useWeb3();
+  const { selectedWallet, isManualConnection } = useStore();
   const { openModal } = useModal();
+  const { debug } = useStore();
 
   const onClickOpenModal = () => {
     carbonEvents.navigation.navWalletConnectClick(undefined);
@@ -52,6 +56,21 @@ export const MainMenuRightWallet: FC = () => {
   };
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
+  const userConnected = !!user && selectedWallet != null;
+
+  useEffect(() => {
+    if (userConnected) {
+      if (!isManualConnection.current) {
+        carbonEvents.wallet.walletConnected({
+          address: user,
+          name: getConnection(selectedWallet)?.name || '',
+        });
+      } else {
+        isManualConnection.current = false; // Expect an auto wallet connection next
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, selectedWallet]);
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'error-light';
@@ -92,7 +111,9 @@ export const MainMenuRightWallet: FC = () => {
             data-testid="user-wallet"
           >
             {buttonIcon}
-            <span>{buttonText}</span>
+            <span className={debug.debugState.isE2E ? 'font-mono' : ''}>
+              {buttonText}
+            </span>
           </button>
         )}
       >

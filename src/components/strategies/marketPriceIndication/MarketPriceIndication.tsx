@@ -1,9 +1,10 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { getMarketPricePercentage } from './utils';
 
 type MarketPriceIndicationProps = {
-  marketPricePercentage: BigNumber;
+  marketPricePercentage: SafeDecimal;
   isRange?: boolean;
 };
 
@@ -15,24 +16,7 @@ export const MarketPriceIndication: FC<MarketPriceIndicationProps> = ({
     return null;
   }
   const isAbove = marketPricePercentage.gt(0);
-
-  const getMarketPricePercentage = () => {
-    if (marketPricePercentage.gte(99.99)) {
-      return '>99.99';
-    }
-    if (marketPricePercentage.lte(-99.99)) {
-      return '99.99';
-    }
-    if (marketPricePercentage.lte(0.01) && isAbove) {
-      return '<0.01';
-    }
-
-    return isAbove
-      ? marketPricePercentage.toFixed(2)
-      : marketPricePercentage.times(-1).toFixed(2);
-  };
-
-  const percentage = getMarketPricePercentage();
+  const percentage = getMarketPricePercentage(marketPricePercentage);
 
   return (
     <span

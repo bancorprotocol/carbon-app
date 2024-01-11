@@ -11,10 +11,10 @@ export const WarningWithTooltip = ({
   className = '',
 }: WarningWithTooltipProps) => {
   return (
-    <span className={`flex ${className}`}>
-      <Tooltip interactive={false} element={tooltipContent}>
-        <IconWarning className={'w-14 text-warning-500'} />
-      </Tooltip>
-    </span>
+    <Tooltip interactive={false} element={tooltipContent}>
+      <span>
+        <IconWarning className={`w-14 text-warning-500 ${className}`} />
+      </span>
+    </Tooltip>
   );
 };

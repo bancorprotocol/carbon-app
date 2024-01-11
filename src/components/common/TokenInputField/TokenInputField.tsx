@@ -1,11 +1,11 @@
-import { ChangeEvent, FC, useRef } from 'react';
-import BigNumber from 'bignumber.js';
+import { ChangeEvent, FC, FocusEvent, useRef } from 'react';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { prettifyNumber, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
   onKeystroke?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
-  slippage?: BigNumber | null;
+  slippage?: SafeDecimal | null;
   withoutWallet?: boolean;
   'data-testid'?: string;
 };
@@ -50,15 +50,20 @@ export const TokenInputField: FC<Props> = ({
   const handleChange = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNumberInput(value, token.decimals);
+    const sanitized = sanitizeNumber(value, token.decimals);
     setValue(sanitized);
     onKeystroke && onKeystroke();
+  };
+
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setValue(formatted);
   };
 
   const handleBalanceClick = () => {
     if (balance === value) return;
     if (balance) {
-      const balanceValue = new BigNumber(balance).toFixed(token.decimals);
+      const balanceValue = new SafeDecimal(balance).toFixed(token.decimals);
       setValue(balanceValue);
     }
     onKeystroke && onKeystroke();
@@ -69,7 +74,7 @@ export const TokenInputField: FC<Props> = ({
   return (
     <div
       className={`
-        flex cursor-text flex-col gap-8 border-2 border-black p-16
+        flex cursor-text flex-col gap-8 border border-black p-16
         focus-within:border-white/50
         ${isError ? '!border-red/50' : ''}
         ${className}
@@ -88,9 +93,12 @@ export const TokenInputField: FC<Props> = ({
           onChange={handleChange}
           placeholder={placeholder}
           onFocus={(e) => e.target.select()}
+          onBlur={handleBlur}
           className={`
             grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
             ${isError ? 'text-red' : ''}
+            ${disabled ? 'text-white/40' : ''}
+            ${disabled ? 'cursor-not-allowed' : ''}
           `}
           disabled={disabled}
           data-testid={testid}
@@ -102,11 +110,12 @@ export const TokenInputField: FC<Props> = ({
       </div>
       <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
         <p className="flex items-center gap-5 text-white/60">
-          {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
+          {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
         {user && isBalanceLoading !== undefined && !withoutWallet && (
           <button
+            disabled={disabled}
             type="button"
             onClick={handleBalanceClick}
             className="group flex items-center"
@@ -119,7 +128,15 @@ export const TokenInputField: FC<Props> = ({
                 <span className="text-white">
                   {prettifyNumber(balance || 0)}&nbsp;
                 </span>
-                <b className="text-green group-hover:text-white">MAX</b>
+                <b
+                  className={
+                    disabled
+                      ? 'text-green/40'
+                      : 'text-green group-hover:text-white'
+                  }
+                >
+                  MAX
+                </b>
               </>
             )}
           </button>
