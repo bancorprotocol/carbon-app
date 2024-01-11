@@ -557,6 +557,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const priceOption = {
     abbreviate: order.endRate.length > 10,
     round: true,
+    useSubscript: false,
   };
   const startPrice = prettifyNumber(order.startRate, priceOption);
   const endPrice = prettifyNumber(order.endRate, priceOption);

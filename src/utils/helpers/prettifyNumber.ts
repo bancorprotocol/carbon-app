@@ -26,6 +26,33 @@ const defaultNumbroOptions: numbro.Format = {
   trimMantissa: true,
 };
 
+const subscriptMap: Record<string, string> = {
+  '0': '₀',
+  '1': '₁',
+  '2': '₂',
+  '3': '₃',
+  '4': '₄',
+  '5': '₅',
+  '6': '₆',
+  '7': '₇',
+  '8': '₈',
+  '9': '₉',
+};
+
+const subscript = (value: string) => {
+  // Get consecutive zeros after the decimal point
+  const match = value.match(/\.0+/);
+  if (!match) return value;
+  const amount = match ? match[0].length - 1 : 0;
+  const trailing = value.substring(amount + 2, amount + 7);
+  const htmlCharacters = amount
+    .toString()
+    .split('')
+    .map((v) => subscriptMap[v])
+    .join('');
+  return `0.0${htmlCharacters}${trailing}`;
+};
+
 const getDefaultNumberoOptions = (round = false) => {
   return {
     ...defaultNumbroOptions,
@@ -41,6 +68,7 @@ interface PrettifyNumberOptions {
   highPrecision?: boolean;
   locale?: string;
   round?: boolean;
+  useSubscript?: boolean;
 }
 
 export function prettifyNumber(num: number | string | SafeDecimal): string;
@@ -58,6 +86,7 @@ export function prettifyNumber(
     abbreviate = false,
     highPrecision = false,
     round = false,
+    useSubscript = true,
   } = options || {};
 
   const bigNum = new SafeDecimal(num);
@@ -66,7 +95,10 @@ export function prettifyNumber(
   }
 
   if (bigNum.lte(0)) return '0';
-  if (bigNum.lt(0.000001)) return '< 0.000001';
+  if (bigNum.lt(0.001)) {
+    if (useSubscript) return subscript(bigNum.toString());
+    else return numbro(bigNum).format();
+  }
   if (abbreviate && bigNum.gt(999999))
     return numbro(bigNum).format({
       ...prettifyNumberAbbreviateFormat,
@@ -107,6 +139,7 @@ const handlePrettifyNumberCurrency = (
     locale = 'en-US',
     currentCurrency = 'USD',
     round = false,
+    useSubscript = true,
   } = options || {};
 
   const nfCurrencyOptionsDefault: Intl.NumberFormatOptions = {
@@ -122,16 +155,30 @@ const handlePrettifyNumberCurrency = (
     return Intl.NumberFormat(locale, nfCurrencyOptionsDefault)
       .format(0)
       .toString();
-  if (num.lte(0.01))
-    return (
-      '< ' +
-      Intl.NumberFormat(locale, {
-        ...nfCurrencyOptionsDefault,
-        minimumFractionDigits: 2,
-      })
-        .format(0.01)
+  if (num.lt(0.001)) {
+    if (!useSubscript) {
+      return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
+        num.toNumber()
+      );
+    } else {
+      // Use number format with 0 and replace 0 to subscript
+      const options = { ...nfCurrencyOptionsDefault, minimumFractionDigits: 0 };
+      return Intl.NumberFormat(locale, options)
+        .format(0)
         .toString()
-    );
+        .replace('0', subscript(num.toString()));
+    }
+  }
+  if (num.lt(0.01))
+    return Intl.NumberFormat(locale, {
+      ...nfCurrencyOptionsDefault,
+      maximumFractionDigits: 4,
+    }).format(num.toNumber());
+  if (num.lt(0.1))
+    return Intl.NumberFormat(locale, {
+      ...nfCurrencyOptionsDefault,
+      maximumFractionDigits: 3,
+    }).format(num.toNumber());
   if (abbreviate && num.gt(999999))
     return Intl.NumberFormat(locale, {
       ...nfCurrencyOptionsDefault,
