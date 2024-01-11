@@ -70,7 +70,7 @@ const createStrategyPage = new Route({
     if (
       search.strategyType === 'recurring' ||
       search.strategyType === 'disposable' ||
-      search.encodedStrategy
+      search.strategy
     ) {
       return search;
     }
