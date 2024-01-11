@@ -1,20 +1,20 @@
 import { expect, test } from '@playwright/test';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
-export const editPriceStrategyTest = (config: CreateStrategyTemplate) => {
+export const editPriceStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Edit Price', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(config);
+    const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-editPrices');
 
     await page.waitForURL('/strategies/edit?type=editPrices', {
       timeout: 10_000,
     });
 
-    const newBuyPrice = (parseFloat(config.buy.max) / 2).toString();
-    const newSellPrice = (parseFloat(config.sell.max) / 2).toString();
+    const newBuyPrice = (parseFloat(testCase.buy.max) / 2).toString();
+    const newSellPrice = (parseFloat(testCase.sell.max) / 2).toString();
 
     await manage.fillLimitPrice('buy', newBuyPrice);
     await manage.fillLimitPrice('sell', newSellPrice);

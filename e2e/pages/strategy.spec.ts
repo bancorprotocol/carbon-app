@@ -1,29 +1,26 @@
 import { test } from '@playwright/test';
-import { createLimitStrategy } from './../tests/strategy/createLimit';
-import { createOverlappingStrategy } from './../tests/strategy/createOverlapping';
-import { deleteStrategyTest } from './../tests/strategy/delete';
-import { duplicateStrategyTest } from './../tests/strategy/duplicate';
-import { renewStrategyTest } from './../tests/strategy/renew';
-import { pauseStrategyTest } from './../tests/strategy/pause';
-import { withdrawStrategyTest } from './../tests/strategy/withdraw';
-import { depositStrategyTest } from './../tests/strategy/deposit';
-import { editPriceStrategyTest } from '../tests/strategy/edit';
-import {
-  CreateStrategyTemplate,
-  StrategyType,
-} from './../utils/strategy/template';
+import * as recurring from '../tests/strategy/recurring/';
+import * as disposable from '../tests/strategy/disposable/';
+import * as overlapping from '../tests/strategy/overlapping/';
+
+import { StrategyType } from './../utils/strategy/template';
+import { navigateTo, screenshot } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
 import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
+import {
+  MyStrategyDriver,
+  OverlappingStrategyTestCase,
+  RecurringStrategyTestCase,
+} from '../utils/strategy';
 
-type Config = CreateStrategyTemplate & { type: StrategyType };
-
-type CreateStrategy = {
-  [key in StrategyType]: (c: CreateStrategyTemplate) => void;
+type TestCase = (RecurringStrategyTestCase | OverlappingStrategyTestCase) & {
+  type: StrategyType;
 };
 
-const configs: Config[] = [
+const testCases: TestCase[] = [
   {
-    type: 'Limit',
+    type: 'recurring',
+    setting: 'limit_limit',
     base: 'ETH',
     quote: 'DAI',
     buy: {
@@ -40,7 +37,7 @@ const configs: Config[] = [
     },
   },
   {
-    type: 'Overlapping',
+    type: 'overlapping',
     base: 'BNT',
     quote: 'USDC',
     buy: {
@@ -59,10 +56,10 @@ const configs: Config[] = [
   },
 ];
 
-const createStrategy: CreateStrategy = {
-  Limit: createLimitStrategy,
-  Overlapping: createOverlappingStrategy,
-  Range: () => {},
+const testDescription = (testCase: TestCase) => {
+  if (testCase.type === 'overlapping') return 'Overlapping';
+  if (testCase.type === 'disposable') return `Disposable ${testCase.setting}`;
+  return `Recurring ${testCase.setting.split('_')}`;
 };
 
 test.describe('Strategies', () => {
@@ -78,16 +75,25 @@ test.describe('Strategies', () => {
     await removeFork(testInfo);
   });
 
-  for (const config of configs) {
-    test.describe(config.type, () => {
-      createStrategy[config.type](config);
-      editPriceStrategyTest(config);
-      depositStrategyTest(config);
-      withdrawStrategyTest(config);
-      pauseStrategyTest(config);
-      renewStrategyTest(config);
-      duplicateStrategyTest(config);
-      deleteStrategyTest(config);
+  test('First Strategy Page', async ({ page }) => {
+    await navigateTo(page, '/');
+    const driver = new MyStrategyDriver(page);
+    await driver.firstStrategy().waitFor({ state: 'visible' });
+    await screenshot(page, 'first-strategy');
+  });
+
+  const testStrategies = {
+    recurring,
+    disposable,
+    overlapping,
+  };
+
+  for (const testCase of testCases) {
+    test.describe(testDescription(testCase), () => {
+      const testSuite = testStrategies[testCase.type];
+      for (const [, testFn] of Object.entries(testSuite)) {
+        testFn(testCase);
+      }
     });
   }
 });

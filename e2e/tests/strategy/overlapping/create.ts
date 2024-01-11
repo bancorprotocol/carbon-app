@@ -1,46 +1,53 @@
 import { expect, test } from '@playwright/test';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { checkApproval } from './../../utils/modal';
-import { NotificationDriver } from './../../utils/NotificationDriver';
+import { CreateStrategyTemplate } from '../../../utils/strategy/template';
+import { NotificationDriver } from '../../../utils/NotificationDriver';
 import {
   fiatPrice,
   navigateTo,
+  screenshot,
   tokenPrice,
   waitFor,
-} from './../../utils/operators';
-import { CreateStrategyDriver, MyStrategyDriver } from './../../utils/strategy';
+} from '../../../utils/operators';
+import {
+  CreateStrategyDriver,
+  MyStrategyDriver,
+} from '../../../utils/strategy';
+import { MainMenuDriver } from '../../../utils/MainMenuDriver';
+import { checkApproval } from '../../../utils/modal';
 
-export const createLimitStrategy = (config: CreateStrategyTemplate) => {
-  const { base, quote, buy, sell } = config;
+export const createOverlappingStrategy = (testCase: CreateStrategyTemplate) => {
+  const { base, quote, buy, sell } = testCase;
   const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
   const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
 
-  return test(`Create`, async ({ page }) => {
+  return test(`Create Overlapping Strategy ${base}->${quote}`, async ({
+    page,
+  }) => {
+    test.setTimeout(180_000);
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
     const myStrategies = new MyStrategyDriver(page);
-    const createForm = new CreateStrategyDriver(page, config);
+    const createForm = new CreateStrategyDriver(page, testCase);
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
-    await createForm.selectSetting('two-ranges');
+    await createForm.selectSetting('overlapping');
     await createForm.nextStep();
-    const buyForm = await createForm.fillLimit('buy');
-    const sellForm = await createForm.fillLimit('sell');
 
-    // Assert 100% outcome
-    await expect(buyForm.outcomeValue()).toHaveText(`0.006666 ${base}`);
-    await expect(buyForm.outcomeQuote()).toHaveText(tokenPrice(buy.min, quote));
-    await expect(sellForm.outcomeValue()).toHaveText(`3,400 ${quote}`);
-    await expect(sellForm.outcomeQuote()).toHaveText(
-      tokenPrice(sell.min, quote)
+    const overlappingForm = await createForm.fillOverlapping();
+    expect(overlappingForm.max()).toHaveValue(testCase.sell.max.toString());
+
+    const mainMenu = new MainMenuDriver(page);
+    await mainMenu.hide();
+    await screenshot(
+      overlappingForm.locator,
+      `[Create Overlapping Strategy] Form`
     );
+    await mainMenu.show();
 
     await createForm.submit();
-
     await checkApproval(page, [base, quote]);
-
     await page.waitForURL('/', { timeout: 10_000 });
 
     // Verfiy notification
@@ -69,5 +76,15 @@ export const createLimitStrategy = (config: CreateStrategyTemplate) => {
     await expect(strategy.sellBudgetFiat()).toHaveText(
       fiatPrice(sellBudgetFiat)
     );
+    const sellTooltip = await strategy.priceTooltip('sell');
+    await expect(sellTooltip.minPrice()).toHaveText(
+      tokenPrice(sell.min, quote)
+    );
+    await sellTooltip.waitForDetached();
+    const buyTooltip = await strategy.priceTooltip('buy');
+    await expect(buyTooltip.maxPrice()).toHaveText(tokenPrice(buy.max, quote));
+    await buyTooltip.waitForDetached();
+    await notif.close();
+    await screenshot(page, `[Create Overlapping Strategy] My Strategy`);
   });
 };
