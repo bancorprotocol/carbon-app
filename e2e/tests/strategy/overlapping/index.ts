@@ -1,0 +1,1 @@
+export { createOverlappingStrategy } from './create';

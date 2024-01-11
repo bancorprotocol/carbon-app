@@ -43,7 +43,9 @@ export const StrategyBlockBuySell: FC<{
           <h4 className="font-mono text-12 text-green">Buy {token.symbol}</h4>
           {hasFiatValue && (
             <Tooltip element={buyTooltip}>
-              <TooltipIcon className="h-10 w-10 text-white/60" />
+              <span>
+                <TooltipIcon className="h-10 w-10 text-white/60" />
+              </span>
             </Tooltip>
           )}
           {!hasFiatValue && (
@@ -56,7 +58,9 @@ export const StrategyBlockBuySell: FC<{
                 </p>
               }
             >
-              <WarningIcon className="h-10 w-10 text-warning-500" />
+              <span>
+                <WarningIcon className="h-10 w-10 text-warning-500" />
+              </span>
             </Tooltip>
           )}
         </header>
@@ -67,7 +71,9 @@ export const StrategyBlockBuySell: FC<{
           </h4>
           {hasFiatValue && (
             <Tooltip element={sellTooltip}>
-              <TooltipIcon className="h-10 w-10 text-white/60" />
+              <span>
+                <TooltipIcon className="h-10 w-10 text-white/60" />
+              </span>
             </Tooltip>
           )}
           {!hasFiatValue && (
@@ -80,29 +86,29 @@ export const StrategyBlockBuySell: FC<{
                 </p>
               }
             >
-              <WarningIcon className="h-10 w-10 text-warning-500" />
+              <span>
+                <WarningIcon className="h-10 w-10 text-warning-500" />
+              </span>
             </Tooltip>
           )}
         </header>
       )}
-      <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
-        <Tooltip
-          element={
-            <span className="inline-flex items-center gap-4">
-              <LogoImager
-                className="h-16 w-16"
-                src={otherToken.logoURI}
-                alt="token"
-              />
-              {order.balance.toString()}
-            </span>
-          }
-        >
-          <>
-            {prettifiedBudget} {otherToken.symbol}
-          </>
-        </Tooltip>
-      </p>
+      <Tooltip
+        element={
+          <span className="inline-flex items-center gap-4">
+            <LogoImager
+              className="h-16 w-16"
+              src={otherToken.logoURI}
+              alt="token"
+            />
+            {order.balance.toString()}
+          </span>
+        }
+      >
+        <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
+          {prettifiedBudget} {otherToken.symbol}
+        </p>
+      </Tooltip>
       <p
         data-testid={`${testIdPrefix}-budget-fiat`}
         className="font-mono text-12 text-white/60"
