@@ -6,6 +6,7 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -68,6 +69,7 @@ interface StoreContext {
   setInnerHeight: (value: number) => void;
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
+  isManualConnection: React.MutableRefObject<boolean>;
   toaster: ToastStore;
   debug: DebugStore;
 }
@@ -90,6 +92,7 @@ const defaultValue: StoreContext = {
   setInnerHeight: () => {},
   selectedWallet: null,
   setSelectedWallet: () => {},
+  isManualConnection: { current: false },
   toaster: defaultToastStore,
   debug: defaultDebugStore,
 };
@@ -110,6 +113,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedWallet, setSelectedWallet] = useState<ConnectionType | null>(
     null
   );
+  const isManualConnection = useRef(false);
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -123,6 +127,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
+    isManualConnection,
     sdk,
     tokens,
     notifications,
