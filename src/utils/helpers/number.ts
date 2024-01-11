@@ -88,7 +88,6 @@ interface PrettifyNumberOptions {
   highPrecision?: boolean;
   locale?: string;
   round?: boolean;
-  useSubscript?: boolean;
 }
 
 export function prettifyNumber(num: number | string | SafeDecimal): string;
@@ -106,7 +105,6 @@ export function prettifyNumber(
     abbreviate = false,
     highPrecision = false,
     round = false,
-    useSubscript = true,
   } = options || {};
 
   const bigNum = new SafeDecimal(num);
@@ -115,10 +113,7 @@ export function prettifyNumber(
   }
 
   if (bigNum.lte(0)) return '0';
-  if (bigNum.lt(0.001)) {
-    if (useSubscript) return subscript(bigNum.toString());
-    else return numbro(bigNum).format();
-  }
+  if (bigNum.lt(0.001)) return subscript(bigNum.toString());
   if (abbreviate && bigNum.gt(999999))
     return numbro(bigNum).format({
       ...prettifyNumberAbbreviateFormat,
@@ -159,7 +154,6 @@ const handlePrettifyNumberCurrency = (
     locale = 'en-US',
     currentCurrency = 'USD',
     round = false,
-    useSubscript = true,
   } = options || {};
 
   const nfCurrencyOptionsDefault: Intl.NumberFormatOptions = {
@@ -176,18 +170,16 @@ const handlePrettifyNumberCurrency = (
       .format(0)
       .toString();
   if (num.lt(0.001)) {
-    if (!useSubscript) {
-      return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
-        num.toNumber()
-      );
-    } else {
-      // Use number format with 0 and replace 0 to subscript
-      const options = { ...nfCurrencyOptionsDefault, minimumFractionDigits: 0 };
-      return Intl.NumberFormat(locale, options)
-        .format(0)
-        .toString()
-        .replace('0', subscript(num.toString()));
-    }
+    // Use number format with 0 and replace 0 to subscript
+    const options = {
+      ...nfCurrencyOptionsDefault,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    };
+    return Intl.NumberFormat(locale, options)
+      .format(0)
+      .toString()
+      .replace('0', subscript(num.toString()));
   }
   if (num.lt(0.01))
     return Intl.NumberFormat(locale, {
