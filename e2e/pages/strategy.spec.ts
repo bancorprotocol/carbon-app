@@ -6,7 +6,7 @@ import * as overlapping from '../tests/strategy/overlapping/';
 import { StrategyType } from './../utils/strategy/template';
 import { navigateTo, screenshot } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
-import { removeFork, setupFork, setupImposter } from '../utils/DebugDriver';
+import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
 import {
   MyStrategyDriver,
   OverlappingStrategyTestCase,
@@ -36,29 +36,40 @@ const testCases: TestCase[] = [
       budgetFiat: '3334',
     },
   },
-  // {
-  //   type: 'Range',
-  //   base: 'ETH',
-  //   quote: 'DAI',
-  //   buy: {
-  //     min: '1500',
-  //     max: '1600',
-  //     budget: '10',
-  //     budgetFiat: '10',
-  //   },
-  //   sell: {
-  //     min: '1700',
-  //     max: '1800',
-  //     budget: '2',
-  //     budgetFiat: '3334',
-  //   },
-  // },
+  {
+    type: 'overlapping',
+    base: 'BNT',
+    quote: 'USDC',
+    buy: {
+      min: '0.3',
+      max: '0.545454',
+      budget: '12.501572',
+      budgetFiat: '12.5',
+    },
+    sell: {
+      min: '0.33',
+      max: '0.6',
+      budget: '30',
+      budgetFiat: '12.61',
+    },
+    spread: '10', // Need a large spread for tooltip test
+  },
 ];
+
+const testDescription = (testCase: TestCase) => {
+  if (testCase.type === 'overlapping') return 'Overlapping';
+  if (testCase.type === 'disposable') return `Disposable ${testCase.setting}`;
+  return `Recurring ${testCase.setting.split('_').join(' ')}`;
+};
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    await setupFork(page, testInfo);
-    await Promise.all([mockApi(page), setupImposter(page)]);
+    testInfo.setTimeout(180_000);
+    await setupFork(testInfo);
+    const debug = new DebugDriver(page);
+    await debug.visit();
+    await debug.setRpcUrl(testInfo);
+    await Promise.all([mockApi(page), debug.setupImposter()]);
   });
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);
@@ -78,7 +89,7 @@ test.describe('Strategies', () => {
   };
 
   for (const testCase of testCases) {
-    test.describe(testCase.type + ' ' + testCase.setting, () => {
+    test.describe(testDescription(testCase), () => {
       const testSuite = testStrategies[testCase.type];
       for (const [, testFn] of Object.entries(testSuite)) {
         testFn(testCase);

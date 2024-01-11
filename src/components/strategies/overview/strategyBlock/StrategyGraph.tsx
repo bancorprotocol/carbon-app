@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
-import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
   FloatTooltipContent,
@@ -38,14 +38,14 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   );
 
   const buy = {
-    from: Number(sanitizeNumberInput(buyOrder.startRate)),
-    to: Number(sanitizeNumberInput(buyOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(buyOrder.marginalRate)),
+    from: Number(sanitizeNumber(buyOrder.startRate)),
+    to: Number(sanitizeNumber(buyOrder.endRate)),
+    marginalPrice: Number(sanitizeNumber(buyOrder.marginalRate)),
   };
   const sell = {
-    from: Number(sanitizeNumberInput(sellOrder.startRate)),
-    to: Number(sanitizeNumberInput(sellOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(sellOrder.marginalRate)),
+    from: Number(sanitizeNumber(sellOrder.startRate)),
+    to: Number(sanitizeNumber(sellOrder.endRate)),
+    marginalPrice: Number(sanitizeNumber(sellOrder.marginalRate)),
   };
 
   const buyOrderExists = buy.from !== 0 && buy.to !== 0;

@@ -1,5 +1,33 @@
 import { OrderCreate } from './create/useOrder';
 
+interface ValidOrderParams {
+  isRange: boolean;
+  min: string;
+  max: string;
+  price: string;
+}
+
+export const isValidOrder = (order: ValidOrderParams) => {
+  return order.isRange
+    ? isValidRange(order.min, order.max)
+    : isValidLimit(order.price);
+};
+
+export const isEmptyOrder = (order: ValidOrderParams) => {
+  return order.price === '0' && !order.min && !order.max;
+};
+
+export const isValidLimit = (value: string) => {
+  const price = Number(value);
+  return !isNaN(price) && price > 0;
+};
+
+export const isValidRange = (minStr: string, maxStr: string) => {
+  const min = Number(minStr);
+  const max = Number(maxStr);
+  return !isNaN(min) && !isNaN(max) && min > 0 && min < max;
+};
+
 export const checkIfOrdersOverlap = (
   orderA: OrderCreate,
   orderB: OrderCreate

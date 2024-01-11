@@ -102,7 +102,11 @@ export const NotificationLine: FC<{
         <div className="text-secondary whitespace-nowrap text-12 font-weight-500">
           {unix(notification.timestamp).fromNow(true)}
         </div>
-        <button className="text-12 font-weight-500" onClick={handleCloseClick}>
+        <button
+          className="text-12 font-weight-500"
+          onClick={handleCloseClick}
+          data-testid="notif-close"
+        >
           {isAlert ? 'Close' : 'Clear'}
         </button>
       </div>

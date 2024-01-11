@@ -5,7 +5,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
-  getRoundedSpreadPPM,
+  getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from '../../overlapping/utils';
@@ -37,7 +37,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
   const externalMarketPrice = useMarketPrice({ base, quote });
   const oldMarketPrice = geoMean(order0.marginalPrice, order1.marginalPrice)!;
 
-  const spreadPPM = getRoundedSpreadPPM(strategy);
+  const spread = getRoundedSpread(strategy);
   const min = order0.min;
   const max = order1.max;
   const { marketPricePercentage } = useMarketIndication({
@@ -77,7 +77,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
         order0.min,
         order1.max,
         getMarketPrice(),
-        spreadPPM.toString(),
+        spread.toString(),
         sellBudget.toString()
       );
     const buyBudget = new SafeDecimal(resultBuyBudget).minus(
@@ -98,7 +98,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
         order0.min,
         order1.max,
         getMarketPrice(),
-        spreadPPM.toString(),
+        spread.toString(),
         buyBudget.toString()
       );
     const sellBudget = new SafeDecimal(resultSellBudget).minus(
@@ -152,7 +152,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           order0={order0}
           order1={order1}
           marketPrice={externalMarketPrice}
-          spreadPPM={spreadPPM}
+          spread={spread}
           marketPricePercentage={marketPricePercentage}
           disabled
         />

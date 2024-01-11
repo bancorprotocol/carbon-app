@@ -19,7 +19,8 @@ export const useFiatCurrency = (token?: Token) => {
 
   const getFiatValue = useMemo(() => {
     return (value: string, usd = false) => {
-      return new SafeDecimal(value || 0).times(
+      const v = isNaN(Number(value)) ? 0 : value;
+      return new SafeDecimal(v || 0).times(
         tokenPriceQuery.data?.[
           usd ? availableCurrencies[0] : selectedFiatCurrency
         ] || 0

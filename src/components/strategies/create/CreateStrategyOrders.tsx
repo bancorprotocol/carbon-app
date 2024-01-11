@@ -28,8 +28,8 @@ export const CreateStrategyOrders = ({
   isProcessing,
   isAwaiting,
   isOrdersOverlap,
-  spreadPPM,
-  setSpreadPPM,
+  spread,
+  setSpread,
   isOverlapping,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
@@ -100,8 +100,8 @@ export const CreateStrategyOrders = ({
           order1={order1}
           token0BalanceQuery={token0BalanceQuery}
           token1BalanceQuery={token1BalanceQuery}
-          spreadPPM={spreadPPM}
-          setSpreadPPM={setSpreadPPM}
+          spread={spread}
+          setSpread={setSpread}
         />
       )}
       {!isOverlapping && (

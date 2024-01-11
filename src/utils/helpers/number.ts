@@ -9,6 +9,26 @@ export const getFiatDisplayValue = (
   return prettifyNumber(fiatValue, { currentCurrency });
 };
 
+/** Enforce precision on a string number */
+export const sanitizeNumber = (input: string, precision?: number): string => {
+  const sanitized = input
+    .replace(/,/, '.')
+    .replace(/[^\d.]/g, '')
+    .replace(/\./, 'x')
+    .replace(/\./g, '')
+    .replace(/x/, '.');
+  if (!precision) return sanitized;
+  const [integer, decimals] = sanitized.split('.');
+  if (decimals) return `${integer}.${decimals.substring(0, precision)}`;
+  else return sanitized;
+};
+
+/** Format string number to look like a real number */
+export const formatNumber = (value: string) => {
+  if (!value || value === '.') return '0';
+  return new SafeDecimal(value).toString();
+};
+
 const prettifyNumberAbbreviateFormat: numbro.Format = {
   average: true,
   mantissa: 1,
@@ -213,4 +233,23 @@ export const prettifySignedNumber = (
   return bigNum.lt(0)
     ? `-${prettifyNumber(bigNum.abs(), options)}`
     : prettifyNumber(bigNum, options);
+};
+
+export const formatNumberWithApproximation = (
+  num: SafeDecimal,
+  { isPercentage = false, approximateBelow = 0.01 } = {}
+): { value: string; negative: boolean } => {
+  const addPercentage = (value: string) => (isPercentage ? value + '%' : value);
+
+  if (num.isZero()) {
+    return { value: addPercentage('0.00'), negative: false };
+  } else if (num.gt(0) && num.lt(approximateBelow)) {
+    return { value: addPercentage(`< ${approximateBelow}`), negative: false };
+  } else if (num.gte(approximateBelow)) {
+    return { value: addPercentage(num.toFixed(2)), negative: false };
+  } else if (num.gt(-1 * approximateBelow)) {
+    return { value: addPercentage(`> -${approximateBelow}`), negative: true };
+  } else {
+    return { value: addPercentage(num.toFixed(2)), negative: true };
+  }
 };

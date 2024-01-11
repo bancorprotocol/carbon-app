@@ -1,6 +1,6 @@
 import { Locator, Page } from 'playwright-core';
-import { prettifyNumber as pn } from '../../src/utils/helpers/prettifyNumber';
-export { prettifyNumber as pn } from '../../src/utils/helpers/prettifyNumber';
+import { prettifyNumber as pn } from '../../src/utils/helpers/number';
+export { prettifyNumber as pn } from '../../src/utils/helpers/number';
 
 export const isCI = !!process.env.CI && process.env.CI !== 'false';
 export const isDraft = !!process.env.DRAFT && process.env.DRAFT !== 'false';
@@ -23,7 +23,7 @@ const urlNames = {
   '/debug': 'Debug',
 };
 
-/** Use soft navigation instead of reloading the page */
+/** Use soft navigation instead of reloading the page. */
 export const navigateTo = async (page: Page, url: keyof typeof urlNames) => {
   await page.getByTestId('main-nav').getByText(urlNames[url]).click();
   await page.waitForURL(url);
