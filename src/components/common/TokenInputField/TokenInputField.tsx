@@ -1,11 +1,11 @@
-import { ChangeEvent, FC, useRef } from 'react';
+import { ChangeEvent, FC, FocusEvent, useRef } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { prettifyNumber, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
@@ -50,9 +50,14 @@ export const TokenInputField: FC<Props> = ({
   const handleChange = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNumberInput(value, token.decimals);
+    const sanitized = sanitizeNumber(value, token.decimals);
     setValue(sanitized);
     onKeystroke && onKeystroke();
+  };
+
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setValue(formatted);
   };
 
   const handleBalanceClick = () => {
@@ -88,6 +93,7 @@ export const TokenInputField: FC<Props> = ({
           onChange={handleChange}
           placeholder={placeholder}
           onFocus={(e) => e.target.select()}
+          onBlur={handleBlur}
           className={`
             grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
             ${isError ? 'text-red' : ''}

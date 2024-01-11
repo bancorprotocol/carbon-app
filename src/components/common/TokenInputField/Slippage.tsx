@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
-import { cn, sanitizeNumberInput } from 'utils/helpers';
+import { cn, sanitizeNumber } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from '../tooltip/Tooltip';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -18,7 +18,7 @@ const slippageColor = (slippage: SafeDecimal) => {
 
 export const Slippage: FC<Props> = ({ slippage }) => {
   const { selectedFiatCurrency } = useFiatCurrency();
-  const slippageValue = sanitizeNumberInput(slippage.toString(), 2);
+  const slippageValue = sanitizeNumber(slippage.toString(), 2);
   const textColor = slippageColor(slippage);
 
   return (
