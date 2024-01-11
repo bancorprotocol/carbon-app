@@ -27,7 +27,11 @@ interface LimitOrder {
   budget: string;
 }
 
-export const STRATEGY_TYPES = ['Limit', 'Range', 'Overlapping'] as const;
+export const STRATEGY_TYPES = [
+  'recurring',
+  'disposable',
+  'overlapping',
+] as const;
 
 export type StrategyType = (typeof STRATEGY_TYPES)[number];
 
@@ -40,7 +44,7 @@ export interface CreateStrategyTemplate {
   spread?: string;
 }
 
-interface OverlappingParams {
+export interface OverlappingParams {
   pair: TokenPair;
   buyMin: string;
   buyBudget: string;

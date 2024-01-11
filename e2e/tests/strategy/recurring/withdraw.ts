@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
-import { waitModalOpen } from './../../utils/modal';
-import { tokenPrice } from './../../utils/operators';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
-import { NotificationDriver } from './../../utils/NotificationDriver';
-import { ManageStrategyDriver } from './../../utils/strategy/ManageStrategyDriver';
+import { waitModalOpen } from './../../../utils/modal';
+import { tokenPrice } from './../../../utils/operators';
+import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import { NotificationDriver } from './../../../utils/NotificationDriver';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 
-export const withdrawStrategyTest = (config: CreateStrategyTemplate) => {
+export const withdrawStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Withdraw', async ({ page }) => {
     test.setTimeout(45_000);
-    const { base, quote, buy, sell } = config;
+    const { base, quote, buy, sell } = testCase;
 
     const buyBudget = parseFloat(buy.budget);
     const sellBudget = parseFloat(sell.budget);
@@ -16,7 +16,7 @@ export const withdrawStrategyTest = (config: CreateStrategyTemplate) => {
     const withdrawSellBudget = sellBudget / 2;
 
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(config);
+    const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-withdrawFunds');
 
     const modal = await waitModalOpen(page);

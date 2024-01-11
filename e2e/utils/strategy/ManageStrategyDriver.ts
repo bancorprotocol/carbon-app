@@ -7,16 +7,16 @@ import { Page } from 'playwright-core';
 export class ManageStrategyDriver {
   constructor(private page: Page) {}
 
-  async createStrategy(config: CreateStrategyTemplate) {
+  async createStrategy(testCase: CreateStrategyTemplate) {
     const debug = new DebugDriver(this.page);
-    await debug.createStrategy(config);
+    await debug.createStrategy(testCase);
     await navigateTo(this.page, '/');
     const myStrategies = new MyStrategyDriver(this.page);
     return await myStrategies.getStrategy(1);
   }
 
-  async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew') {
-    await this.page.waitForURL(`/strategies/edit?type=${type}`, {
+  async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
+    await this.page.waitForURL(`/strategies/edit/*?type=${type}`, {
       timeout: 10_000,
     });
   }
