@@ -20,9 +20,7 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTemplate) => {
   const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
   const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
 
-  return test(`Create Overlapping Strategy ${base}->${quote}`, async ({
-    page,
-  }) => {
+  return test(`Create ${base}->${quote}`, async ({ page }) => {
     test.setTimeout(180_000);
     await waitFor(page, `balance-${quote}`, 30_000);
 

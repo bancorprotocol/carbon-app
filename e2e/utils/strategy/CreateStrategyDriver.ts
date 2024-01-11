@@ -6,7 +6,7 @@ export interface RecurringStrategyTestCase extends CreateStrategyTemplate {
   setting: 'limit_limit' | 'range_range' | 'limit_range' | 'range_limit';
 }
 export interface OverlappingStrategyTestCase extends CreateStrategyTemplate {
-  setting: 'overlapping';
+  type: 'overlapping';
   spread: string;
 }
 
