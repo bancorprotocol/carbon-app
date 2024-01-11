@@ -59,18 +59,29 @@ const subscriptMap: Record<string, string> = {
   '9': '₉',
 };
 
-const subscript = (value: string) => {
-  // Get consecutive zeros after the decimal point
-  const match = value.match(/\.0+/);
-  if (!match) return value;
-  const amount = match ? match[0].length - 1 : 0;
-  const trailing = value.substring(amount + 2, amount + 7);
-  const htmlCharacters = amount
+const subscriptCharacters = (amount: number | string) => {
+  return amount
     .toString()
     .split('')
     .map((v) => subscriptMap[v])
     .join('');
-  return `0.0${htmlCharacters}${trailing}`;
+};
+
+const subscript = (value: string) => {
+  if (value.includes('e-')) {
+    const [base, amount] = value.split('e-');
+    const trailing = base.replace('.', '').slice(0, 5);
+    const htmlCharacters = subscriptCharacters(Number(amount) - 1);
+    return `0.0${htmlCharacters}${trailing}`;
+  } else {
+    // Get consecutive zeros after the decimal point
+    const match = value.match(/\.0+/);
+    if (!match) return value;
+    const amount = match ? match[0].length - 1 : 0;
+    const trailing = value.substring(amount + 2, amount + 7);
+    const htmlCharacters = subscriptCharacters(amount);
+    return `0.0${htmlCharacters}${trailing}`;
+  }
 };
 
 const getDefaultNumberoOptions = (round = false) => {
@@ -113,7 +124,9 @@ export function prettifyNumber(
   }
 
   if (bigNum.lte(0)) return '0';
-  if (bigNum.lt(0.001)) return subscript(bigNum.toString());
+  if (bigNum.lt(0.001)) {
+    return subscript(bigNum.toString());
+  }
   if (abbreviate && bigNum.gt(999999))
     return numbro(bigNum).format({
       ...prettifyNumberAbbreviateFormat,
