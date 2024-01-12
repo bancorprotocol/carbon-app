@@ -36,8 +36,8 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$10.00',
         },
         sell: {
-          min: '1,700 USDC',
-          max: '1,700 USDC',
+          min: '1,700 DAI',
+          max: '1,700 DAI',
           budget: '2 ETH',
           fiat: '$3,334.42',
         },
