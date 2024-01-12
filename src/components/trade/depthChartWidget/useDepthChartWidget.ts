@@ -158,9 +158,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
         tooltip: {
           headerFormat: ' ',
           formatter: function () {
-            if (this.x === undefined) return '';
-            const x = prettifyNumber(this.x);
-            return `Amount: ${this.y} ${base?.symbol}<br/>Price: ${x} ${quote?.symbol}`;
+            return `Amount: ${this.y} ${base?.symbol}<br/>Price: ${this.x} ${quote?.symbol}`;
           },
           valueDecimals: undefined,
           borderRadius: 12,
