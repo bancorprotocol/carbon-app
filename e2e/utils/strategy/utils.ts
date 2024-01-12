@@ -1,60 +1,26 @@
 import {
+  DebugTokens,
+  LimitOrder,
+  TokenPair,
+  CreateStrategyInput,
+  RangeOrder,
+  OverlappingParams,
+} from './types';
+import {
   getBuyMax,
   getSellMin,
 } from '../../../src/components/strategies/overlapping/utils';
+import { CreateStrategyTestCase } from './CreateStrategyDriver';
 
-type DebugTokens =
-  | 'USDC'
-  | 'DAI'
-  | 'BNT'
-  | 'PARQ'
-  | 'WBTC'
-  | 'BNB'
-  | 'MATIC'
-  | 'SHIB'
-  | 'UNI'
-  | 'USDT'
-  | 'ETH';
+export const testDescription = (testCase: CreateStrategyTestCase) => {
+  const input = testCase.input;
+  if (input.type === 'overlapping') return 'Overlapping';
+  if (input.type === 'disposable') {
+    return `Disposable ${input.direction} ${input.setting}`;
+  }
+  return `Recurring ${input.setting.split('_').join(' ')}`;
+};
 
-interface RangeOrder {
-  min: string;
-  max: string;
-  budget: string;
-  // TODO: remove this
-  budgetFiat?: string;
-}
-interface LimitOrder {
-  price: string;
-  budget: string;
-}
-
-export const STRATEGY_TYPES = [
-  'recurring',
-  'disposable',
-  'overlapping',
-] as const;
-
-export type StrategyType = (typeof STRATEGY_TYPES)[number];
-
-export interface CreateStrategyInput {
-  base: DebugTokens;
-  quote: DebugTokens;
-  buy: RangeOrder;
-  sell: RangeOrder;
-  amount?: string;
-  spread?: string;
-}
-
-export interface OverlappingParams {
-  pair: TokenPair;
-  buyMin: string;
-  buyBudget: string;
-  sellMax: string;
-  sellBudget: string;
-  spread: string;
-}
-
-type TokenPair = `${DebugTokens}->${DebugTokens}`;
 const emptyOrder = () => ({ min: '0', max: '0', budget: '0' });
 const fromPair = (pair: TokenPair) => {
   const [base, quote] = pair.split('->') as [DebugTokens, DebugTokens];

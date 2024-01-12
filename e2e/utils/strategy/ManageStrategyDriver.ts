@@ -1,15 +1,15 @@
-import { CreateStrategyInput } from './../../utils/strategy/template';
 import { DebugDriver } from './../../utils/DebugDriver';
 import { navigateTo } from './../../utils/operators';
 import { MyStrategyDriver } from './../../utils/strategy/MyStrategyDriver';
 import { Page } from 'playwright-core';
+import { CreateStrategyInput } from './types';
 
 export class ManageStrategyDriver {
   constructor(private page: Page) {}
 
-  async createStrategy(testCase: CreateStrategyInput) {
+  async createStrategy(input: CreateStrategyInput) {
     const debug = new DebugDriver(this.page);
-    await debug.createStrategy(testCase);
+    await debug.createStrategy(input);
     await navigateTo(this.page, '/');
     const myStrategies = new MyStrategyDriver(this.page);
     return await myStrategies.getStrategy(1);

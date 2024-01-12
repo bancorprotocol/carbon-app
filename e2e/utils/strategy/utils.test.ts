@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { createDebugStrategy } from './template';
+import { createDebugStrategy } from './utils';
 
 describe('Test create strategy template', () => {
   // Limit

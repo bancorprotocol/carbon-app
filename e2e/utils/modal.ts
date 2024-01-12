@@ -11,6 +11,7 @@ export const closeModal = async (page: Page) => {
 };
 
 export const checkApproval = async (page: Page, tokens: string[]) => {
+  if (tokens.length === 1 && tokens[0] === 'ETH') return;
   const modal = await waitModalOpen(page);
   for (const token of tokens) {
     if (token === 'ETH') {

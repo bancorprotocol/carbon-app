@@ -111,12 +111,17 @@ export const BuySellBlock: FC<Props> = ({
     >
       {strategyType === 'disposable' && (
         <TabsMenu>
-          <TabsMenuButton onClick={() => changeStrategy('buy')} isActive={buy}>
+          <TabsMenuButton
+            onClick={() => changeStrategy('buy')}
+            isActive={buy}
+            data-testid="tab-buy"
+          >
             Buy
           </TabsMenuButton>
           <TabsMenuButton
             onClick={() => changeStrategy('sell')}
             isActive={!buy}
+            data-testid="tab-sell"
           >
             Sell
           </TabsMenuButton>

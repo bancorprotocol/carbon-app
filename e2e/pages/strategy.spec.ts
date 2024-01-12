@@ -7,6 +7,164 @@ import * as disposable from '../tests/strategy/disposable/';
 import * as overlapping from '../tests/strategy/overlapping/';
 
 const testCases: CreateStrategyTestCase[] = [
+  // Disposable
+  {
+    input: {
+      type: 'disposable',
+      setting: 'limit',
+      direction: 'buy',
+      base: 'ETH',
+      quote: 'DAI',
+      buy: {
+        min: '1500',
+        max: '1500',
+        budget: '10',
+      },
+      sell: {
+        min: '0',
+        max: '0',
+        budget: '0',
+      },
+    },
+    output: {
+      create: {
+        buy: {
+          min: '1,500 DAI',
+          max: '1,500 DAI',
+          outcomeValue: '0.006666 ETH',
+          outcomeQuote: '1,500 DAI',
+          budget: '10 DAI',
+          fiat: '$10.00',
+        },
+        sell: {
+          min: '0 DAI',
+          max: '0 DAI',
+          outcomeValue: '0 ETH',
+          outcomeQuote: '0 ETH',
+          budget: '0 ETH',
+          fiat: '$0.00',
+        },
+      },
+    },
+  },
+  {
+    input: {
+      type: 'disposable',
+      setting: 'limit',
+      direction: 'sell',
+      base: 'ETH',
+      quote: 'DAI',
+      buy: {
+        min: '0',
+        max: '0',
+        budget: '0',
+      },
+      sell: {
+        min: '1700',
+        max: '1700',
+        budget: '2',
+      },
+    },
+    output: {
+      create: {
+        buy: {
+          min: '0 DAI',
+          max: '0 DAI',
+          outcomeValue: '0 ETH',
+          outcomeQuote: '0 ETH',
+          budget: '0 DAI',
+          fiat: '$0.00',
+        },
+        sell: {
+          min: '1,700 DAI',
+          max: '1,700 DAI',
+          outcomeValue: '3,400 DAI',
+          outcomeQuote: '1,700 DAI',
+          budget: '2 ETH',
+          fiat: '$3,334.42',
+        },
+      },
+    },
+  },
+  {
+    input: {
+      type: 'disposable',
+      setting: 'range',
+      direction: 'buy',
+      base: 'ETH',
+      quote: 'DAI',
+      buy: {
+        min: '1500',
+        max: '1700',
+        budget: '10',
+      },
+      sell: {
+        min: '0',
+        max: '0',
+        budget: '0',
+      },
+    },
+    output: {
+      create: {
+        buy: {
+          min: '1,500 DAI',
+          max: '1,700 DAI',
+          outcomeValue: '0.006262 ETH',
+          outcomeQuote: '1,596 DAI',
+          budget: '10 DAI',
+          fiat: '$10.00',
+        },
+        sell: {
+          min: '0 DAI',
+          max: '0 DAI',
+          outcomeValue: '0 ETH',
+          outcomeQuote: '0 ETH',
+          budget: '0 ETH',
+          fiat: '$0.00',
+        },
+      },
+    },
+  },
+  {
+    input: {
+      type: 'disposable',
+      setting: 'range',
+      direction: 'sell',
+      base: 'ETH',
+      quote: 'DAI',
+      buy: {
+        min: '0',
+        max: '0',
+        budget: '0',
+      },
+      sell: {
+        min: '1500',
+        max: '1700',
+        budget: '2',
+      },
+    },
+    output: {
+      create: {
+        buy: {
+          min: '0 DAI',
+          max: '0 DAI',
+          outcomeValue: '0 ETH',
+          outcomeQuote: '0 ETH',
+          budget: '0 DAI',
+          fiat: '$0.00',
+        },
+        sell: {
+          min: '1,500 DAI',
+          max: '1,700 DAI',
+          outcomeValue: '3,193 DAI',
+          outcomeQuote: '1,596 DAI',
+          budget: '2 ETH',
+          fiat: '$3,334.42',
+        },
+      },
+    },
+  },
+  // Recurring
   {
     input: {
       type: 'recurring',
@@ -17,13 +175,11 @@ const testCases: CreateStrategyTestCase[] = [
         min: '1500',
         max: '1500',
         budget: '10',
-        budgetFiat: '10',
       },
       sell: {
         min: '1700',
         max: '1700',
         budget: '2',
-        budgetFiat: '3334',
       },
     },
     output: {
@@ -32,18 +188,23 @@ const testCases: CreateStrategyTestCase[] = [
         buy: {
           min: '1,500 DAI',
           max: '1,500 DAI',
+          outcomeValue: '0.006666 ETH',
+          outcomeQuote: '1,500 DAI',
           budget: '10 DAI',
           fiat: '$10.00',
         },
         sell: {
           min: '1,700 DAI',
           max: '1,700 DAI',
+          outcomeValue: '3,400 DAI',
+          outcomeQuote: '1,700 DAI',
           budget: '2 ETH',
           fiat: '$3,334.42',
         },
       },
     },
   },
+  // Overlapping
   {
     input: {
       type: 'overlapping',
@@ -53,13 +214,11 @@ const testCases: CreateStrategyTestCase[] = [
         min: '0.3',
         max: '0.545454',
         budget: '12.501572',
-        budgetFiat: '12.5',
       },
       sell: {
         min: '0.33',
         max: '0.6',
         budget: '30',
-        budgetFiat: '12.61',
       },
       spread: '10', // Need a large spread for tooltip test
     },
@@ -86,7 +245,9 @@ const testCases: CreateStrategyTestCase[] = [
 const testDescription = (testCase: CreateStrategyTestCase) => {
   const input = testCase.input;
   if (input.type === 'overlapping') return 'Overlapping';
-  if (input.type === 'disposable') return `Disposable ${input.setting}`;
+  if (input.type === 'disposable') {
+    return `Disposable ${input.direction} ${input.setting}`;
+  }
   return `Recurring ${input.setting.split('_').join(' ')}`;
 };
 
