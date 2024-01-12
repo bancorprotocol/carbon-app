@@ -84,7 +84,7 @@ export const StrategyBlockManage: FC<Props> = ({
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
         if (!isOverlapping) {
-          openModal('duplicateStrategy', { strategy: strategy });
+          openModal('duplicateStrategy', { strategy });
         } else {
           duplicate(strategy);
         }
