@@ -83,7 +83,6 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
             <h3 className="text-14 font-weight-500">{title}</h3>
             <Button
               variant="white"
-              type="button"
               onClick={onClick}
               aria-label={title.toLowerCase()}
               className="row-span-2 self-center"
