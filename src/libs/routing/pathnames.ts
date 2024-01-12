@@ -21,7 +21,7 @@ export const PathNames = {
   trade: '/trade',
   debug: '/debug',
   createStrategy: '/strategies/create',
-  editStrategy: '/strategies/edit',
+  editStrategy: '/strategies/edit/$strategyId',
   terms: '/terms',
   privacy: '/privacy',
   simulator: '/simulator',

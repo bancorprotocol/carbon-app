@@ -25,7 +25,7 @@ const presets: TradeSettingsStore['presets'] = {
 
 export const useTradeSettingsStore = (): TradeSettingsStore => {
   const [slippage, _setSlippage] = useState(
-    lsService.getItem('tradeSlippage') || presets.slippage[1]
+    lsService.getItem('tradeSlippage') || presets.slippage[0]
   );
 
   const [deadline, _setDeadline] = useState(

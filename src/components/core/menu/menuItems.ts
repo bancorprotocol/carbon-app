@@ -26,7 +26,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: 'Explorer',
-    href: PathNames.explorer('wallet'),
+    href: PathNames.explorer('token-pair'),
     hrefMatches: [
       PathNames.explorer('wallet'),
       PathNames.explorer('token-pair'),

@@ -1,3 +1,4 @@
+import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Button } from 'components/common/button';
 import { Strategy } from 'libs/queries';
@@ -17,7 +18,6 @@ import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
 import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
-import { useStore } from 'store';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -30,8 +30,7 @@ export const EditStrategyBudgetContent = ({
   strategy,
   type,
 }: EditStrategyBudgetContentProps) => {
-  const { debug } = useStore();
-  const isOverlapping = isOverlappingStrategy(strategy, debug);
+  const isOverlapping = isOverlappingStrategy(strategy);
 
   const { history } = useRouter();
   const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
@@ -129,7 +128,17 @@ export const EditStrategyBudgetContent = ({
     }
   };
 
+  const getMarginalOption = (order: OrderCreate) => {
+    if (!Number(order.budget) || !order.budget) return undefined;
+    if (order.marginalPriceOption) return order.marginalPriceOption;
+
+    return MarginalPriceOptions.reset;
+  };
+
   const depositOrWithdrawFunds = () => {
+    const buyOption = getMarginalOption(order0);
+    const sellOption = getMarginalOption(order1);
+
     const updatedStrategy = {
       ...strategy,
       order0: {
@@ -146,19 +155,8 @@ export const EditStrategyBudgetContent = ({
       },
     };
 
-    type === 'withdraw'
-      ? withdrawBudget(
-          updatedStrategy,
-          order0.marginalPriceOption,
-          order1.marginalPriceOption,
-          handleEvents
-        )
-      : depositBudget(
-          updatedStrategy,
-          order0.marginalPriceOption,
-          order1.marginalPriceOption,
-          handleEvents
-        );
+    const action = type === 'withdraw' ? withdrawBudget : depositBudget;
+    void action(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
   const isOrdersBudgetValid = useMemo(() => {
@@ -221,6 +219,7 @@ export const EditStrategyBudgetContent = ({
         variant="white"
         size="lg"
         fullWidth
+        data-testid="deposit-withdraw-confirm-btn"
       >
         {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>

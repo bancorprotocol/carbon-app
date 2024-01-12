@@ -5,7 +5,7 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import {
-  getRoundedSpreadPPM,
+  getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
 } from '../../overlapping/utils';
@@ -18,6 +18,8 @@ import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { DepositAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
 import { carbonSDK } from 'libs/sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { MarketWarning } from './MarketWarning';
+import { geoMean } from 'utils/fullOutcome';
 
 interface Props {
   strategy: Strategy;
@@ -32,8 +34,10 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
 
-  const marketPrice = useMarketPrice({ base, quote });
-  const spreadPPM = getRoundedSpreadPPM(strategy);
+  const externalMarketPrice = useMarketPrice({ base, quote });
+  const oldMarketPrice = geoMean(order0.marginalPrice, order1.marginalPrice)!;
+
+  const spread = getRoundedSpread(strategy);
   const min = order0.min;
   const max = order1.max;
   const { marketPricePercentage } = useMarketIndication({
@@ -51,32 +55,56 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setBuyBudget = async (sellBudget: string) => {
-    if (!sellBudget) return order0.setBudget('');
-    const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
-      base.address,
-      quote.address,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spreadPPM.toString(),
-      sellBudget ?? '0'
-    );
-    order0.setBudget(buyBudget);
+  const getMarketPrice = () => {
+    if (aboveMarket || new SafeDecimal(strategy.order0.balance).eq(0)) {
+      return order0.min;
+    }
+    if (belowMarket || new SafeDecimal(strategy.order1.balance).eq(0)) {
+      return order1.max;
+    }
+    return oldMarketPrice.toString();
   };
 
-  const setSellBudget = async (buyBudget: string) => {
-    if (!buyBudget) return order1.setBudget('');
-    const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
-      base.address,
-      quote.address,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spreadPPM.toString(),
-      buyBudget ?? '0'
+  const setBuyBudget = async (sellBudgetDelta: string) => {
+    if (!sellBudgetDelta) return order0.setBudget('');
+    const sellBudget = new SafeDecimal(sellBudgetDelta || '0').plus(
+      strategy.order1.balance || '0'
     );
-    order1.setBudget(sellBudget);
+    const resultBuyBudget =
+      await carbonSDK.calculateOverlappingStrategyBuyBudget(
+        base.address,
+        quote.address,
+        order0.min,
+        order1.max,
+        getMarketPrice(),
+        spread.toString(),
+        sellBudget.toString()
+      );
+    const buyBudget = new SafeDecimal(resultBuyBudget).minus(
+      strategy.order0.balance || '0'
+    );
+    order0.setBudget(buyBudget.toString());
+  };
+
+  const setSellBudget = async (buyBudgetDelta: string) => {
+    if (!buyBudgetDelta) return order1.setBudget('');
+    const buyBudget = new SafeDecimal(buyBudgetDelta || '0').plus(
+      strategy.order0.balance || '0'
+    );
+    const resultSellBudget =
+      await carbonSDK.calculateOverlappingStrategySellBudget(
+        base.address,
+        quote.address,
+        order0.min,
+        order1.max,
+        getMarketPrice(),
+        spread.toString(),
+        buyBudget.toString()
+      );
+    const sellBudget = new SafeDecimal(resultSellBudget).minus(
+      strategy.order1.balance || '0'
+    );
+    order1.setBudget(sellBudget.toString());
   };
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
@@ -110,6 +138,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     setBuyBudget(value);
   };
 
+  const marketWarningProps = { oldMarketPrice, externalMarketPrice };
+
   return (
     <>
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
@@ -121,8 +151,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           order0={order0}
           order1={order1}
-          marketPrice={marketPrice}
-          spreadPPM={spreadPPM}
+          marketPrice={externalMarketPrice}
+          spread={spread}
           marketPricePercentage={marketPricePercentage}
           disabled
         />
@@ -130,7 +160,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Deposit Budget</h3>
-          <Tooltip element='Indicate the amount you wish to deposit to the available "wallet budget"'>
+          <Tooltip element='Indicate the amount you wish to deposit from the available "allocated budget"'>
             <IconTooltip className="h-14 w-14 text-white/60" />
           </Tooltip>
         </header>
@@ -139,25 +169,27 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           query={tokenQuoteBalanceQuery}
           order={order0}
           onChange={onBuyBudgetChange}
-          disabled={aboveMarket}
+          disabled={aboveMarket || order0.min === '0'}
         >
           <DepositAllocatedBudget
             token={quote}
             currentBudget={strategy.order0.balance}
             buy
           />
+          <MarketWarning {...marketWarningProps} />
         </BudgetInput>
         <BudgetInput
           token={base}
           query={tokenBaseBalanceQuery}
           order={order1}
           onChange={onSellBudgetChange}
-          disabled={belowMarket}
+          disabled={belowMarket || order1.max === '0'}
         >
           <DepositAllocatedBudget
             token={base}
             currentBudget={strategy.order1.balance}
           />
+          <MarketWarning {...marketWarningProps} />
         </BudgetInput>
         <footer className="flex items-center gap-8">
           <IconAction className="h-16 w-16" />

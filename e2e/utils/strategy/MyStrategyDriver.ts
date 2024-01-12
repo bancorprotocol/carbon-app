@@ -1,4 +1,18 @@
+import { waitFor } from './../../utils/operators';
 import { Page } from 'playwright-core';
+
+// TODO import type `StrategyEditOptionId`
+type IDs =
+  | 'duplicateStrategy'
+  | 'manageNotifications'
+  | 'walletOwner'
+  | 'depositFunds'
+  | 'pauseStrategy'
+  | 'renewStrategy'
+  | 'editPrices'
+  | 'deleteStrategy'
+  | 'withdrawFunds';
+type ManageStrategyID = `manage-strategy-${IDs}`;
 
 export class MyStrategyDriver {
   constructor(private page: Page) {}
@@ -8,9 +22,7 @@ export class MyStrategyDriver {
   }
 
   async getAllStrategies() {
-    const strategies = this.page.locator('[data-testid="strategy-list"] > li');
-    await strategies.waitFor({ state: 'visible' });
-    return strategies;
+    return this.page.locator('[data-testid="strategy-list"] > li');
   }
 
   async getStrategy(index: number) {
@@ -39,7 +51,16 @@ export class MyStrategyDriver {
           minPrice: () => tooltip.getByTestId('min-price'),
           maxPrice: () => tooltip.getByTestId('max-price'),
           marginalPrice: () => tooltip.getByTestId('marginal-price'),
+          waitForDetached: async () => {
+            await this.page.mouse.move(0, 0);
+            await tooltip.waitFor({ state: 'detached' });
+          },
         };
+      },
+      clickManageEntry: async (id: ManageStrategyID) => {
+        await strategy.getByTestId('manage-strategy-btn').click();
+        await waitFor(this.page, 'manage-strategy-dropdown', 10_000);
+        await this.page.getByTestId(id).click();
       },
     };
   }

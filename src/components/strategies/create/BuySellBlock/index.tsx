@@ -57,14 +57,14 @@ export const BuySellBlock: FC<Props> = ({
           base.symbol
         } at. Make sure the price is in ${quote.symbol} tokens.`}
       >
-        <>
+        <p>
           <span className="text-white/80">
             Set {buy ? 'Buy' : 'Sell'} Price&nbsp;
           </span>
           <span className="text-white/60">
             ({quote.symbol} per 1 {base.symbol})
           </span>
-        </>
+        </p>
       </Tooltip>
     </>
   );

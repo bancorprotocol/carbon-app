@@ -37,6 +37,14 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       ? new SafeDecimal(balance || 0).lt(order.budget)
       : calculatedWalletBalance.lt(0);
 
+  const budgetProps = {
+    base,
+    quote,
+    balance,
+    buy,
+    type,
+  };
+
   return (
     <section
       aria-labelledby={titleId}
@@ -74,6 +82,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         isError={insufficientBalance}
         balance={tokenBalanceQuery.data}
         withoutWallet={type === 'withdraw'}
+        data-testid={`budget-${type}-${buy ? 'buy' : 'sell'}-input`}
       />
       {insufficientBalance && (
         <output
@@ -87,7 +96,8 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         </output>
       )}
       <EditStrategyAllocatedBudget
-        {...{ order, base, quote, balance, buy, type }}
+        order={order}
+        {...budgetProps}
         {...(type === 'withdraw' && {
           showMaxCb: () => order.setBudget(balance || ''),
         })}

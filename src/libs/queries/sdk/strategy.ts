@@ -303,8 +303,8 @@ export const useUpdateStrategyQuery = () => {
         {
           ...fieldsToUpdate,
         },
-        buyMarginalPrice ? buyMarginalPrice : MarginalPriceOptions.reset,
-        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset
+        buyMarginalPrice,
+        sellMarginalPrice
       );
 
       return signer!.sendTransaction(unsignedTx);
