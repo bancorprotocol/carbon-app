@@ -6,7 +6,7 @@ export interface RecurringStrategyTestCase extends CreateStrategyTemplate {
   setting: 'limit_limit' | 'range_range' | 'limit_range' | 'range_limit';
 }
 export interface OverlappingStrategyTestCase extends CreateStrategyTemplate {
-  setting: 'overlapping';
+  type: 'overlapping';
   spread: string;
 }
 
@@ -41,6 +41,7 @@ export class CreateStrategyDriver {
   getOverlappingForm() {
     const form = this.page.getByTestId('create-strategy-form');
     return {
+      locator: form,
       min: () => form.getByLabel('Min Buy Price'),
       max: () => form.getByLabel('Max Sell Price'),
       budgetBase: () => form.getByTestId('input-budget-base'),
@@ -71,10 +72,10 @@ export class CreateStrategyDriver {
   async fillOverlapping() {
     const testCase = this.testCase as OverlappingStrategyTestCase;
     const form = this.getOverlappingForm();
-    await form.min().fill(testCase.buy.min.toString());
     await form.max().fill(testCase.sell.max.toString());
-    await form.budgetBase().fill(testCase.sell.budget.toString());
+    await form.min().fill(testCase.buy.min.toString());
     await form.spread().fill(testCase.spread.toString());
+    await form.budgetBase().fill(testCase.sell.budget.toString());
     return form;
   }
   nextStep() {

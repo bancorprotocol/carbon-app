@@ -7,7 +7,6 @@ import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDr
 
 export const withdrawStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Withdraw', async ({ page }) => {
-    test.setTimeout(45_000);
     const { base, quote, buy, sell } = testCase;
 
     const buyBudget = parseFloat(buy.budget);

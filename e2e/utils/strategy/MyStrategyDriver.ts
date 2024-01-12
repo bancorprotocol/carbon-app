@@ -51,6 +51,10 @@ export class MyStrategyDriver {
           minPrice: () => tooltip.getByTestId('min-price'),
           maxPrice: () => tooltip.getByTestId('max-price'),
           marginalPrice: () => tooltip.getByTestId('marginal-price'),
+          waitForDetached: async () => {
+            await this.page.mouse.move(0, 0);
+            await tooltip.waitFor({ state: 'detached' });
+          },
         };
       },
       clickManageEntry: async (id: ManageStrategyID) => {

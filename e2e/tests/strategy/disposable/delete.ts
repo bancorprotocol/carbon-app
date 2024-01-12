@@ -7,8 +7,6 @@ import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDr
 
 export const deleteStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Delete', async ({ page }) => {
-    test.setTimeout(45_000);
-
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-deleteStrategy');
