@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { checkApproval } from '../../../utils/modal';
 import { NotificationDriver } from '../../../utils/NotificationDriver';
-import { navigateTo, tokenPrice, waitFor } from '../../../utils/operators';
+import { navigateTo, waitFor } from '../../../utils/operators';
 import {
   CreateStrategyDriver,
   CreateStrategyTestCase,
@@ -11,7 +11,7 @@ import {
 
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
-  const { base, quote, buy, sell } = testCase.input;
+  const { base, quote } = testCase.input;
   const output = testCase.output.create;
 
   return test(`Create`, async ({ page }) => {
@@ -19,22 +19,20 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     await navigateTo(page, '/');
     const myStrategies = new MyStrategyDriver(page);
-    const createForm = new CreateStrategyDriver(page, testCase.input);
+    const createForm = new CreateStrategyDriver(page, testCase);
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
     await createForm.selectSetting('two-ranges');
     await createForm.nextStep();
-    const buyForm = await createForm.fillRecurringLimit('buy');
-    const sellForm = await createForm.fillRecurringLimit('sell');
+
+    const { buyForm, sellForm } = await createForm.fillRecurring();
 
     // Assert 100% outcome
-    await expect(buyForm.outcomeValue()).toHaveText(`0.006666 ${base}`);
-    await expect(buyForm.outcomeQuote()).toHaveText(tokenPrice(buy.min, quote));
-    await expect(sellForm.outcomeValue()).toHaveText(`3,400.00 ${quote}`);
-    await expect(sellForm.outcomeQuote()).toHaveText(
-      tokenPrice(sell.min, quote)
-    );
+    await expect(buyForm.outcomeValue()).toHaveText(output.buy.outcomeValue);
+    await expect(buyForm.outcomeQuote()).toHaveText(output.buy.outcomeQuote);
+    await expect(sellForm.outcomeValue()).toHaveText(output.sell.outcomeValue);
+    await expect(sellForm.outcomeQuote()).toHaveText(output.sell.outcomeQuote);
 
     await createForm.submit();
 

@@ -8,7 +8,7 @@ import {
 } from './../utils/tenderly';
 import { Wallet } from 'ethers';
 import { checkApproval } from './modal';
-import { CreateStrategyInput } from './strategy/template';
+import { CreateStrategyInput } from './strategy';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -54,6 +54,7 @@ export class DebugDriver {
     await this.page.getByLabel('RPC URL').fill(rpcUrl);
     await this.page.getByTestId('unchecked-signer').click();
     await this.page.getByTestId('save-rpc').click();
+    await this.page.waitForURL('/debug');
   }
 
   async setupImposter(config: ImposterConfig = {}) {

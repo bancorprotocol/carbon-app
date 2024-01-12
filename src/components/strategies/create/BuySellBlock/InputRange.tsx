@@ -118,7 +118,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onChange={handleChangeMin}
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMin}
-            data-testid="input-range-min"
+            data-testid="input-min"
           />
           <p className="flex flex-wrap items-center gap-4">
             <span className="break-all font-mono text-12 text-white/60">
@@ -163,7 +163,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onChange={handleChangeMax}
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMax}
-            data-testid="input-range-max"
+            data-testid="input-max"
           />
           <div className="flex flex-wrap items-center gap-4">
             <p className="break-all font-mono text-12 text-white/60">
