@@ -6,6 +6,7 @@ import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { SafeDecimal } from 'libs/safedecimal';
 import { isMinAboveMarket, isMaxBelowMarket } from '../../overlapping/utils';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
+import { isValidRange } from 'components/strategies/utils';
 
 interface Props extends OverlappingStrategyProps {
   marketPrice: number;
@@ -29,6 +30,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   } = props;
   const minAboveMarket = isMinAboveMarket(order0, quote);
   const maxBelowMarket = isMaxBelowMarket(order1, quote);
+  const validPrice = isValidRange(order0.min, order1.max);
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
     if (new SafeDecimal(balance).lt(order.budget)) {
@@ -71,7 +73,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         order={order0}
         query={token1BalanceQuery}
         onChange={onBuyBudgetChange}
-        disabled={minAboveMarket}
+        disabled={minAboveMarket || !validPrice}
         data-testid="input-budget-quote"
       />
       {minAboveMarket && <Explaination base={base} buy />}
@@ -80,7 +82,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         order={order1}
         query={token0BalanceQuery}
         onChange={onSellBudgetChange}
-        disabled={maxBelowMarket}
+        disabled={maxBelowMarket || !validPrice}
         data-testid="input-budget-base"
       />
       {maxBelowMarket && <Explaination base={base} />}

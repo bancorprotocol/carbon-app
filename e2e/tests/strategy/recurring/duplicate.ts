@@ -7,7 +7,6 @@ import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDr
 
 export const duplicateStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Duplicate', async ({ page }) => {
-    test.setTimeout(45_000);
     const { base, quote, buy, sell } = testCase;
     const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
     const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');

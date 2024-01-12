@@ -8,8 +8,8 @@ export const MainMenu: FC = () => {
   const { aboveBreakpoint } = useBreakpoints();
 
   return (
-    <header className={`fixed top-0 z-40 w-full`}>
-      <div className={'main-menu'}>
+    <header className="fixed top-0 z-40 w-full" data-testid="main-menu">
+      <div className="main-menu">
         <MainMenuLeft />
         {aboveBreakpoint('md') && <MainMenuTrade />}
         <MainMenuRight />

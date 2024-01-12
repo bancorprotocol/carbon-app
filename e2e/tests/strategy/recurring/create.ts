@@ -19,8 +19,6 @@ export const createRecurringStrategy = (testCase: CreateStrategyTemplate) => {
   const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
 
   return test(`Create`, async ({ page }) => {
-    test.setTimeout(45_000);
-
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');

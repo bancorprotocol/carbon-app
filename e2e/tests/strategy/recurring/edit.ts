@@ -5,8 +5,6 @@ import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDr
 
 export const editPriceStrategyTest = (testCase: CreateStrategyTemplate) => {
   return test('Edit Price', async ({ page }) => {
-    test.setTimeout(45_000);
-
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-editPrices');
