@@ -1,29 +1,25 @@
 import { expect, test } from '@playwright/test';
-import { CreateStrategyTemplate } from '../../../utils/strategy/template';
 import { checkApproval } from '../../../utils/modal';
 import { NotificationDriver } from '../../../utils/NotificationDriver';
-import {
-  fiatPrice,
-  navigateTo,
-  tokenPrice,
-  waitFor,
-} from '../../../utils/operators';
+import { navigateTo, tokenPrice, waitFor } from '../../../utils/operators';
 import {
   CreateStrategyDriver,
+  CreateStrategyTestCase,
   MyStrategyDriver,
+  assertRecurringTestCase,
 } from '../../../utils/strategy';
 
-export const createRecurringStrategy = (testCase: CreateStrategyTemplate) => {
-  const { base, quote, buy, sell } = testCase;
-  const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
-  const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
+export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
+  assertRecurringTestCase(testCase);
+  const { base, quote, buy, sell } = testCase.input;
+  const output = testCase.output.create;
 
   return test(`Create`, async ({ page }) => {
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
     const myStrategies = new MyStrategyDriver(page);
-    const createForm = new CreateStrategyDriver(page, testCase);
+    const createForm = new CreateStrategyDriver(page, testCase.input);
     await myStrategies.createStrategy();
     await createForm.selectToken('base');
     await createForm.selectToken('quote');
@@ -59,18 +55,10 @@ export const createRecurringStrategy = (testCase: CreateStrategyTemplate) => {
     const strategy = await myStrategies.getStrategy(1);
     await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategy.status()).toHaveText('Active');
-    await expect(strategy.totalBudget()).toHaveText(
-      fiatPrice(buyBudgetFiat + sellBudgetFiat)
-    );
-    await expect(strategy.buyBudget()).toHaveText(
-      tokenPrice(buy.budget, quote)
-    );
-    await expect(strategy.buyBudgetFiat()).toHaveText(fiatPrice(buyBudgetFiat));
-    await expect(strategy.sellBudget()).toHaveText(
-      tokenPrice(sell.budget, base)
-    );
-    await expect(strategy.sellBudgetFiat()).toHaveText(
-      fiatPrice(sellBudgetFiat)
-    );
+    await expect(strategy.totalBudget()).toHaveText(output.totalFiat);
+    await expect(strategy.buyBudget()).toHaveText(output.buy.budget);
+    await expect(strategy.buyBudgetFiat()).toHaveText(output.buy.fiat);
+    await expect(strategy.sellBudget()).toHaveText(output.sell.budget);
+    await expect(strategy.sellBudgetFiat()).toHaveText(output.sell.fiat);
   });
 };

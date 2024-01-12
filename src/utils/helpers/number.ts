@@ -170,6 +170,7 @@ const handlePrettifyNumberCurrency = (
   num: SafeDecimal,
   options?: PrettifyNumberOptions
 ) => {
+  const price = num.toNumber();
   const {
     abbreviate = false,
     highPrecision = false,
@@ -189,11 +190,11 @@ const handlePrettifyNumberCurrency = (
     maximumFractionDigits: 2,
   };
 
+  if (options?.decimals) {
+    nfCurrencyOptionsDefault.maximumFractionDigits = options.decimals;
+  }
   if (options?.fullValue) {
-    return Intl.NumberFormat(locale, {
-      ...nfCurrencyOptionsDefault,
-      maximumFractionDigits: options.decimals ?? 100,
-    }).format(num.toNumber());
+    return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(price);
   }
 
   if (num.lte(0))
@@ -215,30 +216,28 @@ const handlePrettifyNumberCurrency = (
   if (num.lt(0.01))
     return Intl.NumberFormat(locale, {
       ...nfCurrencyOptionsDefault,
+      minimumFractionDigits: 2,
       maximumFractionDigits: 4,
-    }).format(num.toNumber());
+    }).format(price);
   if (num.lt(0.1))
     return Intl.NumberFormat(locale, {
       ...nfCurrencyOptionsDefault,
+      minimumFractionDigits: 2,
       maximumFractionDigits: 3,
-    }).format(num.toNumber());
+    }).format(price);
   if (abbreviate && num.gt(999999))
     return Intl.NumberFormat(locale, {
       ...nfCurrencyOptionsDefault,
       notation: 'compact',
       minimumFractionDigits: 0,
       maximumFractionDigits: 1,
-    }).format(num.toNumber());
+    }).format(price);
 
   if (!highPrecision && num.gt(100)) {
-    return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
-      num.toNumber()
-    );
+    return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(price);
   }
 
-  return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
-    num.toNumber()
-  );
+  return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(price);
 };
 
 /**

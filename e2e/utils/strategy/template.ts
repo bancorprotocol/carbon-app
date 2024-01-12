@@ -20,6 +20,7 @@ interface RangeOrder {
   min: string;
   max: string;
   budget: string;
+  // TODO: remove this
   budgetFiat?: string;
 }
 interface LimitOrder {
@@ -35,7 +36,7 @@ export const STRATEGY_TYPES = [
 
 export type StrategyType = (typeof STRATEGY_TYPES)[number];
 
-export interface CreateStrategyTemplate {
+export interface CreateStrategyInput {
   base: DebugTokens;
   quote: DebugTokens;
   buy: RangeOrder;
@@ -65,12 +66,12 @@ const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
   budget: order.budget,
 });
 export const createDebugStrategy = {
-  limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyTemplate => ({
+  limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: fromLimitOrder(buy),
     sell: emptyOrder(),
   }),
-  limitSell: (pair: TokenPair, sell: LimitOrder): CreateStrategyTemplate => ({
+  limitSell: (pair: TokenPair, sell: LimitOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell: fromLimitOrder(sell),
@@ -79,17 +80,17 @@ export const createDebugStrategy = {
     pair: TokenPair,
     buy: LimitOrder,
     sell: LimitOrder
-  ): CreateStrategyTemplate => ({
+  ): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: fromLimitOrder(buy),
     sell: fromLimitOrder(sell),
   }),
-  rangeBuy: (pair: TokenPair, buy: RangeOrder): CreateStrategyTemplate => ({
+  rangeBuy: (pair: TokenPair, buy: RangeOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy,
     sell: emptyOrder(),
   }),
-  rangeSell: (pair: TokenPair, sell: RangeOrder): CreateStrategyTemplate => ({
+  rangeSell: (pair: TokenPair, sell: RangeOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell,
@@ -98,7 +99,7 @@ export const createDebugStrategy = {
     pair: TokenPair,
     buy: RangeOrder,
     sell: RangeOrder
-  ): CreateStrategyTemplate => ({
+  ): CreateStrategyInput => ({
     ...fromPair(pair),
     buy,
     sell,

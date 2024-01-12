@@ -8,7 +8,7 @@ import {
 } from './../utils/tenderly';
 import { Wallet } from 'ethers';
 import { checkApproval } from './modal';
-import { CreateStrategyTemplate } from './strategy/template';
+import { CreateStrategyInput } from './strategy/template';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -68,7 +68,7 @@ export class DebugDriver {
     return this.page.getByTestId(`balance-${token}`);
   }
 
-  async createStrategy(template: CreateStrategyTemplate) {
+  async createStrategy(template: CreateStrategyInput) {
     const { base, quote, buy, sell, spread, amount } = template;
     // TODO: use textarea shortcut instead of filling each field.
     // Currently this revert with Dai/insufficient-allowance for some reason
