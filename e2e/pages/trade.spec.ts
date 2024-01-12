@@ -14,7 +14,7 @@ test.describe('Trade', () => {
     await debug.visit();
     await setupFork(testInfo);
     await debug.setRpcUrl(testInfo);
-    await Promise.all([mockApi(page), debug.setupImposter()]);
+    await Promise.all([mockApi(page), debug.setupImposter(), debug.setE2E()]);
   });
 
   test.afterEach(async ({}, testInfo) => {
