@@ -61,8 +61,9 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
       icon: IconCut,
       title: 'Undercut the Strategy',
       onClick: undercutStrategy,
-      description:
-        'Set prices at 0.1% tighter spread and try to get filled ahead',
+      description: `Set prices at ${
+        undercutDifference * 100
+      }% tighter spread and try to get filled ahead`,
       testId: 'undercut-strategy-btn',
     },
   ];
