@@ -21,27 +21,23 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   const undercutDifference = 0.001;
 
   const undercutStrategy = () => {
-    const undercuttedStrategy = {
-      ...strategy,
-      order0: {
-        ...strategy.order0,
-        startRate: new Decimal(strategy.order0.startRate)
-          .times(1 + undercutDifference)
-          .toString(),
-        endRate: new Decimal(strategy.order0.endRate)
-          .times(1 + undercutDifference)
-          .toString(),
-      },
-      order1: {
-        ...strategy.order1,
-        startRate: new Decimal(strategy.order1.startRate)
-          .times(1 - undercutDifference)
-          .toString(),
-        endRate: new Decimal(strategy.order1.endRate)
-          .times(1 - undercutDifference)
-          .toString(),
-      },
-    };
+    const undercuttedStrategy = structuredClone(strategy);
+    undercuttedStrategy.order0.startRate = new Decimal(
+      strategy.order0.startRate
+    )
+      .times(1 + undercutDifference)
+      .toString();
+    undercuttedStrategy.order0.endRate = new Decimal(strategy.order0.endRate)
+      .times(1 + undercutDifference)
+      .toString();
+    undercuttedStrategy.order1.startRate = new Decimal(
+      strategy.order1.startRate
+    )
+      .times(1 - undercutDifference)
+      .toString();
+    undercuttedStrategy.order1.endRate = new Decimal(strategy.order1.endRate)
+      .times(1 - undercutDifference)
+      .toString();
 
     duplicate(undercuttedStrategy);
     closeModal(id);
