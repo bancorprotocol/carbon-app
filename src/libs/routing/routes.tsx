@@ -128,7 +128,9 @@ const explorerLayout = new Route({
 const explorerRedirect = new Route({
   getParentRoute: () => explorerLayout,
   path: '/',
-  component: () => <Navigate to="/explorer/wallet" />,
+  component: () => (
+    <Navigate to="/explorer/$type" params={{ type: 'token-pair' }} />
+  ),
 });
 
 const explorerPage = new Route({
