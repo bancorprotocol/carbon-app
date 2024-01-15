@@ -413,7 +413,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
   const maxChar = Math.max(formattedPrice.length, '(off-scale)'.length);
   const outRangeWidth = `${maxChar + 6}ch`;
   // In Range
-  const inRangeWidth = `${formattedPrice.length + 6}ch`;
+  const inRangeWidth = `${formattedPrice.length + 2}ch`;
   const baseDelta = `${(formattedPrice.length + 2) / 2}ch`; // 6ch
 
   const deltaStart = price - steps[1];
@@ -421,7 +421,6 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
   const translateStart = `min(${baseDelta}, ${deltaStart}px)`;
   const translateEnd = `max((${inRangeWidth}  / 2) - ${deltaEnd}px, 0px)`;
   const translateRect = `translateX(calc(-1 * (${translateStart} + ${translateEnd})))`;
-  const translateText = `translateX(calc(-1 * (${translateStart} + ${translateEnd} - 1.5ch)))`;
 
   return (
     <g className={style.currentPrice}>
@@ -487,13 +486,13 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={price + 2}
+            x={price + 8}
             y="12"
             dominantBaseline="hanging"
             textAnchor="start"
             fontSize="14"
             style={{
-              transform: translateText,
+              transform: translateRect,
             }}
           >
             {formattedPrice}
