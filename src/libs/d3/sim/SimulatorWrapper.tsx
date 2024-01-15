@@ -189,7 +189,7 @@ const SimChartWrapper = ({
     .range([0, dms.boundedWidth]);
 
   return (
-    <div ref={ref} className={'bg-white text-black'}>
+    <div ref={ref} className={''}>
       {isLoading || !data ? (
         <div>loading</div>
       ) : (

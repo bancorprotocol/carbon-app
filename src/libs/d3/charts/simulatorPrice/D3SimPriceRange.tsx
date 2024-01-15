@@ -16,8 +16,8 @@ export const D3SimPriceRange = ({ type, yScale }: OrderRangeProps) => {
     data: { data, bounds },
   } = useD3Chart<SimulatorReturn>();
 
-  const color = type === 'bid' ? 'green' : 'red';
-  const strokeWidth = 2;
+  const color = type === 'bid' ? '#00B578' : '#D86371';
+  const strokeWidth = 1;
 
   const min = type === 'bid' ? yScale(bounds.bidMin) : yScale(bounds.askMin);
   const max = type === 'bid' ? yScale(bounds.bidMax) : yScale(bounds.askMax);
@@ -36,7 +36,7 @@ export const D3SimPriceRange = ({ type, yScale }: OrderRangeProps) => {
         y1Acc={() => dashedLine}
         data={data}
         fill={'grey'}
-        fillOpacity={0.3}
+        fillOpacity={0.25}
       />
       <D3AreaPath
         xAcc={xAcc}
@@ -44,7 +44,7 @@ export const D3SimPriceRange = ({ type, yScale }: OrderRangeProps) => {
         y1Acc={yAcc}
         data={data}
         fill={color}
-        fillOpacity={0.5}
+        fillOpacity={0.15}
       />
       <D3LinePath
         stroke={color}
@@ -56,7 +56,7 @@ export const D3SimPriceRange = ({ type, yScale }: OrderRangeProps) => {
       <D3LinePath
         stroke={color}
         strokeWidth={strokeWidth}
-        strokeDasharray={strokeWidth}
+        strokeDasharray={strokeWidth * 4}
         xAcc={xAcc}
         yAcc={() => dashedLine}
         data={data}
