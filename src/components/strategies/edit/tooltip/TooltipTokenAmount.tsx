@@ -14,9 +14,9 @@ export interface TooltipPriceProps {
 
 export const TooltipTokenAmount: FC<TooltipPriceProps> = (props) => {
   const { amount, token, className } = props;
-  const fiatPrice = useFiatValue({ price: amount, token, fullValue: true });
+  const fiatPrice = useFiatValue({ price: amount, token, highPrecision: true });
   const fullAmount = prettifyNumber(amount, {
-    fullValue: true,
+    highPrecision: true,
     decimals: token.decimals,
   });
   return (

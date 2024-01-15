@@ -21,9 +21,9 @@ export const TooltipTokenRange: FC<TooltipPriceProps> = ({
   className,
 }) => {
   const { min, max } = range;
-  const options = { decimals: token.decimals, fullValue: true };
-  const minFiatPrice = useFiatValue({ price: min, token, fullValue: true });
-  const maxFiatPrice = useFiatValue({ price: max, token, fullValue: true });
+  const options = { decimals: token.decimals, highPrecision: true };
+  const minFiatPrice = useFiatValue({ price: min, token, highPrecision: true });
+  const maxFiatPrice = useFiatValue({ price: max, token, highPrecision: true });
   const minFullPrice = prettifyNumber(min, options);
   const maxFullPrice = prettifyNumber(max, options);
   return (

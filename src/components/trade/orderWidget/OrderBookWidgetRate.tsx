@@ -20,7 +20,7 @@ export const OrderBookWidgetRate: FC<Props> = ({
     <div className="-mx-10 my-10 flex items-center rounded-8 bg-silver px-10 py-10 text-16">
       <Tooltip element="The mid-market price based on the last trade">
         <span className="flex items-center ">
-          {prettifyNumber(rate)}
+          {prettifyNumber(rate, { decimals: 6 })}
           {!isLoading && (
             <div
               className={`${
@@ -32,7 +32,11 @@ export const OrderBookWidgetRate: FC<Props> = ({
               />
             </div>
           )}
-          {fiatRate && <span className="ml-8 text-white/60">{fiatRate}</span>}
+          {fiatRate && (
+            <span className="ml-8 text-white/60">
+              {prettifyNumber(fiatRate, { decimals: 6 })}
+            </span>
+          )}
         </span>
       </Tooltip>
     </div>

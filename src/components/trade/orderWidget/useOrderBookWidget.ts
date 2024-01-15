@@ -74,7 +74,7 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
   const baseDecimals = baseToken?.decimals || 0;
   const quoteToken = getTokenById(quote!);
   const quoteDecimals = quoteToken?.decimals || 0;
-  const { getFiatAsString } = useFiatCurrency(quoteToken);
+  const { getFiatValue } = useFiatCurrency(quoteToken);
 
   const orders = useMemo<OrderBook & { middleRateFiat: string }>(() => {
     const buy = orderBy(data?.buy || [], ({ rate }) => +rate, 'desc');
@@ -84,14 +84,14 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
       buy: buildOrders(buy, baseDecimals, quoteDecimals, orderBookBuckets),
       sell: buildOrders(sell, baseDecimals, quoteDecimals, orderBookBuckets),
       middleRate: data?.middleRate || '0',
-      middleRateFiat: getFiatAsString(data?.middleRate || ''),
+      middleRateFiat: getFiatValue(data?.middleRate || '').toString(),
     };
   }, [
     baseDecimals,
     data?.buy,
     data?.middleRate,
     data?.sell,
-    getFiatAsString,
+    getFiatValue,
     orderBookBuckets,
     quoteDecimals,
   ]);
