@@ -31,7 +31,8 @@ export const EditStrategyAllocatedBudget: FC<{
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const isDistributeToggleOn =
-    order.marginalPriceOption === MarginalPriceOptions.reset;
+    order.marginalPriceOption === MarginalPriceOptions.reset ||
+    !order.marginalPriceOption;
 
   useEffect(() => {
     if (
@@ -88,7 +89,7 @@ export const EditStrategyAllocatedBudget: FC<{
           <div role="row" className="flex items-center justify-between gap-16">
             <p role="columnheader">{buy ? 'Buy' : 'Sell'} Price</p>
             <div role="cell" className="flex flex-1 justify-end gap-8">
-              <div className={'flex items-center'}>
+              <div className="flex items-center">
                 {/* Limit Strategy Price */}
                 {!!order.price && (
                   <TooltipTokenAmount amount={order.price} token={quote} />
@@ -153,7 +154,7 @@ export const EditStrategyAllocatedBudget: FC<{
                     : MarginalPriceOptions.maintain
                 )
               }
-              size={'sm'}
+              size="sm"
             />
           </div>
         )}
