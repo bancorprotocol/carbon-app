@@ -45,14 +45,16 @@ const highPrecision = (
   formatter: Intl.NumberFormat,
   maxDecimals: number = 6
 ) => {
-  // let fraction = num.modulo(1).toString().slice(2);
   if (num.lt(1)) return formatter.format(num.toNumber());
   // 12.12345678 -> 123456 (if maxDecimals is 6)
-  let fraction = num
+  const fraction = num
     .modulo(1)
-    .toString()
-    .slice(2, maxDecimals + 2);
-  if (!fraction.length) fraction = '00';
+    .toFixed(maxDecimals, SafeDecimal.ROUND_FLOOR)
+    .slice(2)
+    .replace(/0+$/, ''); // Remove trailing 0
+  if (!fraction.length || !Number(fraction)) {
+    return formatter.format(num.trunc().toNumber());
+  }
   const result = formatter
     .formatToParts(num.toNumber())
     .map((part) => (part.type === 'fraction' ? fraction : part.value))
