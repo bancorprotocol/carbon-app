@@ -30,15 +30,15 @@ const testCases: CreateStrategyTestCase[] = [
       create: {
         totalFiat: '$3,344.42',
         buy: {
-          min: '1,500 DAI',
-          max: '1,500 DAI',
-          budget: '10 DAI',
+          min: '1,500.00 DAI',
+          max: '1,500.00 DAI',
+          budget: '10.00 DAI',
           fiat: '$10.00',
         },
         sell: {
-          min: '1,700 DAI',
-          max: '1,700 DAI',
-          budget: '2 ETH',
+          min: '1,700.00 DAI',
+          max: '1,700.00 DAI',
+          budget: '2.00 ETH',
           fiat: '$3,334.42',
         },
       },
@@ -67,15 +67,15 @@ const testCases: CreateStrategyTestCase[] = [
       create: {
         totalFiat: '$25.11',
         buy: {
-          min: '0.3 USDC',
+          min: '0.30 USDC',
           max: '0.545454 USDC',
-          budget: '12.5 USDC',
+          budget: '12.50 USDC',
           fiat: '$12.50',
         },
         sell: {
           min: '0.33 USDC',
-          max: '0.6 USDC',
-          budget: '30 BNT',
+          max: '0.60 USDC',
+          budget: '30.00 BNT',
           fiat: '$12.61',
         },
       },

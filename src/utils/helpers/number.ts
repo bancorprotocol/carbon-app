@@ -36,22 +36,28 @@ const getDisplayCurrency = (currency: string) => {
   return 'name';
 };
 
+/**
+ * Use string manipulation to display the value with high precision
+ * @dev We need to split the number into integer & fraction because number is not precise enough
+ */
 const highPrecision = (
   num: SafeDecimal,
   formatter: Intl.NumberFormat,
   maxDecimals: number = 6
 ) => {
-  const fraction = num
+  // let fraction = num.modulo(1).toString().slice(2);
+  if (num.lt(1)) return formatter.format(num.toNumber());
+  // 12.12345678 -> 123456 (if maxDecimals is 6)
+  let fraction = num
     .modulo(1)
     .toString()
     .slice(2, maxDecimals + 2);
-  if (!fraction.length || !Number(fraction)) {
-    return formatter.format(num.toNumber());
-  }
-  return formatter
+  if (!fraction.length) fraction = '00';
+  const result = formatter
     .formatToParts(num.toNumber())
     .map((part) => (part.type === 'fraction' ? fraction : part.value))
     .join('');
+  return result;
 };
 
 const subscriptMap: Record<string, string> = {
