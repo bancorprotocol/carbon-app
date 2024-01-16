@@ -1,5 +1,9 @@
 import { Page } from '@playwright/test';
-import { CreateStrategyInput } from './../../utils/strategy/template';
+import {
+  CreateStrategyInput,
+  assertDebugToken,
+  debugTokens,
+} from './../../utils/strategy/template';
 import { waitModalClose, waitModalOpen } from '../modal';
 import { TestCase } from '../types';
 
@@ -131,10 +135,12 @@ export class CreateStrategyDriver {
   }
 
   async selectToken(tokenType: 'base' | 'quote') {
-    const token = this.testCase[tokenType];
+    const symbol = this.testCase[tokenType];
+    assertDebugToken(symbol);
+    const token = debugTokens[symbol];
     await this.page.getByTestId(`select-${tokenType}-token`).click();
     await waitModalOpen(this.page);
-    await this.page.getByLabel('Select Token').fill(token);
+    await this.page.getByLabel('Select Token').fill(symbol);
     await this.page.getByTestId(`select-token-${token}`).click();
     await waitModalClose(this.page);
   }

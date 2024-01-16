@@ -13,7 +13,7 @@ export const useTokensQuery = () => {
       return tokens;
     },
     {
-      placeholderData: lsService.getItem('tokenListCache')?.tokens,
+      initialData: lsService.getItem('tokenListCache')?.tokens,
       staleTime: ONE_DAY_IN_MS,
     }
   );
