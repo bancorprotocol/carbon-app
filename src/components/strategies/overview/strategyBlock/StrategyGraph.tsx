@@ -379,7 +379,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
             y={baseline + 10}
             dominantBaseline="hanging"
             textAnchor="middle"
-            fontSize="14"
+            fontSize="16"
             opacity="60%"
           >
             {prettifyNumber(point, { abbreviate: true, round: true })}
@@ -446,10 +446,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[1]}
-            y="12"
+            y="9"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -459,10 +459,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[1]}
-            y="27"
+            y="26"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -487,10 +487,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={price + 8}
-            y="12"
+            y="10"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: translateRect,
             }}
@@ -515,10 +515,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[steps.length - 1]}
-            y="12"
+            y="9"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -528,10 +528,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[steps.length - 1]}
-            y="27"
+            y="26"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
