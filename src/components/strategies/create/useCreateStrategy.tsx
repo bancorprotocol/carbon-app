@@ -22,8 +22,18 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
-import { checkIfOrdersOverlap } from '../utils';
+import {
+  checkIfOrdersOverlap,
+  isEmptyOrder,
+  isValidOrder,
+  isValidRange,
+} from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import {
+  getRoundedSpread,
+  isOverlappingStrategy,
+  isValidSpread,
+} from '../overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -44,8 +54,13 @@ export const useCreateStrategy = () => {
 
   const token0BalanceQuery = useGetTokenBalance(base);
   const token1BalanceQuery = useGetTokenBalance(quote);
-  const order1 = useOrder(templateStrategy?.order1);
   const order0 = useOrder(templateStrategy?.order0);
+  const order1 = useOrder(templateStrategy?.order1);
+  const baseSpread = templateStrategy
+    ? getRoundedSpread(templateStrategy)
+    : 0.05;
+  const [spread, setSpread] = useState(baseSpread);
+
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const { marketPricePercentage: buyMarketPricePercentage } =
     useMarketIndication({
@@ -68,6 +83,23 @@ export const useCreateStrategy = () => {
   const mutation = useCreateStrategyQuery();
 
   const search: StrategyCreateSearch = useSearch({ strict: false });
+  const {
+    base: baseAddress,
+    quote: quoteAddress,
+    strategySettings = templateStrategy?.strategySettings,
+    strategyDirection = templateStrategy?.strategyDirection,
+    strategyType = templateStrategy?.strategyType,
+  } = search;
+
+  const isOverlapping = useMemo(() => {
+    return (
+      strategySettings === 'overlapping' ||
+      isOverlappingStrategy({ order0, order1 })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [strategySettings]);
+
+  const { getTokenById } = useTokens();
   const [selectedStrategySettings, setSelectedStrategySettings] = useState<
     | {
         to: string;
@@ -113,14 +145,13 @@ export const useCreateStrategy = () => {
       return openModal('wallet', undefined);
     }
 
-    const onConfirm = () =>
-      createStrategyAction({
+    const onConfirm = () => {
+      const orders = { order0, order1 };
+      return createStrategyAction({
         base,
         quote,
         user,
         mutation,
-        order0,
-        order1,
         dispatchNotification,
         cache,
         navigate,
@@ -130,7 +161,9 @@ export const useCreateStrategy = () => {
           sellMarketPricePercentage,
         },
         setIsProcessing,
+        ...orders,
       });
+    };
 
     if (sourceCorrect && targetCorrect) {
       if (!+order0.budget && !+order1.budget) {
@@ -203,7 +236,11 @@ export const useCreateStrategy = () => {
 
       navigate({
         to: PathNames.createStrategy,
-        search: (search) => ({ ...search, base: b, quote: q }),
+        search: (search: StrategyCreateSearch) => ({
+          ...search,
+          base: b,
+          quote: q,
+        }),
         replace: true,
       });
       order0.resetFields();
@@ -219,50 +256,36 @@ export const useCreateStrategy = () => {
   };
 
   const isCTAdisabled = useMemo(() => {
-    if (!user) {
-      return false;
+    if (!user) return false;
+    if (approval.isLoading) return true;
+    if (approval.isError) return true;
+    if (mutation.isLoading) return true;
+    if (isProcessing) return true;
+    if (order0.budgetError) return true;
+    if (order1.budgetError) return true;
+
+    if (isOverlapping) {
+      return !isValidSpread(spread) || !isValidRange(order0.min, order1.max);
+    } else if (strategyType === 'recurring') {
+      return !isValidOrder(order0) || !isValidOrder(order1);
+    } else if (strategyDirection === 'buy') {
+      return !isValidOrder(order0) || !isEmptyOrder(order1);
+    } else {
+      return !isValidOrder(order1) || !isEmptyOrder(order0);
     }
-
-    const isOrder0Valid = order0.isRange
-      ? +order0.min > 0 && +order0.max > 0 && +order0.min < +order0.max
-      : +order0.price >= 0 && order0.price !== '';
-
-    const isOrder1Valid = order1.isRange
-      ? +order1.min > 0 && +order1.max > 0 && +order1.min < +order1.max
-      : +order1.price >= 0 && order1.price !== '';
-
-    return (
-      approval.isLoading ||
-      approval.isError ||
-      mutation.isLoading ||
-      !isOrder0Valid ||
-      !isOrder1Valid ||
-      isProcessing
-    );
   }, [
-    approval.isError,
-    approval.isLoading,
-    isProcessing,
-    mutation.isLoading,
-    order0.isRange,
-    order0.max,
-    order0.min,
-    order0.price,
-    order1.isRange,
-    order1.max,
-    order1.min,
-    order1.price,
     user,
-  ]);
-
-  const {
-    base: baseAddress,
-    quote: quoteAddress,
-    strategySettings,
-    strategyDirection,
+    approval.isLoading,
+    approval.isError,
+    mutation.isLoading,
+    isProcessing,
+    order0,
+    order1,
+    isOverlapping,
     strategyType,
-  } = search;
-  const { getTokenById } = useTokens();
+    strategyDirection,
+    spread,
+  ]);
 
   useEffect(() => {
     setSelectedStrategySettings(undefined);
@@ -357,5 +380,8 @@ export const useCreateStrategy = () => {
     setSelectedStrategySettings,
     isProcessing,
     isOrdersOverlap,
+    spread,
+    setSpread,
+    isOverlapping,
   };
 };

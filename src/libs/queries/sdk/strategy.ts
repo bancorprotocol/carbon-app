@@ -224,6 +224,7 @@ interface CreateStrategyOrder {
   min: string;
   max: string;
   price: string;
+  marginalPrice: string;
 }
 
 type TokenAddressDecimals = Pick<Token, 'address' | 'decimals'>;
@@ -258,9 +259,11 @@ export const useCreateStrategyQuery = () => {
 
       const order0Low = noPrice0 ? order0.min : order0.price;
       const order0Max = noPrice0 ? order0.max : order0.price;
+      const order0MarginalPrice = order0.marginalPrice || order0Max;
 
       const order1Low = noPrice1 ? order1.min : order1.price;
       const order1Max = noPrice1 ? order1.max : order1.price;
+      const order1MarginalPrice = order1.marginalPrice || order1Low;
 
       const order0Budget = Number(order0.budget) === 0 ? '0' : order0.budget;
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
@@ -269,9 +272,11 @@ export const useCreateStrategyQuery = () => {
         base.address,
         quote.address,
         order0Low,
+        order0MarginalPrice,
         order0Max,
         order0Budget,
         order1Low,
+        order1MarginalPrice,
         order1Max,
         order1Budget
       );
@@ -298,8 +303,8 @@ export const useUpdateStrategyQuery = () => {
         {
           ...fieldsToUpdate,
         },
-        buyMarginalPrice ? buyMarginalPrice : MarginalPriceOptions.reset,
-        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset
+        buyMarginalPrice,
+        sellMarginalPrice
       );
 
       return signer!.sendTransaction(unsignedTx);

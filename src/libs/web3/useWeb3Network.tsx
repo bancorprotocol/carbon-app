@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useStore } from 'store';
 import useAsyncEffect from 'use-async-effect';
 import { getConnectionTypeFromLS } from './web3.constants';
+import { carbonEvents } from 'services/events';
 
 export const useWeb3Network = () => {
   const { isCountryBlocked, setSelectedWallet } = useStore();
@@ -66,6 +67,10 @@ export const useWeb3Network = () => {
         if (success) {
           setSelectedWallet(storedConnection);
         }
+      }
+
+      if (!isNativeAppBrowser && storedConnection === undefined) {
+        carbonEvents.wallet.walletDisconnected(undefined);
       }
     }
   }, [isCountryBlocked]);

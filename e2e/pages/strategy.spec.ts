@@ -1,15 +1,80 @@
-import { test, expect } from '@playwright/test';
-import { navigateTo, screenshot, waitFor } from '../utils/operators';
+import { test } from '@playwright/test';
+import * as recurring from '../tests/strategy/recurring/';
+import * as disposable from '../tests/strategy/disposable/';
+import * as overlapping from '../tests/strategy/overlapping/';
+
+import { StrategyType } from './../utils/strategy/template';
+import { navigateTo, screenshot } from '../utils/operators';
 import { mockApi } from '../utils/mock-api';
-import { setupImposter } from '../utils/DebugDriver';
-import { CreateStrategyDriver, MyStrategyDriver } from '../utils/strategy';
-import { NotificationDriver } from '../utils/NotificationDriver';
-import { checkApproval } from '../utils/modal';
+import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
+import {
+  MyStrategyDriver,
+  OverlappingStrategyTestCase,
+  RecurringStrategyTestCase,
+} from '../utils/strategy';
+
+type TestCase = (RecurringStrategyTestCase | OverlappingStrategyTestCase) & {
+  type: StrategyType;
+};
+
+const testCases: TestCase[] = [
+  {
+    type: 'recurring',
+    setting: 'limit_limit',
+    base: 'ETH',
+    quote: 'DAI',
+    buy: {
+      min: '1500',
+      max: '1500',
+      budget: '10',
+      budgetFiat: '10',
+    },
+    sell: {
+      min: '1700',
+      max: '1700',
+      budget: '2',
+      budgetFiat: '3334',
+    },
+  },
+  {
+    type: 'overlapping',
+    base: 'BNT',
+    quote: 'USDC',
+    buy: {
+      min: '0.3',
+      max: '0.545454',
+      budget: '12.501572',
+      budgetFiat: '12.5',
+    },
+    sell: {
+      min: '0.33',
+      max: '0.6',
+      budget: '30',
+      budgetFiat: '12.61',
+    },
+    spread: '10', // Need a large spread for tooltip test
+  },
+];
+
+const testDescription = (testCase: TestCase) => {
+  if (testCase.type === 'overlapping') return 'Overlapping';
+  if (testCase.type === 'disposable') return `Disposable ${testCase.setting}`;
+  return `Recurring ${testCase.setting.split('_').join(' ')}`;
+};
 
 test.describe('Strategies', () => {
-  test.beforeEach(async ({ page }) => {
-    await Promise.all([mockApi(page), setupImposter(page)]);
+  test.beforeEach(async ({ page }, testInfo) => {
+    testInfo.setTimeout(180_000);
+    await setupFork(testInfo);
+    const debug = new DebugDriver(page);
+    await debug.visit();
+    await debug.setRpcUrl(testInfo);
+    await Promise.all([mockApi(page), debug.setupImposter(), debug.setE2E()]);
   });
+  test.afterEach(async ({}, testInfo) => {
+    await removeFork(testInfo);
+  });
+
   test('First Strategy Page', async ({ page }) => {
     await navigateTo(page, '/');
     const driver = new MyStrategyDriver(page);
@@ -17,65 +82,18 @@ test.describe('Strategies', () => {
     await screenshot(page, 'first-strategy');
   });
 
-  const configs = [
-    {
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        price: '1500',
-        budget: '10',
-      },
-      sell: {
-        price: '1700',
-        budget: '2',
-      },
-    },
-  ];
+  const testStrategies = {
+    recurring,
+    disposable,
+    overlapping,
+  };
 
-  for (const config of configs) {
-    const { base, quote } = config;
-    test(`Create Limit Strategy ${base}->${quote}`, async ({ page }) => {
-      test.setTimeout(180_000);
-      await waitFor(page, `balance-${quote}`, 30_000);
-
-      await navigateTo(page, '/');
-      const myStrategies = new MyStrategyDriver(page);
-      const createForm = new CreateStrategyDriver(page, config);
-      await myStrategies.createStrategy();
-      await createForm.selectBase();
-      await createForm.selectQuote();
-      const buy = await createForm.fillLimit('buy');
-      const sell = await createForm.fillLimit('sell');
-
-      // Assert 100% outcome
-      await expect(buy.outcomeValue()).toHaveText(`0.006666 ${base}`);
-      await expect(buy.outcomeQuote()).toHaveText(`1,500 ${quote}`);
-      await expect(sell.outcomeValue()).toHaveText(`3,400 ${quote}`);
-      await expect(sell.outcomeQuote()).toHaveText(`1,700 ${quote}`);
-
-      await createForm.submit();
-
-      await checkApproval(page, [base, quote]);
-
-      await page.waitForURL('/', { timeout: 10_000 });
-
-      // Verfiy notification
-      const notif = new NotificationDriver(page, 'create-strategy');
-      await expect(notif.getTitle()).toHaveText('Success');
-      await expect(notif.getDescription()).toHaveText(
-        'New strategy was successfully created.'
-      );
-
-      // Verify strategy data
-      const strategies = await myStrategies.getAllStrategies();
-      await expect(strategies).toHaveCount(1);
-      const strategy = await myStrategies.getStrategy(1);
-      await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
-      await expect(strategy.status()).toHaveText('Active');
-      await expect(strategy.totalBudget()).toHaveText('$3,344');
-      await expect(strategy.buyBudget()).toHaveText(`10 ${quote}`);
-      await expect(strategy.buyBudgetFiat()).toHaveText('$10.00');
-      await expect(strategy.sellBudgetFiat()).toHaveText('$3,334');
+  for (const testCase of testCases) {
+    test.describe(testDescription(testCase), () => {
+      const testSuite = testStrategies[testCase.type];
+      for (const [, testFn] of Object.entries(testSuite)) {
+        testFn(testCase);
+      }
     });
   }
 });

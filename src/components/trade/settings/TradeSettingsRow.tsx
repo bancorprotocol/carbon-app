@@ -6,7 +6,7 @@ import {
   TradeSettingsData,
   warningMessageIfOutOfRange,
 } from './utils';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeNumber } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
@@ -68,7 +68,7 @@ export const TradeSettingsRow: FC<{
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
     if (item.id === 'slippageTolerance') {
-      updateItemAndInternalState(sanitizeNumberInput(value));
+      updateItemAndInternalState(sanitizeNumber(value));
     } else {
       updateItemAndInternalState(value.replace(/\D/g, ''));
     }

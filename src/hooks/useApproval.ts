@@ -3,7 +3,7 @@ import {
   useGetUserApproval,
 } from 'libs/queries/chain/approval';
 import { useMemo } from 'react';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeNumber } from 'utils/helpers';
 import { NULL_APPROVAL_CONTRACTS } from 'utils/approval';
 
 export type ApprovalToken = GetUserApprovalProps & {
@@ -22,7 +22,7 @@ export const useApproval = (data: ApprovalToken[]) => {
 
   const result = useMemo(() => {
     return approvalQuery.map((q, i) => {
-      const amount = sanitizeNumberInput(data[i].amount, data[i].decimals);
+      const amount = sanitizeNumber(data[i].amount, data[i].decimals);
       const isNullApprovalToken = NULL_APPROVAL_CONTRACTS.includes(
         data[i].address.toLowerCase()
       );
