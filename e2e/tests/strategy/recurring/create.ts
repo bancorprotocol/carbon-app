@@ -31,7 +31,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     // Assert 100% outcome
     await expect(buyForm.outcomeValue()).toHaveText(`0.006666 ${base}`);
     await expect(buyForm.outcomeQuote()).toHaveText(tokenPrice(buy.min, quote));
-    await expect(sellForm.outcomeValue()).toHaveText(`3,400 ${quote}`);
+    await expect(sellForm.outcomeValue()).toHaveText(`3,400.00 ${quote}`);
     await expect(sellForm.outcomeQuote()).toHaveText(
       tokenPrice(sell.min, quote)
     );
