@@ -71,6 +71,7 @@ export const strategySort = {
   pairDesc: 'Pair (Z->A)',
   roiAsc: 'ROI (Ascending)',
   roiDesc: 'ROI (Descending)',
+  totalBudgetDesc: 'Total Budget',
 };
 export type StrategySort = keyof typeof strategySort;
 

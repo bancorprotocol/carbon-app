@@ -1,6 +1,6 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
-import { FC, useId } from 'react';
+import { FC, useEffect, useId } from 'react';
 import { StrategyType } from '../types';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { OrderCreate } from '../useOrder';
@@ -36,6 +36,14 @@ export const BudgetSection: FC<Props> = ({
 
   useStrategyEvents({ base, quote, order, buy, insufficientBalance });
 
+  useEffect(() => {
+    if (insufficientBalance) {
+      order.setBudgetError('Insufficient balance');
+    } else {
+      order.setBudgetError('');
+    }
+  }, [insufficientBalance, order]);
+
   return (
     <fieldset className="flex flex-col gap-8">
       <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
@@ -62,7 +70,7 @@ export const BudgetSection: FC<Props> = ({
                 }`
           }
         >
-          <span className={'text-white/80'}>
+          <span className="text-white/80">
             Set {buy ? 'Buy' : 'Sell'} Budget&nbsp;
           </span>
         </Tooltip>
@@ -72,7 +80,7 @@ export const BudgetSection: FC<Props> = ({
       </legend>
       <TokenInputField
         id={inputId}
-        className={'rounded-16 bg-black p-16'}
+        className="rounded-16 bg-black p-16"
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}
@@ -86,7 +94,7 @@ export const BudgetSection: FC<Props> = ({
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className={`flex items-center gap-10 font-mono text-12 text-red`}
+          className="flex items-center gap-10 font-mono text-12 text-red"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">Insufficient balance</span>

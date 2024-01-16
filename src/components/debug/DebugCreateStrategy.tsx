@@ -1,3 +1,4 @@
+import { ChangeEvent, FormEvent } from 'react';
 import { Button } from 'components/common/button';
 import {
   CreateStrategyParams,
@@ -9,13 +10,15 @@ import { FAUCET_TOKENS } from 'utils/tenderly';
 import { config } from 'services/web3/config';
 import { wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
-import { SafeDecimal } from 'libs/safedecimal';
 import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { carbonSDK } from 'libs/sdk';
+import { getMarketPrice } from 'hooks/useMarketPrice';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -33,7 +36,7 @@ export const DebugCreateStrategy = () => {
   const { openModal } = useModal();
   const queryClient = useQueryClient();
   const createMutation = useCreateStrategyQuery();
-  const [rounds, setRounds] = useState(10);
+  const [rounds, setRounds] = useState(1);
   const [index, setIndex] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [interval, setInterval] = useState(0);
@@ -42,14 +45,21 @@ export const DebugCreateStrategy = () => {
   );
   const [buyMin, setBuyMin] = useState('0');
   const [buyMax, setBuyMax] = useState('0');
+  const [buyBudget, setBuyBudget] = useState('0');
   const [sellMin, setSellMin] = useState('0');
   const [sellMax, setSellMax] = useState('0');
+  const [sellBudget, setSellBudget] = useState('0');
+  const [spread, setSpread] = useState('');
   const selectedTokens = useMemo(() => {
     return allTokens
       .filter((t) => t.selected && t.count > 0)
       .sort((t1, t2) => t1.count - t2.count);
   }, [allTokens]);
 
+  const baseSymbol = selectedTokens?.[0]?.symbol ?? '';
+  const quoteSymbol = selectedTokens?.[1]?.symbol ?? '';
+
+  const { selectedFiatCurrency } = useFiatCurrency();
   const balanceQueries = useGetTokenBalances(selectedTokens);
 
   const perRound = 1;
@@ -87,56 +97,58 @@ export const DebugCreateStrategy = () => {
 
   const total = useMemo(() => rounds * perRound, [perRound, rounds]);
 
-  const approval = useApproval(approvalTokens);
-
-  const handleClick = async () => {
-    if (approval.approvalRequired) {
-      openModal('txConfirm', { approvalTokens, onConfirm: create });
-    } else {
-      create();
-    }
+  const createStrategies = async (e: FormEvent) => {
+    e.preventDefault();
+    openModal('txConfirm', { approvalTokens, onConfirm: create });
   };
 
   const create = async () => {
-    if (!user) {
-      console.error('user is undefined');
-      return;
-    }
+    if (!user) throw new Error('user is undefined');
     setIsRunning(true);
-
-    for await (const _ of Array.from({ length: rounds })) {
-      const tkn0 = selectedTokens[0];
-      const tkn1 = selectedTokens[1];
-
-      const balance0 = balancesMap.get(tkn0.address) || '0';
-      const balance1 = balancesMap.get(tkn1.address) || '0';
-
-      let strategy: CreateStrategyParams = {
-        base: tkn0,
-        quote: tkn1,
-        order0: {
-          max: buyMax,
-          min: buyMin,
-          budget: new SafeDecimal(balance1).div(total + 1).toFixed(2),
-          price: buyMax === buyMin ? buyMax : '0',
-        },
-        order1: {
-          max: sellMax,
-          min: sellMin,
-          budget: new SafeDecimal(balance0).div(total + 1).toFixed(2),
-          price: sellMax === sellMin ? sellMax : '0',
-        },
-      };
+    const base = selectedTokens[0];
+    const quote = selectedTokens[1];
+    const strategy: CreateStrategyParams = {
+      base,
+      quote,
+      order0: {
+        max: buyMax,
+        min: buyMin,
+        marginalPrice: '',
+        budget: buyBudget,
+        price: buyMax === buyMin ? buyMax : '',
+      },
+      order1: {
+        max: sellMax,
+        min: sellMin,
+        marginalPrice: '',
+        budget: sellBudget,
+        price: sellMax === sellMin ? sellMax : '',
+      },
+    };
+    if (spread) {
+      const price = await getMarketPrice(base, quote, selectedFiatCurrency);
+      const params = await carbonSDK.calculateOverlappingStrategyPrices(
+        quote.address,
+        buyMin,
+        sellMax,
+        price.toString(),
+        spread
+      );
+      strategy.order0.max = params.buyPriceHigh;
+      strategy.order0.marginalPrice = params.buyPriceMarginal;
+      strategy.order1.min = params.sellPriceLow;
+      strategy.order1.marginalPrice = params.sellPriceMarginal;
+    }
+    for (let i = 0; i <= rounds - 1; i++) {
+      setIndex(i);
       try {
-        await createMutation.mutate(strategy, {
-          onError: (e) => console.error(e),
-        });
+        await createMutation.mutateAsync(strategy);
         await wait(interval * 1000);
         await queryClient.invalidateQueries({
-          queryKey: QueryKey.balance(user, tkn0.address),
+          queryKey: QueryKey.balance(user, base.address),
         });
         await queryClient.invalidateQueries({
-          queryKey: QueryKey.balance(user, tkn1.address),
+          queryKey: QueryKey.balance(user, quote.address),
         });
         console.log(
           'created strategy',
@@ -147,95 +159,173 @@ export const DebugCreateStrategy = () => {
         console.error(
           'create strategy failed for ',
           'base',
-          tkn0.address,
+          base.address,
           'quote',
-          tkn1.address,
+          quote.address,
           e
         );
-      } finally {
-        setIndex((i) => i + 1);
       }
     }
     setIsRunning(false);
   };
 
+  const onShortcutChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (!e.target.value) return;
+    const value = JSON.parse(e.target.value);
+    setSpread(value.spread || '');
+    const base = allTokens.find((t) => t.symbol === value.base)?.address;
+    const quote = allTokens.find((t) => t.symbol === value.quote)?.address;
+    if (base) selectToken(base);
+    if (quote) selectToken(quote);
+    setBuyMin(value.buy.min);
+    setBuyMax(value.buy.max);
+    setBuyBudget(value.buy.budget);
+    setSellMin(value.sell.min);
+    setSellMax(value.sell.max);
+    setSellBudget(value.sell.budget);
+    setRounds(value.amount ? Number(value.amount) : 1);
+  };
+
   return (
-    <div
-      className={
-        'bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20'
-      }
+    <form
+      onSubmit={createStrategies}
+      className="bg-secondary flex flex-col space-y-20 rounded-18 p-20"
     >
-      <h2>Create Strategy</h2>
-      <div className={'space-y-10'}>
-        Tokens:
-        {allTokens.map((t) => (
-          <div
-            key={t.address}
-            className={'flex items-center space-x-10 rounded-18 bg-black p-5'}
-          >
-            <Checkbox
-              isChecked={t.selected}
-              setIsChecked={() => selectToken(t.address)}
-            />
-            <div>{t.symbol}</div>
-          </div>
-        ))}
+      <h2 className="text-center">Create Strategy</h2>
+
+      <div className="flex flex-col gap-8">
+        <label htmlFor="strategy-json-shortcut">JSON Shortcut</label>
+        <textarea
+          id="strategy-json-shortcut"
+          className="rounded-18 bg-black px-16 py-8"
+          placeholder="Enter a Strategy template in JSON format"
+          onChange={onShortcutChange}
+          aria-describedby="strategy-json-shortcut-description"
+          data-testid="strategy-json-shortcut"
+        ></textarea>
+        <p
+          id="strategy-json-shortcut-description"
+          className="text-12 text-white/60"
+        >
+          Used by E2E to prefill the form
+        </p>
       </div>
-      <div className="flex w-full justify-between">
-        <div>{`Base: ${
-          selectedTokens?.[0]?.symbol
-            ? selectedTokens?.[0]?.symbol
-            : 'not selected'
-        }`}</div>
-        <div>{`Quote: ${
-          selectedTokens?.[1]?.symbol
-            ? selectedTokens?.[1]?.symbol
-            : 'not selected'
-        }`}</div>
-      </div>
-      <Label label={'Buy Min'}>
+
+      <fieldset className="flex flex-col gap-16 rounded border border-white/60 p-16">
+        <legend>Tokens</legend>
+        <ul className="flex flex-col gap-8">
+          {allTokens.map((t) => (
+            <li
+              key={t.address}
+              className="flex items-center gap-8 rounded-18 bg-black px-16 py-8"
+            >
+              <Checkbox
+                isChecked={t.selected}
+                setIsChecked={() => selectToken(t.address)}
+                data-testid={`token-${t.symbol}`}
+              />
+              <span>{t.symbol}</span>
+            </li>
+          ))}
+        </ul>
+        <footer className="flex justify-between">
+          <p>{`Base: ${baseSymbol || 'not selected'}`}</p>
+          <p>{`Quote: ${quoteSymbol || 'not selected'}`}</p>
+        </footer>
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
+        <legend>Overlapping Spread</legend>
+        <Label label="Spread">
+          <Input
+            type="text"
+            value={spread}
+            fullWidth
+            onChange={(e) => setSpread(e.target.value)}
+            aria-describedby="strategy-spread-description"
+            data-testid="spread"
+          />
+        </Label>
+        <p id="strategy-spread-description" className="text-12 text-white/60">
+          Spread will create an overlapping strategy. You still need to set the
+          correct budget.
+        </p>
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
+        <legend>Buy Low {baseSymbol}</legend>
+        <Label label="Min">
+          <Input
+            type="text"
+            value={buyMin}
+            fullWidth
+            onChange={(e) => setBuyMin(e.target.value)}
+            data-testid="buyMin"
+          />
+        </Label>
+        <Label label={`Max ${spread ? '(Disabled)' : ''}`}>
+          <Input
+            type="text"
+            value={buyMax}
+            fullWidth
+            disabled={!!spread}
+            onChange={(e) => setBuyMax(e.target.value)}
+            data-testid="buyMax"
+          />
+        </Label>
+        <Label label={`Budget ${quoteSymbol}`}>
+          <Input
+            type="text"
+            value={buyBudget}
+            fullWidth
+            onChange={(e) => setBuyBudget(e.target.value)}
+            data-testid="buyBudget"
+          />
+        </Label>
+      </fieldset>
+      <fieldset className="flex flex-col gap-8 rounded border border-white/60 p-16">
+        <legend>Sell High {baseSymbol}</legend>
+        <Label label={`Min ${spread ? '(Disabled)' : ''}`}>
+          <Input
+            type="text"
+            value={sellMin}
+            fullWidth
+            disabled={!!spread}
+            onChange={(e) => setSellMin(e.target.value)}
+            data-testid="sellMin"
+          />
+        </Label>
+        <Label label="Max">
+          <Input
+            type="text"
+            value={sellMax}
+            fullWidth
+            onChange={(e) => setSellMax(e.target.value)}
+            data-testid="sellMax"
+          />
+        </Label>
+        <Label label={`Budget ${baseSymbol}`}>
+          <Input
+            type="text"
+            value={sellBudget}
+            fullWidth
+            onChange={(e) => setSellBudget(e.target.value)}
+            data-testid="sellBudget"
+          />
+        </Label>
+      </fieldset>
+      <Label label="How many strategies?">
         <Input
-          type={'text'}
-          value={buyMin}
-          fullWidth
-          onChange={(e) => setBuyMin(e.target.value)}
-        />
-      </Label>
-      <Label label={'Buy Max'}>
-        <Input
-          type={'text'}
-          value={buyMax}
-          fullWidth
-          onChange={(e) => setBuyMax(e.target.value)}
-        />
-      </Label>
-      <Label label={'Sell Min'}>
-        <Input
-          type={'text'}
-          value={sellMin}
-          fullWidth
-          onChange={(e) => setSellMin(e.target.value)}
-        />
-      </Label>
-      <Label label={'Sell Max'}>
-        <Input
-          type={'text'}
-          value={sellMax}
-          fullWidth
-          onChange={(e) => setSellMax(e.target.value)}
-        />
-      </Label>
-      <Label label={'How many strategies?'}>
-        <Input
-          type={'number'}
+          type="number"
           value={rounds}
           fullWidth
           onChange={(e) => setRounds(Number(e.target.value))}
+          data-testid="strategy-amount"
         />
       </Label>
-      <Label label={'Pause in seconds between creation'}>
+      <Label label="Pause in seconds between creation">
         <Input
-          type={'number'}
+          type="number"
           value={interval}
           fullWidth
           onChange={(e) => setInterval(Number(e.target.value))}
@@ -243,12 +333,14 @@ export const DebugCreateStrategy = () => {
       </Label>
       <div>Strategies total: {total}</div>
       {isRunning ? (
-        <div>
+        <output data-testid="creating-strategies">
           Strategies created: {index} / {total}
-        </div>
+        </output>
       ) : (
-        <Button onClick={handleClick}>START</Button>
+        <Button type="submit" data-testid="create-strategies">
+          START
+        </Button>
       )}
-    </div>
+    </form>
   );
 };

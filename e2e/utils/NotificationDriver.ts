@@ -11,7 +11,9 @@ type NotificationType =
   | 'withdraw-strategy'
   | 'delete-strategy'
   | 'change-rates-strategy'
-  | 'trade';
+  | 'trade'
+  | 'pause-strategy'
+  | 'deposit-strategy';
 
 export class NotificationDriver {
   private notif = this.page.getByTestId(`notification-${this.type}`);
@@ -22,5 +24,12 @@ export class NotificationDriver {
   }
   getDescription() {
     return this.notif.getByTestId('notif-description');
+  }
+  async close() {
+    const isVisible = await this.notif.isVisible();
+    if (isVisible) {
+      this.notif.getByTestId('notif-close').click();
+      return this.notif.waitFor({ state: 'detached' });
+    }
   }
 }

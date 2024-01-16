@@ -1,5 +1,5 @@
 import { SafeDecimal } from 'libs/safedecimal';
-import { Strategy } from 'libs/queries';
+import { StrategyWithFiat } from 'libs/queries';
 import {
   StrategyFilter,
   StrategySort,
@@ -8,13 +8,14 @@ import {
 } from './StrategyFilterSort';
 
 /** There are multiple inactive status, so we cannot just do a.status !== b.status */
-const differentStatus = (a: Strategy, b: Strategy) => {
+const differentStatus = (a: StrategyWithFiat, b: StrategyWithFiat) => {
   if (a.status === 'active' && b.status !== 'active') return true;
   if (b.status === 'active' && a.status !== 'active') return true;
   return false;
 };
 
-const sortFn: Record<StrategySort, (a: Strategy, b: Strategy) => number> = {
+type SortFn = (a: StrategyWithFiat, b: StrategyWithFiat) => number;
+const sortFn: Record<StrategySort, SortFn> = {
   recent: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return new SafeDecimal(a.idDisplay).minus(b.idDisplay).times(-1).toNumber();
@@ -44,6 +45,10 @@ const sortFn: Record<StrategySort, (a: Strategy, b: Strategy) => number> = {
   roiDesc: (a, b) => {
     if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
     return a.roi.minus(b.roi).times(-1).toNumber();
+  },
+  totalBudgetDesc: (a, b) => {
+    if (differentStatus(a, b)) return a.status === 'active' ? -1 : 1;
+    return a.fiatBudget.total.minus(b.fiatBudget.total).times(-1).toNumber();
   },
 };
 
