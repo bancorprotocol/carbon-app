@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import { FC, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -12,7 +13,6 @@ import {
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { useNavigate } from 'libs/routing';
 import { BuySellHeader } from './Header';
 import { m } from 'libs/motion';
 import { items } from '../variants';
@@ -71,6 +71,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const changeStrategy = (direction: StrategyDirection) => {
     navigate({
+      from: '/strategies/create',
       search: (search) => ({
         ...search,
         strategyDirection: direction,

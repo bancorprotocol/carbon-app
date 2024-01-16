@@ -1,5 +1,5 @@
 import { Page } from 'components/common/page';
-import { Outlet, PathNames, Navigate } from 'libs/routing';
+import { Outlet, Navigate } from 'libs/routing';
 import {
   ExplorerSearch,
   useExplorer,
@@ -14,7 +14,7 @@ export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const query = useExplorer();
   if (type !== 'wallet' && type !== 'token-pair') {
-    return <Navigate to={PathNames.explorer('wallet')} />;
+    return <Navigate to={'/explorer/$type'} params={{ type: 'token-pair' }} />;
   }
 
   return (

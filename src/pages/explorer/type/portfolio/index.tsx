@@ -12,7 +12,12 @@ export const ExplorerTypePortfolioPage = () => {
 
   const onRowClick = (row: Row<PortfolioData>) =>
     navigate({
-      to: `/explorer/${type}/${slug}/portfolio/token/${row.original.token.address}`,
+      to: '/explorer/$type/$slug/portfolio/token/$address',
+      params: {
+        type,
+        slug,
+        address: row.original.token.address,
+      },
     });
 
   const getHref = (row: PortfolioData) =>

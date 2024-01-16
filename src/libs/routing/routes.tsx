@@ -1,14 +1,12 @@
 import { ExplorerPage } from 'pages/explorer';
 import { StrategiesPage } from 'pages/strategies';
-import { TradePage } from 'pages/trade';
 import { CreateStrategyPage } from 'pages/strategies/create';
 import { DebugPage } from 'pages/debug';
 import { TermsPage } from 'pages/terms';
 import { EditStrategyPage } from 'pages/strategies/edit';
 import { PrivacyPage } from 'pages/privacy';
 import { App } from 'App';
-import { Navigate, RootRoute, Route } from '@tanstack/react-router';
-import { PathNames } from './pathnames';
+import { redirect, RootRoute, Route } from '@tanstack/react-router';
 import { ExplorerTypePage } from 'pages/explorer/type';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
@@ -56,17 +54,17 @@ const debugPage = new Route({
   component: DebugPage,
 });
 
-const tradePage = new Route({
-  getParentRoute: () => appRoute,
-  path: '/trade',
-  component: TradePage,
-});
+// const tradePage = new Route({
+//   getParentRoute: () => appRoute,
+//   path: '/trade',
+//   component: TradePage,
+// });
 
 const createStrategyPage = new Route({
   getParentRoute: () => appRoute,
   path: '/strategies/create',
   component: CreateStrategyPage,
-  validateSearch: (search) => {
+  validateSearch: (search: Record<string, unknown>) => {
     if (
       search.strategyType === 'recurring' ||
       search.strategyType === 'disposable' ||
@@ -80,7 +78,7 @@ const createStrategyPage = new Route({
 
 const editStrategyPage = new Route({
   getParentRoute: () => appRoute,
-  path: PathNames.editStrategy,
+  path: '/strategies/edit/$strategyId',
   component: EditStrategyPage,
 });
 
@@ -112,12 +110,6 @@ export const strategyPortflioPage = new Route({
   path: '/',
   component: StrategiesPortfolioPage,
 });
-strategyPortflioLayout.addChildren([
-  strategyPortflioPage,
-  strategyPortflioTokenPage,
-]);
-
-myStrategyLayout.addChildren([strategyOverviewPage, strategyPortflioLayout]);
 
 // EXPLORER
 const explorerLayout = new Route({
@@ -128,9 +120,9 @@ const explorerLayout = new Route({
 const explorerRedirect = new Route({
   getParentRoute: () => explorerLayout,
   path: '/',
-  component: () => (
-    <Navigate to="/explorer/$type" params={{ type: 'token-pair' }} />
-  ),
+  loader: () => {
+    redirect({ to: '/explorer/$type', params: { type: 'token-pair' } });
+  },
 });
 
 const explorerPage = new Route({
@@ -139,7 +131,7 @@ const explorerPage = new Route({
   component: ExplorerPage,
 });
 
-const explorerResultLayout = new Route({
+export const explorerResultLayout = new Route({
   getParentRoute: () => explorerPage,
   path: '$slug',
 });
@@ -173,25 +165,31 @@ const explorerPortfolioTokenPage = new Route({
   component: ExplorerTypePortfolioTokenPage,
 });
 
-explorerPortfolioLayout.addChildren([
-  explorerPortfolioPage,
-  explorerPortfolioTokenPage,
-]);
-
-explorerLayout.addChildren([explorerRedirect, explorerPage]);
-explorerPage.addChildren([explorerTypePage, explorerResultLayout]);
-explorerResultLayout.addChildren([
-  explorerOverviewPage,
-  explorerPortfolioLayout,
-]);
-
 export const routeTree = appRoute.addChildren([
   termPage,
   privacyPage,
   debugPage,
-  tradePage,
+  // tradePage,
   createStrategyPage,
   editStrategyPage,
-  explorerLayout,
-  myStrategyLayout,
+  explorerLayout.addChildren([
+    explorerRedirect,
+    explorerPage.addChildren([
+      explorerTypePage,
+      explorerResultLayout.addChildren([
+        explorerOverviewPage,
+        explorerPortfolioLayout.addChildren([
+          explorerPortfolioPage,
+          explorerPortfolioTokenPage,
+        ]),
+      ]),
+    ]),
+  ]),
+  myStrategyLayout.addChildren([
+    strategyOverviewPage,
+    strategyPortflioLayout.addChildren([
+      strategyPortflioPage,
+      strategyPortflioTokenPage,
+    ]),
+  ]),
 ]);

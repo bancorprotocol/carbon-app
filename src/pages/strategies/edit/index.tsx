@@ -1,5 +1,5 @@
 import { EditStrategyMain } from 'components/strategies/edit';
-import { PathNames, useNavigate, useParams } from 'libs/routing';
+import { useNavigate, useParams } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
 import { useEffect, useState } from 'react';
 import { StrategiesPage } from '..';
@@ -15,11 +15,11 @@ export const EditStrategyPage = () => {
   useEffect(() => {
     if (isLoading) return;
     if (!user || !strategyId) {
-      navigate({ to: PathNames.strategies });
+      navigate({ to: '/' });
     } else {
       const strategy = strategies?.find(({ id }) => id === strategyId);
       if (strategy) setStrategy(strategy);
-      else navigate({ to: PathNames.strategies });
+      else navigate({ to: '/' });
     }
   }, [user, strategyId, strategies, isLoading, navigate]);
 

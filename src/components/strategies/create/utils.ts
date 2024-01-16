@@ -90,7 +90,7 @@ export const createStrategyAction = async ({
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, quote.address),
         });
-        navigate({ to: PathNames.strategies });
+        navigate({ to: '/', params: {} });
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e: any) => {
