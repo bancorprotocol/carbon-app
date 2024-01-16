@@ -11,13 +11,12 @@ export default defineConfig({
   testMatch: '**/*.spec.ts', // Realtive to testDir
   outputDir: './e2e/results',
   globalSetup: './e2e/setup.ts',
-  globalTeardown: './e2e/teardown.ts',
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!isCI,
   retries: isCI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: isCI ? 1 : undefined,
+  workers: undefined,
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
 

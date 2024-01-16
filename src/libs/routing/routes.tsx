@@ -70,7 +70,7 @@ const createStrategyPage = new Route({
     if (
       search.strategyType === 'recurring' ||
       search.strategyType === 'disposable' ||
-      search.encodedStrategy
+      search.strategy
     ) {
       return search;
     }
@@ -128,7 +128,9 @@ const explorerLayout = new Route({
 const explorerRedirect = new Route({
   getParentRoute: () => explorerLayout,
   path: '/',
-  component: () => <Navigate to="/explorer/wallet" />,
+  component: () => (
+    <Navigate to="/explorer/$type" params={{ type: 'token-pair' }} />
+  ),
 });
 
 const explorerPage = new Route({

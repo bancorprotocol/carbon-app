@@ -1,8 +1,8 @@
-import { ChangeEvent, FC, useId } from 'react';
+import { ChangeEvent, FC, FocusEvent, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
@@ -32,7 +32,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   const inputId = useId();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = sanitizeNumberInput(e.target.value);
+    const value = sanitizeNumber(e.target.value);
     if (Number(value) > 0) {
       setPriceError('');
     } else {
@@ -44,6 +44,10 @@ export const InputLimit: FC<InputLimitProps> = ({
       setPriceError(errorMessage);
     }
     setPrice(value);
+  };
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setPrice(formatted);
   };
 
   const { getFiatAsString } = useFiatCurrency(token);
@@ -67,13 +71,14 @@ export const InputLimit: FC<InputLimitProps> = ({
           value={price}
           onChange={handleChange}
           onFocus={(e) => e.target.select()}
+          onBlur={handleBlur}
           aria-label="Enter Price"
           placeholder="Enter Price"
           className={`
             mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
             ${error ? 'text-red' : ''}
           `}
-          data-testid="input-limit"
+          data-testid={`input-limit-${buy ? 'buy' : 'sell'}`}
         />
         <p className="flex flex-wrap items-center gap-8">
           <span className="break-all font-mono text-12 text-white/60">

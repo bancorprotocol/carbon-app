@@ -6,6 +6,7 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -40,11 +41,6 @@ import {
   useOrderBookSettingsStore,
 } from 'store/useOrderBookSettingsStore';
 import {
-  defaultStrategyToEdit,
-  StrategyToEditStore,
-  useStrategyToEdit,
-} from 'store/useStrategyToEdit';
-import {
   defaultToastStore,
   ToastStore,
   useToastStore,
@@ -73,7 +69,7 @@ interface StoreContext {
   setInnerHeight: (value: number) => void;
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
-  strategies: StrategyToEditStore;
+  isManualConnection: React.MutableRefObject<boolean>;
   toaster: ToastStore;
   debug: DebugStore;
 }
@@ -96,7 +92,7 @@ const defaultValue: StoreContext = {
   setInnerHeight: () => {},
   selectedWallet: null,
   setSelectedWallet: () => {},
-  strategies: defaultStrategyToEdit,
+  isManualConnection: { current: false },
   toaster: defaultToastStore,
   debug: defaultDebugStore,
 };
@@ -117,6 +113,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedWallet, setSelectedWallet] = useState<ConnectionType | null>(
     null
   );
+  const isManualConnection = useRef(false);
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -124,13 +121,13 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const modals = useModalStore();
   const tokens = useTokensStore();
   const fiatCurrency = useFiatCurrencyStore();
-  const strategies = useStrategyToEdit();
   const toaster = useToastStore();
   const debug = useDebugStore();
 
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
+    isManualConnection,
     sdk,
     tokens,
     notifications,
@@ -146,7 +143,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setInnerHeight,
     selectedWallet,
     setSelectedWallet,
-    strategies,
     toaster,
     debug,
   };

@@ -1,7 +1,7 @@
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { StrategyEventType } from 'services/events/types';
-import { sanitizeNumberInput } from 'utils/helpers';
+import { sanitizeNumber } from 'utils/helpers';
 import { OrderCreate } from './useOrder';
 import { useSearch } from 'libs/routing';
 import { StrategyCreateSearch } from './types';
@@ -29,15 +29,15 @@ export const useStrategyEventData = ({
     quoteToken: quote,
     buyBudget: order0.budget,
     buyBudgetUsd: lowBudgetUsd,
-    buyTokenPrice: sanitizeNumberInput(order0.price, 18),
-    buyTokenPriceMin: sanitizeNumberInput(order0.min, 18),
-    buyTokenPriceMax: sanitizeNumberInput(order0.max, 18),
+    buyTokenPrice: sanitizeNumber(order0.price, 18),
+    buyTokenPriceMin: sanitizeNumber(order0.min, 18),
+    buyTokenPriceMax: sanitizeNumber(order0.max, 18),
     sellOrderType: order1?.isRange ? 'range' : 'limit',
     sellBudget: order1.budget,
     sellBudgetUsd: highBudgetUsd,
-    sellTokenPrice: sanitizeNumberInput(order1.price, 18),
-    sellTokenPriceMin: sanitizeNumberInput(order1.min, 18),
-    sellTokenPriceMax: sanitizeNumberInput(order1.max, 18),
+    sellTokenPrice: sanitizeNumber(order1.price, 18),
+    sellTokenPriceMin: sanitizeNumber(order1.min, 18),
+    sellTokenPriceMax: sanitizeNumber(order1.max, 18),
     strategyDirection: search?.strategyDirection,
     strategySettings: search?.strategySettings,
     strategyType: search?.strategyType,
