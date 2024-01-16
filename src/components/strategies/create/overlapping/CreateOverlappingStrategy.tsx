@@ -131,10 +131,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     if (!quote || !base || marketPrice <= 0) return;
     if (!order0.min && !order1.max) {
       const { min, max } = getInitialPrice(new SafeDecimal(marketPrice), quote);
-      // const _marketPrice = new SafeDecimal(marketPrice);
-      // const min = _marketPrice.times(0.999).toFixed(quote.decimals);
-      // const max = _marketPrice.times(1.001).toFixed(quote.decimals);
-      console.log({ min, max });
       if (isValidRange(min, max)) setOverlappingParams(min, max);
     } else {
       const min = order0.min;
