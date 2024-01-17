@@ -1,15 +1,45 @@
-import { ModalFC } from 'libs/modals/modals.types';
-import { useModal } from 'hooks/useModal';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
-import { Strategy } from 'libs/queries';
 import { ReactComponent as IconCut } from 'assets/icons/cut.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { Button } from 'components/common/button';
-import Decimal from 'decimal.js';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { useModal } from 'hooks/useModal';
+import { ModalFC } from 'libs/modals/modals.types';
+import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Strategy } from 'libs/queries';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export type ModalDuplicateStrategyData = {
   strategy: Strategy;
+};
+
+export const getUndercutStrategy = (
+  strategy: Strategy,
+  undercutDifference: number
+): Strategy => {
+  const multiplyRate = (rate: string, factor: number) =>
+    new SafeDecimal(rate).times(factor).toString();
+
+  const undercuttedStrategy = {
+    ...strategy,
+    order0: {
+      ...strategy.order0,
+      startRate: multiplyRate(
+        strategy.order0.startRate,
+        1 + undercutDifference
+      ),
+      endRate: multiplyRate(strategy.order0.endRate, 1 + undercutDifference),
+    },
+    order1: {
+      ...strategy.order1,
+      startRate: multiplyRate(
+        strategy.order1.startRate,
+        1 - undercutDifference
+      ),
+      endRate: multiplyRate(strategy.order1.endRate, 1 - undercutDifference),
+    },
+  };
+
+  return undercuttedStrategy;
 };
 
 export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
@@ -21,23 +51,10 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   const undercutDifference = 0.001;
 
   const undercutStrategy = () => {
-    const undercuttedStrategy = structuredClone(strategy);
-    undercuttedStrategy.order0.startRate = new Decimal(
-      strategy.order0.startRate
-    )
-      .times(1 + undercutDifference)
-      .toString();
-    undercuttedStrategy.order0.endRate = new Decimal(strategy.order0.endRate)
-      .times(1 + undercutDifference)
-      .toString();
-    undercuttedStrategy.order1.startRate = new Decimal(
-      strategy.order1.startRate
-    )
-      .times(1 - undercutDifference)
-      .toString();
-    undercuttedStrategy.order1.endRate = new Decimal(strategy.order1.endRate)
-      .times(1 - undercutDifference)
-      .toString();
+    const undercuttedStrategy = getUndercutStrategy(
+      strategy,
+      undercutDifference
+    );
 
     duplicate(undercuttedStrategy);
     closeModal(id);
