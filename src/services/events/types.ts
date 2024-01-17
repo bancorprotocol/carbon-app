@@ -1,9 +1,9 @@
+import { ApprovalToken } from 'hooks/useApproval';
 import {
   StrategyDirection,
   StrategySettings,
   StrategyType,
-} from 'components/strategies/create/types';
-import { ApprovalToken } from 'hooks/useApproval';
+} from 'libs/routing/routes/strategyCreateEdit';
 import { Token } from 'libs/tokens';
 
 export interface TradeEventBase {

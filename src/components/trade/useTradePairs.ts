@@ -6,14 +6,13 @@ import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';
 import { toPairKey } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
-import { MyLocationSearch } from './useTradeTokens';
 
 export const useTradePairs = () => {
   const { user } = useWeb3();
   const { openModal } = useModal();
 
   const navigate = useNavigate();
-  const search: MyLocationSearch = useSearch({ strict: false });
+  const search = useSearch({ from: '/trade' });
 
   const pairs = usePairs();
 

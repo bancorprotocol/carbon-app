@@ -1,4 +1,3 @@
-import { EditStratgySearch } from 'libs/routing/routes/strategyCreateEdit';
 import { FC, useState } from 'react';
 import { m } from 'libs/motion';
 import { EditStrategyHeader } from './EditStrategyHeader';
@@ -15,7 +14,7 @@ interface Props {
 
 export const EditStrategyMain: FC<Props> = ({ strategy, isLoading }) => {
   const [showGraph, setShowGraph] = useState(true);
-  const { type }: EditStratgySearch = useSearch({ strict: false });
+  const { type } = useSearch({ from: '/strategies/edit/$strategyId' });
 
   return (
     <m.div
