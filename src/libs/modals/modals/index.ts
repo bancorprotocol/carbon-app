@@ -43,7 +43,7 @@ import {
 import {
   ModalDuplicateStrategy,
   ModalDuplicateStrategyData,
-} from './ModalDuplicateStrategy';
+} from './ModalDuplicateStrategy/ModalDuplicateStrategy';
 import {
   ModalConfirmWithdraw,
   ModalConfirmWithdrawData,

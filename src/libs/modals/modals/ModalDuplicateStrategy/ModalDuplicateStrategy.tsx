@@ -6,40 +6,10 @@ import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { Strategy } from 'libs/queries';
-import { SafeDecimal } from 'libs/safedecimal';
+import { getUndercutStrategy } from './utils';
 
 export type ModalDuplicateStrategyData = {
   strategy: Strategy;
-};
-
-export const getUndercutStrategy = (
-  strategy: Strategy,
-  undercutDifference: number
-): Strategy => {
-  const multiplyRate = (rate: string, factor: number) =>
-    new SafeDecimal(rate).times(factor).toString();
-
-  const undercuttedStrategy = {
-    ...strategy,
-    order0: {
-      ...strategy.order0,
-      startRate: multiplyRate(
-        strategy.order0.startRate,
-        1 + undercutDifference
-      ),
-      endRate: multiplyRate(strategy.order0.endRate, 1 + undercutDifference),
-    },
-    order1: {
-      ...strategy.order1,
-      startRate: multiplyRate(
-        strategy.order1.startRate,
-        1 - undercutDifference
-      ),
-      endRate: multiplyRate(strategy.order1.endRate, 1 - undercutDifference),
-    },
-  };
-
-  return undercuttedStrategy;
 };
 
 export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
@@ -51,12 +21,9 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   const undercutDifference = 0.001;
 
   const undercutStrategy = () => {
-    const undercuttedStrategy = getUndercutStrategy(
-      strategy,
-      undercutDifference
-    );
+    const undercutStrategy = getUndercutStrategy(strategy, undercutDifference);
 
-    duplicate(undercuttedStrategy);
+    duplicate(undercutStrategy);
     closeModal(id);
   };
 
