@@ -42,6 +42,21 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$3,334.42',
         },
       },
+      undercut: {
+        totalFiat: '$3,344.42',
+        buy: {
+          min: '1,501.50 DAI',
+          max: '1,501.50 DAI',
+          budget: '10.00 DAI',
+          fiat: '$10.00',
+        },
+        sell: {
+          min: '1,698.30 DAI',
+          max: '1,698.30 DAI',
+          budget: '2.00 ETH',
+          fiat: '$3,334.42',
+        },
+      },
     },
   },
   {

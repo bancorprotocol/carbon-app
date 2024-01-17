@@ -34,6 +34,21 @@ export interface RecurringStrategyOutput {
       fiat: string;
     };
   };
+  undercut: {
+    totalFiat: string;
+    buy: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
+    sell: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
+  };
 }
 export type RecurringStrategyTestCase = TestCase<
   RecurringStrategyInput,

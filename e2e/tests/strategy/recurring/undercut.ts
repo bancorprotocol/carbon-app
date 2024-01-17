@@ -1,21 +1,20 @@
 import { expect, test } from '@playwright/test';
-import { MyStrategyDriver } from './../../../utils/strategy';
-import { fiatPrice, tokenPrice } from './../../../utils/operators';
-import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import {
+  CreateStrategyTestCase,
+  MyStrategyDriver,
+  assertRecurringTestCase,
+} from './../../../utils/strategy';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { waitModalOpen } from '../../../utils/modal';
-import { SafeDecimal } from '../../../../src/libs/safedecimal';
 
-export const undercutStrategyTest = (testCase: CreateStrategyTemplate) => {
+export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
+  assertRecurringTestCase(testCase);
+  const { base, quote } = testCase.input;
+  const output = testCase.output.undercut;
   return test('Undercut', async ({ page }) => {
-    const { base, quote, buy, sell } = testCase;
-    const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
-    const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
-    const undercutRate = 0.001;
-
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const strategy = await manage.createStrategy(testCase.input);
     await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
 
     const modal = await waitModalOpen(page);
@@ -39,41 +38,22 @@ export const undercutStrategyTest = (testCase: CreateStrategyTemplate) => {
     await expect(strategies).toHaveCount(2);
 
     const strategyUndercut = await myStrategies.getStrategy(2);
-
     await expect(strategyUndercut.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategyUndercut.status()).toHaveText('Active');
-    await expect(strategyUndercut.totalBudget()).toHaveText(
-      fiatPrice(buyBudgetFiat + sellBudgetFiat)
-    );
-    await expect(strategyUndercut.buyBudget()).toHaveText(
-      tokenPrice(buy.budget, quote)
-    );
-    await expect(strategyUndercut.buyBudgetFiat()).toHaveText(
-      fiatPrice(buyBudgetFiat)
-    );
-    await expect(strategyUndercut.sellBudget()).toHaveText(
-      tokenPrice(sell.budget, base)
-    );
+    await expect(strategyUndercut.totalBudget()).toHaveText(output.totalFiat);
+    await expect(strategyUndercut.buyBudget()).toHaveText(output.buy.budget);
+    await expect(strategyUndercut.buyBudgetFiat()).toHaveText(output.buy.fiat);
+    await expect(strategyUndercut.sellBudget()).toHaveText(output.sell.budget);
     await expect(strategyUndercut.sellBudgetFiat()).toHaveText(
-      fiatPrice(sellBudgetFiat)
+      output.sell.fiat
     );
 
     const buyTooltip = await strategyUndercut.priceTooltip('buy');
-    await expect(buyTooltip.startPrice()).toHaveText(
-      tokenPrice(
-        new SafeDecimal(buy.min).times(1 + undercutRate).toString(),
-        quote
-      )
-    );
+    await expect(buyTooltip.startPrice()).toHaveText(output.buy.min);
     await buyTooltip.waitForDetached();
 
     const sellTooltip = await strategyUndercut.priceTooltip('sell');
-    await expect(sellTooltip.startPrice()).toHaveText(
-      tokenPrice(
-        new SafeDecimal(sell.min).times(1 - undercutRate).toString(),
-        quote
-      )
-    );
+    await expect(sellTooltip.startPrice()).toHaveText(output.sell.min);
     await sellTooltip.waitForDetached();
   });
 };
