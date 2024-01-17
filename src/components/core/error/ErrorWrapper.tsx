@@ -1,5 +1,5 @@
+import { A, externalLinks } from 'libs/routing';
 import { FC, ReactNode } from 'react';
-import { Link } from 'libs/routing';
 import {
   IconTitleText,
   IconTitleTextProps,
@@ -12,11 +12,11 @@ type Props = IconTitleTextProps & {
 
 const DefaultChildren = () => (
   <div>
-    <Link to={'https://faq.carbondefi.xyz/'}>
+    <A to={externalLinks.faq}>
       <Button variant={'error'} fullWidth>
         Contact Support
       </Button>
-    </Link>
+    </A>
   </div>
 );
 

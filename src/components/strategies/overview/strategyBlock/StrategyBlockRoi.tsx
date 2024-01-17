@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { externalLinks } from 'libs/routing';
-import { Link } from 'libs/routing';
+import { A, externalLinks } from 'libs/routing';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { cn, formatNumberWithApproximation } from 'utils/helpers';
@@ -42,9 +41,9 @@ const TooltipContent: FC<{}> = () => (
     <span className="align-middle">
       Total percentage returns of the strategy from its creation.&nbsp;
     </span>
-    <Link to={externalLinks.roiLearnMore} className="text-green">
+    <A to={externalLinks.roiLearnMore} className="text-green">
       <span className="align-middle">Learn how ROI is calculated.</span>
       <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
-    </Link>
+    </A>
   </>
 );

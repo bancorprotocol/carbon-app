@@ -16,6 +16,8 @@ export const MobileMenu = () => {
           key={index}
           onClick={() => handleOnItemClick(href)}
           to={href}
+          // TODO: fix this
+          params={{}}
           className={`px-3 py-3 ${
             isPathnameMatch(location.pathname, href, hrefMatches)
               ? 'text-white'

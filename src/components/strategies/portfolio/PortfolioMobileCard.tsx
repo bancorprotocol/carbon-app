@@ -40,7 +40,8 @@ export const PortfolioMobileCard: FC<Props> = ({
 
   if (href) {
     return (
-      <Link to={href} className={wrapperClasses}>
+      // TODO: fix this
+      <Link to={href} params={{}} className={wrapperClasses}>
         {content}
       </Link>
     );

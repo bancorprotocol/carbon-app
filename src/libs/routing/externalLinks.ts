@@ -13,4 +13,6 @@ export const externalLinks = {
   interactiveSim: 'https://simulator.carbondefi.xyz/',
   duneDashboard: 'https://dune.com/bancor/carbon-by-bancor',
   roiLearnMore: 'https://faq.carbondefi.xyz/strategy-roi-and-apr',
+  treasuryGov:
+    'https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions/20220808',
 };

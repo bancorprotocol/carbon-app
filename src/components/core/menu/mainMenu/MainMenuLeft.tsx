@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
-import { Link, PathNames, useRouterState } from 'libs/routing';
+import { Link, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 import { isPathnameMatch } from 'utils/helpers';
 import { handleOnItemClick } from '../utils';
@@ -16,7 +16,7 @@ export const MainMenuLeft: FC = () => {
       data-testid="main-nav"
     >
       <Link
-        to={PathNames.strategies}
+        to={'/'}
         onClick={() => carbonEvents.navigation.navHomeClick(undefined)}
       >
         <LogoCarbon className={'w-34'} />
@@ -30,6 +30,8 @@ export const MainMenuLeft: FC = () => {
               key={index}
               onClick={() => handleOnItemClick(href)}
               to={href}
+              // TODO: fix this
+              params={{}}
               aria-current={isSamePage ? 'page' : 'false'}
               className={`px-3 py-3 transition-colors duration-300 ${
                 isSamePage ? 'text-white' : 'hover:text-white'

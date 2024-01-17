@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Link, PathNames } from 'libs/routing';
+import { A, Link } from 'libs/routing';
 import { Connection, selectableConnectionTypes } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
 import { Imager } from 'components/common/imager/Imager';
@@ -40,7 +40,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link
-            to={PathNames.terms}
+            to={'/terms'}
             target="_blank"
             className="font-weight-500 text-white"
           >
@@ -49,7 +49,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
           and{' '}
           <Link
             target="_blank"
-            to={PathNames.privacy}
+            to={'/privacy'}
             className="font-weight-500 text-white"
           >
             cookie & privacy policy
@@ -77,7 +77,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
       ))}
 
       {EXT_LINKS.map(({ url, name, logoUrl }) => (
-        <Link
+        <A
           key={url}
           to={url}
           className={`${buttonClasses} ${
@@ -91,7 +91,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
             <Imager alt="Wallet Logo" src={logoUrl} className="h-24" />
           </div>
           <span className={textClasses}>{name}</span>
-        </Link>
+        </A>
       ))}
     </div>
   );

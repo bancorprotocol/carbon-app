@@ -1,5 +1,5 @@
 import { ReactElement, useMemo } from 'react';
-import { Link, PathNames, externalLinks } from 'libs/routing';
+import { externalLinks, A, Link } from 'libs/routing';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
 import { ReactComponent as IconX } from 'assets/logos/x.svg';
@@ -37,35 +37,35 @@ export const useBurgerMenuItems = () => {
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.faq}>
+        <A className="flex" to={externalLinks.faq}>
           FAQ
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.analytics}>
+        <A className="flex" to={externalLinks.analytics}>
           Analytics
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.blog}>
+        <A className="flex" to={externalLinks.blog}>
           Blog
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={PathNames.terms}>
+        <Link className="flex" to={'/terms'}>
           Terms of Use
         </Link>
       ),
     },
     {
       content: (
-        <Link className="flex" to={PathNames.privacy}>
+        <Link className="flex" to={'/privacy'}>
           Privacy Policy
         </Link>
       ),
@@ -73,30 +73,27 @@ export const useBurgerMenuItems = () => {
     {
       content: (
         <div className="flex w-full items-center justify-between">
-          <Link
-            to={externalLinks.x}
-            className="rounded-6 p-6 md:hover:bg-black"
-          >
+          <A to={externalLinks.x} className="rounded-6 p-6 md:hover:bg-black">
             <IconX className={iconStyles} />
-          </Link>
-          <Link
+          </A>
+          <A
             to={externalLinks.youtube}
             className="rounded-6 p-6 md:hover:bg-black"
           >
             <IconYoutube className={iconStyles} />
-          </Link>
-          <Link
+          </A>
+          <A
             to={externalLinks.discord}
             className="rounded-6 p-6 md:hover:bg-black"
           >
             <IconDiscord className={iconStyles} />
-          </Link>
-          <Link
+          </A>
+          <A
             to={externalLinks.telegram}
             className="rounded-6 p-6 md:hover:bg-black"
           >
             <IconTelegram className={iconStyles} />
-          </Link>
+          </A>
         </div>
       ),
     },
@@ -137,44 +134,44 @@ export const useBurgerMenuItems = () => {
   const resourcesItems: MenuItemType[] = [
     {
       content: (
-        <Link className="flex" to={externalLinks.techDocs}>
+        <A className="flex" to={externalLinks.techDocs}>
           Tech Docs
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.litePaper}>
+        <A className="flex" to={externalLinks.litePaper}>
           Litepaper
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.whitepaper}>
+        <A className="flex" to={externalLinks.whitepaper}>
           Whitepaper
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.simulatorRepo}>
+        <A className="flex" to={externalLinks.simulatorRepo}>
           Simulator Repo
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.interactiveSim}>
+        <A className="flex" to={externalLinks.interactiveSim}>
           Interactive Simulator
-        </Link>
+        </A>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.duneDashboard}>
+        <A className="flex" to={externalLinks.duneDashboard}>
           Dune Dashboard
-        </Link>
+        </A>
       ),
     },
   ];

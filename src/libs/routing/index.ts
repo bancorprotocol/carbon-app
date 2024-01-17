@@ -8,7 +8,8 @@ export {
   useParams,
   Navigate,
   useScrollRestoration,
+  Link,
 } from '@tanstack/react-router';
-export { Link } from 'libs/routing/Link';
+export { A } from 'libs/routing/A';
 export { Outlet } from '@tanstack/react-router';
 export { externalLinks } from 'libs/routing/externalLinks';
