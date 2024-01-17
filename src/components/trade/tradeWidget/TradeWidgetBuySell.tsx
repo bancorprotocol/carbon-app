@@ -156,12 +156,12 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     if (buy) {
       return `1 ${target.symbol} = ${
         rate && rate !== '0'
-          ? prettifyNumber(new SafeDecimal(1).div(rate))
+          ? prettifyNumber(new SafeDecimal(1).div(rate), { decimals: 6 })
           : '--'
       } ${source.symbol}`;
     }
     return `1 ${source.symbol} =
-        ${rate ? prettifyNumber(rate) : '--'}
+        ${rate ? prettifyNumber(rate, { decimals: 6 }) : '--'}
         ${target.symbol}`;
   };
 
