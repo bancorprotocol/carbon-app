@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 type Props = {
   rate: string;
@@ -16,6 +17,7 @@ export const OrderBookWidgetRate: FC<Props> = ({
   fiatRate,
   isLoading,
 }) => {
+  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
   return (
     <div className="-mx-10 my-10 flex items-center rounded-8 bg-silver px-10 py-10 text-16">
       <Tooltip element="The mid-market price based on the last trade">
@@ -34,7 +36,7 @@ export const OrderBookWidgetRate: FC<Props> = ({
           )}
           {fiatRate && (
             <span className="ml-8 text-white/60">
-              {prettifyNumber(fiatRate, { decimals: 6 })}
+              {prettifyNumber(fiatRate, { decimals: 6, currentCurrency })}
             </span>
           )}
         </span>
