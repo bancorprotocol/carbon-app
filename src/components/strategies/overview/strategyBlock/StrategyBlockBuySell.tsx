@@ -19,9 +19,7 @@ export const StrategyBlockBuySell: FC<{
   const active = strategy.status === 'active';
   const otherTokenFiat = useFiatCurrency(otherToken);
   const currency = otherTokenFiat.selectedFiatCurrency;
-  const prettifiedBudget = prettifyNumber(order.balance, {
-    abbreviate: order.balance.length > 10,
-  });
+  const prettifiedBudget = prettifyNumber(order.balance, { abbreviate: true });
   const hasFiatValue = otherTokenFiat.hasFiatValue();
   const fiatBudget = buy ? strategy.fiatBudget.quote : strategy.fiatBudget.base;
   const fiatBudgetValue = getFiatDisplayValue(fiatBudget, currency);
@@ -101,7 +99,7 @@ export const StrategyBlockBuySell: FC<{
               src={otherToken.logoURI}
               alt="token"
             />
-            {order.balance.toString()}
+            {prettifyNumber(order.balance, { highPrecision: true })}
           </span>
         }
       >

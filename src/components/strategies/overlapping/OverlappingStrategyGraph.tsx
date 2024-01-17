@@ -665,7 +665,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 x={price.toString()}
                 {...priceIndicator}
               >
-                {prettifySignedNumber(price.div(xFactor))}
+                {prettifySignedNumber(price.div(xFactor), { abbreviate: true })}
               </text>
             ))}
           </g>

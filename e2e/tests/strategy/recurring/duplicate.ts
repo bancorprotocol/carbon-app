@@ -1,19 +1,20 @@
 import { expect, test } from '@playwright/test';
-import { MyStrategyDriver } from './../../../utils/strategy';
-import { fiatPrice, tokenPrice } from './../../../utils/operators';
-import { CreateStrategyTemplate } from './../../../utils/strategy/template';
+import {
+  CreateStrategyTestCase,
+  MyStrategyDriver,
+  assertRecurringTestCase,
+} from './../../../utils/strategy';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { waitModalOpen } from '../../../utils/modal';
 
-export const duplicateStrategyTest = (testCase: CreateStrategyTemplate) => {
+export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
+  assertRecurringTestCase(testCase);
+  const { base, quote } = testCase.input;
+  const output = testCase.output.create;
   return test('Duplicate', async ({ page }) => {
-    const { base, quote, buy, sell } = testCase;
-    const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
-    const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
-
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const strategy = await manage.createStrategy(testCase.input);
     await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
 
     const modal = await waitModalOpen(page);
@@ -39,20 +40,12 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTemplate) => {
     const strategyDuplicate = await myStrategies.getStrategy(2);
     await expect(strategyDuplicate.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategyDuplicate.status()).toHaveText('Active');
-    await expect(strategyDuplicate.totalBudget()).toHaveText(
-      fiatPrice(buyBudgetFiat + sellBudgetFiat)
-    );
-    await expect(strategyDuplicate.buyBudget()).toHaveText(
-      tokenPrice(buy.budget, quote)
-    );
-    await expect(strategyDuplicate.buyBudgetFiat()).toHaveText(
-      fiatPrice(buyBudgetFiat)
-    );
-    await expect(strategyDuplicate.sellBudget()).toHaveText(
-      tokenPrice(sell.budget, base)
-    );
+    await expect(strategyDuplicate.totalBudget()).toHaveText(output.totalFiat);
+    await expect(strategyDuplicate.buyBudget()).toHaveText(output.buy.budget);
+    await expect(strategyDuplicate.buyBudgetFiat()).toHaveText(output.buy.fiat);
+    await expect(strategyDuplicate.sellBudget()).toHaveText(output.sell.budget);
     await expect(strategyDuplicate.sellBudgetFiat()).toHaveText(
-      fiatPrice(sellBudgetFiat)
+      output.sell.fiat
     );
   });
 };

@@ -1,65 +1,93 @@
 import { test } from '@playwright/test';
+import { mockApi } from '../utils/mock-api';
+import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
+import { CreateStrategyTestCase } from '../utils/strategy';
 import * as recurring from '../tests/strategy/recurring/';
 import * as disposable from '../tests/strategy/disposable/';
 import * as overlapping from '../tests/strategy/overlapping/';
 
-import { StrategyType } from './../utils/strategy/template';
-import { navigateTo, screenshot } from '../utils/operators';
-import { mockApi } from '../utils/mock-api';
-import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
-import {
-  MyStrategyDriver,
-  OverlappingStrategyTestCase,
-  RecurringStrategyTestCase,
-} from '../utils/strategy';
-
-type TestCase = (RecurringStrategyTestCase | OverlappingStrategyTestCase) & {
-  type: StrategyType;
-};
-
-const testCases: TestCase[] = [
+const testCases: CreateStrategyTestCase[] = [
   {
-    type: 'recurring',
-    setting: 'limit_limit',
-    base: 'ETH',
-    quote: 'DAI',
-    buy: {
-      min: '1500',
-      max: '1500',
-      budget: '10',
-      budgetFiat: '10',
+    input: {
+      type: 'recurring',
+      setting: 'limit_limit',
+      base: 'ETH',
+      quote: 'DAI',
+      buy: {
+        min: '1500',
+        max: '1500',
+        budget: '10',
+        budgetFiat: '10',
+      },
+      sell: {
+        min: '1700',
+        max: '1700',
+        budget: '2',
+        budgetFiat: '3334',
+      },
     },
-    sell: {
-      min: '1700',
-      max: '1700',
-      budget: '2',
-      budgetFiat: '3334',
+    output: {
+      create: {
+        totalFiat: '$3,344.42',
+        buy: {
+          min: '1,500.00 DAI',
+          max: '1,500.00 DAI',
+          budget: '10.00 DAI',
+          fiat: '$10.00',
+        },
+        sell: {
+          min: '1,700.00 DAI',
+          max: '1,700.00 DAI',
+          budget: '2.00 ETH',
+          fiat: '$3,334.42',
+        },
+      },
     },
   },
   {
-    type: 'overlapping',
-    base: 'BNT',
-    quote: 'USDC',
-    buy: {
-      min: '0.3',
-      max: '0.545454',
-      budget: '12.501572',
-      budgetFiat: '12.5',
+    input: {
+      type: 'overlapping',
+      base: 'BNT',
+      quote: 'USDC',
+      buy: {
+        min: '0.3',
+        max: '0.545454',
+        budget: '12.501572',
+        budgetFiat: '12.5',
+      },
+      sell: {
+        min: '0.33',
+        max: '0.6',
+        budget: '30',
+        budgetFiat: '12.61',
+      },
+      spread: '10', // Need a large spread for tooltip test
     },
-    sell: {
-      min: '0.33',
-      max: '0.6',
-      budget: '30',
-      budgetFiat: '12.61',
+    output: {
+      create: {
+        totalFiat: '$25.11',
+        buy: {
+          min: '0.30 USDC',
+          max: '0.545454 USDC',
+          budget: '12.50 USDC',
+          fiat: '$12.50',
+        },
+        sell: {
+          min: '0.33 USDC',
+          max: '0.60 USDC',
+          budget: '30.00 BNT',
+          fiat: '$12.61',
+        },
+      },
     },
-    spread: '10', // Need a large spread for tooltip test
   },
 ];
 
-const testDescription = (testCase: TestCase) => {
-  if (testCase.type === 'overlapping') return 'Overlapping';
-  if (testCase.type === 'disposable') return `Disposable ${testCase.setting}`;
-  return `Recurring ${testCase.setting.split('_').join(' ')}`;
+const testDescription = (testCase: CreateStrategyTestCase) => {
+  const input = testCase.input;
+  if (input.type === 'overlapping') return 'Overlapping';
+  if (input.type === 'disposable') return `Disposable ${input.setting}`;
+  return `Recurring ${input.setting.split('_').join(' ')}`;
 };
 
 test.describe('Strategies', () => {
@@ -75,13 +103,6 @@ test.describe('Strategies', () => {
     await removeFork(testInfo);
   });
 
-  test('First Strategy Page', async ({ page }) => {
-    await navigateTo(page, '/');
-    const driver = new MyStrategyDriver(page);
-    await driver.firstStrategy().waitFor({ state: 'visible' });
-    await screenshot(page, 'first-strategy');
-  });
-
   const testStrategies = {
     recurring,
     disposable,
@@ -90,7 +111,7 @@ test.describe('Strategies', () => {
 
   for (const testCase of testCases) {
     test.describe(testDescription(testCase), () => {
-      const testSuite = testStrategies[testCase.type];
+      const testSuite = testStrategies[testCase.input.type];
       for (const [, testFn] of Object.entries(testSuite)) {
         testFn(testCase);
       }
