@@ -44,9 +44,10 @@ export type SetOverlappingParams = (
   max: string
 ) => Promise<StrategyPrices | undefined>;
 
-const getInitialPrice = (marketPrice: SafeDecimal, quote: Token) => {
-  const min = marketPrice.times(0.999).toFixed(quote.decimals);
-  const max = marketPrice.times(1.001).toFixed(quote.decimals);
+const getInitialPrice = (marketPrice: string | number, quote: Token) => {
+  const currentPrice = new SafeDecimal(marketPrice);
+  const min = currentPrice.times(0.999).toFixed(quote.decimals);
+  const max = currentPrice.times(1.001).toFixed(quote.decimals);
   if (min !== max) return { min, max };
   // TODO(#988) Workaround if market price is close to 1wei
   const wei = new SafeDecimal(min);
@@ -58,7 +59,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 ) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
   const marketPrice = useMarketPrice({ base, quote });
-  const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
+  const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
@@ -72,8 +73,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   });
 
   const setOverlappingParams = async (min: string, max: string) => {
-    order0.setMin(min);
-    order1.setMax(max);
     const params = await carbonSDK.calculateOverlappingStrategyPrices(
       quote!.address,
       min,
@@ -81,6 +80,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       marketPrice.toString(),
       spread.toString()
     );
+    order0.setMin(min);
+    order1.setMax(max);
     order0.setMax(params.buyPriceHigh);
     order0.setMarginalPrice(params.buyPriceMarginal);
     order1.setMin(params.sellPriceLow);
@@ -130,14 +131,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!order0.min && !order1.max) {
-      const { min, max } = getInitialPrice(new SafeDecimal(marketPrice), quote);
-      if (isValidRange(min, max)) {
-        setOverlappingParams(min, max).then(() => {
-          // Need to reset min/max after params in non strict mode
-          if (!order0.min) order0.setMin(min);
-          if (!order1.max) order1.setMax(max);
-        });
-      }
+      const { min, max } = getInitialPrice(marketPrice, quote);
+      if (isValidRange(min, max)) setOverlappingParams(min, max);
     } else {
       const min = order0.min;
       const max = order1.max;
@@ -146,10 +141,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
           const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
           if (isMinAboveMarket(buyOrder, quote)) {
-            setAnchoderOrder('sell');
+            setAnchoredOrder('sell');
             setBuyBudget(order1.budget, min, max);
           } else if (isMaxBelowMarket(sellOrder, quote)) {
-            setAnchoderOrder('buy');
+            setAnchoredOrder('buy');
             setSellBudget(order0.budget, min, max);
           } else {
             if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
@@ -170,7 +165,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.buyPriceMarginal;
         if (isMinAboveMarket({ min, marginalPrice }, quote)) {
-          setAnchoderOrder('sell');
+          setAnchoredOrder('sell');
           setBuyBudget(order1.budget, min, max);
         } else {
           if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
@@ -198,7 +193,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.sellPriceMarginal;
         if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
-          setAnchoderOrder('buy');
+          setAnchoredOrder('buy');
           setSellBudget(order0.budget, min, max);
         } else {
           if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
@@ -312,7 +307,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           {...props}
           marketPrice={marketPrice}
           anchoredOrder={anchoredOrder}
-          setAnchoderOrder={setAnchoderOrder}
+          setAnchoredOrder={setAnchoredOrder}
           setBuyBudget={setBuyBudget}
           setSellBudget={setSellBudget}
         />
