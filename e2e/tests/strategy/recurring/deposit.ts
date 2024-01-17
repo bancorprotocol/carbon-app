@@ -1,12 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { tokenPrice } from './../../../utils/operators';
-import { CreateStrategyTemplate } from './../../../utils/strategy/template';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
+import { CreateStrategyTestCase } from '../../../utils/strategy';
 
-export const depositStrategyTest = (testCase: CreateStrategyTemplate) => {
+export const depositStrategyTest = (testCase: CreateStrategyTestCase) => {
+  const { input } = testCase;
   return test('Deposit', async ({ page }) => {
-    const { base, quote, buy, sell } = testCase;
+    const { base, quote, buy, sell } = input;
 
     const buyBudget = parseFloat(buy.budget);
     const sellBudget = parseFloat(sell.budget);
@@ -16,7 +17,7 @@ export const depositStrategyTest = (testCase: CreateStrategyTemplate) => {
     const newSellBudget = (sellBudget + depositSellBudget).toString();
 
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const strategy = await manage.createStrategy(input);
     await strategy.clickManageEntry('manage-strategy-depositFunds');
 
     await manage.waitForEditPage('deposit');
