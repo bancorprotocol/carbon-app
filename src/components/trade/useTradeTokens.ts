@@ -5,13 +5,14 @@ import {
   useNavigate,
 } from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
+import { TradeSearch } from 'libs/routing/routes/trade';
 
 export const useTradeTokens = () => {
   const navigate = useNavigate();
   const { location } = useRouterState();
   const isTradePage = location.pathname === PathNames.trade;
   const { getTokenById } = useTokens();
-  const search = useSearch({ from: '/trade' });
+  const search: TradeSearch = useSearch({ strict: false });
 
   const baseToken = getTokenById(search.base);
   const quoteToken = getTokenById(search.quote);
