@@ -1,120 +1,20 @@
 import { Page } from '@playwright/test';
-import { assertDebugToken } from './utils';
-import { CreateStrategyInput, RangeOrder, debugTokens } from './types';
+import {
+  assertDebugToken,
+  assertDisposableTestCase,
+  assertOverlappingTestCase,
+  assertRecurringTestCase,
+  getRecurringSettings,
+} from './utils';
+import {
+  RangeOrder,
+  debugTokens,
+  CreateStrategyTestCase,
+  Direction,
+  StrategySettings,
+  Setting,
+} from './types';
 import { waitModalClose, waitModalOpen } from '../modal';
-import { TestCase } from '../types';
-
-type Setting = 'limit' | 'range';
-type Direction = 'buy' | 'sell';
-type StrategySettings =
-  | `two-${Setting}s`
-  | `${Direction}-${Setting}`
-  | 'overlapping';
-
-interface OrderOuput {
-  min: string;
-  max: string;
-  outcomeValue: string;
-  outcomeQuote: string;
-  budget: string;
-  fiat: string;
-}
-
-export interface RecurringStrategyInput extends CreateStrategyInput {
-  type: 'recurring';
-  setting: `${Setting}_${Setting}`;
-}
-export interface RecurringStrategyOutput {
-  create: {
-    totalFiat: string;
-    buy: OrderOuput;
-    sell: OrderOuput;
-  };
-  undercut: {
-    totalFiat: string;
-    buy: {
-      min: string;
-      max: string;
-      budget: string;
-      fiat: string;
-    };
-    sell: {
-      min: string;
-      max: string;
-      budget: string;
-      fiat: string;
-    };
-  };
-}
-export type RecurringStrategyTestCase = TestCase<
-  RecurringStrategyInput,
-  RecurringStrategyOutput
->;
-
-export interface OverlappingStrategyInput extends CreateStrategyInput {
-  type: 'overlapping';
-  spread: string;
-}
-export interface OverlappingStrategyOutput {
-  create: {
-    totalFiat: string;
-    buy: Omit<OrderOuput, 'outcomeValue' | 'outcomeQuote'>;
-    sell: Omit<OrderOuput, 'outcomeValue' | 'outcomeQuote'>;
-  };
-}
-export type OverlappingStrategyTestCase = TestCase<
-  OverlappingStrategyInput,
-  OverlappingStrategyOutput
->;
-
-export interface DisposableStrategyInput extends CreateStrategyInput {
-  type: 'disposable';
-  setting: Setting;
-  direction: Direction;
-}
-export interface DisposableStrategyOutput {
-  create: {
-    buy: OrderOuput;
-    sell: OrderOuput;
-  };
-}
-export type DisposableStrategyTestCase = TestCase<
-  DisposableStrategyInput,
-  DisposableStrategyOutput
->;
-
-export type CreateStrategyTestCase =
-  | DisposableStrategyTestCase
-  | RecurringStrategyTestCase
-  | OverlappingStrategyTestCase;
-
-export function assertDisposableTestCase(
-  testCase: CreateStrategyTestCase
-): asserts testCase is DisposableStrategyTestCase {
-  if (testCase.input.type !== 'disposable') {
-    throw new Error('Test case should be disposable');
-  }
-}
-
-export function assertRecurringTestCase(
-  testCase: CreateStrategyTestCase
-): asserts testCase is RecurringStrategyTestCase {
-  if (testCase.input.type !== 'recurring') {
-    throw new Error('Test case should be recurring');
-  }
-}
-
-export function assertOverlappingTestCase(
-  testCase: CreateStrategyTestCase
-): asserts testCase is OverlappingStrategyTestCase {
-  if (testCase.input.type !== 'overlapping') {
-    throw new Error('Test case should be overlapping');
-  }
-}
-
-export const getRecurringSettings = (testCase: RecurringStrategyTestCase) => {
-  return testCase.input.setting.split('_') as [Setting, Setting];
-};
 
 export class CreateStrategyDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}

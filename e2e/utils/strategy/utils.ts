@@ -6,12 +6,44 @@ import {
   RangeOrder,
   OverlappingParams,
   debugTokens,
+  CreateStrategyTestCase,
+  DisposableStrategyTestCase,
+  RecurringStrategyTestCase,
+  OverlappingStrategyTestCase,
+  Setting,
 } from './types';
 import {
   getBuyMax,
   getSellMin,
 } from '../../../src/components/strategies/overlapping/utils';
-import { CreateStrategyTestCase } from './CreateStrategyDriver';
+
+export function assertDisposableTestCase(
+  testCase: CreateStrategyTestCase
+): asserts testCase is DisposableStrategyTestCase {
+  if (testCase.input.type !== 'disposable') {
+    throw new Error('Test case should be disposable');
+  }
+}
+
+export function assertRecurringTestCase(
+  testCase: CreateStrategyTestCase
+): asserts testCase is RecurringStrategyTestCase {
+  if (testCase.input.type !== 'recurring') {
+    throw new Error('Test case should be recurring');
+  }
+}
+
+export function assertOverlappingTestCase(
+  testCase: CreateStrategyTestCase
+): asserts testCase is OverlappingStrategyTestCase {
+  if (testCase.input.type !== 'overlapping') {
+    throw new Error('Test case should be overlapping');
+  }
+}
+
+export const getRecurringSettings = (testCase: RecurringStrategyTestCase) => {
+  return testCase.input.setting.split('_') as [Setting, Setting];
+};
 
 export function assertDebugToken(
   symbol: string
