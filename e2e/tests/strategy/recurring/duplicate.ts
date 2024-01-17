@@ -6,7 +6,6 @@ import {
 } from './../../../utils/strategy';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
-import { waitModalOpen } from '../../../utils/modal';
 
 export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -16,9 +15,6 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase.input);
     await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
-
-    const modal = await waitModalOpen(page);
-    await modal.getByTestId('duplicate-strategy-btn').click();
 
     await page.waitForURL('/strategies/create?strategy=*', {
       timeout: 10_000,
