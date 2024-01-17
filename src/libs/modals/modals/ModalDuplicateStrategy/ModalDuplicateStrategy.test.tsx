@@ -2,11 +2,6 @@ import { describe, test, expect } from 'vitest';
 import { SafeDecimal } from 'libs/safedecimal';
 import { deepCopy, getUndercutStrategy } from './utils';
 
-// -- User duplicates a ETH/USDC strategy with range buy ETH for min 1600 USDC- max 1700 USDC and limit sell ETH for
-// 1800 USDC prices
-// -- Undercut token min buy price = 1600+1600 * 0.1/100= 1601.6
-// -- Undercut token max buy price = 1700+1700 * 0.1/100= 1701.7
-// -- Undercut token sell price = 1800-1800 * 0.1/100= 1798.2
 type StrategyStatus = 'active' | 'noBudget' | 'paused' | 'inactive';
 
 const baseStrategy = {
