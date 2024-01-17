@@ -141,7 +141,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
   return (
     <svg
-      className={style.strategyGraph}
+      className={cn(style.strategyGraph, 'font-mono')}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
