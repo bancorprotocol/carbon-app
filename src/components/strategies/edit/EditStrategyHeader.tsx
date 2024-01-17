@@ -1,5 +1,5 @@
 import { carbonEvents } from 'services/events';
-import { EditTypes } from './EditStrategyMain';
+import { EditTypes } from 'libs/routing/routes/strategyCreateEdit';
 import { useRouter } from 'libs/routing';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';

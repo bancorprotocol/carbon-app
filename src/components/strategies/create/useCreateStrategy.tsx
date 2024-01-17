@@ -4,7 +4,7 @@ import { useCreateStrategyQuery } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
-import { PathNames, useNavigate, useSearch } from 'libs/routing';
+import { useNavigate, useSearch } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
@@ -15,7 +15,7 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
-import { StrategyCreateSearch } from 'components/strategies/create/types';
+import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
 import {
   handleStrategyDirection,
   handleStrategySettings,
@@ -82,7 +82,7 @@ export const useCreateStrategy = () => {
 
   const mutation = useCreateStrategyQuery();
 
-  const search: StrategyCreateSearch = useSearch({ strict: false });
+  const search = useSearch({ from: '/strategies/create' });
   const {
     base: baseAddress,
     quote: quoteAddress,
@@ -235,8 +235,8 @@ export const useCreateStrategy = () => {
       }
 
       navigate({
-        to: PathNames.createStrategy,
-        search: (search: StrategyCreateSearch) => ({
+        to: '/strategies/create',
+        search: (search) => ({
           ...search,
           base: b,
           quote: q,

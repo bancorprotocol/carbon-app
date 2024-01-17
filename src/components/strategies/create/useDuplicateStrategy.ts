@@ -1,11 +1,7 @@
-import { PathNames, useNavigate, useSearch } from 'libs/routing';
+import { useNavigate, useSearch } from 'libs/routing';
 import { Strategy } from 'libs/queries';
 import { isOverlappingStrategy } from '../overlapping/utils';
-import { StrategyCreateSearch } from './types';
-
-interface MyLocationSearch {
-  strategy: string;
-}
+import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
 
 const isValid = (strategy: Strategy) => {
   return (
@@ -55,14 +51,14 @@ const decodeStrategyAndValidate = (
 
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate();
-  const search: MyLocationSearch = useSearch({ strict: false });
+  const search: StrategyCreateSearch = useSearch({ strict: false });
   const { strategy: urlStrategy } = search;
 
   const duplicate = (strategy: Partial<Strategy>) => {
     const encodedStrategy = btoa(JSON.stringify(strategy));
 
     navigate({
-      to: `${PathNames.createStrategy}`,
+      to: '/strategies/create',
       search: {
         ...search,
         strategy: encodedStrategy,

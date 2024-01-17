@@ -4,7 +4,7 @@ import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumber } from 'utils/helpers';
 import { OrderCreate } from './useOrder';
 import { useSearch } from 'libs/routing';
-import { StrategyCreateSearch } from './types';
+import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
 
 export const useStrategyEventData = ({
   base,

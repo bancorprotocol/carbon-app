@@ -9,7 +9,6 @@ import {
   StrategySellEventType,
 } from 'services/events/types';
 import { sanitizeNumber } from 'utils/helpers';
-import { StrategyCreateSearch } from '../types';
 import { OrderCreate } from '../useOrder';
 import { useSearch } from 'libs/routing';
 
@@ -29,7 +28,7 @@ export const useStrategyEvents = ({
   const budgetToken = buy ? quote : base;
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
-  const search: StrategyCreateSearch = useSearch({ strict: false });
+  const search = useSearch({ from: '/strategies/create' });
 
   const getStrategyEventData = (): (
     | StrategySellEventType

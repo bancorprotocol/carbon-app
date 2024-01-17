@@ -1,3 +1,4 @@
+import { EditStratgySearch } from 'libs/routing/routes/strategyCreateEdit';
 import { FC, useState } from 'react';
 import { m } from 'libs/motion';
 import { EditStrategyHeader } from './EditStrategyHeader';
@@ -6,12 +7,6 @@ import { list } from '../create/variants';
 import { Strategy } from 'libs/queries';
 import { useSearch } from 'libs/routing';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-
-export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
-
-export interface EditStratgySearch {
-  type: EditTypes;
-}
 
 interface Props {
   strategy?: Strategy;

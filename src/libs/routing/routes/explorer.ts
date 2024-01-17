@@ -1,4 +1,5 @@
 import { redirect, Route } from '@tanstack/react-router';
+import { ExplorerType } from 'components/explorer/utils';
 import { rootRoot } from 'libs/routing/routes/root';
 import { ExplorerPage } from 'pages/explorer';
 import { ExplorerTypePage } from 'pages/explorer/type';
@@ -22,6 +23,9 @@ export const explorerRedirect = new Route({
 export const explorerPage = new Route({
   getParentRoute: () => explorerLayout,
   path: '$type',
+  parseParams: (params: Record<string, string>) => {
+    return { type: params.type as ExplorerType };
+  },
   component: ExplorerPage,
 });
 

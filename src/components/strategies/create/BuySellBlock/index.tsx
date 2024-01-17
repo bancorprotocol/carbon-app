@@ -9,7 +9,7 @@ import { LogoImager } from 'components/common/imager/Imager';
 import {
   StrategyDirection,
   StrategyType,
-} from 'components/strategies/create/types';
+} from 'libs/routing/routes/strategyCreateEdit';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';

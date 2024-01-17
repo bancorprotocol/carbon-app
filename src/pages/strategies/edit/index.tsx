@@ -8,7 +8,7 @@ import { Strategy, useGetUserStrategies } from 'libs/queries';
 export const EditStrategyPage = () => {
   const { user } = useWeb3();
   const { data: strategies, isLoading } = useGetUserStrategies({ user });
-  const { strategyId } = useParams({ strict: false });
+  const { strategyId } = useParams({ from: '/strategies/edit/$strategyId' });
   const [strategy, setStrategy] = useState<Strategy>();
   const navigate = useNavigate();
 

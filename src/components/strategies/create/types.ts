@@ -9,20 +9,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { NavigateOptions } from '@tanstack/react-router';
 
-export type StrategyType = 'recurring' | 'disposable';
-export type StrategyDirection = 'buy' | 'sell';
-
-export type LimitRange = 'limit' | 'range';
-export type StrategySettings = LimitRange | 'overlapping';
-
-export interface StrategyCreateSearch {
-  base?: string;
-  quote?: string;
-  strategyType?: StrategyType;
-  strategyDirection?: StrategyDirection;
-  strategySettings?: StrategySettings;
-}
-
 export type OrderWithSetters = {
   setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
   setPrice: (value: ((prevState: string) => string) | string) => void;

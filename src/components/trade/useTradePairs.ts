@@ -1,4 +1,4 @@
-import { PathNames, useSearch, useNavigate } from 'libs/routing';
+import { useSearch, useNavigate } from 'libs/routing';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -19,7 +19,7 @@ export const useTradePairs = () => {
 
   const onTradePairSelect = (tradePair: TradePair) => {
     navigate({
-      to: PathNames.trade,
+      to: '/trade',
       search: {
         base: tradePair.baseToken.address,
         quote: tradePair.quoteToken.address,

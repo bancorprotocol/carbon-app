@@ -3,7 +3,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
-import { PathNames, useNavigate, useParams } from 'libs/routing';
+import { useNavigate, useParams } from 'libs/routing';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -21,7 +21,6 @@ import { cn } from 'utils/helpers';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
-import { ExplorerParams } from 'components/explorer/utils';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -51,7 +50,7 @@ export const StrategyBlockManage: FC<Props> = ({
   const navigate = useNavigate();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-  const { type, slug }: ExplorerParams = useParams({ strict: false });
+  const { type, slug } = useParams({ from: '/explorer/$type/$slug' });
 
   const owner = useGetVoucherOwner(
     manage && type === 'token-pair' ? strategy.id : undefined
@@ -105,7 +104,8 @@ export const StrategyBlockManage: FC<Props> = ({
         const event = { type, slug, strategyEvent, strategies, sort, filter };
         explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
-          to: PathNames.explorerOverview('wallet', owner.data ?? ''),
+          to: '/explorer/$type/$slug',
+          params: { type: 'wallet', slug: owner.data ?? '' },
         });
       },
       disabled: !owner.data,
@@ -123,7 +123,7 @@ export const StrategyBlockManage: FC<Props> = ({
             ...strategyEvent,
           });
           navigate({
-            to: PathNames.editStrategy,
+            to: '/strategies/edit/$strategyId',
             params: { strategyId: strategy.id },
             search: { type: 'editPrices' },
           });
@@ -145,7 +145,7 @@ export const StrategyBlockManage: FC<Props> = ({
         action: () => {
           carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
           navigate({
-            to: PathNames.editStrategy,
+            to: '/strategies/edit/$strategyId',
             params: { strategyId: strategy.id },
             search: { type: 'deposit' },
           });
@@ -162,7 +162,7 @@ export const StrategyBlockManage: FC<Props> = ({
 
           if (isOverlapping) {
             navigate({
-              to: PathNames.editStrategy,
+              to: '/strategies/edit/$strategyId',
               params: { strategyId: strategy.id },
               search: { type: 'withdraw' },
             });
@@ -194,7 +194,7 @@ export const StrategyBlockManage: FC<Props> = ({
         action: () => {
           carbonEvents.strategyEdit.strategyRenewClick(strategyEvent);
           navigate({
-            to: PathNames.editStrategy,
+            to: '/strategies/edit/$strategyId',
             params: { strategyId: strategy.id },
             search: { type: 'renew' },
           });

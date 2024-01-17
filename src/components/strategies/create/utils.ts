@@ -1,10 +1,10 @@
 import {
   CreateStrategyActionProps,
   OrderWithSetters,
-  StrategySettings,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
 import { OrderCreate } from 'components/strategies/create/useOrder';
+import { StrategySettings } from 'libs/routing/routes/strategyCreateEdit';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
@@ -89,7 +89,7 @@ export const createStrategyAction = async ({
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, quote.address),
         });
-        navigate({ to: '/', params: {} });
+        navigate({ to: '/', search: {}, params: {} });
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e: any) => {
@@ -115,7 +115,7 @@ export const handleTxStatusAndRedirectToOverview = (
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
-    navigate?.({ to: '/', params: {} });
+    navigate?.({ to: '/', params: {}, search: {} });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };
