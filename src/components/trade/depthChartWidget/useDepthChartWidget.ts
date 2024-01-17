@@ -93,8 +93,9 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
               return prettifyNumber(value, { abbreviate: true });
             },
             style: {
-              fontFamily: 'GT America Mono',
               color: 'rgba(255, 255, 255, 0.6)',
+              fontFamily:
+                'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
             },
           },
           crosshair: {
@@ -140,7 +141,8 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
               },
               style: {
                 color: 'rgba(255, 255, 255, 0.6)',
-                fontFamily: 'GT America Mono',
+                fontFamily:
+                  'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
               },
             },
           },
