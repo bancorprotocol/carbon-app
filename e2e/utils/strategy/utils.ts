@@ -5,25 +5,13 @@ import {
   CreateStrategyInput,
   RangeOrder,
   OverlappingParams,
+  debugTokens,
 } from './types';
 import {
   getBuyMax,
   getSellMin,
 } from '../../../src/components/strategies/overlapping/utils';
 import { CreateStrategyTestCase } from './CreateStrategyDriver';
-
-export const debugTokens = {
-  BNB: '0x418D75f65a02b3D53B2418FB8E1fe493759c7605',
-  BNT: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
-  DAI: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-  ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  MATIC: '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
-  SHIB: '0xfcaF0e4498E78d65526a507360F755178b804Ba8',
-  UNI: '0x2730d6FdC86C95a74253BefFaA8306B40feDecbb',
-  USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-  USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-  WBTC: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
-};
 
 export function assertDebugToken(
   symbol: string

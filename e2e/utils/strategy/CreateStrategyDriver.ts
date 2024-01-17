@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
-import { assertDebugToken, debugTokens } from './../../utils/strategy/template';
-import { CreateStrategyInput, RangeOrder } from './types';
+import { assertDebugToken } from './utils';
+import { CreateStrategyInput, RangeOrder, debugTokens } from './types';
 import { waitModalClose, waitModalOpen } from '../modal';
 import { TestCase } from '../types';
 
