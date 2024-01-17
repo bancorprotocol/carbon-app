@@ -4,7 +4,6 @@ import {
   StrategySettings,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
-import { PathNames } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
@@ -116,7 +115,7 @@ export const handleTxStatusAndRedirectToOverview = (
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
-    navigate?.({ to: PathNames.strategies });
+    navigate?.({ to: '/', params: {} });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };

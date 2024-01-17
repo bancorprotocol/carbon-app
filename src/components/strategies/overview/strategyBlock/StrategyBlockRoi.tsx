@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { externalLinks } from 'libs/routing/routes';
+import { externalLinks } from 'libs/routing';
 import { Link } from 'libs/routing';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';

@@ -1,6 +1,6 @@
 import { ReactElement, useMemo } from 'react';
 import { Link, PathNames } from 'libs/routing';
-import { externalLinks } from 'libs/routing/routes';
+import { externalLinks } from 'libs/routing';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
 import { ReactComponent as IconX } from 'assets/logos/x.svg';

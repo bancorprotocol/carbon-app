@@ -22,7 +22,7 @@ export const useTradeTokens = () => {
   const quoteToken = getTokenById(search.quote);
 
   const goToPair = (base: string, quote: string, replace?: boolean) =>
-    navigate({ to: PathNames.trade, search: { base, quote }, replace });
+    navigate({ to: '/trade', search: { base, quote }, replace });
 
   const isTokenError =
     (search.base && !baseToken) || (search.base && !quoteToken);

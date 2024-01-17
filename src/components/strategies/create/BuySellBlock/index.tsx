@@ -16,7 +16,7 @@ import { FullOutcome } from 'components/strategies/FullOutcome';
 import { BuySellHeader } from './Header';
 import { m } from 'libs/motion';
 import { items } from '../variants';
-import { BudgetSection } from './BugetSection';
+import { BudgetSection } from './BudgetSection';
 
 type Props = {
   base: Token;

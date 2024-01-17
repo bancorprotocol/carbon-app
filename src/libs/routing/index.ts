@@ -11,3 +11,4 @@ export {
 } from '@tanstack/react-router';
 export { Link } from 'libs/routing/Link';
 export { Outlet } from '@tanstack/react-router';
+export { externalLinks } from 'libs/routing/externalLinks';

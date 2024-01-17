@@ -15,7 +15,7 @@ export const ExplorerTypePortfolioPage = () => {
       to: '/explorer/$type/$slug/portfolio/token/$address',
       params: {
         type,
-        slug,
+        slug: slug || '',
         address: row.original.token.address,
       },
     });
