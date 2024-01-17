@@ -1,5 +1,5 @@
 import { Route } from '@tanstack/react-router';
-import { rootRoot } from 'libs/routing/routes/root';
+import { rootRoute } from 'libs/routing/routes/root';
 import { TradePage } from 'pages/trade';
 
 export interface TradeSearch {
@@ -8,7 +8,7 @@ export interface TradeSearch {
 }
 
 export const tradePage = new Route({
-  getParentRoute: () => rootRoot,
+  getParentRoute: () => rootRoute,
   path: '/trade',
   component: TradePage,
   validateSearch: (search: Record<string, unknown>): TradeSearch => {

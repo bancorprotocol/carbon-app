@@ -1,3 +1,4 @@
+import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { CreateStrategyCTAMobile } from 'components/strategies/create/CreateStrategyCTA';
 import { useEffect } from 'react';
 import { NotificationAlerts } from 'libs/notifications';
@@ -36,6 +37,7 @@ export const App = () => {
       <MainMenu />
       <main className="my-80 flex w-full flex-grow flex-col">
         <MainContent />
+        <TanStackRouterDevtools position={'bottom-right'} />
       </main>
       <MobileMenu />
       <ModalProvider />

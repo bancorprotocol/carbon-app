@@ -18,14 +18,14 @@ import {
   strategyPortfolioPage,
   strategyPortfolioTokenPage,
 } from 'libs/routing/routes/myStrategies';
-import { rootRoot } from 'libs/routing/routes/root';
+import { rootRoute } from 'libs/routing/routes/root';
 import {
   createStrategyPage,
   editStrategyPage,
 } from 'libs/routing/routes/strategyCreateEdit';
 import { tradePage } from 'libs/routing/routes/trade';
 
-export const routeTree = rootRoot.addChildren([
+export const routeTree = rootRoute.addChildren([
   termPage,
   privacyPage,
   debugPage,

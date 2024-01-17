@@ -1,5 +1,5 @@
 import { Route } from '@tanstack/react-router';
-import { rootRoot } from 'libs/routing/routes/root';
+import { rootRoute } from 'libs/routing/routes/root';
 import { CreateStrategyPage } from 'pages/strategies/create';
 import { EditStrategyPage } from 'pages/strategies/edit';
 
@@ -19,7 +19,7 @@ export interface StrategyCreateSearch {
 }
 
 export const createStrategyPage = new Route({
-  getParentRoute: () => rootRoot,
+  getParentRoute: () => rootRoute,
   path: '/strategies/create',
   component: CreateStrategyPage,
   validateSearch: (search: Record<string, unknown>): StrategyCreateSearch => {
@@ -41,7 +41,7 @@ export interface EditStratgySearch {
 }
 
 export const editStrategyPage = new Route({
-  getParentRoute: () => rootRoot,
+  getParentRoute: () => rootRoute,
   path: '/strategies/edit/$strategyId',
   component: EditStrategyPage,
   validateSearch: (search: Record<string, unknown>): EditStratgySearch => {
