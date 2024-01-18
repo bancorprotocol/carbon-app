@@ -1,7 +1,9 @@
+import { ToOptions } from '@tanstack/react-router';
 import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
 import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
 import { Strategy } from 'libs/queries';
+import { Pathnames } from 'libs/routing';
 import { memo } from 'react';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
@@ -13,7 +15,8 @@ interface Props {
   address: string;
   strategies?: Strategy[];
   isLoading?: boolean;
-  backLinkHref: string;
+  backLinkHref: Pathnames;
+  backLinkHrefParams?: ToOptions['params'];
 }
 
 const _PortfolioToken = ({
@@ -21,6 +24,7 @@ const _PortfolioToken = ({
   isLoading: _isLoading,
   address,
   backLinkHref,
+  backLinkHrefParams,
 }: Props) => {
   const { tableData, isLoading, selectedToken } = usePortfolioToken({
     address,
@@ -43,6 +47,7 @@ const _PortfolioToken = ({
       headerElement={
         <PortfolioTokenHeader
           backLinkHref={backLinkHref}
+          backLinkHrefParams={backLinkHrefParams}
           symbol={selectedToken?.token.symbol}
           logoURI={selectedToken?.token.logoURI}
         />

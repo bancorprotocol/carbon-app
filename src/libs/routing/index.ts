@@ -1,5 +1,4 @@
 export { router } from 'libs/routing/router';
-export { PathNames } from './pathnames';
 export {
   useRouterState,
   useNavigate,

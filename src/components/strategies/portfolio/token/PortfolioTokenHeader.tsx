@@ -1,16 +1,19 @@
+import { ToOptions } from '@tanstack/react-router';
 import { LogoImager } from 'components/common/imager/Imager';
-import { Link } from 'libs/routing';
+import { Link, Pathnames } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconBack } from 'assets/icons/chevron-left.svg';
 
 interface Props {
-  backLinkHref: string;
+  backLinkHref: Pathnames;
+  backLinkHrefParams?: ToOptions['params'];
   logoURI?: string;
   symbol?: string;
 }
 export const PortfolioTokenHeader: FC<Props> = ({
   backLinkHref,
+  backLinkHrefParams,
   logoURI,
   symbol,
 }) => {
@@ -31,8 +34,8 @@ export const PortfolioTokenHeader: FC<Props> = ({
     >
       <Link
         to={backLinkHref}
-        // TODO: fix this
-        params={{}}
+        params={backLinkHrefParams ?? {}}
+        search={{}}
         className={cn(
           'flex',
           'justify-center',

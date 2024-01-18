@@ -1,12 +1,14 @@
+import { ToOptions } from '@tanstack/react-router';
 import { FC, ReactNode } from 'react';
 import { cn } from 'utils/helpers';
 import { getColorByIndex } from 'utils/colorPalettes';
-import { Link } from 'libs/routing';
+import { Link, Pathnames } from 'libs/routing';
 
 type Props = {
   children: ReactNode;
   index: number;
-  href?: string;
+  href?: Pathnames;
+  params?: ToOptions['params'];
   gridColsClassName?: string;
 };
 
@@ -22,6 +24,7 @@ const wrapperClasses = cn(
 export const PortfolioMobileCard: FC<Props> = ({
   index,
   href,
+  params,
   children,
   gridColsClassName = 'grid-cols-2',
 }) => {
@@ -40,8 +43,12 @@ export const PortfolioMobileCard: FC<Props> = ({
 
   if (href) {
     return (
-      // TODO: fix this
-      <Link to={href} params={{}} className={wrapperClasses}>
+      <Link
+        to={href}
+        params={params ?? {}}
+        search={{}}
+        className={wrapperClasses}
+      >
         {content}
       </Link>
     );
