@@ -15,7 +15,7 @@ import {
   useScrollRestoration,
 } from 'libs/routing';
 
-const paths: { [key: string]: Pathnames } = {
+const paths: Record<string, Pathnames> = {
   debug: '/debug',
   terms: '/terms',
   privacy: '/privacy',
