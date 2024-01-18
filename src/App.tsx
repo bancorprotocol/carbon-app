@@ -37,7 +37,7 @@ export const App = () => {
       <MainMenu />
       <main className="my-80 flex w-full flex-grow flex-col">
         <MainContent />
-        <TanStackRouterDevtools position={'bottom-right'} />
+        <TanStackRouterDevtools position="bottom-right" />
       </main>
       <MobileMenu />
       <ModalProvider />

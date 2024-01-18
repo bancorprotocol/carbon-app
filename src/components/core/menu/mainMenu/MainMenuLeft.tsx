@@ -16,7 +16,7 @@ export const MainMenuLeft: FC = () => {
       data-testid="main-nav"
     >
       <Link
-        to={'/'}
+        to="/"
         onClick={() => carbonEvents.navigation.navHomeClick(undefined)}
       >
         <LogoCarbon className={'w-34'} />

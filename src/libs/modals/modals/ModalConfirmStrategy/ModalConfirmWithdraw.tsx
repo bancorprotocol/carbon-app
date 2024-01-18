@@ -40,7 +40,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         <h3 className="text-14 font-weight-500">Did you know ?</h3>
         <Link
           onClick={edit}
-          to={'/strategies/edit/$strategyId'}
+          to="/strategies/edit/$strategyId"
           params={{ strategyId: strategy.id }}
           search={{ type: 'editPrices' }}
           className={cn(
@@ -56,7 +56,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
       </article>
       <Link
         onClick={edit}
-        to={'/strategies/edit/$strategyId'}
+        to="/strategies/edit/$strategyId"
         params={{ strategyId: strategy.id }}
         search={{ type: 'withdraw' }}
         className={buttonStyles({ variant: 'white' })}
