@@ -30,7 +30,7 @@ describe('Test helpers', () => {
   });
   describe('prettifyNumber', () => {
     test('should return 0 for input lower then 0', () => {
-      expect(prettifyNumber(-5000)).toEqual('0');
+      expect(prettifyNumber(-5000)).toEqual('0.00');
     });
     describe('Currency', () => {
       test('should return $0.00 for input lower then 0 and currentCurrency is USD', () => {
@@ -112,7 +112,7 @@ describe('Test helpers', () => {
       });
 
       test('should return "1,000" for input 1000 and no currentCurrency selected', () => {
-        expect(prettifyNumber(1000, {})).toEqual('1,000');
+        expect(prettifyNumber(1000, {})).toEqual('1,000.00');
       });
 
       test('should return "$1.23" for input 1.2345 and currentCurrency is USD', () => {
@@ -163,50 +163,59 @@ describe('Test helpers', () => {
         );
       });
 
-      test('should return "$1.2M" for input 1234567, with abbreviate true, and currentCurrency is USD', () => {
+      ////////////////
+      // Abbreviate //
+      ////////////////
+      test('should return "$1.23M" for input 1234567, with abbreviate true, and currentCurrency is USD', () => {
         expect(
           prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'USD' })
-        ).toEqual('$1.2M');
+        ).toEqual('$1.23M');
       });
 
-      test('should return "1.2M ETH" for input 1234567, with abbreviate true, and currentCurrency is ETH', () => {
+      test('should return "1.23M ETH" for input 1234567, with abbreviate true, and currentCurrency is ETH', () => {
         expect(
           prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'ETH' })
-        ).toEqual('1.2M ETH');
+        ).toEqual('1.23M ETH');
       });
 
-      test('should return "¥1.2M" for input 1234567, with abbreviate true, and currentCurrency is JPY', () => {
+      test('should return "¥1.23M" for input 1234567, with abbreviate true, and currentCurrency is JPY', () => {
         expect(
           prettifyNumber(1234567, { abbreviate: true, currentCurrency: 'JPY' })
-        ).toEqual('¥1.2M');
+        ).toEqual('¥1.23M');
+      });
+
+      ////////////////////
+      // High Precision //
+      ////////////////////
+      test('should return "$12.34567" for input 1234567, with highPrecision, and currentCurrency is USD', () => {
+        const option = { highPrecision: true, currentCurrency: 'USD' } as const;
+        expect(prettifyNumber(12.34567, option)).toEqual('$12.34567');
+      });
+
+      test('should return "123,456.789 ETH" for input 123456.789, with highPrecision, and currentCurrency is ETH', () => {
+        const option = { highPrecision: true, currentCurrency: 'ETH' } as const;
+        expect(prettifyNumber(123456.789, option)).toEqual('123,456.789 ETH');
+      });
+
+      test('should return "¥1.234567" for input 1.23456789, with highPrecision, and currentCurrency is JPY', () => {
+        const option = { highPrecision: true, currentCurrency: 'JPY' } as const;
+        expect(prettifyNumber(1.23456789, option)).toEqual('¥1.234567');
+      });
+      test('should display 5 significant numbers when there is at least 6 zeros in a row', () => {
+        const option = { highPrecision: true, currentCurrency: 'JPY' } as const;
+        expect(prettifyNumber(0.000000123456789, option)).toEqual(
+          '¥0.00000012345'
+        );
       });
     });
 
     describe('Numbers', () => {
-      test('should return "0" for input 0 and no currentCurrency selected', () => {
-        expect(prettifyNumber(0)).toEqual('0');
+      test('should return "0.00" for input 0 and no currentCurrency selected', () => {
+        expect(prettifyNumber(0)).toEqual('0.00');
       });
 
-      test('should return "1.2M" for input 1234567 and no currentCurrency selected', () => {
-        expect(prettifyNumber(1234567, { abbreviate: true })).toEqual('1.2 m');
-      });
-
-      test('should return "1.234567" for input 1.23456789 and no currentCurrency selected', () => {
-        expect(prettifyNumber(1.23456789, { highPrecision: true })).toEqual(
-          '1.234567'
-        );
-      });
-
-      test('should return "0.0₅1" for input 0.000001 and no currentCurrency selected', () => {
-        expect(prettifyNumber(0.000001)).toEqual('0.0₅1');
-      });
-
-      test('should return "0.0₆12345" for input 0.000000123456 and no currentCurrency selected', () => {
-        expect(prettifyNumber(0.000000123456)).toEqual('0.0₆12345');
-      });
-
-      test('should return "1,321,965,595" for large number', () => {
-        expect(prettifyNumber(1321965595)).toEqual('1,321,965,595');
+      test('should return "1,321,965,595.00" for large number', () => {
+        expect(prettifyNumber(1321965595)).toEqual('1,321,965,595.00');
       });
 
       test('should return "$1,321,965,595.00" for large number and currentCurrency is USD', () => {
@@ -216,17 +225,17 @@ describe('Test helpers', () => {
       });
 
       test('Check rounding is correct - default = math.floor', () => {
-        expect(prettifyNumber(18999.999999999851769955)).toEqual('18,999');
-        expect(prettifyNumber(19999.999999999986138278)).toEqual('19,999');
+        expect(prettifyNumber(18999.999999999851769955)).toEqual('18,999.99');
+        expect(prettifyNumber(19999.999999999986138278)).toEqual('19,999.99');
       });
 
       test('Check rounding is correct - math.round', () => {
         expect(
           prettifyNumber(18999.999999999851769955, { round: true })
-        ).toEqual('19,000');
+        ).toEqual('19,000.00');
         expect(
           prettifyNumber(19999.999999999986138278, { round: true })
-        ).toEqual('20,000');
+        ).toEqual('20,000.00');
       });
 
       test('Check rounding is correct - currentCurrency is USD', () => {
@@ -242,9 +251,71 @@ describe('Test helpers', () => {
       });
 
       test('Remove redundant zero', () => {
-        expect(prettifyNumber('18.00000')).toEqual('18');
+        expect(prettifyNumber('18.00000')).toEqual('18.00');
         expect(prettifyNumber('18.120000')).toEqual('18.12');
         expect(prettifyNumber('18.12345678910000')).toEqual('18.12');
+      });
+
+      ///////////////
+      // Subscript //
+      ///////////////
+      test('should return "0.0₅1" for input 0.000001 and no currentCurrency selected', () => {
+        expect(prettifyNumber(0.000001)).toEqual('0.0₅1');
+      });
+
+      test('should return "0.0₆12345" for input 0.000000123456 and no currentCurrency selected', () => {
+        expect(prettifyNumber(0.000000123456)).toEqual('0.0₆12345');
+      });
+
+      ////////////////
+      // Abbreviate //
+      ////////////////
+      test('Abbreviate should not display K for thousands', () => {
+        expect(prettifyNumber(123456, { abbreviate: true })).toEqual(
+          '123,456.00'
+        );
+      });
+      test('Abbreviate should display M for millions', () => {
+        expect(prettifyNumber(1234567, { abbreviate: true })).toEqual('1.23M');
+      });
+      test('Abbreviate should display B for billions', () => {
+        expect(prettifyNumber(1234567890, { abbreviate: true })).toEqual(
+          '1.23B'
+        );
+      });
+      test('Abbreviate should display T for trillions', () => {
+        expect(prettifyNumber(1234567890000, { abbreviate: true })).toEqual(
+          '1.23T'
+        );
+      });
+
+      ////////////////////
+      // High Precision //
+      ////////////////////
+      test('High precision should trunc after 6 decimal by default', () => {
+        const option = { highPrecision: true };
+        expect(prettifyNumber(1.23456789, option)).toEqual('1.234567');
+        expect(prettifyNumber(1.00000012, option)).toEqual('1.00');
+      });
+      test('High precision should trunc with decimals in options', () => {
+        const option = { highPrecision: true, decimals: 10 };
+        expect(prettifyNumber(1.2345678901234, option)).toEqual('1.2345678901');
+      });
+      test('High precision should has 5 significant digits if there is 6 zeros', () => {
+        const option = { highPrecision: true };
+        expect(prettifyNumber(0.0000001234567, option)).toEqual(
+          '0.00000012345'
+        );
+        expect(prettifyNumber(0.000000000001234567, option)).toEqual(
+          '0.0000000000012345'
+        );
+      });
+      test('High precision should has 5 significant digits if decimals is 4 & there is at least 4 zeros', () => {
+        const option = { highPrecision: true, decimals: 4 };
+        expect(prettifyNumber(0.00001234567, option)).toEqual('0.000012345');
+        expect(prettifyNumber(0.0000001234567, option)).toEqual(
+          '0.00000012345'
+        );
       });
     });
   });

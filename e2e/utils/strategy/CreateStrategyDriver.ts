@@ -1,5 +1,10 @@
 import { Page } from '@playwright/test';
-import { CreateStrategyInput, RangeOrder } from './types';
+import {
+  CreateStrategyInput,
+  assertDebugToken,
+  debugTokens,
+  RangeOrder,
+} from './../../utils/strategy/';
 import { waitModalClose, waitModalOpen } from '../modal';
 import { TestCase } from '../types';
 
@@ -28,6 +33,21 @@ export interface RecurringStrategyOutput {
     totalFiat: string;
     buy: OrderOutput;
     sell: OrderOutput;
+  };
+  undercut: {
+    totalFiat: string;
+    buy: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
+    sell: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
   };
 }
 export type RecurringStrategyTestCase = TestCase<
@@ -132,10 +152,12 @@ export class CreateStrategyDriver {
   }
 
   async selectToken(tokenType: 'base' | 'quote') {
-    const token = this.testCase.input[tokenType];
+    const symbol = this.testCase[tokenType];
+    assertDebugToken(symbol);
+    const token = debugTokens[symbol];
     await this.page.getByTestId(`select-${tokenType}-token`).click();
     await waitModalOpen(this.page);
-    await this.page.getByLabel('Select Token').fill(token);
+    await this.page.getByLabel('Select Token').fill(symbol);
     await this.page.getByTestId(`select-token-${token}`).click();
     await waitModalClose(this.page);
   }

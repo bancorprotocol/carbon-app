@@ -209,9 +209,7 @@ const testCases: CreateStrategyTestCase[] = [
       type: 'recurring',
       setting: 'limit_range',
       base: 'ETH',
-      baseAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       quote: 'DAI',
-      quoteAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
       buy: {
         min: '1500',
         max: '1500',
@@ -250,9 +248,7 @@ const testCases: CreateStrategyTestCase[] = [
       type: 'recurring',
       setting: 'range_limit',
       base: 'ETH',
-      baseAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       quote: 'DAI',
-      quoteAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
       buy: {
         min: '1500',
         max: '1600',
@@ -291,9 +287,7 @@ const testCases: CreateStrategyTestCase[] = [
       type: 'recurring',
       setting: 'range_range',
       base: 'ETH',
-      baseAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       quote: 'DAI',
-      quoteAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
       buy: {
         min: '1500',
         max: '1600',
@@ -349,15 +343,15 @@ const testCases: CreateStrategyTestCase[] = [
       create: {
         totalFiat: '$25.11',
         buy: {
-          min: '0.3 USDC',
+          min: '0.30 USDC',
           max: '0.545454 USDC',
-          budget: '12.5 USDC',
+          budget: '12.50 USDC',
           fiat: '$12.50',
         },
         sell: {
           min: '0.33 USDC',
-          max: '0.6 USDC',
-          budget: '30 BNT',
+          max: '0.60 USDC',
+          budget: '30.00 BNT',
           fiat: '$12.61',
         },
       },

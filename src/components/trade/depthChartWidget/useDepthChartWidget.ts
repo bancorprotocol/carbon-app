@@ -89,9 +89,13 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
           tickWidth: 0,
           lineWidth: 0,
           labels: {
-            formatter: ({ value }) => prettifyNumber(value),
+            formatter: ({ value }) => {
+              return prettifyNumber(value, { abbreviate: true });
+            },
             style: {
               color: 'rgba(255, 255, 255, 0.6)',
+              fontFamily:
+                'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
             },
           },
           crosshair: {
@@ -132,8 +136,13 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
             tickLength: 5,
             tickPosition: 'inside',
             labels: {
+              formatter: ({ value }) => {
+                return prettifyNumber(value, { abbreviate: true });
+              },
               style: {
                 color: 'rgba(255, 255, 255, 0.6)',
+                fontFamily:
+                  'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
               },
             },
           },
@@ -158,7 +167,12 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
         tooltip: {
           headerFormat: ' ',
           formatter: function () {
-            return `Amount: ${this.y} ${base?.symbol}<br/>Price: ${this.x} ${quote?.symbol}`;
+            if (typeof this.x !== 'number' || typeof this.y !== 'number') {
+              return '';
+            }
+            const x = prettifyNumber(this.x, { highPrecision: true });
+            const y = prettifyNumber(this.y, { highPrecision: true });
+            return `Amount: ${y} ${base?.symbol}<br/>Price: ${x} ${quote?.symbol}`;
           },
           valueDecimals: undefined,
           borderRadius: 12,

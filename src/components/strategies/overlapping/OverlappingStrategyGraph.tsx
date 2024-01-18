@@ -155,6 +155,14 @@ const getMarginalSellPoint = (config: PointConfig) => {
   }
 };
 
+// Make sure the distance is always large enough to avoid blurry behavior
+const getXFactor = (min: number, max: number, marketPrice: number) => {
+  const lowest = Math.min(min, max, marketPrice);
+  const highest = Math.max(min, max, marketPrice);
+  const delta = highest - lowest || 1;
+  return 1 / delta;
+};
+
 export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
@@ -162,9 +170,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const { quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
-  // Make sure the distance is always large enough to avoid blurry behavior
-  const delta = baseMax - baseMin || 1;
-  const xFactor = delta <= 1 ? 1 / delta : 1;
+  const xFactor = getXFactor(baseMin, baseMax, props.marketPrice);
 
   const marketPrice = props.marketPrice * xFactor;
 
@@ -665,7 +671,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 x={price.toString()}
                 {...priceIndicator}
               >
-                {prettifySignedNumber(price.div(xFactor))}
+                {prettifySignedNumber(price.div(xFactor), { abbreviate: true })}
               </text>
             ))}
           </g>

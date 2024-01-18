@@ -68,11 +68,10 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const to = center + delta * 1.25;
 
   const pricePoints = [
-    from + (1 / 3) * (center - from),
-    from + (2 / 3) * (center - from),
-    center,
-    to - (2 / 3) * (to - center),
-    to - (1 / 3) * (to - center),
+    from + (1 / 4) * (center - from),
+    from + (3 / 4) * (center - from),
+    to - (3 / 4) * (to - center),
+    to - (1 / 4) * (to - center),
   ];
 
   // X position
@@ -142,7 +141,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
   return (
     <svg
-      className={style.strategyGraph}
+      className={cn(style.strategyGraph, 'font-mono')}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -380,7 +379,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
             y={baseline + 10}
             dominantBaseline="hanging"
             textAnchor="middle"
-            fontSize="12"
+            fontSize="16"
             opacity="60%"
           >
             {prettifyNumber(point, { abbreviate: true, round: true })}
@@ -412,7 +411,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
 
   // Out of Range
   const maxChar = Math.max(formattedPrice.length, '(off-scale)'.length);
-  const outRangeWidth = `${maxChar + 2}ch`;
+  const outRangeWidth = `${maxChar + 6}ch`;
   // In Range
   const inRangeWidth = `${formattedPrice.length + 2}ch`;
   const baseDelta = `${(formattedPrice.length + 2) / 2}ch`; // 6ch
@@ -422,7 +421,6 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
   const translateStart = `min(${baseDelta}, ${deltaStart}px)`;
   const translateEnd = `max((${inRangeWidth}  / 2) - ${deltaEnd}px, 0px)`;
   const translateRect = `translateX(calc(-1 * (${translateStart} + ${translateEnd})))`;
-  const translateText = `translateX(calc(-1 * (${translateStart} + ${translateEnd} - 1.5ch)))`;
 
   return (
     <g className={style.currentPrice}>
@@ -448,10 +446,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[1]}
-            y="13"
+            y="9"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -461,10 +459,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[1]}
-            y="28"
+            y="26"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -480,7 +478,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             x={price}
             y="6"
             width={inRangeWidth}
-            height="20"
+            height="22"
             rx="4"
             style={{
               transform: translateRect,
@@ -488,13 +486,13 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={price}
-            y="13"
+            x={price + 8}
+            y="10"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="12"
+            fontSize="16"
             style={{
-              transform: translateText,
+              transform: translateRect,
             }}
           >
             {formattedPrice}
@@ -517,10 +515,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[steps.length - 1]}
-            y="13"
+            y="9"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -530,10 +528,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           <text
             fill="white"
             x={steps[steps.length - 1]}
-            y="28"
+            y="26"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -555,7 +553,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const order = buy ? strategy.order0 : strategy.order1;
   const limit = order.startRate === order.endRate;
   const priceOption = {
-    abbreviate: order.endRate.length > 10,
+    abbreviate: true,
     round: true,
     useSubscript: false,
   };
@@ -566,7 +564,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const color = buy ? 'text-green' : 'text-red';
   return (
     <article
-      className="flex flex-col gap-16 text-12"
+      className="flex flex-col gap-16 text-14"
       data-testid="order-tooltip"
     >
       <h3 className={cn('text-16 font-weight-500', color)}>
@@ -587,7 +585,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       {!limit && (
-        <table className="border-separate rounded-8 border border-white/40">
+        <table className="border-separate rounded-8 border border-white/40 font-mono">
           <tbody>
             <tr>
               <th className="p-8 pb-4 text-start font-weight-400 text-white/60">
