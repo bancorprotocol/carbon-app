@@ -1,16 +1,15 @@
-import {
-  PathNames,
-  useSearch,
-  useRouterState,
-  useNavigate,
-} from 'libs/routing';
+import { useMatchRoute } from '@tanstack/react-router';
+import { useSearch, useNavigate } from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
 import { TradeSearch } from 'libs/routing/routes/trade';
 
 export const useTradeTokens = () => {
   const navigate = useNavigate();
-  const { location } = useRouterState();
-  const isTradePage = location.pathname === PathNames.trade;
+  const match = useMatchRoute();
+  const isTradePage = match({
+    to: '/trade',
+    fuzzy: true,
+  });
   const { getTokenById } = useTokens();
   const search: TradeSearch = useSearch({ strict: false });
 

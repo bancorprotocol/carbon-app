@@ -1,10 +1,11 @@
-import { Link } from 'libs/routing';
-import { cn, isPathnameMatch } from 'utils/helpers';
+import { ToOptions, useMatchRoute } from '@tanstack/react-router';
+import { Link, Pathnames } from 'libs/routing';
+import { cn } from 'utils/helpers';
 
 export interface StrategyTab {
   label: string;
-  href: string;
-  hrefMatches: string[];
+  href: Pathnames;
+  params?: ToOptions['params'];
   icon: JSX.Element;
   badge?: number;
 }
@@ -15,18 +16,27 @@ interface Props {
 }
 
 export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
+  const match = useMatchRoute();
   return (
     <nav
       aria-label="Strategy Panels"
       className="flex w-full gap-2 rounded-full border-2 border-silver p-6 text-14 md:w-auto"
     >
-      {tabs.map(({ label, href, icon, badge, hrefMatches }) => {
-        const active = isPathnameMatch(currentPathname, href, hrefMatches);
+      {tabs.map(({ label, href, params, icon, badge }) => {
+        const active = match({
+          to: href,
+          search: {},
+          params: params ?? {},
+          fuzzy:
+            currentPathname.includes('/token/') && href.includes('portfolio'),
+        });
+
         return (
           <Link
             to={href}
             // TODO: fix this
-            params={{}}
+            params={params ?? {}}
+            search={{}}
             key={href}
             className={cn(
               'flex w-full items-center justify-center gap-4 rounded-full py-5 md:px-10',

@@ -13,3 +13,4 @@ export {
 export { A } from 'libs/routing/A';
 export { Outlet } from '@tanstack/react-router';
 export { externalLinks } from 'libs/routing/externalLinks';
+export type { Pathnames } from './types';

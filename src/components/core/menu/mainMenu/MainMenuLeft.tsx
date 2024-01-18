@@ -1,13 +1,14 @@
+import { useMatchRoute, useRouterState } from '@tanstack/react-router';
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
-import { Link, useRouterState } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { isPathnameMatch } from 'utils/helpers';
 import { handleOnItemClick } from '../utils';
 import { menuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
-  const pathname = useRouterState().location.pathname;
+  const { pathname } = useRouterState().location;
+  const match = useMatchRoute();
 
   return (
     <nav
@@ -23,8 +24,17 @@ export const MainMenuLeft: FC = () => {
       </Link>
 
       <div className={'hidden space-x-24 md:block'}>
-        {menuItems.map(({ label, href, hrefMatches }, index) => {
-          const isSamePage = isPathnameMatch(pathname, href, hrefMatches);
+        {menuItems.map(({ label, href }, index) => {
+          let isSamePage = match({
+            to: href,
+            search: {},
+            params: {},
+            fuzzy: true,
+          });
+          if (pathname.startsWith('/strategies') && href === '/') {
+            isSamePage = true;
+          }
+
           return (
             <Link
               key={index}
@@ -32,9 +42,10 @@ export const MainMenuLeft: FC = () => {
               to={href}
               // TODO: fix this
               params={{}}
+              search={{}}
               aria-current={isSamePage ? 'page' : 'false'}
               className={`px-3 py-3 transition-colors duration-300 ${
-                isSamePage ? 'text-white' : 'hover:text-white'
+                isSamePage !== false ? 'text-white' : 'hover:text-white'
               }`}
             >
               {label}

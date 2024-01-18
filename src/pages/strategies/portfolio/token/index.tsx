@@ -5,7 +5,6 @@ import { PathNames, useParams } from 'libs/routing';
 export const StrategiesPortfolioTokenPage = () => {
   const { strategies, isLoading } = useStrategyCtx();
   const { address } = useParams({
-    // TODO fix this - layout id should not be here
     from: '/my-strategy-layout/strategies/portfolio/token/$address',
   });
 

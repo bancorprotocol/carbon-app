@@ -1,5 +1,5 @@
 import { ReactNode, useMemo } from 'react';
-import { PathNames, useNavigate } from 'libs/routing';
+import { Pathnames, useNavigate } from 'libs/routing';
 import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
@@ -11,7 +11,7 @@ interface StrategyTypeItem {
   label: string;
   description: string;
   benefits: { summary: string; details: string }[];
-  to: string;
+  to: Pathnames;
   search: StrategyCreateSearch;
   isRecommended?: boolean;
   svg: ReactNode;
@@ -44,7 +44,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconBuyLimit className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,
@@ -82,7 +82,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconBuyRange className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,
@@ -115,7 +115,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconTwoRanges className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,
@@ -142,7 +142,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconOverlappingStrategy className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,

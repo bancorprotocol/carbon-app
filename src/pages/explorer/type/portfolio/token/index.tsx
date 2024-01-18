@@ -1,5 +1,4 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
-import { PathNames } from 'libs/routing';
 import { useExplorerParams } from 'components/explorer/useExplorerParams';
 import { useStrategyCtx } from 'hooks/useStrategies';
 

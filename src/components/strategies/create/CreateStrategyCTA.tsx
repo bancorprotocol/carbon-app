@@ -1,5 +1,6 @@
+import { useRouterState } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
-import { Link, PathNames, useRouterState } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { carbonEvents } from 'services/events';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { isPathnameMatch } from 'utils/helpers';
@@ -22,9 +23,9 @@ export const CreateStrategyCTAMobile = () => {
   const { pathname } = useRouterState().location;
 
   const showCTA = isPathnameMatch(pathname, '/', [
-    PathNames.strategies,
-    PathNames.portfolio,
-    PathNames.portfolioToken('0x'),
+    '/',
+    '/strategies/portfolio',
+    '/strategies/portfolio/token/$address',
   ]);
 
   if (!showCTA) {

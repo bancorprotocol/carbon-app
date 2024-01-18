@@ -1,3 +1,4 @@
+import { useMatchRoute } from '@tanstack/react-router';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -9,7 +10,7 @@ import { StrategyPageTitleWidget } from 'components/strategies/overview/Strategy
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
-import { Outlet, PathNames, useRouterState } from 'libs/routing';
+import { Outlet, useRouterState } from 'libs/routing';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
@@ -19,25 +20,25 @@ export const StrategiesPage = () => {
   const { belowBreakpoint } = useBreakpoints();
   const { user } = useWeb3();
   const query = useGetUserStrategies({ user });
+  const match = useMatchRoute();
+  const isStrategiesPage = match({ to: '/' });
 
   const showFilter = useMemo(() => {
-    if (pathname !== PathNames.strategies) return false;
+    if (!isStrategiesPage) return false;
     if (belowBreakpoint('lg')) return false;
     return !!(query.data && query.data.length > 2);
-  }, [belowBreakpoint, pathname, query.data]);
+  }, [belowBreakpoint, isStrategiesPage, query.data]);
 
   const tabs: StrategyTab[] = [
     {
       label: 'Overview',
-      href: PathNames.strategies,
-      hrefMatches: [PathNames.strategies],
+      href: '/',
       icon: <IconOverview className="h-18 w-18" />,
       badge: query.data?.length,
     },
     {
       label: 'Portfolio',
-      href: PathNames.portfolio,
-      hrefMatches: [PathNames.portfolio, PathNames.portfolioToken('0x')],
+      href: '/strategies/portfolio',
       icon: <IconPieChart className="h-18 w-18" />,
     },
   ];
