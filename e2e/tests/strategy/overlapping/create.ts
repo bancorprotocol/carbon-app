@@ -13,7 +13,8 @@ import { checkApproval } from '../../../utils/modal';
 
 export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
-  const { base, quote, sell } = testCase.input;
+  const { base, quote } = testCase;
+  const { sell } = testCase.input.create;
   const output = testCase.output.create;
 
   return test(`Create ${base}->${quote}`, async ({ page }) => {

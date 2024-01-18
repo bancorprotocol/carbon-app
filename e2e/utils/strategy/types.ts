@@ -1,5 +1,3 @@
-import { TestCase } from '../types';
-
 export const debugTokens = {
   BNB: '0x418D75f65a02b3D53B2418FB8E1fe493759c7605',
   BNT: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
@@ -34,11 +32,8 @@ export const STRATEGY_TYPES = [
 export type StrategyType = (typeof STRATEGY_TYPES)[number];
 
 export interface CreateStrategyInput {
-  base: DebugTokens;
-  quote: DebugTokens;
   buy: RangeOrder;
   sell: RangeOrder;
-  amount?: string;
   spread?: string;
 }
 
@@ -69,53 +64,96 @@ interface OrderOutput {
   fiat: string;
 }
 
-export interface RecurringStrategyInput extends CreateStrategyInput {
+///////////////
+// RECURRING //
+///////////////
+
+export interface RecurringStrategyTestCase {
   type: 'recurring';
   setting: `${Setting}_${Setting}`;
-}
-export interface RecurringStrategyOutput {
-  create: {
-    totalFiat: string;
-    buy: OrderOutput;
-    sell: OrderOutput;
+  base: DebugTokens;
+  quote: DebugTokens;
+  input: {
+    create: CreateStrategyInput;
+    editPrice: {
+      buy: {
+        min: string;
+        max: string;
+      };
+      sell: {
+        min: string;
+        max: string;
+      };
+    };
+  };
+  output: {
+    create: {
+      totalFiat: string;
+      buy: OrderOutput;
+      sell: OrderOutput;
+    };
+    editPrice: {
+      buy: {
+        min: string;
+        max: string;
+      };
+      sell: {
+        min: string;
+        max: string;
+      };
+    };
   };
 }
-export type RecurringStrategyTestCase = TestCase<
-  RecurringStrategyInput,
-  RecurringStrategyOutput
->;
 
-export interface OverlappingStrategyInput extends CreateStrategyInput {
-  type: 'overlapping';
+/////////////////
+// OVERLAPPING //
+/////////////////
+
+export interface CreateOverlappingStrategyInput extends CreateStrategyInput {
   spread: string;
 }
-export interface OverlappingStrategyOutput {
-  create: {
-    totalFiat: string;
-    buy: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
-    sell: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
+export interface OverlappingStrategyTestCase {
+  type: 'overlapping';
+  base: DebugTokens;
+  quote: DebugTokens;
+  input: {
+    create: CreateOverlappingStrategyInput;
+  };
+  output: {
+    create: {
+      totalFiat: string;
+      buy: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
+      sell: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
+    };
   };
 }
-export type OverlappingStrategyTestCase = TestCase<
-  OverlappingStrategyInput,
-  OverlappingStrategyOutput
->;
 
-export interface DisposableStrategyInput extends CreateStrategyInput {
-  type: 'disposable';
-  setting: Setting;
-  direction: Direction;
-}
+////////////////
+// DISPOSABLE //
+////////////////
+
 export interface DisposableStrategyOutput {
   create: {
     buy: OrderOutput;
     sell: OrderOutput;
   };
 }
-export type DisposableStrategyTestCase = TestCase<
-  DisposableStrategyInput,
-  DisposableStrategyOutput
->;
+export interface DisposableStrategyTestCase {
+  type: 'disposable';
+  setting: Setting;
+  direction: Direction;
+  base: DebugTokens;
+  quote: DebugTokens;
+  input: {
+    create: CreateStrategyInput;
+  };
+  output: {
+    create: {
+      buy: OrderOutput;
+      sell: OrderOutput;
+    };
+  };
+}
 
 export type CreateStrategyTestCase =
   | DisposableStrategyTestCase

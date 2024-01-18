@@ -6,17 +6,16 @@ import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDr
 import { CreateStrategyTestCase } from '../../../utils/strategy';
 
 export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
-  const { input } = testCase;
+  const { base, quote } = testCase;
+  const { buy, sell } = testCase.input.create;
   return test('Withdraw', async ({ page }) => {
-    const { base, quote, buy, sell } = input;
-
     const buyBudget = parseFloat(buy.budget);
     const sellBudget = parseFloat(sell.budget);
     const withdrawBuyBudget = buyBudget / 2;
     const withdrawSellBudget = sellBudget / 2;
 
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(input);
+    const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-withdrawFunds');
 
     const modal = await waitModalOpen(page);

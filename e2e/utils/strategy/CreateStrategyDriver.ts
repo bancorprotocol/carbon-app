@@ -48,7 +48,7 @@ export class CreateStrategyDriver {
   }
 
   async selectToken(tokenType: 'base' | 'quote') {
-    const symbol = this.testCase.input[tokenType];
+    const symbol = this.testCase[tokenType];
     assertDebugToken(symbol);
     const token = debugTokens[symbol];
     await this.page.getByTestId(`select-${tokenType}-token`).click();
@@ -81,17 +81,16 @@ export class CreateStrategyDriver {
 
   async fillRecurring() {
     assertRecurringTestCase(this.testCase);
+    const { buy, sell } = this.testCase.input.create;
     const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-    const buyOrder = this.testCase.input.buy;
-    const buyForm = await this.fillFormSection('buy', buySetting, buyOrder);
-    const sellOrder = this.testCase.input.sell;
-    const sellForm = await this.fillFormSection('sell', sellSetting, sellOrder);
+    const buyForm = await this.fillFormSection('buy', buySetting, buy);
+    const sellForm = await this.fillFormSection('sell', sellSetting, sell);
     return { buyForm, sellForm };
   }
 
   async fillOverlapping() {
     assertOverlappingTestCase(this.testCase);
-    const { buy, sell, spread } = this.testCase.input;
+    const { buy, sell, spread } = this.testCase.input.create;
     const form = this.getOverlappingForm();
     await form.max().fill(sell.max.toString());
     await form.min().fill(buy.min.toString());
@@ -102,7 +101,7 @@ export class CreateStrategyDriver {
 
   async fillDisposable() {
     assertDisposableTestCase(this.testCase);
-    const { direction, setting } = this.testCase.input;
+    const { direction, setting } = this.testCase;
     await this.page.getByTestId(`tab-${direction}`).click();
     const order = this.testCase.input[direction];
     return this.fillFormSection(direction, setting, order);

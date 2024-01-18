@@ -9,21 +9,23 @@ import * as overlapping from '../tests/strategy/overlapping/';
 const testCases: CreateStrategyTestCase[] = [
   // Disposable
   {
+    type: 'disposable',
+    setting: 'limit',
+    direction: 'buy',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'limit',
-      direction: 'buy',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1500',
-        budget: '10',
-      },
-      sell: {
-        min: '0',
-        max: '0',
-        budget: '0',
+      create: {
+        buy: {
+          min: '1500',
+          max: '1500',
+          budget: '10',
+        },
+        sell: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
       },
     },
     output: {
@@ -48,21 +50,23 @@ const testCases: CreateStrategyTestCase[] = [
     },
   },
   {
+    type: 'disposable',
+    setting: 'limit',
+    direction: 'sell',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'limit',
-      direction: 'sell',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '0',
-        max: '0',
-        budget: '0',
-      },
-      sell: {
-        min: '1700',
-        max: '1700',
-        budget: '2',
+      create: {
+        buy: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
+        sell: {
+          min: '1700',
+          max: '1700',
+          budget: '2',
+        },
       },
     },
     output: {
@@ -87,21 +91,23 @@ const testCases: CreateStrategyTestCase[] = [
     },
   },
   {
+    type: 'disposable',
+    setting: 'range',
+    direction: 'buy',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'range',
-      direction: 'buy',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1700',
-        budget: '10',
-      },
-      sell: {
-        min: '0',
-        max: '0',
-        budget: '0',
+      create: {
+        buy: {
+          min: '1500',
+          max: '1700',
+          budget: '10',
+        },
+        sell: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
       },
     },
     output: {
@@ -126,21 +132,23 @@ const testCases: CreateStrategyTestCase[] = [
     },
   },
   {
+    type: 'disposable',
+    setting: 'range',
+    direction: 'sell',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'range',
-      direction: 'sell',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '0',
-        max: '0',
-        budget: '0',
-      },
-      sell: {
-        min: '1500',
-        max: '1700',
-        budget: '2',
+      create: {
+        buy: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
+        sell: {
+          min: '1500',
+          max: '1700',
+          budget: '2',
+        },
       },
     },
     output: {
@@ -166,20 +174,32 @@ const testCases: CreateStrategyTestCase[] = [
   },
   // Recurring
   {
+    type: 'recurring',
+    setting: 'limit_limit',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'recurring',
-      setting: 'limit_limit',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1500',
-        budget: '10',
+      create: {
+        buy: {
+          min: '1500',
+          max: '1500',
+          budget: '10',
+        },
+        sell: {
+          min: '1700',
+          max: '1700',
+          budget: '2',
+        },
       },
-      sell: {
-        min: '1700',
-        max: '1700',
-        budget: '2',
+      editPrice: {
+        buy: {
+          min: '1600',
+          max: '1600',
+        },
+        sell: {
+          min: '1800',
+          max: '1800',
+        },
       },
     },
     output: {
@@ -196,8 +216,8 @@ const testCases: CreateStrategyTestCase[] = [
         sell: {
           min: '1,700.00 DAI',
           max: '1,700.00 DAI',
-          outcomeValue: '3,400 DAI',
-          outcomeQuote: '1,700 DAI',
+          outcomeValue: '3,400.00 DAI',
+          outcomeQuote: '1,700.00 DAI',
           budget: '2.00 ETH',
           fiat: '$3,334.42',
         },
@@ -215,27 +235,39 @@ const testCases: CreateStrategyTestCase[] = [
           max: '1,698.30 DAI',
           budget: '2.00 ETH',
           fiat: '$3,334.42',
+        }
+      },
+      editPrice: {
+        buy: {
+          min: '',
+          max: '',
+        },
+        sell: {
+          min: '',
+          max: '',
         },
       },
     },
   },
   // Overlapping
   {
+    type: 'overlapping',
+    base: 'BNT',
+    quote: 'USDC',
     input: {
-      type: 'overlapping',
-      base: 'BNT',
-      quote: 'USDC',
-      buy: {
-        min: '0.3',
-        max: '0.545454',
-        budget: '12.501572',
+      create: {
+        buy: {
+          min: '0.3',
+          max: '0.545454',
+          budget: '12.501572',
+        },
+        sell: {
+          min: '0.33',
+          max: '0.6',
+          budget: '30',
+        },
+        spread: '10', // Need a large spread for tooltip test
       },
-      sell: {
-        min: '0.33',
-        max: '0.6',
-        budget: '30',
-      },
-      spread: '10', // Need a large spread for tooltip test
     },
     output: {
       create: {
@@ -258,12 +290,11 @@ const testCases: CreateStrategyTestCase[] = [
 ];
 
 const testDescription = (testCase: CreateStrategyTestCase) => {
-  const input = testCase.input;
-  if (input.type === 'overlapping') return 'Overlapping';
-  if (input.type === 'disposable') {
-    return `Disposable ${input.direction} ${input.setting}`;
+  if (testCase.type === 'overlapping') return 'Overlapping';
+  if (testCase.type === 'disposable') {
+    return `Disposable ${testCase.direction} ${testCase.setting}`;
   }
-  return `Recurring ${input.setting.split('_').join(' ')}`;
+  return `Recurring ${testCase.setting.split('_').join(' ')}`;
 };
 
 test.describe('Strategies', () => {
@@ -287,7 +318,7 @@ test.describe('Strategies', () => {
 
   for (const testCase of testCases) {
     test.describe(testDescription(testCase), () => {
-      const testSuite = testStrategies[testCase.input.type];
+      const testSuite = testStrategies[testCase.type];
       for (const [, testFn] of Object.entries(testSuite)) {
         testFn(testCase);
       }

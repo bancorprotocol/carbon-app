@@ -8,7 +8,7 @@ import {
 } from './../utils/tenderly';
 import { Wallet } from 'ethers';
 import { checkApproval } from './modal';
-import { CreateStrategyInput } from './strategy';
+import { CreateStrategyTestCase } from './strategy';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -73,8 +73,9 @@ export class DebugDriver {
     return this.page.getByTestId(`balance-${token}`);
   }
 
-  async createStrategy(template: CreateStrategyInput) {
-    const { base, quote, buy, sell, spread, amount } = template;
+  async createStrategy(testCase: CreateStrategyTestCase) {
+    const { base, quote } = testCase;
+    const { buy, sell, spread } = testCase.input.create;
     // TODO: use textarea shortcut instead of filling each field.
     // Currently this revert with Dai/insufficient-allowance for some reason
     // await this.page.getByTestId('strategy-json-shortcut').fill(JSON.stringify(template));
@@ -91,7 +92,7 @@ export class DebugDriver {
     await this.page.getByTestId('sellMin').fill(sell.min);
     await this.page.getByTestId('sellMax').fill(sell.max);
     await this.page.getByTestId('sellBudget').fill(sell.budget);
-    await this.page.getByTestId('strategy-amount').fill(amount ?? '1');
+    await this.page.getByTestId('strategy-amount').fill('1');
     await this.page.getByTestId('create-strategies').click();
     await checkApproval(this.page, [base, quote]);
     await this.page.getByTestId('creating-strategies').waitFor({

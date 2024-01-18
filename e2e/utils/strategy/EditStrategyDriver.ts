@@ -1,21 +1,9 @@
-import { DebugDriver } from './../../utils/DebugDriver';
-import { navigateTo } from './../../utils/operators';
-import { MyStrategyDriver } from './../../utils/strategy/MyStrategyDriver';
 import { Page } from 'playwright-core';
-import { CreateStrategyInput, RangeOrder, Setting } from './types';
-import { Direction } from 'readline';
+import { CreateStrategyTestCase, Setting, Direction } from './types';
+import { assertRecurringTestCase, getRecurringSettings } from './utils';
 
-export class ManageStrategyDriver {
-  constructor(private page: Page) {}
-
-  async createStrategy(input: CreateStrategyInput) {
-    const debug = new DebugDriver(this.page);
-    await debug.createStrategy(input);
-    await navigateTo(this.page, '/');
-    const myStrategies = new MyStrategyDriver(this.page);
-    return await myStrategies.getStrategy(1);
-  }
-
+export class EditStrategyDriver {
+  constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
   async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
     await this.page.waitForURL(`/strategies/edit/*?type=${type}`, {
       timeout: 10_000,
@@ -51,7 +39,7 @@ export class ManageStrategyDriver {
   async fillFormSection(
     direction: Direction,
     setting: Setting,
-    order: RangeOrder
+    order: { min: string; max: string }
   ) {
     const form = this.getFormSection(direction);
     await form.setting(setting).click();
@@ -61,7 +49,15 @@ export class ManageStrategyDriver {
       await form.min().fill(order.min);
       await form.max().fill(order.max);
     }
-    await form.budget().fill(order.budget);
     return form;
+  }
+
+  async fillRecurring() {
+    assertRecurringTestCase(this.testCase);
+    const { buy, sell } = this.testCase.input.editPrice;
+    const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
+    const buyForm = await this.fillFormSection('buy', buySetting, buy);
+    const sellForm = await this.fillFormSection('sell', sellSetting, sell);
+    return { buyForm, sellForm };
   }
 }

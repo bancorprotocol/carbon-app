@@ -20,7 +20,7 @@ import {
 export function assertDisposableTestCase(
   testCase: CreateStrategyTestCase
 ): asserts testCase is DisposableStrategyTestCase {
-  if (testCase.input.type !== 'disposable') {
+  if (testCase.type !== 'disposable') {
     throw new Error('Test case should be disposable');
   }
 }
@@ -28,7 +28,7 @@ export function assertDisposableTestCase(
 export function assertRecurringTestCase(
   testCase: CreateStrategyTestCase
 ): asserts testCase is RecurringStrategyTestCase {
-  if (testCase.input.type !== 'recurring') {
+  if (testCase.type !== 'recurring') {
     throw new Error('Test case should be recurring');
   }
 }
@@ -36,13 +36,13 @@ export function assertRecurringTestCase(
 export function assertOverlappingTestCase(
   testCase: CreateStrategyTestCase
 ): asserts testCase is OverlappingStrategyTestCase {
-  if (testCase.input.type !== 'overlapping') {
+  if (testCase.type !== 'overlapping') {
     throw new Error('Test case should be overlapping');
   }
 }
 
 export const getRecurringSettings = (testCase: RecurringStrategyTestCase) => {
-  return testCase.input.setting.split('_') as [Setting, Setting];
+  return testCase.setting.split('_') as [Setting, Setting];
 };
 
 export function assertDebugToken(
@@ -56,12 +56,11 @@ export function assertDebugToken(
 }
 
 export const testDescription = (testCase: CreateStrategyTestCase) => {
-  const input = testCase.input;
-  if (input.type === 'overlapping') return 'Overlapping';
-  if (input.type === 'disposable') {
-    return `Disposable ${input.direction} ${input.setting}`;
+  if (testCase.type === 'overlapping') return 'Overlapping';
+  if (testCase.type === 'disposable') {
+    return `Disposable ${testCase.direction} ${testCase.setting}`;
   }
-  return `Recurring ${input.setting.split('_').join(' ')}`;
+  return `Recurring ${testCase.setting.split('_').join(' ')}`;
 };
 
 const emptyOrder = () => ({ min: '0', max: '0', budget: '0' });

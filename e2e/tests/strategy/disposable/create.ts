@@ -13,7 +13,7 @@ import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
-  const { base, quote, direction } = testCase.input;
+  const { base, quote, direction } = testCase;
   const output = testCase.output.create;
   const order = output[direction];
   if (!order) {
