@@ -1,6 +1,7 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
 import { useExplorerParams } from 'components/explorer/useExplorerParams';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { PathNames } from 'libs/routing';
 
 export const ExplorerTypePortfolioTokenPage = () => {
   const { address, type, slug } = useExplorerParams();
