@@ -204,6 +204,129 @@ const testCases: CreateStrategyTestCase[] = [
       },
     },
   },
+  {
+    input: {
+      type: 'recurring',
+      setting: 'limit_range',
+      base: 'ETH',
+      baseAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      quote: 'DAI',
+      quoteAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+      buy: {
+        min: '1500',
+        max: '1500',
+        budget: '10',
+      },
+      sell: {
+        min: '1700',
+        max: '1800',
+        budget: '2',
+      },
+    },
+    output: {
+      create: {
+        totalFiat: '$3,344.42',
+        buy: {
+          min: '1,500 DAI',
+          max: '1,500 DAI',
+          outcomeValue: '0.006666 ETH',
+          outcomeQuote: '1,500 DAI',
+          budget: '10 DAI',
+          fiat: '$10.00',
+        },
+        sell: {
+          min: '1,700 DAI',
+          max: '1,800 DAI',
+          outcomeValue: '3,498 DAI',
+          outcomeQuote: '1,749 DAI',
+          budget: '2 ETH',
+          fiat: '$3,334.42',
+        },
+      },
+    },
+  },
+  {
+    input: {
+      type: 'recurring',
+      setting: 'range_limit',
+      base: 'ETH',
+      baseAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      quote: 'DAI',
+      quoteAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+      buy: {
+        min: '1500',
+        max: '1600',
+        budget: '10',
+      },
+      sell: {
+        min: '1700',
+        max: '1700',
+        budget: '2',
+      },
+    },
+    output: {
+      create: {
+        totalFiat: '$3,344.42',
+        buy: {
+          min: '1,500 DAI',
+          max: '1,600 DAI',
+          outcomeValue: '0.006454 ETH',
+          outcomeQuote: '1,549 DAI',
+          budget: '10 DAI',
+          fiat: '$10.00',
+        },
+        sell: {
+          min: '1,700 DAI',
+          max: '1,700 DAI',
+          outcomeValue: '3,400 DAI',
+          outcomeQuote: '1,700 DAI',
+          budget: '2 ETH',
+          fiat: '$3,334.42',
+        },
+      },
+    },
+  },
+  {
+    input: {
+      type: 'recurring',
+      setting: 'range_range',
+      base: 'ETH',
+      baseAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      quote: 'DAI',
+      quoteAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+      buy: {
+        min: '1500',
+        max: '1600',
+        budget: '10',
+      },
+      sell: {
+        min: '1700',
+        max: '1800',
+        budget: '2',
+      },
+    },
+    output: {
+      create: {
+        totalFiat: '$3,344.42',
+        buy: {
+          min: '1,500 DAI',
+          max: '1,600 DAI',
+          outcomeValue: '0.006454 ETH',
+          outcomeQuote: '1,549 DAI',
+          budget: '10 DAI',
+          fiat: '$10.00',
+        },
+        sell: {
+          min: '1,700 DAI',
+          max: '1,800 DAI',
+          outcomeValue: '3,498 DAI',
+          outcomeQuote: '1,749 DAI',
+          budget: '2 ETH',
+          fiat: '$3,334.42',
+        },
+      },
+    },
+  },
   // Overlapping
   {
     input: {
