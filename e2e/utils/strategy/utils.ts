@@ -1,5 +1,4 @@
 import {
-  DebugTokens,
   LimitOrder,
   TokenPair,
   CreateStrategyInput,
@@ -34,6 +33,8 @@ export const debugTokens = {
   WBTC: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
 };
 
+export type DebugTokens = keyof typeof debugTokens;
+
 export function assertDebugToken(
   symbol: string
 ): asserts symbol is DebugTokens {
@@ -43,8 +44,6 @@ export function assertDebugToken(
     throw new Error(msg);
   }
 }
-
-type DebugTokens = keyof typeof debugTokens;
 
 const emptyOrder = () => ({ min: '0', max: '0', budget: '0' });
 const fromPair = (pair: TokenPair) => {
