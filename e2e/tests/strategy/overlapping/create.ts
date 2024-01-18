@@ -28,7 +28,11 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await createForm.selectSetting('overlapping');
     await createForm.nextStep();
 
-    const overlappingForm = await createForm.fillOverlapping();
+    const overlappingForm = createForm.getOverlappingForm();
+    // Make so form has value before filling it
+    expect(overlappingForm.min()).toHaveValue(/\S+/);
+    expect(overlappingForm.max()).toHaveValue(/\S+/);
+    await createForm.fillOverlapping();
     expect(overlappingForm.max()).toHaveValue(sell.max.toString());
 
     const mainMenu = new MainMenuDriver(page);
@@ -43,7 +47,7 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await checkApproval(page, [base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
+    // Verify notification
     const notif = new NotificationDriver(page, 'create-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(

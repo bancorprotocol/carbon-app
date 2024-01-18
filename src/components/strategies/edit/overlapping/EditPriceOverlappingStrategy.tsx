@@ -40,7 +40,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   });
 
   const [spread, setSpread] = useState(getRoundedSpread(strategy));
-  const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
+  const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
   const [mounted, setMounted] = useState(false);
 
   const setOverlappingParams = async (min: string, max: string) => {
@@ -107,10 +107,10 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
         const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
         if (isMinAboveMarket(buyOrder, quote)) {
-          setAnchoderOrder('sell');
+          setAnchoredOrder('sell');
           setBuyBudget(order1.budget, min, max);
         } else if (isMaxBelowMarket(sellOrder, quote)) {
-          setAnchoderOrder('buy');
+          setAnchoredOrder('buy');
           setSellBudget(order0.budget, min, max);
         } else {
           if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
@@ -131,7 +131,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.buyPriceMarginal;
         if (isMinAboveMarket({ min, marginalPrice }, quote)) {
-          setAnchoderOrder('sell');
+          setAnchoredOrder('sell');
           setBuyBudget(order1.budget, min, max);
         } else {
           if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
@@ -158,7 +158,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.sellPriceMarginal;
         if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
-          setAnchoderOrder('buy');
+          setAnchoredOrder('buy');
           setSellBudget(order0.budget, min, max);
         } else {
           if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
@@ -233,7 +233,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         {...props}
         marketPrice={marketPrice}
         anchoredOrder={anchoredOrder}
-        setAnchoderOrder={setAnchoderOrder}
+        setAnchoredOrder={setAnchoredOrder}
         setBuyBudget={setBuyBudget}
         setSellBudget={setSellBudget}
       />
