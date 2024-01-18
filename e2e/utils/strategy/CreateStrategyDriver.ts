@@ -10,7 +10,7 @@ type StrategySettings =
   | `${Direction}-${Setting}`
   | 'overlapping';
 
-interface OrderOuput {
+interface OrderOutput {
   min: string;
   max: string;
   outcomeValue: string;
@@ -26,8 +26,8 @@ export interface RecurringStrategyInput extends CreateStrategyInput {
 export interface RecurringStrategyOutput {
   create: {
     totalFiat: string;
-    buy: OrderOuput;
-    sell: OrderOuput;
+    buy: OrderOutput;
+    sell: OrderOutput;
   };
 }
 export type RecurringStrategyTestCase = TestCase<
@@ -42,8 +42,8 @@ export interface OverlappingStrategyInput extends CreateStrategyInput {
 export interface OverlappingStrategyOutput {
   create: {
     totalFiat: string;
-    buy: Omit<OrderOuput, 'outcomeValue' | 'outcomeQuote'>;
-    sell: Omit<OrderOuput, 'outcomeValue' | 'outcomeQuote'>;
+    buy: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
+    sell: Omit<OrderOutput, 'outcomeValue' | 'outcomeQuote'>;
   };
 }
 export type OverlappingStrategyTestCase = TestCase<
@@ -58,8 +58,8 @@ export interface DisposableStrategyInput extends CreateStrategyInput {
 }
 export interface DisposableStrategyOutput {
   create: {
-    buy: OrderOuput;
-    sell: OrderOuput;
+    buy: OrderOutput;
+    sell: OrderOutput;
   };
 }
 export type DisposableStrategyTestCase = TestCase<
