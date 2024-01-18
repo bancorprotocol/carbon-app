@@ -85,6 +85,14 @@ export interface RecurringStrategyTestCase {
         max: string;
       };
     };
+    withdraw: {
+      buy: string;
+      sell: string;
+    };
+    deposit: {
+      buy: string;
+      sell: string;
+    };
   };
   output: {
     create: {
@@ -101,6 +109,14 @@ export interface RecurringStrategyTestCase {
         min: string;
         max: string;
       };
+    };
+    withdraw: {
+      buy: string;
+      sell: string;
+    };
+    deposit: {
+      buy: string;
+      sell: string;
     };
     undercut: {
       totalFiat: string;

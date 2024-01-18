@@ -116,7 +116,7 @@ const testCases: CreateStrategyTestCase[] = [
           min: '1,500.00 DAI',
           max: '1,700.00 DAI',
           outcomeValue: '0.006262 ETH',
-          outcomeQuote: '1,596 DAI',
+          outcomeQuote: '1,596.87 DAI',
           budget: '10.00 DAI',
           fiat: '$10.00',
         },
@@ -164,8 +164,8 @@ const testCases: CreateStrategyTestCase[] = [
         sell: {
           min: '1,500.00 DAI',
           max: '1,700.00 DAI',
-          outcomeValue: '3,193 DAI',
-          outcomeQuote: '1,596 DAI',
+          outcomeValue: '3,193.74 DAI',
+          outcomeQuote: '1,596.87 DAI',
           budget: '2.00 ETH',
           fiat: '$3,334.42',
         },
@@ -201,6 +201,14 @@ const testCases: CreateStrategyTestCase[] = [
           max: '1800',
         },
       },
+      deposit: {
+        buy: '5',
+        sell: '1',
+      },
+      withdraw: {
+        buy: '5',
+        sell: '1',
+      },
     },
     output: {
       create: {
@@ -235,17 +243,25 @@ const testCases: CreateStrategyTestCase[] = [
           max: '1,698.30 DAI',
           budget: '2.00 ETH',
           fiat: '$3,334.42',
-        }
+        },
       },
       editPrice: {
         buy: {
-          min: '',
-          max: '',
+          min: '1,600.00 DAI',
+          max: '1,600.00 DAI',
         },
         sell: {
-          min: '',
-          max: '',
+          min: '1,800.00 DAI',
+          max: '1,800.00 DAI',
         },
+      },
+      deposit: {
+        buy: '15.00 DAI',
+        sell: '3.00 ETH',
+      },
+      withdraw: {
+        buy: '5.00 DAI',
+        sell: '1.00 ETH',
       },
     },
   },

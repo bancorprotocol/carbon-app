@@ -103,7 +103,7 @@ export class CreateStrategyDriver {
     assertDisposableTestCase(this.testCase);
     const { direction, setting } = this.testCase;
     await this.page.getByTestId(`tab-${direction}`).click();
-    const order = this.testCase.input[direction];
+    const order = this.testCase.input.create[direction];
     return this.fillFormSection(direction, setting, order);
   }
 
