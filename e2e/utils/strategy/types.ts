@@ -102,6 +102,21 @@ export interface RecurringStrategyTestCase {
         max: string;
       };
     };
+    undercut: {
+      totalFiat: string;
+      buy: {
+        min: string;
+        max: string;
+        budget: string;
+        fiat: string;
+      };
+      sell: {
+        min: string;
+        max: string;
+        budget: string;
+        fiat: string;
+      };
+    };
   };
 }
 

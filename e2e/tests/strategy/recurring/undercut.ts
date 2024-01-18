@@ -10,11 +10,11 @@ import { waitModalOpen } from '../../../utils/modal';
 
 export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
-  const { base, quote } = testCase.input;
-  const output = testCase.output.undercut;
+  const { base, quote } = testCase;
+  const { buy, sell, totalFiat } = testCase.output.undercut;
   return test('Undercut', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase.input);
+    const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
 
     const modal = await waitModalOpen(page);
@@ -40,20 +40,18 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     const strategyUndercut = await myStrategies.getStrategy(2);
     await expect(strategyUndercut.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategyUndercut.status()).toHaveText('Active');
-    await expect(strategyUndercut.totalBudget()).toHaveText(output.totalFiat);
-    await expect(strategyUndercut.buyBudget()).toHaveText(output.buy.budget);
-    await expect(strategyUndercut.buyBudgetFiat()).toHaveText(output.buy.fiat);
-    await expect(strategyUndercut.sellBudget()).toHaveText(output.sell.budget);
-    await expect(strategyUndercut.sellBudgetFiat()).toHaveText(
-      output.sell.fiat
-    );
+    await expect(strategyUndercut.totalBudget()).toHaveText(totalFiat);
+    await expect(strategyUndercut.buyBudget()).toHaveText(buy.budget);
+    await expect(strategyUndercut.buyBudgetFiat()).toHaveText(buy.fiat);
+    await expect(strategyUndercut.sellBudget()).toHaveText(sell.budget);
+    await expect(strategyUndercut.sellBudgetFiat()).toHaveText(sell.fiat);
 
     const buyTooltip = await strategyUndercut.priceTooltip('buy');
-    await expect(buyTooltip.startPrice()).toHaveText(output.buy.min);
+    await expect(buyTooltip.startPrice()).toHaveText(buy.min);
     await buyTooltip.waitForDetached();
 
     const sellTooltip = await strategyUndercut.priceTooltip('sell');
-    await expect(sellTooltip.startPrice()).toHaveText(output.sell.min);
+    await expect(sellTooltip.startPrice()).toHaveText(sell.min);
     await sellTooltip.waitForDetached();
   });
 };
