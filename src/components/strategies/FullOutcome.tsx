@@ -23,12 +23,18 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
     <p className="text-12 text-white/60" data-testid="full-outcome">
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
-      <b className="break-words font-weight-500" data-testid="outcome-value">
+      <b
+        className="break-words font-mono font-weight-600"
+        data-testid="outcome-value"
+      >
         {prettifyNumber(amount)}&nbsp;
         {token.symbol}
       </b>
       &nbsp;at an average price of&nbsp;
-      <b className="break-words font-weight-500" data-testid="outcome-quote">
+      <b
+        className="break-words font-mono font-weight-600"
+        data-testid="outcome-quote"
+      >
         {prettifyNumber(mean)}&nbsp;
         {props.quote.symbol}
       </b>

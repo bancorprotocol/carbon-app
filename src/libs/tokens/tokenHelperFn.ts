@@ -66,7 +66,6 @@ export const buildTokenList = (tokenList: TokenList[]): Token[] => {
   tokens.push(...merged);
 
   const lsImportedTokens = lsService.getItem('importedTokens') ?? [];
-  lsService.removeItem('importedTokens');
   tokens.push(...lsImportedTokens);
 
   return uniqBy(tokens, (token: Token) => token.address);

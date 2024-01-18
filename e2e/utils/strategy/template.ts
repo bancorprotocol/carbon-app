@@ -3,23 +3,36 @@ import {
   getSellMin,
 } from '../../../src/components/strategies/overlapping/utils';
 
-type DebugTokens =
-  | 'USDC'
-  | 'DAI'
-  | 'BNT'
-  | 'PARQ'
-  | 'WBTC'
-  | 'BNB'
-  | 'MATIC'
-  | 'SHIB'
-  | 'UNI'
-  | 'USDT'
-  | 'ETH';
+export const debugTokens = {
+  BNB: '0x418D75f65a02b3D53B2418FB8E1fe493759c7605',
+  BNT: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
+  DAI: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+  ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+  MATIC: '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
+  SHIB: '0xfcaF0e4498E78d65526a507360F755178b804Ba8',
+  UNI: '0x2730d6FdC86C95a74253BefFaA8306B40feDecbb',
+  USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+  USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  WBTC: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+};
+
+export function assertDebugToken(
+  symbol: string
+): asserts symbol is DebugTokens {
+  const tokenList = Object.keys(debugTokens);
+  if (!tokenList.includes(symbol)) {
+    const msg = `Only use token from this list ${tokenList.join()}, got ${symbol}`;
+    throw new Error(msg);
+  }
+}
+
+type DebugTokens = keyof typeof debugTokens;
 
 interface RangeOrder {
   min: string;
   max: string;
   budget: string;
+  // TODO: remove this
   budgetFiat?: string;
 }
 interface LimitOrder {
@@ -35,7 +48,7 @@ export const STRATEGY_TYPES = [
 
 export type StrategyType = (typeof STRATEGY_TYPES)[number];
 
-export interface CreateStrategyTemplate {
+export interface CreateStrategyInput {
   base: DebugTokens;
   quote: DebugTokens;
   buy: RangeOrder;
@@ -65,12 +78,12 @@ const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
   budget: order.budget,
 });
 export const createDebugStrategy = {
-  limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyTemplate => ({
+  limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: fromLimitOrder(buy),
     sell: emptyOrder(),
   }),
-  limitSell: (pair: TokenPair, sell: LimitOrder): CreateStrategyTemplate => ({
+  limitSell: (pair: TokenPair, sell: LimitOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell: fromLimitOrder(sell),
@@ -79,17 +92,17 @@ export const createDebugStrategy = {
     pair: TokenPair,
     buy: LimitOrder,
     sell: LimitOrder
-  ): CreateStrategyTemplate => ({
+  ): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: fromLimitOrder(buy),
     sell: fromLimitOrder(sell),
   }),
-  rangeBuy: (pair: TokenPair, buy: RangeOrder): CreateStrategyTemplate => ({
+  rangeBuy: (pair: TokenPair, buy: RangeOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy,
     sell: emptyOrder(),
   }),
-  rangeSell: (pair: TokenPair, sell: RangeOrder): CreateStrategyTemplate => ({
+  rangeSell: (pair: TokenPair, sell: RangeOrder): CreateStrategyInput => ({
     ...fromPair(pair),
     buy: emptyOrder(),
     sell,
@@ -98,7 +111,7 @@ export const createDebugStrategy = {
     pair: TokenPair,
     buy: RangeOrder,
     sell: RangeOrder
-  ): CreateStrategyTemplate => ({
+  ): CreateStrategyInput => ({
     ...fromPair(pair),
     buy,
     sell,

@@ -23,7 +23,7 @@ interface Props {
   order1: OrderCreate;
   marketPrice: number;
   anchoredOrder: 'buy' | 'sell';
-  setAnchoderOrder: (value: 'buy' | 'sell') => any;
+  setAnchoredOrder: (value: 'buy' | 'sell') => any;
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
   setSellBudget: (buyBudget: string, min: string, max: string) => any;
   setOverlappingError: (error: string) => void;
@@ -41,7 +41,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     order0,
     order1,
     marketPrice,
-    setAnchoderOrder,
+    setAnchoredOrder,
     setBuyBudget,
     setSellBudget,
     setOverlappingError,
@@ -124,12 +124,12 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
 
   const onBuyBudgetChange = (value: string) => {
     order0.setBudget(value);
-    setAnchoderOrder('buy');
+    setAnchoredOrder('buy');
     setSellBudget(value, order0.min, order1.max);
   };
   const onSellBudgetChange = (value: string) => {
     order1.setBudget(value);
-    setAnchoderOrder('sell');
+    setAnchoredOrder('sell');
     setBuyBudget(value, order0.min, order1.max);
   };
 

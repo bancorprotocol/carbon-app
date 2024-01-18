@@ -47,7 +47,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       </div>
 
       {isLoading && (
-        <div className={`${blockClasses} animate-pulse dark:bg-silver`}></div>
+        <div className={`${blockClasses} animate-pulse bg-black`}></div>
       )}
       {isError && (
         <div
@@ -86,12 +86,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       >
         Import Token
       </Button>
-      <Button
-        variant={'black'}
-        fullWidth
-        onClick={() => closeModal(id)}
-        className={'mt-16'}
-      >
+      <Button variant={'black'} fullWidth onClick={() => closeModal(id)}>
         Cancel
       </Button>
     </ModalOrMobileSheet>

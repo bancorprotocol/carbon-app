@@ -1,6 +1,5 @@
 import type { FiatSymbol } from 'utils/carbonApi';
 import { SafeDecimal } from 'libs/safedecimal';
-import numbro from 'numbro';
 
 export const getFiatDisplayValue = (
   fiatValue: SafeDecimal | string | number,
@@ -29,30 +28,69 @@ export const formatNumber = (value: string) => {
   return new SafeDecimal(value).toString();
 };
 
-const prettifyNumberAbbreviateFormat: numbro.Format = {
-  average: true,
-  mantissa: 1,
-  optionalMantissa: true,
-  lowPrecision: false,
-  spaceSeparated: true,
-  roundingFunction: (num) => Math.floor(num),
+const getDisplayCurrency = (currency: string) => {
+  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
+  if (!Intl.supportedValuesOf) return 'symbol';
+  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
+  if (Intl.supportedValuesOf('currency').includes(currency)) return 'symbol';
+  return 'name';
 };
 
-const defaultNumbroOptions: numbro.Format = {
-  roundingFunction: (num) => Math.floor(num),
-  mantissa: 0,
-  optionalMantissa: true,
-  thousandSeparated: true,
-  trimMantissa: true,
+/**
+ * Use string manipulation to display the value with high precision
+ * @dev We need to split the number into integer & fraction because number is not precise enough
+ */
+const highPrecision = (
+  num: SafeDecimal,
+  formatter: Intl.NumberFormat,
+  maxDecimals: number = 6
+) => {
+  if (num.lt(1)) return formatter.format(num.toNumber());
+  // 12.12345678 -> 123456 (if maxDecimals is 6)
+  const fraction = num
+    .modulo(1)
+    .toFixed(maxDecimals, SafeDecimal.ROUND_FLOOR)
+    .slice(2)
+    .replace(/0+$/, ''); // Remove trailing 0
+  if (!fraction.length || !Number(fraction)) {
+    return formatter.format(num.trunc().toNumber());
+  }
+  const result = formatter
+    .formatToParts(num.toNumber())
+    .map((part) => (part.type === 'fraction' ? fraction : part.value))
+    .join('');
+  return result;
 };
 
-const getDefaultNumberoOptions = (round = false) => {
-  return {
-    ...defaultNumbroOptions,
-    ...(round && {
-      roundingFunction: (num: number) => Math.round(num),
-    }),
+const subscriptMap: Record<string, string> = {
+  '0': '₀',
+  '1': '₁',
+  '2': '₂',
+  '3': '₃',
+  '4': '₄',
+  '5': '₅',
+  '6': '₆',
+  '7': '₇',
+  '8': '₈',
+  '9': '₉',
+};
+
+const subscriptCharacters = (amount: number | string) => {
+  return amount
+    .toString()
+    .split('')
+    .map((v) => subscriptMap[v])
+    .join('');
+};
+
+const subscript = (num: SafeDecimal, formatter: Intl.NumberFormat) => {
+  const transform = (part: Intl.NumberFormatPart) => {
+    if (part.type !== 'fraction') return part.value;
+    return part.value.replace(/0+/, (match) => {
+      return `0${subscriptCharacters(match.length)}`;
+    });
   };
+  return formatter.formatToParts(num.toNumber()).map(transform).join('');
 };
 
 interface PrettifyNumberOptions {
@@ -61,6 +99,7 @@ interface PrettifyNumberOptions {
   highPrecision?: boolean;
   locale?: string;
   round?: boolean;
+  decimals?: number;
 }
 
 export function prettifyNumber(num: number | string | SafeDecimal): string;
@@ -71,107 +110,65 @@ export function prettifyNumber(
 ): string;
 
 export function prettifyNumber(
-  num: number | string | SafeDecimal,
-  options?: PrettifyNumberOptions
+  value: number | string | SafeDecimal,
+  options: PrettifyNumberOptions = {}
 ): string {
-  const {
-    abbreviate = false,
-    highPrecision = false,
-    round = false,
-  } = options || {};
-
-  const bigNum = new SafeDecimal(num);
-  if (options?.currentCurrency) {
-    return handlePrettifyNumberCurrency(bigNum, options);
-  }
-
-  if (bigNum.lte(0)) return '0';
-  if (bigNum.lt(0.000001)) return '< 0.000001';
-  if (abbreviate && bigNum.gt(999999))
-    return numbro(bigNum).format({
-      ...prettifyNumberAbbreviateFormat,
-      ...(round && {
-        roundingFunction: (num) => Math.round(num),
-      }),
-    });
-  if (!highPrecision) {
-    if (bigNum.gte(1000))
-      return numbro(bigNum).format(getDefaultNumberoOptions(round));
-    if (bigNum.gte(2))
-      return `${numbro(bigNum).format({
-        ...getDefaultNumberoOptions(round),
-        mantissa: 2,
-      })}`;
-  }
-  return `${numbro(bigNum).format({
-    ...getDefaultNumberoOptions(round),
-    mantissa: 6,
-  })}`;
-}
-
-const getDisplayCurrency = (currency: string) => {
-  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
-  if (!Intl.supportedValuesOf) return 'symbol';
-  // @ts-ignore: TS52072 supportedValuesOf is not yet supported in TypeScript 5.2
-  if (Intl.supportedValuesOf('currency').includes(currency)) return 'symbol';
-  return 'name';
-};
-
-const handlePrettifyNumberCurrency = (
-  num: SafeDecimal,
-  options?: PrettifyNumberOptions
-) => {
-  const {
-    abbreviate = false,
-    highPrecision = false,
-    locale = 'en-US',
-    currentCurrency = 'USD',
-    round = false,
-  } = options || {};
-
-  const nfCurrencyOptionsDefault: Intl.NumberFormatOptions = {
-    style: 'currency',
-    currency: currentCurrency,
-    currencyDisplay: getDisplayCurrency(currentCurrency),
-    useGrouping: true,
+  const num = new SafeDecimal(value);
+  const { locale = 'en-US' } = options;
+  const intlOptions: Intl.NumberFormatOptions = {
     // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
-    roundingMode: round ? 'halfExpand' : 'floor',
+    roundingMode: 'trunc',
   };
 
-  if (num.lte(0))
-    return Intl.NumberFormat(locale, nfCurrencyOptionsDefault)
-      .format(0)
-      .toString();
-  if (num.lte(0.01))
-    return (
-      '< ' +
-      Intl.NumberFormat(locale, {
-        ...nfCurrencyOptionsDefault,
-        minimumFractionDigits: 2,
-      })
-        .format(0.01)
-        .toString()
-    );
-  if (abbreviate && num.gt(999999))
-    return Intl.NumberFormat(locale, {
-      ...nfCurrencyOptionsDefault,
-      notation: 'compact',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 1,
-    }).format(num.toNumber());
-
-  if (!highPrecision && num.gt(100)) {
-    return Intl.NumberFormat(locale, {
-      ...nfCurrencyOptionsDefault,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(num.toNumber());
+  if (options.round) {
+    // @ts-ignore: TS52072 roundingMode is not yet supported in TypeScript 5.2
+    intlOptions.roundingMode = 'halfExpand';
   }
 
-  return Intl.NumberFormat(locale, nfCurrencyOptionsDefault).format(
-    num.toNumber()
-  );
-};
+  // Currency
+  if (options.currentCurrency) {
+    const currency = options.currentCurrency;
+    intlOptions.style = 'currency';
+    intlOptions.currency = currency;
+    intlOptions.currencyDisplay = getDisplayCurrency(currency);
+    intlOptions.useGrouping = true;
+  }
+
+  if (options.abbreviate && num.gte(1_000_000)) {
+    intlOptions.notation = 'compact';
+  }
+
+  // Force value to be positive
+  if (num.lte(0)) {
+    return Intl.NumberFormat(locale, {
+      ...intlOptions,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(0);
+  }
+
+  if (num.gte(1)) {
+    intlOptions.minimumFractionDigits = 2;
+    intlOptions.maximumFractionDigits = options.decimals ?? 2;
+  } else if (num.gte(0.001)) {
+    intlOptions.minimumFractionDigits = 2;
+    intlOptions.maximumFractionDigits = options.decimals ?? 6;
+  } else {
+    intlOptions.maximumSignificantDigits = 5;
+  }
+
+  const formatter = new Intl.NumberFormat(locale, intlOptions);
+
+  if (options.highPrecision) {
+    return highPrecision(num, formatter, options.decimals);
+  }
+
+  if (num.lt(0.001)) {
+    return subscript(num, formatter);
+  }
+
+  return formatter.format(num.toNumber());
+}
 
 /**
  * Work around prettifyNumber to support signed number

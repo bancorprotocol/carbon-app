@@ -1,34 +1,118 @@
 import { Page } from '@playwright/test';
-import { CreateStrategyTemplate } from './../../utils/strategy/template';
+import {
+  CreateStrategyInput,
+  assertDebugToken,
+  debugTokens,
+} from './../../utils/strategy/template';
 import { waitModalClose, waitModalOpen } from '../modal';
+import { TestCase } from '../types';
 
-export interface RecurringStrategyTestCase extends CreateStrategyTemplate {
-  setting: 'limit_limit' | 'range_range' | 'limit_range' | 'range_limit';
+type Setting = 'limit' | 'range';
+type Direction = 'buy' | 'sell';
+type StrategySettings =
+  | `two-${Setting}s`
+  | `${Direction}-${Setting}`
+  | 'overlapping';
+
+export interface RecurringStrategyInput extends CreateStrategyInput {
+  type: 'recurring';
+  setting: `${Setting}_${Setting}`;
 }
-export interface OverlappingStrategyTestCase extends CreateStrategyTemplate {
+export interface RecurringStrategyOutput {
+  create: {
+    totalFiat: string;
+    buy: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
+    sell: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
+  };
+}
+export type RecurringStrategyTestCase = TestCase<
+  RecurringStrategyInput,
+  RecurringStrategyOutput
+>;
+
+export interface OverlappingStrategyInput extends CreateStrategyInput {
   type: 'overlapping';
   spread: string;
 }
+export interface OverlappingStrategyOutput {
+  create: {
+    totalFiat: string;
+    buy: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
+    sell: {
+      min: string;
+      max: string;
+      budget: string;
+      fiat: string;
+    };
+  };
+}
+export type OverlappingStrategyTestCase = TestCase<
+  OverlappingStrategyInput,
+  OverlappingStrategyOutput
+>;
+
+export interface DisposableStrategyInput extends CreateStrategyInput {
+  type: 'disposable';
+  setting: Setting;
+  direction: Direction;
+}
+export interface DisposableStrategyOutput {}
+export type DisposableStrategyTestCase = TestCase<
+  DisposableStrategyInput,
+  DisposableStrategyOutput
+>;
 
 export type CreateStrategyTestCase =
+  | DisposableStrategyTestCase
   | RecurringStrategyTestCase
   | OverlappingStrategyTestCase;
 
-type Mode = 'buy' | 'sell';
-type StrategySettings =
-  | 'two-limits'
-  | 'two-ranges'
-  | 'overlapping'
-  | `${Mode}-range`
-  | `${Mode}-limit`;
+export function assertDisposableTestCase(
+  testCase: CreateStrategyTestCase
+): asserts testCase is DisposableStrategyTestCase {
+  if (testCase.input.type !== 'disposable') {
+    throw new Error('Test case should be disposable');
+  }
+}
+
+export function assertRecurringTestCase(
+  testCase: CreateStrategyTestCase
+): asserts testCase is RecurringStrategyTestCase {
+  if (testCase.input.type !== 'recurring') {
+    throw new Error('Test case should be recurring');
+  }
+}
+
+export function assertOverlappingTestCase(
+  testCase: CreateStrategyTestCase
+): asserts testCase is OverlappingStrategyTestCase {
+  if (testCase.input.type !== 'overlapping') {
+    throw new Error('Test case should be overlapping');
+  }
+}
 
 export class CreateStrategyDriver {
-  constructor(private page: Page, private testCase: CreateStrategyTemplate) {}
+  constructor(private page: Page, private testCase: CreateStrategyInput) {}
 
-  getRecurringLimitForm(mode: Mode) {
-    const form = this.page.getByTestId(`${mode}-section`);
+  getRecurringLimitForm(direction: Direction) {
+    const form = this.page.getByTestId(`${direction}-section`);
     return {
-      price: () => form.getByTestId(`input-limit-${mode}`),
+      price: () => form.getByTestId(`input-limit-${direction}`),
       budget: () => form.getByTestId('input-budget'),
       outcomeValue: () => form.getByTestId('outcome-value'),
       outcomeQuote: () => form.getByTestId('outcome-quote'),
@@ -51,26 +135,28 @@ export class CreateStrategyDriver {
   }
 
   async selectToken(tokenType: 'base' | 'quote') {
-    const token = this.testCase[tokenType];
+    const symbol = this.testCase[tokenType];
+    assertDebugToken(symbol);
+    const token = debugTokens[symbol];
     await this.page.getByTestId(`select-${tokenType}-token`).click();
     await waitModalOpen(this.page);
-    await this.page.getByLabel('Select Token').fill(token);
+    await this.page.getByLabel('Select Token').fill(symbol);
     await this.page.getByTestId(`select-token-${token}`).click();
     await waitModalClose(this.page);
   }
   selectSetting(strategySettings: StrategySettings) {
     return this.page.getByTestId(strategySettings).click();
   }
-  async fillRecurringLimit(mode: Mode) {
-    const { min, budget } = this.testCase[mode];
-    const form = this.getRecurringLimitForm(mode);
+  async fillRecurringLimit(direction: Direction) {
+    const { min, budget } = this.testCase[direction];
+    const form = this.getRecurringLimitForm(direction);
     await form.setting('limit').click();
     await form.price().fill(min.toString());
     await form.budget().fill(budget.toString());
     return form;
   }
   async fillOverlapping() {
-    const testCase = this.testCase as OverlappingStrategyTestCase;
+    const testCase = this.testCase as OverlappingStrategyInput;
     const form = this.getOverlappingForm();
     await form.max().fill(testCase.sell.max.toString());
     await form.min().fill(testCase.buy.min.toString());

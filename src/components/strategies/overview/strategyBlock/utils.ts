@@ -75,12 +75,12 @@ export const getPrice = ({
 }: getPriceParams) => {
   if (prettified) {
     return `${prettifyNumber(order.startRate, {
-      abbreviate: order.startRate.length > 10,
+      abbreviate: true,
       round: true,
     })} ${
       !limit
         ? ` - ${prettifyNumber(order.endRate, {
-            abbreviate: order.endRate.length > 10,
+            abbreviate: true,
             round: true,
           })}`
         : ''
