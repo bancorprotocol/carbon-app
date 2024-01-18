@@ -41,6 +41,10 @@ import {
   ModalManageNotificationsData,
 } from './ModalManageNotifications';
 import {
+  ModalDuplicateStrategy,
+  ModalDuplicateStrategyData,
+} from './ModalDuplicateStrategy/ModalDuplicateStrategy';
+import {
   ModalConfirmWithdraw,
   ModalConfirmWithdrawData,
 } from './ModalConfirmStrategy/ModalConfirmWithdraw';
@@ -63,6 +67,7 @@ export interface ModalSchema {
   restrictedCountry: undefined;
   genericInfo: ModalGenericInfoData;
   manageNotifications: ModalManageNotificationsData;
+  duplicateStrategy: ModalDuplicateStrategyData;
   confirmPauseStrategy: ModalConfirmPauseData;
   confirmWithdrawStrategy: ModalConfirmWithdrawData;
   confirmDeleteStrategy: ModalConfirmDeleteData;
@@ -84,6 +89,7 @@ export const MODAL_COMPONENTS: TModals = {
   restrictedCountry: (props) => ModalRestrictedCountry(props),
   genericInfo: (props) => ModalGenericInfo(props),
   manageNotifications: (props) => ModalManageNotifications(props),
+  duplicateStrategy: (props) => ModalDuplicateStrategy(props),
   confirmPauseStrategy: (props) => ModalConfirmPause(props),
   confirmWithdrawStrategy: (props) => ModalConfirmWithdraw(props),
   confirmDeleteStrategy: (props) => ModalConfirmDelete(props),
