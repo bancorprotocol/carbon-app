@@ -3,8 +3,7 @@ import { Token } from 'libs/tokens';
 import { StrategyEventType } from 'services/events/types';
 import { sanitizeNumber } from 'utils/helpers';
 import { OrderCreate } from './useOrder';
-import { useSearch } from 'libs/routing';
-import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
+import { useSearch, StrategyCreateSearch } from 'libs/routing';
 
 export const useStrategyEventData = ({
   base,

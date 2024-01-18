@@ -1,7 +1,6 @@
-import { useSearch, useNavigate } from 'libs/routing';
+import { useSearch, useNavigate, TradeSearch } from 'libs/routing';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'hooks/useModal';
-import { TradeSearch } from 'libs/routing/routes/trade';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';

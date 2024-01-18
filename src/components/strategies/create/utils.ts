@@ -4,11 +4,10 @@ import {
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { StrategySettings } from 'libs/routing/routes/strategyCreateEdit';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
-import { NavigateOptions } from '@tanstack/react-router';
+import { NavigateOptions, StrategySettings } from 'libs/routing';
 
 export const handleStrategySettings = (
   settings?: StrategySettings,

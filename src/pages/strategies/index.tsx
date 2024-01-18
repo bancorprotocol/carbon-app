@@ -1,4 +1,3 @@
-import { useMatchRoute } from '@tanstack/react-router';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -10,7 +9,7 @@ import { StrategyPageTitleWidget } from 'components/strategies/overview/Strategy
 import { useGetUserStrategies } from 'libs/queries';
 import { Page } from 'components/common/page';
 import { useMemo } from 'react';
-import { Outlet, useRouterState } from 'libs/routing';
+import { Outlet, useRouterState, useMatchRoute } from 'libs/routing';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { StrategyProvider } from 'hooks/useStrategies';

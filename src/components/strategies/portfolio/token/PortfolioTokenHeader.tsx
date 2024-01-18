@@ -1,13 +1,12 @@
-import { ToOptions } from '@tanstack/react-router';
+import { Link, Pathnames, PathParams } from 'libs/routing';
 import { LogoImager } from 'components/common/imager/Imager';
-import { Link, Pathnames } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconBack } from 'assets/icons/chevron-left.svg';
 
 interface Props {
   backLinkHref: Pathnames;
-  backLinkHrefParams?: ToOptions['params'];
+  backLinkHrefParams?: PathParams;
   logoURI?: string;
   symbol?: string;
 }

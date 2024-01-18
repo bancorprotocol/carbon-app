@@ -1,7 +1,10 @@
-import { useMatchRoute } from '@tanstack/react-router';
-import { useSearch, useNavigate } from 'libs/routing';
+import {
+  useSearch,
+  useNavigate,
+  useMatchRoute,
+  TradeSearch,
+} from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
-import { TradeSearch } from 'libs/routing/routes/trade';
 
 export const useTradeTokens = () => {
   const navigate = useNavigate();

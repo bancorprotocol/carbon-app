@@ -2,12 +2,11 @@ import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useStrategyCtx } from 'hooks/useStrategies';
-import { ToOptions, useNavigate } from '@tanstack/react-router';
-import { Pathnames } from 'libs/routing';
+import { Pathnames, PathParams, useNavigate } from 'libs/routing';
 
 export type GetPortfolioTokenHref = (row: PortfolioData) => {
   href: Pathnames;
-  params: ToOptions['params'];
+  params: PathParams;
 };
 
 export const getPortfolioTokenHref: GetPortfolioTokenHref = (row) => ({

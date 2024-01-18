@@ -1,9 +1,8 @@
-import { ToOptions } from '@tanstack/react-router';
+import { Pathnames, PathParams } from 'libs/routing';
 import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
 import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
 import { Strategy } from 'libs/queries';
-import { Pathnames } from 'libs/routing';
 import { memo } from 'react';
 import { PortfolioLayout } from './../PortfolioLayout';
 import { PortfolioPieChart } from './../PortfolioPieChart';
@@ -16,7 +15,7 @@ interface Props {
   strategies?: Strategy[];
   isLoading?: boolean;
   backLinkHref: Pathnames;
-  backLinkHrefParams?: ToOptions['params'];
+  backLinkHrefParams?: PathParams;
 }
 
 const _PortfolioToken = ({

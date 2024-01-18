@@ -1,4 +1,4 @@
-import { StrategySettings } from 'libs/routing/routes/strategyCreateEdit';
+import { StrategySettings } from 'libs/routing';
 import { EventExplorerSchema } from '../explorerEvents';
 import { EventGeneralSchema } from '../generalEvents';
 import { EventNavigationSchema } from '../navigationEvents';

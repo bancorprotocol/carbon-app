@@ -1,14 +1,13 @@
-import { ToOptions } from '@tanstack/react-router';
+import { Link, Pathnames, PathParams } from 'libs/routing';
 import { FC, ReactNode } from 'react';
 import { cn } from 'utils/helpers';
 import { getColorByIndex } from 'utils/colorPalettes';
-import { Link, Pathnames } from 'libs/routing';
 
 type Props = {
   children: ReactNode;
   index: number;
   href?: Pathnames;
-  params?: ToOptions['params'];
+  params?: PathParams;
   gridColsClassName?: string;
 };
 

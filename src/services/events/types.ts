@@ -3,7 +3,7 @@ import {
   StrategyDirection,
   StrategySettings,
   StrategyType,
-} from 'libs/routing/routes/strategyCreateEdit';
+} from 'libs/routing';
 import { Token } from 'libs/tokens';
 
 export interface TradeEventBase {

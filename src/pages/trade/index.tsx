@@ -3,21 +3,19 @@ import { OrderBookWidget } from 'components/trade/orderWidget/OrderBookWidget';
 import { DepthChartWidget } from 'components/trade/depthChartWidget/DepthChartWidget';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useTradeTokens } from 'components/trade/useTradeTokens';
-import { tradePage } from 'libs/routing/routes/trade';
 import { Token } from 'libs/tokens';
 import { useTradePairs } from 'components/trade/useTradePairs';
 import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { useNavigate } from '@tanstack/react-router';
-import { getLastVisitedPair } from 'libs/routing/utils';
+import { getLastVisitedPair, useNavigate, useSearch } from 'libs/routing';
 
 export type TradePageProps = { base: Token; quote: Token };
 
 export const TradePage = () => {
   const navigate = useNavigate();
-  const search = tradePage.useSearch();
+  const search = useSearch({ from: '/trade' });
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isLoading, isTradePairError } = useTradePairs();

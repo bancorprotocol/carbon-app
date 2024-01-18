@@ -4,7 +4,7 @@ import { useCreateStrategyQuery } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
-import { useNavigate, useSearch } from 'libs/routing';
+import { useNavigate, useSearch, StrategyCreateSearch } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
@@ -15,7 +15,6 @@ import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from './useStrategyEventData';
 import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
-import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
 import {
   handleStrategyDirection,
   handleStrategySettings,

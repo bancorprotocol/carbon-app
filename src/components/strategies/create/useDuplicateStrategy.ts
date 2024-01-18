@@ -1,7 +1,6 @@
-import { useNavigate, useSearch } from 'libs/routing';
+import { useNavigate, useSearch, StrategyCreateSearch } from 'libs/routing';
 import { Strategy } from 'libs/queries';
 import { isOverlappingStrategy } from '../overlapping/utils';
-import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
 
 const isValid = (strategy: Strategy) => {
   return (

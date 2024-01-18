@@ -7,7 +7,7 @@ import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { NavigateOptions } from '@tanstack/react-router';
+import { NavigateOptions } from 'libs/routing';
 
 export type OrderWithSetters = {
   setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;

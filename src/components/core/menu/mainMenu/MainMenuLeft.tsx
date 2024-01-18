@@ -1,7 +1,6 @@
-import { useMatchRoute, useRouterState } from '@tanstack/react-router';
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
-import { Link } from 'libs/routing';
+import { Link, useMatchRoute, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
 import { handleOnItemClick } from '../utils';
 import { menuItems } from 'components/core/menu';

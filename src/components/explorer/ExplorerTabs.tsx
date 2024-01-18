@@ -1,5 +1,5 @@
 import { useExplorerParams } from './useExplorerParams';
-import { useRouterState } from 'libs/routing';
+import { useRouterState, useMatchRoute } from 'libs/routing';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -8,7 +8,6 @@ import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
-import { useMatchRoute } from '@tanstack/react-router';
 
 export const ExplorerTabs = () => {
   const { strategies } = useStrategyCtx();

@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate } from 'libs/routing';
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';

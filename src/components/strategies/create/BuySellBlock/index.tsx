@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router';
 import { FC, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -6,10 +5,7 @@ import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { LimitRangeSection } from './LimitRangeSection';
 import { LogoImager } from 'components/common/imager/Imager';
-import {
-  StrategyDirection,
-  StrategyType,
-} from 'libs/routing/routes/strategyCreateEdit';
+import { StrategyDirection, StrategyType, useNavigate } from 'libs/routing';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';

@@ -1,6 +1,5 @@
 import { ReactNode, useMemo } from 'react';
-import { Pathnames, useNavigate } from 'libs/routing';
-import { StrategyCreateSearch } from 'libs/routing/routes/strategyCreateEdit';
+import { Pathnames, useNavigate, StrategyCreateSearch } from 'libs/routing';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';

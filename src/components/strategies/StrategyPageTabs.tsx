@@ -1,11 +1,10 @@
-import { ToOptions, useMatchRoute } from '@tanstack/react-router';
-import { Link, Pathnames } from 'libs/routing';
+import { Link, Pathnames, PathParams, useMatchRoute } from 'libs/routing';
 import { cn } from 'utils/helpers';
 
 export interface StrategyTab {
   label: string;
   href: Pathnames;
-  params?: ToOptions['params'];
+  params?: PathParams;
   icon: JSX.Element;
   badge?: number;
 }
