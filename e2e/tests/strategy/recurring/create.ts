@@ -55,7 +55,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
+    // Verify notification
     const notif = new NotificationDriver(page, 'create-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
