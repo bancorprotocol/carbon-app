@@ -1,10 +1,8 @@
 import {
   DebugTokens,
   LimitOrder,
-  TokenPair,
   CreateStrategyInput,
   RangeOrder,
-  OverlappingParams,
   debugTokens,
   CreateStrategyTestCase,
   DisposableStrategyTestCase,
@@ -14,10 +12,6 @@ import {
   MinMax,
   StrategyCase,
 } from './types';
-import {
-  getBuyMax,
-  getSellMin,
-} from '../../../src/components/strategies/overlapping/utils';
 
 export function isDisposableTestCase(
   testCase: CreateStrategyTestCase
@@ -110,67 +104,3 @@ export const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
   max: order.price,
   budget: order.budget,
 });
-
-// TODO: refactor the code below
-
-const fromPair = (pair: TokenPair) => {
-  const [base, quote] = pair.split('->') as [DebugTokens, DebugTokens];
-  return { base, quote };
-};
-export const createDebugStrategy = {
-  limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyInput => ({
-    ...fromPair(pair),
-    buy: fromLimitOrder(buy),
-    sell: emptyOrder(),
-  }),
-  limitSell: (pair: TokenPair, sell: LimitOrder): CreateStrategyInput => ({
-    ...fromPair(pair),
-    buy: emptyOrder(),
-    sell: fromLimitOrder(sell),
-  }),
-  limitBuySell: (
-    pair: TokenPair,
-    buy: LimitOrder,
-    sell: LimitOrder
-  ): CreateStrategyInput => ({
-    ...fromPair(pair),
-    buy: fromLimitOrder(buy),
-    sell: fromLimitOrder(sell),
-  }),
-  rangeBuy: (pair: TokenPair, buy: RangeOrder): CreateStrategyInput => ({
-    ...fromPair(pair),
-    buy,
-    sell: emptyOrder(),
-  }),
-  rangeSell: (pair: TokenPair, sell: RangeOrder): CreateStrategyInput => ({
-    ...fromPair(pair),
-    buy: emptyOrder(),
-    sell,
-  }),
-  rangeBuySell: (
-    pair: TokenPair,
-    buy: RangeOrder,
-    sell: RangeOrder
-  ): CreateStrategyInput => ({
-    ...fromPair(pair),
-    buy,
-    sell,
-  }),
-  overlapping: (params: OverlappingParams) => {
-    const { pair, buyMin, sellMax, spread, buyBudget, sellBudget } = params;
-    return {
-      ...fromPair(pair),
-      buy: {
-        min: buyMin,
-        max: getBuyMax(Number(sellMax), Number(spread)).toString(),
-        budget: buyBudget,
-      },
-      sell: {
-        min: getSellMin(Number(buyMin), Number(spread)).toString(),
-        max: sellMax,
-        budget: sellBudget,
-      },
-      spread,
-    };
-  },
-};

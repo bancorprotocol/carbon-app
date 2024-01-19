@@ -6,9 +6,8 @@ import {
   CreateStrategyTestCase,
   MyStrategyDriver,
   assertOverlappingTestCase,
-  testDescription,
+  screenshotPath,
 } from '../../../utils/strategy';
-import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 import { checkApproval } from '../../../utils/modal';
 
 export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
@@ -36,14 +35,6 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     expect(overlappingForm.max()).toHaveValue(/\S+/);
     await createForm.fillOverlapping();
     expect(overlappingForm.max()).toHaveValue(sell.max.toString());
-
-    const mainMenu = new MainMenuDriver(page);
-    await mainMenu.hide();
-    await screenshot(
-      overlappingForm.locator,
-      `[Create ${testDescription(testCase)}] Form`
-    );
-    await mainMenu.show();
 
     await createForm.submit();
     await checkApproval(page, [base, quote]);
@@ -75,7 +66,8 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
     await buyTooltip.waitForDetached();
+
     await notif.close();
-    await screenshot(page, `[Create ${testDescription(testCase)}] My Strategy`);
+    await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
 };

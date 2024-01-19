@@ -5,6 +5,7 @@ import {
   assertOverlappingTestCase,
   assertRecurringTestCase,
   getRecurringSettings,
+  screenshotPath,
 } from './utils';
 import {
   RangeOrder,
@@ -15,6 +16,8 @@ import {
   Setting,
 } from './types';
 import { waitModalClose, waitModalOpen } from '../modal';
+import { screenshot, shouldTakeScreenshot } from '../operators';
+import { MainMenuDriver } from '../MainMenuDriver';
 
 export class CreateStrategyDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
@@ -110,7 +113,18 @@ export class CreateStrategyDriver {
   nextStep() {
     return this.page.getByText('Next Step').click();
   }
-  submit() {
-    return this.page.getByText('Create Strategy').click();
+
+  async submit() {
+    const btn = this.page.getByText('Create Strategy');
+    await btn.isEnabled();
+    if (shouldTakeScreenshot) {
+      const mainMenu = new MainMenuDriver(this.page);
+      await mainMenu.hide();
+      const form = this.page.getByTestId('edit-form');
+      const path = screenshotPath(this.testCase, 'create', 'form');
+      await screenshot(form, path);
+      await mainMenu.show();
+    }
+    return btn.click();
   }
 }

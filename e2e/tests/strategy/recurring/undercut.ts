@@ -66,7 +66,6 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
       await expect(sellTooltip.minPrice()).toHaveText(sell.min);
       await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
     }
-
     await sellTooltip.waitForDetached();
   });
 };
