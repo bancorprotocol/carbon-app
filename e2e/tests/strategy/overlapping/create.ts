@@ -63,10 +63,10 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategy.status()).toHaveText('Active');
     await expect(strategy.totalBudget()).toHaveText(output.totalFiat);
-    await expect(strategy.buyBudget()).toHaveText(output.buy.budget);
-    await expect(strategy.buyBudgetFiat()).toHaveText(output.buy.fiat);
-    await expect(strategy.sellBudget()).toHaveText(output.sell.budget);
-    await expect(strategy.sellBudgetFiat()).toHaveText(output.sell.fiat);
+    await expect(strategy.budget('buy')).toHaveText(output.buy.budget);
+    await expect(strategy.budgetFiat('buy')).toHaveText(output.buy.fiat);
+    await expect(strategy.budget('sell')).toHaveText(output.sell.budget);
+    await expect(strategy.budgetFiat('sell')).toHaveText(output.sell.fiat);
     const sellTooltip = await strategy.priceTooltip('sell');
     await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
     await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);

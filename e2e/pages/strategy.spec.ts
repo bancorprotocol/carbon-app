@@ -1,7 +1,11 @@
 import { test } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
 import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
-import { CreateStrategyTestCase } from '../utils/strategy';
+import {
+  CreateStrategyTestCase,
+  fromLimitOrder,
+  fromPrice,
+} from '../utils/strategy';
 import * as recurring from '../tests/strategy/recurring/';
 import * as disposable from '../tests/strategy/disposable/';
 import * as overlapping from '../tests/strategy/overlapping/';
@@ -15,38 +19,26 @@ const testCases: CreateStrategyTestCase[] = [
     base: 'ETH',
     quote: 'DAI',
     input: {
-      create: {
-        buy: {
-          min: '1500',
-          max: '1500',
-          budget: '10',
-        },
-        sell: {
-          min: '0',
-          max: '0',
-          budget: '0',
-        },
-      },
+      create: fromLimitOrder({ price: '1500', budget: '10' }),
+      editPrice: fromPrice('1600'),
+      deposit: '5',
+      withdraw: '5',
     },
     output: {
       create: {
-        buy: {
-          min: '1,500.00 DAI',
-          max: '1,500.00 DAI',
-          outcomeValue: '0.006666 ETH',
-          outcomeQuote: '1,500.00 DAI',
-          budget: '10.00 DAI',
-          fiat: '$10.00',
-        },
-        sell: {
-          min: '0.00 DAI',
-          max: '0.00 DAI',
-          outcomeValue: '0.00 ETH',
-          outcomeQuote: '0.00 ETH',
-          budget: '0.00 ETH',
-          fiat: '$0.00',
-        },
+        min: '1,500.00 DAI',
+        max: '1,500.00 DAI',
+        outcomeValue: '0.006666 ETH',
+        outcomeQuote: '1,500.00 DAI',
+        budget: '10.00 DAI',
+        fiat: '$10.00',
       },
+      editPrice: {
+        min: '1,600.00 DAI',
+        max: '1,600.00 DAI',
+      },
+      deposit: '15.00 DAI',
+      withdraw: '5.00 DAI',
     },
   },
   {
@@ -56,38 +48,26 @@ const testCases: CreateStrategyTestCase[] = [
     base: 'ETH',
     quote: 'DAI',
     input: {
-      create: {
-        buy: {
-          min: '0',
-          max: '0',
-          budget: '0',
-        },
-        sell: {
-          min: '1700',
-          max: '1700',
-          budget: '2',
-        },
-      },
+      create: fromLimitOrder({ price: '1700', budget: '2' }),
+      editPrice: fromPrice('1800'),
+      deposit: '1',
+      withdraw: '1',
     },
     output: {
       create: {
-        buy: {
-          min: '0.00 DAI',
-          max: '0.00 DAI',
-          outcomeValue: '0.00 ETH',
-          outcomeQuote: '0.00 ETH',
-          budget: '0.00 DAI',
-          fiat: '$0.00',
-        },
-        sell: {
-          min: '1,700.00 DAI',
-          max: '1,700.00 DAI',
-          outcomeValue: '3,400.00 DAI',
-          outcomeQuote: '1,700.00 DAI',
-          budget: '2.00 ETH',
-          fiat: '$3,334.42',
-        },
+        min: '1,700.00 DAI',
+        max: '1,700.00 DAI',
+        outcomeValue: '3,400.00 DAI',
+        outcomeQuote: '1,700.00 DAI',
+        budget: '2.00 ETH',
+        fiat: '$3,334.42',
       },
+      editPrice: {
+        min: '1,800.00 DAI',
+        max: '1,800.00 DAI',
+      },
+      deposit: '3.00 ETH',
+      withdraw: '1.00 ETH',
     },
   },
   {
@@ -98,37 +78,32 @@ const testCases: CreateStrategyTestCase[] = [
     quote: 'DAI',
     input: {
       create: {
-        buy: {
-          min: '1500',
-          max: '1700',
-          budget: '10',
-        },
-        sell: {
-          min: '0',
-          max: '0',
-          budget: '0',
-        },
+        min: '1500',
+        max: '1700',
+        budget: '10',
       },
+      editPrice: {
+        min: '1600',
+        max: '1800',
+      },
+      deposit: '2',
+      withdraw: '2',
     },
     output: {
       create: {
-        buy: {
-          min: '1,500.00 DAI',
-          max: '1,700.00 DAI',
-          outcomeValue: '0.006262 ETH',
-          outcomeQuote: '1,596.87 DAI',
-          budget: '10.00 DAI',
-          fiat: '$10.00',
-        },
-        sell: {
-          min: '0.00 DAI',
-          max: '0.00 DAI',
-          outcomeValue: '0.00 ETH',
-          outcomeQuote: '0.00 ETH',
-          budget: '0.00 ETH',
-          fiat: '$0.00',
-        },
+        min: '1,500.00 DAI',
+        max: '1,700.00 DAI',
+        outcomeValue: '0.006262 ETH',
+        outcomeQuote: '1,596.87 DAI',
+        budget: '10.00 DAI',
+        fiat: '$10.00',
       },
+      editPrice: {
+        min: '1,600.00 DAI',
+        max: '1,800.00 DAI',
+      },
+      deposit: '12.00 DAI',
+      withdraw: '8.00 DAI',
     },
   },
   {
@@ -139,37 +114,32 @@ const testCases: CreateStrategyTestCase[] = [
     quote: 'DAI',
     input: {
       create: {
-        buy: {
-          min: '0',
-          max: '0',
-          budget: '0',
-        },
-        sell: {
-          min: '1500',
-          max: '1700',
-          budget: '2',
-        },
+        min: '1500',
+        max: '1700',
+        budget: '2',
       },
+      editPrice: {
+        min: '1600',
+        max: '1800',
+      },
+      deposit: '1',
+      withdraw: '1',
     },
     output: {
       create: {
-        buy: {
-          min: '0.00 DAI',
-          max: '0.00 DAI',
-          outcomeValue: '0.00 ETH',
-          outcomeQuote: '0.00 ETH',
-          budget: '0.00 DAI',
-          fiat: '$0.00',
-        },
-        sell: {
-          min: '1,500.00 DAI',
-          max: '1,700.00 DAI',
-          outcomeValue: '3,193.74 DAI',
-          outcomeQuote: '1,596.87 DAI',
-          budget: '2.00 ETH',
-          fiat: '$3,334.42',
-        },
+        min: '1,500.00 DAI',
+        max: '1,700.00 DAI',
+        outcomeValue: '3,193.74 DAI',
+        outcomeQuote: '1,596.87 DAI',
+        budget: '2.00 ETH',
+        fiat: '$3,334.42',
       },
+      editPrice: {
+        min: '1,600.00 DAI',
+        max: '1,800.00 DAI',
+      },
+      deposit: '3.00 ETH',
+      withdraw: '1.00 ETH',
     },
   },
   // Recurring
@@ -335,7 +305,7 @@ test.describe('Strategies', () => {
   for (const testCase of testCases) {
     test.describe(testDescription(testCase), () => {
       const testSuite = testStrategies[testCase.type];
-      for (const [, testFn] of Object.entries(testSuite)) {
+      for (const testFn of Object.values(testSuite)) {
         testFn(testCase);
       }
     });

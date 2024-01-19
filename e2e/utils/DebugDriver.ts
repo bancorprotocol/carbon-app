@@ -8,7 +8,7 @@ import {
 } from './../utils/tenderly';
 import { Wallet } from 'ethers';
 import { checkApproval } from './modal';
-import { CreateStrategyTestCase } from './strategy';
+import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -75,7 +75,7 @@ export class DebugDriver {
 
   async createStrategy(testCase: CreateStrategyTestCase) {
     const { base, quote } = testCase;
-    const { buy, sell, spread } = testCase.input.create;
+    const { buy, sell, spread } = toDebugStrategy(testCase);
     // TODO: use textarea shortcut instead of filling each field.
     // Currently this revert with Dai/insufficient-allowance for some reason
     // await this.page.getByTestId('strategy-json-shortcut').fill(JSON.stringify(template));

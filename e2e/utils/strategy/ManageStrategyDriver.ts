@@ -14,24 +14,4 @@ export class ManageStrategyDriver {
     const myStrategies = new MyStrategyDriver(this.page);
     return myStrategies.getStrategy(1);
   }
-
-  async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
-    await this.page.waitForURL(`/strategies/edit/*?type=${type}`, {
-      timeout: 10_000,
-    });
-  }
-
-  async fillBudget(
-    type: 'deposit' | 'withdraw',
-    order: 'buy' | 'sell',
-    budget: string | number
-  ) {
-    await this.page
-      .getByTestId(`budget-${type}-${order}-input`)
-      .fill(budget.toString());
-  }
-
-  async fillLimitPrice(order: 'buy' | 'sell', price: number | string) {
-    await this.page.getByTestId(`input-limit-${order}`).fill(price.toString());
-  }
 }

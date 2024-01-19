@@ -11,11 +11,25 @@ export const debugTokens = {
   WBTC: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
 };
 
+export type StrategyCase =
+  | 'create'
+  | 'withdraw'
+  | 'delete'
+  | 'deposit'
+  | 'duplicate'
+  | 'editPrices'
+  | 'pause'
+  | 'renew'
+  | 'undercut'
+  | 'withdraw';
 export type DebugTokens = keyof typeof debugTokens;
 
-export interface RangeOrder {
+export interface MinMax {
   min: string;
   max: string;
+}
+
+export interface RangeOrder extends MinMax {
   budget: string;
 }
 export interface LimitOrder {
@@ -76,14 +90,8 @@ export interface RecurringStrategyTestCase {
   input: {
     create: CreateStrategyInput;
     editPrice: {
-      buy: {
-        min: string;
-        max: string;
-      };
-      sell: {
-        min: string;
-        max: string;
-      };
+      buy: MinMax;
+      sell: MinMax;
     };
     withdraw: {
       buy: string;
@@ -101,14 +109,8 @@ export interface RecurringStrategyTestCase {
       sell: OrderOutput;
     };
     editPrice: {
-      buy: {
-        min: string;
-        max: string;
-      };
-      sell: {
-        min: string;
-        max: string;
-      };
+      buy: MinMax;
+      sell: MinMax;
     };
     withdraw: {
       buy: string;
@@ -176,13 +178,16 @@ export interface DisposableStrategyTestCase {
   base: DebugTokens;
   quote: DebugTokens;
   input: {
-    create: CreateStrategyInput;
+    create: RangeOrder;
+    editPrice: MinMax;
+    deposit: string;
+    withdraw: string;
   };
   output: {
-    create: {
-      buy: OrderOutput;
-      sell: OrderOutput;
-    };
+    create: OrderOutput;
+    editPrice: MinMax;
+    deposit: string;
+    withdraw: string;
   };
 }
 
@@ -190,3 +195,8 @@ export type CreateStrategyTestCase =
   | DisposableStrategyTestCase
   | RecurringStrategyTestCase
   | OverlappingStrategyTestCase;
+
+/** Use to create a generic strategy in the debug page */
+export interface DebugStrategy extends CreateStrategyInput {
+  spread?: string;
+}

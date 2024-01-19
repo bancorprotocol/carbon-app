@@ -11,7 +11,7 @@ export const pauseStrategy = async (
 ) => {
   const manage = new ManageStrategyDriver(page);
   const strategy = await manage.createStrategy(testCase);
-  await strategy.clickManageEntry('manage-strategy-pauseStrategy');
+  await strategy.clickManageEntry('pauseStrategy');
 
   const modal = await waitModalOpen(page);
   await modal.getByTestId('pause-strategy-btn').click();

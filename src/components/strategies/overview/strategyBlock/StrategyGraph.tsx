@@ -577,7 +577,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
               <th className="p-8 text-start font-weight-400 text-white/60">
                 Price
               </th>
-              <td className="p-8 text-end" data-testid="start-price">
+              <td className="p-8 text-end" data-testid="price">
                 {startPrice} {quote.symbol}
               </td>
             </tr>

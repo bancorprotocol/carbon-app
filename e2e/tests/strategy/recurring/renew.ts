@@ -8,13 +8,13 @@ import {
 
 export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
   return test('Renew', async ({ page }) => {
-    const { strategy, manage } = await pauseStrategy(page, testCase);
+    const { strategy } = await pauseStrategy(page, testCase);
 
-    await strategy.clickManageEntry('manage-strategy-renewStrategy');
-    await manage.waitForEditPage('renew');
+    await strategy.clickManageEntry('renewStrategy');
     const edit = new EditStrategyDriver(page, testCase);
-    await edit.fillRecurring();
-    await page.getByTestId('edit-strategy-prices-submit').click();
+    await edit.waitForPage('renew');
+    await edit.fillRecurringPrice();
+    await edit.submit('renew');
     await page.waitForURL('/', { timeout: 10_000 });
 
     const notifRenew = new NotificationDriver(page, 'renew-strategy');

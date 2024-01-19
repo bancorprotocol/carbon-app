@@ -122,6 +122,7 @@ export const EditStrategyPricesContent = ({
       onSubmit={(e) => handleOnActionClick(e)}
       onReset={() => history.back()}
       className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]"
+      data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
       {isOverlapping && (
