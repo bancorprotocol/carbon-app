@@ -81,8 +81,8 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     const buyTooltip = await strategy.priceTooltip('buy');
     if (buySetting === 'limit') {
-      await expect(buyTooltip.startPrice()).toHaveText(output.buy.min);
-      await expect(buyTooltip.startPrice()).toHaveText(output.buy.max);
+      await expect(buyTooltip.price()).toHaveText(output.buy.min);
+      await expect(buyTooltip.price()).toHaveText(output.buy.max);
     } else {
       await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
       await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
@@ -91,8 +91,8 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     const sellTooltip = await strategy.priceTooltip('sell');
     if (sellSetting === 'limit') {
-      await expect(sellTooltip.startPrice()).toHaveText(output.sell.min);
-      await expect(sellTooltip.startPrice()).toHaveText(output.sell.max);
+      await expect(sellTooltip.price()).toHaveText(output.sell.min);
+      await expect(sellTooltip.price()).toHaveText(output.sell.max);
     } else {
       await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
       await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);

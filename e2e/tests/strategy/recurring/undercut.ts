@@ -52,8 +52,8 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const buyTooltip = await strategyUndercut.priceTooltip('buy');
     if (buySetting === 'limit') {
-      await expect(buyTooltip.startPrice()).toHaveText(buy.min);
-      await expect(buyTooltip.startPrice()).toHaveText(buy.max);
+      await expect(buyTooltip.price()).toHaveText(buy.min);
+      await expect(buyTooltip.price()).toHaveText(buy.max);
     } else {
       await expect(buyTooltip.minPrice()).toHaveText(buy.min);
       await expect(buyTooltip.maxPrice()).toHaveText(buy.max);
@@ -62,8 +62,8 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const sellTooltip = await strategyUndercut.priceTooltip('sell');
     if (sellSetting === 'limit') {
-      await expect(sellTooltip.startPrice()).toHaveText(sell.min);
-      await expect(sellTooltip.startPrice()).toHaveText(sell.max);
+      await expect(sellTooltip.price()).toHaveText(sell.min);
+      await expect(sellTooltip.price()).toHaveText(sell.max);
     } else {
       await expect(sellTooltip.minPrice()).toHaveText(sell.min);
       await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
