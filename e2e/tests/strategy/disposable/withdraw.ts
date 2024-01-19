@@ -3,14 +3,15 @@ import { waitModalOpen } from './../../../utils/modal';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
-  assertRecurringTestCase,
+  assertDisposableTestCase,
   CreateStrategyTestCase,
   EditStrategyDriver,
 } from '../../../utils/strategy';
 
-export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
-  assertRecurringTestCase(testCase);
-  const { buy, sell } = testCase.output.withdraw;
+export const withdraw = (testCase: CreateStrategyTestCase) => {
+  assertDisposableTestCase(testCase);
+  const { direction } = testCase;
+  const output = testCase.output.withdraw;
   return test('Withdraw', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
@@ -21,7 +22,7 @@ export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('withdraw');
-    await edit.fillRecurringBudget('withdraw');
+    await edit.fillDisposableBudget('withdraw');
 
     await edit.submit('withdraw');
     await page.waitForURL('/', { timeout: 20_000 });
@@ -32,7 +33,6 @@ export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
       'Your withdrawal request was successfully completed.'
     );
 
-    await expect(strategy.budget('buy')).toHaveText(buy);
-    await expect(strategy.budget('sell')).toHaveText(sell);
+    await expect(strategy.budget(direction)).toHaveText(output);
   });
 };

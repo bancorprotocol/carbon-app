@@ -11,34 +11,49 @@ import {
   RecurringStrategyTestCase,
   OverlappingStrategyTestCase,
   Setting,
+  MinMax,
+  StrategyCase,
 } from './types';
 import {
   getBuyMax,
   getSellMin,
 } from '../../../src/components/strategies/overlapping/utils';
 
+export function isDisposableTestCase(
+  testCase: CreateStrategyTestCase
+): testCase is DisposableStrategyTestCase {
+  return testCase.type === 'disposable';
+}
+
 export function assertDisposableTestCase(
   testCase: CreateStrategyTestCase
 ): asserts testCase is DisposableStrategyTestCase {
-  if (testCase.type !== 'disposable') {
-    throw new Error('Test case should be disposable');
-  }
+  if (isDisposableTestCase(testCase)) return;
+  throw new Error('Test case should be disposable');
 }
 
+export function isRecurringTestCase(
+  testCase: CreateStrategyTestCase
+): testCase is RecurringStrategyTestCase {
+  return testCase.type === 'recurring';
+}
 export function assertRecurringTestCase(
   testCase: CreateStrategyTestCase
 ): asserts testCase is RecurringStrategyTestCase {
-  if (testCase.type !== 'recurring') {
-    throw new Error('Test case should be recurring');
-  }
+  if (isRecurringTestCase(testCase)) return;
+  throw new Error('Test case should be recurring');
 }
 
+export function isOverlappingTestCase(
+  testCase: CreateStrategyTestCase
+): testCase is OverlappingStrategyTestCase {
+  return testCase.type === 'overlapping';
+}
 export function assertOverlappingTestCase(
   testCase: CreateStrategyTestCase
 ): asserts testCase is OverlappingStrategyTestCase {
-  if (testCase.type !== 'overlapping') {
-    throw new Error('Test case should be overlapping');
-  }
+  if (isOverlappingTestCase(testCase)) return;
+  throw new Error('Test case should be overlapping');
 }
 
 export const getRecurringSettings = (testCase: RecurringStrategyTestCase) => {
@@ -56,23 +71,52 @@ export function assertDebugToken(
 }
 
 export const testDescription = (testCase: CreateStrategyTestCase) => {
-  if (testCase.type === 'overlapping') return 'Overlapping';
-  if (testCase.type === 'disposable') {
+  if (isOverlappingTestCase(testCase)) return 'Overlapping';
+  if (isDisposableTestCase(testCase)) {
     return `Disposable ${testCase.direction} ${testCase.setting}`;
   }
   return `Recurring ${testCase.setting.split('_').join(' ')}`;
 };
 
-const emptyOrder = () => ({ min: '0', max: '0', budget: '0' });
-const fromPair = (pair: TokenPair) => {
-  const [base, quote] = pair.split('->') as [DebugTokens, DebugTokens];
-  return { base, quote };
+export const screenshotPath = (
+  testCase: CreateStrategyTestCase,
+  strategyCase: StrategyCase,
+  filename: string
+) => {
+  const description = testDescription(testCase);
+  return `/strategy/${testCase.type}/${description}/${strategyCase}/${filename}`;
 };
-const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
+
+export const toDebugStrategy = (
+  testCase: CreateStrategyTestCase
+): CreateStrategyInput => {
+  if (isRecurringTestCase(testCase)) return testCase.input.create;
+  if (isOverlappingTestCase(testCase)) return testCase.input.create;
+  // Disposable
+  if (testCase.direction === 'buy') {
+    return { buy: testCase.input.create, sell: emptyOrder() };
+  } else {
+    return { buy: emptyOrder(), sell: testCase.input.create };
+  }
+};
+
+const emptyOrder = () => ({ min: '0', max: '0', budget: '0' });
+export const fromPrice = (price: string): MinMax => ({
+  min: price,
+  max: price,
+});
+export const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
   min: order.price,
   max: order.price,
   budget: order.budget,
 });
+
+// TODO: refactor the code below
+
+const fromPair = (pair: TokenPair) => {
+  const [base, quote] = pair.split('->') as [DebugTokens, DebugTokens];
+  return { base, quote };
+};
 export const createDebugStrategy = {
   limitBuy: (pair: TokenPair, buy: LimitOrder): CreateStrategyInput => ({
     ...fromPair(pair),

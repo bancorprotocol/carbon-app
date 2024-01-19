@@ -1,6 +1,13 @@
 import { Page } from 'playwright-core';
-import { CreateStrategyTestCase, Setting, Direction } from './types';
-import { assertRecurringTestCase, getRecurringSettings } from './utils';
+import { MainMenuDriver } from '../MainMenuDriver';
+import { screenshot, shouldTakeScreenshot } from '../operators';
+import { CreateStrategyTestCase, Setting, Direction, MinMax } from './types';
+import {
+  assertDisposableTestCase,
+  assertRecurringTestCase,
+  getRecurringSettings,
+  screenshotPath,
+} from './utils';
 
 export class EditStrategyDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
@@ -9,10 +16,9 @@ export class EditStrategyDriver {
     return this.page.getByTestId('edit-submit');
   }
 
-  async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
-    await this.page.waitForURL(`/strategies/edit/*?type=${type}`, {
-      timeout: 10_000,
-    });
+  async waitForPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
+    const options = { timeout: 10_000 };
+    return this.page.waitForURL(`/strategies/edit/*?type=${type}`, options);
   }
 
   getPriceSection(direction: Direction) {
@@ -38,8 +44,16 @@ export class EditStrategyDriver {
     };
   }
 
-  async submit() {
+  async submit(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
     await this.submitBtn().isEnabled();
+    if (shouldTakeScreenshot) {
+      const mainMenu = new MainMenuDriver(this.page);
+      await mainMenu.hide();
+      const form = this.page.getByTestId('edit-form');
+      const path = screenshotPath(this.testCase, type, 'form');
+      await screenshot(form, path);
+      await mainMenu.show();
+    }
     return this.submitBtn().click();
   }
 
@@ -48,11 +62,7 @@ export class EditStrategyDriver {
     return form.budget().fill(budget);
   }
 
-  async fillPrice(
-    direction: Direction,
-    setting: Setting,
-    order: { min: string; max: string }
-  ) {
+  async fillPrice(direction: Direction, setting: Setting, order: MinMax) {
     const form = this.getPriceSection(direction);
     await form.setting(setting).click();
     if (setting === 'limit') {
@@ -81,19 +91,15 @@ export class EditStrategyDriver {
     return { buyForm, sellForm };
   }
 
-  // async fillDisposablePrice() {
-  //   assertDisposableTestCase(this.testCase);
-  //   const { buy, sell } = this.testCase.input.editPrice;
-  //   const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-  //   const buyForm = await this.fillPrice('buy', buySetting, buy);
-  //   return { buyForm, sellForm };
-  // }
+  async fillDisposablePrice() {
+    assertDisposableTestCase(this.testCase);
+    const { direction, setting, input } = this.testCase;
+    return this.fillPrice(direction, setting, input.editPrice);
+  }
 
-  // async fillDisposableBudget(type: 'deposit' | 'withdraw') {
-  //   assertRecurringTestCase(this.testCase);
-  //   const { buy, sell } = this.testCase.input[type];
-  //   const buyForm = await this.fillBudget('buy', buy);
-  //   const sellForm = await this.fillBudget('sell', sell);
-  //   return { buyForm, sellForm };
-  // }
+  async fillDisposableBudget(type: 'deposit' | 'withdraw') {
+    assertDisposableTestCase(this.testCase);
+    const { direction, input } = this.testCase;
+    return this.fillBudget(direction, input[type]);
+  }
 }

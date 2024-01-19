@@ -11,14 +11,10 @@ import {
 } from '../../../utils/strategy';
 import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 
-export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
+export const create = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
-  const { base, quote, direction } = testCase;
+  const { base, quote, direction, setting } = testCase;
   const output = testCase.output.create;
-  const order = output[direction];
-  if (!order) {
-    throw new Error(`Disposable input is missing key "${direction}"`);
-  }
 
   return test(`Create`, async ({ page }) => {
     await waitFor(page, `balance-${quote}`, 30_000);
@@ -35,8 +31,8 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     const form = await createForm.fillDisposable();
 
     // Assert 100% outcome
-    await expect(form.outcomeValue()).toHaveText(order.outcomeValue);
-    await expect(form.outcomeQuote()).toHaveText(order.outcomeQuote);
+    await expect(form.outcomeValue()).toHaveText(output.outcomeValue);
+    await expect(form.outcomeQuote()).toHaveText(output.outcomeQuote);
 
     const mainMenu = new MainMenuDriver(page);
     await mainMenu.hide();
@@ -56,7 +52,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
+    // Verify notification
     const notif = new NotificationDriver(page, 'create-strategy');
     await expect(notif.getTitle()).toHaveText('Success');
     await expect(notif.getDescription()).toHaveText(
@@ -69,11 +65,17 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     const strategy = await myStrategies.getStrategy(1);
     await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategy.status()).toHaveText('Active');
-    await expect(strategy.totalBudget()).toHaveText(order.fiat);
-    await expect(strategy.buyBudget()).toHaveText(output.buy.budget);
-    await expect(strategy.buyBudgetFiat()).toHaveText(output.buy.fiat);
-    await expect(strategy.sellBudget()).toHaveText(output.sell.budget);
-    await expect(strategy.sellBudgetFiat()).toHaveText(output.sell.fiat);
+    await expect(strategy.totalBudget()).toHaveText(output.fiat);
+    await expect(strategy.budget(direction)).toHaveText(output.budget);
+    await expect(strategy.budgetFiat(direction)).toHaveText(output.fiat);
+
+    const tooltip = await strategy.priceTooltip(direction);
+    if (setting === 'limit') {
+      expect(tooltip.price()).toHaveText(output.min);
+    } else {
+      expect(tooltip.minPrice()).toHaveText(output.min);
+      expect(tooltip.maxPrice()).toHaveText(output.max);
+    }
 
     await notif.close();
     await screenshot(page, `[Create ${testDescription(testCase)}] My Strategy`);

@@ -16,7 +16,7 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
   return test('Undercut', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
-    await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
+    await strategy.clickManageEntry('duplicateStrategy');
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('undercut-strategy-btn').click();
@@ -42,10 +42,10 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await expect(strategyUndercut.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategyUndercut.status()).toHaveText('Active');
     await expect(strategyUndercut.totalBudget()).toHaveText(totalFiat);
-    await expect(strategyUndercut.buyBudget()).toHaveText(buy.budget);
-    await expect(strategyUndercut.buyBudgetFiat()).toHaveText(buy.fiat);
-    await expect(strategyUndercut.sellBudget()).toHaveText(sell.budget);
-    await expect(strategyUndercut.sellBudgetFiat()).toHaveText(sell.fiat);
+    await expect(strategyUndercut.budget('buy')).toHaveText(buy.budget);
+    await expect(strategyUndercut.budgetFiat('buy')).toHaveText(buy.fiat);
+    await expect(strategyUndercut.budget('sell')).toHaveText(sell.budget);
+    await expect(strategyUndercut.budgetFiat('sell')).toHaveText(sell.fiat);
 
     // Check range
     const [buySetting, sellSetting] = getRecurringSettings(testCase);
@@ -68,6 +68,7 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
       await expect(sellTooltip.minPrice()).toHaveText(sell.min);
       await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
     }
+
     await sellTooltip.waitForDetached();
   });
 };

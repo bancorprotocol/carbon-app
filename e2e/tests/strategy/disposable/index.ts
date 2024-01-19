@@ -1,2 +1,6 @@
 export * from './create';
-export { deleteStrategyTest } from './delete';
+export * from './edit';
+export * from './delete';
+export * from './withdraw';
+export * from './deposit';
+export * from './duplicate';

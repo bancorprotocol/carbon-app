@@ -11,7 +11,7 @@ export const deleteStrategyTest = (testCase: CreateStrategyTestCase) => {
   return test('Delete', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
-    await strategy.clickManageEntry('manage-strategy-deleteStrategy');
+    await strategy.clickManageEntry('deleteStrategy');
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('delete-strategy-btn').click();

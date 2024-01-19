@@ -15,13 +15,12 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
     const { buy, sell } = testCase.output.editPrice;
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
-    await strategy.clickManageEntry('manage-strategy-editPrices');
-
-    await manage.waitForEditPage('editPrices');
+    await strategy.clickManageEntry('editPrices');
 
     const edit = new EditStrategyDriver(page, testCase);
+    await edit.waitForPage('editPrices');
     await edit.fillRecurringPrice();
-    await page.getByTestId('edit-submit').click();
+    await edit.submit('editPrices');
     await page.waitForURL('/', { timeout: 10_000 });
 
     const notif = new NotificationDriver(page, 'change-rates-strategy');
