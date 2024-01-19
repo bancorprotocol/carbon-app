@@ -84,7 +84,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     }
     await sellTooltip.waitForDetached();
 
-    await notif.close;
+    await notif.close();
 
     await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
