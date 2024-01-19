@@ -8,6 +8,7 @@ import {
   MyStrategyDriver,
   assertRecurringTestCase,
   testDescription,
+  getRecurringSettings,
 } from '../../../utils/strategy';
 import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 
@@ -75,7 +76,7 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(strategy.sellBudgetFiat()).toHaveText(output.sell.fiat);
 
     // Check range
-    const [buySetting, sellSetting] = testCase.input.setting.split('_');
+    const [buySetting, sellSetting] = getRecurringSettings(testCase);
 
     const buyTooltip = await strategy.priceTooltip('buy');
     if (buySetting === 'limit') {

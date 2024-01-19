@@ -2,12 +2,17 @@ import { expect, test } from '@playwright/test';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
+  assertRecurringTestCase,
   CreateStrategyTestCase,
   EditStrategyDriver,
+  getRecurringSettings,
+  MyStrategyDriver,
 } from '../../../utils/strategy';
 
 export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
+  assertRecurringTestCase(testCase);
   return test('Edit Price', async ({ page }) => {
+    const { buy, sell } = testCase.output.editPrice;
     const manage = new ManageStrategyDriver(page);
     const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-editPrices');
@@ -16,7 +21,7 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.fillRecurringPrice();
-    await page.getByTestId('edit-strategy-prices-submit').click();
+    await page.getByTestId('edit-submit').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
     const notif = new NotificationDriver(page, 'change-rates-strategy');
@@ -25,6 +30,30 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
       'Your strategy was successfully updated.'
     );
 
-    // TODO Assert new prices from tooltips
+    const myStrategies = new MyStrategyDriver(page);
+    const strategyEdited = await myStrategies.getStrategy(1);
+
+    // Check range
+    const [buySetting, sellSetting] = getRecurringSettings(testCase);
+
+    const buyTooltip = await strategyEdited.priceTooltip('buy');
+    if (buySetting === 'limit') {
+      await expect(buyTooltip.startPrice()).toHaveText(buy.min);
+      await expect(buyTooltip.startPrice()).toHaveText(buy.max);
+    } else {
+      await expect(buyTooltip.minPrice()).toHaveText(buy.min);
+      await expect(buyTooltip.maxPrice()).toHaveText(buy.max);
+    }
+    await buyTooltip.waitForDetached();
+
+    const sellTooltip = await strategyEdited.priceTooltip('sell');
+    if (sellSetting === 'limit') {
+      await expect(sellTooltip.startPrice()).toHaveText(sell.min);
+      await expect(sellTooltip.startPrice()).toHaveText(sell.max);
+    } else {
+      await expect(sellTooltip.minPrice()).toHaveText(sell.min);
+      await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
+    }
+    await sellTooltip.waitForDetached();
   });
 };
