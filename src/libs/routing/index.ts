@@ -1,6 +1,6 @@
 export { router } from 'libs/routing/router';
 export * from '@tanstack/react-router';
-export { A } from 'libs/routing/A';
+export { NewTabLink } from 'libs/routing/NewTabLink';
 export { externalLinks } from 'libs/routing/externalLinks';
 export type { Pathnames, PathParams } from './types';
 export type {

@@ -1,4 +1,4 @@
-import { A, externalLinks } from 'libs/routing';
+import { NewTabLink, externalLinks } from 'libs/routing';
 import { FC, ReactNode } from 'react';
 import {
   IconTitleText,
@@ -12,11 +12,11 @@ type Props = IconTitleTextProps & {
 
 const DefaultChildren = () => (
   <div>
-    <A to={externalLinks.faq}>
+    <NewTabLink to={externalLinks.faq}>
       <Button variant={'error'} fullWidth>
         Contact Support
       </Button>
-    </A>
+    </NewTabLink>
   </div>
 );
 

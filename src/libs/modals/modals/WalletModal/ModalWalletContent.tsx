@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { A, Link } from 'libs/routing';
+import { NewTabLink, Link } from 'libs/routing';
 import { Connection, selectableConnectionTypes } from 'libs/web3';
 import { getConnection } from 'libs/web3/web3.utils';
 import { Imager } from 'components/common/imager/Imager';
@@ -77,7 +77,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
       ))}
 
       {EXT_LINKS.map(({ url, name, logoUrl }) => (
-        <A
+        <NewTabLink
           key={url}
           to={url}
           className={`${buttonClasses} ${
@@ -91,7 +91,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
             <Imager alt="Wallet Logo" src={logoUrl} className="h-24" />
           </div>
           <span className={textClasses}>{name}</span>
-        </A>
+        </NewTabLink>
       ))}
     </div>
   );
