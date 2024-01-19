@@ -1,12 +1,14 @@
 import { expect, test } from '@playwright/test';
 import { checkApproval } from '../../../utils/modal';
 import { NotificationDriver } from '../../../utils/NotificationDriver';
-import { navigateTo, waitFor } from '../../../utils/operators';
+import { navigateTo, screenshot, waitFor } from '../../../utils/operators';
 import {
   CreateStrategyDriver,
   CreateStrategyTestCase,
   MyStrategyDriver,
   assertRecurringTestCase,
+  getRecurringSettings,
+  screenshotPath,
 } from '../../../utils/strategy';
 
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
@@ -51,12 +53,39 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     const strategies = await myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
+
     await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategy.status()).toHaveText('Active');
     await expect(strategy.totalBudget()).toHaveText(output.totalFiat);
+
     await expect(strategy.budget('buy')).toHaveText(output.buy.budget);
     await expect(strategy.budgetFiat('buy')).toHaveText(output.buy.fiat);
     await expect(strategy.budget('sell')).toHaveText(output.sell.budget);
     await expect(strategy.budgetFiat('sell')).toHaveText(output.sell.fiat);
+
+    // Check range
+    const [buySetting, sellSetting] = getRecurringSettings(testCase);
+
+    const buyTooltip = await strategy.priceTooltip('buy');
+    if (buySetting === 'limit') {
+      await expect(buyTooltip.price()).toHaveText(output.buy.min);
+    } else {
+      await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
+      await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
+    }
+    await buyTooltip.waitForDetached();
+
+    const sellTooltip = await strategy.priceTooltip('sell');
+    if (sellSetting === 'limit') {
+      await expect(sellTooltip.price()).toHaveText(output.sell.min);
+    } else {
+      await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
+      await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
+    }
+    await sellTooltip.waitForDetached();
+
+    await notif.close();
+
+    await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
 };

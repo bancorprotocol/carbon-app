@@ -3,6 +3,7 @@ import {
   CreateStrategyTestCase,
   MyStrategyDriver,
   assertRecurringTestCase,
+  getRecurringSettings,
 } from './../../../utils/strategy';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
@@ -46,12 +47,25 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await expect(strategyUndercut.budget('sell')).toHaveText(sell.budget);
     await expect(strategyUndercut.budgetFiat('sell')).toHaveText(sell.fiat);
 
+    // Check range
+    const [buySetting, sellSetting] = getRecurringSettings(testCase);
+
     const buyTooltip = await strategyUndercut.priceTooltip('buy');
-    await expect(buyTooltip.price()).toHaveText(buy.min);
+    if (buySetting === 'limit') {
+      await expect(buyTooltip.price()).toHaveText(buy.min);
+    } else {
+      await expect(buyTooltip.minPrice()).toHaveText(buy.min);
+      await expect(buyTooltip.maxPrice()).toHaveText(buy.max);
+    }
     await buyTooltip.waitForDetached();
 
     const sellTooltip = await strategyUndercut.priceTooltip('sell');
-    await expect(sellTooltip.price()).toHaveText(sell.min);
+    if (sellSetting === 'limit') {
+      await expect(sellTooltip.price()).toHaveText(sell.min);
+    } else {
+      await expect(sellTooltip.minPrice()).toHaveText(sell.min);
+      await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
+    }
     await sellTooltip.waitForDetached();
   });
 };
