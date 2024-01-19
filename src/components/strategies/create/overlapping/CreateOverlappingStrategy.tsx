@@ -44,14 +44,12 @@ export type SetOverlappingParams = (
   max: string
 ) => Promise<StrategyPrices | undefined>;
 
-const getInitialPrice = (marketPrice: string | number, quote: Token) => {
+const getInitialPrices = (marketPrice: string | number) => {
   const currentPrice = new SafeDecimal(marketPrice);
-  const min = currentPrice.times(0.999).toFixed(quote.decimals);
-  const max = currentPrice.times(1.001).toFixed(quote.decimals);
-  if (min !== max) return { min, max };
-  // TODO(#988) Workaround if market price is close to 1wei
-  const wei = new SafeDecimal(min);
-  return { min, max: wei.times(10).toString() };
+  return {
+    min: currentPrice.times(0.999).toString(),
+    max: currentPrice.times(1.001).toString(),
+  };
 };
 
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
@@ -131,7 +129,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!order0.min && !order1.max) {
-      const { min, max } = getInitialPrice(marketPrice, quote);
+      const { min, max } = getInitialPrices(marketPrice);
       if (isValidRange(min, max)) setOverlappingParams(min, max);
     } else {
       const min = order0.min;

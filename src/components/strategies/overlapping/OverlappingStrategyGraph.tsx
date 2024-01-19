@@ -398,12 +398,12 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const getDraggedMin = () => {
     const delta = Number(getHandlerDelta('buy'));
     if (!delta) return;
-    return ((min + delta) / xFactor).toFixed(quote!.decimals);
+    return new SafeDecimal(min).add(delta).div(xFactor).toString();
   };
   const getDraggedMax = () => {
     const delta = Number(getHandlerDelta('sell'));
     if (!delta) return;
-    return ((max + delta) / xFactor).toFixed(quote!.decimals);
+    return new SafeDecimal(max).add(delta).div(xFactor).toString();
   };
 
   const updatePoints = {
