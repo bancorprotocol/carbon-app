@@ -29,7 +29,7 @@ export const MainMenuLeft: FC = () => {
 
       <div className={'hidden space-x-24 md:block'}>
         {menuItems.map(({ label, href }, index) => {
-          let isSamePage = isSamePageLink(href);
+          const isSamePage = isSamePageLink(href);
 
           return (
             <Link
