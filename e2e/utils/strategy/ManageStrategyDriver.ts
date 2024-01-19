@@ -7,9 +7,9 @@ import { CreateStrategyTestCase } from './types';
 export class ManageStrategyDriver {
   constructor(private page: Page) {}
 
-  async createStrategy(input: CreateStrategyTestCase) {
+  async createStrategy(testCase: CreateStrategyTestCase) {
     const debug = new DebugDriver(this.page);
-    await debug.createStrategy(input);
+    await debug.createStrategy(testCase);
     await navigateTo(this.page, '/');
     const myStrategies = new MyStrategyDriver(this.page);
     return myStrategies.getStrategy(1);
