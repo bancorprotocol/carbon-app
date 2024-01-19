@@ -235,7 +235,6 @@ const testCases: CreateStrategyTestCase[] = [
       },
     },
   },
-  // Overlapping
   {
     type: 'recurring',
     setting: 'range_limit',
