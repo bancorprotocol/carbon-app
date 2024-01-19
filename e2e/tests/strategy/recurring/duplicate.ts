@@ -9,12 +9,12 @@ import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDr
 import { waitModalOpen } from '../../../utils/modal';
 
 export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
+  const { base, quote } = testCase;
   assertRecurringTestCase(testCase);
-  const { base, quote } = testCase.input;
   const output = testCase.output.create;
   return test('Duplicate', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase.input);
+    const strategy = await manage.createStrategy(testCase);
     await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
 
     const modal = await waitModalOpen(page);

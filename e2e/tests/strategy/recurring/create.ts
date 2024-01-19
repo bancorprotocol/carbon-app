@@ -13,7 +13,7 @@ import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
-  const { base, quote } = testCase.input;
+  const { base, quote } = testCase;
   const output = testCase.output.create;
 
   return test(`Create`, async ({ page }) => {

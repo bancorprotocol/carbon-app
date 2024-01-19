@@ -9,156 +9,164 @@ import * as overlapping from '../tests/strategy/overlapping/';
 const testCases: CreateStrategyTestCase[] = [
   // Disposable
   {
+    type: 'disposable',
+    setting: 'limit',
+    direction: 'buy',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'limit',
-      direction: 'buy',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1500',
-        budget: '10',
-      },
-      sell: {
-        min: '0',
-        max: '0',
-        budget: '0',
+      create: {
+        buy: {
+          min: '1500',
+          max: '1500',
+          budget: '10',
+        },
+        sell: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
       },
     },
     output: {
       create: {
         buy: {
-          min: '1,500 DAI',
-          max: '1,500 DAI',
+          min: '1,500.00 DAI',
+          max: '1,500.00 DAI',
           outcomeValue: '0.006666 ETH',
-          outcomeQuote: '1,500 DAI',
-          budget: '10 DAI',
+          outcomeQuote: '1,500.00 DAI',
+          budget: '10.00 DAI',
           fiat: '$10.00',
         },
         sell: {
-          min: '0 DAI',
-          max: '0 DAI',
-          outcomeValue: '0 ETH',
-          outcomeQuote: '0 ETH',
-          budget: '0 ETH',
+          min: '0.00 DAI',
+          max: '0.00 DAI',
+          outcomeValue: '0.00 ETH',
+          outcomeQuote: '0.00 ETH',
+          budget: '0.00 ETH',
           fiat: '$0.00',
         },
       },
     },
   },
   {
+    type: 'disposable',
+    setting: 'limit',
+    direction: 'sell',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'limit',
-      direction: 'sell',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '0',
-        max: '0',
-        budget: '0',
-      },
-      sell: {
-        min: '1700',
-        max: '1700',
-        budget: '2',
+      create: {
+        buy: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
+        sell: {
+          min: '1700',
+          max: '1700',
+          budget: '2',
+        },
       },
     },
     output: {
       create: {
         buy: {
-          min: '0 DAI',
-          max: '0 DAI',
-          outcomeValue: '0 ETH',
-          outcomeQuote: '0 ETH',
-          budget: '0 DAI',
+          min: '0.00 DAI',
+          max: '0.00 DAI',
+          outcomeValue: '0.00 ETH',
+          outcomeQuote: '0.00 ETH',
+          budget: '0.00 DAI',
           fiat: '$0.00',
         },
         sell: {
-          min: '1,700 DAI',
-          max: '1,700 DAI',
-          outcomeValue: '3,400 DAI',
-          outcomeQuote: '1,700 DAI',
-          budget: '2 ETH',
+          min: '1,700.00 DAI',
+          max: '1,700.00 DAI',
+          outcomeValue: '3,400.00 DAI',
+          outcomeQuote: '1,700.00 DAI',
+          budget: '2.00 ETH',
           fiat: '$3,334.42',
         },
       },
     },
   },
   {
+    type: 'disposable',
+    setting: 'range',
+    direction: 'buy',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'range',
-      direction: 'buy',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1700',
-        budget: '10',
-      },
-      sell: {
-        min: '0',
-        max: '0',
-        budget: '0',
+      create: {
+        buy: {
+          min: '1500',
+          max: '1700',
+          budget: '10',
+        },
+        sell: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
       },
     },
     output: {
       create: {
         buy: {
-          min: '1,500 DAI',
-          max: '1,700 DAI',
+          min: '1,500.00 DAI',
+          max: '1,700.00 DAI',
           outcomeValue: '0.006262 ETH',
-          outcomeQuote: '1,596 DAI',
-          budget: '10 DAI',
+          outcomeQuote: '1,596.87 DAI',
+          budget: '10.00 DAI',
           fiat: '$10.00',
         },
         sell: {
-          min: '0 DAI',
-          max: '0 DAI',
-          outcomeValue: '0 ETH',
-          outcomeQuote: '0 ETH',
-          budget: '0 ETH',
+          min: '0.00 DAI',
+          max: '0.00 DAI',
+          outcomeValue: '0.00 ETH',
+          outcomeQuote: '0.00 ETH',
+          budget: '0.00 ETH',
           fiat: '$0.00',
         },
       },
     },
   },
   {
+    type: 'disposable',
+    setting: 'range',
+    direction: 'sell',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'disposable',
-      setting: 'range',
-      direction: 'sell',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '0',
-        max: '0',
-        budget: '0',
-      },
-      sell: {
-        min: '1500',
-        max: '1700',
-        budget: '2',
+      create: {
+        buy: {
+          min: '0',
+          max: '0',
+          budget: '0',
+        },
+        sell: {
+          min: '1500',
+          max: '1700',
+          budget: '2',
+        },
       },
     },
     output: {
       create: {
         buy: {
-          min: '0 DAI',
-          max: '0 DAI',
-          outcomeValue: '0 ETH',
-          outcomeQuote: '0 ETH',
-          budget: '0 DAI',
+          min: '0.00 DAI',
+          max: '0.00 DAI',
+          outcomeValue: '0.00 ETH',
+          outcomeQuote: '0.00 ETH',
+          budget: '0.00 DAI',
           fiat: '$0.00',
         },
         sell: {
-          min: '1,500 DAI',
-          max: '1,700 DAI',
-          outcomeValue: '3,193 DAI',
-          outcomeQuote: '1,596 DAI',
-          budget: '2 ETH',
+          min: '1,500.00 DAI',
+          max: '1,700.00 DAI',
+          outcomeValue: '3,193.74 DAI',
+          outcomeQuote: '1,596.87 DAI',
+          budget: '2.00 ETH',
           fiat: '$3,334.42',
         },
       },
@@ -166,178 +174,116 @@ const testCases: CreateStrategyTestCase[] = [
   },
   // Recurring
   {
+    type: 'recurring',
+    setting: 'limit_limit',
+    base: 'ETH',
+    quote: 'DAI',
     input: {
-      type: 'recurring',
-      setting: 'limit_limit',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1500',
-        budget: '10',
+      create: {
+        buy: {
+          min: '1500',
+          max: '1500',
+          budget: '10',
+        },
+        sell: {
+          min: '1700',
+          max: '1700',
+          budget: '2',
+        },
       },
-      sell: {
-        min: '1700',
-        max: '1700',
-        budget: '2',
+      editPrice: {
+        buy: {
+          min: '1600',
+          max: '1600',
+        },
+        sell: {
+          min: '1800',
+          max: '1800',
+        },
+      },
+      deposit: {
+        buy: '5',
+        sell: '1',
+      },
+      withdraw: {
+        buy: '5',
+        sell: '1',
       },
     },
     output: {
       create: {
         totalFiat: '$3,344.42',
         buy: {
-          min: '1,500 DAI',
-          max: '1,500 DAI',
+          min: '1,500.00 DAI',
+          max: '1,500.00 DAI',
           outcomeValue: '0.006666 ETH',
-          outcomeQuote: '1,500 DAI',
-          budget: '10 DAI',
+          outcomeQuote: '1,500.00 DAI',
+          budget: '10.00 DAI',
           fiat: '$10.00',
         },
         sell: {
-          min: '1,700 DAI',
-          max: '1,700 DAI',
-          outcomeValue: '3,400 DAI',
-          outcomeQuote: '1,700 DAI',
-          budget: '2 ETH',
+          min: '1,700.00 DAI',
+          max: '1,700.00 DAI',
+          outcomeValue: '3,400.00 DAI',
+          outcomeQuote: '1,700.00 DAI',
+          budget: '2.00 ETH',
           fiat: '$3,334.42',
         },
       },
-    },
-  },
-  {
-    input: {
-      type: 'recurring',
-      setting: 'limit_range',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1500',
-        budget: '10',
-      },
-      sell: {
-        min: '1700',
-        max: '1800',
-        budget: '2',
-      },
-    },
-    output: {
-      create: {
+      undercut: {
         totalFiat: '$3,344.42',
         buy: {
-          min: '1,500 DAI',
-          max: '1,500 DAI',
-          outcomeValue: '0.006666 ETH',
-          outcomeQuote: '1,500 DAI',
-          budget: '10 DAI',
+          min: '1,501.50 DAI',
+          max: '1,501.50 DAI',
+          budget: '10.00 DAI',
           fiat: '$10.00',
         },
         sell: {
-          min: '1,700 DAI',
-          max: '1,800 DAI',
-          outcomeValue: '3,498 DAI',
-          outcomeQuote: '1,749 DAI',
-          budget: '2 ETH',
+          min: '1,698.30 DAI',
+          max: '1,698.30 DAI',
+          budget: '2.00 ETH',
           fiat: '$3,334.42',
         },
       },
-    },
-  },
-  {
-    input: {
-      type: 'recurring',
-      setting: 'range_limit',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1600',
-        budget: '10',
-      },
-      sell: {
-        min: '1700',
-        max: '1700',
-        budget: '2',
-      },
-    },
-    output: {
-      create: {
-        totalFiat: '$3,344.42',
+      editPrice: {
         buy: {
-          min: '1,500 DAI',
-          max: '1,600 DAI',
-          outcomeValue: '0.006454 ETH',
-          outcomeQuote: '1,549 DAI',
-          budget: '10 DAI',
-          fiat: '$10.00',
+          min: '1,600.00 DAI',
+          max: '1,600.00 DAI',
         },
         sell: {
-          min: '1,700 DAI',
-          max: '1,700 DAI',
-          outcomeValue: '3,400 DAI',
-          outcomeQuote: '1,700 DAI',
-          budget: '2 ETH',
-          fiat: '$3,334.42',
+          min: '1,800.00 DAI',
+          max: '1,800.00 DAI',
         },
       },
-    },
-  },
-  {
-    input: {
-      type: 'recurring',
-      setting: 'range_range',
-      base: 'ETH',
-      quote: 'DAI',
-      buy: {
-        min: '1500',
-        max: '1600',
-        budget: '10',
+      deposit: {
+        buy: '15.00 DAI',
+        sell: '3.00 ETH',
       },
-      sell: {
-        min: '1700',
-        max: '1800',
-        budget: '2',
-      },
-    },
-    output: {
-      create: {
-        totalFiat: '$3,344.42',
-        buy: {
-          min: '1,500 DAI',
-          max: '1,600 DAI',
-          outcomeValue: '0.006454 ETH',
-          outcomeQuote: '1,549 DAI',
-          budget: '10 DAI',
-          fiat: '$10.00',
-        },
-        sell: {
-          min: '1,700 DAI',
-          max: '1,800 DAI',
-          outcomeValue: '3,498 DAI',
-          outcomeQuote: '1,749 DAI',
-          budget: '2 ETH',
-          fiat: '$3,334.42',
-        },
+      withdraw: {
+        buy: '5.00 DAI',
+        sell: '1.00 ETH',
       },
     },
   },
   // Overlapping
   {
+    type: 'overlapping',
+    base: 'BNT',
+    quote: 'USDC',
     input: {
-      type: 'overlapping',
-      base: 'BNT',
-      quote: 'USDC',
-      buy: {
-        min: '0.3',
-        max: '0.545454',
-        budget: '12.501572',
+      create: {
+        buy: {
+          min: '0.3',
+          max: '0.545454',
+          budget: '12.501572',
+        },
+        sell: {
+          min: '0.33',
+          max: '0.6',
+          budget: '30',
+        },
+        spread: '10', // Need a large spread for tooltip test
       },
-      sell: {
-        min: '0.33',
-        max: '0.6',
-        budget: '30',
-      },
-      spread: '10', // Need a large spread for tooltip test
     },
     output: {
       create: {
@@ -360,12 +306,11 @@ const testCases: CreateStrategyTestCase[] = [
 ];
 
 const testDescription = (testCase: CreateStrategyTestCase) => {
-  const input = testCase.input;
-  if (input.type === 'overlapping') return 'Overlapping';
-  if (input.type === 'disposable') {
-    return `Disposable ${input.direction} ${input.setting}`;
+  if (testCase.type === 'overlapping') return 'Overlapping';
+  if (testCase.type === 'disposable') {
+    return `Disposable ${testCase.direction} ${testCase.setting}`;
   }
-  return `Recurring ${input.setting.split('_').join(' ')}`;
+  return `Recurring ${testCase.setting.split('_').join(' ')}`;
 };
 
 test.describe('Strategies', () => {
@@ -389,7 +334,7 @@ test.describe('Strategies', () => {
 
   for (const testCase of testCases) {
     test.describe(testDescription(testCase), () => {
-      const testSuite = testStrategies[testCase.input.type];
+      const testSuite = testStrategies[testCase.type];
       for (const [, testFn] of Object.entries(testSuite)) {
         testFn(testCase);
       }

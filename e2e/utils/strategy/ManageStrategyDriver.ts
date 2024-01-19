@@ -2,17 +2,17 @@ import { DebugDriver } from './../../utils/DebugDriver';
 import { navigateTo } from './../../utils/operators';
 import { MyStrategyDriver } from './../../utils/strategy/MyStrategyDriver';
 import { Page } from 'playwright-core';
-import { CreateStrategyInput } from './types';
+import { CreateStrategyTestCase } from './types';
 
 export class ManageStrategyDriver {
   constructor(private page: Page) {}
 
-  async createStrategy(input: CreateStrategyInput) {
+  async createStrategy(input: CreateStrategyTestCase) {
     const debug = new DebugDriver(this.page);
     await debug.createStrategy(input);
     await navigateTo(this.page, '/');
     const myStrategies = new MyStrategyDriver(this.page);
-    return await myStrategies.getStrategy(1);
+    return myStrategies.getStrategy(1);
   }
 
   async waitForEditPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {

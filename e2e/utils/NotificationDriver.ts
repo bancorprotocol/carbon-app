@@ -19,6 +19,13 @@ export class NotificationDriver {
   private notif = this.page.getByTestId(`notification-${this.type}`);
   constructor(private page: Page, private type: NotificationType) {}
 
+  waitForAttached() {
+    return this.notif.waitFor({ state: 'attached' });
+  }
+  waitForDetached() {
+    return this.notif.waitFor({ state: 'detached' });
+  }
+
   getTitle() {
     return this.notif.getByTestId('notif-title');
   }
@@ -30,7 +37,7 @@ export class NotificationDriver {
     const isVisible = await btn.isVisible();
     if (isVisible) {
       btn.click();
-      return this.notif.waitFor({ state: 'detached' });
+      return this.waitForDetached();
     }
   }
 }

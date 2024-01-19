@@ -59,6 +59,7 @@ export const EditStrategyPricesBuySellBlock: FC<
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
       }`}
+      data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <BuySellHeader {...headProps}>
         <h3 id={titleId} className="flex items-center gap-6 text-18">

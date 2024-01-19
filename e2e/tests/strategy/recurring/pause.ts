@@ -1,14 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { waitModalOpen } from './../../../utils/modal';
 import { Page } from 'playwright-core';
-import { CreateStrategyInput } from './../../../utils/strategy/template';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { CreateStrategyTestCase } from '../../../utils/strategy';
 
 export const pauseStrategy = async (
   page: Page,
-  testCase: CreateStrategyInput
+  testCase: CreateStrategyTestCase
 ) => {
   const manage = new ManageStrategyDriver(page);
   const strategy = await manage.createStrategy(testCase);
@@ -29,8 +28,7 @@ export const pauseStrategy = async (
 };
 
 export const pauseStrategyTest = (testCase: CreateStrategyTestCase) => {
-  const { input } = testCase;
   return test('Pause', async ({ page }) => {
-    await pauseStrategy(page, input);
+    await pauseStrategy(page, testCase);
   });
 };
