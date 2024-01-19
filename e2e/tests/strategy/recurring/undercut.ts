@@ -47,11 +47,11 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await expect(strategyUndercut.budgetFiat('sell')).toHaveText(sell.fiat);
 
     const buyTooltip = await strategyUndercut.priceTooltip('buy');
-    await expect(buyTooltip.startPrice()).toHaveText(buy.min);
+    await expect(buyTooltip.price()).toHaveText(buy.min);
     await buyTooltip.waitForDetached();
 
     const sellTooltip = await strategyUndercut.priceTooltip('sell');
-    await expect(sellTooltip.startPrice()).toHaveText(sell.min);
+    await expect(sellTooltip.price()).toHaveText(sell.min);
     await sellTooltip.waitForDetached();
   });
 };

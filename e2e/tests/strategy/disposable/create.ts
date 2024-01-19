@@ -7,9 +7,8 @@ import {
   CreateStrategyTestCase,
   MyStrategyDriver,
   assertDisposableTestCase,
-  testDescription,
+  screenshotPath,
 } from '../../../utils/strategy';
-import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 
 export const create = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -33,14 +32,6 @@ export const create = (testCase: CreateStrategyTestCase) => {
     // Assert 100% outcome
     await expect(form.outcomeValue()).toHaveText(output.outcomeValue);
     await expect(form.outcomeQuote()).toHaveText(output.outcomeQuote);
-
-    const mainMenu = new MainMenuDriver(page);
-    await mainMenu.hide();
-    await screenshot(
-      form.locator,
-      `[Create ${testDescription(testCase)}] Form`
-    );
-    await mainMenu.show();
 
     await createForm.submit();
 
@@ -78,6 +69,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     }
 
     await notif.close();
-    await screenshot(page, `[Create ${testDescription(testCase)}] My Strategy`);
+
+    await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
 };
