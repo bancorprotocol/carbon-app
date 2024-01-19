@@ -17,7 +17,7 @@ export const MobileMenu = () => {
   return (
     <footer className={`mobile-menu`}>
       {menuItems.map(({ label, href }, index) => {
-        let isSamePage = isSamePageLink(href);
+        const isSamePage = isSamePageLink(href);
 
         return (
           <Link
