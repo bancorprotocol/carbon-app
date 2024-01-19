@@ -38,7 +38,6 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     const buyTooltip = await strategyEdited.priceTooltip('buy');
     if (buySetting === 'limit') {
       await expect(buyTooltip.price()).toHaveText(buy.min);
-      await expect(buyTooltip.price()).toHaveText(buy.max);
     } else {
       await expect(buyTooltip.minPrice()).toHaveText(buy.min);
       await expect(buyTooltip.maxPrice()).toHaveText(buy.max);
