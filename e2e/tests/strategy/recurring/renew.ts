@@ -12,7 +12,6 @@ import {
 export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
   return test('Renew', async ({ page }) => {
-    const { buy, sell } = testCase.output.create;
     const { strategy } = await pauseStrategy(page, testCase);
 
     await strategy.clickManageEntry('renewStrategy');
@@ -33,6 +32,7 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     const strategyEdited = await myStrategies.getStrategy(1);
 
     // Check range
+    const { buy, sell } = testCase.output.editPrice;
     const [buySetting, sellSetting] = getRecurringSettings(testCase);
 
     const buyTooltip = await strategyEdited.priceTooltip('buy');
