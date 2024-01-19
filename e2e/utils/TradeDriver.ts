@@ -2,9 +2,10 @@
 import { Page } from '@playwright/test';
 import { waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
+import { Direction } from './strategy';
 
 interface TradeTestCase {
-  mode: 'buy' | 'sell';
+  mode: Direction;
   source: string;
   target: string;
   sourceValue: string;

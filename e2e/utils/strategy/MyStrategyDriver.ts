@@ -1,5 +1,6 @@
 import { waitFor } from './../../utils/operators';
 import { Page } from 'playwright-core';
+import { Direction } from './types';
 
 // TODO import type `StrategyEditOptionId`
 type IDs =
@@ -36,7 +37,7 @@ export class MyStrategyDriver {
       buyBudgetFiat: () => strategy.getByTestId('buy-budget-fiat'),
       sellBudget: () => strategy.getByTestId('sell-budget'),
       sellBudgetFiat: () => strategy.getByTestId('sell-budget-fiat'),
-      priceTooltip: async (mode: 'buy' | 'sell') => {
+      priceTooltip: async (mode: Direction) => {
         // Note: locator.hover() doesn't work because of polygon form I think
         const position = await strategy
           .getByTestId(`polygon-${mode}`)

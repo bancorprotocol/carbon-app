@@ -2,7 +2,7 @@ import { DebugDriver } from './../../utils/DebugDriver';
 import { navigateTo } from './../../utils/operators';
 import { MyStrategyDriver } from './../../utils/strategy/MyStrategyDriver';
 import { Page } from 'playwright-core';
-import { CreateStrategyTestCase } from './types';
+import { CreateStrategyTestCase, Direction } from './types';
 
 export class ManageStrategyDriver {
   constructor(private page: Page) {}
@@ -23,7 +23,7 @@ export class ManageStrategyDriver {
 
   async fillBudget(
     type: 'deposit' | 'withdraw',
-    order: 'buy' | 'sell',
+    order: Direction,
     budget: string | number
   ) {
     await this.page
@@ -31,7 +31,7 @@ export class ManageStrategyDriver {
       .fill(budget.toString());
   }
 
-  async fillLimitPrice(order: 'buy' | 'sell', price: number | string) {
+  async fillLimitPrice(order: Direction, price: number | string) {
     await this.page.getByTestId(`input-limit-${order}`).fill(price.toString());
   }
 }
