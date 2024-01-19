@@ -40,7 +40,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link
-            to={'/terms'}
+            to="/terms"
             target="_blank"
             className="font-weight-500 text-white"
           >
@@ -49,7 +49,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
           and{' '}
           <Link
             target="_blank"
-            to={'/privacy'}
+            to="/privacy"
             className="font-weight-500 text-white"
           >
             cookie & privacy policy

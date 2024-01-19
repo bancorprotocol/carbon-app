@@ -28,7 +28,7 @@ export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
       {items.map(({ label, type, active }) => (
         <Link
           key={type}
-          to={'/explorer/$type'}
+          to="/explorer/$type"
           params={{ type }}
           onClick={() => setSearch('')}
           className={cn(

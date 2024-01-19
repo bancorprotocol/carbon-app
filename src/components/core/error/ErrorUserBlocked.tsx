@@ -17,7 +17,7 @@ export const ErrorUserBlocked = () => {
       variant={'error'}
     >
       <div className={'space-y-10'}>
-        <NewTabLink to={externalLinks.treasuryGov} className={'w-full'}>
+        <NewTabLink to={externalLinks.treasuryGov} className="w-full">
           <Button fullWidth>Learn More</Button>
         </NewTabLink>
         <Button variant={'black'} onClick={disconnect} fullWidth>

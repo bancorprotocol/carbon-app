@@ -66,7 +66,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
           <Link
             onClick={editPrices}
             disabled={isAwaiting || isProcessing}
-            to={'/strategies/edit/$strategyId'}
+            to="/strategies/edit/$strategyId"
             params={{ strategyId: strategy.id }}
             search={{ type: 'editPrices' }}
             className={cn(
