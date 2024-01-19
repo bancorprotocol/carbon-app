@@ -9,6 +9,11 @@ export const MainMenuLeft: FC = () => {
   const { pathname } = useRouterState().location;
   const match = useMatchRoute();
 
+  const isSamePageLink = (to: string) => {
+    if (pathname.startsWith('/strategies') && to === '/') return true;
+    return !!match({ to, search: {}, params: {}, fuzzy: true });
+  };
+
   return (
     <nav
       className="flex items-center space-x-24"
@@ -24,15 +29,7 @@ export const MainMenuLeft: FC = () => {
 
       <div className={'hidden space-x-24 md:block'}>
         {menuItems.map(({ label, href }, index) => {
-          let isSamePage = match({
-            to: href,
-            search: {},
-            params: {},
-            fuzzy: true,
-          });
-          if (pathname.startsWith('/strategies') && href === '/') {
-            isSamePage = true;
-          }
+          let isSamePage = isSamePageLink(href);
 
           return (
             <Link
@@ -44,7 +41,7 @@ export const MainMenuLeft: FC = () => {
               search={{}}
               aria-current={isSamePage ? 'page' : 'false'}
               className={`px-3 py-3 transition-colors duration-300 ${
-                isSamePage !== false ? 'text-white' : 'hover:text-white'
+                isSamePage ? 'text-white' : 'hover:text-white'
               }`}
             >
               {label}

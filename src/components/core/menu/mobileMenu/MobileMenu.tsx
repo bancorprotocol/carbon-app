@@ -9,18 +9,15 @@ export const MobileMenu = () => {
   const match = useMatchRoute();
   const { openModal } = useModal();
 
+  const isSamePageLink = (to: string) => {
+    if (pathname.startsWith('/strategies') && to === '/') return true;
+    return !!match({ to, search: {}, params: {}, fuzzy: true });
+  };
+
   return (
     <footer className={`mobile-menu`}>
       {menuItems.map(({ label, href }, index) => {
-        let isSamePage = match({
-          to: href,
-          search: {},
-          params: {},
-          fuzzy: true,
-        });
-        if (pathname.startsWith('/strategies') && href === '/') {
-          isSamePage = true;
-        }
+        let isSamePage = isSamePageLink(href);
 
         return (
           <Link
@@ -30,6 +27,7 @@ export const MobileMenu = () => {
             // TODO: fix this
             params={{}}
             search={{}}
+            aria-current={isSamePage ? 'page' : 'false'}
             className={`px-3 py-3 ${
               isSamePage ? 'text-white' : 'hover:text-white'
             }`}
