@@ -7,10 +7,9 @@ import {
   CreateStrategyTestCase,
   MyStrategyDriver,
   assertRecurringTestCase,
-  testDescription,
   getRecurringSettings,
+  screenshotPath,
 } from '../../../utils/strategy';
-import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -36,18 +35,6 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(buyForm.outcomeQuote()).toHaveText(output.buy.outcomeQuote);
     await expect(sellForm.outcomeValue()).toHaveText(output.sell.outcomeValue);
     await expect(sellForm.outcomeQuote()).toHaveText(output.sell.outcomeQuote);
-
-    const mainMenu = new MainMenuDriver(page);
-    await mainMenu.hide();
-    await screenshot(
-      buyForm.locator,
-      `[Create ${testDescription(testCase)}] Buy Form`
-    );
-    await screenshot(
-      sellForm.locator,
-      `[Create ${testDescription(testCase)}] Sell Form`
-    );
-    await mainMenu.show();
 
     await createForm.submit();
 
@@ -98,5 +85,9 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
       await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
     }
     await sellTooltip.waitForDetached();
+
+    await notif.close;
+
+    await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
 };
