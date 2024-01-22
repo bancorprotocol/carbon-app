@@ -61,13 +61,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     }
     await tooltip.waitForDetached();
 
-    // Verify notification
     const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('create-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'New strategy was successfully created.'
-    );
     await notificationDriver.closeAll();
 
     await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));

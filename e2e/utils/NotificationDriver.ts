@@ -32,12 +32,13 @@ export class NotificationDriver {
     };
   }
 
-  private async closeNotif(locator: Locator) {
-    const btn = locator.getByTestId('notif-close');
+  private async closeNotif(notif: Locator) {
+    const btn = notif.getByTestId('notif-close');
     const isVisible = await btn.isVisible();
     if (isVisible) {
-      await btn.click();
-      return locator.waitFor({ state: 'detached' });
+      // Prevent playwright to check if the button is inside viewport
+      await btn.dispatchEvent('click');
+      return notif.waitFor({ state: 'detached' });
     }
   }
   async closeAll() {

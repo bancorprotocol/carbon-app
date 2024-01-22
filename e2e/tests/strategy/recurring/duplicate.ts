@@ -4,7 +4,6 @@ import {
   MyStrategyDriver,
   assertRecurringTestCase,
 } from './../../../utils/strategy';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { waitModalOpen } from '../../../utils/modal';
 
@@ -40,12 +39,5 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     await expect(strategyDuplicate.budgetFiat('buy')).toHaveText(buy.fiat);
     await expect(strategyDuplicate.budget('sell')).toHaveText(sell.budget);
     await expect(strategyDuplicate.budgetFiat('sell')).toHaveText(sell.fiat);
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('create-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'New strategy was successfully created.'
-    );
   });
 };

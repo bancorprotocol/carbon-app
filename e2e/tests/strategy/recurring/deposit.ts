@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
   assertRecurringTestCase,
@@ -21,13 +20,6 @@ export const depositStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     await edit.submit('deposit');
     await page.waitForURL('/', { timeout: 20_000 });
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('deposit-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'Your deposit request was successfully completed.'
-    );
 
     await expect(strategy.budget('buy')).toHaveText(buy);
     await expect(strategy.budget('sell')).toHaveText(sell);

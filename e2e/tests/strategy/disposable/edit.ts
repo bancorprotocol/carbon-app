@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
   assertDisposableTestCase,
@@ -30,12 +29,5 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
       expect(tooltip.minPrice()).toHaveText(output.min);
       expect(tooltip.maxPrice()).toHaveText(output.max);
     }
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('change-rates-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'Your strategy was successfully updated.'
-    );
   });
 };

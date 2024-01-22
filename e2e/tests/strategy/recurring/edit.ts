@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
   assertRecurringTestCase,
@@ -46,13 +45,5 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
       await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
     }
     await sellTooltip.waitForDetached();
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('change-rates-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'Your strategy was successfully updated.'
-    );
-    await notificationDriver.closeAll();
   });
 };

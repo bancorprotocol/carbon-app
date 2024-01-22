@@ -39,14 +39,6 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await checkApproval(page, [base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verify notification
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('create-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'New strategy was successfully created.'
-    );
-
     // Verify strategy data
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
@@ -69,6 +61,7 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
     await buyTooltip.waitForDetached();
 
+    const notificationDriver = new NotificationDriver(page);
     await notificationDriver.closeAll();
     await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });

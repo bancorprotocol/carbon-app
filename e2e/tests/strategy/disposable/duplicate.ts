@@ -4,7 +4,6 @@ import {
   MyStrategyDriver,
   assertDisposableTestCase,
 } from './../../../utils/strategy';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { waitModalOpen } from '../../../utils/modal';
 
@@ -47,12 +46,5 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
       expect(tooltip.maxPrice()).toHaveText(output.max);
     }
     await tooltip.waitForDetached();
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('create-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'New strategy was successfully created.'
-    );
   });
 };

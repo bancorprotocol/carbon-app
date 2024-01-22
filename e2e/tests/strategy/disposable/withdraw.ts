@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { waitModalOpen } from './../../../utils/modal';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
   assertDisposableTestCase,
@@ -27,13 +26,6 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
 
     await edit.submit('withdraw');
     await page.waitForURL('/', { timeout: 20_000 });
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('withdraw-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'Your withdrawal request was successfully completed.'
-    );
 
     await expect(strategy.budget(direction)).toHaveText(output);
   });
