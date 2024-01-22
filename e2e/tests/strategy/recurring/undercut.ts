@@ -3,6 +3,7 @@ import {
   CreateStrategyTestCase,
   MyStrategyDriver,
   assertRecurringTestCase,
+  getRecurringSettings,
 } from './../../../utils/strategy';
 import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
@@ -10,15 +11,16 @@ import { waitModalOpen } from '../../../utils/modal';
 
 export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
-  const { base, quote } = testCase.input;
-  const output = testCase.output.undercut;
+  const { base, quote } = testCase;
+  const { buy, sell, totalFiat } = testCase.output.undercut;
   return test('Undercut', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase.input);
-    await strategy.clickManageEntry('manage-strategy-duplicateStrategy');
+    const strategy = await manage.createStrategy(testCase);
+    await strategy.clickManageEntry('duplicateStrategy');
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('undercut-strategy-btn').click();
+    await modal.waitFor({ state: 'detached' });
 
     await page.waitForURL('/strategies/create?strategy=*', {
       timeout: 10_000,
@@ -27,33 +29,46 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await page.getByText('Create Strategy').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'New strategy was successfully created.'
-    );
-
     const myStrategies = new MyStrategyDriver(page);
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
     const strategyUndercut = await myStrategies.getStrategy(2);
     await expect(strategyUndercut.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategyUndercut.status()).toHaveText('Active');
-    await expect(strategyUndercut.totalBudget()).toHaveText(output.totalFiat);
-    await expect(strategyUndercut.buyBudget()).toHaveText(output.buy.budget);
-    await expect(strategyUndercut.buyBudgetFiat()).toHaveText(output.buy.fiat);
-    await expect(strategyUndercut.sellBudget()).toHaveText(output.sell.budget);
-    await expect(strategyUndercut.sellBudgetFiat()).toHaveText(
-      output.sell.fiat
-    );
+    await expect(strategyUndercut.totalBudget()).toHaveText(totalFiat);
+    await expect(strategyUndercut.budget('buy')).toHaveText(buy.budget);
+    await expect(strategyUndercut.budgetFiat('buy')).toHaveText(buy.fiat);
+    await expect(strategyUndercut.budget('sell')).toHaveText(sell.budget);
+    await expect(strategyUndercut.budgetFiat('sell')).toHaveText(sell.fiat);
+
+    // Check range
+    const [buySetting, sellSetting] = getRecurringSettings(testCase);
 
     const buyTooltip = await strategyUndercut.priceTooltip('buy');
-    await expect(buyTooltip.startPrice()).toHaveText(output.buy.min);
+    if (buySetting === 'limit') {
+      await expect(buyTooltip.price()).toHaveText(buy.min);
+    } else {
+      await expect(buyTooltip.minPrice()).toHaveText(buy.min);
+      await expect(buyTooltip.maxPrice()).toHaveText(buy.max);
+    }
     await buyTooltip.waitForDetached();
 
     const sellTooltip = await strategyUndercut.priceTooltip('sell');
-    await expect(sellTooltip.startPrice()).toHaveText(output.sell.min);
+    if (sellSetting === 'limit') {
+      await expect(sellTooltip.price()).toHaveText(sell.min);
+    } else {
+      await expect(sellTooltip.minPrice()).toHaveText(sell.min);
+      await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
+    }
     await sellTooltip.waitForDetached();
+
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('create-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
+      'New strategy was successfully created.'
+    );
+    await notificationDriver.closeAll();
   });
 };

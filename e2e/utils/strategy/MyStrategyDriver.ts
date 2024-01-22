@@ -1,8 +1,9 @@
 import { waitFor } from './../../utils/operators';
 import { Page } from 'playwright-core';
+import { Direction } from './types';
 
 // TODO import type `StrategyEditOptionId`
-type IDs =
+type ManageStrategyID =
   | 'duplicateStrategy'
   | 'manageNotifications'
   | 'walletOwner'
@@ -12,7 +13,6 @@ type IDs =
   | 'editPrices'
   | 'deleteStrategy'
   | 'withdrawFunds';
-type ManageStrategyID = `manage-strategy-${IDs}`;
 
 export class MyStrategyDriver {
   constructor(private page: Page) {}
@@ -21,7 +21,7 @@ export class MyStrategyDriver {
     return this.page.getByTestId('first-strategy');
   }
 
-  async getAllStrategies() {
+  getAllStrategies() {
     return this.page.locator('[data-testid="strategy-list"] > li');
   }
 
@@ -32,26 +32,31 @@ export class MyStrategyDriver {
       pair: () => strategy.getByTestId('token-pair'),
       status: () => strategy.getByTestId('status'),
       totalBudget: () => strategy.getByTestId('total-budget'),
-      buyBudget: () => strategy.getByTestId('buy-budget'),
-      buyBudgetFiat: () => strategy.getByTestId('buy-budget-fiat'),
-      sellBudget: () => strategy.getByTestId('sell-budget'),
-      sellBudgetFiat: () => strategy.getByTestId('sell-budget-fiat'),
-      priceTooltip: async (mode: 'buy' | 'sell') => {
+      budget: (direction: Direction) => {
+        return strategy.getByTestId(`${direction}-budget`);
+      },
+      budgetFiat: (direction: Direction) => {
+        return strategy.getByTestId(`${direction}-budget-fiat`);
+      },
+      priceTooltip: async (direction: Direction) => {
         // Note: locator.hover() doesn't work because of polygon form I think
         const position = await strategy
-          .getByTestId(`polygon-${mode}`)
+          .getByTestId(`polygon-${direction}`)
           .boundingBox();
         if (!position?.x || !position?.y) throw new Error('No polygon found');
         const x =
-          mode === 'buy' ? position.x + 2 : position.x + position.width - 2;
+          direction === 'buy'
+            ? position.x + 2
+            : position.x + position.width - 2;
         const y = position.y + 2;
         await this.page.mouse.move(x, y);
         const tooltip = this.page.getByTestId('order-tooltip');
+        await tooltip.waitFor({ state: 'visible' });
         return {
+          price: () => tooltip.getByTestId('price'),
           minPrice: () => tooltip.getByTestId('min-price'),
           maxPrice: () => tooltip.getByTestId('max-price'),
           marginalPrice: () => tooltip.getByTestId('marginal-price'),
-          startPrice: () => tooltip.getByTestId('start-price'),
           waitForDetached: async () => {
             await this.page.mouse.move(0, 0);
             await tooltip.waitFor({ state: 'detached' });
@@ -61,7 +66,7 @@ export class MyStrategyDriver {
       clickManageEntry: async (id: ManageStrategyID) => {
         await strategy.getByTestId('manage-strategy-btn').click();
         await waitFor(this.page, 'manage-strategy-dropdown', 10_000);
-        await this.page.getByTestId(id).click();
+        await this.page.getByTestId(`manage-strategy-${id}`).click();
       },
     };
   }

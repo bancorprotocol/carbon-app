@@ -1,43 +1,27 @@
 import { expect, test } from '@playwright/test';
-import { tokenPrice } from './../../../utils/operators';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
-import { CreateStrategyTestCase } from '../../../utils/strategy';
+import {
+  assertRecurringTestCase,
+  CreateStrategyTestCase,
+  EditStrategyDriver,
+} from '../../../utils/strategy';
 
 export const depositStrategyTest = (testCase: CreateStrategyTestCase) => {
-  const { input } = testCase;
+  assertRecurringTestCase(testCase);
+  const { buy, sell } = testCase.output.deposit;
   return test('Deposit', async ({ page }) => {
-    const { base, quote, buy, sell } = input;
-
-    const buyBudget = parseFloat(buy.budget);
-    const sellBudget = parseFloat(sell.budget);
-    const depositBuyBudget = buyBudget / 2;
-    const depositSellBudget = sellBudget / 2;
-    const newBuyBudget = (buyBudget + depositBuyBudget).toString();
-    const newSellBudget = (sellBudget + depositSellBudget).toString();
-
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(input);
-    await strategy.clickManageEntry('manage-strategy-depositFunds');
+    const strategy = await manage.createStrategy(testCase);
+    await strategy.clickManageEntry('depositFunds');
 
-    await manage.waitForEditPage('deposit');
-    await manage.fillBudget('deposit', 'buy', depositBuyBudget);
-    await manage.fillBudget('deposit', 'sell', depositSellBudget);
+    const edit = new EditStrategyDriver(page, testCase);
+    await edit.waitForPage('deposit');
+    await edit.fillRecurringBudget('deposit');
 
-    await page.getByTestId('deposit-withdraw-confirm-btn').click();
+    await edit.submit('deposit');
     await page.waitForURL('/', { timeout: 20_000 });
 
-    const notif = new NotificationDriver(page, 'deposit-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'Your deposit request was successfully completed.'
-    );
-
-    await expect(strategy.buyBudget()).toHaveText(
-      tokenPrice(newBuyBudget, quote)
-    );
-    await expect(strategy.sellBudget()).toHaveText(
-      tokenPrice(newSellBudget, base)
-    );
+    await expect(strategy.budget('buy')).toHaveText(buy);
+    await expect(strategy.budget('sell')).toHaveText(sell);
   });
 };
