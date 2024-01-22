@@ -13,10 +13,6 @@ import {
 export class EditStrategyDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
-  submitBtn() {
-    return this.page.getByTestId('edit-submit');
-  }
-
   async waitForPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
     const options = { timeout: 10_000 };
     return this.page.waitForURL(`/strategies/edit/*?type=${type}`, options);
@@ -46,7 +42,8 @@ export class EditStrategyDriver {
   }
 
   async submit(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
-    await this.submitBtn().isEnabled();
+    const btn = this.page.getByTestId('edit-submit');
+    await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
@@ -55,7 +52,7 @@ export class EditStrategyDriver {
       await screenshot(form, path);
       await mainMenu.show();
     }
-    return this.submitBtn().click();
+    return btn.click();
   }
 
   async fillBudget(direction: Direction, budget: string) {

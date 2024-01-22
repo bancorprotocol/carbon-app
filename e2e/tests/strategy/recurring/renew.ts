@@ -21,9 +21,10 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     await edit.submit('renew');
     await page.waitForURL('/', { timeout: 10_000 });
 
-    const notifRenew = new NotificationDriver(page, 'renew-strategy');
-    await expect(notifRenew.getTitle()).toHaveText('Success');
-    await expect(notifRenew.getDescription()).toHaveText(
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('renew-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
       'Your request to renew the strategy was successfully completed.'
     );
 

@@ -28,14 +28,8 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     await page.getByText('Create Strategy').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'New strategy was successfully created.'
-    );
-
     const myStrategies = new MyStrategyDriver(page);
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
     const duplicate = await myStrategies.getStrategy(2);
@@ -52,5 +46,13 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
       expect(tooltip.minPrice()).toHaveText(output.min);
       expect(tooltip.maxPrice()).toHaveText(output.max);
     }
+    await tooltip.waitForDetached();
+
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('create-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
+      'New strategy was successfully created.'
+    );
   });
 };

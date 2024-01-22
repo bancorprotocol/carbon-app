@@ -19,6 +19,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('withdraw-strategy-btn').click();
+    await modal.waitFor({ state: 'detached' });
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('withdraw');
@@ -27,9 +28,10 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
     await edit.submit('withdraw');
     await page.waitForURL('/', { timeout: 20_000 });
 
-    const notif = new NotificationDriver(page, 'withdraw-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('withdraw-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
       'Your withdrawal request was successfully completed.'
     );
 

@@ -75,9 +75,10 @@ test.describe('Trade', () => {
       await checkApproval(page, [testCase.source]);
 
       // Verify notification
-      const notif = new NotificationDriver(page, 'trade');
-      await expect(notif.getTitle()).toHaveText('Success', { timeout: 10_000 });
-      await expect(notif.getDescription()).toHaveText(
+      const notificationDriver = new NotificationDriver(page);
+      const notif = notificationDriver.getNotification('trade');
+      await expect(notif.title()).toHaveText('Success', { timeout: 10_000 });
+      await expect(notif.description()).toHaveText(
         `Trading ${sourceValue} ${source} for ${target} was successfully completed.`,
         { timeout: 10_000 }
       );

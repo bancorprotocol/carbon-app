@@ -15,10 +15,12 @@ export const pauseStrategy = async (
 
   const modal = await waitModalOpen(page);
   await modal.getByTestId('pause-strategy-btn').click();
+  await modal.waitFor({ state: 'detached' });
 
-  const notif = new NotificationDriver(page, 'pause-strategy');
-  await expect(notif.getTitle()).toHaveText('Success');
-  await expect(notif.getDescription()).toHaveText(
+  const notificationDriver = new NotificationDriver(page);
+  const notif = notificationDriver.getNotification('pause-strategy');
+  await expect(notif.title()).toHaveText('Success');
+  await expect(notif.description()).toHaveText(
     'Your strategy was successfully paused.'
   );
 

@@ -15,16 +15,17 @@ export const deleteStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('delete-strategy-btn').click();
+    await modal.waitFor({ state: 'detached' });
 
-    const notif = new NotificationDriver(page, 'delete-strategy');
-    await notif.waitForAttached();
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('delete-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
       'Strategy was successfully deleted and all associated funds have been withdrawn to your wallet.'
     );
 
     const myStrategies = new MyStrategyDriver(page);
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(0);
   });
 };

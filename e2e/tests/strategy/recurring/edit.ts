@@ -23,12 +23,6 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
     await edit.submit('editPrices');
     await page.waitForURL('/', { timeout: 10_000 });
 
-    const notif = new NotificationDriver(page, 'change-rates-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'Your strategy was successfully updated.'
-    );
-
     const myStrategies = new MyStrategyDriver(page);
     const strategyEdited = await myStrategies.getStrategy(1);
 
@@ -52,5 +46,13 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
       await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
     }
     await sellTooltip.waitForDetached();
+
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('change-rates-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
+      'Your strategy was successfully updated.'
+    );
+    await notificationDriver.closeAll();
   });
 };

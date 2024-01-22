@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import {
   assertDebugToken,
   assertDisposableTestCase,
@@ -120,7 +120,7 @@ export class CreateStrategyDriver {
 
   async submit() {
     const btn = this.page.getByText('Create Strategy');
-    await btn.isEnabled();
+    await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();

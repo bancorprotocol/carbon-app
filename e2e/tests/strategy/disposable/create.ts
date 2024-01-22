@@ -42,16 +42,8 @@ export const create = (testCase: CreateStrategyTestCase) => {
     }
 
     await page.waitForURL('/', { timeout: 10_000 });
-
-    // Verify notification
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'New strategy was successfully created.'
-    );
-
     // Verify strategy data
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
     await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
@@ -67,8 +59,16 @@ export const create = (testCase: CreateStrategyTestCase) => {
       expect(tooltip.minPrice()).toHaveText(output.min);
       expect(tooltip.maxPrice()).toHaveText(output.max);
     }
+    await tooltip.waitForDetached();
 
-    await notif.close();
+    // Verify notification
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('create-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
+      'New strategy was successfully created.'
+    );
+    await notificationDriver.closeAll();
 
     await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });

@@ -20,6 +20,7 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('undercut-strategy-btn').click();
+    await modal.waitFor({ state: 'detached' });
 
     await page.waitForURL('/strategies/create?strategy=*', {
       timeout: 10_000,
@@ -28,14 +29,8 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await page.getByText('Create Strategy').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'New strategy was successfully created.'
-    );
-
     const myStrategies = new MyStrategyDriver(page);
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
     const strategyUndercut = await myStrategies.getStrategy(2);
@@ -67,5 +62,13 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
       await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
     }
     await sellTooltip.waitForDetached();
+
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('create-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
+      'New strategy was successfully created.'
+    );
+    await notificationDriver.closeAll();
   });
 };

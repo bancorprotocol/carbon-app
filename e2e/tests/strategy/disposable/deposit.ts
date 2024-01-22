@@ -23,9 +23,10 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
     await edit.submit('deposit');
     await page.waitForURL('/', { timeout: 20_000 });
 
-    const notif = new NotificationDriver(page, 'deposit-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('deposit-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
       'Your deposit request was successfully completed.'
     );
 

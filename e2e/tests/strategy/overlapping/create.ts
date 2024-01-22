@@ -40,14 +40,15 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await page.waitForURL('/', { timeout: 10_000 });
 
     // Verify notification
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('create-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
       'New strategy was successfully created.'
     );
 
     // Verify strategy data
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
     await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
@@ -57,16 +58,18 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(strategy.budgetFiat('buy')).toHaveText(output.buy.fiat);
     await expect(strategy.budget('sell')).toHaveText(output.sell.budget);
     await expect(strategy.budgetFiat('sell')).toHaveText(output.sell.fiat);
+
     const sellTooltip = await strategy.priceTooltip('sell');
     await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
     await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
     await sellTooltip.waitForDetached();
+
     const buyTooltip = await strategy.priceTooltip('buy');
     await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
     await buyTooltip.waitForDetached();
 
-    await notif.close();
+    await notificationDriver.closeAll();
     await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
 };

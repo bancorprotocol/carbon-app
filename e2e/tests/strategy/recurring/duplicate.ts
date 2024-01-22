@@ -19,6 +19,7 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const modal = await waitModalOpen(page);
     await modal.getByTestId('duplicate-strategy-btn').click();
+    await modal.waitFor({ state: 'detached' });
 
     await page.waitForURL('/strategies/create?strategy=*', {
       timeout: 10_000,
@@ -27,14 +28,8 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     await page.getByText('Create Strategy').click();
     await page.waitForURL('/', { timeout: 10_000 });
 
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'New strategy was successfully created.'
-    );
-
     const myStrategies = new MyStrategyDriver(page);
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(2);
 
     const strategyDuplicate = await myStrategies.getStrategy(2);
@@ -45,5 +40,12 @@ export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
     await expect(strategyDuplicate.budgetFiat('buy')).toHaveText(buy.fiat);
     await expect(strategyDuplicate.budget('sell')).toHaveText(sell.budget);
     await expect(strategyDuplicate.budgetFiat('sell')).toHaveText(sell.fiat);
+
+    const notificationDriver = new NotificationDriver(page);
+    const notif = notificationDriver.getNotification('create-strategy');
+    await expect(notif.title()).toHaveText('Success');
+    await expect(notif.description()).toHaveText(
+      'New strategy was successfully created.'
+    );
   });
 };

@@ -21,7 +21,7 @@ export class MyStrategyDriver {
     return this.page.getByTestId('first-strategy');
   }
 
-  async getAllStrategies() {
+  getAllStrategies() {
     return this.page.locator('[data-testid="strategy-list"] > li');
   }
 
