@@ -7,7 +7,7 @@ import { getExplorerLink } from 'utils/blockExplorer';
 import { unix } from 'libs/dayjs';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
-import { Link } from 'libs/routing';
+import { NewTabLink } from 'libs/routing';
 import { FOUR_SECONDS_IN_MS } from 'utils/time';
 
 const StatusIcon = (status: NotificationStatus) => {
@@ -88,12 +88,12 @@ export const NotificationLine: FC<{
             {getDescriptionByStatus(notification)}
           </p>
           {notification.txHash && (
-            <Link
+            <NewTabLink
               to={getExplorerLink('tx', notification.txHash)}
               className={'mt-10 flex items-center font-weight-500'}
             >
               View on Etherscan <IconLink className="ml-6 w-14" />
-            </Link>
+            </NewTabLink>
           )}
         </div>
       </div>

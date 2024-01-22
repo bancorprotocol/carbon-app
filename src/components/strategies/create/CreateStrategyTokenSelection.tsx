@@ -1,7 +1,7 @@
+import { useNavigate } from 'libs/routing';
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
-import { PathNames, useNavigate } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
@@ -22,7 +22,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         updatedQuote: base.symbol,
       });
       navigate({
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: (search) => ({
           ...search,
           base: quote.address,

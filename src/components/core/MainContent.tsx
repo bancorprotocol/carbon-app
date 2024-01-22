@@ -10,10 +10,16 @@ import { carbonEvents } from 'services/events';
 import { ErrorUserBlocked } from 'components/core/error/ErrorUserBlocked';
 import {
   Outlet,
-  PathNames,
+  Pathnames,
   useRouterState,
   useScrollRestoration,
 } from 'libs/routing';
+
+const paths: Record<string, Pathnames> = {
+  debug: '/debug',
+  terms: '/terms',
+  privacy: '/privacy',
+};
 
 export const MainContent: FC = () => {
   const web3 = useWeb3();
@@ -32,9 +38,9 @@ export const MainContent: FC = () => {
   }, [location, location.pathname]);
 
   if (
-    location.pathname === PathNames.debug ||
-    location.pathname === PathNames.terms ||
-    location.pathname === PathNames.privacy
+    location.pathname === paths.debug ||
+    location.pathname === paths.terms ||
+    location.pathname === paths.privacy
   ) {
     return <Outlet />;
   }

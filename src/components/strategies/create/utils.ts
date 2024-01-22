@@ -1,15 +1,13 @@
 import {
   CreateStrategyActionProps,
   OrderWithSetters,
-  StrategySettings,
 } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
-import { PathNames } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
-import { NavigateOptions } from '@tanstack/react-router';
+import { NavigateOptions, StrategySettings } from 'libs/routing';
 
 export const handleStrategySettings = (
   settings?: StrategySettings,
@@ -90,7 +88,7 @@ export const createStrategyAction = async ({
         void cache.invalidateQueries({
           queryKey: QueryKey.balance(user, quote.address),
         });
-        navigate({ to: PathNames.strategies });
+        navigate({ to: '/', search: {}, params: {} });
         carbonEvents.strategy.strategyCreate(strategyEventData);
       },
       onError: (e: any) => {
@@ -116,7 +114,7 @@ export const handleTxStatusAndRedirectToOverview = (
 ) => {
   setIsProcessing(true);
   setTimeout(() => {
-    navigate?.({ to: PathNames.strategies });
+    navigate?.({ to: '/', params: {}, search: {} });
     setIsProcessing(false);
   }, ONE_AND_A_HALF_SECONDS_IN_MS);
 };

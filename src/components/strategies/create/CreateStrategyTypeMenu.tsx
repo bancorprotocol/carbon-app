@@ -18,7 +18,7 @@ import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
 import styles from './CreateStrategyTypeMenu.module.css';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { StrategyCreateSearch } from './types';
+import { StrategyCreateSearch } from 'libs/routing';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
