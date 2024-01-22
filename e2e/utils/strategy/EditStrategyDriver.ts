@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test';
 import { Page } from 'playwright-core';
 import { MainMenuDriver } from '../MainMenuDriver';
 import { screenshot, shouldTakeScreenshot } from '../operators';
@@ -66,8 +67,13 @@ export class EditStrategyDriver {
     const form = this.getPriceSection(direction);
     await form.setting(setting).click();
     if (setting === 'limit') {
+      // wait for input to have a value before overriding
+      expect(form.price()).toHaveValue(/\S+/);
       await form.price().fill(order.min);
     } else {
+      // wait for input to have a value before overriding
+      expect(form.min()).toHaveValue(/\S+/);
+      expect(form.max()).toHaveValue(/\S+/);
       await form.min().fill(order.min);
       await form.max().fill(order.max);
     }

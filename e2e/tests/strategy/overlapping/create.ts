@@ -17,7 +17,6 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
   const output = testCase.output.create;
 
   return test(`Create ${base}->${quote}`, async ({ page }) => {
-    test.setTimeout(180_000);
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');

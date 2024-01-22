@@ -9,7 +9,7 @@ import { NotificationDriver } from '../utils/NotificationDriver';
 
 test.describe('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    testInfo.setTimeout(180_000);
+    testInfo.setTimeout(90_000);
     const debug = new DebugDriver(page);
     await debug.visit();
     await setupFork(testInfo);

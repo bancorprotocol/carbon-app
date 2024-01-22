@@ -22,6 +22,10 @@ import { MainMenuDriver } from '../MainMenuDriver';
 export class CreateStrategyDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
+  getForm() {
+    return this.page.getByTestId('create-strategy-form');
+  }
+
   getFormSection(direction: Direction) {
     const form = this.page.getByTestId(`${direction}-section`);
     return {
@@ -39,7 +43,7 @@ export class CreateStrategyDriver {
   }
 
   getOverlappingForm() {
-    const form = this.page.getByTestId('create-strategy-form');
+    const form = this.getForm();
     return {
       locator: form,
       min: () => form.getByLabel('Min Buy Price'),
@@ -120,7 +124,7 @@ export class CreateStrategyDriver {
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
-      const form = this.page.getByTestId('edit-form');
+      const form = this.getForm();
       const path = screenshotPath(this.testCase, 'create', 'form');
       await screenshot(form, path);
       await mainMenu.show();
