@@ -5,18 +5,14 @@ import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
 import { LimitRangeSection } from './LimitRangeSection';
 import { LogoImager } from 'components/common/imager/Imager';
-import {
-  StrategyDirection,
-  StrategyType,
-} from 'components/strategies/create/types';
+import { StrategyDirection, StrategyType, useNavigate } from 'libs/routing';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { useNavigate } from 'libs/routing';
 import { BuySellHeader } from './Header';
 import { m } from 'libs/motion';
 import { items } from '../variants';
-import { BudgetSection } from './BugetSection';
+import { BudgetSection } from './BudgetSection';
 
 type Props = {
   base: Token;
@@ -71,6 +67,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const changeStrategy = (direction: StrategyDirection) => {
     navigate({
+      from: '/strategies/create',
       search: (search) => ({
         ...search,
         strategyDirection: direction,

@@ -1,5 +1,5 @@
 import { useExplorerParams } from './useExplorerParams';
-import { PathNames, useRouterState } from 'libs/routing';
+import { useRouterState, useMatchRoute } from 'libs/routing';
 import {
   StrategyPageTabs,
   StrategyTab,
@@ -17,18 +17,26 @@ export const ExplorerTabs = () => {
   const { location } = useRouterState();
   const pathname = decodeURIComponent(location.pathname);
 
+  const match = useMatchRoute();
+
+  const showFilter = !!match({
+    to: '/explorer/$type/$slug',
+    params: { type, slug },
+    fuzzy: true,
+  });
+
   const tabs: StrategyTab[] = [
     {
       label: 'Overview',
-      href: PathNames.explorerOverview(type, slug!),
-      hrefMatches: [],
+      href: '/explorer/$type/$slug',
+      params: { type, slug },
       icon: <IconOverview className="h-18 w-18" />,
       badge: strategies?.length || 0,
     },
     {
       label: 'Portfolio',
-      href: PathNames.explorerPortfolio(type, slug!),
-      hrefMatches: [PathNames.explorerPortfolioToken(type, slug!, '0x')],
+      href: '/explorer/$type/$slug/portfolio',
+      params: { type, slug },
       icon: <IconPieChart className="h-18 w-18" />,
     },
   ];
@@ -36,9 +44,7 @@ export const ExplorerTabs = () => {
   return (
     <div className="flex items-center justify-between gap-16">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-      {pathname === PathNames.explorerOverview(type, slug!) && (
-        <StrategyFilterSort />
-      )}
+      {showFilter && <StrategyFilterSort />}
     </div>
   );
 };

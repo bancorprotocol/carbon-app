@@ -1,7 +1,7 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { FC, useEffect, useId } from 'react';
-import { StrategyType } from '../types';
+import { StrategyType } from 'libs/routing';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { OrderCreate } from '../useOrder';
 import { UseQueryResult } from '@tanstack/react-query';

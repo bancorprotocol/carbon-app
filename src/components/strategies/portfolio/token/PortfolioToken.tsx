@@ -1,3 +1,4 @@
+import { Pathnames, PathParams } from 'libs/routing';
 import { PortfolioTokenHeader } from 'components/strategies/portfolio/token/PortfolioTokenHeader';
 import { PortfolioTokenPieChartCenter } from 'components/strategies/portfolio/token/PortfolioTokenPieChartCenter';
 import { usePortfolioToken } from 'components/strategies/portfolio/token/usePortfolioToken';
@@ -13,7 +14,8 @@ interface Props {
   address: string;
   strategies?: Strategy[];
   isLoading?: boolean;
-  backLinkHref: string;
+  backLinkHref: Pathnames;
+  backLinkHrefParams?: PathParams;
 }
 
 const _PortfolioToken = ({
@@ -21,6 +23,7 @@ const _PortfolioToken = ({
   isLoading: _isLoading,
   address,
   backLinkHref,
+  backLinkHrefParams,
 }: Props) => {
   const { tableData, isLoading, selectedToken } = usePortfolioToken({
     address,
@@ -43,6 +46,7 @@ const _PortfolioToken = ({
       headerElement={
         <PortfolioTokenHeader
           backLinkHref={backLinkHref}
+          backLinkHrefParams={backLinkHrefParams}
           symbol={selectedToken?.token.symbol}
           logoURI={selectedToken?.token.logoURI}
         />

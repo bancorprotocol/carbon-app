@@ -7,21 +7,7 @@ import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { NavigateOptions } from '@tanstack/react-router';
-
-export type StrategyType = 'recurring' | 'disposable';
-export type StrategyDirection = 'buy' | 'sell';
-
-export type LimitRange = 'limit' | 'range';
-export type StrategySettings = LimitRange | 'overlapping';
-
-export interface StrategyCreateSearch {
-  base?: string;
-  quote?: string;
-  strategyType?: StrategyType;
-  strategyDirection?: StrategyDirection;
-  strategySettings?: StrategySettings;
-}
+import { NavigateOptions } from 'libs/routing';
 
 export type OrderWithSetters = {
   setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;

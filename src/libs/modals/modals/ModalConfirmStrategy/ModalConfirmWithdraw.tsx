@@ -1,7 +1,7 @@
 import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
-import { Link, PathNames } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Strategy } from 'libs/queries';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
@@ -40,7 +40,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         <h3 className="text-14 font-weight-500">Did you know ?</h3>
         <Link
           onClick={edit}
-          to={PathNames.editStrategy}
+          to="/strategies/edit/$strategyId"
           params={{ strategyId: strategy.id }}
           search={{ type: 'editPrices' }}
           className={cn(
@@ -56,7 +56,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
       </article>
       <Link
         onClick={edit}
-        to={PathNames.editStrategy}
+        to="/strategies/edit/$strategyId"
         params={{ strategyId: strategy.id }}
         search={{ type: 'withdraw' }}
         className={buttonStyles({ variant: 'white' })}

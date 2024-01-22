@@ -1,6 +1,5 @@
 import { ReactNode, useMemo } from 'react';
-import { PathNames, useNavigate } from 'libs/routing';
-import { StrategyCreateSearch } from 'components/strategies/create/types';
+import { Pathnames, useNavigate, StrategyCreateSearch } from 'libs/routing';
 import { ReactComponent as IconBuyRange } from 'assets/icons/buy-range.svg';
 import { ReactComponent as IconBuyLimit } from 'assets/icons/buy-limit.svg';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
@@ -11,7 +10,7 @@ interface StrategyTypeItem {
   label: string;
   description: string;
   benefits: { summary: string; details: string }[];
-  to: string;
+  to: Pathnames;
   search: StrategyCreateSearch;
   isRecommended?: boolean;
   svg: ReactNode;
@@ -44,7 +43,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconBuyLimit className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,
@@ -82,7 +81,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconBuyRange className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,
@@ -115,7 +114,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconTwoRanges className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,
@@ -142,7 +141,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
           },
         ],
         svg: <IconOverlappingStrategy className="w-full" />,
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: {
           base,
           quote,
@@ -160,7 +159,7 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
     search: StrategyCreateSearch,
     replace?: boolean
   ) => {
-    navigate({ to, search, replace });
+    navigate({ to, search, replace, params: {} });
   };
 
   return { items, handleClick };
