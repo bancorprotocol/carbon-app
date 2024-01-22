@@ -1,5 +1,4 @@
 import { PortfolioToken } from 'components/strategies/portfolio';
-import { PathNames } from 'libs/routing';
 import { useExplorerParams } from 'components/explorer/useExplorerParams';
 import { useStrategyCtx } from 'hooks/useStrategies';
 
@@ -14,7 +13,8 @@ export const ExplorerTypePortfolioTokenPage = () => {
       strategies={strategies}
       isLoading={isLoading}
       address={address}
-      backLinkHref={PathNames.explorerPortfolio(type, slug!)}
+      backLinkHref={'/explorer/$type/$slug/portfolio'}
+      backLinkHrefParams={{ type, slug }}
     />
   );
 };

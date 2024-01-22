@@ -1,8 +1,13 @@
-import { PathNames } from 'libs/routing';
+import { Pathnames } from 'libs/routing';
 import { carbonEvents } from 'services/events';
 
+const paths: { [key: string]: Pathnames } = {
+  strategies: '/',
+  trade: '/trade',
+};
+
 export const handleOnItemClick = (href: string) => {
-  href === PathNames.strategies &&
+  href === paths.strategies &&
     carbonEvents.navigation.navStrategyClick(undefined);
-  href === PathNames.trade && carbonEvents.navigation.navTradeClick(undefined);
+  href === paths.trade && carbonEvents.navigation.navTradeClick(undefined);
 };

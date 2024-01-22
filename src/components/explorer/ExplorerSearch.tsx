@@ -14,7 +14,7 @@ import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchD
 import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
 import { utils } from 'ethers';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
@@ -68,7 +68,8 @@ export const _ExplorerSearch: FC = () => {
       if (type === 'token-pair' && !pairs.names.has(slug)) return;
       if (type === 'wallet' && (waitingToFetchEns || isInvalidAddress)) return;
       navigate({
-        to: PathNames.explorerOverview(type, slug),
+        to: '/explorer/$type/$slug',
+        params: { type, slug },
       });
     },
     [waitingToFetchEns, isInvalidAddress, navigate, pairs.names, type]

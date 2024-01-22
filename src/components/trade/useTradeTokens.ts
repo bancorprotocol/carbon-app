@@ -1,28 +1,26 @@
 import {
-  PathNames,
   useSearch,
-  useRouterState,
   useNavigate,
+  useMatchRoute,
+  TradeSearch,
 } from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
 
-export interface MyLocationSearch {
-  base: string;
-  quote: string;
-}
-
 export const useTradeTokens = () => {
   const navigate = useNavigate();
-  const { location } = useRouterState();
-  const isTradePage = location.pathname === PathNames.trade;
+  const match = useMatchRoute();
+  const isTradePage = match({
+    to: '/trade',
+    fuzzy: true,
+  });
   const { getTokenById } = useTokens();
-  const search: MyLocationSearch = useSearch({ strict: false });
+  const search: TradeSearch = useSearch({ strict: false });
 
   const baseToken = getTokenById(search.base);
   const quoteToken = getTokenById(search.quote);
 
   const goToPair = (base: string, quote: string, replace?: boolean) =>
-    navigate({ to: PathNames.trade, search: { base, quote }, replace });
+    navigate({ to: '/trade', search: { base, quote }, replace });
 
   const isTokenError =
     (search.base && !baseToken) || (search.base && !quoteToken);

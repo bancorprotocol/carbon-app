@@ -1,4 +1,4 @@
-import { PathNames, useSearch, useNavigate } from 'libs/routing';
+import { useSearch, useNavigate, TradeSearch } from 'libs/routing';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -6,20 +6,19 @@ import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';
 import { toPairKey } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
-import { MyLocationSearch } from './useTradeTokens';
 
 export const useTradePairs = () => {
   const { user } = useWeb3();
   const { openModal } = useModal();
 
   const navigate = useNavigate();
-  const search: MyLocationSearch = useSearch({ strict: false });
+  const search: TradeSearch = useSearch({ strict: false });
 
   const pairs = usePairs();
 
   const onTradePairSelect = (tradePair: TradePair) => {
     navigate({
-      to: PathNames.trade,
+      to: '/trade',
       search: {
         base: tradePair.baseToken.address,
         quote: tradePair.quoteToken.address,
