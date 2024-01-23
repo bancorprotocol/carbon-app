@@ -1,8 +1,8 @@
-import { D3SimPriceRange } from 'libs/d3/charts/simulatorPrice/D3SimPriceRange';
-import { D3XAxis } from 'libs/d3/charts/simulatorPrice/D3XAxis';
-import { D3YAxisLeft } from 'libs/d3/charts/simulatorPrice/D3YAxisLeft';
-import { useLinearScale } from 'libs/d3/charts/simulatorPrice/useLinearScale';
-import { getPriceDomain } from 'libs/d3/charts/simulatorPrice/utils';
+import { D3SimPriceRange } from 'libs/d3/primitives/D3SimPriceRange';
+import { D3XAxis } from 'libs/d3/primitives/D3XAxis';
+import { D3YAxisLeft } from 'libs/d3/primitives/D3YAxisLeft';
+import { useLinearScale } from 'libs/d3/useLinearScale';
+import { getPriceDomain } from 'libs/d3/utils';
 import { D3LinePath } from 'libs/d3/primitives/D3LinePath';
 import { D3ChartSettings } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';

@@ -1,13 +1,16 @@
 import { max, min, scaleBand, scaleLinear } from 'd3';
-import { XAxis } from 'libs/d3/xAxis';
-import { YAxis } from 'libs/d3/yAxis';
-import { D3ChartCandlestickData } from './../../types';
-import { useD3Chart } from './../../D3ChartProvider';
+import { XAxis } from 'libs/d3/charts/candlestick/xAxis';
+import { YAxis } from 'libs/d3/charts/candlestick/yAxis';
+import { CandlestickData } from 'pages/simulator/useMockdata';
 import { Candlesticks } from './Candlesticks';
+import { D3ChartSettings } from 'libs/d3';
 
-export const D3ChartCandlesticks = () => {
-  const { data, dms } = useD3Chart<D3ChartCandlestickData>();
+interface Props {
+  dms: D3ChartSettings;
+  data: CandlestickData[];
+}
 
+export const D3ChartCandlesticks = ({ dms, data }: Props) => {
   const xScale = scaleBand()
     .domain(data.map((d) => d.date.toString()))
     .range([0, dms.boundedWidth])
@@ -23,9 +26,9 @@ export const D3ChartCandlesticks = () => {
 
   return (
     <>
-      <Candlesticks xScale={xScale} yScale={yScale} />
+      <Candlesticks xScale={xScale} yScale={yScale} data={data} />
       <YAxis yScale={yScale} />
-      <XAxis xScale={xScale} />
+      <XAxis xScale={xScale} dms={dms} />
     </>
   );
 };

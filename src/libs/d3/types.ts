@@ -1,26 +1,3 @@
-import { ScaleLinear } from 'd3';
-import { SimulatorReturn } from 'libs/queries/extApi/simulator';
-import { ReactNode, RefObject } from 'react';
-
-export interface D3ChartProviderProps {
-  children: ReactNode;
-  dms: D3ChartSettings;
-  data: D3ChartData;
-  xScale: ScaleLinear<number, number>;
-}
-
-export interface D3ChartContext {
-  svgRef: RefObject<SVGSVGElement>;
-  dms: D3ChartSettings;
-  data: D3ChartData;
-  xScale: ScaleLinear<number, number>;
-}
-
-export type D3ChartData =
-  | D3ChartCandlestickData[]
-  | { time: number; value: number }[]
-  | SimulatorReturn;
-
 export interface D3ChartSettingsProps {
   width: number;
   height: number;

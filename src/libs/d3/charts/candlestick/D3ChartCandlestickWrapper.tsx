@@ -1,7 +1,7 @@
+import { SimChartWrapper } from 'libs/d3/sim/SimulatorChartWrapper';
 import { D3ChartCandlesticks } from './D3ChartCandlesticks';
 import { useState } from 'react';
 import { D3ChartSettingsProps, D3ChartCandlestickData } from './../../types';
-import { D3ChartProvider } from './../../D3ChartProvider';
 
 type Props = {
   data: D3ChartCandlestickData[];
@@ -29,8 +29,8 @@ export const D3ChartCandlestickWrapper = ({ data, settings }: Props) => {
       );
 
   return (
-    <D3ChartProvider settings={settings} data={slicedData}>
-      <D3ChartCandlesticks />
-    </D3ChartProvider>
+    <SimChartWrapper settings={settings}>
+      {(dms) => <D3ChartCandlesticks data={slicedData} dms={dms} />}
+    </SimChartWrapper>
   );
 };

@@ -1,15 +1,13 @@
 import { ScaleBand, ScaleLinear } from 'd3';
-import { useD3Chart } from 'libs/d3/D3ChartProvider';
 import { CandlestickData } from 'pages/simulator/useMockdata';
 
 type CandlesticksProps = {
   xScale: ScaleBand<string>;
   yScale: ScaleLinear<number, number>;
+  data: CandlestickData[];
 };
 
-export function Candlesticks({ xScale, yScale }: CandlesticksProps) {
-  const { data } = useD3Chart<CandlestickData>();
-
+export function Candlesticks({ xScale, yScale, data }: CandlesticksProps) {
   return (
     <>
       {data.map((d) => (

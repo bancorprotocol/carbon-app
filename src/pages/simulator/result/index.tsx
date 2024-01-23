@@ -1,9 +1,10 @@
-import { D3ChartSettingsProps, D3ChartSimulatorPrice } from 'libs/d3';
-import { D3ChartSimulatorBalance } from 'libs/d3/charts/simulatorPrice/D3ChartSimulatorBalance';
-import { D3ChartSimulatorPerformance } from 'libs/d3/charts/simulatorPrice/D3ChartSimulatorPerformance';
-import { D3ChartSimulatorSummary } from 'libs/d3/charts/simulatorPrice/D3ChartSimulatorSummary';
+import { D3ChartSimulatorPrice } from 'libs/d3';
+import { D3ChartSimulatorBalance } from 'libs/d3/sim/D3ChartSimulatorBalance';
+import { D3ChartSimulatorPerformance } from 'libs/d3/sim/D3ChartSimulatorPerformance';
+import { D3ChartSimulatorSummary } from 'libs/d3/sim/D3ChartSimulatorSummary';
 import { SimChartWrapper } from 'libs/d3/sim/SimulatorChartWrapper';
 import { useSimulator } from 'libs/d3/sim/SimulatorProvider';
+import { D3ChartSettingsProps } from 'libs/d3/types';
 import { useState } from 'react';
 
 const chartSettings: D3ChartSettingsProps = {

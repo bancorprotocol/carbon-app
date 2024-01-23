@@ -1,37 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
+import { SimulatorSearch } from 'libs/routing';
 import { carbonApi } from 'utils/carbonApi';
 import { FIVE_MIN_IN_MS } from 'utils/time';
-
-export interface SimulatorParams {
-  token0: string;
-  token1: string;
-  start: number;
-  end: number;
-  startingPortfolioValue: number;
-  highRangeHighPriceCash: number;
-  highRangeLowPriceCash: number;
-  lowRangeHighPriceCash: number;
-  lowRangeLowPriceCash: number;
-  startRateHighRange: number;
-  startRateLowRange: number;
-  cashProportion: number;
-  riskProportion: number;
-  networkFee: number;
-}
-
-export interface SimulatorInput {
-  start: string;
-  end: string;
-  baseToken: string;
-  baseBudget: string;
-  quoteToken: string;
-  quoteBudget: string;
-  sellMax: string;
-  sellMin: string;
-  buyMax: string;
-  buyMin: string;
-}
 
 export interface SimulatorResult {
   CASH: {
@@ -83,11 +54,11 @@ export type SimulatorReturn = {
   bounds: SimulatorBounds;
 };
 
-export const useGetSimulator = (params: SimulatorInput) => {
+export const useGetSimulator = (params: SimulatorSearch) => {
   return useQuery<SimulatorReturn>(
     QueryKey.simulator(params),
     async () => {
-      const res = await carbonApi.getSimulator2(params);
+      const res = await carbonApi.getSimulator(params);
 
       const data: SimulatorReturn = {
         data: res.dates.map((d, i) => ({

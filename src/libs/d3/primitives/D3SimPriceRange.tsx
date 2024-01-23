@@ -1,4 +1,4 @@
-import { LinearScaleReturn } from 'libs/d3/charts/simulatorPrice/useLinearScale';
+import { LinearScaleReturn } from 'libs/d3/useLinearScale';
 import { D3AreaPath } from 'libs/d3/primitives/D3AreaPath';
 import { D3LinePath } from 'libs/d3/primitives/D3LinePath';
 import { SimulatorData, SimulatorReturn } from 'libs/queries';

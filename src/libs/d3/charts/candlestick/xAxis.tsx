@@ -1,13 +1,12 @@
 import { ScaleBand } from 'd3';
-import { useD3Chart } from 'libs/d3/D3ChartProvider';
+import { D3ChartSettings } from 'libs/d3';
 
 type Props = {
+  dms: D3ChartSettings;
   xScale: ScaleBand<string>;
 };
 
-export const XAxis = ({ xScale }: Props) => {
-  const { dms } = useD3Chart();
-
+export const XAxis = ({ xScale, dms }: Props) => {
   const ticks = xScale
     .domain()
     .filter((_, i) => !(i % 12))

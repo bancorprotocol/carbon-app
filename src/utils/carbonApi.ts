@@ -1,9 +1,5 @@
 import axios from 'axios';
-import {
-  SimulatorInput,
-  SimulatorParams,
-  SimulatorResult,
-} from 'libs/queries/extApi/simulator';
+import { SimulatorInput, SimulatorResult } from 'libs/queries/extApi/simulator';
 
 export const AVAILABLE_CURRENCIES = [
   'USD',
@@ -65,13 +61,7 @@ const carbonApi = {
     const { data } = await newApiAxios.get<RoiRow[]>('roi');
     return data;
   },
-  getSimulator: async (params: SimulatorParams): Promise<SimulatorResult> => {
-    const { data } = await newApiAxios.get<SimulatorResult>('simulator', {
-      params,
-    });
-    return data;
-  },
-  getSimulator2: async (params: SimulatorInput): Promise<SimulatorResult> => {
+  getSimulator: async (params: SimulatorInput): Promise<SimulatorResult> => {
     const { data } = await newApiAxios.get<SimulatorResult>(
       'simulate-create-strategy',
       {

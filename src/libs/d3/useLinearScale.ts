@@ -1,5 +1,5 @@
 import { scaleLinear } from 'd3';
-import { getAccessor } from 'libs/d3/charts/simulatorPrice/utils';
+import { getAccessor } from 'libs/d3/utils';
 import { D3AxisTick } from 'libs/d3/types';
 import { SimulatorData } from 'libs/queries';
 import { useCallback } from 'react';

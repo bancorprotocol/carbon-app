@@ -1,4 +1,4 @@
-import { useLinearScale } from 'libs/d3/charts/simulatorPrice/useLinearScale';
+import { useLinearScale } from 'libs/d3/useLinearScale';
 import { D3ChartSettings } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';
 import { max, scaleBand } from 'd3';

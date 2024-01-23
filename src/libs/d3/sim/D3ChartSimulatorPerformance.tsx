@@ -1,6 +1,6 @@
-import { D3XAxis } from 'libs/d3/charts/simulatorPrice/D3XAxis';
-import { D3YAxisLeft } from 'libs/d3/charts/simulatorPrice/D3YAxisLeft';
-import { useLinearScale } from 'libs/d3/charts/simulatorPrice/useLinearScale';
+import { D3XAxis } from 'libs/d3/primitives/D3XAxis';
+import { D3YAxisLeft } from 'libs/d3/primitives/D3YAxisLeft';
+import { useLinearScale } from 'libs/d3/useLinearScale';
 import { D3LinePath } from 'libs/d3/primitives/D3LinePath';
 import { D3ChartSettings } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';

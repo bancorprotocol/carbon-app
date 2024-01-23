@@ -1,10 +1,6 @@
-import {
-  D3LegendItem,
-  D3SimLegendEntry,
-  D3SimLegendType,
-} from 'libs/d3/charts/simulatorPrice/D3ChartSimulatorPrice';
 import { ReactComponent as IconEye } from 'assets/icons/eye.svg';
 import { ReactComponent as IconEyeDisabled } from 'assets/icons/eye-disabled.svg';
+import { D3LegendItem, D3SimLegendEntry, D3SimLegendType } from 'libs/d3/types';
 
 interface Props {
   legend: D3SimLegendType;
