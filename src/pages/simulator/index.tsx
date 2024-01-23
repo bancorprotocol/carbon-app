@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { Page } from 'components/common/page';
 import { useModal } from 'hooks/useModal';
-import { SimulatorInput } from 'libs/queries';
+import { SimulatorSearch } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { useState } from 'react';
 
-const defaultParams: SimulatorInput = {
+const defaultParams: SimulatorSearch = {
   start: '1672491600',
   end: '1701262800',
   baseToken: '',
@@ -24,7 +24,7 @@ export const SimulatorPage = () => {
   const [baseToken, setBaseToken] = useState<Token>();
   const [quoteToken, setQuoteToken] = useState<Token>();
 
-  const [params, setParams] = useState<SimulatorInput>(defaultParams);
+  const [params, setParams] = useState(defaultParams);
 
   return (
     <Page title="Simulator Input">

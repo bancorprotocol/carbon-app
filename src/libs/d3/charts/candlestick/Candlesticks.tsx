@@ -1,10 +1,10 @@
 import { ScaleBand, ScaleLinear } from 'd3';
-import { CandlestickData } from 'pages/simulator/useMockdata';
+import { D3ChartCandlestickData } from 'libs/d3';
 
 type CandlesticksProps = {
   xScale: ScaleBand<string>;
   yScale: ScaleLinear<number, number>;
-  data: CandlestickData[];
+  data: D3ChartCandlestickData[];
 };
 
 export function Candlesticks({ xScale, yScale, data }: CandlesticksProps) {

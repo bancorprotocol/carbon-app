@@ -1,5 +1,5 @@
 import { MatchActionBNStr, TokenPair } from '@bancor/carbon-sdk';
-import { SimulatorInput } from 'libs/queries/extApi/simulator';
+import { SimulatorSearch } from 'libs/routing';
 import { buildTokenPairKey } from 'utils/helpers';
 
 export namespace QueryKey {
@@ -8,7 +8,7 @@ export namespace QueryKey {
   export const extAPI = ['ext-api'];
 
   export const roi = () => [...extAPI, 'roi'];
-  export const simulator = (params: SimulatorInput) => [
+  export const simulator = (params: SimulatorSearch) => [
     ...extAPI,
     'simulator',
     params,
