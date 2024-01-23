@@ -1,7 +1,7 @@
 import { useLinearScale } from 'libs/d3/useLinearScale';
 import { D3ChartSettings } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';
-import { max, scaleBand } from 'd3';
+import { max, ScaleBand, scaleBand, ScaleLinear } from 'd3';
 
 interface Props {
   dms: D3ChartSettings;
@@ -10,7 +10,7 @@ interface Props {
 
 export const D3ChartSimulatorBalance = ({ dms, data }: Props) => {
   const xScale = scaleBand()
-    .domain(['tkn1', 'tkn2'])
+    .domain(['base', 'quote'])
     .range([0, dms.boundedWidth])
     .padding(0.1);
 
@@ -28,43 +28,54 @@ export const D3ChartSimulatorBalance = ({ dms, data }: Props) => {
 
   return (
     <>
+      <Bar
+        id="base"
+        xScale={xScale}
+        yScale={y.scale}
+        value={balanceRISK}
+        percentage={percentage}
+        dms={dms}
+      />
+
+      <Bar
+        id="quote"
+        xScale={xScale}
+        yScale={y.scale}
+        value={balanceCASH}
+        percentage={100 - percentage}
+        dms={dms}
+      />
+    </>
+  );
+};
+
+interface BarProps {
+  id: 'base' | 'quote';
+  xScale: ScaleBand<string>;
+  yScale: ScaleLinear<number, number>;
+  value: number;
+  dms: D3ChartSettings;
+  percentage: number;
+}
+const Bar = ({ id, xScale, yScale, value, dms, percentage }: BarProps) => {
+  const x = xScale(id);
+  const y = yScale(value);
+  const width = xScale.bandwidth();
+  const color = id === 'base' ? '#D86371' : '#00B578';
+
+  return (
+    <>
       <rect
-        x={xScale('tkn1')}
-        y={y.scale(balanceCASH)}
-        width={xScale.bandwidth()}
-        height={dms.boundedHeight - y.scale(balanceCASH)}
-        fill="teal"
+        x={x}
+        y={value ? y : dms.boundedHeight - 2}
+        width={width}
+        height={dms.boundedHeight - y || 2}
+        fill={color}
       />
 
       <text
-        x={(xScale('tkn1') ?? 0) + xScale.bandwidth() / 2}
-        y={y.scale(balanceCASH) - 10}
-        fill="currentColor"
-        style={{ textAnchor: 'middle' }}
-      >
-        {balanceCASH.toFixed(2)}
-      </text>
-
-      <text
-        x={(xScale('tkn1') ?? 0) + xScale.bandwidth() / 2}
-        y={y.scale(balanceCASH) - 30}
-        fill="currentColor"
-        style={{ textAnchor: 'middle' }}
-      >
-        {(100 - percentage).toFixed(2)} %
-      </text>
-
-      <rect
-        x={xScale('tkn2')}
-        y={balanceRISK ? y.scale(balanceRISK) : dms.boundedHeight - 2}
-        width={xScale.bandwidth()}
-        height={dms.boundedHeight - y.scale(balanceRISK) || 2}
-        fill="red"
-      />
-
-      <text
-        x={(xScale('tkn2') ?? 0) + xScale.bandwidth() / 2}
-        y={y.scale(balanceRISK) - 30}
+        x={(x || 0) + width / 2}
+        y={y - 30}
         fill="currentColor"
         style={{ textAnchor: 'middle' }}
       >
@@ -72,12 +83,12 @@ export const D3ChartSimulatorBalance = ({ dms, data }: Props) => {
       </text>
 
       <text
-        x={(xScale('tkn2') ?? 0) + xScale.bandwidth() / 2}
-        y={y.scale(balanceRISK) - 10}
+        x={(x ?? 0) + width / 2}
+        y={y - 10}
         fill="currentColor"
         style={{ textAnchor: 'middle' }}
       >
-        {balanceRISK.toFixed(2)}
+        {value.toFixed(2)}
       </text>
     </>
   );
