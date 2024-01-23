@@ -174,6 +174,7 @@ export const EditStrategyBudgetContent = ({
       onSubmit={(e) => handleOnActionClick(e)}
       onReset={() => history.back()}
       className="flex w-full flex-col gap-20 md:w-[400px]"
+      data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
       {isOverlapping && type === 'deposit' && (
@@ -219,7 +220,7 @@ export const EditStrategyBudgetContent = ({
         variant="white"
         size="lg"
         fullWidth
-        data-testid="deposit-withdraw-confirm-btn"
+        data-testid="edit-submit"
       >
         {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>

@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 type NotificationType =
   | 'reject'
@@ -16,21 +16,34 @@ type NotificationType =
   | 'deposit-strategy';
 
 export class NotificationDriver {
-  private notif = this.page.getByTestId(`notification-${this.type}`);
-  constructor(private page: Page, private type: NotificationType) {}
+  constructor(private page: Page) {}
 
-  getTitle() {
-    return this.notif.getByTestId('notif-title');
+  getAllNotifications() {
+    return this.page.locator('[data-testid="notification-list"] > li');
   }
-  getDescription() {
-    return this.notif.getByTestId('notif-description');
+
+  getNotification(type: NotificationType) {
+    const notif = this.page.getByTestId(`notification-${type}`);
+    return {
+      locator: notif,
+      title: () => notif.getByTestId('notif-title'),
+      description: () => notif.getByTestId('notif-description'),
+      close: () => this.closeNotif(notif),
+    };
   }
-  async close() {
-    const btn = this.notif.getByTestId('notif-close');
+
+  private async closeNotif(notif: Locator) {
+    const btn = notif.getByTestId('notif-close');
     const isVisible = await btn.isVisible();
     if (isVisible) {
-      btn.click();
-      return this.notif.waitFor({ state: 'detached' });
+      // Prevent playwright to check if the button is inside viewport
+      await btn.dispatchEvent('click');
+      return notif.waitFor({ state: 'detached' });
     }
+  }
+  async closeAll() {
+    const all = await this.getAllNotifications().all();
+    const closeAll = all.map((locator) => this.closeNotif(locator));
+    return Promise.all(closeAll);
   }
 }
