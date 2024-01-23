@@ -1,6 +1,6 @@
 import 'global-shim';
 import 'init-sentry';
-import React, { Suspense } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { StoreProvider } from 'store';
@@ -22,9 +22,7 @@ root.render(
       <StoreProvider>
         <Web3ReactWrapper>
           <LazyMotion>
-            <Suspense>
-              <RouterProvider router={router} />
-            </Suspense>
+            <RouterProvider router={router} />
           </LazyMotion>
         </Web3ReactWrapper>
       </StoreProvider>
