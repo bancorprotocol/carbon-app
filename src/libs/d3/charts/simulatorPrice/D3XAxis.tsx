@@ -1,27 +1,22 @@
-import { useD3Chart } from 'libs/d3/D3ChartProvider';
+import { D3AxisTick, D3ChartSettings } from 'libs/d3/types';
 import { dayjs } from 'libs/dayjs';
 import { uuid } from 'utils/helpers';
 
-export const D3XAxis = () => {
-  const { xScale, dms } = useD3Chart();
-  const range = xScale.range();
-  const width = range[1] - range[0];
-  const pixelsPerTick = 70;
-  const numberOfTicksTarget = Math.max(1, Math.floor(width / pixelsPerTick));
-  const ticks = xScale.ticks(numberOfTicksTarget).map((value) => ({
-    value,
-    xOffset: xScale(value),
-  }));
+interface Props {
+  ticks: D3AxisTick[];
+  dms: D3ChartSettings;
+}
 
+export const D3XAxis = ({ ticks, dms }: Props) => {
   return (
     <g transform={`translate(0,${dms.boundedHeight})`}>
       <path
-        d={['M', range[0], 6, 'v', -6, 'H', range[1], 'v', 6].join(' ')}
+        d={['M', 0, 6, 'v', -6, 'H', dms.boundedWidth, 'v', 6].join(' ')}
         fill="none"
         className={'stroke-emphasis'}
       />
-      {ticks.map(({ value, xOffset }) => (
-        <g key={`${uuid()}${value}`} transform={`translate(${xOffset}, 0)`}>
+      {ticks.map(({ value, offset }) => (
+        <g key={`${uuid()}${value}`} transform={`translate(${offset}, 0)`}>
           <line
             y1={dms.boundedHeight * -1}
             y2="6"

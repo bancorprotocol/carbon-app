@@ -45,3 +45,31 @@ export type D3ChartCandlestickData = {
 };
 
 export type Accessor<T> = (d: T) => number;
+
+export interface D3AxisTick {
+  value: number;
+  offset: number;
+}
+
+export interface D3AxisProps {
+  ticks: D3AxisTick[];
+  dms: D3ChartSettings;
+}
+
+export type D3SimLegendEntry =
+  | 'ask'
+  | 'bid'
+  | 'price'
+  | 'portfolio'
+  | 'portion'
+  | 'hodl';
+
+export type D3LegendItem = {
+  index: number;
+  label: string;
+  labelSecondary?: string;
+  color: string;
+  isDisabled: boolean;
+};
+
+export type D3SimLegendType = Record<D3SimLegendEntry, D3LegendItem>;

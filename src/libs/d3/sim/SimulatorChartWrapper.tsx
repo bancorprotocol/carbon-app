@@ -1,14 +1,22 @@
-import { useSimulator } from 'libs/d3/sim/SimulatorProvider';
-import { D3ChartSettingsProps } from 'libs/d3/types';
+import { D3ChartSettings, D3ChartSettingsProps } from 'libs/d3/types';
+import { useChartDimensions } from 'libs/d3/useChartDimensions';
 import { ReactNode } from 'react';
 
-type Props = {
+interface Props {
+  children: (dms: D3ChartSettings) => ReactNode;
   settings: D3ChartSettingsProps;
-  children: ReactNode;
-};
+}
 
-export const SimulatorChartWrapper = (props: Props) => {
-  const { data } = useSimulator();
+export const SimChartWrapper = ({ children, settings }: Props) => {
+  const [ref, dms] = useChartDimensions(settings);
 
-  // return <D3ChartProvider {...props} data={data} />;
+  return (
+    <div ref={ref}>
+      <svg width={dms.width} height={dms.height}>
+        <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
+          {children(dms)}
+        </g>
+      </svg>
+    </div>
+  );
 };

@@ -1,32 +1,32 @@
-import { ScaleLinear } from 'd3';
-import { getAccessor } from 'libs/d3/charts/simulatorPrice/utils';
-import { useD3Chart } from 'libs/d3/D3ChartProvider';
+import { LinearScaleReturn } from 'libs/d3/charts/simulatorPrice/useLinearScale';
 import { D3AreaPath } from 'libs/d3/primitives/D3AreaPath';
 import { D3LinePath } from 'libs/d3/primitives/D3LinePath';
 import { SimulatorData, SimulatorReturn } from 'libs/queries';
 
-type OrderRangeProps = {
+interface OrderRangeProps extends SimulatorReturn {
   type: keyof Pick<SimulatorData, 'bid' | 'ask'>;
-  yScale: ScaleLinear<number, number>;
-};
+  x: LinearScaleReturn;
+  y: LinearScaleReturn;
+}
 
-export const D3SimPriceRange = ({ type, yScale }: OrderRangeProps) => {
-  const {
-    xScale,
-    data: { data, bounds },
-  } = useD3Chart<SimulatorReturn>();
-
+export const D3SimPriceRange = ({
+  type,
+  x,
+  y,
+  data,
+  bounds,
+}: OrderRangeProps) => {
   const color = type === 'bid' ? '#00B578' : '#D86371';
   const strokeWidth = 1;
 
-  const min = type === 'bid' ? yScale(bounds.bidMin) : yScale(bounds.askMin);
-  const max = type === 'bid' ? yScale(bounds.bidMax) : yScale(bounds.askMax);
+  const min = type === 'bid' ? y.scale(bounds.bidMin) : y.scale(bounds.askMin);
+  const max = type === 'bid' ? y.scale(bounds.bidMax) : y.scale(bounds.askMax);
 
   const solidLine = type === 'bid' ? min : max;
   const dashedLine = type === 'bid' ? max : min;
 
-  const xAcc = getAccessor('date', xScale);
-  const yAcc = getAccessor(type, yScale);
+  const xAcc = x.accessor('date');
+  const yAcc = y.accessor(type);
 
   return (
     <>

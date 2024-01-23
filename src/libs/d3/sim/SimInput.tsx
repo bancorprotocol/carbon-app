@@ -1,10 +1,9 @@
-import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { useModal } from 'hooks/useModal';
-import { QueryKey, SimulatorInput, SimulatorReturn } from 'libs/queries';
+import { SimulatorInput } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useState } from 'react';
-import token = QueryKey.token;
 
 const defaultParams: SimulatorInput = {
   start: '1672491600',
@@ -19,16 +18,7 @@ const defaultParams: SimulatorInput = {
   buyMin: '0.3275',
 };
 
-export const SimInput = ({
-  mutate,
-}: {
-  mutate: UseMutateAsyncFunction<
-    SimulatorReturn,
-    unknown,
-    SimulatorInput,
-    unknown
-  >;
-}) => {
+export const SimInput = () => {
   const { openModal } = useModal();
   const [baseToken, setBaseToken] = useState<Token>();
   const [quoteToken, setQuoteToken] = useState<Token>();
@@ -128,15 +118,9 @@ export const SimInput = ({
         </label>
       </div>
 
-      <Button
-        size={'lg'}
-        variant={'success'}
-        onClick={async () => {
-          await mutate(params);
-        }}
-      >
+      <Link to={'/simulator/result'} search={params}>
         Start Simulation
-      </Button>
+      </Link>
     </div>
   );
 };

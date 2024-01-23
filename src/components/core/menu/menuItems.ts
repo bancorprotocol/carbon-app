@@ -21,8 +21,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: 'Sim',
-    href: PathNames.simulator,
-    hrefMatches: [PathNames.simulator],
+    href: '/simulator',
   },
   ...(isProduction
     ? []
