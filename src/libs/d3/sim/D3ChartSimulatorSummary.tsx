@@ -54,7 +54,6 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
 
   return (
     <>
-      {' '}
       <D3XAxis ticks={x.ticks} dms={dms} />
       <D3YAxisLeft ticks={yLeft.ticks} dms={dms} />
       <D3YAxiRight ticks={yRightTicks} dms={dms} />
