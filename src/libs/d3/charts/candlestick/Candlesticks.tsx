@@ -1,10 +1,10 @@
 import { ScaleBand, ScaleLinear } from 'd3';
-import { D3ChartCandlestickData } from 'libs/d3';
+import { CandlestickData } from 'libs/d3';
 
 type CandlesticksProps = {
   xScale: ScaleBand<string>;
   yScale: ScaleLinear<number, number>;
-  data: D3ChartCandlestickData[];
+  data: CandlestickData[];
 };
 
 export function Candlesticks({ xScale, yScale, data }: CandlesticksProps) {

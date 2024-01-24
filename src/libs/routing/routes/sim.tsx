@@ -4,15 +4,7 @@ import { rootRoute } from 'libs/routing/routes/root';
 import { SimulatorPage } from 'pages/simulator';
 import { SimulatorResultPage } from 'pages/simulator/result';
 
-export const simulatorPage = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/simulator',
-  component: SimulatorPage,
-});
-
-export interface SimulatorSearch {
-  start: string;
-  end: string;
+interface SimulatorSearchBase {
   baseToken: string;
   baseBudget: string;
   quoteToken: string;
@@ -23,6 +15,36 @@ export interface SimulatorSearch {
   buyMin: string;
 }
 
+export interface SimulatorInputSearch extends SimulatorSearchBase {
+  isBuyLimit?: boolean;
+  isSellLimit?: boolean;
+}
+
+export const simulatorPage = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/simulator',
+  component: SimulatorPage,
+  validateSearch: (search: Record<string, string>): SimulatorInputSearch => {
+    return {
+      baseToken: search.baseToken || '',
+      baseBudget: search.baseBudget || '',
+      quoteToken: search.quoteToken || '',
+      quoteBudget: search.quoteBudget || '',
+      sellMax: search.sellMax || '',
+      sellMin: search.sellMin || '',
+      buyMax: (search.buyMax as string) || '',
+      buyMin: search.buyMin || '',
+      // isBuyLimit: Boolean(search.isBuyLimit),
+      // isSellLimit: Boolean(search.isSellLimit),
+    };
+  },
+});
+
+export interface SimulatorResultSearch extends SimulatorSearchBase {
+  start: string;
+  end: string;
+}
+
 export const simulatorResultPage = new Route({
   getParentRoute: () => rootRoute,
   path: '/simulator/result',
@@ -31,7 +53,7 @@ export const simulatorResultPage = new Route({
       <SimulatorResultPage />
     </SimulatorProvider>
   ),
-  validateSearch: (search: Record<string, string>): SimulatorSearch => {
+  validateSearch: (search: Record<string, string>): SimulatorResultSearch => {
     if (Number(search.start) <= 0) {
       throw new Error('Invalid start date');
     }

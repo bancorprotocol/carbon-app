@@ -31,9 +31,10 @@ export const XAxis = ({ xScale, dms }: Props) => {
           style={{ textAnchor: 'middle' }}
           dy=".71em"
           y={dms.boundedHeight + 14}
+          fill="currentColor"
         >
-          {new Date(Number(tickValue)).getDate()}/
-          {new Date(Number(tickValue)).getMonth() + 1}
+          {new Date(Number(tickValue) * 1000).getDate()}/
+          {new Date(Number(tickValue) * 1000).getMonth() + 1}
         </text>
       </g>
     ));

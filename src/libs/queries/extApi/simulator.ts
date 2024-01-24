@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
-import { SimulatorSearch } from 'libs/routing';
+import { SimulatorResultSearch } from 'libs/routing';
 import { carbonApi } from 'utils/carbonApi';
 import { FIVE_MIN_IN_MS } from 'utils/time';
 
@@ -54,7 +54,7 @@ export type SimulatorReturn = {
   bounds: SimulatorBounds;
 };
 
-export const useGetSimulator = (params: SimulatorSearch) => {
+export const useGetSimulator = (params: SimulatorResultSearch) => {
   return useQuery<SimulatorReturn>(
     QueryKey.simulator(params),
     async () => {

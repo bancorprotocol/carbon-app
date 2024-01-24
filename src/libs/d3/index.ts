@@ -1,7 +1,7 @@
 export type {
   D3ChartSettings,
   D3ChartSettingsProps,
-  D3ChartCandlestickData,
+  CandlestickData,
 } from './types';
 export { D3ChartCandlestick } from './charts/candlestick';
 export { D3ChartSimulatorBalance } from './sim/D3ChartSimulatorBalance';

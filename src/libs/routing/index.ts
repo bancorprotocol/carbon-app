@@ -12,4 +12,4 @@ export type {
 } from 'libs/routing/routes/strategyCreateEdit';
 export { getLastVisitedPair } from 'libs/routing/utils';
 export type { TradeSearch } from 'libs/routing/routes/trade';
-export type { SimulatorSearch } from 'libs/routing/routes/sim';
+export type { SimulatorResultSearch } from 'libs/routing/routes/sim';

@@ -12,9 +12,9 @@ export interface D3ChartSettings extends Required<D3ChartSettingsProps> {
   boundedHeight: number;
 }
 
-export type D3ChartCandlestickData = {
+export type CandlestickData = {
   date: number;
-  volume: number;
+  // volume: number;
   open: number;
   close: number;
   high: number;

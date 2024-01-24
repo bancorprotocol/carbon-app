@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { SimulatorResult } from 'libs/queries/extApi/simulator';
-import { SimulatorSearch } from 'libs/routing';
+import {
+  TokenPriceHistoryResult,
+  TokenPriceHistorySearch,
+} from 'libs/queries/extApi/tokenPrice';
+import { SimulatorResultSearch } from 'libs/routing';
 
 export const AVAILABLE_CURRENCIES = [
   'USD',
@@ -58,11 +62,22 @@ const carbonApi = {
     });
     return data;
   },
+  getMarketRateHistory: async (
+    params: TokenPriceHistorySearch
+  ): Promise<TokenPriceHistoryResult[]> => {
+    const { data } = await newApiAxios.get<TokenPriceHistoryResult[]>(
+      `history/prices`,
+      { params }
+    );
+    return data;
+  },
   getRoi: async (): Promise<RoiRow[]> => {
     const { data } = await newApiAxios.get<RoiRow[]>('roi');
     return data;
   },
-  getSimulator: async (params: SimulatorSearch): Promise<SimulatorResult> => {
+  getSimulator: async (
+    params: SimulatorResultSearch
+  ): Promise<SimulatorResult> => {
     const { data } = await newApiAxios.get<SimulatorResult>(
       'simulate-create-strategy',
       {
