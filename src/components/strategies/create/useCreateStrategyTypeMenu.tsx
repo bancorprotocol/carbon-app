@@ -129,11 +129,12 @@ export const useCreateStrategyTypeMenu = (base: string, quote: string) => {
         description:
           'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does',
         benefits: [
-          {
-            summary: 'Adjustable',
-            details:
-              'Easily adjust prices without having to withdraw and redeposit funds, saving time and gas.',
-          },
+          // TODO: uncomment when overlapping strategy edit price is ready
+          // {
+          //   summary: 'Adjustable',
+          //   details:
+          //     'Easily adjust prices without having to withdraw and redeposit funds, saving time and gas.',
+          // },
           {
             summary: 'No trading or gas fees on filled orders',
             details:
