@@ -1,25 +1,23 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { cn } from 'utils/helpers';
+import { cn, prettifyNumber } from 'utils/helpers';
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
+import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 interface Props {
-  portfolioGains?: number[];
-  quoteToken?: Token;
+  quoteToken: Token;
+  portfolioGains: number;
 }
 
 export const SimulatorSummaryGains = ({
   portfolioGains,
   quoteToken,
 }: Props) => {
-  // const quoteFiat = useFiatCurrency(quoteToken);
-  // const budgetFormatted = prettifyNumber(
-  //   portfolioGains[portfolioGains.length - 1],
-  //   {
-  //     currentCurrency: quoteFiat.selectedFiatCurrency,
-  //   }
-  // );
+  const quoteFiat = useFiatCurrency(quoteToken);
+  const budgetFormatted = prettifyNumber(portfolioGains, {
+    currentCurrency: quoteFiat.selectedFiatCurrency,
+  });
 
   return (
     <article className={cn('flex flex-col rounded-8')}>
@@ -29,15 +27,13 @@ export const SimulatorSummaryGains = ({
           <IconTooltip className="h-10 w-10" />
         </h4>
       </Tooltip>
-      <p className={`text-24 font-weight-500`}>$235.34</p>
+      <p className={`text-24 font-weight-500`}>{budgetFormatted}</p>
     </article>
   );
 };
 
 const TooltipContent: FC<{}> = () => (
   <>
-    <span className="align-middle">
-      Total returns of the strategy from its creation.&nbsp;
-    </span>
+    <span className="align-middle">TBD.&nbsp;</span>
   </>
 );

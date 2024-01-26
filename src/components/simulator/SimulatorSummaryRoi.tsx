@@ -6,11 +6,11 @@ import { formatNumberWithApproximation } from 'utils/helpers';
 import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
-  portfolioRoi?: number[];
+  portfolioRoi: number;
 }
 
 export const SimulatorSummaryRoi = ({ portfolioRoi }: Props) => {
-  const roi = new SafeDecimal(36.25);
+  const roi = new SafeDecimal(portfolioRoi);
   const roiFormatted = formatNumberWithApproximation(roi, {
     isPercentage: true,
     approximateBelow: 0.01,
