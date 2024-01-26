@@ -6,8 +6,12 @@ import { ReactComponent as IconDownload } from 'assets/icons/sim-download.svg';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useState } from 'react';
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import { SimulatorReturn } from 'libs/queries';
+import { CsvDataService } from 'libs/csv';
 
-export const SimulatorDownloadMenu = () => {
+interface Props extends Pick<SimulatorReturn, 'data'> {}
+
+export const SimulatorDownloadMenu = ({ data }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const items = [
@@ -29,7 +33,9 @@ export const SimulatorDownloadMenu = () => {
       id: 'simulationLog' as const,
       title: 'Simulation Log',
       subTitle: 'CSV',
-      action: () => console.log('Simulation Log'),
+      action: () => {
+        CsvDataService.exportToCsv('data.csv', data);
+      },
       icon: <IconLog className="h-20 w-20" />,
     },
   ];
