@@ -46,8 +46,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     order: { min, max, price: '', isRange: true },
   });
 
-  const aboveMarket = isMinAboveMarket(order0, quote);
-  const belowMarket = isMaxBelowMarket(order1, quote);
+  const aboveMarket = isMinAboveMarket(order0);
+  const belowMarket = isMaxBelowMarket(order1);
 
   useEffect(() => {
     order0.setMarginalPriceOption(MarginalPriceOptions.maintain);

@@ -76,8 +76,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.budget]);
 
-  const aboveMarket = isMinAboveMarket(order0, quote);
-  const belowMarket = isMaxBelowMarket(order1, quote);
+  const aboveMarket = isMinAboveMarket(order0);
+  const belowMarket = isMaxBelowMarket(order1);
   const withdrawAll =
     (order0.budget || '0') === strategy.order0.balance &&
     (order1.budget || '0') === strategy.order1.balance;

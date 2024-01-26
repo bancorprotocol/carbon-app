@@ -1,6 +1,5 @@
 import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
-import { Token } from 'libs/tokens';
 
 export const getBuyMax = (sellMax: number, spread: number) => {
   return sellMax / (1 + spread / 100);
@@ -67,21 +66,13 @@ interface BuyOrder {
   min: string;
   marginalPrice: string;
 }
-export const isMinAboveMarket = (buyOrder: BuyOrder, quote?: Token) => {
-  const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
-  return new SafeDecimal(buyOrder.min)
-    .minus(buyOrder.marginalPrice)
-    .abs()
-    .lt(wei);
+export const isMinAboveMarket = (buyOrder: BuyOrder) => {
+  return new SafeDecimal(buyOrder.min).minus(buyOrder.marginalPrice).gte(0);
 };
 interface SellOrder {
   max: string;
   marginalPrice: string;
 }
-export const isMaxBelowMarket = (sellOrder: SellOrder, quote?: Token) => {
-  const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
-  return new SafeDecimal(sellOrder.max)
-    .minus(sellOrder.marginalPrice)
-    .abs()
-    .lt(wei);
+export const isMaxBelowMarket = (sellOrder: SellOrder) => {
+  return new SafeDecimal(sellOrder.marginalPrice).minus(sellOrder.max).gte(0);
 };

@@ -14,8 +14,10 @@ import { CreateOverlappingRange } from './CreateOverlappingRange';
 import { carbonSDK } from 'libs/sdk';
 import { Toolkit } from '@bancor/carbon-sdk/strategy-management';
 import {
+  getBuyMarginalPrice,
   getMaxBuyMin,
   getMinSellMax,
+  getSellMarginalPrice,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -81,9 +83,15 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     order0.setMin(min);
     order1.setMax(max);
     order0.setMax(params.buyPriceHigh);
-    order0.setMarginalPrice(params.buyPriceMarginal);
+    // order0.setMarginalPrice(params.buyPriceMarginal);
+    order0.setMarginalPrice(
+      getBuyMarginalPrice(marketPrice, spread).toString()
+    );
     order1.setMin(params.sellPriceLow);
-    order1.setMarginalPrice(params.sellPriceMarginal);
+    // order1.setMarginalPrice(params.sellPriceMarginal);
+    order1.setMarginalPrice(
+      getSellMarginalPrice(marketPrice, spread).toString()
+    );
     return params;
   };
 
@@ -138,10 +146,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         setOverlappingParams(min, max).then((params) => {
           const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
           const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
-          if (isMinAboveMarket(buyOrder, quote)) {
+          if (isMinAboveMarket(buyOrder)) {
             setAnchoredOrder('sell');
             setBuyBudget(order1.budget, min, max);
-          } else if (isMaxBelowMarket(sellOrder, quote)) {
+          } else if (isMaxBelowMarket(sellOrder)) {
             setAnchoredOrder('buy');
             setSellBudget(order0.budget, min, max);
           } else {
@@ -162,7 +170,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     if (isValidRange(min, max) && isValidSpread(spread)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.buyPriceMarginal;
-        if (isMinAboveMarket({ min, marginalPrice }, quote)) {
+        if (isMinAboveMarket({ min, marginalPrice })) {
           setAnchoredOrder('sell');
           setBuyBudget(order1.budget, min, max);
         } else {
@@ -190,7 +198,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     if (isValidRange(min, max) && isValidSpread(spread)) {
       setOverlappingParams(min, max).then((params) => {
         const marginalPrice = params.sellPriceMarginal;
-        if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
+        if (isMaxBelowMarket({ max, marginalPrice })) {
           setAnchoredOrder('buy');
           setSellBudget(order0.budget, min, max);
         } else {
