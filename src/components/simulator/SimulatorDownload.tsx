@@ -34,7 +34,13 @@ export const SimulatorDownloadMenu = ({ data }: Props) => {
       title: 'Simulation Log',
       subTitle: 'CSV',
       action: () => {
-        CsvDataService.exportToCsv('data.csv', data);
+        const csvOutput = data.map((item) => {
+          return {
+            ...item,
+            date: new Date(item.date * 1e3),
+          };
+        });
+        CsvDataService.exportToCsv('data.csv', csvOutput);
       },
       icon: <IconLog className="h-20 w-20" />,
     },
