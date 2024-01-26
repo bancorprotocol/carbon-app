@@ -4,7 +4,7 @@ import { Token } from 'libs/tokens';
 interface Props {
   baseToken: Token;
   quoteToken: Token;
-  strategyType: 'Recurring' | 'Overlapping';
+  strategyType: 'recurring' | 'overlapping';
 }
 
 export const SimulatorSummaryTokens = ({
@@ -21,7 +21,7 @@ export const SimulatorSummaryTokens = ({
           <span className="self-align-center text-secondary !text-16">/</span>
           {quoteToken.symbol}
         </h2>
-        <h3 className="flex items-center gap-8 font-mono text-12 text-white/60">
+        <h3 className="flex items-center gap-8 font-mono text-12 capitalize text-white/60">
           {strategyType}
         </h3>
       </div>

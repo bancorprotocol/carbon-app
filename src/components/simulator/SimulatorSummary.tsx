@@ -27,13 +27,15 @@ export const SimulatorSummary = ({ roi, gains }: Props) => {
     quoteBudget: search.quoteBudget,
   };
 
+  const strategyType = 'recurring';
+
   return (
     <header className="my-8 flex flex-wrap gap-8">
       <section className="flex flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between">
         <SimulatorSummaryTokens
           baseToken={baseToken!}
           quoteToken={quoteToken!}
-          strategyType="Recurring"
+          strategyType={strategyType}
         />
         <SimulatorSummaryTable
           summaryData={summaryData}
@@ -49,6 +51,14 @@ export const SimulatorSummary = ({ roi, gains }: Props) => {
         <SimulatorSummaryRoi portfolioRoi={roi} />
         <Link
           to="/strategies/create"
+          search={{
+            base: baseToken!.address,
+            quote: quoteToken!.address,
+            strategyType:
+              strategyType === 'recurring' ? 'recurring' : undefined,
+            strategySettings:
+              strategyType === 'recurring' ? 'range' : 'overlapping',
+          }}
           className={buttonStyles({ variant: 'success', size: 'md' })}
         >
           Create strategy
