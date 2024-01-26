@@ -8,8 +8,6 @@ import { SimChartWrapper } from 'libs/d3/sim/SimulatorChartWrapper';
 import { useSimulator } from 'libs/d3/sim/SimulatorProvider';
 import { D3ChartSettingsProps } from 'libs/d3/types';
 import { useState } from 'react';
-import { useSearch } from 'libs/routing';
-import { useTokens } from 'hooks/useTokens';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -42,11 +40,6 @@ export const SimulatorResultPage = () => {
   const ctx = useSimulator();
   const [showSummary, setShowSummary] = useState(false);
 
-  const search = useSearch({ from: '/simulator/result' });
-  const { getTokenById } = useTokens();
-  const baseToken = getTokenById(search.baseToken);
-  const quoteToken = getTokenById(search.quoteToken);
-
   return (
     <div className="p-20">
       <h1>Simulator Result Page</h1>
@@ -64,18 +57,14 @@ export const SimulatorResultPage = () => {
       {ctx.isError && <div>Error</div>}
 
       <div className="rounded-20 bg-silver p-20">
-        {ctx.data && ctx.bounds && (
+        {ctx.data && ctx.roi && ctx.gains && ctx.bounds && (
           <>
-            <SimulatorSummary
-              baseToken={baseToken!}
-              quoteToken={quoteToken!}
-              data={ctx.animationData}
-              bounds={ctx.bounds!}
-            />
+            <SimulatorSummary roi={ctx.roi} gains={ctx.gains} />
             {!ctx.isLoading ? (
               <>
                 <div className="rounded-10 bg-black py-10">
                   <SimulatorChartHeader
+                    data={ctx.data}
                     setShowSummary={setShowSummary}
                     showSummary={showSummary}
                   />
