@@ -4,7 +4,7 @@ import { Token } from 'libs/tokens';
 interface Props {
   baseToken: Token;
   quoteToken: Token;
-  strategyType: string;
+  strategyType: 'Recurring' | 'Overlapping';
 }
 
 export const SimulatorSummaryTokens = ({
