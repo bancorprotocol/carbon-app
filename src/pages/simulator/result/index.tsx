@@ -1,3 +1,5 @@
+import { SimulatorChartHeader } from 'components/simulator/SimulatorChartHeader';
+import { SimulatorSummary } from 'components/simulator/SimulatorSummary';
 import { D3ChartSimulatorPrice } from 'libs/d3';
 import { D3ChartSimulatorBalance } from 'libs/d3/sim/D3ChartSimulatorBalance';
 import { D3ChartSimulatorPerformance } from 'libs/d3/sim/D3ChartSimulatorPerformance';
@@ -55,55 +57,73 @@ export const SimulatorResultPage = () => {
       {ctx.isError && <div>Error</div>}
 
       <div className="rounded-20 bg-silver p-20">
-        <div className="rounded-10 bg-black py-20">
-          {ctx.data && ctx.bounds && !ctx.isLoading ? (
-            !showSummary ? (
+        {ctx.data && ctx.roi && ctx.gains && ctx.bounds && (
+          <>
+            <SimulatorSummary
+              roi={ctx.roi}
+              gains={ctx.gains}
+              isLoading={ctx.isLoading}
+            />
+            {!ctx.isLoading ? (
               <>
-                <SimChartWrapper settings={chartSettings}>
-                  {(dms) => (
-                    <D3ChartSimulatorPrice
-                      data={ctx.animationData}
-                      bounds={ctx.bounds!}
-                      dms={dms}
-                    />
+                <div className="rounded-10 bg-black py-10">
+                  <SimulatorChartHeader
+                    data={ctx.data}
+                    setShowSummary={setShowSummary}
+                    showSummary={showSummary}
+                  />
+                  {!showSummary ? (
+                    <>
+                      <SimChartWrapper settings={chartSettings}>
+                        {(dms) => (
+                          <D3ChartSimulatorPrice
+                            data={ctx.animationData}
+                            bounds={ctx.bounds!}
+                            dms={dms}
+                          />
+                        )}
+                      </SimChartWrapper>
+
+                      <div className="grid grid-cols-2">
+                        <SimChartWrapper settings={chartSettings}>
+                          {(dms) => (
+                            <D3ChartSimulatorPerformance
+                              data={ctx.animationData}
+                              dms={dms}
+                            />
+                          )}
+                        </SimChartWrapper>
+
+                        <SimChartWrapper settings={chartSettingsBalance}>
+                          {(dms) => (
+                            <D3ChartSimulatorBalance
+                              data={ctx.animationData}
+                              dms={dms}
+                            />
+                          )}
+                        </SimChartWrapper>
+                      </div>
+                    </>
+                  ) : (
+                    <SimChartWrapper settings={chartSettingsSummary}>
+                      {(dms) => (
+                        <D3ChartSimulatorSummary
+                          data={ctx.data ?? []}
+                          bounds={ctx.bounds!}
+                          dms={dms}
+                        />
+                      )}
+                    </SimChartWrapper>
                   )}
-                </SimChartWrapper>
-
-                <div className="grid grid-cols-2">
-                  <SimChartWrapper settings={chartSettings}>
-                    {(dms) => (
-                      <D3ChartSimulatorPerformance
-                        data={ctx.animationData}
-                        dms={dms}
-                      />
-                    )}
-                  </SimChartWrapper>
-
-                  <SimChartWrapper settings={chartSettingsBalance}>
-                    {(dms) => (
-                      <D3ChartSimulatorBalance
-                        data={ctx.animationData}
-                        dms={dms}
-                      />
-                    )}
-                  </SimChartWrapper>
                 </div>
               </>
             ) : (
-              <SimChartWrapper settings={chartSettingsSummary}>
-                {(dms) => (
-                  <D3ChartSimulatorSummary
-                    data={ctx.data ?? []}
-                    bounds={ctx.bounds!}
-                    dms={dms}
-                  />
-                )}
-              </SimChartWrapper>
-            )
-          ) : (
-            <div>loading</div>
-          )}
-        </div>
+              <div className="rounded-10 bg-black py-10">
+                <div>loading</div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

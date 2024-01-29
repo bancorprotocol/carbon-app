@@ -52,6 +52,8 @@ export type SimulatorBounds = {
 export type SimulatorReturn = {
   data: Array<SimulatorData>;
   bounds: SimulatorBounds;
+  roi?: number;
+  gains?: number;
 };
 
 export const useGetSimulator = (params: SimulatorResultSearch) => {
@@ -74,6 +76,13 @@ export const useGetSimulator = (params: SimulatorResultSearch) => {
           hodlValue: Number(res.hodl_value[i]),
           portfolioOverHodl: Number(res.portfolio_over_hodl[i]),
         })),
+        roi: Number(
+          res.portfolio_over_hodl[res.portfolio_over_hodl.length - 1]
+        ),
+        gains: Number(
+          Number(res.portfolio_value[res.portfolio_value.length - 1]) -
+            Number(res.hodl_value[res.hodl_value.length - 1])
+        ),
         bounds: {
           askMax: Number(res.max_ask),
           askMin: Number(res.min_ask),
