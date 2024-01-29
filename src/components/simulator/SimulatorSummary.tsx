@@ -9,10 +9,14 @@ import { useTokens } from 'hooks/useTokens';
 interface Props {
   roi: number;
   gains: number;
+  isLoading: boolean;
 }
 
-export const SimulatorSummary = ({ roi, gains }: Props) => {
+export const SimulatorSummary = ({ roi, gains, isLoading }: Props) => {
   const search = useSearch({ from: '/simulator/result' });
+
+  const portfolioGains = isLoading ? 0.0 : gains;
+  const portfolioRoi = isLoading ? 0.0 : roi;
 
   const { getTokenById } = useTokens();
   const baseToken = getTokenById(search.baseToken);
@@ -45,10 +49,10 @@ export const SimulatorSummary = ({ roi, gains }: Props) => {
       </section>
       <section className="flex flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between">
         <SimulatorSummaryGains
-          portfolioGains={gains}
+          portfolioGains={portfolioGains}
           quoteToken={quoteToken!}
         />
-        <SimulatorSummaryRoi portfolioRoi={roi} />
+        <SimulatorSummaryRoi portfolioRoi={portfolioRoi} />
         <Link
           to="/strategies/create"
           search={{
