@@ -16,8 +16,11 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { DepositAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
-import { carbonSDK } from 'libs/sdk';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import {
+  MarginalPriceOptions,
+  calculateOverlappingBuyBudget,
+  calculateOverlappingSellBudget,
+} from '@bancor/carbon-sdk/strategy-management';
 import { MarketWarning } from './MarketWarning';
 import { geoMean } from 'utils/fullOutcome';
 
@@ -65,42 +68,40 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     return oldMarketPrice.toString();
   };
 
-  const setBuyBudget = async (sellBudgetDelta: string) => {
+  const setBuyBudget = (sellBudgetDelta: string) => {
     if (!sellBudgetDelta) return order0.setBudget('');
     const sellBudget = new SafeDecimal(sellBudgetDelta || '0').plus(
       strategy.order1.balance || '0'
     );
-    const resultBuyBudget =
-      await carbonSDK.calculateOverlappingStrategyBuyBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        sellBudget.toString()
-      );
+    const resultBuyBudget = calculateOverlappingBuyBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      sellBudget.toString()
+    );
     const buyBudget = new SafeDecimal(resultBuyBudget).minus(
       strategy.order0.balance || '0'
     );
     order0.setBudget(buyBudget.toString());
   };
 
-  const setSellBudget = async (buyBudgetDelta: string) => {
+  const setSellBudget = (buyBudgetDelta: string) => {
     if (!buyBudgetDelta) return order1.setBudget('');
     const buyBudget = new SafeDecimal(buyBudgetDelta || '0').plus(
       strategy.order0.balance || '0'
     );
-    const resultSellBudget =
-      await carbonSDK.calculateOverlappingStrategySellBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        buyBudget.toString()
-      );
+    const resultSellBudget = calculateOverlappingSellBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      buyBudget.toString()
+    );
     const sellBudget = new SafeDecimal(resultSellBudget).minus(
       strategy.order1.balance || '0'
     );

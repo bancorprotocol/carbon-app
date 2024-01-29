@@ -376,15 +376,6 @@ const sdkExposed = {
     sdkCache.getLatestTradeByPair(source, target),
   getMaxSourceAmountByPair: (source: string, target: string) =>
     carbonSDK.getMaxSourceAmountByPair(source, target),
-  calculateOverlappingStrategyPrices: ((...params) => {
-    return carbonSDK.calculateOverlappingStrategyPrices(...params);
-  }) as Toolkit['calculateOverlappingStrategyPrices'],
-  calculateOverlappingStrategyBuyBudget: ((...params) => {
-    return carbonSDK.calculateOverlappingStrategyBuyBudget(...params);
-  }) as Toolkit['calculateOverlappingStrategyBuyBudget'],
-  calculateOverlappingStrategySellBudget: ((...params) => {
-    return carbonSDK.calculateOverlappingStrategySellBudget(...params);
-  }) as Toolkit['calculateOverlappingStrategySellBudget'],
 };
 
 export type CarbonSDKWebWorker = typeof sdkExposed;
