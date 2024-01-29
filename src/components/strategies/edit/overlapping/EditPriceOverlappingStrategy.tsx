@@ -12,7 +12,6 @@ import {
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
 import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
 import { OverlappingRange } from 'components/strategies/overlapping/OverlappingRange';
@@ -199,9 +198,10 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
-          <Tooltip element="Indicate the strategy exact buy and sell prices.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="Indicate the strategy exact buy and sell prices."
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         {base && quote && (
           <OverlappingRange
@@ -216,9 +216,10 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex w-full flex-col gap-10 rounded-10 bg-silver p-20">
         <header className="mb-10 flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Edit Spread</h3>
-          <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <OverlappingStrategySpread
           order0={order0}
