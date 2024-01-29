@@ -100,19 +100,24 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
       sellBudgetDelta || '0'
     );
-    const resultBuyBudget = calculateOverlappingBuyBudget(
-      base.decimals,
-      quote.decimals,
-      order0.min,
-      order1.max,
-      getMarketPrice(),
-      spread.toString(),
-      sellBudget.toString()
-    );
-    const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
-      resultBuyBudget
-    );
-    order0.setBudget(buyBudget.lt(0) ? '0' : buyBudget.toString());
+    try {
+      const resultBuyBudget = calculateOverlappingBuyBudget(
+        base.decimals,
+        quote.decimals,
+        order0.min,
+        order1.max,
+        getMarketPrice(),
+        spread.toString(),
+        sellBudget.toString()
+      );
+      const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
+        resultBuyBudget
+      );
+      order0.setBudget(buyBudget.lt(0) ? '0' : buyBudget.toString());
+    } catch (e) {
+      console.error(e);
+      order0.setBudget('');
+    }
   };
 
   const setSellBudget = async (buyBudgetDelta: string) => {
@@ -120,19 +125,24 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
       buyBudgetDelta || '0'
     );
-    const resultSellBudget = calculateOverlappingSellBudget(
-      base.decimals,
-      quote.decimals,
-      order0.min,
-      order1.max,
-      getMarketPrice(),
-      spread.toString(),
-      buyBudget.toString()
-    );
-    const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
-      resultSellBudget
-    );
-    order1.setBudget(sellBudget.lt(0) ? '0' : sellBudget.toString());
+    try {
+      const resultSellBudget = calculateOverlappingSellBudget(
+        base.decimals,
+        quote.decimals,
+        order0.min,
+        order1.max,
+        getMarketPrice(),
+        spread.toString(),
+        buyBudget.toString()
+      );
+      const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
+        resultSellBudget
+      );
+      order1.setBudget(sellBudget.lt(0) ? '0' : sellBudget.toString());
+    } catch (e) {
+      console.error(e);
+      order1.setBudget('');
+    }
   };
 
   const onBuyBudgetChange = (value: string) => {

@@ -70,16 +70,21 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   ) => {
     if (!base || !quote) return;
     if (!sellBudget) return order0.setBudget('');
-    const buyBudget = calculateOverlappingBuyBudget(
-      base.decimals,
-      quote.decimals,
-      buyMin,
-      sellMax,
-      marketPrice.toString(),
-      spread.toString(),
-      sellBudget
-    );
-    order0.setBudget(buyBudget);
+    try {
+      const buyBudget = calculateOverlappingBuyBudget(
+        base.decimals,
+        quote.decimals,
+        buyMin,
+        sellMax,
+        marketPrice.toString(),
+        spread.toString(),
+        sellBudget
+      );
+      order0.setBudget(buyBudget);
+    } catch (e) {
+      console.error(e);
+      order0.setBudget('');
+    }
   };
 
   const setSellBudget = (
@@ -89,16 +94,21 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   ) => {
     if (!base || !quote) return;
     if (!buyBudget) order1.setBudget('');
-    const sellBudget = calculateOverlappingSellBudget(
-      base.decimals,
-      quote.decimals,
-      buyMin,
-      sellMax,
-      marketPrice.toString(),
-      spread.toString(),
-      buyBudget
-    );
-    order1.setBudget(sellBudget);
+    try {
+      const sellBudget = calculateOverlappingSellBudget(
+        base.decimals,
+        quote.decimals,
+        buyMin,
+        sellMax,
+        marketPrice.toString(),
+        spread.toString(),
+        buyBudget
+      );
+      order1.setBudget(sellBudget);
+    } catch (e) {
+      console.error(e);
+      order1.setBudget('');
+    }
   };
 
   // Initialize order when market price is available
