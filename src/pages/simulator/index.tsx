@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { Page } from 'components/common/page';
+import { SimulatorStrategyType } from 'components/simulator/SimulatorStrategyType';
+import { SimulatorTokenSelection } from 'components/simulator/SimulatorTokenSelection';
 import { useModal } from 'hooks/useModal';
 import { SimulatorSearch } from 'libs/routing';
 import { Token } from 'libs/tokens';
@@ -23,12 +25,26 @@ export const SimulatorPage = () => {
   const { openModal } = useModal();
   const [baseToken, setBaseToken] = useState<Token>();
   const [quoteToken, setQuoteToken] = useState<Token>();
+  const [strategyType, setStrategyType] = useState<string>();
 
   const [params, setParams] = useState(defaultParams);
 
   return (
     <Page title="Simulator Input">
       <div className={'space-y-10'}>
+        <SimulatorTokenSelection
+          base={baseToken}
+          quote={quoteToken}
+          setBaseToken={setBaseToken}
+          setQuoteToken={setQuoteToken}
+          params={params}
+          setParams={setParams}
+        />
+        <SimulatorStrategyType
+          strategyType={strategyType}
+          setStrategyType={setStrategyType}
+        />
+
         <div className={'flex space-x-20'}>
           <Button
             className={'w-[200px]'}
