@@ -17,8 +17,11 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
-import { carbonSDK } from 'libs/sdk';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import {
+  MarginalPriceOptions,
+  calculateOverlappingBuyBudget,
+  calculateOverlappingSellBudget,
+} from '@bancor/carbon-sdk/strategy-management';
 import { geoMean } from 'utils/fullOutcome';
 
 interface Props {
@@ -97,16 +100,15 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
       sellBudgetDelta || '0'
     );
-    const resultBuyBudget =
-      await carbonSDK.calculateOverlappingStrategyBuyBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        sellBudget.toString()
-      );
+    const resultBuyBudget = calculateOverlappingBuyBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      sellBudget.toString()
+    );
     const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
       resultBuyBudget
     );
@@ -118,16 +120,15 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
       buyBudgetDelta || '0'
     );
-    const resultSellBudget =
-      await carbonSDK.calculateOverlappingStrategySellBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        buyBudget.toString()
-      );
+    const resultSellBudget = calculateOverlappingSellBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      buyBudget.toString()
+    );
     const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
       resultSellBudget
     );

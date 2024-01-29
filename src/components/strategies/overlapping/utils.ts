@@ -67,12 +67,12 @@ interface BuyOrder {
   marginalPrice: string;
 }
 export const isMinAboveMarket = (buyOrder: BuyOrder) => {
-  return new SafeDecimal(buyOrder.min).minus(buyOrder.marginalPrice).gte(0);
+  return new SafeDecimal(buyOrder.min).eq(buyOrder.marginalPrice);
 };
 interface SellOrder {
   max: string;
   marginalPrice: string;
 }
 export const isMaxBelowMarket = (sellOrder: SellOrder) => {
-  return new SafeDecimal(sellOrder.marginalPrice).minus(sellOrder.max).gte(0);
+  return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
 };
