@@ -1,6 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
@@ -243,9 +242,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8">
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
-          <Tooltip element="Drag and drop your strategy buy and sell prices.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="Drag and drop your strategy buy and sell prices."
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <OverlappingStrategyGraph
           {...props}
@@ -266,9 +266,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
-          <Tooltip element="Indicate the strategy exact buy and sell prices.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="Indicate the strategy exact buy and sell prices."
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         {base && quote && (
           <CreateOverlappingRange
@@ -286,9 +287,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             2
           </span>
           <h3 className="flex-1 text-18 font-weight-500">Indicate Spread</h3>
-          <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <OverlappingStrategySpread
           order0={order0}
@@ -305,9 +307,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             3
           </span>
           <h3 className="flex-1 text-18 font-weight-500">Set Budgets</h3>
-          <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values."
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <CreateOverlappingStrategyBudget
           {...props}
