@@ -1,7 +1,7 @@
 import { Pathnames, PathParams } from 'libs/routing';
 import { cn } from 'utils/helpers';
-import { ReactComponent as IconAnimation } from 'assets/icons/sim-animation.svg';
-import { ReactComponent as IconSummary } from 'assets/icons/sim-summary.svg';
+import { ReactComponent as IconAnimation } from 'assets/icons/movie.svg';
+import { ReactComponent as IconSummary } from 'assets/icons/image.svg';
 
 export interface StrategyTab {
   label: string;

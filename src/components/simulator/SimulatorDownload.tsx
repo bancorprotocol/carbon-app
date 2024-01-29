@@ -1,8 +1,8 @@
 import { cn } from 'utils/helpers';
-import { ReactComponent as IconLog } from 'assets/icons/sim-log.svg';
-import { ReactComponent as IconAnimation } from 'assets/icons/sim-animation.svg';
-import { ReactComponent as IconSummary } from 'assets/icons/sim-summary.svg';
-import { ReactComponent as IconDownload } from 'assets/icons/sim-download.svg';
+import { ReactComponent as IconLog } from 'assets/icons/page.svg';
+import { ReactComponent as IconAnimation } from 'assets/icons/movie.svg';
+import { ReactComponent as IconSummary } from 'assets/icons/image.svg';
+import { ReactComponent as IconDownload } from 'assets/icons/download.svg';
 import { DropdownMenu } from 'components/common/dropdownMenu';
 import { useState } from 'react';
 import { buttonStyles } from 'components/common/button/buttonStyles';

@@ -1,4 +1,4 @@
-import { ReactComponent as CalendarIcon } from 'assets/icons/sim-calendar.svg';
+import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { SimulatorPageTabs } from './SimulatorPageTabs';
 import { SimulatorDownloadMenu } from './SimulatorDownload';
 import { SimulatorReturn } from 'libs/queries';

@@ -1,5 +1,4 @@
-import { ReactComponent as ArrowUp } from 'assets/icons/sim-arrow-up.svg';
-import { ReactComponent as ArrowDown } from 'assets/icons/sim-arrow-down.svg';
+import { ReactComponent as Arrow } from 'assets/icons/arrow-round.svg';
 import { prettifyNumber } from 'utils/helpers';
 import { Token } from 'libs/tokens';
 import { SimulatorSearch } from 'libs/routing';
@@ -37,13 +36,13 @@ export const SimulatorSummaryTable = ({
 
   return (
     <article className="grid grid-cols-[auto,auto] grid-rows-4 items-center justify-evenly gap-2 md:grid-cols-[auto,auto,auto,auto] md:grid-rows-2">
-      <ArrowUp className="mx-6" />
+      <Arrow className="mx-6 h-16 w-16 text-green" />
       <span>
         {buyMin}-{buyMax} {baseSymbol} per {quoteSymbol}
       </span>
       <span className="mx-4 text-white/40">|</span>
       {quoteBudgetFormatted} {quoteSymbol}
-      <ArrowDown className="mx-6" />
+      <Arrow className="mx-6 h-16 w-16 -rotate-90 text-red" />
       <span>
         {sellMin}-{sellMax} {baseSymbol} per {quoteSymbol}
       </span>
