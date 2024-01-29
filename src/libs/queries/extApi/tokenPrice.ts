@@ -6,8 +6,8 @@ import { useStore } from 'store';
 import { carbonApi } from 'utils/carbonApi';
 
 export const useCompareTokenPrice = (
-  baseAddress: string,
-  quoteAddress: string
+  baseAddress?: string,
+  quoteAddress?: string
 ) => {
   const basePrice = useGetTokenPrice(baseAddress).data?.USD;
   const quotePrice = useGetTokenPrice(quoteAddress).data?.USD;

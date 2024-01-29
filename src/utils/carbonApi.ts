@@ -81,7 +81,11 @@ const carbonApi = {
     const { data } = await newApiAxios.get<SimulatorResult>(
       'simulate-create-strategy',
       {
-        params,
+        params: {
+          ...params,
+          baseBudget: params.sellBudget,
+          quoteBudget: params.buyBudget,
+        },
       }
     );
     return data;

@@ -1,23 +1,16 @@
-import { drag, ScaleLinear, select } from 'd3';
+import { ScaleLinear } from 'd3';
+import { D3ChartHandle } from 'libs/d3/charts/candlestick/D3ChartHandle';
+import { D3ChartRect } from 'libs/d3/charts/candlestick/D3ChartRect';
+import {
+  getHandleSelector,
+  getRectSelector,
+  handleStateChange,
+  onDragHandler,
+  onDragRectHandler,
+} from 'libs/d3/charts/candlestick/utils';
 import { D3ChartSettings } from 'libs/d3/types';
 import { SimulatorInputSearch } from 'libs/routing/routes/sim';
 import { useEffect, useRef } from 'react';
-
-const dragAccessor2 = function (this: Element) {
-  const me = select(this);
-  const line = me.select('line');
-  return {
-    y: Number(line.attr('y1')),
-  };
-};
-
-const dragAccessor = function (this: Element) {
-  const me = select(this);
-  return {
-    y: Number(me.attr('y')),
-    height: Number(me.attr('height')),
-  };
-};
 
 type OrderRangeProps = {
   type: 'buy' | 'sell';
@@ -32,100 +25,40 @@ export const DragablePriceRange = ({
   yScale,
   onDrag,
   state,
-  dms: { boundedWidth },
+  dms,
 }: OrderRangeProps) => {
   const isHovering = useRef(false);
-  const buyRectRef = useRef<SVGRectElement>(null);
-  const buyUpperLineRef = useRef<SVGLineElement>(null);
-  const buyLowerLineRef = useRef<SVGLineElement>(null);
+  const color = type === 'buy' ? '#00B578' : '#D86371';
 
-  const dragRect = drag()
-    .subject(dragAccessor)
-    .on('drag', function ({ y, subject: { height } }) {
-      const me = select(this);
-      const upperLine = select(buyUpperLineRef.current).select('line');
-      const upperHandle = select(buyUpperLineRef.current).select('rect');
-      const lowerLine = select(buyLowerLineRef.current).select('line');
-      const lowerHandle = select(buyLowerLineRef.current).select('rect');
+  const isLimit = type === 'buy' ? !state.buyIsRange : !state.sellIsRange;
 
-      me.attr('y', y);
-      upperHandle.attr('y', y);
-      upperLine.attr('y1', y).attr('y2', y);
-      lowerLine.attr('y1', y + height).attr('y2', y + height);
-      lowerHandle.attr('y', y + height);
-      onDrag(`${type}Max`, y);
-      onDrag(`${type}Min`, y + height);
-    });
+  const max = Number(state[`${type}Max`]);
+  const min = Number(state[`${type}Min`]);
 
-  const dragUpperLine = drag()
-    .subject(dragAccessor2)
-    .on('drag', function ({ y }) {
-      const me = select(this);
-      const handle = me.select('rect');
-      const upper = me.select('line');
-      const rect = select(buyRectRef.current);
-      const lower = select(buyLowerLineRef.current).select('line');
+  const yMax = yScale(max);
+  const yMin = yScale(min);
 
-      const lowerY = Number(lower.attr('y1'));
+  const selectorRect = getRectSelector(type);
+  const selectorH1 = getHandleSelector(type, 'line1');
+  const selectorH2 = getHandleSelector(type, 'line2');
 
-      handle.attr('y', y);
-      rect.attr('y', y).attr('height', lowerY - y);
-      upper.attr('y1', y).attr('y2', y);
-      onDrag(`${type}Max`, y);
-    });
+  const onDragRect = (y: number, y2: number) =>
+    onDragRectHandler({ type, y, y2, onDrag });
 
-  const dragLowerLine = drag()
-    .subject(dragAccessor2)
-    .on('drag', function ({ y }) {
-      const me = select(this);
-      const handle = me.select('rect');
-      const lower = me.select('line');
-      const upper = select(buyUpperLineRef.current).select('line');
-      const rect = select(buyRectRef.current);
+  const onDragH1 = (y: number) =>
+    onDragHandler({ type, id: 'line1', y, onDrag, isLimit });
 
-      const upperY = Number(upper.attr('y1'));
-
-      rect.attr('height', y - upperY);
-      handle.attr('y', y);
-      lower.attr('y1', y).attr('y2', y);
-      onDrag(`${type}Min`, y);
-    });
+  const onDragH2 = (y: number) =>
+    onDragHandler({ type, id: 'line2', y, onDrag });
 
   useEffect(() => {
-    // @ts-ignore
-    dragRect(select(buyRectRef.current));
-    // @ts-ignore
-    dragUpperLine(select(buyUpperLineRef.current));
-    // @ts-ignore
-    dragLowerLine(select(buyLowerLineRef.current));
-  }, []);
-
-  const color = type === 'buy' ? 'green' : 'red';
-
-  const handleDimensions = {
-    width: 40,
-    height: 20,
-  };
-
-  const max = state[`${type}Max`];
-  const min = state[`${type}Min`];
-
-  useEffect(() => {
-    if (!isHovering.current && max) {
-      const y = yScale(Number(max));
-      const me = select(buyUpperLineRef.current);
-      const handle = me.select('rect');
-      const upper = me.select('line');
-      const rect = select(buyRectRef.current);
-      const lower = select(buyLowerLineRef.current).select('line');
-
-      const lowerY = Number(lower.attr('y1'));
-
-      handle.attr('y', y);
-      rect.attr('y', y).attr('height', lowerY - y);
-      upper.attr('y1', y).attr('y2', y);
+    if (isHovering.current) {
+      return;
     }
-  }, [max, type, yScale]);
+
+    handleStateChange({ type, id: 'line1', y: yMax, isLimit });
+    !isLimit && handleStateChange({ type, id: 'line2', y: yMin });
+  }, [isLimit, type, yMax, yMin]);
 
   return (
     <g
@@ -136,42 +69,30 @@ export const DragablePriceRange = ({
         isHovering.current = false;
       }}
     >
-      <rect
-        ref={buyRectRef}
-        height={30}
-        width={boundedWidth}
-        fill={color}
-        fillOpacity={0.5}
+      {!isLimit && (
+        <D3ChartRect
+          selector={selectorRect}
+          dms={dms}
+          onDrag={onDragRect}
+          color={color}
+          // initialY={30}
+        />
+      )}
+      <D3ChartHandle
+        selector={selectorH1}
+        dms={dms}
+        onDrag={onDragH1}
+        color={color}
       />
-      <g ref={buyUpperLineRef}>
-        <line x1={0} x2={boundedWidth} stroke={color} strokeWidth={10} />
-        <rect
-          {...handleDimensions}
-          fill={color}
-          transform={`translate(-${handleDimensions.width},-${
-            handleDimensions.height / 2
-          })`}
+      {!isLimit && (
+        <D3ChartHandle
+          selector={selectorH2}
+          dms={dms}
+          onDrag={onDragH2}
+          // initialY={35}
+          color={color}
         />
-      </g>
-
-      <g ref={buyLowerLineRef}>
-        <line
-          y1={35}
-          y2={35}
-          x1={0}
-          x2={boundedWidth}
-          stroke={color}
-          strokeWidth={10}
-        />
-        <rect
-          {...handleDimensions}
-          y={35}
-          fill={color}
-          transform={`translate(-${handleDimensions.width},-${
-            handleDimensions.height / 2
-          })`}
-        />
-      </g>
+      )}
     </g>
   );
 };

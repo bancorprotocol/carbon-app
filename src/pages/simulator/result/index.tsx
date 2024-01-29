@@ -5,7 +5,10 @@ import { D3ChartSimulatorBalance } from 'libs/d3/sim/D3ChartSimulatorBalance';
 import { D3ChartSimulatorPerformance } from 'libs/d3/sim/D3ChartSimulatorPerformance';
 import { D3ChartSimulatorSummary } from 'libs/d3/sim/D3ChartSimulatorSummary';
 import { SimChartWrapper } from 'libs/d3/sim/SimulatorChartWrapper';
-import { useSimulator } from 'libs/d3/sim/SimulatorProvider';
+import {
+  playbackSpeedOptions,
+  useSimulator,
+} from 'libs/d3/sim/SimulatorProvider';
 import { D3ChartSettingsProps } from 'libs/d3/types';
 import { useState } from 'react';
 
@@ -53,6 +56,14 @@ export const SimulatorResultPage = () => {
       <button onClick={() => ctx.end()}>End</button>
       <div>{ctx.status}</div>
       <div>Frames: {ctx.timer}</div>
+      <div>
+        Playback Speed:{' '}
+        {playbackSpeedOptions.map((speed) => (
+          <button key={speed} onClick={() => ctx.setPlaybackSpeed(speed)}>
+            {speed}
+          </button>
+        ))}
+      </div>
 
       {ctx.isError && <div>Error</div>}
 

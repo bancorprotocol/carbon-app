@@ -27,8 +27,8 @@ export const SimulatorSummary = ({ roi, gains, isLoading }: Props) => {
     buyMax: search.buyMax,
     sellMin: search.sellMin,
     sellMax: search.sellMax,
-    baseBudget: search.baseBudget,
-    quoteBudget: search.quoteBudget,
+    sellBudget: search.sellBudget,
+    buyBudget: search.buyBudget,
   };
 
   const strategyType = 'recurring';

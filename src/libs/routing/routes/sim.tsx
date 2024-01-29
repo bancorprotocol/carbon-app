@@ -1,39 +1,65 @@
-import { Route } from '@tanstack/react-router';
+import { redirect, Route } from '@tanstack/react-router';
 import { SimulatorProvider } from 'libs/d3';
 import { rootRoute } from 'libs/routing/routes/root';
 import { SimulatorPage } from 'pages/simulator';
 import { SimulatorResultPage } from 'pages/simulator/result';
+import { config } from 'services/web3/config';
+
+export const simulatorRootRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/simulator',
+});
 
 interface SimulatorSearchBase {
   baseToken: string;
-  baseBudget: string;
   quoteToken: string;
-  quoteBudget: string;
+  sellBudget: string;
   sellMax: string;
   sellMin: string;
   buyMax: string;
   buyMin: string;
+  buyBudget: string;
 }
 
 export interface SimulatorInputSearch extends SimulatorSearchBase {
-  isBuyLimit?: boolean;
-  isSellLimit?: boolean;
+  buyIsRange?: boolean;
+  sellIsRange?: boolean;
 }
 
-export const simulatorPage = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/simulator',
+export const simulatorRedirect = new Route({
+  getParentRoute: () => simulatorRootRoute,
+  path: '/',
+  beforeLoad: () => {
+    redirect({
+      to: '/simulator/$simulationType',
+      params: { simulationType: 'recurring' },
+      throw: true,
+    });
+  },
   component: SimulatorPage,
-  validateSearch: (search: Record<string, string>): SimulatorInputSearch => {
+});
+
+export type SimulatorType = 'recurring' | 'overlapping';
+
+export const simulatorInputRoute = new Route({
+  getParentRoute: () => simulatorRootRoute,
+  path: '$simulationType',
+  component: SimulatorPage,
+  parseParams: (params: Record<string, string>) => {
+    return { simulationType: params.simulationType as SimulatorType };
+  },
+  validateSearch: (
+    search: Record<string, string>
+  ): Partial<SimulatorInputSearch> => {
     return {
-      baseToken: search.baseToken || '',
-      baseBudget: search.baseBudget || '',
-      quoteToken: search.quoteToken || '',
-      quoteBudget: search.quoteBudget || '',
+      baseToken: search.baseToken || config.tokens.ETH,
+      quoteToken: search.quoteToken || config.tokens.USDC,
       sellMax: search.sellMax || '',
       sellMin: search.sellMin || '',
-      buyMax: (search.buyMax as string) || '',
+      sellBudget: search.sellBudget || '',
+      buyMax: search.buyMax || '',
       buyMin: search.buyMin || '',
+      buyBudget: search.buyBudget || '',
       // isBuyLimit: Boolean(search.isBuyLimit),
       // isSellLimit: Boolean(search.isSellLimit),
     };
@@ -45,9 +71,9 @@ export interface SimulatorResultSearch extends SimulatorSearchBase {
   end: string;
 }
 
-export const simulatorResultPage = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/simulator/result',
+export const simulatorResultRoute = new Route({
+  getParentRoute: () => simulatorRootRoute,
+  path: 'result',
   component: () => (
     <SimulatorProvider>
       <SimulatorResultPage />
@@ -75,10 +101,10 @@ export const simulatorResultPage = new Route({
     if (search.quoteToken.length !== 42) {
       throw new Error('Invalid base token');
     }
-    if (isNaN(Number(search.baseBudget))) {
+    if (isNaN(Number(search.sellBudget))) {
       throw new Error('Invalid base budget');
     }
-    if (isNaN(Number(search.quoteBudget))) {
+    if (isNaN(Number(search.buyBudget))) {
       throw new Error('Invalid quote budget');
     }
     if (isNaN(Number(search.sellMax))) {
@@ -98,13 +124,13 @@ export const simulatorResultPage = new Route({
       start: search.start,
       end: search.end,
       baseToken: search.baseToken.toLowerCase(),
-      baseBudget: search.baseBudget,
       quoteToken: search.quoteToken.toLowerCase(),
-      quoteBudget: search.quoteBudget,
       sellMax: search.sellMax,
       sellMin: search.sellMin,
+      sellBudget: search.sellBudget,
       buyMax: search.buyMax,
       buyMin: search.buyMin,
+      buyBudget: search.buyBudget,
     };
   },
   // @ts-ignore

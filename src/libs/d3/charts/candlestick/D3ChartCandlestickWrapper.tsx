@@ -10,6 +10,7 @@ type Props = {
   settings: D3ChartSettingsProps;
   dispatch: StrategyInputDispatch;
   state: SimulatorInputSearch;
+  marketPrice?: number;
 };
 
 const brushSize = 130;
@@ -19,6 +20,7 @@ export const D3ChartCandlestickWrapper = ({
   settings,
   dispatch,
   state,
+  marketPrice,
 }: Props) => {
   const [brushExtent] = useState<[number, number]>();
 
@@ -43,8 +45,9 @@ export const D3ChartCandlestickWrapper = ({
         <D3ChartCandlesticks
           state={state}
           dispatch={dispatch}
-          data={data}
+          data={slicedData}
           dms={dms}
+          marketPrice={marketPrice}
         />
       )}
     </SimChartWrapper>

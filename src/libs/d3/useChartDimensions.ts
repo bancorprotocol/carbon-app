@@ -3,10 +3,10 @@ import { D3ChartSettings, D3ChartSettingsProps } from './types';
 import { RefObject, useEffect, useRef, useState } from 'react';
 
 export const useChartDimensions = (
-  setttings: D3ChartSettingsProps
+  settings: D3ChartSettingsProps
 ): [RefObject<HTMLDivElement>, D3ChartSettings] => {
   const ref = useRef<HTMLDivElement>(null);
-  const dimensions = combineChartDimensions(setttings);
+  const dimensions = combineChartDimensions(settings);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 

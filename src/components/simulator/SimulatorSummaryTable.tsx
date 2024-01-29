@@ -1,12 +1,12 @@
 import { ReactComponent as Arrow } from 'assets/icons/arrow-round.svg';
+import { SimulatorResultSearch } from 'libs/routing';
 import { prettifyNumber } from 'utils/helpers';
 import { Token } from 'libs/tokens';
-import { SimulatorSearch } from 'libs/routing';
 
 interface Props {
   summaryData: Pick<
-    SimulatorSearch,
-    'sellMin' | 'sellMax' | 'buyMin' | 'buyMax' | 'baseBudget' | 'quoteBudget'
+    SimulatorResultSearch,
+    'sellMin' | 'sellMax' | 'buyMin' | 'buyMax' | 'buyBudget' | 'sellBudget'
   >;
   baseToken: Token;
   quoteToken: Token;
@@ -21,10 +21,10 @@ export const SimulatorSummaryTable = ({
   const sellMax = prettifyNumber(summaryData.sellMax, { abbreviate: true });
   const buyMin = prettifyNumber(summaryData.buyMin, { abbreviate: true });
   const buyMax = prettifyNumber(summaryData.buyMax, { abbreviate: true });
-  const baseBudget = prettifyNumber(summaryData.baseBudget, {
+  const baseBudget = prettifyNumber(summaryData.sellBudget, {
     abbreviate: true,
   });
-  const quoteBudget = prettifyNumber(summaryData.quoteBudget, {
+  const quoteBudget = prettifyNumber(summaryData.buyBudget, {
     abbreviate: true,
   });
   const baseBudgetFormatted = prettifyNumber(baseBudget, { abbreviate: true });
