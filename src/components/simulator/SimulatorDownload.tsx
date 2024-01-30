@@ -8,10 +8,13 @@ import { useState } from 'react';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { SimulatorReturn } from 'libs/queries';
 import { CsvDataService } from 'libs/csv';
+import { StrategyInput2 } from 'hooks/useStrategyInput';
 
-interface Props extends Pick<SimulatorReturn, 'data'> {}
+interface Props extends Pick<SimulatorReturn, 'data'> {
+  state2: StrategyInput2;
+}
 
-export const SimulatorDownloadMenu = ({ data }: Props) => {
+export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const items = [
@@ -40,7 +43,10 @@ export const SimulatorDownloadMenu = ({ data }: Props) => {
             date: new Date(item.date * 1e3),
           };
         });
-        CsvDataService.exportToCsv('data.csv', csvOutput);
+        const fileName = `${state2.baseToken?.symbol ?? ''}_${
+          state2.quoteToken?.symbol ?? ''
+        }_${state2.simulationType}`;
+        CsvDataService.exportToCsv(fileName, csvOutput);
       },
       icon: <IconLog className="h-20 w-20" />,
     },

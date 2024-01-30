@@ -2,16 +2,19 @@ import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { SimulatorPageTabs } from './SimulatorPageTabs';
 import { SimulatorDownloadMenu } from './SimulatorDownload';
 import { SimulatorReturn } from 'libs/queries';
+import { StrategyInput2 } from 'hooks/useStrategyInput';
 
 interface Props extends Pick<SimulatorReturn, 'data'> {
   showSummary: boolean;
   setShowSummary: React.Dispatch<React.SetStateAction<boolean>>;
+  state2: StrategyInput2;
 }
 
 export const SimulatorChartHeader = ({
   showSummary,
   setShowSummary,
   data,
+  state2,
 }: Props) => {
   const startTimestamp = data![0].date * 1e3; // ms
   const endTimestamp = data![data.length - 1].date * 1e3; // ms
@@ -44,7 +47,7 @@ export const SimulatorChartHeader = ({
           setShowSummary={setShowSummary}
           showSummary={showSummary}
         />
-        <SimulatorDownloadMenu data={data} />
+        <SimulatorDownloadMenu data={data} state2={state2} />
       </article>
     </section>
   );
