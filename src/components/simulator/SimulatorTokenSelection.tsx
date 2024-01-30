@@ -1,39 +1,28 @@
-import { SimulatorSearch } from 'libs/routing';
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
+import { StrategyInputDispatch } from 'hooks/useStrategyInput';
 
 interface Props {
   base: Token | undefined;
   quote: Token | undefined;
-  setBaseToken: React.Dispatch<React.SetStateAction<Token | undefined>>;
-  setQuoteToken: React.Dispatch<React.SetStateAction<Token | undefined>>;
-  params: SimulatorSearch;
-  setParams: React.Dispatch<React.SetStateAction<SimulatorSearch>>;
+  dispatch: StrategyInputDispatch;
 }
 
 export const SimulatorTokenSelection: FC<Props> = ({
   base,
   quote,
-  setBaseToken,
-  setQuoteToken,
-  params,
-  setParams,
+  dispatch,
 }) => {
   const { openModal } = useModal();
 
   const swapTokens = () => {
     if (base && quote) {
-      setBaseToken(quote);
-      setQuoteToken(base);
-      setParams({
-        ...params,
-        baseToken: quote.address,
-        quoteToken: base.address,
-      });
+      dispatch('baseToken', quote.address);
+      dispatch('quoteToken', base.address);
     }
   };
 
@@ -67,8 +56,7 @@ export const SimulatorTokenSelection: FC<Props> = ({
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
-                setBaseToken(token);
-                setParams({ ...params, baseToken: token.address });
+                dispatch('baseToken', token.address);
               },
               excludedTokens: [quote?.address ?? ''],
               isBaseToken: true,
@@ -100,8 +88,7 @@ export const SimulatorTokenSelection: FC<Props> = ({
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
-                setQuoteToken(token);
-                setParams({ ...params, quoteToken: token.address });
+                dispatch('quoteToken', token.address);
               },
               excludedTokens: [base?.address ?? ''],
               isBaseToken: false,

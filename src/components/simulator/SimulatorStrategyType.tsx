@@ -3,26 +3,29 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
 import { cn } from 'utils/helpers';
+import { SimulatorType } from 'libs/routing/routes/sim';
+import { useNavigate } from '@tanstack/react-router';
 
 interface Props {
-  strategyType: string | undefined;
-  setStrategyType: React.Dispatch<React.SetStateAction<string | undefined>>;
+  strategyType: SimulatorType;
 }
 
-export const SimulatorStrategyType: FC<Props> = ({
-  strategyType,
-  setStrategyType,
-}) => {
+export const SimulatorStrategyType: FC<Props> = ({ strategyType }) => {
   const list = useRef<HTMLUListElement>(null);
+  const navigate = useNavigate();
 
-  const items = [
+  const items: {
+    label: SimulatorType;
+    svg: JSX.Element;
+    tooltipText: string;
+  }[] = [
     {
-      label: 'Recurring',
+      label: 'recurring',
       svg: <IconTwoRanges className="h-16 w-37" />,
       tooltipText: 'TBD',
     },
     {
-      label: 'Overlapping',
+      label: 'overlapping',
       svg: <IconOverlappingStrategy className="h-16 w-37" />,
       tooltipText: 'TBD',
     },
@@ -65,7 +68,15 @@ export const SimulatorStrategyType: FC<Props> = ({
                 role="tab"
                 aria-controls={'panel-' + label}
                 aria-selected={strategyType === label}
-                onClick={() => setStrategyType(label)}
+                onClick={() =>
+                  navigate({
+                    to: '/simulator/$simulationType',
+                    search: {},
+                    params: { simulationType: label },
+                    replace: true,
+                    resetScroll: false,
+                  })
+                }
                 className={cn(
                   'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
                   'md:px-12',
@@ -77,7 +88,7 @@ export const SimulatorStrategyType: FC<Props> = ({
               >
                 {svg}
                 <span
-                  className={`${
+                  className={`capitalize ${
                     strategyType === label ? 'text-white' : 'text-white/40'
                   }`}
                 >

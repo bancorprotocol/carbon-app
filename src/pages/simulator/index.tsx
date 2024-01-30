@@ -100,54 +100,12 @@ export const SimulatorPage = () => {
           </div>
         </div>
         <div className="absolute top-0 w-[440px] space-y-20">
-          <div className={'space-y-10'}>
-            <div className={'flex space-x-20'}>
-              <Button
-                className={'w-[200px]'}
-                onClick={() => {
-                  openModal('tokenLists', {
-                    onClick: (token) => {
-                      dispatch('baseToken', token.address);
-                    },
-                  });
-                }}
-              >
-                {state2.baseToken
-                  ? state2.baseToken.symbol
-                  : 'Select Base Token'}
-              </Button>
-            </div>
-
-            <div className={'flex space-x-20'}>
-              <Button
-                className={'w-[200px]'}
-                onClick={() => {
-                  openModal('tokenLists', {
-                    onClick: (token) => {
-                      dispatch('quoteToken', token.address);
-                    },
-                  });
-                }}
-              >
-                {state2.quoteToken
-                  ? state2.quoteToken.symbol
-                  : 'Select Quote Token'}
-              </Button>
-            </div>
-          </div>
-
           <SimulatorTokenSelection
-            base={baseToken}
-            quote={quoteToken}
-            setBaseToken={setBaseToken}
-            setQuoteToken={setQuoteToken}
-            params={params}
-            setParams={setParams}
+            base={state2.baseToken}
+            quote={state2.quoteToken}
+            dispatch={dispatch}
           />
-          <SimulatorStrategyType
-            strategyType={strategyType}
-            setStrategyType={setStrategyType}
-          />
+          <SimulatorStrategyType strategyType={state2.simulationType} />
 
           <BuySellBlock
             buy
