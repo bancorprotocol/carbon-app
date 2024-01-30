@@ -11,27 +11,20 @@ interface Props {
   state2: StrategyInput2;
 }
 
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: '2-digit',
+});
+
 export const SimulatorChartHeader = ({
   showSummary,
   setShowSummary,
   data,
   state2,
 }: Props) => {
-  const startTimestamp = data![0].date * 1e3; // ms
-  const endTimestamp = data![data.length - 1].date * 1e3; // ms
-
-  const dateFormatOptions: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-  };
-
-  const startDate = new Intl.DateTimeFormat('en-US', dateFormatOptions).format(
-    startTimestamp
-  );
-  const endDate = new Intl.DateTimeFormat('en-US', dateFormatOptions).format(
-    endTimestamp
-  );
+  const startDate = dateFormatter.format(data[0].date * 1e3);
+  const endDate = dateFormatter.format(data[data.length - 1].date * 1e3);
 
   return (
     <section className="flex flex-wrap items-center justify-evenly gap-8 py-8 px-24 md:justify-between">
