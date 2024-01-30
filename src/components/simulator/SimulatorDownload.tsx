@@ -8,10 +8,13 @@ import { useState } from 'react';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { SimulatorReturn } from 'libs/queries';
 import { CsvDataService } from 'libs/csv';
+import { StrategyInput2 } from 'hooks/useStrategyInput';
 
-interface Props extends Pick<SimulatorReturn, 'data'> {}
+interface Props extends Pick<SimulatorReturn, 'data'> {
+  state2: StrategyInput2;
+}
 
-export const SimulatorDownloadMenu = ({ data }: Props) => {
+export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const items = [
@@ -34,13 +37,14 @@ export const SimulatorDownloadMenu = ({ data }: Props) => {
       title: 'Simulation Log',
       subTitle: 'CSV',
       action: () => {
-        const csvOutput = data.map((item) => {
-          return {
-            ...item,
-            date: new Date(item.date * 1e3),
-          };
-        });
-        CsvDataService.exportToCsv('data.csv', csvOutput);
+        const csvOutput = data.map((item) => ({
+          ...item,
+          date: new Date(item.date * 1e3),
+        }));
+        const fileName = `${state2.baseToken?.symbol ?? ''}_${
+          state2.quoteToken?.symbol ?? ''
+        }_${state2.simulationType}`;
+        CsvDataService.exportToCsv(fileName, csvOutput);
       },
       icon: <IconLog className="h-20 w-20" />,
     },
@@ -58,7 +62,7 @@ export const SimulatorDownloadMenu = ({ data }: Props) => {
           {...attr}
           className={cn(
             buttonStyles({ variant: 'black' }),
-            'relative h-40 w-40 border-silver !p-0'
+            'relative grid h-40 w-40 place-items-center border-silver py-11 px-0'
           )}
           onClick={(e) => {
             setIsOpen(true);
@@ -66,35 +70,30 @@ export const SimulatorDownloadMenu = ({ data }: Props) => {
           }}
           aria-label="Download Simulation"
         >
-          <span className="flex h-36 w-36 items-center justify-center">
-            <IconDownload className="h-18 w-18" />
-          </span>
+          <IconDownload className="h-18 w-18" />
         </button>
       )}
     >
       {items?.map(({ id, action, title, subTitle, icon }, index) => {
         return (
-          <div key={`${index}_${id}`} className="border-grey5">
-            <button
-              role="menuitem"
-              aria-labelledby="optionTitle"
-              className="hover:bg-body w-full rounded-6 p-8 text-left"
-              onClick={() => {
-                action();
-                setIsOpen(false);
-              }}
-            >
-              <div className="flex items-center gap-y-8">
-                {icon}
-                <span id="optionTitle" className="mx-8 text-14 font-weight-500">
-                  {title}
-                </span>
-                <span className="text-14 font-weight-400 text-white/40">
-                  {subTitle}
-                </span>
-              </div>
-            </button>
-          </div>
+          <button
+            key={`${index}_${id}`}
+            role="menuitem"
+            aria-labelledby="optionTitle"
+            className="hover:bg-body flex w-full rounded-6 p-8 text-left"
+            onClick={() => {
+              action();
+              setIsOpen(false);
+            }}
+          >
+            <div className="flex items-center gap-8 text-14">
+              {icon}
+              <span id="optionTitle" className="font-weight-500">
+                {title}
+              </span>
+              <span className="text-white/40">{subTitle}</span>
+            </div>
+          </button>
         );
       })}
     </DropdownMenu>

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SimulatorChartHeader } from 'components/simulator/SimulatorChartHeader';
 import { SimulatorSummary } from 'components/simulator/SimulatorSummary';
+import { useStrategyInput } from 'hooks/useStrategyInput';
 import { D3ChartSimulatorPrice } from 'libs/d3';
 import { D3ChartSimulatorBalance } from 'libs/d3/sim/D3ChartSimulatorBalance';
 import { D3ChartSimulatorPerformance } from 'libs/d3/sim/D3ChartSimulatorPerformance';
@@ -45,6 +46,7 @@ export const SimulatorResultPage = () => {
   const ctx = useSimulator();
   const search = useSearch({ from: '/simulator/result' });
   const [showSummary, setShowSummary] = useState(false);
+  const { state2 } = useStrategyInput();
   const simulationType = 'recurring';
 
   useEffect(() => {
@@ -76,11 +78,7 @@ export const SimulatorResultPage = () => {
 
       <div className="rounded-20 bg-silver p-20">
         <>
-          <SimulatorSummary
-            roi={ctx.roi}
-            gains={ctx.gains}
-            isLoading={ctx.isLoading}
-          />
+          <SimulatorSummary roi={ctx.roi} gains={ctx.gains} state2={state2} />
           {!ctx.isLoading && !!ctx.data && ctx.status !== 'idle' ? (
             <>
               <div className="rounded-10 bg-black py-10">
@@ -88,6 +86,7 @@ export const SimulatorResultPage = () => {
                   data={ctx.data}
                   setShowSummary={setShowSummary}
                   showSummary={showSummary}
+                  state2={state2}
                 />
                 {!showSummary ? (
                   <>

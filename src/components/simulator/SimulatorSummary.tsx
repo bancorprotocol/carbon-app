@@ -1,92 +1,55 @@
-import { Link, useSearch } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
-import { cn } from 'utils/helpers';
 import { SimulatorSummaryGains } from './SimulatorSummaryGains';
 import { SimulatorSummaryRoi } from './SimulatorSummaryRoi';
 import { SimulatorSummaryTokens } from './SimulatorTokens';
 import { SimulatorSummaryTable } from './SimulatorSummaryTable';
-import { useTokens } from 'hooks/useTokens';
+import { StrategyInput2 } from 'hooks/useStrategyInput';
 
 interface Props {
   roi?: number;
   gains?: number;
-  isLoading: boolean;
+  state2: StrategyInput2;
 }
 
-export const SimulatorSummary = ({
-  roi = 0.0,
-  gains = 0.0,
-  isLoading,
-}: Props) => {
-  const search = useSearch({ from: '/simulator/result' });
+export const SimulatorSummary = ({ roi = 0.0, gains = 0.0, state2 }: Props) => {
+  const baseToken = state2.baseToken!;
+  const quoteToken = state2.quoteToken!;
 
-  const { getTokenById } = useTokens();
-  const baseToken = getTokenById(search.baseToken);
-  const quoteToken = getTokenById(search.quoteToken);
-
-  const summaryData = {
-    buyMin: search.buyMin,
-    buyMax: search.buyMax,
-    sellMin: search.sellMin,
-    sellMax: search.sellMax,
-    sellBudget: search.sellBudget,
-    buyBudget: search.buyBudget,
-  };
-
-  const strategyType = 'recurring';
+  const strategyType = state2.simulationType;
 
   return (
     <header className="my-8 flex flex-wrap gap-8">
-      <section
-        className={cn(
-          'flex flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between',
-          { 'animate-pulse': isLoading, 'h-82': isLoading }
-        )}
-      >
-        {!isLoading && (
-          <>
-            <SimulatorSummaryTokens
-              baseToken={baseToken!}
-              quoteToken={quoteToken!}
-              strategyType={strategyType}
-            />
-            <SimulatorSummaryTable
-              summaryData={summaryData}
-              baseToken={baseToken!}
-              quoteToken={quoteToken!}
-            />
-          </>
-        )}
+      <section className="flex flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between">
+        <SimulatorSummaryTokens
+          baseToken={baseToken}
+          quoteToken={quoteToken}
+          strategyType={strategyType}
+        />
+        <SimulatorSummaryTable
+          buy={state2.buy}
+          sell={state2.sell}
+          baseToken={baseToken}
+          quoteToken={quoteToken}
+        />
       </section>
-      <section
-        className={cn(
-          'flex flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between',
-          { 'animate-pulse': isLoading, 'h-82': isLoading }
-        )}
-      >
-        {!isLoading && (
-          <>
-            <SimulatorSummaryGains
-              portfolioGains={gains}
-              quoteToken={quoteToken!}
-            />
-            <SimulatorSummaryRoi portfolioRoi={roi} />
-            <Link
-              to="/strategies/create"
-              search={{
-                base: baseToken!.address,
-                quote: quoteToken!.address,
-                strategyType:
-                  strategyType === 'recurring' ? 'recurring' : undefined,
-                strategySettings:
-                  strategyType === 'recurring' ? 'range' : 'overlapping',
-              }}
-              className={buttonStyles({ variant: 'success', size: 'md' })}
-            >
-              Create strategy
-            </Link>
-          </>
-        )}
+      <section className="flex flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between">
+        <SimulatorSummaryGains portfolioGains={gains} quoteToken={quoteToken} />
+        <SimulatorSummaryRoi portfolioRoi={roi} />
+        <Link
+          to="/strategies/create"
+          search={{
+            base: baseToken?.address,
+            quote: quoteToken?.address,
+            strategyType:
+              strategyType === 'recurring' ? 'recurring' : undefined,
+            strategySettings:
+              strategyType === 'recurring' ? 'range' : 'overlapping',
+          }}
+          className={buttonStyles({ variant: 'success', size: 'md' })}
+        >
+          Create strategy
+        </Link>
       </section>
     </header>
   );

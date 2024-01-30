@@ -1,33 +1,30 @@
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { SimulatorPageTabs } from './SimulatorPageTabs';
 import { SimulatorDownloadMenu } from './SimulatorDownload';
-import { SimulatorReturn } from 'libs/queries';
+import { SimulatorData } from 'libs/queries';
+import { StrategyInput2 } from 'hooks/useStrategyInput';
 
-interface Props extends Pick<SimulatorReturn, 'data'> {
+interface Props {
+  data: Array<SimulatorData>;
   showSummary: boolean;
   setShowSummary: React.Dispatch<React.SetStateAction<boolean>>;
+  state2: StrategyInput2;
 }
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: '2-digit',
+});
 
 export const SimulatorChartHeader = ({
   showSummary,
   setShowSummary,
   data,
+  state2,
 }: Props) => {
-  const startTimestamp = data![0].date * 1e3; // ms
-  const endTimestamp = data![data.length - 1].date * 1e3; // ms
-
-  const dateFormatOptions: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-  };
-
-  const startDate = new Intl.DateTimeFormat('en-US', dateFormatOptions).format(
-    startTimestamp
-  );
-  const endDate = new Intl.DateTimeFormat('en-US', dateFormatOptions).format(
-    endTimestamp
-  );
+  const startDate = dateFormatter.format(data[0].date * 1e3);
+  const endDate = dateFormatter.format(data[data.length - 1].date * 1e3);
 
   return (
     <section className="flex flex-wrap items-center justify-evenly gap-8 py-8 px-24 md:justify-between">
@@ -44,7 +41,7 @@ export const SimulatorChartHeader = ({
           setShowSummary={setShowSummary}
           showSummary={showSummary}
         />
-        <SimulatorDownloadMenu data={data} />
+        <SimulatorDownloadMenu data={data} state2={state2} />
       </article>
     </section>
   );
