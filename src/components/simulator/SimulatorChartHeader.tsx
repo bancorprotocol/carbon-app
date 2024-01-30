@@ -1,10 +1,11 @@
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { SimulatorPageTabs } from './SimulatorPageTabs';
 import { SimulatorDownloadMenu } from './SimulatorDownload';
-import { SimulatorReturn } from 'libs/queries';
+import { SimulatorData } from 'libs/queries';
 import { StrategyInput2 } from 'hooks/useStrategyInput';
 
-interface Props extends Pick<SimulatorReturn, 'data'> {
+interface Props {
+  data: Array<SimulatorData>;
   showSummary: boolean;
   setShowSummary: React.Dispatch<React.SetStateAction<boolean>>;
   state2: StrategyInput2;
