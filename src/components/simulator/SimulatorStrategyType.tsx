@@ -1,10 +1,10 @@
-import { FC, useRef, KeyboardEvent } from 'react';
+import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
 import { cn } from 'utils/helpers';
 import { SimulatorType } from 'libs/routing/routes/sim';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 
 interface Props {
   strategyType: SimulatorType;
@@ -17,9 +17,6 @@ interface ItemProps {
 }
 
 export const SimulatorStrategyType: FC<Props> = ({ strategyType }) => {
-  const list = useRef<HTMLUListElement>(null);
-  const navigate = useNavigate();
-
   const items: ItemProps[] = [
     {
       label: 'recurring',
@@ -33,21 +30,6 @@ export const SimulatorStrategyType: FC<Props> = ({ strategyType }) => {
     },
   ];
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      const buttons = list.current?.querySelectorAll('button');
-      if (!buttons) return;
-      for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i] !== document.activeElement) continue;
-        const nextIndex =
-          e.key === 'ArrowRight'
-            ? (i + 1) % buttons.length
-            : (i - 1 + buttons.length) % buttons.length;
-        return buttons[nextIndex].focus();
-      }
-    }
-  };
-
   return (
     <section
       className="bg-secondary rounded-10 p-16"
@@ -56,12 +38,7 @@ export const SimulatorStrategyType: FC<Props> = ({ strategyType }) => {
       <header className="mb-16 flex items-center justify-between">
         <h2 className="m-0 text-18 font-weight-500">Strategy Type</h2>
       </header>
-      <article
-        onKeyDown={handleKeyDown}
-        ref={list}
-        role="tablist"
-        className={`grid grid-cols-2 gap-8`}
-      >
+      <article role="tablist" className={`grid grid-cols-2 gap-8`}>
         {items.map(({ label, svg, tooltipText }) => (
           <Link
             role="tab"
