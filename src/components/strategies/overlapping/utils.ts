@@ -1,22 +1,6 @@
 import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 
-export const getBuyMax = (sellMax: number, spread: number) => {
-  return sellMax / (1 + spread / 100);
-};
-
-export const getSellMin = (buyMin: number, spread: number) => {
-  return buyMin * (1 + spread / 100);
-};
-
-export const getBuyMarginalPrice = (marketPrice: number, spread: number) => {
-  return marketPrice / (1 + spread / 100) ** 0.5;
-};
-
-export const getSellMarginalPrice = (marketPrice: number, spread: number) => {
-  return marketPrice * (1 + spread / 100) ** 0.5;
-};
-
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
 };
@@ -58,8 +42,8 @@ export const getSpread = (strategy: Strategy) => {
 };
 
 export const getRoundedSpread = (strategy: Strategy) => {
-  const spreadPPRM = getSpread(strategy);
-  return Number(spreadPPRM.toFixed(2));
+  const spread = getSpread(strategy);
+  return Number(spread.toFixed(2));
 };
 
 interface BuyOrder {
