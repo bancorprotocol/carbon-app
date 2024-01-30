@@ -62,7 +62,7 @@ export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
           {...attr}
           className={cn(
             buttonStyles({ variant: 'black' }),
-            'relative grid h-40 w-40 place-items-center border-silver py-11 px-0'
+            'flex h-40 w-40 items-center justify-center border-silver p-0'
           )}
           onClick={(e) => {
             setIsOpen(true);
