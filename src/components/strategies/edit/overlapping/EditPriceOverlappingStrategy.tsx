@@ -33,34 +33,16 @@ interface Props {
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
-  const min = order0.min;
-  const max = order1.max;
   const marketPrice = useMarketPrice({ base, quote });
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
-    order: { min, max, price: '', isRange: true },
+    order: { min: order0.min, max: order1.max, price: '', isRange: true },
   });
 
   const [spread, setSpread] = useState(getRoundedSpread(strategy));
   const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
   const [mounted, setMounted] = useState(false);
-
-  const setOverlappingParams = (min: string, max: string) => {
-    const params = calculateOverlappingPrices(
-      min,
-      max,
-      marketPrice.toString(),
-      spread.toString()
-    );
-    order0.setMin(min);
-    order0.setMax(params.buyPriceHigh);
-    order0.setMarginalPrice(params.buyPriceMarginal);
-    order1.setMin(params.sellPriceLow);
-    order1.setMax(max);
-    order1.setMarginalPrice(params.sellPriceMarginal);
-    return params;
-  };
 
   const setBuyBudget = (
     sellBudget: string,
@@ -100,49 +82,59 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     order1.setBudget(sellBudget);
   };
 
+  const setOverlappingParams = () => {
+    const min = order0.min;
+    const max = order1.max;
+    if (!isValidRange(min, max) || !isValidSpread(spread)) return;
+    const prices = calculateOverlappingPrices(
+      min,
+      max,
+      marketPrice.toString(),
+      spread.toString()
+    );
+
+    // Set prices
+    order0.setMin(min);
+    order0.setMax(prices.buyPriceHigh);
+    order0.setMarginalPrice(prices.buyPriceMarginal);
+    order1.setMin(prices.sellPriceLow);
+    order1.setMax(max);
+    order1.setMarginalPrice(prices.sellPriceMarginal);
+
+    // Set budget
+    const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
+    const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
+    if (isMinAboveMarket(buyOrder)) {
+      setAnchoredOrder('sell');
+      setBuyBudget(order1.budget, min, max);
+    } else if (isMaxBelowMarket(sellOrder)) {
+      setAnchoredOrder('buy');
+      setSellBudget(order0.budget, min, max);
+    } else {
+      if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+      if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
+    }
+  };
+
   // Initialize order when market price is available
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!mounted) return setMounted(true);
-    if (isValidRange(min, max) && isValidSpread(spread)) {
-      const params = setOverlappingParams(min, max);
-      const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
-      const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
-      if (isMinAboveMarket(buyOrder)) {
-        setAnchoredOrder('sell');
-        setBuyBudget(order1.budget, min, max);
-      } else if (isMaxBelowMarket(sellOrder)) {
-        setAnchoredOrder('buy');
-        setSellBudget(order0.budget, min, max);
-      } else {
-        if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-        if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-      }
-    }
+    setOverlappingParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
 
   // Update on buyMin changes
   useEffect(() => {
-    const min = order0.min;
-    const max = order1.max;
-    if (!min) return;
+    if (!order0.min) return;
     if (!mounted) return setMounted(true);
-    if (isValidRange(min, max) && isValidSpread(spread)) {
-      const params = setOverlappingParams(min, max);
-      const marginalPrice = params.buyPriceMarginal;
-      if (isMinAboveMarket({ min, marginalPrice })) {
-        setAnchoredOrder('sell');
-        setBuyBudget(order1.budget, min, max);
-      } else {
-        if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-        if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-      }
-    }
+    setOverlappingParams();
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const minSellMax = getMinSellMax(Number(min), spread);
-      if (Number(max) < minSellMax) order1.setMax(minSellMax.toFixed(decimals));
+      const minSellMax = getMinSellMax(Number(order0.min), spread);
+      if (Number(order1.max) < minSellMax) {
+        order1.setMax(minSellMax.toFixed(decimals));
+      }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,25 +142,15 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   // Update on sellMax changes
   useEffect(() => {
-    const min = order0.min;
-    const max = order1.max;
-    if (!max) return;
+    if (!order1.max) return;
     if (!mounted) return setMounted(true);
-    if (isValidRange(min, max) && isValidSpread(spread)) {
-      const params = setOverlappingParams(min, max);
-      const marginalPrice = params.sellPriceMarginal;
-      if (isMaxBelowMarket({ max, marginalPrice })) {
-        setAnchoredOrder('buy');
-        setSellBudget(order0.budget, min, max);
-      } else {
-        if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-        if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-      }
-    }
+    setOverlappingParams();
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const maxBuyMin = getMaxBuyMin(Number(max), spread);
-      if (Number(min) > maxBuyMin) order0.setMin(maxBuyMin.toFixed(decimals));
+      const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
+      if (Number(order0.min) > maxBuyMin) {
+        order0.setMin(maxBuyMin.toFixed(decimals));
+      }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps

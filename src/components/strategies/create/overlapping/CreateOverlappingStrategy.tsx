@@ -37,8 +37,6 @@ export interface OverlappingStrategyProps {
   setSpread: Dispatch<SetStateAction<number>>;
 }
 
-type OverlappingPriceParams = ReturnType<typeof calculateOverlappingPrices>;
-
 const getInitialPrices = (marketPrice: string | number) => {
   const currentPrice = new SafeDecimal(marketPrice);
   return {
@@ -64,22 +62,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     },
     buy: true,
   });
-
-  const setOverlappingParams = (min: string, max: string) => {
-    const params = calculateOverlappingPrices(
-      min,
-      max,
-      marketPrice.toString(),
-      spread.toString()
-    );
-    order0.setMin(min);
-    order1.setMax(max);
-    order0.setMax(params.buyPriceHigh);
-    order0.setMarginalPrice(params.buyPriceMarginal);
-    order1.setMin(params.sellPriceLow);
-    order1.setMarginalPrice(params.sellPriceMarginal);
-    return params;
-  };
 
   const setBuyBudget = (
     sellBudget: string,
@@ -129,11 +111,28 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
   };
 
-  const setBudget = (params: OverlappingPriceParams) => {
-    const min = params.buyPriceLow;
-    const max = params.sellPriceHigh;
-    const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
-    const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
+  const setOverlappingParams = () => {
+    const min = order0.min;
+    const max = order1.max;
+    if (!isValidRange(min, max) || !isValidSpread(spread)) return;
+    const prices = calculateOverlappingPrices(
+      min,
+      max,
+      marketPrice.toString(),
+      spread.toString()
+    );
+
+    // Set prices
+    order0.setMin(min);
+    order1.setMax(max);
+    order0.setMax(prices.buyPriceHigh);
+    order0.setMarginalPrice(prices.buyPriceMarginal);
+    order1.setMin(prices.sellPriceLow);
+    order1.setMarginalPrice(prices.sellPriceMarginal);
+
+    // Set budgets
+    const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
+    const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
     if (isMinAboveMarket(buyOrder)) {
       setAnchoredOrder('sell');
       setBuyBudget(order1.budget, min, max);
@@ -151,31 +150,24 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     if (!quote || !base || marketPrice <= 0) return;
     if (!order0.min && !order1.max) {
       const { min, max } = getInitialPrices(marketPrice);
-      if (isValidRange(min, max)) setOverlappingParams(min, max);
+      order0.setMin(min);
+      order1.setMax(max);
     } else {
-      const min = order0.min;
-      const max = order1.max;
-      if (isValidRange(min, max) && isValidSpread(spread)) {
-        const params = setOverlappingParams(min, max);
-        setBudget(params);
-      }
+      setOverlappingParams();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
 
   // Update on buyMin changes
   useEffect(() => {
-    const min = order0.min;
-    const max = order1.max;
-    if (!min) return;
-    if (isValidRange(min, max) && isValidSpread(spread)) {
-      const params = setOverlappingParams(min, max);
-      setBudget(params);
-    }
+    if (!order0.min) return;
+    setOverlappingParams();
+
+    // automatically update max if min > max
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const minSellMax = getMinSellMax(Number(min), spread);
-      if (Number(max) < minSellMax) {
+      const minSellMax = getMinSellMax(Number(order0.min), spread);
+      if (Number(order1.max) < minSellMax) {
         order1.setMax(sanitizeNumber(minSellMax.toString(), decimals));
       }
     }, 1000);
@@ -185,17 +177,13 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   // Update on sellMax changes
   useEffect(() => {
-    const min = order0.min;
-    const max = order1.max;
-    if (!max) return;
-    if (isValidRange(min, max) && isValidSpread(spread)) {
-      const params = setOverlappingParams(min, max);
-      setBudget(params);
-    }
+    if (!order1.max) return;
+    setOverlappingParams();
+    // automatically update min if min > max
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
-      const maxBuyMin = getMaxBuyMin(Number(max), spread);
-      if (Number(min) > maxBuyMin) {
+      const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
+      if (Number(order0.min) > maxBuyMin) {
         order0.setMin(sanitizeNumber(maxBuyMin.toString(), decimals));
       }
     }, 1000);
