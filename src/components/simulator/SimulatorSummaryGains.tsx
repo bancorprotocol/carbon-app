@@ -1,6 +1,6 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn, prettifySignedNumber } from 'utils/helpers';
 import { FC } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
@@ -10,13 +10,19 @@ interface Props {
   portfolioGains: number;
 }
 
-export const SimulatorSummaryGains = ({
+export const SimulatorSummaryGains: FC<Props> = ({
   portfolioGains,
   quoteToken,
-}: Props) => {
-  const quoteFiat = useFiatCurrency(quoteToken);
-  const budgetFormatted = prettifyNumber(portfolioGains, {
-    currentCurrency: quoteFiat.selectedFiatCurrency,
+}) => {
+  const { selectedFiatCurrency, getFiatValue } = useFiatCurrency(quoteToken);
+
+  const portfolioGainsRounded = portfolioGains.toFixed(2);
+  const portfolioGainsFiat = getFiatValue(portfolioGainsRounded);
+  const portfolioGainsFiatFormatted = prettifySignedNumber(portfolioGainsFiat, {
+    currentCurrency: selectedFiatCurrency,
+    round: true,
+    decimals: 2,
+    noSubscript: true,
   });
 
   return (
@@ -27,7 +33,7 @@ export const SimulatorSummaryGains = ({
           <IconTooltip className="h-10 w-10" />
         </h4>
       </Tooltip>
-      <p className={`text-24 font-weight-500`}>{budgetFormatted}</p>
+      <p className={`text-24 font-weight-500`}>{portfolioGainsFiatFormatted}</p>
     </article>
   );
 };
