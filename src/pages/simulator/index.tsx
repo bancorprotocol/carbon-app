@@ -12,7 +12,9 @@ import {
   useCompareTokenPrice,
   useGetTokenPriceHistory,
 } from 'libs/queries/extApi/tokenPrice';
-import { useEffect, useState } from 'react';
+import { StrategyDirection } from 'libs/routing';
+import { SafeDecimal } from 'libs/safedecimal';
+import { useCallback, useEffect, useState } from 'react';
 import { cn } from 'utils/helpers';
 
 const chartSettings: D3ChartSettingsProps = {
@@ -39,25 +41,94 @@ export const SimulatorPage = () => {
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
 
+  // useEffect(() => {
+  //   if (!marketPrice || !initBuyRange) return;
+  //
+  //   const max = (marketPrice - marketPrice * 0.1).toString();
+  //   const min = (marketPrice - marketPrice * 0.2).toString();
+  //
+  //   if (!state.buyMax && !state.buyMin && state2.buy.isRange) {
+  //     dispatch('buyMax', max);
+  //     dispatch('buyMin', min);
+  //   }
+  //   if (!state2.buy.isRange) {
+  //     dispatch('buyMax', max);
+  //     dispatch('buyMin', max);
+  //   }
+  //
+  //   setInitBuyRange(false);
+  // }, [
+  //   initBuyRange,
+  //   dispatch,
+  //   marketPrice,
+  //   state.buyMax,
+  //   state.buyMin,
+  //   state2.buy.isRange,
+  // ]);
+
+  const handleDefaultValues = useCallback(
+    (type: StrategyDirection) => {
+      const init = type === 'buy' ? initBuyRange : initSellRange;
+      const setInit = type === 'buy' ? setInitBuyRange : setInitSellRange;
+
+      if (!marketPrice || !init) return;
+      setInit(false);
+
+      const operation = type === 'buy' ? 'minus' : 'plus';
+
+      const max = new SafeDecimal(marketPrice)
+        [operation](marketPrice * 0.1)
+        .toFixed();
+
+      const min = new SafeDecimal(marketPrice)
+        [operation](marketPrice * 0.2)
+        .toFixed();
+
+      if (!(!state2[type].max && !state2[type].min)) {
+        return;
+      }
+
+      if (state2[type].isRange) {
+        dispatch(`${type}Max`, max);
+        dispatch(`${type}Min`, min);
+      } else {
+        dispatch(`${type}Max`, max);
+        dispatch(`${type}Min`, max);
+      }
+    },
+    [dispatch, initBuyRange, initSellRange, marketPrice, state2]
+  );
+
   useEffect(() => {
-    if (!marketPrice || !initBuyRange) return;
+    handleDefaultValues('buy');
+    handleDefaultValues('sell');
+  }, [handleDefaultValues]);
 
-    if (!state.buyMax && !state.buyMin) {
-      dispatch('buyMax', (marketPrice - marketPrice * 0.1).toString());
-      dispatch('buyMin', (marketPrice - marketPrice * 0.2).toString());
-    }
-    setInitBuyRange(false);
-  }, [initBuyRange, dispatch, marketPrice, state.buyMax, state.buyMin]);
-
-  useEffect(() => {
-    if (!marketPrice || !initSellRange) return;
-
-    if (!state.sellMax && !state.sellMin) {
-      dispatch('sellMax', (marketPrice + marketPrice * 0.2).toString());
-      dispatch('sellMin', (marketPrice + marketPrice * 0.1).toString());
-    }
-    setInitSellRange(false);
-  }, [dispatch, initSellRange, marketPrice, state.sellMax, state.sellMin]);
+  // useEffect(() => {
+  //   if (!marketPrice || !initSellRange) return;
+  //
+  //   const max = (marketPrice + marketPrice * 0.1).toString();
+  //   const min = (marketPrice + marketPrice * 0.2).toString();
+  //
+  //   if (!state.sellMax && !state.sellMin) {
+  //     if (state2.sell.isRange) {
+  //       dispatch('sellMax', max);
+  //       dispatch('sellMin', min);
+  //     } else {
+  //       dispatch('sellMax', max);
+  //       dispatch('sellMin', max);
+  //     }
+  //   }
+  //
+  //   setInitSellRange(false);
+  // }, [
+  //   dispatch,
+  //   initSellRange,
+  //   marketPrice,
+  //   state.sellMax,
+  //   state.sellMin,
+  //   state2.sell.isRange,
+  // ]);
 
   const priceHistoryQuery = useGetTokenPriceHistory({
     baseToken: state.baseToken,
