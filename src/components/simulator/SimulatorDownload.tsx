@@ -76,25 +76,24 @@ export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
     >
       {items?.map(({ id, action, title, subTitle, icon }, index) => {
         return (
-          <div key={`${index}_${id}`} className="border-grey5">
-            <button
-              role="menuitem"
-              aria-labelledby="optionTitle"
-              className="hover:bg-body w-full rounded-6 p-8 text-left"
-              onClick={() => {
-                action();
-                setIsOpen(false);
-              }}
-            >
-              <div className="flex items-center gap-8 text-14">
-                {icon}
-                <span id="optionTitle" className="font-weight-500">
-                  {title}
-                </span>
-                <span className="text-white/40">{subTitle}</span>
-              </div>
-            </button>
-          </div>
+          <button
+            key={`${index}_${id}`}
+            role="menuitem"
+            aria-labelledby="optionTitle"
+            className="hover:bg-body w-full rounded-6 p-8 text-left"
+            onClick={() => {
+              action();
+              setIsOpen(false);
+            }}
+          >
+            <div className="flex items-center gap-8 text-14">
+              {icon}
+              <span id="optionTitle" className="font-weight-500">
+                {title}
+              </span>
+              <span className="text-white/40">{subTitle}</span>
+            </div>
+          </button>
         );
       })}
     </DropdownMenu>
