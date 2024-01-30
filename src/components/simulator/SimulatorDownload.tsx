@@ -80,7 +80,7 @@ export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
             key={`${index}_${id}`}
             role="menuitem"
             aria-labelledby="optionTitle"
-            className="hover:bg-body w-full rounded-6 p-8 text-left"
+            className="hover:bg-body flex w-full rounded-6 p-8 text-left"
             onClick={() => {
               action();
               setIsOpen(false);
