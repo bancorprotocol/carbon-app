@@ -54,56 +54,52 @@ export const SimulatorStrategyType: FC<Props> = ({ strategyType }) => {
       <header className="mb-16 flex items-center justify-between">
         <h2 className="m-0 text-18 font-weight-500">Strategy Type</h2>
       </header>
-      <article>
-        <ul
-          onKeyDown={handleKeyDown}
-          ref={list}
-          role="tablist"
-          className={`grid grid-cols-2 gap-8`}
-        >
-          {items.map(({ label, svg, tooltipText }) => (
-            <li role="none" key={label} className="relative">
-              <button
-                id={'tab-' + label}
-                role="tab"
-                aria-controls={'panel-' + label}
-                aria-selected={strategyType === label}
-                onClick={() =>
-                  navigate({
-                    to: '/simulator/$simulationType',
-                    search: {},
-                    params: { simulationType: label },
-                    replace: true,
-                    resetScroll: false,
-                  })
-                }
-                className={cn(
-                  'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
-                  'md:px-12',
-                  'focus-visible:outline focus-visible:outline-1',
-                  strategyType === label
-                    ? 'outline outline-1 outline-white'
-                    : ''
-                )}
+      <ul
+        onKeyDown={handleKeyDown}
+        ref={list}
+        role="tablist"
+        className={`grid grid-cols-2 gap-8`}
+      >
+        {items.map(({ label, svg, tooltipText }) => (
+          <li role="none" key={label} className="relative">
+            <button
+              id={'tab-' + label}
+              role="tab"
+              aria-controls={'panel-' + label}
+              aria-selected={strategyType === label}
+              onClick={() =>
+                navigate({
+                  to: '/simulator/$simulationType',
+                  search: {},
+                  params: { simulationType: label },
+                  replace: true,
+                  resetScroll: false,
+                })
+              }
+              className={cn(
+                'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
+                'md:px-12',
+                'focus-visible:outline focus-visible:outline-1',
+                strategyType === label ? 'outline outline-1 outline-white' : ''
+              )}
+            >
+              {svg}
+              <span
+                className={`capitalize ${
+                  strategyType === label ? 'text-white' : 'text-white/40'
+                }`}
               >
-                {svg}
-                <span
-                  className={`capitalize ${
-                    strategyType === label ? 'text-white' : 'text-white/40'
-                  }`}
-                >
-                  {label}
-                </span>
+                {label}
+              </span>
 
-                <Tooltip
-                  iconClassName="!h-12 !w-12 text-white/60"
-                  element={<div>{tooltipText}</div>}
-                />
-              </button>
-            </li>
-          ))}
-        </ul>
-      </article>
+              <Tooltip
+                element={<div>{tooltipText}</div>}
+                iconClassName="!h-12 !w-12 text-white/60"
+              />
+            </button>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };
