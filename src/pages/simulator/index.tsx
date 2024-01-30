@@ -2,6 +2,8 @@ import { Link } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { BuySellBlock } from 'components/simulator/BuySellBlockNew';
+import { SimulatorStrategyType } from 'components/simulator/SimulatorStrategyType';
+import { SimulatorTokenSelection } from 'components/simulator/SimulatorTokenSelection';
 import { checkIfOrdersOverlapNew } from 'components/strategies/utils';
 import dayjs from 'dayjs';
 import { useModal } from 'hooks/useModal';
@@ -186,57 +188,14 @@ export const SimulatorPage = () => {
         </div>
 
         <div className="absolute top-0 w-[440px] space-y-20">
-          <div className={'space-y-10'}>
-            <div className={'flex space-x-20'}>
-              <Button
-                className={'w-[200px]'}
-                onClick={() => {
-                  openModal('tokenLists', {
-                    onClick: (token) => {
-                      dispatch('baseToken', token.address);
-                      dispatch('buyMax', '');
-                      dispatch('buyMin', '');
-                      dispatch('sellMax', '');
-                      dispatch('sellMin', '');
-                      dispatch('buyBudget', '');
-                      dispatch('sellBudget', '');
-                      setInitBuyRange(true);
-                      setInitSellRange(true);
-                    },
-                  });
-                }}
-              >
-                {state2.baseToken
-                  ? state2.baseToken.symbol
-                  : 'Select Base Token'}
-              </Button>
-            </div>
-
-            <div className={'flex space-x-20'}>
-              <Button
-                className={'w-[200px]'}
-                onClick={() => {
-                  openModal('tokenLists', {
-                    onClick: (token) => {
-                      dispatch('quoteToken', token.address);
-                      dispatch('buyMax', '');
-                      dispatch('buyMin', '');
-                      dispatch('sellMax', '');
-                      dispatch('sellMin', '');
-                      dispatch('buyBudget', '');
-                      dispatch('sellBudget', '');
-                      setInitBuyRange(true);
-                      setInitSellRange(true);
-                    },
-                  });
-                }}
-              >
-                {state2.quoteToken
-                  ? state2.quoteToken.symbol
-                  : 'Select Quote Token'}
-              </Button>
-            </div>
-          </div>
+          <SimulatorTokenSelection
+            base={state2.baseToken}
+            quote={state2.quoteToken}
+            dispatch={dispatch}
+            setInitBuyRange={setInitBuyRange}
+            setInitSellRange={setInitSellRange}
+          />
+          <SimulatorStrategyType strategyType={state2.simulationType} />
 
           <BuySellBlock
             buy={false}
