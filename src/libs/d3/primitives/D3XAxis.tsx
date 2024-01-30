@@ -32,18 +32,7 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
             fill={'currentColor'}
             opacity={0.6}
           >
-            {dayjs(value * 1000).format('DD/MM')}
-          </text>
-          <text
-            style={{
-              fontSize: '10px',
-              textAnchor: 'middle',
-              transform: 'translateY(33px)',
-            }}
-            fill={'currentColor'}
-            opacity={0.6}
-          >
-            {dayjs(value * 1000).format('YYYY')}
+            {dayjs(value * 1000).format('DD.MM.YY')}
           </text>
         </g>
       ))}

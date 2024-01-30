@@ -7,18 +7,14 @@ import { SimulatorSummaryTable } from './SimulatorSummaryTable';
 import { StrategyInput2 } from 'hooks/useStrategyInput';
 
 interface Props {
-  roi: number;
-  gains: number;
-  isLoading: boolean;
+  roi?: number;
+  gains?: number;
   state2: StrategyInput2;
 }
 
-export const SimulatorSummary = ({ roi, gains, isLoading, state2 }: Props) => {
+export const SimulatorSummary = ({ roi = 0.0, gains = 0.0, state2 }: Props) => {
   const baseToken = state2.baseToken!;
   const quoteToken = state2.quoteToken!;
-
-  const portfolioGains = isLoading ? 0.0 : gains;
-  const portfolioRoi = isLoading ? 0.0 : roi;
 
   const strategyType = state2.simulationType;
 
@@ -38,11 +34,8 @@ export const SimulatorSummary = ({ roi, gains, isLoading, state2 }: Props) => {
         />
       </section>
       <section className="flex flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between">
-        <SimulatorSummaryGains
-          portfolioGains={portfolioGains}
-          quoteToken={quoteToken}
-        />
-        <SimulatorSummaryRoi portfolioRoi={portfolioRoi} />
+        <SimulatorSummaryGains portfolioGains={gains} quoteToken={quoteToken} />
+        <SimulatorSummaryRoi portfolioRoi={roi} />
         <Link
           to="/strategies/create"
           search={{

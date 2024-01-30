@@ -7,6 +7,7 @@ import { D3LinePath } from 'libs/d3/primitives/D3LinePath';
 import { D3ChartSettings } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';
 import { extent } from 'd3';
+import { prettifyNumber } from 'utils/helpers';
 
 interface Props extends SimulatorReturn {
   dms: D3ChartSettings;
@@ -16,6 +17,7 @@ export const D3ChartSimulatorPrice = ({ dms, data, bounds }: Props) => {
   const x = useLinearScale({
     domain: extent(data, (d) => d.date) as [number, number],
     range: [0, dms.boundedWidth],
+    pixelsPerTick: 100,
   });
 
   const y = useLinearScale({
@@ -28,7 +30,11 @@ export const D3ChartSimulatorPrice = ({ dms, data, bounds }: Props) => {
   return (
     <>
       <D3XAxis ticks={x.ticks} dms={dms} />
-      <D3YAxisLeft ticks={y.ticks} dms={dms} />
+      <D3YAxisLeft
+        ticks={y.ticks}
+        dms={dms}
+        formatter={(value) => prettifyNumber(value)}
+      />
 
       <D3SimPriceRange type={'bid'} {...rangeProps} />
       <D3SimPriceRange type={'ask'} {...rangeProps} />

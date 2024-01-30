@@ -22,6 +22,7 @@ interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
   animationData: SimulatorData[];
   isLoading: boolean;
   isError: boolean;
+  isSuccess: boolean;
   timer: string;
   setPlaybackSpeed: (speed: PlaybackSpeed) => void;
 }
@@ -56,6 +57,7 @@ type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulator/result' });
+
   const query = useGetSimulator(search);
   const [animationData, setAnimationData] = useState<SimulatorData[]>([]);
   const [timer, setTimer] = useState('');
@@ -84,8 +86,6 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
       return;
     }
 
-    console.log('status', status);
-
     if (status.current === 'paused' || status.current === 'ended') {
       console.log('Simulator animation canceled, paused or ended.');
       return;
@@ -106,14 +106,12 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
       return;
     }
 
-    console.log('animationFrame', animationFrame);
-
     setAnimationData(query.data.data.slice(0, endSlice));
     await wait(playbackSpeedMap[playbackSpeed.current]);
     requestAnimationFrame(handleAnimationStep);
   }, [query.data, status]);
 
-  const start = () => {
+  const start = useCallback(() => {
     if (status.current === 'running') {
       return;
     }
@@ -121,7 +119,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
     animationFrame.current = 0;
     status.current = 'running';
     handleAnimationStep();
-  };
+  }, [handleAnimationStep]);
 
   const pauseToggle = () => {
     if (status.current === 'paused') {
@@ -147,6 +145,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         end,
         status: status.current,
         isLoading: query.isLoading,
+        isSuccess: query.isSuccess,
         isError: query.isError,
         timer,
         setPlaybackSpeed,
