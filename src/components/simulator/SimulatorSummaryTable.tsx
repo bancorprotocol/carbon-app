@@ -20,16 +20,8 @@ export const SimulatorSummaryTable = ({
   const sellMax = prettifyNumber(sell.max, { abbreviate: true });
   const buyMin = prettifyNumber(buy.min, { abbreviate: true });
   const buyMax = prettifyNumber(buy.max, { abbreviate: true });
-  const baseBudget = prettifyNumber(sell.budget, {
-    abbreviate: true,
-  });
-  const quoteBudget = prettifyNumber(buy.budget, {
-    abbreviate: true,
-  });
-  const baseBudgetFormatted = prettifyNumber(baseBudget, { abbreviate: true });
-  const quoteBudgetFormatted = prettifyNumber(quoteBudget, {
-    abbreviate: true,
-  });
+  const baseBudget = prettifyNumber(sell.budget, { abbreviate: true });
+  const quoteBudget = prettifyNumber(buy.budget, { abbreviate: true });
   const baseSymbol = baseToken.symbol;
   const quoteSymbol = quoteToken.symbol;
 
@@ -38,11 +30,11 @@ export const SimulatorSummaryTable = ({
       <Arrow className="h-16 w-16 text-green" />
       {buyMin}-{buyMax} {baseSymbol} per {quoteSymbol}
       <span className="text-white/40">|</span>
-      {quoteBudgetFormatted} {quoteSymbol}
+      {quoteBudget} {quoteSymbol}
       <Arrow className="h-16 w-16 -rotate-90 text-red" />
       {sellMin}-{sellMax} {baseSymbol} per {quoteSymbol}
       <span className="text-white/40">|</span>
-      {baseBudgetFormatted} {baseSymbol}
+      {baseBudget} {baseSymbol}
     </article>
   );
 };
