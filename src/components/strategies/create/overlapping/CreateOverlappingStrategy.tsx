@@ -18,7 +18,6 @@ import {
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { isValidRange } from 'components/strategies/utils';
-import { sanitizeNumber } from 'utils/helpers';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
   calculateOverlappingBuyBudget,
@@ -145,19 +144,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
   };
 
-  // Initialize order when market price is available
-  useEffect(() => {
-    if (!quote || !base || marketPrice <= 0) return;
-    if (!order0.min && !order1.max) {
-      const { min, max } = getInitialPrices(marketPrice);
-      order0.setMin(min);
-      order1.setMax(max);
-    } else {
-      setOverlappingParams();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spread]);
-
   // Update on buyMin changes
   useEffect(() => {
     if (!order0.min) return;
@@ -165,10 +151,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
     // automatically update max if min > max
     const timeout = setTimeout(async () => {
-      const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(order0.min), spread);
       if (Number(order1.max) < minSellMax) {
-        order1.setMax(sanitizeNumber(minSellMax.toString(), decimals));
+        order1.setMax(minSellMax.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -179,17 +164,33 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   useEffect(() => {
     if (!order1.max) return;
     setOverlappingParams();
+
     // automatically update min if min > max
     const timeout = setTimeout(async () => {
-      const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
       if (Number(order0.min) > maxBuyMin) {
-        order0.setMin(sanitizeNumber(maxBuyMin.toString(), decimals));
+        order0.setMin(maxBuyMin.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);
+
+  // Initialize order when market price is available
+  useEffect(() => {
+    if (!quote || !base || marketPrice <= 0) return;
+    if (!order0.min && !order1.max) {
+      requestAnimationFrame(() => {
+        if (order0.min || order1.max) return;
+        const { min, max } = getInitialPrices(marketPrice);
+        order0.setMin(min);
+        order1.setMax(max);
+      });
+    } else {
+      setOverlappingParams();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketPrice, spread]);
 
   return (
     <>
