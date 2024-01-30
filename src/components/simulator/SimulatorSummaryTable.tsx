@@ -35,19 +35,15 @@ export const SimulatorSummaryTable = ({
   const quoteSymbol = quoteToken.symbol;
 
   return (
-    <article className="grid grid-cols-[auto,auto] grid-rows-4 items-center justify-evenly gap-2 md:grid-cols-[auto,auto,auto,auto] md:grid-rows-2">
-      <Arrow className="mx-6 h-16 w-16 text-green" />
-      <span>
-        {buyMin}-{buyMax} {baseSymbol} per {quoteSymbol}
-      </span>
-      <span className="mx-4 text-white/40">|</span>
+    <table className="grid grid-cols-[auto,auto] grid-rows-4 items-center justify-evenly gap-6 md:grid-cols-[auto,auto,auto,auto] md:grid-rows-2">
+      <Arrow className="h-16 w-16 text-green" />
+      {buyMin}-{buyMax} {baseSymbol} per {quoteSymbol}
+      <span className="text-white/40">|</span>
       {quoteBudgetFormatted} {quoteSymbol}
-      <Arrow className="mx-6 h-16 w-16 -rotate-90 text-red" />
-      <span>
-        {sellMin}-{sellMax} {baseSymbol} per {quoteSymbol}
-      </span>
-      <span className="mx-4 text-white/40">|</span>
+      <Arrow className="h-16 w-16 -rotate-90 text-red" />
+      {sellMin}-{sellMax} {baseSymbol} per {quoteSymbol}
+      <span className="text-white/40">|</span>
       {baseBudgetFormatted} {baseSymbol}
-    </article>
+    </table>
   );
 };
