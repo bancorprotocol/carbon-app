@@ -37,12 +37,10 @@ export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
       title: 'Simulation Log',
       subTitle: 'CSV',
       action: () => {
-        const csvOutput = data.map((item) => {
-          return {
-            ...item,
-            date: new Date(item.date * 1e3),
-          };
-        });
+        const csvOutput = data.map((item) => ({
+          ...item,
+          date: new Date(item.date * 1e3),
+        }));
         const fileName = `${state2.baseToken?.symbol ?? ''}_${
           state2.quoteToken?.symbol ?? ''
         }_${state2.simulationType}`;
