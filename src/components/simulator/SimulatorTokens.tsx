@@ -13,9 +13,9 @@ export const SimulatorSummaryTokens = ({
   strategyType,
 }: Props) => {
   return (
-    <article className="flex flex-shrink-0 items-center">
+    <article className="flex flex-shrink-0 items-center gap-15">
       <TokensOverlap className="h-40 w-40" tokens={[baseToken!, quoteToken!]} />
-      <div className="mx-15 flex flex-col">
+      <div className="flex flex-col">
         <h2 className="flex gap-6 text-18">
           {baseToken.symbol}
           <span className="self-align-center text-secondary !text-16">/</span>
