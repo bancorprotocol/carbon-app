@@ -86,14 +86,12 @@ export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
                 setIsOpen(false);
               }}
             >
-              <div className="flex items-center gap-y-8">
+              <div className="flex items-center gap-8 text-14">
                 {icon}
-                <span id="optionTitle" className="mx-8 text-14 font-weight-500">
+                <span id="optionTitle" className="font-weight-500">
                   {title}
                 </span>
-                <span className="text-14 font-weight-400 text-white/40">
-                  {subTitle}
-                </span>
+                <span className="text-white/40">{subTitle}</span>
               </div>
             </button>
           </div>
