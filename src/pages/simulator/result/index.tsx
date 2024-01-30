@@ -1,5 +1,6 @@
 import { SimulatorChartHeader } from 'components/simulator/SimulatorChartHeader';
 import { SimulatorSummary } from 'components/simulator/SimulatorSummary';
+import { useStrategyInput } from 'hooks/useStrategyInput';
 import { D3ChartSimulatorPrice } from 'libs/d3';
 import { D3ChartSimulatorBalance } from 'libs/d3/sim/D3ChartSimulatorBalance';
 import { D3ChartSimulatorPerformance } from 'libs/d3/sim/D3ChartSimulatorPerformance';
@@ -42,6 +43,7 @@ const chartSettingsSummary: D3ChartSettingsProps = {
 export const SimulatorResultPage = () => {
   const ctx = useSimulator();
   const [showSummary, setShowSummary] = useState(false);
+  const { state2 } = useStrategyInput();
 
   return (
     <div className="p-20">
@@ -74,6 +76,7 @@ export const SimulatorResultPage = () => {
               roi={ctx.roi}
               gains={ctx.gains}
               isLoading={ctx.isLoading}
+              state2={state2}
             />
             {!ctx.isLoading ? (
               <>
@@ -82,6 +85,7 @@ export const SimulatorResultPage = () => {
                     data={ctx.data}
                     setShowSummary={setShowSummary}
                     showSummary={showSummary}
+                    state2={state2}
                   />
                   {!showSummary ? (
                     <>
