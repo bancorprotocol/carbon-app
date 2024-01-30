@@ -1,16 +1,27 @@
+import { StrategyInputDispatch } from 'hooks/useStrategyInput';
 import { SimChartWrapper } from 'libs/d3/sim/SimulatorChartWrapper';
+import { SimulatorInputSearch } from 'libs/routing/routes/sim';
 import { D3ChartCandlesticks } from './D3ChartCandlesticks';
 import { useState } from 'react';
-import { D3ChartSettingsProps, D3ChartCandlestickData } from './../../types';
+import { D3ChartSettingsProps, CandlestickData } from './../../types';
 
 type Props = {
-  data: D3ChartCandlestickData[];
+  data: CandlestickData[];
   settings: D3ChartSettingsProps;
+  dispatch: StrategyInputDispatch;
+  state: SimulatorInputSearch;
+  marketPrice?: number;
 };
 
 const brushSize = 130;
 
-export const D3ChartCandlestickWrapper = ({ data, settings }: Props) => {
+export const D3ChartCandlestickWrapper = ({
+  data,
+  settings,
+  dispatch,
+  state,
+  marketPrice,
+}: Props) => {
   const [brushExtent] = useState<[number, number]>();
 
   if (!data.length) {
@@ -30,7 +41,15 @@ export const D3ChartCandlestickWrapper = ({ data, settings }: Props) => {
 
   return (
     <SimChartWrapper settings={settings}>
-      {(dms) => <D3ChartCandlesticks data={slicedData} dms={dms} />}
+      {(dms) => (
+        <D3ChartCandlesticks
+          state={state}
+          dispatch={dispatch}
+          data={slicedData}
+          dms={dms}
+          marketPrice={marketPrice}
+        />
+      )}
     </SimChartWrapper>
   );
 };

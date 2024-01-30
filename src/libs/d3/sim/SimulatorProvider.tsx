@@ -23,6 +23,7 @@ interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
   isLoading: boolean;
   isError: boolean;
   timer: string;
+  setPlaybackSpeed: (speed: PlaybackSpeed) => void;
 }
 
 const SimulatorCTX = createContext<SimulatorProviderCTX | undefined>(undefined);
@@ -41,6 +42,18 @@ interface SimulatorProviderProps {
 
 const times: number[] = [];
 
+export const playbackSpeedOptions = ['0.1x', '0.5x', '1x', '2x', '4x'] as const;
+
+const playbackSpeedMap: Record<PlaybackSpeed, number> = {
+  '0.1x': 1000,
+  '0.5x': 50,
+  '1x': 25,
+  '2x': 10,
+  '4x': 5,
+};
+
+type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
+
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulator/result' });
   const query = useGetSimulator(search);
@@ -49,6 +62,11 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const status = useRef<SimulationStatus>('idle');
   const animationFrame = useRef<number>(0);
   // const [animationFrame, setAnimationFrame] = useState(0);
+  const playbackSpeed = useRef<PlaybackSpeed>('1x');
+
+  const setPlaybackSpeed = (speed: PlaybackSpeed) => {
+    playbackSpeed.current = speed;
+  };
 
   const handleFPS = () => {
     const now = performance.now();
@@ -91,7 +109,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
     console.log('animationFrame', animationFrame);
 
     setAnimationData(query.data.data.slice(0, endSlice));
-    await wait(75);
+    await wait(playbackSpeedMap[playbackSpeed.current]);
     requestAnimationFrame(handleAnimationStep);
   }, [query.data, status]);
 
@@ -131,6 +149,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         isLoading: query.isLoading,
         isError: query.isError,
         timer,
+        setPlaybackSpeed,
       }}
     >
       {children}

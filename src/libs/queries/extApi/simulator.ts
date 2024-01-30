@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKey } from 'libs/queries/queryKey';
-import { SimulatorSearch } from 'libs/routing';
+import { SimulatorResultSearch } from 'libs/routing';
 import { carbonApi } from 'utils/carbonApi';
 import { FIVE_MIN_IN_MS } from 'utils/time';
 
@@ -52,9 +52,11 @@ export type SimulatorBounds = {
 export type SimulatorReturn = {
   data: Array<SimulatorData>;
   bounds: SimulatorBounds;
+  roi?: number;
+  gains?: number;
 };
 
-export const useGetSimulator = (params: SimulatorSearch) => {
+export const useGetSimulator = (params: SimulatorResultSearch) => {
   return useQuery<SimulatorReturn>(
     QueryKey.simulator(params),
     async () => {
@@ -74,6 +76,13 @@ export const useGetSimulator = (params: SimulatorSearch) => {
           hodlValue: Number(res.hodl_value[i]),
           portfolioOverHodl: Number(res.portfolio_over_hodl[i]),
         })),
+        roi: Number(
+          res.portfolio_over_hodl[res.portfolio_over_hodl.length - 1]
+        ),
+        gains: Number(
+          Number(res.portfolio_value[res.portfolio_value.length - 1]) -
+            Number(res.hodl_value[res.hodl_value.length - 1])
+        ),
         bounds: {
           askMax: Number(res.max_ask),
           askMin: Number(res.min_ask),

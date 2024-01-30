@@ -1,5 +1,5 @@
 import { D3AxisProps } from 'libs/d3/types';
-import { uuid } from 'utils/helpers';
+import { prettifyNumber, uuid } from 'utils/helpers';
 
 export const D3YAxiRight = ({ ticks, dms }: D3AxisProps) => {
   return (
@@ -21,7 +21,7 @@ export const D3YAxiRight = ({ ticks, dms }: D3AxisProps) => {
             fill={'currentColor'}
             opacity={0.6}
           >
-            {value.toFixed(2)}
+            {prettifyNumber(value)}
           </text>
         </g>
       ))}

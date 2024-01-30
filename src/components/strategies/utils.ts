@@ -1,3 +1,4 @@
+import { StrategyInputOrder } from 'hooks/useStrategyInput';
 import { OrderCreate } from './create/useOrder';
 
 interface ValidOrderParams {
@@ -38,6 +39,16 @@ export const checkIfOrdersOverlap = (
     (+orderB.min <= +orderA.price && +orderB.min !== 0) ||
     (+orderB.min <= +orderA.max && +orderB.min !== 0)
   ) {
+    return true;
+  }
+  return false;
+};
+
+export const checkIfOrdersOverlapNew = (
+  buy: StrategyInputOrder,
+  sell: StrategyInputOrder
+): boolean => {
+  if (+sell.min <= +buy.max && +sell.min !== 0) {
     return true;
   }
   return false;
