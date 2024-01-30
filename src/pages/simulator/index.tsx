@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { BuySellBlock } from 'components/simulator/BuySellBlockNew';
 import { checkIfOrdersOverlapNew } from 'components/strategies/utils';
 import dayjs from 'dayjs';
@@ -12,6 +13,7 @@ import {
   useGetTokenPriceHistory,
 } from 'libs/queries/extApi/tokenPrice';
 import { useEffect, useState } from 'react';
+import { cn } from 'utils/helpers';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -19,7 +21,7 @@ const chartSettings: D3ChartSettingsProps = {
   marginTop: 0,
   marginBottom: 40,
   marginLeft: 0,
-  marginRight: 70,
+  marginRight: 80,
 };
 
 const start = dayjs().unix() - 60 * 60 * 24 * 30 * 12;
@@ -70,33 +72,48 @@ export const SimulatorPage = () => {
     return <div>loading tokens</div>;
   }
 
+  const isLoading =
+    priceHistoryQuery.data && marketPrice && !priceHistoryQuery.isLoading;
+
   return (
     <>
+      <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
+
       <div className="relative px-20">
-        {/*<div className="absolute inset-0">*/}
         <div className="absolute right-[20px] w-[calc(100%-500px)]">
-          <div ref={ref} className="sticky top-50">
-            {priceHistoryQuery.isLoading && <div>Loading...</div>}
+          <div ref={ref} className="sticky top-50 rounded-12 bg-silver p-20">
+            <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
             {priceHistoryQuery.isError && <div>Error</div>}
-            {dms.width}
-            <svg width={dms.width} height={dms.height}>
-              <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-                <>
-                  {priceHistoryQuery.data && (
+            <div
+              className={cn(
+                'flex items-center justify-center rounded-12 bg-black',
+                {
+                  'flex items-center justify-center': isLoading,
+                }
+              )}
+              style={{ height: dms.height }}
+            >
+              {isLoading ? (
+                <svg width={dms.width} height={dms.height}>
+                  <g
+                    transform={`translate(${dms.marginLeft},${dms.marginTop})`}
+                  >
                     <D3ChartCandlesticks
-                      state={state}
+                      state={state2}
                       dispatch={dispatch}
                       data={priceHistoryQuery.data}
                       dms={dms}
                       marketPrice={marketPrice}
                     />
-                  )}
-                </>
-              </g>
-            </svg>
-            {/*</div>*/}
+                  </g>
+                </svg>
+              ) : (
+                <CarbonLogoLoading className="h-[100px]" />
+              )}
+            </div>
           </div>
         </div>
+
         <div className="absolute top-0 w-[440px] space-y-20">
           <div className={'space-y-10'}>
             <div className={'flex space-x-20'}>
@@ -106,6 +123,14 @@ export const SimulatorPage = () => {
                   openModal('tokenLists', {
                     onClick: (token) => {
                       dispatch('baseToken', token.address);
+                      dispatch('buyMax', '');
+                      dispatch('buyMin', '');
+                      dispatch('sellMax', '');
+                      dispatch('sellMin', '');
+                      dispatch('buyBudget', '');
+                      dispatch('sellBudget', '');
+                      setInitBuyRange(true);
+                      setInitSellRange(true);
                     },
                   });
                 }}
@@ -123,6 +148,14 @@ export const SimulatorPage = () => {
                   openModal('tokenLists', {
                     onClick: (token) => {
                       dispatch('quoteToken', token.address);
+                      dispatch('buyMax', '');
+                      dispatch('buyMin', '');
+                      dispatch('sellMax', '');
+                      dispatch('sellMin', '');
+                      dispatch('buyBudget', '');
+                      dispatch('sellBudget', '');
+                      setInitBuyRange(true);
+                      setInitSellRange(true);
                     },
                   });
                 }}
@@ -135,19 +168,6 @@ export const SimulatorPage = () => {
           </div>
 
           <BuySellBlock
-            buy
-            base={state2.baseToken}
-            quote={state2.quoteToken}
-            order={state2.buy}
-            dispatch={dispatch}
-            isOrdersOverlap={checkIfOrdersOverlapNew(state2.buy, state2.sell)}
-            strategyType="recurring"
-            isBudgetOptional={
-              +state2.buy.budget === 0 && +state2.sell.budget > 0
-            }
-          />
-
-          <BuySellBlock
             buy={false}
             base={state2.baseToken}
             quote={state2.quoteToken}
@@ -157,6 +177,19 @@ export const SimulatorPage = () => {
             strategyType="recurring"
             isBudgetOptional={
               +state2.sell.budget === 0 && +state2.buy.budget > 0
+            }
+          />
+
+          <BuySellBlock
+            buy
+            base={state2.baseToken}
+            quote={state2.quoteToken}
+            order={state2.buy}
+            dispatch={dispatch}
+            isOrdersOverlap={checkIfOrdersOverlapNew(state2.buy, state2.sell)}
+            strategyType="recurring"
+            isBudgetOptional={
+              +state2.buy.budget === 0 && +state2.sell.budget > 0
             }
           />
 

@@ -15,6 +15,7 @@ export const D3ChartSimulatorPerformance = ({ dms, data }: Props) => {
   const x = useLinearScale({
     domain: extent(data, (d) => d.date) as [number, number],
     range: [0, dms.boundedWidth],
+    pixelsPerTick: 100,
   });
 
   const y = useLinearScale({
@@ -24,7 +25,11 @@ export const D3ChartSimulatorPerformance = ({ dms, data }: Props) => {
   return (
     <>
       <D3XAxis ticks={x.ticks} dms={dms} />
-      <D3YAxisLeft ticks={y.ticks} dms={dms} />
+      <D3YAxisLeft
+        ticks={y.ticks}
+        dms={dms}
+        formatter={(value) => `${value}%`}
+      />
 
       <D3LinePath
         data={data}

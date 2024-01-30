@@ -1,6 +1,5 @@
-import { StrategyInputDispatch } from 'hooks/useStrategyInput';
+import { StrategyInput2, StrategyInputDispatch } from 'hooks/useStrategyInput';
 import { SimChartWrapper } from 'libs/d3/sim/SimulatorChartWrapper';
-import { SimulatorInputSearch } from 'libs/routing/routes/sim';
 import { D3ChartCandlesticks } from './D3ChartCandlesticks';
 import { useState } from 'react';
 import { D3ChartSettingsProps, CandlestickData } from './../../types';
@@ -9,7 +8,7 @@ type Props = {
   data: CandlestickData[];
   settings: D3ChartSettingsProps;
   dispatch: StrategyInputDispatch;
-  state: SimulatorInputSearch;
+  state: StrategyInput2;
   marketPrice?: number;
 };
 

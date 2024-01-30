@@ -30,8 +30,10 @@ const moveBoundary = (selector: string, y: number) => {
   const me = getSelector(selector);
   const line = me.select('line');
   const handle = me.select('rect');
+  const label = me.select('text');
   line.attr('y1', y).attr('y2', y);
   handle.attr('y', y);
+  label.attr('y', y + 12);
 };
 
 export const onDragHandler = ({

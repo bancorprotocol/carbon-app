@@ -4,20 +4,16 @@ import { D3ChartHandleLine } from 'libs/d3/charts/candlestick/D3ChartHandleLine'
 import { getSelector } from 'libs/d3/charts/candlestick/utils';
 import { useEffect } from 'react';
 
-export const D3ChartHandle = ({
-  selector,
-  dms,
-  onDrag,
-  color,
-  initialY,
-}: {
+interface Props {
   selector: string;
   dms: D3ChartSettings;
   onDrag: (y: number) => void;
-  initialY?: number;
   color: string;
-}) => {
-  const selection = getSelector(selector);
+  label?: string;
+}
+
+export const D3ChartHandle = ({ onDrag, ...props }: Props) => {
+  const selection = getSelector(props.selector);
 
   const handleDrag = drag()
     .subject(() => {
@@ -32,12 +28,5 @@ export const D3ChartHandle = ({
     handleDrag(selection as Selection<Element, unknown, any, any>);
   });
 
-  return (
-    <D3ChartHandleLine
-      selector={selector}
-      dms={dms}
-      y={initialY}
-      color={color}
-    />
-  );
+  return <D3ChartHandleLine {...props} isDraggable />;
 };

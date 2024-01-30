@@ -10,6 +10,7 @@ import { D3AxisTick, D3ChartSettings, D3SimLegendEntry } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';
 import { extent } from 'd3';
 import { useState } from 'react';
+import { prettifyNumber } from 'utils/helpers';
 
 interface Props extends SimulatorReturn {
   dms: D3ChartSettings;
@@ -19,6 +20,7 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
   const x = useLinearScale({
     domain: extent(data, (d) => d.date) as [number, number],
     range: [0, dms.boundedWidth],
+    pixelsPerTick: 100,
   });
 
   const yLeft = useLinearScale({
@@ -55,8 +57,16 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
   return (
     <>
       <D3XAxis ticks={x.ticks} dms={dms} />
-      <D3YAxisLeft ticks={yLeft.ticks} dms={dms} />
-      <D3YAxiRight ticks={yRightTicks} dms={dms} />
+      <D3YAxisLeft
+        ticks={yLeft.ticks}
+        dms={dms}
+        formatter={(value) => prettifyNumber(value)}
+      />
+      <D3YAxiRight
+        ticks={yRightTicks}
+        dms={dms}
+        formatter={(value) => prettifyNumber(value)}
+      />
       {!legend.bid.isDisabled && (
         <D3SimPriceRange type={'bid'} {...rangeProps} />
       )}
