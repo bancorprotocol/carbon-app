@@ -76,23 +76,13 @@ export class DebugDriver {
   async createStrategy(testCase: CreateStrategyTestCase) {
     const { base, quote } = testCase;
     const { buy, sell, spread } = toDebugStrategy(testCase);
-    // TODO: use textarea shortcut instead of filling each field.
-    // Currently this revert with Dai/insufficient-allowance for some reason
-    // await this.page.getByTestId('strategy-json-shortcut').fill(JSON.stringify(template));
     for (const token of [base, quote]) {
       await waitFor(this.page, `balance-${token}`, 30_000);
     }
-
-    await this.page.getByTestId('spread').fill(spread ?? '');
-    await this.page.getByTestId(`token-${base}`).click();
-    await this.page.getByTestId(`token-${quote}`).click();
-    await this.page.getByTestId('buyMin').fill(buy.min);
-    await this.page.getByTestId('buyMax').fill(buy.max);
-    await this.page.getByTestId('buyBudget').fill(buy.budget);
-    await this.page.getByTestId('sellMin').fill(sell.min);
-    await this.page.getByTestId('sellMax').fill(sell.max);
-    await this.page.getByTestId('sellBudget').fill(sell.budget);
-    await this.page.getByTestId('strategy-amount').fill('1');
+    const template = { base, quote, buy, sell, spread };
+    await this.page
+      .getByTestId('strategy-json-shortcut')
+      .fill(JSON.stringify(template));
     await this.page.getByTestId('create-strategies').click();
     await checkApproval(this.page, [base, quote]);
     await this.page.getByTestId('creating-strategies').waitFor({
