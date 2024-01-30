@@ -10,12 +10,16 @@ interface Props {
   base: Token | undefined;
   quote: Token | undefined;
   dispatch: StrategyInputDispatch;
+  setInitBuyRange: React.Dispatch<React.SetStateAction<boolean>>;
+  setInitSellRange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SimulatorTokenSelection: FC<Props> = ({
   base,
   quote,
   dispatch,
+  setInitBuyRange,
+  setInitSellRange,
 }) => {
   const { openModal } = useModal();
 
@@ -57,6 +61,14 @@ export const SimulatorTokenSelection: FC<Props> = ({
             openModal('tokenLists', {
               onClick: (token) => {
                 dispatch('baseToken', token.address);
+                dispatch('buyMax', '');
+                dispatch('buyMin', '');
+                dispatch('sellMax', '');
+                dispatch('sellMin', '');
+                dispatch('buyBudget', '');
+                dispatch('sellBudget', '');
+                setInitBuyRange(true);
+                setInitSellRange(true);
               },
               excludedTokens: [quote?.address ?? ''],
               isBaseToken: true,
@@ -89,6 +101,14 @@ export const SimulatorTokenSelection: FC<Props> = ({
             openModal('tokenLists', {
               onClick: (token) => {
                 dispatch('quoteToken', token.address);
+                dispatch('buyMax', '');
+                dispatch('buyMin', '');
+                dispatch('sellMax', '');
+                dispatch('sellMin', '');
+                dispatch('buyBudget', '');
+                dispatch('sellBudget', '');
+                setInitBuyRange(true);
+                setInitSellRange(true);
               },
               excludedTokens: [base?.address ?? ''],
               isBaseToken: false,

@@ -31,6 +31,7 @@ export interface D3AxisTick {
 export interface D3AxisProps {
   ticks: D3AxisTick[];
   dms: D3ChartSettings;
+  formatter?: (value: number) => string | number;
 }
 
 export type D3SimLegendEntry =

@@ -23,14 +23,18 @@ export const BuySellHeader: FC<Props> = (props) => {
   const setLimit = () => {
     if (!isRange) return;
     dispatch(`${type}IsRange`, false);
-    // TODO reset fields
-    // resetFields(true);
+
+    const value = buy ? order.max : order.min;
+    const attr = buy ? 'Min' : 'Max';
+    dispatch(`${type}${attr}`, value);
   };
   const setRange = () => {
     if (isRange) return;
     dispatch(`${type}IsRange`, true);
-    // TODO reset fields
-    // resetFields(true);
+
+    const attr = buy ? 'Min' : 'Max';
+    const multiplier = buy ? 0.9 : 1.1;
+    dispatch(`${type}${attr}`, (Number(order.min) * multiplier).toString());
   };
 
   return (

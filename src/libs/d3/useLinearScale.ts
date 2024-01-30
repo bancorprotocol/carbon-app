@@ -7,25 +7,33 @@ import { useCallback } from 'react';
 interface Props {
   domain: Iterable<number>;
   range: Iterable<number>;
+  pixelsPerTick?: number;
 }
 
 export type LinearScaleReturn = ReturnType<typeof useLinearScale>;
 
-export const useLinearScale = ({ domain, range }: Props) => {
-  const scale = scaleLinear().domain(domain).range(range);
+export const useLinearScale = ({ domain, range, pixelsPerTick }: Props) => {
+  const scale = scaleLinear().domain(domain).range(range).nice(-1);
 
-  // const width = scale.range()[1] - scale.range()[0];
-  // const pixelsPerTick = 70;
-  // const numberOfTicksTarget = Math.max(1, Math.floor(width / pixelsPerTick));
-  // const ticks: D3AxisTick[] = scale.ticks(numberOfTicksTarget).map((value) => ({
-  //   value,
-  //   offset: scale(value),
-  // }));
+  const ticks: D3AxisTick[] = [];
 
-  const ticks: D3AxisTick[] = scale.ticks().map((value) => ({
-    value,
-    offset: scale(value),
-  }));
+  if (pixelsPerTick) {
+    const width = scale.range()[1] - scale.range()[0];
+    const numberOfTicksTarget = Math.max(1, Math.floor(width / pixelsPerTick));
+    scale.ticks(numberOfTicksTarget).forEach((value) =>
+      ticks.push({
+        value,
+        offset: scale(value),
+      })
+    );
+  } else {
+    scale.ticks().forEach((value) =>
+      ticks.push({
+        value,
+        offset: scale(value),
+      })
+    );
+  }
 
   const accessor = useCallback(
     (key: keyof SimulatorData) => getAccessor(key, scale),

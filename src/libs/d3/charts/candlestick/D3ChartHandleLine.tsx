@@ -1,5 +1,6 @@
 import { D3ChartSettings } from 'libs/d3';
 import { SVGProps } from 'react';
+import { cn } from 'utils/helpers';
 
 const handleDms = {
   width: 64,
@@ -13,10 +14,11 @@ interface Props {
   color: string;
   label?: string;
   lineProps?: SVGProps<SVGLineElement>;
+  isDraggable?: boolean;
 }
 
 export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
-  const { selector, dms, color, y = 0, label } = props;
+  const { selector, dms, color, y = 0, label, isDraggable } = props;
   const lineWidth = dms.boundedWidth + 5;
 
   return (
@@ -30,7 +32,10 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
         strokeWidth={1}
         {...lineProps}
       />
-      <g transform={`translate(${lineWidth},-${handleDms.height / 2})`}>
+      <g
+        transform={`translate(${lineWidth},-${handleDms.height / 2})`}
+        className={cn(isDraggable && 'cursor-pointer')}
+      >
         <rect y={y} {...handleDms} fill={color} rx={4} />
         {label && (
           <text y={y + 12} x={6} fill="black" fontSize={10}>

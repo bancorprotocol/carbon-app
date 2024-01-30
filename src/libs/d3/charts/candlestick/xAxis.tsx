@@ -1,5 +1,6 @@
 import { ScaleBand } from 'd3';
 import { D3ChartSettings } from 'libs/d3';
+import { dayjs } from 'libs/dayjs';
 
 type Props = {
   dms: D3ChartSettings;
@@ -9,7 +10,8 @@ type Props = {
 export const XAxis = ({ xScale, dms }: Props) => {
   const ticks = xScale
     .domain()
-    .filter((_, i) => !(i % 12))
+    .filter((_, i) => !(i % 30))
+    .filter((_, i, arr) => i !== arr.length - 1 && i !== 0)
     .map((tickValue) => (
       <g
         className="axis"
@@ -17,24 +19,21 @@ export const XAxis = ({ xScale, dms }: Props) => {
         transform={`translate(${xScale(tickValue)},0)`}
       >
         <line
-          y2={dms.boundedHeight}
-          stroke={'currentColor'}
-          strokeOpacity={0.2}
-        />
-        <line
-          className="tick"
+          className="tick stroke-emphasis"
           y1={dms.boundedHeight}
           y2={dms.boundedHeight + 6}
-          stroke={'currentColor'}
         />
         <text
-          style={{ textAnchor: 'middle' }}
+          style={{
+            fontSize: '10px',
+            textAnchor: 'middle',
+          }}
           dy=".71em"
-          y={dms.boundedHeight + 14}
-          fill="currentColor"
+          y={dms.boundedHeight + 10}
+          fill={'currentColor'}
+          opacity={0.6}
         >
-          {new Date(Number(tickValue) * 1000).getDate()}/
-          {new Date(Number(tickValue) * 1000).getMonth() + 1}
+          {dayjs(Number(tickValue) * 1000).format('DD.MM.YY')}
         </text>
       </g>
     ));
@@ -45,11 +44,11 @@ export const XAxis = ({ xScale, dms }: Props) => {
     <>
       {ticks}
       <line
-        stroke={'currentColor'}
         y1={dms.boundedHeight}
         y2={dms.boundedHeight}
         x1={-bandwidthOffset}
         x2={dms.boundedWidth + bandwidthOffset}
+        className={'stroke-emphasis'}
       />
     </>
   );

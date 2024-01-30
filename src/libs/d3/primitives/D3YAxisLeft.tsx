@@ -1,7 +1,7 @@
 import { D3AxisProps } from 'libs/d3/types';
 import { uuid } from 'utils/helpers';
 
-export const D3YAxisLeft = ({ ticks, dms }: D3AxisProps) => {
+export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
   return (
     <g transform={`translate(0,0)`}>
       <path
@@ -22,7 +22,7 @@ export const D3YAxisLeft = ({ ticks, dms }: D3AxisProps) => {
             fill={'currentColor'}
             opacity={0.6}
           >
-            {value}
+            {formatter ? formatter(value) : value}
           </text>
         </g>
       ))}
