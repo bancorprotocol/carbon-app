@@ -20,15 +20,6 @@ export const SimulatorSummary = ({ roi, gains, isLoading, state2 }: Props) => {
   const portfolioGains = isLoading ? 0.0 : gains;
   const portfolioRoi = isLoading ? 0.0 : roi;
 
-  const summaryData = {
-    buyMin: state2.buy.min,
-    buyMax: state2.buy.max,
-    sellMin: state2.sell.min,
-    sellMax: state2.sell.max,
-    sellBudget: state2.sell.budget,
-    buyBudget: state2.buy.budget,
-  };
-
   const strategyType = state2.simulationType;
 
   return (
@@ -40,7 +31,8 @@ export const SimulatorSummary = ({ roi, gains, isLoading, state2 }: Props) => {
           strategyType={strategyType}
         />
         <SimulatorSummaryTable
-          summaryData={summaryData}
+          buy={state2.buy}
+          sell={state2.sell}
           baseToken={baseToken}
           quoteToken={quoteToken}
         />

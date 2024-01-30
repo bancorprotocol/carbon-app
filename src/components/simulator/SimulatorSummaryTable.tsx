@@ -1,13 +1,11 @@
 import { ReactComponent as Arrow } from 'assets/icons/arrow-round.svg';
-import { SimulatorResultSearch } from 'libs/routing';
 import { prettifyNumber } from 'utils/helpers';
 import { Token } from 'libs/tokens';
+import { StrategyInputOrder } from 'hooks/useStrategyInput';
 
 interface Props {
-  summaryData: Pick<
-    SimulatorResultSearch,
-    'sellMin' | 'sellMax' | 'buyMin' | 'buyMax' | 'buyBudget' | 'sellBudget'
-  >;
+  buy: StrategyInputOrder;
+  sell: StrategyInputOrder;
   baseToken: Token;
   quoteToken: Token;
 }
@@ -15,16 +13,17 @@ interface Props {
 export const SimulatorSummaryTable = ({
   baseToken,
   quoteToken,
-  summaryData,
+  buy,
+  sell,
 }: Props) => {
-  const sellMin = prettifyNumber(summaryData.sellMin, { abbreviate: true });
-  const sellMax = prettifyNumber(summaryData.sellMax, { abbreviate: true });
-  const buyMin = prettifyNumber(summaryData.buyMin, { abbreviate: true });
-  const buyMax = prettifyNumber(summaryData.buyMax, { abbreviate: true });
-  const baseBudget = prettifyNumber(summaryData.sellBudget, {
+  const sellMin = prettifyNumber(sell.min, { abbreviate: true });
+  const sellMax = prettifyNumber(sell.max, { abbreviate: true });
+  const buyMin = prettifyNumber(buy.min, { abbreviate: true });
+  const buyMax = prettifyNumber(buy.max, { abbreviate: true });
+  const baseBudget = prettifyNumber(sell.budget, {
     abbreviate: true,
   });
-  const quoteBudget = prettifyNumber(summaryData.buyBudget, {
+  const quoteBudget = prettifyNumber(buy.budget, {
     abbreviate: true,
   });
   const baseBudgetFormatted = prettifyNumber(baseBudget, { abbreviate: true });
