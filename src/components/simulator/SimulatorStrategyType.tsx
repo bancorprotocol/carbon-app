@@ -10,15 +10,17 @@ interface Props {
   strategyType: SimulatorType;
 }
 
+interface ItemProps {
+  label: SimulatorType;
+  svg: JSX.Element;
+  tooltipText: string;
+}
+
 export const SimulatorStrategyType: FC<Props> = ({ strategyType }) => {
   const list = useRef<HTMLUListElement>(null);
   const navigate = useNavigate();
 
-  const items: {
-    label: SimulatorType;
-    svg: JSX.Element;
-    tooltipText: string;
-  }[] = [
+  const items: ItemProps[] = [
     {
       label: 'recurring',
       svg: <IconTwoRanges className="h-16 w-37" />,
@@ -61,7 +63,7 @@ export const SimulatorStrategyType: FC<Props> = ({ strategyType }) => {
         className={`grid grid-cols-2 gap-8`}
       >
         {items.map(({ label, svg, tooltipText }) => (
-          <li role="none" key={label} className="relative">
+          <li role="button" key={label} className="relative">
             <button
               id={'tab-' + label}
               role="tab"
