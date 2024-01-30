@@ -62,7 +62,7 @@ export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
           {...attr}
           className={cn(
             buttonStyles({ variant: 'black' }),
-            'relative h-40 w-40 border-silver px-0'
+            'relative grid h-40 w-40 place-items-center border-silver py-11 px-0'
           )}
           onClick={(e) => {
             setIsOpen(true);
@@ -70,9 +70,7 @@ export const SimulatorDownloadMenu = ({ data, state2 }: Props) => {
           }}
           aria-label="Download Simulation"
         >
-          <span className="flex h-36 w-36 items-center justify-center">
-            <IconDownload className="h-18 w-18" />
-          </span>
+          <IconDownload className="h-18 w-18" />
         </button>
       )}
     >
