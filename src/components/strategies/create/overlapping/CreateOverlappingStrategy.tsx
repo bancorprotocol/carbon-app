@@ -178,7 +178,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   // Initialize order when market price is available
   useEffect(() => {
-    if (!quote || !base || marketPrice <= 0) return;
+    if (marketPrice <= 0 || !quote || !base) return;
     if (!order0.min && !order1.max) {
       requestAnimationFrame(() => {
         if (order0.min || order1.max) return;
