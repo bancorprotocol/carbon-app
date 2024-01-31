@@ -60,6 +60,8 @@ export const simulatorInputRoute = new Route({
       buyMax: search.buyMax || '',
       buyMin: search.buyMin || '',
       buyBudget: search.buyBudget || '',
+      buyIsRange: true,
+      sellIsRange: true,
       // isBuyLimit: Boolean(search.isBuyLimit),
       // isSellLimit: Boolean(search.isSellLimit),
     };

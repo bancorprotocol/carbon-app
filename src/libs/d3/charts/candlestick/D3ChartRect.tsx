@@ -7,6 +7,8 @@ interface Props {
   selector: string;
   dms: D3ChartSettings;
   onDrag: (y: number, y2: number) => void;
+  onDragEnd: (y: number, y2: number) => void;
+  onDragStart: () => void;
   initialY?: number;
   color: string;
 }
@@ -16,6 +18,8 @@ export const D3ChartRect = ({
   dms,
   color,
   onDrag,
+  onDragEnd,
+  onDragStart,
   initialY,
 }: Props) => {
   const selection = getSelector(selector);
@@ -27,9 +31,16 @@ export const D3ChartRect = ({
         height: Number(selection.attr('height')),
       };
     })
+    .on('start', () => {
+      onDragStart();
+    })
     .on('drag', ({ y, subject: { height } }) => {
       const y2 = y + height;
       onDrag(y, y2);
+    })
+    .on('end', ({ y, subject: { height } }) => {
+      const y2 = y + height;
+      onDragEnd(y, y2);
     });
 
   useEffect(() => {

@@ -1,6 +1,4 @@
 import { StrategyInput2, StrategyInputDispatch } from 'hooks/useStrategyInput';
-import { SimChartWrapper } from 'libs/d3/sim/SimulatorChartWrapper';
-import { D3ChartCandlesticks } from './D3ChartCandlesticks';
 import { useState } from 'react';
 import { D3ChartSettingsProps, CandlestickData } from './../../types';
 
@@ -38,17 +36,17 @@ export const D3ChartCandlestickWrapper = ({
         (d) => d.date > initialBrushExtent[0] && d.date < initialBrushExtent[1]
       );
 
-  return (
-    <SimChartWrapper settings={settings}>
-      {(dms) => (
-        <D3ChartCandlesticks
-          state={state}
-          dispatch={dispatch}
-          data={slicedData}
-          dms={dms}
-          marketPrice={marketPrice}
-        />
-      )}
-    </SimChartWrapper>
-  );
+  // return (
+  //   // <SimChartWrapper settings={settings}>
+  //   //   {(dms) => (
+  //   //     <D3ChartCandlesticks
+  //   //       state={state}
+  //   //       dispatch={dispatch}
+  //   //       data={slicedData}
+  //   //       dms={dms}
+  //   //       marketPrice={marketPrice}
+  //   //     />
+  //   //   )}
+  //   // </SimChartWrapper>
+  // );
 };

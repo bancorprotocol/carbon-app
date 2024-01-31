@@ -1,11 +1,14 @@
 import { max, min, scaleBand } from 'd3';
-import { StrategyInput2, StrategyInputDispatch } from 'hooks/useStrategyInput';
+import {
+  ChartY,
+  StrategyInput2,
+  StrategyInputDispatch,
+  UseStrategyInputReturn,
+} from 'hooks/useStrategyInput';
 import { D3ChartHandleLine } from 'libs/d3/charts/candlestick/D3ChartHandleLine';
 import { DragablePriceRange } from 'libs/d3/charts/candlestick/DragablePriceRange';
 import { XAxis } from 'libs/d3/charts/candlestick/xAxis';
 import { D3YAxiRight } from 'libs/d3/primitives/D3YAxisRight';
-import { useLinearScale } from 'libs/d3/useLinearScale';
-import { SimulatorInputSearch } from 'libs/routing/routes/sim';
 import { useCallback, useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from './Candlesticks';
@@ -17,6 +20,7 @@ interface Props {
   dispatch: StrategyInputDispatch;
   state: StrategyInput2;
   marketPrice?: number;
+  ctx: UseStrategyInputReturn;
 }
 
 type GetDomainFn<T extends number | number[]> = (
@@ -53,7 +57,7 @@ const getDomainMax: GetDomainFn<number> = (data, state, marketPrice) => {
   return max(values, (d) => d) as number;
 };
 
-const getDomain: GetDomainFn<number[]> = (data, state, marketPrice) => {
+export const getDomain: GetDomainFn<number[]> = (data, state, marketPrice) => {
   const domainMin = getDomainMin(data, state, marketPrice);
   const domainMax = getDomainMax(data, state, marketPrice);
 
@@ -64,8 +68,15 @@ const getDomain: GetDomainFn<number[]> = (data, state, marketPrice) => {
 };
 
 export const D3ChartCandlesticks = (props: Props) => {
-  const { dms, data, dispatch, state, marketPrice } = props;
-
+  const { dms, data, marketPrice, ctx } = props;
+  const {
+    y,
+    dispatchY,
+    state2Inverted,
+    isDragging,
+    stateChartInverted,
+    dispatch,
+  } = ctx;
   const xScale = useMemo(
     () =>
       scaleBand()
@@ -75,71 +86,13 @@ export const D3ChartCandlesticks = (props: Props) => {
     [data, dms.boundedWidth]
   );
 
-  const y = useLinearScale({
-    domain: getDomain(data, state, marketPrice),
-    range: [dms.boundedHeight, 0],
-  });
-
-  // const [stateCopy, setStateCopy] = useState(state);
-  // const [tmp, setTmp] = useState(false);
-  //
-  // useEffect(() => {
-  //   if (!tmp) {
-  //     // setTmp(true);
-  //     return;
-  //   }
-  //   setTmp(false);
-  //   console.log('jan jan jan');
-  //   if (stateCopy.sell.max === state.sell.max) return;
-  //   if (stateCopy.sell.min === state.sell.min) return;
-  //   //
-  //   // const domain = getDomain(data, stateCopy, marketPrice);
-  //   // const scale = scaleLinear().domain(domain).range([dms.boundedHeight, 0]);
-  //
-  //   const invertedSellMax = y.scale
-  //     .invert(Number(stateCopy.sell.max))
-  //     .toString();
-  //   dispatch('sellMax', invertedSellMax);
-  //
-  //   const invertedSellMin = y.scale
-  //     .invert(Number(stateCopy.sell.min))
-  //     .toString();
-  //   dispatch('sellMin', invertedSellMin);
-  // }, [
-  //   data,
-  //   dispatch,
-  //   dms.boundedHeight,
-  //   state.sell.max,
-  //   state.sell.min,
-  //   stateCopy,
-  //   tmp,
-  // ]);
-
   const handleDrag = useCallback(
-    (key: keyof SimulatorInputSearch, value: number) => {
-      // const domain = getDomain(data, state, marketPrice);
-      // const scale = scaleLinear().domain(domain).range([dms.boundedHeight, 0]);
-
-      // setTmp(true);
-      //
-      // if (key === 'sellMax') {
-      //   setStateCopy((prev) => ({
-      //     ...prev,
-      //     sell: { ...prev.sell, max: value.toString() },
-      //   }));
-      // }
-      //
-      // if (key === 'sellMin') {
-      //   setStateCopy((prev) => ({
-      //     ...prev,
-      //     sell: { ...prev.sell, min: value.toString() },
-      //   }));
-      // }
-
-      const inverted = y.scale.invert(value).toString();
-      dispatch(key, inverted);
+    (key: keyof ChartY, value: number) => {
+      dispatchY(key, value.toString());
+      // const inverted = y.scale.invert(value).toString();
+      // dispatch(key, inverted);
     },
-    [dispatch, y.scale]
+    [dispatch, dispatchY, y.scale]
   );
 
   return (
@@ -166,15 +119,17 @@ export const D3ChartCandlesticks = (props: Props) => {
         type="buy"
         yScale={y.scale}
         onDrag={handleDrag}
-        state={state}
+        state={stateChartInverted}
         dms={dms}
+        ctx={ctx}
       />
       <DragablePriceRange
         type="sell"
         yScale={y.scale}
         onDrag={handleDrag}
-        state={state}
+        state={stateChartInverted}
         dms={dms}
+        ctx={ctx}
       />
     </>
   );

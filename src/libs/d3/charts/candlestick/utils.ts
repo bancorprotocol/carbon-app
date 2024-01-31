@@ -1,5 +1,5 @@
 import { select } from 'd3';
-import { SimulatorInputSearch } from 'libs/routing/routes/sim';
+import { ChartY } from 'hooks/useStrategyInput';
 
 export const getSelector = (selector: string) => select(`.${selector}`);
 
@@ -46,7 +46,7 @@ export const onDragHandler = ({
   type: 'buy' | 'sell';
   id: 'line1' | 'line2';
   y: number;
-  onDrag: (key: keyof SimulatorInputSearch, value: number) => void;
+  onDrag: (key: keyof ChartY, value: number) => void;
   isLimit?: boolean;
 }) => {
   const selector = getHandleSelector(type, id);
@@ -85,7 +85,7 @@ export const onDragRectHandler = ({
   type: 'buy' | 'sell';
   y: number;
   y2: number;
-  onDrag: (key: keyof SimulatorInputSearch, value: number) => void;
+  onDrag: (key: keyof ChartY, value: number) => void;
 }) => {
   getSelector(getRectSelector(type)).attr('y', y);
 

@@ -31,7 +31,16 @@ const start = dayjs().unix() - 60 * 60 * 24 * 30 * 12;
 const end = dayjs().unix();
 
 export const SimulatorPage = () => {
-  const { state, dispatch, state2 } = useStrategyInput();
+  const ctx = useStrategyInput();
+  const {
+    state,
+    dispatch,
+    state2,
+    stateChart,
+    dispatchY,
+    stateChartInverted,
+    y,
+  } = ctx;
 
   const marketPrice = useCompareTokenPrice(
     state2.baseToken?.address,
@@ -178,6 +187,7 @@ export const SimulatorPage = () => {
                       data={priceHistoryQuery.data}
                       dms={dms}
                       marketPrice={marketPrice}
+                      ctx={ctx}
                     />
                   </g>
                 </svg>
@@ -185,6 +195,8 @@ export const SimulatorPage = () => {
                 <CarbonLogoLoading className="h-[100px]" />
               )}
             </div>
+            <pre>{JSON.stringify(stateChart, null, 2)}</pre>
+            <pre>{JSON.stringify(stateChartInverted, null, 2)}</pre>
           </div>
         </div>
 
