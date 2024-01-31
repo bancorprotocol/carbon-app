@@ -6,7 +6,6 @@ import { SimulatorStrategyType } from 'components/simulator/SimulatorStrategyTyp
 import { SimulatorTokenSelection } from 'components/simulator/SimulatorTokenSelection';
 import { checkIfOrdersOverlapNew } from 'components/strategies/utils';
 import dayjs from 'dayjs';
-import { useModal } from 'hooks/useModal';
 import { useStrategyInput } from 'hooks/useStrategyInput';
 import { D3ChartSettingsProps, useChartDimensions } from 'libs/d3';
 import { D3ChartCandlesticks } from 'libs/d3/charts/candlestick/D3ChartCandlesticks';
@@ -22,7 +21,7 @@ import { cn } from 'utils/helpers';
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
   height: 750,
-  marginTop: 0,
+  marginTop: 10,
   marginBottom: 40,
   marginLeft: 0,
   marginRight: 80,
@@ -32,7 +31,6 @@ const start = dayjs().unix() - 60 * 60 * 24 * 30 * 12;
 const end = dayjs().unix();
 
 export const SimulatorPage = () => {
-  const { openModal } = useModal();
   const { state, dispatch, state2 } = useStrategyInput();
 
   const marketPrice = useCompareTokenPrice(
@@ -76,19 +74,22 @@ export const SimulatorPage = () => {
       if (!marketPrice || !init) return;
       setInit(false);
 
-      const operation = type === 'buy' ? 'minus' : 'plus';
-
-      const max = new SafeDecimal(marketPrice)
-        [operation](marketPrice * 0.1)
-        .toFixed();
-
-      const min = new SafeDecimal(marketPrice)
-        [operation](marketPrice * 0.2)
-        .toFixed();
-
       if (!(!state2[type].max && !state2[type].min)) {
         return;
       }
+
+      const operation = type === 'buy' ? 'minus' : 'plus';
+
+      const multiplierMax = type === 'buy' ? 0.1 : 0.2;
+      const multiplierMin = type === 'buy' ? 0.2 : 0.1;
+
+      const max = new SafeDecimal(marketPrice)
+        [operation](marketPrice * multiplierMax)
+        .toFixed();
+
+      const min = new SafeDecimal(marketPrice)
+        [operation](marketPrice * multiplierMin)
+        .toFixed();
 
       if (state2[type].isRange) {
         dispatch(`${type}Max`, max);
