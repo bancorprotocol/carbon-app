@@ -1,5 +1,4 @@
 import { select } from 'd3';
-import { SimulatorInputSearch } from 'libs/routing/routes/sim';
 
 export const getSelector = (selector: string) => select(`.${selector}`);
 
@@ -40,21 +39,20 @@ export const onDragHandler = ({
   type,
   id,
   y,
-  onDrag,
+  onMinMaxChange,
   isLimit,
 }: {
   type: 'buy' | 'sell';
   id: 'line1' | 'line2';
   y: number;
-  onDrag: (key: keyof SimulatorInputSearch, value: number) => void;
+  onMinMaxChange: (type: 'buy' | 'sell', min: number, max: number) => void;
   isLimit?: boolean;
 }) => {
   const selector = getHandleSelector(type, id);
   moveBoundary(selector, y);
 
   if (isLimit) {
-    onDrag(`${type}Max`, y);
-    onDrag(`${type}Min`, y);
+    onMinMaxChange(type, y, y);
     return;
   }
 
@@ -68,10 +66,10 @@ export const onDragHandler = ({
   const rect = getSelector(getRectSelector(type));
 
   if (y < oppositeY) {
-    onDrag(`${type}Max`, y);
+    onMinMaxChange(type, oppositeY, y);
     rect.attr('y', y).attr('height', oppositeY - y);
   } else {
-    onDrag(`${type}Min`, y);
+    onMinMaxChange(type, y, oppositeY);
     rect.attr('y', oppositeY).attr('height', y - oppositeY);
   }
 };
@@ -80,20 +78,19 @@ export const onDragRectHandler = ({
   type,
   y,
   y2,
-  onDrag,
+  onMinMaxChange,
 }: {
   type: 'buy' | 'sell';
   y: number;
   y2: number;
-  onDrag: (key: keyof SimulatorInputSearch, value: number) => void;
+  onMinMaxChange: (type: 'buy' | 'sell', min: number, max: number) => void;
 }) => {
   getSelector(getRectSelector(type)).attr('y', y);
 
   moveBoundary(getHandleSelector(type, 'line1'), y);
-  onDrag(`${type}Max`, y);
-
   moveBoundary(getHandleSelector(type, 'line2'), y2);
-  onDrag(`${type}Min`, y2);
+
+  onMinMaxChange(type, y2, y);
 };
 
 export const handleStateChange = ({

@@ -8,7 +8,7 @@ interface Props {
   data: Array<SimulatorData>;
   showSummary: boolean;
   setShowSummary: React.Dispatch<React.SetStateAction<boolean>>;
-  state2: StrategyInput2;
+  state: StrategyInput2;
 }
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -21,7 +21,7 @@ export const SimulatorChartHeader = ({
   showSummary,
   setShowSummary,
   data,
-  state2,
+  state,
 }: Props) => {
   const startDate = dateFormatter.format(data[0].date * 1e3);
   const endDate = dateFormatter.format(data[data.length - 1].date * 1e3);
@@ -41,7 +41,7 @@ export const SimulatorChartHeader = ({
           setShowSummary={setShowSummary}
           showSummary={showSummary}
         />
-        <SimulatorDownloadMenu data={data} state2={state2} />
+        <SimulatorDownloadMenu data={data} state2={state} />
       </article>
     </section>
   );

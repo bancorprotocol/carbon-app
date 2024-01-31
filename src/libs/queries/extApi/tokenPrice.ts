@@ -58,8 +58,8 @@ export type TokenPriceHistoryResult = {
 };
 
 export interface TokenPriceHistorySearch {
-  baseToken: string;
-  quoteToken: string;
+  baseToken?: string;
+  quoteToken?: string;
   start: number;
   end: number;
 }
@@ -79,6 +79,7 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
       }));
     },
     {
+      enabled: !!params.baseToken && !!params.quoteToken,
       staleTime: FIVE_MIN_IN_MS,
     }
   );

@@ -3,7 +3,7 @@ export type {
   D3ChartSettingsProps,
   CandlestickData,
 } from './types';
-export { D3ChartCandlestick } from './charts/candlestick';
+// export { D3ChartCandlestick } from './charts/candlestick';
 export { D3ChartSimulatorBalance } from './sim/D3ChartSimulatorBalance';
 export { D3ChartSimulatorPrice } from './sim/D3ChartSimulatorPrice';
 export { D3ChartSimulatorPerformance } from './sim/D3ChartSimulatorPerformance';

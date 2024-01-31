@@ -60,8 +60,10 @@ export const simulatorInputRoute = new Route({
       buyMax: search.buyMax || '',
       buyMin: search.buyMin || '',
       buyBudget: search.buyBudget || '',
-      // isBuyLimit: Boolean(search.isBuyLimit),
-      // isSellLimit: Boolean(search.isSellLimit),
+      sellIsRange:
+        search.sellIsRange === undefined ? true : Boolean(search.sellIsRange),
+      buyIsRange:
+        search.buyIsRange === undefined ? true : Boolean(search.buyIsRange),
     };
   },
 });

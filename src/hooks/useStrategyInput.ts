@@ -1,4 +1,5 @@
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { useTokens } from 'hooks/useTokens';
 import { SimulatorInputSearch, SimulatorType } from 'libs/routing/routes/sim';
@@ -35,57 +36,48 @@ export interface StrategyInput2 {
   buy: StrategyInputOrder;
   sell: StrategyInputOrder;
   simulationType: SimulatorType;
+  start: number;
+  end: number;
 }
+
+const start = dayjs().unix() - 60 * 60 * 24 * 30 * 12;
+const end = dayjs().unix();
 
 export const useStrategyInput = () => {
   const { getTokenById } = useTokens();
   const navigate = useNavigate();
   const search: SimulatorInputSearch = useSearch({ strict: false });
   const params = useParams({ from: '/simulator/$simulationType' });
-  const [state, setState] = useState<StrategyInput>(search);
+  const [_state, setState] = useState<StrategyInput>(search);
 
-  const baseToken = getTokenById(state.baseToken);
-  const quoteToken = getTokenById(state.quoteToken);
+  const baseToken = getTokenById(_state.baseToken);
+  const quoteToken = getTokenById(_state.quoteToken);
 
-  const state2 = useMemo<StrategyInput2>(() => {
+  const state = useMemo<StrategyInput2>(() => {
     return {
       simulationType: params.simulationType,
       baseToken,
       quoteToken,
       buy: {
-        min: state.buyMin,
-        max: state.buyMax,
-        budget: state.buyBudget,
-        budgetError: state.buyBudgetError,
-        isRange: !!state.buyIsRange,
-        priceError: state.buyPriceError,
+        min: _state.buyMin,
+        max: _state.buyMax,
+        budget: _state.buyBudget,
+        budgetError: _state.buyBudgetError,
+        isRange: !!_state.buyIsRange,
+        priceError: _state.buyPriceError,
       },
       sell: {
-        min: state.sellMin,
-        max: state.sellMax,
-        budget: state.sellBudget,
-        budgetError: state.sellBudgetError,
-        isRange: !!state.sellIsRange,
-        priceError: state.sellPriceError,
+        min: _state.sellMin,
+        max: _state.sellMax,
+        budget: _state.sellBudget,
+        budgetError: _state.sellBudgetError,
+        isRange: !!_state.sellIsRange,
+        priceError: _state.sellPriceError,
       },
+      start,
+      end,
     };
-  }, [
-    baseToken,
-    params.simulationType,
-    quoteToken,
-    state.buyBudgetError,
-    state.buyBudget,
-    state.buyIsRange,
-    state.buyMax,
-    state.buyMin,
-    state.sellBudgetError,
-    state.sellBudget,
-    state.sellIsRange,
-    state.sellMax,
-    state.sellMin,
-    state.buyPriceError,
-    state.sellPriceError,
-  ]);
+  }, [baseToken, params.simulationType, quoteToken, _state]);
 
   const setSearch = (search: StrategyInput) => {
     const {
@@ -104,11 +96,11 @@ export const useStrategyInput = () => {
     });
   };
 
-  useDebouncedValue(state, 300, { cb: setSearch });
+  useDebouncedValue(_state, 300, { cb: setSearch });
 
   const dispatch: StrategyInputDispatch = useCallback((key, value) => {
     setState((state) => ({ ...state, [key]: value }));
   }, []);
 
-  return { state, dispatch, state2 };
+  return { dispatch, state };
 };

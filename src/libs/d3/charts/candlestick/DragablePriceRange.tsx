@@ -1,5 +1,3 @@
-import { ScaleLinear } from 'd3';
-import { StrategyInput2 } from 'hooks/useStrategyInput';
 import { D3ChartHandle } from 'libs/d3/charts/candlestick/D3ChartHandle';
 import { D3ChartRect } from 'libs/d3/charts/candlestick/D3ChartRect';
 import {
@@ -10,57 +8,49 @@ import {
   onDragRectHandler,
 } from 'libs/d3/charts/candlestick/utils';
 import { D3ChartSettings } from 'libs/d3/types';
-import { SimulatorInputSearch } from 'libs/routing/routes/sim';
 import { useEffect, useRef } from 'react';
-import { prettifyNumber } from 'utils/helpers';
 
 type OrderRangeProps = {
   type: 'buy' | 'sell';
-  yScale: ScaleLinear<number, number>;
-  onDrag: (key: keyof SimulatorInputSearch, value: number) => void;
-  state: StrategyInput2;
+  onMinMaxChange: (type: 'buy' | 'sell', min: number, max: number) => void;
+  labels: { min: string; max: string };
+  yPos: { min: number; max: number };
   dms: D3ChartSettings;
+  isLimit: boolean;
 };
 
 export const DragablePriceRange = ({
   type,
-  yScale,
-  onDrag,
-  state,
+  onMinMaxChange,
+  labels,
+  yPos,
   dms,
+  isLimit,
 }: OrderRangeProps) => {
   const isHovering = useRef(false);
   const color = type === 'buy' ? '#00B578' : '#D86371';
-
-  const isLimit = !state[type].isRange;
-
-  const max = Number(state[type].max);
-  const min = Number(state[type].min);
-
-  const yMax = yScale(max);
-  const yMin = yScale(min);
 
   const selectorRect = getRectSelector(type);
   const selectorH1 = getHandleSelector(type, 'line1');
   const selectorH2 = getHandleSelector(type, 'line2');
 
   const onDragRect = (y: number, y2: number) =>
-    onDragRectHandler({ type, y, y2, onDrag });
+    onDragRectHandler({ type, y, y2, onMinMaxChange });
 
   const onDragH1 = (y: number) =>
-    onDragHandler({ type, id: 'line1', y, onDrag, isLimit });
+    onDragHandler({ type, id: 'line1', y, onMinMaxChange, isLimit });
 
   const onDragH2 = (y: number) =>
-    onDragHandler({ type, id: 'line2', y, onDrag });
+    onDragHandler({ type, id: 'line2', y, onMinMaxChange });
 
   useEffect(() => {
     if (isHovering.current) {
       return;
     }
 
-    handleStateChange({ type, id: 'line1', y: yMax, isLimit });
-    !isLimit && handleStateChange({ type, id: 'line2', y: yMin });
-  }, [isLimit, type, yMax, yMin]);
+    handleStateChange({ type, id: 'line1', y: yPos.max, isLimit });
+    !isLimit && handleStateChange({ type, id: 'line2', y: yPos.min });
+  }, [isLimit, type, yPos.max, yPos.min]);
 
   return (
     <g
@@ -81,7 +71,7 @@ export const DragablePriceRange = ({
       )}
       <D3ChartHandle
         selector={selectorH1}
-        label={prettifyNumber(max, { currentCurrency: 'USD' })}
+        label={labels.max}
         dms={dms}
         onDrag={onDragH1}
         color={color}
@@ -89,7 +79,7 @@ export const DragablePriceRange = ({
       {!isLimit && (
         <D3ChartHandle
           selector={selectorH2}
-          label={prettifyNumber(min, { currentCurrency: 'USD' })}
+          label={labels.min}
           dms={dms}
           onDrag={onDragH2}
           color={color}

@@ -46,7 +46,7 @@ export const SimulatorResultPage = () => {
   const ctx = useSimulator();
   const search = useSearch({ from: '/simulator/result' });
   const [showSummary, setShowSummary] = useState(false);
-  const { state2 } = useStrategyInput();
+  const { state } = useStrategyInput();
   const simulationType = 'recurring';
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export const SimulatorResultPage = () => {
 
       <div className="rounded-20 bg-silver p-20">
         <>
-          <SimulatorSummary roi={ctx.roi} gains={ctx.gains} state2={state2} />
+          <SimulatorSummary roi={ctx.roi} gains={ctx.gains} state2={state} />
           {!ctx.isLoading && !!ctx.data && ctx.status !== 'idle' ? (
             <>
               <div className="rounded-10 bg-black py-10">
@@ -86,7 +86,7 @@ export const SimulatorResultPage = () => {
                   data={ctx.data}
                   setShowSummary={setShowSummary}
                   showSummary={showSummary}
-                  state2={state2}
+                  state={state}
                 />
                 {!showSummary ? (
                   <>

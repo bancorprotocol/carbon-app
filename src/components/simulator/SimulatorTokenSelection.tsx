@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
@@ -10,8 +10,8 @@ interface Props {
   base: Token | undefined;
   quote: Token | undefined;
   dispatch: StrategyInputDispatch;
-  setInitBuyRange: React.Dispatch<React.SetStateAction<boolean>>;
-  setInitSellRange: React.Dispatch<React.SetStateAction<boolean>>;
+  setInitBuyRange: Dispatch<SetStateAction<boolean>>;
+  setInitSellRange: Dispatch<SetStateAction<boolean>>;
 }
 
 export const SimulatorTokenSelection: FC<Props> = ({
