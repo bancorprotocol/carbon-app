@@ -1,6 +1,7 @@
-import { max, min, scaleBand } from 'd3';
+import { scaleBand } from 'd3';
 import { D3ChartHandleLine } from 'libs/d3/charts/candlestick/D3ChartHandleLine';
 import { DragablePriceRange } from 'libs/d3/charts/candlestick/DragablePriceRange';
+import { getDomain } from 'libs/d3/charts/candlestick/utils';
 import { XAxis } from 'libs/d3/charts/candlestick/xAxis';
 import { D3YAxiRight } from 'libs/d3/primitives/D3YAxisRight';
 import { useLinearScale } from 'libs/d3/useLinearScale';
@@ -8,50 +9,6 @@ import { useCallback, useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from './Candlesticks';
 import { CandlestickData, D3ChartSettings } from 'libs/d3';
-
-type GetDomainFn<T extends number | number[]> = (
-  data: CandlestickData[],
-  prices: ChartPrices,
-  marketPrice?: number
-) => T;
-
-const yScaleDomainTolerance = 0.1;
-
-const getDomainMin: GetDomainFn<number> = (data, prices, marketPrice) => {
-  let dataMin = min(data, (d) => d.low) as number;
-  const values = [
-    dataMin,
-    Number(prices.buyMin),
-    Number(prices.sellMin),
-    Number(prices.buyMax),
-    Number(prices.sellMax),
-    marketPrice,
-  ];
-  return min(values, (d) => d) as number;
-};
-
-const getDomainMax: GetDomainFn<number> = (data, prices, marketPrice) => {
-  let dataMax = max(data, (d) => d.high) as number;
-  const values = [
-    dataMax,
-    Number(prices.buyMin),
-    Number(prices.sellMin),
-    Number(prices.buyMax),
-    Number(prices.sellMax),
-    marketPrice,
-  ];
-  return max(values, (d) => d) as number;
-};
-
-const getDomain: GetDomainFn<number[]> = (data, prices, marketPrice) => {
-  const domainMin = getDomainMin(data, prices, marketPrice);
-  const domainMax = getDomainMax(data, prices, marketPrice);
-
-  const diff = domainMax - domainMin;
-  const tolerance = diff * yScaleDomainTolerance;
-
-  return [domainMin - tolerance, domainMax + tolerance];
-};
 
 export type ChartPrices = {
   sellMax: string;

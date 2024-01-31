@@ -1,4 +1,6 @@
-import { select } from 'd3';
+import { max, min, select } from 'd3';
+import { ChartPrices } from 'libs/d3/charts/candlestick/D3ChartCandlesticks';
+import { CandlestickData } from 'libs/d3/types';
 
 export const getSelector = (selector: string) => select(`.${selector}`);
 
@@ -116,4 +118,48 @@ export const handleStateChange = ({
     .attr('y1');
 
   moveRect(getRectSelector(type), y, Number(oppositeY));
+};
+
+type GetDomainFn<T extends number | number[]> = (
+  data: CandlestickData[],
+  prices: ChartPrices,
+  marketPrice?: number
+) => T;
+
+const yScaleDomainTolerance = 0.1;
+
+const getDomainMin: GetDomainFn<number> = (data, prices, marketPrice) => {
+  let dataMin = min(data, (d) => d.low) as number;
+  const values = [
+    dataMin,
+    Number(prices.buyMin),
+    Number(prices.sellMin),
+    Number(prices.buyMax),
+    Number(prices.sellMax),
+    marketPrice,
+  ];
+  return min(values, (d) => d) as number;
+};
+
+const getDomainMax: GetDomainFn<number> = (data, prices, marketPrice) => {
+  let dataMax = max(data, (d) => d.high) as number;
+  const values = [
+    dataMax,
+    Number(prices.buyMin),
+    Number(prices.sellMin),
+    Number(prices.buyMax),
+    Number(prices.sellMax),
+    marketPrice,
+  ];
+  return max(values, (d) => d) as number;
+};
+
+export const getDomain: GetDomainFn<number[]> = (data, prices, marketPrice) => {
+  const domainMin = getDomainMin(data, prices, marketPrice);
+  const domainMax = getDomainMax(data, prices, marketPrice);
+
+  const diff = domainMax - domainMin;
+  const tolerance = diff * yScaleDomainTolerance;
+
+  return [domainMin - tolerance, domainMax + tolerance];
 };
