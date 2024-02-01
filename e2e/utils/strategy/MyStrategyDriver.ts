@@ -38,18 +38,25 @@ export class MyStrategyDriver {
       budgetFiat: (direction: Direction) => {
         return strategy.getByTestId(`${direction}-budget-fiat`);
       },
-      priceTooltip: async (direction: Direction) => {
+      priceTooltip: async (
+        direction: Direction,
+        options: { isOverlapping: boolean } = { isOverlapping: false }
+      ) => {
         // Note: locator.hover() doesn't work because of polygon form I think
-        const position = await strategy
-          .getByTestId(`polygon-${direction}`)
-          .boundingBox();
-        if (!position?.x || !position?.y) throw new Error('No polygon found');
-        const x =
-          direction === 'buy'
-            ? position.x + 2
-            : position.x + position.width - 2;
-        const y = position.y + 2;
-        await this.page.mouse.move(x, y);
+        if (options.isOverlapping) {
+          const position = await strategy
+            .getByTestId(`polygon-${direction}`)
+            .boundingBox();
+          if (!position?.x || !position?.y) throw new Error('No polygon found');
+          const x =
+            direction === 'buy'
+              ? position.x + 2
+              : position.x + position.width - 2;
+          const y = position.y + 2;
+          await this.page.mouse.move(x, y);
+        } else {
+          await strategy.getByTestId(`polygon-${direction}`).hover();
+        }
         const tooltip = this.page.getByTestId('order-tooltip');
         await tooltip.waitFor({ state: 'visible' });
         return {
