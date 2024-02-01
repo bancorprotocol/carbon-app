@@ -3,6 +3,7 @@ import { SimulatorPageTabs } from './SimulatorPageTabs';
 import { SimulatorDownloadMenu } from './SimulatorDownload';
 import { SimulatorData } from 'libs/queries';
 import { StrategyInput2 } from 'hooks/useStrategyInput';
+import { SimulatorControls } from './SimulatorControls';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -36,6 +37,7 @@ export const SimulatorChartHeader = ({
           {startDate} – {endDate}
         </span>
       </article>
+      <SimulatorControls />
       <article className="flex items-center gap-8">
         <SimulatorPageTabs
           setShowSummary={setShowSummary}
