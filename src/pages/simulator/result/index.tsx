@@ -55,7 +55,7 @@ export const SimulatorResultPage = () => {
     }
     console.log('sim result effect');
 
-    wait(2000).then(() => {
+    wait(3000).then(() => {
       ctx.start();
     });
   }, [ctx]);
