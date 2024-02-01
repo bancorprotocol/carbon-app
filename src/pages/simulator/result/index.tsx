@@ -78,7 +78,12 @@ export const SimulatorResultPage = () => {
 
       <div className="rounded-20 bg-silver p-20">
         <>
-          <SimulatorSummary roi={ctx.roi} gains={ctx.gains} state2={state} />
+          <SimulatorSummary
+            roi={ctx.roi}
+            gains={ctx.gains}
+            state2={state}
+            isLoading={ctx.isLoading}
+          />
           {!ctx.isLoading && !!ctx.data && ctx.status !== 'idle' ? (
             <>
               <div className="rounded-10 bg-black py-10">
