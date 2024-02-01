@@ -8,7 +8,7 @@ import { useStrategyInput } from 'hooks/useStrategyInput';
 import { useState } from 'react';
 
 export const SimulatorPage = () => {
-  const { dispatch, state } = useStrategyInput();
+  const { dispatch, state, bounds } = useStrategyInput();
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
@@ -25,6 +25,7 @@ export const SimulatorPage = () => {
           initSellRange={initSellRange}
           setInitBuyRange={setInitBuyRange}
           setInitSellRange={setInitSellRange}
+          bounds={bounds}
         />
 
         <div className="absolute top-0 w-[440px] space-y-20">

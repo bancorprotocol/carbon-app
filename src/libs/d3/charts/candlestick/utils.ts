@@ -70,6 +70,7 @@ export const onDragHandler = ({
   if (y < oppositeY) {
     onMinMaxChange(type, oppositeY, y);
     rect.attr('y', y).attr('height', oppositeY - y);
+    return 'flipped';
   } else {
     onMinMaxChange(type, y, oppositeY);
     rect.attr('y', oppositeY).attr('height', y - oppositeY);
@@ -132,10 +133,10 @@ const getDomainMin: GetDomainFn<number> = (data, prices, marketPrice) => {
   let dataMin = min(data, (d) => d.low) as number;
   const values = [
     dataMin,
-    Number(prices.buyMin),
-    Number(prices.sellMin),
-    Number(prices.buyMax),
-    Number(prices.sellMax),
+    Number(prices.buy.min),
+    Number(prices.sell.min),
+    Number(prices.buy.max),
+    Number(prices.sell.max),
     marketPrice,
   ];
   return min(values, (d) => d) as number;
@@ -145,10 +146,10 @@ const getDomainMax: GetDomainFn<number> = (data, prices, marketPrice) => {
   let dataMax = max(data, (d) => d.high) as number;
   const values = [
     dataMax,
-    Number(prices.buyMin),
-    Number(prices.sellMin),
-    Number(prices.buyMax),
-    Number(prices.sellMax),
+    Number(prices.buy.min),
+    Number(prices.sell.min),
+    Number(prices.buy.max),
+    Number(prices.sell.max),
     marketPrice,
   ];
   return max(values, (d) => d) as number;
