@@ -6,6 +6,7 @@ import {
   CreateStrategyTestCase,
   EditStrategyDriver,
 } from '../../../utils/strategy';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const withdraw = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -13,7 +14,8 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
   const output = testCase.output.withdraw;
   return test('Withdraw', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const tokenApproval = new TokenApprovalDriver(page);
+    const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('withdrawFunds');
 
     const modal = await waitModalOpen(page);

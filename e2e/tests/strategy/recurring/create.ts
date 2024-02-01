@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { checkApproval } from '../../../utils/modal';
 import { NotificationDriver } from '../../../utils/NotificationDriver';
 import { navigateTo, screenshot, waitFor } from '../../../utils/operators';
 import {
@@ -10,6 +9,7 @@ import {
   getRecurringSettings,
   screenshotPath,
 } from '../../../utils/strategy';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -36,9 +36,9 @@ export const createRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(sellForm.outcomeValue()).toHaveText(output.sell.outcomeValue);
     await expect(sellForm.outcomeQuote()).toHaveText(output.sell.outcomeQuote);
 
+    const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit();
-
-    await checkApproval(page, [base, quote]);
+    await tokenApproval.checkApproval([base, quote]);
 
     await page.waitForURL('/', { timeout: 10_000 });
 

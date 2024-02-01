@@ -6,13 +6,15 @@ import {
   CreateStrategyTestCase,
   EditStrategyDriver,
 } from '../../../utils/strategy';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
   const { buy, sell } = testCase.output.withdraw;
   return test('Withdraw', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const tokenApproval = new TokenApprovalDriver(page);
+    const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('withdrawFunds');
 
     const modal = await waitModalOpen(page);

@@ -33,6 +33,7 @@ export class NotificationDriver {
   }
 
   private async closeNotif(notif: Locator) {
+    await notif.waitFor({ state: 'attached' });
     const btn = notif.getByTestId('notif-close');
     const isVisible = await btn.isVisible();
     if (isVisible) {

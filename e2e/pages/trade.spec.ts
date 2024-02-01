@@ -4,7 +4,7 @@ import { mockApi } from '../utils/mock-api';
 import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
 import { navigateTo } from '../utils/operators';
-import { checkApproval } from '../utils/modal';
+import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
 
 test.describe('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
@@ -71,7 +71,8 @@ test.describe('Trade', () => {
       await driver.submit();
 
       // Token approval
-      await checkApproval(page, [testCase.source]);
+      const tokenApproval = new TokenApprovalDriver(page);
+      await tokenApproval.checkApproval([testCase.source]);
 
       // Verify form empty
       expect(driver.getPayInput()).toHaveValue('');

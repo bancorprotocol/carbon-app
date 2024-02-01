@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { checkApproval } from '../../../utils/modal';
 import { NotificationDriver } from '../../../utils/NotificationDriver';
 import { navigateTo, screenshot, waitFor } from '../../../utils/operators';
 import {
@@ -9,6 +8,7 @@ import {
   assertDisposableTestCase,
   screenshotPath,
 } from '../../../utils/strategy';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const create = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -35,10 +35,11 @@ export const create = (testCase: CreateStrategyTestCase) => {
 
     await createForm.submit();
 
+    const tokenApproval = new TokenApprovalDriver(page);
     if (direction === 'buy') {
-      await checkApproval(page, [quote]);
+      await tokenApproval.checkApproval([quote]);
     } else {
-      await checkApproval(page, [base]);
+      await tokenApproval.checkApproval([base]);
     }
 
     await page.waitForURL('/', { timeout: 10_000 });

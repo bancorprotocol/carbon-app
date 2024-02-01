@@ -8,7 +8,7 @@ import {
   assertOverlappingTestCase,
   screenshotPath,
 } from '../../../utils/strategy';
-import { checkApproval } from '../../../utils/modal';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
@@ -35,8 +35,9 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await createForm.fillOverlapping();
     expect(overlappingForm.max()).toHaveValue(sell.max.toString());
 
+    const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit();
-    await checkApproval(page, [base, quote]);
+    await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
 
     // Verify strategy data
@@ -51,12 +52,13 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(strategy.budget('sell')).toHaveText(output.sell.budget);
     await expect(strategy.budgetFiat('sell')).toHaveText(output.sell.fiat);
 
-    const sellTooltip = await strategy.priceTooltip('sell');
+    const isOverlapping = true;
+    const sellTooltip = await strategy.priceTooltip('sell', { isOverlapping });
     await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
     await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
     await sellTooltip.waitForDetached();
 
-    const buyTooltip = await strategy.priceTooltip('buy');
+    const buyTooltip = await strategy.priceTooltip('buy', { isOverlapping });
     await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
     await buyTooltip.waitForDetached();
