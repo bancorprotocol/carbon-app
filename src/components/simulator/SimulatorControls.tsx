@@ -14,10 +14,12 @@ interface Props {
 export const SimulatorControls = ({ showSummary }: Props) => {
   const { status, start, pauseToggle, end, playbackSpeed, setPlaybackSpeed } =
     useSimulator();
-  const [isRunning, setIsRunning] = useState(status === 'running');
   const [isOpen, setIsOpen] = useState(false);
+
+  const [isRunning, setIsRunning] = useState(status === 'running');
   const [currentPlaybackSpeed, setCurrentPlaybackSpeed] =
     useState(playbackSpeed);
+  const isStopped = status === 'ended';
 
   const setSpeed = (speed: PlaybackSpeed) => {
     setPlaybackSpeed(speed);
@@ -33,6 +35,10 @@ export const SimulatorControls = ({ showSummary }: Props) => {
   };
 
   const playPause = () => {
+    if (isStopped) {
+      replay();
+      return;
+    }
     setIsRunning(!isRunning);
     pauseToggle();
   };
@@ -42,7 +48,7 @@ export const SimulatorControls = ({ showSummary }: Props) => {
   const buttons = [
     {
       label: 'Play/Pause',
-      icon: isRunning ? <PauseIcon /> : <PlayIcon />,
+      icon: isRunning && !isStopped ? <PauseIcon /> : <PlayIcon />,
       onClick: () => playPause(),
     },
     {
