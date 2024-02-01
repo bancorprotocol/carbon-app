@@ -34,7 +34,7 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
       />
       <g
         transform={`translate(${lineWidth},-${handleDms.height / 2})`}
-        className={cn(isDraggable && 'cursor-pointer')}
+        className={cn(isDraggable && 'cursor-ns-resize')}
       >
         <rect y={y} {...handleDms} fill={color} rx={4} />
         {label && (
