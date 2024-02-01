@@ -17,7 +17,7 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('editPrices');
-    await edit.fillDisposablePrice();
+    await edit.fillDisposablePrice('editPrices');
 
     await edit.submit('editPrices');
     await page.waitForURL('/', { timeout: 10_000 });

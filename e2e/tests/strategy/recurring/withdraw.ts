@@ -21,6 +21,7 @@ export const withdrawStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('withdraw');
+    await edit.waitForWallet();
     await edit.fillRecurringBudget('withdraw');
 
     await edit.submit('withdraw');

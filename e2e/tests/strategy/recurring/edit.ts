@@ -18,7 +18,7 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('editPrices');
-    await edit.fillRecurringPrice();
+    await edit.fillRecurringPrice('editPrices');
     await edit.submit('editPrices');
     await page.waitForURL('/', { timeout: 10_000 });
 

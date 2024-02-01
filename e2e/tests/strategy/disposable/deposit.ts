@@ -17,6 +17,7 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('deposit');
+    await edit.waitForWallet();
     await edit.fillDisposableBudget('deposit');
 
     await edit.submit('deposit');

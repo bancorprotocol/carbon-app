@@ -17,7 +17,7 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     await strategy.clickManageEntry('renewStrategy');
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('renew');
-    await edit.fillRecurringPrice();
+    await edit.fillRecurringPrice('renew');
     await edit.submit('renew');
     await page.waitForURL('/', { timeout: 10_000 });
 
