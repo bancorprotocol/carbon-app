@@ -23,6 +23,8 @@ export const AnimatedNumber = ({
     const node = nodeRef.current;
     if (!node) return;
     const controls = animate(from, to, {
+      type: 'tween',
+      ease: [0.1, 0.84, 0.29, 0.93], // cubic-bezier
       duration: duration ?? 2,
       onUpdate(value) {
         node.textContent = formatFn ? formatFn(value) : value.toString();
