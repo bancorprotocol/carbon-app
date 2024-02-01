@@ -2,6 +2,7 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { StrategyInput2, StrategyInputDispatch } from 'hooks/useStrategyInput';
 import { D3ChartSettingsProps, useChartDimensions } from 'libs/d3';
 import {
+  ChartPrices,
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'libs/d3/charts/candlestick/D3ChartCandlesticks';
@@ -17,7 +18,7 @@ import { cn } from 'utils/helpers';
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
   height: 750,
-  marginTop: 10,
+  marginTop: 0,
   marginBottom: 40,
   marginLeft: 0,
   marginRight: 80,
@@ -30,6 +31,7 @@ interface Props {
   initSellRange: boolean;
   setInitBuyRange: Dispatch<SetStateAction<boolean>>;
   setInitSellRange: Dispatch<SetStateAction<boolean>>;
+  bounds: ChartPrices;
 }
 
 export const SimInputChart = ({
@@ -39,6 +41,7 @@ export const SimInputChart = ({
   initSellRange,
   setInitBuyRange,
   setInitSellRange,
+  bounds,
 }: Props) => {
   const [ref, dms] = useChartDimensions(chartSettings);
 
@@ -108,15 +111,27 @@ export const SimInputChart = ({
   }, [handleDefaultValues]);
 
   const prices = {
-    buyMax: state.buy.max,
-    buyMin: state.buy.min,
-    buyIsLimit: !state.buy.isRange,
-    sellMax: state.sell.max,
-    sellMin: state.sell.min,
-    sellIsLimit: !state.sell.isRange,
+    buy: {
+      min: state.buy.min,
+      max: state.buy.max,
+    },
+    sell: {
+      min: state.sell.min,
+      max: state.sell.max,
+    },
   };
 
   const onPriceUpdates: OnPriceUpdates = useCallback(
+    ({ buy, sell }) => {
+      dispatch('buyMin', buy.min, false);
+      dispatch('buyMax', buy.max, false);
+      dispatch('sellMin', sell.min, false);
+      dispatch('sellMax', sell.max, false);
+    },
+    [dispatch]
+  );
+
+  const onPriceUpdatesEnd: OnPriceUpdates = useCallback(
     ({ buy, sell }) => {
       dispatch('buyMin', buy.min);
       dispatch('buyMax', buy.max);
@@ -147,6 +162,12 @@ export const SimInputChart = ({
               data={priceHistoryQuery.data}
               dms={dms}
               marketPrice={marketPrice}
+              bounds={bounds}
+              onDragEnd={onPriceUpdatesEnd}
+              isLimit={{
+                buy: !state.buy.isRange,
+                sell: !state.sell.isRange,
+              }}
             />
           ) : (
             <CarbonLogoLoading className="h-[100px]" />

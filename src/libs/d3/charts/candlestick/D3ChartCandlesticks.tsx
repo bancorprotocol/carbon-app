@@ -1,28 +1,21 @@
 import { scaleBand } from 'd3';
 import { D3ChartHandleLine } from 'libs/d3/charts/candlestick/D3ChartHandleLine';
 import { DragablePriceRange } from 'libs/d3/charts/candlestick/DragablePriceRange';
-import { getDomain } from 'libs/d3/charts/candlestick/utils';
+import { getDomain, handleStateChange } from 'libs/d3/charts/candlestick/utils';
 import { XAxis } from 'libs/d3/charts/candlestick/xAxis';
 import { D3YAxiRight } from 'libs/d3/primitives/D3YAxisRight';
 import { useLinearScale } from 'libs/d3/useLinearScale';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from './Candlesticks';
 import { CandlestickData, D3ChartSettings } from 'libs/d3';
 
 export type ChartPrices = {
-  sellMax: string;
-  sellMin: string;
-  sellIsLimit: boolean;
-  buyMax: string;
-  buyMin: string;
-  buyIsLimit: boolean;
-};
-
-export type OnPriceUpdates = (props: {
   buy: { min: string; max: string };
   sell: { min: string; max: string };
-}) => void;
+};
+
+export type OnPriceUpdates = (props: ChartPrices) => void;
 
 interface Props {
   dms: D3ChartSettings;
@@ -30,10 +23,22 @@ interface Props {
   prices: ChartPrices;
   onPriceUpdates: OnPriceUpdates;
   marketPrice?: number;
+  bounds: ChartPrices;
+  onDragEnd?: OnPriceUpdates;
+  isLimit: { buy: boolean; sell: boolean };
 }
 
 export const D3ChartCandlesticks = (props: Props) => {
-  const { dms, data, prices, onPriceUpdates, marketPrice } = props;
+  const {
+    dms,
+    data,
+    prices,
+    onPriceUpdates,
+    marketPrice,
+    bounds,
+    onDragEnd,
+    isLimit,
+  } = props;
 
   const xScale = useMemo(
     () =>
@@ -45,7 +50,7 @@ export const D3ChartCandlesticks = (props: Props) => {
   );
 
   const y = useLinearScale({
-    domain: getDomain(data, prices, marketPrice),
+    domain: getDomain(data, bounds, marketPrice),
     range: [dms.boundedHeight, 0],
   });
 
@@ -55,48 +60,116 @@ export const D3ChartCandlesticks = (props: Props) => {
       const maxInverted = y.scale.invert(max).toString();
 
       const buy = {
-        min: type === 'buy' ? minInverted : prices.buyMin,
-        max: type === 'buy' ? maxInverted : prices.buyMax,
+        min: type === 'buy' ? minInverted : prices.buy.min,
+        max: type === 'buy' ? maxInverted : prices.buy.max,
       };
       const sell = {
-        min: type === 'sell' ? minInverted : prices.sellMin,
-        max: type === 'sell' ? maxInverted : prices.sellMax,
+        min: type === 'sell' ? minInverted : prices.sell.min,
+        max: type === 'sell' ? maxInverted : prices.sell.max,
       };
       onPriceUpdates({ buy, sell });
     },
     [
       onPriceUpdates,
-      prices.buyMax,
-      prices.buyMin,
-      prices.sellMax,
-      prices.sellMin,
+      prices.buy.max,
+      prices.buy.min,
+      prices.sell.max,
+      prices.sell.min,
       y.scale,
+    ]
+  );
+
+  const hasDragEnded = useRef(false);
+
+  const onMinMaxChangeEnd = useCallback(
+    (type: 'buy' | 'sell', y1?: number, y2?: number) => {
+      const minInverted = y1
+        ? y.scale.invert(y1).toString()
+        : type === 'buy'
+        ? prices.buy.min
+        : prices.sell.min;
+
+      const maxInverted = y2
+        ? y.scale.invert(y2).toString()
+        : type === 'buy'
+        ? prices.buy.max
+        : prices.sell.max;
+
+      const buy = {
+        min: type === 'buy' ? minInverted : prices.buy.min,
+        max: type === 'buy' ? maxInverted : prices.buy.max,
+      };
+      const sell = {
+        min: type === 'sell' ? minInverted : prices.sell.min,
+        max: type === 'sell' ? maxInverted : prices.sell.max,
+      };
+      onDragEnd?.({ buy, sell });
+      hasDragEnded.current = true;
+    },
+    [
+      onDragEnd,
+      prices.buy.max,
+      prices.buy.min,
+      prices.sell.max,
+      prices.sell.min,
+      y,
     ]
   );
 
   const labels = {
     // TODO add formater function to child
     buy: {
-      min: prettifyNumber(prices.buyMin, { currentCurrency: 'USD' }),
-      max: prettifyNumber(prices.buyMax, { currentCurrency: 'USD' }),
+      min: prettifyNumber(prices.buy.min, { currentCurrency: 'USD' }),
+      max: prettifyNumber(prices.buy.max, { currentCurrency: 'USD' }),
     },
     sell: {
-      min: prettifyNumber(prices.sellMin, { currentCurrency: 'USD' }),
-      max: prettifyNumber(prices.sellMax, { currentCurrency: 'USD' }),
+      min: prettifyNumber(prices.sell.min, { currentCurrency: 'USD' }),
+      max: prettifyNumber(prices.sell.max, { currentCurrency: 'USD' }),
     },
     marketPrice: prettifyNumber(marketPrice ?? '', { currentCurrency: 'USD' }),
   };
 
-  const yPos = {
-    buy: {
-      min: y.scale(Number(prices.buyMin)),
-      max: y.scale(Number(prices.buyMax)),
-    },
-    sell: {
-      min: y.scale(Number(prices.sellMin)),
-      max: y.scale(Number(prices.sellMax)),
-    },
-  };
+  const yPos = useMemo(
+    () => ({
+      buy: {
+        min: y.scale(Number(prices.buy.min)),
+        max: y.scale(Number(prices.buy.max)),
+      },
+      sell: {
+        min: y.scale(Number(prices.sell.min)),
+        max: y.scale(Number(prices.sell.max)),
+      },
+    }),
+    [prices.buy.max, prices.buy.min, prices.sell.max, prices.sell.min, y]
+  );
+
+  useEffect(() => {
+    if (!hasDragEnded.current) {
+      return;
+    }
+
+    handleStateChange({
+      type: 'sell',
+      id: 'line1',
+      y: y.scale(Number(prices.sell.max)),
+    });
+    handleStateChange({
+      type: 'sell',
+      id: 'line2',
+      y: y.scale(Number(prices.sell.min)),
+    });
+    handleStateChange({
+      type: 'buy',
+      id: 'line1',
+      y: y.scale(Number(prices.buy.max)),
+    });
+    handleStateChange({
+      type: 'buy',
+      id: 'line2',
+      y: y.scale(Number(prices.buy.min)),
+    });
+    hasDragEnded.current = false;
+  }, [prices.buy.max, prices.buy.min, prices.sell.max, prices.sell.min, y]);
 
   return (
     <svg width={dms.width} height={dms.height}>
@@ -126,7 +199,8 @@ export const D3ChartCandlesticks = (props: Props) => {
           labels={labels.buy}
           yPos={yPos.buy}
           dms={dms}
-          isLimit={prices.buyIsLimit}
+          onDragEnd={onMinMaxChangeEnd}
+          isLimit={isLimit.buy}
         />
 
         <DragablePriceRange
@@ -135,7 +209,8 @@ export const D3ChartCandlesticks = (props: Props) => {
           labels={labels.sell}
           yPos={yPos.sell}
           dms={dms}
-          isLimit={prices.sellIsLimit}
+          isLimit={isLimit.sell}
+          onDragEnd={onMinMaxChangeEnd}
         />
       </g>
     </svg>

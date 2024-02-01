@@ -2,6 +2,7 @@ import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useDebouncedValue } from 'hooks/useDebouncedValue';
 import { useTokens } from 'hooks/useTokens';
+import { ChartPrices } from 'libs/d3/charts/candlestick/D3ChartCandlesticks';
 import { SimulatorInputSearch, SimulatorType } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';
 import { useCallback, useMemo, useState } from 'react';
@@ -11,7 +12,8 @@ export type StrategyInputDispatch = <
   K extends keyof T
 >(
   key: K,
-  value: T[K]
+  value: T[K],
+  setBounds?: boolean
 ) => void;
 
 interface StrategyInput extends SimulatorInputSearch {
@@ -49,6 +51,11 @@ export const useStrategyInput = () => {
   const search: SimulatorInputSearch = useSearch({ strict: false });
   const params = useParams({ from: '/simulator/$simulationType' });
   const [_state, setState] = useState<StrategyInput>(search);
+
+  const [bounds, setBounds] = useState<ChartPrices>({
+    buy: { min: search.buyMin, max: search.buyMax },
+    sell: { min: search.sellMin, max: search.sellMax },
+  });
 
   const baseToken = getTokenById(_state.baseToken);
   const quoteToken = getTokenById(_state.quoteToken);
@@ -98,9 +105,43 @@ export const useStrategyInput = () => {
 
   useDebouncedValue(_state, 300, { cb: setSearch });
 
-  const dispatch: StrategyInputDispatch = useCallback((key, value) => {
-    setState((state) => ({ ...state, [key]: value }));
-  }, []);
+  const dispatch: StrategyInputDispatch = useCallback(
+    (key, value, updateBounds = true) => {
+      setState((state) => ({ ...state, [key]: value }));
 
-  return { dispatch, state };
+      if (!updateBounds) {
+        return;
+      }
+
+      switch (key) {
+        case 'buyMin':
+          setBounds((bounds) => ({
+            ...bounds,
+            buy: { ...bounds.buy, min: value as string },
+          }));
+          break;
+        case 'buyMax':
+          setBounds((bounds) => ({
+            ...bounds,
+            buy: { ...bounds.buy, max: value as string },
+          }));
+          break;
+        case 'sellMin':
+          setBounds((bounds) => ({
+            ...bounds,
+            sell: { ...bounds.sell, min: value as string },
+          }));
+          break;
+        case 'sellMax':
+          setBounds((bounds) => ({
+            ...bounds,
+            sell: { ...bounds.sell, max: value as string },
+          }));
+          break;
+      }
+    },
+    []
+  );
+
+  return { dispatch, state, bounds };
 };
