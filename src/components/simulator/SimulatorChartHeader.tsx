@@ -1,6 +1,6 @@
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { SimulatorPageTabs } from './SimulatorPageTabs';
-import { SimulatorDownloadMenu } from './SimulatorDownload';
+import { SimulatorDownload } from './SimulatorDownload';
 import { SimulatorData } from 'libs/queries';
 import { StrategyInput2 } from 'hooks/useStrategyInput';
 import { SimulatorControls } from './SimulatorControls';
@@ -43,7 +43,12 @@ export const SimulatorChartHeader = ({
           setShowSummary={setShowSummary}
           showSummary={showSummary}
         />
-        <SimulatorDownloadMenu data={data} state2={state} />
+        <SimulatorDownload
+          data={data}
+          baseSymbol={state.baseToken?.symbol ?? ''}
+          quoteSymbol={state.quoteToken?.symbol ?? ''}
+          simulationType={state.simulationType ?? ''}
+        />
       </article>
     </section>
   );
