@@ -76,6 +76,7 @@ export const Tooltip: FC<
         <m.div
           className={`rounded border border-darkGrey bg-darkGrey/30 px-24 py-16 text-14 text-white shadow-lg backdrop-blur-2xl ${className}`}
           style={{ scale, opacity, maxWidth }}
+          data-testid="tippy-tooltip"
           {...attrs}
         >
           {element}

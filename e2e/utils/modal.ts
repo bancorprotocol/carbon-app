@@ -25,3 +25,11 @@ export const checkApproval = async (page: Page, tokens: string[]) => {
   }
   await modal.getByTestId('approve-submit').click();
 };
+
+export const waitTooltipsClose = async (page: Page) => {
+  const selector = '[data-testid="tippy-tooltip"]';
+  const tooltips = await page.locator(selector).all();
+  for (const tooltip of tooltips) {
+    await tooltip.waitFor({ state: 'detached' });
+  }
+};
