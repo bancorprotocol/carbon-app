@@ -27,6 +27,7 @@ export const checkApproval = async (page: Page, tokens: string[]) => {
   }
   approvedTokens.push(...tokens);
   await modal.getByTestId('approve-submit').click();
+  return modal.waitFor({ state: 'detached' });
 };
 
 export const waitTooltipsClose = async (page: Page) => {

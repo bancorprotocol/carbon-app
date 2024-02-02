@@ -1,22 +1,5 @@
 import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
-import { Token } from 'libs/tokens';
-
-export const getBuyMax = (sellMax: number, spread: number) => {
-  return sellMax / (1 + spread / 100);
-};
-
-export const getSellMin = (buyMin: number, spread: number) => {
-  return buyMin * (1 + spread / 100);
-};
-
-export const getBuyMarginalPrice = (marketPrice: number, spread: number) => {
-  return marketPrice / (1 + spread / 100) ** 0.5;
-};
-
-export const getSellMarginalPrice = (marketPrice: number, spread: number) => {
-  return marketPrice * (1 + spread / 100) ** 0.5;
-};
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -59,29 +42,21 @@ export const getSpread = (strategy: Strategy) => {
 };
 
 export const getRoundedSpread = (strategy: Strategy) => {
-  const spreadPPRM = getSpread(strategy);
-  return Number(spreadPPRM.toFixed(2));
+  const spread = getSpread(strategy);
+  return Number(spread.toFixed(2));
 };
 
 interface BuyOrder {
   min: string;
   marginalPrice: string;
 }
-export const isMinAboveMarket = (buyOrder: BuyOrder, quote?: Token) => {
-  const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
-  return new SafeDecimal(buyOrder.min)
-    .minus(buyOrder.marginalPrice)
-    .abs()
-    .lt(wei);
+export const isMinAboveMarket = (buyOrder: BuyOrder) => {
+  return new SafeDecimal(buyOrder.min).eq(buyOrder.marginalPrice);
 };
 interface SellOrder {
   max: string;
   marginalPrice: string;
 }
-export const isMaxBelowMarket = (sellOrder: SellOrder, quote?: Token) => {
-  const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
-  return new SafeDecimal(sellOrder.max)
-    .minus(sellOrder.marginalPrice)
-    .abs()
-    .lt(wei);
+export const isMaxBelowMarket = (sellOrder: SellOrder) => {
+  return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
 };

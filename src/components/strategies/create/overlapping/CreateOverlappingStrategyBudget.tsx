@@ -28,8 +28,8 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     setBuyBudget,
     setSellBudget,
   } = props;
-  const minAboveMarket = isMinAboveMarket(order0, quote);
-  const maxBelowMarket = isMaxBelowMarket(order1, quote);
+  const minAboveMarket = isMinAboveMarket(order0);
+  const maxBelowMarket = isMaxBelowMarket(order1);
   const validPrice = isValidRange(order0.min, order1.max);
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {

@@ -1,5 +1,5 @@
 import { CreateStrategyCTAMobile } from 'components/strategies/create/CreateStrategyCTA';
-import { lazy, useEffect } from 'react';
+import { useEffect } from 'react';
 import { NotificationAlerts } from 'libs/notifications';
 import { ModalProvider } from 'libs/modals';
 import { useCarbonInit } from 'hooks/useCarbonInit';
@@ -7,18 +7,6 @@ import { MainMenu, MobileMenu } from 'components/core/menu';
 import { MainContent } from 'components/core/MainContent';
 import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
-
-const TanStackRouterDevtools =
-  process.env.NODE_ENV === 'production'
-    ? () => null // Render nothing in production
-    : lazy(() =>
-        // Lazy load in development
-        import('@tanstack/router-devtools').then((res) => ({
-          default: res.TanStackRouterDevtools,
-          // For Embedded Mode
-          // default: res.TanStackRouterDevtoolsPanel
-        }))
-      );
 
 let didInit = false;
 
@@ -48,7 +36,6 @@ export const App = () => {
       <MainMenu />
       <main className="my-80 flex w-full flex-grow flex-col">
         <MainContent />
-        <TanStackRouterDevtools position="bottom-right" />
       </main>
       <MobileMenu />
       <ModalProvider />
