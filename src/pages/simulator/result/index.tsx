@@ -19,7 +19,7 @@ const chartSettings: D3ChartSettingsProps = {
   width: 0,
   height: 330,
   marginTop: 0,
-  marginBottom: 40,
+  marginBottom: 30,
   marginLeft: 80,
   marginRight: 0,
 };
@@ -28,7 +28,7 @@ const chartSettingsBalance: D3ChartSettingsProps = {
   width: 0,
   height: 330,
   marginTop: 100,
-  marginBottom: 40,
+  marginBottom: 30,
   marginLeft: 0,
   marginRight: 0,
 };
@@ -120,6 +120,8 @@ export const SimulatorResultPage = () => {
                           <D3ChartSimulatorBalance
                             data={ctx.animationData}
                             dms={dms}
+                            baseToken={state.baseToken!}
+                            quoteToken={state.quoteToken!}
                           />
                         )}
                       </SimChartWrapper>
