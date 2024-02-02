@@ -29,8 +29,8 @@ export const SimulatorSummary = ({
     <header className="my-8 flex flex-wrap gap-8">
       <section
         className={cn(
-          'flex flex-1 flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between',
-          { 'animate-pulse': isLoading, 'h-82': isLoading }
+          'flex h-72 flex-1 flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black px-16 md:justify-between',
+          { 'animate-pulse': isLoading }
         )}
       >
         {!isLoading && (
@@ -51,8 +51,8 @@ export const SimulatorSummary = ({
       </section>
       <section
         className={cn(
-          'flex flex-1 flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black p-16 md:justify-between',
-          { 'animate-pulse': isLoading, 'h-82': isLoading }
+          'flex h-72 flex-1 flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black px-16 md:justify-between',
+          { 'animate-pulse': isLoading }
         )}
       >
         {!isLoading && (
