@@ -1,6 +1,5 @@
 import { FC, useEffect } from 'react';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -16,8 +15,11 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { DepositAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
-import { carbonSDK } from 'libs/sdk';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import {
+  MarginalPriceOptions,
+  calculateOverlappingBuyBudget,
+  calculateOverlappingSellBudget,
+} from '@bancor/carbon-sdk/strategy-management';
 import { MarketWarning } from './MarketWarning';
 import { geoMean } from 'utils/fullOutcome';
 
@@ -46,8 +48,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     order: { min, max, price: '', isRange: true },
   });
 
-  const aboveMarket = isMinAboveMarket(order0, quote);
-  const belowMarket = isMaxBelowMarket(order1, quote);
+  const aboveMarket = isMinAboveMarket(order0);
+  const belowMarket = isMaxBelowMarket(order1);
 
   useEffect(() => {
     order0.setMarginalPriceOption(MarginalPriceOptions.maintain);
@@ -70,16 +72,15 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     const sellBudget = new SafeDecimal(sellBudgetDelta || '0').plus(
       strategy.order1.balance || '0'
     );
-    const resultBuyBudget =
-      await carbonSDK.calculateOverlappingStrategyBuyBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        sellBudget.toString()
-      );
+    const resultBuyBudget = calculateOverlappingBuyBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      sellBudget.toString()
+    );
     const buyBudget = new SafeDecimal(resultBuyBudget).minus(
       strategy.order0.balance || '0'
     );
@@ -91,16 +92,15 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     const buyBudget = new SafeDecimal(buyBudgetDelta || '0').plus(
       strategy.order0.balance || '0'
     );
-    const resultSellBudget =
-      await carbonSDK.calculateOverlappingStrategySellBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        buyBudget.toString()
-      );
+    const resultSellBudget = calculateOverlappingSellBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      buyBudget.toString()
+    );
     const sellBudget = new SafeDecimal(resultSellBudget).minus(
       strategy.order1.balance || '0'
     );
@@ -160,9 +160,10 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Deposit Budget</h3>
-          <Tooltip element='Indicate the amount you wish to deposit from the available "allocated budget"'>
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element='Indicate the amount you wish to deposit from the available "allocated budget"'
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <BudgetInput
           token={quote}

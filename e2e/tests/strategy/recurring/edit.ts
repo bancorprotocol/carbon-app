@@ -7,18 +7,20 @@ import {
   getRecurringSettings,
   MyStrategyDriver,
 } from '../../../utils/strategy';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
   return test('Edit Price', async ({ page }) => {
     const { buy, sell } = testCase.output.editPrice;
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const tokenApproval = new TokenApprovalDriver(page);
+    const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('editPrices');
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('editPrices');
-    await edit.fillRecurringPrice();
+    await edit.fillRecurringPrice('editPrices');
     await edit.submit('editPrices');
     await page.waitForURL('/', { timeout: 10_000 });
 

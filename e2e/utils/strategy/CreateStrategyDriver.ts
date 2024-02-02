@@ -15,7 +15,7 @@ import {
   StrategySettings,
   Setting,
 } from './types';
-import { waitModalClose, waitModalOpen } from '../modal';
+import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
 import { screenshot, shouldTakeScreenshot } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
 
@@ -124,6 +124,8 @@ export class CreateStrategyDriver {
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
+      await btn.hover(); // Enforce hover to have always the same color
+      await waitTooltipsClose(this.page);
       const form = this.getForm();
       const path = screenshotPath(this.testCase, 'create', 'form');
       await screenshot(form, path);

@@ -113,32 +113,28 @@ export const TokenInputField: FC<Props> = ({
           {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
-        {user && isBalanceLoading !== undefined && !withoutWallet && (
+        {user && !withoutWallet && isBalanceLoading && (
+          <button disabled type="button" data-testid="wallet-loading">
+            Wallet: loading
+          </button>
+        )}
+        {user && !withoutWallet && isBalanceLoading === false && (
           <button
             disabled={disabled}
             type="button"
             onClick={handleBalanceClick}
             className="group flex items-center"
           >
-            Wallet:&nbsp;
-            {isBalanceLoading ? (
-              'loading'
-            ) : (
-              <>
-                <span className="text-white">
-                  {prettifyNumber(balance || 0)}&nbsp;
-                </span>
-                <b
-                  className={
-                    disabled
-                      ? 'text-green/40'
-                      : 'text-green group-hover:text-white'
-                  }
-                >
-                  MAX
-                </b>
-              </>
-            )}
+            <span className="text-white">
+              Wallet: {prettifyNumber(balance || 0)}&nbsp;
+            </span>
+            <b
+              className={
+                disabled ? 'text-green/40' : 'text-green group-hover:text-white'
+              }
+            >
+              MAX
+            </b>
           </button>
         )}
       </div>

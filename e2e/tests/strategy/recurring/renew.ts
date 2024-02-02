@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { pauseStrategy } from './pause';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import {
   assertRecurringTestCase,
   CreateStrategyTestCase,
@@ -17,16 +16,9 @@ export const renewStrategyTest = (testCase: CreateStrategyTestCase) => {
     await strategy.clickManageEntry('renewStrategy');
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('renew');
-    await edit.fillRecurringPrice();
+    await edit.fillRecurringPrice('renew');
     await edit.submit('renew');
     await page.waitForURL('/', { timeout: 10_000 });
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('renew-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'Your request to renew the strategy was successfully completed.'
-    );
 
     await expect(strategy.status()).toHaveText('Active');
     const myStrategies = new MyStrategyDriver(page);

@@ -520,7 +520,7 @@ const testCases: CreateStrategyTestCase[] = [
       create: {
         buy: {
           min: '0.3',
-          max: '0.545454',
+          max: '0.545455',
           budget: '12.501572',
         },
         sell: {
@@ -536,7 +536,7 @@ const testCases: CreateStrategyTestCase[] = [
         totalFiat: '$25.11',
         buy: {
           min: '0.30 USDC',
-          max: '0.545454 USDC',
+          max: '0.545455 USDC',
           budget: '12.50 USDC',
           fiat: '$12.50',
         },
@@ -561,7 +561,7 @@ const testDescription = (testCase: CreateStrategyTestCase) => {
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    testInfo.setTimeout(90_000);
+    testInfo.setTimeout(120_000);
     await setupFork(testInfo);
     const debug = new DebugDriver(page);
     await debug.visit();

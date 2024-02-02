@@ -47,8 +47,8 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     setOverlappingError,
   } = props;
   const { quote, base } = strategy;
-  const minAboveMarket = isMinAboveMarket(order0, quote);
-  const maxBelowMarket = isMaxBelowMarket(order1, quote);
+  const minAboveMarket = isMinAboveMarket(order0);
+  const maxBelowMarket = isMaxBelowMarket(order1);
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
 
