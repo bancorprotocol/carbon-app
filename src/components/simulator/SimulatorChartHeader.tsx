@@ -28,7 +28,7 @@ export const SimulatorChartHeader = ({
   const endDate = dateFormatter.format(data[data.length - 1].date * 1e3);
 
   return (
-    <section className="flex flex-wrap items-center justify-evenly gap-8 py-8 px-24 md:justify-between">
+    <section className="flex flex-wrap items-center justify-evenly gap-8 py-20 px-24 md:justify-between">
       <article className="flex items-center gap-8">
         <span className="flex h-24 w-24 items-center justify-center rounded-[12px] bg-white/10">
           <CalendarIcon className="h-12 w-12" />

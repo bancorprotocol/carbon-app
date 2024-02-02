@@ -86,7 +86,7 @@ export const SimulatorResultPage = () => {
           />
           {!ctx.isLoading && !!ctx.data && ctx.status !== 'idle' ? (
             <>
-              <div className="rounded-10 bg-black py-10">
+              <div className="rounded-10 bg-black">
                 <SimulatorChartHeader
                   data={ctx.data}
                   setShowSummary={setShowSummary}
@@ -95,7 +95,10 @@ export const SimulatorResultPage = () => {
                 />
                 {!showSummary ? (
                   <>
-                    <SimChartWrapper settings={chartSettings}>
+                    <SimChartWrapper
+                      settings={chartSettings}
+                      className="border-t border-emphasis"
+                    >
                       {(dms) => (
                         <D3ChartSimulatorPrice
                           data={ctx.animationData}
@@ -106,7 +109,10 @@ export const SimulatorResultPage = () => {
                     </SimChartWrapper>
 
                     <div className="grid grid-cols-2">
-                      <SimChartWrapper settings={chartSettings}>
+                      <SimChartWrapper
+                        settings={chartSettings}
+                        className="border-t border-r border-emphasis"
+                      >
                         {(dms) => (
                           <D3ChartSimulatorPerformance
                             data={ctx.animationData}
@@ -115,7 +121,10 @@ export const SimulatorResultPage = () => {
                         )}
                       </SimChartWrapper>
 
-                      <SimChartWrapper settings={chartSettingsBalance}>
+                      <SimChartWrapper
+                        settings={chartSettingsBalance}
+                        className="border-t border-emphasis"
+                      >
                         {(dms) => (
                           <D3ChartSimulatorBalance
                             data={ctx.animationData}

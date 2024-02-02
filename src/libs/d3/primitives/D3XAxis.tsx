@@ -10,16 +10,17 @@ interface Props {
 export const D3XAxis = ({ ticks, dms }: Props) => {
   return (
     <g transform={`translate(0,${dms.boundedHeight})`}>
-      <path
-        d={['M', 0, 6, 'v', -6, 'H', dms.boundedWidth, 'v', 6].join(' ')}
-        fill="none"
-        className={'stroke-emphasis'}
-      />
+      {/*<path*/}
+      {/*  d={['M', 0, 6, 'v', -6, 'H', dms.boundedWidth, 'v', 6].join(' ')}*/}
+      {/*  fill="none"*/}
+      {/*  className={'stroke-emphasis'}*/}
+      {/*/>*/}
+      <line x1={-dms.marginLeft} x2={dms.width} className={'stroke-emphasis'} />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(${offset}, 0)`}>
           <line
             y1={dms.boundedHeight * -1}
-            y2="6"
+            y2="0"
             className={'stroke-emphasis'}
           />
           <text
@@ -27,7 +28,7 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
             style={{
               fontSize: '10px',
               textAnchor: 'middle',
-              transform: 'translateY(20px)',
+              transform: 'translateY(19px)',
             }}
             fill={'currentColor'}
             opacity={0.6}
