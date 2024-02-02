@@ -5,7 +5,10 @@ import { ReactComponent as SkipIcon } from 'assets/icons/skip.svg';
 import { useSimulator } from 'libs/d3';
 import { useState } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { PlaybackSpeed } from 'libs/d3/sim/SimulatorProvider';
+import {
+  PlaybackSpeed,
+  playbackSpeedOptions,
+} from 'libs/d3/sim/SimulatorProvider';
 
 interface Props {
   showSummary: boolean;
@@ -42,8 +45,6 @@ export const SimulatorControls = ({ showSummary }: Props) => {
     setIsRunning(!isRunning);
     pauseToggle();
   };
-
-  const speeds: PlaybackSpeed[] = ['0.1x', '0.5x', '1x', '2x', '4x'];
 
   const buttons = [
     {
@@ -87,7 +88,7 @@ export const SimulatorControls = ({ showSummary }: Props) => {
               </button>
             )}
           >
-            {speeds.map((speed, index) => {
+            {playbackSpeedOptions.map((speed, index) => {
               return (
                 <button
                   key={`${index}_${speed}`}
