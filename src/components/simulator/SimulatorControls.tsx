@@ -46,17 +46,17 @@ export const SimulatorControls = () => {
     {
       label: 'Play/Pause',
       icon: isRunning && !isStopped ? <PauseIcon /> : <PlayIcon />,
-      onClick: () => playPause(),
+      onClick: playPause,
     },
     {
       label: 'End',
       icon: <SkipIcon />,
-      onClick: () => end(),
+      onClick: end,
     },
     {
       label: 'Replay',
       icon: <ReplayIcon />,
-      onClick: () => replay(),
+      onClick: replay,
     },
   ];
 
