@@ -12,13 +12,12 @@ import { wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
 import { useWeb3 } from 'libs/web3';
 import { useQueryClient } from '@tanstack/react-query';
-import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { carbonSDK } from 'libs/sdk';
 import { getMarketPrice } from 'hooks/useMarketPrice';
+import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -127,8 +126,7 @@ export const DebugCreateStrategy = () => {
     };
     if (spread) {
       const price = await getMarketPrice(base, quote, selectedFiatCurrency);
-      const params = await carbonSDK.calculateOverlappingStrategyPrices(
-        quote.address,
+      const params = calculateOverlappingPrices(
         buyMin,
         sellMax,
         price.toString(),

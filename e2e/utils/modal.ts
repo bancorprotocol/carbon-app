@@ -24,4 +24,5 @@ export const checkApproval = async (page: Page, tokens: string[]) => {
     }
   }
   await modal.getByTestId('approve-submit').click();
+  return modal.waitFor({ state: 'detached' });
 };

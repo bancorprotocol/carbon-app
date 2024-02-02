@@ -25,8 +25,8 @@ const getPriceWarnings = (isOutOfMarket: boolean): string[] => {
 
 export const CreateOverlappingRange: FC<Props> = (props) => {
   const { base, quote, order0, order1, marketPricePercentage } = props;
-  const minAboveMarket = isMinAboveMarket(order0, quote);
-  const maxBelowMarket = isMaxBelowMarket(order1, quote);
+  const minAboveMarket = isMinAboveMarket(order0);
+  const maxBelowMarket = isMaxBelowMarket(order1);
 
   const priceWarnings = getPriceWarnings(minAboveMarket || maxBelowMarket);
 

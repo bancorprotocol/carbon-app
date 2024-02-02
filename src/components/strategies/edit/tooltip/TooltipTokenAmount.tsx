@@ -23,10 +23,10 @@ export const TooltipTokenAmount: FC<TooltipPriceProps> = (props) => {
     <Tooltip
       element={
         <>
-          <p className="align-center flex flex gap-6">
+          <div className="align-center flex flex gap-6">
             <TokenPrice price={fullAmount} />
             {token.symbol}
-          </p>
+          </div>
           <TokenPrice className="text-white/60" price={fiatPrice} />
         </>
       }
