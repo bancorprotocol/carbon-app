@@ -7,8 +7,8 @@ import {
   deleteFork,
 } from './../utils/tenderly';
 import { Wallet } from 'ethers';
-import { checkApproval } from './modal';
 import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
+import { TokenApprovalDriver } from './TokenApprovalDriver';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -32,6 +32,10 @@ interface ImposterConfig {
   address?: string;
   /** Won't need  */
   noMoney?: boolean;
+}
+
+export interface CreateStrategyDependencies {
+  tokenApproval: TokenApprovalDriver;
 }
 
 export class DebugDriver {
@@ -73,7 +77,10 @@ export class DebugDriver {
     return this.page.getByTestId(`balance-${token}`);
   }
 
-  async createStrategy(testCase: CreateStrategyTestCase) {
+  async createStrategy(
+    testCase: CreateStrategyTestCase,
+    deps: CreateStrategyDependencies
+  ) {
     const { base, quote } = testCase;
     const { buy, sell, spread } = toDebugStrategy(testCase);
     for (const token of [base, quote]) {
@@ -84,7 +91,7 @@ export class DebugDriver {
       .getByTestId('strategy-json-shortcut')
       .fill(JSON.stringify(template));
     await this.page.getByTestId('create-strategies').click();
-    await checkApproval(this.page, [base, quote]);
+    await deps.tokenApproval.checkApproval([base, quote]);
     await this.page.getByTestId('creating-strategies').waitFor({
       state: 'detached',
     });

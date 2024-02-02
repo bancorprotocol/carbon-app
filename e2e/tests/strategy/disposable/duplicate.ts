@@ -6,6 +6,7 @@ import {
 } from './../../../utils/strategy';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { waitModalOpen } from '../../../utils/modal';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const duplicate = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -14,7 +15,8 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
 
   return test('Duplicate', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const tokenApproval = new TokenApprovalDriver(page);
+    const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('duplicateStrategy');
 
     const modal = await waitModalOpen(page);

@@ -5,6 +5,7 @@ import {
   CreateStrategyTestCase,
   EditStrategyDriver,
 } from '../../../utils/strategy';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const deposit = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -12,11 +13,13 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
   const output = testCase.output.deposit;
   return test('Deposit', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const tokenApproval = new TokenApprovalDriver(page);
+    const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('depositFunds');
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('deposit');
+    await edit.waitForWallet();
     await edit.fillDisposableBudget('deposit');
 
     await edit.submit('deposit');

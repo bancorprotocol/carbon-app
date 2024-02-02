@@ -8,7 +8,7 @@ const isCI = !!process.env.CI && process.env.CI !== 'false';
  */
 export default defineConfig({
   testDir: './e2e/pages',
-  testMatch: '**/*.spec.ts', // Realtive to testDir
+  testMatch: '**/*.spec.ts', // Relative to testDir
   outputDir: './e2e/results',
   globalSetup: './e2e/setup.ts',
   fullyParallel: true,
@@ -24,8 +24,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:3000',
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: isCI ? 'on-first-retry' : 'retain-on-failure',
     storageState: 'e2e/storage.json',
   },
 

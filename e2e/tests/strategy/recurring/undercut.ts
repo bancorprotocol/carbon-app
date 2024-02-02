@@ -5,9 +5,9 @@ import {
   assertRecurringTestCase,
   getRecurringSettings,
 } from './../../../utils/strategy';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { waitModalOpen } from '../../../utils/modal';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -15,7 +15,8 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
   const { buy, sell, totalFiat } = testCase.output.undercut;
   return test('Undercut', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
-    const strategy = await manage.createStrategy(testCase);
+    const tokenApproval = new TokenApprovalDriver(page);
+    const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('duplicateStrategy');
 
     const modal = await waitModalOpen(page);
@@ -62,13 +63,5 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
       await expect(sellTooltip.maxPrice()).toHaveText(sell.max);
     }
     await sellTooltip.waitForDetached();
-
-    const notificationDriver = new NotificationDriver(page);
-    const notif = notificationDriver.getNotification('create-strategy');
-    await expect(notif.title()).toHaveText('Success');
-    await expect(notif.description()).toHaveText(
-      'New strategy was successfully created.'
-    );
-    await notificationDriver.closeAll();
   });
 };

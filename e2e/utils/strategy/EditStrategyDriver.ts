@@ -9,13 +9,21 @@ import {
   getRecurringSettings,
   screenshotPath,
 } from './utils';
+import { waitTooltipsClose } from '../modal';
+
+type EditType = 'deposit' | 'withdraw' | 'renew' | 'editPrices';
 
 export class EditStrategyDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
-  async waitForPage(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
+  async waitForPage(type: EditType) {
     const options = { timeout: 10_000 };
     return this.page.waitForURL(`/strategies/edit/*?type=${type}`, options);
+  }
+
+  waitForWallet() {
+    const loading = this.page.getByTestId('wallet-loading');
+    return loading.waitFor({ state: 'detached' });
   }
 
   getPriceSection(direction: Direction) {
@@ -47,6 +55,8 @@ export class EditStrategyDriver {
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
+      await btn.hover(); // Enforce hover to have always the same color
+      await waitTooltipsClose(this.page);
       const form = this.page.getByTestId('edit-form');
       const path = screenshotPath(this.testCase, type, 'form');
       await screenshot(form, path);
@@ -60,29 +70,38 @@ export class EditStrategyDriver {
     return form.budget().fill(budget);
   }
 
-  async fillPrice(direction: Direction, setting: Setting, order: MinMax) {
+  async fillPrice(
+    direction: Direction,
+    setting: Setting,
+    order: MinMax,
+    type: EditType
+  ) {
     const form = this.getPriceSection(direction);
     await form.setting(setting).click();
     if (setting === 'limit') {
-      // wait for input to have a value before overriding
-      expect(form.price()).toHaveValue(/\S+/);
+      if (type !== 'renew') {
+        // wait for input to have a value before overriding
+        expect(form.price()).toHaveValue(/\S+/);
+      }
       await form.price().fill(order.min);
     } else {
-      // wait for input to have a value before overriding
-      expect(form.min()).toHaveValue(/\S+/);
-      expect(form.max()).toHaveValue(/\S+/);
+      if (type !== 'renew') {
+        // wait for input to have a value before overriding
+        expect(form.min()).toHaveValue(/\S+/);
+        expect(form.max()).toHaveValue(/\S+/);
+      }
       await form.min().fill(order.min);
       await form.max().fill(order.max);
     }
     return form;
   }
 
-  async fillRecurringPrice() {
+  async fillRecurringPrice(type: EditType) {
     assertRecurringTestCase(this.testCase);
     const { buy, sell } = this.testCase.input.editPrice;
     const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-    const buyForm = await this.fillPrice('buy', buySetting, buy);
-    const sellForm = await this.fillPrice('sell', sellSetting, sell);
+    const buyForm = await this.fillPrice('buy', buySetting, buy, type);
+    const sellForm = await this.fillPrice('sell', sellSetting, sell, type);
     return { buyForm, sellForm };
   }
 
@@ -94,10 +113,10 @@ export class EditStrategyDriver {
     return { buyForm, sellForm };
   }
 
-  async fillDisposablePrice() {
+  async fillDisposablePrice(type: EditType) {
     assertDisposableTestCase(this.testCase);
     const { direction, setting, input } = this.testCase;
-    return this.fillPrice(direction, setting, input.editPrice);
+    return this.fillPrice(direction, setting, input.editPrice, type);
   }
 
   async fillDisposableBudget(type: 'deposit' | 'withdraw') {
