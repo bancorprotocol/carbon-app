@@ -1,7 +1,8 @@
 import { drag, Selection } from 'd3';
 import { getSelector } from 'libs/d3/charts/candlestick/utils';
 import { D3ChartSettings } from 'libs/d3/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { cn } from 'utils/helpers';
 
 interface Props {
   selector: string;
@@ -23,6 +24,7 @@ export const D3ChartRect = ({
   initialY,
 }: Props) => {
   const selection = getSelector(selector);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleDrag = drag()
     .subject(() => {
@@ -32,6 +34,7 @@ export const D3ChartRect = ({
       };
     })
     .on('start', ({ y, subject: { height } }) => {
+      setIsDragging(true);
       const y2 = y + height;
       onDragStart?.(y2, y);
     })
@@ -40,6 +43,7 @@ export const D3ChartRect = ({
       onDrag(y, y2);
     })
     .on('end', ({ y, subject: { height } }) => {
+      setIsDragging(false);
       const y2 = y + height;
       onDragEnd?.(y2, y);
     });
@@ -50,7 +54,10 @@ export const D3ChartRect = ({
 
   return (
     <rect
-      className={selector}
+      className={cn(selector, {
+        'cursor-grab': !isDragging,
+        'cursor-grabbing': isDragging,
+      })}
       height={initialY}
       width={dms.boundedWidth}
       fill={color}

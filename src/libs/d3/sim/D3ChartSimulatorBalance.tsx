@@ -67,7 +67,7 @@ const Bar = ({ id, xScale, yScale, value, dms, percentage }: BarProps) => {
     <>
       <rect
         x={x}
-        y={value ? y : dms.boundedHeight - 2}
+        y={value > 2 ? y : dms.boundedHeight - 2}
         width={width}
         height={dms.boundedHeight - y || 2}
         fill={color}

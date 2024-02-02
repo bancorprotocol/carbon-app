@@ -56,14 +56,14 @@ export const D3ChartPriceOutOfScale = ({
           fill={`url(#gradient-out-of-range-${type})`}
           opacity={0.5}
         />
-        <text
-          x={dms.boundedWidth / 2}
-          y={yText}
-          textAnchor="middle"
-          fill="white"
-        >
-          {msg} PRICE IS OUT OF SCALE
-        </text>
+        {/*<text*/}
+        {/*  x={dms.boundedWidth / 2}*/}
+        {/*  y={yText}*/}
+        {/*  textAnchor="middle"*/}
+        {/*  fill="white"*/}
+        {/*>*/}
+        {/*  {msg} PRICE IS OUT OF SCALE*/}
+        {/*</text>*/}
       </g>
     </>
   );
