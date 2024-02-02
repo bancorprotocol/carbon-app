@@ -10,11 +10,7 @@ import {
   playbackSpeedOptions,
 } from 'libs/d3/sim/SimulatorProvider';
 
-interface Props {
-  showSummary: boolean;
-}
-
-export const SimulatorControls = ({ showSummary }: Props) => {
+export const SimulatorControls = () => {
   const { status, start, pauseToggle, end, playbackSpeed, setPlaybackSpeed } =
     useSimulator();
   const [isOpen, setIsOpen] = useState(false);
@@ -65,60 +61,56 @@ export const SimulatorControls = ({ showSummary }: Props) => {
   ];
 
   return (
-    <>
-      {!showSummary && (
-        <article className="flex flex-row items-center justify-between gap-12 rounded-[24px] bg-white/10 px-20 py-8">
-          <DropdownMenu
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            placement="bottom-end"
-            className="min-w-[144px] items-center rounded-[10px] border-0 p-8 text-white"
-            aria-expanded={isOpen}
-            button={(attr) => (
-              <button
-                {...attr}
-                className="hover:bg-body h-20 min-w-[20px] place-items-center rounded-[6px] px-2 text-14"
-                onClick={(e) => {
-                  setIsOpen(true);
-                  attr.onClick(e);
-                }}
-                aria-label="Set Playback Speed"
-              >
-                {currentPlaybackSpeed}
-              </button>
-            )}
+    <article className="flex flex-row items-center justify-between gap-12 rounded-[24px] bg-white/10 px-20 py-8">
+      <DropdownMenu
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        placement="bottom-end"
+        className="min-w-[144px] items-center rounded-[10px] border-0 p-8 text-white"
+        aria-expanded={isOpen}
+        button={(attr) => (
+          <button
+            {...attr}
+            className="hover:bg-body h-20 min-w-[20px] place-items-center rounded-[6px] px-2 text-14"
+            onClick={(e) => {
+              setIsOpen(true);
+              attr.onClick(e);
+            }}
+            aria-label="Set Playback Speed"
           >
-            {playbackSpeedOptions.map((speed, index) => {
-              return (
-                <button
-                  key={`${index}_${speed}`}
-                  role="menuitem"
-                  aria-label={`Playback Speed: ${speed}`}
-                  className="hover:bg-body flex w-full rounded-6 py-8 px-12 text-left text-14 text-white/80"
-                  onClick={() => {
-                    setSpeed(speed);
-                    setIsOpen(false);
-                  }}
-                >
-                  {speed}
-                </button>
-              );
-            })}
-          </DropdownMenu>
-          {buttons.map(({ label, onClick, icon }) => {
-            return (
-              <button
-                key={label}
-                aria-label={label}
-                className="hover:bg-body h-20 w-20 rounded-[6px] p-4"
-                onClick={onClick}
-              >
-                {icon}
-              </button>
-            );
-          })}
-        </article>
-      )}
-    </>
+            {currentPlaybackSpeed}
+          </button>
+        )}
+      >
+        {playbackSpeedOptions.map((speed, index) => {
+          return (
+            <button
+              key={`${index}_${speed}`}
+              role="menuitem"
+              aria-label={`Playback Speed: ${speed}`}
+              className="hover:bg-body flex w-full rounded-6 py-8 px-12 text-left text-14 text-white/80"
+              onClick={() => {
+                setSpeed(speed);
+                setIsOpen(false);
+              }}
+            >
+              {speed}
+            </button>
+          );
+        })}
+      </DropdownMenu>
+      {buttons.map(({ label, onClick, icon }) => {
+        return (
+          <button
+            key={label}
+            aria-label={label}
+            className="hover:bg-body h-20 w-20 rounded-[6px] p-4"
+            onClick={onClick}
+          >
+            {icon}
+          </button>
+        );
+      })}
+    </article>
   );
 };
