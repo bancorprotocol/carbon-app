@@ -38,7 +38,7 @@ export const SimulatorChartHeader = ({
         </span>
       </article>
       <SimulatorControls showSummary={showSummary} />
-      <article className="flex items-center gap-8">
+      <article className="flex flex-wrap items-center justify-center gap-8">
         <SimulatorPageTabs
           setShowSummary={setShowSummary}
           showSummary={showSummary}
