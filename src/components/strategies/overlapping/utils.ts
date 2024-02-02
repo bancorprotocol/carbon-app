@@ -1,5 +1,6 @@
 import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
+import { sanitizeNumber } from 'utils/helpers';
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -60,3 +61,23 @@ interface SellOrder {
 export const isMaxBelowMarket = (sellOrder: SellOrder) => {
   return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
 };
+
+interface BuyBudgetOrder extends BuyOrder {
+  budget: string;
+}
+interface SellBudgetOrder extends SellOrder {
+  budget: string;
+}
+/** Verify that both budget are above 1wei if they are enabled */
+export function isOverlappingBudgetTooSmall(
+  order0: BuyBudgetOrder,
+  order1: SellBudgetOrder
+) {
+  if (isMaxBelowMarket(order1)) return false;
+  if (isMinAboveMarket(order0)) return false;
+  const buyBudget = Number(sanitizeNumber(order0.budget));
+  const sellBudget = Number(sanitizeNumber(order1.budget));
+  if (!!buyBudget && !!sellBudget) return false;
+  if (!buyBudget && !sellBudget) return false;
+  return true;
+}
