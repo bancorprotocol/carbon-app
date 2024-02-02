@@ -71,12 +71,12 @@ export const SimulatorControls = ({ showSummary }: Props) => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             placement="bottom-end"
-            className="min-w-[120px] rounded-[10px] border-0 p-8 text-white"
+            className="min-w-[144px] items-center rounded-[10px] border-0 p-8 text-white"
             aria-expanded={isOpen}
             button={(attr) => (
               <button
                 {...attr}
-                className="hover:bg-body h-20 w-20 place-items-center rounded-[6px] text-14"
+                className="hover:bg-body h-20 min-w-[20px] place-items-center rounded-[6px] px-2 text-14"
                 onClick={(e) => {
                   setIsOpen(true);
                   attr.onClick(e);
@@ -93,7 +93,7 @@ export const SimulatorControls = ({ showSummary }: Props) => {
                   key={`${index}_${speed}`}
                   role="menuitem"
                   aria-label={`Playback Speed: ${speed}`}
-                  className="hover:bg-body flex w-full rounded-6 p-8 text-left text-14 text-white/80"
+                  className="hover:bg-body flex w-full rounded-6 py-8 px-12 text-left text-14 text-white/80"
                   onClick={() => {
                     setSpeed(speed);
                     setIsOpen(false);
