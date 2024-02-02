@@ -1,9 +1,10 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { prettifySignedNumber } from 'utils/helpers';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import { AnimatedNumber } from './AnimatedNumber';
 
 interface Props {
   quoteToken: Token;
@@ -18,12 +19,17 @@ export const SimulatorSummaryGains: FC<Props> = ({
 
   const portfolioGainsRounded = portfolioGains.toFixed(2);
   const portfolioGainsFiat = getFiatValue(portfolioGainsRounded);
-  const portfolioGainsFiatFormatted = prettifySignedNumber(portfolioGainsFiat, {
-    currentCurrency: selectedFiatCurrency,
-    round: true,
-    decimals: 2,
-    noSubscript: true,
-  });
+
+  const portfolioGainsFormatter = useCallback(
+    (portfolioGainsFiat: number) =>
+      prettifySignedNumber(portfolioGainsFiat, {
+        currentCurrency: selectedFiatCurrency,
+        round: true,
+        decimals: 2,
+        noSubscript: true,
+      }),
+    [selectedFiatCurrency]
+  );
 
   return (
     <article className="flex flex-col rounded-8">
@@ -33,7 +39,13 @@ export const SimulatorSummaryGains: FC<Props> = ({
           <IconTooltip className="h-10 w-10" />
         </h4>
       </Tooltip>
-      <p className="text-24 font-weight-500">{portfolioGainsFiatFormatted}</p>
+      <AnimatedNumber
+        className="text-24 font-weight-500"
+        from={0.0}
+        to={portfolioGainsFiat.toNumber()}
+        formatFn={portfolioGainsFormatter}
+        duration={2}
+      />
     </article>
   );
 };

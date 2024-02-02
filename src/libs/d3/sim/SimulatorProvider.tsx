@@ -24,6 +24,7 @@ interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
   isError: boolean;
   isSuccess: boolean;
   timer: string;
+  playbackSpeed: PlaybackSpeed;
   setPlaybackSpeed: (speed: PlaybackSpeed) => void;
 }
 
@@ -53,7 +54,7 @@ const playbackSpeedMap: Record<PlaybackSpeed, number> = {
   '4x': 5,
 };
 
-type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
+export type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulator/result' });
@@ -148,6 +149,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         isSuccess: query.isSuccess,
         isError: query.isError,
         timer,
+        playbackSpeed: playbackSpeed.current,
         setPlaybackSpeed,
       }}
     >

@@ -4,18 +4,24 @@ import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { formatNumberWithApproximation } from 'utils/helpers';
 import { SafeDecimal } from 'libs/safedecimal';
+import { useCallback } from 'react';
+import { AnimatedNumber } from './AnimatedNumber';
 
 interface Props {
   portfolioRoi: number;
 }
 
 export const SimulatorSummaryRoi = ({ portfolioRoi }: Props) => {
-  const roi = new SafeDecimal(portfolioRoi);
-  const roiFormatted = formatNumberWithApproximation(roi, {
-    isPercentage: true,
-    approximateBelow: 0.01,
-  });
-  const color = roi.gte(0) ? 'text-green' : 'text-red';
+  const portfolioRoiFormatter = useCallback((portfolioRoi: number) => {
+    const roi = new SafeDecimal(portfolioRoi);
+    const roiFormatted = formatNumberWithApproximation(roi, {
+      isPercentage: true,
+      approximateBelow: 0,
+    });
+    return roiFormatted.value;
+  }, []);
+
+  const color = portfolioRoi >= 0 ? 'text-green' : 'text-red';
 
   return (
     <article className="flex flex-col rounded-8 border-emphasis">
@@ -25,7 +31,13 @@ export const SimulatorSummaryRoi = ({ portfolioRoi }: Props) => {
           <IconTooltip className="h-10 w-10" />
         </h4>
       </Tooltip>
-      <p className={`text-24 font-weight-500 ${color}`}>{roiFormatted.value}</p>
+      <AnimatedNumber
+        className={`text-24 font-weight-500 ${color}`}
+        from={0.0}
+        to={portfolioRoi}
+        formatFn={portfolioRoiFormatter}
+        duration={2}
+      />
     </article>
   );
 };

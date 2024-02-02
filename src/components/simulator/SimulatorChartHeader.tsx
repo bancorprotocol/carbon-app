@@ -1,8 +1,9 @@
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { SimulatorPageTabs } from './SimulatorPageTabs';
-import { SimulatorDownloadMenu } from './SimulatorDownload';
+import { SimulatorDownload } from './SimulatorDownload';
 import { SimulatorData } from 'libs/queries';
 import { StrategyInput2 } from 'hooks/useStrategyInput';
+import { SimulatorControls } from './SimulatorControls';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -36,12 +37,18 @@ export const SimulatorChartHeader = ({
           {startDate} – {endDate}
         </span>
       </article>
-      <article className="flex items-center gap-8">
+      {!showSummary && <SimulatorControls />}
+      <article className="flex flex-wrap items-center justify-center gap-8">
         <SimulatorPageTabs
           setShowSummary={setShowSummary}
           showSummary={showSummary}
         />
-        <SimulatorDownloadMenu data={data} state2={state} />
+        <SimulatorDownload
+          data={data}
+          baseSymbol={state.baseToken?.symbol ?? ''}
+          quoteSymbol={state.quoteToken?.symbol ?? ''}
+          simulationType={state.simulationType ?? ''}
+        />
       </article>
     </section>
   );
