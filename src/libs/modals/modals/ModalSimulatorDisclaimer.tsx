@@ -8,18 +8,21 @@ import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 export const ModalSimulatorDisclaimer: ModalFC<undefined> = ({ id }) => {
   const { closeModal } = useModal();
 
+  const paragraphClassName =
+    'text-secondary flex w-full items-center justify-center text-center';
+
   return (
     <ModalOrMobileSheet id={id}>
       <IconTitleText
         icon={<IconBookmark className="h-24 w-24 text-white" />}
         title="Simulator Disclaimer"
       />
-      <p className="text-secondary flex w-full items-center justify-center text-center">
+      <p className={paragraphClassName}>
         This tool provides insights into historical market performance, but
         results may vary due to the underlying price API. The simulator assumes
         no gas fees.
       </p>
-      <p className="text-secondary flex w-full items-center justify-center text-center">
+      <p className={paragraphClassName}>
         While it offers valuable information for analyzing past market behavior,
         users should approach the results with an awareness of potential
         variations in real-world conditions. It's advisable to use this tool as
