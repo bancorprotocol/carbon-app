@@ -23,8 +23,7 @@ export const OverlappingSmallBudget: FC<Props> = (props) => {
 
   return (
     <WarningMessageWithIcon className="text-red" htmlFor={htmlFor}>
-      Calculated budget for {token.symbol} is smaller than its decimals. Please
-      increase {otherToken.symbol} budget to have at least&nbsp;
+      Please increase {otherToken.symbol} budget to have at least&nbsp;
       {prettifyNumber(wei)} {token.symbol}
     </WarningMessageWithIcon>
   );

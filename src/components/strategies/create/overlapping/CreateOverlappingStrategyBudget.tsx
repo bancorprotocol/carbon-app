@@ -1,6 +1,6 @@
 import { FC, useEffect, useId } from 'react';
 import { Token } from 'libs/tokens';
-import { OrderCreate } from '../useOrder';
+import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -8,7 +8,7 @@ import {
   isMinAboveMarket,
   isMaxBelowMarket,
   isOverlappingBudgetTooSmall,
-} from '../../overlapping/utils';
+} from 'components/strategies/overlapping/utils';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { isValidRange } from 'components/strategies/utils';
 import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
