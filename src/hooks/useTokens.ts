@@ -16,16 +16,6 @@ export const useTokens = () => {
     [tokensMap]
   );
 
-  const getTokenByAddress = useCallback(
-    (address?: string) => {
-      if (!address) return;
-      for (const token of tokensMap.values()) {
-        if (token.address.toLowerCase() === address.toLowerCase()) return token;
-      }
-    },
-    [tokensMap]
-  );
-
   const importToken = useCallback(
     (token: Token) => {
       const normalizedAddress = utils.getAddress(token.address);
@@ -76,7 +66,6 @@ export const useTokens = () => {
   return {
     ...props,
     getTokenById,
-    getTokenByAddress,
     importToken,
     addFavoriteToken,
     removeFavoriteToken,

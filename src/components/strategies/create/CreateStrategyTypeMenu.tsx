@@ -23,6 +23,8 @@ import { StrategyCreateSearch } from 'libs/routing';
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
   quote,
+  order0,
+  order1,
   strategyType,
   selectedStrategySettings,
   setSelectedStrategySettings,
@@ -187,6 +189,8 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         size="lg"
         disabled={!selectedStrategySettings}
         onClick={() => {
+          order0.resetFields();
+          order1.resetFields();
           const search = selectedStrategySettings?.search;
           handleClick(
             selectedStrategySettings?.to!,

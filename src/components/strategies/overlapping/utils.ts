@@ -40,6 +40,7 @@ export const getSpread = ({ order0, order1 }: StrategyInput) => {
   const sellHigh = 'startRate' in order1 ? order1.startRate : order1.min;
   const buyMax = Number(buyHigh);
   const sellMax = Number(sellHigh);
+  if (!buyHigh && !sellMax) return 0;
   return (sellMax / buyMax - 1) * 100;
 };
 

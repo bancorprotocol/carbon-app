@@ -1,16 +1,23 @@
 import { useNavigate, useSearch, StrategyCreateSearch } from 'libs/routing';
-import { Strategy } from 'libs/queries';
+import { Order, Strategy } from 'libs/queries';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { useTokens } from 'hooks/useTokens';
 
-export const toStrategyCreateSearch = (
-  strategy: Strategy
+const isEmptyOrder = (order: Order) => {
+  return !Number(order.startRate) && !Number(order.endRate);
+};
+const isLimitOrder = (order: Order) => {
+  return order.startRate === order.endRate;
+};
+const toStrategyCreateSearch = (
+  order0: Order,
+  order1: Order
 ): StrategyCreateSearch => {
-  const { order0, order1 } = strategy;
-  const isRecurring = order0.endRate !== '0' && order1.endRate !== '0';
-  const isBuyLimit = order0.startRate === order0.endRate;
-  const isSellLimit = order1.startRate === order1.endRate;
-  const isLimit = isBuyLimit && isSellLimit;
+  if (isOverlappingStrategy({ order0, order1 })) {
+    return { strategySettings: 'overlapping' };
+  }
+  const isRecurring = !isEmptyOrder(order0) && !isEmptyOrder(order1);
+  const isLimit = isLimitOrder(order0) && isLimitOrder(order1);
   if (isRecurring) {
     return {
       strategyType: 'recurring',
@@ -23,6 +30,18 @@ export const toStrategyCreateSearch = (
       strategyDirection: order1.endRate === '0' ? 'buy' : 'sell',
     };
   }
+};
+
+/** Remove unwanted balances from duplicate */
+const prepareDuplicate = (strategy: Strategy) => {
+  // Remove balance if overlapping strategy because market price changed
+  if (isOverlappingStrategy(strategy)) {
+    strategy.order0.balance = '0';
+    strategy.order1.balance = '0';
+  }
+  if (isEmptyOrder(strategy.order0)) strategy.order0.balance = '0';
+  if (isEmptyOrder(strategy.order1)) strategy.order1.balance = '0';
+  return strategy;
 };
 
 type DuplicateStrategyParams = StrategyCreateSearch & {
@@ -38,27 +57,42 @@ type DuplicateStrategyParams = StrategyCreateSearch & {
   sellBudget: string;
 };
 
+// TODO: test it and move it into number utils
+const roundSearchParam = (param: string) => {
+  if (param === '0') return '';
+  const [radix, decimals] = param.split('.');
+  if (!decimals) return param;
+  let leadingZeros = '';
+  for (const char of decimals) {
+    if (char !== '0') break;
+    leadingZeros += '0';
+  }
+  if (leadingZeros === decimals) return radix;
+  const rest = decimals
+    .slice(leadingZeros.length, leadingZeros.length + 6)
+    .replace(/0+$/, '');
+  return `${radix}.${leadingZeros}${rest}`;
+};
+
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate();
-  const { getTokenByAddress } = useTokens();
+  const { getTokenById } = useTokens();
   const search: DuplicateStrategyParams = useSearch({ strict: false });
 
   const duplicate = (strategy: Strategy) => {
-    const { base, quote, order0: buy, order1: sell } = strategy;
+    const { base, quote, order0, order1 } = prepareDuplicate(strategy);
     navigate({
       to: '/strategies/create',
       search: {
-        ...search,
         base: base.address,
         quote: quote.address,
-        buyMin: buy.startRate,
-        buyMax: buy.endRate,
-        buyMarginalPrice: buy.marginalRate,
-        buyBudget: buy.balance,
-        sellMin: sell.startRate,
-        sellMax: sell.endRate,
-        sellMarginalPrice: sell.marginalRate,
-        sellBudget: sell.balance,
+        ...toStrategyCreateSearch(order0, order1),
+        buyMin: roundSearchParam(order0.startRate),
+        buyMax: roundSearchParam(order0.endRate),
+        buyBudget: roundSearchParam(order0.balance),
+        sellMin: roundSearchParam(order1.startRate),
+        sellMax: roundSearchParam(order1.endRate),
+        sellBudget: roundSearchParam(order1.balance),
       },
     });
   };
@@ -67,36 +101,21 @@ export const useDuplicateStrategy = () => {
     strategyType: search.strategyType,
     strategySettings: search.strategySettings,
     strategyDirection: search.strategyDirection,
-    base: getTokenByAddress(search.base),
-    quote: getTokenByAddress(search.quote),
+    base: getTokenById(search.base),
+    quote: getTokenById(search.quote),
     order0: {
-      balance: search.buyBudget,
-      startRate: search.buyMin,
-      endRate: search.buyMax,
-      marginalRate: search.buyMarginalPrice,
+      balance: search.buyBudget ?? '',
+      startRate: search.buyMin ?? '',
+      endRate: search.buyMax ?? '',
+      marginalRate: '',
     },
     order1: {
-      balance: search.buyBudget,
-      startRate: search.sellMin,
-      endRate: search.sellMax,
-      marginalRate: search.sellMarginalPrice,
+      balance: search.sellBudget ?? '',
+      startRate: search.sellMin ?? '',
+      endRate: search.sellMax ?? '',
+      marginalRate: '',
     },
   };
-  // marginal price should be calculated based on prices
-  if (decoded.order0.marginalRate) decoded.order0.marginalRate = '';
-  if (decoded.order1.marginalRate) decoded.order1.marginalRate = '';
-
-  // Remove balance if overlapping strategy because market price changed
-  if (isOverlappingStrategy(decoded)) {
-    decoded.order0.balance = '';
-    decoded.order1.balance = '';
-  }
-
-  // Clear order balance for opposite direction in disposable
-  if (decoded.strategyType === 'disposable') {
-    if (decoded.strategyDirection === 'buy') decoded.order1.balance = '';
-    if (decoded.strategyDirection === 'sell') decoded.order0.balance = '';
-  }
 
   return {
     duplicate,
