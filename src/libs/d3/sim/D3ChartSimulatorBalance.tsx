@@ -28,8 +28,8 @@ export const D3ChartSimulatorBalance = ({
     .range([0, dms.boundedWidth])
     .padding(0.1);
 
-  const balanceCASH = data.length ? data[data.length - 1].balanceCASH : 0;
-  const balanceRISK = data.length ? data[data.length - 1].balanceRISK : 0;
+  const balanceCASH = data.length ? data[data.length - 1].portionCASH : 0;
+  const balanceRISK = data.length ? data[data.length - 1].portionRISK : 0;
 
   const y = useLinearScale({
     domain: [max([balanceCASH, balanceRISK]) as number, 0],
