@@ -4,12 +4,13 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 interface Props {
   externalMarketPrice: number;
-  oldMarketPrice: SafeDecimal;
+  oldMarketPrice?: SafeDecimal;
 }
 export const MarketWarning: FC<Props> = (props) => {
   const { externalMarketPrice, oldMarketPrice } = props;
+  if (!oldMarketPrice) return <></>;
   const delta = new SafeDecimal(externalMarketPrice)
-    .div(oldMarketPrice!)
+    .div(oldMarketPrice)
     .minus(1)
     .abs();
   if (delta.lt(0.05)) return <></>;

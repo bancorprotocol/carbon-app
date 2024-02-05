@@ -15,7 +15,10 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
-import { isOverlappingStrategy } from '../overlapping/utils';
+import {
+  isOverlappingBudgetTooSmall,
+  isOverlappingStrategy,
+} from '../overlapping/utils';
 import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
 import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
 
@@ -162,8 +165,11 @@ export const EditStrategyBudgetContent = ({
   const isOrdersBudgetValid = useMemo(() => {
     if (order0.budgetError) return false;
     if (order1.budgetError) return false;
+    if (isOverlapping && isOverlappingBudgetTooSmall(order0, order1)) {
+      return false;
+    }
     return +order0.budget > 0 || +order1.budget > 0;
-  }, [order0.budget, order0.budgetError, order1.budget, order1.budgetError]);
+  }, [order0, order1, isOverlapping]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);

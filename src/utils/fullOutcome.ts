@@ -16,7 +16,7 @@ const isStringNumber = (value: string) => {
 };
 
 /**
- * Performe geometric mean on a range of positive values
+ * Perform geometric mean on a range of positive values
  * @param min Should be lte max
  * @param max Should be gte min
  */
@@ -30,7 +30,7 @@ export const geoMean = (min: string, max: string) => {
   return lowRate.times(highRate).sqrt();
 };
 
-/** Get the aquired amount of token and mean price for a strategy */
+/** Get the acquired amount of token and mean price for a strategy */
 export const getFullOutcome = ({
   budget,
   min,

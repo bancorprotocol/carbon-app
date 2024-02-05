@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useId } from 'react';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
@@ -7,6 +7,7 @@ import {
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
+  isOverlappingBudgetTooSmall,
 } from '../../overlapping/utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -22,6 +23,7 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 import { MarketWarning } from './MarketWarning';
 import { geoMean } from 'utils/fullOutcome';
+import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 
 interface Props {
   strategy: Strategy;
@@ -37,7 +39,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
 
   const externalMarketPrice = useMarketPrice({ base, quote });
-  const oldMarketPrice = geoMean(order0.marginalPrice, order1.marginalPrice)!;
+  const oldMarketPrice = geoMean(order0.marginalPrice, order1.marginalPrice);
 
   const spread = getRoundedSpread(strategy);
   const min = order0.min;
@@ -50,6 +52,9 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
+  const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
+  const buyBudgetId = useId();
+  const sellBudgetId = useId();
 
   useEffect(() => {
     order0.setMarginalPriceOption(MarginalPriceOptions.maintain);
@@ -64,15 +69,15 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     if (belowMarket || new SafeDecimal(strategy.order1.balance).eq(0)) {
       return order1.max;
     }
-    return oldMarketPrice.toString();
+    return oldMarketPrice!.toString();
   };
 
   const setBuyBudget = async (sellBudgetDelta: string) => {
     if (!sellBudgetDelta) return order0.setBudget('');
-    const sellBudget = new SafeDecimal(sellBudgetDelta || '0').plus(
-      strategy.order1.balance || '0'
-    );
-    const resultBuyBudget = calculateOverlappingBuyBudget(
+    const currentBuyBudget = new SafeDecimal(strategy.order0.balance || '0');
+    const currentSellBudget = new SafeDecimal(strategy.order1.balance || '0');
+    const sellBudget = currentSellBudget.plus(sellBudgetDelta);
+    const totalBuy = calculateOverlappingBuyBudget(
       base.decimals,
       quote.decimals,
       order0.min,
@@ -81,18 +86,16 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       spread.toString(),
       sellBudget.toString()
     );
-    const buyBudget = new SafeDecimal(resultBuyBudget).minus(
-      strategy.order0.balance || '0'
-    );
-    order0.setBudget(buyBudget.toString());
+    const buyBudget = new SafeDecimal(totalBuy).minus(currentBuyBudget);
+    order0.setBudget(SafeDecimal.max(buyBudget, 0).toString());
   };
 
   const setSellBudget = async (buyBudgetDelta: string) => {
     if (!buyBudgetDelta) return order1.setBudget('');
-    const buyBudget = new SafeDecimal(buyBudgetDelta || '0').plus(
-      strategy.order0.balance || '0'
-    );
-    const resultSellBudget = calculateOverlappingSellBudget(
+    const currentBuyBudget = new SafeDecimal(strategy.order0.balance || '0');
+    const currentSellBudget = new SafeDecimal(strategy.order1.balance || '0');
+    const buyBudget = currentBuyBudget.plus(buyBudgetDelta);
+    const totalSell = calculateOverlappingSellBudget(
       base.decimals,
       quote.decimals,
       order0.min,
@@ -101,10 +104,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       spread.toString(),
       buyBudget.toString()
     );
-    const sellBudget = new SafeDecimal(resultSellBudget).minus(
-      strategy.order1.balance || '0'
-    );
-    order1.setBudget(sellBudget.toString());
+    const sellBudget = new SafeDecimal(totalSell).minus(currentSellBudget);
+    order1.setBudget(SafeDecimal.max(0, sellBudget).toString());
   };
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
@@ -131,11 +132,11 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   const onBuyBudgetChange = (value: string) => {
     order0.setBudget(value);
-    setSellBudget(value);
+    setSellBudget(value || '0');
   };
   const onSellBudgetChange = (value: string) => {
     order1.setBudget(value);
-    setBuyBudget(value);
+    setBuyBudget(value || '0');
   };
 
   const marketWarningProps = { oldMarketPrice, externalMarketPrice };
@@ -192,6 +193,14 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           />
           <MarketWarning {...marketWarningProps} />
         </BudgetInput>
+        {budgetTooSmall && (
+          <OverlappingSmallBudget
+            base={base}
+            quote={quote}
+            buyBudget={order0.budget}
+            htmlFor={`${buyBudgetId} ${sellBudgetId}`}
+          />
+        )}
         <footer className="flex items-center gap-8">
           <IconAction className="h-16 w-16" />
           <p className="text-12 text-white/60">
