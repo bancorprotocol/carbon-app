@@ -13,12 +13,14 @@ interface Props {
   onDragEnd?: (y?: number, y2?: number) => void;
   color: string;
   label?: string;
+  isLimit: boolean;
 }
 
 export const D3ChartHandle = ({
   onDragStart,
   onDrag,
   onDragEnd,
+  isLimit,
   ...props
 }: Props) => {
   const selection = getSelector(props.selector);
@@ -33,6 +35,11 @@ export const D3ChartHandle = ({
     .on('start', ({ y }) => onDragStart?.(y))
     .on('drag', ({ y }) => onDrag(y))
     .on('end', ({ y }) => {
+      if (isLimit) {
+        onDragEnd?.(y, y);
+        return;
+      }
+
       const oppositeY = Number(
         getSelector(props.selectorOpposite).select('line').attr('y1')
       );

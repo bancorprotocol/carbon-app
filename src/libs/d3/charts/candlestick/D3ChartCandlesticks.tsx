@@ -152,24 +152,36 @@ export const D3ChartCandlesticks = (props: Props) => {
       type: 'sell',
       id: 'line1',
       y: y.scale(Number(prices.sell.max)),
+      isLimit: isLimit.sell,
     });
     handleStateChange({
       type: 'sell',
       id: 'line2',
       y: y.scale(Number(prices.sell.min)),
+      isLimit: isLimit.sell,
     });
     handleStateChange({
       type: 'buy',
       id: 'line1',
       y: y.scale(Number(prices.buy.max)),
+      isLimit: isLimit.buy,
     });
     handleStateChange({
       type: 'buy',
       id: 'line2',
       y: y.scale(Number(prices.buy.min)),
+      isLimit: isLimit.buy,
     });
     hasDragEnded.current = false;
-  }, [prices.buy.max, prices.buy.min, prices.sell.max, prices.sell.min, y]);
+  }, [
+    isLimit.buy,
+    isLimit.sell,
+    prices.buy.max,
+    prices.buy.min,
+    prices.sell.max,
+    prices.sell.min,
+    y,
+  ]);
 
   return (
     <svg width={dms.width} height={dms.height}>

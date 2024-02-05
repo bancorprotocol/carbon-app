@@ -119,6 +119,7 @@ export const DragablePriceRange = ({
         onDrag={onDragH1}
         onDragEnd={onDragEndHandler}
         color={color}
+        isLimit={isLimit}
       />
       {!isLimit && (
         <D3ChartHandle
@@ -130,6 +131,7 @@ export const DragablePriceRange = ({
           onDrag={onDragH2}
           onDragEnd={onDragEndHandler}
           color={color}
+          isLimit={isLimit}
         />
       )}
       <D3ChartPriceOutOfScale

@@ -114,11 +114,11 @@ export const handleStateChange = ({
   }
 
   const oppositeId = id === 'line1' ? 'line2' : 'line1';
-  const oppositeY = getSelector(getHandleSelector(type, oppositeId))
-    .select('line')
-    .attr('y1');
+  const oppositeY = Number(
+    getSelector(getHandleSelector(type, oppositeId)).select('line').attr('y1')
+  );
 
-  moveRect(getRectSelector(type), y, Number(oppositeY));
+  moveRect(getRectSelector(type), y, oppositeY);
 };
 
 type GetDomainFn<T extends number | number[]> = (
