@@ -16,6 +16,7 @@ export const SimulatorPage = () => {
 
   const { openModal } = useModal();
   const hasOpenedDisclaimer = useRef(false);
+
   useEffect(() => {
     if (!hasOpenedDisclaimer.current) {
       openModal('simulatorDisclaimer', undefined);
@@ -60,9 +61,11 @@ export const SimulatorPage = () => {
               buyMin: state.buy.min,
               buyMax: state.buy.max,
               buyBudget: state.buy.budget,
+              buyIsRange: state.buy.isRange,
               sellMin: state.sell.min,
               sellMax: state.sell.max,
               sellBudget: state.sell.budget,
+              sellIsRange: state.sell.isRange,
               start: state.start.toString(),
               end: state.end.toString(),
             }}

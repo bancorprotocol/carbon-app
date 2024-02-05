@@ -10,20 +10,17 @@ export const simulatorRootRoute = new Route({
   path: '/simulator',
 });
 
-interface SimulatorSearchBase {
+interface SimulatorInputSearch {
   baseToken: string;
   quoteToken: string;
   sellBudget: string;
   sellMax: string;
   sellMin: string;
+  sellIsRange: boolean;
   buyMax: string;
   buyMin: string;
   buyBudget: string;
-}
-
-export interface SimulatorInputSearch extends SimulatorSearchBase {
-  buyIsRange?: boolean;
-  sellIsRange?: boolean;
+  buyIsRange: boolean;
 }
 
 export const simulatorRedirect = new Route({
@@ -68,7 +65,7 @@ export const simulatorInputRoute = new Route({
   },
 });
 
-export interface SimulatorResultSearch extends SimulatorSearchBase {
+export interface SimulatorResultSearch extends SimulatorInputSearch {
   start: string;
   end: string;
 }
@@ -130,9 +127,11 @@ export const simulatorResultRoute = new Route({
       sellMax: search.sellMax,
       sellMin: search.sellMin,
       sellBudget: search.sellBudget,
+      sellIsRange: Boolean(search.sellIsRange),
       buyMax: search.buyMax,
       buyMin: search.buyMin,
       buyBudget: search.buyBudget,
+      buyIsRange: Boolean(search.buyIsRange),
     };
   },
   // @ts-ignore
