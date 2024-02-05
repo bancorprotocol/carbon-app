@@ -10,7 +10,7 @@ export const simulatorRootRoute = new Route({
   path: '/simulator',
 });
 
-interface SimulatorInputSearch {
+export interface SimulatorInputSearch {
   baseToken: string;
   quoteToken: string;
   sellBudget: string;
