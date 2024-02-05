@@ -5,13 +5,23 @@ import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring'
 import { SimulatorStrategyType } from 'components/simulator/SimulatorStrategyType';
 import { SimulatorTokenSelection } from 'components/simulator/SimulatorTokenSelection';
 import { useStrategyInput } from 'hooks/useStrategyInput';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useModal } from 'hooks/useModal';
 
 export const SimulatorPage = () => {
   const { dispatch, state, bounds } = useStrategyInput();
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
+
+  const { openModal } = useModal();
+  const hasOpenedDisclaimer = useRef(false);
+  useEffect(() => {
+    if (!hasOpenedDisclaimer.current) {
+      openModal('simulatorDisclaimer', undefined);
+      hasOpenedDisclaimer.current = true;
+    }
+  }, [openModal]);
 
   return (
     <>
