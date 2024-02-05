@@ -1,13 +1,7 @@
 import { useNavigate, useSearch, StrategyCreateSearch } from 'libs/routing';
 import { Strategy } from 'libs/queries';
 import { isOverlappingStrategy } from '../overlapping/utils';
-
-const isValid = (strategy: Strategy) => {
-  return (
-    (strategy.hasOwnProperty('base') && strategy.hasOwnProperty('quote')) ||
-    (strategy.hasOwnProperty('order0') && strategy.hasOwnProperty('order1'))
-  );
-};
+import { useTokens } from 'hooks/useTokens';
 
 export const toStrategyCreateSearch = (
   strategy: Strategy
@@ -31,57 +25,77 @@ export const toStrategyCreateSearch = (
   }
 };
 
-const decodeStrategyAndValidate = (
-  urlStrategy?: string
-): (Strategy & StrategyCreateSearch) | undefined => {
-  if (!urlStrategy) return;
-
-  try {
-    const decodedStrategy = JSON.parse(atob(urlStrategy));
-    if (!isValid(decodedStrategy)) return;
-    return {
-      ...decodedStrategy,
-      ...toStrategyCreateSearch(decodedStrategy),
-    };
-  } catch (error) {
-    console.log('Invalid value for search param `strategy`', error);
-  }
+type DuplicateStrategyParams = StrategyCreateSearch & {
+  base: string;
+  quote: string;
+  buyMin: string;
+  buyMax: string;
+  buyMarginalPrice: string;
+  buyBudget: string;
+  sellMin: string;
+  sellMax: string;
+  sellMarginalPrice: string;
+  sellBudget: string;
 };
 
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate();
-  const search: StrategyCreateSearch = useSearch({ strict: false });
-  const { strategy: urlStrategy } = search;
+  const { getTokenByAddress } = useTokens();
+  const search: DuplicateStrategyParams = useSearch({ strict: false });
 
-  const duplicate = (strategy: Partial<Strategy>) => {
-    const encodedStrategy = btoa(JSON.stringify(strategy));
-
+  const duplicate = (strategy: Strategy) => {
+    const { base, quote, order0: buy, order1: sell } = strategy;
     navigate({
       to: '/strategies/create',
       search: {
         ...search,
-        strategy: encodedStrategy,
+        base: base.address,
+        quote: quote.address,
+        buyMin: buy.startRate,
+        buyMax: buy.endRate,
+        buyMarginalPrice: buy.marginalRate,
+        buyBudget: buy.balance,
+        sellMin: sell.startRate,
+        sellMax: sell.endRate,
+        sellMarginalPrice: sell.marginalRate,
+        sellBudget: sell.balance,
       },
     });
   };
 
-  const decoded = decodeStrategyAndValidate(urlStrategy);
-  if (decoded) {
-    // marginal price should be calculated based on prices
-    if (decoded.order0.marginalRate) decoded.order0.marginalRate = '';
-    if (decoded.order1.marginalRate) decoded.order1.marginalRate = '';
+  const decoded = {
+    strategyType: search.strategyType,
+    strategySettings: search.strategySettings,
+    strategyDirection: search.strategyDirection,
+    base: getTokenByAddress(search.base),
+    quote: getTokenByAddress(search.quote),
+    order0: {
+      balance: search.buyBudget,
+      startRate: search.buyMin,
+      endRate: search.buyMax,
+      marginalRate: search.buyMarginalPrice,
+    },
+    order1: {
+      balance: search.buyBudget,
+      startRate: search.sellMin,
+      endRate: search.sellMax,
+      marginalRate: search.sellMarginalPrice,
+    },
+  };
+  // marginal price should be calculated based on prices
+  if (decoded.order0.marginalRate) decoded.order0.marginalRate = '';
+  if (decoded.order1.marginalRate) decoded.order1.marginalRate = '';
 
-    // Remove balance if overlapping strategy because market price changed
-    if (isOverlappingStrategy(decoded)) {
-      decoded.order0.balance = '';
-      decoded.order1.balance = '';
-    }
+  // Remove balance if overlapping strategy because market price changed
+  if (isOverlappingStrategy(decoded)) {
+    decoded.order0.balance = '';
+    decoded.order1.balance = '';
+  }
 
-    // Clear order balance for opposite direction in disposable
-    if (decoded.strategyType === 'disposable') {
-      if (decoded.strategyDirection === 'buy') decoded.order1.balance = '';
-      if (decoded.strategyDirection === 'sell') decoded.order0.balance = '';
-    }
+  // Clear order balance for opposite direction in disposable
+  if (decoded.strategyType === 'disposable') {
+    if (decoded.strategyDirection === 'buy') decoded.order1.balance = '';
+    if (decoded.strategyDirection === 'sell') decoded.order0.balance = '';
   }
 
   return {

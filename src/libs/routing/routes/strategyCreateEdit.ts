@@ -15,7 +15,6 @@ export interface StrategyCreateSearch {
   strategyType?: StrategyType;
   strategyDirection?: StrategyDirection;
   strategySettings?: StrategySettings;
-  strategy?: string;
 }
 
 export const createStrategyPage = new Route({
