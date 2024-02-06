@@ -18,16 +18,19 @@ export const ModalSimulatorDisclaimer: ModalFC<undefined> = ({ id }) => {
         title="Simulator Disclaimer"
       />
       <p className={paragraphClassName}>
-        This tool provides insights into historical market performance, but
-        results may vary due to the underlying price API. The simulator assumes
-        no gas fees.
+        This tool analyzes historical market data under artificial conditions,
+        and is not indicative of future results.
       </p>
       <p className={paragraphClassName}>
-        While it offers valuable information for analyzing past market behavior,
-        users should approach the results with an awareness of potential
-        variations in real-world conditions. It's advisable to use this tool as
-        a reference and consider multiple factors that may influence actual
-        trading outcomes.
+        The simulator relies on a historical price API as to which we cannot
+        assure accuracy or completeness, and it assumes no gas fees. It is
+        offered for informational purposes only. Future trading outcomes may
+        deviate from historical or simulated results for a variety of reasons.
+      </p>
+      <p className={paragraphClassName}>
+        We disclaim any responsibility or liability whatsoever for the quality,
+        accuracy or completeness of the information herein, and for any reliance
+        on, or use of this material in any way.
       </p>
       <Button variant="white" fullWidth onClick={() => closeModal(id)}>
         I Understand
