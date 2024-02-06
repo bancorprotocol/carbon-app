@@ -24,6 +24,7 @@ export const D3ChartSimulatorPrice = ({ dms, data, bounds }: Props) => {
   const y = useLinearScale({
     domain: getPriceDomain({ data, bounds }),
     range: [dms.boundedHeight, 0],
+    domainTolerance: 0.05,
   });
 
   const rangeProps = { x, y, data, bounds };

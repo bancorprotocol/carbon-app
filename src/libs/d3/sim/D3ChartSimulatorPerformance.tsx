@@ -22,6 +22,7 @@ export const D3ChartSimulatorPerformance = ({ dms, data }: Props) => {
   const y = useLinearScale({
     domain: extent(data, (d) => d.portfolioOverHodl) as [number, number],
     range: [dms.boundedHeight, 0],
+    domainTolerance: 0.05,
   });
   return (
     <>

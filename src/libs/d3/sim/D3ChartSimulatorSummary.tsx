@@ -26,11 +26,13 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
   const yLeft = useLinearScale({
     domain: getPriceDomain({ data, bounds }),
     range: [dms.boundedHeight, 0],
+    domainTolerance: 0.05,
   });
 
   const yRight = useLinearScale({
     domain: yRightDomain(data),
     range: [dms.boundedHeight, 0],
+    domainTolerance: 0.05,
   });
   const yRightTicks: D3AxisTick[] = yLeft.ticks.map(({ offset }) => ({
     value: yRight.scale.invert(offset),

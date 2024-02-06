@@ -127,8 +127,6 @@ type GetDomainFn<T extends number | number[]> = (
   marketPrice?: number
 ) => T;
 
-const yScaleDomainTolerance = 0.1;
-
 const getDomainMin: GetDomainFn<number> = (data, prices, marketPrice) => {
   let dataMin = min(data, (d) => d.low) as number;
   const values = [
@@ -159,8 +157,5 @@ export const getDomain: GetDomainFn<number[]> = (data, prices, marketPrice) => {
   const domainMin = getDomainMin(data, prices, marketPrice);
   const domainMax = getDomainMax(data, prices, marketPrice);
 
-  const diff = domainMax - domainMin;
-  const tolerance = diff * yScaleDomainTolerance;
-
-  return [domainMin - tolerance, domainMax + tolerance];
+  return [domainMin, domainMax];
 };

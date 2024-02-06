@@ -52,6 +52,7 @@ export const D3ChartCandlesticks = (props: Props) => {
   const y = useLinearScale({
     domain: getDomain(data, bounds, marketPrice),
     range: [dms.boundedHeight, 0],
+    domainTolerance: 0.1,
   });
 
   const onMinMaxChange = useCallback(

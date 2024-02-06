@@ -4,16 +4,31 @@ import { D3AxisTick } from 'libs/d3/types';
 import { SimulatorData } from 'libs/queries';
 import { useCallback } from 'react';
 
+const calcDomain = (domain: number[], tolerance: number) => {
+  const value = (domain[1] - domain[0]) * tolerance;
+
+  return [domain[0] - value, domain[1] + value];
+};
+
 interface Props {
-  domain: Iterable<number>;
+  domain: number[];
   range: Iterable<number>;
   pixelsPerTick?: number;
+  domainTolerance?: number;
 }
 
 export type LinearScaleReturn = ReturnType<typeof useLinearScale>;
 
-export const useLinearScale = ({ domain, range, pixelsPerTick }: Props) => {
-  const scale = scaleLinear().domain(domain).range(range).nice(-1);
+export const useLinearScale = ({
+  domain,
+  range,
+  pixelsPerTick,
+  domainTolerance = 0,
+}: Props) => {
+  const scale = scaleLinear()
+    .domain(calcDomain(domain, domainTolerance))
+    .range(range)
+    .nice(-1);
 
   const ticks: D3AxisTick[] = [];
 
