@@ -9,55 +9,8 @@ const isEmptyOrder = (order: Order) => {
 const isLimitOrder = (order: Order) => {
   return order.startRate === order.endRate;
 };
-const toStrategyCreateSearch = (
-  order0: Order,
-  order1: Order
-): StrategyCreateSearch => {
-  if (isOverlappingStrategy({ order0, order1 })) {
-    return { strategySettings: 'overlapping' };
-  }
-  const isRecurring = !isEmptyOrder(order0) && !isEmptyOrder(order1);
-  const isLimit = isLimitOrder(order0) && isLimitOrder(order1);
-  if (isRecurring) {
-    return {
-      strategyType: 'recurring',
-      strategySettings: isLimit ? 'limit' : 'range',
-    };
-  } else {
-    return {
-      strategyType: 'disposable',
-      strategySettings: isLimit ? 'limit' : 'range',
-      strategyDirection: order1.endRate === '0' ? 'buy' : 'sell',
-    };
-  }
-};
 
-/** Remove unwanted balances from duplicate */
-const prepareDuplicate = (strategy: Strategy) => {
-  // Remove balance if overlapping strategy because market price changed
-  if (isOverlappingStrategy(strategy)) {
-    strategy.order0.balance = '0';
-    strategy.order1.balance = '0';
-  }
-  if (isEmptyOrder(strategy.order0)) strategy.order0.balance = '0';
-  if (isEmptyOrder(strategy.order1)) strategy.order1.balance = '0';
-  return strategy;
-};
-
-type DuplicateStrategyParams = StrategyCreateSearch & {
-  base: string;
-  quote: string;
-  buyMin: string;
-  buyMax: string;
-  buyMarginalPrice: string;
-  buyBudget: string;
-  sellMin: string;
-  sellMax: string;
-  sellMarginalPrice: string;
-  sellBudget: string;
-};
-
-// TODO: test it and move it into number utils
+/** Round to 6 decimals after leading zeros */
 const roundSearchParam = (param: string) => {
   if (param === '0') return '';
   const [radix, decimals] = param.split('.');
@@ -77,23 +30,48 @@ const roundSearchParam = (param: string) => {
 export const useDuplicateStrategy = () => {
   const navigate = useNavigate();
   const { getTokenById } = useTokens();
-  const search: DuplicateStrategyParams = useSearch({ strict: false });
+  const search: StrategyCreateSearch = useSearch({ strict: false });
 
   const duplicate = (strategy: Strategy) => {
-    const { base, quote, order0, order1 } = prepareDuplicate(strategy);
+    // Remove balances if needed
+    if (isOverlappingStrategy(strategy)) {
+      strategy.order0.balance = '0';
+      strategy.order1.balance = '0';
+    }
+    if (isEmptyOrder(strategy.order0)) strategy.order0.balance = '0';
+    if (isEmptyOrder(strategy.order1)) strategy.order1.balance = '0';
+
+    // initialize params
+    const { order0, order1, base, quote } = strategy;
+    const searchParams: StrategyCreateSearch = {
+      base: base.address,
+      quote: quote.address,
+      buyMin: roundSearchParam(order0.startRate),
+      buyMax: roundSearchParam(order0.endRate),
+      buyBudget: roundSearchParam(order0.balance),
+      sellMin: roundSearchParam(order1.startRate),
+      sellMax: roundSearchParam(order1.endRate),
+      sellBudget: roundSearchParam(order1.balance),
+    };
+
+    const isOverlapping = isOverlappingStrategy({ order0, order1 });
+    const isRecurring = !isEmptyOrder(order0) && !isEmptyOrder(order1);
+    if (isOverlapping) {
+      searchParams.strategySettings = 'overlapping';
+    } else if (isRecurring) {
+      const isLimit = isLimitOrder(order0) && isLimitOrder(order1);
+      searchParams.strategyType = 'recurring';
+      searchParams.strategySettings = isLimit ? 'limit' : 'range';
+    } else {
+      const isLimit = isLimitOrder(order0) || isLimitOrder(order1);
+      searchParams.strategyType = 'disposable';
+      searchParams.strategySettings = isLimit ? 'limit' : 'range';
+      searchParams.strategyDirection = order1.endRate === '0' ? 'buy' : 'sell';
+    }
+
     navigate({
       to: '/strategies/create',
-      search: {
-        base: base.address,
-        quote: quote.address,
-        ...toStrategyCreateSearch(order0, order1),
-        buyMin: roundSearchParam(order0.startRate),
-        buyMax: roundSearchParam(order0.endRate),
-        buyBudget: roundSearchParam(order0.balance),
-        sellMin: roundSearchParam(order1.startRate),
-        sellMax: roundSearchParam(order1.endRate),
-        sellBudget: roundSearchParam(order1.balance),
-      },
+      search: searchParams,
     });
   };
 

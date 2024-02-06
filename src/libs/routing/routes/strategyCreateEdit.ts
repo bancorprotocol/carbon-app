@@ -15,21 +15,21 @@ export interface StrategyCreateSearch {
   strategyType?: StrategyType;
   strategyDirection?: StrategyDirection;
   strategySettings?: StrategySettings;
+  buyMin?: string;
+  buyMax?: string;
+  buyBudget?: string;
+  sellMin?: string;
+  sellMax?: string;
+  sellBudget?: string;
 }
 
 export const createStrategyPage = new Route({
   getParentRoute: () => rootRoute,
   path: '/strategies/create',
   component: CreateStrategyPage,
-  validateSearch: (search: Record<string, unknown>): StrategyCreateSearch => {
-    if (
-      search.strategyType === 'recurring' ||
-      search.strategyType === 'disposable' ||
-      search.strategy
-    ) {
-      return search;
-    }
-    return { ...search, strategyType: 'recurring' };
+  validateSearch: (search: StrategyCreateSearch = {}): StrategyCreateSearch => {
+    search.strategyType ||= 'recurring';
+    return search;
   },
 });
 
