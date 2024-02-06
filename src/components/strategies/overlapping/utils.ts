@@ -37,10 +37,10 @@ export const isValidSpread = (spread: number) => {
 
 export const getSpread = ({ order0, order1 }: StrategyInput) => {
   const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
-  const sellHigh = 'startRate' in order1 ? order1.startRate : order1.min;
+  const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
   const buyMax = Number(buyHigh);
   const sellMax = Number(sellHigh);
-  if (!buyHigh && !sellMax) return 0;
+  if (!buyHigh || !sellMax) return 0;
   return (sellMax / buyMax - 1) * 100;
 };
 
