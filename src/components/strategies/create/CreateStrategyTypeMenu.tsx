@@ -1,11 +1,4 @@
-import {
-  FC,
-  KeyboardEvent,
-  SyntheticEvent,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import { FC, KeyboardEvent, SyntheticEvent, useMemo, useRef } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
 import { Button } from 'components/common/button';
@@ -16,9 +9,9 @@ import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
-import styles from './CreateStrategyTypeMenu.module.css';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { StrategyCreateSearch } from 'libs/routing';
+import styles from './CreateStrategyTypeMenu.module.css';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
@@ -36,6 +29,11 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   );
   const { aboveBreakpoint } = useBreakpoints();
 
+  if (!selectedStrategySettings) {
+    const { to, search } = items[0];
+    setSelectedStrategySettings({ to, search });
+  }
+
   const selectedId = useMemo(() => {
     if (!selectedStrategySettings) return;
     const search = selectedStrategySettings.search;
@@ -47,12 +45,6 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     });
     return item?.id;
   }, [selectedStrategySettings, items]);
-
-  useEffect(() => {
-    if (!selectedStrategySettings) {
-      setSelectedStrategySettings(items[0]);
-    }
-  }, [selectedStrategySettings, items, setSelectedStrategySettings]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
