@@ -22,13 +22,10 @@ export const SimulatorSummaryGains: FC<Props> = ({
 
   const portfolioGainsFormatter = useCallback(
     (portfolioGainsFiat: number) =>
-      prettifySignedNumber(portfolioGainsFiat, {
-        currentCurrency: selectedFiatCurrency,
+      `${prettifySignedNumber(portfolioGainsFiat, {
         round: true,
-        decimals: 2,
-        noSubscript: true,
-      }),
-    [selectedFiatCurrency]
+      })} ${quoteToken.symbol}`,
+    [quoteToken.symbol]
   );
 
   return (
@@ -42,7 +39,7 @@ export const SimulatorSummaryGains: FC<Props> = ({
       <AnimatedNumber
         className="text-24 font-weight-500"
         from={0.0}
-        to={portfolioGainsFiat.toNumber()}
+        to={portfolioGains}
         formatFn={portfolioGainsFormatter}
         duration={2}
       />

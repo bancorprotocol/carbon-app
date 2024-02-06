@@ -48,6 +48,7 @@ export type D3LegendItem = {
   labelSecondary?: string;
   color: string;
   isDisabled: boolean;
+  isDashed?: boolean;
 };
 
 export type D3SimLegendType = Record<D3SimLegendEntry, D3LegendItem>;

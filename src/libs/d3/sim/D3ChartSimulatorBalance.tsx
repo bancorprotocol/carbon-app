@@ -1,3 +1,4 @@
+import { D3ChartTitle } from 'libs/d3/primitives/D3ChartTitle';
 import { useLinearScale } from 'libs/d3/useLinearScale';
 import { D3ChartSettings } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';
@@ -28,15 +29,18 @@ export const D3ChartSimulatorBalance = ({
     .range([0, dms.boundedWidth])
     .padding(0.1);
 
-  const balanceCASH = data.length ? data[data.length - 1].portionCASH : 0;
-  const balanceRISK = data.length ? data[data.length - 1].portionRISK : 0;
+  const balanceCASH = data.length ? data[data.length - 1].balanceCASH : 0;
+  const balanceRISK = data.length ? data[data.length - 1].balanceRISK : 0;
+
+  const portionCASH = data.length ? data[data.length - 1].portionCASH : 0;
+  const portionRISK = data.length ? data[data.length - 1].portionRISK : 0;
 
   const y = useLinearScale({
-    domain: [max([balanceCASH, balanceRISK]) as number, 0],
+    domain: [max([portionCASH, portionRISK]) as number, 0],
     range: [0, dms.boundedHeight],
   });
 
-  const percentage = (balanceRISK / (balanceCASH + balanceRISK)) * 100;
+  const percentage = (portionRISK / (portionCASH + portionRISK)) * 100;
 
   const xBase = xScale('base');
   const xQuote = xScale('quote');
@@ -47,22 +51,33 @@ export const D3ChartSimulatorBalance = ({
 
   return (
     <>
+      <D3ChartTitle
+        dms={dms}
+        title="Token Balances"
+        width={130}
+        marginTop={(dms.marginTop - 20) * -1}
+      />
+
       <Bar
         id="base"
         xScale={xScale}
         yScale={y.scale}
-        value={balanceRISK}
+        label={balanceRISK}
+        value={portionRISK}
         percentage={percentage}
         dms={dms}
+        symbol={baseToken.symbol}
       />
 
       <Bar
         id="quote"
         xScale={xScale}
         yScale={y.scale}
-        value={balanceCASH}
+        label={balanceCASH}
+        value={portionCASH}
         percentage={100 - percentage}
         dms={dms}
+        symbol={quoteToken.symbol}
       />
 
       <g>
@@ -102,11 +117,22 @@ interface BarProps {
   xScale: ScaleBand<string>;
   yScale: ScaleLinear<number, number>;
   value: number;
+  label: number;
+  symbol: string;
   dms: D3ChartSettings;
   percentage: number;
 }
 
-const Bar = ({ id, xScale, yScale, value, dms, percentage }: BarProps) => {
+const Bar = ({
+  id,
+  xScale,
+  yScale,
+  value,
+  dms,
+  percentage,
+  label,
+  symbol,
+}: BarProps) => {
   const minValue = 2;
   const x = xScale(id);
   const y = yScale(value);
@@ -141,7 +167,7 @@ const Bar = ({ id, xScale, yScale, value, dms, percentage }: BarProps) => {
         style={{ textAnchor: 'middle' }}
         className="font-mono text-14 text-white/60"
       >
-        {prettifyNumber(value, { currentCurrency: 'USD' })}
+        {prettifyNumber(label)} {symbol}
       </text>
     </>
   );

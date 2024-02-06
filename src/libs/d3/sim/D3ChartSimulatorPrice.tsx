@@ -1,3 +1,4 @@
+import { D3ChartTitle } from 'libs/d3/primitives/D3ChartTitle';
 import { D3SimPriceRange } from 'libs/d3/primitives/D3SimPriceRange';
 import { D3XAxis } from 'libs/d3/primitives/D3XAxis';
 import { D3YAxisLeft } from 'libs/d3/primitives/D3YAxisLeft';
@@ -44,6 +45,8 @@ export const D3ChartSimulatorPrice = ({ dms, data, bounds }: Props) => {
         xAcc={x.accessor('date')}
         yAcc={y.accessor('price')}
       />
+
+      <D3ChartTitle dms={dms} title="Price Chart" width={100} />
     </>
   );
 };

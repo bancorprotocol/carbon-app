@@ -1,3 +1,4 @@
+import { D3ChartTitle } from 'libs/d3/primitives/D3ChartTitle';
 import { D3XAxis } from 'libs/d3/primitives/D3XAxis';
 import { D3YAxisLeft } from 'libs/d3/primitives/D3YAxisLeft';
 import { useLinearScale } from 'libs/d3/useLinearScale';
@@ -36,6 +37,8 @@ export const D3ChartSimulatorPerformance = ({ dms, data }: Props) => {
         xAcc={x.accessor('date')}
         yAcc={y.accessor('portfolioOverHodl')}
       />
+
+      <D3ChartTitle dms={dms} title="Performance vs HODL" width={170} />
     </>
   );
 };

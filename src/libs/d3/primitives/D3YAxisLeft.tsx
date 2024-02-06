@@ -11,7 +11,7 @@ export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
       />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(0,${offset})`}>
-          <line x1={-6} x2={dms.boundedWidth} className={'stroke-emphasis'} />
+          <line x1={0} x2={dms.boundedWidth} className={'stroke-emphasis'} />
           <text
             key={value}
             style={{
@@ -21,6 +21,7 @@ export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
             }}
             fill={'currentColor'}
             opacity={0.6}
+            className={'font-mono'}
           >
             {formatter ? formatter(value) : value}
           </text>

@@ -137,15 +137,33 @@ export const SimulatorResultPage = () => {
                     </div>
                   </>
                 ) : (
-                  <SimChartWrapper settings={chartSettingsSummary}>
-                    {(dms) => (
-                      <D3ChartSimulatorSummary
-                        data={ctx.data ?? []}
-                        bounds={ctx.bounds!}
-                        dms={dms}
-                      />
-                    )}
-                  </SimChartWrapper>
+                  <>
+                    <hr className="border-emphasis" />
+                    <div className="flex w-full flex-row">
+                      <div className="relative flex w-30 flex-shrink-0 items-center justify-center border-r border-emphasis font-mono text-12 text-white/60">
+                        <div className="-rotate-90 whitespace-nowrap">
+                          Price ({state.quoteToken?.symbol} per{' '}
+                          {state.baseToken?.symbol})
+                        </div>
+                      </div>
+                      <div className="w-[calc(100%-60px)]">
+                        <SimChartWrapper settings={chartSettingsSummary}>
+                          {(dms) => (
+                            <D3ChartSimulatorSummary
+                              data={ctx.data ?? []}
+                              bounds={ctx.bounds!}
+                              dms={dms}
+                            />
+                          )}
+                        </SimChartWrapper>
+                      </div>
+                      <div className="relative flex w-30 flex-shrink-0 items-center justify-center border-l border-emphasis font-mono text-12 text-white/60">
+                        <div className="-rotate-90 whitespace-nowrap">
+                          Portfolio Value ({state.quoteToken?.symbol})
+                        </div>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </>

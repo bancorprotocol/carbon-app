@@ -15,10 +15,10 @@ export const D3SimLegend = ({ legend, toggleLegend }: Props) => {
         y={0}
         width={195}
         height={156}
-        className={'fill-darkSilver'}
+        className={'fill-emphasis'}
         rx={8}
       />
-      <g transform={`translate(12,14)`}>
+      <g transform={`translate(12,16)`}>
         {Object.entries(legend).map(([key, data]) => (
           <LegendItem
             key={key}
@@ -38,7 +38,7 @@ const LegendItem = ({
   data: D3LegendItem;
   onClick: () => void;
 }) => {
-  const { index, color, label, labelSecondary, isDisabled } = data;
+  const { index, color, label, labelSecondary, isDisabled, isDashed } = data;
 
   return (
     <g
@@ -48,8 +48,17 @@ const LegendItem = ({
       style={{ pointerEvents: 'bounding-box' }}
       className={'cursor-pointer'}
     >
-      <rect x={0} y={0} width={8} height={2} fill={color} rx={1} />
-      <text x={15} y={6} fill={'currentColor'} className={'text-14'}>
+      <line
+        x1={0}
+        x2={10}
+        y1={0}
+        y2={0}
+        stroke={color}
+        strokeWidth={2}
+        rx={1}
+        strokeDasharray={isDashed ? 2 : 0}
+      />
+      <text x={17} y={5} fill={'currentColor'} className={'text-14'}>
         {label}{' '}
         <tspan fill={'currentColor'} opacity={0.5}>
           {labelSecondary}

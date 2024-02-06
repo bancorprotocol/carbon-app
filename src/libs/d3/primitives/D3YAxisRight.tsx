@@ -11,7 +11,6 @@ export const D3YAxiRight = ({ ticks, dms, formatter }: D3AxisProps) => {
       />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(0,${offset})`}>
-          <line x1={0} x2={6} className={'stroke-emphasis'} />
           <text
             style={{
               fontSize: '10px',
@@ -20,6 +19,7 @@ export const D3YAxiRight = ({ ticks, dms, formatter }: D3AxisProps) => {
             }}
             fill={'currentColor'}
             opacity={0.6}
+            className={'font-mono'}
           >
             {formatter ? formatter(value) : value}
           </text>

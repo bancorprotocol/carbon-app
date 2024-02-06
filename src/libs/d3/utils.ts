@@ -69,6 +69,7 @@ export const defaultLegend: D3SimLegendType = {
     labelSecondary: 'RHS',
     color: '#FF8A00',
     isDisabled: false,
+    isDashed: true,
   },
   hodl: {
     index: 5,
