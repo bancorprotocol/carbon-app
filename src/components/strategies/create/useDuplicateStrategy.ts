@@ -48,6 +48,10 @@ export const getDuplicateStrategyParams = (strategy: Strategy) => {
     sellMax: roundSearchParam(order1.endRate),
     sellBudget: roundSearchParam(order1.balance),
   };
+  for (const key in searchParams) {
+    const keyString = key as keyof StrategyCreateSearch;
+    if (!searchParams[keyString]) delete searchParams[keyString];
+  }
 
   const isOverlapping = isOverlappingStrategy({ order0, order1 });
   const isRecurring = !isEmptyOrder(order0) && !isEmptyOrder(order1);
@@ -68,7 +72,7 @@ export const getDuplicateStrategyParams = (strategy: Strategy) => {
 
 export const useDuplicateStrategy = () => {
   const { getTokenById } = useTokens();
-  const search: StrategyCreateSearch = useSearch({ strict: false });
+  const search = useSearch({ from: '/strategies/create' });
 
   return {
     strategyType: search.strategyType,
