@@ -39,7 +39,7 @@ const spenderAddress = config.carbon.carbonController;
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
 export const useCreateStrategy = () => {
-  const { templateStrategy } = useDuplicateStrategy();
+  const templateStrategy = useDuplicateStrategy();
   const cache = useQueryClient();
   const navigate = useNavigate();
   const { user, provider } = useWeb3();
