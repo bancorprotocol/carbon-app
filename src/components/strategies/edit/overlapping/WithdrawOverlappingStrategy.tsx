@@ -7,6 +7,7 @@ import {
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
+  isOverlappingBudgetTooSmall,
 } from '../../overlapping/utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -22,6 +23,7 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { geoMean } from 'utils/fullOutcome';
+import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 
 interface Props {
   strategy: Strategy;
@@ -49,6 +51,9 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     quote,
     order: { min, max, price: '', isRange: true },
   });
+  const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
+  const buyBudgetId = useId();
+  const sellBudgetId = useId();
 
   useEffect(() => {
     order0.setMarginalPriceOption(MarginalPriceOptions.maintain);
@@ -96,10 +101,10 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
   const setBuyBudget = async (sellBudgetDelta: string) => {
     if (!sellBudgetDelta) return order0.setBudget('');
-    const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
-      sellBudgetDelta || '0'
-    );
-    const resultBuyBudget = calculateOverlappingBuyBudget(
+    const currentBuyBudget = new SafeDecimal(strategy.order0.balance || '0');
+    const currentSellBudget = new SafeDecimal(strategy.order1.balance || '0');
+    const sellBudget = currentSellBudget.minus(sellBudgetDelta);
+    const totalBuy = calculateOverlappingBuyBudget(
       base.decimals,
       quote.decimals,
       order0.min,
@@ -108,18 +113,16 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       spread.toString(),
       sellBudget.toString()
     );
-    const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
-      resultBuyBudget
-    );
-    order0.setBudget(buyBudget.lt(0) ? '0' : buyBudget.toString());
+    const buyBudget = new SafeDecimal(currentBuyBudget).minus(totalBuy);
+    order0.setBudget(SafeDecimal.max(buyBudget, 0).toString());
   };
 
   const setSellBudget = async (buyBudgetDelta: string) => {
     if (!buyBudgetDelta) return order1.setBudget('');
-    const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
-      buyBudgetDelta || '0'
-    );
-    const resultSellBudget = calculateOverlappingSellBudget(
+    const currentBuyBudget = new SafeDecimal(strategy.order0.balance || '0');
+    const currentSellBudget = new SafeDecimal(strategy.order1.balance || '0');
+    const buyBudget = currentBuyBudget.minus(buyBudgetDelta);
+    const totalSell = calculateOverlappingSellBudget(
       base.decimals,
       quote.decimals,
       order0.min,
@@ -128,10 +131,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       spread.toString(),
       buyBudget.toString()
     );
-    const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
-      resultSellBudget
-    );
-    order1.setBudget(sellBudget.lt(0) ? '0' : sellBudget.toString());
+    const sellBudget = new SafeDecimal(currentSellBudget).minus(totalSell);
+    order1.setBudget(SafeDecimal.max(0, sellBudget).toString());
   };
 
   const onBuyBudgetChange = (value: string) => {
@@ -169,6 +170,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           />
         </header>
         <BudgetInput
+          id={buyBudgetId}
           token={quote}
           query={tokenQuoteBalanceQuery}
           order={order0}
@@ -185,6 +187,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           />
         </BudgetInput>
         <BudgetInput
+          id={sellBudgetId}
           token={base}
           query={tokenBaseBalanceQuery}
           order={order1}
@@ -199,6 +202,14 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             setBudget={onSellBudgetChange}
           />
         </BudgetInput>
+        {budgetTooSmall && (
+          <OverlappingSmallBudget
+            base={base}
+            quote={quote}
+            buyBudget={order0.budget}
+            htmlFor={`${buyBudgetId} ${sellBudgetId}`}
+          />
+        )}
         <footer className="flex items-center gap-8">
           {!withdrawAll && (
             <>

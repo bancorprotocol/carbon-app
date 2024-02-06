@@ -30,6 +30,7 @@ import {
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import {
   getRoundedSpread,
+  isOverlappingBudgetTooSmall,
   isOverlappingStrategy,
   isValidSpread,
 } from '../overlapping/utils';
@@ -264,7 +265,11 @@ export const useCreateStrategy = () => {
     if (order1.budgetError) return true;
 
     if (isOverlapping) {
-      return !isValidSpread(spread) || !isValidRange(order0.min, order1.max);
+      return (
+        !isValidSpread(spread) ||
+        !isValidRange(order0.min, order1.max) ||
+        isOverlappingBudgetTooSmall(order0, order1)
+      );
     } else if (strategyType === 'recurring') {
       return !isValidOrder(order0) || !isValidOrder(order1);
     } else if (strategyDirection === 'buy') {
