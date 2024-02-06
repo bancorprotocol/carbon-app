@@ -21,7 +21,7 @@ export const XAxis = ({ xScale, dms }: Props) => {
         <line
           className="tick stroke-emphasis"
           y1={dms.boundedHeight}
-          y2={dms.boundedHeight + 6}
+          y2={dms.boundedHeight - 10}
         />
         <text
           style={{
@@ -32,6 +32,7 @@ export const XAxis = ({ xScale, dms }: Props) => {
           y={dms.boundedHeight + 10}
           fill={'currentColor'}
           opacity={0.6}
+          className={'font-mono'}
         >
           {dayjs(Number(tickValue) * 1000).format('DD.MM.YY')}
         </text>
@@ -47,7 +48,7 @@ export const XAxis = ({ xScale, dms }: Props) => {
         y1={dms.boundedHeight}
         y2={dms.boundedHeight}
         x1={-bandwidthOffset}
-        x2={dms.boundedWidth + bandwidthOffset}
+        x2={dms.width}
         className={'stroke-emphasis'}
       />
     </>
