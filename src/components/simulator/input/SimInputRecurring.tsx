@@ -23,6 +23,7 @@ export const SimInputRecurring = ({ state, dispatch }: Props) => {
         isOrdersOverlap={checkIfOrdersOverlapNew(state.buy, state.sell)}
         strategyType="recurring"
         isBudgetOptional={+state.sell.budget === 0 && +state.buy.budget > 0}
+        ignoreMarketPriceWarning
       />
 
       <BuySellBlock
@@ -34,6 +35,7 @@ export const SimInputRecurring = ({ state, dispatch }: Props) => {
         isOrdersOverlap={checkIfOrdersOverlapNew(state.buy, state.sell)}
         strategyType="recurring"
         isBudgetOptional={+state.buy.budget === 0 && +state.sell.budget > 0}
+        ignoreMarketPriceWarning
       />
     </>
   );

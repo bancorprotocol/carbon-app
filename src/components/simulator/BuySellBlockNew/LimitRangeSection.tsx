@@ -18,6 +18,7 @@ type Props = {
   buy?: boolean;
   isOrdersOverlap: boolean;
   isEdit?: boolean;
+  ignoreMarketPriceWarning?: boolean;
 };
 
 export const LimitRangeSection: FC<Props> = ({
@@ -29,6 +30,7 @@ export const LimitRangeSection: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
   isEdit,
+  ignoreMarketPriceWarning,
 }) => {
   const { isRange } = order;
   const { marketPricePercentage, isOrderAboveOrBelowMarketPrice } =
@@ -90,7 +92,7 @@ export const LimitRangeSection: FC<Props> = ({
       {isOrdersOverlap && !buy && (
         <WarningMessageWithIcon message={overlappingOrdersPricesMessage} />
       )}
-      {isOrderAboveOrBelowMarketPrice && (
+      {isOrderAboveOrBelowMarketPrice && !ignoreMarketPriceWarning && (
         <WarningMessageWithIcon message={warningMarketPriceMessage} />
       )}
     </fieldset>

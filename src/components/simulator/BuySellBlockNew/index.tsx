@@ -24,6 +24,7 @@ type Props = {
   isBudgetOptional?: boolean;
   strategyType?: StrategyType;
   isOrdersOverlap: boolean;
+  ignoreMarketPriceWarning?: boolean;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -36,6 +37,7 @@ export const BuySellBlock: FC<Props> = ({
   strategyType,
   buy = false,
   isOrdersOverlap,
+  ignoreMarketPriceWarning,
 }) => {
   const titleId = useId();
 
@@ -104,7 +106,10 @@ export const BuySellBlock: FC<Props> = ({
           <span>{base.symbol}</span>
         </h3>
       </BuySellHeader>
-      <LimitRangeSection {...limitRangeProps} />
+      <LimitRangeSection
+        {...limitRangeProps}
+        ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+      />
       <BudgetSection {...budgetProps} />
       <FullOutcome
         price={order.min}
