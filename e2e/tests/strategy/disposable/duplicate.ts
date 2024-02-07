@@ -22,7 +22,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     const modal = await waitModalOpen(page);
     await modal.getByTestId('duplicate-strategy-btn').click();
 
-    await page.waitForURL('/strategies/create?strategy=*', {
+    await page.waitForURL('/strategies/create?*', {
       timeout: 10_000,
     });
 
