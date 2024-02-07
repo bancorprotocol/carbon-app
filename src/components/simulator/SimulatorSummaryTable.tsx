@@ -30,17 +30,6 @@ export const SimulatorSummaryTable = ({
 
   return (
     <article className="grid grid-cols-[auto,auto,auto,auto] grid-rows-2 items-center justify-evenly gap-8">
-      <Arrow className="h-16 w-16 text-green" />
-      {isBuyLimitOrder ? (
-        buyMin
-      ) : (
-        <>
-          {buyMin} - {buyMax}
-        </>
-      )}{' '}
-      {quoteSymbol} per {baseSymbol}
-      <span className="text-white/40">|</span>
-      {quoteBudget} {quoteSymbol}
       <Arrow className="h-16 w-16 -rotate-90 text-red" />
       {isSellLimitOrder ? (
         sellMin
@@ -52,6 +41,17 @@ export const SimulatorSummaryTable = ({
       {quoteSymbol} per {baseSymbol}
       <span className="text-white/40">|</span>
       {baseBudget} {baseSymbol}
+      <Arrow className="h-16 w-16 text-green" />
+      {isBuyLimitOrder ? (
+        buyMin
+      ) : (
+        <>
+          {buyMin} - {buyMax}
+        </>
+      )}{' '}
+      {quoteSymbol} per {baseSymbol}
+      <span className="text-white/40">|</span>
+      {quoteBudget} {quoteSymbol}
     </article>
   );
 };
