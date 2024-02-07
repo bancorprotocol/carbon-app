@@ -2,29 +2,13 @@ import { useSearch, StrategyCreateSearch } from 'libs/routing';
 import { Order, Strategy } from 'libs/queries';
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { useTokens } from 'hooks/useTokens';
+import { roundSearchParam } from 'utils/helpers';
 
 const isEmptyOrder = (order: Order) => {
   return !Number(order.startRate) && !Number(order.endRate);
 };
 const isLimitOrder = (order: Order) => {
   return !isEmptyOrder(order) && order.startRate === order.endRate;
-};
-
-/** Round to 6 decimals after leading zeros */
-const roundSearchParam = (param: string) => {
-  if (param === '0') return '';
-  const [radix, decimals] = param.split('.');
-  if (!decimals) return param;
-  let leadingZeros = '';
-  for (const char of decimals) {
-    if (char !== '0') break;
-    leadingZeros += '0';
-  }
-  if (leadingZeros === decimals) return radix;
-  const rest = decimals
-    .slice(leadingZeros.length, leadingZeros.length + 6)
-    .replace(/0+$/, '');
-  return `${radix}.${leadingZeros}${rest}`;
 };
 
 /** Transform a strategy into query params required for the create page */
