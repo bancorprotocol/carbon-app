@@ -22,6 +22,7 @@ interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
   animationData: SimulatorData[];
   isLoading: boolean;
   isError: boolean;
+  errorMsg?: string;
   isSuccess: boolean;
   timer: string;
   playbackSpeed: PlaybackSpeed;
@@ -151,6 +152,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         timer,
         playbackSpeed: playbackSpeed.current,
         setPlaybackSpeed,
+        errorMsg: (query.error?.message as string) ?? undefined,
       }}
     >
       {children}
