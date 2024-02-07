@@ -112,7 +112,7 @@ export const BuySellBlock: FC<Props> = ({
       />
       <BudgetSection {...budgetProps} />
       <FullOutcome
-        price={order.min}
+        price={''}
         min={order.min}
         max={order.max}
         budget={order.budget}
