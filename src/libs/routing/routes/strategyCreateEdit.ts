@@ -23,12 +23,30 @@ export interface StrategyCreateSearch {
   sellBudget?: string;
 }
 
+const createParamsKeys: (keyof StrategyCreateSearch)[] = [
+  'base',
+  'quote',
+  'strategyType',
+  'strategyDirection',
+  'strategySettings',
+  'buyMin',
+  'buyMax',
+  'buyBudget',
+  'sellMin',
+  'sellMax',
+  'sellBudget',
+];
+
 export const createStrategyPage = new Route({
   getParentRoute: () => rootRoute,
   path: '/strategies/create',
   component: CreateStrategyPage,
-  validateSearch: (search: StrategyCreateSearch = {}): StrategyCreateSearch => {
-    search.strategyType ||= 'recurring';
+  validateSearch: (search: Record<string, unknown>): StrategyCreateSearch => {
+    for (const key in search) {
+      if (!createParamsKeys.includes(key as keyof StrategyCreateSearch)) {
+        delete search[key];
+      }
+    }
     return search;
   },
 });

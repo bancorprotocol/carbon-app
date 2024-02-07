@@ -7,7 +7,7 @@ const isEmptyOrder = (order: Order) => {
   return !Number(order.startRate) && !Number(order.endRate);
 };
 const isLimitOrder = (order: Order) => {
-  return order.startRate === order.endRate;
+  return !isEmptyOrder(order) && order.startRate === order.endRate;
 };
 
 /** Round to 6 decimals after leading zeros */
@@ -27,6 +27,7 @@ const roundSearchParam = (param: string) => {
   return `${radix}.${leadingZeros}${rest}`;
 };
 
+/** Transform a strategy into query params required for the create page */
 export const getDuplicateStrategyParams = (strategy: Strategy) => {
   // Remove balances if needed
   if (isOverlappingStrategy(strategy)) {
@@ -53,9 +54,10 @@ export const getDuplicateStrategyParams = (strategy: Strategy) => {
     if (!searchParams[keyString]) delete searchParams[keyString];
   }
 
-  const isOverlapping = isOverlappingStrategy({ order0, order1 });
   const isRecurring = !isEmptyOrder(order0) && !isEmptyOrder(order1);
+  const isOverlapping = isOverlappingStrategy({ order0, order1 });
   if (isOverlapping) {
+    searchParams.strategyType = 'recurring';
     searchParams.strategySettings = 'overlapping';
   } else if (isRecurring) {
     const isLimit = isLimitOrder(order0) && isLimitOrder(order1);
