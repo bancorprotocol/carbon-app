@@ -27,11 +27,13 @@ export const SimulatorSummary = ({
   const quoteToken = state.quoteToken!;
 
   return (
-    <header className="my-8 flex flex-wrap gap-8">
+    <header className="my-8 grid gap-8 xl:grid-cols-2">
       <section
         className={cn(
-          'flex h-72 flex-1 flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black px-16 md:justify-between',
-          { 'animate-pulse': isLoading }
+          'flex h-72 items-center justify-between gap-8 rounded-10 bg-black px-16',
+          {
+            'animate-pulse': isLoading,
+          }
         )}
       >
         {!isLoading && (
@@ -52,8 +54,10 @@ export const SimulatorSummary = ({
       </section>
       <section
         className={cn(
-          'flex h-72 flex-1 flex-grow flex-wrap items-center justify-evenly gap-8 rounded-10 bg-black px-16 md:justify-between',
-          { 'animate-pulse': isLoading }
+          'grid h-72 grid-cols-4 items-center gap-8 rounded-10 bg-black px-16',
+          {
+            'animate-pulse': isLoading,
+          }
         )}
       >
         {!isLoading && (
@@ -73,7 +77,10 @@ export const SimulatorSummary = ({
                 strategySettings:
                   strategyType === 'recurring' ? 'range' : 'overlapping',
               }}
-              className={buttonStyles({ variant: 'success', size: 'md' })}
+              className={cn(
+                buttonStyles({ variant: 'success', size: 'md' }),
+                'whitespace-nowrap'
+              )}
             >
               Create strategy
             </Link>

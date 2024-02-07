@@ -146,13 +146,17 @@ export const SimInputChart = ({
       <div ref={ref} className="sticky top-50 rounded-12 bg-silver p-20">
         <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
         <div
-          className={cn('flex items-center justify-center rounded-12 bg-black')}
+          className={cn(
+            'flex items-center justify-center overflow-hidden rounded-12 bg-black'
+          )}
           style={{ height: dms.height }}
         >
           {isError && (
             <div>error: no price history available for this pair.</div>
           )}
+
           {isLoading && <CarbonLogoLoading className="h-[100px]" />}
+
           {!!data && (
             <D3ChartCandlesticks
               prices={prices}

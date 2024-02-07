@@ -22,14 +22,14 @@ export const SimulatorSummaryGains: FC<Props> = ({
 
   const portfolioGainsFormatter = useCallback(
     (portfolioGainsFiat: number) =>
-      `${prettifySignedNumber(portfolioGainsFiat, {
+      `${quoteToken.symbol} ${prettifySignedNumber(portfolioGainsFiat, {
         round: true,
-      })} ${quoteToken.symbol}`,
+      })}`,
     [quoteToken.symbol]
   );
 
   return (
-    <article className="flex flex-col rounded-8">
+    <article className="col-span-2 flex flex-col rounded-8">
       <Tooltip element={<TooltipContent />}>
         <h4 className="text-secondary flex items-center gap-4 font-mono !text-12">
           Estimated Gains
