@@ -17,7 +17,7 @@ export const D3YAxiRight = ({ ticks, dms, formatter }: D3AxisProps) => {
               textAnchor: 'start',
               transform: 'translate(12px, 3px)',
             }}
-            fill={'currentColor'}
+            fill="currentColor"
             opacity={0.6}
             className={'font-mono'}
           >
