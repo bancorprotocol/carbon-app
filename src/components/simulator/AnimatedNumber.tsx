@@ -32,7 +32,7 @@ export const AnimatedNumber = ({
     });
 
     return () => controls.stop();
-  });
+  }, [to]);
 
   return <m.p ref={nodeRef} className={className ?? ''} />;
 };

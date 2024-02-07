@@ -25,7 +25,7 @@ export interface SimulatorResult {
   portfolio_risk: string[];
   portfolio_value: string[];
   portfolio_over_hodl: string[];
-  price: string[];
+  prices: string[];
 }
 
 export type SimulatorData = {
@@ -66,7 +66,7 @@ export const useGetSimulator = (params: SimulatorResultSearch) => {
         const data: SimulatorReturn = {
           data: res.dates.map((d, i) => ({
             date: d,
-            price: Number(res.price[i]),
+            price: Number(res.prices[i]),
             ask: Number(res.ask[i]),
             bid: Number(res.bid[i]),
             balanceRISK: Number(res.RISK.balance[i]),
