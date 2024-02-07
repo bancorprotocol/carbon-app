@@ -9,7 +9,7 @@ interface Props {
 
 export const D3SimLegend = ({ legend, toggleLegend }: Props) => {
   return (
-    <g transform={`translate(16,16)`}>
+    <g transform="translate(16,16)">
       <rect
         x={0}
         y={0}
