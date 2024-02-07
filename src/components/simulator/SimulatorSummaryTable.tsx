@@ -29,7 +29,7 @@ export const SimulatorSummaryTable = ({
   const isSellLimitOrder = sell.min === sell.max;
 
   return (
-    <article className="grid grid-cols-[auto,auto,auto,auto] grid-rows-2 items-center justify-evenly gap-8">
+    <article className="grid grid-cols-[auto,auto,auto,auto] grid-rows-2 items-center justify-evenly gap-x-8 gap-y-4">
       <Arrow className="h-16 w-16 -rotate-90 text-red" />
       {isSellLimitOrder ? (
         sellMin
