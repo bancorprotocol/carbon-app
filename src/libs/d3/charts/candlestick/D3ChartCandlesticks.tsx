@@ -120,14 +120,14 @@ export const D3ChartCandlesticks = (props: Props) => {
   const labels = {
     // TODO add formater function to child
     buy: {
-      min: prettifyNumber(prices.buy.min, { currentCurrency: 'USD' }),
-      max: prettifyNumber(prices.buy.max, { currentCurrency: 'USD' }),
+      min: prettifyNumber(prices.buy.min),
+      max: prettifyNumber(prices.buy.max),
     },
     sell: {
-      min: prettifyNumber(prices.sell.min, { currentCurrency: 'USD' }),
-      max: prettifyNumber(prices.sell.max, { currentCurrency: 'USD' }),
+      min: prettifyNumber(prices.sell.min),
+      max: prettifyNumber(prices.sell.max),
     },
-    marketPrice: prettifyNumber(marketPrice ?? '', { currentCurrency: 'USD' }),
+    marketPrice: prettifyNumber(marketPrice ?? ''),
   };
 
   const yPos = useMemo(
