@@ -60,7 +60,7 @@ const LegendItem = ({
       />
       <text x={17} y={5} fill={'currentColor'} className={'text-14'}>
         {label}{' '}
-        <tspan fill={'currentColor'} opacity={0.5}>
+        <tspan fill="currentColor" opacity={0.5}>
           {labelSecondary}
         </tspan>
       </text>
