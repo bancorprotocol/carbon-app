@@ -29,7 +29,6 @@ export const useSimulatorInput = ({ searchState }: Props) => {
 
   const dispatch: SimulatorInputDispatch = useCallback(
     (key, value, updateBounds = true) => {
-      console.log('dispatch', key, value);
       _dispatch(key, value);
 
       if (!updateBounds) {
