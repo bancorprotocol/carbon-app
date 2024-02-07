@@ -1,29 +1,30 @@
+import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { Link } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import { SimulatorType } from 'libs/routing/routes/sim';
 import { SimulatorSummaryGains } from './SimulatorSummaryGains';
 import { SimulatorSummaryRoi } from './SimulatorSummaryRoi';
 import { SimulatorSummaryTokens } from './SimulatorTokens';
 import { SimulatorSummaryTable } from './SimulatorSummaryTable';
-import { StrategyInput2 } from 'hooks/useStrategyInput';
 import { cn } from 'utils/helpers';
 
 interface Props {
   roi?: number;
   gains?: number;
-  state2: StrategyInput2;
+  state: StrategyInputValues;
+  strategyType: SimulatorType;
   isLoading: boolean;
 }
 
 export const SimulatorSummary = ({
   roi = 0.0,
   gains = 0.0,
-  state2,
+  state,
+  strategyType,
   isLoading,
 }: Props) => {
-  const baseToken = state2.baseToken!;
-  const quoteToken = state2.quoteToken!;
-
-  const strategyType = state2.simulationType;
+  const baseToken = state.baseToken!;
+  const quoteToken = state.quoteToken!;
 
   return (
     <header className="my-8 flex flex-wrap gap-8">
@@ -41,8 +42,8 @@ export const SimulatorSummary = ({
               strategyType={strategyType}
             />
             <SimulatorSummaryTable
-              buy={state2.buy}
-              sell={state2.sell}
+              buy={state.buy}
+              sell={state.sell}
               baseToken={baseToken}
               quoteToken={quoteToken}
             />

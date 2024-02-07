@@ -1,15 +1,26 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useParams, useSearch } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
+import { SimInputOverlapping } from 'components/simulator/input/SimInputOverlapping';
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
 import { SimulatorStrategyType } from 'components/simulator/SimulatorStrategyType';
 import { SimulatorTokenSelection } from 'components/simulator/SimulatorTokenSelection';
-import { useStrategyInput } from 'hooks/useStrategyInput';
+import dayjs from 'dayjs';
+import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useEffect, useRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 
 export const SimulatorPage = () => {
-  const { dispatch, state, bounds } = useStrategyInput();
+  const [timeRange] = useState({
+    start: dayjs().unix() - 60 * 60 * 24 * 30 * 12,
+    end: dayjs().unix(),
+  });
+
+  const { simulationType } = useParams({ from: '/simulator/$simulationType' });
+  const searchState = useSearch({
+    from: '/simulator/$simulationType',
+  });
+  const { dispatch, state, bounds } = useSimulatorInput({ searchState });
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
@@ -30,6 +41,7 @@ export const SimulatorPage = () => {
 
       <div className="relative px-20">
         <SimInputChart
+          timeRange={timeRange}
           state={state}
           dispatch={dispatch}
           initBuyRange={initBuyRange}
@@ -47,10 +59,12 @@ export const SimulatorPage = () => {
             setInitBuyRange={setInitBuyRange}
             setInitSellRange={setInitSellRange}
           />
-          <SimulatorStrategyType strategyType={state.simulationType} />
+          <SimulatorStrategyType strategyType={simulationType} />
 
-          {state.simulationType === 'recurring' && (
+          {simulationType === 'recurring' ? (
             <SimInputRecurring state={state} dispatch={dispatch} />
+          ) : (
+            <SimInputOverlapping />
           )}
 
           <Link
@@ -66,8 +80,8 @@ export const SimulatorPage = () => {
               sellMax: state.sell.max,
               sellBudget: state.sell.budget,
               sellIsRange: state.sell.isRange,
-              start: state.start.toString(),
-              end: state.end.toString(),
+              start: timeRange.start.toString(),
+              end: timeRange.end.toString(),
             }}
             className={buttonStyles({ fullWidth: true, size: 'lg' })}
           >

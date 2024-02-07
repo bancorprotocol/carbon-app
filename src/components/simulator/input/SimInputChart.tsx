@@ -1,5 +1,6 @@
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { StrategyInput2, StrategyInputDispatch } from 'hooks/useStrategyInput';
+import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
+import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { D3ChartSettingsProps, useChartDimensions } from 'libs/d3';
 import {
   ChartPrices,
@@ -25,8 +26,9 @@ const chartSettings: D3ChartSettingsProps = {
 };
 
 interface Props {
-  state: StrategyInput2;
-  dispatch: StrategyInputDispatch;
+  timeRange: { start: number; end: number };
+  state: StrategyInputValues;
+  dispatch: SimulatorInputDispatch;
   initBuyRange: boolean;
   initSellRange: boolean;
   setInitBuyRange: Dispatch<SetStateAction<boolean>>;
@@ -35,6 +37,7 @@ interface Props {
 }
 
 export const SimInputChart = ({
+  timeRange,
   state,
   dispatch,
   initBuyRange,
@@ -50,15 +53,12 @@ export const SimInputChart = ({
     state.quoteToken?.address
   );
 
-  const priceHistoryQuery = useGetTokenPriceHistory({
+  const { data, isLoading, isError } = useGetTokenPriceHistory({
     baseToken: state.baseToken?.address,
     quoteToken: state.quoteToken?.address,
-    start: state.start,
-    end: state.end,
+    start: timeRange.start,
+    end: timeRange.end,
   });
-
-  const isLoading =
-    priceHistoryQuery.data && marketPrice && !priceHistoryQuery.isLoading;
 
   const handleDefaultValues = useCallback(
     (type: StrategyDirection) => {
@@ -145,21 +145,19 @@ export const SimInputChart = ({
     <div className="absolute right-[20px] w-[calc(100%-500px)]">
       <div ref={ref} className="sticky top-50 rounded-12 bg-silver p-20">
         <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
-        {priceHistoryQuery.isError && <div>Error</div>}
         <div
-          className={cn(
-            'flex items-center justify-center rounded-12 bg-black',
-            {
-              'flex items-center justify-center': isLoading,
-            }
-          )}
+          className={cn('flex items-center justify-center rounded-12 bg-black')}
           style={{ height: dms.height }}
         >
-          {isLoading ? (
+          {isError && (
+            <div>error: no price history available for this pair.</div>
+          )}
+          {isLoading && <CarbonLogoLoading className="h-[100px]" />}
+          {!!data && (
             <D3ChartCandlesticks
               prices={prices}
               onPriceUpdates={onPriceUpdates}
-              data={priceHistoryQuery.data}
+              data={data}
               dms={dms}
               marketPrice={marketPrice}
               bounds={bounds}
@@ -169,8 +167,6 @@ export const SimInputChart = ({
                 sell: !state.sell.isRange,
               }}
             />
-          ) : (
-            <CarbonLogoLoading className="h-[100px]" />
           )}
         </div>
       </div>

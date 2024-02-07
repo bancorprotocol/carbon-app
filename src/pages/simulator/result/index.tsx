@@ -10,8 +10,8 @@ import { wait } from 'utils/helpers';
 
 export const SimulatorResultPage = () => {
   const ctx = useSimulator();
-  const search = useSearch({ from: '/simulator/result' });
-  const { state } = useStrategyInput();
+  const searchState = useSearch({ from: '/simulator/result' });
+  const { state } = useStrategyInput({ searchState });
   const simulationType = 'recurring';
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const SimulatorResultPage = () => {
       <Link
         to={'/simulator/$simulationType'}
         params={{ simulationType }}
-        search={search}
+        search={searchState}
         className="mb-16 flex items-center text-24 font-weight-500"
       >
         <div className="mr-16 flex h-40 w-40 items-center justify-center rounded-full bg-emphasis">
@@ -43,11 +43,12 @@ export const SimulatorResultPage = () => {
           <SimulatorSummary
             roi={ctx.roi}
             gains={ctx.gains}
-            state2={state}
+            state={state}
+            strategyType={simulationType}
             isLoading={ctx.isLoading}
           />
 
-          <SimulatorResultChart state={state} />
+          <SimulatorResultChart state={state} simulationType={simulationType} />
         </>
       </div>
     </div>

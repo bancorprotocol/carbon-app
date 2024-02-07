@@ -1,15 +1,17 @@
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
+import { SimulatorType } from 'libs/routing/routes/sim';
 import { SimulatorPageTabs } from './SimulatorPageTabs';
 import { SimulatorDownload } from './SimulatorDownload';
 import { SimulatorData } from 'libs/queries';
-import { StrategyInput2 } from 'hooks/useStrategyInput';
+import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorControls } from './SimulatorControls';
 
 interface Props {
   data: Array<SimulatorData>;
   showSummary: boolean;
   setShowSummary: React.Dispatch<React.SetStateAction<boolean>>;
-  state: StrategyInput2;
+  state: StrategyInputValues;
+  simulationType: SimulatorType;
 }
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -23,6 +25,7 @@ export const SimulatorChartHeader = ({
   setShowSummary,
   data,
   state,
+  simulationType,
 }: Props) => {
   const startDate = dateFormatter.format(data[0].date * 1e3);
   const endDate = dateFormatter.format(data[data.length - 1].date * 1e3);
@@ -47,7 +50,7 @@ export const SimulatorChartHeader = ({
           data={data}
           baseSymbol={state.baseToken?.symbol ?? ''}
           quoteSymbol={state.quoteToken?.symbol ?? ''}
-          simulationType={state.simulationType ?? ''}
+          simulationType={simulationType ?? ''}
         />
       </article>
     </section>

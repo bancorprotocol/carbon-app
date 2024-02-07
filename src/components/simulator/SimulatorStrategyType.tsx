@@ -4,7 +4,7 @@ import { ReactComponent as IconTwoRanges } from 'assets/icons/two-ranges.svg';
 import { ReactComponent as IconOverlappingStrategy } from 'assets/icons/overlapping-strategy.svg';
 import { cn } from 'utils/helpers';
 import { SimulatorType } from 'libs/routing/routes/sim';
-import { Link } from '@tanstack/react-router';
+import { Link } from 'libs/routing';
 
 interface Props {
   strategyType: SimulatorType;

@@ -10,17 +10,17 @@ export const simulatorRootRoute = new Route({
   path: '/simulator',
 });
 
-export interface SimulatorInputSearch {
-  baseToken: string;
-  quoteToken: string;
-  sellBudget: string;
-  sellMax: string;
-  sellMin: string;
-  sellIsRange: boolean;
-  buyMax: string;
-  buyMin: string;
-  buyBudget: string;
-  buyIsRange: boolean;
+export interface StrategyInputSearch {
+  baseToken?: string;
+  quoteToken?: string;
+  sellBudget?: string;
+  sellMax?: string;
+  sellMin?: string;
+  sellIsRange?: boolean;
+  buyMax?: string;
+  buyMin?: string;
+  buyBudget?: string;
+  buyIsRange?: boolean;
 }
 
 export const simulatorRedirect = new Route({
@@ -45,18 +45,16 @@ export const simulatorInputRoute = new Route({
   parseParams: (params: Record<string, string>) => {
     return { simulationType: params.simulationType as SimulatorType };
   },
-  validateSearch: (
-    search: Record<string, string>
-  ): Partial<SimulatorInputSearch> => {
+  validateSearch: (search: Record<string, string>): StrategyInputSearch => {
     return {
       baseToken: search.baseToken || config.tokens.ETH,
       quoteToken: search.quoteToken || config.tokens.USDC,
-      sellMax: search.sellMax || '',
-      sellMin: search.sellMin || '',
-      sellBudget: search.sellBudget || '',
-      buyMax: search.buyMax || '',
-      buyMin: search.buyMin || '',
-      buyBudget: search.buyBudget || '',
+      sellMax: search.sellMax,
+      sellMin: search.sellMin,
+      sellBudget: search.sellBudget,
+      buyMax: search.buyMax,
+      buyMin: search.buyMin,
+      buyBudget: search.buyBudget,
       sellIsRange:
         search.sellIsRange === undefined ? true : Boolean(search.sellIsRange),
       buyIsRange:
@@ -65,7 +63,7 @@ export const simulatorInputRoute = new Route({
   },
 });
 
-export interface SimulatorResultSearch extends SimulatorInputSearch {
+export interface SimulatorResultSearch extends StrategyInputSearch {
   start: string;
   end: string;
 }

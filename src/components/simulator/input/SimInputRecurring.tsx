@@ -1,9 +1,12 @@
 import { BuySellBlock } from 'components/simulator/BuySellBlockNew';
 import { checkIfOrdersOverlapNew } from 'components/strategies/utils';
-import { StrategyInput2, StrategyInputDispatch } from 'hooks/useStrategyInput';
+import {
+  StrategyInputValues,
+  StrategyInputDispatch,
+} from 'hooks/useStrategyInput';
 
 interface Props {
-  state: StrategyInput2;
+  state: StrategyInputValues;
   dispatch: StrategyInputDispatch;
 }
 
