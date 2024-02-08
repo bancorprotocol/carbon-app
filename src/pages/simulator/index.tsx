@@ -9,8 +9,10 @@ import dayjs from 'dayjs';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useEffect, useRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
+import { useStore } from 'store';
 
 export const SimulatorPage = () => {
+  const { simDisclaimerLastSeen, setSimDisclaimerLastSeen } = useStore();
   const [timeRange] = useState({
     start: dayjs().unix() - 60 * 60 * 24 * 30 * 12,
     end: dayjs().unix(),
@@ -29,11 +31,19 @@ export const SimulatorPage = () => {
   const hasOpenedDisclaimer = useRef(false);
 
   useEffect(() => {
+    if (
+      !!simDisclaimerLastSeen &&
+      simDisclaimerLastSeen > dayjs().unix() - 15 * 60 * 1000
+    ) {
+      return;
+    }
     if (!hasOpenedDisclaimer.current) {
-      openModal('simulatorDisclaimer', undefined);
+      openModal('simulatorDisclaimer', {
+        onConfirm: () => setSimDisclaimerLastSeen(dayjs().unix()),
+      });
       hasOpenedDisclaimer.current = true;
     }
-  }, [openModal]);
+  }, [openModal, setSimDisclaimerLastSeen, simDisclaimerLastSeen]);
 
   return (
     <>

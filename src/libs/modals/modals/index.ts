@@ -52,7 +52,10 @@ import {
   ModalConfirmDelete,
   ModalConfirmDeleteData,
 } from 'libs/modals/modals/ModalConfirmStrategy/ModalConfirmDelete';
-import { ModalSimulatorDisclaimer } from 'libs/modals/modals/ModalSimulatorDisclaimer';
+import {
+  ModalSimulatorDisclaimer,
+  ModalSimulatorDisclaimerData,
+} from 'libs/modals/modals/ModalSimulatorDisclaimer';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -72,7 +75,7 @@ export interface ModalSchema {
   confirmPauseStrategy: ModalConfirmPauseData;
   confirmWithdrawStrategy: ModalConfirmWithdrawData;
   confirmDeleteStrategy: ModalConfirmDeleteData;
-  simulatorDisclaimer: undefined;
+  simulatorDisclaimer: ModalSimulatorDisclaimerData;
 }
 
 // Step 2: Create component in modals/modals folder

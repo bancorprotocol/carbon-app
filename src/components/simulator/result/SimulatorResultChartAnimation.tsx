@@ -10,7 +10,16 @@ import { Token } from 'libs/tokens';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
-  height: 330,
+  height: 350,
+  marginTop: 0,
+  marginBottom: 30,
+  marginLeft: 80,
+  marginRight: 0,
+};
+
+const chartPerformanceSettings: D3ChartSettingsProps = {
+  width: 0,
+  height: 250,
   marginTop: 0,
   marginBottom: 30,
   marginLeft: 80,
@@ -19,7 +28,7 @@ const chartSettings: D3ChartSettingsProps = {
 
 const chartSettingsBalance: D3ChartSettingsProps = {
   width: 0,
-  height: 330,
+  height: 250,
   marginTop: 100,
   marginBottom: 30,
   marginLeft: 0,
@@ -52,7 +61,7 @@ export const SimulatorResultChartAnimation = ({
 
       <div className="grid grid-cols-2">
         <SimChartWrapper
-          settings={chartSettings}
+          settings={chartPerformanceSettings}
           className="border-t border-r border-emphasis"
         >
           {(dms) => <D3ChartSimulatorPerformance data={data} dms={dms} />}

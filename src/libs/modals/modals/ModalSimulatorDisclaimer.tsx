@@ -5,7 +5,13 @@ import { ReactComponent as IconBookmark } from 'assets/icons/bookmark.svg';
 import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
-export const ModalSimulatorDisclaimer: ModalFC<undefined> = ({ id }) => {
+export interface ModalSimulatorDisclaimerData {
+  onConfirm: () => void;
+}
+
+export const ModalSimulatorDisclaimer: ModalFC<
+  ModalSimulatorDisclaimerData
+> = ({ id, data: { onConfirm } }) => {
   const { closeModal } = useModal();
 
   const paragraphClassName =
@@ -32,7 +38,14 @@ export const ModalSimulatorDisclaimer: ModalFC<undefined> = ({ id }) => {
         accuracy or completeness of the information herein, and for any reliance
         on, or use of this material in any way.
       </p>
-      <Button variant="white" fullWidth onClick={() => closeModal(id)}>
+      <Button
+        variant="white"
+        fullWidth
+        onClick={() => {
+          onConfirm();
+          closeModal(id);
+        }}
+      >
         I Understand
       </Button>
     </ModalOrMobileSheet>
