@@ -1,4 +1,7 @@
+import { Link } from '@tanstack/react-router';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { D3ChartSettingsProps, useChartDimensions } from 'libs/d3';
@@ -15,6 +18,7 @@ import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { cn } from 'utils/helpers';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -152,7 +156,10 @@ export const SimInputChart = ({
           style={{ height: dms.height }}
         >
           {isError && (
-            <div>error: no price history available for this pair.</div>
+            <ErrorMsg
+              base={state.baseToken?.address}
+              quote={state.quoteToken?.address}
+            />
           )}
 
           {isLoading && <CarbonLogoLoading className="h-[100px]" />}
@@ -174,6 +181,31 @@ export const SimInputChart = ({
           )}
         </div>
       </div>
+    </div>
+  );
+};
+
+const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
+  return (
+    <div className="max-w-[340px]">
+      <IconTitleText
+        icon={<IconWarning />}
+        title="Well, this doesn’t happen often..."
+        text="Unfortunately, price history for this token is not available and cannot be simulated."
+        variant="error"
+      />
+      <p className="my-20 text-center text-14 text-white/60">
+        However, you can{' '}
+        <span className="font-weight-500 text-white">Create a Strategy</span>
+      </p>
+
+      <Link
+        to={'/strategies/create'}
+        search={{ base, quote }}
+        className={buttonStyles({ variant: 'success' })}
+      >
+        Create Strategy
+      </Link>
     </div>
   );
 };

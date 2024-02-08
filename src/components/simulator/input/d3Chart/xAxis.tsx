@@ -8,9 +8,13 @@ type Props = {
 };
 
 export const XAxis = ({ xScale, dms }: Props) => {
+  const length = xScale.domain().length;
+  const numberOfTicksTarget = Math.max(1, Math.floor(dms.boundedWidth / 80));
+  const m = Math.floor(length / numberOfTicksTarget);
+
   const ticks = xScale
     .domain()
-    .filter((_, i) => !(i % 30))
+    .filter((_, i) => i % m === m - 1 || i === 0 || i === length - 1)
     .filter((_, i, arr) => i !== arr.length - 1 && i !== 0)
     .map((tickValue) => (
       <g
