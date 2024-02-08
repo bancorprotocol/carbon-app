@@ -2,6 +2,12 @@ import { Route } from '@tanstack/react-router';
 import { rootRoute } from 'libs/routing/routes/root';
 import { CreateStrategyPage } from 'pages/strategies/create';
 import { EditStrategyPage } from 'pages/strategies/edit';
+import {
+  validAddress,
+  validLiteral,
+  validNumber,
+  validateSearchParams,
+} from 'libs/routing/utils';
 
 export type StrategyType = 'recurring' | 'disposable';
 export type StrategyDirection = 'buy' | 'sell';
@@ -23,45 +29,35 @@ export interface StrategyCreateSearch {
   sellBudget?: string;
 }
 
-const createParamsKeys: (keyof StrategyCreateSearch)[] = [
-  'base',
-  'quote',
-  'strategyType',
-  'strategyDirection',
-  'strategySettings',
-  'buyMin',
-  'buyMax',
-  'buyBudget',
-  'sellMin',
-  'sellMax',
-  'sellBudget',
-];
-
 export const createStrategyPage = new Route({
   getParentRoute: () => rootRoute,
   path: '/strategies/create',
   component: CreateStrategyPage,
-  validateSearch: (search: Record<string, unknown>): StrategyCreateSearch => {
-    for (const key in search) {
-      if (!createParamsKeys.includes(key as keyof StrategyCreateSearch)) {
-        delete search[key];
-      }
-    }
-    return search;
-  },
+  validateSearch: validateSearchParams<StrategyCreateSearch>({
+    base: validAddress,
+    quote: validAddress,
+    strategyType: validLiteral(['recurring', 'disposable']),
+    strategyDirection: validLiteral(['buy', 'sell']),
+    strategySettings: validLiteral(['limit', 'range', 'overlapping']),
+    buyMin: validNumber,
+    buyMax: validNumber,
+    buyBudget: validNumber,
+    sellMin: validNumber,
+    sellMax: validNumber,
+    sellBudget: validNumber,
+  }),
 });
 
 export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
 
-export interface EditStratgySearch {
+export interface EditStrategySearch {
   type: EditTypes;
 }
-
 export const editStrategyPage = new Route({
   getParentRoute: () => rootRoute,
   path: '/strategies/edit/$strategyId',
   component: EditStrategyPage,
-  validateSearch: (search: Record<string, unknown>): EditStratgySearch => {
-    return { type: search.type as EditTypes };
-  },
+  validateSearch: validateSearchParams<EditStrategySearch>({
+    type: validLiteral(['renew', 'editPrices', 'deposit', 'withdraw']),
+  }),
 });
