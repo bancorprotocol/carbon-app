@@ -1,4 +1,4 @@
-import { D3AxisProps } from 'libs/d3/types';
+import { D3AxisProps } from 'libs/d3';
 import { uuid } from 'utils/helpers';
 
 export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {

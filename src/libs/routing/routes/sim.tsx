@@ -1,5 +1,5 @@
 import { redirect, Route } from '@tanstack/react-router';
-import { SimulatorProvider } from 'libs/d3';
+import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
 import { rootRoute } from 'libs/routing/routes/root';
 import { SimulatorPage } from 'pages/simulator';
 import { SimulatorResultPage } from 'pages/simulator/result';

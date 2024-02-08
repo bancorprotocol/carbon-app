@@ -2,7 +2,7 @@ import {
   InternalStrategyInput,
   useStrategyInput,
 } from 'hooks/useStrategyInput';
-import { ChartPrices } from 'libs/d3/charts/candlestick/D3ChartCandlesticks';
+import { ChartPrices } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
 import { StrategyInputSearch } from 'libs/routing/routes/sim';
 import { useCallback, useState } from 'react';
 

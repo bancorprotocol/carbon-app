@@ -1,4 +1,4 @@
-import { BuySellBlock } from 'components/simulator/BuySellBlockNew';
+import { BuySellBlock } from 'components/simulator/input/BuySellBlockNew';
 import { checkIfOrdersOverlapNew } from 'components/strategies/utils';
 import {
   StrategyInputValues,

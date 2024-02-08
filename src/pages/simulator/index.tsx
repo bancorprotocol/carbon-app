@@ -3,8 +3,8 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { SimInputOverlapping } from 'components/simulator/input/SimInputOverlapping';
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
-import { SimulatorStrategyType } from 'components/simulator/SimulatorStrategyType';
-import { SimulatorTokenSelection } from 'components/simulator/SimulatorTokenSelection';
+import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
+import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import dayjs from 'dayjs';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useEffect, useRef, useState } from 'react';
@@ -68,14 +68,14 @@ export const SimulatorPage = () => {
         />
 
         <div className="absolute top-0 w-[440px] space-y-20">
-          <SimulatorTokenSelection
+          <SimInputTokenSelection
             base={state.baseToken}
             quote={state.quoteToken}
             dispatch={dispatch}
             setInitBuyRange={setInitBuyRange}
             setInitSellRange={setInitSellRange}
           />
-          <SimulatorStrategyType strategyType={simulationType} />
+          <SimInputStrategyType strategyType={simulationType} />
 
           {simulationType === 'recurring' ? (
             <SimInputRecurring state={state} dispatch={dispatch} />

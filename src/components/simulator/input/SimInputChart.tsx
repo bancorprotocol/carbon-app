@@ -6,7 +6,7 @@ import {
   ChartPrices,
   D3ChartCandlesticks,
   OnPriceUpdates,
-} from 'libs/d3/charts/candlestick/D3ChartCandlesticks';
+} from 'components/simulator/input/d3Chart';
 import {
   useCompareTokenPrice,
   useGetTokenPriceHistory,

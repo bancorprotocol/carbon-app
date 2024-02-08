@@ -1,12 +1,13 @@
-export type {
-  D3ChartSettings,
-  D3ChartSettingsProps,
-  CandlestickData,
-} from './types';
-// export { D3ChartCandlestick } from './charts/candlestick';
-export { D3ChartSimulatorBalance } from './sim/D3ChartSimulatorBalance';
-export { D3ChartSimulatorPrice } from './sim/D3ChartSimulatorPrice';
-export { D3ChartSimulatorPerformance } from './sim/D3ChartSimulatorPerformance';
-export { D3ChartSimulatorSummary } from './sim/D3ChartSimulatorSummary';
-export { SimulatorProvider, useSimulator } from './sim/SimulatorProvider';
+export { D3ChartWrapper } from './D3ChartWrapper';
 export { useChartDimensions } from './useChartDimensions';
+export { D3XAxis } from './primitives/D3XAxis';
+export { D3YAxisLeft } from './primitives/D3YAxisLeft';
+export { D3YAxisRight } from './primitives/D3YAxisRight';
+export { D3LinePath } from './primitives/D3LinePath';
+export { D3AreaPath } from './primitives/D3AreaPath';
+export { D3ChartTitle } from './primitives/D3ChartTitle';
+export { useLinearScale } from './useLinearScale';
+export * from './types';
+export * from './utils';
+export { scaleBand, drag, max, min } from 'd3';
+export type { Selection, ScaleBand, ScaleLinear } from 'd3';

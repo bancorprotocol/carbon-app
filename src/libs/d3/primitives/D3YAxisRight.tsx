@@ -1,7 +1,7 @@
-import { D3AxisProps } from 'libs/d3/types';
+import { D3AxisProps } from 'libs/d3';
 import { uuid } from 'utils/helpers';
 
-export const D3YAxiRight = ({ ticks, dms, formatter }: D3AxisProps) => {
+export const D3YAxisRight = ({ ticks, dms, formatter }: D3AxisProps) => {
   return (
     <g transform={`translate(${dms.boundedWidth},0)`}>
       <path

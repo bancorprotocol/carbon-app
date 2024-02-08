@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router';
-import { SimulatorResultChart } from 'components/simulator/result/SimulatorResultChart';
-import { SimulatorSummary } from 'components/simulator/SimulatorSummary';
+import { SimResultChart } from 'components/simulator/result/SimResultChart';
+import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
 import { useStrategyInput } from 'hooks/useStrategyInput';
-import { useSimulator } from 'libs/d3/sim/SimulatorProvider';
+import { useSimulator } from 'components/simulator/result/SimulatorProvider';
 import { useSearch } from 'libs/routing';
 import { useEffect } from 'react';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
@@ -40,7 +40,7 @@ export const SimulatorResultPage = () => {
 
       <div className="rounded-20 bg-silver p-20">
         <>
-          <SimulatorSummary
+          <SimResultSummary
             roi={ctx.roi}
             gains={ctx.gains}
             state={state}
@@ -48,7 +48,7 @@ export const SimulatorResultPage = () => {
             isLoading={ctx.isLoading}
           />
 
-          <SimulatorResultChart state={state} simulationType={simulationType} />
+          <SimResultChart state={state} simulationType={simulationType} />
         </>
       </div>
     </div>
