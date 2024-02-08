@@ -233,24 +233,22 @@ export const useCreateStrategy = () => {
 
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
-      let b: string | undefined;
-      let q: string | undefined;
+      const params: { base?: string; quote?: string } = {};
       handleChangeTokensEvents(isSource, token);
 
       if (isSource) {
-        b = token.address;
-        q = quote?.address;
+        params.base = token.address;
+        if (quote) params.quote = quote?.address;
       } else {
-        b = base?.address;
-        q = token.address;
+        if (base) params.base = base?.address;
+        params.quote = token.address;
       }
 
       navigate({
         to: '/strategies/create',
         search: (search) => ({
           ...search,
-          base: b,
-          quote: q,
+          ...params,
         }),
         replace: true,
       });

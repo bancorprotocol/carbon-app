@@ -17,7 +17,14 @@ export type SearchParamsValidator<T> = {
   [key in keyof T]: (value: string) => boolean;
 };
 
-export const validAddress = (value: string) => utils.isAddress(value);
+export const validAddress = (value: string) => {
+  try {
+    utils.getAddress(value.toLocaleLowerCase());
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 export const validNumber = (value: string) => isNaN(Number(value)) === false;
 export const validLiteral = (array: string[]) => (value: string) => {
   return array.includes(value);
