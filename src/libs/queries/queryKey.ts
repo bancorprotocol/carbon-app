@@ -22,11 +22,11 @@ export namespace QueryKey {
     address,
   ];
 
-  export const tokenPriceHistory = (params: TokenPriceHistorySearch) => [
-    ...extAPI,
-    'token-price-history',
-    params,
-  ];
+  export const tokenPriceHistory = ({
+    start,
+    end,
+    ...params
+  }: TokenPriceHistorySearch) => [...extAPI, 'token-price-history', params];
 
   export const strategies = (user?: string) => [
     ...sdk,
