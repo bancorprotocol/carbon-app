@@ -3,11 +3,11 @@ import { uuid } from 'utils/helpers';
 
 export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
   return (
-    <g transform={`translate(0,0)`}>
+    <g>
       <path
         d={['M', -6, dms.boundedHeight, 'h', 6, 'V', 0, 'h', -6].join(' ')}
         fill="none"
-        className={'stroke-emphasis'}
+        className="stroke-emphasis"
       />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(0,${offset})`}>
@@ -19,7 +19,7 @@ export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
               textAnchor: 'end',
               transform: 'translate(-12px, 3px)',
             }}
-            fill={'currentColor'}
+            fill="currentColor"
             opacity={0.6}
             className={'font-mono'}
           >

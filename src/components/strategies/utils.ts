@@ -44,7 +44,7 @@ export const checkIfOrdersOverlap = (
   return false;
 };
 
-export const checkIfOrdersOverlapNew = (
+export const checkIfOrdersOverlap = (
   buy: StrategyInputOrder,
   sell: StrategyInputOrder
 ): boolean => {
