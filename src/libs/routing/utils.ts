@@ -8,7 +8,7 @@ function toValue(mix: string | undefined) {
   if (str === 'true') return true;
   if (str.startsWith('0x')) return str;
   if (str.startsWith('0X')) return str;
-  return +str * 0 === 0 ? +str : str;
+  return +str * 0 === 0 && +str + '' === str ? +str : str;
 }
 
 export function decode(str: string) {

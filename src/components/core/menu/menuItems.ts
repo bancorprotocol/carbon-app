@@ -19,6 +19,10 @@ export const menuItems: MenuItem[] = [
     label: 'Explorer',
     href: '/explorer',
   },
+  // {
+  //   label: 'Simulator',
+  //   href: '/simulator',
+  // },
   ...(isProduction
     ? []
     : [

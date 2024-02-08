@@ -20,6 +20,12 @@ import {
 } from 'libs/routing/routes/myStrategies';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
+  simulatorInputRoute,
+  simulatorRedirect,
+  simulatorResultRoute,
+  simulatorRootRoute,
+} from 'libs/routing/routes/sim';
+import {
   createStrategyPage,
   editStrategyPage,
 } from 'libs/routing/routes/strategyCreateEdit';
@@ -51,5 +57,10 @@ export const routeTree = rootRoute.addChildren([
       strategyPortfolioPage,
       strategyPortfolioTokenPage,
     ]),
+  ]),
+  simulatorRootRoute.addChildren([
+    simulatorRedirect,
+    simulatorInputRoute,
+    simulatorResultRoute,
   ]),
 ]);
