@@ -55,7 +55,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
 
   return (
     <tr>
-      <td className="border-t border-emphasis p-8">
+      <td className="border-t border-neutral-800 p-8">
         <Checkbox
           isChecked={isSelected}
           setIsChecked={onCheckboxClick}
@@ -64,7 +64,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           tabIndex={-1}
         />
       </td>
-      <td className="border-t border-emphasis p-8">
+      <td className="border-t border-neutral-800 p-8">
         <ModalTradeRoutingRowCell
           amount={sourceAmount}
           fiatAmount={sourceAmountFiat}
@@ -72,13 +72,13 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
           selectedFiatCurrency={selectedFiatCurrency}
         />
       </td>
-      <td className="border-t border-emphasis">
+      <td className="border-t border-neutral-800">
         <ForwardArrow
           arrowType="full"
-          className="inline h-18 w-18 rounded-full bg-silver p-4 text-white/60"
+          className="inline h-18 w-18 rounded-full bg-neutral-900 p-4 text-white/60"
         />
       </td>
-      <td className="border-t border-emphasis p-8">
+      <td className="border-t border-neutral-800 p-8">
         <ModalTradeRoutingRowCell
           amount={targetAmount}
           fiatAmount={targetAmountFiat}
@@ -87,7 +87,7 @@ export const ModalTradeRoutingRow: FC<ModalTradeRoutingRowProps> = ({
         />
       </td>
 
-      <td className="border-t border-emphasis p-8">
+      <td className="border-t border-neutral-800 p-8">
         <ModalTradeRoutingRowCell
           amount={averageAmount}
           fiatAmount={averagePriceFiat}

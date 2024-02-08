@@ -21,7 +21,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   return (
     <article
       className={cn(
-        'flex flex-col rounded-8 border-2 border-emphasis p-16',
+        'flex flex-col rounded-8 border-2 border-neutral-800 p-16',
         strategy.status === 'active' ? '' : 'opacity-50'
       )}
     >

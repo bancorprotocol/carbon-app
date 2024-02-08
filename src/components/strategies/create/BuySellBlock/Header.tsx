@@ -33,7 +33,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             tabIndex={!isRange ? -1 : 0}
             onClick={setLimit}
             className={`rounded-40 font-weight-500 ${
-              !isRange ? 'bg-silver' : 'text-secondary'
+              !isRange ? 'bg-neutral-900' : 'text-secondary'
             } px-10 py-4`}
             data-testid="tab-limit"
           >
@@ -44,7 +44,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             tabIndex={isRange ? -1 : 0}
             onClick={setRange}
             className={`rounded-40 font-weight-500 ${
-              isRange ? 'bg-silver' : 'text-secondary'
+              isRange ? 'bg-neutral-900' : 'text-secondary'
             } px-10 py-4`}
             data-testid="tab-range"
           >

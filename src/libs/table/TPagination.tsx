@@ -27,7 +27,7 @@ export const TPagination = <D extends object>({
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
           }}
-          className={cn('bg-silver')}
+          className={cn('bg-neutral-900')}
         >
           {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
@@ -58,7 +58,7 @@ export const TPagination = <D extends object>({
             'py-4',
             'text-white',
             'border',
-            'border-emphasis',
+            'border-neutral-800',
             'rounded-full'
           )}
         >

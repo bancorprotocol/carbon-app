@@ -20,12 +20,12 @@ export const EditStrategyGraph = ({
   return (
     <m.div
       variants={list}
-      className="flex h-[550px] flex-col rounded-10 bg-silver p-20 pb-40"
+      className="flex h-[550px] flex-col rounded-10 bg-neutral-900 p-20 pb-40"
     >
       <div className="flex items-center justify-between">
         <h2 className="mb-20 font-weight-500">Price Chart</h2>
         <Button
-          className={`mb-20 self-end bg-emphasis`}
+          className={`mb-20 self-end bg-neutral-800`}
           variant="secondary"
           size={'md'}
           onClick={() => {

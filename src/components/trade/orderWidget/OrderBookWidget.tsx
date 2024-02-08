@@ -15,7 +15,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
   return (
     <section
       aria-labelledby="order-title"
-      className="rounded-10 bg-silver p-20"
+      className="rounded-10 bg-neutral-900 p-20"
     >
       <h2 id="order-title">Orders</h2>
       <div className="mt-20 font-mono">

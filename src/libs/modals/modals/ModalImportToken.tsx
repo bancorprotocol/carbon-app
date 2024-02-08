@@ -57,7 +57,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         </div>
       )}
       {data && (
-        <div className={`${blockClasses} bg-silver p-16`}>
+        <div className={`${blockClasses} bg-neutral-900 p-16`}>
           <div className={'flex items-center justify-between'}>
             <div className={'font-weight-500'}>{data.symbol}</div>
             <NewTabLink

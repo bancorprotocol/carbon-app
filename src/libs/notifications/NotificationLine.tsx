@@ -83,7 +83,7 @@ export const NotificationLine: FC<{
         <h3 id={titleId} data-testid="notif-title">
           {getTitleByStatus(notification)}
         </h3>
-        <div className="text-14 text-charcoal/80 dark:text-white/80">
+        <div className="text-14 text-neutral-900/80 dark:text-white/80">
           <p data-testid="notif-description">
             {getDescriptionByStatus(notification)}
           </p>

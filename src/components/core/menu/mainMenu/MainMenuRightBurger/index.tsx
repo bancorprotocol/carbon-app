@@ -47,7 +47,7 @@ export const MainMenuRightBurger: FC<{
         return (
           <div
             key={`${index}_${item.content}`}
-            className={`border-grey5 ${
+            className={`border-neutral-700 ${
               menuContext.size() === 1 ? 'first:border-b-2 last:border-t-2' : ''
             }`}
           >

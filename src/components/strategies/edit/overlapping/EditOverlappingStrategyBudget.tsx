@@ -153,7 +153,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     );
   }
   return (
-    <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
+    <article className="flex w-full flex-col gap-20 rounded-10 bg-neutral-900 p-20">
       <header className="flex items-center gap-8 ">
         <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
         <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
