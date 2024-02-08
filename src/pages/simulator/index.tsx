@@ -10,6 +10,7 @@ import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useEffect, useRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { useStore } from 'store';
+import { cn } from 'utils/helpers';
 
 export const SimulatorPage = () => {
   const { simDisclaimerLastSeen, setSimDisclaimerLastSeen } = useStore();
@@ -29,6 +30,11 @@ export const SimulatorPage = () => {
 
   const { openModal } = useModal();
   const hasOpenedDisclaimer = useRef(false);
+
+  const inputError =
+    Number(state.buy.budget) + Number(state.sell.budget) <= 0
+      ? 'Please add Sell and/or Buy budgets'
+      : null;
 
   useEffect(() => {
     if (
@@ -77,26 +83,35 @@ export const SimulatorPage = () => {
             <SimInputOverlapping />
           )}
 
-          <Link
-            to={'/simulator/result'}
-            search={{
-              baseToken: state.baseToken?.address || '',
-              quoteToken: state.quoteToken?.address || '',
-              buyMin: state.buy.min,
-              buyMax: state.buy.max,
-              buyBudget: state.buy.budget,
-              buyIsRange: state.buy.isRange,
-              sellMin: state.sell.min,
-              sellMax: state.sell.max,
-              sellBudget: state.sell.budget,
-              sellIsRange: state.sell.isRange,
-              start: timeRange.start.toString(),
-              end: timeRange.end.toString(),
-            }}
-            className={buttonStyles({ fullWidth: true, size: 'lg' })}
-          >
-            Start Simulation
-          </Link>
+          {simulationType === 'recurring' && (
+            <Link
+              to={'/simulator/result'}
+              disabled={!!inputError}
+              search={{
+                baseToken: state.baseToken?.address || '',
+                quoteToken: state.quoteToken?.address || '',
+                buyMin: state.buy.min,
+                buyMax: state.buy.max,
+                buyBudget: state.buy.budget,
+                buyIsRange: state.buy.isRange,
+                sellMin: state.sell.min,
+                sellMax: state.sell.max,
+                sellBudget: state.sell.budget,
+                sellIsRange: state.sell.isRange,
+                start: timeRange.start.toString(),
+                end: timeRange.end.toString(),
+              }}
+              className={cn(
+                buttonStyles({
+                  fullWidth: true,
+                  size: 'lg',
+                }),
+                { 'cursor-not-allowed opacity-40': !!inputError }
+              )}
+            >
+              {inputError ?? 'Start Simulation'}
+            </Link>
+          )}
         </div>
       </div>
     </>
