@@ -7,6 +7,7 @@ export const commonConfig: AppConfig = {
   rpcUrl:
     process.env.VITE_CHAIN_RPC_URL ||
     'https://eth-mainnet.alchemyapi.io/v2/41hlTcJUXX7kLw5oPejnQJ7V9BdW8Ysg',
+  walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   addresses: {
     tokens: {
       ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',

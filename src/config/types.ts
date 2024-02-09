@@ -2,6 +2,7 @@ export interface AppConfig {
   mode: 'development' | 'production';
   carbonApi: string;
   appUrl: string;
+  walletConnectProjectId: string;
   sentryDNS?: string;
   rpcUrl: string;
   addresses: {
