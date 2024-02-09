@@ -1,4 +1,5 @@
 import { Page } from 'components/common/page';
+import config from 'config';
 
 const content = [
   {
@@ -1072,7 +1073,7 @@ export const TermsPage = () => {
           USES OR FROM PROHIBITED JURISDICTIONS. IF YOU DO NOT AGREE TO ANY OF
           THESE TERMS OF USE OR THE PRIVACY POLICY AVAILABLE AT{' '}
           <a
-            href="https://app.carbondefi.xyz/privacy"
+            href={config.appUrl + '/privacy'}
             target="_blank"
             rel="noreferrer"
             className="text-green underline"
@@ -1108,7 +1109,7 @@ export const TermsPage = () => {
           both these Terms and our privacy policy (the “Privacy Policy”), a
           current version of which is available at{' '}
           <a
-            href="https://app.carbondefi.xyz/privacy"
+            href={config.appUrl + '/privacy'}
             target="_blank"
             rel="noreferrer"
             className="text-green underline"

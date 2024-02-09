@@ -1,4 +1,5 @@
 import { Page } from 'components/common/page';
+import config from 'config';
 
 const content = [
   {
@@ -583,7 +584,7 @@ export const PrivacyPage = () => {
           THIS PRIVACY POLICY IS SUBJECT IN ALL RESPECTS TO THE TERMS OF USE
           AVAILABLE AT{' '}
           <a
-            href="https://app.carbondefi.xyz/terms"
+            href={config.appUrl + '/terms'}
             target={'_blank'}
             rel="noreferrer"
             className="text-green underline"
