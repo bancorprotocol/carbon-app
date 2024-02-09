@@ -36,4 +36,8 @@ export const commonConfig: AppConfig = {
       multicall: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
     },
   },
+  tokenLists: {
+    Bancor: 'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens.json',
+    CoinGecko: 'https://tokens.coingecko.com/ethereum/all.json',
+  },
 };

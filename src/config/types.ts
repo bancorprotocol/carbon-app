@@ -33,4 +33,5 @@ export interface AppConfig {
       multicall: string;
     };
   };
+  tokenLists: Record<string, string>;
 }
