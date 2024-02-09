@@ -32,7 +32,7 @@ export type RoiRow = {
 
 let BASE_URL = '/api/';
 
-if (import.meta.env.VITE_DEV_MODE) {
+if (config.mode === 'development') {
   BASE_URL = config.appUrl + '/api/';
 }
 
@@ -46,9 +46,7 @@ const newApiAxios = axios.create({
 
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
-    if (import.meta.env.VITE_DEV_MODE) {
-      return false;
-    }
+    if (config.mode === 'development') return false;
     const { data } = await carbonApiAxios.get<boolean>('/check');
     return data;
   },

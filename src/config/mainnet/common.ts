@@ -1,9 +1,11 @@
 import { AppConfig } from 'config/types';
 
 export const commonConfig: AppConfig = {
+  mode: 'development',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
   rpcUrl:
+    process.env.VITE_CHAIN_RPC_URL ||
     'https://eth-mainnet.alchemyapi.io/v2/41hlTcJUXX7kLw5oPejnQJ7V9BdW8Ysg',
   addresses: {
     tokens: {

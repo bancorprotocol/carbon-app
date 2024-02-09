@@ -1,4 +1,5 @@
 export interface AppConfig {
+  mode: 'development' | 'production';
   rpcUrl: string;
   carbonApi: string;
   appUrl: string;
