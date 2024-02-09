@@ -1,8 +1,9 @@
 export interface AppConfig {
   mode: 'development' | 'production';
-  rpcUrl: string;
   carbonApi: string;
   appUrl: string;
+  sentryDNS?: string;
+  rpcUrl: string;
   addresses: {
     tokens: {
       ETH: string;
