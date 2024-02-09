@@ -37,7 +37,7 @@ jobs:
         env:
           VITE_TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
-          NODE_ENV: development
+          NODE_ENV: production
           CI: true
         run: npx playwright test --update-snapshots --reporter=list
       - uses: stefanzweifel/git-auto-commit-action@v4

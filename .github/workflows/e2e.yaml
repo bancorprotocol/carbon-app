@@ -23,7 +23,7 @@ jobs:
         run: yarn e2e
         env:
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
-          NODE_ENV: development
+          NODE_ENV: production
           TENDERLY_ACCOUNT: bancor
           TENDERLY_PROJECT: carbon-test-forks
           TENDERLY_ACCESS_KEY: ${{ secrets.VITE_TENDERLY_ACCESS_KEY }}
