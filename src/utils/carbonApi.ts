@@ -30,16 +30,6 @@ export type RoiRow = {
   id: string;
 };
 
-let BASE_URL = '/api/';
-
-if (config.mode === 'development') {
-  BASE_URL = config.appUrl + '/api/';
-}
-
-const carbonApiAxios = axios.create({
-  baseURL: BASE_URL,
-});
-
 const newApiAxios = axios.create({
   baseURL: config.carbonApi,
 });
@@ -47,7 +37,8 @@ const newApiAxios = axios.create({
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (config.mode === 'development') return false;
-    const { data } = await carbonApiAxios.get<boolean>('/check');
+    const baseURL = config.appUrl + '/api/';
+    const { data } = await axios.create({ baseURL }).get<boolean>('/check');
     return data;
   },
   getMarketRate: async (
@@ -91,4 +82,4 @@ const carbonApi = {
   },
 };
 
-export { carbonApiAxios, carbonApi };
+export { carbonApi };
