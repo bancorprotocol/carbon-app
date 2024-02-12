@@ -1,13 +1,25 @@
-import development from './mainnet/development';
-import production from './mainnet/production';
+import ethereumDev from './ethereum/development';
+import ethereumProd from './ethereum/production';
 
-const configs = { development, production };
-const mode = import.meta.env.MODE as keyof typeof configs;
-if (!configs[mode]) {
-  const keys = Object.keys(configs)
-    .map((v) => `"${v}"`)
-    .join(' or ');
-  throw new Error(`NODE_ENV should either be ${keys}, got "${mode}"`);
+const configs = {
+  ethereum: {
+    development: ethereumDev,
+    production: ethereumProd,
+  },
+};
+type Network = keyof typeof configs;
+type Mode = 'development' | 'production';
+
+const network = (import.meta.env.VITE_NETWORK || 'ethereum') as Network;
+const mode = import.meta.env.MODE as Mode;
+
+if (!configs[network]) {
+  const networks = Object.keys(configs).join(' or ');
+  throw new Error(`VITE_NETWORK should be ${networks}, got "${network}"`);
+}
+if (!configs[network][mode]) {
+  const modes = Object.keys(configs[network]).join(' or ');
+  throw new Error(`NODE_ENV should be ${modes}, got "${mode}"`);
 }
 
-export default configs[mode];
+export default configs[network][mode];
