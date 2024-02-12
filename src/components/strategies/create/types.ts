@@ -15,12 +15,17 @@ export type OrderWithSetters = {
   setBudget: (value: ((prevState: string) => string) | string) => void;
 };
 
+type BaseCreateOrder = Pick<
+  OrderCreate,
+  'budget' | 'min' | 'max' | 'price' | 'marginalPrice'
+>;
+
 export type CreateStrategyActionProps = Pick<
   UseStrategyCreateReturn,
   'base' | 'quote'
 > & {
-  order0: OrderCreate;
-  order1: OrderCreate;
+  order0: BaseCreateOrder;
+  order1: BaseCreateOrder;
   user?: string;
   cache: QueryClient;
   mutation: UseMutationResult<

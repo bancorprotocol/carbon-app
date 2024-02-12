@@ -66,6 +66,7 @@ export const BuySellBlock: FC<Props> = ({
   );
 
   const changeStrategy = (direction: StrategyDirection) => {
+    order.resetFields();
     navigate({
       from: '/strategies/create',
       search: (search) => ({

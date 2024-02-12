@@ -1,44 +1,10 @@
-import {
-  CreateStrategyActionProps,
-  OrderWithSetters,
-} from 'components/strategies/create/types';
+import { CreateStrategyActionProps } from 'components/strategies/create/types';
 import { QueryKey } from 'libs/queries';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { carbonEvents } from 'services/events';
 import { Dispatch, SetStateAction } from 'react';
 import { ONE_AND_A_HALF_SECONDS_IN_MS } from 'utils/time';
-import { NavigateOptions, StrategySettings } from 'libs/routing';
-
-export const handleStrategySettings = (
-  settings?: StrategySettings,
-  functions?: ((value: boolean) => void)[]
-) => {
-  if (!functions || !settings) return;
-  if (settings === 'overlapping') return functions.forEach((fn) => fn(true));
-  if (settings === 'range') return functions.forEach((fn) => fn(true));
-  if (settings === 'limit') return functions.forEach((fn) => fn(false));
-};
-
-export const handleStrategyDirection = (
-  strategyDirection: 'buy' | 'sell' | undefined,
-  strategySettings: StrategySettings | undefined,
-  order1: OrderWithSetters,
-  order0: OrderWithSetters
-) => {
-  switch (strategyDirection) {
-    case 'buy':
-      handleStrategySettings(strategySettings, [order1.setIsRange]);
-      order0.setPrice('0');
-      order0.setIsRange(false);
-      break;
-    case 'sell': {
-      handleStrategySettings(strategySettings, [order0.setIsRange]);
-      order1.setPrice('0');
-      order1.setIsRange(false);
-      break;
-    }
-  }
-};
+import { NavigateOptions } from 'libs/routing';
 
 export const createStrategyAction = async ({
   base,

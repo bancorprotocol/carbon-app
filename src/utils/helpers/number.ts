@@ -204,3 +204,20 @@ export const formatNumberWithApproximation = (
     return { value: addPercentage(num.toFixed(2)), negative: true };
   }
 };
+
+/** Round to 6 decimals after leading zeros */
+export const roundSearchParam = (param: string) => {
+  if (Number(param) === 0 || isNaN(Number(param))) return '';
+  const [radix, decimals] = param.split('.');
+  if (!decimals) return param;
+  let leadingZeros = '';
+  for (const char of decimals) {
+    if (char !== '0') break;
+    leadingZeros += '0';
+  }
+  if (leadingZeros === decimals) return radix;
+  const rest = decimals
+    .slice(leadingZeros.length, leadingZeros.length + 6)
+    .replace(/0+$/, '');
+  return `${radix}.${leadingZeros}${rest}`;
+};

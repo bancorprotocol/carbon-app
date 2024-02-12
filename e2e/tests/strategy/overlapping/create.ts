@@ -10,7 +10,7 @@ import {
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
-export const createOverlappingStrategy = (testCase: CreateStrategyTestCase) => {
+export const create = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
   const { base, quote } = testCase;
   const { sell } = testCase.input.create;
