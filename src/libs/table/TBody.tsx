@@ -34,7 +34,7 @@ export const TBody = <D extends object>({
               'h-64',
               '!text-white/80',
               'text-16',
-              'hover:bg-neutral-900',
+              'hover:bg-neutral-800',
               'hover:!text-white',
               onRowClick && 'cursor-pointer'
             )}

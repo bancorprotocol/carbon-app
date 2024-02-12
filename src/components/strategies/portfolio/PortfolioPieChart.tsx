@@ -19,7 +19,7 @@ export const PortfolioPieChart = ({
   return (
     <div
       className={
-        'relative aspect-square w-full flex-shrink-0 rounded-10 bg-neutral-900 md:h-[400px] md:w-[400px]'
+        'relative aspect-square w-full flex-shrink-0 rounded-10 bg-neutral-800 md:h-[400px] md:w-[400px]'
       }
     >
       <div
@@ -56,7 +56,7 @@ export const PortfolioPieChart = ({
             )}
           >
             <div
-              className={cn('w-4/5', 'rounded-full', 'h-4/5', 'bg-neutral-900')}
+              className={cn('w-4/5', 'rounded-full', 'h-4/5', 'bg-neutral-800')}
             ></div>
           </div>
         </div>

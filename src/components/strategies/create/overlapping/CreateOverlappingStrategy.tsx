@@ -194,7 +194,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   return (
     <>
-      <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-neutral-900 p-20">
+      <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-neutral-800 p-20">
         <h4 className="flex items-center gap-8 text-14 font-weight-500">
           Discover Overlapping Strategies
           <span className="rounded-8 bg-darkGreen px-8 py-4 text-10 text-green">
@@ -214,7 +214,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           <IconLink className="h-12 w-12" />
         </a>
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-neutral-900 p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-neutral-800 p-20">
         <header className="flex items-center gap-8">
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
           <Tooltip
@@ -230,7 +230,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           marketPricePercentage={marketPricePercentage}
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-neutral-900 p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-neutral-800 p-20">
         <header className="flex items-center gap-8">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             1
@@ -256,7 +256,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           />
         )}
       </article>
-      <article className="flex flex-col gap-10 rounded-10 bg-neutral-900 p-20">
+      <article className="flex flex-col gap-10 rounded-10 bg-neutral-800 p-20">
         <header className="mb-10 flex items-center gap-8 ">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
@@ -276,7 +276,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           setSpread={setSpread}
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-neutral-900 p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-neutral-800 p-20">
         <header className="flex items-center gap-8 ">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             3

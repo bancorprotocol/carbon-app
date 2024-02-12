@@ -183,7 +183,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     <form
       {...formProps}
       onSubmit={handleTrade}
-      className="flex flex-col rounded-12 bg-neutral-900 p-20"
+      className="flex flex-col rounded-12 bg-neutral-800 p-20"
     >
       <h2 className="mb-20">
         {buy

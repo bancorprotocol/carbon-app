@@ -78,7 +78,7 @@
   }
 
   .bg-secondary {
-    @apply bg-neutral-900;
+    @apply bg-neutral-800;
   }
 
   .px-content {
@@ -86,7 +86,7 @@
   }
 
   .text-body {
-    @apply text-neutral-900 dark:text-white;
+    @apply text-neutral-800 dark:text-white;
   }
 
   .text-secondary {
@@ -94,7 +94,7 @@
   }
 
   .loading-skeleton {
-    @apply animate-pulse rounded-10 bg-neutral-900;
+    @apply animate-pulse rounded-10 bg-neutral-800;
   }
 }
 

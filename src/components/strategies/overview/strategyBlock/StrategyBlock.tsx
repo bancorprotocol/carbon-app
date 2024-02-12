@@ -24,7 +24,7 @@ export const StrategyBlock: FC<Props> = ({
     <m.li
       variants={mItemVariant}
       className={cn(
-        'grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded-10 bg-neutral-900 p-24',
+        'grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded-10 bg-neutral-800 p-24',
         className
       )}
       data-testid={`${strategy.base.symbol}/${strategy.quote.symbol}`}

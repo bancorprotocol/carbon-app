@@ -67,7 +67,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         {!!base && (
           <>
             <button
-              className="relative z-10 mx-auto grid h-40 w-40 place-items-center rounded-full border-[5px] border-neutral-900 bg-black"
+              className="relative z-10 mx-auto grid h-40 w-40 place-items-center rounded-full border-[5px] border-neutral-800 bg-black"
               onClick={swapTokens}
               disabled={!base || !quote}
             >

@@ -71,7 +71,7 @@ export const CreateStrategyOrders = ({
       <m.header
         variants={items}
         key="createStrategyBuyTokens"
-        className="flex flex-col gap-10 rounded-10 bg-neutral-900 p-20"
+        className="flex flex-col gap-10 rounded-10 bg-neutral-800 p-20"
       >
         <div className="flex gap-10">
           <TokensOverlap className="h-32 w-32" tokens={[base!, quote!]} />

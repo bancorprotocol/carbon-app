@@ -146,7 +146,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex flex-col gap-20 rounded-10 bg-neutral-900 p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-neutral-800 p-20">
         <header>
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
         </header>
@@ -161,7 +161,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           disabled
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-neutral-900 p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-neutral-800 p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Withdraw Budget</h3>
           <Tooltip
