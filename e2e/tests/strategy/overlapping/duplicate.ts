@@ -1,31 +1,31 @@
 import { expect, test } from '@playwright/test';
 import {
+  CreateStrategyDriver,
   CreateStrategyTestCase,
   MyStrategyDriver,
-  assertRecurringTestCase,
+  assertOverlappingTestCase,
 } from './../../../utils/strategy';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
-import { waitModalOpen } from '../../../utils/modal';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
-export const duplicateStrategyTest = (testCase: CreateStrategyTestCase) => {
+export const duplicate = (testCase: CreateStrategyTestCase) => {
+  assertOverlappingTestCase(testCase);
   const { base, quote } = testCase;
-  assertRecurringTestCase(testCase);
-  const { buy, sell, totalFiat } = testCase.output.create;
+  const { totalFiat, buy, sell } = testCase.output.create;
+
   return test('Duplicate', async ({ page }) => {
     const manage = new ManageStrategyDriver(page);
     const tokenApproval = new TokenApprovalDriver(page);
     const strategy = await manage.createStrategy(testCase, { tokenApproval });
     await strategy.clickManageEntry('duplicateStrategy');
 
-    const modal = await waitModalOpen(page);
-    await modal.getByTestId('duplicate-strategy-btn').click();
-    await modal.waitFor({ state: 'detached' });
-
     await page.waitForURL('/strategies/create?*', {
       timeout: 10_000,
     });
 
+    const createForm = new CreateStrategyDriver(page, testCase);
+    const overlappingForm = createForm.getOverlappingForm();
+    await overlappingForm.budgetBase().fill(sell.budget);
     await page.getByText('Create Strategy').click();
     await page.waitForURL('/', { timeout: 10_000 });
 

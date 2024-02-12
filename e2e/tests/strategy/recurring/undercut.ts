@@ -23,7 +23,7 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
     await modal.getByTestId('undercut-strategy-btn').click();
     await modal.waitFor({ state: 'detached' });
 
-    await page.waitForURL('/strategies/create?strategy=*', {
+    await page.waitForURL('/strategies/create?*', {
       timeout: 10_000,
     });
 

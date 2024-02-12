@@ -1,6 +1,6 @@
 import { Token } from 'libs/tokens';
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useNavigate } from 'libs/routing';
 
 export type NotEnoughLiquidityProps = {
   source: Token;
@@ -11,7 +11,11 @@ export const NotEnoughLiquidity = ({
   source,
   target,
 }: NotEnoughLiquidityProps) => {
-  const { duplicate } = useDuplicateStrategy();
+  const navigate = useNavigate();
+  const duplicate = () => {
+    const search = { base: source.address, quote: target.address };
+    navigate({ to: '/strategies/create', search });
+  };
 
   return (
     <div className="t-grey mt-5 min-h-[228px] flex-1">
@@ -25,9 +29,9 @@ export const NotEnoughLiquidity = ({
         <div className="mb-8 font-weight-500">No Liquidity Available</div>
         <div>No available orders at this moment.</div>
         <div>
-          {`You can `}
+          You can&nbsp;
           <span
-            onClick={() => duplicate({ base: source, quote: target })}
+            onClick={() => duplicate()}
             className="cursor-pointer font-weight-500"
           >
             Create a Strategy.
