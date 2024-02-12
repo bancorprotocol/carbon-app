@@ -207,7 +207,7 @@ export const formatNumberWithApproximation = (
 
 /** Round to 6 decimals after leading zeros */
 export const roundSearchParam = (param: string) => {
-  if (param === '0') return '';
+  if (Number(param) === 0 || isNaN(Number(param))) return '';
   const [radix, decimals] = param.split('.');
   if (!decimals) return param;
   let leadingZeros = '';

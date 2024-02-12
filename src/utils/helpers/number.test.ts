@@ -5,6 +5,7 @@ import {
   prettifyNumber,
   sanitizeNumber,
   formatNumberWithApproximation,
+  roundSearchParam,
 } from './number';
 
 describe('Test helpers', () => {
@@ -387,6 +388,22 @@ describe('Test helpers', () => {
         const result = formatNumberWithApproximation(num, options);
         expect(result).to.deep.equal(expected);
       });
+    });
+  });
+
+  describe('roundSearchParam', () => {
+    test('Should return empty string if value is 0-ish', () => {
+      expect(roundSearchParam('')).toBe('');
+      expect(roundSearchParam('.')).toBe('');
+      expect(roundSearchParam('0')).toBe('');
+      expect(roundSearchParam('0.0')).toBe('');
+    });
+    test('Should display maximum 6 decimals after leading 0 & remove trailing 0', () => {
+      expect(roundSearchParam('10')).toBe('10');
+      expect(roundSearchParam('0.1234567')).toBe('0.123456');
+      expect(roundSearchParam('1.1234567')).toBe('1.123456');
+      expect(roundSearchParam('1.00000001234567')).toBe('1.0000000123456');
+      expect(roundSearchParam('0.000000012345600001')).toBe('0.0000000123456');
     });
   });
 });
