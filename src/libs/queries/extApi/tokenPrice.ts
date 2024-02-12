@@ -1,12 +1,13 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
+import { CandlestickData } from 'libs/d3';
 import { QueryKey } from 'libs/queries/queryKey';
 import { FIVE_MIN_IN_MS } from 'utils/time';
 import { useStore } from 'store';
 import { carbonApi } from 'utils/carbonApi';
 
 export const useCompareTokenPrice = (
-  baseAddress: string,
-  quoteAddress: string
+  baseAddress?: string,
+  quoteAddress?: string
 ) => {
   const basePrice = useGetTokenPrice(baseAddress).data?.USD;
   const quotePrice = useGetTokenPrice(quoteAddress).data?.USD;
@@ -46,4 +47,40 @@ export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
       };
     }),
   });
+};
+
+export type TokenPriceHistoryResult = {
+  timestamp: number;
+  open: string;
+  close: string;
+  high: string;
+  low: string;
+};
+
+export interface TokenPriceHistorySearch {
+  baseToken?: string;
+  quoteToken?: string;
+  start: number;
+  end: number;
+}
+
+export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
+  return useQuery<CandlestickData[]>(
+    QueryKey.tokenPriceHistory(params),
+    async () => {
+      const data = await carbonApi.getMarketRateHistory(params);
+
+      return data.map((item) => ({
+        date: item.timestamp,
+        open: Number(item.open),
+        close: Number(item.close),
+        high: Number(item.high),
+        low: Number(item.low),
+      }));
+    },
+    {
+      enabled: !!params.baseToken && !!params.quoteToken,
+      staleTime: FIVE_MIN_IN_MS,
+    }
+  );
 };

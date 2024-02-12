@@ -72,6 +72,8 @@ interface StoreContext {
   isManualConnection: React.MutableRefObject<boolean>;
   toaster: ToastStore;
   debug: DebugStore;
+  simDisclaimerLastSeen?: number;
+  setSimDisclaimerLastSeen: Dispatch<SetStateAction<number | undefined>>;
 }
 
 const defaultValue: StoreContext = {
@@ -95,6 +97,8 @@ const defaultValue: StoreContext = {
   isManualConnection: { current: false },
   toaster: defaultToastStore,
   debug: defaultDebugStore,
+  simDisclaimerLastSeen: undefined,
+  setSimDisclaimerLastSeen: () => {},
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -124,6 +128,8 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const toaster = useToastStore();
   const debug = useDebugStore();
 
+  const [simDisclaimerLastSeen, setSimDisclaimerLastSeen] = useState<number>();
+
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
@@ -145,6 +151,8 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setSelectedWallet,
     toaster,
     debug,
+    simDisclaimerLastSeen,
+    setSimDisclaimerLastSeen,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;

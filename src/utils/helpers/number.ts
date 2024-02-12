@@ -100,6 +100,7 @@ interface PrettifyNumberOptions {
   locale?: string;
   round?: boolean;
   decimals?: number;
+  noSubscript?: boolean;
 }
 
 export function prettifyNumber(num: number | string | SafeDecimal): string;
@@ -163,7 +164,7 @@ export function prettifyNumber(
     return highPrecision(num, formatter, options.decimals);
   }
 
-  if (num.lt(0.001)) {
+  if (!options.noSubscript && num.lt(0.001)) {
     return subscript(num, formatter);
   }
 
