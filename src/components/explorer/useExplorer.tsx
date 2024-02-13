@@ -1,6 +1,6 @@
 import { useGetPairStrategies, useGetUserStrategies } from 'libs/queries';
 import { useMemo } from 'react';
-import { fromPairSlug } from 'utils/pairSearch';
+import { fromPairSearch } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
 
@@ -13,7 +13,7 @@ export const useExplorer = () => {
     if (!slug) return;
     return pairs.map.has(slug)
       ? pairs.map.get(slug)
-      : pairs.map.get(fromPairSlug(slug));
+      : pairs.map.get(fromPairSearch(slug));
   }, [pairs.map, slug]);
   const pairQuery = useGetPairStrategies({
     token0: exactMatch?.baseToken.address,
