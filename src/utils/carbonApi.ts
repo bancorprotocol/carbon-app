@@ -37,8 +37,8 @@ const newApiAxios = axios.create({
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (config.mode === 'development') return false;
-    const baseURL = config.appUrl + '/api/';
-    const { data } = await axios.create({ baseURL }).get<boolean>('/check');
+    const localApi = axios.create({ baseURL: '/api/' });
+    const { data } = await localApi.get<boolean>('/check');
     return data;
   },
   getMarketRate: async (

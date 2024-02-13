@@ -55,8 +55,10 @@ const configs = {
   },
 };
 ```
-4. Update the `.env` file to use polygon network
+4. Update the `.env` file to use polygon network and set your RPC url
 ```bash
 # Use polygon network
 VITE_NETWORK=polygon
+# Use any RPC URL to your network
+VITE_CHAIN_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/<API_KEY>
 ```

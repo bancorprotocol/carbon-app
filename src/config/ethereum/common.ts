@@ -6,7 +6,7 @@ export const commonConfig: AppConfig = {
   carbonApi: 'https://api.carbondefi.xyz/v1/',
   rpcUrl:
     import.meta.env.VITE_CHAIN_RPC_URL ||
-    'https://eth-mainnet.alchemyapi.io/v2/41hlTcJUXX7kLw5oPejnQJ7V9BdW8Ysg',
+    'https://eth-mainnet.g.alchemy.com/v2/demo',
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   addresses: {
     tokens: {
@@ -36,8 +36,10 @@ export const commonConfig: AppConfig = {
       multicall: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
     },
   },
-  tokenLists: {
-    Bancor: 'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens.json',
-    CoinGecko: 'https://tokens.coingecko.com/ethereum/all.json',
-  },
+  tokenLists: [
+    // Bancor
+    'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens.json',
+    // CoinGecko
+    'https://tokens.coingecko.com/ethereum/all.json',
+  ],
 };

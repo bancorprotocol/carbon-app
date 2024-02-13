@@ -7,8 +7,6 @@ import { Token as TokenContract } from 'abis/types';
 import { lsService } from 'services/localeStorage';
 import config from 'config';
 
-export const listOfLists = Object.values(config.tokenLists);
-
 const getLogoByURI = (uri: string | undefined) =>
   uri && uri.startsWith('ipfs') ? buildIpfsUri(uri.split('//')[1]) : uri;
 
@@ -16,7 +14,7 @@ const buildIpfsUri = (ipfsHash: string) => `https://ipfs.io/ipfs/${ipfsHash}`;
 
 export const fetchTokenLists = async () => {
   const res = await Promise.all(
-    listOfLists.map(async (uri) => {
+    config.tokenLists.map(async (uri) => {
       const res = await axios.get<TokenList>(uri, { timeout: 10000 });
       return {
         ...res.data,

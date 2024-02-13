@@ -1,5 +1,6 @@
 import { Page } from 'components/common/page';
 import config from 'config';
+import { NewTabLink, externalLinks } from 'libs/routing';
 
 const content = [
   {
@@ -1072,14 +1073,12 @@ export const TermsPage = () => {
           YOU HEREBY AGREE NOT TO USE THE SITE OR THE CONTENT FOR RESTRICTED
           USES OR FROM PROHIBITED JURISDICTIONS. IF YOU DO NOT AGREE TO ANY OF
           THESE TERMS OF USE OR THE PRIVACY POLICY AVAILABLE AT{' '}
-          <a
-            href={config.appUrl + '/privacy'}
-            target="_blank"
-            rel="noreferrer"
+          <NewTabLink
             className="text-green underline"
+            to={externalLinks.privacy}
           >
-            HTTPS://APP.CARBONDEFI.XYZ/PRIVACY
-          </a>{' '}
+            {config.appUrl.toUpperCase()}/PRIVACY
+          </NewTabLink>{' '}
           , PLEASE IMMEDIATELY CEASE ALL USE OF THE SITE AND THE CONTENT.
         </p>
         <p className="mt-40">
@@ -1108,14 +1107,12 @@ export const TermsPage = () => {
           By using the Content or visiting the Site, you signify your consent to
           both these Terms and our privacy policy (the “Privacy Policy”), a
           current version of which is available at{' '}
-          <a
-            href={config.appUrl + '/privacy'}
-            target="_blank"
-            rel="noreferrer"
+          <NewTabLink
             className="text-green underline"
+            to={externalLinks.privacy}
           >
             CARBON PRIVACY POLICY
-          </a>
+          </NewTabLink>
           , which is incorporated herein by reference and which may be modified
           from time to time. In the event of any change, amendment or update to
           these Terms or the Privacy Policy by us, you agree to be bound by
