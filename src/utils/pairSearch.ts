@@ -37,14 +37,6 @@ export const toPairName = (
 };
 
 /**
- * Transform pair symbols to pair key
- * pair key is used to access a pair in the map
- */
-export const toPairKey = (base: string, quote: string) => {
-  return `${base}_${quote}`.toLowerCase();
-};
-
-/**
  * Transform a slug into a pair key
  * slug comes from a search (query params or input)
  */
