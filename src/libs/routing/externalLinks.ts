@@ -1,3 +1,4 @@
+import config from 'config';
 export const externalLinks = {
   blog: 'http://blog.carbondefi.xyz',
   faq: 'https://faq.carbondefi.xyz/',
@@ -15,4 +16,6 @@ export const externalLinks = {
   roiLearnMore: 'https://faq.carbondefi.xyz/strategy-roi-and-apr',
   treasuryGov:
     'https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions/20220808',
+  terms: config.appUrl + '/terms',
+  privacy: config.appUrl + '/privacy',
 };

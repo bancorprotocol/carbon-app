@@ -5,6 +5,7 @@ import {
   TokenPriceHistorySearch,
 } from 'libs/queries/extApi/tokenPrice';
 import { SimulatorResultSearch } from 'libs/routing';
+import config from 'config';
 
 export const AVAILABLE_CURRENCIES = [
   'USD',
@@ -29,26 +30,15 @@ export type RoiRow = {
   id: string;
 };
 
-let BASE_URL = '/api/';
-
-if (import.meta.env.VITE_DEV_MODE) {
-  BASE_URL = 'https://app.carbondefi.xyz/api/';
-}
-
-const carbonApiAxios = axios.create({
-  baseURL: BASE_URL,
-});
-
 const newApiAxios = axios.create({
-  baseURL: 'https://api.carbondefi.xyz/v1/',
+  baseURL: config.carbonApi,
 });
 
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
-    if (import.meta.env.VITE_DEV_MODE) {
-      return false;
-    }
-    const { data } = await carbonApiAxios.get<boolean>('/check');
+    if (config.mode === 'development') return false;
+    const localApi = axios.create({ baseURL: '/api/' });
+    const { data } = await localApi.get<boolean>('/check');
     return data;
   },
   getMarketRate: async (
@@ -92,4 +82,4 @@ const carbonApi = {
   },
 };
 
-export { carbonApiAxios, carbonApi };
+export { carbonApi };

@@ -20,4 +20,8 @@ export const mockApi = async (page: Page) => {
     }
     return route.fulfill({ json: { data } });
   });
+  // E2E should be allowed in production mode (CI)
+  await page.route('/api/check', (route) => {
+    return route.fulfill({ json: false });
+  });
 };

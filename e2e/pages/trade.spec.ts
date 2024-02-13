@@ -9,11 +9,12 @@ import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
 test.describe('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     testInfo.setTimeout(90_000);
+    await mockApi(page);
     const debug = new DebugDriver(page);
     await debug.visit();
     await setupFork(testInfo);
     await debug.setRpcUrl(testInfo);
-    await Promise.all([mockApi(page), debug.setupImposter(), debug.setE2E()]);
+    await Promise.all([debug.setupImposter(), debug.setE2E()]);
   });
 
   test.afterEach(async ({}, testInfo) => {
@@ -75,8 +76,8 @@ test.describe('Trade', () => {
       await tokenApproval.checkApproval([testCase.source]);
 
       // Verify form empty
-      expect(driver.getPayInput()).toHaveValue('');
-      expect(driver.getReceiveInput()).toHaveValue('');
+      expect(driver.getPayInput()).toHaveValue('', { timeout: 10_000 });
+      expect(driver.getReceiveInput()).toHaveValue('', { timeout: 10_000 });
 
       // Check balance diff
       await navigateTo(page, '/debug');
