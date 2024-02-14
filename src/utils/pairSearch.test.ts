@@ -1,339 +1,667 @@
+/* eslint-disable prettier/prettier */
 import { describe, it, expect } from 'vitest';
 import { searchPairKeys } from 'utils/pairSearch';
 
-// Snapshot of the tokens available on the app on September 2023
+// Snapshot of the tokens available on the app on February 2024
 const keyNameRecord = {
-  dai_eth: 'DAI/ETH',
-  steth_eth: 'STETH/ETH',
-  usdc_usdt: 'USDC/USDT',
-  dai_usdc: 'DAI/USDC',
-  usdc_eth: 'USDC/ETH',
-  dai_usdt: 'DAI/USDT',
-  bnt_usdc: 'BNT/USDC',
-  usdt_eth: 'USDT/ETH',
-  reth_eth: 'RETH/ETH',
-  pepe_usdc: 'PEPE/USDC',
-  bnt_eth: 'BNT/ETH',
-  wbtc_usdc: 'WBTC/USDC',
-  bnt_vbnt: 'BNT/VBNT',
-  link_usdt: 'LINK/USDT',
-  vbnt_usdc: 'VBNT/USDC',
-  ohm_usdc: 'OHM/USDC',
-  xchf_rpl: 'XCHF/RPL',
-  matic_arb: 'MATIC/ARB',
-  usdc_tsuka: 'USDC/TSUKA',
-  lbr_eth: 'LBR/ETH',
-  pepe_eth: 'PEPE/ETH',
-  usdc_lyxe: 'USDC/LYXE',
-  rail_eth: 'RAIL/ETH',
-  hrp_eth: 'HRP/ETH',
-  silo_usdc: 'SILO/USDC',
-  link_usdc: 'LINK/USDC',
-  wbtc_eth: 'WBTC/ETH',
-  wbtc_usdt: 'WBTC/USDT',
-  '0x0_eth': '0X0/ETH',
-  smt_eth: 'SMT/ETH',
-  usdc_pepecoin: 'USDC/PEPECOIN',
-  usdc_jay: 'USDC/JAY',
-  wyd_eth: 'WYD/ETH',
-  wsb_eth: 'WSB/ETH',
-  ewtb_eth: 'EWTB/ETH',
-  usdc_crv: 'USDC/CRV',
-  bam_eth: 'BAM/ETH',
-  steth_weth: 'STETH/WETH',
-  eth2x_fli_eth: 'ETH2X-FLI/ETH',
-  ersdl_eth: 'ERSDL/ETH',
-  usdc_dext: 'USDC/DEXT',
-  hex_eth: 'HEX/ETH',
-  creth2_eth: 'CRETH2/ETH',
-  unibot_weth: 'UNIBOT/WETH',
-  paxg_usdc: 'PAXG/USDC',
-  wbtc_reth: 'WBTC/RETH',
-  lhinu_usdt: 'LHINU/USDT',
-  ribbit_eth: 'RIBBIT/ETH',
-  cvx_crv: 'CVX/CRV',
-  pepe_turbo: 'PEPE/TURBO',
-  mdt_weth: 'MDT/WETH',
-  sfox_eth: 'SFOX/ETH',
-  wjaura_aura: 'WJAURA/AURA',
-  frax_usdc: 'FRAX/USDC',
-  bee_eth: 'BEE/ETH',
-  ssv_usdt: 'SSV/USDT',
-  biao_eth: 'BIAO/ETH',
-  lusd_usdc: 'LUSD/USDC',
-  tucker_usdc: 'TUCKER/USDC',
-  link_eth: 'LINK/ETH',
-  grt_usdt: 'GRT/USDT',
-  yfi_usdc: 'YFI/USDC',
-  usdc_comp: 'USDC/COMP',
-  ageur_usdc: 'AGEUR/USDC',
-  wsteth_eth: 'WSTETH/ETH',
-  big_eth: 'BIG/ETH',
-  fxs_frax: 'FXS/FRAX',
-  matic_usdc: 'MATIC/USDC',
-  dai_steth: 'DAI/STETH',
-  bnt_dai: 'BNT/DAI',
-  oxo_usdt: 'OXO/USDT',
-  uni_eth: 'UNI/ETH',
-  oeth_eth: 'OETH/ETH',
-  fumo_eth: 'FUMO/ETH',
-  exrd_usdc: 'EXRD/USDC',
-  wsteth_usdc: 'WSTETH/USDC',
-  bitcoin_eth: 'BITCOIN/ETH',
-  arcona_eth: 'ARCONA/ETH',
-  iceth_eth: 'ICETH/ETH',
-  om_weth: 'OM/WETH',
-  usdp_eth: 'USDP/ETH',
-  pendle_eth: 'PENDLE/ETH',
-  bnt_pendle: 'BNT/PENDLE',
-  snx_eth: 'SNX/ETH',
-  evermoon_eth: 'EVERMOON/ETH',
-  idle_usdt: 'IDLE/USDT',
-  sgtv2_eth: 'SGTV2/ETH',
-  usdt_pepe20: 'USDT/PEPE20',
-  fxs_usdt: 'FXS/USDT',
-  eth_pepe20: 'ETH/PEPE20',
-  hitop_usdt: 'HITOP/USDT',
-  rlb_usdc: 'RLB/USDC',
-  wbtc_wsteth: 'WBTC/WSTETH',
-  'pepe3.0_usdc': 'PEPE3.0/USDC',
-  bnt_get: 'BNT/GET',
-  usdc_bbs: 'USDC/BBS',
-  lyxe_eth: 'LYXE/ETH',
-  gamma_usdc: 'GAMMA/USDC',
-  dai_mnw: 'DAI/MNW',
-  eth_ibex: 'ETH/IBEX',
-  usdc_eth2x_fli: 'USDC/ETH2X-FLI',
-  wtao_usdc: 'WTAO/USDC',
-  get_usdt: 'GET/USDT',
-  eth_cash: 'ETH/CASH',
-  caj_dai: 'CAJ/DAI',
-  caj_usdt: 'CAJ/USDT',
-  usdc_snx: 'USDC/SNX',
-  rlb_eth: 'RLB/ETH',
-  eusd_usdc: 'EUSD/USDC',
-  pbr_usdt: 'PBR/USDT',
-  fxs_eth: 'FXS/ETH',
-  rpl_eth: 'RPL/ETH',
-  cscs_usdt: 'CSCS/USDT',
-  frax_crv: 'FRAX/CRV',
-  bnt_crv: 'BNT/CRV',
-  xbot_eth: 'XBOT/ETH',
-  x_eth: 'X/ETH',
-  wsteth_reth: 'WSTETH/RETH',
-  peth_eth: 'PETH/ETH',
-  crv_usdt: 'CRV/USDT',
-  wozx_usdt: 'WOZX/USDT',
-  xpro_eth: 'XPRO/ETH',
-  x_weth: 'X/WETH',
-  wbtc_dai: 'WBTC/DAI',
-  bnt_link: 'BNT/LINK',
-  kata_usdc: 'KATA/USDC',
-  qnt_usdc: 'QNT/USDC',
-  dxn_eth: 'DXN/ETH',
-  eth_sweth: 'ETH/SWETH',
-  bnt_acre: 'BNT/ACRE',
-  xwizard_eth: 'XWIZARD/ETH',
-  ankreth_eth: 'ANKRETH/ETH',
-  usdc_saito: 'USDC/SAITO',
-  shib20_eth: 'SHIB20/ETH',
-  psyop_eth: 'PSYOP/ETH',
-  frogdog_eth: 'FROGDOG/ETH',
-  frxeth_eth: 'FRXETH/ETH',
-  bazed_usdt: 'BAZED/USDT',
-  weth_shield: 'WETH/SHIELD',
-  shield_eth: 'SHIELD/ETH',
-  ethereum_eth: 'ETHEREUM/ETH',
-  mbot_eth: 'MBOT/ETH',
-  shibie_eth: 'SHIBIE/ETH',
-  bnt_shibie: 'BNT/SHIBIE',
-  oly_usdt: 'OLY/USDT',
-  cscs_eth: 'CSCS/ETH',
-  bnt_rvt: 'BNT/RVT',
-  srm_weth: 'SRM/WETH',
-  axe_eth: 'AXE/ETH',
-  rai_usdt: 'RAI/USDT',
-  zcn_eth: 'ZCN/ETH',
-  homer_pepe_weth: 'Homer Pepe/WETH',
-  ldo_usdt: 'LDO/USDT',
-  usdc_cscs: 'USDC/CSCS',
-  shib_usdt: 'SHIB/USDT',
-  eth_cbot: 'ETH/CBOT',
-  guise_eth: 'GUISE/ETH',
-  weth_shares: 'WETH/SHARES',
-  ant_eth: 'ANT/ETH',
-  parq_usdc: 'PARQ/USDC',
-  eth_dai: 'ETH/DAI',
-  eth_steth: 'ETH/STETH',
-  usdt_usdc: 'USDT/USDC',
-  usdc_dai: 'USDC/DAI',
-  eth_usdc: 'ETH/USDC',
-  usdt_dai: 'USDT/DAI',
-  usdc_bnt: 'USDC/BNT',
-  eth_usdt: 'ETH/USDT',
-  eth_reth: 'ETH/RETH',
-  usdc_pepe: 'USDC/PEPE',
-  eth_bnt: 'ETH/BNT',
-  usdc_wbtc: 'USDC/WBTC',
-  vbnt_bnt: 'VBNT/BNT',
-  usdt_link: 'USDT/LINK',
-  usdc_vbnt: 'USDC/VBNT',
-  usdc_ohm: 'USDC/OHM',
-  rpl_xchf: 'RPL/XCHF',
-  arb_matic: 'ARB/MATIC',
-  tsuka_usdc: 'TSUKA/USDC',
-  eth_lbr: 'ETH/LBR',
-  eth_pepe: 'ETH/PEPE',
-  lyxe_usdc: 'LYXE/USDC',
-  eth_rail: 'ETH/RAIL',
-  eth_hrp: 'ETH/HRP',
-  usdc_silo: 'USDC/SILO',
-  usdc_link: 'USDC/LINK',
-  eth_wbtc: 'ETH/WBTC',
-  usdt_wbtc: 'USDT/WBTC',
-  eth_0x0: 'ETH/0X0',
-  eth_smt: 'ETH/SMT',
-  pepecoin_usdc: 'PEPECOIN/USDC',
-  jay_usdc: 'JAY/USDC',
-  eth_wyd: 'ETH/WYD',
-  eth_wsb: 'ETH/WSB',
-  eth_ewtb: 'ETH/EWTB',
-  crv_usdc: 'CRV/USDC',
-  eth_bam: 'ETH/BAM',
-  weth_steth: 'WETH/STETH',
-  eth_eth2x_fli: 'ETH/ETH2X-FLI',
-  eth_ersdl: 'ETH/ERSDL',
-  dext_usdc: 'DEXT/USDC',
-  eth_hex: 'ETH/HEX',
-  eth_creth2: 'ETH/CRETH2',
-  weth_unibot: 'WETH/UNIBOT',
-  usdc_paxg: 'USDC/PAXG',
-  reth_wbtc: 'RETH/WBTC',
-  usdt_lhinu: 'USDT/LHINU',
-  eth_ribbit: 'ETH/RIBBIT',
-  crv_cvx: 'CRV/CVX',
-  turbo_pepe: 'TURBO/PEPE',
-  weth_mdt: 'WETH/MDT',
-  eth_sfox: 'ETH/SFOX',
-  aura_wjaura: 'AURA/WJAURA',
-  usdc_frax: 'USDC/FRAX',
-  eth_bee: 'ETH/BEE',
-  usdt_ssv: 'USDT/SSV',
-  eth_biao: 'ETH/BIAO',
-  usdc_lusd: 'USDC/LUSD',
-  usdc_tucker: 'USDC/TUCKER',
-  eth_link: 'ETH/LINK',
-  usdt_grt: 'USDT/GRT',
-  usdc_yfi: 'USDC/YFI',
-  comp_usdc: 'COMP/USDC',
-  usdc_ageur: 'USDC/AGEUR',
-  eth_wsteth: 'ETH/WSTETH',
-  eth_big: 'ETH/BIG',
-  frax_fxs: 'FRAX/FXS',
-  usdc_matic: 'USDC/MATIC',
-  steth_dai: 'STETH/DAI',
-  dai_bnt: 'DAI/BNT',
-  usdt_oxo: 'USDT/OXO',
-  eth_uni: 'ETH/UNI',
-  eth_oeth: 'ETH/OETH',
-  eth_fumo: 'ETH/FUMO',
-  usdc_exrd: 'USDC/EXRD',
-  usdc_wsteth: 'USDC/WSTETH',
-  eth_bitcoin: 'ETH/BITCOIN',
-  eth_arcona: 'ETH/ARCONA',
-  eth_iceth: 'ETH/ICETH',
-  weth_om: 'WETH/OM',
-  eth_usdp: 'ETH/USDP',
-  eth_pendle: 'ETH/PENDLE',
-  pendle_bnt: 'PENDLE/BNT',
-  eth_snx: 'ETH/SNX',
-  eth_evermoon: 'ETH/EVERMOON',
-  usdt_idle: 'USDT/IDLE',
-  eth_sgtv2: 'ETH/SGTV2',
-  pepe20_usdt: 'PEPE20/USDT',
-  usdt_fxs: 'USDT/FXS',
-  pepe20_eth: 'PEPE20/ETH',
-  usdt_hitop: 'USDT/HITOP',
-  usdc_rlb: 'USDC/RLB',
-  wsteth_wbtc: 'WSTETH/WBTC',
-  'usdc_pepe3.0': 'USDC/PEPE3.0',
-  get_bnt: 'GET/BNT',
-  bbs_usdc: 'BBS/USDC',
-  eth_lyxe: 'ETH/LYXE',
-  usdc_gamma: 'USDC/GAMMA',
-  mnw_dai: 'MNW/DAI',
-  ibex_eth: 'IBEX/ETH',
-  eth2x_fli_usdc: 'ETH2X-FLI/USDC',
-  usdc_wtao: 'USDC/WTAO',
-  usdt_get: 'USDT/GET',
-  cash_eth: 'CASH/ETH',
-  dai_caj: 'DAI/CAJ',
-  usdt_caj: 'USDT/CAJ',
-  snx_usdc: 'SNX/USDC',
-  eth_rlb: 'ETH/RLB',
-  usdc_eusd: 'USDC/EUSD',
-  usdt_pbr: 'USDT/PBR',
-  eth_fxs: 'ETH/FXS',
-  eth_rpl: 'ETH/RPL',
-  usdt_cscs: 'USDT/CSCS',
-  crv_frax: 'CRV/FRAX',
-  crv_bnt: 'CRV/BNT',
-  eth_xbot: 'ETH/XBOT',
-  eth_x: 'ETH/X',
-  reth_wsteth: 'RETH/WSTETH',
-  eth_peth: 'ETH/PETH',
-  usdt_crv: 'USDT/CRV',
-  usdt_wozx: 'USDT/WOZX',
-  eth_xpro: 'ETH/XPRO',
-  weth_x: 'WETH/X',
-  dai_wbtc: 'DAI/WBTC',
-  link_bnt: 'LINK/BNT',
-  usdc_kata: 'USDC/KATA',
-  usdc_qnt: 'USDC/QNT',
-  eth_dxn: 'ETH/DXN',
-  sweth_eth: 'SWETH/ETH',
-  acre_bnt: 'ACRE/BNT',
-  eth_xwizard: 'ETH/XWIZARD',
-  eth_ankreth: 'ETH/ANKRETH',
-  saito_usdc: 'SAITO/USDC',
-  eth_shib20: 'ETH/SHIB20',
-  eth_psyop: 'ETH/PSYOP',
-  eth_frogdog: 'ETH/FROGDOG',
-  eth_frxeth: 'ETH/FRXETH',
-  usdt_bazed: 'USDT/BAZED',
-  shield_weth: 'SHIELD/WETH',
-  eth_shield: 'ETH/SHIELD',
-  eth_ethereum: 'ETH/ETHEREUM',
-  eth_mbot: 'ETH/MBOT',
-  eth_shibie: 'ETH/SHIBIE',
-  shibie_bnt: 'SHIBIE/BNT',
-  usdt_oly: 'USDT/OLY',
-  eth_cscs: 'ETH/CSCS',
-  rvt_bnt: 'RVT/BNT',
-  weth_srm: 'WETH/SRM',
-  eth_axe: 'ETH/AXE',
-  usdt_rai: 'USDT/RAI',
-  eth_zcn: 'ETH/ZCN',
-  weth_homer_pepe: 'WETH/Homer Pepe',
-  usdt_ldo: 'USDT/LDO',
-  cscs_usdc: 'CSCS/USDC',
-  usdt_shib: 'USDT/SHIB',
-  cbot_eth: 'CBOT/ETH',
-  eth_guise: 'ETH/GUISE',
-  shares_weth: 'SHARES/WETH',
-  eth_ant: 'ETH/ANT',
-  usdc_parq: 'USDC/PARQ',
-};
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'dai_eth',
+  '0xae7ab96520de3a18e5e111b5eaab095312d7fe84_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'steth_eth',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'usdc_usdt',
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'dai_usdc',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'usdc_eth',
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'dai_usdt',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'bnt_usdc',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'usdt_eth',
+  '0xae78736cd615f374d3085123a210448e74fc6393_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'reth_eth',
+  '0x6982508145454ce325ddbe47a25d4ec3d2311933_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'pepe_usdc',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'bnt_eth',
+  '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'wbtc_usdc',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0x48fb253446873234f2febbf9bdeaa72d9d387f94':
+    'bnt_vbnt',
+  '0x514910771af9ca656af840dff83e8264ecf986ca_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'link_usdt',
+  '0x48fb253446873234f2febbf9bdeaa72d9d387f94_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'vbnt_usdc',
+  '0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'ohm_usdc',
+  '0xb4272071ecadd69d933adcd19ca99fe80664fc08_0xd33526068d116ce69f19a9ee46f0bd304f21a51f':
+    'xchf_rpl',
+  '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0_0xb50721bcf8d664c30412cfbc6cf7a15145234ad1':
+    'matic_arb',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xc5fb36dd2fb59d3b98deff88425a3f425ee469ed':
+    'usdc_tsuka',
+  '0xc98835e792553e505ae46e73a6fd27a23985acca_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'lbr_eth',
+  '0x6982508145454ce325ddbe47a25d4ec3d2311933_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'pepe_eth',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xa8b919680258d369114910511cc87595aec0be6d':
+    'usdc_lyxe',
+  '0xe76c6c83af64e4c60245d8c7de953df673a7a33d_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'rail_eth',
+  '0xbd15ad921e1b480209af549874a2fcb80dc312bf_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'hrp_eth',
+  '0x6f80310ca7f2c654691d1383149fa1a57d8ab1f8_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'silo_usdc',
+  '0x514910771af9ca656af840dff83e8264ecf986ca_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'link_usdc',
+  '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'wbtc_eth',
+  '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'wbtc_usdt',
+  '0x5a3e6a77ba2f983ec0d371ea3b475f8bc0811ad5_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    '0x0_eth',
+  '0xb17548c7b510427baac4e267bea62e800b247173_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'smt_eth',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xa9e8acf069c58aec8825542845fd754e41a9489a':
+    'usdc_pepecoin',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xda7c0810ce6f8329786160bb3d1734cf6661ca6e':
+    'usdc_jay',
+  '0xbae9992488ae7f7c1edb34ed74c213b28d928991_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'wyd_eth',
+  '0x0414d8c87b271266a5864329fb4932bbe19c0c49_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'wsb_eth',
+  '0x178c820f862b14f316509ec36b13123da19a6054_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'ewtb_eth',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xd533a949740bb3306d119cc777fa900ba034cd52':
+    'usdc_crv',
+  '0x9db0fb0aebe6a925b7838d16e3993a3976a64aab_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'bam_eth',
+  '0xae7ab96520de3a18e5e111b5eaab095312d7fe84_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'steth_weth',
+  '0xaa6e8127831c9de45ae56bb1b0d4d4da6e5665bd_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'eth2x_fli_eth',
+  '0x5218e472cfcfe0b64a064f055b43b4cdc9efd3a6_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'ersdl_eth',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xfb7b4564402e5500db5bb6d63ae671302777c75a':
+    'usdc_dext',
+  '0x2b591e99afe9f32eaa6214f7b7629768c40eeb39_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'hex_eth',
+  '0x49d72e3973900a195a155a46441f0c08179fdb64_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'creth2_eth',
+  '0x25127685dc35d4dc96c7feac7370749d004c5040_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'unibot_weth',
+  '0x45804880de22913dafe09f4980848ece6ecbaf78_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'paxg_usdc',
+  '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599_0xae78736cd615f374d3085123a210448e74fc6393':
+    'wbtc_reth',
+  '0xcedefe438860d2789da6419b3a19cece2a41038d_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'lhinu_usdt',
+  '0xb794ad95317f75c44090f64955954c3849315ffe_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'ribbit_eth',
+  '0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b_0xd533a949740bb3306d119cc777fa900ba034cd52':
+    'cvx_crv',
+  '0x6982508145454ce325ddbe47a25d4ec3d2311933_0xa35923162c49cf95e6bf26623385eb431ad920d3':
+    'pepe_turbo',
+  '0x814e0908b12a99fecf5bc101bb5d0b8b5cdf7d26_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'mdt_weth',
+  '0xdfba8e8ffcc348b006e893e78de233b8597076d5_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'sfox_eth',
+  '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f_0xc0c293ce456ff0ed870add98a0828dd4d2903dbf':
+    'wjaura_aura',
+  '0x853d955acef822db058eb8505911ed77f175b99e_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'frax_usdc',
+  '0x4c4f2b9deb3c91006719bb3232dd4eb39977307c_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'bee_eth',
+  '0x9d65ff81a3c488d585bbfb0bfe3c7707c7917f54_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'ssv_usdt',
+  '0x00282fd551d03dc033256c4bf119532e8c735d8a_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'biao_eth',
+  '0x5f98805a4e8be255a32880fdec7f6728c6568ba0_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'lusd_usdc',
+  '0x6f49694827d46a14baf2a7b1eac3e6eb3526a84f_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'tucker_usdc',
+  '0x514910771af9ca656af840dff83e8264ecf986ca_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'link_eth',
+  '0xc944e90c64b2c07662a292be6244bdf05cda44a7_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'grt_usdt',
+  '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'yfi_usdc',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xc00e94cb662c3520282e6f5717214004a7f26888':
+    'usdc_comp',
+  '0x1a7e4e63778b4f12a199c062f3efdd288afcbce8_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'ageur_usdc',
+  '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'wsteth_eth',
+  '0xc8de43bfe33ff496fa14c270d9cb29bda196b9b5_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'big_eth',
+  '0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0_0x853d955acef822db058eb8505911ed77f175b99e':
+    'fxs_frax',
+  '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'matic_usdc',
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0xae7ab96520de3a18e5e111b5eaab095312d7fe84':
+    'dai_steth',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'bnt_dai',
+  '0x47dac6bd80f024575a6d367af5ba8e89202a09fc_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'oxo_usdt',
+  '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'uni_eth',
+  '0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'oeth_eth',
+  '0x2890df158d76e584877a1d17a85fea3aeeb85aa6_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'fumo_eth',
+  '0x6468e79a80c0eab0f9a2b574c8d5bc374af59414_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'exrd_usdc',
+  '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'wsteth_usdc',
+  '0x72e4f9f808c49a2a61de9c5896298920dc4eeea9_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'bitcoin_eth',
+  '0x0f71b8de197a1c84d31de0f1fa7926c365f052b3_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'arcona_eth',
+  '0x7c07f7abe10ce8e33dc6c5ad68fe033085256a84_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'iceth_eth',
+  '0x3593d125a4f7849a1b059e64f4517a86dd60c95d_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'om_weth',
+  '0x8e870d67f660d95d5be530380d0ec0bd388289e1_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'usdp_eth',
+  '0x808507121b80c02388fad14726482e061b8da827_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'pendle_eth',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0x808507121b80c02388fad14726482e061b8da827':
+    'bnt_pendle',
+  '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'snx_eth',
+  '0x4ad434b8cdc3aa5ac97932d6bd18b5d313ab0f6f_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'evermoon_eth',
+  '0x875773784af8135ea0ef43b5a374aad105c5d39e_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'idle_usdt',
+  '0x24c19f7101c1731b85f1127eaa0407732e36ecdd_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'sgtv2_eth',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0xfb66321d7c674995dfcc2cb67a30bc978dc862ad':
+    'usdt_pepe2.0',
+  '0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'fxs_usdt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xfb66321d7c674995dfcc2cb67a30bc978dc862ad':
+    'eth_pepe2.0',
+  '0x01022591fce0609b57670beba60102dfd2b95d77_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'hitop_usdt',
+  '0x046eee2cc3188071c02bfc1745a6b17c656e3f3d_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'rlb_usdc',
+  '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599_0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0':
+    'wbtc_wsteth',
+  '0x0e92c90867bf82ebbe66ae0352a4c6d876fb5398_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'pepe3.0_usdc',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0x8a854288a5976036a725879164ca3e91d30c6a1b':
+    'bnt_get',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xfe459828c90c0ba4bc8b42f5c5d44f316700b430':
+    'usdc_bbs',
+  '0xa8b919680258d369114910511cc87595aec0be6d_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'lyxe_eth',
+  '0x6bea7cfef803d1e3d5f7c0103f7ded065644e197_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'gamma_usdc',
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0xd3e4ba569045546d09cf021ecc5dfe42b1d7f6e4':
+    'dai_mnw',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xf655c8567e0f213e6c634cd2a68d992152161dc6':
+    'eth_ibex',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xaa6e8127831c9de45ae56bb1b0d4d4da6e5665bd':
+    'usdc_eth2x_fli',
+  '0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'wtao_usdc',
+  '0x8a854288a5976036a725879164ca3e91d30c6a1b_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'get_usdt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xf32cfbaf4000e6820a95b3a3fcdbf27fb4efc9af':
+    'eth_cash',
+  '0x3c6a7ab47b5f058be0e7c7fe1a4b7925b8aca40e_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'caj_dai',
+  '0x3c6a7ab47b5f058be0e7c7fe1a4b7925b8aca40e_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'caj_usdt',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f':
+    'usdc_snx',
+  '0x046eee2cc3188071c02bfc1745a6b17c656e3f3d_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'rlb_eth',
+  '0x97de57ec338ab5d51557da3434828c5dbfada371_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'eusd_usdc',
+  '0x298d492e8c1d909d3f63bc4a36c66c64acb3d695_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'pbr_usdt',
+  '0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'fxs_eth',
+  '0xd33526068d116ce69f19a9ee46f0bd304f21a51f_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'rpl_eth',
+  '0xa6ec49e06c25f63292bac1abc1896451a0f4cfb7_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'cscs_usdt',
+  '0x853d955acef822db058eb8505911ed77f175b99e_0xd533a949740bb3306d119cc777fa900ba034cd52':
+    'frax_crv',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0xd533a949740bb3306d119cc777fa900ba034cd52':
+    'bnt_crv',
+  '0x53bf63239b8c6354b81a8d235fb08e32ffbf22a9_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'xbot_eth',
+  '0xa62894d5196bc44e4c3978400ad07e7b30352372_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'x_eth',
+  '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0_0xae78736cd615f374d3085123a210448e74fc6393':
+    'wsteth_reth',
+  '0x836a808d4828586a69364065a1e064609f5078c7_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'peth_eth',
+  '0xd533a949740bb3306d119cc777fa900ba034cd52_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'crv_usdt',
+  '0x34950ff2b487d9e5282c5ab342d08a2f712eb79f_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'wozx_usdt',
+  '0xa23c5ef36dec46fe8e320caa647afd484d9d96df_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'xpro_eth',
+  '0xabec00542d141bddf58649bfe860c6449807237c_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'x_weth',
+  '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'wbtc_dai',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0x514910771af9ca656af840dff83e8264ecf986ca':
+    'bnt_link',
+  '0x2e85ae1c47602f7927bcabc2ff99c40aa222ae15_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'kata_usdc',
+  '0x4a220e6096b25eadb88358cb44068a3248254675_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'qnt_usdc',
+  '0x80f0c1c49891dcfdd40b6e0f960f84e6042bcb6f_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'dxn_eth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xf951e335afb289353dc249e82926178eac7ded78':
+    'eth_sweth',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0xb2cabf797bc907b049e4ccb5b84d13be3a8cfc21':
+    'bnt_acre',
+  '0x7fc09a4f6182e835a97c42980f7235e8c0cbfa56_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'xwizard_eth',
+  '0xe95a203b1a91a908f9b9ce46459d101078c2c3cb_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'ankreth_eth',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xfa14fa6958401314851a17d6c5360ca29f74b57b':
+    'usdc_saito',
+  '0x34ba042827996821cffeb06477d48a2ff9474483_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'shib20_eth',
+  '0x3007083eaa95497cd6b2b809fb97b6a30bdf53d3_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'psyop_eth',
+  '0x3cda61b56278842876e7fdd56123d83dbafae16c_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'frogdog_eth',
+  '0x5e8422345238f34275888049021821e8e08caa1f_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'frxeth_eth',
+  '0x3ee4b152824b657644c7a9b50694787e80eb8f4a_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'bazed_usdt',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0xd8b90d2e680ea535eacce1b025c998b347892f68':
+    'weth_shield',
+  '0xd8b90d2e680ea535eacce1b025c998b347892f68_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'shield_eth',
+  '0xc32db1d3282e872d98f6437d3bcfa57801ca6d5c_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'ethereum_eth',
+  '0x38cf11283de05cf1823b7804bc75068bd6296957_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'mbot_eth',
+  '0x4965b3b90f3a63fc72f74e53322f66b2a174a98f_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'shibie_eth',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0x4965b3b90f3a63fc72f74e53322f66b2a174a98f':
+    'bnt_shibie',
+  '0x6595b8fd9c920c81500dca94e53cdc712513fb1f_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'oly_usdt',
+  '0xa6ec49e06c25f63292bac1abc1896451a0f4cfb7_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'cscs_eth',
+  '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c_0x3d1ba9be9f66b8ee101911bc36d3fb562eac2244':
+    'bnt_rvt',
+  '0x476c5e26a75bd202a9683ffd34359c0cc15be0ff_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'srm_weth',
+  '0x070e984fda37dd942f5c953f6b2375339adac308_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'axe_eth',
+  '0x03ab458634910aad20ef5f1c8ee96f1d6ac54919_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'rai_usdt',
+  '0xb9ef770b6a5e12e45983c5d80545258aa38f3b78_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'zcn_eth',
+  '0x86803e2012cba1ca09d87393f5c739fa9e58ea3c_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'homer_pepe_weth',
+  '0x5a98fcbea516cf06857215779fd812ca3bef1b32_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'ldo_usdt',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0xa6ec49e06c25f63292bac1abc1896451a0f4cfb7':
+    'usdc_cscs',
+  '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'shib_usdt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xf49311af05a4ffb1dbf33d61e9b2d4f0a7d4a71c':
+    'eth_cbot',
+  '0x7721a4cb6190edb11d47f51c20968436eccdafb8_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'guise_eth',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0xebb82c932759b515b2efc1cfbb6bf2f6dbace404':
+    'weth_shares',
+  '0xa117000000f279d81a1d3cc75430faa017fa5a2e_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'ant_eth',
+  '0x15b0dd2c5db529ab870915ff498bea6d20fb6b96_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'parq_usdc',
+  '0x15b0dd2c5db529ab870915ff498bea6d20fb6b96_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'parq_eth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'eth_dai',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xae7ab96520de3a18e5e111b5eaab095312d7fe84':
+    'eth_steth',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'usdt_usdc',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'usdc_dai',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'eth_usdc',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'usdt_dai',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'usdc_bnt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'eth_usdt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xae78736cd615f374d3085123a210448e74fc6393':
+    'eth_reth',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x6982508145454ce325ddbe47a25d4ec3d2311933':
+    'usdc_pepe',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'eth_bnt',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x2260fac5e5542a773aa44fbcfedf7c193bc2c599':
+    'usdc_wbtc',
+  '0x48fb253446873234f2febbf9bdeaa72d9d387f94_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'vbnt_bnt',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x514910771af9ca656af840dff83e8264ecf986ca':
+    'usdt_link',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x48fb253446873234f2febbf9bdeaa72d9d387f94':
+    'usdc_vbnt',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5':
+    'usdc_ohm',
+  '0xd33526068d116ce69f19a9ee46f0bd304f21a51f_0xb4272071ecadd69d933adcd19ca99fe80664fc08':
+    'rpl_xchf',
+  '0xb50721bcf8d664c30412cfbc6cf7a15145234ad1_0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0':
+    'arb_matic',
+  '0xc5fb36dd2fb59d3b98deff88425a3f425ee469ed_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'tsuka_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xc98835e792553e505ae46e73a6fd27a23985acca':
+    'eth_lbr',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x6982508145454ce325ddbe47a25d4ec3d2311933':
+    'eth_pepe',
+  '0xa8b919680258d369114910511cc87595aec0be6d_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'lyxe_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xe76c6c83af64e4c60245d8c7de953df673a7a33d':
+    'eth_rail',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xbd15ad921e1b480209af549874a2fcb80dc312bf':
+    'eth_hrp',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x6f80310ca7f2c654691d1383149fa1a57d8ab1f8':
+    'usdc_silo',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x514910771af9ca656af840dff83e8264ecf986ca':
+    'usdc_link',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x2260fac5e5542a773aa44fbcfedf7c193bc2c599':
+    'eth_wbtc',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x2260fac5e5542a773aa44fbcfedf7c193bc2c599':
+    'usdt_wbtc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x5a3e6a77ba2f983ec0d371ea3b475f8bc0811ad5':
+    'eth_0x0',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xb17548c7b510427baac4e267bea62e800b247173':
+    'eth_smt',
+  '0xa9e8acf069c58aec8825542845fd754e41a9489a_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'pepecoin_usdc',
+  '0xda7c0810ce6f8329786160bb3d1734cf6661ca6e_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'jay_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xbae9992488ae7f7c1edb34ed74c213b28d928991':
+    'eth_wyd',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x0414d8c87b271266a5864329fb4932bbe19c0c49':
+    'eth_wsb',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x178c820f862b14f316509ec36b13123da19a6054':
+    'eth_ewtb',
+  '0xd533a949740bb3306d119cc777fa900ba034cd52_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'crv_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x9db0fb0aebe6a925b7838d16e3993a3976a64aab':
+    'eth_bam',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0xae7ab96520de3a18e5e111b5eaab095312d7fe84':
+    'weth_steth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xaa6e8127831c9de45ae56bb1b0d4d4da6e5665bd':
+    'eth_eth2x_fli',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x5218e472cfcfe0b64a064f055b43b4cdc9efd3a6':
+    'eth_ersdl',
+  '0xfb7b4564402e5500db5bb6d63ae671302777c75a_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'dext_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x2b591e99afe9f32eaa6214f7b7629768c40eeb39':
+    'eth_hex',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x49d72e3973900a195a155a46441f0c08179fdb64':
+    'eth_creth2',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0x25127685dc35d4dc96c7feac7370749d004c5040':
+    'weth_unibot',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x45804880de22913dafe09f4980848ece6ecbaf78':
+    'usdc_paxg',
+  '0xae78736cd615f374d3085123a210448e74fc6393_0x2260fac5e5542a773aa44fbcfedf7c193bc2c599':
+    'reth_wbtc',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0xcedefe438860d2789da6419b3a19cece2a41038d':
+    'usdt_lhinu',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xb794ad95317f75c44090f64955954c3849315ffe':
+    'eth_ribbit',
+  '0xd533a949740bb3306d119cc777fa900ba034cd52_0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b':
+    'crv_cvx',
+  '0xa35923162c49cf95e6bf26623385eb431ad920d3_0x6982508145454ce325ddbe47a25d4ec3d2311933':
+    'turbo_pepe',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0x814e0908b12a99fecf5bc101bb5d0b8b5cdf7d26':
+    'weth_mdt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xdfba8e8ffcc348b006e893e78de233b8597076d5':
+    'eth_sfox',
+  '0xc0c293ce456ff0ed870add98a0828dd4d2903dbf_0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f':
+    'aura_wjaura',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x853d955acef822db058eb8505911ed77f175b99e':
+    'usdc_frax',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x4c4f2b9deb3c91006719bb3232dd4eb39977307c':
+    'eth_bee',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x9d65ff81a3c488d585bbfb0bfe3c7707c7917f54':
+    'usdt_ssv',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x00282fd551d03dc033256c4bf119532e8c735d8a':
+    'eth_biao',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x5f98805a4e8be255a32880fdec7f6728c6568ba0':
+    'usdc_lusd',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x6f49694827d46a14baf2a7b1eac3e6eb3526a84f':
+    'usdc_tucker',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x514910771af9ca656af840dff83e8264ecf986ca':
+    'eth_link',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0xc944e90c64b2c07662a292be6244bdf05cda44a7':
+    'usdt_grt',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e':
+    'usdc_yfi',
+  '0xc00e94cb662c3520282e6f5717214004a7f26888_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'comp_usdc',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x1a7e4e63778b4f12a199c062f3efdd288afcbce8':
+    'usdc_ageur',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0':
+    'eth_wsteth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xc8de43bfe33ff496fa14c270d9cb29bda196b9b5':
+    'eth_big',
+  '0x853d955acef822db058eb8505911ed77f175b99e_0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0':
+    'frax_fxs',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0':
+    'usdc_matic',
+  '0xae7ab96520de3a18e5e111b5eaab095312d7fe84_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'steth_dai',
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'dai_bnt',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x47dac6bd80f024575a6d367af5ba8e89202a09fc':
+    'usdt_oxo',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x1f9840a85d5af5bf1d1762f925bdaddc4201f984':
+    'eth_uni',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3':
+    'eth_oeth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x2890df158d76e584877a1d17a85fea3aeeb85aa6':
+    'eth_fumo',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x6468e79a80c0eab0f9a2b574c8d5bc374af59414':
+    'usdc_exrd',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0':
+    'usdc_wsteth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x72e4f9f808c49a2a61de9c5896298920dc4eeea9':
+    'eth_bitcoin',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x0f71b8de197a1c84d31de0f1fa7926c365f052b3':
+    'eth_arcona',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x7c07f7abe10ce8e33dc6c5ad68fe033085256a84':
+    'eth_iceth',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0x3593d125a4f7849a1b059e64f4517a86dd60c95d':
+    'weth_om',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x8e870d67f660d95d5be530380d0ec0bd388289e1':
+    'eth_usdp',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x808507121b80c02388fad14726482e061b8da827':
+    'eth_pendle',
+  '0x808507121b80c02388fad14726482e061b8da827_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'pendle_bnt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f':
+    'eth_snx',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x4ad434b8cdc3aa5ac97932d6bd18b5d313ab0f6f':
+    'eth_evermoon',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x875773784af8135ea0ef43b5a374aad105c5d39e':
+    'usdt_idle',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x24c19f7101c1731b85f1127eaa0407732e36ecdd':
+    'eth_sgtv2',
+  '0xfb66321d7c674995dfcc2cb67a30bc978dc862ad_0xdac17f958d2ee523a2206206994597c13d831ec7':
+    'pepe2.0_usdt',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0':
+    'usdt_fxs',
+  '0xfb66321d7c674995dfcc2cb67a30bc978dc862ad_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'pepe2.0_eth',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x01022591fce0609b57670beba60102dfd2b95d77':
+    'usdt_hitop',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x046eee2cc3188071c02bfc1745a6b17c656e3f3d':
+    'usdc_rlb',
+  '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0_0x2260fac5e5542a773aa44fbcfedf7c193bc2c599':
+    'wsteth_wbtc',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x0e92c90867bf82ebbe66ae0352a4c6d876fb5398':
+    'usdc_pepe3.0',
+  '0x8a854288a5976036a725879164ca3e91d30c6a1b_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'get_bnt',
+  '0xfe459828c90c0ba4bc8b42f5c5d44f316700b430_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'bbs_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xa8b919680258d369114910511cc87595aec0be6d':
+    'eth_lyxe',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x6bea7cfef803d1e3d5f7c0103f7ded065644e197':
+    'usdc_gamma',
+  '0xd3e4ba569045546d09cf021ecc5dfe42b1d7f6e4_0x6b175474e89094c44da98b954eedeac495271d0f':
+    'mnw_dai',
+  '0xf655c8567e0f213e6c634cd2a68d992152161dc6_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'ibex_eth',
+  '0xaa6e8127831c9de45ae56bb1b0d4d4da6e5665bd_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'eth2x_fli_usdc',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44':
+    'usdc_wtao',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x8a854288a5976036a725879164ca3e91d30c6a1b':
+    'usdt_get',
+  '0xf32cfbaf4000e6820a95b3a3fcdbf27fb4efc9af_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'cash_eth',
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0x3c6a7ab47b5f058be0e7c7fe1a4b7925b8aca40e':
+    'dai_caj',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x3c6a7ab47b5f058be0e7c7fe1a4b7925b8aca40e':
+    'usdt_caj',
+  '0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'snx_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x046eee2cc3188071c02bfc1745a6b17c656e3f3d':
+    'eth_rlb',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x97de57ec338ab5d51557da3434828c5dbfada371':
+    'usdc_eusd',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x298d492e8c1d909d3f63bc4a36c66c64acb3d695':
+    'usdt_pbr',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0':
+    'eth_fxs',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xd33526068d116ce69f19a9ee46f0bd304f21a51f':
+    'eth_rpl',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0xa6ec49e06c25f63292bac1abc1896451a0f4cfb7':
+    'usdt_cscs',
+  '0xd533a949740bb3306d119cc777fa900ba034cd52_0x853d955acef822db058eb8505911ed77f175b99e':
+    'crv_frax',
+  '0xd533a949740bb3306d119cc777fa900ba034cd52_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'crv_bnt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x53bf63239b8c6354b81a8d235fb08e32ffbf22a9':
+    'eth_xbot',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xa62894d5196bc44e4c3978400ad07e7b30352372':
+    'eth_x',
+  '0xae78736cd615f374d3085123a210448e74fc6393_0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0':
+    'reth_wsteth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x836a808d4828586a69364065a1e064609f5078c7':
+    'eth_peth',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0xd533a949740bb3306d119cc777fa900ba034cd52':
+    'usdt_crv',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x34950ff2b487d9e5282c5ab342d08a2f712eb79f':
+    'usdt_wozx',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xa23c5ef36dec46fe8e320caa647afd484d9d96df':
+    'eth_xpro',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0xabec00542d141bddf58649bfe860c6449807237c':
+    'weth_x',
+  '0x6b175474e89094c44da98b954eedeac495271d0f_0x2260fac5e5542a773aa44fbcfedf7c193bc2c599':
+    'dai_wbtc',
+  '0x514910771af9ca656af840dff83e8264ecf986ca_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'link_bnt',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x2e85ae1c47602f7927bcabc2ff99c40aa222ae15':
+    'usdc_kata',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x4a220e6096b25eadb88358cb44068a3248254675':
+    'usdc_qnt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x80f0c1c49891dcfdd40b6e0f960f84e6042bcb6f':
+    'eth_dxn',
+  '0xf951e335afb289353dc249e82926178eac7ded78_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'sweth_eth',
+  '0xb2cabf797bc907b049e4ccb5b84d13be3a8cfc21_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'acre_bnt',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x7fc09a4f6182e835a97c42980f7235e8c0cbfa56':
+    'eth_xwizard',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xe95a203b1a91a908f9b9ce46459d101078c2c3cb':
+    'eth_ankreth',
+  '0xfa14fa6958401314851a17d6c5360ca29f74b57b_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'saito_usdc',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x34ba042827996821cffeb06477d48a2ff9474483':
+    'eth_shib20',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x3007083eaa95497cd6b2b809fb97b6a30bdf53d3':
+    'eth_psyop',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x3cda61b56278842876e7fdd56123d83dbafae16c':
+    'eth_frogdog',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x5e8422345238f34275888049021821e8e08caa1f':
+    'eth_frxeth',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x3ee4b152824b657644c7a9b50694787e80eb8f4a':
+    'usdt_bazed',
+  '0xd8b90d2e680ea535eacce1b025c998b347892f68_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'shield_weth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xd8b90d2e680ea535eacce1b025c998b347892f68':
+    'eth_shield',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xc32db1d3282e872d98f6437d3bcfa57801ca6d5c':
+    'eth_ethereum',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x38cf11283de05cf1823b7804bc75068bd6296957':
+    'eth_mbot',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x4965b3b90f3a63fc72f74e53322f66b2a174a98f':
+    'eth_shibie',
+  '0x4965b3b90f3a63fc72f74e53322f66b2a174a98f_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'shibie_bnt',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x6595b8fd9c920c81500dca94e53cdc712513fb1f':
+    'usdt_oly',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xa6ec49e06c25f63292bac1abc1896451a0f4cfb7':
+    'eth_cscs',
+  '0x3d1ba9be9f66b8ee101911bc36d3fb562eac2244_0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c':
+    'rvt_bnt',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0x476c5e26a75bd202a9683ffd34359c0cc15be0ff':
+    'weth_srm',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x070e984fda37dd942f5c953f6b2375339adac308':
+    'eth_axe',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x03ab458634910aad20ef5f1c8ee96f1d6ac54919':
+    'usdt_rai',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xb9ef770b6a5e12e45983c5d80545258aa38f3b78':
+    'eth_zcn',
+  '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0x86803e2012cba1ca09d87393f5c739fa9e58ea3c':
+    'weth_homer_pepe',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x5a98fcbea516cf06857215779fd812ca3bef1b32':
+    'usdt_ldo',
+  '0xa6ec49e06c25f63292bac1abc1896451a0f4cfb7_0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':
+    'cscs_usdc',
+  '0xdac17f958d2ee523a2206206994597c13d831ec7_0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce':
+    'usdt_shib',
+  '0xf49311af05a4ffb1dbf33d61e9b2d4f0a7d4a71c_0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee':
+    'cbot_eth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x7721a4cb6190edb11d47f51c20968436eccdafb8':
+    'eth_guise',
+  '0xebb82c932759b515b2efc1cfbb6bf2f6dbace404_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':
+    'shares_weth',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0xa117000000f279d81a1d3cc75430faa017fa5a2e':
+    'eth_ant',
+  '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_0x15b0dd2c5db529ab870915ff498bea6d20fb6b96':
+    'usdc_parq',
+  '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee_0x15b0dd2c5db529ab870915ff498bea6d20fb6b96':
+    'eth_parq',
+} as const;
 const nameMap = new Map<string, string>(Object.entries(keyNameRecord));
 
-type TokenKey = keyof typeof keyNameRecord;
+type TokenKeys = keyof typeof keyNameRecord;
+type TokenValues = (typeof keyNameRecord)[TokenKeys];
 
 describe('Pair Key Search', () => {
   // Bind nameMap for all tests
   const searchKey = searchPairKeys.bind(undefined, nameMap);
   // Utils function for positive expect with type autocomplete
   const expectSearch = (search: string) => ({
-    toEqual: (result: TokenKey[]) => expect(searchKey(search)).toEqual(result),
+    toEqual: (result: TokenValues[]) => {
+      return expect(searchKey(search).map(({ name }) => name)).toEqual(result);
+    },
   });
 
   describe('Filter', () => {
@@ -377,16 +705,16 @@ describe('Pair Key Search', () => {
   describe('Sorting', () => {
     it('should order by group, first base token in the pair, then quote token', () => {
       const result = searchKey('dai');
-      expect(result.at(0)?.startsWith('dai')).toBeTruthy();
-      expect(result.at(-1)?.endsWith('dai')).toBeTruthy();
+      expect(result.at(0)?.name.startsWith('dai')).toBeTruthy();
+      expect(result.at(-1)?.name.endsWith('dai')).toBeTruthy();
     });
     it('should be in alphabetic order in the same group (base / quote)', () => {
       const result = searchKey('eth');
-      expect(result.at(0)).toBe('eth_0x0');
-      expect(result.at(1)).toBe('eth_ankreth');
-      expect(result.at(2)).toBe('eth_ant');
-      expect(result.at(-1)).toBe('zcn_eth');
-      expect(result.at(-2)).toBe('xwizard_eth');
+      expect(result.at(0)?.name).toBe('eth_0x0');
+      expect(result.at(1)?.name).toBe('eth_ankreth');
+      expect(result.at(2)?.name).toBe('eth_ant');
+      expect(result.at(-1)?.name).toBe('zcn_eth');
+      expect(result.at(-2)?.name).toBe('xwizard_eth');
     });
   });
 });
