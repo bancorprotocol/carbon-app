@@ -20,7 +20,7 @@ export const D3ChartWrapper: FC<Props> = ({
 
   return (
     <div className={className}>
-      <svg ref={ref} width={dms.width} height={dms.height}>
+      <svg ref={ref} width={dms.width} height={dms.height} className="w-full">
         <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
           {children(dms)}
         </g>

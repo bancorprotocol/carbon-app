@@ -17,8 +17,8 @@ export const useChartDimensions = (
       if (!entries.length) return;
       const rect = entries[0].target?.getBoundingClientRect();
       if (!rect) return;
-      if (width !== rect.width) setWidth(rect.width);
-      if (height !== rect.height) setHeight(rect.height);
+      if (!dimensions.width && width !== rect.width) setWidth(rect.width);
+      if (!dimensions.height && height !== rect.height) setHeight(rect.height);
     });
     resizeObserver.observe(element);
     return () => resizeObserver.unobserve(element);
