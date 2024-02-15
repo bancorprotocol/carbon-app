@@ -27,7 +27,7 @@
   }
 
   #root {
-    @apply flex flex-col overflow-auto;
+    @apply flex flex-col;
   }
 
   h1 {

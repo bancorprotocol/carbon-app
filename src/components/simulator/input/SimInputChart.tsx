@@ -4,7 +4,6 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
-import { D3ChartSettingsProps, useChartDimensions } from 'libs/d3';
 import {
   ChartPrices,
   D3ChartCandlesticks,
@@ -17,17 +16,7 @@ import {
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
-import { cn } from 'utils/helpers';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-
-const chartSettings: D3ChartSettingsProps = {
-  width: 0,
-  height: 750,
-  marginTop: 0,
-  marginBottom: 40,
-  marginLeft: 0,
-  marginRight: 80,
-};
 
 interface Props {
   timeRange: { start: number; end: number };
@@ -50,8 +39,6 @@ export const SimInputChart = ({
   setInitSellRange,
   bounds,
 }: Props) => {
-  const [ref, dms] = useChartDimensions(chartSettings);
-
   const marketPrice = useCompareTokenPrice(
     state.baseToken?.address,
     state.quoteToken?.address
@@ -146,48 +133,41 @@ export const SimInputChart = ({
   );
 
   return (
-    <div className="absolute right-[20px] w-[calc(100%-500px)]">
-      <div ref={ref} className="sticky top-50 rounded-12 bg-silver p-20">
-        <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
-        <div
-          className={cn(
-            'flex items-center justify-center overflow-hidden rounded-12 bg-black'
-          )}
-          style={{ height: dms.height }}
-        >
-          {isError && (
-            <ErrorMsg
-              base={state.baseToken?.address}
-              quote={state.quoteToken?.address}
-            />
-          )}
+    <div className="align-stretch sticky top-80 grid h-[calc(100vh-80px)] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-silver p-20">
+      <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
+      {isError && (
+        <ErrorMsg
+          base={state.baseToken?.address}
+          quote={state.quoteToken?.address}
+        />
+      )}
 
-          {isLoading && <CarbonLogoLoading className="h-[100px]" />}
+      {isLoading && (
+        <CarbonLogoLoading className="h-[100px] self-center justify-self-center" />
+      )}
 
-          {!!data && (
-            <D3ChartCandlesticks
-              prices={prices}
-              onPriceUpdates={onPriceUpdates}
-              data={data}
-              dms={dms}
-              marketPrice={marketPrice}
-              bounds={bounds}
-              onDragEnd={onPriceUpdatesEnd}
-              isLimit={{
-                buy: !state.buy.isRange,
-                sell: !state.sell.isRange,
-              }}
-            />
-          )}
-        </div>
-      </div>
+      {!!data && (
+        <D3ChartCandlesticks
+          className="flex-1 self-stretch rounded-12 bg-black"
+          prices={prices}
+          onPriceUpdates={onPriceUpdates}
+          data={data}
+          marketPrice={marketPrice}
+          bounds={bounds}
+          onDragEnd={onPriceUpdatesEnd}
+          isLimit={{
+            buy: !state.buy.isRange,
+            sell: !state.sell.isRange,
+          }}
+        />
+      )}
     </div>
   );
 };
 
 const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
   return (
-    <div className="max-w-[340px]">
+    <div className="max-w-[340px] self-center justify-self-center">
       <IconTitleText
         icon={<IconWarning />}
         title="Well, this doesn’t happen often..."

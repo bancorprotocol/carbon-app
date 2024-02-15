@@ -9,8 +9,9 @@ import {
   D3YAxisRight,
   useLinearScale,
   CandlestickData,
-  D3ChartSettings,
   scaleBand,
+  useChartDimensions,
+  D3ChartSettingsProps,
 } from 'libs/d3';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
@@ -24,7 +25,7 @@ export type ChartPrices = {
 export type OnPriceUpdates = (props: ChartPrices) => void;
 
 interface Props {
-  dms: D3ChartSettings;
+  className?: string;
   data: CandlestickData[];
   prices: ChartPrices;
   onPriceUpdates: OnPriceUpdates;
@@ -34,9 +35,19 @@ interface Props {
   isLimit: { buy: boolean; sell: boolean };
 }
 
+const chartSettings: D3ChartSettingsProps = {
+  width: 0,
+  height: 0,
+  marginTop: 0,
+  marginBottom: 40,
+  marginLeft: 0,
+  marginRight: 80,
+};
+
 export const D3ChartCandlesticks = (props: Props) => {
+  const [ref, dms] = useChartDimensions(chartSettings);
+
   const {
-    dms,
     data,
     prices,
     onPriceUpdates,
@@ -191,7 +202,7 @@ export const D3ChartCandlesticks = (props: Props) => {
   ]);
 
   return (
-    <svg width={dms.width} height={dms.height}>
+    <svg ref={ref} className={props.className}>
       <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
         <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
 
