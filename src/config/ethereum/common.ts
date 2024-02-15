@@ -2,6 +2,7 @@ import { AppConfig } from 'config/types';
 
 export const commonConfig: AppConfig = {
   mode: 'development',
+  productionHostName: 'carbondefi.xyz',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
   rpcUrl:
