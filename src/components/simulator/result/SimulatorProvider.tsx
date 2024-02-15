@@ -59,7 +59,6 @@ export type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulator/result' });
-
   const query = useGetSimulator(search);
   const [animationData, setAnimationData] = useState<SimulatorData[]>([]);
   const [timer, setTimer] = useState('');
