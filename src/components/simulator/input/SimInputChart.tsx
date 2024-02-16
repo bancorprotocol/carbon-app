@@ -133,7 +133,7 @@ export const SimInputChart = ({
   );
 
   return (
-    <div className="align-stretch sticky top-80 grid h-[calc(100vh-80px)] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-silver p-20">
+    <div className="align-stretch sticky top-80 grid h-[calc(100vh-180px)] min-h-[500px] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-silver p-20">
       <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
       {isError && (
         <ErrorMsg
