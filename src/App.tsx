@@ -39,11 +39,11 @@ export const App = () => {
       <main className="my-80 flex w-full flex-grow flex-col">
         <MainContent />
       </main>
+      {!isNativeApp && <Footer />}
       <MobileMenu />
       <ModalProvider />
       <Toaster />
       <CreateStrategyCTAMobile />
-      {!isNativeApp && <Footer />}
     </>
   );
 };
