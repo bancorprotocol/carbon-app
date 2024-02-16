@@ -372,18 +372,28 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       </g>
       <g className={style.pricePoints}>
         {pricePoints.map((point, i) => (
-          <text
-            key={i}
-            fill="white"
-            x={x(point)}
-            y={baseline + 10}
-            dominantBaseline="hanging"
-            textAnchor="middle"
-            fontSize="16"
-            opacity="60%"
-          >
-            {prettifyNumber(point, { abbreviate: true, round: true })}
-          </text>
+          <>
+            <line
+              x1={x(point)}
+              x2={x(point)}
+              y1={tick}
+              y2={baseline + 5}
+              stroke="white"
+              opacity="60%"
+            />
+            <text
+              key={i}
+              fill="white"
+              x={x(point)}
+              y={baseline + 10}
+              dominantBaseline="hanging"
+              textAnchor="middle"
+              fontSize="16"
+              opacity="60%"
+            >
+              {prettifyNumber(point, { abbreviate: true, round: true })}
+            </text>
+          </>
         ))}
       </g>
     </svg>
