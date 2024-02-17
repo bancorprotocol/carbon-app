@@ -12,7 +12,7 @@ export const isProduction = window
   : true;
 
 export const isNativeApp = window
-  ? window.location.host.includes('carbondefi.xyz')
+  ? window.location.host.includes('carbondefi.xyz') // do not change
   : true;
 
 export const uuid = () => {
