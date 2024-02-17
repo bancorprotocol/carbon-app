@@ -36,7 +36,7 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className="my-80 flex w-full flex-grow flex-col">
+      <main className="mt-80 mb-16 flex w-full flex-grow flex-col">
         <MainContent />
       </main>
       {!isNativeApp && <Footer />}
