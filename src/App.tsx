@@ -8,7 +8,7 @@ import { MainContent } from 'components/core/MainContent';
 import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
 import { Footer } from 'components/common/Footer/Footer';
-import { isNativeApp } from 'utils/helpers';
+import { isNativeApp, isProduction } from 'utils/helpers';
 
 let didInit = false;
 
@@ -39,7 +39,7 @@ export const App = () => {
       <main className="mt-80 mb-16 flex w-full flex-grow flex-col">
         <MainContent />
       </main>
-      {!isNativeApp && <Footer />}
+      {!isNativeApp && isProduction && <Footer />}
       <MobileMenu />
       <ModalProvider />
       <Toaster />
