@@ -34,7 +34,7 @@ export const StrategyBlock: FC<Props> = ({
       <StrategyBlockBudget strategy={strategy} />
       <div
         className={cn(
-          'col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] rounded-8 border-2 border-neutral-800',
+          'col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] rounded-8 border-2 border-neutral-700',
           strategy.status === 'active' ? '' : 'opacity-50'
         )}
       >
