@@ -98,7 +98,7 @@ export const StrategyFilterSort = () => {
         <button
           type="button"
           className={`
-            grid h-40 min-w-[40px] place-items-center rounded-full border-2 border-neutral-800
+            grid h-40 min-w-[40px] place-items-center rounded-full border-2 border-neutral-700
             hover:bg-white/10
             active:bg-white/20
             md:px-30

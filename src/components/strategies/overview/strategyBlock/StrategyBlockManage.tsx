@@ -236,7 +236,7 @@ export const StrategyBlockManage: FC<Props> = ({
           role="menuitem"
           aria-label="Manage strategy"
           className={`
-            self-center rounded-8 border-2 border-neutral-800 p-8
+            self-center rounded-8 border-2 border-neutral-700 p-8
             hover:bg-white/10
             active:bg-white/20
           `}

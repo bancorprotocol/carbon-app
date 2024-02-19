@@ -41,10 +41,10 @@ export const StrategyBlock: FC<Props> = ({
         <StrategyBlockBuySell
           strategy={strategy}
           buy
-          className="border-r-2 border-neutral-800"
+          className="border-r-2 border-neutral-700"
         />
         <StrategyBlockBuySell strategy={strategy} />
-        <div className="col-start-1 col-end-3 border-t-2 border-neutral-800">
+        <div className="col-start-1 col-end-3 border-t-2 border-neutral-700">
           <StrategyGraph strategy={strategy} />
         </div>
       </div>
