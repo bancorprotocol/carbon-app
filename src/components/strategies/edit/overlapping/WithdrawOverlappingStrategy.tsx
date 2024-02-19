@@ -220,7 +220,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
                   href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-4 font-weight-500 text-green"
+                  className="inline-flex items-center gap-4 font-weight-500 text-primary"
                 >
                   <span>Learn More</span>
                   <IconLink className="inline h-12 w-12" />

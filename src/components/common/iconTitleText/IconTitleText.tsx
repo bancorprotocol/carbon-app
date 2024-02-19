@@ -18,9 +18,9 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
       case 'warning':
         return 'text-warning-500 bg-warning-500/25';
       case 'error':
-        return 'text-red bg-red/25';
+        return 'text-error bg-error/25';
       case 'success':
-        return 'text-green bg-green/25';
+        return 'text-primary bg-primary/25';
       default:
         return 'bg-neutral-800';
     }

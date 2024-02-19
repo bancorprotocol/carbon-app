@@ -16,7 +16,7 @@ export const StrategyBlockRoi: FC<Props> = ({ strategy }) => {
     isPercentage: true,
     approximateBelow: 0.01,
   });
-  const color = roi.gte(0) ? 'text-green' : 'text-red';
+  const color = roi.gte(0) ? 'text-success' : 'text-error';
 
   return (
     <article
@@ -41,7 +41,7 @@ const TooltipContent: FC<{}> = () => (
     <span className="align-middle">
       Total percentage returns of the strategy from its creation.&nbsp;
     </span>
-    <NewTabLink to={externalLinks.roiLearnMore} className="text-green">
+    <NewTabLink to={externalLinks.roiLearnMore} className="text-primary">
       <span className="align-middle">Learn how ROI is calculated.</span>
       <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
     </NewTabLink>

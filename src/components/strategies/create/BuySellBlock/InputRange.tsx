@@ -88,7 +88,7 @@ export const InputRange: FC<InputRangeProps> = ({
           className={`
             bg-body w-full cursor-text rounded-r-4 rounded-l-16 border border-black p-16
             focus-within:border-white/50 
-            ${error ? '!border-red/50' : ''}
+            ${error ? '!border-error/50' : ''}
             ${showWarning ? '!border-warning-400' : ''}
           `}
           onClick={() => document.getElementById(inputMinId)?.focus()}
@@ -112,7 +112,7 @@ export const InputRange: FC<InputRangeProps> = ({
             placeholder="Enter Price"
             className={`
               mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
-              ${error ? 'text-red' : ''}
+              ${error ? 'text-error' : ''}
             `}
             onChange={handleChangeMin}
             onFocus={(e) => e.target.select()}
@@ -133,7 +133,7 @@ export const InputRange: FC<InputRangeProps> = ({
           className={`
             bg-body w-full cursor-text rounded-r-16 rounded-l-4 border border-black p-16
             focus-within:border-white/50
-            ${error ? '!border-red/50' : ''}
+            ${error ? '!border-error/50' : ''}
             ${showWarning ? '!border-warning-400' : ''}
           `}
           onClick={() => document.getElementById(inputMaxId)?.focus()}
@@ -157,7 +157,7 @@ export const InputRange: FC<InputRangeProps> = ({
             placeholder="Enter Price"
             className={`
               mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
-              ${error ? 'text-red' : ''}
+              ${error ? 'text-error' : ''}
             `}
             onChange={handleChangeMax}
             onFocus={(e) => e.target.select()}
@@ -177,7 +177,7 @@ export const InputRange: FC<InputRangeProps> = ({
       </div>
       {error ? (
         <WarningMessageWithIcon
-          className="text-red"
+          className="text-error"
           message={error}
           htmlFor={`${inputMinId} ${inputMaxId}`}
         />

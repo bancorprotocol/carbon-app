@@ -174,7 +174,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             {errorMsg && (
               <output
                 htmlFor={sourceInputId}
-                className="text-12 font-weight-500 text-red"
+                className="text-12 font-weight-500 text-error"
               >
                 {errorMsg}
               </output>

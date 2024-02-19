@@ -32,20 +32,20 @@ export const buttonStyles = cva<ButtonVariants>(
           'hover:border-neutral-700 hover:disabled:border-neutral-800',
         ],
         success: [
-          'bg-green border-2 border-green !text-black',
-          'hover:border-lightGreen hover:disabled:border-green',
+          'bg-primary border-2 border-primary !text-black',
+          'hover:border-lightGreen hover:disabled:border-primary',
         ],
         'success-light': [
-          'bg-green/20 border-2 border-green/0 !text-green',
-          'hover:border-lightGreen hover:!text-black hover:bg-green hover:disabled:border-green',
+          'bg-primary/20 border-2 border-primary/0 !text-primary',
+          'hover:border-lightGreen hover:!text-black hover:bg-primary hover:disabled:border-primary',
         ],
         error: [
-          'bg-red border-2 border-red !text-black',
-          'hover:border-redLight hover:disabled:border-red',
+          'bg-error border-2 border-error !text-black',
+          'hover:border-errorLight hover:disabled:border-error',
         ],
         'error-light': [
-          'bg-red/25 !text-red',
-          'hover:bg-red/50 hover:!text-white',
+          'bg-error/25 !text-error',
+          'hover:bg-error/50 hover:!text-white',
         ],
       },
       size: {

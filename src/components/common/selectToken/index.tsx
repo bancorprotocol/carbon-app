@@ -28,7 +28,7 @@ export const SelectTokenButton: FC<Props> = ({
       data-testid={testId}
       className={cn(
         'flex items-center gap-8 rounded-12 p-10',
-        symbol ? 'bg-black text-white' : 'bg-green text-black',
+        symbol ? 'bg-black text-white' : 'bg-primary text-black',
         className
       )}
       {...props}
@@ -37,7 +37,7 @@ export const SelectTokenButton: FC<Props> = ({
         <LogoImager alt="Token Logo" src={imgUrl} width="30" height="30" />
       ) : (
         <div className="grid h-30 w-30 place-items-center rounded-full bg-black">
-          <IconPlus className="h-16 w-16 p-2 text-green" />
+          <IconPlus className="h-16 w-16 p-2 text-primary" />
         </div>
       )}
       <div className="flex-1 text-left">

@@ -61,8 +61,8 @@ export const WithdrawAllocatedBudget: FC<WithdrawProps> = (props) => {
         onClick={() => setBudget(currentBudget)}
         className={
           disabled
-            ? 'pointer-events-none text-green/40'
-            : 'text-green hover:text-white'
+            ? 'text-primary/40 pointer-events-none'
+            : 'text-primary hover:text-white'
         }
       >
         MAX

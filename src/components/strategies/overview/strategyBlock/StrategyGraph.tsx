@@ -169,14 +169,14 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           patternUnits="userSpaceOnUse"
         />
         <pattern href="#base-pattern" id="buy-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="#00B578" />
-          <use href="#carbonLogo" x="8" y="16" fill="#00B578" />
+          <use href="#carbonLogo" x="0" y="4" fill="var(--buy)" />
+          <use href="#carbonLogo" x="8" y="16" fill="var(--buy)" />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="#00B578"
+            fill="var(--buy)"
             fillOpacity="0.05"
           />
         </pattern>
@@ -223,7 +223,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                     <>
                       <polygon
                         className={style.buyArea}
-                        fill="#00B578"
+                        fill="var(--buy)"
                         fillOpacity="0.25"
                         points={Array.from(
                           getBuyPoints(
@@ -246,7 +246,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         )}
                       <line
                         className={style.lineBuySell}
-                        stroke="#00B578"
+                        stroke="var(--buy)"
                         strokeWidth="2"
                         x1={x(buy.from)}
                         y1={baseline}
@@ -255,7 +255,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       <line
                         className={style.lineBuySell}
-                        stroke="#00B578"
+                        stroke="var(--buy)"
                         strokeWidth="2"
                         x1={x(buy.to)}
                         y1={baseline}
@@ -274,7 +274,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         fill="transparent"
                       />
                       <line
-                        stroke="#00B578"
+                        stroke="var(--buy)"
                         strokeWidth="2"
                         x1={x(buy.to)}
                         y1={baseline}
@@ -561,7 +561,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const endPrice = prettifyNumber(order.endRate, priceOption);
   const marginalPrice = prettifyNumber(order.marginalRate, priceOption);
   const { quote, base } = strategy;
-  const color = buy ? 'text-green' : 'text-red';
+  const color = buy ? 'text-buy' : 'text-sell';
   return (
     <article
       className="flex flex-col gap-16 text-14"
@@ -618,7 +618,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-4 font-weight-500 text-green"
+        className="inline-flex items-center gap-4 font-weight-500 text-primary"
       >
         <span>Learn more about marginal price</span>
         <IconLink className="inline h-12 w-12" />

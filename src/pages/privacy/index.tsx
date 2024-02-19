@@ -523,7 +523,7 @@ const content = [
         <button
           onClick={() => window?.OneTrust?.ToggleInfoDisplay()}
           id="ot-sdk-btn"
-          className="text-green"
+          className="text-primary"
         >
           <u>Cookie Settings</u>
         </button>
@@ -586,7 +586,7 @@ export const PrivacyPage = () => {
             href="https://app.carbondefi.xyz/terms"
             target={'_blank'}
             rel="noreferrer"
-            className="text-green underline"
+            className="text-primary underline"
           >
             HTTPS://APP.CARBONDEFI.XYZ/TERMS
           </a>{' '}
@@ -604,7 +604,7 @@ export const PrivacyPage = () => {
             href="https://www.carbondefi.xyz"
             target={'_blank'}
             rel="noreferrer"
-            className="text-green underline"
+            className="text-primary underline"
           >
             https://www.carbondefi.xyz
           </a>{' '}

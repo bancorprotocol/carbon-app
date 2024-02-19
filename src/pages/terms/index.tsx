@@ -81,7 +81,7 @@ const content = [
         <p>
           v. Access the Bancor Network site (
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://bancor.network"
             target="_blank"
             rel="noreferrer"
@@ -90,7 +90,7 @@ const content = [
           </a>
           ), which has its own terms of use available at{' '}
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://app.bancor.network/terms-of-use"
             target="_blank"
             rel="noreferrer"
@@ -110,7 +110,7 @@ const content = [
         <p>
           vi. Access the Bancor Governance Forum (
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://gov.bancor.network"
             target="_blank"
             rel="noreferrer"
@@ -119,7 +119,7 @@ const content = [
           </a>
           ), which has its own terms of use available at{' '}
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://gov.bancor.network/tos"
             target="_blank"
             rel="noreferrer"
@@ -138,7 +138,7 @@ const content = [
           through the Site is available at the Frequently Asked Questions page
           of the Site (available at{' '}
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://faq.carbondefi.xyz"
             target="_blank"
             rel="noreferrer"
@@ -167,7 +167,7 @@ const content = [
           NFT serves as the credentials for interacting with the underlying
           position. For more information on Carbon, please visit{' '}
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://docs.carbondefi.xyz"
             target="_blank"
             rel="noreferrer"
@@ -182,7 +182,7 @@ const content = [
           decentralized autonomous organization referred to as “BancorDAO”. For
           more information on BancorDAO, please visit{' '}
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://support.bancor.network/hc/en-us/sections/4415839473682-Bancor-DAO"
             target="_blank"
             rel="noreferrer"
@@ -222,7 +222,7 @@ const content = [
           subject to determination by BancorDAO. For more information on the
           current fee structure, please visit{' '}
           <a
-            className="text-green underline"
+            className="text-primary underline"
             href="https://docs.carbondefi.xyz/carbon/introducing-carbon/fees-and-payments"
             target="_blank"
             rel="noreferrer"
@@ -1075,7 +1075,7 @@ export const TermsPage = () => {
             href="https://app.carbondefi.xyz/privacy"
             target="_blank"
             rel="noreferrer"
-            className="text-green underline"
+            className="text-primary underline"
           >
             HTTPS://APP.CARBONDEFI.XYZ/PRIVACY
           </a>{' '}
@@ -1087,7 +1087,7 @@ export const TermsPage = () => {
             href="https://www.carbondefi.xyz"
             target="_blank"
             rel="noreferrer"
-            className="text-green underline"
+            className="text-primary underline"
           >
             {' '}
             https://www.carbondefi.xyz
@@ -1111,7 +1111,7 @@ export const TermsPage = () => {
             href="https://app.carbondefi.xyz/privacy"
             target="_blank"
             rel="noreferrer"
-            className="text-green underline"
+            className="text-primary underline"
           >
             CARBON PRIVACY POLICY
           </a>

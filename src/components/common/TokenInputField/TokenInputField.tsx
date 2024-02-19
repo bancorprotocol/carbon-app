@@ -76,7 +76,7 @@ export const TokenInputField: FC<Props> = ({
       className={`
         flex cursor-text flex-col gap-8 border border-black p-16
         focus-within:border-white/50
-        ${isError ? '!border-red/50' : ''}
+        ${isError ? '!border-error/50' : ''}
         ${className}
       `}
       onClick={() => inputRef.current?.focus()}
@@ -96,7 +96,7 @@ export const TokenInputField: FC<Props> = ({
           onBlur={handleBlur}
           className={`
             grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
-            ${isError ? 'text-red' : ''}
+            ${isError ? 'text-error' : ''}
             ${disabled ? 'text-white/40' : ''}
             ${disabled ? 'cursor-not-allowed' : ''}
           `}
@@ -130,7 +130,9 @@ export const TokenInputField: FC<Props> = ({
             </span>
             <b
               className={
-                disabled ? 'text-green/40' : 'text-green group-hover:text-white'
+                disabled
+                  ? 'text-primary/40'
+                  : 'text-primary group-hover:text-white'
               }
             >
               MAX

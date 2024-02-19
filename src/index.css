@@ -5,13 +5,16 @@
 :root {
   --hue: 0;
   --chroma: 0;
-  --main-menu-height: 80px;
-  --mobile-menu-height: 80px;
-  --blue: rgba(0, 181, 120, 0.25);
-  --cyan: rgba(0, 181, 120, 0.25);
-  --green: #00b578;
+  --primary: #00b578;
+  --error: #d86371;
+  --buy: #00b578;
+  --sell: #d86371;
+  --success: #00b578;
   color-scheme: dark;
   accent-color: white;
+
+  --main-menu-height: 80px;
+  --mobile-menu-height: 80px;
 }
 
 @layer base {
@@ -113,18 +116,12 @@
   will-change: transform;
   background: linear-gradient(
     90deg,
-    var(--blue) 0%,
-    var(--blue) 25%,
-    var(--cyan) 25%,
-    var(--cyan) 37.5%,
-    var(--green) 37.5%,
-    var(--green) 50%,
-    var(--blue) 50%,
-    var(--blue) 75%,
-    var(--cyan) 75%,
-    var(--cyan) 87.5%,
-    var(--green) 87.5%,
-    var(--green) 100%
+    rgba(0, 181, 120, 0.25) 37.5%,
+    var(--primary) 37.5%,
+    var(--primary) 50%,
+    rgba(0, 181, 120, 0.25) 50%,
+    rgba(0, 181, 120, 0.25) 87.5%,
+    var(--primary) 87.5%
   );
   animation: 1.3s progress ease infinite;
 }

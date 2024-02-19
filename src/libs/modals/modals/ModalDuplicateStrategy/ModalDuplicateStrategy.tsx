@@ -60,10 +60,10 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         ({ icon: Icon, title, onClick, description, testId }) => (
           <article
             key={title}
-            className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16"
+            className="bg-black/90 grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded p-16"
           >
-            <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-green/25">
-              <Icon className="h-16 w-16 text-green" />
+            <div className="bg-primary/25 row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full">
+              <Icon className="h-16 w-16 text-primary" />
             </div>
             <h3 className="text-14 font-weight-500">{title}</h3>
             <Button

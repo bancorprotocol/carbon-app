@@ -120,10 +120,10 @@ export const _ExplorerSearch: FC = () => {
             'space-x-8',
             'rounded-full',
             'border',
-            'border-green',
+            'border-primary',
             'px-16',
             'md:space-x-16',
-            isInvalidAddress && 'border-red'
+            isInvalidAddress && 'border-error'
           )}
         >
           <div className="shrink-0">
@@ -157,7 +157,7 @@ export const _ExplorerSearch: FC = () => {
       {isInvalidAddress && (
         <div
           className={
-            'absolute mt-4 flex items-center font-mono text-14 text-red'
+            'absolute mt-4 flex items-center font-mono text-14 text-error'
           }
         >
           <IconWarning className={'mr-10 h-16 w-16'} />

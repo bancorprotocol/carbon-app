@@ -197,7 +197,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-neutral-800 p-20">
         <h4 className="flex items-center gap-8 text-14 font-weight-500">
           Discover Overlapping Strategies
-          <span className="rounded-8 bg-darkGreen px-8 py-4 text-10 text-green">
+          <span className="rounded-8 bg-darkGreen px-8 py-4 text-10 text-primary">
             NEW
           </span>
         </h4>
@@ -207,7 +207,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         <a
           href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy"
           target="_blank"
-          className="row-span-2 flex items-center gap-4 self-center justify-self-end text-12 font-weight-500 text-green"
+          className="row-span-2 flex items-center gap-4 self-center justify-self-end text-12 font-weight-500 text-primary"
           rel="noreferrer"
         >
           Learn More

@@ -56,8 +56,8 @@ export const EditStrategyPricesBuySellBlock: FC<
       aria-labelledby={titleId}
       className={`bg-secondary flex w-full flex-col gap-20 rounded-6 border-l-2 p-20 text-12 ${
         buy
-          ? 'border-green/50 focus-within:border-green'
-          : 'border-red/50 focus-within:border-red'
+          ? 'border-buy/50 focus-within:border-buy'
+          : 'border-sell/50 focus-within:border-sell'
       }`}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >

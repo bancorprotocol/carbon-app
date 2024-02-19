@@ -25,10 +25,12 @@ module.exports = {
     colors: ({ colors }) => ({
       white: colors.white,
       transparent: colors.transparent,
+      primary: 'var(--primary)',
+      error: 'var(--error)',
+      sell: 'var(--sell)',
+      buy: 'var(--buy)',
+      success: 'var(--success)',
       black: `oklch(13% ${chroma} ${hue})`,
-      primary: colors.blue,
-      secondary: colors.gray,
-      success: colors.green,
       neutral: {
         50: `oklch(99% ${chroma} ${hue})`,
         100: `oklch(97% ${chroma} ${hue})`,
@@ -41,6 +43,7 @@ module.exports = {
         800: `oklch(27% ${chroma} ${hue})`,
         900: `oklch(20% ${chroma} ${hue})`,
       },
+      secondary: colors.gray,
       blue: '#2962FF',
       lightBlue: '#9db2bd',
       green: '#00B578',
@@ -48,7 +51,6 @@ module.exports = {
       darkGreen: '#002D1E',
       red: '#D86371',
       redLight: '#EFC1C6',
-      error: colors.red,
       warning: colors.orange,
     }),
     columns: {
