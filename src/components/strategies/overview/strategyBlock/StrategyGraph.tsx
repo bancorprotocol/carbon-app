@@ -181,14 +181,14 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           />
         </pattern>
         <pattern href="#base-pattern" id="sell-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="#D86371" />
-          <use href="#carbonLogo" x="8" y="16" fill="#D86371" />
+          <use href="#carbonLogo" x="0" y="4" fill="var(--sell)" />
+          <use href="#carbonLogo" x="8" y="16" fill="var(--sell)" />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="#D86371"
+            fill="var(--sell)"
             fillOpacity="0.05"
           />
         </pattern>
@@ -301,7 +301,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                     <>
                       <polygon
                         className={style.sellArea}
-                        fill="#D86371"
+                        fill="var(--sell)"
                         fillOpacity="0.25"
                         points={Array.from(
                           getSellPoints(
@@ -324,7 +324,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         )}
                       <line
                         className={style.lineBuySell}
-                        stroke="#D86371"
+                        stroke="var(--sell)"
                         strokeWidth="2"
                         x1={x(sell.from)}
                         x2={x(sell.from)}
@@ -333,7 +333,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       <line
                         className={style.lineBuySell}
-                        stroke="#D86371"
+                        stroke="var(--sell)"
                         strokeWidth="2"
                         x1={x(sell.to)}
                         x2={x(sell.to)}
@@ -352,7 +352,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         fill="transparent"
                       />
                       <line
-                        stroke="#D86371"
+                        stroke="var(--sell)"
                         strokeWidth="2"
                         x1={x(sell.to)}
                         x2={x(sell.to)}
