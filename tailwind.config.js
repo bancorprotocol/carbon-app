@@ -7,6 +7,9 @@ function createTwConfigValues(start, end, step) {
   return obj;
 }
 
+const hue = 'var(--hue, 0)';
+const chroma = 'var(--chroma, 0)'; // Recommended 0.01, 0.02
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
@@ -22,11 +25,22 @@ module.exports = {
     colors: ({ colors }) => ({
       white: colors.white,
       transparent: colors.transparent,
-      black: colors.black,
+      black: `oklch(13% ${chroma} ${hue})`,
       primary: colors.blue,
       secondary: colors.gray,
       success: colors.green,
-      neutral: colors.neutral,
+      neutral: {
+        50: `oklch(99% ${chroma} ${hue})`,
+        100: `oklch(97% ${chroma} ${hue})`,
+        200: `oklch(92% ${chroma} ${hue})`,
+        300: `oklch(87% ${chroma} ${hue})`,
+        400: `oklch(72% ${chroma} ${hue})`,
+        500: `oklch(56% ${chroma} ${hue})`,
+        600: `oklch(44% ${chroma} ${hue})`,
+        700: `oklch(37% ${chroma} ${hue})`,
+        800: `oklch(27% ${chroma} ${hue})`,
+        900: `oklch(20% ${chroma} ${hue})`,
+      },
       blue: '#2962FF',
       lightBlue: '#9db2bd',
       green: '#00B578',
