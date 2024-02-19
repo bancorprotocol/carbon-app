@@ -6,13 +6,15 @@ type LabelVariants = VariantColor;
 export const labelStyles = cva<LabelVariants>([], {
   variants: {
     variant: {
-      black: ['bg-primary-500', 'hover:bg-primary-600'],
-      secondary: ['bg-black', 'bg-white text-background-900'],
-      white: ['bg-background-800 text-white'],
-      success: ['bg-green', 'hover:bg-success-600'],
-      'success-light': ['bg-green', 'hover:bg-success-600'],
-      error: ['bg-red', 'hover:bg-error-600'],
-      'error-light': ['bg-red/25', 'hover:bg-error-600/25'],
+      black: ['bg-primary', 'hover:bg-primary/25'],
+      secondary: ['bg-black', 'dark:bg-white dark:text-neutral-800'],
+      white: [
+        'bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-white',
+      ],
+      success: ['bg-success', 'hover:bg-success/25'],
+      'success-light': ['bg-success', 'hover:bg-success/25'],
+      error: ['bg-error', 'hover:bg-error'],
+      'error-light': ['bg-error/25', 'hover:bg-error/25'],
     },
   },
   defaultVariants: {

@@ -50,8 +50,8 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       aria-labelledby={titleId}
       className={`bg-secondary flex flex-col gap-20 rounded-6 border-l-2 p-20 text-left ${
         buy
-          ? 'border-green/50 focus-within:border-green'
-          : 'border-red/50 focus-within:border-red'
+          ? 'border-buy/50 focus-within:border-buy'
+          : 'border-sell/50 focus-within:border-sell'
       }`}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
@@ -90,7 +90,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-red"
+          className="flex items-center gap-10 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">Insufficient balance</span>

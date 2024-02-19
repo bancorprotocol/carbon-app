@@ -59,7 +59,7 @@ export const InputLimit: FC<InputLimitProps> = ({
         className={`
           bg-body flex cursor-text flex-col rounded-16 border p-16
           focus-within:border-white/50
-          ${error ? '!border-red/50' : 'border-black'} 
+          ${error ? '!border-error/50' : 'border-black'} 
         `}
         onClick={() => document.getElementById(id ?? inputId)?.focus()}
       >
@@ -76,7 +76,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           placeholder="Enter Price"
           className={`
             mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
-            ${error ? 'text-red' : ''}
+            ${error ? 'text-error' : ''}
           `}
           data-testid="input-price"
         />
@@ -94,7 +94,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           htmlFor={id ?? inputId}
           role="alert"
           aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-red"
+          className="flex items-center gap-10 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">{error}</span>

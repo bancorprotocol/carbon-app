@@ -557,19 +557,19 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             patternUnits="userSpaceOnUse"
           />
           <pattern href="#base-pattern" id="buy-pattern">
-            <use href="#carbonLogo" x="0" y={4 * ratio} fill="#00B578" />
+            <use href="#carbonLogo" x="0" y={4 * ratio} fill="var(--buy)" />
             <use
               href="#carbonLogo"
               x={8 * ratio}
               y={16 * ratio}
-              fill="#00B578"
+              fill="var(--buy)"
             />
             <rect
               x="0"
               y="0"
               width={15 * ratio}
               height={25 * ratio}
-              fill="#00B578"
+              fill="var(--buy)"
               fillOpacity="0.05"
             />
           </pattern>
@@ -598,7 +598,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             <polygon
               id="buy-polygon"
               points={buyPoints}
-              fill="#00B578"
+              fill="var(--buy)"
               fillOpacity="0.35"
             />
             <polygon
@@ -612,7 +612,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x2={buyMax}
               y1={bottom}
               y2={middle}
-              stroke="#00B578"
+              stroke="var(--buy)"
               strokeWidth={2 * ratio}
             />
           </g>
@@ -714,7 +714,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 y={top - 1 * ratio}
                 width={12 * ratio}
                 height={24 * ratio}
-                fill="#00B578"
+                fill="var(--buy)"
                 rx={4 * ratio}
               />
             )}
@@ -741,7 +741,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x2={min}
               y1={bottom}
               y2={top}
-              stroke="#00B578"
+              stroke="var(--buy)"
               strokeWidth={2 * ratio}
             />
           </g>

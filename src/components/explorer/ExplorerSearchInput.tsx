@@ -19,7 +19,7 @@ export const ExplorerSearchInput: FC<Props> = ({
   return (
     <ExplorerSearchInputContainer
       value={search}
-      className={invalid ? 'text-red' : ''}
+      className={invalid ? 'text-error' : ''}
       placeholder="Search by wallet address"
       aria-label="Search by wallet address"
       onKeyDown={onKeyDownHandler}

@@ -212,7 +212,7 @@ export const ApproveToken: FC<Props> = ({
             </div>
           )
         ) : (
-          <span className="text-green" data-testid={`msg-${token.symbol}`}>
+          <span className="text-primary" data-testid={`msg-${token.symbol}`}>
             {txSuccess ? 'Approved' : 'Pre-Approved'}
           </span>
         )}

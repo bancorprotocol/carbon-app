@@ -33,7 +33,7 @@ export const ModalSheet: FC<ModalProps> = ({
       >
         <div className="relative flex w-full flex-col gap-20 overflow-hidden rounded-t-10 border-0 bg-background-900 p-20 outline-none focus:outline-none">
           {isLoading && (
-            <div className="statusBar bg-green/25 absolute inset-x-0 top-0 h-6" />
+            <div className="statusBar absolute inset-x-0 top-0 h-6 bg-primary/25" />
           )}
           <header data-testid={testId} className="flex justify-between">
             {typeof title === 'string' ? <h2>{title}</h2> : title}

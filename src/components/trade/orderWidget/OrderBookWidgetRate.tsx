@@ -26,12 +26,10 @@ export const OrderBookWidgetRate: FC<Props> = ({
           {!isLoading && (
             <div
               className={`${
-                buy ? 'bg-green/25 rotate-180' : 'bg-red/25'
+                buy ? 'rotate-180 bg-buy/25' : 'bg-sell/25'
               } ml-8 flex h-20 w-20 items-center justify-center rounded-full`}
             >
-              <IconArrow
-                className={`${buy ? 'text-green' : 'text-red'} w-10`}
-              />
+              <IconArrow className={`${buy ? 'text-buy' : 'text-sell'} w-10`} />
             </div>
           )}
           {fiatRate && (

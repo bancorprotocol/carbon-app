@@ -137,7 +137,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
             'hover:outline hover:outline-1',
             'focus-within:outline focus-within:outline-2',
             spread && !inOptions && 'outline outline-1 outline-white/60',
-            hasError && 'text-red outline-red',
+            hasError && 'text-error outline-error',
             spread && inOptions && 'text-white/40'
           )}
         >
@@ -171,7 +171,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
       {spread <= 0 && (
         <output
           htmlFor="spread-custom"
-          className="text-red flex items-center gap-8 font-mono text-12"
+          className="flex items-center gap-8 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
           <span>The spread should be above 0%</span>
@@ -180,7 +180,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
       {spread > 100 && (
         <output
           htmlFor="spread-custom"
-          className="text-red flex items-center gap-8 font-mono text-12"
+          className="flex items-center gap-8 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
           <span>The spread should be equal or below 100%</span>

@@ -176,7 +176,7 @@ const ConnectedMenu: FC = () => {
       ) : (
         <button
           role="menuitem"
-          className="hover:bg-body flex w-full rounded-6 p-8 text-red/80 hover:text-red"
+          className="hover:bg-body flex w-full rounded-6 p-8 text-error/80 hover:text-error"
           onClick={switchNetwork}
         >
           Switch Network

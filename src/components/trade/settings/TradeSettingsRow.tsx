@@ -11,9 +11,9 @@ import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 const buttonClasses =
-  'rounded-8 !text-white/60 hover:text-green hover:border-green px-5';
-const buttonActiveClasses = '!border-green !text-green';
-const buttonErrorClasses = '!border-red !text-red focus:text-red';
+  'rounded-8 !text-white/60 hover:text-primary hover:border-primary px-5';
+const buttonActiveClasses = '!border-primary !text-primary';
+const buttonErrorClasses = '!border-error !text-error focus:text-error';
 const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
@@ -119,8 +119,8 @@ export const TradeSettingsRow: FC<{
         <div
           className={`mt-15 flex font-mono text-12 font-weight-500 text-warning`}
         >
-          <IconWarning className={`w-14 ${isError ? 'text-red' : ''}`} />
-          <span className={`ml-5 ${isError ? 'text-red' : ''}`}>
+          <IconWarning className={`w-14 ${isError ? 'text-error' : ''}`} />
+          <span className={`ml-5 ${isError ? 'text-error' : ''}`}>
             {warningMessage}
           </span>
         </div>

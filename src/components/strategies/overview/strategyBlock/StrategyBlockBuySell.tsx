@@ -37,7 +37,7 @@ export const StrategyBlockBuySell: FC<{
     >
       {buy ? (
         <header className="flex items-center gap-4">
-          <h4 className="text-green font-mono text-12">Buy {token.symbol}</h4>
+          <h4 className="font-mono text-12 text-buy">Buy {token.symbol}</h4>
           {hasFiatValue && (
             <Tooltip
               element={buyTooltip}
@@ -62,7 +62,7 @@ export const StrategyBlockBuySell: FC<{
         </header>
       ) : (
         <header className="flex items-center gap-4">
-          <h4 className="text-red font-mono text-12">
+          <h4 className="font-mono text-12 text-sell">
             Sell {otherToken.symbol}
           </h4>
           {hasFiatValue && (
