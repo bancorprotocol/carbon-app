@@ -197,7 +197,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-neutral-800 p-20">
         <h4 className="flex items-center gap-8 text-14 font-weight-500">
           Discover Overlapping Strategies
-          <span className="rounded-8 bg-darkGreen px-8 py-4 text-10 text-primary">
+          <span className="rounded-8 bg-primary-dark px-8 py-4 text-10 text-primary">
             NEW
           </span>
         </h4>

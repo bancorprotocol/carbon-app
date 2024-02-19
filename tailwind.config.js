@@ -7,6 +7,12 @@ function createTwConfigValues(start, end, step) {
   return obj;
 }
 
+const lightDark = (l, c, h) => ({
+  light: `oklch(${Math.min(l + 20, 100)}% ${c} ${h} / <alpha-value>)`,
+  DEFAULT: `oklch(${l}% ${c} ${h} / <alpha-value>)`,
+  dark: `oklch(${Math.max(0, l - 50)}% ${c} ${h} / <alpha-value>)`,
+});
+
 const hue = 'var(--hue, 0)';
 const chroma = 'var(--chroma, 0)'; // Recommended 0.01, 0.02
 
@@ -25,11 +31,11 @@ module.exports = {
     colors: ({ colors }) => ({
       white: colors.white,
       transparent: colors.transparent,
-      primary: 'var(--primary)',
-      error: 'var(--error)',
-      sell: 'var(--sell)',
-      buy: 'var(--buy)',
-      success: 'var(--success)',
+      primary: lightDark(68, 0.153, 160), // #00B578
+      error: lightDark(64.59, 0.147, 14.77), // #D86371
+      sell: lightDark(64.59, 0.147, 14.77), // #D86371
+      buy: lightDark(68, 0.153, 160), // #00B578
+      success: lightDark(68, 0.153, 160), // #00B578
       black: `oklch(13% ${chroma} ${hue})`,
       neutral: {
         50: `oklch(99% ${chroma} ${hue})`,
@@ -46,11 +52,6 @@ module.exports = {
       secondary: colors.gray,
       blue: '#2962FF',
       lightBlue: '#9db2bd',
-      green: '#00B578',
-      lightGreen: '#85E1C2',
-      darkGreen: '#002D1E',
-      red: '#D86371',
-      redLight: '#EFC1C6',
       warning: colors.orange,
     }),
     columns: {

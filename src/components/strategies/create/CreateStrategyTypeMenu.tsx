@@ -99,7 +99,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
               {isRecommended && (
                 <span
                   aria-labelledby={'legend-' + id}
-                  className="absolute top-8 right-8 rounded bg-darkGreen p-4 text-primary"
+                  className="absolute top-8 right-8 rounded bg-primary-dark p-4 text-primary"
                 >
                   <IconStar aria-hidden className="h-10 w-10" />
                 </span>
@@ -171,7 +171,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 id={'legend-' + id}
                 className="flex gap-8 text-12 text-white/40"
               >
-                <span className="rounded bg-darkGreen p-4 text-primary">
+                <span className="rounded bg-primary-dark p-4 text-primary">
                   <IconStar aria-hidden className="h-10 w-10" />
                 </span>
                 Carbon Signature Feature

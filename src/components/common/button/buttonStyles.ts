@@ -33,11 +33,11 @@ export const buttonStyles = cva<ButtonVariants>(
         ],
         success: [
           'bg-primary border-2 border-primary !text-black',
-          'hover:border-lightGreen hover:disabled:border-primary',
+          'hover:border-primary-light hover:disabled:border-primary',
         ],
         'success-light': [
           'bg-primary/20 border-2 border-primary/0 !text-primary',
-          'hover:border-lightGreen hover:!text-black hover:bg-primary hover:disabled:border-primary',
+          'hover:border-primary-light hover:!text-black hover:bg-primary hover:disabled:border-primary',
         ],
         error: [
           'bg-error border-2 border-error !text-black',
