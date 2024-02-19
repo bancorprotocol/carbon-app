@@ -368,7 +368,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       </g>
       <g className={style.pricePoints}>
         {pricePoints.map((point, i) => (
-          <>
+          <g key={i}>
             <line
               x1={x(point)}
               x2={x(point)}
@@ -378,7 +378,6 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
               opacity="60%"
             />
             <text
-              key={i}
               fill="white"
               x={x(point)}
               y={baseline + 10}
@@ -389,7 +388,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
             >
               {prettifyNumber(point, { abbreviate: true, round: true })}
             </text>
-          </>
+          </g>
         ))}
       </g>
     </svg>
