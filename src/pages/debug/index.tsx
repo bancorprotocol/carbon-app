@@ -10,6 +10,7 @@ import { DebugCreateStrategy } from 'components/debug/DebugCreateStrategy';
 import { DebugFiatCurrency } from 'components/debug/DebugFiatCurrency';
 import { DebugOrderBook } from 'components/debug/DebugOrderBook';
 import { DebugE2E } from 'components/debug/DebugE2E';
+import { DebugShowPoweredFooter } from 'components/debug/DebugFooter';
 
 export const DebugPage = () => {
   return (
@@ -26,6 +27,7 @@ export const DebugPage = () => {
         <DebugFiatCurrency />
         <DebugOrderBook />
         <DebugE2E />
+        <DebugShowPoweredFooter />
       </div>
     </Page>
   );

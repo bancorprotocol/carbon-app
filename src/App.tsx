@@ -13,7 +13,8 @@ let didInit = false;
 
 export const App = () => {
   const { init } = useCarbonInit();
-  const { setInnerHeight } = useStore();
+  const { setInnerHeight, debug } = useStore();
+  const showPoweredFooter = debug.debugState.showPoweredFooter;
 
   useEffect(() => {
     if (!didInit) {
@@ -35,10 +36,14 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className="mt-80 mb-16 flex w-full flex-grow flex-col">
+      <main
+        className={`${
+          showPoweredFooter ? 'mt-80 mb-16' : 'my-80'
+        }  flex w-full flex-grow flex-col`}
+      >
         <MainContent />
       </main>
-      <Footer />
+      {showPoweredFooter && <Footer />}
       <MobileMenu />
       <ModalProvider />
       <Toaster />
