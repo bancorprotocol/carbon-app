@@ -60,8 +60,6 @@ module.exports = {
         900: oklch(20, chroma, hue),
       },
       secondary: colors.gray,
-      blue: '#2962FF',
-      lightBlue: '#9db2bd',
     }),
     columns: {
       auto: 'auto',
