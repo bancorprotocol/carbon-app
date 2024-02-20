@@ -27,10 +27,8 @@ const CellID = (info: CellContext<PortfolioTokenData, string>) => {
   return (
     <div className={cn('flex', 'items-center', 'space-x-16')}>
       <div
-        className={cn('h-32', 'w-4', 'bg-blue', 'rounded-r-2')}
-        style={{
-          backgroundColor: getColorByIndex(i),
-        }}
+        className={cn('h-32', 'w-4', 'rounded-r-2')}
+        style={{ backgroundColor: getColorByIndex(i) }}
       />
       <div>{id}</div>
     </div>

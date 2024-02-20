@@ -16,7 +16,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
   const getVariantClass = () => {
     switch (variant) {
       case 'warning':
-        return 'text-warning-500 bg-warning-500/25';
+        return 'text-warning bg-warning/25';
       case 'error':
         return 'text-error bg-error/25';
       case 'success':

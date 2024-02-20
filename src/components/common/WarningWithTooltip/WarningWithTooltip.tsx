@@ -13,7 +13,7 @@ export const WarningWithTooltip = ({
   return (
     <Tooltip interactive={false} element={tooltipContent}>
       <span>
-        <IconWarning className={`w-14 text-warning-500 ${className}`} />
+        <IconWarning className={`w-14 text-warning ${className}`} />
       </span>
     </Tooltip>
   );

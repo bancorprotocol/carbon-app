@@ -162,7 +162,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
       {warning && spread && (
         <output
           htmlFor="spread-custom"
-          className="flex items-center gap-8 font-mono text-12 text-warning-500"
+          className="flex items-center gap-8 font-mono text-12 text-warning"
         >
           <IconWarning className="h-12 w-12" />
           <span>{warning}</span>

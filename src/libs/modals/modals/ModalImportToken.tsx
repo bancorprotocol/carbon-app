@@ -34,15 +34,13 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   const blockClasses = 'my-20 h-80 rounded-8';
 
   return (
-    <ModalOrMobileSheet id={id} title={'Import Token'}>
-      <div className={'mt-40'}>
+    <ModalOrMobileSheet id={id} title="Import Token">
+      <div className="mt-40">
         <IconTitleText
-          variant={'warning'}
+          variant="warning"
           icon={<IconWarning />}
-          title={'Use at your own risk'}
-          text={
-            "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
-          }
+          title="Use at your own risk"
+          text="This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
         />
       </div>
 
@@ -51,7 +49,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       )}
       {isError && (
         <div
-          className={`${blockClasses} bg-error/30 flex items-center justify-center`}
+          className={`${blockClasses} flex items-center justify-center bg-error/30`}
         >
           Error: No token found for this address
         </div>
@@ -62,9 +60,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
             <div className={'font-weight-500'}>{data.symbol}</div>
             <NewTabLink
               to={getExplorerLink('token', data.address)}
-              className={
-                'flex items-center text-14 font-weight-500 text-warning-500'
-              }
+              className="flex items-center text-14 font-weight-500 text-warning"
             >
               <span className={'whitespace-nowrap'}>View on Explorer</span>
               <IconLink className={'ml-4 inline-flex h-14'} />

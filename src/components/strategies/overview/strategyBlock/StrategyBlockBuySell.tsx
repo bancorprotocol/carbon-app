@@ -55,7 +55,7 @@ export const StrategyBlockBuySell: FC<{
               }
             >
               <span>
-                <WarningIcon className="h-10 w-10 text-warning-500" />
+                <WarningIcon className="h-10 w-10 text-warning" />
               </span>
             </Tooltip>
           )}
@@ -82,7 +82,7 @@ export const StrategyBlockBuySell: FC<{
               }
             >
               <span>
-                <WarningIcon className="h-10 w-10 text-warning-500" />
+                <WarningIcon className="h-10 w-10 text-warning" />
               </span>
             </Tooltip>
           )}

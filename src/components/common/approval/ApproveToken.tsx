@@ -220,7 +220,7 @@ export const ApproveToken: FC<Props> = ({
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className="flex space-x-20 font-mono text-14 text-warning-500">
+        <div className="flex space-x-20 font-mono text-14 text-warning">
           <div>
             <IconWarning className="w-16" />
           </div>
