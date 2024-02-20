@@ -9,21 +9,17 @@ function createTwConfigValues(start, end, step) {
 }
 
 const oklch = (l, c, h) => {
-  const result = formatRgb(`oklch(${l}% ${c} ${h} / 0)`);
+  const result = formatRgb(`oklch(${l} ${c} ${h} / 0)`);
   return result.replace(', 0)', ', <alpha-value>)');
 };
-const lighten = (l, amount) => Math.min(l + amount, 100);
+const lighten = (l, amount) => Math.min(l + amount, 1);
 const darken = (l, amount) => Math.max(l - amount, 0);
 
 const lightDark = (l, c, h) => ({
-  light: oklch(lighten(l, 20), c, h),
+  light: oklch(lighten(l, 0.2), c, h),
   DEFAULT: oklch(l, c, h),
-  dark: oklch(darken(l, 50), c, h),
+  dark: oklch(darken(l, 0.5), c, h),
 });
-
-// Background color variables
-const hue = 0;
-const chroma = 0; // Recommended 0.01, 0.02
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -37,30 +33,35 @@ module.exports = {
       xl: '1280px',
       '2xl': '1536px',
     },
-    colors: ({ colors }) => ({
-      white: colors.white,
-      transparent: colors.transparent,
-      primary: lightDark(68, 0.153, 160), // #00B578
-      error: lightDark(65, 0.147, 15), // #D86371
-      sell: lightDark(65, 0.147, 15), // #D86371
-      buy: lightDark(68, 0.153, 160), // #00B578
-      success: lightDark(68, 0.153, 160), // #00B578
-      warning: lightDark(74.7, 0.18, 57.36), // #ff8a00
-      black: oklch(13, chroma, hue),
-      neutral: {
-        50: oklch(99, chroma, hue),
-        100: oklch(97, chroma, hue),
-        200: oklch(92, chroma, hue),
-        300: oklch(87, chroma, hue),
-        400: oklch(72, chroma, hue),
-        500: oklch(56, chroma, hue),
-        600: oklch(44, chroma, hue),
-        700: oklch(37, chroma, hue),
-        800: oklch(27, chroma, hue),
-        900: oklch(20, chroma, hue),
-      },
-      secondary: colors.gray,
-    }),
+    colors: ({ colors }) => {
+      // Background color variables
+      const hue = 0;
+      const chroma = 0; // Recommended 0.01, 0.02
+      return {
+        white: colors.white,
+        transparent: colors.transparent,
+        primary: lightDark(0.68, 0.153, 160), // #00B578
+        error: lightDark(0.65, 0.147, 15), // #D86371
+        sell: lightDark(0.65, 0.147, 15), // #D86371
+        buy: lightDark(0.68, 0.153, 160), // #00B578
+        success: lightDark(0.68, 0.153, 160), // #00B578
+        warning: lightDark(0.747, 0.18, 57.36), // #ff8a00
+        black: oklch(0.13, chroma, hue),
+        neutral: {
+          50: oklch(0.99, chroma, hue),
+          100: oklch(0.97, chroma, hue),
+          200: oklch(0.92, chroma, hue),
+          300: oklch(0.87, chroma, hue),
+          400: oklch(0.72, chroma, hue),
+          500: oklch(0.56, chroma, hue),
+          600: oklch(0.44, chroma, hue),
+          700: oklch(0.37, chroma, hue),
+          800: oklch(0.27, chroma, hue),
+          900: oklch(0.2, chroma, hue),
+        },
+        secondary: colors.gray,
+      };
+    },
     columns: {
       auto: 'auto',
       1: '1',
