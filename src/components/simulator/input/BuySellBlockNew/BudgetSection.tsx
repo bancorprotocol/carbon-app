@@ -98,7 +98,7 @@ export const BudgetSection: FC<Props> = ({
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className="text-red flex items-center gap-10 font-mono text-12"
+          className="flex items-center gap-10 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">Insufficient balance</span>

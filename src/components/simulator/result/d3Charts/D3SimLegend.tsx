@@ -69,7 +69,7 @@ const LegendItem = ({
         <IconEyeDisabled
           x={160}
           y={-6}
-          className={'text-white/60'}
+          className="text-white/60"
           width={14}
           height={14}
         />
@@ -77,7 +77,7 @@ const LegendItem = ({
         <IconEye
           x={160}
           y={-6}
-          className={'text-green'}
+          className="text-primary"
           width={14}
           height={14}
         />

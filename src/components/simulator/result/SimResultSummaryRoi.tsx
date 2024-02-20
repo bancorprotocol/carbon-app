@@ -21,7 +21,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
     return roiFormatted.value;
   }, []);
 
-  const color = portfolioRoi >= 0 ? 'text-green' : 'text-red';
+  const color = portfolioRoi >= 0 ? 'text-success' : 'text-error';
 
   return (
     <article className="border-emphasis flex flex-col rounded-8">
@@ -45,7 +45,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
 const TooltipContent = () => (
   <>
     <span className="align-middle">TBD.&nbsp;</span>
-    <NewTabLink to={externalLinks.roiLearnMore} className="text-green">
+    <NewTabLink to={externalLinks.roiLearnMore} className="text-primary">
       <span className="align-middle">Learn how ROI is calculated.</span>
       <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
     </NewTabLink>
