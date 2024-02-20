@@ -18,6 +18,17 @@ export type PairMaps = ReturnType<typeof createPairMaps>;
  * Transform a pair of symbols to a pair name
  * pair name is used to be displayed
  */
+export const toPairSlug = (
+  base: { address: string },
+  quote: { address: string }
+) => {
+  return `${base.address}_${quote.address}`.toLowerCase();
+};
+
+/**
+ * Transform a pair of symbols to a pair name
+ * pair name is used to be displayed
+ */
 export const toPairName = (
   base: { symbol: string },
   quote: { symbol: string }
@@ -26,18 +37,13 @@ export const toPairName = (
 };
 
 /**
- * Transform pair symbols to pair key
- * pair key is used to access a pair in the map
- */
-export const toPairKey = (base: string, quote: string) => {
-  return `${base}_${quote}`.toLowerCase();
-};
-
-/**
  * Transform a slug into a pair key
  * slug comes from a search (query params or input)
  */
-export const fromPairSlug = (value: string, regex: RegExp = pairSearchExp) => {
+export const fromPairSearch = (
+  value: string,
+  regex: RegExp = pairSearchExp
+) => {
   return value.toLowerCase().replaceAll(regex, '_');
 };
 
@@ -49,10 +55,11 @@ export const createPairMaps = (
   const nameMap = new Map<string, string>();
   for (const pair of pairs) {
     const { baseToken: base, quoteToken: quote } = pair;
-    const name = toPairName(base, quote);
-    const key = fromPairSlug(name, transformSlugExp);
-    pairMap.set(key, pair);
-    nameMap.set(key, name);
+    const slug = toPairSlug(base, quote);
+    pairMap.set(slug, pair);
+    const displayName = toPairName(base, quote);
+    const name = fromPairSearch(displayName, transformSlugExp);
+    nameMap.set(slug, name);
   }
   return { pairMap, nameMap };
 };
@@ -71,18 +78,18 @@ export const searchPairKeys = (
   search: string,
   transformSlugExp: RegExp = pairSearchExp
 ) => {
-  const searchSlug = fromPairSlug(search, transformSlugExp);
-  const slugs = [];
-  for (const slug of nameMap.keys()) {
-    if (slug.includes(searchSlug)) slugs.push(slug);
+  const searchSlug = fromPairSearch(search, transformSlugExp);
+  const names: { key: string; name: string }[] = [];
+  for (const [key, name] of nameMap.entries()) {
+    if (name.includes(searchSlug)) names.push({ key, name });
   }
-  return slugs.sort((a, b) => {
-    if (a.startsWith(searchSlug)) {
-      if (!b.startsWith(searchSlug)) return -1;
+  return names.sort((a, b) => {
+    if (a.name.startsWith(searchSlug)) {
+      if (!b.name.startsWith(searchSlug)) return -1;
     } else {
-      if (b.startsWith(searchSlug)) return 1;
+      if (b.name.startsWith(searchSlug)) return 1;
     }
-    return nameMap.get(a)!.localeCompare(nameMap.get(b)!);
+    return a.name.localeCompare(b.name);
   });
 };
 
@@ -94,6 +101,6 @@ export const searchPairTrade = (
   transformSlugExp: RegExp = pairSearchExp
 ) => {
   if (!search) return Array.from(pairMap.values());
-  const keys = searchPairKeys(nameMap, search, transformSlugExp);
-  return keys.map((key) => pairMap.get(key)).filter(exist);
+  const result = searchPairKeys(nameMap, search, transformSlugExp);
+  return result.map(({ key }) => pairMap.get(key)).filter(exist);
 };
