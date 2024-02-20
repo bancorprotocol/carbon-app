@@ -34,21 +34,21 @@ export const inputStyles = cva<InputVariants>(
           'outline-primary',
           'focus:!outline-primary',
         ],
-        'success-light': [
+        buy: [
           'outline',
           'outline-offset-2',
           'outline-2',
-          'outline-primary',
-          'focus:!outline-primary',
+          'outline-buy',
+          'focus:!outline-buy',
+        ],
+        sell: [
+          'outline',
+          'outline-offset-2',
+          'outline-2',
+          'outline-sell',
+          'focus:!outline-sell',
         ],
         error: [
-          'outline',
-          'outline-offset-2',
-          'outline-2',
-          'outline-error',
-          'focus:outline-error',
-        ],
-        'error-light': [
           'outline',
           'outline-offset-2',
           'outline-2',

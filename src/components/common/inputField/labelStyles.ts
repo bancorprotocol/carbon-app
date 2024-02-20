@@ -12,9 +12,9 @@ export const labelStyles = cva<LabelVariants>([], {
         'bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-white',
       ],
       success: ['bg-success', 'hover:bg-success/25'],
-      'success-light': ['bg-success', 'hover:bg-success/25'],
+      buy: ['bg-buy', 'hover:bg-buy/25'],
+      sell: ['bg-sell', 'hover:bg-sell/25'],
       error: ['bg-error', 'hover:bg-error'],
-      'error-light': ['bg-error/25', 'hover:bg-error/25'],
     },
   },
   defaultVariants: {

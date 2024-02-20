@@ -32,8 +32,8 @@ module.exports = {
       white: colors.white,
       transparent: colors.transparent,
       primary: lightDark(68, 0.153, 160), // #00B578
-      error: lightDark(64.59, 0.147, 14.77), // #D86371
-      sell: lightDark(64.59, 0.147, 14.77), // #D86371
+      error: lightDark(65, 0.147, 15), // #D86371
+      sell: lightDark(65, 0.147, 15), // #D86371
       buy: lightDark(68, 0.153, 160), // #00B578
       success: lightDark(68, 0.153, 160), // #00B578
       black: `oklch(13% ${chroma} ${hue})`,

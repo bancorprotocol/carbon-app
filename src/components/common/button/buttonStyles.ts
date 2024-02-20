@@ -35,17 +35,17 @@ export const buttonStyles = cva<ButtonVariants>(
           'bg-primary border-2 border-primary !text-black',
           'hover:border-primary-light hover:disabled:border-primary',
         ],
-        'success-light': [
-          'bg-primary/20 border-2 border-primary/0 !text-primary',
-          'hover:border-primary-light hover:!text-black hover:bg-primary hover:disabled:border-primary',
+        buy: [
+          'bg-buy border-2 border-buy !text-black',
+          'hover:border-buy-light hover:!text-black hover:bg-buy hover:disabled:border-buy',
+        ],
+        sell: [
+          'bg-sell border-2 border-sell !text-black',
+          'hover:border-sell-light hover:!text-black hover:bg-sell hover:disabled:border-sell',
         ],
         error: [
           'bg-error border-2 border-error !text-black',
-          'hover:border-errorLight hover:disabled:border-error',
-        ],
-        'error-light': [
-          'bg-error/25 !text-error',
-          'hover:bg-error/50 hover:!text-white',
+          'hover:border-error-light hover:disabled:border-error',
         ],
       },
       size: {
