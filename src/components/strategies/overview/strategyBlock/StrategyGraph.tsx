@@ -59,7 +59,9 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       : Math.max(buy.from, sell.from);
 
   const hasSpan = min && max && min !== max;
-  const center = hasSpan ? (min + max) / 2 : currentPrice ?? 1000;
+  const center = hasSpan
+    ? (min + max) / 2
+    : ((min || max) + (currentPrice ?? 1000)) / 2;
   const delta = hasSpan ? (max - min) / 2 : center * 1.5;
 
   // Graph zoom
