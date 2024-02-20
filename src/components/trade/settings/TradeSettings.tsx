@@ -65,7 +65,9 @@ export const TradeSettings = ({
             base={base}
             quote={quote}
           />
-          <hr className={'my-20 border-b-2 border-neutral-700 last:hidden'} />
+          <hr
+            className={'my-20 border-b-2 border-background-700 last:hidden'}
+          />
         </Fragment>
       ))}
     </div>

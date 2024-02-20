@@ -126,7 +126,7 @@ export const FloatTooltipContent = forwardRef<
   return (
     <FloatingPortal>
       <div
-        className="rounded bg-neutral-800 p-16"
+        className="rounded bg-background-800 p-16"
         ref={ref}
         style={{
           ...context.floatingStyles,

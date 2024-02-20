@@ -83,7 +83,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     <>
       <m.div
         variants={itemsVariant}
-        className="flex flex-col gap-20 rounded-10 bg-neutral-800 p-20"
+        className="flex flex-col gap-20 rounded-10 bg-background-800 p-20"
         key="createStrategyTypeMenu"
       >
         <h2>Strategy Type</h2>

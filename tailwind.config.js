@@ -38,16 +38,7 @@ module.exports = {
       const hue = 0;
       const chroma = 0; // Recommended 0.01, 0.02
       return {
-        white: colors.white,
-        transparent: colors.transparent,
-        primary: lightDark(0.68, 0.153, 160), // #00B578
-        error: lightDark(0.65, 0.147, 15), // #D86371
-        sell: lightDark(0.65, 0.147, 15), // #D86371
-        buy: lightDark(0.68, 0.153, 160), // #00B578
-        success: lightDark(0.68, 0.153, 160), // #00B578
-        warning: lightDark(0.747, 0.18, 57.36), // #ff8a00
-        black: oklch(0.13, chroma, hue),
-        neutral: {
+        background: {
           50: oklch(0.99, chroma, hue),
           100: oklch(0.97, chroma, hue),
           200: oklch(0.92, chroma, hue),
@@ -59,6 +50,15 @@ module.exports = {
           800: oklch(0.27, chroma, hue),
           900: oklch(0.2, chroma, hue),
         },
+        white: colors.white,
+        transparent: colors.transparent,
+        primary: lightDark(0.68, 0.153, 160), // #00B578
+        error: lightDark(0.65, 0.147, 15), // #D86371
+        sell: lightDark(0.65, 0.147, 15), // #D86371
+        buy: lightDark(0.68, 0.153, 160), // #00B578
+        success: lightDark(0.68, 0.153, 160), // #00B578
+        warning: lightDark(0.747, 0.18, 57.36), // #ff8a00
+        black: oklch(0.13, chroma, hue),
         secondary: colors.gray,
       };
     },

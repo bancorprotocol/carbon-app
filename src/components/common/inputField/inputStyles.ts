@@ -23,9 +23,9 @@ export const inputStyles = cva<InputVariants>(
     variants: {
       variant: {
         black: ['bg-primary-500', 'hover:bg-primary-600'],
-        secondary: ['bg-black', 'dark:bg-white dark:text-neutral-800'],
+        secondary: ['bg-black', 'dark:bg-white dark:text-background-800'],
         white: [
-          'bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-white',
+          'bg-background-200 text-background-800 dark:bg-background-800 dark:text-white',
         ],
         success: [
           'outline',

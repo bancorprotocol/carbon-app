@@ -38,7 +38,7 @@ export const NotificationAlerts: FC = () => {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="mb-20 block w-[350px] rounded-10 bg-neutral-800 px-20 py-10"
+            className="mb-20 block w-[350px] rounded-10 bg-background-800 px-20 py-10"
             data-testid={`notification-${n.testid}`}
           >
             <NotificationLine isAlert notification={n} />

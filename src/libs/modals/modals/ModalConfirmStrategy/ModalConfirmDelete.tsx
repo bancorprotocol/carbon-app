@@ -61,7 +61,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
       {!isOverlapping && (
-        <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-neutral-800 p-16">
+        <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-background-800 p-16">
           <h3 className="text-14 font-weight-500">Did you know ?</h3>
           <Link
             onClick={editPrices}

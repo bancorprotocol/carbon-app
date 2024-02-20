@@ -19,7 +19,7 @@ export const StrategyPageTabs = ({ currentPathname, tabs }: Props) => {
   return (
     <nav
       aria-label="Strategy Panels"
-      className="flex w-full gap-2 rounded-full border-2 border-neutral-800 p-6 text-14 md:w-auto"
+      className="flex w-full gap-2 rounded-full border-2 border-background-800 p-6 text-14 md:w-auto"
     >
       {tabs.map(({ label, href, params, icon, badge }) => {
         const active = match({

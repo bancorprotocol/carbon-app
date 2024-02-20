@@ -54,7 +54,7 @@ export const BudgetWarning: FC<Props> = ({ base, quote, state, setState }) => {
     setState(`${current}->${current}`);
   };
   return (
-    <article className="flex w-full flex-col gap-16 rounded-10 border border-warning bg-neutral-800 p-20">
+    <article className="flex w-full flex-col gap-16 rounded-10 border border-warning bg-background-800 p-20">
       <header className="flex items-center gap-8 ">
         <IconWarning className="h-14 w-14 text-warning" />
         <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>

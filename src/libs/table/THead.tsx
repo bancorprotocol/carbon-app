@@ -3,7 +3,7 @@ import { cn } from 'utils/helpers';
 
 export const THead = <D extends object>({ table }: { table: Table<D> }) => {
   return (
-    <thead className={cn('border-b-2', 'border-neutral-800')}>
+    <thead className={cn('border-b-2', 'border-background-800')}>
       {table.getHeaderGroups().map((headerGroup) => (
         <tr key={headerGroup.id} className={cn('h-64')}>
           {headerGroup.headers.map((header) => (
