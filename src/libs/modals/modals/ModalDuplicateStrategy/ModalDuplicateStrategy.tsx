@@ -1,12 +1,13 @@
 import { ReactComponent as IconCut } from 'assets/icons/cut.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { Button } from 'components/common/button';
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { getDuplicateStrategyParams } from 'components/strategies/create/useDuplicateStrategy';
 import { useModal } from 'hooks/useModal';
 import { ModalFC } from 'libs/modals/modals.types';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { Strategy } from 'libs/queries';
 import { getUndercutStrategy } from './utils';
+import { useNavigate } from 'libs/routing';
 
 export type ModalDuplicateStrategyData = {
   strategy: Strategy;
@@ -16,13 +17,17 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
   id,
   data: { strategy },
 }) => {
+  const navigate = useNavigate();
   const { closeModal } = useModal();
-  const { duplicate } = useDuplicateStrategy();
   const undercutDifference = 0.001;
+
+  const duplicate = (strategy: Strategy) => {
+    const search = getDuplicateStrategyParams(strategy);
+    navigate({ to: '/strategies/create', search });
+  };
 
   const undercutStrategy = () => {
     const undercutStrategy = getUndercutStrategy(strategy, undercutDifference);
-
     duplicate(undercutStrategy);
     closeModal(id);
   };
@@ -60,9 +65,9 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
         ({ icon: Icon, title, onClick, description, testId }) => (
           <article
             key={title}
-            className="bg-black/90 grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded p-16"
+            className="grid grid-cols-[32px_1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-black/90 p-16"
           >
-            <div className="bg-primary/25 row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full">
+            <div className="row-span-2 flex h-32 w-32 items-center justify-center self-center rounded-full bg-primary/25">
               <Icon className="h-16 w-16 text-primary" />
             </div>
             <h3 className="text-14 font-weight-500">{title}</h3>

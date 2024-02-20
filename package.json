@@ -11,6 +11,7 @@
     "@ethersproject/bytes": "^5.0.0",
     "@ethersproject/providers": "^5.7.1",
     "@floating-ui/react": "^0.25.4",
+    "@juggle/resize-observer": "^3.4.0",
     "@playwright/test": "^1.37.1",
     "@sentry/react": "^7.48.0",
     "@sentry/vite-plugin": "^0.7.2",
@@ -53,6 +54,7 @@
     "comlink": "^4.4.1",
     "crypto-browserify": "^3.12.0",
     "culori": "^4.0.1",
+    "d3": "^7.8.5",
     "dayjs": "^1.11.7",
     "decimal.js": "^10.4.2",
     "dotenv": "^16.3.1",
@@ -87,6 +89,7 @@
     "typescript": "^5.3.3",
     "ua-parser-js": "^1.0.35",
     "use-async-effect": "^2.2.7",
+    "valibot": "^0.28.1",
     "vite": "5.0.12",
     "vite-plugin-rewrite-all": "^1.0.1",
     "vite-plugin-svgr": "^2.4.0",
@@ -117,5 +120,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3"
   }
 }

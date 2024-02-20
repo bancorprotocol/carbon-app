@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { LogoImager } from 'components/common/imager/Imager';
 import { ButtonHTMLProps } from 'components/common/button';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
@@ -8,7 +8,8 @@ import { cn } from 'utils/helpers';
 type Props = ButtonHTMLProps & {
   symbol?: string;
   imgUrl?: string;
-  description?: string;
+  description?: ReactNode;
+  chevronClassName?: string;
   isBaseToken?: boolean;
 };
 
@@ -18,6 +19,7 @@ export const SelectTokenButton: FC<Props> = ({
   className,
   description,
   isBaseToken,
+  chevronClassName = '',
   ...props
 }) => {
   const testId = isBaseToken ? 'select-base-token' : 'select-quote-token';
@@ -44,7 +46,7 @@ export const SelectTokenButton: FC<Props> = ({
         {description && <p className="text-12 opacity-90">{description}</p>}
         <p>{symbol ?? text}</p>
       </div>
-      <IconChevron className="h-20 w-20" />
+      <IconChevron className={cn('h-20 w-20', chevronClassName)} />
     </button>
   );
 };

@@ -1,4 +1,3 @@
-import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { sanitizeNumber } from 'utils/helpers';
 
@@ -24,6 +23,7 @@ interface StrategyInput {
 export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
   const sellLow = 'startRate' in order1 ? order1.startRate : order1.min;
+  if (!buyHigh || !sellLow) return false;
   const buyMax = new SafeDecimal(buyHigh);
   const sellMin = new SafeDecimal(sellLow);
   if (sellMin.eq(0)) return false; // Limit strategy with only buy
@@ -35,14 +35,16 @@ export const isValidSpread = (spread: number) => {
   return !isNaN(spread) && spread > 0 && spread < 100;
 };
 
-export const getSpread = (strategy: Strategy) => {
-  const { order0, order1 } = strategy;
-  const buyMax = Number(order0.endRate);
-  const sellMax = Number(order1.endRate);
+export const getSpread = ({ order0, order1 }: StrategyInput) => {
+  const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
+  const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
+  const buyMax = Number(buyHigh);
+  const sellMax = Number(sellHigh);
+  if (!buyHigh || !sellMax) return 0;
   return (sellMax / buyMax - 1) * 100;
 };
 
-export const getRoundedSpread = (strategy: Strategy) => {
+export const getRoundedSpread = (strategy: StrategyInput) => {
   const spread = getSpread(strategy);
   return Number(spread.toFixed(2));
 };

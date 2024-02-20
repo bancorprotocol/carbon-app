@@ -1,0 +1,109 @@
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import {
+  StrategyInputDispatch,
+  StrategyInputOrder,
+} from 'hooks/useStrategyInput';
+import { Token } from 'libs/tokens';
+import { capitalize } from 'lodash';
+import { FC, useEffect, useId } from 'react';
+import { StrategyType } from 'libs/routing';
+import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
+import { UseQueryResult } from '@tanstack/react-query';
+import { SafeDecimal } from 'libs/safedecimal';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+
+interface Props {
+  base: Token;
+  quote: Token;
+  order: StrategyInputOrder;
+  dispatch: StrategyInputDispatch;
+  strategyType?: StrategyType;
+  tokenBalanceQuery?: UseQueryResult<string>;
+  isBudgetOptional?: boolean;
+  buy?: boolean;
+}
+
+export const BudgetSection: FC<Props> = ({
+  buy,
+  quote,
+  base,
+  strategyType,
+  order,
+  dispatch,
+  isBudgetOptional,
+  tokenBalanceQuery,
+}) => {
+  const inputId = useId();
+  const type = buy ? 'buy' : 'sell';
+  const budgetToken = buy ? quote : base;
+  const insufficientBalance =
+    tokenBalanceQuery &&
+    !tokenBalanceQuery?.isLoading &&
+    new SafeDecimal(tokenBalanceQuery?.data || 0).lt(order.budget);
+
+  useEffect(() => {
+    if (tokenBalanceQuery?.data) return;
+    if (insufficientBalance) {
+      dispatch(`${type}BudgetError`, 'Insufficient balance');
+    } else {
+      dispatch(`${type}BudgetError`, '');
+    }
+  }, [insufficientBalance, type, dispatch, tokenBalanceQuery?.data]);
+
+  return (
+    <fieldset className="flex flex-col gap-8">
+      <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          2
+        </span>
+        <Tooltip
+          sendEventOnMount={{ buy }}
+          element={
+            buy
+              ? `The amount of ${
+                  quote.symbol
+                } tokens you would like to use in order to buy ${
+                  base.symbol
+                }. ${
+                  strategyType === 'recurring'
+                    ? 'Note: this amount will re-fill once the "Sell" order is used by traders.'
+                    : ''
+                }`
+              : `The amount of ${base.symbol} tokens you would like to sell. ${
+                  strategyType === 'recurring'
+                    ? 'Note: this amount will re-fill once the "Buy" order is used by traders.'
+                    : ''
+                }`
+          }
+        >
+          <span className="text-white/80">Set {capitalize(type)} Budget</span>
+        </Tooltip>
+        {isBudgetOptional && (
+          <span className="ml-8 font-weight-500 text-white/60">Optional</span>
+        )}
+      </legend>
+      <TokenInputField
+        id={inputId}
+        className="rounded-16 bg-black p-16"
+        value={order.budget}
+        setValue={(value) => dispatch(`${type}Budget`, value)}
+        token={budgetToken}
+        isBalanceLoading={tokenBalanceQuery?.isLoading}
+        balance={tokenBalanceQuery?.data}
+        isError={insufficientBalance}
+        data-testid="input-budget"
+      />
+      {insufficientBalance && (
+        <output
+          htmlFor={inputId}
+          role="alert"
+          aria-live="polite"
+          className="text-red flex items-center gap-10 font-mono text-12"
+        >
+          <IconWarning className="h-12 w-12" />
+          <span className="flex-1">Insufficient balance</span>
+        </output>
+      )}
+    </fieldset>
+  );
+};

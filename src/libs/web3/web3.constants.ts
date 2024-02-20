@@ -1,11 +1,12 @@
 import { ChainIdMapTo } from 'libs/web3/web3.types';
 import { lsService } from 'services/localeStorage';
+import config from 'config';
 
 const TENDERLY_RPC = lsService.getItem('tenderlyRpc');
-const CHAIN_RPC_URL = TENDERLY_RPC || import.meta.env.VITE_CHAIN_RPC_URL;
+const CHAIN_RPC_URL = TENDERLY_RPC || config.rpcUrl;
 
 if (typeof CHAIN_RPC_URL === 'undefined') {
-  throw new Error(`VITE_CHAIN_RPC_URL must be a defined environment variable`);
+  throw new Error(`rpcUrl must be defined in config folder`);
 }
 
 export const IS_TENDERLY_FORK = !!TENDERLY_RPC;

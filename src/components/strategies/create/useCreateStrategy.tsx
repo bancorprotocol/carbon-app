@@ -1,10 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useOrder } from './useOrder';
-import { useCreateStrategyQuery } from 'libs/queries';
+import { OrderCreate, useOrder } from './useOrder';
+import { Order, useCreateStrategyQuery } from 'libs/queries';
 import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
 import { useApproval } from 'hooks/useApproval';
-import { useNavigate, useSearch, StrategyCreateSearch } from 'libs/routing';
+import {
+  useNavigate,
+  useSearch,
+  StrategyCreateSearch,
+  StrategySettings,
+} from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { config } from 'services/web3/config';
 import { useGetTokenBalance, useQueryClient } from 'libs/queries';
@@ -13,11 +18,8 @@ import { useNotifications } from 'hooks/useNotifications';
 import { useDuplicateStrategy } from './useDuplicateStrategy';
 import { carbonEvents } from 'services/events';
 import { useStrategyEventData } from './useStrategyEventData';
-import { useTokens } from 'hooks/useTokens';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 import {
-  handleStrategyDirection,
-  handleStrategySettings,
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
@@ -31,7 +33,6 @@ import { useMarketIndication } from 'components/strategies/marketPriceIndication
 import {
   getRoundedSpread,
   isOverlappingBudgetTooSmall,
-  isOverlappingStrategy,
   isValidSpread,
 } from '../overlapping/utils';
 
@@ -39,26 +40,49 @@ const spenderAddress = config.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
+const getIsRange = (order: Order, setting?: StrategySettings) => {
+  if (order.startRate !== order.endRate) return true;
+  if (!!Number(order.startRate)) return false;
+  if (!setting) return true; // Default is range
+  return setting === 'overlapping' || setting === 'range';
+};
+
+const copyOrderCreate = (order: OrderCreate) => {
+  return {
+    budget: order.budget,
+    min: order.min,
+    max: order.max,
+    price: order.price,
+    marginalPrice: order.marginalPrice,
+  };
+};
+
 export const useCreateStrategy = () => {
-  const { templateStrategy } = useDuplicateStrategy();
+  const templateStrategy = useDuplicateStrategy();
+  const base = templateStrategy.base;
+  const quote = templateStrategy.quote;
   const cache = useQueryClient();
   const navigate = useNavigate();
+  const search = useSearch({ from: '/strategies/create' });
+  const {
+    base: baseAddress,
+    quote: quoteAddress,
+    strategySettings = templateStrategy.strategySettings,
+    strategyDirection = templateStrategy.strategyDirection,
+    strategyType = templateStrategy.strategyType,
+  } = search;
+
   const { user, provider } = useWeb3();
   const { openModal } = useModal();
-  const [base, setBase] = useState<Token | undefined>(templateStrategy?.base);
-  const [quote, setQuote] = useState<Token | undefined>(
-    templateStrategy?.quote
-  );
+
   const [showGraph, setShowGraph] = useState(false);
   const { dispatchNotification } = useNotifications();
 
   const token0BalanceQuery = useGetTokenBalance(base);
   const token1BalanceQuery = useGetTokenBalance(quote);
-  const order0 = useOrder(templateStrategy?.order0);
-  const order1 = useOrder(templateStrategy?.order1);
-  const baseSpread = templateStrategy
-    ? getRoundedSpread(templateStrategy)
-    : 0.05;
+  const order0 = useOrder(templateStrategy.order0);
+  const order1 = useOrder(templateStrategy.order1);
+  const baseSpread = getRoundedSpread(templateStrategy) || 0.05;
   const [spread, setSpread] = useState(baseSpread);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -82,24 +106,6 @@ export const useCreateStrategy = () => {
 
   const mutation = useCreateStrategyQuery();
 
-  const search = useSearch({ from: '/strategies/create' });
-  const {
-    base: baseAddress,
-    quote: quoteAddress,
-    strategySettings = templateStrategy?.strategySettings,
-    strategyDirection = templateStrategy?.strategyDirection,
-    strategyType = templateStrategy?.strategyType,
-  } = search;
-
-  const isOverlapping = useMemo(() => {
-    return (
-      strategySettings === 'overlapping' ||
-      isOverlappingStrategy({ order0, order1 })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategySettings]);
-
-  const { getTokenById } = useTokens();
   const [selectedStrategySettings, setSelectedStrategySettings] = useState<
     | {
         to: string;
@@ -146,7 +152,16 @@ export const useCreateStrategy = () => {
     }
 
     const onConfirm = () => {
-      const orders = { order0, order1 };
+      const orders = {
+        order0: copyOrderCreate(order0),
+        order1: copyOrderCreate(order1),
+      };
+      // In disposable strategies, the price of the other should be 0 to avoid SDK error
+      // TODO: Should be managed before sending to the SDK IMO
+      if (strategyType === 'disposable') {
+        if (strategyDirection === 'buy') orders.order1.price = '0';
+        if (strategyDirection === 'sell') orders.order0.price = '0';
+      }
       return createStrategyAction({
         base,
         quote,
@@ -218,28 +233,22 @@ export const useCreateStrategy = () => {
 
   const openTokenListModal = (isSource?: boolean) => {
     const onClick = (token: Token) => {
-      let b: string | undefined;
-      let q: string | undefined;
+      const params: { base?: string; quote?: string } = {};
       handleChangeTokensEvents(isSource, token);
 
-      switch (isSource) {
-        case true: {
-          b = token.address;
-          q = quote?.address;
-          break;
-        }
-        default: {
-          b = base?.address;
-          q = token.address;
-        }
+      if (isSource) {
+        params.base = token.address;
+        if (quote) params.quote = quote?.address;
+      } else {
+        if (base) params.base = base?.address;
+        params.quote = token.address;
       }
 
       navigate({
         to: '/strategies/create',
         search: (search) => ({
           ...search,
-          base: b,
-          quote: q,
+          ...params,
         }),
         replace: true,
       });
@@ -264,7 +273,7 @@ export const useCreateStrategy = () => {
     if (order0.budgetError) return true;
     if (order1.budgetError) return true;
 
-    if (isOverlapping) {
+    if (strategySettings === 'overlapping') {
       return (
         !isValidSpread(spread) ||
         !isValidRange(order0.min, order1.max) ||
@@ -285,9 +294,9 @@ export const useCreateStrategy = () => {
     isProcessing,
     order0,
     order1,
-    isOverlapping,
     strategyType,
     strategyDirection,
+    strategySettings,
     spread,
   ]);
 
@@ -295,59 +304,20 @@ export const useCreateStrategy = () => {
     setSelectedStrategySettings(undefined);
   }, [baseAddress, quoteAddress]);
 
+  // TODO: This should be managed by a query params like "limit_range"
   useEffect(() => {
-    if (!baseAddress && !quoteAddress) {
-      return;
-    }
-    setBase(getTokenById(baseAddress || ''));
-    setQuote(getTokenById(quoteAddress || ''));
-
-    switch (strategyType) {
-      case 'disposable': {
-        order0.resetFields();
-        order1.resetFields();
-        handleStrategyDirection(
-          strategyDirection,
-          strategySettings,
-          order0,
-          order1
-        );
-        break;
-      }
-      case 'recurring': {
-        order0.resetFields();
-        order1.resetFields();
-        handleStrategySettings(strategySettings, [
-          order0.setIsRange,
-          order1.setIsRange,
-        ]);
-        break;
-      }
-    }
+    order0.setIsRange(getIsRange(templateStrategy.order0, strategySettings));
+    order1.setIsRange(getIsRange(templateStrategy.order1, strategySettings));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    baseAddress,
-    getTokenById,
-    quoteAddress,
-    setBase,
-    setQuote,
-    strategyDirection,
-    strategySettings,
-    strategyType,
-  ]);
+  }, [strategySettings]);
 
-  const showTokenSelection =
-    (!strategyType || !strategySettings) && !templateStrategy;
+  const showTokenSelection = !strategyType || !strategySettings;
   const showTypeMenu =
-    !(!base || !quote) &&
-    (!strategyType || !strategySettings) &&
-    !templateStrategy;
-  const showOrders = (!!base && !!quote && !showTypeMenu) || !!templateStrategy;
+    !!base && !!quote && (!strategyType || !strategySettings);
+  const showOrders = !!base && !!quote && !showTypeMenu;
 
   useEffect(() => {
-    if (!showOrders) {
-      return setShowGraph(false);
-    }
+    if (!showOrders) return setShowGraph(false);
     const hasMapping =
       !!pairsToExchangeMapping[`${base?.symbol}${quote?.symbol}`];
     if (hasMapping && showOrders) {
@@ -360,9 +330,7 @@ export const useCreateStrategy = () => {
 
   return {
     base,
-    setBase,
     quote,
-    setQuote,
     order0,
     order1,
     isAwaiting: mutation.isLoading,
@@ -372,7 +340,6 @@ export const useCreateStrategy = () => {
     isCTAdisabled,
     token0BalanceQuery,
     token1BalanceQuery,
-    isDuplicate: !!templateStrategy,
     showGraph,
     setShowGraph,
     showTokenSelection,
@@ -386,6 +353,5 @@ export const useCreateStrategy = () => {
     isOrdersOverlap,
     spread,
     setSpread,
-    isOverlapping,
   };
 };

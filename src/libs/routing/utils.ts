@@ -1,5 +1,7 @@
 import { lsService } from 'services/localeStorage';
 import { config } from 'services/web3/config';
+import { utils } from 'ethers';
+import * as v from 'valibot';
 
 function toValue(mix: string | undefined) {
   if (!mix) return '';
@@ -8,7 +10,7 @@ function toValue(mix: string | undefined) {
   if (str === 'true') return true;
   if (str.startsWith('0x')) return str;
   if (str.startsWith('0X')) return str;
-  return +str * 0 === 0 ? +str : str;
+  return +str * 0 === 0 && +str + '' === str ? +str : str;
 }
 
 export function decode(str: string) {
@@ -68,4 +70,39 @@ export const getLastVisitedPair = () => {
   ];
 
   return { base, quote };
+};
+
+// Validate Search Params //
+
+export type SearchParamsValidator<T> = {
+  [key in keyof T]: v.BaseSchema<string, any>;
+};
+
+export const validLiteral = (array: string[]) => {
+  return v.union(array.map((l) => v.literal(l)));
+};
+export const validNumber = v.string([
+  v.custom((value: string) => isNaN(Number(value)) === false),
+]);
+export const validAddress = v.string([
+  v.custom((value: string) => {
+    try {
+      utils.getAddress(value.toLocaleLowerCase());
+      return true;
+    } catch {
+      return false;
+    }
+  }),
+]);
+export const validateSearchParams = <T>(
+  validator: SearchParamsValidator<T>
+) => {
+  return (search: Record<string, string>): T => {
+    for (const key in search) {
+      const schema = validator[key as keyof T];
+      if (schema && v.is(schema, search[key])) continue;
+      delete search[key];
+    }
+    return search as T;
+  };
 };
