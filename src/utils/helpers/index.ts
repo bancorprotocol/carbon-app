@@ -4,15 +4,10 @@ import { Pathnames } from 'libs/routing';
 import { twMerge } from 'tailwind-merge';
 import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import config from 'config';
 export * from './number';
 
 export const isProduction = window
-  ? window.location.host.includes(config.productionHostName)
-  : true;
-
-export const isNativeApp = window
-  ? window.location.host.includes('carbondefi.xyz') // do not change
+  ? window.location.host.includes('carbondefi.xyz')
   : true;
 
 export const uuid = () => {
