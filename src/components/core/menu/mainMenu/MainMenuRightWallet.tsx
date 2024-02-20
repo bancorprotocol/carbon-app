@@ -73,8 +73,8 @@ export const MainMenuRightWallet: FC = () => {
   }, [user, selectedWallet]);
 
   const buttonVariant = useMemo(() => {
-    if (isUserBlocked) return 'error-light';
-    if (!isSupportedNetwork) return 'error-light';
+    if (isUserBlocked) return 'error';
+    if (!isSupportedNetwork) return 'error';
     return 'secondary';
   }, [isSupportedNetwork, isUserBlocked]);
 

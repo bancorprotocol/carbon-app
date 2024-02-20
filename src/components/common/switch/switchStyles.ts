@@ -16,9 +16,9 @@ export const switchStyles = cva<SwitchVariants>(
         secondary: ['bg-background-900'],
         white: ['bg-white/90'],
         success: ['bg-primary'],
-        'success-light': ['bg-primary/20'],
+        buy: ['bg-buy'],
+        sell: ['bg-sell'],
         error: ['bg-error'],
-        'error-light': ['bg-error/25'],
       },
       size: {
         sm: ['h-16 w-[32px] p-3'],

@@ -286,7 +286,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         disabled={disabledCTA}
         loading={isAwaiting}
         loadingChildren="Waiting for Confirmation"
-        variant={buy ? 'success' : 'error'}
+        variant={buy ? 'buy' : 'sell'}
         fullWidth
         className="mt-20"
         data-testid="submit"
