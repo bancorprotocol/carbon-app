@@ -3,8 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --hue: 0;
-  --chroma: 0;
   --primary: theme('colors.primary.DEFAULT');
   /* We use CSS variable for the svg assets (fill & stop-color) */
   --buy: theme('colors.buy.DEFAULT');

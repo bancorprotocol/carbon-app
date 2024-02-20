@@ -1,3 +1,4 @@
+const { formatRgb } = require('culori');
 function createTwConfigValues(start, end, step) {
   const remBase = 16;
   const obj = {};
@@ -7,14 +8,22 @@ function createTwConfigValues(start, end, step) {
   return obj;
 }
 
+const oklch = (l, c, h) => {
+  const result = formatRgb(`oklch(${l}% ${c} ${h} / 0)`);
+  return result.replace(', 0)', ', <alpha-value>)');
+};
+const lighten = (l, amount) => Math.min(l + amount, 100);
+const darken = (l, amount) => Math.max(l - amount, 0);
+
 const lightDark = (l, c, h) => ({
-  light: `oklch(${Math.min(l + 20, 100)}% ${c} ${h} / <alpha-value>)`,
-  DEFAULT: `oklch(${l}% ${c} ${h} / <alpha-value>)`,
-  dark: `oklch(${Math.max(0, l - 50)}% ${c} ${h} / <alpha-value>)`,
+  light: oklch(lighten(l, 20), c, h),
+  DEFAULT: oklch(l, c, h),
+  dark: oklch(darken(l, 50), c, h),
 });
 
-const hue = 'var(--hue, 0)';
-const chroma = 'var(--chroma, 0)'; // Recommended 0.01, 0.02
+// Background color variables
+const hue = 0;
+const chroma = 0; // Recommended 0.01, 0.02
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -36,23 +45,23 @@ module.exports = {
       sell: lightDark(65, 0.147, 15), // #D86371
       buy: lightDark(68, 0.153, 160), // #00B578
       success: lightDark(68, 0.153, 160), // #00B578
-      black: `oklch(13% ${chroma} ${hue})`,
+      warning: lightDark(74.7, 0.18, 57.36), // #ff8a00
+      black: oklch(13, chroma, hue),
       neutral: {
-        50: `oklch(99% ${chroma} ${hue})`,
-        100: `oklch(97% ${chroma} ${hue})`,
-        200: `oklch(92% ${chroma} ${hue})`,
-        300: `oklch(87% ${chroma} ${hue})`,
-        400: `oklch(72% ${chroma} ${hue})`,
-        500: `oklch(56% ${chroma} ${hue})`,
-        600: `oklch(44% ${chroma} ${hue})`,
-        700: `oklch(37% ${chroma} ${hue})`,
-        800: `oklch(27% ${chroma} ${hue})`,
-        900: `oklch(20% ${chroma} ${hue})`,
+        50: oklch(99, chroma, hue),
+        100: oklch(97, chroma, hue),
+        200: oklch(92, chroma, hue),
+        300: oklch(87, chroma, hue),
+        400: oklch(72, chroma, hue),
+        500: oklch(56, chroma, hue),
+        600: oklch(44, chroma, hue),
+        700: oklch(37, chroma, hue),
+        800: oklch(27, chroma, hue),
+        900: oklch(20, chroma, hue),
       },
       secondary: colors.gray,
       blue: '#2962FF',
       lightBlue: '#9db2bd',
-      warning: colors.orange,
     }),
     columns: {
       auto: 'auto',
