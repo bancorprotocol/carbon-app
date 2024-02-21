@@ -11,8 +11,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { useStore } from 'store';
 import { cn } from 'utils/helpers';
+import { useBreakpoints } from 'hooks/useBreakpoints';
+import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 
 export const SimulatorPage = () => {
+  const { aboveBreakpoint } = useBreakpoints();
   const { simDisclaimerLastSeen, setSimDisclaimerLastSeen } = useStore();
   const [timeRange] = useState({
     start: dayjs().unix() - 60 * 60 * 24 * 30 * 12,
@@ -37,19 +40,25 @@ export const SimulatorPage = () => {
       : null;
 
   useEffect(() => {
-    if (
-      !!simDisclaimerLastSeen &&
-      simDisclaimerLastSeen > dayjs().unix() - 15 * 60 * 1000
-    ) {
-      return;
-    }
+    if (!aboveBreakpoint('md')) return;
+    const showDisclaimer =
+      !simDisclaimerLastSeen ||
+      simDisclaimerLastSeen <= dayjs().unix() - 15 * 60 * 1000;
+    if (!showDisclaimer) return;
     if (!hasOpenedDisclaimer.current) {
       openModal('simulatorDisclaimer', {
         onConfirm: () => setSimDisclaimerLastSeen(dayjs().unix()),
       });
       hasOpenedDisclaimer.current = true;
     }
-  }, [openModal, setSimDisclaimerLastSeen, simDisclaimerLastSeen]);
+  }, [
+    aboveBreakpoint,
+    openModal,
+    setSimDisclaimerLastSeen,
+    simDisclaimerLastSeen,
+  ]);
+
+  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
     <>
