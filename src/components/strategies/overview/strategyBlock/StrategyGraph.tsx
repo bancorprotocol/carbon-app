@@ -24,10 +24,9 @@ const baseline = 100; // Line above text
 const middle = 75; // Where two polygons can intersect
 const top = 50; // End of the polygons
 const tick = 87; // Where the ticks end, from baseline
-const step = width / 30;
-const steps = Array(30)
-  .fill(null)
-  .map((_, i) => i * step);
+// X positions
+const lowest = 10;
+const highest = width - 10;
 
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const buyOrder = strategy.order0;
@@ -60,7 +59,9 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       : Math.max(buy.from, sell.from);
 
   const hasSpan = min && max && min !== max;
-  const center = hasSpan ? (min + max) / 2 : currentPrice ?? 1000;
+  const center = hasSpan
+    ? (min + max) / 2
+    : ((min || max) + (currentPrice ?? 1000)) / 2;
   const delta = hasSpan ? (max - min) / 2 : center * 1.5;
 
   // Graph zoom
@@ -206,9 +207,6 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
       <g className={style.axes} stroke="#404040">
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
-        {steps.map((x) => (
-          <line key={x} x1={x} y1={baseline} x2={x} y2={tick} />
-        ))}
       </g>
 
       <CurrentPrice currentPrice={currentPrice} x={x} token={strategy.quote} />
@@ -372,18 +370,27 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       </g>
       <g className={style.pricePoints}>
         {pricePoints.map((point, i) => (
-          <text
-            key={i}
-            fill="white"
-            x={x(point)}
-            y={baseline + 10}
-            dominantBaseline="hanging"
-            textAnchor="middle"
-            fontSize="16"
-            opacity="60%"
-          >
-            {prettifyNumber(point, { abbreviate: true, round: true })}
-          </text>
+          <g key={i}>
+            <line
+              x1={x(point)}
+              x2={x(point)}
+              y1={tick}
+              y2={baseline + 5}
+              stroke="white"
+              opacity="60%"
+            />
+            <text
+              fill="white"
+              x={x(point)}
+              y={baseline + 10}
+              dominantBaseline="hanging"
+              textAnchor="middle"
+              fontSize="16"
+              opacity="60%"
+            >
+              {prettifyNumber(point, { abbreviate: true, round: true })}
+            </text>
+          </g>
         ))}
       </g>
     </svg>
@@ -403,8 +410,8 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
 }) => {
   if (!currentPrice) return <></>;
   const price = x(currentPrice);
-  const tooLow = price < steps[1];
-  const tooHigh = price > steps[steps.length - 1];
+  const tooLow = price < lowest;
+  const tooHigh = price > highest;
   const inRange = !tooLow && !tooHigh;
   const prettyPrice = prettifyNumber(currentPrice, { round: true });
   const formattedPrice = `${prettyPrice} ${token.symbol}`;
@@ -416,8 +423,8 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
   const inRangeWidth = `${formattedPrice.length + 2}ch`;
   const baseDelta = `${(formattedPrice.length + 2) / 2}ch`; // 6ch
 
-  const deltaStart = price - steps[1];
-  const deltaEnd = steps[steps.length - 1] - price;
+  const deltaStart = price - lowest;
+  const deltaEnd = highest - price;
   const translateStart = `min(${baseDelta}, ${deltaStart}px)`;
   const translateEnd = `max((${inRangeWidth}  / 2) - ${deltaEnd}px, 0px)`;
   const translateRect = `translateX(calc(-1 * (${translateStart} + ${translateEnd})))`;
@@ -428,16 +435,13 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
         className={style.priceLine}
         stroke="#404040"
         strokeWidth="2"
-        d={`M ${Math.max(
-          steps[1],
-          Math.min(steps[steps.length - 1], price)
-        )} ${baseline} V 25`}
+        d={`M ${Math.max(lowest, Math.min(highest, price))} ${baseline} V 25`}
       />
       {tooLow && (
         <>
           <rect
             fill="#404040"
-            x={steps[1] - 1}
+            x={lowest - 1}
             y="6"
             width={outRangeWidth}
             height="36"
@@ -445,7 +449,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={steps[1]}
+            x={lowest}
             y="9"
             dominantBaseline="hanging"
             textAnchor="start"
@@ -458,7 +462,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           </text>
           <text
             fill="white"
-            x={steps[1]}
+            x={lowest}
             y="26"
             dominantBaseline="hanging"
             textAnchor="start"
@@ -503,7 +507,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
         <>
           <rect
             fill="#404040"
-            x={steps[steps.length - 1] + 1}
+            x={highest + 1}
             y="6"
             width={outRangeWidth}
             height="36"
@@ -514,7 +518,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={steps[steps.length - 1]}
+            x={highest}
             y="9"
             dominantBaseline="hanging"
             textAnchor="end"
@@ -527,7 +531,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           </text>
           <text
             fill="white"
-            x={steps[steps.length - 1]}
+            x={highest}
             y="26"
             dominantBaseline="hanging"
             textAnchor="end"
