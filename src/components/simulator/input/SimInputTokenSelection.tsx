@@ -27,6 +27,14 @@ export const SimInputTokenSelection: FC<Props> = ({
     if (base && quote) {
       dispatch('baseToken', quote.address);
       dispatch('quoteToken', base.address);
+      dispatch('buyMax', '');
+      dispatch('buyMin', '');
+      dispatch('sellMax', '');
+      dispatch('sellMin', '');
+      dispatch('buyBudget', '');
+      dispatch('sellBudget', '');
+      setInitBuyRange(true);
+      setInitSellRange(true);
     }
   };
 
