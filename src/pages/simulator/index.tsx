@@ -5,17 +5,17 @@ import { SimInputOverlapping } from 'components/simulator/input/SimInputOverlapp
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
+import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
 import dayjs from 'dayjs';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
-import { useEffect, useRef, useState } from 'react';
-import { useModal } from 'hooks/useModal';
-import { useStore } from 'store';
+import { useState } from 'react';
 import { cn } from 'utils/helpers';
 
 export const SimulatorPage = () => {
-  const { simDisclaimerLastSeen, setSimDisclaimerLastSeen } = useStore();
+  useSimDisclaimer();
+
   const [timeRange] = useState({
-    start: dayjs().unix() - 60 * 60 * 24 * 30 * 12,
+    start: dayjs().subtract(1, 'year').unix(),
     end: dayjs().unix(),
   });
 
@@ -28,28 +28,10 @@ export const SimulatorPage = () => {
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
 
-  const { openModal } = useModal();
-  const hasOpenedDisclaimer = useRef(false);
-
   const inputError =
     Number(state.buy.budget) + Number(state.sell.budget) <= 0
       ? 'Please add Sell and/or Buy budgets'
       : null;
-
-  useEffect(() => {
-    if (
-      !!simDisclaimerLastSeen &&
-      simDisclaimerLastSeen > dayjs().unix() - 15 * 60 * 1000
-    ) {
-      return;
-    }
-    if (!hasOpenedDisclaimer.current) {
-      openModal('simulatorDisclaimer', {
-        onConfirm: () => setSimDisclaimerLastSeen(dayjs().unix()),
-      });
-      hasOpenedDisclaimer.current = true;
-    }
-  }, [openModal, setSimDisclaimerLastSeen, simDisclaimerLastSeen]);
 
   return (
     <>
