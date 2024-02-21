@@ -10,10 +10,6 @@ export const isProduction = window
   ? window.location.host.includes('carbondefi.xyz')
   : true;
 
-export const isNativeApp =
-  !!import.meta.env.VITE_IS_NATIVE_APP &&
-  import.meta.env.VITE_IS_NATIVE_APP !== 'false';
-
 export const uuid = () => {
   return 'xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0,
