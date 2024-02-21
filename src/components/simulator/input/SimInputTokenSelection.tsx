@@ -39,7 +39,17 @@ export const SimInputTokenSelection: FC<Props> = ({
         <h2 className="m-0 text-18 font-weight-500">Token Pair</h2>
         <Tooltip
           iconClassName="h-18 w-18 text-white/60"
-          element={<div>TBD</div>}
+          element={
+            <div>
+              Selecting the tokens you would like to create a simulation for.
+              <br />
+              <b>Buy or Sell</b> token (also called <b>Base</b> token) is the
+              token you would like to buy or sell in the strategy.
+              <br />
+              <b>With</b> token (also called <b>Quote</b> token) is the token
+              you would denominate the rates in.
+            </div>
+          }
         />
       </header>
       <article className="flex flex-row items-center -space-x-10 font-weight-500">
