@@ -3,14 +3,14 @@ import { D3SimLegendType } from 'libs/d3';
 export const defaultLegend: D3SimLegendType = {
   ask: {
     index: 0,
-    label: 'Ask',
+    label: 'Sell high',
     labelSecondary: 'LHS',
     color: '#D86371',
     isDisabled: false,
   },
   bid: {
     index: 1,
-    label: 'Bid',
+    label: 'Buy low',
     labelSecondary: 'LHS',
     color: '#00B578',
     isDisabled: false,
