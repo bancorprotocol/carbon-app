@@ -19,12 +19,10 @@ export const D3ChartWrapper: FC<Props> = ({
   const [ref, dms] = useChartDimensions(settings);
 
   return (
-    <div className={className}>
-      <svg ref={ref} width={dms.width} height={dms.height} className="w-full">
-        <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-          {children(dms)}
-        </g>
-      </svg>
-    </div>
+    <svg ref={ref} width={dms.width} height={dms.height} className={className}>
+      <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
+        {children(dms)}
+      </g>
+    </svg>
   );
 };

@@ -6,16 +6,15 @@ export const useChartDimensions = (
 ): [RefObject<SVGSVGElement>, D3ChartSettings] => {
   const ref = useRef<SVGSVGElement>(null);
   const dimensions = combineChartDimensions(settings);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(dimensions.width);
+  const [height, setHeight] = useState(dimensions.height);
 
   useEffect(() => {
     if (dimensions.width && dimensions.height) return;
     const element = ref.current;
     if (!element) return;
     const resizeObserver = new ResizeObserver((entries) => {
-      if (!entries.length) return;
-      const rect = entries[0].target?.getBoundingClientRect();
+      const rect = entries[0]?.contentRect;
       if (!rect) return;
       if (!dimensions.width && width !== rect.width) setWidth(rect.width);
       if (!dimensions.height && height !== rect.height) setHeight(rect.height);
@@ -26,8 +25,8 @@ export const useChartDimensions = (
 
   const newSettings = combineChartDimensions({
     ...dimensions,
-    width: dimensions.width || width,
-    height: dimensions.height || height,
+    width,
+    height,
   });
 
   return [ref, newSettings];
