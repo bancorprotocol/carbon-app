@@ -11,8 +11,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { useStore } from 'store';
 import { cn } from 'utils/helpers';
+import { useBreakpoints } from 'hooks/useBreakpoints';
+import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 
 export const SimulatorPage = () => {
+  const { aboveBreakpoint } = useBreakpoints();
   const { simDisclaimerLastSeen, setSimDisclaimerLastSeen } = useStore();
   const [timeRange] = useState({
     start: dayjs().unix() - 60 * 60 * 24 * 30 * 12,
@@ -37,37 +40,32 @@ export const SimulatorPage = () => {
       : null;
 
   useEffect(() => {
-    if (
-      !!simDisclaimerLastSeen &&
-      simDisclaimerLastSeen > dayjs().unix() - 15 * 60 * 1000
-    ) {
-      return;
-    }
+    if (!aboveBreakpoint('md')) return;
+    const showDisclaimer =
+      !simDisclaimerLastSeen ||
+      simDisclaimerLastSeen <= dayjs().unix() - 15 * 60 * 1000;
+    if (!showDisclaimer) return;
     if (!hasOpenedDisclaimer.current) {
       openModal('simulatorDisclaimer', {
         onConfirm: () => setSimDisclaimerLastSeen(dayjs().unix()),
       });
       hasOpenedDisclaimer.current = true;
     }
-  }, [openModal, setSimDisclaimerLastSeen, simDisclaimerLastSeen]);
+  }, [
+    aboveBreakpoint,
+    openModal,
+    setSimDisclaimerLastSeen,
+    simDisclaimerLastSeen,
+  ]);
+
+  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
     <>
       <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
 
-      <div className="relative px-20">
-        <SimInputChart
-          timeRange={timeRange}
-          state={state}
-          dispatch={dispatch}
-          initBuyRange={initBuyRange}
-          initSellRange={initSellRange}
-          setInitBuyRange={setInitBuyRange}
-          setInitSellRange={setInitSellRange}
-          bounds={bounds}
-        />
-
-        <div className="absolute top-0 w-[440px] space-y-20">
+      <div className="flex gap-20 px-20">
+        <div className="flex w-[440px] flex-col gap-20">
           <SimInputTokenSelection
             base={state.baseToken}
             quote={state.quoteToken}
@@ -113,6 +111,17 @@ export const SimulatorPage = () => {
             </Link>
           )}
         </div>
+
+        <SimInputChart
+          timeRange={timeRange}
+          state={state}
+          dispatch={dispatch}
+          initBuyRange={initBuyRange}
+          initSellRange={initSellRange}
+          setInitBuyRange={setInitBuyRange}
+          setInitSellRange={setInitSellRange}
+          bounds={bounds}
+        />
       </div>
     </>
   );
