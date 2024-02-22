@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import {
-  getSelectedOption,
+  selectCurrentOption,
   selectFirstOption,
   selectLastOption,
   selectNextSibling,
@@ -44,8 +44,8 @@ export const SuggestionCombobox: FC<Props> = (props) => {
     }
     if (!open) return setOpen(true);
 
-    if (e.key === 'Enter') return getSelectedOption(root.current)?.click();
     if (e.key === 'Escape') return setOpen(false);
+    if (e.key === 'Enter') return selectCurrentOption(root.current);
 
     if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
     e.preventDefault();
