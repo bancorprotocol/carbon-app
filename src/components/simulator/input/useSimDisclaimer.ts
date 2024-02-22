@@ -11,7 +11,7 @@ export const useSimDisclaimer = () => {
   const handleSimulatorDisclaimer = useCallback(() => {
     if (
       !!simDisclaimerLastSeen &&
-      simDisclaimerLastSeen > dayjs().subtract(15, 'minutes').unix()
+      simDisclaimerLastSeen > dayjs().subtract(0.5, 'minutes').unix()
     ) {
       return;
     }
