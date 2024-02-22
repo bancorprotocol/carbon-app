@@ -40,7 +40,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         <Tooltip
           iconClassName="h-18 w-18 text-white/60"
           element={
-            <div>
+            <p>
               Selecting the tokens you would like to create a simulation for.
               <br />
               <b>Buy or Sell</b> token (also called <b>Base</b> token) is the
@@ -48,7 +48,7 @@ export const SimInputTokenSelection: FC<Props> = ({
               <br />
               <b>With</b> token (also called <b>Quote</b> token) is the token
               you would denominate the rates in.
-            </div>
+            </p>
           }
         />
       </header>
