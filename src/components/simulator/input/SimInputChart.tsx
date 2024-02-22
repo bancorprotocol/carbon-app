@@ -147,7 +147,10 @@ export const SimInputChart = ({
 
   return (
     <div className="absolute right-[20px] w-[calc(100%-500px)]">
-      <div ref={ref} className="bg-silver sticky top-50 rounded-12 p-20">
+      <div
+        ref={ref}
+        className="sticky top-50 rounded-12 bg-background-800 p-20"
+      >
         <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
         <div
           className={cn(

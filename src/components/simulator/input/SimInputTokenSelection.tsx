@@ -50,7 +50,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           description={
             <span
               className={`${
-                base ? 'text-white/30' : 'text-black'
+                base ? 'text-white/60' : 'text-black'
               } font-weight-500`}
             >
               Buy or Sell
@@ -77,7 +77,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           isBaseToken
         />
         <button
-          className="border-silver relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] bg-black"
+          className="relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] border-background-800 bg-black"
           onClick={swapTokens}
           disabled={!base || !quote}
         >
@@ -90,7 +90,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           description={
             <span
               className={`${
-                quote ? 'text-white/30' : 'text-black'
+                quote ? 'text-white/60' : 'text-black'
               } font-weight-500`}
             >
               With

@@ -32,13 +32,13 @@ export const SimulatorResultPage = () => {
         search={searchState}
         className="mb-16 flex items-center text-24 font-weight-500"
       >
-        <div className="bg-emphasis mr-16 flex h-40 w-40 items-center justify-center rounded-full">
+        <div className="mr-16 flex h-40 w-40 items-center justify-center rounded-full bg-background-800">
           <IconChevronLeft className="h-16 w-16" />
         </div>
         Simulate Strategy
       </Link>
 
-      <div className="bg-silver rounded-20 p-20">
+      <div className="rounded-20 bg-background-800 p-20">
         <>
           <SimResultSummary
             roi={ctx.roi}

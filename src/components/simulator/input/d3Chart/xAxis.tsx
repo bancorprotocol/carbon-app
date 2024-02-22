@@ -23,7 +23,7 @@ export const XAxis = ({ xScale, dms }: Props) => {
         transform={`translate(${xScale(tickValue)},0)`}
       >
         <line
-          className="tick stroke-emphasis"
+          className="tick stroke-background-800"
           y1={dms.boundedHeight}
           y2={dms.boundedHeight - 10}
         />
@@ -53,7 +53,7 @@ export const XAxis = ({ xScale, dms }: Props) => {
         y2={dms.boundedHeight}
         x1={-bandwidthOffset}
         x2={dms.width}
-        className={'stroke-emphasis'}
+        className={'stroke-background-800'}
       />
     </>
   );

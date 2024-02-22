@@ -91,7 +91,7 @@ export const D3ChartSimulatorBalance = ({
           x2={dms.boundedWidth}
           y1={dms.boundedHeight}
           y2={dms.boundedHeight}
-          className="stroke-emphasis"
+          className="stroke-background-800"
         />
         <text
           x={(xBase ?? 0) + barWidth / 2}

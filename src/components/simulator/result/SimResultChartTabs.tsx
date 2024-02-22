@@ -27,7 +27,7 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
   return (
     <nav
       aria-label="Simulation Tabs"
-      className="max-w-40 border-silver flex h-40 w-full gap-2 rounded-full border-2 p-4 text-14 md:w-auto"
+      className="max-w-40 flex h-40 w-full gap-2 rounded-full border-2 border-background-800 p-4 text-14 md:w-auto"
     >
       {tabs.map(({ label, icon, isActive, click }) => {
         const active = isActive();

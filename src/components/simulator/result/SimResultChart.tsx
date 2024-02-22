@@ -19,13 +19,13 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
   if (ctx.isError) {
     return (
       <div className="flex h-[400px] items-center justify-center rounded-10 bg-black py-10">
-        <div className="max-w-1/3 border-red bg-red/30 flex flex-col items-center justify-center space-y-10 rounded-10 border p-20">
+        <div className="max-w-1/3 flex flex-col items-center justify-center space-y-10 rounded-10 border border-error bg-error/30 p-20">
           <div className="text-24 font-weight-500">Error</div>
           <div className="text-center font-weight-500">
             Something went wrong.
             <br /> Please try again or contact support.
           </div>
-          <div className="text-red/80 text-12">
+          <div className="text-12 text-error/80">
             {ctx.errorMsg ?? 'Unknown internal error'}
           </div>
         </div>

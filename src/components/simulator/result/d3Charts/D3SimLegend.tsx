@@ -15,7 +15,7 @@ export const D3SimLegend = ({ legend, toggleLegend }: Props) => {
         y={0}
         width={195}
         height={156}
-        className={'fill-emphasis'}
+        className={'fill-background-800'}
         rx={8}
       />
       <g transform={`translate(12,16)`}>
