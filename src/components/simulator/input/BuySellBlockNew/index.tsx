@@ -111,15 +111,17 @@ export const BuySellBlock: FC<Props> = ({
         ignoreMarketPriceWarning={ignoreMarketPriceWarning}
       />
       <BudgetSection {...budgetProps} />
-      <FullOutcome
-        price={''}
-        min={order.min}
-        max={order.max}
-        budget={order.budget}
-        buy={buy}
-        base={base}
-        quote={quote}
-      />
+      {!ignoreMarketPriceWarning && (
+        <FullOutcome
+          price={''}
+          min={order.min}
+          max={order.max}
+          budget={order.budget}
+          buy={buy}
+          base={base}
+          quote={quote}
+        />
+      )}
     </section>
   );
 };
