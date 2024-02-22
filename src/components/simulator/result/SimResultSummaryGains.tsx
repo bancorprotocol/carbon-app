@@ -49,9 +49,9 @@ export const SimResultSummaryGains: FC<Props> = ({
 
 const TooltipContent: FC<{}> = () => (
   <>
-    <span className="align-middle">
+    <p className="align-middle">
       Estimated gains your trading strategy might have generated over the
       specified period. Amounts are denominated in the quote token.
-    </span>
+    </p>
   </>
 );
