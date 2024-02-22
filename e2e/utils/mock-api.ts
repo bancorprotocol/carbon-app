@@ -1,6 +1,8 @@
 import { Page } from 'playwright-core';
 import marketRate from '../mocks/market-rates.json';
 import roi from '../mocks/roi.json';
+import historyPrices from '../mocks/history-prices.json';
+import _ from 'lodash';
 
 export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {
@@ -17,6 +19,20 @@ export const mockApi = async (page: Page) => {
     const data = {};
     for (const currency of currencies) {
       data[currency] = marketRate[address][currency];
+    }
+    return route.fulfill({ json: { data } });
+  });
+  await page.route('**/*/history/prices?*', (route) => {
+    const url = new URL(route.request().url());
+    const baseToken = url.searchParams.get('baseToken')?.toLowerCase();
+    const quoteToken = url.searchParams.get('quoteToken')?.toLowerCase();
+    const start = url.searchParams.get('start')?.toLowerCase();
+    const end = url.searchParams.get('end')?.toLowerCase();
+    const historyPricesId = _.join([baseToken, quoteToken, start, end], '-');
+    // If unexpected behavior, let the real server handle that
+    const data = historyPrices[historyPricesId];
+    if (!baseToken || !quoteToken || !start || !end || !data) {
+      return route.continue();
     }
     return route.fulfill({ json: { data } });
   });
