@@ -23,31 +23,33 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
 
   if (ctx.isError) {
     return (
-      <div className="flex h-[400px] items-center justify-center rounded-10 bg-black py-10">
-        <section
-          role="alert"
-          aria-live="polite"
-          className="my-40 mx-auto flex w-[480px] flex-col items-center gap-20"
+      <div
+        role="alert"
+        aria-live="polite"
+        className="mx-auto my-10 flex h-[400px] flex-col items-center justify-center gap-20 rounded-10 bg-black"
+      >
+        <IconTitleText
+          icon={<IconWarning />}
+          title="Missing Information"
+          text={
+            <p className="w-[480px]">
+              It appears that the simulation is missing essential information
+              for successful execution. Please attempt to re-enter the
+              simulation data.
+            </p>
+          }
+          variant="error"
+        />
+        <Link
+          to="/simulator/$simulationType"
+          params={{ simulationType }}
+          search={searchState}
+          className={buttonStyles({
+            size: 'lg',
+          })}
         >
-          <IconTitleText
-            icon={<IconWarning />}
-            title="Missing Information"
-            text="
-          It appears that the simulation is missing essential information for
-          successful execution. Please attempt to re-enter the simulation data."
-            variant="error"
-          />
-          <Link
-            to="/simulator/$simulationType"
-            params={{ simulationType }}
-            search={searchState}
-            className={buttonStyles({
-              size: 'lg',
-            })}
-          >
-            Back
-          </Link>
-        </section>
+          Back
+        </Link>
       </div>
     );
   }
