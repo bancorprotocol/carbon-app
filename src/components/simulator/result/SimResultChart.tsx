@@ -38,7 +38,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
             variant="error"
           />
           <Link
-            to={'/simulator/$simulationType'}
+            to="/simulator/$simulationType"
             params={{ simulationType }}
             search={searchState}
             className={buttonStyles({
