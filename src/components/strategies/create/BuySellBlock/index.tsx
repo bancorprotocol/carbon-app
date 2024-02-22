@@ -44,7 +44,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const inputTitle = (
     <>
-      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white">
         1
       </span>
       <Tooltip
@@ -54,10 +54,10 @@ export const BuySellBlock: FC<Props> = ({
         } at. Make sure the price is in ${quote.symbol} tokens.`}
       >
         <p>
-          <span className="text-white/80">
+          <span className="text-white">
             Set {buy ? 'Buy' : 'Sell'} Price&nbsp;
           </span>
-          <span className="text-white/60">
+          <span className="text-white/80">
             ({quote.symbol} per 1 {base.symbol})
           </span>
         </p>

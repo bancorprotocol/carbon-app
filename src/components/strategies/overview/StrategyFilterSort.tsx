@@ -113,7 +113,7 @@ export const StrategyFilterSort = () => {
       )}
     >
       <fieldset onChange={onSortChange}>
-        <legend className="text-secondary px-16 py-8">Sort By</legend>
+        <legend className="px-16 py-8 text-14 text-white/80">Sort By</legend>
         {sortItems.map((sortItem) => (
           <FilterSortItem
             name="sort"
@@ -126,7 +126,7 @@ export const StrategyFilterSort = () => {
       </fieldset>
 
       <fieldset onChange={onFilterChange}>
-        <legend className="text-secondary px-16 py-8">View</legend>
+        <legend className="px-16 py-8 text-14 text-white/80">View</legend>
         {filterItems.map((filterItem) => (
           <FilterSortItem
             name="filter"

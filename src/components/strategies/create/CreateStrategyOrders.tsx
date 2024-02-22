@@ -78,17 +78,19 @@ export const CreateStrategyOrders = ({
           <div>
             <h2 className="flex gap-6 text-14">
               <span>{base?.symbol}</span>
-              <span role="separator" className="text-secondary">
+              <span role="separator" className="text-14 text-white/80">
                 /
               </span>
               <span>{quote?.symbol}</span>
             </h2>
-            <div className="text-secondary capitalize">{strategyType}</div>
+            <div className="text-14 capitalize text-white/80">
+              {strategyType}
+            </div>
           </div>
         </div>
-        <p className="flex items-center text-12 font-weight-400 text-white/60">
+        <p className="flex items-center text-12 font-weight-400 text-white/80">
           <IconWarning className="ml-6 mr-10 w-14 flex-shrink-0" /> Rebasing and
-          and fee-on-transfer tokens are not supported
+          fee-on-transfer tokens are not supported
         </p>
       </m.header>
 

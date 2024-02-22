@@ -237,7 +237,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           </span>
           <h3 className="flex-1 text-18 font-weight-500">
             Set Price Range&nbsp;
-            <span className="text-white/40">
+            <span className="text-white/60">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>

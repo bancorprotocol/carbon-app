@@ -195,7 +195,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
       </BudgetInput>
       {maxBelowMarket && <Explanation base={base} />}
       {!minAboveMarket && !maxBelowMarket && (
-        <p className="text-12 text-white/60">
+        <p className="text-12 text-white/80">
           The required 2nd budget will be calculated to maintain overlapping
           dynamics.&nbsp;
           <a

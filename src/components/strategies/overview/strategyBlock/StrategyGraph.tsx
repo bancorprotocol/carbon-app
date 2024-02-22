@@ -590,7 +590,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         <table className="border-separate rounded-8 border border-white/40 font-mono">
           <tbody>
             <tr>
-              <th className="p-8 pb-4 text-start font-weight-400 text-white/60">
+              <th className="p-8 pb-4 text-start font-weight-400 text-white/80">
                 Min Price
               </th>
               <td className="p-8 pb-4 text-end" data-testid="min-price">
@@ -598,7 +598,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
               </td>
             </tr>
             <tr>
-              <th className="p-8 pt-4 text-start font-weight-400 text-white/60">
+              <th className="p-8 pt-4 text-start font-weight-400 text-white/80">
                 Max Price
               </th>
               <td className="p-8 pt-4 text-end" data-testid="max-price">

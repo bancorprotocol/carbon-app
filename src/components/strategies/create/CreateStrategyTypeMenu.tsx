@@ -120,7 +120,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 {svg}
                 <span
                   className={`text-12 md:text-14 ${
-                    selectedId === id ? 'text-white' : 'text-white/40'
+                    selectedId === id ? 'text-white' : 'text-white/60'
                   }`}
                 >
                   {aboveBreakpoint('md') ? label : label.split(' ')[0]}
@@ -168,7 +168,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             {isRecommended && (
               <p
                 id={'legend-' + id}
-                className="flex gap-8 text-12 text-white/40"
+                className="flex gap-8 text-12 text-white/60"
               >
                 <span className="rounded bg-primary-dark p-4 text-primary">
                   <IconStar aria-hidden className="h-10 w-10" />

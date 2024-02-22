@@ -193,7 +193,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
           <header className="flex justify-between text-14">
-            <label htmlFor={`${id}-pay`} className="text-white/50">
+            <label htmlFor={`${id}-pay`} className="text-white/80">
               You pay
             </label>
             {errorMsgSource && (
@@ -221,7 +221,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             disabled={!hasEnoughLiquidity}
           />
           <header className="flex justify-between text-14">
-            <label htmlFor={`${id}-receive`} className="text-white/50">
+            <label htmlFor={`${id}-receive`} className="text-white/80">
               You receive
             </label>
             {errorMsgTarget && (
