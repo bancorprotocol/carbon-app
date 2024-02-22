@@ -3,6 +3,7 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 import { SimulatorData } from 'libs/queries';
 import { CsvDataService } from 'libs/csv';
 import { cn } from 'utils/helpers';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 const downloadCSV = ({
   data,
@@ -31,17 +32,19 @@ export const SimResultChartDownload = ({
   simulationType,
 }: Props) => {
   return (
-    <button
-      className={cn(
-        buttonStyles({ variant: 'black' }),
-        'border-silver flex h-40 w-40 items-center justify-center p-0'
-      )}
-      onClick={(e) => {
-        downloadCSV({ data, baseSymbol, quoteSymbol, simulationType });
-      }}
-      aria-label="Download Simulation"
-    >
-      <IconDownload className="h-18 w-18" />
-    </button>
+    <Tooltip element="Download a csv file with full breakdown of the simulation data">
+      <button
+        className={cn(
+          buttonStyles({ variant: 'black' }),
+          'flex h-40 w-40 items-center justify-center border-background-800 p-0'
+        )}
+        onClick={() => {
+          downloadCSV({ data, baseSymbol, quoteSymbol, simulationType });
+        }}
+        aria-label="Download Simulation"
+      >
+        <IconDownload className="h-18 w-18" />
+      </button>
+    </Tooltip>
   );
 };

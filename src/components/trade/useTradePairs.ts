@@ -4,8 +4,9 @@ import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lsService } from 'services/localeStorage';
 import { useWeb3 } from 'libs/web3';
-import { toPairKey } from 'utils/pairSearch';
+import { toPairSlug } from 'utils/pairSearch';
 import { usePairs } from 'hooks/usePairs';
+import config from 'config';
 
 export const useTradePairs = () => {
   const { user } = useWeb3();
@@ -28,7 +29,7 @@ export const useTradePairs = () => {
 
   const getTradePair = useCallback(
     (base: string, quote: string) => {
-      const key = toPairKey(base, quote);
+      const key = toPairSlug({ address: base }, { address: quote });
       return pairs.map.get(key);
     },
     [pairs.map]
@@ -100,28 +101,29 @@ export const useTradePairs = () => {
   };
 };
 
+const tokenAddress = config.addresses.tokens;
 const popularPairs: string[][] = [
-  ['ETH', 'USDC'],
-  ['ETH', 'USDT'],
-  ['ETH', 'DAI'],
-  ['ETH', 'WBTC'],
-  ['BNT', 'USDC'],
-  ['BNT', 'USDT'],
-  ['BNT', 'DAI'],
-  ['BNT', 'ETH'],
-  ['BNT', 'WBTC'],
-  ['WBTC', 'USDC'],
-  ['WBTC', 'USDT'],
-  ['WBTC', 'DAI'],
-  ['WBTC', 'ETH'],
-  ['USDT', 'USDC'],
-  ['USDC', 'USDT'],
-  ['USDT', 'DAI'],
-  ['USDC', 'DAI'],
-  ['DAI', 'USDC'],
-  ['DAI', 'USDT'],
-  ['SHIB', 'USDT'],
-  ['SHIB', 'USDC'],
-  ['SHIB', 'DAI'],
-  ['SHIB', 'ETH'],
+  [tokenAddress.ETH, tokenAddress.USDC],
+  [tokenAddress.ETH, tokenAddress.USDT],
+  [tokenAddress.ETH, tokenAddress.DAI],
+  [tokenAddress.ETH, tokenAddress.WBTC],
+  [tokenAddress.BNT, tokenAddress.USDC],
+  [tokenAddress.BNT, tokenAddress.USDT],
+  [tokenAddress.BNT, tokenAddress.DAI],
+  [tokenAddress.BNT, tokenAddress.ETH],
+  [tokenAddress.BNT, tokenAddress.WBTC],
+  [tokenAddress.WBTC, tokenAddress.USDC],
+  [tokenAddress.WBTC, tokenAddress.USDT],
+  [tokenAddress.WBTC, tokenAddress.DAI],
+  [tokenAddress.WBTC, tokenAddress.ETH],
+  [tokenAddress.USDT, tokenAddress.USDC],
+  [tokenAddress.USDC, tokenAddress.USDT],
+  [tokenAddress.USDT, tokenAddress.DAI],
+  [tokenAddress.USDC, tokenAddress.DAI],
+  [tokenAddress.DAI, tokenAddress.USDC],
+  [tokenAddress.DAI, tokenAddress.USDT],
+  [tokenAddress.SHIB, tokenAddress.USDT],
+  [tokenAddress.SHIB, tokenAddress.USDC],
+  [tokenAddress.SHIB, tokenAddress.DAI],
+  [tokenAddress.SHIB, tokenAddress.ETH],
 ];
