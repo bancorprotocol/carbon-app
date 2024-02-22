@@ -50,7 +50,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           description={
             <span
               className={`${
-                base ? 'text-white/30' : 'text-black'
+                base ? 'text-white/60' : 'text-black'
               } font-weight-500`}
             >
               Buy or Sell
@@ -90,7 +90,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           description={
             <span
               className={`${
-                quote ? 'text-white/30' : 'text-black'
+                quote ? 'text-white/60' : 'text-black'
               } font-weight-500`}
             >
               With
