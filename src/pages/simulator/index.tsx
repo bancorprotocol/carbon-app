@@ -64,19 +64,8 @@ export const SimulatorPage = () => {
     <>
       <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
 
-      <div className="relative px-20">
-        <SimInputChart
-          timeRange={timeRange}
-          state={state}
-          dispatch={dispatch}
-          initBuyRange={initBuyRange}
-          initSellRange={initSellRange}
-          setInitBuyRange={setInitBuyRange}
-          setInitSellRange={setInitSellRange}
-          bounds={bounds}
-        />
-
-        <div className="absolute top-0 w-[440px] space-y-20">
+      <div className="flex gap-20 px-20">
+        <div className="flex w-[440px] flex-col gap-20">
           <SimInputTokenSelection
             base={state.baseToken}
             quote={state.quoteToken}
@@ -122,6 +111,17 @@ export const SimulatorPage = () => {
             </Link>
           )}
         </div>
+
+        <SimInputChart
+          timeRange={timeRange}
+          state={state}
+          dispatch={dispatch}
+          initBuyRange={initBuyRange}
+          initSellRange={initSellRange}
+          setInitBuyRange={setInitBuyRange}
+          setInitSellRange={setInitSellRange}
+          bounds={bounds}
+        />
       </div>
     </>
   );

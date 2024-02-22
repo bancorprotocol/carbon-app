@@ -21,12 +21,14 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
     {
       label: 'recurring',
       svg: <IconTwoRanges className="h-16 w-37" />,
-      tooltipText: 'TBD',
+      tooltipText:
+        'Create buy and sell orders (limit or range) that are linked together. Newly acquired funds automatically rotate between them, creating an endless trading cycle without need for manual intervention.',
     },
     {
       label: 'overlapping',
       svg: <IconOverlappingStrategy className="h-16 w-37" />,
-      tooltipText: 'TBD',
+      tooltipText:
+        'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does.',
     },
   ];
 

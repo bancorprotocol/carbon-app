@@ -56,6 +56,8 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
     });
   };
 
+  if (!dms.width) return null;
+
   return (
     <>
       <D3XAxis ticks={x.ticks} dms={dms} />
