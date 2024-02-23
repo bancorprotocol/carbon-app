@@ -8,6 +8,7 @@ import { SimInputTokenSelection } from 'components/simulator/input/SimInputToken
 import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
+import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { useState } from 'react';
 import { cn } from 'utils/helpers';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
@@ -20,6 +21,12 @@ export const SimulatorPage = () => {
     from: '/simulator/$simulationType',
   });
   const { dispatch, state, bounds } = useSimulatorInput({ searchState });
+  const { data, isLoading, isError } = useGetTokenPriceHistory({
+    baseToken: state.baseToken?.address,
+    quoteToken: state.quoteToken?.address,
+    start: state.start,
+    end: state.end,
+  });
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
@@ -47,7 +54,11 @@ export const SimulatorPage = () => {
           <SimInputStrategyType strategyType={simulationType} />
 
           {simulationType === 'recurring' ? (
-            <SimInputRecurring state={state} dispatch={dispatch} />
+            <SimInputRecurring
+              state={state}
+              dispatch={dispatch}
+              firstHistoricPricePoint={data?.[0]}
+            />
           ) : (
             <SimInputOverlapping />
           )}
@@ -84,6 +95,9 @@ export const SimulatorPage = () => {
         </div>
 
         <SimInputChart
+          data={data}
+          isLoading={isLoading}
+          isError={isError}
           state={state}
           dispatch={dispatch}
           initBuyRange={initBuyRange}

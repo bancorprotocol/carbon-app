@@ -17,16 +17,17 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/simulator/input/d3Chart';
-import {
-  useCompareTokenPrice,
-  useGetTokenPriceHistory,
-} from 'libs/queries/extApi/tokenPrice';
+import { CandlestickData } from 'libs/d3';
+import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 interface Props {
+  data?: CandlestickData[];
+  isLoading: boolean;
+  isError: boolean;
   state: StrategyInputValues;
   dispatch: SimulatorInputDispatch;
   initBuyRange: boolean;
@@ -37,6 +38,9 @@ interface Props {
 }
 
 export const SimInputChart = ({
+  data,
+  isLoading,
+  isError,
   state,
   dispatch,
   initBuyRange,
@@ -49,13 +53,6 @@ export const SimInputChart = ({
     state.baseToken?.address,
     state.quoteToken?.address
   );
-
-  const { data, isLoading, isError } = useGetTokenPriceHistory({
-    baseToken: state.baseToken?.address,
-    quoteToken: state.quoteToken?.address,
-    start: state.start,
-    end: state.end,
-  });
 
   const handleDefaultValues = useCallback(
     (type: StrategyDirection) => {

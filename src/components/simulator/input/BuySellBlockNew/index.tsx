@@ -1,3 +1,4 @@
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { capitalize } from 'lodash';
 import { FC, useId } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -25,6 +26,7 @@ type Props = {
   strategyType?: StrategyType;
   isOrdersOverlap: boolean;
   ignoreMarketPriceWarning?: boolean;
+  warningMsg?: string;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -38,6 +40,7 @@ export const BuySellBlock: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
   ignoreMarketPriceWarning,
+  warningMsg,
 }) => {
   const titleId = useId();
 
@@ -75,6 +78,7 @@ export const BuySellBlock: FC<Props> = ({
     buy,
     inputTitle,
     isOrdersOverlap,
+    ignoreMarketPriceWarning,
   };
   const budgetProps = {
     buy,
@@ -106,11 +110,9 @@ export const BuySellBlock: FC<Props> = ({
           <span>{base.symbol}</span>
         </h3>
       </BuySellHeader>
-      <LimitRangeSection
-        {...limitRangeProps}
-        ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-      />
+      <LimitRangeSection {...limitRangeProps} />
       <BudgetSection {...budgetProps} />
+      {warningMsg && <WarningMessageWithIcon message={warningMsg} />}
       {!ignoreMarketPriceWarning && (
         <FullOutcome
           price={''}
