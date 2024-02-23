@@ -1,7 +1,6 @@
-import { ReactComponent as IconEye } from 'assets/icons/eye.svg';
-import { ReactComponent as IconEyeDisabled } from 'assets/icons/eye-disabled.svg';
 import { D3LegendItem, D3SimLegendEntry, D3SimLegendType } from 'libs/d3/types';
 import { useId } from 'react';
+import { ToggleEye } from './EyeIcon';
 
 interface Props {
   legend: D3SimLegendType;
@@ -88,27 +87,12 @@ const LegendItem = ({
         </tspan>
       </text>
 
-      {isDisabled ? (
-        <IconEyeDisabled
-          role="img"
-          x={160}
-          y={-6}
-          width={14}
-          height={14}
-          className="text-white/60"
-          aria-label="Closed eye icon"
+      <g transform="translate(160, -12)">
+        <ToggleEye
+          visible={!isDisabled}
+          className={isDisabled ? 'text-white/60' : 'text-green'}
         />
-      ) : (
-        <IconEye
-          role="img"
-          x={160}
-          y={-6}
-          width={14}
-          height={14}
-          className="text-green"
-          aria-label="Opened eye icon"
-        />
-      )}
+      </g>
       <rect x="0" height="20" y="-7" fill="transparent" width="174" />
     </g>
   );
