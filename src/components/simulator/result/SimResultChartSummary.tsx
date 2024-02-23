@@ -27,27 +27,24 @@ export const SimResultChartSummary = ({
   quoteToken,
 }: Props) => {
   return (
-    <>
-      <hr className="border-emphasis" />
-      <div className="flex w-full flex-row">
-        <div className="relative flex w-30 flex-shrink-0 items-center justify-center border-r border-emphasis font-mono text-12 text-white/60">
-          <div className="-rotate-90 whitespace-nowrap">
-            Price ({quoteToken.symbol} per {baseToken.symbol})
-          </div>
-        </div>
-        <div className="w-[calc(100%-60px)]">
-          <D3ChartWrapper settings={chartSettingsSummary}>
-            {(dms) => (
-              <D3ChartSimulatorSummary data={data} bounds={bounds} dms={dms} />
-            )}
-          </D3ChartWrapper>
-        </div>
-        <div className="relative flex w-30 flex-shrink-0 items-center justify-center border-l border-emphasis font-mono text-12 text-white/60">
-          <div className="-rotate-90 whitespace-nowrap">
-            Portfolio Value ({quoteToken.symbol})
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="flex w-full border-t border-emphasis">
+      <p
+        className="-rotate-180 border-l border-emphasis p-8 text-center font-mono text-12 text-white/60"
+        style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
+      >
+        Price ({quoteToken.symbol} per {baseToken.symbol})
+      </p>
+      <D3ChartWrapper className="flex-1" settings={chartSettingsSummary}>
+        {(dms) => (
+          <D3ChartSimulatorSummary data={data} bounds={bounds} dms={dms} />
+        )}
+      </D3ChartWrapper>
+      <p
+        className="-rotate-180 border-r border-emphasis p-8 text-center font-mono text-12 text-white/60"
+        style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
+      >
+        Portfolio Value ({quoteToken.symbol})
+      </p>
+    </div>
   );
 };
