@@ -49,8 +49,6 @@ export const DateRangePicker = memo((props: Props) => {
   );
 });
 
-const disabledDays = [{ after: new Date(), before: subDays(new Date(), 365) }];
-
 const Content = (props: Props) => {
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(Number(props.defaultStart) * 1000),
@@ -105,7 +103,6 @@ const Content = (props: Props) => {
         <Calendar
           defaultMonth={date?.to}
           numberOfMonths={2}
-          disabled={disabledDays}
           {...props.options}
           mode="range"
           selected={date}

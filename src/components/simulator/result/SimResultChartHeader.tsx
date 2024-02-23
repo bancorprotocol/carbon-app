@@ -2,6 +2,7 @@ import {
   DatePickerPreset,
   DateRangePicker,
 } from 'components/common/datePicker/DateRangePicker';
+import { subDays } from 'date-fns';
 import { useNavigate } from 'libs/routing';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { SimResultChartTabs } from 'components/simulator/result/SimResultChartTabs';
@@ -31,6 +32,10 @@ const datePickerPresets: DatePickerPreset[] = [
   { label: 'Last 30 days', days: 30 },
   { label: 'Last 90 days', days: 90 },
   { label: 'Last 365 days', days: 365 },
+];
+
+const datePickerDisabledDays = [
+  { after: new Date(), before: subDays(new Date(), 365) },
 ];
 
 export const SimResultChartHeader = ({
@@ -85,6 +90,7 @@ export const SimResultChartHeader = ({
         onConfirm={onDatePickerConfirm}
         button={DatePickerButton}
         presets={datePickerPresets}
+        options={{ disabled: datePickerDisabledDays }}
       />
 
       {!showSummary && <SimResultChartControls />}
