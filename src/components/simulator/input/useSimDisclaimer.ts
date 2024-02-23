@@ -1,14 +1,17 @@
 import dayjs from 'dayjs';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useModal } from 'hooks/useModal';
 import { useCallback, useEffect, useRef } from 'react';
 import { useStore } from 'store';
 
 export const useSimDisclaimer = () => {
+  const { aboveBreakpoint } = useBreakpoints();
   const { simDisclaimerLastSeen, setSimDisclaimerLastSeen } = useStore();
   const { openModal } = useModal();
   const hasOpenedDisclaimer = useRef(false);
 
   const handleSimulatorDisclaimer = useCallback(() => {
+    if (!aboveBreakpoint('md')) return;
     if (
       !!simDisclaimerLastSeen &&
       simDisclaimerLastSeen > dayjs().subtract(15, 'minutes').unix()
@@ -21,7 +24,12 @@ export const useSimDisclaimer = () => {
       });
       hasOpenedDisclaimer.current = true;
     }
-  }, [openModal, setSimDisclaimerLastSeen, simDisclaimerLastSeen]);
+  }, [
+    aboveBreakpoint,
+    openModal,
+    setSimDisclaimerLastSeen,
+    simDisclaimerLastSeen,
+  ]);
 
   useEffect(() => {
     handleSimulatorDisclaimer();
