@@ -211,7 +211,7 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
   const marginLeft = 12;
 
   const scale = isVisible ? 1 : 32 / 24;
-  const x = isVisible ? center + titleWidth / 2 + marginLeft : center / 2 + 6;
+  const x = isVisible ? center + titleWidth / 2 + marginLeft : center -16;
   const y = marginTop;
 
   // Hide toggle if transitioning between state (ResizeObserver takes 1 frame)
