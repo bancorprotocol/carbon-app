@@ -59,28 +59,7 @@ export const useStrategyInput = ({ searchState }: Props) => {
     [_state.quoteToken, getTokenById]
   );
 
-  const state = useMemo<StrategyInputValues>(() => {
-    return {
-      baseToken,
-      quoteToken,
-      buy: {
-        min: _state.buyMin || '',
-        max: _state.buyMax || '',
-        budget: _state.buyBudget || '',
-        budgetError: _state.buyBudgetError,
-        isRange: !!_state.buyIsRange,
-        priceError: _state.buyPriceError,
-      },
-      sell: {
-        min: _state.sellMin || '',
-        max: _state.sellMax || '',
-        budget: _state.sellBudget || '',
-        budgetError: _state.sellBudgetError,
-        isRange: !!_state.sellIsRange,
-        priceError: _state.sellPriceError,
-      },
-    };
-  }, [baseToken, quoteToken, _state]);
+  const state = buildStrategyInputState(_state, baseToken, quoteToken);
 
   const setSearch = useCallback(
     (search: InternalStrategyInput) => {
@@ -109,4 +88,58 @@ export const useStrategyInput = ({ searchState }: Props) => {
   }, []);
 
   return { dispatch, state };
+};
+
+function isFoo(object: any): object is InternalStrategyInput {
+  return 'buyBudgetError' in object;
+}
+
+export const buildStrategyInputState = (
+  state: InternalStrategyInput | StrategyInputSearch,
+  baseToken?: Token,
+  quoteToken?: Token
+): StrategyInputValues => {
+  if (isFoo(state)) {
+    return {
+      baseToken,
+      quoteToken,
+      buy: {
+        min: state.buyMin || '',
+        max: state.buyMax || '',
+        budget: state.buyBudget || '',
+        budgetError: state.buyBudgetError,
+        isRange: !!state.buyIsRange,
+        priceError: state.buyPriceError,
+      },
+      sell: {
+        min: state.sellMin || '',
+        max: state.sellMax || '',
+        budget: state.sellBudget || '',
+        budgetError: state.sellBudgetError,
+        isRange: !!state.sellIsRange,
+        priceError: state.sellPriceError,
+      },
+    };
+  } else {
+    return {
+      baseToken,
+      quoteToken,
+      buy: {
+        min: state.buyMin || '',
+        max: state.buyMax || '',
+        budget: state.buyBudget || '',
+        budgetError: '',
+        isRange: !!state.buyIsRange,
+        priceError: '',
+      },
+      sell: {
+        min: state.sellMin || '',
+        max: state.sellMax || '',
+        budget: state.sellBudget || '',
+        budgetError: '',
+        isRange: !!state.sellIsRange,
+        priceError: '',
+      },
+    };
+  }
 };
