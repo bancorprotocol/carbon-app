@@ -7,12 +7,14 @@ import { SimInputStrategyType } from 'components/simulator/input/SimInputStrateg
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
 import dayjs from 'dayjs';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useState } from 'react';
 import { cn } from 'utils/helpers';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 
 export const SimulatorPage = () => {
+  const { aboveBreakpoint } = useBreakpoints();
   useSimDisclaimer();
   const [timeRange] = useState({
     start: dayjs().subtract(1, 'year').unix(),
