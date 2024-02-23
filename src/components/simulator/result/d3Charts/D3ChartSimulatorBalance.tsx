@@ -57,6 +57,8 @@ export const D3ChartSimulatorBalance = ({
   const xQuote = xScale('quote');
 
   const barWidth = xScale.bandwidth();
+  // Hide the chart is not visible or if transitioning to visible (ResizeObserver takes 1 frame)
+  const hide = !isVisible || dms.width === 80;
 
   if (data.length === 0) return null;
   if (!dms.width) return null;
@@ -70,7 +72,7 @@ export const D3ChartSimulatorBalance = ({
         marginTop={(dms.marginTop - 20) * -1}
       />
 
-      <g className={isVisible ? '' : 'hidden'}>
+      <g className={hide ? 'hidden' : ''}>
         <D3ChartTitle
           dms={dms}
           title="Token Balances"
@@ -212,6 +214,17 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
   const x = isVisible ? center + titleWidth / 2 + marginLeft : center / 2 + 6;
   const y = marginTop;
 
+  // Hide toggle if transitioning between state (ResizeObserver takes 1 frame)
+  const hide = isVisible && dms.width === 80;
+  const style = hide ? { opacity: 0, outline: 'none' } : {};
+
+  const onKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggle();
+    }
+  };
+
   return (
     <g
       role="switch"
@@ -219,9 +232,10 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
       transform={`translate(${x},${y}) scale(${scale})`}
       className="cursor-pointer"
       onClick={toggle}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggle()}
+      onKeyDown={onKeyDown}
       aria-checked={isVisible}
       aria-label="Toggle chart visibility"
+      style={style}
     >
       <circle
         cx="12"
