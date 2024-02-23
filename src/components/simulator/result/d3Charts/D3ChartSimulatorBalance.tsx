@@ -217,7 +217,6 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
       role="switch"
       tabIndex={0}
       transform={`translate(${x},${y}) scale(${scale})`}
-      style={{ transition: 'transform 0.2s ease-in-out' }}
       className="cursor-pointer"
       onClick={toggle}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggle()}
