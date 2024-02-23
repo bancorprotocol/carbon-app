@@ -8,10 +8,10 @@ export const Footer: FC = () => {
       <NewTabLink
         aria-label="Powered By CarbonDeFi"
         to={externalLinks.carbonHomepage}
-        className="flex h-16 items-center gap-8 whitespace-nowrap text-14 font-weight-500 text-white/60"
+        className="flex items-center gap-8 whitespace-nowrap text-14 font-weight-500 text-white/60"
       >
         Powered by
-        <LogoCarbonDeFi className="text-white" />
+        <LogoCarbonDeFi className="w-[114px] text-white" />
       </NewTabLink>
     </footer>
   );
