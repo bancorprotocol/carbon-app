@@ -60,8 +60,8 @@ export type TokenPriceHistoryResult = {
 export interface TokenPriceHistorySearch {
   baseToken?: string;
   quoteToken?: string;
-  start: number;
-  end: number;
+  start?: string;
+  end?: string;
 }
 
 export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {

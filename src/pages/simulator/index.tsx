@@ -6,7 +6,6 @@ import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring'
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
-import dayjs from 'dayjs';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useState } from 'react';
@@ -14,13 +13,8 @@ import { cn } from 'utils/helpers';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 
 export const SimulatorPage = () => {
-  const { aboveBreakpoint } = useBreakpoints();
   useSimDisclaimer();
-  const [timeRange] = useState({
-    start: dayjs().subtract(1, 'year').unix(),
-    end: dayjs().unix(),
-  });
-
+  const { aboveBreakpoint } = useBreakpoints();
   const { simulationType } = useParams({ from: '/simulator/$simulationType' });
   const searchState = useSearch({
     from: '/simulator/$simulationType',
@@ -73,8 +67,8 @@ export const SimulatorPage = () => {
                 sellMax: state.sell.max,
                 sellBudget: state.sell.budget,
                 sellIsRange: state.sell.isRange,
-                start: timeRange.start.toString(),
-                end: timeRange.end.toString(),
+                start: state.start!,
+                end: state.end!,
               }}
               className={cn(
                 buttonStyles({
@@ -90,7 +84,6 @@ export const SimulatorPage = () => {
         </div>
 
         <SimInputChart
-          timeRange={timeRange}
           state={state}
           dispatch={dispatch}
           initBuyRange={initBuyRange}

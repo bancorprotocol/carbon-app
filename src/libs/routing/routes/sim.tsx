@@ -1,5 +1,6 @@
 import { redirect, Route } from '@tanstack/react-router';
 import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
+import dayjs from 'dayjs';
 import { rootRoute } from 'libs/routing/routes/root';
 import { validAddress, validBoolean, validNumber } from 'libs/routing/utils';
 import { SimulatorPage } from 'pages/simulator';
@@ -24,6 +25,8 @@ export interface StrategyInputSearch {
   buyMin?: string;
   buyBudget?: string;
   buyIsRange?: boolean;
+  start?: string;
+  end?: string;
 }
 
 export const simulatorRedirect = new Route({
@@ -49,6 +52,16 @@ export const simulatorInputRoute = new Route({
     return { simulationType: params.simulationType as SimulatorType };
   },
   validateSearch: (search: Record<string, string>): StrategyInputSearch => {
+    const start =
+      Number(search.start) > 0
+        ? search.start
+        : dayjs().subtract(1, 'year').unix().toString();
+    const end = Number(search.end) > 0 ? search.end : dayjs().unix().toString();
+
+    if (Number(start) >= Number(end)) {
+      throw new Error('Invalid date range');
+    }
+
     const baseToken = v.is(validAddress, search.baseToken)
       ? search.baseToken
       : config.tokens.ETH;
@@ -87,14 +100,13 @@ export const simulatorInputRoute = new Route({
       buyBudget,
       sellIsRange,
       buyIsRange,
+      start,
+      end,
     };
   },
 });
 
-export interface SimulatorResultSearch extends Required<StrategyInputSearch> {
-  start: string;
-  end: string;
-}
+export type SimulatorResultSearch = Required<StrategyInputSearch>;
 
 export const simulatorResultRoute = new Route({
   getParentRoute: () => simulatorRootRoute,

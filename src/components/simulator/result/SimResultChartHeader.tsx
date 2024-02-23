@@ -1,4 +1,5 @@
 import {
+  DatePickerButton,
   DatePickerPreset,
   DateRangePicker,
 } from 'components/common/datePicker/DateRangePicker';
@@ -11,7 +12,6 @@ import { SimulatorData } from 'libs/queries';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
-import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -21,20 +21,14 @@ interface Props {
   simulationType: SimulatorType;
 }
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: '2-digit',
-});
-
-const datePickerPresets: DatePickerPreset[] = [
+export const datePickerPresets: DatePickerPreset[] = [
   { label: 'Last 7 days', days: 7 },
   { label: 'Last 30 days', days: 30 },
   { label: 'Last 90 days', days: 90 },
   { label: 'Last 365 days', days: 365 },
 ];
 
-const datePickerDisabledDays = [
+export const datePickerDisabledDays = [
   { after: new Date(), before: subDays(new Date(), 365) },
 ];
 
@@ -47,8 +41,6 @@ export const SimResultChartHeader = ({
 }: Props) => {
   const startUnix = data[0].date;
   const endUnix = data[data.length - 1].date;
-  const startDate = dateFormatter.format(startUnix * 1e3);
-  const endDate = dateFormatter.format(endUnix * 1e3);
 
   const navigate = useNavigate();
 
@@ -67,31 +59,23 @@ export const SimResultChartHeader = ({
     [navigate]
   );
 
-  const DatePickerButton = useMemo(
-    () => (
-      <>
-        <span className="flex h-24 w-24 items-center justify-center rounded-[12px] bg-white/10">
-          <CalendarIcon className="h-12 w-12" />
-        </span>
-
-        <span className="justify-self-end text-14 text-white/80">
-          {startDate} – {endDate}
-        </span>
-      </>
-    ),
-    [startDate, endDate]
-  );
-
-  return (
-    <section className="flex flex-wrap items-center justify-evenly gap-8 py-20 px-24 md:justify-between">
+  // has to be memorized to work while animation is running
+  const DateRangePickerMemo = useMemo(() => {
+    return (
       <DateRangePicker
         defaultStart={startUnix}
         defaultEnd={endUnix}
         onConfirm={onDatePickerConfirm}
-        button={DatePickerButton}
+        button={<DatePickerButton startUnix={startUnix} endUnix={endUnix} />}
         presets={datePickerPresets}
         options={{ disabled: datePickerDisabledDays }}
       />
+    );
+  }, [endUnix, onDatePickerConfirm, startUnix]);
+
+  return (
+    <section className="flex flex-wrap items-center justify-evenly gap-8 py-20 px-24 md:justify-between">
+      {DateRangePickerMemo}
 
       {!showSummary && <SimResultChartControls />}
       <article className="flex flex-wrap items-center justify-center gap-8">

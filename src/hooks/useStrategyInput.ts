@@ -35,6 +35,8 @@ export interface StrategyInputValues {
   quoteToken?: Token;
   buy: StrategyInputOrder;
   sell: StrategyInputOrder;
+  start?: string;
+  end?: string;
 }
 
 interface Props {
@@ -90,7 +92,7 @@ export const useStrategyInput = ({ searchState }: Props) => {
   return { dispatch, state };
 };
 
-function isFoo(object: any): object is InternalStrategyInput {
+function isInternalState(object: any): object is InternalStrategyInput {
   return 'buyBudgetError' in object;
 }
 
@@ -99,7 +101,7 @@ export const buildStrategyInputState = (
   baseToken?: Token,
   quoteToken?: Token
 ): StrategyInputValues => {
-  if (isFoo(state)) {
+  if (isInternalState(state)) {
     return {
       baseToken,
       quoteToken,
@@ -119,6 +121,8 @@ export const buildStrategyInputState = (
         isRange: !!state.sellIsRange,
         priceError: state.sellPriceError,
       },
+      start: state.start || undefined,
+      end: state.end || undefined,
     };
   } else {
     return {
@@ -140,6 +144,8 @@ export const buildStrategyInputState = (
         isRange: !!state.sellIsRange,
         priceError: '',
       },
+      start: state.start || undefined,
+      end: state.end || undefined,
     };
   }
 };

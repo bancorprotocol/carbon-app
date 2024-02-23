@@ -4,6 +4,7 @@ import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { subDays, getUnixTime, isSameDay } from 'date-fns';
 import { memo, ReactNode, useState } from 'react';
 import { DateRange } from 'react-day-picker';
+import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 
 export type DatePickerPreset = {
   label: string;
@@ -12,8 +13,8 @@ export type DatePickerPreset = {
 
 interface Props {
   button: ReactNode;
-  defaultStart: number;
-  defaultEnd: number;
+  defaultStart?: number | string;
+  defaultEnd?: number | string;
   onConfirm: (props: { start: string; end: string }) => void;
   presets?: DatePickerPreset[];
   options?: Omit<CalendarProps, 'mode' | 'selected' | 'onSelect'>;
@@ -49,25 +50,33 @@ export const DateRangePicker = memo((props: Props) => {
   );
 });
 
+const getDefaultDateRange = (
+  start?: number | string,
+  end?: number | string
+): DateRange | undefined => {
+  if (!start || !end) return undefined;
+  return {
+    from: new Date(Number(start) * 1000),
+    to: new Date(Number(end) * 1000),
+  };
+};
+
 const Content = (props: Props) => {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(Number(props.defaultStart) * 1000),
-    to: new Date(Number(props.defaultEnd) * 1000),
-  });
+  const now = new Date();
+  const [date, setDate] = useState(
+    getDefaultDateRange(props.defaultStart, props.defaultEnd)
+  );
   const hasDates = !!(date?.from && date?.to);
   const selectedPreset = props.presets?.find((p) => {
-    if (!hasDates) {
-      return false;
-    }
-
-    const from = subDays(new Date(), p.days);
-    return isSameDay(from, date?.from!);
+    if (!hasDates) return false;
+    const from = subDays(now, p.days);
+    return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
   });
 
   const handlePreset = (days: number) => {
     setDate({
-      from: subDays(new Date(), days),
-      to: new Date(),
+      from: subDays(now, days),
+      to: now,
     });
   };
 
@@ -117,3 +126,41 @@ const Content = (props: Props) => {
     </div>
   );
 };
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: '2-digit',
+});
+
+interface DatePickerButtonProps {
+  startUnix?: string | number;
+  endUnix?: string | number;
+}
+
+export const DatePickerButton = memo(
+  ({ startUnix, endUnix }: DatePickerButtonProps) => {
+    const startDate = dateFormatter.format(Number(startUnix) * 1e3);
+    const endDate = dateFormatter.format(Number(endUnix) * 1e3);
+
+    const hasDates = !!(startUnix && endUnix);
+
+    return (
+      <>
+        <span className="flex h-24 w-24 items-center justify-center rounded-[12px] bg-white/10">
+          <CalendarIcon className="h-12 w-12" />
+        </span>
+
+        <span className="justify-self-end text-14 text-white/80">
+          {hasDates ? (
+            <>
+              {startDate} – {endDate}
+            </>
+          ) : (
+            'Select date range'
+          )}
+        </span>
+      </>
+    );
+  }
+);
