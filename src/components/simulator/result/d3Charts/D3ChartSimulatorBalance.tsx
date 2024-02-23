@@ -53,7 +53,7 @@ export const D3ChartSimulatorBalance = ({
   const barWidth = xScale.bandwidth();
 
   if (data.length === 0) return null;
-
+  if (!dms.width) return null;
   return (
     <>
       <D3ChartTitle

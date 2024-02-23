@@ -7,13 +7,15 @@ import { SimInputStrategyType } from 'components/simulator/input/SimInputStrateg
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
 import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
 import dayjs from 'dayjs';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
 import { useState } from 'react';
 import { cn } from 'utils/helpers';
+import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 
 export const SimulatorPage = () => {
+  const { aboveBreakpoint } = useBreakpoints();
   useSimDisclaimer();
-
   const [timeRange] = useState({
     start: dayjs().subtract(1, 'year').unix(),
     end: dayjs().unix(),
@@ -33,23 +35,14 @@ export const SimulatorPage = () => {
       ? 'Please add Sell and/or Buy budgets'
       : null;
 
+  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
+
   return (
     <>
       <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
 
-      <div className="relative px-20">
-        <SimInputChart
-          timeRange={timeRange}
-          state={state}
-          dispatch={dispatch}
-          initBuyRange={initBuyRange}
-          initSellRange={initSellRange}
-          setInitBuyRange={setInitBuyRange}
-          setInitSellRange={setInitSellRange}
-          bounds={bounds}
-        />
-
-        <div className="absolute top-0 w-[440px] space-y-20">
+      <div className="flex gap-20 px-20">
+        <div className="flex w-[440px] flex-col gap-20">
           <SimInputTokenSelection
             base={state.baseToken}
             quote={state.quoteToken}
@@ -95,6 +88,17 @@ export const SimulatorPage = () => {
             </Link>
           )}
         </div>
+
+        <SimInputChart
+          timeRange={timeRange}
+          state={state}
+          dispatch={dispatch}
+          initBuyRange={initBuyRange}
+          initSellRange={initSellRange}
+          setInitBuyRange={setInitBuyRange}
+          setInitSellRange={setInitSellRange}
+          bounds={bounds}
+        />
       </div>
     </>
   );

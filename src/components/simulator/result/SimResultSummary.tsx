@@ -76,6 +76,12 @@ export const SimResultSummary = ({
                   strategyType === 'recurring' ? 'recurring' : undefined,
                 strategySettings:
                   strategyType === 'recurring' ? 'range' : 'overlapping',
+                buyMin: state.buy.min,
+                buyMax: state.buy.max,
+                buyBudget: state.buy.budget,
+                sellMin: state.sell.min,
+                sellMax: state.sell.max,
+                sellBudget: state.sell.budget,
               }}
               className={cn(
                 buttonStyles({ variant: 'success', size: 'md' }),
