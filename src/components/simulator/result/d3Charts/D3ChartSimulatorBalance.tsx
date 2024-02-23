@@ -211,7 +211,7 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
   const marginLeft = 12;
 
   const scale = isVisible ? 1 : 32 / 24;
-  const x = isVisible ? center + titleWidth / 2 + marginLeft : center -16;
+  const x = isVisible ? center + titleWidth / 2 + marginLeft : center - 16;
   const y = marginTop;
 
   // Hide toggle if transitioning between state (ResizeObserver takes 1 frame)
@@ -230,7 +230,7 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
       role="switch"
       tabIndex={0}
       transform={`translate(${x},${y}) scale(${scale})`}
-      className="cursor-pointer"
+      className="cursor-pointer rounded-full"
       onClick={toggle}
       onKeyDown={onKeyDown}
       aria-checked={isVisible}
@@ -245,7 +245,11 @@ const ToggleChart: FC<ToggleChartProps> = (props) => {
         strokeWidth={2}
         className="stroke-emphasis"
       />
-      <ToggleEye visible={isVisible} className="text-white" />
+      <ToggleEye
+        visible={isVisible}
+        transform="translate(5, 5)"
+        className="text-white"
+      />
     </g>
   );
 };

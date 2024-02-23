@@ -87,7 +87,7 @@ const LegendItem = ({
         </tspan>
       </text>
 
-      <g transform="translate(160, -12)">
+      <g transform="translate(160, -6)">
         <ToggleEye
           visible={!isDisabled}
           className={isDisabled ? 'text-white/60' : 'text-green'}
