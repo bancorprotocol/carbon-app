@@ -61,7 +61,7 @@ export const D3ChartSimulatorBalance = ({
   const hide = !isVisible || dms.width === 80;
 
   if (data.length === 0) return null;
-  if (!dms.width) return null;
+  if (!dms.width || !dms.height) return null;
   return (
     <>
       <ToggleChart

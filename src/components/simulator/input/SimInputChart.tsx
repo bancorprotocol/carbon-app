@@ -17,6 +17,7 @@ import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 
 interface Props {
   timeRange: { start: number; end: number };
@@ -28,6 +29,15 @@ interface Props {
   setInitSellRange: Dispatch<SetStateAction<boolean>>;
   bounds: ChartPrices;
 }
+
+const chartSettings: D3ChartSettingsProps = {
+  width: 0,
+  height: 0,
+  marginTop: 0,
+  marginBottom: 40,
+  marginLeft: 0,
+  marginRight: 80,
+};
 
 export const SimInputChart = ({
   timeRange,
@@ -147,19 +157,26 @@ export const SimInputChart = ({
       )}
 
       {!!data && (
-        <D3ChartCandlesticks
-          className="flex-1 self-stretch rounded-12 bg-black"
-          prices={prices}
-          onPriceUpdates={onPriceUpdates}
-          data={data}
-          marketPrice={marketPrice}
-          bounds={bounds}
-          onDragEnd={onPriceUpdatesEnd}
-          isLimit={{
-            buy: !state.buy.isRange,
-            sell: !state.sell.isRange,
-          }}
-        />
+        <D3ChartWrapper
+          settings={chartSettings}
+          className="self-stretch rounded-12 bg-black"
+        >
+          {(dms) => (
+            <D3ChartCandlesticks
+              dms={dms}
+              prices={prices}
+              onPriceUpdates={onPriceUpdates}
+              data={data}
+              marketPrice={marketPrice}
+              bounds={bounds}
+              onDragEnd={onPriceUpdatesEnd}
+              isLimit={{
+                buy: !state.buy.isRange,
+                sell: !state.sell.isRange,
+              }}
+            />
+          )}
+        </D3ChartWrapper>
       )}
     </div>
   );

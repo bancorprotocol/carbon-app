@@ -56,7 +56,7 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
     });
   };
 
-  if (!dms.width) return null;
+  if (!dms.width || !dms.height) return null;
 
   return (
     <>

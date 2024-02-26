@@ -10,8 +10,7 @@ import {
   useLinearScale,
   CandlestickData,
   scaleBand,
-  useChartDimensions,
-  D3ChartSettingsProps,
+  D3ChartSettings,
 } from 'libs/d3';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
@@ -33,20 +32,11 @@ interface Props {
   bounds: ChartPrices;
   onDragEnd?: OnPriceUpdates;
   isLimit: { buy: boolean; sell: boolean };
+  dms: D3ChartSettings;
 }
 
-const chartSettings: D3ChartSettingsProps = {
-  width: 0,
-  height: 0,
-  marginTop: 0,
-  marginBottom: 40,
-  marginLeft: 0,
-  marginRight: 80,
-};
-
 export const D3ChartCandlesticks = (props: Props) => {
-  const [ref, dms] = useChartDimensions(chartSettings);
-
+  const { dms } = props;
   const {
     data,
     prices,
@@ -201,48 +191,43 @@ export const D3ChartCandlesticks = (props: Props) => {
     y,
   ]);
 
+  if (!dms.width || !dms.height) return null;
   return (
-    <svg ref={ref} className={props.className}>
-      <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-        <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
-
-        <D3YAxisRight
-          ticks={y.ticks}
+    <>
+      <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
+      <D3YAxisRight
+        ticks={y.ticks}
+        dms={dms}
+        formatter={(value) => prettifyNumber(value)}
+      />
+      <XAxis xScale={xScale} dms={dms} />
+      {marketPrice && (
+        <D3ChartHandleLine
           dms={dms}
-          formatter={(value) => prettifyNumber(value)}
+          color="white"
+          y={y.scale(marketPrice)}
+          lineProps={{ strokeDasharray: 2 }}
+          label={labels.marketPrice}
         />
-        <XAxis xScale={xScale} dms={dms} />
-
-        {marketPrice && (
-          <D3ChartHandleLine
-            dms={dms}
-            color="white"
-            y={y.scale(marketPrice)}
-            lineProps={{ strokeDasharray: 2 }}
-            label={labels.marketPrice}
-          />
-        )}
-
-        <DragablePriceRange
-          type="buy"
-          onMinMaxChange={onMinMaxChange}
-          labels={labels.buy}
-          yPos={yPos.buy}
-          dms={dms}
-          onDragEnd={onMinMaxChangeEnd}
-          isLimit={isLimit.buy}
-        />
-
-        <DragablePriceRange
-          type="sell"
-          onMinMaxChange={onMinMaxChange}
-          labels={labels.sell}
-          yPos={yPos.sell}
-          dms={dms}
-          isLimit={isLimit.sell}
-          onDragEnd={onMinMaxChangeEnd}
-        />
-      </g>
-    </svg>
+      )}
+      <DragablePriceRange
+        type="buy"
+        onMinMaxChange={onMinMaxChange}
+        labels={labels.buy}
+        yPos={yPos.buy}
+        dms={dms}
+        onDragEnd={onMinMaxChangeEnd}
+        isLimit={isLimit.buy}
+      />
+      <DragablePriceRange
+        type="sell"
+        onMinMaxChange={onMinMaxChange}
+        labels={labels.sell}
+        yPos={yPos.sell}
+        dms={dms}
+        isLimit={isLimit.sell}
+        onDragEnd={onMinMaxChangeEnd}
+      />
+    </>
   );
 };
