@@ -1,8 +1,8 @@
 import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { subDays, getUnixTime, isSameDay } from 'date-fns';
-import { memo, ReactNode, useState } from 'react';
+import { subDays, getUnixTime, isSameDay, subMonths } from 'date-fns';
+import { Dispatch, memo, ReactNode, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 
@@ -16,11 +16,12 @@ interface Props {
   defaultStart?: number | string;
   defaultEnd?: number | string;
   onConfirm: (props: { start: string; end: string }) => void;
-  presets?: DatePickerPreset[];
+  setIsOpen: Dispatch<boolean>;
+  presets: DatePickerPreset[];
   options?: Omit<CalendarProps, 'mode' | 'selected' | 'onSelect'>;
 }
 
-export const DateRangePicker = memo((props: Props) => {
+export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const Trigger = (attr: MenuButtonProps) => (
@@ -42,10 +43,11 @@ export const DateRangePicker = memo((props: Props) => {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       placement="bottom-start"
+      strategy="fixed"
       aria-expanded={isOpen}
       button={Trigger}
     >
-      <Content {...props} />
+      <Content {...props} setIsOpen={setIsOpen} />
     </DropdownMenu>
   );
 });
@@ -81,10 +83,8 @@ const Content = (props: Props) => {
   };
 
   const onConfirm = () => {
-    if (!hasDates) {
-      return;
-    }
-
+    if (!hasDates) return;
+    props.setIsOpen(false);
     props.onConfirm({
       start: getUnixTime(date.from!).toString(),
       end: getUnixTime(date.to!).toString(),
@@ -92,38 +92,46 @@ const Content = (props: Props) => {
   };
 
   return (
-    <div className="space-y-20 p-20">
-      <div className="flex space-x-30">
-        {props.presets && (
-          <div className="w-200 space-y-5">
-            {props.presets.map(({ label, days }) => (
-              <Button
-                key={days}
-                variant={selectedPreset?.days === days ? 'black' : 'secondary'}
-                className="rounded-8"
-                fullWidth
-                onClick={() => handlePreset(days)}
-              >
-                {label}
-              </Button>
-            ))}
-          </div>
-        )}
-        <Calendar
-          defaultMonth={date?.to}
-          numberOfMonths={2}
-          {...props.options}
-          mode="range"
-          selected={date}
-          onSelect={setDate}
-        />
+    <form
+      method="dialog"
+      className="grid grid-cols-[200px_1fr] grid-rows-[1fr_auto] gap-x-30 gap-y-20 p-20"
+      onSubmit={onConfirm}
+    >
+      <div
+        role="radiogroup"
+        aria-label="presets"
+        className="flex flex-col gap-5"
+      >
+        {props.presets.map(({ label, days }) => (
+          <button
+            type="button"
+            role="radio"
+            key={days}
+            className="box-border rounded-8 border-2 border-transparent bg-clip-padding py-8 px-30 text-start text-14 font-weight-500 hover:border-grey3 [&[aria-checked=true]]:bg-black"
+            onClick={() => handlePreset(days)}
+            aria-checked={selectedPreset?.days === days}
+          >
+            {label}
+          </button>
+        ))}
       </div>
-      <div className="flex w-full justify-end">
-        <Button onClick={onConfirm} disabled={!hasDates} size="sm">
-          Confirm
-        </Button>
-      </div>
-    </div>
+      <Calendar
+        defaultMonth={subMonths(date?.to ?? new Date(), 1)}
+        numberOfMonths={2}
+        {...props.options}
+        mode="range"
+        selected={date}
+        onSelect={setDate}
+      />
+      <Button
+        type="submit"
+        disabled={!hasDates}
+        size="sm"
+        className="col-span-2 justify-self-end"
+      >
+        Confirm
+      </Button>
+    </form>
   );
 };
 
