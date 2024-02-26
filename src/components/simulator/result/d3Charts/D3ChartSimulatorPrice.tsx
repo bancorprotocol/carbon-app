@@ -28,7 +28,7 @@ export const D3ChartSimulatorPrice = ({ dms, data, bounds }: Props) => {
   });
 
   const rangeProps = { x, y, data, bounds };
-  if (!dms.width) return null;
+  if (!dms.width || !dms.height) return null;
   return (
     <>
       <D3XAxis ticks={x.ticks} dms={dms} />

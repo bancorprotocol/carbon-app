@@ -34,7 +34,10 @@ export const SimResultChartSummary = ({
       >
         Price ({quoteToken.symbol} per {baseToken.symbol})
       </p>
-      <D3ChartWrapper className="flex-1" settings={chartSettingsSummary}>
+      <D3ChartWrapper
+        className="min-h-[600px] flex-1"
+        settings={chartSettingsSummary}
+      >
         {(dms) => (
           <D3ChartSimulatorSummary data={data} bounds={bounds} dms={dms} />
         )}
