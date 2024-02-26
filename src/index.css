@@ -13,10 +13,19 @@
 }
 
 @layer base {
+
   html,
   body,
   #root {
     @apply text-body bg-body font-gt-america w-full min-h-screen;
+  }
+
+  /** Some Browsers set outline on :focus instead of :focus-visible for svg element */
+  svg *:focus {
+    outline: none;
+  }
+  svg *:focus-visible {
+    outline: 1px solid white;
   }
 
   .h-screen-mobile {

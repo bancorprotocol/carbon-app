@@ -25,7 +25,7 @@ export const D3ChartSimulatorPerformance = ({ dms, data }: Props) => {
     domainTolerance: 0.05,
   });
 
-  if (!dms.width) return null;
+  if (!dms.width || !dms.height) return null;
   return (
     <>
       <D3XAxis ticks={x.ticks} dms={dms} />
