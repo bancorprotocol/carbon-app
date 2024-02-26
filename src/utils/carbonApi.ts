@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { SimulatorResult } from 'libs/queries/extApi/simulator';
+import {
+  SimulatorAPIParams,
+  SimulatorResult,
+} from 'libs/queries/extApi/simulator';
 import {
   TokenPriceHistoryResult,
   TokenPriceHistorySearch,
 } from 'libs/queries/extApi/tokenPrice';
-import { SimulatorResultSearch } from 'libs/routing';
 import config from 'config';
 
 export const AVAILABLE_CURRENCIES = [
@@ -66,7 +68,7 @@ const carbonApi = {
     return data;
   },
   getSimulator: async (
-    params: SimulatorResultSearch
+    params: SimulatorAPIParams
   ): Promise<SimulatorResult> => {
     const { data } = await newApiAxios.get<SimulatorResult>(
       'simulate-create-strategy',

@@ -43,6 +43,7 @@ interface LocalStorageSchema {
   isUncheckedSigner: boolean;
   hasSeenRestrictedCountryModal: boolean;
   hasSeenCreateStratExpertMode: boolean;
+  simDisclaimerLastSeen: number;
 }
 
 export const lsService = new ManagedLocalStorage<LocalStorageSchema>((key) =>

@@ -94,6 +94,10 @@ export const validAddress = v.string([
     }
   }),
 ]);
+export const validBoolean = v.string([
+  v.custom((value) => value === 'true' || value === 'false'),
+]);
+
 export const validateSearchParams = <T>(
   validator: SearchParamsValidator<T>
 ) => {

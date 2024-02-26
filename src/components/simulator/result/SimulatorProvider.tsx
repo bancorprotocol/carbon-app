@@ -1,3 +1,4 @@
+import { useTokens } from 'hooks/useTokens';
 import { SimulatorData, SimulatorReturn, useGetSimulator } from 'libs/queries';
 import { useSearch } from 'libs/routing';
 import { isNil } from 'lodash';
@@ -59,8 +60,8 @@ export type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulator/result' });
-
   const query = useGetSimulator(search);
+  const tokens = useTokens();
   const [animationData, setAnimationData] = useState<SimulatorData[]>([]);
   const [timer, setTimer] = useState('');
   const status = useRef<SimulationStatus>('idle');
@@ -145,9 +146,9 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         pauseToggle,
         end,
         status: status.current,
-        isLoading: query.isLoading,
+        isLoading: query.isLoading || tokens.isLoading,
         isSuccess: query.isSuccess,
-        isError: query.isError,
+        isError: query.isError || tokens.isError,
         timer,
         playbackSpeed: playbackSpeed.current,
         setPlaybackSpeed,

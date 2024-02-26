@@ -4,9 +4,10 @@ import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
 import { useStrategyInput } from 'hooks/useStrategyInput';
 import { useSimulator } from 'components/simulator/result/SimulatorProvider';
 import { useSearch } from 'libs/routing';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { wait } from 'utils/helpers';
+import { THREE_SECONDS_IN_MS } from 'utils/time';
 
 export const SimulatorResultPage = () => {
   const ctx = useSimulator();
@@ -14,15 +15,19 @@ export const SimulatorResultPage = () => {
   const { state } = useStrategyInput({ searchState });
   const simulationType = 'recurring';
 
-  useEffect(() => {
+  const handleAnimationStart = useCallback(() => {
     if (!ctx.isSuccess || ctx.status === 'running' || ctx.status === 'ended') {
       return;
     }
 
-    wait(3000).then(() => {
+    wait(THREE_SECONDS_IN_MS).then(() => {
       ctx.start();
     });
   }, [ctx]);
+
+  useEffect(() => {
+    handleAnimationStart();
+  }, [handleAnimationStart]);
 
   return (
     <div className="p-20">

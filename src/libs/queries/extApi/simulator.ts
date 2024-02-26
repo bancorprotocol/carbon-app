@@ -56,7 +56,12 @@ export type SimulatorReturn = {
   gains?: number;
 };
 
-export const useGetSimulator = (params: SimulatorResultSearch) => {
+export type SimulatorAPIParams = Omit<
+  SimulatorResultSearch,
+  'buyIsRange' | 'sellIsRange'
+>;
+
+export const useGetSimulator = (params: SimulatorAPIParams) => {
   return useQuery<SimulatorReturn, Error>(
     QueryKey.simulator(params),
     async () => {
