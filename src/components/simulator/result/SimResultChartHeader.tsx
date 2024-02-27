@@ -22,10 +22,10 @@ interface Props {
 }
 
 export const datePickerPresets: DatePickerPreset[] = [
-  { label: 'Last 7 days', days: 7 },
-  { label: 'Last 30 days', days: 30 },
-  { label: 'Last 90 days', days: 90 },
-  { label: 'Last 365 days', days: 365 },
+  { label: 'Last 7 days', days: 6 },
+  { label: 'Last 30 days', days: 29 },
+  { label: 'Last 90 days', days: 89 },
+  { label: 'Last 365 days', days: 364 },
 ];
 
 export const datePickerDisabledDays = [
