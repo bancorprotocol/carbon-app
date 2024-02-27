@@ -27,7 +27,7 @@ export const SimResultChartSummary = ({
   quoteToken,
 }: Props) => {
   return (
-    <>
+    <div data-testid="chart-summary">
       <hr className="border-emphasis" />
       <div className="flex w-full flex-row">
         <div className="relative flex w-30 flex-shrink-0 items-center justify-center border-r border-emphasis font-mono text-12 text-white/60">
@@ -48,6 +48,6 @@ export const SimResultChartSummary = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

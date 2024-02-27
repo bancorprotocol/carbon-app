@@ -18,7 +18,7 @@ export const ModalSimulatorDisclaimer: ModalFC<
     'text-secondary flex w-full items-center justify-center text-center';
 
   return (
-    <ModalOrMobileSheet id={id}>
+    <ModalOrMobileSheet id={id} data-testid="sim-disclaimer-modal">
       <IconTitleText
         icon={<IconBookmark className="h-24 w-24 text-white" />}
         title="Simulator Disclaimer"
@@ -45,6 +45,7 @@ export const ModalSimulatorDisclaimer: ModalFC<
           onConfirm();
           closeModal(id);
         }}
+        data-testid="clear-sim-disclaimer"
       >
         I Understand
       </Button>

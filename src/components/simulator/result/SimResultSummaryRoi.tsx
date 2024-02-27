@@ -37,6 +37,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
         to={portfolioRoi}
         formatFn={portfolioRoiFormatter}
         duration={2}
+        data-testid="summary-roi"
       />
     </article>
   );

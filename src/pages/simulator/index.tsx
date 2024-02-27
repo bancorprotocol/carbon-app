@@ -76,7 +76,10 @@ export const SimulatorPage = () => {
           bounds={bounds}
         />
 
-        <div className="absolute top-0 w-[440px] space-y-20">
+        <div
+          className="absolute top-0 w-[440px] space-y-20"
+          data-testid="create-simulation-form"
+        >
           <SimInputTokenSelection
             base={state.baseToken}
             quote={state.quoteToken}

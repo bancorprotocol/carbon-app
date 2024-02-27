@@ -191,7 +191,7 @@ export const D3ChartCandlesticks = (props: Props) => {
   ]);
 
   return (
-    <svg width={dms.width} height={dms.height}>
+    <svg width={dms.width} height={dms.height} data-testid="price-chart">
       <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
         <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
 

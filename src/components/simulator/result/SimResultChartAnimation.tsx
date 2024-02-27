@@ -47,7 +47,7 @@ export const SimResultChartAnimation = ({
   quoteToken,
 }: Props) => {
   return (
-    <>
+    <div data-testid="chart-animation">
       <D3ChartWrapper
         settings={chartSettings}
         className="border-t border-emphasis"
@@ -79,6 +79,6 @@ export const SimResultChartAnimation = ({
           )}
         </D3ChartWrapper>
       </div>
-    </>
+    </div>
   );
 };

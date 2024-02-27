@@ -42,6 +42,7 @@ export const SimResultSummaryGains: FC<Props> = ({
         to={portfolioGains}
         formatFn={portfolioGainsFormatter}
         duration={2}
+        data-testid="summary-gains"
       />
     </article>
   );

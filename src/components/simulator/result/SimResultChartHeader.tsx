@@ -36,7 +36,10 @@ export const SimResultChartHeader = ({
         <span className="flex h-24 w-24 items-center justify-center rounded-[12px] bg-white/10">
           <CalendarIcon className="h-12 w-12" />
         </span>
-        <span className="justify-self-end text-14 text-white/80">
+        <span
+          className="justify-self-end text-14 text-white/80"
+          data-testid="simulation-dates"
+        >
           {startDate} – {endDate}
         </span>
       </article>
