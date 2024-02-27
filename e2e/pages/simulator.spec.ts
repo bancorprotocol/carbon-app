@@ -32,7 +32,7 @@ const testCases: CreateStrategyTestCase[] = [
     output: {
       roi: '-79.93%',
       estimatedGains: 'DAI -25,492.02',
-      date: 'March 02, 2023 – February 25, 2024',
+      date: 'March 02, 2023 - February 25, 2024',
       buy: {
         rate: '1,500.00 - 1,600.00 DAI per ETH',
         budget: '2,000.00 DAI',
