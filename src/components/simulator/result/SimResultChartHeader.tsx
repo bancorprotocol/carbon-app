@@ -40,7 +40,7 @@ export const SimResultChartHeader = ({
           className="justify-self-end text-14 text-white/80"
           data-testid="simulation-dates"
         >
-          {startDate} – {endDate}
+          {startDate} - {endDate}
         </span>
       </article>
       {!showSummary && <SimResultChartControls />}
