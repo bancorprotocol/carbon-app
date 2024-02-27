@@ -44,11 +44,11 @@ export const mockApi = async (page: Page) => {
     const buyIsRange = url.searchParams.get('buyIsRange');
     const buyMin = url.searchParams.get('buyMin');
     const buyMax = url.searchParams.get('buyMax');
+    const buyBudget = url.searchParams.get('buyBudget');
     const sellIsRange = url.searchParams.get('sellIsRange');
     const sellMin = url.searchParams.get('sellMin');
     const sellMax = url.searchParams.get('sellMax');
-    const baseBudget = url.searchParams.get('buyBudget');
-    const quoteBudget = url.searchParams.get('sellBudget');
+    const sellBudget = url.searchParams.get('sellBudget');
     const start = url.searchParams.get('start');
     const end = url.searchParams.get('end');
     const simulateCreateStrategyId = _.join(
@@ -57,14 +57,13 @@ export const mockApi = async (page: Page) => {
         quoteToken,
         buyMin,
         buyMax,
+        buyBudget,
         sellMin,
         sellMax,
-        baseBudget,
-        quoteBudget,
+        sellBudget,
       ],
       '-'
     );
-
     // If unexpected behavior, let the real server handle that
     if (
       !baseToken ||
@@ -72,11 +71,11 @@ export const mockApi = async (page: Page) => {
       !buyIsRange ||
       !buyMin ||
       !buyMax ||
+      !buyBudget ||
       !sellIsRange ||
       !sellMin ||
       !sellMax ||
-      !baseBudget ||
-      !quoteBudget ||
+      !sellBudget ||
       !start ||
       !end ||
       !simulatorResult[simulateCreateStrategyId]
@@ -84,7 +83,7 @@ export const mockApi = async (page: Page) => {
       return route.continue();
     }
     const data = simulatorResult[simulateCreateStrategyId];
-    return route.fulfill({ json: { data } });
+    return route.fulfill({ json: data });
   });
   // E2E should be allowed in production mode (CI)
   await page.route('/api/check', (route) => {
