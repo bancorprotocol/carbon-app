@@ -1,9 +1,13 @@
 import { redirect, Route } from '@tanstack/react-router';
 import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
+import dayjs from 'dayjs';
 import { rootRoute } from 'libs/routing/routes/root';
+import { validAddress, validBoolean, validNumber } from 'libs/routing/utils';
 import { SimulatorPage } from 'pages/simulator';
 import { SimulatorResultPage } from 'pages/simulator/result';
 import { config } from 'services/web3/config';
+import { roundSearchParam, stringToBoolean } from 'utils/helpers';
+import * as v from 'valibot';
 
 export const simulatorRootRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -21,6 +25,8 @@ export interface StrategyInputSearch {
   buyMin?: string;
   buyBudget?: string;
   buyIsRange?: boolean;
+  start?: string;
+  end?: string;
 }
 
 export const simulatorRedirect = new Route({
@@ -46,27 +52,61 @@ export const simulatorInputRoute = new Route({
     return { simulationType: params.simulationType as SimulatorType };
   },
   validateSearch: (search: Record<string, string>): StrategyInputSearch => {
+    const start =
+      Number(search.start) > 0
+        ? search.start
+        : dayjs().subtract(1, 'year').unix().toString();
+    const end = Number(search.end) > 0 ? search.end : dayjs().unix().toString();
+
+    if (Number(start) >= Number(end)) {
+      throw new Error('Invalid date range');
+    }
+
+    const baseToken = v.is(validAddress, search.baseToken)
+      ? search.baseToken
+      : config.tokens.ETH;
+    const quoteToken = v.is(validAddress, search.quoteToken)
+      ? search.quoteToken
+      : config.tokens.USDC;
+    const sellMax = v.is(validNumber, search.sellMax)
+      ? roundSearchParam(search.sellMax)
+      : '';
+    const sellMin = v.is(validNumber, search.sellMin)
+      ? roundSearchParam(search.sellMin)
+      : '';
+    const sellBudget = v.is(validNumber, search.sellBudget)
+      ? roundSearchParam(search.sellBudget)
+      : '';
+    const buyMax = v.is(validNumber, search.buyMax)
+      ? roundSearchParam(search.buyMax)
+      : '';
+    const buyMin = v.is(validNumber, search.buyMin)
+      ? roundSearchParam(search.buyMin)
+      : '';
+    const buyBudget = v.is(validNumber, search.buyBudget)
+      ? roundSearchParam(search.buyBudget)
+      : '';
+    const sellIsRange = stringToBoolean(search.sellIsRange, true);
+    const buyIsRange = stringToBoolean(search.buyIsRange, true);
+
     return {
-      baseToken: search.baseToken || config.tokens.ETH,
-      quoteToken: search.quoteToken || config.tokens.USDC,
-      sellMax: search.sellMax,
-      sellMin: search.sellMin,
-      sellBudget: search.sellBudget,
-      buyMax: search.buyMax,
-      buyMin: search.buyMin,
-      buyBudget: search.buyBudget,
-      sellIsRange:
-        search.sellIsRange === undefined ? true : Boolean(search.sellIsRange),
-      buyIsRange:
-        search.buyIsRange === undefined ? true : Boolean(search.buyIsRange),
+      baseToken,
+      quoteToken,
+      sellMax: sellIsRange ? sellMax : sellMin,
+      sellMin,
+      sellBudget,
+      buyMax: buyIsRange ? buyMax : buyMin,
+      buyMin,
+      buyBudget,
+      sellIsRange,
+      buyIsRange,
+      start,
+      end,
     };
   },
 });
 
-export interface SimulatorResultSearch extends StrategyInputSearch {
-  start: string;
-  end: string;
-}
+export type SimulatorResultSearch = Required<StrategyInputSearch>;
 
 export const simulatorResultRoute = new Route({
   getParentRoute: () => simulatorRootRoute,
@@ -86,35 +126,35 @@ export const simulatorResultRoute = new Route({
     if (Number(search.start) >= Number(search.end)) {
       throw new Error('Invalid date range');
     }
-    if (!search.baseToken.toLowerCase().startsWith('0x')) {
+    if (!v.is(validAddress, search.baseToken)) {
       throw new Error('Invalid base token');
     }
-    if (search.baseToken.length !== 42) {
-      throw new Error('Invalid base token');
+    if (!v.is(validAddress, search.quoteToken)) {
+      throw new Error('Invalid quote token');
     }
-    if (!search.quoteToken.toLowerCase().startsWith('0x')) {
-      throw new Error('Invalid base token');
-    }
-    if (search.quoteToken.length !== 42) {
-      throw new Error('Invalid base token');
-    }
-    if (isNaN(Number(search.sellBudget))) {
+    if (!v.is(validNumber, search.sellBudget)) {
       throw new Error('Invalid base budget');
     }
-    if (isNaN(Number(search.buyBudget))) {
+    if (!v.is(validNumber, search.buyBudget)) {
       throw new Error('Invalid quote budget');
     }
-    if (isNaN(Number(search.sellMax))) {
+    if (!v.is(validNumber, search.sellMax)) {
       throw new Error('Invalid sell max');
     }
-    if (isNaN(Number(search.sellMin))) {
+    if (!v.is(validNumber, search.sellMin)) {
       throw new Error('Invalid sell min');
     }
-    if (isNaN(Number(search.buyMax))) {
+    if (!v.is(validNumber, search.buyMax)) {
       throw new Error('Invalid buy max');
     }
-    if (isNaN(Number(search.buyMin))) {
+    if (!v.is(validNumber, search.buyMin)) {
       throw new Error('Invalid buy min');
+    }
+    if (!v.is(validBoolean, search.sellIsRange)) {
+      throw new Error('Invalid sell is range');
+    }
+    if (!v.is(validBoolean, search.buyIsRange)) {
+      throw new Error('Invalid buy is range');
     }
 
     return {
@@ -124,12 +164,12 @@ export const simulatorResultRoute = new Route({
       quoteToken: search.quoteToken.toLowerCase(),
       sellMax: search.sellMax,
       sellMin: search.sellMin,
-      sellBudget: search.sellBudget,
-      sellIsRange: Boolean(search.sellIsRange),
+      sellBudget: search.sellBudget || '0',
+      sellIsRange: stringToBoolean(search.sellIsRange),
       buyMax: search.buyMax,
       buyMin: search.buyMin,
-      buyBudget: search.buyBudget,
-      buyIsRange: Boolean(search.buyIsRange),
+      buyBudget: search.buyBudget || '0',
+      buyIsRange: stringToBoolean(search.buyIsRange),
     };
   },
   // @ts-ignore

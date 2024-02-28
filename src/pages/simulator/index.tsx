@@ -5,58 +5,36 @@ import { SimInputOverlapping } from 'components/simulator/input/SimInputOverlapp
 import { SimInputRecurring } from 'components/simulator/input/SimInputRecurring';
 import { SimInputStrategyType } from 'components/simulator/input/SimInputStrategyType';
 import { SimInputTokenSelection } from 'components/simulator/input/SimInputTokenSelection';
-import dayjs from 'dayjs';
-import { useSimulatorInput } from 'hooks/useSimulatorInput';
-import { useEffect, useRef, useState } from 'react';
-import { useModal } from 'hooks/useModal';
-import { useStore } from 'store';
-import { cn } from 'utils/helpers';
+import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
 import { useBreakpoints } from 'hooks/useBreakpoints';
+import { useSimulatorInput } from 'hooks/useSimulatorInput';
+import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
+import { useState } from 'react';
+import { cn } from 'utils/helpers';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 
 export const SimulatorPage = () => {
+  useSimDisclaimer();
   const { aboveBreakpoint } = useBreakpoints();
-  const { simDisclaimerLastSeen, setSimDisclaimerLastSeen } = useStore();
-  const [timeRange] = useState({
-    start: dayjs().unix() - 60 * 60 * 24 * 30 * 12,
-    end: dayjs().unix(),
-  });
-
   const { simulationType } = useParams({ from: '/simulator/$simulationType' });
   const searchState = useSearch({
     from: '/simulator/$simulationType',
   });
   const { dispatch, state, bounds } = useSimulatorInput({ searchState });
+  const { data, isLoading, isError } = useGetTokenPriceHistory({
+    baseToken: state.baseToken?.address,
+    quoteToken: state.quoteToken?.address,
+    start: state.start,
+    end: state.end,
+  });
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
-
-  const { openModal } = useModal();
-  const hasOpenedDisclaimer = useRef(false);
 
   const inputError =
     Number(state.buy.budget) + Number(state.sell.budget) <= 0
       ? 'Please add Sell and/or Buy budgets'
       : null;
-
-  useEffect(() => {
-    if (!aboveBreakpoint('md')) return;
-    const showDisclaimer =
-      !simDisclaimerLastSeen ||
-      simDisclaimerLastSeen <= dayjs().unix() - 15 * 60 * 1000;
-    if (!showDisclaimer) return;
-    if (!hasOpenedDisclaimer.current) {
-      openModal('simulatorDisclaimer', {
-        onConfirm: () => setSimDisclaimerLastSeen(dayjs().unix()),
-      });
-      hasOpenedDisclaimer.current = true;
-    }
-  }, [
-    aboveBreakpoint,
-    openModal,
-    setSimDisclaimerLastSeen,
-    simDisclaimerLastSeen,
-  ]);
 
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
@@ -64,20 +42,9 @@ export const SimulatorPage = () => {
     <>
       <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
 
-      <div className="relative px-20">
-        <SimInputChart
-          timeRange={timeRange}
-          state={state}
-          dispatch={dispatch}
-          initBuyRange={initBuyRange}
-          initSellRange={initSellRange}
-          setInitBuyRange={setInitBuyRange}
-          setInitSellRange={setInitSellRange}
-          bounds={bounds}
-        />
-
+      <div className="flex gap-20 px-20">
         <div
-          className="absolute top-0 w-[440px] space-y-20"
+          className="flex w-[440px] flex-col gap-20"
           data-testid="create-simulation-form"
         >
           <SimInputTokenSelection
@@ -90,7 +57,11 @@ export const SimulatorPage = () => {
           <SimInputStrategyType strategyType={simulationType} />
 
           {simulationType === 'recurring' ? (
-            <SimInputRecurring state={state} dispatch={dispatch} />
+            <SimInputRecurring
+              state={state}
+              dispatch={dispatch}
+              firstHistoricPricePoint={data?.[0]}
+            />
           ) : (
             <SimInputOverlapping />
           )}
@@ -110,8 +81,8 @@ export const SimulatorPage = () => {
                 sellMax: state.sell.max,
                 sellBudget: state.sell.budget,
                 sellIsRange: state.sell.isRange,
-                start: timeRange.start.toString(),
-                end: timeRange.end.toString(),
+                start: state.start!,
+                end: state.end!,
               }}
               className={cn(
                 buttonStyles({
@@ -125,6 +96,19 @@ export const SimulatorPage = () => {
             </Link>
           )}
         </div>
+
+        <SimInputChart
+          data={data}
+          isLoading={isLoading}
+          isError={isError}
+          state={state}
+          dispatch={dispatch}
+          initBuyRange={initBuyRange}
+          initSellRange={initSellRange}
+          setInitBuyRange={setInitBuyRange}
+          setInitSellRange={setInitSellRange}
+          bounds={bounds}
+        />
       </div>
     </>
   );

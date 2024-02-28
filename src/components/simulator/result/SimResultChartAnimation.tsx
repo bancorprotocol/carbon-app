@@ -5,6 +5,7 @@ import { D3ChartSettingsProps } from 'libs/d3';
 import { D3ChartWrapper } from 'libs/d3/D3ChartWrapper';
 import { SimulatorBounds, SimulatorData } from 'libs/queries';
 import { Token } from 'libs/tokens';
+import { useState } from 'react';
 
 const chartSettings: D3ChartSettingsProps = {
   width: 0,
@@ -46,28 +47,30 @@ export const SimResultChartAnimation = ({
   baseToken,
   quoteToken,
 }: Props) => {
+  const [displayBalance, setDisplayBalance] = useState(true);
+  const gridCols = displayBalance ? 'grid-cols-2' : 'grid-cols-[1fr_80px]';
   return (
     <div data-testid="chart-animation">
       <D3ChartWrapper
         settings={chartSettings}
-        className="border-t border-emphasis"
+        className="min-h-[350px] w-full border-t border-emphasis"
       >
         {(dms) => (
           <D3ChartSimulatorPrice data={data} bounds={bounds!} dms={dms} />
         )}
       </D3ChartWrapper>
 
-      <div className="grid grid-cols-2">
+      <div className={`grid ${gridCols} min-h-[250px] items-stretch`}>
         <D3ChartWrapper
           settings={chartPerformanceSettings}
-          className="border-t border-r border-emphasis"
+          className="w-full border-t border-r border-emphasis"
         >
           {(dms) => <D3ChartSimulatorPerformance data={data} dms={dms} />}
         </D3ChartWrapper>
 
         <D3ChartWrapper
           settings={chartSettingsBalance}
-          className="border-t border-emphasis"
+          className="w-full border-t border-emphasis"
         >
           {(dms) => (
             <D3ChartSimulatorBalance
@@ -75,6 +78,8 @@ export const SimResultChartAnimation = ({
               dms={dms}
               baseToken={baseToken}
               quoteToken={quoteToken}
+              isVisible={displayBalance}
+              setIsVisible={setDisplayBalance}
             />
           )}
         </D3ChartWrapper>

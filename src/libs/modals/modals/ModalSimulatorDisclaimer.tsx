@@ -38,6 +38,10 @@ export const ModalSimulatorDisclaimer: ModalFC<
         accuracy or completeness of the information herein, and for any reliance
         on, or use of this material in any way.
       </p>
+      <p className={paragraphClassName}>
+        Tax and rebase tokens are not supported.
+      </p>
+
       <Button
         variant="white"
         fullWidth

@@ -27,6 +27,14 @@ export const SimInputTokenSelection: FC<Props> = ({
     if (base && quote) {
       dispatch('baseToken', quote.address);
       dispatch('quoteToken', base.address);
+      dispatch('buyMax', '');
+      dispatch('buyMin', '');
+      dispatch('sellMax', '');
+      dispatch('sellMin', '');
+      dispatch('buyBudget', '');
+      dispatch('sellBudget', '');
+      setInitBuyRange(true);
+      setInitSellRange(true);
     }
   };
 
@@ -39,7 +47,17 @@ export const SimInputTokenSelection: FC<Props> = ({
         <h2 className="m-0 text-18 font-weight-500">Token Pair</h2>
         <Tooltip
           iconClassName="h-18 w-18 text-white/60"
-          element={<div>TBD</div>}
+          element={
+            <p>
+              Selecting the tokens you would like to create a simulation for.
+              <br />
+              <b>Buy or Sell</b> token (also called <b>Base</b> token) is the
+              token you would like to buy or sell in the strategy.
+              <br />
+              <b>With</b> token (also called <b>Quote</b> token) is the token
+              you would denominate the rates in.
+            </p>
+          }
         />
       </header>
       <article className="flex flex-row items-center -space-x-10 font-weight-500">
@@ -50,7 +68,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           description={
             <span
               className={`${
-                base ? 'text-white/30' : 'text-black'
+                base ? 'text-white/60' : 'text-black'
               } font-weight-500`}
             >
               Buy or Sell
@@ -90,7 +108,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           description={
             <span
               className={`${
-                quote ? 'text-white/30' : 'text-black'
+                quote ? 'text-white/60' : 'text-black'
               } font-weight-500`}
             >
               With

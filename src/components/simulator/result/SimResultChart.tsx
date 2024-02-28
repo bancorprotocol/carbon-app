@@ -17,28 +17,11 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
   const [showSummary, setShowSummary] = useState(false);
 
   if (ctx.isError) {
-    return (
-      <div className="flex h-[400px] items-center justify-center rounded-10 bg-black py-10">
-        <div className="max-w-1/3 flex flex-col items-center justify-center space-y-10 rounded-10 border border-red bg-red/30 p-20">
-          <div className="text-24 font-weight-500">Error</div>
-          <div className="text-center font-weight-500">
-            Something went wrong.
-            <br /> Please try again or contact support.
-          </div>
-          <div className="text-12 text-red/80">
-            {ctx.errorMsg ?? 'Unknown internal error'}
-          </div>
-        </div>
-      </div>
-    );
+    return <Error msg={ctx.errorMsg} />;
   }
 
   if (ctx.isLoading || ctx.status === 'idle') {
-    return (
-      <div className="flex h-[400px] items-center justify-center rounded-10 bg-black py-10">
-        <CarbonLogoLoading className="h-[100px]" />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -66,6 +49,27 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           quoteToken={state.quoteToken!}
         />
       )}
+    </div>
+  );
+};
+
+const Loading = () => (
+  <div className="grid h-[400px] place-items-center rounded-10 bg-black py-10">
+    <CarbonLogoLoading className="h-[100px]" />
+  </div>
+);
+
+const Error = ({ msg }: { msg?: string }) => {
+  return (
+    <div className="grid h-[400px] place-items-center rounded-10 bg-black py-10">
+      <article className="max-w-1/3 flex flex-col items-center justify-center space-y-10 rounded-10 border border-red bg-red/30 p-20">
+        <h3 className="text-24 font-weight-500">Error</h3>
+        <p className="text-center font-weight-500">
+          Something went wrong.
+          <br /> Please try again or contact support.
+        </p>
+        <p className="text-12 text-red/80">{msg ?? 'Unknown internal error'}</p>
+      </article>
     </div>
   );
 };

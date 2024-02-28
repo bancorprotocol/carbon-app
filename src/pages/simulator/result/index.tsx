@@ -1,35 +1,36 @@
 import { Link } from '@tanstack/react-router';
 import { SimResultChart } from 'components/simulator/result/SimResultChart';
 import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
-import { useStrategyInput } from 'hooks/useStrategyInput';
 import { useSimulator } from 'components/simulator/result/SimulatorProvider';
-import { useSearch } from 'libs/routing';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { wait } from 'utils/helpers';
+import { THREE_SECONDS_IN_MS } from 'utils/time';
 
 export const SimulatorResultPage = () => {
   const ctx = useSimulator();
-  const searchState = useSearch({ from: '/simulator/result' });
-  const { state } = useStrategyInput({ searchState });
   const simulationType = 'recurring';
 
-  useEffect(() => {
+  const handleAnimationStart = useCallback(() => {
     if (!ctx.isSuccess || ctx.status === 'running' || ctx.status === 'ended') {
       return;
     }
 
-    wait(3000).then(() => {
+    wait(THREE_SECONDS_IN_MS).then(() => {
       ctx.start();
     });
   }, [ctx]);
+
+  useEffect(() => {
+    handleAnimationStart();
+  }, [handleAnimationStart]);
 
   return (
     <div className="p-20">
       <Link
         to={'/simulator/$simulationType'}
         params={{ simulationType }}
-        search={searchState}
+        search={ctx.search}
         className="mb-16 flex items-center text-24 font-weight-500"
       >
         <div className="mr-16 flex h-40 w-40 items-center justify-center rounded-full bg-emphasis">
@@ -39,17 +40,15 @@ export const SimulatorResultPage = () => {
       </Link>
 
       <div className="rounded-20 bg-silver p-20">
-        <>
-          <SimResultSummary
-            roi={ctx.roi}
-            gains={ctx.gains}
-            state={state}
-            strategyType={simulationType}
-            isLoading={ctx.isLoading}
-          />
+        <SimResultSummary
+          roi={ctx.roi}
+          gains={ctx.gains}
+          state={ctx.state}
+          strategyType={simulationType}
+          isLoading={ctx.isLoading}
+        />
 
-          <SimResultChart state={state} simulationType={simulationType} />
-        </>
+        <SimResultChart state={ctx.state} simulationType={simulationType} />
       </div>
     </div>
   );

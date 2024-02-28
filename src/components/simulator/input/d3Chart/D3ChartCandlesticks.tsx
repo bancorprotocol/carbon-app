@@ -9,8 +9,8 @@ import {
   D3YAxisRight,
   useLinearScale,
   CandlestickData,
-  D3ChartSettings,
   scaleBand,
+  D3ChartSettings,
 } from 'libs/d3';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
@@ -24,7 +24,7 @@ export type ChartPrices = {
 export type OnPriceUpdates = (props: ChartPrices) => void;
 
 interface Props {
-  dms: D3ChartSettings;
+  className?: string;
   data: CandlestickData[];
   prices: ChartPrices;
   onPriceUpdates: OnPriceUpdates;
@@ -32,11 +32,12 @@ interface Props {
   bounds: ChartPrices;
   onDragEnd?: OnPriceUpdates;
   isLimit: { buy: boolean; sell: boolean };
+  dms: D3ChartSettings;
 }
 
 export const D3ChartCandlesticks = (props: Props) => {
+  const { dms } = props;
   const {
-    dms,
     data,
     prices,
     onPriceUpdates,
@@ -190,48 +191,43 @@ export const D3ChartCandlesticks = (props: Props) => {
     y,
   ]);
 
+  if (!dms.width || !dms.height) return null;
   return (
-    <svg width={dms.width} height={dms.height} data-testid="price-chart">
-      <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
-        <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
-
-        <D3YAxisRight
-          ticks={y.ticks}
+    <>
+      <Candlesticks xScale={xScale} yScale={y.scale} data={data} />
+      <D3YAxisRight
+        ticks={y.ticks}
+        dms={dms}
+        formatter={(value) => prettifyNumber(value)}
+      />
+      <XAxis xScale={xScale} dms={dms} />
+      {marketPrice && (
+        <D3ChartHandleLine
           dms={dms}
-          formatter={(value) => prettifyNumber(value)}
+          color="white"
+          y={y.scale(marketPrice)}
+          lineProps={{ strokeDasharray: 2 }}
+          label={labels.marketPrice}
         />
-        <XAxis xScale={xScale} dms={dms} />
-
-        {marketPrice && (
-          <D3ChartHandleLine
-            dms={dms}
-            color="white"
-            y={y.scale(marketPrice)}
-            lineProps={{ strokeDasharray: 2 }}
-            label={labels.marketPrice}
-          />
-        )}
-
-        <DragablePriceRange
-          type="buy"
-          onMinMaxChange={onMinMaxChange}
-          labels={labels.buy}
-          yPos={yPos.buy}
-          dms={dms}
-          onDragEnd={onMinMaxChangeEnd}
-          isLimit={isLimit.buy}
-        />
-
-        <DragablePriceRange
-          type="sell"
-          onMinMaxChange={onMinMaxChange}
-          labels={labels.sell}
-          yPos={yPos.sell}
-          dms={dms}
-          isLimit={isLimit.sell}
-          onDragEnd={onMinMaxChangeEnd}
-        />
-      </g>
-    </svg>
+      )}
+      <DragablePriceRange
+        type="buy"
+        onMinMaxChange={onMinMaxChange}
+        labels={labels.buy}
+        yPos={yPos.buy}
+        dms={dms}
+        onDragEnd={onMinMaxChangeEnd}
+        isLimit={isLimit.buy}
+      />
+      <DragablePriceRange
+        type="sell"
+        onMinMaxChange={onMinMaxChange}
+        labels={labels.sell}
+        yPos={yPos.sell}
+        dms={dms}
+        isLimit={isLimit.sell}
+        onDragEnd={onMinMaxChangeEnd}
+      />
+    </>
   );
 };

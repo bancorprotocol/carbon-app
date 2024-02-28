@@ -45,7 +45,6 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
 
 const TooltipContent = () => (
   <>
-    <span className="align-middle">TBD.&nbsp;</span>
     <NewTabLink to={externalLinks.roiLearnMore} className="text-green">
       <span className="align-middle">Learn how ROI is calculated.</span>
       <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />

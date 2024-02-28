@@ -5,10 +5,12 @@ import {
   FC,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
   useRef,
   useState,
 } from 'react';
+import { lsService } from 'services/localeStorage';
 import {
   defaultTradeSettingsStore,
   TradeSettingsStore,
@@ -73,7 +75,7 @@ interface StoreContext {
   toaster: ToastStore;
   debug: DebugStore;
   simDisclaimerLastSeen?: number;
-  setSimDisclaimerLastSeen: Dispatch<SetStateAction<number | undefined>>;
+  setSimDisclaimerLastSeen: (value?: number) => void;
 }
 
 const defaultValue: StoreContext = {
@@ -128,7 +130,18 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const toaster = useToastStore();
   const debug = useDebugStore();
 
-  const [simDisclaimerLastSeen, setSimDisclaimerLastSeen] = useState<number>();
+  const [simDisclaimerLastSeen, _setSimDisclaimerLastSeen] = useState<
+    number | undefined
+  >(lsService.getItem('simDisclaimerLastSeen'));
+
+  const setSimDisclaimerLastSeen = useCallback((value?: number) => {
+    _setSimDisclaimerLastSeen(value);
+    if (value) {
+      lsService.setItem('simDisclaimerLastSeen', value);
+    } else {
+      lsService.removeItem('simDisclaimerLastSeen');
+    }
+  }, []);
 
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,

@@ -1,10 +1,11 @@
 import { D3SimLegend } from 'components/simulator/result/d3Charts/D3SimLegend';
 import { D3SimPriceRange } from 'components/simulator/result/d3Charts/D3SimPriceRange';
+import { defaultLegend } from 'components/simulator/result/d3Charts/utils';
 import { D3XAxis } from 'libs/d3/primitives/D3XAxis';
 import { D3YAxisLeft } from 'libs/d3/primitives/D3YAxisLeft';
 import { D3YAxisRight } from 'libs/d3/primitives/D3YAxisRight';
 import { useLinearScale } from 'libs/d3/useLinearScale';
-import { defaultLegend, getPriceDomain, yRightDomain } from 'libs/d3/utils';
+import { getPriceDomain, yRightDomain } from 'libs/d3/utils';
 import { D3LinePath } from 'libs/d3/primitives/D3LinePath';
 import { D3AxisTick, D3ChartSettings, D3SimLegendEntry } from 'libs/d3/types';
 import { SimulatorReturn } from 'libs/queries/extApi/simulator';
@@ -55,6 +56,8 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
       };
     });
   };
+
+  if (!dms.width || !dms.height) return null;
 
   return (
     <>
