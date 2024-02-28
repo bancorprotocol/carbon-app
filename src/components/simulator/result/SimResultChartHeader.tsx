@@ -76,6 +76,7 @@ export const SimResultChartHeader = ({
   return (
     <section className="flex flex-wrap items-center justify-evenly gap-8 py-20 px-24 md:justify-between">
       {DateRangePickerMemo}
+
       {!showSummary && <SimResultChartControls />}
       <article className="flex flex-wrap items-center justify-center gap-8">
         <SimResultChartTabs
