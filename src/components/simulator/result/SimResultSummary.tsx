@@ -23,9 +23,6 @@ export const SimResultSummary = ({
   strategyType,
   isLoading,
 }: Props) => {
-  const baseToken = state.baseToken!;
-  const quoteToken = state.quoteToken!;
-
   return (
     <header className="my-8 grid gap-8 xl:grid-cols-2">
       <section
@@ -39,15 +36,15 @@ export const SimResultSummary = ({
         {!isLoading && (
           <>
             <SimResultSummaryTokens
-              baseToken={baseToken}
-              quoteToken={quoteToken}
+              baseToken={state.baseToken!}
+              quoteToken={state.quoteToken!}
               strategyType={strategyType}
             />
             <SimResultSummaryTable
               buy={state.buy}
               sell={state.sell}
-              baseToken={baseToken}
-              quoteToken={quoteToken}
+              baseToken={state.baseToken!}
+              quoteToken={state.quoteToken!}
             />
           </>
         )}
@@ -64,14 +61,14 @@ export const SimResultSummary = ({
           <>
             <SimResultSummaryGains
               portfolioGains={gains}
-              quoteToken={quoteToken}
+              quoteToken={state.quoteToken!}
             />
             <SimResultSummaryRoi portfolioRoi={roi} />
             <Link
               to="/strategies/create"
               search={{
-                base: baseToken?.address,
-                quote: quoteToken?.address,
+                base: state.baseToken?.address,
+                quote: state.quoteToken?.address,
                 strategyType:
                   strategyType === 'recurring' ? 'recurring' : undefined,
                 strategySettings:
