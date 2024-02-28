@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import {
   assertDebugToken,
   assertOverlappingTestCase,
@@ -57,34 +57,12 @@ export class CreateSimulationDriver {
     };
   }
 
-  MONTHS = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
   async selectMonthYear(monthYear: string) {
-    let selectedMonth: Locator | undefined;
-
     const findMonthYear = async () => {
       try {
-        selectedMonth = this.page.getByText(monthYear);
+        this.page.getByText(monthYear);
       } catch {
-        //couldn't find month
-        selectedMonth = undefined;
-      }
-
-      if (!selectedMonth) {
-        // Move to next month
+        // Couldn't find month, move to next one
         await this.page.getByTestId('date-picker-left-arrow').click();
         await findMonthYear();
       }
