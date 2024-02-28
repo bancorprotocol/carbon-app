@@ -13,13 +13,12 @@ import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { Button } from 'components/common/button';
 import { getUnixTime, subDays } from 'date-fns';
 
+export const defaultStart = () => getUnixTime(subDays(new Date(), 364));
+export const defaultEnd = () => getUnixTime(new Date());
+
 export const SimulatorPage = () => {
   useSimDisclaimer();
   const { aboveBreakpoint } = useBreakpoints();
-  const [timeRange] = useState({
-    start: getUnixTime(subDays(new Date(), 364).toUTCString()),
-    end: getUnixTime(new Date().toUTCString()),
-  });
 
   const navigate = useNavigate();
   const { simulationType } = useParams({ from: '/simulator/$simulationType' });
@@ -48,6 +47,8 @@ export const SimulatorPage = () => {
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isLoading || isError || noBudget) return;
+    const start = state.start ?? defaultStart();
+    const end = state.end ?? defaultEnd();
     navigate({
       to: '/simulator/result',
       search: {
@@ -61,8 +62,8 @@ export const SimulatorPage = () => {
         sellMax: state.sell.max,
         sellBudget: state.sell.budget,
         sellIsRange: state.sell.isRange,
-        start: timeRange.start.toString(),
-        end: timeRange.end.toString(),
+        start: start.toString(),
+        end: end.toString(),
       },
     });
   };

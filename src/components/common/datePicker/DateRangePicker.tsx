@@ -23,7 +23,6 @@ interface Props {
 
 export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
@@ -31,6 +30,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
         setIsOpen(true);
         attr.onClick(e);
       }}
+      type="button"
       aria-label="Pick date range"
       className="flex items-center gap-8"
     >
@@ -72,6 +72,10 @@ const Content = (props: Props) => {
   const selectedPreset = props.presets?.find((p) => {
     if (!hasDates) return false;
     const from = subDays(now, p.days);
+    console.log({
+      from: from.toString(),
+      start: date.from?.toString(),
+    });
     return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
   });
 

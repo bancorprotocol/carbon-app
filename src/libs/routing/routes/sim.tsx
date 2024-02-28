@@ -1,9 +1,8 @@
 import { redirect, Route } from '@tanstack/react-router';
 import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
-import dayjs from 'dayjs';
 import { rootRoute } from 'libs/routing/routes/root';
 import { validAddress, validBoolean, validNumber } from 'libs/routing/utils';
-import { SimulatorPage } from 'pages/simulator';
+import { defaultEnd, defaultStart, SimulatorPage } from 'pages/simulator';
 import { SimulatorResultPage } from 'pages/simulator/result';
 import { config } from 'services/web3/config';
 import { roundSearchParam, stringToBoolean } from 'utils/helpers';
@@ -53,10 +52,8 @@ export const simulatorInputRoute = new Route({
   },
   validateSearch: (search: Record<string, string>): StrategyInputSearch => {
     const start =
-      Number(search.start) > 0
-        ? search.start
-        : dayjs().subtract(1, 'year').unix().toString();
-    const end = Number(search.end) > 0 ? search.end : dayjs().unix().toString();
+      Number(search.start) > 0 ? search.start : defaultStart().toString();
+    const end = Number(search.end) > 0 ? search.end : defaultEnd().toString();
 
     if (Number(start) >= Number(end)) {
       throw new Error('Invalid date range');
