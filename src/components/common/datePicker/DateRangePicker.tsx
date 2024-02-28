@@ -86,8 +86,8 @@ const Content = (props: Props) => {
     if (!hasDates) return;
     props.setIsOpen(false);
     props.onConfirm({
-      start: getUnixTime(date.from!).toString(),
-      end: getUnixTime(date.to!).toString(),
+      start: getUnixTime(date.from!.toUTCString()).toString(),
+      end: getUnixTime(date.to!.toUTCString()).toString(),
     });
   };
 
