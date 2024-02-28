@@ -17,18 +17,14 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/simulator/input/d3Chart';
-import { CandlestickData } from 'libs/d3';
 import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
+import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 
 interface Props {
-  data?: CandlestickData[];
-  isLoading: boolean;
-  isError: boolean;
   state: StrategyInputValues;
   dispatch: SimulatorInputDispatch;
   initBuyRange: boolean;
@@ -36,6 +32,9 @@ interface Props {
   setInitBuyRange: Dispatch<SetStateAction<boolean>>;
   setInitSellRange: Dispatch<SetStateAction<boolean>>;
   bounds: ChartPrices;
+  data?: CandlestickData[];
+  isLoading: boolean;
+  isError: boolean;
 }
 
 const chartSettings: D3ChartSettingsProps = {
@@ -48,9 +47,6 @@ const chartSettings: D3ChartSettingsProps = {
 };
 
 export const SimInputChart = ({
-  data,
-  isLoading,
-  isError,
   state,
   dispatch,
   initBuyRange,
@@ -58,6 +54,9 @@ export const SimInputChart = ({
   setInitBuyRange,
   setInitSellRange,
   bounds,
+  isLoading,
+  isError,
+  data,
 }: Props) => {
   const marketPrice = useCompareTokenPrice(
     state.baseToken?.address,
@@ -209,10 +208,10 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
   return (
     <div className="max-w-[340px] self-center justify-self-center">
       <IconTitleText
-        icon={<IconWarning />}
+        icon={<IconPlus />}
         title="Well, this doesn’t happen often..."
         text="Unfortunately, price history for this token is not available and cannot be simulated."
-        variant="error"
+        variant="success"
       />
       <p className="my-20 text-center text-14 text-white/60">
         However, you can{' '}

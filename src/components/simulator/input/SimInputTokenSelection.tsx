@@ -95,6 +95,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           isBaseToken
         />
         <button
+          type="button"
           className="relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] border-silver bg-black"
           onClick={swapTokens}
           disabled={!base || !quote}
