@@ -1,7 +1,13 @@
 import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { subDays, getUnixTime, isSameDay, subMonths } from 'date-fns';
+import {
+  subDays,
+  getUnixTime,
+  isSameDay,
+  subMonths,
+  subMinutes,
+} from 'date-fns';
 import { Dispatch, memo, ReactNode, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
@@ -20,6 +26,12 @@ interface Props {
   presets: DatePickerPreset[];
   options?: Omit<CalendarProps, 'mode' | 'selected' | 'onSelect'>;
 }
+
+/** Get the date to be the same in a the UTC timezone */
+const toUTC = (date: Date) => {
+  const deltaMin = date.getTimezoneOffset();
+  return subMinutes(date, deltaMin);
+};
 
 export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,10 +84,6 @@ const Content = (props: Props) => {
   const selectedPreset = props.presets?.find((p) => {
     if (!hasDates) return false;
     const from = subDays(now, p.days);
-    console.log({
-      from: from.toString(),
-      start: date.from?.toString(),
-    });
     return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
   });
 
@@ -90,8 +98,8 @@ const Content = (props: Props) => {
     if (!hasDates) return;
     props.setIsOpen(false);
     props.onConfirm({
-      start: getUnixTime(date.from!.toUTCString()).toString(),
-      end: getUnixTime(date.to!.toUTCString()).toString(),
+      start: getUnixTime(toUTC(date.from!)).toString(),
+      end: getUnixTime(toUTC(date.to!)).toString(),
     });
   };
 
