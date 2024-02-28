@@ -183,6 +183,7 @@ export const SimInputChart = ({
         <D3ChartWrapper
           settings={chartSettings}
           className="self-stretch rounded-12 bg-black"
+          data-testid="price-chart"
         >
           {(dms) => (
             <D3ChartCandlesticks

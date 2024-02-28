@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import {
   assertDebugToken,
   assertOverlappingTestCase,
@@ -15,13 +15,9 @@ import {
   StrategyType,
 } from './types';
 import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
-import {
-  screenshot,
-  screenshotFullScreen,
-  shouldTakeScreenshot,
-  waitFor,
-} from '../operators';
+import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
+import { dayjs } from '../../../src/libs/dayjs';
 
 export class CreateSimulationDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
@@ -61,9 +57,71 @@ export class CreateSimulationDriver {
     };
   }
 
-  // TODO
-  async fillDates() {
-    return;
+  MONTHS = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  async selectMonthYear(monthYear: string) {
+    let selectedMonth: Locator | undefined;
+
+    const findMonthYear = async () => {
+      try {
+        selectedMonth = this.page.getByText(monthYear);
+      } catch {
+        //couldn't find month
+        selectedMonth = undefined;
+      }
+
+      if (!selectedMonth) {
+        // Move to next month
+        await this.page.getByTestId('date-picker-left-arrow').click();
+        await findMonthYear();
+      }
+      return;
+    };
+    await findMonthYear();
+  }
+
+  async selectDay(day: string, monthYear: string) {
+    const dayButton = this.page
+      .getByLabel(monthYear)
+      .getByText(day, { exact: true });
+    await dayButton.click();
+  }
+
+  parseTimestamp(timestamp: number) {
+    return {
+      day: dayjs(timestamp * 1000).format('DD'),
+      monthYear: dayjs(timestamp * 1000).format('MMMM YYYY'),
+    };
+  }
+
+  async selectDate(timestamp: number) {
+    const { day, monthYear } = this.parseTimestamp(timestamp);
+    await this.selectMonthYear(monthYear);
+    await this.selectDay(day, monthYear);
+  }
+
+  async fillDates(start: number, end: number) {
+    const [from, to] = start <= end ? [start, end] : [end, start];
+
+    await this.page.getByTestId('date-picker-button').click();
+    // Select date twice to force range to be 1 day long
+    await this.selectDate(to);
+    await this.selectDate(to);
+    await this.selectDate(from);
+    await this.page.getByTestId('date-picker-confirm').click();
   }
 
   clearSimulatorDisclaimer() {
@@ -144,7 +202,7 @@ export class CreateSimulationDriver {
       await waitTooltipsClose(this.page);
       const form = this.getForm();
       const path = screenshotPath(this.testCase, 'form');
-      await screenshotFullScreen(form, path);
+      await screenshot(form, path);
       await mainMenu.show();
     }
     return btn.click();
