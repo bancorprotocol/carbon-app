@@ -80,6 +80,7 @@ export const SimulatorPage = () => {
             dispatch={dispatch}
             setInitBuyRange={setInitBuyRange}
             setInitSellRange={setInitSellRange}
+            noPriceHistory={isError}
           />
           {!isError && (
             <>
