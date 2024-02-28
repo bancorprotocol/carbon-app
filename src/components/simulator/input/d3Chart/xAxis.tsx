@@ -1,6 +1,6 @@
 import { ScaleBand } from 'd3';
 import { D3ChartSettings } from 'libs/d3';
-import { dayjs } from 'libs/dayjs';
+import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
 
 type Props = {
   dms: D3ChartSettings;
@@ -11,7 +11,6 @@ export const XAxis = ({ xScale, dms }: Props) => {
   const length = xScale.domain().length;
   const numberOfTicksTarget = Math.max(1, Math.floor(dms.boundedWidth / 80));
   const m = Math.ceil(length / numberOfTicksTarget);
-
   const ticks = xScale
     .domain()
     .filter((_, i) => i % m === m - 1)
@@ -31,11 +30,11 @@ export const XAxis = ({ xScale, dms }: Props) => {
             }}
             dy=".71em"
             y={dms.boundedHeight + 10}
-            fill={'currentColor'}
+            fill="currentColor"
             opacity={0.6}
-            className={'font-mono'}
+            className="font-mono"
           >
-            {dayjs(Number(tickValue) * 1000).format('DD.MM.YY')}
+            {xAxisFormatter.format(fromUnixUTC(tickValue))}
           </text>
         </g>
       );
