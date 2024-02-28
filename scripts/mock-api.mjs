@@ -143,6 +143,35 @@ const addresses = [
   '0xa117000000f279D81A1D3cc75430fAA017FA5A2e',
   '0x15b0dD2c5Db529Ab870915ff498bEa6d20Fb6b96',
 ];
+
+// Add more cases for more mocks
+const historyPricesCases = [
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
+    start: 1677715200, // Thu Mar 02 2023 00:00:00 GMT+0000
+    end: 1708819200, // Sun Feb 25 2024 00:00:00 GMT+0000
+  },
+];
+
+// Add more cases for more mocks
+const simulatorResultCases = [
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
+    buyIsRange: false,
+    buyMin: 1500,
+    buyMax: 1600,
+    buyBudget: 2000,
+    sellIsRange: false,
+    sellMin: 1700,
+    sellMax: 2000,
+    sellBudget: 10,
+    start: 1677715200, // Thu Mar 02 2023 00:00:00 GMT+0000
+    end: 1708819200, // Sun Feb 25 2024 00:00:00 GMT+0000
+  },
+];
+
 const baseUrl = 'https://api.carbondefi.xyz/v1';
 
 const get = async (url) => {
@@ -161,6 +190,45 @@ const getMarketRate = async (address) => {
 
 const getRoi = () => get(`${baseUrl}/roi`);
 
+const getHistoryPrices = async (baseToken, quoteToken, start, end) => {
+  const url = new URL(`${baseUrl}/history/prices`);
+  url.searchParams.set('baseToken', baseToken);
+  url.searchParams.set('quoteToken', quoteToken);
+  url.searchParams.set('start', start);
+  url.searchParams.set('end', end);
+  return get(url);
+};
+
+const getSimulatorData = async (
+  baseToken,
+  quoteToken,
+  buyIsRange,
+  buyMin,
+  buyMax,
+  buyBudget,
+  sellIsRange,
+  sellMin,
+  sellMax,
+  sellBudget,
+  start,
+  end
+) => {
+  const url = new URL(`${baseUrl}/simulate-create-strategy`);
+  url.searchParams.set('baseToken', baseToken);
+  url.searchParams.set('quoteToken', quoteToken);
+  url.searchParams.set('buyIsRange', buyIsRange);
+  url.searchParams.set('buyMin', buyMin);
+  url.searchParams.set('buyMax', buyMax);
+  url.searchParams.set('quoteBudget', buyBudget);
+  url.searchParams.set('sellIsRange', sellIsRange);
+  url.searchParams.set('sellMin', sellMin);
+  url.searchParams.set('sellMax', sellMax);
+  url.searchParams.set('baseBudget', sellBudget);
+  url.searchParams.set('start', start);
+  url.searchParams.set('end', end);
+  return get(url);
+};
+
 async function main() {
   const roi = await getRoi();
 
@@ -172,12 +240,55 @@ async function main() {
   });
   await Promise.allSettled(getAll);
 
+  const historyPrices = {};
+  const getHistoryPricesAll = historyPricesCases.map(async (c) => {
+    const dict = await getHistoryPrices(
+      c.baseToken,
+      c.quoteToken,
+      c.start,
+      c.end
+    );
+    historyPrices[`${c.baseToken}-${c.quoteToken}-${c.start}-${c.end}`] = dict;
+  });
+  await Promise.allSettled(getHistoryPricesAll);
+
+  const simulatorResult = {};
+  const getSimulatorDataAll = simulatorResultCases.map(async (c) => {
+    const dict = await getSimulatorData(
+      c.baseToken,
+      c.quoteToken,
+      c.buyIsRange,
+      c.buyMin,
+      c.buyMax,
+      c.buyBudget,
+      c.sellIsRange,
+      c.sellMin,
+      c.sellMax,
+      c.sellBudget,
+      c.start,
+      c.end
+    );
+    simulatorResult[
+      `${c.baseToken}-${c.quoteToken}-${c.buyMin}-${c.buyMax}-${c.buyBudget}-${c.sellMin}-${c.sellMax}-${c.sellBudget}-${c.start}-${c.end}`
+    ] = dict;
+  });
+  await Promise.allSettled(getSimulatorDataAll);
+
   const folder = join(cwd(), 'e2e/mocks');
   if (!existsSync(folder)) mkdirSync(folder, { recursive: true });
 
   // We do not wrap it into "data" as playwright will do it for us
   writeFileSync(join(folder, 'roi.json'), JSON.stringify(roi));
   writeFileSync(join(folder, 'market-rates.json'), JSON.stringify(rates));
+
+  writeFileSync(
+    join(folder, 'history-prices.json'),
+    JSON.stringify(historyPrices)
+  );
+  writeFileSync(
+    join(folder, 'simulator-result.json'),
+    JSON.stringify(simulatorResult)
+  );
 }
 
 main()

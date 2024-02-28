@@ -44,11 +44,11 @@ export const mockApi = async (page: Page) => {
     const buyIsRange = url.searchParams.get('buyIsRange');
     const buyMin = url.searchParams.get('buyMin');
     const buyMax = url.searchParams.get('buyMax');
-    const buyBudget = url.searchParams.get('buyBudget');
+    const quoteBudget = url.searchParams.get('quoteBudget');
     const sellIsRange = url.searchParams.get('sellIsRange');
     const sellMin = url.searchParams.get('sellMin');
     const sellMax = url.searchParams.get('sellMax');
-    const sellBudget = url.searchParams.get('sellBudget');
+    const baseBudget = url.searchParams.get('baseBudget');
     const start = url.searchParams.get('start');
     const end = url.searchParams.get('end');
     const simulateCreateStrategyId = _.join(
@@ -57,10 +57,12 @@ export const mockApi = async (page: Page) => {
         quoteToken,
         buyMin,
         buyMax,
-        buyBudget,
+        quoteBudget,
         sellMin,
         sellMax,
-        sellBudget,
+        baseBudget,
+        start,
+        end,
       ],
       '-'
     );
@@ -71,11 +73,11 @@ export const mockApi = async (page: Page) => {
       !buyIsRange ||
       !buyMin ||
       !buyMax ||
-      !buyBudget ||
+      !quoteBudget ||
       !sellIsRange ||
       !sellMin ||
       !sellMax ||
-      !sellBudget ||
+      !baseBudget ||
       !start ||
       !end ||
       !simulatorResult[simulateCreateStrategyId]
