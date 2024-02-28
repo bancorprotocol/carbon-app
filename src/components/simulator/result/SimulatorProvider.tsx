@@ -1,6 +1,11 @@
+import {
+  StrategyInputValues,
+  buildStrategyInputState,
+} from 'hooks/useStrategyInput';
 import { useTokens } from 'hooks/useTokens';
 import { SimulatorData, SimulatorReturn, useGetSimulator } from 'libs/queries';
 import { useSearch } from 'libs/routing';
+import { StrategyInputSearch } from 'libs/routing/routes/sim';
 import { isNil } from 'lodash';
 import {
   createContext,
@@ -8,6 +13,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -16,6 +22,8 @@ import { wait } from 'utils/helpers';
 type SimulationStatus = 'running' | 'paused' | 'ended' | 'idle';
 
 interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
+  search: StrategyInputSearch;
+  state: StrategyInputValues;
   status: SimulationStatus;
   start: () => void;
   pauseToggle: () => void;
@@ -60,8 +68,11 @@ export type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const search = useSearch({ from: '/simulator/result' });
-  const query = useGetSimulator(search);
   const tokens = useTokens();
+  const baseToken = tokens.getTokenById(search.baseToken);
+  const quoteToken = tokens.getTokenById(search.quoteToken);
+  const state = buildStrategyInputState(search, baseToken, quoteToken);
+  const query = useGetSimulator(search);
   const [animationData, setAnimationData] = useState<SimulatorData[]>([]);
   const [timer, setTimer] = useState('');
   const status = useRef<SimulationStatus>('idle');
@@ -137,9 +148,16 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
     setAnimationData(query.data?.data || []);
   };
 
+  useEffect(() => {
+    status.current = 'idle';
+    setAnimationData([]);
+  }, [search]);
+
   return (
     <SimulatorCTX.Provider
       value={{
+        search,
+        state,
         ...query.data,
         animationData,
         start,

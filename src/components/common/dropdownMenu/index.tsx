@@ -21,6 +21,8 @@ import {
   useInteractions,
   useRole,
   useTransitionStyles,
+  autoUpdate,
+  Strategy as FloatingStrategy,
 } from '@floating-ui/react';
 import { cn } from 'utils/helpers';
 
@@ -36,6 +38,7 @@ type Props = {
   className?: string;
   placement?: Placement;
   offset?: number;
+  strategy?: FloatingStrategy;
 };
 
 interface MenuCtx {
@@ -53,6 +56,7 @@ export const DropdownMenu: FC<Props> = ({
   isOpen,
   setIsOpen,
   placement,
+  strategy = 'absolute',
   className = '',
   offset: offsetValue = 8,
 }) => {
@@ -66,9 +70,11 @@ export const DropdownMenu: FC<Props> = ({
   // Get properties to calculate positioning
   const { refs, floatingStyles, context } = useFloating({
     placement: placement ?? 'bottom',
+    strategy: strategy,
     open: menuOpen,
     onOpenChange: outsideState ? setIsOpen : setOpen,
     middleware: [offset(offsetValue), flip(), shift()],
+    whileElementsMounted: strategy === 'fixed' ? autoUpdate : undefined,
   });
 
   // Default transition provides a fadein on enter

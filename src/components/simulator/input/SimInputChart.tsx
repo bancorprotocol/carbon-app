@@ -1,7 +1,15 @@
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import {
+  DatePickerButton,
+  DateRangePicker,
+} from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
+import {
+  datePickerDisabledDays,
+  datePickerPresets,
+} from 'components/simulator/result/SimResultChartHeader';
 import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
@@ -9,10 +17,8 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/simulator/input/d3Chart';
-import {
-  useCompareTokenPrice,
-  useGetTokenPriceHistory,
-} from 'libs/queries/extApi/tokenPrice';
+import { CandlestickData } from 'libs/d3';
+import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
@@ -20,7 +26,9 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 
 interface Props {
-  timeRange: { start: number; end: number };
+  data?: CandlestickData[];
+  isLoading: boolean;
+  isError: boolean;
   state: StrategyInputValues;
   dispatch: SimulatorInputDispatch;
   initBuyRange: boolean;
@@ -40,7 +48,9 @@ const chartSettings: D3ChartSettingsProps = {
 };
 
 export const SimInputChart = ({
-  timeRange,
+  data,
+  isLoading,
+  isError,
   state,
   dispatch,
   initBuyRange,
@@ -53,13 +63,6 @@ export const SimInputChart = ({
     state.baseToken?.address,
     state.quoteToken?.address
   );
-
-  const { data, isLoading, isError } = useGetTokenPriceHistory({
-    baseToken: state.baseToken?.address,
-    quoteToken: state.quoteToken?.address,
-    start: timeRange.start,
-    end: timeRange.end,
-  });
 
   const handleDefaultValues = useCallback(
     (type: StrategyDirection) => {
@@ -142,9 +145,29 @@ export const SimInputChart = ({
     [dispatch]
   );
 
+  const onDatePickerConfirm = useCallback(
+    (props: { start: string; end: string }) => {
+      dispatch('start', props.start);
+      dispatch('end', props.end);
+    },
+    [dispatch]
+  );
+
   return (
     <div className="align-stretch sticky top-80 grid h-[calc(100vh-180px)] min-h-[500px] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-silver p-20">
-      <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
+      <div className="mb-20 flex items-center justify-between">
+        <h2 className="mr-20 text-20 font-weight-500">Price Chart</h2>
+        <DateRangePicker
+          defaultStart={state.start}
+          defaultEnd={state.end}
+          onConfirm={onDatePickerConfirm}
+          button={
+            <DatePickerButton startUnix={state.start} endUnix={state.end} />
+          }
+          presets={datePickerPresets}
+          options={{ disabled: datePickerDisabledDays }}
+        />
+      </div>
       {isError && (
         <ErrorMsg
           base={state.baseToken?.address}
