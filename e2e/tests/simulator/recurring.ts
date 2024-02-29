@@ -23,7 +23,11 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await createForm.selectToken('quote');
     await createForm.selectStrategyType('recurring');
     await createForm.fillRecurring();
-    await createForm.fillDates();
+
+    const start = testCase.input.dates.start;
+    const end = testCase.input.dates.end;
+
+    await createForm.fillDates(start, end);
 
     await createForm.waitForPriceChart();
     await createForm.screenshotPriceChart();
