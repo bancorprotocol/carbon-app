@@ -41,6 +41,13 @@ export class TradeDriver {
     return this.form.getByLabel('You Pay').fill(sourceValue);
   }
 
+  async checkSuccess() {
+    await this.page
+      .getByTestId('notification-trade')
+      .getByLabel('Success')
+      .waitFor({ state: 'visible', timeout: 10_000 });
+  }
+
   async openRouting() {
     await this.form.getByTestId('routing').click();
     const modal = await waitFor(this.page, 'modal-container');
