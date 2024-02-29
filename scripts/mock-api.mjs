@@ -7,12 +7,14 @@
  * - E2E tests will likely fail for value based on these mocks, so you'll need to update them.
  * - visual tests will fail too
  *
- * Last ran on 18th Sep 2023
+ * Last ran on 29th Feb 2024
  */
 
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { cwd } from 'process';
+import dayjs from 'dayjs';
+
 // Add more addresses for more mocks
 const addresses = [
   '0x6B175474E89094C44Da98b954EedeAC495271d0F',
@@ -147,28 +149,82 @@ const addresses = [
 // Add more cases for more mocks
 const historyPricesCases = [
   {
-    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
-    start: 1677715200, // Thu Mar 02 2023 00:00:00 GMT+0000
-    end: 1708819200, // Sun Feb 25 2024 00:00:00 GMT+0000
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
+    start: '2023-02-28',
+    end: '2024-02-29',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+    start: '2023-02-28',
+    end: '2024-02-29',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
+    start: '2023-02-28',
+    end: '2024-02-29',
   },
 ];
 
 // Add more cases for more mocks
 const simulatorResultCases = [
   {
-    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f',
-    buyIsRange: false,
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
+    buyIsRange: true,
     buyMin: 1500,
     buyMax: 1600,
     buyBudget: 2000,
-    sellIsRange: false,
+    sellIsRange: true,
     sellMin: 1700,
     sellMax: 2000,
     sellBudget: 10,
-    start: 1677715200, // Thu Mar 02 2023 00:00:00 GMT+0000
-    end: 1708819200, // Sun Feb 25 2024 00:00:00 GMT+0000
+    start: '2023-03-02',
+    end: '2024-02-25',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+    buyIsRange: true,
+    buyMin: 1700,
+    buyMax: 1800,
+    buyBudget: 200,
+    sellIsRange: false,
+    sellMin: 2100,
+    sellMax: 2100,
+    sellBudget: 1,
+    start: '2023-03-10',
+    end: '2024-01-24',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
+    buyIsRange: false,
+    buyMin: 222000000,
+    buyMax: 222000000,
+    buyBudget: 1000000000,
+    sellIsRange: true,
+    sellMin: 240000000,
+    sellMax: 270000000,
+    sellBudget: 1,
+    start: '2023-03-08',
+    end: '2024-01-21',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
+    buyIsRange: false,
+    buyMin: 222000000,
+    buyMax: 222000000,
+    buyBudget: 100000000,
+    sellIsRange: false,
+    sellMin: 240000000,
+    sellMax: 240000000,
+    sellBudget: 10,
+    start: '2023-03-01',
+    end: '2024-02-21',
   },
 ];
 
@@ -181,6 +237,8 @@ const get = async (url) => {
   throw new Error(`[${res.status} ${res.statusText}] ${err.message ?? ''}`);
 };
 
+const convertToUnix = (date) => dayjs(date).unix();
+
 const getMarketRate = async (address) => {
   const url = new URL(`${baseUrl}/market-rate`);
   url.searchParams.set('address', address);
@@ -191,11 +249,13 @@ const getMarketRate = async (address) => {
 const getRoi = () => get(`${baseUrl}/roi`);
 
 const getHistoryPrices = async (baseToken, quoteToken, start, end) => {
+  const startTimestamp = convertToUnix(start);
+  const endTimestamp = convertToUnix(end);
   const url = new URL(`${baseUrl}/history/prices`);
   url.searchParams.set('baseToken', baseToken);
   url.searchParams.set('quoteToken', quoteToken);
-  url.searchParams.set('start', start);
-  url.searchParams.set('end', end);
+  url.searchParams.set('start', startTimestamp);
+  url.searchParams.set('end', endTimestamp);
   return get(url);
 };
 
@@ -213,6 +273,8 @@ const getSimulatorData = async (
   start,
   end
 ) => {
+  const startTimestamp = convertToUnix(start);
+  const endTimestamp = convertToUnix(end);
   const url = new URL(`${baseUrl}/simulate-create-strategy`);
   url.searchParams.set('baseToken', baseToken);
   url.searchParams.set('quoteToken', quoteToken);
@@ -224,8 +286,8 @@ const getSimulatorData = async (
   url.searchParams.set('sellMin', sellMin);
   url.searchParams.set('sellMax', sellMax);
   url.searchParams.set('baseBudget', sellBudget);
-  url.searchParams.set('start', start);
-  url.searchParams.set('end', end);
+  url.searchParams.set('start', startTimestamp);
+  url.searchParams.set('end', endTimestamp);
   return get(url);
 };
 
@@ -248,7 +310,9 @@ async function main() {
       c.start,
       c.end
     );
-    historyPrices[`${c.baseToken}-${c.quoteToken}-${c.start}-${c.end}`] = dict;
+    historyPrices[
+      `${c.baseToken.toLowerCase()}-${c.quoteToken.toLowerCase()}`
+    ] = dict;
   });
   await Promise.allSettled(getHistoryPricesAll);
 
@@ -269,7 +333,11 @@ async function main() {
       c.end
     );
     simulatorResult[
-      `${c.baseToken}-${c.quoteToken}-${c.buyMin}-${c.buyMax}-${c.buyBudget}-${c.sellMin}-${c.sellMax}-${c.sellBudget}-${c.start}-${c.end}`
+      `${c.baseToken.toLowerCase()}-${c.quoteToken.toLowerCase()}-${c.buyMin}-${
+        c.buyMax
+      }-${c.buyBudget}-${c.sellMin}-${c.sellMax}-${
+        c.sellBudget
+      }-${convertToUnix(c.start)}-${convertToUnix(c.end)}`
     ] = dict;
   });
   await Promise.allSettled(getSimulatorDataAll);

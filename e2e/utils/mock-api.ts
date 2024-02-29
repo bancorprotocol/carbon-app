@@ -35,7 +35,10 @@ export const mockApi = async (page: Page) => {
     if (!baseToken || !quoteToken || !start || !end || !data) {
       return route.continue();
     }
-    return route.fulfill({ json: { data } });
+    const filteredData = historyPrices[historyPricesId].filter(
+      (item) => item.timestamp >= start && item.timestamp <= end
+    );
+    return route.fulfill({ json: filteredData });
   });
   await page.route('**/*/simulate-create-strategy?*', (route) => {
     const url = new URL(route.request().url());
