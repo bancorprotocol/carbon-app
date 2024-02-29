@@ -5,11 +5,14 @@ import {
   StrategyInputDispatch,
 } from 'hooks/useStrategyInput';
 import { CandlestickData } from 'libs/d3';
+import { Token } from 'libs/tokens';
 
-const buyWarningMsg =
-  'This budget will be arbitrated in the first step of the simulation, potentially affecting the overall ROI calculation.';
-const sellWarningMsg =
-  'This budget will be arbitrated in the first step of the simulation, potentially affecting the overall ROI calculation.';
+const buyWarningMsg = (base: Token) => {
+  return `The specified buy price for ${base.symbol} is higher than its initial price of the simulation. As a result, your buy budget will be arbitrated in this initial step, potentially impacting the overall ROI calculation.`;
+};
+const sellWarningMsg = (base: Token) => {
+  return `The specified sell price for ${base.symbol} is lower than its initial price of the simulation. As a result, your sell budget will be arbitrated in this initial step, potentially impacting the overall ROI calculation.`;
+};
 
 interface Props {
   state: StrategyInputValues;
@@ -34,8 +37,8 @@ export const SimInputRecurring = ({
     : false;
 
   const warningMsg = {
-    buy: showBuyWarning ? buyWarningMsg : undefined,
-    sell: showSellWarning ? sellWarningMsg : undefined,
+    buy: showBuyWarning ? buyWarningMsg(state.baseToken) : undefined,
+    sell: showSellWarning ? sellWarningMsg(state.baseToken) : undefined,
   };
 
   return (
