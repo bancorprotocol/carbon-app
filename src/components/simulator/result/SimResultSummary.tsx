@@ -33,18 +33,18 @@ export const SimResultSummary = ({
           }
         )}
       >
-        {!isLoading && (
+        {!isLoading && !!state.baseToken && !!state.quoteToken && (
           <>
             <SimResultSummaryTokens
-              baseToken={state.baseToken!}
-              quoteToken={state.quoteToken!}
+              baseToken={state.baseToken}
+              quoteToken={state.quoteToken}
               strategyType={strategyType}
             />
             <SimResultSummaryTable
               buy={state.buy}
               sell={state.sell}
-              baseToken={state.baseToken!}
-              quoteToken={state.quoteToken!}
+              baseToken={state.baseToken}
+              quoteToken={state.quoteToken}
             />
           </>
         )}
@@ -57,18 +57,18 @@ export const SimResultSummary = ({
           }
         )}
       >
-        {!isLoading && (
+        {!isLoading && !!state.baseToken && !!state.quoteToken && (
           <>
             <SimResultSummaryGains
               portfolioGains={gains}
-              quoteToken={state.quoteToken!}
+              quoteToken={state.quoteToken}
             />
             <SimResultSummaryRoi portfolioRoi={roi} />
             <Link
               to="/strategies/create"
               search={{
-                base: state.baseToken?.address,
-                quote: state.quoteToken?.address,
+                base: state.baseToken.address,
+                quote: state.quoteToken.address,
                 strategyType:
                   strategyType === 'recurring' ? 'recurring' : undefined,
                 strategySettings:
