@@ -59,14 +59,15 @@ export class CreateSimulationDriver {
 
   async selectMonthYear(monthYear: string) {
     const findMonthYear = async () => {
-      try {
-        this.page.getByText(monthYear);
-      } catch {
-        // Couldn't find month, move to next one
+      const isMonthYearVisible = await this.page.isVisible(
+        `text='${monthYear}'`
+      );
+      if (isMonthYearVisible) {
+        return;
+      } else {
         await this.page.getByTestId('date-picker-left-arrow').click();
-        await findMonthYear();
+        return await findMonthYear();
       }
-      return;
     };
     await findMonthYear();
   }
@@ -75,12 +76,22 @@ export class CreateSimulationDriver {
     const dayButton = this.page
       .getByLabel(monthYear)
       .getByText(day, { exact: true });
-    await dayButton.click();
+    const dayButtonCount = await dayButton.count();
+    // If the month has more than one day with the same number, find right one to press
+    if (dayButtonCount > 1) {
+      if (Number(day) < 15) {
+        await dayButton.nth(0).click();
+      } else {
+        await dayButton.nth(1).click();
+      }
+    } else {
+      await dayButton.click();
+    }
   }
 
   parseTimestamp(timestamp: number) {
     return {
-      day: dayjs(timestamp * 1000).format('DD'),
+      day: dayjs(timestamp * 1000).format('D'),
       monthYear: dayjs(timestamp * 1000).format('MMMM YYYY'),
     };
   }
@@ -91,8 +102,14 @@ export class CreateSimulationDriver {
     await this.selectDay(day, monthYear);
   }
 
-  async fillDates(start: number, end: number) {
-    const [from, to] = start <= end ? [start, end] : [end, start];
+  async fillDates(start: string, end: string) {
+    const startTimestamp = dayjs(start).unix();
+    const endTimestamp = dayjs(end).unix();
+
+    const [from, to] =
+      startTimestamp <= endTimestamp
+        ? [startTimestamp, endTimestamp]
+        : [endTimestamp, startTimestamp];
 
     await this.page.getByTestId('date-picker-button').click();
     // Select date twice to force range to be 1 day long
