@@ -162,7 +162,6 @@ export const SimInputChart = ({
           defaultEnd={state.end}
           onConfirm={onDatePickerConfirm}
           button={
-            // TODO: use fromUnixUTC in the query directly
             <DatePickerButton
               start={fromUnixUTC(state.start)}
               end={fromUnixUTC(state.end)}
