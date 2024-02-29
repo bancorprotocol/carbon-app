@@ -1,6 +1,7 @@
 import config from 'config';
 export const externalLinks = {
-  blog: 'http://blog.carbondefi.xyz',
+  carbonHomepage: 'https://carbondefi.xyz',
+  blog: 'https://blog.carbondefi.xyz',
   faq: 'https://faq.carbondefi.xyz/',
   analytics: 'http://analytics.carbondefi.xyz',
   x: 'https://x.com/carbondefixyz',

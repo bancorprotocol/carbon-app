@@ -1,10 +1,11 @@
 import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { subDays, getUnixTime, isSameDay, subMonths } from 'date-fns';
-import { Dispatch, memo, ReactNode, useState } from 'react';
+import { subDays, isSameDay, subMonths } from 'date-fns';
+import { Dispatch, FormEvent, memo, ReactNode, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
+import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 
 export type DatePickerPreset = {
   label: string;
@@ -23,7 +24,6 @@ interface Props {
 
 export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
@@ -31,6 +31,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
         setIsOpen(true);
         attr.onClick(e);
       }}
+      type="button"
       aria-label="Pick date range"
       className="flex items-center gap-8"
       data-testid="date-picker-button"
@@ -59,8 +60,8 @@ const getDefaultDateRange = (
 ): DateRange | undefined => {
   if (!start || !end) return undefined;
   return {
-    from: new Date(Number(start) * 1000),
-    to: new Date(Number(end) * 1000),
+    from: fromUnixUTC(start),
+    to: fromUnixUTC(end),
   };
 };
 
@@ -83,18 +84,18 @@ const Content = (props: Props) => {
     });
   };
 
-  const onConfirm = () => {
+  const onConfirm = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!hasDates) return;
     props.setIsOpen(false);
     props.onConfirm({
-      start: getUnixTime(date.from!.toUTCString()).toString(),
-      end: getUnixTime(date.to!.toUTCString()).toString(),
+      start: toUnixUTC(date.from!),
+      end: toUnixUTC(date.to!),
     });
   };
 
   return (
     <form
-      method="dialog"
       className="grid grid-cols-[200px_1fr] grid-rows-[1fr_auto] gap-x-30 gap-y-20 p-20"
       onSubmit={onConfirm}
     >
@@ -145,16 +146,16 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 });
 
 interface DatePickerButtonProps {
-  startUnix?: string | number;
-  endUnix?: string | number;
+  start?: Date;
+  end?: Date;
 }
 
 export const DatePickerButton = memo(
-  ({ startUnix, endUnix }: DatePickerButtonProps) => {
-    const startDate = dateFormatter.format(Number(startUnix) * 1e3);
-    const endDate = dateFormatter.format(Number(endUnix) * 1e3);
+  ({ start, end }: DatePickerButtonProps) => {
+    const startDate = dateFormatter.format(start);
+    const endDate = dateFormatter.format(end);
 
-    const hasDates = !!(startUnix && endUnix);
+    const hasDates = !!(start && end);
 
     return (
       <>

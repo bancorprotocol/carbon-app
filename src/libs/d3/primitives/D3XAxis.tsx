@@ -1,5 +1,5 @@
+import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
 import { D3AxisTick, D3ChartSettings } from 'libs/d3/types';
-import { dayjs } from 'libs/dayjs';
 import { uuid } from 'utils/helpers';
 
 interface Props {
@@ -15,7 +15,7 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
       {/*  fill="none"*/}
       {/*  className={'stroke-emphasis'}*/}
       {/*/>*/}
-      <line x1={-dms.marginLeft} x2={dms.width} className={'stroke-emphasis'} />
+      <line x1={-dms.marginLeft} x2={dms.width} className="stroke-emphasis" />
       {ticks.map(({ value, offset }) => (
         <g key={`${uuid()}${value}`} transform={`translate(${offset}, 0)`}>
           <line
@@ -30,11 +30,11 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
               textAnchor: 'middle',
               transform: 'translateY(19px)',
             }}
-            fill={'currentColor'}
-            className={'font-mono'}
+            fill="currentColor"
+            className="font-mono"
             opacity={0.6}
           >
-            {dayjs(value * 1000).format('DD.MM.YY')}
+            {xAxisFormatter.format(fromUnixUTC(value))}
           </text>
         </g>
       ))}

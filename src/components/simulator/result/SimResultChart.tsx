@@ -6,6 +6,10 @@ import { useSimulator } from 'components/simulator/result/SimulatorProvider';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useState } from 'react';
+import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { Link, useSearch } from '@tanstack/react-router';
+import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 interface Props {
   state: StrategyInputValues;
@@ -15,9 +19,39 @@ interface Props {
 export const SimResultChart = ({ state, simulationType }: Props) => {
   const ctx = useSimulator();
   const [showSummary, setShowSummary] = useState(false);
+  const searchState = useSearch({ from: '/simulator/result' });
 
   if (ctx.isError) {
-    return <Error msg={ctx.errorMsg} />;
+    return (
+      <div
+        role="alert"
+        aria-live="polite"
+        className="mx-auto my-10 flex h-[400px] flex-col items-center justify-center gap-20 rounded-10 bg-black"
+      >
+        <IconTitleText
+          icon={<IconWarning />}
+          title="Missing Information"
+          text={
+            <p className="w-[480px]">
+              It appears that the simulation is missing essential information
+              for successful execution. Please attempt to re-enter the
+              simulation data.
+            </p>
+          }
+          variant="error"
+        />
+        <Link
+          to="/simulator/$simulationType"
+          params={{ simulationType }}
+          search={searchState}
+          className={buttonStyles({
+            size: 'lg',
+          })}
+        >
+          Back
+        </Link>
+      </div>
+    );
   }
 
   if (ctx.isLoading || ctx.status === 'idle') {
@@ -58,18 +92,3 @@ const Loading = () => (
     <CarbonLogoLoading className="h-[100px]" />
   </div>
 );
-
-const Error = ({ msg }: { msg?: string }) => {
-  return (
-    <div className="grid h-[400px] place-items-center rounded-10 bg-black py-10">
-      <article className="max-w-1/3 flex flex-col items-center justify-center space-y-10 rounded-10 border border-red bg-red/30 p-20">
-        <h3 className="text-24 font-weight-500">Error</h3>
-        <p className="text-center font-weight-500">
-          Something went wrong.
-          <br /> Please try again or contact support.
-        </p>
-        <p className="text-12 text-red/80">{msg ?? 'Unknown internal error'}</p>
-      </article>
-    </div>
-  );
-};
