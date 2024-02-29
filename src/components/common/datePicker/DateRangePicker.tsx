@@ -2,10 +2,10 @@ import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { subDays, isSameDay, subMonths } from 'date-fns';
-import { Dispatch, memo, ReactNode, useState } from 'react';
+import { Dispatch, FormEvent, memo, ReactNode, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
-import { toUnixUTC } from 'components/simulator/utils';
+import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 
 export type DatePickerPreset = {
   label: string;
@@ -59,8 +59,8 @@ const getDefaultDateRange = (
 ): DateRange | undefined => {
   if (!start || !end) return undefined;
   return {
-    from: new Date(Number(start) * 1000),
-    to: new Date(Number(end) * 1000),
+    from: fromUnixUTC(start),
+    to: fromUnixUTC(end),
   };
 };
 
@@ -83,18 +83,18 @@ const Content = (props: Props) => {
     });
   };
 
-  const onConfirm = () => {
+  const onConfirm = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!hasDates) return;
     props.setIsOpen(false);
     props.onConfirm({
-      start: toUnixUTC(date.from!).toString(),
-      end: toUnixUTC(date.to!).toString(),
+      start: toUnixUTC(date.from!),
+      end: toUnixUTC(date.to!),
     });
   };
 
   return (
     <form
-      method="dialog"
       className="grid grid-cols-[200px_1fr] grid-rows-[1fr_auto] gap-x-30 gap-y-20 p-20"
       onSubmit={onConfirm}
     >
@@ -143,16 +143,16 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 });
 
 interface DatePickerButtonProps {
-  startUnix?: string | number;
-  endUnix?: string | number;
+  start?: Date;
+  end?: Date;
 }
 
 export const DatePickerButton = memo(
-  ({ startUnix, endUnix }: DatePickerButtonProps) => {
-    const startDate = dateFormatter.format(Number(startUnix) * 1e3);
-    const endDate = dateFormatter.format(Number(endUnix) * 1e3);
+  ({ start, end }: DatePickerButtonProps) => {
+    const startDate = dateFormatter.format(start);
+    const endDate = dateFormatter.format(end);
 
-    const hasDates = !!(startUnix && endUnix);
+    const hasDates = !!(start && end);
 
     return (
       <>

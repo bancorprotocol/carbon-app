@@ -23,6 +23,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
+import { fromUnixUTC } from '../utils';
 
 interface Props {
   state: StrategyInputValues;
@@ -161,7 +162,11 @@ export const SimInputChart = ({
           defaultEnd={state.end}
           onConfirm={onDatePickerConfirm}
           button={
-            <DatePickerButton startUnix={state.start} endUnix={state.end} />
+            // TODO: use fromUnixUTC in the query directly
+            <DatePickerButton
+              start={fromUnixUTC(state.start)}
+              end={fromUnixUTC(state.end)}
+            />
           }
           presets={datePickerPresets}
           options={{ disabled: datePickerDisabledDays }}
@@ -210,7 +215,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
       <IconTitleText
         icon={<IconPlus />}
         title="Well, this doesn’t happen often..."
-        text="Unfortunately, price history for this token is not available and cannot be simulated."
+        text="Unfortunately, price history for this pair is not available and cannot be simulated."
         variant="success"
       />
       <p className="my-20 text-center text-14 text-white/60">

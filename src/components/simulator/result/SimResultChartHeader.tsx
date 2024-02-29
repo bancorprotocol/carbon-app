@@ -12,6 +12,7 @@ import { SimulatorData } from 'libs/queries';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
+import { fromUnixUTC } from '../utils';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -66,7 +67,12 @@ export const SimResultChartHeader = ({
         defaultStart={startUnix}
         defaultEnd={endUnix}
         onConfirm={onDatePickerConfirm}
-        button={<DatePickerButton startUnix={startUnix} endUnix={endUnix} />}
+        button={
+          <DatePickerButton
+            start={fromUnixUTC(startUnix)}
+            end={fromUnixUTC(endUnix)}
+          />
+        }
         presets={datePickerPresets}
         options={{ disabled: datePickerDisabledDays }}
       />

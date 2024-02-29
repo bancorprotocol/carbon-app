@@ -7,7 +7,8 @@ export const toUnixUTC = (date: Date) => {
 };
 
 /** Transform the date in UTC into the local timezone */
-export const fromUnixUTC = (timestamp: string | number) => {
+export const fromUnixUTC = (timestamp?: string | number) => {
+  if (!timestamp) return;
   const date = fromUnixTime(Number(timestamp));
   const deltaMin = date.getTimezoneOffset();
   return addMinutes(date, deltaMin);
