@@ -1,7 +1,15 @@
 import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import {
+  DatePickerButton,
+  DateRangePicker,
+} from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
+import {
+  datePickerDisabledDays,
+  datePickerPresets,
+} from 'components/simulator/result/SimResultChartHeader';
 import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
@@ -9,17 +17,15 @@ import {
   D3ChartCandlesticks,
   OnPriceUpdates,
 } from 'components/simulator/input/d3Chart';
-import {
-  useCompareTokenPrice,
-  useGetTokenPriceHistory,
-} from 'libs/queries/extApi/tokenPrice';
+import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
+import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
+import { fromUnixUTC } from '../utils';
 
 interface Props {
-  timeRange: { start: number; end: number };
   state: StrategyInputValues;
   dispatch: SimulatorInputDispatch;
   initBuyRange: boolean;
@@ -27,10 +33,21 @@ interface Props {
   setInitBuyRange: Dispatch<SetStateAction<boolean>>;
   setInitSellRange: Dispatch<SetStateAction<boolean>>;
   bounds: ChartPrices;
+  data?: CandlestickData[];
+  isLoading: boolean;
+  isError: boolean;
 }
 
+const chartSettings: D3ChartSettingsProps = {
+  width: 0,
+  height: 0,
+  marginTop: 0,
+  marginBottom: 40,
+  marginLeft: 0,
+  marginRight: 80,
+};
+
 export const SimInputChart = ({
-  timeRange,
   state,
   dispatch,
   initBuyRange,
@@ -38,18 +55,14 @@ export const SimInputChart = ({
   setInitBuyRange,
   setInitSellRange,
   bounds,
+  isLoading,
+  isError,
+  data,
 }: Props) => {
   const marketPrice = useCompareTokenPrice(
     state.baseToken?.address,
     state.quoteToken?.address
   );
-
-  const { data, isLoading, isError } = useGetTokenPriceHistory({
-    baseToken: state.baseToken?.address,
-    quoteToken: state.quoteToken?.address,
-    start: timeRange.start,
-    end: timeRange.end,
-  });
 
   const handleDefaultValues = useCallback(
     (type: StrategyDirection) => {
@@ -132,9 +145,32 @@ export const SimInputChart = ({
     [dispatch]
   );
 
+  const onDatePickerConfirm = useCallback(
+    (props: { start: string; end: string }) => {
+      dispatch('start', props.start);
+      dispatch('end', props.end);
+    },
+    [dispatch]
+  );
+
   return (
     <div className="align-stretch sticky top-80 grid h-[calc(100vh-180px)] min-h-[500px] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-silver p-20">
-      <h2 className="mb-20 text-20 font-weight-500">Price Chart</h2>
+      <div className="mb-20 flex items-center justify-between">
+        <h2 className="mr-20 text-20 font-weight-500">Price Chart</h2>
+        <DateRangePicker
+          defaultStart={state.start}
+          defaultEnd={state.end}
+          onConfirm={onDatePickerConfirm}
+          button={
+            <DatePickerButton
+              start={fromUnixUTC(state.start)}
+              end={fromUnixUTC(state.end)}
+            />
+          }
+          presets={datePickerPresets}
+          options={{ disabled: datePickerDisabledDays }}
+        />
+      </div>
       {isError && (
         <ErrorMsg
           base={state.baseToken?.address}
@@ -147,19 +183,26 @@ export const SimInputChart = ({
       )}
 
       {!!data && (
-        <D3ChartCandlesticks
-          className="flex-1 self-stretch rounded-12 bg-black"
-          prices={prices}
-          onPriceUpdates={onPriceUpdates}
-          data={data}
-          marketPrice={marketPrice}
-          bounds={bounds}
-          onDragEnd={onPriceUpdatesEnd}
-          isLimit={{
-            buy: !state.buy.isRange,
-            sell: !state.sell.isRange,
-          }}
-        />
+        <D3ChartWrapper
+          settings={chartSettings}
+          className="self-stretch rounded-12 bg-black"
+        >
+          {(dms) => (
+            <D3ChartCandlesticks
+              dms={dms}
+              prices={prices}
+              onPriceUpdates={onPriceUpdates}
+              data={data}
+              marketPrice={marketPrice}
+              bounds={bounds}
+              onDragEnd={onPriceUpdatesEnd}
+              isLimit={{
+                buy: !state.buy.isRange,
+                sell: !state.sell.isRange,
+              }}
+            />
+          )}
+        </D3ChartWrapper>
       )}
     </div>
   );
@@ -169,10 +212,10 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
   return (
     <div className="max-w-[340px] self-center justify-self-center">
       <IconTitleText
-        icon={<IconWarning />}
+        icon={<IconPlus />}
         title="Well, this doesn’t happen often..."
-        text="Unfortunately, price history for this token is not available and cannot be simulated."
-        variant="error"
+        text="Unfortunately, price history for this pair is not available and cannot be simulated."
+        variant="success"
       />
       <p className="my-20 text-center text-14 text-white/60">
         However, you can{' '}

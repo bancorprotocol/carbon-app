@@ -4,6 +4,7 @@ import { useTokens } from 'hooks/useTokens';
 import { StrategyInputSearch } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';
 import { useCallback, useMemo, useState } from 'react';
+import { stringToBoolean } from 'utils/helpers';
 
 export interface InternalStrategyInput extends StrategyInputSearch {
   sellBudgetError?: string;
@@ -34,6 +35,8 @@ export interface StrategyInputValues {
   quoteToken?: Token;
   buy: StrategyInputOrder;
   sell: StrategyInputOrder;
+  start?: string;
+  end?: string;
 }
 
 interface Props {
@@ -43,7 +46,11 @@ interface Props {
 export const useStrategyInput = ({ searchState }: Props) => {
   const { getTokenById } = useTokens();
   const navigate = useNavigate();
-  const [_state, setState] = useState<InternalStrategyInput>(searchState);
+  const [_state, setState] = useState<InternalStrategyInput>({
+    ...searchState,
+    sellIsRange: stringToBoolean(String(searchState.sellIsRange), true),
+    buyIsRange: stringToBoolean(String(searchState.buyIsRange), true),
+  });
 
   const baseToken = useMemo(
     () => getTokenById(_state.baseToken),
@@ -54,28 +61,7 @@ export const useStrategyInput = ({ searchState }: Props) => {
     [_state.quoteToken, getTokenById]
   );
 
-  const state = useMemo<StrategyInputValues>(() => {
-    return {
-      baseToken,
-      quoteToken,
-      buy: {
-        min: _state.buyMin || '',
-        max: _state.buyMax || '',
-        budget: _state.buyBudget || '',
-        budgetError: _state.buyBudgetError,
-        isRange: !!_state.buyIsRange,
-        priceError: _state.buyPriceError,
-      },
-      sell: {
-        min: _state.sellMin || '',
-        max: _state.sellMax || '',
-        budget: _state.sellBudget || '',
-        budgetError: _state.sellBudgetError,
-        isRange: !!_state.sellIsRange,
-        priceError: _state.sellPriceError,
-      },
-    };
-  }, [baseToken, quoteToken, _state]);
+  const state = buildStrategyInputState(_state, baseToken, quoteToken);
 
   const setSearch = useCallback(
     (search: InternalStrategyInput) => {
@@ -104,4 +90,62 @@ export const useStrategyInput = ({ searchState }: Props) => {
   }, []);
 
   return { dispatch, state };
+};
+
+function isInternalState(object: any): object is InternalStrategyInput {
+  return 'buyBudgetError' in object;
+}
+
+export const buildStrategyInputState = (
+  state: InternalStrategyInput | StrategyInputSearch,
+  baseToken?: Token,
+  quoteToken?: Token
+): StrategyInputValues => {
+  if (isInternalState(state)) {
+    return {
+      baseToken,
+      quoteToken,
+      buy: {
+        min: state.buyMin || '',
+        max: state.buyMax || '',
+        budget: state.buyBudget || '',
+        budgetError: state.buyBudgetError,
+        isRange: !!state.buyIsRange,
+        priceError: state.buyPriceError,
+      },
+      sell: {
+        min: state.sellMin || '',
+        max: state.sellMax || '',
+        budget: state.sellBudget || '',
+        budgetError: state.sellBudgetError,
+        isRange: !!state.sellIsRange,
+        priceError: state.sellPriceError,
+      },
+      start: state.start || undefined,
+      end: state.end || undefined,
+    };
+  } else {
+    return {
+      baseToken,
+      quoteToken,
+      buy: {
+        min: state.buyMin || '',
+        max: state.buyMax || '',
+        budget: state.buyBudget || '',
+        budgetError: '',
+        isRange: !!state.buyIsRange,
+        priceError: '',
+      },
+      sell: {
+        min: state.sellMin || '',
+        max: state.sellMax || '',
+        budget: state.sellBudget || '',
+        budgetError: '',
+        isRange: !!state.sellIsRange,
+        priceError: '',
+      },
+      start: state.start || undefined,
+      end: state.end || undefined,
+    };
+  }
 };

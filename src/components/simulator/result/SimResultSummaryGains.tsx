@@ -3,7 +3,6 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { prettifySignedNumber } from 'utils/helpers';
 import { FC, useCallback } from 'react';
 import { Token } from 'libs/tokens';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { AnimatedNumber } from 'components/common/AnimatedNumber';
 
 interface Props {
@@ -15,16 +14,11 @@ export const SimResultSummaryGains: FC<Props> = ({
   portfolioGains,
   quoteToken,
 }) => {
-  const { selectedFiatCurrency, getFiatValue } = useFiatCurrency(quoteToken);
-
-  const portfolioGainsRounded = portfolioGains.toFixed(2);
-  const portfolioGainsFiat = getFiatValue(portfolioGainsRounded);
-
-  const portfolioGainsFormatter = useCallback(
-    (portfolioGainsFiat: number) =>
-      `${quoteToken.symbol} ${prettifySignedNumber(portfolioGainsFiat, {
-        round: true,
-      })}`,
+  const formatGain = useCallback(
+    (gains: number) => {
+      const value = prettifySignedNumber(gains, { round: true });
+      return `${quoteToken.symbol} ${value}`;
+    },
     [quoteToken.symbol]
   );
 
@@ -40,7 +34,7 @@ export const SimResultSummaryGains: FC<Props> = ({
         className="text-24 font-weight-500"
         from={0.0}
         to={portfolioGains}
-        formatFn={portfolioGainsFormatter}
+        formatFn={formatGain}
         duration={2}
       />
     </article>

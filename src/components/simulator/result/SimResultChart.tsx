@@ -55,11 +55,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
   }
 
   if (ctx.isLoading || ctx.status === 'idle') {
-    return (
-      <div className="flex h-[400px] items-center justify-center rounded-10 bg-black py-10">
-        <CarbonLogoLoading className="h-[100px]" />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -90,3 +86,9 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
     </div>
   );
 };
+
+const Loading = () => (
+  <div className="grid h-[400px] place-items-center rounded-10 bg-black py-10">
+    <CarbonLogoLoading className="h-[100px]" />
+  </div>
+);

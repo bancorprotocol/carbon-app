@@ -19,7 +19,7 @@ export const D3ChartWrapper: FC<Props> = ({
   const [ref, dms] = useChartDimensions(settings);
 
   return (
-    <svg ref={ref} width={dms.width} height={dms.height} className={className}>
+    <svg ref={ref} className={className}>
       <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
         {children(dms)}
       </g>

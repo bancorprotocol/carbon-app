@@ -130,3 +130,12 @@ export const isPathnameMatch = (
     .filter((x) => x !== '/')
     .some((x) => current.startsWith(x));
 };
+
+export const stringToBoolean = (
+  string: string,
+  fallback: boolean | undefined = false
+) => {
+  if (string === 'true') return true;
+  if (string === 'false') return false;
+  return fallback;
+};

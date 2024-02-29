@@ -5,10 +5,13 @@ import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
 import { StrategyInputDispatch } from 'hooks/useStrategyInput';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { cn } from 'utils/helpers';
 
 interface Props {
   base: Token | undefined;
   quote: Token | undefined;
+  noPriceHistory: boolean;
   dispatch: StrategyInputDispatch;
   setInitBuyRange: Dispatch<SetStateAction<boolean>>;
   setInitSellRange: Dispatch<SetStateAction<boolean>>;
@@ -17,6 +20,7 @@ interface Props {
 export const SimInputTokenSelection: FC<Props> = ({
   base,
   quote,
+  noPriceHistory,
   dispatch,
   setInitBuyRange,
   setInitSellRange,
@@ -27,15 +31,23 @@ export const SimInputTokenSelection: FC<Props> = ({
     if (base && quote) {
       dispatch('baseToken', quote.address);
       dispatch('quoteToken', base.address);
+      dispatch('buyMax', '');
+      dispatch('buyMin', '');
+      dispatch('sellMax', '');
+      dispatch('sellMin', '');
+      dispatch('buyBudget', '');
+      dispatch('sellBudget', '');
+      setInitBuyRange(true);
+      setInitSellRange(true);
     }
   };
 
   return (
     <section
-      className="bg-secondary rounded-10 p-16"
+      className="bg-secondary flex flex-col gap-16 rounded-10 p-16"
       key="simulatorTokenSelection"
     >
-      <header className="mb-16 flex items-center justify-between">
+      <header className="flex items-center justify-between">
         <h2 className="m-0 text-18 font-weight-500">Token Pair</h2>
         <Tooltip
           iconClassName="h-18 w-18 text-white/60"
@@ -66,7 +78,10 @@ export const SimInputTokenSelection: FC<Props> = ({
               Buy or Sell
             </span>
           }
-          className="h-[50px] w-full pl-10 pr-20"
+          className={cn(
+            'h-[50px] flex-1 pl-10 pr-20',
+            noPriceHistory && 'border-2 border-warning-500'
+          )}
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
@@ -87,6 +102,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           isBaseToken
         />
         <button
+          type="button"
           className="relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] border-silver bg-black"
           onClick={swapTokens}
           disabled={!base || !quote}
@@ -106,7 +122,10 @@ export const SimInputTokenSelection: FC<Props> = ({
               With
             </span>
           }
-          className="h-[50px] w-full pl-16 pr-16"
+          className={cn(
+            'h-[50px] flex-1 pl-16 pr-16',
+            noPriceHistory && 'border-2 border-warning-500'
+          )}
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
@@ -126,6 +145,11 @@ export const SimInputTokenSelection: FC<Props> = ({
           }}
         />
       </article>
+      {noPriceHistory && (
+        <WarningMessageWithIcon className="font-weight-500">
+          The pair lacks price history and cannot be simulated.
+        </WarningMessageWithIcon>
+      )}
     </section>
   );
 };

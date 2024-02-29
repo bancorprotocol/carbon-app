@@ -9,7 +9,9 @@ import {
 } from 'libs/d3';
 import { SimulatorReturn } from 'libs/queries';
 import { Token } from 'libs/tokens';
+import { FC } from 'react';
 import { prettifyNumber } from 'utils/helpers';
+import { ToggleEye } from './EyeIcon';
 
 const colors = {
   base: '#D86371',
@@ -21,6 +23,8 @@ interface Props {
   data: SimulatorReturn['data'];
   baseToken: Token;
   quoteToken: Token;
+  isVisible: boolean;
+  setIsVisible: (value: boolean) => void;
 }
 
 export const D3ChartSimulatorBalance = ({
@@ -28,6 +32,8 @@ export const D3ChartSimulatorBalance = ({
   data,
   baseToken,
   quoteToken,
+  isVisible,
+  setIsVisible,
 }: Props) => {
   const xScale = scaleBand()
     .domain(['base', 'quote'])
@@ -51,67 +57,79 @@ export const D3ChartSimulatorBalance = ({
   const xQuote = xScale('quote');
 
   const barWidth = xScale.bandwidth();
+  // Hide the chart is not visible or if transitioning to visible (ResizeObserver takes 1 frame)
+  const hide = !isVisible || dms.width === 80;
 
   if (data.length === 0) return null;
-  if (!dms.width) return null;
+  if (!dms.width || !dms.height) return null;
   return (
     <>
-      <D3ChartTitle
+      <ToggleChart
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
         dms={dms}
-        title="Token Balances"
-        width={130}
+        titleWidth={130}
         marginTop={(dms.marginTop - 20) * -1}
       />
 
-      <Bar
-        id="base"
-        xScale={xScale}
-        yScale={y.scale}
-        label={balanceRISK}
-        value={portionRISK}
-        percentage={percentage}
-        dms={dms}
-        symbol={baseToken.symbol}
-      />
-
-      <Bar
-        id="quote"
-        xScale={xScale}
-        yScale={y.scale}
-        label={balanceCASH}
-        value={portionCASH}
-        percentage={100 - percentage}
-        dms={dms}
-        symbol={quoteToken.symbol}
-      />
-
-      <g>
-        <line
-          x1={0}
-          x2={dms.boundedWidth}
-          y1={dms.boundedHeight}
-          y2={dms.boundedHeight}
-          className="stroke-emphasis"
+      <g className={hide ? 'hidden' : ''}>
+        <D3ChartTitle
+          dms={dms}
+          title="Token Balances"
+          width={130}
+          marginTop={(dms.marginTop - 20) * -1}
         />
-        <text
-          x={(xBase ?? 0) + barWidth / 2}
-          y={dms.boundedHeight + 20}
-          fill="currentColor"
-          style={{ textAnchor: 'middle' }}
-          className="text-12"
-        >
-          {baseToken.symbol}
-        </text>
 
-        <text
-          x={(xQuote ?? 0) + barWidth / 2}
-          y={dms.boundedHeight + 20}
-          fill="currentColor"
-          style={{ textAnchor: 'middle' }}
-          className="text-12"
-        >
-          {quoteToken.symbol}
-        </text>
+        <Bar
+          id="base"
+          xScale={xScale}
+          yScale={y.scale}
+          label={balanceRISK}
+          value={portionRISK}
+          percentage={percentage}
+          dms={dms}
+          symbol={baseToken.symbol}
+        />
+
+        <Bar
+          id="quote"
+          xScale={xScale}
+          yScale={y.scale}
+          label={balanceCASH}
+          value={portionCASH}
+          percentage={100 - percentage}
+          dms={dms}
+          symbol={quoteToken.symbol}
+        />
+
+        <g>
+          <line
+            x1={0}
+            x2={dms.boundedWidth}
+            y1={dms.boundedHeight}
+            y2={dms.boundedHeight}
+            className="stroke-emphasis"
+          />
+          <text
+            x={(xBase ?? 0) + barWidth / 2}
+            y={dms.boundedHeight + 20}
+            fill="currentColor"
+            style={{ textAnchor: 'middle' }}
+            className="text-12"
+          >
+            {baseToken.symbol}
+          </text>
+
+          <text
+            x={(xQuote ?? 0) + barWidth / 2}
+            y={dms.boundedHeight + 20}
+            fill="currentColor"
+            style={{ textAnchor: 'middle' }}
+            className="text-12"
+          >
+            {quoteToken.symbol}
+          </text>
+        </g>
       </g>
     </>
   );
@@ -175,5 +193,63 @@ const Bar = ({
         {prettifyNumber(label)} {symbol}
       </text>
     </>
+  );
+};
+
+interface ToggleChartProps {
+  isVisible: boolean;
+  setIsVisible: (value: boolean) => void;
+  dms: D3ChartSettings;
+  titleWidth: number;
+  marginTop: number;
+}
+
+const ToggleChart: FC<ToggleChartProps> = (props) => {
+  const { isVisible, setIsVisible, dms, titleWidth, marginTop } = props;
+  const toggle = () => setIsVisible(!isVisible);
+  const center = dms.width / 2;
+  const marginLeft = 12;
+
+  const scale = isVisible ? 1 : 32 / 24;
+  const x = isVisible ? center + titleWidth / 2 + marginLeft : center - 16;
+  const y = marginTop;
+
+  // Hide toggle if transitioning between state (ResizeObserver takes 1 frame)
+  const hide = isVisible && dms.width === 80;
+  const style = hide ? { opacity: 0, outline: 'none' } : {};
+
+  const onKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggle();
+    }
+  };
+
+  return (
+    <g
+      role="switch"
+      tabIndex={0}
+      transform={`translate(${x},${y}) scale(${scale})`}
+      className="cursor-pointer rounded-full"
+      onClick={toggle}
+      onKeyDown={onKeyDown}
+      aria-checked={isVisible}
+      aria-label="Toggle chart visibility"
+      style={style}
+    >
+      <circle
+        cx="12"
+        cy="12"
+        r="11"
+        fill="transparent"
+        strokeWidth={2}
+        className="stroke-emphasis"
+      />
+      <ToggleEye
+        visible={isVisible}
+        transform="translate(5, 5)"
+        className="text-white"
+      />
+    </g>
   );
 };

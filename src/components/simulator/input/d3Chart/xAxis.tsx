@@ -1,6 +1,6 @@
 import { ScaleBand } from 'd3';
 import { D3ChartSettings } from 'libs/d3';
-import { dayjs } from 'libs/dayjs';
+import { fromUnixUTC, xAxisFormatter } from 'components/simulator/utils';
 
 type Props = {
   dms: D3ChartSettings;
@@ -10,38 +10,35 @@ type Props = {
 export const XAxis = ({ xScale, dms }: Props) => {
   const length = xScale.domain().length;
   const numberOfTicksTarget = Math.max(1, Math.floor(dms.boundedWidth / 80));
-  const m = Math.floor(length / numberOfTicksTarget);
-
+  const m = Math.ceil(length / numberOfTicksTarget);
   const ticks = xScale
     .domain()
-    .filter((_, i) => i % m === m - 1 || i === 0 || i === length - 1)
-    .filter((_, i, arr) => i !== arr.length - 1 && i !== 0)
-    .map((tickValue) => (
-      <g
-        className="axis"
-        key={tickValue}
-        transform={`translate(${xScale(tickValue)},0)`}
-      >
-        <line
-          className="tick stroke-emphasis"
-          y1={dms.boundedHeight}
-          y2={dms.boundedHeight - 10}
-        />
-        <text
-          style={{
-            fontSize: '10px',
-            textAnchor: 'middle',
-          }}
-          dy=".71em"
-          y={dms.boundedHeight + 10}
-          fill={'currentColor'}
-          opacity={0.6}
-          className={'font-mono'}
-        >
-          {dayjs(Number(tickValue) * 1000).format('DD.MM.YY')}
-        </text>
-      </g>
-    ));
+    .filter((_, i) => i % m === m - 1)
+    .map((tickValue) => {
+      const x = (xScale(tickValue) ?? 0) + xScale.bandwidth() / 2;
+      return (
+        <g className="axis" key={tickValue} transform={`translate(${x},0)`}>
+          <line
+            className="tick stroke-emphasis"
+            y1={dms.boundedHeight}
+            y2={dms.boundedHeight - 10}
+          />
+          <text
+            style={{
+              fontSize: '10px',
+              textAnchor: 'middle',
+            }}
+            dy=".71em"
+            y={dms.boundedHeight + 10}
+            fill="currentColor"
+            opacity={0.6}
+            className="font-mono"
+          >
+            {xAxisFormatter.format(fromUnixUTC(tickValue))}
+          </text>
+        </g>
+      );
+    });
 
   const bandwidthOffset = xScale.bandwidth() / 2;
 
