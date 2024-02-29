@@ -80,7 +80,8 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
     },
     {
       enabled: !!params.baseToken && !!params.quoteToken,
-      staleTime: FIVE_MIN_IN_MS,
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
     }
   );
 };

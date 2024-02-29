@@ -23,7 +23,7 @@ export const SimInputRecurring = ({
   firstHistoricPricePoint,
 }: Props) => {
   if (!state.baseToken || !state.quoteToken) {
-    return <div>error no tokens found</div>;
+    return <p>error no tokens found</p>;
   }
 
   const showBuyWarning = firstHistoricPricePoint?.low

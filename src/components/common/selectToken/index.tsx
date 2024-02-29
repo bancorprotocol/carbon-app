@@ -27,6 +27,7 @@ export const SelectTokenButton: FC<Props> = ({
 
   return (
     <button
+      type="button"
       data-testid={testId}
       className={cn(
         'flex items-center gap-8 rounded-12 p-10',
