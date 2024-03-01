@@ -1,8 +1,19 @@
 import { max, min, select } from 'd3';
 import { ChartPrices } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
 import { CandlestickData } from 'libs/d3/types';
+import { useEffect, useState } from 'react';
 
 export const getSelector = (selector: string) => select(`.${selector}`);
+
+export const useSelectable = (selector: string) => {
+  const [isSelectable, setIsSelectable] = useState(false);
+  useEffect(() => {
+    const selection = getSelector(selector);
+    if (!selection.size()) return;
+    setIsSelectable(true);
+  }, [selector]);
+  return isSelectable;
+};
 
 export const getHandleSelector = (
   type: 'buy' | 'sell',

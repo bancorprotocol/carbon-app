@@ -1,5 +1,8 @@
 import { drag, Selection } from 'd3';
-import { getSelector } from 'components/simulator/input/d3Chart/utils';
+import {
+  getSelector,
+  useSelectable,
+} from 'components/simulator/input/d3Chart/utils';
 import { D3ChartSettings } from 'libs/d3/types';
 import { useEffect, useState } from 'react';
 import { cn } from 'utils/helpers';
@@ -25,14 +28,13 @@ export const D3ChartRect = ({
 }: Props) => {
   const selection = getSelector(selector);
   const [isDragging, setIsDragging] = useState(false);
+  const isSelectable = useSelectable(selector);
 
   const handleDrag = drag()
-    .subject(() => {
-      return {
-        y: Number(selection.attr('y')),
-        height: Number(selection.attr('height')),
-      };
-    })
+    .subject(() => ({
+      y: Number(selection.attr('y')),
+      height: Number(selection.attr('height')),
+    }))
     .on('start', ({ y, subject: { height } }) => {
       setIsDragging(true);
       const y2 = y + height;
@@ -49,8 +51,9 @@ export const D3ChartRect = ({
     });
 
   useEffect(() => {
+    if (!isSelectable) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  });
+  }, [isSelectable, handleDrag, selection]);
 
   return (
     <rect
