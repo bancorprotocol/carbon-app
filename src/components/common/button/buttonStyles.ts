@@ -33,7 +33,7 @@ export const buttonStyles = cva<ButtonVariants>(
         ],
         success: [
           'bg-primary border-2 border-primary !text-black',
-          'hover:border-lightGreen hover:disabled:border-primary',
+          'hover:border-primary-light hover:disabled:border-primary',
         ],
         buy: [
           'bg-buy border-2 border-buy !text-black',

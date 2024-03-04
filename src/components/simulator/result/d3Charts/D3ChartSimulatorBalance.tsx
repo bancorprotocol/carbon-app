@@ -14,8 +14,8 @@ import { prettifyNumber } from 'utils/helpers';
 import { ToggleEye } from './EyeIcon';
 
 const colors = {
-  base: '#D86371',
-  quote: '#00B578',
+  base: 'var(--sell)',
+  quote: 'var(--buy)',
 };
 
 interface Props {

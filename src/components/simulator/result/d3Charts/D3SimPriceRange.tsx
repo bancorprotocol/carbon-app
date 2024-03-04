@@ -16,7 +16,7 @@ export const D3SimPriceRange = ({
   data,
   bounds,
 }: OrderRangeProps) => {
-  const color = type === 'bid' ? '#00B578' : '#D86371';
+  const color = type === 'bid' ? 'var(--buy)' : 'var(--sell)';
   const strokeWidth = 1;
 
   const min = type === 'bid' ? y.scale(bounds.bidMin) : y.scale(bounds.askMin);
