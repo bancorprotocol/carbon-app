@@ -136,19 +136,19 @@ export const EditStrategyPricesContent = ({
       {!isOverlapping && (
         <>
           <EditStrategyPricesBuySellBlock
+            base={strategy?.base}
+            quote={strategy?.quote}
+            order={order1}
+            balance={strategy.order1.balance}
+            type={type}
+            isOrdersOverlap={isOrdersOverlap}
+          />
+          <EditStrategyPricesBuySellBlock
             buy
             base={strategy?.base}
             quote={strategy?.quote}
             order={order0}
             balance={strategy.order0.balance}
-            type={type}
-            isOrdersOverlap={isOrdersOverlap}
-          />
-          <EditStrategyPricesBuySellBlock
-            base={strategy?.base}
-            quote={strategy?.quote}
-            order={order1}
-            balance={strategy.order1.balance}
             type={type}
             isOrdersOverlap={isOrdersOverlap}
           />
