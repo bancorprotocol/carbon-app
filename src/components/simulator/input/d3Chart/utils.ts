@@ -9,8 +9,7 @@ export const useSelectable = (selector: string) => {
   const [isSelectable, setIsSelectable] = useState(false);
   useEffect(() => {
     const selection = getSelector(selector);
-    if (!selection.size()) return;
-    setIsSelectable(true);
+    setIsSelectable(!!selection.size());
   }, [selector]);
   return isSelectable;
 };
