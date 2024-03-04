@@ -18,7 +18,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
 
   return (
     <div className="rounded-10 bg-background-900 p-20">
-      <div className="bg-body mb-20 flex w-[244px] items-center rounded-[100px] p-2">
+      <div className="mb-20 flex w-[244px] items-center rounded-[100px] bg-black p-2">
         <button
           onClick={() => setShowTVChart(false)}
           className={`rounded-40 ${

@@ -12,7 +12,7 @@ export const DebugResetDefault = () => {
   return (
     <div
       className={
-        'bg-secondary flex flex-col items-center space-y-20 rounded-18 p-20'
+        'flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20'
       }
     >
       <h2>Reset to defaults</h2>

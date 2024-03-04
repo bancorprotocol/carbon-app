@@ -18,7 +18,7 @@
   html,
   body,
   #root {
-    @apply text-body bg-body font-gt-america w-full min-h-screen;
+    @apply text-white bg-black font-gt-america w-full min-h-screen;
   }
   
   /** Some Browsers set outline on :focus instead of :focus-visible for svg element */
@@ -68,34 +68,22 @@
 @layer components {
   .main-menu {
     height: var(--main-menu-height);
-    @apply bg-body px-content flex w-full items-center justify-between font-weight-500 text-white/50;
+    @apply bg-black px-content flex w-full items-center justify-between font-weight-500 text-white/50;
   }
 
   .mobile-menu {
     height: var(--mobile-menu-height);
-    @apply bg-body z-40 fixed bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t px-10 font-weight-500 text-white/50 border-background-800 md:hidden;
+    @apply bg-black z-40 fixed bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t px-10 font-weight-500 text-white/50 border-background-800 md:hidden;
   }
 }
 
 @layer utilities {
-  .bg-body {
-    @apply bg-black;
-  }
-
   .bg-content {
     @apply border border-background-800 bg-black;
   }
 
-  .bg-secondary {
-    @apply bg-background-900;
-  }
-
   .px-content {
     @apply px-10 md:px-20 w-full;
-  }
-
-  .text-body {
-    @apply text-white;
   }
 
   .text-secondary {

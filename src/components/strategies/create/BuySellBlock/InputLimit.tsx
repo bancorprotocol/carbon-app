@@ -57,7 +57,7 @@ export const InputLimit: FC<InputLimitProps> = ({
     <>
       <div
         className={`
-          bg-body flex cursor-text flex-col rounded-16 border p-16
+          flex cursor-text flex-col rounded-16 border bg-black p-16
           focus-within:border-white/50
           ${error ? '!border-error/50' : 'border-black'} 
         `}

@@ -100,7 +100,7 @@ export const BuySellBlock: FC<Props> = ({
     <m.section
       variants={items}
       aria-labelledby={titleId}
-      className={`bg-secondary flex flex-col gap-20 rounded-10 border-l-2 p-20 ${
+      className={`flex flex-col gap-20 rounded-10 border-l-2 bg-background-900 p-20 ${
         buy
           ? 'border-buy/50 focus-within:border-buy'
           : 'border-sell/50 focus-within:border-sell'

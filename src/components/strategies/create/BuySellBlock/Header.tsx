@@ -27,7 +27,7 @@ export const BuySellHeader: FC<Props> = (props) => {
     <header className="flex items-center justify-between">
       {children}
       <div className="flex items-center gap-10 text-14">
-        <div className="bg-body flex items-center rounded-[100px] p-2">
+        <div className="flex items-center rounded-[100px] bg-black p-2">
           <button
             type="button"
             tabIndex={!isRange ? -1 : 0}

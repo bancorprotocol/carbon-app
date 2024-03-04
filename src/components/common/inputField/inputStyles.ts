@@ -9,7 +9,7 @@ type InputVariants = VariantColor & VariantSize & VariantFullWidth;
 
 export const inputStyles = cva<InputVariants>(
   [
-    'bg-body',
+    'bg-black',
     'text-white',
     'rounded-full',
     'px-30',

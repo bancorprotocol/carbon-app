@@ -44,7 +44,7 @@ export const SimInputTokenSelection: FC<Props> = ({
 
   return (
     <section
-      className="bg-secondary flex flex-col gap-16 rounded-10 p-16"
+      className="flex flex-col gap-16 rounded-10 bg-background-900 p-16"
       key="simulatorTokenSelection"
     >
       <header className="flex items-center justify-between">

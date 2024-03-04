@@ -48,7 +48,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
   return (
     <section
       aria-labelledby={titleId}
-      className={`bg-secondary flex flex-col gap-20 rounded-6 border-l-2 p-20 text-left ${
+      className={`flex flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-left ${
         buy
           ? 'border-buy/50 focus-within:border-buy'
           : 'border-sell/50 focus-within:border-sell'

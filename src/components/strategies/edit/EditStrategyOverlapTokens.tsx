@@ -9,7 +9,7 @@ export const EditStrategyOverlapTokens = ({
   strategy,
 }: EditStrategyOverlapTokensProps) => {
   return (
-    <header className="bg-secondary flex w-full items-center space-x-10 rounded-10 p-20">
+    <header className="flex w-full items-center space-x-10 rounded-10 bg-background-900 p-20">
       <TokensOverlap
         className="h-32 w-32"
         tokens={[strategy.base, strategy.quote]}

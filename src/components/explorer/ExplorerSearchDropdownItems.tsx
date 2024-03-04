@@ -32,7 +32,7 @@ export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
           params={{ type }}
           onClick={() => setSearch('')}
           className={cn(
-            'hover:bg-body rounded-6 p-10',
+            'rounded-6 p-10 hover:bg-black',
             active && 'flex items-center justify-between'
           )}
         >

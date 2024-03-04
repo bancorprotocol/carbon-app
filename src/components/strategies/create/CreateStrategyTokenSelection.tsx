@@ -36,7 +36,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
   return (
     <m.article
       variants={items}
-      className="bg-secondary rounded-10 p-20"
+      className="rounded-10 bg-background-900 p-20"
       key="strategyCreateTokenSelection"
     >
       <header className="mb-15 flex items-center justify-between">
