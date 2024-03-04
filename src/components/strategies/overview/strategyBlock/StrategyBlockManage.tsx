@@ -49,7 +49,7 @@ export const StrategyBlockManage: FC<Props> = ({
   const navigate = useNavigate();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-  const { type, slug } = useParams({ from: '/explorer/$type/$slug' });
+  const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
   const owner = useGetVoucherOwner(
     manage && type === 'token-pair' ? strategy.id : undefined
@@ -108,7 +108,7 @@ export const StrategyBlockManage: FC<Props> = ({
         const event = { type, slug, strategyEvent, strategies, sort, filter };
         explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
-          to: '/explorer/$type/$slug',
+          to: '/explore/$type/$slug',
           params: { type: 'wallet', slug: owner.data ?? '' },
         });
       },

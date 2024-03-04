@@ -9,6 +9,7 @@ import {
   explorerRedirect,
   explorerResultLayout,
   explorerTypePage,
+  oldExplorerLayout,
 } from 'libs/routing/routes/explorer';
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
@@ -38,6 +39,7 @@ export const routeTree = rootRoute.addChildren([
   tradePage,
   createStrategyPage,
   editStrategyPage,
+  oldExplorerLayout,
   explorerLayout.addChildren([
     explorerRedirect,
     explorerPage.addChildren([

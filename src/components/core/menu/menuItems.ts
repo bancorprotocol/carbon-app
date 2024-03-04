@@ -16,12 +16,12 @@ export const menuItems: MenuItem[] = [
     href: '/trade',
   },
   {
-    label: 'Explorer',
-    href: '/explorer',
+    label: 'Explore',
+    href: '/explore',
   },
   {
-    label: 'Simulator',
-    href: '/simulator',
+    label: 'Simulate',
+    href: '/simulate',
   },
   ...(isProduction
     ? []

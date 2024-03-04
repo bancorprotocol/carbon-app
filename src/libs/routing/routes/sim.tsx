@@ -10,7 +10,7 @@ import * as v from 'valibot';
 
 export const simulatorRootRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/simulator',
+  path: '/simulate',
 });
 
 export interface StrategyInputSearch {
@@ -33,7 +33,7 @@ export const simulatorRedirect = new Route({
   path: '/',
   beforeLoad: () => {
     redirect({
-      to: '/simulator/$simulationType',
+      to: '/simulate/$simulationType',
       params: { simulationType: 'recurring' },
       throw: true,
     });

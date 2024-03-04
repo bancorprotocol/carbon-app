@@ -23,7 +23,7 @@ export const screenshot = (
 const urlNames = {
   '/': 'My Strategies',
   '/trade?*': 'Trade',
-  '/explorer': 'Explorer',
+  '/explore': 'Explore',
   '/debug': 'Debug',
   '/simulator/recurring': 'Simulator',
 };
