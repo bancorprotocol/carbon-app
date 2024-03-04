@@ -20,7 +20,7 @@ export const ExplorerTabs = () => {
   const match = useMatchRoute();
 
   const showFilter = !!match({
-    to: '/explorer/$type/$slug',
+    to: '/explore/$type/$slug',
     params: { type, slug },
     fuzzy: true,
   });
@@ -28,14 +28,14 @@ export const ExplorerTabs = () => {
   const tabs: StrategyTab[] = [
     {
       label: 'Overview',
-      href: '/explorer/$type/$slug',
+      href: '/explore/$type/$slug',
       params: { type, slug },
       icon: <IconOverview className="h-18 w-18" />,
       badge: strategies?.length || 0,
     },
     {
       label: 'Portfolio',
-      href: '/explorer/$type/$slug/portfolio',
+      href: '/explore/$type/$slug/portfolio',
       params: { type, slug },
       icon: <IconPieChart className="h-18 w-18" />,
     },

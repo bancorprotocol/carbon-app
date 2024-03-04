@@ -17,11 +17,11 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: 'Explore',
-    href: '/explorer',
+    href: '/explore',
   },
   {
     label: 'Simulate',
-    href: '/simulator',
+    href: '/simulate',
   },
   ...(isProduction
     ? []

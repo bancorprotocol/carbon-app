@@ -21,9 +21,9 @@ export const SimulatorPage = () => {
   const { aboveBreakpoint } = useBreakpoints();
 
   const navigate = useNavigate();
-  const { simulationType } = useParams({ from: '/simulator/$simulationType' });
+  const { simulationType } = useParams({ from: '/simulate/$simulationType' });
   const searchState = useSearch({
-    from: '/simulator/$simulationType',
+    from: '/simulate/$simulationType',
   });
   const { dispatch, state, bounds } = useSimulatorInput({ searchState });
   const { data, isLoading, isError } = useGetTokenPriceHistory({
@@ -50,7 +50,7 @@ export const SimulatorPage = () => {
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
     navigate({
-      to: '/simulator/result',
+      to: '/simulate/result',
       search: {
         baseToken: state.baseToken?.address || '',
         quoteToken: state.quoteToken?.address || '',

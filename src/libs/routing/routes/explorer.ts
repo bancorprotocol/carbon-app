@@ -7,9 +7,24 @@ import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
 
+// Used for redirecting old explorer route to new explorer route
+// TODO: remove this on May 2024
+export const oldExplorerLayout = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/explorer/*',
+  beforeLoad: ({ params }) => {
+    console.log(params);
+    const allParams = (params as any)['*'];
+    redirect({
+      to: `/explore/${allParams}`,
+      throw: true,
+    } as any);
+  },
+});
+
 export const explorerLayout = new Route({
   getParentRoute: () => rootRoute,
-  path: '/explorer',
+  path: '/explore',
 });
 
 export const explorerRedirect = new Route({
@@ -17,7 +32,7 @@ export const explorerRedirect = new Route({
   path: '/',
   beforeLoad: () => {
     redirect({
-      to: '/explorer/$type',
+      to: '/explore/$type',
       params: { type: 'token-pair' },
       throw: true,
     });
