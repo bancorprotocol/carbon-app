@@ -13,7 +13,7 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
   const output = testCase.output;
 
   return test(testDescription(testCase), async ({ page }) => {
-    await navigateTo(page, '/simulator/recurring');
+    await navigateTo(page, '/simulate/recurring');
 
     const createForm = new CreateSimulationDriver(page, testCase);
     await createForm.waitForDisclaimerModal();
