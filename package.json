@@ -124,6 +124,5 @@
   },
   "devDependencies": {
     "@types/d3": "^7.4.3"
-  },
-  "packageManager": "yarn@1.22.21"
+  }
 }
