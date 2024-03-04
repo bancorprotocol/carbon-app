@@ -73,18 +73,17 @@
 
   .mobile-menu {
     height: var(--mobile-menu-height);
-    @apply bg-body z-40 fixed bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t border-background-200 px-10 font-weight-500 text-white/50 dark:border-background-800 md:hidden;
+    @apply bg-body z-40 fixed bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t px-10 font-weight-500 text-white/50 border-background-800 md:hidden;
   }
 }
 
 @layer utilities {
   .bg-body {
-    @apply dark:bg-black;
+    @apply bg-black;
   }
 
   .bg-content {
-    @apply border border-background-200 bg-white;
-    @apply dark:border dark:border-background-800 dark:bg-black;
+    @apply border border-background-800 bg-black;
   }
 
   .bg-secondary {
