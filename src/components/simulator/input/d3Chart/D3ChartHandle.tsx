@@ -1,6 +1,9 @@
 import { D3ChartSettings, drag, Selection } from 'libs/d3';
 import { D3ChartHandleLine } from 'components/simulator/input/d3Chart/D3ChartHandleLine';
-import { getSelector } from 'components/simulator/input/d3Chart/utils';
+import {
+  getSelector,
+  useSelectable,
+} from 'components/simulator/input/d3Chart/utils';
 import { useEffect } from 'react';
 
 interface Props {
@@ -23,14 +26,12 @@ export const D3ChartHandle = ({
   ...props
 }: Props) => {
   const selection = getSelector(props.selector);
+  const isSelectable = useSelectable(props.selector);
 
   const handleDrag = drag()
-    .subject(() => {
-      const line = selection.select('line');
-      return {
-        y: Number(line.attr('y1')),
-      };
-    })
+    .subject(() => ({
+      y: Number(selection.select('line').attr('y1')),
+    }))
     .on('start', ({ y }) => onDragStart?.(y))
     .on('drag', ({ y }) => onDrag(y))
     .on('end', ({ y }) => {
@@ -51,8 +52,9 @@ export const D3ChartHandle = ({
     });
 
   useEffect(() => {
+    if (!isSelectable) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  });
+  }, [isSelectable, handleDrag, selection]);
 
   return <D3ChartHandleLine {...props} isDraggable />;
 };
