@@ -37,11 +37,10 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     const simulationResult = new SimulationResultDriver(page, testCase);
     await simulationResult.waitForChartElement();
 
-    const simulatorSummary = simulationResult.getSimulationSummary();
-    const sellOrderRates = simulatorSummary.sell.orderRates();
-    const sellOrderBudget = simulatorSummary.sell.orderBudget();
-    const buyOrderRates = simulatorSummary.buy.orderRates();
-    const buyOrderBudget = simulatorSummary.buy.orderBudget();
+    const sellOrderRates = simulationResult.getSummaryRow('sell', 'rates');
+    const sellOrderBudget = simulationResult.getSummaryRow('sell', 'budget');
+    const buyOrderRates = simulationResult.getSummaryRow('buy', 'rates');
+    const buyOrderBudget = simulationResult.getSummaryRow('buy', 'budget');
 
     await expect(sellOrderRates).toHaveText(output.sell.rate);
     await expect(sellOrderBudget).toHaveText(output.sell.budget);

@@ -1,11 +1,9 @@
 import {
-  DebugTokens,
-  debugTokens,
   CreateStrategyTestCase,
   RecurringStrategyTestCase,
   OverlappingStrategyTestCase,
-  Setting,
 } from './types';
+import { DebugTokens, debugTokens, Setting } from '../types';
 
 export function isRecurringTestCase(
   testCase: CreateStrategyTestCase

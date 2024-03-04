@@ -7,7 +7,11 @@
  * - E2E tests will likely fail for value based on these mocks, so you'll need to update them.
  * - visual tests will fail too
  *
- * Last ran on 29th Feb 2024
+ * Last ran on:
+ * ROI: 18th Sep 2023
+ * Market Rate: 18th Sep 2023
+ * History Prices: 29th Feb 2024
+ * Simulator Results: 29th Feb 2024
  */
 
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
@@ -176,11 +180,11 @@ const simulatorResultCases = [
     buyIsRange: true,
     buyMin: 1500,
     buyMax: 1600,
-    buyBudget: 2000,
+    quoteBudget: 2000,
     sellIsRange: true,
     sellMin: 1700,
     sellMax: 2000,
-    sellBudget: 10,
+    baseBudget: 10,
     start: '2023-03-02',
     end: '2024-02-25',
   },
@@ -190,11 +194,11 @@ const simulatorResultCases = [
     buyIsRange: true,
     buyMin: 1700,
     buyMax: 1800,
-    buyBudget: 200,
+    quoteBudget: 200,
     sellIsRange: false,
     sellMin: 2100,
     sellMax: 2100,
-    sellBudget: 1,
+    baseBudget: 1,
     start: '2023-03-10',
     end: '2024-01-24',
   },
@@ -204,11 +208,11 @@ const simulatorResultCases = [
     buyIsRange: false,
     buyMin: 222000000,
     buyMax: 222000000,
-    buyBudget: 1000000000,
+    quoteBudget: 1000000000,
     sellIsRange: true,
     sellMin: 240000000,
     sellMax: 270000000,
-    sellBudget: 1,
+    baseBudget: 1,
     start: '2023-03-08',
     end: '2024-01-21',
   },
@@ -218,11 +222,11 @@ const simulatorResultCases = [
     buyIsRange: false,
     buyMin: 222000000,
     buyMax: 222000000,
-    buyBudget: 100000000,
+    quoteBudget: 100000000,
     sellIsRange: false,
     sellMin: 240000000,
     sellMax: 240000000,
-    sellBudget: 10,
+    baseBudget: 10,
     start: '2023-03-01',
     end: '2024-02-21',
   },
@@ -259,33 +263,15 @@ const getHistoryPrices = async (baseToken, quoteToken, start, end) => {
   return get(url);
 };
 
-const getSimulatorData = async (
-  baseToken,
-  quoteToken,
-  buyIsRange,
-  buyMin,
-  buyMax,
-  buyBudget,
-  sellIsRange,
-  sellMin,
-  sellMax,
-  sellBudget,
-  start,
-  end
-) => {
-  const startTimestamp = convertToUnix(start);
-  const endTimestamp = convertToUnix(end);
+const getSimulatorData = async (simulatorData) => {
   const url = new URL(`${baseUrl}/simulate-create-strategy`);
-  url.searchParams.set('baseToken', baseToken);
-  url.searchParams.set('quoteToken', quoteToken);
-  url.searchParams.set('buyIsRange', buyIsRange);
-  url.searchParams.set('buyMin', buyMin);
-  url.searchParams.set('buyMax', buyMax);
-  url.searchParams.set('quoteBudget', buyBudget);
-  url.searchParams.set('sellIsRange', sellIsRange);
-  url.searchParams.set('sellMin', sellMin);
-  url.searchParams.set('sellMax', sellMax);
-  url.searchParams.set('baseBudget', sellBudget);
+  const startTimestamp = convertToUnix(simulatorData.start);
+  const endTimestamp = convertToUnix(simulatorData.end);
+
+  for (const key in simulatorData) {
+    url.searchParams.set(key, simulatorData[key]);
+  }
+
   url.searchParams.set('start', startTimestamp);
   url.searchParams.set('end', endTimestamp);
   return get(url);
@@ -310,35 +296,29 @@ async function main() {
       c.start,
       c.end
     );
-    historyPrices[
-      `${c.baseToken.toLowerCase()}-${c.quoteToken.toLowerCase()}`
-    ] = dict;
+    const pairKey = [c.baseToken, c.quoteToken].join('-').toLowerCase();
+    historyPrices[pairKey] = dict;
   });
   await Promise.allSettled(getHistoryPricesAll);
 
   const simulatorResult = {};
   const getSimulatorDataAll = simulatorResultCases.map(async (c) => {
-    const dict = await getSimulatorData(
+    const dict = await getSimulatorData(c);
+    const pairKey = [
       c.baseToken,
       c.quoteToken,
-      c.buyIsRange,
       c.buyMin,
       c.buyMax,
-      c.buyBudget,
-      c.sellIsRange,
+      c.quoteBudget,
       c.sellMin,
       c.sellMax,
-      c.sellBudget,
-      c.start,
-      c.end
-    );
-    simulatorResult[
-      `${c.baseToken.toLowerCase()}-${c.quoteToken.toLowerCase()}-${c.buyMin}-${
-        c.buyMax
-      }-${c.buyBudget}-${c.sellMin}-${c.sellMax}-${
-        c.sellBudget
-      }-${convertToUnix(c.start)}-${convertToUnix(c.end)}`
-    ] = dict;
+      c.baseBudget,
+      convertToUnix(c.start),
+      convertToUnix(c.end),
+    ]
+      .join('-')
+      .toLowerCase();
+    simulatorResult[pairKey] = dict;
   });
   await Promise.allSettled(getSimulatorDataAll);
 

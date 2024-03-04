@@ -6,14 +6,8 @@ import {
   getRecurringSettings,
   screenshotPath,
 } from './utils';
-import {
-  RangeOrder,
-  debugTokens,
-  CreateStrategyTestCase,
-  Direction,
-  Setting,
-  StrategyType,
-} from './types';
+import { CreateStrategyTestCase, StrategyType } from './types';
+import { RangeOrder, debugTokens, Direction, Setting } from '../types';
 import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
 import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
@@ -22,8 +16,8 @@ import { dayjs } from '../../../src/libs/dayjs';
 export class CreateSimulationDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
-  async waitForPriceChart(timeout?: number) {
-    await waitFor(this.page, 'price-chart', timeout);
+  waitForPriceChart(timeout?: number) {
+    return waitFor(this.page, 'price-chart', timeout);
   }
 
   async screenshotPriceChart() {
@@ -35,8 +29,8 @@ export class CreateSimulationDriver {
     );
   }
 
-  async waitForDisclaimerModal(timeout?: number) {
-    await waitFor(this.page, 'sim-disclaimer-modal', timeout);
+  waitForDisclaimerModal(timeout?: number) {
+    return waitFor(this.page, 'sim-disclaimer-modal', timeout);
   }
 
   getForm() {
@@ -59,17 +53,13 @@ export class CreateSimulationDriver {
 
   async selectMonthYear(monthYear: string) {
     const findMonthYear = async () => {
-      const isMonthYearVisible = await this.page.isVisible(
-        `text='${monthYear}'`
-      );
-      if (isMonthYearVisible) {
-        return;
-      } else {
-        await this.page.getByTestId('date-picker-left-arrow').click();
-        return await findMonthYear();
-      }
+      const selector = `text='${monthYear}'`;
+      const isMonthYearVisible = await this.page.isVisible(selector);
+      if (isMonthYearVisible) return;
+      await this.page.getByTestId('date-picker-left-arrow').click();
+      return findMonthYear();
     };
-    await findMonthYear();
+    return findMonthYear();
   }
 
   async selectDay(day: string, monthYear: string) {
@@ -78,12 +68,10 @@ export class CreateSimulationDriver {
       .getByText(day, { exact: true });
     const dayButtonCount = await dayButton.count();
     // If the month has more than one day with the same number, find right one to press
+
     if (dayButtonCount > 1) {
-      if (Number(day) < 15) {
-        await dayButton.nth(0).click();
-      } else {
-        await dayButton.nth(1).click();
-      }
+      const index = Number(day) < 15 ? 0 : 1;
+      await dayButton.nth(index).click();
     } else {
       await dayButton.click();
     }
@@ -103,13 +91,7 @@ export class CreateSimulationDriver {
   }
 
   async fillDates(start: string, end: string) {
-    const startTimestamp = dayjs(start).unix();
-    const endTimestamp = dayjs(end).unix();
-
-    const [from, to] =
-      startTimestamp <= endTimestamp
-        ? [startTimestamp, endTimestamp]
-        : [endTimestamp, startTimestamp];
+    const [from, to] = [dayjs(start).unix(), dayjs(end).unix()].sort();
 
     await this.page.getByTestId('date-picker-button').click();
     // Select date twice to force range to be 1 day long

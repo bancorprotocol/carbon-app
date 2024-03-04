@@ -32,7 +32,7 @@ const testCases: CreateStrategyTestCase[] = [
     output: {
       roi: '-29.91%',
       estimatedGains: 'DAI -9,904.69',
-      date: 'March 02, 2023 - February 25, 2024',
+      date: 'March 02, 2023 – February 25, 2024',
       buy: {
         rate: '1,500.00 - 1,600.00 DAI per ETH',
         budget: '2,000.00 DAI',
@@ -67,7 +67,7 @@ const testCases: CreateStrategyTestCase[] = [
     output: {
       roi: '15.49%',
       estimatedGains: 'USDC 376.75',
-      date: 'March 10, 2023 - January 24, 2024',
+      date: 'March 10, 2023 – January 24, 2024',
       buy: {
         rate: '1,700.00 - 1,800.00 USDC per ETH',
         budget: '200.00 USDC',
@@ -102,7 +102,7 @@ const testCases: CreateStrategyTestCase[] = [
     output: {
       roi: '32.23%',
       estimatedGains: 'SHIB 407,118,924.87',
-      date: 'March 08, 2023 - January 21, 2024',
+      date: 'March 08, 2023 – January 21, 2024',
       buy: {
         rate: '222.00M SHIB per ETH',
         budget: '1.00B SHIB',
@@ -137,7 +137,7 @@ const testCases: CreateStrategyTestCase[] = [
     output: {
       roi: '-8.87%',
       estimatedGains: 'SHIB -285,338,714.67',
-      date: 'March 01, 2023 - February 21, 2024',
+      date: 'March 01, 2023 – February 21, 2024',
       buy: {
         rate: '222.00M SHIB per ETH',
         budget: '100.00M SHIB',

@@ -169,7 +169,7 @@ export const DatePickerButton = memo(
         >
           {hasDates ? (
             <>
-              {startDate} - {endDate}
+              {startDate} – {endDate}
             </>
           ) : (
             'Select date range'

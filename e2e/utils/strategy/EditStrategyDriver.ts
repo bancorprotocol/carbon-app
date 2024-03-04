@@ -2,7 +2,8 @@ import { expect } from '@playwright/test';
 import { Page } from 'playwright-core';
 import { MainMenuDriver } from '../MainMenuDriver';
 import { screenshot, shouldTakeScreenshot } from '../operators';
-import { CreateStrategyTestCase, Setting, Direction, MinMax } from './types';
+import { CreateStrategyTestCase } from './types';
+import { Setting, Direction, MinMax } from '../types';
 import {
   assertDisposableTestCase,
   assertRecurringTestCase,

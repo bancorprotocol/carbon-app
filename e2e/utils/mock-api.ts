@@ -3,7 +3,6 @@ import marketRate from '../mocks/market-rates.json';
 import roi from '../mocks/roi.json';
 import historyPrices from '../mocks/history-prices.json';
 import simulatorResult from '../mocks/simulator-result.json';
-import _ from 'lodash';
 
 export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {
@@ -25,11 +24,10 @@ export const mockApi = async (page: Page) => {
   });
   await page.route('**/*/history/prices?*', (route) => {
     const url = new URL(route.request().url());
-    const baseToken = url.searchParams.get('baseToken')?.toLowerCase();
-    const quoteToken = url.searchParams.get('quoteToken')?.toLowerCase();
-    const start = url.searchParams.get('start')?.toLowerCase();
-    const end = url.searchParams.get('end')?.toLowerCase();
-    const historyPricesId = _.join([baseToken, quoteToken], '-');
+    const { baseToken, quoteToken, start, end } = Object.fromEntries(
+      url.searchParams.entries()
+    );
+    const historyPricesId = [baseToken, quoteToken].join('-').toLowerCase();
     const data = historyPrices[historyPricesId];
     // If unexpected behavior, let the real server handle that
     if (!baseToken || !quoteToken || !start || !end || !data) {
@@ -42,51 +40,19 @@ export const mockApi = async (page: Page) => {
   });
   await page.route('**/*/simulate-create-strategy?*', (route) => {
     const url = new URL(route.request().url());
-    const baseToken = url.searchParams.get('baseToken')?.toLowerCase();
-    const quoteToken = url.searchParams.get('quoteToken')?.toLowerCase();
-    const buyIsRange = url.searchParams.get('buyIsRange');
-    const buyMin = url.searchParams.get('buyMin');
-    const buyMax = url.searchParams.get('buyMax');
-    const quoteBudget = url.searchParams.get('quoteBudget');
-    const sellIsRange = url.searchParams.get('sellIsRange');
-    const sellMin = url.searchParams.get('sellMin');
-    const sellMax = url.searchParams.get('sellMax');
-    const baseBudget = url.searchParams.get('baseBudget');
-    const start = url.searchParams.get('start');
-    const end = url.searchParams.get('end');
-    const simulateCreateStrategyId = _.join(
-      [
-        baseToken,
-        quoteToken,
-        buyMin,
-        buyMax,
-        quoteBudget,
-        sellMin,
-        sellMax,
-        baseBudget,
-        start,
-        end,
-      ],
-      '-'
+    const [buyIsRange, sellIsRange, ...keyValues] = Array.from(
+      url.searchParams.entries()
     );
+    const simulateCreateStrategyId = keyValues.join('-');
     // If unexpected behavior, let the real server handle that
     if (
-      !baseToken ||
-      !quoteToken ||
+      keyValues.some((v) => !v) ||
       !buyIsRange ||
-      !buyMin ||
-      !buyMax ||
-      !quoteBudget ||
       !sellIsRange ||
-      !sellMin ||
-      !sellMax ||
-      !baseBudget ||
-      !start ||
-      !end ||
       !simulatorResult[simulateCreateStrategyId]
-    ) {
+    )
       return route.continue();
-    }
+
     const data = simulatorResult[simulateCreateStrategyId];
     return route.fulfill({ json: data });
   });

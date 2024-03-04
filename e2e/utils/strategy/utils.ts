@@ -1,17 +1,19 @@
 import {
-  DebugTokens,
-  LimitOrder,
   CreateStrategyInput,
-  RangeOrder,
-  debugTokens,
   CreateStrategyTestCase,
   DisposableStrategyTestCase,
   RecurringStrategyTestCase,
   OverlappingStrategyTestCase,
+} from './types';
+import {
+  DebugTokens,
+  LimitOrder,
+  RangeOrder,
+  debugTokens,
   Setting,
   MinMax,
   StrategyCase,
-} from './types';
+} from '../types';
 
 export function isDisposableTestCase(
   testCase: CreateStrategyTestCase

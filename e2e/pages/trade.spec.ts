@@ -76,7 +76,7 @@ test.describe('Trade', () => {
       await tokenApproval.checkApproval([testCase.source]);
 
       // Verify form empty
-      await driver.checkSuccess();
+      await driver.awaitSuccess();
       expect(driver.getPayInput()).toHaveValue('');
       expect(driver.getReceiveInput()).toHaveValue('');
 

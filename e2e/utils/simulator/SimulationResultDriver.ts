@@ -1,9 +1,6 @@
 import { Page } from 'playwright-core';
-import {
-  CreateStrategyTestCase,
-  Direction,
-  SimulatorChartTypes,
-} from './types';
+import { CreateStrategyTestCase, SimulatorChartTypes } from './types';
+import { Direction } from '../types';
 import { screenshot, waitFor } from '../operators';
 import { screenshotPath } from './utils';
 
@@ -11,31 +8,38 @@ export class SimulationResultDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
   async waitForChartElement() {
-    await waitFor(this.page, 'chart-tab-animation', 50000);
+    await waitFor(this.page, 'chart-tab-animation');
   }
 
   getSummaryChart() {
-    return this.page.getByTestId('chart-summary');
+    return this.page.getByTestId('chart-summary').locator('..');
   }
+
   getAnimationChart() {
-    return this.page.getByTestId('chart-animation');
+    return this.page.getByTestId(`chart-animation-price`).locator('..');
   }
 
   async screenshotAnimationChart() {
-    const animationChart = this.page.getByTestId('chart-animation');
+    const animationChart = this.getAnimationChart();
     await animationChart.scrollIntoViewIfNeeded();
+    const elementsToHide = [this.getSimulationDates()];
+
     await screenshot(
       animationChart,
-      screenshotPath(this.testCase, 'simulator-results-animation')
+      screenshotPath(this.testCase, 'simulator-results-animation'),
+      elementsToHide
     );
   }
 
   async screenshotSummaryChart() {
-    const summaryChart = this.page.getByTestId('chart-summary');
+    const summaryChart = this.getSummaryChart();
     await summaryChart.scrollIntoViewIfNeeded();
+    const elementsToHide = [this.getSimulationDates()];
+
     await screenshot(
       summaryChart,
-      screenshotPath(this.testCase, 'simulator-results-summary')
+      screenshotPath(this.testCase, 'simulator-results-summary'),
+      elementsToHide
     );
   }
 
@@ -44,14 +48,12 @@ export class SimulationResultDriver {
   }
 
   async getAnimationControls() {
+    const control = (id: string) =>
+      this.page.getByTestId(`animation-controls-${id}`);
     return {
-      playPause: async () =>
-        await this.page.getByTestId('animation-controls-play&pause').click(),
-      end: async () => {
-        await this.page.getByTestId('animation-controls-end').click();
-      },
-      replay: async () =>
-        await this.page.getByTestId('animation-controls-replay').click(),
+      playPause: async () => control('play&pause').click(),
+      end: async () => control('end').click(),
+      replay: async () => control('replay').click(),
       setPlaybackSpeed: async (speed) => {
         await this.page.getByTestId('set-playback-speed').click();
         await this.page.getByTestId(`set-speed-${speed}`).click();
@@ -63,20 +65,8 @@ export class SimulationResultDriver {
     return this.page.getByTestId('simulation-dates');
   }
 
-  getSimulationSummaryRow(direction: Direction) {
-    const orderRates = () =>
-      this.page.getByTestId(`table-${direction}-order-rates`);
-    const orderBudget = () =>
-      this.page.getByTestId(`table-${direction}-order-budget`);
-
-    return { orderRates, orderBudget };
-  }
-
-  getSimulationSummary() {
-    return {
-      buy: this.getSimulationSummaryRow('buy'),
-      sell: this.getSimulationSummaryRow('sell'),
-    };
+  getSummaryRow(direction: Direction, type: 'rates' | 'budget') {
+    return this.page.getByTestId(`table-${direction}-order-${type}`);
   }
 
   getRoi() {
