@@ -13,7 +13,6 @@ export const oldExplorerLayout = new Route({
   getParentRoute: () => rootRoute,
   path: '/explorer/*',
   beforeLoad: ({ params }) => {
-    console.log(params);
     const allParams = (params as any)['*'];
     redirect({
       to: `/explore/${allParams}`,
