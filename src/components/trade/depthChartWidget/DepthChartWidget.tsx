@@ -17,12 +17,12 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
   const isError = (!buyOrders && !sellOrders) || !base || !quote || !options;
 
   return (
-    <div className="rounded-10 bg-silver p-20">
+    <div className="rounded-10 bg-background-900 p-20">
       <div className="bg-body mb-20 flex w-[244px] items-center rounded-[100px] p-2">
         <button
           onClick={() => setShowTVChart(false)}
           className={`rounded-40 ${
-            !showTVChart ? 'bg-silver' : 'text-secondary'
+            !showTVChart ? 'bg-background-900' : 'text-secondary'
           } w-[120px] px-10 py-4`}
         >
           Depth
@@ -30,7 +30,7 @@ export const DepthChartWidget = ({ base, quote }: TradePageProps) => {
         <button
           onClick={() => setShowTVChart(true)}
           className={`rounded-40 ${
-            showTVChart ? 'bg-silver' : 'text-secondary'
+            showTVChart ? 'bg-background-900' : 'text-secondary'
           } w-[120px] px-10 py-4`}
         >
           Price

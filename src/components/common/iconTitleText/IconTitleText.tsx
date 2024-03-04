@@ -22,7 +22,7 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
       case 'success':
         return 'text-green bg-green/25';
       default:
-        return 'bg-emphasis';
+        return 'bg-background-800';
     }
   };
 

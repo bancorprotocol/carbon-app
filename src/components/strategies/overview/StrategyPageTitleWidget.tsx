@@ -17,7 +17,7 @@ export const StrategyPageTitleWidget: FC<{
             <SearchInput
               value={search}
               setValue={setSearch}
-              className="rounded-full bg-charcoal"
+              className="rounded-full bg-background-900"
             />
           </div>
           <StrategyFilterSort />

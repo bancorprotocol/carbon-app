@@ -146,7 +146,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header>
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
         </header>
@@ -161,7 +161,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           disabled
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Withdraw Budget</h3>
           <Tooltip
@@ -220,7 +220,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
                   href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-4 font-weight-500 text-green"
+                  className="text-green inline-flex items-center gap-4 font-weight-500"
                 >
                   <span>Learn More</span>
                   <IconLink className="inline h-12 w-12" />
@@ -233,7 +233,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
               htmlFor={[buyId, sellId].join(',')}
               role="alert"
               aria-live="polite"
-              className="flex items-center gap-10 font-mono text-12 text-warning-500"
+              className="text-warning-500 flex items-center gap-10 font-mono text-12"
             >
               <IconWarning className="h-12 w-12" />
               <span className="flex-1">

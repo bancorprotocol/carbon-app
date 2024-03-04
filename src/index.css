@@ -72,7 +72,7 @@
 
   .mobile-menu {
     height: var(--mobile-menu-height);
-    @apply bg-body z-40 fixed bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t border-lightGrey px-10 font-weight-500 text-white/50 dark:border-darkGrey md:hidden;
+    @apply bg-body z-40 fixed bottom-0 flex w-full flex-shrink-0 items-center justify-around border-t border-background-200 px-10 font-weight-500 text-white/50 dark:border-background-800 md:hidden;
   }
 }
 
@@ -82,12 +82,12 @@
   }
 
   .bg-content {
-    @apply border border-lightGrey bg-white;
-    @apply dark:border dark:border-darkGrey dark:bg-black;
+    @apply border border-background-200 bg-white;
+    @apply dark:border dark:border-background-800 dark:bg-black;
   }
 
   .bg-secondary {
-    @apply bg-silver;
+    @apply bg-background-900;
   }
 
   .px-content {
@@ -95,7 +95,7 @@
   }
 
   .text-body {
-    @apply text-charcoal dark:text-white;
+    @apply text-white;
   }
 
   .text-secondary {
@@ -103,7 +103,7 @@
   }
 
   .loading-skeleton {
-    @apply animate-pulse rounded-10 bg-silver;
+    @apply animate-pulse rounded-10 bg-background-900;
   }
 }
 

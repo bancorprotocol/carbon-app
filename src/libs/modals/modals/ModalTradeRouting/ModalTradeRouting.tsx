@@ -174,7 +174,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             {errorMsg && (
               <output
                 htmlFor={sourceInputId}
-                className="text-12 font-weight-500 text-red"
+                className="text-red text-12 font-weight-500"
               >
                 {errorMsg}
               </output>
@@ -189,7 +189,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             data-testid="confirm-source"
             className="-mb-16 rounded-12 bg-black"
           />
-          <IconArrow className="z-10 mx-auto h-24 w-24 rounded-full bg-silver p-5" />
+          <IconArrow className="z-10 mx-auto h-24 w-24 rounded-full bg-background-900 p-5" />
           <TokenInputField
             value={totalTargetAmount}
             token={data.target}

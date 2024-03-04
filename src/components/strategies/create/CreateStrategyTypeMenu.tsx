@@ -83,7 +83,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     <>
       <m.div
         variants={itemsVariant}
-        className="flex flex-col gap-20 rounded-10 bg-silver p-20"
+        className="flex flex-col gap-20 rounded-10 bg-background-900 p-20"
         key="createStrategyTypeMenu"
       >
         <h2>Strategy Type</h2>
@@ -98,7 +98,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
               {isRecommended && (
                 <span
                   aria-labelledby={'legend-' + id}
-                  className="absolute top-8 right-8 rounded bg-darkGreen p-4 text-green"
+                  className="bg-darkGreen text-green absolute top-8 right-8 rounded p-4"
                 >
                   <IconStar aria-hidden className="h-10 w-10" />
                 </span>
@@ -156,7 +156,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                   onClick={(e) => toggleAccordion(e, id)}
                   className="mb-4 flex cursor-pointer items-center gap-8 text-12 text-white/80"
                 >
-                  <IconCheck className="h-14 w-14 text-green" />
+                  <IconCheck className="text-green h-14 w-14" />
                   {summary}
                   <IconChevron className={styles.chevron} />
                 </summary>
@@ -170,7 +170,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 id={'legend-' + id}
                 className="flex gap-8 text-12 text-white/40"
               >
-                <span className="rounded bg-darkGreen p-4 text-green">
+                <span className="bg-darkGreen text-green rounded p-4">
                   <IconStar aria-hidden className="h-10 w-10" />
                 </span>
                 Carbon Signature Feature

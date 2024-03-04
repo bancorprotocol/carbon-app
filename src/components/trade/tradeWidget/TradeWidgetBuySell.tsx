@@ -183,7 +183,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     <form
       {...formProps}
       onSubmit={handleTrade}
-      className="flex flex-col rounded-12 bg-silver p-20"
+      className="flex flex-col rounded-12 bg-background-900 p-20"
     >
       <h2 className="mb-20">
         {buy
@@ -199,7 +199,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {errorMsgSource && (
               <output
                 htmlFor={`${id}-pay`}
-                className="font-weight-500 text-red"
+                className="text-red font-weight-500"
               >
                 {errorMsgSource}
               </output>
@@ -227,7 +227,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {errorMsgTarget && (
               <button
                 type="button"
-                className="cursor-pointer font-weight-500 text-red"
+                className="text-red cursor-pointer font-weight-500"
                 onClick={() => {
                   onInputChange(false);
                   setTargetInput(liquidityQuery.data || '0');

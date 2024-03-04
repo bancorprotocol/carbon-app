@@ -31,9 +31,9 @@ export const ModalSheet: FC<ModalProps> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col gap-20 overflow-hidden rounded-t-10 border-0 bg-silver p-20 outline-none focus:outline-none">
+        <div className="relative flex w-full flex-col gap-20 overflow-hidden rounded-t-10 border-0 bg-background-900 p-20 outline-none focus:outline-none">
           {isLoading && (
-            <div className="statusBar absolute inset-x-0 top-0 h-6 bg-green/25" />
+            <div className="statusBar bg-green/25 absolute inset-x-0 top-0 h-6" />
           )}
           <header data-testid={testId} className="flex justify-between">
             {typeof title === 'string' ? <h2>{title}</h2> : title}

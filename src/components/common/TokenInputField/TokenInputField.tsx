@@ -103,7 +103,7 @@ export const TokenInputField: FC<Props> = ({
           disabled={disabled}
           data-testid={testid}
         />
-        <div className="flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8">
+        <div className="flex items-center gap-6 rounded-[20px] bg-background-800 py-6 px-8">
           <LogoImager alt="Token" src={token.logoURI} className="h-20 w-20" />
           <span className="font-weight-500">{token.symbol}</span>
         </div>

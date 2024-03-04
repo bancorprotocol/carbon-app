@@ -25,7 +25,7 @@ export const CreateStrategyGraph: FC<Props> = ({
       <m.div
         variants={items}
         key="createStrategyGraph"
-        className="flex h-[550px] flex-col rounded-10 bg-silver p-20 pb-40 md:sticky md:top-80"
+        className="flex h-[550px] flex-col rounded-10 bg-background-900 p-20 pb-40 md:sticky md:top-80"
       >
         <div className="flex items-center justify-between">
           <h2 className="mb-20 font-weight-500">Price Chart</h2>

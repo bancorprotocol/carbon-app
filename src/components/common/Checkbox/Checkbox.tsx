@@ -19,7 +19,7 @@ export const Checkbox: FC<Props> = ({ isChecked, setIsChecked, ...attr }) => {
       className={cn(`${classNames} ${borderColor}`, attr.className)}
       onClick={() => setIsChecked(!isChecked)}
     >
-      {isChecked && <IconCheck className="h-10 w-10 text-silver" />}
+      {isChecked && <IconCheck className="h-10 w-10 text-white/50" />}
     </button>
   );
 };

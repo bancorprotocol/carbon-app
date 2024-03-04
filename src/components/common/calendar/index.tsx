@@ -32,7 +32,7 @@ export const Calendar = ({
         day: cn(
           'text-white/60 h-32 w-36 p-0 rounded-8 border-box',
           'focus-visible:border focus-visible:border-white/50 focus-visible:outline-none',
-          'hover:bg-silver hover:text-white'
+          'hover:bg-background-900 hover:text-white'
         ),
         day_selected:
           'focus-visible:bg-green/80 font-weight-500 text-white bg-green/20 rounded-0 [&:not(.outside)]:opacity-100',

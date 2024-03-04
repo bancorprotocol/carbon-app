@@ -13,7 +13,7 @@ export const ExplorerEmpty = ({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center space-y-30 rounded-10 border-2 border-emphasis px-20 py-50 md:h-[500px]'
+        'flex flex-col items-center justify-center space-y-30 rounded-10 border-2 border-background-800 px-20 py-50 md:h-[500px]'
       )}
     >
       <div

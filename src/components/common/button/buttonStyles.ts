@@ -21,15 +21,15 @@ export const buttonStyles = cva<ButtonVariants>(
       variant: {
         black: [
           'bg-black border-2 border-black !text-white',
-          'hover:border-grey3 hover:disabled:black',
+          'hover:border-background-700 hover:disabled:black',
         ],
         white: [
           'bg-white border-2 border-white !text-black',
-          'hover:border-grey4 hover:disabled:border-white',
+          'hover:border-background-400 hover:disabled:border-white',
         ],
         secondary: [
-          'bg-emphasis border-2 border-emphasis !text-white',
-          'hover:border-grey3 hover:disabled:border-emphasis',
+          'bg-background-800 border-2 border-background-800 !text-white',
+          'hover:border-background-700 hover:disabled:border-background-800',
         ],
         success: [
           'bg-green border-2 border-green !text-black',
