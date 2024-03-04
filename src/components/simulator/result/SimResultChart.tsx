@@ -19,7 +19,7 @@ interface Props {
 export const SimResultChart = ({ state, simulationType }: Props) => {
   const ctx = useSimulator();
   const [showSummary, setShowSummary] = useState(false);
-  const searchState = useSearch({ from: '/simulator/result' });
+  const searchState = useSearch({ from: '/simulate/result' });
 
   if (ctx.isError) {
     return (
@@ -41,7 +41,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           variant="error"
         />
         <Link
-          to="/simulator/$simulationType"
+          to="/simulate/$simulationType"
           params={{ simulationType }}
           search={searchState}
           className={buttonStyles({

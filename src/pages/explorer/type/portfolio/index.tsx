@@ -13,7 +13,7 @@ export const ExplorerTypePortfolioPage = () => {
 
   const onRowClick = (row: Row<PortfolioData>) =>
     navigate({
-      to: '/explorer/$type/$slug/portfolio/token/$address',
+      to: '/explore/$type/$slug/portfolio/token/$address',
       params: {
         type,
         slug: slug || '',
