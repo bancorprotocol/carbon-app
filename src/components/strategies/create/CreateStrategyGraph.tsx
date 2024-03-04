@@ -30,7 +30,7 @@ export const CreateStrategyGraph: FC<Props> = ({
         <div className="flex items-center justify-between">
           <h2 className="mb-20 font-weight-500">Price Chart</h2>
           <Button
-            className="mb-20 self-end"
+            className="mb-20 self-end bg-background-700 hover:border-background-600"
             variant="secondary"
             size="md"
             onClick={() => {

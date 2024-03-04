@@ -233,7 +233,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
               htmlFor={[buyId, sellId].join(',')}
               role="alert"
               aria-live="polite"
-              className="text-warning-500 flex items-center gap-10 font-mono text-12"
+              className="flex items-center gap-10 font-mono text-12 text-warning"
             >
               <IconWarning className="h-12 w-12" />
               <span className="flex-1">

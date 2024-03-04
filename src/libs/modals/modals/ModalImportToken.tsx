@@ -63,7 +63,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
             <NewTabLink
               to={getExplorerLink('token', data.address)}
               className={
-                'text-warning-500 flex items-center text-14 font-weight-500'
+                'flex items-center text-14 font-weight-500 text-warning'
               }
             >
               <span className={'whitespace-nowrap'}>View on Explorer</span>

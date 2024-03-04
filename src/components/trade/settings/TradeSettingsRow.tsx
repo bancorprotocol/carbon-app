@@ -117,7 +117,7 @@ export const TradeSettingsRow: FC<{
       </div>
       {warningMessage && (
         <div
-          className={`mt-15 flex font-mono text-12 font-weight-500 text-warning-400`}
+          className={`mt-15 flex font-mono text-12 font-weight-500 text-warning`}
         >
           <IconWarning className={`w-14 ${isError ? 'text-red' : ''}`} />
           <span className={`ml-5 ${isError ? 'text-red' : ''}`}>

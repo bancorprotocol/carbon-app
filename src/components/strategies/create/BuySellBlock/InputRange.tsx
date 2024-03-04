@@ -89,7 +89,7 @@ export const InputRange: FC<InputRangeProps> = ({
             bg-body w-full cursor-text rounded-r-4 rounded-l-16 border border-black p-16
             focus-within:border-white/50 
             ${error ? '!border-red/50' : ''}
-            ${showWarning ? '!border-warning-400' : ''}
+            ${showWarning ? '!border-warning' : ''}
           `}
           onClick={() => document.getElementById(inputMinId)?.focus()}
         >
@@ -134,7 +134,7 @@ export const InputRange: FC<InputRangeProps> = ({
             bg-body w-full cursor-text rounded-r-16 rounded-l-4 border border-black p-16
             focus-within:border-white/50
             ${error ? '!border-red/50' : ''}
-            ${showWarning ? '!border-warning-400' : ''}
+            ${showWarning ? '!border-warning' : ''}
           `}
           onClick={() => document.getElementById(inputMaxId)?.focus()}
         >

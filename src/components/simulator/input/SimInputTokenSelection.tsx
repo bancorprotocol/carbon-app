@@ -80,7 +80,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-10 pr-20',
-            noPriceHistory && 'border-warning-500 border-2'
+            noPriceHistory && 'border-2 border-warning'
           )}
           onClick={() => {
             openModal('tokenLists', {
@@ -124,7 +124,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-16 pr-16',
-            noPriceHistory && 'border-warning-500 border-2'
+            noPriceHistory && 'border-2 border-warning'
           )}
           onClick={() => {
             openModal('tokenLists', {
