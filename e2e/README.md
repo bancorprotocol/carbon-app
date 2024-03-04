@@ -1,6 +1,6 @@
 # E2E
 
-### Local
+## Local
 
 Install Playwright browsers
 
@@ -8,7 +8,7 @@ Install Playwright browsers
 yarn playwright install
 ```
 
-E2E tests call Tenderly API to create a fork of mainnet at a specific blockNumber. You need to have a [Tenderly account](https://tenderly.co/).
+E2E tests call the Tenderly API to create a fork of mainnet at a specific blockNumber. You need to have a [Tenderly account](https://tenderly.co/).
 
 Add in your .env :
 
@@ -30,24 +30,24 @@ Run in UI mode :
 yarn e2e --ui
 ```
 
-### CI
+## CI
 
 E2E run in a github action on:
 
 - every commit
 - when draft PR become ready for review
 
-### Screenshot
+## Screenshots
 
-Screenshot are taken during E2E and images are pushed automatically on the current branch
+Screenshots are taken during E2E and images are pushed automatically on the current branch
 
-Screenshot are only taking :
+Screenshots are only taken:
 
-- In Github Action
+- In a Github Action
 - If PR is not draft
 
 <p style="border:solid 1px #303030; background-color: #30303030; border-radius:4px; padding:8px 16px">
-We do not run screenshot on draft commit as we would need to merge the local branch on each change
+Screenshots are not taken on draft commits as the local branch would need to be merged on each change.
 <p>
 
 ## Tips
@@ -73,7 +73,7 @@ const [first] = await list.all();
 await expect(first.getTestId('strategy-pair')).toHaveText('ETH/DAI');
 ```
 
-As we use the same network for all tests, mutating a strategy in one test might impact the other. For now, we'll try to use different pairs of token for each test to avoid side effect :
+As the same network was used for all tests, mutating a strategy in one test might impact another test. For now, it is suggested to try to use different token pairs for each test to avoid unwanted side effect, for example:
 
 - `ETH/DAI`: Create recurring strategy
 - `ETH/BNT`: Create overlapping strategy
