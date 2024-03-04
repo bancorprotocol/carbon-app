@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="72" height="32" viewBox="0 0 72 32" fill="none">
   <g opacity="0.75">
-    <path opacity="0.55" d="M0 32H72V31H0V32Z" fill="white" fill-opacity="0.25"/>
+    <path opacity="0.55" d="M0 32H72V31H0V32Z" fill="currentColor" fill-opacity="0.25"/>
     <path d="M18 7.92491C18 7.11506 18.9123 6.6411 19.5749 7.10672L52.4126 30.1818C53.2118 30.7434 52.8144 32 51.8376 32H19C18.4477 32 18 31.5523 18 31V7.92491Z" fill="url(#paint0_radial_10937_170166)" fill-opacity="0.35"/>
     <rect width="10" height="27" transform="matrix(-1 0 0 1 42 5)" fill="url(#paint1_linear_10937_170166)" fill-opacity="0.25"/>
     <path d="M42.5 32C42.7761 32 43 31.7761 43 31.5L43 7.5C43 7.22386 42.7761 7 42.5 7V7C42.2239 7 42 7.22386 42 7.5L42 31.5C42 31.7761 42.2239 32 42.5 32V32Z" fill="url(#paint2_linear_10937_170166)"/>

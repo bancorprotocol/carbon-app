@@ -12,8 +12,8 @@
 <stop offset="1" stop-color="var(--sell)" stop-opacity="0.2"/>
 </radialGradient>
 <linearGradient id="paint2_linear_4772_92042" x1="49.3846" y1="-13.3077" x2="17.5" y2="21.5" gradientUnits="userSpaceOnUse">
-<stop stop-color="white" stop-opacity="0"/>
-<stop offset="1" stop-color="white"/>
+<stop stop-color="currentColor" stop-opacity="0"/>
+<stop offset="1" stop-color="currentColor"/>
 </linearGradient>
 </defs>
 </svg>
