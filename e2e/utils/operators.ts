@@ -19,7 +19,7 @@ export const screenshot = (target: Page | Locator, name: string) => {
 const urlNames = {
   '/': 'My Strategies',
   '/trade?*': 'Trade',
-  '/explorer': 'Explorer',
+  '/explorer': 'Explore',
   '/debug': 'Debug',
 };
 

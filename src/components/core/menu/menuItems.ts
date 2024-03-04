@@ -16,13 +16,13 @@ export const menuItems: MenuItem[] = [
     href: '/trade',
   },
   {
-    label: 'Explorer',
+    label: 'Explore',
     href: '/explorer',
   },
-  // {
-  //   label: 'Simulator',
-  //   href: '/simulator',
-  // },
+  {
+    label: 'Simulate',
+    href: '/simulator',
+  },
   ...(isProduction
     ? []
     : [
