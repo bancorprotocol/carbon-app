@@ -106,6 +106,18 @@ export const CreateStrategyOrders = ({
       )}
       {strategySettings !== 'overlapping' && (
         <>
+          {(strategyDirection === 'sell' || !strategyDirection) && (
+            <BuySellBlock
+              key="createStrategySellOrder"
+              base={base!}
+              quote={quote!}
+              order={order1}
+              tokenBalanceQuery={token0BalanceQuery}
+              isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+              strategyType={strategyType}
+              isOrdersOverlap={isOrdersOverlap}
+            />
+          )}
           {(strategyDirection === 'buy' || !strategyDirection) && (
             <BuySellBlock
               key="createStrategyBuyOrder"
@@ -115,18 +127,6 @@ export const CreateStrategyOrders = ({
               buy
               tokenBalanceQuery={token1BalanceQuery}
               isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-              strategyType={strategyType}
-              isOrdersOverlap={isOrdersOverlap}
-            />
-          )}
-          {(strategyDirection === 'sell' || !strategyDirection) && (
-            <BuySellBlock
-              key="createStrategySellOrder"
-              base={base!}
-              quote={quote!}
-              order={order1}
-              tokenBalanceQuery={token0BalanceQuery}
-              isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
               strategyType={strategyType}
               isOrdersOverlap={isOrdersOverlap}
             />

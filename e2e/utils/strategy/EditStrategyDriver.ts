@@ -100,16 +100,16 @@ export class EditStrategyDriver {
     assertRecurringTestCase(this.testCase);
     const { buy, sell } = this.testCase.input.editPrice;
     const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-    const buyForm = await this.fillPrice('buy', buySetting, buy, type);
     const sellForm = await this.fillPrice('sell', sellSetting, sell, type);
+    const buyForm = await this.fillPrice('buy', buySetting, buy, type);
     return { buyForm, sellForm };
   }
 
   async fillRecurringBudget(type: 'deposit' | 'withdraw') {
     assertRecurringTestCase(this.testCase);
     const { buy, sell } = this.testCase.input[type];
-    const buyForm = await this.fillBudget('buy', buy);
     const sellForm = await this.fillBudget('sell', sell);
+    const buyForm = await this.fillBudget('buy', buy);
     return { buyForm, sellForm };
   }
 
