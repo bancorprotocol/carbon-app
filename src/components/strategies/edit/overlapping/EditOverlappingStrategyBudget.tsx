@@ -153,7 +153,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     );
   }
   return (
-    <article className="flex w-full flex-col gap-20 rounded-10 bg-silver p-20">
+    <article className="flex w-full flex-col gap-20 rounded-10 bg-background-900 p-20">
       <header className="flex items-center gap-8 ">
         <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
         <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
@@ -201,7 +201,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
           <a
             href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
             target="_blank"
-            className="inline-flex items-center gap-4 text-12 font-weight-500 text-green"
+            className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"
             rel="noreferrer"
           >
             Learn More
@@ -230,7 +230,7 @@ const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
       <a
         href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"
-        className="inline-flex items-center gap-4 text-12 font-weight-500 text-green"
+        className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"
         rel="noreferrer"
       >
         Learn More
@@ -246,10 +246,10 @@ const BudgetMessage: FC<{ token: Token; change?: SafeDecimal }> = (props) => {
   if (change.gt(0)) {
     return (
       <div className="flex items-center gap-8">
-        <IconArrowDown className="h-16 w-16 rotate-180 text-green" />
+        <IconArrowDown className="h-16 w-16 rotate-180 text-primary" />
         <p className="text-12 font-weight-400 text-white/60">
           You will deposit&nbsp;
-          <b className="text-green">
+          <b className="text-primary">
             {prettifyNumber(change)} {token.symbol}
           </b>
           &nbsp;to your wallet balance
@@ -259,10 +259,10 @@ const BudgetMessage: FC<{ token: Token; change?: SafeDecimal }> = (props) => {
   } else {
     return (
       <div className="flex items-center gap-8">
-        <IconArrowDown className="h-16 w-16 text-red" />
+        <IconArrowDown className="h-16 w-16 text-error" />
         <p className="text-12 font-weight-400 text-white/60">
           You will withdraw&nbsp;
-          <b className="text-red">
+          <b className="text-error">
             {prettifyNumber(change.abs())} {token.symbol}
           </b>
           &nbsp;to your wallet balance

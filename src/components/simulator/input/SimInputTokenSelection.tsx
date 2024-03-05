@@ -44,7 +44,7 @@ export const SimInputTokenSelection: FC<Props> = ({
 
   return (
     <section
-      className="bg-secondary flex flex-col gap-16 rounded-10 p-16"
+      className="flex flex-col gap-16 rounded-10 bg-background-900 p-16"
       key="simulatorTokenSelection"
     >
       <header className="flex items-center justify-between">
@@ -80,7 +80,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-10 pr-20',
-            noPriceHistory && 'border-2 border-warning-500'
+            noPriceHistory && 'border-2 border-warning'
           )}
           onClick={() => {
             openModal('tokenLists', {
@@ -103,7 +103,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         />
         <button
           type="button"
-          className="relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] border-silver bg-black"
+          className="relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] border-background-900 bg-black"
           onClick={swapTokens}
           disabled={!base || !quote}
         >
@@ -124,7 +124,7 @@ export const SimInputTokenSelection: FC<Props> = ({
           }
           className={cn(
             'h-[50px] flex-1 pl-16 pr-16',
-            noPriceHistory && 'border-2 border-warning-500'
+            noPriceHistory && 'border-2 border-warning'
           )}
           onClick={() => {
             openModal('tokenLists', {

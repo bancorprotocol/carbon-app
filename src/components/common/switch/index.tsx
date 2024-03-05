@@ -30,7 +30,7 @@ export const Switch: FC<SwitchProps> = ({
     >
       <motion.div
         className={`aspect-square h-10 rounded-full ${
-          isOn ? 'bg-white dark:bg-black' : 'bg-white/60'
+          isOn ? 'bg-black' : 'bg-white/60'
         }`}
         layout
         transition={spring}

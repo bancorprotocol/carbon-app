@@ -73,8 +73,8 @@ export const MainMenuRightWallet: FC = () => {
   }, [user, selectedWallet]);
 
   const buttonVariant = useMemo(() => {
-    if (isUserBlocked) return 'error-light';
-    if (!isSupportedNetwork) return 'error-light';
+    if (isUserBlocked) return 'error';
+    if (!isSupportedNetwork) return 'error';
     return 'secondary';
   }, [isSupportedNetwork, isUserBlocked]);
 
@@ -166,7 +166,7 @@ const ConnectedMenu: FC = () => {
           </div>
           <button
             role="menuitem"
-            className="hover:bg-body flex w-full items-center space-x-10 rounded-6 p-8"
+            className="flex w-full items-center space-x-10 rounded-6 p-8 hover:bg-black"
             onClick={copyAddress}
           >
             <IconCopy className="w-16" />
@@ -176,7 +176,7 @@ const ConnectedMenu: FC = () => {
       ) : (
         <button
           role="menuitem"
-          className="hover:bg-body flex w-full rounded-6 p-8 text-red/80 hover:text-red"
+          className="flex w-full rounded-6 p-8 text-error/80 hover:bg-black hover:text-error"
           onClick={switchNetwork}
         >
           Switch Network
@@ -184,7 +184,7 @@ const ConnectedMenu: FC = () => {
       )}
       <button
         role="menuitem"
-        className="hover:bg-body flex w-full items-center space-x-10 rounded-6 p-8"
+        className="flex w-full items-center space-x-10 rounded-6 p-8 hover:bg-black"
         onClick={onDisconnect}
       >
         <IconDisconnect className="w-16" />

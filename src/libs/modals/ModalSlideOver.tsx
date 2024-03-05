@@ -36,7 +36,7 @@ export const ModalSlideOver: FC<ModalProps> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex h-screen w-full flex-col border-0 bg-silver p-25 outline-none focus:outline-none">
+        <div className="relative flex h-screen w-full flex-col border-0 bg-background-900 p-25 outline-none focus:outline-none">
           <div
             className={`flex items-center ${
               title ? 'justify-between' : 'justify-end'

@@ -156,7 +156,7 @@ export const SimInputChart = ({
   );
 
   return (
-    <div className="align-stretch sticky top-80 grid h-[calc(100vh-180px)] min-h-[500px] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-silver p-20">
+    <div className="align-stretch sticky top-80 grid h-[calc(100vh-180px)] min-h-[500px] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-background-900 p-20">
       <div className="mb-20 flex items-center justify-between">
         <h2 className="mr-20 text-20 font-weight-500">Price Chart</h2>
         <DateRangePicker

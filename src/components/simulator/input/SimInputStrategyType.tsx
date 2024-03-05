@@ -34,7 +34,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
 
   return (
     <section
-      className="bg-secondary rounded-10 p-16"
+      className="rounded-10 bg-background-900 p-16"
       key="simulatorTypeSelection"
     >
       <header className="mb-16 flex items-center justify-between">
