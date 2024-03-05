@@ -6,16 +6,12 @@ export const isDraft = !!process.env.DRAFT && process.env.DRAFT !== 'false';
 export const shouldTakeScreenshot = isCI && !isDraft;
 
 /** Utils to take screenshot on CI that are not draft */
-export const screenshot = (
-  target: Page | Locator,
-  name: string,
-  elementsToHide?: Locator[]
-) => {
+export const screenshot = (target: Page | Locator, name: string) => {
   if (!shouldTakeScreenshot) return;
   return target.screenshot({
     type: 'jpeg',
     path: `e2e/screenshots/${name}.jpg`,
-    mask: [target.getByTestId('user-wallet'), ...(elementsToHide ?? [])],
+    mask: [target.getByTestId('user-wallet')],
     maskColor: '#303030',
   });
 };

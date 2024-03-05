@@ -7,8 +7,8 @@ import { screenshotPath } from './utils';
 export class SimulationResultDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
-  async waitForChartElement() {
-    await waitFor(this.page, 'chart-tab-animation');
+  waitForChartElement() {
+    return waitFor(this.page, 'chart-tab-animation');
   }
 
   getSummaryChart() {
@@ -22,24 +22,20 @@ export class SimulationResultDriver {
   async screenshotAnimationChart() {
     const animationChart = this.getAnimationChart();
     await animationChart.scrollIntoViewIfNeeded();
-    const elementsToHide = [this.getSimulationDates()];
 
     await screenshot(
       animationChart,
-      screenshotPath(this.testCase, 'simulator-results-animation'),
-      elementsToHide
+      screenshotPath(this.testCase, 'simulator-results-animation')
     );
   }
 
   async screenshotSummaryChart() {
     const summaryChart = this.getSummaryChart();
     await summaryChart.scrollIntoViewIfNeeded();
-    const elementsToHide = [this.getSimulationDates()];
 
     await screenshot(
       summaryChart,
-      screenshotPath(this.testCase, 'simulator-results-summary'),
-      elementsToHide
+      screenshotPath(this.testCase, 'simulator-results-summary')
     );
   }
 
