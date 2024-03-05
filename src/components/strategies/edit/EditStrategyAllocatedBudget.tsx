@@ -77,7 +77,7 @@ export const EditStrategyAllocatedBudget: FC<{
               <button
                 type="button"
                 onClick={() => showMaxCb()}
-                className="cursor-pointer font-weight-500 text-green"
+                className="cursor-pointer font-weight-500 text-primary"
               >
                 MAX
               </button>

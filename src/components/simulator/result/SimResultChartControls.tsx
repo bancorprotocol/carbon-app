@@ -71,7 +71,7 @@ export const SimResultChartControls = () => {
         button={(attr) => (
           <button
             {...attr}
-            className="hover:bg-body h-20 min-w-[20px] place-items-center rounded-[6px] px-2 text-14"
+            className="h-20 min-w-[20px] place-items-center rounded-[6px] px-2 text-14 hover:bg-black"
             onClick={(e) => {
               setIsOpen(true);
               attr.onClick(e);
@@ -88,7 +88,7 @@ export const SimResultChartControls = () => {
               key={`${index}_${speed}`}
               role="menuitem"
               aria-label={`Playback Speed: ${speed}`}
-              className="hover:bg-body flex w-full rounded-6 py-8 px-12 text-left text-14 text-white/80"
+              className="flex w-full rounded-6 py-8 px-12 text-left text-14 text-white/80 hover:bg-black"
               onClick={() => {
                 setSpeed(speed);
                 setIsOpen(false);
@@ -104,7 +104,7 @@ export const SimResultChartControls = () => {
           <button
             key={label}
             aria-label={label}
-            className="hover:bg-body h-20 w-20 rounded-[6px] p-4"
+            className="h-20 w-20 rounded-[6px] p-4 hover:bg-black"
             onClick={onClick}
           >
             {icon}

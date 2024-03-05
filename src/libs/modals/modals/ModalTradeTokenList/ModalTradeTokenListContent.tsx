@@ -127,7 +127,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
                     className={cn(
                       'w-20 transition hover:fill-white/80 hover:text-white/80',
                       isFavorite(tradePair)
-                        ? 'fill-green text-green'
+                        ? 'fill-primary text-primary'
                         : 'text-white/40'
                     )}
                   />

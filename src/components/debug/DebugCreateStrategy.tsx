@@ -187,7 +187,7 @@ export const DebugCreateStrategy = () => {
   return (
     <form
       onSubmit={createStrategies}
-      className="bg-secondary flex flex-col space-y-20 rounded-18 p-20"
+      className="flex flex-col space-y-20 rounded-18 bg-background-900 p-20"
     >
       <h2 className="text-center">Create Strategy</h2>
 

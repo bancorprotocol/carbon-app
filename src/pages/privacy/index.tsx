@@ -525,7 +525,7 @@ const content = [
         <button
           onClick={() => window?.OneTrust?.ToggleInfoDisplay()}
           id="ot-sdk-btn"
-          className="text-green"
+          className="text-primary"
         >
           <u>Cookie Settings</u>
         </button>
@@ -584,7 +584,10 @@ export const PrivacyPage = () => {
         <p>
           THIS PRIVACY POLICY IS SUBJECT IN ALL RESPECTS TO THE TERMS OF USE
           AVAILABLE AT{' '}
-          <NewTabLink className="text-green underline" to={externalLinks.terms}>
+          <NewTabLink
+            className="text-primary underline"
+            to={externalLinks.terms}
+          >
             {config.appUrl.toUpperCase()}/TERMS
           </NewTabLink>{' '}
           (THE “TERMS OF USE”), AND BY ACCEPTING SUCH TERMS OF USE PURSUANT TO
@@ -601,7 +604,7 @@ export const PrivacyPage = () => {
             href="https://www.carbondefi.xyz"
             target={'_blank'}
             rel="noreferrer"
-            className="text-green underline"
+            className="text-primary underline"
           >
             https://www.carbondefi.xyz
           </a>{' '}

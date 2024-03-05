@@ -27,9 +27,9 @@ export const SimResultChartSummary = ({
   quoteToken,
 }: Props) => {
   return (
-    <div className="flex w-full border-t border-emphasis">
+    <div className="flex w-full border-t border-background-800">
       <p
-        className="-rotate-180 border-l border-emphasis p-8 text-center font-mono text-12 text-white/60"
+        className="-rotate-180 border-l border-background-800 p-8 text-center font-mono text-12 text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
         Price ({quoteToken.symbol} per {baseToken.symbol})
@@ -43,7 +43,7 @@ export const SimResultChartSummary = ({
         )}
       </D3ChartWrapper>
       <p
-        className="-rotate-180 border-r border-emphasis p-8 text-center font-mono text-12 text-white/60"
+        className="-rotate-180 border-r border-background-800 p-8 text-center font-mono text-12 text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
         Portfolio Value ({quoteToken.symbol})

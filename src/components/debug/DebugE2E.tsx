@@ -9,7 +9,7 @@ export const DebugE2E = () => {
   };
 
   return (
-    <div className="bg-secondary flex flex-col gap-16 rounded-18 p-20">
+    <div className="flex flex-col gap-16 rounded-18 bg-background-900 p-20">
       <h2 className="text-center">E2E</h2>
       <div className="flex items-center gap-8">
         <Checkbox
