@@ -32,7 +32,11 @@ export const SimResultChartDownload = ({
   simulationType,
 }: Props) => {
   return (
-    <Tooltip element="Download a csv file with full breakdown of the simulation data">
+    <Tooltip
+      damping={20}
+      stiffness={200}
+      element="Download a csv file with full breakdown of the simulation data"
+    >
       <button
         className={cn(
           buttonStyles({ variant: 'black' }),
