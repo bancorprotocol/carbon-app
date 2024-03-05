@@ -67,7 +67,7 @@ const playbackSpeedMap: Record<PlaybackSpeed, number> = {
 export type PlaybackSpeed = (typeof playbackSpeedOptions)[number];
 
 export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
-  const search = useSearch({ from: '/simulator/result' });
+  const search = useSearch({ from: '/simulate/result' });
   const tokens = useTokens();
   const baseToken = tokens.getTokenById(search.baseToken);
   const quoteToken = tokens.getTokenById(search.quoteToken);

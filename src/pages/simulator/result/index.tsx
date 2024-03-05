@@ -28,7 +28,7 @@ export const SimulatorResultPage = () => {
   return (
     <div className="p-20">
       <Link
-        to={'/simulator/$simulationType'}
+        to={'/simulate/$simulationType'}
         params={{ simulationType }}
         search={ctx.search}
         className="mb-16 flex items-center text-24 font-weight-500"

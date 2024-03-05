@@ -48,7 +48,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
             aria-controls={'panel-' + label}
             aria-selected={strategyType === label}
             key={label}
-            to="/simulator/$simulationType"
+            to="/simulate/$simulationType"
             className={cn(
               'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
               'md:px-12',
