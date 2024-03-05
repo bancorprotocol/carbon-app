@@ -31,7 +31,7 @@ export const DragablePriceRange = ({
   isLimit,
 }: OrderRangeProps) => {
   const isDragging = useRef(false);
-  const color = type === 'buy' ? '#00B578' : '#D86371';
+  const color = type === 'buy' ? 'var(--buy)' : 'var(--sell)';
   const maxIsOutOfScale = yPos.max <= 0;
   const minIsOutOfScale = yPos.min >= dms.boundedHeight;
 

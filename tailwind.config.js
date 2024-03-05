@@ -1,3 +1,5 @@
+const { formatRgb } = require('culori');
+
 function createTwConfigValues(start, end, step) {
   const remBase = 16;
   const obj = {};
@@ -6,6 +8,19 @@ function createTwConfigValues(start, end, step) {
   }
   return obj;
 }
+
+const oklch = (l, c, h) => {
+  const result = formatRgb(`oklch(${l} ${c} ${h} / 0)`);
+  return result.replace(', 0)', ', <alpha-value>)');
+};
+const lighten = (l, amount) => Math.min(l + amount, 1);
+const darken = (l, amount) => Math.max(l - amount, 0);
+
+const lightDark = (l, c, h) => ({
+  light: oklch(lighten(l, 0.2), c, h),
+  DEFAULT: oklch(l, c, h),
+  dark: oklch(darken(l, 0.5), c, h),
+});
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -19,33 +34,35 @@ module.exports = {
       xl: '1280px',
       '2xl': '1536px',
     },
-    colors: ({ colors }) => ({
-      white: colors.white,
-      transparent: colors.transparent,
-      black: colors.black,
-      primary: colors.blue,
-      secondary: colors.gray,
-      success: colors.green,
-      blue: '#2962FF',
-      lightBlue: '#9db2bd',
-      green: '#00B578',
-      lightGreen: '#85E1C2',
-      darkGreen: '#002D1E',
-      red: '#D86371',
-      redLight: '#EFC1C6',
-      error: colors.red,
-      warning: colors.orange,
-      charcoal: '#18181A',
-      darkGrey: '#303034',
-      lightGrey: '#E4E4E6',
-      grey3: '#343435',
-      grey4: '#B7B7B7',
-      grey5: '#36363C',
-      fog: '#F4F4F4',
-      emphasis: '#212123',
-      silver: '#161617',
-      darkSilver: '#111112',
-    }),
+    colors: ({ colors }) => {
+      // Background color variables
+      const hue = 0;
+      const chroma = 0; // Recommended 0.01, 0.02
+      return {
+        background: {
+          50: oklch(0.99, chroma, hue),
+          100: oklch(0.97, chroma, hue),
+          200: oklch(0.92, chroma, hue),
+          300: oklch(0.87, chroma, hue),
+          400: oklch(0.72, chroma, hue),
+          500: oklch(0.56, chroma, hue),
+          600: oklch(0.44, chroma, hue),
+          700: oklch(0.37, chroma, hue),
+          800: oklch(0.27, chroma, hue),
+          900: oklch(0.2, chroma, hue),
+        },
+        white: colors.white,
+        transparent: colors.transparent,
+        primary: lightDark(0.68, 0.153, 160), // #00B578
+        error: lightDark(0.65, 0.147, 15), // #D86371
+        sell: lightDark(0.65, 0.147, 15), // #D86371
+        buy: lightDark(0.68, 0.153, 160), // #00B578
+        success: lightDark(0.68, 0.153, 160), // #00B578
+        warning: lightDark(0.747, 0.18, 57.36), // #ff8a00
+        black: oklch(0.13, chroma, hue),
+        secondary: colors.gray,
+      };
+    },
     columns: {
       auto: 'auto',
       1: '1',

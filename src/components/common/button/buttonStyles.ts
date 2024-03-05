@@ -21,31 +21,31 @@ export const buttonStyles = cva<ButtonVariants>(
       variant: {
         black: [
           'bg-black border-2 border-black !text-white',
-          'hover:border-grey3 hover:disabled:black',
+          'hover:border-background-700 hover:disabled:black',
         ],
         white: [
           'bg-white border-2 border-white !text-black',
-          'hover:border-grey4 hover:disabled:border-white',
+          'hover:border-background-400 hover:disabled:border-white',
         ],
         secondary: [
-          'bg-emphasis border-2 border-emphasis !text-white',
-          'hover:border-grey3 hover:disabled:border-emphasis',
+          'bg-background-800 border-2 border-background-800 !text-white',
+          'hover:border-background-700 hover:disabled:border-background-800',
         ],
         success: [
-          'bg-green border-2 border-green !text-black',
-          'hover:border-lightGreen hover:disabled:border-green',
+          'bg-primary border-2 border-primary !text-black',
+          'hover:border-primary-light hover:disabled:border-primary',
         ],
-        'success-light': [
-          'bg-green/20 border-2 border-green/0 !text-green',
-          'hover:border-lightGreen hover:!text-black hover:bg-green hover:disabled:border-green',
+        buy: [
+          'bg-buy border-2 border-buy !text-black',
+          'hover:border-buy-light hover:!text-black hover:bg-buy hover:disabled:border-buy',
+        ],
+        sell: [
+          'bg-sell border-2 border-sell !text-black',
+          'hover:border-sell-light hover:!text-black hover:bg-sell hover:disabled:border-sell',
         ],
         error: [
-          'bg-red border-2 border-red !text-black',
-          'hover:border-redLight hover:disabled:border-red',
-        ],
-        'error-light': [
-          'bg-red/25 !text-red',
-          'hover:bg-red/50 hover:!text-white',
+          'bg-error border-2 border-error !text-black',
+          'hover:border-error-light hover:disabled:border-error',
         ],
       },
       size: {

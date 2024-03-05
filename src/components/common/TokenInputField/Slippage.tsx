@@ -10,9 +10,9 @@ interface Props {
 }
 
 const slippageColor = (slippage: SafeDecimal) => {
-  if (slippage?.gt(0)) return 'text-green';
-  if (slippage?.isZero()) return 'text-red';
-  if (slippage?.lt(-3)) return 'text-red';
+  if (slippage?.gt(0)) return 'text-primary';
+  if (slippage?.isZero()) return 'text-error';
+  if (slippage?.lt(-3)) return 'text-error';
   return 'text-white/80';
 };
 

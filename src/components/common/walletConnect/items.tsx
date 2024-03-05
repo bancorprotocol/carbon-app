@@ -7,27 +7,27 @@ import { ReactComponent as IconWallet6 } from 'assets/icons/wallet-6.svg';
 
 export const items = [
   {
-    icon: <IconWallet1 className="h-20 w-20 text-green" />,
+    icon: <IconWallet1 className="h-20 w-20 text-primary" />,
     title: 'On-chain Limit & Range Orders',
   },
   {
-    icon: <IconWallet2 className="h-20 w-20 text-green" />,
+    icon: <IconWallet2 className="h-20 w-20 text-primary" />,
     title: 'Automated and Recurring strategies',
   },
   {
-    icon: <IconWallet3 className="h-20 w-20 text-green" />,
+    icon: <IconWallet3 className="h-20 w-20 text-primary" />,
     title: 'Easily Adjustable',
   },
   {
-    icon: <IconWallet4 className="h-20 w-20 text-green" />,
+    icon: <IconWallet4 className="h-20 w-20 text-primary" />,
     title: 'Rotating Liquidity',
   },
   {
-    icon: <IconWallet5 className="h-20 w-20 text-green" />,
+    icon: <IconWallet5 className="h-20 w-20 text-primary" />,
     title: 'All standard ERC-20 tokens',
   },
   {
-    icon: <IconWallet6 className="h-20 w-20 text-green" />,
+    icon: <IconWallet6 className="h-20 w-20 text-primary" />,
     title: 'MEV Resistant',
   },
 ];

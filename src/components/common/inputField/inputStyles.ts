@@ -9,8 +9,8 @@ type InputVariants = VariantColor & VariantSize & VariantFullWidth;
 
 export const inputStyles = cva<InputVariants>(
   [
-    'bg-body',
-    'dark:text-white',
+    'bg-black',
+    'text-white',
     'rounded-full',
     'px-30',
     'outline-none',
@@ -23,35 +23,35 @@ export const inputStyles = cva<InputVariants>(
     variants: {
       variant: {
         black: ['bg-primary-500', 'hover:bg-primary-600'],
-        secondary: ['bg-black', 'dark:bg-white dark:text-charcoal'],
-        white: ['bg-lightGrey text-charcoal dark:bg-darkGrey dark:text-white'],
+        secondary: ['bg-black', 'bg-white text-background-900'],
+        white: ['bg-background-800 text-white'],
         success: [
           'outline',
           'outline-offset-2',
           'outline-2',
-          'outline-green',
-          'focus:!outline-green',
+          'outline-primary',
+          'focus:!outline-primary',
         ],
-        'success-light': [
+        buy: [
           'outline',
           'outline-offset-2',
           'outline-2',
-          'outline-green',
-          'focus:!outline-green',
+          'outline-buy',
+          'focus:!outline-buy',
+        ],
+        sell: [
+          'outline',
+          'outline-offset-2',
+          'outline-2',
+          'outline-sell',
+          'focus:!outline-sell',
         ],
         error: [
           'outline',
           'outline-offset-2',
           'outline-2',
-          'outline-red',
-          'focus:outline-red',
-        ],
-        'error-light': [
-          'outline',
-          'outline-offset-2',
-          'outline-2',
-          'outline-red',
-          'focus:outline-red',
+          'outline-error',
+          'focus:outline-error',
         ],
       },
       size: {

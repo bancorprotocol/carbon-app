@@ -51,19 +51,19 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       )}
       {isError && (
         <div
-          className={`${blockClasses} flex items-center justify-center dark:bg-red/30`}
+          className={`${blockClasses} flex items-center justify-center bg-error/30`}
         >
           Error: No token found for this address
         </div>
       )}
       {data && (
-        <div className={`${blockClasses} bg-silver p-16`}>
+        <div className={`${blockClasses} bg-background-900 p-16`}>
           <div className={'flex items-center justify-between'}>
             <div className={'font-weight-500'}>{data.symbol}</div>
             <NewTabLink
               to={getExplorerLink('token', data.address)}
               className={
-                'flex items-center text-14 font-weight-500 text-warning-500'
+                'flex items-center text-14 font-weight-500 text-warning'
               }
             >
               <span className={'whitespace-nowrap'}>View on Explorer</span>
