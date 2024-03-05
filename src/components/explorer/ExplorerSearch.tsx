@@ -67,7 +67,7 @@ export const _ExplorerSearch: FC = () => {
       if (type === 'token-pair' && !pairs.names.has(slug)) return;
       if (type === 'wallet' && (waitingToFetchEns || isInvalidAddress)) return;
       navigate({
-        to: '/explorer/$type/$slug',
+        to: '/explore/$type/$slug',
         params: { type, slug },
       });
     },

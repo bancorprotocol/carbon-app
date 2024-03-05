@@ -13,7 +13,7 @@ export const ExplorerTypePortfolioTokenPage = () => {
       strategies={strategies}
       isLoading={isLoading}
       address={address}
-      backLinkHref={'/explorer/$type/$slug/portfolio'}
+      backLinkHref={'/explore/$type/$slug/portfolio'}
       backLinkHrefParams={{ type, slug }}
     />
   );

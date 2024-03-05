@@ -14,7 +14,7 @@ export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const query = useExplorer();
   if (type !== 'wallet' && type !== 'token-pair') {
-    return <Navigate to={'/explorer/$type'} params={{ type: 'token-pair' }} />;
+    return <Navigate to={'/explore/$type'} params={{ type: 'token-pair' }} />;
   }
 
   return (

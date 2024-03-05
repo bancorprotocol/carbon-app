@@ -48,8 +48,8 @@ export const SimResultChartHeader = ({
   const onDatePickerConfirm = useCallback(
     (props: { start: string; end: string }) => {
       navigate({
-        from: '/simulator/result',
-        to: '/simulator/result',
+        from: '/simulate/result',
+        to: '/simulate/result',
         search: (search) => ({
           ...search,
           ...props,

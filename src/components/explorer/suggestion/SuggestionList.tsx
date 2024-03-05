@@ -32,7 +32,7 @@ export const SuggestionList: FC<Props> = (props) => {
               styles.option,
               'flex cursor-pointer items-center space-x-10 px-30 py-10 hover:bg-white/20'
             )}
-            to="/explorer/$type/$slug"
+            to="/explore/$type/$slug"
             params={params}
             search={{}}
           >
