@@ -55,7 +55,7 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
     await expect(gains).toHaveText(output.estimatedGains);
 
     const simulationDates = simulationResult.getSimulationDates();
-    expect(simulationDates).toHaveText(testCase.output.date);
+    await expect(simulationDates).toHaveText(testCase.output.date);
 
     // Move the animation to the end
     const animationControls = await simulationResult.getAnimationControls();
