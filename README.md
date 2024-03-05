@@ -25,7 +25,7 @@ To run the app locally, you need the following:
 - Yarn
 - RPC Node Provider API Key (Alchemy, Infura, etc)
 
-For E2E testing you nee a Tenderly account and API Key.
+For E2E testing you need a Tenderly account and API Key.
 
 ## Run locally
 
@@ -75,7 +75,7 @@ Your app is ready to be deployed!
 
 # Debug
 
-The '/debug' route is available to debug the app (ex: https://app.carbondefi.xyz/debug). It can be accessed directly by adding '/debug' to the url, or by pressing the "Debug" main menu option which is shown when the app is ran locally. From the debug page you can access the following features:
+The '/debug' route is available to debug the app (ex: localhost:3000/debug). It can be accessed directly by adding '/debug' to the url, or by pressing the "Debug" main menu option which is shown when the app is ran locally. From the debug page you can access the following features:
 
 - Set Imposter Account: Allows to set any account in the active network to impersonate.
 - Set Tenderly RPC: Allows to set the RPC URL from a Tenderly fork, as well as setting custom addresses for the [carbonController contract](https://github.com/bancorprotocol/carbon-contracts/blob/dev/contracts/carbon/CarbonController.sol) and the [carbonVoucher contract](https://github.com/bancorprotocol/carbon-contracts/blob/dev/contracts/voucher/Voucher.sol). Leaving "Unchecked Signer" checked is recommended as it avoids the need to populate all details of the transaction before returning it, and avoids transaction errors when using the app.
