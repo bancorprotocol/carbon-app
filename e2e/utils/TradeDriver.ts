@@ -41,8 +41,8 @@ export class TradeDriver {
     return this.form.getByLabel('You Pay').fill(sourceValue);
   }
 
-  async awaitSuccess() {
-    await this.page
+  awaitSuccess() {
+    return this.page
       .getByTestId('notification-trade')
       .getByLabel('Success')
       .waitFor({ state: 'visible', timeout: 10_000 });
