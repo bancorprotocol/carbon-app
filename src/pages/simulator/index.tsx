@@ -73,7 +73,11 @@ export const SimulatorPage = () => {
       <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
 
       <div className="flex gap-20 px-20">
-        <form onSubmit={submit} className="flex w-[440px] flex-col gap-20">
+        <form
+          onSubmit={submit}
+          className="flex w-[440px] flex-col gap-20"
+          data-testid="create-simulation-form"
+        >
           <SimInputTokenSelection
             base={state.baseToken}
             quote={state.quoteToken}

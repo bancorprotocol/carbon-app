@@ -1,23 +1,40 @@
 import { expect, Page } from '@playwright/test';
 import {
   assertDebugToken,
-  assertDisposableTestCase,
   assertOverlappingTestCase,
   assertRecurringTestCase,
   getRecurringSettings,
   screenshotPath,
 } from './utils';
-import { CreateStrategyTestCase, StrategySettings } from './types';
+import { CreateStrategyTestCase, StrategyType } from './types';
 import { RangeOrder, debugTokens, Direction, Setting } from '../types';
 import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
-import { screenshot, shouldTakeScreenshot } from '../operators';
+import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
+import { dayjs } from '../../../src/libs/dayjs';
 
-export class CreateStrategyDriver {
+export class CreateSimulationDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
+  waitForPriceChart(timeout?: number) {
+    return waitFor(this.page, 'price-chart', timeout);
+  }
+
+  async screenshotPriceChart() {
+    const priceChart = this.page.getByTestId('price-chart');
+    await priceChart.scrollIntoViewIfNeeded();
+    await screenshot(
+      priceChart,
+      screenshotPath(this.testCase, 'simulator-input-price')
+    );
+  }
+
+  waitForDisclaimerModal(timeout?: number) {
+    return waitFor(this.page, 'sim-disclaimer-modal', timeout);
+  }
+
   getForm() {
-    return this.page.getByTestId('create-strategy-form');
+    return this.page.getByTestId('create-simulation-form');
   }
 
   getFormSection(direction: Direction) {
@@ -28,12 +45,63 @@ export class CreateStrategyDriver {
       min: () => form.getByTestId('input-min'),
       max: () => form.getByTestId('input-max'),
       budget: () => form.getByTestId('input-budget'),
-      outcomeValue: () => form.getByTestId('outcome-value'),
-      outcomeQuote: () => form.getByTestId('outcome-quote'),
       setting: (setting: 'limit' | 'range') => {
         return form.getByTestId(`tab-${setting}`);
       },
     };
+  }
+
+  async selectMonthYear(monthYear: string) {
+    const findMonthYear = async () => {
+      const selector = `text='${monthYear}'`;
+      const isMonthYearVisible = await this.page.isVisible(selector);
+      if (isMonthYearVisible) return;
+      await this.page.getByTestId('date-picker-left-arrow').click();
+      return findMonthYear();
+    };
+    return findMonthYear();
+  }
+
+  async selectDay(day: string, monthYear: string) {
+    const dayButton = this.page
+      .getByLabel(monthYear)
+      .getByText(day, { exact: true });
+    const dayButtonCount = await dayButton.count();
+    // If the month has more than one day with the same number, find right one to press
+    if (dayButtonCount > 1) {
+      const index = Number(day) < 15 ? 0 : 1;
+      await dayButton.nth(index).click();
+    } else {
+      await dayButton.click();
+    }
+  }
+
+  parseTimestamp(timestamp: number) {
+    return {
+      day: dayjs(timestamp * 1000).format('D'),
+      monthYear: dayjs(timestamp * 1000).format('MMMM YYYY'),
+    };
+  }
+
+  async selectDate(timestamp: number) {
+    const { day, monthYear } = this.parseTimestamp(timestamp);
+    await this.selectMonthYear(monthYear);
+    await this.selectDay(day, monthYear);
+  }
+
+  async fillDates(start: string, end: string) {
+    const [from, to] = [dayjs(start).unix(), dayjs(end).unix()].sort();
+
+    await this.page.getByTestId('date-picker-button').click();
+    // Select date twice to force range to be 1 day long
+    await this.selectDate(to);
+    await this.selectDate(to);
+    await this.selectDate(from);
+    await this.page.getByTestId('date-picker-confirm').click();
+  }
+
+  clearSimulatorDisclaimer() {
+    return this.page.getByTestId('clear-sim-disclaimer').click();
   }
 
   getOverlappingForm() {
@@ -59,8 +127,8 @@ export class CreateStrategyDriver {
     await waitModalClose(this.page);
   }
 
-  selectSetting(strategySettings: StrategySettings) {
-    return this.page.getByTestId(strategySettings).click();
+  selectStrategyType(strategyType: StrategyType) {
+    return this.page.getByTestId(`select-type-${strategyType}`).click();
   }
 
   async fillFormSection(
@@ -82,16 +150,16 @@ export class CreateStrategyDriver {
 
   async fillRecurring() {
     assertRecurringTestCase(this.testCase);
-    const { buy, sell } = this.testCase.input.create;
+    const { buy, sell } = this.testCase.input;
     const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
-    const sellForm = await this.fillFormSection('sell', sellSetting, sell);
     const buyForm = await this.fillFormSection('buy', buySetting, buy);
+    const sellForm = await this.fillFormSection('sell', sellSetting, sell);
     return { buyForm, sellForm };
   }
 
   async fillOverlapping() {
     assertOverlappingTestCase(this.testCase);
-    const { buy, sell, spread } = this.testCase.input.create;
+    const { buy, sell, spread } = this.testCase.input;
     const form = this.getOverlappingForm();
     await form.max().fill(sell.max.toString());
     await form.min().fill(buy.min.toString());
@@ -100,20 +168,8 @@ export class CreateStrategyDriver {
     return form;
   }
 
-  async fillDisposable() {
-    assertDisposableTestCase(this.testCase);
-    const { direction, setting } = this.testCase;
-    await this.page.getByTestId(`tab-${direction}`).click();
-    const order = this.testCase.input.create;
-    return this.fillFormSection(direction, setting, order);
-  }
-
-  nextStep() {
-    return this.page.getByText('Next Step').click();
-  }
-
   async submit() {
-    const btn = this.page.getByText('Create Strategy');
+    const btn = this.page.getByText('Start Simulation');
     await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
@@ -121,7 +177,7 @@ export class CreateStrategyDriver {
       await btn.hover(); // Enforce hover to have always the same color
       await waitTooltipsClose(this.page);
       const form = this.getForm();
-      const path = screenshotPath(this.testCase, 'create', 'form');
+      const path = screenshotPath(this.testCase, 'form');
       await screenshot(form, path);
       await mainMenu.show();
     }

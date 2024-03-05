@@ -48,8 +48,18 @@ export const Calendar = ({
         ...classNames,
       }}
       components={{
-        IconLeft: () => <Chevron className="h-16 w-16 rotate-90" />,
-        IconRight: () => <Chevron className="h-16 w-16 -rotate-90" />,
+        IconLeft: () => (
+          <Chevron
+            className="h-16 w-16 rotate-90"
+            data-testid="date-picker-left-arrow"
+          />
+        ),
+        IconRight: () => (
+          <Chevron
+            className="h-16 w-16 -rotate-90"
+            data-testid="date-picker-right-arrow"
+          />
+        ),
       }}
       weekStartsOn={weekStartsOn}
       {...props}

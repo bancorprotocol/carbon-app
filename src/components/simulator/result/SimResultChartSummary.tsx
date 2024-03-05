@@ -27,7 +27,10 @@ export const SimResultChartSummary = ({
   quoteToken,
 }: Props) => {
   return (
-    <div className="flex w-full border-t border-background-800">
+    <div
+      className="flex w-full border-t border-background-800"
+      data-testid="chart-summary"
+    >
       <p
         className="-rotate-180 border-l border-background-800 p-8 text-center font-mono text-12 text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}

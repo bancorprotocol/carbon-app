@@ -1,32 +1,9 @@
 import {
-  CreateStrategyInput,
   CreateStrategyTestCase,
-  DisposableStrategyTestCase,
   RecurringStrategyTestCase,
   OverlappingStrategyTestCase,
 } from './types';
-import {
-  DebugTokens,
-  LimitOrder,
-  RangeOrder,
-  debugTokens,
-  Setting,
-  MinMax,
-  StrategyCase,
-} from '../types';
-
-export function isDisposableTestCase(
-  testCase: CreateStrategyTestCase
-): testCase is DisposableStrategyTestCase {
-  return testCase.type === 'disposable';
-}
-
-export function assertDisposableTestCase(
-  testCase: CreateStrategyTestCase
-): asserts testCase is DisposableStrategyTestCase {
-  if (isDisposableTestCase(testCase)) return;
-  throw new Error('Test case should be disposable');
-}
+import { DebugTokens, debugTokens, Setting } from '../types';
 
 export function isRecurringTestCase(
   testCase: CreateStrategyTestCase
@@ -68,41 +45,13 @@ export function assertDebugToken(
 
 export const testDescription = (testCase: CreateStrategyTestCase) => {
   if (isOverlappingTestCase(testCase)) return 'Overlapping';
-  if (isDisposableTestCase(testCase)) {
-    return `Disposable ${testCase.direction} ${testCase.setting}`;
-  }
   return `Recurring ${testCase.setting.split('_').join(' ')}`;
 };
 
 export const screenshotPath = (
   testCase: CreateStrategyTestCase,
-  strategyCase: StrategyCase,
   filename: string
 ) => {
   const description = testDescription(testCase);
-  return `/strategy/${testCase.type}/${description}/${strategyCase}/${filename}`;
+  return `/simulator/${testCase.type}/${description}/${filename}`;
 };
-
-export const toDebugStrategy = (
-  testCase: CreateStrategyTestCase
-): CreateStrategyInput => {
-  if (isRecurringTestCase(testCase)) return testCase.input.create;
-  if (isOverlappingTestCase(testCase)) return testCase.input.create;
-  // Disposable
-  if (testCase.direction === 'buy') {
-    return { buy: testCase.input.create, sell: emptyOrder() };
-  } else {
-    return { buy: emptyOrder(), sell: testCase.input.create };
-  }
-};
-
-const emptyOrder = () => ({ min: '0', max: '0', budget: '0' });
-export const fromPrice = (price: string): MinMax => ({
-  min: price,
-  max: price,
-});
-export const fromLimitOrder = (order: LimitOrder): RangeOrder => ({
-  min: order.price,
-  max: order.price,
-  budget: order.budget,
-});

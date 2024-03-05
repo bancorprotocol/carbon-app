@@ -76,8 +76,9 @@ test.describe('Trade', () => {
       await tokenApproval.checkApproval([testCase.source]);
 
       // Verify form empty
-      expect(driver.getPayInput()).toHaveValue('', { timeout: 10_000 });
-      expect(driver.getReceiveInput()).toHaveValue('', { timeout: 10_000 });
+      await driver.awaitSuccess();
+      expect(driver.getPayInput()).toHaveValue('');
+      expect(driver.getReceiveInput()).toHaveValue('');
 
       // Check balance diff
       await navigateTo(page, '/debug');

@@ -44,17 +44,17 @@ export const SimResultChartControls = () => {
 
   const buttons = [
     {
-      label: 'Play/Pause',
+      label: 'play&pause',
       icon: isRunning && !isStopped ? <PauseIcon /> : <PlayIcon />,
       onClick: playPause,
     },
     {
-      label: 'End',
+      label: 'end',
       icon: <SkipIcon />,
       onClick: end,
     },
     {
-      label: 'Replay',
+      label: 'replay',
       icon: <ReplayIcon />,
       onClick: replay,
     },
@@ -77,6 +77,7 @@ export const SimResultChartControls = () => {
               attr.onClick(e);
             }}
             aria-label="Set Playback Speed"
+            data-testid="set-playback-speed"
           >
             {currentPlaybackSpeed}
           </button>
@@ -93,6 +94,7 @@ export const SimResultChartControls = () => {
                 setSpeed(speed);
                 setIsOpen(false);
               }}
+              data-testid={`set-speed-${speed}`}
             >
               {speed}
             </button>
@@ -106,6 +108,7 @@ export const SimResultChartControls = () => {
             aria-label={label}
             className="h-20 w-20 rounded-[6px] p-4 hover:bg-black"
             onClick={onClick}
+            data-testid={`animation-controls-${label}`}
           >
             {icon}
           </button>
