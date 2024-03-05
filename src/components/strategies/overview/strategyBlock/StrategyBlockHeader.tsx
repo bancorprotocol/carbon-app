@@ -33,7 +33,7 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
             <circle cx="2" cy="2" r="2" fill="currentcolor" />
           </svg>
           {strategy.status === 'active' && (
-            <span data-testid="status" className="text-green">
+            <span data-testid="status" className="text-success">
               {statusText.active}
             </span>
           )}
@@ -42,11 +42,11 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
               element={getTooltipTextByStatus(isExplorer, strategy.status)}
             >
               <span
-                className="inline-flex items-center gap-4 text-red"
+                className="inline-flex items-center gap-4 text-error"
                 data-testid="status"
               >
                 {statusText.inactive}
-                <TooltipIcon className="h-10 w-10 text-red" />
+                <TooltipIcon className="h-10 w-10 text-error" />
               </span>
             </Tooltip>
           )}

@@ -15,7 +15,7 @@ export const MarketWarning: FC<Props> = (props) => {
     .abs();
   if (delta.lt(0.05)) return <></>;
   return (
-    <div className="flex items-center gap-8 text-warning-500">
+    <div className="flex items-center gap-8 text-warning">
       <IconWarning className="h-16 w-16" />
       <p className="text-12 font-weight-400">
         Please note that the deposit budget might create an arb opportunity.

@@ -13,22 +13,22 @@ export const ExplorerEmpty = ({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center space-y-30 rounded-10 border-2 border-emphasis px-20 py-50 md:h-[500px]'
+        'flex flex-col items-center justify-center space-y-30 rounded-10 border-2 border-background-800 px-20 py-50 md:h-[500px]'
       )}
     >
       <div
         className={cn(
           'flex h-72 w-72 items-center justify-center rounded-full',
           {
-            'bg-green/20': variant === 'info',
-            'bg-red/20': variant === 'error',
+            'bg-primary/20': variant === 'info',
+            'bg-error/20': variant === 'error',
           }
         )}
       >
         <IconSearch
           className={cn('h-32 w-32', {
-            'text-green': variant === 'info',
-            'text-red': variant === 'error',
+            'text-primary': variant === 'info',
+            'text-error': variant === 'error',
           })}
         />
       </div>

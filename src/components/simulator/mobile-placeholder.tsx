@@ -5,7 +5,7 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 export const SimulatorMobilePlaceholder = () => {
   return (
     <section className="my-40 mx-auto flex w-[300px] flex-col items-center gap-20 text-center ">
-      <div className="rounded-full bg-emphasis p-12">
+      <div className="rounded-full bg-background-800 p-12">
         <IconInfo className="h-24 w-24 text-white/60" />
       </div>
       <h1 className="text-18">Device not supported</h1>

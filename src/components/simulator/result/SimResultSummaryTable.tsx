@@ -30,7 +30,7 @@ export const SimResultSummaryTable = ({
 
   return (
     <article className="grid grid-cols-[auto,auto,auto,auto] grid-rows-2 items-center justify-evenly gap-x-8 gap-y-4">
-      <Arrow className="h-16 w-16 -rotate-90 text-red" />
+      <Arrow className="h-16 w-16 -rotate-90 text-sell" />
       {isSellLimitOrder ? (
         sellMin
       ) : (
@@ -41,7 +41,7 @@ export const SimResultSummaryTable = ({
       {quoteSymbol} per {baseSymbol}
       <span className="text-white/40">|</span>
       {baseBudget} {baseSymbol}
-      <Arrow className="h-16 w-16 text-green" />
+      <Arrow className="h-16 w-16 text-buy" />
       {isBuyLimitOrder ? (
         buyMin
       ) : (

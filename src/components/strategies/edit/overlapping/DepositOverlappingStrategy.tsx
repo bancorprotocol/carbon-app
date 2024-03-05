@@ -143,7 +143,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header>
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
         </header>
@@ -158,7 +158,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           disabled
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Deposit Budget</h3>
           <Tooltip
@@ -209,7 +209,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
               href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-4 font-weight-500 text-green"
+              className="inline-flex items-center gap-4 font-weight-500 text-primary"
             >
               <span>Learn More</span>
               <IconLink className="inline h-12 w-12" />

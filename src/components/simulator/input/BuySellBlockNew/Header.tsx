@@ -41,13 +41,13 @@ export const BuySellHeader: FC<Props> = (props) => {
     <header className="flex items-center justify-between">
       {children}
       <div className="flex items-center gap-10 text-14">
-        <div className="bg-body flex items-center rounded-[100px] p-2">
+        <div className="flex items-center rounded-[100px] bg-black p-2">
           <button
             type="button"
             tabIndex={!isRange ? -1 : 0}
             onClick={setLimit}
             className={`rounded-40 font-weight-500 ${
-              !isRange ? 'bg-silver' : 'text-secondary'
+              !isRange ? 'bg-background-900' : 'text-secondary'
             } px-10 py-4`}
             data-testid="tab-limit"
           >
@@ -58,7 +58,7 @@ export const BuySellHeader: FC<Props> = (props) => {
             tabIndex={isRange ? -1 : 0}
             onClick={setRange}
             className={`rounded-40 font-weight-500 ${
-              isRange ? 'bg-silver' : 'text-secondary'
+              isRange ? 'bg-background-900' : 'text-secondary'
             } px-10 py-4`}
             data-testid="tab-range"
           >
