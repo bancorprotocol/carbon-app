@@ -24,6 +24,7 @@ import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { fromUnixUTC } from '../utils';
+import { useStore } from 'store';
 
 interface Props {
   state: StrategyInputValues;
@@ -59,6 +60,7 @@ export const SimInputChart = ({
   isError,
   data,
 }: Props) => {
+  const { debug } = useStore();
   const marketPrice = useCompareTokenPrice(
     state.baseToken?.address,
     state.quoteToken?.address
@@ -168,7 +170,9 @@ export const SimInputChart = ({
             />
           }
           presets={datePickerPresets}
-          options={{ disabled: datePickerDisabledDays }}
+          options={{
+            disabled: debug.debugState.isE2E ? [] : datePickerDisabledDays,
+          }}
         />
       </div>
       {isError && (
@@ -186,6 +190,7 @@ export const SimInputChart = ({
         <D3ChartWrapper
           settings={chartSettings}
           className="self-stretch rounded-12 bg-black"
+          data-testid="price-chart"
         >
           {(dms) => (
             <D3ChartCandlesticks

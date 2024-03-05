@@ -15,11 +15,12 @@ export const D3ChartWrapper: FC<Props> = ({
   children,
   settings,
   className,
+  ...props
 }) => {
   const [ref, dms] = useChartDimensions(settings);
 
   return (
-    <svg ref={ref} className={className}>
+    <svg ref={ref} className={className} {...props}>
       <g transform={`translate(${dms.marginLeft},${dms.marginTop})`}>
         {children(dms)}
       </g>

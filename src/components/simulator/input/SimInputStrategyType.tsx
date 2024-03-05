@@ -58,6 +58,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
             replace={true}
             resetScroll={false}
             params={{ simulationType: label }}
+            data-testid={`select-type-${label}`}
           >
             {svg}
             <span

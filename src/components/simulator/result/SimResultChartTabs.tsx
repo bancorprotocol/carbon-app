@@ -11,13 +11,13 @@ interface Props {
 export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
   const tabs = [
     {
-      label: 'Animation',
+      label: 'animation',
       icon: <IconAnimation className="h-18 w-18" />,
       isActive: () => !showSummary,
       click: () => setShowSummary(false),
     },
     {
-      label: 'Summary',
+      label: 'summary',
       icon: <IconSummary className="h-18 w-18" />,
       isActive: () => showSummary,
       click: () => setShowSummary(true),
@@ -39,9 +39,10 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
               'flex w-full items-center justify-center gap-4 rounded-full py-5 px-16',
               active ? 'bg-white/10' : 'bg-transparent text-white/60'
             )}
+            data-testid={`chart-tab-${label}`}
           >
             {icon}
-            <span className="text-14 font-weight-500">{label}</span>
+            <span className="text-14 font-weight-500 capitalize">{label}</span>
           </button>
         );
       })}

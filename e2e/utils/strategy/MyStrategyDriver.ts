@@ -1,6 +1,6 @@
 import { waitFor } from './../../utils/operators';
 import { Page } from 'playwright-core';
-import { Direction } from './types';
+import { Direction } from '../types';
 
 // TODO import type `StrategyEditOptionId`
 type ManageStrategyID =

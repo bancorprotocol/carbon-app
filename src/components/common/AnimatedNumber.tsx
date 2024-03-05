@@ -8,6 +8,7 @@ interface Props {
   className: string;
   duration?: number;
   formatFn?: (value: number) => string;
+  'data-testid'?: string;
 }
 
 export const AnimatedNumber = ({
@@ -16,6 +17,7 @@ export const AnimatedNumber = ({
   className,
   duration,
   formatFn,
+  'data-testid': testid,
 }: Props) => {
   const nodeRef = useRef<HTMLParagraphElement | null>(null);
 
@@ -34,5 +36,5 @@ export const AnimatedNumber = ({
     return () => controls.stop();
   }, [to]);
 
-  return <m.p ref={nodeRef} className={className ?? ''} />;
+  return <m.p ref={nodeRef} className={className ?? ''} data-testid={testid} />;
 };

@@ -20,6 +20,7 @@ const urlNames = {
   '/': 'My Strategies',
   '/trade?*': 'Trade',
   '/explore': 'Explore',
+  '/simulate/recurring': 'Simulate',
   '/debug': 'Debug',
 };
 

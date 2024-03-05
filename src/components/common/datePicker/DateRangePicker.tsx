@@ -34,6 +34,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
       type="button"
       aria-label="Pick date range"
       className="flex items-center gap-8"
+      data-testid="date-picker-button"
     >
       {props.button}
     </button>
@@ -111,6 +112,7 @@ const Content = (props: Props) => {
             className="box-border rounded-8 border-2 border-transparent bg-clip-padding py-8 px-30 text-start text-14 font-weight-500 hover:border-background-700 [&[aria-checked=true]]:bg-black"
             onClick={() => handlePreset(days)}
             aria-checked={selectedPreset?.days === days}
+            data-testid="date-picker-button"
           >
             {label}
           </button>
@@ -129,6 +131,7 @@ const Content = (props: Props) => {
         disabled={!hasDates}
         size="sm"
         className="col-span-2 justify-self-end"
+        data-testid="date-picker-confirm"
       >
         Confirm
       </Button>
@@ -160,7 +163,10 @@ export const DatePickerButton = memo(
           <CalendarIcon className="h-12 w-12" />
         </span>
 
-        <span className="justify-self-end text-14 text-white/80">
+        <span
+          className="justify-self-end text-14 text-white/80"
+          data-testid="simulation-dates"
+        >
           {hasDates ? (
             <>
               {startDate} – {endDate}

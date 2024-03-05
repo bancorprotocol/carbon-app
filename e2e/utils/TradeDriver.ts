@@ -2,7 +2,7 @@
 import { Page } from '@playwright/test';
 import { waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
-import { Direction } from './strategy';
+import { Direction } from './types';
 
 interface TradeTestCase {
   mode: Direction;
@@ -39,6 +39,13 @@ export class TradeDriver {
   setPay() {
     const { sourceValue } = this.testCase;
     return this.form.getByLabel('You Pay').fill(sourceValue);
+  }
+
+  awaitSuccess() {
+    return this.page
+      .getByTestId('notification-trade')
+      .getByLabel('Success')
+      .waitFor({ state: 'visible', timeout: 10_000 });
   }
 
   async openRouting() {
