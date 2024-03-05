@@ -7,14 +7,8 @@ import {
   getRecurringSettings,
   screenshotPath,
 } from './utils';
-import {
-  RangeOrder,
-  debugTokens,
-  CreateStrategyTestCase,
-  Direction,
-  StrategySettings,
-  Setting,
-} from './types';
+import { CreateStrategyTestCase, StrategySettings } from './types';
+import { RangeOrder, debugTokens, Direction, Setting } from '../types';
 import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
 import { screenshot, shouldTakeScreenshot } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';

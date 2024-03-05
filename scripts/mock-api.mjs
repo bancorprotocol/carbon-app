@@ -7,12 +7,18 @@
  * - E2E tests will likely fail for value based on these mocks, so you'll need to update them.
  * - visual tests will fail too
  *
- * Last ran on 18th Sep 2023
+ * Last ran on:
+ * ROI: 18th Sep 2023
+ * Market Rate: 18th Sep 2023
+ * History Prices: 29th Feb 2024
+ * Simulator Results: 29th Feb 2024
  */
 
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { cwd } from 'process';
+import dayjs from 'dayjs';
+
 // Add more addresses for more mocks
 const addresses = [
   '0x6B175474E89094C44Da98b954EedeAC495271d0F',
@@ -143,6 +149,89 @@ const addresses = [
   '0xa117000000f279D81A1D3cc75430fAA017FA5A2e',
   '0x15b0dD2c5Db529Ab870915ff498bEa6d20Fb6b96',
 ];
+
+// Add more cases for more mocks
+const historyPricesCases = [
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
+    start: '2023-02-28',
+    end: '2024-02-29',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+    start: '2023-02-28',
+    end: '2024-02-29',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
+    start: '2023-02-28',
+    end: '2024-02-29',
+  },
+];
+
+// Add more cases for more mocks
+const simulatorResultCases = [
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
+    buyIsRange: true,
+    buyMin: 1500,
+    buyMax: 1600,
+    quoteBudget: 2000,
+    sellIsRange: true,
+    sellMin: 1700,
+    sellMax: 2000,
+    baseBudget: 10,
+    start: '2023-03-02',
+    end: '2024-02-25',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+    buyIsRange: true,
+    buyMin: 1700,
+    buyMax: 1800,
+    quoteBudget: 200,
+    sellIsRange: false,
+    sellMin: 2100,
+    sellMax: 2100,
+    baseBudget: 1,
+    start: '2023-03-10',
+    end: '2024-01-24',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
+    buyIsRange: false,
+    buyMin: 222000000,
+    buyMax: 222000000,
+    quoteBudget: 1000000000,
+    sellIsRange: true,
+    sellMin: 240000000,
+    sellMax: 270000000,
+    baseBudget: 1,
+    start: '2023-03-08',
+    end: '2024-01-21',
+  },
+  {
+    baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
+    quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
+    buyIsRange: false,
+    buyMin: 222000000,
+    buyMax: 222000000,
+    quoteBudget: 100000000,
+    sellIsRange: false,
+    sellMin: 240000000,
+    sellMax: 240000000,
+    baseBudget: 10,
+    start: '2023-03-01',
+    end: '2024-02-21',
+  },
+];
+
 const baseUrl = 'https://api.carbondefi.xyz/v1';
 
 const get = async (url) => {
@@ -152,6 +241,8 @@ const get = async (url) => {
   throw new Error(`[${res.status} ${res.statusText}] ${err.message ?? ''}`);
 };
 
+const convertToUnix = (date) => dayjs(date).unix();
+
 const getMarketRate = async (address) => {
   const url = new URL(`${baseUrl}/market-rate`);
   url.searchParams.set('address', address);
@@ -160,6 +251,31 @@ const getMarketRate = async (address) => {
 };
 
 const getRoi = () => get(`${baseUrl}/roi`);
+
+const getHistoryPrices = async (baseToken, quoteToken, start, end) => {
+  const startTimestamp = convertToUnix(start);
+  const endTimestamp = convertToUnix(end);
+  const url = new URL(`${baseUrl}/history/prices`);
+  url.searchParams.set('baseToken', baseToken);
+  url.searchParams.set('quoteToken', quoteToken);
+  url.searchParams.set('start', startTimestamp);
+  url.searchParams.set('end', endTimestamp);
+  return get(url);
+};
+
+const getSimulatorData = async (simulatorData) => {
+  const url = new URL(`${baseUrl}/simulate-create-strategy`);
+  const startTimestamp = convertToUnix(simulatorData.start);
+  const endTimestamp = convertToUnix(simulatorData.end);
+
+  for (const key in simulatorData) {
+    url.searchParams.set(key, simulatorData[key]);
+  }
+
+  url.searchParams.set('start', startTimestamp);
+  url.searchParams.set('end', endTimestamp);
+  return get(url);
+};
 
 async function main() {
   const roi = await getRoi();
@@ -172,12 +288,55 @@ async function main() {
   });
   await Promise.allSettled(getAll);
 
+  const historyPrices = {};
+  const getHistoryPricesAll = historyPricesCases.map(async (c) => {
+    const dict = await getHistoryPrices(
+      c.baseToken,
+      c.quoteToken,
+      c.start,
+      c.end
+    );
+    const pairKey = [c.baseToken, c.quoteToken].join('-').toLowerCase();
+    historyPrices[pairKey] = dict;
+  });
+  await Promise.allSettled(getHistoryPricesAll);
+
+  const simulatorResult = {};
+  const getSimulatorDataAll = simulatorResultCases.map(async (c) => {
+    const dict = await getSimulatorData(c);
+    const pairKey = [
+      c.baseToken,
+      c.quoteToken,
+      c.buyMin,
+      c.buyMax,
+      c.quoteBudget,
+      c.sellMin,
+      c.sellMax,
+      c.baseBudget,
+      convertToUnix(c.start),
+      convertToUnix(c.end),
+    ]
+      .join('-')
+      .toLowerCase();
+    simulatorResult[pairKey] = dict;
+  });
+  await Promise.allSettled(getSimulatorDataAll);
+
   const folder = join(cwd(), 'e2e/mocks');
   if (!existsSync(folder)) mkdirSync(folder, { recursive: true });
 
   // We do not wrap it into "data" as playwright will do it for us
   writeFileSync(join(folder, 'roi.json'), JSON.stringify(roi));
   writeFileSync(join(folder, 'market-rates.json'), JSON.stringify(rates));
+
+  writeFileSync(
+    join(folder, 'history-prices.json'),
+    JSON.stringify(historyPrices)
+  );
+  writeFileSync(
+    join(folder, 'simulator-result.json'),
+    JSON.stringify(simulatorResult)
+  );
 }
 
 main()
