@@ -1,4 +1,13 @@
 import axios from 'axios';
+import {
+  SimulatorAPIParams,
+  SimulatorResult,
+} from 'libs/queries/extApi/simulator';
+import {
+  TokenPriceHistoryResult,
+  TokenPriceHistorySearch,
+} from 'libs/queries/extApi/tokenPrice';
+import config from 'config';
 
 export const AVAILABLE_CURRENCIES = [
   'USD',
@@ -23,26 +32,15 @@ export type RoiRow = {
   id: string;
 };
 
-let BASE_URL = '/api/';
-
-if (import.meta.env.VITE_DEV_MODE) {
-  BASE_URL = 'https://app.carbondefi.xyz/api/';
-}
-
-const carbonApiAxios = axios.create({
-  baseURL: BASE_URL,
-});
-
 const newApiAxios = axios.create({
-  baseURL: 'https://api.carbondefi.xyz/v1/',
+  baseURL: config.carbonApi,
 });
 
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
-    if (import.meta.env.VITE_DEV_MODE) {
-      return false;
-    }
-    const { data } = await carbonApiAxios.get<boolean>('/check');
+    if (config.mode === 'development') return false;
+    const localApi = axios.create({ baseURL: '/api/' });
+    const { data } = await localApi.get<boolean>('/check');
     return data;
   },
   getMarketRate: async (
@@ -56,10 +54,34 @@ const carbonApi = {
     });
     return data;
   },
+  getMarketRateHistory: async (
+    params: TokenPriceHistorySearch
+  ): Promise<TokenPriceHistoryResult[]> => {
+    const { data } = await newApiAxios.get<TokenPriceHistoryResult[]>(
+      `history/prices`,
+      { params }
+    );
+    return data;
+  },
   getRoi: async (): Promise<RoiRow[]> => {
     const { data } = await newApiAxios.get<RoiRow[]>('roi');
     return data;
   },
+  getSimulator: async (
+    params: SimulatorAPIParams
+  ): Promise<SimulatorResult> => {
+    const { data } = await newApiAxios.get<SimulatorResult>(
+      'simulate-create-strategy',
+      {
+        params: {
+          ...params,
+          baseBudget: params.sellBudget,
+          quoteBudget: params.buyBudget,
+        },
+      }
+    );
+    return data;
+  },
 };
 
-export { carbonApiAxios, carbonApi };
+export { carbonApi };

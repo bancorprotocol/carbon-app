@@ -2,8 +2,10 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { suggestionClasses } from './utils';
 import { cn } from 'utils/helpers';
 import { PairLogoName } from 'components/common/PairLogoName';
-import styles from './suggestion.module.css';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
+import { Link } from '@tanstack/react-router';
+import { toPairSlug } from 'utils/pairSearch';
+import styles from './suggestion.module.css';
 
 interface Props {
   listboxId: string;
@@ -12,44 +14,32 @@ interface Props {
 }
 
 export const SuggestionList: FC<Props> = (props) => {
-  const select = (name: string) => {
-    const selector = `input[aria-controls="${props.listboxId}"]`;
-    const input = document.querySelector<HTMLInputElement>(selector);
-    if (!input) return;
-    input.value = name;
-    input.form?.requestSubmit();
-    props.setOpen(false);
-  };
-
   return (
-    <ul
-      role="listbox"
-      id={props.listboxId}
-      className={suggestionClasses}
-      tabIndex={-1}
-    >
+    <div role="listbox" id={props.listboxId} className={suggestionClasses}>
       <h3 className="text-secondary ml-20 mb-8 font-weight-500">
         {props.filteredPairs.length} Results
       </h3>
-      {props.filteredPairs.map((pair, i) => {
-        const slug = `${pair.baseToken.symbol}-${pair.quoteToken.symbol}`;
-        const name = `${pair.baseToken.symbol}/${pair.quoteToken.symbol}`;
+      {props.filteredPairs.map((pair) => {
+        const slug = toPairSlug(pair.baseToken, pair.quoteToken);
+        const params = { type: 'token-pair' as const, slug };
         return (
-          <li
-            role="option"
-            aria-selected={i === 0}
-            key={slug.toLowerCase()}
+          <Link
+            key={slug}
             onMouseDown={(e) => e.preventDefault()} // prevent blur on click
-            onClick={() => select(name)}
+            onClick={() => props.setOpen(false)}
+            role="option"
             className={cn(
               styles.option,
               'flex cursor-pointer items-center space-x-10 px-30 py-10 hover:bg-white/20'
             )}
+            to="/explore/$type/$slug"
+            params={params}
+            search={{}}
           >
             <PairLogoName pair={pair} />
-          </li>
+          </Link>
         );
       })}
-    </ul>
+    </div>
   );
 };

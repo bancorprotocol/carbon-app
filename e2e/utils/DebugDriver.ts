@@ -7,8 +7,8 @@ import {
   deleteFork,
 } from './../utils/tenderly';
 import { Wallet } from 'ethers';
-import { checkApproval } from './modal';
-import { CreateStrategyTemplate } from './strategy/template';
+import { CreateStrategyTestCase, toDebugStrategy } from './strategy';
+import { TokenApprovalDriver } from './TokenApprovalDriver';
 
 const forkConfig: CreateForkBody = {
   network_id: '1',
@@ -34,6 +34,10 @@ interface ImposterConfig {
   noMoney?: boolean;
 }
 
+export interface CreateStrategyDependencies {
+  tokenApproval: TokenApprovalDriver;
+}
+
 export class DebugDriver {
   constructor(private page: Page) {}
 
@@ -54,6 +58,7 @@ export class DebugDriver {
     await this.page.getByLabel('RPC URL').fill(rpcUrl);
     await this.page.getByTestId('unchecked-signer').click();
     await this.page.getByTestId('save-rpc').click();
+    await this.page.waitForURL('/debug');
   }
 
   async setupImposter(config: ImposterConfig = {}) {
@@ -72,27 +77,21 @@ export class DebugDriver {
     return this.page.getByTestId(`balance-${token}`);
   }
 
-  async createStrategy(template: CreateStrategyTemplate) {
-    const { base, quote, buy, sell, spread, amount } = template;
-    // TODO: use textarea shortcut instead of filling each field.
-    // Currently this revert with Dai/insufficient-allowance for some reason
-    // await this.page.getByTestId('strategy-json-shortcut').fill(JSON.stringify(template));
+  async createStrategy(
+    testCase: CreateStrategyTestCase,
+    deps: CreateStrategyDependencies
+  ) {
+    const { base, quote } = testCase;
+    const { buy, sell, spread } = toDebugStrategy(testCase);
     for (const token of [base, quote]) {
       await waitFor(this.page, `balance-${token}`, 30_000);
     }
-
-    await this.page.getByTestId('spread').fill(spread ?? '');
-    await this.page.getByTestId(`token-${base}`).click();
-    await this.page.getByTestId(`token-${quote}`).click();
-    await this.page.getByTestId('buyMin').fill(buy.min);
-    await this.page.getByTestId('buyMax').fill(buy.max);
-    await this.page.getByTestId('buyBudget').fill(buy.budget);
-    await this.page.getByTestId('sellMin').fill(sell.min);
-    await this.page.getByTestId('sellMax').fill(sell.max);
-    await this.page.getByTestId('sellBudget').fill(sell.budget);
-    await this.page.getByTestId('strategy-amount').fill(amount ?? '1');
+    const template = { base, quote, buy, sell, spread };
+    await this.page
+      .getByTestId('strategy-json-shortcut')
+      .fill(JSON.stringify(template));
     await this.page.getByTestId('create-strategies').click();
-    await checkApproval(this.page, [base, quote]);
+    await deps.tokenApproval.checkApproval([base, quote]);
     await this.page.getByTestId('creating-strategies').waitFor({
       state: 'detached',
     });

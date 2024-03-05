@@ -1,5 +1,5 @@
 import { Button } from 'components/common/button';
-import { Link, PathNames, useRouterState } from 'libs/routing';
+import { Link, useRouterState } from 'libs/routing';
 import { carbonEvents } from 'services/events';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { isPathnameMatch } from 'utils/helpers';
@@ -8,7 +8,7 @@ import { buttonStyles } from 'components/common/button/buttonStyles';
 export const CreateStrategyCTA = () => {
   return (
     <Link
-      to={PathNames.createStrategy}
+      to="/strategies/create"
       className={buttonStyles({ variant: 'success' })}
       data-testid="create-strategy-desktop"
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
@@ -22,9 +22,9 @@ export const CreateStrategyCTAMobile = () => {
   const { pathname } = useRouterState().location;
 
   const showCTA = isPathnameMatch(pathname, '/', [
-    PathNames.strategies,
-    PathNames.portfolio,
-    PathNames.portfolioToken('0x'),
+    '/',
+    '/strategies/portfolio',
+    '/strategies/portfolio/token/$address',
   ]);
 
   if (!showCTA) {
@@ -33,7 +33,7 @@ export const CreateStrategyCTAMobile = () => {
 
   return (
     <Link
-      to={PathNames.createStrategy}
+      to="/strategies/create"
       className="fixed bottom-100 right-30 md:hidden"
       data-testid="create-strategy-mobile"
     >

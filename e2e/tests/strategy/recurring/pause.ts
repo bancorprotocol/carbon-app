@@ -1,33 +1,29 @@
 import { expect, test } from '@playwright/test';
 import { waitModalOpen } from './../../../utils/modal';
 import { Page } from 'playwright-core';
-import { CreateStrategyTemplate } from './../../../utils/strategy/template';
-import { NotificationDriver } from './../../../utils/NotificationDriver';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
+import { CreateStrategyTestCase } from '../../../utils/strategy';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
 export const pauseStrategy = async (
   page: Page,
-  testCase: CreateStrategyTemplate
+  testCase: CreateStrategyTestCase
 ) => {
   const manage = new ManageStrategyDriver(page);
-  const strategy = await manage.createStrategy(testCase);
-  await strategy.clickManageEntry('manage-strategy-pauseStrategy');
+  const tokenApproval = new TokenApprovalDriver(page);
+  const strategy = await manage.createStrategy(testCase, { tokenApproval });
+  await strategy.clickManageEntry('pauseStrategy');
 
   const modal = await waitModalOpen(page);
   await modal.getByTestId('pause-strategy-btn').click();
-
-  const notif = new NotificationDriver(page, 'pause-strategy');
-  await expect(notif.getTitle()).toHaveText('Success');
-  await expect(notif.getDescription()).toHaveText(
-    'Your strategy was successfully paused.'
-  );
+  await modal.waitFor({ state: 'detached' });
 
   await expect(strategy.status()).toHaveText('Inactive');
 
   return { strategy, manage };
 };
 
-export const pauseStrategyTest = (testCase: CreateStrategyTemplate) => {
+export const pauseStrategyTest = (testCase: CreateStrategyTestCase) => {
   return test('Pause', async ({ page }) => {
     await pauseStrategy(page, testCase);
   });

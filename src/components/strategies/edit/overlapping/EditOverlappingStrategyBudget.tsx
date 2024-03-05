@@ -1,9 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useId, useState } from 'react';
 import { Token } from 'libs/tokens';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { SafeDecimal } from 'libs/safedecimal';
-import { isMinAboveMarket, isMaxBelowMarket } from '../../overlapping/utils';
+import {
+  isMinAboveMarket,
+  isMaxBelowMarket,
+  isOverlappingBudgetTooSmall,
+} from '../../overlapping/utils';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
@@ -16,6 +20,7 @@ import {
 } from './BudgetWarning';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { prettifyNumber } from 'utils/helpers';
+import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 
 interface Props {
   strategy: Strategy;
@@ -23,7 +28,7 @@ interface Props {
   order1: OrderCreate;
   marketPrice: number;
   anchoredOrder: 'buy' | 'sell';
-  setAnchoderOrder: (value: 'buy' | 'sell') => any;
+  setAnchoredOrder: (value: 'buy' | 'sell') => any;
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
   setSellBudget: (buyBudget: string, min: string, max: string) => any;
   setOverlappingError: (error: string) => void;
@@ -41,16 +46,19 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     order0,
     order1,
     marketPrice,
-    setAnchoderOrder,
+    setAnchoredOrder,
     setBuyBudget,
     setSellBudget,
     setOverlappingError,
   } = props;
   const { quote, base } = strategy;
-  const minAboveMarket = isMinAboveMarket(order0, quote);
-  const maxBelowMarket = isMaxBelowMarket(order1, quote);
+  const minAboveMarket = isMinAboveMarket(order0);
+  const maxBelowMarket = isMaxBelowMarket(order1);
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
+  const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
+  const buyBudgetId = useId();
+  const sellBudgetId = useId();
 
   // We need to use external market price for the initial state in case of dust
   const disableBuy =
@@ -124,12 +132,12 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
 
   const onBuyBudgetChange = (value: string) => {
     order0.setBudget(value);
-    setAnchoderOrder('buy');
+    setAnchoredOrder('buy');
     setSellBudget(value, order0.min, order1.max);
   };
   const onSellBudgetChange = (value: string) => {
     order1.setBudget(value);
-    setAnchoderOrder('sell');
+    setAnchoredOrder('sell');
     setBuyBudget(value, order0.min, order1.max);
   };
 
@@ -151,6 +159,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
       </header>
       <BudgetInput
+        id={buyBudgetId}
         token={quote}
         query={tokenQuoteBalanceQuery}
         order={order0}
@@ -168,6 +177,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         <BudgetMessage token={quote} change={quoteBalanceChange} />
       </BudgetInput>
       <BudgetInput
+        id={sellBudgetId}
         token={base}
         query={tokenBaseBalanceQuery}
         order={order1}
@@ -183,7 +193,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         />
         <BudgetMessage token={base} change={baseBalanceChange} />
       </BudgetInput>
-      {maxBelowMarket && <Explaination base={base} />}
+      {maxBelowMarket && <Explanation base={base} />}
       {!minAboveMarket && !maxBelowMarket && (
         <p className="text-12 text-white/60">
           The required 2nd budget will be calculated to maintain overlapping
@@ -199,11 +209,19 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
           </a>
         </p>
       )}
+      {budgetTooSmall && (
+        <OverlappingSmallBudget
+          base={base}
+          quote={quote}
+          buyBudget={order0.budget}
+          htmlFor={`${buyBudgetId} ${sellBudgetId}`}
+        />
+      )}
     </article>
   );
 };
 
-const Explaination: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
+const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
   return (
     <p className="text-12 text-white/60">
       The market price is outside the ranges you set for&nbsp;

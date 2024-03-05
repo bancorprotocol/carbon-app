@@ -53,6 +53,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
       }`}
+      data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <header className="flex items-center justify-between">
         <h3 id={titleId} className="flex items-center gap-8 text-18">
@@ -82,7 +83,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         isError={insufficientBalance}
         balance={tokenBalanceQuery.data}
         withoutWallet={type === 'withdraw'}
-        data-testid={`budget-${type}-${buy ? 'buy' : 'sell'}-input`}
+        data-testid="input-budget"
       />
       {insufficientBalance && (
         <output

@@ -32,7 +32,8 @@ export const getTooltipTextByStatus = (
 };
 
 const tooltipTextByStrategyEditOptionsId = {
-  duplicateStrategy: 'Create a new strategy with the same details',
+  duplicateStrategy:
+    'Create a new strategy with the same details or undercut it',
   deleteStrategy:
     'Delete the strategy and withdraw all associated funds to your wallet',
   pauseStrategy: 'Deactivate the strategy by nulling the prices',
@@ -75,12 +76,12 @@ export const getPrice = ({
 }: getPriceParams) => {
   if (prettified) {
     return `${prettifyNumber(order.startRate, {
-      abbreviate: order.startRate.length > 10,
+      abbreviate: true,
       round: true,
     })} ${
       !limit
         ? ` - ${prettifyNumber(order.endRate, {
-            abbreviate: order.endRate.length > 10,
+            abbreviate: true,
             round: true,
           })}`
         : ''

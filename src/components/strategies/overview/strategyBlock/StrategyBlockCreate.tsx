@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
-import { Link, PathNames } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { cn } from 'utils/helpers';
 
@@ -15,7 +15,7 @@ export const StrategyBlockCreate: FC<Props> = ({
   return (
     <Link
       onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
-      to={PathNames.createStrategy}
+      to="/strategies/create"
       className={cn(
         'bg-content flex flex-col items-center justify-center gap-24 rounded-10 py-50 text-24 font-weight-500 md:text-[32px]',
         className

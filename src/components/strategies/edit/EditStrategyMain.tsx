@@ -7,12 +7,6 @@ import { Strategy } from 'libs/queries';
 import { useSearch } from 'libs/routing';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 
-export type EditTypes = 'renew' | 'editPrices' | 'deposit' | 'withdraw';
-
-export interface EditStratgySearch {
-  type: EditTypes;
-}
-
 interface Props {
   strategy?: Strategy;
   isLoading: boolean;
@@ -20,7 +14,7 @@ interface Props {
 
 export const EditStrategyMain: FC<Props> = ({ strategy, isLoading }) => {
   const [showGraph, setShowGraph] = useState(true);
-  const { type }: EditStratgySearch = useSearch({ strict: false });
+  const { type } = useSearch({ from: '/strategies/edit/$strategyId' });
 
   return (
     <m.div

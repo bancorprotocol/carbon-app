@@ -122,6 +122,7 @@ export const EditStrategyPricesContent = ({
       onSubmit={(e) => handleOnActionClick(e)}
       onReset={() => history.back()}
       className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]"
+      data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
       {isOverlapping && (
@@ -135,19 +136,19 @@ export const EditStrategyPricesContent = ({
       {!isOverlapping && (
         <>
           <EditStrategyPricesBuySellBlock
+            base={strategy?.base}
+            quote={strategy?.quote}
+            order={order1}
+            balance={strategy.order1.balance}
+            type={type}
+            isOrdersOverlap={isOrdersOverlap}
+          />
+          <EditStrategyPricesBuySellBlock
             buy
             base={strategy?.base}
             quote={strategy?.quote}
             order={order0}
             balance={strategy.order0.balance}
-            type={type}
-            isOrdersOverlap={isOrdersOverlap}
-          />
-          <EditStrategyPricesBuySellBlock
-            base={strategy?.base}
-            quote={strategy?.quote}
-            order={order1}
-            balance={strategy.order1.balance}
             type={type}
             isOrdersOverlap={isOrdersOverlap}
           />
@@ -162,7 +163,7 @@ export const EditStrategyPricesContent = ({
         variant="white"
         size="lg"
         fullWidth
-        data-testid="edit-strategy-prices-submit"
+        data-testid="edit-submit"
       >
         {type === 'renew' ? 'Renew Strategy' : 'Confirm Changes'}
       </Button>

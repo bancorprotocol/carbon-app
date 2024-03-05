@@ -1,27 +1,22 @@
 import { expect, test } from '@playwright/test';
-import { CreateStrategyTemplate } from '../../../utils/strategy/template';
 import { NotificationDriver } from '../../../utils/NotificationDriver';
-import {
-  fiatPrice,
-  navigateTo,
-  screenshot,
-  tokenPrice,
-  waitFor,
-} from '../../../utils/operators';
+import { navigateTo, screenshot, waitFor } from '../../../utils/operators';
 import {
   CreateStrategyDriver,
+  CreateStrategyTestCase,
   MyStrategyDriver,
+  assertOverlappingTestCase,
+  screenshotPath,
 } from '../../../utils/strategy';
-import { MainMenuDriver } from '../../../utils/MainMenuDriver';
-import { checkApproval } from '../../../utils/modal';
+import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
-export const createOverlappingStrategy = (testCase: CreateStrategyTemplate) => {
-  const { base, quote, buy, sell } = testCase;
-  const buyBudgetFiat = parseFloat(buy.budgetFiat ?? '0');
-  const sellBudgetFiat = parseFloat(sell.budgetFiat ?? '0');
+export const create = (testCase: CreateStrategyTestCase) => {
+  assertOverlappingTestCase(testCase);
+  const { base, quote } = testCase;
+  const { sell } = testCase.input.create;
+  const output = testCase.output.create;
 
   return test(`Create ${base}->${quote}`, async ({ page }) => {
-    test.setTimeout(180_000);
     await waitFor(page, `balance-${quote}`, 30_000);
 
     await navigateTo(page, '/');
@@ -33,56 +28,43 @@ export const createOverlappingStrategy = (testCase: CreateStrategyTemplate) => {
     await createForm.selectSetting('overlapping');
     await createForm.nextStep();
 
-    const overlappingForm = await createForm.fillOverlapping();
-    expect(overlappingForm.max()).toHaveValue(testCase.sell.max.toString());
+    const overlappingForm = createForm.getOverlappingForm();
+    // Make so form has value before filling it
+    expect(overlappingForm.min()).toHaveValue(/\S+/);
+    expect(overlappingForm.max()).toHaveValue(/\S+/);
+    await createForm.fillOverlapping();
+    expect(overlappingForm.max()).toHaveValue(sell.max.toString());
 
-    const mainMenu = new MainMenuDriver(page);
-    await mainMenu.hide();
-    await screenshot(
-      overlappingForm.locator,
-      `[Create Overlapping Strategy] Form`
-    );
-    await mainMenu.show();
-
+    const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit();
-    await checkApproval(page, [base, quote]);
+    await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
 
-    // Verfiy notification
-    const notif = new NotificationDriver(page, 'create-strategy');
-    await expect(notif.getTitle()).toHaveText('Success');
-    await expect(notif.getDescription()).toHaveText(
-      'New strategy was successfully created.'
-    );
-
     // Verify strategy data
-    const strategies = await myStrategies.getAllStrategies();
+    const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
     await expect(strategy.pair()).toHaveText(`${base}/${quote}`);
     await expect(strategy.status()).toHaveText('Active');
-    await expect(strategy.totalBudget()).toHaveText(
-      fiatPrice(buyBudgetFiat + sellBudgetFiat)
-    );
-    await expect(strategy.buyBudget()).toHaveText(
-      tokenPrice(buy.budget, quote)
-    );
-    await expect(strategy.buyBudgetFiat()).toHaveText(fiatPrice(buyBudgetFiat));
-    await expect(strategy.sellBudget()).toHaveText(
-      tokenPrice(sell.budget, base)
-    );
-    await expect(strategy.sellBudgetFiat()).toHaveText(
-      fiatPrice(sellBudgetFiat)
-    );
-    const sellTooltip = await strategy.priceTooltip('sell');
-    await expect(sellTooltip.minPrice()).toHaveText(
-      tokenPrice(sell.min, quote)
-    );
+    await expect(strategy.totalBudget()).toHaveText(output.totalFiat);
+    await expect(strategy.budget('buy')).toHaveText(output.buy.budget);
+    await expect(strategy.budgetFiat('buy')).toHaveText(output.buy.fiat);
+    await expect(strategy.budget('sell')).toHaveText(output.sell.budget);
+    await expect(strategy.budgetFiat('sell')).toHaveText(output.sell.fiat);
+
+    const isOverlapping = true;
+    const sellTooltip = await strategy.priceTooltip('sell', { isOverlapping });
+    await expect(sellTooltip.minPrice()).toHaveText(output.sell.min);
+    await expect(sellTooltip.maxPrice()).toHaveText(output.sell.max);
     await sellTooltip.waitForDetached();
-    const buyTooltip = await strategy.priceTooltip('buy');
-    await expect(buyTooltip.maxPrice()).toHaveText(tokenPrice(buy.max, quote));
+
+    const buyTooltip = await strategy.priceTooltip('buy', { isOverlapping });
+    await expect(buyTooltip.minPrice()).toHaveText(output.buy.min);
+    await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
     await buyTooltip.waitForDetached();
-    await notif.close();
-    await screenshot(page, `[Create Overlapping Strategy] My Strategy`);
+
+    const notificationDriver = new NotificationDriver(page);
+    await notificationDriver.closeAll();
+    await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
 };

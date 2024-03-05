@@ -1,13 +1,13 @@
 import { Locator, Page } from 'playwright-core';
-import { prettifyNumber as pn } from '../../src/utils/helpers/number';
 export { prettifyNumber as pn } from '../../src/utils/helpers/number';
 
 export const isCI = !!process.env.CI && process.env.CI !== 'false';
 export const isDraft = !!process.env.DRAFT && process.env.DRAFT !== 'false';
+export const shouldTakeScreenshot = isCI && !isDraft;
 
 /** Utils to take screenshot on CI that are not draft */
 export const screenshot = (target: Page | Locator, name: string) => {
-  if (!isCI || isDraft) return;
+  if (!shouldTakeScreenshot) return;
   return target.screenshot({
     type: 'jpeg',
     path: `e2e/screenshots/${name}.jpg`,
@@ -19,7 +19,7 @@ export const screenshot = (target: Page | Locator, name: string) => {
 const urlNames = {
   '/': 'My Strategies',
   '/trade?*': 'Trade',
-  '/explorer': 'Explorer',
+  '/explore': 'Explore',
   '/debug': 'Debug',
 };
 
@@ -33,11 +33,4 @@ export const waitFor = async (page: Page, testId: string, timeout = 10_000) => {
   const locator = page.getByTestId(testId);
   await locator.waitFor({ state: 'visible', timeout });
   return locator;
-};
-
-export const fiatPrice = (price: number) => {
-  return pn(price, { currentCurrency: 'USD' });
-};
-export const tokenPrice = (price: number | string, token: string) => {
-  return `${pn(price)} ${token}`;
 };

@@ -14,10 +14,6 @@ export const buildPercentageString = (percentage: SafeDecimal) => {
   return `${percentage.toFixed(2)}%`;
 };
 
-export const buildAmountString = (
-  amount: SafeDecimal,
-  { symbol }: Token,
-  highPrecision: boolean = true
-) => {
-  return `${prettifyNumber(amount, { highPrecision })} ${symbol}`;
+export const buildAmountString = (amount: SafeDecimal, { symbol }: Token) => {
+  return `${prettifyNumber(amount)} ${symbol}`;
 };

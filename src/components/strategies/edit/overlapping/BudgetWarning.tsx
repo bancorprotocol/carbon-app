@@ -1,5 +1,4 @@
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FC } from 'react';
@@ -59,9 +58,10 @@ export const BudgetWarning: FC<Props> = ({ base, quote, state, setState }) => {
       <header className="flex items-center gap-8 ">
         <IconWarning className="h-14 w-14 text-warning-500" />
         <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
-        <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values.">
-          <IconTooltip className="h-14 w-14 text-white/60" />
-        </Tooltip>
+        <Tooltip
+          element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values."
+          iconClassName="h-14 w-14 text-white/60"
+        />
       </header>
       <p className="text-12 font-weight-400 text-white/60">
         Due to the strategy edits, the following budget changes are needed:

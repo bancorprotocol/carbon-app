@@ -2,7 +2,7 @@ import { FC, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { EditTypes } from './EditStrategyMain';
+import { EditTypes } from 'libs/routing';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { BuySellHeader } from '../create/BuySellBlock/Header';
@@ -59,6 +59,7 @@ export const EditStrategyPricesBuySellBlock: FC<
           ? 'border-green/50 focus-within:border-green'
           : 'border-red/50 focus-within:border-red'
       }`}
+      data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <BuySellHeader {...headProps}>
         <h3 id={titleId} className="flex items-center gap-6 text-18">

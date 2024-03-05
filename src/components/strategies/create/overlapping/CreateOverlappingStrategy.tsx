@@ -1,6 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
@@ -11,8 +10,6 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
 import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
 import { CreateOverlappingRange } from './CreateOverlappingRange';
-import { carbonSDK } from 'libs/sdk';
-import { Toolkit } from '@bancor/carbon-sdk/strategy-management';
 import {
   getMaxBuyMin,
   getMinSellMax,
@@ -21,8 +18,12 @@ import {
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { isValidRange } from 'components/strategies/utils';
-import { sanitizeNumber } from 'utils/helpers';
 import { SafeDecimal } from 'libs/safedecimal';
+import {
+  calculateOverlappingBuyBudget,
+  calculateOverlappingPrices,
+  calculateOverlappingSellBudget,
+} from '@bancor/carbon-sdk/strategy-management';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -34,22 +35,21 @@ export interface OverlappingStrategyProps {
   spread: number;
   setSpread: Dispatch<SetStateAction<number>>;
 }
-type FromPromise<T> = T extends Promise<infer I> ? I : never;
-type StrategyPrices = FromPromise<
-  ReturnType<Toolkit['calculateOverlappingStrategyPrices']>
->;
 
-export type SetOverlappingParams = (
-  min: string,
-  max: string
-) => Promise<StrategyPrices | undefined>;
+const getInitialPrices = (marketPrice: string | number) => {
+  const currentPrice = new SafeDecimal(marketPrice);
+  return {
+    min: currentPrice.times(0.999).toString(),
+    max: currentPrice.times(1.001).toString(),
+  };
+};
 
 export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
 ) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
   const marketPrice = useMarketPrice({ base, quote });
-  const [anchoredOrder, setAnchoderOrder] = useState<'buy' | 'sell'>('buy');
+  const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
@@ -62,114 +62,98 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     buy: true,
   });
 
-  const setOverlappingParams = async (min: string, max: string) => {
-    order0.setMin(min);
-    order1.setMax(max);
-    const params = await carbonSDK.calculateOverlappingStrategyPrices(
-      quote!.address,
-      min,
-      max,
-      marketPrice.toString(),
-      spread.toString()
-    );
-    order0.setMax(params.buyPriceHigh);
-    order0.setMarginalPrice(params.buyPriceMarginal);
-    order1.setMin(params.sellPriceLow);
-    order1.setMarginalPrice(params.sellPriceMarginal);
-    return params;
-  };
-
-  const setBuyBudget = async (
+  const setBuyBudget = (
     sellBudget: string,
     buyMin: string,
     sellMax: string
   ) => {
     if (!base || !quote) return;
     if (!sellBudget) return order0.setBudget('');
-    const buyBudget = await carbonSDK.calculateOverlappingStrategyBuyBudget(
-      base.address,
-      quote.address,
-      buyMin,
-      sellMax,
-      marketPrice.toString(),
-      spread.toString(),
-      sellBudget
-    );
-    order0.setBudget(buyBudget);
+    try {
+      const buyBudget = calculateOverlappingBuyBudget(
+        base.decimals,
+        quote.decimals,
+        buyMin,
+        sellMax,
+        marketPrice.toString(),
+        spread.toString(),
+        sellBudget
+      );
+      order0.setBudget(buyBudget);
+    } catch (err) {
+      console.error(err);
+      order0.setBudget('');
+    }
   };
 
-  const setSellBudget = async (
+  const setSellBudget = (
     buyBudget: string,
     buyMin: string,
     sellMax: string
   ) => {
     if (!base || !quote) return;
     if (!buyBudget) return order1.setBudget('');
-    const sellBudget = await carbonSDK.calculateOverlappingStrategySellBudget(
-      base.address,
-      quote.address,
-      buyMin,
-      sellMax,
-      marketPrice.toString(),
-      spread.toString(),
-      buyBudget
-    );
-    order1.setBudget(sellBudget);
+    try {
+      const sellBudget = calculateOverlappingSellBudget(
+        base.decimals,
+        quote.decimals,
+        buyMin,
+        sellMax,
+        marketPrice.toString(),
+        spread.toString(),
+        buyBudget
+      );
+      order1.setBudget(sellBudget);
+    } catch (err) {
+      console.error(err);
+      order1.setBudget('');
+    }
   };
 
-  // Initialize order when market price is available
-  useEffect(() => {
-    if (!quote || !base || marketPrice <= 0) return;
-    if (!order0.min && !order1.max) {
-      const _marketPrice = new SafeDecimal(marketPrice);
-      const min = _marketPrice.times(0.999).toFixed(quote.decimals);
-      const max = _marketPrice.times(1.001).toFixed(quote.decimals);
-      if (isValidRange(min, max)) setOverlappingParams(min, max);
+  const setOverlappingParams = () => {
+    const min = order0.min;
+    const max = order1.max;
+    if (!isValidRange(min, max) || !isValidSpread(spread)) return;
+    const prices = calculateOverlappingPrices(
+      min,
+      max,
+      marketPrice.toString(),
+      spread.toString()
+    );
+
+    // Set prices
+    order0.setMin(min);
+    order1.setMax(max);
+    order0.setMax(prices.buyPriceHigh);
+    order0.setMarginalPrice(prices.buyPriceMarginal);
+    order1.setMin(prices.sellPriceLow);
+    order1.setMarginalPrice(prices.sellPriceMarginal);
+
+    // Set budgets
+    const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
+    const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
+    if (isMinAboveMarket(buyOrder)) {
+      setAnchoredOrder('sell');
+      setBuyBudget(order1.budget, min, max);
+    } else if (isMaxBelowMarket(sellOrder)) {
+      setAnchoredOrder('buy');
+      setSellBudget(order0.budget, min, max);
     } else {
-      const min = order0.min;
-      const max = order1.max;
-      if (isValidRange(min, max) && isValidSpread(spread)) {
-        setOverlappingParams(min, max).then((params) => {
-          const buyOrder = { min, marginalPrice: params.buyPriceMarginal };
-          const sellOrder = { max, marginalPrice: params.sellPriceMarginal };
-          if (isMinAboveMarket(buyOrder, quote)) {
-            setAnchoderOrder('sell');
-            setBuyBudget(order1.budget, min, max);
-          } else if (isMaxBelowMarket(sellOrder, quote)) {
-            setAnchoderOrder('buy');
-            setSellBudget(order0.budget, min, max);
-          } else {
-            if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-            if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-          }
-        });
-      }
+      if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
+      if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spread]);
+  };
 
   // Update on buyMin changes
   useEffect(() => {
-    const min = order0.min;
-    const max = order1.max;
-    if (!min) return;
-    if (isValidRange(min, max) && isValidSpread(spread)) {
-      setOverlappingParams(min, max).then((params) => {
-        const marginalPrice = params.buyPriceMarginal;
-        if (isMinAboveMarket({ min, marginalPrice }, quote)) {
-          setAnchoderOrder('sell');
-          setBuyBudget(order1.budget, min, max);
-        } else {
-          if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-          if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-        }
-      });
-    }
+    if (!order0.min) return;
+    setOverlappingParams();
+
+    // automatically update max if min > max
     const timeout = setTimeout(async () => {
-      const decimals = quote?.decimals ?? 18;
-      const minSellMax = getMinSellMax(Number(min), spread);
-      if (Number(max) < minSellMax) {
-        order1.setMax(sanitizeNumber(minSellMax.toString(), decimals));
+      const minSellMax = getMinSellMax(Number(order0.min), spread);
+      if (Number(order1.max) < minSellMax) {
+        order1.setMax(minSellMax.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -178,31 +162,35 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   // Update on sellMax changes
   useEffect(() => {
-    const min = order0.min;
-    const max = order1.max;
-    if (!max) return;
-    if (isValidRange(min, max) && isValidSpread(spread)) {
-      setOverlappingParams(min, max).then((params) => {
-        const marginalPrice = params.sellPriceMarginal;
-        if (isMaxBelowMarket({ max, marginalPrice }, quote)) {
-          setAnchoderOrder('buy');
-          setSellBudget(order0.budget, min, max);
-        } else {
-          if (anchoredOrder === 'buy') setSellBudget(order0.budget, min, max);
-          if (anchoredOrder === 'sell') setBuyBudget(order1.budget, min, max);
-        }
-      });
-    }
+    if (!order1.max) return;
+    setOverlappingParams();
+
+    // automatically update min if min > max
     const timeout = setTimeout(async () => {
-      const decimals = quote?.decimals ?? 18;
-      const maxBuyMin = getMaxBuyMin(Number(max), spread);
-      if (Number(min) > maxBuyMin) {
-        order0.setMin(sanitizeNumber(maxBuyMin.toString(), decimals));
+      const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
+      if (Number(order0.min) > maxBuyMin) {
+        order0.setMin(maxBuyMin.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);
+
+  // Initialize order when market price is available
+  useEffect(() => {
+    if (marketPrice <= 0 || !quote || !base) return;
+    if (!order0.min && !order1.max) {
+      requestAnimationFrame(() => {
+        if (order0.min || order1.max) return;
+        const { min, max } = getInitialPrices(marketPrice);
+        order0.setMin(min);
+        order1.setMax(max);
+      });
+    } else {
+      setOverlappingParams();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketPrice, spread]);
 
   return (
     <>
@@ -229,9 +217,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8">
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
-          <Tooltip element="Drag and drop your strategy buy and sell prices.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="Drag and drop your strategy buy and sell prices."
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <OverlappingStrategyGraph
           {...props}
@@ -252,9 +241,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
           </h3>
-          <Tooltip element="Indicate the strategy exact buy and sell prices.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="Indicate the strategy exact buy and sell prices."
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         {base && quote && (
           <CreateOverlappingRange
@@ -272,9 +262,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             2
           </span>
           <h3 className="flex-1 text-18 font-weight-500">Indicate Spread</h3>
-          <Tooltip element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <OverlappingStrategySpread
           order0={order0}
@@ -291,15 +282,16 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             3
           </span>
           <h3 className="flex-1 text-18 font-weight-500">Set Budgets</h3>
-          <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values.">
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values."
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <CreateOverlappingStrategyBudget
           {...props}
           marketPrice={marketPrice}
           anchoredOrder={anchoredOrder}
-          setAnchoderOrder={setAnchoderOrder}
+          setAnchoredOrder={setAnchoredOrder}
           setBuyBudget={setBuyBudget}
           setSellBudget={setSellBudget}
         />

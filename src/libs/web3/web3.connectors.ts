@@ -12,6 +12,7 @@ import iconCoinbase from 'assets/logos/coinbase.svg';
 import iconGnosis from 'assets/logos/gnosis.svg';
 import carbonLogo from 'assets/logos/carbon.svg';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
+import config from 'config';
 
 const onError = (error: Error) => {
   console.debug(`web3-react error: ${error}`);
@@ -82,7 +83,7 @@ const [web3WalletConnect, web3WalletConnectHooks] =
       new WalletConnect({
         actions,
         options: {
-          projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
+          projectId: config.walletConnectProjectId,
           rpc: RPC_URLS,
           showQrModal: true,
           chains: [SupportedChainId.MAINNET],
@@ -90,8 +91,8 @@ const [web3WalletConnect, web3WalletConnectHooks] =
             name: 'Carbon',
             description:
               'Trade tokens or create automated onchain trading strategies',
-            url: 'https://app.carbondefi.xyz',
-            icons: ['https://app.carbondefi.xyz/logo512.png'],
+            url: config.appUrl,
+            icons: [`${config.appUrl}/logo512.png`],
           },
         },
         onError,

@@ -10,7 +10,10 @@ export const closeModal = async (page: Page) => {
   return waitModalClose(page);
 };
 
+// Keep track of approved token for the current test case.
+const approvedTokens: string[] = ['ETH'];
 export const checkApproval = async (page: Page, tokens: string[]) => {
+  if (tokens.every((token) => approvedTokens.includes(token))) return;
   const modal = await waitModalOpen(page);
   for (const token of tokens) {
     if (token === 'ETH') {
@@ -22,5 +25,15 @@ export const checkApproval = async (page: Page, tokens: string[]) => {
       await expect(msg).toHaveText('Approved');
     }
   }
+  approvedTokens.push(...tokens);
   await modal.getByTestId('approve-submit').click();
+  return modal.waitFor({ state: 'detached' });
+};
+
+export const waitTooltipsClose = async (page: Page) => {
+  const selector = '[data-testid="tippy-tooltip"]';
+  const tooltips = await page.locator(selector).all();
+  for (const tooltip of tooltips) {
+    await tooltip.waitFor({ state: 'detached' });
+  }
 };

@@ -15,7 +15,7 @@ import {
 } from 'react';
 import { Strategy, StrategyWithFiat, UseQueryResult } from 'libs/queries';
 import { lsService } from 'services/localeStorage';
-import { toPairName, fromPairSlug } from 'utils/pairSearch';
+import { toPairName, fromPairSearch } from 'utils/pairSearch';
 import { getCompareFunctionBySortType } from 'components/strategies/overview/utils';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
@@ -39,6 +39,7 @@ export const useStrategyFilter = (
   }, [filter]);
 
   const filteredStrategies = useMemo(() => {
+    const pairSearch = fromPairSearch(search);
     // Filter
     const filtered = strategies.filter((strategy) => {
       if (filter === 'active' && strategy.status !== 'active') {
@@ -49,7 +50,7 @@ export const useStrategyFilter = (
       }
       if (!search) return true;
       const name = toPairName(strategy.base, strategy.quote);
-      return fromPairSlug(name).includes(search);
+      return fromPairSearch(name).includes(pairSearch);
     });
 
     // Sort

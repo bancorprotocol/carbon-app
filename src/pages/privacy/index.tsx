@@ -1,4 +1,6 @@
 import { Page } from 'components/common/page';
+import config from 'config';
+import { NewTabLink, externalLinks } from 'libs/routing';
 
 const content = [
   {
@@ -582,14 +584,9 @@ export const PrivacyPage = () => {
         <p>
           THIS PRIVACY POLICY IS SUBJECT IN ALL RESPECTS TO THE TERMS OF USE
           AVAILABLE AT{' '}
-          <a
-            href="https://app.carbondefi.xyz/terms"
-            target={'_blank'}
-            rel="noreferrer"
-            className="text-green underline"
-          >
-            HTTPS://APP.CARBONDEFI.XYZ/TERMS
-          </a>{' '}
+          <NewTabLink className="text-green underline" to={externalLinks.terms}>
+            {config.appUrl.toUpperCase()}/TERMS
+          </NewTabLink>{' '}
           (THE “TERMS OF USE”), AND BY ACCEPTING SUCH TERMS OF USE PURSUANT TO
           THE TERMS THEREIN OR BY USING THE SITE, YOU ALSO HEREBY AGREE TO
           ACCEPT THE TERMS OF THIS PRIVACY POLICY IN ALL RESPECTS.
