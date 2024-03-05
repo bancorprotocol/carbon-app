@@ -12,16 +12,10 @@ import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import styles from './OverlappingStrategyGraph.module.css';
-import {
-  getBuyMarginalPrice,
-  getBuyMax,
-  getMaxBuyMin,
-  getMinSellMax,
-  getSellMarginalPrice,
-  getSellMin,
-} from './utils';
+import { getMaxBuyMin, getMinSellMax } from './utils';
 import { OrderCreate } from '../create/useOrder';
+import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
+import styles from './OverlappingStrategyGraph.module.css';
 
 type Props = EnableProps | DisableProps;
 
@@ -155,6 +149,14 @@ const getMarginalSellPoint = (config: PointConfig) => {
   }
 };
 
+// Make sure the distance is always large enough to avoid blurry behavior
+const getXFactor = (min: number, max: number, marketPrice: number) => {
+  const lowest = Math.min(min, max, marketPrice);
+  const highest = Math.max(min, max, marketPrice);
+  const delta = highest - lowest || 1;
+  return 1 / delta;
+};
+
 export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
@@ -162,9 +164,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const { quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
-  // Make sure the distance is always large enough to avoid blurry behavior
-  const delta = baseMax - baseMin || 1;
-  const xFactor = delta <= 1 ? 1 / delta : 1;
+  const xFactor = getXFactor(baseMin, baseMax, props.marketPrice);
 
   const marketPrice = props.marketPrice * xFactor;
 
@@ -272,20 +272,22 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   /** Config returned if Graph is dynamic */
   const getPointConfig = ({ min, max }: { min: number; max: number }) => {
-    const buyMax = clamp(min, getBuyMax(max, spread), max);
-    const sellMin = clamp(min, getSellMin(min, spread), max);
-    const marginalBuy = getBuyMarginalPrice(marketPrice, spread);
-    const marginalSell = getSellMarginalPrice(marketPrice, spread);
+    const params = calculateOverlappingPrices(
+      min.toString(),
+      max.toString(),
+      marketPrice.toString(),
+      spread.toString()
+    );
     return {
       top,
       middle,
       bottom,
-      min,
-      max,
-      buyMax,
-      sellMin,
-      marginalBuy: clamp(min, marginalBuy, buyMax),
-      marginalSell: clamp(sellMin, marginalSell, max),
+      min: Number(params.buyPriceLow),
+      buyMax: Number(params.buyPriceHigh),
+      marginalBuy: Number(params.buyPriceMarginal),
+      sellMin: Number(params.sellPriceLow),
+      max: Number(params.sellPriceHigh),
+      marginalSell: Number(params.sellPriceMarginal),
     };
   };
   const getConfig = () => {
@@ -392,12 +394,12 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const getDraggedMin = () => {
     const delta = Number(getHandlerDelta('buy'));
     if (!delta) return;
-    return ((min + delta) / xFactor).toFixed(quote!.decimals);
+    return new SafeDecimal(min).add(delta).div(xFactor).toString();
   };
   const getDraggedMax = () => {
     const delta = Number(getHandlerDelta('sell'));
     if (!delta) return;
-    return ((max + delta) / xFactor).toFixed(quote!.decimals);
+    return new SafeDecimal(max).add(delta).div(xFactor).toString();
   };
 
   const updatePoints = {
@@ -665,7 +667,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 x={price.toString()}
                 {...priceIndicator}
               >
-                {prettifySignedNumber(price.div(xFactor))}
+                {prettifySignedNumber(price.div(xFactor), { abbreviate: true })}
               </text>
             ))}
           </g>

@@ -7,6 +7,7 @@ import { MainMenu, MobileMenu } from 'components/core/menu';
 import { MainContent } from 'components/core/MainContent';
 import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
+import { Footer } from 'components/common/Footer/Footer';
 
 let didInit = false;
 
@@ -34,9 +35,10 @@ export const App = () => {
     <>
       <NotificationAlerts />
       <MainMenu />
-      <main className="my-80 flex w-full flex-grow flex-col">
+      <main className="mt-80 mb-16 flex w-full flex-grow flex-col">
         <MainContent />
       </main>
+      <Footer />
       <MobileMenu />
       <ModalProvider />
       <Toaster />

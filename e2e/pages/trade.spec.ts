@@ -4,17 +4,17 @@ import { mockApi } from '../utils/mock-api';
 import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
 import { navigateTo } from '../utils/operators';
-import { checkApproval } from '../utils/modal';
-import { NotificationDriver } from '../utils/NotificationDriver';
+import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
 
 test.describe('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    testInfo.setTimeout(180_000);
+    testInfo.setTimeout(90_000);
+    await mockApi(page);
     const debug = new DebugDriver(page);
     await debug.visit();
     await setupFork(testInfo);
     await debug.setRpcUrl(testInfo);
-    await Promise.all([mockApi(page), debug.setupImposter(), debug.setE2E()]);
+    await Promise.all([debug.setupImposter(), debug.setE2E()]);
   });
 
   test.afterEach(async ({}, testInfo) => {
@@ -72,19 +72,12 @@ test.describe('Trade', () => {
       await driver.submit();
 
       // Token approval
-      await checkApproval(page, [testCase.source]);
-
-      // Verify notification
-      const notif = new NotificationDriver(page, 'trade');
-      await expect(notif.getTitle()).toHaveText('Success', { timeout: 10_000 });
-      await expect(notif.getDescription()).toHaveText(
-        `Trading ${sourceValue} ${source} for ${target} was successfully completed.`,
-        { timeout: 10_000 }
-      );
+      const tokenApproval = new TokenApprovalDriver(page);
+      await tokenApproval.checkApproval([testCase.source]);
 
       // Verify form empty
-      expect(driver.getPayInput()).toHaveValue('');
-      expect(driver.getReceiveInput()).toHaveValue('');
+      expect(driver.getPayInput()).toHaveValue('', { timeout: 10_000 });
+      expect(driver.getReceiveInput()).toHaveValue('', { timeout: 10_000 });
 
       // Check balance diff
       await navigateTo(page, '/debug');

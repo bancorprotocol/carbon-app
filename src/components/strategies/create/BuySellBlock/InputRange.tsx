@@ -6,7 +6,6 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
@@ -118,7 +117,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onChange={handleChangeMin}
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMin}
-            data-testid="input-range-min"
+            data-testid="input-min"
           />
           <p className="flex flex-wrap items-center gap-4">
             <span className="break-all font-mono text-12 text-white/60">
@@ -163,7 +162,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onChange={handleChangeMax}
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMax}
-            data-testid="input-range-max"
+            data-testid="input-max"
           />
           <div className="flex flex-wrap items-center gap-4">
             <p className="break-all font-mono text-12 text-white/60">
@@ -177,18 +176,18 @@ export const InputRange: FC<InputRangeProps> = ({
         </div>
       </div>
       {error ? (
-        <output
+        <WarningMessageWithIcon
+          className="text-red"
+          message={error}
           htmlFor={`${inputMinId} ${inputMaxId}`}
-          role="alert"
-          aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-red"
-        >
-          <IconWarning className="h-12 w-12" />
-          <span className="flex-1">{error}</span>
-        </output>
+        />
       ) : (
         warnings?.map((warning, i) => (
-          <WarningMessageWithIcon key={i} message={warning} />
+          <WarningMessageWithIcon
+            key={i}
+            message={warning}
+            htmlFor={`${inputMinId} ${inputMaxId}`}
+          />
         ))
       )}
     </>

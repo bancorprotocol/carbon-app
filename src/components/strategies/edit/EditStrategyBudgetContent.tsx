@@ -15,7 +15,10 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
-import { isOverlappingStrategy } from '../overlapping/utils';
+import {
+  isOverlappingBudgetTooSmall,
+  isOverlappingStrategy,
+} from '../overlapping/utils';
 import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
 import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
 
@@ -162,8 +165,11 @@ export const EditStrategyBudgetContent = ({
   const isOrdersBudgetValid = useMemo(() => {
     if (order0.budgetError) return false;
     if (order1.budgetError) return false;
+    if (isOverlapping && isOverlappingBudgetTooSmall(order0, order1)) {
+      return false;
+    }
     return +order0.budget > 0 || +order1.budget > 0;
-  }, [order0.budget, order0.budgetError, order1.budget, order1.budgetError]);
+  }, [order0, order1, isOverlapping]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -174,6 +180,7 @@ export const EditStrategyBudgetContent = ({
       onSubmit={(e) => handleOnActionClick(e)}
       onReset={() => history.back()}
       className="flex w-full flex-col gap-20 md:w-[400px]"
+      data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
       {isOverlapping && type === 'deposit' && (
@@ -193,20 +200,20 @@ export const EditStrategyBudgetContent = ({
       {!isOverlapping && (
         <>
           <EditStrategyBudgetBuySellBlock
+            base={strategy?.base}
+            quote={strategy?.quote}
+            order={order1}
+            balance={strategy.order1.balance}
+            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+            type={type}
+          />
+          <EditStrategyBudgetBuySellBlock
             buy
             base={strategy?.base}
             quote={strategy?.quote}
             order={order0}
             balance={strategy.order0.balance}
             isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-            type={type}
-          />
-          <EditStrategyBudgetBuySellBlock
-            base={strategy?.base}
-            quote={strategy?.quote}
-            order={order1}
-            balance={strategy.order1.balance}
-            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
             type={type}
           />
         </>
@@ -219,7 +226,7 @@ export const EditStrategyBudgetContent = ({
         variant="white"
         size="lg"
         fullWidth
-        data-testid="deposit-withdraw-confirm-btn"
+        data-testid="edit-submit"
       >
         {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>

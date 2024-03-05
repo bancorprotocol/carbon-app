@@ -1,17 +1,22 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useId } from 'react';
 import { Token } from 'libs/tokens';
-import { OrderCreate } from '../useOrder';
+import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
 import { SafeDecimal } from 'libs/safedecimal';
-import { isMinAboveMarket, isMaxBelowMarket } from '../../overlapping/utils';
+import {
+  isMinAboveMarket,
+  isMaxBelowMarket,
+  isOverlappingBudgetTooSmall,
+} from 'components/strategies/overlapping/utils';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { isValidRange } from 'components/strategies/utils';
+import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 
 interface Props extends OverlappingStrategyProps {
   marketPrice: number;
   anchoredOrder: 'buy' | 'sell';
-  setAnchoderOrder: (value: 'buy' | 'sell') => any;
+  setAnchoredOrder: (value: 'buy' | 'sell') => any;
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
   setSellBudget: (buyBudget: string, min: string, max: string) => any;
 }
@@ -24,13 +29,16 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     order1,
     token0BalanceQuery,
     token1BalanceQuery,
-    setAnchoderOrder,
+    setAnchoredOrder,
     setBuyBudget,
     setSellBudget,
   } = props;
-  const minAboveMarket = isMinAboveMarket(order0, quote);
-  const maxBelowMarket = isMaxBelowMarket(order1, quote);
+  const minAboveMarket = isMinAboveMarket(order0);
+  const maxBelowMarket = isMaxBelowMarket(order1);
   const validPrice = isValidRange(order0.min, order1.max);
+  const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
+  const buyBudgetId = useId();
+  const sellBudgetId = useId();
 
   const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
     if (new SafeDecimal(balance).lt(order.budget)) {
@@ -56,12 +64,12 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 
   const onBuyBudgetChange = (value: string) => {
     order0.setBudget(value);
-    setAnchoderOrder('buy');
+    setAnchoredOrder('buy');
     setSellBudget(value, order0.min, order1.max);
   };
   const onSellBudgetChange = (value: string) => {
     order1.setBudget(value);
-    setAnchoderOrder('sell');
+    setAnchoredOrder('sell');
     setBuyBudget(value, order0.min, order1.max);
   };
 
@@ -69,6 +77,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   return (
     <>
       <BudgetInput
+        id={buyBudgetId}
         token={quote}
         order={order0}
         query={token1BalanceQuery}
@@ -76,8 +85,9 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         disabled={minAboveMarket || !validPrice}
         data-testid="input-budget-quote"
       />
-      {minAboveMarket && <Explaination base={base} buy />}
+      {minAboveMarket && <Explanation base={base} buy />}
       <BudgetInput
+        id={sellBudgetId}
         token={base}
         order={order1}
         query={token0BalanceQuery}
@@ -85,7 +95,15 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         disabled={maxBelowMarket || !validPrice}
         data-testid="input-budget-base"
       />
-      {maxBelowMarket && <Explaination base={base} />}
+      {maxBelowMarket && <Explanation base={base} />}
+      {budgetTooSmall && (
+        <OverlappingSmallBudget
+          base={base}
+          quote={quote}
+          buyBudget={order0.budget}
+          htmlFor={`${buyBudgetId} ${sellBudgetId}`}
+        />
+      )}
       {!minAboveMarket && !maxBelowMarket && (
         <p className="text-12 text-white/60">
           The required 2nd budget will be calculated to maintain overlapping
@@ -105,7 +123,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   );
 };
 
-const Explaination: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
+const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
   return (
     <p className="text-12 text-white/60">
       The market price is outside the ranges you set for&nbsp;

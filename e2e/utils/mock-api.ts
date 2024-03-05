@@ -8,7 +8,7 @@ export const mockApi = async (page: Page) => {
   });
   await page.route('**/*/market-rate?*', (route) => {
     const url = new URL(route.request().url());
-    const address = url.searchParams.get('address');
+    const address = url.searchParams.get('address')?.toLowerCase();
     const currencies = url.searchParams.get('convert')?.split(',');
     // If unexpected behavior, let the real server handle that
     if (!address || !currencies || !marketRate[address]) {
@@ -19,5 +19,9 @@ export const mockApi = async (page: Page) => {
       data[currency] = marketRate[address][currency];
     }
     return route.fulfill({ json: { data } });
+  });
+  // E2E should be allowed in production mode (CI)
+  await page.route('/api/check', (route) => {
+    return route.fulfill({ json: false });
   });
 };

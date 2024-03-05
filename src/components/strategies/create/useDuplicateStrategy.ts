@@ -1,96 +1,82 @@
-import { PathNames, useNavigate, useSearch } from 'libs/routing';
-import { Strategy } from 'libs/queries';
-import { isOverlappingStrategy } from '../overlapping/utils';
-import { StrategyCreateSearch } from './types';
+import { useSearch, StrategyCreateSearch } from 'libs/routing';
+import { Order, Strategy } from 'libs/queries';
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { useTokens } from 'hooks/useTokens';
+import { roundSearchParam } from 'utils/helpers';
 
-interface MyLocationSearch {
-  strategy: string;
-}
-
-const isValid = (strategy: Strategy) => {
-  return (
-    (strategy.hasOwnProperty('base') && strategy.hasOwnProperty('quote')) ||
-    (strategy.hasOwnProperty('order0') && strategy.hasOwnProperty('order1'))
-  );
+const isEmptyOrder = (order: Order) => {
+  return !Number(order.startRate) && !Number(order.endRate);
+};
+const isLimitOrder = (order: Order) => {
+  return !isEmptyOrder(order) && order.startRate === order.endRate;
 };
 
-export const toStrategyCreateSearch = (
-  strategy: Strategy
-): StrategyCreateSearch => {
-  const { order0, order1 } = strategy;
-  const isRecurring = order0.endRate !== '0' && order1.endRate !== '0';
-  const isBuyLimit = order0.startRate === order0.endRate;
-  const isSellLimit = order1.startRate === order1.endRate;
-  const isLimit = isBuyLimit && isSellLimit;
-  if (isRecurring) {
-    return {
-      strategyType: 'recurring',
-      strategySettings: isLimit ? 'limit' : 'range',
-    };
+/** Transform a strategy into query params required for the create page */
+export const getDuplicateStrategyParams = (strategy: Strategy) => {
+  // Remove balances if needed
+  if (isOverlappingStrategy(strategy)) {
+    strategy.order0.balance = '0';
+    strategy.order1.balance = '0';
+  }
+  if (isEmptyOrder(strategy.order0)) strategy.order0.balance = '0';
+  if (isEmptyOrder(strategy.order1)) strategy.order1.balance = '0';
+
+  // initialize params
+  const { order0, order1, base, quote } = strategy;
+  const searchParams: StrategyCreateSearch = {
+    base: base.address,
+    quote: quote.address,
+    buyMin: roundSearchParam(order0.startRate),
+    buyMax: roundSearchParam(order0.endRate),
+    buyBudget: roundSearchParam(order0.balance),
+    sellMin: roundSearchParam(order1.startRate),
+    sellMax: roundSearchParam(order1.endRate),
+    sellBudget: roundSearchParam(order1.balance),
+  };
+  for (const key in searchParams) {
+    const keyString = key as keyof StrategyCreateSearch;
+    if (!searchParams[keyString]) delete searchParams[keyString];
+  }
+
+  const isRecurring = !isEmptyOrder(order0) && !isEmptyOrder(order1);
+  const isOverlapping = isOverlappingStrategy({ order0, order1 });
+  if (isOverlapping) {
+    searchParams.strategyType = 'recurring';
+    searchParams.strategySettings = 'overlapping';
+  } else if (isRecurring) {
+    const isLimit = isLimitOrder(order0) && isLimitOrder(order1);
+    searchParams.strategyType = 'recurring';
+    searchParams.strategySettings = isLimit ? 'limit' : 'range';
   } else {
-    return {
-      strategyType: 'disposable',
-      strategySettings: isLimit ? 'limit' : 'range',
-      strategyDirection: order1.endRate === '0' ? 'buy' : 'sell',
-    };
+    const isLimit = isLimitOrder(order0) || isLimitOrder(order1);
+    searchParams.strategyType = 'disposable';
+    searchParams.strategySettings = isLimit ? 'limit' : 'range';
+    searchParams.strategyDirection = order1.endRate === '0' ? 'buy' : 'sell';
   }
-};
-
-const decodeStrategyAndValidate = (
-  urlStrategy?: string
-): (Strategy & StrategyCreateSearch) | undefined => {
-  if (!urlStrategy) return;
-
-  try {
-    const decodedStrategy = JSON.parse(atob(urlStrategy));
-    if (!isValid(decodedStrategy)) return;
-    return {
-      ...decodedStrategy,
-      ...toStrategyCreateSearch(decodedStrategy),
-    };
-  } catch (error) {
-    console.log('Invalid value for search param `strategy`', error);
-  }
+  return searchParams;
 };
 
 export const useDuplicateStrategy = () => {
-  const navigate = useNavigate();
-  const search: MyLocationSearch = useSearch({ strict: false });
-  const { strategy: urlStrategy } = search;
-
-  const duplicate = (strategy: Partial<Strategy>) => {
-    const encodedStrategy = btoa(JSON.stringify(strategy));
-
-    navigate({
-      to: `${PathNames.createStrategy}`,
-      search: {
-        ...search,
-        strategy: encodedStrategy,
-      },
-    });
-  };
-
-  const decoded = decodeStrategyAndValidate(urlStrategy);
-  if (decoded) {
-    // marginal price should be calculated based on prices
-    if (decoded.order0.marginalRate) decoded.order0.marginalRate = '';
-    if (decoded.order1.marginalRate) decoded.order1.marginalRate = '';
-
-    // Remove balance if overlapping strategy because market price changed
-    if (isOverlappingStrategy(decoded)) {
-      decoded.order0.balance = '';
-      decoded.order1.balance = '';
-    }
-
-    // Clear order balance for opposite direction in disposable
-    if (decoded.strategyType === 'disposable') {
-      if (decoded.strategyDirection === 'buy') decoded.order1.balance = '';
-      if (decoded.strategyDirection === 'sell') decoded.order0.balance = '';
-    }
-  }
+  const { getTokenById } = useTokens();
+  const search = useSearch({ from: '/strategies/create' });
 
   return {
-    duplicate,
-    templateStrategy: decoded,
+    strategyType: search.strategyType,
+    strategySettings: search.strategySettings,
+    strategyDirection: search.strategyDirection,
+    base: getTokenById(search.base),
+    quote: getTokenById(search.quote),
+    order0: {
+      balance: search.buyBudget ?? '',
+      startRate: search.buyMin ?? '',
+      endRate: search.buyMax ?? '',
+      marginalRate: '',
+    },
+    order1: {
+      balance: search.sellBudget ?? '',
+      startRate: search.sellMin ?? '',
+      endRate: search.sellMax ?? '',
+      marginalRate: '',
+    },
   };
 };

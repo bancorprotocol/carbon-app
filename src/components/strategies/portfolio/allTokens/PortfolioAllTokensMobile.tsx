@@ -4,6 +4,7 @@ import {
   buildAmountString,
   buildPercentageString,
 } from 'components/strategies/portfolio/utils';
+import { GetPortfolioTokenHref } from 'pages/strategies/portfolio';
 import { FC } from 'react';
 import {
   CardSection,
@@ -16,7 +17,7 @@ import { cn, getFiatDisplayValue } from 'utils/helpers';
 type Props = {
   data: PortfolioData[];
   isLoading: boolean;
-  getHref: (row: PortfolioData) => string;
+  getHref: GetPortfolioTokenHref;
 };
 
 export const PortfolioAllTokensMobile: FC<Props> = ({
@@ -35,7 +36,12 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
             <PortfolioMobileCardLoading key={i} />
           ))
         : data.map((value, i) => (
-            <PortfolioMobileCard key={i} index={i} href={getHref(value)}>
+            <PortfolioMobileCard
+              key={i}
+              index={i}
+              href={getHref(value).href}
+              params={getHref(value).params}
+            >
               <div className={cn('flex', 'items-center', 'text-18')}>
                 <LogoImager
                   src={value.token.logoURI}

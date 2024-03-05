@@ -38,25 +38,15 @@ const _subtractPrevAmount = (
   };
 };
 
-const buildOrders = (
-  data: OrderRow[],
-  baseDecimals: number,
-  quoteDecimals: number,
-  buckets: number
-): OrderRow[] => {
+const buildOrders = (data: OrderRow[], buckets: number): OrderRow[] => {
   return data
-    .map(({ amount, rate, total }, i) =>
-      _subtractPrevAmount(data, amount, rate, total, i)
-    )
-    .filter(({ amount }) =>
-      new SafeDecimal(amount).gte(ROW_AMOUNT_MIN_THRESHOLD)
-    )
-    .splice(0, buckets)
-    .map(({ amount, rate, total }) => ({
-      rate: new SafeDecimal(rate).toFixed(quoteDecimals, 1),
-      amount: new SafeDecimal(amount).toFixed(baseDecimals, 1),
-      total: new SafeDecimal(total).toFixed(quoteDecimals, 1),
-    }));
+    .map(({ amount, rate, total }, i) => {
+      return _subtractPrevAmount(data, amount, rate, total, i);
+    })
+    .filter(({ amount }) => {
+      return new SafeDecimal(amount).gte(ROW_AMOUNT_MIN_THRESHOLD);
+    })
+    .splice(0, buckets);
 };
 
 export const useOrderBookWidget = (base?: string, quote?: string) => {
@@ -70,31 +60,20 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
   const { getTokenById } = useTokens();
   const { data } = orderBookQuery;
 
-  const baseToken = getTokenById(base!);
-  const baseDecimals = baseToken?.decimals || 0;
   const quoteToken = getTokenById(quote!);
-  const quoteDecimals = quoteToken?.decimals || 0;
-  const { getFiatAsString } = useFiatCurrency(quoteToken);
+  const { getFiatValue } = useFiatCurrency(quoteToken);
 
   const orders = useMemo<OrderBook & { middleRateFiat: string }>(() => {
     const buy = orderBy(data?.buy || [], ({ rate }) => +rate, 'desc');
     const sell = orderBy(data?.sell || [], ({ rate }) => +rate, 'asc');
 
     return {
-      buy: buildOrders(buy, baseDecimals, quoteDecimals, orderBookBuckets),
-      sell: buildOrders(sell, baseDecimals, quoteDecimals, orderBookBuckets),
+      buy: buildOrders(buy, orderBookBuckets),
+      sell: buildOrders(sell, orderBookBuckets),
       middleRate: data?.middleRate || '0',
-      middleRateFiat: getFiatAsString(data?.middleRate || ''),
+      middleRateFiat: getFiatValue(data?.middleRate || '').toString(),
     };
-  }, [
-    baseDecimals,
-    data?.buy,
-    data?.middleRate,
-    data?.sell,
-    getFiatAsString,
-    orderBookBuckets,
-    quoteDecimals,
-  ]);
+  }, [data?.buy, data?.middleRate, data?.sell, getFiatValue, orderBookBuckets]);
 
   return {
     ...orderBookQuery,

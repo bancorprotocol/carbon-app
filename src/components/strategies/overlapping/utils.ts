@@ -1,22 +1,5 @@
-import { Strategy } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
-import { Token } from 'libs/tokens';
-
-export const getBuyMax = (sellMax: number, spread: number) => {
-  return sellMax / (1 + spread / 100);
-};
-
-export const getSellMin = (buyMin: number, spread: number) => {
-  return buyMin * (1 + spread / 100);
-};
-
-export const getBuyMarginalPrice = (marketPrice: number, spread: number) => {
-  return marketPrice / (1 + spread / 100) ** 0.5;
-};
-
-export const getSellMarginalPrice = (marketPrice: number, spread: number) => {
-  return marketPrice * (1 + spread / 100) ** 0.5;
-};
+import { sanitizeNumber } from 'utils/helpers';
 
 export const getMaxSpread = (buyMin: number, sellMax: number) => {
   return (1 - (buyMin / sellMax) ** (1 / 2)) * 100;
@@ -40,6 +23,7 @@ interface StrategyInput {
 export const isOverlappingStrategy = ({ order0, order1 }: StrategyInput) => {
   const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
   const sellLow = 'startRate' in order1 ? order1.startRate : order1.min;
+  if (!buyHigh || !sellLow) return false;
   const buyMax = new SafeDecimal(buyHigh);
   const sellMin = new SafeDecimal(sellLow);
   if (sellMin.eq(0)) return false; // Limit strategy with only buy
@@ -51,37 +35,51 @@ export const isValidSpread = (spread: number) => {
   return !isNaN(spread) && spread > 0 && spread < 100;
 };
 
-export const getSpread = (strategy: Strategy) => {
-  const { order0, order1 } = strategy;
-  const buyMax = Number(order0.endRate);
-  const sellMax = Number(order1.endRate);
+export const getSpread = ({ order0, order1 }: StrategyInput) => {
+  const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
+  const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
+  const buyMax = Number(buyHigh);
+  const sellMax = Number(sellHigh);
+  if (!buyHigh || !sellMax) return 0;
   return (sellMax / buyMax - 1) * 100;
 };
 
-export const getRoundedSpread = (strategy: Strategy) => {
-  const spreadPPRM = getSpread(strategy);
-  return Number(spreadPPRM.toFixed(2));
+export const getRoundedSpread = (strategy: StrategyInput) => {
+  const spread = getSpread(strategy);
+  return Number(spread.toFixed(2));
 };
 
 interface BuyOrder {
   min: string;
   marginalPrice: string;
 }
-export const isMinAboveMarket = (buyOrder: BuyOrder, quote?: Token) => {
-  const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
-  return new SafeDecimal(buyOrder.min)
-    .minus(buyOrder.marginalPrice)
-    .abs()
-    .lt(wei);
+export const isMinAboveMarket = (buyOrder: BuyOrder) => {
+  return new SafeDecimal(buyOrder.min).eq(buyOrder.marginalPrice);
 };
 interface SellOrder {
   max: string;
   marginalPrice: string;
 }
-export const isMaxBelowMarket = (sellOrder: SellOrder, quote?: Token) => {
-  const wei = new SafeDecimal(10).pow((quote?.decimals ?? 0) * -1);
-  return new SafeDecimal(sellOrder.max)
-    .minus(sellOrder.marginalPrice)
-    .abs()
-    .lt(wei);
+export const isMaxBelowMarket = (sellOrder: SellOrder) => {
+  return new SafeDecimal(sellOrder.marginalPrice).eq(sellOrder.max);
 };
+
+interface BuyBudgetOrder extends BuyOrder {
+  budget: string;
+}
+interface SellBudgetOrder extends SellOrder {
+  budget: string;
+}
+/** Verify that both budget are above 1wei if they are enabled */
+export function isOverlappingBudgetTooSmall(
+  order0: BuyBudgetOrder,
+  order1: SellBudgetOrder
+) {
+  if (isMaxBelowMarket(order1)) return false;
+  if (isMinAboveMarket(order0)) return false;
+  const buyBudget = Number(sanitizeNumber(order0.budget));
+  const sellBudget = Number(sanitizeNumber(order1.budget));
+  if (!!buyBudget && !!sellBudget) return false;
+  if (!buyBudget && !sellBudget) return false;
+  return true;
+}

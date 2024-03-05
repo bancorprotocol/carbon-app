@@ -24,13 +24,13 @@ export const CreateStrategyOrders = ({
   token1BalanceQuery,
   strategyDirection,
   strategyType,
+  strategySettings,
   selectedStrategySettings,
   isProcessing,
   isAwaiting,
   isOrdersOverlap,
   spread,
   setSpread,
-  isOverlapping,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
   const strategyEventData = useStrategyEventData({
@@ -92,7 +92,7 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {isOverlapping && base && quote && (
+      {strategySettings === 'overlapping' && base && quote && (
         <CreateOverlappingStrategy
           base={base}
           quote={quote}
@@ -104,8 +104,20 @@ export const CreateStrategyOrders = ({
           setSpread={setSpread}
         />
       )}
-      {!isOverlapping && (
+      {strategySettings !== 'overlapping' && (
         <>
+          {(strategyDirection === 'sell' || !strategyDirection) && (
+            <BuySellBlock
+              key="createStrategySellOrder"
+              base={base!}
+              quote={quote!}
+              order={order1}
+              tokenBalanceQuery={token0BalanceQuery}
+              isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
+              strategyType={strategyType}
+              isOrdersOverlap={isOrdersOverlap}
+            />
+          )}
           {(strategyDirection === 'buy' || !strategyDirection) && (
             <BuySellBlock
               key="createStrategyBuyOrder"
@@ -115,18 +127,6 @@ export const CreateStrategyOrders = ({
               buy
               tokenBalanceQuery={token1BalanceQuery}
               isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-              strategyType={strategyType}
-              isOrdersOverlap={isOrdersOverlap}
-            />
-          )}
-          {(strategyDirection === 'sell' || !strategyDirection) && (
-            <BuySellBlock
-              key="createStrategySellOrder"
-              base={base!}
-              quote={quote!}
-              order={order1}
-              tokenBalanceQuery={token0BalanceQuery}
-              isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
               strategyType={strategyType}
               isOrdersOverlap={isOrdersOverlap}
             />

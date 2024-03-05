@@ -1,6 +1,5 @@
 import { FC, useEffect, useId } from 'react';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from '../../overlapping/OverlappingStrategyGraph';
 import { useMarketPrice } from 'hooks/useMarketPrice';
@@ -8,6 +7,7 @@ import {
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
+  isOverlappingBudgetTooSmall,
 } from '../../overlapping/utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -17,9 +17,13 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
-import { carbonSDK } from 'libs/sdk';
-import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import {
+  MarginalPriceOptions,
+  calculateOverlappingBuyBudget,
+  calculateOverlappingSellBudget,
+} from '@bancor/carbon-sdk/strategy-management';
 import { geoMean } from 'utils/fullOutcome';
+import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 
 interface Props {
   strategy: Strategy;
@@ -47,6 +51,9 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     quote,
     order: { min, max, price: '', isRange: true },
   });
+  const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
+  const buyBudgetId = useId();
+  const sellBudgetId = useId();
 
   useEffect(() => {
     order0.setMarginalPriceOption(MarginalPriceOptions.maintain);
@@ -76,8 +83,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.budget]);
 
-  const aboveMarket = isMinAboveMarket(order0, quote);
-  const belowMarket = isMaxBelowMarket(order1, quote);
+  const aboveMarket = isMinAboveMarket(order0);
+  const belowMarket = isMaxBelowMarket(order1);
   const withdrawAll =
     (order0.budget || '0') === strategy.order0.balance &&
     (order1.budget || '0') === strategy.order1.balance;
@@ -94,44 +101,38 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
   const setBuyBudget = async (sellBudgetDelta: string) => {
     if (!sellBudgetDelta) return order0.setBudget('');
-    const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
-      sellBudgetDelta || '0'
+    const currentBuyBudget = new SafeDecimal(strategy.order0.balance || '0');
+    const currentSellBudget = new SafeDecimal(strategy.order1.balance || '0');
+    const sellBudget = currentSellBudget.minus(sellBudgetDelta);
+    const totalBuy = calculateOverlappingBuyBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      sellBudget.toString()
     );
-    const resultBuyBudget =
-      await carbonSDK.calculateOverlappingStrategyBuyBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        sellBudget.toString()
-      );
-    const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
-      resultBuyBudget
-    );
-    order0.setBudget(buyBudget.lt(0) ? '0' : buyBudget.toString());
+    const buyBudget = new SafeDecimal(currentBuyBudget).minus(totalBuy);
+    order0.setBudget(SafeDecimal.max(buyBudget, 0).toString());
   };
 
   const setSellBudget = async (buyBudgetDelta: string) => {
     if (!buyBudgetDelta) return order1.setBudget('');
-    const buyBudget = new SafeDecimal(strategy.order0.balance || '0').minus(
-      buyBudgetDelta || '0'
+    const currentBuyBudget = new SafeDecimal(strategy.order0.balance || '0');
+    const currentSellBudget = new SafeDecimal(strategy.order1.balance || '0');
+    const buyBudget = currentBuyBudget.minus(buyBudgetDelta);
+    const totalSell = calculateOverlappingSellBudget(
+      base.decimals,
+      quote.decimals,
+      order0.min,
+      order1.max,
+      getMarketPrice(),
+      spread.toString(),
+      buyBudget.toString()
     );
-    const resultSellBudget =
-      await carbonSDK.calculateOverlappingStrategySellBudget(
-        base.address,
-        quote.address,
-        order0.min,
-        order1.max,
-        getMarketPrice(),
-        spread.toString(),
-        buyBudget.toString()
-      );
-    const sellBudget = new SafeDecimal(strategy.order1.balance || '0').minus(
-      resultSellBudget
-    );
-    order1.setBudget(sellBudget.lt(0) ? '0' : sellBudget.toString());
+    const sellBudget = new SafeDecimal(currentSellBudget).minus(totalSell);
+    order1.setBudget(SafeDecimal.max(0, sellBudget).toString());
   };
 
   const onBuyBudgetChange = (value: string) => {
@@ -163,11 +164,13 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
         <header className="flex items-center gap-8 ">
           <h3 className="flex-1 text-18 font-weight-500">Withdraw Budget</h3>
-          <Tooltip element='Indicate the amount you wish to withdraw to the available "wallet budget"'>
-            <IconTooltip className="h-14 w-14 text-white/60" />
-          </Tooltip>
+          <Tooltip
+            element='Indicate the amount you wish to withdraw to the available "wallet budget"'
+            iconClassName="h-14 w-14 text-white/60"
+          />
         </header>
         <BudgetInput
+          id={buyBudgetId}
           token={quote}
           query={tokenQuoteBalanceQuery}
           order={order0}
@@ -184,6 +187,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           />
         </BudgetInput>
         <BudgetInput
+          id={sellBudgetId}
           token={base}
           query={tokenBaseBalanceQuery}
           order={order1}
@@ -198,6 +202,14 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             setBudget={onSellBudgetChange}
           />
         </BudgetInput>
+        {budgetTooSmall && (
+          <OverlappingSmallBudget
+            base={base}
+            quote={quote}
+            buyBudget={order0.budget}
+            htmlFor={`${buyBudgetId} ${sellBudgetId}`}
+          />
+        )}
         <footer className="flex items-center gap-8">
           {!withdrawAll && (
             <>

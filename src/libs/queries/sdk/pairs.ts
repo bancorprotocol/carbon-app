@@ -52,7 +52,7 @@ export const useGetTradePairsData = () => {
 
       return pairsWithInverse;
     },
-    initialData: getCachedData(),
+    placeholderData: getCachedData(),
     enabled: !!tokens.length && isInitialized,
     retry: 1,
     staleTime: ONE_DAY_IN_MS,

@@ -8,31 +8,36 @@ import {
 } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
-import { Button } from 'components/common/button';
 import { items as itemsVariant } from 'components/strategies/create/variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create/index';
-import { useCreateStrategyTypeMenu } from 'components/strategies/create/useCreateStrategyTypeMenu';
+import { getStrategyTypeItem } from 'components/strategies/create/useCreateStrategyTypeMenu';
 import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { cn } from 'utils/helpers';
-import styles from './CreateStrategyTypeMenu.module.css';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { StrategyCreateSearch } from './types';
+import { Link, StrategyCreateSearch } from 'libs/routing';
+import styles from './CreateStrategyTypeMenu.module.css';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
   base,
   quote,
+  order0,
+  order1,
   strategyType,
   selectedStrategySettings,
   setSelectedStrategySettings,
 }) => {
   const list = useRef<HTMLUListElement>(null);
-  const { items, handleClick } = useCreateStrategyTypeMenu(
-    base?.address!,
-    quote?.address!
-  );
+  const items = getStrategyTypeItem(base?.address!, quote?.address!);
   const { aboveBreakpoint } = useBreakpoints();
+
+  useEffect(() => {
+    if (selectedStrategySettings) return;
+    const { to, search } = items[0];
+    setSelectedStrategySettings({ to, search });
+  });
 
   const selectedId = useMemo(() => {
     if (!selectedStrategySettings) return;
@@ -45,12 +50,6 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     });
     return item?.id;
   }, [selectedStrategySettings, items]);
-
-  useEffect(() => {
-    if (!selectedStrategySettings) {
-      setSelectedStrategySettings(items[0]);
-    }
-  }, [selectedStrategySettings, items, setSelectedStrategySettings]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
@@ -181,17 +180,20 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         ))}
       </m.div>
 
-      <Button
-        variant="success"
-        fullWidth
-        size="lg"
-        disabled={!selectedStrategySettings}
+      <Link
+        {...selectedStrategySettings}
+        params={{}}
+        className={cn(
+          buttonStyles({ variant: 'success', fullWidth: true, size: 'lg' }),
+          selectedStrategySettings
+            ? ''
+            : 'pointer-events-none cursor-not-allowed opacity-40'
+        )}
         onClick={() => {
+          if (!selectedStrategySettings) return;
+          order0.resetFields();
+          order1.resetFields();
           const search = selectedStrategySettings?.search;
-          handleClick(
-            selectedStrategySettings?.to!,
-            selectedStrategySettings?.search!
-          );
           carbonEvents.strategy.newStrategyNextStepClick({
             baseToken: base,
             quoteToken: quote,
@@ -202,7 +204,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
         }}
       >
         Next Step
-      </Button>
+      </Link>
     </>
   );
 };

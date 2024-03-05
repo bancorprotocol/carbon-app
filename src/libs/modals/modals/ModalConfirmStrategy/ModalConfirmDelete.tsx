@@ -2,7 +2,7 @@ import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
-import { Link, PathNames } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Strategy } from 'libs/queries';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
@@ -66,7 +66,7 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
           <Link
             onClick={editPrices}
             disabled={isAwaiting || isProcessing}
-            to={PathNames.editStrategy}
+            to="/strategies/edit/$strategyId"
             params={{ strategyId: strategy.id }}
             search={{ type: 'editPrices' }}
             className={cn(

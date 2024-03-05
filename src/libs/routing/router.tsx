@@ -1,8 +1,22 @@
 import { Router } from '@tanstack/react-router';
 import { routeTree } from 'libs/routing/routes';
-import { parseSearchWith } from 'libs/routing/utils';
 
-export const router = new Router<any, any>({
+export const router = new Router({
   routeTree,
-  parseSearch: parseSearchWith(JSON.parse),
+  parseSearch: (searchStr) => {
+    const searchParams = new URLSearchParams(searchStr);
+    return Object.fromEntries(searchParams.entries());
+  },
+  stringifySearch: (search) => {
+    const searchParams = new URLSearchParams();
+    for (const key in search) searchParams.set(key, search[key]);
+    const searchStr = searchParams.toString();
+    return searchStr ? `?${searchStr}` : '';
+  },
 });
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}

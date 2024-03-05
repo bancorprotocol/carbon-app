@@ -13,8 +13,14 @@ interface Props {
 export const BuySellHeader: FC<Props> = (props) => {
   const { order, buy, children, base } = props;
   const { isRange, setIsRange, resetFields } = order;
-  const handleRangeChange = () => {
-    setIsRange(!isRange);
+  const setLimit = () => {
+    if (!isRange) return;
+    setIsRange(false);
+    resetFields(true);
+  };
+  const setRange = () => {
+    if (isRange) return;
+    setIsRange(true);
     resetFields(true);
   };
   return (
@@ -25,7 +31,7 @@ export const BuySellHeader: FC<Props> = (props) => {
           <button
             type="button"
             tabIndex={!isRange ? -1 : 0}
-            onClick={() => handleRangeChange()}
+            onClick={setLimit}
             className={`rounded-40 font-weight-500 ${
               !isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}
@@ -36,7 +42,7 @@ export const BuySellHeader: FC<Props> = (props) => {
           <button
             type="button"
             tabIndex={isRange ? -1 : 0}
-            onClick={() => handleRangeChange()}
+            onClick={setRange}
             className={`rounded-40 font-weight-500 ${
               isRange ? 'bg-silver' : 'text-secondary'
             } px-10 py-4`}

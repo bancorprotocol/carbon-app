@@ -1,5 +1,6 @@
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
+import { Pathnames } from 'libs/routing';
 import { twMerge } from 'tailwind-merge';
 import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
@@ -116,8 +117,8 @@ export const sortObjectArray = <D extends object>(
 
 export const isPathnameMatch = (
   currentPath: string,
-  href: string,
-  hrefMatches: string[]
+  href: Pathnames,
+  hrefMatches: Pathnames[]
 ) => {
   // Remove trailing /
   const current =
@@ -128,4 +129,13 @@ export const isPathnameMatch = (
   return hrefMatches
     .filter((x) => x !== '/')
     .some((x) => current.startsWith(x));
+};
+
+export const stringToBoolean = (
+  string: string,
+  fallback: boolean | undefined = false
+) => {
+  if (string === 'true') return true;
+  if (string === 'false') return false;
+  return fallback;
 };
