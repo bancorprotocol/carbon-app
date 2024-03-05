@@ -68,7 +68,6 @@ export class CreateSimulationDriver {
       .getByText(day, { exact: true });
     const dayButtonCount = await dayButton.count();
     // If the month has more than one day with the same number, find right one to press
-
     if (dayButtonCount > 1) {
       const index = Number(day) < 15 ? 0 : 1;
       await dayButton.nth(index).click();

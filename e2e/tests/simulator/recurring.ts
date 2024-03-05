@@ -44,7 +44,6 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     await expect(sellOrderRates).toHaveText(output.sell.rate);
     await expect(sellOrderBudget).toHaveText(output.sell.budget);
-
     await expect(buyOrderRates).toHaveText(output.buy.rate);
     await expect(buyOrderBudget).toHaveText(output.buy.budget);
 
@@ -63,7 +62,6 @@ export const simulateRecurringStrategy = (testCase: CreateStrategyTestCase) => {
 
     await simulationResult.screenshotAnimationChart();
 
-    // Toggle Summary
     await simulationResult.setChartTab('summary');
 
     await simulationResult.screenshotSummaryChart();

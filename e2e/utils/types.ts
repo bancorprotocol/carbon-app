@@ -29,11 +29,6 @@ export type TokenPair = `${DebugTokens}->${DebugTokens}`;
 export type Setting = 'limit' | 'range';
 export type Direction = 'buy' | 'sell';
 
-export type TestCase<I, O> = {
-  input: I;
-  output: O;
-};
-
 export interface MinMax {
   min: string;
   max: string;
@@ -46,3 +41,8 @@ export interface LimitOrder {
   price: string;
   budget: string;
 }
+
+export type TestCase<I, O> = {
+  input: I;
+  output: O;
+};
