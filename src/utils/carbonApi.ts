@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   SimulatorAPIParams,
   SimulatorResult,
@@ -32,52 +31,62 @@ export type RoiRow = {
   id: string;
 };
 
-const newApiAxios = axios.create({
-  baseURL: config.carbonApi,
-});
+const fetchGetToJson = <T>(url: string, params?: Object): Promise<T> => {
+  const isRelativeUrl = url.startsWith('/');
+  const urlAbsolute = new URL(`${isRelativeUrl ? '' : config.carbonApi}` + url);
+
+  if (params) {
+    Object.entries(params).forEach(([k, v]) =>
+      urlAbsolute.searchParams.append(k, v)
+    );
+  }
+
+  return fetch(urlAbsolute, { method: 'GET' }).then((response) =>
+    response.json()
+  );
+};
 
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (config.mode === 'development') return false;
-    const localApi = axios.create({ baseURL: '/api/' });
-    const { data } = await localApi.get<boolean>('/check');
+    const data = await fetchGetToJson<boolean>(`/api/check`);
     return data;
   },
   getMarketRate: async (
     address: string,
     convert: readonly FiatSymbol[]
   ): Promise<FiatPriceDict> => {
-    const {
-      data: { data },
-    } = await newApiAxios.get<{ data: FiatPriceDict }>(`market-rate`, {
-      params: { address, convert: convert.join(',') },
-    });
+    const { data } = await fetchGetToJson<{ data: FiatPriceDict }>(
+      'market-rate',
+      {
+        address,
+        convert: convert.join(','),
+      }
+    );
     return data;
   },
   getMarketRateHistory: async (
     params: TokenPriceHistorySearch
   ): Promise<TokenPriceHistoryResult[]> => {
-    const { data } = await newApiAxios.get<TokenPriceHistoryResult[]>(
-      `history/prices`,
-      { params }
+    const data = await fetchGetToJson<TokenPriceHistoryResult[]>(
+      'history/prices',
+      params
     );
     return data;
   },
   getRoi: async (): Promise<RoiRow[]> => {
-    const { data } = await newApiAxios.get<RoiRow[]>('roi');
+    const data = await fetchGetToJson<RoiRow[]>('roi');
     return data;
   },
   getSimulator: async (
     params: SimulatorAPIParams
   ): Promise<SimulatorResult> => {
-    const { data } = await newApiAxios.get<SimulatorResult>(
+    const data = await fetchGetToJson<SimulatorResult>(
       'simulate-create-strategy',
       {
-        params: {
-          ...params,
-          baseBudget: params.sellBudget,
-          quoteBudget: params.buyBudget,
-        },
+        ...params,
+        baseBudget: params.sellBudget,
+        quoteBudget: params.buyBudget,
       }
     );
     return data;
