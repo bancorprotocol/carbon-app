@@ -1,11 +1,4 @@
-import {
-  FormEvent,
-  KeyboardEvent,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from 'react';
+import { FormEvent, KeyboardEvent, useId, useRef, useState } from 'react';
 import { ModalFC } from '../../modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
@@ -53,7 +46,6 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     id,
     data: { ...data, setIsAwaiting },
   });
-  const [allChecked, setAllChecked] = useState(true);
 
   const selectedSorted = selected.sort((a, b) => {
     const averageAmountA = data.buy
@@ -66,8 +58,10 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     return averageAmountA.sub(averageAmountB).toNumber();
   });
 
-  useEffect(() => {
-    if (allChecked) {
+  const allSelected = selected.every((pred) => pred.isSelected);
+
+  const handleAllCheck = (selectAll: boolean) => {
+    if (selectAll) {
       for (const select of selected) {
         if (!select.isSelected) onSelect(select.id);
       }
@@ -77,7 +71,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allChecked]);
+  };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -88,7 +82,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     const key = e.key;
     if (e.ctrlKey && e.key === 'a') {
       e.preventDefault();
-      setAllChecked(!allChecked);
+      handleAllCheck(allSelected);
     }
     if (['Home', 'End', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
       e.preventDefault();
@@ -136,8 +130,8 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                   <th className="sticky top-0 bg-black p-8">
                     <Checkbox
                       className="m-auto"
-                      isChecked={allChecked}
-                      setIsChecked={setAllChecked}
+                      isChecked={allSelected}
+                      setIsChecked={handleAllCheck}
                       aria-label="toggle all orders"
                     />
                   </th>
