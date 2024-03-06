@@ -18,6 +18,7 @@ import { ModalTradeRoutingRow } from './ModalTradeRoutingRow';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export type ModalTradeRoutingData = {
   source: Token;
@@ -53,6 +54,17 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     data: { ...data, setIsAwaiting },
   });
   const [allChecked, setAllChecked] = useState(true);
+
+  const selectedSorted = selected.sort((a, b) => {
+    const averageAmountA = data.buy
+      ? new SafeDecimal(a.sourceAmount).div(a.targetAmount)
+      : new SafeDecimal(a.targetAmount).div(a.sourceAmount);
+    const averageAmountB = data.buy
+      ? new SafeDecimal(b.sourceAmount).div(b.targetAmount)
+      : new SafeDecimal(b.targetAmount).div(b.sourceAmount);
+
+    return averageAmountA.sub(averageAmountB).toNumber();
+  });
 
   useEffect(() => {
     if (allChecked) {
@@ -142,7 +154,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                 </tr>
               </thead>
               <tbody>
-                {selected.map((action) => (
+                {selectedSorted.map((action) => (
                   <ModalTradeRoutingRow
                     key={action.id}
                     action={action}
