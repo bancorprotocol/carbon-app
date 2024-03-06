@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { config as web3Config } from 'services/web3/config';
 import { uniqBy } from 'lodash';
 import { utils } from 'ethers';
@@ -15,10 +14,14 @@ const buildIpfsUri = (ipfsHash: string) => `https://ipfs.io/ipfs/${ipfsHash}`;
 export const fetchTokenLists = async () => {
   const res = await Promise.all(
     config.tokenLists.map(async (uri) => {
-      const res = await axios.get<TokenList>(uri, { timeout: 10000 });
+      const signal = AbortSignal.timeout(10000);
+      const res: TokenList = await fetch(uri, {
+        method: 'GET',
+        signal,
+      }).then((response) => response.json());
       return {
-        ...res.data,
-        logoURI: getLogoByURI(res.data.logoURI),
+        ...res,
+        logoURI: getLogoByURI(res.logoURI),
       };
     })
   );
