@@ -9,6 +9,8 @@ import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useMarketIndication } from '../marketPriceIndication';
+import { AboveBelowMarketPriceWarning } from '../common/AboveBelowMarketPriceWarning';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -27,6 +29,13 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     ? tokenQuoteBalanceQuery
     : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
+
+  const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
+    base,
+    quote,
+    order,
+    buy,
+  });
 
   const calculatedWalletBalance = new SafeDecimal(
     tokenBalanceQuery.data || 0
@@ -85,6 +94,9 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         withoutWallet={type === 'withdraw'}
         data-testid="input-budget"
       />
+      {isOrderAboveOrBelowMarketPrice && (
+        <AboveBelowMarketPriceWarning base={base} buy={!!buy} />
+      )}
       {insufficientBalance && (
         <output
           htmlFor={inputId}
