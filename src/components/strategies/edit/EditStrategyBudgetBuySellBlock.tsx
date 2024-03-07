@@ -10,7 +10,7 @@ import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useMarketIndication } from '../marketPriceIndication';
-import { AboveBelowMarketPriceWarning } from '../common/AboveBelowMarketPriceWarning';
+import { AboveBelowMarketPriceWarning } from 'components/common/AboveBelowMarketPriceWarning';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
