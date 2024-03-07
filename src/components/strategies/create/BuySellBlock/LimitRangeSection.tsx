@@ -66,7 +66,7 @@ export const LimitRangeSection: FC<Props> = ({
         <WarningMessageWithIcon message={overlappingOrdersPricesMessage} />
       )}
       {isOrderAboveOrBelowMarketPrice && (
-        <AboveBelowMarketPriceWarning base={base} buy={!!buy} />
+        <AboveBelowMarketPriceWarning base={base} buy={buy} />
       )}
     </fieldset>
   );
