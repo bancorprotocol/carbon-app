@@ -5,7 +5,7 @@ import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { AboveBelowMarketPriceWarning } from 'components/strategies/common/AboveBelowMarketPriceWarning';
+import { AboveBelowMarketPriceWarning } from 'components/common/AboveBelowMarketPriceWarning';
 
 type Props = {
   base: Token;
