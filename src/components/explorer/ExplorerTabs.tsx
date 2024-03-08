@@ -6,6 +6,7 @@ import {
 } from 'components/strategies/StrategyPageTabs';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
+import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
 
@@ -38,6 +39,12 @@ export const ExplorerTabs = () => {
       href: '/explore/$type/$slug/portfolio',
       params: { type, slug },
       icon: <IconPieChart className="h-18 w-18" />,
+    },
+    {
+      label: 'Activity',
+      href: '/explore/$type/$slug/activity',
+      params: { type, slug },
+      icon: <IconActivity className="h-18 w-18" />,
     },
   ];
 

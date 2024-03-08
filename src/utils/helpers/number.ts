@@ -1,5 +1,8 @@
 import type { FiatSymbol } from 'utils/carbonApi';
 import { SafeDecimal } from 'libs/safedecimal';
+import { Token } from 'libs/tokens';
+
+export type NumberLike = number | string | SafeDecimal;
 
 export const getFiatDisplayValue = (
   fiatValue: SafeDecimal | string | number,
@@ -103,15 +106,15 @@ interface PrettifyNumberOptions {
   noSubscript?: boolean;
 }
 
-export function prettifyNumber(num: number | string | SafeDecimal): string;
+export function prettifyNumber(num: NumberLike): string;
 
 export function prettifyNumber(
-  num: number | string | SafeDecimal,
+  num: NumberLike,
   options?: PrettifyNumberOptions
 ): string;
 
 export function prettifyNumber(
-  value: number | string | SafeDecimal,
+  value: NumberLike,
   options: PrettifyNumberOptions = {}
 ): string {
   const num = new SafeDecimal(value);
@@ -220,4 +223,17 @@ export const roundSearchParam = (param: string) => {
     .slice(leadingZeros.length, leadingZeros.length + 6)
     .replace(/0+$/, '');
   return `${radix}.${leadingZeros}${rest}`;
+};
+
+export const tokenAmount = (amount: NumberLike | undefined, token: Token) => {
+  if (amount === undefined) return;
+  const value = prettifyNumber(amount, {
+    decimals: token.decimals,
+  });
+  return `${value} ${token.symbol}`;
+};
+
+export const tokenRange = (min: NumberLike, max: NumberLike, token: Token) => {
+  if (min === max) return tokenAmount(min, token);
+  return `${tokenAmount(min, token)} - ${tokenAmount(max, token)}`;
 };

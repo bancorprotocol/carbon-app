@@ -1,5 +1,6 @@
 import { debugPage } from 'libs/routing/routes/debug';
 import {
+  explorerActivityPage,
   explorerLayout,
   explorerOverviewPage,
   explorerPage,
@@ -14,6 +15,7 @@ import {
 import { privacyPage, termPage } from 'libs/routing/routes/legal';
 import {
   myStrategyLayout,
+  strategyActivityPage,
   strategyOverviewPage,
   strategyPortfolioLayout,
   strategyPortfolioPage,
@@ -50,6 +52,7 @@ export const routeTree = rootRoute.addChildren([
           explorerPortfolioPage,
           explorerPortfolioTokenPage,
         ]),
+        explorerActivityPage,
       ]),
     ]),
   ]),
@@ -59,6 +62,7 @@ export const routeTree = rootRoute.addChildren([
       strategyPortfolioPage,
       strategyPortfolioTokenPage,
     ]),
+    strategyActivityPage,
   ]),
   simulatorRootRoute.addChildren([
     simulatorRedirect,
