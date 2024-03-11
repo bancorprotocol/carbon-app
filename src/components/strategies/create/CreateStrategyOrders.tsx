@@ -12,6 +12,7 @@ import { useWeb3 } from 'libs/web3';
 import { getStatusTextByTxStatus } from '../utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { CreateOverlappingStrategy } from './overlapping/CreateOverlappingStrategy';
+import { useStrategyWarning } from 'components/strategies/useWarning';
 
 export const CreateStrategyOrders = ({
   base,
@@ -33,6 +34,15 @@ export const CreateStrategyOrders = ({
   setSpread,
 }: UseStrategyCreateReturn) => {
   const { user } = useWeb3();
+  const warnings = useStrategyWarning({
+    base,
+    quote,
+    order0,
+    order1,
+    isOverlapping: strategySettings === 'overlapping',
+    invalidForm: isCTAdisabled,
+  });
+
   const strategyEventData = useStrategyEventData({
     base,
     quote,
@@ -133,13 +143,28 @@ export const CreateStrategyOrders = ({
           )}
         </>
       )}
+
+      {warnings.formHasWarning && !isCTAdisabled && (
+        <m.label
+          variants={items}
+          className="flex items-center gap-8 rounded-10 bg-background-900 p-20 text-14 font-weight-500 text-white/60"
+        >
+          <input
+            type="checkbox"
+            value={warnings.approvedWarnings.toString()}
+            onChange={(e) => warnings.setApprovedWarnings(e.target.checked)}
+          />
+          I've reviewed the warning(s) but choose to proceed.
+        </m.label>
+      )}
+
       <m.div variants={items} key="createStrategyCTA">
         <Button
           type="submit"
           variant="success"
           size="lg"
           fullWidth
-          disabled={isCTAdisabled}
+          disabled={isCTAdisabled || warnings.shouldApproveWarnings}
           loading={isProcessing || isAwaiting}
           loadingChildren={loadingChildren}
         >
