@@ -41,6 +41,7 @@ export const CreateStrategyOrders = ({
     order1,
     isOverlapping: strategySettings === 'overlapping',
     invalidForm: isCTAdisabled,
+    isConnected: !!user,
   });
 
   const strategyEventData = useStrategyEventData({

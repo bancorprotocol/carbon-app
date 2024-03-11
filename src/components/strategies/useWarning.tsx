@@ -11,6 +11,7 @@ interface StrategyWarningParams {
   order1: OrderCreate;
   isOverlapping: boolean;
   invalidForm: boolean;
+  isConnected?: boolean;
 }
 
 export const useStrategyWarning = ({
@@ -20,6 +21,7 @@ export const useStrategyWarning = ({
   order1,
   isOverlapping,
   invalidForm,
+  isConnected = true,
 }: StrategyWarningParams) => {
   const [approvedWarnings, setApprovedWarnings] = useState(false);
   const { isOrderAboveOrBelowMarketPrice: buyOutsideMarket } =
@@ -36,18 +38,21 @@ export const useStrategyWarning = ({
       order: order1,
       buy: false,
     });
-  const formHasWarning = hasWarning({
-    order0,
-    order1,
-    buyOutsideMarket,
-    sellOutsideMarket,
-    isOverlapping,
-  });
+  const formHasWarning =
+    isConnected &&
+    hasWarning({
+      order0,
+      order1,
+      buyOutsideMarket,
+      sellOutsideMarket,
+      isOverlapping,
+    });
   useEffect(() => {
     if (formHasWarning) setApprovedWarnings(false);
   }, [formHasWarning, invalidForm, setApprovedWarnings]);
 
-  const shouldApproveWarnings = formHasWarning && !approvedWarnings;
+  const shouldApproveWarnings =
+    isConnected && formHasWarning && !approvedWarnings;
 
   return {
     formHasWarning,
