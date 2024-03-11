@@ -51,8 +51,7 @@ export const useStrategyWarning = ({
     if (formHasWarning) setApprovedWarnings(false);
   }, [formHasWarning, invalidForm, setApprovedWarnings]);
 
-  const shouldApproveWarnings =
-    isConnected && formHasWarning && !approvedWarnings;
+  const shouldApproveWarnings = formHasWarning && !approvedWarnings;
 
   return {
     formHasWarning,
