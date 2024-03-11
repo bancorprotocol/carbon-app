@@ -113,6 +113,9 @@ export class CreateStrategyDriver {
   }
 
   async submit() {
+    if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+      this.page.getByTestId('approve-warnings').click();
+    }
     const btn = this.page.getByText('Create Strategy');
     await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {

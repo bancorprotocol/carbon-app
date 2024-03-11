@@ -172,6 +172,7 @@ export const EditStrategyPricesContent = ({
             type="checkbox"
             value={warnings.approvedWarnings.toString()}
             onChange={(e) => warnings.setApprovedWarnings(e.target.checked)}
+            data-testid="approve-warnings"
           />
           I've reviewed the warning(s) but choose to proceed.
         </label>
