@@ -225,15 +225,23 @@ export const roundSearchParam = (param: string) => {
   return `${radix}.${leadingZeros}${rest}`;
 };
 
-export const tokenAmount = (amount: NumberLike | undefined, token: Token) => {
+export const tokenAmount = (
+  amount: NumberLike | undefined,
+  token: Token,
+  options?: PrettifyNumberOptions
+) => {
   if (amount === undefined) return;
-  const value = prettifyNumber(amount, {
-    decimals: token.decimals,
-  });
-  return `${value} ${token.symbol}`;
+  return `${prettifyNumber(amount, options)} ${token.symbol}`;
 };
 
-export const tokenRange = (min: NumberLike, max: NumberLike, token: Token) => {
+export const tokenRange = (
+  min: NumberLike,
+  max: NumberLike,
+  token: Token,
+  options?: PrettifyNumberOptions
+) => {
   if (min === max) return tokenAmount(min, token);
-  return `${tokenAmount(min, token)} - ${tokenAmount(max, token)}`;
+  const from = tokenAmount(min, token, options);
+  const to = tokenAmount(max, token, options);
+  return `${from} - ${to}`;
 };

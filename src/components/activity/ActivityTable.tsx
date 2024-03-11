@@ -18,8 +18,11 @@ import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
 import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
 import { ReactComponent as IconTransfer } from 'assets/icons/transfer.svg';
+import { ReactComponent as IconLink } from 'assets/icons/link.svg';
+import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { activityActionName } from './utils';
 import { usePagination } from 'hooks/useList';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   activities: Activity[];
@@ -27,14 +30,16 @@ interface Props {
 
 export const ActivityTable: FC<Props> = ({ activities }) => {
   return (
-    <table className="border-collapse">
+    <table className="w-full border-collapse">
       <thead>
-        <tr>
-          <th className="px-24 py-16">ID</th>
-          <th colSpan={2}>Action</th>
-          <th>Buy Budget</th>
-          <th>Sell Budget</th>
-          <th className="px-24 py-16 text-end">Date</th>
+        <tr className="border-y border-background-800 font-mono text-14 text-white/60">
+          <th className="px-24 py-16 text-start font-weight-400">ID</th>
+          <th className="text-start font-weight-400" colSpan={2}>
+            Action
+          </th>
+          <th className="text-start font-weight-400">Buy Budget</th>
+          <th className="text-start font-weight-400">Sell Budget</th>
+          <th className="px-24 py-16 text-end font-weight-400">Date</th>
         </tr>
       </thead>
       <tbody>
@@ -58,7 +63,10 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   minute: '2-digit',
   hour12: false,
 };
-
+const budgetColor = (budget?: string) => {
+  if (!budget) return '';
+  return new SafeDecimal(budget).isPositive() ? 'text-buy' : 'text-buy';
+};
 interface ActivityRowProps {
   activity: Activity;
 }
@@ -68,42 +76,54 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity }) => {
   const date = new Date(activity.date).toLocaleDateString('en', dateOptions);
   return (
     <>
-      <tr>
-        <td rowSpan={2} className="px-24 py-16">
-          <div className="flex items-center gap-8 rounded-full bg-background-800 p-8">
-            {getLowestBits(strategy.id)}
+      <tr className="text-14">
+        <td rowSpan={2} className="px-24 py-12">
+          <div className="inline-flex items-center gap-8 rounded-full bg-background-800 p-8">
+            <span className="lineHeight-4">{getLowestBits(strategy.id)}</span>
             <TokensOverlap className="h-16" tokens={[base, quote]} />
           </div>
         </td>
-        <td rowSpan={2} className="py-16">
+        <td rowSpan={2} className="py-12">
           <div
             className={cn(
-              'm-8 grid place-items-center rounded-full p-8',
+              'mr-8 grid h-32 w-32 place-items-center rounded-full',
               iconColor(activity.action)
             )}
           >
             <ActionIcon action={activity.action} />
           </div>
         </td>
-        <td className="pt-16">{activityActionName[activity.action]}</td>
-        <td className="pt-16">{tokenAmount(strategy.buy.budget, base)}</td>
-        <td className="pt-16">{tokenAmount(strategy.sell.budget, quote)}</td>
-        <td className="pt-16 text-end">{date}</td>
+        <td className="pt-12 align-bottom font-weight-500">
+          {activityActionName[activity.action]}
+        </td>
+        <td className="pt-12 align-bottom">
+          {tokenAmount(strategy.buy.budget, base)}
+        </td>
+        <td className="pt-12 align-bottom">
+          {tokenAmount(strategy.sell.budget, quote)}
+        </td>
+        <td className="px-24 pt-12 text-end align-bottom font-mono">{date}</td>
       </tr>
       <tr className="font-mono text-12 text-white/60">
         {/* ID */}
         {/* Action Icon */}
-        <td className="pb-16">{activityDescription(activity)}</td>
-        <td className="pb-16">
+        <td className="pb-12 align-top">{activityDescription(activity)}</td>
+        <td className={cn('pb-12 align-top', budgetColor(changes.buy?.budget))}>
           {tokenAmount(changes.buy?.budget, base) || '...'}
         </td>
-        <td className="pb-16">
+        <td className={cn('pb-12 align-top', budgetColor(changes.buy?.budget))}>
           {tokenAmount(changes.sell?.budget, quote) || '...'}
         </td>
-        <td className="px-24 pb-16 text-end">
-          <NewTabLink to={getExplorerLink('tx', activity.txHash)}>
+        <td className="px-24 pb-12 align-top">
+          <p className="flex justify-end gap-8 align-bottom">
             {shortAddress(activity.txHash)}
-          </NewTabLink>
+            <NewTabLink
+              aria-label="See transaction on block explorer"
+              to={getExplorerLink('tx', activity.txHash)}
+            >
+              <IconLink className="h-14 text-primary" />
+            </NewTabLink>
+          </p>
         </td>
       </tr>
     </>
@@ -189,23 +209,31 @@ const ActivityPaginator = () => {
   };
 
   return (
-    <tr>
+    <tr className="border-t border-background-800 text-14 text-white/80">
       <td className="px-24 py-16" colSpan={3}>
-        Show results
-        <select name="limit" onChange={changeLimit} value={limit}>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
-        </select>
+        <div className="flex items-center gap-8">
+          <label>Show results</label>
+          <select
+            className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
+            name="limit"
+            onChange={changeLimit}
+            value={limit}
+          >
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+          </select>
+        </div>
       </td>
       <td className="px-24 py-16 text-end" colSpan={3}>
-        <div role="group">
+        <div role="group" className="flex justify-end gap-8 font-mono">
           <button
             onClick={firstPage}
             disabled={!offset}
             aria-label="First page"
+            className="disabled:opacity-50"
           >
             First
           </button>
@@ -213,23 +241,31 @@ const ActivityPaginator = () => {
             onClick={previousPage}
             disabled={!offset}
             aria-label="Previous page"
+            className="p-8 disabled:opacity-50"
           >
-            Previous
+            <IconChevronLeft className="h-12" />
           </button>
-          <span>
-            {currentPage} / {maxPage}
-          </span>
+          <p
+            className="flex gap-8 rounded-full border-2 border-background-800 px-12 py-8"
+            aria-label="page position"
+          >
+            <span className="text-white">{currentPage}</span>
+            <span role="separator">/</span>
+            <span className="text-white">{maxPage}</span>
+          </p>
           <button
             onClick={nextPage}
             disabled={currentPage === maxPage}
             aria-label="Next page"
+            className="p-8 disabled:opacity-50"
           >
-            Next
+            <IconChevronLeft className="h-12 rotate-180" />
           </button>
           <button
             onClick={lastPage}
             disabled={currentPage === maxPage}
             aria-label="Last page"
+            className="disabled:opacity-50"
           >
             Last
           </button>
@@ -251,14 +287,15 @@ const iconColor = (action: ActivityAction) => {
 };
 
 const ActionIcon: FC<ActionIconProps> = ({ action }) => {
-  if (action === 'create') return <IconCheck className="h-16" />;
-  if (action === 'transfer') return <IconTransfer className="h-16" />;
-  if (action === 'editPrice') return <IconEdit className="h-16" />;
-  if (action === 'delete') return <IconDelete className="h-16" />;
-  if (action === 'pause') return <IconPause className="h-16" />;
-  if (action === 'deposit') return <IconArrowDown className="h-16" />;
+  if (action === 'create') return <IconCheck className="h-16 w-16" />;
+  if (action === 'transfer') return <IconTransfer className="h-16 w-16" />;
+  if (action === 'editPrice') return <IconEdit className="h-16 w-16" />;
+  if (action === 'delete') return <IconDelete className="h-16 w-16" />;
+  if (action === 'pause') return <IconPause className="h-16 w-16" />;
+  if (action === 'deposit') return <IconArrowDown className="h-16 w-16" />;
   if (action === 'withdraw')
-    return <IconArrowDown className="h-16 rotate-180" />;
-  if (action === 'buy') return <IconArrowDown className="rotate-120 h-16" />;
-  return <IconArrowDown className="rotate-60 h-16" />;
+    return <IconArrowDown className="h-16 w-16 rotate-180" />;
+  if (action === 'buy')
+    return <IconArrowDown className="rotate-120 h-16 w-16" />;
+  return <IconArrowDown className="rotate-60 h-16 w-16" />;
 };

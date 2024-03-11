@@ -1,7 +1,10 @@
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { useActivity } from 'components/activity/useActivity';
+import { ActivitySearchParams } from 'components/activity/utils';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
+import { ListOptions, ListProvider } from 'hooks/useList';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { Activity } from 'libs/queries/extApi/activity';
 import { useWeb3 } from 'libs/web3';
 
 export const StrategiesActivityPage = () => {
@@ -19,7 +22,24 @@ export const StrategiesActivityPage = () => {
     return false;
   });
 
+  // TODO: move that into a dedicated component
+  const listOptions: ListOptions<Activity, ActivitySearchParams> = {
+    all: activities,
+    defaultLimit: 10,
+    filter: (list, searchParams) => {
+      const { action } = searchParams;
+      return list.filter((activity) => {
+        if (action && activity.action !== action) return false;
+        return true;
+      });
+    },
+  };
+
   if (!activities.length) return 'No activities found';
 
-  return <ActivitySection activities={activities} />;
+  return (
+    <ListProvider {...listOptions}>
+      <ActivitySection />
+    </ListProvider>
+  );
 };

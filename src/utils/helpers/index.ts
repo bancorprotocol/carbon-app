@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge';
 import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 export * from './number';
+export * from './schema';
 
 export const isProduction = window
   ? window.location.host.includes('carbondefi.xyz')

@@ -55,7 +55,10 @@ export const ActivityFilter = () => {
       role="search"
       onChange={updateParams}
     >
-      <select name="strategyId">
+      <select
+        name="strategyId"
+        className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
+      >
         <option key="empty" value="">
           Select a strategy
         </option>
@@ -65,7 +68,10 @@ export const ActivityFilter = () => {
           </option>
         ))}
       </select>
-      <select name="pair">
+      <select
+        name="pair"
+        className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
+      >
         <option key="empty" value="">
           Select a Pair
         </option>
@@ -75,7 +81,11 @@ export const ActivityFilter = () => {
           </option>
         ))}
       </select>
-      <select name="action" value={searchParams.action}>
+      <select
+        name="action"
+        value={searchParams.action}
+        className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
+      >
         <option key="empty" value="">
           Select an Action
         </option>

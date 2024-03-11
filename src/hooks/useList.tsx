@@ -1,14 +1,18 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useContext, createContext, useCallback } from 'react';
+import { toNumber, toString } from 'utils/helpers';
+import * as v from 'valibot';
 
-interface SortParams {
-  sortBy: string;
-  order: 'asc' | 'desc';
-}
-interface PaginationParams {
-  limit: number;
-  offset: number;
-}
+const sortSchema = v.object({
+  sortBy: toString,
+  order: v.picklist(['asc', 'desc']),
+});
+const paginationSchema = v.object({
+  limit: toNumber,
+  offset: toNumber,
+});
+type SortParams = v.Input<typeof sortSchema>;
+type PaginationParams = v.Input<typeof paginationSchema>;
 type ListParams<P> = Partial<P> & SortParams & PaginationParams;
 
 interface ListContextType<T, P> {
@@ -31,6 +35,7 @@ export interface ListOptions<T, P> {
   all: T[];
   defaultLimit?: number;
   defaultOffset?: number;
+  schema?: v.ObjectSchema<any>;
   filter?: (list: T[], searchParams: ListParams<P>) => T[];
   sort?: (list: T[], sortBy: string, order: 'asc' | 'desc') => T[];
 }
@@ -40,8 +45,39 @@ interface ListProviderProps<T, P> extends ListOptions<T, P> {
 }
 
 export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
+  const {
+    children,
+    all,
+    defaultLimit = 10,
+    defaultOffset = 0,
+    filter = (list) => list,
+    sort = (list) => list,
+  } = props;
+
+  // TODO: find a way to validate the schema
+  const listSchema = props.schema
+    ? v.intersect([v.partial(props.schema), v.record(v.string())])
+    : v.record(v.string());
+
+  // Get params from URL as string
+  const {
+    limit = defaultLimit,
+    offset = defaultOffset,
+    sortBy = '',
+    order = 'asc',
+    ...otherParams
+  }: ListParams<P> = useSearch({ strict: false });
+
+  // Parse and validate params
+  const searchParams = {
+    ...v.parse(paginationSchema, { limit, offset }),
+    ...v.parse(sortSchema, { sortBy, order }),
+    ...v.parse(listSchema, otherParams),
+  } as ListParams<P>;
+
+  console.log(searchParams);
+
   const nav = useNavigate();
-  const searchParams: ListParams<P> = useSearch({ strict: false });
   const setSearchParams = useCallback(
     (changes: Partial<ListParams<P>>) => {
       return nav({
@@ -50,7 +86,7 @@ export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
         params: (params) => params,
         search: (search) => {
           for (const [key, value] of Object.entries(changes)) {
-            if (!value) {
+            if (value === '' || value === null || value === undefined) {
               delete (changes as any)[key];
               if (key in search) delete (search as any)[key];
             }
@@ -61,36 +97,20 @@ export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
     },
     [nav]
   );
-  const {
-    children,
-    all,
-    defaultLimit = 10,
-    defaultOffset = 0,
-    filter = (list) => list,
-    sort = (list) => list,
-  } = props;
-  const {
-    limit = defaultLimit,
-    offset = defaultOffset,
-    sortBy = '',
-    order = 'asc',
-    ...otherParams
-  } = searchParams;
+
+  // Filter, slice & sort the list
   const filtered = filter(all, searchParams);
-  const sliced = filtered.slice(offset, offset + limit);
+  const sliced = filtered.slice(
+    searchParams.offset,
+    searchParams.offset + searchParams.limit
+  );
   const sorted = sort(sliced, sortBy, order);
 
   const ctx = {
     all,
     list: sorted,
     size: filtered.length,
-    searchParams: {
-      limit,
-      offset,
-      sortBy,
-      order,
-      ...otherParams,
-    },
+    searchParams,
     setSearchParams,
   };
 
