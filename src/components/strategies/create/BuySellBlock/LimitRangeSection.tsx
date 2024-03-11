@@ -5,7 +5,7 @@ import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { AboveBelowMarketPriceWarning } from 'components/common/AboveBelowMarketPriceWarning';
+import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 
 type Props = {
   base: Token;
@@ -66,7 +66,7 @@ export const LimitRangeSection: FC<Props> = ({
         <WarningMessageWithIcon message={overlappingOrdersPricesMessage} />
       )}
       {isOrderAboveOrBelowMarketPrice && (
-        <AboveBelowMarketPriceWarning base={base} buy={buy} />
+        <OutsideMarketPriceWarning base={base} buy={buy} />
       )}
     </fieldset>
   );

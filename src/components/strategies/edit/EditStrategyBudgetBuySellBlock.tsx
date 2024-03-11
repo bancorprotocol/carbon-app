@@ -10,7 +10,7 @@ import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useMarketIndication } from '../marketPriceIndication';
-import { AboveBelowMarketPriceWarning } from 'components/common/AboveBelowMarketPriceWarning';
+import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -95,7 +95,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         data-testid="input-budget"
       />
       {isOrderAboveOrBelowMarketPrice && (
-        <AboveBelowMarketPriceWarning base={base} buy={!!buy} />
+        <OutsideMarketPriceWarning base={base} buy={!!buy} />
       )}
       {insufficientBalance && (
         <output
