@@ -14,6 +14,12 @@
   --mobile-menu-height: 80px;
 }
 
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
 @layer base {
   html,
   body,

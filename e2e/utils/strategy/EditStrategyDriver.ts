@@ -51,6 +51,9 @@ export class EditStrategyDriver {
   }
 
   async submit(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
+    if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+      this.page.getByTestId('approve-warnings').click();
+    }
     const btn = this.page.getByTestId('edit-submit');
     await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {
