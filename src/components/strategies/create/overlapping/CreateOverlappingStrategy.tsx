@@ -110,9 +110,12 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
   };
 
-  const setOverlappingParams = () => {
-    const min = order0.min;
-    const max = order1.max;
+  const setOverlappingParams = (min: string, max: string) => {
+    // Set min & max.
+    order0.setMin(min);
+    order1.setMax(max);
+
+    // If invalid range, wait for timeout to reset range
     if (!isValidRange(min, max) || !isValidSpread(spread)) return;
     const prices = calculateOverlappingPrices(
       min,
@@ -122,8 +125,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     );
 
     // Set prices
-    order0.setMin(min);
-    order1.setMax(max);
     order0.setMax(prices.buyPriceHigh);
     order0.setMarginalPrice(prices.buyPriceMarginal);
     order1.setMin(prices.sellPriceLow);
@@ -144,16 +145,25 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
   };
 
+  const setMin = (min: string) => {
+    if (!order1.max) return order0.setMin(min);
+    setOverlappingParams(min, order1.max);
+  };
+
+  const setMax = (max: string) => {
+    if (!order0.min) return order1.setMax(max);
+    setOverlappingParams(order0.min, max);
+  };
+
   // Update on buyMin changes
   useEffect(() => {
     if (!order0.min) return;
-    setOverlappingParams();
 
     // automatically update max if min > max
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(order0.min), spread);
       if (Number(order1.max) < minSellMax) {
-        order1.setMax(minSellMax.toString());
+        setMax(minSellMax.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -163,13 +173,12 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   // Update on sellMax changes
   useEffect(() => {
     if (!order1.max) return;
-    setOverlappingParams();
 
     // automatically update min if min > max
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
       if (Number(order0.min) > maxBuyMin) {
-        order0.setMin(maxBuyMin.toString());
+        setMin(maxBuyMin.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -183,11 +192,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       requestAnimationFrame(() => {
         if (order0.min || order1.max) return;
         const { min, max } = getInitialPrices(marketPrice);
-        order0.setMin(min);
-        order1.setMax(max);
+        setOverlappingParams(min, max);
       });
     } else {
-      setOverlappingParams();
+      setOverlappingParams(order0.min, order1.max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
@@ -228,6 +236,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           order1={order1}
           marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
+          setMin={setMin}
+          setMax={setMax}
         />
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
@@ -253,6 +263,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             order0={order0}
             order1={order1}
             marketPricePercentage={marketPricePercentage}
+            setMin={setMin}
+            setMax={setMax}
           />
         )}
       </article>
