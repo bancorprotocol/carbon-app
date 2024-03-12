@@ -31,64 +31,55 @@ export type RoiRow = {
   id: string;
 };
 
-const fetchGetToJson = <T>(url: string, params?: Object): Promise<T> => {
-  const isRelativeUrl = url.startsWith('/');
-  const urlAbsolute = new URL(`${isRelativeUrl ? '' : config.carbonApi}` + url);
-
-  if (params) {
-    Object.entries(params).forEach(([k, v]) =>
-      urlAbsolute.searchParams.append(k, v)
-    );
+const get = async <T>(endpoint: string, params: Object = {}): Promise<T> => {
+  const url = new URL(config.carbonApi + endpoint);
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
   }
+  const response = await fetch(url);
+  const result = (await response.json()) as T & { error?: string };
 
-  return fetch(urlAbsolute, { method: 'GET' }).then((response) =>
-    response.json()
-  );
+  if (!response.ok)
+    throw new Error(
+      result?.error ||
+        `Response was not okay. ${response.statusText} response received.`
+    );
+  return result;
 };
 
 const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (config.mode === 'development') return false;
-    const data = await fetchGetToJson<boolean>(`/api/check`);
-    return data;
+    return fetch(`/api/check`).then((res) => res.json());
   },
   getMarketRate: async (
     address: string,
     convert: readonly FiatSymbol[]
   ): Promise<FiatPriceDict> => {
-    const { data } = await fetchGetToJson<{ data: FiatPriceDict }>(
-      'market-rate',
-      {
-        address,
-        convert: convert.join(','),
-      }
-    );
+    const { data } = await get<{ data: FiatPriceDict }>('market-rate', {
+      address,
+      convert: convert.join(','),
+    });
     return data;
   },
   getMarketRateHistory: async (
     params: TokenPriceHistorySearch
   ): Promise<TokenPriceHistoryResult[]> => {
-    const data = await fetchGetToJson<TokenPriceHistoryResult[]>(
-      'history/prices',
-      params
-    );
+    const data = await get<TokenPriceHistoryResult[]>('history/prices', params);
     return data;
   },
   getRoi: async (): Promise<RoiRow[]> => {
-    const data = await fetchGetToJson<RoiRow[]>('roi');
+    const data = await get<RoiRow[]>('roi');
     return data;
   },
   getSimulator: async (
     params: SimulatorAPIParams
   ): Promise<SimulatorResult> => {
-    const data = await fetchGetToJson<SimulatorResult>(
-      'simulate-create-strategy',
-      {
-        ...params,
-        baseBudget: params.sellBudget,
-        quoteBudget: params.buyBudget,
-      }
-    );
+    const data = await get<SimulatorResult>('simulate-create-strategy', {
+      ...params,
+      baseBudget: params.sellBudget,
+      quoteBudget: params.buyBudget,
+    });
     return data;
   },
 };
