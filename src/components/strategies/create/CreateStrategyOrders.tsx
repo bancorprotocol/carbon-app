@@ -117,7 +117,7 @@ export const CreateStrategyOrders = ({
       )}
       {strategySettings !== 'overlapping' && (
         <>
-          {(strategyDirection === 'sell' || !strategyDirection) && (
+          {(strategyDirection === 'sell' || strategyType === 'recurring') && (
             <BuySellBlock
               key="createStrategySellOrder"
               base={base!}
@@ -129,7 +129,9 @@ export const CreateStrategyOrders = ({
               isOrdersOverlap={isOrdersOverlap}
             />
           )}
-          {(strategyDirection === 'buy' || !strategyDirection) && (
+          {(strategyDirection === 'buy' ||
+            !strategyDirection ||
+            strategyType === 'recurring') && (
             <BuySellBlock
               key="createStrategyBuyOrder"
               base={base!}
