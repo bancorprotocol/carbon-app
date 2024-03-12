@@ -27,6 +27,8 @@ interface EnableProps {
   order0: OrderCreate;
   order1: OrderCreate;
   spread: number;
+  setMin: (value: string) => void;
+  setMax: (value: string) => void;
   disabled?: false;
 }
 
@@ -481,8 +483,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       setDragging('');
       const newMin = getDraggedMin();
       const newMax = getDraggedMax();
-      if (newMin) order0.setMin(newMin);
-      if (newMax) order1.setMax(newMax);
+      if (newMin) (props as EnableProps).setMin(newMin);
+      if (newMax) (props as EnableProps).setMax(newMax);
       translateHandler('buy', 0);
       translateHandler('sell', 0);
       initialPosition = 0;

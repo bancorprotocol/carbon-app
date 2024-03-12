@@ -82,9 +82,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     order1.setBudget(sellBudget);
   };
 
-  const setOverlappingParams = () => {
-    const min = order0.min;
-    const max = order1.max;
+  const setOverlappingParams = (min: string, max: string) => {
+    // Set min & max.
+    order0.setMin(min);
+    order1.setMax(max);
+
+    // If invalid range, wait for timeout to reset range
     if (!isValidRange(min, max) || !isValidSpread(spread)) return;
     const prices = calculateOverlappingPrices(
       min,
@@ -94,14 +97,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     );
 
     // Set prices
-    order0.setMin(min);
     order0.setMax(prices.buyPriceHigh);
     order0.setMarginalPrice(prices.buyPriceMarginal);
     order1.setMin(prices.sellPriceLow);
-    order1.setMax(max);
     order1.setMarginalPrice(prices.sellPriceMarginal);
 
-    // Set budget
+    // Set budgets
     const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
     const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
     if (isMinAboveMarket(buyOrder)) {
@@ -116,11 +117,20 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
+  const setMin = (min: string) => {
+    if (!order1.max) return order0.setMin(min);
+    setOverlappingParams(min, order1.max);
+  };
+
+  const setMax = (max: string) => {
+    if (!order0.min) return order1.setMax(max);
+    setOverlappingParams(order0.min, max);
+  };
+
   // Initialize order when market price is available
   useEffect(() => {
     if (!quote || !base || marketPrice <= 0) return;
     if (!mounted) return setMounted(true);
-    setOverlappingParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
 
@@ -128,12 +138,11 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!order0.min) return;
     if (!mounted) return setMounted(true);
-    setOverlappingParams();
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(order0.min), spread);
       if (Number(order1.max) < minSellMax) {
-        order1.setMax(minSellMax.toFixed(decimals));
+        setMax(minSellMax.toFixed(decimals));
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -144,12 +153,11 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   useEffect(() => {
     if (!order1.max) return;
     if (!mounted) return setMounted(true);
-    setOverlappingParams();
     const timeout = setTimeout(async () => {
       const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
       if (Number(order0.min) > maxBuyMin) {
-        order0.setMin(maxBuyMin.toFixed(decimals));
+        setMin(maxBuyMin.toFixed(decimals));
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -170,6 +178,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           marketPrice={marketPrice}
           spread={spread}
           marketPricePercentage={marketPricePercentage}
+          setMin={setMin}
+          setMax={setMax}
         />
       </article>
       <article className="flex w-full flex-col gap-20 rounded-10 bg-background-900 p-20">
@@ -192,6 +202,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
             order0={order0}
             order1={order1}
             marketPricePercentage={marketPricePercentage}
+            setMin={setMin}
+            setMax={setMax}
           />
         )}
       </article>

@@ -5,6 +5,7 @@ import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 
 type Props = {
   base: Token;
@@ -31,10 +32,6 @@ export const LimitRangeSection: FC<Props> = ({
 
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
-
-  const warningMarketPriceMessage = buy
-    ? `Notice: you offer to buy ${base.symbol} above current market price`
-    : `Notice: you offer to sell ${base.symbol} below current market price`;
 
   return (
     <fieldset className="flex flex-col gap-8">
@@ -69,7 +66,7 @@ export const LimitRangeSection: FC<Props> = ({
         <WarningMessageWithIcon message={overlappingOrdersPricesMessage} />
       )}
       {isOrderAboveOrBelowMarketPrice && (
-        <WarningMessageWithIcon message={warningMarketPriceMessage} />
+        <OutsideMarketPriceWarning base={base} buy={buy} />
       )}
     </fieldset>
   );
