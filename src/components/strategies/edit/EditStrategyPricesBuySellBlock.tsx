@@ -4,8 +4,8 @@ import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/Lim
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from 'libs/routing';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
-import { FullOutcome } from '../FullOutcome';
-import { BuySellHeader } from '../create/BuySellBlock/Header';
+import { FullOutcome } from 'components/strategies/FullOutcome';
+import { BuySellHeader } from 'components/strategies/create/BuySellBlock/Header';
 
 type EditStrategyPricesBuySellBlockProps = {
   base: Token;
@@ -15,11 +15,21 @@ type EditStrategyPricesBuySellBlockProps = {
   buy?: boolean;
   type: EditTypes;
   isOrdersOverlap: boolean;
+  isOrdersReversed: boolean;
 };
 
 export const EditStrategyPricesBuySellBlock: FC<
   EditStrategyPricesBuySellBlockProps
-> = ({ base, quote, balance, buy, order, type, isOrdersOverlap }) => {
+> = ({
+  base,
+  quote,
+  balance,
+  buy,
+  order,
+  type,
+  isOrdersOverlap,
+  isOrdersReversed,
+}) => {
   const titleId = useId();
 
   const headProps = { order, base, buy };
@@ -31,7 +41,7 @@ export const EditStrategyPricesBuySellBlock: FC<
     buy,
     order,
     isOrdersOverlap,
-    isEdit: true,
+    isOrdersReversed,
     inputTitle: (
       <>
         <span className="text-white/80">Set {buy ? 'Buy' : 'Sell'} Price</span>

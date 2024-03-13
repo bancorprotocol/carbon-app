@@ -1,18 +1,18 @@
 import { FormEvent, useMemo } from 'react';
-import { Button } from 'components/common/button';
 import { m } from 'libs/motion';
-import { BuySellBlock } from './BuySellBlock';
-import { items } from './variants';
+import { useWeb3 } from 'libs/web3';
+import { Button } from 'components/common/button';
+import { BuySellBlock } from 'components/strategies/create/BuySellBlock';
+import { items } from 'components/strategies/create/variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { useStrategyEventData } from './useStrategyEventData';
-import { carbonEvents } from 'services/events';
-import useInitEffect from 'hooks/useInitEffect';
-import { useWeb3 } from 'libs/web3';
-import { getStatusTextByTxStatus } from '../utils';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { CreateOverlappingStrategy } from './overlapping/CreateOverlappingStrategy';
+import { CreateOverlappingStrategy } from 'components/strategies/create/overlapping/CreateOverlappingStrategy';
 import { useStrategyWarning } from 'components/strategies/useWarning';
+import useInitEffect from 'hooks/useInitEffect';
+import { carbonEvents } from 'services/events';
 
 export const CreateStrategyOrders = ({
   base,
@@ -30,6 +30,7 @@ export const CreateStrategyOrders = ({
   isProcessing,
   isAwaiting,
   isOrdersOverlap,
+  isOrdersReversed,
   spread,
   setSpread,
 }: UseStrategyCreateReturn) => {
@@ -127,6 +128,7 @@ export const CreateStrategyOrders = ({
               isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
               strategyType={strategyType}
               isOrdersOverlap={isOrdersOverlap}
+              isOrdersReversed={isOrdersReversed}
             />
           )}
           {(strategyDirection === 'buy' ||
@@ -142,6 +144,7 @@ export const CreateStrategyOrders = ({
               isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
               strategyType={strategyType}
               isOrdersOverlap={isOrdersOverlap}
+              isOrdersReversed={isOrdersReversed}
             />
           )}
         </>
