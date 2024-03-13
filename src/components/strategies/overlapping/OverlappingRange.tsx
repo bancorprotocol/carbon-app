@@ -13,6 +13,8 @@ interface Props {
   quote: Token;
   order0: OrderCreate;
   order1: OrderCreate;
+  setMin: (value: string) => void;
+  setMax: (value: string) => void;
   marketPricePercentage: MarketPricePercentage;
 }
 
@@ -36,8 +38,8 @@ export const OverlappingRange: FC<Props> = (props) => {
       quote={quote}
       min={order0.min}
       max={order1.max}
-      setMin={order0.setMin}
-      setMax={order1.setMax}
+      setMin={props.setMin}
+      setMax={props.setMax}
       minLabel="Min Buy Price"
       maxLabel="Max Sell Price"
       error={order0.rangeError}
