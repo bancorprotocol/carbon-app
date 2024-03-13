@@ -26,7 +26,8 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     const createForm = new CreateStrategyDriver(page, testCase);
     const overlappingForm = createForm.getOverlappingForm();
     await overlappingForm.budgetBase().fill(sell.budget);
-    await page.getByText('Create Strategy').click();
+    await createForm.submit();
+
     await page.waitForURL('/', { timeout: 10_000 });
 
     const myStrategies = new MyStrategyDriver(page);
