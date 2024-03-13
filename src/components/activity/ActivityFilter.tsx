@@ -4,7 +4,11 @@ import { Token } from 'libs/tokens';
 import { activityActionName } from './utils';
 import { toPairSlug } from 'utils/pairSearch';
 import { useList } from 'hooks/useList';
-import { ChangeEvent } from 'react';
+import { useId } from 'react';
+import { Combobox, Listbox, Option } from 'components/common/combobox';
+import { getLowestBits } from 'utils/helpers';
+import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
+import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
 
 interface ActivityTokens {
   base: Token;
@@ -12,9 +16,9 @@ interface ActivityTokens {
 }
 
 interface ActivitySearchParams {
-  pair: string;
-  strategyId: string;
-  action: string;
+  pair: string[];
+  strategyId: string[];
+  action: string[];
 }
 
 const idMap = (activity: Activity[]) => {
@@ -34,19 +38,33 @@ const pairMap = (activity: Activity[]) => {
   );
 };
 export const ActivityFilter = () => {
+  const formId = useId();
   const {
     all: activities,
     searchParams,
     setSearchParams,
   } = useList<Activity, ActivitySearchParams>();
 
-  const ids = idMap(activities);
-  const pairs = pairMap(activities);
-  const actions = Array.from(new Set(activities.map((a) => a.action)));
+  const allIds = idMap(activities);
+  const allPairs = pairMap(activities);
+  const allActions = Array.from(new Set(activities.map((a) => a.action)));
 
-  const updateParams = (e: ChangeEvent<HTMLFormElement>) => {
-    const data = new FormData(e.currentTarget);
-    setSearchParams(Object.fromEntries(data.entries()));
+  console.log(searchParams);
+  const { pair, strategyId, action } = searchParams;
+  // const strategyIds = searchParams.strategyId?.split(',') ?? [];
+  // const pairs = searchParams.pair?.split(',') ?? [];
+  // const actions = searchParams.action?.split(',') ?? [];
+
+  const updateParams = () => {
+    const selector = `input[type="checkbox"][form="${formId}"]:checked`;
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(selector);
+    const params: Record<string, FormDataEntryValue[]> = {};
+    for (const checkbox of checkboxes) {
+      const name = checkbox.name;
+      params[name] ||= [];
+      params[name].push(checkbox.value);
+    }
+    setSearchParams(params);
   };
 
   return (
@@ -55,46 +73,65 @@ export const ActivityFilter = () => {
       role="search"
       onChange={updateParams}
     >
-      <select
+      <Combobox
+        form={formId}
         name="strategyId"
-        className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
-      >
-        <option key="empty" value="">
-          Select a strategy
-        </option>
-        {mapOver(ids, ([key, { base, quote }]) => (
-          <option key={key} value={key}>
-            {base.symbol}/{quote.symbol}
-          </option>
-        ))}
-      </select>
-      <select
+        value={strategyId ?? []}
+        icon={<IconSearch className="w-14 text-primary" />}
+        label={
+          strategyId?.length
+            ? `${strategyId.length} Strategies Selected`
+            : 'Select Strategies'
+        }
+        filterLabel="Search by ID"
+        listbox={
+          <Listbox>
+            {mapOver(allIds, ([key, { base, quote }]) => (
+              <Option key={key} value={getLowestBits(key)}>
+                {getLowestBits(key)} - {base.symbol}/{quote.symbol}
+              </Option>
+            ))}
+          </Listbox>
+        }
+      />
+      <Combobox
+        form={formId}
         name="pair"
-        className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
-      >
-        <option key="empty" value="">
-          Select a Pair
-        </option>
-        {mapOver(pairs, ([key, { base, quote }]) => (
-          <option key={key} value={key}>
-            {base.symbol}/{quote.symbol}
-          </option>
-        ))}
-      </select>
-      <select
+        value={pair ?? []}
+        icon={<IconPair className="w-14 text-primary" />}
+        label={pair?.length ? `${pair?.length} Pairs Selected` : 'Select Pair'}
+        filterLabel="Search by Pair"
+        listbox={
+          <Listbox>
+            {mapOver(allPairs, ([key, { base, quote }]) => (
+              <Option key={key} value={key}>
+                {base.symbol}/{quote.symbol}
+              </Option>
+            ))}
+          </Listbox>
+        }
+      />
+      <Combobox
+        form={formId}
         name="action"
-        value={searchParams.action}
-        className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
-      >
-        <option key="empty" value="">
-          Select an Action
-        </option>
-        {actions.map((action) => (
-          <option key={action} value={action}>
-            {activityActionName[action]}
-          </option>
-        ))}
-      </select>
+        value={action ?? []}
+        icon={<IconSearch className="w-14 text-primary" />}
+        label={
+          action?.length
+            ? `${action.length} Actions Selected`
+            : 'Select Actions'
+        }
+        filterLabel="Search by Action"
+        listbox={
+          <Listbox>
+            {allActions.map((action) => (
+              <Option key={action} value={action}>
+                {activityActionName[action]}
+              </Option>
+            ))}
+          </Listbox>
+        }
+      />
     </form>
   );
 };

@@ -12,7 +12,7 @@
 export const exist = <T>(v?: T | null): v is T => v !== undefined && v !== null;
 
 export const unique = <T>(values: T[]) => Array.from(new Set(values));
-export const mapOver = <K, V>(
+export const mapOver = <K, V, O>(
   map: Map<K, V>,
-  cb: (keyvalue: [key: K, value: V]) => any
+  cb: (keyvalue: [key: K, value: V]) => O
 ) => Array.from(map.entries()).map(cb);
