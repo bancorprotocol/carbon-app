@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import {
+  CreateStrategyDriver,
   CreateStrategyTestCase,
   MyStrategyDriver,
   assertRecurringTestCase,
@@ -27,7 +28,9 @@ export const undercutStrategyTest = (testCase: CreateStrategyTestCase) => {
       timeout: 10_000,
     });
 
-    await page.getByText('Create Strategy').click();
+    const createForm = new CreateStrategyDriver(page, testCase);
+    await createForm.submit();
+
     await page.waitForURL('/', { timeout: 10_000 });
 
     const myStrategies = new MyStrategyDriver(page);

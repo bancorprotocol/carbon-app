@@ -1,5 +1,6 @@
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
 import { OrderCreate } from './create/useOrder';
+import { isMaxBelowMarket, isMinAboveMarket } from './overlapping/utils';
 
 interface ValidOrderParams {
   isRange: boolean;
@@ -61,4 +62,32 @@ export const getStatusTextByTxStatus = (
   if (isAwaiting) return 'Waiting for Confirmation';
   if (isProcessing) return 'Processing';
   return;
+};
+
+interface HasWarningParams {
+  order0: OrderCreate;
+  order1: OrderCreate;
+  buyOutsideMarket: boolean;
+  sellOutsideMarket: boolean;
+  isOverlapping: boolean;
+}
+
+export const hasWarning = ({
+  order0,
+  order1,
+  buyOutsideMarket,
+  sellOutsideMarket,
+  isOverlapping,
+}: HasWarningParams) => {
+  if (isOverlapping) {
+    const minAboveMarket = isMinAboveMarket(order0);
+    const maxBelowMarket = isMaxBelowMarket(order1);
+    return minAboveMarket || maxBelowMarket;
+  } else {
+    return (
+      checkIfOrdersOverlapNew(order0, order1) ||
+      buyOutsideMarket ||
+      sellOutsideMarket
+    );
+  }
 };
