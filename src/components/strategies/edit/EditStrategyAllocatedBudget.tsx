@@ -7,8 +7,8 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from 'libs/routing';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
-import { TooltipTokenAmount } from './tooltip/TooltipTokenAmount';
-import { TooltipTokenRange } from './tooltip/TooltipTokenRange';
+import { TooltipTokenAmount } from 'components/strategies/edit/tooltip/TooltipTokenAmount';
+import { TooltipTokenRange } from 'components/strategies/edit/tooltip/TooltipTokenRange';
 
 const shouldDisplayDistributeByType: {
   [key in EditTypes]: boolean;
@@ -167,7 +167,7 @@ export const EditStrategyAllocatedBudget: FC<{
               'When updating the rates, the allocated budget will be distributed equally across the entire range'
             }
           />
-          Strategy budget will be distribute across entire range
+          Strategy budget will be distributed across entire range
         </div>
       )}
     </>
