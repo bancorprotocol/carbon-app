@@ -3,9 +3,7 @@ import { Token } from 'libs/tokens';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { InputLimit } from 'components/strategies/create/BuySellBlock/InputLimit';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 
 type Props = {
   base: Token;
@@ -14,7 +12,7 @@ type Props = {
   inputTitle: ReactNode | string;
   buy?: boolean;
   isOrdersOverlap: boolean;
-  isEdit?: boolean;
+  isOrdersReversed: boolean;
 };
 
 export const LimitRangeSection: FC<Props> = ({
@@ -24,7 +22,7 @@ export const LimitRangeSection: FC<Props> = ({
   inputTitle,
   buy = false,
   isOrdersOverlap,
-  isEdit,
+  isOrdersReversed,
 }) => {
   const { isRange } = order;
   const { marketPricePercentage, isOrderAboveOrBelowMarketPrice } =
@@ -32,6 +30,19 @@ export const LimitRangeSection: FC<Props> = ({
 
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
+
+  const warningMarketPriceMessage = buy
+    ? `Notice: you offer to buy ${base.symbol} above current market price`
+    : `Notice: you offer to sell ${base.symbol} below current market price`;
+
+  const getWarnings = () => {
+    let warnings = [];
+    if (isOrdersOverlap && !isOrdersReversed)
+      warnings.push(overlappingOrdersPricesMessage);
+    if (isOrderAboveOrBelowMarketPrice)
+      warnings.push(warningMarketPriceMessage);
+    return warnings;
+  };
 
   return (
     <fieldset className="flex flex-col gap-8">
@@ -50,23 +61,21 @@ export const LimitRangeSection: FC<Props> = ({
           base={base}
           buy={buy}
           marketPricePercentages={marketPricePercentage}
+          isOrdersReversed={isOrdersReversed}
+          warnings={getWarnings()}
         />
       ) : (
         <InputLimit
           token={quote}
           price={order.price}
           setPrice={order.setPrice}
-          error={isEdit ? undefined : order.priceError}
+          error={order.priceError}
           setPriceError={order.setPriceError}
           buy={buy}
           marketPricePercentage={marketPricePercentage}
+          isOrdersReversed={isOrdersReversed}
+          warnings={getWarnings()}
         />
-      )}
-      {isOrdersOverlap && !buy && (
-        <WarningMessageWithIcon message={overlappingOrdersPricesMessage} />
-      )}
-      {isOrderAboveOrBelowMarketPrice && (
-        <OutsideMarketPriceWarning base={base} buy={buy} />
       )}
     </fieldset>
   );
