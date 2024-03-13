@@ -1,0 +1,12 @@
+.option.selected {
+  order: -1;
+}
+.option.hidden:not(.selected) {
+  display: none;
+}
+/* Last selected checkbox that is followed by a visible checkbox */
+.option.selected:nth-last-child(1 of .selected):not(:nth-last-child(1 of :not(.hidden))),
+.option.selected:last-child {
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}

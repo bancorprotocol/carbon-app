@@ -5,9 +5,7 @@ import {
   FC,
   useId,
   useContext,
-  isValidElement,
-  Children,
-  ReactElement,
+  ChangeEvent,
 } from 'react';
 import {
   FloatingFocusManager,
@@ -25,6 +23,7 @@ import {
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { cn } from 'utils/helpers';
+import style from './index.module.css';
 
 interface ComboboxCtx {
   name: string;
@@ -55,7 +54,8 @@ export const Combobox: FC<ComboboxProps> = (props) => {
   const { name, value: selected = [], form } = props;
   const rootId = useId();
   const [open, setOpen] = useState(false);
-  const [filter, setFilter] = useState('');
+  const [empty, setEmpty] = useState(false);
+  // const [filter, setFilter] = useState('');
   // Get properties to calculate positioning
   const { refs, floatingStyles, context } = useFloating({
     placement: 'bottom',
@@ -73,6 +73,23 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     useDismiss(context),
     useRole(context),
   ]);
+
+  const filter = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    if (!value) return setEmpty(false);
+    const options = document.querySelectorAll(`.${style.option}`)!;
+    let empty = true;
+    for (const option of options) {
+      if (option.textContent?.toLowerCase().includes(value)) {
+        empty = false;
+        option.classList.remove(style.hidden);
+      } else {
+        option.classList.add(style.hidden);
+        if (option.classList.contains(style.selected)) setEmpty(true);
+      }
+    }
+    setEmpty(empty);
+  };
 
   const onChange = () => {
     if (!props.onChange) return;
@@ -136,8 +153,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                   className="border-none bg-transparent text-14 outline-none"
                   aria-label={filterLabel}
                   placeholder={filterLabel}
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value.toLowerCase())}
+                  onChange={filter}
                 />
               </div>
               <button
@@ -147,42 +163,18 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               >
                 Reset Filter
               </button>
-              <Listbox filter={filter}>{options}</Listbox>
+              <div
+                role="listbox"
+                className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto"
+              >
+                {options}
+                {empty && <output>Empty</output>}
+              </div>
             </div>
           </FloatingFocusManager>
         )}
       </FloatingPortal>
     </ComboboxContext.Provider>
-  );
-};
-
-interface ListboxProps {
-  filter: string;
-  children: ReactNode;
-}
-export const Listbox: FC<ListboxProps> = ({ filter, children }) => {
-  const { selected } = useContext(ComboboxContext);
-  const checkedOptions: ReactElement[] = [];
-  const uncheckedOptions: ReactElement[] = [];
-  Children.forEach(children, (child) => {
-    if (!isValidElement(child)) return;
-    if (selected.includes(child.props.value)) return checkedOptions.push(child);
-    const text = Children.toArray(child.props.children)
-      .filter((c) => typeof c === 'string')
-      .join(' ')
-      .toLowerCase();
-    console.log(text);
-    if (text.includes(filter)) uncheckedOptions.push(child);
-  });
-  return (
-    <div
-      role="listbox"
-      className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto"
-    >
-      {checkedOptions}
-      {!!checkedOptions.length && <hr className="border-white/40" />}
-      {uncheckedOptions}
-    </div>
   );
 };
 
@@ -196,7 +188,11 @@ export const Option: FC<OptionProps> = (props) => {
   const checked = selected.includes(value);
   const id = useId();
   return (
-    <label htmlFor={id} className="flex items-center gap-8">
+    <div
+      className={cn('flex items-center gap-8', style.option, {
+        [style.selected]: checked,
+      })}
+    >
       <input
         id={id}
         form={form}
@@ -206,7 +202,9 @@ export const Option: FC<OptionProps> = (props) => {
         defaultChecked={checked}
         className="h-14 w-14"
       />
-      {children}
-    </label>
+      <label htmlFor={id} className="flex items-center gap-8">
+        {children}
+      </label>
+    </div>
   );
 };
