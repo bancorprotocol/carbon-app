@@ -1,6 +1,9 @@
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
-import { OrderCreate } from './create/useOrder';
-import { isMaxBelowMarket, isMinAboveMarket } from './overlapping/utils';
+import { OrderCreate } from 'components/strategies/create/useOrder';
+import {
+  isMaxBelowMarket,
+  isMinAboveMarket,
+} from 'components/strategies/overlapping/utils';
 
 interface ValidOrderParams {
   isRange: boolean;
