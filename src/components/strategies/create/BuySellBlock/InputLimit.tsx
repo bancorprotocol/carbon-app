@@ -15,7 +15,7 @@ type InputLimitProps = {
   token: Token;
   error?: string;
   warnings?: string[];
-  setPriceError: (error: string) => void;
+  setPriceError?: (error: string) => void;
   buy?: boolean;
   marketPricePercentage: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
@@ -50,7 +50,7 @@ export const InputLimit: FC<InputLimitProps> = ({
     let errorMessage = '';
     if (isOrdersReversed) errorMessage = errorReversedOrders;
     if (+price <= 0) errorMessage = errorAboveZero;
-    setPriceError(errorMessage);
+    if (setPriceError) setPriceError(errorMessage);
     if (errorMessage) {
       carbonEvents.strategy.strategyErrorShow({
         buy,

@@ -19,7 +19,7 @@ const shouldDisplayDistributeByType: {
   withdraw: true,
 };
 
-export const EditStrategyAllocatedBudget: FC<{
+interface Props {
   order: OrderCreate;
   base: Token;
   quote: Token;
@@ -27,7 +27,16 @@ export const EditStrategyAllocatedBudget: FC<{
   buy?: boolean;
   showMaxCb?: () => void;
   type: EditTypes;
-}> = ({ base, quote, balance, order, showMaxCb, type, buy = false }) => {
+}
+export const EditStrategyAllocatedBudget: FC<Props> = ({
+  base,
+  quote,
+  balance,
+  order,
+  showMaxCb,
+  type,
+  buy = false,
+}) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const isDistributeToggleOn =

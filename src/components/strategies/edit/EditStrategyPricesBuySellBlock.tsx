@@ -32,6 +32,8 @@ export const EditStrategyPricesBuySellBlock: FC<
 }) => {
   const titleId = useId();
 
+  const isEmptyOrder = !Number(balance);
+
   const headProps = { order, base, buy };
 
   const sectionProps = {
@@ -50,6 +52,7 @@ export const EditStrategyPricesBuySellBlock: FC<
         </span>
       </>
     ),
+    isEmptyOrder,
   };
 
   const budgetProps = {

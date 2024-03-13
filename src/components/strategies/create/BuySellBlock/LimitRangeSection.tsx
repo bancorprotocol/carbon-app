@@ -13,6 +13,7 @@ type Props = {
   buy?: boolean;
   isOrdersOverlap: boolean;
   isOrdersReversed: boolean;
+  isEmptyOrder?: boolean;
 };
 
 export const LimitRangeSection: FC<Props> = ({
@@ -23,6 +24,7 @@ export const LimitRangeSection: FC<Props> = ({
   buy = false,
   isOrdersOverlap,
   isOrdersReversed,
+  isEmptyOrder,
 }) => {
   const { isRange } = order;
   const { marketPricePercentage, isOrderAboveOrBelowMarketPrice } =
@@ -69,8 +71,8 @@ export const LimitRangeSection: FC<Props> = ({
           token={quote}
           price={order.price}
           setPrice={order.setPrice}
-          error={order.priceError}
-          setPriceError={order.setPriceError}
+          error={isEmptyOrder ? undefined : order.priceError}
+          setPriceError={isEmptyOrder ? undefined : order.setPriceError}
           buy={buy}
           marketPricePercentage={marketPricePercentage}
           isOrdersReversed={isOrdersReversed}
