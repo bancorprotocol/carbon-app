@@ -1,10 +1,10 @@
 import { Activity } from 'libs/queries/extApi/activity';
-import { toArray } from 'utils/helpers';
+import { GroupSchema, toArray } from 'utils/helpers';
 
 export interface ActivitySearchParams {
-  pair: string[];
-  strategyId: string[];
-  action: string[];
+  pairs: string[];
+  strategyIds: string[];
+  actions: string[];
 }
 
 export const activityActionName = {
@@ -19,23 +19,23 @@ export const activityActionName = {
   pause: 'Pause',
 };
 
-export const activitySchema = {
-  pair: toArray([]),
-  action: toArray([]),
-  strategyId: toArray([]),
+export const activitySchema: GroupSchema<ActivitySearchParams> = {
+  pairs: toArray([]),
+  actions: toArray([]),
+  strategyIds: toArray([]),
 };
 
 export const filterActivity = (
   list: Activity[],
   searchParams: ActivitySearchParams
 ) => {
-  const { action, pair } = searchParams;
+  const { actions, pairs } = searchParams;
   return list.filter((activity) => {
-    if (action.length && !action.includes(activity.action)) return false;
-    if (pair.length) {
+    if (actions.length && !actions.includes(activity.action)) return false;
+    if (pairs.length) {
       const base = activity.strategy.base.address.toLowerCase();
       const quote = activity.strategy.quote.address.toLowerCase();
-      if (!pair.includes(base) || pair.includes(quote)) return false;
+      if (!pairs.includes(base) || pairs.includes(quote)) return false;
     }
     return true;
   });

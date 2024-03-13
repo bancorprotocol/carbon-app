@@ -8,6 +8,7 @@ import {
   toNumber,
   SearchParams,
 } from 'utils/helpers';
+import { isEmpty } from 'utils/helpers/operators';
 
 interface SortParams {
   sortBy: string;
@@ -95,20 +96,22 @@ export function ListProvider<T, P>(props: ListProviderProps<T, P>) {
         replace: true,
         resetScroll: false,
         params: (params) => params,
-        search: (search) => {
+        search: (currentSearch) => {
+          const updates = structuredClone(changes);
+          const search = structuredClone(currentSearch);
           for (const [key, value] of Object.entries(changes)) {
-            if (value === '' || value === null || value === undefined) {
-              delete (changes as any)[key];
+            if (isEmpty(value)) {
+              delete (updates as any)[key];
               if (key in search) delete (search as any)[key];
             }
           }
-          return { ...search, ...changes };
+          return { ...search, ...updates };
         },
       });
     },
     [nav]
   );
-  console.log(searchParams);
+
   // Filter, slice & sort the list
   const { limit, offset, order, sortBy } = searchParams;
   const filtered = filter(all, searchParams);

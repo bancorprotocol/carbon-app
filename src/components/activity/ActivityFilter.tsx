@@ -1,41 +1,42 @@
 import { Activity } from 'libs/queries/extApi/activity';
-import { mapOver } from 'utils/helpers/operators';
 import { Token } from 'libs/tokens';
-import { activityActionName } from './utils';
+import { ActivitySearchParams, activityActionName } from './utils';
 import { toPairSlug } from 'utils/pairSearch';
 import { useList } from 'hooks/useList';
 import { useId } from 'react';
-import { Combobox, Listbox, Option } from 'components/common/combobox';
+import { Combobox, Option } from 'components/common/combobox';
 import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
 
-interface ActivityTokens {
+interface DisplayID {
+  id: string;
+  base: Token;
+  quote: Token;
+}
+interface DisplayPair {
+  pair: string;
   base: Token;
   quote: Token;
 }
 
-interface ActivitySearchParams {
-  pair: string[];
-  strategyId: string[];
-  action: string[];
-}
-
-const idMap = (activity: Activity[]) => {
-  return new Map<string, ActivityTokens>(
-    activity.map(({ strategy }) => [
-      strategy.id,
-      { base: strategy.base, quote: strategy.quote },
-    ])
-  );
+const getAllIds = (activities: Activity[]) => {
+  const map = new Map<string, DisplayID>();
+  for (const activity of activities) {
+    const { base, quote } = activity.strategy;
+    const id = getLowestBits(activity.strategy.id);
+    map.set(id, { id, base, quote });
+  }
+  return Array.from(map.values());
 };
-const pairMap = (activity: Activity[]) => {
-  return new Map<string, ActivityTokens>(
-    activity.map(({ strategy }) => [
-      toPairSlug(strategy.base, strategy.quote),
-      { base: strategy.base, quote: strategy.quote },
-    ])
-  );
+const getAllPairs = (activities: Activity[]) => {
+  const map = new Map<string, DisplayPair>();
+  for (const activity of activities) {
+    const { base, quote } = activity.strategy;
+    const pair = toPairSlug(base, quote);
+    map.set(pair, { pair, base, quote });
+  }
+  return Array.from(map.values());
 };
 export const ActivityFilter = () => {
   const formId = useId();
@@ -45,24 +46,20 @@ export const ActivityFilter = () => {
     setSearchParams,
   } = useList<Activity, ActivitySearchParams>();
 
-  const allIds = idMap(activities);
-  const allPairs = pairMap(activities);
+  const allIds = getAllIds(activities);
+  const allPairs = getAllPairs(activities);
   const allActions = Array.from(new Set(activities.map((a) => a.action)));
 
-  console.log(searchParams);
-  const { pair, strategyId, action } = searchParams;
-  // const strategyIds = searchParams.strategyId?.split(',') ?? [];
-  // const pairs = searchParams.pair?.split(',') ?? [];
-  // const actions = searchParams.action?.split(',') ?? [];
+  const { pairs, strategyIds, actions } = searchParams;
 
   const updateParams = () => {
-    const selector = `input[type="checkbox"][form="${formId}"]:checked`;
+    const selector = `input[type="checkbox"][form="${formId}"]`;
     const checkboxes = document.querySelectorAll<HTMLInputElement>(selector);
-    const params: Record<string, FormDataEntryValue[]> = {};
+    const params: Record<string, string[]> = {};
     for (const checkbox of checkboxes) {
       const name = checkbox.name;
       params[name] ||= [];
-      params[name].push(checkbox.value);
+      if (checkbox.checked) params[name].push(checkbox.value);
     }
     setSearchParams(params);
   };
@@ -75,62 +72,50 @@ export const ActivityFilter = () => {
     >
       <Combobox
         form={formId}
-        name="strategyId"
-        value={strategyId ?? []}
+        name="strategyIds"
+        value={strategyIds}
         icon={<IconSearch className="w-14 text-primary" />}
         label={
-          strategyId?.length
-            ? `${strategyId.length} Strategies Selected`
+          strategyIds.length
+            ? `${strategyIds.length} Strategies Selected`
             : 'Select Strategies'
         }
         filterLabel="Search by ID"
-        listbox={
-          <Listbox>
-            {mapOver(allIds, ([key, { base, quote }]) => (
-              <Option key={key} value={getLowestBits(key)}>
-                {getLowestBits(key)} - {base.symbol}/{quote.symbol}
-              </Option>
-            ))}
-          </Listbox>
-        }
+        options={allIds.map(({ id, base, quote }) => (
+          <Option key={id} value={id}>
+            {id} - {base.symbol}/{quote.symbol}
+          </Option>
+        ))}
       />
       <Combobox
         form={formId}
-        name="pair"
-        value={pair ?? []}
+        name="pairs"
+        value={pairs}
         icon={<IconPair className="w-14 text-primary" />}
-        label={pair?.length ? `${pair?.length} Pairs Selected` : 'Select Pair'}
+        label={pairs.length ? `${pairs.length} Pairs Selected` : 'Select Pair'}
         filterLabel="Search by Pair"
-        listbox={
-          <Listbox>
-            {mapOver(allPairs, ([key, { base, quote }]) => (
-              <Option key={key} value={key}>
-                {base.symbol}/{quote.symbol}
-              </Option>
-            ))}
-          </Listbox>
-        }
+        options={allPairs.map(({ pair, base, quote }) => (
+          <Option key={pair} value={pair}>
+            {base.symbol}/{quote.symbol}
+          </Option>
+        ))}
       />
       <Combobox
         form={formId}
-        name="action"
-        value={action ?? []}
+        name="actions"
+        value={actions}
         icon={<IconSearch className="w-14 text-primary" />}
         label={
-          action?.length
-            ? `${action.length} Actions Selected`
+          actions.length
+            ? `${actions.length} Actions Selected`
             : 'Select Actions'
         }
         filterLabel="Search by Action"
-        listbox={
-          <Listbox>
-            {allActions.map((action) => (
-              <Option key={action} value={action}>
-                {activityActionName[action]}
-              </Option>
-            ))}
-          </Listbox>
-        }
+        options={allActions.map((action) => (
+          <Option key={action} value={action}>
+            {activityActionName[action]}
+          </Option>
+        ))}
       />
     </form>
   );

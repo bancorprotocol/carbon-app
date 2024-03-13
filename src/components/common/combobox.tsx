@@ -47,7 +47,7 @@ interface ComboboxProps {
   label: ReactNode;
   /** Label used for the input used to filter the options */
   filterLabel: string;
-  listbox: ReactNode;
+  options: ReactNode;
   onChange?: (value: string[]) => any;
 }
 
@@ -55,6 +55,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
   const { name, value: selected = [], form } = props;
   const rootId = useId();
   const [open, setOpen] = useState(false);
+  const [filter, setFilter] = useState('');
   // Get properties to calculate positioning
   const { refs, floatingStyles, context } = useFloating({
     placement: 'bottom',
@@ -90,7 +91,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     checkboxes.forEach((checkbox) => checkbox.click());
   };
 
-  const { icon, label, listbox, filterLabel } = props;
+  const { icon, label, options, filterLabel } = props;
 
   const ctx = {
     name,
@@ -135,6 +136,8 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                   className="border-none bg-transparent text-14 outline-none"
                   aria-label={filterLabel}
                   placeholder={filterLabel}
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value.toLowerCase())}
                 />
               </div>
               <button
@@ -144,7 +147,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               >
                 Reset Filter
               </button>
-              {listbox}
+              <Listbox filter={filter}>{options}</Listbox>
             </div>
           </FloatingFocusManager>
         )}
@@ -154,17 +157,22 @@ export const Combobox: FC<ComboboxProps> = (props) => {
 };
 
 interface ListboxProps {
+  filter: string;
   children: ReactNode;
 }
-export const Listbox: FC<ListboxProps> = ({ children }) => {
+export const Listbox: FC<ListboxProps> = ({ filter, children }) => {
   const { selected } = useContext(ComboboxContext);
   const checkedOptions: ReactElement[] = [];
   const uncheckedOptions: ReactElement[] = [];
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
-    selected.includes(child.props.value)
-      ? checkedOptions.push(child)
-      : uncheckedOptions.push(child);
+    if (selected.includes(child.props.value)) return checkedOptions.push(child);
+    const text = Children.toArray(child.props.children)
+      .filter((c) => typeof c === 'string')
+      .join(' ')
+      .toLowerCase();
+    console.log(text);
+    if (text.includes(filter)) uncheckedOptions.push(child);
   });
   return (
     <div
@@ -172,7 +180,7 @@ export const Listbox: FC<ListboxProps> = ({ children }) => {
       className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto"
     >
       {checkedOptions}
-      {!!checkedOptions.length && <hr className="bg-white/40" />}
+      {!!checkedOptions.length && <hr className="border-white/40" />}
       {uncheckedOptions}
     </div>
   );

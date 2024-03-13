@@ -16,3 +16,13 @@ export const mapOver = <K, V, O>(
   map: Map<K, V>,
   cb: (keyvalue: [key: K, value: V]) => O
 ) => Array.from(map.entries()).map(cb);
+
+/** Check is a value is empty. Mostly used to determine if a value should be in the search params */
+export const isEmpty = (value: any) => {
+  return (
+    value === '' ||
+    value === null ||
+    value === undefined ||
+    (Array.isArray(value) && !value.length)
+  );
+};
