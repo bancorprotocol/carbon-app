@@ -8,6 +8,7 @@ import { Combobox, Option } from 'components/common/combobox';
 import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
+import { TokensOverlap } from 'components/common/tokensOverlap';
 
 interface DisplayID {
   id: string;
@@ -80,7 +81,7 @@ export const ActivityFilter = () => {
             ? `${strategyIds.length} Strategies Selected`
             : 'Select Strategies'
         }
-        filterLabel="Search by ID"
+        filterLabel="Search by ID or Symbol"
         options={allIds.map(({ id, base, quote }) => (
           <Option key={id} value={id}>
             {id} - {base.symbol}/{quote.symbol}
@@ -96,6 +97,7 @@ export const ActivityFilter = () => {
         filterLabel="Search by Pair"
         options={allPairs.map(({ pair, base, quote }) => (
           <Option key={pair} value={pair}>
+            <TokensOverlap tokens={[base, quote]} className="h-14" />
             {base.symbol}/{quote.symbol}
           </Option>
         ))}

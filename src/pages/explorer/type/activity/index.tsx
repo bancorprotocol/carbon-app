@@ -27,7 +27,7 @@ export const ExplorerActivityPage = () => {
       return false;
     } else {
       const base = activity.strategy.base.address.toLowerCase();
-      const quote = activity.strategy.base.address.toLowerCase();
+      const quote = activity.strategy.quote.address.toLowerCase();
       return slug.includes(base) && slug.includes(quote);
     }
   });

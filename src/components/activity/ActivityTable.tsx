@@ -65,7 +65,7 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 };
 const budgetColor = (budget?: string) => {
   if (!budget) return '';
-  return new SafeDecimal(budget).isPositive() ? 'text-buy' : 'text-buy';
+  return new SafeDecimal(budget).isPositive() ? 'text-buy' : 'text-sell';
 };
 interface ActivityRowProps {
   activity: Activity;
@@ -111,7 +111,9 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity }) => {
         <td className={cn('pb-12 align-top', budgetColor(changes.buy?.budget))}>
           {tokenAmount(changes.buy?.budget, base) || '...'}
         </td>
-        <td className={cn('pb-12 align-top', budgetColor(changes.buy?.budget))}>
+        <td
+          className={cn('pb-12 align-top', budgetColor(changes.sell?.budget))}
+        >
           {tokenAmount(changes.sell?.budget, quote) || '...'}
         </td>
         <td className="px-24 pb-12 align-top">
@@ -130,10 +132,11 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity }) => {
   );
 };
 
-const formatter = new Intl.ListFormat('en', {
+const listFormatter = new Intl.ListFormat('en', {
   style: 'long',
   type: 'conjunction',
 });
+const abs = (num: string | number) => Math.abs(Number(num));
 const activityDescription = (activity: Activity) => {
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
@@ -146,31 +149,29 @@ const activityDescription = (activity: Activity) => {
       return `Buy ${base.symbol}: ${buyRange} / Sell ${base.symbol}: ${sellRange}.`;
     }
     case 'deposit': {
-      const buy = changes.buy?.budget && tokenAmount(changes.buy.budget, quote);
-      const sell =
-        changes.sell?.budget && tokenAmount(changes.sell.budget, base);
-      const amounts = formatter.format([buy, sell].filter(exist));
+      const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
+      const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
+      const amounts = listFormatter.format([buy, sell].filter(exist));
       return `${amounts} was deposited to the strategy.`;
     }
     case 'withdraw': {
-      const buy = changes.buy?.budget && tokenAmount(changes.buy.budget, quote);
-      const sell =
-        changes.sell?.budget && tokenAmount(changes.sell.budget, base);
-      const amounts = formatter.format([buy, sell].filter(exist));
+      const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
+      const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
+      const amounts = listFormatter.format([buy, sell].filter(exist));
       return `${amounts} was withdrawn to the wallet.`;
     }
     case 'buy': {
       // TODO: understand in which case changes.buy is undefined
-      const buy = Number(changes.buy?.budget ?? 0);
-      const sell = Number(changes.sell?.budget ?? 0);
+      const buy = abs(changes.buy?.budget ?? 0);
+      const sell = abs(changes.sell?.budget ?? 0);
       const bought = tokenAmount(buy, quote);
       const gained = tokenAmount(sell, base);
       const price = prettifyNumber(buy / sell);
       return `${bought} was bought for ${gained}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'sell': {
-      const buy = Number(changes.buy?.budget ?? 0);
-      const sell = Number(changes.sell?.budget ?? 0);
+      const buy = abs(changes.buy?.budget ?? 0);
+      const sell = abs(changes.sell?.budget ?? 0);
       const sold = tokenAmount(sell, quote);
       const gained = tokenAmount(buy, base);
       const price = prettifyNumber(sell / buy);
@@ -296,6 +297,6 @@ const ActionIcon: FC<ActionIconProps> = ({ action }) => {
   if (action === 'withdraw')
     return <IconArrowDown className="h-16 w-16 rotate-180" />;
   if (action === 'buy')
-    return <IconArrowDown className="rotate-120 h-16 w-16" />;
-  return <IconArrowDown className="rotate-60 h-16 w-16" />;
+    return <IconArrowDown className="h-16 w-16 rotate-[-60deg]" />;
+  return <IconArrowDown className="h-16 w-16 rotate-[-120deg]" />;
 };

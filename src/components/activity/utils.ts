@@ -25,6 +25,13 @@ export const activitySchema: GroupSchema<ActivitySearchParams> = {
   strategyIds: toArray([]),
 };
 
+export const activityHasPairs = (activity: Activity, pairs: string[]) => {
+  if (pairs.length === 0) return true;
+  const base = activity.strategy.base.address.toLowerCase();
+  const quote = activity.strategy.quote.address.toLowerCase();
+  return pairs.some((pair) => pair.includes(base) && pair.includes(quote));
+};
+
 export const filterActivity = (
   list: Activity[],
   searchParams: ActivitySearchParams
@@ -32,11 +39,7 @@ export const filterActivity = (
   const { actions, pairs } = searchParams;
   return list.filter((activity) => {
     if (actions.length && !actions.includes(activity.action)) return false;
-    if (pairs.length) {
-      const base = activity.strategy.base.address.toLowerCase();
-      const quote = activity.strategy.quote.address.toLowerCase();
-      if (!pairs.includes(base) || pairs.includes(quote)) return false;
-    }
+    if (!activityHasPairs(activity, pairs)) return false;
     return true;
   });
 };

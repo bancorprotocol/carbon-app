@@ -76,7 +76,6 @@ export const Combobox: FC<ComboboxProps> = (props) => {
 
   const filter = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
-    if (!value) return setEmpty(false);
     const options = document.querySelectorAll(`.${style.option}`)!;
     let empty = true;
     for (const option of options) {
@@ -168,7 +167,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                 className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto"
               >
                 {options}
-                {empty && <output>Empty</output>}
+                {empty && <Empty />}
               </div>
             </div>
           </FloatingFocusManager>
@@ -206,5 +205,19 @@ export const Option: FC<OptionProps> = (props) => {
         {children}
       </label>
     </div>
+  );
+};
+
+const Empty = () => {
+  return (
+    <output className="flex max-w-[200px] flex-col items-center p-16">
+      <div className="mb-16 grid place-items-center rounded-full bg-white/40 p-8">
+        <IconSearch className="h-16 w-16 self-center" />
+      </div>
+      <h3 className="mb-8 text-14 font-weight-500">Nothing found</h3>
+      <p className="text-center text-12 text-white/80">
+        Unfortunately we couldn't find what you're looking for.
+      </p>
+    </output>
   );
 };
