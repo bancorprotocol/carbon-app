@@ -15,13 +15,20 @@ export const fetchTokenLists = async () => {
   const res = await Promise.all(
     config.tokenLists.map(async (uri) => {
       const signal = AbortSignal.timeout(10000);
-      const res: TokenList = await fetch(uri, {
-        method: 'GET',
-        signal,
-      }).then((response) => response.json());
+      const response = await fetch(uri, { signal });
+      const result: TokenList = await response.json();
+
+      if (!response.ok) {
+        const error = (result as { error?: string }).error;
+        throw new Error(
+          error ||
+            `Failed to fetch token list. ${response.statusText} response received.`
+        );
+      }
+
       return {
-        ...res,
-        logoURI: getLogoByURI(res.logoURI),
+        ...result,
+        logoURI: getLogoByURI(result.logoURI),
       };
     })
   );

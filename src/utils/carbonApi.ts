@@ -37,14 +37,16 @@ const get = async <T>(endpoint: string, params: Object = {}): Promise<T> => {
     url.searchParams.set(key, value);
   }
   const response = await fetch(url);
-  const result = (await response.json()) as T & { error?: string };
+  const result = await response.json();
 
-  if (!response.ok)
+  if (!response.ok) {
+    const error = (result as { error?: string }).error;
     throw new Error(
-      result?.error ||
+      error ||
         `Response was not okay. ${response.statusText} response received.`
     );
-  return result;
+  }
+  return result as T;
 };
 
 const carbonApi = {
@@ -65,22 +67,19 @@ const carbonApi = {
   getMarketRateHistory: async (
     params: TokenPriceHistorySearch
   ): Promise<TokenPriceHistoryResult[]> => {
-    const data = await get<TokenPriceHistoryResult[]>('history/prices', params);
-    return data;
+    return get<TokenPriceHistoryResult[]>('history/prices', params);
   },
   getRoi: async (): Promise<RoiRow[]> => {
-    const data = await get<RoiRow[]>('roi');
-    return data;
+    return get<RoiRow[]>('roi');
   },
   getSimulator: async (
     params: SimulatorAPIParams
   ): Promise<SimulatorResult> => {
-    const data = await get<SimulatorResult>('simulate-create-strategy', {
+    return get<SimulatorResult>('simulate-create-strategy', {
       ...params,
       baseBudget: params.sellBudget,
       quoteBudget: params.buyBudget,
     });
-    return data;
   },
 };
 
