@@ -3,7 +3,7 @@ import { Token } from 'libs/tokens';
 import { ActivitySearchParams, activityActionName } from './utils';
 import { toPairSlug } from 'utils/pairSearch';
 import { useList } from 'hooks/useList';
-import { useId } from 'react';
+import { FC, useId } from 'react';
 import { Combobox, Option } from 'components/common/combobox';
 import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
@@ -44,7 +44,10 @@ const getAllPairs = (activities: Activity[]) => {
   }
   return Array.from(map.values());
 };
-export const ActivityFilter = () => {
+export interface ActivityFilterProps {
+  filters?: ('ids' | 'pairs')[];
+}
+export const ActivityFilter: FC<ActivityFilterProps> = ({ filters = [] }) => {
   const formId = useId();
   const {
     all: activities,
@@ -56,7 +59,7 @@ export const ActivityFilter = () => {
   const allPairs = getAllPairs(activities);
   const allActions = Array.from(new Set(activities.map((a) => a.action)));
 
-  const { pairs, strategyIds, actions, start, end } = searchParams;
+  const { pairs, ids, actions, start, end } = searchParams;
 
   const updateParams = () => {
     const selector = `input[form="${formId}"]`;
@@ -81,43 +84,49 @@ export const ActivityFilter = () => {
       role="search"
       onChange={updateParams}
     >
-      <Combobox
-        form={formId}
-        name="strategyIds"
-        value={strategyIds}
-        icon={<IconSearch className="w-14 text-primary" />}
-        label={
-          strategyIds.length
-            ? `${strategyIds.length} Strategies Selected`
-            : 'Select Strategies'
-        }
-        filterLabel="Search by ID or Symbol"
-        options={allIds.map(({ id, base, quote }) => (
-          <Option key={id} value={id}>
-            <span>{id}</span>
-            <svg width="4" height="4">
-              <circle cx="2" cy="2" r="2" fill="white" fillOpacity="0.4" />
-            </svg>
-            <span className="text-white/40">
+      {filters.includes('ids') && (
+        <Combobox
+          form={formId}
+          name="ids"
+          value={ids}
+          icon={<IconSearch className="w-14 text-primary" />}
+          label={
+            ids.length
+              ? `${ids.length} Strategies Selected`
+              : 'Select Strategies'
+          }
+          filterLabel="Search by ID or Symbol"
+          options={allIds.map(({ id, base, quote }) => (
+            <Option key={id} value={id}>
+              <span>{id}</span>
+              <svg width="4" height="4">
+                <circle cx="2" cy="2" r="2" fill="white" fillOpacity="0.4" />
+              </svg>
+              <span className="text-white/40">
+                {base.symbol}/{quote.symbol}
+              </span>
+            </Option>
+          ))}
+        />
+      )}
+      {filters.includes('pairs') && (
+        <Combobox
+          form={formId}
+          name="pairs"
+          value={pairs}
+          icon={<IconPair className="w-14 text-primary" />}
+          label={
+            pairs.length ? `${pairs.length} Pairs Selected` : 'Select Pair'
+          }
+          filterLabel="Search by Pair"
+          options={allPairs.map(({ pair, base, quote }) => (
+            <Option key={pair} value={pair}>
+              <TokensOverlap tokens={[base, quote]} className="h-14" />
               {base.symbol}/{quote.symbol}
-            </span>
-          </Option>
-        ))}
-      />
-      <Combobox
-        form={formId}
-        name="pairs"
-        value={pairs}
-        icon={<IconPair className="w-14 text-primary" />}
-        label={pairs.length ? `${pairs.length} Pairs Selected` : 'Select Pair'}
-        filterLabel="Search by Pair"
-        options={allPairs.map(({ pair, base, quote }) => (
-          <Option key={pair} value={pair}>
-            <TokensOverlap tokens={[base, quote]} className="h-14" />
-            {base.symbol}/{quote.symbol}
-          </Option>
-        ))}
-      />
+            </Option>
+          ))}
+        />
+      )}
       <Combobox
         form={formId}
         name="actions"

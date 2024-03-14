@@ -5,6 +5,7 @@ import {
   activitySchema,
   filterActivity,
 } from 'components/activity/utils';
+import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { useExplorerParams } from 'components/explorer';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { ListOptions, ListProvider } from 'hooks/useList';
@@ -16,7 +17,11 @@ export const ExplorerActivityPage = () => {
   const { type, slug } = useExplorerParams();
   const { strategies, isLoading } = useStrategyCtx();
 
-  if (isLoading || query.isLoading) return 'Loading';
+  if (isLoading || query.isLoading) {
+    return (
+      <CarbonLogoLoading className="h-[100px] self-center justify-self-center" />
+    );
+  }
 
   if (!strategies.length) return <StrategyCreateFirst />;
 
@@ -43,7 +48,9 @@ export const ExplorerActivityPage = () => {
 
   return (
     <ListProvider {...listOptions}>
-      <ActivitySection />
+      <ActivitySection
+        filters={type === 'wallet' ? ['ids', 'pairs'] : ['ids']}
+      />
     </ListProvider>
   );
 };

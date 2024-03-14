@@ -3,7 +3,7 @@ import { GroupSchema, toArray, toDate } from 'utils/helpers';
 
 export interface ActivitySearchParams {
   pairs: string[];
-  strategyIds: string[];
+  ids: string[];
   actions: string[];
   start?: Date;
   end?: Date;
@@ -24,7 +24,7 @@ export const activityActionName = {
 export const activitySchema: GroupSchema<ActivitySearchParams> = {
   pairs: toArray([]),
   actions: toArray([]),
-  strategyIds: toArray([]),
+  ids: toArray([]),
   start: toDate(),
   end: toDate(),
 };
