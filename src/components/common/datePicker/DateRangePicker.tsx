@@ -2,10 +2,12 @@ import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { subDays, isSameDay, subMonths } from 'date-fns';
-import { Dispatch, memo, ReactNode, useRef, useState } from 'react';
+import { Dispatch, memo, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
+import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
+import { cn } from 'utils/helpers';
 
 export const datePickerPresets: DatePickerPreset[] = [
   { label: 'Last 7 days', days: 6 },
@@ -20,10 +22,13 @@ export type DatePickerPreset = {
 };
 
 interface Props {
-  button: ReactNode;
+  /** Value used to be reset to when user click on reset */
   defaultStart?: number | string;
+  /** Value used to be reset to when user click on reset */
   defaultEnd?: number | string;
+  /** Current start value */
   start?: number | string;
+  /** Current end value */
   end?: number | string;
   onConfirm: (props: { start?: string; end?: string }) => void;
   setIsOpen: Dispatch<boolean>;
@@ -35,15 +40,34 @@ interface Props {
 
 export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
   const [isOpen, setIsOpen] = useState(false);
+  const startDate = dateFormatter.format(fromUnixUTC(props.start));
+  const endDate = dateFormatter.format(fromUnixUTC(props.end));
+
+  const hasDates = !!(props.start && props.end);
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
       type="button"
       aria-label="Pick date range"
-      className="flex items-center gap-8"
+      className={cn(
+        'flex items-center gap-8 rounded-full border-2 border-background-800 px-12 py-8 text-12',
+        'hover:border-background-700 hover:bg-background-800',
+        'active:border-background-600'
+      )}
       data-testid="date-picker-button"
     >
-      {props.button}
+      <CalendarIcon className="h-14 w-14 text-primary" />
+      <span
+        className="justify-self-end text-white/60"
+        data-testid="simulation-dates"
+      >
+        {hasDates ? `${startDate} – ${endDate}` : 'Select date range'}
+      </span>
+      <ChevronIcon
+        className={cn('h-12 w-12 text-white/80 transition-transform', {
+          'rotate-180': isOpen,
+        })}
+      />
     </button>
   );
 
@@ -80,8 +104,8 @@ const Content = (props: Props) => {
   const endRef = useRef<HTMLInputElement>(null);
   const now = new Date();
   const baseDate = getDefaultDateRange(
-    props.defaultStart ?? props.start,
-    props.defaultEnd ?? props.end
+    props.start ?? props.defaultStart,
+    props.end ?? props.defaultEnd
   );
   const [date, setDate] = useState(baseDate);
   const hasDates = !!(date?.from && date?.to);
@@ -206,22 +230,14 @@ export const DatePickerButton = memo(
 
     return (
       <>
-        <span className="flex h-24 w-24 items-center justify-center rounded-[12px] bg-white/10">
-          <CalendarIcon className="h-12 w-12" />
-        </span>
-
+        <CalendarIcon className="h-14 w-14 text-primary" />
         <span
-          className="justify-self-end text-14 text-white/80"
+          className="justify-self-end text-white/60"
           data-testid="simulation-dates"
         >
-          {hasDates ? (
-            <>
-              {startDate} – {endDate}
-            </>
-          ) : (
-            'Select date range'
-          )}
+          {hasDates ? `${startDate} – ${endDate}` : 'Select date range'}
         </span>
+        <ChevronIcon className="h-12 w-12 rotate-180 text-white/80" />
       </>
     );
   }

@@ -10,7 +10,6 @@ import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import {
-  DatePickerButton,
   DateRangePicker,
   datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
@@ -143,7 +142,6 @@ export const ActivityFilter = () => {
         // TODO: change it to the actual date
         start={start && toUnixUTC(start)}
         end={end && toUnixUTC(end)}
-        button={<DatePickerButton start={start} end={end} />}
         options={{
           disabled: { after: new Date() },
         }}

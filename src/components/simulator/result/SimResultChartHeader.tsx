@@ -1,9 +1,8 @@
 import {
-  DatePickerButton,
   DateRangePicker,
   datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
-import { subDays } from 'date-fns';
+import { startOfDay, sub, subDays } from 'date-fns';
 import { useNavigate } from 'libs/routing';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { SimResultChartTabs } from 'components/simulator/result/SimResultChartTabs';
@@ -12,7 +11,7 @@ import { SimulatorData } from 'libs/queries';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
-import { fromUnixUTC } from '../utils';
+import { toUnixUTC } from '../utils';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -58,15 +57,11 @@ export const SimResultChartHeader = ({
   const DateRangePickerMemo = useMemo(() => {
     return (
       <DateRangePicker
-        defaultStart={startUnix}
-        defaultEnd={endUnix}
+        defaultStart={toUnixUTC(sub(new Date(), { days: 364 }))}
+        defaultEnd={toUnixUTC(startOfDay(new Date()))}
+        start={startUnix}
+        end={endUnix}
         onConfirm={onDatePickerConfirm}
-        button={
-          <DatePickerButton
-            start={fromUnixUTC(startUnix)}
-            end={fromUnixUTC(endUnix)}
-          />
-        }
         presets={datePickerPresets}
         options={{ disabled: datePickerDisabledDays }}
         required

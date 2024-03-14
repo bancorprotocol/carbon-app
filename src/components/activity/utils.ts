@@ -40,10 +40,12 @@ export const filterActivity = (
   list: Activity[],
   searchParams: ActivitySearchParams
 ) => {
-  const { actions, pairs } = searchParams;
+  const { actions, pairs, start, end } = searchParams;
   return list.filter((activity) => {
     if (actions.length && !actions.includes(activity.action)) return false;
     if (!activityHasPairs(activity, pairs)) return false;
+    if (start && activity.date < start) return false;
+    if (end && activity.date > end) return false;
     return true;
   });
 };

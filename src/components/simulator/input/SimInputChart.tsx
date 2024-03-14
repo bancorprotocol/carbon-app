@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import {
-  DatePickerButton,
   DateRangePicker,
   datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
@@ -21,8 +20,9 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
-import { fromUnixUTC } from '../utils';
+import { toUnixUTC } from '../utils';
 import { useStore } from 'store';
+import { startOfDay, sub } from 'date-fns';
 
 interface Props {
   state: StrategyInputValues;
@@ -159,15 +159,11 @@ export const SimInputChart = ({
       <div className="mb-20 flex items-center justify-between">
         <h2 className="mr-20 text-20 font-weight-500">Price Chart</h2>
         <DateRangePicker
-          defaultStart={state.start}
-          defaultEnd={state.end}
+          defaultStart={toUnixUTC(sub(new Date(), { days: 364 }))}
+          defaultEnd={toUnixUTC(startOfDay(new Date()))}
+          start={state.start}
+          end={state.end}
           onConfirm={onDatePickerConfirm}
-          button={
-            <DatePickerButton
-              start={fromUnixUTC(state.start)}
-              end={fromUnixUTC(state.end)}
-            />
-          }
           presets={datePickerPresets}
           options={{
             disabled: debug.debugState.isE2E ? [] : datePickerDisabledDays,

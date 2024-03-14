@@ -55,7 +55,6 @@ export const Combobox: FC<ComboboxProps> = (props) => {
   const rootId = useId();
   const [open, setOpen] = useState(false);
   const [empty, setEmpty] = useState(false);
-  // const [filter, setFilter] = useState('');
   // Get properties to calculate positioning
   const { refs, floatingStyles, context } = useFloating({
     placement: 'bottom',
@@ -121,15 +120,15 @@ export const Combobox: FC<ComboboxProps> = (props) => {
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
         className={cn(
-          'flex items-center gap-4 rounded-full border-2 border-background-800 bg-background-900 px-12 py-8',
+          'flex items-center gap-8 rounded-full border-2 border-background-800 bg-background-900 px-12 py-8 text-12',
           'hover:border-background-700 hover:bg-background-800',
           'active:border-background-600'
         )}
       >
         {icon}
-        <span className="text-12 text-white/60">{label}</span>
+        <span className="text-white/60">{label}</span>
         <IconChevron
-          className={cn('w-14 text-white/60 transition-transform', {
+          className={cn('h-12 w-12 text-white/60 transition-transform', {
             'rotate-180': open,
           })}
         />
