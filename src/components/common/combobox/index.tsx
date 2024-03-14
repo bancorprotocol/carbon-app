@@ -179,10 +179,11 @@ export const Combobox: FC<ComboboxProps> = (props) => {
 
 interface OptionProps {
   value: string;
+  className?: string;
   children: ReactNode;
 }
 export const Option: FC<OptionProps> = (props) => {
-  const { value, children } = props;
+  const { value, children, className } = props;
   const { name, selected, form } = useContext(ComboboxContext);
   const checked = selected.includes(value);
   const id = useId();
@@ -201,7 +202,7 @@ export const Option: FC<OptionProps> = (props) => {
         defaultChecked={checked}
         className="h-14 w-14"
       />
-      <label htmlFor={id} className="flex items-center gap-8">
+      <label htmlFor={id} className={cn('flex items-center gap-8', className)}>
         {children}
       </label>
     </div>

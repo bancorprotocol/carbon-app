@@ -1,5 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { useContext, createContext, useCallback } from 'react';
+import { useContext, createContext, useCallback, useEffect } from 'react';
 import {
   GroupSchema,
   parseSchema,
@@ -153,16 +153,15 @@ export function usePagination() {
   const { limit, offset } = searchParams;
 
   const currentPage = Math.floor(offset / limit) + 1;
-  const maxPage = Math.floor((size - limit) / limit) + 1;
+  const maxPage = Math.ceil(Math.max(size - limit, 1) / limit);
 
   const setLimit = (limit: number) => setSearchParams({ limit });
   const setOffset = (offset: number) => setSearchParams({ offset });
 
   // Reset pagination to 0 when list size changes
-  // TODO: prevent this to be triggered on navigation
-  // useEffect(() => {
-  //   setSearchParams({ offset: 0 });
-  // }, [size, setSearchParams]);
+  useEffect(() => {
+    setSearchParams({ offset: 0 });
+  }, [size, setSearchParams]);
 
   return {
     limit,

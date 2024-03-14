@@ -84,7 +84,13 @@ export const ActivityFilter = () => {
         filterLabel="Search by ID or Symbol"
         options={allIds.map(({ id, base, quote }) => (
           <Option key={id} value={id}>
-            {id} - {base.symbol}/{quote.symbol}
+            <span>{id}</span>
+            <svg width="4" height="4">
+              <circle cx="2" cy="2" r="2" fill="white" fillOpacity="0.4" />
+            </svg>
+            <span className="text-white/40">
+              {base.symbol}/{quote.symbol}
+            </span>
           </Option>
         ))}
       />
