@@ -1,6 +1,10 @@
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { useActivity } from 'components/activity/useActivity';
-import { ActivitySearchParams } from 'components/activity/utils';
+import {
+  ActivitySearchParams,
+  activitySchema,
+  filterActivity,
+} from 'components/activity/utils';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
 import { ListOptions, ListProvider } from 'hooks/useList';
 import { useStrategyCtx } from 'hooks/useStrategies';
@@ -22,17 +26,11 @@ export const StrategiesActivityPage = () => {
     return false;
   });
 
-  // TODO: move that into a dedicated component
   const listOptions: ListOptions<Activity, ActivitySearchParams> = {
     all: activities,
     defaultLimit: 10,
-    filter: (list, searchParams) => {
-      const { action } = searchParams;
-      return list.filter((activity) => {
-        if (action && activity.action !== action) return false;
-        return true;
-      });
-    },
+    schema: activitySchema,
+    filter: filterActivity,
   };
 
   if (!activities.length) return 'No activities found';
