@@ -2,10 +2,17 @@ import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { subDays, isSameDay, subMonths } from 'date-fns';
-import { Dispatch, FormEvent, memo, ReactNode, useState } from 'react';
+import { Dispatch, memo, ReactNode, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
+
+export const datePickerPresets: DatePickerPreset[] = [
+  { label: 'Last 7 days', days: 6 },
+  { label: 'Last 30 days', days: 29 },
+  { label: 'Last 90 days', days: 89 },
+  { label: 'Last 365 days', days: 364 },
+];
 
 export type DatePickerPreset = {
   label: string;
@@ -16,10 +23,14 @@ interface Props {
   button: ReactNode;
   defaultStart?: number | string;
   defaultEnd?: number | string;
-  onConfirm: (props: { start: string; end: string }) => void;
+  start?: number | string;
+  end?: number | string;
+  onConfirm: (props: { start?: string; end?: string }) => void;
   setIsOpen: Dispatch<boolean>;
   presets: DatePickerPreset[];
   options?: Omit<CalendarProps, 'mode' | 'selected' | 'onSelect'>;
+  required?: boolean;
+  form?: string;
 }
 
 export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
@@ -27,10 +38,6 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
-      onClick={(e) => {
-        setIsOpen(true);
-        attr.onClick(e);
-      }}
       type="button"
       aria-label="Pick date range"
       className="flex items-center gap-8"
@@ -65,13 +72,20 @@ const getDefaultDateRange = (
   };
 };
 
+/** Transform date into YYYY-MM-DD */
+const toDateInput = (date?: Date) => date?.toISOString().split('T')[0] ?? '';
+
 const Content = (props: Props) => {
+  const startRef = useRef<HTMLInputElement>(null);
+  const endRef = useRef<HTMLInputElement>(null);
   const now = new Date();
-  const [date, setDate] = useState(
-    getDefaultDateRange(props.defaultStart, props.defaultEnd)
+  const baseDate = getDefaultDateRange(
+    props.defaultStart ?? props.start,
+    props.defaultEnd ?? props.end
   );
+  const [date, setDate] = useState(baseDate);
   const hasDates = !!(date?.from && date?.to);
-  const selectedPreset = props.presets?.find((p) => {
+  const selectedPreset = props.presets.find((p) => {
     if (!hasDates) return false;
     const from = subDays(now, p.days);
     return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
@@ -84,58 +98,91 @@ const Content = (props: Props) => {
     });
   };
 
-  const onConfirm = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!hasDates) return;
+  const onConfirm = () => {
+    if (props.required && !hasDates) return;
     props.setIsOpen(false);
+    startRef.current!.value = toDateInput(date?.from);
+    endRef.current!.value = toDateInput(date?.to);
     props.onConfirm({
-      start: toUnixUTC(date.from!),
-      end: toUnixUTC(date.to!),
+      start: date?.from && toUnixUTC(date.from),
+      end: date?.to && toUnixUTC(date.to),
     });
   };
 
+  const onReset = () => {
+    setDate(getDefaultDateRange(props.defaultStart, props.defaultEnd));
+  };
+
   return (
-    <form
-      className="grid grid-cols-[200px_1fr] grid-rows-[1fr_auto] gap-x-30 gap-y-20 p-20"
-      onSubmit={onConfirm}
-    >
-      <div
-        role="radiogroup"
-        aria-label="presets"
-        className="flex flex-col gap-5"
-      >
-        {props.presets.map(({ label, days }) => (
-          <button
-            type="button"
-            role="radio"
-            key={days}
-            className="box-border rounded-8 border-2 border-transparent bg-clip-padding py-8 px-30 text-start text-14 font-weight-500 hover:border-background-700 [&[aria-checked=true]]:bg-black"
-            onClick={() => handlePreset(days)}
-            aria-checked={selectedPreset?.days === days}
-            data-testid="date-picker-button"
-          >
-            {label}
-          </button>
-        ))}
+    <div className="flex flex-col gap-20 p-20">
+      <div className="flex gap-30">
+        <div
+          role="radiogroup"
+          aria-label="presets"
+          className="flex w-[200px] flex-col gap-5"
+        >
+          {props.presets.map(({ label, days }) => (
+            <button
+              type="button"
+              role="radio"
+              key={days}
+              className="box-border rounded-8 border-2 border-transparent bg-clip-padding py-8 px-30 text-start text-14 font-weight-500 hover:border-background-700 [&[aria-checked=true]]:bg-black"
+              onClick={() => handlePreset(days)}
+              aria-checked={selectedPreset?.days === days}
+              data-testid="date-picker-button"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <Calendar
+          defaultMonth={subMonths(date?.to ?? new Date(), 1)}
+          numberOfMonths={2}
+          {...props.options}
+          mode="range"
+          selected={date}
+          onSelect={setDate}
+        />
       </div>
-      <Calendar
-        defaultMonth={subMonths(date?.to ?? new Date(), 1)}
-        numberOfMonths={2}
-        {...props.options}
-        mode="range"
-        selected={date}
-        onSelect={setDate}
-      />
-      <Button
-        type="submit"
-        disabled={!hasDates}
-        size="sm"
-        className="col-span-2 justify-self-end"
-        data-testid="date-picker-confirm"
-      >
-        Confirm
-      </Button>
-    </form>
+      <footer className="flex justify-end gap-16">
+        <input
+          ref={startRef}
+          form={props.form}
+          name="start"
+          type="date"
+          hidden
+          defaultValue={toDateInput(date?.from)}
+        />
+        <input
+          ref={endRef}
+          form={props.form}
+          name="end"
+          type="date"
+          hidden
+          defaultValue={toDateInput(date?.to)}
+        />
+        <Button
+          type="button"
+          variant="black"
+          size="sm"
+          className="col-span-2 justify-self-start"
+          onClick={onReset}
+        >
+          Reset
+        </Button>
+        <Button
+          form={props.form}
+          type="submit"
+          disabled={props.required && !hasDates}
+          size="sm"
+          className="col-span-2 justify-self-end"
+          data-testid="date-picker-confirm"
+          onClick={onConfirm}
+        >
+          Confirm
+        </Button>
+      </footer>
+    </div>
   );
 };
 

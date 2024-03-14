@@ -4,12 +4,10 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import {
   DatePickerButton,
   DateRangePicker,
+  datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import {
-  datePickerDisabledDays,
-  datePickerPresets,
-} from 'components/simulator/result/SimResultChartHeader';
+import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
@@ -148,7 +146,8 @@ export const SimInputChart = ({
   );
 
   const onDatePickerConfirm = useCallback(
-    (props: { start: string; end: string }) => {
+    (props: { start?: string; end?: string }) => {
+      if (!props.start || !props.end) return;
       dispatch('start', props.start);
       dispatch('end', props.end);
     },
@@ -173,6 +172,7 @@ export const SimInputChart = ({
           options={{
             disabled: debug.debugState.isE2E ? [] : datePickerDisabledDays,
           }}
+          required
         />
       </div>
       {isError && (

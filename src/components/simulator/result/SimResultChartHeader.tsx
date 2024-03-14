@@ -1,7 +1,7 @@
 import {
   DatePickerButton,
-  DatePickerPreset,
   DateRangePicker,
+  datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
 import { subDays } from 'date-fns';
 import { useNavigate } from 'libs/routing';
@@ -22,13 +22,6 @@ interface Props {
   simulationType: SimulatorType;
 }
 
-export const datePickerPresets: DatePickerPreset[] = [
-  { label: 'Last 7 days', days: 6 },
-  { label: 'Last 30 days', days: 29 },
-  { label: 'Last 90 days', days: 89 },
-  { label: 'Last 365 days', days: 364 },
-];
-
 export const datePickerDisabledDays = [
   { after: new Date(), before: subDays(new Date(), 365) },
 ];
@@ -46,7 +39,8 @@ export const SimResultChartHeader = ({
   const navigate = useNavigate();
 
   const onDatePickerConfirm = useCallback(
-    (props: { start: string; end: string }) => {
+    (props: { start?: string; end?: string }) => {
+      if (!props.start || !props.end) return;
       navigate({
         from: '/simulate/result',
         to: '/simulate/result',
@@ -75,6 +69,7 @@ export const SimResultChartHeader = ({
         }
         presets={datePickerPresets}
         options={{ disabled: datePickerDisabledDays }}
+        required
       />
     );
   }, [endUnix, onDatePickerConfirm, startUnix]);

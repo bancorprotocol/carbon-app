@@ -29,7 +29,11 @@ export const toLiteral =
   (value: string = '') => {
     return literals.includes(value as any) ? (value as T) : fallback;
   };
-
+export const toDate =
+  (fallback?: Date) =>
+  (value: string = '') => {
+    return value ? new Date(value) : fallback;
+  };
 export type SearchParams<T> = Partial<{
   [key in keyof T]: string;
 }>;

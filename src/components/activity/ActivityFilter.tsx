@@ -9,6 +9,12 @@ import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
+import {
+  DatePickerButton,
+  DateRangePicker,
+  datePickerPresets,
+} from 'components/common/datePicker/DateRangePicker';
+import { toUnixUTC } from 'components/simulator/utils';
 
 interface DisplayID {
   id: string;
@@ -51,22 +57,27 @@ export const ActivityFilter = () => {
   const allPairs = getAllPairs(activities);
   const allActions = Array.from(new Set(activities.map((a) => a.action)));
 
-  const { pairs, strategyIds, actions } = searchParams;
+  const { pairs, strategyIds, actions, start, end } = searchParams;
 
   const updateParams = () => {
-    const selector = `input[type="checkbox"][form="${formId}"]`;
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(selector);
+    const selector = `input[form="${formId}"]`;
+    const inputs = document.querySelectorAll<HTMLInputElement>(selector);
     const params: Record<string, string[]> = {};
-    for (const checkbox of checkboxes) {
-      const name = checkbox.name;
+    for (const input of inputs) {
+      const name = input.name;
       params[name] ||= [];
-      if (checkbox.checked) params[name].push(checkbox.value);
+      if (input.type === 'checkbox') {
+        if (input.checked) params[name].push(input.value);
+      } else {
+        params[name].push(input.value);
+      }
     }
     setSearchParams(params);
   };
 
   return (
     <form
+      id={formId}
       className="flex flex-1 justify-end gap-8"
       role="search"
       onChange={updateParams}
@@ -124,6 +135,18 @@ export const ActivityFilter = () => {
             {activityActionName[action]}
           </Option>
         ))}
+      />
+      <DateRangePicker
+        form={formId}
+        presets={datePickerPresets}
+        onConfirm={updateParams}
+        // TODO: change it to the actual date
+        start={start && toUnixUTC(start)}
+        end={end && toUnixUTC(end)}
+        button={<DatePickerButton start={start} end={end} />}
+        options={{
+          disabled: { after: new Date() },
+        }}
       />
     </form>
   );

@@ -1,10 +1,12 @@
 import { Activity } from 'libs/queries/extApi/activity';
-import { GroupSchema, toArray } from 'utils/helpers';
+import { GroupSchema, toArray, toDate } from 'utils/helpers';
 
 export interface ActivitySearchParams {
   pairs: string[];
   strategyIds: string[];
   actions: string[];
+  start?: Date;
+  end?: Date;
 }
 
 export const activityActionName = {
@@ -23,6 +25,8 @@ export const activitySchema: GroupSchema<ActivitySearchParams> = {
   pairs: toArray([]),
   actions: toArray([]),
   strategyIds: toArray([]),
+  start: toDate(),
+  end: toDate(),
 };
 
 export const activityHasPairs = (activity: Activity, pairs: string[]) => {
