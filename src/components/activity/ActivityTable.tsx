@@ -16,6 +16,8 @@ import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
 import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { ReactComponent as IconArrowDown } from 'assets/icons/arrowDown.svg';
+import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
+import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
 import { ReactComponent as IconTransfer } from 'assets/icons/transfer.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
@@ -293,9 +295,8 @@ const ActionIcon: FC<ActionIconProps> = ({ action }) => {
   if (action === 'editPrice') return <IconEdit className="h-16 w-16" />;
   if (action === 'delete') return <IconDelete className="h-16 w-16" />;
   if (action === 'pause') return <IconPause className="h-16 w-16" />;
-  if (action === 'deposit') return <IconArrowDown className="h-16 w-16" />;
-  if (action === 'withdraw')
-    return <IconArrowDown className="h-16 w-16 rotate-180" />;
+  if (action === 'deposit') return <IconDeposit className="h-16 w-16" />;
+  if (action === 'withdraw') return <IconWithdraw className="h-16 w-16" />;
   if (action === 'buy')
     return <IconArrowDown className="h-16 w-16 rotate-[-60deg]" />;
   return <IconArrowDown className="h-16 w-16 rotate-[-120deg]" />;
