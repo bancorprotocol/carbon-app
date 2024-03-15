@@ -5,7 +5,12 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
-import { prettifyNumber, formatNumber, sanitizeNumber } from 'utils/helpers';
+import {
+  prettifyNumber,
+  formatNumber,
+  sanitizeNumber,
+  cn,
+} from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
@@ -73,12 +78,11 @@ export const TokenInputField: FC<Props> = ({
 
   return (
     <div
-      className={`
-        flex cursor-text flex-col gap-8 border border-black p-16
-        focus-within:border-white/50
-        ${isError ? '!border-error/50' : ''}
-        ${className}
-      `}
+      className={cn(
+        'flex cursor-text flex-col gap-8 border border-black p-16 focus-within:border-white/50',
+        isError ? '!border-error/50' : '',
+        className
+      )}
       onClick={() => inputRef.current?.focus()}
     >
       <div className="flex items-center justify-between">
