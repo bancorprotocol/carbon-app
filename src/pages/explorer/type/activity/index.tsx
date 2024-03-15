@@ -1,16 +1,10 @@
+import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { useActivity } from 'components/activity/useActivity';
-import {
-  ActivitySearchParams,
-  activitySchema,
-  filterActivity,
-} from 'components/activity/utils';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { useExplorerParams } from 'components/explorer';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
-import { ListOptions, ListProvider } from 'hooks/useList';
 import { useStrategyCtx } from 'hooks/useStrategies';
-import { Activity } from 'libs/queries/extApi/activity';
 
 export const ExplorerActivityPage = () => {
   const query = useActivity();
@@ -37,20 +31,13 @@ export const ExplorerActivityPage = () => {
     }
   });
 
-  const listOptions: ListOptions<Activity, ActivitySearchParams> = {
-    all: activities,
-    defaultLimit: 10,
-    schema: activitySchema,
-    filter: filterActivity,
-  };
-
   if (!activities.length) return 'No activities found';
 
   return (
-    <ListProvider {...listOptions}>
+    <ActivityProvider activities={activities}>
       <ActivitySection
         filters={type === 'wallet' ? ['ids', 'pairs'] : ['ids']}
       />
-    </ListProvider>
+    </ActivityProvider>
   );
 };

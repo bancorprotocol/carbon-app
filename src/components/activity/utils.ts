@@ -1,5 +1,5 @@
 import { Activity } from 'libs/queries/extApi/activity';
-import { GroupSchema, toArray, toDate } from 'utils/helpers';
+import { GroupSchema, getLowestBits, toArray, toDate } from 'utils/helpers';
 
 export interface ActivitySearchParams {
   pairs: string[];
@@ -40,8 +40,10 @@ export const filterActivity = (
   list: Activity[],
   searchParams: ActivitySearchParams
 ) => {
-  const { actions, pairs, start, end } = searchParams;
+  const { ids, actions, pairs, start, end } = searchParams;
   return list.filter((activity) => {
+    if (ids.length && !ids.includes(getLowestBits(activity.strategy.id)))
+      return false;
     if (actions.length && !actions.includes(activity.action)) return false;
     if (!activityHasPairs(activity, pairs)) return false;
     if (start && activity.date < start) return false;

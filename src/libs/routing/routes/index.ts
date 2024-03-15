@@ -33,12 +33,14 @@ import {
   editStrategyPage,
 } from 'libs/routing/routes/strategyCreateEdit';
 import { tradePage } from 'libs/routing/routes/trade';
+import { strategyPage } from 'libs/routing/routes/strategy';
 
 export const routeTree = rootRoute.addChildren([
   termPage,
   privacyPage,
   debugPage,
   tradePage,
+  strategyPage,
   createStrategyPage,
   editStrategyPage,
   oldExplorerLayout,

@@ -1,6 +1,6 @@
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { SafeDecimal } from 'libs/safedecimal';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
@@ -33,17 +33,11 @@ type separatorCounterType = number;
 
 interface Props {
   strategy: Strategy;
-  manage: boolean;
-  setManage: (flag: boolean) => void;
   isExplorer?: boolean;
 }
 
-export const StrategyBlockManage: FC<Props> = ({
-  strategy,
-  manage,
-  setManage,
-  isExplorer,
-}) => {
+export const StrategyBlockManage: FC<Props> = ({ strategy, isExplorer }) => {
+  const [manage, setManage] = useState(false);
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
@@ -236,7 +230,7 @@ export const StrategyBlockManage: FC<Props> = ({
           role="menuitem"
           aria-label="Manage strategy"
           className={`
-            self-center rounded-8 border-2 border-background-800 p-8
+            grid h-38 w-38 place-items-center rounded-8 border-2 border-background-800
             hover:bg-white/10
             active:bg-white/20
           `}

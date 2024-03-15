@@ -28,6 +28,7 @@ export namespace QueryKey {
     params,
   ];
 
+  export const strategy = (id: string) => [...sdk, 'strategy', id];
   export const strategies = (user?: string) => [
     ...sdk,
     'strategies',

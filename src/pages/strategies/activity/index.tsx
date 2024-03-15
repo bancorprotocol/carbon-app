@@ -1,14 +1,8 @@
+import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { useActivity } from 'components/activity/useActivity';
-import {
-  ActivitySearchParams,
-  activitySchema,
-  filterActivity,
-} from 'components/activity/utils';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
-import { ListOptions, ListProvider } from 'hooks/useList';
 import { useStrategyCtx } from 'hooks/useStrategies';
-import { Activity } from 'libs/queries/extApi/activity';
 import { useWeb3 } from 'libs/web3';
 
 export const StrategiesActivityPage = () => {
@@ -26,18 +20,11 @@ export const StrategiesActivityPage = () => {
     return false;
   });
 
-  const listOptions: ListOptions<Activity, ActivitySearchParams> = {
-    all: activities,
-    defaultLimit: 10,
-    schema: activitySchema,
-    filter: filterActivity,
-  };
-
   if (!activities.length) return 'No activities found';
 
   return (
-    <ListProvider {...listOptions}>
+    <ActivityProvider activities={activities}>
       <ActivitySection />
-    </ListProvider>
+    </ActivityProvider>
   );
 };

@@ -70,7 +70,9 @@ export const useStrategyFilter = (
   };
 };
 
-const useStrategiesWithFiat = (query: UseQueryResult<Strategy[], unknown>) => {
+export const useStrategiesWithFiat = (
+  query: UseQueryResult<Strategy[], unknown>
+) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
