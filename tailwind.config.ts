@@ -1,4 +1,5 @@
-const { formatRgb } = require('culori');
+import type { Config } from 'tailwindcss';
+import { formatRgb } from 'culori';
 
 function createTwConfigValues(start, end, step) {
   const remBase = 16;
@@ -22,10 +23,8 @@ const lightDark = (l, c, h) => ({
   dark: oklch(darken(l, 0.5), c, h),
 });
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
-  darkMode: 'class',
   theme: {
     screens: {
       sm: '640px',
@@ -118,18 +117,14 @@ module.exports = {
     backgroundColor: ({ theme }) => theme('colors'),
     backgroundImage: {
       none: 'none',
-      'gradient-to-t': 'linear-gradient(to top, var(--tw-gradient-stops))',
-      'gradient-to-tr':
-        'linear-gradient(to top right, var(--tw-gradient-stops))',
-      'gradient-to-r': 'linear-gradient(to right, var(--tw-gradient-stops))',
-      'gradient-to-br':
-        'linear-gradient(to bottom right, var(--tw-gradient-stops))',
-      'gradient-to-b': 'linear-gradient(to bottom, var(--tw-gradient-stops))',
-      'gradient-to-bl':
-        'linear-gradient(to bottom left, var(--tw-gradient-stops))',
-      'gradient-to-l': 'linear-gradient(to left, var(--tw-gradient-stops))',
-      'gradient-to-tl':
-        'linear-gradient(to top left, var(--tw-gradient-stops))',
+      'gradient-to-t': 'linear-gradient(to top, --tw-gradient-stops)',
+      'gradient-to-tr': 'linear-gradient(to top right, --tw-gradient-stops)',
+      'gradient-to-r': 'linear-gradient(to right, --tw-gradient-stops)',
+      'gradient-to-br': 'linear-gradient(to bottom right, --tw-gradient-stops)',
+      'gradient-to-b': 'linear-gradient(to bottom, --tw-gradient-stops)',
+      'gradient-to-bl': 'linear-gradient(to bottom left, --tw-gradient-stops)',
+      'gradient-to-l': 'linear-gradient(to left, --tw-gradient-stops)',
+      'gradient-to-tl': 'linear-gradient(to top left, --tw-gradient-stops)',
     },
     backgroundOpacity: ({ theme }) => theme('opacity'),
     backgroundPosition: {
@@ -574,7 +569,7 @@ module.exports = {
       },
       fade: {
         from: {
-          opacity: 0,
+          opacity: '0',
         },
       },
       translateY: {
@@ -938,4 +933,4 @@ module.exports = {
     },
   },
   plugins: [],
-};
+} satisfies Config;
