@@ -250,4 +250,6 @@ export const pairsToExchangeMapping: { [key: string]: string } = {
   BNTWBTC: 'COINBASE:BNTBTC',
   BNTETH: 'COINBASE:BNTETH',
   BNTWETH: 'COINBASE:BNTETH',
+  COTETH: 'UNISWAP3ETH:',
+  COTWETH: 'UNISWAP3ETH:',
 };
