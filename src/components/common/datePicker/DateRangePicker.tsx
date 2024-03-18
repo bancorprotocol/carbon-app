@@ -1,7 +1,7 @@
 import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { subDays, isSameDay, subMonths } from 'date-fns';
+import { subDays, isSameDay, subMonths, startOfDay, endOfDay } from 'date-fns';
 import { Dispatch, memo, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
@@ -124,13 +124,15 @@ const Content = (props: Props) => {
 
   const onConfirm = () => {
     if (props.required && !hasDates) return;
-    props.setIsOpen(false);
-    startRef.current!.value = toDateInput(date?.from);
-    endRef.current!.value = toDateInput(date?.to);
+    const from = date!.from ?? startOfDay(date!.to!);
+    const to = date!.to ?? endOfDay(date!.from!);
+    startRef.current!.value = toDateInput(from);
+    endRef.current!.value = toDateInput(to);
     props.onConfirm({
-      start: date?.from && toUnixUTC(date.from),
-      end: date?.to && toUnixUTC(date.to),
+      start: toUnixUTC(from),
+      end: toUnixUTC(to!),
     });
+    props.setIsOpen(false);
   };
 
   const onReset = () => {
@@ -196,7 +198,7 @@ const Content = (props: Props) => {
         </Button>
         <Button
           form={props.form}
-          type="submit"
+          type="button"
           disabled={props.required && !hasDates}
           size="sm"
           className="col-span-2 justify-self-end"

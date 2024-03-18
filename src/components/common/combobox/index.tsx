@@ -120,10 +120,13 @@ export const Combobox: FC<ComboboxProps> = (props) => {
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
         className={cn(
-          'flex items-center gap-8 rounded-full border-2 border-background-800 bg-background-900 px-12 py-8 text-12',
-          'hover:border-background-700 hover:bg-background-800',
-          'active:border-background-600'
+          'flex items-center gap-8 rounded-full border-2 px-12 py-8 text-12',
+          'hover:bg-background-800',
+          selected.length
+            ? 'border-primary active:border-primary-light'
+            : 'border-background-800 hover:border-background-700 active:border-background-600'
         )}
+        aria-controls={rootId}
       >
         {icon}
         <span className="text-white/60">{label}</span>

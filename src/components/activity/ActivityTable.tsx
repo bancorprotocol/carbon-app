@@ -2,15 +2,7 @@ import { ChangeEvent, FC } from 'react';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import { NewTabLink } from 'libs/routing';
-import {
-  cn,
-  getLowestBits,
-  prettifyNumber,
-  shortAddress,
-  tokenAmount,
-  tokenRange,
-} from 'utils/helpers';
-import { exist } from 'utils/helpers/operators';
+import { cn, getLowestBits, shortAddress, tokenAmount } from 'utils/helpers';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
@@ -22,7 +14,7 @@ import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
 import { ReactComponent as IconTransfer } from 'assets/icons/transfer.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
-import { activityActionName } from './utils';
+import { activityActionName, activityDescription } from './utils';
 import { usePagination } from 'hooks/useList';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
@@ -37,7 +29,6 @@ const thStyle = cn(
   'first:text-start first:px-24',
   'last:px-24 last:text-end'
 );
-const tdStyle = cn();
 
 export const ActivityTable: FC<ActivityTableProps> = (props) => {
   const { activities, hideIds = false } = props;
@@ -157,66 +148,6 @@ const BudgetChange = ({ budget, token }: { budget?: string; token: Token }) => {
   return value.isNegative()
     ? tokenAmount(budget, token)
     : `+${tokenAmount(budget, token)}`;
-};
-
-const listFormatter = new Intl.ListFormat('en', {
-  style: 'long',
-  type: 'conjunction',
-});
-const abs = (num: string | number) => Math.abs(Number(num));
-const activityDescription = (activity: Activity) => {
-  const { strategy, changes } = activity;
-  const { base, quote } = strategy;
-  switch (activity.action) {
-    case 'create':
-    case 'editPrice': {
-      const { buy, sell } = strategy;
-      const buyRange = tokenRange(buy.min, buy.max, quote);
-      const sellRange = tokenRange(sell.min, sell.max, base);
-      return `Buy ${base.symbol}: ${buyRange} / Sell ${base.symbol}: ${sellRange}.`;
-    }
-    case 'deposit': {
-      const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
-      const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
-      const amounts = listFormatter.format([buy, sell].filter(exist));
-      return `${amounts} was deposited to the strategy.`;
-    }
-    case 'withdraw': {
-      const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
-      const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
-      const amounts = listFormatter.format([buy, sell].filter(exist));
-      return `${amounts} was withdrawn to the wallet.`;
-    }
-    case 'buy': {
-      // TODO: understand in which case changes.buy is undefined
-      const buy = abs(changes.buy?.budget ?? 0);
-      const sell = abs(changes.sell?.budget ?? 0);
-      const bought = tokenAmount(buy, quote);
-      const gained = tokenAmount(sell, base);
-      const price = prettifyNumber(buy / sell);
-      return `${bought} was bought for ${gained}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
-    }
-    case 'sell': {
-      const buy = abs(changes.buy?.budget ?? 0);
-      const sell = abs(changes.sell?.budget ?? 0);
-      const sold = tokenAmount(sell, quote);
-      const gained = tokenAmount(buy, base);
-      const price = prettifyNumber(sell / buy);
-      return `${sold} was sold for ${gained}. Avg price: ${price} ${base.symbol}/${quote.symbol}.`;
-    }
-    case 'transfer': {
-      return `Strategy was transferred to a ${shortAddress(changes.owner!)}.`;
-    }
-    case 'delete': {
-      return 'Strategy was deleted.';
-    }
-    case 'pause': {
-      return 'The strategy was paused.';
-    }
-    default: {
-      return 'Unknown action';
-    }
-  }
 };
 
 const ActivityPaginator = () => {

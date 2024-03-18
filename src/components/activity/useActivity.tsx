@@ -80,8 +80,7 @@ export const useActivity = () => {
       return toActivities(activities, tokensMap);
     },
     {
-      // refetchInterval: 30 * 1000,
-      staleTime: 30 * 60 * 1000,
+      refetchInterval: 30 * 1000,
       placeholderData: [],
     }
   );

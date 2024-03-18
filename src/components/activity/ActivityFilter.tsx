@@ -80,7 +80,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = ({ filters = [] }) => {
   return (
     <form
       id={formId}
-      className="flex flex-1 justify-end gap-8"
+      className="flex flex-1 justify-end gap-16"
       role="search"
       onChange={updateParams}
     >
