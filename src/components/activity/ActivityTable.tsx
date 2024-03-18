@@ -18,6 +18,7 @@ import { activityActionName, activityDescription } from './utils';
 import { usePagination } from 'hooks/useList';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
+import style from './ActivityTable.module.css';
 
 interface ActivityTableProps {
   activities: Activity[];
@@ -33,7 +34,7 @@ const thStyle = cn(
 export const ActivityTable: FC<ActivityTableProps> = (props) => {
   const { activities, hideIds = false } = props;
   return (
-    <table className="w-full border-collapse">
+    <table className={cn('w-full border-collapse', style.table)}>
       <thead>
         <tr className="border-y border-background-800 font-mono text-14 text-white/60">
           {!hideIds && <th className={thStyle}>ID</th>}
@@ -49,7 +50,12 @@ export const ActivityTable: FC<ActivityTableProps> = (props) => {
         {activities.map((activity, i) => {
           const key = `${activity.txHash}-${activity.action}-${i}`;
           return (
-            <ActivityRow key={key} activity={activity} hideIds={hideIds} />
+            <ActivityRow
+              key={key}
+              activity={activity}
+              hideIds={hideIds}
+              index={i}
+            />
           );
         })}
       </tbody>
@@ -75,14 +81,15 @@ const budgetColor = (budget?: string) => {
 interface ActivityRowProps {
   activity: Activity;
   hideIds: boolean;
+  index: number;
 }
-const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds }) => {
+const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
   const date = new Date(activity.date).toLocaleDateString('en', dateOptions);
   return (
     <>
-      <tr className="text-14">
+      <tr className="text-14" style={{ animationDelay: `${index * 50}ms` }}>
         {!hideIds && (
           <td rowSpan={2} className="py-12 first:px-24">
             <div className="inline-flex items-center gap-8 rounded-full bg-background-800 p-8">
@@ -114,7 +121,10 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds }) => {
           {date}
         </td>
       </tr>
-      <tr className="font-mono text-12 text-white/60">
+      <tr
+        className="font-mono text-12 text-white/60"
+        style={{ animationDelay: `${index * 50}ms` }}
+      >
         {/* ID */}
         {/* Action Icon */}
         <td className="pb-12 align-top">{activityDescription(activity)}</td>
