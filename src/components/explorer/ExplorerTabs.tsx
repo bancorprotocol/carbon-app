@@ -30,14 +30,14 @@ export const ExplorerTabs = () => {
       label: 'Overview',
       href: '/explore/$type/$slug',
       params: { type, slug },
-      icon: <IconOverview className="h-18 w-18" />,
+      icon: <IconOverview className="size-18" />,
       badge: strategies?.length || 0,
     },
     {
       label: 'Portfolio',
       href: '/explore/$type/$slug/portfolio',
       params: { type, slug },
-      icon: <IconPieChart className="h-18 w-18" />,
+      icon: <IconPieChart className="size-18" />,
     },
   ];
 

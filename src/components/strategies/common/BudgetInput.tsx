@@ -42,9 +42,9 @@ export const BudgetInput: FC<Props> = (props) => {
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-error"
+          className="text-12 text-error flex items-center gap-10 font-mono"
         >
-          <IconWarning className="h-12 w-12" />
+          <IconWarning className="size-12" />
           <span className="flex-1">{order.budgetError}</span>
         </output>
       )}

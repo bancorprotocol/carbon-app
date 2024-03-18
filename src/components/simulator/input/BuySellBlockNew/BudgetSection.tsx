@@ -52,8 +52,8 @@ export const BudgetSection: FC<Props> = ({
 
   return (
     <fieldset className="flex flex-col gap-8">
-      <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+      <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
+        <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
           2
         </span>
         <Tooltip
@@ -79,7 +79,7 @@ export const BudgetSection: FC<Props> = ({
           <span className="text-white/80">Set {capitalize(type)} Budget</span>
         </Tooltip>
         {isBudgetOptional && (
-          <span className="ml-8 font-weight-500 text-white/60">Optional</span>
+          <span className="font-weight-500 ml-8 text-white/60">Optional</span>
         )}
       </legend>
       <TokenInputField
@@ -98,9 +98,9 @@ export const BudgetSection: FC<Props> = ({
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-error"
+          className="text-12 text-error flex items-center gap-10 font-mono"
         >
-          <IconWarning className="h-12 w-12" />
+          <IconWarning className="size-12" />
           <span className="flex-1">Insufficient balance</span>
         </output>
       )}

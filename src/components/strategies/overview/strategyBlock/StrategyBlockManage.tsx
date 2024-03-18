@@ -236,13 +236,13 @@ export const StrategyBlockManage: FC<Props> = ({
           role="menuitem"
           aria-label="Manage strategy"
           className={`
-            self-center rounded-8 border-2 border-background-800 p-8
+            rounded-8 border-background-800 self-center border-2 p-8
             hover:bg-white/10
             active:bg-white/20
           `}
           data-testid="manage-strategy-btn"
         >
-          <IconGear className="h-24 w-24" />
+          <IconGear className="size-24" />
         </button>
       )}
     >
@@ -252,7 +252,7 @@ export const StrategyBlockManage: FC<Props> = ({
             return (
               <hr
                 key={item}
-                className="border-1  my-10 border-background-700"
+                className="border-1  border-background-700 my-10"
               />
             );
           }
@@ -297,7 +297,7 @@ const ManageItem: FC<{
           setManage(false);
         }}
         disabled={disabled}
-        className={cn('w-full rounded-6 p-12 text-left', {
+        className={cn('rounded-6 w-full p-12 text-left', {
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
           'hover:bg-black': !disabled,

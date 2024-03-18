@@ -99,7 +99,7 @@ export const TokenInputField: FC<Props> = ({
           onFocus={(e) => e.target.select()}
           onBlur={handleBlur}
           className={`
-            grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
+            text-18 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none
             ${isError ? 'text-error' : ''}
             ${disabled ? 'text-white/40' : ''}
             ${disabled ? 'cursor-not-allowed' : ''}
@@ -107,12 +107,12 @@ export const TokenInputField: FC<Props> = ({
           disabled={disabled}
           data-testid={testid}
         />
-        <div className="flex items-center gap-6 rounded-[20px] bg-background-800 py-6 px-8">
-          <LogoImager alt="Token" src={token.logoURI} className="h-20 w-20" />
+        <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
+          <LogoImager alt="Token" src={token.logoURI} className="size-20" />
           <span className="font-weight-500">{token.symbol}</span>
         </div>
       </div>
-      <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
+      <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
         <p className="flex items-center gap-5 break-all text-white/60">
           {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}

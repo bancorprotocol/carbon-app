@@ -34,7 +34,7 @@ export const TooltipTokenAmount: FC<TooltipPriceProps> = (props) => {
       <div className={cn('align-center flex flex gap-7', className)}>
         {prettifyNumber(amount)}
         <LogoImager
-          className="h-16 w-16"
+          className="size-16"
           src={token.logoURI}
           alt={token.name ?? 'Token'}
         />

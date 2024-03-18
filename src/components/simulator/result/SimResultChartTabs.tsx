@@ -12,13 +12,13 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
   const tabs = [
     {
       label: 'animation',
-      icon: <IconAnimation className="h-18 w-18" />,
+      icon: <IconAnimation className="size-18" />,
       isActive: () => !showSummary,
       click: () => setShowSummary(false),
     },
     {
       label: 'summary',
-      icon: <IconSummary className="h-18 w-18" />,
+      icon: <IconSummary className="size-18" />,
       isActive: () => showSummary,
       click: () => setShowSummary(true),
     },
@@ -27,7 +27,7 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
   return (
     <nav
       aria-label="Simulation Tabs"
-      className="max-w-40 flex h-40 w-full gap-2 rounded-full border-2 border-background-900 p-4 text-14 md:w-auto"
+      className="border-background-900 text-14 flex h-40 w-full max-w-40 gap-2 rounded-full border-2 p-4 md:w-auto"
     >
       {tabs.map(({ label, icon, isActive, click }) => {
         const active = isActive();
@@ -36,7 +36,7 @@ export const SimResultChartTabs = ({ showSummary, setShowSummary }: Props) => {
             key={label}
             onClick={click}
             className={cn(
-              'flex w-full items-center justify-center gap-4 rounded-full py-5 px-16',
+              'flex w-full items-center justify-center gap-4 rounded-full px-16 py-5',
               active ? 'bg-white/10' : 'bg-transparent text-white/60'
             )}
             data-testid={`chart-tab-${label}`}

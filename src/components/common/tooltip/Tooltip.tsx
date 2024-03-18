@@ -30,7 +30,7 @@ export const Tooltip: FC<Props> = ({
   stiffness = 300,
   children = (
     <span>
-      <IconTooltip className={cn('h-18 w-18', iconClassName)} />
+      <IconTooltip className={cn('size-18', iconClassName)} />
     </span>
   ),
   ...props
@@ -78,7 +78,7 @@ export const Tooltip: FC<Props> = ({
       render={(attrs) => (
         <m.div
           className={cn(
-            'rounded border border-background-800 bg-background-800/30 px-24 py-16 !text-14 text-white shadow-lg backdrop-blur-2xl',
+            'border-background-800 bg-background-800/30 !text-14 rounded border px-24 py-16 text-white shadow-lg backdrop-blur-2xl',
             className
           )}
           style={{ scale, opacity, maxWidth }}

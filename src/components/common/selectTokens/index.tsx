@@ -30,11 +30,11 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onClick0()}
         className={
-          '-mr-13 flex w-[140px] flex-grow items-center rounded-12 bg-black py-10 px-18'
+          '-mr-13 rounded-12 px-18 flex w-[140px] flex-grow items-center bg-black py-10'
         }
       >
-        <LogoImager alt={''} src={imgUrl0} className={'mr-8 h-30 w-30'} />
-        <div className={'mr-auto text-16 font-weight-500'}>
+        <LogoImager alt={''} src={imgUrl0} className="size-30 mr-8" />
+        <div className={'text-16 font-weight-500 mr-auto'}>
           {symbol0 ? shortenString(symbol0, '...', 5) : 'Select'}
         </div>
         <IconChevron className="w-14" />
@@ -43,7 +43,7 @@ export const SelectTokens: FC<Props> = ({
         onClick={() => onMiddleClick?.()}
         disabled={middleDisabled}
         className={
-          'z-20 flex h-30 w-30 flex-grow-0 items-center justify-center rounded-full bg-background-900 disabled:cursor-not-allowed'
+          'size-30 bg-background-900 z-20 flex flex-grow-0 items-center justify-center rounded-full disabled:cursor-not-allowed'
         }
       >
         <IconArrow className={`${middleDisabled && 'opacity-25'}`} />
@@ -51,15 +51,15 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onClick1()}
         className={
-          '-ml-13 flex w-[140px] flex-grow items-center rounded-12 bg-black py-10 px-18'
+          '-ml-13 rounded-12 px-18 flex w-[140px] flex-grow items-center bg-black py-10'
         }
       >
         <LogoImager
           alt={''}
           src={imgUrl1}
-          className={'mr-8 h-30 w-30 rounded-full'}
+          className="size-30 mr-8 rounded-full"
         />
-        <div className={'mr-auto text-16 font-weight-500'}>
+        <div className="text-16 font-weight-500 mr-auto">
           {symbol1 ? shortenString(symbol1, '...', 5) : 'Select'}
         </div>
         <IconChevron className="w-14" />

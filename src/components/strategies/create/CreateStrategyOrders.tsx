@@ -82,12 +82,12 @@ export const CreateStrategyOrders = ({
       <m.header
         variants={items}
         key="createStrategyBuyTokens"
-        className="flex flex-col gap-10 rounded-10 bg-background-900 p-20"
+        className="rounded-10 bg-background-900 flex flex-col gap-10 p-20"
       >
         <div className="flex gap-10">
-          <TokensOverlap className="h-32 w-32" tokens={[base!, quote!]} />
+          <TokensOverlap className="size-32" tokens={[base!, quote!]} />
           <div>
-            <h2 className="flex gap-6 text-14">
+            <h2 className="text-14 flex gap-6">
               <span>{base?.symbol}</span>
               <span role="separator" className="text-secondary">
                 /
@@ -97,7 +97,7 @@ export const CreateStrategyOrders = ({
             <div className="text-secondary capitalize">{strategyType}</div>
           </div>
         </div>
-        <p className="flex items-center text-12 font-weight-400 text-white/60">
+        <p className="text-12 font-weight-400 flex items-center text-white/60">
           <IconWarning className="ml-6 mr-10 w-14 flex-shrink-0" /> Rebasing and
           and fee-on-transfer tokens are not supported
         </p>
@@ -150,7 +150,7 @@ export const CreateStrategyOrders = ({
       {warnings.formHasWarning && !isCTAdisabled && (
         <m.label
           variants={items}
-          className="flex items-center gap-8 rounded-10 bg-background-900 p-20 text-14 font-weight-500 text-white/60"
+          className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60"
         >
           <input
             type="checkbox"

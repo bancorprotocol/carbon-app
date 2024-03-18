@@ -56,12 +56,12 @@ export const ModalConfirmDelete: ModalFC<ModalConfirmDeleteData> = ({
     <ModalOrMobileSheet id={id} title="Delete Strategy">
       <IconTitleText
         variant="error"
-        icon={<IconTrash className="h-24 w-24" />}
+        icon={<IconTrash className="size-24" />}
         title="Are you sure you would like to delete your strategy?"
         text="Deleting your strategy will result in all strategy data being lost and impossible to restore. All funds will be withdrawn to your wallet."
       />
       {!isOverlapping && (
-        <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-background-800 p-16">
+        <article className="bg-background-800 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded p-16">
           <h3 className="text-14 font-weight-500">Did you know ?</h3>
           <Link
             onClick={editPrices}

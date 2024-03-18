@@ -23,7 +23,7 @@ export const Calendar = ({
         caption_start: '[&>:first-child]:flex-row-reverse',
         caption_label: 'flex-1 text-center text-14',
         nav: 'gap-10 flex items-center',
-        nav_button: 'h-16 w-16 bg-transparent opacity-50 hover:opacity-100',
+        nav_button: 'size-16 bg-transparent opacity-50 hover:opacity-100',
         table: 'border-collapse',
         head_row: 'flex m-b-1',
         head_cell: 'text-white/20 rounded-8 w-36 text-12 font-weight-400',
@@ -50,13 +50,13 @@ export const Calendar = ({
       components={{
         IconLeft: () => (
           <Chevron
-            className="h-16 w-16 rotate-90"
+            className="size-16 rotate-90"
             data-testid="date-picker-left-arrow"
           />
         ),
         IconRight: () => (
           <Chevron
-            className="h-16 w-16 -rotate-90"
+            className="size-16 -rotate-90"
             data-testid="date-picker-right-arrow"
           />
         ),

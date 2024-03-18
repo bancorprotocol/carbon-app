@@ -20,7 +20,7 @@ export const getModalDataByType = (
     case 'pause':
       return {
         modalTitle: 'Pause Strategy',
-        icon: <IconPause className="h-16 w-16" />,
+        icon: <IconPause className="size-16" />,
         title: 'Are you sure you would like to pause your strategy?',
         content:
           'This will prevent your strategy from being traded against, however you will retain access to any associated funds.',
@@ -30,14 +30,14 @@ export const getModalDataByType = (
     case 'delete':
       return {
         modalTitle: 'Delete Strategy',
-        icon: <IconTrash className="h-24 w-24" />,
+        icon: <IconTrash className="size-24" />,
         title: 'Are you sure you would like to delete your strategy?',
         content:
           'All data on the strategy will be deleted. It will be impossible to restore them.',
         additionalContent: (
           <div className="mt-20 flex items-center">
-            <IconWallet className="mr-10 h-12 w-12" />
-            <div className="flex-1 text-14 font-weight-500 text-white/80">
+            <IconWallet className="mr-10 size-12" />
+            <div className="text-14 font-weight-500 flex-1 text-white/80">
               All funds will be withdrawn to your wallet
             </div>
           </div>

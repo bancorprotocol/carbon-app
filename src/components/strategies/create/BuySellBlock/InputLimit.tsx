@@ -57,7 +57,7 @@ export const InputLimit: FC<InputLimitProps> = ({
     <>
       <div
         className={`
-          flex cursor-text flex-col rounded-16 border bg-black p-16
+          rounded-16 flex cursor-text flex-col border bg-black p-16
           focus-within:border-white/50
           ${error ? '!border-error/50' : 'border-black'} 
         `}
@@ -75,13 +75,13 @@ export const InputLimit: FC<InputLimitProps> = ({
           aria-label="Enter Price"
           placeholder="Enter Price"
           className={`
-            mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
+            text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent text-start focus:outline-none
             ${error ? 'text-error' : ''}
           `}
           data-testid="input-price"
         />
         <p className="flex flex-wrap items-center gap-8">
-          <span className="break-all font-mono text-12 text-white/60">
+          <span className="text-12 break-all font-mono text-white/60">
             {fiatAsString}
           </span>
           <MarketPriceIndication
@@ -94,9 +94,9 @@ export const InputLimit: FC<InputLimitProps> = ({
           htmlFor={id ?? inputId}
           role="alert"
           aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-error"
+          className="text-12 text-error flex items-center gap-10 font-mono"
         >
-          <IconWarning className="h-12 w-12" />
+          <IconWarning className="size-12" />
           <span className="flex-1">{error}</span>
         </output>
       )}

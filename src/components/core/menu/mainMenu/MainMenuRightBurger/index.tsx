@@ -22,7 +22,7 @@ export const MainMenuRightBurger: FC<{
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       placement="bottom"
-      className="rounded-[10px] p-8 text-16 font-weight-400 text-white"
+      className="text-16 font-weight-400 rounded-[10px] p-8 text-white"
       button={(attr) => (
         <button
           {...attr}
@@ -35,8 +35,8 @@ export const MainMenuRightBurger: FC<{
             attr.onClick(e);
           }}
         >
-          <span className="flex h-36 w-36 items-center justify-center">
-            <span className="relative flex inline-flex h-36 w-36 items-center justify-center rounded-full">
+          <span className="flex size-36 items-center justify-center">
+            <span className="relative flex inline-flex size-36 items-center justify-center rounded-full">
               <IconBurger className="h-14" />
             </span>
           </span>

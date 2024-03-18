@@ -96,7 +96,7 @@ const Content = (props: Props) => {
 
   return (
     <form
-      className="grid grid-cols-[200px_1fr] grid-rows-[1fr_auto] gap-x-30 gap-y-20 p-20"
+      className="gap-x-30 grid grid-cols-[200px_1fr] grid-rows-[1fr_auto] gap-y-20 p-20"
       onSubmit={onConfirm}
     >
       <div
@@ -109,7 +109,7 @@ const Content = (props: Props) => {
             type="button"
             role="radio"
             key={days}
-            className="box-border rounded-8 border-2 border-transparent bg-clip-padding py-8 px-30 text-start text-14 font-weight-500 hover:border-background-700 [&[aria-checked=true]]:bg-black"
+            className="rounded-8 px-30 text-14 font-weight-500 hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start [&[aria-checked=true]]:bg-black"
             onClick={() => handlePreset(days)}
             aria-checked={selectedPreset?.days === days}
             data-testid="date-picker-button"
@@ -159,12 +159,12 @@ export const DatePickerButton = memo(
 
     return (
       <>
-        <span className="flex h-24 w-24 items-center justify-center rounded-[12px] bg-white/10">
-          <CalendarIcon className="h-12 w-12" />
+        <span className="flex size-24 items-center justify-center rounded-[12px] bg-white/10">
+          <CalendarIcon className="size-12" />
         </span>
 
         <span
-          className="justify-self-end text-14 text-white/80"
+          className="text-14 justify-self-end text-white/80"
           data-testid="simulation-dates"
         >
           {hasDates ? (
