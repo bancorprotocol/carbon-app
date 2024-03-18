@@ -20,10 +20,9 @@ export const ExplorerTabs = () => {
 
   const match = useMatchRoute();
 
-  const showFilter = !!match({
-    to: '/explore/$type/$slug',
+  const isActivity = !!match({
+    to: '/explore/$type/$slug/activity',
     params: { type, slug },
-    fuzzy: true,
   });
 
   const tabs: StrategyTab[] = [
@@ -51,7 +50,7 @@ export const ExplorerTabs = () => {
   return (
     <div className="flex items-center justify-between gap-16">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-      {showFilter && <StrategyFilterSort />}
+      {!isActivity && <StrategyFilterSort />}
     </div>
   );
 };

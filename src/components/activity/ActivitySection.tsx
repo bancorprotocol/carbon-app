@@ -4,15 +4,18 @@ import { ActivityFilter, ActivityFilterProps } from './ActivityFilter';
 import { useList } from 'hooks/useList';
 import { FC } from 'react';
 
-export const ActivitySection: FC<ActivityFilterProps> = (props) => {
+export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
   const { list: activities } = useList<Activity>();
   return (
     <section className="rounded bg-background-900">
       <header className="flex items-center px-20 py-24">
         <h2>Activity</h2>
-        <ActivityFilter {...props} />
+        <ActivityFilter filters={filters} />
       </header>
-      <ActivityTable activities={activities} />
+      <ActivityTable
+        activities={activities}
+        hideIds={!filters.includes('ids')}
+      />
     </section>
   );
 };

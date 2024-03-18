@@ -46,7 +46,7 @@ export const StrategyPage = () => {
         >
           <IconChevronLeft className="h-16 w-16" />
         </button>
-        <TokensOverlap tokens={[base, quote]} className="h-40" />
+        <TokensOverlap tokens={[base, quote]} size={40} />
         <div className="flex-1 flex-col gap-8">
           <h1 className="flex gap-8 text-18 font-weight-500">
             <span>{base.symbol}</span>

@@ -61,7 +61,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
         className="justify-self-end text-white/60"
         data-testid="simulation-dates"
       >
-        {hasDates ? `${startDate} – ${endDate}` : 'Select date range'}
+        {hasDates ? `${startDate} – ${endDate}` : 'Select Date range'}
       </span>
       <ChevronIcon
         className={cn('h-12 w-12 text-white/80 transition-transform', {
@@ -235,7 +235,7 @@ export const DatePickerButton = memo(
           className="justify-self-end text-white/60"
           data-testid="simulation-dates"
         >
-          {hasDates ? `${startDate} – ${endDate}` : 'Select date range'}
+          {hasDates ? `${startDate} – ${endDate}` : 'Select Date range'}
         </span>
         <ChevronIcon className="h-12 w-12 rotate-180 text-white/80" />
       </>

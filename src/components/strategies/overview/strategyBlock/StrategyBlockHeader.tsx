@@ -21,7 +21,7 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
     <header className="col-start-1 col-end-3 flex gap-16">
       <TokensOverlap
         // TODO fix token logo classes
-        className="h-40 w-40"
+        size={40}
         tokens={[base, quote]}
       />
       <div className="flex flex-1 flex-col">

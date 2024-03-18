@@ -121,7 +121,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = ({ filters = [] }) => {
           filterLabel="Search by Pair"
           options={allPairs.map(({ pair, base, quote }) => (
             <Option key={pair} value={pair}>
-              <TokensOverlap tokens={[base, quote]} className="h-14" />
+              <TokensOverlap tokens={[base, quote]} size={14} />
               {base.symbol}/{quote.symbol}
             </Option>
           ))}

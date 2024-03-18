@@ -25,29 +25,41 @@ import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg
 import { activityActionName } from './utils';
 import { usePagination } from 'hooks/useList';
 import { SafeDecimal } from 'libs/safedecimal';
+import { Token } from 'libs/tokens';
 
-interface Props {
+interface ActivityTableProps {
   activities: Activity[];
+  hideIds?: boolean;
 }
 
-export const ActivityTable: FC<Props> = ({ activities }) => {
+const thStyle = cn(
+  'text-start font-weight-400 py-16',
+  'first:text-start first:px-24',
+  'last:px-24 last:text-end'
+);
+const tdStyle = cn();
+
+export const ActivityTable: FC<ActivityTableProps> = (props) => {
+  const { activities, hideIds = false } = props;
   return (
     <table className="w-full border-collapse">
       <thead>
         <tr className="border-y border-background-800 font-mono text-14 text-white/60">
-          <th className="px-24 py-16 text-start font-weight-400">ID</th>
-          <th className="text-start font-weight-400" colSpan={2}>
+          {!hideIds && <th className={thStyle}>ID</th>}
+          <th className={thStyle} colSpan={2}>
             Action
           </th>
-          <th className="text-start font-weight-400">Buy Budget</th>
-          <th className="text-start font-weight-400">Sell Budget</th>
-          <th className="px-24 py-16 text-end font-weight-400">Date</th>
+          <th className={thStyle}>Buy Budget</th>
+          <th className={thStyle}>Sell Budget</th>
+          <th className={thStyle}>Date</th>
         </tr>
       </thead>
       <tbody>
         {activities.map((activity, i) => {
           const key = `${activity.txHash}-${activity.action}-${i}`;
-          return <ActivityRow key={key} activity={activity} />;
+          return (
+            <ActivityRow key={key} activity={activity} hideIds={hideIds} />
+          );
         })}
       </tbody>
       <tfoot>
@@ -71,21 +83,24 @@ const budgetColor = (budget?: string) => {
 };
 interface ActivityRowProps {
   activity: Activity;
+  hideIds: boolean;
 }
-const ActivityRow: FC<ActivityRowProps> = ({ activity }) => {
+const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds }) => {
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
   const date = new Date(activity.date).toLocaleDateString('en', dateOptions);
   return (
     <>
       <tr className="text-14">
-        <td rowSpan={2} className="px-24 py-12">
-          <div className="inline-flex items-center gap-8 rounded-full bg-background-800 p-8">
-            <span className="lineHeight-4">{getLowestBits(strategy.id)}</span>
-            <TokensOverlap className="h-16" tokens={[base, quote]} />
-          </div>
-        </td>
-        <td rowSpan={2} className="py-12">
+        {!hideIds && (
+          <td rowSpan={2} className="py-12 first:px-24">
+            <div className="inline-flex items-center gap-8 rounded-full bg-background-800 p-8">
+              <span className="lineHeight-4">{getLowestBits(strategy.id)}</span>
+              <TokensOverlap tokens={[base, quote]} size={16} />
+            </div>
+          </td>
+        )}
+        <td rowSpan={2} className="py-12 first:px-24">
           <div
             className={cn(
               'mr-8 grid h-32 w-32 place-items-center rounded-full',
@@ -104,21 +119,23 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity }) => {
         <td className="pt-12 align-bottom">
           {tokenAmount(strategy.sell.budget, quote)}
         </td>
-        <td className="px-24 pt-12 text-end align-bottom font-mono">{date}</td>
+        <td className="pt-12 text-end align-bottom font-mono last:px-24">
+          {date}
+        </td>
       </tr>
       <tr className="font-mono text-12 text-white/60">
         {/* ID */}
         {/* Action Icon */}
         <td className="pb-12 align-top">{activityDescription(activity)}</td>
         <td className={cn('pb-12 align-top', budgetColor(changes.buy?.budget))}>
-          {tokenAmount(changes.buy?.budget, base) || '...'}
+          <BudgetChange budget={changes.buy?.budget} token={base} />
         </td>
         <td
           className={cn('pb-12 align-top', budgetColor(changes.sell?.budget))}
         >
-          {tokenAmount(changes.sell?.budget, quote) || '...'}
+          <BudgetChange budget={changes.sell?.budget} token={quote} />
         </td>
-        <td className="px-24 pb-12 align-top">
+        <td className="pb-12 align-top last:px-24">
           <p className="flex justify-end gap-8 align-bottom">
             {shortAddress(activity.txHash)}
             <NewTabLink
@@ -132,6 +149,14 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity }) => {
       </tr>
     </>
   );
+};
+
+const BudgetChange = ({ budget, token }: { budget?: string; token: Token }) => {
+  if (!budget) return '...';
+  const value = new SafeDecimal(budget);
+  return value.isNegative()
+    ? tokenAmount(budget, token)
+    : `+${tokenAmount(budget, token)}`;
 };
 
 const listFormatter = new Intl.ListFormat('en', {
