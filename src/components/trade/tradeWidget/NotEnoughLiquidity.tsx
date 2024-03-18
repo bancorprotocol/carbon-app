@@ -23,7 +23,7 @@ export const NotEnoughLiquidity = ({
         className={`rounded-12 border-error/100 text-14 font-weight-400
           flex h-full flex-col items-center justify-center border px-[4rem] text-center`}
       >
-        <div className="size-38 bg-error/10 mb-16 flex flex items-center justify-center rounded-full">
+        <div className="size-38 bg-error/10 mb-16 flex items-center justify-center rounded-full">
           <IconWarning className="fill-error/100 size-16" />
         </div>
         <div className="font-weight-500 mb-8">No Liquidity Available</div>

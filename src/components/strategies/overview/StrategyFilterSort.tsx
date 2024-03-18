@@ -7,7 +7,7 @@ import { ReactComponent as IconFilter } from 'assets/icons/filter.svg';
 import { lsService } from 'services/localeStorage';
 import { useStrategyCtx } from 'hooks/useStrategies';
 
-// [START] Used for localstorage migration: Remove it after Nov 2023
+// [START] Used for localStorage migration: Remove it after Nov 2023
 export enum EnumStrategySort {
   Recent,
   Old,
@@ -160,7 +160,7 @@ const FilterSortItem: FC<{
       <label
         htmlFor={id}
         className={`
-          rounded-6 flex cursor-pointer items-center justify-between px-16 px-16
+          rounded-6 flex cursor-pointer items-center justify-between px-16
           py-8 hover:bg-black/90
           peer-focus-visible:outline peer-focus-visible:outline-1
         `}

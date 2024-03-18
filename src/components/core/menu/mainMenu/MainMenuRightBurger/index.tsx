@@ -36,7 +36,7 @@ export const MainMenuRightBurger: FC<{
           }}
         >
           <span className="flex size-36 items-center justify-center">
-            <span className="relative flex inline-flex size-36 items-center justify-center rounded-full">
+            <span className="relative inline-flex size-36 items-center justify-center rounded-full">
               <IconBurger className="h-14" />
             </span>
           </span>
