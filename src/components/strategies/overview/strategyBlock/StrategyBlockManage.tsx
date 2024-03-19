@@ -85,15 +85,6 @@ export const StrategyBlockManage: FC<Props> = ({ strategy, isExplorer }) => {
     });
   }
 
-  items.push({
-    id: 'manageNotifications',
-    name: 'Manage Notifications',
-    action: () => {
-      carbonEvents.strategyEdit.strategyManageNotificationClick(strategyEvent);
-      openModal('manageNotifications', { strategyId: strategy.id });
-    },
-  });
-
   if (isExplorer && type === 'token-pair') {
     items.push({
       id: 'walletOwner',
