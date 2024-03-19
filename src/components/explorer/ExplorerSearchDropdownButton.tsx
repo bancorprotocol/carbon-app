@@ -14,22 +14,22 @@ export const ExplorerSearchDropdownButton = forwardRef<
     <button
       ref={ref}
       type="button"
-      className="flex items-center gap-10 font-weight-500"
+      className="font-weight-500 flex items-center gap-10"
       {...props}
     >
       {type === 'wallet' && (
         <>
-          <IconWallet className="h-18 w-18 text-primary" />
+          <IconWallet className="size-18 text-primary" />
           <span className="hidden md:inline">Wallet</span>
         </>
       )}
       {type === 'token-pair' && (
         <>
-          <IconTokenPair className="h-18 w-18 text-primary" />
+          <IconTokenPair className="size-18 text-primary" />
           <span className="hidden md:inline">Token Pair</span>
         </>
       )}
-      <IconChevron className="h-16 w-16 text-white/40" />
+      <IconChevron className="size-16 text-white/40" />
     </button>
   );
 });

@@ -15,19 +15,19 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'pending':
       return (
         <div className="relative flex items-center justify-center">
-          <div className="h-38 w-38 animate-spin rounded-full border-t border-r border-white" />
+          <div className="size-38 animate-spin rounded-full border-r border-t border-white" />
         </div>
       );
     case 'success':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-primary/10">
-          <IconCheck className="w-11 text-primary" />
+        <div className="size-38 bg-primary/10 flex items-center justify-center rounded-full">
+          <IconCheck className="text-primary w-11" />
         </div>
       );
     case 'failed':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-error/10">
-          <IconTimes className="w-11 text-error" />
+        <div className="size-38 bg-error/10 flex items-center justify-center rounded-full">
+          <IconTimes className="text-error w-11" />
         </div>
       );
   }
@@ -90,7 +90,7 @@ export const NotificationLine: FC<{
           {notification.txHash && (
             <NewTabLink
               to={getExplorerLink('tx', notification.txHash)}
-              className={'mt-10 flex items-center font-weight-500'}
+              className={'font-weight-500 mt-10 flex items-center'}
             >
               View on Etherscan <IconLink className="ml-6 w-14" />
             </NewTabLink>
@@ -99,7 +99,7 @@ export const NotificationLine: FC<{
       </div>
 
       <div className={'flex flex-col items-end justify-between'}>
-        <div className="text-secondary whitespace-nowrap text-12 font-weight-500">
+        <div className="text-secondary text-12 font-weight-500 whitespace-nowrap">
           {unix(notification.timestamp).fromNow(true)}
         </div>
         <button

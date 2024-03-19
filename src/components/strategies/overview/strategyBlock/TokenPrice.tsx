@@ -20,9 +20,7 @@ export const TokenPrice: FC<Props> = ({
       className={cn('flex items-center gap-4', className)}
       data-testid={testId}
     >
-      {iconSrc && (
-        <LogoImager className="h-16 w-16" src={iconSrc} alt="token" />
-      )}
+      {iconSrc && <LogoImager className="size-16" src={iconSrc} alt="token" />}
       {price}
     </div>
   );

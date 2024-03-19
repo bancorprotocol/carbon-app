@@ -9,7 +9,7 @@ import { useBurgerMenuItems } from './MainMenuRightBurger/useBurgerMenuItems';
 
 const TenderlyForkAlert = () => {
   return IS_TENDERLY_FORK ? (
-    <Button variant={'error'} size={'sm'} className={'px-8'}>
+    <Button variant={'error'} size={'sm'}>
       Fork
     </Button>
   ) : null;

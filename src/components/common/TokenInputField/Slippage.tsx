@@ -26,11 +26,11 @@ export const Slippage: FC<Props> = ({ slippage }) => {
       element={`The slippage is calculated based on the ${selectedFiatCurrency} value difference between the selected source and target tokens.`}
     >
       <span className={cn('flex flex-1 items-center gap-5', textColor)}>
-        {slippage?.eq(0) && <IconWarning className="h-12 w-12" />}
+        {slippage?.eq(0) && <IconWarning className="size-12" />}
         {slippage?.gt(0) && <>(+{slippageValue}%)</>}
         {slippage?.lt(0) && <>(-{slippageValue}%)</>}
         {slippage?.eq(0) && <>Notice: price & slippage are unknown</>}
-        {slippage.lt(-3) && <IconWarning className="h-12 w-12" />}
+        {slippage.lt(-3) && <IconWarning className="size-12" />}
       </span>
     </Tooltip>
   );

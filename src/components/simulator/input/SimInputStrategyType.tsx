@@ -20,13 +20,13 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
   const items: ItemProps[] = [
     {
       label: 'recurring',
-      svg: <IconTwoRanges className="h-16 w-37" />,
+      svg: <IconTwoRanges className="w-37 h-16" />,
       tooltipText:
         'Create buy and sell orders (limit or range) that are linked together. Newly acquired funds automatically rotate between them, creating an endless trading cycle without need for manual intervention.',
     },
     {
       label: 'overlapping',
-      svg: <IconOverlappingStrategy className="h-16 w-37" />,
+      svg: <IconOverlappingStrategy className="w-37 h-16" />,
       tooltipText:
         'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does.',
     },
@@ -38,7 +38,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
       key="simulatorTypeSelection"
     >
       <header className="mb-16 flex items-center justify-between">
-        <h2 className="m-0 text-18 font-weight-500">Strategy Type</h2>
+        <h2 className="text-18 font-weight-500 m-0">Strategy Type</h2>
       </header>
       <article role="tablist" className={`grid grid-cols-2 gap-8`}>
         {items.map(({ label, svg, tooltipText }) => (
@@ -50,7 +50,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
             key={label}
             to="/simulate/$simulationType"
             className={cn(
-              'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
+              'rounded-10 text-14 font-weight-500 flex h-full w-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white/60',
               'md:px-12',
               'focus-visible:outline focus-visible:outline-1',
               strategyType === label ? 'outline outline-1 outline-white' : ''
@@ -71,7 +71,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
 
             <Tooltip
               element={<div>{tooltipText}</div>}
-              iconClassName="!h-12 !w-12 text-white/60"
+              iconClassName="!size-12 text-white/60"
             />
           </Link>
         ))}

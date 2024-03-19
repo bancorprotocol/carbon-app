@@ -18,16 +18,16 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
     <header className="col-start-1 col-end-3 flex gap-16">
       <TokensOverlap
         // TODO fix token logo classes
-        className="h-40 w-40"
+        className="size-40"
         tokens={[base, quote]}
       />
       <div className="mr-auto flex flex-col">
-        <h3 className="flex gap-6 text-18" data-testid="token-pair">
+        <h3 className="text-18 flex gap-6" data-testid="token-pair">
           <span>{base.symbol}</span>
           <span className="self-align-center text-secondary !text-16">/</span>
           <span>{quote.symbol}</span>
         </h3>
-        <p className="flex items-center gap-8 text-12 text-white/60">
+        <p className="text-12 flex items-center gap-8 text-white/60">
           <span className="font-mono">ID: {strategy.idDisplay}</span>
           <svg width="4" height="4" role="separator">
             <circle cx="2" cy="2" r="2" fill="currentcolor" />
@@ -42,11 +42,11 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
               element={getTooltipTextByStatus(isExplorer, strategy.status)}
             >
               <span
-                className="inline-flex items-center gap-4 text-error"
+                className="text-error inline-flex items-center gap-4"
                 data-testid="status"
               >
                 {statusText.inactive}
-                <TooltipIcon className="h-10 w-10 text-error" />
+                <TooltipIcon className="text-error size-10" />
               </span>
             </Tooltip>
           )}

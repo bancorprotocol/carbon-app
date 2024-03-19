@@ -29,7 +29,7 @@ export const TokensOverlap = ({
       ))}
       {tokenCount > maxLogos && (
         <div
-          className="flex h-30 w-30 items-center justify-center rounded-full bg-black text-12"
+          className="size-30 text-12 flex items-center justify-center rounded-full bg-black"
           style={{
             marginLeft: '-10px',
           }}

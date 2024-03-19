@@ -19,15 +19,15 @@ export const OrderBookWidgetRate: FC<Props> = ({
 }) => {
   const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
   return (
-    <div className="-mx-10 my-10 flex items-center rounded-8 bg-background-900 px-10 py-10 text-16">
+    <div className="rounded-8 bg-background-900 text-16 -mx-10 my-10 flex items-center px-10 py-10">
       <Tooltip element="The mid-market price based on the last trade">
         <span className="flex items-center ">
           {prettifyNumber(rate, { decimals: 6 })}
           {!isLoading && (
             <div
               className={`${
-                buy ? 'rotate-180 bg-buy/25' : 'bg-sell/25'
-              } ml-8 flex h-20 w-20 items-center justify-center rounded-full`}
+                buy ? 'bg-buy/25 rotate-180' : 'bg-sell/25'
+              } ml-8 flex size-20 items-center justify-center rounded-full`}
             >
               <IconArrow className={`${buy ? 'text-buy' : 'text-sell'} w-10`} />
             </div>

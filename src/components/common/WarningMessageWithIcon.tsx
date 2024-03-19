@@ -1,5 +1,6 @@
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { FC, ReactNode } from 'react';
+import { cn } from 'utils/helpers';
 
 type WarningMessageWithIconProps = {
   htmlFor?: string;
@@ -19,9 +20,12 @@ export const WarningMessageWithIcon: FC<WarningMessageWithIconProps> = ({
       htmlFor={htmlFor}
       role="alert"
       aria-live="polite"
-      className={`flex items-center gap-10 font-mono text-12 text-warning ${className}`}
+      className={cn(
+        '!text-12 text-warning flex items-center gap-10 font-mono',
+        className
+      )}
     >
-      <IconWarning className="h-12 w-12" />
+      <IconWarning className="size-12" />
       <span className="flex-1">{children ?? message}</span>
     </output>
   );

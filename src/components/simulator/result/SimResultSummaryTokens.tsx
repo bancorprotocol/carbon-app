@@ -13,15 +13,15 @@ export const SimResultSummaryTokens = ({
   strategyType,
 }: Props) => {
   return (
-    <article className="flex flex-shrink-0 items-center gap-15">
-      <TokensOverlap className="h-40 w-40" tokens={[baseToken!, quoteToken!]} />
+    <article className="gap-15 flex flex-shrink-0 items-center">
+      <TokensOverlap className="size-40" tokens={[baseToken!, quoteToken!]} />
       <div className="flex flex-col">
-        <h2 className="flex gap-6 text-18">
+        <h2 className="text-18 flex gap-6">
           {baseToken.symbol}
           <span className="self-align-center text-secondary !text-16">/</span>
           {quoteToken.symbol}
         </h2>
-        <h3 className="flex items-center gap-8 font-mono text-12 capitalize text-white/60">
+        <h3 className="text-12 flex items-center gap-8 font-mono capitalize text-white/60">
           {strategyType}
         </h3>
       </div>

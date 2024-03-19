@@ -20,7 +20,7 @@ export const ModalSimulatorDisclaimer: ModalFC<
   return (
     <ModalOrMobileSheet id={id} data-testid="sim-disclaimer-modal">
       <IconTitleText
-        icon={<IconBookmark className="h-24 w-24 text-white" />}
+        icon={<IconBookmark className="size-24 text-white" />}
         title="Simulator Disclaimer"
       />
       <p className={paragraphClassName}>

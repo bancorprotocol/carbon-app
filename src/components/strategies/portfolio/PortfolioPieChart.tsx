@@ -19,7 +19,7 @@ export const PortfolioPieChart = ({
   return (
     <div
       className={
-        'relative aspect-square w-full flex-shrink-0 rounded-10 bg-background-900 md:h-[400px] md:w-[400px]'
+        'rounded-10 bg-background-900 relative aspect-square w-full flex-shrink-0 md:size-[400px]'
       }
     >
       <div

@@ -37,11 +37,11 @@ export const StrategyBlockBuySell: FC<{
     >
       {buy ? (
         <header className="flex items-center gap-4">
-          <h4 className="font-mono text-12 text-buy">Buy {token.symbol}</h4>
+          <h4 className="text-12 text-buy font-mono">Buy {token.symbol}</h4>
           {hasFiatValue && (
             <Tooltip
               element={buyTooltip}
-              iconClassName="h-10 w-10 text-white/60"
+              iconClassName="size-10 text-white/60"
             />
           )}
           {!hasFiatValue && (
@@ -55,20 +55,20 @@ export const StrategyBlockBuySell: FC<{
               }
             >
               <span>
-                <WarningIcon className="h-10 w-10 text-warning" />
+                <WarningIcon className="text-warning size-10" />
               </span>
             </Tooltip>
           )}
         </header>
       ) : (
         <header className="flex items-center gap-4">
-          <h4 className="font-mono text-12 text-sell">
+          <h4 className="text-12 text-sell font-mono">
             Sell {otherToken.symbol}
           </h4>
           {hasFiatValue && (
             <Tooltip
               element={sellTooltip}
-              iconClassName="h-10 w-10 text-white/60"
+              iconClassName="size-10 text-white/60"
             />
           )}
           {!hasFiatValue && (
@@ -82,7 +82,7 @@ export const StrategyBlockBuySell: FC<{
               }
             >
               <span>
-                <WarningIcon className="h-10 w-10 text-warning" />
+                <WarningIcon className="text-warning size-10" />
               </span>
             </Tooltip>
           )}
@@ -92,7 +92,7 @@ export const StrategyBlockBuySell: FC<{
         element={
           <span className="inline-flex items-center gap-4">
             <LogoImager
-              className="h-16 w-16"
+              className="size-16"
               src={otherToken.logoURI}
               alt="token"
             />
@@ -106,7 +106,7 @@ export const StrategyBlockBuySell: FC<{
       </Tooltip>
       <p
         data-testid={`${testIdPrefix}-budget-fiat`}
-        className="font-mono text-12 text-white/60"
+        className="text-12 font-mono text-white/60"
       >
         {hasFiatValue ? fiatBudgetValue : '...'}
       </p>

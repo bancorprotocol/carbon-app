@@ -11,7 +11,7 @@ import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 const buttonClasses =
-  'rounded-8 !text-white/60 hover:text-primary hover:border-primary px-5';
+  '!rounded-8 !text-white/60 hover:text-primary hover:border-primary px-5';
 const buttonActiveClasses = '!border-primary';
 const buttonErrorClasses = '!border-error !text-error focus:text-error';
 const inputClasses =

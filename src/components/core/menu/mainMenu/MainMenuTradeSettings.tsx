@@ -26,7 +26,7 @@ export const MainMenuTradeSettings: FC<Props> = ({ baseToken, quoteToken }) => {
         });
       }}
     >
-      <IconCog className={'h-20 w-20'} />
+      <IconCog className="size-20" />
     </Button>
   );
 };
