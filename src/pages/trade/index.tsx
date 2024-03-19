@@ -24,7 +24,11 @@ export const TradePage = () => {
 
   useEffect(() => {
     if (search.base && search.quote) return;
-    navigate({ search: { ...search, ...getLastVisitedPair() }, params: {} });
+    navigate({
+      search: { ...search, ...getLastVisitedPair() },
+      params: {},
+      replace: true,
+    });
   }, [search, navigate]);
 
   useEffect(() => {
