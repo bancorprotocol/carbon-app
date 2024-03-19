@@ -2,27 +2,25 @@ import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { useActivity } from 'components/activity/useActivity';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { useExplorerParams } from 'components/explorer';
-import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
-import { useStrategyCtx } from 'hooks/useStrategies';
+import { ExplorerEmptyError, useExplorerParams } from 'components/explorer';
+import { QueryActivityParams } from 'libs/queries/extApi/activity';
 
 export const ExplorerActivityPage = () => {
-  const query = useActivity();
   const { type, slug } = useExplorerParams();
-  const { strategies, isLoading } = useStrategyCtx();
+  const params: QueryActivityParams = {};
+  if (type === 'wallet') params.ownerId = slug;
+  const query = useActivity(params);
 
-  if (isLoading || query.isLoading) {
+  if (query.isLoading) {
     return (
       <CarbonLogoLoading className="h-[100px] self-center justify-self-center" />
     );
   }
 
-  if (!strategies.length) return <StrategyCreateFirst />;
-
   const activities = (query.data ?? []).filter((activity) => {
     if (type === 'wallet') {
       if (activity.strategy.owner.toLowerCase() === slug) return true;
-      if (activity.changes.owner?.toLowerCase() === slug) return true;
+      if (activity.changes?.owner?.toLowerCase() === slug) return true;
       return false;
     } else {
       const base = activity.strategy.base.address.toLowerCase();
@@ -31,7 +29,7 @@ export const ExplorerActivityPage = () => {
     }
   });
 
-  if (!activities.length) return 'No activities found';
+  if (!activities.length) return <ExplorerEmptyError type="activities" />;
 
   return (
     <ActivityProvider activities={activities}>

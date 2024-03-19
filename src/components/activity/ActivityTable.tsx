@@ -29,17 +29,17 @@ import style from './ActivityTable.module.css';
 
 const thStyle = cn(
   'text-start font-weight-400 py-16',
-  'first:text-start first:px-24',
-  'last:px-24 last:text-end'
+  'first:pl-24',
+  'last:pr-24 last:text-end'
 );
 const tdFirstLine = cn(
   'pt-12 align-bottom whitespace-nowrap',
-  'first:px-24',
-  'last:px-24 last:text-end'
+  'first:pl-24',
+  'last:pr-24 last:text-end'
 );
 const tdSecondLine = cn(
   'pb-12 align-top whitespace-nowrap',
-  'last:px-24 last:text-end'
+  'last:pr-24 last:text-end'
 );
 
 export const ActivityTable: FC<ActivityListProps> = (props) => {
@@ -86,12 +86,12 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
     <>
       <tr className="text-14" style={{ animationDelay: `${index * 50}ms` }}>
         {!hideIds && (
-          <td rowSpan={2} className="py-12 first:px-24">
+          <td rowSpan={2} className="py-12 first:pl-24">
             <ActivityId activity={activity} size={14} />
           </td>
         )}
         <td rowSpan={2} className="py-12 first:px-24">
-          <ActivityIcon activity={activity} className="mr-8" size={32} />
+          <ActivityIcon activity={activity} size={32} />
         </td>
         <td className={cn(tdFirstLine, 'font-weight-500')}>
           {activityActionName[activity.action]}
@@ -116,10 +116,10 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
           <p className="whitespace-normal">{activityDescription(activity)}</p>
         </td>
         <td className={tdSecondLine}>
-          <BudgetChange budget={changes.buy?.budget} token={base} />
+          <BudgetChange budget={changes?.buy?.budget} token={base} />
         </td>
         <td className={tdSecondLine}>
-          <BudgetChange budget={changes.sell?.budget} token={quote} />
+          <BudgetChange budget={changes?.sell?.budget} token={quote} />
         </td>
         <td className={tdSecondLine}>
           <p className="flex justify-end gap-8 align-bottom">
@@ -298,7 +298,7 @@ const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
   const className = `h-${size} w-${size}`;
   if (action === 'create') return <IconCheck className={className} />;
   if (action === 'transfer') return <IconTransfer className={className} />;
-  if (action === 'editPrice') return <IconEdit className={className} />;
+  if (action === 'edit') return <IconEdit className={className} />;
   if (action === 'delete') return <IconDelete className={className} />;
   if (action === 'pause') return <IconPause className={className} />;
   if (action === 'deposit') return <IconDeposit className={className} />;

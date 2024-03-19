@@ -22,7 +22,7 @@ export interface ActivitySearchParams {
 
 export const activityActionName = {
   create: 'Create',
-  editPrice: 'Edit Price',
+  edit: 'Edit Price',
   deposit: 'Deposit',
   withdraw: 'Withdraw',
   buy: 'Buy Low',
@@ -91,42 +91,42 @@ export const activityDescription = (activity: Activity) => {
   const { base, quote } = strategy;
   switch (activity.action) {
     case 'create':
-    case 'editPrice': {
+    case 'edit': {
       const { buy, sell } = strategy;
       const buyRange = tokenRange(buy.min, buy.max, quote);
       const sellRange = tokenRange(sell.min, sell.max, base);
       return `Buy ${base.symbol}: ${buyRange} / Sell ${base.symbol}: ${sellRange}.`;
     }
     case 'deposit': {
-      const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
-      const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
+      const buy = tokenAmount(abs(changes?.buy?.budget ?? 0), quote);
+      const sell = tokenAmount(abs(changes?.sell?.budget ?? 0), base);
       const amounts = activityListFormatter.format([buy, sell].filter(exist));
       return `${amounts} was deposited to the strategy.`;
     }
     case 'withdraw': {
-      const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
-      const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
+      const buy = tokenAmount(abs(changes?.buy?.budget ?? 0), quote);
+      const sell = tokenAmount(abs(changes?.sell?.budget ?? 0), base);
       const amounts = activityListFormatter.format([buy, sell].filter(exist));
       return `${amounts} was withdrawn to the wallet.`;
     }
     case 'buy': {
-      const buy = abs(changes.buy?.budget ?? 0);
-      const sell = abs(changes.sell?.budget ?? 0);
+      const buy = abs(changes?.buy?.budget ?? 0);
+      const sell = abs(changes?.sell?.budget ?? 0);
       const bought = tokenAmount(buy, quote);
       const gained = tokenAmount(sell, base);
       const price = prettifyNumber(buy / sell);
       return `${bought} was bought for ${gained}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'sell': {
-      const buy = abs(changes.buy?.budget ?? 0);
-      const sell = abs(changes.sell?.budget ?? 0);
+      const buy = abs(changes?.buy?.budget ?? 0);
+      const sell = abs(changes?.sell?.budget ?? 0);
       const sold = tokenAmount(sell, quote);
       const gained = tokenAmount(buy, base);
       const price = prettifyNumber(sell / buy);
       return `${sold} was sold for ${gained}. Avg price: ${price} ${base.symbol}/${quote.symbol}.`;
     }
     case 'transfer': {
-      return `Strategy was transferred to a ${shortAddress(changes.owner!)}.`;
+      return `Strategy was transferred to a ${shortAddress(changes!.owner!)}.`;
     }
     case 'delete': {
       return 'Strategy was deleted.';

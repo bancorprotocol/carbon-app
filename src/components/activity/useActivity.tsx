@@ -1,7 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTokens } from 'hooks/useTokens';
 import { QueryKey } from 'libs/queries';
-import { Activity, ServerActivity } from 'libs/queries/extApi/activity';
+import {
+  Activity,
+  QueryActivityParams,
+  ServerActivity,
+} from 'libs/queries/extApi/activity';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { carbonApi } from 'utils/carbonApi';
@@ -10,19 +14,20 @@ const toActivities = (
   data: ServerActivity[],
   tokenMap: Map<string, Token>
 ): Activity[] => {
+  console.log({ data, tokenMap });
   return (
     data
       // TODO: Remove this filter once we have all tokens
       .filter((activity) => {
         const { strategy } = activity;
-        if (!tokenMap.has(strategy.base)) return false;
-        if (!tokenMap.has(strategy.quote)) return false;
+        if (!tokenMap.has(strategy.base.toLowerCase())) return false;
+        if (!tokenMap.has(strategy.quote.toLowerCase())) return false;
         return true;
       })
       .map((activity) => {
         const { strategy } = activity;
-        const base = tokenMap.get(strategy.base);
-        const quote = tokenMap.get(strategy.quote);
+        const base = tokenMap.get(strategy.base.toLowerCase());
+        const quote = tokenMap.get(strategy.quote.toLowerCase());
         if (!base) {
           throw new Error(
             `Base "${strategy.base}" not found for activity with txhash "${activity.txHash}"`
@@ -35,7 +40,7 @@ const toActivities = (
         }
         return {
           ...activity,
-          date: new Date(activity.date),
+          date: new Date(activity.timestamp * 1000),
           strategy: {
             ...strategy,
             base,
@@ -69,15 +74,17 @@ const getNewTokens = async (
 };
 
 // TODO: query all remaining tokens
-export const useActivity = () => {
+export const useActivity = (params: QueryActivityParams = {}) => {
   // const { Token } = useContract();
   const { tokensMap } = useTokens();
   return useQuery(
     QueryKey.tokenPrice('activity'),
     async () => {
-      const activities = await carbonApi.getActivity();
+      const activities = await carbonApi.getActivity(params);
       // await getNewTokens(tokensMap, Token, activities);
-      return toActivities(activities, tokensMap);
+      return toActivities(activities, tokensMap).sort((a, b) => {
+        return b.date.getTime() - a.date.getTime();
+      });
     },
     {
       refetchInterval: 30 * 1000,

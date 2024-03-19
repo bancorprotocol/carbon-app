@@ -1,40 +1,14 @@
-// export interface Activity {
-//   creationWallet: string;
-//   currentOwner: string;
-//   actionOwner: string;
-//   id: string;
-//   action: ActivityAction;
-//   baseQuote: string;
-//   baseSellToken: string;
-//   quoteBuyToken: string;
-//   buyBudget: number;
-//   sellBudget: number;
-//   buyBudgetChange: number;
-//   sellBudgetChange: number;
-//   buyPriceA: number;
-//   buyPriceB: number;
-//   sellPriceA: number;
-//   sellPriceB: number;
-//   strategySold: number;
-//   tokenSold: string;
-//   strategyBought: number;
-//   tokenBought: string;
-//   avgPrice: number;
-//   oldOwner: string | null;
-//   newOwner: string | null;
-//   date: string;
-//   txhash: string;
-// }
-
 import { Token } from 'libs/tokens';
 
-type DeepPartial<T> = T extends object
-  ? Partial<{ [P in keyof T]: DeepPartial<T[P]> }>
-  : T;
 interface OrderState {
   min: string;
   max: string;
   budget: string;
+}
+interface StrategyChanges {
+  owner?: string;
+  buy?: Partial<OrderState>;
+  sell: Partial<OrderState>;
 }
 interface StrategyState<T extends 'server' | 'app'> {
   id: string;
@@ -48,7 +22,7 @@ export type ActivityAction =
   | 'create'
   | 'deposit'
   | 'withdraw'
-  | 'editPrice'
+  | 'edit'
   | 'delete'
   | 'transfer'
   | 'buy'
@@ -57,11 +31,18 @@ export type ActivityAction =
 export interface RawActivity<T extends 'server' | 'app'> {
   action: ActivityAction;
   strategy: StrategyState<T>;
-  changes: Omit<DeepPartial<StrategyState<T>>, 'base' | 'quote' | 'id'>;
+  changes?: StrategyChanges;
   blockNumber: number;
   txHash: string;
-  date: T extends 'server' ? string : Date;
+  timestamp: number;
+  date: T extends 'server' ? undefined : Date;
 }
 
 export type ServerActivity = RawActivity<'server'>;
 export type Activity = RawActivity<'app'>;
+
+export interface QueryActivityParams {
+  ownerId?: string;
+  pair?: string;
+  strategyId?: string;
+}

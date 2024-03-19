@@ -7,7 +7,10 @@ import {
   TokenPriceHistorySearch,
 } from 'libs/queries/extApi/tokenPrice';
 import config from 'config';
-import { ServerActivity } from 'libs/queries/extApi/activity';
+import {
+  QueryActivityParams,
+  ServerActivity,
+} from 'libs/queries/extApi/activity';
 
 export const AVAILABLE_CURRENCIES = [
   'USD',
@@ -82,10 +85,8 @@ const carbonApi = {
       quoteBudget: params.buyBudget,
     });
   },
-  getActivity: async (): Promise<ServerActivity[]> => {
-    return fetch('/mocks/activity.json').then((response) => response.json());
-    // const { data } = await newApiAxios.get<ServerActivity[]>('activity');
-    // return data;
+  getActivity: async (params: QueryActivityParams) => {
+    return get<ServerActivity[]>('activity', params);
   },
 };
 

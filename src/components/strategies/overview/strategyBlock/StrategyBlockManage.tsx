@@ -88,7 +88,7 @@ export const StrategyBlockManage: FC<Props> = ({ strategy, isExplorer }) => {
   if (isExplorer && type === 'token-pair') {
     items.push({
       id: 'walletOwner',
-      name: 'View Owner’s Strategies',
+      name: "View Owner's Strategies",
       action: () => {
         const event = { type, slug, strategyEvent, strategies, sort, filter };
         explorerEvents.viewOwnersStrategiesClick(event);
