@@ -11,7 +11,7 @@ import { SimulatorData } from 'libs/queries';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
-import { toUnixUTC } from '../utils';
+import { fromUnixUTC, toUnixUTC } from '../utils';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -38,14 +38,16 @@ export const SimResultChartHeader = ({
   const navigate = useNavigate();
 
   const onDatePickerConfirm = useCallback(
-    (props: { start?: string; end?: string }) => {
-      if (!props.start || !props.end) return;
+    (props: { start?: Date; end?: Date }) => {
+      const { start, end } = props;
+      if (!start || !end) return;
       navigate({
         from: '/simulate/result',
         to: '/simulate/result',
         search: (search) => ({
           ...search,
-          ...props,
+          start: toUnixUTC(start),
+          end: toUnixUTC(end),
         }),
         replace: true,
       });
@@ -57,10 +59,10 @@ export const SimResultChartHeader = ({
   const DateRangePickerMemo = useMemo(() => {
     return (
       <DateRangePicker
-        defaultStart={toUnixUTC(sub(new Date(), { days: 364 }))}
-        defaultEnd={toUnixUTC(startOfDay(new Date()))}
-        start={startUnix}
-        end={endUnix}
+        defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
+        defaultEnd={startOfDay(new Date())}
+        start={fromUnixUTC(startUnix)}
+        end={fromUnixUTC(endUnix)}
         onConfirm={onDatePickerConfirm}
         presets={datePickerPresets}
         options={{ disabled: datePickerDisabledDays }}

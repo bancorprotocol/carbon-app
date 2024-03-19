@@ -1,12 +1,18 @@
 import { Button } from 'components/common/button';
 import { Calendar, CalendarProps } from 'components/common/calendar';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { subDays, isSameDay, subMonths, startOfDay, endOfDay } from 'date-fns';
+import {
+  subDays,
+  isSameDay,
+  subMonths,
+  startOfDay,
+  endOfDay,
+  format,
+} from 'date-fns';
 import { Dispatch, memo, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
-import { fromUnixUTC, toUnixUTC } from 'components/simulator/utils';
 import { cn } from 'utils/helpers';
 
 export const datePickerPresets: DatePickerPreset[] = [
@@ -23,14 +29,14 @@ export type DatePickerPreset = {
 
 interface Props {
   /** Value used to be reset to when user click on reset */
-  defaultStart?: number | string;
+  defaultStart?: Date;
   /** Value used to be reset to when user click on reset */
-  defaultEnd?: number | string;
+  defaultEnd?: Date;
   /** Current start value */
-  start?: number | string;
+  start?: Date;
   /** Current end value */
-  end?: number | string;
-  onConfirm: (props: { start?: string; end?: string }) => void;
+  end?: Date;
+  onConfirm: (props: { start?: Date; end?: Date }) => void;
   setIsOpen: Dispatch<boolean>;
   presets: DatePickerPreset[];
   options?: Omit<CalendarProps, 'mode' | 'selected' | 'onSelect'>;
@@ -38,10 +44,14 @@ interface Props {
   form?: string;
 }
 
+const displayRange = (start?: Date, end?: Date) => {
+  if (!start || !end) return 'Select Date Range';
+  if (isSameDay(start, end)) return dateFormatter.format(start);
+  return `${dateFormatter.format(start)} - ${dateFormatter.format(end)}`;
+};
+
 export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
   const [isOpen, setIsOpen] = useState(false);
-  const startDate = dateFormatter.format(fromUnixUTC(props.start));
-  const endDate = dateFormatter.format(fromUnixUTC(props.end));
 
   const hasDates = !!(props.start && props.end);
   const Trigger = (attr: MenuButtonProps) => (
@@ -50,9 +60,11 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'flex items-center gap-8 rounded-full border-2 border-background-800 px-12 py-8 text-12',
-        'hover:border-background-700 hover:bg-background-800',
-        'active:border-background-600'
+        'flex items-center gap-8 rounded-full border-2 px-12 py-8 text-12',
+        'hover:bg-background-800',
+        hasDates
+          ? 'border-primary active:border-primary-light'
+          : 'border-background-800 hover:border-background-700 active:border-background-600'
       )}
       data-testid="date-picker-button"
     >
@@ -61,7 +73,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
         className="justify-self-end text-white/60"
         data-testid="simulation-dates"
       >
-        {hasDates ? `${startDate} – ${endDate}` : 'Select Date Range'}
+        {displayRange(props.start, props.end)}
       </span>
       <ChevronIcon
         className={cn('h-12 w-12 text-white/80 transition-transform', {
@@ -86,18 +98,21 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
 });
 
 const getDefaultDateRange = (
-  start?: number | string,
-  end?: number | string
+  start?: Date,
+  end?: Date
 ): DateRange | undefined => {
   if (!start || !end) return undefined;
   return {
-    from: fromUnixUTC(start),
-    to: fromUnixUTC(end),
+    from: start,
+    to: end,
   };
 };
 
-/** Transform date into YYYY-MM-DD */
-const toDateInput = (date?: Date) => date?.toISOString().split('T')[0] ?? '';
+/** Transform date into yyyy-MM-dd */
+const toDateInput = (date?: Date) => {
+  if (!date) return '';
+  return format(date, 'yyyy-MM-dd');
+};
 
 const Content = (props: Props) => {
   const startRef = useRef<HTMLInputElement>(null);
@@ -130,10 +145,7 @@ const Content = (props: Props) => {
     if (!to && date?.from) to = endOfDay(date?.from);
     startRef.current!.value = toDateInput(from);
     endRef.current!.value = toDateInput(to);
-    props.onConfirm({
-      start: from && toUnixUTC(from),
-      end: to && toUnixUTC(to!),
-    });
+    props.onConfirm({ start: from, end: to });
     props.setIsOpen(false);
   };
 

@@ -20,7 +20,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
-import { toUnixUTC } from '../utils';
+import { fromUnixUTC, toUnixUTC } from '../utils';
 import { useStore } from 'store';
 import { startOfDay, sub } from 'date-fns';
 
@@ -146,10 +146,10 @@ export const SimInputChart = ({
   );
 
   const onDatePickerConfirm = useCallback(
-    (props: { start?: string; end?: string }) => {
+    (props: { start?: Date; end?: Date }) => {
       if (!props.start || !props.end) return;
-      dispatch('start', props.start);
-      dispatch('end', props.end);
+      dispatch('start', toUnixUTC(props.start));
+      dispatch('end', toUnixUTC(props.end));
     },
     [dispatch]
   );
@@ -159,10 +159,10 @@ export const SimInputChart = ({
       <div className="mb-20 flex items-center justify-between">
         <h2 className="mr-20 text-20 font-weight-500">Price Chart</h2>
         <DateRangePicker
-          defaultStart={toUnixUTC(sub(new Date(), { days: 364 }))}
-          defaultEnd={toUnixUTC(startOfDay(new Date()))}
-          start={state.start}
-          end={state.end}
+          defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
+          defaultEnd={startOfDay(new Date())}
+          start={fromUnixUTC(state.start)}
+          end={fromUnixUTC(state.end)}
           onConfirm={onDatePickerConfirm}
           presets={datePickerPresets}
           options={{

@@ -1,3 +1,4 @@
+import { endOfDay, startOfDay } from 'date-fns';
 import { Activity } from 'libs/queries/extApi/activity';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
@@ -6,7 +7,6 @@ import {
   prettifyNumber,
   shortAddress,
   toArray,
-  toDate,
   tokenAmount,
   tokenRange,
 } from 'utils/helpers';
@@ -36,8 +36,14 @@ export const activitySchema: GroupSchema<ActivitySearchParams> = {
   pairs: toArray([]),
   actions: toArray([]),
   ids: toArray([]),
-  start: toDate(),
-  end: toDate(),
+  start: (value?: string) => {
+    if (!value) return;
+    return startOfDay(new Date(value));
+  },
+  end: (value?: string) => {
+    if (!value) return;
+    return endOfDay(new Date(value));
+  },
 };
 
 export const activityHasPairs = (activity: Activity, pairs: string[]) => {

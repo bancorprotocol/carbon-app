@@ -13,7 +13,6 @@ import {
   DateRangePicker,
   datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
-import { toUnixUTC } from 'components/simulator/utils';
 
 interface DisplayID {
   id: string;
@@ -153,9 +152,8 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         form={formId}
         presets={datePickerPresets}
         onConfirm={updateParams}
-        // TODO: change it to the actual date
-        start={start && toUnixUTC(start)}
-        end={end && toUnixUTC(end)}
+        start={start}
+        end={end}
         options={{
           disabled: { after: new Date() },
         }}

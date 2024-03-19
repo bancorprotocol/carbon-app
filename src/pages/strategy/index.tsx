@@ -55,7 +55,7 @@ export const StrategyPage = () => {
           </h1>
           <StrategySubtitle {...strategy} />
         </div>
-        <StrategyBlockManage strategy={strategy} isExplorer={false} />
+        <StrategyBlockManage strategy={strategy} isExplorer={true} />
       </header>
       <section className="flex flex-col gap-16 md:flex-row">
         <article className="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded bg-background-900 p-24 md:w-[400px]">
