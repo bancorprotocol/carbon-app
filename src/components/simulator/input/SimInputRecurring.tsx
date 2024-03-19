@@ -1,7 +1,7 @@
 import { BuySellBlock } from 'components/simulator/input/BuySellBlockNew';
 import {
-  checkOrdersOverlap,
-  checkOrdersReversed,
+  checkIfOrdersOverlap,
+  checkIfOrdersReversed,
 } from 'components/strategies/utils';
 import {
   StrategyInputValues,
@@ -52,8 +52,8 @@ export const SimInputRecurring = ({
         quote={state.quoteToken}
         order={state.sell}
         dispatch={dispatch}
-        isOrdersOverlap={checkOrdersOverlap(state.buy, state.sell)}
-        isOrdersReversed={checkOrdersReversed(state.buy, state.sell)}
+        isOrdersOverlap={checkIfOrdersOverlap(state.buy, state.sell)}
+        isOrdersReversed={checkIfOrdersReversed(state.buy, state.sell)}
         strategyType="recurring"
         isBudgetOptional={+state.sell.budget === 0 && +state.buy.budget > 0}
         ignoreMarketPriceWarning
@@ -66,8 +66,8 @@ export const SimInputRecurring = ({
         quote={state.quoteToken}
         order={state.buy}
         dispatch={dispatch}
-        isOrdersOverlap={checkOrdersOverlap(state.buy, state.sell)}
-        isOrdersReversed={checkOrdersReversed(state.buy, state.sell)}
+        isOrdersOverlap={checkIfOrdersOverlap(state.buy, state.sell)}
+        isOrdersReversed={checkIfOrdersReversed(state.buy, state.sell)}
         strategyType="recurring"
         isBudgetOptional={+state.buy.budget === 0 && +state.sell.budget > 0}
         ignoreMarketPriceWarning
