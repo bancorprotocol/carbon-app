@@ -43,6 +43,7 @@ export type Activity = RawActivity<'app'>;
 
 export interface QueryActivityParams {
   ownerId?: string;
-  pair?: string;
+  token0?: string;
+  token1?: string;
   strategyId?: string;
 }

@@ -69,17 +69,15 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
         </thead>
         <tbody>
           <tr className="text-14">
-            <td className="px-16">{tokenAmount(strategy.buy.budget, base)}</td>
-            <td className="px-16">
-              {tokenAmount(strategy.sell.budget, quote)}
-            </td>
+            <td className="px-16">{tokenAmount(strategy.buy.budget, quote)}</td>
+            <td className="px-16">{tokenAmount(strategy.sell.budget, base)}</td>
           </tr>
           <tr className="text-12">
             <td className="px-16 pb-16">
-              <BudgetChange budget={changes.buy?.budget} token={base} />
+              <BudgetChange budget={changes?.buy?.budget} token={quote} />
             </td>
             <td className="px-16 pb-16">
-              <BudgetChange budget={changes.sell?.budget} token={quote} />
+              <BudgetChange budget={changes?.sell?.budget} token={base} />
             </td>
           </tr>
         </tbody>

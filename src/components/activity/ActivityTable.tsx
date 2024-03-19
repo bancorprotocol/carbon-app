@@ -97,10 +97,10 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
           {activityActionName[activity.action]}
         </td>
         <td className={tdFirstLine}>
-          {tokenAmount(strategy.buy.budget, base)}
+          {tokenAmount(strategy.buy.budget, quote)}
         </td>
         <td className={tdFirstLine}>
-          {tokenAmount(strategy.sell.budget, quote)}
+          {tokenAmount(strategy.sell.budget, base)}
         </td>
         <td className={cn(tdFirstLine, 'font-mono')}>
           {activityDateFormatter.format(activity.date)}
@@ -116,10 +116,10 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
           <p className="whitespace-normal">{activityDescription(activity)}</p>
         </td>
         <td className={tdSecondLine}>
-          <BudgetChange budget={changes?.buy?.budget} token={base} />
+          <BudgetChange budget={changes?.buy?.budget} token={quote} />
         </td>
         <td className={tdSecondLine}>
-          <BudgetChange budget={changes?.sell?.budget} token={quote} />
+          <BudgetChange budget={changes?.sell?.budget} token={base} />
         </td>
         <td className={tdSecondLine}>
           <p className="flex justify-end gap-8 align-bottom">

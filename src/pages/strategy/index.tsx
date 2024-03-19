@@ -18,12 +18,10 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
 
 export const StrategyPage = () => {
-  const query = useActivity();
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
-  const activities = (query.data ?? []).filter((activity) => {
-    return activity.strategy.id === id;
-  });
+  const query = useActivity({ strategyId: id });
+  const activities = query.data ?? [];
   // TODO: change to useGetStrategy
   const user = activities[0]?.strategy.owner.toLowerCase();
   const allStrategies = useStrategiesWithFiat(useGetUserStrategies({ user }));
