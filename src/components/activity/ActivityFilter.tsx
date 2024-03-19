@@ -5,7 +5,7 @@ import { toPairSlug } from 'utils/pairSearch';
 import { useList } from 'hooks/useList';
 import { FC, useId } from 'react';
 import { Combobox, Option } from 'components/common/combobox';
-import { getLowestBits } from 'utils/helpers';
+import { cn, getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconPair } from 'assets/icons/token-pair.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
@@ -46,8 +46,10 @@ const getAllPairs = (activities: Activity[]) => {
 };
 export interface ActivityFilterProps {
   filters?: ('ids' | 'pairs')[];
+  className?: string;
 }
-export const ActivityFilter: FC<ActivityFilterProps> = ({ filters = [] }) => {
+export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
+  const { filters = [], className } = props;
   const formId = useId();
   const {
     all: activities,
@@ -80,7 +82,10 @@ export const ActivityFilter: FC<ActivityFilterProps> = ({ filters = [] }) => {
   return (
     <form
       id={formId}
-      className="flex flex-1 justify-end gap-16"
+      className={cn(
+        'flex flex-wrap justify-start gap-8 md:justify-end md:gap-16',
+        className
+      )}
       role="search"
       onChange={updateParams}
     >

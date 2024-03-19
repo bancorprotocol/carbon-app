@@ -25,7 +25,7 @@ export const StrategyPage = () => {
     return activity.strategy.id === id;
   });
   // TODO: change to useGetStrategy
-  const user = activities[0]?.strategy.owner;
+  const user = activities[0]?.strategy.owner.toLowerCase();
   const allStrategies = useStrategiesWithFiat(useGetUserStrategies({ user }));
   const strategy = allStrategies.find((strategy) => strategy.id === id);
   if (query.isLoading || !strategy) {
@@ -57,8 +57,8 @@ export const StrategyPage = () => {
         </div>
         <StrategyBlockManage strategy={strategy} isExplorer={false} />
       </header>
-      <section className="flex gap-16">
-        <article className="grid w-[400px] grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded bg-background-900 p-24">
+      <section className="flex flex-col gap-16 md:flex-row">
+        <article className="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded bg-background-900 p-24 md:w-[400px]">
           <h2 className="col-span-2 text-18 font-weight-500">Strategy Info</h2>
           <StrategyBlockRoi strategy={strategy} />
           <StrategyBlockBudget strategy={strategy} />

@@ -61,7 +61,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
         className="justify-self-end text-white/60"
         data-testid="simulation-dates"
       >
-        {hasDates ? `${startDate} – ${endDate}` : 'Select Date range'}
+        {hasDates ? `${startDate} – ${endDate}` : 'Select Date Range'}
       </span>
       <ChevronIcon
         className={cn('h-12 w-12 text-white/80 transition-transform', {
@@ -124,13 +124,15 @@ const Content = (props: Props) => {
 
   const onConfirm = () => {
     if (props.required && !hasDates) return;
-    const from = date!.from ?? startOfDay(date!.to!);
-    const to = date!.to ?? endOfDay(date!.from!);
+    let from = date?.from;
+    if (!from && date?.to) from = startOfDay(date?.to);
+    let to = date?.to;
+    if (!to && date?.from) to = endOfDay(date?.from);
     startRef.current!.value = toDateInput(from);
     endRef.current!.value = toDateInput(to);
     props.onConfirm({
-      start: toUnixUTC(from),
-      end: toUnixUTC(to!),
+      start: from && toUnixUTC(from),
+      end: to && toUnixUTC(to!),
     });
     props.setIsOpen(false);
   };
@@ -237,7 +239,7 @@ export const DatePickerButton = memo(
           className="justify-self-end text-white/60"
           data-testid="simulation-dates"
         >
-          {hasDates ? `${startDate} – ${endDate}` : 'Select Date range'}
+          {hasDates ? `${startDate} – ${endDate}` : 'Select Date Range'}
         </span>
         <ChevronIcon className="h-12 w-12 rotate-180 text-white/80" />
       </>

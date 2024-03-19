@@ -1,0 +1,89 @@
+import { FC } from 'react';
+import { Activity } from 'libs/queries/extApi/activity';
+import {
+  activityActionName,
+  activityDateFormatter,
+  activityDescription,
+  activityKey,
+} from './utils';
+import {
+  ActivityIcon,
+  ActivityId,
+  BudgetChange,
+  TransactionLink,
+} from './ActivityTable';
+import { tokenAmount } from 'utils/helpers';
+
+export interface ActivityListProps {
+  activities: Activity[];
+  hideIds?: boolean;
+}
+
+export const ActivityList: FC<ActivityListProps> = (props) => {
+  const { activities, hideIds = false } = props;
+  return (
+    <ul className="flex flex-col gap-16 p-16">
+      {activities.map((activity, i) => (
+        <ActivityItem
+          key={activityKey(activity, i)}
+          activity={activity}
+          hideIds={hideIds}
+        />
+      ))}
+    </ul>
+  );
+};
+
+interface ActivityItemProps {
+  activity: Activity;
+  hideIds: boolean;
+}
+const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
+  const { strategy, changes } = activity;
+  const { base, quote } = strategy;
+  return (
+    <li className="flex flex-col gap-16 rounded border-2 border-background-800">
+      <header className="flex px-16 pt-16">
+        {!hideIds && <ActivityId activity={activity} size={12} />}
+        <p className="flex flex-1 items-center justify-end gap-8 font-mono text-12 text-white/60">
+          {activityDateFormatter.format(activity.date)}
+          <TransactionLink txHash={activity.txHash} className="h-12" />
+        </p>
+      </header>
+      <section className="px-16">
+        <h3 className="mb-8 flex items-center gap-8">
+          <ActivityIcon activity={activity} size={24} />
+          {activityActionName[activity.action]}
+        </h3>
+        <p className="font-mono text-12 text-white/60">
+          {activityDescription(activity)}
+        </p>
+      </section>
+      <hr className="border-background-800" />
+      <table className="w-full table-fixed">
+        <thead>
+          <tr className="font-mono text-12 text-white/60">
+            <th className="px-16 font-weight-400">Buy Budget</th>
+            <th className="px-16 font-weight-400">Sell Budget</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="text-14">
+            <td className="px-16">{tokenAmount(strategy.buy.budget, base)}</td>
+            <td className="px-16">
+              {tokenAmount(strategy.sell.budget, quote)}
+            </td>
+          </tr>
+          <tr className="text-12">
+            <td className="px-16 pb-16">
+              <BudgetChange budget={changes.buy?.budget} token={base} />
+            </td>
+            <td className="px-16 pb-16">
+              <BudgetChange budget={changes.sell?.budget} token={quote} />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+  );
+};

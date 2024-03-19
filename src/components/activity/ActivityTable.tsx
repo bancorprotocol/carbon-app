@@ -14,24 +14,35 @@ import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
 import { ReactComponent as IconTransfer } from 'assets/icons/transfer.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
-import { activityActionName, activityDescription } from './utils';
+import {
+  activityActionName,
+  activityDateFormatter,
+  activityDescription,
+  activityKey,
+  budgetColor,
+} from './utils';
 import { usePagination } from 'hooks/useList';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
+import { ActivityListProps } from './ActivityList';
 import style from './ActivityTable.module.css';
-
-interface ActivityTableProps {
-  activities: Activity[];
-  hideIds?: boolean;
-}
 
 const thStyle = cn(
   'text-start font-weight-400 py-16',
   'first:text-start first:px-24',
   'last:px-24 last:text-end'
 );
+const tdFirstLine = cn(
+  'pt-12 align-bottom whitespace-nowrap',
+  'first:px-24',
+  'last:px-24 last:text-end'
+);
+const tdSecondLine = cn(
+  'pb-12 align-top whitespace-nowrap',
+  'last:px-24 last:text-end'
+);
 
-export const ActivityTable: FC<ActivityTableProps> = (props) => {
+export const ActivityTable: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
   return (
     <table className={cn('w-full border-collapse', style.table)}>
@@ -47,17 +58,14 @@ export const ActivityTable: FC<ActivityTableProps> = (props) => {
         </tr>
       </thead>
       <tbody>
-        {activities.map((activity, i) => {
-          const key = `${activity.txHash}-${activity.action}-${i}`;
-          return (
-            <ActivityRow
-              key={key}
-              activity={activity}
-              hideIds={hideIds}
-              index={i}
-            />
-          );
-        })}
+        {activities.map((activity, i) => (
+          <ActivityRow
+            key={activityKey(activity, i)}
+            activity={activity}
+            hideIds={hideIds}
+            index={i}
+          />
+        ))}
       </tbody>
       <tfoot>
         <ActivityPaginator />
@@ -66,18 +74,6 @@ export const ActivityTable: FC<ActivityTableProps> = (props) => {
   );
 };
 
-const dateOptions: Intl.DateTimeFormatOptions = {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-};
-const budgetColor = (budget?: string) => {
-  if (!budget) return '';
-  return new SafeDecimal(budget).isPositive() ? 'text-buy' : 'text-sell';
-};
 interface ActivityRowProps {
   activity: Activity;
   hideIds: boolean;
@@ -86,39 +82,28 @@ interface ActivityRowProps {
 const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
-  const date = new Date(activity.date).toLocaleDateString('en', dateOptions);
   return (
     <>
       <tr className="text-14" style={{ animationDelay: `${index * 50}ms` }}>
         {!hideIds && (
           <td rowSpan={2} className="py-12 first:px-24">
-            <div className="inline-flex items-center gap-8 rounded-full bg-background-800 p-8">
-              <span className="lineHeight-4">{getLowestBits(strategy.id)}</span>
-              <TokensOverlap tokens={[base, quote]} size={16} />
-            </div>
+            <ActivityId activity={activity} size={14} />
           </td>
         )}
         <td rowSpan={2} className="py-12 first:px-24">
-          <div
-            className={cn(
-              'mr-8 grid h-32 w-32 place-items-center rounded-full',
-              iconColor(activity.action)
-            )}
-          >
-            <ActionIcon action={activity.action} />
-          </div>
+          <ActivityIcon activity={activity} className="mr-8" size={32} />
         </td>
-        <td className="pt-12 align-bottom font-weight-500">
+        <td className={cn(tdFirstLine, 'font-weight-500')}>
           {activityActionName[activity.action]}
         </td>
-        <td className="pt-12 align-bottom">
+        <td className={tdFirstLine}>
           {tokenAmount(strategy.buy.budget, base)}
         </td>
-        <td className="pt-12 align-bottom">
+        <td className={tdFirstLine}>
           {tokenAmount(strategy.sell.budget, quote)}
         </td>
-        <td className="pt-12 text-end align-bottom font-mono last:px-24">
-          {date}
+        <td className={cn(tdFirstLine, 'font-mono')}>
+          {activityDateFormatter.format(activity.date)}
         </td>
       </tr>
       <tr
@@ -127,24 +112,19 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
       >
         {/* ID */}
         {/* Action Icon */}
-        <td className="pb-12 align-top">{activityDescription(activity)}</td>
-        <td className={cn('pb-12 align-top', budgetColor(changes.buy?.budget))}>
+        <td className={tdSecondLine}>
+          <p className="whitespace-normal">{activityDescription(activity)}</p>
+        </td>
+        <td className={tdSecondLine}>
           <BudgetChange budget={changes.buy?.budget} token={base} />
         </td>
-        <td
-          className={cn('pb-12 align-top', budgetColor(changes.sell?.budget))}
-        >
+        <td className={tdSecondLine}>
           <BudgetChange budget={changes.sell?.budget} token={quote} />
         </td>
-        <td className="pb-12 align-top last:px-24">
+        <td className={tdSecondLine}>
           <p className="flex justify-end gap-8 align-bottom">
             {shortAddress(activity.txHash)}
-            <NewTabLink
-              aria-label="See transaction on block explorer"
-              to={getExplorerLink('tx', activity.txHash)}
-            >
-              <IconLink className="h-14 text-primary" />
-            </NewTabLink>
+            <TransactionLink txHash={activity.txHash} className="h-14" />
           </p>
         </td>
       </tr>
@@ -152,12 +132,70 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
   );
 };
 
-const BudgetChange = ({ budget, token }: { budget?: string; token: Token }) => {
+interface ActivityIdProps {
+  activity: Activity;
+  size: number;
+}
+export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
+  const { id, base, quote } = activity.strategy;
+  const space = size >= 14 ? 8 : 4;
+  return (
+    <span
+      className={`inline-flex items-center gap-${space} rounded-full bg-background-800 p-${space}`}
+    >
+      <span className={`text-${size}`}>{getLowestBits(id)}</span>
+      <TokensOverlap tokens={[base, quote]} size={size + 2} />
+    </span>
+  );
+};
+
+interface ActivityIconProps {
+  activity: Activity;
+  size: number;
+  className?: string;
+}
+export const ActivityIcon: FC<ActivityIconProps> = (props) => {
+  const { activity, className, size } = props;
+  const classes = cn(
+    'grid place-items-center rounded-full',
+    iconColor(activity.action),
+    `h-${size} w-${size}`,
+    className
+  );
+  return (
+    <div className={classes}>
+      <ActionIcon action={activity.action} size={size - 16} />
+    </div>
+  );
+};
+
+interface TransactionLinkProps {
+  txHash: string;
+  className: string;
+}
+export const TransactionLink: FC<TransactionLinkProps> = (props) => {
+  const { txHash, className } = props;
+  return (
+    <NewTabLink
+      aria-label="See transaction on block explorer"
+      to={getExplorerLink('tx', txHash)}
+    >
+      <IconLink className={cn('text-primary', className)} />
+    </NewTabLink>
+  );
+};
+
+interface BudgetChangeProps {
+  budget?: string;
+  token: Token;
+}
+export const BudgetChange: FC<BudgetChangeProps> = ({ budget, token }) => {
   if (!budget) return '...';
   const value = new SafeDecimal(budget);
-  return value.isNegative()
+  const text = value.isNegative()
     ? tokenAmount(budget, token)
     : `+${tokenAmount(budget, token)}`;
+  return <p className={budgetColor(budget)}>{text}</p>;
 };
 
 const ActivityPaginator = () => {
@@ -246,6 +284,7 @@ const ActivityPaginator = () => {
 
 interface ActionIconProps {
   action: ActivityAction;
+  size: string | number;
 }
 const iconColor = (action: ActivityAction) => {
   if (action === 'buy') return `bg-buy/10 text-buy`;
@@ -255,15 +294,16 @@ const iconColor = (action: ActivityAction) => {
   return `bg-white/10 text-white`;
 };
 
-const ActionIcon: FC<ActionIconProps> = ({ action }) => {
-  if (action === 'create') return <IconCheck className="h-16 w-16" />;
-  if (action === 'transfer') return <IconTransfer className="h-16 w-16" />;
-  if (action === 'editPrice') return <IconEdit className="h-16 w-16" />;
-  if (action === 'delete') return <IconDelete className="h-16 w-16" />;
-  if (action === 'pause') return <IconPause className="h-16 w-16" />;
-  if (action === 'deposit') return <IconDeposit className="h-16 w-16" />;
-  if (action === 'withdraw') return <IconWithdraw className="h-16 w-16" />;
+const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
+  const className = `h-${size} w-${size}`;
+  if (action === 'create') return <IconCheck className={className} />;
+  if (action === 'transfer') return <IconTransfer className={className} />;
+  if (action === 'editPrice') return <IconEdit className={className} />;
+  if (action === 'delete') return <IconDelete className={className} />;
+  if (action === 'pause') return <IconPause className={className} />;
+  if (action === 'deposit') return <IconDeposit className={className} />;
+  if (action === 'withdraw') return <IconWithdraw className={className} />;
   if (action === 'buy')
-    return <IconArrowDown className="h-16 w-16 rotate-[-60deg]" />;
-  return <IconArrowDown className="h-16 w-16 rotate-[-120deg]" />;
+    return <IconArrowDown className={cn('rotate-[-60deg]', className)} />;
+  return <IconArrowDown className={cn('rotate-[-120deg]', className)} />;
 };

@@ -1,4 +1,5 @@
 import { Activity } from 'libs/queries/extApi/activity';
+import { SafeDecimal } from 'libs/safedecimal';
 import {
   GroupSchema,
   getLowestBits,
@@ -62,7 +63,19 @@ export const filterActivity = (
   });
 };
 
-const listFormatter = new Intl.ListFormat('en', {
+export const activityKey = (activity: Activity, i: number) => {
+  return `${activity.txHash}-${activity.action}-${i}`;
+};
+
+export const activityDateFormatter = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
+const activityListFormatter = new Intl.ListFormat('en', {
   style: 'long',
   type: 'conjunction',
 });
@@ -81,17 +94,16 @@ export const activityDescription = (activity: Activity) => {
     case 'deposit': {
       const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
       const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
-      const amounts = listFormatter.format([buy, sell].filter(exist));
+      const amounts = activityListFormatter.format([buy, sell].filter(exist));
       return `${amounts} was deposited to the strategy.`;
     }
     case 'withdraw': {
       const buy = tokenAmount(abs(changes.buy?.budget ?? 0), quote);
       const sell = tokenAmount(abs(changes.sell?.budget ?? 0), base);
-      const amounts = listFormatter.format([buy, sell].filter(exist));
+      const amounts = activityListFormatter.format([buy, sell].filter(exist));
       return `${amounts} was withdrawn to the wallet.`;
     }
     case 'buy': {
-      // TODO: understand in which case changes.buy is undefined
       const buy = abs(changes.buy?.budget ?? 0);
       const sell = abs(changes.sell?.budget ?? 0);
       const bought = tokenAmount(buy, quote);
@@ -120,4 +132,9 @@ export const activityDescription = (activity: Activity) => {
       return 'Unknown action';
     }
   }
+};
+
+export const budgetColor = (budget?: string) => {
+  if (!budget) return '';
+  return new SafeDecimal(budget).isPositive() ? 'text-buy' : 'text-sell';
 };
