@@ -45,5 +45,5 @@ export interface QueryActivityParams {
   ownerId?: string;
   token0?: string;
   token1?: string;
-  strategyId?: string;
+  strategyIds?: string;
 }

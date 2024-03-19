@@ -20,7 +20,7 @@ import { TradingviewChart } from 'components/tradingviewChart';
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
-  const query = useActivity({ strategyId: id });
+  const query = useActivity({ strategyIds: id });
   const activities = query.data ?? [];
   // TODO: change to useGetStrategy
   const user = activities[0]?.strategy.owner.toLowerCase();

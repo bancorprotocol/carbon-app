@@ -14,7 +14,6 @@ const toActivities = (
   data: ServerActivity[],
   tokenMap: Map<string, Token>
 ): Activity[] => {
-  console.log({ data, tokenMap });
   return (
     data
       // TODO: Remove this filter once we have all tokens
