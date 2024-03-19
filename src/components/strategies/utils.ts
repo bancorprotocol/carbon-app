@@ -39,10 +39,10 @@ export const checkIfOrdersOverlap = (
 ): boolean => {
   const isSellMinInBuyRange =
     +sell.min < +buy.max &&
-    +sell.min > +buy.min &&
+    +sell.min >= +buy.min &&
     +sell.min !== 0 &&
     +buy.min !== 0;
-  const isSellMaxAboveBuyMax = +sell.max > +buy.max;
+  const isSellMaxAboveBuyMax = +sell.max >= +buy.max;
 
   return isSellMinInBuyRange && isSellMaxAboveBuyMax;
 };
