@@ -1,44 +1,53 @@
 import { Activity } from 'libs/queries/extApi/activity';
 import { FC, useMemo } from 'react';
-import { activityActionName, activityDescription } from './utils';
+import { activityActionName } from './utils';
 import { getLowestBits } from 'utils/helpers';
 import { ReactComponent as IconDownloadFile } from 'assets/icons/download-file.svg';
 
-const formatter = Intl.NumberFormat('en');
 const getCSV = (activities: Activity[]) => {
   const header = [
     'ID',
     'Base',
     'Quote',
     'Action',
-    'Description',
+    'Buy Min',
+    'Buy Max',
     'Buy Budget',
-    'Buy Budget Changes',
+    'Sell Min',
+    'Sell Max',
     'Sell Budget',
+    'Buy Min Changes',
+    'Buy Max Changes',
+    'Buy Budget Changes',
+    'Sell Min Changes',
+    'Sell Max Changes',
     'Sell Budget Changes',
     'Block Number',
     'Transaction Hash',
     'Date',
   ].join(',');
+
   const body = activities.map((activity) => {
     const { strategy, changes, blockNumber, txHash } = activity;
     const { base, quote } = strategy;
-    const description = activityDescription(activity);
     const date = new Date(activity.date).toUTCString();
     return [
       getLowestBits(strategy.id),
       base.symbol,
       quote.symbol,
       activityActionName[activity.action],
-      description,
-      `${formatter.format(+strategy.buy.budget)} ${base.symbol}`,
-      changes?.buy?.budget
-        ? `${formatter.format(+changes.buy.budget)} ${base.symbol}`
-        : '',
-      `${formatter.format(+strategy.sell.budget)} ${quote.symbol}`,
-      changes?.sell?.budget
-        ? `${formatter.format(+changes.sell.budget)} ${quote.symbol}`
-        : '',
+      strategy.buy.min,
+      strategy.buy.max,
+      strategy.buy.budget,
+      strategy.sell.min,
+      strategy.sell.max,
+      strategy.sell.budget,
+      changes?.buy?.min ?? '',
+      changes?.buy?.max ?? '',
+      changes?.buy?.budget ?? '',
+      changes?.sell?.min ?? '',
+      changes?.sell?.max ?? '',
+      changes?.sell?.budget ?? '',
       blockNumber,
       txHash,
       date,

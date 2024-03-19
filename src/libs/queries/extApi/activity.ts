@@ -8,7 +8,7 @@ interface OrderState {
 interface StrategyChanges {
   owner?: string;
   buy?: Partial<OrderState>;
-  sell: Partial<OrderState>;
+  sell?: Partial<OrderState>;
 }
 interface StrategyState<T extends 'server' | 'app'> {
   id: string;
