@@ -53,10 +53,10 @@ export const checkIfOrdersReversed = (
 ): boolean => {
   const translateOrder = (order: OrderCreate | StrategyInputOrder) => {
     let orderPrice;
-    if ((order as StrategyInputOrder).isRange !== undefined) {
-      orderPrice = !order.isRange ? +order.min : 0;
-    } else {
+    if ((order as OrderCreate).price !== undefined) {
       orderPrice = +(order as OrderCreate).price;
+    } else {
+      orderPrice = !order.isRange ? +order.min : 0;
     }
 
     return {
