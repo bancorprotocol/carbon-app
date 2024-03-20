@@ -11,3 +11,12 @@
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
 }
+@supports selector(:has(a,b)) {
+  .option input:focus-visible {
+    outline: none;
+  }
+  .option:has(input:focus-visible) {
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: 1px solid white;
+  } 
+}

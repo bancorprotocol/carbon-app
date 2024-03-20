@@ -6,6 +6,7 @@ import {
   useId,
   useContext,
   ChangeEvent,
+  KeyboardEvent,
 } from 'react';
 import {
   FloatingFocusManager,
@@ -98,6 +99,58 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     props.onChange(values);
   };
 
+  const onKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      (document.activeElement as HTMLElement).click();
+    }
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) {
+      e.preventDefault();
+      const root = document.getElementById(rootId)!;
+      const getList = (selector: string) =>
+        Array.from(root.querySelectorAll<HTMLInputElement>(selector));
+      const focus = (el: HTMLInputElement) => {
+        el.tabIndex = 0;
+        el.focus();
+      };
+      const current = document.activeElement as HTMLInputElement;
+      const checkedSelector = `.${style.option}.${style.selected} input`;
+      const unCheckedSelector = `.${style.option}:not(.${style.selected}):not(.${style.hidden}) input`;
+      const checked = getList(checkedSelector);
+      const unchecked = getList(unCheckedSelector);
+      const first = checked.at(0) || unchecked[0];
+      const last = unchecked.at(-1) || checked.at(-1)!;
+
+      checked.forEach((checkbox) => (checkbox.tabIndex = -1));
+      unchecked.forEach((checkbox) => (checkbox.tabIndex = -1));
+
+      if (e.key === 'Home') return focus(first);
+      if (e.key === 'End') return focus(last);
+
+      // checkbox are not sorted in the DOM but with CSS to improve perf, next checkbox is not always the next sibling
+      if (current.checked) {
+        const index = checked.indexOf(current);
+        if (e.key === 'ArrowDown') {
+          console.log(index, checked.length - 1, unchecked[0]);
+          if (index === checked.length - 1) focus(unchecked[0] || checked[0]);
+          else focus(checked[index + 1]);
+        } else {
+          if (index === 0) focus(last);
+          else focus(checked[index - 1]);
+        }
+      } else {
+        const index = unchecked.indexOf(current);
+        if (e.key === 'ArrowDown') {
+          if (index === unchecked.length - 1) focus(first);
+          else focus(unchecked[index + 1]);
+        } else {
+          if (index === 0) focus(checked.at(-1) || unchecked.at(-1)!);
+          else focus(unchecked[index - 1]);
+        }
+      }
+    }
+  };
+
   const reset = () => {
     const selector = 'input[type="checkbox"]:checked';
     const root = document.getElementById(rootId)!;
@@ -166,7 +219,8 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               </button>
               <div
                 role="listbox"
-                className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto"
+                className="flex max-h-[200px] min-w-[200px] flex-col gap-8 overflow-auto p-4"
+                onKeyDown={onKeydown}
               >
                 {options}
                 {empty && <Empty />}
@@ -191,7 +245,7 @@ export const Option: FC<OptionProps> = (props) => {
   const id = useId();
   return (
     <div
-      className={cn('flex items-center gap-8', style.option, {
+      className={cn('flex items-center gap-8 px-4', style.option, {
         [style.selected]: checked,
       })}
     >
@@ -203,6 +257,7 @@ export const Option: FC<OptionProps> = (props) => {
         value={value}
         defaultChecked={checked}
         className="h-14 w-14"
+        tabIndex={checked ? 1 : 0}
       />
       <label htmlFor={id} className={cn('flex items-center gap-8', className)}>
         {children}
