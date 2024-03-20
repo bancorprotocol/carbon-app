@@ -2,7 +2,7 @@ import { ExplorerEmpty } from 'components/explorer/ExplorerEmpty';
 import { FC } from 'react';
 
 interface Props {
-  type: 'strategies' | 'activities';
+  type?: 'strategies' | 'activities';
 }
 export const ExplorerEmptyError: FC<Props> = ({ type = 'strategies' }) => {
   return (
