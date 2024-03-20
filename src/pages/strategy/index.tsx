@@ -12,7 +12,10 @@ import { StrategyBlockRoi } from 'components/strategies/overview/strategyBlock/S
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
 import { StrategyBlockBuySell } from 'components/strategies/overview/strategyBlock/StrategyBlockBuySell';
 import { StrategyGraph } from 'components/strategies/overview/strategyBlock/StrategyGraph';
-import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
+import {
+  ManageButton,
+  StrategyBlockManage,
+} from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
@@ -53,7 +56,11 @@ export const StrategyPage = () => {
           </h1>
           <StrategySubtitle {...strategy} />
         </div>
-        <StrategyBlockManage strategy={strategy} isExplorer={true} />
+        <StrategyBlockManage
+          strategy={strategy}
+          isExplorer={true}
+          button={(attr) => <ManageButton {...attr} />}
+        />
       </header>
       <section className="flex flex-col gap-16 md:flex-row">
         <article className="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded bg-background-900 p-24 md:w-[400px]">

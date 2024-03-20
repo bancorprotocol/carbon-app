@@ -3,7 +3,10 @@ import { FC } from 'react';
 import { getTooltipTextByStatus, statusText } from './utils';
 import { ReactComponent as TooltipIcon } from 'assets/icons/tooltip.svg';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
-import { StrategyBlockManage } from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
+import {
+  ManageButtonIcon,
+  StrategyBlockManage,
+} from 'components/strategies/overview/strategyBlock/StrategyBlockManage';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Link } from '@tanstack/react-router';
@@ -41,7 +44,11 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         >
           <DashboardIcon className="h-16 w-16" />
         </Link>
-        <StrategyBlockManage strategy={strategy} isExplorer={isExplorer} />
+        <StrategyBlockManage
+          strategy={strategy}
+          isExplorer={isExplorer}
+          button={(attr) => <ManageButtonIcon {...attr} />}
+        />
       </div>
     </header>
   );
