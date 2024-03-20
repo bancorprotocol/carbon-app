@@ -3,7 +3,7 @@ import { Activity } from 'libs/queries/extApi/activity';
 import { ActivityTable } from './ActivityTable';
 import { ActivityFilter, ActivityFilterProps } from './ActivityFilter';
 import { useList } from 'hooks/useList';
-import { ActivityCountDown, useCountDown } from './ActivityCountDown';
+import { ActivityCountDown } from './ActivityCountDown';
 import { ActivityList } from './ActivityList';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { ActivityExport } from './ActivityExport';
@@ -11,8 +11,6 @@ import { ActivityExport } from './ActivityExport';
 export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
   const { list: activities, all: allActivities } = useList<Activity>();
   const { aboveBreakpoint } = useBreakpoints();
-  const count = useCountDown(30, [allActivities]);
-
   return (
     <section className="rounded bg-background-900">
       <header className="grid grid-cols-[auto_1fr] gap-16 px-20 py-24 md:grid-cols-[auto_1fr_auto]">
@@ -23,7 +21,7 @@ export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
         />
         <div className="row-start-1 flex gap-8 self-start justify-self-end">
           <ActivityExport activities={allActivities} />
-          <ActivityCountDown time={10} count={count} />
+          <ActivityCountDown time={30} />
         </div>
       </header>
       {aboveBreakpoint('md') ? (

@@ -1,8 +1,8 @@
+import { useList } from 'hooks/useList';
 import { DependencyList, FC, useEffect, useState } from 'react';
 
 interface Props {
   time: number;
-  count: number;
 }
 
 export const useCountDown = (time: number, deps?: DependencyList) => {
@@ -16,7 +16,10 @@ export const useCountDown = (time: number, deps?: DependencyList) => {
   return count;
 };
 
-export const ActivityCountDown: FC<Props> = ({ count, time }) => {
+export const ActivityCountDown: FC<Props> = ({ time }) => {
+  const { all } = useList();
+  // reset the countdown when the new request is made
+  const count = useCountDown(time, [all]);
   const perimeter = 2 * Math.PI * 40;
   return (
     <svg width="30" height="30" viewBox="0 0 100 100" fill="none">
