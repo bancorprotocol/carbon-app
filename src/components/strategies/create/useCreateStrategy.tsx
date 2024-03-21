@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { OrderCreate, useOrder } from './useOrder';
-import { Order, useCreateStrategyQuery } from 'libs/queries';
-import { useModal } from 'hooks/useModal';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
-import { useApproval } from 'hooks/useApproval';
+import { useGetTokenBalance, useQueryClient } from 'libs/queries';
+import { Order, useCreateStrategyQuery } from 'libs/queries';
 import {
   useNavigate,
   useSearch,
@@ -11,20 +9,23 @@ import {
   StrategySettings,
 } from 'libs/routing';
 import { Token } from 'libs/tokens';
-import { config } from 'services/web3/config';
-import { useGetTokenBalance, useQueryClient } from 'libs/queries';
 import { useWeb3 } from 'libs/web3';
-import { useNotifications } from 'hooks/useNotifications';
-import { useDuplicateStrategy } from './useDuplicateStrategy';
-import { carbonEvents } from 'services/events';
-import { useStrategyEventData } from './useStrategyEventData';
+import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
+import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
+import { useApproval } from 'hooks/useApproval';
+import { useModal } from 'hooks/useModal';
+import { useNotifications } from 'hooks/useNotifications';
+import { config } from 'services/web3/config';
+import { carbonEvents } from 'services/events';
 import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
 import {
   checkIfOrdersOverlap,
+  checkIfOrdersReversed,
   isEmptyOrder,
   isValidOrder,
   isValidRange,
@@ -102,6 +103,10 @@ export const useCreateStrategy = () => {
     });
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
+  }, [order0, order1]);
+
+  const isOrdersReversed = useMemo(() => {
+    return checkIfOrdersReversed(order0, order1);
   }, [order0, order1]);
 
   const mutation = useCreateStrategyQuery();
@@ -272,6 +277,7 @@ export const useCreateStrategy = () => {
     if (isProcessing) return true;
     if (order0.budgetError) return true;
     if (order1.budgetError) return true;
+    if (isOrdersReversed) return true;
 
     if (strategySettings === 'overlapping') {
       return (
@@ -298,6 +304,7 @@ export const useCreateStrategy = () => {
     strategyDirection,
     strategySettings,
     spread,
+    isOrdersReversed,
   ]);
 
   useEffect(() => {
@@ -351,6 +358,7 @@ export const useCreateStrategy = () => {
     setSelectedStrategySettings,
     isProcessing,
     isOrdersOverlap,
+    isOrdersReversed,
     spread,
     setSpread,
   };

@@ -1,12 +1,12 @@
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { capitalize } from 'lodash';
 import { FC, useId } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
+import { StrategyType } from 'libs/routing';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { LimitRangeSection } from 'components/simulator/input/BuySellBlockNew/LimitRangeSection';
 import { LogoImager } from 'components/common/imager/Imager';
-import { StrategyType } from 'libs/routing';
 import { FullOutcome } from 'components/strategies/FullOutcome';
 import { BuySellHeader } from 'components/simulator/input/BuySellBlockNew/Header';
 import { BudgetSection } from 'components/simulator/input/BuySellBlockNew/BudgetSection';
@@ -25,6 +25,7 @@ type Props = {
   isBudgetOptional?: boolean;
   strategyType?: StrategyType;
   isOrdersOverlap: boolean;
+  isOrdersReversed: boolean;
   ignoreMarketPriceWarning?: boolean;
   warningMsg?: string;
 };
@@ -39,6 +40,7 @@ export const BuySellBlock: FC<Props> = ({
   strategyType,
   buy = false,
   isOrdersOverlap,
+  isOrdersReversed,
   ignoreMarketPriceWarning,
   warningMsg,
 }) => {
@@ -78,6 +80,7 @@ export const BuySellBlock: FC<Props> = ({
     buy,
     inputTitle,
     isOrdersOverlap,
+    isOrdersReversed,
     ignoreMarketPriceWarning,
   };
   const budgetProps = {
