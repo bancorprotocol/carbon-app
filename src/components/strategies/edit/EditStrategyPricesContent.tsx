@@ -5,14 +5,17 @@ import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Order, Strategy } from 'libs/queries';
 import { useRouter } from 'libs/routing';
-import { EditStrategyOverlapTokens } from './EditStrategyOverlapTokens';
-import { EditStrategyPricesBuySellBlock } from './EditStrategyPricesBuySellBlock';
+import { EditStrategyOverlapTokens } from 'components/strategies/edit/EditStrategyOverlapTokens';
+import { EditStrategyPricesBuySellBlock } from 'components/strategies/edit/EditStrategyPricesBuySellBlock';
 import { carbonEvents } from 'services/events';
-import { useStrategyEventData } from '../create/useStrategyEventData';
-import { checkIfOrdersOverlap } from '../utils';
-import { getStatusTextByTxStatus } from '../utils';
-import { isOverlappingStrategy } from '../overlapping/utils';
-import { EditPriceOverlappingStrategy } from './overlapping/EditPriceOverlappingStrategy';
+import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
+import {
+  checkIfOrdersOverlap,
+  checkIfOrdersReversed,
+  getStatusTextByTxStatus,
+} from 'components/strategies/utils';
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { EditPriceOverlappingStrategy } from 'components/strategies/edit/overlapping/EditPriceOverlappingStrategy';
 import { useStrategyWarning } from '../useWarning';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
@@ -65,6 +68,9 @@ export const EditStrategyPricesContent = ({
 
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
+  }, [order0, order1]);
+  const isOrdersReversed = useMemo(() => {
+    return checkIfOrdersReversed(order0, order1);
   }, [order0, order1]);
 
   const strategyEventData = useStrategyEventData({
@@ -153,6 +159,7 @@ export const EditStrategyPricesContent = ({
             balance={strategy.order1.balance}
             type={type}
             isOrdersOverlap={isOrdersOverlap}
+            isOrdersReversed={isOrdersReversed}
           />
           <EditStrategyPricesBuySellBlock
             buy
@@ -162,6 +169,7 @@ export const EditStrategyPricesContent = ({
             balance={strategy.order0.balance}
             type={type}
             isOrdersOverlap={isOrdersOverlap}
+            isOrdersReversed={isOrdersReversed}
           />
         </>
       )}
