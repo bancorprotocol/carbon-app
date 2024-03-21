@@ -1,15 +1,14 @@
 import { FC } from 'react';
-import { Activity } from 'libs/queries/extApi/activity';
 import { ActivityTable } from './ActivityTable';
 import { ActivityFilter, ActivityFilterProps } from './ActivityFilter';
-import { useList } from 'hooks/useList';
 import { ActivityCountDown } from './ActivityCountDown';
 import { ActivityList } from './ActivityList';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { ActivityExport } from './ActivityExport';
+import { useActivity } from './ActivityProvider';
 
 export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
-  const { list: activities, all: allActivities } = useList<Activity>();
+  const { list: activities, all: allActivities } = useActivity();
   const { aboveBreakpoint } = useBreakpoints();
   return (
     <section className="rounded bg-background-900">

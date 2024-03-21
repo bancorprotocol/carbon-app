@@ -1,8 +1,7 @@
 import { Activity } from 'libs/queries/extApi/activity';
 import { Token } from 'libs/tokens';
-import { ActivitySearchParams, activityActionName } from './utils';
+import { activityActionName } from './utils';
 import { toPairSlug } from 'utils/pairSearch';
-import { useList } from 'hooks/useList';
 import { FC, useId } from 'react';
 import { Combobox, Option } from 'components/common/combobox';
 import { cn, getLowestBits } from 'utils/helpers';
@@ -13,6 +12,7 @@ import {
   DateRangePicker,
   datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
+import { useActivity } from './ActivityProvider';
 
 interface DisplayID {
   id: string;
@@ -50,11 +50,7 @@ export interface ActivityFilterProps {
 export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
   const { filters = [], className } = props;
   const formId = useId();
-  const {
-    all: activities,
-    searchParams,
-    setSearchParams,
-  } = useList<Activity, ActivitySearchParams>();
+  const { all: activities, searchParams, setSearchParams } = useActivity();
 
   const allIds = getAllIds(activities);
   const allPairs = getAllPairs(activities);

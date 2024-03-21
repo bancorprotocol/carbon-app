@@ -18,7 +18,6 @@ import Decimal from 'decimal.js';
 import { OrderRow } from 'libs/queries';
 import { OrderBook } from 'libs/queries/sdk/orderBook';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
-import { BigNumber } from 'ethers';
 
 Decimal.set({
   precision: 100,
@@ -275,7 +274,7 @@ const sdkExposed = {
   getUserStrategies: (address: string) => carbonSDK.getUserStrategies(address),
   getStrategiesByPair: (token0: string, token1: string) =>
     carbonSDK.getStrategiesByPair(token0, token1),
-  getStrategy: (id: string) => api.reader.strategy(BigNumber.from(id)),
+  getStrategy: (id: string) => carbonSDK.getStrategyById(id),
   createBuySellStrategy: (
     baseToken: string,
     quoteToken: string,

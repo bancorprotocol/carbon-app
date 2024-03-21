@@ -73,11 +73,11 @@ const getNewTokens = async (
 };
 
 // TODO: query all remaining tokens
-export const useActivity = (params: QueryActivityParams = {}) => {
+export const useActivityQuery = (params: QueryActivityParams = {}) => {
   // const { Token } = useContract();
-  const { tokensMap } = useTokens();
+  const { tokensMap, isLoading } = useTokens();
   return useQuery(
-    QueryKey.tokenPrice('activity'),
+    QueryKey.activities(params),
     async () => {
       const activities = await carbonApi.getActivity(params);
       // await getNewTokens(tokensMap, Token, activities);
@@ -86,8 +86,8 @@ export const useActivity = (params: QueryActivityParams = {}) => {
       });
     },
     {
+      enabled: !isLoading,
       refetchInterval: 30 * 1000,
-      placeholderData: [],
     }
   );
 };

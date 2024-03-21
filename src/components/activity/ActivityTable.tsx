@@ -197,7 +197,7 @@ export const TransactionLink: FC<TransactionLinkProps> = (props) => {
       aria-label="See transaction on block explorer"
       to={getExplorerLink('tx', txHash)}
     >
-      <IconLink className={cn('text-primary', className)} />
+      <IconLink className={cn('text-white', className)} />
     </NewTabLink>
   );
 };

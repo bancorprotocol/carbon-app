@@ -1,12 +1,11 @@
 import { useParams, useRouter } from '@tanstack/react-router';
 import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
-import { useActivity } from 'components/activity/useActivity';
 import { Page } from 'components/common/page';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { cn } from 'utils/helpers';
-import { useGetUserStrategies } from 'libs/queries';
+import { useGetStrategy } from 'libs/queries';
 import { useStrategiesWithFiat } from 'hooks/useStrategies';
 import { StrategyBlockRoi } from 'components/strategies/overview/strategyBlock/StrategyBlockRoi';
 import { StrategyBlockBudget } from 'components/strategies/overview/strategyBlock/StrategyBlockBudget';
@@ -19,22 +18,29 @@ import {
 import { StrategySubtitle } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { TradingviewChart } from 'components/tradingviewChart';
+import { NotFound } from 'components/common/NotFound';
 
 export const StrategyPage = () => {
   const { history } = useRouter();
   const { id } = useParams({ from: '/strategy/$id' });
-  const query = useActivity({ strategyIds: id });
-  const activities = query.data ?? [];
-  // TODO: change to useGetStrategy
-  const user = activities[0]?.strategy.owner.toLowerCase();
-  const allStrategies = useStrategiesWithFiat(useGetUserStrategies({ user }));
-  const strategy = allStrategies.find((strategy) => strategy.id === id);
-  if (query.isLoading || !strategy) {
+  const query = useGetStrategy(id);
+  const [strategy] = useStrategiesWithFiat(query);
+
+  if (query.isLoading) {
     return (
       <CarbonLogoLoading className="m-80 h-[100px] self-center justify-self-center" />
     );
   }
-
+  if (!strategy) {
+    return (
+      <NotFound
+        variant="error"
+        title="Strategy not found"
+        text="The strategy you are looking for does not exist."
+        bordered
+      />
+    );
+  }
   const base = strategy.base;
   const quote = strategy.quote;
 
@@ -89,7 +95,7 @@ export const StrategyPage = () => {
           <TradingviewChart base={base} quote={quote} />
         </article>
       </section>
-      <ActivityProvider activities={activities}>
+      <ActivityProvider params={{ strategyIds: id }}>
         <ActivitySection filters={[]} />
       </ActivityProvider>
     </Page>
