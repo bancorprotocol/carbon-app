@@ -28,17 +28,21 @@ export const StrategyPage = () => {
 
   if (query.isLoading) {
     return (
-      <CarbonLogoLoading className="m-80 h-[100px] self-center justify-self-center" />
+      <Page>
+        <CarbonLogoLoading className="m-80 h-[100px] self-center justify-self-center" />
+      </Page>
     );
   }
   if (!strategy) {
     return (
-      <NotFound
-        variant="error"
-        title="Strategy not found"
-        text="The strategy you are looking for does not exist."
-        bordered
-      />
+      <Page>
+        <NotFound
+          variant="error"
+          title="Strategy not found"
+          text="The strategy you are looking for does not exist."
+          bordered
+        />
+      </Page>
     );
   }
   const base = strategy.base;

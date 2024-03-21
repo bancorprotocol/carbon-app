@@ -8,9 +8,10 @@ import { NotFound } from 'components/common/NotFound';
 
 interface Props {
   params: QueryActivityParams;
+  empty?: ReactNode;
   children: ReactNode;
 }
-export const ActivityProvider: FC<Props> = ({ children, params }) => {
+export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   const query = useActivityQuery(params);
   const listOptions: ListOptions<Activity, ActivitySearchParams> = {
     all: query.data ?? [],
@@ -26,11 +27,12 @@ export const ActivityProvider: FC<Props> = ({ children, params }) => {
   }
   const activities = query.data ?? [];
   if (!activities.length) {
+    if (empty) return empty;
     return (
       <NotFound
         variant="error"
         title="We couldn't find any activities"
-        text=""
+        text="Try entering a different wallet address or choose a different token pair."
         bordered
       />
     );
