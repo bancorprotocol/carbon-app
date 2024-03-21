@@ -1,29 +1,86 @@
-import { useList } from 'hooks/useList';
-import { DependencyList, FC, useEffect, useState } from 'react';
-import style from './ActivityCountDown.module.css';
+import { FC, useEffect, useState } from 'react';
+import { useIsFetching } from '@tanstack/react-query';
+import { QueryKey } from 'libs/queries';
 
 interface Props {
   time: number;
 }
 
-export const useCountDown = (time: number, deps?: DependencyList) => {
+interface AnimationOptions {
+  element: HTMLElement | null;
+  keyframes: Keyframe[];
+  duration: number;
+}
+async function runAnimationAfterLast(options: AnimationOptions) {
+  const { element, keyframes, duration } = options;
+  const animations = element?.getAnimations() ?? [];
+  const delta = await new Promise<number>((res) => {
+    if (!animations.length) return res(0);
+    animations.forEach((a) => {
+      const timing = a.effect?.getComputedTiming();
+      const delta = Number(timing?.duration) * Number(timing?.progress);
+      // const delta = Number(a.currentTime ?? 0) - Number(a.startTime ?? 0);
+      a.onfinish = () => res(delta);
+    });
+  });
+  return element?.animate(keyframes, {
+    duration: duration - delta,
+    fill: 'forwards',
+  });
+}
+
+export const useCountDown = (time: number, isFetching: boolean) => {
   const [count, setCount] = useState(time);
   useEffect(() => {
-    setCount(time);
-    const interval = setInterval(() => setCount((v) => Math.max(--v, 0)), 1000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
-  return count;
+    const arrow = document.getElementById('arrow');
+    const lines = document.getElementById('lines');
+    const circle = document.getElementById('circle');
+    if (!isFetching) {
+      runAnimationAfterLast({
+        element: circle,
+        keyframes: [
+          { strokeDashoffset: perimeter },
+          { strokeDashoffset: 0.1 * perimeter },
+        ],
+        duration: time * 1000,
+      });
+      runAnimationAfterLast({
+        element: arrow,
+        keyframes: [
+          { transform: 'rotate(0deg)' },
+          { transform: 'rotate(324deg)' }, // 0.9 * 360
+        ],
+        duration: time * 1000,
+      });
+      runAnimationAfterLast({
+        element: lines,
+        keyframes: [
+          { transform: 'translateY(15px) scale(0)' },
+          { transform: 'translateY(0) scale(1)' },
+        ],
+        duration: time * 1000,
+      });
+      setCount(time);
+      const i = setInterval(() => setCount((v) => Math.max(--v, 0)), 1000);
+      return () => clearInterval(i);
+    } else {
+      const options: KeyframeAnimationOptions = {
+        duration: 1000,
+      };
+      circle?.animate([{ strokeDashoffset: -1 * perimeter }], options);
+      arrow?.animate([{ transform: 'rotate(720deg)' }], options);
+      lines?.animate([{ transform: 'translateY(15px) scale(0)' }], options);
+    }
+  }, [isFetching, time]);
+  return { count };
 };
 
 const radius = 35;
 const perimeter = 2 * Math.PI * radius;
 
 export const ActivityCountDown: FC<Props> = ({ time }) => {
-  const { all } = useList();
-  // reset the countdown when the new request is made
-  const count = useCountDown(time, [all]);
+  const amount = useIsFetching({ queryKey: QueryKey.activities({}) });
+  const { count } = useCountDown(time, amount > 0);
   return (
     <svg
       width="30"
@@ -31,7 +88,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
       viewBox="0 0 100 100"
       fill="none"
       style={{
-        ['--time' as any]: `${time}s`,
+        ['--time' as any]: `${time - 5}s`,
       }}
     >
       <circle
@@ -42,8 +99,8 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         strokeWidth="6"
         strokeOpacity="0.2"
       />
-      <g className={style.arrow}>
-        <g className={style.lines}>
+      <g className="origin-center" id="arrow">
+        <g className="origin-top" id="lines">
           <line
             x1="60"
             x2="48"
@@ -65,7 +122,8 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         </g>
       </g>
       <circle
-        className={style.circle}
+        id="circle"
+        className="origin-center -rotate-[90deg]"
         cx="50"
         cy="50"
         r={radius}
