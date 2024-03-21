@@ -2,7 +2,8 @@ import { ActivityProvider } from 'components/activity/ActivityProvider';
 import { ActivitySection } from 'components/activity/ActivitySection';
 import { useActivity } from 'components/activity/useActivity';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
-import { ExplorerEmptyError, useExplorerParams } from 'components/explorer';
+import { NotFound } from 'components/common/NotFound';
+import { useExplorerParams } from 'components/explorer';
 import { QueryActivityParams } from 'libs/queries/extApi/activity';
 
 export const ExplorerActivityPage = () => {
@@ -21,20 +22,17 @@ export const ExplorerActivityPage = () => {
       <CarbonLogoLoading className="h-[100px] self-center justify-self-center" />
     );
   }
-
-  const activities = (query.data ?? []).filter((activity) => {
-    if (type === 'wallet') {
-      if (activity.strategy.owner.toLowerCase() === slug) return true;
-      if (activity.changes?.owner?.toLowerCase() === slug) return true;
-      return false;
-    } else {
-      const base = activity.strategy.base.address.toLowerCase();
-      const quote = activity.strategy.quote.address.toLowerCase();
-      return slug.includes(base) && slug.includes(quote);
-    }
-  });
-
-  if (!activities.length) return <ExplorerEmptyError type="activities" />;
+  const activities = query.data ?? [];
+  if (!activities.length) {
+    return (
+      <NotFound
+        variant="error"
+        title="We couldn't find any activities"
+        text="Try entering a different wallet address or choose a different token pair or reset your filters."
+        bordered
+      />
+    );
+  }
 
   return (
     <ActivityProvider activities={activities}>

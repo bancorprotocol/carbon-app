@@ -25,6 +25,7 @@ import { usePagination } from 'hooks/useList';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { ActivityListProps } from './ActivityList';
+import { NotFound } from 'components/common/NotFound';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(
@@ -58,14 +59,18 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
         </tr>
       </thead>
       <tbody>
-        {activities.map((activity, i) => (
-          <ActivityRow
-            key={activityKey(activity, i)}
-            activity={activity}
-            hideIds={hideIds}
-            index={i}
-          />
-        ))}
+        {activities.length === 0 ? (
+          <ActivityEmpty />
+        ) : (
+          activities.map((activity, i) => (
+            <ActivityRow
+              key={activityKey(activity, i)}
+              activity={activity}
+              hideIds={hideIds}
+              index={i}
+            />
+          ))
+        )}
       </tbody>
       <tfoot>
         <ActivityPaginator />
@@ -73,6 +78,18 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
     </table>
   );
 };
+
+const ActivityEmpty = () => (
+  <tr>
+    <td className="py-24 text-center" colSpan={6}>
+      <NotFound
+        variant="error"
+        title="There are no results for your filter"
+        text="Please reset your filters or try a different date range."
+      />
+    </td>
+  </tr>
+);
 
 interface ActivityRowProps {
   activity: Activity;
@@ -90,7 +107,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
             <ActivityId activity={activity} size={14} />
           </td>
         )}
-        <td rowSpan={2} className="py-12 first:px-24">
+        <td rowSpan={2} className="py-12 first:pl-24">
           <ActivityIcon activity={activity} size={32} />
         </td>
         <td className={cn(tdFirstLine, 'font-weight-500')}>
@@ -102,7 +119,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         <td className={tdFirstLine}>
           {tokenAmount(strategy.sell.budget, base)}
         </td>
-        <td className={cn(tdFirstLine, 'font-mono')}>
+        <td className={tdFirstLine}>
           {activityDateFormatter.format(activity.date)}
         </td>
       </tr>
