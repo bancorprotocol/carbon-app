@@ -1,6 +1,9 @@
 import { StrategyInputOrder } from 'hooks/useStrategyInput';
-import { OrderCreate } from './create/useOrder';
-import { isMaxBelowMarket, isMinAboveMarket } from './overlapping/utils';
+import { OrderCreate } from 'components/strategies/create/useOrder';
+import {
+  isMaxBelowMarket,
+  isMinAboveMarket,
+} from 'components/strategies/overlapping/utils';
 
 interface ValidOrderParams {
   isRange: boolean;
@@ -31,27 +34,62 @@ export const isValidRange = (minStr: string, maxStr: string) => {
 };
 
 export const checkIfOrdersOverlap = (
-  orderA: OrderCreate,
-  orderB: OrderCreate
+  buy: OrderCreate | StrategyInputOrder,
+  sell: OrderCreate | StrategyInputOrder
 ): boolean => {
-  if (
-    (+orderB.price <= +orderA.max && +orderB.price !== 0) ||
-    (+orderB.price <= +orderA.price && +orderB.price !== 0) ||
-    (+orderB.min <= +orderA.price && +orderB.min !== 0) ||
-    (+orderB.min <= +orderA.max && +orderB.min !== 0)
-  ) {
-    return true;
-  }
-  return false;
+  const isSellMinInBuyRange =
+    +sell.min < +buy.max &&
+    +sell.min >= +buy.min &&
+    +sell.min !== 0 &&
+    +buy.min !== 0;
+  const isSellMaxAboveBuyMax = +sell.max >= +buy.max;
+
+  return isSellMinInBuyRange && isSellMaxAboveBuyMax;
 };
 
-export const checkIfOrdersOverlapNew = (
-  buy: StrategyInputOrder,
-  sell: StrategyInputOrder
+export const checkIfOrdersReversed = (
+  buyRaw: OrderCreate | StrategyInputOrder,
+  sellRaw: OrderCreate | StrategyInputOrder
 ): boolean => {
-  if (+sell.min <= +buy.max && +sell.min !== 0) {
+  const translateOrder = (order: OrderCreate | StrategyInputOrder) => {
+    let orderPrice;
+    if ((order as OrderCreate).price !== undefined) {
+      orderPrice = +(order as OrderCreate).price;
+    } else {
+      orderPrice = !order.isRange ? +order.min : 0;
+    }
+
+    return {
+      price: orderPrice,
+      min: +order.min,
+      max: +order.max,
+    };
+  };
+
+  const buy = translateOrder(buyRaw);
+  const sell = translateOrder(sellRaw);
+
+  const isSellMinBelowBuyMin = sell.min < buy.min && sell.min !== 0;
+  const isSellMaxBelowBuyMax = sell.max < buy.max && sell.max !== 0;
+  const isSellRangeSameAsBuyRange =
+    sell.min === buy.min &&
+    sell.max === buy.max &&
+    buy.min !== 0 &&
+    buy.max !== 0;
+
+  // 2 range orders
+  if (isSellMinBelowBuyMin || isSellMaxBelowBuyMax || isSellRangeSameAsBuyRange)
     return true;
-  }
+
+  // limit buy and range sell
+  if (buy.price >= sell.min && sell.min !== 0) return true;
+
+  // range buy and limit sell
+  if (buy.max >= sell.price && sell.price !== 0) return true;
+
+  // 2 limit orders
+  if (buy.price >= sell.price && sell.price !== 0) return true;
+
   return false;
 };
 
@@ -85,7 +123,7 @@ export const hasWarning = ({
     return minAboveMarket || maxBelowMarket;
   } else {
     return (
-      checkIfOrdersOverlapNew(order0, order1) ||
+      checkIfOrdersOverlap(order0, order1) ||
       buyOutsideMarket ||
       sellOutsideMarket
     );
