@@ -14,15 +14,12 @@ interface AnimationOptions {
 async function runAnimationAfterLast(options: AnimationOptions) {
   const { element, keyframes, duration } = options;
   const animations = element?.getAnimations() ?? [];
-  const delta = await new Promise<number>((res) => {
-    if (!animations.length) return res(0);
-    animations.forEach((a) => {
-      const timing = a.effect?.getComputedTiming();
-      const delta = Number(timing?.duration) * Number(timing?.progress);
-      // const delta = Number(a.currentTime ?? 0) - Number(a.startTime ?? 0);
-      a.onfinish = () => res(delta);
-    });
+  const beforeFinished = Date.now();
+  await new Promise<void>((res) => {
+    if (!animations.length) return res();
+    animations.forEach((a) => (a.onfinish = () => res()));
   });
+  const delta = Date.now() - beforeFinished;
   return element?.animate(keyframes, {
     duration: duration - delta,
     fill: 'forwards',
@@ -35,6 +32,7 @@ export const useCountDown = (time: number, isFetching: boolean) => {
     const arrow = document.getElementById('arrow');
     const lines = document.getElementById('lines');
     const circle = document.getElementById('circle');
+    const text = document.getElementById('text');
     if (!isFetching) {
       runAnimationAfterLast({
         element: circle,
@@ -66,10 +64,19 @@ export const useCountDown = (time: number, isFetching: boolean) => {
     } else {
       const options: KeyframeAnimationOptions = {
         duration: 1000,
+        easing: 'cubic-bezier(0.87, 0, 0.13, 1)',
       };
-      circle?.animate([{ strokeDashoffset: -1 * perimeter }], options);
       arrow?.animate([{ transform: 'rotate(720deg)' }], options);
       lines?.animate([{ transform: 'translateY(15px) scale(0)' }], options);
+      circle?.animate([{ strokeDashoffset: -1 * perimeter }], options);
+      text?.animate(
+        [
+          { opacity: 1, transform: 'scale(1)' },
+          { opacity: 0, transform: 'scale(0.5)' },
+          { opacity: 1, transform: 'scale(1)' },
+        ],
+        options
+      );
     }
   }, [isFetching, time]);
   return { count };
@@ -133,6 +140,8 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
         strokeDasharray={perimeter}
       />
       <text
+        id="text"
+        className="origin-center"
         x="50"
         y="55"
         fontSize="30"
