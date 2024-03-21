@@ -48,9 +48,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   const order1 = useOrder(strategy.order1);
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
-  const owner = useGetVoucherOwner(
-    manage && type === 'token-pair' ? strategy.id : undefined
-  );
+  const owner = useGetVoucherOwner(manage ? strategy.id : undefined);
 
   const isOverlapping = isOverlappingStrategy(strategy);
 
@@ -88,7 +86,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
   }
 
-  if (isExplorer && type === 'token-pair') {
+  if (isExplorer) {
     items.push({
       id: 'walletOwner',
       name: "View Owner's Strategies",
