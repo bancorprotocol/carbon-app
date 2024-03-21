@@ -1,0 +1,52 @@
+@keyframes arrow {
+  0% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(calc(360deg * 0.9));
+  }
+  100% {
+    transform: rotate(720deg);
+  }
+}
+
+@keyframes scale {
+  0% {
+    /* translate to compensate transform origin */
+    transform: translateY(15px) scale(0);
+  }
+  90% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(15px) scale(0);
+  }
+}
+@keyframes move {
+  0% {
+    stroke-dashoffset: 220;
+    transform: rotate(-90deg);
+  }
+  90% {
+    stroke-dashoffset: 22;
+    transform: rotate(-90deg);
+  }
+  100% {
+    stroke-dashoffset: -220;
+    transform: rotate(270deg);
+  }
+}
+
+.arrow {
+  animation: arrow var(--time) linear infinite;
+  transform-origin: center;
+}
+.lines {
+  animation: scale var(--time) linear infinite;
+  transform-origin: top center;
+}
+.circle {
+  animation: move var(--time) linear infinite;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
