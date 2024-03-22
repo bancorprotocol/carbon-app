@@ -221,7 +221,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
           },
           role: 'menuitem',
           'aria-label': 'Manage strategy',
-          'data-test-id': 'manage-strategy-btn',
+          'data-testid': 'manage-strategy-btn',
         });
       }}
     >
@@ -258,7 +258,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
 interface ManageButtonProps extends MenuButtonProps {
   role: 'menuitem';
   'aria-label': string;
-  'data-test-id': string;
+  'data-testid': string;
 }
 
 export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
