@@ -251,7 +251,7 @@ export const DatePickerButton = memo(
           className="justify-self-end text-white/60"
           data-testid="simulation-dates"
         >
-          {hasDates ? `${startDate} – ${endDate}` : 'Select Date Range'}
+          {hasDates ? `${startDate} - ${endDate}` : 'Select Date Range'}
         </span>
         <ChevronIcon className="h-12 w-12 rotate-180 text-white/80" />
       </>
