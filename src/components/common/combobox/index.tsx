@@ -131,7 +131,6 @@ export const Combobox: FC<ComboboxProps> = (props) => {
       if (current.checked) {
         const index = checked.indexOf(current);
         if (e.key === 'ArrowDown') {
-          console.log(index, checked.length - 1, unchecked[0]);
           if (index === checked.length - 1) focus(unchecked[0] || checked[0]);
           else focus(checked[index + 1]);
         } else {
