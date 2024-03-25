@@ -75,7 +75,7 @@ const carbonApi = {
   getSimulator: async (
     params: SimulatorAPIParams
   ): Promise<SimulatorReturnNew> => {
-    return get<SimulatorReturnNew>('simulator/create', { params });
+    return get<SimulatorReturnNew>('simulator/create', params);
   },
 };
 
