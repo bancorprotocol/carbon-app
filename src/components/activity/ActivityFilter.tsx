@@ -54,7 +54,9 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
 
   const allIds = getAllIds(activities);
   const allPairs = getAllPairs(activities);
-  const allActions = Array.from(new Set(activities.map((a) => a.action)));
+  const allActions = Array.from(
+    new Set(activities.map((a) => a.action))
+  ).sort();
 
   const { pairs, ids, actions, start, end } = searchParams;
 
@@ -78,7 +80,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
     <form
       id={formId}
       className={cn(
-        'flex flex-wrap justify-start gap-8 md:justify-end md:gap-16',
+        'flex flex-wrap items-center justify-start gap-8 md:justify-end md:gap-16',
         className
       )}
       role="search"

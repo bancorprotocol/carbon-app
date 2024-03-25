@@ -145,7 +145,7 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
   }, [amount, time, id]);
 
   return (
-    <svg width="30" height="30" viewBox="0 0 100 100" fill="none">
+    <svg width="45" height="45" viewBox="0 0 100 100" fill="none">
       <circle
         cx="50"
         cy="50"
