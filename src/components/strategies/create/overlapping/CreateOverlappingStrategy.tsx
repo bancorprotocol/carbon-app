@@ -39,8 +39,8 @@ export interface OverlappingStrategyProps {
 const getInitialPrices = (marketPrice: string | number) => {
   const currentPrice = new SafeDecimal(marketPrice);
   return {
-    min: currentPrice.times(0.999).toString(),
-    max: currentPrice.times(1.001).toString(),
+    min: currentPrice.times(0.99).toString(),
+    max: currentPrice.times(1.01).toString(),
   };
 };
 

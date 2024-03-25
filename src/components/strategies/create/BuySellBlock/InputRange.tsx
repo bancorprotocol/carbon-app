@@ -22,6 +22,8 @@ type InputRangeProps = {
   warnings?: string[];
   setRangeError: (error: string) => void;
   marketPricePercentages: MarketPricePercentage;
+  ignoreMarketPriceWarning?: boolean;
+  isOrdersReversed?: boolean;
 };
 
 export const InputRange: FC<InputRangeProps> = ({
@@ -38,30 +40,35 @@ export const InputRange: FC<InputRangeProps> = ({
   buy = false,
   marketPricePercentages,
   warnings,
+  ignoreMarketPriceWarning,
+  isOrdersReversed,
 }) => {
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMinMax = 'Maximum price must be higher than the minimum price';
   const errorAboveZero = 'Price must be greater than 0';
+  const errorReversedOrders =
+    'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
   const showWarning = !error && warnings?.length;
 
   // Handle errors
   // TODO: re-enable this for create strategy
-  // useEffect(() => {
-  //   if (!min || !max) return;
-  //   const minValue = Number(formatNumber(min));
-  //   const maxValue = Number(formatNumber(max));
-  //   let error = '';
-  //   if (minValue >= maxValue) error = errorMinMax;
-  //   if (minValue <= 0 || maxValue <= 0) error = errorAboveZero;
-  //   setRangeError(error);
-  //   if (error) {
-  //     carbonEvents.strategy.strategyErrorShow({
-  //       buy,
-  //       message: error,
-  //     });
-  //   }
-  // }, [min, max, setRangeError, buy]);
+  //   useEffect(() => {
+  //     if (!min || !max) return;
+  //     const minValue = Number(formatNumber(min));
+  //     const maxValue = Number(formatNumber(max));
+  //     let errorMessage = '';
+  //     if (isOrdersReversed) errorMessage = errorReversedOrders;
+  //     if (minValue >= maxValue) errorMessage = errorMinMax;
+  //     if (minValue <= 0 || maxValue <= 0) errorMessage = errorAboveZero;
+  //     setRangeError(errorMessage);
+  //     if (errorMessage) {
+  //       carbonEvents.strategy.strategyErrorShow({
+  //         buy,
+  //         message: errorMessage,
+  //       });
+  //     }
+  //   }, [min, max, setRangeError, buy, isOrdersReversed]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumber(e.target.value));
@@ -126,6 +133,8 @@ export const InputRange: FC<InputRangeProps> = ({
             <MarketPriceIndication
               marketPricePercentage={marketPricePercentages.min}
               isRange
+              buy={buy}
+              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
             />
           </p>
         </div>
@@ -171,6 +180,8 @@ export const InputRange: FC<InputRangeProps> = ({
             <MarketPriceIndication
               marketPricePercentage={marketPricePercentages.max}
               isRange
+              buy={buy}
+              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
             />
           </div>
         </div>

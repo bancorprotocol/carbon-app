@@ -40,9 +40,34 @@ export const mockApi = async (page: Page) => {
   });
   await page.route('**/*/simulate-create-strategy?*', (route) => {
     const url = new URL(route.request().url());
-    const [buyIsRange, sellIsRange, ...keyValues] = Array.from(
-      url.searchParams.entries()
-    );
+    const {
+      baseToken,
+      quoteToken,
+      buyMin,
+      buyMax,
+      buyBudget,
+      buyIsRange,
+      sellMin,
+      sellMax,
+      sellBudget,
+      sellIsRange,
+      start,
+      end,
+    } = Object.fromEntries(url.searchParams.entries());
+
+    const keyValues = [
+      baseToken,
+      quoteToken,
+      buyMin,
+      buyMax,
+      buyBudget,
+      sellMin,
+      sellMax,
+      sellBudget,
+      start,
+      end,
+    ];
+
     const simulateCreateStrategyId = keyValues.join('-');
     // If unexpected behavior, let the real server handle that
     if (

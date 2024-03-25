@@ -61,8 +61,9 @@ export const SimulatorPage = () => {
   const noBudgetText =
     !isError && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isLoading && 'Loading price history...';
+  const priceError = state.buy.priceError || state.sell.priceError;
 
-  const btnDisabled = isLoading || isError || noBudget;
+  const btnDisabled = isLoading || isError || noBudget || !!priceError;
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
