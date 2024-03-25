@@ -72,8 +72,10 @@ const carbonApi = {
   getRoi: async (): Promise<RoiRow[]> => {
     return get<RoiRow[]>('roi');
   },
-  getSimulator: async (params: SimulatorAPIParams): Promise<SimulatorReturnNew> => {
-    return get<SimulatorResult>('simulator/create', { params });
+  getSimulator: async (
+    params: SimulatorAPIParams
+  ): Promise<SimulatorReturnNew> => {
+    return get<SimulatorReturnNew>('simulator/create', { params });
   },
 };
 
