@@ -112,18 +112,18 @@ export const activityDescription = (activity: Activity) => {
     case 'buy': {
       const buy = abs(changes?.buy?.budget ?? 0);
       const sell = abs(changes?.sell?.budget ?? 0);
-      const bought = tokenAmount(buy, base);
-      const gained = tokenAmount(sell, quote);
-      const price = prettifyNumber(sell / buy);
-      return `${bought} was bought for ${gained}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
+      const bought = tokenAmount(sell, base);
+      const sold = tokenAmount(buy, quote);
+      const price = prettifyNumber(buy / sell);
+      return `${bought} was bought for ${sold}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'sell': {
       const buy = abs(changes?.buy?.budget ?? 0);
       const sell = abs(changes?.sell?.budget ?? 0);
       const sold = tokenAmount(sell, base);
-      const gained = tokenAmount(buy, quote);
+      const bought = tokenAmount(buy, quote);
       const price = prettifyNumber(buy / sell);
-      return `${sold} was sold for ${gained}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
+      return `${sold} was sold for ${bought}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'transfer': {
       return `Strategy was transferred to a ${shortAddress(changes!.owner!)}.`;
