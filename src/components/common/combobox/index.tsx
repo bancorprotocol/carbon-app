@@ -11,6 +11,7 @@ import {
 import {
   FloatingFocusManager,
   FloatingPortal,
+  autoUpdate,
   flip,
   offset,
   shift,
@@ -61,7 +62,8 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     placement: 'bottom',
     open: open,
     onOpenChange: setOpen,
-    middleware: [offset(16), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(8), flip(), shift({ padding: 16 })],
   });
 
   // Default transition provides a fade in on enter
@@ -196,7 +198,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               style={{ ...floatingStyles, ...transition }}
               {...getFloatingProps()}
               id={rootId}
-              className="flex flex-col gap-8 rounded bg-background-800 p-16"
+              className="z-50 flex flex-col gap-8 rounded bg-background-800 p-16"
               onChange={onChange}
             >
               <div className="flex gap-8 rounded bg-black p-10 focus-within:outline-1">

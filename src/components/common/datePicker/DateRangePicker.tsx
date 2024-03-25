@@ -14,6 +14,7 @@ import { DateRange } from 'react-day-picker';
 import { ReactComponent as CalendarIcon } from 'assets/icons/calendar.svg';
 import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
 import { cn } from 'utils/helpers';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 
 export const datePickerPresets: DatePickerPreset[] = [
   { label: 'Last 7 days', days: 6 },
@@ -130,6 +131,8 @@ const Content = (props: Props) => {
     return isSameDay(from, date?.from!) && isSameDay(date?.to!, now);
   });
 
+  const { aboveBreakpoint } = useBreakpoints();
+
   const handlePreset = (days: number) => {
     setDate({
       from: subDays(now, days),
@@ -159,7 +162,7 @@ const Content = (props: Props) => {
         <div
           role="radiogroup"
           aria-label="presets"
-          className="flex w-[200px] flex-col gap-5"
+          className="hidden w-[200px] flex-col gap-5 md:flex"
         >
           {props.presets.map(({ label, days }) => (
             <button
@@ -177,7 +180,7 @@ const Content = (props: Props) => {
         </div>
         <Calendar
           defaultMonth={subMonths(date?.to ?? new Date(), 1)}
-          numberOfMonths={2}
+          numberOfMonths={aboveBreakpoint('sm') ? 2 : 1}
           {...props.options}
           mode="range"
           selected={date}
