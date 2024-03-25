@@ -94,7 +94,7 @@ export const activityDescription = (activity: Activity) => {
     case 'edit': {
       const { buy, sell } = strategy;
       const buyRange = tokenRange(buy.min, buy.max, quote);
-      const sellRange = tokenRange(sell.min, sell.max, base);
+      const sellRange = tokenRange(sell.min, sell.max, quote);
       return `Buy ${base.symbol}: ${buyRange} / Sell ${base.symbol}: ${sellRange}.`;
     }
     case 'deposit': {
@@ -107,23 +107,23 @@ export const activityDescription = (activity: Activity) => {
       const buy = tokenAmount(abs(changes?.buy?.budget ?? 0), quote);
       const sell = tokenAmount(abs(changes?.sell?.budget ?? 0), base);
       const amounts = activityListFormatter.format([buy, sell].filter(exist));
-      return `${amounts} was withdrawn to the wallet.`;
+      return `${amounts} was withdrawn from the strategy.`;
     }
     case 'buy': {
       const buy = abs(changes?.buy?.budget ?? 0);
       const sell = abs(changes?.sell?.budget ?? 0);
-      const bought = tokenAmount(buy, quote);
-      const gained = tokenAmount(sell, base);
-      const price = prettifyNumber(buy / sell);
+      const bought = tokenAmount(buy, base);
+      const gained = tokenAmount(sell, quote);
+      const price = prettifyNumber(sell / buy);
       return `${bought} was bought for ${gained}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'sell': {
       const buy = abs(changes?.buy?.budget ?? 0);
       const sell = abs(changes?.sell?.budget ?? 0);
-      const sold = tokenAmount(sell, quote);
-      const gained = tokenAmount(buy, base);
-      const price = prettifyNumber(sell / buy);
-      return `${sold} was sold for ${gained}. Avg price: ${price} ${base.symbol}/${quote.symbol}.`;
+      const sold = tokenAmount(sell, base);
+      const gained = tokenAmount(buy, quote);
+      const price = prettifyNumber(buy / sell);
+      return `${sold} was sold for ${gained}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'transfer': {
       return `Strategy was transferred to a ${shortAddress(changes!.owner!)}.`;

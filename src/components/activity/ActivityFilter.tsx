@@ -93,7 +93,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           label={
             ids.length
               ? `${ids.length} Strategies Selected`
-              : 'Select Strategies'
+              : 'Filter Strategies'
           }
           filterLabel="Search by ID or Symbol"
           options={allIds.map(({ id, base, quote }) => (
@@ -116,7 +116,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           value={pairs}
           icon={<IconPair className="w-14 text-primary" />}
           label={
-            pairs.length ? `${pairs.length} Pairs Selected` : 'Select Pair'
+            pairs.length ? `${pairs.length} Pairs Selected` : 'Filter Pairs'
           }
           filterLabel="Search by Pair"
           options={allPairs.map(({ pair, base, quote }) => (
@@ -135,7 +135,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         label={
           actions.length
             ? `${actions.length} Actions Selected`
-            : 'Select Actions'
+            : 'Filter Actions'
         }
         filterLabel="Search by Action"
         options={allActions.map((action) => (

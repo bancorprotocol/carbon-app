@@ -29,17 +29,17 @@ import { NotFound } from 'components/common/NotFound';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(
-  'text-start font-weight-400 py-16',
+  'text-start font-weight-400 py-16 pl-8',
   'first:pl-24',
   'last:pr-24 last:text-end'
 );
 const tdFirstLine = cn(
-  'pt-12 align-bottom whitespace-nowrap',
+  'pt-12 align-bottom whitespace-nowrap pl-8',
   'first:pl-24',
   'last:pr-24 last:text-end'
 );
 const tdSecondLine = cn(
-  'pb-12 align-top whitespace-nowrap',
+  'pb-12 align-top whitespace-nowrap pl-8',
   'last:pr-24 last:text-end'
 );
 
@@ -103,11 +103,11 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
     <>
       <tr className="text-14" style={{ animationDelay: `${index * 50}ms` }}>
         {!hideIds && (
-          <td rowSpan={2} className="py-12 first:pl-24">
+          <td rowSpan={2} className="py-12 pl-8 first:pl-24">
             <ActivityId activity={activity} size={14} />
           </td>
         )}
-        <td rowSpan={2} className="py-12 first:pl-24">
+        <td rowSpan={2} className="py-12 pl-8 first:pl-24">
           <ActivityIcon activity={activity} size={32} />
         </td>
         <td className={cn(tdFirstLine, 'font-weight-500')}>

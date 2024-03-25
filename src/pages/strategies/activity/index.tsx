@@ -10,7 +10,7 @@ export const StrategiesActivityPage = () => {
       params={{ ownerId: user }}
       empty={<StrategyCreateFirst />}
     >
-      <ActivitySection />
+      <ActivitySection filters={['ids', 'pairs']} />
     </ActivityProvider>
   );
 };
