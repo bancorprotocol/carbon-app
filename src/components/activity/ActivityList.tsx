@@ -13,6 +13,8 @@ import {
   TransactionLink,
 } from './ActivityTable';
 import { tokenAmount } from 'utils/helpers';
+import { usePagination } from 'hooks/useList';
+import { Button } from 'components/common/button';
 
 export interface ActivityListProps {
   activities: Activity[];
@@ -21,16 +23,33 @@ export interface ActivityListProps {
 
 export const ActivityList: FC<ActivityListProps> = (props) => {
   const { activities, hideIds = false } = props;
+  const { size, limit, setLimit } = usePagination();
   return (
-    <ul className="flex flex-col gap-16 p-16">
-      {activities.map((activity, i) => (
-        <ActivityItem
-          key={activityKey(activity, i)}
-          activity={activity}
-          hideIds={hideIds}
-        />
-      ))}
-    </ul>
+    <>
+      <ul className="flex flex-col gap-16 p-16">
+        {activities.map((activity, i) => (
+          <ActivityItem
+            key={activityKey(activity, i)}
+            activity={activity}
+            hideIds={hideIds}
+          />
+        ))}
+      </ul>
+      {limit < size && (
+        <>
+          <p className="mb-16 text-center text-12 text-white/60">
+            {limit} / {size}
+          </p>
+          <Button
+            fullWidth
+            variant="success"
+            onClick={() => setLimit(limit + 10)}
+          >
+            Show 10 More
+          </Button>
+        </>
+      )}
+    </>
   );
 };
 

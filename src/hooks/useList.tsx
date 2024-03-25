@@ -158,12 +158,13 @@ export function usePagination() {
   const setLimit = (limit: number) => setSearchParams({ limit });
   const setOffset = (offset: number) => setSearchParams({ offset });
 
-  // Reset pagination to 0 when list size changes
+  // Remove offset when list size changes
   useEffect(() => {
-    setSearchParams({ offset: 0 });
+    setSearchParams({ offset: undefined });
   }, [size, setSearchParams]);
 
   return {
+    size,
     limit,
     offset,
     currentPage,
