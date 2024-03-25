@@ -87,6 +87,8 @@ export const simulatorInputRoute = new Route({
     const sellIsRange = stringToBoolean(search.sellIsRange, true);
     const buyIsRange = stringToBoolean(search.buyIsRange, true);
 
+    const overlappingSpread = search.overlappingSpread ?? '1';
+
     return {
       baseToken,
       quoteToken,
@@ -101,7 +103,7 @@ export const simulatorInputRoute = new Route({
       start,
       end,
       // TODO add validation
-      overlappingSpread: search.overlappingSpread,
+      overlappingSpread,
     };
   },
 });

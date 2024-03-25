@@ -27,15 +27,7 @@ export const SimulatorPage = () => {
     from: '/simulate/$simulationType',
   });
 
-  // TODO fix this
-  const ssss =
-    simulationType === 'overlapping'
-      ? {
-          ...searchState,
-          overlappingSpread: searchState.overlappingSpread ?? '1',
-        }
-      : searchState;
-  const { dispatch, state, bounds } = useSimulatorInput({ searchState: ssss });
+  const { dispatch, state, bounds } = useSimulatorInput({ searchState });
   const { data, isLoading, isError } = useGetTokenPriceHistory({
     baseToken: state.baseToken?.address,
     quoteToken: state.quoteToken?.address,
@@ -96,7 +88,10 @@ export const SimulatorPage = () => {
           simulationType === 'overlapping' ? sellPriceMarginal : undefined,
         start: start.toString(),
         end: end.toString(),
-        overlappingSpread: state.overlappingSpread,
+        overlappingSpread:
+          simulationType === 'overlapping'
+            ? state.overlappingSpread
+            : undefined,
         type: simulationType,
       },
     });

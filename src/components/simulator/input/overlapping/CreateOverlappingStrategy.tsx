@@ -2,7 +2,7 @@ import {
   StrategyInputDispatch,
   StrategyInputValues,
 } from 'hooks/useStrategyInput';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -199,6 +199,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
 
+  const setErrorCb = useCallback(
+    (value: string) => dispatch('buyPriceError', value),
+    [dispatch]
+  );
+
   return (
     <>
       <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-background-900 p-20">
@@ -262,7 +267,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             min={state.buy.min}
             max={state.sell.max}
             error={state.buy.priceError}
-            setError={(value) => dispatch('buyPriceError', value)}
+            setError={setErrorCb}
             marketPricePercentage={marketPricePercentage}
             setMin={setMin}
             setMax={setMax}
