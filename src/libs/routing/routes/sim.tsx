@@ -26,6 +26,7 @@ export interface StrategyInputSearch {
   buyIsRange?: boolean;
   start?: string;
   end?: string;
+  overlappingSpread: string | undefined;
 }
 
 export const simulatorRedirect = new Route({
@@ -99,11 +100,17 @@ export const simulatorInputRoute = new Route({
       buyIsRange,
       start,
       end,
+      // TODO add validation
+      overlappingSpread: search.overlappingSpread,
     };
   },
 });
 
-export type SimulatorResultSearch = Required<StrategyInputSearch>;
+export type SimulatorResultSearch = Required<StrategyInputSearch> & {
+  type: SimulatorType;
+  buyMarginal?: string;
+  sellMarginal?: string;
+};
 
 export const simulatorResultRoute = new Route({
   getParentRoute: () => simulatorRootRoute,
@@ -162,11 +169,17 @@ export const simulatorResultRoute = new Route({
       sellMax: search.sellMax,
       sellMin: search.sellMin,
       sellBudget: search.sellBudget || '0',
+      // TODO add validation
+      sellMarginal: search.sellMarginal || '0',
       sellIsRange: stringToBoolean(search.sellIsRange),
       buyMax: search.buyMax,
       buyMin: search.buyMin,
+      buyMarginal: search.buyMarginal || '0',
       buyBudget: search.buyBudget || '0',
       buyIsRange: stringToBoolean(search.buyIsRange),
+      overlappingSpread: search.overlappingSpread,
+      // TODO add validation
+      type: search.type as SimulatorType,
     };
   },
   // @ts-ignore

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
   SimulatorAPIParams,
-  SimulatorResult,
+  SimulatorReturnNew,
 } from 'libs/queries/extApi/simulator';
 import {
   TokenPriceHistoryResult,
@@ -69,15 +69,11 @@ const carbonApi = {
   },
   getSimulator: async (
     params: SimulatorAPIParams
-  ): Promise<SimulatorResult> => {
-    const { data } = await newApiAxios.get<SimulatorResult>(
-      'simulate-create-strategy',
+  ): Promise<SimulatorReturnNew> => {
+    const { data } = await newApiAxios.get<SimulatorReturnNew>(
+      'simulator/create',
       {
-        params: {
-          ...params,
-          baseBudget: params.sellBudget,
-          quoteBudget: params.buyBudget,
-        },
+        params,
       }
     );
     return data;

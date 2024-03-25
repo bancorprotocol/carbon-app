@@ -19,6 +19,7 @@ import {
 } from 'components/simulator/input/d3Chart';
 import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
 import { StrategyDirection } from 'libs/routing';
+import { SimulatorType } from 'libs/routing/routes/sim';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
@@ -37,6 +38,7 @@ interface Props {
   data?: CandlestickData[];
   isLoading: boolean;
   isError: boolean;
+  simulationType: SimulatorType;
 }
 
 const chartSettings: D3ChartSettingsProps = {
@@ -59,6 +61,7 @@ export const SimInputChart = ({
   isLoading,
   isError,
   data,
+  simulationType,
 }: Props) => {
   const { debug } = useStore();
   const marketPrice = useCompareTokenPrice(
@@ -112,9 +115,10 @@ export const SimInputChart = ({
   );
 
   useEffect(() => {
+    if (simulationType !== 'recurring') return;
     handleDefaultValues('buy');
     handleDefaultValues('sell');
-  }, [handleDefaultValues]);
+  }, [handleDefaultValues, simulationType]);
 
   const prices = {
     buy: {
@@ -205,6 +209,8 @@ export const SimInputChart = ({
                 buy: !state.buy.isRange,
                 sell: !state.sell.isRange,
               }}
+              type={simulationType}
+              overlappingSpread={state.overlappingSpread}
             />
           )}
         </D3ChartWrapper>

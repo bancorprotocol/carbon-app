@@ -27,7 +27,8 @@ export const getRectSelector = (type: 'buy' | 'sell') => {
   return `${base}-${type}`;
 };
 
-const moveRect = (selector: string, y: number, oppositeY: number) => {
+// TODO move to other utils
+export const moveRect = (selector: string, y: number, oppositeY: number) => {
   const rect = getSelector(selector);
 
   if (y < oppositeY) {
@@ -37,7 +38,8 @@ const moveRect = (selector: string, y: number, oppositeY: number) => {
   }
 };
 
-const moveBoundary = (selector: string, y: number) => {
+// TODO move to other utils
+export const moveBoundary = (selector: string, y: number) => {
   const me = getSelector(selector);
   const line = me.select('line');
   const handle = me.select('rect');

@@ -37,6 +37,7 @@ export interface StrategyInputValues {
   sell: StrategyInputOrder;
   start?: string;
   end?: string;
+  overlappingSpread?: string;
 }
 
 interface Props {
@@ -123,6 +124,7 @@ export const buildStrategyInputState = (
       },
       start: state.start || undefined,
       end: state.end || undefined,
+      overlappingSpread: state.overlappingSpread,
     };
   } else {
     return {
@@ -146,6 +148,7 @@ export const buildStrategyInputState = (
       },
       start: state.start || undefined,
       end: state.end || undefined,
+      overlappingSpread: state.overlappingSpread,
     };
   }
 };

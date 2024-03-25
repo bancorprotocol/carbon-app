@@ -4,8 +4,7 @@ import {
 } from 'hooks/useStrategyInput';
 import { useTokens } from 'hooks/useTokens';
 import { SimulatorData, SimulatorReturn, useGetSimulator } from 'libs/queries';
-import { useSearch } from 'libs/routing';
-import { StrategyInputSearch } from 'libs/routing/routes/sim';
+import { SimulatorResultSearch, useSearch } from 'libs/routing';
 import { isNil } from 'lodash';
 import {
   createContext,
@@ -22,7 +21,7 @@ import { wait } from 'utils/helpers';
 type SimulationStatus = 'running' | 'paused' | 'ended' | 'idle';
 
 interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
-  search: StrategyInputSearch;
+  search: SimulatorResultSearch;
   state: StrategyInputValues;
   status: SimulationStatus;
   start: () => void;

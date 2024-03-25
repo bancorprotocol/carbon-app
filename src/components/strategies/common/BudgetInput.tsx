@@ -1,5 +1,4 @@
 import { FC, ReactNode, useId } from 'react';
-import { OrderCreate } from '../create/useOrder';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Token } from 'libs/tokens';
@@ -8,9 +7,10 @@ import { UseQueryResult } from '@tanstack/react-query';
 interface Props {
   id?: string;
   children?: ReactNode;
-  order: OrderCreate;
+  budgetValue: string;
+  budgetError?: string;
   token: Token;
-  query: UseQueryResult<string>;
+  query?: UseQueryResult<string>;
   onChange: (value: string) => void;
   disabled?: boolean;
   withoutWallet?: boolean;
@@ -18,26 +18,27 @@ interface Props {
 }
 
 export const BudgetInput: FC<Props> = (props) => {
-  const { id, order, token, query, children, onChange } = props;
+  const { id, budgetValue, budgetError, token, query, children, onChange } =
+    props;
   const inputId = useId();
-  const balance = query.data ?? '0';
+  const balance = query?.data ?? '0';
 
   return (
     <div className="flex flex-col gap-16">
       <TokenInputField
         id={id ?? inputId}
         className="rounded-16 bg-black p-16"
-        value={order.budget}
+        value={budgetValue}
         setValue={onChange}
         token={token}
-        isBalanceLoading={query.isLoading}
+        isBalanceLoading={query?.isLoading}
         balance={balance}
-        isError={!!order.budgetError}
+        isError={!!budgetError}
         withoutWallet={!!props.withoutWallet}
         disabled={!!props.disabled}
         data-testid={props['data-testid']}
       />
-      {!!order.budgetError && (
+      {!!budgetError && (
         <output
           htmlFor={inputId}
           role="alert"
@@ -45,7 +46,7 @@ export const BudgetInput: FC<Props> = (props) => {
           className="flex items-center gap-10 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
-          <span className="flex-1">{order.budgetError}</span>
+          <span className="flex-1">{budgetError}</span>
         </output>
       )}
       {children}

@@ -1,3 +1,4 @@
+import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { SimInputOverlapping } from 'components/simulator/input/SimInputOverlapping';
@@ -7,7 +8,7 @@ import { SimInputTokenSelection } from 'components/simulator/input/SimInputToken
 import { useSimDisclaimer } from 'components/simulator/input/useSimDisclaimer';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useSimulatorInput } from 'hooks/useSimulatorInput';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { Button } from 'components/common/button';
@@ -25,7 +26,16 @@ export const SimulatorPage = () => {
   const searchState = useSearch({
     from: '/simulate/$simulationType',
   });
-  const { dispatch, state, bounds } = useSimulatorInput({ searchState });
+
+  // TODO fix this
+  const ssss =
+    simulationType === 'overlapping'
+      ? {
+          ...searchState,
+          overlappingSpread: searchState.overlappingSpread ?? '1',
+        }
+      : searchState;
+  const { dispatch, state, bounds } = useSimulatorInput({ searchState: ssss });
   const { data, isLoading, isError } = useGetTokenPriceHistory({
     baseToken: state.baseToken?.address,
     quoteToken: state.quoteToken?.address,
@@ -35,6 +45,17 @@ export const SimulatorPage = () => {
 
   const [initBuyRange, setInitBuyRange] = useState(true);
   const [initSellRange, setInitSellRange] = useState(true);
+
+  const onTypeChange = useCallback(() => {
+    dispatch('buyMax', '');
+    dispatch('buyMin', '');
+    dispatch('sellMax', '');
+    dispatch('sellMin', '');
+    dispatch('buyBudget', '');
+    dispatch('sellBudget', '');
+    setInitBuyRange(true);
+    setInitSellRange(true);
+  }, [dispatch]);
 
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
@@ -49,6 +70,12 @@ export const SimulatorPage = () => {
     if (isLoading || isError || noBudget) return;
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
+    const { buyPriceMarginal, sellPriceMarginal } = calculateOverlappingPrices(
+      state.buy.min,
+      state.sell.max,
+      data[0].open.toString(),
+      state.overlappingSpread?.toString() ?? '0'
+    );
     navigate({
       to: '/simulate/result',
       search: {
@@ -58,12 +85,18 @@ export const SimulatorPage = () => {
         buyMax: state.buy.max,
         buyBudget: state.buy.budget,
         buyIsRange: state.buy.isRange,
+        buyMarginal:
+          simulationType === 'overlapping' ? buyPriceMarginal : undefined,
         sellMin: state.sell.min,
         sellMax: state.sell.max,
         sellBudget: state.sell.budget,
         sellIsRange: state.sell.isRange,
+        sellMarginal:
+          simulationType === 'overlapping' ? sellPriceMarginal : undefined,
         start: start.toString(),
         end: end.toString(),
+        overlappingSpread: state.overlappingSpread,
+        type: simulationType,
       },
     });
   };
@@ -88,7 +121,11 @@ export const SimulatorPage = () => {
           />
           {!isError && (
             <>
-              <SimInputStrategyType strategyType={simulationType} />
+              <SimInputStrategyType
+                strategyType={simulationType}
+                onTypeChange={onTypeChange}
+              />
+
               {simulationType === 'recurring' ? (
                 <SimInputRecurring
                   state={state}
@@ -96,15 +133,18 @@ export const SimulatorPage = () => {
                   firstHistoricPricePoint={data?.[0]}
                 />
               ) : (
-                <SimInputOverlapping />
+                <SimInputOverlapping
+                  state={state}
+                  dispatch={dispatch}
+                  marketPrice={data?.[0].open ?? 0}
+                />
               )}
             </>
           )}
-          {simulationType === 'recurring' && (
-            <Button type="submit" fullWidth size="lg" disabled={btnDisabled}>
-              {loadingText || noBudgetText || 'Start Simulation'}
-            </Button>
-          )}
+
+          <Button type="submit" fullWidth size="lg" disabled={btnDisabled}>
+            {loadingText || noBudgetText || 'Start Simulation'}
+          </Button>
         </form>
 
         <SimInputChart
@@ -118,6 +158,7 @@ export const SimulatorPage = () => {
           data={data}
           isLoading={isLoading}
           isError={isError}
+          simulationType={simulationType}
         />
       </div>
     </>

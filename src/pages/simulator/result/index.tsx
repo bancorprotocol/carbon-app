@@ -9,7 +9,7 @@ import { THREE_SECONDS_IN_MS } from 'utils/time';
 
 export const SimulatorResultPage = () => {
   const ctx = useSimulator();
-  const simulationType = 'recurring';
+  const simulationType = ctx.search.type;
 
   const handleAnimationStart = useCallback(() => {
     if (!ctx.isSuccess || ctx.status === 'running' || ctx.status === 'ended') {

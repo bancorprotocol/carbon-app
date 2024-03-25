@@ -8,6 +8,7 @@ import { Link } from 'libs/routing';
 
 interface Props {
   strategyType: SimulatorType;
+  onTypeChange: () => void;
 }
 
 interface ItemProps {
@@ -16,7 +17,10 @@ interface ItemProps {
   tooltipText: string;
 }
 
-export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
+export const SimInputStrategyType: FC<Props> = ({
+  strategyType,
+  onTypeChange,
+}) => {
   const items: ItemProps[] = [
     {
       label: 'recurring',
@@ -49,6 +53,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
             aria-selected={strategyType === label}
             key={label}
             to="/simulate/$simulationType"
+            onClick={onTypeChange}
             className={cn(
               'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
               'md:px-12',

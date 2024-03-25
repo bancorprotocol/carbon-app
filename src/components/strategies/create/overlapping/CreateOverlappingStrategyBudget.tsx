@@ -79,7 +79,8 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       <BudgetInput
         id={buyBudgetId}
         token={quote}
-        order={order0}
+        budgetValue={order0.budget}
+        budgetError={order0.budgetError}
         query={token1BalanceQuery}
         onChange={onBuyBudgetChange}
         disabled={minAboveMarket || !validPrice}
@@ -89,7 +90,8 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       <BudgetInput
         id={sellBudgetId}
         token={base}
-        order={order1}
+        budgetValue={order1.budget}
+        budgetError={order1.budgetError}
         query={token0BalanceQuery}
         onChange={onSellBudgetChange}
         disabled={maxBelowMarket || !validPrice}

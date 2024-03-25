@@ -11,7 +11,7 @@ interface Props {
   selector: string;
   dms: D3ChartSettings;
   onDragStart?: (y: number, y2: number) => void;
-  onDrag: (y: number, y2: number) => void;
+  onDrag?: (y: number, y2: number) => void;
   onDragEnd?: (y: number, y2: number) => void;
   initialY?: number;
   color: string;
@@ -24,7 +24,6 @@ export const D3ChartRect = ({
   onDragStart,
   onDrag,
   onDragEnd,
-  initialY,
 }: Props) => {
   const selection = getSelector(selector);
   const [isDragging, setIsDragging] = useState(false);
@@ -42,7 +41,7 @@ export const D3ChartRect = ({
     })
     .on('drag', ({ y, subject: { height } }) => {
       const y2 = y + height;
-      onDrag(y, y2);
+      onDrag?.(y, y2);
     })
     .on('end', ({ y, subject: { height } }) => {
       setIsDragging(false);
@@ -51,9 +50,9 @@ export const D3ChartRect = ({
     });
 
   useEffect(() => {
-    if (!isSelectable) return;
+    if (!isSelectable ?? !onDrag) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
-  }, [isSelectable, handleDrag, selection]);
+  }, [isSelectable, handleDrag, selection, onDrag]);
 
   return (
     <rect
@@ -61,7 +60,6 @@ export const D3ChartRect = ({
         'cursor-grab': !isDragging,
         'cursor-grabbing': isDragging,
       })}
-      height={initialY}
       width={dms.boundedWidth}
       fill={color}
       fillOpacity={0.15}

@@ -1,5 +1,4 @@
-import { ChangeEvent, FocusEvent, FC, useEffect, useId } from 'react';
-import { carbonEvents } from 'services/events';
+import { ChangeEvent, FocusEvent, FC, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -47,21 +46,22 @@ export const InputRange: FC<InputRangeProps> = ({
   const showWarning = !error && warnings?.length;
 
   // Handle errors
-  useEffect(() => {
-    if (!min || !max) return;
-    const minValue = Number(formatNumber(min));
-    const maxValue = Number(formatNumber(max));
-    let error = '';
-    if (minValue >= maxValue) error = errorMinMax;
-    if (minValue <= 0 || maxValue <= 0) error = errorAboveZero;
-    setRangeError(error);
-    if (error) {
-      carbonEvents.strategy.strategyErrorShow({
-        buy,
-        message: error,
-      });
-    }
-  }, [min, max, setRangeError, buy]);
+  // TODO: re-enable this for create strategy
+  // useEffect(() => {
+  //   if (!min || !max) return;
+  //   const minValue = Number(formatNumber(min));
+  //   const maxValue = Number(formatNumber(max));
+  //   let error = '';
+  //   if (minValue >= maxValue) error = errorMinMax;
+  //   if (minValue <= 0 || maxValue <= 0) error = errorAboveZero;
+  //   setRangeError(error);
+  //   if (error) {
+  //     carbonEvents.strategy.strategyErrorShow({
+  //       buy,
+  //       message: error,
+  //     });
+  //   }
+  // }, [min, max, setRangeError, buy]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumber(e.target.value));
