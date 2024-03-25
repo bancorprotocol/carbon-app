@@ -1,8 +1,9 @@
-import { ChangeEvent, FocusEvent, FC, useId } from 'react';
+import { ChangeEvent, FocusEvent, FC, useId, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
+import { carbonEvents } from 'services/events';
 import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
@@ -52,23 +53,22 @@ export const InputRange: FC<InputRangeProps> = ({
   const showWarning = !error && warnings?.length;
 
   // Handle errors
-  // TODO: re-enable this for create strategy
-  //   useEffect(() => {
-  //     if (!min || !max) return;
-  //     const minValue = Number(formatNumber(min));
-  //     const maxValue = Number(formatNumber(max));
-  //     let errorMessage = '';
-  //     if (isOrdersReversed) errorMessage = errorReversedOrders;
-  //     if (minValue >= maxValue) errorMessage = errorMinMax;
-  //     if (minValue <= 0 || maxValue <= 0) errorMessage = errorAboveZero;
-  //     setRangeError(errorMessage);
-  //     if (errorMessage) {
-  //       carbonEvents.strategy.strategyErrorShow({
-  //         buy,
-  //         message: errorMessage,
-  //       });
-  //     }
-  //   }, [min, max, setRangeError, buy, isOrdersReversed]);
+  useEffect(() => {
+    if (!min || !max) return;
+    const minValue = Number(formatNumber(min));
+    const maxValue = Number(formatNumber(max));
+    let errorMessage = '';
+    if (isOrdersReversed) errorMessage = errorReversedOrders;
+    if (minValue >= maxValue) errorMessage = errorMinMax;
+    if (minValue <= 0 || maxValue <= 0) errorMessage = errorAboveZero;
+    setRangeError(errorMessage);
+    if (errorMessage) {
+      carbonEvents.strategy.strategyErrorShow({
+        buy,
+        message: errorMessage,
+      });
+    }
+  }, [min, max, setRangeError, isOrdersReversed, buy]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumber(e.target.value));
