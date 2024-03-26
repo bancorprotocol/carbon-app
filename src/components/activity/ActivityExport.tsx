@@ -30,7 +30,7 @@ const getCSV = (activities: Activity[]) => {
   const body = activities.map((activity) => {
     const { strategy, changes, blockNumber, txHash } = activity;
     const { base, quote } = strategy;
-    const date = new Date(activity.date).toUTCString();
+    const date = new Date(activity.date).toLocaleDateString();
     return [
       getLowestBits(strategy.id),
       base.symbol,

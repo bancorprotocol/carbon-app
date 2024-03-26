@@ -5,8 +5,9 @@ import {
   FC,
   useId,
   useContext,
-  ChangeEvent,
   KeyboardEvent,
+  Children,
+  useEffect,
 } from 'react';
 import {
   FloatingFocusManager,
@@ -55,6 +56,7 @@ interface ComboboxProps {
 export const Combobox: FC<ComboboxProps> = (props) => {
   const { name, value: selected = [], form } = props;
   const rootId = useId();
+  const inputId = useId();
   const [open, setOpen] = useState(false);
   const [empty, setEmpty] = useState(false);
   // Get properties to calculate positioning
@@ -76,8 +78,13 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     useRole(context),
   ]);
 
-  const filter = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
+  useEffect(() => {
+    const input = document.getElementById(inputId) as HTMLInputElement | null;
+    if (!input?.value) return;
+    filter(input.value);
+  }, [inputId, selected]);
+
+  const filter = (value: string) => {
     const options = document.querySelectorAll(`.${style.option}`)!;
     let empty = true;
     for (const option of options) {
@@ -162,6 +169,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
 
   const { icon, label, options, filterLabel } = props;
 
+  const optionSize = Children.count(options);
   const ctx = {
     name,
     form,
@@ -204,17 +212,18 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <div className="flex gap-8 rounded bg-black p-10 focus-within:outline-1">
                 <IconSearch className="w-14 self-center" />
                 <input
+                  id={inputId}
                   type="search"
                   className="border-none bg-transparent text-14 outline-none"
                   aria-label={filterLabel}
                   placeholder={filterLabel}
-                  onChange={filter}
+                  onChange={(e) => filter(e.target.value)}
                 />
               </div>
               <button
                 type="button"
                 onClick={reset}
-                className="rounded rounded bg-background-900 p-10 text-12 font-weight-500"
+                className="rounded bg-background-900 p-10 text-12 font-weight-500"
               >
                 Reset Filter
               </button>
@@ -225,6 +234,11 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               >
                 {options}
                 {empty && <Empty />}
+                <hr
+                  className={cn('-order-1 border-white/60', {
+                    hidden: !selected.length || optionSize === selected.length,
+                  })}
+                />
               </div>
             </div>
           </FloatingFocusManager>

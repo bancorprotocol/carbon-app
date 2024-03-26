@@ -21,9 +21,7 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
   };
 
   if (query.isLoading) {
-    return (
-      <CarbonLogoLoading className="h-[100px] self-center justify-self-center" />
-    );
+    return <CarbonLogoLoading className="w-[100px] flex-1 self-center" />;
   }
   const activities = query.data ?? [];
   if (!activities.length) {

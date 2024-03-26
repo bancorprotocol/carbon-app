@@ -145,7 +145,13 @@ export const ActivityCountDown: FC<Props> = ({ time }) => {
   }, [amount, time, id]);
 
   return (
-    <svg width="45" height="45" viewBox="0 0 100 100" fill="none">
+    <svg
+      width="45"
+      height="45"
+      viewBox="0 0 100 100"
+      fill="none"
+      aria-label={`${count}seconds until next refresh`}
+    >
       <circle
         cx="50"
         cy="50"

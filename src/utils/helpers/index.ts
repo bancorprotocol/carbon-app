@@ -140,7 +140,3 @@ export const stringToBoolean = (
   if (string === 'false') return false;
   return fallback;
 };
-
-export const shortAddress = (address: string) => {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
-};

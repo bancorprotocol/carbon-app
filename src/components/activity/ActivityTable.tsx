@@ -2,7 +2,7 @@ import { ChangeEvent, FC } from 'react';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
 import { NewTabLink } from 'libs/routing';
-import { cn, getLowestBits, shortAddress, tokenAmount } from 'utils/helpers';
+import { cn, getLowestBits, shortenString, tokenAmount } from 'utils/helpers';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
 import { ReactComponent as IconPause } from 'assets/icons/pause.svg';
@@ -140,7 +140,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         </td>
         <td className={tdSecondLine}>
           <p className="flex justify-end gap-8 align-bottom">
-            {shortAddress(activity.txHash)}
+            {shortenString(activity.txHash)}
             <TransactionLink txHash={activity.txHash} className="h-14" />
           </p>
         </td>
@@ -155,10 +155,9 @@ interface ActivityIdProps {
 }
 export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
   const { id, base, quote } = activity.strategy;
-  const space = size >= 14 ? 8 : 4;
   return (
     <span
-      className={`inline-flex items-center gap-${space} rounded-full bg-background-800 p-${space}`}
+      className={`inline-flex items-center gap-4 rounded-full bg-background-800 py-4 px-8`}
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />

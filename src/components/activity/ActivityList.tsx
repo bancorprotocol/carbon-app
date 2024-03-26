@@ -66,7 +66,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
         {!hideIds && <ActivityId activity={activity} size={12} />}
         <p className="flex flex-1 items-center justify-end gap-8 font-mono text-12 text-white/60">
           {activityDateFormatter.format(activity.date)}
-          <TransactionLink txHash={activity.txHash} className="h-12" />
+          <TransactionLink txHash={activity.txHash} className="h-16" />
         </p>
       </header>
       <section className="px-16">

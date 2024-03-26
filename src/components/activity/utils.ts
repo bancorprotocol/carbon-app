@@ -5,7 +5,7 @@ import {
   GroupSchema,
   getLowestBits,
   prettifyNumber,
-  shortAddress,
+  shortenString,
   toArray,
   tokenAmount,
   tokenRange,
@@ -126,7 +126,7 @@ export const activityDescription = (activity: Activity) => {
       return `${sold} was sold for ${bought}. Avg price: ${price} ${quote.symbol}/${base.symbol}.`;
     }
     case 'transfer': {
-      return `Strategy was transferred to a ${shortAddress(changes!.owner!)}.`;
+      return `Strategy was transferred to a ${shortenString(changes!.owner!)}.`;
     }
     case 'delete': {
       return 'Strategy was deleted.';
