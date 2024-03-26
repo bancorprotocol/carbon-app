@@ -1,11 +1,11 @@
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { SafeDecimal } from 'libs/safedecimal';
-import { FC } from 'react';
+import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
 import { useNavigate, useParams } from 'libs/routing';
 import { getDuplicateStrategyParams } from 'components/strategies/create/useDuplicateStrategy';
-import { DropdownMenu } from 'components/common/dropdownMenu';
+import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
 import {
@@ -21,6 +21,7 @@ import { cn } from 'utils/helpers';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -33,17 +34,13 @@ type separatorCounterType = number;
 
 interface Props {
   strategy: Strategy;
-  manage: boolean;
-  setManage: (flag: boolean) => void;
   isExplorer?: boolean;
+  button: (props: ManageButtonProps) => JSX.Element;
 }
 
-export const StrategyBlockManage: FC<Props> = ({
-  strategy,
-  manage,
-  setManage,
-  isExplorer,
-}) => {
+export const StrategyBlockManage: FC<Props> = (props) => {
+  const { strategy, isExplorer } = props;
+  const [manage, setManage] = useState(false);
   const { strategies, sort, filter } = useStrategyCtx();
   const { openModal } = useModal();
   const navigate = useNavigate();
@@ -51,9 +48,7 @@ export const StrategyBlockManage: FC<Props> = ({
   const order1 = useOrder(strategy.order1);
   const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
-  const owner = useGetVoucherOwner(
-    manage && type === 'token-pair' ? strategy.id : undefined
-  );
+  const owner = useGetVoucherOwner(manage ? strategy.id : undefined);
 
   const isOverlapping = isOverlappingStrategy(strategy);
 
@@ -91,19 +86,10 @@ export const StrategyBlockManage: FC<Props> = ({
     });
   }
 
-  items.push({
-    id: 'manageNotifications',
-    name: 'Manage Notifications',
-    action: () => {
-      carbonEvents.strategyEdit.strategyManageNotificationClick(strategyEvent);
-      openModal('manageNotifications', { strategyId: strategy.id });
-    },
-  });
-
-  if (isExplorer && type === 'token-pair') {
+  if (isExplorer) {
     items.push({
       id: 'walletOwner',
-      name: 'View Owner’s Strategies',
+      name: "View Owner's Strategies",
       action: () => {
         const event = { type, slug, strategyEvent, strategies, sort, filter };
         explorerEvents.viewOwnersStrategiesClick(event);
@@ -221,10 +207,10 @@ export const StrategyBlockManage: FC<Props> = ({
       isOpen={manage}
       setIsOpen={setManage}
       className="z-10 w-fit p-10"
-      button={(attr) => (
-        <button
-          {...attr}
-          onClick={(e) => {
+      button={(attr) => {
+        return props.button({
+          ...attr,
+          onClick: (e) => {
             attr.onClick(e);
             if (isExplorer) {
               const baseEvent = { type, slug, strategies, sort, filter };
@@ -232,19 +218,12 @@ export const StrategyBlockManage: FC<Props> = ({
             } else {
               strategyEditEvents.strategyManageClick(strategyEvent);
             }
-          }}
-          role="menuitem"
-          aria-label="Manage strategy"
-          className={`
-            self-center rounded-8 border-2 border-background-800 p-8
-            hover:bg-white/10
-            active:bg-white/20
-          `}
-          data-testid="manage-strategy-btn"
-        >
-          <IconGear className="h-24 w-24" />
-        </button>
-      )}
+          },
+          role: 'menuitem',
+          'aria-label': 'Manage strategy',
+          'data-testid': 'manage-strategy-btn',
+        });
+      }}
     >
       <ul role="menu" data-testid={'manage-strategy-dropdown'}>
         {items.map((item) => {
@@ -275,6 +254,43 @@ export const StrategyBlockManage: FC<Props> = ({
     </DropdownMenu>
   );
 };
+
+interface ManageButtonProps extends MenuButtonProps {
+  role: 'menuitem';
+  'aria-label': string;
+  'data-testid': string;
+}
+
+export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
+  (props, ref) => {
+    const style = cn(buttonStyles({ variant: 'white' }), 'gap-8');
+    return (
+      <button {...props} className={style} ref={ref}>
+        <IconGear className="h-24 w-24" />
+        Manage
+      </button>
+    );
+  }
+);
+
+export const ManageButtonIcon = forwardRef<
+  HTMLButtonElement,
+  ManageButtonProps
+>((props, ref) => {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      className={`
+        grid h-38 w-38 place-items-center rounded-8 border-2 border-background-800
+        hover:bg-white/10
+        active:bg-white/20
+      `}
+    >
+      <IconGear className="h-24 w-24" />
+    </button>
+  );
+});
 
 const ManageItem: FC<{
   title: string;

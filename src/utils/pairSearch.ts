@@ -1,5 +1,5 @@
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
-import { exist } from './helpers/filter';
+import { exist } from './helpers/operators';
 
 /**
  * Remove " ", "-", "/" from a string
