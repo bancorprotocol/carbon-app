@@ -80,8 +80,8 @@ interface SimulatorBoundsNew {
 export interface SimulatorReturnNew {
   data: Array<SimulatorDataNew>;
   bounds: SimulatorBoundsNew;
-  roiInPercent: number;
-  gainsInQuote: number;
+  roiInPercent: string;
+  gainsInQuote: string;
 }
 
 export type SimulatorAPIParams = Omit<
@@ -119,8 +119,8 @@ export const useGetSimulator = (search: SimulatorResultSearch) => {
             bidMax: Number(res.bounds.buyMax),
             bidMin: Number(res.bounds.buyMin),
           },
-          roi: res.roiInPercent,
-          gains: res.gainsInQuote,
+          roi: Number(res.roiInPercent),
+          gains: Number(res.gainsInQuote),
         };
 
         return data;
