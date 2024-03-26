@@ -10,8 +10,6 @@ import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudg
 import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
 import { CreateOverlappingRange } from './CreateOverlappingRange';
 import {
-  getMaxBuyMin,
-  getMinSellMax,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -154,35 +152,40 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     setOverlappingParams(state.buy.min, max);
   };
 
-  // Update on buyMin changes
   useEffect(() => {
-    if (!state.buy.min) return;
-
-    // automatically update max if min > max
-    const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(state.buy.min), spread);
-      if (Number(state.sell.max) < minSellMax) {
-        setMax(minSellMax.toString());
-      }
-    }, 1000);
-    return () => clearTimeout(timeout);
+    setOverlappingParams(state.buy.min, state.sell.max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.buy.min]);
+  }, [state.buy.min, state.sell.max]);
 
-  // Update on sellMax changes
-  useEffect(() => {
-    if (!state.sell.max) return;
-
-    // automatically update min if min > max
-    const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(state.sell.max), spread);
-      if (Number(state.buy.min) > maxBuyMin) {
-        setMin(maxBuyMin.toString());
-      }
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.sell.max]);
+  // // Update on buyMin changes
+  // useEffect(() => {
+  //   if (!state.buy.min) return;
+  //
+  //   // automatically update max if min > max
+  //   const timeout = setTimeout(async () => {
+  //     const minSellMax = getMinSellMax(Number(state.buy.min), spread);
+  //     if (Number(state.sell.max) < minSellMax) {
+  //       setMax(minSellMax.toString());
+  //     }
+  //   }, 1000);
+  //   return () => clearTimeout(timeout);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.buy.min]);
+  //
+  // // Update on sellMax changes
+  // useEffect(() => {
+  //   if (!state.sell.max) return;
+  //
+  //   // automatically update min if min > max
+  //   const timeout = setTimeout(async () => {
+  //     const maxBuyMin = getMaxBuyMin(Number(state.sell.max), spread);
+  //     if (Number(state.buy.min) > maxBuyMin) {
+  //       setMin(maxBuyMin.toString());
+  //     }
+  //   }, 1000);
+  //   return () => clearTimeout(timeout);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.sell.max]);
 
   // Initialize order when market price is available
   useEffect(() => {
