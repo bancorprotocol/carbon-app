@@ -153,9 +153,33 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   };
 
   useEffect(() => {
-    setOverlappingParams(state.buy.min, state.sell.max);
+    const min = state.buy.min;
+    const max = state.sell.max;
+
+    if (!min || !max || !spread || !marketPrice) return;
+
+    const prices = calculateOverlappingPrices(
+      min,
+      max,
+      marketPrice.toString(),
+      spread.toString()
+    );
+
+    // Set budgets
+    const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
+    const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
+    if (isMinAboveMarket(buyOrder)) {
+      setAnchoredOrder('sell');
+      setBuyBudget(state.sell.budget, min, max);
+    } else if (isMaxBelowMarket(sellOrder)) {
+      setAnchoredOrder('buy');
+      setSellBudget(state.buy.budget, min, max);
+    } else {
+      if (anchoredOrder === 'buy') setSellBudget(state.buy.budget, min, max);
+      if (anchoredOrder === 'sell') setBuyBudget(state.sell.budget, min, max);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.buy.min, state.sell.max]);
+  }, [state.buy.min, state.sell.max, marketPrice, spread]);
 
   // // Update on buyMin changes
   // useEffect(() => {

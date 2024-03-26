@@ -1,9 +1,14 @@
+import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
+import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
+import {
+  isMaxBelowMarket,
+  isMinAboveMarket,
+  isOverlappingBudgetTooSmall,
+} from 'components/strategies/overlapping/utils';
 import { FC, useId } from 'react';
 import { Token } from 'libs/tokens';
-import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
-import { SafeDecimal } from 'libs/safedecimal';
 
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { isValidRange } from 'components/strategies/utils';
@@ -19,23 +24,43 @@ interface Props extends OverlappingStrategyProps {
 export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   const { state, dispatch, setAnchoredOrder, setBuyBudget, setSellBudget } =
     props;
-  const { baseToken: base, quoteToken: quote } = state;
-  // TODO reenable this for create strategy
-  // const minAboveMarket = isMinAboveMarket(order0);
-  // const maxBelowMarket = isMaxBelowMarket(order1);
-  const validPrice = isValidRange(state.buy.min, state.sell.max);
-  // TODO reenable this for create strategy
-  // const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
+  const { baseToken: base, quoteToken: quote, buy, sell } = state;
   const buyBudgetId = useId();
   const sellBudgetId = useId();
 
-  const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
-    if (new SafeDecimal(balance).lt(order.budget)) {
-      order.setBudgetError('Insufficient balance');
-    } else {
-      order.setBudgetError('');
-    }
+  if (!buy.min || !sell.max || !props.spread || !props.marketPrice)
+    return <></>;
+
+  const prices = calculateOverlappingPrices(
+    buy.min,
+    sell.max,
+    props.marketPrice.toString(),
+    props.spread.toString()
+  );
+
+  const buyOrder = {
+    min: buy.min || '0',
+    marginalPrice: prices.buyPriceMarginal || '0',
   };
+  const sellOrder = {
+    max: sell.max || '0',
+    marginalPrice: prices.sellPriceMarginal || '0',
+  };
+  const minAboveMarket = isMinAboveMarket(buyOrder);
+  const maxBelowMarket = isMaxBelowMarket(sellOrder);
+  const validPrice = isValidRange(buy.min, sell.max);
+  const budgetTooSmall = isOverlappingBudgetTooSmall(
+    { ...buyOrder, budget: buy.budget },
+    { ...sellOrder, budget: sell.budget }
+  );
+
+  // const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
+  //   if (new SafeDecimal(balance).lt(order.budget)) {
+  //     order.setBudgetError('Insufficient balance');
+  //   } else {
+  //     order.setBudgetError('');
+  //   }
+  // };
 
   // TODO reenable this for create strategy
   // // Check for error when buy budget changes
@@ -72,47 +97,43 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         budgetValue={state.buy.budget}
         budgetError={state.buy.budgetError}
         onChange={onBuyBudgetChange}
-        // disabled={minAboveMarket || !validPrice}
-        disabled={!validPrice}
+        disabled={minAboveMarket || !validPrice}
         data-testid="input-budget-quote"
       />
-      {/*TODO reenable for create*/}
-      {/*{minAboveMarket && <Explanation base={base} buy />}*/}
+      {minAboveMarket && <Explanation base={base} buy />}
       <BudgetInput
         id={sellBudgetId}
         token={base}
         budgetValue={state.sell.budget}
         budgetError={state.sell.budgetError}
         onChange={onSellBudgetChange}
-        // disabled={maxBelowMarket || !validPrice}
-        disabled={!validPrice}
+        disabled={maxBelowMarket || !validPrice}
         data-testid="input-budget-base"
       />
-      {/*TODO reenable for create*/}
-      {/*{maxBelowMarket && <Explanation base={base} />}*/}
-      {/*{budgetTooSmall && (*/}
-      {/*  <OverlappingSmallBudget*/}
-      {/*    base={base}*/}
-      {/*    quote={quote}*/}
-      {/*    buyBudget={state.buy.budget}*/}
-      {/*    htmlFor={`${buyBudgetId} ${sellBudgetId}`}*/}
-      {/*  />*/}
-      {/*)}*/}
-      {/*{!minAboveMarket && !maxBelowMarket && (*/}
-      {/*  <p className="text-12 text-white/60">*/}
-      {/*    The required 2nd budget will be calculated to maintain overlapping*/}
-      {/*    dynamics.&nbsp;*/}
-      {/*    <a*/}
-      {/*      href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"*/}
-      {/*      target="_blank"*/}
-      {/*      className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"*/}
-      {/*      rel="noreferrer"*/}
-      {/*    >*/}
-      {/*      Learn More*/}
-      {/*      <IconLink className="h-12 w-12" />*/}
-      {/*    </a>*/}
-      {/*  </p>*/}
-      {/*)}*/}
+      {maxBelowMarket && <Explanation base={base} />}
+      {budgetTooSmall && (
+        <OverlappingSmallBudget
+          base={base}
+          quote={quote}
+          buyBudget={state.buy.budget}
+          htmlFor={`${buyBudgetId} ${sellBudgetId}`}
+        />
+      )}
+      {!minAboveMarket && !maxBelowMarket && (
+        <p className="text-12 text-white/60">
+          The required 2nd budget will be calculated to maintain overlapping
+          dynamics.&nbsp;
+          <a
+            href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
+            target="_blank"
+            className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"
+            rel="noreferrer"
+          >
+            Learn More
+            <IconLink className="h-12 w-12" />
+          </a>
+        </p>
+      )}
     </>
   );
 };
