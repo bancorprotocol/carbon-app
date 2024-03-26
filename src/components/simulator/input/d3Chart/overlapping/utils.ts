@@ -130,15 +130,20 @@ export const handleStateChange = ({
   moveBoundary(getHandleSelector('buy', id), yBuyMin);
   moveBoundary(getHandleSelector('sell', id), ySellMax);
 
+  const sellRect = getRectSelector('sell');
+  const buyRect = getRectSelector('buy');
+
   if (ySellMax < marketPriceY && marketPriceY < yBuyMin) {
-    moveRect(getRectSelector('buy'), yBuyMin, marketPriceY);
-    moveRect(getRectSelector('sell'), ySellMax, marketPriceY);
+    moveRect(buyRect, yBuyMin, marketPriceY);
+    moveRect(sellRect, ySellMax, marketPriceY);
     return;
   }
 
   if (yBuyMin < marketPriceY) {
-    moveRect(getRectSelector('sell'), ySellMax, yBuyMin);
+    moveRect(sellRect, ySellMax, yBuyMin);
+    moveRect(buyRect, yBuyMin, yBuyMin);
   } else {
-    moveRect(getRectSelector('buy'), yBuyMin, ySellMax);
+    moveRect(buyRect, yBuyMin, ySellMax);
+    moveRect(sellRect, ySellMax, ySellMax);
   }
 };
