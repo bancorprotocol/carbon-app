@@ -1,9 +1,9 @@
-const EXPLORER_BASE_URL = 'https://etherscan.io';
+import config from 'config';
 export const getExplorerLink = (type: 'token' | 'tx', value: string) => {
   switch (type) {
     case 'token':
-      return `${EXPLORER_BASE_URL}/token/${value}`;
+      return `${config.blockExplorer}/token/${value}`;
     case 'tx':
-      return `${EXPLORER_BASE_URL}/tx/${value}`;
+      return `${config.blockExplorer}/tx/${value}`;
   }
 };

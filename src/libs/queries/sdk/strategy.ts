@@ -186,6 +186,33 @@ export const useGetUserStrategies = ({ user }: Props) => {
   );
 };
 
+export const useGetStrategy = (id: string) => {
+  const { isInitialized } = useCarbonInit();
+  const { tokens, getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
+  const roiQuery = useGetRoi();
+
+  return useQuery<Strategy>(
+    QueryKey.strategy(id),
+    async () => {
+      const strategy = await carbonSDK.getStrategy(id);
+      const strategies = await buildStrategiesHelper({
+        strategies: [strategy],
+        getTokenById,
+        importToken,
+        Token,
+        roiData: roiQuery.data || [],
+      });
+      return strategies[0];
+    },
+    {
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      staleTime: ONE_DAY_IN_MS,
+      retry: false,
+    }
+  );
+};
+
 interface PropsPair {
   token0?: string;
   token1?: string;

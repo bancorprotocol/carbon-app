@@ -86,7 +86,7 @@ export const CreateStrategyOrders = ({
         className="flex flex-col gap-10 rounded-10 bg-background-900 p-20"
       >
         <div className="flex gap-10">
-          <TokensOverlap className="h-32 w-32" tokens={[base!, quote!]} />
+          <TokensOverlap tokens={[base!, quote!]} size={32} />
           <div>
             <h2 className="flex gap-6 text-14">
               <span>{base?.symbol}</span>

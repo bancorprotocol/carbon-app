@@ -3,6 +3,7 @@ import { ExplorerType } from 'components/explorer/utils';
 import { rootRoute } from 'libs/routing/routes/root';
 import { ExplorerPage } from 'pages/explorer';
 import { ExplorerTypePage } from 'pages/explorer/type';
+import { ExplorerActivityPage } from 'pages/explorer/type/activity';
 import { ExplorerTypeOverviewPage } from 'pages/explorer/type/overview';
 import { ExplorerTypePortfolioPage } from 'pages/explorer/type/portfolio';
 import { ExplorerTypePortfolioTokenPage } from 'pages/explorer/type/portfolio/token';
@@ -81,4 +82,10 @@ export const explorerPortfolioTokenPage = new Route({
   getParentRoute: () => explorerPortfolioLayout,
   path: 'token/$address',
   component: ExplorerTypePortfolioTokenPage,
+});
+
+export const explorerActivityPage = new Route({
+  getParentRoute: () => explorerResultLayout,
+  path: '/activity',
+  component: ExplorerActivityPage,
 });
