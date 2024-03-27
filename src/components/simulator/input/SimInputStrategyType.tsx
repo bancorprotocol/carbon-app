@@ -6,21 +6,13 @@ import { cn } from 'utils/helpers';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { Link } from 'libs/routing';
 
-interface Props {
-  strategyType: SimulatorType;
-  onTypeChange: () => void;
-}
-
 interface ItemProps {
   label: SimulatorType;
   svg: JSX.Element;
   tooltipText: string;
 }
 
-export const SimInputStrategyType: FC<Props> = ({
-  strategyType,
-  onTypeChange,
-}) => {
+export const SimInputStrategyType: FC = () => {
   const items: ItemProps[] = [
     {
       label: 'recurring',
@@ -50,34 +42,37 @@ export const SimInputStrategyType: FC<Props> = ({
             role="tab"
             id={'tab-' + label}
             aria-controls={'panel-' + label}
-            aria-selected={strategyType === label}
             key={label}
-            to="/simulate/$simulationType"
-            onClick={onTypeChange}
+            to={`/simulate/${label}`}
             className={cn(
               'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
               'md:px-12',
-              'focus-visible:outline focus-visible:outline-1',
-              strategyType === label ? 'outline outline-1 outline-white' : ''
+              'focus-visible:outline focus-visible:outline-1'
             )}
+            activeProps={{ className: 'outline outline-1 outline-white' }}
             replace={true}
             resetScroll={false}
             params={{ simulationType: label }}
             data-testid={`select-type-${label}`}
           >
-            {svg}
-            <span
-              className={`capitalize ${
-                strategyType === label ? 'text-white' : 'text-white/40'
-              }`}
-            >
-              {label}
-            </span>
-
-            <Tooltip
-              element={<div>{tooltipText}</div>}
-              iconClassName="!h-12 !w-12 text-white/60"
-            />
+            {({ isActive }) => {
+              return (
+                <>
+                  {svg}
+                  <span
+                    className={`capitalize ${
+                      isActive ? 'text-white' : 'text-white/40'
+                    }`}
+                  >
+                    {label}
+                  </span>
+                  <Tooltip
+                    element={<div>{tooltipText}</div>}
+                    iconClassName="!h-12 !w-12 text-white/60"
+                  />
+                </>
+              );
+            }}
           </Link>
         ))}
       </article>

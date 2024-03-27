@@ -8,6 +8,8 @@ export const router = new Router({
     let query: Record<string, unknown> = {};
     for (const [key, value] of searchParams.entries()) {
       switch (value) {
+        case '':
+          break;
         case 'undefined':
           break;
         case 'null':
@@ -27,7 +29,10 @@ export const router = new Router({
   },
   stringifySearch: (search) => {
     const searchParams = new URLSearchParams();
-    for (const key in search) searchParams.set(key, search[key]);
+    for (const key in search) {
+      const value = search[key];
+      if (value !== '') searchParams.set(key, search[key]);
+    }
     const searchStr = searchParams.toString();
     return searchStr ? `?${searchStr}` : '';
   },

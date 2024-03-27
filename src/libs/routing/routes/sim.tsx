@@ -1,8 +1,11 @@
 import { redirect, Route } from '@tanstack/react-router';
 import { SimulatorProvider } from 'components/simulator/result/SimulatorProvider';
+import { endOfDay, getUnixTime, startOfDay, sub } from 'date-fns';
 import { rootRoute } from 'libs/routing/routes/root';
 import { validAddress, validBoolean, validNumber } from 'libs/routing/utils';
-import { defaultEnd, defaultStart, SimulatorPage } from 'pages/simulator';
+import { SimulatorPage } from 'pages/simulator';
+import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
+import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
 import { SimulatorResultPage } from 'pages/simulator/result';
 import { config } from 'services/web3/config';
 import { roundSearchParam, stringToBoolean } from 'utils/helpers';
@@ -13,49 +16,34 @@ export const simulatorRootRoute = new Route({
   path: '/simulate',
 });
 
-export interface StrategyInputSearch {
+export interface StrategyInputBase {
   baseToken?: string;
   quoteToken?: string;
-  sellBudget?: string;
-  sellMax?: string;
-  sellMin?: string;
-  sellIsRange?: boolean;
-  buyMax?: string;
-  buyMin?: string;
-  buyBudget?: string;
-  buyIsRange?: boolean;
   start?: string;
   end?: string;
-  overlappingSpread: string | undefined;
 }
 
-export const simulatorRedirect = new Route({
+export const simulatorInputRootRoute = new Route({
   getParentRoute: () => simulatorRootRoute,
   path: '/',
-  beforeLoad: () => {
-    redirect({
-      to: '/simulate/$simulationType',
-      params: { simulationType: 'recurring' },
-      throw: true,
-      replace: true,
-    });
-  },
   component: SimulatorPage,
-});
-
-export type SimulatorType = 'recurring' | 'overlapping';
-
-export const simulatorInputRoute = new Route({
-  getParentRoute: () => simulatorRootRoute,
-  path: '$simulationType',
-  component: SimulatorPage,
-  parseParams: (params: Record<string, string>) => {
-    return { simulationType: params.simulationType as SimulatorType };
+  beforeLoad: ({ location }) => {
+    if (location.pathname === '/simulate' || location.pathname === '/simulate/')
+      redirect({
+        to: '/simulate/recurring',
+        throw: true,
+        replace: true,
+      });
   },
-  validateSearch: (search: Record<string, string>): StrategyInputSearch => {
+  validateSearch: (search: Record<string, unknown>): StrategyInputBase => {
     const start =
-      Number(search.start) > 0 ? search.start : defaultStart().toString();
-    const end = Number(search.end) > 0 ? search.end : defaultEnd().toString();
+      Number(search.start) > 0
+        ? (search.start as string)
+        : getUnixTime(startOfDay(sub(new Date(), { days: 364 }))).toString();
+    const end =
+      Number(search.end) > 0
+        ? (search.end as string)
+        : getUnixTime(endOfDay(new Date())).toString();
 
     if (Number(start) >= Number(end)) {
       throw new Error('Invalid date range');
@@ -67,6 +55,34 @@ export const simulatorInputRoute = new Route({
     const quoteToken = v.is(validAddress, search.quoteToken)
       ? search.quoteToken
       : config.tokens.USDC;
+
+    return {
+      baseToken,
+      quoteToken,
+      start,
+      end,
+    };
+  },
+});
+
+export interface StrategyInputSearch extends StrategyInputBase {
+  sellBudget?: string;
+  sellMax?: string;
+  sellMin?: string;
+  sellIsRange?: boolean;
+  buyMax?: string;
+  buyMin?: string;
+  buyBudget?: string;
+  buyIsRange?: boolean;
+}
+
+export type SimulatorType = 'recurring' | 'overlapping';
+
+export const simulatorInputRecurringRoute = new Route({
+  getParentRoute: () => simulatorInputRootRoute,
+  path: 'recurring',
+  component: SimulatorInputRecurringPage,
+  validateSearch: (search: Record<string, unknown>): StrategyInputSearch => {
     const sellMax = v.is(validNumber, search.sellMax)
       ? roundSearchParam(search.sellMax)
       : '';
@@ -85,14 +101,12 @@ export const simulatorInputRoute = new Route({
     const buyBudget = v.is(validNumber, search.buyBudget)
       ? roundSearchParam(search.buyBudget)
       : '';
-    const sellIsRange = stringToBoolean(search.sellIsRange, true);
-    const buyIsRange = stringToBoolean(search.buyIsRange, true);
-
-    const overlappingSpread = search.overlappingSpread ?? '1';
+    const sellIsRange =
+      typeof search.sellIsRange === 'boolean' ? search.sellIsRange : true;
+    const buyIsRange =
+      typeof search.buyIsRange === 'boolean' ? search.buyIsRange : true;
 
     return {
-      baseToken,
-      quoteToken,
       sellMax: sellIsRange ? sellMax : sellMin,
       sellMin,
       sellBudget,
@@ -101,10 +115,37 @@ export const simulatorInputRoute = new Route({
       buyBudget,
       sellIsRange,
       buyIsRange,
-      start,
-      end,
-      // TODO add validation
-      overlappingSpread,
+    };
+  },
+});
+
+export interface SimulatorInputOverlappingSearch extends StrategyInputBase {
+  sellMax?: string;
+  buyMin?: string;
+  spread?: string;
+}
+
+export const simulatorInputOverlappingRoute = new Route({
+  getParentRoute: () => simulatorInputRootRoute,
+  path: 'overlapping',
+  component: SimulatorInputOverlappingPage,
+  validateSearch: (
+    search: Record<string, unknown>
+  ): SimulatorInputOverlappingSearch => {
+    const sellMax = v.is(validNumber, search.sellMax)
+      ? roundSearchParam(search.sellMax)
+      : '';
+    const buyMin = v.is(validNumber, search.buyMin)
+      ? roundSearchParam(search.buyMin)
+      : '';
+    const spread = v.is(validNumber, search.overlappingSpread)
+      ? search.overlappingSpread
+      : '1';
+
+    return {
+      sellMax,
+      buyMin,
+      spread,
     };
   },
 });
@@ -180,7 +221,7 @@ export const simulatorResultRoute = new Route({
       buyMarginal: search.buyMarginal || '0',
       buyBudget: search.buyBudget || '0',
       buyIsRange: stringToBoolean(search.buyIsRange),
-      overlappingSpread: search.overlappingSpread,
+      // overlappingSpread: search.overlappingSpread,
       // TODO add validation
       type: search.type as SimulatorType,
     };

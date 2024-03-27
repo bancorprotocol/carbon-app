@@ -23,8 +23,11 @@ import {
 } from 'libs/routing/routes/myStrategies';
 import { rootRoute } from 'libs/routing/routes/root';
 import {
-  simulatorInputRoute,
-  simulatorRedirect,
+  simulatorInputOverlappingRoute,
+  // simulatorInputOverlappingRoute,
+  simulatorInputRecurringRoute,
+  simulatorInputRootRoute,
+  // simulatorRedirect,
   simulatorResultRoute,
   simulatorRootRoute,
 } from 'libs/routing/routes/sim';
@@ -67,8 +70,10 @@ export const routeTree = rootRoute.addChildren([
     strategyActivityPage,
   ]),
   simulatorRootRoute.addChildren([
-    simulatorRedirect,
-    simulatorInputRoute,
+    simulatorInputRootRoute.addChildren([
+      simulatorInputRecurringRoute,
+      simulatorInputOverlappingRoute,
+    ]),
     simulatorResultRoute,
   ]),
 ]);

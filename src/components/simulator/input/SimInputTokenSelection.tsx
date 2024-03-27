@@ -1,46 +1,27 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { useTokens } from 'hooks/useTokens';
+import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
-import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
-import { StrategyInputDispatch } from 'hooks/useStrategyInput';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { cn } from 'utils/helpers';
 
 interface Props {
-  base: Token | undefined;
-  quote: Token | undefined;
+  baseToken?: string;
+  quoteToken?: string;
   noPriceHistory: boolean;
-  dispatch: StrategyInputDispatch;
-  setInitBuyRange: Dispatch<SetStateAction<boolean>>;
-  setInitSellRange: Dispatch<SetStateAction<boolean>>;
 }
 
 export const SimInputTokenSelection: FC<Props> = ({
-  base,
-  quote,
+  baseToken,
+  quoteToken,
   noPriceHistory,
-  dispatch,
-  setInitBuyRange,
-  setInitSellRange,
 }) => {
   const { openModal } = useModal();
-
-  const swapTokens = () => {
-    if (base && quote) {
-      dispatch('baseToken', quote.address);
-      dispatch('quoteToken', base.address);
-      dispatch('buyMax', '');
-      dispatch('buyMin', '');
-      dispatch('sellMax', '');
-      dispatch('sellMin', '');
-      dispatch('buyBudget', '');
-      dispatch('sellBudget', '');
-      setInitBuyRange(true);
-      setInitSellRange(true);
-    }
-  };
+  const { getTokenById } = useTokens();
+  const base = getTokenById(baseToken);
+  const quote = getTokenById(quoteToken);
 
   return (
     <section
@@ -85,15 +66,15 @@ export const SimInputTokenSelection: FC<Props> = ({
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
-                dispatch('baseToken', token.address);
-                dispatch('buyMax', '');
-                dispatch('buyMin', '');
-                dispatch('sellMax', '');
-                dispatch('sellMin', '');
-                dispatch('buyBudget', '');
-                dispatch('sellBudget', '');
-                setInitBuyRange(true);
-                setInitSellRange(true);
+                // dispatch('baseToken', token.address);
+                // dispatch('buyMax', '');
+                // dispatch('buyMin', '');
+                // dispatch('sellMax', '');
+                // dispatch('sellMin', '');
+                // dispatch('buyBudget', '');
+                // dispatch('sellBudget', '');
+                // setInitBuyRange(true);
+                // setInitSellRange(true);
               },
               excludedTokens: [quote?.address ?? ''],
               isBaseToken: true,
@@ -104,7 +85,7 @@ export const SimInputTokenSelection: FC<Props> = ({
         <button
           type="button"
           className="relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] border-background-900 bg-black"
-          onClick={swapTokens}
+          // onClick={swapTokens}
           disabled={!base || !quote}
         >
           <IconArrow className="h-10.8 w-12" />
@@ -129,15 +110,15 @@ export const SimInputTokenSelection: FC<Props> = ({
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
-                dispatch('quoteToken', token.address);
-                dispatch('buyMax', '');
-                dispatch('buyMin', '');
-                dispatch('sellMax', '');
-                dispatch('sellMin', '');
-                dispatch('buyBudget', '');
-                dispatch('sellBudget', '');
-                setInitBuyRange(true);
-                setInitSellRange(true);
+                // dispatch('quoteToken', token.address);
+                // dispatch('buyMax', '');
+                // dispatch('buyMin', '');
+                // dispatch('sellMax', '');
+                // dispatch('sellMin', '');
+                // dispatch('buyBudget', '');
+                // dispatch('sellBudget', '');
+                // setInitBuyRange(true);
+                // setInitSellRange(true);
               },
               excludedTokens: [base?.address ?? ''],
               isBaseToken: false,
