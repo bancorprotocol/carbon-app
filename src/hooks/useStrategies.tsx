@@ -70,11 +70,14 @@ export const useStrategyFilter = (
   };
 };
 
-const useStrategiesWithFiat = (query: UseQueryResult<Strategy[], unknown>) => {
+export const useStrategiesWithFiat = (
+  query: UseQueryResult<Strategy[] | Strategy, unknown>
+) => {
   const {
     fiatCurrency: { selectedFiatCurrency },
   } = useStore();
-  const strategies = query.data ?? [];
+  const data = query.data ?? [];
+  const strategies = Array.isArray(data) ? data : [data];
   const tokens = strategies.map(({ base, quote }) => [base, quote]).flat();
   const addresses = Array.from(new Set(tokens?.map((t) => t.address)));
   const priceQueries = useGetMultipleTokenPrices(addresses);

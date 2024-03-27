@@ -2,11 +2,18 @@ import { MatchActionBNStr, TokenPair } from '@bancor/carbon-sdk';
 import { TokenPriceHistorySearch } from 'libs/queries/extApi/tokenPrice';
 import { SimulatorResultSearch } from 'libs/routing';
 import { buildTokenPairKey } from 'utils/helpers';
+import { QueryActivityParams } from './extApi/activity';
 
 export namespace QueryKey {
   export const sdk = ['sdk'];
   export const chain = ['chain'];
   export const extAPI = ['ext-api'];
+
+  export const activities = (params: QueryActivityParams) => [
+    ...extAPI,
+    'activity',
+    params,
+  ];
 
   export const roi = () => [...extAPI, 'roi'];
   export const simulator = (params: SimulatorResultSearch) => [
@@ -28,6 +35,7 @@ export namespace QueryKey {
     params,
   ];
 
+  export const strategy = (id: string) => [...sdk, 'strategy', id];
   export const strategies = (user?: string) => [
     ...sdk,
     'strategies',

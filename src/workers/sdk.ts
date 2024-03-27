@@ -274,6 +274,7 @@ const sdkExposed = {
   getUserStrategies: (address: string) => carbonSDK.getUserStrategies(address),
   getStrategiesByPair: (token0: string, token1: string) =>
     carbonSDK.getStrategiesByPair(token0, token1),
+  getStrategy: (id: string) => carbonSDK.getStrategyById(id),
   createBuySellStrategy: (
     baseToken: string,
     quoteToken: string,

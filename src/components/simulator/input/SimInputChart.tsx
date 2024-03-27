@@ -2,14 +2,11 @@ import { Link } from '@tanstack/react-router';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import {
-  DatePickerButton,
   DateRangePicker,
+  datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import {
-  datePickerDisabledDays,
-  datePickerPresets,
-} from 'components/simulator/result/SimResultChartHeader';
+import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
 import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
@@ -24,8 +21,9 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
-import { fromUnixUTC } from '../utils';
+import { fromUnixUTC, toUnixUTC } from '../utils';
 import { useStore } from 'store';
+import { startOfDay, sub } from 'date-fns';
 
 interface Props {
   state: StrategyInputValues;
@@ -152,9 +150,10 @@ export const SimInputChart = ({
   );
 
   const onDatePickerConfirm = useCallback(
-    (props: { start: string; end: string }) => {
-      dispatch('start', props.start);
-      dispatch('end', props.end);
+    (props: { start?: Date; end?: Date }) => {
+      if (!props.start || !props.end) return;
+      dispatch('start', toUnixUTC(props.start));
+      dispatch('end', toUnixUTC(props.end));
     },
     [dispatch]
   );
@@ -164,19 +163,16 @@ export const SimInputChart = ({
       <div className="mb-20 flex items-center justify-between">
         <h2 className="mr-20 text-20 font-weight-500">Price Chart</h2>
         <DateRangePicker
-          defaultStart={state.start}
-          defaultEnd={state.end}
+          defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
+          defaultEnd={startOfDay(new Date())}
+          start={fromUnixUTC(state.start)}
+          end={fromUnixUTC(state.end)}
           onConfirm={onDatePickerConfirm}
-          button={
-            <DatePickerButton
-              start={fromUnixUTC(state.start)}
-              end={fromUnixUTC(state.end)}
-            />
-          }
           presets={datePickerPresets}
           options={{
             disabled: debug.debugState.isE2E ? [] : datePickerDisabledDays,
           }}
+          required
         />
       </div>
       {isError && (

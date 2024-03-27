@@ -37,10 +37,6 @@ import {
   ModalGenericInfoData,
 } from 'libs/modals/modals/ModalGenericInfo';
 import {
-  ModalManageNotifications,
-  ModalManageNotificationsData,
-} from 'libs/modals/modals/ModalManageNotifications';
-import {
   ModalDuplicateStrategy,
   ModalDuplicateStrategyData,
 } from 'libs/modals/modals/ModalDuplicateStrategy/ModalDuplicateStrategy';
@@ -70,7 +66,6 @@ export interface ModalSchema {
   burgerMenu: undefined;
   restrictedCountry: undefined;
   genericInfo: ModalGenericInfoData;
-  manageNotifications: ModalManageNotificationsData;
   duplicateStrategy: ModalDuplicateStrategyData;
   confirmPauseStrategy: ModalConfirmPauseData;
   confirmWithdrawStrategy: ModalConfirmWithdrawData;
@@ -93,7 +88,6 @@ export const MODAL_COMPONENTS: TModals = {
   burgerMenu: (props) => ModalBurgerMenu(props),
   restrictedCountry: (props) => ModalRestrictedCountry(props),
   genericInfo: (props) => ModalGenericInfo(props),
-  manageNotifications: (props) => ModalManageNotifications(props),
   duplicateStrategy: (props) => ModalDuplicateStrategy(props),
   confirmPauseStrategy: (props) => ModalConfirmPause(props),
   confirmWithdrawStrategy: (props) => ModalConfirmWithdraw(props),

@@ -7,6 +7,10 @@ import {
   TokenPriceHistorySearch,
 } from 'libs/queries/extApi/tokenPrice';
 import config from 'config';
+import {
+  QueryActivityParams,
+  ServerActivity,
+} from 'libs/queries/extApi/activity';
 
 export const AVAILABLE_CURRENCIES = [
   'USD',
@@ -76,6 +80,9 @@ const carbonApi = {
     params: SimulatorAPIParams
   ): Promise<SimulatorReturnNew> => {
     return get<SimulatorReturnNew>('simulator/create', params);
+  },
+  getActivity: async (params: QueryActivityParams) => {
+    return get<ServerActivity[]>('activity', params);
   },
 };
 

@@ -37,6 +37,7 @@ export const simulatorRedirect = new Route({
       to: '/simulate/$simulationType',
       params: { simulationType: 'recurring' },
       throw: true,
+      replace: true,
     });
   },
   component: SimulatorPage,
