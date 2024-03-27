@@ -135,14 +135,14 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                       aria-label="toggle all orders"
                     />
                   </th>
-                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                  <th className="sticky top-0 bg-black py-8 text-14 font-weight-500 text-white/60">
                     {source.symbol}
                   </th>
                   <th className="sticky top-0 bg-black">{/* Arrow */}</th>
-                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                  <th className="sticky top-0 bg-black py-8 text-14 font-weight-500 text-white/60">
                     {target.symbol}
                   </th>
-                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                  <th className="sticky top-0 bg-black py-8 text-14 font-weight-500 text-white/60">
                     Avg Price
                   </th>
                 </tr>

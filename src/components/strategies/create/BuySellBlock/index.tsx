@@ -130,13 +130,13 @@ export const BuySellBlock: FC<Props> = ({
       )}
 
       <BuySellHeader {...headerProps}>
-        <h3 className="flex items-center gap-8" id={titleId}>
+        <h2 className="flex items-center gap-8 text-18" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
           <LogoImager alt="Token" src={base.logoURI} className="h-18 w-18" />
           <span>{base.symbol}</span>
-        </h3>
+        </h2>
       </BuySellHeader>
       <LimitRangeSection {...limitRangeProps} />
       <BudgetSection {...budgetProps} />

@@ -21,7 +21,6 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
                 <div
                   {...{
                     className: cn(
-                      '!font-mono',
                       'text-16',
                       'font-weight-500',
                       'text-white/60',

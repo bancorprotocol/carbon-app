@@ -1,9 +1,9 @@
 import { FC, ReactNode, useId } from 'react';
 import { OrderCreate } from '../create/useOrder';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from '@tanstack/react-query';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   id?: string;
@@ -38,15 +38,9 @@ export const BudgetInput: FC<Props> = (props) => {
         data-testid={props['data-testid']}
       />
       {!!order.budgetError && (
-        <output
-          htmlFor={inputId}
-          role="alert"
-          aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-error"
-        >
-          <IconWarning className="h-12 w-12" />
-          <span className="flex-1">{order.budgetError}</span>
-        </output>
+        <WarningMessageWithIcon htmlFor={inputId} isError>
+          {order.budgetError}
+        </WarningMessageWithIcon>
       )}
       {children}
     </div>

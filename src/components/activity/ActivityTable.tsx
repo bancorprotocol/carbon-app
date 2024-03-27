@@ -48,7 +48,7 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
   return (
     <table className={cn('w-full border-collapse', style.table)}>
       <thead>
-        <tr className="border-y border-background-800 font-mono text-14 text-white/60">
+        <tr className="border-y border-background-800 text-14 text-white/60">
           {!hideIds && <th className={thStyle}>ID</th>}
           <th className={thStyle} colSpan={2}>
             Action
@@ -124,7 +124,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
         </td>
       </tr>
       <tr
-        className="font-mono text-12 text-white/60"
+        className="text-12 text-white/60"
         style={{ animationDelay: `${index * 50}ms` }}
       >
         {/* ID */}
@@ -251,7 +251,7 @@ const ActivityPaginator = () => {
         </div>
       </td>
       <td className="px-24 py-16 text-end" colSpan={3}>
-        <div role="group" className="flex justify-end gap-8 font-mono">
+        <div role="group" className="flex justify-end gap-8">
           <button
             onClick={firstPage}
             disabled={!offset}

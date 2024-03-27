@@ -75,9 +75,9 @@ export const EditStrategyPricesBuySellBlock: FC<
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <BuySellHeader {...headProps}>
-        <h3 id={titleId} className="flex items-center gap-6 text-18">
+        <h2 id={titleId} className="flex items-center gap-6 text-18">
           {buy ? 'Buy' : 'Sell'} {buy ? 'Low' : 'High'} {base.symbol}
-        </h3>
+        </h2>
       </BuySellHeader>
       <LimitRangeSection {...sectionProps} />
       <EditStrategyAllocatedBudget {...budgetProps} />

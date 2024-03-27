@@ -127,7 +127,7 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-min"
           />
           <p className="flex flex-wrap items-center gap-4">
-            <span className="break-all font-mono text-12 text-white/60">
+            <span className="break-all text-12 text-white/60">
               {getFiatAsString(min)}
             </span>
             <MarketPriceIndication
@@ -174,7 +174,7 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-max"
           />
           <div className="flex flex-wrap items-center gap-4">
-            <p className="break-all font-mono text-12 text-white/60">
+            <p className="break-all text-12 text-white/60">
               {getFiatAsString(max)}
             </p>
             <MarketPriceIndication
@@ -188,7 +188,7 @@ export const InputRange: FC<InputRangeProps> = ({
       </div>
       {error ? (
         <WarningMessageWithIcon
-          className="text-error"
+          isError
           message={error}
           htmlFor={`${inputMinId} ${inputMaxId}`}
         />

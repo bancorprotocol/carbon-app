@@ -199,7 +199,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {errorMsgSource && (
               <output
                 htmlFor={`${id}-pay`}
-                className="font-weight-500 text-error"
+                className="text-12 font-weight-500 text-error"
               >
                 {errorMsgSource}
               </output>
@@ -227,7 +227,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {errorMsgTarget && (
               <button
                 type="button"
-                className="cursor-pointer font-weight-500 text-error"
+                className="cursor-pointer text-12 font-weight-500 text-error"
                 onClick={() => {
                   onInputChange(false);
                   setTargetInput(liquidityQuery.data || '0');
@@ -250,7 +250,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             slippage={slippage}
             disabled={!hasEnoughLiquidity}
           />
-          <footer className="mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 font-mono text-14 text-white/80">
+          <footer className="mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 text-14 text-white/80">
             <p>{getRate()}</p>
             {showRouting && (
               <button

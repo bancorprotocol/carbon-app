@@ -96,7 +96,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           data-testid="input-price"
         />
         <p className="flex flex-wrap items-center gap-8">
-          <span className="break-all font-mono text-12 text-white/60">
+          <span className="break-all text-12 text-white/60">
             {fiatAsString}
           </span>
           <MarketPriceIndication
@@ -108,7 +108,7 @@ export const InputLimit: FC<InputLimitProps> = ({
       </div>
       {error ? (
         <WarningMessageWithIcon
-          className="text-error"
+          isError
           message={error}
           htmlFor={id ?? inputId}
         />

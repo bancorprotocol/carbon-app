@@ -64,7 +64,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
     <li className="flex flex-col gap-16 rounded border-2 border-background-800">
       <header className="flex px-16 pt-16">
         {!hideIds && <ActivityId activity={activity} size={12} />}
-        <p className="flex flex-1 items-center justify-end gap-8 font-mono text-12 text-white/60">
+        <p className="flex flex-1 items-center justify-end gap-8 text-12 text-white/60">
           {activityDateFormatter.format(activity.date)}
           <TransactionLink txHash={activity.txHash} className="h-16" />
         </p>
@@ -74,14 +74,12 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
           <ActivityIcon activity={activity} size={24} />
           {activityActionName[activity.action]}
         </h3>
-        <p className="font-mono text-12 text-white/60">
-          {activityDescription(activity)}
-        </p>
+        <p className="text-12 text-white/60">{activityDescription(activity)}</p>
       </section>
       <hr className="border-background-800" />
       <table className="w-full table-fixed">
         <thead>
-          <tr className="font-mono text-12 text-white/60">
+          <tr className="text-12 text-white/60">
             <th className="px-16 font-weight-400">Buy Budget</th>
             <th className="px-16 font-weight-400">Sell Budget</th>
           </tr>

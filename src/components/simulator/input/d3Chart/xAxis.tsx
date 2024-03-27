@@ -32,7 +32,6 @@ export const XAxis = ({ xScale, dms }: Props) => {
             y={dms.boundedHeight + 10}
             fill="currentColor"
             opacity={0.6}
-            className="font-mono"
           >
             {xAxisFormatter.format(fromUnixUTC(tickValue))}
           </text>

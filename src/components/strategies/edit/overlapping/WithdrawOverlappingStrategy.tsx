@@ -13,7 +13,6 @@ import { useMarketIndication } from 'components/strategies/marketPriceIndication
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
@@ -24,6 +23,7 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 import { geoMean } from 'utils/fullOutcome';
 import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   strategy: Strategy;
@@ -148,7 +148,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     <>
       <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header>
-          <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
+          <h2 className="flex-1 text-18 font-weight-500">Price Range</h2>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -163,7 +163,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Withdraw Budget</h3>
+          <h2 className="flex-1 text-18 font-weight-500">Withdraw Budget</h2>
           <Tooltip
             element='Indicate the amount you wish to withdraw to the available "wallet budget"'
             iconClassName="h-14 w-14 text-white/60"
@@ -229,18 +229,10 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             </>
           )}
           {withdrawAll && (
-            <output
-              htmlFor={[buyId, sellId].join(',')}
-              role="alert"
-              aria-live="polite"
-              className="flex items-center gap-10 font-mono text-12 text-warning"
-            >
-              <IconWarning className="h-12 w-12" />
-              <span className="flex-1">
-                Please note that your strategy will be inactive as it will not
-                have any budget.
-              </span>
-            </output>
+            <WarningMessageWithIcon htmlFor={[buyId, sellId].join(',')}>
+              Please note that your strategy will be inactive as it will not
+              have any budget.
+            </WarningMessageWithIcon>
           )}
         </footer>
       </article>
