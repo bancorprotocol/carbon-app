@@ -5,7 +5,25 @@ export const router = new Router({
   routeTree,
   parseSearch: (searchStr) => {
     const searchParams = new URLSearchParams(searchStr);
-    return Object.fromEntries(searchParams.entries());
+    let query: Record<string, unknown> = {};
+    for (const [key, value] of searchParams.entries()) {
+      switch (value) {
+        case 'undefined':
+          break;
+        case 'null':
+          query[key] = null;
+          break;
+        case 'true':
+          query[key] = true;
+          break;
+        case 'false':
+          query[key] = false;
+          break;
+        default:
+          query[key] = value;
+      }
+    }
+    return query;
   },
   stringifySearch: (search) => {
     const searchParams = new URLSearchParams();
