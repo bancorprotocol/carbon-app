@@ -188,7 +188,7 @@ export const InputRange: FC<InputRangeProps> = ({
       </div>
       {error ? (
         <WarningMessageWithIcon
-          className="text-error"
+          isError
           message={error}
           htmlFor={`${inputMinId} ${inputMaxId}`}
         />
