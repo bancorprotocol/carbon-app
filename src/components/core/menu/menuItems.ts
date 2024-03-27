@@ -4,6 +4,7 @@ import { isProduction } from 'utils/helpers';
 export interface MenuItem {
   label: string;
   href: Pathnames;
+  hideMobile?: boolean;
 }
 
 export const menuItems: MenuItem[] = [
@@ -22,6 +23,7 @@ export const menuItems: MenuItem[] = [
   {
     label: 'Simulate',
     href: '/simulate',
+    hideMobile: true,
   },
   ...(isProduction
     ? []

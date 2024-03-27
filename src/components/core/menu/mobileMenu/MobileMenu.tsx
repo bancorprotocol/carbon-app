@@ -16,26 +16,28 @@ export const MobileMenu = () => {
 
   return (
     <footer className={`mobile-menu`}>
-      {menuItems.map(({ label, href }, index) => {
-        const isSamePage = isSamePageLink(href);
+      {menuItems
+        .filter((x) => !x.hideMobile)
+        .map(({ label, href }, index) => {
+          const isSamePage = isSamePageLink(href);
 
-        return (
-          <Link
-            key={index}
-            onClick={() => handleOnItemClick(href)}
-            to={href}
-            // TODO: fix this
-            params={{}}
-            search={{}}
-            aria-current={isSamePage ? 'page' : 'false'}
-            className={`px-3 py-3 ${
-              isSamePage ? 'text-white' : 'hover:text-white'
-            }`}
-          >
-            {label}
-          </Link>
-        );
-      })}
+          return (
+            <Link
+              key={index}
+              onClick={() => handleOnItemClick(href)}
+              to={href}
+              // TODO: fix this
+              params={{}}
+              search={{}}
+              aria-current={isSamePage ? 'page' : 'false'}
+              className={`px-3 py-3 ${
+                isSamePage ? 'text-white' : 'hover:text-white'
+              }`}
+            >
+              {label}
+            </Link>
+          );
+        })}
       <div
         onClick={() => openModal('burgerMenu', undefined)}
         className="flex h-30 w-24 cursor-pointer items-center hover:text-white"
