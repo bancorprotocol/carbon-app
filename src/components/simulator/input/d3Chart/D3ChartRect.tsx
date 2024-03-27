@@ -4,7 +4,7 @@ import {
   useSelectable,
 } from 'components/simulator/input/d3Chart/utils';
 import { D3ChartSettings } from 'libs/d3/types';
-import { useEffect, useState } from 'react';
+import { SVGProps, useEffect, useState } from 'react';
 import { cn } from 'utils/helpers';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
   color: string;
 }
 
-export const D3ChartRect = ({
+export const D3ChartRectDraggable = ({
   selector,
   dms,
   color,
@@ -50,19 +50,33 @@ export const D3ChartRect = ({
     });
 
   useEffect(() => {
-    if (!isSelectable ?? !onDrag) return;
+    if (!isSelectable || !onDrag) return;
     handleDrag(selection as Selection<Element, unknown, any, any>);
   }, [isSelectable, handleDrag, selection, onDrag]);
 
+  return (
+    <D3ChartRect
+      selector={selector}
+      isDragging={isDragging}
+      width={dms.boundedWidth}
+      fill={color}
+    />
+  );
+};
+
+interface RectProps extends SVGProps<SVGRectElement> {
+  selector: string;
+  isDragging: boolean;
+}
+export const D3ChartRect = ({ selector, isDragging, ...props }: RectProps) => {
   return (
     <rect
       className={cn(selector, {
         'cursor-grab': !isDragging,
         'cursor-grabbing': isDragging,
       })}
-      width={dms.boundedWidth}
-      fill={color}
       fillOpacity={0.15}
+      {...props}
     />
   );
 };

@@ -1,6 +1,6 @@
 import { D3ChartHandle } from 'components/simulator/input/d3Chart/D3ChartHandle';
 import { D3ChartPriceOutOfScale } from 'components/simulator/input/d3Chart/D3ChartPriceOutOfScale';
-import { D3ChartRect } from 'components/simulator/input/d3Chart/D3ChartRect';
+import { D3ChartRectDraggable } from 'components/simulator/input/d3Chart/D3ChartRect';
 import {
   getHandleSelector,
   getRectSelector,
@@ -101,7 +101,7 @@ export const DragablePriceRange = ({
   return (
     <>
       {!isLimit && (
-        <D3ChartRect
+        <D3ChartRectDraggable
           selector={selectorRect}
           dms={dms}
           onDragStart={onDragStartHandler}

@@ -1,3 +1,4 @@
+import { ChartPrices } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
 import {
   getHandleSelector,
   getRectSelector,
@@ -8,18 +9,15 @@ import {
 
 export const onDragBuyHandler = ({
   y,
+  y2,
   marketPriceY,
-  onChange,
 }: {
   y: number;
+  y2: number;
   marketPriceY: number;
-  onChange: (y: number) => void;
 }) => {
-  onChange(y);
-  const id = 'line1';
-  const selector = getHandleSelector('buy', id);
   const yOpposite = Number(
-    getSelector(getHandleSelector('sell', id)).select('line').attr('y1')
+    getSelector(getHandleSelector('sell', 'line1')).select('line').attr('y1')
   );
 
   // SellMin is dragged below BuyMin
@@ -27,7 +25,8 @@ export const onDragBuyHandler = ({
     return;
   }
 
-  moveBoundary(selector, y);
+  moveBoundary(getHandleSelector('buy', 'line1'), y);
+  moveBoundary(getHandleSelector('sell', 'line2'), y2);
 
   const rect = getSelector(getRectSelector('buy'));
   const rectOpposite = getSelector(getRectSelector('sell'));
@@ -53,25 +52,23 @@ export const onDragBuyHandler = ({
 
 export const onDragSellHandler = ({
   y,
+  y2,
   marketPriceY,
-  onChange,
 }: {
   y: number;
+  y2: number;
   marketPriceY: number;
-  onChange: (y: number) => void;
 }) => {
-  onChange(y);
-  const id = 'line1';
-  const selector = getHandleSelector('sell', id);
   const yOpposite = Number(
-    getSelector(getHandleSelector('buy', id)).select('line').attr('y1')
+    getSelector(getHandleSelector('buy', 'line1')).select('line').attr('y1')
   );
   // SellMin is dragged below BuyMin
   if (y > yOpposite) {
     return;
   }
 
-  moveBoundary(selector, y);
+  moveBoundary(getHandleSelector('sell', 'line1'), y);
+  moveBoundary(getHandleSelector('buy', 'line2'), y2);
 
   const rect = getSelector(getRectSelector('sell'));
   const rectOpposite = getSelector(getRectSelector('buy'));
@@ -98,52 +95,42 @@ export const onDragSellHandler = ({
 };
 
 export const onDragRectHandler = ({
-  y,
-  y2,
+  yPos,
   marketPriceY,
-  onChange,
 }: {
-  y: number;
-  y2: number;
+  yPos: ChartPrices<number>;
   marketPriceY: number;
-  onChange: (min: number, max: number) => void;
 }) => {
-  getSelector(getRectSelector('buy')).attr('y2', y);
-  getSelector(getRectSelector('sell')).attr('y', y2);
-
-  moveBoundary(getHandleSelector('buy', 'line1'), y);
-  moveBoundary(getHandleSelector('sell', 'line1'), y2);
-
-  onChange(y2, y);
+  onDragSellHandler({ y: yPos.sell.max, y2: yPos.buy.max, marketPriceY });
+  onDragBuyHandler({ y: yPos.buy.min, y2: yPos.sell.min, marketPriceY });
 };
 
 export const handleStateChange = ({
-  yBuyMin,
-  ySellMax,
+  yPos,
   marketPriceY,
 }: {
-  yBuyMin: number;
-  ySellMax: number;
+  yPos: ChartPrices<number>;
   marketPriceY: number;
 }) => {
-  const id = 'line1';
-  moveBoundary(getHandleSelector('buy', id), yBuyMin);
-  moveBoundary(getHandleSelector('sell', id), ySellMax);
+  moveBoundary(getHandleSelector('buy', 'line1'), yPos.buy.min);
+  moveBoundary(getHandleSelector('sell', 'line1'), yPos.sell.max);
+  moveBoundary(getHandleSelector('buy', 'line2'), yPos.buy.max);
+  moveBoundary(getHandleSelector('sell', 'line2'), yPos.sell.min);
 
   const sellRect = getRectSelector('sell');
   const buyRect = getRectSelector('buy');
 
-  if (ySellMax < marketPriceY && marketPriceY < yBuyMin) {
-    moveRect(buyRect, yBuyMin, marketPriceY);
-    moveRect(sellRect, ySellMax, marketPriceY);
+  if (yPos.sell.max < marketPriceY && marketPriceY < yPos.buy.min) {
+    moveRect(buyRect, yPos.buy.min, marketPriceY);
+    moveRect(sellRect, yPos.sell.max, marketPriceY);
     return;
   }
 
-  if (yBuyMin < marketPriceY) {
-    moveRect(sellRect, ySellMax, yBuyMin);
-    moveRect(buyRect, yBuyMin, yBuyMin);
+  if (yPos.buy.min < marketPriceY) {
+    moveRect(sellRect, yPos.sell.max, yPos.buy.min);
+    moveRect(buyRect, yPos.buy.min, yPos.buy.min);
   } else {
-    moveRect(buyRect, yBuyMin, ySellMax);
-    moveRect(sellRect, ySellMax, ySellMax);
+    moveRect(buyRect, yPos.buy.min, yPos.sell.max);
+    moveRect(sellRect, yPos.sell.max, yPos.sell.max);
   }
 };

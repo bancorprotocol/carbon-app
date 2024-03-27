@@ -15,9 +15,9 @@ import { useMemo } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 import { Candlesticks } from 'components/simulator/input/d3Chart/Candlesticks';
 
-export type ChartPrices = {
-  buy: { min: string; max: string };
-  sell: { min: string; max: string };
+export type ChartPrices<T = string> = {
+  buy: { min: T; max: T };
+  sell: { min: T; max: T };
 };
 
 export type OnPriceUpdates = (props: ChartPrices) => void;
