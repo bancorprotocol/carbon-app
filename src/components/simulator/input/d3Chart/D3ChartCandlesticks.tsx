@@ -1,5 +1,5 @@
 import { D3ChartHandleLine } from 'components/simulator/input/d3Chart/D3ChartHandleLine';
-import { D3ChartRecurring } from 'components/simulator/input/d3Chart/D3ChartRecurring';
+import { D3ChartRecurring } from 'components/simulator/input/d3Chart/recurring/D3ChartRecurring';
 import { D3ChartOverlapping } from 'components/simulator/input/d3Chart/overlapping/D3ChartOverlapping';
 import { getDomain } from 'components/simulator/input/d3Chart/utils';
 import { XAxis } from 'components/simulator/input/d3Chart/xAxis';
