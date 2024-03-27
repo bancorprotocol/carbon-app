@@ -22,7 +22,7 @@ export const OverlappingSmallBudget: FC<Props> = (props) => {
   const otherToken = isBuyTooSmall ? base : quote;
 
   return (
-    <WarningMessageWithIcon className="text-error" htmlFor={htmlFor}>
+    <WarningMessageWithIcon isError htmlFor={htmlFor}>
       Please increase {otherToken.symbol} budget to have at least&nbsp;
       {prettifyNumber(wei)} {token.symbol}
     </WarningMessageWithIcon>

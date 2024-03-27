@@ -108,7 +108,7 @@ export const InputLimit: FC<InputLimitProps> = ({
       </div>
       {error ? (
         <WarningMessageWithIcon
-          className="text-error"
+          isError
           message={error}
           htmlFor={id ?? inputId}
         />
