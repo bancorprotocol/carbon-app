@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { isAddress } from 'ethers/lib/utils';
 import { useTokens } from 'hooks/useTokens';
 import { QueryKey } from 'libs/queries';
 import {
@@ -39,8 +40,14 @@ const toActivities = (
   });
 };
 
+const isValidParams = (params: QueryActivityParams) => {
+  if ('ownerId' in params && !isAddress(params.ownerId ?? '')) return false;
+  return true;
+};
+
 export const useActivityQuery = (params: QueryActivityParams = {}) => {
   const { tokensMap, isLoading } = useTokens();
+  const validParams = isValidParams(params);
   return useQuery(
     QueryKey.activities(params),
     async () => {
@@ -50,7 +57,7 @@ export const useActivityQuery = (params: QueryActivityParams = {}) => {
       });
     },
     {
-      enabled: !isLoading,
+      enabled: !isLoading && validParams,
       refetchInterval: 30 * 1000,
     }
   );

@@ -18,13 +18,13 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
           </button>
         </div>
       }
-      size={'md'}
+      size="md"
     >
-      <div className={'mt-25 space-y-10'}>
+      <div className="mt-25 space-y-10">
         {reversedNotifications.map((notification) => (
           <div
             key={notification.id}
-            className={'rounded-10 bg-black px-20 py-10'}
+            className="rounded-10 bg-black px-20 py-10"
           >
             <NotificationLine notification={notification} />
           </div>

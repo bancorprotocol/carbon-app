@@ -1,10 +1,10 @@
 import { useWeb3 } from 'libs/web3';
 import { FC, useEffect } from 'react';
-import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getLSUserNotifications } from 'libs/notifications/utils';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
+import { NotificationLine } from './NotificationLine';
 
 export const NotificationAlerts: FC = () => {
   const { user } = useWeb3();
@@ -13,7 +13,7 @@ export const NotificationAlerts: FC = () => {
 
   useInterval(async () => {
     notifications
-      .filter((n) => n.status === 'pending')
+      .filter((n) => n.type === 'tx' && n.status === 'pending')
       .forEach((n) => checkStatus(n));
   }, 2000);
 
@@ -41,6 +41,7 @@ export const NotificationAlerts: FC = () => {
             className="mb-20 block w-[350px] rounded-10 bg-background-900 px-20 py-10"
             data-testid={`notification-${n.testid}`}
           >
+            {}
             <NotificationLine isAlert notification={n} />
           </motion.li>
         ))}
