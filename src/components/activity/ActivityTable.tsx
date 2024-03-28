@@ -98,11 +98,14 @@ interface ActivityRowProps {
   index: number;
 }
 const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
-  const { setSearchParams } = useActivity();
+  const { searchParams, setSearchParams } = useActivity();
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
   const setAction = () => {
-    setSearchParams({ actions: [activity.action] });
+    const actions = searchParams.actions.includes(activity.action)
+      ? []
+      : [activity.action];
+    setSearchParams({ actions });
   };
   return (
     <>

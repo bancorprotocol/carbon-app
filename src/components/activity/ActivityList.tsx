@@ -59,11 +59,14 @@ interface ActivityItemProps {
   hideIds: boolean;
 }
 const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
-  const { setSearchParams } = useActivity();
+  const { searchParams, setSearchParams } = useActivity();
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
   const setAction = () => {
-    setSearchParams({ actions: [activity.action] });
+    const actions = searchParams.actions.includes(activity.action)
+      ? []
+      : [activity.action];
+    setSearchParams({ actions });
   };
   return (
     <li className="flex flex-col gap-16 rounded border-2 border-background-800">
