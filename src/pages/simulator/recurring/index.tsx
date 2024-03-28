@@ -83,6 +83,26 @@ export const SimulatorInputRecurringPage = () => {
     handleDefaultValues('sell');
   }, [handleDefaultValues]);
 
+  useEffect(() => {
+    if (initBuyRange || initSellRange) return;
+    dispatch('baseToken', searchState.baseToken);
+    dispatch('quoteToken', searchState.quoteToken);
+    dispatch('sellMax', '');
+    dispatch('sellMin', '');
+    dispatch('sellBudget', '');
+    dispatch('sellBudgetError', '');
+    dispatch('sellPriceError', '');
+    dispatch('sellIsRange', true);
+    dispatch('buyMax', '');
+    dispatch('buyMin', '');
+    dispatch('buyBudget', '');
+    dispatch('buyBudgetError', '');
+    dispatch('buyPriceError', '');
+    dispatch('buyIsRange', true);
+    setInitBuyRange(true);
+    setInitSellRange(true);
+  }, [dispatch, searchState.baseToken, searchState.quoteToken]);
+
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
     !isError && noBudget && 'Please add Sell and/or Buy budgets';
@@ -138,6 +158,7 @@ export const SimulatorInputRecurringPage = () => {
       <SimInputChart
         state={state}
         dispatch={dispatch}
+        isLimit={{ buy: !state.buy.isRange, sell: !state.sell.isRange }}
         bounds={bounds}
         data={data}
         isLoading={isLoading}

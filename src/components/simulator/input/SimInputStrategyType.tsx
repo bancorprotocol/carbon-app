@@ -12,7 +12,12 @@ interface ItemProps {
   tooltipText: string;
 }
 
-export const SimInputStrategyType: FC = () => {
+interface Props {
+  baseToken?: string;
+  quoteToken?: string;
+}
+
+export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
   const items: ItemProps[] = [
     {
       label: 'recurring',
@@ -44,6 +49,7 @@ export const SimInputStrategyType: FC = () => {
             aria-controls={'panel-' + label}
             key={label}
             to={`/simulate/${label}`}
+            search={{ baseToken, quoteToken }}
             className={cn(
               'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
               'md:px-12',

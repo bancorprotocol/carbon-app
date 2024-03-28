@@ -7,7 +7,10 @@ import {
 } from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
-import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
+import {
+  SimulatorInputOverlappingValues,
+  SimulatorOverlappingInputDispatch,
+} from 'hooks/useSimulatorOverlappingInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
   ChartPrices,
@@ -24,8 +27,10 @@ import { useStore } from 'store';
 import { startOfDay, sub } from 'date-fns';
 
 interface Props {
-  state: StrategyInputValues;
-  dispatch: SimulatorInputDispatch;
+  state: StrategyInputValues | SimulatorInputOverlappingValues;
+  dispatch: SimulatorOverlappingInputDispatch;
+  isLimit?: { buy: boolean; sell: boolean };
+  spread?: string;
   bounds: ChartPrices;
   data?: CandlestickData[];
   isLoading: boolean;
@@ -45,6 +50,8 @@ const chartSettings: D3ChartSettingsProps = {
 export const SimInputChart = ({
   state,
   dispatch,
+  isLimit,
+  spread,
   bounds,
   isLoading,
   isError,
@@ -140,12 +147,9 @@ export const SimInputChart = ({
               marketPrice={marketPrice}
               bounds={bounds}
               onDragEnd={onPriceUpdatesEnd}
-              isLimit={{
-                buy: !state.buy.isRange,
-                sell: !state.sell.isRange,
-              }}
+              isLimit={isLimit}
               type={simulationType}
-              overlappingSpread={state.overlappingSpread}
+              overlappingSpread={spread}
             />
           )}
         </D3ChartWrapper>

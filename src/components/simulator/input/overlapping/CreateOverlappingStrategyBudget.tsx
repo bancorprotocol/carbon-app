@@ -92,16 +92,6 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   return (
     <>
       <BudgetInput
-        id={buyBudgetId}
-        token={quote}
-        budgetValue={state.buy.budget}
-        budgetError={state.buy.budgetError}
-        onChange={onBuyBudgetChange}
-        disabled={minAboveMarket || !validPrice}
-        data-testid="input-budget-quote"
-      />
-      {minAboveMarket && <Explanation base={base} buy />}
-      <BudgetInput
         id={sellBudgetId}
         token={base}
         budgetValue={state.sell.budget}
@@ -111,6 +101,16 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         data-testid="input-budget-base"
       />
       {maxBelowMarket && <Explanation base={base} />}
+      <BudgetInput
+        id={buyBudgetId}
+        token={quote}
+        budgetValue={state.buy.budget}
+        budgetError={state.buy.budgetError}
+        onChange={onBuyBudgetChange}
+        disabled={minAboveMarket || !validPrice}
+        data-testid="input-budget-quote"
+      />
+      {minAboveMarket && <Explanation base={base} buy />}
       {budgetTooSmall && (
         <OverlappingSmallBudget
           base={base}
@@ -141,9 +141,11 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
   return (
     <p className="text-12 text-white/60">
-      The market price is outside the ranges you set for&nbsp;
+      The first price in the selected time frame is outside the ranges you've
+      set for&nbsp;
       {buy ? 'buying' : 'selling'}&nbsp;
-      {base?.symbol}. Budget for buying {base?.symbol} is not required.&nbsp;
+      {base?.symbol}. Therefore, budget for buying {base?.symbol} is not
+      required.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"

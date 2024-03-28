@@ -1,12 +1,12 @@
 import { CreateOverlappingStrategy } from 'components/simulator/input/overlapping/CreateOverlappingStrategy';
 import {
-  StrategyInputDispatch,
-  StrategyInputValues,
-} from 'hooks/useStrategyInput';
+  SimulatorInputOverlappingValues,
+  SimulatorOverlappingInputDispatch,
+} from 'hooks/useSimulatorOverlappingInput';
 
 interface Props {
-  state: StrategyInputValues;
-  dispatch: StrategyInputDispatch;
+  state: SimulatorInputOverlappingValues;
+  dispatch: SimulatorOverlappingInputDispatch;
   marketPrice: number;
 }
 
@@ -15,8 +15,8 @@ export const SimInputOverlapping = (props: Props) => {
   return (
     <CreateOverlappingStrategy
       {...props}
-      spread={+props.state.overlappingSpread!}
-      setSpread={(v) => props.dispatch('overlappingSpread', v.toString())}
+      spread={+props.state.spread!}
+      setSpread={(v) => props.dispatch('spread', v.toString())}
     />
   );
 };

@@ -22,7 +22,7 @@ type InputRangeProps = {
   error?: string;
   warnings?: string[];
   setRangeError: (error: string) => void;
-  marketPricePercentages: MarketPricePercentage;
+  marketPricePercentages?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed?: boolean;
 };
@@ -130,12 +130,14 @@ export const InputRange: FC<InputRangeProps> = ({
             <span className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(min)}
             </span>
-            <MarketPriceIndication
-              marketPricePercentage={marketPricePercentages.min}
-              isRange
-              buy={buy}
-              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-            />
+            {marketPricePercentages && (
+              <MarketPriceIndication
+                marketPricePercentage={marketPricePercentages.min}
+                isRange
+                buy={buy}
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+              />
+            )}
           </p>
         </div>
         <div
@@ -177,12 +179,14 @@ export const InputRange: FC<InputRangeProps> = ({
             <p className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(max)}
             </p>
-            <MarketPriceIndication
-              marketPricePercentage={marketPricePercentages.max}
-              isRange
-              buy={buy}
-              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-            />
+            {marketPricePercentages && (
+              <MarketPriceIndication
+                marketPricePercentage={marketPricePercentages.max}
+                isRange
+                buy={buy}
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+              />
+            )}
           </div>
         </div>
       </div>

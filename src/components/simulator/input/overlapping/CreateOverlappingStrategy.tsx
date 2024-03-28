@@ -1,7 +1,8 @@
 import {
-  StrategyInputDispatch,
-  StrategyInputValues,
-} from 'hooks/useStrategyInput';
+  SimulatorInputOverlappingValues,
+  SimulatorOverlappingInputDispatch,
+} from 'hooks/useSimulatorOverlappingInput';
+
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
@@ -23,8 +24,8 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 
 export interface OverlappingStrategyProps {
-  state: StrategyInputValues;
-  dispatch: StrategyInputDispatch;
+  state: SimulatorInputOverlappingValues;
+  dispatch: SimulatorOverlappingInputDispatch;
   spread: number;
   setSpread: (value: number) => void;
   marketPrice: number;

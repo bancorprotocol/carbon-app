@@ -40,16 +40,49 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           }
           variant="error"
         />
-        <Link
-          to="/simulate/$simulationType"
-          params={{ simulationType }}
-          search={searchState}
-          className={buttonStyles({
-            size: 'lg',
-          })}
-        >
-          Back
-        </Link>
+        {simulationType === 'recurring' && (
+          <Link
+            to={`/simulate/recurring`}
+            search={{
+              baseToken: ctx.search.baseToken,
+              quoteToken: ctx.search.quoteToken,
+              start: ctx.search.start,
+              end: ctx.search.end,
+              buyMin: ctx.search.buyMin,
+              buyMax: ctx.search.buyMax,
+              buyBudget: ctx.search.buyBudget,
+              sellMin: ctx.search.sellMin,
+              sellMax: ctx.search.sellMax,
+              sellBudget: ctx.search.sellBudget,
+              buyIsRange: ctx.search.buyIsRange,
+              sellIsRange: ctx.search.sellIsRange,
+            }}
+            className={buttonStyles({
+              size: 'lg',
+            })}
+          >
+            Back
+          </Link>
+        )}
+        {simulationType === 'overlapping' && (
+          <Link
+            to={`/simulate/overlapping`}
+            search={{
+              baseToken: ctx.search.baseToken,
+              quoteToken: ctx.search.quoteToken,
+              start: ctx.search.start,
+              end: ctx.search.end,
+              buyMin: ctx.search.buyMin,
+              sellMax: ctx.search.sellMax,
+              spread: ctx.search.spread,
+            }}
+            className={buttonStyles({
+              size: 'lg',
+            })}
+          >
+            Back
+          </Link>
+        )}
       </div>
     );
   }

@@ -94,8 +94,7 @@ export const useGetSimulator = (search: SimulatorResultSearch) => {
     QueryKey.simulator(search),
     async () => {
       try {
-        const { buyIsRange, sellIsRange, type, overlappingSpread, ...params } =
-          search;
+        const { buyIsRange, sellIsRange, type, spread, ...params } = search;
         const res = await carbonApi.getSimulator(params);
 
         // TODO cleanup schema

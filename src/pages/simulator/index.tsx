@@ -30,7 +30,10 @@ export const SimulatorPage = () => {
               quoteToken={searchState.quoteToken}
               noPriceHistory={isError}
             />
-            <SimInputStrategyType />
+            <SimInputStrategyType
+              baseToken={searchState.baseToken}
+              quoteToken={searchState.quoteToken}
+            />
             <Outlet />
           </div>
         )}

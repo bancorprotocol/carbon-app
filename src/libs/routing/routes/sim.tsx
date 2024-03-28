@@ -8,7 +8,7 @@ import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
 import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
 import { SimulatorResultPage } from 'pages/simulator/result';
 import { config } from 'services/web3/config';
-import { roundSearchParam, stringToBoolean } from 'utils/helpers';
+import { roundSearchParam } from 'utils/helpers';
 import * as v from 'valibot';
 
 export const simulatorRootRoute = new Route({
@@ -138,9 +138,7 @@ export const simulatorInputOverlappingRoute = new Route({
     const buyMin = v.is(validNumber, search.buyMin)
       ? roundSearchParam(search.buyMin)
       : '';
-    const spread = v.is(validNumber, search.overlappingSpread)
-      ? search.overlappingSpread
-      : '1';
+    const spread = v.is(validNumber, search.spread) ? search.spread : '1';
 
     return {
       sellMax,
@@ -154,6 +152,7 @@ export type SimulatorResultSearch = Required<StrategyInputSearch> & {
   type: SimulatorType;
   buyMarginal?: string;
   sellMarginal?: string;
+  spread?: string;
 };
 
 export const simulatorResultRoute = new Route({
@@ -215,14 +214,14 @@ export const simulatorResultRoute = new Route({
       sellBudget: search.sellBudget || '0',
       // TODO add validation
       sellMarginal: search.sellMarginal || '0',
-      sellIsRange: stringToBoolean(search.sellIsRange),
+      sellIsRange: search.sellIsRange,
       buyMax: search.buyMax,
       buyMin: search.buyMin,
       buyMarginal: search.buyMarginal || '0',
       buyBudget: search.buyBudget || '0',
-      buyIsRange: stringToBoolean(search.buyIsRange),
-      // overlappingSpread: search.overlappingSpread,
+      buyIsRange: search.buyIsRange,
       // TODO add validation
+      spread: search.spread,
       type: search.type as SimulatorType,
     };
   },

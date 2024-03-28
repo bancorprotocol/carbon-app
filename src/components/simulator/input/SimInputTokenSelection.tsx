@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import { useTokens } from 'hooks/useTokens';
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -18,6 +19,7 @@ export const SimInputTokenSelection: FC<Props> = ({
   quoteToken,
   noPriceHistory,
 }) => {
+  const navigate = useNavigate();
   const { openModal } = useModal();
   const { getTokenById } = useTokens();
   const base = getTokenById(baseToken);
@@ -66,15 +68,10 @@ export const SimInputTokenSelection: FC<Props> = ({
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
-                // dispatch('baseToken', token.address);
-                // dispatch('buyMax', '');
-                // dispatch('buyMin', '');
-                // dispatch('sellMax', '');
-                // dispatch('sellMin', '');
-                // dispatch('buyBudget', '');
-                // dispatch('sellBudget', '');
-                // setInitBuyRange(true);
-                // setInitSellRange(true);
+                navigate({
+                  search: { baseToken: token.address, quoteToken },
+                  params: {},
+                });
               },
               excludedTokens: [quote?.address ?? ''],
               isBaseToken: true,
@@ -85,7 +82,12 @@ export const SimInputTokenSelection: FC<Props> = ({
         <button
           type="button"
           className="relative z-10 grid h-40 w-40 flex-shrink-0 -rotate-90 place-items-center rounded-full border-[5px] border-background-900 bg-black"
-          // onClick={swapTokens}
+          onClick={() => {
+            navigate({
+              search: { baseToken: quoteToken, quoteToken: baseToken },
+              params: {},
+            });
+          }}
           disabled={!base || !quote}
         >
           <IconArrow className="h-10.8 w-12" />
@@ -110,15 +112,10 @@ export const SimInputTokenSelection: FC<Props> = ({
           onClick={() => {
             openModal('tokenLists', {
               onClick: (token) => {
-                // dispatch('quoteToken', token.address);
-                // dispatch('buyMax', '');
-                // dispatch('buyMin', '');
-                // dispatch('sellMax', '');
-                // dispatch('sellMin', '');
-                // dispatch('buyBudget', '');
-                // dispatch('sellBudget', '');
-                // setInitBuyRange(true);
-                // setInitSellRange(true);
+                navigate({
+                  search: { baseToken, quoteToken: token.address },
+                  params: {},
+                });
               },
               excludedTokens: [base?.address ?? ''],
               isBaseToken: false,

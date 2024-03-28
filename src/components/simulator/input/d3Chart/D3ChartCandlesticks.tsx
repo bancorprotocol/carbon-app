@@ -30,7 +30,7 @@ export interface D3ChartCandlesticksProps {
   marketPrice?: number;
   bounds: ChartPrices;
   onDragEnd?: OnPriceUpdates;
-  isLimit: { buy: boolean; sell: boolean };
+  isLimit?: { buy: boolean; sell: boolean };
   dms: D3ChartSettings;
   type: SimulatorType;
   overlappingSpread?: string;
@@ -84,7 +84,7 @@ export const D3ChartCandlesticks = (props: D3ChartCandlesticksProps) => {
           label={prettifyNumber(marketPrice ?? '')}
         />
       )}
-      {type === 'recurring' && (
+      {type === 'recurring' && isLimit && (
         <D3ChartRecurring
           yScale={y.scale}
           isLimit={isLimit}

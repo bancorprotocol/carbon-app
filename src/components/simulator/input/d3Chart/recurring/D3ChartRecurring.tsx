@@ -7,8 +7,11 @@ import { prettifyNumber } from 'utils/helpers';
 
 type Props = Pick<
   D3ChartCandlesticksProps,
-  'prices' | 'onPriceUpdates' | 'dms' | 'isLimit' | 'onDragEnd'
-> & { yScale: ScaleLinear<number, number> };
+  'prices' | 'onPriceUpdates' | 'dms' | 'onDragEnd'
+> & {
+  yScale: ScaleLinear<number, number>;
+  isLimit: { buy: boolean; sell: boolean };
+};
 
 export const D3ChartRecurring = ({
   prices,

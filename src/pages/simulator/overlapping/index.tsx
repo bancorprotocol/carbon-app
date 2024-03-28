@@ -1,17 +1,19 @@
+import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
 import { SimInputOverlapping } from 'components/simulator/input/SimInputOverlapping';
-import { useSimulatorInput } from 'hooks/useSimulatorInput';
+import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
 import { defaultEnd, defaultStart } from 'pages/simulator/index';
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
+import { roundSearchParam } from 'utils/helpers';
 
 export const SimulatorInputOverlappingPage = () => {
   const searchState = simulatorInputOverlappingRoute.useSearch();
 
-  const { dispatch, state, bounds } = useSimulatorInput({
+  const { dispatch, state, bounds } = useSimulatorOverlappingInput({
     searchState,
   });
 
@@ -21,6 +23,28 @@ export const SimulatorInputOverlappingPage = () => {
     start: searchState.start,
     end: searchState.end,
   });
+
+  useEffect(() => {
+    if (searchState.sellMax) return;
+    dispatch('baseToken', searchState.baseToken);
+    dispatch('quoteToken', searchState.quoteToken);
+    dispatch('spread', '1');
+    dispatch('buyMax', '', true);
+    dispatch('buyMin', '', true);
+    dispatch('sellMax', '', true);
+    dispatch('sellMin', '', true);
+    dispatch('sellBudget', '');
+    dispatch('sellBudgetError', '');
+    dispatch('sellPriceError', '');
+    dispatch('buyBudget', '');
+    dispatch('buyBudgetError', '');
+    dispatch('buyPriceError', '');
+  }, [
+    dispatch,
+    searchState.baseToken,
+    searchState.quoteToken,
+    searchState.sellMax,
+  ]);
 
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
@@ -37,22 +61,32 @@ export const SimulatorInputOverlappingPage = () => {
     const start = state.start ?? defaultStart();
     const end = state.end ?? defaultEnd();
 
+    const { buyPriceMarginal, sellPriceMarginal } = calculateOverlappingPrices(
+      state.buy.min,
+      state.sell.max,
+      data[0].open.toString(),
+      state.spread
+    );
+
     navigate({
       to: '/simulate/result',
       search: {
         baseToken: state.baseToken?.address || '',
         quoteToken: state.quoteToken?.address || '',
         buyMin: state.buy.min,
-        buyMax: state.buy.max,
+        buyMax: roundSearchParam(state.buy.max),
         buyBudget: state.buy.budget,
-        buyIsRange: state.buy.isRange,
-        sellMin: state.sell.min,
+        buyMarginal: roundSearchParam(buyPriceMarginal),
+        buyIsRange: true,
+        sellMin: roundSearchParam(state.sell.min),
         sellMax: state.sell.max,
         sellBudget: state.sell.budget,
-        sellIsRange: state.sell.isRange,
+        sellMarginal: roundSearchParam(sellPriceMarginal),
+        sellIsRange: true,
         start: start.toString(),
         end: end.toString(),
         type: 'overlapping',
+        spread: state.spread,
       },
     });
   };
@@ -81,6 +115,7 @@ export const SimulatorInputOverlappingPage = () => {
         data={data}
         isLoading={isLoading}
         isError={isError}
+        spread={state.spread}
         simulationType={'overlapping'}
       />
     </>
