@@ -14,11 +14,20 @@ interface Props {
   color: string;
   label?: string;
   lineProps?: SVGProps<SVGLineElement>;
+  handleClassName?: string;
   isDraggable?: boolean;
 }
 
 export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
-  const { selector, dms, color, y = 0, label, isDraggable } = props;
+  const {
+    selector,
+    dms,
+    color,
+    y = 0,
+    label,
+    isDraggable,
+    handleClassName,
+  } = props;
   const lineWidth = dms.boundedWidth + 5;
 
   return (
@@ -34,7 +43,7 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
       />
       <g
         transform={`translate(${lineWidth},-${handleDms.height / 2})`}
-        className={cn(isDraggable && 'cursor-ns-resize')}
+        className={cn(isDraggable && 'cursor-ns-resize', handleClassName)}
       >
         <rect y={y} {...handleDms} fill={color} rx={4} />
         {label && (

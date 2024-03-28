@@ -173,7 +173,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           id={buyBudgetId}
           token={quote}
           query={tokenQuoteBalanceQuery}
-          order={order0}
+          budgetValue={order0.budget}
+          budgetError={order0.budgetError}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
           withoutWallet
@@ -190,7 +191,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           id={sellBudgetId}
           token={base}
           query={tokenBaseBalanceQuery}
-          order={order1}
+          budgetValue={order1.budget}
+          budgetError={order1.budgetError}
           onChange={onSellBudgetChange}
           disabled={belowMarket || order1.max === '0'}
           withoutWallet
