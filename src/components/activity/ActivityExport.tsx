@@ -6,8 +6,8 @@ import { ReactComponent as IconDownloadFile } from 'assets/icons/download-file.s
 
 const getCSV = (activities: Activity[]) => {
   const header = [
-    'Full ID',
-    'Shorten ID',
+    'ID',
+    'Strategy NFT ID',
     'Base',
     'Quote',
     'Action',
@@ -33,8 +33,8 @@ const getCSV = (activities: Activity[]) => {
     const { base, quote } = strategy;
     const date = new Date(activity.date).toLocaleDateString();
     return [
-      strategy.id,
       getLowestBits(strategy.id),
+      strategy.id,
       base.symbol,
       quote.symbol,
       activityActionName[activity.action],
