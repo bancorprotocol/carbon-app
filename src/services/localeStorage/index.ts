@@ -21,6 +21,7 @@ import { FiatSymbol } from 'utils/carbonApi';
 interface LocalStorageSchema {
   connectionType: ConnectionType | EnumConnectionType;
   tenderlyRpc: string;
+  carbonApi: string;
   imposterAccount: string;
   importedTokens: Token[];
   [k: `notifications-${string}`]: Notification[];

@@ -21,7 +21,7 @@ export const Input: FC<InputProps> = ({
   ...props
 }) => {
   return (
-    <div className={'relative w-full'}>
+    <div className="relative w-full">
       <div className="pointer-events-none absolute top-1/2 left-10 h-20 w-20 -translate-y-1/2 transform">
         <svg
           xmlns="http://www.w3.org/2000/svg"
