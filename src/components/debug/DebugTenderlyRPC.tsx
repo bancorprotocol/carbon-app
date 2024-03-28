@@ -1,5 +1,5 @@
 import { useWeb3 } from 'libs/web3';
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
@@ -22,13 +22,17 @@ export const DebugTenderlyRPC = () => {
     web3Config.carbon.voucher
   );
 
-  const handleOnClick = () => {
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
     handleTenderlyRPC(urlInput, carbonControllerInput, voucherAddressInput);
     lsService.setItem('carbonApi', backendUrl);
   };
 
   return (
-    <section className="flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20">
+    <form
+      onSubmit={submit}
+      className="flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20"
+    >
       <h2>Set Tenderly RPC</h2>
       <Label label="RPC URL">
         <Input
@@ -75,9 +79,9 @@ export const DebugTenderlyRPC = () => {
         />
       </Label>
 
-      <Button data-testid="save-rpc" onClick={handleOnClick}>
+      <Button data-testid="save-rpc" type="submit">
         Save
       </Button>
-    </section>
+    </form>
   );
 };
