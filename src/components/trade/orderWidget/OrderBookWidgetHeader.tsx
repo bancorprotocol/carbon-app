@@ -11,19 +11,19 @@ export const OrderBookWidgetHeader: FC<Props> = ({
   quoteSymbol,
 }) => {
   return (
-    <p className="text-secondary grid grid-cols-3 rounded-t-10 rounded-b-4 bg-black px-20 pt-15 pb-12">
+    <p className="text-secondary grid grid-cols-3 rounded-t-10 rounded-b-4 bg-black px-20 pt-15 pb-12 text-16">
       <Tooltip element={`Price points denominated in ${quoteSymbol}`}>
-        <span>Price ({quoteSymbol})</span>
+        <b>Price ({quoteSymbol})</b>
       </Tooltip>
       <Tooltip
         element={`The amount of available ${baseSymbol} tokens in this price point`}
       >
-        <span>Amount ({baseSymbol})</span>
+        <b>Amount ({baseSymbol})</b>
       </Tooltip>
       <Tooltip
         element={`The available liquidity in this price point denominated in ${quoteSymbol}`}
       >
-        <span className="text-right">Total</span>
+        <b className="text-right">Total</b>
       </Tooltip>
     </p>
   );

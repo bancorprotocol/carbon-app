@@ -142,7 +142,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
   return (
     <svg
-      className={cn(style.strategyGraph, 'font-mono')}
+      className={style.strategyGraph}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -385,7 +385,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
               y={baseline + 10}
               dominantBaseline="hanging"
               textAnchor="middle"
-              fontSize="16"
+              fontSize="14"
               opacity="60%"
             >
               {prettifyNumber(point, { abbreviate: true, round: true })}
@@ -453,7 +453,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="9"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="16"
+            fontSize="14"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -466,7 +466,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="26"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="16"
+            fontSize="14"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -494,7 +494,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="10"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="16"
+            fontSize="14"
             style={{
               transform: translateRect,
             }}
@@ -522,7 +522,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="9"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="16"
+            fontSize="14"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -535,7 +535,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="26"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="16"
+            fontSize="14"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -589,7 +589,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       {!limit && (
-        <table className="border-separate rounded-8 border border-white/40 font-mono">
+        <table className="border-separate rounded-8 border border-white/40">
           <tbody>
             <tr>
               <th className="p-8 pb-4 text-start font-weight-400 text-white/60">

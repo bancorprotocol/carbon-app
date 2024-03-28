@@ -1,45 +1,88 @@
+
+/* In carbon app: BW */
 @font-face {
-    font-family: 'GT America';
-    font-weight: normal;
-    src: url('assets/font/gt-america/GT-America-Standard-Regular-Trial.woff2')
+    font-family: 'Carbon-Title';
+    font-weight: 900;
+    font-display: swap;
+    src: url('assets/font/title/black.woff2')
     format('woff');
 }
 
 @font-face {
-    font-family: 'GT America';
-    font-weight: bold;
-    src: url('assets/font/gt-america/GT-America-Standard-Black-Trial.woff2') format('woff');
+    font-family: 'Carbon-Title';
+    font-weight: 800;
+    font-display: swap;
+    src: url('assets/font/title/extra-bold.woff2') format('woff');
+}
+@font-face {
+    font-family: 'Carbon-Title';
+    font-weight: 700, bold;
+    font-display: swap;
+    src: url('assets/font/title/bold.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'GT America';
-    font-weight: 700;
-    src: url('assets/font/gt-america/GT-America-Standard-Black-Trial.woff2') format('woff');
-}
-
-@font-face {
-    font-family: 'GT America';
-    font-weight: 600;
-    src: url('assets/font/gt-america/GT-America-Standard-Bold-Trial.woff2')
-    format('woff');
-}
-
-@font-face {
-    font-family: 'GT America';
+    font-family: 'Carbon-Title';
     font-weight: 500;
-    src: url('assets/font/gt-america/GT-America-Standard-Medium-Trial.woff2')
-    format('woff');
+    font-display: swap;
+    src: url('assets/font/title/medium.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'GT America';
-    font-weight: 400;
-    src: url('assets/font/gt-america/GT-America-Standard-Light-Trial.woff2')
-    format('woff');
+    font-family: 'Carbon-Title';
+    font-weight: 400, normal;
+    font-display: swap;
+    src: url('assets/font/title/regular.woff2') format('woff');
 }
 
 @font-face {
-    font-family: 'GT America';
+    font-family: 'Carbon-Title';
     font-weight: 300;
-    src: url('assets/font/gt-america/GT-America-Standard-Thin-Trial.woff2') format('woff');
+    font-display: swap;
+    src: url('assets/font/title/light.woff2') format('woff');
+}
+
+@font-face {
+    font-family: 'Carbon-Title';
+    font-weight: 100;
+    font-display: swap;
+    src: url('assets/font/title/thin.woff2') format('woff');
+}
+
+/* In carbon app: Euclid Circular A */
+@font-face {
+    font-family: 'Carbon-Text';
+    font-weight: 700, bold;
+    font-display: swap;
+    src: url('assets/font/text/bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Carbon-Text';
+    font-weight: 600;
+    font-display: swap;
+    src: url('assets/font/text/semi-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Carbon-Text';
+    font-weight: 500;
+    font-display: swap;
+    src: url('assets/font/text/medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Carbon-Text';
+    font-weight: 400, normal;
+    font-display: swap;
+    src: url('assets/font/text/regular.ttf')
+    format('truetype');
+}
+
+@font-face {
+    font-family: 'Carbon-Text';
+    font-weight: 300;
+    font-display: swap;
+    src: url('assets/font/text/light.ttf')
+    format('truetype');
 }

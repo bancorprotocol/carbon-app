@@ -26,7 +26,7 @@ export const StrategyBlockRoi: FC<Props> = ({ strategy }) => {
       )}
     >
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-secondary flex items-center gap-4 font-mono !text-12">
+        <h4 className="text-secondary flex items-center gap-4 !text-12">
           ROI
           <IconTooltip className="h-10 w-10" />
         </h4>

@@ -185,7 +185,7 @@ export const ApproveToken: FC<Props> = ({
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-10">
                   <div
-                    className={`font-mono text-12 font-weight-500 transition-all ${
+                    className={`text-12 font-weight-500 transition-all ${
                       isLimited ? 'text-white/60' : 'text-white/85'
                     }`}
                   >
@@ -220,7 +220,7 @@ export const ApproveToken: FC<Props> = ({
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className="flex space-x-20 font-mono text-14 text-warning">
+        <div className="flex space-x-20 text-14 text-warning">
           <div>
             <IconWarning className="w-16" />
           </div>

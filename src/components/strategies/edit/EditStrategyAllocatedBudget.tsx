@@ -62,7 +62,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
     <>
       <div
         role="table"
-        className="flex flex-col gap-10 rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500"
+        className="flex flex-col gap-10 rounded-8 border-2 border-white/10 p-15 text-left text-12 font-weight-500"
       >
         <div role="row" className="flex items-center justify-between gap-16">
           <p role="columnheader" className="flex w-auto items-center gap-6">
