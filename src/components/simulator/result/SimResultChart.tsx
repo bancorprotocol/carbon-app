@@ -7,7 +7,7 @@ import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useState } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { Link, useSearch } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 
@@ -19,7 +19,6 @@ interface Props {
 export const SimResultChart = ({ state, simulationType }: Props) => {
   const ctx = useSimulator();
   const [showSummary, setShowSummary] = useState(false);
-  const searchState = useSearch({ from: '/simulate/result' });
 
   if (ctx.isError) {
     return (
