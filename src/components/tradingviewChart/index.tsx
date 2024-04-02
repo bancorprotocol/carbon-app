@@ -19,7 +19,7 @@ export const TradingviewChart: FC<TradingviewChartProps> = memo(
       `UNISWAP3ETH:${baseSymbol}${quoteSymbol}`;
 
     return (
-      <div>
+      <div className="flex flex-col">
         <Widget symbol={symbol} />
         <Copyright symbol={symbol} />
       </div>

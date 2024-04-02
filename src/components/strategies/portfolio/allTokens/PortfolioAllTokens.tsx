@@ -1,5 +1,4 @@
 import { Row } from '@tanstack/react-table';
-import { ExplorerEmptyError } from 'components/explorer';
 import { PortfolioAllTokensPieChartCenter } from 'components/strategies/portfolio/allTokens/PortfolioAllTokensPieChartCenter';
 import { Strategy } from 'libs/queries';
 import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
@@ -14,6 +13,8 @@ import {
   usePortfolioData,
 } from 'components/strategies/portfolio/usePortfolioData';
 import { StrategyCreateFirst } from 'components/strategies/overview/StrategyCreateFirst';
+import { NotFound } from 'components/common/NotFound';
+
 interface Props {
   strategies?: Strategy[];
   isLoading?: boolean;
@@ -37,7 +38,14 @@ const _PortfolioAllTokens = ({
 
   if (!isLoading && tableData && tableData.length === 0) {
     if (isExplorer) {
-      return <ExplorerEmptyError />;
+      return (
+        <NotFound
+          variant="error"
+          title="We couldn't find any strategies"
+          text="Try entering a different wallet address or choose a different token pair or reset your filters."
+          bordered
+        />
+      );
     }
     return <StrategyCreateFirst />;
   }

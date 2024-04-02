@@ -1,12 +1,12 @@
-import { ChangeEvent, FC, FocusEvent, useId } from 'react';
+import { ChangeEvent, FC, FocusEvent, useEffect, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
 import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 type InputLimitProps = {
   id?: string;
@@ -14,9 +14,12 @@ type InputLimitProps = {
   setPrice: (value: string) => void;
   token: Token;
   error?: string;
-  setPriceError: (error: string) => void;
+  warnings?: string[];
+  setPriceError?: (error: string) => void;
   buy?: boolean;
   marketPricePercentage: MarketPricePercentage;
+  ignoreMarketPriceWarning?: boolean;
+  isOrdersReversed: boolean;
 };
 
 export const InputLimit: FC<InputLimitProps> = ({
@@ -25,26 +28,37 @@ export const InputLimit: FC<InputLimitProps> = ({
   setPrice,
   token,
   error,
+  warnings,
   setPriceError,
   marketPricePercentage,
   buy = false,
+  ignoreMarketPriceWarning,
+  isOrdersReversed,
 }) => {
   const inputId = useId();
 
+  const errorAboveZero = 'Price must be greater than 0';
+  const errorReversedOrders =
+    'Orders are reversed. This strategy is currently set to Buy High and Sell Low. Please adjust your prices to avoid an immediate loss of funds upon creation.';
+  const showWarning = !error && warnings?.length;
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = sanitizeNumber(e.target.value);
-    if (Number(value) > 0) {
-      setPriceError('');
-    } else {
-      const errorMessage = 'Price must be greater than 0';
+    setPrice(sanitizeNumber(e.target.value));
+  };
+
+  useEffect(() => {
+    let errorMessage = '';
+    if (isOrdersReversed) errorMessage = errorReversedOrders;
+    if (+price <= 0) errorMessage = errorAboveZero;
+    if (setPriceError) setPriceError(errorMessage);
+    if (errorMessage) {
       carbonEvents.strategy.strategyErrorShow({
         buy,
         message: errorMessage,
       });
-      setPriceError(errorMessage);
     }
-    setPrice(value);
-  };
+  }, [price, setPriceError, buy, isOrdersReversed]);
+
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     const formatted = formatNumber(e.target.value);
     if (formatted !== e.target.value) setPrice(formatted);
@@ -57,9 +71,10 @@ export const InputLimit: FC<InputLimitProps> = ({
     <>
       <div
         className={`
-          flex cursor-text flex-col rounded-16 border bg-black p-16
+          flex cursor-text flex-col rounded-16 border border-black bg-black p-16
           focus-within:border-white/50
-          ${error ? '!border-error/50' : 'border-black'} 
+          ${error ? '!border-error/50' : ''}
+          ${showWarning ? '!border-warning' : ''}
         `}
         onClick={() => document.getElementById(id ?? inputId)?.focus()}
       >
@@ -86,19 +101,25 @@ export const InputLimit: FC<InputLimitProps> = ({
           </span>
           <MarketPriceIndication
             marketPricePercentage={marketPricePercentage.price}
+            buy={buy}
+            ignoreMarketPriceWarning={ignoreMarketPriceWarning}
           />
         </p>
       </div>
-      {error && (
-        <output
+      {error ? (
+        <WarningMessageWithIcon
+          isError
+          message={error}
           htmlFor={id ?? inputId}
-          role="alert"
-          aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-error"
-        >
-          <IconWarning className="h-12 w-12" />
-          <span className="flex-1">{error}</span>
-        </output>
+        />
+      ) : (
+        warnings?.map((warning, i) => (
+          <WarningMessageWithIcon
+            key={i}
+            message={warning}
+            htmlFor={id ?? inputId}
+          />
+        ))
       )}
     </>
   );
