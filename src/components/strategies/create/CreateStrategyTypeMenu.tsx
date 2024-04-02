@@ -183,12 +183,14 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
       <Link
         {...selectedStrategySettings}
         params={{}}
-        className={cn(
-          buttonStyles({ variant: 'success', fullWidth: true, size: 'lg' }),
-          selectedStrategySettings
-            ? ''
-            : 'pointer-events-none cursor-not-allowed opacity-40'
-        )}
+        className={`
+          ${buttonStyles({ variant: 'success', fullWidth: true, size: 'lg' })}
+          ${
+            selectedStrategySettings
+              ? ''
+              : 'pointer-events-none cursor-not-allowed opacity-40'
+          }
+        `}
         onClick={() => {
           if (!selectedStrategySettings) return;
           order0.resetFields();
