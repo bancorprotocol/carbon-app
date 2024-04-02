@@ -40,7 +40,7 @@ export const MainMenuLeft: FC = () => {
               params={{}}
               search={{}}
               aria-current={isSamePage ? 'page' : 'false'}
-              className={`px-3 py-3 transition-colors duration-300 ${
+              className={`px-3 py-3 font-title transition-colors duration-300 ${
                 isSamePage ? 'text-white' : 'hover:text-white'
               }`}
             >
