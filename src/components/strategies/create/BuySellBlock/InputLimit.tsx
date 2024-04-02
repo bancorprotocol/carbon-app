@@ -51,6 +51,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   };
 
   useEffect(() => {
+    if (!price) return;
     let errorMessage = '';
     if (isOrdersReversed) errorMessage = errorReversedOrders;
     if (+price <= 0) errorMessage = errorAboveZero;
