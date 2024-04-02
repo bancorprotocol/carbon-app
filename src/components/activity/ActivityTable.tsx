@@ -121,7 +121,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
           </button>
         </td>
         <td className={cn(tdFirstLine, 'font-weight-500')}>
-          <button onClick={setAction}>
+          <button onClick={setAction} className="w-full text-start">
             {activityActionName[activity.action]}
           </button>
         </td>
@@ -141,8 +141,8 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
       >
         {/* ID */}
         {/* Action Icon */}
-        <td className={tdSecondLine}>
-          <button onClick={setAction}>
+        <td className={cn(tdSecondLine, 'w-full')}>
+          <button onClick={setAction} className="w-full text-start">
             <p className="whitespace-normal">{activityDescription(activity)}</p>
           </button>
         </td>
