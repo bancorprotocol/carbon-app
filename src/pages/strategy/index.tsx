@@ -41,6 +41,7 @@ export const StrategyPage = () => {
           title="Strategy not found"
           text="The strategy you are looking for does not exist or has been deleted."
           bordered
+          showBackButton
         />
       </Page>
     );

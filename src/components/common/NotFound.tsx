@@ -8,11 +8,13 @@ export const NotFound = ({
   title,
   text,
   bordered = false,
+  showBackButton = false,
 }: {
   variant: 'info' | 'error';
   title: string;
   text: string;
   bordered?: boolean;
+  showBackButton?: boolean;
 }) => {
   const { history } = useRouter();
 
@@ -23,12 +25,14 @@ export const NotFound = ({
         bordered && 'rounded border-2 border-background-800'
       )}
     >
-      <button
-        onClick={() => history.back()}
-        className="absolute top-8 left-8 rounded-full p-16 hover:bg-white/20"
-      >
-        <ForwardArrow className="h-16 w-16 rotate-180" />
-      </button>
+      {showBackButton && (
+        <button
+          onClick={() => history.back()}
+          className="absolute top-8 left-8 rounded-full p-16 hover:bg-white/20"
+        >
+          <ForwardArrow className="h-16 w-16 rotate-180" />
+        </button>
+      )}
       <div
         className={cn('rounded-full p-20', {
           'bg-primary/20': variant === 'info',
