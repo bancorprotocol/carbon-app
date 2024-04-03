@@ -4,7 +4,7 @@ import {
   buildAmountString,
   buildPercentageString,
 } from 'components/strategies/portfolio/utils';
-import { GetPortfolioTokenHref } from 'pages/strategies/portfolio';
+import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 import { FC } from 'react';
 import {
   CardSection,
