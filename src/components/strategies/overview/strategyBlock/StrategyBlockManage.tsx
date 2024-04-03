@@ -103,23 +103,21 @@ export const StrategyBlockManage: FC<Props> = (props) => {
   }
 
   if (!isExplorer) {
-    if (!isOverlapping) {
-      items.push({
-        id: 'editPrices',
-        name: 'Edit Prices',
-        action: () => {
-          carbonEvents.strategyEdit.strategyEditPricesClick({
-            origin: 'manage',
-            ...strategyEvent,
-          });
-          navigate({
-            to: '/strategies/edit/$strategyId',
-            params: { strategyId: strategy.id },
-            search: { type: 'editPrices' },
-          });
-        },
-      });
-    }
+    items.push({
+      id: 'editPrices',
+      name: 'Edit Prices',
+      action: () => {
+        carbonEvents.strategyEdit.strategyEditPricesClick({
+          origin: 'manage',
+          ...strategyEvent,
+        });
+        navigate({
+          to: '/strategies/edit/$strategyId',
+          params: { strategyId: strategy.id },
+          search: { type: 'editPrices' },
+        });
+      },
+    });
 
     if (
       !isOverlapping ||

@@ -1,0 +1,21 @@
+.progress {
+  display: flex;
+  gap: 8px;
+  height: 24px;
+}
+.initial {
+  border-radius: 8px;
+  background-color: var(--buy);
+  transition: flex-grow 0.2s;
+}
+.delta {
+  border-radius: 8px;
+  background-color: var(--buy);
+  transition: flex-grow 0.2s;
+}
+.wallet {
+  border-radius: 8px;
+  background-color: var(--buy);
+  opacity: 0.4;
+  transition: flex-grow 0.2s;
+}

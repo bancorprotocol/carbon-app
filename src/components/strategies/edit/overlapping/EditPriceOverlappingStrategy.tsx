@@ -15,13 +15,13 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
 import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
 import { OverlappingRange } from 'components/strategies/overlapping/OverlappingRange';
-import { EditOverlappingStrategyBudget } from './EditOverlappingStrategyBudget';
 import { isValidRange } from 'components/strategies/utils';
 import {
   calculateOverlappingBuyBudget,
   calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
+import { OverlappingBudget } from 'components/strategies/overlapping/OverlappingBudget';
 
 interface Props {
   strategy: Strategy;
@@ -42,7 +42,6 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   const [spread, setSpread] = useState(getRoundedSpread(strategy));
   const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
-  const [mounted, setMounted] = useState(false);
 
   const setBuyBudget = (
     sellBudget: string,
@@ -127,23 +126,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     setOverlappingParams(order0.min, max);
   };
 
-  // Initialize order when market price is available
-  useEffect(() => {
-    if (!quote || !base || marketPrice <= 0) return;
-    if (!mounted) return setMounted(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spread]);
-
   // Update on buyMin changes
   useEffect(() => {
     if (!order0.min) return;
-    if (!mounted) return setMounted(true);
     const timeout = setTimeout(async () => {
-      const decimals = quote?.decimals ?? 18;
       const minSellMax = getMinSellMax(Number(order0.min), spread);
-      if (Number(order1.max) < minSellMax) {
-        setMax(minSellMax.toFixed(decimals));
-      }
+      if (Number(order1.max) < minSellMax) setMax(minSellMax.toString());
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,13 +140,9 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   // Update on sellMax changes
   useEffect(() => {
     if (!order1.max) return;
-    if (!mounted) return setMounted(true);
     const timeout = setTimeout(async () => {
-      const decimals = quote?.decimals ?? 18;
       const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
-      if (Number(order0.min) > maxBuyMin) {
-        setMin(maxBuyMin.toFixed(decimals));
-      }
+      if (Number(order0.min) > maxBuyMin) setMin(maxBuyMin.toString());
     }, 1000);
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -224,13 +208,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setSpread={setSpread}
         />
       </article>
-      <EditOverlappingStrategyBudget
-        {...props}
-        marketPrice={marketPrice}
+      <OverlappingBudget
+        base={base}
+        quote={quote}
+        order0={order0}
+        order1={order1}
         anchoredOrder={anchoredOrder}
         setAnchoredOrder={setAnchoredOrder}
-        setBuyBudget={setBuyBudget}
-        setSellBudget={setSellBudget}
       />
     </>
   );
