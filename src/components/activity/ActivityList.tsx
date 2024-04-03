@@ -15,6 +15,7 @@ import {
 import { tokenAmount } from 'utils/helpers';
 import { usePagination } from 'hooks/useList';
 import { Button } from 'components/common/button';
+import { useActivity } from './ActivityProvider';
 
 export interface ActivityListProps {
   activities: Activity[];
@@ -58,8 +59,15 @@ interface ActivityItemProps {
   hideIds: boolean;
 }
 const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
+  const { searchParams, setSearchParams } = useActivity();
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
+  const setAction = () => {
+    const actions = searchParams.actions.includes(activity.action)
+      ? []
+      : [activity.action];
+    setSearchParams({ actions });
+  };
   return (
     <li className="flex flex-col gap-16 rounded border-2 border-background-800">
       <header className="flex px-16 pt-16">
@@ -70,13 +78,15 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
         </p>
       </header>
       <section className="px-16">
-        <h3 className="mb-8 flex items-center gap-8">
-          <ActivityIcon activity={activity} size={24} />
-          {activityActionName[activity.action]}
-        </h3>
-        <p className="font-mono text-12 text-white/60">
-          {activityDescription(activity)}
-        </p>
+        <button onClick={setAction} className="text-start">
+          <h3 className="mb-8 flex items-center gap-8">
+            <ActivityIcon activity={activity} size={24} />
+            {activityActionName[activity.action]}
+          </h3>
+          <p className="font-mono text-12 text-white/60">
+            {activityDescription(activity)}
+          </p>
+        </button>
       </section>
       <hr className="border-background-800" />
       <table className="w-full table-fixed">

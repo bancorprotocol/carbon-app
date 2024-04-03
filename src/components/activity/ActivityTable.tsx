@@ -1,7 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
-import { NewTabLink } from 'libs/routing';
+import { Link, NewTabLink } from 'libs/routing';
 import { cn, getLowestBits, shortenString, tokenAmount } from 'utils/helpers';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
@@ -26,6 +26,7 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { ActivityListProps } from './ActivityList';
 import { NotFound } from 'components/common/NotFound';
+import { useActivity } from './ActivityProvider';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(
@@ -97,8 +98,15 @@ interface ActivityRowProps {
   index: number;
 }
 const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
+  const { searchParams, setSearchParams } = useActivity();
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
+  const setAction = () => {
+    const actions = searchParams.actions.includes(activity.action)
+      ? []
+      : [activity.action];
+    setSearchParams({ actions });
+  };
   return (
     <>
       <tr className="text-14" style={{ animationDelay: `${index * 50}ms` }}>
@@ -108,10 +116,14 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
           </td>
         )}
         <td rowSpan={2} className="py-12 pl-8 first:pl-24">
-          <ActivityIcon activity={activity} size={32} />
+          <button onClick={setAction}>
+            <ActivityIcon activity={activity} size={32} />
+          </button>
         </td>
         <td className={cn(tdFirstLine, 'font-weight-500')}>
-          {activityActionName[activity.action]}
+          <button onClick={setAction} className="w-full text-start">
+            {activityActionName[activity.action]}
+          </button>
         </td>
         <td className={tdFirstLine}>
           {tokenAmount(strategy.buy.budget, quote)}
@@ -129,8 +141,10 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
       >
         {/* ID */}
         {/* Action Icon */}
-        <td className={tdSecondLine}>
-          <p className="whitespace-normal">{activityDescription(activity)}</p>
+        <td className={cn(tdSecondLine, 'w-full')}>
+          <button onClick={setAction} className="w-full text-start">
+            <p className="whitespace-normal">{activityDescription(activity)}</p>
+          </button>
         </td>
         <td className={tdSecondLine}>
           <BudgetChange budget={changes?.buy?.budget} token={quote} />
@@ -156,12 +170,14 @@ interface ActivityIdProps {
 export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
   const { id, base, quote } = activity.strategy;
   return (
-    <span
-      className={`inline-flex items-center gap-4 rounded-full bg-background-800 py-4 px-8`}
+    <Link
+      to="/strategy/$id"
+      params={{ id: id }}
+      className="inline-flex items-center gap-4 rounded-full bg-background-800 py-4 px-8"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
-    </span>
+    </Link>
   );
 };
 
