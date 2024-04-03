@@ -1,10 +1,9 @@
 import { AppConfig } from 'config/types';
-import { lsService } from 'services/localeStorage';
 
 export const commonConfig: AppConfig = {
   mode: 'development',
   appUrl: 'https://app.carbondefi.xyz',
-  carbonApi: lsService.getItem('carbonApi') || 'https://api.carbondefi.xyz/v1/',
+  carbonApi: 'https://api.carbondefi.xyz/v1/',
   blockExplorer: 'https://etherscan.io',
   rpcUrl:
     import.meta.env.VITE_CHAIN_RPC_URL ||

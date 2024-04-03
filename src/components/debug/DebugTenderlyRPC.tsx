@@ -13,7 +13,9 @@ export const DebugTenderlyRPC = () => {
   const [urlInput, setUrlInput] = useState(
     lsService.getItem('tenderlyRpc') || ''
   );
-  const [backendUrl, setBackendUrl] = useState(config.carbonApi);
+  const [backendUrl, setBackendUrl] = useState(
+    lsService.getItem('carbonApi') || config.carbonApi
+  );
   const [carbonControllerInput, setCarbonControllerInput] = useState(
     web3Config.carbon.carbonController
   );
