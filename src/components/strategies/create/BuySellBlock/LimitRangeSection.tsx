@@ -68,7 +68,8 @@ export const LimitRangeSection: FC<Props> = ({
         />
       ) : (
         <InputLimit
-          token={quote}
+          base={base}
+          quote={quote}
           price={order.price}
           setPrice={order.setPrice}
           error={isEmptyOrder ? undefined : order.priceError}
