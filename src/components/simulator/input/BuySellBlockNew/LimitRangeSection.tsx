@@ -88,7 +88,8 @@ export const LimitRangeSection: FC<Props> = ({
         />
       ) : (
         <InputLimit
-          token={quote}
+          base={base}
+          quote={quote}
           price={order.min}
           setPrice={(value) => {
             dispatch(`${type}Min`, value);
