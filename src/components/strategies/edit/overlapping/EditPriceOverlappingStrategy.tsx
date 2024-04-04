@@ -150,7 +150,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex w-full flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
         <header>
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
         </header>
@@ -166,7 +166,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setMax={setMax}
         />
       </article>
-      <article className="flex w-full flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8">
           <h3 className="flex-1 text-18 font-weight-500">
             Edit Price Range&nbsp;

@@ -2,8 +2,9 @@
   display: flex;
   gap: 8px;
   height: 24px;
+  transition: gap 0.2s;
 }
-.initial {
+.allocation {
   border-radius: 8px;
   background-color: var(--buy);
   transition: flex-grow 0.2s;
@@ -13,7 +14,7 @@
   background-color: var(--buy);
   transition: flex-grow 0.2s;
 }
-.wallet {
+.balance {
   border-radius: 8px;
   background-color: var(--buy);
   opacity: 0.4;

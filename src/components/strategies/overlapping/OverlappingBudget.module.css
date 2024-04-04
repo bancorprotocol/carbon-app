@@ -1,0 +1,8 @@
+/* TODO(#1130) integrate this into component when tailwind is updated */
+.select-token:checked + label {
+  border: solid 1px white;
+}
+.budget-mode:checked + label {
+  color: white;
+  background-color: #404040;
+}
