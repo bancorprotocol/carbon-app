@@ -8,18 +8,23 @@ import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
 
 export const SimulatorResultPage = () => {
-  const ctx = useSimulator();
+  const { status, isSuccess, start, ...ctx } = useSimulator();
   const simulationType = 'recurring';
 
   const handleAnimationStart = useCallback(() => {
-    if (!ctx.isSuccess || ctx.status === 'running' || ctx.status === 'ended') {
+    if (
+      !isSuccess ||
+      status === 'running' ||
+      status === 'ended' ||
+      status === 'paused'
+    ) {
       return;
     }
 
     wait(THREE_SECONDS_IN_MS).then(() => {
-      ctx.start();
+      start();
     });
-  }, [ctx]);
+  }, [isSuccess, status, start]);
 
   useEffect(() => {
     handleAnimationStart();
