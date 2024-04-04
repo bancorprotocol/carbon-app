@@ -101,13 +101,15 @@ export const InputLimit: FC<InputLimitProps> = ({
             `}
             data-testid="input-price"
           />
-          <button
-            className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
-            type="button"
-            onClick={() => setPrice(formatNumber(marketPrice.toString()))}
-          >
-            Use Market
-          </button>
+          {marketPrice !== 0 && (
+            <button
+              className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+              type="button"
+              onClick={() => setPrice(formatNumber(marketPrice.toString()))}
+            >
+              Use Market
+            </button>
+          )}
         </div>
         <p className="flex flex-wrap items-center gap-8">
           <span className="break-all font-mono text-12 text-white/60">

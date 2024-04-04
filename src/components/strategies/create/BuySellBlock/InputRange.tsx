@@ -111,13 +111,15 @@ export const InputRange: FC<InputRangeProps> = ({
             >
               <label htmlFor={inputMinId}>{minLabel}</label>
             </Tooltip>
-            <button
-              className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
-              type="button"
-              onClick={() => setMin(formatNumber(marketPrice.toString()))}
-            >
-              Use Market
-            </button>
+            {marketPrice !== 0 && (
+              <button
+                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                type="button"
+                onClick={() => setMin(formatNumber(marketPrice.toString()))}
+              >
+                Use Market
+              </button>
+            )}
           </header>
           <input
             id={inputMinId}
@@ -165,13 +167,15 @@ export const InputRange: FC<InputRangeProps> = ({
             >
               <label htmlFor={inputMaxId}>{maxLabel}</label>
             </Tooltip>
-            <button
-              className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
-              type="button"
-              onClick={() => setMax(formatNumber(marketPrice.toString()))}
-            >
-              Use Market
-            </button>
+            {marketPrice !== 0 && (
+              <button
+                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                type="button"
+                onClick={() => setMax(formatNumber(marketPrice.toString()))}
+              >
+                Use Market
+              </button>
+            )}
           </header>
           <input
             id={inputMaxId}
