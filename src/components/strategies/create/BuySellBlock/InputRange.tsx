@@ -114,7 +114,7 @@ export const InputRange: FC<InputRangeProps> = ({
             <button
               className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
               type="button"
-              onClick={() => setMin(marketPrice.toString())}
+              onClick={() => setMin(formatNumber(marketPrice.toString()))}
             >
               Use Market
             </button>
@@ -168,7 +168,7 @@ export const InputRange: FC<InputRangeProps> = ({
             <button
               className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
               type="button"
-              onClick={() => setMax(marketPrice.toString())}
+              onClick={() => setMax(formatNumber(marketPrice.toString()))}
             >
               Use Market
             </button>

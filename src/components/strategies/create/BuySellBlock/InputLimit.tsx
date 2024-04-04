@@ -104,7 +104,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           <button
             className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
             type="button"
-            onClick={() => setPrice(marketPrice.toString())}
+            onClick={() => setPrice(formatNumber(marketPrice.toString()))}
           >
             Use Market
           </button>
