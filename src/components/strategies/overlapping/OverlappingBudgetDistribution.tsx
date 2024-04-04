@@ -25,9 +25,9 @@ function getBudgetDistribution(
   const newBalance = mode === 'deposit' ? balance - delta : balance;
   const total = initial + balance;
   return {
-    allocationPercent: Math.round((newAllocation / total) * 100),
+    allocationPercent: Math.round((Math.max(newAllocation, 0) / total) * 100),
     deltaPercent: Math.round((delta / total) * 100),
-    balancePercent: Math.round((newBalance / total) * 100),
+    balancePercent: Math.round((Math.max(newBalance, 0) / total) * 100),
   };
 }
 
@@ -47,7 +47,6 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
     Number(balance),
     mode
   );
-  console.log(dist);
   const color = buy ? 'bg-buy' : 'bg-sell';
   return (
     <div className="flex flex-col gap-4">

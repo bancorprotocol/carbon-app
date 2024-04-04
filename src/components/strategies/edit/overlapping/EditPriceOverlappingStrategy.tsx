@@ -213,6 +213,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         quote={quote}
         order0={order0}
         order1={order1}
+        spread={spread}
+        marketPrice={marketPrice}
         anchoredOrder={anchoredOrder}
         setAnchoredOrder={setAnchoredOrder}
       />

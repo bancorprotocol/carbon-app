@@ -11,6 +11,7 @@ interface Props {
   order: OrderCreate;
   token: Token;
   query: UseQueryResult<string>;
+  value?: string;
   onChange: (value: string) => void;
   disabled?: boolean;
   withoutWallet?: boolean;
@@ -18,7 +19,7 @@ interface Props {
 }
 
 export const BudgetInput: FC<Props> = (props) => {
-  const { id, order, token, query, children, onChange } = props;
+  const { id, value, order, token, query, children, onChange } = props;
   const inputId = useId();
   const balance = query.data ?? '0';
 
@@ -27,7 +28,7 @@ export const BudgetInput: FC<Props> = (props) => {
       <TokenInputField
         id={id ?? inputId}
         className="rounded-16 bg-black p-16"
-        value={order.budget}
+        value={value ?? order.budget}
         setValue={onChange}
         token={token}
         isBalanceLoading={query.isLoading}
