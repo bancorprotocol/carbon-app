@@ -5,19 +5,23 @@ import { useNotifications } from 'hooks/useNotifications';
 
 export const useActivityNotifications = () => {
   const { user } = useWeb3();
-  const [size, setSize] = useState(0);
+  const [previous, setPrevious] = useState<number | null>(null);
   const query = useActivityQuery({ ownerId: user });
-  const buyOrSell = (query.data || []).filter(
+  const allActivities = query.data || [];
+  const buyOrSell = allActivities.filter(
     (a) => a.action === 'sell' || a.action === 'buy'
   );
   const { dispatchNotification } = useNotifications();
+
   useEffect(() => {
-    if (!size) return setSize(buyOrSell.length);
-    if (size === buyOrSell.length) return;
-    for (let i = size; i < buyOrSell.length; i++) {
-      const activity = buyOrSell[i];
-      dispatchNotification('activity', { activity });
+    if (query.isLoading) return;
+    const length = buyOrSell.length;
+    if (typeof previous === 'number' && length > previous) {
+      for (let i = previous; i < length; i++) {
+        const activity = buyOrSell[i];
+        dispatchNotification('activity', { activity });
+      }
     }
-    setSize(buyOrSell.length);
-  }, [dispatchNotification, buyOrSell.length, size, buyOrSell]);
+    setPrevious(length);
+  }, [buyOrSell, dispatchNotification, previous, query.isLoading]);
 };
