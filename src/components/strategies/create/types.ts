@@ -1,4 +1,3 @@
-import { MakeGenerics, useNavigate } from 'libs/routing';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { QueryClient, UseMutationResult } from '@tanstack/react-query';
 import { TransactionResponse } from '@ethersproject/providers';
@@ -8,20 +7,7 @@ import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { StrategyEventType } from 'services/events/types';
 import { Dispatch, SetStateAction } from 'react';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
-
-export type StrategyType = 'recurring' | 'disposable';
-export type StrategyDirection = 'buy' | 'sell';
-export type StrategySettings = 'limit' | 'range' | 'custom';
-
-export type StrategyCreateLocationGenerics = MakeGenerics<{
-  Search: {
-    base?: string;
-    quote?: string;
-    strategyType?: StrategyType;
-    strategyDirection?: StrategyDirection;
-    strategySettings?: StrategySettings;
-  };
-}>;
+import { NavigateOptions } from 'libs/routing';
 
 export type OrderWithSetters = {
   setIsRange: (value: ((prevState: boolean) => boolean) | boolean) => void;
@@ -29,12 +15,17 @@ export type OrderWithSetters = {
   setBudget: (value: ((prevState: string) => string) | string) => void;
 };
 
+type BaseCreateOrder = Pick<
+  OrderCreate,
+  'budget' | 'min' | 'max' | 'price' | 'marginalPrice'
+>;
+
 export type CreateStrategyActionProps = Pick<
   UseStrategyCreateReturn,
   'base' | 'quote'
 > & {
-  order0: OrderCreate;
-  order1: OrderCreate;
+  order0: BaseCreateOrder;
+  order1: BaseCreateOrder;
   user?: string;
   cache: QueryClient;
   mutation: UseMutationResult<
@@ -44,7 +35,7 @@ export type CreateStrategyActionProps = Pick<
     unknown
   >;
   dispatchNotification: DispatchNotification;
-  navigate: ReturnType<typeof useNavigate<StrategyCreateLocationGenerics>>;
+  navigate: (opts: NavigateOptions) => Promise<void>;
   setIsProcessing: Dispatch<SetStateAction<boolean>>;
   strategyEventData: StrategyEventType & {
     buyMarketPricePercentage: MarketPricePercentage;

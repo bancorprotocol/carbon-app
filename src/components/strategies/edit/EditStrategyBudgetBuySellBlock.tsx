@@ -1,5 +1,5 @@
 import { FC, useId } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -9,6 +9,8 @@ import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useMarketIndication } from '../marketPriceIndication';
+import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -28,23 +30,39 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
 
-  const calculatedWalletBalance = new BigNumber(
+  const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
+    base,
+    quote,
+    order,
+    buy,
+  });
+
+  const calculatedWalletBalance = new SafeDecimal(
     tokenBalanceQuery.data || 0
-  ).minus(new BigNumber(order.budget || 0));
+  ).minus(new SafeDecimal(order.budget || 0));
 
   const insufficientBalance =
     type === 'withdraw'
-      ? new BigNumber(balance || 0).lt(order.budget)
+      ? new SafeDecimal(balance || 0).lt(order.budget)
       : calculatedWalletBalance.lt(0);
+
+  const budgetProps = {
+    base,
+    quote,
+    balance,
+    buy,
+    type,
+  };
 
   return (
     <section
       aria-labelledby={titleId}
-      className={`bg-secondary flex flex-col gap-20 rounded-6 border-l-2 p-20 text-left ${
+      className={`flex flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-left ${
         buy
-          ? 'border-green/50 focus-within:border-green'
-          : 'border-red/50 focus-within:border-red'
+          ? 'border-buy/50 focus-within:border-buy'
+          : 'border-sell/50 focus-within:border-sell'
       }`}
+      data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <header className="flex items-center justify-between">
         <h3 id={titleId} className="flex items-center gap-8 text-18">
@@ -66,7 +84,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       </header>
       <TokenInputField
         id={inputId}
-        className={'rounded-16 bg-black p-16'}
+        className="rounded-16 bg-black p-16"
         value={order.budget}
         setValue={order.setBudget}
         token={budgetToken}
@@ -74,20 +92,25 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         isError={insufficientBalance}
         balance={tokenBalanceQuery.data}
         withoutWallet={type === 'withdraw'}
+        data-testid="input-budget"
       />
+      {isOrderAboveOrBelowMarketPrice && (
+        <OutsideMarketPriceWarning base={base} buy={!!buy} />
+      )}
       {insufficientBalance && (
         <output
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className={`flex items-center gap-10 font-mono text-12 text-red`}
+          className="flex items-center gap-10 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">Insufficient balance</span>
         </output>
       )}
       <EditStrategyAllocatedBudget
-        {...{ order, base, quote, balance, buy, type }}
+        order={order}
+        {...budgetProps}
         {...(type === 'withdraw' && {
           showMaxCb: () => order.setBudget(balance || ''),
         })}

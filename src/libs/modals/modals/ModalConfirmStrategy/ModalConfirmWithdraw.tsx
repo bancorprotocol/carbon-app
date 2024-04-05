@@ -1,10 +1,9 @@
 import { useModal } from 'hooks/useModal';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { ModalFC } from '../../modals.types';
-import { Link, PathNames } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { Strategy } from 'libs/queries';
-import { useStore } from 'store';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { cn } from 'utils/helpers';
@@ -20,16 +19,14 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
   id,
   data,
 }) => {
-  const { strategies } = useStore();
   const { closeModal } = useModal();
-  const { strategyEvent } = data;
+  const { strategyEvent, strategy } = data;
 
   const edit = () => {
     carbonEvents.strategyEdit.strategyEditPricesClick({
       origin: 'withdraw',
       ...strategyEvent,
     });
-    strategies.setStrategyToEdit(data.strategy);
     closeModal(id);
   };
 
@@ -43,7 +40,8 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
         <h3 className="text-14 font-weight-500">Did you know ?</h3>
         <Link
           onClick={edit}
-          to={PathNames.editStrategy}
+          to="/strategies/edit/$strategyId"
+          params={{ strategyId: strategy.id }}
           search={{ type: 'editPrices' }}
           className={cn(
             'row-span-2 self-center',
@@ -58,9 +56,11 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
       </article>
       <Link
         onClick={edit}
-        to={PathNames.editStrategy}
+        to="/strategies/edit/$strategyId"
+        params={{ strategyId: strategy.id }}
         search={{ type: 'withdraw' }}
         className={buttonStyles({ variant: 'white' })}
+        data-testid="withdraw-strategy-btn"
       >
         Withdraw Funds
       </Link>

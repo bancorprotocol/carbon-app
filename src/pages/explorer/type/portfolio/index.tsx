@@ -4,27 +4,39 @@ import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData'
 import { useNavigate } from 'libs/routing';
 import { useExplorerParams } from 'components/explorer/useExplorerParams';
 import { useStrategyCtx } from 'hooks/useStrategies';
+import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 
 export const ExplorerTypePortfolioPage = () => {
   const navigate = useNavigate();
   const { type, slug } = useExplorerParams();
   const { strategies, isLoading } = useStrategyCtx();
+  const href = '/explore/$type/$slug/portfolio/token/$address';
 
+  const getPortfolioTokenHref: GetPortfolioTokenHref = (row) => ({
+    href,
+    params: {
+      type,
+      slug: slug || '',
+      address: row.token.address,
+    },
+  });
   const onRowClick = (row: Row<PortfolioData>) =>
     navigate({
-      to: `/explorer/${type}/${slug}/portfolio/token/${row.original.token.address}`,
+      to: href,
+      params: {
+        type,
+        slug: slug || '',
+        address: row.original.token.address,
+      },
     });
-
-  const getHref = (row: PortfolioData) =>
-    `/explorer/${type}/${slug}/portfolio/token/${row.token.address}`;
 
   return (
     <>
       <PortfolioAllTokens
         strategies={strategies}
         isLoading={isLoading}
+        getHref={getPortfolioTokenHref}
         onRowClick={onRowClick}
-        getHref={getHref}
         isExplorer
       />
     </>

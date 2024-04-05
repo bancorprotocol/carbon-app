@@ -1,42 +1,35 @@
 import { FC } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { getMarketPricePercentage } from './utils';
 
 type MarketPriceIndicationProps = {
-  marketPricePercentage: BigNumber;
+  marketPricePercentage: SafeDecimal;
   isRange?: boolean;
+  buy?: boolean;
+  ignoreMarketPriceWarning?: boolean;
 };
 
 export const MarketPriceIndication: FC<MarketPriceIndicationProps> = ({
   marketPricePercentage,
   isRange = false,
+  buy,
+  ignoreMarketPriceWarning,
 }) => {
   if (marketPricePercentage.eq(0)) {
     return null;
   }
   const isAbove = marketPricePercentage.gt(0);
-
-  const getMarketPricePercentage = () => {
-    if (marketPricePercentage.gte(99.99)) {
-      return '>99.99';
-    }
-    if (marketPricePercentage.lte(-99.99)) {
-      return '99.99';
-    }
-    if (marketPricePercentage.lte(0.01) && isAbove) {
-      return '<0.01';
-    }
-
-    return isAbove
-      ? marketPricePercentage.toFixed(2)
-      : marketPricePercentage.times(-1).toFixed(2);
-  };
-
-  const percentage = getMarketPricePercentage();
+  const percentage = getMarketPricePercentage(marketPricePercentage);
+  const isOrderAboveOrBelowMarketPrice = (isAbove && buy) || (!isAbove && !buy);
+  const marketPriceWarning =
+    !ignoreMarketPriceWarning && isOrderAboveOrBelowMarketPrice;
 
   return (
     <span
-      className="flex items-center gap-5 rounded-6 bg-emphasis py-4 px-6 text-white/60"
+      className={`flex items-center gap-5 rounded-6 bg-background-800 py-4 px-6 ${
+        marketPriceWarning ? 'text-warning' : 'text-white/60'
+      }`}
       data-testid="market-price-indication"
     >
       <span className="font-mono text-10">

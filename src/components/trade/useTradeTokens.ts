@@ -1,31 +1,17 @@
-import {
-  MakeGenerics,
-  PathNames,
-  useSearch,
-  useLocation,
-  useNavigate,
-} from 'libs/routing';
+import { useSearch, useMatchRoute, TradeSearch } from 'libs/routing';
 import { useTokens } from 'hooks/useTokens';
 
-export type MyLocationGenerics = MakeGenerics<{
-  Search: {
-    base: string;
-    quote: string;
-  };
-}>;
-
 export const useTradeTokens = () => {
-  const navigate = useNavigate<MyLocationGenerics>();
-  const location = useLocation<MyLocationGenerics>();
-  const isTradePage = location.current.pathname === PathNames.trade;
+  const match = useMatchRoute();
+  const isTradePage = match({
+    to: '/trade',
+    fuzzy: true,
+  });
   const { getTokenById } = useTokens();
-  const search = useSearch<MyLocationGenerics>();
+  const search: TradeSearch = useSearch({ strict: false });
 
   const baseToken = getTokenById(search.base);
   const quoteToken = getTokenById(search.quote);
-
-  const goToPair = (base: string, quote: string, replace?: boolean) =>
-    navigate({ to: PathNames.trade, search: { base, quote }, replace });
 
   const isTokenError =
     (search.base && !baseToken) || (search.base && !quoteToken);
@@ -35,6 +21,5 @@ export const useTradeTokens = () => {
     baseToken,
     quoteToken,
     isTokenError,
-    goToPair,
   };
 };

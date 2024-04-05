@@ -18,25 +18,34 @@ export const OrderBookWidgetRow: FC<Props> = ({
   base,
   quote,
 }) => {
+  const baseOptions = { highPrecision: true, decimals: base.decimals };
+  const quoteOptions = { highPrecision: true, decimals: quote.decimals };
+  const rowOptions = { decimals: 6 };
   return (
     <>
       <div
-        className={`${buy ? 'text-green' : 'text-red'} overflow-x-hidden py-4`}
+        className={`${buy ? 'text-buy' : 'text-sell'} overflow-x-hidden py-4`}
       >
-        <Tooltip element={`${rate} ${quote.symbol}`}>
-          <span>{prettifyNumber(rate, { highPrecision: true })}</span>
+        <Tooltip
+          element={`${prettifyNumber(rate, quoteOptions)} ${quote.symbol}`}
+        >
+          <span>{prettifyNumber(rate, rowOptions)}</span>
         </Tooltip>
       </div>
 
-      <div className={'overflow-x-hidden py-4 text-right text-white/80'}>
-        <Tooltip element={`${amount} ${base.symbol}`}>
-          <span>{prettifyNumber(amount, { highPrecision: true })}</span>
+      <div className="overflow-x-hidden py-4 text-right text-white/80">
+        <Tooltip
+          element={`${prettifyNumber(amount, baseOptions)} ${base.symbol}`}
+        >
+          <span>{prettifyNumber(amount, rowOptions)}</span>
         </Tooltip>
       </div>
 
-      <div className={'overflow-x-hidden py-4 text-right text-white/80'}>
-        <Tooltip element={`${total} ${quote.symbol}`}>
-          <span>{prettifyNumber(total, { highPrecision: true })}</span>
+      <div className="overflow-x-hidden py-4 text-right text-white/80">
+        <Tooltip
+          element={`${prettifyNumber(total, quoteOptions)} ${quote.symbol}`}
+        >
+          <span>{prettifyNumber(total, rowOptions)}</span>
         </Tooltip>
       </div>
     </>

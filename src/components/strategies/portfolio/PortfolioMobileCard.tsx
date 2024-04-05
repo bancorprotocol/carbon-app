@@ -1,19 +1,20 @@
+import { Link, Pathnames, PathParams } from 'libs/routing';
 import { FC, ReactNode } from 'react';
 import { cn } from 'utils/helpers';
 import { getColorByIndex } from 'utils/colorPalettes';
-import { Link } from 'libs/routing';
 
 type Props = {
   children: ReactNode;
   index: number;
-  href?: string;
+  href?: Pathnames;
+  params?: PathParams;
   gridColsClassName?: string;
 };
 
 const wrapperClasses = cn(
   'flex',
   'items-center',
-  'bg-silver',
+  'bg-background-900',
   'h-[120px]',
   'rounded-10',
   'space-x-20'
@@ -22,6 +23,7 @@ const wrapperClasses = cn(
 export const PortfolioMobileCard: FC<Props> = ({
   index,
   href,
+  params,
   children,
   gridColsClassName = 'grid-cols-2',
 }) => {
@@ -40,7 +42,13 @@ export const PortfolioMobileCard: FC<Props> = ({
 
   if (href) {
     return (
-      <Link to={href} className={wrapperClasses}>
+      <Link
+        to={href}
+        // TODO: fix this
+        params={params ?? {}}
+        search={{}}
+        className={wrapperClasses}
+      >
         {content}
       </Link>
     );

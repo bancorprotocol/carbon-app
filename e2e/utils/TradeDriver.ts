@@ -2,9 +2,10 @@
 import { Page } from '@playwright/test';
 import { waitFor } from './operators';
 import { closeModal, waitModalClose, waitModalOpen } from './modal';
+import { Direction } from './types';
 
-interface TradeConfig {
-  mode: 'buy' | 'sell';
+interface TradeTestCase {
+  mode: Direction;
   source: string;
   target: string;
   sourceValue: string;
@@ -12,9 +13,9 @@ interface TradeConfig {
 }
 
 export class TradeDriver {
-  public form = this.page.getByTestId(`${this.config.mode}-form`);
+  public form = this.page.getByTestId(`${this.testCase.mode}-form`);
 
-  constructor(private page: Page, private config: TradeConfig) {}
+  constructor(private page: Page, private testCase: TradeTestCase) {}
 
   getPayInput() {
     return this.form.getByLabel('You Pay');
@@ -25,7 +26,7 @@ export class TradeDriver {
   }
 
   async selectPair() {
-    const { mode, target, source } = this.config;
+    const { mode, target, source } = this.testCase;
     await this.page.getByTestId('select-trade-pair').click();
     await waitModalOpen(this.page);
     const pair = mode === 'buy' ? [target, source] : [source, target];
@@ -36,8 +37,15 @@ export class TradeDriver {
   }
 
   setPay() {
-    const { sourceValue } = this.config;
+    const { sourceValue } = this.testCase;
     return this.form.getByLabel('You Pay').fill(sourceValue);
+  }
+
+  awaitSuccess() {
+    return this.page
+      .getByTestId('notification-trade')
+      .getByLabel('Success')
+      .waitFor({ state: 'visible', timeout: 10_000 });
   }
 
   async openRouting() {

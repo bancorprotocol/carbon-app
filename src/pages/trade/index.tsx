@@ -9,16 +9,27 @@ import { MainMenuTrade } from 'components/core/menu/mainMenu/MainMenuTrade';
 import { useEffect } from 'react';
 import { lsService } from 'services/localeStorage';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
+import { getLastVisitedPair, useNavigate, useSearch } from 'libs/routing';
 
 export type TradePageProps = { base: Token; quote: Token };
 
 export const TradePage = () => {
+  const navigate = useNavigate();
+  const search = useSearch({ from: '/trade' });
   const { belowBreakpoint } = useBreakpoints();
   const { baseToken, quoteToken } = useTradeTokens();
   const { isLoading, isTradePairError } = useTradePairs();
   const isValidPair = !(!baseToken || !quoteToken);
-
   const noTokens = !baseToken && !quoteToken;
+
+  useEffect(() => {
+    if (search.base && search.quote) return;
+    navigate({
+      search: { ...search, ...getLastVisitedPair() },
+      params: {},
+      replace: true,
+    });
+  }, [search, navigate]);
 
   useEffect(() => {
     if (baseToken && quoteToken) {

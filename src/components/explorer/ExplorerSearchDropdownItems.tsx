@@ -1,4 +1,4 @@
-import { Link, PathNames } from 'libs/routing';
+import { Link } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconCheck } from 'assets/icons/v.svg';
@@ -28,10 +28,11 @@ export const ExplorerSearchDropdownItems: FC<Props> = ({ setSearch }) => {
       {items.map(({ label, type, active }) => (
         <Link
           key={type}
-          to={PathNames.explorer(type)}
+          to="/explore/$type"
+          params={{ type }}
           onClick={() => setSearch('')}
           className={cn(
-            'hover:bg-body rounded-6 p-10',
+            'rounded-6 p-10 hover:bg-black',
             active && 'flex items-center justify-between'
           )}
         >

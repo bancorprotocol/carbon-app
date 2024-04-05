@@ -5,9 +5,12 @@ import {
   FC,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
+  useRef,
   useState,
 } from 'react';
+import { lsService } from 'services/localeStorage';
 import {
   defaultTradeSettingsStore,
   TradeSettingsStore,
@@ -40,15 +43,11 @@ import {
   useOrderBookSettingsStore,
 } from 'store/useOrderBookSettingsStore';
 import {
-  defaultStrategyToEdit,
-  StrategyToEditStore,
-  useStrategyToEdit,
-} from 'store/useStrategyToEdit';
-import {
   defaultToastStore,
   ToastStore,
   useToastStore,
 } from 'store/useToasterStore';
+import { DebugStore, defaultDebugStore, useDebugStore } from './useDebugStore';
 
 // ********************************** //
 // STORE CONTEXT
@@ -72,8 +71,11 @@ interface StoreContext {
   setInnerHeight: (value: number) => void;
   selectedWallet: ConnectionType | null;
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
-  strategies: StrategyToEditStore;
+  isManualConnection: React.MutableRefObject<boolean>;
   toaster: ToastStore;
+  debug: DebugStore;
+  simDisclaimerLastSeen?: number;
+  setSimDisclaimerLastSeen: (value?: number) => void;
 }
 
 const defaultValue: StoreContext = {
@@ -94,8 +96,11 @@ const defaultValue: StoreContext = {
   setInnerHeight: () => {},
   selectedWallet: null,
   setSelectedWallet: () => {},
-  strategies: defaultStrategyToEdit,
+  isManualConnection: { current: false },
   toaster: defaultToastStore,
+  debug: defaultDebugStore,
+  simDisclaimerLastSeen: undefined,
+  setSimDisclaimerLastSeen: () => {},
 };
 
 const StoreCTX = createContext(defaultValue);
@@ -114,6 +119,7 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedWallet, setSelectedWallet] = useState<ConnectionType | null>(
     null
   );
+  const isManualConnection = useRef(false);
   const sdk = useSDKStore();
   const tradeSettings = useTradeSettingsStore();
   const orderBookSettings = useOrderBookSettingsStore();
@@ -121,12 +127,26 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const modals = useModalStore();
   const tokens = useTokensStore();
   const fiatCurrency = useFiatCurrencyStore();
-  const strategies = useStrategyToEdit();
   const toaster = useToastStore();
+  const debug = useDebugStore();
+
+  const [simDisclaimerLastSeen, _setSimDisclaimerLastSeen] = useState<
+    number | undefined
+  >(lsService.getItem('simDisclaimerLastSeen'));
+
+  const setSimDisclaimerLastSeen = useCallback((value?: number) => {
+    _setSimDisclaimerLastSeen(value);
+    if (value) {
+      lsService.setItem('simDisclaimerLastSeen', value);
+    } else {
+      lsService.removeItem('simDisclaimerLastSeen');
+    }
+  }, []);
 
   const value: StoreContext = {
     isCountryBlocked: countryBlocked,
     setCountryBlocked,
+    isManualConnection,
     sdk,
     tokens,
     notifications,
@@ -142,8 +162,10 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setInnerHeight,
     selectedWallet,
     setSelectedWallet,
-    strategies,
     toaster,
+    debug,
+    simDisclaimerLastSeen,
+    setSimDisclaimerLastSeen,
   };
 
   return <StoreCTX.Provider value={value}>{children}</StoreCTX.Provider>;

@@ -1,11 +1,11 @@
-import { FC } from 'react';
-import { useStore } from 'store';
+import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
+import { SafeDecimal } from 'libs/safedecimal';
+import { FC, forwardRef, useState } from 'react';
 import { useModal } from 'hooks/useModal';
 import { Strategy } from 'libs/queries';
-import { PathNames, useMatch, useNavigate } from 'libs/routing';
-import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
-import { EditStrategyLocationGenerics } from 'components/strategies/edit/EditStrategyMain';
-import { DropdownMenu } from 'components/common/dropdownMenu';
+import { useNavigate, useParams } from 'libs/routing';
+import { getDuplicateStrategyParams } from 'components/strategies/create/useDuplicateStrategy';
+import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
 import {
@@ -18,10 +18,10 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { carbonEvents } from 'services/events';
 import { useGetVoucherOwner } from 'libs/queries/chain/voucher';
 import { cn } from 'utils/helpers';
-import { ExplorerRouteGenerics } from 'components/explorer';
 import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
+import { buttonStyles } from 'components/common/button/buttonStyles';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -34,30 +34,23 @@ type separatorCounterType = number;
 
 interface Props {
   strategy: Strategy;
-  manage: boolean;
-  setManage: (flag: boolean) => void;
   isExplorer?: boolean;
+  button: (props: ManageButtonProps) => JSX.Element;
 }
 
-export const StrategyBlockManage: FC<Props> = ({
-  strategy,
-  manage,
-  setManage,
-  isExplorer,
-}) => {
+export const StrategyBlockManage: FC<Props> = (props) => {
+  const { strategy, isExplorer } = props;
+  const [manage, setManage] = useState(false);
   const { strategies, sort, filter } = useStrategyCtx();
-  const { duplicate } = useDuplicateStrategy();
   const { openModal } = useModal();
-  const navigate = useNavigate<EditStrategyLocationGenerics>();
+  const navigate = useNavigate();
   const order0 = useOrder(strategy.order0);
   const order1 = useOrder(strategy.order1);
-  const {
-    params: { type, slug },
-  } = useMatch<ExplorerRouteGenerics>();
+  const { type, slug } = useParams({ from: '/explore/$type/$slug' });
 
-  const owner = useGetVoucherOwner(
-    manage && type === 'token-pair' ? strategy.id : undefined
-  );
+  const owner = useGetVoucherOwner(manage ? strategy.id : undefined);
+
+  const isOverlapping = isOverlappingStrategy(strategy);
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -70,40 +63,39 @@ export const StrategyBlockManage: FC<Props> = ({
     strategyId: strategy.id,
   };
 
-  const {
-    strategies: { setStrategyToEdit },
-  } = useStore();
+  const items: (itemsType | separatorCounterType)[] = [];
 
-  const items: (itemsType | separatorCounterType)[] = [
-    {
+  if (
+    !isOverlapping ||
+    (isOverlapping &&
+      (new SafeDecimal(strategy.order0.balance).gt(0) ||
+        new SafeDecimal(strategy.order1.balance).gt(0)))
+  ) {
+    items.push({
       id: 'duplicateStrategy',
       name: 'Duplicate Strategy',
       action: () => {
         carbonEvents.strategyEdit.strategyDuplicateClick(strategyEvent);
-        duplicate(strategy);
+        if (!isOverlapping) {
+          openModal('duplicateStrategy', { strategy });
+        } else {
+          const search = getDuplicateStrategyParams(strategy);
+          navigate({ to: '/strategies/create', search });
+        }
       },
-    },
-    {
-      id: 'manageNotifications',
-      name: 'Manage Notifications',
-      action: () => {
-        carbonEvents.strategyEdit.strategyManageNotificationClick(
-          strategyEvent
-        );
-        openModal('manageNotifications', { strategyId: strategy.id });
-      },
-    },
-  ];
+    });
+  }
 
-  if (isExplorer && type === 'token-pair') {
+  if (isExplorer) {
     items.push({
       id: 'walletOwner',
-      name: 'View Owner’s Strategies',
+      name: "View Owner's Strategies",
       action: () => {
         const event = { type, slug, strategyEvent, strategies, sort, filter };
         explorerEvents.viewOwnersStrategiesClick(event);
         navigate({
-          to: PathNames.explorerOverview('wallet', owner.data ?? ''),
+          to: '/explore/$type/$slug',
+          params: { type: 'wallet', slug: owner.data ?? '' },
         });
       },
       disabled: !owner.data,
@@ -111,45 +103,62 @@ export const StrategyBlockManage: FC<Props> = ({
   }
 
   if (!isExplorer) {
-    items.push({
-      id: 'editPrices',
-      name: 'Edit Prices',
-      action: () => {
-        setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyEditPricesClick({
-          origin: 'manage',
-          ...strategyEvent,
-        });
-        navigate({
-          to: PathNames.editStrategy,
-          search: { type: 'editPrices' },
-        });
-      },
-    });
+    if (!isOverlapping) {
+      items.push({
+        id: 'editPrices',
+        name: 'Edit Prices',
+        action: () => {
+          carbonEvents.strategyEdit.strategyEditPricesClick({
+            origin: 'manage',
+            ...strategyEvent,
+          });
+          navigate({
+            to: '/strategies/edit/$strategyId',
+            params: { strategyId: strategy.id },
+            search: { type: 'editPrices' },
+          });
+        },
+      });
+    }
 
-    // separator
-    items.push(0);
-
-    items.push({
-      id: 'depositFunds',
-      name: 'Deposit Funds',
-      action: () => {
-        setStrategyToEdit(strategy);
-        carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
-        navigate({
-          to: PathNames.editStrategy,
-          search: { type: 'deposit' },
-        });
-      },
-    });
+    if (
+      !isOverlapping ||
+      (isOverlapping &&
+        (new SafeDecimal(strategy.order0.balance).gt(0) ||
+          new SafeDecimal(strategy.order1.balance).gt(0)))
+    ) {
+      // separator
+      items.push(0);
+      items.push({
+        id: 'depositFunds',
+        name: 'Deposit Funds',
+        action: () => {
+          carbonEvents.strategyEdit.strategyDepositClick(strategyEvent);
+          navigate({
+            to: '/strategies/edit/$strategyId',
+            params: { strategyId: strategy.id },
+            search: { type: 'deposit' },
+          });
+        },
+      });
+    }
 
     if (strategy.status !== 'noBudget') {
       items.push({
         id: 'withdrawFunds',
         name: 'Withdraw Funds',
         action: () => {
-          openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
           carbonEvents.strategyEdit.strategyWithdrawClick(strategyEvent);
+
+          if (isOverlapping) {
+            navigate({
+              to: '/strategies/edit/$strategyId',
+              params: { strategyId: strategy.id },
+              search: { type: 'withdraw' },
+            });
+          } else {
+            openModal('confirmWithdrawStrategy', { strategy, strategyEvent });
+          }
         },
       });
     }
@@ -174,9 +183,9 @@ export const StrategyBlockManage: FC<Props> = ({
         name: 'Renew Strategy',
         action: () => {
           carbonEvents.strategyEdit.strategyRenewClick(strategyEvent);
-          setStrategyToEdit(strategy);
           navigate({
-            to: PathNames.editStrategy,
+            to: '/strategies/edit/$strategyId',
+            params: { strategyId: strategy.id },
             search: { type: 'renew' },
           });
         },
@@ -198,10 +207,10 @@ export const StrategyBlockManage: FC<Props> = ({
       isOpen={manage}
       setIsOpen={setManage}
       className="z-10 w-fit p-10"
-      button={(attr) => (
-        <button
-          {...attr}
-          onClick={(e) => {
+      button={(attr) => {
+        return props.button({
+          ...attr,
+          onClick: (e) => {
             attr.onClick(e);
             if (isExplorer) {
               const baseEvent = { type, slug, strategies, sort, filter };
@@ -209,44 +218,79 @@ export const StrategyBlockManage: FC<Props> = ({
             } else {
               strategyEditEvents.strategyManageClick(strategyEvent);
             }
-          }}
-          role="menuitem"
-          aria-label="Manage strategy"
-          className={`
-            self-center rounded-8 border-2 border-emphasis p-8
-            hover:bg-white/10
-            active:bg-white/20
-          `}
-        >
-          <IconGear className="h-24 w-24" />
-        </button>
-      )}
+          },
+          role: 'menuitem',
+          'aria-label': 'Manage strategy',
+          'data-testid': 'manage-strategy-btn',
+        });
+      }}
     >
-      <ul role="menu">
+      <ul role="menu" data-testid={'manage-strategy-dropdown'}>
         {items.map((item) => {
           if (typeof item === 'number') {
-            return <hr key={item} className="border-1  my-10 border-grey5" />;
+            return (
+              <hr
+                key={item}
+                className="border-1  my-10 border-background-700"
+              />
+            );
           }
 
           const { name, id, action, disabled } = item;
 
           return (
-            <li key={id} role="none">
-              <ManageItem
-                title={name}
-                setManage={setManage}
-                action={action}
-                id={id}
-                isExplorer={isExplorer}
-                disabled={disabled}
-              />
-            </li>
+            <ManageItem
+              key={id}
+              title={name}
+              setManage={setManage}
+              action={action}
+              id={id}
+              isExplorer={isExplorer}
+              disabled={disabled}
+            />
           );
         })}
       </ul>
     </DropdownMenu>
   );
 };
+
+interface ManageButtonProps extends MenuButtonProps {
+  role: 'menuitem';
+  'aria-label': string;
+  'data-testid': string;
+}
+
+export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
+  (props, ref) => {
+    const style = cn(buttonStyles({ variant: 'white' }), 'gap-8');
+    return (
+      <button {...props} className={style} ref={ref}>
+        <IconGear className="h-24 w-24" />
+        Manage
+      </button>
+    );
+  }
+);
+
+export const ManageButtonIcon = forwardRef<
+  HTMLButtonElement,
+  ManageButtonProps
+>((props, ref) => {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      className={`
+        grid h-38 w-38 place-items-center rounded-8 border-2 border-background-800
+        hover:bg-white/10
+        active:bg-white/20
+      `}
+    >
+      <IconGear className="h-24 w-24" />
+    </button>
+  );
+});
 
 const ManageItem: FC<{
   title: string;
@@ -272,8 +316,9 @@ const ManageItem: FC<{
         className={cn('w-full rounded-6 p-12 text-left', {
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
-          'hover:bg-body': !disabled,
+          'hover:bg-black': !disabled,
         })}
+        data-testid={`manage-strategy-${id}`}
       >
         {title}
       </button>
@@ -287,10 +332,16 @@ const ManageItem: FC<{
         element={tooltipText}
         interactive={false}
       >
-        <Content />
+        <li role="none">
+          <Content />
+        </li>
       </Tooltip>
     );
   }
 
-  return <Content />;
+  return (
+    <li role="none">
+      <Content />
+    </li>
+  );
 };

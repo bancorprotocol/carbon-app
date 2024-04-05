@@ -15,24 +15,18 @@ export const PairLogoName: FC<Props> = ({
 }) => {
   return (
     <>
-      <TokensOverlap className="h-30 w-30" tokens={[baseToken, quoteToken]} />
-      <span className={'flex font-weight-500'}>
+      <TokensOverlap tokens={[baseToken, quoteToken]} size={30} />
+      <p className="flex items-center gap-4 font-weight-500">
         {baseToken.symbol}
         {baseToken.isSuspicious && (
-          <WarningWithTooltip
-            className="ml-5"
-            tooltipContent={suspiciousTokenTooltipMsg}
-          />
+          <WarningWithTooltip tooltipContent={suspiciousTokenTooltipMsg} />
         )}
-        <span className="px-5 text-white/60">/</span>
+        <span className="text-white/60">/</span>
         {quoteToken.symbol}
         {quoteToken.isSuspicious && (
-          <WarningWithTooltip
-            className="ml-5"
-            tooltipContent={suspiciousTokenTooltipMsg}
-          />
+          <WarningWithTooltip tooltipContent={suspiciousTokenTooltipMsg} />
         )}
-      </span>
+      </p>
     </>
   );
 };

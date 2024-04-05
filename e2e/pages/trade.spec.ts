@@ -1,18 +1,27 @@
 /* eslint-disable prettier/prettier */
 import { test, expect } from '@playwright/test';
 import { mockApi } from '../utils/mock-api';
-import { DebugDriver, setupImposter } from '../utils/DebugDriver';
+import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
 import { navigateTo } from '../utils/operators';
-import { checkApproval } from '../utils/modal';
-import { NotificationDriver } from '../utils/NotificationDriver';
+import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
 
 test.describe('Trade', () => {
-  test.beforeEach(async ({ page }) => {
-    await Promise.all([mockApi(page), setupImposter(page)]);
+  test.beforeEach(async ({ page }, testInfo) => {
+    testInfo.setTimeout(90_000);
+    await mockApi(page);
+    const debug = new DebugDriver(page);
+    await debug.visit();
+    await setupFork(testInfo);
+    await debug.setRpcUrl(testInfo);
+    await Promise.all([debug.setupImposter(), debug.setE2E()]);
   });
 
-  const configs = [
+  test.afterEach(async ({}, testInfo) => {
+    await removeFork(testInfo);
+  });
+
+  const testCases = [
     {
       mode: 'buy' as const,
       source: 'USDC',
@@ -29,8 +38,8 @@ test.describe('Trade', () => {
     },
   ];
 
-  for (const config of configs) {
-    const { mode, source, target, sourceValue, targetValue } = config;
+  for (const testCase of testCases) {
+    const { mode, source, target, sourceValue, targetValue } = testCase;
     const testName =
       mode === 'buy'
         ? `Buy ${target} with ${source}`
@@ -41,13 +50,13 @@ test.describe('Trade', () => {
       // Store current balance
       const debug = new DebugDriver(page);
       const balance = {
-        source: await debug.getBalance(config.source).textContent(),
-        target: await debug.getBalance(config.target).textContent(),
+        source: await debug.getBalance(testCase.source).textContent(),
+        target: await debug.getBalance(testCase.target).textContent(),
       };
 
       // Test Trade
       await navigateTo(page, '/trade?*');
-      const driver = new TradeDriver(page, config);
+      const driver = new TradeDriver(page, testCase);
 
       // Select pair
       await driver.selectPair();
@@ -63,29 +72,23 @@ test.describe('Trade', () => {
       await driver.submit();
 
       // Token approval
-      await checkApproval(page, [config.source]);
-
-      // Verify notification
-      const notif = new NotificationDriver(page, 'trade');
-      await expect(notif.getTitle()).toHaveText('Success', { timeout: 10_000 });
-      await expect(notif.getDescription()).toHaveText(
-        `Trading ${sourceValue} ${source} for ${target} was successfully completed.`,
-        { timeout: 10_000 }
-      );
+      const tokenApproval = new TokenApprovalDriver(page);
+      await tokenApproval.checkApproval([testCase.source]);
 
       // Verify form empty
+      await driver.awaitSuccess();
       expect(driver.getPayInput()).toHaveValue('');
       expect(driver.getReceiveInput()).toHaveValue('');
 
       // Check balance diff
       await navigateTo(page, '/debug');
 
-      const sourceDelta = Number(balance.source) - Number(config.sourceValue);
+      const sourceDelta = Number(balance.source) - Number(testCase.sourceValue);
       const nextSource = new RegExp(sourceDelta.toString());
-      await expect(debug.getBalance(config.source)).toHaveText(nextSource);
-      const targetDelta = Number(balance.target) + Number(config.targetValue);
+      await expect(debug.getBalance(testCase.source)).toHaveText(nextSource);
+      const targetDelta = Number(balance.target) + Number(testCase.targetValue);
       const nextTarget = new RegExp(targetDelta.toString());
-      await expect(debug.getBalance(config.target)).toHaveText(nextTarget);
+      await expect(debug.getBalance(testCase.target)).toHaveText(nextTarget);
     });
   }
 });

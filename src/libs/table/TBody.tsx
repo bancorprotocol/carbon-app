@@ -14,16 +14,14 @@ export const TBody = <D extends object>({
   isLoading,
 }: Props<D>) => {
   return (
-    <tbody className={cn('border-b-2', 'border-emphasis')}>
+    <tbody className="border-b-2 border-background-800">
       {isLoading ? (
         <tr>
           <td
             colSpan={table.getVisibleFlatColumns().length}
-            className={cn(' h-[320px] w-full items-center justify-center')}
+            className="h-[320px] w-full items-center justify-center"
           >
-            <div className={'h-[80px]'}>
-              <CarbonLogoLoading />
-            </div>
+            <CarbonLogoLoading className="h-[80px]" />
           </td>
         </tr>
       ) : (
@@ -34,7 +32,7 @@ export const TBody = <D extends object>({
               'h-64',
               '!text-white/80',
               'text-16',
-              'hover:bg-darkSilver',
+              'hover:bg-background-800',
               'hover:!text-white',
               onRowClick && 'cursor-pointer'
             )}

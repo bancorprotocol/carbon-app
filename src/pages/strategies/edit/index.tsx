@@ -1,27 +1,28 @@
 import { EditStrategyMain } from 'components/strategies/edit';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useNavigate, useParams } from 'libs/routing';
 import { useWeb3 } from 'libs/web3';
-import { useEffect } from 'react';
-import { useStore } from 'store';
+import { useEffect, useState } from 'react';
 import { StrategiesPage } from '..';
+import { Strategy, useGetUserStrategies } from 'libs/queries';
 
 export const EditStrategyPage = () => {
   const { user } = useWeb3();
-  const {
-    strategies: { strategyToEdit },
-  } = useStore();
-  const navigate = useNavigate<MyLocationGenerics>();
+  const { data: strategies, isLoading } = useGetUserStrategies({ user });
+  const { strategyId } = useParams({ from: '/strategies/edit/$strategyId' });
+  const [strategy, setStrategy] = useState<Strategy>();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user || !strategyToEdit) {
-      navigate({ to: PathNames.strategies });
+    if (isLoading) return;
+    if (!user || !strategyId) {
+      navigate({ to: '/' });
+    } else {
+      const strategy = strategies?.find(({ id }) => id === strategyId);
+      if (strategy) setStrategy(strategy);
+      else navigate({ to: '/' });
     }
-  }, [user, strategyToEdit, navigate]);
+  }, [user, strategyId, strategies, isLoading, navigate]);
 
-  return user && strategyToEdit ? (
-    <EditStrategyMain strategy={strategyToEdit} />
-  ) : (
-    <StrategiesPage />
-  );
+  if (!user) return <StrategiesPage />;
+  return <EditStrategyMain strategy={strategy} isLoading={isLoading} />;
 };

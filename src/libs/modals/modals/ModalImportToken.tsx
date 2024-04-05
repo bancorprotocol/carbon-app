@@ -8,7 +8,7 @@ import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
-import { Link } from 'libs/routing';
+import { NewTabLink } from 'libs/routing';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 
 export type ModalImportTokenData = {
@@ -47,28 +47,28 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       </div>
 
       {isLoading && (
-        <div className={`${blockClasses} animate-pulse dark:bg-silver`}></div>
+        <div className={`${blockClasses} animate-pulse bg-black`}></div>
       )}
       {isError && (
         <div
-          className={`${blockClasses} flex items-center justify-center dark:bg-red/30`}
+          className={`${blockClasses} flex items-center justify-center bg-error/30`}
         >
           Error: No token found for this address
         </div>
       )}
       {data && (
-        <div className={`${blockClasses} bg-silver p-16`}>
+        <div className={`${blockClasses} bg-background-900 p-16`}>
           <div className={'flex items-center justify-between'}>
             <div className={'font-weight-500'}>{data.symbol}</div>
-            <Link
+            <NewTabLink
               to={getExplorerLink('token', data.address)}
               className={
-                'flex items-center text-14 font-weight-500 text-warning-500'
+                'flex items-center text-14 font-weight-500 text-warning'
               }
             >
               <span className={'whitespace-nowrap'}>View on Explorer</span>
               <IconLink className={'ml-4 inline-flex h-14'} />
-            </Link>
+            </NewTabLink>
           </div>
           <div className={'flex items-center justify-between'}>
             <div className={'text-secondary text-14'}>{data.name}</div>
@@ -86,12 +86,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       >
         Import Token
       </Button>
-      <Button
-        variant={'black'}
-        fullWidth
-        onClick={() => closeModal(id)}
-        className={'mt-16'}
-      >
+      <Button variant={'black'} fullWidth onClick={() => closeModal(id)}>
         Cancel
       </Button>
     </ModalOrMobileSheet>

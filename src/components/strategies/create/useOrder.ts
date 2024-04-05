@@ -19,35 +19,45 @@ export interface OrderCreate {
   setPriceError: (value: string) => void;
   budgetError: string;
   setBudgetError: (value: string) => void;
-  marginalPriceOption: MarginalPriceOptions;
+  marginalPrice: string;
+  setMarginalPrice: (value: string) => void;
+  marginalPriceOption?: MarginalPriceOptions;
   setMarginalPriceOption: (value: MarginalPriceOptions) => void;
   resetFields: (skipBudget?: boolean, skipPrice?: boolean) => void;
 }
 
-export const useOrder = (order?: Order) => {
+const initPrice = (order: Order) => {
+  if (order.startRate !== order.endRate) return '';
+  return order.startRate;
+};
+const initMin = (order: Order) => {
+  if (order.startRate === order.endRate) return '';
+  return order.startRate;
+};
+const initMax = (order: Order) => {
+  if (order.startRate === order.endRate) return '';
+  return order.endRate;
+};
+
+export const useOrder = (order: Order) => {
   const [budget, setBudget] = useState(order?.balance ?? '');
-  const [price, setPrice] = useState(
-    order?.startRate !== order?.endRate ? '' : order?.startRate ?? ''
-  );
-  const [max, setMax] = useState(
-    order?.startRate !== order?.endRate ? order?.endRate ?? '' : ''
-  );
-  const [min, setMin] = useState(
-    order?.startRate !== order?.endRate ? order?.startRate ?? '' : ''
-  );
+  const [price, setPrice] = useState(initPrice(order));
+  const [min, setMin] = useState(initMin(order));
+  const [max, setMax] = useState(initMax(order));
   const [rangeError, setRangeError] = useState('');
   const [priceError, setPriceError] = useState('');
+  const [marginalPrice, setMarginalPrice] = useState(order.marginalRate);
   const [budgetError, setBudgetError] = useState('');
-  const [isRange, setIsRange] = useState(order?.startRate !== order?.endRate);
-  const [marginalPriceOption, setMarginalPriceOption] = useState(
-    MarginalPriceOptions.reset
-  );
+  const [isRange, setIsRange] = useState(order.startRate !== order.endRate);
+  const [marginalPriceOption, setMarginalPriceOption] =
+    useState<MarginalPriceOptions>();
 
   const resetFields = (skipBudget?: boolean, skipPrice?: boolean) => {
     if (!skipPrice) {
       setMin('');
       setMax('');
       setPrice('');
+      setMarginalPrice('');
       setPriceError('');
       setRangeError('');
     }
@@ -75,6 +85,8 @@ export const useOrder = (order?: Order) => {
     setPriceError,
     budgetError,
     setBudgetError,
+    marginalPrice,
+    setMarginalPrice,
     marginalPriceOption,
     setMarginalPriceOption,
     resetFields,

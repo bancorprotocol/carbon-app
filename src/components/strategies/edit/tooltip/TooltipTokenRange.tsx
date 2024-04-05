@@ -2,8 +2,8 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { TokenPrice } from 'components/strategies/overview/strategyBlock/TokenPrice';
 import { Token } from 'libs/tokens';
 import { FC } from 'react';
-import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
-import { useFiatPrice } from 'hooks/useFiatPrice';
+import { cn, prettifyNumber } from 'utils/helpers';
+import { useFiatValue } from 'hooks/useFiatValue';
 import { LogoImager } from 'components/common/imager/Imager';
 
 export interface TooltipPriceProps {
@@ -21,12 +21,14 @@ export const TooltipTokenRange: FC<TooltipPriceProps> = ({
   className,
 }) => {
   const { min, max } = range;
-  const minFiatPrice = useFiatPrice({ price: min, token });
-  const maxFiatPrice = useFiatPrice({ price: max, token });
-  const minFullPrice = sanitizeNumberInput(min, token.decimals);
-  const maxFullPrice = sanitizeNumberInput(max, token.decimals);
+  const options = { decimals: token.decimals, highPrecision: true };
+  const minFiatPrice = useFiatValue({ price: min, token, highPrecision: true });
+  const maxFiatPrice = useFiatValue({ price: max, token, highPrecision: true });
+  const minFullPrice = prettifyNumber(min, options);
+  const maxFullPrice = prettifyNumber(max, options);
   return (
     <Tooltip
+      maxWidth={600}
       element={
         <>
           <div className="align-center flex gap-6">

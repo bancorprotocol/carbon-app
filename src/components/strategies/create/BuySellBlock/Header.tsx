@@ -1,7 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { useModal } from 'hooks/useModal';
 import { OrderCreate } from '../useOrder';
-import { lsService } from 'services/localeStorage';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 
@@ -14,43 +12,41 @@ interface Props {
 
 export const BuySellHeader: FC<Props> = (props) => {
   const { order, buy, children, base } = props;
-  const { openModal } = useModal();
   const { isRange, setIsRange, resetFields } = order;
-  const handleRangeChange = () => {
-    if (!lsService.getItem('hasSeenCreateStratExpertMode')) {
-      openModal('createStratExpertMode', {
-        onConfirm: () => {
-          setIsRange(!isRange);
-          resetFields(true);
-        },
-      });
-    } else {
-      setIsRange(!isRange);
-      resetFields(true);
-    }
+  const setLimit = () => {
+    if (!isRange) return;
+    setIsRange(false);
+    resetFields(true);
+  };
+  const setRange = () => {
+    if (isRange) return;
+    setIsRange(true);
+    resetFields(true);
   };
   return (
     <header className="flex items-center justify-between">
       {children}
       <div className="flex items-center gap-10 text-14">
-        <div className="bg-body flex items-center rounded-[100px] p-2">
+        <div className="flex items-center rounded-[100px] bg-black p-2">
           <button
             type="button"
             tabIndex={!isRange ? -1 : 0}
-            onClick={() => handleRangeChange()}
+            onClick={setLimit}
             className={`rounded-40 font-weight-500 ${
-              !isRange ? 'bg-silver' : 'text-secondary'
+              !isRange ? 'bg-background-900' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="tab-limit"
           >
             Limit
           </button>
           <button
             type="button"
             tabIndex={isRange ? -1 : 0}
-            onClick={() => handleRangeChange()}
+            onClick={setRange}
             className={`rounded-40 font-weight-500 ${
-              isRange ? 'bg-silver' : 'text-secondary'
+              isRange ? 'bg-background-900' : 'text-secondary'
             } px-10 py-4`}
+            data-testid="tab-range"
           >
             Range
           </button>

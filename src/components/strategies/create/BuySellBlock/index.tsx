@@ -1,23 +1,18 @@
 import { FC, useId } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
-import { LimitRangeSection } from './LimitRangeSection';
+import { m } from 'libs/motion';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { OrderCreate } from 'components/strategies/create/useOrder';
+import { StrategyDirection, StrategyType, useNavigate } from 'libs/routing';
+import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
 import { LogoImager } from 'components/common/imager/Imager';
-import {
-  StrategyCreateLocationGenerics,
-  StrategyDirection,
-  StrategyType,
-} from 'components/strategies/create/types';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { useNavigate } from 'libs/routing';
-import { BuySellHeader } from './Header';
-import { m } from 'libs/motion';
-import { items } from '../variants';
-import { BudgetSection } from './BugetSection';
+import { BuySellHeader } from 'components/strategies/create/BuySellBlock/Header';
+import { items } from 'components/strategies/create/variants';
+import { BudgetSection } from 'components/strategies/create/BuySellBlock/BudgetSection';
 
 type Props = {
   base: Token;
@@ -28,6 +23,7 @@ type Props = {
   isBudgetOptional?: boolean;
   strategyType?: StrategyType;
   isOrdersOverlap: boolean;
+  isOrdersReversed: boolean;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -39,9 +35,10 @@ export const BuySellBlock: FC<Props> = ({
   strategyType,
   buy = false,
   isOrdersOverlap,
+  isOrdersReversed,
 }) => {
   const titleId = useId();
-  const navigate = useNavigate<StrategyCreateLocationGenerics>();
+  const navigate = useNavigate();
 
   const tooltipText = `This section will define the order details in which you are willing to ${
     buy ? 'buy' : 'sell'
@@ -49,11 +46,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const inputTitle = (
     <>
-      <span
-        className={
-          'flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60'
-        }
-      >
+      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
         1
       </span>
       <Tooltip
@@ -62,20 +55,22 @@ export const BuySellBlock: FC<Props> = ({
           base.symbol
         } at. Make sure the price is in ${quote.symbol} tokens.`}
       >
-        <>
+        <p>
           <span className="text-white/80">
             Set {buy ? 'Buy' : 'Sell'} Price&nbsp;
           </span>
           <span className="text-white/60">
             ({quote.symbol} per 1 {base.symbol})
           </span>
-        </>
+        </p>
       </Tooltip>
     </>
   );
 
   const changeStrategy = (direction: StrategyDirection) => {
+    order.resetFields();
     navigate({
+      from: '/strategies/create',
       search: (search) => ({
         ...search,
         strategyDirection: direction,
@@ -92,6 +87,7 @@ export const BuySellBlock: FC<Props> = ({
     buy,
     inputTitle,
     isOrdersOverlap,
+    isOrdersReversed,
   };
   const budgetProps = {
     buy,
@@ -107,21 +103,26 @@ export const BuySellBlock: FC<Props> = ({
     <m.section
       variants={items}
       aria-labelledby={titleId}
-      className={`bg-secondary flex flex-col gap-20 rounded-10 border-l-2 p-20 ${
+      className={`flex flex-col gap-20 rounded-10 border-l-2 bg-background-900 p-20 ${
         buy
-          ? 'border-green/50 focus-within:border-green'
-          : 'border-red/50 focus-within:border-red'
+          ? 'border-buy/50 focus-within:border-buy'
+          : 'border-sell/50 focus-within:border-sell'
       }`}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       {strategyType === 'disposable' && (
         <TabsMenu>
-          <TabsMenuButton onClick={() => changeStrategy('buy')} isActive={buy}>
+          <TabsMenuButton
+            onClick={() => changeStrategy('buy')}
+            isActive={buy}
+            data-testid="tab-buy"
+          >
             Buy
           </TabsMenuButton>
           <TabsMenuButton
             onClick={() => changeStrategy('sell')}
             isActive={!buy}
+            data-testid="tab-sell"
           >
             Sell
           </TabsMenuButton>
@@ -129,15 +130,11 @@ export const BuySellBlock: FC<Props> = ({
       )}
 
       <BuySellHeader {...headerProps}>
-        <h3 className={'flex items-center gap-8'} id={titleId}>
+        <h3 className="flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
-          <LogoImager
-            alt={'Token'}
-            src={base.logoURI}
-            className={'h-18 w-18'}
-          />
+          <LogoImager alt="Token" src={base.logoURI} className="h-18 w-18" />
           <span>{base.symbol}</span>
         </h3>
       </BuySellHeader>

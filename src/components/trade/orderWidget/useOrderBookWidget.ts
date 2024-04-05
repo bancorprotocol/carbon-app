@@ -8,14 +8,14 @@ import { useMemo } from 'react';
 import { orderBy } from 'lodash';
 import { useTokens } from 'hooks/useTokens';
 import { useStore } from 'store';
-import Decimal from 'decimal.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 
 const ROW_AMOUNT_MIN_THRESHOLD = 0.0001;
 
-Decimal.set({
+SafeDecimal.set({
   precision: 100,
-  rounding: Decimal.ROUND_HALF_DOWN,
+  rounding: SafeDecimal.ROUND_HALF_DOWN,
   toExpNeg: -30,
   toExpPos: 30,
 });
@@ -28,8 +28,8 @@ const _subtractPrevAmount = (
   i: number
 ) => {
   const prevAmount = data[i - 1]?.amount || '0';
-  const newAmount = new Decimal(amount).minus(prevAmount);
-  const newTotal = new Decimal(rate).times(newAmount);
+  const newAmount = new SafeDecimal(amount).minus(prevAmount);
+  const newTotal = new SafeDecimal(rate).times(newAmount);
 
   return {
     rate,
@@ -38,23 +38,15 @@ const _subtractPrevAmount = (
   };
 };
 
-const buildOrders = (
-  data: OrderRow[],
-  baseDecimals: number,
-  quoteDecimals: number,
-  buckets: number
-): OrderRow[] => {
+const buildOrders = (data: OrderRow[], buckets: number): OrderRow[] => {
   return data
-    .map(({ amount, rate, total }, i) =>
-      _subtractPrevAmount(data, amount, rate, total, i)
-    )
-    .filter(({ amount }) => new Decimal(amount).gte(ROW_AMOUNT_MIN_THRESHOLD))
-    .splice(0, buckets)
-    .map(({ amount, rate, total }) => ({
-      rate: new Decimal(rate).toFixed(quoteDecimals, 1),
-      amount: new Decimal(amount).toFixed(baseDecimals, 1),
-      total: new Decimal(total).toFixed(quoteDecimals, 1),
-    }));
+    .map(({ amount, rate, total }, i) => {
+      return _subtractPrevAmount(data, amount, rate, total, i);
+    })
+    .filter(({ amount }) => {
+      return new SafeDecimal(amount).gte(ROW_AMOUNT_MIN_THRESHOLD);
+    })
+    .splice(0, buckets);
 };
 
 export const useOrderBookWidget = (base?: string, quote?: string) => {
@@ -68,31 +60,20 @@ export const useOrderBookWidget = (base?: string, quote?: string) => {
   const { getTokenById } = useTokens();
   const { data } = orderBookQuery;
 
-  const baseToken = getTokenById(base!);
-  const baseDecimals = baseToken?.decimals || 0;
   const quoteToken = getTokenById(quote!);
-  const quoteDecimals = quoteToken?.decimals || 0;
-  const { getFiatAsString } = useFiatCurrency(quoteToken);
+  const { getFiatValue } = useFiatCurrency(quoteToken);
 
   const orders = useMemo<OrderBook & { middleRateFiat: string }>(() => {
     const buy = orderBy(data?.buy || [], ({ rate }) => +rate, 'desc');
     const sell = orderBy(data?.sell || [], ({ rate }) => +rate, 'asc');
 
     return {
-      buy: buildOrders(buy, baseDecimals, quoteDecimals, orderBookBuckets),
-      sell: buildOrders(sell, baseDecimals, quoteDecimals, orderBookBuckets),
+      buy: buildOrders(buy, orderBookBuckets),
+      sell: buildOrders(sell, orderBookBuckets),
       middleRate: data?.middleRate || '0',
-      middleRateFiat: getFiatAsString(data?.middleRate || ''),
+      middleRateFiat: getFiatValue(data?.middleRate || '').toString(),
     };
-  }, [
-    baseDecimals,
-    data?.buy,
-    data?.middleRate,
-    data?.sell,
-    getFiatAsString,
-    orderBookBuckets,
-    quoteDecimals,
-  ]);
+  }, [data?.buy, data?.middleRate, data?.sell, getFiatValue, orderBookBuckets]);
 
   return {
     ...orderBookQuery,

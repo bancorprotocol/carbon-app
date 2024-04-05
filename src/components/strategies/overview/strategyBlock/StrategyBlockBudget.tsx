@@ -3,19 +3,17 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { Strategy } from 'libs/queries';
+import { StrategyWithFiat } from 'libs/queries';
 
 interface Props {
-  strategy: Strategy;
+  strategy: StrategyWithFiat;
 }
 
 export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   const baseFiat = useFiatCurrency(strategy.base);
   const quoteFiat = useFiatCurrency(strategy.quote);
-  const baseFiatBalance = baseFiat.getFiatValue(strategy.order1.balance);
-  const quoteFiatBalance = quoteFiat.getFiatValue(strategy.order0.balance);
   const noFiatValue = !baseFiat.hasFiatValue() && !quoteFiat.hasFiatValue();
-  const totalBalance = baseFiatBalance.plus(quoteFiatBalance);
+  const totalBalance = strategy.fiatBudget.total;
   const budgetFormatted = prettifyNumber(totalBalance, {
     currentCurrency: baseFiat.selectedFiatCurrency,
   });
@@ -23,7 +21,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   return (
     <article
       className={cn(
-        'flex flex-col rounded-8 border-2 border-emphasis p-16',
+        'flex flex-col rounded-8 border-2 border-background-800 p-16',
         strategy.status === 'active' ? '' : 'opacity-50'
       )}
     >

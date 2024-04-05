@@ -1,0 +1,12 @@
+.handler-tooltip {
+  opacity: 0;
+}
+.graph.drag {
+  cursor: ew-resize;
+}
+.graph.drag .handler-tooltip {
+  opacity: 1;
+}
+.content:hover .handler-tooltip {
+  opacity: 1;
+}

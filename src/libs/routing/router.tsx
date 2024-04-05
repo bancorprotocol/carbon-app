@@ -1,19 +1,22 @@
-import { FC, ReactNode } from 'react';
-import {
-  Router as LocationRouter,
-  ReactLocation,
-} from '@tanstack/react-location';
-import { routes } from 'libs/routing/routes';
-import { parseSearchWith } from 'libs/routing/utils';
+import { Router } from '@tanstack/react-router';
+import { routeTree } from 'libs/routing/routes';
 
-const location = new ReactLocation({
-  parseSearch: parseSearchWith((search) => JSON.parse(search)),
+export const router = new Router({
+  routeTree,
+  parseSearch: (searchStr) => {
+    const searchParams = new URLSearchParams(searchStr);
+    return Object.fromEntries(searchParams.entries());
+  },
+  stringifySearch: (search) => {
+    const searchParams = new URLSearchParams();
+    for (const key in search) searchParams.set(key, search[key]);
+    const searchStr = searchParams.toString();
+    return searchStr ? `?${searchStr}` : '';
+  },
 });
 
-export const Router: FC<{ children: ReactNode }> = ({ children }) => {
-  return (
-    <LocationRouter location={location} routes={routes}>
-      {children}
-    </LocationRouter>
-  );
-};
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}

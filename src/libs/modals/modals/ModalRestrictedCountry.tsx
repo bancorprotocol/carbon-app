@@ -16,14 +16,12 @@ export const ModalRestrictedCountry: ModalFC<undefined> = ({ id }) => {
 
   return (
     <ModalOrMobileSheet id={id} onClose={onClose}>
-      <div className={'mt-40'}>
+      <div className="mt-40">
         <IconTitleText
-          variant={'warning'}
+          variant="warning"
           icon={<IconWarning />}
-          title={'Limited access in your location'}
-          text={
-            'According to our Terms of Service, users in your location are not able to use this site.'
-          }
+          title="Limited access in your location"
+          text="According to our Terms of Service, users in your location are not able to use this site."
         />
       </div>
       <Button variant={'white'} fullWidth onClick={onClose} className={'mt-16'}>

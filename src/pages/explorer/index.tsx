@@ -1,5 +1,5 @@
 import { Page } from 'components/common/page';
-import { Outlet, PathNames, Navigate } from 'libs/routing';
+import { Outlet, Navigate } from 'libs/routing';
 import {
   ExplorerSearch,
   useExplorer,
@@ -9,11 +9,12 @@ import { StrategyProvider, useStrategyCtx } from 'hooks/useStrategies';
 import { ExplorerTabs } from 'components/explorer/ExplorerTabs';
 import { useEffect, useState } from 'react';
 import { explorerEvents } from 'services/events/explorerEvents';
+
 export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const query = useExplorer();
   if (type !== 'wallet' && type !== 'token-pair') {
-    return <Navigate to={PathNames.explorer('wallet')} />;
+    return <Navigate to="/explore/$type" params={{ type: 'token-pair' }} />;
   }
 
   return (

@@ -34,7 +34,7 @@ export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
           return (
             <div
               key={`${index}_${item.content}`}
-              className={`border-grey5 py-4 ${
+              className={`border-background-700 py-4 ${
                 menuContext.size() === 1
                   ? 'first:border-b-2 last:border-t-2'
                   : ''

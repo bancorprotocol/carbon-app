@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useStore } from 'store';
 import { Options } from 'libs/charts';
 import { OrderRow, useGetOrderBook } from 'libs/queries';
 import { Token } from 'libs/tokens';
+import { prettifyNumber } from 'utils/helpers';
 
 export const useDepthChartWidget = (base?: Token, quote?: Token) => {
   const {
@@ -35,8 +36,8 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
       let rate;
 
       return new Array(depthChartBuckets + 2).fill(0).map((_, i) => {
-        rate = new BigNumber(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
-          new BigNumber(data?.step || 0).times(i)
+        rate = new SafeDecimal(data?.middleRate || 0)?.[buy ? 'minus' : 'plus'](
+          new SafeDecimal(data?.step || 0).times(i)
         );
 
         return [+(+rate).toFixed(quote?.decimals), 0];
@@ -88,8 +89,13 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
           tickWidth: 0,
           lineWidth: 0,
           labels: {
+            formatter: ({ value }) => {
+              return prettifyNumber(value, { abbreviate: true });
+            },
             style: {
               color: 'rgba(255, 255, 255, 0.6)',
+              fontFamily:
+                'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
             },
           },
           crosshair: {
@@ -130,8 +136,13 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
             tickLength: 5,
             tickPosition: 'inside',
             labels: {
+              formatter: ({ value }) => {
+                return prettifyNumber(value, { abbreviate: true });
+              },
               style: {
                 color: 'rgba(255, 255, 255, 0.6)',
+                fontFamily:
+                  'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
               },
             },
           },
@@ -155,7 +166,14 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
         },
         tooltip: {
           headerFormat: ' ',
-          pointFormat: `Amount: {point.y} ${base?.symbol}<br/>Price: {point.x} ${quote?.symbol}`,
+          formatter: function () {
+            if (typeof this.x !== 'number' || typeof this.y !== 'number') {
+              return '';
+            }
+            const x = prettifyNumber(this.x, { highPrecision: true });
+            const y = prettifyNumber(this.y, { highPrecision: true });
+            return `Amount: ${y} ${base?.symbol}<br/>Price: ${x} ${quote?.symbol}`;
+          },
           valueDecimals: undefined,
           borderRadius: 12,
           backgroundColor: '#212123',
@@ -169,7 +187,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
             type: 'area',
             name: 'Asks',
             data: asksData,
-            color: 'rgba(216, 99, 113, 0.8)',
+            color: 'var(--sell)',
             marker: {
               enabled: false,
             },
@@ -178,7 +196,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
             type: 'area',
             name: 'Bids',
             data: bidsData,
-            color: 'rgba(0, 181, 120, 0.8)',
+            color: 'var(--buy)',
             marker: {
               enabled: false,
             },

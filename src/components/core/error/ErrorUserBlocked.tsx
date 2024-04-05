@@ -1,5 +1,5 @@
 import { useWeb3 } from 'libs/web3';
-import { Link } from 'libs/routing';
+import { NewTabLink, externalLinks } from 'libs/routing';
 import { ErrorWrapper } from 'components/core/error/ErrorWrapper';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -17,14 +17,9 @@ export const ErrorUserBlocked = () => {
       variant={'error'}
     >
       <div className={'space-y-10'}>
-        <Link
-          to={
-            'https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions/20220808'
-          }
-          className={'w-full'}
-        >
+        <NewTabLink to={externalLinks.treasuryGov} className="w-full">
           <Button fullWidth>Learn More</Button>
-        </Link>
+        </NewTabLink>
         <Button variant={'black'} onClick={disconnect} fullWidth>
           Logout
         </Button>

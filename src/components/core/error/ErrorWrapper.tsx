@@ -1,5 +1,5 @@
+import { NewTabLink, externalLinks } from 'libs/routing';
 import { FC, ReactNode } from 'react';
-import { Link } from 'libs/routing';
 import {
   IconTitleText,
   IconTitleTextProps,
@@ -12,11 +12,11 @@ type Props = IconTitleTextProps & {
 
 const DefaultChildren = () => (
   <div>
-    <Link to={'https://faq.carbondefi.xyz/'}>
+    <NewTabLink to={externalLinks.faq}>
       <Button variant={'error'} fullWidth>
         Contact Support
       </Button>
-    </Link>
+    </NewTabLink>
   </div>
 );
 
@@ -24,7 +24,7 @@ export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
   return (
     <div
       className={
-        'mx-auto mt-100 w-[385px] space-y-16 rounded-10 bg-silver p-20'
+        'mx-auto mt-100 w-[385px] space-y-16 rounded-10 bg-background-900 p-20'
       }
     >
       <IconTitleText {...props} />

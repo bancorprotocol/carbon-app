@@ -3,12 +3,11 @@ import 'init-sentry';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
-import { App } from 'App';
 import { StoreProvider } from 'store';
 import { Web3ReactWrapper } from 'libs/web3';
-import { Router } from 'libs/routing';
 import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
+import { RouterProvider, router } from 'libs/routing';
 import 'utils/buffer';
 import 'fonts.css';
 import 'index.css';
@@ -23,9 +22,7 @@ root.render(
       <StoreProvider>
         <Web3ReactWrapper>
           <LazyMotion>
-            <Router>
-              <App />
-            </Router>
+            <RouterProvider router={router} />
           </LazyMotion>
         </Web3ReactWrapper>
       </StoreProvider>

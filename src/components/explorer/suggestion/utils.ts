@@ -1,12 +1,23 @@
 export const suggestionClasses =
-  'absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-auto rounded-10 bg-emphasis py-10 md:mt-20';
+  'absolute left-0 top-[100%] z-30 mt-10 max-h-[300px] w-full overflow-hidden overflow-y-auto rounded-10 bg-background-800 py-10 md:mt-20';
 
 const isOption = (el?: Element | null): el is HTMLElement => {
   return el instanceof HTMLElement && el.getAttribute('role') === 'option';
 };
 
+export const selectCurrentOption = (root: HTMLElement | null) => {
+  const option = getSelectedOption(root) || getFirstOption(root);
+  option?.click();
+};
+
 export const getSelectedOption = (root: HTMLElement | null) => {
   const selector = '[role="option"][aria-selected="true"]';
+  return root?.querySelector<HTMLElement>(selector);
+};
+
+export const getFirstOption = (root: HTMLElement | null) => {
+  getSelectedOption(root)?.setAttribute('aria-selected', 'false');
+  const selector = '[role="option"]:first-of-type';
   return root?.querySelector<HTMLElement>(selector);
 };
 
@@ -17,9 +28,7 @@ export const selectOption = (element?: HTMLElement | null) => {
 };
 
 export const selectFirstOption = (root: HTMLElement | null) => {
-  getSelectedOption(root)?.setAttribute('aria-selected', 'false');
-  const selector = '[role="option"]:first-of-type';
-  const firstOption = root?.querySelector<HTMLElement>(selector);
+  const firstOption = getFirstOption(root);
   selectOption(firstOption);
 };
 

@@ -1,16 +1,18 @@
+import { Link, Pathnames, PathParams } from 'libs/routing';
 import { LogoImager } from 'components/common/imager/Imager';
-import { Link } from 'libs/routing';
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconBack } from 'assets/icons/chevron-left.svg';
 
 interface Props {
-  backLinkHref: string;
+  backLinkHref: Pathnames;
+  backLinkHrefParams?: PathParams;
   logoURI?: string;
   symbol?: string;
 }
 export const PortfolioTokenHeader: FC<Props> = ({
   backLinkHref,
+  backLinkHrefParams,
   logoURI,
   symbol,
 }) => {
@@ -20,7 +22,7 @@ export const PortfolioTokenHeader: FC<Props> = ({
         'flex',
         'items-center',
         'w-full',
-        'bg-emphasis',
+        'bg-background-800',
         'rounded-10',
         'h-64 lg:h-95',
         'px-20',
@@ -31,11 +33,13 @@ export const PortfolioTokenHeader: FC<Props> = ({
     >
       <Link
         to={backLinkHref}
+        params={backLinkHrefParams ?? {}}
+        search={{}}
         className={cn(
           'flex',
           'justify-center',
           'items-center',
-          'bg-silver',
+          'bg-background-900',
           'rounded-full',
           'h-32 w-32'
         )}

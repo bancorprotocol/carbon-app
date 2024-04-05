@@ -7,7 +7,7 @@ import { getExplorerLink } from 'utils/blockExplorer';
 import { unix } from 'libs/dayjs';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
-import { Link } from 'libs/routing';
+import { NewTabLink } from 'libs/routing';
 import { FOUR_SECONDS_IN_MS } from 'utils/time';
 
 const StatusIcon = (status: NotificationStatus) => {
@@ -20,14 +20,14 @@ const StatusIcon = (status: NotificationStatus) => {
       );
     case 'success':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-green/10">
-          <IconCheck className="w-11 text-green" />
+        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-primary/10">
+          <IconCheck className="w-11 text-primary" />
         </div>
       );
     case 'failed':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-red/10">
-          <IconTimes className="w-11 text-red" />
+        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-error/10">
+          <IconTimes className="w-11 text-error" />
         </div>
       );
   }
@@ -83,17 +83,17 @@ export const NotificationLine: FC<{
         <h3 id={titleId} data-testid="notif-title">
           {getTitleByStatus(notification)}
         </h3>
-        <div className="text-14 text-charcoal/80 dark:text-white/80">
+        <div className="text-14 text-white/80">
           <p data-testid="notif-description">
             {getDescriptionByStatus(notification)}
           </p>
           {notification.txHash && (
-            <Link
+            <NewTabLink
               to={getExplorerLink('tx', notification.txHash)}
               className={'mt-10 flex items-center font-weight-500'}
             >
               View on Etherscan <IconLink className="ml-6 w-14" />
-            </Link>
+            </NewTabLink>
           )}
         </div>
       </div>
@@ -102,7 +102,11 @@ export const NotificationLine: FC<{
         <div className="text-secondary whitespace-nowrap text-12 font-weight-500">
           {unix(notification.timestamp).fromNow(true)}
         </div>
-        <button className="text-12 font-weight-500" onClick={handleCloseClick}>
+        <button
+          className="text-12 font-weight-500"
+          onClick={handleCloseClick}
+          data-testid="notif-close"
+        >
           {isAlert ? 'Close' : 'Clear'}
         </button>
       </div>

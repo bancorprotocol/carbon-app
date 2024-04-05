@@ -13,15 +13,20 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Strategy, UseQueryResult } from 'libs/queries';
+import { Strategy, StrategyWithFiat, UseQueryResult } from 'libs/queries';
 import { lsService } from 'services/localeStorage';
-import { toPairName, fromPairSlug } from 'utils/pairSearch';
+import { toPairName, fromPairSearch } from 'utils/pairSearch';
 import { getCompareFunctionBySortType } from 'components/strategies/overview/utils';
+import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
+import { useStore } from 'store';
+import { SafeDecimal } from 'libs/safedecimal';
 
-type StrateyQuery = UseQueryResult<Strategy[], unknown>;
 export type StrategyFilterOutput = ReturnType<typeof useStrategyFilter>;
 
-export const useStrategyFilter = (query: StrateyQuery) => {
+export const useStrategyFilter = (
+  strategies: StrategyWithFiat[],
+  isLoading: boolean
+) => {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<StrategySort>(getSortFromLS());
   const [filter, setFilter] = useState<StrategyFilter>(getFilterFromLS());
@@ -34,8 +39,9 @@ export const useStrategyFilter = (query: StrateyQuery) => {
   }, [filter]);
 
   const filteredStrategies = useMemo(() => {
+    const pairSearch = fromPairSearch(search);
     // Filter
-    const filtered = (query.data ?? []).filter((strategy) => {
+    const filtered = strategies.filter((strategy) => {
       if (filter === 'active' && strategy.status !== 'active') {
         return false;
       }
@@ -44,17 +50,17 @@ export const useStrategyFilter = (query: StrateyQuery) => {
       }
       if (!search) return true;
       const name = toPairName(strategy.base, strategy.quote);
-      return fromPairSlug(name).includes(search);
+      return fromPairSearch(name).includes(pairSearch);
     });
 
     // Sort
     const compareFunction = getCompareFunctionBySortType(sort);
     return filtered?.sort(compareFunction);
-  }, [search, query.data, filter, sort]);
+  }, [search, strategies, filter, sort]);
 
   return {
     strategies: filteredStrategies,
-    isLoading: query.isLoading,
+    isLoading,
     search,
     setSearch,
     sort,
@@ -62,6 +68,33 @@ export const useStrategyFilter = (query: StrateyQuery) => {
     filter,
     setFilter,
   };
+};
+
+export const useStrategiesWithFiat = (
+  query: UseQueryResult<Strategy[] | Strategy, unknown>
+) => {
+  const {
+    fiatCurrency: { selectedFiatCurrency },
+  } = useStore();
+  const data = query.data ?? [];
+  const strategies = Array.isArray(data) ? data : [data];
+  const tokens = strategies.map(({ base, quote }) => [base, quote]).flat();
+  const addresses = Array.from(new Set(tokens?.map((t) => t.address)));
+  const priceQueries = useGetMultipleTokenPrices(addresses);
+  const prices: Record<string, number | undefined> = {};
+  for (let i = 0; i < priceQueries.length; i++) {
+    const address = addresses[i];
+    const price = priceQueries[i].data?.[selectedFiatCurrency];
+    prices[address] = price;
+  }
+  return strategies.map((strategy) => {
+    const basePrice = new SafeDecimal(prices[strategy.base.address] ?? 0);
+    const quotePrice = new SafeDecimal(prices[strategy.quote.address] ?? 0);
+    const base = basePrice.times(strategy.order1.balance);
+    const quote = quotePrice.times(strategy.order0.balance);
+    const total = base.plus(quote);
+    return { ...strategy, fiatBudget: { base, quote, total } };
+  });
 };
 
 type StrategyCtx = ReturnType<typeof useStrategyFilter>;
@@ -81,7 +114,8 @@ interface StrategyProviderProps {
   children: ReactNode;
 }
 export const StrategyProvider: FC<StrategyProviderProps> = (props) => {
-  const ctx = useStrategyFilter(props.query);
+  const strategies = useStrategiesWithFiat(props.query);
+  const ctx = useStrategyFilter(strategies, props.query.isLoading);
   return (
     <StrategyContext.Provider value={ctx}>
       {props.children}

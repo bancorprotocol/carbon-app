@@ -1,6 +1,5 @@
 import { ReactElement, useMemo } from 'react';
-import { Link, PathNames } from 'libs/routing';
-import { externalLinks } from 'libs/routing/routes';
+import { externalLinks, NewTabLink, Link } from 'libs/routing';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { MenuItemActions } from './useMenuContext';
 import { ReactComponent as IconX } from 'assets/logos/x.svg';
@@ -38,35 +37,35 @@ export const useBurgerMenuItems = () => {
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.faq}>
+        <NewTabLink className="flex" to={externalLinks.faq}>
           FAQ
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.analytics}>
+        <NewTabLink className="flex" to={externalLinks.analytics}>
           Analytics
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.blog}>
+        <NewTabLink className="flex" to={externalLinks.blog}>
           Blog
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={PathNames.terms}>
+        <Link className="flex" to={'/terms'}>
           Terms of Use
         </Link>
       ),
     },
     {
       content: (
-        <Link className="flex" to={PathNames.privacy}>
+        <Link className="flex" to={'/privacy'}>
           Privacy Policy
         </Link>
       ),
@@ -74,30 +73,30 @@ export const useBurgerMenuItems = () => {
     {
       content: (
         <div className="flex w-full items-center justify-between">
-          <Link
+          <NewTabLink
             to={externalLinks.x}
             className="rounded-6 p-6 md:hover:bg-black"
           >
             <IconX className={iconStyles} />
-          </Link>
-          <Link
+          </NewTabLink>
+          <NewTabLink
             to={externalLinks.youtube}
             className="rounded-6 p-6 md:hover:bg-black"
           >
             <IconYoutube className={iconStyles} />
-          </Link>
-          <Link
+          </NewTabLink>
+          <NewTabLink
             to={externalLinks.discord}
             className="rounded-6 p-6 md:hover:bg-black"
           >
             <IconDiscord className={iconStyles} />
-          </Link>
-          <Link
+          </NewTabLink>
+          <NewTabLink
             to={externalLinks.telegram}
             className="rounded-6 p-6 md:hover:bg-black"
           >
             <IconTelegram className={iconStyles} />
-          </Link>
+          </NewTabLink>
         </div>
       ),
     },
@@ -138,44 +137,44 @@ export const useBurgerMenuItems = () => {
   const resourcesItems: MenuItemType[] = [
     {
       content: (
-        <Link className="flex" to={externalLinks.techDocs}>
+        <NewTabLink className="flex" to={externalLinks.techDocs}>
           Tech Docs
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.litePaper}>
+        <NewTabLink className="flex" to={externalLinks.litePaper}>
           Litepaper
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.whitepaper}>
+        <NewTabLink className="flex" to={externalLinks.whitepaper}>
           Whitepaper
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.simulatorRepo}>
+        <NewTabLink className="flex" to={externalLinks.simulatorRepo}>
           Simulator Repo
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.interactiveSim}>
+        <NewTabLink className="flex" to={externalLinks.interactiveSim}>
           Interactive Simulator
-        </Link>
+        </NewTabLink>
       ),
     },
     {
       content: (
-        <Link className="flex" to={externalLinks.duneDashboard}>
+        <NewTabLink className="flex" to={externalLinks.duneDashboard}>
           Dune Dashboard
-        </Link>
+        </NewTabLink>
       ),
     },
   ];

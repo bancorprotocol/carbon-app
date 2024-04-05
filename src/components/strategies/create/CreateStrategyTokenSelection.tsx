@@ -1,7 +1,7 @@
+import { useNavigate } from 'libs/routing';
 import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { m } from 'libs/motion';
-import { PathNames, useNavigate } from 'libs/routing';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { SelectTokenButton } from 'components/common/selectToken';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
@@ -22,7 +22,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         updatedQuote: base.symbol,
       });
       navigate({
-        to: PathNames.createStrategy,
+        to: '/strategies/create',
         search: (search) => ({
           ...search,
           base: quote.address,
@@ -36,7 +36,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
   return (
     <m.article
       variants={items}
-      className="bg-secondary rounded-10 p-20"
+      className="rounded-10 bg-background-900 p-20"
       key="strategyCreateTokenSelection"
     >
       <header className="mb-15 flex items-center justify-between">
@@ -67,7 +67,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         {!!base && (
           <>
             <button
-              className="relative z-10 mx-auto grid h-40 w-40 place-items-center rounded-full border-[5px] border-silver bg-black"
+              className="relative z-10 mx-auto grid h-40 w-40 place-items-center rounded-full border-[5px] border-background-900 bg-black"
               onClick={swapTokens}
               disabled={!base || !quote}
             >

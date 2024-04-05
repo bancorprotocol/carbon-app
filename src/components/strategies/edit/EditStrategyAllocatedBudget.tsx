@@ -4,11 +4,11 @@ import { Token } from 'libs/tokens';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Switch } from 'components/common/switch';
 import { OrderCreate } from 'components/strategies/create/useOrder';
-import { EditTypes } from './EditStrategyMain';
+import { EditTypes } from 'libs/routing';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
-import { TooltipTokenAmount } from './tooltip/TooltipTokenAmount';
-import { TooltipTokenRange } from './tooltip/TooltipTokenRange';
+import { TooltipTokenAmount } from 'components/strategies/edit/tooltip/TooltipTokenAmount';
+import { TooltipTokenRange } from 'components/strategies/edit/tooltip/TooltipTokenRange';
 
 const shouldDisplayDistributeByType: {
   [key in EditTypes]: boolean;
@@ -19,7 +19,7 @@ const shouldDisplayDistributeByType: {
   withdraw: true,
 };
 
-export const EditStrategyAllocatedBudget: FC<{
+interface Props {
   order: OrderCreate;
   base: Token;
   quote: Token;
@@ -27,11 +27,21 @@ export const EditStrategyAllocatedBudget: FC<{
   buy?: boolean;
   showMaxCb?: () => void;
   type: EditTypes;
-}> = ({ base, quote, balance, order, showMaxCb, type, buy = false }) => {
+}
+export const EditStrategyAllocatedBudget: FC<Props> = ({
+  base,
+  quote,
+  balance,
+  order,
+  showMaxCb,
+  type,
+  buy = false,
+}) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const isDistributeToggleOn =
-    order.marginalPriceOption === MarginalPriceOptions.reset;
+    order.marginalPriceOption === MarginalPriceOptions.reset ||
+    !order.marginalPriceOption;
 
   useEffect(() => {
     if (
@@ -76,7 +86,7 @@ export const EditStrategyAllocatedBudget: FC<{
               <button
                 type="button"
                 onClick={() => showMaxCb()}
-                className="cursor-pointer font-weight-500 text-green"
+                className="cursor-pointer font-weight-500 text-primary"
               >
                 MAX
               </button>
@@ -88,7 +98,7 @@ export const EditStrategyAllocatedBudget: FC<{
           <div role="row" className="flex items-center justify-between gap-16">
             <p role="columnheader">{buy ? 'Buy' : 'Sell'} Price</p>
             <div role="cell" className="flex flex-1 justify-end gap-8">
-              <div className={'flex items-center'}>
+              <div className="flex items-center">
                 {/* Limit Strategy Price */}
                 {!!order.price && (
                   <TooltipTokenAmount amount={order.price} token={quote} />
@@ -153,7 +163,7 @@ export const EditStrategyAllocatedBudget: FC<{
                     : MarginalPriceOptions.maintain
                 )
               }
-              size={'sm'}
+              size="sm"
             />
           </div>
         )}
@@ -166,7 +176,7 @@ export const EditStrategyAllocatedBudget: FC<{
               'When updating the rates, the allocated budget will be distributed equally across the entire range'
             }
           />
-          Strategy budget will be distribute across entire range
+          Strategy budget will be distributed across entire range
         </div>
       )}
     </>

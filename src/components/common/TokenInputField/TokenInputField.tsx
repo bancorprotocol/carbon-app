@@ -1,11 +1,11 @@
-import { ChangeEvent, FC, useRef } from 'react';
-import BigNumber from 'bignumber.js';
+import { ChangeEvent, FC, FocusEvent, useRef } from 'react';
+import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
-import { prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { prettifyNumber, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
   onKeystroke?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
-  slippage?: BigNumber | null;
+  slippage?: SafeDecimal | null;
   withoutWallet?: boolean;
   'data-testid'?: string;
 };
@@ -50,15 +50,20 @@ export const TokenInputField: FC<Props> = ({
   const handleChange = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNumberInput(value, token.decimals);
+    const sanitized = sanitizeNumber(value, token.decimals);
     setValue(sanitized);
     onKeystroke && onKeystroke();
+  };
+
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const formatted = formatNumber(e.target.value);
+    if (formatted !== e.target.value) setValue(formatted);
   };
 
   const handleBalanceClick = () => {
     if (balance === value) return;
     if (balance) {
-      const balanceValue = new BigNumber(balance).toFixed(token.decimals);
+      const balanceValue = new SafeDecimal(balance).toFixed(token.decimals);
       setValue(balanceValue);
     }
     onKeystroke && onKeystroke();
@@ -69,9 +74,9 @@ export const TokenInputField: FC<Props> = ({
   return (
     <div
       className={`
-        flex cursor-text flex-col gap-8 border-2 border-black p-16
+        flex cursor-text flex-col gap-8 border border-black p-16
         focus-within:border-white/50
-        ${isError ? '!border-red/50' : ''}
+        ${isError ? '!border-error/50' : ''}
         ${className}
       `}
       onClick={() => inputRef.current?.focus()}
@@ -88,40 +93,50 @@ export const TokenInputField: FC<Props> = ({
           onChange={handleChange}
           placeholder={placeholder}
           onFocus={(e) => e.target.select()}
+          onBlur={handleBlur}
           className={`
             grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
-            ${isError ? 'text-red' : ''}
+            ${isError ? 'text-error' : ''}
+            ${disabled ? 'text-white/40' : ''}
+            ${disabled ? 'cursor-not-allowed' : ''}
           `}
           disabled={disabled}
           data-testid={testid}
         />
-        <div className="flex items-center gap-6 rounded-[20px] bg-emphasis py-6 px-8">
+        <div className="flex items-center gap-6 rounded-[20px] bg-background-800 py-6 px-8">
           <LogoImager alt="Token" src={token.logoURI} className="h-20 w-20" />
           <span className="font-weight-500">{token.symbol}</span>
         </div>
       </div>
       <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
-        <p className="flex items-center gap-5 text-white/60">
-          {!slippage?.isEqualTo(0) && showFiatValue && getFiatAsString(value)}
+        <p className="flex items-center gap-5 break-all text-white/60">
+          {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
         </p>
-        {user && isBalanceLoading !== undefined && !withoutWallet && (
+        {user && !withoutWallet && isBalanceLoading && (
+          <button disabled type="button" data-testid="wallet-loading">
+            Wallet: loading
+          </button>
+        )}
+        {user && !withoutWallet && isBalanceLoading === false && (
           <button
+            disabled={disabled}
             type="button"
             onClick={handleBalanceClick}
             className="group flex items-center"
           >
-            Wallet:&nbsp;
-            {isBalanceLoading ? (
-              'loading'
-            ) : (
-              <>
-                <span className="text-white">
-                  {prettifyNumber(balance || 0)}&nbsp;
-                </span>
-                <b className="text-green group-hover:text-white">MAX</b>
-              </>
-            )}
+            <span className="text-white">
+              Wallet: {prettifyNumber(balance || 0)}&nbsp;
+            </span>
+            <b
+              className={
+                disabled
+                  ? 'text-primary/40'
+                  : 'text-primary group-hover:text-white'
+              }
+            >
+              MAX
+            </b>
           </button>
         )}
       </div>

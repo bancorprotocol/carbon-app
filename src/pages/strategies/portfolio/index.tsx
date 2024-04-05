@@ -1,24 +1,31 @@
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokens } from 'components/strategies/portfolio';
+import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData';
 import { useStrategyCtx } from 'hooks/useStrategies';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 
 export const StrategiesPortfolioPage = () => {
   const { strategies, isLoading } = useStrategyCtx();
   const navigate = useNavigate();
+  const href = '/strategies/portfolio/token/$address';
+
+  const getPortfolioTokenHref: GetPortfolioTokenHref = (row) => ({
+    href,
+    params: { address: row.token.address },
+  });
 
   const onRowClick = (row: Row<PortfolioData>) =>
-    navigate({ to: PathNames.portfolioToken(row.original.token.address) });
-
-  const getHref = (row: PortfolioData) =>
-    PathNames.portfolioToken(row.token.address);
+    navigate({
+      to: href,
+      params: { address: row.original.token.address },
+    });
 
   return (
     <PortfolioAllTokens
       strategies={strategies}
       isLoading={isLoading}
-      getHref={getHref}
+      getHref={getPortfolioTokenHref}
       onRowClick={onRowClick}
     />
   );

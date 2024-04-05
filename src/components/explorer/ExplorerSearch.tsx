@@ -14,12 +14,12 @@ import { ExplorerSearchDropdownItems } from 'components/explorer/ExplorerSearchD
 import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
 import { utils } from 'ethers';
-import { PathNames, useNavigate } from 'libs/routing';
+import { useNavigate } from 'libs/routing';
 import { config } from 'services/web3/config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { fromPairSlug } from 'utils/pairSearch';
+import { fromPairSearch } from 'utils/pairSearch';
 import { useExplorerParams } from './useExplorerParams';
 import { usePairs } from 'hooks/usePairs';
 import { useGetAddressFromEns } from 'libs/queries';
@@ -54,21 +54,21 @@ export const _ExplorerSearch: FC = () => {
     if (!slug) return setSearch('');
     if (type === 'wallet') return setSearch(slug);
     if (type === 'token-pair') {
-      const content = pairs.names.has(slug)
-        ? pairs.names.get(slug)
-        : pairs.names.get(fromPairSlug(slug));
-      return setSearch(content || slug);
+      const name = pairs.names.get(slug);
+      const displayName = name?.replace('_', '/').toUpperCase();
+      return setSearch(displayName || '');
     }
   }, [slug, type, pairs.names]);
 
   const onSearchHandler = useCallback(
     (value: string) => {
       if (value.length === 0) return;
-      const slug = fromPairSlug(value);
+      const slug = fromPairSearch(value);
       if (type === 'token-pair' && !pairs.names.has(slug)) return;
       if (type === 'wallet' && (waitingToFetchEns || isInvalidAddress)) return;
       navigate({
-        to: PathNames.explorerOverview(type, slug),
+        to: '/explore/$type/$slug',
+        params: { type, slug },
       });
     },
     [waitingToFetchEns, isInvalidAddress, navigate, pairs.names, type]
@@ -119,10 +119,10 @@ export const _ExplorerSearch: FC = () => {
             'space-x-8',
             'rounded-full',
             'border',
-            'border-green',
+            'border-primary',
             'px-16',
             'md:space-x-16',
-            isInvalidAddress && 'border-red'
+            isInvalidAddress && 'border-error'
           )}
         >
           <div className="shrink-0">
@@ -156,7 +156,7 @@ export const _ExplorerSearch: FC = () => {
       {isInvalidAddress && (
         <div
           className={
-            'absolute mt-4 flex items-center font-mono text-14 text-red'
+            'absolute mt-4 flex items-center font-mono text-14 text-error'
           }
         >
           <IconWarning className={'mr-10 h-16 w-16'} />

@@ -1,4 +1,4 @@
-import './verbosity-setter';
+import './runtime-config';
 import * as Comlink from 'comlink';
 import {
   PayableOverrides,
@@ -274,13 +274,16 @@ const sdkExposed = {
   getUserStrategies: (address: string) => carbonSDK.getUserStrategies(address),
   getStrategiesByPair: (token0: string, token1: string) =>
     carbonSDK.getStrategiesByPair(token0, token1),
+  getStrategy: (id: string) => carbonSDK.getStrategyById(id),
   createBuySellStrategy: (
     baseToken: string,
     quoteToken: string,
     buyPriceLow: string,
+    buyPriceMarginal: string,
     buyPriceHigh: string,
     buyBudget: string,
     sellPriceLow: string,
+    sellPriceMarginal: string,
     sellPriceHigh: string,
     sellBudget: string,
     overrides?: PayableOverrides | undefined
@@ -289,9 +292,11 @@ const sdkExposed = {
       baseToken,
       quoteToken,
       buyPriceLow,
+      buyPriceMarginal,
       buyPriceHigh,
       buyBudget,
       sellPriceLow,
+      sellPriceMarginal,
       sellPriceHigh,
       sellBudget,
       overrides

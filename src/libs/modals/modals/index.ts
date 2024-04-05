@@ -29,29 +29,29 @@ import {
 import {
   ModalConfirmPause,
   ModalConfirmPauseData,
-} from './ModalConfirmStrategy/ModalConfirmPause';
-import { ModalBurgerMenu } from './ModalBurgerMenu';
+} from 'libs/modals/modals/ModalConfirmStrategy/ModalConfirmPause';
+import { ModalBurgerMenu } from 'libs/modals/modals/ModalBurgerMenu';
 import { ModalRestrictedCountry } from 'libs/modals/modals/ModalRestrictedCountry';
 import {
   ModalGenericInfo,
   ModalGenericInfoData,
 } from 'libs/modals/modals/ModalGenericInfo';
 import {
-  ModalCreateStratExpertMode,
-  ModalCreateStratExpertModeData,
-} from 'libs/modals/modals/ModalCreateStratExpertMode';
-import {
-  ModalManageNotifications,
-  ModalManageNotificationsData,
-} from './ModalManageNotifications';
+  ModalDuplicateStrategy,
+  ModalDuplicateStrategyData,
+} from 'libs/modals/modals/ModalDuplicateStrategy/ModalDuplicateStrategy';
 import {
   ModalConfirmWithdraw,
   ModalConfirmWithdrawData,
-} from './ModalConfirmStrategy/ModalConfirmWithdraw';
+} from 'libs/modals/modals/ModalConfirmStrategy/ModalConfirmWithdraw';
 import {
   ModalConfirmDelete,
   ModalConfirmDeleteData,
-} from './ModalConfirmStrategy/ModalConfirmDelete';
+} from 'libs/modals/modals/ModalConfirmStrategy/ModalConfirmDelete';
+import {
+  ModalSimulatorDisclaimer,
+  ModalSimulatorDisclaimerData,
+} from 'libs/modals/modals/ModalSimulatorDisclaimer';
 
 // Step 1: Add modal key and data type to schema
 export interface ModalSchema {
@@ -66,11 +66,11 @@ export interface ModalSchema {
   burgerMenu: undefined;
   restrictedCountry: undefined;
   genericInfo: ModalGenericInfoData;
-  createStratExpertMode: ModalCreateStratExpertModeData;
-  manageNotifications: ModalManageNotificationsData;
+  duplicateStrategy: ModalDuplicateStrategyData;
   confirmPauseStrategy: ModalConfirmPauseData;
   confirmWithdrawStrategy: ModalConfirmWithdrawData;
   confirmDeleteStrategy: ModalConfirmDeleteData;
+  simulatorDisclaimer: ModalSimulatorDisclaimerData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -88,9 +88,9 @@ export const MODAL_COMPONENTS: TModals = {
   burgerMenu: (props) => ModalBurgerMenu(props),
   restrictedCountry: (props) => ModalRestrictedCountry(props),
   genericInfo: (props) => ModalGenericInfo(props),
-  createStratExpertMode: (props) => ModalCreateStratExpertMode(props),
-  manageNotifications: (props) => ModalManageNotifications(props),
+  duplicateStrategy: (props) => ModalDuplicateStrategy(props),
   confirmPauseStrategy: (props) => ModalConfirmPause(props),
   confirmWithdrawStrategy: (props) => ModalConfirmWithdraw(props),
   confirmDeleteStrategy: (props) => ModalConfirmDelete(props),
+  simulatorDisclaimer: (props) => ModalSimulatorDisclaimer(props),
 };

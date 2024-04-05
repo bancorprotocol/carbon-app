@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Strategy } from 'libs/queries';
-import { cn, prettifyNumber, sanitizeNumberInput } from 'utils/helpers';
+import { cn, prettifyNumber, sanitizeNumber } from 'utils/helpers';
 import {
   FloatTooltip,
   FloatTooltipContent,
@@ -24,10 +24,9 @@ const baseline = 100; // Line above text
 const middle = 75; // Where two polygons can intersect
 const top = 50; // End of the polygons
 const tick = 87; // Where the ticks end, from baseline
-const step = width / 30;
-const steps = Array(30)
-  .fill(null)
-  .map((_, i) => i * step);
+// X positions
+const lowest = 10;
+const highest = width - 10;
 
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const buyOrder = strategy.order0;
@@ -38,14 +37,14 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   );
 
   const buy = {
-    from: Number(sanitizeNumberInput(buyOrder.startRate)),
-    to: Number(sanitizeNumberInput(buyOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(buyOrder.marginalRate)),
+    from: Number(sanitizeNumber(buyOrder.startRate)),
+    to: Number(sanitizeNumber(buyOrder.endRate)),
+    marginalPrice: Number(sanitizeNumber(buyOrder.marginalRate)),
   };
   const sell = {
-    from: Number(sanitizeNumberInput(sellOrder.startRate)),
-    to: Number(sanitizeNumberInput(sellOrder.endRate)),
-    marginalPrice: Number(sanitizeNumberInput(sellOrder.marginalRate)),
+    from: Number(sanitizeNumber(sellOrder.startRate)),
+    to: Number(sanitizeNumber(sellOrder.endRate)),
+    marginalPrice: Number(sanitizeNumber(sellOrder.marginalRate)),
   };
 
   const buyOrderExists = buy.from !== 0 && buy.to !== 0;
@@ -60,7 +59,9 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       : Math.max(buy.from, sell.from);
 
   const hasSpan = min && max && min !== max;
-  const center = hasSpan ? (min + max) / 2 : currentPrice ?? 1000;
+  const center = hasSpan
+    ? (min + max) / 2
+    : ((min || max) + (currentPrice ?? 1000)) / 2;
   const delta = hasSpan ? (max - min) / 2 : center * 1.5;
 
   // Graph zoom
@@ -68,11 +69,10 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const to = center + delta * 1.25;
 
   const pricePoints = [
-    from + (1 / 3) * (center - from),
-    from + (2 / 3) * (center - from),
-    center,
-    to - (2 / 3) * (to - center),
-    to - (1 / 3) * (to - center),
+    from + (1 / 4) * (center - from),
+    from + (3 / 4) * (center - from),
+    to - (3 / 4) * (to - center),
+    to - (1 / 4) * (to - center),
   ];
 
   // X position
@@ -142,7 +142,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
   return (
     <svg
-      className={style.strategyGraph}
+      className={cn(style.strategyGraph, 'font-mono')}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -170,26 +170,26 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
           patternUnits="userSpaceOnUse"
         />
         <pattern href="#base-pattern" id="buy-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="#00B578" />
-          <use href="#carbonLogo" x="8" y="16" fill="#00B578" />
+          <use href="#carbonLogo" x="0" y="4" fill="var(--buy)" />
+          <use href="#carbonLogo" x="8" y="16" fill="var(--buy)" />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="#00B578"
+            fill="var(--buy)"
             fillOpacity="0.05"
           />
         </pattern>
         <pattern href="#base-pattern" id="sell-pattern">
-          <use href="#carbonLogo" x="0" y="4" fill="#D86371" />
-          <use href="#carbonLogo" x="8" y="16" fill="#D86371" />
+          <use href="#carbonLogo" x="0" y="4" fill="var(--sell)" />
+          <use href="#carbonLogo" x="8" y="16" fill="var(--sell)" />
           <rect
             x="0"
             y="0"
             width="15"
             height="25"
-            fill="#D86371"
+            fill="var(--sell)"
             fillOpacity="0.05"
           />
         </pattern>
@@ -207,9 +207,6 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
       <g className={style.axes} stroke="#404040">
         <line x1="0" y1={baseline} x2={width} y2={baseline} />
-        {steps.map((x) => (
-          <line key={x} x1={x} y1={baseline} x2={x} y2={tick} />
-        ))}
       </g>
 
       <CurrentPrice currentPrice={currentPrice} x={x} token={strategy.quote} />
@@ -218,13 +215,13 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         {buyOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
-              <g className={style.buy}>
+              <g className={style.buy} data-testid="polygon-buy">
                 <>
                   {!buyOrderIsLimit && (
                     <>
                       <polygon
                         className={style.buyArea}
-                        fill="#00B578"
+                        fill="var(--buy)"
                         fillOpacity="0.25"
                         points={Array.from(
                           getBuyPoints(
@@ -247,7 +244,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         )}
                       <line
                         className={style.lineBuySell}
-                        stroke="#00B578"
+                        stroke="var(--buy)"
                         strokeWidth="2"
                         x1={x(buy.from)}
                         y1={baseline}
@@ -256,7 +253,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       <line
                         className={style.lineBuySell}
-                        stroke="#00B578"
+                        stroke="var(--buy)"
                         strokeWidth="2"
                         x1={x(buy.to)}
                         y1={baseline}
@@ -275,7 +272,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         fill="transparent"
                       />
                       <line
-                        stroke="#00B578"
+                        stroke="var(--buy)"
                         strokeWidth="2"
                         x1={x(buy.to)}
                         y1={baseline}
@@ -296,13 +293,13 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
         {sellOrderExists && (
           <FloatTooltip>
             <FloatTooltipTrigger>
-              <g className={style.sell}>
+              <g className={style.sell} data-testid="polygon-sell">
                 <>
                   {!sellOrderIsLimit && (
                     <>
                       <polygon
                         className={style.sellArea}
-                        fill="#D86371"
+                        fill="var(--sell)"
                         fillOpacity="0.25"
                         points={Array.from(
                           getSellPoints(
@@ -325,7 +322,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         )}
                       <line
                         className={style.lineBuySell}
-                        stroke="#D86371"
+                        stroke="var(--sell)"
                         strokeWidth="2"
                         x1={x(sell.from)}
                         x2={x(sell.from)}
@@ -334,7 +331,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                       />
                       <line
                         className={style.lineBuySell}
-                        stroke="#D86371"
+                        stroke="var(--sell)"
                         strokeWidth="2"
                         x1={x(sell.to)}
                         x2={x(sell.to)}
@@ -353,7 +350,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
                         fill="transparent"
                       />
                       <line
-                        stroke="#D86371"
+                        stroke="var(--sell)"
                         strokeWidth="2"
                         x1={x(sell.to)}
                         x2={x(sell.to)}
@@ -373,18 +370,27 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
       </g>
       <g className={style.pricePoints}>
         {pricePoints.map((point, i) => (
-          <text
-            key={i}
-            fill="white"
-            x={x(point)}
-            y={baseline + 10}
-            dominantBaseline="hanging"
-            textAnchor="middle"
-            fontSize="12"
-            opacity="60%"
-          >
-            {prettifyNumber(point, { abbreviate: true, round: true })}
-          </text>
+          <g key={i}>
+            <line
+              x1={x(point)}
+              x2={x(point)}
+              y1={tick}
+              y2={baseline + 5}
+              stroke="white"
+              opacity="60%"
+            />
+            <text
+              fill="white"
+              x={x(point)}
+              y={baseline + 10}
+              dominantBaseline="hanging"
+              textAnchor="middle"
+              fontSize="16"
+              opacity="60%"
+            >
+              {prettifyNumber(point, { abbreviate: true, round: true })}
+            </text>
+          </g>
         ))}
       </g>
     </svg>
@@ -404,25 +410,24 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
 }) => {
   if (!currentPrice) return <></>;
   const price = x(currentPrice);
-  const tooLow = price < steps[1];
-  const tooHigh = price > steps[steps.length - 1];
+  const tooLow = price < lowest;
+  const tooHigh = price > highest;
   const inRange = !tooLow && !tooHigh;
   const prettyPrice = prettifyNumber(currentPrice, { round: true });
   const formattedPrice = `${prettyPrice} ${token.symbol}`;
 
   // Out of Range
   const maxChar = Math.max(formattedPrice.length, '(off-scale)'.length);
-  const outRangeWidth = `${maxChar + 2}ch`;
+  const outRangeWidth = `${maxChar + 6}ch`;
   // In Range
   const inRangeWidth = `${formattedPrice.length + 2}ch`;
   const baseDelta = `${(formattedPrice.length + 2) / 2}ch`; // 6ch
 
-  const deltaStart = price - steps[1];
-  const deltaEnd = steps[steps.length - 1] - price;
+  const deltaStart = price - lowest;
+  const deltaEnd = highest - price;
   const translateStart = `min(${baseDelta}, ${deltaStart}px)`;
   const translateEnd = `max((${inRangeWidth}  / 2) - ${deltaEnd}px, 0px)`;
   const translateRect = `translateX(calc(-1 * (${translateStart} + ${translateEnd})))`;
-  const translateText = `translateX(calc(-1 * (${translateStart} + ${translateEnd} - 1.5ch)))`;
 
   return (
     <g className={style.currentPrice}>
@@ -430,16 +435,13 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
         className={style.priceLine}
         stroke="#404040"
         strokeWidth="2"
-        d={`M ${Math.max(
-          steps[1],
-          Math.min(steps[steps.length - 1], price)
-        )} ${baseline} V 25`}
+        d={`M ${Math.max(lowest, Math.min(highest, price))} ${baseline} V 25`}
       />
       {tooLow && (
         <>
           <rect
             fill="#404040"
-            x={steps[1] - 1}
+            x={lowest - 1}
             y="6"
             width={outRangeWidth}
             height="36"
@@ -447,11 +449,11 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={steps[1]}
-            y="13"
+            x={lowest}
+            y="9"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -460,11 +462,11 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           </text>
           <text
             fill="white"
-            x={steps[1]}
-            y="28"
+            x={lowest}
+            y="26"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -480,7 +482,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             x={price}
             y="6"
             width={inRangeWidth}
-            height="20"
+            height="22"
             rx="4"
             style={{
               transform: translateRect,
@@ -488,13 +490,13 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={price}
-            y="13"
+            x={price + 8}
+            y="10"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="12"
+            fontSize="16"
             style={{
-              transform: translateText,
+              transform: translateRect,
             }}
           >
             {formattedPrice}
@@ -505,7 +507,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
         <>
           <rect
             fill="#404040"
-            x={steps[steps.length - 1] + 1}
+            x={highest + 1}
             y="6"
             width={outRangeWidth}
             height="36"
@@ -516,11 +518,11 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={steps[steps.length - 1]}
-            y="13"
+            x={highest}
+            y="9"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -529,11 +531,11 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           </text>
           <text
             fill="white"
-            x={steps[steps.length - 1]}
-            y="28"
+            x={highest}
+            y="26"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="12"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -555,16 +557,20 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const order = buy ? strategy.order0 : strategy.order1;
   const limit = order.startRate === order.endRate;
   const priceOption = {
-    abbreviate: order.endRate.length > 10,
+    abbreviate: true,
     round: true,
+    useSubscript: false,
   };
   const startPrice = prettifyNumber(order.startRate, priceOption);
   const endPrice = prettifyNumber(order.endRate, priceOption);
   const marginalPrice = prettifyNumber(order.marginalRate, priceOption);
   const { quote, base } = strategy;
-  const color = buy ? 'text-green' : 'text-red';
+  const color = buy ? 'text-buy' : 'text-sell';
   return (
-    <article className="flex flex-col gap-16 text-12">
+    <article
+      className="flex flex-col gap-16 text-14"
+      data-testid="order-tooltip"
+    >
       <h3 className={cn('text-16 font-weight-500', color)}>
         {buy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
@@ -575,7 +581,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
               <th className="p-8 text-start font-weight-400 text-white/60">
                 Price
               </th>
-              <td className="p-8 text-end">
+              <td className="p-8 text-end" data-testid="price">
                 {startPrice} {quote.symbol}
               </td>
             </tr>
@@ -583,13 +589,13 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       {!limit && (
-        <table className="border-separate rounded-8 border border-white/40">
+        <table className="border-separate rounded-8 border border-white/40 font-mono">
           <tbody>
             <tr>
               <th className="p-8 pb-4 text-start font-weight-400 text-white/60">
                 Min Price
               </th>
-              <td className="p-8 pb-4 text-end">
+              <td className="p-8 pb-4 text-end" data-testid="min-price">
                 {startPrice} {quote.symbol}
               </td>
             </tr>
@@ -597,7 +603,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
               <th className="p-8 pt-4 text-start font-weight-400 text-white/60">
                 Max Price
               </th>
-              <td className="p-8 pt-4 text-end">
+              <td className="p-8 pt-4 text-end" data-testid="max-price">
                 {endPrice} {quote.symbol}
               </td>
             </tr>
@@ -605,16 +611,20 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       <p className="text-white/60">
-        Current marginal price is {marginalPrice} {quote.symbol} per 1&nbsp;
+        Current marginal price is&nbsp;
+        <span data-testid="marginal-price">
+          {marginalPrice} {quote.symbol}
+        </span>
+        &nbsp;per 1&nbsp;
         {base.symbol}
       </p>
       <a
         href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-4 font-weight-500 text-green"
+        className="inline-flex items-center gap-4 font-weight-500 text-primary"
       >
-        <span>Learn More about marginal price</span>
+        <span>Learn more about marginal price</span>
         <IconLink className="inline h-12 w-12" />
       </a>
     </article>

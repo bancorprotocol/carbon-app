@@ -1,6 +1,5 @@
 import { carbonEvents } from 'services/events';
-import { useLocation } from 'libs/routing';
-import { EditTypes } from './EditStrategyMain';
+import { useRouter, EditTypes } from 'libs/routing';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import { ReactComponent as IconCandles } from 'assets/icons/candles.svg';
 import { cn } from 'utils/helpers';
@@ -16,10 +15,7 @@ export const EditStrategyHeader = ({
   setShowGraph,
   type,
 }: EditStrategyHeaderProps) => {
-  const {
-    history: { back },
-  } = useLocation();
-
+  const { history } = useRouter();
   const titleByType: { [key in EditTypes]: string } = {
     renew: 'Renew Strategy',
     editPrices: 'Edit Prices',
@@ -35,8 +31,8 @@ export const EditStrategyHeader = ({
       )}
     >
       <button
-        onClick={() => back()}
-        className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
+        onClick={() => history.back()}
+        className="grid h-40 w-40 place-items-center rounded-full bg-background-800"
       >
         <ForwardArrow className="h-18 w-18 rotate-180" />
       </button>
@@ -49,7 +45,7 @@ export const EditStrategyHeader = ({
             carbonEvents.strategy.strategyChartOpen(undefined);
             setShowGraph(true);
           }}
-          className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
+          className="grid h-40 w-40 place-items-center rounded-full bg-background-800"
         >
           <IconCandles className="h-18 w-18" />
         </button>

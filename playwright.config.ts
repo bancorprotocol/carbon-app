@@ -8,16 +8,15 @@ const isCI = !!process.env.CI && process.env.CI !== 'false';
  */
 export default defineConfig({
   testDir: './e2e/pages',
-  testMatch: '**/*.spec.ts', // Realtive to testDir
+  testMatch: '**/*.spec.ts', // Relative to testDir
   outputDir: './e2e/results',
   globalSetup: './e2e/setup.ts',
-  globalTeardown: './e2e/teardown.ts',
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!isCI,
   retries: isCI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: isCI ? 1 : undefined,
+  workers: undefined,
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
 
@@ -25,8 +24,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:3000',
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: isCI ? 'on-first-retry' : 'retain-on-failure',
     storageState: 'e2e/storage.json',
   },
 

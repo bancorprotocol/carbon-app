@@ -3,8 +3,6 @@ import { ReactComponent as IconSwitch } from 'assets/icons/switch.svg';
 import { Button } from 'components/common/button';
 import { Token } from 'libs/tokens';
 import { useNavigate } from 'libs/routing';
-import { MyLocationGenerics } from 'components/trade/useTradeTokens';
-import { PathNames } from 'libs/routing';
 import { carbonEvents } from 'services/events';
 
 type Props = {
@@ -13,11 +11,11 @@ type Props = {
 };
 
 export const MainMenuTradeSwitch: FC<Props> = ({ baseToken, quoteToken }) => {
-  const navigate = useNavigate<MyLocationGenerics>();
+  const navigate = useNavigate();
 
   const onClick = () => {
     navigate({
-      to: PathNames.trade,
+      to: '/trade',
       search: { base: quoteToken.address, quote: baseToken.address },
     });
     carbonEvents.trade.tradePairSwap({

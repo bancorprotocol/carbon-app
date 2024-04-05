@@ -1,11 +1,4 @@
-import {
-  FormEvent,
-  KeyboardEvent,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from 'react';
+import { FormEvent, KeyboardEvent, useId, useRef, useState } from 'react';
 import { ModalFC } from '../../modals.types';
 import { Action } from 'libs/sdk';
 import { Token } from 'libs/tokens';
@@ -18,6 +11,7 @@ import { ModalTradeRoutingRow } from './ModalTradeRoutingRow';
 import { ReactComponent as IconArrow } from 'assets/icons/arrowDown.svg';
 import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
+import { SafeDecimal } from 'libs/safedecimal';
 
 export type ModalTradeRoutingData = {
   source: Token;
@@ -52,10 +46,22 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     id,
     data: { ...data, setIsAwaiting },
   });
-  const [allChecked, setAllChecked] = useState(true);
 
-  useEffect(() => {
-    if (allChecked) {
+  const selectedSorted = selected.sort((a, b) => {
+    const averageAmountA = data.buy
+      ? new SafeDecimal(a.sourceAmount).div(a.targetAmount)
+      : new SafeDecimal(a.targetAmount).div(a.sourceAmount);
+    const averageAmountB = data.buy
+      ? new SafeDecimal(b.sourceAmount).div(b.targetAmount)
+      : new SafeDecimal(b.targetAmount).div(b.sourceAmount);
+
+    return averageAmountA.sub(averageAmountB).toNumber();
+  });
+
+  const allSelected = selected.every((pred) => pred.isSelected);
+
+  const handleAllCheck = (selectAll: boolean) => {
+    if (selectAll) {
       for (const select of selected) {
         if (!select.isSelected) onSelect(select.id);
       }
@@ -65,7 +71,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allChecked]);
+  };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +82,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
     const key = e.key;
     if (e.ctrlKey && e.key === 'a') {
       e.preventDefault();
-      setAllChecked(!allChecked);
+      handleAllCheck(allSelected);
     }
     if (['Home', 'End', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
       e.preventDefault();
@@ -124,8 +130,8 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                   <th className="sticky top-0 bg-black p-8">
                     <Checkbox
                       className="m-auto"
-                      isChecked={allChecked}
-                      setIsChecked={setAllChecked}
+                      isChecked={allSelected}
+                      setIsChecked={handleAllCheck}
                       aria-label="toggle all orders"
                     />
                   </th>
@@ -142,7 +148,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                 </tr>
               </thead>
               <tbody>
-                {selected.map((action) => (
+                {selectedSorted.map((action) => (
                   <ModalTradeRoutingRow
                     key={action.id}
                     action={action}
@@ -174,7 +180,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             {errorMsg && (
               <output
                 htmlFor={sourceInputId}
-                className="text-12 font-weight-500 text-red"
+                className="text-12 font-weight-500 text-error"
               >
                 {errorMsg}
               </output>
@@ -189,7 +195,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             data-testid="confirm-source"
             className="-mb-16 rounded-12 bg-black"
           />
-          <IconArrow className="z-10 mx-auto h-24 w-24 rounded-full bg-silver p-5" />
+          <IconArrow className="z-10 mx-auto h-24 w-24 rounded-full bg-background-900 p-5" />
           <TokenInputField
             value={totalTargetAmount}
             token={data.target}

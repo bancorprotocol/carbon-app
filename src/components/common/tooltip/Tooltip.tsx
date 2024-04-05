@@ -6,31 +6,37 @@ import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import ReactDOMServer from 'react-dom/server';
 import { carbonEvents } from 'services/events';
 
-export const Tooltip: FC<
-  TippyProps & {
-    element: ReactNode;
-    className?: string;
-    iconClassName?: string;
-    sendEventOnMount?: {
-      buy?: boolean | undefined;
-    };
-    disabled?: boolean;
-  }
-> = ({
+interface Props extends TippyProps {
+  element: ReactNode;
+  className?: string;
+  iconClassName?: string;
+  sendEventOnMount?: {
+    buy?: boolean | undefined;
+  };
+  disabled?: boolean;
+  damping?: number;
+  stiffness?: number;
+}
+
+export const Tooltip: FC<Props> = ({
   element,
   className = '',
   iconClassName = '',
   maxWidth = 350,
   sendEventOnMount,
   disabled = false,
+  damping = 15,
+  stiffness = 300,
   children = (
-    <IconTooltip
-      className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
-    />
+    <span>
+      <IconTooltip
+        className={`h-18 w-18 ${iconClassName ? iconClassName : ''}`}
+      />
+    </span>
   ),
   ...props
 }) => {
-  const springConfig = { damping: 15, stiffness: 300 };
+  const springConfig = { damping, stiffness };
   const initialScale = 0.5;
   const opacity = useSpring(0, springConfig);
   const scale = useSpring(initialScale, springConfig);
@@ -72,8 +78,9 @@ export const Tooltip: FC<
       delay={500}
       render={(attrs) => (
         <m.div
-          className={`rounded border border-darkGrey bg-darkGrey/30 px-24 py-16 text-14 text-white shadow-lg backdrop-blur-2xl ${className}`}
+          className={`rounded border border-background-800 bg-background-800/30 px-24 py-16 text-14 text-white shadow-lg backdrop-blur-2xl ${className}`}
           style={{ scale, opacity, maxWidth }}
+          data-testid="tippy-tooltip"
           {...attrs}
         >
           {element}
@@ -86,7 +93,7 @@ export const Tooltip: FC<
       onHide={onHide}
       {...props}
     >
-      <div>{children}</div>
+      {children}
     </Tippy>
   );
 };

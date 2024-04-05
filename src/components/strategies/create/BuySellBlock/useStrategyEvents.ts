@@ -8,8 +8,7 @@ import {
   StrategyEventTypeBase,
   StrategySellEventType,
 } from 'services/events/types';
-import { sanitizeNumberInput } from 'utils/helpers';
-import { StrategyCreateLocationGenerics } from '../types';
+import { sanitizeNumber } from 'utils/helpers';
 import { OrderCreate } from '../useOrder';
 import { useSearch } from 'libs/routing';
 
@@ -29,7 +28,7 @@ export const useStrategyEvents = ({
   const budgetToken = buy ? quote : base;
   const { getFiatValue } = useFiatCurrency(budgetToken);
   const fiatValueUsd = getFiatValue(order.budget, true).toString();
-  const search = useSearch<StrategyCreateLocationGenerics>();
+  const search = useSearch({ from: '/strategies/create' });
 
   const getStrategyEventData = (): (
     | StrategySellEventType
@@ -43,9 +42,9 @@ export const useStrategyEvents = ({
         buyOrderType: order.isRange ? 'range' : 'limit',
         buyBudget: order.budget,
         buyBudgetUsd: fiatValueUsd,
-        buyTokenPrice: sanitizeNumberInput(order.price, 18),
-        buyTokenPriceMin: sanitizeNumberInput(order.min, 18),
-        buyTokenPriceMax: sanitizeNumberInput(order.max, 18),
+        buyTokenPrice: sanitizeNumber(order.price, 18),
+        buyTokenPriceMin: sanitizeNumber(order.min, 18),
+        buyTokenPriceMax: sanitizeNumber(order.max, 18),
         strategyDirection: search?.strategyDirection,
         strategySettings: search?.strategySettings,
         strategyType: search?.strategyType,
@@ -57,9 +56,9 @@ export const useStrategyEvents = ({
       sellOrderType: order.isRange ? 'range' : 'limit',
       sellBudget: order.budget,
       sellBudgetUsd: fiatValueUsd,
-      sellTokenPrice: sanitizeNumberInput(order.price, 18),
-      sellTokenPriceMin: sanitizeNumberInput(order.min, 18),
-      sellTokenPriceMax: sanitizeNumberInput(order.max, 18),
+      sellTokenPrice: sanitizeNumber(order.price, 18),
+      sellTokenPriceMin: sanitizeNumber(order.min, 18),
+      sellTokenPriceMax: sanitizeNumber(order.max, 18),
       strategyDirection: search?.strategyDirection,
       strategySettings: search?.strategySettings,
       strategyType: search?.strategyType,

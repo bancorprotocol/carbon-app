@@ -1,7 +1,7 @@
 import { Order, Strategy } from 'libs/queries';
 import { Token } from 'libs/tokens';
 import { useMemo } from 'react';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useGetMultipleTokenPrices } from 'libs/queries/extApi/tokenPrice';
 import { useStore } from 'store';
 import { sortObjectArray } from 'utils/helpers';
@@ -9,9 +9,9 @@ import { FiatPriceDict } from 'utils/carbonApi';
 
 export interface PortfolioData {
   token: Token;
-  share: BigNumber;
-  amount: BigNumber;
-  value: BigNumber;
+  share: SafeDecimal;
+  amount: SafeDecimal;
+  value: SafeDecimal;
   strategies: Strategy[];
   fiatPrice: number;
 }
@@ -56,24 +56,24 @@ export const usePortfolioData = ({
 
   const totalValue = useMemo(() => {
     const data = strategies;
-    if (!data) return new BigNumber(0);
+    if (!data) return new SafeDecimal(0);
 
     return data.reduce((acc, strategy) => {
       const fiatPriceDictQuote = tokenPriceMap.get(strategy.quote.address);
       const tokenPriceQuote = fiatPriceDictQuote?.[selectedFiatCurrency] || 0;
 
-      const amountQuote = new BigNumber(strategy.order0.balance);
+      const amountQuote = new SafeDecimal(strategy.order0.balance);
       const fiatAmountQuote = amountQuote.times(tokenPriceQuote);
 
       const fiatPriceDictBase = tokenPriceMap.get(strategy.base.address);
       const tokenPriceBase = fiatPriceDictBase?.[selectedFiatCurrency] || 0;
 
-      const amountBase = new BigNumber(strategy.order1.balance);
+      const amountBase = new SafeDecimal(strategy.order1.balance);
       const fiatAmountBase = amountBase.times(tokenPriceBase);
 
       const fiatAmount = fiatAmountQuote.plus(fiatAmountBase);
       return acc.plus(fiatAmount);
-    }, new BigNumber(0));
+    }, new SafeDecimal(0));
   }, [selectedFiatCurrency, strategies, tokenPriceMap]);
 
   const tableData: PortfolioData[] = useMemo(() => {
@@ -86,7 +86,7 @@ export const usePortfolioData = ({
           const fiatPriceDict = tokenPriceMap.get(token.address);
           const tokenPrice = fiatPriceDict?.[selectedFiatCurrency] || 0;
 
-          const amount = new BigNumber(order.balance);
+          const amount = new SafeDecimal(order.balance);
 
           let item = map.get(token.symbol);
 

@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { externalLinks } from 'libs/routing/routes';
-import { Link } from 'libs/routing';
+import { NewTabLink, externalLinks } from 'libs/routing';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 import { cn, formatNumberWithApproximation } from 'utils/helpers';
@@ -17,12 +16,12 @@ export const StrategyBlockRoi: FC<Props> = ({ strategy }) => {
     isPercentage: true,
     approximateBelow: 0.01,
   });
-  const color = roi.gte(0) ? 'text-green' : 'text-red';
+  const color = roi.gte(0) ? 'text-success' : 'text-error';
 
   return (
     <article
       className={cn(
-        'flex flex-col rounded-8 border-2 border-emphasis p-16',
+        'flex flex-col rounded-8 border-2 border-background-800 p-16',
         strategy.status === 'active' ? '' : 'opacity-50'
       )}
     >
@@ -40,11 +39,12 @@ export const StrategyBlockRoi: FC<Props> = ({ strategy }) => {
 const TooltipContent: FC<{}> = () => (
   <>
     <span className="align-middle">
-      Total percentage returns of the strategy from its creation.&nbsp;
+      Total percentage returns of the strategy from its creation as compared to
+      HODL.&nbsp;
     </span>
-    <Link to={externalLinks.roiLearnMore} className="text-green">
+    <NewTabLink to={externalLinks.roiLearnMore} className="text-primary">
       <span className="align-middle">Learn how ROI is calculated.</span>
       <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
-    </Link>
+    </NewTabLink>
   </>
 );

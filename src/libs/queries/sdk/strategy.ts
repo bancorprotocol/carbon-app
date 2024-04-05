@@ -5,7 +5,7 @@ import { useWeb3 } from 'libs/web3';
 import { Token } from 'libs/tokens';
 import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
-import BigNumber from 'bignumber.js';
+import { SafeDecimal } from 'libs/safedecimal';
 import { useContract } from 'hooks/useContract';
 import { config } from 'services/web3/config';
 import { ONE_DAY_IN_MS } from 'utils/time';
@@ -41,7 +41,15 @@ export interface Strategy {
   order1: Order;
   status: StrategyStatus;
   encoded: EncodedStrategyBNStr;
-  roi: BigNumber;
+  roi: SafeDecimal;
+}
+
+export interface StrategyWithFiat extends Strategy {
+  fiatBudget: {
+    total: SafeDecimal;
+    quote: SafeDecimal;
+    base: SafeDecimal;
+  };
 }
 
 interface StrategiesHelperProps {
@@ -70,13 +78,13 @@ const buildStrategiesHelper = async ({
     const quote =
       getTokenById(s.quoteToken) || (await _getTknData(s.quoteToken));
 
-    const sellLow = new BigNumber(s.sellPriceLow);
-    const sellHigh = new BigNumber(s.sellPriceHigh);
-    const sellBudget = new BigNumber(s.sellBudget);
+    const sellLow = new SafeDecimal(s.sellPriceLow);
+    const sellHigh = new SafeDecimal(s.sellPriceHigh);
+    const sellBudget = new SafeDecimal(s.sellBudget);
 
-    const buyLow = new BigNumber(s.buyPriceLow);
-    const buyHight = new BigNumber(s.buyPriceHigh);
-    const buyBudget = new BigNumber(s.buyBudget);
+    const buyLow = new SafeDecimal(s.buyPriceLow);
+    const buyHight = new SafeDecimal(s.buyPriceHigh);
+    const buyBudget = new SafeDecimal(s.buyBudget);
 
     const offCurve =
       sellLow.isZero() &&
@@ -115,7 +123,7 @@ const buildStrategiesHelper = async ({
       marginalRate: s.sellPriceMarginal,
     };
 
-    const roi = new BigNumber(roiData.find((r) => r.id === s.id)?.ROI || 0);
+    const roi = new SafeDecimal(roiData.find((r) => r.id === s.id)?.ROI || 0);
 
     const strategy: Strategy = {
       id: s.id,
@@ -178,6 +186,33 @@ export const useGetUserStrategies = ({ user }: Props) => {
   );
 };
 
+export const useGetStrategy = (id: string) => {
+  const { isInitialized } = useCarbonInit();
+  const { tokens, getTokenById, importToken } = useTokens();
+  const { Token } = useContract();
+  const roiQuery = useGetRoi();
+
+  return useQuery<Strategy>(
+    QueryKey.strategy(id),
+    async () => {
+      const strategy = await carbonSDK.getStrategy(id);
+      const strategies = await buildStrategiesHelper({
+        strategies: [strategy],
+        getTokenById,
+        importToken,
+        Token,
+        roiData: roiQuery.data || [],
+      });
+      return strategies[0];
+    },
+    {
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      staleTime: ONE_DAY_IN_MS,
+      retry: false,
+    }
+  );
+};
+
 interface PropsPair {
   token0?: string;
   token1?: string;
@@ -216,6 +251,7 @@ interface CreateStrategyOrder {
   min: string;
   max: string;
   price: string;
+  marginalPrice: string;
 }
 
 type TokenAddressDecimals = Pick<Token, 'address' | 'decimals'>;
@@ -250,9 +286,11 @@ export const useCreateStrategyQuery = () => {
 
       const order0Low = noPrice0 ? order0.min : order0.price;
       const order0Max = noPrice0 ? order0.max : order0.price;
+      const order0MarginalPrice = order0.marginalPrice || order0Max;
 
       const order1Low = noPrice1 ? order1.min : order1.price;
       const order1Max = noPrice1 ? order1.max : order1.price;
+      const order1MarginalPrice = order1.marginalPrice || order1Low;
 
       const order0Budget = Number(order0.budget) === 0 ? '0' : order0.budget;
       const order1Budget = Number(order1.budget) === 0 ? '0' : order1.budget;
@@ -261,9 +299,11 @@ export const useCreateStrategyQuery = () => {
         base.address,
         quote.address,
         order0Low,
+        order0MarginalPrice,
         order0Max,
         order0Budget,
         order1Low,
+        order1MarginalPrice,
         order1Max,
         order1Budget
       );
@@ -290,8 +330,8 @@ export const useUpdateStrategyQuery = () => {
         {
           ...fieldsToUpdate,
         },
-        buyMarginalPrice ? buyMarginalPrice : MarginalPriceOptions.reset,
-        sellMarginalPrice ? sellMarginalPrice : MarginalPriceOptions.reset
+        buyMarginalPrice,
+        sellMarginalPrice
       );
 
       return signer!.sendTransaction(unsignedTx);
