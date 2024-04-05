@@ -6,6 +6,7 @@ import {
 } from 'components/strategies/StrategyPageTabs';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
+import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { StrategyFilterSort } from 'components/strategies/overview/StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
 
@@ -19,10 +20,9 @@ export const ExplorerTabs = () => {
 
   const match = useMatchRoute();
 
-  const showFilter = !!match({
-    to: '/explore/$type/$slug',
+  const isActivity = !!match({
+    to: '/explore/$type/$slug/activity',
     params: { type, slug },
-    fuzzy: true,
   });
 
   const tabs: StrategyTab[] = [
@@ -39,12 +39,18 @@ export const ExplorerTabs = () => {
       params: { type, slug },
       icon: <IconPieChart className="h-18 w-18" />,
     },
+    {
+      label: 'Activity',
+      href: '/explore/$type/$slug/activity',
+      params: { type, slug },
+      icon: <IconActivity className="h-18 w-18" />,
+    },
   ];
 
   return (
     <div className="flex items-center justify-between gap-16">
       <StrategyPageTabs currentPathname={pathname} tabs={tabs} />
-      {showFilter && <StrategyFilterSort />}
+      {!isActivity && <StrategyFilterSort />}
     </div>
   );
 };

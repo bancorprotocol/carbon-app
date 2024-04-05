@@ -30,7 +30,7 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onClick0()}
         className={
-          'bg-body -mr-13 flex w-[140px] flex-grow items-center rounded-12 py-10 px-18'
+          '-mr-13 flex w-[140px] flex-grow items-center rounded-12 bg-black py-10 px-18'
         }
       >
         <LogoImager alt={''} src={imgUrl0} className={'mr-8 h-30 w-30'} />
@@ -43,7 +43,7 @@ export const SelectTokens: FC<Props> = ({
         onClick={() => onMiddleClick?.()}
         disabled={middleDisabled}
         className={
-          'bg-secondary z-20 flex h-30 w-30 flex-grow-0 items-center justify-center rounded-full disabled:cursor-not-allowed'
+          'z-20 flex h-30 w-30 flex-grow-0 items-center justify-center rounded-full bg-background-900 disabled:cursor-not-allowed'
         }
       >
         <IconArrow className={`${middleDisabled && 'opacity-25'}`} />
@@ -51,7 +51,7 @@ export const SelectTokens: FC<Props> = ({
       <button
         onClick={() => onClick1()}
         className={
-          'bg-body -ml-13 flex w-[140px] flex-grow items-center rounded-12 py-10 px-18'
+          '-ml-13 flex w-[140px] flex-grow items-center rounded-12 bg-black py-10 px-18'
         }
       >
         <LogoImager

@@ -13,12 +13,12 @@ export const switchStyles = cva<SwitchVariants>(
     variants: {
       variant: {
         black: ['bg-black'],
-        secondary: ['bg-silver'],
+        secondary: ['bg-background-900'],
         white: ['bg-white/90'],
-        success: ['bg-green'],
-        'success-light': ['bg-green/20'],
-        error: ['bg-red'],
-        'error-light': ['bg-red/25'],
+        success: ['bg-primary'],
+        buy: ['bg-buy'],
+        sell: ['bg-sell'],
+        error: ['bg-error'],
       },
       size: {
         sm: ['h-16 w-[32px] p-3'],

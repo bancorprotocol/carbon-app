@@ -27,6 +27,8 @@ interface EnableProps {
   order0: OrderCreate;
   order1: OrderCreate;
   spread: number;
+  setMin: (value: string) => void;
+  setMax: (value: string) => void;
   disabled?: false;
 }
 
@@ -481,8 +483,8 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
       setDragging('');
       const newMin = getDraggedMin();
       const newMax = getDraggedMax();
-      if (newMin) order0.setMin(newMin);
-      if (newMax) order1.setMax(newMax);
+      if (newMin) (props as EnableProps).setMin(newMin);
+      if (newMax) (props as EnableProps).setMax(newMax);
       translateHandler('buy', 0);
       translateHandler('sell', 0);
       initialPosition = 0;
@@ -557,36 +559,36 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             patternUnits="userSpaceOnUse"
           />
           <pattern href="#base-pattern" id="buy-pattern">
-            <use href="#carbonLogo" x="0" y={4 * ratio} fill="#00B578" />
+            <use href="#carbonLogo" x="0" y={4 * ratio} fill="var(--buy)" />
             <use
               href="#carbonLogo"
               x={8 * ratio}
               y={16 * ratio}
-              fill="#00B578"
+              fill="var(--buy)"
             />
             <rect
               x="0"
               y="0"
               width={15 * ratio}
               height={25 * ratio}
-              fill="#00B578"
+              fill="var(--buy)"
               fillOpacity="0.05"
             />
           </pattern>
           <pattern href="#base-pattern" id="sell-pattern">
-            <use href="#carbonLogo" x="0" y={4 * ratio} fill="#D86371" />
+            <use href="#carbonLogo" x="0" y={4 * ratio} fill="var(--sell)" />
             <use
               href="#carbonLogo"
               x={8 * ratio}
               y={16 * ratio}
-              fill="#D86371"
+              fill="var(--sell)"
             />
             <rect
               x="0"
               y="0"
               width={15 * ratio}
               height={25 * ratio}
-              fill="#D86371"
+              fill="var(--sell)"
               fillOpacity="0.05"
             />
           </pattern>
@@ -598,7 +600,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             <polygon
               id="buy-polygon"
               points={buyPoints}
-              fill="#00B578"
+              fill="var(--buy)"
               fillOpacity="0.35"
             />
             <polygon
@@ -612,7 +614,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x2={buyMax}
               y1={bottom}
               y2={middle}
-              stroke="#00B578"
+              stroke="var(--buy)"
               strokeWidth={2 * ratio}
             />
           </g>
@@ -625,13 +627,13 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x2={sellMin}
               y1={middle}
               y2={top}
-              stroke="#D86371"
+              stroke="var(--sell)"
               strokeWidth={2 * ratio}
             />
             <polygon
               id="sell-polygon"
               points={sellPoints}
-              fill="#D86371"
+              fill="var(--sell)"
               fillOpacity="0.35"
             />
             <polygon
@@ -714,7 +716,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 y={top - 1 * ratio}
                 width={12 * ratio}
                 height={24 * ratio}
-                fill="#00B578"
+                fill="var(--buy)"
                 rx={4 * ratio}
               />
             )}
@@ -741,7 +743,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x2={min}
               y1={bottom}
               y2={top}
-              stroke="#00B578"
+              stroke="var(--buy)"
               strokeWidth={2 * ratio}
             />
           </g>
@@ -774,7 +776,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
                 y={top - 1 * ratio}
                 width={12 * ratio}
                 height={24 * ratio}
-                fill="#D86371"
+                fill="var(--sell)"
                 rx={4 * ratio}
               />
             )}
@@ -801,7 +803,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               x2={max}
               y1={bottom}
               y2={top}
-              stroke="#D86371"
+              stroke="var(--sell)"
               strokeWidth={2 * ratio}
             />
           </g>

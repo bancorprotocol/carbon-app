@@ -40,8 +40,9 @@ export const SimulatorPage = () => {
   const noBudgetText =
     !isError && noBudget && 'Please add Sell and/or Buy budgets';
   const loadingText = isLoading && 'Loading price history...';
+  const priceError = state.buy.priceError || state.sell.priceError;
 
-  const btnDisabled = isLoading || isError || noBudget;
+  const btnDisabled = isLoading || isError || noBudget || !!priceError;
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
@@ -73,7 +74,11 @@ export const SimulatorPage = () => {
       <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
 
       <div className="flex gap-20 px-20">
-        <form onSubmit={submit} className="flex w-[440px] flex-col gap-20">
+        <form
+          onSubmit={submit}
+          className="flex w-[440px] flex-col gap-20"
+          data-testid="create-simulation-form"
+        >
           <SimInputTokenSelection
             base={state.baseToken}
             quote={state.quoteToken}

@@ -32,7 +32,7 @@ export const EditStrategyHeader = ({
     >
       <button
         onClick={() => history.back()}
-        className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
+        className="grid h-40 w-40 place-items-center rounded-full bg-background-800"
       >
         <ForwardArrow className="h-18 w-18 rotate-180" />
       </button>
@@ -45,7 +45,7 @@ export const EditStrategyHeader = ({
             carbonEvents.strategy.strategyChartOpen(undefined);
             setShowGraph(true);
           }}
-          className="grid h-40 w-40 place-items-center rounded-full bg-emphasis"
+          className="grid h-40 w-40 place-items-center rounded-full bg-background-800"
         >
           <IconCandles className="h-18 w-18" />
         </button>

@@ -5,6 +5,7 @@ export interface AppConfig {
   walletConnectProjectId: string;
   sentryDNS?: string;
   rpcUrl: string;
+  blockExplorer: string;
   addresses: {
     tokens: {
       ETH: string;

@@ -19,13 +19,13 @@ export const ExplorerSearchDropdownButton = forwardRef<
     >
       {type === 'wallet' && (
         <>
-          <IconWallet className="h-18 w-18 text-green" />
+          <IconWallet className="h-18 w-18 text-primary" />
           <span className="hidden md:inline">Wallet</span>
         </>
       )}
       {type === 'token-pair' && (
         <>
-          <IconTokenPair className="h-18 w-18 text-green" />
+          <IconTokenPair className="h-18 w-18 text-primary" />
           <span className="hidden md:inline">Token Pair</span>
         </>
       )}

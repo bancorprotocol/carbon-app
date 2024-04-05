@@ -9,6 +9,8 @@ import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { useMarketIndication } from '../marketPriceIndication';
+import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -27,6 +29,13 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     ? tokenQuoteBalanceQuery
     : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
+
+  const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
+    base,
+    quote,
+    order,
+    buy,
+  });
 
   const calculatedWalletBalance = new SafeDecimal(
     tokenBalanceQuery.data || 0
@@ -48,10 +57,10 @@ export const EditStrategyBudgetBuySellBlock: FC<{
   return (
     <section
       aria-labelledby={titleId}
-      className={`bg-secondary flex flex-col gap-20 rounded-6 border-l-2 p-20 text-left ${
+      className={`flex flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-left ${
         buy
-          ? 'border-green/50 focus-within:border-green'
-          : 'border-red/50 focus-within:border-red'
+          ? 'border-buy/50 focus-within:border-buy'
+          : 'border-sell/50 focus-within:border-sell'
       }`}
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
@@ -85,12 +94,15 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         withoutWallet={type === 'withdraw'}
         data-testid="input-budget"
       />
+      {isOrderAboveOrBelowMarketPrice && (
+        <OutsideMarketPriceWarning base={base} buy={!!buy} />
+      )}
       {insufficientBalance && (
         <output
           htmlFor={inputId}
           role="alert"
           aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-red"
+          className="flex items-center gap-10 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
           <span className="flex-1">Insufficient balance</span>

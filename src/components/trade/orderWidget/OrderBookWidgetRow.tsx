@@ -24,7 +24,7 @@ export const OrderBookWidgetRow: FC<Props> = ({
   return (
     <>
       <div
-        className={`${buy ? 'text-green' : 'text-red'} overflow-x-hidden py-4`}
+        className={`${buy ? 'text-buy' : 'text-sell'} overflow-x-hidden py-4`}
       >
         <Tooltip
           element={`${prettifyNumber(rate, quoteOptions)} ${quote.symbol}`}

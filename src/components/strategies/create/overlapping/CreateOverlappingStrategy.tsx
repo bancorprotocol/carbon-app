@@ -39,8 +39,8 @@ export interface OverlappingStrategyProps {
 const getInitialPrices = (marketPrice: string | number) => {
   const currentPrice = new SafeDecimal(marketPrice);
   return {
-    min: currentPrice.times(0.999).toString(),
-    max: currentPrice.times(1.001).toString(),
+    min: currentPrice.times(0.99).toString(),
+    max: currentPrice.times(1.01).toString(),
   };
 };
 
@@ -110,9 +110,12 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
   };
 
-  const setOverlappingParams = () => {
-    const min = order0.min;
-    const max = order1.max;
+  const setOverlappingParams = (min: string, max: string) => {
+    // Set min & max.
+    order0.setMin(min);
+    order1.setMax(max);
+
+    // If invalid range, wait for timeout to reset range
     if (!isValidRange(min, max) || !isValidSpread(spread)) return;
     const prices = calculateOverlappingPrices(
       min,
@@ -122,8 +125,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     );
 
     // Set prices
-    order0.setMin(min);
-    order1.setMax(max);
     order0.setMax(prices.buyPriceHigh);
     order0.setMarginalPrice(prices.buyPriceMarginal);
     order1.setMin(prices.sellPriceLow);
@@ -144,16 +145,25 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     }
   };
 
+  const setMin = (min: string) => {
+    if (!order1.max) return order0.setMin(min);
+    setOverlappingParams(min, order1.max);
+  };
+
+  const setMax = (max: string) => {
+    if (!order0.min) return order1.setMax(max);
+    setOverlappingParams(order0.min, max);
+  };
+
   // Update on buyMin changes
   useEffect(() => {
     if (!order0.min) return;
-    setOverlappingParams();
 
     // automatically update max if min > max
     const timeout = setTimeout(async () => {
       const minSellMax = getMinSellMax(Number(order0.min), spread);
       if (Number(order1.max) < minSellMax) {
-        order1.setMax(minSellMax.toString());
+        setMax(minSellMax.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -163,13 +173,12 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   // Update on sellMax changes
   useEffect(() => {
     if (!order1.max) return;
-    setOverlappingParams();
 
     // automatically update min if min > max
     const timeout = setTimeout(async () => {
       const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
       if (Number(order0.min) > maxBuyMin) {
-        order0.setMin(maxBuyMin.toString());
+        setMin(maxBuyMin.toString());
       }
     }, 1000);
     return () => clearTimeout(timeout);
@@ -183,21 +192,20 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       requestAnimationFrame(() => {
         if (order0.min || order1.max) return;
         const { min, max } = getInitialPrices(marketPrice);
-        order0.setMin(min);
-        order1.setMax(max);
+        setOverlappingParams(min, max);
       });
     } else {
-      setOverlappingParams();
+      setOverlappingParams(order0.min, order1.max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
 
   return (
     <>
-      <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-silver p-20">
+      <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-background-900 p-20">
         <h4 className="flex items-center gap-8 text-14 font-weight-500">
           Discover Overlapping Strategies
-          <span className="rounded-8 bg-darkGreen px-8 py-4 text-10 text-green">
+          <span className="rounded-8 bg-primary-dark px-8 py-4 text-10 text-primary">
             NEW
           </span>
         </h4>
@@ -207,14 +215,14 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         <a
           href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy"
           target="_blank"
-          className="row-span-2 flex items-center gap-4 self-center justify-self-end text-12 font-weight-500 text-green"
+          className="row-span-2 flex items-center gap-4 self-center justify-self-end text-12 font-weight-500 text-primary"
           rel="noreferrer"
         >
           Learn More
           <IconLink className="h-12 w-12" />
         </a>
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8">
           <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
           <Tooltip
@@ -228,9 +236,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           order1={order1}
           marketPrice={marketPrice}
           marketPricePercentage={marketPricePercentage}
+          setMin={setMin}
+          setMax={setMax}
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             1
@@ -253,10 +263,12 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             order0={order0}
             order1={order1}
             marketPricePercentage={marketPricePercentage}
+            setMin={setMin}
+            setMax={setMax}
           />
         )}
       </article>
-      <article className="flex flex-col gap-10 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-10 rounded-10 bg-background-900 p-20">
         <header className="mb-10 flex items-center gap-8 ">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
@@ -276,7 +288,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           setSpread={setSpread}
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-silver p-20">
+      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8 ">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             3

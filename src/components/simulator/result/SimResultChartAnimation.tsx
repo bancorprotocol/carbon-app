@@ -53,7 +53,8 @@ export const SimResultChartAnimation = ({
     <>
       <D3ChartWrapper
         settings={chartSettings}
-        className="min-h-[350px] w-full border-t border-emphasis"
+        className="min-h-[350px] w-full border-t border-background-800"
+        data-testid="chart-animation-price"
       >
         {(dms) => (
           <D3ChartSimulatorPrice data={data} bounds={bounds!} dms={dms} />
@@ -63,14 +64,16 @@ export const SimResultChartAnimation = ({
       <div className={`grid ${gridCols} min-h-[250px] items-stretch`}>
         <D3ChartWrapper
           settings={chartPerformanceSettings}
-          className="w-full border-t border-r border-emphasis"
+          className="w-full border-t border-r border-background-800"
+          data-testid="chart-animation-performance"
         >
           {(dms) => <D3ChartSimulatorPerformance data={data} dms={dms} />}
         </D3ChartWrapper>
 
         <D3ChartWrapper
           settings={chartSettingsBalance}
-          className="w-full border-t border-emphasis"
+          className="w-full border-t border-background-800"
+          data-testid="chart-animation-balance"
         >
           {(dms) => (
             <D3ChartSimulatorBalance

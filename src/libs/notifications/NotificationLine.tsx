@@ -20,14 +20,14 @@ const StatusIcon = (status: NotificationStatus) => {
       );
     case 'success':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-green/10">
-          <IconCheck className="w-11 text-green" />
+        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-primary/10">
+          <IconCheck className="w-11 text-primary" />
         </div>
       );
     case 'failed':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-red/10">
-          <IconTimes className="w-11 text-red" />
+        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-error/10">
+          <IconTimes className="w-11 text-error" />
         </div>
       );
   }
@@ -83,7 +83,7 @@ export const NotificationLine: FC<{
         <h3 id={titleId} data-testid="notif-title">
           {getTitleByStatus(notification)}
         </h3>
-        <div className="text-14 text-charcoal/80 dark:text-white/80">
+        <div className="text-14 text-white/80">
           <p data-testid="notif-description">
             {getDescriptionByStatus(notification)}
           </p>
