@@ -1,7 +1,7 @@
 import { Row } from '@tanstack/react-table';
 import { PortfolioAllTokensPieChartCenter } from 'components/strategies/portfolio/allTokens/PortfolioAllTokensPieChartCenter';
 import { Strategy } from 'libs/queries';
-import { GetPortfolioTokenHref } from 'pages/strategies/portfolio';
+import { GetPortfolioTokenHref } from 'components/strategies/portfolio/types';
 import { memo } from 'react';
 import { PortfolioAllTokensDesktop } from './PortfolioAllTokensDesktop';
 import { PortfolioAllTokensMobile } from './PortfolioAllTokensMobile';

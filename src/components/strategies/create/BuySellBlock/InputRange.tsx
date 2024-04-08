@@ -8,6 +8,7 @@ import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 type InputRangeProps = {
   min: string;
@@ -44,6 +45,7 @@ export const InputRange: FC<InputRangeProps> = ({
   ignoreMarketPriceWarning,
   isOrdersReversed,
 }) => {
+  const marketPrice = useMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMinMax = 'Maximum price must be higher than the minimum price';
@@ -100,16 +102,25 @@ export const InputRange: FC<InputRangeProps> = ({
           `}
           onClick={() => document.getElementById(inputMinId)?.focus()}
         >
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
-              base.symbol
-            } at.`}
-          >
-            <label htmlFor={inputMinId} className="mb-5 text-12 text-white/60">
-              {minLabel}
-            </label>
-          </Tooltip>
+          <header className="mb-5 flex justify-between text-12 text-white/60">
+            <Tooltip
+              sendEventOnMount={{ buy }}
+              element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
+                base.symbol
+              } at.`}
+            >
+              <label htmlFor={inputMinId}>{minLabel}</label>
+            </Tooltip>
+            {marketPrice !== 0 && (
+              <button
+                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                type="button"
+                onClick={() => setMin(formatNumber(marketPrice.toString()))}
+              >
+                Use Market
+              </button>
+            )}
+          </header>
           <input
             id={inputMinId}
             type="text"
@@ -149,16 +160,25 @@ export const InputRange: FC<InputRangeProps> = ({
           `}
           onClick={() => document.getElementById(inputMaxId)?.focus()}
         >
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={`The highest price to ${buy ? 'buy' : 'sell'} ${
-              base.symbol
-            } at.`}
-          >
-            <label htmlFor={inputMaxId} className="mb-5 text-12 text-white/60">
-              {maxLabel}
-            </label>
-          </Tooltip>
+          <header className="mb-5 flex justify-between text-12 text-white/60">
+            <Tooltip
+              sendEventOnMount={{ buy }}
+              element={`The highest price to ${buy ? 'buy' : 'sell'} ${
+                base.symbol
+              } at.`}
+            >
+              <label htmlFor={inputMaxId}>{maxLabel}</label>
+            </Tooltip>
+            {marketPrice !== 0 && (
+              <button
+                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                type="button"
+                onClick={() => setMax(formatNumber(marketPrice.toString()))}
+              >
+                Use Market
+              </button>
+            )}
+          </header>
           <input
             id={inputMaxId}
             type="text"
