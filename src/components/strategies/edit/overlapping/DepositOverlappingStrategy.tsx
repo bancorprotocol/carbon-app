@@ -167,32 +167,32 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           />
         </header>
         <BudgetInput
+          mode="deposit"
           token={quote}
-          query={tokenQuoteBalanceQuery}
-          order={order0}
+          max={tokenQuoteBalanceQuery.data ?? '0'}
+          value={order0.min}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
-        >
-          <DepositAllocatedBudget
-            token={quote}
-            currentBudget={strategy.order0.balance}
-            buy
-          />
-          <MarketWarning {...marketWarningProps} />
-        </BudgetInput>
+        />
+        <DepositAllocatedBudget
+          token={quote}
+          currentBudget={strategy.order0.balance}
+          buy
+        />
+        <MarketWarning {...marketWarningProps} />
         <BudgetInput
+          mode="deposit"
           token={base}
-          query={tokenBaseBalanceQuery}
-          order={order1}
+          max={tokenBaseBalanceQuery.data ?? '0'}
+          value={order1.max}
           onChange={onSellBudgetChange}
           disabled={belowMarket || order1.max === '0'}
-        >
-          <DepositAllocatedBudget
-            token={base}
-            currentBudget={strategy.order1.balance}
-          />
-          <MarketWarning {...marketWarningProps} />
-        </BudgetInput>
+        />
+        <DepositAllocatedBudget
+          token={base}
+          currentBudget={strategy.order1.balance}
+        />
+        <MarketWarning {...marketWarningProps} />
         {budgetTooSmall && (
           <OverlappingSmallBudget
             base={base}

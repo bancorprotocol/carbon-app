@@ -159,40 +159,40 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
       </header>
       <BudgetInput
+        mode="deposit"
         id={buyBudgetId}
         token={quote}
-        query={tokenQuoteBalanceQuery}
-        order={order0}
+        max={tokenQuoteBalanceQuery.data ?? '0'}
+        value={order0.min}
         onChange={onBuyBudgetChange}
         disabled={disableBuy}
-      >
-        <WithdrawAllocatedBudget
-          token={quote}
-          order={order0}
-          currentBudget={strategy.order0.balance}
-          setBudget={onBuyBudgetChange}
-          disabled={disableBuy}
-          buy
-        />
-        <BudgetMessage token={quote} change={quoteBalanceChange} />
-      </BudgetInput>
+      />
+      <WithdrawAllocatedBudget
+        token={quote}
+        order={order0}
+        currentBudget={strategy.order0.balance}
+        setBudget={onBuyBudgetChange}
+        disabled={disableBuy}
+        buy
+      />
+      <BudgetMessage token={quote} change={quoteBalanceChange} />
       <BudgetInput
+        mode="deposit"
         id={sellBudgetId}
         token={base}
-        query={tokenBaseBalanceQuery}
-        order={order1}
+        max={tokenBaseBalanceQuery.data ?? '0'}
+        value={order1.max}
         onChange={onSellBudgetChange}
         disabled={disableSell}
-      >
-        <WithdrawAllocatedBudget
-          token={base}
-          order={order1}
-          currentBudget={strategy.order1.balance}
-          disabled={disableSell}
-          setBudget={onSellBudgetChange}
-        />
-        <BudgetMessage token={base} change={baseBalanceChange} />
-      </BudgetInput>
+      />
+      <WithdrawAllocatedBudget
+        token={base}
+        order={order1}
+        currentBudget={strategy.order1.balance}
+        disabled={disableSell}
+        setBudget={onSellBudgetChange}
+      />
+      <BudgetMessage token={base} change={baseBalanceChange} />
       {maxBelowMarket && <Explanation base={base} />}
       {!minAboveMarket && !maxBelowMarket && (
         <p className="text-12 text-white/60">

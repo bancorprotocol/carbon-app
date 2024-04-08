@@ -170,38 +170,36 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           />
         </header>
         <BudgetInput
+          mode="withdraw"
           id={buyBudgetId}
           token={quote}
-          query={tokenQuoteBalanceQuery}
-          order={order0}
+          max={tokenQuoteBalanceQuery.data ?? '0'}
+          value={order0.min}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
-          withoutWallet
-        >
-          <WithdrawAllocatedBudget
-            token={quote}
-            order={order0}
-            currentBudget={strategy.order0.balance}
-            setBudget={onBuyBudgetChange}
-            buy
-          />
-        </BudgetInput>
+        />
+        <WithdrawAllocatedBudget
+          token={quote}
+          order={order0}
+          currentBudget={strategy.order0.balance}
+          setBudget={onBuyBudgetChange}
+          buy
+        />
         <BudgetInput
+          mode="withdraw"
           id={sellBudgetId}
           token={base}
-          query={tokenBaseBalanceQuery}
-          order={order1}
+          max={tokenBaseBalanceQuery.data ?? '0'}
+          value={order1.max}
           onChange={onSellBudgetChange}
           disabled={belowMarket || order1.max === '0'}
-          withoutWallet
-        >
-          <WithdrawAllocatedBudget
-            token={base}
-            order={order1}
-            currentBudget={strategy.order1.balance}
-            setBudget={onSellBudgetChange}
-          />
-        </BudgetInput>
+        />
+        <WithdrawAllocatedBudget
+          token={base}
+          order={order1}
+          currentBudget={strategy.order1.balance}
+          setBudget={onSellBudgetChange}
+        />
         {budgetTooSmall && (
           <OverlappingSmallBudget
             base={base}
