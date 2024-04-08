@@ -1,3 +1,4 @@
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FC, ReactNode, useId } from 'react';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -15,16 +16,32 @@ interface Props {
   disabled?: boolean;
   withoutWallet?: boolean;
   'data-testid'?: string;
+  title: string;
+  titleTooltip: string;
 }
 
 export const BudgetInput: FC<Props> = (props) => {
-  const { id, budgetValue, budgetError, token, query, children, onChange } =
-    props;
+  const {
+    id,
+    budgetValue,
+    budgetError,
+    token,
+    query,
+    children,
+    onChange,
+    title,
+    titleTooltip,
+  } = props;
   const inputId = useId();
   const balance = query?.data ?? '0';
 
   return (
     <div className="flex flex-col gap-16">
+      <legend className="flex text-14 font-weight-500">
+        <Tooltip element={titleTooltip}>
+          <span className="text-white/80">{title}</span>
+        </Tooltip>
+      </legend>
       <TokenInputField
         id={id ?? inputId}
         className="rounded-16 bg-black p-16"
