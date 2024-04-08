@@ -1,36 +1,18 @@
 import { FC, useId } from 'react';
-import { useNotifications } from 'hooks/useNotifications';
 import { NotificationActivity } from 'libs/notifications/types';
 import { activityActionName, activityDescription } from './utils';
 import { ActivityIcon, ActivityId } from './ActivityTable';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { useInterval } from 'hooks/useInterval';
-import { FOUR_SECONDS_IN_MS } from 'utils/time';
 import { Link } from '@tanstack/react-router';
 
 interface Props {
   notification: NotificationActivity;
-  isAlert?: boolean;
+  close: () => void;
 }
 
-export const ActivityNotification: FC<Props> = ({ notification, isAlert }) => {
+export const ActivityNotification: FC<Props> = ({ notification, close }) => {
   const titleId = useId();
   const { activity } = notification;
-  const { dismissAlert, removeNotification } = useNotifications();
-
-  const handleCloseClick = () => {
-    if (isAlert) {
-      dismissAlert(notification.id);
-    } else {
-      removeNotification(notification.id);
-    }
-  };
-
-  useInterval(
-    () => dismissAlert(notification.id),
-    isAlert ? FOUR_SECONDS_IN_MS : null,
-    false
-  );
 
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
@@ -39,7 +21,7 @@ export const ActivityNotification: FC<Props> = ({ notification, isAlert }) => {
         to="/strategy/$id"
         params={{ id: activity.strategy.id }}
         className="flex flex-1 gap-8 overflow-hidden"
-        onClick={handleCloseClick}
+        onClick={close}
       >
         <ActivityIcon activity={activity} size={32} />
         <div className="flex-1 overflow-hidden">
@@ -56,8 +38,9 @@ export const ActivityNotification: FC<Props> = ({ notification, isAlert }) => {
       </Link>
       <button
         className="self-start text-12 font-weight-500"
-        onClick={handleCloseClick}
+        onClick={close}
         data-testid="notif-close"
+        aria-label="Remove notification"
       >
         <IconClose className="h-14 w-14 text-white/80" />
       </button>

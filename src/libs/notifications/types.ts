@@ -26,6 +26,7 @@ export interface NotificationTx extends BaseNotification {
 export interface NotificationActivity extends BaseNotification {
   type: 'activity';
   activity: Activity;
+  status: undefined; // Needed for type checking in NotificationLine
 }
 
 export type Notification = NotificationTx | NotificationActivity;

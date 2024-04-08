@@ -3,12 +3,10 @@ import { NotificationStatus, NotificationTx } from 'libs/notifications/types';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { ReactComponent as IconTimes } from 'assets/icons/times.svg';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
+import { ReactComponent as IconClose } from 'assets/icons/X.svg';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { unix } from 'libs/dayjs';
-import { useNotifications } from 'hooks/useNotifications';
-import { useInterval } from 'hooks/useInterval';
 import { NewTabLink } from 'libs/routing';
-import { FOUR_SECONDS_IN_MS } from 'utils/time';
 
 const StatusIcon = (status: NotificationStatus) => {
   switch (status) {
@@ -57,60 +55,44 @@ const getDescriptionByStatus = (n: NotificationTx) => {
 
 interface Props {
   notification: NotificationTx;
-  isAlert?: boolean;
+  close: () => void;
 }
 
-export const TxNotification: FC<Props> = ({ notification, isAlert }) => {
+export const TxNotification: FC<Props> = ({ notification, close }) => {
   const titleId = useId();
-  const { removeNotification, dismissAlert } = useNotifications();
-
-  const handleCloseClick = () => {
-    if (isAlert) {
-      dismissAlert(notification.id);
-    } else {
-      removeNotification(notification.id);
-    }
-  };
-
-  useInterval(
-    () => dismissAlert(notification.id),
-    isAlert && notification.status !== 'pending' ? FOUR_SECONDS_IN_MS : null,
-    false
-  );
 
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
       <div className="self-center">{StatusIcon(notification.status)}</div>
-      <div className="w-full">
-        <h3 id={titleId} data-testid="notif-title">
+      <div className="w-full text-14 text-white/80">
+        <h3 id={titleId} className="text-white" data-testid="notif-title">
           {getTitleByStatus(notification)}
         </h3>
-        <div className="text-14 text-white/80">
-          <p data-testid="notif-description">
-            {getDescriptionByStatus(notification)}
-          </p>
-          {notification.txHash && (
-            <NewTabLink
-              to={getExplorerLink('tx', notification.txHash)}
-              className={'mt-10 flex items-center font-weight-500'}
-            >
-              View on Etherscan <IconLink className="ml-6 w-14" />
-            </NewTabLink>
-          )}
-        </div>
+        <p data-testid="notif-description">
+          {getDescriptionByStatus(notification)}
+        </p>
+        {notification.txHash && (
+          <NewTabLink
+            to={getExplorerLink('tx', notification.txHash)}
+            className="mt-10 flex items-center font-weight-500"
+          >
+            View on Etherscan <IconLink className="ml-6 w-14" />
+          </NewTabLink>
+        )}
       </div>
 
-      <div className={'flex flex-col items-end justify-between'}>
+      <div className="flex flex-col items-end justify-between">
+        <button
+          className="text-12 font-weight-500"
+          onClick={close}
+          data-testid="notif-close"
+          aria-label="Remove notification"
+        >
+          <IconClose className="h-14 w-14 text-white/80" />
+        </button>
         <div className="text-secondary whitespace-nowrap text-12 font-weight-500">
           {unix(notification.timestamp).fromNow(true)}
         </div>
-        <button
-          className="text-12 font-weight-500"
-          onClick={handleCloseClick}
-          data-testid="notif-close"
-        >
-          {isAlert ? 'Close' : 'Clear'}
-        </button>
       </div>
     </article>
   );

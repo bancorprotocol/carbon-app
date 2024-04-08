@@ -9,6 +9,7 @@ import {
 } from 'libs/queries/extApi/activity';
 import { Token } from 'libs/tokens';
 import { carbonApi } from 'utils/carbonApi';
+import { THIRTY_SEC_IN_MS } from 'utils/time';
 
 const toActivities = (
   data: ServerActivity[],
@@ -58,7 +59,7 @@ export const useActivityQuery = (params: QueryActivityParams = {}) => {
     },
     {
       enabled: !isLoading && validParams,
-      refetchInterval: 30 * 1000,
+      refetchInterval: THIRTY_SEC_IN_MS,
     }
   );
 };
