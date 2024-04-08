@@ -22,9 +22,11 @@ export const NotificationLine: FC<NotificationLineProps> = (props) => {
     }
   };
 
+  const status = 'status' in notification ? notification.status : null;
+
   useInterval(
     () => dismissAlert(notification.id),
-    isAlert && notification?.status !== 'pending' ? FOUR_SECONDS_IN_MS : null,
+    isAlert && status !== 'pending' ? FOUR_SECONDS_IN_MS : null,
     false
   );
 
