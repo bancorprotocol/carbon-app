@@ -1,159 +1,59 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { TokenLogo } from 'components/common/imager/Imager';
-import { OrderCreate } from '../create/useOrder';
-import {
-  OverlappingBudgetDescription,
-  OverlappingBudgetDistribution,
-} from './OverlappingBudgetDistribution';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { useGetTokenBalance } from 'libs/queries';
-import style from './OverlappingBudget.module.css';
 import { cn } from 'utils/helpers';
-import { BudgetInput } from '../common/BudgetInput';
-import {
-  calculateOverlappingBuyBudget,
-  calculateOverlappingSellBudget,
-} from '@bancor/carbon-sdk/strategy-management';
-import { SafeDecimal } from 'libs/safedecimal';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-
-export type BudgetMode = 'deposit' | 'withdraw';
+import { BudgetInput, BudgetMode } from '../common/BudgetInput';
+import style from './OverlappingBudget.module.css';
 
 interface Props {
   base: Token;
   quote: Token;
-  order0: OrderCreate;
-  order1: OrderCreate;
-  marketPrice: number;
-  spread: number;
-  anchoredOrder?: 'buy' | 'sell';
-  setAnchoredOrder: (order: 'buy' | 'sell') => void;
-}
-
-interface GetErrorsParams {
-  base: Token;
-  quote: Token;
-  order0: OrderCreate;
-  order1: OrderCreate;
-  baseBalance: string;
-  quoteBalance: string;
   buyBudget: string;
   sellBudget: string;
-  budgetMode: BudgetMode;
+  budgetValue: string;
+  setBudget: (value: string) => void;
+  anchor?: 'buy' | 'sell';
+  setAnchor: (order: 'buy' | 'sell') => void;
+  mode: BudgetMode;
+  setMode: (mode: BudgetMode) => void;
+  errors: string[];
 }
-
-const getErrors = ({
-  base,
-  quote,
-  order0,
-  order1,
-  baseBalance,
-  quoteBalance,
-  buyBudget,
-  sellBudget,
-  budgetMode,
-}: GetErrorsParams) => {
-  const errors = [];
-  if (budgetMode === 'deposit') {
-    if (new SafeDecimal(buyBudget).gt(new SafeDecimal(quoteBalance))) {
-      errors.push(`Insufficient ${quote.symbol} balance`);
-    }
-    if (new SafeDecimal(sellBudget).gt(new SafeDecimal(baseBalance))) {
-      errors.push(`Insufficient ${base.symbol} balance`);
-    }
-  } else {
-    if (new SafeDecimal(buyBudget).gt(new SafeDecimal(order0.budget))) {
-      errors.push(`Insufficient ${quote.symbol} budget`);
-    }
-    if (new SafeDecimal(sellBudget).gt(new SafeDecimal(order1.budget))) {
-      errors.push(`Insufficient ${base.symbol} budget`);
-    }
-  }
-  return errors;
-};
 
 export const OverlappingBudget: FC<Props> = (props) => {
   const {
     base,
     quote,
-    order0,
-    order1,
-    marketPrice,
-    spread,
-    anchoredOrder,
-    setAnchoredOrder,
+    buyBudget,
+    sellBudget,
+    mode,
+    setMode,
+    anchor,
+    setAnchor,
+    budgetValue,
+    setBudget,
+    errors,
   } = props;
-  // TODO: move this in the parent component
-  const [buyBudget, setBuyBudget] = useState<string>('');
-  const [sellBudget, setSellBudget] = useState<string>('');
-  const [budgetMode, setBudgetMode] = useState<BudgetMode>('deposit');
-  const [buyMode, setBuyMode] = useState<BudgetMode>('deposit');
-  const [sellMode, setSellMode] = useState<BudgetMode>('deposit');
-  const baseBalance = useGetTokenBalance(base);
-  const quoteBalance = useGetTokenBalance(quote);
+  const baseBalance = useGetTokenBalance(base).data ?? '0';
+  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
 
-  const setMode = (mode: 'deposit' | 'withdraw') => {
-    setBuyBudget('');
-    setSellBudget('');
-    setBuyMode(mode);
-    setSellMode(mode);
-    setBudgetMode(mode);
+  const setBudgetMode = (mode: BudgetMode) => {
+    setBudget('');
+    setMode(mode);
   };
 
-  const updateBuyBudget = (newSellBudget: string) => {
-    if (!base || !quote) return;
-    if (!newSellBudget) return setBuyBudget('');
-    const newBuyBudget = calculateOverlappingBuyBudget(
-      base.decimals,
-      quote.decimals,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spread.toString(),
-      newSellBudget
-    );
-    setBuyBudget(newBuyBudget);
-  };
-
-  const updateSellBudget = (newBuyBudget: string) => {
-    if (!base || !quote) return;
-    if (!newBuyBudget) setSellBudget('');
-    const newSellBudget = calculateOverlappingSellBudget(
-      base.decimals,
-      quote.decimals,
-      order0.min,
-      order1.max,
-      marketPrice.toString(),
-      spread.toString(),
-      newBuyBudget
-    );
-    setSellBudget(newSellBudget);
-  };
-
-  const setBudget = (value: string) => {
-    if (anchoredOrder === 'buy') {
-      setBuyBudget(value);
-      updateSellBudget(value);
+  const getMax = () => {
+    if (mode === 'deposit') {
+      return anchor === 'buy' ? quoteBalance : baseBalance;
     } else {
-      setSellBudget(value);
-      updateBuyBudget(value);
+      return anchor === 'buy' ? buyBudget : sellBudget;
     }
   };
 
-  const errors = getErrors({
-    base,
-    quote,
-    order0,
-    order1,
-    baseBalance: baseBalance.data ?? '0',
-    quoteBalance: quoteBalance.data ?? '0',
-    buyBudget,
-    sellBudget,
-    budgetMode,
-  });
+  // TODO: split this into 3 components: anchor / mode / budget
 
   return (
     <>
@@ -171,8 +71,8 @@ export const OverlappingBudget: FC<Props> = (props) => {
             className={cn('absolute opacity-0', style.selectToken)}
             type="radio"
             id="anchor-buy"
-            checked={anchoredOrder === 'buy'}
-            onChange={(e) => e.target.checked && setAnchoredOrder('buy')}
+            checked={anchor === 'buy'}
+            onChange={(e) => e.target.checked && setAnchor('buy')}
           />
           <label
             htmlFor="anchor-buy"
@@ -185,8 +85,8 @@ export const OverlappingBudget: FC<Props> = (props) => {
             className={cn('absolute opacity-0', style.selectToken)}
             type="radio"
             id="anchor-sell"
-            checked={anchoredOrder === 'sell'}
-            onChange={(e) => e.target.checked && setAnchoredOrder('sell')}
+            checked={anchor === 'sell'}
+            onChange={(e) => e.target.checked && setAnchor('sell')}
           />
           <label
             htmlFor="anchor-sell"
@@ -197,7 +97,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
           </label>
         </div>
       </article>
-      {anchoredOrder && (
+      {anchor && (
         <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
           <hgroup>
             <h3 className="text-16 font-weight-500">Edit Budget</h3>
@@ -213,8 +113,8 @@ export const OverlappingBudget: FC<Props> = (props) => {
               className={cn('absolute opacity-0', style.budgetMode)}
               type="radio"
               id="select-deposit"
-              checked={budgetMode === 'deposit'}
-              onChange={(e) => e.target.checked && setMode('deposit')}
+              checked={mode === 'deposit'}
+              onChange={(e) => e.target.checked && setBudgetMode('deposit')}
             />
             <label
               htmlFor="select-deposit"
@@ -227,8 +127,8 @@ export const OverlappingBudget: FC<Props> = (props) => {
               className={cn('absolute opacity-0', style.budgetMode)}
               type="radio"
               id="select-withdraw"
-              checked={budgetMode === 'withdraw'}
-              onChange={(e) => e.target.checked && setMode('withdraw')}
+              checked={mode === 'withdraw'}
+              onChange={(e) => e.target.checked && setBudgetMode('withdraw')}
             />
             <label
               htmlFor="select-withdraw"
@@ -239,52 +139,12 @@ export const OverlappingBudget: FC<Props> = (props) => {
             </label>
           </div>
           <BudgetInput
-            token={anchoredOrder === 'buy' ? quote : base}
-            query={anchoredOrder === 'buy' ? quoteBalance : baseBalance}
-            order={anchoredOrder === 'buy' ? order0 : order1}
-            value={anchoredOrder === 'buy' ? buyBudget : sellBudget}
+            mode={mode}
+            token={anchor === 'buy' ? quote : base}
+            value={budgetValue}
             onChange={setBudget}
-            withoutWallet={budgetMode === 'deposit'}
-          />
-          {!!errors.length &&
-            errors.map((error, index) => (
-              <WarningMessageWithIcon key={index} message={error} isError />
-            ))}
-        </article>
-      )}
-      {anchoredOrder && (
-        <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
-          <hgroup>
-            <h3 className="text-16 font-weight-500">Distribution</h3>
-            <p className="text-14 text-white/80">
-              Following the edits implemented above, these are the changes in
-              budget allocation
-            </p>
-          </hgroup>
-          <OverlappingBudgetDistribution
-            token={quote}
-            initialBudget={order0.budget}
-            deltaBudget={buyBudget}
-            balance={quoteBalance.data ?? '0'}
-            mode={sellMode}
-          />
-          <OverlappingBudgetDescription
-            token={quote}
-            deltaBudget={buyBudget}
-            mode={sellMode}
-          />
-          <OverlappingBudgetDistribution
-            token={base}
-            initialBudget={order1.budget}
-            deltaBudget={sellBudget}
-            balance={baseBalance.data ?? '0'}
-            mode={buyMode}
-            buy
-          />
-          <OverlappingBudgetDescription
-            token={base}
-            deltaBudget={sellBudget}
-            mode={buyMode}
+            max={getMax()}
+            errors={errors}
           />
         </article>
       )}

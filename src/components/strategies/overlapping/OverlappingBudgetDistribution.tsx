@@ -3,7 +3,7 @@ import { FC, useId } from 'react';
 import { cn, tokenAmount } from 'utils/helpers';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
-import { BudgetMode } from './OverlappingBudget';
+import { BudgetMode } from '../common/BudgetInput';
 import styles from './OverlappingBudgetDistribution.module.css';
 
 interface Props {
@@ -11,18 +11,21 @@ interface Props {
   mode: BudgetMode;
   token: Token;
   initialBudget: string;
-  deltaBudget: string;
+  withdraw: string;
+  deposit: string;
   balance: string;
 }
 
 function getBudgetDistribution(
   initial: number,
-  delta: number,
+  withdraw: number,
+  deposit: number,
   balance: number,
   mode: BudgetMode
 ) {
-  const newAllocation = mode === 'deposit' ? initial : initial - delta;
-  const newBalance = mode === 'deposit' ? balance - delta : balance;
+  const delta = mode === 'deposit' ? deposit : withdraw;
+  const newAllocation = mode === 'deposit' ? initial : initial - withdraw;
+  const newBalance = mode === 'deposit' ? balance - deposit : balance;
   const total = initial + balance;
   return {
     allocationPercent: Math.round((Math.max(newAllocation, 0) / total) * 100),
@@ -40,10 +43,11 @@ function getGap(dist: ReturnType<typeof getBudgetDistribution>) {
 export const OverlappingBudgetDistribution: FC<Props> = (props) => {
   const allocatedId = useId();
   const walletId = useId();
-  const { buy, token, initialBudget, deltaBudget, balance, mode } = props;
+  const { buy, token, initialBudget, withdraw, deposit, balance, mode } = props;
   const dist = getBudgetDistribution(
     Number(initialBudget),
-    Number(deltaBudget),
+    Number(withdraw),
+    Number(deposit),
     Number(balance),
     mode
   );
@@ -91,36 +95,39 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
 };
 
 interface DescriptionProps {
-  deltaBudget: string;
-  mode: BudgetMode;
+  withdraw: string;
+  deposit: string;
   token: Token;
 }
 export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
-  const { deltaBudget, mode, token } = props;
-  if (!Number(deltaBudget)) return null;
-  if (mode === 'deposit') {
+  const token = props.token;
+  const withdraw = Number(props.withdraw);
+  const deposit = Number(props.deposit);
+  if (deposit) {
     return (
       <p className="flex items-start gap-8 text-14 text-white/60">
         <span className="rounded-full bg-buy/10 p-4 text-buy">
           <IconDeposit className="h-12 w-12" />
         </span>
         <span>
-          You will <b>deposit {tokenAmount(deltaBudget, token)}</b> from your
-          wallet to the strategy
+          You will <b>deposit {tokenAmount(deposit, token)}</b> from your wallet
+          to the strategy
         </span>
       </p>
     );
-  } else {
+  }
+  if (withdraw) {
     return (
       <p className="flex items-start gap-8 text-14 text-white/60">
         <span className="rounded-full bg-sell/10 p-4 text-sell">
           <IconWithdraw className="h-12 w-12" />
         </span>
         <span>
-          You will <b>withdraw {tokenAmount(deltaBudget, token)}</b> from the
+          You will <b>withdraw {tokenAmount(withdraw, token)}</b> from the
           strategy to your wallet.
         </span>
       </p>
     );
   }
+  return null;
 };
