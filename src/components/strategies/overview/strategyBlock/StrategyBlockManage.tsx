@@ -109,7 +109,6 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         },
       });
     },
-    disabled: !owner.data,
   });
 
   if (isExplorer) {
