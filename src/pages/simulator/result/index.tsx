@@ -12,12 +12,7 @@ export const SimulatorResultPage = () => {
   const simulationType = 'recurring';
 
   const handleAnimationStart = useCallback(() => {
-    if (
-      !isSuccess ||
-      status === 'running' ||
-      status === 'ended' ||
-      status === 'paused'
-    ) {
+    if (!isSuccess || ['running', 'ended', 'paused'].includes(status)) {
       return;
     }
 

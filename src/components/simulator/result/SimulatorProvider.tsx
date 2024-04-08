@@ -154,7 +154,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   };
 
   const onBrush = (frame: number) => {
-    if (actionAfterBrushEnd.current === undefined) {
+    if (!actionAfterBrushEnd.current) {
       if (status.current === 'running') {
         actionAfterBrushEnd.current = 'run';
       } else {
@@ -171,7 +171,7 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   };
 
   const onBrushEnd = () => {
-    if (actionAfterBrushEnd.current === undefined) {
+    if (!actionAfterBrushEnd.current) {
       return;
     }
     if (actionAfterBrushEnd.current === 'run') {
