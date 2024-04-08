@@ -19,7 +19,7 @@ interface Props {
   max?: string;
   placeholder?: string;
   disabled?: boolean;
-  errors?: string[];
+  errors?: string[] | string;
   warnings?: string[];
   'data-testid'?: string;
   onChange: (value: string) => void;
@@ -39,8 +39,8 @@ export const BudgetInput: FC<Props> = (props) => {
     placeholder = 'Enter Amount',
     disabled,
     warnings = [],
-    errors = [],
   } = props;
+
   const { getFiatValue, selectedFiatCurrency: currentCurrency } =
     useFiatCurrency(token);
   const fiatValue = getFiatValue(value ?? '0', true);
@@ -63,7 +63,12 @@ export const BudgetInput: FC<Props> = (props) => {
     }
   };
 
-  const hasErrors = errors.length > 0;
+  const getErrors = () => {
+    if (!props.errors) return [];
+    if (Array.isArray(props.errors)) return props.errors;
+    return [props.errors];
+  };
+  const hasErrors = getErrors().length > 0;
 
   return (
     <div className="flex flex-col gap-16">
@@ -131,7 +136,7 @@ export const BudgetInput: FC<Props> = (props) => {
           )}
         </div>
       </div>
-      {errors.map((error) => (
+      {getErrors().map((error) => (
         <WarningMessageWithIcon htmlFor={inputId} message={error} isError />
       ))}
       {warnings.map((warning) => (

@@ -3,12 +3,10 @@ import { FC, useId } from 'react';
 import { cn, tokenAmount } from 'utils/helpers';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
-import { BudgetMode } from '../common/BudgetInput';
 import styles from './OverlappingBudgetDistribution.module.css';
 
 interface Props {
   buy?: boolean;
-  mode: BudgetMode;
   token: Token;
   initialBudget: string;
   withdraw: string;
@@ -20,14 +18,14 @@ function getBudgetDistribution(
   initial: number,
   withdraw: number,
   deposit: number,
-  balance: number,
-  mode: BudgetMode
+  balance: number
 ) {
-  const delta = mode === 'deposit' ? deposit : withdraw;
-  const newAllocation = mode === 'deposit' ? initial : initial - withdraw;
-  const newBalance = mode === 'deposit' ? balance - deposit : balance;
+  const delta = deposit || withdraw;
+  const newAllocation = initial - withdraw;
+  const newBalance = balance - deposit;
   const total = initial + balance;
   return {
+    mode: deposit ? 'deposit' : 'withdraw',
     allocationPercent: Math.round((Math.max(newAllocation, 0) / total) * 100),
     deltaPercent: Math.round((delta / total) * 100),
     balancePercent: Math.round((Math.max(newBalance, 0) / total) * 100),
@@ -43,13 +41,12 @@ function getGap(dist: ReturnType<typeof getBudgetDistribution>) {
 export const OverlappingBudgetDistribution: FC<Props> = (props) => {
   const allocatedId = useId();
   const walletId = useId();
-  const { buy, token, initialBudget, withdraw, deposit, balance, mode } = props;
+  const { buy, token, initialBudget, withdraw, deposit, balance } = props;
   const dist = getBudgetDistribution(
     Number(initialBudget),
     Number(withdraw),
     Number(deposit),
-    Number(balance),
-    mode
+    Number(balance)
   );
   const color = buy ? 'bg-buy' : 'bg-sell';
   return (
@@ -82,7 +79,7 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
           className={cn(styles.delta, color)}
           style={{
             flexGrow: dist.deltaPercent,
-            opacity: mode === 'deposit' ? 1 : 0.4,
+            opacity: dist.mode === 'deposit' ? 1 : 0.4,
           }}
         ></div>
         <div

@@ -2,8 +2,6 @@ import {
   useRef,
   FC,
   KeyboardEvent,
-  Dispatch,
-  SetStateAction,
   useState,
   FocusEvent,
   ChangeEvent,
@@ -21,7 +19,7 @@ interface Props {
   spread: number;
   order0: OrderCreate;
   order1: OrderCreate;
-  setSpread: Dispatch<SetStateAction<number>>;
+  setSpread: (value: number) => void;
 }
 
 const getWarning = (maxSpread: number) => {
