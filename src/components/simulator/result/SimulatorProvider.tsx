@@ -26,8 +26,11 @@ interface SimulatorProviderCTX extends Partial<SimulatorReturn> {
   state: StrategyInputValues;
   status: SimulationStatus;
   start: () => void;
-  pauseToggle: () => void;
   end: () => void;
+  pause: () => void;
+  unpause: () => void;
+  onBrush: (frame: number) => void;
+  onBrushEnd: () => void;
   animationData: SimulatorData[];
   isLoading: boolean;
   isError: boolean;
@@ -78,9 +81,11 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
   const status = useRef<SimulationStatus>('idle');
   const animationFrame = useRef<number>(0);
   const playbackSpeed = useRef<PlaybackSpeed>('1x');
+  const actionAfterBrushEnd = useRef<'run' | 'pause' | undefined>();
 
   const setPlaybackSpeed = (speed: PlaybackSpeed) => {
     playbackSpeed.current = speed;
+    setAnimationData((prev) => [...prev]);
   };
 
   const handleFPS = () => {
@@ -110,10 +115,9 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
     const startSlice = perFrame * animationFrame.current;
     const endSlice = startSlice + perFrame;
 
-    // setAnimationFrame(animationFrame + 1);
     animationFrame.current = animationFrame.current + 1;
 
-    if (endSlice >= query.data.data.length - 1) {
+    if (endSlice >= query.data.data.length) {
       status.current = 'ended';
       setAnimationData(query.data.data);
       return;
@@ -134,18 +138,47 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
     handleAnimationStep();
   }, [handleAnimationStep]);
 
-  const pauseToggle = () => {
-    if (status.current === 'paused') {
-      status.current = 'running';
-      handleAnimationStep();
-    } else if (status.current === 'running') {
-      status.current = 'paused';
-    }
+  const pause = () => {
+    status.current = 'paused';
+    setAnimationData((prev) => [...prev]);
+  };
+
+  const unpause = () => {
+    status.current = 'running';
+    handleAnimationStep();
   };
 
   const end = () => {
     status.current = 'ended';
     setAnimationData(query.data?.data || []);
+  };
+
+  const onBrush = (frame: number) => {
+    if (!actionAfterBrushEnd.current) {
+      if (status.current === 'running') {
+        actionAfterBrushEnd.current = 'run';
+      } else {
+        actionAfterBrushEnd.current = 'pause';
+      }
+    }
+    status.current = 'paused';
+    animationFrame.current = frame;
+    const data = query.data?.data || [];
+    if (frame === data.length) {
+      status.current = 'ended';
+    }
+    setAnimationData(data.slice(0, frame));
+  };
+
+  const onBrushEnd = () => {
+    if (!actionAfterBrushEnd.current) {
+      return;
+    }
+    if (actionAfterBrushEnd.current === 'run') {
+      status.current = 'running';
+      handleAnimationStep();
+    }
+    actionAfterBrushEnd.current = undefined;
   };
 
   useEffect(() => {
@@ -161,8 +194,11 @@ export const SimulatorProvider: FC<SimulatorProviderProps> = ({ children }) => {
         ...query.data,
         animationData,
         start,
-        pauseToggle,
         end,
+        onBrush,
+        onBrushEnd,
+        pause,
+        unpause,
         status: status.current,
         isLoading: query.isLoading || tokens.isLoading,
         isSuccess: query.isSuccess,
