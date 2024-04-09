@@ -1,10 +1,11 @@
 import { useWeb3 } from 'libs/web3';
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
-import { config } from 'services/web3/config';
+import { config as web3Config } from 'services/web3/config';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
+import config from 'config';
 
 export const DebugTenderlyRPC = () => {
   const { handleTenderlyRPC, isUncheckedSigner, setIsUncheckedSigner } =
@@ -12,26 +13,30 @@ export const DebugTenderlyRPC = () => {
   const [urlInput, setUrlInput] = useState(
     lsService.getItem('tenderlyRpc') || ''
   );
+  const [backendUrl, setBackendUrl] = useState(
+    lsService.getItem('carbonApi') || config.carbonApi
+  );
   const [carbonControllerInput, setCarbonControllerInput] = useState(
-    config.carbon.carbonController
+    web3Config.carbon.carbonController
   );
 
   const [voucherAddressInput, setVoucherAddressInput] = useState(
-    config.carbon.voucher
+    web3Config.carbon.voucher
   );
 
-  const handleOnClick = () => {
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
     handleTenderlyRPC(urlInput, carbonControllerInput, voucherAddressInput);
+    lsService.setItem('carbonApi', backendUrl);
   };
 
   return (
-    <div
-      className={
-        'flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20'
-      }
+    <form
+      onSubmit={submit}
+      className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20"
     >
       <h2>Set Tenderly RPC</h2>
-      <Label label={'RPC URL'}>
+      <Label label="RPC URL">
         <Input
           value={urlInput}
           onChange={(e) => setUrlInput(e.target.value)}
@@ -41,7 +46,7 @@ export const DebugTenderlyRPC = () => {
 
       {urlInput && (
         <>
-          <Label label={'Carbon Controller Contract'}>
+          <Label label="Carbon Controller Contract">
             <Input
               value={carbonControllerInput}
               onChange={(e) => setCarbonControllerInput(e.target.value)}
@@ -49,7 +54,7 @@ export const DebugTenderlyRPC = () => {
             />
           </Label>
 
-          <Label label={'Carbon Voucher Contract'}>
+          <Label label="Carbon Voucher Contract">
             <Input
               value={voucherAddressInput}
               onChange={(e) => setVoucherAddressInput(e.target.value)}
@@ -59,11 +64,7 @@ export const DebugTenderlyRPC = () => {
         </>
       )}
 
-      <div
-        className={
-          'flex w-full items-center space-x-20 rounded-full bg-black px-20 py-10'
-        }
-      >
+      <div className="flex w-full items-center space-x-20 rounded-full bg-black px-20 py-10">
         <Checkbox
           data-testid="unchecked-signer"
           isChecked={isUncheckedSigner}
@@ -72,9 +73,17 @@ export const DebugTenderlyRPC = () => {
         <span>Unchecked Signer</span>
       </div>
 
-      <Button data-testid="save-rpc" onClick={handleOnClick}>
+      <Label label="Carbon API URL">
+        <Input
+          value={backendUrl}
+          onChange={(e) => setBackendUrl(e.target.value)}
+          fullWidth
+        />
+      </Label>
+
+      <Button data-testid="save-rpc" type="submit">
         Save
       </Button>
-    </div>
+    </form>
   );
 };

@@ -12,6 +12,7 @@ import { useMemo } from 'react';
 import { Outlet, useRouterState, useMatchRoute } from 'libs/routing';
 import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
 import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
+import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
 import { StrategyProvider } from 'hooks/useStrategies';
 
 export const StrategiesPage = () => {
@@ -39,6 +40,11 @@ export const StrategiesPage = () => {
       label: 'Portfolio',
       href: '/strategies/portfolio',
       icon: <IconPieChart className="size-18" />,
+    },
+    {
+      label: 'Activity',
+      href: '/strategies/activity',
+      icon: <IconActivity className="h-18 w-18" />,
     },
   ];
 

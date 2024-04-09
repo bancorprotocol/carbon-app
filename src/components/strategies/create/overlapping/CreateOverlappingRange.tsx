@@ -45,6 +45,7 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
       setRangeError={order0.setRangeError}
       warnings={priceWarnings}
       marketPricePercentages={marketPricePercentage}
+      ignoreMarketPriceWarning
     />
   );
 };

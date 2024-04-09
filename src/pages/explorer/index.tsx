@@ -14,14 +14,14 @@ export const ExplorerPage = () => {
   const { slug, type } = useExplorerParams();
   const query = useExplorer();
   if (type !== 'wallet' && type !== 'token-pair') {
-    return <Navigate to={'/explore/$type'} params={{ type: 'token-pair' }} />;
+    return <Navigate to="/explore/$type" params={{ type: 'token-pair' }} />;
   }
 
   return (
     <Page hideTitle>
       <StrategyProvider query={query}>
         <ExplorerEvents />
-        <div className="flex flex-grow flex-col space-y-30">
+        <div className="space-y-30 flex flex-grow flex-col">
           <ExplorerSearch />
           {slug && <ExplorerTabs />}
           <Outlet />

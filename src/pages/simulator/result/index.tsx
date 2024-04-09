@@ -8,18 +8,18 @@ import { wait } from 'utils/helpers';
 import { THREE_SECONDS_IN_MS } from 'utils/time';
 
 export const SimulatorResultPage = () => {
-  const ctx = useSimulator();
+  const { status, isSuccess, start, ...ctx } = useSimulator();
   const simulationType = 'recurring';
 
   const handleAnimationStart = useCallback(() => {
-    if (!ctx.isSuccess || ctx.status === 'running' || ctx.status === 'ended') {
+    if (!isSuccess || ['running', 'ended', 'paused'].includes(status)) {
       return;
     }
 
     wait(THREE_SECONDS_IN_MS).then(() => {
-      ctx.start();
+      start();
     });
-  }, [ctx]);
+  }, [isSuccess, status, start]);
 
   useEffect(() => {
     handleAnimationStart();
@@ -33,7 +33,7 @@ export const SimulatorResultPage = () => {
         search={ctx.search}
         className="text-24 font-weight-500 mb-16 flex items-center"
       >
-        <div className="bg-background-800 mr-16 flex size-40 items-center justify-center rounded-full">
+        <div className="bg-background-800 size-40 mr-16 flex items-center justify-center rounded-full">
           <IconChevronLeft className="size-16" />
         </div>
         Simulate Strategy

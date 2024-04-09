@@ -39,8 +39,8 @@ export interface OverlappingStrategyProps {
 const getInitialPrices = (marketPrice: string | number) => {
   const currentPrice = new SafeDecimal(marketPrice);
   return {
-    min: currentPrice.times(0.999).toString(),
-    max: currentPrice.times(1.001).toString(),
+    min: currentPrice.times(0.99).toString(),
+    max: currentPrice.times(1.01).toString(),
   };
 };
 
@@ -242,7 +242,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       </article>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8">
-          <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          <span className="size-16 flex items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             1
           </span>
           <h3 className="text-18 font-weight-500 flex-1">
@@ -270,7 +270,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       </article>
       <article className="rounded-10 bg-background-900 flex flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
-          <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          <span className="size-16 flex items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
           </span>
           <h3 className="text-18 font-weight-500 flex-1">Indicate Spread</h3>
@@ -290,7 +290,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       </article>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          <span className="size-16 flex items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             3
           </span>
           <h3 className="text-18 font-weight-500 flex-1">Set Budgets</h3>

@@ -1,18 +1,18 @@
 import { FC, useId } from 'react';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from 'libs/queries';
-import { LimitRangeSection } from './LimitRangeSection';
-import { LogoImager } from 'components/common/imager/Imager';
+import { m } from 'libs/motion';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { OrderCreate } from 'components/strategies/create/useOrder';
 import { StrategyDirection, StrategyType, useNavigate } from 'libs/routing';
+import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/LimitRangeSection';
+import { LogoImager } from 'components/common/imager/Imager';
 import { TabsMenu } from 'components/common/tabs/TabsMenu';
 import { TabsMenuButton } from 'components/common/tabs/TabsMenuButton';
 import { FullOutcome } from 'components/strategies/FullOutcome';
-import { BuySellHeader } from './Header';
-import { m } from 'libs/motion';
-import { items } from '../variants';
-import { BudgetSection } from './BudgetSection';
+import { BuySellHeader } from 'components/strategies/create/BuySellBlock/Header';
+import { items } from 'components/strategies/create/variants';
+import { BudgetSection } from 'components/strategies/create/BuySellBlock/BudgetSection';
 
 type Props = {
   base: Token;
@@ -23,6 +23,7 @@ type Props = {
   isBudgetOptional?: boolean;
   strategyType?: StrategyType;
   isOrdersOverlap: boolean;
+  isOrdersReversed: boolean;
 };
 
 export const BuySellBlock: FC<Props> = ({
@@ -34,6 +35,7 @@ export const BuySellBlock: FC<Props> = ({
   strategyType,
   buy = false,
   isOrdersOverlap,
+  isOrdersReversed,
 }) => {
   const titleId = useId();
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const inputTitle = (
     <>
-      <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+      <span className="size-16 flex items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
         1
       </span>
       <Tooltip
@@ -85,6 +87,7 @@ export const BuySellBlock: FC<Props> = ({
     buy,
     inputTitle,
     isOrdersOverlap,
+    isOrdersReversed,
   };
   const budgetProps = {
     buy,

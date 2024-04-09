@@ -145,6 +145,11 @@ VITE_NETWORK=polygon
 VITE_CHAIN_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/<API_KEY>
 ```
 
+### Contracts with version < 5
+
+In case the network is using a version of CarbonController older than 5 then there's no support for extended range for trade by source,
+and it is recommended to set VITE_LEGACY_TRADE_BY_SOURCE_RANGE to true in .env to avoid possible reverts.
+
 ## Change Colors
 
 The theme is defined in the [`tailwind.config.ts`](./tailwind.config.ts#L36) file.

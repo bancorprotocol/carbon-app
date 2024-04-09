@@ -4,6 +4,7 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appUrl: 'https://app.carbondefi.xyz',
   carbonApi: 'https://api.carbondefi.xyz/v1/',
+  blockExplorer: 'https://etherscan.io',
   rpcUrl:
     import.meta.env.VITE_CHAIN_RPC_URL ||
     'https://eth-mainnet.g.alchemy.com/v2/demo',

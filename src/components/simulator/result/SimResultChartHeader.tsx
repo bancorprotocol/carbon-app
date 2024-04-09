@@ -1,9 +1,8 @@
 import {
-  DatePickerButton,
-  DatePickerPreset,
   DateRangePicker,
+  datePickerPresets,
 } from 'components/common/datePicker/DateRangePicker';
-import { subDays } from 'date-fns';
+import { startOfDay, sub, subDays } from 'date-fns';
 import { useNavigate } from 'libs/routing';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { SimResultChartTabs } from 'components/simulator/result/SimResultChartTabs';
@@ -12,7 +11,7 @@ import { SimulatorData } from 'libs/queries';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimResultChartControls } from 'components/simulator/result/SimResultChartControls';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
-import { fromUnixUTC } from '../utils';
+import { fromUnixUTC, toUnixUTC } from '../utils';
 
 interface Props {
   data: Array<SimulatorData>;
@@ -21,13 +20,6 @@ interface Props {
   state: StrategyInputValues;
   simulationType: SimulatorType;
 }
-
-export const datePickerPresets: DatePickerPreset[] = [
-  { label: 'Last 7 days', days: 6 },
-  { label: 'Last 30 days', days: 29 },
-  { label: 'Last 90 days', days: 89 },
-  { label: 'Last 365 days', days: 364 },
-];
 
 export const datePickerDisabledDays = [
   { after: new Date(), before: subDays(new Date(), 365) },
@@ -46,13 +38,16 @@ export const SimResultChartHeader = ({
   const navigate = useNavigate();
 
   const onDatePickerConfirm = useCallback(
-    (props: { start: string; end: string }) => {
+    (props: { start?: Date; end?: Date }) => {
+      const { start, end } = props;
+      if (!start || !end) return;
       navigate({
         from: '/simulate/result',
         to: '/simulate/result',
         search: (search) => ({
           ...search,
-          ...props,
+          start: toUnixUTC(start),
+          end: toUnixUTC(end),
         }),
         replace: true,
       });
@@ -64,17 +59,14 @@ export const SimResultChartHeader = ({
   const DateRangePickerMemo = useMemo(() => {
     return (
       <DateRangePicker
-        defaultStart={startUnix}
-        defaultEnd={endUnix}
+        defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
+        defaultEnd={startOfDay(new Date())}
+        start={fromUnixUTC(startUnix)}
+        end={fromUnixUTC(endUnix)}
         onConfirm={onDatePickerConfirm}
-        button={
-          <DatePickerButton
-            start={fromUnixUTC(startUnix)}
-            end={fromUnixUTC(endUnix)}
-          />
-        }
         presets={datePickerPresets}
         options={{ disabled: datePickerDisabledDays }}
+        required
       />
     );
   }, [endUnix, onDatePickerConfirm, startUnix]);

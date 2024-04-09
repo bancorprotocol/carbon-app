@@ -24,7 +24,11 @@ export const TradePage = () => {
 
   useEffect(() => {
     if (search.base && search.quote) return;
-    navigate({ search: { ...search, ...getLastVisitedPair() }, params: {} });
+    navigate({
+      search: { ...search, ...getLastVisitedPair() },
+      params: {},
+      replace: true,
+    });
   }, [search, navigate]);
 
   useEffect(() => {
@@ -46,7 +50,7 @@ export const TradePage = () => {
       ) : isTradePairError || !isValidPair ? (
         <p>{!noTokens && <>Not found</>}</p>
       ) : (
-        <div className="px-content mt-25 grid grid-cols-1 gap-20 pb-30 md:grid-cols-12 xl:px-50">
+        <div className="px-content mt-25 pb-30 xl:px-50 grid grid-cols-1 gap-20 md:grid-cols-12">
           <div className="order-3 md:order-1 md:col-span-4 md:row-span-2">
             <OrderBookWidget base={baseToken} quote={quoteToken} />
           </div>

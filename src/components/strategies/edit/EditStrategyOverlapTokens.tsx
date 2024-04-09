@@ -10,10 +10,7 @@ export const EditStrategyOverlapTokens = ({
 }: EditStrategyOverlapTokensProps) => {
   return (
     <header className="rounded-10 bg-background-900 flex w-full items-center space-x-10 p-20">
-      <TokensOverlap
-        className="size-32"
-        tokens={[strategy.base, strategy.quote]}
-      />
+      <TokensOverlap tokens={[strategy.base, strategy.quote]} size={32} />
       <div>
         <h2 className="text-14 flex gap-6">
           <span>{strategy.base.symbol}</span>

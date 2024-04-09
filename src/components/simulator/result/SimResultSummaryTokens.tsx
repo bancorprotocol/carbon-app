@@ -14,7 +14,7 @@ export const SimResultSummaryTokens = ({
 }: Props) => {
   return (
     <article className="gap-15 flex flex-shrink-0 items-center">
-      <TokensOverlap className="size-40" tokens={[baseToken!, quoteToken!]} />
+      <TokensOverlap tokens={[baseToken!, quoteToken!]} size={30} />
       <div className="flex flex-col">
         <h2 className="text-18 flex gap-6">
           {baseToken.symbol}

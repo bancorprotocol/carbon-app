@@ -7,8 +7,8 @@ import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from 'libs/routing';
 import { ReactComponent as IconDistributedEntireRange } from 'assets/distributedEntireRange.svg';
 import { ReactComponent as IconDistributedUnusedRange } from 'assets/distributedUnusedRange.svg';
-import { TooltipTokenAmount } from './tooltip/TooltipTokenAmount';
-import { TooltipTokenRange } from './tooltip/TooltipTokenRange';
+import { TooltipTokenAmount } from 'components/strategies/edit/tooltip/TooltipTokenAmount';
+import { TooltipTokenRange } from 'components/strategies/edit/tooltip/TooltipTokenRange';
 
 const shouldDisplayDistributeByType: {
   [key in EditTypes]: boolean;
@@ -19,7 +19,7 @@ const shouldDisplayDistributeByType: {
   withdraw: true,
 };
 
-export const EditStrategyAllocatedBudget: FC<{
+interface Props {
   order: OrderCreate;
   base: Token;
   quote: Token;
@@ -27,7 +27,16 @@ export const EditStrategyAllocatedBudget: FC<{
   buy?: boolean;
   showMaxCb?: () => void;
   type: EditTypes;
-}> = ({ base, quote, balance, order, showMaxCb, type, buy = false }) => {
+}
+export const EditStrategyAllocatedBudget: FC<Props> = ({
+  base,
+  quote,
+  balance,
+  order,
+  showMaxCb,
+  type,
+  buy = false,
+}) => {
   const firstTime = useRef(true);
   const [showDistribute, setShowDistribute] = useState(false);
   const isDistributeToggleOn =
@@ -53,7 +62,7 @@ export const EditStrategyAllocatedBudget: FC<{
     <>
       <div
         role="table"
-        className="flex flex-col gap-10 rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500"
+        className="rounded-8 p-15 text-12 font-weight-500 flex flex-col gap-10 border-2 border-white/10 text-left font-mono"
       >
         <div role="row" className="flex items-center justify-between gap-16">
           <p role="columnheader" className="flex w-auto items-center gap-6">
@@ -77,7 +86,7 @@ export const EditStrategyAllocatedBudget: FC<{
               <button
                 type="button"
                 onClick={() => showMaxCb()}
-                className="cursor-pointer font-weight-500 text-primary"
+                className="font-weight-500 text-primary cursor-pointer"
               >
                 MAX
               </button>
@@ -160,14 +169,14 @@ export const EditStrategyAllocatedBudget: FC<{
         )}
       </div>
       {type === 'editPrices' && showDistribute && (
-        <div className="flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60">
+        <div className="rounded-8 text-12 flex items-center gap-10 bg-white/5 p-12 text-left text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"
             element={
               'When updating the rates, the allocated budget will be distributed equally across the entire range'
             }
           />
-          Strategy budget will be distribute across entire range
+          Strategy budget will be distributed across entire range
         </div>
       )}
     </>

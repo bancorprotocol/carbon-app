@@ -4,8 +4,8 @@ import { LimitRangeSection } from 'components/strategies/create/BuySellBlock/Lim
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { EditTypes } from 'libs/routing';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
-import { FullOutcome } from '../FullOutcome';
-import { BuySellHeader } from '../create/BuySellBlock/Header';
+import { FullOutcome } from 'components/strategies/FullOutcome';
+import { BuySellHeader } from 'components/strategies/create/BuySellBlock/Header';
 
 type EditStrategyPricesBuySellBlockProps = {
   base: Token;
@@ -15,12 +15,24 @@ type EditStrategyPricesBuySellBlockProps = {
   buy?: boolean;
   type: EditTypes;
   isOrdersOverlap: boolean;
+  isOrdersReversed: boolean;
 };
 
 export const EditStrategyPricesBuySellBlock: FC<
   EditStrategyPricesBuySellBlockProps
-> = ({ base, quote, balance, buy, order, type, isOrdersOverlap }) => {
+> = ({
+  base,
+  quote,
+  balance,
+  buy,
+  order,
+  type,
+  isOrdersOverlap,
+  isOrdersReversed,
+}) => {
   const titleId = useId();
+
+  const isEmptyOrder = !Number(balance);
 
   const headProps = { order, base, buy };
 
@@ -31,7 +43,7 @@ export const EditStrategyPricesBuySellBlock: FC<
     buy,
     order,
     isOrdersOverlap,
-    isEdit: true,
+    isOrdersReversed,
     inputTitle: (
       <>
         <span className="text-white/80">Set {buy ? 'Buy' : 'Sell'} Price</span>
@@ -40,6 +52,7 @@ export const EditStrategyPricesBuySellBlock: FC<
         </span>
       </>
     ),
+    isEmptyOrder,
   };
 
   const budgetProps = {
@@ -54,7 +67,7 @@ export const EditStrategyPricesBuySellBlock: FC<
   return (
     <section
       aria-labelledby={titleId}
-      className={`flex w-full flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-12 ${
+      className={`rounded-6 bg-background-900 text-12 flex w-full flex-col gap-20 border-l-2 p-20 ${
         buy
           ? 'border-buy/50 focus-within:border-buy'
           : 'border-sell/50 focus-within:border-sell'
@@ -62,7 +75,7 @@ export const EditStrategyPricesBuySellBlock: FC<
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <BuySellHeader {...headProps}>
-        <h3 id={titleId} className="flex items-center gap-6 text-18">
+        <h3 id={titleId} className="text-18 flex items-center gap-6">
           {buy ? 'Buy' : 'Sell'} {buy ? 'Low' : 'High'} {base.symbol}
         </h3>
       </BuySellHeader>
