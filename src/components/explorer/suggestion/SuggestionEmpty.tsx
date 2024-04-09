@@ -10,10 +10,10 @@ export const SuggestionEmpty: FC = () => {
       className={cn(suggestionClasses, 'px-20')}
     >
       <h3 className="text-secondary mb-8 font-weight-500">0 Results</h3>
-      <h4 id={emptyId} className={'font-weight-500'}>
+      <h4 id={emptyId} className="font-weight-500">
         We couldn't find any strategies
       </h4>
-      <p className={'text-secondary'}>
+      <p className="text-secondary">
         Please make sure your search input is correct or try searching by a
         different token pair
       </p>

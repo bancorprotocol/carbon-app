@@ -28,7 +28,9 @@ export const MainMenuTradePairs: FC<Props> = ({ baseToken, quoteToken }) => {
       className="flex items-center gap-10 rounded-full bg-background-900 py-5 pl-15 pr-15"
     >
       <TokensOverlap tokens={[baseToken, quoteToken]} size={30} />
-      <span className="text-14 font-weight-500">{`${baseToken.symbol} - ${quoteToken.symbol}`}</span>
+      <span className="text-14 font-weight-500">
+        {baseToken.symbol} - {quoteToken.symbol}
+      </span>
       <IconChevron className="w-14" />
     </Button>
   );

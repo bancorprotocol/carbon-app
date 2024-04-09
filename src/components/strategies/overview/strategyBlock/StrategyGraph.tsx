@@ -385,7 +385,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
               y={baseline + 10}
               dominantBaseline="hanging"
               textAnchor="middle"
-              fontSize="14"
+              fontSize="16"
               opacity="60%"
             >
               {prettifyNumber(point, { abbreviate: true, round: true })}
@@ -453,7 +453,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="9"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -466,7 +466,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="26"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(1ch)`,
             }}
@@ -494,7 +494,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="10"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: translateRect,
             }}
@@ -522,7 +522,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="9"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
@@ -535,7 +535,7 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
             y="26"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="14"
+            fontSize="16"
             style={{
               transform: `translateX(-1ch)`,
             }}
