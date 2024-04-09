@@ -12,12 +12,12 @@ export const useActivityNotifications = () => {
     (a) => a.action === 'sell' || a.action === 'buy'
   );
   const { dispatchNotification } = useNotifications();
-
   useEffect(() => {
     if (query.isLoading) return;
     const length = buyOrSell.length;
     if (typeof previous === 'number' && length > previous) {
-      for (let i = previous; i < length; i++) {
+      // Sorted by date desc
+      for (let i = 0; i < length - previous; i++) {
         const activity = buyOrSell[i];
         dispatchNotification('activity', { activity });
       }

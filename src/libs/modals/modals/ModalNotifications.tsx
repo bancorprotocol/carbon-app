@@ -11,25 +11,22 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
     <ModalSlideOver
       id={id}
       title={
-        <div className="flex w-full items-center justify-between">
+        <header className="flex w-full items-center justify-between">
           Notifications
           <button onClick={() => clearNotifications()} className="mr-20">
             Clear All
           </button>
-        </div>
+        </header>
       }
       size="md"
     >
-      <div className="mt-25 space-y-10">
+      <ul className="mt-25 flex flex-col gap-10">
         {reversedNotifications.map((notification) => (
-          <div
-            key={notification.id}
-            className="rounded-10 bg-black px-20 py-10"
-          >
+          <li key={notification.id} className="rounded-10 bg-black px-20 py-10">
             <NotificationLine notification={notification} />
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </ModalSlideOver>
   );
 };

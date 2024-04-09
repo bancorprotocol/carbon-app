@@ -27,7 +27,7 @@ export const NotificationAlerts: FC = () => {
   }, [user, setNotifications]);
 
   return (
-    <ul className="fixed top-10 right-10 z-50" data-testid="notification-list">
+    <ul className="fixed top-80 right-10 z-50" data-testid="notification-list">
       <AnimatePresence mode="popLayout">
         {alerts.map((n) => (
           <motion.li

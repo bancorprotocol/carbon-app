@@ -4,7 +4,6 @@ import { TxNotification } from './TxNotification';
 import { Notification } from './types';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
-import { FOUR_SECONDS_IN_MS } from 'utils/time';
 
 interface NotificationLineProps {
   isAlert?: boolean;
@@ -26,7 +25,7 @@ export const NotificationLine: FC<NotificationLineProps> = (props) => {
 
   useInterval(
     () => dismissAlert(notification.id),
-    isAlert && status !== 'pending' ? FOUR_SECONDS_IN_MS : null,
+    isAlert && status !== 'pending' ? 7 * 1000 : null,
     false
   );
 
