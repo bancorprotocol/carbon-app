@@ -207,8 +207,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     setAnchor(value);
     if (value === 'buy') {
       calculateSellBudget(getBuyBudget(), order0.min, order1.max);
+      if (depositBuyBudget) setMode('deposit');
+      else if (withdrawBuyBudget) setMode('withdraw');
     } else {
       calculateBuyBudget(getSellBudget(), order0.min, order1.max);
+      if (depositSellBudget) setMode('deposit');
+      else if (withdrawSellBudget) setMode('withdraw');
     }
   };
 
