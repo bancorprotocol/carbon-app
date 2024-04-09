@@ -391,7 +391,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       {anchor && mode && (
         <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
           <hgroup>
-            <h3 className="text-16 font-weight-500">Distribution</h3>
+            <h3 className="flex items-center gap-8 text-16 font-weight-500">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+                3
+              </span>
+              Distribution
+            </h3>
             <p className="text-14 text-white/80">
               Following the edits implemented above, these are the changes in
               budget allocation

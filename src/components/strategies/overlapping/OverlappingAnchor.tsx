@@ -26,7 +26,12 @@ export const OverlappingAnchor: FC<Props> = (props) => {
       <p className="text-14 text-white/80">
         Please specify which token you'd prefer to use as the anchor.
       </p>
-      <h3 className="text-16 font-weight-500">Select Token</h3>
+      <h3 className="flex items-center gap-8 text-16 font-weight-500">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          1
+        </span>
+        Select Token
+      </h3>
       <div role="radiogroup" className="flex gap-16">
         <input
           className={cn('absolute opacity-0', style.selectToken)}

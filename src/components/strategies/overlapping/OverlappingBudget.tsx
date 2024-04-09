@@ -50,6 +50,9 @@ export const OverlappingBudget: FC<Props> = (props) => {
     <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
       <details>
         <summary className="flex cursor-pointer items-center gap-8">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+            2
+          </span>
           <h3 className="text-16 font-weight-500">Edit Budget</h3>
           <span className="text-12 text-white/60">(Optional)</span>
           <IconChevron className="toggle h-14 w-14" />
