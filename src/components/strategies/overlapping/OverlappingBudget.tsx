@@ -37,11 +37,6 @@ export const OverlappingBudget: FC<Props> = (props) => {
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
 
-  const setBudgetMode = (mode: BudgetMode) => {
-    // setBudget('');
-    setMode(mode);
-  };
-
   const getMax = () => {
     if (mode === 'deposit') {
       return anchor === 'buy' ? quoteBalance : baseBalance;
@@ -72,7 +67,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
               type="radio"
               id="select-deposit"
               checked={mode === 'deposit'}
-              onChange={(e) => e.target.checked && setBudgetMode('deposit')}
+              onChange={(e) => e.target.checked && setMode('deposit')}
             />
             <label
               htmlFor="select-deposit"
@@ -86,7 +81,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
               type="radio"
               id="select-withdraw"
               checked={mode === 'withdraw'}
-              onChange={(e) => e.target.checked && setBudgetMode('withdraw')}
+              onChange={(e) => e.target.checked && setMode('withdraw')}
             />
             <label
               htmlFor="select-withdraw"

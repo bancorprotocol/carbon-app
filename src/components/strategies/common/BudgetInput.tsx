@@ -136,11 +136,20 @@ export const BudgetInput: FC<Props> = (props) => {
           )}
         </div>
       </div>
-      {getErrors().map((error) => (
-        <WarningMessageWithIcon htmlFor={inputId} message={error} isError />
+      {getErrors().map((error, i) => (
+        <WarningMessageWithIcon
+          key={`error-${i}`}
+          htmlFor={inputId}
+          message={error}
+          isError
+        />
       ))}
-      {warnings.map((warning) => (
-        <WarningMessageWithIcon htmlFor={inputId} message={warning} />
+      {warnings.map((warning, i) => (
+        <WarningMessageWithIcon
+          key={`warning-${i}`}
+          htmlFor={inputId}
+          message={warning}
+        />
       ))}
     </div>
   );
