@@ -31,6 +31,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <input
           className={cn('absolute opacity-0', style.selectToken)}
           type="radio"
+          name="anchor"
           id="anchor-buy"
           checked={anchor === 'buy'}
           onChange={(e) => e.target.checked && setAnchor('buy')}
@@ -46,6 +47,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         <input
           className={cn('absolute opacity-0', style.selectToken)}
           type="radio"
+          name="anchor"
           id="anchor-sell"
           checked={anchor === 'sell'}
           onChange={(e) => e.target.checked && setAnchor('sell')}

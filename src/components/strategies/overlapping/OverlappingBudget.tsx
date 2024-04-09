@@ -65,6 +65,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
             <input
               className={cn('absolute opacity-0', style.budgetMode)}
               type="radio"
+              name="mode"
               id="select-deposit"
               checked={mode === 'deposit'}
               onChange={(e) => e.target.checked && setMode('deposit')}
@@ -79,6 +80,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
             <input
               className={cn('absolute opacity-0', style.budgetMode)}
               type="radio"
+              name="mode"
               id="select-withdraw"
               checked={mode === 'withdraw'}
               onChange={(e) => e.target.checked && setMode('withdraw')}
