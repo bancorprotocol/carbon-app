@@ -11,7 +11,7 @@ export const OrderBookWidgetHeader: FC<Props> = ({
   quoteSymbol,
 }) => {
   return (
-    <p className="text-secondary grid grid-cols-3 rounded-t-10 rounded-b-4 bg-black px-20 pt-15 pb-12">
+    <p className="text-14 rounded-t-10 rounded-b-4 pt-15 grid grid-cols-3 bg-black px-20 pb-12 text-white/60">
       <Tooltip element={`Price points denominated in ${quoteSymbol}`}>
         <span>Price ({quoteSymbol})</span>
       </Tooltip>

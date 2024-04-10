@@ -15,7 +15,7 @@ export const ModalSimulatorDisclaimer: ModalFC<
   const { closeModal } = useModal();
 
   const paragraphClassName =
-    'text-secondary flex w-full items-center justify-center text-center';
+    'text-white/60 text-14 flex w-full items-center justify-center text-center';
 
   return (
     <ModalOrMobileSheet id={id} data-testid="sim-disclaimer-modal">

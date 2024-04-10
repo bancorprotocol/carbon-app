@@ -114,7 +114,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           className="flex min-h-[130px] flex-col gap-8 overflow-auto"
         >
           <Tooltip element="This is the list of orders your trade will use when executed.">
-            <h3 id="routing-table" className="text-secondary">
+            <h3 id="routing-table" className="text-14 text-white/60">
               Routing Table
             </h3>
           </Tooltip>
@@ -173,7 +173,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         >
           <header className="flex items-center justify-between">
             <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
-              <h3 id="confirm-table" className="text-secondary">
+              <h3 id="confirm-table" className="text-14 text-white/60">
                 Confirm Trade
               </h3>
             </Tooltip>

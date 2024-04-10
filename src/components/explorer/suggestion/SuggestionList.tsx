@@ -14,7 +14,7 @@ interface Props {
 export const SuggestionList: FC<Props> = (props) => {
   return (
     <div role="listbox" id={props.listboxId} className={suggestionClasses}>
-      <h3 className="text-secondary font-weight-500 mb-8 ml-20">
+      <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
         {props.filteredPairs.length} Results
       </h3>
       {props.filteredPairs.map((pair) => {

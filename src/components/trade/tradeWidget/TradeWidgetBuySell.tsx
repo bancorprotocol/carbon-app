@@ -270,7 +270,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             )}
           </footer>
           {IS_TENDERLY_FORK && (
-            <div className="text-secondary mt-5 text-right">
+            <div className="text-14 mt-5 text-right text-white/60">
               DEBUG: {getLiquidity()}
             </div>
           )}

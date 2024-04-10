@@ -3,7 +3,7 @@ import { useGetTokenData } from 'libs/queries/chain/token';
 import { Button } from 'components/common/button';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
-import { shortenString } from 'utils/helpers';
+import { cn, shortenString } from 'utils/helpers';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
@@ -47,34 +47,33 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       </div>
 
       {isLoading && (
-        <div className={`${blockClasses} animate-pulse bg-black`}></div>
+        <div className={cn(blockClasses, 'animate-pulse bg-black')}></div>
       )}
       {isError && (
         <div
-          className={`${blockClasses} flex items-center justify-center bg-error/30`}
+          className={cn(
+            blockClasses,
+            'bg-error/30 flex items-center justify-center'
+          )}
         >
           Error: No token found for this address
         </div>
       )}
       {data && (
-        <div className={`${blockClasses} bg-background-900 p-16`}>
-          <div className={'flex items-center justify-between'}>
-            <div className={'font-weight-500'}>{data.symbol}</div>
+        <div className={cn(blockClasses, 'bg-background-900 p-16')}>
+          <div className="flex items-center justify-between">
+            <div className="font-weight-500">{data.symbol}</div>
             <NewTabLink
               to={getExplorerLink('token', data.address)}
-              className={
-                'flex items-center text-14 font-weight-500 text-warning'
-              }
+              className="text-14 font-weight-500 text-warning flex items-center"
             >
-              <span className={'whitespace-nowrap'}>View on Explorer</span>
-              <IconLink className={'ml-4 inline-flex h-14'} />
+              <span className="whitespace-nowrap">View on Explorer</span>
+              <IconLink className="ml-4 inline-flex h-14" />
             </NewTabLink>
           </div>
-          <div className={'flex items-center justify-between'}>
-            <div className={'text-secondary text-14'}>{data.name}</div>
-            <div className={'font-mono text-14'}>
-              {shortenString(data.address)}
-            </div>
+          <div className="text-14 flex items-center justify-between">
+            <div className="text-white/60">{data.name}</div>
+            <div className=" font-mono">{shortenString(data.address)}</div>
           </div>
         </div>
       )}

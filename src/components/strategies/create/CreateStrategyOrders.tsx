@@ -85,17 +85,17 @@ export const CreateStrategyOrders = ({
         key="createStrategyBuyTokens"
         className="rounded-10 bg-background-900 flex flex-col gap-10 p-20"
       >
-        <div className="flex gap-10">
+        <div className="text-14 flex gap-10">
           <TokensOverlap tokens={[base!, quote!]} size={32} />
           <div>
-            <h2 className="text-14 flex gap-6">
+            <h2 className="flex gap-6">
               <span>{base?.symbol}</span>
-              <span role="separator" className="text-secondary">
+              <span role="separator" className="text-white/60">
                 /
               </span>
               <span>{quote?.symbol}</span>
             </h2>
-            <div className="text-secondary capitalize">{strategyType}</div>
+            <div className="capitalize text-white/60">{strategyType}</div>
           </div>
         </div>
         <p className="text-12 font-weight-400 flex items-center text-white/60">

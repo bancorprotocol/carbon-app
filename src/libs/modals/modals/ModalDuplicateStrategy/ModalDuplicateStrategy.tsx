@@ -59,7 +59,9 @@ export const ModalDuplicateStrategy: ModalFC<ModalDuplicateStrategyData> = ({
 
   return (
     <ModalOrMobileSheet id={id} title="Duplicate Strategy">
-      <h2 className="text-secondary font-weight-400">Select your option.</h2>
+      <h2 className="text-14 font-weight-400 text-white/60">
+        Select your option.
+      </h2>
 
       {duplicateOptions.map(
         ({ icon: Icon, title, onClick, description, testId }) => (

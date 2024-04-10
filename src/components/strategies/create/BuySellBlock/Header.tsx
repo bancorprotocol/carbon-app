@@ -2,6 +2,7 @@ import { FC, ReactNode } from 'react';
 import { OrderCreate } from '../useOrder';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
+import { cn } from 'utils/helpers';
 
 interface Props {
   children: ReactNode;
@@ -26,15 +27,17 @@ export const BuySellHeader: FC<Props> = (props) => {
   return (
     <header className="flex items-center justify-between">
       {children}
-      <div className="flex items-center gap-10 text-14">
+      <div className="text-14 flex items-center gap-10">
         <div className="flex items-center rounded-[100px] bg-black p-2">
           <button
             type="button"
             tabIndex={!isRange ? -1 : 0}
             onClick={setLimit}
-            className={`rounded-40 font-weight-500 ${
-              !isRange ? 'bg-background-900' : 'text-secondary'
-            } px-10 py-4`}
+            className={cn(
+              'rounded-40 font-weight-500',
+              !isRange ? 'bg-background-900' : 'text-white/60',
+              'px-10 py-4'
+            )}
             data-testid="tab-limit"
           >
             Limit
@@ -43,9 +46,11 @@ export const BuySellHeader: FC<Props> = (props) => {
             type="button"
             tabIndex={isRange ? -1 : 0}
             onClick={setRange}
-            className={`rounded-40 font-weight-500 ${
-              isRange ? 'bg-background-900' : 'text-secondary'
-            } px-10 py-4`}
+            className={cn(
+              'rounded-40 font-weight-500',
+              isRange ? 'bg-background-900' : 'text-white/60',
+              'px-10 py-4'
+            )}
             data-testid="tab-range"
           >
             Range
@@ -53,6 +58,7 @@ export const BuySellHeader: FC<Props> = (props) => {
         </div>
         <Tooltip
           sendEventOnMount={{ buy }}
+          iconClassName="text-white/60"
           element={
             <>
               This section will define the order details in which you are

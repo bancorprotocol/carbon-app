@@ -98,8 +98,8 @@ export const NotificationLine: FC<{
         </div>
       </div>
 
-      <div className={'flex flex-col items-end justify-between'}>
-        <div className="text-secondary text-12 font-weight-500 whitespace-nowrap">
+      <div className="flex flex-col items-end justify-between">
+        <div className="text-12 font-weight-500 whitespace-nowrap text-white/60">
           {unix(notification.timestamp).fromNow(true)}
         </div>
         <button

@@ -127,7 +127,7 @@ export const ModalTokenListContent: FC<Props> = ({
                         />
                       )}
                     </div>
-                    <div className="text-secondary text-12 max-w-full truncate">
+                    <div className="text-12 max-w-full truncate text-white/60">
                       {token.name ?? token.symbol}
                     </div>
                   </div>
