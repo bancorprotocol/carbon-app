@@ -1,9 +1,13 @@
 import { FC, useId } from 'react';
 import { NotificationActivity } from 'libs/notifications/types';
 import { activityActionName, activityDescription } from './utils';
-import { ActivityIcon, ActivityId } from './ActivityTable';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Link } from '@tanstack/react-router';
+import { cn } from 'utils/helpers';
+import { ActivityAction } from 'libs/queries/extApi/activity';
+import { unix } from 'dayjs';
+import style from './ActivityNotification.module.css';
 
 interface Props {
   notification: NotificationActivity;
@@ -16,34 +20,90 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
 
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
-      <ActivityId activity={activity} size={16} />
-      <Link
-        to="/strategy/$id"
-        params={{ id: activity.strategy.id }}
-        className="flex flex-1 gap-8 overflow-hidden"
-        onClick={close}
-      >
-        <ActivityIcon activity={activity} size={32} />
-        <div className="flex-1 overflow-hidden">
-          <h3 className="text-14" id={titleId} data-testid="notif-title">
+      <AnimatedActionIcon action={activity.action} />
+      <div className="flex flex-1 flex-col gap-8 overflow-hidden text-14">
+        <hgroup>
+          <h3 className="text-16" id={titleId} data-testid="notif-title">
             {activityActionName[activity.action]}
           </h3>
-          <p
-            className="truncate text-12 text-white/60"
-            data-testid="notif-description"
-          >
+          <p className="truncate text-white/60" data-testid="notif-description">
             {activityDescription(activity)}
           </p>
-        </div>
-      </Link>
-      <button
-        className="self-start text-12 font-weight-500"
-        onClick={close}
-        data-testid="notif-close"
-        aria-label="Remove notification"
-      >
-        <IconClose className="h-14 w-14 text-white/80" />
-      </button>
+        </hgroup>
+        <Link
+          to="/strategy/$id"
+          params={{ id: activity.strategy.id }}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center font-weight-500"
+        >
+          View Activity <IconLink className="ml-6 w-14" />
+        </Link>
+      </div>
+      <div className="flex flex-col items-end justify-between">
+        <button
+          onClick={close}
+          data-testid="notif-close"
+          aria-label="Remove notification"
+        >
+          <IconClose className="h-14 w-14 text-white/80" />
+        </button>
+
+        <p className="whitespace-nowrap text-12 font-weight-500 text-white/60">
+          {unix(notification.timestamp).fromNow(true)}
+        </p>
+      </div>
     </article>
+  );
+};
+
+export const AnimatedActionIcon = (props: { action: ActivityAction }) => {
+  const transform = props.action === 'buy' ? 'rotate(30deg)' : 'rotate(-30deg)';
+  return (
+    <div
+      className={cn(
+        'relative grid h-38 w-38 place-items-center rounded-full',
+        style.icon,
+        {
+          'bg-buy/20 text-buy': props.action === 'buy',
+          'bg-sell/20 text-sell': props.action === 'sell',
+        }
+      )}
+    >
+      <svg width="24" height="24" viewBox="0 0 100 100" style={{ transform }}>
+        <g>
+          <line
+            x1="20"
+            x2="75"
+            y1="50"
+            y2="50"
+            stroke="currentColor"
+            stroke-width="8"
+            stroke-linecap="round"
+            transform-origin="75 50"
+          />
+          <line
+            x1="50"
+            x2="75"
+            y1="25"
+            y2="50"
+            stroke="currentColor"
+            stroke-width="8"
+            stroke-linecap="round"
+            transform-origin="75 50"
+          />
+          <line
+            x1="50"
+            x2="75"
+            y1="75"
+            y2="50"
+            stroke="currentColor"
+            stroke-width="8"
+            stroke-linecap="round"
+            transform-origin="75 50"
+          />
+        </g>
+      </svg>
+    </div>
   );
 };

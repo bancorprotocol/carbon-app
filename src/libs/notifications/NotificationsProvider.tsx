@@ -38,10 +38,9 @@ export const NotificationAlerts: FC = () => {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="mb-20 block w-[350px] rounded-10 bg-background-900 px-20 py-10"
+            className="mb-20 block w-[350px] overflow-hidden rounded-10 border border-white/60  bg-background-900 px-16 py-12"
             data-testid={`notification-${n.testid}`}
           >
-            {}
             <NotificationLine isAlert notification={n} />
           </motion.li>
         ))}

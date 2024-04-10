@@ -63,18 +63,20 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
 
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
-      <div className="self-center">{StatusIcon(notification.status)}</div>
-      <div className="w-full text-14 text-white/80">
-        <h3 id={titleId} className="text-white" data-testid="notif-title">
-          {getTitleByStatus(notification)}
-        </h3>
-        <p data-testid="notif-description">
-          {getDescriptionByStatus(notification)}
-        </p>
+      {StatusIcon(notification.status)}
+      <div className="flex flex-1 flex-col gap-8 overflow-hidden text-14">
+        <hgroup>
+          <h3 id={titleId} className="text-16" data-testid="notif-title">
+            {getTitleByStatus(notification)}
+          </h3>
+          <p className="truncate text-white/80" data-testid="notif-description">
+            {getDescriptionByStatus(notification)}
+          </p>
+        </hgroup>
         {notification.txHash && (
           <NewTabLink
             to={getExplorerLink('tx', notification.txHash)}
-            className="mt-10 flex items-center font-weight-500"
+            className="flex items-center font-weight-500"
           >
             View on Etherscan <IconLink className="ml-6 w-14" />
           </NewTabLink>
