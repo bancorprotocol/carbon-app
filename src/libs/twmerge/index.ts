@@ -1,11 +1,12 @@
 import { extendTailwindMerge } from 'tailwind-merge';
 
 type AdditionalClassGroupIDs =
+  | 'fontWeights'
   | 'textColors'
   | 'bgColors'
   | 'borderColors'
   | 'outlineColors'
-  | 'rounded';
+  | 'animation';
 
 const colors = [
   'white',
@@ -30,18 +31,31 @@ const colors = [
   'background-900',
 ];
 
+const createConfigValues = (start: number, end: number, step: number) =>
+  Array.from({ length: Math.ceil((end - start) / step) + 1 }, (_, i) =>
+    (start + i * step).toString()
+  );
+
 export const customTwMerge = extendTailwindMerge<AdditionalClassGroupIDs>({
-  // ↓ Override elements from the default config
-  //   It has the same shape as the `extend` object, so we're going to skip it here.
   override: {},
-  // ↓ Extend values from the default config
   extend: {
-    // ↓ Add values to existing theme scale or create a new one
-    theme: {
-      spacing: ['sm', 'md', 'lg', 'xl', '2xl'],
-    },
-    // ↓ Add values to existing class groups or define new ones
+    theme: {},
     classGroups: {
+      fontWeights: [
+        {
+          font: [
+            'weight-100',
+            'weight-200',
+            'weight-300',
+            'weight-400',
+            'weight-500',
+            'weight-600',
+            'weight-700',
+            'weight-800',
+            'weight-900',
+          ],
+        },
+      ],
       textColors: [
         {
           text: colors,
@@ -62,46 +76,19 @@ export const customTwMerge = extendTailwindMerge<AdditionalClassGroupIDs>({
           outline: colors,
         },
       ],
+      animation: [
+        {
+          animate: ['none', 'spin', 'ping', 'pulse', 'bounce', 'slideUp'],
+        },
+      ],
       rounded: [
         {
-          rounded: [
-            'full',
-            'DEFAULT',
-            '0',
-            '2',
-            '4',
-            '6',
-            '8',
-            '10',
-            '12',
-            '14',
-            '16',
-            '18',
-            '20',
-            '22',
-            '24',
-            '26',
-            '28',
-            '30',
-            '32',
-            '34',
-            '36',
-            '38',
-            '40',
-            '42',
-            '44',
-            '46',
-            '48',
-            '50',
-          ],
+          rounded: ['full', 'DEFAULT', ...createConfigValues(0, 50, 2)],
         },
       ],
     },
     // ↓ Here you can define additional conflicts across class groups
-    conflictingClassGroups: {
-      px: ['pr', 'pl'],
-      size: ['h', 'w'],
-    },
+    conflictingClassGroups: {},
     // ↓ Define conflicts between postfix modifiers and class groups
     conflictingClassGroupModifiers: {},
   },
