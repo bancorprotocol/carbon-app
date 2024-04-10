@@ -80,6 +80,7 @@ export const EditStrategyBudgetBuySellBlock: FC<{
           element={`Indicate the amount you wish to ${
             type === 'withdraw' ? 'withdraw' : 'deposit'
           } from the available "allocated budget"`}
+          iconClassName="text-white/60"
         />
       </header>
       <TokenInputField
