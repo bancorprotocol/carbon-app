@@ -20,31 +20,31 @@ export const buttonStyles = cva<ButtonVariants>(
     variants: {
       variant: {
         black: [
-          'bg-black border-2 border-black !text-white',
+          'bg-black border-2 border-black text-white',
           'hover:border-background-700 hover:disabled:black',
         ],
         white: [
-          'bg-white border-2 border-white !text-black',
+          'bg-white border-2 border-white text-black',
           'hover:border-background-400 hover:disabled:border-white',
         ],
         secondary: [
-          'bg-background-800 border-2 border-background-800 !text-white',
+          'bg-background-800 border-2 border-background-800 text-white',
           'hover:border-background-700 hover:disabled:border-background-800',
         ],
         success: [
-          'bg-primary border-2 border-primary !text-black',
+          'bg-primary border-2 border-primary text-black',
           'hover:border-primary-light hover:disabled:border-primary',
         ],
         buy: [
-          'bg-buy border-2 border-buy !text-black',
-          'hover:border-buy-light hover:!text-black hover:bg-buy hover:disabled:border-buy',
+          'bg-buy border-2 border-buy text-black',
+          'hover:border-buy-light hover:text-black hover:bg-buy hover:disabled:border-buy',
         ],
         sell: [
-          'bg-sell border-2 border-sell !text-black',
-          'hover:border-sell-light hover:!text-black hover:bg-sell hover:disabled:border-sell',
+          'bg-sell border-2 border-sell text-black',
+          'hover:border-sell-light hover:text-black hover:bg-sell hover:disabled:border-sell',
         ],
         error: [
-          'bg-error border-2 border-error !text-black',
+          'bg-error border-2 border-error text-black',
           'hover:border-error-light hover:disabled:border-error',
         ],
       },
