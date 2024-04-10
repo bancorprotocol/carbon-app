@@ -42,6 +42,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
       <header className="mb-15 flex items-center justify-between">
         <h2>Token Pair</h2>
         <Tooltip
+          iconClassName="text-white/60"
           sendEventOnMount={{ buy: undefined }}
           element={
             <div>
