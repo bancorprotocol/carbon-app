@@ -26,10 +26,7 @@ export const MainMenuRightBurger: FC<{
       button={(attr) => (
         <button
           {...attr}
-          className={cn(
-            buttonStyles({ variant: 'secondary' }),
-            'relative !p-0'
-          )}
+          className={cn(buttonStyles({ variant: 'secondary' }), 'relative p-0')}
           onClick={(e) => {
             setIsOpen(true);
             attr.onClick(e);

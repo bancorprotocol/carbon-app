@@ -14,7 +14,7 @@ export const TBody = <D extends object>({
   isLoading,
 }: Props<D>) => {
   return (
-    <tbody className="border-b-2 border-background-800">
+    <tbody className="border-background-800 border-b-2">
       {isLoading ? (
         <tr>
           <td
@@ -30,10 +30,10 @@ export const TBody = <D extends object>({
             key={row.id}
             className={cn(
               'h-64',
-              '!text-white/80',
+              'text-white/80',
               'text-16',
               'hover:bg-background-800',
-              'hover:!text-white',
+              'hover:text-white',
               onRowClick && 'cursor-pointer'
             )}
             onClick={() => {

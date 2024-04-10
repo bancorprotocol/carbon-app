@@ -35,9 +35,9 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
 
   return (
     <ModalOrMobileSheet id={id} title={'Import Token'}>
-      <div className={'mt-40'}>
+      <div className="mt-40">
         <IconTitleText
-          variant={'warning'}
+          variant="warning"
           icon={<IconWarning />}
           title={'Use at your own risk'}
           text={
@@ -78,14 +78,14 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         </div>
       )}
       <Button
-        variant={'white'}
+        variant="white"
         fullWidth
         onClick={onClick}
         disabled={isLoading || isError}
       >
         Import Token
       </Button>
-      <Button variant={'black'} fullWidth onClick={() => closeModal(id)}>
+      <Button variant="black" fullWidth onClick={() => closeModal(id)}>
         Cancel
       </Button>
     </ModalOrMobileSheet>

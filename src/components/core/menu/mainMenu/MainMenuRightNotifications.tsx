@@ -15,8 +15,8 @@ export const MainMenuRightNotifications: FC = () => {
 
   return (
     <Button
-      variant={'secondary'}
-      className={'relative !p-0'}
+      variant="secondary"
+      className="relative p-0"
       onClick={() => {
         carbonEvents.navigation.navNotificationClick(undefined);
         openModal('notifications', undefined);

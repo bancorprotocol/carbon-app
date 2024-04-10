@@ -102,7 +102,7 @@ export const _ExplorerSearch: FC = () => {
   };
 
   return (
-    <div className={'relative'}>
+    <div className="relative">
       <form
         role="search"
         onSubmit={submitHandler}
@@ -145,9 +145,9 @@ export const _ExplorerSearch: FC = () => {
 
         <Button
           type="submit"
-          variant={'success'}
-          size={'md'}
-          className={'w-40 shrink-0 !px-0 md:w-[180px]'}
+          variant="success"
+          size="md"
+          className="w-40 shrink-0 px-0 md:w-[180px]"
         >
           <IconSearch className="size-16 md:mr-8" />
           <span className={'hidden md:block'}>Search</span>

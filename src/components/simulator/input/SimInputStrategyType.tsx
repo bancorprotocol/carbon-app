@@ -71,7 +71,7 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
 
             <Tooltip
               element={<div>{tooltipText}</div>}
-              iconClassName="!size-12 text-white/60"
+              iconClassName="size-12 text-white/60"
             />
           </Link>
         ))}
