@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 import { formatRgb } from 'culori';
 
-function createTwConfigValues(start, end, step) {
+function createTwConfigValues(start: number, end: number, step: number) {
   const remBase = 16;
   const obj = {};
   for (let i = start; i <= end; i = i + step) {
@@ -10,14 +10,14 @@ function createTwConfigValues(start, end, step) {
   return obj;
 }
 
-const oklch = (l, c, h) => {
+const oklch = (l: number, c: number, h: number) => {
   const result = formatRgb(`oklch(${l} ${c} ${h} / 0)`);
   return result.replace(', 0)', ', <alpha-value>)');
 };
-const lighten = (l, amount) => Math.min(l + amount, 1);
-const darken = (l, amount) => Math.max(l - amount, 0);
+const lighten = (l: number, amount: number) => Math.min(l + amount, 1);
+const darken = (l: number, amount: number) => Math.max(l - amount, 0);
 
-const lightDark = (l, c, h) => ({
+const lightDark = (l: number, c: number, h: number) => ({
   light: oklch(lighten(l, 0.2), c, h),
   DEFAULT: oklch(l, c, h),
   dark: oklch(darken(l, 0.5), c, h),
