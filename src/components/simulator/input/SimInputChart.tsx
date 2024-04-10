@@ -224,7 +224,7 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
       </p>
 
       <Link
-        to={'/strategies/create'}
+        to="/strategies/create"
         search={{ base, quote }}
         className={buttonStyles({ variant: 'success' })}
       >

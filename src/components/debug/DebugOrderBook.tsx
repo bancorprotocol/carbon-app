@@ -18,11 +18,11 @@ export const DebugOrderBook = () => {
   return (
     <div
       className={
-        'flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20'
+        'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
       <h2>Reset to defaults</h2>
-      <Label label={'Steps'}>
+      <Label label="Steps">
         <Input
           type="number"
           value={steps}
@@ -31,7 +31,7 @@ export const DebugOrderBook = () => {
         />
       </Label>
 
-      <Label label={'Depth Chart Buckets'}>
+      <Label label="Depth Chart Buckets">
         <Input
           type="number"
           value={depthChartBuckets}
@@ -40,7 +40,7 @@ export const DebugOrderBook = () => {
         />
       </Label>
 
-      <Label label={'Order Book Buckets'}>
+      <Label label="Order Book Buckets">
         <Input
           type="number"
           value={orderBookBuckets}

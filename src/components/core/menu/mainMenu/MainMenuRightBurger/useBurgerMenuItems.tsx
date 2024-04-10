@@ -58,14 +58,14 @@ export const useBurgerMenuItems = () => {
     },
     {
       content: (
-        <Link className="flex" to={'/terms'}>
+        <Link className="flex" to="/terms">
           Terms of Use
         </Link>
       ),
     },
     {
       content: (
-        <Link className="flex" to={'/privacy'}>
+        <Link className="flex" to="/privacy">
           Privacy Policy
         </Link>
       ),

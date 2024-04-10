@@ -225,7 +225,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         });
       }}
     >
-      <ul role="menu" data-testid={'manage-strategy-dropdown'}>
+      <ul role="menu" data-testid="manage-strategy-dropdown">
         {items.map((item) => {
           if (typeof item === 'number') {
             return (

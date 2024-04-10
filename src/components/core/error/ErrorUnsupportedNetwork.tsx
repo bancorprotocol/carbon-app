@@ -9,16 +9,16 @@ export const ErrorUnsupportedNetwork = () => {
   return (
     <ErrorWrapper
       icon={<IconWarning />}
-      title={'Wrong Network'}
+      title="Wrong Network"
       text={
         'Please connect to Ethereum Mainnet using your wallet or the button below'
       }
-      variant={'error'}
+      variant="error"
     >
-      <Button variant={'white'} fullWidth onClick={switchNetwork}>
+      <Button variant="white" fullWidth onClick={switchNetwork}>
         Change Network
       </Button>
-      <Button variant={'black'} fullWidth onClick={disconnect}>
+      <Button variant="black" fullWidth onClick={disconnect}>
         Disconnect Wallet
       </Button>
     </ErrorWrapper>

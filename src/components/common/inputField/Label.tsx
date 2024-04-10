@@ -19,9 +19,9 @@ export const Label: FC<LabelProps & VariantProps<typeof labelStyles>> = ({
   ...props
 }) => {
   return (
-    <label className={'w-full'} {...props}>
+    <label className="w-full" {...props}>
       {(label || msg) && (
-        <div className={'mb-10 flex justify-between'}>
+        <div className="mb-10 flex justify-between">
           <div>{label}</div>
           <div className={labelStyles({ variant: props.variant })}>{msg}</div>
         </div>

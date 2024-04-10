@@ -18,12 +18,6 @@ export const D3LinePath = <T,>({
   const d = lineGenerator(data) ?? undefined;
 
   return (
-    <path
-      fill={'none'}
-      stroke={'currentColor'}
-      strokeWidth={1}
-      {...props}
-      d={d}
-    />
+    <path fill="none" stroke="currentColor" strokeWidth={1} {...props} d={d} />
   );
 };

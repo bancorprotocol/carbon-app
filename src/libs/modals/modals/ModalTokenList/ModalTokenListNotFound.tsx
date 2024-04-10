@@ -12,7 +12,7 @@ export const ModalTokenListNotFound: FC = () => {
         Unfortunately we couldn't find the token you're looking for, try
         searching for it
       </span>
-      <span className={'font-weight-500 text-white'}> by address.</span>
+      <span className="font-weight-500 text-white"> by address.</span>
     </>
   );
 
@@ -22,7 +22,7 @@ export const ModalTokenListNotFound: FC = () => {
       style={{ height: innerHeight - 258 }}
     >
       <IconTitleText
-        title={'Token not found'}
+        title="Token not found"
         icon={<IconSearch />}
         text={<Text />}
       />

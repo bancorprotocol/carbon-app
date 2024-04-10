@@ -32,30 +32,30 @@ export const PortfolioTokenMobile: FC<PortfolioTokenProps> = ({
             <PortfolioMobileCard
               key={i}
               index={i}
-              gridColsClassName={'grid-cols-3'}
+              gridColsClassName="grid-cols-3"
             >
               <CardSection
-                title={'ID'}
+                title="ID"
                 value={`ID ${value.strategy.idDisplay}`}
               />
 
               <CardSection
-                title={'Pair'}
+                title="Pair"
                 value={buildPairNameByStrategy(value.strategy)}
               />
 
               <CardSection
-                title={'Share'}
+                title="Share"
                 value={buildPercentageString(value.share)}
               />
 
               <CardSection
-                title={'Value'}
+                title="Value"
                 value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
               />
 
               <CardSection
-                title={'Amount'}
+                title="Amount"
                 value={buildAmountString(value.amount, selectedToken)}
               />
             </PortfolioMobileCard>

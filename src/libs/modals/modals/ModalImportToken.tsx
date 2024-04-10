@@ -34,12 +34,12 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
   const blockClasses = 'my-20 h-80 rounded-8';
 
   return (
-    <ModalOrMobileSheet id={id} title={'Import Token'}>
+    <ModalOrMobileSheet id={id} title="Import Token">
       <div className="mt-40">
         <IconTitleText
           variant="warning"
           icon={<IconWarning />}
-          title={'Use at your own risk'}
+          title="Use at your own risk"
           text={
             "This token doesn't appear on the active token list. Anyone can create a token, including fake versions of existing tokens that claim to represent projects."
           }

@@ -90,7 +90,7 @@ export const NotificationLine: FC<{
           {notification.txHash && (
             <NewTabLink
               to={getExplorerLink('tx', notification.txHash)}
-              className={'font-weight-500 mt-10 flex items-center'}
+              className="font-weight-500 mt-10 flex items-center"
             >
               View on Etherscan <IconLink className="ml-6 w-14" />
             </NewTabLink>

@@ -6,6 +6,6 @@ type TabsMenuProps = {
 
 export const TabsMenu: FC<TabsMenuProps> = ({ children }) => {
   return (
-    <div className={'flex space-x-2 rounded-10 bg-black p-2'}>{children}</div>
+    <div className="rounded-10 flex space-x-2 bg-black p-2">{children}</div>
   );
 };

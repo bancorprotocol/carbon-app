@@ -45,24 +45,24 @@ export const PortfolioAllTokensMobile: FC<Props> = ({
               <div className={cn('flex', 'items-center', 'text-18')}>
                 <LogoImager
                   src={value.token.logoURI}
-                  alt={'Token Logo'}
+                  alt="Token Logo"
                   className={cn('w-36', 'h-36', 'mr-10')}
                 />
                 {value.token.symbol}
               </div>
 
               <CardSection
-                title={'Amount'}
+                title="Amount"
                 value={buildAmountString(value.amount, value.token)}
               />
 
               <CardSection
-                title={'Share'}
+                title="Share"
                 value={buildPercentageString(value.share)}
               />
 
               <CardSection
-                title={'Value'}
+                title="Value"
                 value={getFiatDisplayValue(value.value, selectedFiatCurrency)}
               />
             </PortfolioMobileCard>

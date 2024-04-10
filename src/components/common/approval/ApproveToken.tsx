@@ -166,9 +166,9 @@ export const ApproveToken: FC<Props> = ({
   return (
     <>
       <div className="bg-content h-85 flex items-center justify-between rounded px-20">
-        <div className={'space-y-6'}>
-          <div className={'flex items-center space-x-10'}>
-            <LogoImager alt={'Token'} src={token.logoURI} className="size-30" />
+        <div className="space-y-6">
+          <div className="flex items-center space-x-10">
+            <LogoImager alt="Token" src={token.logoURI} className="size-30" />
             <div className="font-weight-500">{token.symbol}</div>
           </div>
         </div>
@@ -191,7 +191,7 @@ export const ApproveToken: FC<Props> = ({
                     variant={isLimited ? 'secondary' : 'white'}
                     isOn={!isLimited}
                     setIsOn={handleLimitChange}
-                    size={'sm'}
+                    size="sm"
                   />
                 </div>
               </div>

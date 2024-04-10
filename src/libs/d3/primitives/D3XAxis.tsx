@@ -13,7 +13,7 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
       {/*<path*/}
       {/*  d={['M', 0, 6, 'v', -6, 'H', dms.boundedWidth, 'v', 6].join(' ')}*/}
       {/*  fill="none"*/}
-      {/*  className={'stroke-background-800'}*/}
+      {/*  className='stroke-background-800'*/}
       {/*/>*/}
       <line
         x1={-dms.marginLeft}
@@ -25,7 +25,7 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
           <line
             y1={dms.boundedHeight * -1}
             y2="0"
-            className={'stroke-background-800'}
+            className="stroke-background-800"
           />
           <text
             key={value}

@@ -26,15 +26,15 @@ export const ModalTokenListImport: FC<{ address: string }> = ({ address }) => {
   return (
     <>
       <div
-        className={'mt-40 flex w-full flex-col items-center'}
+        className="mt-40 flex w-full flex-col items-center"
         style={{ height: innerHeight - 218 }}
       >
         <IconTitleText
           icon={<IconSearch />}
-          title={'Token not found'}
+          title="Token not found"
           text={<Text />}
         />
-        <Button variant={'white'} onClick={onClick} className={'my-30'}>
+        <Button variant="white" onClick={onClick} className="my-30">
           Import Token
         </Button>
       </div>

@@ -1053,7 +1053,7 @@ const content = [
 
 export const TermsPage = () => {
   return (
-    <Page title={'Terms of Use'}>
+    <Page title="Terms of Use">
       <>
         <span>Last updated: 18 April, 2023</span>
         <p>
@@ -1129,7 +1129,7 @@ export const TermsPage = () => {
 
         {content.map((item, index) => (
           <div key={index} className="legal pt-10">
-            <h2 className="font-semibold mb-10 text-[20px]">
+            <h2 className="mb-10 text-[20px] font-semibold">
               {item.id}. {item.subtitle}
             </h2>
             <div className="mb-20 text-[16px]">{item.html}</div>

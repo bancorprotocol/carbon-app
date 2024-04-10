@@ -24,10 +24,10 @@ export const MainMenuLeft: FC = () => {
         to="/"
         onClick={() => carbonEvents.navigation.navHomeClick(undefined)}
       >
-        <LogoCarbon className={'w-34'} />
+        <LogoCarbon className="w-34" />
       </Link>
 
-      <div className={'hidden space-x-24 md:block'}>
+      <div className="hidden space-x-24 md:block">
         {menuItems.map(({ label, href }, index) => {
           const isSamePage = isSamePageLink(href);
 

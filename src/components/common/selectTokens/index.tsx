@@ -26,15 +26,15 @@ export const SelectTokens: FC<Props> = ({
   middleDisabled,
 }) => {
   return (
-    <div className={'flex items-center justify-between'}>
+    <div className="flex items-center justify-between">
       <button
         onClick={() => onClick0()}
         className={
           '-mr-13 rounded-12 px-18 flex w-[140px] flex-grow items-center bg-black py-10'
         }
       >
-        <LogoImager alt={''} src={imgUrl0} className="size-30 mr-8" />
-        <div className={'text-16 font-weight-500 mr-auto'}>
+        <LogoImager alt="" src={imgUrl0} className="size-30 mr-8" />
+        <div className="text-16 font-weight-500 mr-auto">
           {symbol0 ? shortenString(symbol0, '...', 5) : 'Select'}
         </div>
         <IconChevron className="w-14" />
@@ -55,7 +55,7 @@ export const SelectTokens: FC<Props> = ({
         }
       >
         <LogoImager
-          alt={''}
+          alt=""
           src={imgUrl1}
           className="size-30 mr-8 rounded-full"
         />

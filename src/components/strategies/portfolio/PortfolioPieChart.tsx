@@ -22,11 +22,9 @@ export const PortfolioPieChart = ({
         'rounded-10 bg-background-900 relative aspect-square w-full flex-shrink-0 md:size-[400px]'
       }
     >
-      <div
-        className={'absolute flex h-full w-full items-center justify-center'}
-      >
+      <div className="absolute flex h-full w-full items-center justify-center">
         {isLoading ? (
-          <div className={'h-[80px]'}>
+          <div className="h-[80px]">
             <CarbonLogoLoading />
           </div>
         ) : (

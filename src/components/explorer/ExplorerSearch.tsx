@@ -150,7 +150,7 @@ export const _ExplorerSearch: FC = () => {
           className="w-40 shrink-0 px-0 md:w-[180px]"
         >
           <IconSearch className="size-16 md:mr-8" />
-          <span className={'hidden md:block'}>Search</span>
+          <span className="hidden md:block">Search</span>
         </Button>
       </form>
       {isInvalidAddress && (
