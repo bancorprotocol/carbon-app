@@ -86,6 +86,31 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     });
   }
 
+  items.push({
+    id: 'simulate',
+    name: 'Simulate Strategy',
+    action: () => {
+      navigate({
+        to: '/simulate/$simulationType',
+        params: {
+          simulationType: !isOverlapping ? 'recurring' : 'overlapping',
+        },
+        search: {
+          baseToken: strategy.base.address,
+          quoteToken: strategy.quote.address,
+          buyMin: strategy.order0.startRate,
+          buyMax: strategy.order0.endRate,
+          buyBudget: strategy.order0.balance,
+          buyIsRange: strategy.order0.endRate !== strategy.order0.startRate,
+          sellMin: strategy.order1.startRate,
+          sellMax: strategy.order1.endRate,
+          sellBudget: strategy.order1.balance,
+          sellIsRange: strategy.order1.endRate !== strategy.order1.startRate,
+        },
+      });
+    },
+  });
+
   if (isExplorer) {
     items.push({
       id: 'walletOwner',

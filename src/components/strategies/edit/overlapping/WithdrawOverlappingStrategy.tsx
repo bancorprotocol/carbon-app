@@ -13,7 +13,6 @@ import { useMarketIndication } from 'components/strategies/marketPriceIndication
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
@@ -34,8 +33,6 @@ interface Props {
 export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
-  const buyId = useId();
-  const sellId = useId();
 
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
@@ -217,39 +214,23 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             htmlFor={`${buyBudgetId} ${sellBudgetId}`}
           />
         )}
-        <footer className="flex items-center gap-8">
-          {!withdrawAll && (
-            <>
-              <IconAction className="h-16 w-16" />
-              <p className="text-12 text-white/60">
-                Price range and liquidity spread remain unchanged.&nbsp;
-                <a
-                  href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-4 font-weight-500 text-primary"
-                >
-                  <span>Learn More</span>
-                  <IconLink className="inline h-12 w-12" />
-                </a>
-              </p>
-            </>
-          )}
-          {withdrawAll && (
-            <output
-              htmlFor={[buyId, sellId].join(',')}
-              role="alert"
-              aria-live="polite"
-              className="flex items-center gap-10 font-mono text-12 text-warning"
-            >
-              <IconWarning className="h-12 w-12" />
-              <span className="flex-1">
-                Please note that your strategy will be inactive as it will not
-                have any budget.
-              </span>
-            </output>
-          )}
-        </footer>
+        {!withdrawAll && (
+          <footer className="flex items-center gap-8">
+            <IconAction className="h-16 w-16" />
+            <p className="text-12 text-white/60">
+              Price range and liquidity spread remain unchanged.&nbsp;
+              <a
+                href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-4 font-weight-500 text-primary"
+              >
+                <span>Learn More</span>
+                <IconLink className="inline h-12 w-12" />
+              </a>
+            </p>
+          </footer>
+        )}
       </article>
     </>
   );
