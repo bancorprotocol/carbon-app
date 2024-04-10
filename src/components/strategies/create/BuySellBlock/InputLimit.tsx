@@ -2,7 +2,7 @@ import { ChangeEvent, FC, FocusEvent, useEffect, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { formatNumber, sanitizeNumber } from 'utils/helpers';
+import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
@@ -75,12 +75,11 @@ export const InputLimit: FC<InputLimitProps> = ({
   return (
     <>
       <div
-        className={`
-          rounded-16 flex cursor-text flex-col gap-5 border border-black bg-black p-16
-          focus-within:border-white/50
-          ${error ? '!border-error/50' : ''}
-          ${showWarning ? '!border-warning' : ''}
-        `}
+        className={cn(
+          'rounded-16 flex cursor-text flex-col gap-5 border border-black bg-black p-16 focus-within:border-white/50',
+          showWarning && 'border-warning focus-within:border-warning',
+          error && 'border-error/50 focus-within:border-error/50'
+        )}
         onClick={() => document.getElementById(id ?? inputId)?.focus()}
       >
         <div className="flex">
@@ -95,10 +94,10 @@ export const InputLimit: FC<InputLimitProps> = ({
             onBlur={handleBlur}
             aria-label="Enter Price"
             placeholder="Enter Price"
-            className={`
-              text-18 font-weight-500 flex-1 text-ellipsis bg-transparent text-start focus:outline-none
-              ${error ? 'text-error' : ''}
-            `}
+            className={cn(
+              'text-18 font-weight-500 flex-1 text-ellipsis bg-transparent text-start focus:outline-none',
+              error && 'text-error'
+            )}
             data-testid="input-price"
           />
           {marketPrice !== 0 && (
