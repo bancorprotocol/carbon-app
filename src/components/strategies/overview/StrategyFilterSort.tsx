@@ -106,7 +106,7 @@ export const StrategyFilterSort = () => {
           {...attr}
         >
           <IconFilter className="size-18 md:hidden" />
-          <span className="hidden items-center gap-10 md:inline-flex">
+          <span className="hidden gap-10 md:inline-flex md:items-center">
             Filter & Sort <IconChevron className="w-14" />
           </span>
         </button>
