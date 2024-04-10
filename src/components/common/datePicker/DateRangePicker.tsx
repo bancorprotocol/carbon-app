@@ -43,6 +43,7 @@ interface Props {
   options?: Omit<CalendarProps, 'mode' | 'selected' | 'onSelect'>;
   required?: boolean;
   form?: string;
+  disabled?: boolean;
 }
 
 const displayRange = (start?: Date, end?: Date) => {
@@ -65,9 +66,12 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
         'hover:bg-background-800',
         hasDates
           ? 'border-primary active:border-primary-light'
-          : 'border-background-800 hover:border-background-700 active:border-background-600'
+          : 'border-background-800 hover:border-background-700 active:border-background-600',
+        props.disabled &&
+          'cursor-not-allowed border-background-800 hover:border-background-800 hover:bg-transparent active:border-background-800'
       )}
       data-testid="date-picker-button"
+      disabled={props.disabled}
     >
       <CalendarIcon className="h-14 w-14 text-primary" />
       <span
@@ -76,11 +80,13 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
       >
         {displayRange(props.start, props.end)}
       </span>
-      <ChevronIcon
-        className={cn('h-12 w-12 text-white/80 transition-transform', {
-          'rotate-180': isOpen,
-        })}
-      />
+      {!props.disabled && (
+        <ChevronIcon
+          className={cn('h-12 w-12 text-white/80 transition-transform', {
+            'rotate-180': isOpen,
+          })}
+        />
+      )}
     </button>
   );
 

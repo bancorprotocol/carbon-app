@@ -67,9 +67,10 @@ export const SimResultChartHeader = ({
         presets={datePickerPresets}
         options={{ disabled: datePickerDisabledDays }}
         required
+        disabled={simulationType === 'overlapping'}
       />
     );
-  }, [endUnix, onDatePickerConfirm, startUnix]);
+  }, [endUnix, onDatePickerConfirm, simulationType, startUnix]);
 
   return (
     <section className="flex flex-wrap items-center justify-evenly gap-8 py-20 px-24 md:justify-between">

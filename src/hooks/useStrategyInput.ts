@@ -4,7 +4,6 @@ import { useTokens } from 'hooks/useTokens';
 import { StrategyInputSearch } from 'libs/routing/routes/sim';
 import { Token } from 'libs/tokens';
 import { useCallback, useMemo, useState } from 'react';
-import { stringToBoolean } from 'utils/helpers';
 
 export interface InternalStrategyInput extends StrategyInputSearch {
   sellBudgetError?: string;
@@ -37,6 +36,7 @@ export interface StrategyInputValues {
   sell: StrategyInputOrder;
   start?: string;
   end?: string;
+  overlappingSpread?: string;
 }
 
 interface Props {
@@ -46,11 +46,7 @@ interface Props {
 export const useStrategyInput = ({ searchState }: Props) => {
   const { getTokenById } = useTokens();
   const navigate = useNavigate();
-  const [_state, setState] = useState<InternalStrategyInput>({
-    ...searchState,
-    sellIsRange: stringToBoolean(String(searchState.sellIsRange), true),
-    buyIsRange: stringToBoolean(String(searchState.buyIsRange), true),
-  });
+  const [_state, setState] = useState<InternalStrategyInput>(searchState);
 
   const baseToken = useMemo(
     () => getTokenById(_state.baseToken),

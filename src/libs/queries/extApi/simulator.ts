@@ -56,45 +56,70 @@ export type SimulatorReturn = {
   gains?: number;
 };
 
+export interface SimulatorDataNew {
+  date: number;
+  price: string;
+  sell: string;
+  buy: string;
+  portfolioOverHodlInPercent: string;
+  portfolioValueInQuote: string;
+  hodlValueInQuote: string;
+  baseBalance: string;
+  basePortion: string;
+  quoteBalance: string;
+  quotePortion: string;
+}
+
+interface SimulatorBoundsNew {
+  sellMin: string;
+  sellMax: string;
+  buyMin: string;
+  buyMax: string;
+}
+
+export interface SimulatorReturnNew {
+  data: Array<SimulatorDataNew>;
+  bounds: SimulatorBoundsNew;
+  roiInPercent: string;
+  gainsInQuote: string;
+}
+
 export type SimulatorAPIParams = Omit<
   SimulatorResultSearch,
-  'buyIsRange' | 'sellIsRange'
+  'buyIsRange' | 'sellIsRange' | 'type' | 'overlappingSpread'
 >;
 
-export const useGetSimulator = (params: SimulatorAPIParams) => {
+export const useGetSimulator = (search: SimulatorResultSearch) => {
   return useQuery<SimulatorReturn, Error>(
-    QueryKey.simulator(params),
+    QueryKey.simulator(search),
     async () => {
       try {
+        const { buyIsRange, sellIsRange, type, spread, ...params } = search;
         const res = await carbonApi.getSimulator(params);
 
+        // TODO cleanup schema
         const data: SimulatorReturn = {
-          data: res.dates.map((d, i) => ({
-            date: d,
-            price: Number(res.prices[i]),
-            ask: Number(res.ask[i]),
-            bid: Number(res.bid[i]),
-            balanceRISK: Number(res.RISK.balance[i]),
-            portionRISK: Number(res.portfolio_risk[i]),
-            balanceCASH: Number(res.CASH.balance[i]),
-            portionCASH: Number(res.portfolio_cash[i]),
-            portfolioValue: Number(res.portfolio_value[i]),
-            hodlValue: Number(res.hodl_value[i]),
-            portfolioOverHodl: Number(res.portfolio_over_hodl[i]),
+          data: res.data.map((x) => ({
+            date: x.date,
+            price: Number(x.price),
+            ask: Number(x.sell),
+            bid: Number(x.buy),
+            balanceRISK: Number(x.baseBalance),
+            portionRISK: Number(x.basePortion),
+            balanceCASH: Number(x.quoteBalance),
+            portionCASH: Number(x.quotePortion),
+            portfolioValue: Number(x.portfolioValueInQuote),
+            hodlValue: Number(x.hodlValueInQuote),
+            portfolioOverHodl: Number(x.portfolioOverHodlInPercent),
           })),
-          roi: Number(
-            res.portfolio_over_hodl[res.portfolio_over_hodl.length - 1]
-          ),
-          gains: Number(
-            Number(res.portfolio_value[res.portfolio_value.length - 1]) -
-              Number(res.hodl_value[res.hodl_value.length - 1])
-          ),
           bounds: {
-            askMax: Number(res.max_ask),
-            askMin: Number(res.min_ask),
-            bidMax: Number(res.max_bid),
-            bidMin: Number(res.min_bid),
+            askMax: Number(res.bounds.sellMax),
+            askMin: Number(res.bounds.sellMin),
+            bidMax: Number(res.bounds.buyMax),
+            bidMin: Number(res.bounds.buyMin),
           },
+          roi: Number(res.roiInPercent),
+          gains: Number(res.gainsInQuote),
         };
 
         return data;

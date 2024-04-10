@@ -166,11 +166,34 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             iconClassName="h-14 w-14 text-white/60"
           />
         </header>
+
+        <BudgetInput
+          id={sellBudgetId}
+          title="Set Sell Budget"
+          titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
+          token={base}
+          query={tokenBaseBalanceQuery}
+          budgetValue={order1.budget}
+          budgetError={order1.budgetError}
+          onChange={onSellBudgetChange}
+          disabled={belowMarket || order1.max === '0'}
+          withoutWallet
+        >
+          <WithdrawAllocatedBudget
+            token={base}
+            order={order1}
+            currentBudget={strategy.order1.balance}
+            setBudget={onSellBudgetChange}
+          />
+        </BudgetInput>
         <BudgetInput
           id={buyBudgetId}
+          title="Set Buy Budget"
+          titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           token={quote}
           query={tokenQuoteBalanceQuery}
-          order={order0}
+          budgetValue={order0.budget}
+          budgetError={order0.budgetError}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
           withoutWallet
@@ -181,22 +204,6 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             currentBudget={strategy.order0.balance}
             setBudget={onBuyBudgetChange}
             buy
-          />
-        </BudgetInput>
-        <BudgetInput
-          id={sellBudgetId}
-          token={base}
-          query={tokenBaseBalanceQuery}
-          order={order1}
-          onChange={onSellBudgetChange}
-          disabled={belowMarket || order1.max === '0'}
-          withoutWallet
-        >
-          <WithdrawAllocatedBudget
-            token={base}
-            order={order1}
-            currentBudget={strategy.order1.balance}
-            setBudget={onSellBudgetChange}
           />
         </BudgetInput>
         {budgetTooSmall && (
