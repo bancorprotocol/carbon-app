@@ -22,7 +22,10 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
     >
       <ul className="mt-25 flex flex-col gap-10">
         {reversedNotifications.map((notification) => (
-          <li key={notification.id} className="rounded-10 bg-black px-20 py-10">
+          <li
+            key={notification.id}
+            className="rounded-10 border-2 border-white/60 bg-black px-16 py-20"
+          >
             <NotificationLine notification={notification} />
           </li>
         ))}

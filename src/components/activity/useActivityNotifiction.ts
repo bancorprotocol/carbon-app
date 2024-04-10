@@ -5,6 +5,7 @@ import { useNotifications } from 'hooks/useNotifications';
 
 export const useActivityNotifications = () => {
   const { user } = useWeb3();
+  const [previousUser, setPreviousUser] = useState<string | null>(null);
   const [previous, setPrevious] = useState<number | null>(null);
   const query = useActivityQuery({ ownerId: user });
   const allActivities = query.data || [];
@@ -12,8 +13,15 @@ export const useActivityNotifications = () => {
     (a) => a.action === 'sell' || a.action === 'buy'
   );
   const { dispatchNotification } = useNotifications();
+
   useEffect(() => {
     if (query.isLoading) return;
+    // We need to keep this in the same useEffect to force re-evaluate previous in next render
+    if (user && user !== previousUser) {
+      setPreviousUser(user);
+      setPrevious(null);
+      return;
+    }
     const length = buyOrSell.length;
     if (typeof previous === 'number' && length > previous) {
       // Sorted by date desc
@@ -23,5 +31,12 @@ export const useActivityNotifications = () => {
       }
     }
     setPrevious(length);
-  }, [buyOrSell, dispatchNotification, previous, query.isLoading]);
+  }, [
+    buyOrSell,
+    dispatchNotification,
+    previous,
+    query.isLoading,
+    previousUser,
+    user,
+  ]);
 };
