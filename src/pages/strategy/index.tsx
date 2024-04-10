@@ -56,7 +56,7 @@ export const StrategyPage = () => {
           onClick={() => history.back()}
           className="bg-background-900 hover:bg-background-800 rounded-full p-12"
         >
-          <IconChevronLeft className="h-16 w-16" />
+          <IconChevronLeft className="size-16" />
         </button>
         <TokensOverlap tokens={[base, quote]} size={40} />
         <div className="flex-1 flex-col gap-8">

@@ -94,7 +94,7 @@ export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
             data-testid="status"
           >
             {statusText.inactive}
-            <TooltipIcon className="text-error h-10 w-10" />
+            <TooltipIcon className="text-error size-10" />
           </span>
         </Tooltip>
       )}

@@ -73,7 +73,7 @@ export const ActivityExport: FC<Props> = ({ activities }) => {
       className="border-background-800 text-12 hover:border-background-700 hover:bg-background-800 flex items-center gap-8 rounded-full border-2 px-12 py-8"
       download="activities.csv"
     >
-      <IconDownloadFile className="text-primary h-14 w-14" />
+      <IconDownloadFile className="text-primary size-14" />
       <span>Export</span>
     </a>
   );

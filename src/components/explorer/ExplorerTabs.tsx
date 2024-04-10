@@ -43,7 +43,7 @@ export const ExplorerTabs = () => {
       label: 'Activity',
       href: '/explore/$type/$slug/activity',
       params: { type, slug },
-      icon: <IconActivity className="h-18 w-18" />,
+      icon: <IconActivity className="size-18" />,
     },
   ];
 

@@ -266,7 +266,7 @@ export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
     const style = cn(buttonStyles({ variant: 'white' }), 'gap-8');
     return (
       <button {...props} className={style} ref={ref}>
-        <IconGear className="h-24 w-24" />
+        <IconGear className="size-24" />
         Manage
       </button>
     );
@@ -282,12 +282,12 @@ export const ManageButtonIcon = forwardRef<
       {...props}
       ref={ref}
       className={`
-        h-38 w-38 rounded-8 border-background-800 grid place-items-center border-2
+        size-38 rounded-8 border-background-800 grid place-items-center border-2
         hover:bg-white/10
         active:bg-white/20
       `}
     >
-      <IconGear className="h-24 w-24" />
+      <IconGear className="size-24" />
     </button>
   );
 });

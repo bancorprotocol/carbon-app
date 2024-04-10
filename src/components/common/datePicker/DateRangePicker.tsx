@@ -69,7 +69,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
       )}
       data-testid="date-picker-button"
     >
-      <CalendarIcon className="text-primary h-14 w-14" />
+      <CalendarIcon className="text-primary size-14" />
       <span
         className="justify-self-end text-white/60"
         data-testid="simulation-dates"
@@ -77,7 +77,7 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
         {displayRange(props.start, props.end)}
       </span>
       <ChevronIcon
-        className={cn('h-12 w-12 text-white/80 transition-transform', {
+        className={cn('size-12 text-white/80 transition-transform', {
           'rotate-180': isOpen,
         })}
       />
@@ -249,7 +249,7 @@ export const DatePickerButton = memo(
 
     return (
       <>
-        <CalendarIcon className="size-14 text-primary" />
+        <CalendarIcon className="text-primary size-14" />
         <span
           className="justify-self-end text-white/60"
           data-testid="simulation-dates"

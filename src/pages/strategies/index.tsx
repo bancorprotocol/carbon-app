@@ -44,7 +44,7 @@ export const StrategiesPage = () => {
     {
       label: 'Activity',
       href: '/strategies/activity',
-      icon: <IconActivity className="h-18 w-18" />,
+      icon: <IconActivity className="size-18" />,
     },
   ];
 

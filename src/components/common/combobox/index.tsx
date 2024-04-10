@@ -193,7 +193,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
         {icon}
         <span className="text-white/60">{label}</span>
         <IconChevron
-          className={cn('h-12 w-12 text-white/60 transition-transform', {
+          className={cn('size-12 text-white/60 transition-transform', {
             'rotate-180': open,
           })}
         />
@@ -271,7 +271,7 @@ export const Option: FC<OptionProps> = (props) => {
         name={name}
         value={value}
         defaultChecked={checked}
-        className="h-14 w-14"
+        className="size-14"
         tabIndex={checked ? 1 : 0}
       />
       <label htmlFor={id} className={cn('flex items-center gap-8', className)}>
@@ -285,7 +285,7 @@ const Empty = () => {
   return (
     <output className="flex max-w-[200px] flex-col items-center p-16">
       <div className="mb-16 grid place-items-center rounded-full bg-white/40 p-8">
-        <IconSearch className="h-16 w-16 self-center" />
+        <IconSearch className="size-16 self-center" />
       </div>
       <h3 className="text-14 font-weight-500 mb-8">Nothing found</h3>
       <p className="text-12 text-center text-white/80">

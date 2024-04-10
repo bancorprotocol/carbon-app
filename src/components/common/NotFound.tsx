@@ -28,9 +28,9 @@ export const NotFound = ({
       {showBackButton && (
         <button
           onClick={() => history.back()}
-          className="absolute top-8 left-8 rounded-full p-16 hover:bg-white/20"
+          className="absolute left-8 top-8 rounded-full p-16 hover:bg-white/20"
         >
-          <ForwardArrow className="h-16 w-16 rotate-180" />
+          <ForwardArrow className="size-16 rotate-180" />
         </button>
       )}
       <div
@@ -40,7 +40,7 @@ export const NotFound = ({
         })}
       >
         <IconSearch
-          className={cn('h-32 w-32', {
+          className={cn('size-32', {
             'text-primary': variant === 'info',
             'text-error': variant === 'error',
           })}

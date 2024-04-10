@@ -21,7 +21,7 @@ export const StrategyBlockCreate: FC<Props> = ({
         className
       )}
     >
-      <div className="bg-primary/20 h-72 w-72 rounded-full md:size-80">
+      <div className="bg-primary/20 size-72 rounded-full md:size-80">
         <IconPlus className="text-primary md:p-26 p-24" />
       </div>
       <span className="w-[185px] text-center leading-9 md:w-[210px]">
