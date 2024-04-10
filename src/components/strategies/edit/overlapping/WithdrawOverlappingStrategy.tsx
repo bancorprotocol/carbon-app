@@ -169,7 +169,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
         <BudgetInput
           id={sellBudgetId}
-          title="Set Sell Budget"
+          title="Withdraw Sell Budget"
           titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
           token={base}
           query={tokenBaseBalanceQuery}
@@ -188,7 +188,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
         </BudgetInput>
         <BudgetInput
           id={buyBudgetId}
-          title="Set Buy Budget"
+          title="Withdraw Buy Budget"
           titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           token={quote}
           query={tokenQuoteBalanceQuery}
