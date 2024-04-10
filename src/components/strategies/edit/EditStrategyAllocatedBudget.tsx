@@ -172,9 +172,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
         <div className="rounded-8 text-12 flex items-center gap-10 bg-white/5 p-12 text-left text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"
-            element={
-              'When updating the rates, the allocated budget will be distributed equally across the entire range'
-            }
+            element="When updating the rates, the allocated budget will be distributed equally across the entire range"
           />
           Strategy budget will be distributed across entire range
         </div>
