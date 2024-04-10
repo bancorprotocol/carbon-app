@@ -56,7 +56,7 @@ export const TradeSettings = ({
   ];
 
   return (
-    <div className={'mt-30'}>
+    <div className="mt-30">
       {settingsData.map((item) => (
         <Fragment key={item.id}>
           <TradeSettingsRow
@@ -65,9 +65,7 @@ export const TradeSettings = ({
             base={base}
             quote={quote}
           />
-          <hr
-            className={'my-20 border-b-2 border-background-700 last:hidden'}
-          />
+          <hr className="border-background-700 my-20 border-b-2 last:hidden" />
         </Fragment>
       ))}
     </div>
