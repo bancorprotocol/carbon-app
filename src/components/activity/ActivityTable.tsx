@@ -173,7 +173,7 @@ export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
     <Link
       to="/strategy/$id"
       params={{ id: id }}
-      className="bg-background-800 inline-flex items-center gap-4 rounded-full py-4 px-8"
+      className="bg-background-800 inline-flex items-center gap-4 rounded-full px-8 py-4"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
@@ -327,7 +327,7 @@ const iconColor = (action: ActivityAction) => {
 };
 
 const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
-  const className = `h-${size} w-${size}`;
+  const className = `size-${size}`;
   if (action === 'create') return <IconCheck className={className} />;
   if (action === 'transfer') return <IconTransfer className={className} />;
   if (action === 'edit') return <IconEdit className={className} />;
