@@ -84,7 +84,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     <>
       <BudgetInput
         id={sellBudgetId}
-        title="Set Sell Budget"
+        title="Sell Budget"
         titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
         token={base}
         budgetValue={order1.budget}

@@ -160,7 +160,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Withdraw Budget</h3>
+          <h3 className="flex-1 text-18 font-weight-500">Withdraw Budgets</h3>
           <Tooltip
             element='Indicate the amount you wish to withdraw to the available "wallet budget"'
             iconClassName="h-14 w-14 text-white/60"
@@ -169,7 +169,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
         <BudgetInput
           id={sellBudgetId}
-          title="Withdraw Sell Budget"
+          title="Sell Budget"
           titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
           token={base}
           query={tokenBaseBalanceQuery}
@@ -188,7 +188,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
         </BudgetInput>
         <BudgetInput
           id={buyBudgetId}
-          title="Withdraw Buy Budget"
+          title="Buy Budget"
           titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           token={quote}
           query={tokenQuoteBalanceQuery}

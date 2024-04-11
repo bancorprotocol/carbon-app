@@ -93,7 +93,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     <>
       <BudgetInput
         id={sellBudgetId}
-        title="Set Sell Budget"
+        title="Sell Budget"
         titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
         token={base}
         budgetValue={state.sell.budget}
@@ -149,8 +149,8 @@ const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
       The first price in the selected time frame is outside the ranges you've
       set for&nbsp;
       {buy ? 'buying' : 'selling'}&nbsp;
-      {base?.symbol}. Therefore, budget for buying {base?.symbol} is not
-      required.&nbsp;
+      {base?.symbol}. Therefore, budget for {buy ? 'buying' : 'selling'}{' '}
+      {base?.symbol} is not required.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"

@@ -19,8 +19,8 @@ export const EditStrategyHeader = ({
   const titleByType: { [key in EditTypes]: string } = {
     renew: 'Renew Strategy',
     editPrices: 'Edit Prices',
-    deposit: 'Deposit Budget',
-    withdraw: 'Withdraw Budget',
+    deposit: 'Deposit Budgets',
+    withdraw: 'Withdraw Budgets',
   };
 
   return (

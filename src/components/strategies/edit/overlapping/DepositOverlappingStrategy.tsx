@@ -160,7 +160,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Deposit Budget</h3>
+          <h3 className="flex-1 text-18 font-weight-500">Deposit Budgets</h3>
           <Tooltip
             element='Indicate the amount you wish to deposit from the available "allocated budget"'
             iconClassName="h-14 w-14 text-white/60"
@@ -168,7 +168,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
         </header>
         <BudgetInput
           token={base}
-          title="Set Sell Budget"
+          title="Sell Budget"
           titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
           query={tokenBaseBalanceQuery}
           budgetValue={order1.budget}
