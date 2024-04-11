@@ -19,7 +19,7 @@ export const TBody = <D extends object>({
         <tr>
           <td
             colSpan={table.getVisibleFlatColumns().length}
-            className="h-[320px] w-full items-center justify-center"
+            className="h-[320px] text-center"
           >
             <CarbonLogoLoading className="h-[80px]" />
           </td>
