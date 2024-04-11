@@ -121,12 +121,8 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
     // Set prices
     dispatch('buyMax', prices.buyPriceHigh);
-    // TODO reenable this for create strategy
-    // order0.setMarginalPrice(prices.buyPriceMarginal);
 
     dispatch('sellMin', prices.sellPriceLow);
-    // TODO reenable this for create strategy
-    // order1.setMarginalPrice(prices.sellPriceMarginal);
 
     // Set budgets
     const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
@@ -182,36 +178,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.buy.min, state.sell.max, marketPrice, spread]);
 
-  // // Update on buyMin changes
-  // useEffect(() => {
-  //   if (!state.buy.min) return;
-  //
-  //   // automatically update max if min > max
-  //   const timeout = setTimeout(async () => {
-  //     const minSellMax = getMinSellMax(Number(state.buy.min), spread);
-  //     if (Number(state.sell.max) < minSellMax) {
-  //       setMax(minSellMax.toString());
-  //     }
-  //   }, 1000);
-  //   return () => clearTimeout(timeout);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.buy.min]);
-  //
-  // // Update on sellMax changes
-  // useEffect(() => {
-  //   if (!state.sell.max) return;
-  //
-  //   // automatically update min if min > max
-  //   const timeout = setTimeout(async () => {
-  //     const maxBuyMin = getMaxBuyMin(Number(state.sell.max), spread);
-  //     if (Number(state.buy.min) > maxBuyMin) {
-  //       setMin(maxBuyMin.toString());
-  //     }
-  //   }, 1000);
-  //   return () => clearTimeout(timeout);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.sell.max]);
-
   // Initialize order when market price is available
   useEffect(() => {
     if (marketPrice <= 0 || !quote || !base) return;
@@ -254,24 +220,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           <IconLink className="h-12 w-12" />
         </a>
       </article>
-      {/*<article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">*/}
-      {/*  <header className="flex items-center gap-8">*/}
-      {/*    <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>*/}
-      {/*    <Tooltip*/}
-      {/*      element="Drag and drop your strategy buy and sell prices."*/}
-      {/*      iconClassName="h-14 w-14 text-white/60"*/}
-      {/*    />*/}
-      {/*  </header>*/}
-      {/*  <OverlappingStrategyGraph*/}
-      {/*    {...props}*/}
-      {/*    order0={order0}*/}
-      {/*    order1={order1}*/}
-      {/*    marketPrice={marketPrice}*/}
-      {/*    marketPricePercentage={marketPricePercentage}*/}
-      {/*    setMin={setMin}*/}
-      {/*    setMax={setMax}*/}
-      {/*  />*/}
-      {/*</article>*/}
       <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
         <header className="flex items-center gap-8">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">

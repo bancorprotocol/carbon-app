@@ -1,8 +1,8 @@
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from 'components/common/button';
+import { CreateOverlappingStrategy } from 'components/simulator/input/overlapping/CreateOverlappingStrategy';
 import { SimInputChart } from 'components/simulator/input/SimInputChart';
-import { SimInputOverlapping } from 'components/simulator/input/SimInputOverlapping';
 import { useSimulatorOverlappingInput } from 'hooks/useSimulatorOverlappingInput';
 import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
 import { simulatorInputOverlappingRoute } from 'libs/routing/routes/sim';
@@ -98,10 +98,12 @@ export const SimulatorInputOverlappingPage = () => {
         className="flex flex-col gap-y-20"
         data-testid="create-simulation-form"
       >
-        <SimInputOverlapping
+        <CreateOverlappingStrategy
           state={state}
           dispatch={dispatch}
           marketPrice={data?.[0].open ?? 0}
+          spread={+state.spread!}
+          setSpread={(v) => dispatch('spread', v.toString())}
         />
         <Button type="submit" fullWidth size="lg" disabled={btnDisabled}>
           {loadingText || noBudgetText || 'Start Simulation'}

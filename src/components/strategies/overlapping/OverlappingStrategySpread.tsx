@@ -5,7 +5,6 @@ import {
   useState,
   FocusEvent,
   ChangeEvent,
-  useEffect,
 } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
@@ -50,11 +49,11 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (spread === undefined) {
-      setSpread(defaultValue);
-    }
-  }, [defaultValue, setSpread, spread]);
+  // useEffect(() => {
+  //   if (spread === undefined) {
+  //     setSpread(defaultValue);
+  //   }
+  // }, [defaultValue, setSpread, spread]);
 
   const onKeyDown = (e: KeyboardEvent) => {
     const fieldset = root.current!;

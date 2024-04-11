@@ -84,7 +84,6 @@ export const D3ChartRecurring = ({
   );
 
   const labels = {
-    // TODO add formater function to child
     buy: {
       min: prettifyNumber(prices.buy.min),
       max: prettifyNumber(prices.buy.max),

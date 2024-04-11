@@ -54,29 +54,6 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     { ...sellOrder, budget: sell.budget }
   );
 
-  // const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
-  //   if (new SafeDecimal(balance).lt(order.budget)) {
-  //     order.setBudgetError('Insufficient balance');
-  //   } else {
-  //     order.setBudgetError('');
-  //   }
-  // };
-
-  // TODO reenable this for create strategy
-  // // Check for error when buy budget changes
-  // useEffect(() => {
-  //   const balance = token1BalanceQuery.data ?? '0';
-  //   checkInsufficientBalance(balance, order0);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [order0.budget, token1BalanceQuery.data]);
-  //
-  // // Check for error when sell budget changes
-  // useEffect(() => {
-  //   const balance = token0BalanceQuery.data ?? '0';
-  //   checkInsufficientBalance(balance, order1);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [order1.budget, token0BalanceQuery.data]);
-
   const onBuyBudgetChange = (value: string) => {
     dispatch('buyBudget', value);
     setAnchoredOrder('buy');

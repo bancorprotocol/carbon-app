@@ -15,27 +15,13 @@ interface Props {
   marketPricePercentage: MarketPricePercentage;
 }
 
-const getPriceWarnings = (isOutOfMarket: boolean): string[] => {
-  if (!isOutOfMarket) return [];
-  return [
-    'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.',
-  ];
-};
-
 export const CreateOverlappingRange: FC<Props> = (props) => {
-  const { base, quote, min, max, marketPricePercentage, error, setError } =
-    props;
-  // TODO - reenable when used in create strategy
-  // const minAboveMarket = isMinAboveMarket(order0);
-  // const maxBelowMarket = isMaxBelowMarket(order1);
-  // const priceWarnings = getPriceWarnings(minAboveMarket || maxBelowMarket);
+  const { base, quote, min, max, error, setError } = props;
 
   return (
     <InputRange
       base={base}
       quote={quote}
-      // min={order0.min}
-      // max={order1.max}
       min={min}
       max={max}
       setMin={props.setMin}
@@ -44,8 +30,6 @@ export const CreateOverlappingRange: FC<Props> = (props) => {
       maxLabel="Max Sell Price"
       error={error}
       setRangeError={setError}
-      // warnings={priceWarnings}
-      // marketPricePercentages={marketPricePercentage}
     />
   );
 };
