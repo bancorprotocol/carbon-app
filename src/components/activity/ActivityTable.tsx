@@ -191,7 +191,7 @@ export const ActivityIcon: FC<ActivityIconProps> = (props) => {
   const classes = cn(
     'grid place-items-center rounded-full',
     iconColor(activity.action),
-    `h-${size} w-${size}`,
+    `size-${size}`,
     className
   );
   return (
