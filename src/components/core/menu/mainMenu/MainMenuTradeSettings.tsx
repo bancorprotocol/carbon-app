@@ -17,7 +17,7 @@ export const MainMenuTradeSettings: FC<Props> = ({ baseToken, quoteToken }) => {
   return (
     <Button
       variant="secondary"
-      className="flex w-40 items-center justify-center !p-0"
+      className="flex w-40 items-center justify-center p-0"
       onClick={() => {
         openModal('tradeSettings', { base: baseToken, quote: quoteToken });
         carbonEvents.trade.tradeSettingsClick({
