@@ -100,8 +100,8 @@ export const TokenInputField: FC<Props> = ({
           onBlur={handleBlur}
           className={cn(
             'text-18 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none',
-            isError && 'text-error',
-            disabled && 'cursor-not-allowed text-white/40'
+            disabled && 'cursor-not-allowed text-white/40',
+            isError && 'text-error'
           )}
           disabled={disabled}
           data-testid={testid}
