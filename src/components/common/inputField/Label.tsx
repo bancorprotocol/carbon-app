@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, FC, LabelHTMLAttributes } from 'react';
 import { labelStyles } from 'components/common/inputField/labelStyles';
 import { VariantProps } from 'class-variance-authority';
+import { cn } from 'utils/helpers';
 
 type LabelHTMLProps = DetailedHTMLProps<
   LabelHTMLAttributes<HTMLLabelElement>,
@@ -23,7 +24,9 @@ export const Label: FC<LabelProps & VariantProps<typeof labelStyles>> = ({
       {(label || msg) && (
         <div className="mb-10 flex justify-between">
           <div>{label}</div>
-          <div className={labelStyles({ variant: props.variant })}>{msg}</div>
+          <div className={cn(labelStyles({ variant: props.variant }))}>
+            {msg}
+          </div>
         </div>
       )}
       {children}
