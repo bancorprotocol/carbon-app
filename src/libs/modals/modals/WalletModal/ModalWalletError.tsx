@@ -12,7 +12,7 @@ export const ModalWalletError: FC<Props> = ({ logoUrl, error, name }) => {
     <>
       <Imager alt="Wallet Logo" src={logoUrl} className="w-60" />
       <span>{name} Error:</span>
-      <span className="rounded-10 bg-error/20 px-20 py-10 font-weight-500 text-error">
+      <span className="rounded-10 bg-error/20 font-weight-500 text-error px-20 py-10">
         {error}
       </span>
     </>

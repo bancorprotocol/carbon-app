@@ -35,7 +35,7 @@ export const D3SimPriceRange = ({
         y0Acc={yAcc}
         y1Acc={() => dashedLine}
         data={data}
-        fill={'grey'}
+        fill="grey"
         fillOpacity={0.25}
       />
       <D3AreaPath

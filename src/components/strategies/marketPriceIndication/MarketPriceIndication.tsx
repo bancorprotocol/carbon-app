@@ -27,7 +27,7 @@ export const MarketPriceIndication: FC<MarketPriceIndicationProps> = ({
 
   return (
     <span
-      className={`rounded-6 bg-background-800 flex items-center gap-5 py-4 px-6 ${
+      className={`rounded-6 bg-background-800 flex items-center gap-5 px-6 py-4 ${
         marketPriceWarning ? 'text-warning' : 'text-white/60'
       }`}
       data-testid="market-price-indication"

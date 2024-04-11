@@ -13,7 +13,7 @@ export const StrategiesPortfolioTokenPage = () => {
       strategies={strategies}
       isLoading={isLoading}
       address={address}
-      backLinkHref={'/strategies/portfolio'}
+      backLinkHref="/strategies/portfolio"
     />
   );
 };

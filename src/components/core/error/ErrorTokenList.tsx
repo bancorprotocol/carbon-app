@@ -6,9 +6,7 @@ export const ErrorTokenList = () => {
     <ErrorWrapper
       icon={<IconWarning />}
       title="Network Error"
-      text={
-        'Failed to fetch token list. Please check your network connection and try again.'
-      }
+      text="Failed to fetch token list. Please check your network connection and try again."
       variant="error"
     />
   );

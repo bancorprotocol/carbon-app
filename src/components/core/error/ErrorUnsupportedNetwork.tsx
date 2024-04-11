@@ -10,9 +10,7 @@ export const ErrorUnsupportedNetwork = () => {
     <ErrorWrapper
       icon={<IconWarning />}
       title="Wrong Network"
-      text={
-        'Please connect to Ethereum Mainnet using your wallet or the button below'
-      }
+      text="Please connect to Ethereum Mainnet using your wallet or the button below"
       variant="error"
     >
       <Button variant="white" fullWidth onClick={switchNetwork}>

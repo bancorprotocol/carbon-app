@@ -105,7 +105,7 @@ export const ModalTradeTokenListContent: FC<Props> = ({
             return (
               <li
                 key={`${selectedList}-${pairKey}`}
-                className="absolute inset-0 flex items-center justify-between rounded-12 hover:bg-black"
+                className="rounded-12 absolute inset-0 flex items-center justify-between hover:bg-black"
                 style={style}
               >
                 <button

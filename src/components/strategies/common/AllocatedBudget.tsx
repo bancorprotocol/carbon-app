@@ -13,7 +13,7 @@ interface DepositProps {
 export const DepositAllocatedBudget: FC<DepositProps> = (props) => {
   const { currentBudget, token, buy } = props;
   return (
-    <div className="flex items-center justify-between gap-16 rounded-8 border border-background-800 py-8 px-16 font-mono text-12 font-weight-500">
+    <div className="rounded-8 border-background-800 text-12 font-weight-500 flex items-center justify-between gap-16 border px-16 py-8 font-mono">
       <p className="flex items-center gap-6">
         Allocated Budget
         <Tooltip
@@ -46,7 +46,7 @@ export const WithdrawAllocatedBudget: FC<WithdrawProps> = (props) => {
     setBudget = order.setBudget,
   } = props;
   return (
-    <div className="flex items-center justify-between gap-7 rounded-8 border border-background-800 py-8 px-16 font-mono text-12 font-weight-500">
+    <div className="rounded-8 border-background-800 text-12 font-weight-500 flex items-center justify-between gap-7 border px-16 py-8 font-mono">
       <p className="flex flex-1 items-center gap-6">
         Allocated Budget
         <Tooltip
@@ -61,7 +61,7 @@ export const WithdrawAllocatedBudget: FC<WithdrawProps> = (props) => {
         onClick={() => setBudget(currentBudget)}
         className={
           disabled
-            ? 'pointer-events-none text-primary/40'
+            ? 'text-primary/40 pointer-events-none'
             : 'text-primary hover:text-white'
         }
       >

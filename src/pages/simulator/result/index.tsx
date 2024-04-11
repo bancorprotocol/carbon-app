@@ -28,12 +28,12 @@ export const SimulatorResultPage = () => {
   return (
     <div className="p-20">
       <Link
-        to={'/simulate/$simulationType'}
+        to="/simulate/$simulationType"
         params={{ simulationType }}
         search={ctx.search}
         className="text-24 font-weight-500 mb-16 flex items-center"
       >
-        <div className="bg-background-800 size-40 mr-16 flex items-center justify-center rounded-full">
+        <div className="bg-background-800 mr-16 flex size-40 items-center justify-center rounded-full">
           <IconChevronLeft className="size-16" />
         </div>
         Simulate Strategy

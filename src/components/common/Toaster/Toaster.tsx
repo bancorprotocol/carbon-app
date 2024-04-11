@@ -8,7 +8,7 @@ export const Toaster: FC = () => {
       {toaster.toasts.map((toast) => (
         <li
           key={toast.id}
-          className="my-5 animate-slideUp rounded-full border border-white/60 bg-background-800 py-8 px-16"
+          className="animate-slideUp bg-background-800 my-5 rounded-full border border-white/60 px-16 py-8"
         >
           <output>{toast.content}</output>
         </li>

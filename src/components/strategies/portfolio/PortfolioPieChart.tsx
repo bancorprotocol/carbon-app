@@ -17,11 +17,7 @@ export const PortfolioPieChart = ({
   hideChart,
 }: Props) => {
   return (
-    <div
-      className={
-        'rounded-10 bg-background-900 relative aspect-square w-full flex-shrink-0 md:size-[400px]'
-      }
-    >
+    <div className="rounded-10 bg-background-900 relative aspect-square w-full flex-shrink-0 md:size-[400px]">
       <div className="absolute flex size-full items-center justify-center">
         {isLoading ? (
           <div className="h-[80px]">

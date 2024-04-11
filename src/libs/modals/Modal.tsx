@@ -51,10 +51,10 @@ export const Modal: FC<ModalProps> = ({
       >
         <div
           data-testid={testId}
-          className="relative flex w-full flex-col gap-20 overflow-hidden rounded-10 border-0 bg-background-900 p-20 outline-none focus:outline-none"
+          className="rounded-10 bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-none focus:outline-none"
         >
           {isLoading && (
-            <div className="statusBar absolute inset-x-0 top-0 h-6 bg-primary/25" />
+            <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
           )}
           <header className="flex justify-between">
             {typeof title === 'string' ? (
