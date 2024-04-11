@@ -1,10 +1,11 @@
 import { useWeb3 } from 'libs/web3';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getLSUserNotifications } from 'libs/notifications/utils';
 import { useNotifications } from 'hooks/useNotifications';
 import { useInterval } from 'hooks/useInterval';
 import { NotificationLine } from './NotificationLine';
+import { Notification } from './types';
 
 export const NotificationAlerts: FC = () => {
   const { user } = useWeb3();
@@ -30,22 +31,42 @@ export const NotificationAlerts: FC = () => {
     <ul className="fixed top-80 right-10 z-50" data-testid="notification-list">
       <AnimatePresence mode="popLayout">
         {alerts.map((n) => (
-          <motion.li
-            key={n.id}
-            layout
-            variants={notificationVariants}
-            whileHover="hover"
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="mb-20 block w-[350px] overflow-hidden rounded-10 border border-white/60  bg-background-900 px-16 py-12"
-            data-testid={`notification-${n.testid}`}
-          >
-            <NotificationLine isAlert notification={n} />
-          </motion.li>
+          <NotificationItem notification={n} key={n.id} />
         ))}
       </AnimatePresence>
     </ul>
+  );
+};
+
+const NotificationItem: FC<{ notification: Notification }> = (props) => {
+  const { notification } = props;
+  const id = notification.id;
+  const [delay, setDelay] = useState(7 * 1000);
+  const { dismissAlert } = useNotifications();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => dismissAlert(id), delay);
+    return () => clearTimeout(timeout);
+  }, [delay, dismissAlert, id]);
+
+  return (
+    <motion.li
+      layout
+      variants={notificationVariants}
+      onMouseEnter={() => setDelay(1_000_000)} // Infinity doesn't work with timeout
+      onMouseLeave={() => setDelay(7 * 1000)}
+      whileHover="hover"
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="mb-20 block w-[350px] overflow-hidden rounded-10 border border-white/40 bg-background-900 px-16 py-12"
+      data-testid={`notification-${notification.testid}`}
+    >
+      <NotificationLine
+        notification={notification}
+        close={() => dismissAlert(id)}
+      />
+    </motion.li>
   );
 };
 

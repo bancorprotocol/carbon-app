@@ -4,7 +4,8 @@ import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
-  const { notifications, clearNotifications } = useNotifications();
+  const { notifications, clearNotifications, removeNotification } =
+    useNotifications();
   const reversedNotifications = notifications.slice().reverse();
 
   return (
@@ -21,12 +22,15 @@ export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
       size="md"
     >
       <ul className="mt-25 flex flex-col gap-10">
-        {reversedNotifications.map((notification) => (
+        {reversedNotifications.map((n) => (
           <li
-            key={notification.id}
+            key={n.id}
             className="overflow-hidden rounded-10 bg-black px-16 py-12"
           >
-            <NotificationLine notification={notification} />
+            <NotificationLine
+              notification={n}
+              close={() => removeNotification(n.id)}
+            />
           </li>
         ))}
       </ul>

@@ -2,7 +2,6 @@ import { FC, useId } from 'react';
 import { NotificationActivity } from 'libs/notifications/types';
 import { activityActionName, activityDescription } from './utils';
 import { ReactComponent as IconClose } from 'assets/icons/X.svg';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Link } from '@tanstack/react-router';
 import { cn } from 'utils/helpers';
 import { ActivityAction } from 'libs/queries/extApi/activity';
@@ -33,11 +32,9 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
         <Link
           to="/strategy/$id"
           params={{ id: activity.strategy.id }}
-          target="_blank"
-          rel="noreferrer"
           className="flex items-center font-weight-500"
         >
-          View Activity <IconLink className="ml-6 w-14" />
+          View Activity
         </Link>
       </div>
       <div className="flex flex-col items-end justify-between">

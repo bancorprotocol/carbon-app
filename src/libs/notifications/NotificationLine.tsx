@@ -2,32 +2,13 @@ import { FC } from 'react';
 import { ActivityNotification } from 'components/activity/ActivityNotification';
 import { TxNotification } from './TxNotification';
 import { Notification } from './types';
-import { useNotifications } from 'hooks/useNotifications';
-import { useInterval } from 'hooks/useInterval';
 
 interface NotificationLineProps {
-  isAlert?: boolean;
+  close: () => void;
   notification: Notification;
 }
 export const NotificationLine: FC<NotificationLineProps> = (props) => {
-  const { notification, isAlert } = props;
-  const { removeNotification, dismissAlert } = useNotifications();
-
-  const close = () => {
-    if (isAlert) {
-      dismissAlert(notification.id);
-    } else {
-      removeNotification(notification.id);
-    }
-  };
-
-  const status = 'status' in notification ? notification.status : null;
-
-  useInterval(
-    () => dismissAlert(notification.id),
-    isAlert && status !== 'pending' ? 7 * 1000 : null,
-    false
-  );
+  const { notification, close } = props;
 
   switch (notification.type) {
     case 'activity':
