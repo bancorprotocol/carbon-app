@@ -20,22 +20,16 @@ function getBudgetDistribution(
   deposit: number,
   balance: number
 ) {
-  const delta = deposit || withdraw;
-  const newAllocation = initial - withdraw;
-  const newBalance = balance - deposit;
   const total = initial + balance;
+  const delta = ((deposit || withdraw) / total) * 100;
+  const newAllocation = (Math.max(initial - withdraw, 0) / total) * 100;
+  const newBalance = (Math.max(balance - deposit, 0) / total) * 100;
   return {
     mode: deposit ? 'deposit' : 'withdraw',
-    allocationPercent: Math.round((Math.max(newAllocation, 0) / total) * 100),
-    deltaPercent: Math.round((delta / total) * 100),
-    balancePercent: Math.round((Math.max(newBalance, 0) / total) * 100),
+    allocationPercent: Math.round(newAllocation),
+    deltaPercent: Math.round(delta),
+    balancePercent: Math.round(newBalance),
   };
-}
-
-function getGap(dist: ReturnType<typeof getBudgetDistribution>) {
-  const { allocationPercent, deltaPercent, balancePercent } = dist;
-  const list = [allocationPercent, deltaPercent, balancePercent];
-  return (list.filter((v) => !!v).length - 1) * 4;
 }
 
 export const OverlappingBudgetDistribution: FC<Props> = (props) => {
@@ -64,13 +58,9 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
           <span className="text-white">{tokenAmount(balance, token)}</span>
         </label>
       </div>
-      <div
-        className={styles.progress}
-        style={{
-          gap: getGap(dist),
-        }}
-      >
+      <div className={styles.progress}>
         <div
+          aria-valuenow={dist.allocationPercent}
           className={cn(styles.allocation, color)}
           style={{ flexGrow: dist.allocationPercent }}
         ></div>
@@ -79,10 +69,11 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
           className={cn(styles.delta, color)}
           style={{
             flexGrow: dist.deltaPercent,
-            opacity: dist.mode === 'deposit' ? 1 : 0.4,
+            opacity: !dist.deltaPercent ? 0 : dist.mode === 'deposit' ? 1 : 0.4,
           }}
         ></div>
         <div
+          aria-valuenow={dist.balancePercent}
           className={cn(styles.balance, color)}
           style={{ flexGrow: dist.balancePercent }}
         ></div>

@@ -15,7 +15,7 @@ interface Props {
   sellBudget: string;
   budgetValue: string;
   setBudget: (value: string) => void;
-  anchor?: 'buy' | 'sell';
+  anchor: 'buy' | 'sell';
   mode: BudgetMode;
   setMode: (mode: BudgetMode) => void;
   errors: string[];
@@ -45,7 +45,6 @@ export const OverlappingBudget: FC<Props> = (props) => {
     }
   };
 
-  if (!anchor) return null;
   return (
     <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
       <details>

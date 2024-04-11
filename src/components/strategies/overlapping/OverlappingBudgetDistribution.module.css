@@ -1,22 +1,30 @@
 .progress {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   height: 24px;
   transition: gap 0.2s;
+  border-radius: 8px;
+  overflow: hidden;
 }
 .allocation {
-  border-radius: 8px;
   background-color: var(--buy);
   transition: flex-grow 0.2s;
+}
+.allocation[aria-valuenow="0"] {
+  margin-left: -4px;
 }
 .delta {
-  border-radius: 8px;
   background-color: var(--buy);
   transition: flex-grow 0.2s;
 }
+.delta[aria-valuenow="0"] {
+  margin-inline: -2px;
+}
 .balance {
-  border-radius: 8px;
   background-color: var(--buy);
   opacity: 0.4;
   transition: flex-grow 0.2s;
+}
+.balance[aria-valuenow="0"] {
+  margin-right: -4px;
 }

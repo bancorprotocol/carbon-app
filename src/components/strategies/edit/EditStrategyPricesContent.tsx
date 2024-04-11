@@ -1,7 +1,7 @@
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Button } from 'components/common/button';
-import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
+import { useOrder } from 'components/strategies/create/useOrder';
 import { useUpdateStrategy } from 'components/strategies/useUpdateStrategy';
 import { Order, Strategy } from 'libs/queries';
 import { useRouter } from 'libs/routing';
@@ -16,7 +16,8 @@ import {
 } from 'components/strategies/utils';
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { EditPriceOverlappingStrategy } from 'components/strategies/edit/overlapping/EditPriceOverlappingStrategy';
-import { useStrategyWarning } from '../useWarning';
+import { cn } from 'utils/helpers';
+import style from './EditStrategyPricesContent.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -48,24 +49,6 @@ export const EditStrategyPricesContent = ({
       ? { ...strategy.order1, startRate: '', endRate: '' }
       : strategy.order1
   );
-  const [overlappingError, setOverlappingError] = useState('');
-  const isOrderValid = (order: OrderCreate): boolean => {
-    if (order.budgetError) return false;
-    if (!order.isRange) return !order.priceError;
-    if (order.rangeError) return false;
-    if (overlappingError) return false;
-    return +order.min > 0 && +order.max > 0 && +order.max > +order.min;
-  };
-  const isInvalid = !isOrderValid(order0) || !isOrderValid(order1);
-  const warnings = useStrategyWarning({
-    base,
-    quote,
-    order0,
-    order1,
-    isOverlapping,
-    invalidForm: isInvalid,
-  });
-
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
   }, [order0, order1]);
@@ -79,7 +62,7 @@ export const EditStrategyPricesContent = ({
     order0,
     order1,
   });
-  const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newOrder0 = {
       balance: order0.budget || strategy.order0.balance,
@@ -101,33 +84,35 @@ export const EditStrategyPricesContent = ({
         return MarginalPriceOptions.reset;
     };
 
-    type === 'renew'
-      ? renewStrategy(
-          {
-            ...strategy,
-            order0: newOrder0,
-            order1: newOrder1,
-          },
-          () =>
-            carbonEvents.strategyEdit.strategyRenew({
-              ...strategyEventData,
-              strategyId: strategy.id,
-            })
-        )
-      : changeRateStrategy(
-          {
-            ...strategy,
-            order0: newOrder0,
-            order1: newOrder1,
-          },
-          getMarginalOption(strategy.order0, newOrder0),
-          getMarginalOption(strategy.order1, newOrder1),
-          () =>
-            carbonEvents.strategyEdit.strategyEditPrices({
-              ...strategyEventData,
-              strategyId: strategy.id,
-            })
-        );
+    if (type === 'renew') {
+      renewStrategy(
+        {
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        },
+        () =>
+          carbonEvents.strategyEdit.strategyRenew({
+            ...strategyEventData,
+            strategyId: strategy.id,
+          })
+      );
+    } else {
+      changeRateStrategy(
+        {
+          ...strategy,
+          order0: newOrder0,
+          order1: newOrder1,
+        },
+        getMarginalOption(strategy.order0, newOrder0),
+        getMarginalOption(strategy.order1, newOrder1),
+        () =>
+          carbonEvents.strategyEdit.strategyEditPrices({
+            ...strategyEventData,
+            strategyId: strategy.id,
+          })
+      );
+    }
   };
 
   const loadingChildren = useMemo(() => {
@@ -136,9 +121,12 @@ export const EditStrategyPricesContent = ({
 
   return (
     <form
-      onSubmit={(e) => handleOnActionClick(e)}
+      onSubmit={submit}
       onReset={() => history.back()}
-      className="flex w-full flex-col items-center gap-20 md:w-[400px]"
+      className={cn(
+        'flex w-full flex-col items-center gap-20 md:w-[400px]',
+        style.form
+      )}
       data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -147,7 +135,6 @@ export const EditStrategyPricesContent = ({
           strategy={strategy}
           order0={order0}
           order1={order1}
-          setOverlappingError={setOverlappingError}
         />
       )}
       {!isOverlapping && (
@@ -174,21 +161,17 @@ export const EditStrategyPricesContent = ({
         </>
       )}
 
-      {warnings.formHasWarning && !isInvalid && (
-        <label className="flex items-center gap-8 rounded-10 bg-background-900 p-20 text-14 font-weight-500 text-white/60">
-          <input
-            type="checkbox"
-            value={warnings.approvedWarnings.toString()}
-            onChange={(e) => warnings.setApprovedWarnings(e.target.checked)}
-            data-testid="approve-warnings"
-          />
-          I've reviewed the warning(s) but choose to proceed.
-        </label>
-      )}
+      <label className={cn(style.approveWarnings)}>
+        <input
+          name="approve-warning"
+          type="checkbox"
+          data-testid="approve-warnings"
+        />
+        I've reviewed the warning(s) but choose to proceed.
+      </label>
 
       <Button
         type="submit"
-        disabled={isInvalid || warnings.shouldApproveWarnings}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

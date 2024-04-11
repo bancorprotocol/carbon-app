@@ -33,22 +33,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         Select Token
       </h3>
       <div role="radiogroup" className="flex gap-16">
-        <input
-          className={cn('absolute opacity-0', style.selectToken)}
-          type="radio"
-          name="anchor"
-          id="anchor-buy"
-          checked={anchor === 'buy'}
-          onChange={(e) => e.target.checked && setAnchor('buy')}
-          disabled={props.disableBuy}
-        />
-        <label
-          htmlFor="anchor-buy"
-          className="flex flex-1 cursor-pointer items-center justify-center gap-8 rounded-8 bg-black p-16 text-14"
-        >
-          <TokenLogo token={quote} size={14} />
-          {quote.symbol}
-        </label>
+        {/* SELL */}
         <input
           className={cn('absolute opacity-0', style.selectToken)}
           type="radio"
@@ -64,6 +49,23 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         >
           <TokenLogo token={base} size={14} />
           {base.symbol}
+        </label>
+        {/* BUY */}
+        <input
+          className={cn('absolute opacity-0', style.selectToken)}
+          type="radio"
+          name="anchor"
+          id="anchor-buy"
+          checked={anchor === 'buy'}
+          onChange={(e) => e.target.checked && setAnchor('buy')}
+          disabled={props.disableBuy}
+        />
+        <label
+          htmlFor="anchor-buy"
+          className="flex flex-1 cursor-pointer items-center justify-center gap-8 rounded-8 bg-black p-16 text-14"
+        >
+          <TokenLogo token={quote} size={14} />
+          {quote.symbol}
         </label>
       </div>
       {anchorError && <WarningMessageWithIcon message={anchorError} isError />}
