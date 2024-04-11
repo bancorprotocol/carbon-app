@@ -87,9 +87,13 @@ export const customTwMerge = extendTailwindMerge<AdditionalClassGroupIDs>({
         },
       ],
     },
-    // ↓ Here you can define additional conflicts across class groups
-    conflictingClassGroups: {},
-    // ↓ Define conflicts between postfix modifiers and class groups
+    conflictingClassGroups: {
+      px: ['pr', 'pl'],
+      py: ['pt', 'pb'],
+      p: ['pt', 'pb', 'pr', 'pl'],
+      size: ['h', 'w'],
+    },
+
     conflictingClassGroupModifiers: {},
   },
 });
