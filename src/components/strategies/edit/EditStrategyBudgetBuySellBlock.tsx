@@ -8,19 +8,23 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useMarketIndication } from '../marketPriceIndication';
 import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
+import { getDeposit, getWithdraw } from './utils';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
-export const EditStrategyBudgetBuySellBlock: FC<{
+interface Props {
   base: Token;
   quote: Token;
   order: OrderCreate;
-  balance?: string;
+  balance: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
   type: 'deposit' | 'withdraw';
-}> = ({ base, quote, balance, buy, order, isBudgetOptional, type }) => {
+}
+
+export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
+  const { base, quote, balance, buy, order, isBudgetOptional, type } = props;
   const inputId = useId();
   const titleId = useId();
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
@@ -29,6 +33,19 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     ? tokenQuoteBalanceQuery
     : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
+
+  const budget =
+    type === 'deposit'
+      ? getDeposit(balance, order.budget)
+      : getWithdraw(balance, order.budget);
+
+  const setBudget = (value: string) => {
+    const amount =
+      type === 'deposit'
+        ? new SafeDecimal(balance).add(value || '0')
+        : new SafeDecimal(balance).sub(value || '0');
+    order.setBudget(amount.toString());
+  };
 
   const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
     base,
@@ -85,8 +102,8 @@ export const EditStrategyBudgetBuySellBlock: FC<{
       <TokenInputField
         id={inputId}
         className="rounded-16 bg-black p-16"
-        value={order.budget}
-        setValue={order.setBudget}
+        value={budget}
+        setValue={setBudget}
         token={budgetToken}
         isBalanceLoading={tokenBalanceQuery.isLoading}
         isError={insufficientBalance}
@@ -98,29 +115,25 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         <OutsideMarketPriceWarning base={base} buy={!!buy} />
       )}
       {insufficientBalance && (
-        <output
+        <WarningMessageWithIcon
           htmlFor={inputId}
-          role="alert"
-          aria-live="polite"
-          className="flex items-center gap-10 font-mono text-12 text-error"
-        >
-          <IconWarning className="h-12 w-12" />
-          <span className="flex-1">Insufficient balance</span>
-        </output>
+          isError
+          message="Insufficient balance"
+        />
       )}
       <EditStrategyAllocatedBudget
         order={order}
         {...budgetProps}
         {...(type === 'withdraw' && {
-          showMaxCb: () => order.setBudget(balance || ''),
+          showMaxCb: () => setBudget(balance || ''),
         })}
       />
       <FullOutcome
         price={order.price}
         min={order.min}
         max={order.max}
-        budget={getUpdatedBudget(type, balance, order.budget)}
-        budgetUpdate={order.budget}
+        budget={getUpdatedBudget(type, balance, budget)}
+        budgetUpdate={budget}
         buy={buy}
         base={base}
         quote={quote}

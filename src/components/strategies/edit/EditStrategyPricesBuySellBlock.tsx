@@ -11,7 +11,7 @@ type EditStrategyPricesBuySellBlockProps = {
   base: Token;
   quote: Token;
   order: OrderCreate;
-  balance?: string;
+  balance: string;
   buy?: boolean;
   type: EditTypes;
   isOrdersOverlap: boolean;

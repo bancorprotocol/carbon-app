@@ -19,7 +19,22 @@ interface Props {
   mode: BudgetMode;
   setMode: (mode: BudgetMode) => void;
   errors: string[];
+  fixMode?: BudgetMode;
 }
+
+const getTitle = (fixMode?: BudgetMode) => {
+  if (!fixMode) return 'Edit Budget';
+  if (fixMode === 'deposit') return 'Deposit Budget';
+  return 'Withdraw Budget';
+};
+const getDescription = (fixMode?: BudgetMode) => {
+  if (!fixMode) return 'Please select the action and amount of tokens';
+  if (fixMode === 'deposit') {
+    return 'Please enter the amount of tokens you want to deposit.';
+  } else {
+    return 'Please enter the amount of tokens you want to withdraw.';
+  }
+};
 
 export const OverlappingBudget: FC<Props> = (props) => {
   const {
@@ -33,6 +48,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
     budgetValue,
     setBudget,
     errors,
+    fixMode,
   } = props;
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
@@ -52,49 +68,51 @@ export const OverlappingBudget: FC<Props> = (props) => {
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
           </span>
-          <h3 className="text-16 font-weight-500">Edit Budget</h3>
-          <span className="text-12 text-white/60">(Optional)</span>
+          <h3 className="text-16 font-weight-500">{getTitle(fixMode)}</h3>
+          {!fixMode && (
+            <span className="text-12 text-white/60">(Optional)</span>
+          )}
           <IconChevron className="toggle h-14 w-14" />
         </summary>
         <div className="flex flex-col gap-16">
-          <p className="text-14 text-white/80">
-            Please select the action and amount of tokens
-          </p>
-          <div
-            role="radiogroup"
-            className="flex gap-2 self-start rounded-full border-2 border-background-700 p-6"
-          >
-            <input
-              className={cn('absolute opacity-0', style.budgetMode)}
-              type="radio"
-              name="mode"
-              id="select-deposit"
-              checked={mode === 'deposit'}
-              onChange={(e) => e.target.checked && setMode('deposit')}
-            />
-            <label
-              htmlFor="select-deposit"
-              className="flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-8 text-14"
+          <p className="text-14 text-white/80">{getDescription(fixMode)}</p>
+          {!fixMode && (
+            <div
+              role="radiogroup"
+              className="flex gap-2 self-start rounded-full border-2 border-background-700 p-6"
             >
-              <IconDeposit className="h-14 w-14" />
-              Deposit
-            </label>
-            <input
-              className={cn('absolute opacity-0', style.budgetMode)}
-              type="radio"
-              name="mode"
-              id="select-withdraw"
-              checked={mode === 'withdraw'}
-              onChange={(e) => e.target.checked && setMode('withdraw')}
-            />
-            <label
-              htmlFor="select-withdraw"
-              className="flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-8 text-14"
-            >
-              <IconWithdraw className="h-14 w-14" />
-              Withdraw
-            </label>
-          </div>
+              <input
+                className={cn('absolute opacity-0', style.budgetMode)}
+                type="radio"
+                name="mode"
+                id="select-deposit"
+                checked={mode === 'deposit'}
+                onChange={(e) => e.target.checked && setMode('deposit')}
+              />
+              <label
+                htmlFor="select-deposit"
+                className="flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-8 text-14"
+              >
+                <IconDeposit className="h-14 w-14" />
+                Deposit
+              </label>
+              <input
+                className={cn('absolute opacity-0', style.budgetMode)}
+                type="radio"
+                name="mode"
+                id="select-withdraw"
+                checked={mode === 'withdraw'}
+                onChange={(e) => e.target.checked && setMode('withdraw')}
+              />
+              <label
+                htmlFor="select-withdraw"
+                className="flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-8 text-14"
+              >
+                <IconWithdraw className="h-14 w-14" />
+                Withdraw
+              </label>
+            </div>
+          )}
           <BudgetInput
             mode={mode}
             token={anchor === 'buy' ? quote : base}

@@ -23,7 +23,7 @@ interface Props {
   order: OrderCreate;
   base: Token;
   quote: Token;
-  balance?: string;
+  balance: string;
   buy?: boolean;
   showMaxCb?: () => void;
   type: EditTypes;
@@ -47,16 +47,16 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
     if (
       !firstTime.current &&
       order.isRange &&
-      +order.budget > 0 &&
+      +order.budget < +balance &&
       shouldDisplayDistributeByType[type]
     ) {
       setShowDistribute(true);
     }
-    if (!order.isRange || +order.budget === 0) {
+    if (!order.isRange || +order.budget === +balance) {
       setShowDistribute(false);
     }
     firstTime.current = false;
-  }, [order.max, order.min, order.budget, order.isRange, type]);
+  }, [order.max, order.min, order.budget, order.isRange, balance, type]);
 
   return (
     <>

@@ -17,10 +17,11 @@ import {
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
 import { EditOverlappingStrategy } from 'components/strategies/edit/overlapping/EditOverlappingStrategy';
 import { cn } from 'utils/helpers';
-import style from './EditStrategyPricesContent.module.css';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
+import { getDeposit } from './utils';
+import style from './EditStrategy.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -54,7 +55,11 @@ export const EditStrategyPricesContent = ({
   );
 
   const { provider } = useWeb3();
-  const { approval } = useEditStrategy(strategy, order0, order1);
+  const { approval } = useEditStrategy(
+    strategy,
+    getDeposit(strategy.order0.balance, order0.budget),
+    getDeposit(strategy.order1.balance, order1.budget)
+  );
   const { openModal } = useModal();
 
   const isOrdersOverlap = useMemo(() => {
