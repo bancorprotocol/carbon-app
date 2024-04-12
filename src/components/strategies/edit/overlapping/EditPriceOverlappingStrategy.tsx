@@ -36,6 +36,17 @@ interface Props {
   order1: OrderCreate;
 }
 
+const getDeposit = (initial: string, newBudget: string) => {
+  const value = new SafeDecimal(newBudget).sub(initial);
+  if (value.lte(0)) return '';
+  return value.toString();
+};
+const getWithdraw = (initial: string, newBudget: string) => {
+  const value = new SafeDecimal(initial).sub(newBudget);
+  if (value.lte(0)) return '';
+  return value.toString();
+};
+
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
@@ -48,24 +59,18 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
   const [spread, setSpread] = useState(getRoundedSpread(strategy));
-  const [depositBuyBudget, setDepositBuyBudget] = useState<string>('');
-  const [depositSellBudget, setDepositSellBudget] = useState<string>('');
-  const [withdrawBuyBudget, setWithdrawBuyBudget] = useState<string>('');
-  const [withdrawSellBudget, setWithdrawSellBudget] = useState<string>('');
+
+  const [initialBuyBudget] = useState<string>(order0.budget);
+  const [initialSellBudget] = useState<string>(order1.budget);
 
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
   const [anchorError, setAnchorError] = useState('');
   const [mode, setMode] = useState<'deposit' | 'withdraw'>('deposit');
-
-  const clearBuyBudget = () => {
-    setDepositBuyBudget('');
-    setWithdrawBuyBudget('');
-  };
-  const clearSellBudget = () => {
-    setDepositSellBudget('');
-    setWithdrawSellBudget('');
-  };
+  const depositBuyBudget = getDeposit(initialBuyBudget, order0.budget);
+  const withdrawBuyBudget = getWithdraw(initialBuyBudget, order0.budget);
+  const depositSellBudget = getDeposit(initialSellBudget, order1.budget);
+  const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
 
   const getBudgetValue = () => {
     if (anchor === 'buy') {
@@ -75,57 +80,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  const getBuyBudget = () => {
-    return new SafeDecimal(order0.budget)
-      .add(depositBuyBudget || 0)
-      .sub(withdrawBuyBudget || 0)
-      .toString();
-  };
-
-  const getSellBudget = () => {
-    return new SafeDecimal(order1.budget)
-      .add(depositSellBudget || 0)
-      .sub(withdrawSellBudget || 0)
-      .toString();
-  };
-
-  const setSellBudgets = (newBudget: string) => {
-    if (new SafeDecimal(newBudget).eq(order1.budget)) {
-      setDepositSellBudget('');
-      setWithdrawSellBudget('');
-    } else if (new SafeDecimal(newBudget).gt(order1.budget)) {
-      const deposit = new SafeDecimal(newBudget).sub(order1.budget).toString();
-      setDepositSellBudget(deposit);
-      setWithdrawSellBudget('');
-    } else {
-      const withdraw = new SafeDecimal(order1.budget).sub(newBudget).toString();
-      setDepositSellBudget('');
-      setWithdrawSellBudget(withdraw);
-    }
-  };
-
-  const setBuyBudgets = (newBudget: string) => {
-    if (new SafeDecimal(newBudget).eq(order0.budget)) {
-      setDepositBuyBudget('');
-      setWithdrawBuyBudget('');
-    } else if (new SafeDecimal(newBudget).gt(order0.budget)) {
-      const deposit = new SafeDecimal(newBudget).sub(order0.budget).toString();
-      setDepositBuyBudget(deposit);
-      setWithdrawBuyBudget('');
-    } else {
-      const withdraw = new SafeDecimal(order0.budget).sub(newBudget).toString();
-      setDepositBuyBudget('');
-      setWithdrawBuyBudget(withdraw);
-    }
-  };
-
   const calculateBuyBudget = (
     sellBudget: string,
     buyMin: string,
     sellMax: string
   ) => {
     if (!base || !quote) return;
-    if (!Number(sellBudget)) return setBuyBudgets('0');
+    if (!Number(sellBudget)) return order0.setBudget('');
     try {
       const buyBudget = calculateOverlappingBuyBudget(
         base.decimals,
@@ -136,7 +97,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         spread.toString(),
         sellBudget
       );
-      setBuyBudgets(buyBudget);
+      order0.setBudget(buyBudget);
     } catch (error) {
       console.error(error);
     }
@@ -148,7 +109,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote) return;
-    if (!Number(buyBudget)) return setSellBudgets('0');
+    if (!Number(buyBudget)) return order1.setBudget('');
     try {
       const sellBudget = calculateOverlappingSellBudget(
         base.decimals,
@@ -159,7 +120,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         spread.toString(),
         buyBudget
       );
-      setSellBudgets(sellBudget);
+      order1.setBudget(sellBudget);
     } catch (error) {
       console.error(error);
     }
@@ -200,25 +161,39 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
     // Set budgets
     const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
+    const buyBudget = order0.budget;
     const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
-    const sellBudget = getSellBudget();
-    const buyBudget = getBuyBudget();
+    const sellBudget = order1.budget;
 
     if (!touched) setTouched(true);
     // If there is not anchor display error
     if (!anchor) return setAnchorError('Please select a token to proceed');
 
     if (isMinAboveMarket(buyOrder)) {
-      if (anchor !== 'sell') clearSellBudget();
+      if (anchor !== 'sell') resetBudgets('sell', min, max);
       else calculateBuyBudget(sellBudget, min, max);
       setAnchor('sell');
     } else if (isMaxBelowMarket(sellOrder)) {
-      if (anchor !== 'buy') clearBuyBudget();
+      if (anchor !== 'buy') resetBudgets('buy', min, max);
       else calculateSellBudget(buyBudget, min, max);
       setAnchor('buy');
     } else {
       if (anchor === 'buy') calculateSellBudget(buyBudget, min, max);
       if (anchor === 'sell') calculateBuyBudget(sellBudget, min, max);
+    }
+  };
+
+  const resetBudgets = (
+    anchorValue: 'buy' | 'sell',
+    min = order0.min,
+    max = order1.max
+  ) => {
+    if (anchorValue === 'buy') {
+      order0.setBudget(initialBuyBudget);
+      calculateSellBudget(initialBuyBudget, min, max);
+    } else {
+      order1.setBudget(initialSellBudget);
+      calculateBuyBudget(initialSellBudget, min, max);
     }
   };
 
@@ -228,15 +203,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setModeValue = (value: BudgetMode) => {
-    clearBuyBudget();
-    clearSellBudget();
+    resetBudgets(anchor!);
     setMode(value);
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
     if (!anchor) setAnchorError('');
-    clearBuyBudget();
-    clearSellBudget();
+    resetBudgets(value);
     setAnchor(value);
   };
 
@@ -250,30 +223,19 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     setOverlappingParams(order0.min, max);
   };
 
-  const setBudget = (amount: string) => {
+  const setBudget = (value: string) => {
+    const amount = value || '0'; // SafeDecimal doesn't support ""
     if (anchor === 'buy') {
-      let buyBudget = Number(order0.budget);
-      if (mode === 'deposit') {
-        setWithdrawBuyBudget('');
-        setDepositBuyBudget(amount);
-        buyBudget += Number(amount);
-      } else {
-        setWithdrawBuyBudget(amount);
-        setDepositBuyBudget('');
-        buyBudget -= Number(amount);
-      }
+      const initial = new SafeDecimal(initialBuyBudget);
+      const buyBudget =
+        mode === 'deposit' ? initial.add(amount) : initial.sub(amount);
+      order0.setBudget(buyBudget.toString());
       calculateSellBudget(buyBudget.toString(), order0.min, order1.max);
     } else {
-      let sellBudget = Number(order1.budget);
-      if (mode === 'deposit') {
-        setWithdrawSellBudget('');
-        setDepositSellBudget(amount);
-        sellBudget += Number(amount);
-      } else {
-        setWithdrawSellBudget(amount);
-        setDepositSellBudget('');
-        sellBudget -= Number(amount);
-      }
+      const initial = new SafeDecimal(initialSellBudget);
+      const sellBudget =
+        mode === 'deposit' ? initial.add(amount) : initial.sub(amount);
+      order1.setBudget(sellBudget.toString());
       calculateBuyBudget(sellBudget.toString(), order0.min, order1.max);
     }
   };
@@ -287,25 +249,15 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       errors.push(`Insufficient ${base.symbol} balance`);
     }
 
-    if (new SafeDecimal(withdrawBuyBudget).gt(order0.budget)) {
+    if (new SafeDecimal(withdrawBuyBudget).gt(initialBuyBudget)) {
       errors.push(`Insufficient allocated ${quote.symbol} budget`);
     }
-    if (new SafeDecimal(withdrawSellBudget).gt(order1.budget)) {
+    if (new SafeDecimal(withdrawSellBudget).gt(initialSellBudget)) {
       errors.push(`Insufficient allocated ${base.symbol} budget`);
     }
 
     return errors;
   };
-
-  useEffect(() => {
-    if (!anchor) return;
-    if (anchor === 'buy') {
-      calculateSellBudget(order0.budget, order0.min, order1.max);
-    } else {
-      calculateBuyBudget(order1.budget, order0.min, order1.max);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anchor]);
 
   useEffect(() => {
     if (!touched || !spread || !marketPrice) return;
@@ -415,8 +367,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setMode={setModeValue}
           budgetValue={getBudgetValue()}
           setBudget={setBudget}
-          buyBudget={order0.budget}
-          sellBudget={order1.budget}
+          buyBudget={initialBuyBudget}
+          sellBudget={initialSellBudget}
           errors={getErrors()}
         />
       )}
@@ -436,7 +388,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           </hgroup>
           <OverlappingBudgetDistribution
             token={base}
-            initialBudget={order1.budget}
+            initialBudget={initialSellBudget}
             withdraw={withdrawSellBudget}
             deposit={depositSellBudget}
             balance={baseBalance}
@@ -448,7 +400,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           />
           <OverlappingBudgetDistribution
             token={quote}
-            initialBudget={order0.budget}
+            initialBudget={initialBuyBudget}
             withdraw={withdrawBuyBudget}
             deposit={depositBuyBudget}
             balance={quoteBalance}

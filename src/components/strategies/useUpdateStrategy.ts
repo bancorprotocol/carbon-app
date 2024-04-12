@@ -133,8 +133,10 @@ export const useUpdateStrategy = () => {
         fieldsToUpdate: {
           buyPriceLow: order0.startRate,
           buyPriceHigh: order0.endRate,
+          buyBudget: order0.balance,
           sellPriceLow: order1.startRate,
           sellPriceHigh: order1.endRate,
+          sellBudget: order1.balance,
         },
         buyMarginalPrice,
         sellMarginalPrice,
