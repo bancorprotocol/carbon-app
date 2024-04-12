@@ -268,8 +268,8 @@ export interface UpdateStrategyParams {
   id: string;
   encoded: EncodedStrategyBNStr;
   fieldsToUpdate: StrategyUpdate;
-  buyMarginalPrice?: MarginalPriceOptions;
-  sellMarginalPrice?: MarginalPriceOptions;
+  buyMarginalPrice?: string | MarginalPriceOptions;
+  sellMarginalPrice?: string | MarginalPriceOptions;
 }
 
 export interface DeleteStrategyParams {

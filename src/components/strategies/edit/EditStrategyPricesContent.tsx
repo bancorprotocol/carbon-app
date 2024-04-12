@@ -78,6 +78,7 @@ export const EditStrategyPricesContent = ({
     };
 
     const getMarginalOption = (oldOrder: Order, newOrder: Order) => {
+      if (isOverlapping) return newOrder.marginalRate;
       if (oldOrder.startRate !== newOrder.startRate)
         return MarginalPriceOptions.reset;
       if (oldOrder.endRate !== newOrder.endRate)
