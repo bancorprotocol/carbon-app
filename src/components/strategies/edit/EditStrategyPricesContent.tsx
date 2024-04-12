@@ -15,9 +15,12 @@ import {
   getStatusTextByTxStatus,
 } from 'components/strategies/utils';
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
-import { EditPriceOverlappingStrategy } from 'components/strategies/edit/overlapping/EditPriceOverlappingStrategy';
+import { EditOverlappingStrategy } from 'components/strategies/edit/overlapping/EditOverlappingStrategy';
 import { cn } from 'utils/helpers';
 import style from './EditStrategyPricesContent.module.css';
+import { useEditStrategy } from '../create/useEditStrategy';
+import { useModal } from 'hooks/useModal';
+import { useWeb3 } from 'libs/web3';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -49,6 +52,11 @@ export const EditStrategyPricesContent = ({
       ? { ...strategy.order1, startRate: '', endRate: '' }
       : strategy.order1
   );
+
+  const { provider } = useWeb3();
+  const { approval } = useEditStrategy(strategy, order0, order1);
+  const { openModal } = useModal();
+
   const isOrdersOverlap = useMemo(() => {
     return checkIfOrdersOverlap(order0, order1);
   }, [order0, order1]);
@@ -78,12 +86,29 @@ export const EditStrategyPricesContent = ({
     };
 
     const getMarginalOption = (oldOrder: Order, newOrder: Order) => {
-      if (isOverlapping) return newOrder.marginalRate;
+      if (isOverlapping) return MarginalPriceOptions.maintain;
       if (oldOrder.startRate !== newOrder.startRate)
         return MarginalPriceOptions.reset;
       if (oldOrder.endRate !== newOrder.endRate)
         return MarginalPriceOptions.reset;
     };
+
+    if (approval.approvalRequired) {
+      openModal('txConfirm', {
+        approvalTokens: approval.tokens,
+        onConfirm: submit,
+        buttonLabel: `Confirm Deposit`,
+        eventData: {
+          ...strategyEventData,
+          productType: 'strategy',
+          approvalTokens: approval.tokens,
+          buyToken: strategy.base,
+          sellToken: strategy.quote,
+          blockchainNetwork: provider?.network?.name || '',
+        },
+        context: 'depositStrategyFunds',
+      });
+    }
 
     if (type === 'renew') {
       renewStrategy(
@@ -132,7 +157,7 @@ export const EditStrategyPricesContent = ({
     >
       <EditStrategyOverlapTokens strategy={strategy} />
       {isOverlapping && (
-        <EditPriceOverlappingStrategy
+        <EditOverlappingStrategy
           strategy={strategy}
           order0={order0}
           order1={order1}
