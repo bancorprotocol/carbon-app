@@ -1,6 +1,7 @@
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { D3ChartCandlesticksProps } from 'components/simulator/input/d3Chart/D3ChartCandlesticks';
 import { D3ChartHandleLine } from 'components/simulator/input/d3Chart/D3ChartHandleLine';
+import { D3ChartPriceOutOfScale } from 'components/simulator/input/d3Chart/D3ChartPriceOutOfScale';
 import { D3ChartOverlappingHandle } from 'components/simulator/input/d3Chart/overlapping/D3ChartOverlappingHandle';
 import { D3ChartOverlappingRangeGroup } from 'components/simulator/input/d3Chart/overlapping/D3ChartOverlappingRangeGroup';
 import {
@@ -234,6 +235,9 @@ export const D3ChartOverlapping = (props: Props) => {
     });
   }, [yPos]);
 
+  const maxIsOutOfScale = yPos.sell.max <= 0;
+  const minIsOutOfScale = yPos.buy.min >= dms.boundedHeight;
+
   return (
     <>
       <D3ChartHandleLine
@@ -272,6 +276,20 @@ export const D3ChartOverlapping = (props: Props) => {
         dms={dms}
         onDrag={onDragRect}
         onDragEnd={onDragEndRect}
+      />
+      <D3ChartPriceOutOfScale
+        type="buy"
+        minOutOfScale={minIsOutOfScale}
+        maxOutOfScale={false}
+        color="var(--buy)"
+        dms={dms}
+      />
+      <D3ChartPriceOutOfScale
+        type="sell"
+        minOutOfScale={false}
+        maxOutOfScale={maxIsOutOfScale}
+        color="var(--sell)"
+        dms={dms}
       />
     </>
   );
