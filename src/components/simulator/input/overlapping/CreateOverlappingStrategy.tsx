@@ -176,7 +176,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           rel="noreferrer"
         >
           Learn More
-          <IconLink className="size-12" />
+          <IconLink className="h-12 w-12" />
         </a>
       </article>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
