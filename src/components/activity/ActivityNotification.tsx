@@ -43,10 +43,10 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
           data-testid="notif-close"
           aria-label="Remove notification"
         >
-          <IconClose className="h-14 w-14 text-white/80" />
+          <IconClose className="size-14 text-white/80" />
         </button>
 
-        <p className="text-12 font-weight-500 whitespace-nowrap text-white/60">
+        <p className="text-secondary text-12 font-weight-500 whitespace-nowrap">
           {unix(notification.timestamp).fromNow(true)}
         </p>
       </div>
@@ -59,7 +59,7 @@ export const AnimatedActionIcon = (props: { action: ActivityAction }) => {
   return (
     <div
       className={cn(
-        'h-38 w-38 relative grid place-items-center rounded-full',
+        'size-38 relative grid place-items-center rounded-full',
         style.icon,
         {
           'bg-buy/20 text-buy': props.action === 'buy',

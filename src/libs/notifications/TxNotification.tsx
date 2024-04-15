@@ -90,11 +90,11 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
           data-testid="notif-close"
           aria-label="Remove notification"
         >
-          <IconClose className="h-14 w-14 text-white/80" />
+          <IconClose className="size-14 text-white/80" />
         </button>
-        <div className="text-secondary text-12 font-weight-500 whitespace-nowrap">
+        <p className="text-secondary text-12 font-weight-500 whitespace-nowrap">
           {unix(notification.timestamp).fromNow(true)}
-        </div>
+        </p>
       </div>
     </article>
   );
