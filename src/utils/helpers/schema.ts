@@ -17,12 +17,12 @@ export const toString =
 export const toNumber =
   (fallback: number = 0) =>
   (value: string = '') => {
-    return value ? value : fallback;
+    return value ? Number(value) : fallback;
   };
 export const toArray =
   (fallback: string[] = []) =>
   (value: string = '') => {
-    return value ? value : fallback;
+    return value ? (value as unknown as string[]) : fallback;
   };
 export const toLiteral =
   <T>(literals: T[], fallback: T) =>
