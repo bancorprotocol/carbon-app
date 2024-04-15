@@ -7,7 +7,10 @@ import {
 } from 'components/common/datePicker/DateRangePicker';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { datePickerDisabledDays } from 'components/simulator/result/SimResultChartHeader';
-import { SimulatorInputDispatch } from 'hooks/useSimulatorInput';
+import {
+  SimulatorInputOverlappingValues,
+  SimulatorOverlappingInputDispatch,
+} from 'hooks/useSimulatorOverlappingInput';
 import { StrategyInputValues } from 'hooks/useStrategyInput';
 import {
   ChartPrices,
@@ -15,9 +18,8 @@ import {
   OnPriceUpdates,
 } from 'components/simulator/input/d3Chart';
 import { useCompareTokenPrice } from 'libs/queries/extApi/tokenPrice';
-import { StrategyDirection } from 'libs/routing';
-import { SafeDecimal } from 'libs/safedecimal';
-import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
+import { SimulatorType } from 'libs/routing/routes/sim';
+import { useCallback } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { fromUnixUTC, toUnixUTC } from '../utils';
@@ -25,16 +27,15 @@ import { useStore } from 'store';
 import { startOfDay, sub } from 'date-fns';
 
 interface Props {
-  state: StrategyInputValues;
-  dispatch: SimulatorInputDispatch;
-  initBuyRange: boolean;
-  initSellRange: boolean;
-  setInitBuyRange: Dispatch<SetStateAction<boolean>>;
-  setInitSellRange: Dispatch<SetStateAction<boolean>>;
+  state: StrategyInputValues | SimulatorInputOverlappingValues;
+  dispatch: SimulatorOverlappingInputDispatch;
+  isLimit?: { buy: boolean; sell: boolean };
+  spread?: string;
   bounds: ChartPrices;
   data?: CandlestickData[];
   isLoading: boolean;
   isError: boolean;
+  simulationType: SimulatorType;
 }
 
 const chartSettings: D3ChartSettingsProps = {
@@ -49,70 +50,19 @@ const chartSettings: D3ChartSettingsProps = {
 export const SimInputChart = ({
   state,
   dispatch,
-  initBuyRange,
-  initSellRange,
-  setInitBuyRange,
-  setInitSellRange,
+  isLimit,
+  spread,
   bounds,
   isLoading,
   isError,
   data,
+  simulationType,
 }: Props) => {
   const { debug } = useStore();
   const marketPrice = useCompareTokenPrice(
     state.baseToken?.address,
     state.quoteToken?.address
   );
-
-  const handleDefaultValues = useCallback(
-    (type: StrategyDirection) => {
-      const init = type === 'buy' ? initBuyRange : initSellRange;
-      const setInit = type === 'buy' ? setInitBuyRange : setInitSellRange;
-
-      if (!marketPrice || !init) return;
-      setInit(false);
-
-      if (!(!state[type].max && !state[type].min)) {
-        return;
-      }
-
-      const operation = type === 'buy' ? 'minus' : 'plus';
-
-      const multiplierMax = type === 'buy' ? 0.1 : 0.2;
-      const multiplierMin = type === 'buy' ? 0.2 : 0.1;
-
-      const max = new SafeDecimal(marketPrice)
-        [operation](marketPrice * multiplierMax)
-        .toFixed();
-
-      const min = new SafeDecimal(marketPrice)
-        [operation](marketPrice * multiplierMin)
-        .toFixed();
-
-      if (state[type].isRange) {
-        dispatch(`${type}Max`, max);
-        dispatch(`${type}Min`, min);
-      } else {
-        const value = type === 'buy' ? max : min;
-        dispatch(`${type}Max`, value);
-        dispatch(`${type}Min`, value);
-      }
-    },
-    [
-      dispatch,
-      initBuyRange,
-      initSellRange,
-      marketPrice,
-      setInitBuyRange,
-      setInitSellRange,
-      state,
-    ]
-  );
-
-  useEffect(() => {
-    handleDefaultValues('buy');
-    handleDefaultValues('sell');
-  }, [handleDefaultValues]);
 
   const prices = {
     buy: {
@@ -155,7 +105,7 @@ export const SimInputChart = ({
   );
 
   return (
-    <div className="align-stretch rounded-12 bg-background-900 sticky top-80 grid h-[calc(100vh-180px)] min-h-[500px] flex-1 grid-rows-[auto_1fr] justify-items-stretch p-20">
+    <div className="align-stretch top-120 rounded-12 bg-background-900 fixed right-20 grid h-[calc(100vh-220px)] min-h-[500px] w-[calc(100%-500px)] flex-1 grid-rows-[auto_1fr] justify-items-stretch p-20">
       <div className="mb-20 flex items-center justify-between">
         <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
         <DateRangePicker
@@ -197,10 +147,9 @@ export const SimInputChart = ({
               marketPrice={marketPrice}
               bounds={bounds}
               onDragEnd={onPriceUpdatesEnd}
-              isLimit={{
-                buy: !state.buy.isRange,
-                sell: !state.sell.isRange,
-              }}
+              isLimit={isLimit}
+              type={simulationType}
+              overlappingSpread={spread}
             />
           )}
         </D3ChartWrapper>

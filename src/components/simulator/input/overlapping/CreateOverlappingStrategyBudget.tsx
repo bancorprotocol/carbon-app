@@ -1,18 +1,17 @@
-import { useWeb3 } from 'libs/web3';
-import { FC, useEffect, useId } from 'react';
-import { Token } from 'libs/tokens';
-import { OrderCreate } from 'components/strategies/create/useOrder';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
-import { SafeDecimal } from 'libs/safedecimal';
+import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
+import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 import {
-  isMinAboveMarket,
   isMaxBelowMarket,
+  isMinAboveMarket,
   isOverlappingBudgetTooSmall,
 } from 'components/strategies/overlapping/utils';
+import { FC, useId } from 'react';
+import { Token } from 'libs/tokens';
+import { ReactComponent as IconLink } from 'assets/icons/link.svg';
+import { OverlappingStrategyProps } from './CreateOverlappingStrategy';
+
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { isValidRange } from 'components/strategies/utils';
-import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 
 interface Props extends OverlappingStrategyProps {
   marketPrice: number;
@@ -23,63 +22,56 @@ interface Props extends OverlappingStrategyProps {
 }
 
 export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
-  const {
-    base,
-    quote,
-    order0,
-    order1,
-    token0BalanceQuery,
-    token1BalanceQuery,
-    setAnchoredOrder,
-    setBuyBudget,
-    setSellBudget,
-  } = props;
-  const minAboveMarket = isMinAboveMarket(order0);
-  const maxBelowMarket = isMaxBelowMarket(order1);
-  const validPrice = isValidRange(order0.min, order1.max);
-  const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
+  const { state, dispatch, setAnchoredOrder, setBuyBudget, setSellBudget } =
+    props;
+  const { baseToken: base, quoteToken: quote, buy, sell } = state;
   const buyBudgetId = useId();
   const sellBudgetId = useId();
-  const { user } = useWeb3();
 
-  const checkInsufficientBalance = (
-    balance: string,
-    order: OrderCreate,
-    user?: string
-  ) => {
-    if (new SafeDecimal(balance).lt(order.budget) && !!user) {
-      order.setBudgetError('Insufficient balance');
-    } else {
-      order.setBudgetError('');
-    }
+  if (
+    !buy.min ||
+    !sell.max ||
+    !props.spread ||
+    !props.marketPrice ||
+    !quote ||
+    !base
+  )
+    return <></>;
+
+  const prices = calculateOverlappingPrices(
+    buy.min,
+    sell.max,
+    props.marketPrice.toString(),
+    props.spread.toString()
+  );
+
+  const buyOrder = {
+    min: buy.min || '0',
+    marginalPrice: prices.buyPriceMarginal || '0',
   };
-
-  // Check for error when buy budget changes
-  useEffect(() => {
-    const balance = token1BalanceQuery.data ?? '0';
-    checkInsufficientBalance(balance, order0, user);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.budget, token1BalanceQuery.data, user]);
-
-  // Check for error when sell budget changes
-  useEffect(() => {
-    const balance = token0BalanceQuery.data ?? '0';
-    checkInsufficientBalance(balance, order1, user);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order1.budget, token0BalanceQuery.data, user]);
+  const sellOrder = {
+    max: sell.max || '0',
+    marginalPrice: prices.sellPriceMarginal || '0',
+  };
+  const minAboveMarket = isMinAboveMarket(buyOrder);
+  const maxBelowMarket = isMaxBelowMarket(sellOrder);
+  const validPrice = isValidRange(buy.min, sell.max);
+  const budgetTooSmall = isOverlappingBudgetTooSmall(
+    { ...buyOrder, budget: buy.budget },
+    { ...sellOrder, budget: sell.budget }
+  );
 
   const onBuyBudgetChange = (value: string) => {
-    order0.setBudget(value);
+    dispatch('buyBudget', value);
     setAnchoredOrder('buy');
-    setSellBudget(value, order0.min, order1.max);
+    setSellBudget(value, state.buy.min, state.sell.max);
   };
   const onSellBudgetChange = (value: string) => {
-    order1.setBudget(value);
+    dispatch('sellBudget', value);
     setAnchoredOrder('sell');
-    setBuyBudget(value, order0.min, order1.max);
+    setBuyBudget(value, state.buy.min, state.sell.max);
   };
 
-  if (!quote || !base) return <></>;
   return (
     <>
       <BudgetInput
@@ -87,33 +79,31 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         title="Sell Budget"
         titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
         token={base}
-        value={order1.budget}
-        error={order1.budgetError}
-        query={token0BalanceQuery}
+        value={state.sell.budget}
+        error={state.sell.budgetError}
         onChange={onSellBudgetChange}
         disabled={maxBelowMarket || !validPrice}
         data-testid="input-budget-base"
       />
       {maxBelowMarket && <Explanation base={base} />}
+
       <BudgetInput
         id={buyBudgetId}
         title="Buy Budget"
         titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
         token={quote}
-        value={order0.budget}
-        error={order0.budgetError}
-        query={token1BalanceQuery}
+        value={state.buy.budget}
+        error={state.buy.budgetError}
         onChange={onBuyBudgetChange}
         disabled={minAboveMarket || !validPrice}
         data-testid="input-budget-quote"
       />
       {minAboveMarket && <Explanation base={base} buy />}
-
       {budgetTooSmall && (
         <OverlappingSmallBudget
           base={base}
           quote={quote}
-          buyBudget={order0.budget}
+          buyBudget={state.buy.budget}
           htmlFor={`${buyBudgetId} ${sellBudgetId}`}
         />
       )}
@@ -139,9 +129,11 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
   return (
     <p className="text-12 text-white/60">
-      The market price is outside the ranges you set for&nbsp;
+      The first price in the selected time frame is outside the ranges you've
+      set for&nbsp;
       {buy ? 'buying' : 'selling'}&nbsp;
-      {base?.symbol}. Budget for buying {base?.symbol} is not required.&nbsp;
+      {base?.symbol}. Therefore, budget for {buy ? 'buying' : 'selling'}{' '}
+      {base?.symbol} is not required.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"

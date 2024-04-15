@@ -44,6 +44,7 @@ const tooltipTextByStrategyEditOptionsId = {
   renewStrategy: 'Renew an inactive strategy',
   manageNotifications: 'Get notified when someone trades against your strategy',
   walletOwner: 'View all strategies from the owner of this strategy',
+  simulate: 'Run a simulation on this strategy',
 };
 
 export const getTooltipTextByStrategyEditOptionsId = (

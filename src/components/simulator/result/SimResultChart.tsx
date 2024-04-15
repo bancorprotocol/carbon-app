@@ -7,7 +7,7 @@ import { StrategyInputValues } from 'hooks/useStrategyInput';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { useState } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { Link, useSearch } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 
@@ -19,7 +19,6 @@ interface Props {
 export const SimResultChart = ({ state, simulationType }: Props) => {
   const ctx = useSimulator();
   const [showSummary, setShowSummary] = useState(false);
-  const searchState = useSearch({ from: '/simulate/result' });
 
   if (ctx.isError) {
     return (
@@ -40,16 +39,49 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
           }
           variant="error"
         />
-        <Link
-          to="/simulate/$simulationType"
-          params={{ simulationType }}
-          search={searchState}
-          className={buttonStyles({
-            size: 'lg',
-          })}
-        >
-          Back
-        </Link>
+        {simulationType === 'recurring' && (
+          <Link
+            to={`/simulate/recurring`}
+            search={{
+              baseToken: ctx.search.baseToken,
+              quoteToken: ctx.search.quoteToken,
+              start: ctx.search.start,
+              end: ctx.search.end,
+              buyMin: ctx.search.buyMin,
+              buyMax: ctx.search.buyMax,
+              buyBudget: ctx.search.buyBudget,
+              sellMin: ctx.search.sellMin,
+              sellMax: ctx.search.sellMax,
+              sellBudget: ctx.search.sellBudget,
+              buyIsRange: ctx.search.buyIsRange,
+              sellIsRange: ctx.search.sellIsRange,
+            }}
+            className={buttonStyles({
+              size: 'lg',
+            })}
+          >
+            Back
+          </Link>
+        )}
+        {simulationType === 'overlapping' && (
+          <Link
+            to="/simulate/overlapping"
+            search={{
+              baseToken: ctx.search.baseToken,
+              quoteToken: ctx.search.quoteToken,
+              start: ctx.search.start,
+              end: ctx.search.end,
+              buyMin: ctx.search.buyMin,
+              sellMax: ctx.search.sellMax,
+              spread: ctx.search.spread,
+            }}
+            className={buttonStyles({
+              size: 'lg',
+            })}
+          >
+            Back
+          </Link>
+        )}
       </div>
     );
   }

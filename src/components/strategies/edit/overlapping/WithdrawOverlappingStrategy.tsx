@@ -1,3 +1,4 @@
+import { externalLinks, NewTabLink } from 'libs/routing';
 import { FC, useEffect, useId } from 'react';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -13,7 +14,6 @@ import { useMarketIndication } from 'components/strategies/marketPriceIndication
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { ReactComponent as IconAction } from 'assets/icons/action.svg';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { SafeDecimal } from 'libs/safedecimal';
 import { BudgetInput } from 'components/strategies/common/BudgetInput';
 import { WithdrawAllocatedBudget } from 'components/strategies/common/AllocatedBudget';
@@ -34,8 +34,6 @@ interface Props {
 export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
-  const buyId = useId();
-  const sellId = useId();
 
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
@@ -163,17 +161,40 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <h3 className="text-18 font-weight-500 flex-1">Withdraw Budget</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Withdraw Budgets</h3>
           <Tooltip
             element='Indicate the amount you wish to withdraw to the available "wallet budget"'
             iconClassName="size-14 text-white/60"
           />
         </header>
+
+        <BudgetInput
+          id={sellBudgetId}
+          title="Sell Budget"
+          titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
+          token={base}
+          query={tokenBaseBalanceQuery}
+          value={order1.budget}
+          error={order1.budgetError}
+          onChange={onSellBudgetChange}
+          disabled={belowMarket || order1.max === '0'}
+          withoutWallet
+        >
+          <WithdrawAllocatedBudget
+            token={base}
+            order={order1}
+            currentBudget={strategy.order1.balance}
+            setBudget={onSellBudgetChange}
+          />
+        </BudgetInput>
         <BudgetInput
           id={buyBudgetId}
+          title="Buy Budget"
+          titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           token={quote}
           query={tokenQuoteBalanceQuery}
-          order={order0}
+          value={order0.budget}
+          error={order0.budgetError}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
           withoutWallet
@@ -186,22 +207,6 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             buy
           />
         </BudgetInput>
-        <BudgetInput
-          id={sellBudgetId}
-          token={base}
-          query={tokenBaseBalanceQuery}
-          order={order1}
-          onChange={onSellBudgetChange}
-          disabled={belowMarket || order1.max === '0'}
-          withoutWallet
-        >
-          <WithdrawAllocatedBudget
-            token={base}
-            order={order1}
-            currentBudget={strategy.order1.balance}
-            setBudget={onSellBudgetChange}
-          />
-        </BudgetInput>
         {budgetTooSmall && (
           <OverlappingSmallBudget
             base={base}
@@ -210,39 +215,21 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             htmlFor={`${buyBudgetId} ${sellBudgetId}`}
           />
         )}
-        <footer className="flex items-center gap-8">
-          {!withdrawAll && (
-            <>
-              <IconAction className="size-16" />
-              <p className="text-12 text-white/60">
-                Price range and liquidity spread remain unchanged.&nbsp;
-                <a
-                  href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-weight-500 text-primary inline-flex items-center gap-4"
-                >
-                  <span>Learn More</span>
-                  <IconLink className="inline size-12" />
-                </a>
-              </p>
-            </>
-          )}
-          {withdrawAll && (
-            <output
-              htmlFor={[buyId, sellId].join(',')}
-              role="alert"
-              aria-live="polite"
-              className="text-12 text-warning flex items-center gap-10 font-mono"
-            >
-              <IconWarning className="size-12" />
-              <span className="flex-1">
-                Please note that your strategy will be inactive as it will not
-                have any budget.
-              </span>
-            </output>
-          )}
-        </footer>
+        {!withdrawAll && (
+          <footer className="flex items-center gap-8">
+            <IconAction className="size-16" />
+            <p className="text-12 text-white/60">
+              Price range and liquidity spread remain unchanged.&nbsp;
+              <NewTabLink
+                to={externalLinks.whatIsOverlapping}
+                className="font-weight-500 text-primary inline-flex items-center gap-4"
+              >
+                <span>Learn More</span>
+                <IconLink className="inline size-12" />
+              </NewTabLink>
+            </p>
+          </footer>
+        )}
       </article>
     </>
   );
