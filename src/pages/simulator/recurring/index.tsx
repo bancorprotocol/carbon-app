@@ -101,13 +101,8 @@ export const SimulatorInputRecurringPage = () => {
     dispatch('buyIsRange', true);
     setInitBuyRange(true);
     setInitSellRange(true);
-  }, [
-    dispatch,
-    initBuyRange,
-    initSellRange,
-    searchState.baseToken,
-    searchState.quoteToken,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, searchState.baseToken, searchState.quoteToken]);
 
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
