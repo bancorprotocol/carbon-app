@@ -19,4 +19,6 @@ export const externalLinks = {
     'https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions/20220808',
   terms: config.appUrl + '/terms',
   privacy: config.appUrl + '/privacy',
+  whatIsOverlapping:
+    'https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics',
 };

@@ -7,12 +7,12 @@ export const identity = (value: string) => value;
 export const toBoolean =
   (fallback: boolean = false) =>
   (value: string = '') => {
-    return value ? Boolean(value) : fallback;
+    return value ? value : fallback;
   };
 export const toString =
   (fallback: string = '') =>
   (value: string = '') => {
-    return value ? String(value) : fallback;
+    return value ? value : fallback;
   };
 export const toNumber =
   (fallback: number = 0) =>
@@ -22,7 +22,7 @@ export const toNumber =
 export const toArray =
   (fallback: string[] = []) =>
   (value: string = '') => {
-    return value ? value.split(',') : fallback;
+    return value ? (value as unknown as string[]) : fallback;
   };
 export const toLiteral =
   <T>(literals: T[], fallback: T) =>
@@ -32,7 +32,7 @@ export const toLiteral =
 export const toDate =
   (fallback?: Date) =>
   (value: string = '') => {
-    return value ? new Date(value) : fallback;
+    return value ? value : fallback;
   };
 export type SearchParams<T> = Partial<{
   [key in keyof T]: string;

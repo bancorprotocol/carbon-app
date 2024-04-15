@@ -1,3 +1,7 @@
+import {
+  ModalWithdrawOrDelete,
+  ModalWithdrawOrDeleteData,
+} from 'libs/modals/modals/ModalWithdrawOrDelete';
 import { ModalWallet } from 'libs/modals/modals/WalletModal/ModalWallet';
 import {
   ModalTokenList,
@@ -71,6 +75,7 @@ export interface ModalSchema {
   confirmWithdrawStrategy: ModalConfirmWithdrawData;
   confirmDeleteStrategy: ModalConfirmDeleteData;
   simulatorDisclaimer: ModalSimulatorDisclaimerData;
+  withdrawOrDelete: ModalWithdrawOrDeleteData;
 }
 
 // Step 2: Create component in modals/modals folder
@@ -93,4 +98,5 @@ export const MODAL_COMPONENTS: TModals = {
   confirmWithdrawStrategy: (props) => ModalConfirmWithdraw(props),
   confirmDeleteStrategy: (props) => ModalConfirmDelete(props),
   simulatorDisclaimer: (props) => ModalSimulatorDisclaimer(props),
+  withdrawOrDelete: (props) => ModalWithdrawOrDelete(props),
 };

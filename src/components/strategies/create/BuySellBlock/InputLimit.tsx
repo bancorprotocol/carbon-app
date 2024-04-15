@@ -19,7 +19,7 @@ type InputLimitProps = {
   warnings?: string[];
   setPriceError?: (error: string) => void;
   buy?: boolean;
-  marketPricePercentage: MarketPricePercentage;
+  marketPricePercentage?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed: boolean;
 };
@@ -115,11 +115,13 @@ export const InputLimit: FC<InputLimitProps> = ({
           <span className="break-all font-mono text-12 text-white/60">
             {fiatAsString}
           </span>
-          <MarketPriceIndication
-            marketPricePercentage={marketPricePercentage.price}
-            buy={buy}
-            ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-          />
+          {marketPricePercentage && (
+            <MarketPriceIndication
+              marketPricePercentage={marketPricePercentage.price}
+              buy={buy}
+              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+            />
+          )}
         </p>
       </div>
       {error ? (

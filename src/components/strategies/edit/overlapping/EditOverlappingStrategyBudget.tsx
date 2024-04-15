@@ -159,28 +159,13 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
       </header>
       <BudgetInput
-        id={buyBudgetId}
-        token={quote}
-        query={tokenQuoteBalanceQuery}
-        order={order0}
-        onChange={onBuyBudgetChange}
-        disabled={disableBuy}
-      >
-        <WithdrawAllocatedBudget
-          token={quote}
-          order={order0}
-          currentBudget={strategy.order0.balance}
-          setBudget={onBuyBudgetChange}
-          disabled={disableBuy}
-          buy
-        />
-        <BudgetMessage token={quote} change={quoteBalanceChange} />
-      </BudgetInput>
-      <BudgetInput
         id={sellBudgetId}
+        title="Sell Budget"
+        titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
         token={base}
         query={tokenBaseBalanceQuery}
-        order={order1}
+        value={order1.budget}
+        error={order1.budgetError}
         onChange={onSellBudgetChange}
         disabled={disableSell}
       >
@@ -194,6 +179,28 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         <BudgetMessage token={base} change={baseBalanceChange} />
       </BudgetInput>
       {maxBelowMarket && <Explanation base={base} />}
+      <BudgetInput
+        id={buyBudgetId}
+        title="Buy Budget"
+        titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
+        token={quote}
+        query={tokenQuoteBalanceQuery}
+        value={order0.budget}
+        error={order0.budgetError}
+        onChange={onBuyBudgetChange}
+        disabled={disableBuy}
+      >
+        <WithdrawAllocatedBudget
+          token={quote}
+          order={order0}
+          currentBudget={strategy.order0.balance}
+          setBudget={onBuyBudgetChange}
+          disabled={disableBuy}
+          buy
+        />
+        <BudgetMessage token={quote} change={quoteBalanceChange} />
+      </BudgetInput>
+
       {!minAboveMarket && !maxBelowMarket && (
         <p className="text-12 text-white/60">
           The required 2nd budget will be calculated to maintain overlapping
@@ -226,7 +233,8 @@ const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
     <p className="text-12 text-white/60">
       The market price is outside the ranges you set for&nbsp;
       {buy ? 'buying' : 'selling'}&nbsp;
-      {base?.symbol}. Budget for buying {base?.symbol} is not required.&nbsp;
+      {base?.symbol}. Budget for {buy ? 'buying' : 'selling'} {base?.symbol} is
+      not required.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"
