@@ -17,19 +17,19 @@ import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditOverlappingStrategy } from './overlapping/EditOverlappingStrategy';
 import { getDeposit } from './utils';
-import style from './EditStrategy.module.css';
 import { cn } from 'utils/helpers';
+import style from './EditStrategy.module.css';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
 type EditStrategyBudgetContentProps = {
-  action: EditStrategyBudget;
+  type: EditStrategyBudget;
   strategy: Strategy;
 };
 
 export const EditStrategyBudgetContent = ({
   strategy,
-  action,
+  type,
 }: EditStrategyBudgetContentProps) => {
   const isOverlapping = isOverlappingStrategy(strategy);
 
@@ -64,7 +64,7 @@ export const EditStrategyBudgetContent = ({
   const { openModal } = useModal();
 
   const handleEvents = () => {
-    action === 'withdraw'
+    type === 'withdraw'
       ? carbonEvents.strategyEdit.strategyWithdraw({
           ...strategyEventData,
           strategyId: strategy.id,
@@ -93,7 +93,7 @@ export const EditStrategyBudgetContent = ({
 
   const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (action === 'withdraw') {
+    if (type === 'withdraw') {
       depositOrWithdrawFunds();
     } else {
       if (approval.approvalRequired) {
@@ -117,16 +117,16 @@ export const EditStrategyBudgetContent = ({
     }
   };
 
-  const getMarginalOption = (order: OrderCreate) => {
+  const getMarginalOption = (order: OrderCreate, initialBudget: string) => {
     if (isOverlapping) return MarginalPriceOptions.maintain;
-    if (!Number(order.budget) || !order.budget) return undefined;
+    if (order.budget === initialBudget) return undefined;
     if (order.marginalPriceOption) return order.marginalPriceOption;
     return MarginalPriceOptions.reset;
   };
 
   const depositOrWithdrawFunds = () => {
-    const buyOption = getMarginalOption(order0);
-    const sellOption = getMarginalOption(order1);
+    const buyOption = getMarginalOption(order0, strategy.order0.balance);
+    const sellOption = getMarginalOption(order1, strategy.order1.balance);
 
     const updatedStrategy = {
       ...strategy,
@@ -144,7 +144,7 @@ export const EditStrategyBudgetContent = ({
       },
     };
 
-    const actionFn = action === 'withdraw' ? withdrawBudget : depositBudget;
+    const actionFn = type === 'withdraw' ? withdrawBudget : depositBudget;
     void actionFn(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
@@ -165,7 +165,7 @@ export const EditStrategyBudgetContent = ({
           strategy={strategy}
           order0={order0}
           order1={order1}
-          fixAction={action}
+          fixAction={type}
         />
       )}
       {!isOverlapping && (
@@ -174,18 +174,22 @@ export const EditStrategyBudgetContent = ({
             base={strategy?.base}
             quote={strategy?.quote}
             order={order1}
-            balance={sellBalance}
-            isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-            type={action}
+            initialBudget={sellBalance}
+            isBudgetOptional={
+              order1.budget === sellBalance && order0.budget !== buyBalance
+            }
+            type={type}
           />
           <EditStrategyBudgetBuySellBlock
             buy
             base={strategy?.base}
             quote={strategy?.quote}
             order={order0}
-            balance={buyBalance}
-            isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-            type={action}
+            initialBudget={buyBalance}
+            isBudgetOptional={
+              order0.budget === buyBalance && order1.budget !== sellBalance
+            }
+            type={type}
           />
         </>
       )}
@@ -208,7 +212,7 @@ export const EditStrategyBudgetContent = ({
         fullWidth
         data-testid="edit-submit"
       >
-        {action === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
+        {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>
       <Button
         type="reset"

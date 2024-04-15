@@ -378,7 +378,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           setBudget={setBudget}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
-          errors={getErrors()}
           fixAction={fixAction}
         />
       )}
@@ -406,6 +405,8 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           token={base}
           withdraw={withdrawSellBudget}
           deposit={depositSellBudget}
+          balance={baseBalance}
+          initialBudget={initialSellBudget}
         />
         <OverlappingBudgetDistribution
           token={quote}
@@ -419,6 +420,8 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           token={quote}
           withdraw={withdrawBuyBudget}
           deposit={depositBuyBudget}
+          balance={quoteBalance}
+          initialBudget={depositBuyBudget}
         />
       </article>
     </>

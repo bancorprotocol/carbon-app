@@ -7,7 +7,6 @@ import { TokenInputField } from 'components/common/TokenInputField/TokenInputFie
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
-import { getUpdatedBudget } from 'utils/fullOutcome';
 import { useMarketIndication } from '../marketPriceIndication';
 import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
 import { getDeposit, getWithdraw } from './utils';
@@ -17,14 +16,15 @@ interface Props {
   base: Token;
   quote: Token;
   order: OrderCreate;
-  balance: string;
+  initialBudget: string;
   buy?: boolean;
   isBudgetOptional?: boolean;
   type: 'deposit' | 'withdraw';
 }
 
 export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
-  const { base, quote, balance, buy, order, isBudgetOptional, type } = props;
+  const { base, quote, initialBudget, buy, order, isBudgetOptional, type } =
+    props;
   const inputId = useId();
   const titleId = useId();
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
@@ -36,16 +36,22 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
 
   const budget =
     type === 'deposit'
-      ? getDeposit(balance, order.budget)
-      : getWithdraw(balance, order.budget);
+      ? getDeposit(initialBudget, order.budget)
+      : getWithdraw(initialBudget, order.budget);
 
   const setBudget = (value: string) => {
     const amount =
       type === 'deposit'
-        ? new SafeDecimal(balance).add(value || '0')
-        : new SafeDecimal(balance).sub(value || '0');
+        ? new SafeDecimal(initialBudget).add(value || '0')
+        : new SafeDecimal(initialBudget).sub(value || '0');
     order.setBudget(amount.toString());
   };
+
+  const tokenBalance = tokenBalanceQuery.data || 0;
+  const insufficientBalance =
+    type === 'withdraw'
+      ? new SafeDecimal(initialBudget || 0).lt(budget)
+      : new SafeDecimal(tokenBalance).lt(budget);
 
   const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
     base,
@@ -54,19 +60,10 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
     buy,
   });
 
-  const calculatedWalletBalance = new SafeDecimal(
-    tokenBalanceQuery.data || 0
-  ).minus(new SafeDecimal(order.budget || 0));
-
-  const insufficientBalance =
-    type === 'withdraw'
-      ? new SafeDecimal(balance || 0).lt(order.budget)
-      : calculatedWalletBalance.lt(0);
-
   const budgetProps = {
+    order,
     base,
     quote,
-    balance,
     buy,
     type,
   };
@@ -122,17 +119,16 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
         />
       )}
       <EditStrategyAllocatedBudget
-        order={order}
         {...budgetProps}
-        {...(type === 'withdraw' && {
-          showMaxCb: () => setBudget(balance || ''),
-        })}
+        initialBudget={initialBudget}
+        showMax={type === 'withdraw'}
       />
       <FullOutcome
         price={order.price}
         min={order.min}
         max={order.max}
-        budget={getUpdatedBudget(type, balance, budget)}
+        // TODO: BROKEN
+        budget={order.budget}
         budgetUpdate={budget}
         buy={buy}
         base={base}

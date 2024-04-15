@@ -3,6 +3,7 @@ import { FC, useId } from 'react';
 import { cn, tokenAmount } from 'utils/helpers';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import styles from './OverlappingBudgetDistribution.module.css';
 
 interface Props {
@@ -86,12 +87,23 @@ interface DescriptionProps {
   withdraw: string;
   deposit: string;
   token: Token;
+  initialBudget: string;
+  balance: string;
 }
 export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
   const token = props.token;
   const withdraw = Number(props.withdraw);
   const deposit = Number(props.deposit);
   if (deposit) {
+    const balance = Number(props.balance);
+    if (deposit > balance) {
+      return (
+        <WarningMessageWithIcon isError>
+          You should <b>deposit {tokenAmount(deposit, token)}</b> from your
+          wallet. But your wallet has insufficient balance.
+        </WarningMessageWithIcon>
+      );
+    }
     return (
       <p className="flex items-start gap-8 text-14 text-white/60">
         <span className="rounded-full bg-buy/10 p-4 text-buy">
@@ -105,6 +117,15 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
     );
   }
   if (withdraw) {
+    const initialBudget = Number(props.initialBudget);
+    if (withdraw > initialBudget) {
+      return (
+        <WarningMessageWithIcon isError>
+          You should <b>withdraw {tokenAmount(withdraw, token)}</b> from the
+          strategy. But the allocated budget is insufficient.
+        </WarningMessageWithIcon>
+      );
+    }
     return (
       <p className="flex items-start gap-8 text-14 text-white/60">
         <span className="rounded-full bg-sell/10 p-4 text-sell">

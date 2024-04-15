@@ -18,7 +18,6 @@ interface Props {
   anchor: 'buy' | 'sell';
   action: BudgetAction;
   setAction: (action: BudgetAction) => void;
-  errors: string[];
   fixAction?: BudgetAction;
 }
 
@@ -47,7 +46,6 @@ export const OverlappingBudget: FC<Props> = (props) => {
     anchor,
     budgetValue,
     setBudget,
-    errors,
     fixAction,
   } = props;
   const baseBalance = useGetTokenBalance(base).data ?? '0';
@@ -119,7 +117,6 @@ export const OverlappingBudget: FC<Props> = (props) => {
             value={budgetValue}
             onChange={setBudget}
             max={getMax()}
-            errors={errors}
           />
         </div>
       </details>
