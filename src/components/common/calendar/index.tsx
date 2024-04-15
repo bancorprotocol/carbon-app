@@ -44,7 +44,7 @@ export const Calendar = ({
           '!rounded-r-8 [&:not(.outside)]:!bg-primary [&:not(.outside)]:!text-black',
         day_today: 'border border-white/80',
         day_outside: 'outside !opacity-20',
-        day_disabled: 'hover:!text-white !text-white/20 !opacity-50',
+        day_disabled: 'hover:!text-white !text-white/20 opacity-50',
         day_range_middle: 'aria-selected:bg-primary/20',
         day_hidden: 'invisible',
         ...classNames,
