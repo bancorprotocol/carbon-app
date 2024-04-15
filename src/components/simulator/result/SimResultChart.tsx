@@ -65,7 +65,7 @@ export const SimResultChart = ({ state, simulationType }: Props) => {
         )}
         {simulationType === 'overlapping' && (
           <Link
-            to={`/simulate/overlapping`}
+            to="/simulate/overlapping"
             search={{
               baseToken: ctx.search.baseToken,
               quoteToken: ctx.search.quoteToken,

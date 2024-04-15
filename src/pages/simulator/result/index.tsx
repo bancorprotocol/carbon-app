@@ -29,7 +29,7 @@ export const SimulatorResultPage = () => {
     <div className="p-20">
       {simulationType === 'recurring' && (
         <Link
-          to='/simulate/recurring'
+          to="/simulate/recurring"
           search={{
             baseToken: ctx.search.baseToken,
             quoteToken: ctx.search.quoteToken,
@@ -54,7 +54,7 @@ export const SimulatorResultPage = () => {
       )}
       {simulationType === 'overlapping' && (
         <Link
-          to={`/simulate/overlapping`}
+          to="/simulate/overlapping"
           search={{
             baseToken: ctx.search.baseToken,
             quoteToken: ctx.search.quoteToken,

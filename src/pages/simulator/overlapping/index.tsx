@@ -118,7 +118,7 @@ export const SimulatorInputOverlappingPage = () => {
         isLoading={isLoading}
         isError={isError}
         spread={state.spread}
-        simulationType='overlapping'
+        simulationType="overlapping"
       />
     </>
   );

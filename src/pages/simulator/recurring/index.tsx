@@ -101,7 +101,13 @@ export const SimulatorInputRecurringPage = () => {
     dispatch('buyIsRange', true);
     setInitBuyRange(true);
     setInitSellRange(true);
-  }, [dispatch, searchState.baseToken, searchState.quoteToken]);
+  }, [
+    dispatch,
+    initBuyRange,
+    initSellRange,
+    searchState.baseToken,
+    searchState.quoteToken,
+  ]);
 
   const noBudget = Number(state.buy.budget) + Number(state.sell.budget) <= 0;
   const noBudgetText =
@@ -163,7 +169,7 @@ export const SimulatorInputRecurringPage = () => {
         data={data}
         isLoading={isLoading}
         isError={isError}
-        simulationType={'recurring'}
+        simulationType="recurring"
       />
     </>
   );
