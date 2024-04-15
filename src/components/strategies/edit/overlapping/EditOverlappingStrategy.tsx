@@ -28,7 +28,7 @@ import {
   OverlappingBudgetDistribution,
 } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
-import { BudgetMode } from 'components/strategies/common/BudgetInput';
+import { BudgetAction } from 'components/strategies/common/BudgetInput';
 import { geoMean } from 'utils/fullOutcome';
 import { getDeposit, getWithdraw } from '../utils';
 
@@ -36,11 +36,11 @@ interface Props {
   strategy: Strategy;
   order0: OrderCreate;
   order1: OrderCreate;
-  fixMode?: BudgetMode;
+  fixAction?: BudgetAction;
 }
 
 export const EditOverlappingStrategy: FC<Props> = (props) => {
-  const { strategy, order0, order1, fixMode } = props;
+  const { strategy, order0, order1, fixAction } = props;
   const { base, quote } = strategy;
   const { marketPricePercentage } = useMarketIndication({
     base,
@@ -53,8 +53,8 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
   const [anchorError, setAnchorError] = useState('');
-  const [mode, setMode] = useState<'deposit' | 'withdraw'>(
-    fixMode ?? 'deposit'
+  const [action, setAction] = useState<'deposit' | 'withdraw'>(
+    fixAction ?? 'deposit'
   );
 
   const newMarketPrice = useMarketPrice({ base, quote });
@@ -75,9 +75,9 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
 
   const getBudgetValue = () => {
     if (anchor === 'buy') {
-      return mode === 'deposit' ? depositBuyBudget : withdrawBuyBudget;
+      return action === 'deposit' ? depositBuyBudget : withdrawBuyBudget;
     } else {
-      return mode === 'deposit' ? depositSellBudget : withdrawSellBudget;
+      return action === 'deposit' ? depositSellBudget : withdrawSellBudget;
     }
   };
 
@@ -184,11 +184,17 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
+  /**  */
   const resetBudgets = (
     anchorValue: 'buy' | 'sell',
     min = order0.min,
     max = order1.max
   ) => {
+    if (!touched) {
+      order0.setBudget(initialBuyBudget);
+      order1.setBudget(initialSellBudget);
+      return;
+    }
     if (anchorValue === 'buy') {
       order0.setBudget(initialBuyBudget);
       calculateSellBudget(initialBuyBudget, min, max);
@@ -203,9 +209,9 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     setOverlappingParams(order0.min, order1.max, value.toString());
   };
 
-  const setModeValue = (value: BudgetMode) => {
+  const setActionValue = (value: BudgetAction) => {
     resetBudgets(anchor!);
-    setMode(value);
+    setAction(value);
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
@@ -225,17 +231,22 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setBudget = (value: string) => {
+    if (!value && !touched) {
+      order0.setBudget(initialBuyBudget);
+      order1.setBudget(initialSellBudget);
+      return;
+    }
     const amount = value || '0'; // SafeDecimal doesn't support ""
     if (anchor === 'buy') {
       const initial = new SafeDecimal(initialBuyBudget);
       const buyBudget =
-        mode === 'deposit' ? initial.add(amount) : initial.sub(amount);
+        action === 'deposit' ? initial.add(amount) : initial.sub(amount);
       order0.setBudget(buyBudget.toString());
       calculateSellBudget(buyBudget.toString(), order0.min, order1.max);
     } else {
       const initial = new SafeDecimal(initialSellBudget);
       const sellBudget =
-        mode === 'deposit' ? initial.add(amount) : initial.sub(amount);
+        action === 'deposit' ? initial.add(amount) : initial.sub(amount);
       order1.setBudget(sellBudget.toString());
       calculateBuyBudget(sellBudget.toString(), order0.min, order1.max);
     }
@@ -249,7 +260,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     if (new SafeDecimal(depositSellBudget).gt(baseBalance)) {
       errors.push(`Insufficient ${base.symbol} balance`);
     }
-
     if (new SafeDecimal(withdrawBuyBudget).gt(initialBuyBudget)) {
       errors.push(`Insufficient allocated ${quote.symbol} budget`);
     }
@@ -362,14 +372,14 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           base={base}
           quote={quote}
           anchor={anchor}
-          mode={mode}
-          setMode={setModeValue}
+          action={action}
+          setAction={setActionValue}
           budgetValue={getBudgetValue()}
           setBudget={setBudget}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           errors={getErrors()}
-          fixMode={fixMode}
+          fixAction={fixAction}
         />
       )}
       <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">

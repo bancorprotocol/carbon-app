@@ -8,10 +8,10 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
-export type BudgetMode = 'withdraw' | 'deposit';
+export type BudgetAction = 'withdraw' | 'deposit';
 
 interface Props {
-  mode: BudgetMode;
+  action: BudgetAction;
   token: Token;
   id?: string;
   className?: string;
@@ -33,7 +33,7 @@ export const BudgetInput: FC<Props> = (props) => {
     id,
     className,
     token,
-    mode,
+    action,
     value = '',
     max = '',
     placeholder = 'Enter Amount',
@@ -120,7 +120,7 @@ export const BudgetInput: FC<Props> = (props) => {
               className="group flex items-center gap-4"
             >
               <span className="text-white/60">
-                {mode === 'deposit' ? 'Wallet:' : 'Allocated:'}
+                {action === 'deposit' ? 'Wallet:' : 'Allocated:'}
               </span>
               <span className="text-white">{prettifyNumber(max || '0')}</span>
               <span

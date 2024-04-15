@@ -5,7 +5,7 @@ import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
 import { useGetTokenBalance } from 'libs/queries';
 import { cn } from 'utils/helpers';
-import { BudgetInput, BudgetMode } from '../common/BudgetInput';
+import { BudgetInput, BudgetAction } from '../common/BudgetInput';
 import style from './OverlappingBudget.module.css';
 
 interface Props {
@@ -16,20 +16,20 @@ interface Props {
   budgetValue: string;
   setBudget: (value: string) => void;
   anchor: 'buy' | 'sell';
-  mode: BudgetMode;
-  setMode: (mode: BudgetMode) => void;
+  action: BudgetAction;
+  setAction: (action: BudgetAction) => void;
   errors: string[];
-  fixMode?: BudgetMode;
+  fixAction?: BudgetAction;
 }
 
-const getTitle = (fixMode?: BudgetMode) => {
-  if (!fixMode) return 'Edit Budget';
-  if (fixMode === 'deposit') return 'Deposit Budget';
+const getTitle = (fixAction?: BudgetAction) => {
+  if (!fixAction) return 'Edit Budget';
+  if (fixAction === 'deposit') return 'Deposit Budget';
   return 'Withdraw Budget';
 };
-const getDescription = (fixMode?: BudgetMode) => {
-  if (!fixMode) return 'Please select the action and amount of tokens';
-  if (fixMode === 'deposit') {
+const getDescription = (fixAction?: BudgetAction) => {
+  if (!fixAction) return 'Please select the action and amount of tokens';
+  if (fixAction === 'deposit') {
     return 'Please enter the amount of tokens you want to deposit.';
   } else {
     return 'Please enter the amount of tokens you want to withdraw.';
@@ -42,19 +42,19 @@ export const OverlappingBudget: FC<Props> = (props) => {
     quote,
     buyBudget,
     sellBudget,
-    mode,
-    setMode,
+    action,
+    setAction,
     anchor,
     budgetValue,
     setBudget,
     errors,
-    fixMode,
+    fixAction,
   } = props;
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
 
   const getMax = () => {
-    if (mode === 'deposit') {
+    if (action === 'deposit') {
       return anchor === 'buy' ? quoteBalance : baseBalance;
     } else {
       return anchor === 'buy' ? buyBudget : sellBudget;
@@ -63,20 +63,20 @@ export const OverlappingBudget: FC<Props> = (props) => {
 
   return (
     <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
-      <details>
+      <details open={!!fixAction}>
         <summary className="flex cursor-pointer items-center gap-8">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
           </span>
-          <h3 className="text-16 font-weight-500">{getTitle(fixMode)}</h3>
-          {!fixMode && (
+          <h3 className="text-16 font-weight-500">{getTitle(fixAction)}</h3>
+          {!fixAction && (
             <span className="text-12 text-white/60">(Optional)</span>
           )}
           <IconChevron className="toggle h-14 w-14" />
         </summary>
         <div className="flex flex-col gap-16">
-          <p className="text-14 text-white/80">{getDescription(fixMode)}</p>
-          {!fixMode && (
+          <p className="text-14 text-white/80">{getDescription(fixAction)}</p>
+          {!fixAction && (
             <div
               role="radiogroup"
               className="flex gap-2 self-start rounded-full border-2 border-background-700 p-6"
@@ -84,10 +84,10 @@ export const OverlappingBudget: FC<Props> = (props) => {
               <input
                 className={cn('absolute opacity-0', style.budgetMode)}
                 type="radio"
-                name="mode"
+                name="action"
                 id="select-deposit"
-                checked={mode === 'deposit'}
-                onChange={(e) => e.target.checked && setMode('deposit')}
+                checked={action === 'deposit'}
+                onChange={(e) => e.target.checked && setAction('deposit')}
               />
               <label
                 htmlFor="select-deposit"
@@ -99,10 +99,10 @@ export const OverlappingBudget: FC<Props> = (props) => {
               <input
                 className={cn('absolute opacity-0', style.budgetMode)}
                 type="radio"
-                name="mode"
+                name="action"
                 id="select-withdraw"
-                checked={mode === 'withdraw'}
-                onChange={(e) => e.target.checked && setMode('withdraw')}
+                checked={action === 'withdraw'}
+                onChange={(e) => e.target.checked && setAction('withdraw')}
               />
               <label
                 htmlFor="select-withdraw"
@@ -114,7 +114,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
             </div>
           )}
           <BudgetInput
-            mode={mode}
+            action={action}
             token={anchor === 'buy' ? quote : base}
             value={budgetValue}
             onChange={setBudget}

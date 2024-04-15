@@ -23,13 +23,13 @@ import { cn } from 'utils/helpers';
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
 type EditStrategyBudgetContentProps = {
-  type: EditStrategyBudget;
+  action: EditStrategyBudget;
   strategy: Strategy;
 };
 
 export const EditStrategyBudgetContent = ({
   strategy,
-  type,
+  action,
 }: EditStrategyBudgetContentProps) => {
   const isOverlapping = isOverlappingStrategy(strategy);
 
@@ -64,7 +64,7 @@ export const EditStrategyBudgetContent = ({
   const { openModal } = useModal();
 
   const handleEvents = () => {
-    type === 'withdraw'
+    action === 'withdraw'
       ? carbonEvents.strategyEdit.strategyWithdraw({
           ...strategyEventData,
           strategyId: strategy.id,
@@ -93,7 +93,7 @@ export const EditStrategyBudgetContent = ({
 
   const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (type === 'withdraw') {
+    if (action === 'withdraw') {
       depositOrWithdrawFunds();
     } else {
       if (approval.approvalRequired) {
@@ -144,8 +144,8 @@ export const EditStrategyBudgetContent = ({
       },
     };
 
-    const action = type === 'withdraw' ? withdrawBudget : depositBudget;
-    void action(updatedStrategy, buyOption, sellOption, handleEvents);
+    const actionFn = action === 'withdraw' ? withdrawBudget : depositBudget;
+    void actionFn(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
   const loadingChildren = useMemo(() => {
@@ -165,7 +165,7 @@ export const EditStrategyBudgetContent = ({
           strategy={strategy}
           order0={order0}
           order1={order1}
-          fixMode={type}
+          fixAction={action}
         />
       )}
       {!isOverlapping && (
@@ -176,7 +176,7 @@ export const EditStrategyBudgetContent = ({
             order={order1}
             balance={sellBalance}
             isBudgetOptional={+order1.budget === 0 && +order0.budget > 0}
-            type={type}
+            type={action}
           />
           <EditStrategyBudgetBuySellBlock
             buy
@@ -185,7 +185,7 @@ export const EditStrategyBudgetContent = ({
             order={order0}
             balance={buyBalance}
             isBudgetOptional={+order0.budget === 0 && +order1.budget > 0}
-            type={type}
+            type={action}
           />
         </>
       )}
@@ -208,7 +208,7 @@ export const EditStrategyBudgetContent = ({
         fullWidth
         data-testid="edit-submit"
       >
-        {type === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
+        {action === 'withdraw' ? 'Confirm Withdraw' : 'Confirm Deposit'}
       </Button>
       <Button
         type="reset"
