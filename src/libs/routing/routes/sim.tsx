@@ -204,6 +204,9 @@ export const simulatorResultRoute = new Route({
       throw new Error('Invalid buy is range');
     }
 
+    const type: SimulatorType =
+      search.type === 'overlapping' ? 'overlapping' : 'recurring';
+
     return {
       start: search.start,
       end: search.end,
@@ -222,7 +225,7 @@ export const simulatorResultRoute = new Route({
       buyIsRange: search.buyIsRange,
       // TODO add validation
       spread: search.spread,
-      type: search.type as SimulatorType,
+      type,
     };
   },
   // @ts-ignore
