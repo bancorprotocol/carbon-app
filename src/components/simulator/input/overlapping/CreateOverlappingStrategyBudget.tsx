@@ -28,7 +28,14 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   const buyBudgetId = useId();
   const sellBudgetId = useId();
 
-  if (!buy.min || !sell.max || !props.spread || !props.marketPrice)
+  if (
+    !buy.min ||
+    !sell.max ||
+    !props.spread ||
+    !props.marketPrice ||
+    !quote ||
+    !base
+  )
     return <></>;
 
   const prices = calculateOverlappingPrices(
@@ -65,7 +72,6 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
     setBuyBudget(value, state.buy.min, state.sell.max);
   };
 
-  if (!quote || !base) return <></>;
   return (
     <>
       <BudgetInput
@@ -73,8 +79,8 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         title="Sell Budget"
         titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
         token={base}
-        budgetValue={state.sell.budget}
-        budgetError={state.sell.budgetError}
+        value={state.sell.budget}
+        error={state.sell.budgetError}
         onChange={onSellBudgetChange}
         disabled={maxBelowMarket || !validPrice}
         data-testid="input-budget-base"
@@ -83,11 +89,11 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
 
       <BudgetInput
         id={buyBudgetId}
-        title="Set Buy Budget"
+        title="Buy Budget"
         titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
         token={quote}
-        budgetValue={state.buy.budget}
-        budgetError={state.buy.budgetError}
+        value={state.buy.budget}
+        error={state.buy.budgetError}
         onChange={onBuyBudgetChange}
         disabled={minAboveMarket || !validPrice}
         data-testid="input-budget-quote"

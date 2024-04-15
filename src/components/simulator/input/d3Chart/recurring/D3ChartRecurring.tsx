@@ -2,7 +2,7 @@ import { D3ChartCandlesticksProps } from 'components/simulator/input/d3Chart/D3C
 import { DragablePriceRange } from 'components/simulator/input/d3Chart/recurring/DragablePriceRange';
 import { handleStateChange } from 'components/simulator/input/d3Chart/recurring/utils';
 import { ScaleLinear } from 'd3';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { prettifyNumber } from 'utils/helpers';
 
 type Props = Pick<
@@ -94,19 +94,16 @@ export const D3ChartRecurring = ({
     },
   };
 
-  const yPos = useMemo(
-    () => ({
-      buy: {
-        min: yScale(Number(prices.buy.min)),
-        max: yScale(Number(prices.buy.max)),
-      },
-      sell: {
-        min: yScale(Number(prices.sell.min)),
-        max: yScale(Number(prices.sell.max)),
-      },
-    }),
-    [prices.buy.max, prices.buy.min, prices.sell.max, prices.sell.min, yScale]
-  );
+  const yPos = {
+    buy: {
+      min: yScale(Number(prices.buy.min)),
+      max: yScale(Number(prices.buy.max)),
+    },
+    sell: {
+      min: yScale(Number(prices.sell.min)),
+      max: yScale(Number(prices.sell.max)),
+    },
+  };
 
   useEffect(() => {
     if (!hasDragEnded.current) {

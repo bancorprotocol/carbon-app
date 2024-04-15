@@ -49,12 +49,6 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (spread === undefined) {
-  //     setSpread(defaultValue);
-  //   }
-  // }, [defaultValue, setSpread, spread]);
-
   const onKeyDown = (e: KeyboardEvent) => {
     const fieldset = root.current!;
     const inputs = fieldset.querySelectorAll('input');

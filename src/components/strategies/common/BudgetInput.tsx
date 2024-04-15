@@ -8,8 +8,8 @@ import { UseQueryResult } from '@tanstack/react-query';
 interface Props {
   id?: string;
   children?: ReactNode;
-  budgetValue: string;
-  budgetError?: string;
+  value: string;
+  error?: string;
   token: Token;
   query?: UseQueryResult<string>;
   onChange: (value: string) => void;
@@ -23,8 +23,8 @@ interface Props {
 export const BudgetInput: FC<Props> = (props) => {
   const {
     id,
-    budgetValue,
-    budgetError,
+    value,
+    error,
     token,
     query,
     children,
@@ -37,25 +37,25 @@ export const BudgetInput: FC<Props> = (props) => {
 
   return (
     <div className="flex flex-col gap-16">
-      <legend className="flex text-14 font-weight-500">
+      <label className="flex text-14 font-weight-500">
         <Tooltip element={titleTooltip}>
           <span className="text-white/80">{title}</span>
         </Tooltip>
-      </legend>
+      </label>
       <TokenInputField
         id={id ?? inputId}
         className="rounded-16 bg-black p-16"
-        value={budgetValue}
+        value={value}
         setValue={onChange}
         token={token}
         isBalanceLoading={query?.isLoading}
         balance={balance}
-        isError={!!budgetError}
+        isError={!!error}
         withoutWallet={!!props.withoutWallet}
         disabled={!!props.disabled}
         data-testid={props['data-testid']}
       />
-      {!!budgetError && (
+      {!!error && (
         <output
           htmlFor={inputId}
           role="alert"
@@ -63,7 +63,7 @@ export const BudgetInput: FC<Props> = (props) => {
           className="flex items-center gap-10 font-mono text-12 text-error"
         >
           <IconWarning className="h-12 w-12" />
-          <span className="flex-1">{budgetError}</span>
+          <span className="flex-1">{error}</span>
         </output>
       )}
       {children}

@@ -4,7 +4,6 @@ import {
 } from 'hooks/useSimulatorOverlappingInput';
 
 import { FC, useCallback, useEffect, useState } from 'react';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconLink } from 'assets/icons/link.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { CreateOverlappingStrategyBudget } from './CreateOverlappingStrategyBudget';
@@ -45,17 +44,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   const { state, dispatch, spread, setSpread, marketPrice } = props;
   const { baseToken: base, quoteToken: quote } = state;
   const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
-  const { marketPricePercentage } = useMarketIndication({
-    base,
-    quote,
-    order: {
-      min: state.buy.min,
-      max: state.sell.max,
-      price: '',
-      isRange: true,
-    },
-    buy: true,
-  });
 
   const setBuyBudget = (
     sellBudget: string,
@@ -149,35 +137,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     setOverlappingParams(state.buy.min, max);
   };
 
-  useEffect(() => {
-    const min = state.buy.min;
-    const max = state.sell.max;
-
-    if (!min || !max || !spread || !marketPrice) return;
-
-    const prices = calculateOverlappingPrices(
-      min,
-      max,
-      marketPrice.toString(),
-      spread.toString()
-    );
-
-    // Set budgets
-    const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
-    const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
-    if (isMinAboveMarket(buyOrder)) {
-      setAnchoredOrder('sell');
-      setBuyBudget(state.sell.budget, min, max);
-    } else if (isMaxBelowMarket(sellOrder)) {
-      setAnchoredOrder('buy');
-      setSellBudget(state.buy.budget, min, max);
-    } else {
-      if (anchoredOrder === 'buy') setSellBudget(state.buy.budget, min, max);
-      if (anchoredOrder === 'sell') setBuyBudget(state.sell.budget, min, max);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.buy.min, state.sell.max, marketPrice, spread]);
-
   // Initialize order when market price is available
   useEffect(() => {
     if (marketPrice <= 0 || !quote || !base) return;
@@ -191,7 +150,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       setOverlappingParams(state.buy.min, state.sell.max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spread]);
+  }, [marketPrice, spread, base, quote]);
 
   const setErrorCb = useCallback(
     (value: string) => dispatch('buyPriceError', value),
@@ -244,7 +203,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             max={state.sell.max}
             error={state.buy.priceError}
             setError={setErrorCb}
-            marketPricePercentage={marketPricePercentage}
             setMin={setMin}
             setMax={setMax}
           />

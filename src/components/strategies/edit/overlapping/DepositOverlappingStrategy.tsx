@@ -171,8 +171,8 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           title="Sell Budget"
           titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
           query={tokenBaseBalanceQuery}
-          budgetValue={order1.budget}
-          budgetError={order1.budgetError}
+          value={order1.budget}
+          error={order1.budgetError}
           onChange={onSellBudgetChange}
           disabled={belowMarket || order1.max === '0'}
         >
@@ -184,11 +184,11 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
         </BudgetInput>
         <BudgetInput
           token={quote}
-          title="Set Buy Budget"
+          title="Buy Budget"
           titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           query={tokenQuoteBalanceQuery}
-          budgetValue={order0.budget}
-          budgetError={order0.budgetError}
+          value={order0.budget}
+          error={order0.budgetError}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
         >

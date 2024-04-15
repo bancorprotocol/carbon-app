@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { InputRange } from '../../../strategies/create/BuySellBlock/InputRange';
 import { Token } from 'libs/tokens';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 
 interface Props {
   base: Token;
@@ -12,7 +11,6 @@ interface Props {
   setError: (value: string) => void;
   setMin: (value: string) => void;
   setMax: (value: string) => void;
-  marketPricePercentage: MarketPricePercentage;
 }
 
 export const CreateOverlappingRange: FC<Props> = (props) => {

@@ -1,3 +1,4 @@
+import { externalLinks, NewTabLink } from 'libs/routing';
 import { FC, useEffect, useId } from 'react';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -173,8 +174,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
           token={base}
           query={tokenBaseBalanceQuery}
-          budgetValue={order1.budget}
-          budgetError={order1.budgetError}
+          value={order1.budget}
+          error={order1.budgetError}
           onChange={onSellBudgetChange}
           disabled={belowMarket || order1.max === '0'}
           withoutWallet
@@ -192,8 +193,8 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           token={quote}
           query={tokenQuoteBalanceQuery}
-          budgetValue={order0.budget}
-          budgetError={order0.budgetError}
+          value={order0.budget}
+          error={order0.budgetError}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
           withoutWallet
@@ -219,15 +220,13 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             <IconAction className="h-16 w-16" />
             <p className="text-12 text-white/60">
               Price range and liquidity spread remain unchanged.&nbsp;
-              <a
-                href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
-                target="_blank"
-                rel="noreferrer"
+              <NewTabLink
+                to={externalLinks.whatIsOverlapping}
                 className="inline-flex items-center gap-4 font-weight-500 text-primary"
               >
                 <span>Learn More</span>
                 <IconLink className="inline h-12 w-12" />
-              </a>
+              </NewTabLink>
             </p>
           </footer>
         )}

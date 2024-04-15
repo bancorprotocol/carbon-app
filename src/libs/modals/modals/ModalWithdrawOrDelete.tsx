@@ -20,12 +20,10 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
     <ModalOrMobileSheet id={id}>
       <div className="my-20">
         <IconTitleText
-          variant={'error'}
+          variant="error"
           icon={<IconDelete />}
-          title={
-            'This strategy will become inactive once the budget is removed'
-          }
-          text={'Delete this strategy to keep things tidy'}
+          title="This strategy will become inactive once the budget is removed"
+          text="Delete this strategy to keep things tidy"
         />
       </div>
       <Button
