@@ -13,18 +13,18 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'pending':
       return (
         <div className="relative flex items-center justify-center">
-          <div className="h-38 w-38 animate-spin rounded-full border-r border-t border-white" />
+          <div className="size-38 animate-spin rounded-full border-r border-t border-white" />
         </div>
       );
     case 'success':
       return (
-        <div className="h-38 w-38 bg-primary/10 flex items-center justify-center rounded-full">
+        <div className="size-38 bg-primary/10 flex items-center justify-center rounded-full">
           <IconCheck className="text-primary w-11" />
         </div>
       );
     case 'failed':
       return (
-        <div className="h-38 w-38 bg-error/10 flex items-center justify-center rounded-full">
+        <div className="size-38 bg-error/10 flex items-center justify-center rounded-full">
           <IconTimes className="text-error w-11" />
         </div>
       );
