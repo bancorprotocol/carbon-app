@@ -1,7 +1,8 @@
-import { NotificationsMap, NotificationNew } from 'libs/notifications/types';
+import { NotificationsMap, NotificationTx } from 'libs/notifications/types';
+import { Activity } from 'libs/queries/extApi/activity';
 
 export interface NotificationSchema {
-  generic: NotificationNew;
+  generic: Omit<NotificationTx, 'type' | 'id' | 'timestamp'>;
   reject: undefined;
   revoke: { txHash: string };
   approve: { symbol: string; limited: boolean; txHash: string };
@@ -15,11 +16,13 @@ export interface NotificationSchema {
   depositStrategy: { txHash: string };
   deleteStrategy: { txHash: string };
   changeRatesStrategy: { txHash: string };
+  activity: { activity: Activity };
 }
 
 export const NOTIFICATIONS_MAP: NotificationsMap = {
-  generic: (data) => data,
+  generic: (data) => ({ type: 'tx', ...data }),
   reject: () => ({
+    type: 'tx',
     status: 'failed',
     title: 'Transaction Rejected',
     description:
@@ -29,6 +32,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'reject',
   }),
   approve: ({ symbol, limited, txHash }) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Approving Token ...',
     txHash,
@@ -45,6 +49,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'approve',
   }),
   revoke: ({ txHash }) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Revoking Past Approval',
     txHash,
@@ -57,6 +62,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'revoke',
   }),
   approveError: ({ symbol }) => ({
+    type: 'tx',
     status: 'failed',
     title: 'Approve Token failed',
     description: `Approval for ${symbol} has failed. Please try again or contact support.`,
@@ -64,6 +70,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'approve-error',
   }),
   createStrategy: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'New strategy is being created.',
@@ -76,6 +83,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'create-strategy',
   }),
   pauseStrategy: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'Your request to pause the strategy is being processed.',
@@ -88,6 +96,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'pause-strategy',
   }),
   renewStrategy: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'Your request to renew the strategy is being processed.',
@@ -101,6 +110,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'renew-strategy',
   }),
   editStrategyName: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'Strategy name is being updated.',
@@ -113,6 +123,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'edit-strategy-name',
   }),
   withdrawStrategy: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'Your withdrawal request is being processed.',
@@ -125,6 +136,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'withdraw-strategy',
   }),
   depositStrategy: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'Your deposit request is being processed.',
@@ -137,6 +149,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'deposit-strategy',
   }),
   deleteStrategy: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'Strategy deletion is being processed.',
@@ -150,6 +163,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'delete-strategy',
   }),
   changeRatesStrategy: (data) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: 'Your edit request is being processed.',
@@ -162,6 +176,7 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     testid: 'change-rates-strategy',
   }),
   trade: ({ amount, txHash, to, from }) => ({
+    type: 'tx',
     status: 'pending',
     title: 'Pending Confirmation',
     description: `Trading ${amount} ${from} for ${to} is being processed.`,
@@ -172,5 +187,11 @@ export const NOTIFICATIONS_MAP: NotificationsMap = {
     txHash,
     showAlert: true,
     testid: 'trade',
+  }),
+  activity: ({ activity }) => ({
+    type: 'activity',
+    activity,
+    showAlert: true,
+    testid: 'activity',
   }),
 };

@@ -31,7 +31,7 @@ export const useNotifications = () => {
   };
 
   const checkStatus = async (n: Notification) => {
-    if (!n.txHash || !provider) return;
+    if (n.type !== 'tx' || !n.txHash || !provider) return;
     try {
       const tx = await provider.getTransactionReceipt(n.txHash);
       if (tx && tx.status !== null) {
