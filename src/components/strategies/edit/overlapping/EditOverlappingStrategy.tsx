@@ -88,7 +88,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote) return;
-    if (!Number(sellBudget)) return order0.setBudget(initialBuyBudget);
     try {
       const buyBudget = calculateOverlappingBuyBudget(
         base.decimals,
@@ -111,7 +110,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote) return;
-    if (!Number(buyBudget)) return order1.setBudget(initialSellBudget);
     try {
       const sellBudget = calculateOverlappingSellBudget(
         base.decimals,
@@ -238,10 +236,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
       return;
     }
     const amount = value || '0'; // SafeDecimal doesn't support ""
-
-    const error = getBudgetErrors(amount);
-    if (error) setBudgetError(error);
-    else setBudgetError('');
+    setBudgetError(getBudgetErrors(amount));
 
     if (anchor === 'buy') {
       const initial = new SafeDecimal(initialBuyBudget);
@@ -272,6 +267,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     if (action === 'withdraw' && anchor === 'sell') {
       if (amount.gt(initialSellBudget)) return 'Insufficient funds';
     }
+    return '';
   };
 
   useEffect(() => {
