@@ -127,7 +127,6 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
         price={order.price}
         min={order.min}
         max={order.max}
-        // TODO: BROKEN
         budget={order.budget}
         budgetUpdate={budget}
         buy={buy}

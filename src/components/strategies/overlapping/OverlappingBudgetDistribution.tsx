@@ -118,6 +118,7 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
   }
   if (withdraw) {
     const initialBudget = Number(props.initialBudget);
+    console.log({ withdraw, initialBudget });
     if (withdraw > initialBudget) {
       return (
         <WarningMessageWithIcon isError>

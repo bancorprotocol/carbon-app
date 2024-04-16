@@ -252,24 +252,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  const getErrors = () => {
-    const errors = [];
-    if (new SafeDecimal(depositBuyBudget).gt(quoteBalance)) {
-      errors.push(`Insufficient ${quote.symbol} balance`);
-    }
-    if (new SafeDecimal(depositSellBudget).gt(baseBalance)) {
-      errors.push(`Insufficient ${base.symbol} balance`);
-    }
-    if (new SafeDecimal(withdrawBuyBudget).gt(initialBuyBudget)) {
-      errors.push(`Insufficient allocated ${quote.symbol} budget`);
-    }
-    if (new SafeDecimal(withdrawSellBudget).gt(initialSellBudget)) {
-      errors.push(`Insufficient allocated ${base.symbol} budget`);
-    }
-
-    return errors;
-  };
-
   useEffect(() => {
     if (!touched || !spread || !marketPrice) return;
     setOverlappingParams(order0.min, order1.max);
@@ -421,7 +403,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           withdraw={withdrawBuyBudget}
           deposit={depositBuyBudget}
           balance={quoteBalance}
-          initialBudget={depositBuyBudget}
+          initialBudget={initialBuyBudget}
         />
       </article>
     </>
