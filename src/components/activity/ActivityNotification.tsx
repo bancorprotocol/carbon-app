@@ -46,7 +46,7 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
           <IconClose className="size-14 text-white/80" />
         </button>
 
-        <p className="text-secondary text-12 font-weight-500 whitespace-nowrap">
+        <p className="text-12 font-weight-500 whitespace-nowrap text-white/60">
           {unix(notification.timestamp).fromNow(true)}
         </p>
       </div>
