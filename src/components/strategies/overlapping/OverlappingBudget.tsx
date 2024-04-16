@@ -15,10 +15,12 @@ interface Props {
   sellBudget: string;
   budgetValue: string;
   setBudget: (value: string) => void;
+  resetBudgets: (anchor: 'buy' | 'sell') => void;
   anchor: 'buy' | 'sell';
   action: BudgetAction;
   setAction: (action: BudgetAction) => void;
   fixAction?: BudgetAction;
+  error: string;
 }
 
 const getTitle = (fixAction?: BudgetAction) => {
@@ -46,7 +48,9 @@ export const OverlappingBudget: FC<Props> = (props) => {
     anchor,
     budgetValue,
     setBudget,
+    resetBudgets,
     fixAction,
+    error,
   } = props;
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
@@ -61,7 +65,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
 
   return (
     <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
-      <details open={!!fixAction}>
+      <details open={!!fixAction} onToggle={() => resetBudgets(anchor)}>
         <summary className="flex cursor-pointer items-center gap-8">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
@@ -117,6 +121,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
             value={budgetValue}
             onChange={setBudget}
             max={getMax()}
+            errors={error}
           />
         </div>
       </details>

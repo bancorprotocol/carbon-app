@@ -53,6 +53,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
   const [anchorError, setAnchorError] = useState('');
+  const [budgetError, setBudgetError] = useState('');
   const [action, setAction] = useState<'deposit' | 'withdraw'>(
     fixAction ?? 'deposit'
   );
@@ -184,12 +185,12 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  /**  */
   const resetBudgets = (
     anchorValue: 'buy' | 'sell',
     min = order0.min,
     max = order1.max
   ) => {
+    setBudgetError('');
     if (!touched) {
       order0.setBudget(initialBuyBudget);
       order1.setBudget(initialSellBudget);
@@ -237,6 +238,11 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
       return;
     }
     const amount = value || '0'; // SafeDecimal doesn't support ""
+
+    const error = getBudgetErrors(amount);
+    if (error) setBudgetError(error);
+    else setBudgetError('');
+
     if (anchor === 'buy') {
       const initial = new SafeDecimal(initialBuyBudget);
       const buyBudget =
@@ -249,6 +255,22 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
         action === 'deposit' ? initial.add(amount) : initial.sub(amount);
       order1.setBudget(sellBudget.toString());
       calculateBuyBudget(sellBudget.toString(), order0.min, order1.max);
+    }
+  };
+
+  const getBudgetErrors = (value: string) => {
+    const amount = new SafeDecimal(value);
+    if (action === 'deposit' && anchor === 'buy') {
+      if (amount.gt(quoteBalance)) return 'Insufficient balance';
+    }
+    if (action === 'deposit' && anchor === 'sell') {
+      if (amount.gt(baseBalance)) return 'Insufficient balance';
+    }
+    if (action === 'withdraw' && anchor === 'buy') {
+      if (amount.gt(initialBuyBudget)) return 'Insufficient funds';
+    }
+    if (action === 'withdraw' && anchor === 'sell') {
+      if (amount.gt(initialSellBudget)) return 'Insufficient funds';
     }
   };
 
@@ -358,54 +380,58 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           setAction={setActionValue}
           budgetValue={getBudgetValue()}
           setBudget={setBudget}
+          resetBudgets={resetBudgets}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           fixAction={fixAction}
+          error={budgetError}
         />
       )}
-      <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
-        <hgroup>
-          <h3 className="flex items-center gap-8 text-16 font-weight-500">
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-              3
-            </span>
-            Distribution
-          </h3>
-          <p className="text-14 text-white/80">
-            Following the edits implemented above, these are the changes in
-            budget allocation
-          </p>
-        </hgroup>
-        <OverlappingBudgetDistribution
-          token={base}
-          initialBudget={initialSellBudget}
-          withdraw={withdrawSellBudget}
-          deposit={depositSellBudget}
-          balance={baseBalance}
-        />
-        <OverlappingBudgetDescription
-          token={base}
-          withdraw={withdrawSellBudget}
-          deposit={depositSellBudget}
-          balance={baseBalance}
-          initialBudget={initialSellBudget}
-        />
-        <OverlappingBudgetDistribution
-          token={quote}
-          initialBudget={initialBuyBudget}
-          withdraw={withdrawBuyBudget}
-          deposit={depositBuyBudget}
-          balance={quoteBalance}
-          buy
-        />
-        <OverlappingBudgetDescription
-          token={quote}
-          withdraw={withdrawBuyBudget}
-          deposit={depositBuyBudget}
-          balance={quoteBalance}
-          initialBudget={initialBuyBudget}
-        />
-      </article>
+      {(fixAction || anchor) && (
+        <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
+          <hgroup>
+            <h3 className="flex items-center gap-8 text-16 font-weight-500">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+                3
+              </span>
+              Distribution
+            </h3>
+            <p className="text-14 text-white/80">
+              Following the edits implemented above, these are the changes in
+              budget allocation
+            </p>
+          </hgroup>
+          <OverlappingBudgetDistribution
+            token={base}
+            initialBudget={initialSellBudget}
+            withdraw={budgetError ? '0' : withdrawSellBudget}
+            deposit={budgetError ? '0' : depositSellBudget}
+            balance={baseBalance}
+          />
+          <OverlappingBudgetDescription
+            token={base}
+            withdraw={budgetError ? '0' : withdrawSellBudget}
+            deposit={budgetError ? '0' : depositSellBudget}
+            balance={baseBalance}
+            initialBudget={initialSellBudget}
+          />
+          <OverlappingBudgetDistribution
+            token={quote}
+            initialBudget={initialBuyBudget}
+            withdraw={budgetError ? '0' : withdrawBuyBudget}
+            deposit={budgetError ? '0' : depositBuyBudget}
+            balance={quoteBalance}
+            buy
+          />
+          <OverlappingBudgetDescription
+            token={quote}
+            withdraw={budgetError ? '0' : withdrawBuyBudget}
+            deposit={budgetError ? '0' : depositBuyBudget}
+            balance={quoteBalance}
+            initialBudget={initialBuyBudget}
+          />
+        </article>
+      )}
     </>
   );
 };

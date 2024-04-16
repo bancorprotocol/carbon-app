@@ -98,20 +98,27 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
     const balance = Number(props.balance);
     if (deposit > balance) {
       return (
-        <WarningMessageWithIcon isError>
-          You should <b>deposit {tokenAmount(deposit, token)}</b> from your
-          wallet. But your wallet has insufficient balance.
+        <WarningMessageWithIcon className="text-12" isError>
+          You should&nbsp;
+          <b className="font-weight-500">
+            deposit {tokenAmount(deposit, token)}
+          </b>
+          &nbsp;from your wallet, but your wallet has insufficient balance.
+          Consider changing token deposit amount or prices.
         </WarningMessageWithIcon>
       );
     }
     return (
-      <p className="flex items-start gap-8 text-14 text-white/60">
+      <p className="flex items-start gap-8 text-12 text-white/60">
         <span className="rounded-full bg-buy/10 p-4 text-buy">
           <IconDeposit className="h-12 w-12" />
         </span>
         <span>
-          You will <b>deposit {tokenAmount(deposit, token)}</b> from your wallet
-          to the strategy
+          You will&nbsp;
+          <b className="font-weight-500">
+            deposit {tokenAmount(deposit, token)}
+          </b>
+          &nbsp;from your wallet to the strategy.
         </span>
       </p>
     );
@@ -120,20 +127,27 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
     const initialBudget = Number(props.initialBudget);
     if (withdraw > initialBudget) {
       return (
-        <WarningMessageWithIcon isError>
-          You should <b>withdraw {tokenAmount(withdraw, token)}</b> from the
-          strategy. But the allocated budget is insufficient.
+        <WarningMessageWithIcon className="text-12" isError>
+          You should&nbsp;
+          <b className="font-weight-500">
+            withdraw {tokenAmount(withdraw, token)}
+          </b>
+          &nbsp;from the strategy, but the strategy has insufficient funds.
+          Consider changing token deposit amount or prices.
         </WarningMessageWithIcon>
       );
     }
     return (
-      <p className="flex items-start gap-8 text-14 text-white/60">
+      <p className="flex items-start gap-8 text-12 text-white/60">
         <span className="rounded-full bg-sell/10 p-4 text-sell">
           <IconWithdraw className="h-12 w-12" />
         </span>
         <span>
-          You will <b>withdraw {tokenAmount(withdraw, token)}</b> from the
-          strategy to your wallet.
+          You will&nbsp;
+          <b className="font-weight-500">
+            withdraw {tokenAmount(withdraw, token)}
+          </b>
+          &nbsp;from the strategy to your wallet.
         </span>
       </p>
     );
