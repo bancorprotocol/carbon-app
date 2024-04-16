@@ -18,7 +18,6 @@ const colors = [
   'success',
   'warning',
   'black',
-  'secondary',
   'background-50',
   'background-100',
   'background-200',

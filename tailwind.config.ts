@@ -59,7 +59,6 @@ export default {
         success: lightDark(0.68, 0.153, 160), // #00B578
         warning: lightDark(0.747, 0.18, 57.36), // #ff8a00
         black: oklch(0.13, chroma, hue),
-        secondary: colors.gray,
       };
     },
     spacing: createTwConfigValues(0, 100, 1),
