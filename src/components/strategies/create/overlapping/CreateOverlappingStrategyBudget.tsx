@@ -77,7 +77,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   return (
     <>
       <BudgetInput
-        mode="deposit"
+        action="deposit"
         id={buyBudgetId}
         token={quote}
         value={order0.budget}
@@ -89,7 +89,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
       />
       {minAboveMarket && <Explanation base={base} buy />}
       <BudgetInput
-        mode="deposit"
+        action="deposit"
         id={sellBudgetId}
         token={base}
         value={order1.budget}

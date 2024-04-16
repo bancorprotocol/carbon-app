@@ -159,7 +159,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
       </header>
       <BudgetInput
-        mode="deposit"
+        action="deposit"
         id={buyBudgetId}
         token={quote}
         max={tokenQuoteBalanceQuery.data ?? '0'}
@@ -177,7 +177,7 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
       />
       <BudgetMessage token={quote} change={quoteBalanceChange} />
       <BudgetInput
-        mode="deposit"
+        action="deposit"
         id={sellBudgetId}
         token={base}
         max={tokenBaseBalanceQuery.data ?? '0'}

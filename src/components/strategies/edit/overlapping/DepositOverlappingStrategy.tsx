@@ -167,7 +167,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           />
         </header>
         <BudgetInput
-          mode="deposit"
+          action="deposit"
           token={quote}
           max={tokenQuoteBalanceQuery.data ?? '0'}
           value={order0.min}
@@ -181,7 +181,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
         />
         <MarketWarning {...marketWarningProps} />
         <BudgetInput
-          mode="deposit"
+          action="deposit"
           token={base}
           max={tokenBaseBalanceQuery.data ?? '0'}
           value={order1.max}

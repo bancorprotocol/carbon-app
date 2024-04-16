@@ -170,7 +170,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           />
         </header>
         <BudgetInput
-          mode="withdraw"
+          action="withdraw"
           id={buyBudgetId}
           token={quote}
           max={tokenQuoteBalanceQuery.data ?? '0'}
@@ -186,7 +186,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           buy
         />
         <BudgetInput
-          mode="withdraw"
+          action="withdraw"
           id={sellBudgetId}
           token={base}
           max={tokenBaseBalanceQuery.data ?? '0'}
