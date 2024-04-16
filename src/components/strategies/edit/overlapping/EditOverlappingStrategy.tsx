@@ -332,8 +332,8 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           />
         </header>
         <OverlappingStrategySpread
-          order0={order0}
-          order1={order1}
+          buyMin={Number(order0.min)}
+          sellMax={Number(order1.max)}
           defaultValue={0.05}
           options={[0.01, 0.05, 0.1]}
           spread={spread}

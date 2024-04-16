@@ -80,7 +80,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
         token={base}
         value={state.sell.budget}
-        error={state.sell.budgetError}
+        errors={state.sell.budgetError}
         onChange={onSellBudgetChange}
         disabled={maxBelowMarket || !validPrice}
         data-testid="input-budget-base"
@@ -93,7 +93,7 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
         titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
         token={quote}
         value={state.buy.budget}
-        error={state.buy.budgetError}
+        errors={state.buy.budgetError}
         onChange={onBuyBudgetChange}
         disabled={minAboveMarket || !validPrice}
         data-testid="input-budget-quote"
