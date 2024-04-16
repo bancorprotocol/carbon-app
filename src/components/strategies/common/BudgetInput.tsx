@@ -7,17 +7,20 @@ import { TokenLogo } from 'components/common/imager/Imager';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { useWeb3 } from 'libs/web3';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { Tooltip } from 'components/common/tooltip/Tooltip';
 
 export type BudgetAction = 'withdraw' | 'deposit';
 
 interface Props {
-  action: BudgetAction;
+  action?: BudgetAction;
   token: Token;
   id?: string;
   className?: string;
   value?: string;
   max?: string;
   placeholder?: string;
+  title?: string;
+  titleTooltip?: string;
   disabled?: boolean;
   errors?: string[] | string;
   warnings?: string[];
@@ -30,17 +33,18 @@ export const BudgetInput: FC<Props> = (props) => {
   const inputId = useId();
   const { user } = useWeb3();
   const {
-    id,
     className,
     token,
-    action,
+    action = 'deposit',
     value = '',
     max = '',
     placeholder = 'Enter Amount',
     disabled,
     warnings = [],
+    title,
+    titleTooltip,
   } = props;
-
+  const id = props.id ?? inputId;
   const { getFiatValue, selectedFiatCurrency: currentCurrency } =
     useFiatCurrency(token);
   const fiatValue = getFiatValue(value ?? '0', true);
@@ -72,9 +76,16 @@ export const BudgetInput: FC<Props> = (props) => {
 
   return (
     <div className="flex flex-col gap-16">
+      {title && (
+        <label htmlFor={id} className="flex text-14 font-weight-500">
+          <Tooltip element={titleTooltip}>
+            <span className="text-white/80">{title}</span>
+          </Tooltip>
+        </label>
+      )}
       <div
         className={`
-          flex cursor-text flex-col gap-8 rounded border-2 border-background-700 bg-black p-16
+          flex cursor-text flex-col gap-8 rounded border-2 border-black bg-black p-16
           focus-within:border-white/50
           ${hasErrors ? '!border-error/50' : ''}
           ${className}
@@ -110,9 +121,9 @@ export const BudgetInput: FC<Props> = (props) => {
         </div>
         <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
           <p className="flex items-center gap-5 break-all text-white/60">
-            {fiatValue && prettifyNumber(fiatValue, { currentCurrency })}
+            {fiatValue.gt(0) && prettifyNumber(fiatValue, { currentCurrency })}
           </p>
-          {user && (
+          {user && max && (
             <button
               disabled={disabled}
               type="button"
@@ -139,7 +150,7 @@ export const BudgetInput: FC<Props> = (props) => {
       {getErrors().map((error, i) => (
         <WarningMessageWithIcon
           key={`error-${i}`}
-          htmlFor={inputId}
+          htmlFor={id}
           message={error}
           isError
         />
@@ -147,7 +158,7 @@ export const BudgetInput: FC<Props> = (props) => {
       {warnings.map((warning, i) => (
         <WarningMessageWithIcon
           key={`warning-${i}`}
-          htmlFor={inputId}
+          htmlFor={id}
           message={warning}
         />
       ))}

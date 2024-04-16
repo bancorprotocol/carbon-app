@@ -1,4 +1,5 @@
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
+import { useDeleteStrategy } from 'components/strategies/useDeleteStrategy';
 import { Button } from 'components/common/button';
 import { Strategy } from 'libs/queries';
 import { useRouter } from 'libs/routing';
@@ -34,8 +35,13 @@ export const EditStrategyBudgetContent = ({
   const isOverlapping = isOverlappingStrategy(strategy);
 
   const { history } = useRouter();
-  const { withdrawBudget, depositBudget, isProcessing, updateMutation } =
-    useUpdateStrategy();
+  const {
+    withdrawBudget,
+    depositBudget,
+    isProcessing,
+    setIsProcessing,
+    updateMutation,
+  } = useUpdateStrategy();
 
   const order0: OrderCreate = useOrder(strategy.order0);
   const order1: OrderCreate = useOrder(strategy.order1);
@@ -94,7 +100,14 @@ export const EditStrategyBudgetContent = ({
   const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (type === 'withdraw') {
-      depositOrWithdrawFunds();
+      const withdrawAll =
+        (order0.budget || '0') === strategy.order0.balance &&
+        (order1.budget || '0') === strategy.order1.balance;
+      if (withdrawAll) {
+        openWithdrawModal();
+      } else {
+        depositOrWithdrawFunds();
+      }
     } else {
       if (approval.approvalRequired) {
         openModal('txConfirm', {
@@ -122,6 +135,21 @@ export const EditStrategyBudgetContent = ({
     if (order.budget === initialBudget) return undefined;
     if (order.marginalPriceOption) return order.marginalPriceOption;
     return MarginalPriceOptions.reset;
+  };
+
+  const { deleteStrategy } = useDeleteStrategy();
+
+  const openWithdrawModal = () => {
+    openModal('withdrawOrDelete', {
+      onWithdraw: depositOrWithdrawFunds,
+      onDelete: () =>
+        deleteStrategy(strategy, setIsProcessing, () =>
+          carbonEvents.strategyEdit.strategyDelete({
+            strategyId: strategy.id,
+            ...strategyEventData,
+          })
+        ),
+    });
   };
 
   const depositOrWithdrawFunds = () => {

@@ -85,6 +85,48 @@ export const StrategyBlockManage: FC<Props> = (props) => {
       },
     });
   }
+  const isDisposable =
+    +strategy.order0.startRate === 0 ||
+    +strategy.order0.endRate === 0 ||
+    +strategy.order1.startRate === 0 ||
+    +strategy.order1.endRate === 0;
+
+  if (!isDisposable) {
+    items.push({
+      id: 'simulate',
+      name: 'Simulate Strategy',
+      action: () => {
+        if (isOverlapping) {
+          navigate({
+            to: '/simulate/overlapping',
+            search: {
+              baseToken: strategy.base.address,
+              quoteToken: strategy.quote.address,
+              buyMin: strategy.order0.startRate,
+              sellMax: strategy.order1.endRate,
+            },
+          });
+        } else {
+          navigate({
+            to: '/simulate/recurring',
+            search: {
+              baseToken: strategy.base.address,
+              quoteToken: strategy.quote.address,
+              buyMin: strategy.order0.startRate,
+              buyMax: strategy.order0.endRate,
+              buyBudget: strategy.order0.balance,
+              buyIsRange: strategy.order0.endRate !== strategy.order0.startRate,
+              sellMin: strategy.order1.startRate,
+              sellMax: strategy.order1.endRate,
+              sellBudget: strategy.order1.balance,
+              sellIsRange:
+                strategy.order1.endRate !== strategy.order1.startRate,
+            },
+          });
+        }
+      },
+    });
+  }
 
   if (isExplorer) {
     items.push({

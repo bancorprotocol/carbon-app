@@ -8,7 +8,6 @@ import {
 } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
-import { OrderCreate } from '../create/useOrder';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import styles from './OverlappingStrategySpread.module.css';
 
@@ -17,8 +16,8 @@ interface Props {
   defaultValue: number;
   options: number[];
   spread: number;
-  order0: OrderCreate;
-  order1: OrderCreate;
+  buyMin: number;
+  sellMax: number;
   setSpread: (value: number) => void;
 }
 
@@ -29,13 +28,10 @@ const getWarning = (maxSpread: number) => {
 const round = (value: number) => Math.round(value * 100) / 100;
 
 export const OverlappingStrategySpread: FC<Props> = (props) => {
-  const { defaultValue, options, spread, setSpread } = props;
+  const { defaultValue, options, spread, setSpread, buyMin, sellMax } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spread);
   const hasError = spread <= 0 || spread > 100;
-  const { order0, order1 } = props;
-  const buyMin = Number(order0.min);
-  const sellMax = Number(order1.max);
   const [warning, setWarning] = useState('');
 
   const selectSpread = (value: number) => {

@@ -1,3 +1,4 @@
+import { useWeb3 } from 'libs/web3';
 import { FC, useEffect, useId } from 'react';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from 'components/strategies/create/useOrder';
@@ -39,9 +40,14 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   const budgetTooSmall = isOverlappingBudgetTooSmall(order0, order1);
   const buyBudgetId = useId();
   const sellBudgetId = useId();
+  const { user } = useWeb3();
 
-  const checkInsufficientBalance = (balance: string, order: OrderCreate) => {
-    if (new SafeDecimal(balance).lt(order.budget)) {
+  const checkInsufficientBalance = (
+    balance: string,
+    order: OrderCreate,
+    user?: string
+  ) => {
+    if (new SafeDecimal(balance).lt(order.budget) && !!user) {
       order.setBudgetError('Insufficient balance');
     } else {
       order.setBudgetError('');
@@ -51,16 +57,16 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   // Check for error when buy budget changes
   useEffect(() => {
     const balance = token1BalanceQuery.data ?? '0';
-    checkInsufficientBalance(balance, order0);
+    checkInsufficientBalance(balance, order0, user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.budget, token1BalanceQuery.data]);
+  }, [order0.budget, token1BalanceQuery.data, user]);
 
   // Check for error when sell budget changes
   useEffect(() => {
     const balance = token0BalanceQuery.data ?? '0';
-    checkInsufficientBalance(balance, order1);
+    checkInsufficientBalance(balance, order1, user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order1.budget, token0BalanceQuery.data]);
+  }, [order1.budget, token0BalanceQuery.data, user]);
 
   const onBuyBudgetChange = (value: string) => {
     order0.setBudget(value);
@@ -77,29 +83,33 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
   return (
     <>
       <BudgetInput
-        action="deposit"
-        id={buyBudgetId}
-        token={quote}
-        value={order0.budget}
-        max={token1BalanceQuery.data ?? '0'}
-        onChange={onBuyBudgetChange}
-        disabled={minAboveMarket || !validPrice}
-        data-testid="input-budget-quote"
-        errors={order0.budgetError}
-      />
-      {minAboveMarket && <Explanation base={base} buy />}
-      <BudgetInput
-        action="deposit"
         id={sellBudgetId}
+        title="Sell Budget"
+        titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
+        action="deposit"
         token={base}
         value={order1.budget}
-        max={token0BalanceQuery.data ?? '0'}
+        max={token0BalanceQuery.data}
         onChange={onSellBudgetChange}
         disabled={maxBelowMarket || !validPrice}
         data-testid="input-budget-base"
         errors={order1.budgetError}
       />
       {maxBelowMarket && <Explanation base={base} />}
+      <BudgetInput
+        id={buyBudgetId}
+        title="Buy Budget"
+        titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
+        action="deposit"
+        token={quote}
+        value={order0.budget}
+        max={token1BalanceQuery.data}
+        onChange={onBuyBudgetChange}
+        disabled={minAboveMarket || !validPrice}
+        data-testid="input-budget-quote"
+      />
+      {minAboveMarket && <Explanation base={base} buy />}
+
       {budgetTooSmall && (
         <OverlappingSmallBudget
           base={base}

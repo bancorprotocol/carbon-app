@@ -10,7 +10,7 @@ function toValue(mix: string | undefined) {
   if (str === 'true') return true;
   if (str.startsWith('0x')) return str;
   if (str.startsWith('0X')) return str;
-  return +str * 0 === 0 && +str + '' === str ? +str : str;
+  return +str * 0 === 0 && +str + '' === str ? str : str;
 }
 
 export function decode(str: string) {
@@ -51,7 +51,12 @@ export const parseSearchWith = (parser: (str: string) => any) => {
         const value = query[key];
         if (typeof value === 'string') {
           try {
-            query[key] = parser(value);
+            const parsed = parser(value);
+            if (typeof parsed === 'number') {
+              query[key] = parsed.toString();
+            } else {
+              query[key] = parsed;
+            }
           } catch (err) {
             //
           }
@@ -94,8 +99,8 @@ export const validAddress = v.string([
     }
   }),
 ]);
-export const validBoolean = v.string([
-  v.custom((value) => value === 'true' || value === 'false'),
+export const validBoolean = v.boolean([
+  v.custom((value) => value === true || value === false),
 ]);
 
 export const validateSearchParams = <T>(

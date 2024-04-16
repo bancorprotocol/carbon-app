@@ -1,9 +1,9 @@
-import { ChangeEvent, FocusEvent, FC, useEffect, useId } from 'react';
-import { carbonEvents } from 'services/events';
+import { ChangeEvent, FocusEvent, FC, useId, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
+import { carbonEvents } from 'services/events';
 import { formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
@@ -23,7 +23,7 @@ type InputRangeProps = {
   error?: string;
   warnings?: string[];
   setRangeError: (error: string) => void;
-  marketPricePercentages: MarketPricePercentage;
+  marketPricePercentages?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed?: boolean;
 };
@@ -70,7 +70,7 @@ export const InputRange: FC<InputRangeProps> = ({
         message: errorMessage,
       });
     }
-  }, [min, max, setRangeError, buy, isOrdersReversed]);
+  }, [min, max, setRangeError, isOrdersReversed, buy]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumber(e.target.value));
@@ -141,12 +141,14 @@ export const InputRange: FC<InputRangeProps> = ({
             <span className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(min)}
             </span>
-            <MarketPriceIndication
-              marketPricePercentage={marketPricePercentages.min}
-              isRange
-              buy={buy}
-              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-            />
+            {marketPricePercentages && (
+              <MarketPriceIndication
+                marketPricePercentage={marketPricePercentages.min}
+                isRange
+                buy={buy}
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+              />
+            )}
           </p>
         </div>
         <div
@@ -197,12 +199,14 @@ export const InputRange: FC<InputRangeProps> = ({
             <p className="break-all font-mono text-12 text-white/60">
               {getFiatAsString(max)}
             </p>
-            <MarketPriceIndication
-              marketPricePercentage={marketPricePercentages.max}
-              isRange
-              buy={buy}
-              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-            />
+            {marketPricePercentages && (
+              <MarketPriceIndication
+                marketPricePercentage={marketPricePercentages.max}
+                isRange
+                buy={buy}
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+              />
+            )}
           </div>
         </div>
       </div>

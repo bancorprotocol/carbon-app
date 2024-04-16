@@ -100,7 +100,7 @@ export const CreateStrategyOrders = ({
         </div>
         <p className="flex items-center text-12 font-weight-400 text-white/60">
           <IconWarning className="ml-6 mr-10 w-14 flex-shrink-0" /> Rebasing and
-          and fee-on-transfer tokens are not supported
+          fee-on-transfer tokens are not supported
         </p>
       </m.header>
 
