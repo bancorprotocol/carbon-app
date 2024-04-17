@@ -1,4 +1,4 @@
-import { FC, useId } from 'react';
+import { FC, useEffect, useId } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
@@ -45,6 +45,14 @@ export const EditStrategyBudgetBuySellBlock: FC<{
     type === 'withdraw'
       ? new SafeDecimal(balance || 0).lt(order.budget)
       : calculatedWalletBalance.lt(0);
+
+  useEffect(() => {
+    if (insufficientBalance) {
+      order.setBudgetError('Insufficient balance');
+    } else {
+      order.setBudgetError('');
+    }
+  }, [insufficientBalance, order]);
 
   const budgetProps = {
     base,
