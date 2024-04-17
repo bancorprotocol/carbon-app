@@ -22,6 +22,7 @@ import {
 } from '../overlapping/utils';
 import { DepositOverlappingStrategy } from './overlapping/DepositOverlappingStrategy';
 import { WithdrawOverlappingStrategy } from './overlapping/WithdrawOverlappingStrategy';
+import { useStrategyWarning } from '../useWarning';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -35,6 +36,7 @@ export const EditStrategyBudgetContent = ({
   type,
 }: EditStrategyBudgetContentProps) => {
   const isOverlapping = isOverlappingStrategy(strategy);
+  const { base, quote } = strategy;
 
   const { history } = useRouter();
   const {
@@ -48,8 +50,8 @@ export const EditStrategyBudgetContent = ({
   const order0: OrderCreate = useOrder({ ...strategy.order0, balance: '' });
   const order1: OrderCreate = useOrder({ ...strategy.order1, balance: '' });
   const { provider } = useWeb3();
-  const { getFiatValue: getFiatValueBase } = useFiatCurrency(strategy.base);
-  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(strategy.quote);
+  const { getFiatValue: getFiatValueBase } = useFiatCurrency(base);
+  const { getFiatValue: getFiatValueQuote } = useFiatCurrency(quote);
   const buyBudgetUsd = getFiatValueQuote(
     strategy.order0.balance,
     true
@@ -62,8 +64,8 @@ export const EditStrategyBudgetContent = ({
   const isLoading = isAwaiting || isProcessing;
 
   const strategyEventData = useStrategyEventData({
-    base: strategy.base,
-    quote: strategy.quote,
+    base,
+    quote,
     order0,
     order1,
   });
@@ -132,8 +134,8 @@ export const EditStrategyBudgetContent = ({
             ...strategyEventData,
             productType: 'strategy',
             approvalTokens: approval.tokens,
-            buyToken: strategy.base,
-            sellToken: strategy.quote,
+            buyToken: base,
+            sellToken: quote,
             blockchainNetwork: provider?.network?.name || '',
           },
           context: 'depositStrategyFunds',
@@ -199,6 +201,21 @@ export const EditStrategyBudgetContent = ({
     return +order0.budget > 0 || +order1.budget > 0;
   }, [order0, order1, isOverlapping]);
 
+  const warnings = useStrategyWarning({
+    base,
+    quote,
+    order0,
+    order1,
+    isOverlapping,
+    invalidForm: !isOrdersBudgetValid,
+  });
+
+  const showWarnings =
+    warnings.formHasWarning && type === 'deposit' && isOrdersBudgetValid;
+
+  const mustApproveWarnings =
+    warnings.shouldApproveWarnings && type === 'deposit';
+
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
@@ -246,9 +263,21 @@ export const EditStrategyBudgetContent = ({
           />
         </>
       )}
+      {showWarnings && (
+        <label className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60">
+          <input
+            type="checkbox"
+            value={warnings.approvedWarnings.toString()}
+            onChange={(e) => warnings.setApprovedWarnings(e.target.checked)}
+            data-testid="approve-warnings"
+          />
+          I've reviewed the warning(s) but choose to proceed.
+        </label>
+      )}
+
       <Button
         type="submit"
-        disabled={!isOrdersBudgetValid}
+        disabled={!isOrdersBudgetValid || mustApproveWarnings}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

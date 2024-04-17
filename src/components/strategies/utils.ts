@@ -4,6 +4,7 @@ import {
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface ValidOrderParams {
   isRange: boolean;
@@ -102,12 +103,29 @@ export const getStatusTextByTxStatus = (
   return;
 };
 
+export const checkHasArbOpportunity = (
+  externalMarketPrice: number,
+  oldMarketPrice?: SafeDecimal
+): boolean => {
+  if (!oldMarketPrice) return false;
+
+  const hasArbOpportunity = new SafeDecimal(externalMarketPrice)
+    .div(oldMarketPrice)
+    .minus(1)
+    .abs()
+    .gte(0.05);
+
+  return hasArbOpportunity;
+};
+
 interface HasWarningParams {
   order0: OrderCreate;
   order1: OrderCreate;
   buyOutsideMarket: boolean;
   sellOutsideMarket: boolean;
   isOverlapping: boolean;
+  externalMarketPrice: number;
+  oldMarketPrice?: SafeDecimal;
 }
 
 export const hasWarning = ({
@@ -116,11 +134,19 @@ export const hasWarning = ({
   buyOutsideMarket,
   sellOutsideMarket,
   isOverlapping,
+  externalMarketPrice,
+  oldMarketPrice,
 }: HasWarningParams) => {
   if (isOverlapping) {
     const minAboveMarket = isMinAboveMarket(order0);
     const maxBelowMarket = isMaxBelowMarket(order1);
-    return minAboveMarket || maxBelowMarket;
+
+    const hasArbOpportunity = checkHasArbOpportunity(
+      externalMarketPrice,
+      oldMarketPrice
+    );
+
+    return minAboveMarket || maxBelowMarket || hasArbOpportunity;
   } else {
     return (
       checkIfOrdersOverlap(order0, order1) ||

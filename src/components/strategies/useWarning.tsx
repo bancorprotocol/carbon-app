@@ -3,6 +3,8 @@ import { useMarketIndication } from './marketPriceIndication';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from './create/useOrder';
 import { hasWarning } from './utils';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { geoMean } from 'utils/fullOutcome';
 
 interface StrategyWarningParams {
   base?: Token;
@@ -38,6 +40,8 @@ export const useStrategyWarning = ({
       order: order1,
       buy: false,
     });
+  const externalMarketPrice = useMarketPrice({ base, quote });
+  const oldMarketPrice = geoMean(order0.marginalPrice, order1.marginalPrice);
   const formHasWarning =
     isConnected &&
     hasWarning({
@@ -46,6 +50,8 @@ export const useStrategyWarning = ({
       buyOutsideMarket,
       sellOutsideMarket,
       isOverlapping,
+      oldMarketPrice,
+      externalMarketPrice,
     });
   useEffect(() => {
     if (formHasWarning) setApprovedWarnings(false);

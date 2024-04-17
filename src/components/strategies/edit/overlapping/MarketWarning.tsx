@@ -1,6 +1,7 @@
 import { SafeDecimal } from 'libs/safedecimal';
 import { FC } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { checkHasArbOpportunity } from 'components/strategies/utils';
 
 interface Props {
   externalMarketPrice: number;
@@ -8,12 +9,12 @@ interface Props {
 }
 export const MarketWarning: FC<Props> = (props) => {
   const { externalMarketPrice, oldMarketPrice } = props;
-  if (!oldMarketPrice) return <></>;
-  const delta = new SafeDecimal(externalMarketPrice)
-    .div(oldMarketPrice)
-    .minus(1)
-    .abs();
-  if (delta.lt(0.05)) return <></>;
+  const hasArbOpportunity = checkHasArbOpportunity(
+    externalMarketPrice,
+    oldMarketPrice
+  );
+  if (!hasArbOpportunity) return <></>;
+
   return (
     <div className="text-warning flex items-center gap-8">
       <IconWarning className="size-16" />
