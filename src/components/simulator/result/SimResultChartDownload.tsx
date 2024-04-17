@@ -40,14 +40,14 @@ export const SimResultChartDownload = ({
       <button
         className={cn(
           buttonStyles({ variant: 'black' }),
-          'flex h-40 w-40 items-center justify-center border-background-900 p-0'
+          'border-background-900 size-40 flex items-center justify-center p-0'
         )}
         onClick={() => {
           downloadCSV({ data, baseSymbol, quoteSymbol, simulationType });
         }}
         aria-label="Download Simulation"
       >
-        <IconDownload className="h-18 w-18" />
+        <IconDownload className="size-18" />
       </button>
     </Tooltip>
   );

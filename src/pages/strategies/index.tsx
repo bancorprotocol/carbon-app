@@ -33,18 +33,18 @@ export const StrategiesPage = () => {
     {
       label: 'Overview',
       href: '/',
-      icon: <IconOverview className="h-18 w-18" />,
+      icon: <IconOverview className="size-18" />,
       badge: query.data?.length,
     },
     {
       label: 'Portfolio',
       href: '/strategies/portfolio',
-      icon: <IconPieChart className="h-18 w-18" />,
+      icon: <IconPieChart className="size-18" />,
     },
     {
       label: 'Activity',
       href: '/strategies/activity',
-      icon: <IconActivity className="h-18 w-18" />,
+      icon: <IconActivity className="size-18" />,
     },
   ];
 

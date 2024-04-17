@@ -38,20 +38,20 @@ export const CreateStrategyHeader = ({
     >
       <button
         onClick={() => history.back()}
-        className="grid h-40 w-40 place-items-center rounded-full bg-background-800"
+        className="bg-background-800 size-40 grid place-items-center rounded-full"
       >
-        <ForwardArrow className="h-18 w-18 rotate-180" />
+        <ForwardArrow className="size-18 rotate-180" />
       </button>
-      <h1 className="flex-1 text-24 font-weight-500">{title}</h1>
+      <h1 className="text-24 font-weight-500 flex-1">{title}</h1>
       {!showGraph && showOrders && (
         <button
           onClick={() => {
             carbonEvents.strategy.strategyChartOpen(undefined);
             setShowGraph(true);
           }}
-          className="grid h-40 w-40 place-items-center rounded-full bg-background-800"
+          className="bg-background-800 size-40 grid place-items-center rounded-full"
         >
-          <IconCandles className="h-18 w-18" />
+          <IconCandles className="size-18" />
         </button>
       )}
     </m.header>

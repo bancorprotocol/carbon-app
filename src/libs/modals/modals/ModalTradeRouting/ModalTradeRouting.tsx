@@ -114,7 +114,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
           className="flex min-h-[130px] flex-col gap-8 overflow-auto"
         >
           <Tooltip element="This is the list of orders your trade will use when executed.">
-            <h3 id="routing-table" className="text-secondary">
+            <h3 id="routing-table" className="text-14 text-white/60">
               Routing Table
             </h3>
           </Tooltip>
@@ -135,14 +135,14 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                       aria-label="toggle all orders"
                     />
                   </th>
-                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 font-mono text-white/60">
                     {source.symbol}
                   </th>
                   <th className="sticky top-0 bg-black">{/* Arrow */}</th>
-                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 font-mono text-white/60">
                     {target.symbol}
                   </th>
-                  <th className="sticky top-0 bg-black py-8 font-mono text-14 font-weight-500 text-white/60">
+                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 font-mono text-white/60">
                     Avg Price
                   </th>
                 </tr>
@@ -173,7 +173,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
         >
           <header className="flex items-center justify-between">
             <Tooltip element="When managing the list of orders, your trade amounts will change to reflect these changes.">
-              <h3 id="confirm-table" className="text-secondary">
+              <h3 id="confirm-table" className="text-14 text-white/60">
                 Confirm Trade
               </h3>
             </Tooltip>
@@ -193,15 +193,15 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             isError={!!errorMsg}
             disabled
             data-testid="confirm-source"
-            className="-mb-16 rounded-12 bg-black"
+            className="rounded-12 -mb-16 bg-black"
           />
-          <IconArrow className="z-10 mx-auto h-24 w-24 rounded-full bg-background-900 p-5" />
+          <IconArrow className="bg-background-900 size-24 z-10 mx-auto rounded-full p-5" />
           <TokenInputField
             value={totalTargetAmount}
             token={data.target}
             disabled
             data-testid="confirm-target"
-            className="-mt-16 rounded-12 bg-black"
+            className="rounded-12 -mt-16 bg-black"
           />
         </div>
 

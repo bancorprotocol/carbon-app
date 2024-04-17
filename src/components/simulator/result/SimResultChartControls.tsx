@@ -59,7 +59,7 @@ export const SimResultChartControls = () => {
         button={(attr) => (
           <button
             {...attr}
-            className="h-20 min-w-[20px] place-items-center rounded-[6px] px-2 text-14 hover:bg-black"
+            className="text-14 h-20 min-w-[20px] place-items-center rounded-[6px] px-2 hover:bg-black"
             onClick={(e) => {
               setIsOpen(true);
               attr.onClick(e);
@@ -77,7 +77,7 @@ export const SimResultChartControls = () => {
               key={`${index}_${speed}`}
               role="menuitem"
               aria-label={`Playback Speed: ${speed}`}
-              className="flex w-full rounded-6 py-8 px-12 text-left text-14 text-white/80 hover:bg-black"
+              className="rounded-6 text-14 flex w-full px-12 py-8 text-left text-white/80 hover:bg-black"
               onClick={() => setSpeed(speed)}
               data-testid={`set-speed-${speed}`}
             >
@@ -93,9 +93,9 @@ export const SimResultChartControls = () => {
         data-testid="animation-controls-play&pause"
       >
         {!isRunning || isStopped ? (
-          <PlayIcon className="h-16 w-16" />
+          <PlayIcon className="size-16" />
         ) : (
-          <PauseIcon className="h-16 w-16" />
+          <PauseIcon className="size-16" />
         )}
       </button>
       <input
@@ -113,7 +113,7 @@ export const SimResultChartControls = () => {
         onClick={end}
         data-testid="animation-controls-end"
       >
-        <SkipIcon className="h-16 w-16" />
+        <SkipIcon className="size-16" />
       </button>
       <button
         aria-label="replay"
@@ -121,7 +121,7 @@ export const SimResultChartControls = () => {
         onClick={replay}
         data-testid="animation-controls-replay"
       >
-        <ReplayIcon className="h-16 w-16" />
+        <ReplayIcon className="size-16" />
       </button>
     </article>
   );

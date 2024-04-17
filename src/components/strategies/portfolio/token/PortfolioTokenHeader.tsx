@@ -24,7 +24,7 @@ export const PortfolioTokenHeader: FC<Props> = ({
         'w-full',
         'bg-background-800',
         'rounded-10',
-        'h-64 lg:h-95',
+        'lg:h-95 h-64',
         'px-20',
         'md:mb-20',
         'lg:-mb-15',
@@ -41,16 +41,12 @@ export const PortfolioTokenHeader: FC<Props> = ({
           'items-center',
           'bg-background-900',
           'rounded-full',
-          'h-32 w-32'
+          'size-32'
         )}
       >
-        <IconBack className={'h-10'} />
+        <IconBack className="h-10" />
       </Link>
-      <LogoImager
-        alt={'Token Logo'}
-        src={logoURI}
-        className={'mx-16 h-32 w-32'}
-      />
+      <LogoImager alt="Token Logo" src={logoURI} className="size-32 mx-16" />
       <span>{symbol ?? 'N/A'}</span>
     </div>
   );

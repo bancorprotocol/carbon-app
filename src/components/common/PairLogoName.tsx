@@ -16,7 +16,7 @@ export const PairLogoName: FC<Props> = ({
   return (
     <>
       <TokensOverlap tokens={[baseToken, quoteToken]} size={30} />
-      <p className="flex items-center gap-4 font-weight-500">
+      <p className="font-weight-500 flex items-center gap-4">
         {baseToken.symbol}
         {baseToken.isSuspicious && (
           <WarningWithTooltip tooltipContent={suspiciousTokenTooltipMsg} />

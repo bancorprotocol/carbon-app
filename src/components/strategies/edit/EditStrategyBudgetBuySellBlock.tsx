@@ -67,7 +67,7 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
   return (
     <article
       aria-labelledby={titleId}
-      className={`flex flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-left ${
+      className={`rounded-6 bg-background-900 flex flex-col gap-20 border-l-2 p-20 text-left ${
         buy
           ? 'border-buy/50 focus-within:border-buy'
           : 'border-sell/50 focus-within:border-sell'
@@ -75,7 +75,7 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <header className="flex items-center justify-between">
-        <h3 id={titleId} className="flex items-center gap-8 text-18">
+        <h3 id={titleId} className="text-18 flex items-center gap-8">
           <span>
             {`${type === 'withdraw' ? 'Withdraw' : 'Deposit'}`}{' '}
             {buy ? 'Buy' : 'Sell'} Budget
@@ -90,6 +90,7 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
           element={`Indicate the amount you wish to ${
             type === 'withdraw' ? 'withdraw' : 'deposit'
           } from the available "allocated budget"`}
+          iconClassName="text-white/60"
         />
       </header>
       <TokenInputField

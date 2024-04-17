@@ -49,7 +49,7 @@ export const usePortfolioTokenPieChart = (
         useHTML: true,
         formatter: function () {
           return (
-            '<div class="p-10 text-14 text-white !font-weight-500 space-y-12 w-[230px]">' +
+            '<div class="p-10 text-14 text-white font-weight-500 space-y-12 w-[230px]">' +
             '<div class="flex justify-between">' +
             '<span class="text-white/60">ID</span>' +
             data[this.point.index].strategy.idDisplay +

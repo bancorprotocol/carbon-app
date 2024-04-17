@@ -20,7 +20,7 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
       <AnimatedActionIcon action={activity.action} />
-      <div className="flex flex-1 flex-col gap-8 overflow-hidden text-14">
+      <div className="text-14 flex flex-1 flex-col gap-8 overflow-hidden">
         <hgroup>
           <h3 className="text-16" id={titleId} data-testid="notif-title">
             {activityActionName[activity.action]}
@@ -32,7 +32,7 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
         <Link
           to="/strategy/$id"
           params={{ id: activity.strategy.id }}
-          className="flex items-center font-weight-500"
+          className="font-weight-500 flex items-center"
         >
           View Activity
         </Link>
@@ -43,10 +43,10 @@ export const ActivityNotification: FC<Props> = ({ notification, close }) => {
           data-testid="notif-close"
           aria-label="Remove notification"
         >
-          <IconClose className="h-14 w-14 text-white/80" />
+          <IconClose className="size-14 text-white/80" />
         </button>
 
-        <p className="whitespace-nowrap text-12 font-weight-500 text-white/60">
+        <p className="text-12 font-weight-500 whitespace-nowrap text-white/60">
           {unix(notification.timestamp).fromNow(true)}
         </p>
       </div>
@@ -59,7 +59,7 @@ export const AnimatedActionIcon = (props: { action: ActivityAction }) => {
   return (
     <div
       className={cn(
-        'relative grid h-38 w-38 place-items-center rounded-full',
+        'size-38 relative grid place-items-center rounded-full',
         style.icon,
         {
           'bg-buy/20 text-buy': props.action === 'buy',

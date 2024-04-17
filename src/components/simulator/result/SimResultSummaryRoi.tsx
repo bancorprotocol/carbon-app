@@ -24,11 +24,11 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
   const color = portfolioRoi >= 0 ? 'text-success' : 'text-error';
 
   return (
-    <article className="flex flex-col rounded-8 border-background-800">
+    <article className="rounded-8 border-background-800 flex flex-col">
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-secondary flex items-center gap-4 font-mono !text-12">
+        <h4 className="text-12 flex items-center gap-4 font-mono text-white/60">
           ROI
-          <IconTooltip className="h-10 w-10" />
+          <IconTooltip className="size-10" />
         </h4>
       </Tooltip>
       <AnimatedNumber
@@ -47,7 +47,7 @@ const TooltipContent = () => (
   <>
     <NewTabLink to={externalLinks.roiLearnMore} className="text-primary">
       <span className="align-middle">Learn how ROI is calculated.</span>
-      <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
+      <IconLink className="size-14 mb-1 inline-block align-middle" />
     </NewTabLink>
   </>
 );

@@ -17,16 +17,10 @@ export const PortfolioPieChart = ({
   hideChart,
 }: Props) => {
   return (
-    <div
-      className={
-        'relative aspect-square w-full flex-shrink-0 rounded-10 bg-background-900 md:h-[400px] md:w-[400px]'
-      }
-    >
-      <div
-        className={'absolute flex h-full w-full items-center justify-center'}
-      >
+    <div className="rounded-10 bg-background-900 md:size-[400px] relative aspect-square w-full flex-shrink-0">
+      <div className="size-full absolute flex items-center justify-center">
         {isLoading ? (
-          <div className={'h-[80px]'}>
+          <div className="h-[80px]">
             <CarbonLogoLoading />
           </div>
         ) : (

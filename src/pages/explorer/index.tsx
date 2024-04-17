@@ -21,7 +21,7 @@ export const ExplorerPage = () => {
     <Page hideTitle>
       <StrategyProvider query={query}>
         <ExplorerEvents />
-        <div className="flex flex-grow flex-col space-y-30">
+        <div className="space-y-30 flex flex-grow flex-col">
           <ExplorerSearch />
           {slug && <ExplorerTabs />}
           <Outlet />

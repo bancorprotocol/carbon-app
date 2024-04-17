@@ -54,13 +54,13 @@ export const StrategyPage = () => {
       <header className="flex items-center gap-8">
         <button
           onClick={() => history.back()}
-          className="rounded-full bg-background-900 p-12 hover:bg-background-800"
+          className="bg-background-900 hover:bg-background-800 rounded-full p-12"
         >
-          <IconChevronLeft className="h-16 w-16" />
+          <IconChevronLeft className="size-16" />
         </button>
         <TokensOverlap tokens={[base, quote]} size={40} />
         <div className="flex-1 flex-col gap-8">
-          <h1 className="flex gap-8 text-18 font-weight-500">
+          <h1 className="text-18 font-weight-500 flex gap-8">
             <span>{base.symbol}</span>
             <span className="text-white/25">/</span>
             <span>{quote.symbol}</span>
@@ -74,28 +74,28 @@ export const StrategyPage = () => {
         />
       </header>
       <section className="flex flex-col gap-16 md:flex-row">
-        <article className="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded bg-background-900 p-24 md:w-[400px]">
-          <h2 className="col-span-2 text-18 font-weight-500">Strategy Info</h2>
+        <article className="bg-background-900 grid grid-cols-2 grid-rows-[auto_auto_auto] gap-16 rounded p-24 md:w-[400px]">
+          <h2 className="text-18 font-weight-500 col-span-2">Strategy Info</h2>
           <StrategyBlockRoi strategy={strategy} />
           <StrategyBlockBudget strategy={strategy} />
           <div
             className={cn(
-              'col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] rounded-8 border-2 border-background-800',
+              'rounded-8 border-background-800 col-start-1 col-end-3 grid grid-cols-2 grid-rows-[auto_auto] border-2',
               strategy.status === 'active' ? '' : 'opacity-50'
             )}
           >
             <StrategyBlockBuySell
               strategy={strategy}
               buy
-              className="border-r-2 border-background-800"
+              className="border-background-800 border-r-2"
             />
             <StrategyBlockBuySell strategy={strategy} />
-            <div className="col-start-1 col-end-3 border-t-2 border-background-800">
+            <div className="border-background-800 col-start-1 col-end-3 border-t-2">
               <StrategyGraph strategy={strategy} />
             </div>
           </div>
         </article>
-        <article className="hidden flex-1 flex-col gap-20 rounded bg-background-900 p-16 p-24 md:flex">
+        <article className="bg-background-900 hidden flex-1 flex-col gap-20 rounded p-16 p-24 md:flex">
           <h2 className="text-18 font-weight-500">Price graph</h2>
           <TradingviewChart base={base} quote={quote} />
         </article>

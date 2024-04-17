@@ -114,11 +114,11 @@ export const CreateOverlappingStrategyBudget: FC<Props> = (props) => {
           <a
             href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
             target="_blank"
-            className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"
+            className="text-12 font-weight-500 text-primary inline-flex items-center gap-4"
             rel="noreferrer"
           >
             Learn More
-            <IconLink className="h-12 w-12" />
+            <IconLink className="size-12" />
           </a>
         </p>
       )}
@@ -137,11 +137,11 @@ const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
       <a
         href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"
-        className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"
+        className="text-12 font-weight-500 text-primary inline-flex items-center gap-4"
         rel="noreferrer"
       >
         Learn More
-        <IconLink className="h-12 w-12" />
+        <IconLink className="size-12" />
       </a>
     </p>
   );

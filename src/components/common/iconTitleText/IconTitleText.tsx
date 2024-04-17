@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { cn } from 'utils/helpers';
 
 export type IconTitleTextProps = {
   icon: ReactNode;
@@ -31,13 +32,18 @@ export const IconTitleText: FC<IconTitleTextProps> = ({
   return (
     <div className="flex flex-col items-center">
       <div
-        className={`flex h-60 w-60 items-center justify-center rounded-full p-18 ${variantClass}`}
+        className={cn(
+          'p-18 size-60 flex items-center justify-center rounded-full',
+          variantClass
+        )}
       >
         {icon}
       </div>
       <h2 className="my-16 text-center">{title}</h2>
       {text && (
-        <p className="text-secondary text-center font-weight-400">{text}</p>
+        <p className="text-14 font-weight-400 text-center text-white/60">
+          {text}
+        </p>
       )}
     </div>
   );

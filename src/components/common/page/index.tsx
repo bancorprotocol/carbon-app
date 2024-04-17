@@ -11,7 +11,7 @@ export const Page: FC<{
   return (
     <div
       className={cn(
-        'px-content mx-auto flex max-w-[1280px] flex-grow flex-col pb-30 pt-20 xl:px-50',
+        'px-content pb-30 xl:px-50 mx-auto flex max-w-[1280px] flex-grow flex-col pt-20',
         className
       )}
     >

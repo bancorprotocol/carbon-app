@@ -14,11 +14,11 @@ export const ModalTradeRoutingRowCell: FC<{
     <>
       <p className="inline-flex items-center gap-8">
         <LogoImager src={logoURI} alt="Token Logo" className="w-14" />
-        <span className="font-mono text-14 font-weight-500">
+        <span className="text-14 font-weight-500 font-mono">
           {prettifyNumber(amount)}
         </span>
       </p>
-      <p className="font-mono text-12 font-weight-500 text-white/60">
+      <p className="text-12 font-weight-500 font-mono text-white/60">
         {getFiatDisplayValue(fiatAmount, selectedFiatCurrency)}
       </p>
     </>

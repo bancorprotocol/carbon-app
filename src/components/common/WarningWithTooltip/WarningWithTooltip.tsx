@@ -1,5 +1,6 @@
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import { cn } from 'utils/helpers';
 
 type WarningWithTooltipProps = {
   tooltipContent: string;
@@ -13,7 +14,7 @@ export const WarningWithTooltip = ({
   return (
     <Tooltip interactive={false} element={tooltipContent}>
       <span>
-        <IconWarning className={`w-14 text-warning ${className}`} />
+        <IconWarning className={cn('text-warning w-14', className)} />
       </span>
     </Tooltip>
   );

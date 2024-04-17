@@ -33,7 +33,7 @@ export const DebugTenderlyRPC = () => {
   return (
     <form
       onSubmit={submit}
-      className="flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20"
+      className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20"
     >
       <h2>Set Tenderly RPC</h2>
       <Label label="RPC URL">

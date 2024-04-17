@@ -30,7 +30,7 @@ const CellToken = (info: CellContext<PortfolioData, Token>) => {
         className={cn('h-32', 'w-4', 'rounded-r-2')}
         style={{ backgroundColor: getColorByIndex(i) }}
       />
-      <LogoImager alt={'Token Logo'} src={logoURI} className={'h-32 w-32'} />
+      <LogoImager alt="Token Logo" src={logoURI} className="size-32" />
       <div>{symbol}</div>
     </div>
   );

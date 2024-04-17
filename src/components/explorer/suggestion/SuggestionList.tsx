@@ -1,11 +1,9 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { suggestionClasses } from './utils';
-import { cn } from 'utils/helpers';
 import { PairLogoName } from 'components/common/PairLogoName';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 import { Link } from '@tanstack/react-router';
 import { toPairSlug } from 'utils/pairSearch';
-import styles from './suggestion.module.css';
 
 interface Props {
   listboxId: string;
@@ -16,7 +14,7 @@ interface Props {
 export const SuggestionList: FC<Props> = (props) => {
   return (
     <div role="listbox" id={props.listboxId} className={suggestionClasses}>
-      <h3 className="text-secondary ml-20 mb-8 font-weight-500">
+      <h3 className="text-14 font-weight-500 mb-8 ml-20 text-white/60">
         {props.filteredPairs.length} Results
       </h3>
       {props.filteredPairs.map((pair) => {
@@ -28,10 +26,7 @@ export const SuggestionList: FC<Props> = (props) => {
             onMouseDown={(e) => e.preventDefault()} // prevent blur on click
             onClick={() => props.setOpen(false)}
             role="option"
-            className={cn(
-              styles.option,
-              'flex cursor-pointer items-center space-x-10 px-30 py-10 hover:bg-white/20'
-            )}
+            className="px-30 aria-selected:bg-white/10 flex cursor-pointer items-center space-x-10  py-10 hover:bg-white/20"
             to="/explore/$type/$slug"
             params={params}
             search={{}}

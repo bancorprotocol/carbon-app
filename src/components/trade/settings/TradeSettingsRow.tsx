@@ -6,14 +6,14 @@ import {
   TradeSettingsData,
   warningMessageIfOutOfRange,
 } from './utils';
-import { sanitizeNumber } from 'utils/helpers';
+import { cn, sanitizeNumber } from 'utils/helpers';
 import { Button } from 'components/common/button';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
-const buttonClasses =
-  'rounded-8 !text-white/60 hover:text-primary hover:border-primary px-5';
-const buttonActiveClasses = '!border-primary';
-const buttonErrorClasses = '!border-error !text-error focus:text-error';
+const buttonClasses = 'rounded-8 text-white/60 hover:border-primary px-5';
+const buttonActiveClasses = 'border-primary';
+const buttonErrorClasses =
+  'border-error text-error hover:border-error focus:text-error';
 const inputClasses =
   'border-2 border-black bg-black text-center placeholder-white/25 focus:outline-none';
 
@@ -86,19 +86,20 @@ export const TradeSettingsRow: FC<{
 
   return (
     <div>
-      <div className={'text-white/60'}>{item.title}</div>
-      <div className={'mt-10 grid grid-cols-4 gap-10'}>
+      <div className="text-white/60">{item.title}</div>
+      <div className="mt-10 grid grid-cols-4 gap-10">
         {item.presets.map((value) => (
           <Button
             key={value}
-            variant={'black'}
+            variant="black"
             onClick={() => {
               setInternalValue('');
               item.setValue(value);
             }}
-            className={`${buttonClasses} ${
-              item.value === value ? buttonActiveClasses : ''
-            }`}
+            className={cn(
+              buttonClasses,
+              item.value === value && buttonActiveClasses
+            )}
           >
             {item.prepend}
             {value}
@@ -106,19 +107,20 @@ export const TradeSettingsRow: FC<{
           </Button>
         ))}
         <input
-          placeholder={'Custom'}
+          placeholder="Custom"
           value={internalValue}
           onBlur={handleOnBlur}
           onChange={handleOnInputChange}
-          className={`${buttonClasses} ${inputClasses} ${
-            isError ? buttonErrorClasses : ''
-          }${!item.presets.includes(item.value) ? buttonActiveClasses : ''}`}
+          className={cn(
+            buttonClasses,
+            inputClasses,
+            !item.presets.includes(item.value) && buttonActiveClasses,
+            isError && buttonErrorClasses
+          )}
         />
       </div>
       {warningMessage && (
-        <div
-          className={`mt-15 flex font-mono text-12 font-weight-500 text-warning`}
-        >
+        <div className="mt-15 text-12 font-weight-500 text-warning flex font-mono">
           <IconWarning className={`w-14 ${isError ? 'text-error' : ''}`} />
           <span className={`ml-5 ${isError ? 'text-error' : ''}`}>
             {warningMessage}

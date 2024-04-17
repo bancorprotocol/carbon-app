@@ -38,8 +38,8 @@ export const D3ChartSimulatorPrice = ({ dms, data, bounds }: Props) => {
         formatter={(value) => prettifyNumber(value)}
       />
 
-      <D3SimPriceRange type={'bid'} {...rangeProps} />
-      <D3SimPriceRange type={'ask'} {...rangeProps} />
+      <D3SimPriceRange type="bid" {...rangeProps} />
+      <D3SimPriceRange type="ask" {...rangeProps} />
 
       <D3LinePath
         data={data}

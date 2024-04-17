@@ -19,7 +19,7 @@ export type MenuType = 'main' | 'resources' | 'currency';
 
 export type Menu = { title?: string; items: MenuItemType[] };
 
-const iconStyles = 'h-32 w-32 md:h-20 md:w-20';
+const iconStyles = 'size-32 md:size-20';
 
 export const useBurgerMenuItems = () => {
   const { selectedFiatCurrency, setSelectedFiatCurrency, availableCurrencies } =
@@ -58,14 +58,14 @@ export const useBurgerMenuItems = () => {
     },
     {
       content: (
-        <Link className="flex" to={'/terms'}>
+        <Link className="flex" to="/terms">
           Terms of Use
         </Link>
       ),
     },
     {
       content: (
-        <Link className="flex" to={'/privacy'}>
+        <Link className="flex" to="/privacy">
           Privacy Policy
         </Link>
       ),
@@ -117,7 +117,7 @@ export const useBurgerMenuItems = () => {
               <span>{currency}</span>
               <span className="flex items-center">
                 <IconV
-                  className={`invisible h-12 w-12 ${
+                  className={`size-12 invisible ${
                     isCurrencySelected ? '!visible' : ''
                   }`}
                 />
@@ -199,7 +199,7 @@ const CurrencyMenuItemContent = () => {
   return (
     <div className="flex w-full items-center justify-between">
       <span>Currency</span>
-      <span className="mr-10 font-weight-500">{selectedFiatCurrency}</span>
+      <span className="font-weight-500 mr-10">{selectedFiatCurrency}</span>
     </div>
   );
 };

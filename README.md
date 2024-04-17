@@ -152,7 +152,7 @@ and it is recommended to set VITE_LEGACY_TRADE_BY_SOURCE_RANGE to true in .env t
 
 ## Change Colors
 
-The theme is defined in the [`tailwind.config.js`](./tailwind.config.js#L36) file.
+The theme is defined in the [`tailwind.config.ts`](./tailwind.config.ts#L36) file.
 You can update these colors:
 
 - **background**: used for surfaces
@@ -169,7 +169,7 @@ To get the oklch value of an hex color you can use this webapp: https://oklch.co
 
 ### Background
 
-Background shades are calculated based on hue and chroma. In [`tailwind.config.js`](./tailwind.config.js#L38) you can specify `hue` and `chroma` of the background.
+Background shades are calculated based on hue and chroma. In [`tailwind.config.ts`](./tailwind.config.ts#L37) you can specify `hue` and `chroma` of the background.
 
 - `hue`: from 0 (pink) to 360 (pink).
 - `chroma`: It's recommended to use 0.01 or 0.02 depending on the hue.
@@ -186,7 +186,7 @@ All other colors are defined with l,c,h values (see https://oklch.com), and the 
 }
 ```
 
-You can change the % of the `lighten` & `darken` function with the [`lightDark`](./tailwind.config.js#L18) function.
+You can change the % of the `lighten` & `darken` function with the [`lightDark`](./tailwind.config.ts#L20) function.
 
 # License
 

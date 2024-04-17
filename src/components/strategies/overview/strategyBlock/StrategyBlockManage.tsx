@@ -265,13 +265,13 @@ export const StrategyBlockManage: FC<Props> = (props) => {
         });
       }}
     >
-      <ul role="menu" data-testid={'manage-strategy-dropdown'}>
+      <ul role="menu" data-testid="manage-strategy-dropdown">
         {items.map((item) => {
           if (typeof item === 'number') {
             return (
               <hr
                 key={item}
-                className="border-1  my-10 border-background-700"
+                className="border-1  border-background-700 my-10"
               />
             );
           }
@@ -306,7 +306,7 @@ export const ManageButton = forwardRef<HTMLButtonElement, ManageButtonProps>(
     const style = cn(buttonStyles({ variant: 'white' }), 'gap-8');
     return (
       <button {...props} className={style} ref={ref}>
-        <IconGear className="h-24 w-24" />
+        <IconGear className="size-24" />
         Manage
       </button>
     );
@@ -322,12 +322,12 @@ export const ManageButtonIcon = forwardRef<
       {...props}
       ref={ref}
       className={`
-        grid h-38 w-38 place-items-center rounded-8 border-2 border-background-800
+        size-38 rounded-8 border-background-800 grid place-items-center border-2
         hover:bg-white/10
         active:bg-white/20
       `}
     >
-      <IconGear className="h-24 w-24" />
+      <IconGear className="size-24" />
     </button>
   );
 });
@@ -353,7 +353,7 @@ const ManageItem: FC<{
           setManage(false);
         }}
         disabled={disabled}
-        className={cn('w-full rounded-6 p-12 text-left', {
+        className={cn('rounded-6 w-full p-12 text-left', {
           'cursor-not-allowed': disabled,
           'opacity-60': disabled,
           'hover:bg-black': !disabled,

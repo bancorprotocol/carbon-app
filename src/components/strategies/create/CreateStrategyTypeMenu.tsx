@@ -82,7 +82,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
     <>
       <m.div
         variants={itemsVariant}
-        className="flex flex-col gap-20 rounded-10 bg-background-900 p-20"
+        className="rounded-10 bg-background-900 flex flex-col gap-20 p-20"
         key="createStrategyTypeMenu"
       >
         <h2>Strategy Type</h2>
@@ -97,9 +97,9 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
               {isRecommended && (
                 <span
                   aria-labelledby={'legend-' + id}
-                  className="absolute top-8 right-8 rounded bg-primary-dark p-4 text-primary"
+                  className="bg-primary-dark text-primary absolute right-8 top-8 rounded p-4"
                 >
-                  <IconStar aria-hidden className="h-10 w-10" />
+                  <IconStar aria-hidden className="size-10" />
                 </span>
               )}
               <button
@@ -109,7 +109,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
                 aria-selected={selectedId === id}
                 onClick={() => selectSetting(to, search)}
                 className={cn(
-                  'flex h-full w-full flex-col items-center justify-start gap-8 rounded-10 bg-black px-8 py-16 text-14 outline-white/60',
+                  'rounded-10 text-14 size-full flex flex-col items-center justify-start gap-8 bg-black px-8 py-16 outline-white/60',
                   'md:px-12',
                   'focus-visible:outline focus-visible:outline-1',
                   selectedId === id ? 'outline outline-1 outline-white' : ''
@@ -140,7 +140,7 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             )}
           >
             <hgroup>
-              <h3 className="mb-8 text-14 font-weight-500">{label}</h3>
+              <h3 className="text-14 font-weight-500 mb-8">{label}</h3>
               <p className="text-12 text-white/80">{description}</p>
             </hgroup>
             <h4 className="text-12 font-weight-500">Benefits</h4>
@@ -152,13 +152,13 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
               >
                 <summary
                   onClick={(e) => toggleAccordion(e, id)}
-                  className="mb-4 flex cursor-pointer items-center gap-8 text-12 text-white/80"
+                  className="text-12 mb-4 flex cursor-pointer items-center gap-8 text-white/80"
                 >
-                  <IconCheck className="h-14 w-14 text-primary" />
+                  <IconCheck className="text-primary size-14" />
                   {summary}
                   <IconChevron className="toggle h-14 w-14" />
                 </summary>
-                <p className="pl-22 text-10 text-white/60 md:text-12">
+                <p className="pl-22 text-10 md:text-12 text-white/60">
                   {details}
                 </p>
               </details>
@@ -166,10 +166,10 @@ export const CreateStrategyTypeMenu: FC<UseStrategyCreateReturn> = ({
             {isRecommended && (
               <p
                 id={'legend-' + id}
-                className="flex gap-8 text-12 text-white/40"
+                className="text-12 flex gap-8 text-white/40"
               >
-                <span className="rounded bg-primary-dark p-4 text-primary">
-                  <IconStar aria-hidden className="h-10 w-10" />
+                <span className="bg-primary-dark text-primary rounded p-4">
+                  <IconStar aria-hidden className="size-10" />
                 </span>
                 Carbon Signature Feature
               </p>

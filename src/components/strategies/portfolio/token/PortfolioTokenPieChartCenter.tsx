@@ -3,7 +3,7 @@ import { PortfolioData } from 'components/strategies/portfolio/usePortfolioData'
 import { buildAmountString } from 'components/strategies/portfolio/utils';
 import { FC } from 'react';
 import { useStore } from 'store';
-import { cn, getFiatDisplayValue } from 'utils/helpers';
+import { getFiatDisplayValue } from 'utils/helpers';
 
 type Props = {
   data?: PortfolioData;
@@ -18,22 +18,22 @@ export const PortfolioTokenPieChartCenter: FC<Props> = ({ data }) => {
   if (!data) return null;
 
   return (
-    <div className={cn('flex', 'flex-col', 'items-center', 'space-y-6')}>
-      <div className={cn('flex', 'items-center', 'font-weight-500', 'text-18')}>
+    <div className="flex flex-col items-center space-y-6">
+      <div className="font-weight-500 text-18 flex items-center">
         <LogoImager
-          alt={'Token Logo'}
+          alt="Token Logo"
           src={data.token.logoURI}
-          className={'mr-10 h-24 w-24'}
+          className="size-24 mr-10"
         />
         {data.token.symbol}
       </div>
-      <div className={cn('text-20', 'font-weight-500')}>
+      <div className="text-20 font-weight-500">
         {getFiatDisplayValue(data.value, selectedFiatCurrency)}
       </div>
-      <div className={cn('!text-white/60', 'font-weight-500')}>
+      <div className="font-weight-500 text-white/60">
         {buildAmountString(data.amount, data.token)}
       </div>
-      <div className={cn('text-white/60', 'font-weight-500')}>
+      <div className="font-weight-500 text-white/60">
         {getStrategyText(data.strategies.length)}
       </div>
     </div>

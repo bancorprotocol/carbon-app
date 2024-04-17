@@ -56,7 +56,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
     <>
       <div
         role="table"
-        className="flex flex-col gap-10 rounded-8 border-2 border-white/10 p-15 text-left font-mono text-12 font-weight-500"
+        className="rounded-8 p-15 text-12 font-weight-500 flex flex-col gap-10 border-2 border-white/10 text-left font-mono"
       >
         <div role="row" className="flex items-center justify-between gap-16">
           <p role="columnheader" className="flex w-auto items-center gap-6">
@@ -80,7 +80,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
               <button
                 type="button"
                 onClick={() => order.setBudget('0')}
-                className="cursor-pointer font-weight-500 text-primary"
+                className="font-weight-500 text-primary cursor-pointer"
               >
                 MAX
               </button>
@@ -163,12 +163,10 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
         )}
       </div>
       {type === 'editPrices' && showDistribute && (
-        <div className="flex items-center gap-10 rounded-8 bg-white/5 p-12 text-left text-12 text-white/60">
+        <div className="rounded-8 text-12 flex items-center gap-10 bg-white/5 p-12 text-left text-white/60">
           <Tooltip
             iconClassName="h-13 text-white/60"
-            element={
-              'When updating the rates, the allocated budget will be distributed equally across the entire range'
-            }
+            element="When updating the rates, the allocated budget will be distributed equally across the entire range"
           />
           Strategy budget will be distributed across entire range
         </div>

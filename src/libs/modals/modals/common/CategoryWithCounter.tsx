@@ -30,7 +30,7 @@ export const CategoryWithCounter: FC<CategoryWithCounterProps> = ({
         className={cn(
           'inline-flex flex-1 cursor-pointer items-center justify-center gap-6 capitalize',
           'hover:text-white',
-          isActive ? 'font-weight-500' : 'text-secondary'
+          isActive ? 'font-weight-500' : 'text-14 text-white/60'
         )}
         data-testid={`filter-category-${category}`}
       >

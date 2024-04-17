@@ -24,7 +24,7 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
       {hasBudgetUpdate && 'Based on updated budget, '}
       If the order is 100% filled, you will receive&nbsp;
       <b
-        className="break-words font-mono font-weight-600"
+        className="font-weight-600 break-words font-mono"
         data-testid="outcome-value"
       >
         {prettifyNumber(amount)}&nbsp;
@@ -32,7 +32,7 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
       </b>
       &nbsp;at an average price of&nbsp;
       <b
-        className="break-words font-mono font-weight-600"
+        className="font-weight-600 break-words font-mono"
         data-testid="outcome-quote"
       >
         {prettifyNumber(mean)}&nbsp;
@@ -43,10 +43,10 @@ export const FullOutcome: FC<FullOutcomeProps> = (props) => {
         href="https://faq.carbondefi.xyz/order-execution/100-fill-estimation"
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-4 font-weight-500 text-primary"
+        className="font-weight-500 text-primary inline-flex items-center gap-4"
       >
         <span>Learn More</span>
-        <IconLink className="inline h-12 w-12" />
+        <IconLink className="size-12 inline" />
       </a>
     </p>
   );

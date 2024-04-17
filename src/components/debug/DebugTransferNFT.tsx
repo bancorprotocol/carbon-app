@@ -44,26 +44,26 @@ export const DebugTransferNFT = () => {
   return (
     <div
       className={
-        'flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20'
+        'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
       <h2>Transfer Strategy NFT</h2>
-      <Label label={'Strategy ID'}>
+      <Label label="Strategy ID">
         <Input
-          type={'number'}
+          type="number"
           value={inputId}
           onChange={(e) => setInputId(e.target.value)}
           fullWidth
         />
       </Label>
       <InputUserAccount
-        label={'Recipient'}
+        label="Recipient"
         value={inputRecipient}
         onChange={(e) => setInputRecipient(e.target.value)}
       />
 
-      {isSuccess && <p className={'text-primary'}>Success!</p>}
-      {isError && <p className={'text-error'}>Error!</p>}
+      {isSuccess && <p className="text-primary">Success!</p>}
+      {isError && <p className="text-error">Error!</p>}
       <Button onClick={handleOnClick} disabled={isLoading}>
         {isLoading ? 'loading' : 'Confirm'}
       </Button>
