@@ -62,18 +62,18 @@ export const DateRangePicker = memo((props: Omit<Props, 'setIsOpen'>) => {
       type="button"
       aria-label="Pick date range"
       className={cn(
-        'flex items-center gap-8 rounded-full border-2 px-12 py-8 text-12',
+        'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
         'hover:bg-background-800',
         hasDates
           ? 'border-primary active:border-primary-light'
           : 'border-background-800 hover:border-background-700 active:border-background-600',
         props.disabled &&
-          'cursor-not-allowed border-background-800 hover:border-background-800 hover:bg-transparent active:border-background-800'
+          'border-background-800 hover:border-background-800 active:border-background-800 cursor-not-allowed hover:bg-transparent'
       )}
       data-testid="date-picker-button"
       disabled={props.disabled}
     >
-      <CalendarIcon className="h-14 w-14 text-primary" />
+      <CalendarIcon className="text-primary size-14" />
       <span
         className="justify-self-end text-white/60"
         data-testid="simulation-dates"
@@ -164,7 +164,7 @@ const Content = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-20 p-20">
-      <div className="flex gap-30">
+      <div className="gap-30 flex">
         <div
           role="radiogroup"
           aria-label="presets"
@@ -175,7 +175,7 @@ const Content = (props: Props) => {
               type="button"
               role="radio"
               key={days}
-              className="box-border rounded-8 border-2 border-transparent bg-clip-padding py-8 px-30 text-start text-14 font-weight-500 hover:border-background-700 [&[aria-checked=true]]:bg-black"
+              className="rounded-8 px-30 text-14 font-weight-500 hover:border-background-700 box-border border-2 border-transparent bg-clip-padding py-8 text-start [&[aria-checked=true]]:bg-black"
               onClick={() => handlePreset(days)}
               aria-checked={selectedPreset?.days === days}
               data-testid="date-picker-button"
@@ -255,14 +255,14 @@ export const DatePickerButton = memo(
 
     return (
       <>
-        <CalendarIcon className="h-14 w-14 text-primary" />
+        <CalendarIcon className="text-primary size-14" />
         <span
           className="justify-self-end text-white/60"
           data-testid="simulation-dates"
         >
           {hasDates ? `${startDate} - ${endDate}` : 'Select Date Range'}
         </span>
-        <ChevronIcon className="h-12 w-12 rotate-180 text-white/80" />
+        <ChevronIcon className="size-12 rotate-180 text-white/80" />
       </>
     );
   }

@@ -143,9 +143,9 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header>
-          <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -158,12 +158,12 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           disabled
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Deposit Budgets</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Deposit Budgets</h3>
           <Tooltip
             element='Indicate the amount you wish to deposit from the available "allocated budget"'
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-14 text-white/60"
           />
         </header>
         <BudgetInput
@@ -208,17 +208,17 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           />
         )}
         <footer className="flex items-center gap-8">
-          <IconAction className="h-16 w-16" />
+          <IconAction className="size-16" />
           <p className="text-12 text-white/60">
             Price range and liquidity spread remain unchanged.&nbsp;
             <a
               href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-4 font-weight-500 text-primary"
+              className="font-weight-500 text-primary inline-flex items-center gap-4"
             >
               <span>Learn More</span>
-              <IconLink className="inline h-12 w-12" />
+              <IconLink className="inline size-12" />
             </a>
           </p>
         </footer>

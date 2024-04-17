@@ -165,14 +165,10 @@ export const ApproveToken: FC<Props> = ({
 
   return (
     <>
-      <div className="bg-content flex h-85 items-center justify-between rounded px-20">
-        <div className={'space-y-6'}>
-          <div className={'flex items-center space-x-10'}>
-            <LogoImager
-              alt={'Token'}
-              src={token.logoURI}
-              className="h-30 w-30"
-            />
+      <div className="bg-content h-85 flex items-center justify-between rounded px-20">
+        <div className="space-y-6">
+          <div className="flex items-center space-x-10">
+            <LogoImager alt="Token" src={token.logoURI} className="size-30" />
             <div className="font-weight-500">{token.symbol}</div>
           </div>
         </div>
@@ -181,11 +177,11 @@ export const ApproveToken: FC<Props> = ({
           txBusy ? (
             <div>Waiting for Confirmation</div>
           ) : (
-            <div className="flex h-82 flex-col items-end justify-center gap-10">
+            <div className="h-82 flex flex-col items-end justify-center gap-10">
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-10">
                   <div
-                    className={`font-mono text-12 font-weight-500 transition-all ${
+                    className={`text-12 font-weight-500 font-mono transition-all ${
                       isLimited ? 'text-white/60' : 'text-white/85'
                     }`}
                   >
@@ -195,7 +191,7 @@ export const ApproveToken: FC<Props> = ({
                     variant={isLimited ? 'secondary' : 'white'}
                     isOn={!isLimited}
                     setIsOn={handleLimitChange}
-                    size={'sm'}
+                    size="sm"
                   />
                 </div>
               </div>
@@ -204,7 +200,7 @@ export const ApproveToken: FC<Props> = ({
                 variant="white"
                 onClick={onApprove}
                 size="sm"
-                className="px-10 text-14"
+                className="text-14 px-10"
                 data-testid={`approve-${token.symbol}`}
               >
                 {data.nullApprovalRequired ? 'Revoke and Approve' : 'Approve'}
@@ -220,7 +216,7 @@ export const ApproveToken: FC<Props> = ({
         {error ? <pre>{JSON.stringify(error, null, 2)}</pre> : null}
       </div>
       {data.nullApprovalRequired && (
-        <div className="flex space-x-20 font-mono text-14 text-warning">
+        <div className="text-14 text-warning flex space-x-20 font-mono">
           <div>
             <IconWarning className="w-16" />
           </div>

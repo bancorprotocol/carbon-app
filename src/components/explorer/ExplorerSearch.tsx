@@ -102,7 +102,7 @@ export const _ExplorerSearch: FC = () => {
   };
 
   return (
-    <div className={'relative'}>
+    <div className="relative">
       <form
         role="search"
         onSubmit={submitHandler}
@@ -128,7 +128,7 @@ export const _ExplorerSearch: FC = () => {
           <div className="shrink-0">
             <DropdownMenu
               placement="bottom-start"
-              className="mt-10 -ml-17 p-10"
+              className="-ml-17 mt-10 p-10"
               button={(attr) => <ExplorerSearchDropdownButton {...attr} />}
             >
               <ExplorerSearchDropdownItems setSearch={setSearch} />
@@ -145,21 +145,17 @@ export const _ExplorerSearch: FC = () => {
 
         <Button
           type="submit"
-          variant={'success'}
-          size={'md'}
-          className={'w-40 shrink-0 !px-0 md:w-[180px]'}
+          variant="success"
+          size="md"
+          className="w-40 shrink-0 px-0 md:w-[180px]"
         >
-          <IconSearch className={'h-16 w-16 md:mr-8'} />
-          <span className={'hidden md:block'}>Search</span>
+          <IconSearch className="size-16 md:mr-8" />
+          <span className="hidden md:block">Search</span>
         </Button>
       </form>
       {isInvalidAddress && (
-        <div
-          className={
-            'absolute mt-4 flex items-center font-mono text-14 text-error'
-          }
-        >
-          <IconWarning className={'mr-10 h-16 w-16'} />
+        <div className="text-14 text-error absolute mt-4 flex items-center font-mono">
+          <IconWarning className="mr-10 size-16" />
           Invalid Wallet Address
         </div>
       )}

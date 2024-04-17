@@ -1,7 +1,7 @@
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ClassValue, clsx } from 'clsx';
 import { Pathnames } from 'libs/routing';
-import { twMerge } from 'tailwind-merge';
+import { customTwMerge } from 'libs/twmerge';
 import Graphemer from 'graphemer';
 import { TradePair } from 'libs/modals/modals/ModalTradeTokenList';
 export * from './number';
@@ -94,7 +94,7 @@ export const getLowestBits = (decimal: string, bits: number = 128): string => {
 };
 
 export const cn = (...inputs: ClassValue[]) => {
-  return twMerge(clsx(inputs));
+  return customTwMerge(clsx(inputs));
 };
 
 export const sortObjectArray = <D extends object>(

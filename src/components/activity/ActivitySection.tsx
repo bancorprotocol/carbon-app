@@ -11,7 +11,7 @@ export const ActivitySection: FC<ActivityFilterProps> = ({ filters = [] }) => {
   const { list: activities, all: allActivities } = useActivity();
   const { aboveBreakpoint } = useBreakpoints();
   return (
-    <section className="rounded bg-background-900">
+    <section className="bg-background-900 rounded">
       <header className="grid grid-cols-[auto_1fr] gap-16 px-20 py-24 md:grid-cols-[auto_1fr_auto]">
         <h2 className="row-start-1">Activity</h2>
         <ActivityFilter

@@ -67,7 +67,7 @@ export const EditStrategyPricesBuySellBlock: FC<
   return (
     <section
       aria-labelledby={titleId}
-      className={`flex w-full flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-12 ${
+      className={`rounded-6 bg-background-900 text-12 flex w-full flex-col gap-20 border-l-2 p-20 ${
         buy
           ? 'border-buy/50 focus-within:border-buy'
           : 'border-sell/50 focus-within:border-sell'
@@ -75,7 +75,7 @@ export const EditStrategyPricesBuySellBlock: FC<
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <BuySellHeader {...headProps}>
-        <h3 id={titleId} className="flex items-center gap-6 text-18">
+        <h3 id={titleId} className="text-18 flex items-center gap-6">
           {buy ? 'Buy' : 'Sell'} {buy ? 'Low' : 'High'} {base.symbol}
         </h3>
       </BuySellHeader>

@@ -159,10 +159,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   return (
     <>
-      <article className="grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 rounded-10 bg-background-900 p-20">
-        <h4 className="flex items-center gap-8 text-14 font-weight-500">
+      <article className="rounded-10 bg-background-900 grid grid-flow-col grid-cols-[auto_auto] grid-rows-2 gap-8 p-20">
+        <h4 className="text-14 font-weight-500 flex items-center gap-8">
           Discover Overlapping Strategies
-          <span className="rounded-8 bg-primary-dark px-8 py-4 text-10 text-primary">
+          <span className="rounded-8 bg-primary-dark text-10 text-primary px-8 py-4">
             NEW
           </span>
         </h4>
@@ -172,19 +172,19 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         <a
           href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy"
           target="_blank"
-          className="row-span-2 flex items-center gap-4 self-center justify-self-end text-12 font-weight-500 text-primary"
+          className="text-12 font-weight-500 text-primary row-span-2 flex items-center gap-4 self-center justify-self-end"
           rel="noreferrer"
         >
           Learn More
           <IconLink className="h-12 w-12" />
         </a>
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             1
           </span>
-          <h3 className="flex-1 text-18 font-weight-500">
+          <h3 className="text-18 font-weight-500 flex-1">
             Set Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
@@ -192,7 +192,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           </h3>
           <Tooltip
             element="Indicate the strategy exact buy and sell prices."
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="text-white/60"
           />
         </header>
         {base && quote && (
@@ -208,15 +208,15 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           />
         )}
       </article>
-      <article className="flex flex-col gap-10 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
           </span>
-          <h3 className="flex-1 text-18 font-weight-500">Indicate Spread</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Indicate Spread</h3>
           <Tooltip
             element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="text-white/60"
           />
         </header>
         <OverlappingStrategySpread
@@ -228,15 +228,15 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           setSpread={setSpread}
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+          <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             3
           </span>
-          <h3 className="flex-1 text-18 font-weight-500">Set Budgets</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Set Budgets</h3>
           <Tooltip
             element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values."
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="text-white/60"
           />
         </header>
         <CreateOverlappingStrategyBudget

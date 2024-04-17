@@ -20,19 +20,19 @@ export const NotEnoughLiquidity = ({
   return (
     <div className="t-grey mt-5 min-h-[228px] flex-1">
       <div
-        className={`flex h-full flex-col items-center
-          justify-center rounded-12 border border-error/100 px-[4rem] text-center text-14 font-weight-400`}
+        className={`rounded-12 border-error/100 text-14 font-weight-400
+          flex h-full flex-col items-center justify-center border px-[4rem] text-center`}
       >
-        <div className="mb-16 flex flex h-38 w-38 items-center justify-center rounded-full bg-error/10">
-          <IconWarning className="h-16 w-16 fill-error/100" />
+        <div className="size-38 bg-error/10 mb-16 flex items-center justify-center rounded-full">
+          <IconWarning className="fill-error/100 size-16" />
         </div>
-        <div className="mb-8 font-weight-500">No Liquidity Available</div>
+        <div className="font-weight-500 mb-8">No Liquidity Available</div>
         <div>No available orders at this moment.</div>
         <div>
           You can&nbsp;
           <span
             onClick={() => duplicate()}
-            className="cursor-pointer font-weight-500"
+            className="font-weight-500 cursor-pointer"
           >
             Create a Strategy.
           </span>

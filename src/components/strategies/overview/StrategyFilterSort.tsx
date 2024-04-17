@@ -7,7 +7,7 @@ import { ReactComponent as IconFilter } from 'assets/icons/filter.svg';
 import { lsService } from 'services/localeStorage';
 import { useStrategyCtx } from 'hooks/useStrategies';
 
-// [START] Used for localstorage migration: Remove it after Nov 2023
+// [START] Used for localStorage migration: Remove it after Nov 2023
 export enum EnumStrategySort {
   Recent,
   Old,
@@ -97,23 +97,23 @@ export const StrategyFilterSort = () => {
       button={(attr) => (
         <button
           type="button"
-          className={`
-            grid h-40 min-w-[40px] place-items-center rounded-full border-2 border-background-800
+          className="
+            border-background-800 md:px-30 grid h-40 min-w-[40px] place-items-center rounded-full
+            border-2
             hover:bg-white/10
             active:bg-white/20
-            md:px-30
-          `}
+          "
           {...attr}
         >
-          <IconFilter className="h-18 w-18 md:hidden" />
-          <span className="hidden items-center gap-10 md:inline-flex">
+          <IconFilter className="size-18 md:hidden" />
+          <span className="hidden gap-10 md:inline-flex md:items-center">
             Filter & Sort <IconChevron className="w-14" />
           </span>
         </button>
       )}
     >
       <fieldset onChange={onSortChange}>
-        <legend className="text-secondary px-16 py-8">Sort By</legend>
+        <legend className="text-14 px-16 py-8 text-white/60">Sort By</legend>
         {sortItems.map((sortItem) => (
           <FilterSortItem
             name="sort"
@@ -126,7 +126,7 @@ export const StrategyFilterSort = () => {
       </fieldset>
 
       <fieldset onChange={onFilterChange}>
-        <legend className="text-secondary px-16 py-8">View</legend>
+        <legend className="text-14 px-16 py-8 text-white/60">View</legend>
         {filterItems.map((filterItem) => (
           <FilterSortItem
             name="filter"
@@ -159,11 +159,11 @@ const FilterSortItem: FC<{
       />
       <label
         htmlFor={id}
-        className={`
-          flex cursor-pointer items-center justify-between rounded-6 py-8 px-16
-          px-16 hover:bg-black/90
+        className="
+          rounded-6 flex cursor-pointer items-center justify-between px-16
+          py-8 hover:bg-black/90
           peer-focus-visible:outline peer-focus-visible:outline-1
-        `}
+        "
       >
         {title}
         {selectedItem === item && <IconCheck />}

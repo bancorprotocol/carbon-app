@@ -30,7 +30,7 @@ export const SelectTokenButton: FC<Props> = ({
       type="button"
       data-testid={testId}
       className={cn(
-        'flex items-center gap-8 rounded-12 p-10',
+        'rounded-12 flex items-center gap-8 p-10',
         symbol ? 'bg-black text-white' : 'bg-primary text-black',
         className
       )}
@@ -39,15 +39,15 @@ export const SelectTokenButton: FC<Props> = ({
       {symbol ? (
         <LogoImager alt="Token Logo" src={imgUrl} width="30" height="30" />
       ) : (
-        <div className="grid h-30 w-30 place-items-center rounded-full bg-black">
-          <IconPlus className="h-16 w-16 p-2 text-primary" />
+        <div className="size-30 grid place-items-center rounded-full bg-black">
+          <IconPlus className="text-primary size-16 p-2" />
         </div>
       )}
       <div className="flex-1 text-left">
         {description && <p className="text-12 opacity-90">{description}</p>}
         <p>{symbol ?? text}</p>
       </div>
-      <IconChevron className={cn('h-20 w-20', chevronClassName)} />
+      <IconChevron className={cn('size-20', chevronClassName)} />
     </button>
   );
 };

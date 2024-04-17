@@ -13,19 +13,19 @@ const StatusIcon = (status: NotificationStatus) => {
     case 'pending':
       return (
         <div className="relative flex items-center justify-center">
-          <div className="h-38 w-38 animate-spin rounded-full border-t border-r border-white" />
+          <div className="size-38 animate-spin rounded-full border-r border-t border-white" />
         </div>
       );
     case 'success':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-primary/10">
-          <IconCheck className="w-11 text-primary" />
+        <div className="size-38 bg-primary/10 flex items-center justify-center rounded-full">
+          <IconCheck className="text-primary w-11" />
         </div>
       );
     case 'failed':
       return (
-        <div className="flex h-38 w-38 items-center justify-center rounded-full bg-error/10">
-          <IconTimes className="w-11 text-error" />
+        <div className="size-38 bg-error/10 flex items-center justify-center rounded-full">
+          <IconTimes className="text-error w-11" />
         </div>
       );
   }
@@ -64,7 +64,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
   return (
     <article aria-labelledby={titleId} className="flex gap-16">
       {StatusIcon(notification.status)}
-      <div className="flex flex-1 flex-col gap-8 overflow-hidden text-14">
+      <div className="text-14 flex flex-1 flex-col gap-8 overflow-hidden">
         <hgroup>
           <h3 id={titleId} className="text-16" data-testid="notif-title">
             {getTitleByStatus(notification)}
@@ -76,7 +76,7 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
         {notification.txHash && (
           <NewTabLink
             to={getExplorerLink('tx', notification.txHash)}
-            className="flex items-center font-weight-500"
+            className="font-weight-500 flex items-center"
           >
             View on Etherscan <IconLink className="ml-6 w-14" />
           </NewTabLink>
@@ -90,11 +90,11 @@ export const TxNotification: FC<Props> = ({ notification, close }) => {
           data-testid="notif-close"
           aria-label="Remove notification"
         >
-          <IconClose className="h-14 w-14 text-white/80" />
+          <IconClose className="size-14 text-white/80" />
         </button>
-        <div className="text-secondary whitespace-nowrap text-12 font-weight-500">
+        <p className="text-12 font-weight-500 whitespace-nowrap text-white/60">
           {unix(notification.timestamp).fromNow(true)}
-        </div>
+        </p>
       </div>
     </article>
   );

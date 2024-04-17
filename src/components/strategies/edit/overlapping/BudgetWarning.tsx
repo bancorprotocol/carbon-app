@@ -54,13 +54,13 @@ export const BudgetWarning: FC<Props> = ({ base, quote, state, setState }) => {
     setState(`${current}->${current}`);
   };
   return (
-    <article className="flex w-full flex-col gap-16 rounded-10 border border-warning bg-background-900 p-20">
+    <article className="rounded-10 border-warning bg-background-900 flex w-full flex-col gap-16 border p-20">
       <header className="flex items-center gap-8 ">
-        <IconWarning className="h-14 w-14 text-warning" />
-        <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
+        <IconWarning className="text-warning size-14" />
+        <h3 className="text-18 font-weight-500 flex-1">Edit Budget</h3>
         <Tooltip
           element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values."
-          iconClassName="h-14 w-14 text-white/60"
+          iconClassName="size-14 text-white/60"
         />
       </header>
       <p className="text-12 font-weight-400 text-white/60">
@@ -84,7 +84,7 @@ export const BudgetWarning: FC<Props> = ({ base, quote, state, setState }) => {
                   {i + 1}
                 </text>
               </svg>
-              <p className="flex-1 text-12 font-weight-400 text-white/60">
+              <p className="text-12 font-weight-400 flex-1 text-white/60">
                 {text}
               </p>
             </li>

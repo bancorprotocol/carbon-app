@@ -8,6 +8,7 @@ import {
 import { VariantProps } from 'class-variance-authority';
 import { buttonStyles } from 'components/common/button/buttonStyles';
 import { m } from 'libs/motion';
+import { cn } from 'utils/helpers';
 
 export type ButtonHTMLProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -33,7 +34,9 @@ export const Button: FC<ButtonProps> = ({
   return (
     // @ts-ignore
     <m.button
-      className={buttonStyles({ variant, size, fullWidth, class: className })}
+      className={cn(
+        buttonStyles({ variant, size, fullWidth, class: className })
+      )}
       {...props}
       disabled={props.disabled || loading}
     >

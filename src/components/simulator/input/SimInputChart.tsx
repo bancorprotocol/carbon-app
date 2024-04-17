@@ -105,9 +105,9 @@ export const SimInputChart = ({
   );
 
   return (
-    <div className="align-stretch top-120 fixed right-20 grid h-[calc(100vh-220px)] min-h-[500px] w-[calc(100%-500px)] flex-1 grid-rows-[auto_1fr] justify-items-stretch rounded-12 bg-background-900 p-20">
+    <div className="align-stretch top-120 rounded-12 bg-background-900 fixed right-20 grid h-[calc(100vh-220px)] min-h-[500px] w-[calc(100%-500px)] flex-1 grid-rows-[auto_1fr] justify-items-stretch p-20">
       <div className="mb-20 flex items-center justify-between">
-        <h2 className="mr-20 text-20 font-weight-500">Price Chart</h2>
+        <h2 className="text-20 font-weight-500 mr-20">Price Chart</h2>
         <DateRangePicker
           defaultStart={startOfDay(sub(new Date(), { days: 364 }))}
           defaultEnd={startOfDay(new Date())}
@@ -135,7 +135,7 @@ export const SimInputChart = ({
       {!!data && (
         <D3ChartWrapper
           settings={chartSettings}
-          className="self-stretch rounded-12 bg-black"
+          className="rounded-12 self-stretch bg-black"
           data-testid="price-chart"
         >
           {(dms) => (
@@ -167,13 +167,13 @@ const ErrorMsg = ({ base, quote }: { base?: string; quote?: string }) => {
         text="Unfortunately, price history for this pair is not available and cannot be simulated."
         variant="success"
       />
-      <p className="my-20 text-center text-14 text-white/60">
+      <p className="text-14 my-20 text-center text-white/60">
         However, you can{' '}
         <span className="font-weight-500 text-white">Create a Strategy</span>
       </p>
 
       <Link
-        to={'/strategies/create'}
+        to="/strategies/create"
         search={{ base, quote }}
         className={buttonStyles({ variant: 'success' })}
       >

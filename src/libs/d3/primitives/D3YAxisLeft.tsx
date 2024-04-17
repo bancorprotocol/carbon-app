@@ -14,7 +14,7 @@ export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
           <line
             x1={0}
             x2={dms.boundedWidth}
-            className={'stroke-background-800'}
+            className="stroke-background-800"
           />
           <text
             key={value}
@@ -25,7 +25,7 @@ export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
             }}
             fill="currentColor"
             opacity={0.6}
-            className={'font-mono'}
+            className="font-mono"
           >
             {formatter ? formatter(value) : value}
           </text>

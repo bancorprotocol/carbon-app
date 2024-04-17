@@ -28,7 +28,7 @@ export const NotificationAlerts: FC = () => {
   }, [user, setNotifications]);
 
   return (
-    <ul className="fixed top-80 right-10 z-50" data-testid="notification-list">
+    <ul className="fixed right-10 top-80 z-50" data-testid="notification-list">
       <AnimatePresence mode="popLayout">
         {alerts.map((n) => (
           <NotificationItem notification={n} key={n.id} />
@@ -59,7 +59,7 @@ const NotificationItem: FC<{ notification: Notification }> = (props) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="mb-20 block w-[350px] overflow-hidden rounded-10 border border-white/40 bg-background-900 px-16 py-12"
+      className="rounded-10 bg-background-900 mb-20 block w-[350px] overflow-hidden border border-white/40 px-16 py-12"
       data-testid={`notification-${notification.testid}`}
     >
       <NotificationLine

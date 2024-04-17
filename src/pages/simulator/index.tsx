@@ -21,7 +21,7 @@ export const SimulatorPage = () => {
 
   return (
     <>
-      <h1 className="mb-16 px-20 text-24 font-weight-500">Simulate Strategy</h1>
+      <h1 className="text-24 font-weight-500 mb-16 px-20">Simulate Strategy</h1>
       <div className="flex gap-20 px-20">
         <div className="flex w-[440px] flex-col gap-20">
           <SimInputTokenSelection

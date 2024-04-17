@@ -21,7 +21,7 @@ export const ModalSheet: FC<ModalProps> = ({
   };
 
   return (
-    <Overlay onClick={() => onCloseHandler(id)} className={'items-end'}>
+    <Overlay onClick={() => onCloseHandler(id)} className="items-end">
       <m.div
         data-testid="modal-container"
         onClick={(e) => e.stopPropagation()}
@@ -31,9 +31,9 @@ export const ModalSheet: FC<ModalProps> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex w-full flex-col gap-20 overflow-hidden rounded-t-10 border-0 bg-background-900 p-20 outline-none focus:outline-none">
+        <div className="rounded-t-10 bg-background-900 relative flex w-full flex-col gap-20 overflow-hidden border-0 p-20 outline-none focus:outline-none">
           {isLoading && (
-            <div className="statusBar absolute inset-x-0 top-0 h-6 bg-primary/25" />
+            <div className="statusBar bg-primary/25 absolute inset-x-0 top-0 h-6" />
           )}
           <header data-testid={testId} className="flex justify-between">
             {typeof title === 'string' ? <h2>{title}</h2> : title}

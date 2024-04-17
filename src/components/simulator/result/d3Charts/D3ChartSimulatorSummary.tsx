@@ -72,12 +72,8 @@ export const D3ChartSimulatorSummary = ({ dms, data, bounds }: Props) => {
         dms={dms}
         formatter={(value) => prettifyNumber(value)}
       />
-      {!legend.bid.isDisabled && (
-        <D3SimPriceRange type={'bid'} {...rangeProps} />
-      )}
-      {!legend.ask.isDisabled && (
-        <D3SimPriceRange type={'ask'} {...rangeProps} />
-      )}
+      {!legend.bid.isDisabled && <D3SimPriceRange type="bid" {...rangeProps} />}
+      {!legend.ask.isDisabled && <D3SimPriceRange type="ask" {...rangeProps} />}
       {!legend.price.isDisabled && (
         <D3LinePath data={data} xAcc={xAcc} yAcc={yLeft.accessor('price')} />
       )}

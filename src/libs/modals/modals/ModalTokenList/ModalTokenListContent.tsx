@@ -104,7 +104,7 @@ export const ModalTokenListContent: FC<Props> = ({
             return (
               <li
                 key={token.address}
-                className="absolute inset-0 flex items-center justify-between rounded-12 hover:bg-black"
+                className="rounded-12 absolute inset-0 flex items-center justify-between hover:bg-black"
                 style={style}
               >
                 <button
@@ -115,7 +115,7 @@ export const ModalTokenListContent: FC<Props> = ({
                   <LogoImager
                     src={token.logoURI}
                     alt={`${token.symbol} Token`}
-                    className="h-32 w-32"
+                    className="size-32"
                   />
                   <div className="ml-15 grid justify-items-start">
                     <div className="flex">
@@ -127,7 +127,7 @@ export const ModalTokenListContent: FC<Props> = ({
                         />
                       )}
                     </div>
-                    <div className="text-secondary max-w-full truncate text-12">
+                    <div className="text-12 max-w-full truncate text-white/60">
                       {token.name ?? token.symbol}
                     </div>
                   </div>

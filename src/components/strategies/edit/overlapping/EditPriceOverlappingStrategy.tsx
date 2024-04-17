@@ -166,9 +166,9 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex w-full flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-20 p-20">
         <header>
-          <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -182,9 +182,9 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setMax={setMax}
         />
       </article>
-      <article className="flex w-full flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-20 p-20">
         <header className="flex items-center gap-8">
-          <h3 className="flex-1 text-18 font-weight-500">
+          <h3 className="text-18 font-weight-500 flex-1">
             Edit Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
@@ -192,7 +192,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           </h3>
           <Tooltip
             element="Indicate the strategy exact buy and sell prices."
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-14 text-white/60"
           />
         </header>
         {base && quote && (
@@ -207,12 +207,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           />
         )}
       </article>
-      <article className="flex w-full flex-col gap-10 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Edit Spread</h3>
+          <h3 className="text-18 font-weight-500 flex-1">Edit Spread</h3>
           <Tooltip
             element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-14 text-white/60"
           />
         </header>
         <OverlappingStrategySpread

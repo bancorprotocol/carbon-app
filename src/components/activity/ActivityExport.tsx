@@ -70,10 +70,10 @@ export const ActivityExport: FC<Props> = ({ activities }) => {
   return (
     <a
       href={csvURI}
-      className="flex items-center gap-8 rounded-full border-2 border-background-800 px-12 py-8 text-12 hover:border-background-700 hover:bg-background-800"
+      className="border-background-800 text-12 hover:border-background-700 hover:bg-background-800 flex items-center gap-8 rounded-full border-2 px-12 py-8"
       download="activities.csv"
     >
-      <IconDownloadFile className="h-14 w-14 text-primary" />
+      <IconDownloadFile className="text-primary size-14" />
       <span>Export</span>
     </a>
   );

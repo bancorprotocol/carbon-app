@@ -39,7 +39,7 @@ export const ModalConfirmPause: ModalFC<ModalConfirmPauseData> = ({
   return (
     <ModalOrMobileSheet id={id} title="Pause Strategy">
       <IconTitleText
-        icon={<IconPause className="h-24 w-24" />}
+        icon={<IconPause className="size-24" />}
         title="Are you sure you would like to pause your strategy?"
         text="This will prevent your strategy from being traded against, however you will retain access to any associated funds."
       />

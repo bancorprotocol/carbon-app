@@ -26,20 +26,20 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
     <AnimatePresence exitBeforeEnter={true}>
       {isLoading ? (
         <m.div
-          key={'loading'}
-          className={'flex h-[392px] w-full items-center justify-center'}
+          key="loading"
+          className="flex h-[392px] w-full items-center justify-center"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className={'h-[80px]'}>
+          <div className="h-[80px]">
             <CarbonLogoLoading />
           </div>
         </m.div>
       ) : orders?.length > 0 ? (
         <m.div
-          key={'orders'}
-          className={'grid grid-cols-3 gap-x-10'}
+          key="orders"
+          className="grid grid-cols-3 gap-x-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -60,7 +60,7 @@ export const OrderBookSide: FC<OrderBookSideProps> = ({
         </m.div>
       ) : (
         <m.div
-          className="flex h-[392px] items-center justify-center rounded-10 bg-black text-center"
+          className="rounded-10 flex h-[392px] items-center justify-center bg-black text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
