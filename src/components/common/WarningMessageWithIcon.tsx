@@ -22,7 +22,7 @@ export const WarningMessageWithIcon: FC<WarningMessageWithIconProps> = ({
       role="alert"
       aria-live="polite"
       className={`
-        flex items-center gap-10 text-12
+        flex animate-scaleUp items-center gap-10 text-12
         ${isError ? 'error-message text-error' : 'warning-message text-warning'}
         ${className}
       `}

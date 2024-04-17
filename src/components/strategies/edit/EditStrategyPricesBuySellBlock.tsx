@@ -65,7 +65,7 @@ export const EditStrategyPricesBuySellBlock: FC<
   };
 
   return (
-    <section
+    <article
       aria-labelledby={titleId}
       className={`flex w-full flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-12 ${
         buy
@@ -90,6 +90,6 @@ export const EditStrategyPricesBuySellBlock: FC<
         base={base}
         quote={quote}
       />
-    </section>
+    </article>
   );
 };

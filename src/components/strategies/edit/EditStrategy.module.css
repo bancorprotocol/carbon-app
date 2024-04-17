@@ -7,6 +7,10 @@
 
 .form:has(:global(.error-message)) button[type="submit"],
 .form:has(:global(.warning-message)):has(input[name="approve-warning"]:not(:checked)) button[type="submit"] {
-  opacity: 0.5;
+  opacity: 0.4;
   pointer-events: none;
+}
+
+.form > header, .form > article, .form > button {
+  @apply animate-slideUp;
 }

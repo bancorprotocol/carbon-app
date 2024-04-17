@@ -17,7 +17,7 @@ import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditOverlappingStrategy } from './overlapping/EditOverlappingStrategy';
-import { getDeposit } from './utils';
+import { getDeposit, strategyHasChanges } from './utils';
 import { cn } from 'utils/helpers';
 import style from './EditStrategy.module.css';
 
@@ -176,6 +176,8 @@ export const EditStrategyBudgetContent = ({
     void actionFn(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
+  const hasChanges = strategyHasChanges(strategy, order0, order1);
+
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
@@ -233,6 +235,7 @@ export const EditStrategyBudgetContent = ({
 
       <Button
         type="submit"
+        disabled={!hasChanges}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

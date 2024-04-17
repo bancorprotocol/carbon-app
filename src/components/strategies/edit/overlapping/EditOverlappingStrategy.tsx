@@ -51,6 +51,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
   const [spread, setSpread] = useState(getRoundedSpread(strategy));
   const [touched, setTouched] = useState(false);
+  const [delta, setDelta] = useState('');
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
   const [anchorError, setAnchorError] = useState('');
   const [budgetError, setBudgetError] = useState('');
@@ -73,14 +74,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
   const withdrawBuyBudget = getWithdraw(initialBuyBudget, order0.budget);
   const depositSellBudget = getDeposit(initialSellBudget, order1.budget);
   const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
-
-  const getBudgetValue = () => {
-    if (anchor === 'buy') {
-      return action === 'deposit' ? depositBuyBudget : withdrawBuyBudget;
-    } else {
-      return action === 'deposit' ? depositSellBudget : withdrawSellBudget;
-    }
-  };
 
   const calculateBuyBudget = (
     sellBudget: string,
@@ -188,6 +181,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     min = order0.min,
     max = order1.max
   ) => {
+    setDelta('');
     setBudgetError('');
     if (!touched) {
       order0.setBudget(initialBuyBudget);
@@ -230,11 +224,8 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setBudget = (value: string) => {
-    if (!value && !touched) {
-      order0.setBudget(initialBuyBudget);
-      order1.setBudget(initialSellBudget);
-      return;
-    }
+    setDelta(value);
+    if (!value) return resetBudgets(anchor!);
     const amount = value || '0'; // SafeDecimal doesn't support ""
     setBudgetError(getBudgetErrors(amount));
 
@@ -300,64 +291,68 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
-        <header>
-          <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
-        </header>
-        <OverlappingStrategyGraph
-          base={base}
-          quote={quote}
-          order0={order0}
-          order1={order1}
-          marketPrice={newMarketPrice}
-          spread={spread}
-          marketPricePercentage={marketPricePercentage}
-          setMin={setMin}
-          setMax={setMax}
-        />
-      </article>
-      <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
-        <header className="flex items-center gap-8">
-          <h3 className="flex-1 text-18 font-weight-500">
-            Edit Price Range&nbsp;
-            <span className="text-white/40">
-              ({quote?.symbol} per 1 {base?.symbol})
-            </span>
-          </h3>
-          <Tooltip
-            element="Indicate the strategy exact buy and sell prices."
-            iconClassName="h-14 w-14 text-white/60"
-          />
-        </header>
-        {base && quote && (
-          <OverlappingRange
-            base={base}
-            quote={quote}
-            order0={order0}
-            order1={order1}
-            marketPricePercentage={marketPricePercentage}
-            setMin={setMin}
-            setMax={setMax}
-          />
-        )}
-      </article>
-      <article className="flex w-full flex-col gap-10 rounded-10 bg-background-900 p-20">
-        <header className="mb-10 flex items-center gap-8 ">
-          <h3 className="flex-1 text-18 font-weight-500">Edit Spread</h3>
-          <Tooltip
-            element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-            iconClassName="h-14 w-14 text-white/60"
-          />
-        </header>
-        <OverlappingStrategySpread
-          buyMin={Number(order0.min)}
-          sellMax={Number(order1.max)}
-          defaultValue={0.05}
-          options={[0.01, 0.05, 0.1]}
-          spread={spread}
-          setSpread={setSpreadValue}
-        />
-      </article>
+      {!fixAction && (
+        <>
+          <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
+            <header>
+              <h3 className="flex-1 text-18 font-weight-500">Price Range</h3>
+            </header>
+            <OverlappingStrategyGraph
+              base={base}
+              quote={quote}
+              order0={order0}
+              order1={order1}
+              marketPrice={newMarketPrice}
+              spread={spread}
+              marketPricePercentage={marketPricePercentage}
+              setMin={setMin}
+              setMax={setMax}
+            />
+          </article>
+          <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
+            <header className="flex items-center gap-8">
+              <h3 className="flex-1 text-18 font-weight-500">
+                Edit Price Range&nbsp;
+                <span className="text-white/40">
+                  ({quote?.symbol} per 1 {base?.symbol})
+                </span>
+              </h3>
+              <Tooltip
+                element="Indicate the strategy exact buy and sell prices."
+                iconClassName="h-14 w-14 text-white/60"
+              />
+            </header>
+            {base && quote && (
+              <OverlappingRange
+                base={base}
+                quote={quote}
+                order0={order0}
+                order1={order1}
+                marketPricePercentage={marketPricePercentage}
+                setMin={setMin}
+                setMax={setMax}
+              />
+            )}
+          </article>
+          <article className="flex w-full flex-col gap-10 rounded-10 bg-background-900 p-20">
+            <header className="mb-10 flex items-center gap-8 ">
+              <h3 className="flex-1 text-18 font-weight-500">Edit Spread</h3>
+              <Tooltip
+                element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
+                iconClassName="h-14 w-14 text-white/60"
+              />
+            </header>
+            <OverlappingStrategySpread
+              buyMin={Number(order0.min)}
+              sellMax={Number(order1.max)}
+              defaultValue={0.05}
+              options={[0.01, 0.05, 0.1]}
+              spread={spread}
+              setSpread={setSpreadValue}
+            />
+          </article>
+        </>
+      )}
       <OverlappingAnchor
         base={base}
         quote={quote}
@@ -374,7 +369,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           anchor={anchor}
           action={action}
           setAction={setActionValue}
-          budgetValue={getBudgetValue()}
+          budgetValue={delta}
           setBudget={setBudget}
           resetBudgets={resetBudgets}
           buyBudget={initialBuyBudget}
@@ -383,8 +378,11 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           error={budgetError}
         />
       )}
-      {(fixAction || anchor) && (
-        <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
+      {anchor && (
+        <article
+          id="overlapping-distribution"
+          className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20"
+        >
           <hgroup>
             <h3 className="flex items-center gap-8 text-16 font-weight-500">
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">

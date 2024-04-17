@@ -20,7 +20,7 @@ import { cn } from 'utils/helpers';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
-import { getDeposit } from './utils';
+import { getDeposit, strategyHasChanges } from './utils';
 import style from './EditStrategy.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
@@ -101,7 +101,7 @@ export const EditStrategyPricesContent = ({
     if (approval.approvalRequired) {
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
-        onConfirm: submit,
+        onConfirm: () => submit(e),
         buttonLabel: `Confirm Deposit`,
         eventData: {
           ...strategyEventData,
@@ -145,6 +145,8 @@ export const EditStrategyPricesContent = ({
       );
     }
   };
+
+  const hasChanges = strategyHasChanges(strategy, order0, order1);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -203,6 +205,7 @@ export const EditStrategyPricesContent = ({
 
       <Button
         type="submit"
+        disabled={!hasChanges}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

@@ -21,7 +21,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
     <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
       <header className="flex items-center justify-between">
         <h2 className="text-18">Budget</h2>
-        <Tooltip element="" />
+        <Tooltip className="text-white/60" element="" />
       </header>
       <p className="text-14 text-white/80">
         Please specify which token you'd prefer to use as the anchor.

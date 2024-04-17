@@ -1,4 +1,4 @@
-import { FC, useId } from 'react';
+import { FC, useId, useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { useGetTokenBalance } from 'libs/queries';
@@ -9,7 +9,6 @@ import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { useMarketIndication } from '../marketPriceIndication';
 import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
-import { getDeposit, getWithdraw } from './utils';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
@@ -29,17 +28,14 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
   const titleId = useId();
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
+  const [delta, setDelta] = useState('');
   const tokenBalanceQuery = buy
     ? tokenQuoteBalanceQuery
     : tokenBaseBalanceQuery;
   const budgetToken = buy ? quote : base;
 
-  const budget =
-    type === 'deposit'
-      ? getDeposit(initialBudget, order.budget)
-      : getWithdraw(initialBudget, order.budget);
-
   const setBudget = (value: string) => {
+    setDelta(value);
     const amount =
       type === 'deposit'
         ? new SafeDecimal(initialBudget).add(value || '0')
@@ -50,8 +46,8 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
   const tokenBalance = tokenBalanceQuery.data || 0;
   const insufficientBalance =
     type === 'withdraw'
-      ? new SafeDecimal(initialBudget || 0).lt(budget)
-      : new SafeDecimal(tokenBalance).lt(budget);
+      ? new SafeDecimal(initialBudget || 0).lt(delta)
+      : new SafeDecimal(tokenBalance).lt(delta);
 
   const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
     base,
@@ -69,7 +65,7 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
   };
 
   return (
-    <section
+    <article
       aria-labelledby={titleId}
       className={`flex flex-col gap-20 rounded-6 border-l-2 bg-background-900 p-20 text-left ${
         buy
@@ -99,7 +95,7 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
       <TokenInputField
         id={inputId}
         className="rounded-16 bg-black p-16"
-        value={budget}
+        value={delta}
         setValue={setBudget}
         token={budgetToken}
         isBalanceLoading={tokenBalanceQuery.isLoading}
@@ -128,11 +124,11 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
         min={order.min}
         max={order.max}
         budget={order.budget}
-        budgetUpdate={budget}
+        budgetUpdate={delta}
         buy={buy}
         base={base}
         quote={quote}
       />
-    </section>
+    </article>
   );
 };

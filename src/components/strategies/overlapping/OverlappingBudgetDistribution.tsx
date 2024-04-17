@@ -109,7 +109,7 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="flex items-start gap-8 text-12 text-white/60">
+      <p className="flex animate-scaleUp items-start gap-8 text-12 text-white/60">
         <span className="rounded-full bg-buy/10 p-4 text-buy">
           <IconDeposit className="h-12 w-12" />
         </span>
@@ -138,7 +138,7 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="flex items-start gap-8 text-12 text-white/60">
+      <p className="flex animate-scaleUp items-start gap-8 text-12 text-white/60">
         <span className="rounded-full bg-sell/10 p-4 text-sell">
           <IconWithdraw className="h-12 w-12" />
         </span>

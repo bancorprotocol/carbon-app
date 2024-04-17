@@ -100,6 +100,8 @@ module.exports = {
       bounce: 'bounce 1s infinite',
       slideUp:
         'fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) both, translateY 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
+      scaleUp:
+        'fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) both, scale 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
     },
     aspectRatio: {
       auto: 'auto',
@@ -579,7 +581,12 @@ module.exports = {
       },
       translateY: {
         from: {
-          transform: 'translateY(100%)',
+          transform: 'translateY(20px)',
+        },
+      },
+      scale: {
+        from: {
+          transform: 'scale(0.8)',
         },
       },
     },
