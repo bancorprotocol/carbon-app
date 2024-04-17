@@ -1,7 +1,9 @@
 import { Link } from '@tanstack/react-router';
+import { SimulatorMobilePlaceholder } from 'components/simulator/mobile-placeholder';
 import { SimResultChart } from 'components/simulator/result/SimResultChart';
 import { SimResultSummary } from 'components/simulator/result/SimResultSummary';
 import { useSimulator } from 'components/simulator/result/SimulatorProvider';
+import { useBreakpoints } from 'hooks/useBreakpoints';
 import { useCallback, useEffect } from 'react';
 import { ReactComponent as IconChevronLeft } from 'assets/icons/chevron-left.svg';
 import { wait } from 'utils/helpers';
@@ -24,6 +26,10 @@ export const SimulatorResultPage = () => {
   useEffect(() => {
     handleAnimationStart();
   }, [handleAnimationStart]);
+
+  const { aboveBreakpoint } = useBreakpoints();
+
+  if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;
 
   return (
     <div className="p-20">

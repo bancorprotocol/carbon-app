@@ -23,20 +23,18 @@ export const SimulatorPage = () => {
     <>
       <h1 className="text-24 font-weight-500 mb-16 px-20">Simulate Strategy</h1>
       <div className="flex gap-20 px-20">
-        {!isError && (
-          <div className="flex w-[440px] flex-col gap-20">
-            <SimInputTokenSelection
-              baseToken={searchState.baseToken}
-              quoteToken={searchState.quoteToken}
-              noPriceHistory={isError}
-            />
-            <SimInputStrategyType
-              baseToken={searchState.baseToken}
-              quoteToken={searchState.quoteToken}
-            />
-            <Outlet />
-          </div>
-        )}
+        <div className="flex w-[440px] flex-col gap-20">
+          <SimInputTokenSelection
+            baseToken={searchState.baseToken}
+            quoteToken={searchState.quoteToken}
+            noPriceHistory={isError}
+          />
+          <SimInputStrategyType
+            baseToken={searchState.baseToken}
+            quoteToken={searchState.quoteToken}
+          />
+          <Outlet />
+        </div>
       </div>
     </>
   );
