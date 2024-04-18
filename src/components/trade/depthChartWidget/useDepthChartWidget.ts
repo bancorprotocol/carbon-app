@@ -179,6 +179,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
           backgroundColor: '#212123',
           borderWidth: 0,
           style: {
+            fontFamily: 'Carbon-Text',
             color: 'white',
           },
         },

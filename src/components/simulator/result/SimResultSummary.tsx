@@ -79,10 +79,10 @@ export const SimResultSummary = ({
                 sellMax: state.sell.max,
                 sellBudget: state.sell.budget,
               }}
-              className={`
-                ${buttonStyles({ variant: 'success', size: 'md' })}
-                whitespace-nowrap
-              `}
+              className={cn(
+                buttonStyles({ variant: 'success', size: 'md' }),
+                'whitespace-nowrap'
+              )}
             >
               Create strategy
             </Link>
