@@ -111,9 +111,7 @@ export const MainMenuRightWallet: FC = () => {
             data-testid="user-wallet"
           >
             {buttonIcon}
-            <span className={debug.debugState.isE2E ? 'font-mono' : ''}>
-              {buttonText}
-            </span>
+            <span>{buttonText}</span>
           </button>
         )}
       >
