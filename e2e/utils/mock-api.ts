@@ -45,12 +45,12 @@ export const mockApi = async (page: Page) => {
       quoteToken,
       buyMin,
       buyMax,
+      buyMarginal,
       buyBudget,
-      buyIsRange,
       sellMin,
       sellMax,
+      sellMarginal,
       sellBudget,
-      sellIsRange,
       start,
       end,
     } = Object.fromEntries(url.searchParams.entries());
@@ -60,9 +60,11 @@ export const mockApi = async (page: Page) => {
       quoteToken,
       buyMin,
       buyMax,
+      buyMarginal,
       buyBudget,
       sellMin,
       sellMax,
+      sellMarginal,
       sellBudget,
       start,
       end,
@@ -70,12 +72,7 @@ export const mockApi = async (page: Page) => {
 
     const simulateCreateStrategyId = keyValues.join('-');
     // If unexpected behavior, let the real server handle that
-    if (
-      keyValues.some((v) => !v) ||
-      !buyIsRange ||
-      !sellIsRange ||
-      !simulatorResult[simulateCreateStrategyId]
-    )
+    if (keyValues.some((v) => !v) || !simulatorResult[simulateCreateStrategyId])
       return route.continue();
 
     const data = simulatorResult[simulateCreateStrategyId];
