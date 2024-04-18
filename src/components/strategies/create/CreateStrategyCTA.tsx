@@ -34,16 +34,16 @@ export const CreateStrategyCTAMobile = () => {
   return (
     <Link
       to="/strategies/create"
-      className="fixed bottom-100 right-30 md:hidden"
+      className="bottom-100 right-30 fixed md:hidden"
       data-testid="create-strategy-mobile"
     >
       <Button
         aria-label="Create Strategy"
         variant="success"
-        className="flex h-56 w-56 items-center justify-center rounded-full !p-0"
+        className="flex size-56 items-center justify-center rounded-full p-0"
         onClick={() => carbonEvents.strategy.newStrategyCreateClick(undefined)}
       >
-        <IconPlus className={'h-14 w-14'} />
+        <IconPlus className="size-14" />
       </Button>
     </Link>
   );

@@ -17,12 +17,12 @@ export const DebugImposter = () => {
   return (
     <div
       className={
-        'flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20'
+        'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
       <h2>Set Imposter Account</h2>
       <InputUserAccount
-        label={'Imposter Account'}
+        label="Imposter Account"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />

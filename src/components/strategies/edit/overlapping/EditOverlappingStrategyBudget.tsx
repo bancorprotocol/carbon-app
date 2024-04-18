@@ -153,34 +153,19 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
     );
   }
   return (
-    <article className="flex w-full flex-col gap-20 rounded-10 bg-background-900 p-20">
+    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-20 p-20">
       <header className="flex items-center gap-8 ">
-        <h3 className="flex-1 text-18 font-weight-500">Edit Budget</h3>
+        <h3 className="text-18 font-weight-500 flex-1">Edit Budget</h3>
         <Tooltip element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values." />
       </header>
       <BudgetInput
-        id={buyBudgetId}
-        token={quote}
-        query={tokenQuoteBalanceQuery}
-        order={order0}
-        onChange={onBuyBudgetChange}
-        disabled={disableBuy}
-      >
-        <WithdrawAllocatedBudget
-          token={quote}
-          order={order0}
-          currentBudget={strategy.order0.balance}
-          setBudget={onBuyBudgetChange}
-          disabled={disableBuy}
-          buy
-        />
-        <BudgetMessage token={quote} change={quoteBalanceChange} />
-      </BudgetInput>
-      <BudgetInput
         id={sellBudgetId}
+        title="Sell Budget"
+        titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
         token={base}
         query={tokenBaseBalanceQuery}
-        order={order1}
+        value={order1.budget}
+        error={order1.budgetError}
         onChange={onSellBudgetChange}
         disabled={disableSell}
       >
@@ -194,6 +179,28 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
         <BudgetMessage token={base} change={baseBalanceChange} />
       </BudgetInput>
       {maxBelowMarket && <Explanation base={base} />}
+      <BudgetInput
+        id={buyBudgetId}
+        title="Buy Budget"
+        titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
+        token={quote}
+        query={tokenQuoteBalanceQuery}
+        value={order0.budget}
+        error={order0.budgetError}
+        onChange={onBuyBudgetChange}
+        disabled={disableBuy}
+      >
+        <WithdrawAllocatedBudget
+          token={quote}
+          order={order0}
+          currentBudget={strategy.order0.balance}
+          setBudget={onBuyBudgetChange}
+          disabled={disableBuy}
+          buy
+        />
+        <BudgetMessage token={quote} change={quoteBalanceChange} />
+      </BudgetInput>
+
       {!minAboveMarket && !maxBelowMarket && (
         <p className="text-12 text-white/60">
           The required 2nd budget will be calculated to maintain overlapping
@@ -201,11 +208,11 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
           <a
             href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
             target="_blank"
-            className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"
+            className="text-12 font-weight-500 text-primary inline-flex items-center gap-4"
             rel="noreferrer"
           >
             Learn More
-            <IconLink className="h-12 w-12" />
+            <IconLink className="size-12" />
           </a>
         </p>
       )}
@@ -226,15 +233,16 @@ const Explanation: FC<{ base?: Token; buy?: boolean }> = ({ base, buy }) => {
     <p className="text-12 text-white/60">
       The market price is outside the ranges you set for&nbsp;
       {buy ? 'buying' : 'selling'}&nbsp;
-      {base?.symbol}. Budget for buying {base?.symbol} is not required.&nbsp;
+      {base?.symbol}. Budget for {buy ? 'buying' : 'selling'} {base?.symbol} is
+      not required.&nbsp;
       <a
         href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
         target="_blank"
-        className="inline-flex items-center gap-4 text-12 font-weight-500 text-primary"
+        className="text-12 font-weight-500 text-primary inline-flex items-center gap-4"
         rel="noreferrer"
       >
         Learn More
-        <IconLink className="h-12 w-12" />
+        <IconLink className="size-12" />
       </a>
     </p>
   );
@@ -246,7 +254,7 @@ const BudgetMessage: FC<{ token: Token; change?: SafeDecimal }> = (props) => {
   if (change.gt(0)) {
     return (
       <div className="flex items-center gap-8">
-        <IconArrowDown className="h-16 w-16 rotate-180 text-primary" />
+        <IconArrowDown className="text-primary size-16 rotate-180" />
         <p className="text-12 font-weight-400 text-white/60">
           You will deposit&nbsp;
           <b className="text-primary">
@@ -259,7 +267,7 @@ const BudgetMessage: FC<{ token: Token; change?: SafeDecimal }> = (props) => {
   } else {
     return (
       <div className="flex items-center gap-8">
-        <IconArrowDown className="h-16 w-16 text-error" />
+        <IconArrowDown className="text-error size-16" />
         <p className="text-12 font-weight-400 text-white/60">
           You will withdraw&nbsp;
           <b className="text-error">

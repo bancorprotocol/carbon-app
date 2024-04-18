@@ -41,7 +41,7 @@ export const _StrategyContent: FC<Props> = ({
   return (
     <ul
       data-testid="strategy-list"
-      className={cn('grid gap-20 lg:gap-10 xl:gap-25', styles.strategyList)}
+      className={cn('xl:gap-25 grid gap-20 lg:gap-10', styles.strategyList)}
     >
       {strategies.map((s) => (
         <StrategyBlock key={s.id} strategy={s} isExplorer={isExplorer} />

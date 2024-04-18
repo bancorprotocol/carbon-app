@@ -23,7 +23,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
           baseSymbol={base.symbol}
           quoteSymbol={quote.symbol}
         />
-        <div className="mt-2 rounded-b-10 rounded-t-4 bg-black px-20 py-8 text-14">
+        <div className="rounded-b-10 rounded-t-4 text-14 mt-2 bg-black px-20 py-8">
           <OrderBookSide
             isLoading={isLoading}
             orders={sell}

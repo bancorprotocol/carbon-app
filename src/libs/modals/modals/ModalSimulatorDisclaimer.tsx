@@ -15,12 +15,12 @@ export const ModalSimulatorDisclaimer: ModalFC<
   const { closeModal } = useModal();
 
   const paragraphClassName =
-    'text-secondary flex w-full items-center justify-center text-center';
+    'text-white/60 text-14 flex w-full items-center justify-center text-center';
 
   return (
     <ModalOrMobileSheet id={id} data-testid="sim-disclaimer-modal">
       <IconTitleText
-        icon={<IconBookmark className="h-24 w-24 text-white" />}
+        icon={<IconBookmark className="size-24 text-white" />}
         title="Simulator Disclaimer"
       />
       <p className={paragraphClassName}>

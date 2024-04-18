@@ -182,7 +182,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
         {...getReferenceProps({ ref: refs.setReference })}
         type="button"
         className={cn(
-          'flex items-center gap-8 rounded-full border-2 px-12 py-8 text-12',
+          'text-12 flex items-center gap-8 rounded-full border-2 px-12 py-8',
           'hover:bg-background-800',
           selected.length
             ? 'border-primary active:border-primary-light'
@@ -193,7 +193,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
         {icon}
         <span className="text-white/60">{label}</span>
         <IconChevron
-          className={cn('h-12 w-12 text-white/60 transition-transform', {
+          className={cn('size-12 text-white/60 transition-transform', {
             'rotate-180': open,
           })}
         />
@@ -206,7 +206,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               style={{ ...floatingStyles, ...transition }}
               {...getFloatingProps()}
               id={rootId}
-              className="z-50 flex flex-col gap-8 rounded bg-background-800 p-16"
+              className="bg-background-800 z-50 flex flex-col gap-8 rounded p-16"
               onChange={onChange}
             >
               <div className="flex gap-8 rounded bg-black p-10 focus-within:outline-1">
@@ -214,7 +214,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                 <input
                   id={inputId}
                   type="search"
-                  className="border-none bg-transparent text-14 outline-none"
+                  className="text-14 border-none bg-transparent outline-none"
                   aria-label={filterLabel}
                   placeholder={filterLabel}
                   onChange={(e) => filter(e.target.value)}
@@ -223,7 +223,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <button
                 type="button"
                 onClick={reset}
-                className="rounded bg-background-900 p-10 text-12 font-weight-500"
+                className="bg-background-900 text-12 font-weight-500 rounded p-10"
               >
                 Reset Filter
               </button>
@@ -271,7 +271,7 @@ export const Option: FC<OptionProps> = (props) => {
         name={name}
         value={value}
         defaultChecked={checked}
-        className="h-14 w-14"
+        className="size-14"
         tabIndex={checked ? 1 : 0}
       />
       <label htmlFor={id} className={cn('flex items-center gap-8', className)}>
@@ -285,10 +285,10 @@ const Empty = () => {
   return (
     <output className="flex max-w-[200px] flex-col items-center p-16">
       <div className="mb-16 grid place-items-center rounded-full bg-white/40 p-8">
-        <IconSearch className="h-16 w-16 self-center" />
+        <IconSearch className="size-16 self-center" />
       </div>
-      <h3 className="mb-8 text-14 font-weight-500">Nothing found</h3>
-      <p className="text-center text-12 text-white/80">
+      <h3 className="text-14 font-weight-500 mb-8">Nothing found</h3>
+      <p className="text-12 text-center text-white/80">
         Unfortunately we couldn't find what you're looking for.
       </p>
     </output>

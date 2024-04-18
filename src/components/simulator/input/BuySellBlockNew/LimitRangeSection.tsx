@@ -32,13 +32,12 @@ export const LimitRangeSection: FC<Props> = ({
   ignoreMarketPriceWarning,
 }) => {
   const { isRange } = order;
-  const { marketPricePercentage, isOrderAboveOrBelowMarketPrice } =
-    useMarketIndication({
-      base,
-      quote,
-      order: { ...order, price: order.min },
-      buy,
-    });
+  const { isOrderAboveOrBelowMarketPrice } = useMarketIndication({
+    base,
+    quote,
+    order: { ...order, price: order.min },
+    buy,
+  });
 
   const overlappingOrdersPricesMessage =
     'Notice: your Buy and Sell orders overlap';
@@ -67,7 +66,7 @@ export const LimitRangeSection: FC<Props> = ({
 
   return (
     <fieldset className="flex flex-col gap-8">
-      <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
+      <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
         {inputTitle}
       </legend>
       {isRange ? (
@@ -81,7 +80,6 @@ export const LimitRangeSection: FC<Props> = ({
           quote={quote}
           base={base}
           buy={buy}
-          marketPricePercentages={marketPricePercentage}
           ignoreMarketPriceWarning={ignoreMarketPriceWarning}
           isOrdersReversed={isOrdersReversed}
           warnings={getWarnings()}
@@ -98,7 +96,6 @@ export const LimitRangeSection: FC<Props> = ({
           error={order.priceError}
           setPriceError={setPriceError}
           buy={buy}
-          marketPricePercentage={marketPricePercentage}
           ignoreMarketPriceWarning={ignoreMarketPriceWarning}
           isOrdersReversed={isOrdersReversed}
           warnings={getWarnings()}

@@ -13,7 +13,7 @@ export const TokensOverlap = ({
 }) => {
   const tokenCount = tokens.length;
   return (
-    <span className={`isolate flex shrink-0 items-center`}>
+    <span className="isolate flex shrink-0 items-center">
       {tokens.slice(0, maxLogos).map((token, index, list) => (
         <LogoImager
           width={size}
@@ -31,7 +31,7 @@ export const TokensOverlap = ({
       ))}
       {tokenCount > maxLogos && (
         <span
-          className="flex h-30 w-30 items-center justify-center rounded-full bg-black text-12"
+          className="size-30 text-12 flex items-center justify-center rounded-full bg-black"
           style={{
             marginLeft: `-${size * 0.3}px`,
           }}

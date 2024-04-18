@@ -42,6 +42,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
       <header className="mb-15 flex items-center justify-between">
         <h2>Token Pair</h2>
         <Tooltip
+          iconClassName="text-white/60"
           sendEventOnMount={{ buy: undefined }}
           element={
             <div>
@@ -56,7 +57,7 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
           }
         />
       </header>
-      <div className="flex flex-col -space-y-15">
+      <div className="-space-y-15 flex flex-col">
         <SelectTokenButton
           symbol={base?.symbol}
           imgUrl={base?.logoURI}
@@ -67,11 +68,11 @@ export const CreateStrategyTokenSelection: FC<UseStrategyCreateReturn> = ({
         {!!base && (
           <>
             <button
-              className="relative z-10 mx-auto grid h-40 w-40 place-items-center rounded-full border-[5px] border-background-900 bg-black"
+              className="border-background-900 relative z-10 mx-auto grid size-40 place-items-center rounded-full border-[5px] bg-black"
               onClick={swapTokens}
               disabled={!base || !quote}
             >
-              <IconArrow className="h-12 w-12" />
+              <IconArrow className="size-12" />
             </button>
             <SelectTokenButton
               symbol={quote?.symbol}

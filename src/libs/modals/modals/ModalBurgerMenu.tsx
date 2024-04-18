@@ -28,7 +28,7 @@ export const ModalBurgerMenu: ModalFC<undefined> = ({ id }) => {
   }, [isOpen, closeModal, id]);
 
   return (
-    <ModalSlideOver id={id} size={'md'}>
+    <ModalSlideOver id={id} size="md">
       <div className="mt-10">
         {currentMenuItems?.map((item, index) => {
           return (

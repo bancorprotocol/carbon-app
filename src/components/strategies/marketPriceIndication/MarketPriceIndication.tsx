@@ -27,16 +27,16 @@ export const MarketPriceIndication: FC<MarketPriceIndicationProps> = ({
 
   return (
     <span
-      className={`flex items-center gap-5 rounded-6 bg-background-800 py-4 px-6 ${
+      className={`rounded-6 bg-background-800 flex items-center gap-5 px-6 py-4 ${
         marketPriceWarning ? 'text-warning' : 'text-white/60'
       }`}
       data-testid="market-price-indication"
     >
-      <span className="font-mono text-10">
+      <span className="text-10 font-mono">
         {percentage}% {isAbove ? 'above' : 'below'} {isRange ? '' : 'market'}
       </span>
       <Tooltip
-        iconClassName="h-10 w-10"
+        iconClassName="size-10"
         element="The percentage difference between the input price and the current market price of the token"
       />
     </span>

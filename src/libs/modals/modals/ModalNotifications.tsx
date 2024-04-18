@@ -4,32 +4,36 @@ import { NotificationLine } from 'libs/notifications/NotificationLine';
 import { useNotifications } from 'hooks/useNotifications';
 
 export const ModalNotifications: ModalFC<undefined> = ({ id }) => {
-  const { notifications, clearNotifications } = useNotifications();
+  const { notifications, clearNotifications, removeNotification } =
+    useNotifications();
   const reversedNotifications = notifications.slice().reverse();
 
   return (
     <ModalSlideOver
       id={id}
       title={
-        <div className="flex w-full items-center justify-between">
+        <header className="flex w-full items-center justify-between">
           Notifications
           <button onClick={() => clearNotifications()} className="mr-20">
             Clear All
           </button>
-        </div>
+        </header>
       }
-      size={'md'}
+      size="md"
     >
-      <div className={'mt-25 space-y-10'}>
-        {reversedNotifications.map((notification) => (
-          <div
-            key={notification.id}
-            className={'rounded-10 bg-black px-20 py-10'}
+      <ul className="mt-25 flex flex-col gap-10">
+        {reversedNotifications.map((n) => (
+          <li
+            key={n.id}
+            className="rounded-10 overflow-hidden bg-black px-16 py-12"
           >
-            <NotificationLine notification={notification} />
-          </div>
+            <NotificationLine
+              notification={n}
+              close={() => removeNotification(n.id)}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
     </ModalSlideOver>
   );
 };

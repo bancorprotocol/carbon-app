@@ -38,7 +38,7 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
       </ul>
       {limit < size && (
         <>
-          <p className="mb-16 text-center text-12 text-white/60">
+          <p className="text-12 mb-16 text-center text-white/60">
             {limit} / {size}
           </p>
           <Button
@@ -69,10 +69,10 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
     setSearchParams({ actions });
   };
   return (
-    <li className="flex flex-col gap-16 rounded border-2 border-background-800">
+    <li className="border-background-800 flex flex-col gap-16 rounded border-2">
       <header className="flex px-16 pt-16">
         {!hideIds && <ActivityId activity={activity} size={12} />}
-        <p className="flex flex-1 items-center justify-end gap-8 font-mono text-12 text-white/60">
+        <p className="text-12 flex flex-1 items-center justify-end gap-8 font-mono text-white/60">
           {activityDateFormatter.format(activity.date)}
           <TransactionLink txHash={activity.txHash} className="h-16" />
         </p>
@@ -83,7 +83,7 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
             <ActivityIcon activity={activity} size={24} />
             {activityActionName[activity.action]}
           </h3>
-          <p className="font-mono text-12 text-white/60">
+          <p className="text-12 font-mono text-white/60">
             {activityDescription(activity)}
           </p>
         </button>
@@ -91,9 +91,9 @@ const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
       <hr className="border-background-800" />
       <table className="w-full table-fixed">
         <thead>
-          <tr className="font-mono text-12 text-white/60">
-            <th className="px-16 font-weight-400">Buy Budget</th>
-            <th className="px-16 font-weight-400">Sell Budget</th>
+          <tr className="text-12 font-mono text-white/60">
+            <th className="font-weight-400 px-16">Buy Budget</th>
+            <th className="font-weight-400 px-16">Sell Budget</th>
           </tr>
         </thead>
         <tbody>

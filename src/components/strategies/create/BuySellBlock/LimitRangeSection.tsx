@@ -48,7 +48,7 @@ export const LimitRangeSection: FC<Props> = ({
 
   return (
     <fieldset className="flex flex-col gap-8">
-      <legend className="mb-11 flex items-center gap-6 text-14 font-weight-500">
+      <legend className="text-14 font-weight-500 mb-11 flex items-center gap-6">
         {inputTitle}
       </legend>
       {isRange ? (

@@ -28,9 +28,9 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
         tokens={[base, quote]}
       />
       <div className="flex flex-1 flex-col">
-        <h3 className="flex gap-6 text-18" data-testid="token-pair">
+        <h3 className="text-18 flex gap-6" data-testid="token-pair">
           <span>{base.symbol}</span>
-          <span className="self-align-center text-secondary !text-16">/</span>
+          <span className="self-align-center text-16 text-white/60">/</span>
           <span>{quote.symbol}</span>
         </h3>
         <StrategySubtitle {...strategy} />
@@ -40,9 +40,9 @@ export const StrategyBlockHeader: FC<Props> = ({ strategy, isExplorer }) => {
           role="menuitem"
           to="/strategy/$id"
           params={{ id: strategy.id }}
-          className="grid h-38 w-38 place-items-center rounded-6 border-2 border-background-800 hover:bg-white/10 active:bg-white/20"
+          className="size-38 rounded-6 border-background-800 grid place-items-center border-2 hover:bg-white/10 active:bg-white/20"
         >
-          <DashboardIcon className="h-16 w-16" />
+          <DashboardIcon className="size-16" />
         </Link>
         <StrategyBlockManage
           strategy={strategy}
@@ -63,7 +63,7 @@ export const StrategyTitle: FC<StrategyTitleProps> = ({ base, quote }) => {
   return (
     <>
       <span>{base.symbol}</span>
-      <span className="self-align-center text-secondary !text-16">/</span>
+      <span className="self-align-center text-16 text-white/60">/</span>
       <span>{quote.symbol}</span>
     </>
   );
@@ -77,7 +77,7 @@ interface StrategySubtitleProps {
 export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
   const { id, status, isExplorer } = props;
   return (
-    <p className="flex items-center gap-8 text-12 text-white/60">
+    <p className="text-12 flex items-center gap-8 text-white/60">
       <span className="font-mono">ID: {getLowestBits(id)}</span>
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
@@ -90,11 +90,11 @@ export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
       {status !== 'active' && (
         <Tooltip element={getTooltipTextByStatus(isExplorer, status)}>
           <span
-            className="inline-flex items-center gap-4 text-error"
+            className="text-error inline-flex items-center gap-4"
             data-testid="status"
           >
             {statusText.inactive}
-            <TooltipIcon className="h-10 w-10 text-error" />
+            <TooltipIcon className="text-error size-10" />
           </span>
         </Tooltip>
       )}

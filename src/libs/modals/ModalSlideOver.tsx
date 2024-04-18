@@ -27,7 +27,7 @@ export const ModalSlideOver: FC<ModalProps> = ({
   const sizeClass = getSize(size);
 
   return (
-    <Overlay onClick={() => closeModal(id)} className={`justify-end`}>
+    <Overlay onClick={() => closeModal(id)} className="justify-end">
       <m.div
         onClick={(e) => e.stopPropagation()}
         className={`relative w-full ${sizeClass}`}
@@ -36,7 +36,7 @@ export const ModalSlideOver: FC<ModalProps> = ({
         animate="visible"
         exit="exit"
       >
-        <div className="relative flex h-screen w-full flex-col border-0 bg-background-900 p-25 outline-none focus:outline-none">
+        <div className="bg-background-900 p-25 relative flex h-screen w-full flex-col border-0 outline-none focus:outline-none">
           <div
             className={`flex items-center ${
               title ? 'justify-between' : 'justify-end'
@@ -44,15 +44,15 @@ export const ModalSlideOver: FC<ModalProps> = ({
           >
             <>
               {typeof title === 'string' ? (
-                <h2 className={'m-0'}>{title}</h2>
+                <h2 className="m-0">{title}</h2>
               ) : (
                 title
               )}
             </>
             <div>
               {showCloseButton ? (
-                <button className={'p-4'} onClick={() => closeModal(id)}>
-                  <IconX className={'w-12'} />
+                <button className="p-4" onClick={() => closeModal(id)}>
+                  <IconX className="w-12" />
                 </button>
               ) : null}
             </div>

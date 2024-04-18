@@ -25,12 +25,12 @@ export const CreateStrategyGraph: FC<Props> = ({
       <m.div
         variants={items}
         key="createStrategyGraph"
-        className="flex h-[550px] flex-col rounded-10 bg-background-900 p-20 md:sticky md:top-80"
+        className="rounded-10 bg-background-900 flex h-[550px] flex-col p-20 md:sticky md:top-80"
       >
         <div className="flex items-center justify-between">
-          <h2 className="mb-20 font-weight-500">Price Chart</h2>
+          <h2 className="font-weight-500 mb-20">Price Chart</h2>
           <Button
-            className="mb-20 self-end bg-background-800 hover:border-background-600"
+            className="bg-background-800 hover:border-background-600 mb-20 self-end"
             variant="secondary"
             size="md"
             onClick={() => {
