@@ -21,9 +21,10 @@ import {
   calculateOverlappingBuyBudget,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
-import { MarketWarning } from './MarketWarning';
+import { DepositOverlappingWarning } from './DepositOverlappingWarning';
 import { geoMean } from 'utils/fullOutcome';
 import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
+import { checkHasArbOpportunity } from 'components/strategies/utils';
 
 interface Props {
   strategy: Strategy;
@@ -139,7 +140,12 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     setBuyBudget(value || '0');
   };
 
-  const marketWarningProps = { oldMarketPrice, externalMarketPrice };
+  const hasArbOpportunity = checkHasArbOpportunity(
+    externalMarketPrice,
+    oldMarketPrice
+  );
+  const isOutOfMarket = aboveMarket || belowMarket;
+  const depositOverlappingWarningProps = { isOutOfMarket, hasArbOpportunity };
 
   return (
     <>
@@ -180,7 +186,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
             token={base}
             currentBudget={strategy.order1.balance}
           />
-          <MarketWarning {...marketWarningProps} />
+          <DepositOverlappingWarning {...depositOverlappingWarningProps} />
         </BudgetInput>
         <BudgetInput
           token={quote}
@@ -197,7 +203,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
             currentBudget={strategy.order0.balance}
             buy
           />
-          <MarketWarning {...marketWarningProps} />
+          <DepositOverlappingWarning {...depositOverlappingWarningProps} />
         </BudgetInput>
         {budgetTooSmall && (
           <OverlappingSmallBudget
