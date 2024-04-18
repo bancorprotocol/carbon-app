@@ -5,7 +5,12 @@ import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Slippage } from './Slippage';
-import { prettifyNumber, formatNumber, sanitizeNumber } from 'utils/helpers';
+import {
+  prettifyNumber,
+  formatNumber,
+  sanitizeNumber,
+  cn,
+} from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 
 type Props = {
@@ -73,12 +78,11 @@ export const TokenInputField: FC<Props> = ({
 
   return (
     <div
-      className={`
-        flex cursor-text flex-col gap-8 border border-black p-16
-        focus-within:border-white/50
-        ${isError ? '!border-error/50' : ''}
-        ${className}
-      `}
+      className={cn(
+        'flex cursor-text flex-col gap-8 border border-black p-16 focus-within:border-white/50',
+        className,
+        isError && 'border-error/50 focus-within:border-error/50'
+      )}
       onClick={() => inputRef.current?.focus()}
     >
       <div className="flex items-center justify-between">
@@ -94,21 +98,20 @@ export const TokenInputField: FC<Props> = ({
           placeholder={placeholder}
           onFocus={(e) => e.target.select()}
           onBlur={handleBlur}
-          className={`
-            grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
-            ${isError ? 'text-error' : ''}
-            ${disabled ? 'text-white/40' : ''}
-            ${disabled ? 'cursor-not-allowed' : ''}
-          `}
+          className={cn(
+            'text-18 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none',
+            disabled && 'cursor-not-allowed text-white/40',
+            isError && 'text-error'
+          )}
           disabled={disabled}
           data-testid={testid}
         />
-        <div className="flex items-center gap-6 rounded-[20px] bg-background-800 py-6 px-8">
-          <LogoImager alt="Token" src={token.logoURI} className="h-20 w-20" />
+        <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
+          <LogoImager alt="Token" src={token.logoURI} className="size-20" />
           <span className="font-weight-500">{token.symbol}</span>
         </div>
       </div>
-      <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 text-12">
+      <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10">
         <p className="flex items-center gap-5 break-all text-white/60">
           {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}

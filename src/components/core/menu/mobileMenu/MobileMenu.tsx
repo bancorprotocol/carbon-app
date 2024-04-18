@@ -15,7 +15,7 @@ export const MobileMenu = () => {
   };
 
   return (
-    <footer className={`mobile-menu`}>
+    <footer className="mobile-menu">
       {menuItems.map(({ label, href }, index) => {
         const isSamePage = isSamePageLink(href);
 
@@ -38,7 +38,7 @@ export const MobileMenu = () => {
       })}
       <div
         onClick={() => openModal('burgerMenu', undefined)}
-        className="flex h-30 w-24 cursor-pointer items-center hover:text-white"
+        className="h-30 flex w-24 cursor-pointer items-center hover:text-white"
       >
         <IconDots />
       </div>

@@ -16,7 +16,7 @@ export const TPagination = <D extends object>({
         'items-center',
         'justify-between',
         'px-32',
-        '!text-14',
+        'text-14',
         'text-white/60'
       )}
     >

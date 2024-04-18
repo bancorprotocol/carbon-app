@@ -1,7 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { Activity, ActivityAction } from 'libs/queries/extApi/activity';
-import { NewTabLink } from 'libs/routing';
+import { Link, NewTabLink } from 'libs/routing';
 import { cn, getLowestBits, shortenString, tokenAmount } from 'utils/helpers';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
@@ -26,10 +26,11 @@ import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { ActivityListProps } from './ActivityList';
 import { NotFound } from 'components/common/NotFound';
+import { useActivity } from './ActivityProvider';
 import style from './ActivityTable.module.css';
 
 const thStyle = cn(
-  'text-start font-weight-400 py-16 pl-8',
+  'text-start font-weight-400 py-16 pl-8 whitespace-nowrap',
   'first:pl-24',
   'last:pr-24 last:text-end'
 );
@@ -48,7 +49,7 @@ export const ActivityTable: FC<ActivityListProps> = (props) => {
   return (
     <table className={cn('w-full border-collapse', style.table)}>
       <thead>
-        <tr className="border-y border-background-800 text-14 text-white/60">
+        <tr className="border-background-800 text-14 border-y text-white/60">
           {!hideIds && <th className={thStyle}>ID</th>}
           <th className={thStyle} colSpan={2}>
             Action
@@ -97,8 +98,15 @@ interface ActivityRowProps {
   index: number;
 }
 const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
+  const { searchParams, setSearchParams } = useActivity();
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
+  const setAction = () => {
+    const actions = searchParams.actions.includes(activity.action)
+      ? []
+      : [activity.action];
+    setSearchParams({ actions });
+  };
   return (
     <>
       <tr className="text-14" style={{ animationDelay: `${index * 50}ms` }}>
@@ -108,10 +116,14 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
           </td>
         )}
         <td rowSpan={2} className="py-12 pl-8 first:pl-24">
-          <ActivityIcon activity={activity} size={32} />
+          <button onClick={setAction}>
+            <ActivityIcon activity={activity} size={32} />
+          </button>
         </td>
         <td className={cn(tdFirstLine, 'font-weight-500')}>
-          {activityActionName[activity.action]}
+          <button onClick={setAction} className="w-full text-start">
+            {activityActionName[activity.action]}
+          </button>
         </td>
         <td className={tdFirstLine}>
           {tokenAmount(strategy.buy.budget, quote)}
@@ -129,8 +141,10 @@ const ActivityRow: FC<ActivityRowProps> = ({ activity, hideIds, index }) => {
       >
         {/* ID */}
         {/* Action Icon */}
-        <td className={tdSecondLine}>
-          <p className="whitespace-normal">{activityDescription(activity)}</p>
+        <td className={cn(tdSecondLine, 'w-full')}>
+          <button onClick={setAction} className="w-full text-start">
+            <p className="whitespace-normal">{activityDescription(activity)}</p>
+          </button>
         </td>
         <td className={tdSecondLine}>
           <BudgetChange budget={changes?.buy?.budget} token={quote} />
@@ -156,12 +170,14 @@ interface ActivityIdProps {
 export const ActivityId: FC<ActivityIdProps> = ({ activity, size }) => {
   const { id, base, quote } = activity.strategy;
   return (
-    <span
-      className={`inline-flex items-center gap-4 rounded-full bg-background-800 py-4 px-8`}
+    <Link
+      to="/strategy/$id"
+      params={{ id: id }}
+      className="bg-background-800 inline-flex items-center gap-4 rounded-full px-8 py-4"
     >
       <span className={`text-${size}`}>{getLowestBits(id)}</span>
       <TokensOverlap tokens={[base, quote]} size={size + 2} />
-    </span>
+    </Link>
   );
 };
 
@@ -175,7 +191,7 @@ export const ActivityIcon: FC<ActivityIconProps> = (props) => {
   const classes = cn(
     'grid place-items-center rounded-full',
     iconColor(activity.action),
-    `h-${size} w-${size}`,
+    `size-${size}`,
     className
   );
   return (
@@ -232,12 +248,12 @@ const ActivityPaginator = () => {
   };
 
   return (
-    <tr className="border-t border-background-800 text-14 text-white/80">
+    <tr className="border-background-800 text-14 border-t text-white/80">
       <td className="px-24 py-16" colSpan={3}>
         <div className="flex items-center gap-8">
           <label>Show results</label>
           <select
-            className="rounded-full border-2 border-background-800 bg-background-900 px-12 py-8"
+            className="border-background-800 bg-background-900 rounded-full border-2 px-12 py-8"
             name="limit"
             onChange={changeLimit}
             value={limit}
@@ -269,7 +285,7 @@ const ActivityPaginator = () => {
             <IconChevronLeft className="h-12" />
           </button>
           <p
-            className="flex gap-8 rounded-full border-2 border-background-800 px-12 py-8"
+            className="border-background-800 flex gap-8 rounded-full border-2 px-12 py-8"
             aria-label="page position"
           >
             <span className="text-white">{currentPage}</span>
@@ -311,7 +327,7 @@ const iconColor = (action: ActivityAction) => {
 };
 
 const ActionIcon: FC<ActionIconProps> = ({ action, size }) => {
-  const className = `h-${size} w-${size}`;
+  const className = `size-${size}`;
   if (action === 'create') return <IconCheck className={className} />;
   if (action === 'transfer') return <IconTransfer className={className} />;
   if (action === 'edit') return <IconEdit className={className} />;

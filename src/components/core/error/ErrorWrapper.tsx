@@ -13,7 +13,7 @@ type Props = IconTitleTextProps & {
 const DefaultChildren = () => (
   <div>
     <NewTabLink to={externalLinks.faq}>
-      <Button variant={'error'} fullWidth>
+      <Button variant="error" fullWidth>
         Contact Support
       </Button>
     </NewTabLink>
@@ -22,11 +22,7 @@ const DefaultChildren = () => (
 
 export const ErrorWrapper: FC<Props> = ({ children, ...props }) => {
   return (
-    <div
-      className={
-        'mx-auto mt-100 w-[385px] space-y-16 rounded-10 bg-background-900 p-20'
-      }
-    >
+    <div className="mt-100 rounded-10 bg-background-900 mx-auto w-[385px] space-y-16 p-20">
       <IconTitleText {...props} />
       {children ? children : <DefaultChildren />}
     </div>

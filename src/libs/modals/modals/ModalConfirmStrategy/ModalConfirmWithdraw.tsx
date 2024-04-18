@@ -33,7 +33,7 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
   return (
     <ModalOrMobileSheet id={id} title="Withdraw Funds">
       <IconTitleText
-        icon={<IconWallet className="h-24 w-24" />}
+        icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
       />
       <article className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-8 rounded bg-white/10 p-16">

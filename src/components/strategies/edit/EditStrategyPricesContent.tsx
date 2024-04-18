@@ -138,7 +138,7 @@ export const EditStrategyPricesContent = ({
     <form
       onSubmit={(e) => handleOnActionClick(e)}
       onReset={() => history.back()}
-      className="flex w-full flex-col items-center gap-20 font-weight-500 md:w-[400px]"
+      className="font-weight-500 flex w-full flex-col items-center gap-20 md:w-[400px]"
       data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -175,7 +175,7 @@ export const EditStrategyPricesContent = ({
       )}
 
       {warnings.formHasWarning && !isInvalid && (
-        <label className="flex items-center gap-8 rounded-10 bg-background-900 p-20 text-14 font-weight-500 text-white/60">
+        <label className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60">
           <input
             type="checkbox"
             value={warnings.approvedWarnings.toString()}

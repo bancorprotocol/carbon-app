@@ -568,17 +568,17 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
   const color = buy ? 'text-buy' : 'text-sell';
   return (
     <article
-      className="flex flex-col gap-16 text-14"
+      className="text-14 flex flex-col gap-16"
       data-testid="order-tooltip"
     >
       <h3 className={cn('text-16 font-weight-500', color)}>
         {buy ? 'Buy' : 'Sell'} {base.symbol}
       </h3>
       {limit && (
-        <table className="border-separate rounded-8 border border-white/40">
+        <table className="rounded-8 border-separate border border-white/40">
           <tbody>
             <tr>
-              <th className="p-8 text-start font-weight-400 text-white/60">
+              <th className="font-weight-400 p-8 text-start text-white/60">
                 Price
               </th>
               <td className="p-8 text-end" data-testid="price">
@@ -589,10 +589,10 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       {!limit && (
-        <table className="border-separate rounded-8 border border-white/40">
+        <table className="rounded-8 border-separate border border-white/40">
           <tbody>
             <tr>
-              <th className="p-8 pb-4 text-start font-weight-400 text-white/60">
+              <th className="font-weight-400 p-8 pb-4 text-start text-white/60">
                 Min Price
               </th>
               <td className="p-8 pb-4 text-end" data-testid="min-price">
@@ -600,7 +600,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
               </td>
             </tr>
             <tr>
-              <th className="p-8 pt-4 text-start font-weight-400 text-white/60">
+              <th className="font-weight-400 p-8 pt-4 text-start text-white/60">
                 Max Price
               </th>
               <td className="p-8 pt-4 text-end" data-testid="max-price">
@@ -622,10 +622,10 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         href="https://faq.carbondefi.xyz/trading-strategies/order-dynamics"
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-4 font-weight-500 text-primary"
+        className="font-weight-500 text-primary inline-flex items-center gap-4"
       >
         <span>Learn more about marginal price</span>
-        <IconLink className="inline h-12 w-12" />
+        <IconLink className="inline size-12" />
       </a>
     </article>
   );

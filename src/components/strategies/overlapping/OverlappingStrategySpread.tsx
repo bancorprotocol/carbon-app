@@ -2,14 +2,11 @@ import {
   useRef,
   FC,
   KeyboardEvent,
-  Dispatch,
-  SetStateAction,
   useState,
   FocusEvent,
   ChangeEvent,
 } from 'react';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
-import { OrderCreate } from '../create/useOrder';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
 import styles from './OverlappingStrategySpread.module.css';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
@@ -19,9 +16,9 @@ interface Props {
   defaultValue: number;
   options: number[];
   spread: number;
-  order0: OrderCreate;
-  order1: OrderCreate;
-  setSpread: Dispatch<SetStateAction<number>>;
+  buyMin: number;
+  sellMax: number;
+  setSpread: (value: number) => void;
 }
 
 const getWarning = (maxSpread: number) => {
@@ -31,13 +28,10 @@ const getWarning = (maxSpread: number) => {
 const round = (value: number) => Math.round(value * 100) / 100;
 
 export const OverlappingStrategySpread: FC<Props> = (props) => {
-  const { defaultValue, options, spread, setSpread } = props;
+  const { defaultValue, options, spread, setSpread, buyMin, sellMax } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spread);
   const hasError = spread <= 0 || spread > 100;
-  const { order0, order1 } = props;
-  const buyMin = Number(order0.min);
-  const sellMax = Number(order1.max);
   const [warning, setWarning] = useState('');
 
   const selectSpread = (value: number) => {
@@ -124,7 +118,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
             />
             <label
               htmlFor={'spread-' + option}
-              className="block cursor-pointer rounded-8 bg-black p-16 text-center text-white/40 hover:outline hover:outline-1"
+              className="rounded-8 block cursor-pointer bg-black p-16 text-center text-white/40 hover:outline hover:outline-1"
             >
               {option}%
             </label>
@@ -133,7 +127,7 @@ export const OverlappingStrategySpread: FC<Props> = (props) => {
         <div
           className={cn(
             styles.spreadCustom,
-            'flex min-w-0 flex-1 justify-center rounded-8 bg-black p-16 text-center',
+            'rounded-8 flex min-w-0 flex-1 justify-center bg-black p-16 text-center',
             'hover:outline hover:outline-1',
             'focus-within:outline focus-within:outline-2',
             spread && !inOptions && 'outline outline-1 outline-white/60',

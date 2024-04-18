@@ -36,7 +36,7 @@ export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
 
   return (
     <div className="space-y-10">
-      <div className="mb-20 space-y-10 text-14 text-white/80">
+      <div className="text-14 mb-20 space-y-10 text-white/80">
         <p>
           By connecting my wallet, I agree to the{' '}
           <Link

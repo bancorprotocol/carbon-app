@@ -1,13 +1,14 @@
-import { ChangeEvent, FocusEvent, FC, useEffect, useId } from 'react';
-import { carbonEvents } from 'services/events';
+import { ChangeEvent, FocusEvent, FC, useId, useEffect } from 'react';
 import { Token } from 'libs/tokens';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
-import { formatNumber, sanitizeNumber } from 'utils/helpers';
+import { carbonEvents } from 'services/events';
+import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 type InputRangeProps = {
   min: string;
@@ -22,7 +23,7 @@ type InputRangeProps = {
   error?: string;
   warnings?: string[];
   setRangeError: (error: string) => void;
-  marketPricePercentages: MarketPricePercentage;
+  marketPricePercentages?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed?: boolean;
 };
@@ -44,6 +45,7 @@ export const InputRange: FC<InputRangeProps> = ({
   ignoreMarketPriceWarning,
   isOrdersReversed,
 }) => {
+  const marketPrice = useMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMinMax = 'Maximum price must be higher than the minimum price';
@@ -68,7 +70,7 @@ export const InputRange: FC<InputRangeProps> = ({
         message: errorMessage,
       });
     }
-  }, [min, max, setRangeError, buy, isOrdersReversed]);
+  }, [min, max, setRangeError, isOrdersReversed, buy]);
 
   const handleChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
     setMin(sanitizeNumber(e.target.value));
@@ -92,24 +94,32 @@ export const InputRange: FC<InputRangeProps> = ({
     <>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className={`
-            w-full cursor-text rounded-r-4 rounded-l-16 border border-black bg-black p-16
-            focus-within:border-white/50 
-            ${error ? '!border-error/50' : ''}
-            ${showWarning ? '!border-warning' : ''}
-          `}
+          className={cn(
+            'rounded-r-4 rounded-l-16 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+            showWarning && 'border-warning focus-within:border-warning',
+            error && 'border-error/50 focus-within:border-error'
+          )}
           onClick={() => document.getElementById(inputMinId)?.focus()}
         >
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
-              base.symbol
-            } at.`}
-          >
-            <label htmlFor={inputMinId} className="mb-5 text-12 text-white/60">
-              {minLabel}
-            </label>
-          </Tooltip>
+          <header className="text-12 mb-5 flex justify-between text-white/60">
+            <Tooltip
+              sendEventOnMount={{ buy }}
+              element={`The lowest price to ${buy ? 'buy' : 'sell'} ${
+                base.symbol
+              } at.`}
+            >
+              <label htmlFor={inputMinId}>{minLabel}</label>
+            </Tooltip>
+            {marketPrice !== 0 && (
+              <button
+                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                type="button"
+                onClick={() => setMin(formatNumber(marketPrice.toString()))}
+              >
+                Use Market
+              </button>
+            )}
+          </header>
           <input
             id={inputMinId}
             type="text"
@@ -117,46 +127,56 @@ export const InputRange: FC<InputRangeProps> = ({
             inputMode="decimal"
             value={min}
             placeholder="Enter Price"
-            className={`
-              mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
-              ${error ? 'text-error' : ''}
-            `}
+            className={cn(
+              'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+              error && 'text-error'
+            )}
             onChange={handleChangeMin}
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMin}
             data-testid="input-min"
           />
           <p className="flex flex-wrap items-center gap-4">
-            <span className="break-all text-12 text-white/60">
+            <span className="text-12 break-all text-white/60">
               {getFiatAsString(min)}
             </span>
-            <MarketPriceIndication
-              marketPricePercentage={marketPricePercentages.min}
-              isRange
-              buy={buy}
-              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-            />
+            {marketPricePercentages && (
+              <MarketPriceIndication
+                marketPricePercentage={marketPricePercentages.min}
+                isRange
+                buy={buy}
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+              />
+            )}
           </p>
         </div>
         <div
-          className={`
-            w-full cursor-text rounded-r-16 rounded-l-4 border border-black bg-black p-16
-            focus-within:border-white/50
-            ${error ? '!border-error/50' : ''}
-            ${showWarning ? '!border-warning' : ''}
-          `}
+          className={cn(
+            'rounded-r-16 rounded-l-4 w-full cursor-text border border-black bg-black p-16 focus-within:border-white/50',
+            showWarning && 'border-warning focus-within:border-warning',
+            error && 'border-error/50 focus-within:border-error'
+          )}
           onClick={() => document.getElementById(inputMaxId)?.focus()}
         >
-          <Tooltip
-            sendEventOnMount={{ buy }}
-            element={`The highest price to ${buy ? 'buy' : 'sell'} ${
-              base.symbol
-            } at.`}
-          >
-            <label htmlFor={inputMaxId} className="mb-5 text-12 text-white/60">
-              {maxLabel}
-            </label>
-          </Tooltip>
+          <header className="text-12 mb-5 flex justify-between text-white/60">
+            <Tooltip
+              sendEventOnMount={{ buy }}
+              element={`The highest price to ${buy ? 'buy' : 'sell'} ${
+                base.symbol
+              } at.`}
+            >
+              <label htmlFor={inputMaxId}>{maxLabel}</label>
+            </Tooltip>
+            {marketPrice !== 0 && (
+              <button
+                className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+                type="button"
+                onClick={() => setMax(formatNumber(marketPrice.toString()))}
+              >
+                Use Market
+              </button>
+            )}
+          </header>
           <input
             id={inputMaxId}
             type="text"
@@ -164,25 +184,27 @@ export const InputRange: FC<InputRangeProps> = ({
             inputMode="decimal"
             value={max}
             placeholder="Enter Price"
-            className={`
-              mb-5 w-full text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
-              ${error ? 'text-error' : ''}
-            `}
+            className={cn(
+              'text-18 font-weight-500 mb-5 w-full text-ellipsis bg-transparent focus:outline-none',
+              error && 'text-error'
+            )}
             onChange={handleChangeMax}
             onFocus={(e) => e.target.select()}
             onBlur={handleBlurMax}
             data-testid="input-max"
           />
           <div className="flex flex-wrap items-center gap-4">
-            <p className="break-all text-12 text-white/60">
+            <p className="text-12 break-all text-white/60">
               {getFiatAsString(max)}
             </p>
-            <MarketPriceIndication
-              marketPricePercentage={marketPricePercentages.max}
-              isRange
-              buy={buy}
-              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-            />
+            {marketPricePercentages && (
+              <MarketPriceIndication
+                marketPricePercentage={marketPricePercentages.max}
+                isRange
+                buy={buy}
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+              />
+            )}
           </div>
         </div>
       </div>

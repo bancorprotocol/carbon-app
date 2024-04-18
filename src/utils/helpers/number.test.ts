@@ -24,6 +24,7 @@ describe('Test helpers', () => {
     expect(sanitizeNumber('0.1000000', 3)).toBe('0.100');
   });
   test('formatNumber', () => {
+    expect(formatNumber('')).toBe('');
     expect(formatNumber('.')).toBe('0');
     expect(formatNumber('.1')).toBe('0.1');
     expect(formatNumber('1.1010')).toBe('1.101');

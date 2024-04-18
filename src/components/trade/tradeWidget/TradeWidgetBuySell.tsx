@@ -183,7 +183,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
     <form
       {...formProps}
       onSubmit={handleTrade}
-      className="flex flex-col rounded-12 bg-background-900 p-20"
+      className="rounded-12 bg-background-900 flex flex-col p-20"
     >
       <h2 className="mb-20">
         {buy
@@ -192,7 +192,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
       </h2>
       {hasEnoughLiquidity || liquidityQuery.isLoading ? (
         <>
-          <header className="flex justify-between text-14">
+          <header className="text-14 flex justify-between">
             <label htmlFor={`${id}-pay`} className="text-white/50">
               You pay
             </label>
@@ -207,7 +207,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           </header>
           <TokenInputField
             id={`${id}-pay`}
-            className="mb-20 mt-5 rounded-12 bg-black p-16"
+            className="rounded-12 mb-20 mt-5 bg-black p-16"
             token={source}
             isBalanceLoading={sourceBalanceQuery.isLoading}
             value={sourceInput}
@@ -220,14 +220,14 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             isError={!!errorMsgSource}
             disabled={!hasEnoughLiquidity}
           />
-          <header className="flex justify-between text-14">
+          <header className="text-14 flex justify-between">
             <label htmlFor={`${id}-receive`} className="text-white/50">
               You receive
             </label>
             {errorMsgTarget && (
               <button
                 type="button"
-                className="cursor-pointer text-12 font-weight-500 text-error"
+                className="font-weight-500 text-error cursor-pointer"
                 onClick={() => {
                   onInputChange(false);
                   setTargetInput(liquidityQuery.data || '0');
@@ -239,7 +239,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
           </header>
           <TokenInputField
             id={`${id}-receive`}
-            className="mt-5 rounded-b-4 rounded-t-12 bg-black p-16"
+            className="rounded-b-4 rounded-t-12 mt-5 bg-black p-16"
             token={target}
             value={targetInput}
             setValue={(value) => setTargetInput(value)}
@@ -250,13 +250,13 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             slippage={slippage}
             disabled={!hasEnoughLiquidity}
           />
-          <footer className="mt-5 flex justify-between rounded-b-12 rounded-t-4 bg-black p-16 text-14 text-white/80">
+          <footer className="rounded-b-12 rounded-t-4 text-14 mt-5 flex justify-between bg-black p-16 text-white/80">
             <p>{getRate()}</p>
             {showRouting && (
               <button
                 type="button"
                 onClick={openTradeRouteModal}
-                className="flex hidden space-x-10 text-left hover:text-white md:flex"
+                className="flex space-x-10 text-left hover:text-white md:flex"
                 data-testid="routing"
               >
                 <IconRouting className="w-12" />
@@ -270,7 +270,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             )}
           </footer>
           {IS_TENDERLY_FORK && (
-            <div className="text-secondary mt-5 text-right">
+            <div className="text-14 mt-5 text-right text-white/60">
               DEBUG: {getLiquidity()}
             </div>
           )}

@@ -21,14 +21,14 @@ export const StrategyBlockRoi: FC<Props> = ({ strategy }) => {
   return (
     <article
       className={cn(
-        'flex flex-col rounded-8 border-2 border-background-800 p-16',
+        'rounded-8 border-background-800 flex flex-col border-2 p-16',
         strategy.status === 'active' ? '' : 'opacity-50'
       )}
     >
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-secondary flex items-center gap-4 !text-12">
+        <h4 className="text-12 flex items-center gap-4 text-white/60">
           ROI
-          <IconTooltip className="h-10 w-10" />
+          <IconTooltip className="size-10" />
         </h4>
       </Tooltip>
       <p className={`text-18 font-weight-500 ${color}`}>{roiFormatted.value}</p>
@@ -44,7 +44,7 @@ const TooltipContent: FC<{}> = () => (
     </span>
     <NewTabLink to={externalLinks.roiLearnMore} className="text-primary">
       <span className="align-middle">Learn how ROI is calculated.</span>
-      <IconLink className="mb-1 inline-block h-14 w-14 align-middle" />
+      <IconLink className="mb-1 inline-block size-14 align-middle" />
     </NewTabLink>
   </>
 );

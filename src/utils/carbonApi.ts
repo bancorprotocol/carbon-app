@@ -1,6 +1,6 @@
 import {
   SimulatorAPIParams,
-  SimulatorResult,
+  SimulatorReturnNew,
 } from 'libs/queries/extApi/simulator';
 import {
   TokenPriceHistoryResult,
@@ -11,6 +11,7 @@ import {
   QueryActivityParams,
   ServerActivity,
 } from 'libs/queries/extApi/activity';
+import { lsService } from 'services/localeStorage';
 
 export const AVAILABLE_CURRENCIES = [
   'USD',
@@ -36,9 +37,10 @@ export type RoiRow = {
 };
 
 const get = async <T>(endpoint: string, params: Object = {}): Promise<T> => {
-  const url = new URL(config.carbonApi + endpoint);
+  const api = lsService.getItem('carbonApi') || config.carbonApi;
+  const url = new URL(api + endpoint);
   for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
+    value !== 'undefined' && url.searchParams.set(key, value);
   }
   const response = await fetch(url);
   const result = await response.json();
@@ -78,12 +80,8 @@ const carbonApi = {
   },
   getSimulator: async (
     params: SimulatorAPIParams
-  ): Promise<SimulatorResult> => {
-    return get<SimulatorResult>('simulate-create-strategy', {
-      ...params,
-      baseBudget: params.sellBudget,
-      quoteBudget: params.buyBudget,
-    });
+  ): Promise<SimulatorReturnNew> => {
+    return get<SimulatorReturnNew>('simulator/create', params);
   },
   getActivity: async (params: QueryActivityParams) => {
     return get<ServerActivity[]>('activity', params);

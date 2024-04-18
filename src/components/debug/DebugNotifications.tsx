@@ -7,7 +7,7 @@ export const DebugNotifications = () => {
   return (
     <div
       className={
-        'flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20'
+        'rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20'
       }
     >
       <h2>Notifications</h2>
@@ -23,7 +23,7 @@ export const DebugNotifications = () => {
           })
         }
       >
-        Save
+        Pending
       </Button>
 
       <Button
@@ -39,7 +39,7 @@ export const DebugNotifications = () => {
           })
         }
       >
-        Save
+        Success
       </Button>
 
       <Button
@@ -55,7 +55,47 @@ export const DebugNotifications = () => {
           })
         }
       >
-        Save
+        Fail
+      </Button>
+
+      <Button
+        onClick={() =>
+          dispatchNotification('activity', {
+            activity: {
+              action: 'create',
+              strategy: {
+                id: '10000',
+                base: {
+                  address: '0xeeeeeeeeeeeeeeee',
+                  decimals: 18,
+                  symbol: 'ETH',
+                },
+                quote: {
+                  address: '0xeeeeeeeeeeeeeeee',
+                  decimals: 18,
+                  symbol: 'USDC',
+                },
+                owner: '0x312213123111312',
+                buy: {
+                  min: '1000',
+                  max: '2000',
+                  budget: '10',
+                },
+                sell: {
+                  min: '1000',
+                  max: '2000',
+                  budget: '10',
+                },
+              },
+              blockNumber: 10000,
+              txHash: '0x1231231323123112313111232123',
+              timestamp: 31223121,
+              date: new Date('14-04-2024'),
+            },
+          })
+        }
+      >
+        Activity Create
       </Button>
 
       <Button onClick={() => dispatchNotification('reject', undefined)}>

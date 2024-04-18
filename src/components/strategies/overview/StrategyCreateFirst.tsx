@@ -5,7 +5,7 @@ export const StrategyCreateFirst = () => {
     <div className="h-full p-20" data-testid="first-strategy">
       <StrategyBlockCreate
         title="Create Your First Strategy"
-        className="h-[600px] text-center text-36"
+        className="text-36 h-[600px] text-center"
       />
     </div>
   );

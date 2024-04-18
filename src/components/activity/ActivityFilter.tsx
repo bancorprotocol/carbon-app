@@ -63,14 +63,14 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
   const updateParams = () => {
     const selector = `input[form="${formId}"]`;
     const inputs = document.querySelectorAll<HTMLInputElement>(selector);
-    const params: Record<string, string[]> = {};
+    const params: Record<string, string[] | string> = {};
     for (const input of inputs) {
       const name = input.name;
-      params[name] ||= [];
       if (input.type === 'checkbox') {
-        if (input.checked) params[name].push(input.value);
+        params[name] ||= [];
+        if (input.checked) (params[name] as string[]).push(input.value);
       } else {
-        params[name].push(input.value);
+        params[name] = input.value;
       }
     }
     setSearchParams(params);
@@ -91,7 +91,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           form={formId}
           name="ids"
           value={ids}
-          icon={<IconSearch className="w-14 text-primary" />}
+          icon={<IconSearch className="text-primary w-14" />}
           label={
             ids.length
               ? `${ids.length} Strategies Selected`
@@ -116,7 +116,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
           form={formId}
           name="pairs"
           value={pairs}
-          icon={<IconPair className="w-14 text-primary" />}
+          icon={<IconPair className="text-primary w-14" />}
           label={
             pairs.length ? `${pairs.length} Pairs Selected` : 'Filter Pairs'
           }
@@ -133,7 +133,7 @@ export const ActivityFilter: FC<ActivityFilterProps> = (props) => {
         form={formId}
         name="actions"
         value={actions}
-        icon={<IconSearch className="w-14 text-primary" />}
+        icon={<IconSearch className="text-primary w-14" />}
         label={
           actions.length
             ? `${actions.length} Actions Selected`

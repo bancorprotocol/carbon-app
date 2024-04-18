@@ -51,7 +51,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       size="md"
       data-testid="approval-modal"
     >
-      <h3 className="text-secondary my-10">Approve Tokens</h3>
+      <h3 className="text-14 my-10 text-white/60">Approve Tokens</h3>
       <ul className="space-y-20">
         {approvalQuery.map(({ data, isLoading, error }, i) => (
           <li key={i}>
@@ -67,7 +67,7 @@ export const ModalConfirm: ModalFC<ModalCreateConfirmData> = ({
       </ul>
       <Button
         size="lg"
-        variant={'white'}
+        variant="white"
         fullWidth
         disabled={approvalRequired}
         onClick={async () => {

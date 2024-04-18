@@ -15,6 +15,7 @@ import {
 import { tokenAmount } from 'utils/helpers';
 import { usePagination } from 'hooks/useList';
 import { Button } from 'components/common/button';
+import { useActivity } from './ActivityProvider';
 
 export interface ActivityListProps {
   activities: Activity[];
@@ -37,7 +38,7 @@ export const ActivityList: FC<ActivityListProps> = (props) => {
       </ul>
       {limit < size && (
         <>
-          <p className="mb-16 text-center text-12 text-white/60">
+          <p className="text-12 mb-16 text-center text-white/60">
             {limit} / {size}
           </p>
           <Button
@@ -58,30 +59,41 @@ interface ActivityItemProps {
   hideIds: boolean;
 }
 const ActivityItem: FC<ActivityItemProps> = ({ activity, hideIds }) => {
+  const { searchParams, setSearchParams } = useActivity();
   const { strategy, changes } = activity;
   const { base, quote } = strategy;
+  const setAction = () => {
+    const actions = searchParams.actions.includes(activity.action)
+      ? []
+      : [activity.action];
+    setSearchParams({ actions });
+  };
   return (
-    <li className="flex flex-col gap-16 rounded border-2 border-background-800">
+    <li className="border-background-800 flex flex-col gap-16 rounded border-2">
       <header className="flex px-16 pt-16">
         {!hideIds && <ActivityId activity={activity} size={12} />}
-        <p className="flex flex-1 items-center justify-end gap-8 text-12 text-white/60">
+        <p className="text-12 flex flex-1 items-center justify-end gap-8 text-white/60">
           {activityDateFormatter.format(activity.date)}
           <TransactionLink txHash={activity.txHash} className="h-16" />
         </p>
       </header>
       <section className="px-16">
-        <h3 className="mb-8 flex items-center gap-8">
-          <ActivityIcon activity={activity} size={24} />
-          {activityActionName[activity.action]}
-        </h3>
-        <p className="text-12 text-white/60">{activityDescription(activity)}</p>
+        <button onClick={setAction} className="text-start">
+          <h3 className="mb-8 flex items-center gap-8">
+            <ActivityIcon activity={activity} size={24} />
+            {activityActionName[activity.action]}
+          </h3>
+          <p className="text-12 text-white/60">
+            {activityDescription(activity)}
+          </p>
+        </button>
       </section>
       <hr className="border-background-800" />
       <table className="w-full table-fixed">
         <thead>
           <tr className="text-12 text-white/60">
-            <th className="px-16 font-weight-400">Buy Budget</th>
-            <th className="px-16 font-weight-400">Sell Budget</th>
+            <th className="font-weight-400 px-16">Buy Budget</th>
+            <th className="font-weight-400 px-16">Sell Budget</th>
           </tr>
         </thead>
         <tbody>

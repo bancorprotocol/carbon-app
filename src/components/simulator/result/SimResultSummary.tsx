@@ -27,7 +27,7 @@ export const SimResultSummary = ({
     <header className="my-8 grid gap-8 xl:grid-cols-2">
       <section
         className={cn(
-          'flex min-h-[72px] items-center justify-between gap-8 rounded-10 bg-black py-10 px-16',
+          'rounded-10 flex min-h-[72px] items-center justify-between gap-8 bg-black px-16 py-10',
           {
             'animate-pulse': isLoading,
           }
@@ -51,7 +51,7 @@ export const SimResultSummary = ({
       </section>
       <section
         className={cn(
-          'grid min-h-[72px] grid-cols-4 items-center gap-8 rounded-10 bg-black py-10 px-16',
+          'rounded-10 grid min-h-[72px] grid-cols-4 items-center gap-8 bg-black px-16 py-10',
           {
             'animate-pulse': isLoading,
           }
@@ -69,8 +69,7 @@ export const SimResultSummary = ({
               search={{
                 base: state.baseToken.address,
                 quote: state.quoteToken.address,
-                strategyType:
-                  strategyType === 'recurring' ? 'recurring' : undefined,
+                strategyType: 'recurring',
                 strategySettings:
                   strategyType === 'recurring' ? 'range' : 'overlapping',
                 buyMin: state.buy.min,

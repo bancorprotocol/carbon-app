@@ -30,6 +30,10 @@
     "prettier/prettier": [
       "warn",
       { "endOfLine": "auto" }
+    ],
+    "react/jsx-curly-brace-presence": [
+      "warn",
+      { "props": "never", "children":"never" }
     ]
   },
   "overrides": [

@@ -18,6 +18,7 @@ export const oldExplorerLayout = new Route({
     redirect({
       to: `/explore/${allParams}`,
       throw: true,
+      replace: true,
     } as any);
   },
 });
@@ -35,6 +36,7 @@ export const explorerRedirect = new Route({
       to: '/explore/$type',
       params: { type: 'token-pair' },
       throw: true,
+      replace: true,
     });
   },
 });

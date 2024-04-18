@@ -21,14 +21,14 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
   return (
     <article
       className={cn(
-        'flex flex-col rounded-8 border-2 border-background-800 p-16',
+        'rounded-8 border-background-800 flex flex-col border-2 p-16',
         strategy.status === 'active' ? '' : 'opacity-50'
       )}
     >
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-secondary flex items-center gap-4 !text-12">
+        <h4 className="text-12 flex items-center gap-4 text-white/60">
           Total Budget
-          <IconTooltip className="h-10 w-10" />
+          <IconTooltip className="size-10" />
         </h4>
       </Tooltip>
       <p

@@ -23,11 +23,11 @@ export const SimResultSummaryGains: FC<Props> = ({
   );
 
   return (
-    <article className="col-span-2 flex flex-col rounded-8">
+    <article className="rounded-8 col-span-2 flex flex-col">
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-secondary flex items-center gap-4 !text-12">
+        <h4 className="text-12 flex items-center gap-4 text-white/60">
           Estimated Gains
-          <IconTooltip className="h-10 w-10" />
+          <IconTooltip className="size-10" />
         </h4>
       </Tooltip>
       <AnimatedNumber

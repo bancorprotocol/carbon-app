@@ -154,17 +154,17 @@ const ConnectedMenu: FC = () => {
   return (
     <div
       role="menu"
-      className="w-[180px] space-y-10 font-weight-400 text-white"
+      className="font-weight-400 w-[180px] space-y-10 text-white"
     >
       {isSupportedNetwork ? (
         <>
-          <div className="flex w-full items-center space-x-10 p-8 font-weight-400">
+          <div className="font-weight-400 flex w-full items-center space-x-10 p-8">
             <IconETHLogo className="w-16" />
             <span>Ethereum Network</span>
           </div>
           <button
             role="menuitem"
-            className="flex w-full items-center space-x-10 rounded-6 p-8 hover:bg-black"
+            className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-black"
             onClick={copyAddress}
           >
             <IconCopy className="w-16" />
@@ -174,7 +174,7 @@ const ConnectedMenu: FC = () => {
       ) : (
         <button
           role="menuitem"
-          className="flex w-full rounded-6 p-8 text-error/80 hover:bg-black hover:text-error"
+          className="rounded-6 text-error/80 hover:text-error flex w-full p-8 hover:bg-black"
           onClick={switchNetwork}
         >
           Switch Network
@@ -182,7 +182,7 @@ const ConnectedMenu: FC = () => {
       )}
       <button
         role="menuitem"
-        className="flex w-full items-center space-x-10 rounded-6 p-8 hover:bg-black"
+        className="rounded-6 flex w-full items-center space-x-10 p-8 hover:bg-black"
         onClick={onDisconnect}
       >
         <IconDisconnect className="w-16" />

@@ -6,27 +6,28 @@ import { cn } from 'utils/helpers';
 import { SimulatorType } from 'libs/routing/routes/sim';
 import { Link } from 'libs/routing';
 
-interface Props {
-  strategyType: SimulatorType;
-}
-
 interface ItemProps {
   label: SimulatorType;
   svg: JSX.Element;
   tooltipText: string;
 }
 
-export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
+interface Props {
+  baseToken?: string;
+  quoteToken?: string;
+}
+
+export const SimInputStrategyType: FC<Props> = ({ baseToken, quoteToken }) => {
   const items: ItemProps[] = [
     {
       label: 'recurring',
-      svg: <IconTwoRanges className="h-16 w-37" />,
+      svg: <IconTwoRanges className="w-37 h-16" />,
       tooltipText:
         'Create buy and sell orders (limit or range) that are linked together. Newly acquired funds automatically rotate between them, creating an endless trading cycle without need for manual intervention.',
     },
     {
       label: 'overlapping',
-      svg: <IconOverlappingStrategy className="h-16 w-37" />,
+      svg: <IconOverlappingStrategy className="w-37 h-16" />,
       tooltipText:
         'A concentrated position where you buy and sell in a custom price range, used to create a bid-ask spread that moves as the market does.',
     },
@@ -38,41 +39,46 @@ export const SimInputStrategyType: FC<Props> = ({ strategyType }) => {
       key="simulatorTypeSelection"
     >
       <header className="mb-16 flex items-center justify-between">
-        <h2 className="m-0 text-18 font-weight-500">Strategy Type</h2>
+        <h2 className="text-18 font-weight-500 m-0">Strategy Type</h2>
       </header>
-      <article role="tablist" className={`grid grid-cols-2 gap-8`}>
+      <article role="tablist" className="grid grid-cols-2 gap-8">
         {items.map(({ label, svg, tooltipText }) => (
           <Link
             role="tab"
             id={'tab-' + label}
             aria-controls={'panel-' + label}
-            aria-selected={strategyType === label}
             key={label}
-            to="/simulate/$simulationType"
+            to={`/simulate/${label}`}
+            search={{ baseToken, quoteToken }}
             className={cn(
-              'flex h-full w-full flex-row items-center justify-center gap-8 rounded-10 bg-black px-8 py-16 text-14 font-weight-500 outline-white/60',
+              'rounded-10 text-14 font-weight-500 flex size-full flex-row items-center justify-center gap-8 bg-black px-8 py-16 outline-white/60',
               'md:px-12',
-              'focus-visible:outline focus-visible:outline-1',
-              strategyType === label ? 'outline outline-1 outline-white' : ''
+              'focus-visible:outline focus-visible:outline-1'
             )}
+            activeProps={{ className: 'outline outline-1 outline-white' }}
             replace={true}
             resetScroll={false}
             params={{ simulationType: label }}
             data-testid={`select-type-${label}`}
           >
-            {svg}
-            <span
-              className={`capitalize ${
-                strategyType === label ? 'text-white' : 'text-white/40'
-              }`}
-            >
-              {label}
-            </span>
-
-            <Tooltip
-              element={<div>{tooltipText}</div>}
-              iconClassName="!h-12 !w-12 text-white/60"
-            />
+            {({ isActive }) => {
+              return (
+                <>
+                  {svg}
+                  <span
+                    className={`capitalize ${
+                      isActive ? 'text-white' : 'text-white/40'
+                    }`}
+                  >
+                    {label}
+                  </span>
+                  <Tooltip
+                    element={<div>{tooltipText}</div>}
+                    iconClassName="size-12 text-white/60"
+                  />
+                </>
+              );
+            }}
           </Link>
         ))}
       </article>

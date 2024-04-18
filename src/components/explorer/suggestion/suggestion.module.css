@@ -1,4 +1,0 @@
-/* @todo(#774) use Tailwind aria-selected operator once Tailwind is up-to-date */
-.option[aria-selected="true"] {
-  @apply bg-white/10;
-}

@@ -13,7 +13,7 @@ import { DebugE2E } from 'components/debug/DebugE2E';
 
 export const DebugPage = () => {
   return (
-    <Page title={'Debug'}>
+    <Page title="Debug">
       <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
         <DebugResetDefault />
         <DebugWeb3 />

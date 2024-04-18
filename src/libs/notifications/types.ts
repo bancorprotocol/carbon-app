@@ -1,22 +1,34 @@
 import { NotificationSchema } from 'libs/notifications/data';
+import { Activity } from 'libs/queries/extApi/activity';
 
 export type NotificationStatus = 'pending' | 'failed' | 'success';
 
-export interface Notification {
+interface BaseNotification {
   id: string;
+  timestamp: number;
+  testid: string;
+  showAlert?: boolean;
+  nonPersistent?: boolean;
+}
+
+export interface NotificationTx extends BaseNotification {
+  type: 'tx';
   status: NotificationStatus;
   title: string;
   description: string;
-  timestamp: number;
   txHash?: string;
   successTitle?: string;
   successDesc?: string;
   failedTitle?: string;
   failedDesc?: string;
-  showAlert?: boolean;
-  nonPersistent?: boolean;
-  testid: string;
 }
+
+export interface NotificationActivity extends BaseNotification {
+  type: 'activity';
+  activity: Activity;
+}
+
+export type Notification = NotificationTx | NotificationActivity;
 
 export type DispatchNotification = <T extends keyof NotificationSchema>(
   key: T,
@@ -34,10 +46,10 @@ export interface NotificationsContext {
   hasPendingTx: boolean;
 }
 
-export type NotificationNew = Omit<Notification, 'id' | 'timestamp'>;
-
 export type NotificationsMap = {
   [key in keyof NotificationSchema]: (
     data: NotificationSchema[key]
-  ) => NotificationNew;
+  ) =>
+    | Omit<NotificationTx, 'id' | 'timestamp'>
+    | Omit<NotificationActivity, 'id' | 'timestamp'>;
 };

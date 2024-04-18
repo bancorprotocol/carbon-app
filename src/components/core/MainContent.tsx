@@ -14,6 +14,7 @@ import {
   useRouterState,
   useScrollRestoration,
 } from 'libs/routing';
+import { useActivityNotifications } from 'components/activity/useActivityNotifiction';
 
 const paths: Record<string, Pathnames> = {
   debug: '/debug',
@@ -28,6 +29,7 @@ export const MainContent: FC = () => {
   const tokens = useTokens();
   const sdk = useCarbonInit();
   useScrollRestoration();
+  useActivityNotifications();
 
   useEffect(() => {
     if (prevPathnameRef.current !== location.pathname) {

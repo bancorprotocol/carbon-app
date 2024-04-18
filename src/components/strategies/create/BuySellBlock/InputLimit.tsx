@@ -2,22 +2,24 @@ import { ChangeEvent, FC, FocusEvent, useEffect, useId } from 'react';
 import { carbonEvents } from 'services/events';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { Token } from 'libs/tokens';
-import { formatNumber, sanitizeNumber } from 'utils/helpers';
+import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPriceIndication } from 'components/strategies/marketPriceIndication';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 type InputLimitProps = {
   id?: string;
   price: string;
   setPrice: (value: string) => void;
-  token: Token;
+  base: Token;
+  quote: Token;
   error?: string;
   warnings?: string[];
   setPriceError?: (error: string) => void;
   buy?: boolean;
-  marketPricePercentage: MarketPricePercentage;
+  marketPricePercentage?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed: boolean;
 };
@@ -26,7 +28,8 @@ export const InputLimit: FC<InputLimitProps> = ({
   id,
   price,
   setPrice,
-  token,
+  base,
+  quote,
   error,
   warnings,
   setPriceError,
@@ -36,6 +39,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   isOrdersReversed,
 }) => {
   const inputId = useId();
+  const marketPrice = useMarketPrice({ base, quote });
 
   const errorAboveZero = 'Price must be greater than 0';
   const errorReversedOrders =
@@ -47,6 +51,7 @@ export const InputLimit: FC<InputLimitProps> = ({
   };
 
   useEffect(() => {
+    if (!price) return;
     let errorMessage = '';
     if (isOrdersReversed) errorMessage = errorReversedOrders;
     if (+price <= 0) errorMessage = errorAboveZero;
@@ -64,46 +69,58 @@ export const InputLimit: FC<InputLimitProps> = ({
     if (formatted !== e.target.value) setPrice(formatted);
   };
 
-  const { getFiatAsString } = useFiatCurrency(token);
+  const { getFiatAsString } = useFiatCurrency(quote);
   const fiatAsString = getFiatAsString(price);
 
   return (
     <>
       <div
-        className={`
-          flex cursor-text flex-col rounded-16 border border-black bg-black p-16
-          focus-within:border-white/50
-          ${error ? '!border-error/50' : ''}
-          ${showWarning ? '!border-warning' : ''}
-        `}
+        className={cn(
+          'rounded-16 flex cursor-text flex-col gap-5 border border-black bg-black p-16 focus-within:border-white/50',
+          showWarning && 'border-warning focus-within:border-warning',
+          error && 'border-error/50 focus-within:border-error/50'
+        )}
         onClick={() => document.getElementById(id ?? inputId)?.focus()}
       >
-        <input
-          id={id ?? inputId}
-          type="text"
-          pattern={decimalNumberValidationRegex}
-          inputMode="decimal"
-          value={price}
-          onChange={handleChange}
-          onFocus={(e) => e.target.select()}
-          onBlur={handleBlur}
-          aria-label="Enter Price"
-          placeholder="Enter Price"
-          className={`
-            mb-5 w-full text-ellipsis bg-transparent text-start text-18 font-weight-500 focus:outline-none
-            ${error ? 'text-error' : ''}
-          `}
-          data-testid="input-price"
-        />
+        <div className="flex">
+          <input
+            id={id ?? inputId}
+            type="text"
+            pattern={decimalNumberValidationRegex}
+            inputMode="decimal"
+            value={price}
+            onChange={handleChange}
+            onFocus={(e) => e.target.select()}
+            onBlur={handleBlur}
+            aria-label="Enter Price"
+            placeholder="Enter Price"
+            className={cn(
+              'text-18 font-weight-500 flex-1 text-ellipsis bg-transparent text-start focus:outline-none',
+              error && 'text-error'
+            )}
+            data-testid="input-price"
+          />
+          {marketPrice !== 0 && (
+            <button
+              className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
+              type="button"
+              onClick={() => setPrice(formatNumber(marketPrice.toString()))}
+            >
+              Use Market
+            </button>
+          )}
+        </div>
         <p className="flex flex-wrap items-center gap-8">
-          <span className="break-all text-12 text-white/60">
+          <span className="text-12 break-all text-white/60">
             {fiatAsString}
           </span>
-          <MarketPriceIndication
-            marketPricePercentage={marketPricePercentage.price}
-            buy={buy}
-            ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-          />
+          {marketPricePercentage && (
+            <MarketPriceIndication
+              marketPricePercentage={marketPricePercentage.price}
+              buy={buy}
+              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+            />
+          )}
         </p>
       </div>
       {error ? (

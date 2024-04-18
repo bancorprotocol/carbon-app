@@ -46,7 +46,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const inputTitle = (
     <>
-      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+      <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
         1
       </span>
       <Tooltip
@@ -103,7 +103,7 @@ export const BuySellBlock: FC<Props> = ({
     <m.section
       variants={items}
       aria-labelledby={titleId}
-      className={`flex flex-col gap-20 rounded-10 border-l-2 bg-background-900 p-20 ${
+      className={`rounded-10 bg-background-900 flex flex-col gap-20 border-l-2 p-20 ${
         buy
           ? 'border-buy/50 focus-within:border-buy'
           : 'border-sell/50 focus-within:border-sell'
@@ -130,11 +130,11 @@ export const BuySellBlock: FC<Props> = ({
       )}
 
       <BuySellHeader {...headerProps}>
-        <h2 className="flex items-center gap-8 text-18" id={titleId}>
+        <h2 className="text-18 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
-          <LogoImager alt="Token" src={base.logoURI} className="h-18 w-18" />
+          <LogoImager alt="Token" src={base.logoURI} className="size-18" />
           <span>{base.symbol}</span>
         </h2>
       </BuySellHeader>

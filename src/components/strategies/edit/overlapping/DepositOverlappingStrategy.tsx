@@ -143,9 +143,9 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header>
-          <h2 className="flex-1 text-18 font-weight-500">Price Range</h2>
+          <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -158,18 +158,37 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           disabled
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <h2 className="flex-1 text-18 font-weight-500">Deposit Budget</h2>
+          <h2 className="text-18 font-weight-500 flex-1">Deposit Budget</h2>
           <Tooltip
             element='Indicate the amount you wish to deposit from the available "allocated budget"'
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-14 text-white/60"
           />
         </header>
         <BudgetInput
+          token={base}
+          title="Sell Budget"
+          titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
+          query={tokenBaseBalanceQuery}
+          value={order1.budget}
+          error={order1.budgetError}
+          onChange={onSellBudgetChange}
+          disabled={belowMarket || order1.max === '0'}
+        >
+          <DepositAllocatedBudget
+            token={base}
+            currentBudget={strategy.order1.balance}
+          />
+          <MarketWarning {...marketWarningProps} />
+        </BudgetInput>
+        <BudgetInput
           token={quote}
+          title="Buy Budget"
+          titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           query={tokenQuoteBalanceQuery}
-          order={order0}
+          value={order0.budget}
+          error={order0.budgetError}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
         >
@@ -177,19 +196,6 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
             token={quote}
             currentBudget={strategy.order0.balance}
             buy
-          />
-          <MarketWarning {...marketWarningProps} />
-        </BudgetInput>
-        <BudgetInput
-          token={base}
-          query={tokenBaseBalanceQuery}
-          order={order1}
-          onChange={onSellBudgetChange}
-          disabled={belowMarket || order1.max === '0'}
-        >
-          <DepositAllocatedBudget
-            token={base}
-            currentBudget={strategy.order1.balance}
           />
           <MarketWarning {...marketWarningProps} />
         </BudgetInput>
@@ -202,17 +208,17 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           />
         )}
         <footer className="flex items-center gap-8">
-          <IconAction className="h-16 w-16" />
+          <IconAction className="size-16" />
           <p className="text-12 text-white/60">
             Price range and liquidity spread remain unchanged.&nbsp;
             <a
               href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-4 font-weight-500 text-primary"
+              className="font-weight-500 text-primary inline-flex items-center gap-4"
             >
               <span>Learn More</span>
-              <IconLink className="inline h-12 w-12" />
+              <IconLink className="inline size-12" />
             </a>
           </p>
         </footer>

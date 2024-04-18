@@ -11,57 +11,45 @@ import {
 } from 'components/simulator/result/SimulatorProvider';
 
 export const SimResultChartControls = () => {
-  const { status, start, pauseToggle, end, playbackSpeed, setPlaybackSpeed } =
-    useSimulator();
+  const {
+    status,
+    start,
+    end,
+    playbackSpeed,
+    setPlaybackSpeed,
+    data,
+    animationData,
+    onBrush,
+    onBrushEnd,
+    pause,
+    unpause,
+  } = useSimulator();
   const [isOpen, setIsOpen] = useState(false);
 
-  const [isRunning, setIsRunning] = useState(status === 'running');
-  const [currentPlaybackSpeed, setCurrentPlaybackSpeed] =
-    useState(playbackSpeed);
+  const isRunning = status === 'running';
   const isStopped = status === 'ended';
+  const isPaused = status === 'paused';
 
   const setSpeed = (speed: PlaybackSpeed) => {
     setPlaybackSpeed(speed);
-    setCurrentPlaybackSpeed(speed);
+    setIsOpen(false);
   };
 
   const replay = () => {
-    if (isRunning) {
-      pauseToggle();
-    }
-    setIsRunning(true);
+    end();
     start();
   };
 
   const playPause = () => {
     if (isStopped) {
-      replay();
-      return;
+      start();
+    } else {
+      isPaused ? unpause() : pause();
     }
-    setIsRunning(!isRunning);
-    pauseToggle();
   };
 
-  const buttons = [
-    {
-      label: 'play&pause',
-      icon: isRunning && !isStopped ? <PauseIcon /> : <PlayIcon />,
-      onClick: playPause,
-    },
-    {
-      label: 'end',
-      icon: <SkipIcon />,
-      onClick: end,
-    },
-    {
-      label: 'replay',
-      icon: <ReplayIcon />,
-      onClick: replay,
-    },
-  ];
-
   return (
-    <article className="flex flex-row items-center justify-between gap-12 rounded-[24px] bg-white/10 px-20 py-8">
+    <article className="flex h-36 flex-row items-center justify-between gap-12 rounded-[24px] bg-white/10 px-20">
       <DropdownMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -71,7 +59,7 @@ export const SimResultChartControls = () => {
         button={(attr) => (
           <button
             {...attr}
-            className="h-20 min-w-[20px] place-items-center rounded-[6px] px-2 text-14 hover:bg-black"
+            className="text-14 h-20 min-w-[20px] place-items-center rounded-[6px] px-2 hover:bg-black"
             onClick={(e) => {
               setIsOpen(true);
               attr.onClick(e);
@@ -79,7 +67,7 @@ export const SimResultChartControls = () => {
             aria-label="Set Playback Speed"
             data-testid="set-playback-speed"
           >
-            {currentPlaybackSpeed}
+            {playbackSpeed}
           </button>
         )}
       >
@@ -89,11 +77,8 @@ export const SimResultChartControls = () => {
               key={`${index}_${speed}`}
               role="menuitem"
               aria-label={`Playback Speed: ${speed}`}
-              className="flex w-full rounded-6 py-8 px-12 text-left text-14 text-white/80 hover:bg-black"
-              onClick={() => {
-                setSpeed(speed);
-                setIsOpen(false);
-              }}
+              className="rounded-6 text-14 flex w-full px-12 py-8 text-left text-white/80 hover:bg-black"
+              onClick={() => setSpeed(speed)}
               data-testid={`set-speed-${speed}`}
             >
               {speed}
@@ -101,19 +86,43 @@ export const SimResultChartControls = () => {
           );
         })}
       </DropdownMenu>
-      {buttons.map(({ label, onClick, icon }) => {
-        return (
-          <button
-            key={label}
-            aria-label={label}
-            className="h-20 w-20 rounded-[6px] p-4 hover:bg-black"
-            onClick={onClick}
-            data-testid={`animation-controls-${label}`}
-          >
-            {icon}
-          </button>
-        );
-      })}
+      <button
+        aria-label="play&pause"
+        className="rounded-[6px] p-4 hover:bg-black"
+        onClick={playPause}
+        data-testid="animation-controls-play&pause"
+      >
+        {!isRunning || isStopped ? (
+          <PlayIcon className="size-16" />
+        ) : (
+          <PauseIcon className="size-16" />
+        )}
+      </button>
+      <input
+        type="range"
+        min="1"
+        max={data ? data.length : 0}
+        value={animationData.length}
+        onChange={(e) => onBrush(Number(e.target.value))}
+        onMouseUp={onBrushEnd}
+        className="hidden h-8 lg:block lg:w-[100px] xl:w-[300px]"
+      />
+      <button
+        aria-label="end"
+        className="rounded-[6px] p-4 hover:bg-black"
+        onClick={end}
+        data-testid="animation-controls-end"
+      >
+        <SkipIcon className="size-16" />
+      </button>
+      <button
+        aria-label="replay"
+        className="rounded-[6px] p-4 hover:bg-black"
+        onClick={replay}
+        data-testid="animation-controls-replay"
+      >
+        <ReplayIcon className="size-16" />
+      </button>
     </article>
   );
 };

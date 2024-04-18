@@ -12,7 +12,7 @@ export const useNotificationsStore = (): NotificationsStore => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const hasPendingTx = useMemo(
-    () => notifications.some((n) => n.status === 'pending'),
+    () => notifications.some((n) => n.type === 'tx' && n.status === 'pending'),
     [notifications]
   );
 

@@ -49,7 +49,7 @@ export const XAxis = ({ xScale, dms }: Props) => {
         y2={dms.boundedHeight}
         x1={-bandwidthOffset}
         x2={dms.width}
-        className={'stroke-background-800'}
+        className="stroke-background-800"
       />
     </>
   );

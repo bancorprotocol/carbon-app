@@ -1,3 +1,4 @@
+import { externalLinks, NewTabLink } from 'libs/routing';
 import { FC, useEffect, useId } from 'react';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -23,7 +24,6 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 import { geoMean } from 'utils/fullOutcome';
 import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
-import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   strategy: Strategy;
@@ -34,8 +34,6 @@ interface Props {
 export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
-  const buyId = useId();
-  const sellId = useId();
 
   const tokenBaseBalanceQuery = useGetTokenBalance(base);
   const tokenQuoteBalanceQuery = useGetTokenBalance(quote);
@@ -146,9 +144,9 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header>
-          <h2 className="flex-1 text-18 font-weight-500">Price Range</h2>
+          <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -161,19 +159,42 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
           disabled
         />
       </article>
-      <article className="flex flex-col gap-20 rounded-10 bg-background-900 p-20">
+      <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <h2 className="flex-1 text-18 font-weight-500">Withdraw Budget</h2>
+          <h2 className="text-18 font-weight-500 flex-1">Withdraw Budget</h2>
           <Tooltip
             element='Indicate the amount you wish to withdraw to the available "wallet budget"'
-            iconClassName="h-14 w-14 text-white/60"
+            iconClassName="size-14 text-white/60"
           />
         </header>
+
+        <BudgetInput
+          id={sellBudgetId}
+          title="Sell Budget"
+          titleTooltip={`The amount of ${base.symbol} tokens you would like to sell.`}
+          token={base}
+          query={tokenBaseBalanceQuery}
+          value={order1.budget}
+          error={order1.budgetError}
+          onChange={onSellBudgetChange}
+          disabled={belowMarket || order1.max === '0'}
+          withoutWallet
+        >
+          <WithdrawAllocatedBudget
+            token={base}
+            order={order1}
+            currentBudget={strategy.order1.balance}
+            setBudget={onSellBudgetChange}
+          />
+        </BudgetInput>
         <BudgetInput
           id={buyBudgetId}
+          title="Buy Budget"
+          titleTooltip={`The amount of ${quote.symbol} tokens you would like to use in order to buy ${base.symbol}.`}
           token={quote}
           query={tokenQuoteBalanceQuery}
-          order={order0}
+          value={order0.budget}
+          error={order0.budgetError}
           onChange={onBuyBudgetChange}
           disabled={aboveMarket || order0.min === '0'}
           withoutWallet
@@ -186,22 +207,6 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             buy
           />
         </BudgetInput>
-        <BudgetInput
-          id={sellBudgetId}
-          token={base}
-          query={tokenBaseBalanceQuery}
-          order={order1}
-          onChange={onSellBudgetChange}
-          disabled={belowMarket || order1.max === '0'}
-          withoutWallet
-        >
-          <WithdrawAllocatedBudget
-            token={base}
-            order={order1}
-            currentBudget={strategy.order1.balance}
-            setBudget={onSellBudgetChange}
-          />
-        </BudgetInput>
         {budgetTooSmall && (
           <OverlappingSmallBudget
             base={base}
@@ -210,31 +215,21 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
             htmlFor={`${buyBudgetId} ${sellBudgetId}`}
           />
         )}
-        <footer className="flex items-center gap-8">
-          {!withdrawAll && (
-            <>
-              <IconAction className="h-16 w-16" />
-              <p className="text-12 text-white/60">
-                Price range and liquidity spread remain unchanged.&nbsp;
-                <a
-                  href="https://faq.carbondefi.xyz/what-is-an-overlapping-strategy#overlapping-budget-dynamics"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-4 font-weight-500 text-primary"
-                >
-                  <span>Learn More</span>
-                  <IconLink className="inline h-12 w-12" />
-                </a>
-              </p>
-            </>
-          )}
-          {withdrawAll && (
-            <WarningMessageWithIcon htmlFor={[buyId, sellId].join(',')}>
-              Please note that your strategy will be inactive as it will not
-              have any budget.
-            </WarningMessageWithIcon>
-          )}
-        </footer>
+        {!withdrawAll && (
+          <footer className="flex items-center gap-8">
+            <IconAction className="size-16" />
+            <p className="text-12 text-white/60">
+              Price range and liquidity spread remain unchanged.&nbsp;
+              <NewTabLink
+                to={externalLinks.whatIsOverlapping}
+                className="font-weight-500 text-primary inline-flex items-center gap-4"
+              >
+                <span>Learn More</span>
+                <IconLink className="inline size-12" />
+              </NewTabLink>
+            </p>
+          </footer>
+        )}
       </article>
     </>
   );

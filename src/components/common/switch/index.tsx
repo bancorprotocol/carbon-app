@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { BaseHTMLAttributes, DetailedHTMLProps, FC } from 'react';
 import { VariantProps } from 'class-variance-authority';
 import { switchStyles } from 'components/common/switch/switchStyles';
+import { cn } from 'utils/helpers';
 
 type SwitchHTMLProps = DetailedHTMLProps<
   BaseHTMLAttributes<HTMLDivElement>,
@@ -24,7 +25,7 @@ export const Switch: FC<SwitchProps> = ({
 }) => {
   return (
     <div
-      className={switchStyles({ variant, size, isOn, class: className })}
+      className={cn(switchStyles({ variant, size, isOn, class: className }))}
       onClick={() => setIsOn(!isOn)}
       {...props}
     >

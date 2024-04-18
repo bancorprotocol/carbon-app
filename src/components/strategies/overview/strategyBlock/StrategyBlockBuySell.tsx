@@ -41,7 +41,7 @@ export const StrategyBlockBuySell: FC<{
           {hasFiatValue && (
             <Tooltip
               element={buyTooltip}
-              iconClassName="h-10 w-10 text-white/60"
+              iconClassName="size-10 text-white/60"
             />
           )}
           {!hasFiatValue && (
@@ -55,7 +55,7 @@ export const StrategyBlockBuySell: FC<{
               }
             >
               <span>
-                <WarningIcon className="h-10 w-10 text-warning" />
+                <WarningIcon className="text-warning size-10" />
               </span>
             </Tooltip>
           )}
@@ -66,7 +66,7 @@ export const StrategyBlockBuySell: FC<{
           {hasFiatValue && (
             <Tooltip
               element={sellTooltip}
-              iconClassName="h-10 w-10 text-white/60"
+              iconClassName="size-10 text-white/60"
             />
           )}
           {!hasFiatValue && (
@@ -80,7 +80,7 @@ export const StrategyBlockBuySell: FC<{
               }
             >
               <span>
-                <WarningIcon className="h-10 w-10 text-warning" />
+                <WarningIcon className="text-warning size-10" />
               </span>
             </Tooltip>
           )}
@@ -90,7 +90,7 @@ export const StrategyBlockBuySell: FC<{
         element={
           <span className="inline-flex items-center gap-4">
             <LogoImager
-              className="h-16 w-16"
+              className="size-16"
               src={otherToken.logoURI}
               alt="token"
             />

@@ -5,7 +5,7 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
   return (
     <thead className={cn('border-b-2', 'border-background-800')}>
       {table.getHeaderGroups().map((headerGroup) => (
-        <tr key={headerGroup.id} className={cn('h-64')}>
+        <tr key={headerGroup.id} className="h-64">
           {headerGroup.headers.map((header) => (
             <th
               key={header.id}
@@ -23,6 +23,7 @@ export const THead = <D extends object>({ table }: { table: Table<D> }) => {
                     className: cn(
                       'text-16',
                       'font-weight-500',
+                      'font-mono',
                       'text-white/60',
                       {
                         'cursor-pointer': header.column.getCanSort(),
