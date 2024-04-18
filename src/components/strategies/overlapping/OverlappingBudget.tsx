@@ -64,7 +64,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
   };
 
   return (
-    <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
+    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
       <details open={!!fixAction} onToggle={() => resetBudgets(anchor)}>
         <summary className="flex cursor-pointer items-center gap-8">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
@@ -81,7 +81,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
           {!fixAction && (
             <div
               role="radiogroup"
-              className="flex gap-2 self-start rounded-full border-2 border-background-700 p-6"
+              className="border-background-700 flex gap-2 self-start rounded-full border-2 p-4"
             >
               <input
                 className={cn('absolute opacity-0', style.budgetMode)}
@@ -93,7 +93,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
               />
               <label
                 htmlFor="select-deposit"
-                className="flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-8 text-14"
+                className="text-14 flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-4"
               >
                 <IconDeposit className="h-14 w-14" />
                 Deposit
@@ -108,7 +108,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
               />
               <label
                 htmlFor="select-withdraw"
-                className="flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-8 text-14"
+                className="text-14 flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-4"
               >
                 <IconWithdraw className="h-14 w-14" />
                 Withdraw

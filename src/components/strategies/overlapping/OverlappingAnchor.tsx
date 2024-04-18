@@ -17,12 +17,12 @@ interface Props {
 export const OverlappingAnchor: FC<Props> = (props) => {
   const { base, quote, anchor, setAnchor, anchorError } = props;
   return (
-    <article className="flex w-full flex-col gap-16 rounded-10 bg-background-900 p-20">
+    <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
       <h2 className="text-18">Budget</h2>
       <p className="text-14 text-white/80">
         Please specify which token you'd prefer to use as the anchor.
       </p>
-      <h3 className="flex items-center gap-8 text-16 font-weight-500">
+      <h3 className="text-16 font-weight-500 flex items-center gap-8">
         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
           1
         </span>
@@ -41,7 +41,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         />
         <label
           htmlFor="anchor-sell"
-          className="flex flex-1 cursor-pointer items-center justify-center gap-8 rounded-8 bg-black p-16 text-14"
+          className="rounded-8 text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
         >
           <TokenLogo token={base} size={14} />
           {base.symbol}
@@ -58,7 +58,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         />
         <label
           htmlFor="anchor-buy"
-          className="flex flex-1 cursor-pointer items-center justify-center gap-8 rounded-8 bg-black p-16 text-14"
+          className="rounded-8 text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
         >
           <TokenLogo token={quote} size={14} />
           {quote.symbol}
