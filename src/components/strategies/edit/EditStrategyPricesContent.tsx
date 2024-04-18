@@ -1,4 +1,4 @@
-import { FormEvent, useMemo } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Button } from 'components/common/button';
 import { useOrder } from 'components/strategies/create/useOrder';
@@ -34,8 +34,11 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
+  const ref = useRef<HTMLFormElement>(null);
   const isOverlapping = isOverlappingStrategy(strategy);
   const { history } = useRouter();
+  const [disabled, setDisabled] = useState(true);
+  const [approvedWarnings, setApprovedWarnings] = useState(false);
   const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
   const isAwaiting = updateMutation.isLoading;
@@ -77,6 +80,28 @@ export const EditStrategyPricesContent = ({
   });
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (approval.approvalRequired) {
+      openModal('txConfirm', {
+        approvalTokens: approval.tokens,
+        onConfirm: update,
+        buttonLabel: `Confirm Deposit`,
+        eventData: {
+          ...strategyEventData,
+          productType: 'strategy',
+          approvalTokens: approval.tokens,
+          buyToken: strategy.base,
+          sellToken: strategy.quote,
+          blockchainNetwork: provider?.network?.name || '',
+        },
+        context: 'depositStrategyFunds',
+      });
+    } else {
+      update();
+    }
+  };
+
+  const update = () => {
     const newOrder0 = {
       balance: order0.budget || strategy.order0.balance,
       startRate: (order0.isRange ? order0.min : order0.price) || '0',
@@ -97,23 +122,6 @@ export const EditStrategyPricesContent = ({
       if (oldOrder.endRate !== newOrder.endRate)
         return MarginalPriceOptions.reset;
     };
-
-    if (approval.approvalRequired) {
-      openModal('txConfirm', {
-        approvalTokens: approval.tokens,
-        onConfirm: () => submit(e),
-        buttonLabel: `Confirm Deposit`,
-        eventData: {
-          ...strategyEventData,
-          productType: 'strategy',
-          approvalTokens: approval.tokens,
-          buyToken: strategy.base,
-          sellToken: strategy.quote,
-          blockchainNetwork: provider?.network?.name || '',
-        },
-        context: 'depositStrategyFunds',
-      });
-    }
 
     if (type === 'renew') {
       renewStrategy(
@@ -146,7 +154,14 @@ export const EditStrategyPricesContent = ({
     }
   };
 
-  const hasChanges = strategyHasChanges(strategy, order0, order1);
+  useEffect(() => {
+    const form = ref.current;
+    if (!form) return;
+    const hasError = !!form.querySelector('.error-message');
+    const hasWarning = !!form.querySelector('.warning-message');
+    const hasChanges = strategyHasChanges(strategy, order0, order1);
+    setDisabled(hasError || !hasChanges || (hasWarning && !approvedWarnings));
+  }, [order0, order1, strategy, approvedWarnings]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -154,6 +169,7 @@ export const EditStrategyPricesContent = ({
 
   return (
     <form
+      ref={ref}
       onSubmit={submit}
       onReset={() => history.back()}
       className={cn(
@@ -199,13 +215,14 @@ export const EditStrategyPricesContent = ({
           name="approve-warning"
           type="checkbox"
           data-testid="approve-warnings"
+          onChange={(e) => setApprovedWarnings(!!e.target.checked)}
         />
         I've reviewed the warning(s) but choose to proceed.
       </label>
 
       <Button
         type="submit"
-        disabled={!hasChanges}
+        disabled={disabled}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

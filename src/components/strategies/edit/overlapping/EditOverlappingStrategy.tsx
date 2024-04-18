@@ -265,7 +265,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     if (!touched || !spread || !marketPrice) return;
     setOverlappingParams(order0.min, order1.max);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [touched, marketPrice]);
+  }, [touched, anchor, marketPrice]);
 
   // Update on buyMin changes
   useEffect(() => {

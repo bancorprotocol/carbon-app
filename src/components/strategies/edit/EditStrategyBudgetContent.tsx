@@ -13,7 +13,7 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { FormEvent, useMemo } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditOverlappingStrategy } from './overlapping/EditOverlappingStrategy';
@@ -33,6 +33,9 @@ export const EditStrategyBudgetContent = ({
   type,
 }: EditStrategyBudgetContentProps) => {
   const isOverlapping = isOverlappingStrategy(strategy);
+  const ref = useRef<HTMLFormElement>(null);
+  const [disabled, setDisabled] = useState(true);
+  const [approvedWarnings, setApprovedWarnings] = useState(false);
 
   const { history } = useRouter();
   const {
@@ -176,7 +179,14 @@ export const EditStrategyBudgetContent = ({
     void actionFn(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
-  const hasChanges = strategyHasChanges(strategy, order0, order1);
+  useEffect(() => {
+    const form = ref.current;
+    if (!form) return;
+    const hasError = !!form.querySelector('.error-message');
+    const hasWarning = !!form.querySelector('.warning-message');
+    const hasChanges = strategyHasChanges(strategy, order0, order1);
+    setDisabled(hasError || !hasChanges || (hasWarning && !approvedWarnings));
+  }, [order0, order1, strategy, approvedWarnings]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
@@ -184,6 +194,7 @@ export const EditStrategyBudgetContent = ({
 
   return (
     <form
+      ref={ref}
       onSubmit={(e) => handleOnActionClick(e)}
       onReset={() => history.back()}
       className={cn('flex w-full flex-col gap-20 md:w-[400px]', style.form)}
@@ -235,7 +246,7 @@ export const EditStrategyBudgetContent = ({
 
       <Button
         type="submit"
-        disabled={!hasChanges}
+        disabled={disabled}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"
