@@ -8,11 +8,19 @@ export const shouldTakeScreenshot = isCI && !isDraft;
 /** Utils to take screenshot on CI that are not draft */
 export const screenshot = (target: Page | Locator, name: string) => {
   if (!shouldTakeScreenshot) return;
+
+  const styles = `
+  [data-testid="user-wallet"] {
+    .font-mono !important;
+    visibility: hidden !important;
+  }
+`;
+
   return target.screenshot({
     type: 'jpeg',
     path: `e2e/screenshots/${name}.jpg`,
-    mask: [target.getByTestId('user-wallet')],
-    maskColor: '#303030',
+    style: styles,
+    animations: 'disabled',
   });
 };
 
