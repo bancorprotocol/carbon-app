@@ -38,7 +38,7 @@ export const mockApi = async (page: Page) => {
     );
     return route.fulfill({ json: filteredData });
   });
-  await page.route('**/*/simulate-create-strategy?*', (route) => {
+  await page.route('**/*/simulator/create?*', (route) => {
     const url = new URL(route.request().url());
     const {
       baseToken,
