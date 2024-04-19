@@ -174,7 +174,6 @@ export class CreateSimulationDriver {
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
-      await btn.hover(); // Enforce hover to have always the same color
       await waitTooltipsClose(this.page);
       const form = this.getForm();
       const path = screenshotPath(this.testCase, 'form');
