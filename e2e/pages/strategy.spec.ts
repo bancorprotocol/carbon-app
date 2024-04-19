@@ -551,6 +551,14 @@ const testCases: CreateStrategyTestCase[] = [
         action: 'deposit',
         budget: '10',
       },
+      withdraw: {
+        anchor: 'sell',
+        budget: '10',
+      },
+      deposit: {
+        anchor: 'sell',
+        budget: '10',
+      },
     },
     output: {
       create: {
@@ -587,6 +595,8 @@ const testCases: CreateStrategyTestCase[] = [
           fiat: '$16.67',
         },
       },
+      withdraw: { buy: '8.33 USDC', sell: '20.00 BNT' },
+      deposit: { buy: '16.66 USDC', sell: '40.00 BNT' },
     },
   },
 ];

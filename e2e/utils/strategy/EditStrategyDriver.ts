@@ -164,7 +164,9 @@ export class EditStrategyDriver {
     if (input.min) await form.min().fill(input.min);
     if (input.max) await form.max().fill(input.max);
     if (input.spread) await form.spread().fill(input.spread);
-    await expect(form.anchorRequired()).toBeVisible();
+    if (input.min || input.max || input.spread) {
+      await expect(form.anchorRequired()).toBeVisible();
+    }
     await form.anchor(input.anchor).click();
     if (input.budget) {
       await form.budgetSummary().click();

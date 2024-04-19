@@ -106,13 +106,13 @@ export interface RecurringStrategyTestCase {
 export interface CreateOverlappingStrategyInput extends CreateStrategyInput {
   spread: string;
 }
-export interface EditOverlappingStrategyInput {
-  min?: string;
-  max?: string;
-  spread?: string;
+export interface EditPriceOverlappingStrategyInput {
+  min: string;
+  max: string;
+  spread: string;
   anchor: 'buy' | 'sell';
   action: 'deposit' | 'withdraw';
-  budget?: string;
+  budget: string;
 }
 
 interface OverlappingOrderOutput {
@@ -134,11 +134,15 @@ export interface OverlappingStrategyTestCase {
   input: {
     baseStrategy: CreateStrategyInput;
     create: CreateOverlappingStrategyInput;
-    editPrices: EditOverlappingStrategyInput;
+    editPrices: EditPriceOverlappingStrategyInput;
+    withdraw: { anchor: 'buy' | 'sell'; budget: string };
+    deposit: { anchor: 'buy' | 'sell'; budget: string };
   };
   output: {
     create: OverlappingOutput;
     editPrices: OverlappingOutput;
+    withdraw: { buy: string; sell: string };
+    deposit: { buy: string; sell: string };
   };
 }
 

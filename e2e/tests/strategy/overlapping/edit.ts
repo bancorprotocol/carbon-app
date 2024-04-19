@@ -12,6 +12,7 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
   return test('Edit Price', async ({ page }) => {
     const { base, quote } = testCase;
+    const input = testCase.input.editPrices;
     const output = testCase.output.editPrices;
     const manage = new ManageStrategyDriver(page);
     const tokenApproval = new TokenApprovalDriver(page);
@@ -20,11 +21,20 @@ export const editPrice = (testCase: CreateStrategyTestCase) => {
 
     const edit = new EditStrategyDriver(page, testCase);
     await edit.waitForPage('editPrices');
-    await edit.fillOverlapping('editPrices');
+    const form = edit.getOverlappingForm();
+    await form.min().fill(input.min);
+    await form.max().fill(input.max);
+    await form.spread().fill(input.spread);
+    await expect(form.anchorRequired()).toBeVisible();
+    await form.anchor(input.anchor).click();
+    await form.budgetSummary().click();
+    if (input.action) await form.action(input.action).click();
+    await form.budget().fill(input.budget);
     await edit.submit('editPrices');
 
     await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
+    await page.mouse.move(0, 0); // Prevent mouse to open tooltip
 
     // Verify strategy data
     const myStrategies = new MyStrategyDriver(page);

@@ -38,11 +38,11 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           checked={anchor === 'sell'}
           onChange={(e) => e.target.checked && setAnchor('sell')}
           disabled={props.disableSell}
-          data-testid="anchor-sell"
         />
         <label
           htmlFor="anchor-sell"
           className="rounded-8 text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
+          data-testid="anchor-sell"
         >
           <TokenLogo token={base} size={14} />
           {base.symbol}
@@ -56,11 +56,11 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           checked={anchor === 'buy'}
           onChange={(e) => e.target.checked && setAnchor('buy')}
           disabled={props.disableBuy}
-          data-testid="anchor-buy"
         />
         <label
           htmlFor="anchor-buy"
           className="rounded-8 text-14 flex flex-1 cursor-pointer items-center justify-center gap-8 bg-black p-16"
+          data-testid="anchor-buy"
         >
           <TokenLogo token={quote} size={14} />
           {quote.symbol}
