@@ -169,7 +169,8 @@ export class CreateSimulationDriver {
   }
 
   async submit() {
-    const btn = this.page.getByText('Start Simulation');
+    const btn = this.page.getByTestId('start-simulation-btn');
+    await expect(btn).toHaveText('Start Simulation');
     await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);

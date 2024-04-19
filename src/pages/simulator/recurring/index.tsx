@@ -151,7 +151,13 @@ export const SimulatorInputRecurringPage = () => {
           dispatch={dispatch}
           firstHistoricPricePoint={data?.[0]}
         />
-        <Button type="submit" fullWidth size="lg" disabled={btnDisabled}>
+        <Button
+          type="submit"
+          data-testid="start-simulation-btn"
+          fullWidth
+          size="lg"
+          disabled={btnDisabled}
+        >
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>
