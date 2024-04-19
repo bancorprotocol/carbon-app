@@ -99,7 +99,7 @@
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir \"src/abis/types\" \"src/abis/**/*.json\"",
-    "postinstall": "yarn compile-abis && yarn husky install && yarn playwright install",
+    "postinstall": "yarn compile-abis && yarn husky install && yarn playwright install --with-deps chromium",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "vite",
     "build": "tsc && vite build",

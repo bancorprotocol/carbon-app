@@ -7,6 +7,8 @@ jobs:
   e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.43.0-jammy
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push (see auto-commit below)
       contents: write
@@ -17,9 +19,7 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: yarn
-      - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
-      - name: Run Playwright tests
+      - name: Install Playwright browsers and run Playwright tests
         run: yarn e2e
         env:
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
