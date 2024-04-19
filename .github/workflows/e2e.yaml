@@ -7,8 +7,6 @@ jobs:
   e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.43.0-jammy
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push (see auto-commit below)
       contents: write
@@ -17,9 +15,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install dependencies
+      - name: Install dependencies and Playwright browsers
         run: yarn
-      - name: Install Playwright browsers and run Playwright tests
+      - name: Run Playwright tests
         run: yarn e2e
         env:
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}
@@ -33,7 +31,7 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 30
+          retention-days: 3
       - name: Import GPG key
         id: import-gpg
         if: github.event.pull_request.draft == false
