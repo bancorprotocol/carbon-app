@@ -38,6 +38,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           checked={anchor === 'sell'}
           onChange={(e) => e.target.checked && setAnchor('sell')}
           disabled={props.disableSell}
+          data-testid="anchor-sell"
         />
         <label
           htmlFor="anchor-sell"
@@ -55,6 +56,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           checked={anchor === 'buy'}
           onChange={(e) => e.target.checked && setAnchor('buy')}
           disabled={props.disableBuy}
+          data-testid="anchor-buy"
         />
         <label
           htmlFor="anchor-buy"
@@ -64,7 +66,13 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           {quote.symbol}
         </label>
       </div>
-      {anchorError && <WarningMessageWithIcon message={anchorError} isError />}
+      {anchorError && (
+        <WarningMessageWithIcon
+          message={anchorError}
+          isError
+          data-testid="require-anchor"
+        />
+      )}
     </article>
   );
 };

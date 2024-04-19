@@ -6,6 +6,7 @@ import { CreateStrategyTestCase } from './types';
 import { Setting, Direction, MinMax } from '../types';
 import {
   assertDisposableTestCase,
+  assertOverlappingTestCase,
   assertRecurringTestCase,
   getRecurringSettings,
   screenshotPath,
@@ -46,6 +47,22 @@ export class EditStrategyDriver {
     const form = this.page.getByTestId(`${direction}-section`);
     return {
       locator: form,
+      budget: () => form.getByTestId('input-budget'),
+    };
+  }
+
+  getOverlappingForm() {
+    const form = this.page.getByTestId('edit-form');
+    return {
+      locator: form,
+      min: () => form.getByTestId('input-min'),
+      max: () => form.getByTestId('input-max'),
+      spread: () => form.getByTestId('spread-input'),
+      anchorRequired: () => form.getByTestId('require-anchor'),
+      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      budgetSummary: () => form.getByTestId(`budget-summary`),
+      action: (action: 'deposit' | 'withdraw') =>
+        form.getByTestId(`action-${action}`),
       budget: () => form.getByTestId('input-budget'),
     };
   }
@@ -113,7 +130,7 @@ export class EditStrategyDriver {
 
   async fillRecurringPrice(type: EditType) {
     assertRecurringTestCase(this.testCase);
-    const { buy, sell } = this.testCase.input.editPrice;
+    const { buy, sell } = this.testCase.input.editPrices;
     const [buySetting, sellSetting] = getRecurringSettings(this.testCase);
     const sellForm = await this.fillPrice('sell', sellSetting, sell, type);
     const buyForm = await this.fillPrice('buy', buySetting, buy, type);
@@ -131,12 +148,28 @@ export class EditStrategyDriver {
   async fillDisposablePrice(type: EditType) {
     assertDisposableTestCase(this.testCase);
     const { direction, setting, input } = this.testCase;
-    return this.fillPrice(direction, setting, input.editPrice, type);
+    return this.fillPrice(direction, setting, input.editPrices, type);
   }
 
   async fillDisposableBudget(type: 'deposit' | 'withdraw') {
     assertDisposableTestCase(this.testCase);
     const { direction, input } = this.testCase;
     return this.fillBudget(direction, input[type]);
+  }
+
+  async fillOverlapping(type: EditType) {
+    assertOverlappingTestCase(this.testCase);
+    const input = this.testCase.input[type];
+    const form = this.getOverlappingForm();
+    if (input.min) await form.min().fill(input.min);
+    if (input.max) await form.max().fill(input.max);
+    if (input.spread) await form.spread().fill(input.spread);
+    await expect(form.anchorRequired()).toBeVisible();
+    await form.anchor(input.anchor).click();
+    if (input.budget) {
+      await form.budgetSummary().click();
+      if (input.action) await form.action(input.action).click();
+      await form.budget().fill(input.budget);
+    }
   }
 }

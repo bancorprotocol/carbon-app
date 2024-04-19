@@ -1,46 +1,33 @@
 import { expect, test } from '@playwright/test';
-import { NotificationDriver } from '../../../utils/NotificationDriver';
-import { navigateTo, screenshot, waitFor } from '../../../utils/operators';
+import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import {
-  CreateStrategyDriver,
-  CreateStrategyTestCase,
-  MyStrategyDriver,
   assertOverlappingTestCase,
-  screenshotPath,
+  CreateStrategyTestCase,
+  EditStrategyDriver,
+  MyStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 
-export const create = (testCase: CreateStrategyTestCase) => {
+export const editPrice = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
-  const { base, quote } = testCase;
-  const { sell } = testCase.input.create;
-  const output = testCase.output.create;
-
-  return test(`Create ${base}->${quote}`, async ({ page }) => {
-    await waitFor(page, `balance-${quote}`, 30_000);
-
-    await navigateTo(page, '/');
-    const myStrategies = new MyStrategyDriver(page);
-    const createForm = new CreateStrategyDriver(page, testCase);
-    await myStrategies.createStrategy();
-    await createForm.selectToken('base');
-    await createForm.selectToken('quote');
-    await createForm.selectSetting('overlapping');
-    await createForm.nextStep();
-
-    const overlappingForm = createForm.getOverlappingForm();
-    // Make so form has value before filling it
-    expect(overlappingForm.min()).toHaveValue(/\S+/);
-    expect(overlappingForm.max()).toHaveValue(/\S+/);
-    await createForm.fillOverlapping();
-    expect(overlappingForm.max()).toHaveValue(sell.max.toString());
-
+  return test('Edit Price', async ({ page }) => {
+    const { base, quote } = testCase;
+    const output = testCase.output.editPrices;
+    const manage = new ManageStrategyDriver(page);
     const tokenApproval = new TokenApprovalDriver(page);
-    await createForm.submit();
+    const initial = await manage.createStrategy(testCase, { tokenApproval });
+    await initial.clickManageEntry('editPrices');
+
+    const edit = new EditStrategyDriver(page, testCase);
+    await edit.waitForPage('editPrices');
+    await edit.fillOverlapping('editPrices');
+    await edit.submit('editPrices');
+
     await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
 
     // Verify strategy data
+    const myStrategies = new MyStrategyDriver(page);
     const strategies = myStrategies.getAllStrategies();
     await expect(strategies).toHaveCount(1);
     const strategy = await myStrategies.getStrategy(1);
@@ -64,9 +51,5 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await expect(buyTooltip.maxPrice()).toHaveText(output.buy.max);
     await expect(buyTooltip.marginalPrice()).toHaveText(output.buy.marginal);
     await buyTooltip.waitForDetached();
-
-    const notificationDriver = new NotificationDriver(page);
-    await notificationDriver.closeAll();
-    await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
   });
 };

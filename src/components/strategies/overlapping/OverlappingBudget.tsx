@@ -66,7 +66,10 @@ export const OverlappingBudget: FC<Props> = (props) => {
   return (
     <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
       <details open={!!fixAction} onToggle={() => resetBudgets(anchor)}>
-        <summary className="flex cursor-pointer items-center gap-8">
+        <summary
+          className="flex cursor-pointer items-center gap-8"
+          data-testid="budget-summary"
+        >
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
             2
           </span>
@@ -87,13 +90,14 @@ export const OverlappingBudget: FC<Props> = (props) => {
                 className={cn('absolute opacity-0', style.budgetMode)}
                 type="radio"
                 name="action"
-                id="select-deposit"
+                id="action-deposit"
                 checked={action === 'deposit'}
                 onChange={(e) => e.target.checked && setAction('deposit')}
               />
               <label
-                htmlFor="select-deposit"
+                htmlFor="action-deposit"
                 className="text-14 flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-4"
+                data-testid="action-deposit"
               >
                 <IconDeposit className="h-14 w-14" />
                 Deposit
@@ -102,13 +106,14 @@ export const OverlappingBudget: FC<Props> = (props) => {
                 className={cn('absolute opacity-0', style.budgetMode)}
                 type="radio"
                 name="action"
-                id="select-withdraw"
+                id="action-withdraw"
                 checked={action === 'withdraw'}
                 onChange={(e) => e.target.checked && setAction('withdraw')}
               />
               <label
-                htmlFor="select-withdraw"
+                htmlFor="action-withdraw"
                 className="text-14 flex cursor-pointer items-center justify-center gap-8 rounded-full px-16 py-4"
+                data-testid="action-withdraw"
               >
                 <IconWithdraw className="h-14 w-14" />
                 Withdraw
@@ -122,6 +127,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
             onChange={setBudget}
             max={getMax()}
             errors={error}
+            data-testid="input-budget"
           />
         </div>
       </details>

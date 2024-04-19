@@ -12,7 +12,7 @@ import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
   return test('Edit Price', async ({ page }) => {
-    const { buy, sell } = testCase.output.editPrice;
+    const { buy, sell } = testCase.output.editPrices;
     const manage = new ManageStrategyDriver(page);
     const tokenApproval = new TokenApprovalDriver(page);
     const strategy = await manage.createStrategy(testCase, { tokenApproval });
