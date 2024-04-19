@@ -16,7 +16,13 @@ import { dayjs } from '../../../src/libs/dayjs';
 export class CreateSimulationDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
-  waitForPriceChart(timeout?: number) {
+  async waitForPriceChart(timeout?: number) {
+    const historyPricesRegExp =
+      /.*api\.carbondefi\.xyz\/v1\/history\/prices.*$/;
+    await this.page.waitForResponse(historyPricesRegExp);
+
+    const btn = this.page.getByTestId('start-simulation-btn');
+    await expect(btn).toHaveText('Start Simulation');
     return waitFor(this.page, 'price-chart', timeout);
   }
 
