@@ -240,6 +240,7 @@ export const EditStrategyBudgetContent = ({
           name="approve-warning"
           type="checkbox"
           data-testid="approve-warnings"
+          onChange={(e) => setApprovedWarnings(e.target.checked)}
         />
         I've reviewed the warning(s) but choose to proceed.
       </label>

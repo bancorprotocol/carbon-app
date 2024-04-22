@@ -71,16 +71,16 @@ export class EditStrategyDriver {
     const btn = this.page.getByTestId('edit-submit');
 
     const approveWarningsAndWait = async () => {
-      waitFor(this.page, 'approve-warnings');
+      await waitFor(this.page, 'approve-warnings');
       if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-        this.page.getByTestId('approve-warnings').click();
+        await this.page.getByTestId('approve-warnings').click();
       }
       await expect(btn).toBeEnabled();
     };
 
     // If the submit button is not enabled, try to approve warnings and retry
     await expect(btn)
-      .toBeEnabled()
+      .toBeEnabled({ timeout: 1_000 })
       .catch(() => approveWarningsAndWait());
 
     await expect(btn).toBeEnabled();
