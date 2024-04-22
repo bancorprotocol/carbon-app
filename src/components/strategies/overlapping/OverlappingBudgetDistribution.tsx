@@ -4,7 +4,6 @@ import { cn, tokenAmount } from 'utils/helpers';
 import { ReactComponent as IconDeposit } from 'assets/icons/deposit.svg';
 import { ReactComponent as IconWithdraw } from 'assets/icons/withdraw.svg';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import styles from './OverlappingBudgetDistribution.module.css';
 
 interface Props {
   buy?: boolean;
@@ -47,7 +46,7 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
   return (
     <div className="flex flex-col gap-4">
       <h4 className="text-14 font-weight-500">{buy ? 'Buy' : 'Sell'}</h4>
-      <div className="flex justify-between text-12 text-white/60">
+      <div className="text-12 flex justify-between text-white/60">
         <label htmlFor={allocatedId}>
           Allocated:&nbsp;
           <span className="text-white">
@@ -59,15 +58,21 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
           <span className="text-white">{tokenAmount(balance, token)}</span>
         </label>
       </div>
-      <div className={styles.progress}>
+      <div className="rounded-8 flex h-[24px] gap-4 overflow-hidden transition-[gap] duration-200">
         <div
           aria-valuenow={dist.allocationPercent}
-          className={cn(styles.allocation, color)}
+          className={cn(
+            color,
+            'transition-[flex-grow] duration-200 aria-[valuenow="0"]:-ml-4'
+          )}
           style={{ flexGrow: dist.allocationPercent }}
         ></div>
         <div
           aria-valuenow={dist.deltaPercent}
-          className={cn(styles.delta, color)}
+          className={cn(
+            color,
+            'transition-[flex-grow] duration-200 aria-[valuenow="0"]:-mx-2'
+          )}
           style={{
             flexGrow: dist.deltaPercent,
             opacity: !dist.deltaPercent ? 0 : dist.mode === 'deposit' ? 1 : 0.4,
@@ -75,7 +80,10 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
         ></div>
         <div
           aria-valuenow={dist.balancePercent}
-          className={cn(styles.balance, color)}
+          className={cn(
+            color,
+            'opacity-40 transition-[flex-grow] duration-200 aria-[valuenow="0"]:-mr-4'
+          )}
           style={{ flexGrow: dist.balancePercent }}
         ></div>
       </div>
@@ -109,8 +117,8 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="flex animate-scaleUp items-start gap-8 text-12 text-white/60">
-        <span className="rounded-full bg-buy/10 p-4 text-buy">
+      <p className="animate-scaleUp text-12 flex items-start gap-8 text-white/60">
+        <span className="bg-buy/10 text-buy rounded-full p-4">
           <IconDeposit className="h-12 w-12" />
         </span>
         <span>
@@ -138,8 +146,8 @@ export const OverlappingBudgetDescription: FC<DescriptionProps> = (props) => {
       );
     }
     return (
-      <p className="flex animate-scaleUp items-start gap-8 text-12 text-white/60">
-        <span className="rounded-full bg-sell/10 p-4 text-sell">
+      <p className="animate-scaleUp text-12 flex items-start gap-8 text-white/60">
+        <span className="bg-sell/10 text-sell rounded-full p-4">
           <IconWithdraw className="h-12 w-12" />
         </span>
         <span>
