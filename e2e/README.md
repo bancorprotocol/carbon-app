@@ -89,7 +89,7 @@ If you need to mock the date, you can use the `mockDate` function. This function
 ```typescript
 import { mockDate } from '../utils/mock-date';
 test.beforeEach(async ({ page }) => {
-  await mockDate(page, '2024-03-01')
+  await mockDate(page, '2024-03-01T00:00:00.000Z')
 });
 ```
 

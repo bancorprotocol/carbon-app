@@ -7,12 +7,12 @@ import { Page } from '@playwright/test';
  * import { test } from '@playwright/test';
  *
  * test.beforeEach(async ({ page }) => {
- *   await mockDate(page, '2024-03-01')
+ *   await mockDate(page, '2024-03-01T00:00:00.000Z')
  * });
  * ```
  *
  * @param page Page object to mock
- * @param fakeDate Date in string form, e.g. '2024-03-01'
+ * @param fakeDate Date in string form, e.g. '2024-03-01T00:00:00.000Z'
  */
 export const mockDate = async (page: Page, fakeDate: string) => {
   const fakeNow = new Date(fakeDate).valueOf();
