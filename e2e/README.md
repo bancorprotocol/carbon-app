@@ -52,7 +52,7 @@ Screenshots are not taken on draft commits as the local branch would need to be 
 
 ## Tips
 
-Wait for an element before asserting.
+### Wait for an element before asserting.
 
 ```typescript
 // Wait for the modal with utils `waitFor`
@@ -65,7 +65,7 @@ await list.waitFor({ state: 'visible' });
 await expect(list.toCount(1));
 ```
 
-TestId must be unique in the context. When testing a list, select the element first:
+### TestId must be unique in the context. When testing a list, select the element first:
 
 ```typescript
 const list = page.locator('[data-testid="strategy-list"] > li');
@@ -73,12 +73,36 @@ const [first] = await list.all();
 await expect(first.getTestId('strategy-pair')).toHaveText('ETH/DAI');
 ```
 
+### Using same network for all tests
+
 As the same network was used for all tests, mutating a strategy in one test might impact another test. For now, it is suggested to try to use different token pairs for each test to avoid unwanted side effect, for example:
 
 - `ETH/DAI`: Create recurring strategy
 - `ETH/BNT`: Create overlapping strategy
 - `ETH/USDC`: Trade Buy
 - `USDC/USDT`: Trade Sell
+
+### Mock date
+
+If you need to mock the date, you can use the `mockDate` function. This function will mock the Date constructor and Date.now(). It must be be called before the page is navigated to.
+
+```typescript
+import { mockDate } from '../utils/mock-date';
+test.beforeEach(async ({ page }) => {
+  await mockDate(page, '2024-03-01')
+});
+```
+
+### Wait for network
+
+When getting data from an external source, even if mocked, you may use `waitForResponse` to make sure the next test step is executed after the data is loaded.
+
+```typescript
+const historyPricesRegExp = /.*api\.carbondefi\.xyz\/v1\/history\/prices.*$/;
+await this.page.waitForResponse(historyPricesRegExp);
+```
+
+
 
 ## Common Errors
 
