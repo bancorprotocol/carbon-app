@@ -11,7 +11,7 @@ export const screenshot = (target: Page | Locator, name: string) => {
 
   const styles = `
   [data-testid="user-wallet"] {
-    .font-mono !important;
+    font-family: monospace !important;
     visibility: hidden !important;
   }
 `;
