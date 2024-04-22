@@ -1,3 +1,4 @@
+import { useMatchRoute } from '@tanstack/react-router';
 import { CreateStrategyCTAMobile } from 'components/strategies/create/CreateStrategyCTA';
 import { useEffect } from 'react';
 import { NotificationAlerts } from 'libs/notifications';
@@ -9,18 +10,32 @@ import { useStore } from 'store';
 import { Toaster } from 'components/common/Toaster/Toaster';
 import { Footer } from 'components/common/Footer/Footer';
 
-let didInit = false;
+let didInitCheck = false;
+let didInitSDK = false;
 
 export const App = () => {
-  const { init } = useCarbonInit();
+  const { initCheck, initSDK } = useCarbonInit();
   const { setInnerHeight } = useStore();
 
+  const match = useMatchRoute();
+  // Add more routes here to skip SDK init
+  const skipSDKInit = [match({ to: '/simulate', fuzzy: true })].some(
+    (x) => !!x
+  );
+
   useEffect(() => {
-    if (!didInit) {
-      didInit = true;
-      void init();
+    if (!didInitCheck) {
+      didInitCheck = true;
+      void initCheck();
     }
-  }, [init]);
+  }, [initCheck]);
+
+  useEffect(() => {
+    if (!didInitSDK && !skipSDKInit) {
+      didInitSDK = true;
+      void initSDK();
+    }
+  }, [initSDK, skipSDKInit]);
 
   useEffect(() => {
     window.addEventListener('resize', (e) => {
