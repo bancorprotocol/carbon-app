@@ -18,6 +18,7 @@ export const App = () => {
   const { setInnerHeight } = useStore();
 
   const match = useMatchRoute();
+  // Add more routes here to skip SDK init
   const skipSDKInit = [match({ to: '/simulate', fuzzy: true })].some(
     (x) => !!x
   );
