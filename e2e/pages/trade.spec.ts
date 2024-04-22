@@ -14,7 +14,7 @@ test.describe('Trade', () => {
     await debug.visit();
     await setupFork(testInfo);
     await debug.setRpcUrl(testInfo);
-    await Promise.all([debug.setupImposter(), debug.setE2E()]);
+    await debug.setupImposter();
   });
 
   test.afterEach(async ({}, testInfo) => {

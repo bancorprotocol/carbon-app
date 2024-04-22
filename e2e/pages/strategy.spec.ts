@@ -567,7 +567,7 @@ test.describe('Strategies', () => {
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setRpcUrl(testInfo);
-    await Promise.all([debug.setupImposter(), debug.setE2E()]);
+    await debug.setupImposter();
   });
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);

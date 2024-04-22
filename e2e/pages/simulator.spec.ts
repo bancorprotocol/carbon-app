@@ -196,7 +196,6 @@ test.describe('Simulator', () => {
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setRpcUrl(testInfo);
-    await debug.setE2E();
   });
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);
