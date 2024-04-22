@@ -47,6 +47,7 @@ export const usePortfolioTokenPieChart = (
         backgroundColor: '#212123',
         borderWidth: 0,
         useHTML: true,
+        style: { fontFamily: 'Carbon-Text' },
         formatter: function () {
           return (
             '<div class="p-10 text-14 text-white font-weight-500 space-y-12 w-[230px]">' +
