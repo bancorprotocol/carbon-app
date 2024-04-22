@@ -82,4 +82,10 @@ export const mockApi = async (page: Page) => {
   await page.route('/api/check', (route) => {
     return route.fulfill({ json: false });
   });
+
+  // Block Google tag manager before visiting page
+  await page.route(/googletagmanager.com/, (route) => route.abort());
+
+  // Block Sentry before visiting page
+  await page.route(/sentry.io/, (route) => route.abort());
 };
