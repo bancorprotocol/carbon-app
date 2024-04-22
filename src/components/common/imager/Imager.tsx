@@ -79,7 +79,7 @@ export const Imager = ({
 
 export const TokenLogo = ({ token, size }: { token: Token; size: number }) => {
   return (
-    <Imager
+    <LogoImager
       width={size}
       height={size}
       src={token.logoURI}
