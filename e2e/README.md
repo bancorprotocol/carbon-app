@@ -85,6 +85,10 @@ As the same network was used for all tests, mutating a strategy in one test migh
 - `ETH/USDC`: Trade Buy
 - `USDC/USDT`: Trade Sell
 
+### Mock data
+
+If you need to mock data, you can use the [mock-api.mjs script](../scripts/mock-api.mjs). Please modify the script to return the desired data. If no data is available, the mocked routes will continue fetching.
+
 ### Mock date
 
 If you need to mock the date, you can use the `mockDate` function. This function will mock the Date constructor and Date.now(). It must be be called before the page is navigated to.

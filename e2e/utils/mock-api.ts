@@ -3,6 +3,7 @@ import marketRate from '../mocks/market-rates.json';
 import roi from '../mocks/roi.json';
 import historyPrices from '../mocks/history-prices.json';
 import simulatorResult from '../mocks/simulator-result.json';
+import tokenListsMock from '../mocks/tokenLists.json';
 
 export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {
@@ -81,6 +82,15 @@ export const mockApi = async (page: Page) => {
   // E2E should be allowed in production mode (CI)
   await page.route('/api/check', (route) => {
     return route.fulfill({ json: false });
+  });
+
+  const tokenListsToMock = Object.keys(tokenListsMock);
+  tokenListsToMock.forEach(async (tokenList) => {
+    await page.route(tokenList, (route) => {
+      const json = tokenListsMock[tokenList];
+      if (!json) return route.continue;
+      return route.fulfill({ json });
+    });
   });
 
   // Block Google tag manager before visiting page
