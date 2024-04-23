@@ -174,7 +174,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
             iconClassName="h-13 text-white/60"
             element="When updating the rates, the allocated budget will be distributed equally across the entire range"
           />
-          Strategy budget will be distributed across entire range
+          Budget will be distributed across entire range
         </div>
       )}
     </>
