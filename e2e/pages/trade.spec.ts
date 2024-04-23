@@ -47,7 +47,6 @@ test.describe('Trade', () => {
         : `Sell ${source} for ${target}`;
 
     test(testName, async ({ page }) => {
-      test.setTimeout(120_000);
       // Store current balance
       const debug = new DebugDriver(page);
       const balance = {

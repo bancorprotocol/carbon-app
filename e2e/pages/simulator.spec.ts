@@ -189,7 +189,6 @@ const testCases: CreateStrategyTestCase[] = [
 
 test.describe('Simulator', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    testInfo.setTimeout(120_000);
     await mockApi(page);
     await mockDate(page, '2024-02-26T00:00:00.000Z');
     await setupFork(testInfo);

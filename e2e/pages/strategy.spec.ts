@@ -561,7 +561,6 @@ const testDescription = (testCase: CreateStrategyTestCase) => {
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    testInfo.setTimeout(120_000);
     await mockApi(page);
     await setupFork(testInfo);
     const debug = new DebugDriver(page);

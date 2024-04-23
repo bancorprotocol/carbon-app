@@ -34,12 +34,14 @@ yarn e2e --ui
 
 E2E run in a github action on:
 
-- every commit
-- when draft PR become ready for review
+- Every commit
+- When draft PR become ready for review
+- When PRs are opened or re-opened
+- If PR is against main
 
 ## Screenshots
 
-Screenshots are taken during E2E and images are pushed automatically on the current branch
+Screenshots are taken during E2E and images are pushed automatically on the current PR branch.
 
 Screenshots are only taken:
 
@@ -48,7 +50,7 @@ Screenshots are only taken:
 - If PR is against main branch
 
 <p style="border:solid 1px #303030; background-color: #30303030; border-radius:4px; padding:8px 16px">
-Screenshots are not taken on draft commits as the local branch would need to be merged on each change.
+Screenshots are not taken on draft PRs as the local branch would need to be merged on each change.
 <p>
 
 ## Tips
@@ -115,7 +117,7 @@ await this.page.waitForResponse(historyPricesRegExp);
 
 - **Error**: `Page is closed`
 - **Solution**: Increase timeout of test
-- **Description**: This error happens if test is longer that the defaut timeout (30s). It can append at any stage of the test
+- **Description**: This error happens if test is longer that the default timeout (120s). It can be appended at any stage of the test or the default timeout can be changed in the [playwright config file](.././playwright.config.ts).
 - **Example**:
 
 ```typescript
