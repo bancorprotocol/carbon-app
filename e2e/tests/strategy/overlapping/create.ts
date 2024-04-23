@@ -9,6 +9,7 @@ import {
   screenshotPath,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
+import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const create = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
@@ -39,6 +40,7 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await createForm.submit();
     await tokenApproval.checkApproval([base, quote]);
     await page.waitForURL('/', { timeout: 10_000 });
+    await waitForTenderlyRpc(page);
 
     // Verify strategy data
     const strategies = myStrategies.getAllStrategies();
