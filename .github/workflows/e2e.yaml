@@ -63,8 +63,6 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          # Checkout is done above
-          skip_checkout: true
           commit_message: '[CI] Update Screenshots'
           commit_user_name: ${{ steps.import-gpg.outputs.name }}
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
