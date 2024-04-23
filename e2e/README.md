@@ -18,13 +18,13 @@ TENDERLY_PROJECT=carbon-test-forks
 TENDERLY_ACCESS_KEY=...
 ```
 
-Run in headless mode :
+Install browsers and run in headless mode :
 
 ```shell
 yarn e2e
 ```
 
-Run in UI mode :
+Install browsers and run in UI mode :
 
 ```shell
 yarn e2e --ui
@@ -45,6 +45,7 @@ Screenshots are only taken:
 
 - In a Github Action
 - If PR is not draft
+- If PR is against main branch
 
 <p style="border:solid 1px #303030; background-color: #30303030; border-radius:4px; padding:8px 16px">
 Screenshots are not taken on draft commits as the local branch would need to be merged on each change.

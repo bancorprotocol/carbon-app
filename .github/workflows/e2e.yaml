@@ -17,9 +17,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install dependencies and Playwright browsers
+      - name: Install dependencies
         run: yarn
-      - name: Run Playwright tests
+      - name: Install Playwright browsers and run Playwright tests
         run: yarn e2e
         env:
           VITE_CHAIN_RPC_URL: ${{ secrets.VITE_CHAIN_RPC_URL }}

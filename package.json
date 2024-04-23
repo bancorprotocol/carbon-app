@@ -99,13 +99,13 @@
   },
   "scripts": {
     "compile-abis": "typechain --target ethers-v5 --out-dir \"src/abis/types\" \"src/abis/**/*.json\"",
-    "postinstall": "yarn compile-abis && yarn husky install && yarn playwright install --with-deps chromium",
+    "postinstall": "yarn compile-abis && yarn husky install",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest run",
-    "e2e": "playwright test",
+    "e2e": "yarn playwright install --with-deps chromium && playwright test",
     "lint": "eslint --ext .tsx,.ts .",
     "pre-commit": "yarn lint-staged"
   },
