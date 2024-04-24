@@ -23,7 +23,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
         Please specify which token you'd prefer to use as the anchor.
       </p>
       <h3 className="text-16 font-weight-500 flex items-center gap-8">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
           1
         </span>
         Select Token

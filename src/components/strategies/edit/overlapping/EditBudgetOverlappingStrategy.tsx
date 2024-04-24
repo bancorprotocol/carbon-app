@@ -10,11 +10,6 @@ import {
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication';
-import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
-import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
-import { OverlappingRange } from 'components/strategies/overlapping/OverlappingRange';
 import { isValidRange } from 'components/strategies/utils';
 import {
   calculateOverlappingBuyBudget,
@@ -36,28 +31,20 @@ interface Props {
   strategy: Strategy;
   order0: OrderCreate;
   order1: OrderCreate;
-  fixAction?: BudgetAction;
+  action: BudgetAction;
 }
 
-export const EditOverlappingStrategy: FC<Props> = (props) => {
-  const { strategy, order0, order1, fixAction } = props;
+export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
+  const { strategy, order0, order1, action } = props;
   const { base, quote } = strategy;
-  const { marketPricePercentage } = useMarketIndication({
-    base,
-    quote,
-    order: { min: order0.min, max: order1.max, price: '', isRange: true },
-  });
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
-  const [spread, setSpread] = useState(getRoundedSpread(strategy));
   const [touched, setTouched] = useState(false);
   const [delta, setDelta] = useState('');
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
   const [anchorError, setAnchorError] = useState('');
   const [budgetError, setBudgetError] = useState('');
-  const [action, setAction] = useState<'deposit' | 'withdraw'>(
-    fixAction ?? 'deposit'
-  );
+  const spread = getRoundedSpread(strategy);
 
   const newMarketPrice = useMarketPrice({ base, quote });
   const initialMarketPrice = geoMean(
@@ -197,16 +184,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  const setSpreadValue = (value: number) => {
-    setSpread(value);
-    setOverlappingParams(order0.min, order1.max, value.toString());
-  };
-
-  const setActionValue = (value: BudgetAction) => {
-    resetBudgets(anchor!);
-    setAction(value);
-  };
-
   const setAnchorValue = (value: 'buy' | 'sell') => {
     if (!anchor) setAnchorError('');
     resetBudgets(value);
@@ -223,10 +200,9 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
     setOverlappingParams(order0.min, max);
   };
 
-  const setBudget = (value: string) => {
-    setDelta(value);
-    if (!value) return resetBudgets(anchor!);
-    const amount = value || '0'; // SafeDecimal doesn't support ""
+  const setBudget = (amount: string) => {
+    setDelta(amount);
+    if (!amount) return resetBudgets(anchor!);
     setBudgetError(getBudgetErrors(amount));
 
     if (anchor === 'buy') {
@@ -291,68 +267,6 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      {!fixAction && (
-        <>
-          <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-            <header>
-              <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
-            </header>
-            <OverlappingStrategyGraph
-              base={base}
-              quote={quote}
-              order0={order0}
-              order1={order1}
-              marketPrice={newMarketPrice}
-              spread={spread}
-              marketPricePercentage={marketPricePercentage}
-              setMin={setMin}
-              setMax={setMax}
-            />
-          </article>
-          <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
-            <header className="flex items-center gap-8">
-              <h3 className="text-18 font-weight-500 flex-1">
-                Edit Price Range&nbsp;
-                <span className="text-white/40">
-                  ({quote?.symbol} per 1 {base?.symbol})
-                </span>
-              </h3>
-              <Tooltip
-                element="Indicate the strategy exact buy and sell prices."
-                iconClassName="h-14 w-14 text-white/60"
-              />
-            </header>
-            {base && quote && (
-              <OverlappingRange
-                base={base}
-                quote={quote}
-                order0={order0}
-                order1={order1}
-                marketPricePercentage={marketPricePercentage}
-                setMin={setMin}
-                setMax={setMax}
-              />
-            )}
-          </article>
-          <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
-            <header className="mb-10 flex items-center gap-8 ">
-              <h3 className="text-18 font-weight-500 flex-1">Edit Spread</h3>
-              <Tooltip
-                element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-                iconClassName="h-14 w-14 text-white/60"
-              />
-            </header>
-            <OverlappingStrategySpread
-              buyMin={Number(order0.min)}
-              sellMax={Number(order1.max)}
-              defaultValue={0.05}
-              options={[0.01, 0.05, 0.1]}
-              spread={spread}
-              setSpread={setSpreadValue}
-            />
-          </article>
-        </>
-      )}
       <OverlappingAnchor
         base={base}
         quote={quote}
@@ -368,13 +282,10 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           anchor={anchor}
           action={action}
-          setAction={setActionValue}
           budgetValue={delta}
           setBudget={setBudget}
-          resetBudgets={resetBudgets}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
-          fixAction={fixAction}
           error={budgetError}
         />
       )}
@@ -385,7 +296,7 @@ export const EditOverlappingStrategy: FC<Props> = (props) => {
         >
           <hgroup>
             <h3 className="text-16 font-weight-500 flex items-center gap-8">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
                 3
               </span>
               Distribution

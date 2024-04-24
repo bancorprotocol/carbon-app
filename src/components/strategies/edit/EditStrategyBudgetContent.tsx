@@ -16,7 +16,7 @@ import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
-import { EditOverlappingStrategy } from './overlapping/EditOverlappingStrategy';
+import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappingStrategy';
 import { getDeposit, strategyHasChanges } from './utils';
 import { cn } from 'utils/helpers';
 import style from './EditStrategy.module.css';
@@ -202,11 +202,11 @@ export const EditStrategyBudgetContent = ({
     >
       <EditStrategyOverlapTokens strategy={strategy} />
       {isOverlapping && (
-        <EditOverlappingStrategy
+        <EditBudgetOverlappingStrategy
           strategy={strategy}
           order0={order0}
           order1={order1}
-          fixAction={type}
+          action={type}
         />
       )}
       {!isOverlapping && (

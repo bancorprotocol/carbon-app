@@ -15,7 +15,7 @@ import {
   getStatusTextByTxStatus,
 } from 'components/strategies/utils';
 import { isOverlappingStrategy } from 'components/strategies/overlapping/utils';
-import { EditOverlappingStrategy } from 'components/strategies/edit/overlapping/EditOverlappingStrategy';
+import { EditPriceOverlappingStrategy } from 'components/strategies/edit/overlapping/EditPriceOverlappingStrategy';
 import { cn } from 'utils/helpers';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useModal } from 'hooks/useModal';
@@ -180,7 +180,7 @@ export const EditStrategyPricesContent = ({
     >
       <EditStrategyOverlapTokens strategy={strategy} />
       {isOverlapping && (
-        <EditOverlappingStrategy
+        <EditPriceOverlappingStrategy
           strategy={strategy}
           order0={order0}
           order1={order1}
