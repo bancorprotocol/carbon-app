@@ -6,12 +6,20 @@ export const isDraft = !!process.env.DRAFT && process.env.DRAFT !== 'false';
 export const shouldTakeScreenshot = isCI && !isDraft;
 
 /** Utils to take screenshot on CI that are not draft */
-export const screenshot = (target: Page | Locator, name: string) => {
+export const screenshot = async (target: Page | Locator, name: string) => {
   if (!shouldTakeScreenshot) return;
+
+  const screenshotStyle = `
+  [data-testid="user-wallet"] {
+    font-family: monospace !important;
+    visibility: hidden !important;
+  }
+`;
 
   return target.screenshot({
     path: `e2e/screenshots/${name}.png`,
     animations: 'disabled',
+    style: screenshotStyle,
   });
 };
 

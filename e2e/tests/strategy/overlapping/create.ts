@@ -10,7 +10,6 @@ import {
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 import { waitForTenderlyRpc } from '../../../utils/tenderly';
-import { MainMenuDriver } from '../../../utils/MainMenuDriver';
 
 export const create = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
@@ -69,9 +68,6 @@ export const create = (testCase: CreateStrategyTestCase) => {
     const notificationDriver = new NotificationDriver(page);
     await notificationDriver.closeAll();
 
-    const mainMenu = new MainMenuDriver(page);
-    await mainMenu.hideUserWallet();
     await screenshot(page, screenshotPath(testCase, 'create', 'my-strategy'));
-    await mainMenu.showUserWallet();
   });
 };
