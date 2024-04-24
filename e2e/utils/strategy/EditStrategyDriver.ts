@@ -6,7 +6,6 @@ import { CreateStrategyTestCase } from './types';
 import { Setting, Direction, MinMax } from '../types';
 import {
   assertDisposableTestCase,
-  assertOverlappingTestCase,
   assertRecurringTestCase,
   getRecurringSettings,
   screenshotPath,
@@ -155,23 +154,5 @@ export class EditStrategyDriver {
     assertDisposableTestCase(this.testCase);
     const { direction, input } = this.testCase;
     return this.fillBudget(direction, input[type]);
-  }
-
-  async fillOverlapping(type: EditType) {
-    assertOverlappingTestCase(this.testCase);
-    const input = this.testCase.input[type];
-    const form = this.getOverlappingForm();
-    if (input.min) await form.min().fill(input.min);
-    if (input.max) await form.max().fill(input.max);
-    if (input.spread) await form.spread().fill(input.spread);
-    if (input.min || input.max || input.spread) {
-      await expect(form.anchorRequired()).toBeVisible();
-    }
-    await form.anchor(input.anchor).click();
-    if (input.budget) {
-      await form.budgetSummary().click();
-      if (input.action) await form.action(input.action).click();
-      await form.budget().fill(input.budget);
-    }
   }
 }

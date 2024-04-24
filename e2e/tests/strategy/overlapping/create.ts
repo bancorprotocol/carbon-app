@@ -13,7 +13,7 @@ import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
 export const create = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
   const { base, quote } = testCase;
-  const { sell } = testCase.input.create;
+  const { buy, sell, spread } = testCase.input.create;
   const output = testCase.output.create;
 
   return test(`Create ${base}->${quote}`, async ({ page }) => {
@@ -28,12 +28,13 @@ export const create = (testCase: CreateStrategyTestCase) => {
     await createForm.selectSetting('overlapping');
     await createForm.nextStep();
 
-    const overlappingForm = createForm.getOverlappingForm();
-    // Make so form has value before filling it
-    expect(overlappingForm.min()).toHaveValue(/\S+/);
-    expect(overlappingForm.max()).toHaveValue(/\S+/);
-    await createForm.fillOverlapping();
-    expect(overlappingForm.max()).toHaveValue(sell.max.toString());
+    const form = createForm.getOverlappingForm();
+    await form.max().fill(sell.max.toString());
+    await form.min().fill(buy.min.toString());
+    await form.spread().fill(spread.toString());
+    await expect(form.anchorRequired()).toBeVisible();
+    await form.anchor('sell').click();
+    await form.budget().fill(sell.budget.toString());
 
     const tokenApproval = new TokenApprovalDriver(page);
     await createForm.submit();

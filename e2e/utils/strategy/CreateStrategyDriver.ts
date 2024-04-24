@@ -2,7 +2,6 @@ import { expect, Page } from '@playwright/test';
 import {
   assertDebugToken,
   assertDisposableTestCase,
-  assertOverlappingTestCase,
   assertRecurringTestCase,
   getRecurringSettings,
   screenshotPath,
@@ -40,11 +39,12 @@ export class CreateStrategyDriver {
     const form = this.getForm();
     return {
       locator: form,
-      min: () => form.getByLabel('Min Buy Price'),
-      max: () => form.getByLabel('Max Sell Price'),
-      budgetBase: () => form.getByTestId('input-budget-base'),
-      budgetQuote: () => form.getByTestId('input-budget-quote'),
+      min: () => form.getByTestId('input-min'),
+      max: () => form.getByTestId('input-max'),
       spread: () => form.getByTestId('spread-input'),
+      anchorRequired: () => form.getByTestId('require-anchor'),
+      anchor: (anchor: 'buy' | 'sell') => form.getByTestId(`anchor-${anchor}`),
+      budget: () => form.getByTestId('input-budget'),
     };
   }
 
@@ -87,17 +87,6 @@ export class CreateStrategyDriver {
     const sellForm = await this.fillFormSection('sell', sellSetting, sell);
     const buyForm = await this.fillFormSection('buy', buySetting, buy);
     return { buyForm, sellForm };
-  }
-
-  async fillOverlapping() {
-    assertOverlappingTestCase(this.testCase);
-    const { buy, sell, spread } = this.testCase.input.create;
-    const form = this.getOverlappingForm();
-    await form.max().fill(sell.max.toString());
-    await form.min().fill(buy.min.toString());
-    await form.spread().fill(spread.toString());
-    await form.budgetBase().fill(sell.budget.toString());
-    return form;
   }
 
   async fillDisposable() {
