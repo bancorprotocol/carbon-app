@@ -285,51 +285,51 @@ const getSimulatorData = async (simulatorData) => {
 };
 
 async function main() {
-  // const roi = await getRoi();
+  const roi = await getRoi();
 
-  // /** @type Record<string, FiatPriceDict> */
-  // const rates = {};
-  // const getAll = addresses.map(async (address) => {
-  //   const dict = await getMarketRate(address);
-  //   rates[address] = dict;
-  // });
-  // await Promise.allSettled(getAll);
+  /** @type Record<string, FiatPriceDict> */
+  const rates = {};
+  const getAll = addresses.map(async (address) => {
+    const dict = await getMarketRate(address);
+    rates[address] = dict;
+  });
+  await Promise.allSettled(getAll);
 
-  // const historyPrices = {};
-  // const getHistoryPricesAll = historyPricesCases.map(async (c) => {
-  //   const dict = await getHistoryPrices(
-  //     c.baseToken,
-  //     c.quoteToken,
-  //     c.start,
-  //     c.end
-  //   );
-  //   const pairKey = [c.baseToken, c.quoteToken].join('-').toLowerCase();
-  //   historyPrices[pairKey] = dict;
-  // });
-  // await Promise.allSettled(getHistoryPricesAll);
+  const historyPrices = {};
+  const getHistoryPricesAll = historyPricesCases.map(async (c) => {
+    const dict = await getHistoryPrices(
+      c.baseToken,
+      c.quoteToken,
+      c.start,
+      c.end
+    );
+    const pairKey = [c.baseToken, c.quoteToken].join('-').toLowerCase();
+    historyPrices[pairKey] = dict;
+  });
+  await Promise.allSettled(getHistoryPricesAll);
 
-  // const simulatorResult = {};
-  // const getSimulatorDataAll = simulatorResultCases.map(async (c) => {
-  //   const dict = await getSimulatorData(c);
-  //   const pairKey = [
-  //     c.baseToken,
-  //     c.quoteToken,
-  //     c.buyMin,
-  //     c.buyMax,
-  //     c.buyMarginal,
-  //     c.buyBudget,
-  //     c.sellMin,
-  //     c.sellMax,
-  //     c.sellMarginal,
-  //     c.sellBudget,
-  //     convertToUnix(c.start),
-  //     convertToUnix(c.end),
-  //   ]
-  //     .join('-')
-  //     .toLowerCase();
-  //   simulatorResult[pairKey] = dict;
-  // });
-  // await Promise.allSettled(getSimulatorDataAll);
+  const simulatorResult = {};
+  const getSimulatorDataAll = simulatorResultCases.map(async (c) => {
+    const dict = await getSimulatorData(c);
+    const pairKey = [
+      c.baseToken,
+      c.quoteToken,
+      c.buyMin,
+      c.buyMax,
+      c.buyMarginal,
+      c.buyBudget,
+      c.sellMin,
+      c.sellMax,
+      c.sellMarginal,
+      c.sellBudget,
+      convertToUnix(c.start),
+      convertToUnix(c.end),
+    ]
+      .join('-')
+      .toLowerCase();
+    simulatorResult[pairKey] = dict;
+  });
+  await Promise.allSettled(getSimulatorDataAll);
 
   const tokenListResult = {};
   const getTokenLists = tokenListsToMock.map(async (tokenList) => {
@@ -341,18 +341,18 @@ async function main() {
   const folder = join(cwd(), 'e2e/mocks');
   if (!existsSync(folder)) mkdirSync(folder, { recursive: true });
 
-  // // We do not wrap it into "data" as playwright will do it for us
-  // writeFileSync(join(folder, 'roi.json'), JSON.stringify(roi));
-  // writeFileSync(join(folder, 'market-rates.json'), JSON.stringify(rates));
+  // We do not wrap it into "data" as playwright will do it for us
+  writeFileSync(join(folder, 'roi.json'), JSON.stringify(roi));
+  writeFileSync(join(folder, 'market-rates.json'), JSON.stringify(rates));
 
-  // writeFileSync(
-  //   join(folder, 'history-prices.json'),
-  //   JSON.stringify(historyPrices)
-  // );
-  // writeFileSync(
-  //   join(folder, 'simulator-result.json'),
-  //   JSON.stringify(simulatorResult)
-  // );
+  writeFileSync(
+    join(folder, 'history-prices.json'),
+    JSON.stringify(historyPrices)
+  );
+  writeFileSync(
+    join(folder, 'simulator-result.json'),
+    JSON.stringify(simulatorResult)
+  );
   writeFileSync(
     join(folder, 'tokenLists.json'),
     JSON.stringify(tokenListResult)
