@@ -9,10 +9,10 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { CreateOverlappingStrategy } from 'components/strategies/create/overlapping/CreateOverlappingStrategy';
 import { useStrategyWarning } from 'components/strategies/useWarning';
 import useInitEffect from 'hooks/useInitEffect';
 import { carbonEvents } from 'services/events';
+import { CreateOverlapping } from './overlapping/CreateOverlapping';
 
 export const CreateStrategyOrders = ({
   base,
@@ -107,13 +107,11 @@ export const CreateStrategyOrders = ({
       </m.header>
 
       {strategySettings === 'overlapping' && base && quote && (
-        <CreateOverlappingStrategy
+        <CreateOverlapping
           base={base}
           quote={quote}
           order0={order0}
           order1={order1}
-          token0BalanceQuery={token0BalanceQuery}
-          token1BalanceQuery={token1BalanceQuery}
           spread={spread}
           setSpread={setSpread}
         />
