@@ -9,16 +9,8 @@ export const shouldTakeScreenshot = isCI && !isDraft;
 export const screenshot = (target: Page | Locator, name: string) => {
   if (!shouldTakeScreenshot) return;
 
-  const styles = `
-  [data-testid="user-wallet"] {
-    font-family: monospace !important;
-    visibility: hidden !important;
-  }
-`;
-
   return target.screenshot({
     path: `e2e/screenshots/${name}.png`,
-    style: styles,
     animations: 'disabled',
   });
 };

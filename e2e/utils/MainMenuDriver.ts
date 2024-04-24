@@ -12,4 +12,16 @@ export class MainMenuDriver {
       el.style.visibility = 'unset';
     });
   }
+  hideUserWallet() {
+    return this.page.getByTestId('user-wallet').evaluate((el) => {
+      el.style.fontFamily = 'monospace';
+      el.style.visibility = 'hidden';
+    });
+  }
+  showUserWallet() {
+    return this.page.getByTestId('user-wallet').evaluate((el) => {
+      el.style.fontFamily = 'unset';
+      el.style.visibility = 'unset';
+    });
+  }
 }
