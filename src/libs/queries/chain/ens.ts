@@ -14,8 +14,11 @@ export const useGetEnsFromAddress = (address: string) => {
         throw new Error('useGetEnsFromAddress no provider provided');
       }
       if (utils.isAddress(address.toLowerCase())) {
-        // Already checks reverse resolution
-        return await provider.lookupAddress(address);
+        const ensAddr = (await provider.getNetwork()).ensAddress;
+        if (ensAddr) {
+          // Already checks reverse resolution
+          return await provider.lookupAddress(address);
+        }
       }
       return '';
     },
