@@ -9,7 +9,7 @@ import { useStore } from 'store';
 import useAsyncEffect from 'use-async-effect';
 import { getConnectionTypeFromLS } from './web3.constants';
 import { carbonEvents } from 'services/events';
-
+import config from 'config';
 export const useWeb3Network = () => {
   const { isCountryBlocked, setSelectedWallet } = useStore();
 
@@ -24,7 +24,7 @@ export const useWeb3Network = () => {
   const [networkError, setNetworkError] = useState<string>();
 
   const switchNetwork = useCallback(async () => {
-    await connector.activate(1);
+    await connector.activate(config.network.chainId);
   }, [connector]);
 
   const activateNetwork = useCallback(async () => {

@@ -4,6 +4,7 @@ import config from 'config';
 
 const TENDERLY_RPC = lsService.getItem('tenderlyRpc');
 const CHAIN_RPC_URL = TENDERLY_RPC || config.rpcUrl;
+const CHAIN_ID = TENDERLY_RPC ? 1 : config.network.chainId;
 
 if (typeof CHAIN_RPC_URL === 'undefined') {
   throw new Error(`rpcUrl must be defined in config folder`);
@@ -12,7 +13,7 @@ if (typeof CHAIN_RPC_URL === 'undefined') {
 export const IS_TENDERLY_FORK = !!TENDERLY_RPC;
 
 export enum SupportedChainId {
-  MAINNET = 1,
+  MAINNET = CHAIN_ID,
 }
 
 // [START] Used for localstorage migration: Remove it after Nov 2023

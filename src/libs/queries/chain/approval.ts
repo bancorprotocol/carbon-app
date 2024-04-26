@@ -4,7 +4,7 @@ import { NULL_APPROVAL_CONTRACTS, UNLIMITED_WEI } from 'utils/approval';
 import { expandToken, shrinkToken } from 'utils/tokens';
 import { SafeDecimal } from 'libs/safedecimal';
 import { QueryKey } from 'libs/queries/queryKey';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { useContract } from 'hooks/useContract';
 import { Token } from 'libs/tokens';
 import { ContractTransaction } from 'ethers';
@@ -34,7 +34,7 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
-        const isETH = t.address === config.tokens.ETH;
+        const isETH = t.address === config.network.gasToken.address;
         if (isETH) {
           return new SafeDecimal(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
@@ -73,9 +73,10 @@ export const useSetUserApproval = () => {
     }: SetUserApprovalProps): Promise<
       [ContractTransaction, ContractTransaction | undefined]
     > => {
-      const isETH = address === config.tokens.ETH;
-      if (isETH) {
-        throw new Error('useSetUserApproval cannot approve ETH');
+      const gasToken = config.network.gasToken;
+      const isGasToken = address === gasToken.address;
+      if (isGasToken) {
+        throw new Error(`useSetUserApproval cannot approve ${gasToken.symbol}`);
       }
       if (!user) {
         throw new Error('useSetUserApproval no user provided');
