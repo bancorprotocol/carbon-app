@@ -13,7 +13,7 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useMemo, useRef, useState } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappingStrategy';
@@ -34,7 +34,6 @@ export const EditStrategyBudgetContent = ({
 }: EditStrategyBudgetContentProps) => {
   const isOverlapping = isOverlappingStrategy(strategy);
   const ref = useRef<HTMLFormElement>(null);
-  const [disabled, setDisabled] = useState(true);
   const [approvedWarnings, setApprovedWarnings] = useState(false);
 
   const { history } = useRouter();
@@ -55,8 +54,15 @@ export const EditStrategyBudgetContent = ({
   const { getFiatValue: getFiatValueQuote } = useFiatCurrency(strategy.quote);
   const buyBudgetUsd = getFiatValueQuote(buyBalance, true).toString();
   const sellBudgetUsd = getFiatValueBase(buyBalance, true).toString();
+
+  const { approval } = useEditStrategy(
+    strategy,
+    getDeposit(buyBalance, order0.budget),
+    getDeposit(sellBalance, order1.budget)
+  );
+
   const isAwaiting = updateMutation.isLoading;
-  const isLoading = isAwaiting || isProcessing;
+  const isLoading = isAwaiting || isProcessing || approval.isLoading;
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -65,11 +71,6 @@ export const EditStrategyBudgetContent = ({
     order1,
   });
 
-  const { approval } = useEditStrategy(
-    strategy,
-    getDeposit(buyBalance, order0.budget),
-    getDeposit(sellBalance, order1.budget)
-  );
   const { openModal } = useModal();
 
   const handleEvents = () => {
@@ -179,14 +180,14 @@ export const EditStrategyBudgetContent = ({
     void actionFn(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
-  useEffect(() => {
-    const form = ref.current;
-    if (!form) return;
-    const hasError = !!form.querySelector('.error-message');
-    const hasWarning = !!form.querySelector('.warning-message');
-    const hasChanges = strategyHasChanges(strategy, order0, order1);
-    setDisabled(hasError || !hasChanges || (hasWarning && !approvedWarnings));
-  }, [order0, order1, strategy, approvedWarnings]);
+  const disabled = useMemo(() => {
+    if (approval.isError) return true;
+    if (!strategyHasChanges(strategy, order0, order1)) return true;
+    if (!ref.current) return true;
+    if (ref.current.querySelector('.error-message')) return true;
+    const hasWarning = !!ref.current.querySelector('.warning-message');
+    return hasWarning && !approvedWarnings;
+  }, [approval.isError, strategy, order0, order1, approvedWarnings]);
 
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);

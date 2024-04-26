@@ -29,24 +29,26 @@ type Props = {
   slippage?: SafeDecimal | null;
   withoutWallet?: boolean;
   'data-testid'?: string;
+  required?: boolean;
 };
 
-export const TokenInputField: FC<Props> = ({
-  id,
-  value,
-  setValue = () => {},
-  token,
-  balance,
-  isBalanceLoading,
-  isError,
-  className,
-  onKeystroke,
-  placeholder = 'Enter Amount',
-  disabled,
-  slippage,
-  withoutWallet,
-  'data-testid': testid,
-}) => {
+export const TokenInputField: FC<Props> = (props) => {
+  const {
+    id,
+    value,
+    setValue = () => {},
+    token,
+    balance,
+    isBalanceLoading,
+    isError,
+    className,
+    onKeystroke,
+    placeholder = 'Enter Amount',
+    disabled,
+    slippage,
+    withoutWallet,
+    'data-testid': testid,
+  } = props;
   const { user } = useWeb3();
   const inputRef = useRef<HTMLInputElement>(null);
   const { getFiatValue, getFiatAsString } = useFiatCurrency(token);
@@ -105,6 +107,7 @@ export const TokenInputField: FC<Props> = ({
           )}
           disabled={disabled}
           data-testid={testid}
+          required={props.required}
         />
         <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
           <LogoImager alt="Token" src={token.logoURI} className="size-20" />

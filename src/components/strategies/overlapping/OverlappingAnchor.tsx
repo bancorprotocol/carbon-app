@@ -38,6 +38,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           checked={anchor === 'sell'}
           onChange={(e) => e.target.checked && setAnchor('sell')}
           disabled={props.disableSell}
+          required
         />
         <label
           htmlFor="anchor-sell"
@@ -56,6 +57,7 @@ export const OverlappingAnchor: FC<Props> = (props) => {
           checked={anchor === 'buy'}
           onChange={(e) => e.target.checked && setAnchor('buy')}
           disabled={props.disableBuy}
+          required
         />
         <label
           htmlFor="anchor-buy"

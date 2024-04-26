@@ -23,19 +23,9 @@ import {
   createStrategyAction,
   checkErrors,
 } from 'components/strategies/create/utils';
-import {
-  checkIfOrdersOverlap,
-  checkIfOrdersReversed,
-  isEmptyOrder,
-  isValidOrder,
-  isValidRange,
-} from '../utils';
+import { checkIfOrdersOverlap, checkIfOrdersReversed } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
-import {
-  getRoundedSpread,
-  isOverlappingBudgetTooSmall,
-  isValidSpread,
-} from '../overlapping/utils';
+import { getRoundedSpread } from '../overlapping/utils';
 
 const spenderAddress = config.carbon.carbonController;
 
@@ -269,44 +259,6 @@ export const useCreateStrategy = () => {
     openModal('tokenLists', data);
   };
 
-  const isCTAdisabled = useMemo(() => {
-    if (!user) return false;
-    if (approval.isLoading) return true;
-    if (approval.isError) return true;
-    if (mutation.isLoading) return true;
-    if (isProcessing) return true;
-    if (order0.budgetError) return true;
-    if (order1.budgetError) return true;
-    if (isOrdersReversed) return true;
-
-    if (strategySettings === 'overlapping') {
-      return (
-        !isValidSpread(spread) ||
-        !isValidRange(order0.min, order1.max) ||
-        isOverlappingBudgetTooSmall(order0, order1)
-      );
-    } else if (strategyType === 'recurring') {
-      return !isValidOrder(order0) || !isValidOrder(order1);
-    } else if (strategyDirection === 'buy') {
-      return !isValidOrder(order0) || !isEmptyOrder(order1);
-    } else {
-      return !isValidOrder(order1) || !isEmptyOrder(order0);
-    }
-  }, [
-    user,
-    approval.isLoading,
-    approval.isError,
-    mutation.isLoading,
-    isProcessing,
-    order0,
-    order1,
-    strategyType,
-    strategyDirection,
-    strategySettings,
-    spread,
-    isOrdersReversed,
-  ]);
-
   useEffect(() => {
     setSelectedStrategySettings(undefined);
   }, [baseAddress, quoteAddress]);
@@ -340,11 +292,11 @@ export const useCreateStrategy = () => {
     quote,
     order0,
     order1,
+    hasApprovalError: approval.isError,
     isAwaiting: mutation.isLoading,
     createStrategy,
     openTokenListModal,
     showOrders,
-    isCTAdisabled,
     token0BalanceQuery,
     token1BalanceQuery,
     showGraph,

@@ -1,4 +1,4 @@
-import { FormEvent, useMemo } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { m } from 'libs/motion';
 import { useWeb3 } from 'libs/web3';
 import { Button } from 'components/common/button';
@@ -9,18 +9,17 @@ import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { useStrategyWarning } from 'components/strategies/useWarning';
-import useInitEffect from 'hooks/useInitEffect';
 import { carbonEvents } from 'services/events';
 import { CreateOverlapping } from './overlapping/CreateOverlapping';
+import useInitEffect from 'hooks/useInitEffect';
 
 export const CreateStrategyOrders = ({
   base,
   quote,
   order0,
   order1,
+  hasApprovalError,
   createStrategy,
-  isCTAdisabled,
   token0BalanceQuery,
   token1BalanceQuery,
   strategyDirection,
@@ -34,17 +33,11 @@ export const CreateStrategyOrders = ({
   spread,
   setSpread,
 }: UseStrategyCreateReturn) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const { user } = useWeb3();
-  const warnings = useStrategyWarning({
-    base,
-    quote,
-    order0,
-    order1,
-    isOverlapping: strategySettings === 'overlapping',
-    invalidForm: isCTAdisabled,
-    isConnected: !!user,
-  });
-
+  const [approvedWarnings, setApprovedWarnings] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  const [showWarningApproval, setShowWarningApproval] = useState(false);
   const strategyEventData = useStrategyEventData({
     base,
     quote,
@@ -70,12 +63,33 @@ export const CreateStrategyOrders = ({
     createStrategy();
   };
 
+  useEffect(() => {
+    const form = formRef.current;
+    const valid =
+      form?.checkValidity() && !form.querySelector('.error-message');
+    const warnings = !!formRef.current?.querySelector('.warning-message');
+    setShowWarningApproval(!!user && !!valid && warnings);
+    const hasError = !valid || hasApprovalError;
+    const needApproval = showWarningApproval && !approvedWarnings;
+    setDisabled(!user || hasError || needApproval);
+  }, [
+    approvedWarnings,
+    disabled,
+    order0,
+    order1,
+    showWarningApproval,
+    user,
+    hasApprovalError,
+  ]);
+
+  const loading = isAwaiting || isProcessing;
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
 
   return (
     <form
+      ref={formRef}
       onSubmit={(e) => onCreateStrategy(e)}
       className="flex flex-col gap-20 md:w-[440px]"
       data-testid="create-strategy-form"
@@ -150,15 +164,14 @@ export const CreateStrategyOrders = ({
         </>
       )}
 
-      {warnings.formHasWarning && !isCTAdisabled && (
+      {showWarningApproval && (
         <m.label
           variants={items}
           className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60"
         >
           <input
             type="checkbox"
-            value={warnings.approvedWarnings.toString()}
-            onChange={(e) => warnings.setApprovedWarnings(e.target.checked)}
+            onChange={(e) => setApprovedWarnings(e.target.checked)}
             data-testid="approve-warnings"
           />
           I've reviewed the warning(s) but choose to proceed.
@@ -171,8 +184,8 @@ export const CreateStrategyOrders = ({
           variant="success"
           size="lg"
           fullWidth
-          disabled={isCTAdisabled || warnings.shouldApproveWarnings}
-          loading={isProcessing || isAwaiting}
+          disabled={disabled}
+          loading={loading}
           loadingChildren={loadingChildren}
         >
           {user ? 'Create Strategy' : 'Connect Wallet'}
