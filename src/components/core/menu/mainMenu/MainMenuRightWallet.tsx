@@ -48,7 +48,6 @@ export const MainMenuRightWallet: FC = () => {
   const { user, isSupportedNetwork, isImposter, isUserBlocked } = useWeb3();
   const { selectedWallet, isManualConnection } = useStore();
   const { openModal } = useModal();
-  const { debug } = useStore();
 
   const onClickOpenModal = () => {
     carbonEvents.navigation.navWalletConnectClick(undefined);
@@ -111,9 +110,7 @@ export const MainMenuRightWallet: FC = () => {
             data-testid="user-wallet"
           >
             {buttonIcon}
-            <span className={debug.debugState.isE2E ? 'font-mono' : ''}>
-              {buttonText}
-            </span>
+            <span>{buttonText}</span>
           </button>
         )}
       >
@@ -140,7 +137,7 @@ const ConnectedMenu: FC = () => {
   const { user, disconnect, isSupportedNetwork, switchNetwork } = useWeb3();
 
   const onDisconnect = async () => {
-    disconnect();
+    await disconnect();
     carbonEvents.wallet.walletDisconnect({
       address: user,
     });

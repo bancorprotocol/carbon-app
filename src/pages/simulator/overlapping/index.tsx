@@ -105,7 +105,13 @@ export const SimulatorInputOverlappingPage = () => {
           spread={+state.spread!}
           setSpread={(v) => dispatch('spread', v.toString())}
         />
-        <Button type="submit" fullWidth size="lg" disabled={btnDisabled}>
+        <Button
+          type="submit"
+          data-testid="start-simulation-btn"
+          fullWidth
+          size="lg"
+          disabled={btnDisabled}
+        >
           {loadingText || noBudgetText || 'Start Simulation'}
         </Button>
       </form>

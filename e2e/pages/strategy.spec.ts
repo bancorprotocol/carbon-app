@@ -561,13 +561,12 @@ const testDescription = (testCase: CreateStrategyTestCase) => {
 
 test.describe('Strategies', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    testInfo.setTimeout(120_000);
     await mockApi(page);
     await setupFork(testInfo);
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setRpcUrl(testInfo);
-    await Promise.all([debug.setupImposter(), debug.setE2E()]);
+    await debug.setupImposter();
   });
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);
