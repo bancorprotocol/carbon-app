@@ -28,6 +28,8 @@ import {
 } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { Token } from 'libs/tokens';
+import { m } from 'libs/motion';
+import { items } from '../variants';
 
 interface Props {
   base: Token;
@@ -95,7 +97,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
     buyMin: string,
     sellMax: string
   ) => {
-    console.log({ buyBudget });
     if (!base || !quote) return;
     if (!buyBudget) return order1.setBudget('');
     try {
@@ -273,7 +274,11 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   return (
     <>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+      <m.article
+        variants={items}
+        key="price-graph"
+        className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+      >
         <header>
           <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
         </header>
@@ -288,8 +293,12 @@ export const CreateOverlapping: FC<Props> = (props) => {
           setMin={setMin}
           setMax={setMax}
         />
-      </article>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+      </m.article>
+      <m.article
+        variants={items}
+        key="price-range"
+        className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
+      >
         <header className="flex items-center gap-8">
           <h3 className="text-18 font-weight-500 flex-1">
             Set Price Range&nbsp;
@@ -313,8 +322,12 @@ export const CreateOverlapping: FC<Props> = (props) => {
             setMax={setMax}
           />
         )}
-      </article>
-      <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
+      </m.article>
+      <m.article
+        variants={items}
+        key="spread"
+        className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20"
+      >
         <header className="mb-10 flex items-center gap-8 ">
           <h3 className="text-18 font-weight-500 flex-1">Set Spread</h3>
           <Tooltip
@@ -330,7 +343,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
           spread={spread}
           setSpread={setSpreadValue}
         />
-      </article>
+      </m.article>
       <OverlappingAnchor
         base={base}
         quote={quote}
@@ -352,7 +365,9 @@ export const CreateOverlapping: FC<Props> = (props) => {
         />
       )}
       {anchor && (
-        <article
+        <m.article
+          variants={items}
+          key="overlapping-distribution"
           id="overlapping-distribution"
           className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
         >
@@ -397,7 +412,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
             deposit={budgetError ? '0' : order0.budget}
             balance={quoteBalance}
           />
-        </article>
+        </m.article>
       )}
     </>
   );
