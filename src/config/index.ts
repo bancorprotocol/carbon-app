@@ -1,10 +1,16 @@
 import ethereumDev from './ethereum/development';
 import ethereumProd from './ethereum/production';
+import seiDev from './sei/development';
+import seiProd from './sei/production';
 
 const configs = {
   ethereum: {
     development: ethereumDev,
     production: ethereumProd,
+  },
+  sei: {
+    development: seiDev,
+    production: seiProd,
   },
 };
 type Network = keyof typeof configs;
