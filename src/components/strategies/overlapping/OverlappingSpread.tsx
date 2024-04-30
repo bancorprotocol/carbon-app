@@ -9,7 +9,7 @@ import {
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
-import styles from './OverlappingStrategySpread.module.css';
+import styles from './OverlappingSpread.module.css';
 
 interface Props {
   /** Value used to fallback to when custom input is empty */
@@ -27,7 +27,7 @@ const getWarning = (maxSpread: number) => {
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
-export const OverlappingStrategySpread: FC<Props> = (props) => {
+export const OverlappingSpread: FC<Props> = (props) => {
   const { defaultValue, options, spread, setSpread, buyMin, sellMax } = props;
   const root = useRef<HTMLDivElement>(null);
   const inOptions = options.includes(spread);

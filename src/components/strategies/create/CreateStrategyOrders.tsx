@@ -10,7 +10,7 @@ import { useStrategyEventData } from 'components/strategies/create/useStrategyEv
 import { getStatusTextByTxStatus } from 'components/strategies/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { carbonEvents } from 'services/events';
-import { CreateOverlapping } from './overlapping/CreateOverlapping';
+import { CreateOverlapping } from './CreateOverlapping';
 import useInitEffect from 'hooks/useInitEffect';
 
 export const CreateStrategyOrders = ({

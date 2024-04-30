@@ -13,7 +13,7 @@ import { useMarketPrice } from 'hooks/useMarketPrice';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
-import { OverlappingStrategySpread } from 'components/strategies/overlapping/OverlappingStrategySpread';
+import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
 import { OverlappingRange } from 'components/strategies/overlapping/OverlappingRange';
 import { isValidRange } from 'components/strategies/utils';
 import {
@@ -336,7 +336,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
             iconClassName="h-14 w-14 text-white/60"
           />
         </header>
-        <OverlappingStrategySpread
+        <OverlappingSpread
           buyMin={Number(order0.min)}
           sellMax={Number(order1.max)}
           defaultValue={0.05}
