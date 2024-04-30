@@ -15,10 +15,14 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!isCI,
   retries: isCI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: undefined,
+  /* Opt out of parallel tests on CI. (As recommended in https://playwright.dev/docs/ci#workers) */
+  workers: isCI ? 1 : undefined,
   /* See https://playwright.dev/docs/test-reporters */
   reporter: isCI ? 'html' : 'list',
+  // Limit the number of failures on CI to save resources
+  maxFailures: process.env.CI ? 10 : undefined,
+  // Set each test's default timeout
+  timeout: 120000,
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -43,6 +47,11 @@ export default defineConfig({
     //   use: { ...devices['Desktop Safari'] },
     // },
   ],
+
+  expect: {
+    // Maximum time expect() should wait for the condition to be met.
+    timeout: 10000,
+  },
 
   /* Run your local dev server before starting the tests */
   webServer: {

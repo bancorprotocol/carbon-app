@@ -23,7 +23,6 @@ import { useCallback } from 'react';
 import { ReactComponent as IconPlus } from 'assets/icons/plus.svg';
 import { CandlestickData, D3ChartSettingsProps, D3ChartWrapper } from 'libs/d3';
 import { fromUnixUTC, toUnixUTC } from '../utils';
-import { useStore } from 'store';
 import { startOfDay, sub } from 'date-fns';
 
 interface Props {
@@ -58,7 +57,6 @@ export const SimInputChart = ({
   data,
   simulationType,
 }: Props) => {
-  const { debug } = useStore();
   const marketPrice = useCompareTokenPrice(
     state.baseToken?.address,
     state.quoteToken?.address
@@ -116,7 +114,7 @@ export const SimInputChart = ({
           onConfirm={onDatePickerConfirm}
           presets={datePickerPresets}
           options={{
-            disabled: debug.debugState.isE2E ? [] : datePickerDisabledDays,
+            disabled: datePickerDisabledDays,
           }}
           required
         />
