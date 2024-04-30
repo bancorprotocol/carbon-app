@@ -5,6 +5,7 @@ import config from 'config';
 const TENDERLY_RPC = lsService.getItem('tenderlyRpc');
 const CHAIN_RPC_URL = TENDERLY_RPC || config.rpcUrl;
 const CHAIN_ID = TENDERLY_RPC ? 1 : config.network.chainId;
+const IS_WALLET_CONNECT_AVAILABLE = config.walletConnectProjectId !== '';
 
 if (typeof CHAIN_RPC_URL === 'undefined') {
   throw new Error(`rpcUrl must be defined in config folder`);
@@ -48,9 +49,8 @@ export type ConnectionType =
 
 export const selectableConnectionTypes = [
   'injected',
-  'walletConnect',
-  'coinbaseWallet',
-  'gnosisSafe',
+  ...(IS_WALLET_CONNECT_AVAILABLE ? ['walletConnect', 'coinbaseWallet'] : []),
+  ...(config.isGnosisSafeAvailable ? ['gnosisSafe'] : []),
 ] as const;
 
 export const RPC_URLS: ChainIdMapTo<string> = {

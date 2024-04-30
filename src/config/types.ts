@@ -21,6 +21,7 @@ export interface AppConfig {
   };
   appUrl: string;
   walletConnectProjectId: string;
+  isGnosisSafeAvailable: boolean;
   sentryDNS?: string;
   rpcUrl: string;
   blockExplorer: string;

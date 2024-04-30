@@ -15,7 +15,8 @@ export const commonConfig: AppConfig = {
   rpcUrl:
     import.meta.env.VITE_CHAIN_RPC_URL ||
     'https://evm-rpc-arctic-1.sei-apis.com',
-  walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853', // TODO: if no walletConnectProjectId, remove walletconnect
+  walletConnectProjectId: '',
+  isGnosisSafeAvailable: false,
   mode: 'development',
   network: {
     name: 'SEI Network',
