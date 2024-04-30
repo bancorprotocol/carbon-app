@@ -61,9 +61,10 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     strategy.order0.marginalRate,
     strategy.order1.marginalRate
   )!;
-  const marketPrice = touched
-    ? newMarketPrice.toString()
-    : initialMarketPrice!.toString();
+  const marketPrice =
+    touched || !initialMarketPrice
+      ? newMarketPrice.toString()
+      : initialMarketPrice.toString();
 
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;

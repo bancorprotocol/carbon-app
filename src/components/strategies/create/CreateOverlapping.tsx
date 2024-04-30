@@ -36,7 +36,7 @@ interface Props {
   quote: Token;
   order0: OrderCreate;
   order1: OrderCreate;
-  // Remove spread from useCreateStrategy and use it only locally
+  // TODO Remove spread from useCreateStrategy and use it only locally
   spread: number;
   setSpread: (value: number) => void;
 }

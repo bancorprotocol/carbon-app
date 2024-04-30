@@ -67,7 +67,7 @@ export const CreateStrategyOrders = ({
     const form = formRef.current;
     const valid =
       form?.checkValidity() && !form.querySelector('.error-message');
-    const warnings = !!formRef.current?.querySelector('.warning-message');
+    const warnings = !!form?.querySelector('.warning-message');
     setShowWarningApproval(!!user && !!valid && warnings);
     const hasError = !valid || hasApprovalError;
     const needApproval = showWarningApproval && !approvedWarnings;

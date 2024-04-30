@@ -1,4 +1,3 @@
-/* TODO(#1130) integrate this into component when tailwind is updated */
 .select-token:focus-visible + label {
   outline: solid 1px white;
 }
