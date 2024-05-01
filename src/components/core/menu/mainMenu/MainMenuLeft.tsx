@@ -2,12 +2,28 @@ import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { Link, useMatchRoute, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { handleOnItemClick } from '../utils';
-import { menuItems } from 'components/core/menu';
+import { handleOnItemClick } from 'components/core/menu/utils';
+import { getMenuItems } from 'components/core/menu';
+import { useGetTokenPriceHistory } from 'libs/queries/extApi/tokenPrice';
+import { endOfDay, getUnixTime, startOfDay, sub } from 'date-fns';
+import config from 'config';
 
 export const MainMenuLeft: FC = () => {
   const { pathname } = useRouterState().location;
   const match = useMatchRoute();
+
+  const start = getUnixTime(
+    startOfDay(sub(new Date(), { days: 364 }))
+  ).toString();
+  const end = getUnixTime(endOfDay(new Date())).toString();
+  const { isLoading, isError } = useGetTokenPriceHistory({
+    baseToken: config.defaultTokenPair[0],
+    quoteToken: config.defaultTokenPair[1],
+    start,
+    end,
+  });
+  const noPriceHistory = isLoading || isError;
+  const menuItems = getMenuItems(noPriceHistory);
 
   const isSamePageLink = (to: string) => {
     if (pathname.startsWith('/strategies') && to === '/') return true;
