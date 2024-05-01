@@ -5,7 +5,8 @@ const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   ZERO: '0x0000000000000000000000000000000000000000',
   USDC: '0xace5f7Ea93439Af39b46d2748fA1aC19951c8d7C',
-  WSEI: '0x027d2e627209f1ceba52adc8a5afe9318459b44b',
+  WSEI: '0x027D2E627209f1cebA52ADc8A5aFE9318459b44B',
+  JLY: '0x9e7A8e558Ce582511f4104465a886b7bEfBC146b',
 };
 
 export const commonConfig: AppConfig = {
@@ -56,14 +57,21 @@ export const commonConfig: AppConfig = {
       name: 'WSEI',
       symbol: 'WSEI',
       decimals: 18,
-      address: '0x027d2e627209f1ceba52adc8a5afe9318459b44b',
+      address: addresses.WSEI,
       logoURI: '',
     },
     {
       name: 'USDC',
       symbol: 'USDC',
       decimals: 6,
-      address: '0xace5f7ea93439af39b46d2748fa1ac19951c8d7c',
+      address: addresses.USDC,
+      logoURI: '',
+    },
+    {
+      name: 'JLY',
+      symbol: 'JLY',
+      decimals: 18,
+      address: addresses.JLY,
       logoURI: '',
     },
   ],
