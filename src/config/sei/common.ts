@@ -11,7 +11,7 @@ const addresses = {
 
 export const commonConfig: AppConfig = {
   appUrl: 'https://sei.carbondefi.xyz',
-  carbonApi: 'https://api.carbondefi.xyz/v1/', // TODO: add SEI api
+  carbonApi: 'https://carbon-sei-testnet-ptdczarhfq-nw.a.run.app/v1/', // TODO: add SEI api
   blockExplorer: 'https://seitrace.com',
   rpcUrl:
     import.meta.env.VITE_CHAIN_RPC_URL ||
@@ -49,7 +49,7 @@ export const commonConfig: AppConfig = {
       voucher: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
     },
     utils: {
-      multicall: '0x1E05037b9c4fEFaF3c45CD6F4F2C3197e6A43cD8',
+      multicall: '0xEe8d287B844959ADe40d718Dc23077ba920e2f07',
     },
   },
   tokenListOverride: [
