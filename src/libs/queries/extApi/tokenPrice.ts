@@ -80,6 +80,7 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
     },
     {
       enabled: !!params.baseToken && !!params.quoteToken,
+      retry: false,
       staleTime: Infinity,
       refetchOnWindowFocus: false,
     }
