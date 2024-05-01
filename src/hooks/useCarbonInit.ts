@@ -17,6 +17,7 @@ import { carbonApi } from 'utils/carbonApi';
 const contractsConfig: ContractsConfig = {
   carbonControllerAddress: config.carbon.carbonController,
   voucherAddress: config.carbon.voucher,
+  multiCallAddress: config.utils.multicall,
 };
 
 const persistSdkCacheDump = async () => {
