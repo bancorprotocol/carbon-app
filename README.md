@@ -112,7 +112,7 @@ where `spread` is in percentage, and `value` is the number of strategies to crea
 
 1. Create a new folder under `src/config` with the name of the network (ex: "polygon")
 2. Copy paste the files from `src/config/ethereum` into your folder
-3. Update the `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network
+3. Update the `common.ts`, `production.ts` & `development.ts` files with your config, pointing to the CarbonDeFi contracts in that network
 4. Update the `src/config/index.ts` files to import your files
    `index.ts`
 
@@ -149,6 +149,28 @@ VITE_CHAIN_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/<API_KEY>
 
 In case the network is using a version of CarbonController older than 5 then there's no support for extended range for trade by source,
 and it is recommended to set VITE_LEGACY_TRADE_BY_SOURCE_RANGE to true in .env to avoid possible reverts.
+
+### Network configuration
+
+The file [`common.ts`](src/config/common.ts) contains the common configuration for the network. It includes the following:
+
+- `appUrl`: The URL of the app.
+- `carbonApi`: The URL of the API.
+- `blockExplorer`: The URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
+- `rpcUrl`: The RPC URL of the network.
+- `walletConnectProjectId`: The WalletConnect project ID. Leave empty if not used and the wallet will not show up in the wallet selection modal.
+- `isGnosisSafeAvailable`: Indicate if Gnosis Safe is available on the network.
+- `isSimulatorEnabled`: Indicate if the simulator is enabled on the network.
+- network
+  - `name`: Network name.
+  - `logoUrl`: Network logo URL.
+  - `chainId`: Chain ID.
+  - `gasToken`: Gas token name, symbol, decimals, address and logoURI
+- `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
+- `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
+- `addresses`/`carbon`: CarbonController, Voucher and multicall contract addresses.
+- `tokenListOverride`: Token list override to be used in the app when fetching the token list. Tokens in the list will override any other token with the same address.
+- `tokenLists`: List of token lists including the uri and the parser to be used to parse the token list.
 
 ## Change Colors
 
@@ -188,14 +210,15 @@ All other colors are defined with l,c,h values (see https://oklch.com), and the 
 
 You can change the % of the `lighten` & `darken` function with the [`lightDark`](./tailwind.config.ts#L20) function.
 
-
 ## Change font
 
 The application uses two fonts :
+
 - BW Gradual for the titles
 - Euclid Circle A for the text
 
-You can change the font by changing the files under : 
+You can change the font by changing the files under :
+
 - [`src/assets/font/title`](src/assets/font/title)
 - [`src/assets/font/text`](src/assets/font/text)
 
@@ -210,13 +233,15 @@ If you want to change the weight & format of the fonts you'll need to update the
 If you want to use only one font, the easiest is to update [`tailwind.config.ts`](tailwind.config.ts#L83).
 Under `theme.fontFamily` change the name of the font.
 
-For example, if you want to only use Carbon Text: 
+For example, if you want to only use Carbon Text:
+
 ```js
 fontFamily: {
   text: ['Carbon-Text', 'sans-serif'],
   title: ['Carbon-Text', 'sans-serif'], // change to Carbon Text here
 },
 ```
+
 You can also remove the unused `@font-face` from the [`src/fonts.css`](src/fonts.css) file.
 
 # License
