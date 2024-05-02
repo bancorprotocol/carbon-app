@@ -1,3 +1,5 @@
+import { TokenList } from 'libs/tokens';
+
 export interface AppConfig {
   mode: 'development' | 'production';
   carbonApi: string;
@@ -42,5 +44,8 @@ export interface AppConfig {
     address: string;
     logoURI: string;
   }[];
-  tokenLists: string[];
+  tokenLists: {
+    uri: string;
+    parser?: (data: any) => TokenList;
+  }[];
 }
