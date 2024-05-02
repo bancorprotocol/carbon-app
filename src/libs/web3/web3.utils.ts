@@ -9,11 +9,26 @@ import {
 import { lsService } from 'services/localeStorage';
 import { UAParser } from 'ua-parser-js';
 import { Connection } from './web3.types';
+import config from 'config';
 
 const parser = new UAParser(window.navigator.userAgent);
 const { type } = parser.getDevice();
 
 export const isMobile = type === 'mobile' || type === 'tablet';
+
+export const getChainInfo = () => {
+  return {
+    chainId: config.network.chainId,
+    chainName: config.network.name,
+    nativeCurrency: {
+      name: config.network.gasToken.name,
+      symbol: config.network.gasToken.symbol,
+      decimals: config.network.gasToken.decimals,
+    },
+    rpcUrls: [config.rpcUrl],
+    blockExplorerUrls: [config.blockExplorer],
+  };
+};
 
 const connections: Record<ConnectionType, Connection> = {
   injected: injectedConnection,
