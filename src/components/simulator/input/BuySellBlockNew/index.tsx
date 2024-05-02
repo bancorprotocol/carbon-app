@@ -52,7 +52,7 @@ export const BuySellBlock: FC<Props> = ({
 
   const inputTitle = (
     <>
-      <span className="size-16 flex items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+      <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
         1
       </span>
       <Tooltip
@@ -105,13 +105,13 @@ export const BuySellBlock: FC<Props> = ({
       data-testid={`${buy ? 'buy' : 'sell'}-section`}
     >
       <BuySellHeader {...headerProps}>
-        <h3 className="flex items-center gap-8" id={titleId}>
+        <h2 className="text-18 flex items-center gap-8" id={titleId}>
           <Tooltip sendEventOnMount={{ buy }} element={tooltipText}>
             <span>{buy ? 'Buy Low' : 'Sell High'}</span>
           </Tooltip>
           <LogoImager alt="Token" src={base.logoURI} className="size-18" />
           <span>{base.symbol}</span>
-        </h3>
+        </h2>
       </BuySellHeader>
       <LimitRangeSection {...limitRangeProps} />
       <BudgetSection {...budgetProps} />

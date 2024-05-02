@@ -154,8 +154,8 @@ export const _ExplorerSearch: FC = () => {
         </Button>
       </form>
       {isInvalidAddress && (
-        <div className="text-14 text-error absolute mt-4 flex items-center font-mono">
-          <IconWarning className="size-16 mr-10" />
+        <div className="text-14 text-error absolute mt-4 flex items-center">
+          <IconWarning className="mr-10 size-16" />
           Invalid Wallet Address
         </div>
       )}

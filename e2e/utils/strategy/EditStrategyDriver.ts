@@ -86,7 +86,6 @@ export class EditStrategyDriver {
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
-      await btn.hover(); // Enforce hover to have always the same color
       await waitTooltipsClose(this.page);
       const form = this.page.getByTestId('edit-form');
       const path = screenshotPath(this.testCase, type, 'form');

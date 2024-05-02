@@ -24,7 +24,11 @@ input[type='checkbox'] {
   html,
   body,
   #root {
-    @apply font-gt-america min-h-screen w-full bg-black text-white;
+    @apply text-white bg-black font-text w-full min-h-screen;
+  }
+
+  h1, h2, th {
+    @apply font-title;
   }
 
   /** Some Browsers set outline on :focus instead of :focus-visible for svg element */

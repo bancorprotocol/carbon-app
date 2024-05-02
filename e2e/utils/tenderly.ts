@@ -1,3 +1,5 @@
+import { Page } from '@playwright/test';
+
 const TENDERLY_ACCOUNT = process.env['TENDERLY_ACCOUNT'];
 if (!TENDERLY_ACCOUNT) throw new Error('No TENDERLY_ACCOUNT provided in .env');
 const TENDERLY_PROJECT = process.env['TENDERLY_PROJECT'];
@@ -86,6 +88,11 @@ export const createFork = async (body: CreateForkBody) => {
 export interface GetForkResponse {
   simulation_fork: Fork;
 }
+
+export const waitForTenderlyRpc = (page: Page, timeout?: number) => {
+  const tenderlyRegExp = /.*rpc\.tenderly\.co\/fork.*$/;
+  return page.waitForResponse(tenderlyRegExp, { timeout });
+};
 
 export const getFork = async (forkId: string) => {
   const res = await fetch(`${baseUrl}/${forkId}`, {

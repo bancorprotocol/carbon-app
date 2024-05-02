@@ -109,11 +109,9 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
         <OutsideMarketPriceWarning base={base} buy={!!buy} />
       )}
       {insufficientBalance && (
-        <WarningMessageWithIcon
-          htmlFor={inputId}
-          isError
-          message="Insufficient balance"
-        />
+        <WarningMessageWithIcon htmlFor={inputId} isError>
+          Insufficient balance
+        </WarningMessageWithIcon>
       )}
       <EditStrategyAllocatedBudget
         {...budgetProps}

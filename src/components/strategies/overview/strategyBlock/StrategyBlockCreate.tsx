@@ -21,12 +21,10 @@ export const StrategyBlockCreate: FC<Props> = ({
         className
       )}
     >
-      <div className="bg-primary/20 size-72 md:size-80 rounded-full">
+      <div className="bg-primary/20 size-72 rounded-full md:size-80">
         <IconPlus className="text-primary md:p-26 p-24" />
       </div>
-      <span className="w-[185px] text-center leading-9 md:w-[210px]">
-        {title}
-      </span>
+      <h1 className="w-[200px] text-center leading-9 md:w-[250px]">{title}</h1>
     </Link>
   );
 };

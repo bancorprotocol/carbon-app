@@ -135,14 +135,14 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
                       aria-label="toggle all orders"
                     />
                   </th>
-                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 font-mono text-white/60">
+                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 text-white/60">
                     {source.symbol}
                   </th>
                   <th className="sticky top-0 bg-black">{/* Arrow */}</th>
-                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 font-mono text-white/60">
+                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 text-white/60">
                     {target.symbol}
                   </th>
-                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 font-mono text-white/60">
+                  <th className="text-14 font-weight-500 sticky top-0 bg-black py-8 text-white/60">
                     Avg Price
                   </th>
                 </tr>
@@ -195,7 +195,7 @@ export const ModalTradeRouting: ModalFC<ModalTradeRoutingData> = ({
             data-testid="confirm-source"
             className="rounded-12 -mb-16 bg-black"
           />
-          <IconArrow className="bg-background-900 size-24 z-10 mx-auto rounded-full p-5" />
+          <IconArrow className="bg-background-900 z-10 mx-auto size-24 rounded-full p-5" />
           <TokenInputField
             value={totalTargetAmount}
             token={data.target}

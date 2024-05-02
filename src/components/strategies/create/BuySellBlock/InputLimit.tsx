@@ -112,7 +112,7 @@ export const InputLimit: FC<InputLimitProps> = ({
           )}
         </div>
         <p className="flex flex-wrap items-center gap-8">
-          <span className="text-12 break-all font-mono text-white/60">
+          <span className="text-12 break-all text-white/60">
             {fiatAsString}
           </span>
           {marketPricePercentage && (

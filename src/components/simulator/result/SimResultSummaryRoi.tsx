@@ -26,7 +26,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
   return (
     <article className="rounded-8 border-background-800 flex flex-col">
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-12 flex items-center gap-4 font-mono text-white/60">
+        <h4 className="text-12 flex items-center gap-4 text-white/60">
           ROI
           <IconTooltip className="size-10" />
         </h4>
@@ -47,7 +47,7 @@ const TooltipContent = () => (
   <>
     <NewTabLink to={externalLinks.roiLearnMore} className="text-primary">
       <span className="align-middle">Learn how ROI is calculated.</span>
-      <IconLink className="size-14 mb-1 inline-block align-middle" />
+      <IconLink className="mb-1 inline-block size-14 align-middle" />
     </NewTabLink>
   </>
 );

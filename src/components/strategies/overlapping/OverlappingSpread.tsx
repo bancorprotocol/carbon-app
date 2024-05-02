@@ -6,9 +6,9 @@ import {
   FocusEvent,
   ChangeEvent,
 } from 'react';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { getMaxSpread } from 'components/strategies/overlapping/utils';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import styles from './OverlappingSpread.module.css';
 
 interface Props {
@@ -154,31 +154,19 @@ export const OverlappingSpread: FC<Props> = (props) => {
         </div>
       </div>
       {warning && spread && (
-        <output
-          htmlFor="spread-custom"
-          className="text-12 text-warning flex items-center gap-8 font-mono"
-        >
-          <IconWarning className="size-12" />
-          <span>{warning}</span>
-        </output>
+        <WarningMessageWithIcon htmlFor="spread-custom">
+          {warning}
+        </WarningMessageWithIcon>
       )}
       {spread <= 0 && (
-        <output
-          htmlFor="spread-custom"
-          className="text-12 text-error flex items-center gap-8 font-mono"
-        >
-          <IconWarning className="size-12" />
-          <span>The spread should be above 0%</span>
-        </output>
+        <WarningMessageWithIcon htmlFor="spread-custom" isError>
+          The spread should be above 0%
+        </WarningMessageWithIcon>
       )}
       {spread > 100 && (
-        <output
-          htmlFor="spread-custom"
-          className="text-12 text-error flex items-center gap-8 font-mono"
-        >
-          <IconWarning className="size-12" />
-          <span>The spread should be equal or below 100%</span>
-        </output>
+        <WarningMessageWithIcon htmlFor="spread-custom" isError>
+          The spread should be equal or below 100%
+        </WarningMessageWithIcon>
       )}
     </>
   );

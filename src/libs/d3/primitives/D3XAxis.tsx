@@ -35,7 +35,6 @@ export const D3XAxis = ({ ticks, dms }: Props) => {
               transform: 'translateY(19px)',
             }}
             fill="currentColor"
-            className="font-mono"
             opacity={0.6}
           >
             {xAxisFormatter.format(fromUnixUTC(value))}

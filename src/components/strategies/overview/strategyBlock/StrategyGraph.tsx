@@ -28,6 +28,9 @@ const tick = 87; // Where the ticks end, from baseline
 const lowest = 10;
 const highest = width - 10;
 
+const fontSize = 16;
+const fontWidth = fontSize / 2;
+
 export const StrategyGraph: FC<Props> = ({ strategy }) => {
   const buyOrder = strategy.order0;
   const sellOrder = strategy.order1;
@@ -142,7 +145,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
 
   return (
     <svg
-      className={cn(style.strategyGraph, 'font-mono')}
+      className={style.strategyGraph}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -385,7 +388,7 @@ export const StrategyGraph: FC<Props> = ({ strategy }) => {
               y={baseline + 10}
               dominantBaseline="hanging"
               textAnchor="middle"
-              fontSize="16"
+              fontSize={fontSize}
               opacity="60%"
             >
               {prettifyNumber(point, { abbreviate: true, round: true })}
@@ -418,16 +421,35 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
 
   // Out of Range
   const maxChar = Math.max(formattedPrice.length, '(off-scale)'.length);
-  const outRangeWidth = `${maxChar + 6}ch`;
+  const outRangeWidth = `${(maxChar + 6) * fontWidth}px`;
   // In Range
-  const inRangeWidth = `${formattedPrice.length + 2}ch`;
-  const baseDelta = `${(formattedPrice.length + 2) / 2}ch`; // 6ch
+  const inRangeWidth = (formattedPrice.length + 4) * fontWidth;
+  const baseDelta = inRangeWidth / 2;
 
   const deltaStart = price - lowest;
   const deltaEnd = highest - price;
-  const translateStart = `min(${baseDelta}, ${deltaStart}px)`;
-  const translateEnd = `max((${inRangeWidth}  / 2) - ${deltaEnd}px, 0px)`;
-  const translateRect = `translateX(calc(-1 * (${translateStart} + ${translateEnd})))`;
+  const translateStart = Math.min(baseDelta, deltaStart);
+  const translateEnd = Math.max(inRangeWidth / 2 - deltaEnd, 0);
+  const translateRect = `translateX(calc(-1px * (${translateStart} + ${translateEnd})))`;
+
+  const getTextAttr = () => {
+    if (baseDelta > deltaStart) {
+      return {
+        x: lowest + fontWidth,
+        textAnchor: 'start',
+      };
+    } else if (baseDelta > deltaEnd) {
+      return {
+        x: highest - fontWidth,
+        textAnchor: 'end',
+      };
+    } else {
+      return {
+        x: price,
+        textAnchor: 'middle',
+      };
+    }
+  };
 
   return (
     <g className={style.currentPrice}>
@@ -449,27 +471,21 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={lowest}
+            x={lowest + fontWidth}
             y="9"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="16"
-            style={{
-              transform: `translateX(1ch)`,
-            }}
+            fontSize={fontSize}
           >
             {formattedPrice}
           </text>
           <text
             fill="white"
-            x={lowest}
+            x={lowest + fontWidth}
             y="26"
             dominantBaseline="hanging"
             textAnchor="start"
-            fontSize="16"
-            style={{
-              transform: `translateX(1ch)`,
-            }}
+            fontSize={fontSize}
           >
             (off-scale)
           </text>
@@ -490,14 +506,10 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={price + 8}
-            y="10"
+            y="12"
             dominantBaseline="hanging"
-            textAnchor="start"
-            fontSize="16"
-            style={{
-              transform: translateRect,
-            }}
+            fontSize={fontSize}
+            {...getTextAttr()}
           >
             {formattedPrice}
           </text>
@@ -518,27 +530,21 @@ export const CurrentPrice: FC<CurrentPriceProps> = ({
           />
           <text
             fill="white"
-            x={highest}
+            x={highest - fontWidth}
             y="9"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="16"
-            style={{
-              transform: `translateX(-1ch)`,
-            }}
+            fontSize={fontSize}
           >
             {formattedPrice}
           </text>
           <text
             fill="white"
-            x={highest}
+            x={highest - fontWidth}
             y="26"
             dominantBaseline="hanging"
             textAnchor="end"
-            fontSize="16"
-            style={{
-              transform: `translateX(-1ch)`,
-            }}
+            fontSize={fontSize}
           >
             (off-scale)
           </text>
@@ -589,7 +595,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         </table>
       )}
       {!limit && (
-        <table className="rounded-8 border-separate border border-white/40 font-mono">
+        <table className="rounded-8 border-separate border border-white/40">
           <tbody>
             <tr>
               <th className="font-weight-400 p-8 pb-4 text-start text-white/60">
@@ -625,7 +631,7 @@ const OrderTooltip: FC<OrderTooltipProps> = ({ strategy, buy }) => {
         className="font-weight-500 text-primary inline-flex items-center gap-4"
       >
         <span>Learn more about marginal price</span>
-        <IconLink className="size-12 inline" />
+        <IconLink className="inline size-12" />
       </a>
     </article>
   );
