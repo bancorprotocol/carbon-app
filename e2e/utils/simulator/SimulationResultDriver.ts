@@ -3,6 +3,7 @@ import { CreateStrategyTestCase, SimulatorChartTypes } from './types';
 import { Direction } from '../types';
 import { screenshot, waitFor } from '../operators';
 import { screenshotPath } from './utils';
+import { MainMenuDriver } from '../MainMenuDriver';
 
 export class SimulationResultDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
@@ -23,20 +24,26 @@ export class SimulationResultDriver {
     const animationChart = this.getAnimationChart();
     await animationChart.scrollIntoViewIfNeeded();
 
+    const mainMenu = new MainMenuDriver(this.page);
+    await mainMenu.hide();
     await screenshot(
       animationChart,
       screenshotPath(this.testCase, 'simulator-results-animation')
     );
+    await mainMenu.show();
   }
 
   async screenshotSummaryChart() {
     const summaryChart = this.getSummaryChart();
     await summaryChart.scrollIntoViewIfNeeded();
 
+    const mainMenu = new MainMenuDriver(this.page);
+    await mainMenu.hide();
     await screenshot(
       summaryChart,
       screenshotPath(this.testCase, 'simulator-results-summary')
     );
+    await mainMenu.show();
   }
 
   setChartTab(chartType: SimulatorChartTypes) {

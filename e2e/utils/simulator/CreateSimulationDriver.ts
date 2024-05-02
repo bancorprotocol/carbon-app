@@ -16,7 +16,13 @@ import { dayjs } from '../../../src/libs/dayjs';
 export class CreateSimulationDriver {
   constructor(private page: Page, private testCase: CreateStrategyTestCase) {}
 
-  waitForPriceChart(timeout?: number) {
+  async waitForPriceChart(timeout?: number) {
+    const historyPricesRegExp =
+      /.*api\.carbondefi\.xyz\/v1\/history\/prices.*$/;
+    await this.page.waitForResponse(historyPricesRegExp);
+
+    const btn = this.page.getByTestId('start-simulation-btn');
+    await expect(btn).toHaveText('Start Simulation');
     return waitFor(this.page, 'price-chart', timeout);
   }
 
@@ -169,12 +175,12 @@ export class CreateSimulationDriver {
   }
 
   async submit() {
-    const btn = this.page.getByText('Start Simulation');
+    const btn = this.page.getByTestId('start-simulation-btn');
+    await expect(btn).toHaveText('Start Simulation');
     await expect(btn).toBeEnabled();
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
-      await btn.hover(); // Enforce hover to have always the same color
       await waitTooltipsClose(this.page);
       const form = this.getForm();
       const path = screenshotPath(this.testCase, 'form');

@@ -7,6 +7,7 @@ import {
 } from './../../../utils/strategy';
 import { ManageStrategyDriver } from './../../../utils/strategy/ManageStrategyDriver';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
+import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const duplicate = (testCase: CreateStrategyTestCase) => {
   assertOverlappingTestCase(testCase);
@@ -29,6 +30,7 @@ export const duplicate = (testCase: CreateStrategyTestCase) => {
     await createForm.submit();
 
     await page.waitForURL('/', { timeout: 10_000 });
+    await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);
     const strategies = myStrategies.getAllStrategies();
