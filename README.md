@@ -188,6 +188,37 @@ All other colors are defined with l,c,h values (see https://oklch.com), and the 
 
 You can change the % of the `lighten` & `darken` function with the [`lightDark`](./tailwind.config.ts#L20) function.
 
+
+## Change font
+
+The application uses two fonts :
+- BW Gradual for the titles
+- Euclid Circle A for the text
+
+You can change the font by changing the files under : 
+- [`src/assets/font/title`](src/assets/font/title)
+- [`src/assets/font/text`](src/assets/font/text)
+
+Use the same naming as the current files.
+
+### Change font weight & format
+
+If you want to change the weight & format of the fonts you'll need to update the [`src/fonts.css`](src/fonts.css) file.
+
+### Use only one font
+
+If you want to use only one font, the easiest is to update [`tailwind.config.ts`](tailwind.config.ts#L83).
+Under `theme.fontFamily` change the name of the font.
+
+For example, if you want to only use Carbon Text: 
+```js
+fontFamily: {
+  text: ['Carbon-Text', 'sans-serif'],
+  title: ['Carbon-Text', 'sans-serif'], // change to Carbon Text here
+},
+```
+You can also remove the unused `@font-face` from the [`src/fonts.css`](src/fonts.css) file.
+
 # License
 
 The license used is the MIT License. You can find it [here](LICENSE).

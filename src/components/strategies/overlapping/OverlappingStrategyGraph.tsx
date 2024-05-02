@@ -517,7 +517,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   return (
     <figure className="relative">
-      <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 font-mono text-white/60">
+      <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
         <span>Market price provided by CoinGecko</span>
         <IconCoinGecko className="size-8" />
         <span role="separator">·</span>
@@ -530,7 +530,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
         className={cn(
           styles.graph,
           dragging,
-          'aspect-[400/265] w-full rounded bg-black font-mono'
+          'aspect-[400/265] w-full rounded bg-black'
         )}
         viewBox={`${left} 0 ${width} ${height}`}
         onWheel={onWheel}

@@ -9,7 +9,7 @@ type ButtonVariants = VariantColor & VariantSize & VariantFullWidth;
 
 export const buttonStyles = cva<ButtonVariants>(
   [
-    'font-weight-500',
+    'font-title font-weight-500',
     'rounded-full px-30',
     'transition duration-300 ease-in-out',
     'disabled:cursor-not-allowed',

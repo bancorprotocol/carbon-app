@@ -199,7 +199,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             {errorMsgSource && (
               <output
                 htmlFor={`${id}-pay`}
-                className="font-weight-500 text-error"
+                className="text-12 font-weight-500 text-error"
               >
                 {errorMsgSource}
               </output>
@@ -250,7 +250,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
             slippage={slippage}
             disabled={!hasEnoughLiquidity}
           />
-          <footer className="rounded-b-12 rounded-t-4 text-14 mt-5 flex justify-between bg-black p-16 font-mono text-white/80">
+          <footer className="rounded-b-12 rounded-t-4 text-14 mt-5 flex justify-between bg-black p-16 text-white/80">
             <p>{getRate()}</p>
             {showRouting && (
               <button
@@ -288,6 +288,7 @@ export const TradeWidgetBuySell = (props: TradeWidgetBuySellProps) => {
         loadingChildren="Waiting for Confirmation"
         variant={buy ? 'buy' : 'sell'}
         fullWidth
+        size="lg"
         className="mt-20"
         data-testid="submit"
       >

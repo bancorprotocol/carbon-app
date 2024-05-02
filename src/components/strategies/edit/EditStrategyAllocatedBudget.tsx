@@ -62,7 +62,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
     <>
       <div
         role="table"
-        className="rounded-8 p-15 text-12 font-weight-500 flex flex-col gap-10 border-2 border-white/10 text-left font-mono"
+        className="rounded-8 p-15 text-12 font-weight-500 flex flex-col gap-10 border-2 border-white/10 text-left"
       >
         <div role="row" className="flex items-center justify-between gap-16">
           <p role="columnheader" className="flex w-auto items-center gap-6">
@@ -174,7 +174,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
             iconClassName="h-13 text-white/60"
             element="When updating the rates, the allocated budget will be distributed equally across the entire range"
           />
-          Strategy budget will be distributed across entire range
+          Budget will be distributed across entire range
         </div>
       )}
     </>

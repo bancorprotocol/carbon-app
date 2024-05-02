@@ -188,7 +188,7 @@ const Bar = ({
         y={y - 10}
         fill="currentColor"
         style={{ textAnchor: 'middle' }}
-        className="text-14 font-mono text-white/60"
+        className="text-14 text-white/60"
       >
         {prettifyNumber(label)} {symbol}
       </text>

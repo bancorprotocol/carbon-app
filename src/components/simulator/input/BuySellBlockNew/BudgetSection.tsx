@@ -10,7 +10,7 @@ import { StrategyType } from 'libs/routing';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
 import { UseQueryResult } from '@tanstack/react-query';
 import { SafeDecimal } from 'libs/safedecimal';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   base: Token;
@@ -94,15 +94,9 @@ export const BudgetSection: FC<Props> = ({
         data-testid="input-budget"
       />
       {insufficientBalance && (
-        <output
-          htmlFor={inputId}
-          role="alert"
-          aria-live="polite"
-          className="text-12 text-error flex items-center gap-10 font-mono"
-        >
-          <IconWarning className="size-12" />
-          <span className="flex-1">Insufficient balance</span>
-        </output>
+        <WarningMessageWithIcon htmlFor={inputId} isError>
+          Insufficient balance
+        </WarningMessageWithIcon>
       )}
     </fieldset>
   );

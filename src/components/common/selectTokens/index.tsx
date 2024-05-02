@@ -31,7 +31,7 @@ export const SelectTokens: FC<Props> = ({
         onClick={() => onClick0()}
         className="-mr-13 rounded-12 px-18 flex w-[140px] flex-grow items-center bg-black py-10"
       >
-        <LogoImager alt="" src={imgUrl0} className="size-30 mr-8" />
+        <LogoImager alt="" src={imgUrl0} className="h-30 w-30 mr-8" />
         <div className="text-16 font-weight-500 mr-auto">
           {symbol0 ? shortenString(symbol0, '...', 5) : 'Select'}
         </div>

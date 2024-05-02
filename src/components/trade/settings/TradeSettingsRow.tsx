@@ -120,7 +120,7 @@ export const TradeSettingsRow: FC<{
         />
       </div>
       {warningMessage && (
-        <div className="mt-15 text-12 font-weight-500 text-warning flex font-mono">
+        <div className="mt-15 text-12 font-weight-500 text-warning flex">
           <IconWarning className={`w-14 ${isError ? 'text-error' : ''}`} />
           <span className={`ml-5 ${isError ? 'text-error' : ''}`}>
             {warningMessage}

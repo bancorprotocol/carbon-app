@@ -94,8 +94,8 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
             },
             style: {
               color: 'rgba(255, 255, 255, 0.6)',
-              fontFamily:
-                'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+              fontFamily: 'Carbon-Text',
+              fontSize: '12px',
             },
           },
           crosshair: {
@@ -141,8 +141,8 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
               },
               style: {
                 color: 'rgba(255, 255, 255, 0.6)',
-                fontFamily:
-                  'GT America Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                fontFamily: 'Carbon-Text',
+                fontSize: '12px',
               },
             },
           },
@@ -179,6 +179,7 @@ export const useDepthChartWidget = (base?: Token, quote?: Token) => {
           backgroundColor: '#212123',
           borderWidth: 0,
           style: {
+            fontFamily: 'Carbon-Text',
             color: 'white',
           },
         },

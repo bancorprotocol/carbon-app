@@ -146,7 +146,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
     <>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header>
-          <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
+          <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -161,7 +161,7 @@ export const WithdrawOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <h3 className="text-18 font-weight-500 flex-1">Withdraw Budgets</h3>
+          <h2 className="text-18 font-weight-500 flex-1">Withdraw Budget</h2>
           <Tooltip
             element='Indicate the amount you wish to withdraw to the available "wallet budget"'
             iconClassName="size-14 text-white/60"
