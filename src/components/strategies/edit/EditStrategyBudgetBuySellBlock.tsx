@@ -8,9 +8,9 @@ import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { EditStrategyAllocatedBudget } from './EditStrategyAllocatedBudget';
 import { FullOutcome } from '../FullOutcome';
 import { getUpdatedBudget } from 'utils/fullOutcome';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { useMarketIndication } from '../marketPriceIndication';
 import { OutsideMarketPriceWarning } from 'components/common/OutsideMarketPriceWarning';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 export const EditStrategyBudgetBuySellBlock: FC<{
   base: Token;
@@ -99,15 +99,9 @@ export const EditStrategyBudgetBuySellBlock: FC<{
         <OutsideMarketPriceWarning base={base} buy={!!buy} />
       )}
       {insufficientBalance && (
-        <output
-          htmlFor={inputId}
-          role="alert"
-          aria-live="polite"
-          className="text-12 text-error flex items-center gap-10 font-mono"
-        >
-          <IconWarning className="size-12" />
-          <span className="flex-1">Insufficient balance</span>
-        </output>
+        <WarningMessageWithIcon htmlFor={inputId} isError>
+          Insufficient balance
+        </WarningMessageWithIcon>
       )}
       <EditStrategyAllocatedBudget
         order={order}

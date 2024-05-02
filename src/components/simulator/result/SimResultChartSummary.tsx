@@ -32,7 +32,7 @@ export const SimResultChartSummary = ({
       data-testid="chart-summary"
     >
       <p
-        className="border-background-800 text-12 -rotate-180 border-l p-8 text-center font-mono text-white/60"
+        className="border-background-800 text-12 -rotate-180 border-l p-8 text-center text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
         Price ({quoteToken.symbol} per {baseToken.symbol})
@@ -46,7 +46,7 @@ export const SimResultChartSummary = ({
         )}
       </D3ChartWrapper>
       <p
-        className="border-background-800 text-12 -rotate-180 border-r p-8 text-center font-mono text-white/60"
+        className="border-background-800 text-12 -rotate-180 border-r p-8 text-center text-white/60"
         style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
       >
         Portfolio Value ({quoteToken.symbol})

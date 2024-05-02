@@ -25,7 +25,6 @@ export const D3YAxisLeft = ({ ticks, dms, formatter }: D3AxisProps) => {
             }}
             fill="currentColor"
             opacity={0.6}
-            className="font-mono"
           >
             {formatter ? formatter(value) : value}
           </text>

@@ -11,7 +11,7 @@ export const NoOrders: FC<NoOrdersProps> = ({ text = 'No Orders' }) => {
       <div className="flex size-48 items-center justify-center self-center rounded-full bg-white/10">
         <NoOrdersIcon className="w-18 aspect-square" />
       </div>
-      <div className="text-18 font-weight-500 mt-14">{text}</div>
+      <h2 className="text-18 font-weight-500 mt-14">{text}</h2>
     </div>
   );
 };
