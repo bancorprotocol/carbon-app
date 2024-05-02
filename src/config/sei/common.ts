@@ -19,6 +19,7 @@ export const commonConfig: AppConfig = {
     'https://evm-rpc-arctic-1.sei-apis.com',
   walletConnectProjectId: '',
   isGnosisSafeAvailable: false,
+  isSimulatorEnabled: false,
   mode: 'development',
   network: {
     name: 'SEI Network',

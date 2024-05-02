@@ -30,6 +30,7 @@ export const commonConfig: AppConfig = {
     'https://eth-mainnet.g.alchemy.com/v2/demo',
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   isGnosisSafeAvailable: false,
+  isSimulatorEnabled: true,
   mode: 'development',
   network: {
     name: 'Ethereum Network',
