@@ -1,6 +1,6 @@
 import { AppConfig } from 'config/types';
 import IconSeiLogo from 'assets/logos/seilogo.svg';
-import { Token, TokenList } from 'libs/tokens';
+import { tokenListParser } from 'config/sei/utils';
 
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -9,47 +9,6 @@ const addresses = {
   WSEI: '0x027D2E627209f1cebA52ADc8A5aFE9318459b44B',
   JLY: '0x9e7A8e558Ce582511f4104465a886b7bEfBC146b',
 };
-
-type networkDataType = {
-  name: string;
-  description: string;
-  symbol: string;
-  base: string;
-  display: string;
-  denom_units: [
-    {
-      denom: string;
-      exponent: number;
-    },
-    {
-      denom: string;
-      exponent: number;
-    }
-  ];
-  images: {
-    svg?: string;
-    png?: string;
-  };
-};
-
-const tokenListParser =
-  (networkId: string) => (data: Record<string, networkDataType[]>) => {
-    const networkTokens: Token[] = data[networkId].map((networkData) => {
-      return {
-        name: networkData.name,
-        address: networkData.base !== 'usei' ? networkData.base : addresses.SEI,
-        symbol: networkData.symbol,
-        decimals: networkData.denom_units[1].exponent,
-        logoURI: networkData.images.svg ?? networkData.images.png ?? undefined,
-      };
-    });
-    const parsedData: TokenList = {
-      id: networkId,
-      name: 'SEI Network',
-      tokens: networkTokens,
-    };
-    return parsedData;
-  };
 
 export const commonConfig: AppConfig = {
   appUrl: 'https://sei.carbondefi.xyz',
