@@ -60,6 +60,7 @@ export const useActivityQuery = (params: QueryActivityParams = {}) => {
     {
       enabled: !isLoading && validParams,
       refetchInterval: THIRTY_SEC_IN_MS,
+      retry: false,
     }
   );
 };
