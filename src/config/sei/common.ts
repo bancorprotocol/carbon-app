@@ -49,7 +49,7 @@ export const commonConfig: AppConfig = {
       voucher: '0xe4816658ad10bF215053C533cceAe3f59e1f1087',
     },
     utils: {
-      multicall: '0xEe8d287B844959ADe40d718Dc23077ba920e2f07',
+      multicall: '0xcA11bde05977b3631167028862bE2a173976CA11',
     },
   },
   tokenListOverride: [
