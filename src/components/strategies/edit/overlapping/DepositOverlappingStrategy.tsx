@@ -145,7 +145,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
     <>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header>
-          <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
+          <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -160,7 +160,7 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
         <header className="flex items-center gap-8 ">
-          <h3 className="text-18 font-weight-500 flex-1">Deposit Budgets</h3>
+          <h2 className="text-18 font-weight-500 flex-1">Deposit Budget</h2>
           <Tooltip
             element='Indicate the amount you wish to deposit from the available "allocated budget"'
             iconClassName="size-14 text-white/60"

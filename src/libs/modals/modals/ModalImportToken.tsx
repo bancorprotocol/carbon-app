@@ -73,7 +73,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
           </div>
           <div className="text-14 flex items-center justify-between">
             <div className="text-white/60">{data.name}</div>
-            <div className=" font-mono">{shortenString(data.address)}</div>
+            <div>{shortenString(data.address)}</div>
           </div>
         </div>
       )}

@@ -47,13 +47,7 @@ export const D3ChartHandleLine = ({ lineProps, ...props }: Props) => {
       >
         <rect y={y} {...handleDms} fill={color} rx={4} />
         {label && (
-          <text
-            y={y + 12}
-            x={6}
-            fill="black"
-            fontSize={10}
-            className="font-mono"
-          >
+          <text y={y + 12} x={6} fill="black" fontSize={10}>
             {label}
           </text>
         )}
