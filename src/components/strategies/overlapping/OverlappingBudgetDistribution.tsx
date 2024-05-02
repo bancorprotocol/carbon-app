@@ -12,35 +12,57 @@ interface Props {
   withdraw: string;
   deposit: string;
   balance: string;
+  isSimulator?: boolean;
 }
 
 function getBudgetDistribution(
   initial: number,
   withdraw: number,
   deposit: number,
-  balance: number
+  balance: number,
+  isSimulator: boolean
 ) {
-  const total = initial + balance;
-  const delta = ((deposit || withdraw) / total) * 100;
-  const newAllocation = (Math.max(initial - withdraw, 0) / total) * 100;
-  const newBalance = (Math.max(balance - deposit, 0) / total) * 100;
-  return {
-    mode: deposit ? 'deposit' : 'withdraw',
-    allocationPercent: Math.round(newAllocation),
-    deltaPercent: Math.round(delta),
-    balancePercent: Math.round(newBalance),
-  };
+  if (isSimulator) {
+    return {
+      mode: 'deposit',
+      allocationPercent: initial ? 0.5 : 0,
+      deltaPercent: 0,
+      balancePercent: initial ? 0.5 : 1,
+    };
+  } else {
+    const total = initial + balance;
+    if (!total) {
+      return {
+        mode: deposit ? 'deposit' : 'withdraw',
+        allocationPercent: 0,
+        deltaPercent: 0,
+        balancePercent: 1,
+      };
+    } else {
+      const delta = ((deposit || withdraw) / total) * 100;
+      const newAllocation = (Math.max(initial - withdraw, 0) / total) * 100;
+      const newBalance = (Math.max(balance - deposit, 0) / total) * 100;
+      return {
+        mode: deposit ? 'deposit' : 'withdraw',
+        allocationPercent: Math.round(newAllocation),
+        deltaPercent: Math.round(delta),
+        balancePercent: Math.round(newBalance),
+      };
+    }
+  }
 }
 
 export const OverlappingBudgetDistribution: FC<Props> = (props) => {
   const allocatedId = useId();
   const walletId = useId();
   const { buy, token, initialBudget, withdraw, deposit, balance } = props;
+  const isSimulator = !!props.isSimulator;
   const dist = getBudgetDistribution(
     Number(initialBudget),
     Number(withdraw),
     Number(deposit),
-    Number(balance)
+    Number(balance),
+    isSimulator
   );
   const color = buy ? 'bg-buy' : 'bg-sell';
   return (
@@ -53,10 +75,12 @@ export const OverlappingBudgetDistribution: FC<Props> = (props) => {
             {tokenAmount(initialBudget, token)}
           </span>
         </label>
-        <label htmlFor={walletId}>
-          Wallet:&nbsp;
-          <span className="text-white">{tokenAmount(balance, token)}</span>
-        </label>
+        {!isSimulator && (
+          <label htmlFor={walletId}>
+            Wallet:&nbsp;
+            <span className="text-white">{tokenAmount(balance, token)}</span>
+          </label>
+        )}
       </div>
       <div className="rounded-8 flex h-[24px] gap-4 overflow-hidden transition-[gap] duration-200">
         <div

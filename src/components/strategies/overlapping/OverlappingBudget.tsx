@@ -12,7 +12,7 @@ interface Props {
   setBudget: (value: string) => void;
   anchor: 'buy' | 'sell';
   action: BudgetAction;
-  error: string;
+  error?: string;
 }
 
 const getTitle = (fixAction?: BudgetAction) => {

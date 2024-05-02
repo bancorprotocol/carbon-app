@@ -1,5 +1,4 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useGetTokenBalance } from 'libs/queries';
 import {
   getMaxBuyMin,
   getMinSellMax,
@@ -17,10 +16,7 @@ import {
 } from '@bancor/carbon-sdk/strategy-management';
 import { OverlappingBudget } from 'components/strategies/overlapping/OverlappingBudget';
 import { SafeDecimal } from 'libs/safedecimal';
-import {
-  OverlappingBudgetDescription,
-  OverlappingBudgetDistribution,
-} from 'components/strategies/overlapping/OverlappingBudgetDistribution';
+import { OverlappingBudgetDistribution } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import {
   SimulatorInputOverlappingValues,
@@ -47,12 +43,9 @@ const getInitialPrices = (marketPrice: string | number) => {
 export const CreateOverlappingStrategy: FC<Props> = (props) => {
   const { state, dispatch, marketPrice, spread, setSpread } = props;
   const { baseToken: base, quoteToken: quote, buy, sell } = state;
-  const baseBalance = useGetTokenBalance(base).data ?? '0';
-  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
   const [anchorError, setAnchorError] = useState('');
-  const [budgetError, setBudgetError] = useState('');
   const budget = (() => {
     if (!anchor) return '';
     return anchor === 'buy' ? buy.budget : sell.budget;
@@ -163,7 +156,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
     min = buy.min,
     max = sell.max
   ) => {
-    setBudgetError('');
     if (!touched) {
       dispatch('buyBudget', '');
       dispatch('sellBudget', '');
@@ -201,8 +193,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
 
   const setBudget = (amount: string) => {
     if (!amount) return resetBudgets(anchor!);
-    setBudgetError(getBudgetErrors(amount));
-
     if (anchor === 'buy') {
       dispatch('buyBudget', amount);
       calculateSellBudget(amount, buy.min, sell.max);
@@ -210,17 +200,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
       dispatch('sellBudget', amount);
       calculateBuyBudget(amount, buy.min, sell.max);
     }
-  };
-
-  const getBudgetErrors = (value: string) => {
-    const amount = new SafeDecimal(value);
-    if (anchor === 'buy') {
-      if (amount.gt(quoteBalance)) return 'Insufficient balance';
-    }
-    if (anchor === 'sell') {
-      if (amount.gt(baseBalance)) return 'Insufficient balance';
-    }
-    return '';
   };
 
   const setRangeError = useCallback(
@@ -366,7 +345,6 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           action="deposit"
           budgetValue={budget}
           setBudget={setBudget}
-          error={budgetError}
         />
       )}
       {anchor && (
@@ -388,32 +366,20 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
           </hgroup>
           <OverlappingBudgetDistribution
             token={base}
-            initialBudget="0"
+            initialBudget={sell.budget || '0'}
             withdraw="0"
-            deposit={budgetError ? '0' : sell.budget}
-            balance={baseBalance}
-          />
-          <OverlappingBudgetDescription
-            token={base}
-            initialBudget="0"
-            withdraw="0"
-            deposit={budgetError ? '0' : sell.budget}
-            balance={baseBalance}
+            deposit="0"
+            balance="0"
+            isSimulator
           />
           <OverlappingBudgetDistribution
             token={quote}
-            initialBudget="0"
+            initialBudget={buy.budget || '0'}
             withdraw="0"
-            deposit={budgetError ? '0' : buy.budget}
-            balance={quoteBalance}
+            deposit="0"
+            balance="0"
             buy
-          />
-          <OverlappingBudgetDescription
-            token={quote}
-            initialBudget="0"
-            withdraw="0"
-            deposit={budgetError ? '0' : buy.budget}
-            balance={quoteBalance}
+            isSimulator
           />
         </article>
       )}
