@@ -150,22 +150,21 @@ VITE_CHAIN_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/<API_KEY>
 In case the network is using a version of CarbonController older than 5 then there's no support for extended range for trade by source,
 and it is recommended to set VITE_LEGACY_TRADE_BY_SOURCE_RANGE to true in .env to avoid possible reverts.
 
-### Network configuration
+### Common configuration
 
-The file [`common.ts`](src/config/common.ts) contains the common configuration for the network. It includes the following:
+The file [`common.ts`](src/config/common.ts) contains important configuration for the app and network. It includes the following:
 
 - `appUrl`: The URL of the app.
 - `carbonApi`: The URL of the API.
-- `blockExplorer`: The URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
-- `rpcUrl`: The RPC URL of the network.
 - `walletConnectProjectId`: The WalletConnect project ID. Leave empty if not used and the wallet will not show up in the wallet selection modal.
-- `isGnosisSafeAvailable`: Indicate if Gnosis Safe is available on the network.
-- `isSimulatorEnabled`: Indicate if the simulator is enabled on the network.
+- `selectableConnectionTypes`: List of available connection types to be used in the wallet selection modal.
 - network
   - `name`: Network name.
   - `logoUrl`: Network logo URL.
   - `chainId`: Chain ID.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI
+  - `blockExplorer`: The URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
+  - `rpcUrl`: The RPC URL of the network.
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
 - `addresses`/`carbon`: CarbonController, Voucher and multicall contract addresses.
