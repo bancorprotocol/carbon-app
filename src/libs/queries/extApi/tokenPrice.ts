@@ -27,7 +27,6 @@ export const useGetTokenPrice = (address?: string) => {
       enabled: !!address && availableCurrencies.length > 0,
       refetchInterval: FIVE_MIN_IN_MS,
       staleTime: FIVE_MIN_IN_MS,
-      retry: false,
     }
   );
 };
@@ -82,7 +81,6 @@ export const useGetTokenPriceHistory = (params: TokenPriceHistorySearch) => {
     },
     {
       enabled: !!params.baseToken && !!params.quoteToken,
-      retry: false,
       staleTime: Infinity,
       refetchOnWindowFocus: false,
     }
