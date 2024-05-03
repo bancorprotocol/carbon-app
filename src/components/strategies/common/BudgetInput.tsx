@@ -17,7 +17,7 @@ interface Props {
   withoutWallet?: boolean;
   'data-testid'?: string;
   title: string;
-  titleTooltip: string;
+  titleTooltip?: string;
 }
 
 export const BudgetInput: FC<Props> = (props) => {
