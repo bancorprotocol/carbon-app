@@ -15,7 +15,6 @@ export const useTokensQuery = () => {
     {
       placeholderData: lsService.getItem('tokenListCache')?.tokens,
       staleTime: ONE_DAY_IN_MS,
-      retry: false,
     }
   );
 };
