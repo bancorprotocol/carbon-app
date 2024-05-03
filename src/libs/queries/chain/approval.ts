@@ -34,8 +34,8 @@ export const useGetUserApproval = (data: GetUserApprovalProps[]) => {
           throw new Error('useGetUserApproval no spenderAddress provided');
         }
 
-        const isETH = t.address === config.network.gasToken.address;
-        if (isETH) {
+        const isGasToken = t.address === config.network.gasToken.address;
+        if (isGasToken) {
           return new SafeDecimal(shrinkToken(UNLIMITED_WEI, t.decimals));
         }
 
