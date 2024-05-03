@@ -36,7 +36,7 @@ export const useTradePairs = () => {
   );
 
   const tradePairsPopular = useMemo(() => {
-    return popularPairs
+    return config.popularPairs
       .map(([base, quote]) => getTradePair(base, quote))
       .filter((p) => !!p) as TradePair[];
   }, [getTradePair]);
@@ -100,5 +100,3 @@ export const useTradePairs = () => {
     removeFavoritePair,
   };
 };
-
-const popularPairs = config.popularPairs;
