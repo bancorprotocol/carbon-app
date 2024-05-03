@@ -1,12 +1,20 @@
 import { TokenList } from 'libs/tokens';
+import { selectableConnectionType } from 'libs/web3/web3.constants';
 
 export interface AppConfig {
   mode: 'development' | 'production';
+  appUrl: string;
   carbonApi: string;
+  selectableConnectionTypes: selectableConnectionType[];
+  walletConnectProjectId: string;
+  isSimulatorEnabled: boolean;
+  sentryDNS?: string;
   network: {
     name: string;
     logoUrl: string;
     chainId: number;
+    rpcUrl: string;
+    blockExplorer: string;
     gasToken: {
       name: string;
       symbol: string;
@@ -21,23 +29,6 @@ export interface AppConfig {
     base: string[];
     quote: string[];
   };
-  appUrl: string;
-  walletConnectProjectId: string;
-  isGnosisSafeAvailable: boolean;
-  isSimulatorEnabled: boolean;
-  sentryDNS?: string;
-  rpcUrl: string;
-  blockExplorer: string;
-  addresses: {
-    tokens: { ZERO: string } & Record<symbol, string>;
-    carbon: {
-      carbonController: string;
-      voucher: string;
-    };
-    utils: {
-      multicall: string;
-    };
-  };
   tokenListOverride: {
     name: string;
     symbol: string;
@@ -49,4 +40,14 @@ export interface AppConfig {
     uri: string;
     parser?: (data: any) => TokenList;
   }[];
+  addresses: {
+    tokens: { ZERO: string } & Record<symbol, string>;
+    carbon: {
+      carbonController: string;
+      voucher: string;
+    };
+    utils: {
+      multicall: string;
+    };
+  };
 }

@@ -25,8 +25,8 @@ export const getChainInfo = () => {
       symbol: config.network.gasToken.symbol,
       decimals: config.network.gasToken.decimals,
     },
-    rpcUrls: [config.rpcUrl],
-    blockExplorerUrls: [config.blockExplorer],
+    rpcUrls: [config.network.rpcUrl],
+    blockExplorerUrls: [config.network.blockExplorer],
   };
 };
 

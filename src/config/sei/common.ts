@@ -11,20 +11,20 @@ const addresses = {
 };
 
 export const commonConfig: AppConfig = {
+  mode: 'development',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://carbon-sei-testnet-ptdczarhfq-nw.a.run.app/v1/', // TODO: add SEI api
-  blockExplorer: 'https://seitrace.com',
-  rpcUrl:
-    import.meta.env.VITE_CHAIN_RPC_URL ||
-    'https://evm-rpc-arctic-1.sei-apis.com',
+  selectableConnectionTypes: ['injected'],
   walletConnectProjectId: '',
-  isGnosisSafeAvailable: false,
   isSimulatorEnabled: false,
-  mode: 'development',
   network: {
     name: 'SEI Network',
     logoUrl: IconSeiLogo,
     chainId: 713715,
+    blockExplorer: 'https://seitrace.com',
+    rpcUrl:
+      import.meta.env.VITE_CHAIN_RPC_URL ||
+      'https://evm-rpc-arctic-1.sei-apis.com',
     gasToken: {
       name: 'SEI',
       symbol: 'SEI',
