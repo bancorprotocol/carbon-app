@@ -41,8 +41,7 @@ export const getDuplicateStrategyParams = (strategy: Strategy) => {
   const isRecurring = !isEmptyOrder(order0) && !isEmptyOrder(order1);
   const isOverlapping = isOverlappingStrategy({ order0, order1 });
   if (isOverlapping) {
-    searchParams.strategyType = 'recurring';
-    searchParams.strategySettings = 'overlapping';
+    searchParams.strategyType = 'overlapping';
   } else if (isRecurring) {
     const isLimit = isLimitOrder(order0) && isLimitOrder(order1);
     searchParams.strategyType = 'recurring';

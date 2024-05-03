@@ -9,11 +9,11 @@ import {
   validateSearchParams,
 } from 'libs/routing/utils';
 
-export type StrategyType = 'recurring' | 'disposable';
+export type StrategyType = 'recurring' | 'disposable' | 'overlapping';
 export type StrategyDirection = 'buy' | 'sell';
 
 export type LimitRange = 'limit' | 'range';
-export type StrategySettings = LimitRange | 'overlapping';
+export type StrategySettings = LimitRange;
 
 export interface StrategyCreateSearch {
   base?: string;
@@ -36,9 +36,9 @@ export const createStrategyPage = new Route({
   validateSearch: validateSearchParams<StrategyCreateSearch>({
     base: validAddress,
     quote: validAddress,
-    strategyType: validLiteral(['recurring', 'disposable']),
+    strategyType: validLiteral(['recurring', 'disposable', 'overlapping']),
     strategyDirection: validLiteral(['buy', 'sell']),
-    strategySettings: validLiteral(['limit', 'range', 'overlapping']),
+    strategySettings: validLiteral(['limit', 'range']),
     buyMin: validNumber,
     buyMax: validNumber,
     buyBudget: validNumber,

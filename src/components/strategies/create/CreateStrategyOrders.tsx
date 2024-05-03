@@ -40,7 +40,7 @@ export const CreateStrategyOrders = ({
     quote,
     order0,
     order1,
-    isOverlapping: strategySettings === 'overlapping',
+    isOverlapping: strategyType === 'overlapping',
     invalidForm: isCTAdisabled,
     isConnected: !!user,
   });
@@ -106,7 +106,7 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {strategySettings === 'overlapping' && base && quote && (
+      {strategyType === 'overlapping' && base && quote && (
         <CreateOverlappingStrategy
           base={base}
           quote={quote}
@@ -118,7 +118,7 @@ export const CreateStrategyOrders = ({
           setSpread={setSpread}
         />
       )}
-      {strategySettings !== 'overlapping' && (
+      {strategyType !== 'overlapping' && (
         <>
           {(strategyDirection === 'sell' || strategyType === 'recurring') && (
             <BuySellBlock

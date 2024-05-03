@@ -7,6 +7,7 @@ import {
   useSearch,
   StrategyCreateSearch,
   StrategySettings,
+  StrategyType,
 } from 'libs/routing';
 import { Token } from 'libs/tokens';
 import { useWeb3 } from 'libs/web3';
@@ -41,11 +42,15 @@ const spenderAddress = config.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 
-const getIsRange = (order: Order, setting?: StrategySettings) => {
+const getIsRange = (
+  order: Order,
+  type?: StrategyType,
+  setting?: StrategySettings
+) => {
   if (order.startRate !== order.endRate) return true;
   if (!!Number(order.startRate)) return false;
-  if (!setting) return true; // Default is range
-  return setting === 'overlapping' || setting === 'range';
+  if (!setting || !!type) return true; // Default is range
+  return type === 'overlapping' || setting === 'range';
 };
 
 const copyOrderCreate = (order: OrderCreate) => {
@@ -279,7 +284,7 @@ export const useCreateStrategy = () => {
     if (order1.budgetError) return true;
     if (isOrdersReversed) return true;
 
-    if (strategySettings === 'overlapping') {
+    if (strategyType === 'overlapping') {
       return (
         !isValidSpread(spread) ||
         !isValidRange(order0.min, order1.max) ||
@@ -313,14 +318,17 @@ export const useCreateStrategy = () => {
 
   // TODO: This should be managed by a query params like "limit_range"
   useEffect(() => {
-    order0.setIsRange(getIsRange(templateStrategy.order0, strategySettings));
-    order1.setIsRange(getIsRange(templateStrategy.order1, strategySettings));
+    order0.setIsRange(
+      getIsRange(templateStrategy.order0, strategyType, strategySettings)
+    );
+    order1.setIsRange(
+      getIsRange(templateStrategy.order1, strategyType, strategySettings)
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [strategySettings]);
 
-  const showTokenSelection = !strategyType || !strategySettings;
-  const showTypeMenu =
-    !!base && !!quote && (!strategyType || !strategySettings);
+  const showTokenSelection = !strategyType;
+  const showTypeMenu = !!base && !!quote && !strategyType;
   const showOrders = !!base && !!quote && !showTypeMenu;
 
   useEffect(() => {

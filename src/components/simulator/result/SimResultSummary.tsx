@@ -70,8 +70,7 @@ export const SimResultSummary = ({
                 base: state.baseToken.address,
                 quote: state.quoteToken.address,
                 strategyType: 'recurring',
-                strategySettings:
-                  strategyType === 'recurring' ? 'range' : 'overlapping',
+                strategySettings: 'range',
                 buyMin: state.buy.min,
                 buyMax: state.buy.max,
                 buyBudget: state.buy.budget,

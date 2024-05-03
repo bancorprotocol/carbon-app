@@ -54,8 +54,8 @@ export interface StrategyGTMEventTypeBase {
   token_pair: string;
   strategy_base_token: string;
   strategy_quote_token: string;
-  strategy_type?: 'recurring' | 'disposable';
-  strategy_direction?: 'buy' | 'sell' | undefined;
+  strategy_type?: 'recurring' | 'disposable' | 'overlapping';
+  strategy_direction?: 'buy' | 'sell';
   strategy_settings?: StrategySettings;
 }
 

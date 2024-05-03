@@ -144,8 +144,7 @@ export const getStrategyTypeItem = (
     search: {
       base,
       quote,
-      strategyType: 'recurring',
-      strategySettings: 'overlapping',
+      strategyType: 'overlapping',
     },
     id: 'overlapping',
   },
