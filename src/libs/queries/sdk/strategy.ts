@@ -178,7 +178,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
       enabled:
         tokens.length > 0 &&
         isInitialized &&
-        roiQuery.isSuccess &&
+        roiQuery.isFetched &&
         ensAddress.isSuccess,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
@@ -206,7 +206,7 @@ export const useGetStrategy = (id: string) => {
       return strategies[0];
     },
     {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
@@ -239,7 +239,7 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
       });
     },
     {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
