@@ -20,7 +20,7 @@ import styles from './OverlappingStrategyGraph.module.css';
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
-  externalPrice?: string;
+  externalPrice?: number;
   marketPrice: string;
   marketPricePercentage: MarketPricePercentage;
   base?: Token;
@@ -34,7 +34,7 @@ interface EnableProps {
 }
 
 interface DisableProps {
-  externalPrice?: string;
+  externalPrice?: number;
   marketPrice: number;
   marketPricePercentage: MarketPricePercentage;
   base?: Token;

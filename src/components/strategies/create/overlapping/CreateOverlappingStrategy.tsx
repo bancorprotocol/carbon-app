@@ -48,8 +48,10 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   props
 ) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
-  const externalPrice = useMarketPrice({ base, quote }).toString();
-  const [marketPrice, setMarketPrice] = useState(externalPrice);
+  const externalPrice = useMarketPrice({ base, quote });
+  const [marketPrice, setMarketPrice] = useState(
+    externalPrice ? externalPrice.toString() : ''
+  );
   const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
   const { marketPricePercentage } = useMarketIndication({
     base,
@@ -157,8 +159,9 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
   };
 
   useEffect(() => {
-    if (Number(marketPrice) && marketPrice !== externalPrice) return;
-    setMarketPrice(externalPrice);
+    if (!externalPrice) return;
+    if (Number(marketPrice) && Number(marketPrice) !== externalPrice) return;
+    setMarketPrice(externalPrice.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [externalPrice]);
 

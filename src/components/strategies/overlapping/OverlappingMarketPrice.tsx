@@ -10,7 +10,7 @@ import { items } from '../create/variants';
 interface Props {
   base: Token;
   quote: Token;
-  externalPrice?: string;
+  externalPrice: number;
   marketPrice: string;
   setMarketPrice: (price: string) => void;
 }
@@ -55,12 +55,12 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
             error={error}
             withoutWallet
           />
-          {externalPrice && (
+          {!!externalPrice && (
             <div className="text-12 flex items-center justify-between rounded border border-white/10 p-16">
               <p className="text-white/80">CoinGecko Market Price</p>
               <button
                 className="flex gap-8"
-                onClick={() => setMarketPrice(externalPrice)}
+                onClick={() => setMarketPrice(externalPrice.toString())}
                 type="button"
               >
                 {prettifyNumber(externalPrice)}
