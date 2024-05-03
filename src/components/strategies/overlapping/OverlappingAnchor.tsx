@@ -10,9 +10,9 @@ interface Props {
   quote: Token;
   anchor?: 'buy' | 'sell';
   setAnchor: (order: 'buy' | 'sell') => void;
-  anchorError: string;
   disableBuy: boolean;
   disableSell: boolean;
+  anchorError?: string;
 }
 export const OverlappingAnchor: FC<Props> = (props) => {
   const { base, quote, anchor, setAnchor, anchorError } = props;

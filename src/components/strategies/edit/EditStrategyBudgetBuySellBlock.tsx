@@ -116,7 +116,7 @@ export const EditStrategyBudgetBuySellBlock: FC<Props> = (props) => {
       <EditStrategyAllocatedBudget
         {...budgetProps}
         initialBudget={initialBudget}
-        showMax={type === 'withdraw'}
+        setMax={type === 'withdraw' ? setBudget : undefined}
       />
       <FullOutcome
         price={order.price}

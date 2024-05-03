@@ -26,7 +26,7 @@ interface Props {
   quote: Token;
   buy?: boolean;
   type: EditTypes;
-  showMax?: boolean;
+  setMax?: (value: string) => void;
 }
 export const EditStrategyAllocatedBudget: FC<Props> = ({
   base,
@@ -35,7 +35,7 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
   initialBudget,
   type,
   buy = false,
-  showMax = false,
+  setMax,
 }) => {
   const firstTime = useRef(true);
   const isDistributeToggleOn =
@@ -76,10 +76,10 @@ export const EditStrategyAllocatedBudget: FC<Props> = ({
               amount={initialBudget ?? ''}
               token={buy ? quote : base}
             />
-            {showMax && (
+            {!!setMax && (
               <button
                 type="button"
-                onClick={() => order.setBudget('0')}
+                onClick={() => setMax(initialBudget)}
                 className="font-weight-500 text-primary cursor-pointer"
               >
                 MAX

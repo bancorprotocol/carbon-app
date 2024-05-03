@@ -38,15 +38,14 @@ export const isValidSpread = (spread: number) => {
 export const getSpread = ({ order0, order1 }: StrategyInput) => {
   const buyHigh = 'endRate' in order0 ? order0.endRate : order0.max;
   const sellHigh = 'endRate' in order1 ? order1.endRate : order1.max;
-  const buyMax = Number(buyHigh);
-  const sellMax = Number(sellHigh);
-  if (!buyHigh || !sellMax) return 0;
-  return (sellMax / buyMax - 1) * 100;
+  if (!Number(buyHigh) || !Number(sellHigh)) return new SafeDecimal(0);
+  const buyMax = new SafeDecimal(buyHigh);
+  const sellMax = new SafeDecimal(sellHigh);
+  return sellMax.div(buyMax).minus(1).times(100);
 };
 
 export const getRoundedSpread = (strategy: StrategyInput) => {
-  const spread = getSpread(strategy);
-  return Number(spread.toFixed(2));
+  return Number(getSpread(strategy).toFixed(2));
 };
 
 interface BuyOrder {

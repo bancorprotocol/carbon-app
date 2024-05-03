@@ -22,6 +22,8 @@ function getBudgetDistribution(
   balance: number,
   isSimulator: boolean
 ) {
+  const total = initial + balance;
+  const delta = deposit || withdraw;
   if (isSimulator) {
     return {
       mode: 'deposit',
@@ -29,26 +31,30 @@ function getBudgetDistribution(
       deltaPercent: 0,
       balancePercent: initial ? 0.5 : 1,
     };
+  } else if (!total) {
+    return {
+      mode: deposit ? 'deposit' : 'withdraw',
+      allocationPercent: 0,
+      deltaPercent: 0,
+      balancePercent: 1,
+    };
+  } else if (delta > total) {
+    return {
+      mode: deposit ? 'deposit' : 'withdraw',
+      allocationPercent: 0,
+      deltaPercent: 1,
+      balancePercent: 0,
+    };
   } else {
-    const total = initial + balance;
-    if (!total) {
-      return {
-        mode: deposit ? 'deposit' : 'withdraw',
-        allocationPercent: 0,
-        deltaPercent: 0,
-        balancePercent: 1,
-      };
-    } else {
-      const delta = ((deposit || withdraw) / total) * 100;
-      const newAllocation = (Math.max(initial - withdraw, 0) / total) * 100;
-      const newBalance = (Math.max(balance - deposit, 0) / total) * 100;
-      return {
-        mode: deposit ? 'deposit' : 'withdraw',
-        allocationPercent: Math.round(newAllocation),
-        deltaPercent: Math.round(delta),
-        balancePercent: Math.round(newBalance),
-      };
-    }
+    const deltaPercent = (delta / total) * 100;
+    const newAllocation = (Math.max(initial - withdraw, 0) / total) * 100;
+    const newBalance = (Math.max(balance - deposit, 0) / total) * 100;
+    return {
+      mode: deposit ? 'deposit' : 'withdraw',
+      allocationPercent: Math.round(newAllocation),
+      deltaPercent: Math.round(deltaPercent),
+      balancePercent: Math.round(newBalance),
+    };
   }
 }
 

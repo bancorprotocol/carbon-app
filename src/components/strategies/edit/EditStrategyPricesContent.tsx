@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Button } from 'components/common/button';
 import { useOrder } from 'components/strategies/create/useOrder';
@@ -21,7 +21,7 @@ import { useEditStrategy } from '../create/useEditStrategy';
 import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
 import { getDeposit, strategyHasChanges } from './utils';
-import style from './EditStrategy.module.css';
+import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
 
@@ -34,10 +34,8 @@ export const EditStrategyPricesContent = ({
   strategy,
   type,
 }: EditStrategyPricesContentProps) => {
-  const ref = useRef<HTMLFormElement>(null);
   const isOverlapping = isOverlappingStrategy(strategy);
   const { history } = useRouter();
-  const [disabled, setDisabled] = useState(true);
   const [approvedWarnings, setApprovedWarnings] = useState(false);
   const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
@@ -78,9 +76,18 @@ export const EditStrategyPricesContent = ({
     order0,
     order1,
   });
+
+  const hasChanged = strategyHasChanges(strategy, order0, order1);
+
+  const isDisabled = (form: HTMLFormElement) => {
+    const hasError = !!form.querySelector('.error-message');
+    const hasWarning = !!form.querySelector('.warning-message');
+    return hasError || !hasChanged || (hasWarning && !approvedWarnings);
+  };
+
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (isDisabled(e.currentTarget)) return;
     if (approval.approvalRequired) {
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
@@ -154,22 +161,12 @@ export const EditStrategyPricesContent = ({
     }
   };
 
-  useEffect(() => {
-    const form = ref.current;
-    if (!form) return;
-    const hasError = !!form.querySelector('.error-message');
-    const hasWarning = !!form.querySelector('.warning-message');
-    const hasChanges = strategyHasChanges(strategy, order0, order1);
-    setDisabled(hasError || !hasChanges || (hasWarning && !approvedWarnings));
-  }, [order0, order1, strategy, approvedWarnings]);
-
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
 
   return (
     <form
-      ref={ref}
       onSubmit={submit}
       onReset={() => history.back()}
       className={cn(
@@ -222,7 +219,7 @@ export const EditStrategyPricesContent = ({
 
       <Button
         type="submit"
-        disabled={disabled}
+        disabled={!hasChanged}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"

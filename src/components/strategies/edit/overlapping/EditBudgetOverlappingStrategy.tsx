@@ -1,19 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import {
-  getMaxBuyMin,
-  getMinSellMax,
   getRoundedSpread,
   isMaxBelowMarket,
   isMinAboveMarket,
-  isValidSpread,
 } from 'components/strategies/overlapping/utils';
-import { useMarketPrice } from 'hooks/useMarketPrice';
-import { isValidRange } from 'components/strategies/utils';
 import {
   calculateOverlappingBuyBudget,
-  calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { OverlappingBudget } from 'components/strategies/overlapping/OverlappingBudget';
@@ -37,25 +31,18 @@ interface Props {
 export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1, action } = props;
   const { base, quote } = strategy;
-  const baseBalance = useGetTokenBalance(base).data ?? '0';
-  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
-  const [touched, setTouched] = useState(false);
   const [delta, setDelta] = useState('');
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
-  const [anchorError, setAnchorError] = useState('');
   const [budgetError, setBudgetError] = useState('');
   const spread = getRoundedSpread(strategy);
 
-  const newMarketPrice = useMarketPrice({ base, quote });
-  const initialMarketPrice = geoMean(
+  const marketPrice = geoMean(
     strategy.order0.marginalRate,
     strategy.order1.marginalRate
-  )!;
-  const marketPrice =
-    touched || !initialMarketPrice
-      ? newMarketPrice.toString()
-      : initialMarketPrice.toString();
+  )!.toString();
 
+  const baseBalance = useGetTokenBalance(base).data ?? '0';
+  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
   const depositBuyBudget = getDeposit(initialBuyBudget, order0.budget);
@@ -107,103 +94,21 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  const setOverlappingPrices = (
-    min: string,
-    max: string,
-    spreadValue: string = spread.toString()
-  ) => {
-    if (!base || !quote) return;
-    if (!isValidRange(min, max) || !isValidSpread(spread)) return;
-    const prices = calculateOverlappingPrices(
-      min,
-      max,
-      marketPrice.toString(),
-      spreadValue
-    );
-
-    order0.setMax(prices.buyPriceHigh);
-    order0.setMarginalPrice(prices.buyPriceMarginal);
-    order1.setMin(prices.sellPriceLow);
-    order1.setMarginalPrice(prices.sellPriceMarginal);
-    return prices;
-  };
-
-  const setOverlappingParams = (
-    min: string,
-    max: string,
-    spreadValue: string = spread.toString()
-  ) => {
-    // Set min & max.
-    order0.setMin(min);
-    order1.setMax(max);
-
-    const prices = setOverlappingPrices(min, max, spreadValue);
-    if (!prices) return;
-
-    // Set budgets
-    const buyOrder = { min, marginalPrice: prices.buyPriceMarginal };
-    const buyBudget = order0.budget;
-    const sellOrder = { max, marginalPrice: prices.sellPriceMarginal };
-    const sellBudget = order1.budget;
-
-    if (!touched) setTouched(true);
-    // If there is not anchor display error
-    if (!anchor) return setAnchorError('Please select a token to proceed');
-
-    if (isMinAboveMarket(buyOrder)) {
-      if (anchor !== 'sell') resetBudgets('sell', min, max);
-      else calculateBuyBudget(sellBudget, min, max);
-      setAnchor('sell');
-    } else if (isMaxBelowMarket(sellOrder)) {
-      if (anchor !== 'buy') resetBudgets('buy', min, max);
-      else calculateSellBudget(buyBudget, min, max);
-      setAnchor('buy');
-    } else {
-      if (anchor === 'buy') calculateSellBudget(buyBudget, min, max);
-      if (anchor === 'sell') calculateBuyBudget(sellBudget, min, max);
-    }
-  };
-
-  const resetBudgets = (
-    anchorValue: 'buy' | 'sell',
-    min = order0.min,
-    max = order1.max
-  ) => {
+  const resetBudgets = () => {
     setDelta('');
     setBudgetError('');
-    if (!touched) {
-      order0.setBudget(initialBuyBudget);
-      order1.setBudget(initialSellBudget);
-      return;
-    }
-    if (anchorValue === 'buy') {
-      order0.setBudget(initialBuyBudget);
-      calculateSellBudget(initialBuyBudget, min, max);
-    } else {
-      order1.setBudget(initialSellBudget);
-      calculateBuyBudget(initialSellBudget, min, max);
-    }
+    order0.setBudget(initialBuyBudget);
+    order1.setBudget(initialSellBudget);
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    if (!anchor) setAnchorError('');
-    resetBudgets(value);
+    if (anchor && anchor !== value) resetBudgets();
     setAnchor(value);
-  };
-
-  const setMin = (min: string) => {
-    if (!order1.max) return order0.setMin(min);
-    setOverlappingParams(min, order1.max);
-  };
-
-  const setMax = (max: string) => {
-    if (!order0.min) return order1.setMax(max);
-    setOverlappingParams(order0.min, max);
   };
 
   const setBudget = (amount: string) => {
     setDelta(amount);
-    if (!amount) return resetBudgets(anchor!);
+    if (!amount) return resetBudgets();
     setBudgetError(getBudgetErrors(amount));
 
     if (anchor === 'buy') {
@@ -238,34 +143,6 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
     return '';
   };
 
-  useEffect(() => {
-    if (!touched || !spread || !marketPrice) return;
-    setOverlappingParams(order0.min, order1.max);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [touched, anchor, marketPrice]);
-
-  // Update on buyMin changes
-  useEffect(() => {
-    if (!order0.min) return;
-    const timeout = setTimeout(async () => {
-      const minSellMax = getMinSellMax(Number(order0.min), spread);
-      if (Number(order1.max) < minSellMax) setMax(minSellMax.toString());
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order0.min]);
-
-  // Update on sellMax changes
-  useEffect(() => {
-    if (!order1.max) return;
-    const timeout = setTimeout(async () => {
-      const maxBuyMin = getMaxBuyMin(Number(order1.max), spread);
-      if (Number(order0.min) > maxBuyMin) setMin(maxBuyMin.toString());
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order1.max]);
-
   return (
     <>
       <OverlappingAnchor
@@ -273,7 +150,6 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
         quote={quote}
         anchor={anchor}
         setAnchor={setAnchorValue}
-        anchorError={anchorError}
         disableBuy={isMinAboveMarket(order0)}
         disableSell={isMaxBelowMarket(order1)}
       />

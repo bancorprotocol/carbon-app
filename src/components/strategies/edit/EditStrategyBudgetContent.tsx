@@ -13,13 +13,13 @@ import { useStrategyEventData } from '../create/useStrategyEventData';
 import { carbonEvents } from 'services/events';
 import { useWeb3 } from 'libs/web3';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { FormEvent, useMemo, useRef, useState } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappingStrategy';
 import { getDeposit, strategyHasChanges } from './utils';
 import { cn } from 'utils/helpers';
-import style from './EditStrategy.module.css';
+import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
 
@@ -33,8 +33,6 @@ export const EditStrategyBudgetContent = ({
   type,
 }: EditStrategyBudgetContentProps) => {
   const isOverlapping = isOverlappingStrategy(strategy);
-  const ref = useRef<HTMLFormElement>(null);
-  const [approvedWarnings, setApprovedWarnings] = useState(false);
 
   const { history } = useRouter();
   const {
@@ -101,8 +99,19 @@ export const EditStrategyBudgetContent = ({
         });
   };
 
-  const handleOnActionClick = (e: FormEvent<HTMLFormElement>) => {
+  const hasChanged = strategyHasChanges(strategy, order0, order1);
+
+  const isDisabled = (form: HTMLFormElement) => {
+    if (approval.isError) return true;
+    if (!hasChanged) return true;
+    if (form.querySelector('.error-message')) return true;
+    const warning = form.querySelector<HTMLInputElement>('.warning-message');
+    return !!warning && !warning.checked;
+  };
+
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isDisabled(e.currentTarget)) return;
     if (type === 'withdraw') {
       const withdrawAll =
         (order0.budget || '0') === strategy.order0.balance &&
@@ -180,23 +189,13 @@ export const EditStrategyBudgetContent = ({
     void actionFn(updatedStrategy, buyOption, sellOption, handleEvents);
   };
 
-  const disabled = useMemo(() => {
-    if (approval.isError) return true;
-    if (!strategyHasChanges(strategy, order0, order1)) return true;
-    if (!ref.current) return true;
-    if (ref.current.querySelector('.error-message')) return true;
-    const hasWarning = !!ref.current.querySelector('.warning-message');
-    return hasWarning && !approvedWarnings;
-  }, [approval.isError, strategy, order0, order1, approvedWarnings]);
-
   const loadingChildren = useMemo(() => {
     return getStatusTextByTxStatus(isAwaiting, isProcessing);
   }, [isAwaiting, isProcessing]);
 
   return (
     <form
-      ref={ref}
-      onSubmit={(e) => handleOnActionClick(e)}
+      onSubmit={submit}
       onReset={() => history.back()}
       className={cn('flex w-full flex-col gap-20 md:w-[400px]', style.form)}
       data-testid="edit-form"
@@ -241,14 +240,13 @@ export const EditStrategyBudgetContent = ({
           name="approve-warning"
           type="checkbox"
           data-testid="approve-warnings"
-          onChange={(e) => setApprovedWarnings(e.target.checked)}
         />
         I've reviewed the warning(s) but choose to proceed.
       </label>
 
       <Button
         type="submit"
-        disabled={disabled}
+        disabled={!hasChanged}
         loading={isLoading}
         loadingChildren={loadingChildren}
         variant="white"
