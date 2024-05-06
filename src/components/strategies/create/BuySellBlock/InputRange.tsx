@@ -8,7 +8,7 @@ import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import { useMarketPrice } from 'hooks/useMarketPrice';
+import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
 
 type InputRangeProps = {
   min: string;
@@ -45,7 +45,7 @@ export const InputRange: FC<InputRangeProps> = ({
   ignoreMarketPriceWarning,
   isOrdersReversed,
 }) => {
-  const marketPrice = useMarketPrice({ base, quote });
+  const marketPrice = useUserMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMinMax = 'Maximum price must be higher than the minimum price';

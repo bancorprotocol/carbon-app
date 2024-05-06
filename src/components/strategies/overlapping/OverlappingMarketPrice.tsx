@@ -59,7 +59,7 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
             <div className="text-12 flex items-center justify-between rounded border border-white/10 p-16">
               <p className="text-white/80">CoinGecko Market Price</p>
               <button
-                className="flex gap-8"
+                className="flex items-center gap-8"
                 onClick={() => setMarketPrice(externalPrice.toString())}
                 type="button"
               >

@@ -520,7 +520,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   return (
     <figure className="relative">
       <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
-        {props.externalPrice === props.marketPrice ? (
+        {props.disabled || props.externalPrice === +props.marketPrice ? (
           <>
             <span>Market price provided by CoinGecko</span>
             <IconCoinGecko className="size-8" />

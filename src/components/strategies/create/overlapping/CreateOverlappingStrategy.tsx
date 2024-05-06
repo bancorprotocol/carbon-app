@@ -1,5 +1,4 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from '../useOrder';
@@ -24,6 +23,8 @@ import {
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
+import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 export interface OverlappingStrategyProps {
   base?: Token;
@@ -53,17 +54,11 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
     externalPrice ? externalPrice.toString() : ''
   );
   const [anchoredOrder, setAnchoredOrder] = useState<'buy' | 'sell'>('buy');
-  const { marketPricePercentage } = useMarketIndication({
-    base,
-    quote,
-    order: {
-      min: order0.min,
-      max: order1.max,
-      price: '',
-      isRange: true,
-    },
-    buy: true,
-  });
+  const marketPricePercentage = {
+    min: marketPricePercent(order0.min, marketPrice),
+    max: marketPricePercent(order1.max, marketPrice),
+    price: new SafeDecimal(0),
+  };
 
   const setBuyBudget = (
     sellBudget: string,
@@ -221,99 +216,95 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
         marketPrice={marketPrice}
         setMarketPrice={setMarketPrice}
       />
-      {!!Number(marketPrice) && (
-        <>
-          <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
-            <header className="flex items-center gap-8">
-              <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
-              <Tooltip
-                element="Drag and drop your strategy buy and sell prices."
-                iconClassName="text-white/60"
-              />
-            </header>
-            <OverlappingStrategyGraph
-              {...props}
+      <UserMarketPrice marketPrice={Number(marketPrice)}>
+        <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
+          <header className="flex items-center gap-8">
+            <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
+            <Tooltip
+              element="Drag and drop your strategy buy and sell prices."
+              iconClassName="text-white/60"
+            />
+          </header>
+          <OverlappingStrategyGraph
+            {...props}
+            order0={order0}
+            order1={order1}
+            externalPrice={externalPrice}
+            marketPrice={marketPrice}
+            marketPricePercentage={marketPricePercentage}
+            setMin={setMin}
+            setMax={setMax}
+          />
+        </article>
+        <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
+          <header className="flex items-center gap-8">
+            <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+              1
+            </span>
+            <h2 className="text-18 font-weight-500 flex-1">
+              Set Price Range&nbsp;
+              <span className="text-white/40">
+                ({quote?.symbol} per 1 {base?.symbol})
+              </span>
+            </h2>
+            <Tooltip
+              element="Indicate the strategy exact buy and sell prices."
+              iconClassName="text-white/60"
+            />
+          </header>
+          {base && quote && (
+            <CreateOverlappingRange
+              base={base}
+              quote={quote}
               order0={order0}
               order1={order1}
-              externalPrice={externalPrice}
-              marketPrice={marketPrice}
               marketPricePercentage={marketPricePercentage}
               setMin={setMin}
               setMax={setMax}
             />
-          </article>
-          <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
-            <header className="flex items-center gap-8">
-              <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-                1
-              </span>
-              <h2 className="text-18 font-weight-500 flex-1">
-                Set Price Range&nbsp;
-                <span className="text-white/40">
-                  ({quote?.symbol} per 1 {base?.symbol})
-                </span>
-              </h2>
-              <Tooltip
-                element="Indicate the strategy exact buy and sell prices."
-                iconClassName="text-white/60"
-              />
-            </header>
-            {base && quote && (
-              <CreateOverlappingRange
-                base={base}
-                quote={quote}
-                order0={order0}
-                order1={order1}
-                marketPricePercentage={marketPricePercentage}
-                setMin={setMin}
-                setMax={setMax}
-              />
-            )}
-          </article>
-          <article className="rounded-10 bg-background-900 flex flex-col gap-10 p-20">
-            <header className="mb-10 flex items-center gap-8 ">
-              <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-                2
-              </span>
-              <h2 className="text-18 font-weight-500 flex-1">
-                Indicate Spread
-              </h2>
-              <Tooltip
-                element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
-                iconClassName="text-white/60"
-              />
-            </header>
-            <OverlappingStrategySpread
-              buyMin={+order0.min}
-              sellMax={+order1.max}
-              defaultValue={0.05}
-              options={[0.01, 0.05, 0.1]}
-              spread={spread}
-              setSpread={setSpread}
+          )}
+        </article>
+        <article className="rounded-10 bg-background-900 flex flex-col gap-10 p-20">
+          <header className="mb-10 flex items-center gap-8 ">
+            <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+              2
+            </span>
+            <h2 className="text-18 font-weight-500 flex-1">Indicate Spread</h2>
+            <Tooltip
+              element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
+              iconClassName="text-white/60"
             />
-          </article>
-          <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
-            <header className="flex items-center gap-8 ">
-              <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
-                3
-              </span>
-              <h2 className="text-18 font-weight-500 flex-1">Set Budgets</h2>
-              <Tooltip
-                element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values."
-                iconClassName="text-white/60"
-              />
-            </header>
-            <CreateOverlappingStrategyBudget
-              {...props}
-              marketPrice={marketPrice}
-              anchoredOrder={anchoredOrder}
-              setAnchoredOrder={setAnchoredOrder}
-              setBuyBudget={setBuyBudget}
-              setSellBudget={setSellBudget}
+          </header>
+          <OverlappingStrategySpread
+            buyMin={+order0.min}
+            sellMax={+order1.max}
+            defaultValue={0.05}
+            options={[0.01, 0.05, 0.1]}
+            spread={spread}
+            setSpread={setSpread}
+          />
+        </article>
+        <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
+          <header className="flex items-center gap-8 ">
+            <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
+              3
+            </span>
+            <h2 className="text-18 font-weight-500 flex-1">Set Budgets</h2>
+            <Tooltip
+              element="Indicate the budget you would like to allocate to the strategy. Note that in order to maintain the overlapping behavior, the 2nd budget indication will be calculated using the prices, spread and budget values."
+              iconClassName="text-white/60"
             />
-          </article>
-        </>
-      )}
+          </header>
+          <CreateOverlappingStrategyBudget
+            {...props}
+            marketPrice={marketPrice}
+            anchoredOrder={anchoredOrder}
+            setAnchoredOrder={setAnchoredOrder}
+            setBuyBudget={setBuyBudget}
+            setSellBudget={setSellBudget}
+          />
+        </article>
+      </UserMarketPrice>
     </>
   );
 };
