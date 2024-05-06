@@ -1,12 +1,9 @@
 import { Token } from 'libs/tokens';
 import { FC, useState } from 'react';
 import { BudgetInput } from '../common/BudgetInput';
-import { cn, prettifyNumber, tokenAmount } from 'utils/helpers';
-import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
+import { cn, prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { LogoImager } from 'components/common/imager/Imager';
-import { m } from 'libs/motion';
-import { items } from '../create/variants';
 import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
@@ -19,64 +16,30 @@ interface Props {
   setMarketPrice: (price: string) => void;
 }
 export const OverlappingMarketPrice: FC<Props> = (props) => {
-  const { externalPrice, marketPrice, quote } = props;
   const [open, setOpen] = useState(false);
-
-  if (!Number(props.marketPrice)) {
-    return (
-      <m.article
-        variants={items}
-        key="marketPrice"
-        className="rounded-10 bg-background-900 flex flex-col"
-      >
-        <MarketPriceField {...props} />
-      </m.article>
-    );
-  }
-
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
-      className="flex items-center justify-between p-16"
+      className="text-12 flex items-center justify-between rounded-full border-2 border-white/60 px-16 py-8 text-white/80 hover:border-white/80"
       type="button"
     >
-      {externalPrice === Number(marketPrice) && (
-        <h3 className="text-14 font-weight-500 flex items-center gap-8">
-          <span>Set Market Price</span>
-          <span className="text-12 text-white/60">(Optional)</span>
-        </h3>
-      )}
-      {externalPrice !== Number(marketPrice) && (
-        <h3 className="text-14 font-weight-500 flex items-center gap-8">
-          Market Price:
-          <span className="text-12 text-white/60">
-            {tokenAmount(marketPrice, quote)}
-          </span>
-        </h3>
-      )}
-      <IconEdit className="size-16 text-white/60" />
+      Set Market Price
     </button>
   );
 
   return (
-    <m.article
-      variants={items}
-      key="marketPrice"
-      className="rounded-10 bg-background-900 flex flex-col"
+    <DropdownMenu
+      isOpen={open}
+      setIsOpen={setOpen}
+      placement="bottom-end"
+      button={Trigger}
     >
-      <DropdownMenu
-        isOpen={open}
-        setIsOpen={setOpen}
-        placement="top"
-        button={Trigger}
-      >
-        <MarketPriceField
-          {...props}
-          className="w-[400px]"
-          close={() => setOpen(false)}
-        />
-      </DropdownMenu>
-    </m.article>
+      <OverlappingInitMarketPriceField
+        {...props}
+        className="w-[400px] max-w-[80vw]"
+        close={() => setOpen(false)}
+      />
+    </DropdownMenu>
   );
 };
 
@@ -85,9 +48,16 @@ interface FieldProps extends Props {
   close?: () => void;
 }
 
-const MarketPriceField = (props: FieldProps) => {
+export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const { base, quote, externalPrice, marketPrice } = props;
   const [localPrice, setLocalPrice] = useState(marketPrice);
+  const [error, setError] = useState('');
+
+  const changePrice = (value: string) => {
+    if (!Number(value)) setError('Price must be greater than 0');
+    else setError('');
+    setLocalPrice(value);
+  };
 
   const setPrice = () => {
     if (!Number(localPrice)) return;
@@ -101,9 +71,9 @@ const MarketPriceField = (props: FieldProps) => {
         title={`Enter Market Price (${quote.symbol} per 1${base.symbol})`}
         titleTooltip="Price used to calculate overlapping strategy params"
         value={localPrice}
-        onChange={setLocalPrice}
+        onChange={changePrice}
         token={quote}
-        error={!!Number(localPrice) ? '' : 'Price must be greater than 0'}
+        error={error}
         withoutWallet
       />
       {!!externalPrice && (
