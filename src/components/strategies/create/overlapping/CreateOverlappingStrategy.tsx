@@ -209,14 +209,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
 
   return (
     <>
-      <OverlappingMarketPrice
-        base={base}
-        quote={quote}
-        externalPrice={externalPrice}
-        marketPrice={marketPrice}
-        setMarketPrice={setMarketPrice}
-      />
-      <UserMarketPrice marketPrice={Number(marketPrice)}>
+      {!!Number(marketPrice) && (
         <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
           <header className="flex items-center gap-8">
             <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
@@ -236,6 +229,15 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
             setMax={setMax}
           />
         </article>
+      )}
+      <OverlappingMarketPrice
+        base={base}
+        quote={quote}
+        externalPrice={externalPrice}
+        marketPrice={marketPrice}
+        setMarketPrice={setMarketPrice}
+      />
+      <UserMarketPrice marketPrice={Number(marketPrice)}>
         <article className="rounded-10 bg-background-900 flex flex-col gap-20 p-20">
           <header className="flex items-center gap-8">
             <span className="flex size-16 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/60">
