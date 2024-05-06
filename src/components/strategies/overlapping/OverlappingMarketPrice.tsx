@@ -1,5 +1,5 @@
 import { Token } from 'libs/tokens';
-import { FC, useState } from 'react';
+import { FC, useId, useState } from 'react';
 import { BudgetInput } from '../common/BudgetInput';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
@@ -8,6 +8,8 @@ import { LogoImager } from 'components/common/imager/Imager';
 import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
+import { SafeDecimal } from 'libs/safedecimal';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   base: Token;
@@ -52,13 +54,17 @@ interface FieldProps extends Props {
 
 export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const { base, quote, externalPrice, marketPrice } = props;
+  const checkboxId = useId();
   const [localPrice, setLocalPrice] = useState(marketPrice);
+  console.log({ localPrice, marketPrice });
+  const [approved, setApproved] = useState(localPrice === marketPrice);
   const [error, setError] = useState('');
 
   const changePrice = (value: string) => {
     if (!Number(value)) setError('Price must be greater than 0');
     else setError('');
     setLocalPrice(value);
+    setApproved(value === marketPrice);
   };
 
   const setPrice = () => {
@@ -66,6 +72,17 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
     props.setMarketPrice(localPrice);
     if (props.close) props.close();
   };
+
+  const displayApproval = !!externalPrice && externalPrice !== +localPrice;
+  const disabled = !Number(localPrice) || (displayApproval && !approved);
+
+  const warning =
+    !!externalPrice &&
+    new SafeDecimal(localPrice)
+      .minus(externalPrice)
+      .div(externalPrice)
+      .abs()
+      .gt(0.01);
 
   return (
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
@@ -78,6 +95,12 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         error={error}
         withoutWallet
       />
+      {warning && (
+        <WarningMessageWithIcon>
+          Note that your input market price differs significantly from the
+          application's.
+        </WarningMessageWithIcon>
+      )}
       {!!externalPrice && (
         <div className="text-12 flex items-center justify-between rounded border border-white/10 p-16">
           <p className="text-white/80">CoinGecko Market Price</p>
@@ -113,7 +136,21 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
           </span>
         )}
       </p>
-      <Button type="button" disabled={!Number(localPrice)} onClick={setPrice}>
+      {displayApproval && (
+        <label
+          htmlFor={checkboxId}
+          className="rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60"
+        >
+          <input
+            id={checkboxId}
+            type="checkbox"
+            checked={approved}
+            onChange={(e) => setApproved(e.target.checked)}
+          />
+          <span>I've reviewed the warning(s) but choose to proceed.</span>
+        </label>
+      )}
+      <Button type="button" disabled={disabled} onClick={setPrice}>
         Confirm
       </Button>
     </div>
