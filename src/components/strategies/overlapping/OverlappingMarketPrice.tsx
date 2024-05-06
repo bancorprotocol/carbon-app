@@ -3,6 +3,7 @@ import { FC, useState } from 'react';
 import { BudgetInput } from '../common/BudgetInput';
 import { cn, prettifyNumber } from 'utils/helpers';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
+import { ReactComponent as IconEdit } from 'assets/icons/edit.svg';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
@@ -20,10 +21,11 @@ export const OverlappingMarketPrice: FC<Props> = (props) => {
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
-      className="text-12 flex items-center justify-between rounded-full border-2 border-white/60 px-16 py-8 text-white/80 hover:border-white/80"
+      className="text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8"
       type="button"
     >
-      Set Market Price
+      <IconEdit className="size-16" />
+      <span>Edit Market Price</span>
     </button>
   );
 
