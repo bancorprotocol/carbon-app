@@ -10,7 +10,6 @@ import { useStore } from 'store';
 import useAsyncEffect from 'use-async-effect';
 import { getConnectionTypeFromLS } from './web3.constants';
 import { carbonEvents } from 'services/events';
-import config from 'config';
 
 export const useWeb3Network = () => {
   const { isCountryBlocked, setSelectedWallet } = useStore();
@@ -26,16 +25,7 @@ export const useWeb3Network = () => {
   const [networkError, setNetworkError] = useState<string>();
 
   const switchNetwork = useCallback(async () => {
-    try {
-      await connector.activate(config.network.chainId);
-    } catch (e: any) {
-      // If the chainId is unrecognized by wallet
-      if (e.code === 4902) {
-        await connector.activate(getChainInfo());
-      } else {
-        throw e;
-      }
-    }
+    await connector.activate(getChainInfo());
   }, [connector]);
 
   const activateNetwork = useCallback(async () => {
