@@ -86,6 +86,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
 
   return (
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
+      {!externalPrice && <SetPriceText base={base} />}
       <BudgetInput
         title={`Enter Market Price (${quote.symbol} per 1${base.symbol})`}
         titleTooltip="Price used to calculate overlapping strategy params"
@@ -122,19 +123,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
       <p className="text-12 text-white/60">
         By changing the market price, you change the price area in which your
         overlapping strategy will begin to work.
-        {!!externalPrice && (
-          <span>
-            You can always return to the current market price. Market price
-            provided by&nbsp;
-            <NewTabLink
-              className="text-primary inline-flex items-center gap-8"
-              to="https://www.coingecko.com/"
-            >
-              <b>CoinGecko</b>
-              <IconCoinGecko className="size-10" />
-            </NewTabLink>
-          </span>
-        )}
+        {!!externalPrice && <EditPriceText />}
       </p>
       {displayApproval && (
         <label
@@ -156,3 +145,24 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
     </div>
   );
 };
+
+const SetPriceText = ({ base }: { base: Token }) => (
+  <p className="text-12 text-white/80">
+    {base.symbol} market price is missing. To continue creating a strategy enter
+    its market price.
+  </p>
+);
+
+const EditPriceText = () => (
+  <span>
+    You can always return to the current market price. Market price provided
+    by&nbsp;
+    <NewTabLink
+      className="text-primary inline-flex items-center gap-8"
+      to="https://www.coingecko.com/"
+    >
+      <b>CoinGecko</b>
+      <IconCoinGecko className="size-10" />
+    </NewTabLink>
+  </span>
+);
