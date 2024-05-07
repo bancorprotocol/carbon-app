@@ -179,7 +179,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
         tokens.length > 0 &&
         isInitialized &&
         roiQuery.isFetched &&
-        ensAddress.isSuccess,
+        ensAddress.isFetched,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }

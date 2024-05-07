@@ -23,7 +23,7 @@ export const useGetEnsFromAddress = (address: string) => {
       return '';
     },
     {
-      enabled: !!address && !!provider,
+      enabled: !!provider,
       staleTime: ONE_DAY_IN_MS,
     }
   );
@@ -44,7 +44,7 @@ export const useGetAddressFromEns = (ens: string) => {
       return '';
     },
     {
-      enabled: !!ens && !!provider,
+      enabled: !!provider,
       staleTime: ONE_DAY_IN_MS,
     }
   );
