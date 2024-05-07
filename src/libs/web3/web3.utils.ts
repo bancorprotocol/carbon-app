@@ -16,7 +16,21 @@ const { type } = parser.getDevice();
 
 export const isMobile = type === 'mobile' || type === 'tablet';
 
-export const getChainInfo = () => {
+// Interface to add new chain to injected wallets as per EIP-3085 (https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3085.md)
+export interface AddChainParameter {
+  chainId: number; // EIP-3085 specifies hex string but web3-react expects number
+  chainName: string;
+  nativeCurrency: {
+    name: string;
+    symbol: string;
+    decimals: number; // EIP-3085 specifies generic string but web3-react expects 18
+  };
+  rpcUrls: string[];
+  blockExplorerUrls?: string[];
+  iconUrls?: string[];
+}
+
+export const getChainInfo = (): AddChainParameter => {
   return {
     chainId: config.network.chainId,
     chainName: config.network.name,
@@ -25,6 +39,7 @@ export const getChainInfo = () => {
       symbol: config.network.gasToken.symbol,
       decimals: config.network.gasToken.decimals,
     },
+    iconUrls: [config.network.gasToken.logoURI],
     rpcUrls: [config.network.rpcUrl],
     blockExplorerUrls: [config.network.blockExplorer],
   };
