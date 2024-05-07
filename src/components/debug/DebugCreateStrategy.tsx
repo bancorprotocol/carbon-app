@@ -8,7 +8,6 @@ import {
 } from 'libs/queries';
 import { FAUCET_TOKENS } from 'utils/tenderly';
 import config from 'config';
-import { config as networkConfig } from 'services/web3/config';
 import { wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
 import { useWeb3 } from 'libs/web3';
@@ -33,7 +32,7 @@ TOKENS.push({
   symbol: gasToken.symbol,
 });
 
-const spender = networkConfig.carbon.carbonController;
+const spender = config.addresses.carbon.carbonController;
 
 export const DebugCreateStrategy = () => {
   const count = useRef(0);

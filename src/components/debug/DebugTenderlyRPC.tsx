@@ -3,7 +3,6 @@ import { useState, FormEvent } from 'react';
 import { lsService } from 'services/localeStorage';
 import { Button } from 'components/common/button';
 import { Input, Label } from 'components/common/inputField';
-import { config as web3Config } from 'services/web3/config';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import config from 'config';
 
@@ -17,11 +16,11 @@ export const DebugTenderlyRPC = () => {
     lsService.getItem('carbonApi') || config.carbonApi
   );
   const [carbonControllerInput, setCarbonControllerInput] = useState(
-    web3Config.carbon.carbonController
+    config.addresses.carbon.carbonController
   );
 
   const [voucherAddressInput, setVoucherAddressInput] = useState(
-    web3Config.carbon.voucher
+    config.addresses.carbon.voucher
   );
 
   const submit = (e: FormEvent) => {

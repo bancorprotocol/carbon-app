@@ -17,7 +17,7 @@ import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { carbonEvents } from 'services/events';
 import {
   createStrategyAction,
@@ -37,7 +37,7 @@ import {
   isValidSpread,
 } from '../overlapping/utils';
 
-const spenderAddress = config.carbon.carbonController;
+const spenderAddress = config.addresses.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 

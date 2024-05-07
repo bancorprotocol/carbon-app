@@ -7,7 +7,7 @@ import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useContract } from 'hooks/useContract';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonInit } from 'hooks/useCarbonInit';
@@ -156,7 +156,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const address: string = (ensAddress?.data || user || '').toLowerCase();
 
   const isValidAddress = utils.isAddress(address);
-  const isZeroAddress = address === config.tokens.ZERO;
+  const isZeroAddress = address === config.addresses.tokens.ZERO;
 
   const roiQuery = useGetRoi();
 
