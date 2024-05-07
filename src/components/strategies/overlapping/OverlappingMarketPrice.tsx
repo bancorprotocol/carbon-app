@@ -79,15 +79,16 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
       {!externalPrice && <SetPriceText base={base} />}
       <BudgetInput
-        title={`Enter Market Price (${quote.symbol} per 1${base.symbol})`}
+        title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
         titleTooltip="Price used to calculate overlapping strategy params"
+        placeholder="Enter price"
         value={localPrice}
         onChange={changePrice}
         token={quote}
         error={error}
         withoutWallet
       />
-      {showApproval && (
+      {!error && showApproval && (
         <WarningMessageWithIcon>
           Warning, your market price will be used in the strategy creation flow
           and calculations.
@@ -146,8 +147,8 @@ const SetPriceText = ({ base }: { base: Token }) => (
 
 const EditPriceText = () => (
   <span>
-    You can always return to the current market price. Market price provided
-    by&nbsp;
+    &nbsp;You can always return to the current market price. Market price
+    provided by&nbsp;
     <NewTabLink
       className="text-primary inline-flex items-center gap-8"
       to="https://www.coingecko.com/"
