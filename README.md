@@ -116,6 +116,8 @@ where `spread` is in percentage, and `value` is the number of strategies to crea
 4. Update the `src/config/index.ts` files to import your files
    `index.ts`
 
+As an example on adding Polygon network:
+
 ```typescript
 import ethereumDev from './ethereum/development';
 import ethereumProd from './ethereum/production';
@@ -136,7 +138,7 @@ const configs = {
 };
 ```
 
-5. Update the `.env` file to use the required network (ex: "polygon") and set your RPC url
+5. Update the `.env` file to use the required network (ex: "polygon") and set your RPC url if you wish to use a custom one not defined under the `common.ts` file.
 
 ```bash
 # Use polygon network
@@ -152,24 +154,30 @@ and it is recommended to set VITE_LEGACY_TRADE_BY_SOURCE_RANGE to true in .env t
 
 ### Common configuration
 
-The file [`common.ts`](src/config/common.ts) contains important configuration for the app and network. It includes the following:
+The file `common.ts` with type [`AppConfig`](src/config/types.ts) contains important configuration for the app and network. It includes the following:
 
 - `appUrl`: The URL of the app.
 - `carbonApi`: The URL of the API.
-- `walletConnectProjectId`: The WalletConnect project ID. Leave empty if not used and the wallet will not show up in the wallet selection modal.
+- `walletConnectProjectId`: The WalletConnect project ID If you wish to add walletConnect, make sure to add it to `selectableConnectionTypes` as well.
 - `selectableConnectionTypes`: List of available connection types to be used in the wallet selection modal.
-- network
+- `isSimulatorEnabled`: Flag to enable the simulation page.
+- `network`
   - `name`: Network name.
   - `logoUrl`: Network logo URL.
   - `chainId`: Chain ID.
-  - `gasToken`: Gas token name, symbol, decimals, address and logoURI
+  - `gasToken`: Gas token name, symbol, decimals, address and logoURI.
   - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
   - `rpcUrl`: The RPC URL of the network.
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.
-- `addresses`/`carbon`: CarbonController, Voucher and multicall contract addresses.
+- `popularTokens`: List of popular tokens to be used in the app when opening the token selection modal.
+- `addresses`/`carbon` and `addresses/utils`: CarbonController, Voucher and multicall contract addresses.
 - `tokenListOverride`: Token list override to be used in the app when fetching the token list. Tokens in the list will override any other token with the same address.
 - `tokenLists`: List of token lists including the uri and the parser to be used to parse the token list.
+
+### Add pairsToExchangeMapping
+
+The file [`pairsToExchangeMapping.ts`](src/config/utils.ts) contains the mapping of pair symbols to exchange symbol to be used in the TradingView chart.
 
 ## Change Colors
 
