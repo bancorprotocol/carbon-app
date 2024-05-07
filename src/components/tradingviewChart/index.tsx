@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { Copyright } from './copyrights';
 import { Widget } from './widget';
 import { Token } from 'libs/tokens';
-import { pairsToExchangeMapping } from './utils';
+import { pairsToExchangeMapping } from 'config';
 
 export type TradingviewChartProps = {
   base: Token | undefined;

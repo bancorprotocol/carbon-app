@@ -13,7 +13,7 @@ import { useWeb3 } from 'libs/web3';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
-import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
+import { pairsToExchangeMapping } from 'config';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
