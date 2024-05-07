@@ -15,7 +15,7 @@ export const fetchTokenLists = async () => {
     config.tokenLists.map(async ({ uri, parser }) => {
       const signal = AbortSignal.timeout(10000);
       const response = await fetch(uri, { signal });
-      const result = await response.json();
+      const result: TokenList = await response.json();
 
       if (!response.ok) {
         const error = (result as { error?: string }).error;
@@ -25,7 +25,7 @@ export const fetchTokenLists = async () => {
         );
       }
 
-      const parsedResult = parser ? parser(result) : (result as TokenList);
+      const parsedResult = parser ? parser(result) : result;
 
       return {
         ...parsedResult,
