@@ -37,7 +37,7 @@ export const commonConfig: AppConfig = {
     name: 'Ethereum Network',
     logoUrl: IconETHLogo,
     chainId: 1,
-    blockExplorer: 'https://etherscan.io',
+    blockExplorer: { name: 'Etherscan', url: 'https://etherscan.io' },
     rpcUrl:
       import.meta.env.VITE_CHAIN_RPC_URL ||
       'https://eth-mainnet.g.alchemy.com/v2/demo',

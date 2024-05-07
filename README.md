@@ -163,7 +163,7 @@ The file [`common.ts`](src/config/common.ts) contains important configuration fo
   - `logoUrl`: Network logo URL.
   - `chainId`: Chain ID.
   - `gasToken`: Gas token name, symbol, decimals, address and logoURI
-  - `blockExplorer`: The URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
+  - `blockExplorer`: The name and URL of the block explorer to be used in the notifications and when the network is added to the injected wallet.
   - `rpcUrl`: The RPC URL of the network.
 - `defaultTokenPair`: Default token pair to be used in the app when opening the trade and simulation pages.
 - `popularPairs`: List of popular pairs to be used in the app when opening the token selection modal.

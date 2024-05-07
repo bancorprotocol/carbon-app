@@ -21,7 +21,7 @@ export const commonConfig: AppConfig = {
     name: 'Sei Devnet',
     logoUrl: IconSeiLogo,
     chainId: 713715,
-    blockExplorer: 'https://seitrace.com',
+    blockExplorer: { name: 'Sei Trace', url: 'https://seitrace.com' },
     rpcUrl:
       import.meta.env.VITE_CHAIN_RPC_URL ||
       'https://evm-rpc-arctic-1.sei-apis.com',

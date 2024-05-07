@@ -41,7 +41,7 @@ export const getChainInfo = (): AddChainParameter => {
     },
     iconUrls: [config.network.gasToken.logoURI],
     rpcUrls: [config.network.rpcUrl],
-    blockExplorerUrls: [config.network.blockExplorer],
+    blockExplorerUrls: [config.network.blockExplorer.url],
   };
 };
 
