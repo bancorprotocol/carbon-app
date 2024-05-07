@@ -17,7 +17,8 @@ interface Props {
   withoutWallet?: boolean;
   'data-testid'?: string;
   title: string;
-  titleTooltip: string;
+  titleTooltip?: string;
+  placeholder?: string;
 }
 
 export const BudgetInput: FC<Props> = (props) => {
@@ -31,6 +32,7 @@ export const BudgetInput: FC<Props> = (props) => {
     onChange,
     title,
     titleTooltip,
+    placeholder,
   } = props;
   const inputId = useId();
   const balance = query?.data ?? '0';
@@ -44,6 +46,7 @@ export const BudgetInput: FC<Props> = (props) => {
       </label>
       <TokenInputField
         id={id ?? inputId}
+        placeholder={placeholder}
         className="rounded-16 bg-black p-16"
         value={value}
         setValue={onChange}

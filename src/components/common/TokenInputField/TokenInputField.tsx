@@ -126,7 +126,7 @@ export const TokenInputField: FC<Props> = ({
             disabled={disabled}
             type="button"
             onClick={handleBalanceClick}
-            className="group flex items-center"
+            className="group/token-input flex items-center"
           >
             <span className="text-white">
               Wallet: {prettifyNumber(balance || 0)}&nbsp;
@@ -135,7 +135,7 @@ export const TokenInputField: FC<Props> = ({
               className={
                 disabled
                   ? 'text-primary/40'
-                  : 'text-primary group-hover:text-white'
+                  : 'text-primary group-hover/token-input:text-white'
               }
             >
               MAX

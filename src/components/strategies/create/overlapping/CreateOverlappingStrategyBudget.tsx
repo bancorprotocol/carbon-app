@@ -15,7 +15,7 @@ import { isValidRange } from 'components/strategies/utils';
 import { OverlappingSmallBudget } from 'components/strategies/overlapping/OverlappingSmallBudget';
 
 interface Props extends OverlappingStrategyProps {
-  marketPrice: number;
+  marketPrice: string;
   anchoredOrder: 'buy' | 'sell';
   setAnchoredOrder: (value: 'buy' | 'sell') => any;
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;

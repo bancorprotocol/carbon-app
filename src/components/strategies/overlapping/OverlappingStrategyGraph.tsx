@@ -20,7 +20,8 @@ import styles from './OverlappingStrategyGraph.module.css';
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
-  marketPrice: number;
+  externalPrice?: number;
+  marketPrice: string;
   marketPricePercentage: MarketPricePercentage;
   base?: Token;
   quote?: Token;
@@ -33,6 +34,7 @@ interface EnableProps {
 }
 
 interface DisableProps {
+  externalPrice?: number;
   marketPrice: number;
   marketPricePercentage: MarketPricePercentage;
   base?: Token;
@@ -166,9 +168,9 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const { quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
-  const xFactor = getXFactor(baseMin, baseMax, props.marketPrice);
+  const xFactor = getXFactor(baseMin, baseMax, +props.marketPrice);
 
-  const marketPrice = props.marketPrice * xFactor;
+  const marketPrice = +props.marketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
     min: baseMin * xFactor,
@@ -518,8 +520,14 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   return (
     <figure className="relative">
       <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
-        <span>Market price provided by CoinGecko</span>
-        <IconCoinGecko className="size-8" />
+        {props.disabled || props.externalPrice === +props.marketPrice ? (
+          <>
+            <span>Market price provided by CoinGecko</span>
+            <IconCoinGecko className="size-8" />
+          </>
+        ) : (
+          <span>User-defined market price</span>
+        )}
         <span role="separator">·</span>
         <span>Spread {spread || 0}%</span>
       </figcaption>
