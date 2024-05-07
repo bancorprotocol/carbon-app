@@ -14,11 +14,11 @@ export const commonConfig: AppConfig = {
   mode: 'development',
   appUrl: 'https://sei.carbondefi.xyz',
   carbonApi: 'https://carbon-sei-testnet-ptdczarhfq-nw.a.run.app/v1/', // TODO: add SEI api
-  selectableConnectionTypes: ['injected'],
+  selectableConnectionTypes: ['injected', 'coinbaseWallet'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
   network: {
-    name: 'SEI Network',
+    name: 'Sei Devnet',
     logoUrl: IconSeiLogo,
     chainId: 713715,
     blockExplorer: 'https://seitrace.com',
