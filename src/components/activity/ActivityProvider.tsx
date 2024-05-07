@@ -13,9 +13,9 @@ interface Props {
   children: ReactNode;
 }
 export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
-  const query = useActivityQuery(params);
+  const activityQuery = useActivityQuery(params);
   const listOptions: ListOptions<Activity, ActivitySearchParams> = {
-    all: query.data ?? [],
+    all: activityQuery.data ?? [],
     defaultLimit: 10,
     schema: activitySchema,
     filter: filterActivity,
@@ -24,10 +24,10 @@ export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
     user: params.ownerId,
   });
 
-  if (query.isLoading) {
+  if (activityQuery.isLoading || userStrategiesQuery.isLoading) {
     return <CarbonLogoLoading className="w-[100px] flex-1 self-center" />;
   }
-  const activities = query.data ?? [];
+  const activities = activityQuery.data ?? [];
   if (!activities.length) {
     if (empty) {
       const userStrategies = userStrategiesQuery.data;
