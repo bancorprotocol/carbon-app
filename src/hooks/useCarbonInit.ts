@@ -97,6 +97,7 @@ export const useCarbonInit = () => {
 
       await Promise.all([
         carbonSDK.init(
+          SupportedChainId.MAINNET,
           RPC_URLS[SupportedChainId.MAINNET],
           contractsConfig,
           getTokenDecimalMap(),
