@@ -17,8 +17,9 @@ import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappingStrategy';
-import { getDeposit, strategyHasChanges } from './utils';
+import { getDeposit, strategyHasChanged } from './utils';
 import { cn } from 'utils/helpers';
+import { useNextRender } from 'hooks/useNextRender';
 import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
@@ -61,6 +62,11 @@ export const EditStrategyBudgetContent = ({
 
   const isAwaiting = updateMutation.isLoading;
   const isLoading = isAwaiting || isProcessing || approval.isLoading;
+  const showApproval = !!useNextRender(() => {
+    const errors = document.querySelector('.error-message');
+    const warnings = !!document.querySelector('.warning-message');
+    return !errors && !!warnings;
+  });
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -99,7 +105,7 @@ export const EditStrategyBudgetContent = ({
         });
   };
 
-  const hasChanged = strategyHasChanges(strategy, order0, order1);
+  const hasChanged = strategyHasChanged(strategy, order0, order1);
 
   const isDisabled = (form: HTMLFormElement) => {
     if (approval.isError) return true;
@@ -235,14 +241,17 @@ export const EditStrategyBudgetContent = ({
         </>
       )}
 
-      <label className={cn(style.approveWarnings)}>
-        <input
-          name="approve-warning"
-          type="checkbox"
-          data-testid="approve-warnings"
-        />
-        I've reviewed the warning(s) but choose to proceed.
-      </label>
+      {showApproval && (
+        <label className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60">
+          <input
+            type="checkbox"
+            name="approval"
+            data-testid="approve-warnings"
+            required
+          />
+          I've reviewed the warning(s) but choose to proceed.
+        </label>
+      )}
 
       <Button
         type="submit"

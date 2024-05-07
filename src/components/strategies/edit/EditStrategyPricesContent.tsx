@@ -1,4 +1,4 @@
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { Button } from 'components/common/button';
 import { useOrder } from 'components/strategies/create/useOrder';
@@ -20,7 +20,8 @@ import { cn } from 'utils/helpers';
 import { useEditStrategy } from '../create/useEditStrategy';
 import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
-import { getDeposit, strategyHasChanges } from './utils';
+import { getDeposit, strategyBudgetChanges, strategyHasChanged } from './utils';
+import { useNextRender } from 'hooks/useNextRender';
 import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
@@ -36,7 +37,6 @@ export const EditStrategyPricesContent = ({
 }: EditStrategyPricesContentProps) => {
   const isOverlapping = isOverlappingStrategy(strategy);
   const { history } = useRouter();
-  const [approvedWarnings, setApprovedWarnings] = useState(false);
   const { renewStrategy, changeRateStrategy, isProcessing, updateMutation } =
     useUpdateStrategy();
   const isAwaiting = updateMutation.isLoading;
@@ -77,12 +77,20 @@ export const EditStrategyPricesContent = ({
     order1,
   });
 
-  const hasChanged = strategyHasChanges(strategy, order0, order1);
+  const hasChanged = strategyHasChanged(strategy, order0, order1);
+  const hasDistributionChanges =
+    isOverlapping && strategyBudgetChanges(strategy, order0, order1);
+  const showApproval = !!useNextRender(() => {
+    const errors = document.querySelector('.error-message');
+    const warnings = !!document.querySelector('.warning-message');
+    return !errors && (!!warnings || hasDistributionChanges);
+  });
 
   const isDisabled = (form: HTMLFormElement) => {
-    const hasError = !!form.querySelector('.error-message');
-    const hasWarning = !!form.querySelector('.warning-message');
-    return hasError || !hasChanged || (hasWarning && !approvedWarnings);
+    if (!!form.querySelector('.error-message')) return true;
+    if (!form.checkValidity()) return true;
+    if (!hasChanged) return true;
+    return false;
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
@@ -169,10 +177,7 @@ export const EditStrategyPricesContent = ({
     <form
       onSubmit={submit}
       onReset={() => history.back()}
-      className={cn(
-        'flex w-full flex-col items-center gap-20 md:w-[400px]',
-        style.form
-      )}
+      className={cn('flex w-full flex-col gap-20 md:w-[400px]', style.form)}
       data-testid="edit-form"
     >
       <EditStrategyOverlapTokens strategy={strategy} />
@@ -207,15 +212,19 @@ export const EditStrategyPricesContent = ({
         </>
       )}
 
-      <label className={cn(style.approveWarnings)}>
-        <input
-          name="approve-warning"
-          type="checkbox"
-          data-testid="approve-warnings"
-          onChange={(e) => setApprovedWarnings(e.target.checked)}
-        />
-        I've reviewed the warning(s) but choose to proceed.
-      </label>
+      {showApproval && (
+        <label className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60">
+          <input
+            type="checkbox"
+            name="approval"
+            data-testid="approve-warnings"
+            required
+          />
+          {hasDistributionChanges
+            ? "I've approved the edits and distribution changes."
+            : "I've reviewed the warning(s) but choose to proceed."}
+        </label>
+      )}
 
       <Button
         type="submit"

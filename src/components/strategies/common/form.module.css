@@ -1,21 +1,12 @@
 .form:invalid button[type="submit"],
-.form:has(:global(.error-message)) button[type="submit"],
-.form:has(:not(:global(.error-message))):has(:global(.warning-message) input:not(:checked)) button[type="submit"] {
+.form:has(:global(.error-message)) button[type="submit"] {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 .form:invalid button[type="submit"]:hover,
-.form:has(:global(.error-message)) button[type="submit"]:hover,
-.form:has(:not(:global(.error-message))):has(:global(.warning-message) input:not(:checked)) button[type="submit"]{
+.form:has(:global(.error-message)) button[type="submit"]:hover {
   border: none;
-}
-
-.approve-warnings {
-  display: none;
-}
-.form:has(:global(.warning-message)):not(:has(:global(.error-message))) .approve-warnings {
-  @apply flex items-center gap-8 rounded-10 bg-background-900 p-20 text-14 font-weight-500 text-white/60;
 }
 
 .form > header, .form > article, .form > button {

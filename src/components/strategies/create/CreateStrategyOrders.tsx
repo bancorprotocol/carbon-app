@@ -63,12 +63,23 @@ export const CreateStrategyOrders = ({
     createStrategy();
   };
 
+  const isOverlapping = strategySettings === 'overlapping';
+  const loading = isAwaiting || isProcessing;
+  const loadingChildren = useMemo(() => {
+    return getStatusTextByTxStatus(isAwaiting, isProcessing);
+  }, [isAwaiting, isProcessing]);
+  const hasDistributionChanges =
+    isOverlapping && !!(+order0.budget || +order1.budget);
+
+  // TODO(#1204): cleanup this when separated into different pages
   useEffect(() => {
     const form = formRef.current;
     const valid =
       form?.checkValidity() && !form.querySelector('.error-message');
     const warnings = !!form?.querySelector('.warning-message');
-    setShowWarningApproval(!!user && !!valid && warnings);
+    setShowWarningApproval(
+      !!user && !!valid && (warnings || hasDistributionChanges)
+    );
     const hasError = !valid || hasApprovalError;
     const needApproval = showWarningApproval && !approvedWarnings;
     setDisabled(!user || hasError || needApproval);
@@ -80,12 +91,8 @@ export const CreateStrategyOrders = ({
     showWarningApproval,
     user,
     hasApprovalError,
+    hasDistributionChanges,
   ]);
-
-  const loading = isAwaiting || isProcessing;
-  const loadingChildren = useMemo(() => {
-    return getStatusTextByTxStatus(isAwaiting, isProcessing);
-  }, [isAwaiting, isProcessing]);
 
   return (
     <form
@@ -120,7 +127,7 @@ export const CreateStrategyOrders = ({
         </p>
       </m.header>
 
-      {strategySettings === 'overlapping' && base && quote && (
+      {isOverlapping && base && quote && (
         <CreateOverlapping
           base={base}
           quote={quote}
@@ -130,7 +137,7 @@ export const CreateStrategyOrders = ({
           setSpread={setSpread}
         />
       )}
-      {strategySettings !== 'overlapping' && (
+      {!isOverlapping && (
         <>
           {(strategyDirection === 'sell' || strategyType === 'recurring') && (
             <BuySellBlock
@@ -174,7 +181,9 @@ export const CreateStrategyOrders = ({
             onChange={(e) => setApprovedWarnings(e.target.checked)}
             data-testid="approve-warnings"
           />
-          I've reviewed the warning(s) but choose to proceed.
+          {hasDistributionChanges
+            ? "I've approved the edits and distribution changes."
+            : "I've reviewed the warning(s) but choose to proceed."}
         </m.label>
       )}
 
