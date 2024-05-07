@@ -8,7 +8,6 @@ import { LogoImager } from 'components/common/imager/Imager';
 import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
-import { SafeDecimal } from 'libs/safedecimal';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
@@ -56,15 +55,16 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const { base, quote, externalPrice, marketPrice } = props;
   const checkboxId = useId();
   const [localPrice, setLocalPrice] = useState(marketPrice);
-  console.log({ localPrice, marketPrice });
+  const [showApproval, setShowApproval] = useState(false);
   const [approved, setApproved] = useState(localPrice === marketPrice);
   const [error, setError] = useState('');
 
   const changePrice = (value: string) => {
-    if (!Number(value)) setError('Price must be greater than 0');
+    if (!+value) setError('Price must be greater than 0');
     else setError('');
     setLocalPrice(value);
-    setApproved(value === marketPrice);
+    setApproved(!!marketPrice && +value === +marketPrice);
+    setShowApproval(!externalPrice || +value !== externalPrice);
   };
 
   const setPrice = () => {
@@ -73,16 +73,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
     if (props.close) props.close();
   };
 
-  const displayApproval = !!externalPrice && externalPrice !== +localPrice;
-  const disabled = !Number(localPrice) || (displayApproval && !approved);
-
-  const warning =
-    !!externalPrice &&
-    new SafeDecimal(localPrice)
-      .minus(externalPrice)
-      .div(externalPrice)
-      .abs()
-      .gt(0.01);
+  const disabled = !+localPrice || (showApproval && !approved);
 
   return (
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
@@ -96,10 +87,10 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         error={error}
         withoutWallet
       />
-      {warning && (
+      {showApproval && (
         <WarningMessageWithIcon>
-          Note that your input market price differs significantly from the
-          application's.
+          Warning, your market price will be used in the strategy creation flow
+          and calculations.
         </WarningMessageWithIcon>
       )}
       {!!externalPrice && (
@@ -107,7 +98,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
           <p className="text-white/80">CoinGecko Market Price</p>
           <button
             className="flex items-center gap-8"
-            onClick={() => setLocalPrice(externalPrice.toString())}
+            onClick={() => changePrice(externalPrice.toString())}
             type="button"
           >
             {prettifyNumber(externalPrice)}
@@ -121,11 +112,11 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         </div>
       )}
       <p className="text-12 text-white/60">
-        By changing the market price, you change the price area in which your
-        overlapping strategy will begin to work.
+        By adjusting the market price, you alter the price range within which
+        your overlapping strategy initiates.
         {!!externalPrice && <EditPriceText />}
       </p>
-      {displayApproval && (
+      {showApproval && (
         <label
           htmlFor={checkboxId}
           className="rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60"
@@ -148,8 +139,8 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
 
 const SetPriceText = ({ base }: { base: Token }) => (
   <p className="text-12 text-white/80">
-    {base.symbol} market price is missing. To continue creating a strategy enter
-    its market price.
+    {base.symbol} market price is missing. To continue creating a strategy,
+    enter its market price below.
   </p>
 );
 
