@@ -81,7 +81,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
       <BudgetInput
         title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
         titleTooltip="Price used to calculate overlapping strategy params"
-        placeholder="Enter price"
+        placeholder="Enter Price"
         value={localPrice}
         onChange={changePrice}
         token={quote}
@@ -117,7 +117,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         your overlapping strategy initiates.
         {!!externalPrice && <EditPriceText />}
       </p>
-      {showApproval && (
+      {!error && showApproval && (
         <label
           htmlFor={checkboxId}
           className="rounded-10 text-12 font-weight-500 flex items-center gap-8 text-white/60"
