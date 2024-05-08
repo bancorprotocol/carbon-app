@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
-import { useMarketPrice } from 'hooks/useMarketPrice';
+import { useUserMarketPrice } from '../UserMarketPrice';
 
 export type MarketPricePercentage = {
   min: SafeDecimal;
@@ -27,7 +27,7 @@ export const useMarketIndication = ({
   order,
   buy = false,
 }: UseMarketIndicationProps) => {
-  const marketPrice = useMarketPrice({ base, quote });
+  const marketPrice = useUserMarketPrice({ base, quote });
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
     if (order.isRange) {
       const min = new SafeDecimal(order.min);
@@ -42,24 +42,26 @@ export const useMarketIndication = ({
     }
   }, [order.isRange, order.price, order.max, order.min, buy, marketPrice]);
 
-  const marketPricePercentage = useMemo(() => {
-    const getMarketPricePercentage = (price: string) => {
-      const value = new SafeDecimal(price || 0);
-      if (value.eq(0)) return value;
-      return new SafeDecimal(value)
-        .minus(marketPrice)
-        .div(marketPrice)
-        .times(100);
-    };
-    return {
-      min: getMarketPricePercentage(order.min),
-      max: getMarketPricePercentage(order.max),
-      price: getMarketPricePercentage(order.price),
-    };
-  }, [order.max, order.min, order.price, marketPrice]);
+  const marketPricePercentage = useMemo(
+    () => ({
+      min: marketPricePercent(order.min, marketPrice),
+      max: marketPricePercent(order.max, marketPrice),
+      price: marketPricePercent(order.price, marketPrice),
+    }),
+    [order.max, order.min, order.price, marketPrice]
+  );
 
   return {
     isOrderAboveOrBelowMarketPrice,
     marketPricePercentage,
   };
+};
+
+export const marketPricePercent = (
+  price: string,
+  marketPrice: string | number
+) => {
+  const value = new SafeDecimal(price || 0);
+  if (value.eq(0)) return value;
+  return new SafeDecimal(value).minus(marketPrice).div(marketPrice).times(100);
 };
