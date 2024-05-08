@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
 
-export const ModalTradeImportNotification: FC = () => {
+export const ModalTokenImportNotification: FC = () => {
   return (
     <div className="text-12 flex items-center gap-10">
       <IconTooltip className="size-14 flex-shrink-0" />
