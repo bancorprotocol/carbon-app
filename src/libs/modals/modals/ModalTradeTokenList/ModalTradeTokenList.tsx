@@ -7,7 +7,6 @@ import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTo
 import { SearchInput } from 'components/common/searchInput';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { useBreakpoints } from 'hooks/useBreakpoints';
-import { ModalTokenImportNotification } from 'libs/modals/modals/common/ModalTokenImportNotification';
 
 export type TradePair = {
   baseToken: Token;
@@ -49,7 +48,6 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         aria-label="Search Token Pair"
         data-testid="search-token-pair"
       />
-      {search === '' && <ModalTokenImportNotification />}
 
       {isError ? (
         <ModalTokenListError />

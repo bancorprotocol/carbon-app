@@ -6,7 +6,7 @@ import { ModalTokenListNotFound } from 'libs/modals/modals/ModalTokenList/ModalT
 import { ModalTokenListContent } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTokenListLoading';
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
-import { ModalTokenImportNotification } from 'libs/modals/modals/common/ModalTokenImportNotification';
+import { ModalTokenImportNotification } from 'libs/modals/modals/ModalTokenList/ModalTokenImportNotification';
 import { SearchInput } from 'components/common/searchInput';
 import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
 import { useBreakpoints } from 'hooks/useBreakpoints';
