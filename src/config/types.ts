@@ -50,4 +50,8 @@ export interface AppConfig {
       multicall: string;
     };
   };
+  legal?: {
+    terms?: () => JSX.Element;
+    privacy?: () => JSX.Element;
+  };
 }

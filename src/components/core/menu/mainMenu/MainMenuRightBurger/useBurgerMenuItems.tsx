@@ -7,6 +7,7 @@ import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
 import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
 import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ReactComponent as IconV } from 'assets/icons/v.svg';
+import config from 'config';
 
 export type MenuItemType = {
   subMenu?: MenuType;
@@ -56,20 +57,28 @@ export const useBurgerMenuItems = () => {
         </NewTabLink>
       ),
     },
-    {
-      content: (
-        <Link className="flex" to="/terms">
-          Terms of Use
-        </Link>
-      ),
-    },
-    {
-      content: (
-        <Link className="flex" to="/privacy">
-          Privacy Policy
-        </Link>
-      ),
-    },
+    ...(!!config.legal?.terms
+      ? [
+          {
+            content: (
+              <Link className="flex" to="/terms">
+                Terms of Use
+              </Link>
+            ),
+          },
+        ]
+      : []),
+    ...(!!config.legal?.privacy
+      ? [
+          {
+            content: (
+              <Link className="flex" to="/privacy">
+                Privacy Policy
+              </Link>
+            ),
+          },
+        ]
+      : []),
     {
       content: (
         <div className="flex w-full items-center justify-between">

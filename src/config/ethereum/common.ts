@@ -1,5 +1,7 @@
 import { AppConfig } from 'config/types';
 import IconETHLogo from 'assets/logos/ethlogo.svg';
+import { EthereumTerms } from 'pages/terms/ethereum';
+import { EthereumPrivacy } from 'pages/privacy/ethereum';
 
 const addresses = {
   ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -129,4 +131,8 @@ export const commonConfig: AppConfig = {
       uri: 'https://tokens.coingecko.com/ethereum/all.json',
     },
   ],
+  legal: {
+    terms: EthereumTerms,
+    privacy: EthereumPrivacy,
+  },
 };

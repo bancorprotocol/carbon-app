@@ -1,6 +1,8 @@
 import { AppConfig } from 'config/types';
 import IconSeiLogo from 'assets/logos/seilogo.svg';
 import { tokenListParser } from 'config/sei/utils';
+import { SeiTerms } from 'pages/terms/sei';
+import { SeiPrivacy } from 'pages/privacy/sei';
 
 const addresses = {
   SEI: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -83,4 +85,8 @@ export const commonConfig: AppConfig = {
       parser: tokenListParser('arctic-1'),
     },
   ],
+  legal: {
+    terms: SeiTerms,
+    privacy: SeiPrivacy,
+  },
 };

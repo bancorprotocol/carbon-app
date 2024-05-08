@@ -6,6 +6,7 @@ import { Imager } from 'components/common/imager/Imager';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
 import iconLedger from 'assets/logos/ledger.svg';
 import iconTrezor from 'assets/logos/trezor.svg';
+import config from 'config';
 
 type Props = {
   onClick: (c: Connection) => Promise<void>;
@@ -30,39 +31,49 @@ const EXT_LINKS = [
 ];
 
 export const ModalWalletContent: FC<Props> = ({ onClick, isLoading }) => {
-  const [checked, setChecked] = useState(false);
+  const shouldAcceptTerms = !!config.legal?.terms;
+  const shouldAcceptPrivacy = !!config.legal?.privacy;
+  const showAcceptConditions = shouldAcceptTerms || shouldAcceptPrivacy;
+
+  const [checked, setChecked] = useState(!showAcceptConditions);
 
   const isDisabled = isLoading || !checked;
 
   return (
     <div className="space-y-10">
-      <div className="text-14 mb-20 space-y-10 text-white/80">
-        <p>
-          By connecting my wallet, I agree to the{' '}
-          <Link
-            to="/terms"
-            target="_blank"
-            className="font-weight-500 text-white"
-          >
-            terms & conditions
-          </Link>{' '}
-          and{' '}
-          <Link
-            target="_blank"
-            to="/privacy"
-            className="font-weight-500 text-white"
-          >
-            cookie & privacy policy
-          </Link>{' '}
-          of this site.{' '}
-        </p>
-        <div className="flex items-center space-x-10">
-          <Checkbox isChecked={checked} setIsChecked={setChecked} />
-          <button onClick={() => setChecked((prev) => !prev)}>
-            I read and accept
-          </button>
+      {showAcceptConditions && (
+        <div className="text-14 mb-20 space-y-10 text-white/80">
+          <p>
+            By connecting my wallet, I agree to the{' '}
+            {shouldAcceptTerms && (
+              <Link
+                to="/terms"
+                target="_blank"
+                className="font-weight-500 text-white"
+              >
+                terms & conditions
+              </Link>
+            )}
+            {shouldAcceptTerms && shouldAcceptPrivacy && <span> and </span>}
+            {shouldAcceptPrivacy && (
+              <Link
+                target="_blank"
+                to="/privacy"
+                className="font-weight-500 text-white"
+              >
+                cookie & privacy policy
+              </Link>
+            )}{' '}
+            of this site.{' '}
+          </p>
+          <div className="flex items-center space-x-10">
+            <Checkbox isChecked={checked} setIsChecked={setChecked} />
+            <button onClick={() => setChecked((prev) => !prev)}>
+              I read and accept
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {selectableConnectionTypes.map(getConnection).map((c) => (
         <button
