@@ -49,7 +49,7 @@ export const ModalTradeTokenList: ModalFC<ModalTradeTokenListData> = ({
         aria-label="Search Token Pair"
         data-testid="search-token-pair"
       />
-      <ModalTokenImportNotification />
+      {search === '' && <ModalTokenImportNotification />}
 
       {isError ? (
         <ModalTokenListError />

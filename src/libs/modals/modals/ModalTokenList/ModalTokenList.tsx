@@ -54,7 +54,7 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         className="rounded-8"
         onKeyDown={handleKeyDown}
       />
-      <ModalTokenImportNotification />
+      {search === '' && <ModalTokenImportNotification />}
 
       {isError ? (
         <ModalTokenListError />
