@@ -1,5 +1,5 @@
 import { lsService } from 'services/localeStorage';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { utils } from 'ethers';
 import * as v from 'valibot';
 
@@ -69,10 +69,8 @@ export const parseSearchWith = (parser: (str: string) => any) => {
 };
 
 export const getLastVisitedPair = () => {
-  const [base, quote] = lsService.getItem('tradePair') || [
-    config.tokens.ETH,
-    config.tokens.USDC,
-  ];
+  const [base, quote] =
+    lsService.getItem('tradePair') || config.defaultTokenPair;
 
   return { base, quote };
 };

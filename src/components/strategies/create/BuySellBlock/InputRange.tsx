@@ -136,19 +136,21 @@ export const InputRange: FC<InputRangeProps> = ({
             onBlur={handleBlurMin}
             data-testid="input-min"
           />
-          <p className="flex flex-wrap items-center gap-4">
-            <span className="text-12 break-all text-white/60">
-              {getFiatAsString(min)}
-            </span>
-            {marketPricePercentages && (
-              <MarketPriceIndication
-                marketPricePercentage={marketPricePercentages.min}
-                isRange
-                buy={buy}
-                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-              />
-            )}
-          </p>
+          {marketPrice !== 0 && (
+            <p className="flex flex-wrap items-center gap-4">
+              <span className="text-12 break-all text-white/60">
+                {getFiatAsString(min)}
+              </span>
+              {marketPricePercentages && (
+                <MarketPriceIndication
+                  marketPricePercentage={marketPricePercentages.min}
+                  isRange
+                  buy={buy}
+                  ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+                />
+              )}
+            </p>
+          )}
         </div>
         <div
           className={cn(
@@ -193,19 +195,21 @@ export const InputRange: FC<InputRangeProps> = ({
             onBlur={handleBlurMax}
             data-testid="input-max"
           />
-          <div className="flex flex-wrap items-center gap-4">
-            <p className="text-12 break-all text-white/60">
-              {getFiatAsString(max)}
-            </p>
-            {marketPricePercentages && (
-              <MarketPriceIndication
-                marketPricePercentage={marketPricePercentages.max}
-                isRange
-                buy={buy}
-                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-              />
-            )}
-          </div>
+          {marketPrice !== 0 && (
+            <div className="flex flex-wrap items-center gap-4">
+              <p className="text-12 break-all text-white/60">
+                {getFiatAsString(max)}
+              </p>
+              {marketPricePercentages && (
+                <MarketPriceIndication
+                  marketPricePercentage={marketPricePercentages.max}
+                  isRange
+                  buy={buy}
+                  ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+                />
+              )}
+            </div>
+          )}
         </div>
       </div>
       {error ? (

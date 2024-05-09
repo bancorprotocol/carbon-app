@@ -5,6 +5,7 @@ import { useWeb3Network } from 'libs/web3/useWeb3Network';
 import { useWeb3Imposter } from 'libs/web3/useWeb3Imposter';
 import { useWeb3Tenderly } from 'libs/web3/useWeb3Tenderly';
 import { useWeb3User } from 'libs/web3/useWeb3User';
+import config from 'config';
 
 // ********************************** //
 // WEB3 CONTEXT
@@ -73,7 +74,10 @@ export const CarbonWeb3Provider: FC<{ children: ReactNode }> = ({
   });
 
   const isSupportedNetwork = useMemo(
-    () => !(!!user && (chainId || 1) !== 1),
+    () =>
+      !(
+        !!user && (chainId || config.network.chainId) !== config.network.chainId
+      ),
     [chainId, user]
   );
 

@@ -2,6 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import {
   attemptToConnectWallet,
   getConnection,
+  getChainInfo,
   isNativeAppBrowser,
 } from 'libs/web3/web3.utils';
 import { useCallback, useEffect, useState } from 'react';
@@ -24,7 +25,7 @@ export const useWeb3Network = () => {
   const [networkError, setNetworkError] = useState<string>();
 
   const switchNetwork = useCallback(async () => {
-    await connector.activate(1);
+    await connector.activate(getChainInfo());
   }, [connector]);
 
   const activateNetwork = useCallback(async () => {
