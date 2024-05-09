@@ -168,9 +168,18 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const { quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
-  const xFactor = getXFactor(baseMin, baseMax, +props.marketPrice);
 
-  const marketPrice = +props.marketPrice * xFactor;
+  const isPriceAvailable =
+    (props.externalPrice !== undefined && props.externalPrice !== 0) ||
+    +props.marketPrice !== 0;
+
+  const actualMarketPrice = isPriceAvailable
+    ? +props.marketPrice
+    : (baseMax - baseMin) / 2 + baseMin;
+
+  const xFactor = getXFactor(baseMin, baseMax, actualMarketPrice);
+
+  const marketPrice = actualMarketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
     min: baseMin * xFactor,
@@ -520,15 +529,19 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   return (
     <figure className="relative">
       <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
-        {props.disabled || props.externalPrice === +props.marketPrice ? (
+        {isPriceAvailable && (
           <>
-            <span>Market price provided by CoinGecko</span>
-            <IconCoinGecko className="size-8" />
+            {props.disabled || props.externalPrice === +props.marketPrice ? (
+              <>
+                <span>Market price provided by CoinGecko</span>
+                <IconCoinGecko className="size-8" />
+              </>
+            ) : (
+              <span>User-defined market price</span>
+            )}
+            <span role="separator">·</span>
           </>
-        ) : (
-          <span>User-defined market price</span>
         )}
-        <span role="separator">·</span>
         <span>Spread {spread || 0}%</span>
       </figcaption>
       <svg
@@ -682,17 +695,19 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             ))}
           </g>
           {/* Market Price */}
-          <g>
-            <line
-              {...marketIndicator.line}
-              stroke="#404040"
-              strokeWidth={ratio}
-            />
-            <rect {...marketIndicator.rect} fill="#404040" />
-            <text {...marketIndicator.text} fill="white">
-              {marketValue}
-            </text>
-          </g>
+          {isPriceAvailable && (
+            <g>
+              <line
+                {...marketIndicator.line}
+                stroke="#404040"
+                strokeWidth={ratio}
+              />
+              <rect {...marketIndicator.rect} fill="#404040" />
+              <text {...marketIndicator.text} fill="white">
+                {marketValue}
+              </text>
+            </g>
+          )}
 
           {/* Handlers: must be at the end to always be above the graph */}
           <g
