@@ -40,7 +40,7 @@ export const useStrategyWarning = ({
       buy: false,
     });
   const marketPrice = useMarketPrice({ base, quote });
-  const isMarketPriceUnknown = marketPrice === 0;
+  const isMarketPriceUnknown = !marketPrice;
   const formHasWarning =
     isConnected &&
     hasWarning({

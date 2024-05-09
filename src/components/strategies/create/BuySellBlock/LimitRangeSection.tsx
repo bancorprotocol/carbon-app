@@ -42,7 +42,7 @@ export const LimitRangeSection: FC<Props> = ({
     : `Notice: you offer to sell ${base.symbol} below current market price`;
 
   const marketPrice = useMarketPrice({ base, quote });
-  const isMarketPriceUnknown = marketPrice === 0;
+  const isMarketPriceUnknown = !marketPrice;
 
   const getWarnings = () => {
     let warnings = [];
