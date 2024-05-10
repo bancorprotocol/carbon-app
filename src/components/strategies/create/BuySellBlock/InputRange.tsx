@@ -8,7 +8,7 @@ import { cn, formatNumber, sanitizeNumber } from 'utils/helpers';
 import { decimalNumberValidationRegex } from 'utils/inputsValidations';
 import { MarketPricePercentage } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
-import { useMarketPrice } from 'hooks/useMarketPrice';
+import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
 
 type InputRangeProps = {
   min: string;
@@ -45,7 +45,7 @@ export const InputRange: FC<InputRangeProps> = ({
   ignoreMarketPriceWarning,
   isOrdersReversed,
 }) => {
-  const marketPrice = useMarketPrice({ base, quote });
+  const marketPrice = useUserMarketPrice({ base, quote });
   const inputMinId = useId();
   const inputMaxId = useId();
   const errorMinMax = 'Maximum price must be higher than the minimum price';
@@ -137,19 +137,21 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-min"
             required
           />
-          <p className="flex flex-wrap items-center gap-4">
-            <span className="text-12 break-all text-white/60">
-              {getFiatAsString(min)}
-            </span>
-            {marketPricePercentages && (
-              <MarketPriceIndication
-                marketPricePercentage={marketPricePercentages.min}
-                isRange
-                buy={buy}
-                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-              />
-            )}
-          </p>
+          {marketPrice !== 0 && (
+            <p className="flex flex-wrap items-center gap-4">
+              <span className="text-12 break-all text-white/60">
+                {getFiatAsString(min)}
+              </span>
+              {marketPricePercentages && (
+                <MarketPriceIndication
+                  marketPricePercentage={marketPricePercentages.min}
+                  isRange
+                  buy={buy}
+                  ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+                />
+              )}
+            </p>
+          )}
         </div>
         <div
           className={cn(
@@ -195,19 +197,21 @@ export const InputRange: FC<InputRangeProps> = ({
             data-testid="input-max"
             required
           />
-          <div className="flex flex-wrap items-center gap-4">
-            <p className="text-12 break-all text-white/60">
-              {getFiatAsString(max)}
-            </p>
-            {marketPricePercentages && (
-              <MarketPriceIndication
-                marketPricePercentage={marketPricePercentages.max}
-                isRange
-                buy={buy}
-                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-              />
-            )}
-          </div>
+          {marketPrice !== 0 && (
+            <div className="flex flex-wrap items-center gap-4">
+              <p className="text-12 break-all text-white/60">
+                {getFiatAsString(max)}
+              </p>
+              {marketPricePercentages && (
+                <MarketPriceIndication
+                  marketPricePercentage={marketPricePercentages.max}
+                  isRange
+                  buy={buy}
+                  ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+                />
+              )}
+            </div>
+          )}
         </div>
       </div>
       {error ? (

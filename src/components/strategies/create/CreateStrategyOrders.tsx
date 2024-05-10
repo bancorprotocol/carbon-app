@@ -59,6 +59,7 @@ export const CreateStrategyOrders = ({
 
   const onCreateStrategy = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!!e.currentTarget.querySelector('.error-message')) return;
     carbonEvents.strategy.strategyCreateClick(strategyEventData);
     createStrategy();
   };
@@ -98,7 +99,7 @@ export const CreateStrategyOrders = ({
     <form
       ref={formRef}
       onSubmit={(e) => onCreateStrategy(e)}
-      className="flex flex-col gap-20 md:w-[440px]"
+      className="group flex flex-col gap-20 md:w-[440px]"
       data-testid="create-strategy-form"
     >
       <m.header
@@ -196,6 +197,8 @@ export const CreateStrategyOrders = ({
           disabled={disabled}
           loading={loading}
           loadingChildren={loadingChildren}
+          // TODO: Remove in #1161
+          className="group-has-[.error-message]:cursor-not-allowed group-has-[.error-message]:opacity-40"
         >
           {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>

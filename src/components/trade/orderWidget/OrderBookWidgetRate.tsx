@@ -27,12 +27,12 @@ export const OrderBookWidgetRate: FC<Props> = ({
             <div
               className={`${
                 buy ? 'bg-buy/25 rotate-180' : 'bg-sell/25'
-              } size-20 ml-8 flex items-center justify-center rounded-full`}
+              } ml-8 flex size-20 items-center justify-center rounded-full`}
             >
               <IconArrow className={`${buy ? 'text-buy' : 'text-sell'} w-10`} />
             </div>
           )}
-          {fiatRate && (
+          {fiatRate && +fiatRate !== 0 && (
             <span className="ml-8 text-white/60">
               {prettifyNumber(fiatRate, { decimals: 6, currentCurrency })}
             </span>

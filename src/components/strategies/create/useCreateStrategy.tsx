@@ -13,11 +13,11 @@ import { useWeb3 } from 'libs/web3';
 import { OrderCreate, useOrder } from 'components/strategies/create/useOrder';
 import { useDuplicateStrategy } from 'components/strategies/create/useDuplicateStrategy';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
-import { pairsToExchangeMapping } from 'components/tradingviewChart/utils';
+import { pairsToExchangeMapping } from 'config';
 import { useApproval } from 'hooks/useApproval';
 import { useModal } from 'hooks/useModal';
 import { useNotifications } from 'hooks/useNotifications';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { carbonEvents } from 'services/events';
 import {
   createStrategyAction,
@@ -27,7 +27,7 @@ import { checkIfOrdersOverlap, checkIfOrdersReversed } from '../utils';
 import { useMarketIndication } from 'components/strategies/marketPriceIndication/useMarketIndication';
 import { getRoundedSpread } from '../overlapping/utils';
 
-const spenderAddress = config.carbon.carbonController;
+const spenderAddress = config.addresses.carbon.carbonController;
 
 export type UseStrategyCreateReturn = ReturnType<typeof useCreateStrategy>;
 

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { Strategy } from 'libs/queries';
 import { useApproval } from 'hooks/useApproval';
-import { config } from 'services/web3/config';
+import config from 'config';
 
-const spenderAddress = config.carbon.carbonController;
+const spenderAddress = config.addresses.carbon.carbonController;
 
 export const useEditStrategy = (
   strategy: Strategy,

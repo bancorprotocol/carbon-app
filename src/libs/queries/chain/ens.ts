@@ -14,13 +14,16 @@ export const useGetEnsFromAddress = (address: string) => {
         throw new Error('useGetEnsFromAddress no provider provided');
       }
       if (utils.isAddress(address.toLowerCase())) {
-        // Already checks reverse resolution
-        return await provider.lookupAddress(address);
+        const ensAddr = (await provider.getNetwork()).ensAddress;
+        if (ensAddr) {
+          // Already checks reverse resolution
+          return await provider.lookupAddress(address);
+        }
       }
       return '';
     },
     {
-      enabled: !!address && !!provider,
+      enabled: !!provider,
       staleTime: ONE_DAY_IN_MS,
     }
   );
@@ -41,7 +44,7 @@ export const useGetAddressFromEns = (ens: string) => {
       return '';
     },
     {
-      enabled: !!ens && !!provider,
+      enabled: !!provider,
       staleTime: ONE_DAY_IN_MS,
     }
   );
