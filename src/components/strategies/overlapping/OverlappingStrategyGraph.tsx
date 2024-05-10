@@ -532,14 +532,16 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const isPriceSourceCoingecko =
+    props.disabled ||
+    (!!props.marketPrice && props.externalPrice === +props.marketPrice);
+
   return (
     <figure className="relative">
       <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
         {isPriceAvailable && (
           <>
-            {props.disabled ||
-            (!!props.marketPrice &&
-              props.externalPrice === +props.marketPrice) ? (
+            {isPriceSourceCoingecko ? (
               <>
                 <span>Market price provided by CoinGecko</span>
                 <IconCoinGecko className="size-8" />
