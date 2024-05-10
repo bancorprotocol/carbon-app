@@ -38,6 +38,13 @@ interface Props {
   order1: OrderCreate;
 }
 
+interface ResetBudgets {
+  deltaValue?: string;
+  anchorValue?: 'buy' | 'sell';
+  min?: string;
+  max?: string;
+}
+
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
@@ -161,11 +168,11 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     if (!anchor) return setAnchorError('Please select a token to proceed');
 
     if (isMinAboveMarket(buyOrder)) {
-      if (anchor !== 'sell') resetBudgets('sell', min, max);
+      if (anchor !== 'sell') resetBudgets({ anchorValue: 'sell', min, max });
       else calculateBuyBudget(sellBudget, min, max);
       setAnchor('sell');
     } else if (isMaxBelowMarket(sellOrder)) {
-      if (anchor !== 'buy') resetBudgets('buy', min, max);
+      if (anchor !== 'buy') resetBudgets({ anchorValue: 'buy', min, max });
       else calculateSellBudget(buyBudget, min, max);
       setAnchor('buy');
     } else {
@@ -174,12 +181,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  const resetBudgets = (
-    anchorValue: 'buy' | 'sell',
+  const resetBudgets = ({
+    deltaValue = '',
+    anchorValue = anchor,
     min = order0.min,
-    max = order1.max
-  ) => {
-    setDelta('');
+    max = order1.max,
+  }: ResetBudgets) => {
+    setDelta(deltaValue);
     setBudgetError('');
     if (!touched) {
       order0.setBudget(initialBuyBudget);
@@ -201,13 +209,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setActionValue = (value: BudgetAction) => {
-    resetBudgets(anchor!);
+    resetBudgets({});
     setAction(value);
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
     if (!anchor) setAnchorError('');
-    resetBudgets(value);
+    resetBudgets({ anchorValue: value });
     setAnchor(value);
   };
 
@@ -222,8 +230,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setBudget = (amount: string) => {
+    if (!Number(amount)) return resetBudgets({ deltaValue: amount });
     setDelta(amount);
-    if (!amount) return resetBudgets(anchor!);
     setBudgetError(getBudgetErrors(amount));
 
     if (anchor === 'buy') {
@@ -364,7 +372,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           setAction={setActionValue}
           budgetValue={delta}
           setBudget={setBudget}
-          resetBudgets={resetBudgets}
+          resetBudgets={(anchorValue) => resetBudgets({ anchorValue })}
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           error={budgetError}

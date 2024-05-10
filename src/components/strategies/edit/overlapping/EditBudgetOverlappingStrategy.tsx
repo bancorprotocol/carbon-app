@@ -94,8 +94,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  const resetBudgets = () => {
-    setDelta('');
+  const resetBudgets = (delta = '') => {
+    setDelta(delta);
     setBudgetError('');
     order0.setBudget(initialBuyBudget);
     order1.setBudget(initialSellBudget);
@@ -107,8 +107,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setBudget = (amount: string) => {
+    if (!Number(amount)) return resetBudgets(amount);
     setDelta(amount);
-    if (!amount) return resetBudgets();
     setBudgetError(getBudgetErrors(amount));
 
     if (anchor === 'buy') {
