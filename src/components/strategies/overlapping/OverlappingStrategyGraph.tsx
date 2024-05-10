@@ -171,15 +171,13 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const isPriceAvailable = !!props.externalPrice || !!props.marketPrice;
 
-  const actualMarketPrice = Number(
-    isPriceAvailable
-      ? props.marketPrice ?? '0'
-      : (baseMax + baseMin) / 2
+  const baseMarketPrice = Number(
+    isPriceAvailable ? props.marketPrice ?? '0' : (baseMax + baseMin) / 2
   );
 
-  const xFactor = getXFactor(baseMin, baseMax, actualMarketPrice);
+  const xFactor = getXFactor(baseMin, baseMax, baseMarketPrice);
 
-  const marketPrice = actualMarketPrice * xFactor;
+  const marketPrice = baseMarketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
     min: baseMin * xFactor,
