@@ -167,8 +167,6 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
 
-  const isPriceAvailable = !!props.externalPrice || !!props.marketPrice;
-
   const userMarketPrice = props?.marketPrice || props.externalPrice;
   const baseMarketPrice = Number(userMarketPrice || (baseMax + baseMin) / 2);
 
@@ -352,13 +350,9 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const buyTooltip = {
     rect: {
       x: buyTooltipX,
-      y: isPriceAvailable
-        ? top - 3 * fontSize - 4 * padding
-        : top - 2 * fontSize - 4 * padding,
+      y: top - 3 * fontSize - 4 * padding,
       width: buyTooltipWidth,
-      height: isPriceAvailable
-        ? 2 * fontSize + 4 * padding
-        : 1 * fontSize + 4 * padding,
+      height: 2 * fontSize + 4 * padding,
       fill: '#212123',
       rx: 4 * ratio,
     },
@@ -373,13 +367,9 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const sellTooltip = {
     rect: {
       x: baseSellTooltipX,
-      y: isPriceAvailable
-        ? top - 3 * fontSize - 4 * padding
-        : top - 2 * fontSize - 4 * padding,
+      y: top - 3 * fontSize - 4 * padding,
       width: sellTooltipWidth,
-      height: isPriceAvailable
-        ? 2 * fontSize + 4 * padding
-        : 1 * fontSize + 4 * padding,
+      height: 2 * fontSize + 4 * padding,
       fill: '#212123',
       rx: 4 * ratio,
     },
@@ -544,21 +534,17 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   return (
     <figure className="relative">
       <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
-        {isPriceAvailable && (
+        {isUserPriceSource ? (
+          <span>User-defined market price</span>
+        ) : isCoingeckoPriceSource ? (
           <>
-            {isUserPriceSource ? (
-              <span>User-defined market price</span>
-            ) : isCoingeckoPriceSource ? (
-              <>
-                <span>Market price provided by CoinGecko</span>
-                <IconCoinGecko className="size-8" />
-              </>
-            ) : (
-              <span>Geometric mean price</span>
-            )}
-            <span role="separator">·</span>
+            <span>Market price provided by CoinGecko</span>
+            <IconCoinGecko className="size-8" />
           </>
+        ) : (
+          <span>Geometric mean price</span>
         )}
+        <span role="separator">·</span>
         <span>Spread {spread || 0}%</span>
       </figcaption>
       <svg
@@ -712,19 +698,17 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
             ))}
           </g>
           {/* Market Price */}
-          {isPriceAvailable && (
-            <g>
-              <line
-                {...marketIndicator.line}
-                stroke="#404040"
-                strokeWidth={ratio}
-              />
-              <rect {...marketIndicator.rect} fill="#404040" />
-              <text {...marketIndicator.text} fill="white">
-                {marketValue}
-              </text>
-            </g>
-          )}
+          <g>
+            <line
+              {...marketIndicator.line}
+              stroke="#404040"
+              strokeWidth={ratio}
+            />
+            <rect {...marketIndicator.rect} fill="#404040" />
+            <text {...marketIndicator.text} fill="white">
+              {marketValue}
+            </text>
+          </g>
 
           {/* Handlers: must be at the end to always be above the graph */}
           <g
@@ -736,25 +720,20 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               <rect {...buyTooltip.rect} />
               <text
                 className="tooltip-price"
-                y={
-                  isPriceAvailable
-                    ? top - 2 * fontSize - 3 * padding
-                    : top - 1 * fontSize - 3 * padding
-                }
+                y={top - 2 * fontSize - 3 * padding}
                 {...buyTooltip.text}
               >
                 {minValue}
               </text>
-              {isPriceAvailable && (
-                <text
-                  className="tooltip-percent"
-                  y={top - 1 * fontSize - 2 * padding}
-                  fillOpacity="0.4"
-                  {...buyTooltip.text}
-                >
-                  {minPercent}%
-                </text>
-              )}
+
+              <text
+                className="tooltip-percent"
+                y={top - 1 * fontSize - 2 * padding}
+                fillOpacity="0.4"
+                {...buyTooltip.text}
+              >
+                {minPercent}%
+              </text>
             </g>
             {!disabled && (
               <rect
@@ -802,25 +781,19 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               <rect {...sellTooltip.rect} />
               <text
                 className="tooltip-price"
-                y={
-                  isPriceAvailable
-                    ? top - 2 * fontSize - 3 * padding
-                    : top - 1 * fontSize - 3 * padding
-                }
+                y={top - 2 * fontSize - 3 * padding}
                 {...sellTooltip.text}
               >
                 {maxValue}
               </text>
-              {isPriceAvailable && (
-                <text
-                  className="tooltip-percent"
-                  y={top - 1 * fontSize - 2 * padding}
-                  fillOpacity="0.4"
-                  {...sellTooltip.text}
-                >
-                  {maxPercent}%
-                </text>
-              )}
+              <text
+                className="tooltip-percent"
+                y={top - 1 * fontSize - 2 * padding}
+                fillOpacity="0.4"
+                {...sellTooltip.text}
+              >
+                {maxPercent}%
+              </text>
             </g>
             {!disabled && (
               <rect
