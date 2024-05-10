@@ -28,12 +28,19 @@ export const simulatorInputRootRoute = new Route({
   path: '/',
   component: SimulatorPage,
   beforeLoad: ({ location }) => {
-    if (location.pathname === '/simulate' || location.pathname === '/simulate/')
+    if (!config.isSimulatorEnabled) {
+      throw redirect({ to: '/', replace: true });
+    }
+    if (
+      location.pathname === '/simulate' ||
+      location.pathname === '/simulate/'
+    ) {
       redirect({
         to: '/simulate/recurring',
         throw: true,
         replace: true,
       });
+    }
   },
   validateSearch: (search: Record<string, unknown>): StrategyInputBase => {
     const start =
