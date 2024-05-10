@@ -4,7 +4,7 @@ import { commonConfig } from './common';
 const config: AppConfig = {
   ...commonConfig,
   mode: 'production',
-  sentryDNS:
-    'https://d4f067982bcb46678dd07a0dc54e7270@o1249488.ingest.sentry.io/4505074584584192',
+  sentryDSN:
+    'https://1aaa1b99875949cdb08089743dcc1ec5@o1249488.ingest.us.sentry.io/4505074572197888',
 };
 export default config;
