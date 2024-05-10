@@ -8,7 +8,7 @@ export interface AppConfig {
   selectableConnectionTypes: selectableConnectionType[];
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
-  sentryDNS?: string;
+  sentryDSN?: string;
   network: {
     name: string;
     logoUrl: string;
