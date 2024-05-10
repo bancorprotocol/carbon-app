@@ -168,7 +168,9 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const baseMax = Number(formatNumber(order1.max));
 
   const userMarketPrice = props?.marketPrice || props.externalPrice;
-  const baseMarketPrice = Number(userMarketPrice || (baseMax + baseMin) / 2);
+  if (!userMarketPrice) throw Error('Market price is undefined');
+
+  const baseMarketPrice = Number(userMarketPrice);
 
   const isUserPriceSource =
     !props.disabled &&
