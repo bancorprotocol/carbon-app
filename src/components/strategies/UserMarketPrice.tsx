@@ -4,7 +4,7 @@ import { createContext, FC, ReactNode, useContext } from 'react';
 
 interface Props {
   children: ReactNode;
-  marketPrice: number;
+  marketPrice?: number;
 }
 
 export const UserMarketContext = createContext(0);

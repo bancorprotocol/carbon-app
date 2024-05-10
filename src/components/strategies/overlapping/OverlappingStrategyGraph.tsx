@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react';
 import { cn, prettifySignedNumber, formatNumber } from 'utils/helpers';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -16,13 +15,13 @@ import { getMaxBuyMin, getMinSellMax } from './utils';
 import { OrderCreate } from '../create/useOrder';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import styles from './OverlappingStrategyGraph.module.css';
+import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
   externalPrice?: number;
   marketPrice?: string;
-  marketPricePercentage: MarketPricePercentage;
   base?: Token;
   quote?: Token;
   order0: OrderCreate;
@@ -36,7 +35,6 @@ interface EnableProps {
 interface DisableProps {
   externalPrice?: number;
   marketPrice?: number;
-  marketPricePercentage: MarketPricePercentage;
   base?: Token;
   quote?: Token;
   order0: OrderCreate;
@@ -171,9 +169,15 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const isPriceAvailable = !!props.externalPrice || !!props.marketPrice;
 
-  const baseMarketPrice = Number(
-    isPriceAvailable ? props.marketPrice ?? '0' : (baseMax + baseMin) / 2
-  );
+  const userMarketPrice = props?.marketPrice || props.externalPrice;
+  const baseMarketPrice = Number(userMarketPrice || (baseMax + baseMin) / 2);
+
+  const isUserPriceSource =
+    !props.disabled &&
+    !!props.marketPrice &&
+    props.externalPrice !== +props.marketPrice;
+
+  const isCoingeckoPriceSource = !!props.externalPrice;
 
   const xFactor = getXFactor(baseMin, baseMax, baseMarketPrice);
 
@@ -311,7 +315,12 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const config = getConfig();
   const { min, max, sellMin, buyMax } = config;
-  const marketPercent = props.marketPricePercentage;
+
+  const marketPercent = {
+    min: marketPricePercent(order0.min, userMarketPrice),
+    max: marketPricePercent(order1.max, userMarketPrice),
+  };
+
   const minValue = prettifySignedNumber(min / xFactor);
   const minPercent = getSignedMarketPricePercentage(marketPercent.min);
   const maxValue = prettifySignedNumber(max / xFactor);
@@ -532,22 +541,20 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isPriceSourceCoingecko =
-    props.disabled ||
-    (!!props.marketPrice && props.externalPrice === +props.marketPrice);
-
   return (
     <figure className="relative">
       <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
         {isPriceAvailable && (
           <>
-            {isPriceSourceCoingecko ? (
+            {isUserPriceSource ? (
+              <span>User-defined market price</span>
+            ) : isCoingeckoPriceSource ? (
               <>
                 <span>Market price provided by CoinGecko</span>
                 <IconCoinGecko className="size-8" />
               </>
             ) : (
-              <span>User-defined market price</span>
+              <span>Geometric mean price</span>
             )}
             <span role="separator">·</span>
           </>

@@ -177,7 +177,6 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           order1={order1}
           marketPrice={marketPrice}
           spread={spread}
-          marketPricePercentage={marketPricePercentage}
           setMin={setMin}
           setMax={setMax}
         />
