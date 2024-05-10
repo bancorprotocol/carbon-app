@@ -3,7 +3,7 @@ import { useMarketIndication } from './marketPriceIndication';
 import { Token } from 'libs/tokens';
 import { OrderCreate } from './create/useOrder';
 import { hasWarning } from './utils';
-import { useMarketPrice } from 'hooks/useMarketPrice';
+import { useUserMarketPrice } from 'components/strategies/UserMarketPrice';
 
 interface StrategyWarningParams {
   base?: Token;
@@ -39,7 +39,7 @@ export const useStrategyWarning = ({
       order: order1,
       buy: false,
     });
-  const marketPrice = useMarketPrice({ base, quote });
+  const marketPrice = useUserMarketPrice({ base, quote });
   const isMarketPriceUnknown = !marketPrice;
   const formHasWarning =
     isConnected &&
