@@ -9,7 +9,6 @@ import {
   isValidSpread,
 } from 'components/strategies/overlapping/utils';
 import { useMarketPrice } from 'hooks/useMarketPrice';
-import { useMarketIndication } from 'components/strategies/marketPriceIndication';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { OverlappingStrategyGraph } from 'components/strategies/overlapping/OverlappingStrategyGraph';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
@@ -30,6 +29,12 @@ import { OverlappingAnchor } from 'components/strategies/overlapping/Overlapping
 import { Token } from 'libs/tokens';
 import { m } from 'libs/motion';
 import { items } from './variants';
+import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
+import {
+  OverlappingInitMarketPriceField,
+  OverlappingMarketPrice,
+} from '../overlapping/OverlappingMarketPrice';
+import { UserMarketPrice } from '../UserMarketPrice';
 
 interface Props {
   base: Token;
@@ -51,11 +56,15 @@ const getInitialPrices = (marketPrice: string | number) => {
 
 export const CreateOverlapping: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
-  const { marketPricePercentage } = useMarketIndication({
-    base,
-    quote,
-    order: { min: order0.min, max: order1.max, price: '', isRange: true },
-  });
+  const externalPrice = useMarketPrice({ base, quote });
+  const [marketPrice, setMarketPrice] = useState(
+    externalPrice ? externalPrice : 0
+  );
+  const marketPricePercentage = {
+    min: marketPricePercent(order0.min, marketPrice),
+    max: marketPricePercent(order1.max, marketPrice),
+    price: new SafeDecimal(0),
+  };
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
   const [touched, setTouched] = useState(false);
@@ -66,8 +75,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
     if (!anchor) return '';
     return anchor === 'buy' ? order0.budget : order1.budget;
   })();
-
-  const marketPrice = useMarketPrice({ base, quote });
 
   const calculateBuyBudget = (
     sellBudget: string,
@@ -238,6 +245,13 @@ export const CreateOverlapping: FC<Props> = (props) => {
   };
 
   useEffect(() => {
+    if (!externalPrice) return;
+    if (Number(marketPrice) && Number(marketPrice) !== externalPrice) return;
+    setMarketPrice(externalPrice);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [externalPrice]);
+
+  useEffect(() => {
     if (!spread || !marketPrice) return;
     if (!order0.min && !order1.max) {
       const { min, max } = getInitialPrices(marketPrice);
@@ -272,15 +286,42 @@ export const CreateOverlapping: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);
 
+  if (!base || !quote) return null;
+
+  if (!Number(marketPrice)) {
+    return (
+      <m.article
+        variants={items}
+        key="marketPrice"
+        className="rounded-10 bg-background-900 flex flex-col"
+      >
+        <OverlappingInitMarketPriceField
+          base={base}
+          quote={quote}
+          externalPrice={externalPrice}
+          marketPrice={marketPrice}
+          setMarketPrice={setMarketPrice}
+        />
+      </m.article>
+    );
+  }
+
   return (
-    <>
+    <UserMarketPrice marketPrice={Number(marketPrice)}>
       <m.article
         variants={items}
         key="price-graph"
         className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20"
       >
-        <header>
-          <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
+        <header className="flex items-center gap-8">
+          <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
+          <OverlappingMarketPrice
+            base={base}
+            quote={quote}
+            externalPrice={externalPrice}
+            marketPrice={marketPrice}
+            setMarketPrice={setMarketPrice}
+          />
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -288,6 +329,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
           order0={order0}
           order1={order1}
           marketPrice={+marketPrice}
+          externalPrice={externalPrice}
           spread={spread}
           marketPricePercentage={marketPricePercentage}
           setMin={setMin}
@@ -414,6 +456,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
           />
         </m.article>
       )}
-    </>
+    </UserMarketPrice>
   );
 };

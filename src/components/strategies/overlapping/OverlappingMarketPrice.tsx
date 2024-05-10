@@ -14,8 +14,8 @@ interface Props {
   base: Token;
   quote: Token;
   externalPrice: number;
-  marketPrice: string;
-  setMarketPrice: (price: string) => void;
+  marketPrice: number;
+  setMarketPrice: (price: number) => void;
 }
 export const OverlappingMarketPrice: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
@@ -62,7 +62,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const changePrice = (value: string) => {
     if (!+value) setError('Price must be greater than 0');
     else setError('');
-    setLocalPrice(value);
+    setLocalPrice(Number(value));
     setApproved(!!marketPrice && +value === +marketPrice);
     setShowApproval(!externalPrice || +value !== externalPrice);
   };
@@ -82,11 +82,11 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
         titleTooltip="Price used to calculate overlapping strategy params"
         placeholder="Enter Price"
-        value={localPrice}
+        value={localPrice.toString()}
         onChange={changePrice}
         token={quote}
-        error={error}
-        withoutWallet
+        errors={error}
+        action="deposit"
       />
       {!error && showApproval && (
         <WarningMessageWithIcon>

@@ -21,7 +21,7 @@ type Props = EnableProps | DisableProps;
 
 interface EnableProps {
   externalPrice?: number;
-  marketPrice: string;
+  marketPrice: number;
   marketPricePercentage: MarketPricePercentage;
   base?: Token;
   quote?: Token;
@@ -168,9 +168,9 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const { quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
-  const xFactor = getXFactor(baseMin, baseMax, +props.marketPrice);
+  const xFactor = getXFactor(baseMin, baseMax, props.marketPrice);
 
-  const marketPrice = +props.marketPrice * xFactor;
+  const marketPrice = props.marketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
     min: baseMin * xFactor,
