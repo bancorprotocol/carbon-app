@@ -294,6 +294,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order1.max]);
 
+  if (!base || !quote) return;
+
   return (
     <>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
@@ -325,17 +327,16 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
             iconClassName="h-14 w-14 text-white/60"
           />
         </header>
-        {base && quote && (
-          <OverlappingRange
-            base={base}
-            quote={quote}
-            order0={order0}
-            order1={order1}
-            marketPricePercentage={marketPricePercentage}
-            setMin={setMin}
-            setMax={setMax}
-          />
-        )}
+        <OverlappingRange
+          base={base}
+          quote={quote}
+          order0={order0}
+          order1={order1}
+          spread={spread}
+          marketPricePercentage={marketPricePercentage}
+          setMin={setMin}
+          setMax={setMax}
+        />
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
