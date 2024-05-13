@@ -32,7 +32,7 @@ export const OrderBookWidgetRate: FC<Props> = ({
               <IconArrow className={`${buy ? 'text-buy' : 'text-sell'} w-10`} />
             </div>
           )}
-          {fiatRate && (
+          {fiatRate && +fiatRate !== 0 && (
             <span className="ml-8 text-white/60">
               {prettifyNumber(fiatRate, { decimals: 6, currentCurrency })}
             </span>

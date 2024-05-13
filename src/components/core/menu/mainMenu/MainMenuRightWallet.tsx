@@ -3,7 +3,6 @@ import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { ReactComponent as IconCopy } from 'assets/icons/copy.svg';
 import { ReactComponent as IconCoinbaseLogo } from 'assets/logos/coinbase.svg';
-import { ReactComponent as IconETHLogo } from 'assets/logos/ethlogo.svg';
 import { ReactComponent as IconGnosisLogo } from 'assets/logos/gnosis.svg';
 import { ReactComponent as IconImposterLogo } from 'assets/logos/imposter.svg';
 import { ReactComponent as IconMetaMaskLogo } from 'assets/logos/metamask.svg';
@@ -20,6 +19,7 @@ import { carbonEvents } from 'services/events';
 import { useStore } from 'store';
 import { cn, shortenString } from 'utils/helpers';
 import { useGetEnsFromAddress } from 'libs/queries/chain/ens';
+import config from 'config';
 
 const iconProps = { className: 'w-20' };
 
@@ -155,8 +155,12 @@ const ConnectedMenu: FC = () => {
       {isSupportedNetwork ? (
         <>
           <div className="font-weight-400 flex w-full items-center space-x-10 p-8">
-            <IconETHLogo className="w-16" />
-            <span>Ethereum Network</span>
+            <img
+              alt="Network Logo"
+              src={config.network.logoUrl}
+              className="w-16"
+            />
+            <span>{config.network.name}</span>
           </div>
           <button
             role="menuitem"

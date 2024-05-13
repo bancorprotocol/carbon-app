@@ -5,6 +5,7 @@ import { FC, ReactNode } from 'react';
 import { useActivityQuery } from './useActivityQuery';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { NotFound } from 'components/common/NotFound';
+import { useGetUserStrategies } from 'libs/queries';
 
 interface Props {
   params: QueryActivityParams;
@@ -12,20 +13,29 @@ interface Props {
   children: ReactNode;
 }
 export const ActivityProvider: FC<Props> = ({ children, params, empty }) => {
-  const query = useActivityQuery(params);
+  const activityQuery = useActivityQuery(params);
   const listOptions: ListOptions<Activity, ActivitySearchParams> = {
-    all: query.data ?? [],
+    all: activityQuery.data ?? [],
     defaultLimit: 10,
     schema: activitySchema,
     filter: filterActivity,
   };
+  const userStrategiesQuery = useGetUserStrategies({
+    user: params.ownerId,
+  });
 
-  if (query.isLoading) {
+  if (activityQuery.isLoading || userStrategiesQuery.isLoading) {
     return <CarbonLogoLoading className="w-[100px] flex-1 self-center" />;
   }
-  const activities = query.data ?? [];
+  const activities = activityQuery.data ?? [];
   if (!activities.length) {
-    if (empty) return empty;
+    if (empty) {
+      const userStrategies = userStrategiesQuery.data;
+      const userHasNoStrategies =
+        userStrategiesQuery.isFetched &&
+        (!userStrategies || userStrategies.length === 0);
+      if (userHasNoStrategies) return empty;
+    }
     return (
       <NotFound
         variant="error"

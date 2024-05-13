@@ -7,7 +7,7 @@ import { SimulatorPage } from 'pages/simulator';
 import { SimulatorInputOverlappingPage } from 'pages/simulator/overlapping';
 import { SimulatorInputRecurringPage } from 'pages/simulator/recurring';
 import { SimulatorResultPage } from 'pages/simulator/result';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { roundSearchParam } from 'utils/helpers';
 import * as v from 'valibot';
 
@@ -28,12 +28,19 @@ export const simulatorInputRootRoute = new Route({
   path: '/',
   component: SimulatorPage,
   beforeLoad: ({ location }) => {
-    if (location.pathname === '/simulate' || location.pathname === '/simulate/')
+    if (!config.isSimulatorEnabled) {
+      throw redirect({ to: '/', replace: true });
+    }
+    if (
+      location.pathname === '/simulate' ||
+      location.pathname === '/simulate/'
+    ) {
       redirect({
         to: '/simulate/recurring',
         throw: true,
         replace: true,
       });
+    }
   },
   validateSearch: (search: Record<string, unknown>): StrategyInputBase => {
     const start =
@@ -51,10 +58,10 @@ export const simulatorInputRootRoute = new Route({
 
     const baseToken = v.is(validAddress, search.baseToken)
       ? search.baseToken
-      : config.tokens.ETH;
+      : config.defaultTokenPair[0];
     const quoteToken = v.is(validAddress, search.quoteToken)
       ? search.quoteToken
-      : config.tokens.USDC;
+      : config.defaultTokenPair[1];
 
     return {
       baseToken,

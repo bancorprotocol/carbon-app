@@ -22,6 +22,7 @@ import { explorerEvents } from 'services/events/explorerEvents';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { strategyEditEvents } from 'services/events/strategyEditEvents';
 import { buttonStyles } from 'components/common/button/buttonStyles';
+import config from 'config';
 
 type itemsType = {
   id: StrategyEditOptionId;
@@ -91,7 +92,7 @@ export const StrategyBlockManage: FC<Props> = (props) => {
     +strategy.order1.startRate === 0 ||
     +strategy.order1.endRate === 0;
 
-  if (!isDisposable) {
+  if (!isDisposable && config.isSimulatorEnabled) {
     items.push({
       id: 'simulate',
       name: 'Simulate Strategy',

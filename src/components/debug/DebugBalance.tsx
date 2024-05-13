@@ -5,7 +5,7 @@ export const DebugBalance = () => {
   const { provider, user } = useWeb3();
   const [balance, setBalance] = useState('');
 
-  const fetchETH = useCallback(async () => {
+  const fetchGasToken = useCallback(async () => {
     if (!provider || !user) return;
 
     try {
@@ -18,11 +18,11 @@ export const DebugBalance = () => {
 
   useEffect(() => {
     if (provider && user) {
-      fetchETH();
+      fetchGasToken();
     } else {
       setBalance('');
     }
-  }, [fetchETH, provider, user]);
+  }, [fetchGasToken, provider, user]);
 
   return <div>{balance}</div>;
 };

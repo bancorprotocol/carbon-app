@@ -6,7 +6,7 @@ import {
 import { useWeb3 } from 'libs/web3';
 import { useGetTokenBalances } from 'libs/queries/chain/balance';
 import { useQueryClient } from '@tanstack/react-query';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { Button } from 'components/common/button';
 import { QueryKey } from 'libs/queries';
 import { FormEvent } from 'react';
@@ -17,7 +17,12 @@ const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   symbol: tkn.symbol,
 }));
 
-TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
+const gasToken = config.network.gasToken;
+TOKENS.push({
+  address: gasToken.address,
+  decimals: gasToken.decimals,
+  symbol: gasToken.symbol,
+});
 
 export const DebugTenderlyFaucet = () => {
   const { user } = useWeb3();
@@ -33,7 +38,7 @@ export const DebugTenderlyFaucet = () => {
 
     await tenderlyFaucetTransferETH(user);
     await queryClient.invalidateQueries({
-      queryKey: QueryKey.balance(user, config.tokens.ETH),
+      queryKey: QueryKey.balance(user, gasToken.address),
     });
 
     for (const tkn of FAUCET_TOKENS) {
@@ -51,7 +56,7 @@ export const DebugTenderlyFaucet = () => {
 
   return (
     <form
-      className="flex flex-col items-center space-y-20 rounded-18 bg-background-900 p-20"
+      className="rounded-18 bg-background-900 flex flex-col items-center space-y-20 p-20"
       onSubmit={handleOnSubmit}
     >
       <h2>Tenderly Faucet</h2>

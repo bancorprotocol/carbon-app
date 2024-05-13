@@ -10,6 +10,7 @@ export const ModalTradeRoutingRowCell: FC<{
   fiatAmount: string | SafeDecimal;
   selectedFiatCurrency: FiatSymbol;
 }> = ({ logoURI, amount, fiatAmount, selectedFiatCurrency }) => {
+  const isFiatAmountNotZero = new SafeDecimal(fiatAmount).gt(0);
   return (
     <>
       <p className="inline-flex items-center gap-8">
@@ -18,9 +19,11 @@ export const ModalTradeRoutingRowCell: FC<{
           {prettifyNumber(amount)}
         </span>
       </p>
-      <p className="text-12 font-weight-500 text-white/60">
-        {getFiatDisplayValue(fiatAmount, selectedFiatCurrency)}
-      </p>
+      {isFiatAmountNotZero && (
+        <p className="text-12 font-weight-500 text-white/60">
+          {getFiatDisplayValue(fiatAmount, selectedFiatCurrency)}
+        </p>
+      )}
     </>
   );
 };

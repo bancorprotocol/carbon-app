@@ -26,7 +26,7 @@ interface Props {
   strategy: Strategy;
   order0: OrderCreate;
   order1: OrderCreate;
-  marketPrice: number;
+  marketPrice: string;
   anchoredOrder: 'buy' | 'sell';
   setAnchoredOrder: (value: 'buy' | 'sell') => any;
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
