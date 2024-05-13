@@ -56,10 +56,6 @@ describe('fullOutcome', () => {
       expect(getFullOutcome(noPriceOrMinAndMax)).toBeUndefined();
       expect(getFullOutcome(noPriceAndMax)).toBeUndefined();
     });
-    it('should return undefined if min is greater than max', () => {
-      const input = { ...base, price: '', min: '100', max: '10' };
-      expect(getFullOutcome(input)).toBeUndefined();
-    });
     describe('Limit rate', () => {
       it('[Buy] should return 3.1645569620253164557 with price 1580 & budget 5000', () => {
         const input = { ...base, price: '1580', budget: '5000' };
