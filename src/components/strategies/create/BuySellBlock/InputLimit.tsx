@@ -110,18 +110,20 @@ export const InputLimit: FC<InputLimitProps> = ({
             </button>
           )}
         </div>
-        <p className="flex flex-wrap items-center gap-8">
-          <span className="text-12 break-all text-white/60">
-            {fiatAsString}
-          </span>
-          {marketPricePercentage && (
-            <MarketPriceIndication
-              marketPricePercentage={marketPricePercentage.price}
-              buy={buy}
-              ignoreMarketPriceWarning={ignoreMarketPriceWarning}
-            />
-          )}
-        </p>
+        {marketPrice !== 0 && (
+          <p className="flex flex-wrap items-center gap-8">
+            <span className="text-12 break-all text-white/60">
+              {fiatAsString}
+            </span>
+            {marketPricePercentage && (
+              <MarketPriceIndication
+                marketPricePercentage={marketPricePercentage.price}
+                buy={buy}
+                ignoreMarketPriceWarning={ignoreMarketPriceWarning}
+              />
+            )}
+          </p>
+        )}
       </div>
       {error ? (
         <WarningMessageWithIcon

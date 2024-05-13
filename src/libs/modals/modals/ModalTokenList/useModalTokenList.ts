@@ -6,7 +6,7 @@ import Fuse from 'fuse.js';
 import { utils } from 'ethers';
 import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/ModalTokenList';
 import { orderBy } from 'lodash';
-import { config } from 'services/web3/config';
+import config from 'config';
 
 const SEARCH_KEYS = [
   {
@@ -43,6 +43,9 @@ export const useModalTokenList = ({ id, data }: Props) => {
   } = data;
   const { closeModal } = useModal();
   const [search, setSearch] = useState('');
+
+  const basePopularTokens = config.popularTokens.base;
+  const quotePopularTokens = config.popularTokens.quote;
   const defaultPopularTokens = isBaseToken
     ? basePopularTokens
     : quotePopularTokens;
@@ -152,38 +155,3 @@ export const useModalTokenList = ({ id, data }: Props) => {
     popularTokens,
   };
 };
-
-const {
-  ENJ,
-  UNI,
-  LINK,
-  LDO,
-  APE,
-  GRT,
-  AAVE,
-  CRV,
-  ETH,
-  WBTC,
-  BNT,
-  SHIB,
-  DAI,
-  USDC,
-  USDT,
-} = config.tokens;
-
-const basePopularTokens: string[] = [
-  ETH,
-  WBTC,
-  BNT,
-  SHIB,
-  ENJ,
-  UNI,
-  LINK,
-  LDO,
-  APE,
-  GRT,
-  AAVE,
-  CRV,
-];
-
-const quotePopularTokens: string[] = [DAI, USDC, USDT, ETH, WBTC];

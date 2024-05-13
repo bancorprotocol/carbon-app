@@ -7,7 +7,7 @@ import {
   useGetTokenBalances,
 } from 'libs/queries';
 import { FAUCET_TOKENS } from 'utils/tenderly';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { wait } from 'utils/helpers';
 import { useMemo, useRef, useState } from 'react';
 import { useWeb3 } from 'libs/web3';
@@ -25,9 +25,14 @@ const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   symbol: tkn.symbol,
 }));
 
-TOKENS.push({ address: config.tokens.ETH, decimals: 18, symbol: 'ETH' });
+const gasToken = config.network.gasToken;
+TOKENS.push({
+  address: gasToken.address,
+  decimals: gasToken.decimals,
+  symbol: gasToken.symbol,
+});
 
-const spender = config.carbon.carbonController;
+const spender = config.addresses.carbon.carbonController;
 
 export const DebugCreateStrategy = () => {
   const count = useRef(0);
@@ -187,7 +192,7 @@ export const DebugCreateStrategy = () => {
   return (
     <form
       onSubmit={createStrategies}
-      className="flex flex-col space-y-20 rounded-18 bg-background-900 p-20"
+      className="rounded-18 bg-background-900 flex flex-col space-y-20 p-20"
     >
       <h2 className="text-center">Create Strategy</h2>
 
@@ -215,7 +220,7 @@ export const DebugCreateStrategy = () => {
           {allTokens.map((t) => (
             <li
               key={t.address}
-              className="flex items-center gap-8 rounded-18 bg-black px-16 py-8"
+              className="rounded-18 flex items-center gap-8 bg-black px-16 py-8"
             >
               <Checkbox
                 isChecked={t.selected}

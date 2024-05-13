@@ -22,7 +22,7 @@ export const AVAILABLE_CURRENCIES = [
   'CAD',
   'CHF',
   'CNY',
-  'ETH',
+  config.network.gasToken.symbol,
 ] as const;
 
 export type FiatSymbol = (typeof AVAILABLE_CURRENCIES)[number];
