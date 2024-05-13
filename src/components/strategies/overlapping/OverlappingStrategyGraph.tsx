@@ -165,16 +165,18 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
+  const disabled = !!props.disabled;
 
   const externalPrice = useMarketPrice({ base, quote });
-  const userMarketPrice = props?.marketPrice || externalPrice;
+  const userMarketPrice = disabled
+    ? externalPrice || props?.marketPrice
+    : props?.marketPrice || externalPrice;
+
   if (!userMarketPrice) throw Error('Market price is undefined');
   const baseMarketPrice = Number(userMarketPrice);
 
   const isUserPriceSource =
-    !props.disabled &&
-    !!props.marketPrice &&
-    externalPrice !== +props.marketPrice;
+    !disabled && !!props.marketPrice && externalPrice !== +props.marketPrice;
 
   const isCoingeckoPriceSource = !!externalPrice;
 
@@ -188,7 +190,6 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     marketPrice,
     zoom,
   });
-  const disabled = !!props.disabled;
 
   const baseWidth = right.minus(left);
   const width = baseWidth.toNumber();
