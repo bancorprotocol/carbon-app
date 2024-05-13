@@ -7,7 +7,7 @@ import { fetchTokenData } from 'libs/tokens/tokenHelperFn';
 import { QueryKey } from 'libs/queries/queryKey';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useContract } from 'hooks/useContract';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { ONE_DAY_IN_MS } from 'utils/time';
 import { useTokens } from 'hooks/useTokens';
 import { useCarbonInit } from 'hooks/useCarbonInit';
@@ -156,7 +156,7 @@ export const useGetUserStrategies = ({ user }: Props) => {
   const address: string = (ensAddress?.data || user || '').toLowerCase();
 
   const isValidAddress = utils.isAddress(address);
-  const isZeroAddress = address === config.tokens.ZERO;
+  const isZeroAddress = address === config.addresses.tokens.ZERO;
 
   const roiQuery = useGetRoi();
 
@@ -178,8 +178,8 @@ export const useGetUserStrategies = ({ user }: Props) => {
       enabled:
         tokens.length > 0 &&
         isInitialized &&
-        roiQuery.isSuccess &&
-        ensAddress.isSuccess,
+        roiQuery.isFetched &&
+        ensAddress.isFetched,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
@@ -206,7 +206,7 @@ export const useGetStrategy = (id: string) => {
       return strategies[0];
     },
     {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }
@@ -239,7 +239,7 @@ export const useGetPairStrategies = ({ token0, token1 }: PropsPair) => {
       });
     },
     {
-      enabled: tokens.length > 0 && isInitialized && roiQuery.isSuccess,
+      enabled: tokens.length > 0 && isInitialized && roiQuery.isFetched,
       staleTime: ONE_DAY_IN_MS,
       retry: false,
     }

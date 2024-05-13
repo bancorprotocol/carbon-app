@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/react';
 import config from 'config';
 
-if (config.sentryDNS) {
+if (config.sentryDSN) {
   Sentry.init({
-    dsn: config.sentryDNS,
+    dsn: config.sentryDSN,
     integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
     // Performance Monitoring
     tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!

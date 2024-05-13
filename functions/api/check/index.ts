@@ -1,4 +1,4 @@
-const BLOCKED_HOSTS = ['carbon-app-csq.pages.dev'];
+const BLOCKED_HOSTS = ['carbon-app-csq.pages.dev', 'carbon-app-sei.pages.dev'];
 
 const NO_NO_COUNTRIES = [
   'BY', // Belarus
