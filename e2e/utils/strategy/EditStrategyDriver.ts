@@ -69,8 +69,12 @@ export class EditStrategyDriver {
   async submit(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
     const btn = this.page.getByTestId('edit-submit');
 
-    if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-      await this.page.getByTestId('approve-warnings').click();
+    try {
+      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+        await this.page.getByTestId('approve-warnings').click();
+      }
+    } catch {
+      // do nothing, there is no approval needed
     }
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
