@@ -26,6 +26,8 @@ type InputRangeProps = {
   marketPricePercentages?: MarketPricePercentage;
   ignoreMarketPriceWarning?: boolean;
   isOrdersReversed?: boolean;
+  /** Used to change the warning logic in market price percent */
+  isOverlapping?: boolean;
 };
 
 export const InputRange: FC<InputRangeProps> = ({
@@ -44,6 +46,7 @@ export const InputRange: FC<InputRangeProps> = ({
   warnings,
   ignoreMarketPriceWarning,
   isOrdersReversed,
+  isOverlapping,
 }) => {
   const marketPrice = useUserMarketPrice({ base, quote });
   const inputMinId = useId();
@@ -89,6 +92,8 @@ export const InputRange: FC<InputRangeProps> = ({
   };
 
   const { getFiatAsString } = useFiatCurrency(quote);
+
+  console.log({ buy, isOverlapping });
 
   return (
     <>
@@ -146,7 +151,7 @@ export const InputRange: FC<InputRangeProps> = ({
                 <MarketPriceIndication
                   marketPricePercentage={marketPricePercentages.min}
                   isRange
-                  buy={buy}
+                  buy={buy || isOverlapping === true}
                   ignoreMarketPriceWarning={ignoreMarketPriceWarning}
                 />
               )}

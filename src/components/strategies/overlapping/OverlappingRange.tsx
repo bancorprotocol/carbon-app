@@ -62,6 +62,7 @@ export const OverlappingRange: FC<Props> = (props) => {
       setRangeError={order0.setRangeError}
       warnings={priceWarnings}
       marketPricePercentages={marketPricePercentage}
+      isOverlapping
     />
   );
 };
