@@ -44,6 +44,7 @@ export const useGetMultipleTokenPrices = (addresses: string[] = []) => {
         enabled: !!address && availableCurrencies.length > 0,
         refetchInterval: FIVE_MIN_IN_MS,
         staleTime: FIVE_MIN_IN_MS,
+        refetchOnWindowFocus: false,
       };
     }),
   });

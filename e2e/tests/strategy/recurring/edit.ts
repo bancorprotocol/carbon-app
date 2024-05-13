@@ -8,6 +8,7 @@ import {
   MyStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
+import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
   assertRecurringTestCase(testCase);
@@ -23,6 +24,7 @@ export const editPriceStrategyTest = (testCase: CreateStrategyTestCase) => {
     await edit.fillRecurringPrice('editPrices');
     await edit.submit('editPrices');
     await page.waitForURL('/', { timeout: 10_000 });
+    await waitForTenderlyRpc(page);
 
     const myStrategies = new MyStrategyDriver(page);
     const strategyEdited = await myStrategies.getStrategy(1);

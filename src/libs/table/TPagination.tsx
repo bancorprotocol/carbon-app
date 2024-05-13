@@ -11,7 +11,6 @@ export const TPagination = <D extends object>({
   return (
     <div
       className={cn(
-        'font-mono',
         'h-64',
         'flex',
         'items-center',

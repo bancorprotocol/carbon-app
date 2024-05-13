@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { carbonEvents } from 'services/events';
 import { Link, useMatchRoute, useRouterState } from 'libs/routing';
 import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
-import { handleOnItemClick } from '../utils';
+import { handleOnItemClick } from 'components/core/menu/utils';
 import { menuItems } from 'components/core/menu';
 
 export const MainMenuLeft: FC = () => {
@@ -40,7 +40,7 @@ export const MainMenuLeft: FC = () => {
               params={{}}
               search={{}}
               aria-current={isSamePage ? 'page' : 'false'}
-              className={`px-3 py-3 transition-colors duration-300 ${
+              className={`font-title px-3 py-3 transition-colors duration-300 ${
                 isSamePage ? 'text-white' : 'hover:text-white'
               }`}
             >

@@ -1,9 +1,9 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { FC, ReactNode, useId } from 'react';
 import { TokenInputField } from 'components/common/TokenInputField/TokenInputField';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { Token } from 'libs/tokens';
 import { UseQueryResult } from '@tanstack/react-query';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 
 interface Props {
   id?: string;
@@ -17,7 +17,8 @@ interface Props {
   withoutWallet?: boolean;
   'data-testid'?: string;
   title: string;
-  titleTooltip: string;
+  titleTooltip?: string;
+  placeholder?: string;
 }
 
 export const BudgetInput: FC<Props> = (props) => {
@@ -31,6 +32,7 @@ export const BudgetInput: FC<Props> = (props) => {
     onChange,
     title,
     titleTooltip,
+    placeholder,
   } = props;
   const inputId = useId();
   const balance = query?.data ?? '0';
@@ -44,6 +46,7 @@ export const BudgetInput: FC<Props> = (props) => {
       </label>
       <TokenInputField
         id={id ?? inputId}
+        placeholder={placeholder}
         className="rounded-16 bg-black p-16"
         value={value}
         setValue={onChange}
@@ -56,15 +59,9 @@ export const BudgetInput: FC<Props> = (props) => {
         data-testid={props['data-testid']}
       />
       {!!error && (
-        <output
-          htmlFor={inputId}
-          role="alert"
-          aria-live="polite"
-          className="text-12 text-error flex items-center gap-10 font-mono"
-        >
-          <IconWarning className="size-12" />
-          <span className="flex-1">{error}</span>
-        </output>
+        <WarningMessageWithIcon htmlFor={inputId} isError>
+          {error}
+        </WarningMessageWithIcon>
       )}
       {children}
     </div>

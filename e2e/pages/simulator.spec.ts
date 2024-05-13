@@ -5,6 +5,7 @@ import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
 import { CreateStrategyTestCase } from '../utils/simulator';
 import * as recurring from '../tests/simulator/recurring';
 import * as overlapping from '../tests/simulator/overlapping';
+import { mockDate } from '../utils/mock-date';
 
 const testCases: CreateStrategyTestCase[] = [
   // Recurring
@@ -188,13 +189,12 @@ const testCases: CreateStrategyTestCase[] = [
 
 test.describe('Simulator', () => {
   test.beforeEach(async ({ page }, testInfo) => {
-    testInfo.setTimeout(120_000);
     await mockApi(page);
+    await mockDate(page, '2024-02-26T00:00:00.000Z');
     await setupFork(testInfo);
     const debug = new DebugDriver(page);
     await debug.visit();
     await debug.setRpcUrl(testInfo);
-    await debug.setE2E();
   });
   test.afterEach(async ({}, testInfo) => {
     await removeFork(testInfo);

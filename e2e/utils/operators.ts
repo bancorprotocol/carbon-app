@@ -1,4 +1,5 @@
 import { Locator, Page } from 'playwright-core';
+import { MainMenuDriver } from './MainMenuDriver';
 export { prettifyNumber as pn } from '../../src/utils/helpers/number';
 
 export const isCI = !!process.env.CI && process.env.CI !== 'false';
@@ -6,14 +7,19 @@ export const isDraft = !!process.env.DRAFT && process.env.DRAFT !== 'false';
 export const shouldTakeScreenshot = isCI && !isDraft;
 
 /** Utils to take screenshot on CI that are not draft */
-export const screenshot = (target: Page | Locator, name: string) => {
+export const screenshot = async (target: Page | Locator, name: string) => {
   if (!shouldTakeScreenshot) return;
-  return target.screenshot({
-    type: 'jpeg',
-    path: `e2e/screenshots/${name}.jpg`,
-    mask: [target.getByTestId('user-wallet')],
-    maskColor: '#303030',
-  });
+
+  const mainMenu = new MainMenuDriver(target);
+  const canHideUserWallet = await mainMenu.hideUserWallet();
+  return target
+    .screenshot({
+      path: `e2e/screenshots/${name}.png`,
+      animations: 'disabled',
+    })
+    .then(() => {
+      if (canHideUserWallet) mainMenu.showUserWallet();
+    });
 };
 
 const urlNames = {

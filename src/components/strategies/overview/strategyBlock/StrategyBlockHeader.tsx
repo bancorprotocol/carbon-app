@@ -78,7 +78,7 @@ export const StrategySubtitle: FC<StrategySubtitleProps> = (props) => {
   const { id, status, isExplorer } = props;
   return (
     <p className="text-12 flex items-center gap-8 text-white/60">
-      <span className="font-mono">ID: {getLowestBits(id)}</span>
+      <span>ID: {getLowestBits(id)}</span>
       <svg width="4" height="4" role="separator">
         <circle cx="2" cy="2" r="2" fill="currentcolor" />
       </svg>

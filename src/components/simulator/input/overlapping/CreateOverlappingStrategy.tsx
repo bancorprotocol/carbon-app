@@ -150,7 +150,7 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
       setOverlappingParams(state.buy.min, state.sell.max);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketPrice, spread, base, quote]);
+  }, [marketPrice, spread, base, quote, state.buy.min, state.sell.max]);
 
   const setErrorCb = useCallback(
     (value: string) => dispatch('buyPriceError', value),

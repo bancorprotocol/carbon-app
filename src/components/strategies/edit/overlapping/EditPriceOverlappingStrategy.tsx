@@ -33,7 +33,7 @@ interface Props {
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
-  const marketPrice = useMarketPrice({ base, quote });
+  const marketPrice = useMarketPrice({ base, quote }).toString();
   const { marketPricePercentage } = useMarketIndication({
     base,
     quote,
@@ -56,7 +56,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       quote.decimals,
       buyMin,
       sellMax,
-      marketPrice.toString(),
+      marketPrice,
       spread.toString(),
       sellBudget
     );
@@ -75,7 +75,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       quote.decimals,
       buyMin,
       sellMax,
-      marketPrice.toString(),
+      marketPrice,
       spread.toString(),
       buyBudget
     );
@@ -92,7 +92,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     const prices = calculateOverlappingPrices(
       min,
       max,
-      marketPrice.toString(),
+      marketPrice,
       spread.toString()
     );
 
@@ -129,7 +129,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   // Initialize order when market price is available
   useEffect(() => {
-    if (!quote || !base || marketPrice <= 0) return;
+    if (!quote || !base || +marketPrice <= 0) return;
     if (!mounted) return setMounted(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketPrice, spread]);
@@ -168,7 +168,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     <>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-20 p-20">
         <header>
-          <h3 className="text-18 font-weight-500 flex-1">Price Range</h3>
+          <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
         </header>
         <OverlappingStrategyGraph
           base={base}
@@ -184,12 +184,12 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-20 p-20">
         <header className="flex items-center gap-8">
-          <h3 className="text-18 font-weight-500 flex-1">
+          <h2 className="text-18 font-weight-500 flex-1">
             Edit Price Range&nbsp;
             <span className="text-white/40">
               ({quote?.symbol} per 1 {base?.symbol})
             </span>
-          </h3>
+          </h2>
           <Tooltip
             element="Indicate the strategy exact buy and sell prices."
             iconClassName="size-14 text-white/60"
@@ -209,7 +209,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
       </article>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-10 p-20">
         <header className="mb-10 flex items-center gap-8 ">
-          <h3 className="text-18 font-weight-500 flex-1">Edit Spread</h3>
+          <h2 className="text-18 font-weight-500 flex-1">Edit Spread</h2>
           <Tooltip
             element="The difference between the highest bidding (Sell) price, and the lowest asking (Buy) price"
             iconClassName="size-14 text-white/60"

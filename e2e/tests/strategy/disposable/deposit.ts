@@ -6,6 +6,7 @@ import {
   EditStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
+import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const deposit = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -24,6 +25,7 @@ export const deposit = (testCase: CreateStrategyTestCase) => {
 
     await edit.submit('deposit');
     await page.waitForURL('/', { timeout: 20_000 });
+    await waitForTenderlyRpc(page);
 
     await expect(strategy.budget(direction)).toHaveText(output);
   });

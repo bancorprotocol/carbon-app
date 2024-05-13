@@ -32,7 +32,7 @@ export const MarketPriceIndication: FC<MarketPriceIndicationProps> = ({
       }`}
       data-testid="market-price-indication"
     >
-      <span className="text-10 font-mono">
+      <span className="text-10">
         {percentage}% {isAbove ? 'above' : 'below'} {isRange ? '' : 'market'}
       </span>
       <Tooltip

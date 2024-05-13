@@ -111,7 +111,7 @@ export const TokenInputField: FC<Props> = ({
           <span className="font-weight-500">{token.symbol}</span>
         </div>
       </div>
-      <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
+      <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10">
         <p className="flex items-center gap-5 break-all text-white/60">
           {!slippage?.isZero() && showFiatValue && getFiatAsString(value)}
           {slippage && value && <Slippage slippage={slippage} />}
@@ -126,7 +126,7 @@ export const TokenInputField: FC<Props> = ({
             disabled={disabled}
             type="button"
             onClick={handleBalanceClick}
-            className="group flex items-center"
+            className="group/token-input flex items-center"
           >
             <span className="text-white">
               Wallet: {prettifyNumber(balance || 0)}&nbsp;
@@ -135,7 +135,7 @@ export const TokenInputField: FC<Props> = ({
               className={
                 disabled
                   ? 'text-primary/40'
-                  : 'text-primary group-hover:text-white'
+                  : 'text-primary group-hover/token-input:text-white'
               }
             >
               MAX

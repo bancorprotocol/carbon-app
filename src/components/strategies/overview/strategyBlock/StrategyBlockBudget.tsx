@@ -26,7 +26,7 @@ export const StrategyBlockBudget: FC<Props> = ({ strategy }) => {
       )}
     >
       <Tooltip element={<TooltipContent />}>
-        <h4 className="text-12 flex items-center gap-4 font-mono text-white/60">
+        <h4 className="text-12 flex items-center gap-4 text-white/60">
           Total Budget
           <IconTooltip className="size-10" />
         </h4>

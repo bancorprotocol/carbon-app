@@ -3,6 +3,7 @@ import marketRate from '../mocks/market-rates.json';
 import roi from '../mocks/roi.json';
 import historyPrices from '../mocks/history-prices.json';
 import simulatorResult from '../mocks/simulator-result.json';
+import tokenListsMock from '../mocks/tokenLists.json';
 
 export const mockApi = async (page: Page) => {
   await page.route('**/*/roi', (route) => {
@@ -38,19 +39,19 @@ export const mockApi = async (page: Page) => {
     );
     return route.fulfill({ json: filteredData });
   });
-  await page.route('**/*/simulate-create-strategy?*', (route) => {
+  await page.route('**/*/simulator/create?*', (route) => {
     const url = new URL(route.request().url());
     const {
       baseToken,
       quoteToken,
       buyMin,
       buyMax,
+      buyMarginal,
       buyBudget,
-      buyIsRange,
       sellMin,
       sellMax,
+      sellMarginal,
       sellBudget,
-      sellIsRange,
       start,
       end,
     } = Object.fromEntries(url.searchParams.entries());
@@ -60,9 +61,11 @@ export const mockApi = async (page: Page) => {
       quoteToken,
       buyMin,
       buyMax,
+      buyMarginal,
       buyBudget,
       sellMin,
       sellMax,
+      sellMarginal,
       sellBudget,
       start,
       end,
@@ -70,12 +73,7 @@ export const mockApi = async (page: Page) => {
 
     const simulateCreateStrategyId = keyValues.join('-');
     // If unexpected behavior, let the real server handle that
-    if (
-      keyValues.some((v) => !v) ||
-      !buyIsRange ||
-      !sellIsRange ||
-      !simulatorResult[simulateCreateStrategyId]
-    )
+    if (keyValues.some((v) => !v) || !simulatorResult[simulateCreateStrategyId])
       return route.continue();
 
     const data = simulatorResult[simulateCreateStrategyId];
@@ -85,4 +83,19 @@ export const mockApi = async (page: Page) => {
   await page.route('/api/check', (route) => {
     return route.fulfill({ json: false });
   });
+
+  const tokenListsToMock = Object.keys(tokenListsMock);
+  tokenListsToMock.forEach(async (tokenList) => {
+    await page.route(tokenList, (route) => {
+      const json = tokenListsMock[tokenList];
+      if (!json) return route.continue;
+      return route.fulfill({ json });
+    });
+  });
+
+  // Block Google tag manager before visiting page
+  await page.route(/googletagmanager.com/, (route) => route.abort());
+
+  // Block Sentry before visiting page
+  await page.route(/sentry.io/, (route) => route.abort());
 };

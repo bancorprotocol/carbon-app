@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import * as Comlink from 'comlink';
 import { TokenPair } from '@bancor/carbon-sdk';
 import { ContractsConfig } from '@bancor/carbon-sdk/contracts-api';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { lsService } from 'services/localeStorage';
 import { carbonSDK } from 'libs/sdk';
 import { useModal } from 'hooks/useModal';
@@ -15,8 +15,9 @@ import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
 import { carbonApi } from 'utils/carbonApi';
 
 const contractsConfig: ContractsConfig = {
-  carbonControllerAddress: config.carbon.carbonController,
-  voucherAddress: config.carbon.voucher,
+  carbonControllerAddress: config.addresses.carbon.carbonController,
+  voucherAddress: config.addresses.carbon.voucher,
+  multiCallAddress: config.addresses.utils.multicall,
 };
 
 const persistSdkCacheDump = async () => {
@@ -89,14 +90,14 @@ export const useCarbonInit = () => {
     [cache, invalidateQueriesByPair]
   );
 
-  const init = useCallback(async () => {
+  const initSDK = useCallback(async () => {
     try {
       setIsLoading(true);
       const cacheData = lsService.getItem('sdkCompressedCacheData');
 
-      const [isBlocked] = await Promise.all([
-        carbonApi.getCheck(),
+      await Promise.all([
         carbonSDK.init(
+          SupportedChainId.MAINNET,
           RPC_URLS[SupportedChainId.MAINNET],
           contractsConfig,
           getTokenDecimalMap(),
@@ -107,12 +108,6 @@ export const useCarbonInit = () => {
           Comlink.proxy(onPairAddedToCacheCallback)
         ),
       ]);
-      setCountryBlocked(isBlocked);
-      if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
-        openModal('restrictedCountry', undefined);
-      }
-
-      removeOldI18nKeys();
 
       setIsInitialized(true);
       setIntervalUsingTimeout(persistSdkCacheDump, 1000 * 60);
@@ -123,14 +118,27 @@ export const useCarbonInit = () => {
       setIsLoading(false);
     }
   }, [
-    setIsLoading,
-    onPairDataChangedCallback,
     onPairAddedToCacheCallback,
-    setCountryBlocked,
-    setIsInitialized,
-    openModal,
+    onPairDataChangedCallback,
     setIsError,
+    setIsInitialized,
+    setIsLoading,
   ]);
 
-  return { isInitialized, isLoading, isError, init };
+  const initCheck = useCallback(async () => {
+    try {
+      const isBlocked = await carbonApi.getCheck();
+      setCountryBlocked(isBlocked);
+      if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
+        openModal('restrictedCountry', undefined);
+      }
+
+      removeOldI18nKeys();
+    } catch (e) {
+      console.error('Error carbonApi.getCheck', e);
+      setIsError(true);
+    }
+  }, [openModal, setCountryBlocked, setIsError]);
+
+  return { isInitialized, isLoading, isError, initCheck, initSDK };
 };

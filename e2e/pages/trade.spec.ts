@@ -5,6 +5,7 @@ import { DebugDriver, removeFork, setupFork } from '../utils/DebugDriver';
 import { TradeDriver } from '../utils/TradeDriver';
 import { navigateTo } from '../utils/operators';
 import { TokenApprovalDriver } from '../utils/TokenApprovalDriver';
+import { waitForTenderlyRpc } from '../utils/tenderly';
 
 test.describe('Trade', () => {
   test.beforeEach(async ({ page }, testInfo) => {
@@ -14,7 +15,7 @@ test.describe('Trade', () => {
     await debug.visit();
     await setupFork(testInfo);
     await debug.setRpcUrl(testInfo);
-    await Promise.all([debug.setupImposter(), debug.setE2E()]);
+    await debug.setupImposter();
   });
 
   test.afterEach(async ({}, testInfo) => {
@@ -46,7 +47,6 @@ test.describe('Trade', () => {
         : `Sell ${source} for ${target}`;
 
     test(testName, async ({ page }) => {
-      test.setTimeout(120_000);
       // Store current balance
       const debug = new DebugDriver(page);
       const balance = {
@@ -70,6 +70,7 @@ test.describe('Trade', () => {
       await routing.close();
 
       await driver.submit();
+      await waitForTenderlyRpc(page);
 
       // Token approval
       const tokenApproval = new TokenApprovalDriver(page);

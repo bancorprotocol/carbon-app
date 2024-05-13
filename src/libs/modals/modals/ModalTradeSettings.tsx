@@ -35,7 +35,7 @@ export const ModalTradeSettings: ModalFC<ModalTradeSettingsData> = ({
           <h2>Trade Settings</h2>
           {!isAllSettingsDefault && (
             <button
-              className="text-16 font-weight-500 mr-20 font-mono text-white"
+              className="text-16 font-weight-500 mr-20 text-white"
               onClick={handleReset}
             >
               Reset All

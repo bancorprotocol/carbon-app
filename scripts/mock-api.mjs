@@ -19,6 +19,13 @@ import { join } from 'path';
 import { cwd } from 'process';
 import dayjs from 'dayjs';
 
+export const tokenListsToMock = [
+  // Bancor
+  'https://d1wmp5nysbq9xl.cloudfront.net/ethereum/tokens.json',
+  // CoinGecko
+  'https://tokens.coingecko.com/ethereum/all.json',
+];
+
 // Add more addresses for more mocks
 const addresses = [
   '0x6B175474E89094C44Da98b954EedeAC495271d0F',
@@ -177,56 +184,56 @@ const simulatorResultCases = [
   {
     baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
     quoteToken: '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
-    buyIsRange: true,
     buyMin: 1500,
     buyMax: 1600,
-    quoteBudget: 2000,
-    sellIsRange: true,
+    buyMarginal: 0,
+    buyBudget: 2000,
     sellMin: 1700,
     sellMax: 2000,
-    baseBudget: 10,
+    sellMarginal: 0,
+    sellBudget: 10,
     start: '2023-03-02',
     end: '2024-02-25',
   },
   {
     baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
     quoteToken: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
-    buyIsRange: true,
     buyMin: 1700,
     buyMax: 1800,
-    quoteBudget: 200,
-    sellIsRange: false,
+    buyMarginal: 0,
+    buyBudget: 200,
     sellMin: 2100,
     sellMax: 2100,
-    baseBudget: 1,
+    sellMarginal: 0,
+    sellBudget: 1,
     start: '2023-03-10',
     end: '2024-01-24',
   },
   {
     baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
     quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
-    buyIsRange: false,
     buyMin: 222000000,
     buyMax: 222000000,
-    quoteBudget: 1000000000,
-    sellIsRange: true,
+    buyMarginal: 0,
+    buyBudget: 1000000000,
     sellMin: 240000000,
     sellMax: 270000000,
-    baseBudget: 1,
+    sellMarginal: 0,
+    sellBudget: 1,
     start: '2023-03-08',
     end: '2024-01-21',
   },
   {
     baseToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // ETH
     quoteToken: '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce', // SHIB
-    buyIsRange: false,
     buyMin: 222000000,
     buyMax: 222000000,
-    quoteBudget: 100000000,
-    sellIsRange: false,
+    buyMarginal: 0,
+    buyBudget: 100000000,
     sellMin: 240000000,
     sellMax: 240000000,
-    baseBudget: 10,
+    sellMarginal: 0,
+    sellBudget: 10,
     start: '2023-03-01',
     end: '2024-02-21',
   },
@@ -264,7 +271,7 @@ const getHistoryPrices = async (baseToken, quoteToken, start, end) => {
 };
 
 const getSimulatorData = async (simulatorData) => {
-  const url = new URL(`${baseUrl}/simulate-create-strategy`);
+  const url = new URL(`${baseUrl}/simulator/create`);
   const startTimestamp = convertToUnix(simulatorData.start);
   const endTimestamp = convertToUnix(simulatorData.end);
 
@@ -309,10 +316,12 @@ async function main() {
       c.quoteToken,
       c.buyMin,
       c.buyMax,
-      c.quoteBudget,
+      c.buyMarginal,
+      c.buyBudget,
       c.sellMin,
       c.sellMax,
-      c.baseBudget,
+      c.sellMarginal,
+      c.sellBudget,
       convertToUnix(c.start),
       convertToUnix(c.end),
     ]
@@ -321,6 +330,13 @@ async function main() {
     simulatorResult[pairKey] = dict;
   });
   await Promise.allSettled(getSimulatorDataAll);
+
+  const tokenListResult = {};
+  const getTokenLists = tokenListsToMock.map(async (tokenList) => {
+    const url = new URL(tokenList);
+    tokenListResult[url] = await get(url);
+  });
+  await Promise.allSettled(getTokenLists);
 
   const folder = join(cwd(), 'e2e/mocks');
   if (!existsSync(folder)) mkdirSync(folder, { recursive: true });
@@ -336,6 +352,10 @@ async function main() {
   writeFileSync(
     join(folder, 'simulator-result.json'),
     JSON.stringify(simulatorResult)
+  );
+  writeFileSync(
+    join(folder, 'tokenLists.json'),
+    JSON.stringify(tokenListResult)
   );
 }
 

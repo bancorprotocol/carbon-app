@@ -47,7 +47,6 @@ import {
   ToastStore,
   useToastStore,
 } from 'store/useToasterStore';
-import { DebugStore, defaultDebugStore, useDebugStore } from './useDebugStore';
 
 // ********************************** //
 // STORE CONTEXT
@@ -73,7 +72,6 @@ interface StoreContext {
   setSelectedWallet: Dispatch<SetStateAction<ConnectionType | null>>;
   isManualConnection: React.MutableRefObject<boolean>;
   toaster: ToastStore;
-  debug: DebugStore;
   simDisclaimerLastSeen?: number;
   setSimDisclaimerLastSeen: (value?: number) => void;
 }
@@ -98,7 +96,6 @@ const defaultValue: StoreContext = {
   setSelectedWallet: () => {},
   isManualConnection: { current: false },
   toaster: defaultToastStore,
-  debug: defaultDebugStore,
   simDisclaimerLastSeen: undefined,
   setSimDisclaimerLastSeen: () => {},
 };
@@ -128,7 +125,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const tokens = useTokensStore();
   const fiatCurrency = useFiatCurrencyStore();
   const toaster = useToastStore();
-  const debug = useDebugStore();
 
   const [simDisclaimerLastSeen, _setSimDisclaimerLastSeen] = useState<
     number | undefined
@@ -163,7 +159,6 @@ export const StoreProvider: FC<{ children: ReactNode }> = ({ children }) => {
     selectedWallet,
     setSelectedWallet,
     toaster,
-    debug,
     simDisclaimerLastSeen,
     setSimDisclaimerLastSeen,
   };

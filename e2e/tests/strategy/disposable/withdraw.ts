@@ -7,6 +7,7 @@ import {
   EditStrategyDriver,
 } from '../../../utils/strategy';
 import { TokenApprovalDriver } from '../../../utils/TokenApprovalDriver';
+import { waitForTenderlyRpc } from '../../../utils/tenderly';
 
 export const withdraw = (testCase: CreateStrategyTestCase) => {
   assertDisposableTestCase(testCase);
@@ -28,6 +29,7 @@ export const withdraw = (testCase: CreateStrategyTestCase) => {
 
     await edit.submit('withdraw');
     await page.waitForURL('/', { timeout: 20_000 });
+    await waitForTenderlyRpc(page);
 
     await expect(strategy.budget(direction)).toHaveText(output);
   });

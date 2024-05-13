@@ -45,10 +45,6 @@ export class DebugDriver {
     return this.page.goto('/debug');
   }
 
-  setE2E() {
-    return this.page.getByTestId('is-e2e-checkbox').click();
-  }
-
   async setRpcUrl(testInfo: TestInfo) {
     const forkId = process.env[`TENDERLY_FORK_ID_TEST_${testInfo.testId}`];
     if (!forkId) {

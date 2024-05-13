@@ -2,7 +2,6 @@
   width: 100%;
   height: unset;
   aspect-ratio: 400 / 130;
-  font-size: 16px; /* Used as a ref for rect's width */
 }
 
 .strategy-graph g.buySellAreas:hover g.buy:not(:hover) {

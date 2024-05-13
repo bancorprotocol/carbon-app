@@ -18,7 +18,7 @@ export const OrderBookWidget = ({ base, quote }: TradePageProps) => {
       className="rounded-10 bg-background-900 p-20"
     >
       <h2 id="order-title">Orders</h2>
-      <div className="mt-20 font-mono">
+      <div className="mt-20">
         <OrderBookWidgetHeader
           baseSymbol={base.symbol}
           quoteSymbol={quote.symbol}

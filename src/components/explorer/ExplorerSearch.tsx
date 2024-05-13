@@ -15,7 +15,7 @@ import { ExplorerSearchInput } from 'components/explorer/ExplorerSearchInput';
 import ExplorerSearchSuggestions from 'components/explorer/suggestion';
 import { utils } from 'ethers';
 import { useNavigate } from 'libs/routing';
-import { config } from 'services/web3/config';
+import config from 'config';
 import { cn } from 'utils/helpers';
 import { ReactComponent as IconSearch } from 'assets/icons/search.svg';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
@@ -41,7 +41,7 @@ export const _ExplorerSearch: FC = () => {
 
   const isInvalidAddress = useMemo(() => {
     if (type !== 'wallet' || !search.length) return false;
-    if (search === config.tokens.ZERO) return true;
+    if (search === config.addresses.tokens.ZERO) return true;
 
     return (
       !utils.isAddress(search.toLowerCase()) &&
@@ -154,7 +154,7 @@ export const _ExplorerSearch: FC = () => {
         </Button>
       </form>
       {isInvalidAddress && (
-        <div className="text-14 text-error absolute mt-4 flex items-center font-mono">
+        <div className="text-14 text-error absolute mt-4 flex items-center">
           <IconWarning className="mr-10 size-16" />
           Invalid Wallet Address
         </div>
