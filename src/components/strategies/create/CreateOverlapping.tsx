@@ -205,7 +205,11 @@ export const CreateOverlapping: FC<Props> = (props) => {
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    if (!anchor) setAnchorError('');
+    if (!anchor) {
+      // make sure we set params even with duplicate
+      setOverlappingPrices(order0.min, order1.max);
+      setAnchorError('');
+    }
     resetBudgets(value);
     setAnchor(value);
   };
