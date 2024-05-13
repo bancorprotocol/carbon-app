@@ -145,7 +145,6 @@ export const DepositOverlappingStrategy: FC<Props> = (props) => {
           order0={order0}
           order1={order1}
           marketPrice={oldMarketPrice?.toNumber()}
-          externalPrice={externalMarketPrice}
           spread={spread}
           disabled
         />

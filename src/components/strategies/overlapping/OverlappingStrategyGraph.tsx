@@ -16,11 +16,11 @@ import { OrderCreate } from '../create/useOrder';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import styles from './OverlappingStrategyGraph.module.css';
 import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
-  externalPrice?: number;
   marketPrice?: string;
   base?: Token;
   quote?: Token;
@@ -33,7 +33,6 @@ interface EnableProps {
 }
 
 interface DisableProps {
-  externalPrice?: number;
   marketPrice?: number;
   base?: Token;
   quote?: Token;
@@ -163,21 +162,21 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
-  const { quote, order0, order1, spread } = props;
+  const { base, quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
 
-  const userMarketPrice = props?.marketPrice || props.externalPrice;
+  const externalPrice = useMarketPrice({ base, quote });
+  const userMarketPrice = props?.marketPrice || externalPrice;
   if (!userMarketPrice) throw Error('Market price is undefined');
-
   const baseMarketPrice = Number(userMarketPrice);
 
   const isUserPriceSource =
     !props.disabled &&
     !!props.marketPrice &&
-    props.externalPrice !== +props.marketPrice;
+    externalPrice !== +props.marketPrice;
 
-  const isCoingeckoPriceSource = !!props.externalPrice;
+  const isCoingeckoPriceSource = !!externalPrice;
 
   const xFactor = getXFactor(baseMin, baseMax, baseMarketPrice);
 

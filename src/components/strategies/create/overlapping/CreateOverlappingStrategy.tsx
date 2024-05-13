@@ -247,7 +247,6 @@ export const CreateOverlappingStrategy: FC<OverlappingStrategyProps> = (
           {...props}
           order0={order0}
           order1={order1}
-          externalPrice={externalPrice}
           marketPrice={marketPrice}
           setMin={setMin}
           setMax={setMax}
