@@ -87,10 +87,12 @@ export const EditStrategyPricesContent = ({
   });
 
   const isDisabled = (form: HTMLFormElement) => {
-    if (!!form.querySelector('.error-message')) return true;
-    if (!form.checkValidity()) return true;
+    if (approval.isError) return true;
     if (!hasChanged) return true;
-    return false;
+    if (!form.checkValidity()) return true;
+    if (form.querySelector('.error-message')) return true;
+    const checkbox = form.querySelector<HTMLInputElement>('.approve-warnings');
+    return !!checkbox && !checkbox.checked;
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {

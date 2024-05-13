@@ -110,9 +110,10 @@ export const EditStrategyBudgetContent = ({
   const isDisabled = (form: HTMLFormElement) => {
     if (approval.isError) return true;
     if (!hasChanged) return true;
+    if (!form.checkValidity()) return true;
     if (form.querySelector('.error-message')) return true;
-    const warning = form.querySelector<HTMLInputElement>('.warning-message');
-    return !!warning && !warning.checked;
+    const checkbox = form.querySelector<HTMLInputElement>('.approve-warnings');
+    return !!checkbox && !checkbox.checked;
   };
 
   const submit = (e: FormEvent<HTMLFormElement>) => {

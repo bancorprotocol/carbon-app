@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { Page } from 'playwright-core';
 import { MainMenuDriver } from '../MainMenuDriver';
-import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
+import { screenshot, shouldTakeScreenshot } from '../operators';
 import { CreateStrategyTestCase } from './types';
 import { Setting, Direction, MinMax } from '../types';
 import {
@@ -69,20 +69,9 @@ export class EditStrategyDriver {
   async submit(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
     const btn = this.page.getByTestId('edit-submit');
 
-    const approveWarningsAndWait = async () => {
-      await waitFor(this.page, 'approve-warnings');
-      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-        await this.page.getByTestId('approve-warnings').click();
-      }
-      await expect(btn).toBeEnabled();
-    };
-
-    // If the submit button is not enabled, try to approve warnings and retry
-    await expect(btn)
-      .toBeEnabled({ timeout: 1_000 })
-      .catch(() => approveWarningsAndWait());
-
-    await expect(btn).toBeEnabled();
+    if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+      await this.page.getByTestId('approve-warnings').click();
+    }
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
