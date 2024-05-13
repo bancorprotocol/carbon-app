@@ -28,9 +28,12 @@ import {
 } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { BudgetAction } from 'components/strategies/common/BudgetInput';
-import { geoMean } from 'utils/fullOutcome';
 import { getDeposit, getWithdraw } from '../utils';
 import { OverlappingAction } from 'components/strategies/overlapping/OverlappingAction';
+import {
+  hasNoBudget,
+  useOverlappingMarketPrice,
+} from 'components/strategies/overlapping/useOverlappingMarketPrice';
 
 interface Props {
   strategy: Strategy;
@@ -64,10 +67,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const [action, setAction] = useState<'deposit' | 'withdraw'>('deposit');
 
   const newMarketPrice = useMarketPrice({ base, quote });
-  const initialMarketPrice = geoMean(
-    strategy.order0.marginalRate,
-    strategy.order1.marginalRate
-  )!;
+  const initialMarketPrice = useOverlappingMarketPrice(strategy);
   const marketPrice =
     touched || !initialMarketPrice
       ? newMarketPrice.toString()
@@ -214,7 +214,11 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    if (!anchor) setAnchorError('');
+    if (!anchor) {
+      setAnchorError('');
+      console.log('Has no budget', hasNoBudget(strategy));
+      if (hasNoBudget(strategy)) setOverlappingPrices(order0.min, order1.max);
+    }
     resetBudgets({ anchorValue: value });
     setAnchor(value);
   };

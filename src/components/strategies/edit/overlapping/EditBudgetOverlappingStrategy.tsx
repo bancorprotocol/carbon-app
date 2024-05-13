@@ -18,8 +18,8 @@ import {
 } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { BudgetAction } from 'components/strategies/common/BudgetInput';
-import { geoMean } from 'utils/fullOutcome';
 import { getDeposit, getWithdraw } from '../utils';
+import { useOverlappingMarketPrice } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 
 interface Props {
   strategy: Strategy;
@@ -36,10 +36,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const [budgetError, setBudgetError] = useState('');
   const spread = getRoundedSpread(strategy);
 
-  const marketPrice = geoMean(
-    strategy.order0.marginalRate,
-    strategy.order1.marginalRate
-  )!.toString();
+  const marketPrice = useOverlappingMarketPrice(strategy);
 
   const baseBalance = useGetTokenBalance(base).data ?? '0';
   const quoteBalance = useGetTokenBalance(quote).data ?? '0';
