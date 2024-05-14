@@ -78,7 +78,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
         quote.decimals,
         buyMin,
         sellMax,
-        marketPrice,
+        marketPrice.toString(),
         spread.toString(),
         sellBudget
       );
@@ -100,7 +100,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
         quote.decimals,
         buyMin,
         sellMax,
-        marketPrice,
+        marketPrice.toString(),
         spread.toString(),
         buyBudget
       );

@@ -70,7 +70,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const externalPrice = useMarketPrice({ base, quote });
   const initialMarketPrice = useOverlappingMarketPrice(strategy);
   const [marketPrice, setMarketPrice] = useState(
-    initialMarketPrice || externalPrice.toString()
+    initialMarketPrice || externalPrice
   );
   const marketPricePercentage = {
     min: marketPricePercent(order0.min, marketPrice),
@@ -97,7 +97,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         quote.decimals,
         buyMin,
         sellMax,
-        marketPrice,
+        marketPrice.toString(),
         spread.toString(),
         sellBudget
       );
@@ -119,7 +119,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
         quote.decimals,
         buyMin,
         sellMax,
-        marketPrice,
+        marketPrice.toString(),
         spread.toString(),
         buyBudget
       );
@@ -170,9 +170,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
     if (!touched) {
       setTouched(true);
-      if (initialMarketPrice === marketPrice) {
-        setMarketPrice(externalPrice.toString());
-      }
+      if (+initialMarketPrice === marketPrice) setMarketPrice(externalPrice);
     }
     // If there is not anchor display error
     if (!anchor) return setAnchorError('Please select a token to proceed');
@@ -214,7 +212,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setMarketPriceValue = (value: number) => {
-    setMarketPrice(value.toString());
+    setMarketPrice(value);
     setTouched(true);
   };
 
@@ -315,14 +313,14 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   if (!base || !quote) return;
 
-  if (!Number(marketPrice)) {
+  if (!marketPrice) {
     return (
       <article className="rounded-10 bg-background-900 flex flex-col">
         <OverlappingInitMarketPriceField
           base={base}
           quote={quote}
           externalPrice={externalPrice}
-          marketPrice={Number(marketPrice)}
+          marketPrice={marketPrice}
           setMarketPrice={setMarketPriceValue}
         />
       </article>
@@ -330,7 +328,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   }
 
   return (
-    <UserMarketPrice marketPrice={Number(marketPrice)}>
+    <UserMarketPrice marketPrice={marketPrice}>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
         <header className="flex items-center gap-8">
           <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
@@ -338,7 +336,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
             base={base}
             quote={quote}
             externalPrice={externalPrice}
-            marketPrice={Number(marketPrice)}
+            marketPrice={marketPrice}
             setMarketPrice={setMarketPriceValue}
           />
         </header>
@@ -348,7 +346,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           order0={order0}
           order1={order1}
           externalPrice={externalPrice}
-          marketPrice={Number(marketPrice)}
+          marketPrice={marketPrice}
           spread={spread}
           marketPricePercentage={marketPricePercentage}
           setMin={setMin}
