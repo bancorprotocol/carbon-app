@@ -8,6 +8,7 @@ import {
 } from 'components/strategies/overlapping/utils';
 import {
   calculateOverlappingBuyBudget,
+  calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
 import { OverlappingBudget } from 'components/strategies/overlapping/OverlappingBudget';
@@ -19,7 +20,10 @@ import {
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { BudgetAction } from 'components/strategies/common/BudgetInput';
 import { getDeposit, getWithdraw } from '../utils';
-import { useOverlappingMarketPrice } from 'components/strategies/overlapping/useOverlappingMarketPrice';
+import {
+  hasNoBudget,
+  useOverlappingMarketPrice,
+} from 'components/strategies/overlapping/useOverlappingMarketPrice';
 
 interface Props {
   strategy: Strategy;
@@ -46,6 +50,21 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const withdrawBuyBudget = getWithdraw(initialBuyBudget, order0.budget);
   const depositSellBudget = getDeposit(initialSellBudget, order1.budget);
   const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
+
+  // Only used if no initial budget
+  const setMarginalPrices = () => {
+    if (!base || !quote) return;
+    const prices = calculateOverlappingPrices(
+      order0.min,
+      order1.max,
+      marketPrice.toString(),
+      spread.toString()
+    );
+
+    order0.setMarginalPrice(prices.buyPriceMarginal);
+    order1.setMarginalPrice(prices.sellPriceMarginal);
+    return prices;
+  };
 
   const calculateBuyBudget = (
     sellBudget: string,
@@ -99,6 +118,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
+    if (!anchor && hasNoBudget(strategy)) setMarginalPrices();
     if (anchor && anchor !== value) resetBudgets();
     setAnchor(value);
   };

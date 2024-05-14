@@ -22,6 +22,7 @@ import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
 import { getDeposit, strategyBudgetChanges, strategyHasChanged } from './utils';
 import { useNextRender } from 'hooks/useNextRender';
+import { hasNoBudget } from '../overlapping/useOverlappingMarketPrice';
 import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
@@ -133,6 +134,7 @@ export const EditStrategyPricesContent = ({
     };
 
     const getMarginalOption = (oldOrder: Order, newOrder: Order) => {
+      if (isOverlapping && hasNoBudget(strategy)) return newOrder.marginalRate;
       if (isOverlapping) return MarginalPriceOptions.maintain;
       if (oldOrder.startRate !== newOrder.startRate)
         return MarginalPriceOptions.reset;

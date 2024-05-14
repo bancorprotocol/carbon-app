@@ -20,6 +20,7 @@ import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappi
 import { getDeposit, strategyHasChanged } from './utils';
 import { cn } from 'utils/helpers';
 import { useNextRender } from 'hooks/useNextRender';
+import { hasNoBudget } from '../overlapping/useOverlappingMarketPrice';
 import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
@@ -151,6 +152,7 @@ export const EditStrategyBudgetContent = ({
   };
 
   const getMarginalOption = (order: OrderCreate, initialBudget: string) => {
+    if (isOverlapping && hasNoBudget(strategy)) return order.marginalPrice;
     if (isOverlapping) return MarginalPriceOptions.maintain;
     if (order.budget === initialBudget) return undefined;
     if (order.marginalPriceOption) return order.marginalPriceOption;

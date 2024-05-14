@@ -116,8 +116,8 @@ export const useUpdateStrategy = () => {
 
   const changeRateStrategy = async (
     strategy: Strategy,
-    buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions,
+    buyMarginalPrice?: MarginalPriceOptions | string,
+    sellMarginalPrice?: MarginalPriceOptions | string,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
@@ -166,8 +166,8 @@ export const useUpdateStrategy = () => {
 
   const withdrawBudget = async (
     strategy: Strategy,
-    buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions,
+    buyMarginalPrice?: MarginalPriceOptions | string,
+    sellMarginalPrice?: MarginalPriceOptions | string,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
@@ -219,8 +219,8 @@ export const useUpdateStrategy = () => {
 
   const depositBudget = async (
     strategy: Strategy,
-    buyMarginalPrice?: MarginalPriceOptions,
-    sellMarginalPrice?: MarginalPriceOptions,
+    buyMarginalPrice?: MarginalPriceOptions | string,
+    sellMarginalPrice?: MarginalPriceOptions | string,
     successEventsCb?: () => void
   ) => {
     const { base, quote, order0, order1, encoded, id } = strategy;
