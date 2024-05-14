@@ -65,8 +65,8 @@ export const CreateOverlapping: FC<Props> = (props) => {
     max: marketPricePercent(order1.max, marketPrice),
     price: new SafeDecimal(0),
   };
-  const baseBalance = useGetTokenBalance(base).data ?? '0';
-  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
+  const baseBalance = useGetTokenBalance(base).data;
+  const quoteBalance = useGetTokenBalance(quote).data;
   const [touched, setTouched] = useState(false);
   const [anchor, setAnchor] = useState<'buy' | 'sell' | undefined>();
   const [anchorError, setAnchorError] = useState('');
@@ -224,9 +224,8 @@ export const CreateOverlapping: FC<Props> = (props) => {
     setOverlappingParams(order0.min, max);
   };
 
-  const setBudget = (amount: string) => {
+  const setBudget = async (amount: string) => {
     if (!amount) return resetBudgets(anchor!);
-    setBudgetError(getBudgetErrors(amount));
 
     if (anchor === 'buy') {
       order0.setBudget(amount);
@@ -237,16 +236,17 @@ export const CreateOverlapping: FC<Props> = (props) => {
     }
   };
 
-  const getBudgetErrors = (value: string) => {
-    const amount = new SafeDecimal(value);
-    if (anchor === 'buy') {
-      if (amount.gt(quoteBalance)) return 'Insufficient balance';
+  useEffect(() => {
+    if (anchor === 'buy' && quoteBalance) {
+      const hasError = new SafeDecimal(order0.budget).gt(quoteBalance);
+      if (hasError) return setBudgetError('Insufficient balance');
     }
-    if (anchor === 'sell') {
-      if (amount.gt(baseBalance)) return 'Insufficient balance';
+    if (anchor === 'sell' && baseBalance) {
+      const hasError = new SafeDecimal(order1.budget).gt(baseBalance);
+      if (hasError) return setBudgetError('Insufficient balance');
     }
-    return '';
-  };
+    setBudgetError('');
+  }, [baseBalance, quoteBalance, anchor, order0.budget, order1.budget]);
 
   useEffect(() => {
     if (!externalPrice) return;
@@ -435,21 +435,21 @@ export const CreateOverlapping: FC<Props> = (props) => {
             initialBudget="0"
             withdraw="0"
             deposit={budgetError ? '0' : order1.budget}
-            balance={baseBalance}
+            balance={baseBalance || '0'}
           />
           <OverlappingBudgetDescription
             token={base}
             initialBudget="0"
             withdraw="0"
             deposit={budgetError ? '0' : order1.budget}
-            balance={baseBalance}
+            balance={baseBalance || '0'}
           />
           <OverlappingBudgetDistribution
             token={quote}
             initialBudget="0"
             withdraw="0"
             deposit={budgetError ? '0' : order0.budget}
-            balance={quoteBalance}
+            balance={quoteBalance || '0'}
             buy
           />
           <OverlappingBudgetDescription
@@ -457,7 +457,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
             initialBudget="0"
             withdraw="0"
             deposit={budgetError ? '0' : order0.budget}
-            balance={quoteBalance}
+            balance={quoteBalance || '0'}
           />
         </m.article>
       )}
