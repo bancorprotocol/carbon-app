@@ -1055,7 +1055,7 @@ export const TermsPage = () => {
   return (
     <Page title="Terms of Use">
       <>
-        <span>Last updated: 18 April, 2023</span>
+        <span>Last updated: {config.policiesLastUpdated}</span>
         <p>
           PLEASE READ THESE TERMS OF USE CAREFULLY. YOUR ACCEPTANCE MAY LIMIT OR
           WAIVE CERTAIN OF YOUR RIGHTS. IF YOU HAVE NOT REVIEWED THE TERMS OF

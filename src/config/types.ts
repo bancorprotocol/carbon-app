@@ -9,6 +9,7 @@ export interface AppConfig {
   walletConnectProjectId: string;
   isSimulatorEnabled: boolean;
   sentryDSN?: string;
+  policiesLastUpdated?: string;
   network: {
     name: string;
     logoUrl: string;
