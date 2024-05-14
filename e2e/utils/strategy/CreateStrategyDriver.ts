@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 import {
   assertDebugToken,
   assertDisposableTestCase,
@@ -9,7 +9,7 @@ import {
 import { CreateStrategyTestCase, StrategySettings } from './types';
 import { RangeOrder, debugTokens, Direction, Setting } from '../types';
 import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
-import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
+import { screenshot, shouldTakeScreenshot } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
 
 export class CreateStrategyDriver {
@@ -104,18 +104,13 @@ export class CreateStrategyDriver {
   async submit() {
     const btn = this.page.getByText('Create Strategy');
 
-    const approveWarningsAndWait = async () => {
-      waitFor(this.page, 'approve-warnings');
+    try {
       if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-        this.page.getByTestId('approve-warnings').click();
+        await this.page.getByTestId('approve-warnings').click();
       }
-      await expect(btn).toBeEnabled();
-    };
-
-    // If the submit button is not enabled, try to approve warnings and retry
-    await expect(btn)
-      .toBeEnabled()
-      .catch(() => approveWarningsAndWait());
+    } catch {
+      // do nothing, there is no approval needed
+    }
 
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
