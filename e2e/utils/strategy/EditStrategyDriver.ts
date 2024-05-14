@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { Page } from 'playwright-core';
 import { MainMenuDriver } from '../MainMenuDriver';
-import { screenshot, shouldTakeScreenshot } from '../operators';
+import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { CreateStrategyTestCase } from './types';
 import { Setting, Direction, MinMax } from '../types';
 import {
@@ -69,13 +69,6 @@ export class EditStrategyDriver {
   async submit(type: 'deposit' | 'withdraw' | 'renew' | 'editPrices') {
     const btn = this.page.getByTestId('edit-submit');
 
-    try {
-      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-        await this.page.getByTestId('approve-warnings').click();
-      }
-    } catch {
-      // do nothing, there is no approval needed
-    }
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
@@ -85,7 +78,16 @@ export class EditStrategyDriver {
       await screenshot(form, path);
       await mainMenu.show();
     }
-    return btn.click();
+
+    try {
+      await btn.click({ timeout: 1_000 });
+    } catch {
+      await waitFor(this.page, 'approve-warnings');
+      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+        await this.page.getByTestId('approve-warnings').click();
+      }
+      await btn.click();
+    }
   }
 
   async fillBudget(direction: Direction, budget: string) {

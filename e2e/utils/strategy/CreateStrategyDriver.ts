@@ -9,7 +9,7 @@ import {
 import { CreateStrategyTestCase, StrategySettings } from './types';
 import { RangeOrder, debugTokens, Direction, Setting } from '../types';
 import { waitModalClose, waitModalOpen, waitTooltipsClose } from '../modal';
-import { screenshot, shouldTakeScreenshot } from '../operators';
+import { screenshot, shouldTakeScreenshot, waitFor } from '../operators';
 import { MainMenuDriver } from '../MainMenuDriver';
 
 export class CreateStrategyDriver {
@@ -103,15 +103,6 @@ export class CreateStrategyDriver {
 
   async submit() {
     const btn = this.page.getByText('Create Strategy');
-
-    try {
-      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
-        await this.page.getByTestId('approve-warnings').click();
-      }
-    } catch {
-      // do nothing, there is no approval needed
-    }
-
     if (shouldTakeScreenshot) {
       const mainMenu = new MainMenuDriver(this.page);
       await mainMenu.hide();
@@ -121,6 +112,14 @@ export class CreateStrategyDriver {
       await screenshot(form, path);
       await mainMenu.show();
     }
-    return btn.click();
+    try {
+      await btn.click({ timeout: 1_000 });
+    } catch {
+      await waitFor(this.page, 'approve-warnings');
+      if (await this.page.isVisible('[data-testid=approve-warnings]')) {
+        await this.page.getByTestId('approve-warnings').click();
+      }
+      await btn.click();
+    }
   }
 }
