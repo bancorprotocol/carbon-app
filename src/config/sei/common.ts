@@ -17,6 +17,7 @@ export const commonConfig: AppConfig = {
   selectableConnectionTypes: ['injected', 'coinbaseWallet'],
   walletConnectProjectId: '',
   isSimulatorEnabled: false,
+  policiesLastUpdated: '21 May, 2024',
   network: {
     name: 'Sei Devnet',
     logoUrl: IconSeiLogo,

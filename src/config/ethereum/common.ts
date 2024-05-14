@@ -33,6 +33,7 @@ export const commonConfig: AppConfig = {
   ],
   walletConnectProjectId: 'f9d8863ab6c03f2293d7d56d7c0c0853',
   isSimulatorEnabled: true,
+  policiesLastUpdated: '18 April, 2023',
   network: {
     name: 'Ethereum Network',
     logoUrl: IconETHLogo,
