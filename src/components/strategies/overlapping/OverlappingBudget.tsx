@@ -41,8 +41,8 @@ export const OverlappingBudget: FC<Props> = (props) => {
     setBudget,
     error,
   } = props;
-  const baseBalance = useGetTokenBalance(base).data ?? '0';
-  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
+  const baseBalance = useGetTokenBalance(base).data;
+  const quoteBalance = useGetTokenBalance(quote).data;
 
   const getMax = () => {
     if (action === 'deposit') {
@@ -51,6 +51,9 @@ export const OverlappingBudget: FC<Props> = (props) => {
       return anchor === 'buy' ? buyBudget : sellBudget;
     }
   };
+
+  const disabled =
+    action === 'deposit' && (anchor === 'buy' ? !quoteBalance : !baseBalance);
 
   return (
     <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
@@ -70,6 +73,7 @@ export const OverlappingBudget: FC<Props> = (props) => {
         onChange={setBudget}
         max={getMax()}
         errors={error}
+        disabled={disabled}
         data-testid="input-budget"
       />
     </article>
