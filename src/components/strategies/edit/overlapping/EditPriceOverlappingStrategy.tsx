@@ -72,8 +72,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const [marketPrice, setMarketPrice] = useState(initialMarketPrice);
   const [displayMarketPrice, setDisplayMarketPrice] = useState(externalPrice);
   const marketPricePercentage = {
-    min: marketPricePercent(order0.min, marketPrice),
-    max: marketPricePercent(order1.max, marketPrice),
+    min: marketPricePercent(order0.min, displayMarketPrice),
+    max: marketPricePercent(order1.max, displayMarketPrice),
     price: new SafeDecimal(0),
   };
 
