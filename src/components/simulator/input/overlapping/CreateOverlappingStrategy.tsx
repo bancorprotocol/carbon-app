@@ -378,7 +378,7 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
               Distribution
             </h3>
             <p className="text-14 text-white/80">
-              Following the edits implemented above, these are the changes in
+              Following the above deposit amount, these are the changes in
               budget allocation
             </p>
           </hgroup>
