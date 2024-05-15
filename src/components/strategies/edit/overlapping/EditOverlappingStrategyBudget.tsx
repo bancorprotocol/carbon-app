@@ -26,7 +26,7 @@ interface Props {
   strategy: Strategy;
   order0: OrderCreate;
   order1: OrderCreate;
-  marketPrice: string;
+  marketPrice?: string;
   anchoredOrder: 'buy' | 'sell';
   setAnchoredOrder: (value: 'buy' | 'sell') => any;
   setBuyBudget: (sellBudget: string, min: string, max: string) => any;
@@ -62,9 +62,11 @@ export const EditOverlappingStrategyBudget: FC<Props> = (props) => {
 
   // We need to use external market price for the initial state in case of dust
   const disableBuy =
-    minAboveMarket || new SafeDecimal(order0.min).gt(marketPrice);
+    minAboveMarket ||
+    (!!marketPrice && new SafeDecimal(order0.min).gt(marketPrice));
   const disableSell =
-    maxBelowMarket || new SafeDecimal(order1.max).lt(marketPrice);
+    maxBelowMarket ||
+    (!!marketPrice && new SafeDecimal(order1.max).lt(marketPrice));
 
   const quoteBalanceChange = balanceChange(
     strategy.order0.balance,

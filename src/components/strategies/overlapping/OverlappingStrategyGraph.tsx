@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react';
 import { cn, prettifySignedNumber, formatNumber } from 'utils/helpers';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import { ReactComponent as IconCoinGecko } from 'assets/icons/coin-gecko.svg';
 import { getSignedMarketPricePercentage } from 'components/strategies/marketPriceIndication/utils';
 import { SafeDecimal } from 'libs/safedecimal';
@@ -16,13 +15,13 @@ import { getMaxBuyMin, getMinSellMax } from './utils';
 import { OrderCreate } from '../create/useOrder';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import styles from './OverlappingStrategyGraph.module.css';
+import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 type Props = EnableProps | DisableProps;
 
 interface EnableProps {
-  externalPrice?: number;
-  marketPrice: string;
-  marketPricePercentage: MarketPricePercentage;
+  marketPrice?: string;
   base?: Token;
   quote?: Token;
   order0: OrderCreate;
@@ -34,9 +33,7 @@ interface EnableProps {
 }
 
 interface DisableProps {
-  externalPrice?: number;
-  marketPrice: number;
-  marketPricePercentage: MarketPricePercentage;
+  marketPrice?: number;
   base?: Token;
   quote?: Token;
   order0: OrderCreate;
@@ -165,12 +162,27 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   const svg = useRef<SVGSVGElement>(null);
   const [zoom, setZoom] = useState(0.4);
   const [dragging, setDragging] = useState('');
-  const { quote, order0, order1, spread } = props;
+  const { base, quote, order0, order1, spread } = props;
   const baseMin = Number(formatNumber(order0.min));
   const baseMax = Number(formatNumber(order1.max));
-  const xFactor = getXFactor(baseMin, baseMax, +props.marketPrice);
+  const disabled = !!props.disabled;
 
-  const marketPrice = +props.marketPrice * xFactor;
+  const externalPrice = useMarketPrice({ base, quote });
+  const userMarketPrice = disabled
+    ? externalPrice || props?.marketPrice
+    : props?.marketPrice || externalPrice;
+
+  if (!userMarketPrice) throw Error('Market price is undefined');
+  const baseMarketPrice = Number(userMarketPrice);
+
+  const isUserPriceSource =
+    !disabled && !!props.marketPrice && externalPrice !== +props.marketPrice;
+
+  const isCoingeckoPriceSource = !!externalPrice;
+
+  const xFactor = getXFactor(baseMin, baseMax, baseMarketPrice);
+
+  const marketPrice = baseMarketPrice * xFactor;
 
   const { left, right, mean, minMean, maxMean } = getBoundaries({
     min: baseMin * xFactor,
@@ -178,7 +190,6 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
     marketPrice,
     zoom,
   });
-  const disabled = !!props.disabled;
 
   const baseWidth = right.minus(left);
   const width = baseWidth.toNumber();
@@ -304,7 +315,12 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
 
   const config = getConfig();
   const { min, max, sellMin, buyMax } = config;
-  const marketPercent = props.marketPricePercentage;
+
+  const marketPercent = {
+    min: marketPricePercent(order0.min, userMarketPrice),
+    max: marketPricePercent(order1.max, userMarketPrice),
+  };
+
   const minValue = prettifySignedNumber(min / xFactor);
   const minPercent = getSignedMarketPricePercentage(marketPercent.min);
   const maxValue = prettifySignedNumber(max / xFactor);
@@ -520,13 +536,15 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
   return (
     <figure className="relative">
       <figcaption className="text-10 absolute inset-x-0 top-0 flex items-center justify-center gap-4 p-16 text-white/60">
-        {props.disabled || props.externalPrice === +props.marketPrice ? (
+        {isUserPriceSource ? (
+          <span>User-defined market price</span>
+        ) : isCoingeckoPriceSource ? (
           <>
             <span>Market price provided by CoinGecko</span>
             <IconCoinGecko className="size-8" />
           </>
         ) : (
-          <span>User-defined market price</span>
+          <span>Geometric mean price</span>
         )}
         <span role="separator">·</span>
         <span>Spread {spread || 0}%</span>
@@ -709,6 +727,7 @@ export const OverlappingStrategyGraph: FC<Props> = (props) => {
               >
                 {minValue}
               </text>
+
               <text
                 className="tooltip-percent"
                 y={top - 1 * fontSize - 2 * padding}

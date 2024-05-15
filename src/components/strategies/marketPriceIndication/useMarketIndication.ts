@@ -28,28 +28,19 @@ export const useMarketIndication = ({
   buy = false,
 }: UseMarketIndicationProps) => {
   const marketPrice = useUserMarketPrice({ base, quote });
-  const marketPriceNotZero = +marketPrice > 0;
   const isOrderAboveOrBelowMarketPrice = useMemo(() => {
     if (order.isRange) {
       const min = new SafeDecimal(order.min);
       const max = new SafeDecimal(order.max);
       const isInputNotZero = buy ? max.gt(0) : min.gt(0);
-      if (!isInputNotZero || !marketPriceNotZero) return false;
+      if (!isInputNotZero || !marketPrice) return false;
       return buy ? max.gt(marketPrice) : min.lt(marketPrice);
     } else {
       const price = new SafeDecimal(order.price);
-      if (!price.gt(0) || !marketPriceNotZero) return false;
+      if (!price.gt(0) || !marketPrice) return false;
       return buy ? price.gt(marketPrice) : price.lt(marketPrice);
     }
-  }, [
-    order.isRange,
-    order.price,
-    order.max,
-    order.min,
-    buy,
-    marketPrice,
-    marketPriceNotZero,
-  ]);
+  }, [order.isRange, order.price, order.max, order.min, buy, marketPrice]);
 
   const marketPricePercentage = useMemo(
     () => ({
@@ -68,10 +59,10 @@ export const useMarketIndication = ({
 
 export const marketPricePercent = (
   price: string,
-  marketPrice: string | number
+  marketPrice?: string | number
 ) => {
   const value = new SafeDecimal(price || 0);
   if (value.eq(0)) return value;
-  if (+marketPrice === 0) return new SafeDecimal(0);
+  if (!marketPrice) return new SafeDecimal(0);
   return new SafeDecimal(value).minus(marketPrice).div(marketPrice).times(100);
 };

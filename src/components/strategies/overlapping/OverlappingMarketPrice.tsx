@@ -13,7 +13,7 @@ import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon
 interface Props {
   base: Token;
   quote: Token;
-  externalPrice: number;
+  externalPrice?: number;
   marketPrice: string;
   setMarketPrice: (price: string) => void;
 }

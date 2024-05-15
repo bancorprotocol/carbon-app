@@ -3,12 +3,12 @@ import { FC } from 'react';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 
 interface Props {
-  externalMarketPrice: number;
+  externalMarketPrice?: number;
   oldMarketPrice?: SafeDecimal;
 }
 export const MarketWarning: FC<Props> = (props) => {
   const { externalMarketPrice, oldMarketPrice } = props;
-  if (!oldMarketPrice) return <></>;
+  if (!oldMarketPrice || !externalMarketPrice) return <></>;
   const delta = new SafeDecimal(externalMarketPrice)
     .div(oldMarketPrice)
     .minus(1)

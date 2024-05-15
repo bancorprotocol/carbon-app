@@ -110,7 +110,7 @@ export const InputRange: FC<InputRangeProps> = ({
             >
               <label htmlFor={inputMinId}>{minLabel}</label>
             </Tooltip>
-            {marketPrice !== 0 && (
+            {!!marketPrice && (
               <button
                 className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
                 type="button"
@@ -136,7 +136,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onBlur={handleBlurMin}
             data-testid="input-min"
           />
-          {marketPrice !== 0 && (
+          {!!marketPrice && (
             <p className="flex flex-wrap items-center gap-4">
               <span className="text-12 break-all text-white/60">
                 {getFiatAsString(min)}
@@ -169,7 +169,7 @@ export const InputRange: FC<InputRangeProps> = ({
             >
               <label htmlFor={inputMaxId}>{maxLabel}</label>
             </Tooltip>
-            {marketPrice !== 0 && (
+            {!!marketPrice && (
               <button
                 className="text-12 font-weight-500 text-primary hover:text-primary-light focus:text-primary-light active:text-primary"
                 type="button"
@@ -195,7 +195,7 @@ export const InputRange: FC<InputRangeProps> = ({
             onBlur={handleBlurMax}
             data-testid="input-max"
           />
-          {marketPrice !== 0 && (
+          {!!marketPrice && (
             <div className="flex flex-wrap items-center gap-4">
               <p className="text-12 break-all text-white/60">
                 {getFiatAsString(max)}

@@ -15,8 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
-import { getMarketPrice } from 'hooks/useMarketPrice';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
@@ -63,7 +62,6 @@ export const DebugCreateStrategy = () => {
   const baseSymbol = selectedTokens?.[0]?.symbol ?? '';
   const quoteSymbol = selectedTokens?.[1]?.symbol ?? '';
 
-  const { selectedFiatCurrency } = useFiatCurrency();
   const balanceQueries = useGetTokenBalances(selectedTokens);
 
   const perRound = 1;
@@ -130,7 +128,8 @@ export const DebugCreateStrategy = () => {
       },
     };
     if (spread) {
-      const price = await getMarketPrice(base, quote, selectedFiatCurrency);
+      const price = useMarketPrice({ base, quote });
+      if (!price) throw new Error('price is undefined');
       const params = calculateOverlappingPrices(
         buyMin,
         sellMax,
