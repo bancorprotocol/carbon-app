@@ -14,7 +14,6 @@ import {
   calculateOverlappingPrices,
   calculateOverlappingSellBudget,
 } from '@bancor/carbon-sdk/strategy-management';
-import { OverlappingBudget } from 'components/strategies/overlapping/OverlappingBudget';
 import { SafeDecimal } from 'libs/safedecimal';
 import { OverlappingBudgetDistribution } from 'components/strategies/overlapping/OverlappingBudgetDistribution';
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
@@ -23,6 +22,7 @@ import {
   SimulatorOverlappingInputDispatch,
 } from 'hooks/useSimulatorOverlappingInput';
 import { InputRange } from 'components/strategies/create/BuySellBlock/InputRange';
+import { BudgetInput } from 'components/strategies/common/BudgetInput';
 
 interface Props {
   state: SimulatorInputOverlappingValues;
@@ -344,14 +344,26 @@ export const CreateOverlappingStrategy: FC<Props> = (props) => {
         disableSell={disabledAnchor === 'sell'}
       />
       {anchor && (
-        <OverlappingBudget
-          base={base}
-          quote={quote}
-          anchor={anchor}
-          action="deposit"
-          budgetValue={budget}
-          setBudget={setBudget}
-        />
+        <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
+          <hgroup>
+            <h3 className="text-16 font-weight-500 flex items-center gap-6">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-black text-[10px] text-white/60">
+                2
+              </span>
+              Deposit Budget
+            </h3>
+            <p className="text-14 text-white/80">
+              Please enter the amount of tokens you want to deposit.
+            </p>
+          </hgroup>
+          <BudgetInput
+            action="deposit"
+            token={anchor === 'buy' ? quote : base}
+            value={budget}
+            onChange={setBudget}
+            data-testid="input-budget"
+          />
+        </article>
       )}
       {anchor && (
         <article
