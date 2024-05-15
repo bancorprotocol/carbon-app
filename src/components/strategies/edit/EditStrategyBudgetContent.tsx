@@ -17,7 +17,7 @@ import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappingStrategy';
-import { getDeposit, strategyHasChanged } from './utils';
+import { getDeposit, strategyBudgetChanges, strategyHasChanged } from './utils';
 import { cn } from 'utils/helpers';
 import { useNextRender } from 'hooks/useNextRender';
 import style from 'components/strategies/common/form.module.css';
@@ -65,7 +65,9 @@ export const EditStrategyBudgetContent = ({
   const showApproval = !!useNextRender(() => {
     const errors = document.querySelector('.error-message');
     const warnings = !!document.querySelector('.warning-message');
-    return !errors && !!warnings;
+    const hasDistribution =
+      isOverlapping && strategyBudgetChanges(strategy, order0, order1);
+    return !errors && (!!warnings || hasDistribution);
   });
 
   const strategyEventData = useStrategyEventData({
