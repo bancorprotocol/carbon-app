@@ -77,7 +77,7 @@ export const BudgetInput: FC<Props> = (props) => {
   return (
     <div className="flex flex-col gap-16">
       {title && (
-        <label htmlFor={id} className="flex text-14 font-weight-500">
+        <label htmlFor={id} className="text-14 font-weight-500 flex">
           <Tooltip element={titleTooltip}>
             <span className="text-white/80">{title}</span>
           </Tooltip>
@@ -103,7 +103,7 @@ export const BudgetInput: FC<Props> = (props) => {
             size={1}
             placeholder={placeholder}
             className={`
-              grow text-ellipsis bg-transparent text-18 font-weight-500 focus:outline-none
+              text-18 font-weight-500 grow text-ellipsis bg-transparent focus:outline-none
               ${hasErrors ? 'text-error' : ''}
               ${disabled ? 'text-white/40' : ''}
               ${disabled ? 'cursor-not-allowed' : ''}
@@ -114,12 +114,12 @@ export const BudgetInput: FC<Props> = (props) => {
             disabled={disabled}
             data-testid={props['data-testid']}
           />
-          <div className="flex items-center gap-6 rounded-[20px] bg-background-800 py-6 px-8">
+          <div className="bg-background-800 flex items-center gap-6 rounded-[20px] px-8 py-6">
             <TokenLogo token={token} size={20} />
             <span className="font-weight-500">{token.symbol}</span>
           </div>
         </div>
-        <div className="flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono text-12 font-weight-500">
+        <div className="text-12 font-weight-500 flex min-h-[16px] flex-wrap items-center justify-between gap-10 font-mono">
           <p className="flex items-center gap-5 break-all text-white/60">
             {fiatValue.gt(0) && prettifyNumber(fiatValue, { currentCurrency })}
           </p>
@@ -128,7 +128,7 @@ export const BudgetInput: FC<Props> = (props) => {
               disabled={disabled}
               type="button"
               onClick={setMax}
-              className="group flex items-center gap-4"
+              className="group/budget-input flex items-center gap-4"
             >
               <span className="text-white/60">
                 {action === 'deposit' ? 'Wallet:' : 'Allocated:'}
@@ -138,7 +138,7 @@ export const BudgetInput: FC<Props> = (props) => {
                 className={
                   disabled
                     ? 'text-primary/40'
-                    : 'text-primary group-hover:text-white'
+                    : 'text-primary group-hover/budget-input:text-white'
                 }
               >
                 MAX
