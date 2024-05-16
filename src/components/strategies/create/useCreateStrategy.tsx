@@ -49,7 +49,7 @@ const getIsRange = (
 ) => {
   if (order.startRate !== order.endRate) return true;
   if (!!Number(order.startRate)) return false;
-  if (!setting || !!type) return true; // Default is range
+  if (!setting || !type) return true; // Default is range
   return type === 'overlapping' || setting === 'range';
 };
 
