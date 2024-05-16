@@ -56,7 +56,6 @@ interface ResetBudgets {
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1 } = props;
   const { base, quote } = strategy;
-
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
   const [spread, setSpread] = useState(getRoundedSpread(strategy));
@@ -89,7 +88,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     buyMin: string,
     sellMax: string
   ) => {
-    if (!base || !quote) return;
+    if (!base || !quote || !marketPrice) return;
     try {
       const buyBudget = calculateOverlappingBuyBudget(
         base.decimals,
@@ -111,7 +110,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     buyMin: string,
     sellMax: string
   ) => {
-    if (!base || !quote) return;
+    if (!base || !quote || !marketPrice) return;
     try {
       const sellBudget = calculateOverlappingSellBudget(
         base.decimals,
@@ -133,7 +132,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     max: string,
     spreadValue: string = spread.toString()
   ) => {
-    if (!base || !quote) return;
+    if (!base || !quote || !marketPrice) return;
     if (!isValidRange(min, max) || !isValidSpread(spread)) return;
     const prices = calculateOverlappingPrices(
       min,
@@ -365,10 +364,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           order0={order0}
           order1={order1}
-          externalPrice={externalPrice}
           marketPrice={displayMarketPrice}
           spread={spread}
-          marketPricePercentage={marketPricePercentage}
           setMin={setMin}
           setMax={setMax}
         />

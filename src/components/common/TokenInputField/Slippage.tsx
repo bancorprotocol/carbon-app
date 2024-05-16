@@ -11,7 +11,7 @@ interface Props {
 
 const slippageColor = (slippage: SafeDecimal) => {
   if (slippage?.gt(0)) return 'text-primary';
-  if (slippage?.isZero()) return 'text-error';
+  if (slippage?.isZero()) return 'text-warning';
   if (slippage?.lt(-3)) return 'text-error';
   return 'text-white/80';
 };
@@ -29,7 +29,7 @@ export const Slippage: FC<Props> = ({ slippage }) => {
         {slippage?.eq(0) && <IconWarning className="size-12" />}
         {slippage?.gt(0) && <>(+{slippageValue}%)</>}
         {slippage?.lt(0) && <>(-{slippageValue}%)</>}
-        {slippage?.eq(0) && <>Notice: price & slippage are unknown</>}
+        {slippage?.isZero() && <>Notice: price & slippage are unknown</>}
         {slippage.lt(-3) && <IconWarning className="size-12" />}
       </span>
     </Tooltip>
