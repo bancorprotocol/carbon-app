@@ -23,7 +23,7 @@ interface Props {
   titleTooltip?: string;
   disabled?: boolean;
   errors?: string[] | string;
-  warnings?: string[];
+  warning?: string;
   'data-testid'?: string;
   onChange: (value: string) => void;
 }
@@ -40,7 +40,7 @@ export const BudgetInput: FC<Props> = (props) => {
     max = '',
     placeholder = 'Enter Amount',
     disabled,
-    warnings = [],
+    warning,
     title,
     titleTooltip,
   } = props;
@@ -155,13 +155,7 @@ export const BudgetInput: FC<Props> = (props) => {
           isError
         />
       ))}
-      {warnings.map((warning, i) => (
-        <WarningMessageWithIcon
-          key={`warning-${i}`}
-          htmlFor={id}
-          message={warning}
-        />
-      ))}
+      {warning && <WarningMessageWithIcon htmlFor={id} message={warning} />}
     </div>
   );
 };

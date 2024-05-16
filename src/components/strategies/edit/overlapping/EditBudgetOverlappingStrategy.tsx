@@ -34,6 +34,11 @@ interface Props {
   action: BudgetAction;
 }
 
+const priceWarning = (hasWarning: boolean) => {
+  if (!hasWarning) return '';
+  return 'Notice: your strategy is “out of the money” and will be traded when the market price moves into your price range.';
+};
+
 export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const { strategy, order0, order1, action } = props;
   const { base, quote } = strategy;
@@ -54,19 +59,21 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const depositSellBudget = getDeposit(initialSellBudget, order1.budget);
   const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
 
+  const aboveMarket = isMinAboveMarket(order0);
+  const belowMarket = isMaxBelowMarket(order1);
+  const useExternalPrice = aboveMarket || belowMarket || hasNoBudget(strategy);
+
   useEffect(() => {
     if (marketPrice) return;
     const price = geoMean(
       strategy.order0.marginalRate,
       strategy.order1.marginalRate
     );
-    if (externalPrice && (hasNoBudget(strategy) || !price)) {
+    if (useExternalPrice && externalPrice) {
       setMarketPrice(externalPrice);
       setMarginalPrices(externalPrice);
     } else if (price) {
       setMarketPrice(price.toNumber());
-      // Because of an approximation error, we want to recalculate marginal price with calculated market price
-      setMarginalPrices(price.toNumber());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [externalPrice]);
@@ -142,7 +149,6 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   };
 
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    if (hasNoBudget(strategy)) setMarginalPrices();
     if (anchor && anchor !== value) resetBudgets();
     setAnchor(value);
   };
@@ -186,7 +192,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      {hasNoBudget(strategy) && (
+      {useExternalPrice && (
         <article className="rounded-10 bg-background-900 flex flex-col gap-16 p-20">
           <header className="text-14 flex items-center justify-between">
             <h3>Market Price</h3>
@@ -210,8 +216,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
         quote={quote}
         anchor={anchor}
         setAnchor={setAnchorValue}
-        disableBuy={isMinAboveMarket(order0)}
-        disableSell={isMaxBelowMarket(order1)}
+        disableBuy={aboveMarket}
+        disableSell={belowMarket}
       />
       {anchor && (
         <OverlappingBudget
@@ -224,6 +230,9 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
           buyBudget={initialBuyBudget}
           sellBudget={initialSellBudget}
           error={budgetError}
+          warning={priceWarning(
+            action === 'deposit' && (aboveMarket || belowMarket)
+          )}
         />
       )}
       {anchor && (
