@@ -16,13 +16,17 @@ interface Props {
   externalPrice: number;
   marketPrice: number;
   setMarketPrice: (price: number) => void;
+  className?: string;
 }
 export const OverlappingMarketPrice: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const Trigger = (attr: MenuButtonProps) => (
     <button
       {...attr}
-      className="text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8"
+      className={cn(
+        'text-12 font-weight-500 bg-background-800 hover:bg-background-700 flex items-center justify-between gap-8 rounded-full px-16 py-8',
+        props.className
+      )}
       type="button"
     >
       <IconEdit className="size-16" />

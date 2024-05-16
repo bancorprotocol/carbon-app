@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { OrderCreate } from 'components/strategies/create/useOrder';
 import { Strategy, useGetTokenBalance } from 'libs/queries';
 import {
@@ -24,6 +24,10 @@ import {
   hasNoBudget,
   useOverlappingMarketPrice,
 } from 'components/strategies/overlapping/useOverlappingMarketPrice';
+import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
+import { useMarketPrice } from 'hooks/useMarketPrice';
+import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { tokenAmount } from 'utils/helpers';
 
 interface Props {
   strategy: Strategy;
@@ -40,10 +44,12 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const [budgetError, setBudgetError] = useState('');
   const spread = getRoundedSpread(strategy);
 
-  const marketPrice = useOverlappingMarketPrice(strategy);
+  const externalPrice = useMarketPrice({ base, quote });
+  const baseMarketPrice = useOverlappingMarketPrice(strategy);
+  const [marketPrice, setMarketPrice] = useState(0);
 
-  const baseBalance = useGetTokenBalance(base).data ?? '0';
-  const quoteBalance = useGetTokenBalance(quote).data ?? '0';
+  const baseBalance = useGetTokenBalance(base).data;
+  const quoteBalance = useGetTokenBalance(quote).data;
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
   const depositBuyBudget = getDeposit(initialBuyBudget, order0.budget);
@@ -51,16 +57,23 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const depositSellBudget = getDeposit(initialSellBudget, order1.budget);
   const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
 
+  useEffect(() => {
+    if (!marketPrice) {
+      setMarketPrice(baseMarketPrice);
+      setMarginalPrices(baseMarketPrice);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseMarketPrice]);
+
   // Only used if no initial budget
-  const setMarginalPrices = () => {
+  const setMarginalPrices = (price = marketPrice) => {
     if (!base || !quote) return;
     const prices = calculateOverlappingPrices(
       order0.min,
       order1.max,
-      marketPrice.toString(),
+      price.toString(),
       spread.toString()
     );
-
     order0.setMarginalPrice(prices.buyPriceMarginal);
     order1.setMarginalPrice(prices.sellPriceMarginal);
     return prices;
@@ -117,8 +130,13 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
     order1.setBudget(initialSellBudget);
   };
 
+  const setMarketPriceValue = (value: number) => {
+    setMarketPrice(value);
+    setMarginalPrices(value);
+  };
+
   const setAnchorValue = (value: 'buy' | 'sell') => {
-    if (!anchor && hasNoBudget(strategy)) setMarginalPrices();
+    if (hasNoBudget(strategy)) setMarginalPrices();
     if (anchor && anchor !== value) resetBudgets();
     setAnchor(value);
   };
@@ -145,10 +163,10 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
 
   const getBudgetErrors = (value: string) => {
     const amount = new SafeDecimal(value);
-    if (action === 'deposit' && anchor === 'buy') {
+    if (action === 'deposit' && anchor === 'buy' && quoteBalance) {
       if (amount.gt(quoteBalance)) return 'Insufficient balance';
     }
-    if (action === 'deposit' && anchor === 'sell') {
+    if (action === 'deposit' && anchor === 'sell' && baseBalance) {
       if (amount.gt(baseBalance)) return 'Insufficient balance';
     }
     if (action === 'withdraw' && anchor === 'buy') {
@@ -162,6 +180,26 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
+      {hasNoBudget(strategy) && (
+        <article className="rounded-10 bg-background-900 flex flex-col gap-16 p-20">
+          <header className="text-14 flex items-center justify-between">
+            <h3>Market Price</h3>
+            <span>{tokenAmount(marketPrice, quote)}</span>
+          </header>
+          <WarningMessageWithIcon>
+            Since the strategy had no budget, it will use the current market
+            price to readjust the budget distribution around.
+          </WarningMessageWithIcon>
+          <OverlappingMarketPrice
+            base={base}
+            quote={quote}
+            externalPrice={externalPrice}
+            marketPrice={marketPrice}
+            setMarketPrice={setMarketPriceValue}
+            className="self-start"
+          />
+        </article>
+      )}
       <OverlappingAnchor
         base={base}
         quote={quote}
@@ -205,28 +243,28 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
             initialBudget={initialSellBudget}
             withdraw={budgetError ? '0' : withdrawSellBudget}
             deposit={budgetError ? '0' : depositSellBudget}
-            balance={baseBalance}
+            balance={baseBalance ?? '0'}
           />
           <OverlappingBudgetDescription
             token={base}
+            initialBudget={initialSellBudget}
             withdraw={budgetError ? '0' : withdrawSellBudget}
             deposit={budgetError ? '0' : depositSellBudget}
-            balance={baseBalance}
-            initialBudget={initialSellBudget}
+            balance={baseBalance ?? '0'}
           />
           <OverlappingBudgetDistribution
             token={quote}
             initialBudget={initialBuyBudget}
             withdraw={budgetError ? '0' : withdrawBuyBudget}
             deposit={budgetError ? '0' : depositBuyBudget}
-            balance={quoteBalance}
+            balance={quoteBalance ?? '0'}
             buy
           />
           <OverlappingBudgetDescription
             token={quote}
             withdraw={budgetError ? '0' : withdrawBuyBudget}
             deposit={budgetError ? '0' : depositBuyBudget}
-            balance={quoteBalance}
+            balance={quoteBalance ?? '0'}
             initialBudget={initialBuyBudget}
           />
         </article>
