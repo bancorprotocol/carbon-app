@@ -65,6 +65,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
       setMarginalPrices(externalPrice);
     } else if (price) {
       setMarketPrice(price.toNumber());
+      // Because of an approximation error, we want to recalculate marginal price with calculated market price
+      setMarginalPrices(price.toNumber());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [externalPrice]);

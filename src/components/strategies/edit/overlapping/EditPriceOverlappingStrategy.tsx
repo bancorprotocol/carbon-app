@@ -258,13 +258,16 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     }
   };
 
-  // Update market price if
+  // Initialize / update market with external market price
   useEffect(() => {
     if (!userMarketPrice || externalPrice === userMarketPrice) {
       setUserMarketPrice(externalPrice);
       if (touched) setMarketPrice(externalPrice);
+      // Because of an approximation error, we want to recalculate marginal price with calculated market price
+      else setOverlappingPrices(order0.min, order1.max);
     }
-  }, [touched, externalPrice, userMarketPrice, setUserMarketPrice]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [externalPrice]);
 
   useEffect(() => {
     const error = (() => {
