@@ -332,10 +332,8 @@ export const CreateOverlapping: FC<Props> = (props) => {
           quote={quote}
           order0={order0}
           order1={order1}
-          marketPrice={+marketPrice}
-          externalPrice={externalPrice}
+          marketPrice={marketPrice}
           spread={spread}
-          marketPricePercentage={marketPricePercentage}
           setMin={setMin}
           setMax={setMax}
         />

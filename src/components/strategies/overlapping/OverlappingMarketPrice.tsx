@@ -13,8 +13,8 @@ import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon
 interface Props {
   base: Token;
   quote: Token;
-  externalPrice: number;
-  marketPrice: number;
+  externalPrice?: number;
+  marketPrice?: number;
   setMarketPrice: (price: number) => void;
   className?: string;
 }
@@ -58,7 +58,7 @@ interface FieldProps extends Props {
 export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const { base, quote, externalPrice, marketPrice } = props;
   const checkboxId = useId();
-  const [localPrice, setLocalPrice] = useState(marketPrice);
+  const [localPrice, setLocalPrice] = useState(marketPrice ?? 0);
   const [showApproval, setShowApproval] = useState(false);
   const [approved, setApproved] = useState(localPrice === marketPrice);
   const [error, setError] = useState('');
