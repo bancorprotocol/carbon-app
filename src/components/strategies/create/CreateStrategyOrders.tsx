@@ -12,6 +12,9 @@ import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { carbonEvents } from 'services/events';
 import { CreateOverlapping } from './CreateOverlapping';
 import useInitEffect from 'hooks/useInitEffect';
+import { OrderCreate } from './useOrder';
+
+const validOrder = (order: OrderCreate) => !!order.min && !!order.max;
 
 export const CreateStrategyOrders = ({
   base,
@@ -81,9 +84,11 @@ export const CreateStrategyOrders = ({
     setShowWarningApproval(
       !!user && !!valid && (warnings || hasDistributionChanges)
     );
+    const validBuy = validOrder(order0);
+    const validSell = validOrder(order1);
     const hasError = !valid || hasApprovalError;
     const needApproval = showWarningApproval && !approvedWarnings;
-    setDisabled(!user || hasError || needApproval);
+    setDisabled(!user || hasError || needApproval || !validBuy || !validSell);
   }, [
     approvedWarnings,
     disabled,
@@ -197,8 +202,6 @@ export const CreateStrategyOrders = ({
           disabled={disabled}
           loading={loading}
           loadingChildren={loadingChildren}
-          // TODO: Remove in #1161
-          className="group-has-[.error-message]:cursor-not-allowed group-has-[.error-message]:opacity-40"
         >
           {user ? 'Create Strategy' : 'Connect Wallet'}
         </Button>

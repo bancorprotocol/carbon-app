@@ -20,14 +20,12 @@ import {
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { BudgetAction } from 'components/strategies/common/BudgetInput';
 import { getDeposit, getWithdraw } from '../utils';
-import {
-  hasNoBudget,
-  useOverlappingMarketPrice,
-} from 'components/strategies/overlapping/useOverlappingMarketPrice';
+import { hasNoBudget } from 'components/strategies/overlapping/useOverlappingMarketPrice';
 import { OverlappingMarketPrice } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { useMarketPrice } from 'hooks/useMarketPrice';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
 import { tokenAmount } from 'utils/helpers';
+import { geoMean } from 'utils/fullOutcome';
 
 interface Props {
   strategy: Strategy;
@@ -45,7 +43,6 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const spread = getRoundedSpread(strategy);
 
   const externalPrice = useMarketPrice({ base, quote });
-  const baseMarketPrice = useOverlappingMarketPrice(strategy);
   const [marketPrice, setMarketPrice] = useState(0);
 
   const baseBalance = useGetTokenBalance(base).data;
@@ -58,12 +55,19 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
   const withdrawSellBudget = getWithdraw(initialSellBudget, order1.budget);
 
   useEffect(() => {
-    if (!marketPrice) {
-      setMarketPrice(baseMarketPrice);
-      setMarginalPrices(baseMarketPrice);
+    if (marketPrice) return;
+    const price = geoMean(
+      strategy.order0.marginalRate,
+      strategy.order1.marginalRate
+    );
+    if (externalPrice && (hasNoBudget(strategy) || !price)) {
+      setMarketPrice(externalPrice);
+      setMarginalPrices(externalPrice);
+    } else if (price) {
+      setMarketPrice(price.toNumber());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [baseMarketPrice]);
+  }, [externalPrice]);
 
   // Only used if no initial budget
   const setMarginalPrices = (price = marketPrice) => {

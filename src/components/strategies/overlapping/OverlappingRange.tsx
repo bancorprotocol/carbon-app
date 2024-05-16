@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { OrderCreate } from '../create/useOrder';
 import { InputRange } from '../create/BuySellBlock/InputRange';
 import { Token } from 'libs/tokens';
@@ -7,8 +7,8 @@ import {
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
+import { useUserMarketPrice } from '../UserMarketPrice';
 
 interface Props {
   base: Token;
@@ -30,23 +30,27 @@ const getPriceWarnings = (isOutOfMarket: boolean): string[] => {
 
 export const OverlappingRange: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread, marketPricePercentage } = props;
-  const marketPrice = useMarketPrice({ base, quote });
+  const [warnings, setWarnings] = useState<string[]>([]);
+  const marketPrice = useUserMarketPrice({ base, quote });
 
-  const prices = calculateOverlappingPrices(
-    order0.min || '0',
-    order1.max || '0',
-    marketPrice.toString(),
-    spread.toString()
-  );
-  const minAboveMarket = isMinAboveMarket({
-    min: prices.buyPriceLow,
-    marginalPrice: prices.buyPriceMarginal,
-  });
-  const maxBelowMarket = isMaxBelowMarket({
-    max: prices.sellPriceHigh,
-    marginalPrice: prices.sellPriceMarginal,
-  });
-  const priceWarnings = getPriceWarnings(minAboveMarket || maxBelowMarket);
+  useEffect(() => {
+    if (!marketPrice) return;
+    const prices = calculateOverlappingPrices(
+      order0.min || '0',
+      order1.max || '0',
+      marketPrice.toString(),
+      spread.toString()
+    );
+    const minAboveMarket = isMinAboveMarket({
+      min: prices.buyPriceLow,
+      marginalPrice: prices.buyPriceMarginal,
+    });
+    const maxBelowMarket = isMaxBelowMarket({
+      max: prices.sellPriceHigh,
+      marginalPrice: prices.sellPriceMarginal,
+    });
+    setWarnings(getPriceWarnings(minAboveMarket || maxBelowMarket));
+  }, [marketPrice, order0.min, order1.max, spread]);
 
   return (
     <InputRange
@@ -60,7 +64,7 @@ export const OverlappingRange: FC<Props> = (props) => {
       maxLabel="Max Sell Price"
       error={order0.rangeError}
       setRangeError={order0.setRangeError}
-      warnings={priceWarnings}
+      warnings={warnings}
       marketPricePercentages={marketPricePercentage}
       isOverlapping
     />

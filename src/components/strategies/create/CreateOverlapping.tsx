@@ -57,9 +57,7 @@ const getInitialPrices = (marketPrice: string | number) => {
 export const CreateOverlapping: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
   const externalPrice = useMarketPrice({ base, quote });
-  const [marketPrice, setMarketPrice] = useState(
-    externalPrice ? externalPrice : 0
-  );
+  const [marketPrice, setMarketPrice] = useState(externalPrice ?? 0);
   const marketPricePercentage = {
     min: marketPricePercent(order0.min, marketPrice),
     max: marketPricePercent(order1.max, marketPrice),
@@ -292,7 +290,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
 
   if (!base || !quote) return null;
 
-  if (!Number(marketPrice)) {
+  if (!marketPrice) {
     return (
       <m.article
         variants={items}
@@ -311,7 +309,7 @@ export const CreateOverlapping: FC<Props> = (props) => {
   }
 
   return (
-    <UserMarketPrice marketPrice={Number(marketPrice)}>
+    <UserMarketPrice marketPrice={marketPrice}>
       <m.article
         variants={items}
         key="price-graph"
