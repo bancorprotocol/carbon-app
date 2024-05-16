@@ -2,13 +2,14 @@ import { FC, useEffect, useState } from 'react';
 import { OrderCreate } from '../create/useOrder';
 import { InputRange } from '../create/BuySellBlock/InputRange';
 import { Token } from 'libs/tokens';
-import { MarketPricePercentage } from 'components/strategies/marketPriceIndication';
 import {
   isMaxBelowMarket,
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { useUserMarketPrice } from '../UserMarketPrice';
+import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
+import { SafeDecimal } from 'libs/safedecimal';
 
 interface Props {
   base: Token;
@@ -18,7 +19,6 @@ interface Props {
   spread: number;
   setMin: (value: string) => void;
   setMax: (value: string) => void;
-  marketPricePercentage: MarketPricePercentage;
 }
 
 const getPriceWarnings = (isOutOfMarket: boolean): string[] => {
@@ -29,9 +29,14 @@ const getPriceWarnings = (isOutOfMarket: boolean): string[] => {
 };
 
 export const OverlappingRange: FC<Props> = (props) => {
-  const { base, quote, order0, order1, spread, marketPricePercentage } = props;
+  const { base, quote, order0, order1, spread } = props;
   const [warnings, setWarnings] = useState<string[]>([]);
   const marketPrice = useUserMarketPrice({ base, quote });
+  const marketPricePercentage = {
+    min: marketPricePercent(order0.min, marketPrice),
+    max: marketPricePercent(order1.max, marketPrice),
+    price: new SafeDecimal(0),
+  };
 
   useEffect(() => {
     if (!marketPrice) return;

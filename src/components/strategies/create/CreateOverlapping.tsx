@@ -29,7 +29,6 @@ import { OverlappingAnchor } from 'components/strategies/overlapping/Overlapping
 import { Token } from 'libs/tokens';
 import { m } from 'libs/motion';
 import { items } from './variants';
-import { marketPricePercent } from '../marketPriceIndication/useMarketIndication';
 import {
   OverlappingInitMarketPriceField,
   OverlappingMarketPrice,
@@ -58,11 +57,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
   const { base, quote, order0, order1, spread, setSpread } = props;
   const externalPrice = useMarketPrice({ base, quote });
   const [marketPrice, setMarketPrice] = useState(externalPrice ?? 0);
-  const marketPricePercentage = {
-    min: marketPricePercent(order0.min, marketPrice),
-    max: marketPricePercent(order1.max, marketPrice),
-    price: new SafeDecimal(0),
-  };
   const baseBalance = useGetTokenBalance(base).data;
   const quoteBalance = useGetTokenBalance(quote).data;
   const [touched, setTouched] = useState(false);
@@ -300,7 +294,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
         <OverlappingInitMarketPriceField
           base={base}
           quote={quote}
-          externalPrice={externalPrice}
           marketPrice={marketPrice}
           setMarketPrice={setMarketPrice}
         />
@@ -320,7 +313,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
           <OverlappingMarketPrice
             base={base}
             quote={quote}
-            externalPrice={externalPrice}
             marketPrice={marketPrice}
             setMarketPrice={setMarketPrice}
           />
@@ -360,7 +352,6 @@ export const CreateOverlapping: FC<Props> = (props) => {
             order0={order0}
             order1={order1}
             spread={spread}
-            marketPricePercentage={marketPricePercentage}
             setMin={setMin}
             setMax={setMax}
           />

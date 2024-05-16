@@ -38,7 +38,6 @@ import {
   OverlappingMarketPrice,
 } from 'components/strategies/overlapping/OverlappingMarketPrice';
 import { UserMarketPrice } from 'components/strategies/UserMarketPrice';
-import { marketPricePercent } from 'components/strategies/marketPriceIndication/useMarketIndication';
 
 interface Props {
   strategy: Strategy;
@@ -69,12 +68,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const externalPrice = useMarketPrice({ base, quote });
   const initialMarketPrice = useOverlappingMarketPrice(strategy);
   const [marketPrice, setMarketPrice] = useState(initialMarketPrice);
-  const [displayMarketPrice, setDisplayMarketPrice] = useState(externalPrice);
-  const marketPricePercentage = {
-    min: marketPricePercent(order0.min, displayMarketPrice),
-    max: marketPricePercent(order1.max, displayMarketPrice),
-    price: new SafeDecimal(0),
-  };
+  const [userMarketPrice, setUserMarketPrice] = useState(externalPrice);
 
   const initialBuyBudget = strategy.order0.balance;
   const initialSellBudget = strategy.order1.balance;
@@ -168,7 +162,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
     if (!touched) {
       setTouched(true);
-      setMarketPrice(displayMarketPrice);
+      setMarketPrice(userMarketPrice);
     }
     // If there is not anchor display error
     if (!anchor) return setAnchorError('Please select a token to proceed');
@@ -211,7 +205,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   const setMarketPriceValue = (value: number) => {
     setMarketPrice(value);
-    setDisplayMarketPrice(value);
+    setUserMarketPrice(value);
     setTouched(true);
   };
 
@@ -266,11 +260,11 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   // Update market price if
   useEffect(() => {
-    if (!displayMarketPrice || externalPrice === displayMarketPrice) {
-      setDisplayMarketPrice(externalPrice);
+    if (!userMarketPrice || externalPrice === userMarketPrice) {
+      setUserMarketPrice(externalPrice);
       if (touched) setMarketPrice(externalPrice);
     }
-  }, [touched, externalPrice, displayMarketPrice, setDisplayMarketPrice]);
+  }, [touched, externalPrice, userMarketPrice, setUserMarketPrice]);
 
   useEffect(() => {
     const error = (() => {
@@ -332,14 +326,13 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
 
   if (!base || !quote) return;
 
-  if (!displayMarketPrice) {
+  if (!userMarketPrice) {
     return (
       <article className="rounded-10 bg-background-900 flex flex-col">
         <OverlappingInitMarketPriceField
           base={base}
           quote={quote}
-          externalPrice={externalPrice}
-          marketPrice={displayMarketPrice}
+          marketPrice={userMarketPrice}
           setMarketPrice={setMarketPriceValue}
         />
       </article>
@@ -347,15 +340,14 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   }
 
   return (
-    <UserMarketPrice marketPrice={marketPrice}>
+    <UserMarketPrice marketPrice={userMarketPrice}>
       <article className="rounded-10 bg-background-900 flex w-full flex-col gap-16 p-20">
         <header className="flex items-center gap-8">
           <h2 className="text-18 font-weight-500 flex-1">Price Range</h2>
           <OverlappingMarketPrice
             base={base}
             quote={quote}
-            externalPrice={externalPrice}
-            marketPrice={displayMarketPrice}
+            marketPrice={userMarketPrice}
             setMarketPrice={setMarketPriceValue}
           />
         </header>
@@ -364,7 +356,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           quote={quote}
           order0={order0}
           order1={order1}
-          marketPrice={displayMarketPrice}
+          marketPrice={userMarketPrice}
           spread={spread}
           setMin={setMin}
           setMax={setMax}
@@ -389,7 +381,6 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
           order0={order0}
           order1={order1}
           spread={spread}
-          marketPricePercentage={marketPricePercentage}
           setMin={setMin}
           setMax={setMax}
         />

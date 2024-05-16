@@ -9,11 +9,11 @@ import { Button } from 'components/common/button';
 import { NewTabLink } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { WarningMessageWithIcon } from 'components/common/WarningMessageWithIcon';
+import { useMarketPrice } from 'hooks/useMarketPrice';
 
 interface Props {
   base: Token;
   quote: Token;
-  externalPrice?: number;
   marketPrice?: number;
   setMarketPrice: (price: number) => void;
   className?: string;
@@ -56,12 +56,13 @@ interface FieldProps extends Props {
 }
 
 export const OverlappingInitMarketPriceField = (props: FieldProps) => {
-  const { base, quote, externalPrice, marketPrice } = props;
+  const { base, quote, marketPrice } = props;
   const checkboxId = useId();
   const [localPrice, setLocalPrice] = useState(marketPrice ?? 0);
   const [showApproval, setShowApproval] = useState(false);
   const [approved, setApproved] = useState(localPrice === marketPrice);
   const [error, setError] = useState('');
+  const externalPrice = useMarketPrice({ base, quote });
 
   const changePrice = (value: string) => {
     if (!+value) setError('Price must be greater than 0');

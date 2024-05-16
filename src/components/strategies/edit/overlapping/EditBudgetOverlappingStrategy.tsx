@@ -197,7 +197,6 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
           <OverlappingMarketPrice
             base={base}
             quote={quote}
-            externalPrice={externalPrice}
             marketPrice={marketPrice}
             setMarketPrice={setMarketPriceValue}
             className="self-start"
