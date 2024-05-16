@@ -61,7 +61,6 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
 
   const aboveMarket = isMinAboveMarket(order0);
   const belowMarket = isMaxBelowMarket(order1);
-  const useExternalPrice = aboveMarket || belowMarket || hasNoBudget(strategy);
 
   useEffect(() => {
     if (marketPrice) return;
@@ -69,7 +68,8 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
       strategy.order0.marginalRate,
       strategy.order1.marginalRate
     );
-    if (useExternalPrice && externalPrice) {
+    if (hasNoBudget(strategy)) {
+      if (!externalPrice) return;
       setMarketPrice(externalPrice);
       setMarginalPrices(externalPrice);
     } else if (price) {
@@ -192,7 +192,7 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
 
   return (
     <>
-      {useExternalPrice && (
+      {hasNoBudget(strategy) && (
         <article className="rounded-10 bg-background-900 flex flex-col gap-16 p-20">
           <header className="text-14 flex items-center justify-between">
             <h3>Market Price</h3>
