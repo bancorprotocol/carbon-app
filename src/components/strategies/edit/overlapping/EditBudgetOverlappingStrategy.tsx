@@ -87,7 +87,9 @@ export const EditBudgetOverlappingStrategy: FC<Props> = (props) => {
       price.toString(),
       spread.toString()
     );
+    order0.setMax(prices.buyPriceHigh);
     order0.setMarginalPrice(prices.buyPriceMarginal);
+    order1.setMin(prices.sellPriceLow);
     order1.setMarginalPrice(prices.sellPriceMarginal);
     return prices;
   };
