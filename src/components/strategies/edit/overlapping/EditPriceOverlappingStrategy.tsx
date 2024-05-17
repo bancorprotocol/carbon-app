@@ -83,6 +83,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote || !marketPrice) return;
+    if (!Number(sellBudget)) return order0.setBudget('0');
+    if (isMinAboveMarket(order0)) return order0.setBudget('0');
     try {
       const buyBudget = calculateOverlappingBuyBudget(
         base.decimals,
@@ -105,6 +107,8 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
     sellMax: string
   ) => {
     if (!base || !quote || !marketPrice) return;
+    if (!Number(buyBudget)) return order1.setBudget('0');
+    if (isMaxBelowMarket(order1)) return order1.setBudget('0');
     try {
       const sellBudget = calculateOverlappingSellBudget(
         base.decimals,
@@ -222,7 +226,6 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   const setAnchorValue = (value: 'buy' | 'sell') => {
     if (!anchor) {
       setAnchorError('');
-      console.log('Has no budget', hasNoBudget(strategy));
       if (hasNoBudget(strategy)) setOverlappingPrices(order0.min, order1.max);
     }
     resetBudgets({ anchorValue: value });
