@@ -14,7 +14,12 @@ export const defaultEnd = () => getUnixTime(new Date());
 export const SimulatorPage = () => {
   useSimDisclaimer();
   const searchState = simulatorInputRootRoute.useSearch();
-  const { isError } = useGetTokenPriceHistory(searchState);
+  const { isError } = useGetTokenPriceHistory({
+    baseToken: searchState.baseToken,
+    quoteToken: searchState.quoteToken,
+    start: searchState.start,
+    end: searchState.end,
+  });
   const { aboveBreakpoint } = useBreakpoints();
 
   if (!aboveBreakpoint('md')) return <SimulatorMobilePlaceholder />;

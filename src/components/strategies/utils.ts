@@ -108,6 +108,7 @@ interface HasWarningParams {
   buyOutsideMarket: boolean;
   sellOutsideMarket: boolean;
   isOverlapping: boolean;
+  isMarketPriceUnknown: boolean;
 }
 
 export const hasWarning = ({
@@ -116,6 +117,7 @@ export const hasWarning = ({
   buyOutsideMarket,
   sellOutsideMarket,
   isOverlapping,
+  isMarketPriceUnknown,
 }: HasWarningParams) => {
   if (isOverlapping) {
     const minAboveMarket = isMinAboveMarket(order0);
@@ -125,7 +127,8 @@ export const hasWarning = ({
     return (
       checkIfOrdersOverlap(order0, order1) ||
       buyOutsideMarket ||
-      sellOutsideMarket
+      sellOutsideMarket ||
+      isMarketPriceUnknown
     );
   }
 };

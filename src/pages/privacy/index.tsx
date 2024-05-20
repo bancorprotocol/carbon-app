@@ -576,7 +576,7 @@ export const PrivacyPage = () => {
   return (
     <Page title={'Privacy Policy'}>
       <>
-        <span>Last updated: 18 April, 2023</span>
+        <span>Last updated: {config.policiesLastUpdated}</span>
         <p>
           if you have not reviewed THIS PRIVACY POLICY since the “last updated”
           date above, It is your responsibility to re-review IT.
@@ -624,7 +624,7 @@ export const PrivacyPage = () => {
 
         {content.map((item, index) => (
           <div key={index} className="legal pt-10">
-            <h2 className="font-semibold mb-10 text-[20px]">{item.subtitle}</h2>
+            <h2 className="mb-10 text-[20px] font-semibold">{item.subtitle}</h2>
             <div className="mb-20 text-[16px]">{item.html}</div>
           </div>
         ))}
