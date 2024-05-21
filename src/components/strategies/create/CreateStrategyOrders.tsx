@@ -15,7 +15,8 @@ import useInitEffect from 'hooks/useInitEffect';
 import { OrderCreate } from './useOrder';
 import { useModal } from 'hooks/useModal';
 
-const validOrder = (order: OrderCreate) => !!order.min && !!order.max;
+const validOrder = (order: OrderCreate) =>
+  !!order.price || (!!order.min && !!order.max);
 
 export const CreateStrategyOrders = ({
   base,
@@ -96,6 +97,7 @@ export const CreateStrategyOrders = ({
     const validSell = validOrder(order1);
     const hasError = !valid || hasApprovalError;
     const needApproval = showWarningApproval && !approvedWarnings;
+    console.log({ hasError, needApproval, validBuy, validSell });
     setDisabled(hasError || needApproval || !validBuy || !validSell);
   }, [
     approvedWarnings,
