@@ -35,7 +35,7 @@ export const strategyHasChanged = (
   if (order1.min !== strategy.order1.startRate) return true;
   if (order1.max !== strategy.order1.endRate) return true;
   if (isOverlappingStrategy({ order0, order1 })) {
-    return getSpread({ order0, order1 }) !== getSpread(strategy);
+    return !getSpread({ order0, order1 }).eq(getSpread(strategy));
   }
   return false;
 };

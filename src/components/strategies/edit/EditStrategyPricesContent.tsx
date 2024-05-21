@@ -21,7 +21,6 @@ import { useEditStrategy } from '../create/useEditStrategy';
 import { useModal } from 'hooks/useModal';
 import { useWeb3 } from 'libs/web3';
 import { getDeposit, strategyBudgetChanges, strategyHasChanged } from './utils';
-import { useNextRender } from 'hooks/useNextRender';
 import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyPrices = 'editPrices' | 'renew';
@@ -80,18 +79,14 @@ export const EditStrategyPricesContent = ({
   const hasChanged = strategyHasChanged(strategy, order0, order1);
   const hasDistributionChanges =
     isOverlapping && strategyBudgetChanges(strategy, order0, order1);
-  const showApproval = !!useNextRender(() => {
-    const errors = document.querySelector('.error-message');
-    const warnings = !!document.querySelector('.warning-message');
-    return !errors && (!!warnings || hasDistributionChanges);
-  });
 
   const isDisabled = (form: HTMLFormElement) => {
     if (approval.isError) return true;
     if (!hasChanged) return true;
     if (!form.checkValidity()) return true;
     if (form.querySelector('.error-message')) return true;
-    const checkbox = form.querySelector<HTMLInputElement>('.approve-warnings');
+    if (!form.querySelector('.warning-message')) return false;
+    const checkbox = form.querySelector<HTMLInputElement>('#approve-warnings');
     return !!checkbox && !checkbox.checked;
   };
 
@@ -221,19 +216,23 @@ export const EditStrategyPricesContent = ({
         </>
       )}
 
-      {showApproval && (
-        <label className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60">
-          <input
-            type="checkbox"
-            name="approval"
-            data-testid="approve-warnings"
-            required
-          />
-          {hasDistributionChanges
-            ? "I've approved the edits and distribution changes."
-            : "I've reviewed the warning(s) but choose to proceed."}
-        </label>
-      )}
+      <label
+        htmlFor="approve-warnings"
+        className={cn(
+          style.approveWarnings,
+          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+        )}
+      >
+        <input
+          id="approve-warnings"
+          type="checkbox"
+          name="approval"
+          data-testid="approve-warnings"
+        />
+        {hasDistributionChanges
+          ? "I've approved the edits and distribution changes."
+          : "I've reviewed the warning(s) but choose to proceed."}
+      </label>
 
       <Button
         type="submit"

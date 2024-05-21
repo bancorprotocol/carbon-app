@@ -17,9 +17,8 @@ import { FormEvent, useMemo } from 'react';
 import { getStatusTextByTxStatus } from '../utils';
 import { isOverlappingStrategy } from '../overlapping/utils';
 import { EditBudgetOverlappingStrategy } from './overlapping/EditBudgetOverlappingStrategy';
-import { getDeposit, strategyBudgetChanges, strategyHasChanged } from './utils';
+import { getDeposit, strategyHasChanged } from './utils';
 import { cn } from 'utils/helpers';
-import { useNextRender } from 'hooks/useNextRender';
 import style from 'components/strategies/common/form.module.css';
 
 export type EditStrategyBudget = 'withdraw' | 'deposit';
@@ -62,13 +61,6 @@ export const EditStrategyBudgetContent = ({
 
   const isAwaiting = updateMutation.isLoading;
   const isLoading = isAwaiting || isProcessing || approval.isLoading;
-  const showApproval = !!useNextRender(() => {
-    const errors = document.querySelector('.error-message');
-    const warnings = !!document.querySelector('.warning-message');
-    const hasDistribution =
-      isOverlapping && strategyBudgetChanges(strategy, order0, order1);
-    return !errors && (!!warnings || hasDistribution);
-  });
 
   const strategyEventData = useStrategyEventData({
     base: strategy.base,
@@ -114,6 +106,7 @@ export const EditStrategyBudgetContent = ({
     if (!hasChanged) return true;
     if (!form.checkValidity()) return true;
     if (form.querySelector('.error-message')) return true;
+    if (!form.querySelector('.warning-message')) return false;
     const checkbox = form.querySelector<HTMLInputElement>('.approve-warnings');
     return !!checkbox && !checkbox.checked;
   };
@@ -242,17 +235,21 @@ export const EditStrategyBudgetContent = ({
         </>
       )}
 
-      {showApproval && (
-        <label className="rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60">
-          <input
-            type="checkbox"
-            name="approval"
-            data-testid="approve-warnings"
-            required
-          />
-          I've reviewed the warning(s) but choose to proceed.
-        </label>
-      )}
+      <label
+        htmlFor="approve-warnings"
+        className={cn(
+          style.approveWarnings,
+          'rounded-10 bg-background-900 text-14 font-weight-500 flex items-center gap-8 p-20 text-white/60'
+        )}
+      >
+        <input
+          id="approve-warnings"
+          type="checkbox"
+          name="approval"
+          data-testid="approve-warnings"
+        />
+        I've approved the edits and distribution changes.
+      </label>
 
       <Button
         type="submit"
