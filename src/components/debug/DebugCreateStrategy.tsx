@@ -15,8 +15,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useModal } from 'hooks/useModal';
 import { Input, Label } from 'components/common/inputField';
 import { Checkbox } from 'components/common/Checkbox/Checkbox';
-import { useMarketPrice } from 'hooks/useMarketPrice';
 import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
+import { carbonApi } from 'utils/carbonApi';
+import { Token } from 'libs/tokens';
 
 const TOKENS = FAUCET_TOKENS.map((tkn) => ({
   address: tkn.tokenContract,
@@ -104,6 +105,14 @@ export const DebugCreateStrategy = () => {
     openModal('txConfirm', { approvalTokens, onConfirm: create });
   };
 
+  const getMarketPrice = async (base: Token, quote: Token) => {
+    const [basePrice, quotePrice] = await Promise.all([
+      carbonApi.getMarketRate(base.address, ['USD']),
+      carbonApi.getMarketRate(quote.address, ['USD']),
+    ]);
+    return basePrice['USD'] / quotePrice['USD'];
+  };
+
   const create = async () => {
     if (!user) throw new Error('user is undefined');
     setIsRunning(true);
@@ -128,7 +137,7 @@ export const DebugCreateStrategy = () => {
       },
     };
     if (spread) {
-      const price = useMarketPrice({ base, quote });
+      const price = await getMarketPrice(base, quote);
       if (!price) throw new Error('price is undefined');
       const params = calculateOverlappingPrices(
         buyMin,
@@ -136,6 +145,7 @@ export const DebugCreateStrategy = () => {
         price.toString(),
         spread
       );
+      console.log(params);
       strategy.order0.max = params.buyPriceHigh;
       strategy.order0.marginalPrice = params.buyPriceMarginal;
       strategy.order1.min = params.sellPriceLow;
