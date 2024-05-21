@@ -95,10 +95,17 @@ export const EditStrategyPricesContent = ({
     return !!checkbox && !checkbox.checked;
   };
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
-    if (approval.approvalRequired) {
+    if (!+order0.budget && !+order1.budget) {
+      openModal('genericInfo', {
+        title: 'Empty Strategy Warning',
+        text: 'You are about to create a strategy with no associated budget. It will be inactive until you deposit funds.',
+        variant: 'warning',
+        onConfirm: update,
+      });
+    } else if (approval.approvalRequired) {
       openModal('txConfirm', {
         approvalTokens: approval.tokens,
         onConfirm: update,

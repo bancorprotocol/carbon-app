@@ -13,6 +13,7 @@ import { carbonEvents } from 'services/events';
 import { CreateOverlapping } from './CreateOverlapping';
 import useInitEffect from 'hooks/useInitEffect';
 import { OrderCreate } from './useOrder';
+import { useModal } from 'hooks/useModal';
 
 const validOrder = (order: OrderCreate) => !!order.min && !!order.max;
 
@@ -41,6 +42,7 @@ export const CreateStrategyOrders = ({
   const [approvedWarnings, setApprovedWarnings] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [showWarningApproval, setShowWarningApproval] = useState(false);
+  const { openModal } = useModal();
   const strategyEventData = useStrategyEventData({
     base,
     quote,
@@ -60,6 +62,11 @@ export const CreateStrategyOrders = ({
     });
   }, [strategyDirection]);
 
+  const connectWallet = () => {
+    carbonEvents.strategy.strategyCreateClick(strategyEventData);
+    openModal('wallet', undefined);
+  };
+
   const onCreateStrategy = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!!e.currentTarget.querySelector('.error-message')) return;
@@ -77,6 +84,7 @@ export const CreateStrategyOrders = ({
 
   // TODO(#1204): cleanup this when separated into different pages
   useEffect(() => {
+    if (!user) return setDisabled(false);
     const form = formRef.current;
     const valid =
       form?.checkValidity() && !form.querySelector('.error-message');
@@ -88,7 +96,7 @@ export const CreateStrategyOrders = ({
     const validSell = validOrder(order1);
     const hasError = !valid || hasApprovalError;
     const needApproval = showWarningApproval && !approvedWarnings;
-    setDisabled(!user || hasError || needApproval || !validBuy || !validSell);
+    setDisabled(hasError || needApproval || !validBuy || !validSell);
   }, [
     approvedWarnings,
     disabled,
@@ -194,17 +202,31 @@ export const CreateStrategyOrders = ({
       )}
 
       <m.div variants={items} key="createStrategyCTA">
-        <Button
-          type="submit"
-          variant="success"
-          size="lg"
-          fullWidth
-          disabled={disabled}
-          loading={loading}
-          loadingChildren={loadingChildren}
-        >
-          {user ? 'Create Strategy' : 'Connect Wallet'}
-        </Button>
+        {user ? (
+          <Button
+            type="submit"
+            variant="success"
+            size="lg"
+            fullWidth
+            disabled={disabled}
+            loading={loading}
+            loadingChildren={loadingChildren}
+          >
+            Create Strategy
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant="success"
+            size="lg"
+            fullWidth
+            loading={loading}
+            loadingChildren={loadingChildren}
+            onClick={connectWallet}
+          >
+            Connect Wallet
+          </Button>
+        )}
       </m.div>
     </form>
   );

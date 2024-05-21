@@ -122,9 +122,7 @@ export const EditStrategyBudgetContent = ({
     e.preventDefault();
     if (isDisabled(e.currentTarget)) return;
     if (type === 'withdraw') {
-      const withdrawAll =
-        (order0.budget || '0') === strategy.order0.balance &&
-        (order1.budget || '0') === strategy.order1.balance;
+      const withdrawAll = !+order0.budget && !+order1.budget;
       if (withdrawAll) {
         openWithdrawModal();
       } else {

@@ -99,7 +99,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   ) => {
     if (!base || !quote || !marketPrice) return;
     if (!Number(sellBudget)) return order0.setBudget('0');
-    if (isMinAboveMarket(order0)) return order0.setBudget('0');
+    if (aboveMarket) return order0.setBudget('0');
     try {
       const buyBudget = calculateOverlappingBuyBudget(
         base.decimals,
@@ -123,7 +123,7 @@ export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
   ) => {
     if (!base || !quote || !marketPrice) return;
     if (!Number(buyBudget)) return order1.setBudget('0');
-    if (isMaxBelowMarket(order1)) return order1.setBudget('0');
+    if (belowMarket) return order1.setBudget('0');
     try {
       const sellBudget = calculateOverlappingSellBudget(
         base.decimals,

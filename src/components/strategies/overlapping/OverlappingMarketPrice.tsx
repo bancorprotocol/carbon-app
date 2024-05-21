@@ -58,27 +58,29 @@ interface FieldProps extends Props {
 export const OverlappingInitMarketPriceField = (props: FieldProps) => {
   const { base, quote, marketPrice } = props;
   const checkboxId = useId();
-  const [localPrice, setLocalPrice] = useState(marketPrice ?? 0);
+  const [localPrice, setLocalPrice] = useState(marketPrice?.toString());
   const [showApproval, setShowApproval] = useState(false);
-  const [approved, setApproved] = useState(localPrice === marketPrice);
+  const [approved, setApproved] = useState(
+    localPrice === marketPrice?.toString()
+  );
   const [error, setError] = useState('');
   const externalPrice = useMarketPrice({ base, quote });
 
   const changePrice = (value: string) => {
     if (!+value) setError('Price must be greater than 0');
     else setError('');
-    setLocalPrice(Number(value));
+    setLocalPrice(value);
     setApproved(!!marketPrice && +value === +marketPrice);
     setShowApproval(!externalPrice || +value !== externalPrice);
   };
 
   const setPrice = () => {
-    if (!Number(localPrice)) return;
-    props.setMarketPrice(localPrice);
+    if (!localPrice) return;
+    props.setMarketPrice(Number(localPrice));
     if (props.close) props.close();
   };
 
-  const disabled = !+localPrice || (showApproval && !approved);
+  const disabled = !localPrice || !+localPrice || (showApproval && !approved);
 
   return (
     <div className={cn(props.className, 'flex flex-col gap-20 p-16')}>
@@ -87,7 +89,7 @@ export const OverlappingInitMarketPriceField = (props: FieldProps) => {
         title={`Enter Market Price (${quote.symbol} per 1 ${base.symbol})`}
         titleTooltip="Price used to calculate overlapping strategy params"
         placeholder="Enter Price"
-        value={localPrice.toString()}
+        value={localPrice}
         onChange={changePrice}
         token={quote}
         errors={error}
