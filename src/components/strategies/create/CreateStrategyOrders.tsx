@@ -7,17 +7,15 @@ import { items } from 'components/strategies/create/variants';
 import { UseStrategyCreateReturn } from 'components/strategies/create';
 import { TokensOverlap } from 'components/common/tokensOverlap';
 import { useStrategyEventData } from 'components/strategies/create/useStrategyEventData';
-import { getStatusTextByTxStatus } from 'components/strategies/utils';
+import {
+  getStatusTextByTxStatus,
+  isValidOrder,
+} from 'components/strategies/utils';
 import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
 import { carbonEvents } from 'services/events';
 import { CreateOverlapping } from './CreateOverlapping';
-import useInitEffect from 'hooks/useInitEffect';
-import { OrderCreate } from './useOrder';
 import { useModal } from 'hooks/useModal';
-
-const validOrder = (order: OrderCreate) => {
-  return !!order.price || (!!order.min && !!order.max);
-};
+import useInitEffect from 'hooks/useInitEffect';
 
 export const CreateStrategyOrders = ({
   base,
@@ -96,9 +94,9 @@ export const CreateStrategyOrders = ({
     );
     let hasValidOrders = false;
     if (strategyType === 'disposable') {
-      hasValidOrders = validOrder(order0) || validOrder(order1);
+      hasValidOrders = isValidOrder(order0) || isValidOrder(order1);
     } else {
-      hasValidOrders = validOrder(order0) && validOrder(order1);
+      hasValidOrders = isValidOrder(order0) && isValidOrder(order1);
     }
     const hasError = !valid || hasApprovalError;
     const needApproval = showWarningApproval && !approvedWarnings;

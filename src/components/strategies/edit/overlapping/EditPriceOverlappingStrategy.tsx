@@ -5,8 +5,6 @@ import {
   getMaxBuyMin,
   getMinSellMax,
   getRoundedSpread,
-  isEditAboveMarket,
-  isEditBelowMarket,
   isMaxBelowMarket,
   isMinAboveMarket,
   isValidSpread,
@@ -52,6 +50,44 @@ interface ResetBudgets {
   anchorValue?: 'buy' | 'sell';
   min?: string;
   max?: string;
+}
+
+// When working with edit overlapping we can't trust marginal price when budget was 0, so we need to recalculate
+export function isEditAboveMarket(
+  min: string,
+  max: string,
+  marketPrice: number | undefined,
+  spread: number
+) {
+  if (!marketPrice) return false;
+  const prices = calculateOverlappingPrices(
+    min || '0',
+    max || '0',
+    marketPrice.toString(),
+    spread.toString()
+  );
+  return isMinAboveMarket({
+    min: prices.buyPriceLow,
+    marginalPrice: prices.buyPriceMarginal,
+  });
+}
+export function isEditBelowMarket(
+  min: string,
+  max: string,
+  marketPrice: number | undefined,
+  spread: number
+) {
+  if (!marketPrice) return false;
+  const prices = calculateOverlappingPrices(
+    min || '0',
+    max || '0',
+    marketPrice.toString(),
+    spread.toString()
+  );
+  return isMaxBelowMarket({
+    max: prices.sellPriceHigh,
+    marginalPrice: prices.sellPriceMarginal,
+  });
 }
 
 export const EditPriceOverlappingStrategy: FC<Props> = (props) => {
