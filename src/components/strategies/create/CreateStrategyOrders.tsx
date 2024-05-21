@@ -15,8 +15,9 @@ import useInitEffect from 'hooks/useInitEffect';
 import { OrderCreate } from './useOrder';
 import { useModal } from 'hooks/useModal';
 
-const validOrder = (order: OrderCreate) =>
-  !!order.price || (!!order.min && !!order.max);
+const validOrder = (order: OrderCreate) => {
+  return !!order.price || (!!order.min && !!order.max);
+};
 
 export const CreateStrategyOrders = ({
   base,
@@ -93,12 +94,15 @@ export const CreateStrategyOrders = ({
     setShowWarningApproval(
       !!user && !!valid && (warnings || hasDistributionChanges)
     );
-    const validBuy = validOrder(order0);
-    const validSell = validOrder(order1);
+    let hasValidOrders = false;
+    if (strategyType === 'disposable') {
+      hasValidOrders = validOrder(order0) || validOrder(order1);
+    } else {
+      hasValidOrders = validOrder(order0) && validOrder(order1);
+    }
     const hasError = !valid || hasApprovalError;
     const needApproval = showWarningApproval && !approvedWarnings;
-    console.log({ hasError, needApproval, validBuy, validSell });
-    setDisabled(hasError || needApproval || !validBuy || !validSell);
+    setDisabled(hasError || needApproval || !hasValidOrders);
   }, [
     approvedWarnings,
     disabled,
@@ -108,6 +112,7 @@ export const CreateStrategyOrders = ({
     user,
     hasApprovalError,
     hasDistributionChanges,
+    strategyType,
   ]);
 
   return (
